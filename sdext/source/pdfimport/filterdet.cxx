@@ -422,7 +422,7 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
             uno::Sequence<sal_Int8> aExtractedFileSeq(reinterpret_cast<sal_Int8 *>(aExtractedFileBuf.data()), aExtractedFileBuf.size());
             xOut->writeBytes(aExtractedFileSeq);
 
-            xEmbed = xContextStream;
+            xEmbed = std::move(xContextStream);
             rOutMimetype = aMimetype;
             SAL_INFO("sdext.pdfimport", "getEmbeddedFile returning stream");
         } while (bAgain);
