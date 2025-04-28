@@ -290,7 +290,8 @@ sal_Int64 AccFrameSelectorChild::getAccessibleStateSet(  )
     if(!mpFrameSel)
         return AccessibleStateType::DEFUNC;
 
-    sal_Int64 nStateSet = AccessibleStateType::EDITABLE
+    sal_Int64 nStateSet = AccessibleStateType::CHECKABLE
+                          | AccessibleStateType::EDITABLE
                           | AccessibleStateType::FOCUSABLE
                           | AccessibleStateType::MULTI_SELECTABLE
                           | AccessibleStateType::SELECTABLE
@@ -302,6 +303,9 @@ sal_Int64 AccFrameSelectorChild::getAccessibleStateSet(  )
         nStateSet |= AccessibleStateType::ENABLED;
         nStateSet |= AccessibleStateType::SENSITIVE;
     }
+
+    if (mpFrameSel->GetFrameBorderState(meBorder) == FrameBorderState::Show)
+        nStateSet |= AccessibleStateType::CHECKED;
 
     if (mpFrameSel->HasFocus() && mpFrameSel->IsBorderSelected(meBorder))
     {
