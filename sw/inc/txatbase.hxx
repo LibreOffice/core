@@ -68,7 +68,6 @@ protected:
     SwTextAttr(const SfxPoolItemHolder& rAttr, sal_Int32 nStart );
     virtual ~SwTextAttr() COVERITY_NOEXCEPT_FALSE;
 
-    void SetLockExpandFlag( bool bFlag )    { m_bLockExpandFlag = bFlag; }
     void SetDontMoveAttr( bool bFlag )      { m_bDontMoveAttr = bFlag; }
     void SetCharFormatAttr( bool bFlag )       { m_bCharFormatAttr = bFlag; }
     void SetOverlapAllowedAttr( bool bFlag ){ m_bOverlapAllowedAttr = bFlag; }
@@ -109,6 +108,7 @@ public:
     void SetFormatIgnoreStart(bool bFlag)   { m_bFormatIgnoreStart = bFlag; }
     void SetFormatIgnoreEnd  (bool bFlag)   { m_bFormatIgnoreEnd   = bFlag; }
     bool HasContent() const                 { return m_bHasContent; }
+    void SetLockExpandFlag(bool bFlag)      { m_bLockExpandFlag = bFlag; }
 
     inline const SfxPoolItem& GetAttr() const;
     inline       SfxPoolItem& GetAttr();

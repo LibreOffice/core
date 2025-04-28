@@ -80,6 +80,7 @@
 #include <txtfld.hxx>
 #endif
 #include <translatehelper.hxx>
+#include <txtrfmrk.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -1100,6 +1101,13 @@ bool SwFieldMgr::InsertField(
                 }
 
                 pCurShell->SetAttrItem( SwFormatRefMark( SwMarkName(rData.m_sPar1) ) );
+                if (rData.m_bNeverExpand)
+                {
+                    SwTextRefMark* xTextRefMark = const_cast<SwTextRefMark*>(
+                        pCurShell->GetRefMark(SwMarkName(rData.m_sPar1))->GetTextRefMark());
+                    xTextRefMark->SetDontExpand(true);
+                    xTextRefMark->SetLockExpandFlag(true);
+                }
 
                 if (!bHadMark && !rRefmarkText.isEmpty())
                 {

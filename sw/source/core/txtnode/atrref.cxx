@@ -172,10 +172,11 @@ void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, const OU
     const SwTextNode& rTextNode = this->GetTextNode();
     SwPaM aMarkers(SwPosition(rTextNode, *this->End()));
     IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
-  /* FIXME: see above re: expanding behavior
-   *this->SetLockExpandFlag(false);
-   *this->SetDontExpand(false);
-   */
+
+    bool oldLockValue = this->IsLockExpandFlag();
+    bool oldDontExpandValue = this->DontExpand();
+    this->SetLockExpandFlag(false);
+    this->SetDontExpand(false);
     if (rIDCO.InsertString(aMarkers, u"XY"_ustr))
     {
         SwPaM aPasteEnd(SwPosition(rTextNode, *this->End()));
@@ -204,11 +205,9 @@ void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, const OU
         rIDCO.DeleteAndJoin(aStartMarker);
         rIDCO.DeleteAndJoin(aEndMarker);
     }
-    // Restore flags.
-  /* FIXME: see above re: expanding behavior
-   *this->SetDontExpand(true);
-   *this->SetLockExpandFlag(true);
-   */
+    this->SetDontExpand(oldDontExpandValue);
+    this->SetLockExpandFlag(oldLockValue);
+
 }
 
 
