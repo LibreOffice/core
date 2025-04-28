@@ -22,9 +22,11 @@ constexpr auto IgnoredList
     = frozen::make_unordered_set<std::u16string_view>({
         { u"modules/swriter/ui/annotation.ui" },
         { u"sfx/ui/deck.ui" },
+        { u"sfx/ui/infobar.ui" },
         { u"sfx/ui/tabbar.ui" },
         { u"sfx/ui/tabbarcontents.ui" },
         { u"svt/ui/scrollbars.ui" },
+        { u"svx/ui/measurewidthbar.ui" },
         { u"svx/ui/selectionmenu.ui" },
         { u"svx/ui/stylemenu.ui" },
         { u"svt/ui/tabbuttons.ui" },
