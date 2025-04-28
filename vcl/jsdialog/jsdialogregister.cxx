@@ -33,24 +33,20 @@ void JSInstanceBuilder::InsertWindowToMap(const OUString& nWindowId)
 void JSInstanceBuilder::RememberWidget(OUString sId, weld::Widget* pWidget)
 {
     // do not use the same id for two widgets inside one builder
-    // exception is sidebar where we base our full invalidation on that "Panel" id sharing
-    if (m_sTypeOfJSON != "sidebar")
+    static std::atomic<unsigned long long int> nNotRepeatIndex = 0;
+    auto aWindowIt = JSInstanceBuilder::Widgets().Find(getMapIdFromWindowId());
+    if (aWindowIt)
     {
-        static std::atomic<unsigned long long int> nNotRepeatIndex = 0;
-        auto aWindowIt = JSInstanceBuilder::Widgets().Find(getMapIdFromWindowId());
-        if (aWindowIt)
+        auto aWidgetIt = aWindowIt->Find(sId);
+        if (aWidgetIt)
         {
-            auto aWidgetIt = aWindowIt->Find(sId);
-            if (aWidgetIt)
-            {
-                unsigned long long int nIndex = nNotRepeatIndex++;
-                // found duplicated it -> add some number to the id and apply to the widget
-                sId = sId + OUString::number(nIndex);
-                SalInstanceWidget* pSalWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
-                assert(pSalWidget && "can only be a SalInstanceWidget");
-                vcl::Window* pVclWidget = pSalWidget->getWidget();
-                pVclWidget->set_id(pVclWidget->get_id() + OUString::number(nIndex));
-            }
+            unsigned long long int nIndex = nNotRepeatIndex++;
+            // found duplicated it -> add some number to the id and apply to the widget
+            sId = sId + OUString::number(nIndex);
+            SalInstanceWidget* pSalWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+            assert(pSalWidget && "can only be a SalInstanceWidget");
+            vcl::Window* pVclWidget = pSalWidget->getWidget();
+            pVclWidget->set_id(pVclWidget->get_id() + OUString::number(nIndex));
         }
     }
 
