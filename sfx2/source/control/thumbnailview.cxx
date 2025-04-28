@@ -35,12 +35,14 @@
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageReader.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/weldutils.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <memory>
 #if !ENABLE_WASM_STRIP_RECENT
@@ -97,7 +99,34 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
         catch (const uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("sfx",
-                "caught exception while trying to access Thumbnail/thumbnail.png of " << msURL);
+                "caught exception while trying to access Thumbnails/thumbnail.png of " << msURL);
+        }
+
+        if (!xIStream.is())
+        {
+            // a Micrsosoft formatted template?
+            uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+                = packages::zip::ZipFileAccess::createWithURL(xContext, msURL);
+            if (xNameAccess.is())
+            {
+                if (xNameAccess->hasByName(u"docProps/thumbnail.emf"_ustr))
+                    xIStream.set(xNameAccess->getByName(u"docProps/thumbnail.emf"_ustr),
+                                 uno::UNO_QUERY);
+                else if (xNameAccess->hasByName(u"docProps/thumbnail.jpeg"_ustr))
+                    xIStream.set(xNameAccess->getByName(u"docProps/thumbnail.jpeg"_ustr),
+                                 uno::UNO_QUERY);
+                else if (xNameAccess->hasByName(u"docProps/thumbnail.wmf"_ustr))
+                    xIStream.set(xNameAccess->getByName(u"docProps/thumbnail.wmf"_ustr),
+                                 uno::UNO_QUERY);
+                std::unique_ptr<SvStream> pStream(
+                    utl::UcbStreamHelper::CreateStream(xIStream, /*CloseStream=*/ true));
+                if (pStream)
+                {
+                    Graphic aGraphic
+                        = GraphicFilter::GetGraphicFilter().ImportUnloadedGraphic(*pStream);
+                    return aGraphic.GetBitmapEx();
+                }
+            }
         }
 
         try
@@ -123,7 +152,7 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
         catch (const uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("sfx",
-                "caught exception while trying to access Thumbnails/thumbnail.png of " << msURL);
+                "caught exception while trying to access Thumbnail/thumbnail.png of " << msURL);
         }
     }
     catch (const uno::Exception&)
