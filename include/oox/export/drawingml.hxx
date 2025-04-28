@@ -305,6 +305,8 @@ protected:
     /// True when exporting presentation placeholder shape.
     bool mbPlaceholder;
 
+    bool mbEmbedFonts = false;
+
     bool GetProperty( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& aName );
     bool GetPropertyAndState( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                   const css::uno::Reference< css::beans::XPropertyState >& rXPropState,
@@ -352,8 +354,7 @@ protected:
         const bool bReplaceGeoWidth, const bool bReplaceGeoHeight);
 
 public:
-    DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )
-        : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS(std::move( pFS )), mpFB( pFB ), mbIsBackgroundDark( false ), mbPlaceholder(false) {}
+    OOX_DLLPUBLIC DrawingML(::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr);
     void SetFS(const ::sax_fastparser::FSHelperPtr& pFS) { mpFS = pFS; }
     const ::sax_fastparser::FSHelperPtr& GetFS() const { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
