@@ -55,7 +55,7 @@ private:
     SAL_DLLPRIVATE virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     SAL_DLLPRIVATE virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
-    tools::Polygon  aTailPoly;              // the whole tail polygon
+    tools::Polygon  maTailPoly;              // the whole tail polygon
     bool            mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
     bool            mbFixedTail;            // for calc note box fixed tail, default FALSE
     bool            mbSuppressGetBitmap;    // tdf#118662

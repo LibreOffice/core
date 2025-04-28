@@ -181,7 +181,7 @@ std::unique_ptr<sdr::contact::ViewContact> SdrCaptionObj::CreateObjectSpecificVi
 
 SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel)
 :   SdrRectObj(rSdrModel, SdrObjKind::Text),
-    aTailPoly(3),  // default size: 3 points = 2 lines
+    maTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
     mbFixedTail(false),
     mbSuppressGetBitmap(false)
@@ -192,7 +192,7 @@ SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel, SdrCaptionObj const & rSource)
 :   SdrRectObj(rSdrModel, rSource),
     mbSuppressGetBitmap(false)
 {
-    aTailPoly = rSource.aTailPoly;
+    maTailPoly = rSource.maTailPoly;
     mbSpecialTextBoxShadow = rSource.mbSpecialTextBoxShadow;
     mbFixedTail = rSource.mbFixedTail;
     maFixedTailPos = rSource.maFixedTailPos;
@@ -203,12 +203,12 @@ SdrCaptionObj::SdrCaptionObj(
     const tools::Rectangle& rRect,
     const Point& rTail)
 :   SdrRectObj(rSdrModel, SdrObjKind::Text,rRect),
-    aTailPoly(3),  // default size: 3 points = 2 lines
+    maTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
     mbFixedTail(false),
     mbSuppressGetBitmap(false)
 {
-    aTailPoly[0]=maFixedTailPos=rTail;
+    maTailPoly[0]=maFixedTailPos=rTail;
 }
 
 SdrCaptionObj::~SdrCaptionObj()
@@ -261,7 +261,7 @@ OUString SdrCaptionObj::TakeObjNamePlural() const
 basegfx::B2DPolyPolygon SdrCaptionObj::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aPolyPoly(SdrRectObj::TakeXorPoly());
-    aPolyPoly.append(aTailPoly.getB2DPolygon());
+    aPolyPoly.append(maTailPoly.getB2DPolygon());
 
     return aPolyPoly;
 }
@@ -277,7 +277,7 @@ void SdrCaptionObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
     SdrRectObj::AddToHdlList(rHdlList);
     // Currently only dragging the tail's end is implemented.
-    std::unique_ptr<SdrHdl> pHdl(new SdrHdl(aTailPoly.GetPoint(0), SdrHdlKind::Poly));
+    std::unique_ptr<SdrHdl> pHdl(new SdrHdl(maTailPoly.GetPoint(0), SdrHdlKind::Poly));
     pHdl->SetPolyNum(1);
     pHdl->SetPointNum(0);
     rHdlList.AddHdl(std::move(pHdl));
@@ -349,7 +349,7 @@ bool SdrCaptionObj::applySpecialDrag(SdrDragStat& rDrag)
         }
         else
         {
-            aTailPoly[0] += aDelta;
+            maTailPoly[0] += aDelta;
         }
 
         ImpRecalcTail();
@@ -408,7 +408,7 @@ void SdrCaptionObj::ImpRecalcTail()
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
-    ImpCalcTail(aPara, aTailPoly, getRectangle());
+    ImpCalcTail(aPara, maTailPoly, getRectangle());
     SetBoundAndSnapRectsDirty();
     SetXPolyDirty();
 }
@@ -517,8 +517,8 @@ bool SdrCaptionObj::BegCreate(SdrDragStat& rStat)
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
     moveRectanglePosition(rStat.GetNow().X(), rStat.GetNow().Y());
-    aTailPoly[0]=rStat.GetStart();
-    ImpCalcTail(aPara,aTailPoly, getRectangle());
+    maTailPoly[0]=rStat.GetStart();
+    ImpCalcTail(aPara,maTailPoly, getRectangle());
     rStat.SetActionRect(getRectangle());
     return true;
 }
@@ -528,7 +528,7 @@ bool SdrCaptionObj::MovCreate(SdrDragStat& rStat)
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
     moveRectanglePosition(rStat.GetNow().X(), rStat.GetNow().Y());
-    ImpCalcTail(aPara,aTailPoly, getRectangle());
+    ImpCalcTail(aPara,maTailPoly, getRectangle());
     rStat.SetActionRect(getRectangle());
     SetBoundRectDirty();
     m_bSnapRectDirty=true;
@@ -540,7 +540,7 @@ bool SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
     moveRectanglePosition(rStat.GetNow().X(), rStat.GetNow().Y());
-    ImpCalcTail(aPara,aTailPoly, getRectangle());
+    ImpCalcTail(aPara,maTailPoly, getRectangle());
     SetBoundAndSnapRectsDirty();
     return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
@@ -559,7 +559,7 @@ basegfx::B2DPolyPolygon SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag
     basegfx::B2DPolyPolygon aRetval;
     const basegfx::B2DRange aRange =vcl::unotools::b2DRectangleFromRectangle(getRectangle());
     aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
-    aRetval.append(aTailPoly.getB2DPolygon());
+    aRetval.append(maTailPoly.getB2DPolygon());
     return aRetval;
 }
 
@@ -571,7 +571,7 @@ PointerStyle SdrCaptionObj::GetCreatePointer() const
 void SdrCaptionObj::NbcMove(const Size& rSiz)
 {
     SdrRectObj::NbcMove(rSiz);
-    MovePoly(aTailPoly,rSiz);
+    MovePoly(maTailPoly,rSiz);
     if(mbFixedTail)
         SetTailPos(GetFixedTailPos());
 }
@@ -579,7 +579,7 @@ void SdrCaptionObj::NbcMove(const Size& rSiz)
 void SdrCaptionObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     SdrRectObj::NbcResize(rRef,xFact,yFact);
-    ResizePoly(aTailPoly,rRef,xFact,yFact);
+    ResizePoly(maTailPoly,rRef,xFact,yFact);
     ImpRecalcTail();
     if(mbFixedTail)
         SetTailPos(GetFixedTailPos());
@@ -587,14 +587,14 @@ void SdrCaptionObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fr
 
 void SdrCaptionObj::NbcSetRelativePos(const Point& rPnt)
 {
-    Point aRelPos0(aTailPoly.GetPoint(0)-m_aAnchor);
+    Point aRelPos0(maTailPoly.GetPoint(0)-m_aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
     NbcMove(aSiz); // This also calls SetRectsDirty()
 }
 
 Point SdrCaptionObj::GetRelativePos() const
 {
-    return aTailPoly.GetPoint(0)-m_aAnchor;
+    return maTailPoly.GetPoint(0)-m_aAnchor;
 }
 
 const tools::Rectangle& SdrCaptionObj::GetLogicRect() const
@@ -610,12 +610,12 @@ void SdrCaptionObj::NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTe
 
 const Point& SdrCaptionObj::GetTailPos() const
 {
-    return aTailPoly[0];
+    return maTailPoly[0];
 }
 
 void SdrCaptionObj::SetTailPos(const Point& rPos)
 {
-    if (aTailPoly.GetSize()==0 || aTailPoly[0]!=rPos) {
+    if (maTailPoly.GetSize()==0 || maTailPoly[0]!=rPos) {
         tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcSetTailPos(rPos);
         SetChanged();
@@ -626,7 +626,7 @@ void SdrCaptionObj::SetTailPos(const Point& rPos)
 
 void SdrCaptionObj::NbcSetTailPos(const Point& rPos)
 {
-    aTailPoly[0]=rPos;
+    maTailPoly[0]=rPos;
     ImpRecalcTail();
 }
 
@@ -657,20 +657,20 @@ void SdrCaptionObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrRectObj::SaveGeoData(rGeo);
     SdrCaptObjGeoData& rCGeo=static_cast<SdrCaptObjGeoData&>(rGeo);
-    rCGeo.aTailPoly=aTailPoly;
+    rCGeo.aTailPoly=maTailPoly;
 }
 
 void SdrCaptionObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::RestoreGeoData(rGeo);
     const SdrCaptObjGeoData& rCGeo=static_cast<const SdrCaptObjGeoData&>(rGeo);
-    aTailPoly=rCGeo.aTailPoly;
+    maTailPoly=rCGeo.aTailPoly;
 }
 
 rtl::Reference<SdrObject> SdrCaptionObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     rtl::Reference<SdrObject> pRect = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
-    rtl::Reference<SdrObject> pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), false, bBezier);
+    rtl::Reference<SdrObject> pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(maTailPoly.getB2DPolygon()), false, bBezier);
     rtl::Reference<SdrObject> pRet;
     if (pTail && !pRect)
         pRet = std::move(pTail);
@@ -753,7 +753,7 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
 // geometry access
 basegfx::B2DPolygon SdrCaptionObj::getTailPolygon() const
 {
-    return aTailPoly.getB2DPolygon();
+    return maTailPoly.getB2DPolygon();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
