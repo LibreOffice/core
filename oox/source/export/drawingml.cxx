@@ -250,6 +250,27 @@ sal_Int32 DrawingML::mnDrawingMLCount = 0;
 sal_Int32 DrawingML::mnVmlCount = 0;
 sal_Int32 DrawingML::mnChartCount = 0;
 
+DrawingML::DrawingML(::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport)
+    : meDocumentType(eDocumentType)
+    , mpTextExport(pTextExport)
+    , mpFS(std::move(pFS))
+    , mpFB(pFB)
+    , mbIsBackgroundDark(false)
+    , mbPlaceholder(false)
+{
+    uno::Reference<beans::XPropertySet> xSettings(pFB->getModelFactory()->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
+    if (xSettings.is())
+    {
+        try
+        {
+            xSettings->getPropertyValue(u"EmbedFonts"_ustr) >>= mbEmbedFonts;
+        }
+        catch (Exception& )
+        {
+        }
+    }
+}
+
 sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
 {
     if (rStr.getLength() > 0)
@@ -2814,9 +2835,13 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         OUString usTypeface;
 
         mAny >>= usTypeface;
-        OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
-        if (!aSubstName.isEmpty())
-            usTypeface = aSubstName;
+
+        if (!mbEmbedFonts)
+        {
+            OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
+            if (!aSubstName.isEmpty())
+                usTypeface = aSubstName;
+        }
 
         mpFS->singleElementNS( XML_a, XML_latin,
                                XML_typeface, usTypeface,
@@ -2836,10 +2861,12 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         OUString usTypeface;
 
         mAny >>= usTypeface;
-        OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
-        if (!aSubstName.isEmpty())
-            usTypeface = aSubstName;
-
+        if (!mbEmbedFonts)
+        {
+            OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
+            if (!aSubstName.isEmpty())
+                usTypeface = aSubstName;
+        }
         mpFS->singleElementNS( XML_a, bComplex ? XML_cs : XML_ea,
                                XML_typeface, usTypeface,
                                XML_pitchFamily, pitch,
