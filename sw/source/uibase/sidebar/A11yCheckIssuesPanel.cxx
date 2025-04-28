@@ -37,7 +37,9 @@ namespace sw::sidebar
 {
 AccessibilityCheckEntry::AccessibilityCheckEntry(
     weld::Container* pParent, std::shared_ptr<sfx::AccessibilityIssue> const& rAccessibilityIssue)
-    : m_xBuilder(Application::CreateBuilder(pParent, u"svx/ui/accessibilitycheckentry.ui"_ustr))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"svx/ui/accessibilitycheckentry.ui"_ustr,
+                                            false,
+                                            reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
     , m_xContainer(m_xBuilder->weld_container(u"accessibilityCheckEntryBox"_ustr))
     , m_xLabel(m_xBuilder->weld_label(u"accessibilityCheckEntryLabel"_ustr))
     , m_xGotoButton(m_xBuilder->weld_link_button(u"accessibilityCheckEntryLinkButton"_ustr))
@@ -98,7 +100,9 @@ IMPL_LINK_NOARG(AccessibilityCheckEntry, FixButtonClicked, weld::Button&, void)
 }
 
 AccessibilityCheckLevel::AccessibilityCheckLevel(weld::Box* pParent)
-    : m_xBuilder(Application::CreateBuilder(pParent, u"svx/ui/accessibilitychecklevel.ui"_ustr))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"svx/ui/accessibilitychecklevel.ui"_ustr,
+                                            false,
+                                            reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
     , m_xContainer(m_xBuilder->weld_box(u"accessibilityCheckLevelBox"_ustr))
 {
     m_xExpanders[0] = m_xBuilder->weld_expander(u"expand_document"_ustr);

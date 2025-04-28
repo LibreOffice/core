@@ -189,18 +189,16 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
 
     m_aParentDialog = pRoot->GetParentWithLOKNotifier();
 
-    bool bIsSidebarPanel = (rUIFile == u"sfx/ui/panel.ui");
     bool bIsNavigatorPanel = jsdialog::isBuilderEnabledForNavigator(rUIFile);
 
     // builder for Panel, PanelLayout, and DockingWindow
     // get SidebarDockingWindow, or SwNavigatorWin as m_aContentWindow
+    //    A11YCheckLevel : 12 levels up from pRoot
     //      PanelLayout  : 9 levels up from pRoot
     //      Panel        : 7 levels up from pRoot
     //      DockingWindow: 3 levels up from pRoot
-    unsigned nLevelsUp = 9;
-    if (bIsSidebarPanel)
-        nLevelsUp = 7;
-    else if (bIsNavigatorPanel)
+    unsigned nLevelsUp = 100; // limit
+    if (bIsNavigatorPanel)
         nLevelsUp = 3;
 
     if (nLevelsUp > 0)
@@ -212,6 +210,11 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
         m_aContentWindow = pRoot;
         for (unsigned i = 0; i < nLevelsUp && m_aContentWindow; i++)
         {
+            if (!bIsNavigatorPanel && m_aContentWindow->get_id() == "Deck")
+                nLevelsUp = i + 3;
+
+            // Useful to check if any panel doesn't appear
+            // SAL _ DEBUG ("SIDEBAR CONTENT LOOK UP FROM: " << m_aContentWindow->get_id());
             m_aContentWindow = m_aContentWindow->GetParent();
         }
     }
