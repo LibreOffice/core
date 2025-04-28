@@ -663,7 +663,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_test_master_name)
     CPPUNIT_ASSERT_EQUAL(u"1_Master0"_ustr, aNewMasterPageName);
 }
 
-CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_test_defult_master_name)
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_test_default_master_name)
 {
     // Copying/pasting slide referring to a master page.
     createSdImpressDoc();
