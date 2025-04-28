@@ -211,7 +211,6 @@ struct SeriesModel
     bool                mbBubble3d;         /// True = show bubbles with 3D shade.
     bool                mbInvertNeg;        /// True = invert negative data points.
     bool                mbSmooth;           /// True = smooth series line.
-    sal_Int32           mnCxChartType;      /// Enumerated chartex type
 
     explicit            SeriesModel(bool bMSO2007Doc);
                         ~SeriesModel();
