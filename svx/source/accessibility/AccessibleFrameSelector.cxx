@@ -286,33 +286,30 @@ Reference< XAccessibleRelationSet > AccFrameSelectorChild::getAccessibleRelation
 sal_Int64 AccFrameSelectorChild::getAccessibleStateSet(  )
 {
     SolarMutexGuard aGuard;
-    sal_Int64 nStateSet = 0;
 
     if(!mpFrameSel)
-        nStateSet |= AccessibleStateType::DEFUNC;
-    else
-    {
-        nStateSet |=
-            AccessibleStateType::EDITABLE |
-            AccessibleStateType::FOCUSABLE |
-            AccessibleStateType::MULTI_SELECTABLE |
-            AccessibleStateType::SELECTABLE |
-            AccessibleStateType::SHOWING |
-            AccessibleStateType::VISIBLE |
-            AccessibleStateType::OPAQUE;
-        if(mpFrameSel->IsEnabled())
-        {
-            nStateSet |= AccessibleStateType::ENABLED;
-            nStateSet |= AccessibleStateType::SENSITIVE;
-        }
+        return AccessibleStateType::DEFUNC;
 
-        if (mpFrameSel->HasFocus() && mpFrameSel->IsBorderSelected(meBorder))
-        {
-            nStateSet |= AccessibleStateType::ACTIVE;
-            nStateSet |= AccessibleStateType::FOCUSED;
-            nStateSet |= AccessibleStateType::SELECTED;
-        }
+    sal_Int64 nStateSet = AccessibleStateType::EDITABLE
+                          | AccessibleStateType::FOCUSABLE
+                          | AccessibleStateType::MULTI_SELECTABLE
+                          | AccessibleStateType::SELECTABLE
+                          | AccessibleStateType::SHOWING
+                          | AccessibleStateType::VISIBLE
+                          | AccessibleStateType::OPAQUE;
+    if (mpFrameSel->IsEnabled())
+    {
+        nStateSet |= AccessibleStateType::ENABLED;
+        nStateSet |= AccessibleStateType::SENSITIVE;
     }
+
+    if (mpFrameSel->HasFocus() && mpFrameSel->IsBorderSelected(meBorder))
+    {
+        nStateSet |= AccessibleStateType::ACTIVE;
+        nStateSet |= AccessibleStateType::FOCUSED;
+        nStateSet |= AccessibleStateType::SELECTED;
+    }
+
     return nStateSet;
 }
 
