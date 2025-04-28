@@ -376,7 +376,14 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         GetShellPtr()->InsertFootnote(OUString(), /*bEndNote=*/true);
                     }
                 }
-                SwInsertField_Data aData(nType, nSubType, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
+                bool bNeverExpand = false;
+                const SfxBoolItem* pNeverExpand = rReq.GetArg<SfxBoolItem>(FN_PARAM_6);
+                if (pNeverExpand)
+                {
+                    bNeverExpand = pNeverExpand->GetValue();
+                }
+                SwInsertField_Data aData(nType, nSubType, aPar1, aPar2, nFormat, GetShellPtr(),
+                                         cSeparator, true, bNeverExpand);
                 bRes = aFieldMgr.InsertField( aData );
             }
             else

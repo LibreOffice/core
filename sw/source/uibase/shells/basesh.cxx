@@ -806,6 +806,13 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
     {
         return false;
     }
+
+    bool bNeverExpand = false;
+    const SfxBoolItem* pNeverExpand = rReq.GetArg<SfxBoolItem>(FN_PARAM_6);
+    if (pNeverExpand)
+    {
+        bNeverExpand = pNeverExpand->GetValue();
+    }
     uno::Sequence<beans::PropertyValues> aFields;
     pFields->GetValue() >>= aFields;
 
@@ -834,14 +841,22 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
             continue;
         }
 
+        auto pTextRefMark = const_cast<SwTextRefMark*>(pRefMark->GetTextRefMark());
+        if (bNeverExpand)
+        {
+            pTextRefMark->SetDontExpand(true);
+            pTextRefMark->SetLockExpandFlag(true);
+        }
+
         if (nFieldIndex >= aFields.getLength())
         {
-            break;
+            // earlier we used to break here
+            // but now we need to set expand flags for each refmark
+            continue;
         }
         comphelper::SequenceAsHashMap aMap(aFields[nFieldIndex++]);
         pRefMark->GetRefName() = aMap[u"Name"_ustr].get<OUString>();
 
-        auto pTextRefMark = const_cast<SwTextRefMark*>(pRefMark->GetTextRefMark());
         pTextRefMark->UpdateFieldContent(pDoc, rWrtSh, aMap[u"Content"_ustr].get<OUString>());
     }
 
