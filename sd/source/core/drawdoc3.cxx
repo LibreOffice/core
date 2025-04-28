@@ -2225,7 +2225,7 @@ bool SdDrawDocument::PasteBookmarkAsPage(
     // Insert pages based on whether all or selected pages are bookmarked.
     if (rBookmarkList.empty())
     {
-        insertAllPages(aInsertParams, options, pageCounts);//reblce by pageCounts to add the masterpagecount
+        insertAllPages(aInsertParams, options, pageCounts);//replace by pageCounts to add the masterpagecount
     }
     else
     {
