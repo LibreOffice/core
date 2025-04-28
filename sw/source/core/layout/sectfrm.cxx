@@ -2692,6 +2692,7 @@ void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
             SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
             SwRectFnSet(this).SetHeight(area, HUGE_POSITIVE);
         }
+        GetUpper()->InvalidateSize();
 
         InvalidateFramesInSection(Lower());
         if (Lower())

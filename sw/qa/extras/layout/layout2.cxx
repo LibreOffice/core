@@ -950,6 +950,41 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
                 "1,234.56");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf166210)
+{
+    // Given a document with a table, inside which there are two conditionally hidden sections
+    createDoc("tdf166210.fodt");
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    uno::Reference<beans::XPropertySet> xSection1(xSections->getByName("Section1"), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xSection2(xSections->getByName("Section2"), uno::UNO_QUERY_THROW);
+
+    Scheduler::ProcessEventsToIdle();
+    auto pXmlDoc = parseLayoutDump();
+    auto rowHeight1 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
+    discardDumpedLayout();
+
+    // Hide first section
+    xSection1->setPropertyValue("Condition", css::uno::Any(OUString("1")));
+    Scheduler::ProcessEventsToIdle();
+    pXmlDoc = parseLayoutDump();
+    auto rowHeight2 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
+    // Make sure that the table has shrunk its height
+    CPPUNIT_ASSERT_LESS(rowHeight1, rowHeight2);
+    discardDumpedLayout();
+
+    // Hide second section
+    xSection2->setPropertyValue("Condition", css::uno::Any(OUString("1")));
+    Scheduler::ProcessEventsToIdle();
+    pXmlDoc = parseLayoutDump();
+    auto rowHeight3 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
+    // Make sure that the table has shrunk its height
+    CPPUNIT_ASSERT_LESS(rowHeight2, rowHeight3);
+    discardDumpedLayout();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
