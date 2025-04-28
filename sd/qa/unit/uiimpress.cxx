@@ -946,7 +946,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_Default)
 }
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
 {
-    // Test master page name with double copy for copied page which dosen`t have a normal page created
+    // Test master page name with double copy for copied page which doesn't have a normal page created
     createSdImpressDoc("odp/tdf96708.odp");
     sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
     auto& rSSController = pSSVS->GetSlideSorter().GetController();
