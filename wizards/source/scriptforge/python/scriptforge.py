@@ -1270,8 +1270,10 @@ class SFScriptForge:
         def PickFile(self, defaultfile = ScriptForge.cstSymEmpty, mode = 'OPEN', filter = ''):
             return self.ExecMethod(self.vbMethod, 'PickFile', defaultfile, mode, filter)
 
-        def PickFolder(self, defaultfolder = ScriptForge.cstSymEmpty, freetext = ''):
-            return self.ExecMethod(self.vbMethod, 'PickFolder', defaultfolder, freetext)
+        def PickFolder(self, defaultfolder = ScriptForge.cstSymEmpty, title = '', freetext = ''):
+            if len(freetext) > 0 and len(title) == 0:
+                title = freetext
+            return self.ExecMethod(self.vbMethod, 'PickFolder', defaultfolder, title, freetext)
 
         def SubFolders(self, foldername, filter = '', includesubfolders = False):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'SubFolders', foldername,

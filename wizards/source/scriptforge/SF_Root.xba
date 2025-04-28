@@ -70,8 +70,6 @@ Private PrinterServer		As Object	&apos; com.sun.star.awt.PrinterServer
 Private CharacterClass		As Object	&apos; com.sun.star.i18n.CharacterClassification
 Private FileAccess			As Object	&apos; com.sun.star.ucb.SimpleFileAccess
 Private FilterFactory		As Object	&apos; com.sun.star.document.FilterFactory
-Private FolderPicker		As Object	&apos; com.sun.star.ui.dialogs.FolderPicker
-Private FilePicker			As Object	&apos; com.sun.star.ui.dialogs.FilePicker
 Private URLTransformer		As Object	&apos; com.sun.star.util.URLTransformer
 Private Introspection		As Object	&apos; com.sun.star.beans.Introspection
 Private BrowseNodeFactory	As Object	&apos; com.sun.star.script.browse.BrowseNodeFactory
@@ -141,8 +139,6 @@ Private Sub Class_Initialize()
 	Set CharacterClass = Nothing
 	Set FileAccess = Nothing
 	Set FilterFactory = Nothing
-	Set FolderPicker = Nothing
-	Set FilePicker = Nothing
 	Set URLTransformer = Nothing
 	Set Introspection = Nothing
 	FileSystemNaming = &quot;ANY&quot;

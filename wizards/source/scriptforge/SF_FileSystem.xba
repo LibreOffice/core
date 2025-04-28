@@ -1638,7 +1638,7 @@ Try:
 	End With
 
 	&apos; Activate the filepicker dialog
-	Set oFileDialog = SF_Utils._GetUNOService(&quot;FilePicker&quot;)
+	Set oFileDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FilePicker&quot;)	&apos;	Do not reuse an existing FilePicker: TDF#154462
 	With oFileDialog
 		.Initialize(Array(iMode))
 
@@ -1683,13 +1683,16 @@ End Function    &apos;   ScriptForge.SF_FileSystem.PickFile
 
 REM -----------------------------------------------------------------------------
 Public Function PickFolder(Optional ByVal DefaultFolder As Variant _
+							, Optional ByVal Title As Variant _
 							, Optional ByVal FreeText As Variant _
 							) As String
 &apos;&apos;&apos;	Display a FolderPicker dialog box
 &apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DefaultFolder: the FolderName from which to start. Default = the last selected folder
+&apos;&apos;&apos;		Title: text to display in the dialog header. Default is set by the desktop environment.
 &apos;&apos;&apos;		FreeText: text to display in the dialog. Default = &quot;&quot;
+&apos;&apos;&apos;			The argument is obsolete as from SF 25.8.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The selected FolderName in URL or operating system format
 &apos;&apos;&apos;		The zero-length string if the dialog was cancelled
@@ -1704,27 +1707,34 @@ Dim iAccept As Integer			&apos;	Value returned by the dialog (OK, Cancel, ..)
 Dim sFolder	As String			&apos;	Return value					&apos;	
 
 Const cstThisSub = &quot;FileSystem.PickFolder&quot;
-Const cstSubArgs = &quot;[DefaultFolder=&quot;&quot;&quot;&quot;], [FreeText=&quot;&quot;&quot;&quot;]&quot;
+Const cstSubArgs = &quot;[DefaultFolder=&quot;&quot;&quot;&quot;], [Title=&quot;&quot;&quot;&quot;]&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	sFolder = &quot;&quot;
 
 Check:
 	If IsMissing(DefaultFolder) Or IsEmpty(DefaultFolder) Then DefaultFolder = &quot;&quot;
+	If IsMissing(Title) Or IsEmpty(Title) Then Title = &quot;&quot;
 	If IsMissing(FreeText) Or IsEmpty(FreeText) Then FreeText = &quot;&quot;
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._ValidateFile(DefaultFolder, &quot;DefaultFolder&quot;, , True) Then GoTo Finally
+		If Not SF_Utils._Validate(Title, &quot;Title&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(FreeText, &quot;FreeText&quot;, V_STRING) Then GoTo Finally
 	End If
 	If SF_FileSystem._IsDocFileSystem(DefaultFolder) Then GoTo CatchNotSupported
 	DefaultFolder = SF_FileSystem._ConvertToUrl(DefaultFolder)
 
+	&apos;	Only Windows implements the Description property of the FolderPicker by displaying it in the title.
+	&apos;	The method harmonizes the behaviour among all environments, including Linux.
+	If Len(FreeText) &gt; 0 And Len(Title) = 0 Then Title = FreeText
+
 Try:
-	Set oFolderDialog = SF_Utils._GetUNOService(&quot;FolderPicker&quot;)
+	Set oFolderDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FolderPicker&quot;)
 	If Not IsNull(oFolderDialog) Then
 		With oFolderDialog
 			If Len(DefaultFolder) &gt; 0 Then .DisplayDirectory = ConvertToUrl(DefaultFolder)
-			.Description = FreeText
+			If Len(Title) &gt; 0 Then .setTitle(Title)
+			If Len(FreeText) &gt; 0 Then .setDescription(FreeText)
 			iAccept = .Execute()
 			&apos; https://api.libreoffice.org/docs/idl/ref/ExecutableDialogResults_8idl.html
 			If iAccept = com.sun.star.ui.dialogs.ExecutableDialogResults.OK Then

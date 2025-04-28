@@ -378,19 +378,11 @@ Dim oDefaultContext As Object
 					Set .FileAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 				End If
 				Set _GetUNOService = .FileAccess
-			Case &quot;FilePicker&quot;
-				Set .FilePicker = CreateUnoService(&quot;com.sun.star.ui.dialogs.FilePicker&quot;)	&apos;	Do not reuse an existing FilePicker: TDF#154462
-				Set _GetUNOService = .FilePicker
 			Case &quot;FilterFactory&quot;
 				If IsEmpty(.FilterFactory) Or IsNull(.FilterFactory) Then
 					Set .FilterFactory = CreateUnoService(&quot;com.sun.star.document.FilterFactory&quot;)
 				End If
 				Set _GetUNOService = .FilterFactory
-			Case &quot;FolderPicker&quot;
-				If IsEmpty(.FolderPicker) Or IsNull(.FolderPicker) Then
-					Set .FolderPicker = CreateUnoService(&quot;com.sun.star.ui.dialogs.FolderPicker&quot;)
-				End If
-				Set _GetUNOService = .FolderPicker
 			Case &quot;FormatLocale&quot;
 				If IsEmpty(.FormatLocale) Or IsNull(.FormatLocale) Then
 					.FormatLocale = CreateUnoStruct(&quot;com.sun.star.lang.Locale&quot;)

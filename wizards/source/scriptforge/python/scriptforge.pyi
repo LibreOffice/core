@@ -1331,18 +1331,19 @@ class SFScriptForge:
                 """
             ...
 
-        def PickFolder(self, defaultfolder: FILE = ..., freetext: str = ...) -> FILE:
+        def PickFolder(self, defaultfolder: FILE = ..., title: str = ...) -> FILE:
             """
                 Display a dialog box to select a folder.
                     Args
                         ``defaultfolder``: the folder from which to start. Default = the last selected folder.
 
-                        ``freetext``: text to display in the dialog. Defaults to "".
+                        ``title``: an optional text to display in the dialog header.
                     Returns
                         The selected folder in ``filesystem.FileNaming`` notation.
                         A zero-length string if the dialog was cancelled.
                 """
             ...
+
         def SubFolders(self,
                        foldername: FILE,
                        filter: str = ...,
