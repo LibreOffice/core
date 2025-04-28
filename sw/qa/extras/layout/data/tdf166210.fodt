@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:ooow="http://openoffice.org/2004/writer" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <table:table>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell>
+      <text:section text:name="Section1" text:condition="ooow:0" text:display="condition">
+       <text:p>Conditional section 1</text:p>
+      </text:section>
+      <text:p>Text between sections</text:p>
+      <text:section text:name="Section2" text:condition="ooow:0" text:display="condition">
+       <text:p>Conditional section 2</text:p>
+      </text:section>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

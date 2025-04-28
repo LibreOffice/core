@@ -2794,6 +2794,7 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
             SwRectFnSet(this).SetHeight(area, HUGE_POSITIVE);
         }
+        GetUpper()->InvalidateSize();
 
         InvalidateFramesInSection(Lower());
         if (Lower())
