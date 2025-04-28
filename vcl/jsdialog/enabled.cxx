@@ -311,8 +311,6 @@ constexpr auto OtherDialogList
         { u"formula/ui/structpage.ui" },
         // svx
         { u"svx/ui/acceptrejectchangesdialog.ui" },
-        { u"svx/ui/accessibilitycheckdialog.ui" },
-        { u"svx/ui/accessibilitycheckentry.ui" },
         { u"svx/ui/compressgraphicdialog.ui" },
         { u"svx/ui/findreplacedialog.ui" },
         { u"svx/ui/fontworkgallerydialog.ui" },
@@ -426,6 +424,7 @@ constexpr auto SidebarList
         { u"sfx/ui/panel.ui" },
         { u"sfx/ui/templatepanel.ui" },
         // svx
+        { u"svx/ui/accessibilitycheckentry.ui" },
         { u"svx/ui/accessibilitychecklevel.ui" },
         { u"svx/ui/defaultshapespanel.ui" },
         { u"svx/ui/inspectortextpanel.ui" },
