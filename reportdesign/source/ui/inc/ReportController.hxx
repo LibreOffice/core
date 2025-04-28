@@ -127,13 +127,13 @@ namespace rptui
         * \param _sFunction the function which will be set at the data field.
         */
         void createControl(const css::uno::Sequence< css::beans::PropertyValue >& _aArgs,const css::uno::Reference< css::report::XSection>& _xSection,const OUString& _sFunction ,SdrObjKind _nObjectId = SdrObjKind::ReportDesignFormattedField);
-        /** switch the report header/footer sectionon off with undo or without depending on the given id.
+        /** switch the report header/footer section on/off with undo or without depending on the given id.
         *
         * \param _nId   Can either be SID_REPORTHEADER_WITHOUT_UNDO or SID_REPORTFOOTER_WITHOUT_UNDO or SID_REPORTHEADERFOOTER.
         */
         void switchReportSection(const sal_Int16 _nId);
 
-        /** switch the report header/footer sectionon off with undo or without depending on the given id.
+        /** switch the report header/footer section on/off with undo or without depending on the given id.
         *
         * \param _nId   Can either be SID_PAGEHEADER_WITHOUT_UNDO or SID_PAGEFOOTER_WITHOUT_UNDO or SID_PAGEHEADERFOOTER.
         */
