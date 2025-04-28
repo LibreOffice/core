@@ -829,6 +829,16 @@ IMAGE_SETEVENT:
     if (eNodeType != SwNodeType::Text && eNodeType != SwNodeType::Table)
         return;
 
+    const SwFormatAnchor& rAnch = aFrameSet.Get(RES_ANCHOR);
+    if (SwNode* pAnchorNode = rAnch.GetAnchorNode())
+    {
+        if (pAnchorNode->IsEndNode())
+        {
+            SAL_WARN("sw.html", "Invalid EndNode Anchor");
+            aFrameSet.ClearItem(RES_ANCHOR);
+        }
+    }
+
     // passing empty sGrfNm here, means we don't want the graphic to be linked
     SwFrameFormat *const pFlyFormat =
         m_xDoc->getIDocumentContentOperations().InsertGraphic(
