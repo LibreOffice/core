@@ -446,7 +446,7 @@ OUString analyzeSfntFamilyName(void const * pTTFont)
                     nMatch = 1000;
             }
             OUString aName = convertSfntName( aNameRecords[i] );
-            if (!(aName.isEmpty()) && nMatch > nLastMatch)
+            if (!(aName.isEmpty()) && nMatch >= nLastMatch)
             {
                 nLastMatch = nMatch;
                 aFamily = aName;
