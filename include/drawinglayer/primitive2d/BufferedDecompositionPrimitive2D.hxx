@@ -92,7 +92,7 @@ protected:
     // callback mechanism to flush buffered content timer-based will be activated.
     // it is protected since the idea is that this gets called in the constructor
     // of derived classes.
-    void activateFlushOnTimer() { mbFlushOnTimer = true; }
+    void activateFlushOnTimer();
 
 public:
     // constructor/destructor

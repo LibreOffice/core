@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/configuration.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionFlusher.hxx>
@@ -94,6 +95,13 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
         }
         rVisitor.visit(xTmp);
     }
+}
+
+void BufferedDecompositionPrimitive2D::activateFlushOnTimer()
+{
+    if (comphelper::IsFuzzing())
+        return;
+    mbFlushOnTimer = true;
 }
 
 } // end of namespace drawinglayer::primitive2d
