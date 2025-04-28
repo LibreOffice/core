@@ -77,7 +77,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
 
 OStatement_Base::~OStatement_Base()
 {
-    OSL_ENSURE(!m_aStatementHandle,"Sohould ne null here!");
+    OSL_ENSURE(!m_aStatementHandle,"Should be null here!");
 }
 
 void OStatement_Base::disposeResultSet()
@@ -104,7 +104,7 @@ void SAL_CALL OStatement_Base::disposing()
         m_pConnection->freeStatementHandle(m_aStatementHandle);
         m_pConnection.clear();
     }
-    OSL_ENSURE(!m_aStatementHandle,"Sohould ne null here!");
+    OSL_ENSURE(!m_aStatementHandle,"Should be null here!");
 
     OStatement_BASE::disposing();
 }
