@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
@@ -18,6 +19,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <editeng/unolingu.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <scriptinfo.hxx>
 #include <rootfrm.hxx>
@@ -1607,6 +1609,38 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf165089)
     auto nTop = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT_GREATER(sal_Int32(1400), nTop);
     CPPUNIT_ASSERT_LESS(sal_Int32(1450), nTop);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166210)
+{
+    // Given a document with a table, inside which there are two conditionally hidden sections
+    createSwDoc("tdf166210.fodt");
+
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection1 = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
+    auto xSection2 = xSections->getByName(u"Section2"_ustr).queryThrow<css::beans::XPropertySet>();
+
+    Scheduler::ProcessEventsToIdle();
+    auto pXmlDoc = parseLayoutDump();
+    auto rowHeight1 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
+
+    // Hide first section
+    xSection1->setPropertyValue(u"Condition"_ustr, css::uno::Any(u"1"_ustr));
+    Scheduler::ProcessEventsToIdle();
+    pXmlDoc = parseLayoutDump();
+    auto rowHeight2 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
+    // Make sure that the table has shrunk its height
+    CPPUNIT_ASSERT_LESS(rowHeight1, rowHeight2);
+
+    // Hide second section
+    xSection2->setPropertyValue(u"Condition"_ustr, css::uno::Any(u"1"_ustr));
+    Scheduler::ProcessEventsToIdle();
+    pXmlDoc = parseLayoutDump();
+    auto rowHeight3 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
+    // Make sure that the table has shrunk its height
+    CPPUNIT_ASSERT_LESS(rowHeight2, rowHeight3);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
