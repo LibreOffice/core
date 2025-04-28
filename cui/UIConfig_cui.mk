@@ -222,6 +222,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/textflowpage \
 	cui/uiconfig/ui/thesaurus \
 	cui/uiconfig/ui/toolbarmodedialog \
+	cui/uiconfig/ui/uitabpage \
 	cui/uiconfig/ui/transparencytabpage \
 	cui/uiconfig/ui/tsaurldialog \
 	cui/uiconfig/ui/twolinespage \

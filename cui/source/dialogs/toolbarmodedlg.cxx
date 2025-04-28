@@ -7,177 +7,52 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-
 #include <toolbarmodedlg.hxx>
-#include <toolbarmode.hrc>
 
-#include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/types.hxx>
 #include <dialmgr.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/UI/ToolbarMode.hxx>
-#include <osl/file.hxx>
-#include <rtl/bootstrap.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <strings.hrc>
 #include <unotools/confignode.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <vcl/EnumContext.hxx>
-#include <vcl/weld.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-
-static OUString GetCurrentApp()
-{
-    OUString sResult;
-    if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
-    {
-        const auto xCurrentFrame = pViewFrame->GetFrame().GetFrameInterface();
-        const auto& xContext = comphelper::getProcessComponentContext();
-        const auto xModuleManager = css::frame::ModuleManager::create(xContext);
-        switch (vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xCurrentFrame)))
-        {
-            case vcl::EnumContext::Application::Writer:
-                sResult = "Writer";
-                break;
-            case vcl::EnumContext::Application::Calc:
-                sResult = "Calc";
-                break;
-            case vcl::EnumContext::Application::Impress:
-                sResult = "Impress";
-                break;
-            case vcl::EnumContext::Application::Draw:
-                sResult = "Draw";
-                break;
-            case vcl::EnumContext::Application::Formula:
-                sResult = "Formula";
-                break;
-            case vcl::EnumContext::Application::Base:
-                sResult = "Base";
-                break;
-            default:
-                sResult = "Unsupported";
-        }
-    }
-    return sResult;
-}
-
-static OUString GetCurrentMode()
-{
-    OUString sResult;
-    if (SfxViewFrame::Current())
-    {
-        const auto& xContext = comphelper::getProcessComponentContext();
-        const utl::OConfigurationTreeRoot aAppNode(
-            xContext, "org.openoffice.Office.UI.ToolbarMode/Applications/" + GetCurrentApp(), true);
-        if (aAppNode.isValid())
-            sResult = comphelper::getString(aAppNode.getNodeValue(u"Active"_ustr));
-    };
-    return sResult;
-}
 
 ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, u"cui/ui/toolbarmodedialog.ui"_ustr,
-                              u"ToolbarmodeDialog"_ustr)
-    , m_pImage(m_xBuilder->weld_image(u"imImage"_ustr))
-    , m_pApply(m_xBuilder->weld_button(u"btnApply"_ustr))
-    , m_pApplyAll(m_xBuilder->weld_button(u"btnApplyAll"_ustr))
-    , m_pRadioButtons{ (m_xBuilder->weld_radio_button(u"rbButton1"_ustr)),
-                       (m_xBuilder->weld_radio_button(u"rbButton2"_ustr)),
-                       (m_xBuilder->weld_radio_button(u"rbButton3"_ustr)),
-                       (m_xBuilder->weld_radio_button(u"rbButton4"_ustr)),
-                       (m_xBuilder->weld_radio_button(u"rbButton5"_ustr)),
-                       (m_xBuilder->weld_radio_button(u"rbButton6"_ustr)),
-                       (m_xBuilder->weld_radio_button(u"rbButton7"_ustr)),
-                       (m_xBuilder->weld_radio_button(u"rbButton8"_ustr)),
-                       (m_xBuilder->weld_radio_button(u"rbButton9"_ustr)) }
-    , m_pInfoLabel(m_xBuilder->weld_label(u"lbInfo"_ustr))
+    : SfxTabDialogController(pParent, u"cui/ui/toolbarmodedialog.ui"_ustr,
+                             u"ToolbarModeDialog"_ustr)
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xApplyBtn(m_xBuilder->weld_button(u"apply"_ustr)) // Apply to %Module
+    , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr)) // Close
+    , m_xHelpBtn(m_xBuilder->weld_button(u"help"_ustr))
+    , m_xResetBtn(m_xBuilder->weld_button(u"reset"_ustr)) // Apply to All
 {
-    static_assert(SAL_N_ELEMENTS(m_pRadioButtons) == std::size(TOOLBARMODES_ARRAY));
+    AddTabPage("uimode", UITabPage::Create, nullptr);
 
-    Link<weld::Toggleable&, void> aLink = LINK(this, ToolbarmodeDialog, SelectToolbarmode);
-
-    const OUString sCurrentMode = GetCurrentMode();
-    for (std::size_t i = 0; i < std::size(m_pRadioButtons); ++i)
-    {
-        m_pRadioButtons[i]->connect_toggled(aLink);
-        if (sCurrentMode == std::get<1>(TOOLBARMODES_ARRAY[i]))
-        {
-            m_pRadioButtons[i]->set_active(true);
-            UpdateImage(std::get<2>(TOOLBARMODES_ARRAY[i]));
-            m_pInfoLabel->set_label(CuiResId(std::get<0>(TOOLBARMODES_ARRAY[i])));
-        }
-    }
-
-    m_pApply->set_label(CuiResId(RID_CUISTR_UI_APPLYALL).replaceFirst("%MODULE", GetCurrentApp()));
-    m_pApply->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
-    m_pApplyAll->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
-
-    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
-    {
-        m_pRadioButtons[nGroupedbarFull]->set_visible(false);
-        m_pRadioButtons[nContextualGroups]->set_visible(false);
-    }
+    m_xOKBtn->set_visible(false);
+    m_xHelpBtn->set_visible(false);
+    m_xCancelBtn->set_label(CuiResId(RID_CUISTR_HYPDLG_CLOSEBUT)); // "close"
 }
 
-ToolbarmodeDialog::~ToolbarmodeDialog() = default;
-
-static bool file_exists(const OUString& fileName)
+void ToolbarmodeDialog::ActivatePage(const OUString& rPage)
 {
-    osl::File aFile(fileName);
-    return aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None;
-}
-
-int ToolbarmodeDialog::GetActiveRadioButton()
-{
-    for (std::size_t i = 0; i < std::size(m_pRadioButtons); ++i)
+    if (rPage == "uimode")
     {
-        if (m_pRadioButtons[i]->get_active())
-            return i;
-    }
-    return -1;
-}
+        m_xApplyBtn->set_label(
+            CuiResId(RID_CUISTR_UI_APPLY).replaceFirst("%MODULE", UITabPage::GetCurrentApp()));
+        m_xApplyBtn->set_from_icon_name("sw/res/sc20558.png");
+        m_xResetBtn->set_label(CuiResId(RID_CUISTR_UI_APPLYALL));
 
-void ToolbarmodeDialog::UpdateImage(std::u16string_view sFileName)
-{
-    // load image
-    OUString aURL(u"$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/toolbarmode/"_ustr);
-    rtl::Bootstrap::expandMacros(aURL);
-    aURL += sFileName;
-    if (sFileName.empty() || !file_exists(aURL))
-        return;
-    // draw image
-    Graphic aGraphic;
-    if (GraphicFilter::LoadGraphic(aURL, OUString(), aGraphic) == ERRCODE_NONE)
-    {
-        ScopedVclPtr<VirtualDevice> m_pVirDev = m_pImage->create_virtual_device();
-        m_pVirDev->SetOutputSizePixel(aGraphic.GetSizePixel());
-        m_pVirDev->DrawBitmapEx(Point(0, 0), aGraphic.GetBitmapEx());
-        m_pImage->set_image(m_pVirDev.get());
-        m_pVirDev.disposeAndClear();
-    }
-}
-
-IMPL_LINK_NOARG(ToolbarmodeDialog, SelectToolbarmode, weld::Toggleable&, void)
-{
-    const int i = GetActiveRadioButton();
-    if (i > -1)
-    {
-        UpdateImage(std::get<2>(TOOLBARMODES_ARRAY[i]));
-        m_pInfoLabel->set_label(CuiResId(std::get<0>(TOOLBARMODES_ARRAY[i])));
+        m_xApplyBtn->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
+        m_xResetBtn->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
     }
 }
 
 IMPL_LINK(ToolbarmodeDialog, OnApplyClick, weld::Button&, rButton, void)
 {
-    const int i = GetActiveRadioButton();
-    if (i == -1)
-        return;
-    const OUString sCmd = std::get<1>(TOOLBARMODES_ARRAY[i]);
+    UITabPage* pUITabPage = static_cast<UITabPage*>(GetCurTabPage());
+    const OUString& sCmd = pUITabPage->GetSelectedMode();
+
     //apply to all except current module
-    if (&rButton == m_pApplyAll.get())
+    if (&rButton == m_xResetBtn.get()) // Apply to All
     {
         std::shared_ptr<comphelper::ConfigurationChanges> aBatch(
             comphelper::ConfigurationChanges::create());
@@ -187,7 +62,7 @@ IMPL_LINK(ToolbarmodeDialog, OnApplyClick, weld::Button&, rButton, void)
         officecfg::Office::UI::ToolbarMode::ActiveDraw::set(sCmd, aBatch);
         aBatch->commit();
 
-        OUString sCurrentApp = GetCurrentApp();
+        const OUString sCurrentApp = UITabPage::GetCurrentApp();
         if (SfxViewFrame::Current())
         {
             const auto& xContext = comphelper::getProcessComponentContext();

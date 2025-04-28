@@ -9,29 +9,24 @@
 
 #pragma once
 
-#include <sal/config.h>
+#include <sfx2/tabdlg.hxx>
+#include "uitabpage.hxx"
 
-#include <string_view>
-
-#include <vcl/weld.hxx>
-
-class ToolbarmodeDialog : public weld::GenericDialogController
+class ToolbarmodeDialog : public SfxTabDialogController
 {
-public:
-    ToolbarmodeDialog(weld::Window* pWindow);
-    virtual ~ToolbarmodeDialog() override;
-
 private:
-    std::unique_ptr<weld::Image> m_pImage;
-    std::unique_ptr<weld::Button> m_pApply;
-    std::unique_ptr<weld::Button> m_pApplyAll;
-    std::unique_ptr<weld::RadioButton> m_pRadioButtons[9];
-    std::unique_ptr<weld::Label> m_pInfoLabel;
+    std::unique_ptr<weld::Button> m_xOKBtn;
+    std::unique_ptr<weld::Button> m_xApplyBtn;
+    std::unique_ptr<weld::Button> m_xCancelBtn;
+    std::unique_ptr<weld::Button> m_xHelpBtn;
+    std::unique_ptr<weld::Button> m_xResetBtn;
 
-    void UpdateImage(std::u16string_view sFileName);
-    int GetActiveRadioButton();
-    DECL_LINK(SelectToolbarmode, weld::Toggleable&, void);
+    virtual void ActivatePage(const OUString& rPage) override;
+
     DECL_LINK(OnApplyClick, weld::Button&, void);
+
+public:
+    ToolbarmodeDialog(weld::Window* pParent);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
