@@ -2506,7 +2506,7 @@ void SwAccessibleMap::InvalidateEditableStates( const SwFrame* _pFrame )
     // Start with the frame or the first upper that is accessible
     const SwFrame* pAccFrame = _pFrame;
     while (pAccFrame && !SwAccessibleChild::IsFrameAccessible(*pAccFrame, GetShell().IsPreview()))
-        pAccFrame->GetUpper();
+        pAccFrame = pAccFrame->GetUpper();
     if (!pAccFrame)
         pAccFrame = GetShell().GetLayout();
 
