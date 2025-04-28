@@ -756,12 +756,12 @@ void FrameSelectorImpl::DoInvalidate( bool bFullRepaint )
 void FrameSelectorImpl::SetBorderState( FrameBorder& rBorder, FrameBorderState eState )
 {
     DBG_ASSERT( rBorder.IsEnabled(), "svx::FrameSelectorImpl::SetBorderState - access to disabled border" );
+
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
     Any aOld;
     Any aNew;
     Any& rMod = eState == FrameBorderState::Show ? aNew : aOld;
     rMod <<= AccessibleStateType::CHECKED;
-
-#if !ENABLE_WASM_STRIP_ACCESSIBILITY
     rtl::Reference< a11y::AccFrameSelectorChild > xRet;
     size_t nVecIdx = static_cast< size_t >( rBorder.GetType() );
     if( GetBorder(rBorder.GetType()).IsEnabled() && (1 <= nVecIdx) && (nVecIdx <= maChildVec.size()) )
