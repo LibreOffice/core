@@ -26,17 +26,17 @@
     The relationship data is organized as a set of entries. Each of entry
     is represented by a set of tags, where each tag has unique for this entry
     name and a string value. An entry must contain at least one tag named
-    "ID", the value of this tag must be unique for the whole set of entries,
+    "Id", the value of this tag must be unique for the whole set of entries,
     this tag is used as a unique identifier of an entry.
     </p>
  */
 published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
 {
     /** allows to detect whether there is an entry with specified value of
-        "ID" tag.
+        "Id" tag.
 
         @param sID
-            the value of "ID" tag
+            the value of "Id" tag
 
         @throws ::com::sun::star::io::IOException
             in case there is a problem reading the relations info
@@ -44,7 +44,7 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
     boolean hasByID( [in] string sID )
         raises( ::com::sun::star::io::IOException );
 
-    /** retrieves the value of "Target" tag from the entry with specified "ID"
+    /** retrieves the value of "Target" tag from the entry with specified "Id"
         tag.
 
         <p>
@@ -52,7 +52,7 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         </p>
 
         @param sID
-            the value of "ID" tag
+            the value of "Id" tag
 
         @throws ::com::sun::star::container::NoSuchElementException
             in case there is no entry with specified tag
@@ -64,7 +64,7 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         raises( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException );
 
-    /** retrieves the value of "Type" tag from the entry with specified "ID"
+    /** retrieves the value of "Type" tag from the entry with specified "Id"
         tag.
 
         <p>
@@ -72,7 +72,7 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         </p>
 
         @param sID
-            the value of "ID" tag
+            the value of "Id" tag
 
         @throws ::com::sun::star::container::NoSuchElementException
             in case there is no entry with specified tag
@@ -85,10 +85,10 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
                 ::com::sun::star::io::IOException );
 
     /** retrieves the sequence containing all the tags from the entry with
-        specified value of "ID" tag.
+        specified value of "Id" tag.
 
         @param sID
-            the value of "ID" tag
+            the value of "Id" tag
 
         @returns
             sequence, each element of the sequence represents tag,
@@ -123,7 +123,7 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
             represents the tag name and
             ::com::sun::star::beans::StringPair::Second
             represents the tag value.
-            The sequence should contain the "ID" tag.
+            The sequence should contain the "Id" tag.
 
         @throws ::com::sun::star::io::IOException
             in case there is a problem reading the relations info
@@ -153,7 +153,7 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
     /** allows to insert an entry.
 
         @param sID
-            the value of "ID" tag
+            the value of "Id" tag
 
         @param aEntry
             a sequence, each element of the sequence represents tag,
@@ -161,7 +161,7 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
             represents the tag name and
             ::com::sun::star::beans::StringPair::Second
             represents the tag value.
-            May not contain "ID" tag, that is already specified in previous
+            May not contain "Id" tag, that is already specified in previous
             parameter.
 
         @param bReplace
@@ -171,7 +171,7 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
             in case there is a problem reading/writing the relations info
 
         @throws ::com::sun::star::container::ElementExistException
-            in case an element with the specified "ID" tag exists already, and
+            in case an element with the specified "Id" tag exists already, and
             no replacement is allowed
      */
     void insertRelationshipByID(
@@ -184,7 +184,7 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
     /** allows to remove an entry.
 
         @param sID
-            the value of "ID" tag
+            the value of "Id" tag
 
         @throws ::com::sun::star::container::NoSuchElementException
             in case there is no entry with specified tag
@@ -205,13 +205,13 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
             represents the tag name and
             ::com::sun::star::beans::StringPair::Second
             represents the tag value.
-            Each entry must contain "ID" tag.
+            Each entry must contain "Id" tag.
 
         @param bReplace
             specifies whether the replacement of existing entry is allowed
 
         @throws ::com::sun::star::container::ElementExistException
-            in case an element with the provided "ID" tag exists already, and
+            in case an element with the provided "Id" tag exists already, and
             no replacement is allowed
 
         @throws ::com::sun::star::io::IOException
