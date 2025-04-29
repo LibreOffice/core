@@ -104,7 +104,7 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
 
         if (!xIStream.is())
         {
-            // a Micrsosoft formatted template?
+            // a Microsoft formatted template?
             uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
                 = packages::zip::ZipFileAccess::createWithURL(xContext, msURL);
             if (xNameAccess.is())
