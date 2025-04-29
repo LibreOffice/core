@@ -57,6 +57,8 @@ public:
 
     bool IsIdlingBlocked() const override;
 
+    Timer& GetFireIdleJobsTimer() override;
+
 private:
     DocumentTimerManager(DocumentTimerManager const&) = delete;
     DocumentTimerManager& operator=(DocumentTimerManager const&) = delete;
