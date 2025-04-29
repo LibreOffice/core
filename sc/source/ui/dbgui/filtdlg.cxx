@@ -50,7 +50,7 @@
 ScFilterDlg::EntryList::EntryList() :
     mnHeaderPos(INVALID_HEADER_POS) {}
 
-ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent, ScViewData& rData,
     const SfxItemSet& rArgSet)
     : ScAnyRefDlgController(pB, pCW, pParent,
         u"modules/scalc/ui/standardfilterdialog.ui"_ustr, u"StandardFilterDialog"_ustr)
@@ -63,9 +63,9 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , aStrBackgroundColor(ScResId(SCSTR_FILTER_BACKGROUND_COLOR_COND))
     , nWhichQuery(rArgSet.GetPool()->GetWhichIDFromSlotID(SID_QUERY))
     , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())
-    , pViewData(nullptr)
-    , pDoc(nullptr)
-    , nSrcTab(0)
+    , rViewData(rData)
+    , rDoc(rViewData.GetDocument())
+    , nSrcTab(rViewData.GetTabNo())
     , bRefInputMode(false)
     , m_xLbConnect1(m_xBuilder->weld_combo_box(u"connect1"_ustr))
     , m_xLbField1(m_xBuilder->weld_combo_box(u"field1"_ustr))
@@ -116,7 +116,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     assert(m_xLbCond1->find_text(aStrFontColor) != -1);
     assert(m_xLbCond1->find_text(aStrBackgroundColor) != -1);
 
-    Init( rArgSet );
+    Init();
 
     // Hack: RefInput control
     pTimer.reset( new Timer("ScFilterTimer") );
@@ -161,11 +161,8 @@ VirtualDevice* lcl_getColorImage(const Color &rColor)
 }
 }
 
-void ScFilterDlg::Init( const SfxItemSet& rArgSet )
+void ScFilterDlg::Init()
 {
-    const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(
-                                    rArgSet.Get( nWhichQuery ));
-
     m_xBtnClear->connect_clicked   ( LINK( this, ScFilterDlg, BtnClearHdl ) );
     m_xBtnOk->connect_clicked      ( LINK( this, ScFilterDlg, EndDlgHdl ) );
     m_xBtnCancel->connect_clicked  ( LINK( this, ScFilterDlg, EndDlgHdl ) );
@@ -206,10 +203,6 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     m_xBtnRemove3->connect_clicked( LINK( this, ScFilterDlg, BtnRemoveHdl ) );
     m_xBtnRemove4->connect_clicked( LINK( this, ScFilterDlg, BtnRemoveHdl ) );
 
-    pViewData   = rQueryItem.GetViewData();
-    pDoc        = pViewData ? &pViewData->GetDocument() : nullptr;
-    nSrcTab     = pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
-
     // for easier access:
     maFieldLbArr.reserve(QUERY_ENTRY_COUNT);
     maFieldLbArr.push_back(m_xLbField1.get());
@@ -244,7 +237,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     // Option initialization:
     pOptionsMgr.reset( new ScFilterOptionsMgr(
-                            pViewData,
+                            rViewData,
                             theQueryData,
                             m_xBtnCase.get(),
                             m_xBtnRegExp.get(),
@@ -302,7 +295,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         }
         else if ( i == 0 )
         {
-            nFieldSelPos = pViewData ? GetFieldSelPos(pViewData->GetCurX()) : 0;
+            nFieldSelPos = GetFieldSelPos(rViewData.GetCurX());
             rEntry.nField = nFieldSelPos ? (theQueryData.nCol1 +
                 static_cast<SCCOL>(nFieldSelPos) - 1) : static_cast<SCCOL>(0);
             rEntry.bDoQuery=true;
@@ -400,14 +393,13 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     m_xEdVal3->set_entry_width_chars(10);
     m_xEdVal4->set_entry_width_chars(10);
 
-    if (pDoc != nullptr && pDoc->GetChangeTrack() != nullptr)
+    if (rDoc.GetChangeTrack() != nullptr)
         m_xBtnCopyResult->set_sensitive(false);
 }
 
 void ScFilterDlg::Close()
 {
-    if (pViewData)
-        pViewData->GetDocShell()->CancelAutoDBRange();
+    rViewData.GetDocShell()->CancelAutoDBRange();
 
     DoClose( ScFilterDlgWrapper::GetChildWindowId() );
 }
@@ -455,27 +447,24 @@ void ScFilterDlg::FillFieldLists()
     m_xLbField3->append_text( aStrNone );
     m_xLbField4->append_text( aStrNone );
 
-    if ( pDoc )
-    {
-        OUString aFieldName;
-        SCTAB   nTab        = nSrcTab;
-        SCCOL   nFirstCol   = theQueryData.nCol1;
-        SCROW   nFirstRow   = theQueryData.nRow1;
-        SCCOL   nMaxCol     = theQueryData.nCol2;
-        SCCOL   col = 0;
+    OUString aFieldName;
+    SCTAB   nTab        = nSrcTab;
+    SCCOL   nFirstCol   = theQueryData.nCol1;
+    SCROW   nFirstRow   = theQueryData.nRow1;
+    SCCOL   nMaxCol     = theQueryData.nCol2;
+    SCCOL   col = 0;
 
-        for ( col=nFirstCol; col<=nMaxCol; col++ )
+    for ( col=nFirstCol; col<=nMaxCol; col++ )
+    {
+        aFieldName = rDoc.GetString(col, nFirstRow, nTab);
+        if (!m_xBtnHeader->get_active() || aFieldName.isEmpty())
         {
-            aFieldName = pDoc->GetString(col, nFirstRow, nTab);
-            if (!m_xBtnHeader->get_active() || aFieldName.isEmpty())
-            {
-                aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, u"%1", ScColToAlpha( col ));
-            }
-            m_xLbField1->append_text( aFieldName );
-            m_xLbField2->append_text( aFieldName );
-            m_xLbField3->append_text( aFieldName );
-            m_xLbField4->append_text( aFieldName );
+            aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, u"%1", ScColToAlpha( col ));
         }
+        m_xLbField1->append_text( aFieldName );
+        m_xLbField2->append_text( aFieldName );
+        m_xLbField3->append_text( aFieldName );
+        m_xLbField4->append_text( aFieldName );
     }
 
     m_xLbField4->thaw();
@@ -488,7 +477,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 {
     bool bCaseSens = m_xBtnCase->get_active();
 
-    if (pDoc && nList > 0 && nList <= QUERY_ENTRY_COUNT)
+    if (nList > 0 && nList <= QUERY_ENTRY_COUNT)
     {
         weld::ComboBox* pValList = maValueEdArr[nList-1];
         const sal_Int32 nFieldSelPos = maFieldLbArr[nList-1]->get_active();
@@ -522,7 +511,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                     return;
 
                 pList = r.first->second.get();
-                pDoc->GetFilterEntriesArea(
+                rDoc.GetFilterEntriesArea(
                     nColumn, nFirstRow+1, nLastRow,
                     nTab, bCaseSens, pList->maFilterEntries);
                 maHasDates[nOffset+nList-1] = pList->maFilterEntries.mbHasDates;
@@ -532,7 +521,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
                 pList->mnHeaderPos = INVALID_HEADER_POS;
                 ScFilterEntries aHdrColl;
-                pDoc->GetFilterEntriesArea(
+                rDoc.GetFilterEntriesArea(
                     nColumn, nFirstRow, nFirstRow, nTab, true, aHdrColl );
                 if (!aHdrColl.empty())
                 {
@@ -573,9 +562,6 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 void ScFilterDlg::UpdateHdrInValueList( size_t nList )
 {
     //! GetText / SetText ??
-
-    if (!pDoc)
-        return;
 
     if (nList == 0 || nList > QUERY_ENTRY_COUNT)
         return;
@@ -630,7 +616,7 @@ void ScFilterDlg::ClearValueList( size_t nList )
 
 void ScFilterDlg::UpdateColorList(size_t nList)
 {
-    if (!pDoc || nList <= 0 || nList > QUERY_ENTRY_COUNT)
+    if (nList <= 0 || nList > QUERY_ENTRY_COUNT)
         return;
 
     size_t nPos = nList - 1;
@@ -698,7 +684,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     if ( m_xBtnCopyResult->get_active() )
     {
         ScRefFlags nResult = theCopyPos.Parse(
-            m_xEdCopyArea->GetText(), *pDoc, pDoc->GetAddressConvention());
+            m_xEdCopyArea->GetText(), rDoc, rDoc.GetAddressConvention());
         bCopyPosOk = (nResult & ScRefFlags::VALID) == ScRefFlags::VALID;
     }
 
@@ -726,7 +712,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 
     // only set the three - reset everything else
 
-    pOutItem.reset( new ScQueryItem( nWhichQuery, pViewData, &theParam ) );
+    pOutItem.reset( new ScQueryItem( nWhichQuery, &theParam ) );
 
     return pOutItem.get();
 }
@@ -1301,11 +1287,11 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, weld::ComboBox&, rEd, void )
     }
     else
     {
-        rItem.maString = pDoc->GetSharedStringPool().intern(aStrVal);
+        rItem.maString = rDoc.GetSharedStringPool().intern(aStrVal);
         rItem.mfVal = 0.0;
 
         sal_uInt32 nIndex = 0;
-        bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(
+        bool bNumber = rDoc.GetFormatTable()->IsNumberFormat(
             rItem.maString.getString(), nIndex, rItem.mfVal);
         rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
     }
@@ -1539,20 +1525,15 @@ void ScFilterDlg::SetValString( const OUString& rQueryStr, const ScQueryEntry::I
 {
     if (rQueryStr.isEmpty())
     {
-        pDoc = pViewData ? &pViewData->GetDocument() : nullptr;
         if (rItem.meType == ScQueryEntry::ByValue)
         {
-            if (pDoc)
-                rValStr = pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0);
+            rValStr = rDoc.GetFormatTable()->GetInputLineString(rItem.mfVal, 0);
         }
         else if (rItem.meType == ScQueryEntry::ByDate)
         {
-            if (pDoc)
-            {
-                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                rValStr = pFormatter->GetInputLineString(rItem.mfVal,
-                                               pFormatter->GetStandardFormat( SvNumFormatType::DATE));
-            }
+            SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+            rValStr = pFormatter->GetInputLineString(rItem.mfVal,
+                                           pFormatter->GetStandardFormat( SvNumFormatType::DATE));
         }
         else
         {

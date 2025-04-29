@@ -33,7 +33,7 @@ class ScViewData;
 class ScFilterOptionsMgr
 {
 public:
-    ScFilterOptionsMgr(ScViewData* ptrViewData,
+    ScFilterOptionsMgr(ScViewData& rViewData,
                      const ScQueryParam& refQueryData,
                      weld::CheckButton*  refBtnCase,
                      weld::CheckButton* refBtnRegExp,
@@ -50,8 +50,8 @@ public:
     bool    VerifyPosStr ( const OUString& rPosStr ) const;
 
 private:
-    ScViewData*     pViewData;
-    ScDocument*     pDoc;
+    ScViewData&     rViewData;
+    ScDocument&     rDoc;
 
     weld::CheckButton* pBtnCase;
     weld::CheckButton* pBtnRegExp;

@@ -345,14 +345,12 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             pDBData->GetArea(aArea);
             MarkRange(aArea, false);
 
-            aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA,
-                                      &GetViewData(),
-                                      &aQueryParam ) );
+            aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &aQueryParam ) );
 
             // mark current sheet (due to RefInput in dialog)
             GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
-            xResult = std::make_shared<ScFilterDlg>(pB, pCW, pParent, aArgSet);
+            xResult = std::make_shared<ScFilterDlg>(pB, pCW, pParent, GetViewData(), aArgSet);
             break;
         }
         case SID_SPECIAL_FILTER:
@@ -369,7 +367,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             pDBData->GetArea(aArea);
             MarkRange(aArea, false);
 
-            ScQueryItem aItem( SCITEM_QUERYDATA, &GetViewData(), &aQueryParam );
+            ScQueryItem aItem( SCITEM_QUERYDATA, &aQueryParam );
             ScRange aAdvSource;
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
                 aItem.SetAdvancedQuerySource( &aAdvSource );
@@ -379,7 +377,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             // mark current sheet (due to RefInput in dialog)
             GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
-            xResult = std::make_shared<ScSpecialFilterDlg>(pB, pCW, pParent, aArgSet);
+            xResult = std::make_shared<ScSpecialFilterDlg>(pB, pCW, pParent, GetViewData(), aArgSet);
             break;
         }
         case SID_OPENDLG_OPTSOLVER:

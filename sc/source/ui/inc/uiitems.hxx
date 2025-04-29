@@ -147,7 +147,6 @@ class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
 public:
                             DECLARE_ITEM_TYPE_FUNCTION(ScQueryItem)
                             ScQueryItem( sal_uInt16                 nWhich,
-                                         ScViewData*            ptrViewData,
                                          const ScQueryParam*    pQueryData );
                             ScQueryItem( const ScQueryItem& rItem );
                             virtual ~ScQueryItem() override;
@@ -155,7 +154,6 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual ScQueryItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    ScViewData*         GetViewData () const { return pViewData; }
     const ScQueryParam& GetQueryData() const;
 
     bool        GetAdvancedQuerySource(ScRange& rSource) const;
@@ -163,7 +161,6 @@ public:
 
 private:
     std::unique_ptr<ScQueryParam> mpQueryData;
-    ScViewData*     pViewData;
     ScRange         aAdvSource;
     bool            bIsAdvanced;
 };

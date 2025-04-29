@@ -492,6 +492,7 @@ public:
 
     virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(weld::Window* pParent,
                                                                     const SfxItemSet& rArgSet,
+                                                                    ScViewData& rViewData,
                                                                     sal_uInt16 nSourceTab) = 0;
 
     virtual VclPtr<AbstractScDPFunctionDlg> CreateScDPFunctionDlg(weld::Widget* pParent,

@@ -207,13 +207,13 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             }
 
             SfxItemSet aArgSet(SfxItemSet::makeFixedSfxItemSet<SCITEM_QUERYDATA, SCITEM_QUERYDATA>(mrViewData.GetViewShell()->GetPool()));
-            aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &mrViewData, &aQueryParam ) );
+            aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &aQueryParam ) );
 
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
             ScopedVclPtr<AbstractScPivotFilterDlg> pDlg(
                 pFact->CreateScPivotFilterDlg(
-                    mrViewData.GetViewShell()->GetFrameWeld(), aArgSet, nSrcTab));
+                    mrViewData.GetViewShell()->GetFrameWeld(), aArgSet, mrViewData, nSrcTab));
             if ( pDlg->Execute() == RET_OK )
             {
                 ScSheetSourceDesc aNewDesc(&rDoc);

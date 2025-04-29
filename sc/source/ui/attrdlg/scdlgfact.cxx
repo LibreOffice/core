@@ -568,9 +568,9 @@ public:
 }
 
 VclPtr<AbstractScPivotFilterDlg> ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg(weld::Window* pParent,
-    const SfxItemSet& rArgSet, sal_uInt16 nSourceTab)
+    const SfxItemSet& rArgSet, ScViewData& rViewData, sal_uInt16 nSourceTab)
 {
-    return VclPtr<AbstractScPivotFilterDlg_Impl>::Create(pParent, rArgSet, nSourceTab);
+    return VclPtr<AbstractScPivotFilterDlg_Impl>::Create(pParent, rArgSet, rViewData, nSourceTab);
 }
 
 namespace

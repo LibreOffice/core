@@ -95,12 +95,12 @@ void ScPivotShell::Execute( const SfxRequest& rReq )
 
                 ScViewData& rViewData = pViewShell->GetViewData();
                 SfxItemSetFixed<SCITEM_QUERYDATA, SCITEM_QUERYDATA> aArgSet( pViewShell->GetPool() );
-                aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &rViewData, &aQueryParam ) );
+                aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &aQueryParam ) );
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 ScopedVclPtr<AbstractScPivotFilterDlg> pDlg(pFact->CreateScPivotFilterDlg(
-                    pViewShell->GetFrameWeld(), aArgSet, nSrcTab));
+                    pViewShell->GetFrameWeld(), aArgSet, rViewData, nSrcTab));
 
                 if( pDlg->Execute() == RET_OK )
                 {

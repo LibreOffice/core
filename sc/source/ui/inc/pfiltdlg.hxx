@@ -34,7 +34,7 @@ struct ScFilterEntries;
 class ScPivotFilterDlg : public weld::GenericDialogController
 {
 public:
-    ScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArgSet, SCTAB nSourceTab);
+    ScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArgSet, ScViewData& rData, SCTAB nSourceTab);
     virtual ~ScPivotFilterDlg() override;
 
     const ScQueryItem&  GetOutputItem();
@@ -48,8 +48,8 @@ private:
     const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;
     std::unique_ptr<ScQueryItem> pOutItem;
-    ScViewData*         pViewData;
-    ScDocument*         pDoc;
+    ScViewData&         rViewData;
+    ScDocument&         rDoc;
     SCTAB               nSrcTab;
 
     std::unique_ptr<weld::ComboBox> m_xLbField1;
@@ -78,7 +78,7 @@ private:
     std::array<std::unique_ptr<ScFilterEntries>, MAXCOLCOUNT> m_pEntryLists;
 
 private:
-    void    Init            ( const SfxItemSet& rArgSet );
+    void    Init            ();
     void    FillFieldLists  ();
     void    UpdateValueList ( sal_uInt16 nList );
     void    ClearValueList  ( sal_uInt16 nList );

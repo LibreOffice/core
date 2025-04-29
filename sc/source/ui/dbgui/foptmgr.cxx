@@ -32,7 +32,7 @@
 // ScFilterOptionsMgr (.ui's option helper)
 
 ScFilterOptionsMgr::ScFilterOptionsMgr(
-                                ScViewData*         ptrViewData,
+                                ScViewData&         rData,
                                 const ScQueryParam& refQueryData,
                                 weld::CheckButton* refBtnCase,
                                 weld::CheckButton* refBtnRegExp,
@@ -47,8 +47,8 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 weld::Label* refFtDbArea,
                                 const OUString&     refStrUndefined )
 
-    :   pViewData       ( ptrViewData ),
-        pDoc            ( ptrViewData ? &ptrViewData->GetDocument() : nullptr ),
+    :   rViewData       ( rData ),
+        rDoc            ( rViewData.GetDocument() ),
         pBtnCase        ( refBtnCase ),
         pBtnRegExp      ( refBtnRegExp ),
         pBtnHeader      ( refBtnHeader ),
@@ -69,8 +69,6 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
 void ScFilterOptionsMgr::Init()
 {
 //moggi:TODO
-    OSL_ENSURE( pViewData && pDoc, "Init failed :-/" );
-
     pLbCopyArea->connect_changed( LINK( this, ScFilterOptionsMgr, LbAreaSelHdl ) );
     pEdCopyArea->SetModifyHdl  ( LINK( this, ScFilterOptionsMgr, EdAreaModifyHdl ) );
     pBtnCopyResult->connect_toggled( LINK( this, ScFilterOptionsMgr, BtnCopyResultHdl ) );
@@ -80,104 +78,99 @@ void ScFilterOptionsMgr::Init()
     pBtnRegExp->set_active( rQueryData.eSearchType == utl::SearchParam::SearchType::Regexp );
     pBtnUnique->set_active( !rQueryData.bDuplicate );
 
-    if ( pViewData && pDoc )
+    OUString theAreaStr;
+    ScRange         theCurArea ( ScAddress( rQueryData.nCol1,
+                                            rQueryData.nRow1,
+                                            rViewData.GetTabNo() ),
+                                 ScAddress( rQueryData.nCol2,
+                                            rQueryData.nRow2,
+                                            rViewData.GetTabNo() ) );
+    ScDBCollection* pDBColl     = rDoc.GetDBCollection();
+    OUString theDbArea;
+    OUString   theDbName(STR_DB_LOCAL_NONAME);
+    const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
+
+    theAreaStr = theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, eConv);
+
+    // fill the target area list
+
+    pLbCopyArea->clear();
+    pLbCopyArea->append_text(rStrUndefined);
+
+    ScAreaNameIterator aIter( rDoc );
+    OUString aName;
+    ScRange aRange;
+    while ( aIter.Next( aName, aRange ) )
     {
-        OUString theAreaStr;
-        ScRange         theCurArea ( ScAddress( rQueryData.nCol1,
-                                                rQueryData.nRow1,
-                                                pViewData->GetTabNo() ),
-                                     ScAddress( rQueryData.nCol2,
-                                                rQueryData.nRow2,
-                                                pViewData->GetTabNo() ) );
-        ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        OUString theDbArea;
-        OUString   theDbName(STR_DB_LOCAL_NONAME);
-        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+        OUString aRefStr(aRange.aStart.Format(ScRefFlags::ADDR_ABS_3D, &rDoc, eConv));
+        pLbCopyArea->append(aRefStr, aName);
+    }
 
-        theAreaStr = theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv);
+    pBtnDestPers->set_active(true);         // always on when called
+    pLbCopyArea->set_active( 0 );
+    pEdCopyArea->SetText( OUString() );
 
-        // fill the target area list
+    /*
+     * Check whether the transferred area is a database area:
+     */
 
-        pLbCopyArea->clear();
-        pLbCopyArea->append_text(rStrUndefined);
+    theDbArea = theAreaStr;
 
-        ScAreaNameIterator aIter( *pDoc );
-        OUString aName;
-        ScRange aRange;
-        while ( aIter.Next( aName, aRange ) )
+    if ( pDBColl )
+    {
+        ScAddress&  rStart  = theCurArea.aStart;
+        ScAddress&  rEnd    = theCurArea.aEnd;
+        const ScDBData* pDBData = pDBColl->GetDBAtArea(
+            rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row());
+
+        if ( pDBData )
         {
-            OUString aRefStr(aRange.aStart.Format(ScRefFlags::ADDR_ABS_3D, pDoc, eConv));
-            pLbCopyArea->append(aRefStr, aName);
-        }
+            pBtnHeader->set_active( pDBData->HasHeader() );
+            theDbName = pDBData->GetName();
 
-        pBtnDestPers->set_active(true);         // always on when called
-        pLbCopyArea->set_active( 0 );
-        pEdCopyArea->SetText( OUString() );
-
-        /*
-         * Check whether the transferred area is a database area:
-         */
-
-        theDbArea = theAreaStr;
-
-        if ( pDBColl )
-        {
-            ScAddress&  rStart  = theCurArea.aStart;
-            ScAddress&  rEnd    = theCurArea.aEnd;
-            const ScDBData* pDBData = pDBColl->GetDBAtArea(
-                rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row());
-
-            if ( pDBData )
-            {
-                pBtnHeader->set_active( pDBData->HasHeader() );
-                theDbName = pDBData->GetName();
-
-                pBtnHeader->set_sensitive(theDbName == STR_DB_LOCAL_NONAME);
-            }
-        }
-
-        if ( theDbName != STR_DB_LOCAL_NONAME )
-        {
-            theDbArea += " (" + theDbName + ")";
-
-            pFtDbArea->set_label( theDbArea );
-        }
-        else
-        {
-            pFtDbAreaLabel->set_label( OUString() );
-            pFtDbArea->set_label( OUString() );
-        }
-
-        // position to copy to:
-
-        if ( !rQueryData.bInplace )
-        {
-            OUString aString =
-                ScAddress( rQueryData.nDestCol,
-                           rQueryData.nDestRow,
-                           rQueryData.nDestTab
-                         ).Format(ScRefFlags::ADDR_ABS_3D, pDoc, eConv);
-
-            pBtnCopyResult->set_active(true);
-            pEdCopyArea->SetText( aString );
-            EdAreaModifyHdl( *pEdCopyArea );
-            pLbCopyArea->set_sensitive(true);
-            pEdCopyArea->GetWidget()->set_sensitive(true);
-            pRbCopyArea->GetWidget()->set_sensitive(true);
-            pBtnDestPers->set_sensitive(true);
-        }
-        else
-        {
-            pBtnCopyResult->set_active( false );
-            pEdCopyArea->SetText( OUString() );
-            pLbCopyArea->set_sensitive(false);
-            pEdCopyArea->GetWidget()->set_sensitive(false);
-            pRbCopyArea->GetWidget()->set_sensitive(false);
-            pBtnDestPers->set_sensitive(false);
+            pBtnHeader->set_sensitive(theDbName == STR_DB_LOCAL_NONAME);
         }
     }
+
+    if ( theDbName != STR_DB_LOCAL_NONAME )
+    {
+        theDbArea += " (" + theDbName + ")";
+
+        pFtDbArea->set_label( theDbArea );
+    }
     else
+    {
+        pFtDbAreaLabel->set_label( OUString() );
+        pFtDbArea->set_label( OUString() );
+    }
+
+    // position to copy to:
+
+    if ( !rQueryData.bInplace )
+    {
+        OUString aString =
+            ScAddress( rQueryData.nDestCol,
+                       rQueryData.nDestRow,
+                       rQueryData.nDestTab
+                     ).Format(ScRefFlags::ADDR_ABS_3D, &rDoc, eConv);
+
+        pBtnCopyResult->set_active(true);
+        pEdCopyArea->SetText( aString );
+        EdAreaModifyHdl( *pEdCopyArea );
+        pLbCopyArea->set_sensitive(true);
+        pEdCopyArea->GetWidget()->set_sensitive(true);
+        pRbCopyArea->GetWidget()->set_sensitive(true);
+        pBtnDestPers->set_sensitive(true);
+    }
+    else
+    {
+        pBtnCopyResult->set_active( false );
         pEdCopyArea->SetText( OUString() );
+        pLbCopyArea->set_sensitive(false);
+        pEdCopyArea->GetWidget()->set_sensitive(false);
+        pRbCopyArea->GetWidget()->set_sensitive(false);
+        pBtnDestPers->set_sensitive(false);
+    }
 }
 
 bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
@@ -188,7 +181,7 @@ bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
     if ( -1 != nColonPos )
         aPosStr = aPosStr.copy( 0, nColonPos );
 
-    ScRefFlags nResult = ScAddress().Parse( aPosStr, *pDoc, pDoc->GetAddressConvention() );
+    ScRefFlags nResult = ScAddress().Parse( aPosStr, rDoc, rDoc.GetAddressConvention() );
 
     return (nResult & ScRefFlags::VALID) == ScRefFlags::VALID;
 }
@@ -215,7 +208,7 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, formula::RefEdit&, rEd, void )
         return;
 
     OUString  theCurPosStr = rEd.GetText();
-    ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, *pDoc, pDoc->GetAddressConvention() );
+    ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, rDoc, rDoc.GetAddressConvention() );
 
     if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID)
     {

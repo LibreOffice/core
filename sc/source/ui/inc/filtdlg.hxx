@@ -50,6 +50,7 @@ class ScFilterDlg : public ScAnyRefDlgController
     typedef std::map<SCCOL, std::unique_ptr<EntryList>> EntryListsMap;
 public:
     ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                ScViewData& rData,
                 const SfxItemSet& rArgSet);
     virtual ~ScFilterDlg() override;
 
@@ -78,8 +79,8 @@ private:
     const sal_uInt16        nWhichQuery;
     ScQueryParam        theQueryData;
     std::unique_ptr<ScQueryItem> pOutItem;
-    ScViewData*         pViewData;
-    ScDocument*         pDoc;
+    ScViewData&         rViewData;
+    ScDocument&         rDoc;
     SCTAB               nSrcTab;
 
     std::vector<weld::ComboBox*> maValueEdArr;
@@ -147,7 +148,7 @@ private:
     std::unique_ptr<weld::Label> m_xFtDbArea;
 
 private:
-    void            Init            ( const SfxItemSet& rArgSet );
+    void            Init            ();
     void            FillFieldLists  ();
     void            UpdateValueList ( size_t nList );
     void            UpdateHdrInValueList( size_t nList );
@@ -177,7 +178,7 @@ class ScSpecialFilterDlg : public ScAnyRefDlgController
 {
 public:
     ScSpecialFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-                       const SfxItemSet& rArgSet);
+                       ScViewData& rData, const SfxItemSet& rArgSet);
     virtual ~ScSpecialFilterDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
@@ -195,8 +196,8 @@ private:
     const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;
     std::unique_ptr<ScQueryItem> pOutItem;
-    ScViewData*         pViewData;
-    ScDocument*         pDoc;
+    ScViewData&         rViewData;
+    ScDocument&         rDoc;
 
     bool                bRefInputMode;
 

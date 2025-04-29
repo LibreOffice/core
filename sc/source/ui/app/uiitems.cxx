@@ -157,10 +157,8 @@ bool ScSortItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) co
  * Data for the Filter dialog
  */
 ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
-                          ScViewData*           ptrViewData,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
-        pViewData   ( ptrViewData ),
         bIsAdvanced ( false )
 {
     if (pQueryData)
@@ -172,7 +170,6 @@ ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
 ScQueryItem::ScQueryItem( const ScQueryItem& rItem ) :
         SfxPoolItem ( rItem ),
         mpQueryData(new ScQueryParam(*rItem.mpQueryData)),
-        pViewData   ( rItem.pViewData ),
         aAdvSource  ( rItem.aAdvSource ),
         bIsAdvanced ( rItem.bIsAdvanced )
 {
@@ -210,8 +207,7 @@ bool ScQueryItem::operator==( const SfxPoolItem& rItem ) const
 
     const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(rItem);
 
-    return (   (pViewData    == rQueryItem.pViewData)
-            && (bIsAdvanced  == rQueryItem.bIsAdvanced)
+    return ( (bIsAdvanced  == rQueryItem.bIsAdvanced)
             && (aAdvSource   == rQueryItem.aAdvSource)
             && (*mpQueryData == *rQueryItem.mpQueryData) );
 }

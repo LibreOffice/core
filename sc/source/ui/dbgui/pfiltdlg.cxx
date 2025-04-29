@@ -36,7 +36,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <osl/diagnose.h>
 
-ScPivotFilterDlg::ScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArgSet,
+ScPivotFilterDlg::ScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArgSet, ScViewData& rData,
                                    SCTAB nSourceTab )
     : GenericDialogController(pParent, u"modules/scalc/ui/pivotfilterdialog.ui"_ustr, u"PivotFilterDialog"_ustr)
     , aStrNone(ScResId(SCSTR_NONE))
@@ -45,8 +45,8 @@ ScPivotFilterDlg::ScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArg
     , aStrColumn(ScResId(SCSTR_COLUMN_LETTER))
     , nWhichQuery(rArgSet.GetPool()->GetWhichIDFromSlotID(SID_QUERY))
     , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())
-    , pViewData(nullptr)
-    , pDoc(nullptr)
+    , rViewData(rData)
+    , rDoc(rViewData.GetDocument())
     , nSrcTab(nSourceTab)     // is not in QueryParam
     , m_xLbField1(m_xBuilder->weld_combo_box(u"field1"_ustr))
     , m_xLbCond1(m_xBuilder->weld_combo_box(u"cond1"_ustr))
@@ -64,18 +64,15 @@ ScPivotFilterDlg::ScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArg
     , m_xBtnUnique(m_xBuilder->weld_check_button(u"unique"_ustr))
     , m_xFtDbArea(m_xBuilder->weld_label(u"dbarea"_ustr))
 {
-    Init( rArgSet );
+    Init();
 }
 
 ScPivotFilterDlg::~ScPivotFilterDlg()
 {
 }
 
-void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
+void ScPivotFilterDlg::Init()
 {
-    const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(
-                                    rArgSet.Get( nWhichQuery ));
-
     m_xBtnCase->connect_toggled( LINK( this, ScPivotFilterDlg, CheckBoxHdl ) );
 
     m_xLbField1->connect_changed  ( LINK( this, ScPivotFilterDlg, LbSelectHdl ) );
@@ -88,9 +85,6 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     m_xBtnRegExp->set_active( theQueryData.eSearchType == utl::SearchParam::SearchType::Regexp );
     m_xBtnUnique->set_active( !theQueryData.bDuplicate );
 
-    pViewData   = rQueryItem.GetViewData();
-    pDoc        = pViewData ? &pViewData->GetDocument() : nullptr;
-
     // for easier access:
     aFieldLbArr  [0] = m_xLbField1.get();
     aFieldLbArr  [1] = m_xLbField2.get();
@@ -102,37 +96,30 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     aCondLbArr   [1] = m_xLbCond2.get();
     aCondLbArr   [2] = m_xLbCond3.get();
 
-    if ( pViewData && pDoc )
+    ScRange         theCurArea ( ScAddress( theQueryData.nCol1,
+                                            theQueryData.nRow1,
+                                            nSrcTab ),
+                                 ScAddress( theQueryData.nCol2,
+                                            theQueryData.nRow2,
+                                            nSrcTab ) );
+    ScDBCollection* pDBColl     = rDoc.GetDBCollection();
+    OUString theDbName = STR_DB_LOCAL_NONAME;
+
+     // Check if the passed range is a database range
+
+    if ( pDBColl )
     {
-        ScRange         theCurArea ( ScAddress( theQueryData.nCol1,
-                                                theQueryData.nRow1,
-                                                nSrcTab ),
-                                     ScAddress( theQueryData.nCol2,
-                                                theQueryData.nRow2,
-                                                nSrcTab ) );
-        ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        OUString theDbName = STR_DB_LOCAL_NONAME;
-
-         // Check if the passed range is a database range
-
-        if ( pDBColl )
-        {
-            ScAddress&  rStart  = theCurArea.aStart;
-            ScAddress&  rEnd    = theCurArea.aEnd;
-            ScDBData*   pDBData = pDBColl->GetDBAtArea( rStart.Tab(),
-                                                        rStart.Col(), rStart.Row(),
-                                                        rEnd.Col(),   rEnd.Row() );
-            if ( pDBData )
-                theDbName = pDBData->GetName();
-        }
-
-        OUString sLabel = " (" + theDbName + ")";
-        m_xFtDbArea->set_label(sLabel);
+        ScAddress&  rStart  = theCurArea.aStart;
+        ScAddress&  rEnd    = theCurArea.aEnd;
+        ScDBData*   pDBData = pDBColl->GetDBAtArea( rStart.Tab(),
+                                                    rStart.Col(), rStart.Row(),
+                                                    rEnd.Col(),   rEnd.Row() );
+        if ( pDBData )
+            theDbName = pDBData->GetName();
     }
-    else
-    {
-        m_xFtDbArea->set_label(OUString());
-    }
+
+    OUString sLabel = " (" + theDbName + ")";
+    m_xFtDbArea->set_label(sLabel);
 
     // Read the field lists and select the entries:
 
@@ -219,9 +206,6 @@ void ScPivotFilterDlg::FillFieldLists()
     m_xLbField2->append_text(aStrNone);
     m_xLbField3->append_text(aStrNone);
 
-    if ( !pDoc )
-        return;
-
     OUString  aFieldName;
     SCTAB   nTab        = nSrcTab;
     SCCOL   nFirstCol   = theQueryData.nCol1;
@@ -231,7 +215,7 @@ void ScPivotFilterDlg::FillFieldLists()
 
     for ( col=nFirstCol; col<=nMaxCol; col++ )
     {
-        aFieldName = pDoc->GetString(col, nFirstRow, nTab);
+        aFieldName = rDoc.GetString(col, nFirstRow, nTab);
         if ( aFieldName.isEmpty() )
         {
             aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, u"%1", ScColToAlpha( col ));
@@ -244,7 +228,7 @@ void ScPivotFilterDlg::FillFieldLists()
 
 void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
 {
-    if ( !(pDoc && nList>0 && nList<=3) )
+    if ( !(nList>0 && nList<=3) )
         return;
 
     weld::ComboBox* pValList        = aValueEdArr[nList-1];
@@ -255,7 +239,7 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
     pValList->append_text(aStrNotEmpty);
     pValList->append_text(aStrEmpty);
 
-    if ( pDoc && nFieldSelPos )
+    if ( nFieldSelPos )
     {
         SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
         if (!m_pEntryLists[nColumn])
@@ -268,7 +252,7 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
             nFirstRow++;
             bool bCaseSens = m_xBtnCase->get_active();
             m_pEntryLists[nColumn].reset( new ScFilterEntries);
-            pDoc->GetFilterEntriesArea(
+            rDoc.GetFilterEntriesArea(
                 nColumn, nFirstRow, nLastRow, nTab, bCaseSens, *m_pEntryLists[nColumn]);
         }
 
@@ -307,7 +291,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     sal_Int32          nConnect1 = m_xLbConnect1->get_active();
     sal_Int32          nConnect2 = m_xLbConnect2->get_active();
 
-    svl::SharedStringPool& rPool = pViewData->GetDocument().GetSharedStringPool();
+    svl::SharedStringPool& rPool = rViewData.GetDocument().GetSharedStringPool();
 
     for ( SCSIZE i=0; i<3; i++ )
     {
@@ -368,7 +352,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     theParam.bCaseSens      = m_xBtnCase->get_active();
     theParam.eSearchType    = m_xBtnRegExp->get_active() ? utl::SearchParam::SearchType::Regexp : utl::SearchParam::SearchType::Normal;
 
-    pOutItem.reset( new ScQueryItem( nWhichQuery, pViewData, &theParam ) );
+    pOutItem.reset( new ScQueryItem( nWhichQuery, &theParam ) );
 
     return *pOutItem;
 }
