@@ -117,21 +117,11 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
             if( aBox.Overlaps( rNewVisArea ) )
             {
                 if( aBox.Overlaps( rOldVisArea ) )
-                {
                     eAction = Action::SCROLLED_WITHIN;
-                }
+                else if (bVisibleChildrenOnly && !rLower.AlwaysIncludeAsChild())
+                    eAction = Action::SCROLLED_IN;
                 else
-                {
-                    if ( bVisibleChildrenOnly &&
-                         !rLower.AlwaysIncludeAsChild() )
-                    {
-                        eAction = Action::SCROLLED_IN;
-                    }
-                    else
-                    {
-                        eAction = Action::SCROLLED;
-                    }
-                }
+                    eAction = Action::SCROLLED;
             }
             else if( aBox.Overlaps( rOldVisArea ) )
             {
