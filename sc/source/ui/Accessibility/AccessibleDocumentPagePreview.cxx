@@ -87,7 +87,7 @@ struct ScAccNote
 class ScNotesChildren
 {
 public:
-    ScNotesChildren(ScPreviewShell* pViewShell, ScAccessibleDocumentPagePreview* pAccDoc);
+    ScNotesChildren(ScPreviewShell* pViewShell, ScAccessibleDocumentPagePreview& rAccDoc);
     ~ScNotesChildren();
     void Init(const tools::Rectangle& rVisRect, sal_Int32 nOffset);
 
@@ -99,7 +99,7 @@ public:
 
 private:
     ScPreviewShell*         mpViewShell;
-    ScAccessibleDocumentPagePreview* mpAccDoc;
+    ScAccessibleDocumentPagePreview& mrAccDoc;
     typedef std::vector<ScAccNote> ScAccNotes;
     mutable ScAccNotes      maNotes;
     mutable ScAccNotes      maMarks;
@@ -118,9 +118,9 @@ private:
     inline ScDocument* GetDocument() const;
 };
 
-ScNotesChildren::ScNotesChildren(ScPreviewShell* pViewShell, ScAccessibleDocumentPagePreview* pAccDoc)
+ScNotesChildren::ScNotesChildren(ScPreviewShell* pViewShell, ScAccessibleDocumentPagePreview& rAccDoc)
     : mpViewShell(pViewShell),
-    mpAccDoc(pAccDoc),
+    mrAccDoc(rAccDoc),
     mnParagraphs(0),
     mnOffset(0)
 {
@@ -145,7 +145,7 @@ ScNotesChildren::~ScNotesChildren()
 ::accessibility::AccessibleTextHelper* ScNotesChildren::CreateTextHelper(const OUString& rString, const tools::Rectangle& rVisRect, const ScAddress& aCellPos, bool bMarkNote, sal_Int32 nChildOffset) const
 {
     ::accessibility::AccessibleTextHelper* pTextHelper = new ::accessibility::AccessibleTextHelper(std::make_unique<ScAccessibilityEditSource>(std::make_unique<ScAccessibleNoteTextData>(mpViewShell, rString, aCellPos, bMarkNote)));
-    pTextHelper->SetEventSource(mpAccDoc);
+    pTextHelper->SetEventSource(&mrAccDoc);
     pTextHelper->SetStartIndex(nChildOffset);
     pTextHelper->SetOffset(rVisRect.TopLeft());
 
@@ -461,7 +461,7 @@ struct ScChildNew
 
 void ScNotesChildren::DataChanged(const tools::Rectangle& rVisRect)
 {
-    if (!(mpViewShell && mpAccDoc))
+    if (!mpViewShell)
         return;
 
     ScXAccVector aNewParas;
@@ -477,8 +477,8 @@ void ScNotesChildren::DataChanged(const tools::Rectangle& rVisRect)
         maNotes = std::move(aNewNotes);
     }
 
-    std::for_each(aOldParas.begin(), aOldParas.end(), ScChildGone(mpAccDoc));
-    std::for_each(aNewParas.begin(), aNewParas.end(), ScChildNew(mpAccDoc));
+    std::for_each(aOldParas.begin(), aOldParas.end(), ScChildGone(&mrAccDoc));
+    std::for_each(aNewParas.begin(), aNewParas.end(), ScChildNew(&mrAccDoc));
 }
 
 inline ScDocument* ScNotesChildren::GetDocument() const
@@ -1496,7 +1496,7 @@ ScNotesChildren* ScAccessibleDocumentPagePreview::GetNotesChildren()
 {
     if (!mpNotesChildren && mpViewShell)
     {
-        mpNotesChildren.reset( new ScNotesChildren(mpViewShell, this) );
+        mpNotesChildren.reset(new ScNotesChildren(mpViewShell, *this));
 
         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
         ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChildren(), GetShapeChildren() );
