@@ -108,10 +108,8 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
     const bool bVisibleChildrenOnly = SwAccessibleChild( pFrame ).IsVisibleChildrenOnly();
 
     const SwAccessibleChildSList aList( *pFrame, *(GetMap()) );
-    SwAccessibleChildSList::const_iterator aIter( aList.begin() );
-    while( aIter != aList.end() )
+    for (const SwAccessibleChild& rLower : aList)
     {
-        const SwAccessibleChild& rLower = *aIter;
         const SwRect aBox( rLower.GetBox( *(GetMap()) ) );
         if (rLower.IsAccessible(GetShell().IsPreview()))
         {
@@ -238,7 +236,6 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
             // There are no unaccessible SdrObjects that need to be notified
             ChildrenScrolled( rLower.GetSwFrame(), rOldVisArea );
         }
-        ++aIter;
     }
 }
 
