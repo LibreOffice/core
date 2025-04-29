@@ -1251,6 +1251,14 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
                     (pPrev->GetNode().IsContentNode())
                         ? pPrev->GetNode().GetContentNode()->Len() : 0);
         rIDRA.SplitRedline(pam);
+
+        // Paragraph formatting results in overlapping elements, split of redlines then can result
+        // in an unsorted redline table, fix it up.
+        SwRedlineTable& rRedlineTable = rIDRA.GetRedlineTable();
+        if (rRedlineTable.HasOverlappingElements())
+        {
+            rIDRA.GetRedlineTable().Resort();
+        }
     }
 
     // We always use Upper to insert the Table
