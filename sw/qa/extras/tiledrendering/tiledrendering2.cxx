@@ -191,7 +191,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAsyncLayout)
     CPPUNIT_ASSERT(pPage2->IsInvalidContent());
     CPPUNIT_ASSERT(pPage3->IsInvalidContent());
 
-    // And then processing all idle events:
+    // And when processing all idle events:
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentTimerAccess& rIDTA = pDoc->getIDocumentTimerAccess();
+    rIDTA.GetFireIdleJobsTimer().Stop();
+    rIDTA.StartIdling();
     Scheduler::ProcessEventsToIdle();
 
     // Then make sure all pages get an async layout:
@@ -731,6 +735,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentsOnLoad)
     // When getting the list of comments from the document + listening for notifications from idle
     // layout:
     pXTextDocument->getPostIts(aWriter);
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentTimerAccess& rIDTA = pDoc->getIDocumentTimerAccess();
+    rIDTA.GetFireIdleJobsTimer().Stop();
+    rIDTA.StartIdling();
     Scheduler::ProcessEventsToIdle();
 
     // Then make sure that:

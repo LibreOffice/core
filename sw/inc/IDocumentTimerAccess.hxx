@@ -19,6 +19,8 @@
 
 #pragma once
 
+class Timer;
+
 /**
  * Handle the background jobs of a Writer document.
  *
@@ -68,6 +70,8 @@ public:
      * Is idling blocked?
      */
     virtual bool IsIdlingBlocked() const = 0;
+
+    virtual Timer& GetFireIdleJobsTimer() = 0;
 
 protected:
     virtual ~IDocumentTimerAccess(){};

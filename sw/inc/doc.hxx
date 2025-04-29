@@ -547,7 +547,7 @@ public:
     // IDocumentTimerAccess
     // Our own 'IdleTimer' calls the following method
     IDocumentTimerAccess const & getIDocumentTimerAccess() const;
-    IDocumentTimerAccess & getIDocumentTimerAccess();
+    SW_DLLPUBLIC IDocumentTimerAccess & getIDocumentTimerAccess();
 
     // IDocumentChartDataProviderAccess
     IDocumentChartDataProviderAccess const & getIDocumentChartDataProviderAccess() const;
