@@ -18,6 +18,7 @@
 
 #include <basegfx/color/bcolortools.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
@@ -40,6 +41,9 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
+#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
+#include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
@@ -60,6 +64,73 @@ bool ThumbnailView::renameItem(ThumbnailViewItem&, const OUString&)
     return false;
 }
 
+static css::uno::Reference<css::embed::XHierarchicalStorageAccess>
+getStorageAccess(const OUString& URL, sal_Int32 format)
+{
+    auto xFactory = css::embed::StorageFactory::create(comphelper::getProcessComponentContext());
+    css::uno::Sequence descriptor{ comphelper::makePropertyValue(u"StorageFormat"_ustr, format) };
+    css::uno::Sequence args{ css::uno::Any(URL), css::uno::Any(css::embed::ElementModes::READ),
+                             css::uno::Any(descriptor) };
+    return xFactory->createInstanceWithArguments(args)
+        .queryThrow<css::embed::XHierarchicalStorageAccess>();
+}
+
+static css::uno::Reference<css::io::XInputStream>
+getHierarchicalStream(const css::uno::Reference<css::embed::XHierarchicalStorageAccess>& xStorage,
+                      const OUString& name)
+{
+    auto xStream
+        = xStorage->openStreamElementByHierarchicalName(name, css::embed::ElementModes::READ);
+    return xStream->getInputStream();
+}
+
+static css::uno::Reference<css::io::XInputStream>
+getFirstHierarchicalStream(const OUString& URL, sal_Int32 format,
+                           std::initializer_list<OUString> names)
+{
+    auto xStorage(getStorageAccess(URL, format));
+    for (const auto& name : names)
+    {
+        try
+        {
+            return getHierarchicalStream(xStorage, name);
+        }
+        catch (const css::uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sfx", "caught exception while trying to access " << name << " of "
+                                                                                   << URL);
+        }
+    }
+    return {};
+}
+
+static css::uno::Reference<css::io::XInputStream>
+getFirstStreamByRelType(const OUString& URL, std::initializer_list<OUString> types)
+{
+    auto xStorage(getStorageAccess(URL, css::embed::StorageFormats::OFOPXML));
+    if (auto xRelationshipAccess = xStorage.query<css::embed::XRelationshipAccess>())
+    {
+        for (const auto& type : types)
+        {
+            auto rels = xRelationshipAccess->getRelationshipsByType(type);
+            if (rels.hasElements())
+            {
+                // ISO/IEC 29500-1:2016(E) 15.2.16 Thumbnail Part: "Packages shall not contain
+                // more than one thumbnail relationship associated with the package as a whole"
+                for (const auto& [tag, value] : rels[0])
+                {
+                    if (tag == "Id")
+                    {
+                        return getHierarchicalStream(xStorage,
+                                                     xRelationshipAccess->getTargetByID(value));
+                    }
+                }
+            }
+        }
+    }
+    return {};
+}
+
 BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
 {
     using namespace ::com::sun::star;
@@ -68,91 +139,15 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
     // Load the thumbnail from a template document.
     uno::Reference<io::XInputStream> xIStream;
 
-    const uno::Reference< uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
     try
     {
-        uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create(xContext);
-
-        uno::Sequence<uno::Any> aArgs{ uno::Any(msURL), uno::Any(embed::ElementModes::READ) };
-        uno::Reference<embed::XStorage> xDocStorage (
-            xStorageFactory->createInstanceWithArguments(aArgs),
-            uno::UNO_QUERY);
-
-        try
-        {
-            if (xDocStorage.is())
-            {
-                uno::Reference<embed::XStorage> xStorage (
-                    xDocStorage->openStorageElement(
-                        u"Thumbnails"_ustr,
-                        embed::ElementModes::READ));
-                if (xStorage.is())
-                {
-                    uno::Reference<io::XStream> xThumbnailCopy (
-                        xStorage->cloneStreamElement(u"thumbnail.png"_ustr));
-                    if (xThumbnailCopy.is())
-                        xIStream = xThumbnailCopy->getInputStream();
-                }
-            }
-        }
-        catch (const uno::Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("sfx",
-                "caught exception while trying to access Thumbnails/thumbnail.png of " << msURL);
-        }
-
-        if (!xIStream.is())
-        {
-            // a Micrsosoft formatted template?
-            uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-                = packages::zip::ZipFileAccess::createWithURL(xContext, msURL);
-            if (xNameAccess.is())
-            {
-                if (xNameAccess->hasByName(u"docProps/thumbnail.emf"_ustr))
-                    xIStream.set(xNameAccess->getByName(u"docProps/thumbnail.emf"_ustr),
-                                 uno::UNO_QUERY);
-                else if (xNameAccess->hasByName(u"docProps/thumbnail.jpeg"_ustr))
-                    xIStream.set(xNameAccess->getByName(u"docProps/thumbnail.jpeg"_ustr),
-                                 uno::UNO_QUERY);
-                else if (xNameAccess->hasByName(u"docProps/thumbnail.wmf"_ustr))
-                    xIStream.set(xNameAccess->getByName(u"docProps/thumbnail.wmf"_ustr),
-                                 uno::UNO_QUERY);
-                std::unique_ptr<SvStream> pStream(
-                    utl::UcbStreamHelper::CreateStream(xIStream, /*CloseStream=*/ true));
-                if (pStream)
-                {
-                    Graphic aGraphic
-                        = GraphicFilter::GetGraphicFilter().ImportUnloadedGraphic(*pStream);
-                    return aGraphic.GetBitmapEx();
-                }
-            }
-        }
-
-        try
-        {
-            // An (older) implementation had a bug - The storage
-            // name was "Thumbnail" instead of "Thumbnails".  The
-            // old name is still used as fallback but this code can
-            // be removed soon.
-            if ( ! xIStream.is())
-            {
-                uno::Reference<embed::XStorage> xStorage (
-                    xDocStorage->openStorageElement( u"Thumbnail"_ustr,
-                        embed::ElementModes::READ));
-                if (xStorage.is())
-                {
-                    uno::Reference<io::XStream> xThumbnailCopy (
-                        xStorage->cloneStreamElement(u"thumbnail.png"_ustr));
-                    if (xThumbnailCopy.is())
-                        xIStream = xThumbnailCopy->getInputStream();
-                }
-            }
-        }
-        catch (const uno::Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("sfx",
-                "caught exception while trying to access Thumbnail/thumbnail.png of " << msURL);
-        }
+        // An (older) implementation had a bug - The storage
+        // name was "Thumbnail" instead of "Thumbnails".  The
+        // old name is still used as fallback but this code can
+        // be removed soon.
+        xIStream = getFirstHierarchicalStream(
+            msURL, embed::StorageFormats::PACKAGE,
+            { u"Thumbnails/thumbnail.png"_ustr, u"Thumbnail/thumbnail.png"_ustr });
     }
     catch (const uno::Exception&)
     {
@@ -161,14 +156,29 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
             << msURL);
     }
 
+    if (!xIStream.is())
+    {
+        // OOXML?
+        try
+        {
+            // Check both Transitional and Strict relationships
+            xIStream = getFirstStreamByRelType(
+                msURL,
+                { u"http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail"_ustr,
+                  u"http://purl.oclc.org/ooxml/officeDocument/relationships/metadata/thumbnail"_ustr });
+        }
+        catch (const uno::Exception&)
+        {
+            // Not an OOXML; fine
+        }
+    }
+
     // Extract the image from the stream.
     BitmapEx aThumbnail;
-    if (xIStream.is())
+    if (auto pStream = utl::UcbStreamHelper::CreateStream(xIStream, /*CloseStream=*/true))
     {
-        std::unique_ptr<SvStream> pStream (
-            ::utl::UcbStreamHelper::CreateStream (xIStream));
-        vcl::PngImageReader aReader (*pStream);
-        aThumbnail = aReader.read ();
+        Graphic aGraphic = GraphicFilter::GetGraphicFilter().ImportUnloadedGraphic(*pStream);
+        aThumbnail = aGraphic.GetBitmapEx();
     }
 
     // Note that the preview is returned without scaling it to the desired
