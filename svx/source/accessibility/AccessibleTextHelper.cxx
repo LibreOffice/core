@@ -214,8 +214,6 @@ private:
 
     /// client Id from AccessibleEventNotifier
     comphelper::AccessibleEventNotifier::TClientId mnNotifierClientId;
-    static constexpr comphelper::AccessibleEventNotifier::TClientId snNotifierClientRevoked
-        = std::numeric_limits<comphelper::AccessibleEventNotifier::TClientId>::max();
 };
 
 AccessibleTextHelper_Impl::AccessibleTextHelper_Impl() :
@@ -1360,7 +1358,7 @@ void AccessibleTextHelper_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& 
 
 void AccessibleTextHelper_Impl::Dispose()
 {
-    if (mnNotifierClientId != snNotifierClientRevoked)
+    if (mnNotifierClientId != 0)
     {
         try
         {
@@ -1370,7 +1368,7 @@ void AccessibleTextHelper_Impl::Dispose()
         }
         catch( const uno::Exception& ) {}
 
-        mnNotifierClientId = snNotifierClientRevoked;
+        mnNotifierClientId = 0;
     }
 
     try
@@ -1412,7 +1410,7 @@ void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::
     }
     // -- until here --
 
-    if (mnNotifierClientId != snNotifierClientRevoked)
+    if (mnNotifierClientId != 0)
         ::comphelper::AccessibleEventNotifier::addEvent(mnNotifierClientId, aEvent);
 }
 
@@ -1442,13 +1440,13 @@ uno::Reference< XAccessible > AccessibleTextHelper_Impl::getAccessibleChild( sal
 
 void AccessibleTextHelper_Impl::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
-    if (mnNotifierClientId != snNotifierClientRevoked)
+    if (mnNotifierClientId != 0)
         ::comphelper::AccessibleEventNotifier::addEventListener(mnNotifierClientId, xListener);
 }
 
 void AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
-    if (mnNotifierClientId == snNotifierClientRevoked)
+    if (mnNotifierClientId == 0)
         return;
 
     const sal_Int32 nListenerCount
@@ -1460,7 +1458,7 @@ void AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Refere
         // and at least to us not firing any events anymore, in case somebody calls
         // NotifyAccessibleEvent, again
         ::comphelper::AccessibleEventNotifier::TClientId nId = mnNotifierClientId;
-        mnNotifierClientId = snNotifierClientRevoked;
+        mnNotifierClientId = 0;
         ::comphelper::AccessibleEventNotifier::revokeClient( nId );
     }
 }
