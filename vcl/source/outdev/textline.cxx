@@ -272,16 +272,17 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
 }
 
 void OutputDevice::ImplDrawWaveTextLine( tools::Long nBaseX, tools::Long nBaseY,
-                                         tools::Long nDistX, tools::Long nDistY, tools::Long nWidth,
+                                         tools::Long nDistX, tools::Long nDistY,
+                                         tools::Long nWidth, tools::Long nLayoutWidth,
                                          FontLineStyle eTextLine,
                                          Color aColor,
                                          bool bIsAbove )
 {
     static bool bFuzzing = comphelper::IsFuzzing();
-    if (bFuzzing && nWidth > 10000)
+    if (bFuzzing && nLayoutWidth > 10000)
     {
         SAL_WARN("vcl.gdi", "drawLine, skipping suspicious WaveTextLine of length: "
-                                << nWidth << " for fuzzing performance");
+                                << nLayoutWidth << " for fuzzing performance");
         return;
     }
 
@@ -756,6 +757,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
 
 void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
                                      tools::Long nDistX, double nWidth,
+                                     double nLayoutWidth,
                                      FontStrikeout eStrikeout,
                                      FontLineStyle eUnderline,
                                      FontLineStyle eOverline,
@@ -791,7 +793,7 @@ void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
          (eUnderline == LINESTYLE_DOUBLEWAVE) ||
          (eUnderline == LINESTYLE_BOLDWAVE) )
     {
-        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
+        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, nLayoutWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
         bUnderlineDone = true;
     }
     if ( (eOverline == LINESTYLE_SMALLWAVE) ||
@@ -799,7 +801,7 @@ void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
          (eOverline == LINESTYLE_DOUBLEWAVE) ||
          (eOverline == LINESTYLE_BOLDWAVE) )
     {
-        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, true );
+        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, nLayoutWidth, eOverline, aOverlineColor, true );
         bOverlineDone = true;
     }
 
@@ -824,6 +826,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                                       FontLineStyle eUnderline, FontLineStyle eOverline,
                                       bool bWordLine, bool bUnderlineAbove )
 {
+    double nLayoutWidth = rSalLayout.GetTextWidth();
     if( bWordLine )
     {
         // draw everything relative to the layout base point
@@ -858,7 +861,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
             else if( nWidth > 0 )
             {
                 // draw the textline for each word
-                ImplDrawTextLine( aStartPt.getX(), aStartPt.getY(), nDist, nWidth,
+                ImplDrawTextLine( aStartPt.getX(), aStartPt.getY(), nDist, nWidth, nLayoutWidth,
                                   eStrikeout, eUnderline, eOverline, bUnderlineAbove );
                 nWidth = 0;
             }
@@ -867,7 +870,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
         // draw textline for the last word
         if( nWidth > 0 )
         {
-            ImplDrawTextLine( aStartPt.getX(), aStartPt.getY(), nDist, nWidth,
+            ImplDrawTextLine( aStartPt.getX(), aStartPt.getY(), nDist, nWidth, nLayoutWidth,
                               eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
     }
@@ -875,7 +878,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
     {
         basegfx::B2DPoint aStartPt = rSalLayout.GetDrawPosition();
         ImplDrawTextLine( aStartPt.getX(), aStartPt.getY(), 0,
-                          rSalLayout.GetTextWidth(),
+                          nLayoutWidth, nLayoutWidth,
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );
     }
 }
@@ -889,7 +892,7 @@ void OutputDevice::ImplDrawMnemonicLine( tools::Long nX, tools::Long nY, tools::
         nX = nBaseX - nWidth - (nX - nBaseX - 1);
     }
 
-    ImplDrawTextLine( nX, nY, 0, nWidth, STRIKEOUT_NONE, LINESTYLE_SINGLE, LINESTYLE_NONE, false );
+    ImplDrawTextLine( nX, nY, 0, nWidth, nWidth, STRIKEOUT_NONE, LINESTYLE_SINGLE, LINESTYLE_NONE, false );
 }
 
 void OutputDevice::SetTextLineColor()
@@ -976,7 +979,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, tools::Long nWidth,
     Point aPos = ImplLogicToDevicePixel( rPos );
     double fWidth = ImplLogicWidthToDeviceSubPixel(nWidth);
     aPos += Point( mnTextOffX, mnTextOffY );
-    ImplDrawTextLine( aPos.X(), aPos.X(), 0, fWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
+    ImplDrawTextLine( aPos.X(), aPos.X(), 0, fWidth, fWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
