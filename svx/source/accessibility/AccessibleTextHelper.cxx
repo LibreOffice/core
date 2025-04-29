@@ -798,11 +798,7 @@ void AccessibleTextHelper_Impl::UpdateBoundRect()
         {
             awt::Rectangle          aNewRect = aHardRef->getBounds();
             const awt::Rectangle&   aOldRect = rChild.second;
-
-            if( aNewRect.X != aOldRect.X ||
-                aNewRect.Y != aOldRect.Y ||
-                aNewRect.Width != aOldRect.Width ||
-                aNewRect.Height != aOldRect.Height )
+            if (aNewRect != aOldRect)
             {
                 // visible data changed
                 aHardRef->FireEvent( AccessibleEventId::BOUNDRECT_CHANGED );
