@@ -164,8 +164,6 @@ private:
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    comphelper::AccessibleEventNotifier::TClientId getNotifierClientId() const { return mnNotifierClientId; }
-
     // lock solar mutex before
     SvxTextForwarder& GetTextForwarder() const;
     // lock solar mutex before
@@ -1363,12 +1361,12 @@ void AccessibleTextHelper_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& 
 
 void AccessibleTextHelper_Impl::Dispose()
 {
-    if( getNotifierClientId() != snNotifierClientRevoked)
+    if (mnNotifierClientId != snNotifierClientRevoked)
     {
         try
         {
             // #106234# Unregister from EventNotifier
-            ::comphelper::AccessibleEventNotifier::revokeClient( getNotifierClientId() );
+            ::comphelper::AccessibleEventNotifier::revokeClient(mnNotifierClientId);
             SAL_INFO("svx", "disposed ID: " << mnNotifierClientId );
         }
         catch( const uno::Exception& ) {}
@@ -1421,8 +1419,8 @@ void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::
 void AccessibleTextHelper_Impl::FireEvent( const AccessibleEventObject& rEvent ) const
 {
     // #106234# Delegate to EventNotifier
-    if (getNotifierClientId() != snNotifierClientRevoked)
-        ::comphelper::AccessibleEventNotifier::addEvent( getNotifierClientId(), rEvent );
+    if (mnNotifierClientId != snNotifierClientRevoked)
+        ::comphelper::AccessibleEventNotifier::addEvent(mnNotifierClientId, rEvent);
 }
 
 // XAccessibleContext
@@ -1451,23 +1449,24 @@ uno::Reference< XAccessible > AccessibleTextHelper_Impl::getAccessibleChild( sal
 
 void AccessibleTextHelper_Impl::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
-    if( getNotifierClientId() != snNotifierClientRevoked )
-        ::comphelper::AccessibleEventNotifier::addEventListener( getNotifierClientId(), xListener );
+    if (mnNotifierClientId != snNotifierClientRevoked)
+        ::comphelper::AccessibleEventNotifier::addEventListener(mnNotifierClientId, xListener);
 }
 
 void AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
-    if( getNotifierClientId() == snNotifierClientRevoked )
+    if (mnNotifierClientId == snNotifierClientRevoked)
         return;
 
-    const sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
+    const sal_Int32 nListenerCount
+        = ::comphelper::AccessibleEventNotifier::removeEventListener(mnNotifierClientId, xListener);
     if ( !nListenerCount )
     {
         // no listeners anymore
         // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
         // and at least to us not firing any events anymore, in case somebody calls
         // NotifyAccessibleEvent, again
-        ::comphelper::AccessibleEventNotifier::TClientId nId( getNotifierClientId() );
+        ::comphelper::AccessibleEventNotifier::TClientId nId = mnNotifierClientId;
         mnNotifierClientId = snNotifierClientRevoked;
         ::comphelper::AccessibleEventNotifier::revokeClient( nId );
     }
