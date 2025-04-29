@@ -42,7 +42,7 @@ void ScNavigatorControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /* nSID
         case SID_CURRENTCELL:
             if ( pItem )
             {
-                ScViewData* pViewData = rNavigatorDlg.GetViewData();
+                ScViewData* pViewData = ScNavigatorDlg::GetViewData();
                 const SfxStringItem* pCellPosItem = dynamic_cast<const SfxStringItem*>( pItem );
 
                 OSL_ENSURE( pCellPosItem, "SfxStringItem expected!" );

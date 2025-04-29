@@ -107,7 +107,7 @@ namespace
     }
 }
 
-IMPL_LINK(ScNavigatorDlg, ParseRowInputHdl, const OUString&, rStrCol, std::optional<int>)
+IMPL_STATIC_LINK(ScNavigatorDlg, ParseRowInputHdl, const OUString&, rStrCol, std::optional<int>)
 {
     SCCOL nCol(0);
 
@@ -328,7 +328,6 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     , m_xNavigatorDlg(pNavigatorDlg)
     , aContentIdle("ScNavigatorDlg aContentIdle")
     , aStrActiveWin(ScResId(SCSTR_ACTIVEWIN))
-    , pViewData(nullptr )
     , eListMode(NAV_LMODE_NONE)
     , nDropMode(SC_DROPMODE_URL)
     , nCurCol(0)
@@ -574,8 +573,8 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
     OUString aAddr(aScAddress.Format(ScRefFlags::ADDR_ABS));
 
     bool bUnmark = false;
-    if ( GetViewData() )
-        bUnmark = !pViewData->GetMarkData().IsCellMarked( nColNo, nRowNo );
+    if (ScViewData* pData = GetViewData())
+        bUnmark = !pData->GetMarkData().IsCellMarked( nColNo, nRowNo );
 
     SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
     SfxBoolItem     aUnmarkItem( FN_PARAM_1, bUnmark );     // cancel selection
@@ -609,9 +608,11 @@ void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
 
 void ScNavigatorDlg::SetCurrentTableStr( std::u16string_view rName )
 {
-    if (!GetViewData()) return;
+    ScViewData* pData = GetViewData();
+    if(!pData)
+        return;
 
-    ScDocument& rDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pData->GetDocument();
     SCTAB nCount = rDoc.GetTableCount();
     OUString aTabName;
     SCTAB nLastSheet = 0;
@@ -703,16 +704,15 @@ ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
 ScViewData* ScNavigatorDlg::GetViewData()
 {
     ScTabViewShell* pViewSh = GetTabViewShell();
-    pViewData = pViewSh ? &pViewSh->GetViewData() : nullptr;
-    return pViewData;
+    return pViewSh ? &pViewSh->GetViewData() : nullptr;
 }
 
 void ScNavigatorDlg::UpdateColumn( const SCCOL* pCol )
 {
     if ( pCol )
         nCurCol = *pCol;
-    else if ( GetViewData() )
-        nCurCol = pViewData->GetCurX() + 1;
+    else if ( ScViewData* pData = GetViewData() )
+        nCurCol = pData->GetCurX() + 1;
 
     m_xEdCol->set_value(nCurCol);
 }
@@ -721,8 +721,8 @@ void ScNavigatorDlg::UpdateRow( const SCROW* pRow )
 {
     if ( pRow )
         nCurRow = *pRow;
-    else if ( GetViewData() )
-        nCurRow = pViewData->GetCurY() + 1;
+    else if ( ScViewData* pData = GetViewData() )
+        nCurRow = pData->GetCurY() + 1;
 
     m_xEdRow->set_value(nCurRow);
 }
@@ -731,8 +731,8 @@ void ScNavigatorDlg::UpdateTable( const SCTAB* pTab )
 {
     if ( pTab )
         nCurTab = *pTab;
-    else if ( GetViewData() )
-        nCurTab = pViewData->GetTabNo();
+    else if ( ScViewData* pData = GetViewData() )
+        nCurTab = pData->GetTabNo();
 }
 
 void ScNavigatorDlg::UpdateAll()
@@ -901,9 +901,9 @@ void ScNavigatorDlg::StartOfDataArea()
 {
     //  pMarkArea evaluate ???
 
-    if ( GetViewData() )
+    if (ScViewData* pData = GetViewData())
     {
-        ScMarkData& rMark = pViewData->GetMarkData();
+        ScMarkData& rMark = pData->GetMarkData();
         const ScRange& aMarkRange = rMark.GetMarkArea();
 
         SCCOL nCol = aMarkRange.aStart.Col();
@@ -918,9 +918,9 @@ void ScNavigatorDlg::EndOfDataArea()
 {
     //  pMarkArea evaluate ???
 
-    if ( GetViewData() )
+    if (ScViewData* pData = GetViewData())
     {
-        ScMarkData& rMark = pViewData->GetMarkData();
+        ScMarkData& rMark = pData->GetMarkData();
         const ScRange& aMarkRange = rMark.GetMarkArea();
 
         SCCOL nCol = aMarkRange.aEnd.Col();
