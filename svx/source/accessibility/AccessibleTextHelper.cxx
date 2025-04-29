@@ -125,7 +125,6 @@ public:
 
     // do NOT hold object mutex when calling this! Danger of deadlock
     void FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue = uno::Any(), const uno::Any& rOldValue = uno::Any() ) const;
-    void FireEvent( const AccessibleEventObject& rEvent ) const;
 
     void SetFocus( bool bHaveFocus );
     bool HaveFocus() const
@@ -1413,14 +1412,8 @@ void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::
     }
     // -- until here --
 
-    FireEvent(aEvent);
-}
-
-void AccessibleTextHelper_Impl::FireEvent( const AccessibleEventObject& rEvent ) const
-{
-    // #106234# Delegate to EventNotifier
     if (mnNotifierClientId != snNotifierClientRevoked)
-        ::comphelper::AccessibleEventNotifier::addEvent(mnNotifierClientId, rEvent);
+        ::comphelper::AccessibleEventNotifier::addEvent(mnNotifierClientId, aEvent);
 }
 
 // XAccessibleContext
