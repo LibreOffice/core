@@ -3,4 +3,8 @@
     <string name="app_name_settings">Setări pentru LibreOffice Viewer</string>
     <string name="app_name">LibreOffice Viewer</string>
     <string name="app_version">Versiunea: %1$s&lt;br&gt;ID-ul subversiunii: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
+    <string name="app_description">LibreOffice Viewer este un vizualizator de documente bazat pe LibreOffice.</string>
+    <string name="app_credits">https://www.libreoffice.org</string>
+    <string name="app_vendor">Această versiune a fost furnizată de $VENDOR.</string>
+    <string name="readonly_file">Acest fișier este în modul doar citire.</string>
 </resources>
