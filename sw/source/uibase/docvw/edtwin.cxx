@@ -159,6 +159,8 @@
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
+#define SCROLL_TIMER_RETARD_LIMIT 5
+
 /**
  * Globals
  */
@@ -654,6 +656,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
  */
 IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
 {
+    ++m_nTimerCalls;
     SwWrtShell &rSh = m_rView.GetWrtShell();
     Point aModPt( m_aMovePos );
     const SwRect aOldVis( rSh.VisArea() );
@@ -715,8 +718,10 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
     JustifyAreaTimer();
 }
 
-void SwEditWin::JustifyAreaTimer()
+void SwEditWin::JustifyAreaTimer(bool bStart)
 {
+    if (bStart)
+        m_nTimerCalls = 0;
     const tools::Rectangle &rVisArea = GetView().GetVisArea();
 #ifdef UNX
     const tools::Long coMinLen = 40;
@@ -727,18 +732,26 @@ void SwEditWin::JustifyAreaTimer()
          nDiff = std::max(
          std::max( m_aMovePos.Y() - rVisArea.Bottom(), rVisArea.Top() - m_aMovePos.Y() ),
          std::max( m_aMovePos.X() - rVisArea.Right(),  rVisArea.Left() - m_aMovePos.X()));
-    m_aTimer.SetTimeout( std::max( coMinLen, nTimeout - nDiff) );
-    m_eScrollSizeMode = m_aTimer.GetTimeout() < 100 ?
-        ScrollSizeMode::ScrollSizeTimer2 :
-        m_aTimer.GetTimeout() < 400 ?
-            ScrollSizeMode::ScrollSizeTimer :
-            ScrollSizeMode::ScrollSizeMouseSelection;
+    if (m_nTimerCalls < SCROLL_TIMER_RETARD_LIMIT)
+    {
+        m_aTimer.SetTimeout(nTimeout);
+        m_eScrollSizeMode = ScrollSizeMode::ScrollSizeMouseSelection;
+    }
+    else
+    {
+        m_aTimer.SetTimeout( std::max( coMinLen, nTimeout - nDiff) );
+        m_eScrollSizeMode = m_aTimer.GetTimeout() < 100 ?
+            ScrollSizeMode::ScrollSizeTimer2 :
+            m_aTimer.GetTimeout() < 400 ?
+                ScrollSizeMode::ScrollSizeTimer :
+                ScrollSizeMode::ScrollSizeMouseSelection;
+    }
 }
 
 void SwEditWin::LeaveArea(const Point &rPos)
 {
     m_aMovePos = rPos;
-    JustifyAreaTimer();
+    JustifyAreaTimer(true);
     if( !m_aTimer.IsActive() )
         m_aTimer.Start();
     m_pShadCursor.reset();
@@ -5526,6 +5539,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     DragSourceHelper( this ),
 
     m_aTimer("SwEditWin"),
+    m_nTimerCalls(0),
     m_aKeyInputFlushTimer("SwEditWin m_aKeyInputFlushTimer"),
     m_eBufferLanguage(LANGUAGE_DONTKNOW),
     m_eScrollSizeMode(ScrollSizeMode::ScrollSizeMouseSelection),

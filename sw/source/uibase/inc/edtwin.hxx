@@ -75,6 +75,7 @@ class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
      * regularly.
      */
     AutoTimer       m_aTimer;
+    sal_uInt32      m_nTimerCalls;
     // timer for ANY-KeyInput question without a following KeyInputEvent
     Timer           m_aKeyInputFlushTimer;
 
@@ -136,7 +137,7 @@ class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
      SwTextFrame* m_pSavedOutlineFrame = nullptr;
 
     void            LeaveArea(const Point &);
-    void            JustifyAreaTimer();
+    void            JustifyAreaTimer(bool bStart = false);
     inline void     EnterArea();
 
     void            ResetMouseButtonDownFlags();
