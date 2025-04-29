@@ -923,6 +923,7 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                                             aDispatchArgs,
                                             false,
                                             SignatureState::NOSIGNATURES,
+                                            SignatureState::NOSIGNATURES,
                                             false );
                 }
                 catch( const task::ErrorCodeIOException& aErrorEx )

@@ -1139,6 +1139,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                        aDispatchArgs,
                                        bPreselectPassword,
                                        GetDocumentSignatureState(),
+                                       GetScriptingSignatureState(),
                                        bIsAsync );
 
                 // merge aDispatchArgs to the request
