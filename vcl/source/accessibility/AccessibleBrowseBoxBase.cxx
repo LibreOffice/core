@@ -114,41 +114,6 @@ Reference< css::accessibility::XAccessible > SAL_CALL AccessibleBrowseBoxBase::g
     return mxParent;
 }
 
-sal_Int64 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
-{
-    ::osl::MutexGuard aGuard( getMutex() );
-    ensureIsAlive();
-
-    // -1 for child not found/no parent (according to specification)
-    sal_Int64 nRet = -1;
-
-    css::uno::Reference< uno::XInterface > xMeMyselfAndI( static_cast< css::accessibility::XAccessibleContext* >( this ), uno::UNO_QUERY );
-
-    //  iterate over parent's children and search for this object
-    if( mxParent.is() )
-    {
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-            xParentContext( mxParent->getAccessibleContext() );
-        if( xParentContext.is() )
-        {
-            css::uno::Reference< uno::XInterface > xChild;
-
-            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-            for( sal_Int64 nChild = 0; nChild < nChildCount; ++nChild )
-            {
-                xChild.set(xParentContext->getAccessibleChild( nChild ), css::uno::UNO_QUERY);
-
-                if ( xMeMyselfAndI.get() == xChild.get() )
-                {
-                    nRet = nChild;
-                    break;
-                }
-            }
-        }
-    }
-    return nRet;
-}
-
 OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleDescription()
 {
     ::osl::MutexGuard aGuard( getMutex() );

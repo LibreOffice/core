@@ -103,9 +103,6 @@ public:
     /** @return  A reference to the parent accessible object. */
     virtual css::uno::Reference<css::accessibility::XAccessible > SAL_CALL getAccessibleParent() override;
 
-    /** @return  The index of this object among the parent's children. */
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
-
     /** @return
             The description of this object.
     */
