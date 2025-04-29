@@ -179,7 +179,8 @@ namespace sfx2
 
         ErrCode                 execute( std::vector<OUString>& rpURLList,
                                          std::unique_ptr<SfxItemSet>& rpSet,
-                                         OUString&       rFilter );
+                                         OUString&       rFilter,
+                                         SignatureState nScriptingSignatureState);
         ErrCode                 execute();
 
         void                    setFilter( const OUString& rFilter );

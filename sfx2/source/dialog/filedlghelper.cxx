@@ -1383,7 +1383,8 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
 
 ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                                         std::unique_ptr<SfxItemSet>& rpSet,
-                                        OUString&       rFilter )
+                                        OUString&       rFilter,
+                                        SignatureState const nScriptingSignatureState)
 {
     // rFilter is a pure output parameter, it shouldn't be used for anything else
     // changing this would surely break code
@@ -1510,6 +1511,24 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
                 bool bPassWord = false;
                 if ( ( aValue >>= bPassWord ) && bPassWord )
+                {
+                    if (  SignatureState::OK == nScriptingSignatureState
+                       || SignatureState::INVALID == nScriptingSignatureState
+                       || SignatureState::NOTVALIDATED == nScriptingSignatureState
+                       || SignatureState::PARTIAL_OK == nScriptingSignatureState)
+                    {
+                        std::unique_ptr<weld::MessageDialog> xBox(
+                            Application::CreateMessageDialog(mpFrameWeld,
+                                VclMessageType::Question, VclButtonsType::YesNo,
+                                SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSCRIPTINGSIGNATURE)));
+                        if (xBox->run() == RET_NO)
+                        {
+                            bPassWord = false;
+                        }
+                    }
+                }
+
+                if (bPassWord)
                 {
                     // ask for a password
                     OUString aDocName(rpURLList[0]);
@@ -2370,7 +2389,7 @@ ErrCode FileDialogHelper::Execute( std::vector<OUString>& rpURLList,
                                    const OUString& rDirPath )
 {
     SetDisplayFolder( rDirPath );
-    return mpImpl->execute( rpURLList, rpSet, rFilter );
+    return mpImpl->execute(rpURLList, rpSet, rFilter, SignatureState::UNKNOWN);
 }
 
 
@@ -2380,11 +2399,12 @@ ErrCode FileDialogHelper::Execute()
 }
 
 ErrCode FileDialogHelper::Execute( std::unique_ptr<SfxItemSet>& rpSet,
-                                   OUString&       rFilter )
+                                   OUString&       rFilter,
+                                   SignatureState const nScriptingSignatureState)
 {
     ErrCode nRet;
     std::vector<OUString> rURLList;
-    nRet = mpImpl->execute(rURLList, rpSet, rFilter);
+    nRet = mpImpl->execute(rURLList, rpSet, rFilter, nScriptingSignatureState);
     return nRet;
 }
 

@@ -840,7 +840,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                        OUString::createFromAscii( pSlot->GetUnoName() ),
                                        aDispatchArgs,
                                        bPreselectPassword,
-                                       GetDocumentSignatureState() );
+                                       GetDocumentSignatureState(),
+                                       GetScriptingSignatureState());
 
 
                 // merge aDispatchArgs to the request

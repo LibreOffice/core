@@ -338,7 +338,8 @@ public:
                                 OUString& aSuggestedDir,
                                 sal_Int16 nDialog,
                                 const OUString& rStandardDir,
-                                const css::uno::Sequence< OUString >& rBlackList
+                                const css::uno::Sequence< OUString >& rBlackList,
+                                SignatureState const nScriptingSignatureState
                                 );
 
     bool ShowDocumentInfoDialog(const std::function< void () >&);
@@ -790,7 +791,8 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
                                             OUString& aSuggestedDir,
                                             sal_Int16 nDialog,
                                             const OUString& rStandardDir,
-                                            const css::uno::Sequence< OUString >& rBlackList)
+                                            const css::uno::Sequence< OUString >& rBlackList,
+                                            SignatureState const nScriptingSignatureState)
 {
     if ( nStoreMode == SAVEASREMOTE_REQUESTED )
         nStoreMode = SAVEAS_REQUESTED;
@@ -971,7 +973,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     // aFilterName is a pure output parameter, pDialogParams is an in/out parameter
     OUString aFilterName;
-    if ( pFileDlg->Execute( pDialogParams, aFilterName ) != ERRCODE_NONE )
+    if (pFileDlg->Execute(pDialogParams, aFilterName, nScriptingSignatureState) != ERRCODE_NONE)
     {
         throw task::ErrorCodeIOException(
             "ModelData_Impl::OutputFileDialog: ERRCODE_IO_ABORT",
@@ -1300,7 +1302,8 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
                                             const OUString& aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             bool bPreselectPassword,
-                                            SignatureState nDocumentSignatureState )
+                                            SignatureState const nDocumentSignatureState,
+                                            SignatureState const nScriptingSignatureState)
 {
     ModelData_Impl aModelData( *this, xModel, aArgsSequence );
 
@@ -1520,7 +1523,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         for (;;)
         {
             // in case the dialog is opened a second time the folder should be the same as previously navigated to by the user, not what was handed over by initial parameters
-            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aBlackList );
+            bUseFilterOptions = aModelData.OutputFileDialog(nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aBlackList, nScriptingSignatureState);
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning

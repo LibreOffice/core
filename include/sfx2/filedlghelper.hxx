@@ -56,6 +56,7 @@ namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace weld { class Window; }
 
+enum class SignatureState;
 class Graphic;
 class SfxFilter;
 class SfxItemSet;
@@ -236,7 +237,8 @@ public:
                                      OUString&         rFilter,
                                      const OUString&   rDirPath );
    ErrCode                  Execute( std::unique_ptr<SfxItemSet>& rpSet,
-                                     OUString&         rFilter );
+                                     OUString&         rFilter,
+                                     SignatureState nScriptingSignatureState);
 };
 
 #define SFX2_IMPL_DIALOG_CONFIG 0
