@@ -340,7 +340,8 @@ public:
                                 OUString& aSuggestedDir,
                                 sal_Int16 nDialog,
                                 OUString& rStandardDir,
-                                const css::uno::Sequence< OUString >& rDenyList
+                                const css::uno::Sequence<OUString>& rDenyList,
+                                SignatureState const nScriptingSignatureState
                                 );
 
     bool ShowDocumentInfoDialog();
@@ -679,7 +680,8 @@ void SfxStoringHelper::CallFinishGUIStoreModel()
 
     SfxStoringHelper::FinishGUIStoreModel(aFileNameIter, *m_xModelData, m_bRemote, m_nStoreMode, aFilterProps,
                                           m_bSetStandardName, m_bPreselectPassword, m_bDialogUsed,
-                                          aFilterFromMediaDescr, aOldFilterName, m_aArgsSequence, aFilterName);
+                                          aFilterFromMediaDescr, aOldFilterName, m_aArgsSequence,
+                                          aFilterName, m_nScriptingSignatureState);
 
     if (SfxViewShell::Current())
         SfxViewShell::Current()->SetStoringHelper(nullptr);
@@ -895,7 +897,8 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
                                             OUString& aSuggestedDir,
                                             sal_Int16 nDialog,
                                             OUString& rStandardDir,
-                                            const css::uno::Sequence< OUString >& rDenyList)
+                                            const css::uno::Sequence<OUString>& rDenyList,
+                                            SignatureState const nScriptingSignatureState)
 {
     if ( nStoreMode == SAVEASREMOTE_REQUESTED )
         nStoreMode = SAVEAS_REQUESTED;
@@ -1097,7 +1100,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     // aFilterName is a pure output parameter, pDialogParams is an in/out parameter
     OUString aFilterName;
     // in LOK case we don't show File Picker so it will fail, but execute to do other preparations
-    if ( pFileDlg->Execute( pDialogParams, aFilterName ) != ERRCODE_NONE
+    if (pFileDlg->Execute(pDialogParams, aFilterName, nScriptingSignatureState) != ERRCODE_NONE
         && !comphelper::LibreOfficeKit::isActive() )
     {
         throw task::ErrorCodeIOException(
@@ -1477,7 +1480,8 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel2 >& xM
                                             std::u16string_view aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             bool bPreselectPassword,
-                                            SignatureState nDocumentSignatureState,
+                                            SignatureState const nDocumentSignatureState,
+                                            SignatureState const nScriptingSignatureState,
                                             bool bIsAsync)
 {
     m_xModelData = std::make_shared<ModelData_Impl>( *this, xModel, aArgsSequence );
@@ -1488,6 +1492,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel2 >& xM
 
     m_bSetStandardName = false; // can be set only for SaveAs
     m_bPreselectPassword = bPreselectPassword;
+    m_nScriptingSignatureState = nScriptingSignatureState;
 
     // parse the slot name
     m_bRemote = false;
@@ -1646,7 +1651,8 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel2 >& xM
 
     return SfxStoringHelper::FinishGUIStoreModel(aFileNameIter, aModelData, m_bRemote, m_nStoreMode, aFilterProps,
                                                  m_bSetStandardName, m_bPreselectPassword, m_bDialogUsed,
-                                                 aFilterFromMediaDescr, aOldFilterName, aArgsSequence, aFilterName);
+                                                 aFilterFromMediaDescr, aOldFilterName, aArgsSequence,
+                                                 aFilterName, nScriptingSignatureState);
 }
 
 bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::const_iterator& aFileNameIter,
@@ -1656,7 +1662,8 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                                           std::u16string_view aFilterFromMediaDescr,
                                           std::u16string_view aOldFilterName,
                                           uno::Sequence< beans::PropertyValue >& aArgsSequence,
-                                          OUString aFilterName)
+                                          OUString aFilterName,
+                                          SignatureState const nScriptingSignatureState)
 {
     const OUString sFilterNameString(aFilterNameString);
     const OUString sFilterOptionsString(aFilterOptionsString);
@@ -1718,7 +1725,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         for (;;)
         {
             // in case the dialog is opened a second time the folder should be the same as previously navigated to by the user, not what was handed over by initial parameters
-            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aDenyList );
+            bUseFilterOptions = aModelData.OutputFileDialog(nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aDenyList, nScriptingSignatureState);
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning

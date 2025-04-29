@@ -116,6 +116,7 @@
 #include <sfx2/viewfrm.hxx>
 #include "graphhelp.hxx"
 #include <appbaslib.hxx>
+#include <guisaveas.hxx>
 #include "objstor.hxx"
 #include "exoticfileloadexception.hxx"
 #include <unicode/ucsdet.h>
@@ -180,10 +181,14 @@ bool SfxObjectShell::QuerySlotExecutable( sal_uInt16 /*nSlotId*/ )
     return true;
 }
 
-static bool UseODFWholesomeEncryption(SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)
+namespace sfx2 {
+
+bool UseODFWholesomeEncryption(SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)
 {
     return nODFVersion == SvtSaveOptions::ODFSVER_LATEST_EXTENDED;
 }
+
+} // namespace sfx2
 
 bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
@@ -365,7 +370,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 
         auto pEncryptionAlgs = aEncryptionAlgs.getArray();
         pEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
-        if (UseODFWholesomeEncryption(nDefVersion))
+        if (::sfx2::UseODFWholesomeEncryption(nDefVersion))
         {
             pEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_GCM_W3C;
             pEncryptionAlgs[2].Value.clear();
@@ -1549,7 +1554,7 @@ bool SfxObjectShell::SaveTo_Impl
     if (GetEncryptionData_Impl(&rMedium.GetItemSet(), aEncryptionData))
     {
         assert(aEncryptionData.getLength() != 0);
-        if (bOwnTarget && UseODFWholesomeEncryption(nVersion))
+        if (bOwnTarget && ::sfx2::UseODFWholesomeEncryption(nVersion))
         {
             // when embedded objects are stored here, it should be called from
             // this function for the root document and encryption data was cleared

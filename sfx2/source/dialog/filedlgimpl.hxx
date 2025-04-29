@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
+#include <unotools/saveopt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 
@@ -181,7 +182,8 @@ namespace sfx2
 
         ErrCode                 execute( std::vector<OUString>& rpURLList,
                                          std::optional<SfxAllItemSet>& rpSet,
-                                         OUString&       rFilter );
+                                         OUString&       rFilter,
+                                         SignatureState nScriptingSignatureState);
         ErrCode                 execute();
 
         void                    setFilter( const OUString& rFilter );
@@ -215,7 +217,6 @@ namespace sfx2
 
         css::uno::Reference<css::awt::XWindow> GetFrameInterface();
     };
-
 }   // end of namespace sfx2
 
 #endif // INCLUDED_SFX2_SOURCE_DIALOG_FILEDLGIMPL_HXX

@@ -87,6 +87,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <guisaveas.hxx>
 #include "filtergrouping.hxx"
 #include "filedlgimpl.hxx"
 #include <fpicker/fpsofficeResMgr.hxx>
@@ -1453,7 +1454,8 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
 
 ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                                         std::optional<SfxAllItemSet>& rpSet,
-                                        OUString&       rFilter )
+                                        OUString&       rFilter,
+                                        SignatureState const nScriptingSignatureState)
 {
     // rFilter is a pure output parameter, it shouldn't be used for anything else
     // changing this would surely break code
@@ -1586,6 +1588,32 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
                 bool bPassWord = false;
                 if ( ( aValue >>= bPassWord ) && bPassWord )
+                {
+                    SvtSaveOptions::ODFSaneDefaultVersion nVersion{
+                        SvtSaveOptions::ODFSVER_LATEST_EXTENDED};
+                    if (!comphelper::IsFuzzing())
+                    {
+                        nVersion = GetODFSaneDefaultVersion();
+                    }
+                    // old per-zip-entry ODF encryption destroys macro signatures
+                    if (!::sfx2::UseODFWholesomeEncryption(nVersion)
+                        && (   SignatureState::OK == nScriptingSignatureState
+                            || SignatureState::INVALID == nScriptingSignatureState
+                            || SignatureState::NOTVALIDATED == nScriptingSignatureState
+                            || SignatureState::PARTIAL_OK == nScriptingSignatureState))
+                    {
+                        std::unique_ptr<weld::MessageDialog> xBox(
+                            Application::CreateMessageDialog(mpFrameWeld,
+                                VclMessageType::Question, VclButtonsType::YesNo,
+                                SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSCRIPTINGSIGNATURE)));
+                        if (xBox->run() == RET_NO)
+                        {
+                            bPassWord = false;
+                        }
+                    }
+                }
+
+                if (bPassWord)
                 {
                     // ask for a password
                     const OUString& aDocName(rpURLList[0]);
@@ -2652,7 +2680,7 @@ ErrCode FileDialogHelper::Execute( std::vector<OUString>& rpURLList,
                                    const OUString& rDirPath )
 {
     SetDisplayFolder( rDirPath );
-    return mpImpl->execute( rpURLList, rpSet, rFilter );
+    return mpImpl->execute(rpURLList, rpSet, rFilter, SignatureState::UNKNOWN);
 }
 
 
@@ -2662,11 +2690,12 @@ ErrCode FileDialogHelper::Execute()
 }
 
 ErrCode FileDialogHelper::Execute( std::optional<SfxAllItemSet>& rpSet,
-                                   OUString&       rFilter )
+                                   OUString&       rFilter,
+                                   SignatureState const nScriptingSignatureState)
 {
     ErrCode nRet;
     std::vector<OUString> rURLList;
-    nRet = mpImpl->execute(rURLList, rpSet, rFilter);
+    nRet = mpImpl->execute(rURLList, rpSet, rFilter, nScriptingSignatureState);
     return nRet;
 }
 

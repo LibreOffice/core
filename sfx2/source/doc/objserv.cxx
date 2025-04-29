@@ -1153,6 +1153,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                        aDispatchArgs,
                                        bPreselectPassword,
                                        GetDocumentSignatureState(),
+                                       GetScriptingSignatureState(),
                                        bIsAsync );
 
                 if (bMailPrepareExport)

@@ -38,6 +38,8 @@
 
 #include <svtools/dialogclosedlistener.hxx>
 
+#include <unotools/saveopt.hxx>
+
 #include <tools/urlobj.hxx>
 
 
@@ -45,6 +47,10 @@ namespace com::sun::star::document { class XDocumentProperties; }
 
 namespace weld { class Window; }
 class ModelData_Impl;
+
+namespace sfx2 {
+    bool UseODFWholesomeEncryption(SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion);
+} // namespace sfx2
 
 class SfxStoringHelper
 {
@@ -67,6 +73,7 @@ private:
     bool m_bDialogUsed;
     bool m_bSetStandardName;
     sal_Int16 m_nStoreMode;
+    SignatureState m_nScriptingSignatureState{SignatureState::UNKNOWN};
 
     static bool FinishGUIStoreModel(::comphelper::SequenceAsHashMap::const_iterator& aFileNameIter,
                              ModelData_Impl& aModelData, bool bRemote, sal_Int16 nStoreMode,
@@ -74,7 +81,8 @@ private:
                              bool bSetStandardName, bool bPreselectPassword, bool bDialogUsed,
                              std::u16string_view aFilterFromMediaDescr, std::u16string_view aOldFilterName,
                              css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
-                             OUString aFilterName);
+                             OUString aFilterName,
+                             SignatureState nScriptingSignatureState);
 
     void CallFinishGUIStoreModel();
 
@@ -87,6 +95,7 @@ public:
                     css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
                     bool bPreselectPassword,
                     SignatureState nDocumentSignatureState,
+                    SignatureState nScriptingSignatureState,
                     bool bIsAsync );
 
     static bool CheckFilterOptionsAppearance(

@@ -146,6 +146,7 @@
 #define STR_SECURITY_WARNING_NO_HYPERLINKS      NC_("STR_SECURITY_WARNING_NO_HYPERLINKS", "For security reasons, the hyperlink cannot be executed.\nThe stated address will not be opened.")
 #define RID_SECURITY_WARNING_TITLE              NC_("RID_SECURITY_WARNING_TITLE", "Security Warning")
 #define RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE NC_("RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE", "Saving will remove all existing signatures.\nDo you want to continue saving the document?")
+#define RID_SVXSTR_XMLSEC_QUERY_LOSINGSCRIPTINGSIGNATURE NC_("RID_SVXSTR_XMLSEC_QUERY_LOSINGSCRIPTINGSIGNATURE", "Saving with password will remove all existing scripting signatures, and (depending on macro security settings) macros in the document may no longer be runnable.\nDo you want to continue saving the document with password?")
 #define RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN  NC_("RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN", "The document has to be saved before it can be signed.\nDo you want to save the document?")
 #define STR_QUERY_CANCELCHECKOUT                NC_("STR_QUERY_CANCELCHECKOUT", "This will discard all changes on the server since check-out.\nDo you want to proceed?")
 #define STR_QUERY_REMEMBERSIGNATURE             NC_("STR_QUERY_REMEMBERSIGNATURE", "Do you want to remember that signature for each save?")
