@@ -67,13 +67,12 @@ void AccessibleTextHelper::initialize( const OUString& aCID,
 
     if( pWindow )
     {
-        SdrView * pView = m_pDrawViewWrapper;
-        if( pView )
+        if (m_pDrawViewWrapper)
         {
             SdrObject * pTextObj = m_pDrawViewWrapper->getNamedSdrObject( aCID );
             if( pTextObj )
             {
-                m_oTextHelper.emplace( std::make_unique<SvxTextEditSource>(*pTextObj, nullptr, *pView, *pWindow->GetOutDev()) );
+                m_oTextHelper.emplace(std::make_unique<SvxTextEditSource>(*pTextObj, nullptr, *m_pDrawViewWrapper, *pWindow->GetOutDev()));
                 m_oTextHelper->SetEventSource( xEventSource );
             }
         }
