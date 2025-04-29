@@ -766,7 +766,7 @@ namespace {
 bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
     assert(helpRootUrl != nullptr);
     //TODO: this function for now assumes that the passed-in *helpRootUrl references
-    // /app/libreoffice/help (which belongs to the org.libreoffice.LibreOffice.Help
+    // /app/zetaoffice/help (which belongs to the de.allotropia.ZetaOffice.Help
     // extension); it replaces it with the corresponding file URL as seen outside the flatpak
     // sandbox:
     struct Failure: public std::exception {};
@@ -774,7 +774,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
         static auto const url = [] {
             // From /.flatpak-info [Instance] section, read
             //   app-path=<path>
-            //   app-extensions=...;org.libreoffice.LibreOffice.Help=<sha>;...
+            //   app-extensions=...;de.allotropia.ZetaOffice.Help=<sha>;...
             // lines:
             osl::File ini("file:///.flatpak-info");
             auto err = ini.open(osl_File_OpenFlag_Read);
@@ -849,28 +849,28 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                 }
             }
             ini.close();
-            // Extract <sha> from ...;org.libreoffice.LibreOffice.Help=<sha>;...:
+            // Extract <sha> from ...;de.allotropia.ZetaOffice.Help=<sha>;...:
             OUString sha;
             for (sal_Int32 i = 0;;) {
                 OUString elem = extensions.getToken(0, ';', i);
-                if (elem.startsWith("org.libreoffice.LibreOffice.Help=", &sha)) {
+                if (elem.startsWith("de.allotropia.ZetaOffice.Help=", &sha)) {
                     break;
                 }
                 if (i == -1) {
                     SAL_WARN(
                         "sfx.appl",
                         "LIBO_FLATPAK mode /.flatpak-info [Instance] app-extensions \""
-                            << extensions << "\" org.libreoffice.LibreOffice.Help");
+                            << extensions << "\" de.allotropia.ZetaOffice.Help");
                     throw Failure();
                 }
             }
             // Assuming that <path> is of the form
-            //   /.../app/org.libreoffice.LibreOffice/<arch>/<branch>/<sha'>/files
+            //   /.../app/de.allotropia.ZetaOffice/<arch>/<branch>/<sha'>/files
             // rewrite it as
-            //   /.../runtime/org.libreoffice.LibreOffice.Help/<arch>/<branch>/<sha>/files
+            //   /.../runtime/de.allotropia.ZetaOffice.Help/<arch>/<branch>/<sha>/files
             // because the extension's files are stored at a different place than the app's files,
             // so use this hack until flatpak itself provides a better solution:
-            static constexpr OUString segments = u"/app/org.libreoffice.LibreOffice/"_ustr;
+            static constexpr OUString segments = u"/app/de.allotropia.ZetaOffice/"_ustr;
             auto const i1 = path.lastIndexOf(segments);
                 // use lastIndexOf instead of indexOf, in case the user-controlled prefix /.../
                 // happens to contain such segments
@@ -878,7 +878,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                 SAL_WARN(
                     "sfx.appl",
                     "LIBO_FLATPAK mode /.flatpak-info [Instance] app-path \"" << path
-                        << "\" doesn't contain /app/org.libreoffice.LibreOffice/");
+                        << "\" doesn't contain /app/de.allotropia.ZetaOffice/");
                 throw Failure();
             }
             auto const i2 = i1 + segments.getLength();
@@ -907,7 +907,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                         << "\" doesn't contain files segment");
                 throw Failure();
             }
-            path = path.subView(0, i1) + OUString::Concat("/runtime/org.libreoffice.LibreOffice.Help/")
+            path = path.subView(0, i1) + OUString::Concat("/runtime/de.allotropia.ZetaOffice.Help/")
                 + path.subView(i2, i3 - i2) + sha + path.subView(i4);
             // Turn <path> into a file URL:
             OUString url_;
