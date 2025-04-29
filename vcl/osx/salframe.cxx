@@ -1216,11 +1216,14 @@ bool AquaSalFrame::doFlush()
             AquaSkiaSalGraphicsImpl *pSkiaGraphicsImpl = dynamic_cast<AquaSkiaSalGraphicsImpl*>(mpGraphics->GetImpl());
             if (pSkiaGraphicsImpl)
             {
-                // Assume 1/200th of a second is the fastest flushing rate
+                // Assume a certain frame rate is the fastest flushing rate
                 // that can be handled with Skia/Metal. Note that the Skia
                 // timer is running separately so the overall flushing rate
-                // may still be faster than this limit.
-                static const CFAbsoluteTime fMinFlushInterval = 0.005f;
+                // may still be faster than this limit. Previously, the
+                // limit was set to 200 flushes per second but that caused
+                // tdf#163945 to reappear so reduce the limit to 50 flushes
+                // per second.
+                static const CFAbsoluteTime fMinFlushInterval = 0.02;
                 static CFAbsoluteTime fLastFlushTime = 0;
 
                 CFAbsoluteTime fInterval = CFAbsoluteTimeGetCurrent() - fLastFlushTime;
