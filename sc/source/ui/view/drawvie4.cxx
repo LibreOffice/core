@@ -85,7 +85,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
     //  Update with the data (including NumberFormatter) from the live document would
     //  also store the NumberFormatter in the clipboard chart (#88749#)
 
-    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
 
     TransferableObjectDescriptor aObjDesc;
     pDocSh->FillTransferableObjectDescriptor( aObjDesc );
@@ -354,7 +354,7 @@ void ScDrawView::DoCopy()
     //  Update with the data (including NumberFormatter) from the live document would
     //  also store the NumberFormatter in the clipboard chart (#88749#)
 
-    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
 
     TransferableObjectDescriptor aObjDesc;
     pDocSh->FillTransferableObjectDescriptor( aObjDesc );
@@ -368,7 +368,7 @@ void ScDrawView::DoCopy()
         pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef );    // keep persist for ole objects alive
     }
 
-    pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
+    pTransferObj->CopyToClipboard( rViewData.GetActiveWin() );     // system clipboard
 }
 
 uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
@@ -386,9 +386,9 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
     //  Update with the data (including NumberFormatter) from the live document would
     //  also store the NumberFormatter in the clipboard chart (#88749#)
-    // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
+    // lcl_RefreshChartData( pModel, rViewData.GetDocument() );
 
-    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
 
     TransferableObjectDescriptor aObjDesc;
     pDocSh->FillTransferableObjectDescriptor( aObjDesc );
@@ -412,8 +412,7 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
     double nPPTX = ScGlobal::nScreenPPTX;
     double nPPTY = ScGlobal::nScreenPPTY;
 
-    if (pViewData)
-        nPPTX /= pViewData->GetDocShell()->GetOutputFactor();
+    nPPTX /= rViewData.GetDocShell()->GetOutputFactor();
 
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
@@ -502,10 +501,10 @@ void ScDrawView::SetMarkedOriginalSize()
         }
     }
 
-    if (nDone && pViewData)
+    if (nDone)
     {
         pUndoGroup->SetComment(ScResId( STR_UNDO_ORIGINALSIZE ));
-        ScDocShell* pDocSh = pViewData->GetDocShell();
+        ScDocShell* pDocSh = rViewData.GetDocShell();
         pDocSh->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
         pDocSh->SetDrawModified();
     }
@@ -563,7 +562,7 @@ void ScDrawView::FitToCellSize()
         pObj->SetSnapRect(aCellRect);
 
     pUndoGroup->SetComment(ScResId( STR_UNDO_FITCELLSIZE ));
-    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
     pDocSh->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
 
 }

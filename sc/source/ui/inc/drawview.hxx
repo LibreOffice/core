@@ -31,7 +31,7 @@ class ScDrawObjData;
 
 class ScDrawView final : public FmFormView
 {
-    ScViewData*             pViewData;
+    ScViewData&             rViewData;
     VclPtr<OutputDevice>    pDev;                   //! needed ?
     ScDocument&             rDoc;
     SCTAB                   nTab;
@@ -56,7 +56,7 @@ class ScDrawView final : public FmFormView
 public:
     ScDrawView(
         OutputDevice* pOut,
-        ScViewData* pData);
+        ScViewData& rData);
 
     virtual ~ScDrawView() override;
 

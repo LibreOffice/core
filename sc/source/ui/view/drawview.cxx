@@ -78,45 +78,38 @@ void ScDrawView::Construct()
     SetMinMoveDistancePixel( 2 );
     SetHitTolerancePixel( 2 );
 
-    if (pViewData)
+    SCTAB nViewTab = rViewData.GetTabNo();
+    ShowSdrPage(GetModel().GetPage(nViewTab));
+
+    bool bEx = rViewData.GetViewShell()->IsDrawSelMode();
+    bool bProt = rDoc.IsTabProtected( nViewTab ) ||
+                 rViewData.GetSfxDocShell()->IsReadOnly();
+
+    SdrLayer* pLayer;
+    SdrLayerAdmin& rAdmin = GetModel().GetLayerAdmin();
+    pLayer = rAdmin.GetLayerPerID(SC_LAYER_BACK);
+    if (pLayer)
+        SetLayerLocked( pLayer->GetName(), bProt || !bEx );
+    pLayer = rAdmin.GetLayerPerID(SC_LAYER_INTERN);
+    if (pLayer)
+        SetLayerLocked( pLayer->GetName() );
+    pLayer = rAdmin.GetLayerPerID(SC_LAYER_FRONT);
+    if (pLayer)
     {
-        SCTAB nViewTab = pViewData->GetTabNo();
-        ShowSdrPage(GetModel().GetPage(nViewTab));
-
-        bool bEx = pViewData->GetViewShell()->IsDrawSelMode();
-        bool bProt = rDoc.IsTabProtected( nViewTab ) ||
-                     pViewData->GetSfxDocShell()->IsReadOnly();
-
-        SdrLayer* pLayer;
-        SdrLayerAdmin& rAdmin = GetModel().GetLayerAdmin();
-        pLayer = rAdmin.GetLayerPerID(SC_LAYER_BACK);
-        if (pLayer)
-            SetLayerLocked( pLayer->GetName(), bProt || !bEx );
-        pLayer = rAdmin.GetLayerPerID(SC_LAYER_INTERN);
-        if (pLayer)
-            SetLayerLocked( pLayer->GetName() );
-        pLayer = rAdmin.GetLayerPerID(SC_LAYER_FRONT);
-        if (pLayer)
-        {
-            SetLayerLocked( pLayer->GetName(), bProt );
-            SetActiveLayer( pLayer->GetName() );        // set active layer to FRONT
-        }
-        pLayer = rAdmin.GetLayerPerID(SC_LAYER_CONTROLS);
-        if (pLayer)
-            SetLayerLocked( pLayer->GetName(), bProt );
-        pLayer = rAdmin.GetLayerPerID(SC_LAYER_HIDDEN);
-        if (pLayer)
-        {
-            SetLayerLocked( pLayer->GetName(), bProt );
-            SetLayerVisible( pLayer->GetName(), false);
-        }
-
-        SetSwapAsynchron();
+        SetLayerLocked( pLayer->GetName(), bProt );
+        SetActiveLayer( pLayer->GetName() );        // set active layer to FRONT
     }
-    else
+    pLayer = rAdmin.GetLayerPerID(SC_LAYER_CONTROLS);
+    if (pLayer)
+        SetLayerLocked( pLayer->GetName(), bProt );
+    pLayer = rAdmin.GetLayerPerID(SC_LAYER_HIDDEN);
+    if (pLayer)
     {
-        ShowSdrPage(GetModel().GetPage(nTab));
+        SetLayerLocked( pLayer->GetName(), bProt );
+        SetLayerVisible( pLayer->GetName(), false);
     }
+
+    SetSwapAsynchron();
 
     UpdateUserViewOptions();
     RecalcScale();
@@ -144,7 +137,7 @@ void ScDrawView::AddCustomHdl()
         SdrObject* pObj = rMarkList.GetMark(nPos)->GetMarkedSdrObj();
         if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjDataTab(pObj, nTab))
         {
-            if (ScTabView* pView = pViewData->GetView())
+            if (ScTabView* pView = rViewData.GetView())
                 pView->CreateAnchorHandles(maHdlList, pAnchor->maStart);
         }
     }
@@ -152,8 +145,7 @@ void ScDrawView::AddCustomHdl()
 
 void ScDrawView::InvalidateAttribs()
 {
-    if (!pViewData) return;
-    SfxBindings& rBindings = pViewData->GetBindings();
+    SfxBindings& rBindings = rViewData.GetBindings();
 
         // true status values:
     rBindings.InvalidateAll( true );
@@ -161,8 +153,7 @@ void ScDrawView::InvalidateAttribs()
 
 void ScDrawView::InvalidateDrawTextAttrs()
 {
-    if (!pViewData) return;
-    SfxBindings& rBindings = pViewData->GetBindings();
+    SfxBindings& rBindings = rViewData.GetBindings();
 
     //  cjk/ctl font items have no configured slots,
     //  need no invalidate
@@ -236,7 +227,7 @@ void ScDrawView::SetMarkedToLayer( SdrLayerID nLayerNo )
 
     //  repaint is done in SetLayer
 
-    pViewData->GetDocShell()->SetDrawModified();
+    rViewData.GetDocShell()->SetDrawModified();
 
     //  check mark list now instead of later in a timer
     CheckMarked();
@@ -304,21 +295,11 @@ void ScDrawView::RecalcScale()
     Fraction aZoomX(1,1);
     Fraction aZoomY(1,1);
 
-    if (pViewData)
-    {
-        nTab = pViewData->GetTabNo();
-        nPPTX = pViewData->GetPPTX();
-        nPPTY = pViewData->GetPPTY();
-        aZoomX = pViewData->GetZoomX();
-        aZoomY = pViewData->GetZoomY();
-    }
-    else
-    {
-        Point aLogic = pDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
-        nPPTX = aLogic.X() / 1000.0;
-        nPPTY = aLogic.Y() / 1000.0;
-                                            //! Zoom, handed over ???
-    }
+    nTab = rViewData.GetTabNo();
+    nPPTX = rViewData.GetPPTX();
+    nPPTY = rViewData.GetPPTY();
+    aZoomX = rViewData.GetZoomX();
+    aZoomY = rViewData.GetZoomY();
 
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
@@ -336,7 +317,7 @@ void ScDrawView::RecalcScale()
     resetGridOffsetsForAllSdrPageViews();
 
     SdrPageView* pPV = GetSdrPageView();
-    if ( !(pViewData && pPV) )
+    if ( !pPV )
         return;
 
     if ( SdrPage* pPage = pPV->GetPage() )
@@ -349,15 +330,14 @@ void ScDrawView::RecalcScale()
 
 void ScDrawView::DoConnect(SdrOle2Obj* pOleObj)
 {
-    if ( pViewData )
-        pViewData->GetViewShell()->ConnectObject( pOleObj );
+    rViewData.GetViewShell()->ConnectObject( pOleObj );
 }
 
 void ScDrawView::MarkListHasChanged()
 {
     FmFormView::MarkListHasChanged();
 
-    ScTabViewShell* pViewSh = pViewData->GetViewShell();
+    ScTabViewShell* pViewSh = rViewData.GetViewShell();
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     ScModule* pScMod = ScModule::get();
 
@@ -389,7 +369,7 @@ void ScDrawView::MarkListHasChanged()
 
     const size_t nMarkCount = rMarkList.GetMarkCount();
 
-    if ( nMarkCount == 0 && !pViewData->GetViewShell()->IsDrawSelMode() && !bInConstruct )
+    if ( nMarkCount == 0 && !rViewData.GetViewShell()->IsDrawSelMode() && !bInConstruct )
     {
         //  relock layers that may have been unlocked before
         LockBackgroundLayer(true);
@@ -552,7 +532,7 @@ bool ScDrawView::SdrBeginTextEdit(
         pGivenOutliner, pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus );
 
-    ScTabViewShell* pViewSh = pViewData->GetViewShell();
+    ScTabViewShell* pViewSh = rViewData.GetViewShell();
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -584,7 +564,7 @@ SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
 {
     const SdrEndTextEditKind eRet = FmFormView::SdrEndTextEdit( bDontDeleteReally );
 
-    ScTabViewShell* pViewSh = pViewData->GetViewShell();
+    ScTabViewShell* pViewSh = rViewData.GetViewShell();
 
     if (comphelper::LibreOfficeKit::isActive())
         SfxLokHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
@@ -604,11 +584,11 @@ SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
 void ScDrawView::ModelHasChanged()
 {
     SdrObject* pEditObj = GetTextEditObject();
-    if ( pEditObj && !pEditObj->IsInserted() && pViewData )
+    if ( pEditObj && !pEditObj->IsInserted() )
     {
         //  SdrObjEditView::ModelHasChanged will end text edit in this case,
         //  so make sure the EditEngine's undo manager is no longer used.
-        pViewData->GetViewShell()->SetDrawTextUndo(nullptr);
+        rViewData.GetViewShell()->SetDrawTextUndo(nullptr);
         SetCreateMode();    // don't leave FuText in a funny state
     }
 
@@ -617,10 +597,7 @@ void ScDrawView::ModelHasChanged()
 
 void ScDrawView::UpdateUserViewOptions()
 {
-    if (!pViewData)
-        return;
-
-    const ScViewOptions&    rOpt = pViewData->GetOptions();
+    const ScViewOptions&    rOpt = rViewData.GetOptions();
     const ScGridOptions&    rGrid = rOpt.GetGridOptions();
 
     SetDragStripes( rOpt.GetOption( VOPT_HELPLINES ) );
@@ -702,15 +679,15 @@ void ScDrawView::SelectCurrentViewObject( std::u16string_view rName )
     if ( !pFound )
         return;
 
-    ScTabView* pView = pViewData->GetView();
+    ScTabView* pView = rViewData.GetView();
     if ( nObjectTab != nTab )                               // switch sheet
         pView->SetTabNo( nObjectTab );
     DBG_ASSERT( nTab == nObjectTab, "Switching sheets did not work" );
     pView->ScrollToObject( pFound );
     if ( pFound->GetLayer() == SC_LAYER_BACK &&
-            !pViewData->GetViewShell()->IsDrawSelMode() &&
+            !rViewData.GetViewShell()->IsDrawSelMode() &&
             !rDoc.IsTabProtected( nTab ) &&
-            !pViewData->GetSfxDocShell()->IsReadOnly() )
+            !rViewData.GetSfxDocShell()->IsReadOnly() )
     {
         SdrLayer* pLayer = GetModel().GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
         if (pLayer)
@@ -756,7 +733,7 @@ bool ScDrawView::SelectObject( std::u16string_view rName )
 
     if ( pFound )
     {
-        ScTabView* pView = pViewData->GetView();
+        ScTabView* pView = rViewData.GetView();
         if ( nObjectTab != nTab )                               // switch sheet
             pView->SetTabNo( nObjectTab );
 
@@ -768,9 +745,9 @@ bool ScDrawView::SelectObject( std::u16string_view rName )
             be unlocked even if exclusive drawing selection mode is not active
             (this is reversed in MarkListHasChanged when nothing is selected) */
         if ( pFound->GetLayer() == SC_LAYER_BACK &&
-                !pViewData->GetViewShell()->IsDrawSelMode() &&
+                !rViewData.GetViewShell()->IsDrawSelMode() &&
                 !rDoc.IsTabProtected( nTab ) &&
-                !pViewData->GetSfxDocShell()->IsReadOnly() )
+                !rViewData.GetSfxDocShell()->IsReadOnly() )
         {
             LockBackgroundLayer(false);
         }
@@ -799,12 +776,9 @@ bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV)
     // Do not change marks when the ole object is active
     // (for Drop from ole object would otherwise be deactivated in the middle of ExecuteDrag!)
 
-    if (pViewData)
-    {
-        SfxInPlaceClient* pClient = pViewData->GetViewShell()->GetIPClient();
-        if ( pClient && pClient->IsObjectInPlaceActive() )
-            nOptions |= SdrInsertFlags::DONTMARK;
-    }
+    SfxInPlaceClient* pClient = rViewData.GetViewShell()->GetIPClient();
+    if ( pClient && pClient->IsObjectInPlaceActive() )
+        nOptions |= SdrInsertFlags::DONTMARK;
 
     return InsertObjectAtView(pObj, rPV, nOptions);
 }
@@ -812,10 +786,10 @@ bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV)
 SdrObject* ScDrawView::GetMarkedNoteCaption( ScDrawObjData** ppCaptData )
 {
     const SdrMarkList& rMarkList = GetMarkedObjectList();
-    if( pViewData && (rMarkList.GetMarkCount() == 1) )
+    if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, pViewData->GetTabNo() ) )
+        if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, rViewData.GetTabNo() ) )
         {
             if( ppCaptData ) *ppCaptData = pCaptData;
             return pObj;
@@ -836,13 +810,13 @@ void ScDrawView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin )
     //! Evaluate rWin properly
     //! change zoom if necessary
 
-    if ( pViewData && pViewData->GetActiveWin() == &rWin )
-        pViewData->GetView()->MakeVisible( rRect );
+    if ( rViewData.GetActiveWin() == &rWin )
+        rViewData.GetView()->MakeVisible( rRect );
 }
 
 SfxViewShell* ScDrawView::GetSfxViewShell() const
 {
-    return pViewData->GetViewShell();
+    return rViewData.GetViewShell();
 }
 
 void ScDrawView::DeleteMarked()
@@ -852,7 +826,7 @@ void ScDrawView::DeleteMarked()
     if( SdrObject* pCaptObj = GetMarkedNoteCaption( &pCaptData ) )
     {
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : nullptr;
+        ScDocShell* pDocShell = rViewData.GetDocShell();
         SfxUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : nullptr;
         bool bUndo = pDrawLayer && pDocShell && pUndoMgr && rDoc.IsUndoEnabled();
 
@@ -889,7 +863,7 @@ SdrEndTextEditKind ScDrawView::ScEndTextEdit()
     SdrEndTextEditKind eKind = SdrEndTextEdit();
 
     if (bIsTextEdit)
-        pViewData->GetViewShell()->SetDrawTextUndo(nullptr);   // the "normal" undo manager
+        rViewData.GetViewShell()->SetDrawTextUndo(nullptr);   // the "normal" undo manager
 
     return eKind;
 }
@@ -924,8 +898,8 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
             SyncForGrid( pChild.get() );
     }
 
-    ScSplitPos eWhich = pViewData->GetActivePart();
-    ScGridWindow* pGridWin = pViewData->GetActiveWin();
+    ScSplitPos eWhich = rViewData.GetActivePart();
+    ScGridWindow* pGridWin = rViewData.GetActiveWin();
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
     if ( !pGridWin )
         return;
@@ -954,7 +928,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
     Point aOldPos( rDoc.GetColOffset( aOldStt.Col(), aOldStt.Tab()  ), rDoc.GetRowOffset( aOldStt.Row(), aOldStt.Tab() ) );
     aOldPos = convertTwipToMm100(aOldPos);
     // find position of same point on the screen ( e.g. grid )
-    Point aCurPos =  pViewData->GetScrPos(  aOldStt.Col(), aOldStt.Row(), eWhich, true );
+    Point aCurPos =  rViewData.GetScrPos(  aOldStt.Col(), aOldStt.Row(), eWhich, true );
     Point aCurPosHmm = pGridWin->PixelToLogic(aCurPos, aDrawMode );
     Point aGridOff = aCurPosHmm - aOldPos;
     // fdo#63878 Fix the X position for RTL Sheet
@@ -977,7 +951,7 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
                     comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
         return false;
 
-    ScGridWindow* pGridWin(pViewData->GetActiveWin());
+    ScGridWindow* pGridWin(rViewData.GetActiveWin());
 
     if(nullptr == pGridWin)
     {
@@ -1013,8 +987,8 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
     aOldPos = convertTwipToMm100(aOldPos);
 
     // find position of same point on the screen ( e.g. grid )
-    ScSplitPos eWhich(pViewData->GetActivePart());
-    Point aCurPos(pViewData->GetScrPos(aOldStt.Col(), aOldStt.Row(), eWhich, true));
+    ScSplitPos eWhich(rViewData.GetActivePart());
+    Point aCurPos(rViewData.GetScrPos(aOldStt.Col(), aOldStt.Row(), eWhich, true));
     Point aCurPosHmm(pGridWin->PixelToLogic(aCurPos, aDrawMode));
     Point aGridOff(aCurPosHmm - aOldPos);
 
@@ -1036,7 +1010,7 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
     const basegfx::B2DRange& rB2DRange,
     basegfx::B2DVector& rTarget) const
 {
-    ScGridWindow* pGridWin(pViewData->GetActiveWin());
+    ScGridWindow* pGridWin(rViewData.GetActiveWin());
 
     if(nullptr == pGridWin || rB2DRange.isEmpty())
     {
@@ -1063,8 +1037,8 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
     aOldPos = convertTwipToMm100(aOldPos);
 
     // find position of same point on the screen ( e.g. grid )
-    ScSplitPos eWhich(pViewData->GetActivePart());
-    Point aCurPos(pViewData->GetScrPos(aOldStt.Col(), aOldStt.Row(), eWhich, true));
+    ScSplitPos eWhich(rViewData.GetActivePart());
+    Point aCurPos(rViewData.GetScrPos(aOldStt.Col(), aOldStt.Row(), eWhich, true));
     Point aCurPosHmm(pGridWin->PixelToLogic(aCurPos, aDrawMode));
     Point aGridOff(aCurPosHmm - aOldPos);
 
@@ -1086,7 +1060,7 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
 std::unique_ptr<SdrUndoManager> ScDrawView::createLocalTextUndoManager()
 {
     std::unique_ptr<SdrUndoManager> pUndoManager(new SdrUndoManager);
-    ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : nullptr;
+    ScDocShell* pDocShell = rViewData.GetDocShell();
     pUndoManager->SetDocShell(pDocShell);
     return pUndoManager;
 }

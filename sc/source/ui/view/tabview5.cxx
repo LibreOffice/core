@@ -234,7 +234,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
     OSL_ENSURE(pLayer, "Where is the Draw Layer ??");
 
     sal_uInt16 i;
-    pDrawView.reset( new ScDrawView( pGridWin[SC_SPLIT_BOTTOMLEFT]->GetOutDev(), &aViewData ) );
+    pDrawView.reset( new ScDrawView( pGridWin[SC_SPLIT_BOTTOMLEFT]->GetOutDev(), aViewData ) );
     for (i=0; i<4; i++)
         if (pGridWin[i])
         {

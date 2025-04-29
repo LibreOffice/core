@@ -41,12 +41,12 @@
 
 ScDrawView::ScDrawView(
     OutputDevice* pOut,
-    ScViewData* pData )
-:   FmFormView(*pData->GetDocument().GetDrawLayer(), pOut),
-    pViewData( pData ),
+    ScViewData& rData )
+:   FmFormView(*rData.GetDocument().GetDrawLayer(), pOut),
+    rViewData( rData ),
     pDev( pOut ),
-    rDoc( pData->GetDocument() ),
-    nTab( pData->GetTabNo() ),
+    rDoc( rData.GetDocument() ),
+    nTab( rData.GetTabNo() ),
     pDropMarkObj( nullptr ),
     bInConstruct( true )
 {
@@ -79,8 +79,7 @@ void ScDrawView::SetPageAnchored()
     }
     EndUndo();
 
-    if ( pViewData )
-        pViewData->GetDocShell()->SetDrawModified();
+    rViewData.GetDocShell()->SetDrawModified();
 
     // Remove the anchor object.
     maHdlList.RemoveAllByKind(SdrHdlKind::Anchor);
@@ -104,13 +103,10 @@ void ScDrawView::SetCellAnchored(bool bResizeWithCell)
     }
     EndUndo();
 
-    if ( pViewData )
-    {
-        pViewData->GetDocShell()->SetDrawModified();
+    rViewData.GetDocShell()->SetDrawModified();
 
-        // Set the anchor object.
-        AddCustomHdl();
-    }
+    // Set the anchor object.
+    AddCustomHdl();
 }
 
 ScAnchorType ScDrawView::GetAnchorType() const
@@ -230,9 +226,8 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 void ScDrawView::UpdateIMap( SdrObject* pObj )
 {
-    if ( !(pViewData &&
-         pViewData->GetViewShell()->GetViewFrame().HasChildWindow( ScIMapChildWindowId() ) &&
-         pObj && ( dynamic_cast<const SdrGrafObj*>( pObj) != nullptr || dynamic_cast<const SdrOle2Obj*>( pObj) != nullptr )) )
+    if ( rViewData.GetViewShell()->GetViewFrame().HasChildWindow( ScIMapChildWindowId() ) &&
+         pObj && ( dynamic_cast<const SdrGrafObj*>( pObj) != nullptr || dynamic_cast<const SdrOle2Obj*>( pObj) != nullptr ) )
         return;
 
     Graphic     aGraphic;
