@@ -4290,8 +4290,6 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& 
     // is a better representation of how the changes happened. If this will ever become a problem, overlapping redlines
     // will need to be merged into one, just like doing the changes in the UI does, which will lose some information
     // (and so if that happens, it may be better to fix Writer).
-    // Create the redlines here from lowest (formats) to highest (inserts/removals) priority, since the last one is
-    // what Writer presents graphically, so this will show deletes as deleted text and not as just formatted text being there.
     bool bUsedRange = m_aRedlines.top().size() > 0 || (GetTopContextOfType(CONTEXT_CHARACTER) &&
         GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().size() > 0);
 
@@ -4304,14 +4302,15 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& 
         for( const auto& rRedline : avRedLines )
             CreateRedline( xRange, rRedline );
     }
+    for (const auto& rRedline : m_aRedlines.top())
+        CreateRedline(xRange, rRedline);
+    // Create format redlines after insert/delete, so format can be "on top" of insert/delete.
     if( GetTopContextOfType(CONTEXT_CHARACTER) )
     {
         std::vector<RedlineParamsPtr>& avRedLines = GetTopContextOfType(CONTEXT_CHARACTER)->Redlines();
         for( const auto& rRedline : avRedLines )
             CreateRedline( xRange, rRedline );
     }
-    for (const auto& rRedline : m_aRedlines.top() )
-        CreateRedline( xRange, rRedline );
 }
 
 void DomainMapper_Impl::StartParaMarkerChange( )

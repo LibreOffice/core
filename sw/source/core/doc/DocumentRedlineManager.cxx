@@ -2243,8 +2243,20 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     pNewRedl->SetStart( *pREnd, pStart );
                     break;
 
-                case SwComparePosition::Equal:
                 case SwComparePosition::Inside:
+                    if (*pRStt < *pStart && *pREnd == *pEnd)
+                    {
+                        // pRedl start is before pNewRedl start, the ends match: then create the
+                        // format on top of insert/delete & reduce the end of the original
+                        // insert/delete to avoid an overlap.
+                        pNewRedl->PushData(*pRedl, false);
+                        pRedl->SetEnd(*pStart);
+                        n = 0;
+                        bDec = true;
+                        break;
+                    }
+                    [[fallthrough]];
+                case SwComparePosition::Equal:
                     delete pNewRedl;
                     pNewRedl = nullptr;
 

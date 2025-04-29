@@ -42,6 +42,7 @@
 #include <pagefrm.hxx>
 #include <sortedobjs.hxx>
 #include <itabenum.hxx>
+#include <redline.hxx>
 
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase
@@ -737,6 +738,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenDelRejectUndo)
     // i.e. initially the doc had no redlines after insert, but undo + doing it again resulted in
     // redlines, which is inconsistent.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rRedlines.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)
+{
+    // Given a document with <ins>A<format>B</format>C</ins> style redlines:
+    // When importing that document:
+    createSwDoc("ins-then-format.docx");
+
+    // Then make sure that both the insert and the format on top of it is in the model:
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 1
+    // i.e. a single insert redline was created, format redline was lost on import.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[0]->GetType());
+    const SwRedlineData& rRedlineData1 = rRedlines[1]->GetRedlineData(0);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData1.GetType());
+    CPPUNIT_ASSERT(rRedlineData1.Next());
+    const SwRedlineData& rInnerRedlineData = *rRedlineData1.Next();
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData.GetType());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[2]->GetType());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
