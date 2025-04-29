@@ -2436,6 +2436,12 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="RemoveEditingTimeOnSaving" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether to remove editing duration on saving.</desc>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="RemovePersonalInfoOnSaving" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether to remove personal information on

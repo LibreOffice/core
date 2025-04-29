@@ -317,6 +317,9 @@ bool IsOptionSet( EOption eOption )
         case SvtSecurityOptions::EOption::DocWarnCreatePdf:
             bSet = officecfg::Office::Common::Security::Scripting::WarnCreatePDF::get();
             break;
+        case SvtSecurityOptions::EOption::DocWarnRemoveEditingTimeInfo:
+            bSet = officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::get();
+            break;
         case SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo:
             bSet = officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::get();
             break;
@@ -372,6 +375,9 @@ void SetOption( EOption eOption, bool bValue )
             break;
         case SvtSecurityOptions::EOption::DocWarnCreatePdf:
              officecfg::Office::Common::Security::Scripting::WarnCreatePDF::set(bValue, xChanges);
+            break;
+        case SvtSecurityOptions::EOption::DocWarnRemoveEditingTimeInfo:
+            officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(bValue, xChanges);
             break;
         case SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo:
              officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(bValue, xChanges);

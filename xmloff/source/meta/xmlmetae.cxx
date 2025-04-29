@@ -162,15 +162,15 @@ void SvXMLMetaExport::MExport_()
 
     //  editing duration
     //  property is a int32 (seconds)
-    if (!bRemovePersonalInfo)
+    if (!bRemovePersonalInfo && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemoveEditingTimeInfo))
     {
         sal_Int32 secs = mxDocProps->getEditingDuration();
         SvXMLElementExport aElem( mrExport,
-                                  XML_NAMESPACE_META, XML_EDITING_DURATION,
-                                  true, false );
+            XML_NAMESPACE_META, XML_EDITING_DURATION,
+            true, false );
         OUStringBuffer buf;
         ::sax::Converter::convertDuration(buf, util::Duration(
-                    false, 0, 0, 0, secs/3600, (secs%3600)/60, secs%60, 0));
+            false, 0, 0, 0, secs/3600, (secs%3600)/60, secs%60, 0));
         mrExport.Characters(buf.makeStringAndClear());
     }
 

@@ -236,8 +236,18 @@ void SfxObjectShell::UpdateDocInfoForSave()
             ::DateTime now( ::DateTime::SYSTEM );
             xDocProps->setModificationDate( now.GetUNODateTime() );
             xDocProps->setModifiedBy( aUserName );
-            UpdateTime_Impl( xDocProps );
+            if (!SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemoveEditingTimeInfo))
+                UpdateTime_Impl( xDocProps );
         }
+        // reset only editing time to zero if RemoveEditingTimeOnSaving is true
+        if (SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemoveEditingTimeInfo))
+            xDocProps->setEditingDuration(0);
+    }
+    else
+    {
+        // reset only editing time to zero if RemoveEditingTimeOnSaving is true
+        if (SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemoveEditingTimeInfo))
+            xDocProps->setEditingDuration(0);
     }
 }
 

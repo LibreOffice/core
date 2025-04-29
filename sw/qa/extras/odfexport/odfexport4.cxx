@@ -129,6 +129,33 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
                 "/office:document-settings/office:settings/config:config-item-set[2]/"
                 "config:config-item[@config:name='PrinterSetup']",
                 0);
+
+    // Reset config change
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(false, pBatch);
+    pBatch->commit();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
+{
+    // 1. Check we have the original edit time info
+    loadAndSave("personalmetadata.odt");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
+    assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration",
+                       u"PT21M22S");
+
+    // Set config RemoveEditingTimeOnSaving to true
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(true, pBatch);
+    pBatch->commit();
+
+    // 2. Check edit time info is 0
+    loadAndSave("personalmetadata.odt");
+    pXmlDoc = parseExport(u"meta.xml"_ustr);
+    assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", u"P0D");
+
+    // Reset config change
+    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(false, pBatch);
+    pBatch->commit();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf151100)

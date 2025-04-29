@@ -810,6 +810,33 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastModifiedBy", 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastPrinted", 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision", 0);
+
+    // Reset config change
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(false, pBatch);
+    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(false, pBatch);
+    pBatch->commit();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
+{
+    // 1. Check we have the original edit time info
+    loadAndSave("personalmetadata.docx");
+    xmlDocUniquePtr pAppDoc = parseExport(u"docProps/app.xml"_ustr);
+    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 1);
+
+    // Set config RemoveEditingTimeOnSaving to true
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(true, pBatch);
+    pBatch->commit();
+
+    // 2. Check edit time info is removed
+    loadAndSave("personalmetadata.docx");
+    pAppDoc = parseExport(u"docProps/app.xml"_ustr);
+    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 0);
+
+    // Reset config change
+    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(false, pBatch);
+    pBatch->commit();
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_noPageBitmap, "tdf126533_noPageBitmap.docx")

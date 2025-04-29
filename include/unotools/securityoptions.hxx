@@ -40,6 +40,7 @@ namespace SvtSecurityOptions
         DocWarnSigning,
         DocWarnPrint,
         DocWarnCreatePdf,
+        DocWarnRemoveEditingTimeInfo,
         DocWarnRemovePersonalInfo,
         DocWarnKeepRedlineInfo,
         DocWarnKeepDocUserInfo,

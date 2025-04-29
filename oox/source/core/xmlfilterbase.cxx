@@ -770,7 +770,7 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
     writeElement( pAppProps, XML_Notes,                 "notes" );
 #endif  /* def OOXTODO */
     // EditingDuration is in seconds, TotalTime is in minutes.
-    if (!bRemovePersonalInfo)
+    if (!bRemovePersonalInfo && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemoveEditingTimeInfo))
         writeElement(pAppProps, XML_TotalTime, xProperties->getEditingDuration() / 60);
 #ifdef OOXTODO
     writeElement( pAppProps, XML_HiddenSlides,          "hidden slides" );
