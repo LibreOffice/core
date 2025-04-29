@@ -56,6 +56,11 @@ DocumentTimerManager::DocumentTimerManager(SwDoc& i_rSwdoc)
 
 void DocumentTimerManager::StartIdling()
 {
+    if (m_aFireIdleJobsTimer.IsActive())
+    {
+        return;
+    }
+
     if (m_bWaitForLokInit && comphelper::LibreOfficeKit::isActive())
     {
         // Start the idle jobs only after a certain delay.
@@ -100,6 +105,11 @@ void DocumentTimerManager::UnblockIdling()
         else
             Scheduler::Wakeup();
     }
+}
+
+Timer& DocumentTimerManager::GetFireIdleJobsTimer()
+{
+    return m_aFireIdleJobsTimer;
 }
 
 IMPL_LINK(DocumentTimerManager, FireIdleJobsTimeout, Timer*, , void)
