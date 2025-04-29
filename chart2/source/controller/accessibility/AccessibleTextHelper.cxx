@@ -57,8 +57,8 @@ void AccessibleTextHelper::initialize( const OUString& aCID,
                                 vcl::Window* pWindow)
 {
     OSL_ENSURE( !aCID.isEmpty(), "Empty CID" );
-    OSL_ENSURE( xEventSource.is(), "Empty Event Source" );
-    if( !xEventSource.is() || aCID.isEmpty() )
+    assert(xEventSource.is() && "Empty Event Source");
+    if (aCID.isEmpty())
         return;
 
     SolarMutexGuard aSolarGuard;
