@@ -431,29 +431,23 @@ namespace {
 
 struct ScChildGone
 {
-    ScAccessibleDocumentPagePreview* mpAccDoc;
-    explicit ScChildGone(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
+    ScAccessibleDocumentPagePreview& mrAccDoc;
+    explicit ScChildGone(ScAccessibleDocumentPagePreview& rAccDoc) : mrAccDoc(rAccDoc) {}
     void operator() (const uno::Reference<XAccessible>& xAccessible) const
     {
-        if (mpAccDoc)
-        {
-            // gone child - event
-            mpAccDoc->CommitChange(AccessibleEventId::CHILD, uno::Any(xAccessible), uno::Any());
-        }
+        // gone child - event
+        mrAccDoc.CommitChange(AccessibleEventId::CHILD, uno::Any(xAccessible), uno::Any());
     }
 };
 
 struct ScChildNew
 {
-    ScAccessibleDocumentPagePreview* mpAccDoc;
-    explicit ScChildNew(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
+    ScAccessibleDocumentPagePreview& mrAccDoc;
+    explicit ScChildNew(ScAccessibleDocumentPagePreview& rAccDoc) : mrAccDoc(rAccDoc) {}
     void operator() (const uno::Reference<XAccessible>& xAccessible) const
     {
-        if (mpAccDoc)
-        {
-            // new child - event
-            mpAccDoc->CommitChange(AccessibleEventId::CHILD, uno::Any(), uno::Any(xAccessible));
-        }
+        // new child - event
+        mrAccDoc.CommitChange(AccessibleEventId::CHILD, uno::Any(), uno::Any(xAccessible));
     }
 };
 
@@ -477,8 +471,8 @@ void ScNotesChildren::DataChanged(const tools::Rectangle& rVisRect)
         maNotes = std::move(aNewNotes);
     }
 
-    std::for_each(aOldParas.begin(), aOldParas.end(), ScChildGone(&mrAccDoc));
-    std::for_each(aNewParas.begin(), aNewParas.end(), ScChildNew(&mrAccDoc));
+    std::for_each(aOldParas.begin(), aOldParas.end(), ScChildGone(mrAccDoc));
+    std::for_each(aNewParas.begin(), aNewParas.end(), ScChildNew(mrAccDoc));
 }
 
 inline ScDocument* ScNotesChildren::GetDocument() const
