@@ -142,7 +142,7 @@ OUString SAL_CALL
 void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
     // delegate listener handling to children manager.
-    if ( ! IsDisposed())
+    if (isAlive())
         maTextHelper.AddEventListener(xListener);
     AccessibleContextBase::addEventListener(xListener);
 }
@@ -150,7 +150,7 @@ void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Refe
 void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
     // forward
-    if ( ! IsDisposed())
+    if (isAlive())
         maTextHelper.RemoveEventListener(xListener);
     AccessibleContextBase::removeEventListener(xListener);
 }

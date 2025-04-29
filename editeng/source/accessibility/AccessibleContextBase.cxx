@@ -417,7 +417,7 @@ void AccessibleContextBase::CommitChange (
 
 bool AccessibleContextBase::IsDisposed() const
 {
-    return (rBHelper.bDisposed || rBHelper.bInDispose);
+    return !isAlive();
 }
 
 

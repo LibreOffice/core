@@ -300,7 +300,7 @@ OUString SAL_CALL AccessibleShape::getAccessibleDescription()
 sal_Int64 SAL_CALL
        AccessibleShape::getAccessibleChildCount ()
 {
-    if (IsDisposed())
+    if (!isAlive())
     {
         return 0;
     }
@@ -380,7 +380,7 @@ sal_Int64 SAL_CALL
 {
     ::osl::MutexGuard aGuard (m_aMutex);
 
-    if (IsDisposed())
+    if (!isAlive())
     {
         // Return a minimal state set that only contains the DEFUNC state.
         return AccessibleContextBase::getAccessibleStateSet ();

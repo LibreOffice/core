@@ -457,7 +457,7 @@ void SAL_CALL AccessibleDocumentViewBase::propertyChange (const beans::PropertyC
 void SAL_CALL
     AccessibleDocumentViewBase::windowResized (const css::awt::WindowEvent& )
 {
-    if( IsDisposed() )
+    if (!isAlive())
         return;
 
     ViewForwarderChanged();
@@ -466,7 +466,7 @@ void SAL_CALL
 void SAL_CALL
     AccessibleDocumentViewBase::windowMoved (const css::awt::WindowEvent& )
 {
-    if( IsDisposed() )
+    if (!isAlive())
         return;
 
     ViewForwarderChanged();
@@ -475,7 +475,7 @@ void SAL_CALL
 void SAL_CALL
     AccessibleDocumentViewBase::windowShown (const css::lang::EventObject& )
 {
-    if( IsDisposed() )
+    if (!isAlive())
         return;
 
     ViewForwarderChanged();
@@ -484,7 +484,7 @@ void SAL_CALL
 void SAL_CALL
     AccessibleDocumentViewBase::windowHidden (const css::lang::EventObject& )
 {
-    if( IsDisposed() )
+    if (!isAlive())
         return;
 
     ViewForwarderChanged();
