@@ -553,7 +553,13 @@ struct EmbeddedFont
 
 namespace
 {
-class FontCollector : public sd::ModelTraverseHandler
+
+/** Collects font names of fonts used in the document
+ *
+ * Uses the model traverser to traverse the document model.
+ * Can be parameterized to filter latin, asian or complex scripts.
+ */
+class FontNameCollector : public sd::ModelTraverseHandler
 {
 private:
     std::unordered_set<OUString>& mrUsedFontNames;
@@ -600,7 +606,7 @@ private:
     }
 
 public:
-    FontCollector(std::unordered_set<OUString>& rUsedFontNames, bool bEmbedLatinScript, bool bEmbedAsianScript, bool bEmbedComplexScript)
+    FontNameCollector(std::unordered_set<OUString>& rUsedFontNames, bool bEmbedLatinScript, bool bEmbedAsianScript, bool bEmbedComplexScript)
         : mrUsedFontNames(rUsedFontNames)
         , mbEmbedLatinScript(bEmbedLatinScript)
         , mbEmbedAsianScript(bEmbedAsianScript)
@@ -706,9 +712,9 @@ std::unordered_set<OUString> PowerPointExport::getUsedFontList()
         }
     }
 
-    std::shared_ptr<FontCollector> pFontCollector(new FontCollector(aReturnSet, mbEmbedLatinScript, mbEmbedAsianScript, mbEmbedComplexScript));
+    auto pCollector = std::make_shared<FontNameCollector>(aReturnSet, mbEmbedLatinScript, mbEmbedAsianScript, mbEmbedComplexScript);
     sd::ModelTraverser aModelTraverser(pDocument, { .mbPages = true, .mbMasterPages = true });
-    aModelTraverser.addNodeHandler(pFontCollector);
+    aModelTraverser.addNodeHandler(pCollector);
     aModelTraverser.traverse();
 
     return aReturnSet;
