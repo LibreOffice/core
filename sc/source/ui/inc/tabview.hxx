@@ -124,6 +124,7 @@ private:
     ScHeaderFunctionSet      aHdrFunc;
 
     std::unique_ptr<ScDrawView> pDrawView;
+    sdr::overlay::OverlayObjectList maTextEditOverlayGroup;
 
     Size                aFrameSize;             // passed on as for DoResize
     Point               aBorderPos;
@@ -529,6 +530,7 @@ public:
     void            MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW nRow );
     void            KillEditView( bool bNoPaint );
     void            UpdateEditView();
+    void            RefeshTextEditOverlay();
 
                                     //  Blocks
 

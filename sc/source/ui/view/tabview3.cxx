@@ -34,6 +34,14 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
+
 #include <IAnyRefDialog.hxx>
 #include <tabview.hxx>
 #include <tabvwsh.hxx>
@@ -2189,7 +2197,354 @@ void ScTabView::OnLibreOfficeKitTabChanged()
         pThisViewShell->GetInputHandler()->UpdateLokReferenceMarks();
 }
 
-// paint functions - only for this View
+// TextEditOverlayObject for TextOnOverlay TextEdit. It directly
+// implements needed EditViewCallbacks and also hosts the
+// OverlaySelection
+namespace
+{
+class ScTextEditOverlayObject : public sdr::overlay::OverlayObject, public EditViewCallbacks
+{
+    // the ScTabView the TextEdit is running at and the ScSplitPos to
+    // identify the associated data
+    ScTabView& mrScTabView;
+    ScSplitPos maScSplitPos;
+
+    // this separate OverlayObject holds and creates the selection
+    // visualization, so it can be changed/refreshed without changing
+    // the Text or TextEditBackground
+    std::unique_ptr<sdr::overlay::OverlaySelection> mxOverlayTransparentSelection;
+
+    // geometry creation for OverlayObject, in this case the extraction
+    // of edited Text from the setup EditEngine
+    virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
+
+    // EditView overrides
+    virtual void EditViewInvalidate(const tools::Rectangle& rRect) override;
+    virtual void EditViewSelectionChange() override;
+    virtual OutputDevice& EditViewOutputDevice() const override;
+    virtual Point EditViewPointerPosPixel() const override;
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const override;
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
+    virtual void EditViewInputContext(const InputContext& rInputContext) override;
+    virtual void EditViewCursorRect(const tools::Rectangle& rRect, int nExtTextInputWidth) override;
+
+public:
+    // create using system selection color & ScTabView
+    ScTextEditOverlayObject(
+        const Color& rColor,
+        ScTabView& rScTabView,
+        ScSplitPos aScSplitPos);
+    virtual ~ScTextEditOverlayObject() override;
+
+    // override to mix in TextEditBackground and the Text transformed
+    // as needed
+    virtual drawinglayer::primitive2d::Primitive2DContainer getOverlayObjectPrimitive2DSequence() const override;
+
+    // access to OverlaySelection to add to OverlayManager
+    sdr::overlay::OverlayObject* getOverlaySelection()
+    {
+        return mxOverlayTransparentSelection.get();
+    }
+
+    void RefeshTextEditOverlay()
+    {
+        // currently just deletes all created stuff, this may
+        // be fine-tuned later if needed
+        objectChange();
+    }
+};
+
+ScTextEditOverlayObject::ScTextEditOverlayObject(
+    const Color& rColor,
+    ScTabView& rScTabView,
+    ScSplitPos aScSplitPos)
+: OverlayObject(rColor)
+, mrScTabView(rScTabView)
+, maScSplitPos(aScSplitPos)
+{
+    // no AA for TextEdit overlay
+    allowAntiAliase(false);
+
+    // establish EditViewCallbacks
+    const ScViewData& rScViewData(mrScTabView.GetViewData());
+    EditView* pEditView(rScViewData.GetEditView(maScSplitPos));
+    DBG_ASSERT(nullptr != pEditView, "NO access to EditView in ScTextEditOverlayObject!");
+    pEditView->setEditViewCallbacks(this);
+
+    // initialize empty OverlaySelection
+    std::vector<basegfx::B2DRange> aEmptySelection{};
+    mxOverlayTransparentSelection.reset(new sdr::overlay::OverlaySelection(
+        sdr::overlay::OverlayType::Transparent, rColor, std::move(aEmptySelection), true));
+}
+
+ScTextEditOverlayObject::~ScTextEditOverlayObject()
+{
+    // delete OverlaySelection - this will also remove itself from
+    // OverlayManager already
+    mxOverlayTransparentSelection.reset();
+
+    // shutdown EditViewCallbacks
+    const ScViewData& rScViewData(mrScTabView.GetViewData());
+    EditView* pEditView(rScViewData.GetEditView(maScSplitPos));
+    DBG_ASSERT(nullptr != pEditView, "NO access to EditView in ScTextEditOverlayObject!");
+    pEditView->setEditViewCallbacks(nullptr);
+
+    // remove myself
+    if (getOverlayManager())
+        getOverlayManager()->remove(*this);
+}
+
+drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::createOverlayObjectPrimitive2DSequence()
+{
+    // extract primitive representation from active EditEngine
+    drawinglayer::primitive2d::Primitive2DContainer aRetval;
+
+    ScViewData& rScViewData(mrScTabView.GetViewData());
+    const EditView* pEditView(rScViewData.GetEditView(maScSplitPos));
+    DBG_ASSERT(nullptr != pEditView, "NO access to EditView in ScTextEditOverlayObject!");
+
+    // use no transformations. The result will be in logic coordinates
+    // based on aEditRectangle and the EditEngine setup, see
+    // ScViewData::SetEditEngine
+    basegfx::B2DHomMatrix aNewTransformA;
+    basegfx::B2DHomMatrix aNewTransformB;
+
+    // get text data in LogicMode
+    OutputDevice& rOutDev(pEditView->GetOutputDevice());
+    const MapMode aOrig(rOutDev.GetMapMode());
+    rOutDev.SetMapMode(rScViewData.GetLogicMode());
+
+    pEditView->getEditEngine().StripPortions(
+        [&aRetval, &aNewTransformA, &aNewTransformB](const DrawPortionInfo& rInfo){
+            CreateTextPortionPrimitivesFromDrawPortionInfo(
+                aRetval,
+                aNewTransformA,
+                aNewTransformB,
+                rInfo);
+        },
+        [&aRetval, &aNewTransformA, &aNewTransformB](const DrawBulletInfo& rInfo){
+            CreateDrawBulletPrimitivesFromDrawBulletInfo(
+                aRetval,
+                aNewTransformA,
+                aNewTransformB,
+                rInfo);
+        });
+
+    rOutDev.SetMapMode(aOrig);
+    return aRetval;
+}
+
+void ScTextEditOverlayObject::EditViewInvalidate(const tools::Rectangle& rRect)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // UT testPageDownInvalidation from CppunitTest_sc_tiledrendering
+        // *needs* the direct invalidates formerly done in
+        // EditView::InvalidateWindow when no EditViewCallbacks are set
+        ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
+        pActiveWin->Invalidate(rRect);
+    }
+
+    RefeshTextEditOverlay();
+}
+
+void ScTextEditOverlayObject::EditViewSelectionChange()
+{
+    ScViewData& rScViewData(mrScTabView.GetViewData());
+    EditView* pEditView(rScViewData.GetEditView(maScSplitPos));
+    DBG_ASSERT(nullptr != pEditView, "NO access to EditView in ScTextEditOverlayObject!");
+
+    // get the selection rectangles
+    std::vector<tools::Rectangle> aRects;
+    pEditView->GetSelectionRectangles(aRects);
+    std::vector<basegfx::B2DRange> aLogicRanges;
+
+    if (aRects.empty())
+    {
+        // if none, reset selection at OverlayObject and we are done
+        mxOverlayTransparentSelection->setRanges(std::move(aLogicRanges));
+        return;
+    }
+
+    // create needed transformations
+    // LogicMode -> DiscreteViewCoordinates (Pixels)
+    basegfx::B2DHomMatrix aTransformToPixels;
+    OutputDevice& rOutDev(pEditView->GetOutputDevice());
+    const MapMode aOrig(rOutDev.GetMapMode());
+    rOutDev.SetMapMode(rScViewData.GetLogicMode());
+    aTransformToPixels = rOutDev.GetViewTransformation();
+
+    // DiscreteViewCoordinates (Pixels) -> LogicDrawCoordinates
+    basegfx::B2DHomMatrix aTransformToDrawCoordinates;
+    ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
+    rOutDev.SetMapMode(pActiveWin->GetDrawMapMode());
+    aTransformToDrawCoordinates = rOutDev.GetInverseViewTransformation();
+    rOutDev.SetMapMode(aOrig);
+
+    for (const auto& aRect : aRects)
+    {
+        basegfx::B2DRange aRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+
+        // range to pixels
+        aRange.transform(aTransformToPixels);
+
+        // grow by 1px for slight distance/overlap
+        aRange.grow(1.0);
+
+        // to drawinglayer coordinates & add
+        aRange.transform(aTransformToDrawCoordinates);
+        aLogicRanges.emplace_back(aRange);
+    }
+
+    mxOverlayTransparentSelection->setRanges(std::move(aLogicRanges));
+}
+
+OutputDevice& ScTextEditOverlayObject::EditViewOutputDevice() const
+{
+    ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
+    return *pActiveWin->GetOutDev();
+}
+
+Point ScTextEditOverlayObject::EditViewPointerPosPixel() const
+{
+    ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
+    return pActiveWin->GetPointerPosPixel();
+}
+
+css::uno::Reference<css::datatransfer::clipboard::XClipboard> ScTextEditOverlayObject::GetClipboard() const
+{
+    ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
+    return pActiveWin->GetClipboard();
+}
+
+css::uno::Reference<css::datatransfer::dnd::XDropTarget> ScTextEditOverlayObject::GetDropTarget()
+{
+    ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
+    return pActiveWin->GetDropTarget();
+}
+
+void ScTextEditOverlayObject::EditViewInputContext(const InputContext& rInputContext)
+{
+    ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
+    pActiveWin->SetInputContext(rInputContext);
+}
+
+void ScTextEditOverlayObject::EditViewCursorRect(const tools::Rectangle& rRect, int nExtTextInputWidth)
+{
+    ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
+    pActiveWin->SetCursorRect(&rRect, nExtTextInputWidth);
+}
+
+drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::getOverlayObjectPrimitive2DSequence() const
+{
+    drawinglayer::primitive2d::Primitive2DContainer aRetval;
+
+
+    ScViewData& rScViewData(mrScTabView.GetViewData());
+    EditView* pEditView(rScViewData.GetEditView(maScSplitPos));
+    DBG_ASSERT(nullptr != pEditView, "NO access to EditView in ScTextEditOverlayObject!");
+
+    // call base implementation to get TextPrimitives in logic coordinates
+    // directly from the setup EditEngine
+    drawinglayer::primitive2d::Primitive2DContainer aText(
+        OverlayObject::getOverlayObjectPrimitive2DSequence());
+
+    if (aText.empty())
+        // no Text, done, return result
+        return aRetval;
+
+    // remember MapMode and restore at exit - we do not want
+    // to change it outside this method
+    OutputDevice& rOutDev(pEditView->GetOutputDevice());
+    const MapMode aOrig(rOutDev.GetMapMode());
+
+    // create text edit background based on pixel coordinates
+    // of involved Cells and append
+    {
+        const SCCOL nCol1(rScViewData.GetEditStartCol());
+        const SCROW nRow1(rScViewData.GetEditStartRow());
+        const SCCOL nCol2(rScViewData.GetEditEndCol());
+        const SCROW nRow2(rScViewData.GetEditEndRow());
+        const Point aStart(rScViewData.GetScrPos(nCol1, nRow1, maScSplitPos));
+        const Point aEnd(rScViewData.GetScrPos(nCol2+1, nRow2+1, maScSplitPos));
+
+        if (aStart != aEnd)
+        {
+            basegfx::B2DPolyPolygon aOutline(basegfx::utils::createPolygonFromRect(
+                basegfx::B2DRange(
+                    aStart.X(), aStart.Y(),
+                    aEnd.X(), aEnd.Y())));
+
+            // transform from Pixels to LogicDrawCoordinates
+            ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
+            rOutDev.SetMapMode(pActiveWin->GetDrawMapMode());
+            aOutline.transform(rOutDev.GetInverseViewTransformation());
+
+            // on overlay we can now design the look more freely, it
+            // uses the CellBackgroundColor combined with 50% transparence
+            // to not completely hide what may be behind.
+            // Also currently no need to shrink by 2px (?) right/bottom
+            // to not kill cell separation lines - may have to be re-added
+            // when transparency is not wanted
+            aRetval.push_back(
+                rtl::Reference<drawinglayer::primitive2d::PolyPolygonRGBAPrimitive2D>(
+                    new drawinglayer::primitive2d::PolyPolygonRGBAPrimitive2D(
+                        aOutline,
+                        pEditView->GetBackgroundColor().getBColor(),
+                        0.5)));
+        }
+    }
+
+    // create embedding transformation for Text itself and
+    // append Text
+    {
+        basegfx::B2DHomMatrix aTransform;
+
+        // transform by TextPaint StartPosition (Top-Left). This corresponds
+        // to aEditRectangle and the EditEngine setup, see
+        // ScViewData::SetEditEngine. Offset is in LogicCoordinates/LogicMode
+        const Point aStartPosition(pEditView->CalculateTextPaintStartPosition());
+        aTransform.translate(aStartPosition.X(), aStartPosition.Y());
+
+        // LogicMode -> DiscreteViewCoordinates (Pixels)
+        rOutDev.SetMapMode(rScViewData.GetLogicMode());
+        aTransform *= rOutDev.GetViewTransformation();
+
+        // DiscreteViewCoordinates (Pixels) -> LogicDrawCoordinates
+        ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
+        rOutDev.SetMapMode(pActiveWin->GetDrawMapMode());
+        aTransform *= rOutDev.GetInverseViewTransformation();
+
+        // add text embedded to created transformation
+        aRetval.push_back(rtl::Reference<drawinglayer::primitive2d::TransformPrimitive2D>(
+            new drawinglayer::primitive2d::TransformPrimitive2D(
+                aTransform, std::move(aText))));
+    }
+
+    rOutDev.SetMapMode(aOrig);
+    return aRetval;
+}
+} // end of anonymos namespace
+
+void ScTabView::RefeshTextEditOverlay()
+{
+    // find the ScTextEditOverlayObject in the OverlayGroup and
+    // call refresh there. It is also possible to have separate
+    // holders of that data, so no find/identification would be
+    // needed, but having all associated OverlayObjects in one
+    // group makes handling simple(r). It may also be that the
+    // cursor visualization will be added to that group later
+    for (sal_uInt32 a(0); a < maTextEditOverlayGroup.count(); a++)
+    {
+        sdr::overlay::OverlayObject& rOverlayObject(maTextEditOverlayGroup.getOverlayObject(a));
+        ScTextEditOverlayObject* pScTextEditOverlayObject(dynamic_cast<ScTextEditOverlayObject*>(&rOverlayObject));
+
+        if (nullptr != pScTextEditOverlayObject)
+        {
+            pScTextEditOverlayObject->RefeshTextEditOverlay();
+        }
+    }
+}
 
 void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW nRow )
 {
@@ -2204,8 +2559,9 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
     {
         if (pGridWin[i] && pGridWin[i]->IsVisible() && !aViewData.HasEditView(ScSplitPos(i)))
         {
-            ScHSplitPos eHWhich = WhichH( static_cast<ScSplitPos>(i) );
-            ScVSplitPos eVWhich = WhichV( static_cast<ScSplitPos>(i) );
+            const ScSplitPos aScSplitPos(static_cast<ScSplitPos>(i));
+            ScHSplitPos eHWhich = WhichH(aScSplitPos);
+            ScVSplitPos eVWhich = WhichV(aScSplitPos);
             SCCOL nScrX = aViewData.GetPosX( eHWhich );
             SCROW nScrY = aViewData.GetPosY( eVWhich );
 
@@ -2217,39 +2573,47 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
             //  so input isn't lost (and the edit view may be scrolled into the visible area)
 
             //  #i26433# during spelling, the spelling view must be active
-            if ( bPosVisible || aViewData.GetActivePart() == static_cast<ScSplitPos>(i) ||
-                 ( pSpellingView && aViewData.GetEditView(static_cast<ScSplitPos>(i)) == pSpellingView ) )
+            if ( bPosVisible || aViewData.GetActivePart() == aScSplitPos ||
+                 ( pSpellingView && aViewData.GetEditView(aScSplitPos) == pSpellingView ) )
             {
-                pGridWin[i]->HideCursor();
-
-                pGridWin[i]->DeleteCursorOverlay();
-                pGridWin[i]->DeleteAutoFillOverlay();
-                pGridWin[i]->DeleteCopySourceOverlay();
-
-                // tdf#165621 allow the Overlay to quickly update, necessary
-                // for clean graphical refreshes
-                // NOTE: This also works using Application::Reschedule(true), but
-                // triggers CppunitTest_desktop_lib "DesktopLOKTest::testRedlineCalc",
-                // probably due to not only the timer triggering but 'other' stuff
-                // that better runs later (...?). Not doing it - as long as we need
-                // to do it - is safer, but forces to keep that flush just for this
-                // single usage
-                rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pGridWin[i]->getOverlayManager();
-                if (xOverlayManager.is())
-                    xOverlayManager->flush();
+                VclPtr<ScGridWindow> pScGridWindow(pGridWin[aScSplitPos]);
+                pScGridWindow->HideCursor();
+                pScGridWindow->DeleteCursorOverlay();
+                pScGridWindow->DeleteAutoFillOverlay();
+                pScGridWindow->DeleteCopySourceOverlay();
 
                 // MapMode must be set after HideCursor
-                pGridWin[i]->SetMapMode(aViewData.GetLogicMode());
+                pScGridWindow->SetMapMode(aViewData.GetLogicMode());
 
                 if ( !bPosVisible )
                 {
                     //  move the edit view area to the real (possibly negative) position,
                     //  or hide if completely above or left of the window
-                    pGridWin[i]->UpdateEditViewPos();
+                    pScGridWindow->UpdateEditViewPos();
                 }
 
-                aViewData.SetEditEngine(static_cast<ScSplitPos>(i), pEngine, pGridWin[i], nCol,
+                aViewData.SetEditEngine(aScSplitPos, pEngine, pScGridWindow, nCol,
                                         nRow);
+
+                // get OverlayManager and initialize TextEditOnOverlay for it
+                rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pScGridWindow->getOverlayManager();
+
+                if (xOverlayManager.is() && aViewData.HasEditView(aScSplitPos))
+                {
+                    const Color aHilightColor(SvtOptionsDrawinglayer::getHilightColor());
+                    std::unique_ptr<ScTextEditOverlayObject> pNewScTextEditOverlayObject(
+                        new ScTextEditOverlayObject(
+                            aHilightColor,
+                            *this,
+                            aScSplitPos));
+
+                    // add TextEditOverlayObject and the OverlaySelection hosted by it
+                    // to the OverlayManager (to make visible) and to the local
+                    // reference TextEditOverlayGroup (to access if needed)
+                    xOverlayManager->add(*pNewScTextEditOverlayObject);
+                    xOverlayManager->add(*pNewScTextEditOverlayObject->getOverlaySelection());
+                    maTextEditOverlayGroup.append(std::move(pNewScTextEditOverlayObject));
+                }
             }
         }
     }
@@ -2282,6 +2646,8 @@ void ScTabView::UpdateEditView()
                 pEditView->ShowCursor( false );
         }
     }
+
+    RefeshTextEditOverlay();
 }
 
 void ScTabView::KillEditView( bool bNoPaint )
@@ -2311,6 +2677,10 @@ void ScTabView::KillEditView( bool bNoPaint )
             aRectangle[i] = pView->GetInvalidateRect();
         }
     }
+
+    // this cleans up all used OverlayObjects for TextEdit, they get deleted
+    // and removed from the OverlayManager what makes them optically disappear
+    maTextEditOverlayGroup.clear();
 
     // notify accessibility before all things happen
     if (bNotifyAcc && aViewData.GetViewShell()->HasAccessibilityObjects())

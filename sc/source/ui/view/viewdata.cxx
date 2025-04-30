@@ -1867,8 +1867,13 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     }
     pEditView[eWhich]->SetBackgroundColor( aBackCol );
 
-    pEditView[eWhich]->Invalidate();            //  needed?
-    //  needed, if position changed
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // now only needed when not CEOO (CellEditOnOverlay)
+        //  needed?
+        //  needed, if position changed
+        pEditView[eWhich]->Invalidate();
+    }
 }
 
 IMPL_LINK( ScViewData, EditEngineHdl, EditStatus&, rStatus, void )

@@ -989,6 +989,7 @@ public:
     void                    Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation );
     void                    Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );
     void                    UpdateViews( EditView* pCurView = nullptr );
+    Point CalculateTextPaintStartPosition(ImpEditView& rView) const;
     void                    Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
     void Paint(
         OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, Degree10 nOrientation = 0_deg10,

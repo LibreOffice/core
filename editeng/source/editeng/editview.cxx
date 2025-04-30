@@ -347,6 +347,11 @@ void EditView::GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects
     return getImpl().GetSelectionRectangles(getImpl().GetEditSelection(), rLogicRects);
 }
 
+Point EditView::CalculateTextPaintStartPosition() const
+{
+    return getImpEditEngine().CalculateTextPaintStartPosition(getImpl());
+}
+
 void EditView::Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     getImpEditEngine().Paint(&getImpl(), rRect, pTargetDevice);

@@ -441,7 +441,6 @@ public:
 
     /// Draw content of the gridwindow; shared between the desktop and the tiled rendering.
     void DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData, bool bLogicText);
-    void DrawEditView(OutputDevice &rDevice, EditView *pEditView);
 
     void            CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress);
 

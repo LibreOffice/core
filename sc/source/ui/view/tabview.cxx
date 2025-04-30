@@ -2406,9 +2406,7 @@ void ScTabView::SetNewVisArea()
         if (bInPlaceVisCursor)
             pInPlaceCrsr->Hide();
 
-        ScGridWindow *pGridWindow = GetViewData().GetActiveWin();
-        pGridWindow->DrawEditView(*pGridWindow->GetOutDev(), pEditView);
-        pGridWindow->GetOutDev()->SetMapMode(GetViewData().GetLogicMode());
+        RefeshTextEditOverlay();
 
         if (bInPlaceVisCursor)
             pInPlaceCrsr->Show();

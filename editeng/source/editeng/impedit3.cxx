@@ -4135,6 +4135,26 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
     }
 }
 
+Point ImpEditEngine::CalculateTextPaintStartPosition(ImpEditView& rView) const
+{
+    Point aStartPos;
+
+    if ( !IsEffectivelyVertical() )
+        aStartPos = rView.GetOutputArea().TopLeft();
+    else
+    {
+        if( IsTopToBottom() )
+            aStartPos = rView.GetOutputArea().TopRight();
+        else
+            aStartPos = rView.GetOutputArea().BottomLeft();
+    }
+
+    adjustXDirectionAware(aStartPos, -(rView.GetVisDocLeft()));
+    adjustYDirectionAware(aStartPos, -(rView.GetVisDocTop()));
+
+    return aStartPos;
+}
+
 void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     if ( !IsUpdateLayout() || IsInUndo() )
@@ -4148,18 +4168,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
 
     OutputDevice& rTarget = pTargetDevice ? *pTargetDevice : *pView->GetWindow()->GetOutDev();
 
-    Point aStartPos;
-    if ( !IsEffectivelyVertical() )
-        aStartPos = pView->GetOutputArea().TopLeft();
-    else
-    {
-        if( IsTopToBottom() )
-            aStartPos = pView->GetOutputArea().TopRight();
-        else
-            aStartPos = pView->GetOutputArea().BottomLeft();
-    }
-    adjustXDirectionAware(aStartPos, -(pView->GetVisDocLeft()));
-    adjustYDirectionAware(aStartPos, -(pView->GetVisDocTop()));
+    const Point aStartPos(CalculateTextPaintStartPosition(*pView));
 
     // If Doc-width < Output Area,Width and not wrapped fields,
     // the fields usually protrude if > line.

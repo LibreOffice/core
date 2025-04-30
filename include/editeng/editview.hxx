@@ -194,6 +194,7 @@ public:
     bool            AddOtherViewWindow( vcl::Window* pWin );
     bool            RemoveOtherViewWindow( vcl::Window* pWin );
 
+    Point CalculateTextPaintStartPosition() const;
     void            Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
     tools::Rectangle       GetInvalidateRect() const;
     SAL_DLLPRIVATE void            InvalidateWindow(const tools::Rectangle& rClipRect);
