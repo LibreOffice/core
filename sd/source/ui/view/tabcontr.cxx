@@ -210,7 +210,7 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
         switch (rEvt.mnAction)
         {
             case DND_ACTION_MOVE:
-                if( pDrViewSh->IsSwitchPageAllowed() && pDoc->MovePages( nPageId ) )
+                if( pDrViewSh->IsSwitchPageAllowed() && pDoc->MoveSelectedPages( nPageId ) )
                 {
                     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
                     pDispatcher->Execute(SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
@@ -237,7 +237,7 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     sal_uInt16 nPageNum = nPageId;
                     if ((nPageNumOfCopy <= nPageNum) && (nPageNum != sal_uInt16(-1)))
                         nPageNum += 1;
-                    if (pDoc->MovePages(nPageNum))
+                    if (pDoc->MoveSelectedPages(nPageNum))
                     {
                         // 3. Switch to the copy that has been moved to its
                         // final destination.  Use an asynchron slot call to

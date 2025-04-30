@@ -180,6 +180,10 @@
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsPageSelector.hxx>
 
 #include <app.hrc>
 
@@ -3976,8 +3980,21 @@ void SdXImpressDocument::selectPart(int nPart, int nSelect)
 void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate)
 {
     // Duplicating is currently unsupported.
-    if (!bDuplicate)
-        mpDoc->MovePages(nPosition);
+    if (bDuplicate)
+        return;
+
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return;
+
+    auto pSlideSorter
+        = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewSh->GetViewShellBase());
+    sd::slidesorter::SharedPageSelection pSelectedPage
+        = pSlideSorter ? pSlideSorter->GetPageSelection() : nullptr;
+    std::vector<SdPage*> aPageList;
+    if (pSelectedPage)
+        aPageList = *pSelectedPage;
+    mpDoc->MovePages(nPosition, aPageList);
 }
 
 OUString SdXImpressDocument::getPartInfo(int nPart)

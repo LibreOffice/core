@@ -765,7 +765,7 @@ void SlideSorterViewShell::ExecMovePageFirst (SfxRequest& /*rReq*/)
     SyncPageSelectionToDocument(xSelection);
 
     // Moves selected pages after page -1
-    GetDoc()->MovePages( sal_uInt16(-1) );
+    GetDoc()->MoveSelectedPages( sal_uInt16(-1) );
 
     PostMoveSlidesActions(xSelection);
 }
@@ -821,7 +821,7 @@ void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
 
     // Move pages before firstSelectedPageNo - 1 (so after firstSelectedPageNo - 2),
     // remembering that -1 means at first, which is good.
-    GetDoc()->MovePages( firstSelectedPageNo - 2 );
+    GetDoc()->MoveSelectedPages( firstSelectedPageNo - 2 );
 
     PostMoveSlidesActions(xSelection);
 }
@@ -850,7 +850,7 @@ void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
         return;
 
     // Move to position after lastSelectedPageNo
-    GetDoc()->MovePages( lastSelectedPageNo + 1 );
+    GetDoc()->MoveSelectedPages( lastSelectedPageNo + 1 );
 
     PostMoveSlidesActions(xSelection);
 }
@@ -874,7 +874,7 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
     sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PageKind::Standard);
 
     // Move to position after last page No (=Number of pages - 1)
-    GetDoc()->MovePages( nNoOfPages - 1 );
+    GetDoc()->MoveSelectedPages( nNoOfPages - 1 );
 
     PostMoveSlidesActions(xSelection);
 }

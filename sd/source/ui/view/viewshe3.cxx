@@ -331,7 +331,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                             i == nNewPageIndex);
                     }
                     // Move the selected page to the head of the document
-                    pDocument->MovePages (sal_uInt16(-1));
+                    pDocument->MoveSelectedPages (sal_uInt16(-1));
                     nNewPageIndex = 0;
                 }
             else
