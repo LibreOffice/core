@@ -839,7 +839,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner, void )
         DBG_ASSERT(nPos != 0xffff, "Paragraph not found");
     }
 
-    mrDoc.MovePages(nPos);
+    mrDoc.MoveSelectedPages(nPos);
 
     // deselect the pages again
     sal_uInt16 nPageCount = static_cast<sal_uInt16>(maSelectedParas.size());

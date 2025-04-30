@@ -787,31 +787,35 @@ void SdDrawDocument::UnselectAllPages()
     }
 }
 
+bool SdDrawDocument::MoveSelectedPages(sal_uInt16 nTargetPage)
+{
+    sal_uInt16 nNoOfPages = GetSdPageCount(PageKind::Standard);
+    std::vector<SdPage*> aPageList;
+    for (sal_uInt16 nPage = 0; nPage < nNoOfPages; nPage++)
+    {
+        SdPage* pPage = GetSdPage(nPage, PageKind::Standard);
+
+        if (pPage->IsSelected())
+        {
+            aPageList.push_back(pPage);
+        }
+    }
+    return MovePages(nTargetPage, aPageList);
+}
+
 // + Move selected pages after said page
 //   (nTargetPage = (sal_uInt16)-1  --> move before first page)
 // + Returns sal_True when the page has been moved
-bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
+bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, std::vector<SdPage*>& vSelectedPages)
 {
     SdPage* pPage              = nullptr;
-    sal_uInt16  nPage;
-    sal_uInt16  nNoOfPages         = GetSdPageCount(PageKind::Standard);
+    sal_uInt16 nPage;
     bool    bSomethingHappened = false;
 
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )
         BegUndo(SdResId(STR_UNDO_MOVEPAGES));
-
-    // List of selected pages
-    std::vector<SdPage*> aPageList;
-    for (nPage = 0; nPage < nNoOfPages; nPage++)
-    {
-        pPage = GetSdPage(nPage, PageKind::Standard);
-
-        if (pPage->IsSelected()) {
-            aPageList.push_back(pPage);
-        }
-    }
 
     // If necessary, look backwards, until we find a page that wasn't selected
     nPage = nTargetPage;
@@ -835,7 +839,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     if (nPage == sal_uInt16(-1))
     {
         std::vector<SdPage*>::reverse_iterator iter;
-        for (iter = aPageList.rbegin(); iter != aPageList.rend(); ++iter)
+        for (iter = vSelectedPages.rbegin(); iter != vSelectedPages.rend(); ++iter)
         {
             nPage = (*iter)->GetPageNum();
             if (nPage != 0)
@@ -857,7 +861,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     {
         nTargetPage = 2 * nPage + 1;    // PageKind::Standard --> absolute
 
-        for (const auto& rpPage : aPageList)
+        for (const auto& rpPage : vSelectedPages)
         {
             nPage = rpPage->GetPageNum();
             if (nPage > nTargetPage)
