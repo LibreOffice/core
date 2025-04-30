@@ -78,8 +78,8 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   OUString sbuildId = GetBuildString();
   if (IsStringValidGitHash(sbuildId)) {
     const tools::Long nMaxChar = 25;
-    m_pBuildLabel->set_uri("https://gerrit.libreoffice.org/gitweb?p=core.git;a=log;h="
-                           + sbuildId);
+    m_pBuildLabel->set_uri("https://git.libreoffice.org/core/+log/"
+                           + sbuildId + "/");
     m_pBuildLabel->set_label(sbuildId.getLength() > nMaxChar ? sbuildId.replaceAt(
                                  nMaxChar, sbuildId.getLength() - nMaxChar, u"...")
                                                              : sbuildId);
