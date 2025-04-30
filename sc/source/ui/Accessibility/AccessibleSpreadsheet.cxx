@@ -1318,7 +1318,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //====  internal  =========================================================
 
-AbsoluteScreenPixelRectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aRect;
     if (mpViewShell)
@@ -1330,7 +1330,7 @@ AbsoluteScreenPixelRectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() c
     return aRect;
 }
 
-tools::Rectangle ScAccessibleSpreadsheet::GetBoundingBox() const
+tools::Rectangle ScAccessibleSpreadsheet::GetBoundingBox()
 {
     tools::Rectangle aRect;
     if (mpViewShell)

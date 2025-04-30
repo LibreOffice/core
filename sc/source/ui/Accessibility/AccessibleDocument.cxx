@@ -1930,7 +1930,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 ///=====  IAccessibleViewForwarder  ========================================
 
-tools::Rectangle ScAccessibleDocument::GetVisibleArea_Impl() const
+tools::Rectangle ScAccessibleDocument::GetVisibleArea_Impl()
 {
     tools::Rectangle aVisRect(GetBoundingBox());
 
@@ -2008,7 +2008,7 @@ OUString
     return sName;
 }
 
-AbsoluteScreenPixelRectangle ScAccessibleDocument::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleDocument::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aRect;
     if (mpViewShell)
@@ -2020,7 +2020,7 @@ AbsoluteScreenPixelRectangle ScAccessibleDocument::GetBoundingBoxOnScreen() cons
     return aRect;
 }
 
-tools::Rectangle ScAccessibleDocument::GetBoundingBox() const
+tools::Rectangle ScAccessibleDocument::GetBoundingBox()
 {
     tools::Rectangle aRect;
     if (mpViewShell)

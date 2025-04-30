@@ -147,7 +147,7 @@ void SAL_CALL ScAccessibleCell::grabFocus(  )
     }
 }
 
-AbsoluteScreenPixelRectangle ScAccessibleCell::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleCell::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
@@ -162,7 +162,7 @@ AbsoluteScreenPixelRectangle ScAccessibleCell::GetBoundingBoxOnScreen() const
     return aCellRect;
 }
 
-tools::Rectangle ScAccessibleCell::GetBoundingBox() const
+tools::Rectangle ScAccessibleCell::GetBoundingBox()
 {
     tools::Rectangle aCellRect;
     if (mpViewShell)

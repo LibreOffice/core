@@ -574,7 +574,7 @@ OUString ScAccessiblePreviewTable::createAccessibleName()
     return sName;
 }
 
-AbsoluteScreenPixelRectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen()
 {
     tools::Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
@@ -589,7 +589,7 @@ AbsoluteScreenPixelRectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() 
     return AbsoluteScreenPixelRectangle(aCellRect);
 }
 
-tools::Rectangle ScAccessiblePreviewTable::GetBoundingBox() const
+tools::Rectangle ScAccessiblePreviewTable::GetBoundingBox()
 {
     FillTableInfo();
 

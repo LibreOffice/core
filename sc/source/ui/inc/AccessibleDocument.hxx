@@ -217,10 +217,10 @@ protected:
         createAccessibleName() override;
 
     /// Return the object's current bounding box relative to the desktop.
-    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() const override;
+    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() override;
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual tools::Rectangle GetBoundingBox() const override;
+    virtual tools::Rectangle GetBoundingBox() override;
 
 private:
     ScTabViewShell* mpViewShell;
@@ -248,7 +248,7 @@ private:
     OUString GetCurrentCellName() const;
     static const OUString & GetCurrentCellDescription();
 
-    tools::Rectangle GetVisibleArea_Impl() const;
+    tools::Rectangle GetVisibleArea_Impl();
 public:
     ScDocument *GetDocument() const ;
     ScAddress   GetCurCellAddress() const;

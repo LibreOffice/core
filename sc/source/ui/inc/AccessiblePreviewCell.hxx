@@ -77,8 +77,8 @@ public:
         getImplementationId() override;
 
 protected:
-    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() const override;
-    virtual tools::Rectangle GetBoundingBox() const override;
+    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() override;
+    virtual tools::Rectangle GetBoundingBox() override;
 
 private:
     ScPreviewShell* mpViewShell;

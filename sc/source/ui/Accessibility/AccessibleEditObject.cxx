@@ -183,7 +183,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPo
     return xRet;
 }
 
-AbsoluteScreenPixelRectangle ScAccessibleEditObject::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleEditObject::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aScreenBounds;
 
@@ -211,7 +211,7 @@ AbsoluteScreenPixelRectangle ScAccessibleEditObject::GetBoundingBoxOnScreen() co
     return aScreenBounds;
 }
 
-tools::Rectangle ScAccessibleEditObject::GetBoundingBox() const
+tools::Rectangle ScAccessibleEditObject::GetBoundingBox()
 {
     tools::Rectangle aBounds( GetBoundingBoxOnScreen() );
 
@@ -531,7 +531,7 @@ uno::Reference< XAccessibleRelationSet > ScAccessibleEditObject::getAccessibleRe
     return uno::Reference< XAccessibleRelationSet >();
 }
 
-AbsoluteScreenPixelRectangle ScAccessibleEditControlObject::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleEditControlObject::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aScreenBounds;
 
@@ -544,11 +544,11 @@ AbsoluteScreenPixelRectangle ScAccessibleEditControlObject::GetBoundingBoxOnScre
     return aScreenBounds;
 }
 
-tools::Rectangle ScAccessibleEditControlObject::GetBoundingBox() const
+tools::Rectangle ScAccessibleEditControlObject::GetBoundingBox()
 {
     tools::Rectangle aBounds( GetBoundingBoxOnScreen() );
 
-    uno::Reference< XAccessibleContext > xContext(const_cast<ScAccessibleEditControlObject*>(this)->getAccessibleContext());
+    uno::Reference<XAccessibleContext> xContext = getAccessibleContext();
     if ( xContext.is() )
     {
         uno::Reference< XAccessible > xParent( xContext->getAccessibleParent() );

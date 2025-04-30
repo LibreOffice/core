@@ -106,11 +106,11 @@ protected:
 
 public: // needed in ScShapeChildren
     /// Return the object's current bounding box relative to the desktop.
-    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() const override;
+    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() override;
 
 protected:
     /// Return the object's current bounding box relative to the parent object.
-    virtual tools::Rectangle GetBoundingBox() const override;
+    virtual tools::Rectangle GetBoundingBox() override;
 
 private:
     ScPreviewShell* mpViewShell;

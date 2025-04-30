@@ -290,7 +290,7 @@ OUString ScAccessiblePageHeader::createAccessibleName()
     return sName.replaceFirst("%1", ScResId(SCSTR_UNKNOWN));
 }
 
-AbsoluteScreenPixelRectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen()
 {
     tools::Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
@@ -305,7 +305,7 @@ AbsoluteScreenPixelRectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() co
     return AbsoluteScreenPixelRectangle(aCellRect);
 }
 
-tools::Rectangle ScAccessiblePageHeader::GetBoundingBox() const
+tools::Rectangle ScAccessiblePageHeader::GetBoundingBox()
 {
     tools::Rectangle aRect;
     if (mpViewShell)

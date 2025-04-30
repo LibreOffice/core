@@ -283,7 +283,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //====  internal  =========================================================
 
-AbsoluteScreenPixelRectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen()
 {
     tools::Rectangle aCellRect;
 
@@ -309,7 +309,7 @@ AbsoluteScreenPixelRectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScre
     return AbsoluteScreenPixelRectangle(aCellRect);
 }
 
-tools::Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
+tools::Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox()
 {
     FillTableInfo();
 
@@ -319,7 +319,7 @@ tools::Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
         const ScPreviewColRowInfo& rRowInfo = mpTableInfo->GetRowInfo()[maCellPos.Row()];
 
         tools::Rectangle aCellRect( rColInfo.nPixelStart, rRowInfo.nPixelStart, rColInfo.nPixelEnd, rRowInfo.nPixelEnd );
-        uno::Reference<XAccessible> xAccParent = const_cast<ScAccessiblePreviewHeaderCell*>(this)->getAccessibleParent();
+        uno::Reference<XAccessible> xAccParent = getAccessibleParent();
         if (xAccParent.is())
         {
             uno::Reference<XAccessibleContext> xAccParentContext = xAccParent->getAccessibleContext();

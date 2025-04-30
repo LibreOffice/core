@@ -1456,7 +1456,7 @@ OUString ScAccessibleDocumentPagePreview::createAccessibleName()
     return sName;
 }
 
-AbsoluteScreenPixelRectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aRect;
     if (mpViewShell)
@@ -1468,7 +1468,7 @@ AbsoluteScreenPixelRectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnSc
     return aRect;
 }
 
-tools::Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox() const
+tools::Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox()
 {
     tools::Rectangle aRect;
     if (mpViewShell)

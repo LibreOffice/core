@@ -219,7 +219,7 @@ OUString ScAccessiblePageHeaderArea::createAccessibleName()
     return sName;
 }
 
-AbsoluteScreenPixelRectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen() const
+AbsoluteScreenPixelRectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aRect;
     if (mxParent.is())
@@ -239,7 +239,7 @@ AbsoluteScreenPixelRectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(
     return aRect;
 }
 
-tools::Rectangle ScAccessiblePageHeaderArea::GetBoundingBox() const
+tools::Rectangle ScAccessiblePageHeaderArea::GetBoundingBox()
 {
     tools::Rectangle aRect;
     if (mxParent.is())

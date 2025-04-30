@@ -147,12 +147,12 @@ protected:
     /// Return the object's current bounding box relative to the desktop.
     ///
     /// @throws css::uno::RuntimeException
-    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() const = 0;
+    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() = 0;
 
     /// Return the object's current bounding box relative to the parent object.
     ///
     /// @throws css::uno::RuntimeException
-    virtual tools::Rectangle GetBoundingBox() const = 0;
+    virtual tools::Rectangle GetBoundingBox() = 0;
 
 public:
     /// Calls all listeners to notify them about the change.
