@@ -151,10 +151,10 @@ class ScAcceptChgDlg final : public SfxModelessDialogController
 
 public:
     ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-                   ScViewData* ptrViewData);
+                   ScViewData& rViewData);
     virtual ~ScAcceptChgDlg() override;
 
-    void            ReInit(ScViewData* ptrViewData);
+    void            ReInit(ScViewData& rViewData);
 
     void            Initialize (SfxChildWinInfo* pInfo);
     virtual void    FillInfo(SfxChildWinInfo&) const override;

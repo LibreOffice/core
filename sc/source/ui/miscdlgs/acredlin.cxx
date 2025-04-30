@@ -68,13 +68,13 @@ ScRedlinData::~ScRedlinData()
 
 
 ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-    ScViewData* ptrViewData)
+    ScViewData& rViewData)
     : SfxModelessDialogController(pB, pCW, pParent,
         u"svx/ui/acceptrejectchangesdialog.ui"_ustr, u"AcceptRejectChangesDialog"_ustr)
     , aSelectionIdle( "ScAcceptChgDlg  aSelectionIdle" )
     , aReOpenIdle("ScAcceptChgDlg ReOpenIdle")
-    , pViewData( ptrViewData )
-    , pDoc( &ptrViewData->GetDocument() )
+    , pViewData( &rViewData )
+    , pDoc( &rViewData.GetDocument() )
     , aStrInsertCols(ScResId(STR_CHG_INSERT_COLS))
     , aStrInsertRows(ScResId(STR_CHG_INSERT_ROWS))
     , aStrInsertTabs(ScResId(STR_CHG_INSERT_TABS))
@@ -154,13 +154,10 @@ ScAcceptChgDlg::~ScAcceptChgDlg()
     }
 }
 
-void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
+void ScAcceptChgDlg::ReInit(ScViewData& rViewData)
 {
-    pViewData=ptrViewData;
-    if (pViewData)
-        pDoc = &ptrViewData->GetDocument();
-    else
-        pDoc = nullptr;
+    pViewData = &rViewData;
+    pDoc = &rViewData.GetDocument();
 
     bNoSelection=false;
     bIgnoreMsg=false;
@@ -172,18 +169,13 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
     ClearView();
     UpdateView();
 
-    if ( pDoc )
-    {
-        ScChangeTrack* pChanges = pDoc->GetChangeTrack();
-        if ( pChanges )
-            pChanges->SetModifiedLink( LINK( this, ScAcceptChgDlg, ChgTrackModHdl ) );
-    }
+    ScChangeTrack* pChanges = pDoc->GetChangeTrack();
+    if ( pChanges )
+        pChanges->SetModifiedLink( LINK( this, ScAcceptChgDlg, ChgTrackModHdl ) );
 }
 
 void ScAcceptChgDlg::Init()
 {
-    OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found!" );
-
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
     if(pChanges!=nullptr)
@@ -731,12 +723,9 @@ void ScAcceptChgDlg::UpdateView()
 
     bUseColor = bFilterFlag;
 
-    if(pDoc!=nullptr)
-    {
-        pChanges=pDoc->GetChangeTrack();
-        if(pChanges!=nullptr)
-            pScChangeAction=pChanges->GetFirst();
-    }
+    pChanges=pDoc->GetChangeTrack();
+    if(pChanges!=nullptr)
+        pScChangeAction=pChanges->GetFirst();
     bool bTheFlag = false;
 
     while(pScChangeAction!=nullptr)
@@ -929,7 +918,6 @@ IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
 
 void ScAcceptChgDlg::RejectFiltered()
 {
-    if(pDoc==nullptr) return;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     const ScChangeAction* pScChangeAction=nullptr;
 
@@ -949,7 +937,6 @@ void ScAcceptChgDlg::RejectFiltered()
 }
 void ScAcceptChgDlg::AcceptFiltered()
 {
-    if(pDoc==nullptr) return;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     const ScChangeAction* pScChangeAction=nullptr;
 

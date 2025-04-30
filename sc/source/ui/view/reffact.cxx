@@ -225,7 +225,7 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(vcl::Window* pParentP,
     OSL_ENSURE( pViewShell, "missing view shell :-(" );
     if (pViewShell)
     {
-        auto xDlg = std::make_shared<ScAcceptChgDlg>(pBindings, this, pParentP->GetFrameWeld(), &pViewShell->GetViewData());
+        auto xDlg = std::make_shared<ScAcceptChgDlg>(pBindings, this, pParentP->GetFrameWeld(), pViewShell->GetViewData());
         SetController(xDlg);
         pInfo->nFlags = SfxChildWindowFlags::NEVERHIDE;
         xDlg->Initialize( pInfo );
@@ -244,7 +244,7 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
 
     if (GetController() && pViewShell)
     {
-        static_cast<ScAcceptChgDlg*>(GetController().get())->ReInit(&pViewShell->GetViewData());
+        static_cast<ScAcceptChgDlg*>(GetController().get())->ReInit(pViewShell->GetViewData());
     }
 }
 
