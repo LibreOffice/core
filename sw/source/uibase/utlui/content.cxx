@@ -3218,7 +3218,10 @@ void SwContentTree::Display( bool bActive )
             nEntryRelPos = GetAbsPos(*xOldSelEntry) - GetAbsPos(*xParentEntry);
     }
 
-    clear();
+    SwWrtShell* pShell = GetWrtShell();
+    // thaw updates widget, in case we still do modification - leave it frozen
+    bool bLeaveFrozen = !!pShell;
+    clear(bLeaveFrozen);
 
     if (!bActive)
     {
@@ -3233,7 +3236,6 @@ void SwContentTree::Display( bool bActive )
     else if (State::HIDDEN == m_eState)
         m_eState = State::ACTIVE;
 
-    SwWrtShell* pShell = GetWrtShell();
     if (pShell)
     {
         std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
@@ -3242,8 +3244,6 @@ void SwContentTree::Display( bool bActive )
         // all content navigation view
         if(m_nRootType == ContentTypeId::UNKNOWN)
         {
-            m_xTreeView->freeze();
-
             for( ContentTypeId nCntType : o3tl::enumrange<ContentTypeId>() )
             {
                 std::unique_ptr<SwContentType>& rpContentT = bActive ?
@@ -3281,6 +3281,7 @@ void SwContentTree::Display( bool bActive )
                 }
             }
 
+            bLeaveFrozen = false; // do not thaw on the end
             m_xTreeView->thaw();
 
             // restore visual expanded tree state
@@ -3290,8 +3291,6 @@ void SwContentTree::Display( bool bActive )
         // root content navigation view
         else
         {
-            m_xTreeView->freeze();
-
             std::unique_ptr<SwContentType>& rpRootContentT = bActive ?
                                     m_aActiveContentArr[m_nRootType] :
                                     m_aHiddenContentArr[m_nRootType];
@@ -3318,6 +3317,7 @@ void SwContentTree::Display( bool bActive )
 
             m_xTreeView->set_sensitive(*xEntry, m_xTreeView->iter_has_child(*xEntry));
 
+            bLeaveFrozen = false; // do not thaw on the end
             m_xTreeView->thaw();
 
             if (bChOnDemand)
@@ -3362,18 +3362,22 @@ void SwContentTree::Display( bool bActive )
         UpdateContentFunctionsToolbar();
     }
 
+    if (bLeaveFrozen)
+        m_xTreeView->thaw();
+
     if (!m_bIgnoreDocChange && GetEntryCount() == nOldEntryCount)
     {
         m_xTreeView->vadjustment_set_value(nOldScrollPos);
     }
 }
 
-void SwContentTree::clear()
+void SwContentTree::clear(bool bLeaveFrozen)
 {
     m_xTreeView->freeze();
     m_xTreeView->clear();
     m_nEntryCount = 0;
-    m_xTreeView->thaw();
+    if (!bLeaveFrozen)
+        m_xTreeView->thaw();
 }
 
 bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
