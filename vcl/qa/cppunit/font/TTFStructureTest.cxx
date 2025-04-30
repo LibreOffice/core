@@ -12,7 +12,6 @@
 
 #include <font/TTFStructure.hxx>
 #include <font/TTFReader.hxx>
-#include <font/TTFReader.hxx>
 
 namespace
 {
