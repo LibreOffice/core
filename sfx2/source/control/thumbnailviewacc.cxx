@@ -83,42 +83,6 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
     return mpThumbnailView->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleIndexInParent()
-{
-    ThrowIfDisposed();
-    const SolarMutexGuard aSolarGuard;
-
-    // -1 for child not found/no parent (according to specification)
-    sal_Int64 nRet = -1;
-
-    uno::Reference<accessibility::XAccessible> xParent(getAccessibleParent());
-    if (!xParent)
-        return nRet;
-
-    try
-    {
-        uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent->getAccessibleContext());
-
-        //  iterate over parent's children and search for this object
-        if ( xParentContext.is() )
-        {
-            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-            for ( sal_Int64 nChild = 0; ( nChild < nChildCount ) && ( -1 == nRet ); ++nChild )
-            {
-                uno::Reference<XAccessible> xChild(xParentContext->getAccessibleChild(nChild));
-                if ( xChild.get() == this )
-                    nRet = nChild;
-            }
-        }
-    }
-    catch (const uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION( "sfx", "ThumbnailViewAcc::getAccessibleIndexInParent" );
-    }
-
-    return nRet;
-}
-
 sal_Int16 SAL_CALL ThumbnailViewAcc::getAccessibleRole()
 {
     ThrowIfDisposed();
