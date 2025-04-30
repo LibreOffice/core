@@ -41,12 +41,14 @@ void lclReadStream(png_structp pPng, png_bytep pOutBytes, png_size_t nBytesToRea
     if (nBytesRead != nBytesToRead)
     {
         if (!nBytesRead)
-            png_error(pPng, "Error reading");
+        {
+            png_error(pPng, "Stream read: no data read from the stream.");
+        }
         else
         {
             // Make sure to not reuse old data (could cause infinite loop).
             memset(pOutBytes + nBytesRead, 0, nBytesToRead - nBytesRead);
-            png_warning(pPng, "Short read");
+            png_warning(pPng, "Stream read: read less bytes than asked for.");
         }
     }
 }
@@ -370,23 +372,8 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
 
     if (setjmp(png_jmpbuf(pPng)))
     {
-        if (!bUseExistingBitmap)
-        {
-            // Set the bitmap if it contains something, even on failure. This allows
-            // reading images that are only partially broken.
-            pWriteAccessInstance.reset();
-            pWriteAccessAlphaInstance.reset();
-            if (!aBitmap.IsEmpty() && !aBitmapAlpha.IsEmpty())
-                aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
-            else if (!aBitmap.IsEmpty())
-                aBitmapEx = BitmapEx(aBitmap);
-            if (!aBitmapEx.IsEmpty() && !prefSize.IsEmpty())
-            {
-                aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                aBitmapEx.SetPrefSize(prefSize);
-            }
-            rImportOutput.moBitmap = aBitmapEx;
-        }
+        pWriteAccessInstance.reset();
+        pWriteAccessAlphaInstance.reset();
         return false;
     }
 
@@ -520,6 +507,31 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
     BitmapScopedWriteAccess& pWriteAccess = pAccess ? *pAccess : pWriteAccessInstance;
     BitmapScopedWriteAccess& pWriteAccessAlpha
         = pAlphaAccess ? *pAlphaAccess : pWriteAccessAlphaInstance;
+
+    if (setjmp(png_jmpbuf(pPng)))
+    {
+        pWriteAccessInstance.reset();
+        pWriteAccessAlphaInstance.reset();
+
+        if (!bUseExistingBitmap)
+        {
+            // Set the bitmap if it contains something, even on failure. This allows
+            // reading images that are only partially broken.
+            pWriteAccessInstance.reset();
+            pWriteAccessAlphaInstance.reset();
+            if (!aBitmap.IsEmpty() && !aBitmapAlpha.IsEmpty())
+                aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
+            else if (!aBitmap.IsEmpty())
+                aBitmapEx = BitmapEx(aBitmap);
+            if (!aBitmapEx.IsEmpty() && !prefSize.IsEmpty())
+            {
+                aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                aBitmapEx.SetPrefSize(prefSize);
+            }
+            rImportOutput.moBitmap = aBitmapEx;
+        }
+        return false;
+    }
 
     if (colorType == PNG_COLOR_TYPE_RGB)
     {
@@ -663,6 +675,28 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
                 png_read_row(pPng, pScanline, nullptr);
             }
         }
+    }
+
+    // If an error is thrown when calling png_read_end
+    if (setjmp(png_jmpbuf(pPng)))
+    {
+        if (!bUseExistingBitmap)
+        {
+            pWriteAccessInstance.reset();
+            pWriteAccessAlphaInstance.reset();
+            if (!aBitmap.IsEmpty() && !aBitmapAlpha.IsEmpty())
+                aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
+            else if (!aBitmap.IsEmpty())
+                aBitmapEx = BitmapEx(aBitmap);
+            if (!aBitmapEx.IsEmpty() && !prefSize.IsEmpty())
+            {
+                aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                aBitmapEx.SetPrefSize(prefSize);
+            }
+            rImportOutput.moBitmap = aBitmapEx;
+        }
+        // Return true in this case, as we read the bitmap
+        return true;
     }
 
     png_read_end(pPng, pInfo);
