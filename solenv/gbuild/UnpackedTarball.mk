@@ -150,7 +150,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		) \
 	    $(if $(gb_KEEP_PRISTINE), \
 			rm -fr $(call gb_UnpackedTarball_get_pristine_dir,$(2)) && \
-			cp -r $(gb_UnpackedTarball_workdir)/$(2) $(call gb_UnpackedTarball_get_pristine_dir,$(2)) && \
+			cp -r -P $(gb_UnpackedTarball_workdir)/$(2) $(call gb_UnpackedTarball_get_pristine_dir,$(2)) && \
 		) \
 		touch $(1) \
 		)\
