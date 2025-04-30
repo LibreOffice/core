@@ -17,83 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_THUMBVIEWER_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_THUMBVIEWER_HXX
+#pragma once
 
-#include <objidl.h>
 #include <shlobj.h>
-#ifndef DONT_HAVE_GDIPLUS
-#include <gdiplus.h>
-#endif
-#include <string>
 
-class CThumbviewer : public IPersistFile, public IExtractImage
-{
-public:
-    CThumbviewer(LONG RefCnt = 1);
-    virtual ~CThumbviewer();
-
-
-    // IUnknown methods
-
-
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
-            REFIID riid,
-            void __RPC_FAR *__RPC_FAR *ppvObject) override;
-
-    virtual ULONG STDMETHODCALLTYPE AddRef() override;
-
-    virtual ULONG STDMETHODCALLTYPE Release() override;
-
-
-    // IExtractImage methods
-
-
-    virtual HRESULT STDMETHODCALLTYPE Extract(HBITMAP *phBmpImage) override;
-
-    virtual HRESULT STDMETHODCALLTYPE GetLocation(
-        LPWSTR pszPathBuffer,
-        DWORD cchMax,
-        DWORD *pdwPriority,
-        const SIZE *prgSize,
-        DWORD dwRecClrDepth,
-        DWORD *pdwFlags) override;
-
-
-    // IPersist methods
-
-
-    virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID* pClassID) override;
-
-
-    // IPersistFile methods
-
-
-    virtual HRESULT STDMETHODCALLTYPE IsDirty() override;
-
-    virtual HRESULT STDMETHODCALLTYPE Load(
-            /* [in] */ LPCOLESTR pszFileName,
-            /* [in] */ DWORD dwMode) override;
-
-    virtual HRESULT STDMETHODCALLTYPE Save(
-            /* [unique][in] */ LPCOLESTR pszFileName,
-            /* [in] */ BOOL fRemember) override;
-
-    virtual HRESULT STDMETHODCALLTYPE SaveCompleted(
-            /* [unique][in] */ LPCOLESTR pszFileName) override;
-
-    virtual HRESULT STDMETHODCALLTYPE GetCurFile(
-            /* [out] */ LPOLESTR __RPC_FAR *ppszFileName) override;
-
-private:
-    LONG         ref_count_;
-    std::wstring filename_;
-    SIZE         thumbnail_size_;
-    DWORD        color_depth_;
-    ULONG_PTR    gdiplus_token_;
-    Gdiplus::Bitmap* signet_;
-};
-
-#endif
+IExtractImage* CreateThumbviewer();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

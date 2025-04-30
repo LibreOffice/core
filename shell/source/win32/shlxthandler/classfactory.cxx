@@ -102,7 +102,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
         pUnk = new CColumnInfo();
 
     else if (CLSID_THUMBVIEWER_HANDLER == m_Clsid)
-        pUnk = static_cast<IExtractImage*>(new CThumbviewer());
+        pUnk = CreateThumbviewer();
 
     if (nullptr == pUnk)
     {

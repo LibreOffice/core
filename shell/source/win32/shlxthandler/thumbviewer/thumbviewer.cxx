@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DONT_HAVE_GDIPLUS
-
-
 #include <global.hxx>
 
 #include <thumbviewer.hxx>
@@ -37,26 +34,32 @@
 #include <stdlib.h>
 
 #include <shellapi.h>
+#include <objidl.h>
+#include <shlobj.h>
+#include <gdiplus.h>
 
+#include <algorithm>
+#include <atomic>
 #include <memory>
+#include <string>
 
-namespace internal
+namespace
 {
     /* The signet.png used for thumbnails of signed documents
        is contained as resource in this module, the resource
        id is 2000 */
-    static void LoadSignetImageFromResource(ZipFile::ZipContentBuffer_t& buffer)
+    static ZipFile::ZipContentBuffer_t LoadSignetImageFromResource()
     {
         HRSRC hrc = FindResourceW(g_hModule, L"#2000", reinterpret_cast<LPWSTR>(RT_RCDATA));
         DWORD size = SizeofResource(g_hModule, hrc);
         HGLOBAL hglob = LoadResource(g_hModule, hrc);
         char* data = static_cast<char*>(LockResource(hglob));
-        buffer = ZipFile::ZipContentBuffer_t(data, data + size);
+        return ZipFile::ZipContentBuffer_t(data, data + size);
     }
 
-    static bool IsSignedDocument(const ZipFile* zipfile)
+    static bool IsSignedDocument(const ZipFile& zipfile)
     {
-        return zipfile->HasContent("META-INF/documentsignatures.xml");
+        return zipfile.HasContent("META-INF/documentsignatures.xml");
     }
 
     static Gdiplus::Point CalcSignetPosition(
@@ -80,9 +83,6 @@ namespace internal
 
         return Gdiplus::Point(x,y);
     }
-}
-
-namespace {
 
 Gdiplus::Rect CalcScaledAspectRatio(const Gdiplus::Rect& src, const Gdiplus::Rect& dest)
 {
@@ -98,7 +98,18 @@ Gdiplus::Rect CalcScaledAspectRatio(const Gdiplus::Rect& src, const Gdiplus::Rec
 class StreamOnZipBuffer final : public IStream
 {
 public:
-    explicit StreamOnZipBuffer(const ZipFile::ZipContentBuffer_t& zip_buffer);
+    struct SmartPtr
+    {
+        ~SmartPtr() { p->Release(); }
+        operator IStream*() { return p; }
+
+        IStream* p;
+    };
+
+    static SmartPtr Create(ZipFile::ZipContentBuffer_t&& zip_buffer)
+    {
+        return { new StreamOnZipBuffer(std::move(zip_buffer)) };
+    }
 
     // IUnknown
     virtual ULONG STDMETHODCALLTYPE AddRef() override;
@@ -119,32 +130,28 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Clone(IStream **ppstm) override;
 
 private:
-    LONG ref_count_;
-    const ZipFile::ZipContentBuffer_t& ref_zip_buffer_;
-    size_t pos_;
+    explicit StreamOnZipBuffer(ZipFile::ZipContentBuffer_t&& zip_buffer)
+        : zip_buffer_(std::move(zip_buffer))
+    {
+    }
+
+    std::atomic<ULONG> ref_count_ = 1;
+    const ZipFile::ZipContentBuffer_t zip_buffer_;
+    size_t pos_ = 0;
 };
-
-}
-
-StreamOnZipBuffer::StreamOnZipBuffer(const ZipFile::ZipContentBuffer_t& zip_buffer) :
-    ref_count_(1),
-    ref_zip_buffer_(zip_buffer),
-    pos_(0)
-{
-}
 
 // IUnknown methods
 
 ULONG STDMETHODCALLTYPE StreamOnZipBuffer::AddRef()
 {
-    return InterlockedIncrement(&ref_count_);
+    return ++ref_count_;
 }
 
 ULONG STDMETHODCALLTYPE StreamOnZipBuffer::Release()
 {
-    LONG refcnt = InterlockedDecrement(&ref_count_);
+    const ULONG refcnt = --ref_count_;
 
-    if (0 == ref_count_)
+    if (0 == refcnt)
         delete this;
 
     return refcnt;
@@ -153,13 +160,11 @@ ULONG STDMETHODCALLTYPE StreamOnZipBuffer::Release()
 HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = nullptr;
-    IUnknown* pUnk = nullptr;
 
     if ((IID_IUnknown == riid) || (IID_IStream == riid))
     {
-        pUnk = this;
-        pUnk->AddRef();
-        *ppvObject = pUnk;
+        *ppvObject = this;
+        AddRef();
         return S_OK;
     }
     return E_NOINTERFACE;
@@ -170,75 +175,78 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Read(void *pv, ULONG cb, ULONG *pcb
     if (pv == nullptr)
         return STG_E_INVALIDPOINTER;
 
-    size_t size = ref_zip_buffer_.size();
-
-    if (pos_ > size)
-        return S_FALSE;
-
     char* p = static_cast<char*>(pv);
-    ULONG read = 0;
-
-    for ( ;(pos_ < size) && (cb > 0); pos_++, cb--, read++)
-        *p++ = ref_zip_buffer_[pos_];
+    const size_t available = pos_ < zip_buffer_.size() ? zip_buffer_.size() - pos_ : 0;
+    const ULONG read = min(available, cb);
+    if (read > 0)
+    {
+        std::copy_n(zip_buffer_.data() + pos_, read, p);
+        pos_ += read;
+    }
 
     if (pcbRead)
         *pcbRead = read;
 
-    return S_OK;
+    return read == cb ? S_OK : S_FALSE;
 }
 
-HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *)
+HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin,
+                                                  ULARGE_INTEGER* plibNewPosition)
 {
-    __int64 size = static_cast<__int64>(ref_zip_buffer_.size());
-    __int64 p = 0;
+    const __int64 size = zip_buffer_.size();
+    __int64 p;
 
     switch (dwOrigin)
     {
         case STREAM_SEEK_SET:
+            p = 0;
             break;
         case STREAM_SEEK_CUR:
-            p = static_cast<__int64>(pos_);
+            p = pos_;
             break;
         case STREAM_SEEK_END:
-            p = size - 1;
+            p = size;
             break;
+        default:
+            return STG_E_INVALIDFUNCTION;
     }
-
-    HRESULT hr = STG_E_INVALIDFUNCTION;
 
     p += dlibMove.QuadPart;
+    if (p < 0)
+        return STG_E_INVALIDFUNCTION;
 
-    if ( ( p >= 0 ) && (p < size) )
-    {
-        pos_ = static_cast<size_t>(p);
-        hr = S_OK;
-    }
-    return hr;
+    if (p > size)
+        p = size;
+
+    pos_ = p;
+    if (plibNewPosition)
+        *plibNewPosition = { .QuadPart = pos_ };
+    return S_OK;
 }
 
 HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
     if (pstatstg == nullptr)
         return STG_E_INVALIDPOINTER;
+    if (grfStatFlag != STATFLAG_DEFAULT && grfStatFlag != STATFLAG_NONAME)
+        return STG_E_INVALIDFLAG;
 
     ZeroMemory(pstatstg, sizeof(STATSTG));
 
-    if (grfStatFlag == STATFLAG_DEFAULT)
+    if (grfStatFlag != STATFLAG_NONAME)
     {
         size_t sz = 4 * sizeof(wchar_t);
         wchar_t* name = static_cast<wchar_t*>(CoTaskMemAlloc(sz));
-        ZeroMemory(name, sz);
-        memcpy(name, L"png", 3 * sizeof(wchar_t));
+        if (!name)
+            return STG_E_INSUFFICIENTMEMORY;
+        wcscpy(name, L"png");
         pstatstg->pwcsName = name;
     }
 
     pstatstg->type = STGTY_LOCKBYTES;
 
-    ULARGE_INTEGER uli;
-    uli.LowPart = static_cast<DWORD>(ref_zip_buffer_.size());
-    uli.HighPart = 0;
-
-    pstatstg->cbSize = uli;
+    static_assert(std::is_integral_v<decltype(pstatstg->cbSize.QuadPart)>);
+    pstatstg->cbSize = { .QuadPart = zip_buffer_.size() };
 
     return S_OK;
 }
@@ -267,23 +275,69 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::UnlockRegion(ULARGE_INTEGER, ULARGE
 HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Clone(IStream **)
 {  return E_NOTIMPL; }
 
+class CThumbviewer : public IPersistFile, public IExtractImage
+{
+public:
+    CThumbviewer();
+    virtual ~CThumbviewer();
 
-CThumbviewer::CThumbviewer(LONG RefCnt) :
-    ref_count_(RefCnt)
+    // IUnknown methods
+
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid,
+                                                     void __RPC_FAR* __RPC_FAR* ppvObject) override;
+
+    virtual ULONG STDMETHODCALLTYPE AddRef() override;
+
+    virtual ULONG STDMETHODCALLTYPE Release() override;
+
+    // IExtractImage methods
+
+    virtual HRESULT STDMETHODCALLTYPE Extract(HBITMAP* phBmpImage) override;
+
+    virtual HRESULT STDMETHODCALLTYPE GetLocation(LPWSTR pszPathBuffer, DWORD cchMax,
+                                                  DWORD* pdwPriority, const SIZE* prgSize,
+                                                  DWORD dwRecClrDepth, DWORD* pdwFlags) override;
+
+    // IPersist methods
+
+    virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID* pClassID) override;
+
+    // IPersistFile methods
+
+    virtual HRESULT STDMETHODCALLTYPE IsDirty() override;
+
+    virtual HRESULT STDMETHODCALLTYPE Load(
+        /* [in] */ LPCOLESTR pszFileName,
+        /* [in] */ DWORD dwMode) override;
+
+    virtual HRESULT STDMETHODCALLTYPE Save(
+        /* [unique][in] */ LPCOLESTR pszFileName,
+        /* [in] */ BOOL fRemember) override;
+
+    virtual HRESULT STDMETHODCALLTYPE SaveCompleted(
+        /* [unique][in] */ LPCOLESTR pszFileName) override;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCurFile(
+        /* [out] */ LPOLESTR __RPC_FAR* ppszFileName) override;
+
+private:
+    std::atomic<ULONG> ref_count_ = 1;
+    DWORD color_depth_ = 0;
+    std::wstring filename_;
+    SIZE thumbnail_size_ = { .cx = 0, .cy = 0 };
+    ULONG_PTR gdiplus_token_;
+    Gdiplus::Bitmap* signet_;
+};
+
+CThumbviewer::CThumbviewer()
 {
     InterlockedIncrement(&g_DllRefCnt);
-
-    thumbnail_size_.cx = 0;
-    thumbnail_size_.cy = 0;
 
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     Gdiplus::GdiplusStartup(&gdiplus_token_, &gdiplusStartupInput, nullptr);
 
-    ZipFile::ZipContentBuffer_t img_data;
-    internal::LoadSignetImageFromResource(img_data);
-    IStream* stream = new StreamOnZipBuffer(img_data);
-    signet_ = new Gdiplus::Bitmap(stream, TRUE);
-    stream->Release();
+    signet_ = new Gdiplus::Bitmap(
+        StreamOnZipBuffer::Create(LoadSignetImageFromResource()), TRUE);
 }
 
 CThumbviewer::~CThumbviewer()
@@ -298,20 +352,17 @@ CThumbviewer::~CThumbviewer()
 HRESULT STDMETHODCALLTYPE CThumbviewer::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = nullptr;
-    IUnknown* pUnk = nullptr;
 
     if ((IID_IUnknown == riid) || (IID_IPersistFile == riid))
     {
-        pUnk = static_cast<IPersistFile*>(this);
-        pUnk->AddRef();
-        *ppvObject = pUnk;
+        *ppvObject = static_cast<IPersistFile*>(this);
+        AddRef();
         return S_OK;
     }
     else if (IID_IExtractImage == riid)
     {
-        pUnk = static_cast<IExtractImage*>(this);
-        pUnk->AddRef();
-        *ppvObject = pUnk;
+        *ppvObject = static_cast<IExtractImage*>(this);
+        AddRef();
         return S_OK;
     }
     return E_NOINTERFACE;
@@ -319,14 +370,14 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::QueryInterface(REFIID riid, void __RPC_F
 
 ULONG STDMETHODCALLTYPE CThumbviewer::AddRef()
 {
-    return InterlockedIncrement(&ref_count_);
+    return ++ref_count_;
 }
 
 ULONG STDMETHODCALLTYPE CThumbviewer::Release()
 {
-    LONG refcnt = InterlockedDecrement(&ref_count_);
+    const ULONG refcnt = --ref_count_;
 
-    if (0 == ref_count_)
+    if (0 == refcnt)
         delete this;
 
     return refcnt;
@@ -343,19 +394,17 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
     try
     {
         std::wstring fname = getShortPathName( filename_ );
-        std::unique_ptr<ZipFile> zipfile( new ZipFile( fname ) );
+        ZipFile zipfile(fname);
 
-        if (zipfile->HasContent(THUMBNAIL_CONTENT))
+        if (zipfile.HasContent(THUMBNAIL_CONTENT))
         {
             ZipFile::ZipContentBuffer_t thumbnail;
-            zipfile->GetUncompressedContent(THUMBNAIL_CONTENT, thumbnail);
-            IStream* stream = new StreamOnZipBuffer(thumbnail);
+            zipfile.GetUncompressedContent(THUMBNAIL_CONTENT, thumbnail);
 
-            Gdiplus::Bitmap thumbnail_png(stream, TRUE);
+            Gdiplus::Bitmap thumbnail_png(StreamOnZipBuffer::Create(std::move(thumbnail)), TRUE);
 
             if ((thumbnail_png.GetHeight() == 0) || (thumbnail_png.GetWidth() == 0))
             {
-                stream->Release();
                 return E_FAIL;
             }
 
@@ -414,12 +463,12 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
                     thumbnail_png.GetWidth(), thumbnail_png.GetHeight(), Gdiplus::UnitPixel);
 
                 /* Add a signet sign to the thumbnail of signed documents */
-                if (internal::IsSignedDocument(zipfile.get()))
+                if (IsSignedDocument(zipfile))
                 {
                     double SCALING_FACTOR = 0.6;
                     Gdiplus::Rect signet_scaled(
                         0, 0, static_cast<INT>(signet_->GetWidth() * SCALING_FACTOR), static_cast<INT>(signet_->GetHeight() * SCALING_FACTOR));
-                    Gdiplus::Point pos_signet = internal::CalcSignetPosition(canvas_thumbnail, border_rect, signet_scaled);
+                    Gdiplus::Point pos_signet = CalcSignetPosition(canvas_thumbnail, border_rect, signet_scaled);
                     Gdiplus::Rect dest(pos_signet.X, pos_signet.Y, signet_scaled.GetRight(), signet_scaled.GetBottom());
 
                     stat = graphics.DrawImage(
@@ -439,7 +488,6 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
             }
 
             ReleaseDC(hwnd, hdc);
-            stream->Release();
         }
     }
     catch(std::exception&)
@@ -494,7 +542,8 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::SaveCompleted(LPCOLESTR)
 HRESULT STDMETHODCALLTYPE CThumbviewer::GetCurFile(LPOLESTR __RPC_FAR*)
 { return E_NOTIMPL; }
 
+} // namespace
 
-#endif // DONT_HAVE_GDIPLUS
+IExtractImage* CreateThumbviewer() { return new CThumbviewer; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
