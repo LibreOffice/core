@@ -88,9 +88,6 @@ public:
     createAccessibleContext(FormattedField* pFormattedField);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(vcl::Window* pWindow);
-
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleTextWindowContext(vcl::Window* pWindow, TextEngine& rEngine, TextView& rView);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

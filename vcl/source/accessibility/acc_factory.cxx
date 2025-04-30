@@ -42,7 +42,6 @@
 #include <accessibility/accessibletablistbox.hxx>
 #include <accessibility/AccessibleIconView.hxx>
 #include <accessibility/accessiblelistbox.hxx>
-#include <accessibility/textwindowaccessibility.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/combobox.hxx>
@@ -178,13 +177,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(Heade
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(FormattedField* pFormattedField)
 {
     return new SVTXAccessibleNumericField(pFormattedField);
-}
-
-Reference<XAccessibleContext>
-AccessibleFactory::createAccessibleTextWindowContext(vcl::Window* pWindow, TextEngine& rEngine,
-                                                     TextView& rView)
-{
-    return new Document(pWindow, rEngine, rView );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

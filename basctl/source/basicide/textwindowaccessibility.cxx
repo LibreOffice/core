@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <accessibility/textwindowaccessibility.hxx>
+#include "textwindowaccessibility.hxx"
 
 #include <sal/log.hxx>
 
@@ -47,6 +47,9 @@
 #include <algorithm>
 #include <numeric>
 #include <vector>
+
+namespace accessibility
+{
 
 void SfxListenerGuard::startListening(::SfxBroadcaster & rNotifier)
 {
@@ -2102,6 +2105,8 @@ css::uno::Any Document::mapFontWeight(::FontWeight nWeight)
         : nWeight <= css::awt::FontWeight::BOLD ? WEIGHT_BOLD
         : nWeight <= css::awt::FontWeight::ULTRABOLD ? WEIGHT_ULTRABOLD
         : WEIGHT_BLACK;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

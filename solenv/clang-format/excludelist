@@ -91,6 +91,8 @@ basctl/source/basicide/moduldlg.cxx
 basctl/source/basicide/moduldlg.hxx
 basctl/source/basicide/sbxitem.cxx
 basctl/source/basicide/scriptdocument.cxx
+basctl/source/basicide/textwindowaccessibility.cxx
+basctl/source/basicide/textwindowaccessibility.hxx
 basctl/source/basicide/unomodel.cxx
 basctl/source/basicide/unomodel.hxx
 basctl/source/dlged/dlged.cxx
@@ -14094,7 +14096,6 @@ vcl/inc/accessibility/accessiblemenuitemcomponent.hxx
 vcl/inc/accessibility/accessibletablistbox.hxx
 vcl/inc/accessibility/accessibletablistboxtable.hxx
 vcl/inc/accessibility/listboxhelper.hxx
-vcl/inc/accessibility/textwindowaccessibility.hxx
 vcl/inc/accessibility/vclxaccessiblebox.hxx
 vcl/inc/accessibility/vclxaccessiblebutton.hxx
 vcl/inc/accessibility/vclxaccessiblecheckbox.hxx
@@ -14133,7 +14134,6 @@ vcl/source/accessibility/accessiblelistboxentry.cxx
 vcl/source/accessibility/accessibletablistbox.cxx
 vcl/source/accessibility/accessibletablistboxtable.cxx
 vcl/source/accessibility/floatingwindowaccessible.cxx
-vcl/source/accessibility/textwindowaccessibility.cxx
 vcl/source/accessibility/vclxaccessiblebox.cxx
 vcl/source/accessibility/vclxaccessiblebutton.cxx
 vcl/source/accessibility/vclxaccessiblecheckbox.cxx

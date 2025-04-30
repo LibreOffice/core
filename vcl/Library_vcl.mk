@@ -119,7 +119,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/accessibility/accessibletablistbox \
     vcl/source/accessibility/accessibletablistboxtable \
     vcl/source/accessibility/characterattributeshelper \
-    vcl/source/accessibility/textwindowaccessibility \
     vcl/source/accessibility/floatingwindowaccessible \
     vcl/source/accessibility/IComboListBoxHelper \
     vcl/source/accessibility/svtaccessiblenumericfield \

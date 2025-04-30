@@ -69,6 +69,7 @@
 #include <vector>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <unotools/charclass.hxx>
+#include "textwindowaccessibility.hxx"
 #include "uiobject.hxx"
 #include <basegfx/utils/zoomtools.hxx>
 #include <svl/itemset.hxx>
@@ -1705,7 +1706,7 @@ TextWindowPeer::TextWindowPeer(TextView& view)
 css::uno::Reference<css::accessibility::XAccessibleContext>
 TextWindowPeer::CreateAccessibleContext()
 {
-    return AccessibleFactory::createAccessibleTextWindowContext(GetWindow(), m_rEngine, m_rView);
+    return new ::accessibility::Document(GetWindow(), m_rEngine, m_rView);
 }
 
 struct WatchItem
