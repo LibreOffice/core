@@ -29,7 +29,6 @@
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/i18n/Collator.hpp>
 #include <comphelper/propertysequence.hxx>
-#include "inputstream.hxx"
 #include <algorithm>
 #include <cassert>
 #include <string.h>

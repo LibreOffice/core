@@ -47,7 +47,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpchelp1,\
     xmlhelp/source/cxxhelp/provider/contentcaps \
     xmlhelp/source/cxxhelp/provider/databases \
     xmlhelp/source/cxxhelp/provider/db \
-    xmlhelp/source/cxxhelp/provider/inputstream \
     xmlhelp/source/cxxhelp/provider/provider \
     xmlhelp/source/cxxhelp/provider/resultset \
     xmlhelp/source/cxxhelp/provider/resultsetbase \
