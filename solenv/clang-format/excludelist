@@ -91,7 +91,6 @@ basctl/source/basicide/moduldlg.cxx
 basctl/source/basicide/moduldlg.hxx
 basctl/source/basicide/sbxitem.cxx
 basctl/source/basicide/scriptdocument.cxx
-basctl/source/basicide/textwindowpeer.cxx
 basctl/source/basicide/unomodel.cxx
 basctl/source/basicide/unomodel.hxx
 basctl/source/dlged/dlged.cxx

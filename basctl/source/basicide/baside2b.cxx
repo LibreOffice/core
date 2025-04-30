@@ -48,11 +48,13 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
 #include <utility>
+#include <vcl/accessiblefactory.hxx>
 #include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
+#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
@@ -67,7 +69,6 @@
 #include <vector>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <unotools/charclass.hxx>
-#include "textwindowpeer.hxx"
 #include "uiobject.hxx"
 #include <basegfx/utils/zoomtools.hxx>
 #include <svl/itemset.hxx>
@@ -1678,6 +1679,35 @@ void BreakPointWindow::setBackgroundColor(Color aColor)
 
 namespace {
 
+class TextWindowPeer final : public VCLXWindow
+{
+public:
+    explicit TextWindowPeer(TextView& view);
+
+    TextWindowPeer(const TextWindowPeer&) = delete;
+    TextWindowPeer& operator=(const TextWindowPeer&) = delete;
+
+private:
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
+    CreateAccessibleContext() override;
+
+    TextEngine& m_rEngine;
+    TextView& m_rView;
+};
+
+TextWindowPeer::TextWindowPeer(TextView& view)
+    : m_rEngine(*view.GetTextEngine())
+    , m_rView(view)
+{
+    SetWindow(view.GetWindow());
+}
+
+css::uno::Reference<css::accessibility::XAccessibleContext>
+TextWindowPeer::CreateAccessibleContext()
+{
+    return AccessibleFactory::createAccessibleTextWindowContext(GetWindow(), m_rEngine, m_rView);
+}
+
 struct WatchItem
 {
     OUString        maName;
@@ -2161,7 +2191,7 @@ EditorWindow::GetComponentInterface(bool bCreate)
         if (!pEditEngine)
             CreateEditEngine();
 
-        xPeer = createTextWindowPeer(*GetEditView());
+        xPeer = new TextWindowPeer(*GetEditView());
         SetComponentInterface(xPeer);
     }
     return xPeer;
