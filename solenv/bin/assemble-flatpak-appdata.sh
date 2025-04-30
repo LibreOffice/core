@@ -53,7 +53,7 @@ cat <<\EOF >"${1?}"de.allotropia.ZetaOffice.appdata.xml
    <caption>Sample Writer document</caption>
   </screenshot>
  </screenshots>
- <developer_name>allotropia Software GmbH</developer_name>
+ <developer_name>allotropia software GmbH</developer_name>
  <kudos>
   <kudo>HiDpiIcon</kudo>
   <kudo>HighContrast</kudo>

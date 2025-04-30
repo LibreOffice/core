@@ -30,7 +30,7 @@ Globals
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
             WINDOWSPATCHLEVEL @LIBO_VERSION_MICRO@
-            OOOVENDOR Allotropia Software GmbH
+            OOOVENDOR allotropia software GmbH
             OOODOWNLOADNAME 1
             64BITPRODUCT @WINDOWS_X64@
             WINDOWSSDKVERSION @WINDOWS_SDK_VERSION@
