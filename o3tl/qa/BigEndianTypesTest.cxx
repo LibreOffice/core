@@ -13,6 +13,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <o3tl/BigEndianTypes.hxx>
+#include <osl/endian.h>
 #include <array>
 
 namespace

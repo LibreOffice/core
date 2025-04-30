@@ -11,49 +11,43 @@
 
 #include <sal/config.h>
 #include <sal/types.h>
-#include <osl/endian.h>
 
 namespace o3tl
 {
-/** 16-bit unsigned integer type that can be used in a struct to read from data that is big endian.
+/** 16-bit unsigned integer type that can be used in a struct to read from data that is big endian
+    and potentially misaligned.
  *
  * Type can't be instantiated but only used in a struct which is reinterpret_cast from bytes.
  */
 class sal_uInt16_BE
 {
 private:
-    sal_uInt16 mnValue;
+    sal_uInt8 mnValue[2];
     sal_uInt16_BE() = delete;
 
 public:
     constexpr operator sal_uInt16() const
     {
-#ifdef OSL_LITENDIAN
-        return OSL_SWAPWORD(mnValue);
-#else
-        return mnValue;
-#endif
+        return sal_uInt32(mnValue[1]) | (sal_uInt32(mnValue[0]) << 8);
     }
 };
 
-/** 32-bit unsigned integer type that can be used in a struct to read from data that is big endian.
+/** 32-bit unsigned integer type that can be used in a struct to read from data that is big endian
+    and potentially misaligned.
  *
  * Type can't be instantiated but only used in a struct which is reinterpret_cast from bytes.
  */
 class sal_uInt32_BE
 {
 private:
-    sal_uInt32 mnValue;
+    sal_uInt8 mnValue[4];
     sal_uInt32_BE() = delete;
 
 public:
     constexpr operator sal_uInt32() const
     {
-#ifdef OSL_LITENDIAN
-        return OSL_SWAPDWORD(mnValue);
-#else
-        return mnValue;
-#endif
+        return sal_uInt32(mnValue[3]) | (sal_uInt32(mnValue[2]) << 8)
+               | (sal_uInt32(mnValue[1]) << 16) | (sal_uInt32(mnValue[0]) << 24);
     }
 };
 
