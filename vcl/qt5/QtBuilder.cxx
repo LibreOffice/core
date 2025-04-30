@@ -361,6 +361,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
             const Image aImage = loadThemeImage(sIconName);
             pToolButton->setIcon(toQPixmap(aImage));
         }
+        pToolButton->setText(toQString(extractLabel(rMap)));
         pObject = pToolButton;
     }
     else if (sName == u"GtkTreeView")
