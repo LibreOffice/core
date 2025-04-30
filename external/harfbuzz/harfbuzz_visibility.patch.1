@@ -1,0 +1,11 @@
+diff -ur harfbuzz.org/src/meson.build harfbuzz/src/meson.build
+--- harfbuzz.org/src/meson.build	2025-04-30 11:53:08
++++ harfbuzz/src/meson.build	2025-04-30 12:02:08
+@@ -624,6 +624,7 @@
+   include_directories: incconfig,
+   dependencies: harfbuzz_deps,
+   cpp_args: cpp_args + extra_hb_cpp_args,
++  gnu_symbol_visibility: 'hidden',
+   soversion: hb_so_version,
+   version: version,
+   install: true,

@@ -11499,20 +11499,19 @@ HARFBUZZ_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/harfbuzz/src"
 case "$_os" in
     Linux)
         GRAPHITE_LIBS_internal='$(gb_StaticLibrary_WORKDIR)/libgraphite.a'
-        HARFBUZZ_LIBS_internal="${WORKDIR}/UnpackedTarball/harfbuzz/builddir/src/libharfbuzz.a"
+        HARFBUZZ_LIBS_internal='$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz.a $(GRAPHITE_LIBS)'
+        ;;
+    WINNT)
+        GRAPHITE_LIBS_internal='$(gb_StaticLibrary_WORKDIR)/graphite.lib'
+        HARFBUZZ_LIBS_internal='$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz.a $(GRAPHITE_LIBS)'
         ;;
     *)
         GRAPHITE_LIBS_internal='-L$(gb_StaticLibrary_WORKDIR) -lgraphite'
-        HARFBUZZ_LIBS_internal="-L${WORKDIR}/UnpackedTarball/harfbuzz/builddir/src/ -lharfbuzz"
+        HARFBUZZ_LIBS_internal='-L$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/ -lharfbuzz $(GRAPHITE_LIBS)'
         ;;
 esac
 libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
 libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= $harfbuzz_required_version])
-
-if test "$COM" = "MSC"; then # override the above
-    GRAPHITE_LIBS='$(gb_StaticLibrary_WORKDIR)/graphite.lib'
-    HARFBUZZ_LIBS='$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz.a $(GRAPHITE_LIBS)'
-fi
 
 MESON_NO_PYTHON=
 if test "$with_system_harfbuzz" = "yes"; then
