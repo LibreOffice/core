@@ -522,9 +522,11 @@ void GraphicImportTask::doImport(GraphicImportContext& rContext)
     }
     else if(rContext.m_eLinkType == GfxLinkType::NativePng)
     {
-        if (!vcl::ImportPNG(*rContext.m_pStream, *rContext.m_pImportOutput,
-            rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap,
-            rContext.m_pAccess.get(), rContext.m_pAlphaAccess.get()))
+        vcl::ImportPNG(*rContext.m_pStream, *rContext.m_pImportOutput,
+                rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap,
+                rContext.m_pAccess.get(), rContext.m_pAlphaAccess.get());
+
+        if (!rContext.m_pImportOutput->moBitmap || rContext.m_pImportOutput->moBitmap->IsEmpty())
         {
             rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
         }
@@ -631,9 +633,9 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
         std::shared_ptr<Graphic> pGraphic;
 
         if (rContext.m_nStatus == ERRCODE_NONE && rContext.m_pImportOutput && rContext.m_pImportOutput->moBitmap)
-        {
             pGraphic = std::make_shared<Graphic>(*rContext.m_pImportOutput->moBitmap);
-        }
+        else
+            pGraphic = std::make_shared<Graphic>();
 
         if (rContext.m_nStatus == ERRCODE_NONE && rContext.m_eLinkType != GfxLinkType::NONE)
         {
@@ -659,8 +661,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                 pGraphic->SetGfxLink(std::make_shared<GfxLink>(aGraphicContent, rContext.m_eLinkType));
         }
 
-        if (rContext.m_nStatus == ERRCODE_NONE)
-            rGraphics.push_back(pGraphic);
+        rGraphics.push_back(pGraphic);
     }
 }
 
