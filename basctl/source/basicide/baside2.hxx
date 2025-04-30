@@ -109,7 +109,7 @@ private:
 
     Color           m_aLineHighlightColor;
 
-    virtual css::uno::Reference< css::awt::XVclWindowPeer > GetComponentInterface(bool bCreate = true) override;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
     CodeCompleteDataCache aCodeCompleteCache;
     VclPtr<CodeCompleteWindow> pCodeCompleteWnd;
     OUString GetActualSubName( sal_uInt32 nLine ); // gets the actual subroutine name according to line number

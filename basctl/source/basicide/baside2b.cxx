@@ -1680,35 +1680,6 @@ void BreakPointWindow::setBackgroundColor(Color aColor)
 
 namespace {
 
-class TextWindowPeer final : public VCLXWindow
-{
-public:
-    explicit TextWindowPeer(TextView& view);
-
-    TextWindowPeer(const TextWindowPeer&) = delete;
-    TextWindowPeer& operator=(const TextWindowPeer&) = delete;
-
-private:
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    CreateAccessibleContext() override;
-
-    TextEngine& m_rEngine;
-    TextView& m_rView;
-};
-
-TextWindowPeer::TextWindowPeer(TextView& view)
-    : m_rEngine(*view.GetTextEngine())
-    , m_rView(view)
-{
-    SetWindow(view.GetWindow());
-}
-
-css::uno::Reference<css::accessibility::XAccessibleContext>
-TextWindowPeer::CreateAccessibleContext()
-{
-    return new ::accessibility::Document(GetWindow(), m_rEngine, m_rView);
-}
-
 struct WatchItem
 {
     OUString        maName;
@@ -2181,21 +2152,13 @@ void ComplexEditorWindow::SetLineNumberDisplay(bool b)
     Resize();
 }
 
-uno::Reference< awt::XVclWindowPeer >
-EditorWindow::GetComponentInterface(bool bCreate)
+css::uno::Reference<css::accessibility::XAccessible> EditorWindow::CreateAccessible()
 {
-    uno::Reference< awt::XVclWindowPeer > xPeer(
-        Window::GetComponentInterface(false));
-    if (!xPeer.is() && bCreate)
-    {
-        // Make sure edit engine and view are available:
-        if (!pEditEngine)
-            CreateEditEngine();
+    // Make sure edit engine and view are available:
+    if (!pEditEngine)
+        CreateEditEngine();
 
-        xPeer = new TextWindowPeer(*GetEditView());
-        SetComponentInterface(xPeer);
-    }
-    return xPeer;
+    return new ::accessibility::Document(this, *pEditView->GetTextEngine(), *pEditView);
 }
 
 static sal_uInt32 getCorrectedPropCount(SbxArray* p)

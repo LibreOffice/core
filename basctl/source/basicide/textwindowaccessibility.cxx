@@ -152,7 +152,7 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 Paragraph::getAccessibleParent()
 {
     ensureAlive();
-    return m_xDocument->getAccessible();
+    return m_xDocument;
 }
 
 // virtual
@@ -590,7 +590,7 @@ void Paragraph::implGetLineBoundary( const OUString& rText,
 
 Document::Document(vcl::Window* pWindow, ::TextEngine & rEngine,
                    ::TextView & rView)
-    : VCLXAccessibleComponent(pWindow),
+    : ImplInheritanceHelper(pWindow),
     m_rEngine(rEngine),
     m_rView(rView),
     m_aEngineListener(*this),
@@ -615,11 +615,13 @@ Document::Document(vcl::Window* pWindow, ::TextEngine & rEngine,
     m_aViewListener.startListening(*m_rView.GetWindow());
 }
 
-css::uno::Reference<css::accessibility::XAccessible> Document::getAccessible() const
+css::uno::Reference<css::accessibility::XAccessibleContext>
+    SAL_CALL Document::getAccessibleContext()
 {
-    if (vcl::Window* pWindow = GetWindow())
-        return pWindow->GetAccessible();
-    return nullptr;
+    SolarMutexGuard aGuard;
+    ensureAlive();
+
+    return this;
 }
 
 css::lang::Locale Document::retrieveLocale()
