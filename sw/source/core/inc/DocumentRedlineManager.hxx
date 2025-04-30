@@ -27,6 +27,7 @@ class SwDoc;
 namespace sw
 {
 
+class AppendRedlineContext;
 class SAL_DLLPUBLIC_RTTI DocumentRedlineManager final : public IDocumentRedlineAccess
 {
 public:
@@ -164,6 +165,7 @@ private:
                             const SwRedlineTable::size_type& nPosEnd, bool bCallDelete);
     bool AcceptMovedRedlines(sal_uInt32 nMovedID, bool bCallDelete);
     bool RejectMovedRedlines(sal_uInt32 nMovedID, bool bCallDelete);
+    void PreAppendInsertRedline(AppendRedlineContext& rCtx);
 
     DocumentRedlineManager(DocumentRedlineManager const&) = delete;
     DocumentRedlineManager& operator=(DocumentRedlineManager const&) = delete;
