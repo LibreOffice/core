@@ -75,13 +75,13 @@ const bool kDefaultEra = true;     // Gregorian CE, positive year
 ImpSvNumberInputScan::ImpSvNumberInputScan(SvNFLanguageData& rCurrentLanguage)
         :
         mrCurrentLanguageData(rCurrentLanguage),
+        maNullDate( 30,12,1899 ),
         bTextInitialized( false ),
         bScanGenitiveMonths( false ),
         bScanPartitiveMonths( false ),
         eScannedType( SvNumFormatType::UNDEFINED ),
         eSetType( SvNumFormatType::UNDEFINED )
 {
-    moNullDate.emplace( 30,12,1899 );
     nYear2000 = SvNumberFormatter::GetYear2000Default();
     Reset();
     ChangeIntl();
@@ -2274,7 +2274,7 @@ input for the following reasons:
 
         if ( res && pCal->isValid() )
         {
-            double fDiff = DateTime::Sub( DateTime(*moNullDate), pCal->getEpochStart());
+            double fDiff = DateTime::Sub( DateTime(maNullDate), pCal->getEpochStart());
             fDays = ::rtl::math::approxFloor( pCal->getLocalDateTime() );
             fDays -= fDiff;
             nTryOrder = nFormatOrder; // break for
@@ -3858,7 +3858,7 @@ void ImpSvNumberInputScan::ChangeNullDate( const sal_uInt16 Day,
                                            const sal_uInt16 Month,
                                            const sal_Int16 Year )
 {
-    moNullDate = Date(Day, Month, Year);
+    maNullDate = Date(Day, Month, Year);
 }
 
 

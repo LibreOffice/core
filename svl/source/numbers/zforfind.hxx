@@ -88,10 +88,10 @@ private:
     std::unique_ptr<OUString[]> pUpperDayText;                 //* Array of day of week names, uppercase
     std::unique_ptr<OUString[]> pUpperAbbrevDayText;           //* Array of day of week names, abbreviated, uppercase
     OUString  aUpperCurrSymbol;                 //* Currency symbol, uppercase
+    Date    maNullDate;                 //* 30Dec1899
     bool    bTextInitialized;                   //* Whether days and months are initialized
     bool    bScanGenitiveMonths;                //* Whether to scan an input for genitive months
     bool    bScanPartitiveMonths;               //* Whether to scan an input for partitive months
-    std::optional<Date> moNullDate;                 //* 30Dec1899
     // Variables for provisional results:
     OUString   sStrArray[SV_MAX_COUNT_INPUT_STRINGS];//* Array of scanned substrings
     bool       IsNum[SV_MAX_COUNT_INPUT_STRINGS];    //* Whether a substring is numeric
