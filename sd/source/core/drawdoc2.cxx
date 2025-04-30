@@ -806,7 +806,7 @@ bool SdDrawDocument::MoveSelectedPages(sal_uInt16 nTargetPage)
 // + Move selected pages after said page
 //   (nTargetPage = (sal_uInt16)-1  --> move before first page)
 // + Returns sal_True when the page has been moved
-bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, std::vector<SdPage*>& vSelectedPages)
+bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*>& rSelectedPages)
 {
     SdPage* pPage              = nullptr;
     sal_uInt16 nPage;
@@ -838,8 +838,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, std::vector<SdPage*>& vSe
     // Insert before the first page
     if (nPage == sal_uInt16(-1))
     {
-        std::vector<SdPage*>::reverse_iterator iter;
-        for (iter = vSelectedPages.rbegin(); iter != vSelectedPages.rend(); ++iter)
+        for (auto iter = rSelectedPages.rbegin(); iter != rSelectedPages.rend(); ++iter)
         {
             nPage = (*iter)->GetPageNum();
             if (nPage != 0)
@@ -861,7 +860,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, std::vector<SdPage*>& vSe
     {
         nTargetPage = 2 * nPage + 1;    // PageKind::Standard --> absolute
 
-        for (const auto& rpPage : vSelectedPages)
+        for (const auto& rpPage : rSelectedPages)
         {
             nPage = rpPage->GetPageNum();
             if (nPage > nTargetPage)

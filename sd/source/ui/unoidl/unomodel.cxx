@@ -3991,10 +3991,9 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate)
         = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewSh->GetViewShellBase());
     sd::slidesorter::SharedPageSelection pSelectedPage
         = pSlideSorter ? pSlideSorter->GetPageSelection() : nullptr;
-    std::vector<SdPage*> aPageList;
-    if (pSelectedPage)
-        aPageList = *pSelectedPage;
-    mpDoc->MovePages(nPosition, aPageList);
+    if (!pSelectedPage)
+        return;
+    mpDoc->MovePages(nPosition, *pSelectedPage);
 }
 
 OUString SdXImpressDocument::getPartInfo(int nPart)
