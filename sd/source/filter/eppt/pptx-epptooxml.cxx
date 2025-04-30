@@ -877,7 +877,7 @@ void PowerPointExport::WriteEmbeddedFontList()
         aFontFamilyNameSet.insert(sFamilyName);
     }
 
-    // if there are fonts to embed and font embeding enabled
+    // if there are fonts to embed and font embedding enabled
     mPresentationFS->startElementNS(XML_p, XML_embeddedFontLst);
     for (auto const& rInfo : aEmbeddedFontInfo)
     {
