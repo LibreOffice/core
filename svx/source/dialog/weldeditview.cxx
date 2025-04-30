@@ -23,11 +23,9 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext2.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
@@ -510,13 +508,9 @@ public:
 };
 }
 
-typedef cppu::WeakImplHelper<css::lang::XServiceInfo, css::accessibility::XAccessible,
-                             css::accessibility::XAccessibleComponent,
-                             css::accessibility::XAccessibleContext2,
-                             css::accessibility::XAccessibleEventBroadcaster>
-    WeldEditAccessibleBaseClass;
-
-class WeldEditAccessible : public WeldEditAccessibleBaseClass
+class WeldEditAccessible
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
 {
     weld::CustomWidgetController* m_pController;
     EditEngine* m_pEditEngine;
@@ -545,8 +539,11 @@ public:
     EditEngine* GetEditEngine() { return m_pEditEngine; }
     EditView* GetEditView() { return m_pEditView; }
 
-    void ClearWin()
+    void SAL_CALL dispose() override
     {
+        if (!isAlive())
+            return;
+
         // remove handler before current object gets destroyed
         // (avoid handler being called for already dead object)
         m_pEditEngine->SetNotifyHdl(Link<EENotify&, void>());
@@ -562,6 +559,8 @@ public:
         //! (e.g. the one set by the 'SetEventSource' call)
         m_xTextHelper->Dispose();
         m_xTextHelper.reset();
+
+        OAccessibleComponentHelper::dispose();
     }
 
     // XAccessible
@@ -572,17 +571,6 @@ public:
     }
 
     // XAccessibleComponent
-    virtual sal_Bool SAL_CALL containsPoint(const css::awt::Point& rPoint) override
-    {
-        //! the arguments coordinates are relative to the current window !
-        //! Thus the top left-point is (0, 0)
-        SolarMutexGuard aGuard;
-        if (!m_pController)
-            throw css::uno::RuntimeException();
-
-        Size aSz(m_pController->GetOutputSizePixel());
-        return rPoint.X >= 0 && rPoint.Y >= 0 && rPoint.X < aSz.Width() && rPoint.Y < aSz.Height();
-    }
 
     virtual css::uno::Reference<css::accessibility::XAccessible>
         SAL_CALL getAccessibleAtPoint(const css::awt::Point& rPoint) override
@@ -594,9 +582,8 @@ public:
         return m_xTextHelper->GetAt(rPoint);
     }
 
-    virtual css::awt::Rectangle SAL_CALL getBounds() override
+    virtual css::awt::Rectangle implGetBounds() override
     {
-        SolarMutexGuard aGuard;
         if (!m_pController)
             throw css::uno::RuntimeException();
 
@@ -608,21 +595,6 @@ public:
         aRet.Y = aOutPos.Y();
         aRet.Width = aOutSize.Width();
         aRet.Height = aOutSize.Height();
-
-        return aRet;
-    }
-
-    virtual css::awt::Point SAL_CALL getLocation() override
-    {
-        SolarMutexGuard aGuard;
-        if (!m_pController)
-            throw css::uno::RuntimeException();
-
-        const css::awt::Rectangle aRect(getBounds());
-        css::awt::Point aRet;
-
-        aRet.X = aRect.X;
-        aRet.Y = aRect.Y;
 
         return aRet;
     }
@@ -643,16 +615,6 @@ public:
         }
 
         return aScreenLoc;
-    }
-
-    virtual css::awt::Size SAL_CALL getSize() override
-    {
-        SolarMutexGuard aGuard;
-        if (!m_pController)
-            throw css::uno::RuntimeException();
-
-        Size aSz(m_pController->GetOutputSizePixel());
-        return css::awt::Size(aSz.Width(), aSz.Height());
     }
 
     virtual void SAL_CALL grabFocus() override { m_pController->GrabFocus(); }
@@ -879,7 +841,7 @@ WeldEditView::~WeldEditView()
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if (m_xAccessible.is())
     {
-        m_xAccessible->ClearWin(); // make Accessible nonfunctional
+        m_xAccessible->dispose();
         m_xAccessible.clear();
     }
 #endif
