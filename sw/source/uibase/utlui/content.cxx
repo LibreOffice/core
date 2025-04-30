@@ -3815,7 +3815,7 @@ bool SwContentTree::HasContentChanged()
 
                     const SwContent* pCnt = pArrType->GetMember(j);
 
-                    if (pCnt->IsInvisible() != m_xTreeView->get_sensitive(*xEntry, 0))
+                    if (pCnt->IsInvisible() == m_xTreeView->get_sensitive(*xEntry, 0))
                     {
                         bContentChanged = true;
                         break;
