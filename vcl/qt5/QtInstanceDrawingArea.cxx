@@ -83,8 +83,17 @@ a11yrelationset QtInstanceDrawingArea::get_accessible_relation_set()
 
 AbsoluteScreenPixelPoint QtInstanceDrawingArea::get_accessible_location_on_screen()
 {
-    assert(false && "Not implemented yet");
-    return AbsoluteScreenPixelPoint(0, 0);
+    SolarMutexGuard g;
+
+    AbsoluteScreenPixelPoint aLocation;
+    GetQtInstance().RunInMainThread([&] {
+        QPoint aPos = getQWidget()->pos();
+        if (QWidget* pParent = getQWidget()->parentWidget())
+            aPos = pParent->mapToGlobal(aPos);
+        aLocation = AbsoluteScreenPixelPoint(toPoint(aPos));
+    });
+
+    return aLocation;
 }
 
 void QtInstanceDrawingArea::click(const Point&) { assert(false && "Not implemented yet"); }
