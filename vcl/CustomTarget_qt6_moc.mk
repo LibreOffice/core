@@ -10,6 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/qt6))
 
 $(call gb_CustomTarget_get_target,vcl/qt6) : \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtAccessibleWidget.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtClipboard.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtDoubleSpinBox.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtExpander.moc \

@@ -36,20 +36,27 @@ class XAccessibleTable;
 class QtFrame;
 class QtWidget;
 
-class QtAccessibleWidget final : public QAccessibleInterface,
+class QtAccessibleWidget final : public QObject,
+                                 public QAccessibleInterface,
                                  public QAccessibleActionInterface,
+#ifndef Q_MOC_RUN
 #if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
                                  public QAccessibleAttributesInterface,
 #endif
+#endif
                                  public QAccessibleTextInterface,
                                  public QAccessibleEditableTextInterface,
+#ifndef Q_MOC_RUN
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
                                  public QAccessibleSelectionInterface,
+#endif
 #endif
                                  public QAccessibleTableCellInterface,
                                  public QAccessibleTableInterface,
                                  public QAccessibleValueInterface
 {
+    Q_OBJECT
+
 public:
     QtAccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible>& xAccessible,
                        QObject* pObject);
@@ -88,6 +95,7 @@ public:
     void doAction(const QString& actionName) override;
     QStringList keyBindingsForAction(const QString& actionName) const override;
 
+#ifndef Q_MOC_RUN
 #if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
     // helper method for QAccessibleAttributesInterface
     QHash<QAccessible::Attribute, QVariant> attributes() const;
@@ -95,6 +103,7 @@ public:
     // QAccessibleAttributesInterface
     QList<QAccessible::Attribute> attributeKeys() const override;
     QVariant attributeValue(QAccessible::Attribute key) const override;
+#endif
 #endif
 
     // QAccessibleTextInterface
