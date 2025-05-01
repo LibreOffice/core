@@ -2043,7 +2043,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
 
             // If the result is VT_DISPATCH than the Sequence's element type could be Sequence
             // Look that up in the CoreReflection to make clear.
-            // That requires a recursiv conversion
+            // That requires a recursive conversion
             Any any;
             // Destination address within the out-Sequence "anySeq" where to copy the next converted element
             void* pDest= pArray + (i * nelementSize);
