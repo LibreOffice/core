@@ -810,7 +810,11 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
 
     const QVariant aAccVariant = pObject->property(PROPERTY_ACCESSIBLE);
     if (aAccVariant.isValid() && aAccVariant.canConvert<QtAccessibleWidget*>())
-        return aAccVariant.value<QtAccessibleWidget*>();
+    {
+        QtAccessibleWidget* pAccessibleWidget = aAccVariant.value<QtAccessibleWidget*>();
+        QtAccessibleRegistry::insert(pAccessibleWidget->m_xAccessible, pObject);
+        return pAccessibleWidget;
+    }
 
     if (classname == QLatin1String("QtWidget") && pObject->isWidgetType())
     {
