@@ -665,23 +665,23 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
     rtl::Reference<utl::AccessibleRelationSetHelper> pHelper = new utl::AccessibleRelationSetHelper();
 
     const SwTextFrame* pTextFrame = GetTextFrame();
-    if ( pTextFrame )
-    {
-        const SwContentFrame* pPrevContentFrame( pTextFrame->FindPrevCnt() );
-        if ( pPrevContentFrame )
-        {
-            uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pPrevContentFrame) };
-            AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_FROM, aSequence);
-            pHelper->AddRelation( aAccRel );
-        }
+    if (!pTextFrame)
+        return pHelper;
 
-        const SwContentFrame* pNextContentFrame( pTextFrame->FindNextCnt( true ) );
-        if ( pNextContentFrame )
-        {
-            uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pNextContentFrame) };
-            AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_TO, aSequence);
-            pHelper->AddRelation( aAccRel );
-        }
+    const SwContentFrame* pPrevContentFrame( pTextFrame->FindPrevCnt() );
+    if ( pPrevContentFrame )
+    {
+        uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pPrevContentFrame) };
+        AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_FROM, aSequence);
+        pHelper->AddRelation( aAccRel );
+    }
+
+    const SwContentFrame* pNextContentFrame( pTextFrame->FindNextCnt( true ) );
+    if ( pNextContentFrame )
+    {
+        uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pNextContentFrame) };
+        AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_TO, aSequence);
+        pHelper->AddRelation( aAccRel );
     }
 
     return pHelper;
