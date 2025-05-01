@@ -72,8 +72,6 @@ struct AtkObjectWrapper
         mpTextAttributes;
     css::uno::Reference<css::accessibility::XAccessibleValue> mpValue;
 
-    AtkObject *child_about_to_be_removed;
-    gint       index_of_child_about_to_be_removed;
 //    OString * m_pKeyBindings
 };
 

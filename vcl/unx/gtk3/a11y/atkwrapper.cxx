@@ -508,13 +508,6 @@ wrapper_ref_child( AtkObject *atk_obj,
 
     AtkObject* child = nullptr;
 
-    // see comments above atk_object_wrapper_remove_child
-    if( -1 < i && obj->index_of_child_about_to_be_removed == i )
-    {
-        g_object_ref( obj->child_about_to_be_removed );
-        return obj->child_about_to_be_removed;
-    }
-
     if( obj->mpContext.is() )
     {
         try {
@@ -967,9 +960,6 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
         pWrap = ATK_OBJECT_WRAPPER( obj );
         pWrap->mpAccessible = rxAccessible;
 
-        pWrap->index_of_child_about_to_be_removed = -1;
-        pWrap->child_about_to_be_removed = nullptr;
-
         pWrap->mpContext = xContext;
         pWrap->mpOrig = orig;
         if (pWrap->mpOrig)
@@ -1067,17 +1057,7 @@ void atk_object_wrapper_add_child(AtkObjectWrapper* wrapper, AtkObject *child, g
 
 void atk_object_wrapper_remove_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index)
 {
-    /*
-     * the atk-bridge GTK+ module gets back to the event source to ref the child just
-     * vanishing, so we keep this reference because the semantic on OOo side is different.
-     */
-    wrapper->child_about_to_be_removed = child;
-    wrapper->index_of_child_about_to_be_removed = index;
-
     g_signal_emit_by_name( ATK_OBJECT( wrapper ), "children_changed::remove", index, child, nullptr );
-
-    wrapper->index_of_child_about_to_be_removed = -1;
-    wrapper->child_about_to_be_removed = nullptr;
 }
 
 /*****************************************************************************/
