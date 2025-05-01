@@ -800,11 +800,14 @@ QAccessibleInterface* QtAccessibleWidget::childAt(int x, int y) const
             awt::Point(aLocalCoords.x(), aLocalCoords.y()))));
 }
 
-QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname, QObject* object)
+QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname, QObject* pObject)
 {
-    if (classname == QLatin1String("QtWidget") && object && object->isWidgetType())
+    if (!pObject)
+        return nullptr;
+
+    if (classname == QLatin1String("QtWidget") && pObject->isWidgetType())
     {
-        QtWidget* pWidget = static_cast<QtWidget*>(object);
+        QtWidget* pWidget = static_cast<QtWidget*>(pObject);
         vcl::Window* pWindow = pWidget->frame().GetWindow();
 
         if (pWindow)
@@ -812,16 +815,16 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
             css::uno::Reference<XAccessible> xAcc = pWindow->GetAccessible();
             // insert into registry so the association between the XAccessible and the QtWidget
             // is remembered rather than creating a different QtXAccessible when a QObject is needed later
-            QtAccessibleRegistry::insert(xAcc, object);
-            return new QtAccessibleWidget(xAcc, object);
+            QtAccessibleRegistry::insert(xAcc, pObject);
+            return new QtAccessibleWidget(xAcc, pObject);
         }
     }
-    if (classname == QLatin1String("QtXAccessible") && object)
+    if (classname == QLatin1String("QtXAccessible"))
     {
-        QtXAccessible* pXAccessible = static_cast<QtXAccessible*>(object);
+        QtXAccessible* pXAccessible = static_cast<QtXAccessible*>(pObject);
         if (pXAccessible->m_xAccessible.is())
         {
-            QtAccessibleWidget* pRet = new QtAccessibleWidget(pXAccessible->m_xAccessible, object);
+            QtAccessibleWidget* pRet = new QtAccessibleWidget(pXAccessible->m_xAccessible, pObject);
             // clear the reference in the QtXAccessible, no longer needed now that the QtAccessibleWidget holds one
             pXAccessible->m_xAccessible.clear();
             return pRet;
