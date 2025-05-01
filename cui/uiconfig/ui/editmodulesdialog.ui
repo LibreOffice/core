@@ -16,6 +16,10 @@
       <column type="gboolean"/>
       <!-- column-name weight1 -->
       <column type="gint"/>
+      <!-- column-name sensitive1 -->
+      <column type="gboolean"/>
+      <!-- column-name sensitive2 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkListStore" id="liststore6">
@@ -282,6 +286,7 @@
                                 <child>
                                   <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                                   <attributes>
+                                    <attribute name="sensitive">6</attribute>
                                     <attribute name="visible">3</attribute>
                                     <attribute name="active">0</attribute>
                                   </attributes>
@@ -296,6 +301,7 @@
                                 <child>
                                   <object class="GtkCellRendererText" id="cellrenderer4"/>
                                   <attributes>
+                                    <attribute name="sensitive">7</attribute>
                                     <attribute name="text">1</attribute>
                                     <attribute name="weight">5</attribute>
                                   </attributes>
