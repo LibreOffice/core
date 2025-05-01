@@ -65,7 +65,7 @@ public:
         rOffset = 0;
         rLength = 0;
 
-        for (int n = 0; n < getNumberOfRecords(); n++)
+        for (sal_uInt16 n = 0, nCount = getNumberOfRecords(); n < nCount; n++)
         {
             const font::NameRecord* pNameRecord = getNameRecord(n);
 
