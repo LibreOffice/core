@@ -20,26 +20,25 @@
 #include "testzipimpl.hxx"
 
 TestZipImpl::TestZipImpl(StreamInterface* stream)
-    : zipFile(ZipFile(stream))
-    , expectedContents()
+    : zipFile{ stream }
+    , expectedContents{ "mimetype",
+                        "Configurations2/statusbar/",
+                        "Configurations2/accelerator/current.xml",
+                        "Configurations2/floater/",
+                        "Configurations2/popupmenu/",
+                        "Configurations2/progressbar/",
+                        "Configurations2/toolpanel/",
+                        "Configurations2/menubar/",
+                        "Configurations2/toolbar/",
+                        "Configurations2/images/Bitmaps/",
+                        "content.xml",
+                        "manifest.rdf",
+                        "styles.xml",
+                        "meta.xml",
+                        "Thumbnails/thumbnail.png",
+                        "settings.xml",
+                        "META-INF/manifest.xml" }
 {
-    expectedContents.push_back("mimetype");
-    expectedContents.push_back("Configurations2/statusbar/");
-    expectedContents.push_back("Configurations2/accelerator/current.xml");
-    expectedContents.push_back("Configurations2/floater/");
-    expectedContents.push_back("Configurations2/popupmenu/");
-    expectedContents.push_back("Configurations2/progressbar/");
-    expectedContents.push_back("Configurations2/toolpanel/");
-    expectedContents.push_back("Configurations2/menubar/");
-    expectedContents.push_back("Configurations2/toolbar/");
-    expectedContents.push_back("Configurations2/images/Bitmaps/");
-    expectedContents.push_back("content.xml");
-    expectedContents.push_back("manifest.rdf");
-    expectedContents.push_back("styles.xml");
-    expectedContents.push_back("meta.xml");
-    expectedContents.push_back("Thumbnails/thumbnail.png");
-    expectedContents.push_back("settings.xml");
-    expectedContents.push_back("META-INF/manifest.xml");
     sort(expectedContents.begin(), expectedContents.end());
 }
 
