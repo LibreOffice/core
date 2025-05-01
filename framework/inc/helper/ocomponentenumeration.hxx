@@ -100,7 +100,7 @@ class OComponentEnumeration final : public ::cppu::WeakImplHelper< css::containe
             @descr      If a call "hasMoreElements()" return true, you can get the next element of list.
 
             @seealso    interface XEnumeration
-            @return     A Reference to a component, safed in an Any-structure.
+            @return     A Reference to a component, saved in an Any-structure.
 
             @onerror    If end of enumeration is arrived or there are no elements in list => a NoSuchElementException is thrown.
         *//*-*****************************************************************************************************/
