@@ -171,9 +171,7 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     if (!pFEShell)
         return;
 
-    std::list< SwAccessibleChild > aChildren;
-    m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
-
+    std::list<SwAccessibleChild> aChildren = m_rContext.GetChildren(*(m_rContext.GetMap()));
     for( const SwAccessibleChild& rChild : aChildren )
     {
         const SdrObject* pObj = rChild.GetDrawObject();
@@ -202,8 +200,7 @@ sal_Int64 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         return 1;
 
     sal_Int64 nCount = 0;
-    std::list<SwAccessibleChild> aChildren;
-    m_rContext.GetChildren(*(m_rContext.GetMap()), aChildren);
+    std::list<SwAccessibleChild> aChildren = m_rContext.GetChildren(*(m_rContext.GetMap()));
 
     const size_t nSelObjs = pFEShell->GetSelectedObjCount();
     if( nSelObjs > 0 )
@@ -272,8 +269,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     }
     else
     {
-        std::list<SwAccessibleChild> aChildren;
-        m_rContext.GetChildren(*(m_rContext.GetMap()), aChildren);
+        std::list<SwAccessibleChild> aChildren = m_rContext.GetChildren(*(m_rContext.GetMap()));
 
         const size_t nSelObjs = pFEShell->GetSelectedObjCount();
         if (nSelObjs > 0)

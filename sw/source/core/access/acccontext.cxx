@@ -595,8 +595,7 @@ css::uno::Sequence<uno::Reference<XAccessible>> SAL_CALL
 
     ThrowIfDisposed();
 
-    std::list< sw::access::SwAccessibleChild > aChildren;
-    GetChildren( *GetMap(), aChildren );
+    std::list<sw::access::SwAccessibleChild> aChildren = GetChildren(*GetMap());
 
     std::vector<uno::Reference<XAccessible>> aRet;
     aRet.reserve(aChildren.size());
