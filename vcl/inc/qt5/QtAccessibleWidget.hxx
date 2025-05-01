@@ -189,6 +189,9 @@ public:
 
     // Factory
     static QAccessibleInterface* customFactory(const QString& classname, QObject* object);
+    static void
+    setCustomAccessible(QObject& rObject,
+                        const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible);
 
 private:
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;

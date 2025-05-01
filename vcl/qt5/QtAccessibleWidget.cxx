@@ -64,6 +64,10 @@ using namespace css;
 using namespace css::accessibility;
 using namespace css::uno;
 
+// property used to specify the QtAccessibleWidget* that should be used as the
+// custom accessible interface for an object
+const char* const PROPERTY_ACCESSIBLE = "accessible-interface";
+
 QtAccessibleWidget::QtAccessibleWidget(const Reference<XAccessible>& xAccessible, QObject& rObject)
     : m_xAccessible(xAccessible)
     , m_rObject(rObject)
@@ -804,6 +808,10 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
     if (!pObject)
         return nullptr;
 
+    const QVariant aAccVariant = pObject->property(PROPERTY_ACCESSIBLE);
+    if (aAccVariant.isValid() && aAccVariant.canConvert<QtAccessibleWidget*>())
+        return aAccVariant.value<QtAccessibleWidget*>();
+
     if (classname == QLatin1String("QtWidget") && pObject->isWidgetType())
     {
         QtWidget* pWidget = static_cast<QtWidget*>(pObject);
@@ -832,6 +840,22 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
     }
 
     return nullptr;
+}
+
+void QtAccessibleWidget::setCustomAccessible(QObject& rObject,
+                                             const uno::Reference<XAccessible>& rxAccessible)
+{
+    assert(rxAccessible.is());
+
+    // unset/delete the current/default accessible of the object
+    QAccessibleInterface* pOldAccessible = QAccessible::queryAccessibleInterface(&rObject);
+    const QAccessible::Id nId = QAccessible::uniqueId(pOldAccessible);
+    QAccessible::deleteAccessibleInterface(nId);
+
+    // let QtAccessibleWidget::customFactory set the custom accessible
+    rObject.setProperty(PROPERTY_ACCESSIBLE,
+                        QVariant::fromValue(new QtAccessibleWidget(rxAccessible, rObject)));
+    QAccessible::queryAccessibleInterface(&rObject);
 }
 
 // QAccessibleActionInterface

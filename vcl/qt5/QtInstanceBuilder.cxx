@@ -11,6 +11,7 @@
 
 #include <unordered_set>
 
+#include <QtAccessibleWidget.hxx>
 #include <QtBuilder.hxx>
 #include <QtInstanceAssistant.hxx>
 #include <QtInstanceBox.hxx>
@@ -414,11 +415,16 @@ std::unique_ptr<weld::Expander> QtInstanceBuilder::weld_expander(const OUString&
     return std::make_unique<QtInstanceExpander>(pExpander);
 }
 
-std::unique_ptr<weld::DrawingArea>
-QtInstanceBuilder::weld_drawing_area(const OUString& rId, const a11yref&, FactoryFunction, void*)
+std::unique_ptr<weld::DrawingArea> QtInstanceBuilder::weld_drawing_area(const OUString& rId,
+                                                                        const a11yref& rA11yImpl,
+                                                                        FactoryFunction, void*)
 {
     QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
     assert(pLabel);
+
+    if (rA11yImpl.is())
+        QtAccessibleWidget::setCustomAccessible(*pLabel, rA11yImpl);
+
     return std::make_unique<QtInstanceDrawingArea>(pLabel);
 }
 
