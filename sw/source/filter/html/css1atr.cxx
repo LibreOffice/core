@@ -1252,7 +1252,7 @@ static bool OutCSS1Rule( SwHTMLWriter& rWrt, const OUString& rSelector,
         {
             // If we are exporting styles for a tag we have to export a tag
             // rule for all properties that aren't style dependent and
-            // some class rule for the additional style dependen properties
+            // some class rule for the additional style dependent properties
             {
                 SwCSS1OutMode aMode( rWrt, CSS1_OUTMODE_NO_SCRIPT|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      &rSelector );
@@ -1354,7 +1354,7 @@ static void OutCSS1DropCapRule(
         {
             // If we are exporting styles for a tag we have to export a tag
             // rule for all properties that aren't style dependent and
-            // some class rule for the additional style dependen properties
+            // some class rule for the additional style dependent properties
             {
                 SwCSS1OutMode aMode( rWrt, CSS1_OUTMODE_NO_SCRIPT|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      &rSelector );
