@@ -19,6 +19,7 @@
 #include <test/lokcallback.hxx>
 #include <vcl/scheduler.hxx>
 #include <tabvwsh.hxx>
+#include <scmod.hxx>
 
 #include <docuno.hxx>
 
@@ -203,6 +204,21 @@ CPPUNIT_TEST_FIXTURE(Test, testDecimalSeparatorInfo)
 
     // Cell B1 has language set to Turkish. Decimal separator should be ",".
     CPPUNIT_ASSERT_EQUAL(std::string(","), aView1.decimalSeparator);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCool11739LocaleDialogFieldUnit)
+{
+    createDoc("empty.ods");
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    pView1->SetLOKLocale("fr-FR");
+
+    FieldUnit eMetric = SC_MOD()->GetMetric();
+
+    // Without the fix, it fails with
+    // - Expected: 2
+    // - Actual  : 8
+    // where 2 is FieldUnit::CM and 8 is FieldUnit::INCH
+    CPPUNIT_ASSERT_EQUAL(FieldUnit::CM, eMetric);
 }
 }
 
