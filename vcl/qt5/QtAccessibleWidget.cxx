@@ -330,8 +330,8 @@ QAccessibleInterface* QtAccessibleWidget::parent() const
         return QAccessible::queryAccessibleInterface(
             QtAccessibleRegistry::getQObject(xAc->getAccessibleParent()));
 
-    // go via the QObject hierarchy; some a11y objects like the application
-    // (at the root of the a11y hierarchy) are handled solely by Qt and have
+    // go via the QObject hierarchy; a11y objects like the application object
+    // and native weld::Widgets are handled solely by Qt and have
     // no LO-internal a11y objects associated with them
     QObject* pObj = object();
     if (pObj && pObj->parent())

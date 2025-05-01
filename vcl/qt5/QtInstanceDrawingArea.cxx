@@ -71,13 +71,13 @@ OutputDevice& QtInstanceDrawingArea::get_ref_device() { return *m_xDevice; }
 
 a11yref QtInstanceDrawingArea::get_accessible_parent()
 {
-    assert(false && "Not implemented yet");
+    // parent is handled via native QWidget hierarchy
     return nullptr;
 }
 
 a11yrelationset QtInstanceDrawingArea::get_accessible_relation_set()
 {
-    assert(false && "Not implemented yet");
+    // relations are handled natively in Qt
     return nullptr;
 }
 
