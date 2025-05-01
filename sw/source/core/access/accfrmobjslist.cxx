@@ -131,8 +131,7 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
                                     m_rList.GetAccMap().GetContextImpl( &rFrame, false );
                 if( xAccImpl.is() )
                 {
-                    SwAccessibleContext* pAccImpl = xAccImpl.get();
-                    m_aCurr = SwAccessibleChild( pAccImpl->GetAdditionalAccessibleChild( m_nNextObj - nObjsCount ) );
+                    m_aCurr = SwAccessibleChild(xAccImpl->GetAdditionalAccessibleChild(m_nNextObj - nObjsCount));
                     ++m_nNextObj;
                 }
             }
