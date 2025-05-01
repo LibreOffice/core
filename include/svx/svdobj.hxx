@@ -913,6 +913,7 @@ protected:
 
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact();
 
+    static void ImpCommonDragCalcRect(const SdrDragStat& rDrag, tools::Rectangle& rTmpRect);
     tools::Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 
     // for GetDragComment

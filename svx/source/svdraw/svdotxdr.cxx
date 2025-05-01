@@ -74,72 +74,12 @@ bool SdrTextObj::hasSpecialDrag() const
 tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
 {
     tools::Rectangle aTmpRect(getRectangle());
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    SdrHdlKind eHdl=pHdl==nullptr ? SdrHdlKind::Move : pHdl->GetKind();
-    bool bEcke=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::LowerLeft || eHdl==SdrHdlKind::LowerRight);
-    bool bOrtho=rDrag.GetView()!=nullptr && rDrag.GetView()->IsOrtho();
-    bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
     // Unrotate:
     if (maGeo.m_nRotationAngle) RotatePoint(aPos,aTmpRect.TopLeft(),-maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
     // Unshear:
     if (maGeo.m_nShearAngle) ShearPoint(aPos,aTmpRect.TopLeft(),-maGeo.mfTanShearAngle);
-
-    bool bLft=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::Left  || eHdl==SdrHdlKind::LowerLeft);
-    bool bRgt=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Right || eHdl==SdrHdlKind::LowerRight);
-    bool bTop=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Upper || eHdl==SdrHdlKind::UpperLeft);
-    bool bBtm=(eHdl==SdrHdlKind::LowerRight || eHdl==SdrHdlKind::Lower || eHdl==SdrHdlKind::LowerLeft);
-    if (bLft) aTmpRect.SetLeft(aPos.X() );
-    if (bRgt) aTmpRect.SetRight(aPos.X() );
-    if (bTop) aTmpRect.SetTop(aPos.Y() );
-    if (bBtm) aTmpRect.SetBottom(aPos.Y() );
-    if (bOrtho) { // Ortho
-        tools::Long nWdt0=getRectangle().Right() - getRectangle().Left();
-        tools::Long nHgt0=getRectangle().Bottom() - getRectangle().Top();
-        tools::Long nXMul=aTmpRect.Right() -aTmpRect.Left();
-        tools::Long nYMul=aTmpRect.Bottom()-aTmpRect.Top();
-        tools::Long nXDiv=nWdt0;
-        tools::Long nYDiv=nHgt0;
-        bool bXNeg=(nXMul<0)!=(nXDiv<0);
-        bool bYNeg=(nYMul<0)!=(nYDiv<0);
-        nXMul=std::abs(nXMul);
-        nYMul=std::abs(nYMul);
-        nXDiv=std::abs(nXDiv);
-        nYDiv=std::abs(nYDiv);
-        Fraction aXFact(nXMul,nXDiv); // fractions for canceling
-        Fraction aYFact(nYMul,nYDiv); // and for comparing
-        nXMul=aXFact.GetNumerator();
-        nYMul=aYFact.GetNumerator();
-        nXDiv=aXFact.GetDenominator();
-        nYDiv=aYFact.GetDenominator();
-        if (bEcke) { // corner point handles
-            bool bUseX=(aXFact<aYFact) != bBigOrtho;
-            if (bUseX) {
-                tools::Long nNeed=tools::Long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
-                if (bYNeg) nNeed=-nNeed;
-                if (bTop) aTmpRect.SetTop(aTmpRect.Bottom()-nNeed );
-                if (bBtm) aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
-            } else {
-                tools::Long nNeed=tools::Long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
-                if (bXNeg) nNeed=-nNeed;
-                if (bLft) aTmpRect.SetLeft(aTmpRect.Right()-nNeed );
-                if (bRgt) aTmpRect.SetRight(aTmpRect.Left()+nNeed );
-            }
-        } else { // apex handles
-            if ((bLft || bRgt) && nXDiv!=0) {
-                tools::Long nHgt0b=getRectangle().Bottom() - getRectangle().Top();
-                tools::Long nNeed=tools::Long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
-                aTmpRect.AdjustTop( -((nNeed-nHgt0b)/2) );
-                aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
-            }
-            if ((bTop || bBtm) && nYDiv!=0) {
-                tools::Long nWdt0b=getRectangle().Right() - getRectangle().Left();
-                tools::Long nNeed=tools::Long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
-                aTmpRect.AdjustLeft( -((nNeed-nWdt0b)/2) );
-                aTmpRect.SetRight(aTmpRect.Left()+nNeed );
-            }
-        }
-    }
+    ImpCommonDragCalcRect( rDrag, aTmpRect );
     if (dynamic_cast<const SdrObjCustomShape*>(this) ==  nullptr)        // not justifying when in CustomShapes, to be able to detect if a shape has to be mirrored
         ImpJustifyRect(aTmpRect);
     return aTmpRect;

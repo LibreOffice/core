@@ -1249,71 +1249,95 @@ void SdrObject::addCropHandles(SdrHdlList& /*rTarget*/) const
     // SdrGrafObj and SwVirtFlyDrawObj
 }
 
-tools::Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
+void SdrObject::ImpCommonDragCalcRect(const SdrDragStat& rDrag, tools::Rectangle& rTmpRect)
 {
-    tools::Rectangle aTmpRect(GetSnapRect());
-    tools::Rectangle aRect(aTmpRect);
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    SdrHdlKind eHdl=pHdl==nullptr ? SdrHdlKind::Move : pHdl->GetKind();
-    bool bEcke=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::LowerLeft || eHdl==SdrHdlKind::LowerRight);
-    bool bOrtho=rDrag.GetView()!=nullptr && rDrag.GetView()->IsOrtho();
-    bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
+    const tools::Rectangle aRect(rTmpRect);
+    const SdrHdl* pHdl = rDrag.GetHdl();
+    SdrHdlKind eHdl = (pHdl==nullptr ? SdrHdlKind::Move : pHdl->GetKind());
+    bool bCorner = (eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::LowerLeft || eHdl==SdrHdlKind::LowerRight);
+    bool bOrtho = rDrag.GetView()!=nullptr && rDrag.GetView()->IsOrtho();
+    bool bBigOrtho = bCorner && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
-    bool bLft=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::Left  || eHdl==SdrHdlKind::LowerLeft);
-    bool bRgt=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Right || eHdl==SdrHdlKind::LowerRight);
-    bool bTop=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Upper || eHdl==SdrHdlKind::UpperLeft);
-    bool bBtm=(eHdl==SdrHdlKind::LowerRight || eHdl==SdrHdlKind::Lower || eHdl==SdrHdlKind::LowerLeft);
-    if (bLft) aTmpRect.SetLeft(aPos.X() );
-    if (bRgt) aTmpRect.SetRight(aPos.X() );
-    if (bTop) aTmpRect.SetTop(aPos.Y() );
-    if (bBtm) aTmpRect.SetBottom(aPos.Y() );
-    if (bOrtho) { // Ortho
-        tools::Long nWdt0=aRect.Right() -aRect.Left();
-        tools::Long nHgt0=aRect.Bottom()-aRect.Top();
-        tools::Long nXMul=aTmpRect.Right() -aTmpRect.Left();
-        tools::Long nYMul=aTmpRect.Bottom()-aTmpRect.Top();
-        tools::Long nXDiv=nWdt0;
-        tools::Long nYDiv=nHgt0;
-        bool bXNeg=(nXMul<0)!=(nXDiv<0);
-        bool bYNeg=(nYMul<0)!=(nYDiv<0);
-        nXMul=std::abs(nXMul);
-        nYMul=std::abs(nYMul);
-        nXDiv=std::abs(nXDiv);
-        nYDiv=std::abs(nYDiv);
-        Fraction aXFact(nXMul,nXDiv); // fractions for canceling
-        Fraction aYFact(nYMul,nYDiv); // and for comparing
-        nXMul=aXFact.GetNumerator();
-        nYMul=aYFact.GetNumerator();
-        nXDiv=aXFact.GetDenominator();
-        nYDiv=aYFact.GetDenominator();
-        if (bEcke) { // corner point handles
-            bool bUseX=(aXFact<aYFact) != bBigOrtho;
-            if (bUseX) {
-                tools::Long nNeed=tools::Long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
-                if (bYNeg) nNeed=-nNeed;
-                if (bTop) aTmpRect.SetTop(aTmpRect.Bottom()-nNeed );
-                if (bBtm) aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
-            } else {
-                tools::Long nNeed=tools::Long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
-                if (bXNeg) nNeed=-nNeed;
-                if (bLft) aTmpRect.SetLeft(aTmpRect.Right()-nNeed );
-                if (bRgt) aTmpRect.SetRight(aTmpRect.Left()+nNeed );
+    bool bLft = (eHdl==SdrHdlKind::UpperLeft  || eHdl==SdrHdlKind::Left  || eHdl==SdrHdlKind::LowerLeft);
+    bool bRgt = (eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Right || eHdl==SdrHdlKind::LowerRight);
+    bool bTop = (eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Upper || eHdl==SdrHdlKind::UpperLeft);
+    bool bBtm = (eHdl==SdrHdlKind::LowerRight || eHdl==SdrHdlKind::Lower || eHdl==SdrHdlKind::LowerLeft);
+    if (bLft)
+        rTmpRect.SetLeft(aPos.X() );
+    else if (bRgt)
+        rTmpRect.SetRight(aPos.X() );
+    if (bTop)
+        rTmpRect.SetTop(aPos.Y() );
+    else if (bBtm)
+        rTmpRect.SetBottom(aPos.Y() );
+    if (bOrtho)  // Ortho
+    {
+        tools::Long nWdt0 = aRect.Right() - aRect.Left();
+        tools::Long nHgt0 = aRect.Bottom()- aRect.Top();
+        tools::Long nXMul = rTmpRect.Right() - rTmpRect.Left();
+        tools::Long nYMul = rTmpRect.Bottom()- rTmpRect.Top();
+        tools::Long nXDiv = nWdt0;
+        tools::Long nYDiv = nHgt0;
+        bool bXNeg = ((nXMul<0) != (nXDiv<0));
+        bool bYNeg = ((nYMul<0) != (nYDiv<0));
+        nXMul = std::abs(nXMul);
+        nYMul = std::abs(nYMul);
+        nXDiv = std::abs(nXDiv);
+        nYDiv = std::abs(nYDiv);
+        Fraction aXFact(nXMul, nXDiv); // fractions for canceling
+        Fraction aYFact(nYMul, nYDiv); // and for comparing
+        nXMul = aXFact.GetNumerator();
+        nYMul = aYFact.GetNumerator();
+        nXDiv = aXFact.GetDenominator();
+        nYDiv = aYFact.GetDenominator();
+        if (bCorner) // corner point handles
+        {
+            bool bUseX = ((aXFact<aYFact) != bBigOrtho);
+            if (bUseX)
+            {
+                tools::Long nNeed = tools::Long( BigInt(nHgt0) * BigInt(nXMul) / BigInt(nXDiv) );
+                if (bYNeg)
+                    nNeed = -nNeed;
+                if (bTop)
+                    rTmpRect.SetTop( rTmpRect.Bottom() - nNeed );
+                else if (bBtm)
+                    rTmpRect.SetBottom( rTmpRect.Top() + nNeed );
             }
-        } else { // apex handles
-            if ((bLft || bRgt) && nXDiv!=0) {
-                tools::Long nHgt0b=aRect.Bottom()-aRect.Top();
-                tools::Long nNeed=tools::Long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
-                aTmpRect.AdjustTop( -((nNeed-nHgt0b)/2) );
-                aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
+            else
+            {
+                tools::Long nNeed = tools::Long( BigInt(nWdt0) * BigInt(nYMul) / BigInt(nYDiv) );
+                if (bXNeg)
+                    nNeed = -nNeed;
+                if (bLft)
+                    rTmpRect.SetLeft(rTmpRect.Right()-nNeed );
+                else if (bRgt)
+                    rTmpRect.SetRight(rTmpRect.Left()+nNeed );
             }
-            if ((bTop || bBtm) && nYDiv!=0) {
-                tools::Long nWdt0b=aRect.Right()-aRect.Left();
-                tools::Long nNeed=tools::Long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
-                aTmpRect.AdjustLeft( -((nNeed-nWdt0b)/2) );
-                aTmpRect.SetRight(aTmpRect.Left()+nNeed );
+        }
+        else // apex handles
+        {
+            if ((bLft || bRgt) && nXDiv!=0)
+            {
+                tools::Long nHgt0b = aRect.Bottom() - aRect.Top();
+                tools::Long nNeed = tools::Long( BigInt(nHgt0b) * BigInt(nXMul) / BigInt(nXDiv) ) ;
+                rTmpRect.AdjustTop( -((nNeed-nHgt0b)/2) );
+                rTmpRect.SetBottom( rTmpRect.Top() + nNeed );
+            }
+            else if ((bTop || bBtm) && nYDiv!=0)
+            {
+                tools::Long nWdt0b = aRect.Right() - aRect.Left();
+                tools::Long nNeed = tools::Long( BigInt(nWdt0b) * BigInt(nYMul) / BigInt(nYDiv) );
+                rTmpRect.AdjustLeft( -((nNeed-nWdt0b)/2) );
+                rTmpRect.SetRight( rTmpRect.Left() + nNeed );
             }
         }
     }
+}
+
+tools::Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
+{
+    tools::Rectangle aTmpRect(GetSnapRect());
+    ImpCommonDragCalcRect( rDrag, aTmpRect );
     aTmpRect.Normalize();
     return aTmpRect;
 }
