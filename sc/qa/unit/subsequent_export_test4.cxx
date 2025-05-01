@@ -2208,6 +2208,41 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165886)
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[2]/x:f", u"OR(D4=0,D4<>’’)");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166413)
+{
+    createScDoc("xlsx/tdf166413.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // Without the accompanying fix in place, this test would have failed with
+    // - Expected: NOT(ISERROR(SEARCH("""ABC""",A1)))
+    // - Actual  : NOT(ISERROR(SEARCH(""ABC"",A1)))
+    assertXPathContent(pSheet,
+                       "/x:worksheet/x:conditionalFormatting[@sqref=\"A1:C1\"]/x:cfRule/x:formula",
+                       u"NOT(ISERROR(SEARCH(\"\"\"ABC\"\"\",A1)))");
+    // Similarly
+    // - Expected: ISERROR(SEARCH("""ABC""",A2))
+    // - Actual  : ISERROR(SEARCH(""ABC"",A2))
+    assertXPathContent(pSheet,
+                       "/x:worksheet/x:conditionalFormatting[@sqref=\"A2:C2\"]/x:cfRule/x:formula",
+                       u"ISERROR(SEARCH(\"\"\"ABC\"\"\",A2))");
+    // Similarly
+    // - Expected: LEFT(A3,LEN("""ABC"""))="""ABC"""
+    // - Actual  : LEFT(A3,LEN(""ABC""))=""ABC""
+    assertXPathContent(pSheet,
+                       "/x:worksheet/x:conditionalFormatting[@sqref=\"A3:C3\"]/x:cfRule/x:formula",
+                       u"LEFT(A3,LEN(\"\"\"ABC\"\"\"))=\"\"\"ABC\"\"\"");
+    // Similarly
+    // - Expected: RIGHT(A4,LEN("""ABC"""))="""ABC"""
+    // - Actual  : RIGHT(A4,LEN(""ABC""))=""ABC""
+    assertXPathContent(pSheet,
+                       "/x:worksheet/x:conditionalFormatting[@sqref=\"A4:C4\"]/x:cfRule/x:formula",
+                       u"RIGHT(A4,LEN(\"\"\"ABC\"\"\"))=\"\"\"ABC\"\"\"");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1001,11 +1001,13 @@ bool RequiresFixedFormula(ScConditionMode eMode)
     return false;
 }
 
-OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, std::string_view rText)
+OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const OString& rText)
 {
     OStringBuffer aBuffer;
     XclXmlUtils::ToOString(aBuffer, rAddress);
     OString aPos = aBuffer.makeStringAndClear();
+    // double quotes in rText need to be escaped
+    const OString aText = rText.replaceAll("\""_ostr, "\"\""_ostr);
     switch (eMode)
     {
         case ScConditionMode::Error:
@@ -1013,13 +1015,13 @@ OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, std::s
         case ScConditionMode::NoError:
             return OString("NOT(ISERROR(" + aPos + "))") ;
         case ScConditionMode::BeginsWith:
-            return OString("LEFT(" + aPos + ",LEN(\"" + rText + "\"))=\"" + rText + "\"");
+            return OString("LEFT(" + aPos + ",LEN(\"" + aText + "\"))=\"" + aText + "\"");
         case ScConditionMode::EndsWith:
-            return OString("RIGHT(" + aPos +",LEN(\"" + rText + "\"))=\"" + rText + "\"");
+            return OString("RIGHT(" + aPos +",LEN(\"" + aText + "\"))=\"" + aText + "\"");
         case ScConditionMode::ContainsText:
-            return OString(OString::Concat("NOT(ISERROR(SEARCH(\"") + rText + "\"," + aPos + ")))");
+            return OString(OString::Concat("NOT(ISERROR(SEARCH(\"") + aText + "\"," + aPos + ")))");
         case ScConditionMode::NotContainsText:
-            return OString(OString::Concat("ISERROR(SEARCH(\"") +  rText + "\"," + aPos + "))");
+            return OString(OString::Concat("ISERROR(SEARCH(\"") +  aText + "\"," + aPos + "))");
         default:
         break;
     }
