@@ -37,7 +37,7 @@ public:
 };
 
 Test::Test()
-    : UnoApiXmlTest("/sc/qa/unit/tiledrendering2/data/")
+    : UnoApiXmlTest("/sc/qa/unit/tiledrendering/data/")
 {
 }
 
