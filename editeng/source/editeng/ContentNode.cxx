@@ -70,7 +70,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
                 pAttrib->MoveForward( nNew );
             }
             // 0: Expand empty attribute, if at insertion point
-            else if ( pAttrib->IsEmpty() )
+            else if (pAttrib->IsEmpty() && pAttrib->IsExpandable())
             {
                 // Do not check Index, an empty one could only be there
                 // When later checking it anyhow:
@@ -90,7 +90,8 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
                 // and if not in exclude list!
                 // Otherwise, a UL will go on until a new ULDB, expanding both
 //              if ( !pAttrib->IsFeature() && !rExclList.FindAttrib( pAttrib->Which() ) )
-                if ( !pAttrib->IsFeature() && !maCharAttribList.FindEmptyAttrib( pAttrib->Which(), nIndex ) )
+                if (pAttrib->IsExpandable()
+                    && !maCharAttribList.FindEmptyAttrib(pAttrib->Which(), nIndex))
                 {
                     if ( !pAttrib->IsEdge() )
                         pAttrib->Expand( nNew );
@@ -107,7 +108,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
             // 3: Attribute starts on index...
             else if ( pAttrib->GetStart() == nIndex )
             {
-                if ( pAttrib->IsFeature() )
+                if (!pAttrib->IsExpandable())
                 {
                     pAttrib->MoveForward( nNew );
                     bResort = true;

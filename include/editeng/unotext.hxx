@@ -133,8 +133,11 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_CHAR_POSTURE_COMPLEX,     EE_CHAR_ITALIC_CTL,     ::cppu::UnoType<css::awt::FontSlant>::get(),0, MID_POSTURE }, \
     { UNO_NAME_EDIT_CHAR_WEIGHT_COMPLEX,      EE_CHAR_WEIGHT_CTL,     cppu::UnoType<float>::get(),            0, MID_WEIGHT }, \
     { UNO_NAME_EDIT_CHAR_LOCALE_COMPLEX,      EE_CHAR_LANGUAGE_CTL,   ::cppu::UnoType<css::lang::Locale>::get(),0, MID_LANG_LOCALE }, \
-    { u"CharRelief"_ustr,                      EE_CHAR_RELIEF,         ::cppu::UnoType<sal_Int16>::get(),    0, MID_RELIEF }, \
-    { u"CharInteropGrabBag"_ustr,              EE_CHAR_GRABBAG,        cppu::UnoType<css::uno::Sequence<css::beans::PropertyValue >>::get(), 0, 0}
+    { u"CharRelief"_ustr,                     EE_CHAR_RELIEF,         ::cppu::UnoType<sal_Int16>::get(),    0, MID_RELIEF }, \
+    { u"CharInteropGrabBag"_ustr,             EE_CHAR_GRABBAG,        cppu::UnoType<css::uno::Sequence<css::beans::PropertyValue >>::get(), 0, 0 }, \
+    { UNO_NAME_EDIT_CHAR_RUBY_TEXT,           EE_CHAR_RUBY,           ::cppu::UnoType<OUString>::get(), 0, MID_RUBY_TEXT }, \
+    { UNO_NAME_EDIT_CHAR_RUBY_ADJUST,         EE_CHAR_RUBY,           ::cppu::UnoType<sal_Int16>::get(), 0, MID_RUBY_ADJUST }, \
+    { UNO_NAME_EDIT_CHAR_RUBY_POSITION,       EE_CHAR_RUBY,           ::cppu::UnoType<sal_Int16>::get(), 0, MID_RUBY_POSITION }
 
 
 #define SVX_UNOEDIT_FONT_PROPERTIES \

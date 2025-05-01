@@ -36,6 +36,7 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <frmfmt.hxx>
+#include <editeng/memberids.h>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>

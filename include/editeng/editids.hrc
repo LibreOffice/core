@@ -55,6 +55,7 @@ class SvxOverlineItem;
 class SvxPageModelItem;
 class SvxParaVertAlignItem;
 class SvxPostureItem;
+class SvxRubyItem;
 class SvxScriptSpaceItem;
 class SvxShadowItem;
 class SvxShadowedItem;
@@ -149,6 +150,7 @@ class SvxWordLineModeItem;
 #define SID_ATTR_PARA_SCRIPTSPACE                       TypedWhichId<SvxScriptSpaceItem>( SID_SVX_START + 901 )
 #define SID_ATTR_PARA_HANGPUNCTUATION                   TypedWhichId<SvxHangingPunctuationItem>( SID_SVX_START + 902 )
 #define SID_ATTR_PARA_FORBIDDEN_RULES                   TypedWhichId<SvxForbiddenRuleItem>( SID_SVX_START + 903 )
+#define SID_ATTR_CHAR_RUBY                              TypedWhichId<SvxRubyItem>( SID_SVX_START + 904 )
 #define SID_ATTR_CHAR_VERTICAL                          ( SID_SVX_START + 905 )
 #define SID_ATTR_CHAR_ROTATED                           TypedWhichId<SvxCharRotateItem>( SID_SVX_START + 910 )
 #define SID_ATTR_CHAR_SCALEWIDTH                        TypedWhichId<SvxCharScaleWidthItem>( SID_SVX_START + 911 )

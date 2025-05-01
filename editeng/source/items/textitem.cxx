@@ -76,6 +76,7 @@
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
+#include <editeng/rubyitem.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 #include <docmodel/color/ComplexColorJSON.hxx>

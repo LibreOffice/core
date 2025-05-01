@@ -86,10 +86,18 @@ struct ExtraPortionInfo
     }
 };
 
+struct RubyPortionInfo
+{
+    tools::Long nXOffset = 0;
+    tools::Long nYOffset = 0;
+    sal_uInt16 nMaxAscent = 0;
+};
+
 class TextPortion
 {
 private:
     std::unique_ptr<ExtraPortionInfo> xExtraInfos;
+    std::unique_ptr<RubyPortionInfo> xRubyInfos;
     sal_Int32 nLen;
     Size aOutSz = Size(-1, -1);
     PortionKind nKind = PortionKind::TEXT;
@@ -142,6 +150,9 @@ public:
 
     ExtraPortionInfo* GetExtraInfos() const { return xExtraInfos.get(); }
     void SetExtraInfos(ExtraPortionInfo* p) { xExtraInfos.reset(p); }
+
+    RubyPortionInfo const* GetRubyInfos() const { return xRubyInfos.get(); }
+    void SetRubyInfos(std::unique_ptr<RubyPortionInfo> p) { xRubyInfos = std::move(p); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

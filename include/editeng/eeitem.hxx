@@ -60,6 +60,7 @@ class SvxBulletItem;
 class SvxNumBulletItem;
 class SvxJustifyMethodItem;
 class SvxVerJustifyItem;
+class SvxRubyItem;
 
 /*
  * NOTE: Changes in this file will probably require
@@ -127,8 +128,9 @@ inline constexpr TypedWhichId<SvxOverlineItem>        EE_CHAR_OVERLINE       (EE
 inline constexpr TypedWhichId<SvxCaseMapItem>         EE_CHAR_CASEMAP        (EE_CHAR_START+29);
 inline constexpr TypedWhichId<SfxGrabBagItem>         EE_CHAR_GRABBAG        (EE_CHAR_START+30);
 inline constexpr TypedWhichId<SvxColorItem>           EE_CHAR_BKGCOLOR       (EE_CHAR_START+31);
+inline constexpr TypedWhichId<SvxRubyItem>            EE_CHAR_RUBY           (EE_CHAR_START+32);
 
-inline constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 31);
+inline constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 32);
 
 inline constexpr sal_uInt16 EE_FEATURE_START   (EE_CHAR_END + 1);
 inline constexpr sal_uInt16 EE_FEATURE_TAB     (EE_FEATURE_START + 0);

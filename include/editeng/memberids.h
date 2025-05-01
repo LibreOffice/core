@@ -212,6 +212,12 @@
 #define MID_COMPLEX_COLOR_JSON  8
 #define MID_COMPLEX_COLOR       9
 
+// SvxRubyItem and SwFormatRuby
+#define MID_RUBY_TEXT           0
+#define MID_RUBY_ADJUST         1
+#define MID_RUBY_CHARSTYLE      2
+#define MID_RUBY_ABOVE          3
+#define MID_RUBY_POSITION       4
 
 #endif
 

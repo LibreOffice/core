@@ -399,6 +399,7 @@ enum class SfxItemType : sal_uInt16
     SvxRightMarginItemType,
     SvxRotateModeItemType,
     SvxRsidItemType,
+    SvxRubyItemType,
     SvxScriptSetItemType,
     SvxScriptSpaceItemType,
     SvxSearchItemType,

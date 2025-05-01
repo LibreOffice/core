@@ -88,6 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/items/optitems \
     editeng/source/items/paperinf \
     editeng/source/items/paraitem \
+    editeng/source/items/rubyitem \
     editeng/source/items/svdfield \
     editeng/source/items/svxfont \
     editeng/source/items/textitem \

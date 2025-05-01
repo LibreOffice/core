@@ -41,6 +41,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/rubyitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/scriptspaceitem.hxx>
@@ -625,6 +626,102 @@ tools::Long ImpEditEngine::calculateMaxLineWidth(tools::Long nStartX, SvxLRSpace
         nMaxLineWidth = 1;
 
     return nMaxLineWidth;
+}
+
+void ImpEditEngine::populateRubyInfo(ParaPortion& rParaPortion, EditLine* pLine)
+{
+    ContentNode* const pNode = rParaPortion.GetNode();
+    SvxFont aTmpFont(pNode->GetCharAttribs().GetDefFont());
+    SvxFont aRubyStartFont = aTmpFont;
+
+    sal_Int32 nTextPos = pLine->GetStart();
+    const EditCharAttrib* pNextRubyAttr
+        = pNode->GetCharAttribs().FindNextAttrib(EE_CHAR_RUBY, nTextPos);
+    TextPortion* pTPRubyStart = nullptr;
+    tools::Long nTPMaxAscent = 0;
+    tools::Long nTPTotalWidth = 0;
+    for (sal_Int32 nP = pLine->GetStartPortion(); pNextRubyAttr && nP <= pLine->GetEndPortion();
+         ++nP)
+    {
+        SeekCursor(pNode, nTextPos, aTmpFont);
+
+        TextPortion& rTP = rParaPortion.GetTextPortions()[nP];
+        rTP.SetRubyInfos({});
+
+        if (nTextPos == pNextRubyAttr->GetStart())
+        {
+            pTPRubyStart = &rTP;
+            aRubyStartFont = aTmpFont;
+            SeekCursor(pNode, nTextPos, aTmpFont);
+
+            nTPMaxAscent = 0;
+            nTPTotalWidth = 0;
+        }
+
+        nTextPos += rTP.GetLen();
+        nTPTotalWidth += rTP.GetSize().getWidth();
+
+        aTmpFont.SetPhysFont(*GetRefDevice());
+        nTPMaxAscent = std::max(
+            nTPMaxAscent, static_cast<tools::Long>(GetRefDevice()->GetFontMetric().GetAscent()));
+
+        if (pTPRubyStart && nTextPos >= pNextRubyAttr->GetEnd())
+        {
+            auto pRubyInfo = std::make_unique<RubyPortionInfo>();
+
+            // Get ruby text width
+            const auto* pRuby = static_cast<const SvxRubyItem*>(pNextRubyAttr->GetItem());
+
+            // TODO: Style support is unimplemented. For now, use a hard-coded 50% scale
+            aRubyStartFont.SetFontSize(aRubyStartFont.GetFontSize() / 2);
+            aRubyStartFont.SetPhysFont(*GetRefDevice());
+
+            auto aRubyMetrics = GetRefDevice()->GetFontMetric();
+            auto nRubyAscent = static_cast<tools::Long>(aRubyMetrics.GetAscent());
+
+            tools::Long nRubyWidth = aRubyStartFont
+                                         .QuickGetTextSize(GetRefDevice(), pRuby->GetText(), 0,
+                                                           pRuby->GetText().getLength(),
+                                                           /*pDXArray=*/nullptr, /*bStacked=*/false)
+                                         .Width();
+
+            switch (pRuby->GetAdjustment())
+            {
+                case css::text::RubyAdjust_LEFT:
+                    pRubyInfo->nXOffset = 0;
+                    break;
+
+                case css::text::RubyAdjust_RIGHT:
+                    pRubyInfo->nXOffset = nTPTotalWidth - nRubyWidth;
+                    break;
+
+                default:
+                case css::text::RubyAdjust_CENTER:
+                    pRubyInfo->nXOffset = (nTPTotalWidth - nRubyWidth) / 2;
+                    break;
+            }
+
+            switch (pRuby->GetPosition())
+            {
+                default:
+                case css::text::RubyPosition::ABOVE:
+                    pRubyInfo->nYOffset = nTPMaxAscent;
+                    pRubyInfo->nMaxAscent = nTPMaxAscent + nRubyAscent;
+                    break;
+
+                case css::text::RubyPosition::BELOW:
+                    pRubyInfo->nYOffset = -nRubyAscent;
+                    pRubyInfo->nMaxAscent = 0;
+                    break;
+            }
+
+            pTPRubyStart->SetRubyInfos(std::move(pRubyInfo));
+
+            pNextRubyAttr
+                = rParaPortion.GetNode()->GetCharAttribs().FindNextAttrib(EE_CHAR_RUBY, nTextPos);
+            pTPRubyStart = nullptr;
+        }
+    }
 }
 
 bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY, bool bIsScaling )
@@ -1449,6 +1546,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY, bool bI
 
         // Line finished => adjust
 
+        populateRubyInfo(rParaPortion, pLine);
 
         // CalcTextSize should be replaced by a continuous registering!
         Size aTextSize = pLine->CalcTextSize(rParaPortion);
@@ -1481,6 +1579,11 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY, bool bI
                 aTmpFont.SetPhysFont(*GetRefDevice());
                 ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
                 RecalcFormatterFontMetrics( aFormatterMetrics, aTmpFont );
+
+                if(const auto* pRubyInfo = rTP.GetRubyInfos(); pRubyInfo)
+                {
+                    aFormatterMetrics.nMaxAscent = std::max(aFormatterMetrics.nMaxAscent, pRubyInfo->nMaxAscent);
+                }
             }
             nTPos = nTPos + rTP.GetLen();
         }
@@ -2017,9 +2120,28 @@ void ImpEditEngine::ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, Tex
 
             if (!maStatus.IsSingleLine())
             {
-                i18n::LineBreakResults aLBR = _xBI->getLineBreak(
-                    pNode->GetString(), nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
-                nBreakPos = aLBR.breakIndex;
+                // Scan backwards for a valid break position
+                while (nMaxBreakPos > nMinBreakPos)
+                {
+                    i18n::LineBreakResults aLBR
+                        = _xBI->getLineBreak(pNode->GetString(), nMaxBreakPos, aLocale,
+                                             nMinBreakPos, aHyphOptions, aUserOptions);
+                    nBreakPos = aLBR.breakIndex;
+
+                    // Don't allow line breaks under ruby characters
+                    if (auto* pRubyAttr
+                        = pNode->GetCharAttribs().FindAttribRightOpen(EE_CHAR_RUBY, nBreakPos);
+                        pRubyAttr)
+                    {
+                        if (nBreakPos > pRubyAttr->GetStart() && nBreakPos < pRubyAttr->GetEnd())
+                        {
+                            nMaxBreakPos = pRubyAttr->GetStart();
+                            continue;
+                        }
+                    }
+
+                    break;
+                }
 
                 // show soft hyphen
                 if ( nBreakPos > 0 && CH_SOFTHYPHEN == pNode->GetString()[nBreakPos - 1] )
@@ -3443,6 +3565,44 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                         if (isXOverflowDirectionAware(aTmpPos, aClipRect))
                             break; // No further output in line necessary
+
+                        // Draw ruby characters, if present
+                        if (const auto* pRubyInfo = rTextPortion.GetRubyInfos(); pRubyInfo)
+                        {
+                            auto* pRubyAttr = rParaPortion.GetNode()->GetCharAttribs().FindAttrib(
+                                EE_CHAR_RUBY, nIndex);
+                            if (pRubyAttr && pRubyAttr->GetStart() == nIndex)
+                            {
+                                SeekCursor(rParaPortion.GetNode(), nIndex, aTmpFont, &rOutDev);
+
+                                const auto* pRuby
+                                    = static_cast<const SvxRubyItem*>(pRubyAttr->GetItem());
+                                if (rDrawPortion)
+                                {
+                                    const bool bEndOfLine(nPortion == pLine->GetEndPortion());
+                                    const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
+
+                                    const Color aOverlineColor(rOutDev.GetOverlineColor());
+                                    const Color aTextLineColor(rOutDev.GetTextLineColor());
+
+                                    Point aRubyPos = aTmpPos;
+                                    aRubyPos.AdjustX(pRubyInfo->nXOffset);
+                                    aRubyPos.AdjustY(-pRubyInfo->nYOffset);
+
+                                    auto nPrevSz = aTmpFont.GetFontSize();
+                                    aTmpFont.SetFontSize(nPrevSz / 2);
+
+                                    const DrawPortionInfo aInfo(
+                                        aRubyPos, pRuby->GetText(), 0, pRuby->GetText().getLength(),
+                                        {}, {}, aTmpFont, nParaPortion, 0, nullptr, nullptr,
+                                        bEndOfLine, bEndOfParagraph, false, nullptr, aOverlineColor,
+                                        aTextLineColor);
+                                    rDrawPortion(aInfo);
+
+                                    aTmpFont.SetFontSize(nPrevSz);
+                                }
+                            }
+                        }
 
                         switch ( rTextPortion.GetKind() )
                         {

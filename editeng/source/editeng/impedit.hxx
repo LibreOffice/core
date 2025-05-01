@@ -696,6 +696,7 @@ private:
     bool createLinesForEmptyParagraph(ParaPortion& rParaPortion, bool bIsScaling = false);
     tools::Long calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem,
                                       const SvxFontUnitMetrics& rMetrics);
+    void populateRubyInfo(ParaPortion& rParaPortion, EditLine* pLine);
     bool CreateLines(sal_Int32 nPara, sal_uInt32 nStartPosY, bool bIsScaling = false);
 
     void                CreateAndInsertEmptyLine(ParaPortion& rParaPortion);

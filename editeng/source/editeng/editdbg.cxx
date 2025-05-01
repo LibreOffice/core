@@ -38,6 +38,7 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/kernitem.hxx>
+#include <editeng/rubyitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/langitem.hxx>
@@ -173,6 +174,11 @@ struct DebOutBuffer
     {
         appendHeightAndPts(descr, rItem.GetValue(), rPool.GetMetric(rItem.Which()));
     }
+    void append(std::string_view descr, const SvxRubyItem& rItem)
+    {
+        str.append(OString::Concat(descr)
+                   + OUStringToOString(rItem.GetText(), RTL_TEXTENCODING_UTF8));
+    }
 };
 }
 
@@ -303,6 +309,9 @@ static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         break;
         case EE_CHAR_XMLATTRIBS:
             buffer.str.append("XMLAttribs=...");
+        break;
+        case EE_CHAR_RUBY:
+            buffer.append("Ruby=", rItem.StaticWhichCast(EE_CHAR_RUBY));
         break;
     }
     return buffer.str.makeStringAndClear();

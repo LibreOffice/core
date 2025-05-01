@@ -52,6 +52,7 @@ EditCharAttrib::EditCharAttrib(SfxItemPool& rPool, const SfxPoolItem& rItem, sal
 , nEnd(nE)
 , bFeature(false)
 , bEdge(false)
+, bExpandable(true)
 {
     assert((rItem.Which() >= EE_ITEMS_START) && (rItem.Which() <= EE_ITEMS_END));
     assert((rItem.Which() < EE_FEATURE_START) || (rItem.Which() > EE_FEATURE_END) || (nE == (nS+1)));
@@ -244,7 +245,15 @@ void EditCharAttribLanguage::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetLanguage( static_cast<const SvxLanguageItem*>(GetItem())->GetLanguage() );
 }
 
+EditCharAttribRuby::EditCharAttribRuby(SfxItemPool& rPool, const SfxPoolItem& rItem,
+                                       sal_Int32 nStartIn, sal_Int32 nEndIn)
+    : EditCharAttrib(rPool, rItem, nStartIn, nEndIn)
+{
+    assert(rItem.Which() == EE_CHAR_RUBY);
+    SetExpandable(false);
+}
 
+void EditCharAttribRuby::SetFont(SvxFont&, OutputDevice*) {}
 
 EditCharAttribShadow::EditCharAttribShadow(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
 : EditCharAttrib(rPool, rItem, _nStart, _nEnd)

@@ -359,6 +359,10 @@ inline constexpr OUString UNO_NAME_EDIT_CHAR_BACKGROUND_COLOR = u"CharBackColor"
 inline constexpr OUString UNO_NAME_EDIT_CHAR_BACKGROUND_COMPLEX_COLOR = u"CharBackgroundComplexColor"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_CHAR_BACKGROUND_TRANSPARENT = u"CharBackTransparent"_ustr;
 
+inline constexpr OUString UNO_NAME_EDIT_CHAR_RUBY_TEXT = u"RubyText"_ustr;
+inline constexpr OUString UNO_NAME_EDIT_CHAR_RUBY_ADJUST = u"RubyAdjust"_ustr;
+inline constexpr OUString UNO_NAME_EDIT_CHAR_RUBY_POSITION = u"RubyPosition"_ustr;
+
 inline constexpr OUString UNO_NAME_BITMAP = u"Bitmap"_ustr;
 
 inline constexpr OUString UNO_NAME_LINKDISPLAYNAME = u"LinkDisplayName"_ustr;

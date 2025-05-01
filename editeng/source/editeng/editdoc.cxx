@@ -308,6 +308,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
             return new EditCharAttribBackgroundColor(rPool, rAttr, nS, nE );
         }
         break;
+        case EE_CHAR_RUBY:
+        {
+            return new EditCharAttribRuby(rPool, rAttr, nS, nE);
+        }
+        break;
         default:
         break;
     }

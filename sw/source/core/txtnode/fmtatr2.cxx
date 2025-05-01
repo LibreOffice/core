@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 #include <poolfmt.hxx>
 #include <unomid.h>
+#include <editeng/memberids.h>
 
 #include <o3tl/any.hxx>
 #include <svl/macitem.hxx>

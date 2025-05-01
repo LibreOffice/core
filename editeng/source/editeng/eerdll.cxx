@@ -50,6 +50,7 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/rubyitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -154,6 +155,7 @@ ItemInfoPackage& getItemInfoPackageEditEngine()
             { EE_CHAR_CASEMAP, new SvxCaseMapItem( SvxCaseMap::NotMapped, EE_CHAR_CASEMAP ), SID_ATTR_CHAR_CASEMAP, SFX_ITEMINFOFLAG_NONE  },
             { EE_CHAR_GRABBAG, new SfxGrabBagItem( EE_CHAR_GRABBAG ), SID_ATTR_CHAR_GRABBAG, SFX_ITEMINFOFLAG_NONE  },
             { EE_CHAR_BKGCOLOR, new SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR ), SID_ATTR_CHAR_BACK_COLOR, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_RUBY, new SvxRubyItem( EE_CHAR_RUBY ), SID_ATTR_CHAR_RUBY, SFX_ITEMINFOFLAG_NONE },
             { EE_FEATURE_TAB, new SfxVoidItem( EE_FEATURE_TAB ), 0, SFX_ITEMINFOFLAG_NONE  },
             { EE_FEATURE_LINEBR, new SfxVoidItem( EE_FEATURE_LINEBR ), 0, SFX_ITEMINFOFLAG_NONE  },
             { EE_FEATURE_NOTCONV, new SvxColorItem( COL_RED, EE_FEATURE_NOTCONV ), SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEMINFOFLAG_NONE  },

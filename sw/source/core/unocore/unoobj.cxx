@@ -25,6 +25,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/endian.h>
 #include <unotools/collatorwrapper.hxx>
+#include <editeng/memberids.h>
 
 #include <autostyle_helper.hxx>
 #include <swtypes.hxx>

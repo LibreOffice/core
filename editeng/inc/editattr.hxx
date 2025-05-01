@@ -48,6 +48,7 @@ class EditCharAttrib
     sal_Int32               nEnd;
     bool                bFeature    :1;
     bool                bEdge       :1;
+    bool bExpandable : 1;
 
 public:
     EditCharAttrib(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd);
@@ -92,6 +93,9 @@ public:
 
     bool    IsEdge() const      { return bEdge; }
     void    SetEdge( bool b )   { bEdge = b; }
+
+    bool IsExpandable() const { return !bFeature && bExpandable; }
+    void SetExpandable(bool b) { bExpandable = b; }
 };
 
 inline sal_Int32 EditCharAttrib::GetLen() const
@@ -295,7 +299,13 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
 };
 
+class EditCharAttribRuby final : public EditCharAttrib
+{
+public:
+    EditCharAttribRuby(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd);
 
+    virtual void SetFont(SvxFont& rFont, OutputDevice* pOutDev) override;
+};
 
 class EditCharAttribTab final : public EditCharAttrib
 {
