@@ -64,9 +64,9 @@ using namespace css;
 using namespace css::accessibility;
 using namespace css::uno;
 
-QtAccessibleWidget::QtAccessibleWidget(const Reference<XAccessible>& xAccessible, QObject* pObject)
+QtAccessibleWidget::QtAccessibleWidget(const Reference<XAccessible>& xAccessible, QObject& rObject)
     : m_xAccessible(xAccessible)
-    , m_pObject(pObject)
+    , m_rObject(rObject)
 {
     Reference<XAccessibleContext> xContext = xAccessible->getAccessibleContext();
     Reference<XAccessibleEventBroadcaster> xBroadcaster(xContext, UNO_QUERY);
@@ -129,11 +129,10 @@ QtAccessibleWidget::getAccessibleTableForParent() const
 
 QWindow* QtAccessibleWidget::window() const
 {
-    assert(m_pObject);
-    if (m_pObject->isWidgetType())
+    if (m_rObject.isWidgetType())
     {
-        QWidget* pWidget = static_cast<QWidget*>(m_pObject);
-        QWidget* pWindow = pWidget->window();
+        QWidget& rWidget = static_cast<QWidget&>(m_rObject);
+        QWidget* pWindow = rWidget.window();
         if (pWindow)
             return pWindow->windowHandle();
     }
@@ -782,7 +781,7 @@ bool QtAccessibleWidget::isValid() const
     return xAc.is();
 }
 
-QObject* QtAccessibleWidget::object() const { return m_pObject; }
+QObject* QtAccessibleWidget::object() const { return &m_rObject; }
 
 void QtAccessibleWidget::setText(QAccessible::Text /* t */, const QString& /* text */) {}
 
@@ -816,7 +815,7 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
             // insert into registry so the association between the XAccessible and the QtWidget
             // is remembered rather than creating a different QtXAccessible when a QObject is needed later
             QtAccessibleRegistry::insert(xAcc, pObject);
-            return new QtAccessibleWidget(xAcc, pObject);
+            return new QtAccessibleWidget(xAcc, *pObject);
         }
     }
     if (classname == QLatin1String("QtXAccessible"))
@@ -824,7 +823,8 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
         QtXAccessible* pXAccessible = static_cast<QtXAccessible*>(pObject);
         if (pXAccessible->m_xAccessible.is())
         {
-            QtAccessibleWidget* pRet = new QtAccessibleWidget(pXAccessible->m_xAccessible, pObject);
+            QtAccessibleWidget* pRet
+                = new QtAccessibleWidget(pXAccessible->m_xAccessible, *pObject);
             // clear the reference in the QtXAccessible, no longer needed now that the QtAccessibleWidget holds one
             pXAccessible->m_xAccessible.clear();
             return pRet;

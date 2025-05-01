@@ -59,7 +59,7 @@ class QtAccessibleWidget final : public QObject,
 
 public:
     QtAccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible>& xAccessible,
-                       QObject* pObject);
+                       QObject& rObject);
 
     void invalidate();
 
@@ -203,7 +203,7 @@ private:
         return xInterface.is();
     }
 
-    QObject* m_pObject;
+    QObject& m_rObject;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
