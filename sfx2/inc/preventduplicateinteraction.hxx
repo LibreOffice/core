@@ -144,7 +144,7 @@ public:
     @short      Prevent us from showing the same interaction more than once during
                 the same transaction.
 
-    @descr      Every interaction provided to this helper will be safed ... handled by the internal
+    @descr      Every interaction provided to this helper will be saved... handled by the internal
                 used UUIInteractionHandler (!) and never be handled a second time!
 
                 On the other side there exists some interactions, which allow a retry.
