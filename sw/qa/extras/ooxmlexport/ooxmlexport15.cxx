@@ -292,6 +292,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138739, "tdf138739.docx")
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(5), 3), u"CharWeight"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf166436)
+{
+    // Without the fix in place, this test would have crashed at import time
+    loadAndReload("tdf166436.docx");
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    CPPUNIT_ASSERT(xFieldsAccess->hasElements());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf123390)
 {
     loadAndReload("tdf123390.fodt");
