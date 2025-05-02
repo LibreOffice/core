@@ -123,56 +123,13 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=2 -->
-          <object class="GtkGrid" id="grid2">
+          <object class="GtkBox" id="grid2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="row-spacing">12</property>
-            <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="grid3">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkLabel" id="label2">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="eventsconfigpage|label2">Save in:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">savein</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="savein">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="savein-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="eventsconfigpage|extended_tip|savein">Select first where to save the event binding, in the current document or in the office suite.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
@@ -239,8 +196,53 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <!-- n-columns=2 n-rows=1 -->
+              <object class="GtkGrid" id="grid3">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="column-spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="eventsconfigpage|label2">Save in:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">savein</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="savein">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="savein-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="eventsconfigpage|extended_tip|savein">Select first where to save the event binding, in the current document or in the office suite.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
