@@ -226,6 +226,9 @@ protected:
     SC_DLLPUBLIC virtual void SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                                 const css::uno::Any& aValue );
 
+    ScRangeList& AccessRanges() { return aRanges; }
+    SC_DLLPUBLIC virtual void AdjustUpdatedRanges(UpdateRefMode mode);
+
 public:
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR);
                             ScCellRangesBase(ScDocShell* pDocSh, ScRangeList aR);
@@ -956,6 +959,9 @@ public:
                             // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+
+protected:
+    void AdjustUpdatedRanges(UpdateRefMode mode) override;
 };
 
 class ScTableColumnObj final : public ScCellRangeObj,
@@ -995,6 +1001,8 @@ public:
                             // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+protected:
+    void AdjustUpdatedRanges(UpdateRefMode mode) override;
 };
 
 class ScTableRowObj final : public ScCellRangeObj
@@ -1020,6 +1028,9 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+protected:
+    void AdjustUpdatedRanges(UpdateRefMode mode) override;
 };
 
 class ScCellsObj final : public cppu::WeakImplHelper<
