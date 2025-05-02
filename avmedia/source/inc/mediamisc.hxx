@@ -24,12 +24,13 @@
 #include <unotools/resmgr.hxx>
 
 #ifdef _WIN32
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_DirectX"
+constexpr OUString AVMEDIA_MANAGER_SERVICE_NAME = u"com.sun.star.comp.avmedia.Manager_DirectX"_ustr;
 #else
 #ifdef MACOSX
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_MacAVF"
+constexpr OUString AVMEDIA_MANAGER_SERVICE_NAME = u"com.sun.star.comp.avmedia.Manager_MacAVF"_ustr;
 #else
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_GStreamer"
+constexpr OUString AVMEDIA_MANAGER_SERVICE_NAME
+    = u"com.sun.star.comp.avmedia.Manager_GStreamer"_ustr;
 #endif
 #endif
 

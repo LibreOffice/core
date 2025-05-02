@@ -192,7 +192,7 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
         else if (sToolkitName.startsWith(u"kf6") || sToolkitName.startsWith(u"qt6"))
             xPlayer = createPlayer(rURL, u"com.sun.star.comp.avmedia.Manager_Qt"_ustr, xContext);
         else
-            xPlayer = createPlayer(rURL, u"" AVMEDIA_MANAGER_SERVICE_NAME ""_ustr, xContext);
+            xPlayer = createPlayer(rURL, AVMEDIA_MANAGER_SERVICE_NAME, xContext);
     }
 
     return xPlayer;
