@@ -2702,7 +2702,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 }
             }
 
-            else if ( pSectionContext )
+            else if ( pSectionContext && m_pImpl->IsOpenField())
             {
                 FieldContextPtr pContext = m_pImpl->GetTopFieldContext();
                 uno::Reference< beans::XPropertySet > xTOC = pContext->GetTOC();
