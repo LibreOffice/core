@@ -17,6 +17,9 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 
+#include <com/sun/star/media/XManager.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <rtl/string.hxx>
@@ -30,6 +33,7 @@
 #include <vcl/timer.hxx>
 
 #include <gstwindow.hxx>
+#include <mediamisc.hxx>
 #include "QtFrameGrabber.hxx"
 #include "QtPlayer.hxx"
 
@@ -245,12 +249,55 @@ uno::Reference<::media::XPlayerWindow>
     return xRet;
 }
 
+namespace
+{
+// see also MediaWindowImpl::createPlayer
+uno::Reference<media::XFrameGrabber> createPlatformFrameGrabber(const OUString& rUrl)
+{
+    const uno::Reference<uno::XComponentContext>& xContext
+        = comphelper::getProcessComponentContext();
+    try
+    {
+        uno::Reference<css::media::XManager> xManager(
+            xContext->getServiceManager()->createInstanceWithContext(AVMEDIA_MANAGER_SERVICE_NAME,
+                                                                     xContext),
+            uno::UNO_QUERY);
+        if (!xManager.is())
+            return nullptr;
+
+        uno::Reference<media::XPlayer> xPlayer = xManager->createPlayer(rUrl);
+        if (!xPlayer.is())
+            return nullptr;
+
+        return xPlayer->createFrameGrabber();
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("avmedia", "Exception in createPlatformFrameGrabber");
+    }
+
+    return nullptr;
+}
+}
+
 uno::Reference<media::XFrameGrabber> SAL_CALL QtPlayer::createFrameGrabber()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    rtl::Reference<QtFrameGrabber> xFrameGrabber = new QtFrameGrabber(m_xMediaPlayer->source());
-    return xFrameGrabber;
+    // use the default platform frame grabber (GStreamer on Linux) by default
+    // instead of using QtFrameGrabber for now unless overriden by env variable,
+    // as QtFrameGrabber has issues (see e.g. tdf#166055)
+    static const bool bPreferQtFrameGrabber
+        = (getenv("SAL_VCL_QT_USE_QT_FRAME_GRABBER") != nullptr);
+    if (!bPreferQtFrameGrabber)
+    {
+        uno::Reference<media::XFrameGrabber> xFrameGrabber
+            = createPlatformFrameGrabber(toOUString(m_xMediaPlayer->source().url()));
+        if (xFrameGrabber.is())
+            return xFrameGrabber;
+    }
+
+    return new QtFrameGrabber(m_xMediaPlayer->source());
 }
 
 OUString SAL_CALL QtPlayer::getImplementationName()
