@@ -17,8 +17,11 @@
 #include <document.hxx>
 #include <scitems.hxx>
 
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/XCellRangeMovement.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
 
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -917,6 +920,60 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf159412)
     // i.e., the passed 1 and 2 values were lost.
 
     CPPUNIT_ASSERT_EQUAL(u"1 Long/2 Double"_ustr, aReturnValue);
+}
+
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf47479)
+{
+    createScDoc();
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    auto xSheets = xDoc->getSheets().queryThrow<container::XIndexAccess>();
+    auto xSheet = xSheets->getByIndex(0).queryThrow<sheet::XCellRangeMovement>();
+    auto xSheetAddressable = xSheet.queryThrow<sheet::XCellRangeAddressable>();
+    auto xColRowRange = xSheet.queryThrow<table::XColumnRowRange>();
+    auto xColAddressable
+        = xColRowRange->getColumns()->getByIndex(1).queryThrow<sheet::XCellRangeAddressable>();
+    auto xRowAddressable
+        = xColRowRange->getRows()->getByIndex(1).queryThrow<sheet::XCellRangeAddressable>();
+    css::table::CellRangeAddress origSheetRange = xSheetAddressable->getRangeAddress();
+    css::table::CellRangeAddress origColRange = xColAddressable->getRangeAddress();
+    css::table::CellRangeAddress origRowRange = xRowAddressable->getRangeAddress();
+    css::table::CellRangeAddress addressToRemove(origSheetRange.Sheet, 1, 1, 1, 1);
+
+    xSheet->removeRange(addressToRemove, css::sheet::CellDeleteMode_UP);
+
+    auto currentRange = xSheetAddressable->getRangeAddress();
+    CPPUNIT_ASSERT_EQUAL(origSheetRange.Sheet, currentRange.Sheet);
+    CPPUNIT_ASSERT_EQUAL(origSheetRange.StartColumn, currentRange.StartColumn);
+    CPPUNIT_ASSERT_EQUAL(origSheetRange.StartRow, currentRange.StartRow);
+    CPPUNIT_ASSERT_EQUAL(origSheetRange.EndColumn, currentRange.EndColumn);
+    // Without the fix, this would fail with
+    // - Expected: 1048575
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(origSheetRange.EndRow, currentRange.EndRow);
+
+    xSheet->removeRange(addressToRemove, css::sheet::CellDeleteMode_LEFT);
+
+    currentRange = xColAddressable->getRangeAddress();
+    CPPUNIT_ASSERT_EQUAL(origColRange.Sheet, currentRange.Sheet);
+    CPPUNIT_ASSERT_EQUAL(origColRange.StartColumn, currentRange.StartColumn);
+    // Without the fix, this would fail with
+    // - Expected: 0
+    // - Actual  : 2
+    CPPUNIT_ASSERT_EQUAL(origColRange.StartRow, currentRange.StartRow);
+    CPPUNIT_ASSERT_EQUAL(origColRange.EndColumn, currentRange.EndColumn);
+    CPPUNIT_ASSERT_EQUAL(origColRange.EndRow, currentRange.EndRow);
+
+    xSheet->removeRange(origColRange, css::sheet::CellDeleteMode_UP);
+
+    currentRange = xRowAddressable->getRangeAddress();
+    CPPUNIT_ASSERT_EQUAL(origRowRange.Sheet, currentRange.Sheet);
+    // Without the fix, this would fail with
+    // - Expected: 0
+    // - Actual  : 2
+    CPPUNIT_ASSERT_EQUAL(origRowRange.StartColumn, currentRange.StartColumn);
+    CPPUNIT_ASSERT_EQUAL(origRowRange.StartRow, currentRange.StartRow);
+    CPPUNIT_ASSERT_EQUAL(origRowRange.EndColumn, currentRange.EndColumn);
+    CPPUNIT_ASSERT_EQUAL(origRowRange.EndRow, currentRange.EndRow);
 }
 
 ScMacrosTest::ScMacrosTest()
