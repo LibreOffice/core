@@ -1475,6 +1475,8 @@ const ScMarkData* ScCellRangesBase::GetMarkData()
     return pMarkData.get();
 }
 
+void ScCellRangesBase::AdjustUpdatedRanges(UpdateRefMode) {}
+
 void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxHintId nId = rHint.GetId();
@@ -1546,18 +1548,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if ( aRanges.UpdateReference( pRefHint->GetMode(), &rDoc, pRefHint->GetRange(),
                                     pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() ) )
         {
-            if (  pRefHint->GetMode() == URM_INSDEL
-               && aRanges.size() == 1
-               && dynamic_cast<ScTableSheetObj*>(this)
-               )
-            {
-                // #101755#; the range size of a sheet does not change
-                ScRange & rR = aRanges.front();
-                rR.aStart.SetCol(0);
-                rR.aStart.SetRow(0);
-                rR.aEnd.SetCol(rDoc.MaxCol());
-                rR.aEnd.SetRow(rDoc.MaxRow());
-            }
+            AdjustUpdatedRanges(pRefHint->GetMode());
             RefChanged();
 
             // any change of the range address is broadcast to value (modify) listeners
@@ -6392,6 +6383,17 @@ SCTAB ScTableSheetObj::GetTab_Impl() const
     return 0;
 }
 
+void ScTableSheetObj::AdjustUpdatedRanges(UpdateRefMode mode)
+{
+    if (mode == URM_INSDEL)
+    {
+        ScRangeList& rRanges = AccessRanges();
+        // #101755#, tdf#47479: the range of a sheet does not change
+        rRanges.RemoveAll();
+        rRanges.push_back(GetRange());
+    }
+}
+
 // former XSheet
 
 uno::Reference<table::XTableCharts> SAL_CALL ScTableSheetObj::getCharts()
@@ -8195,6 +8197,17 @@ const SfxItemPropertyMap& ScTableColumnObj::GetItemPropertyMap()
     return pColPropSet->getPropertyMap();
 }
 
+void ScTableColumnObj::AdjustUpdatedRanges(UpdateRefMode mode)
+{
+    if (mode == URM_INSDEL)
+    {
+        ScRangeList& rRanges = AccessRanges();
+        // tdf#47479: the range of a column does not change
+        rRanges.RemoveAll();
+        rRanges.push_back(GetRange());
+    }
+}
+
 ScTableRowObj::ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab) :
     ScCellRangeObj( pDocSh, ScRange(0,nRow,nTab, pDocSh->GetDocument().MaxCol(),nRow,nTab) ),
     pRowPropSet(lcl_GetRowPropertySet())
@@ -8342,6 +8355,17 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, 
 const SfxItemPropertyMap& ScTableRowObj::GetItemPropertyMap()
 {
     return pRowPropSet->getPropertyMap();
+}
+
+void ScTableRowObj::AdjustUpdatedRanges(UpdateRefMode mode)
+{
+    if (mode == URM_INSDEL)
+    {
+        ScRangeList& rRanges = AccessRanges();
+        // tdf#47479: the range of a row does not change
+        rRanges.RemoveAll();
+        rRanges.push_back(GetRange());
+    }
 }
 
 ScCellsObj::ScCellsObj(ScDocShell* pDocSh, ScRangeList aR) :
