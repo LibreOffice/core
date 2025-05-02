@@ -164,7 +164,7 @@ Private _TestCase			As String		&apos; Exact name of test case currently running
 Private _ReturnCode			As Integer		&apos; 0 = Normal end
 											&apos; 1 = Assertion failed
 											&apos; 2 = Skip request (in Setup() only)
-											&apos;-1 = abnormal end
+											&apos; 3 = abnormal end
 Private _FailedAssert		As String		&apos; Assert function that returned a failure
 
 &apos;	Timers
@@ -1255,6 +1255,7 @@ Try:
 			If Not _ExecuteScript(_TestCase) Then GoTo Catch
 		End If
 	End If
+	iRun = _ReturnCode
 
 	&apos;	Report the end of the current test suite
 	sRunMessage = &quot;RUNTEST EXIT testsuite=&apos;&quot; &amp; LibraryName &amp; &quot;.&quot; &amp; _Module &amp; &quot;&apos; &quot; &amp; _Duration(&quot;Suite&quot;, True)
