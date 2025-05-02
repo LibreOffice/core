@@ -17,13 +17,13 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
 ))
 
 $(eval $(call gb_Library_use_externals,sofficeapp, \
-	$(if $(ENABLE_BREAKPAD),breakpad) \
-	$(if $(filter OPENCL,$(BUILD_TYPE)),clew) \
-    boost_headers \
-    dbus \
     icu_headers \
     icui18n \
     icuuc \
+    $(if $(ENABLE_BREAKPAD),breakpad) \
+    $(if $(filter OPENCL,$(BUILD_TYPE)),clew) \
+    boost_headers \
+    dbus \
     $(if $(ENABLE_CURL), \
     $(if $(filter-out EMSCRIPTEN iOS,$(OS)), \
         curl \
