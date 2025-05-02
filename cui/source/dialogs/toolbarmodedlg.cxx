@@ -49,7 +49,12 @@ void ToolbarmodeDialog::ActivatePage(const OUString& rPage)
 IMPL_LINK(ToolbarmodeDialog, OnApplyClick, weld::Button&, rButton, void)
 {
     UITabPage* pUITabPage = static_cast<UITabPage*>(GetCurTabPage());
-    const OUString& sCmd = pUITabPage->GetSelectedMode();
+    OUString sCmd = pUITabPage->GetSelectedMode();
+    if (sCmd.isEmpty())
+    {
+        SAL_WARN("cui.dialogs", "ToolbarmodeDialog: no mode selected");
+        return;
+    }
 
     //apply to all except current module
     if (&rButton == m_xResetBtn.get()) // Apply to All

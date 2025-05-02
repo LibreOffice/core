@@ -32,7 +32,7 @@ public:
     static std::unique_ptr<SfxTabPage>
     Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
-    const OUString& GetSelectedMode();
+    OUString GetSelectedMode();
     static OUString GetCurrentApp();
 };
 

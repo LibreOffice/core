@@ -128,9 +128,11 @@ int UITabPage::GetActiveRadioButton()
     return -1;
 }
 
-const OUString& UITabPage::GetSelectedMode()
+OUString UITabPage::GetSelectedMode()
 {
     int i = GetActiveRadioButton();
+    if (i < 0)
+        return OUString();
     return std::get<1>(UIMODES_ARRAY[i]);
 }
 
