@@ -375,9 +375,9 @@ public:
 }
 
 VclPtr<AbstractScInsertCellDlg> ScAbstractDialogFactory_Impl::CreateScInsertCellDlg(weld::Window* pParent,
-                                                                bool bDisallowCellMove)
+                                                                ScViewData& rViewData, bool bDisallowCellMove)
 {
-    return VclPtr<AbstractScInsertCellDlg_Impl>::Create(pParent, bDisallowCellMove);
+    return VclPtr<AbstractScInsertCellDlg_Impl>::Create(pParent, rViewData, bDisallowCellMove);
 }
 
 namespace

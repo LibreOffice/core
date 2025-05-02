@@ -386,7 +386,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        VclPtr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg(pTabViewShell->GetFrameWeld(), bTheFlag));
+                        VclPtr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg(pTabViewShell->GetFrameWeld(), GetViewData(), bTheFlag));
                         pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
                             if (nResult == RET_OK)
                             {

@@ -26,7 +26,8 @@
 
 static sal_uInt8 nInsItemChecked = 0;
 
-ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove)
+ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, ScViewData& rViewData,
+                                 bool bDisallowCellMove)
     : GenericDialogController(pParent, u"modules/scalc/ui/insertcells.ui"_ustr,
                               u"InsertCellsDialog"_ustr)
     , m_xBtnCellsDown(m_xBuilder->weld_radio_button(u"down"_ustr))
@@ -36,8 +37,7 @@ ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove)
     , m_xNumberOfRows(m_xBuilder->weld_spin_button(u"number_of_rows"_ustr))
     , m_xNumberOfCols(m_xBuilder->weld_spin_button(u"number_of_columns"_ustr))
 {
-    const ScViewData* pViewData = ScDocShell::GetViewData();
-    if (pViewData && pViewData->GetDocument().IsLayoutRTL(pViewData->GetTabNo()))
+    if (rViewData.GetDocument().IsLayoutRTL(rViewData.GetTabNo()))
         m_xBtnCellsRight->set_label(ScResId(SCSTR_INSERT_RTL));
 
     m_xNumberOfRows->set_range(1, MAX_INS_ROWS);
@@ -96,7 +96,7 @@ ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove)
     }
 
     // if some cells are selected, then disable the SpinButtons
-    const bool bMarked = pViewData && pViewData->GetMarkData().IsMarked();
+    const bool bMarked = rViewData.GetMarkData().IsMarked();
     m_xNumberOfCols->set_sensitive(bColCount && !bMarked);
     m_xNumberOfRows->set_sensitive(bRowsCount && !bMarked);
 }

@@ -22,6 +22,7 @@
 #include <vcl/weld.hxx>
 
 #include <global.hxx>
+#include "viewdata.hxx"
 
 class ScInsertCellDlg : public weld::GenericDialogController
 {
@@ -38,7 +39,7 @@ private:
     static constexpr size_t MAX_INS_COLS = 4000;
 
 public:
-    ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove);
+    ScInsertCellDlg(weld::Window* pParent, ScViewData& rViewData, bool bDisallowCellMove);
     virtual ~ScInsertCellDlg() override;
 
     InsCellCmd GetInsCellCmd() const;
