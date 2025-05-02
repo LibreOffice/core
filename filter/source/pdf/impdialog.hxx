@@ -201,7 +201,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     std::unique_ptr<weld::ComboBox> mxRbPDFVersion;
     std::unique_ptr<weld::CheckButton> mxCbTaggedPDF;
     std::unique_ptr<weld::CheckButton> mxCbExportFormFields;
-    std::unique_ptr<weld::Widget> mxFormsFrame;
+    std::unique_ptr<weld::Widget> mxFormsOptionGrid;
     std::unique_ptr<weld::ComboBox> mxLbFormsFormat;
     std::unique_ptr<weld::CheckButton> mxCbAllowDuplicateFieldNames;
     std::unique_ptr<weld::CheckButton> mxCbExportBookmarks;
