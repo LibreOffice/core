@@ -302,7 +302,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             }
             if( !m_aDBColumns.insert( std::move(pNew) ).second )
             {
-                OSL_ENSURE( false, "Spaltenname mehrfach vergeben?" );
+                OSL_ENSURE( false, "Column name given more than once?" );
             }
         }
     }
