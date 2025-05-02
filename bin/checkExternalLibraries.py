@@ -21,6 +21,20 @@ postgres_branch = ""
 mariadb_branch = ""
 libxml2_branch = ""
 
+libraryIds = {
+    "openssl": 2,
+    "curl": 1,
+    "libpng": 4,
+    "freetype": 2,
+    "lcms2": 1,
+    "cairo": 1,
+    "bzip2": 1,
+    "zlib": 1,
+    "libwebp": 1,
+    "libffi": 1,
+    "zstd": 1
+}
+
 def get_current_version(libName):
     libraryName = libName.replace("_", ".")
     libraryName = re.sub("[0-9a-f]{5,40}", "", libraryName) #SHA1
@@ -112,47 +126,16 @@ def get_latest_version(libName):
         libName = libName.split("-")[0]
 
     item = 0
-    itemId = 0
     latest_version = 0
-    if libName == "openssl":
-        item = 2
-        itemId = 2566
-    elif libName == "curl":
-        item = 1
-        itemId = 381
-    elif libName == "libpng":
-        item = 4
-        itemId = 1705
-    elif libName == "freetype":
-        item = 2
-        itemId = 854
-    elif libName == "lcms2":
-        item = 1
-        itemId = 9815
-    elif libName == "cairo":
-        item = 1
-        itemId = 247
-    elif libName == "bzip2":
-        item = 1
-        itemId = 237
-    elif libName == "zlib":
-        item = 1
-        itemId = 5303
-    elif libName == "libwebp":
-        item = 1
-        itemId = 1761
-    elif libName == "libffi":
-        item = 1
-        itemId = 1611
+
+    if libName in libraryIds:
+        item = libraryIds[libName]
 
     urlApi = "https://release-monitoring.org/api/v2/projects/?name=" + libName
     res = requests.get(urlApi)
     json = res.json()
     if not json['items']:
         return Version("0.0.0"), ""
-
-    if item != 0:
-        assert json['items'][item]['id'] == itemId, str(json['items'][item]['id']) + " != " + str(itemId)
 
     if libName == "openssl":
         for idx, ver in enumerate(json['items'][item]['stable_versions']):
