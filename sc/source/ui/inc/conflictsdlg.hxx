@@ -107,11 +107,9 @@ class ScConflictsDlg : public weld::GenericDialogController
 private:
     OUString            maStrUnknownUser;
 
-    ScViewData* const   mpViewData;
-    ScDocument*         mpOwnDoc;
-    ScChangeTrack*      mpOwnTrack;
-    ScDocument* const   mpSharedDoc;
-    ScChangeTrack*      mpSharedTrack;
+    ScViewData&         mrViewData;
+    ScDocument&         mrOwnDoc;
+    ScDocument&         mrSharedDoc;
     ScConflictsList&    mrConflictsList;
 
     Idle                maSelectionIdle;
@@ -124,7 +122,7 @@ private:
     std::unique_ptr<SvxRedlinTable> m_xLbConflicts;
 
     OUString            GetConflictString( const ScConflictsListEntry& rConflictEntry );
-    void                SetActionString(const ScChangeAction* pAction, ScDocument* pDoc, const weld::TreeIter& rEntry);
+    void                SetActionString(ScChangeAction& rAction, ScDocument& rDoc, const weld::TreeIter& rEntry);
     void                HandleListBoxSelection();
 
     void                SetConflictAction(const weld::TreeIter& rRootEntry, ScConflictAction eConflictAction);
@@ -139,7 +137,7 @@ private:
     DECL_LINK( KeepAllOthersHandle, weld::Button&, void );
 
 public:
-    ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList);
+    ScConflictsDlg(weld::Window* pParent, ScViewData& rViewData, ScDocument& rSharedDoc, ScConflictsList& rConflictsList);
     virtual ~ScConflictsDlg() override;
 
     void                UpdateView();

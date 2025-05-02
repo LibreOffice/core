@@ -1216,25 +1216,28 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             if ( aFinder.Find() )
             {
                 ScConflictsListHelper::TransformConflictsList( aConflictsList, nullptr, &aOwnInverseMergeMap );
-                bool bLoop = true;
-                while ( bLoop )
+                if (ScViewData* pViewData = GetViewData())
                 {
-                    bLoop = false;
-                    weld::Window* pWin = GetActiveDialogParent();
-                    ScConflictsDlg aDlg(pWin, GetViewData(), &rSharedDoc, aConflictsList);
-                    if (aDlg.run() == RET_CANCEL)
+                    bool bLoop = true;
+                    while ( bLoop )
                     {
-                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin,
-                                                                       VclMessageType::Question, VclButtonsType::YesNo,
-                                                                       ScResId(STR_DOC_WILLNOTBESAVED)));
-                        xQueryBox->set_default_response(RET_YES);
-                        if (xQueryBox->run() == RET_YES)
+                        bLoop = false;
+                        weld::Window* pWin = GetActiveDialogParent();
+                        ScConflictsDlg aDlg(pWin, *pViewData, rSharedDoc, aConflictsList);
+                        if (aDlg.run() == RET_CANCEL)
                         {
-                            return false;
-                        }
-                        else
-                        {
-                            bLoop = true;
+                            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin,
+                                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                                           ScResId(STR_DOC_WILLNOTBESAVED)));
+                            xQueryBox->set_default_response(RET_YES);
+                            if (xQueryBox->run() == RET_YES)
+                            {
+                                return false;
+                            }
+                            else
+                            {
+                                bLoop = true;
+                            }
                         }
                     }
                 }

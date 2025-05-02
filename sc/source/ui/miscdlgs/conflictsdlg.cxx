@@ -319,14 +319,12 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
 }
 
 
-ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList)
+ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData& rViewData, ScDocument& rSharedDoc, ScConflictsList& rConflictsList)
     : GenericDialogController(pParent, u"modules/scalc/ui/conflictsdialog.ui"_ustr, u"ConflictsDialog"_ustr)
     , maStrUnknownUser   ( ScResId( STR_UNKNOWN_USER_CONFLICT ) )
-    , mpViewData         ( pViewData )
-    , mpOwnDoc           ( nullptr )
-    , mpOwnTrack         ( nullptr )
-    , mpSharedDoc        ( pSharedDoc )
-    , mpSharedTrack      ( nullptr )
+    , mrViewData         ( rViewData )
+    , mrOwnDoc           ( mrViewData.GetDocument() )
+    , mrSharedDoc        ( rSharedDoc )
     , mrConflictsList    ( rConflictsList )
     , maSelectionIdle    ( "ScConflictsDlg maSelectionIdle" )
     , mbInSelectHdl      ( false )
@@ -337,14 +335,6 @@ ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScD
     , m_xLbConflicts(new SvxRedlinTable(m_xBuilder->weld_tree_view(u"container"_ustr), nullptr,
                                         nullptr))
 {
-    OSL_ENSURE( mpViewData, "ScConflictsDlg CTOR: mpViewData is null!" );
-    mpOwnDoc = ( mpViewData ? &mpViewData->GetDocument() : nullptr );
-    OSL_ENSURE( mpOwnDoc, "ScConflictsDlg CTOR: mpOwnDoc is null!" );
-    mpOwnTrack = ( mpOwnDoc ? mpOwnDoc->GetChangeTrack() : nullptr );
-    OSL_ENSURE( mpOwnTrack, "ScConflictsDlg CTOR: mpOwnTrack is null!" );
-    OSL_ENSURE( mpSharedDoc, "ScConflictsDlg CTOR: mpSharedDoc is null!" );
-    mpSharedTrack = ( mpSharedDoc ? mpSharedDoc->GetChangeTrack() : nullptr );
-    OSL_ENSURE( mpSharedTrack, "ScConflictsDlg CTOR: mpSharedTrack is null!" );
 
     weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();
 
@@ -382,37 +372,33 @@ ScConflictsDlg::~ScConflictsDlg()
 OUString ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflictEntry )
 {
     OUString aString;
-    if ( mpOwnTrack )
+    if ( ScChangeTrack* pOwnTrack = mrOwnDoc.GetChangeTrack() )
     {
-        const ScChangeAction* pAction = mpOwnTrack->GetAction( rConflictEntry.maOwnActions[ 0 ] );
-        if ( pAction && mpOwnDoc )
+        const ScChangeAction* pAction = pOwnTrack->GetAction( rConflictEntry.maOwnActions[ 0 ] );
+        if ( pAction )
         {
-            SCTAB nTab = pAction->GetBigRange().MakeRange( *mpOwnDoc ).aStart.Tab();
-            mpOwnDoc->GetName( nTab, aString );
+            SCTAB nTab = pAction->GetBigRange().MakeRange( mrOwnDoc ).aStart.Tab();
+            mrOwnDoc.GetName( nTab, aString );
         }
     }
     return aString;
 }
 
-void ScConflictsDlg::SetActionString(const ScChangeAction* pAction, ScDocument* pDoc, const weld::TreeIter& rEntry)
+void ScConflictsDlg::SetActionString(ScChangeAction& rAction, ScDocument& rDoc, const weld::TreeIter& rEntry)
 {
-    OSL_ENSURE( pAction, "ScConflictsDlg::GetActionString(): pAction is null!" );
-    OSL_ENSURE( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
-    if (!pAction || !pDoc)
-        return;
 
     weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();
-    OUString aDesc = pAction->GetDescription(*pDoc, true, false);
+    OUString aDesc = rAction.GetDescription(rDoc, true, false);
     rTreeView.set_text(rEntry, aDesc, 0);
 
-    OUString aUser = comphelper::string::strip(pAction->GetUser(), ' ');
+    OUString aUser = comphelper::string::strip(rAction.GetUser(), ' ');
     if ( aUser.isEmpty() )
     {
         aUser = maStrUnknownUser;
     }
     rTreeView.set_text(rEntry, aUser, 1);
 
-    DateTime aDateTime = pAction->GetDateTime();
+    DateTime aDateTime = rAction.GetDateTime();
     OUString aString = ScGlobal::getLocaleData().getDate( aDateTime ) + " " +
         ScGlobal::getLocaleData().getTime( aDateTime, false );
     rTreeView.set_text(rEntry, aString, 2);
@@ -460,12 +446,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, SelectHandle, weld::TreeView&, void)
 
 IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl, Timer *, void)
 {
-    if ( !mpViewData || !mpOwnDoc )
-    {
-        return;
-    }
-
-    ScTabView* pTabView = mpViewData->GetView();
+    ScTabView* pTabView = mrViewData.GetView();
     pTabView->DoneBlockMode();
 
     std::vector<const ScChangeAction*> aActions;
@@ -492,10 +473,10 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl, Timer *, void)
     for (size_t i = 0, nCount = aActions.size(); i < nCount; ++i)
     {
         const ScBigRange& rBigRange = aActions[i]->GetBigRange();
-        if (rBigRange.IsValid(*mpOwnDoc))
+        if (rBigRange.IsValid(mrOwnDoc))
         {
             bool bSetCursor = i == nCount - 1;
-            pTabView->MarkRange(rBigRange.MakeRange( *mpOwnDoc ), bSetCursor, bContMark);
+            pTabView->MarkRange(rBigRange.MakeRange( mrOwnDoc ), bSetCursor, bContMark);
             bContMark = true;
         }
     }
@@ -595,44 +576,48 @@ void ScConflictsDlg::UpdateView()
 
             for ( const auto& aSharedAction : rConflictEntry.maSharedActions )
             {
-                ScChangeAction* pAction = mpSharedTrack ? mpSharedTrack->GetAction(aSharedAction) : nullptr;
-                if ( pAction )
+                if ( ScChangeTrack* pSharedTrack = mrSharedDoc.GetChangeTrack() )
                 {
-                    // only display shared top content entries
-                    if ( pAction->GetType() == SC_CAT_CONTENT )
+                    if (ScChangeAction* pAction = pSharedTrack->GetAction(aSharedAction))
                     {
-                        ScChangeActionContent* pNextContent = dynamic_cast<ScChangeActionContent&>(*pAction).GetNextContent();
-                        if ( pNextContent && rConflictEntry.HasSharedAction( pNextContent->GetActionNumber() ) )
+                        // only display shared top content entries
+                        if ( pAction->GetType() == SC_CAT_CONTENT )
                         {
-                            continue;
+                            ScChangeActionContent* pNextContent = dynamic_cast<ScChangeActionContent&>(*pAction).GetNextContent();
+                            if ( pNextContent && rConflictEntry.HasSharedAction( pNextContent->GetActionNumber() ) )
+                            {
+                                continue;
+                            }
                         }
-                    }
 
-                    rTreeView.insert(xRootEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
-                    SetActionString(pAction, mpSharedDoc, *xEntry);
+                        rTreeView.insert(xRootEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
+                        SetActionString(*pAction, mrSharedDoc, *xEntry);
+                    }
                 }
             }
 
             for ( const auto& aOwnAction : rConflictEntry.maOwnActions )
             {
-                ScChangeAction* pAction = mpOwnTrack ? mpOwnTrack->GetAction(aOwnAction) : nullptr;
-                if ( pAction )
+                if ( ScChangeTrack* pOwnTrack = mrOwnDoc.GetChangeTrack() )
                 {
-                    // only display own top content entries
-                    if ( pAction->GetType() == SC_CAT_CONTENT )
+                    if (ScChangeAction* pAction = pOwnTrack->GetAction(aOwnAction))
                     {
-                        ScChangeActionContent* pNextContent = dynamic_cast<ScChangeActionContent&>(*pAction).GetNextContent();
-                        if ( pNextContent && rConflictEntry.HasOwnAction( pNextContent->GetActionNumber() ) )
+                        // only display own top content entries
+                        if ( pAction->GetType() == SC_CAT_CONTENT )
                         {
-                            continue;
+                            ScChangeActionContent* pNextContent = dynamic_cast<ScChangeActionContent&>(*pAction).GetNextContent();
+                            if ( pNextContent && rConflictEntry.HasOwnAction( pNextContent->GetActionNumber() ) )
+                            {
+                                continue;
+                            }
                         }
-                    }
 
-                    std::unique_ptr<RedlinData> pUserData(new RedlinData());
-                    pUserData->pData = static_cast< void* >( pAction );
-                    OUString aId(weld::toId(pUserData.release()));
-                    rTreeView.insert(xRootEntry.get(), -1, nullptr, &aId, nullptr, nullptr, false, xEntry.get());
-                    SetActionString(pAction, mpOwnDoc, *xEntry);
+                        std::unique_ptr<RedlinData> pUserData(new RedlinData());
+                        pUserData->pData = static_cast< void* >( pAction );
+                        OUString aId(weld::toId(pUserData.release()));
+                        rTreeView.insert(xRootEntry.get(), -1, nullptr, &aId, nullptr, nullptr, false, xEntry.get());
+                        SetActionString(*pAction, mrOwnDoc, *xEntry);
+                    }
                 }
             }
 
