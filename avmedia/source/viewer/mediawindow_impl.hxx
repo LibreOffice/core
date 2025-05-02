@@ -137,8 +137,7 @@ private:
 
     void onURLChanged();
 
-    static css::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rManagerServName,
-                                                                 const css::uno::Reference<css::uno::XComponentContext>& xContext);
+    static css::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rManagerServName);
 
     OUString maFileURL;
     OUString mTempFileURL;
