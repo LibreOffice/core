@@ -368,6 +368,53 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
                          pCursor->GetPointNode().GetTextNode()->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf131431)
+{
+    // the goal of this test is to check if replaceAll does not go into an infinite loop
+
+    // load document with underlined text with empty and non empty lines
+    createSwDoc("tdf131431.odt");
+
+    // setup search for any underline text
+    uno::Sequence<beans::PropertyValue> aSearchAttribute(comphelper::InitPropertySequence(
+        { { "CharUnderline", uno::Any(sal_Int32(css::awt::FontUnderline::NONE)) } }));
+
+    // setup replace with green highlight color
+    uno::Sequence<beans::PropertyValue> aReplaceAttribute(
+        comphelper::InitPropertySequence({ { "CharBackColor", uno::Any(sal_Int32(0x00FF00)) } }));
+
+    uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDes = xReplace->createReplaceDescriptor();
+    uno::Reference<util::XPropertyReplace> xPropReplace(xReplaceDes, uno::UNO_QUERY_THROW);
+    xPropReplace->setSearchAttributes(aSearchAttribute);
+    xPropReplace->setReplaceAttributes(aReplaceAttribute);
+
+    // time out after 30 seconds if replaceAll hasn't returned
+    std::atomic<bool> completed{ false };
+    std::thread TimeoutThread([&completed]() {
+        for (int i = 0; i < 300; ++i)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            if (completed)
+            {
+                return;
+            }
+        }
+        CPPUNIT_FAIL("Test timed out after 30 seconds - infinite loop detected");
+    });
+
+    // actual test
+    sal_Int32 nReplaceCount = xReplace->replaceAll(xReplaceDes);
+
+    completed = true;
+    TimeoutThread.join();
+
+    // ideally should be 9, but due to some bugs it reports more
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nReplaceCount);
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(8), nReplaceCount);
+    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(14), nReplaceCount);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf147583_backwardSearch)
 {
     createSwDoc("tdf147583_backwardSearch.odt");

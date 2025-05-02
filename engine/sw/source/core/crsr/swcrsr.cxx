@@ -56,6 +56,7 @@
 #include <memory>
 #include <comphelper/kit.hxx>
 #include <editsh.hxx>
+#include <pamtyp.hxx>
 
 #include <viewopt.hxx>
 #include <annotationmark.hxx>
@@ -808,7 +809,7 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
             pPHdl.reset(new PercentHdl( aRegion ));
 
         // as long as found and not at same position
-        while(  *pSttPos <= *pEndPos )
+        while( *pSttPos <= *pEndPos )
         {
             nFndRet = rParas.DoFind(*pCurrentCursor, fnMove, aRegion, bInReadOnly, xSearchItem);
             if( 0 == nFndRet ||
@@ -856,16 +857,26 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
                 }
             }
 
+            // tdf#131431 move pCurrentCursor if it hasn't moved to avoid an infinte loop
+            if( bSrchBkwrd && *pEndPos == *pCurrentCursor->Start() )
+            {
+                (*fnMove.fnPos)( pCurrentCursor->GetMark(), false );
+            }
+            else if ( !bSrchBkwrd && *pSttPos == *pCurrentCursor->End() )
+            {
+                (*fnMove.fnPos)( pCurrentCursor->GetPoint(), false );
+            }
+
+            if( *pSttPos == *pEndPos )
+                // in area but at the end => done
+                break;
+
             if( bSrchBkwrd )
                 // move pEndPos in front of the found area
                 *pEndPos = *pCurrentCursor->Start();
             else
                 // move pSttPos behind the found area
                 *pSttPos = *pCurrentCursor->End();
-
-            if( *pSttPos == *pEndPos )
-                // in area but at the end => done
-                break;
 
             if( !nCursorCnt && pPHdl )
             {
