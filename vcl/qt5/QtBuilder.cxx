@@ -63,11 +63,15 @@ QString convertAccelerator(const OUString& rText)
 QtBuilder::QtBuilder(QWidget* pParent, std::u16string_view sUIRoot, const OUString& rUIFile)
     : WidgetBuilder(sUIRoot, rUIFile, false)
 {
-    processUIFile(pParent);
+    SolarMutexGuard g;
 
-    // tweak widget hierarchy (remove unnecessary parent widgets)
-    for (const std::pair<QWidget*, QWidget*>& rPair : m_aWidgetReplacements)
-        replaceWidget(rPair.first, rPair.second);
+    GetQtInstance().RunInMainThread([&] {
+        processUIFile(pParent);
+
+        // tweak widget hierarchy (remove unnecessary parent widgets)
+        for (const std::pair<QWidget*, QWidget*>& rPair : m_aWidgetReplacements)
+            replaceWidget(rPair.first, rPair.second);
+    });
 }
 
 QtBuilder::~QtBuilder() {}
