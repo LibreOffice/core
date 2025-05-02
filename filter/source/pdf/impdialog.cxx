@@ -495,7 +495,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
     , mxRbPDFVersion(m_xBuilder->weld_combo_box(u"pdf_version"_ustr))
     , mxCbTaggedPDF(m_xBuilder->weld_check_button(u"tagged"_ustr))
     , mxCbExportFormFields(m_xBuilder->weld_check_button(u"forms"_ustr))
-    , mxFormsFrame(m_xBuilder->weld_widget(u"forms_frame"_ustr))
+    , mxFormsOptionGrid(m_xBuilder->weld_widget(u"forms_options_grid"_ustr))
     , mxLbFormsFormat(m_xBuilder->weld_combo_box(u"format"_ustr))
     , mxCbAllowDuplicateFieldNames(m_xBuilder->weld_check_button(u"allowdups"_ustr))
     , mxCbExportBookmarks(m_xBuilder->weld_check_button(u"bookmarks"_ustr))
@@ -647,8 +647,8 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
     mxLbFormsFormat->set_active(static_cast<sal_uInt16>(pParent->mnFormsType));
     mxCbAllowDuplicateFieldNames->set_active( pParent->mbAllowDuplicateFieldNames );
-    // FormsFrame contains (and thus sets_sensitive) FormsFormat and AllowDuplicateFieldNames
-    mxFormsFrame->set_sensitive(pParent->mbExportFormFields);
+    // FormsOptionGrid contains (and thus sets_sensitive) FormsFormat and AllowDuplicateFieldNames
+    mxFormsOptionGrid->set_sensitive(pParent->mbExportFormFields);
     if (pParent->mbExportFormFields)
     {
         if (pParent->maConfigItem.IsReadOnly(u"FormsType"_ustr))
@@ -874,8 +874,8 @@ void ImpPDFTabGeneralPage::EnableExportNotesPages()
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, weld::Toggleable&, void)
 {
     const bool bExportFormFields = mxCbExportFormFields->get_active();
-    // FormsFrame contains (and thus sets_sensitive) FormsFormat and AllowDuplicateFieldNames
-    mxFormsFrame->set_sensitive(bExportFormFields);
+    // FormsOptionsGrid contains (and thus sets_sensitive) FormsFormat and AllowDuplicateFieldNames
+    mxFormsOptionGrid->set_sensitive(bExportFormFields);
     if (bExportFormFields)
     {
         if (IsReadOnlyProperty(u"FormsType"_ustr))
