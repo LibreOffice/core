@@ -59,7 +59,6 @@
 
 #if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
-#include "skia/osx/gdiimpl.hxx"
 #endif
 
 const int nMinBlinkCursorDelay = 500;
@@ -1213,34 +1212,30 @@ bool AquaSalFrame::doFlush()
         // tdf#164428 Skia/Metal needs flush after drawing progress bar
         if (!mbForceFlushProgressBar && SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
         {
-            AquaSkiaSalGraphicsImpl *pSkiaGraphicsImpl = dynamic_cast<AquaSkiaSalGraphicsImpl*>(mpGraphics->GetImpl());
-            if (pSkiaGraphicsImpl)
-            {
-                // Assume a certain frame rate is the fastest flushing rate
-                // that can be handled with Skia/Metal. Note that the Skia
-                // timer is running separately so the overall flushing rate
-                // may still be faster than this limit. Previously, the
-                // limit was set to 200 flushes per second but that caused
-                // tdf#163945 to reappear so reduce the limit to 50 flushes
-                // per second.
-                static const CFAbsoluteTime fMinFlushInterval = 0.02;
-                static CFAbsoluteTime fLastFlushTime = 0;
+            // Assume a certain frame rate is the fastest flushing rate
+            // that can be handled with Skia/Metal. Note that the Skia
+            // timer is running separately so the overall flushing rate
+            // may still be faster than this limit. Previously, the
+            // limit was set to 200 flushes per second but that caused
+            // tdf#163945 to reappear so reduce the limit to 40 flushes
+            // per second.
+            static const CFAbsoluteTime fMinFlushInterval = 0.025;
+            static CFAbsoluteTime fLastFlushTime = 0;
 
-                CFAbsoluteTime fInterval = CFAbsoluteTimeGetCurrent() - fLastFlushTime;
-                if (fInterval >= 0.0f && fInterval < fMinFlushInterval)
-                {
-                    // Just to be safe, schedule the Skia timer to run so that
-                    // a flush is only delayed but never missed
-                    pSkiaGraphicsImpl->ScheduleFlush();
-                }
-                else
-                {
-                    mpGraphics->Flush();
-                    fLastFlushTime = CFAbsoluteTimeGetCurrent();
-                    bFlushed = true;
-                }
-                bNeedsFlush = false;
+            CFAbsoluteTime fInterval = CFAbsoluteTimeGetCurrent() - fLastFlushTime;
+            if (fInterval >= 0.0f && fInterval < fMinFlushInterval)
+            {
+                // Do not schedule the Skia timer to run as it appears that
+                // it might be part of the cause for the reappearance of
+                // tdf#163945 on some machines.
             }
+            else
+            {
+                mpGraphics->Flush();
+                fLastFlushTime = CFAbsoluteTimeGetCurrent();
+                bFlushed = true;
+            }
+            bNeedsFlush = false;
         }
 #endif
         if (bNeedsFlush)
