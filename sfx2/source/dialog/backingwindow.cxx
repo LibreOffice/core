@@ -611,18 +611,11 @@ IMPL_LINK_NOARG( BackingWindow, FilterHdl, weld::ComboBox&, void )
 
 IMPL_LINK( BackingWindow, ToggleHdl, weld::Toggleable&, rButton, void )
 {
-    bool bRecentMode;
     if (&rButton == mxRecentButton.get())
-        bRecentMode = rButton.get_active();
-    else
-        bRecentMode = !rButton.get_active();
-
-    if (bRecentMode)
     {
         mxLocalView->Hide();
         mxAllRecentThumbnails->Show();
         mxAllRecentThumbnails->GrabFocus();
-        mxRecentButton->set_active(true);
         mxTemplateButton->set_active(false);
         mxActions->show();
     }
@@ -634,7 +627,6 @@ IMPL_LINK( BackingWindow, ToggleHdl, weld::Toggleable&, rButton, void )
         mxLocalView->reload();
         mxLocalView->GrabFocus();
         mxRecentButton->set_active(false);
-        mxTemplateButton->set_active(true);
         mxActions->hide();
     }
     applyFilter();
