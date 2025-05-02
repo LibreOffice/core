@@ -161,22 +161,25 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
 std::unique_ptr<weld::MessageDialog> QtInstanceBuilder::weld_message_dialog(const OUString& id)
 {
     QMessageBox* pMessageBox = m_xBuilder->get<QMessageBox>(id);
-    assert(pMessageBox);
-    return std::make_unique<QtInstanceMessageDialog>(pMessageBox);
+    std::unique_ptr<weld::MessageDialog> xRet(
+        pMessageBox ? std::make_unique<QtInstanceMessageDialog>(pMessageBox) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Dialog> QtInstanceBuilder::weld_dialog(const OUString& rId)
 {
     QDialog* pDialog = m_xBuilder->get<QDialog>(rId);
-    assert(pDialog);
-    return std::make_unique<QtInstanceDialog>(pDialog);
+    std::unique_ptr<weld::Dialog> xRet(pDialog ? std::make_unique<QtInstanceDialog>(pDialog)
+                                               : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Assistant> QtInstanceBuilder::weld_assistant(const OUString& rId)
 {
     QWizard* pWizard = m_xBuilder->get<QWizard>(rId);
-    assert(pWizard);
-    return std::make_unique<QtInstanceAssistant>(pWizard);
+    std::unique_ptr<weld::Assistant> xRet(pWizard ? std::make_unique<QtInstanceAssistant>(pWizard)
+                                                  : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Window> QtInstanceBuilder::create_screenshot_window()
@@ -188,14 +191,17 @@ std::unique_ptr<weld::Window> QtInstanceBuilder::create_screenshot_window()
 std::unique_ptr<weld::Widget> QtInstanceBuilder::weld_widget(const OUString& rId)
 {
     QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
-    assert(pWidget);
-    return std::make_unique<QtInstanceWidget>(pWidget);
+    std::unique_ptr<weld::Widget> xRet(pWidget ? std::make_unique<QtInstanceWidget>(pWidget)
+                                               : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Container> QtInstanceBuilder::weld_container(const OUString& rId)
 {
     QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
-    assert(pWidget);
+    if (!pWidget)
+        return nullptr;
+
     assert(pWidget->layout() && "no layout");
     return std::make_unique<QtInstanceContainer>(pWidget);
 }
@@ -203,7 +209,9 @@ std::unique_ptr<weld::Container> QtInstanceBuilder::weld_container(const OUStrin
 std::unique_ptr<weld::Box> QtInstanceBuilder::weld_box(const OUString& rId)
 {
     QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
-    assert(pWidget);
+    if (!pWidget)
+        return nullptr;
+
     assert(qobject_cast<QBoxLayout*>(pWidget->layout()) && "widget doesn't have a box layout");
     return std::make_unique<QtInstanceBox>(pWidget);
 }
@@ -211,7 +219,9 @@ std::unique_ptr<weld::Box> QtInstanceBuilder::weld_box(const OUString& rId)
 std::unique_ptr<weld::Grid> QtInstanceBuilder::weld_grid(const OUString& rId)
 {
     QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
-    assert(pWidget);
+    if (!pWidget)
+        return nullptr;
+
     assert(qobject_cast<QGridLayout*>(pWidget->layout()) && "no grid layout");
     return std::make_unique<QtInstanceGrid>(pWidget);
 }
@@ -225,37 +235,42 @@ std::unique_ptr<weld::Paned> QtInstanceBuilder::weld_paned(const OUString&)
 std::unique_ptr<weld::Frame> QtInstanceBuilder::weld_frame(const OUString& rId)
 {
     QGroupBox* pGroupBox = m_xBuilder->get<QGroupBox>(rId);
-    assert(pGroupBox);
-    return std::make_unique<QtInstanceFrame>(pGroupBox);
+    std::unique_ptr<weld::Frame> xRet(pGroupBox ? std::make_unique<QtInstanceFrame>(pGroupBox)
+                                                : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::ScrolledWindow> QtInstanceBuilder::weld_scrolled_window(const OUString& rId,
                                                                               bool)
 {
     QScrollArea* pScrollArea = m_xBuilder->get<QScrollArea>(rId);
-    assert(pScrollArea);
-    return std::make_unique<QtInstanceScrolledWindow>(pScrollArea);
+    std::unique_ptr<weld::ScrolledWindow> xRet(
+        pScrollArea ? std::make_unique<QtInstanceScrolledWindow>(pScrollArea) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Notebook> QtInstanceBuilder::weld_notebook(const OUString& rId)
 {
     QTabWidget* pTabWidget = m_xBuilder->get<QTabWidget>(rId);
-    assert(pTabWidget);
-    return std::make_unique<QtInstanceNotebook>(pTabWidget);
+    std::unique_ptr<weld::Notebook> xRet(
+        pTabWidget ? std::make_unique<QtInstanceNotebook>(pTabWidget) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Button> QtInstanceBuilder::weld_button(const OUString& rId)
 {
     QPushButton* pButton = m_xBuilder->get<QPushButton>(rId);
-    assert(pButton);
-    return std::make_unique<QtInstanceButton>(pButton);
+    std::unique_ptr<weld::Button> xRet(pButton ? std::make_unique<QtInstanceButton>(pButton)
+                                               : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::MenuButton> QtInstanceBuilder::weld_menu_button(const OUString& rId)
 {
     QToolButton* pButton = m_xBuilder->get<QToolButton>(rId);
-    assert(pButton);
-    return std::make_unique<QtInstanceMenuButton>(pButton);
+    std::unique_ptr<weld::MenuButton> xRet(pButton ? std::make_unique<QtInstanceMenuButton>(pButton)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::MenuToggleButton> QtInstanceBuilder::weld_menu_toggle_button(const OUString&)
@@ -267,50 +282,57 @@ std::unique_ptr<weld::MenuToggleButton> QtInstanceBuilder::weld_menu_toggle_butt
 std::unique_ptr<weld::LinkButton> QtInstanceBuilder::weld_link_button(const OUString& rId)
 {
     QtHyperlinkLabel* pLabel = m_xBuilder->get<QtHyperlinkLabel>(rId);
-    assert(pLabel);
-    return std::make_unique<QtInstanceLinkButton>(pLabel);
+    std::unique_ptr<weld::LinkButton> xRet(pLabel ? std::make_unique<QtInstanceLinkButton>(pLabel)
+                                                  : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::ToggleButton> QtInstanceBuilder::weld_toggle_button(const OUString& rId)
 {
     QAbstractButton* pButton = m_xBuilder->get<QAbstractButton>(rId);
-    assert(pButton);
-    return std::make_unique<QtInstanceToggleButton>(pButton);
+    std::unique_ptr<weld::ToggleButton> xRet(
+        pButton ? std::make_unique<QtInstanceToggleButton>(pButton) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::RadioButton> QtInstanceBuilder::weld_radio_button(const OUString& rId)
 {
     QRadioButton* pRadioButton = m_xBuilder->get<QRadioButton>(rId);
-    assert(pRadioButton);
-    return std::make_unique<QtInstanceRadioButton>(pRadioButton);
+    std::unique_ptr<weld::RadioButton> xRet(
+        pRadioButton ? std::make_unique<QtInstanceRadioButton>(pRadioButton) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::CheckButton> QtInstanceBuilder::weld_check_button(const OUString& rId)
 {
     QCheckBox* pCheckBox = m_xBuilder->get<QCheckBox>(rId);
-    assert(pCheckBox);
-    return std::make_unique<QtInstanceCheckButton>(pCheckBox);
+    std::unique_ptr<weld::CheckButton> xRet(
+        pCheckBox ? std::make_unique<QtInstanceCheckButton>(pCheckBox) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Scale> QtInstanceBuilder::weld_scale(const OUString& rId)
 {
     QSlider* pSlider = m_xBuilder->get<QSlider>(rId);
-    assert(pSlider);
-    return std::make_unique<QtInstanceScale>(pSlider);
+    std::unique_ptr<weld::Scale> xRet(pSlider ? std::make_unique<QtInstanceScale>(pSlider)
+                                              : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::ProgressBar> QtInstanceBuilder::weld_progress_bar(const OUString& rId)
 {
     QProgressBar* pProgressBar = m_xBuilder->get<QProgressBar>(rId);
-    assert(pProgressBar);
-    return std::make_unique<QtInstanceProgressBar>(pProgressBar);
+    std::unique_ptr<weld::ProgressBar> xRet(
+        pProgressBar ? std::make_unique<QtInstanceProgressBar>(pProgressBar) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::LevelBar> QtInstanceBuilder::weld_level_bar(const OUString& rId)
 {
     QProgressBar* pProgressBar = m_xBuilder->get<QProgressBar>(rId);
-    assert(pProgressBar);
-    return std::make_unique<QtInstanceLevelBar>(pProgressBar);
+    std::unique_ptr<weld::LevelBar> xRet(
+        pProgressBar ? std::make_unique<QtInstanceLevelBar>(pProgressBar) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Spinner> QtInstanceBuilder::weld_spinner(const OUString&)
@@ -322,8 +344,8 @@ std::unique_ptr<weld::Spinner> QtInstanceBuilder::weld_spinner(const OUString&)
 std::unique_ptr<weld::Image> QtInstanceBuilder::weld_image(const OUString& rId)
 {
     QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
-    assert(pLabel);
-    return std::make_unique<QtInstanceImage>(pLabel);
+    std::unique_ptr<weld::Image> xRet(pLabel ? std::make_unique<QtInstanceImage>(pLabel) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Calendar> QtInstanceBuilder::weld_calendar(const OUString&)
@@ -335,15 +357,17 @@ std::unique_ptr<weld::Calendar> QtInstanceBuilder::weld_calendar(const OUString&
 std::unique_ptr<weld::Entry> QtInstanceBuilder::weld_entry(const OUString& rId)
 {
     QLineEdit* pLineEdit = m_xBuilder->get<QLineEdit>(rId);
-    assert(pLineEdit);
-    return std::make_unique<QtInstanceEntry>(pLineEdit);
+    std::unique_ptr<weld::Entry> xRet(pLineEdit ? std::make_unique<QtInstanceEntry>(pLineEdit)
+                                                : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::SpinButton> QtInstanceBuilder::weld_spin_button(const OUString& rId)
 {
     QtDoubleSpinBox* pSpinBox = m_xBuilder->get<QtDoubleSpinBox>(rId);
-    assert(pSpinBox);
-    return std::make_unique<QtInstanceSpinButton>(pSpinBox);
+    std::unique_ptr<weld::SpinButton> xRet(
+        pSpinBox ? std::make_unique<QtInstanceSpinButton>(pSpinBox) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::MetricSpinButton>
@@ -356,15 +380,17 @@ std::unique_ptr<weld::FormattedSpinButton>
 QtInstanceBuilder::weld_formatted_spin_button(const OUString& rId)
 {
     QtDoubleSpinBox* pSpinBox = m_xBuilder->get<QtDoubleSpinBox>(rId);
-    assert(pSpinBox);
-    return std::make_unique<QtInstanceFormattedSpinButton>(pSpinBox);
+    std::unique_ptr<weld::FormattedSpinButton> xRet(
+        pSpinBox ? std::make_unique<QtInstanceFormattedSpinButton>(pSpinBox) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::ComboBox> QtInstanceBuilder::weld_combo_box(const OUString& rId)
 {
     QComboBox* pComboBox = m_xBuilder->get<QComboBox>(rId);
-    assert(pComboBox);
-    return std::make_unique<QtInstanceComboBox>(pComboBox);
+    std::unique_ptr<weld::ComboBox> xRet(pComboBox ? std::make_unique<QtInstanceComboBox>(pComboBox)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::EntryTreeView>
@@ -376,43 +402,49 @@ QtInstanceBuilder::weld_entry_tree_view(const OUString& rContainerId, const OUSt
     QTreeView* pTreeView = m_xBuilder->get<QTreeView>(rTreeViewId);
     assert(pWidget && pLineEdit && pTreeView);
 
-    return std::make_unique<QtInstanceEntryTreeView>(
-        pWidget, pLineEdit, pTreeView, weld_entry(rEntryId), weld_tree_view(rTreeViewId));
+    std::unique_ptr<weld::EntryTreeView> xRet(std::make_unique<QtInstanceEntryTreeView>(
+        pWidget, pLineEdit, pTreeView, weld_entry(rEntryId), weld_tree_view(rTreeViewId)));
+
+    return xRet;
 }
 
 std::unique_ptr<weld::TreeView> QtInstanceBuilder::weld_tree_view(const OUString& rId)
 {
     QTreeView* pTreeView = m_xBuilder->get<QTreeView>(rId);
-    assert(pTreeView);
-    return std::make_unique<QtInstanceTreeView>(pTreeView);
+    std::unique_ptr<weld::TreeView> xRet(pTreeView ? std::make_unique<QtInstanceTreeView>(pTreeView)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::IconView> QtInstanceBuilder::weld_icon_view(const OUString& rId)
 {
     QListView* pListView = m_xBuilder->get<QListView>(rId);
-    assert(pListView);
-    return std::make_unique<QtInstanceIconView>(pListView);
+    std::unique_ptr<weld::IconView> xRet(pListView ? std::make_unique<QtInstanceIconView>(pListView)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Label> QtInstanceBuilder::weld_label(const OUString& rId)
 {
     QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
-    assert(pLabel);
-    return std::make_unique<QtInstanceLabel>(pLabel);
+    std::unique_ptr<weld::Label> xRet(pLabel ? std::make_unique<QtInstanceLabel>(pLabel) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::TextView> QtInstanceBuilder::weld_text_view(const OUString& rId)
 {
     QPlainTextEdit* pTextEdit = m_xBuilder->get<QPlainTextEdit>(rId);
-    assert(pTextEdit);
-    return std::make_unique<QtInstanceTextView>(pTextEdit);
+    std::unique_ptr<weld::TextView> xRet(pTextEdit ? std::make_unique<QtInstanceTextView>(pTextEdit)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Expander> QtInstanceBuilder::weld_expander(const OUString& rId)
 {
     QtExpander* pExpander = m_xBuilder->get<QtExpander>(rId);
-    assert(pExpander);
-    return std::make_unique<QtInstanceExpander>(pExpander);
+    std::unique_ptr<weld::Expander> xRet(pExpander ? std::make_unique<QtInstanceExpander>(pExpander)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::DrawingArea> QtInstanceBuilder::weld_drawing_area(const OUString& rId,
@@ -420,7 +452,8 @@ std::unique_ptr<weld::DrawingArea> QtInstanceBuilder::weld_drawing_area(const OU
                                                                         FactoryFunction, void*)
 {
     QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
-    assert(pLabel);
+    if (!pLabel)
+        return nullptr;
 
     if (rA11yImpl.is())
         QtAccessibleWidget::setCustomAccessible(*pLabel, rA11yImpl);
@@ -431,29 +464,32 @@ std::unique_ptr<weld::DrawingArea> QtInstanceBuilder::weld_drawing_area(const OU
 std::unique_ptr<weld::Menu> QtInstanceBuilder::weld_menu(const OUString& rId)
 {
     QMenu* pMenu = m_xBuilder->get_menu(rId);
-    assert(pMenu);
-    return std::make_unique<QtInstanceMenu>(pMenu);
+    std::unique_ptr<weld::Menu> xRet(pMenu ? std::make_unique<QtInstanceMenu>(pMenu) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Popover> QtInstanceBuilder::weld_popover(const OUString& rId)
 {
     QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
-    assert(pWidget);
-    return std::make_unique<QtInstancePopover>(pWidget);
+    std::unique_ptr<weld::Popover> xRet(pWidget ? std::make_unique<QtInstancePopover>(pWidget)
+                                                : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Toolbar> QtInstanceBuilder::weld_toolbar(const OUString& rId)
 {
     QToolBar* pToolBar = m_xBuilder->get<QToolBar>(rId);
-    assert(pToolBar);
-    return std::make_unique<QtInstanceToolbar>(pToolBar);
+    std::unique_ptr<weld::Toolbar> xRet(pToolBar ? std::make_unique<QtInstanceToolbar>(pToolBar)
+                                                 : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Scrollbar> QtInstanceBuilder::weld_scrollbar(const OUString& rId)
 {
     QScrollBar* pScrollBar = m_xBuilder->get<QScrollBar>(rId);
-    assert(pScrollBar);
-    return std::make_unique<QtInstanceScrollbar>(pScrollBar);
+    std::unique_ptr<weld::Scrollbar> xRet(
+        pScrollBar ? std::make_unique<QtInstanceScrollbar>(pScrollBar) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::SizeGroup> QtInstanceBuilder::create_size_group()
