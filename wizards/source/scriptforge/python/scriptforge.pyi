@@ -2392,24 +2392,27 @@ class SFScriptForge:
 
         def CreateBaseDocument(self,
                                filename: str,
-                               embeddeddatabase: Literal['HSQLDB', 'FIREBIRD', 'CALC'] = ...,
+                               embeddeddatabase: Literal['HSQLDB', 'FIREBIRD', 'FIREBIRD_EXTERNAL', 'CALC'] = ...,
                                registrationname: str = ...,
-                               calcfilename: str = ...,
+                               datafilename: str = ...,
                                ) -> BASE:
             """
-                Create a new LibreOffice Base document embedding an empty database of the given type.
+                Create a new LibreOffice Base document embedding an empty database of the given type
+                or finding its datasource in an external database file (Calc or Firebird).
                     Args
                         ``filename``: identifies the file to create. It must follow the ``FileSystem.FileNaming``
                         notation. If the file already exists, it is overwritten without warning.
 
-                        ``embeddeddatabase``: either ``HSQLDB`` or ``FIREBIRD`` or ``CALC``. Defaults to ``HSQLDB``.
+                        ``embeddeddatabase``: either ``HSQLDB``, ``FIREBIRD``, ``FIREBIRD_EXTERNAL`` or ``CALC``.
+                        Defaults to ``HSQLDB``.
 
                         ``registrationname``: the name used to store the new database in the databases register.
                         If "" (default), no registration takes place. If the name already exists it is overwritten
                         without warning.
 
-                        ``calcfilename``: only when ``embeddeddatabase`` = ``CALC``, the name of the file containing
-                        the tables as Calc sheets. The name of the file must be given in ``FileSystem.FileNaming``
+                        ``datafilename``: when ``embeddeddatabase`` = ``CALC``, the name of the file containing
+                        the tables as Calc sheets. When ``embeddeddatabase`` = ``FIREBIRD_EXTERNAL``, the name of the
+                        Firebird external database file. The name of the file must be given in ``FileSystem.FileNaming``
                         notation. The file must exist.
                     Returns
                         A ``Base`` service instance.

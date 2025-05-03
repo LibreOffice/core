@@ -263,9 +263,11 @@ REM ----------------------------------------------------------------------------
 Public Function CreateBaseDocument(Optional ByVal FileName As Variant _
 							, Optional ByVal EmbeddedDatabase As Variant _
 							, Optional ByVal RegistrationName As Variant _
+							, Optional ByVal DataFileName As Variant _
 							, Optional ByVal CalcFileName As Variant _
 							) As Object
 &apos;&apos;&apos; Create a new LibreOffice Base document embedding an empty database of the given type
+&apos;&apos;&apos;	or finding its datasource in an external database file (Calc or Firebird).
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: Identifies the file to create. It must follow the SF_FileSystem.FileNaming notation
 &apos;&apos;&apos;			If the file already exists, it is overwritten without warning
@@ -273,11 +275,14 @@ Public Function CreateBaseDocument(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;		RegistrationName: the name used to store the new database in the databases register
 &apos;&apos;&apos;			If &quot;&quot; (default), no registration takes place
 &apos;&apos;&apos;			If the name already exists it is overwritten without warning
-&apos;&apos;&apos;		CalcFileName: only when EmbedddedDatabase = &quot;CALC&quot;, the name of the file containing the tables as Calc sheets
+&apos;&apos;&apos;		DataFileName: when EmbedddedDatabase = &quot;CALC&quot;, the name of the file containing the tables as Calc sheets,
+&apos;&apos;&apos;			when EmbeddedDatabase = &quot;FIREBIRD_EXTERNAL&quot;, the Firebird external database file.
 &apos;&apos;&apos;			The name of the file must be given in SF_FileSystem.FileNaming notation
 &apos;&apos;&apos;			The file must exist
+&apos;&apos;&apos;		CalcFileName: only when EmbedddedDatabase = &quot;CALC&quot;, the name of the file containing the tables as Calc sheets
+&apos;&apos;&apos;			The argument is obsolete as from SF 25.8.
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		 A SFDocuments.SF_Document object or one of its subclasses
+&apos;&apos;&apos;		 A SFDocuments.SF_Base object or Nothing
 &apos;&apos;&apos;	Exceptions
 &apos;&apos;&apos;		UNKNOWNFILEERROR				Calc datasource does not exist
 &apos;&apos;&apos;	Examples:
@@ -288,12 +293,13 @@ Public Function CreateBaseDocument(Optional ByVal FileName As Variant _
 Dim oCreate As Variant				&apos;	Return value
 Dim oDBContext As Object			&apos;	com.sun.star.sdb.DatabaseContext
 Dim oDatabase As Object				&apos;	com.sun.star.comp.dba.ODatabaseSource
-Dim oComp As Object					&apos;	Loaded component com.sun.star.lang.XComponent
+Dim sTarget As String				&apos;	sdbc abbreviation
 Dim sFileName As String				&apos;	Alias of FileName
 Dim FSO As Object					&apos;	Alias for FileSystem service
 Const cstDocType = &quot;private:factory/s&quot;
 Const cstThisSub = &quot;UI.CreateBaseDocument&quot;
-Const cstSubArgs = &quot;FileName, [EmbeddedDatabase=&quot;&quot;HSQLDB&quot;&quot;|&quot;&quot;FIREBIRD&quot;&quot;|&quot;&quot;CALC&quot;&quot;], [RegistrationName=&quot;&quot;&quot;&quot;], [CalcFileName]&quot;
+Const cstSubArgs = &quot;FileName, [EmbeddedDatabase=&quot;&quot;HSQLDB&quot;&quot;|&quot;&quot;FIREBIRD&quot;&quot;|&quot;&quot;FIREBIRD_EXTERNAL&quot;&quot;|&quot;&quot;CALC&quot;&quot;], &quot; _
+					&amp; &quot;[RegistrationName=&quot;&quot;&quot;&quot;], [DataFileName]&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	Set oCreate = Nothing
@@ -302,34 +308,43 @@ Const cstSubArgs = &quot;FileName, [EmbeddedDatabase=&quot;&quot;HSQLDB&quot;&qu
 Check:
 	If IsMissing(EmbeddedDatabase) Or IsEmpty(EmbeddedDatabase) Then EmbeddedDatabase = &quot;HSQLDB&quot;
 	If IsMissing(RegistrationName) Or IsEmpty(RegistrationName) Then RegistrationName = &quot;&quot;
+	If IsMissing(DataFileName) Or IsEmpty(DataFileName) Then DataFileName = &quot;&quot;
 	If IsMissing(CalcFileName) Or IsEmpty(CalcFileName) Then CalcFileName = &quot;&quot;
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
-		If Not SF_Utils._Validate(EmbeddedDatabase, &quot;EmbeddedDatabase&quot;, V_STRING, Array(&quot;CALC&quot;, &quot;HSQLDB&quot;, &quot;FIREBIRD&quot;)) Then GoTo Finally
+		If Not SF_Utils._Validate(EmbeddedDatabase, &quot;EmbeddedDatabase&quot;, V_STRING, _
+									Array(&quot;CALC&quot;, &quot;HSQLDB&quot;, &quot;FIREBIRD&quot;, &quot;FIREBIRD_EXTERNAL&quot;)) Then GoTo Finally
 		If Not SF_Utils._Validate(RegistrationName, &quot;RegistrationName&quot;, V_STRING) Then GoTo Finally
-		If UCase(EmbeddedDatabase) = &quot;CALC&quot; Then
-			If Not SF_Utils._ValidateFile(CalcFileName, &quot;CalcFileName&quot;) Then GoTo Finally
-			If Not FSO.FileExists(CalcFileName) Then GoTo CatchNotExists
+		If InStr(UCase(EmbeddedDatabase), &quot;CALC,FIREBIRD_EXTERNAL&quot;) &gt; 0 Then
+			If Len(CalcFileName) &gt; 0 And Len(DataFileName) = 0 Then DataFileName = CalcFileName
+			If Not SF_Utils._ValidateFile(DataFileName, &quot;DataFileName&quot;) Then GoTo Finally
+			If Not FSO.FileExists(DataFileName) Then GoTo CatchNotExists
 		End If
 	End If
 
 Try:
+	sFileName = FSO._ConvertToUrl(FileName)
+
 	Set oDBContext = SF_Utils._GetUNOService(&quot;DatabaseContext&quot;)
 	With oDBContext
 		Set oDatabase = .createInstance()
-		&apos;	Build the url link to the database
+
+		&apos;	Build the url links in the database descriptors
+		oDatabase.URL = sFileName
 		Select Case UCase(EmbeddedDatabase)
 			Case &quot;HSQLDB&quot;, &quot;FIREBIRD&quot;
-				oDatabase.URL = &quot;sdbc:embedded:&quot; &amp; LCase(EmbeddedDatabase)
-			Case &quot;CALC&quot;
-				oDatabase.URL = &quot;sdbc:calc:&quot; &amp; FSO._ConvertToUrl(CalcFileName)
+				oDatabase.DatabaseDocument.DataSource.URL = &quot;sdbc:embedded:&quot; &amp; LCase(EmbeddedDatabase)
+			Case &quot;CALC&quot;, &quot;FIREBIRD_EXTERNAL&quot;
+				If UCase(EmbeddedDatabase) = &quot;CALC&quot; Then sTarget = &quot;calc&quot; Else sTarget = &quot;firebird&quot;
+				oDatabase.DatabaseDocument.DataSource.URL = &quot;sdbc:&quot; &amp; sTarget &amp; &quot;:&quot; &amp; FSO._ConvertToUrl(DataFileName)
 		End Select
+
 		&apos;	Create empty Base document
-		sFileName = FSO._ConvertToUrl(FileName)
 		&apos;	An existing file is overwritten without warning
 		If FSO.FileExists(FileName) Then FSO.DeleteFile(FileName)
 		If FSO.FileExists(FileName &amp; &quot;.lck&quot;) Then FSO.DeleteFile(FileName &amp; &quot;.lck&quot;)
 		oDatabase.DatabaseDocument.storeAsURL(sFileName, Array(SF_Utils._MakePropertyValue(&quot;Overwrite&quot;, True)))
+
 		&apos;	Register database if requested
 		If Len(RegistrationName) &gt; 0 Then
 			If .hasRegisteredDatabase(RegistrationName) Then
@@ -349,7 +364,7 @@ Finally:
 Catch:
 	GoTo Finally
 CatchNotExists:
-	SF_Exception.RaiseFatal(UNKNOWNFILEERROR, &quot;CalcFileName&quot;, CalcFileName)
+	SF_Exception.RaiseFatal(UNKNOWNFILEERROR, &quot;DataFileName&quot;, DataFileName)
 	GoTo Finally
 End Function    &apos;   ScriptForge.SF_UI.CreateBaseDocument
 

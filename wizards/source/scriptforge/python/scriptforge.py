@@ -1752,9 +1752,12 @@ class SFScriptForge:
         def Activate(self, windowname = ''):
             return self.ExecMethod(self.vbMethod, 'Activate', windowname)
 
-        def CreateBaseDocument(self, filename, embeddeddatabase = 'HSQLDB', registrationname = '', calcfilename = ''):
+        def CreateBaseDocument(self, filename, embeddeddatabase = 'HSQLDB', registrationname = '', datafilename = '',
+                               calcfilename = ''):
+            if len(calcfilename) > 0 and len(datafilename) == 0:
+                datafilename = calcfilename
             return self.ExecMethod(self.vbMethod, 'CreateBaseDocument', filename, embeddeddatabase, registrationname,
-                                   calcfilename)
+                                   datafilename)
 
         def CreateDocument(self, documenttype = '', templatefile = '', hidden = False):
             return self.ExecMethod(self.vbMethod, 'CreateDocument', documenttype, templatefile, hidden)
