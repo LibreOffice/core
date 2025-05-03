@@ -1198,6 +1198,8 @@ MetaMaskAction::MetaMaskAction( const Point& rPt,
 
 void MetaMaskAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowPoint(pOut->LogicToPixel(maPt)))
+        return;
     pOut->DrawMask( maPt, maBmp, maColor );
 }
 
