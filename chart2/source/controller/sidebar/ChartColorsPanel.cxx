@@ -84,9 +84,9 @@ private:
     ChartColorPaletteControl* mpControl;
 };
 
-ColorPaletteWrapper::ColorPaletteWrapper(rtl::Reference<ChartModel> mxModel,
+ColorPaletteWrapper::ColorPaletteWrapper(rtl::Reference<ChartModel> xModel,
                                          ChartColorPaletteControl* pControl)
-    : mxModel(std::move(mxModel))
+    : mxModel(std::move(xModel))
     , mpControl(pControl)
 {
 }
