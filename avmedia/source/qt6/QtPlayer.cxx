@@ -285,7 +285,7 @@ uno::Reference<media::XFrameGrabber> SAL_CALL QtPlayer::createFrameGrabber()
     osl::MutexGuard aGuard(m_aMutex);
 
     // use the default platform frame grabber (GStreamer on Linux) by default
-    // instead of using QtFrameGrabber for now unless overriden by env variable,
+    // instead of using QtFrameGrabber for now unless overridden by env variable,
     // as QtFrameGrabber has issues (see e.g. tdf#166055)
     static const bool bPreferQtFrameGrabber
         = (getenv("SAL_VCL_QT_USE_QT_FRAME_GRABBER") != nullptr);
