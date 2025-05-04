@@ -296,6 +296,8 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain, weld::Button&, void)
             else
                 m_pSearchEngine->SearchNextSpecial(m_prbSearchForNull->get_active());
         }
+        // tdf#155308: explicitly keep the focus by default for non gtk renderings
+        m_pbSearchAgain->grab_focus();
     }
     else
     {   // the button has the function 'cancel'
