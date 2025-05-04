@@ -861,8 +861,11 @@ bool Bitmap::Convert( BmpConversion eConversion )
         break;
 
         case BmpConversion::N8BitGreys:
-        case BmpConversion::N8BitNoConversion:
             bRet = ImplMakeGreyscales();
+        break;
+
+        case BmpConversion::N8BitNoConversion:
+            bRet = ImplMake8BitNoConversion();
         break;
 
         case BmpConversion::N8BitColors:
@@ -1016,7 +1019,110 @@ bool Bitmap::ImplMakeGreyscales()
     return true;
 }
 
-bool Bitmap::ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const * pExtColor)
+// Used for the bitmap->alpha layer conversion, just takes the red channel
+bool Bitmap::ImplMake8BitNoConversion()
+{
+    BitmapScopedReadAccess pReadAcc(*this);
+    if (!pReadAcc)
+        return false;
+
+    const BitmapPalette& rPal = GetGreyPalette(256);
+    bool bPalDiffers
+        = !pReadAcc->HasPalette() || (rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount());
+
+    if (!bPalDiffers)
+        bPalDiffers = (rPal != pReadAcc->GetPalette());
+    if (!bPalDiffers)
+        return true;
+
+    const auto ePixelFormat = vcl::PixelFormat::N8_BPP;
+    Bitmap aNewBmp(GetSizePixel(), ePixelFormat, &rPal);
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    if (!pWriteAcc)
+        return false;
+
+    const tools::Long nWidth = pWriteAcc->Width();
+    const tools::Long nHeight = pWriteAcc->Height();
+
+    if (pReadAcc->HasPalette())
+    {
+        for (tools::Long nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; nX++)
+            {
+                const sal_uInt8 cIndex = pReadAcc->GetIndexFromData(pScanlineRead, nX);
+                pWriteAcc->SetPixelOnData(
+                    pScanline, nX,
+                    BitmapColor(pReadAcc->GetPaletteColor(cIndex).GetRed()));
+            }
+        }
+    }
+    else if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr
+             && pWriteAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
+    {
+        for (tools::Long nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pReadScan = pReadAcc->GetScanline(nY);
+            Scanline pWriteScan = pWriteAcc->GetScanline(nY);
+
+            for (tools::Long nX = 0; nX < nWidth; nX++)
+            {
+                pReadScan++;
+                pReadScan++;
+                const sal_uLong nR = *pReadScan++;
+
+                *pWriteScan++ = static_cast<sal_uInt8>(nR);
+            }
+        }
+    }
+    else if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb
+             && pWriteAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
+    {
+        for (tools::Long nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pReadScan = pReadAcc->GetScanline(nY);
+            Scanline pWriteScan = pWriteAcc->GetScanline(nY);
+
+            for (tools::Long nX = 0; nX < nWidth; nX++)
+            {
+                const sal_uLong nR = *pReadScan++;
+                pReadScan++;
+                pReadScan++;
+
+                *pWriteScan++ = static_cast<sal_uInt8>(nR);
+            }
+        }
+    }
+    else
+    {
+        for (tools::Long nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; nX++)
+                pWriteAcc->SetPixelOnData(
+                    pScanline, nX,
+                    BitmapColor(pReadAcc->GetPixelFromData(pScanlineRead, nX).GetRed()));
+        }
+    }
+
+    pWriteAcc.reset();
+    pReadAcc.reset();
+
+    const MapMode aMap(maPrefMapMode);
+    const Size aSize(maPrefSize);
+
+    *this = std::move(aNewBmp);
+
+    maPrefMapMode = aMap;
+    maPrefSize = aSize;
+
+    return true;
+}
+
+bool Bitmap::ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const* pExtColor)
 {
     SAL_WARN_IF(ePixelFormat <= getPixelFormat(), "vcl", "New pixel format must be greater!" );
 

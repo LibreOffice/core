@@ -580,6 +580,7 @@ public:
     SAL_DLLPRIVATE void     ImplSetSalBitmap( const std::shared_ptr<SalBitmap>& xImpBmp );
 
     SAL_DLLPRIVATE bool     ImplMakeGreyscales();
+    SAL_DLLPRIVATE bool     ImplMake8BitNoConversion();
 
 private:
     SAL_DLLPRIVATE bool ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const* pExtColor = nullptr);
