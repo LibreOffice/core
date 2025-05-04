@@ -53,7 +53,7 @@ struct ScOoxPasswordHash
         maHashValue.clear();
         maSaltValue.clear();
     }
-    bool verifyPassword( const OUString& aPassText ) const;
+    bool verifyPassword( std::u16string_view aPassText ) const;
 };
 
 namespace ScPassHashHelper
@@ -89,7 +89,7 @@ public:
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) = 0;
     virtual void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
             const OUString& rSaltValue, sal_uInt32 nSpinCount ) = 0;
-    virtual bool verifyPassword(const OUString& aPassText) const = 0;
+    virtual bool verifyPassword(std::u16string_view aPassText) const = 0;
 };
 
 class SAL_DLLPUBLIC_RTTI ScDocProtection final : public ScPassHashProtectable
@@ -121,7 +121,7 @@ public:
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
     virtual void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
             const OUString& rSaltValue, sal_uInt32 nSpinCount ) override;
-    SC_DLLPUBLIC virtual bool verifyPassword(const OUString& aPassText) const override;
+    SC_DLLPUBLIC virtual bool verifyPassword(std::u16string_view aPassText) const override;
 
     SC_DLLPUBLIC bool isOptionEnabled(Option eOption) const;
     SC_DLLPUBLIC void setOption(Option eOption, bool bEnabled);
@@ -205,7 +205,7 @@ public:
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
     virtual void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
             const OUString& rSaltValue, sal_uInt32 nSpinCount ) override;
-    virtual bool verifyPassword(const OUString& aPassText) const override;
+    virtual bool verifyPassword(std::u16string_view aPassText) const override;
 
     bool isOptionEnabled(Option eOption) const;
     void setOption(Option eOption, bool bEnabled);

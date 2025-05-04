@@ -238,7 +238,7 @@ public:
         @return the raw hash value as sal_Int8 sequence.
      */
     static css::uno::Sequence<sal_Int8> GetOoxHashAsSequence(
-            const OUString& rPassword,
+            std::u16string_view rPassword,
             std::u16string_view rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,
@@ -284,7 +284,7 @@ public:
                 compared against a stored base64 encoded hash value.
      */
     static OUString GetOoxHashAsBase64(
-            const OUString& rPassword,
+            std::u16string_view rPassword,
             std::u16string_view rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,
@@ -328,7 +328,7 @@ public:
         @return the raw the hash value.
      */
     static std::vector<unsigned char> GetOoxHashAsVector(
-            const OUString& rPassword,
+            std::u16string_view rPassword,
             const std::vector<unsigned char>& rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,

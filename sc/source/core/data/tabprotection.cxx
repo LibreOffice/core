@@ -90,7 +90,7 @@ ScPasswordHash ScPassHashHelper::getHashTypeFromURI(std::u16string_view rURI)
     return PASSHASH_UNSPECIFIED;
 }
 
-bool ScOoxPasswordHash::verifyPassword( const OUString& aPassText ) const
+bool ScOoxPasswordHash::verifyPassword( std::u16string_view aPassText ) const
 {
     if (!hasPassword())
         return false;
@@ -132,7 +132,7 @@ public:
         ScPasswordHash eHash, ScPasswordHash eHash2);
     void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
             const OUString& rSaltValue, sal_uInt32 nSpinCount );
-    bool verifyPassword(const OUString& aPassText) const;
+    bool verifyPassword(std::u16string_view aPassText) const;
 
     bool isOptionEnabled(SCSIZE nOptId) const;
     void setOption(SCSIZE nOptId, bool bEnabled);
@@ -354,7 +354,7 @@ void ScTableProtectionImpl::setPasswordHash( const OUString& rAlgorithmName, con
     maPasswordHash.mnSpinCount      = nSpinCount;
 }
 
-bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
+bool ScTableProtectionImpl::verifyPassword(std::u16string_view aPassText) const
 {
 #if DEBUG_TAB_PROTECTION
     fprintf(stdout, "ScTableProtectionImpl::verifyPassword: input = '%s'\n",
@@ -362,7 +362,7 @@ bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
 #endif
 
     if (mbEmptyPass)
-        return aPassText.isEmpty();
+        return aPassText.empty();
 
     if (!maPassText.isEmpty())
         // Clear text password exists, and this one takes precedence.
@@ -597,7 +597,7 @@ void ScDocProtection::setPasswordHash( const OUString& rAlgorithmName, const OUS
     mpImpl->setPasswordHash( rAlgorithmName, rHashValue, rSaltValue, nSpinCount);
 }
 
-bool ScDocProtection::verifyPassword(const OUString& aPassText) const
+bool ScDocProtection::verifyPassword(std::u16string_view aPassText) const
 {
     return mpImpl->verifyPassword(aPassText);
 }
@@ -682,7 +682,7 @@ void ScTableProtection::setPasswordHash( const OUString& rAlgorithmName, const O
     mpImpl->setPasswordHash( rAlgorithmName, rHashValue, rSaltValue, nSpinCount);
 }
 
-bool ScTableProtection::verifyPassword(const OUString& aPassText) const
+bool ScTableProtection::verifyPassword(std::u16string_view aPassText) const
 {
     return mpImpl->verifyPassword(aPassText);
 }

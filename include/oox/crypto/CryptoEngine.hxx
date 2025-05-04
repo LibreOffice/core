@@ -41,7 +41,7 @@ public:
     // Decryption
     virtual bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) = 0;
 
-    virtual bool generateEncryptionKey(const OUString& rPassword) = 0;
+    virtual bool generateEncryptionKey(std::u16string_view rPassword) = 0;
 
     virtual bool decrypt(
                     BinaryXInputStream& aInputStream,

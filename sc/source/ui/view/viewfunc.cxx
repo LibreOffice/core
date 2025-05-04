@@ -2812,7 +2812,7 @@ void ScViewFunc::ProtectDoc( const OUString& rPassword )
     UpdateLayerLocks();         //! broadcast to all views
 }
 
-bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
+bool ScViewFunc::Unprotect( SCTAB nTab, std::u16string_view rPassword )
 {
     ScMarkData& rMark = GetViewData().GetMarkData();
     ScDocShell& rDocSh = GetViewData().GetDocShell();

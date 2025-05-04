@@ -116,7 +116,7 @@ bool Standard2007Engine::calculateEncryptionKey(std::u16string_view rPassword)
     return true;
 }
 
-bool Standard2007Engine::generateEncryptionKey(const OUString& password)
+bool Standard2007Engine::generateEncryptionKey(std::u16string_view password)
 {
     mKey.clear();
     /*

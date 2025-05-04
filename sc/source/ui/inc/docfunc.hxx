@@ -169,7 +169,7 @@ public:
     void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
     bool            Protect( SCTAB nTab, const OUString& rPassword );
-    bool            Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi );
+    bool            Unprotect( SCTAB nTab, std::u16string_view rPassword, bool bApi );
 
     void            ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, bool bApi );
     bool            ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bApi );

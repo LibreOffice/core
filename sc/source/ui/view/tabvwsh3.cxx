@@ -240,7 +240,7 @@ void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
         }
         else
             // this sheet is not password-protected.
-            Unprotect(nTab, OUString());
+            Unprotect(nTab, std::u16string_view());
 
         if (!pReqArgs)
         {

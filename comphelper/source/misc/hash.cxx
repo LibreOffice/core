@@ -264,14 +264,14 @@ std::vector<unsigned char> Hash::calculateHash(
 }
 
 std::vector<unsigned char> Hash::calculateHash(
-        const OUString& rPassword,
+        std::u16string_view rPassword,
         const std::vector<unsigned char>& rSaltValue,
         sal_uInt32 nSpinCount,
         IterCount eIterCount,
         HashType eType)
 {
-    const unsigned char* pPassBytes = reinterpret_cast<const unsigned char*>(rPassword.getStr());
-    const size_t nPassBytesLen = rPassword.getLength() * 2;
+    const unsigned char* pPassBytes = reinterpret_cast<const unsigned char*>(rPassword.data());
+    const size_t nPassBytesLen = rPassword.length() * 2;
 #ifdef OSL_BIGENDIAN
     // Swap UTF16-BE to UTF16-LE
     std::vector<unsigned char> vPass;

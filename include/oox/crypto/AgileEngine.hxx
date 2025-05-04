@@ -75,7 +75,7 @@ private:
     AgileEncryptionInfo mInfo;
     AgileEncryptionPreset meEncryptionPreset;
 
-    void calculateHashFinal(const OUString& rPassword, std::vector<sal_uInt8>& aHashFinal);
+    void calculateHashFinal(std::u16string_view rPassword, std::vector<sal_uInt8>& aHashFinal);
 
     void calculateBlock(
             std::vector<sal_uInt8> const & rBlock,
@@ -103,10 +103,10 @@ public:
 
     // Decryption
 
-    void decryptEncryptionKey(OUString const & rPassword);
-    bool decryptAndCheckVerifierHash(OUString const & rPassword);
+    void decryptEncryptionKey(std::u16string_view rPassword);
+    bool decryptAndCheckVerifierHash(std::u16string_view rPassword);
 
-    bool generateEncryptionKey(OUString const & rPassword) override;
+    bool generateEncryptionKey(std::u16string_view rPassword) override;
     bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
     bool decrypt(BinaryXInputStream& aInputStream,
                  BinaryXOutputStream& aOutputStream) override;
@@ -126,14 +126,14 @@ public:
 
     bool setupEncryption(OUString const & rPassword) override;
 
-    bool generateAndEncryptVerifierHash(OUString const & rPassword);
+    bool generateAndEncryptVerifierHash(std::u16string_view rPassword);
 
     bool encryptHmacKey();
     bool encryptHmacValue();
 
-    bool encryptEncryptionKey(OUString const & rPassword);
+    bool encryptEncryptionKey(std::u16string_view rPassword);
     void setupEncryptionParameters(AgileEncryptionParameters const & rAgileEncryptionParameters);
-    bool setupEncryptionKey(OUString const & rPassword);
+    bool setupEncryptionKey(std::u16string_view rPassword);
 };
 
 } // namespace comphelper::crypto

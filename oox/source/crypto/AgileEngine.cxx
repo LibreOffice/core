@@ -304,7 +304,7 @@ void AgileEngine::encryptBlock(
     aEncryptor.update(rOutput, rInput);
 }
 
-void AgileEngine::calculateHashFinal(const OUString& rPassword, std::vector<sal_uInt8>& aHashFinal)
+void AgileEngine::calculateHashFinal(std::u16string_view rPassword, std::vector<sal_uInt8>& aHashFinal)
 {
     aHashFinal = comphelper::DocPasswordHelper::GetOoxHashAsVector(
                     rPassword, mInfo.saltValue, mInfo.spinCount,
@@ -328,7 +328,7 @@ bool generateBytes(std::vector<sal_uInt8> & rBytes, sal_Int32 nSize)
 
 } // end anonymous namespace
 
-bool AgileEngine::decryptAndCheckVerifierHash(OUString const & rPassword)
+bool AgileEngine::decryptAndCheckVerifierHash(std::u16string_view rPassword)
 {
     std::vector<sal_uInt8>& encryptedHashValue = mInfo.encryptedVerifierHashValue;
     size_t encryptedHashValueSize = encryptedHashValue.size();
@@ -353,7 +353,7 @@ bool AgileEngine::decryptAndCheckVerifierHash(OUString const & rPassword)
     return std::equal(hash.begin(), hash.end(), hashValue.begin());
 }
 
-void AgileEngine::decryptEncryptionKey(OUString const & rPassword)
+void AgileEngine::decryptEncryptionKey(std::u16string_view rPassword)
 {
     sal_Int32 nKeySize = mInfo.keyBits / 8;
 
@@ -371,7 +371,7 @@ void AgileEngine::decryptEncryptionKey(OUString const & rPassword)
 }
 
 // TODO: Rename
-bool AgileEngine::generateEncryptionKey(OUString const & rPassword)
+bool AgileEngine::generateEncryptionKey(std::u16string_view rPassword)
 {
     bool bResult = decryptAndCheckVerifierHash(rPassword);
 
@@ -597,7 +597,7 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
     return false;
 }
 
-bool AgileEngine::generateAndEncryptVerifierHash(OUString const & rPassword)
+bool AgileEngine::generateAndEncryptVerifierHash(std::u16string_view rPassword)
 {
     if (!generateBytes(mInfo.saltValue, mInfo.saltSize))
         return false;
@@ -692,7 +692,7 @@ bool AgileEngine::encryptHmacValue()
     return true;
 }
 
-bool AgileEngine::encryptEncryptionKey(OUString const & rPassword)
+bool AgileEngine::encryptEncryptionKey(std::u16string_view rPassword)
 {
     sal_Int32 nKeySize = mInfo.keyBits / 8;
 
@@ -745,7 +745,7 @@ void AgileEngine::setupEncryptionParameters(AgileEncryptionParameters const & rA
     mInfo.encryptedVerifierHashValue.resize(comphelper::roundUp(mInfo.hashSize, mInfo.blockSize), 0);
 }
 
-bool AgileEngine::setupEncryptionKey(OUString const & rPassword)
+bool AgileEngine::setupEncryptionKey(std::u16string_view rPassword)
 {
     if (!generateAndEncryptVerifierHash(rPassword))
         return false;

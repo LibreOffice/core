@@ -4055,7 +4055,7 @@ bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword )
     return true;
 }
 
-bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
+bool ScDocFunc::Unprotect( SCTAB nTab, std::u16string_view rPassword, bool bApi )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
 

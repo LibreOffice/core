@@ -120,7 +120,7 @@ DocPasswordHelper::GenerateNewModifyPasswordInfoOOXML(std::u16string_view aPassw
         sal_Int32 const nIterationCount = 100000;
         OUString sAlgorithm(u"SHA-512"_ustr);
 
-        const OUString sHash(GetOoxHashAsBase64(OUString(aPassword), sSalt, nIterationCount,
+        const OUString sHash(GetOoxHashAsBase64(aPassword, sSalt, nIterationCount,
                                                 comphelper::Hash::IterCount::APPEND, sAlgorithm));
 
         if (!sHash.isEmpty())
@@ -239,7 +239,7 @@ bool DocPasswordHelper::IsModifyPasswordCorrect( std::u16string_view aPassword, 
             aHash >>= sHash;
             if (!sSalt.isEmpty() && !sHash.isEmpty())
             {
-                const OUString aNewHash(GetOoxHashAsBase64(OUString(aPassword), sSalt, nCount,
+                const OUString aNewHash(GetOoxHashAsBase64(aPassword, sSalt, nCount,
                                                            comphelper::Hash::IterCount::APPEND,
                                                            sAlgorithm));
                 if (!aNewHash.isEmpty())
@@ -362,7 +362,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
 
 std::vector<unsigned char> DocPasswordHelper::GetOoxHashAsVector(
-        const OUString& rPassword,
+        std::u16string_view rPassword,
         const std::vector<unsigned char>& rSaltValue,
         sal_uInt32 nSpinCount,
         comphelper::Hash::IterCount eIterCount,
@@ -387,7 +387,7 @@ std::vector<unsigned char> DocPasswordHelper::GetOoxHashAsVector(
 
 
 css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
-        const OUString& rPassword,
+        std::u16string_view rPassword,
         std::u16string_view rSaltValue,
         sal_uInt32 nSpinCount,
         comphelper::Hash::IterCount eIterCount,
@@ -407,7 +407,7 @@ css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
 }
 
 OUString DocPasswordHelper::GetOoxHashAsBase64(
-        const OUString& rPassword,
+        std::u16string_view rPassword,
         std::u16string_view rSaltValue,
         sal_uInt32 nSpinCount,
         comphelper::Hash::IterCount eIterCount,

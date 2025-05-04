@@ -145,28 +145,28 @@ void CryptoTest::testAgileEncryptionVerifier()
         { 100000, 16, 128, 20, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA1"_ustr });
 
     CPPUNIT_ASSERT_EQUAL(true, aEngine.generateAndEncryptVerifierHash(aPassword));
-    CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"_ustr));
+    CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
     CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
 
     aEngine.setupEncryptionParameters(
         { 100000, 16, 128, 48, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA384"_ustr });
 
     CPPUNIT_ASSERT_EQUAL(true, aEngine.generateAndEncryptVerifierHash(aPassword));
-    CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"_ustr));
+    CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
     CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
 
     aEngine.setupEncryptionParameters(
         { 100000, 16, 192, 48, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA384"_ustr });
 
     CPPUNIT_ASSERT_EQUAL(true, aEngine.generateAndEncryptVerifierHash(aPassword));
-    CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"_ustr));
+    CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
     CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
 
     aEngine.setupEncryptionParameters(
         { 100000, 16, 256, 64, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA512"_ustr });
 
     CPPUNIT_ASSERT_EQUAL(true, aEngine.generateAndEncryptVerifierHash(aPassword));
-    CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"_ustr));
+    CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
     CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
 }
 
@@ -216,7 +216,7 @@ void CryptoTest::testAgileEncryptionInfoWritingAndParsing()
             CPPUNIT_ASSERT_EQUAL(u"SHA1"_ustr, rInfo.hashAlgorithm);
             CPPUNIT_ASSERT_EQUAL(toString(aKeyDataSalt), toString(rInfo.keyDataSalt));
 
-            CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"_ustr));
+            CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
             CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
         }
     }
@@ -262,7 +262,7 @@ void CryptoTest::testAgileEncryptionInfoWritingAndParsing()
             CPPUNIT_ASSERT_EQUAL(u"SHA384"_ustr, rInfo.hashAlgorithm);
             CPPUNIT_ASSERT_EQUAL(toString(aKeyDataSalt), toString(rInfo.keyDataSalt));
 
-            CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"_ustr));
+            CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
             CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
         }
     }
@@ -307,7 +307,7 @@ void CryptoTest::testAgileEncryptionInfoWritingAndParsing()
             CPPUNIT_ASSERT_EQUAL(u"SHA384"_ustr, rInfo.hashAlgorithm);
             CPPUNIT_ASSERT_EQUAL(toString(aKeyDataSalt), toString(rInfo.keyDataSalt));
 
-            CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"_ustr));
+            CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
             CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
         }
     }
@@ -352,7 +352,7 @@ void CryptoTest::testAgileEncryptionInfoWritingAndParsing()
             CPPUNIT_ASSERT_EQUAL(u"SHA512"_ustr, rInfo.hashAlgorithm);
             CPPUNIT_ASSERT_EQUAL(toString(aKeyDataSalt), toString(rInfo.keyDataSalt));
 
-            CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"_ustr));
+            CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
             CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
         }
     }

@@ -117,7 +117,7 @@ public:
                 Salt that will be prepended to password data.
      */
     static std::vector<unsigned char> calculateHash(
-            const rtl::OUString& rPassword,
+            std::u16string_view rPassword,
             const std::vector<unsigned char>& rSaltValue,
             sal_uInt32 nSpinCount,
             IterCount eIterCount,

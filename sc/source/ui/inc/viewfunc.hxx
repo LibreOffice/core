@@ -200,7 +200,7 @@ public:
     void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
     void            ProtectDoc( const OUString& rPassword );
-    bool            Unprotect( SCTAB nTab, const OUString& rPassword );
+    bool            Unprotect( SCTAB nTab, std::u16string_view rPassword );
 
     void            DeleteCells( DelCellCmd eCmd );
     bool            InsertCells( InsCellCmd eCmd, bool bRecord = true, bool bPartOfPaste = false, size_t nCount = 0);
