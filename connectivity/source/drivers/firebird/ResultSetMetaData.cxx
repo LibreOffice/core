@@ -138,6 +138,16 @@ OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
     return sRet;
 }
 
+OUString OResultSetMetaData::getColumnNameWithoutAlias(sal_Int32 column)
+{
+    verifyValidColumn(column);
+    char* pColumnName = m_pSqlda->sqlvar[column - 1].sqlname;
+    sal_Int32 nColumnNameLength = m_pSqlda->sqlvar[column - 1].sqlname_length;
+    OUString sRet(pColumnName, nColumnNameLength, RTL_TEXTENCODING_UTF8);
+    sanitizeIdentifier(sRet);
+    return sRet;
+}
+
 OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
 {
     verifyValidColumn(column);
@@ -188,7 +198,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     if( sTable.isEmpty() )
         return false;
 
-    OUString sColumnName = getColumnName( column );
+    OUString sColumnName = getColumnNameWithoutAlias( column );
 
     OUString sSql = "SELECT RDB$IDENTITY_TYPE FROM RDB$RELATION_FIELDS "
                "WHERE RDB$RELATION_NAME = '"

@@ -115,7 +115,7 @@ void FirebirdDriver::disposing()
 #endif /*MACOSX*/
 #endif /*!SYSTEM_FIREBIRD*/
 
-    OSL_VERIFY(fb_shutdown(0, 1));
+    OSL_VERIFY(fb_shutdown(0, 1) == 0);
 
     ODriver_BASE::disposing();
 }

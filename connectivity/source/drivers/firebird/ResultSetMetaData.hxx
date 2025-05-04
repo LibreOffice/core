@@ -62,6 +62,7 @@ namespace connectivity::firebird
         virtual sal_Int32 SAL_CALL getColumnDisplaySize(sal_Int32 column) override;
         virtual OUString SAL_CALL getColumnLabel(sal_Int32 column) override;
         virtual OUString SAL_CALL getColumnName(sal_Int32 column) override;
+        OUString getColumnNameWithoutAlias(sal_Int32 column);
         virtual OUString SAL_CALL getSchemaName(sal_Int32 column) override;
         virtual sal_Int32 SAL_CALL getPrecision(sal_Int32 column) override;
         virtual sal_Int32 SAL_CALL getScale(sal_Int32 column) override;
