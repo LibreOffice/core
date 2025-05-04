@@ -416,14 +416,14 @@ public:
     /** Called by sd::Window::LoseFocus to enable sd::ViewShell to take action
         when focus is lost.
 
-        e.g. overriden by NotesPanelViewShell
+        e.g. overridden by NotesPanelViewShell
      */
     virtual void onLoseFocus(){};
 
     /** Called by sd::Window::GrabFocus to enable sd::ViewShell to take action
         when focus is grabbed.
 
-        e.g. overriden by NotesPanelViewShell
+        e.g. overridden by NotesPanelViewShell
      */
     virtual void onGrabFocus(){};
 
