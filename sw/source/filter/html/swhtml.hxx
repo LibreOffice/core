@@ -956,6 +956,8 @@ public:
 
     /// Strips query and fragment from a URL path if base URL is a file:// one.
     static OUString StripQueryFromPath(std::u16string_view rBase, const OUString& rPath);
+
+    static void SanitizeAnchor(SfxItemSet& rFrameItemSet);
 };
 
 struct SwPendingData

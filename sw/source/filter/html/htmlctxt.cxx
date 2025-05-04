@@ -466,6 +466,20 @@ void SwHTMLParser::ClearContext( HTMLAttrContext *pContext )
         StartListing();
 }
 
+//static
+void SwHTMLParser::SanitizeAnchor(SfxItemSet& rFrameItemSet)
+{
+    const SwFormatAnchor& rAnch = rFrameItemSet.Get(RES_ANCHOR);
+    if (SwNode* pAnchorNode = rAnch.GetAnchorNode())
+    {
+        if (pAnchorNode->IsEndNode())
+        {
+            SAL_WARN("sw.html", "Invalid EndNode Anchor");
+            rFrameItemSet.ClearItem(RES_ANCHOR);
+        }
+    }
+}
+
 bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
                                   SvxCSS1PropertyInfo &rPropInfo,
                                   HTMLAttrContext *pContext )
@@ -494,15 +508,7 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
                         HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Padding|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Direction,
                         aFrameItemSet );
 
-        const SwFormatAnchor& rAnch = aFrameItemSet.Get(RES_ANCHOR);
-        if (SwNode* pAnchorNode = rAnch.GetAnchorNode())
-        {
-            if (pAnchorNode->IsEndNode())
-            {
-                SAL_WARN("sw.html", "Invalid EndNode Anchor");
-                aFrameItemSet.ClearItem(RES_ANCHOR);
-            }
-        }
+        SanitizeAnchor(aFrameItemSet);
 
         InsertFlyFrame(aFrameItemSet, pContext, UIName(rPropInfo.m_aId));
         pContext->SetPopStack( true );

@@ -1163,6 +1163,8 @@ void SwHTMLParser::InsertFloatingFrame()
     SetFixSize( aSize, aDfltSz, bPercentWidth, bPercentHeight, aPropInfo, aFrameSet );
     SetSpace( aSpace, aItemSet, aPropInfo, aFrameSet );
 
+    SanitizeAnchor(aFrameSet);
+
     // and insert into the document
     SwFrameFormat* pFlyFormat =
         m_xDoc->getIDocumentContentOperations().InsertEmbObject(*m_pPam,
