@@ -536,7 +536,9 @@ class TrueTypeFont;
  * @ingroup sft
  *
  */
-    int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal_uInt32 >& glyphlist);
+    int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID,
+                             std::vector<sal_uInt32>& glyphlist,
+                             std::vector<sal_uInt32>& currentGlyphStack);
 
 /**
  * Extracts all Name Records from the font and stores them in an allocated
