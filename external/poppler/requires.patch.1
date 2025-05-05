@@ -1,0 +1,10 @@
+--- poppler/poppler/Object.h.orig	2025-08-07 19:00:01.178536031 +0200
++++ poppler/poppler/Object.h	2025-08-07 19:00:48.012895971 +0200
+@@ -270,7 +270,6 @@
+         dict = dictA;
+     }
+     template<typename StreamType>
+-        requires(std::is_base_of_v<Stream, StreamType>)
+     explicit Object(std::unique_ptr<StreamType> &&streamA)
+     {
+         assert(streamA);

@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/std_numbers.patch.1 \
 	external/poppler/std_optional.patch.1 \
 	external/poppler/clang-std-ranges.patch.1 \
+	external/poppler/requires.patch.1 \
 	external/poppler/poppler-config.patch.1 \
 ))
 
