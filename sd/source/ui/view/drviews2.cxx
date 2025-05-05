@@ -614,10 +614,29 @@ public:
     }
 };
 
-    void lcl_convertStringArguments(const std::unique_ptr<SfxItemSet>& pArgs)
+    void lcl_convertStringArguments(sal_uInt16 nSId, const std::unique_ptr<SfxItemSet>& pArgs)
     {
         const SfxPoolItem* pItem = nullptr;
 
+        if (nSId == SID_ATTR_FILL_COLOR)
+        {
+            pItem = pArgs->GetItem(SID_ATTR_FILL_COLOR);
+            Color aColor = pItem ? static_cast<const XFillColorItem*>(pItem)->GetColorValue() : COL_AUTO;
+            if (aColor.IsFullyTransparent())
+            {
+                const XFillStyleItem aXFillStyleItem(drawing::FillStyle_NONE);
+                pArgs->Put(aXFillStyleItem);
+            }
+            else
+            {
+                SfxItemState eState = pArgs->GetItemState(SID_ATTR_FILL_STYLE, false, &pItem);
+                if (eState != SfxItemState::SET || static_cast<const XFillStyleItem*>(pItem)->GetValue() == drawing::FillStyle_NONE)
+                {
+                    const XFillStyleItem aXFillStyleItem(drawing::FillStyle_SOLID);
+                    pArgs->Put(aXFillStyleItem);
+                }
+            }
+        }
         if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
         {
             double fValue = static_cast<const SvxDoubleItem*>(pItem)->GetValue();
@@ -729,12 +748,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rReq.GetArgs() )
             {
                 std::unique_ptr<SfxItemSet> pNewArgs = rReq.GetArgs()->Clone();
-                if (nSId == SID_ATTR_FILL_COLOR)
-                {
-                    const XFillStyleItem aXFillStyleItem;
-                    pNewArgs->Put(aXFillStyleItem);
-                }
-                lcl_convertStringArguments(pNewArgs);
+                lcl_convertStringArguments(nSId, pNewArgs);
                 mpDrawView->SetAttributes(*pNewArgs);
                 rReq.Done();
             }

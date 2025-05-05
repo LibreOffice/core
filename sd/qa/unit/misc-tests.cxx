@@ -25,7 +25,10 @@
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <comphelper/sequence.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <vcl/scheduler.hxx>
@@ -65,6 +68,7 @@ public:
 
     void testTdf99396();
     void testTableObjectUndoTest();
+    void testFillColor();
     void testFillGradient();
     void testTdf44774();
     void testTdf38225();
@@ -88,6 +92,7 @@ public:
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396);
     CPPUNIT_TEST(testTableObjectUndoTest);
+    CPPUNIT_TEST(testFillColor);
     CPPUNIT_TEST(testFillGradient);
     CPPUNIT_TEST(testTdf44774);
     CPPUNIT_TEST(testTdf38225);
@@ -252,6 +257,66 @@ void SdMiscTest::testTableObjectUndoTest()
     CPPUNIT_ASSERT_EQUAL(OUString("Grow font size"),
                          pDoc->GetUndoManager()->GetUndoActionComment(1));
     CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), pDoc->GetUndoManager()->GetUndoActionComment(2));
+}
+
+void SdMiscTest::testFillColor()
+{
+    // Test if setting the shape fill color from color to transparent automatically turns off the fill style to none
+    createSdImpressDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    // Insert a new page.
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->insertNewByIndex(0),
+                                                 uno::UNO_SET_THROW);
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
+    // Create a rectangle
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFactory.is());
+    uno::Reference<drawing::XShape> xShape1(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr),
+        uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet(xShape1, uno::UNO_QUERY_THROW);
+    // Set FillStyle and FillColor
+    xPropSet->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_SOLID));
+    xPropSet->setPropertyValue(u"FillColor"_ustr, uno::Any(COL_RED));
+    // Add the rectangle to the page.
+    xShapes->add(xShape1);
+
+    // Retrieve the shape and check FillStyle and FillGradient
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPage, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet2(xIndexAccess->getByIndex(0),
+                                                  uno::UNO_QUERY_THROW);
+    drawing::FillStyle eFillStyle;
+    Color aColor;
+    CPPUNIT_ASSERT(xPropSet2->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle);
+    CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_SOLID), static_cast<int>(eFillStyle));
+    CPPUNIT_ASSERT(xPropSet2->getPropertyValue(u"FillColor"_ustr) >>= aColor);
+
+    CPPUNIT_ASSERT_EQUAL(COL_RED, aColor);
+
+    // Setup transparent color and check fill styles
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(xModel->getCurrentController(),
+                                                                uno::UNO_QUERY);
+
+    xSelectionSupplier->select(uno::Any(xShape1));
+    CPPUNIT_ASSERT(xSelectionSupplier->getSelection().hasValue());
+
+    const char arguments[] = "{"
+                             "\"FillColor.Color\":{"
+                             "\"type\":\"long\","
+                             "\"value\":-1"
+                             "}}";
+
+    dispatchCommand(mxComponent, u".uno:FillColor"_ustr,
+                    comphelper::containerToSequence(comphelper::JsonToPropertyValues(arguments)));
+
+    uno::Reference<container::XIndexAccess> xIndexAccess2(xDrawPage, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet3(xIndexAccess2->getByIndex(0),
+                                                  uno::UNO_QUERY_THROW);
+    drawing::FillStyle eFillStyle2;
+    CPPUNIT_ASSERT(xPropSet3->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle2);
+    CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_NONE), static_cast<int>(eFillStyle2));
 }
 
 void SdMiscTest::testFillGradient()
