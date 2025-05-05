@@ -181,6 +181,7 @@ public:
     void testOmitInvalidate();
     void test2ViewsOmitInvalidate();
     void testPaintTileOmitInvalidate();
+    void testCreateViewOmitInvalidate();
     void testInput();
     void testRedlineWriter();
     void testRedlineCalc();
@@ -256,6 +257,7 @@ public:
     CPPUNIT_TEST(testOmitInvalidate);
     CPPUNIT_TEST(test2ViewsOmitInvalidate);
     CPPUNIT_TEST(testPaintTileOmitInvalidate);
+    CPPUNIT_TEST(testCreateViewOmitInvalidate);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testRedlineCalc);
@@ -2374,6 +2376,46 @@ void DesktopLOKTest::testPaintTileOmitInvalidate()
 
     // Then make sure we get an invalidation:
     CPPUNIT_ASSERT(aView.m_bTilesInvalidated);
+}
+
+void DesktopLOKTest::testCreateViewOmitInvalidate()
+{
+    // Given a document with 2 views: view 1 renders sheet One, then view 2 gets created and finally
+    // view 1 switches to sheet Two:
+    comphelper::LibreOfficeKit::setPartInInvalidation(true);
+    comphelper::ScopeGuard aGuard([]()
+    {
+        comphelper::LibreOfficeKit::setPartInInvalidation(false);
+    });
+    LibLODocument_Impl* pDocument = loadDoc("create-view-omit-invalidate.ods");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
+    ViewCallback aView1(pDocument);
+    int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
+    const int nCanvasWidth = 256;
+    const int nCanvasHeight = 256;
+    std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
+    pDocument->m_pDocumentClass->paintTile(pDocument, aPixels.data(), nCanvasWidth, nCanvasHeight, 0, 0, 3840, 3840);
+    pDocument->m_pDocumentClass->createView(pDocument);
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
+    ViewCallback aView2(pDocument);
+    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    pDocument->m_pDocumentClass->setPart(pDocument, 1);
+    Scheduler::ProcessEventsToIdle();
+    aView1.m_bTilesInvalidated = false;
+    aView2.m_bTilesInvalidated = false;
+
+    // When pressing a key in view 1, on sheet Two:
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure that both views are invalidated:
+    CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+    // Without the accompanying fix in place, this test would have failed, the 2nd view was not
+    // invalidated when it was created after a paintTile().
+    CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
 }
 
 void DesktopLOKTest::testPaintPartTileDifferentSchemes()
