@@ -747,7 +747,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)
     createSwDoc("ins-then-format.docx");
 
     // Then make sure that both the insert and the format on top of it is in the model:
-    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
     IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
     SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
     // Without the accompanying fix in place, this test would have failed with:
@@ -762,6 +763,18 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)
     const SwRedlineData& rInnerRedlineData = *rRedlineData1.Next();
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData.GetType());
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[2]->GetType());
+
+    // And when accepting the insert:
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->AcceptRedline(0);
+
+    // Then make sure only the format on top of insert remains:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlines[0]->GetType());
+    const SwRedlineData& rRedlineData = rRedlines[0]->GetRedlineData(0);
+    // Without the accompanying fix in place, this test would have failed, the insert under format
+    // was not accepted.
+    CPPUNIT_ASSERT(!rRedlineData.Next());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
