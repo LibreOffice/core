@@ -4503,6 +4503,7 @@ void LibLODocument_Impl::updateViewsForPaintedTile(int nOrigViewId, int nPart, i
         return;
     }
 
+    // Update info about painted tiles in other views that have the same CanonicalViewId.
     const OString& rViewRenderState = it->second->getViewRenderState();
     for (const auto& rHandler : mpCallbackFlushHandlers)
     {
@@ -4650,7 +4651,8 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
         }
     }
 
-    pDocument->mpCallbackFlushHandlers[nView] = std::make_shared<CallbackFlushHandler>(pThis, pCallback, pData);
+    auto pCallbackFlushHandler = std::make_shared<CallbackFlushHandler>(pThis, pCallback, pData);
+    pDocument->mpCallbackFlushHandlers[nView] = pCallbackFlushHandler;
 
     if (pCallback != nullptr)
     {
@@ -4683,6 +4685,18 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
             sPayload += " ] }";
             pCallback(LOK_CALLBACK_FONTS_MISSING, sPayload.getStr(), pData);
             pDocument->maFontsMissing.clear();
+        }
+
+        // Try to take info about already painted tiles from an other view that has the same
+        // CanonicalViewId.
+        const OString& rViewRenderState = pCallbackFlushHandler->getViewRenderState();
+        for (const auto& rHandler : pDocument->mpCallbackFlushHandlers)
+        {
+            if (rHandler.second->getViewRenderState() == rViewRenderState && rHandler.first != nId)
+            {
+                pCallbackFlushHandler->setPaintedTiles(rHandler.second->getPaintedTiles());
+                break;
+            }
         }
     }
     else

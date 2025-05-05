@@ -117,6 +117,14 @@ namespace desktop {
 
         DESKTOP_DLLPUBLIC void tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle);
         const OString& getViewRenderState() const { return m_aViewRenderState; }
+        const std::map<int, std::map<int, tools::Rectangle>>& getPaintedTiles() const
+        {
+            return m_aPaintedTiles;
+        }
+        void setPaintedTiles(const std::map<int, std::map<int, tools::Rectangle>>& rPaintedTiles)
+        {
+            m_aPaintedTiles = rPaintedTiles;
+        }
 
         // SfxLockCallbackInterface
         virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) override;
