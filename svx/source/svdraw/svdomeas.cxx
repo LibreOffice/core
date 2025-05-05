@@ -95,7 +95,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
             if(eMeasureUnit == FieldUnit::NONE)
                 eMeasureUnit = eModUIUnit;
 
-            sal_Int32 nLen(GetLen(aPt2 - aPt1));
+            sal_Int32 nLen(GetLen(m_aPt2 - m_aPt1));
             Fraction aFact(1,1);
 
             if(eMeasureUnit != eModUIUnit)
@@ -197,7 +197,7 @@ std::unique_ptr<sdr::contact::ViewContact> SdrMeasureObj::CreateObjectSpecificVi
 
 SdrMeasureObj::SdrMeasureObj(SdrModel& rSdrModel)
 :   SdrTextObj(rSdrModel),
-    bTextDirty(false)
+    m_bTextDirty(false)
 {
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
@@ -205,14 +205,14 @@ SdrMeasureObj::SdrMeasureObj(SdrModel& rSdrModel)
 
 SdrMeasureObj::SdrMeasureObj(SdrModel& rSdrModel, SdrMeasureObj const & rSource)
 :   SdrTextObj(rSdrModel, rSource),
-    bTextDirty(false)
+    m_bTextDirty(false)
 {
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
 
-    aPt1 = rSource.aPt1;
-    aPt2 = rSource.aPt2;
-    bTextDirty = rSource.bTextDirty;
+    m_aPt1 = rSource.m_aPt1;
+    m_aPt2 = rSource.m_aPt2;
+    m_bTextDirty = rSource.m_bTextDirty;
 }
 
 SdrMeasureObj::SdrMeasureObj(
@@ -220,9 +220,9 @@ SdrMeasureObj::SdrMeasureObj(
     const Point& rPt1,
     const Point& rPt2)
 :   SdrTextObj(rSdrModel),
-    aPt1(rPt1),
-    aPt2(rPt2),
-    bTextDirty(false)
+    m_aPt1(rPt1),
+    m_aPt2(rPt2),
+    m_bTextDirty(false)
 {
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
@@ -316,8 +316,8 @@ struct ImpMeasurePoly
 
 void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
 {
-    rRec.aPt1 = aPt1;
-    rRec.aPt2 = aPt2;
+    rRec.aPt1 = m_aPt1;
+    rRec.aPt2 = m_aPt2;
 
     const SfxItemSet& rSet = GetObjectItemSet();
     rRec.eWantTextHPos     =rSet.Get(SDRATTR_MEASURETEXTHPOS        ).GetValue();
@@ -575,7 +575,7 @@ bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, 
 
 void SdrMeasureObj::UndirtyText() const
 {
-    if (!bTextDirty)
+    if (!m_bTextDirty)
         return;
 
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
@@ -608,12 +608,12 @@ void SdrMeasureObj::UndirtyText() const
     // cast to nonconst three times
     const_cast<SdrMeasureObj*>(this)->maTextSize = aSiz;
     const_cast<SdrMeasureObj*>(this)->mbTextSizeDirty = false;
-    const_cast<SdrMeasureObj*>(this)->bTextDirty = false;
+    const_cast<SdrMeasureObj*>(this)->m_bTextDirty = false;
 }
 
 void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
-    if (bTextDirty) UndirtyText();
+    if (m_bTextDirty) UndirtyText();
     ImpMeasureRec aRec;
     ImpMeasurePoly aMPol;
     ImpTakeAttr(aRec);
@@ -755,8 +755,8 @@ void SdrMeasureObj::AddToHdlList(SdrHdlList& rHdlList) const
         switch (nHdlNum) {
             case 0: aPt=aMPol.aHelpline1.aP1; break;
             case 1: aPt=aMPol.aHelpline2.aP1; break;
-            case 2: aPt=aPt1;       break;
-            case 3: aPt=aPt2;       break;
+            case 2: aPt=m_aPt1;       break;
+            case 3: aPt=m_aPt2;       break;
             case 4: aPt=aMPol.aHelpline1.aP2; break;
             case 5: aPt=aMPol.aHelpline2.aP2; break;
         } // switch
@@ -805,13 +805,13 @@ bool SdrMeasureObj::applySpecialDrag(SdrDragStat& rDrag)
     {
         case 2:
         {
-            aPt1 = aMeasureRec.aPt1;
+            m_aPt1 = aMeasureRec.aPt1;
             SetTextDirty();
             break;
         }
         case 3:
         {
-            aPt2 = aMeasureRec.aPt2;
+            m_aPt2 = aMeasureRec.aPt2;
             SetTextDirty();
             break;
         }
@@ -885,14 +885,14 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
 
     switch (nHdlNum) {
         case 0: {
-            RotatePoint(aPt,aPt1,nSin,-nCos);
-            rRec.nHelpline1Len=aPt1.Y()-aPt.Y();
+            RotatePoint(aPt,m_aPt1,nSin,-nCos);
+            rRec.nHelpline1Len=m_aPt1.Y()-aPt.Y();
             if (bBelow) rRec.nHelpline1Len=-rRec.nHelpline1Len;
             if (bOrtho) rRec.nHelpline2Len=rRec.nHelpline1Len;
         } break;
         case 1: {
-            RotatePoint(aPt,aPt2,nSin,-nCos);
-            rRec.nHelpline2Len=aPt2.Y()-aPt.Y();
+            RotatePoint(aPt,m_aPt2,nSin,-nCos);
+            rRec.nHelpline2Len=m_aPt2.Y()-aPt.Y();
             if (bBelow) rRec.nHelpline2Len=-rRec.nHelpline2Len;
             if (bOrtho) rRec.nHelpline1Len=rRec.nHelpline2Len;
         } break;
@@ -924,8 +924,8 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
         } break;
         case 4: case 5: {
             tools::Long nVal0=rRec.nLineDist;
-            RotatePoint(aPt,(nHdlNum==4 ? aPt1 : aPt2),nSin,-nCos);
-            rRec.nLineDist=aPt.Y()- (nHdlNum==4 ? aPt1.Y() : aPt2.Y());
+            RotatePoint(aPt,(nHdlNum==4 ? m_aPt1 : m_aPt2),nSin,-nCos);
+            rRec.nLineDist=aPt.Y()- (nHdlNum==4 ? m_aPt1.Y() : m_aPt2.Y());
             if (bBelow) rRec.nLineDist=-rRec.nLineDist;
             if (rRec.nLineDist<0) {
                 rRec.nLineDist=-rRec.nLineDist;
@@ -941,8 +941,8 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
 bool SdrMeasureObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho8Possible();
-    aPt1=rStat.GetStart();
-    aPt2=rStat.GetNow();
+    m_aPt1=rStat.GetStart();
+    m_aPt2=rStat.GetNow();
     SetTextDirty();
     return true;
 }
@@ -950,11 +950,11 @@ bool SdrMeasureObj::BegCreate(SdrDragStat& rStat)
 bool SdrMeasureObj::MovCreate(SdrDragStat& rStat)
 {
     SdrView* pView=rStat.GetView();
-    aPt1=rStat.GetStart();
-    aPt2=rStat.GetNow();
+    m_aPt1=rStat.GetStart();
+    m_aPt2=rStat.GetNow();
     if (pView!=nullptr && pView->IsCreate1stPointAsCenter()) {
-        aPt1+=aPt1;
-        aPt1-=rStat.GetNow();
+        m_aPt1+=m_aPt1;
+        m_aPt1-=rStat.GetNow();
     }
     SetTextDirty();
     SetBoundRectDirty();
@@ -997,36 +997,36 @@ PointerStyle SdrMeasureObj::GetCreatePointer() const
 void SdrMeasureObj::NbcMove(const Size& rSiz)
 {
     SdrTextObj::NbcMove(rSiz);
-    aPt1.Move(rSiz);
-    aPt2.Move(rSiz);
+    m_aPt1.Move(rSiz);
+    m_aPt2.Move(rSiz);
 }
 
 void SdrMeasureObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     SdrTextObj::NbcResize(rRef,xFact,yFact);
-    ResizePoint(aPt1,rRef,xFact,yFact);
-    ResizePoint(aPt2,rRef,xFact,yFact);
+    ResizePoint(m_aPt1,rRef,xFact,yFact);
+    ResizePoint(m_aPt2,rRef,xFact,yFact);
     SetTextDirty();
 }
 
 void SdrMeasureObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
-    tools::Long nLen0=GetLen(aPt2-aPt1);
-    RotatePoint(aPt1,rRef,sn,cs);
-    RotatePoint(aPt2,rRef,sn,cs);
-    tools::Long nLen1=GetLen(aPt2-aPt1);
+    tools::Long nLen0=GetLen(m_aPt2-m_aPt1);
+    RotatePoint(m_aPt1,rRef,sn,cs);
+    RotatePoint(m_aPt2,rRef,sn,cs);
+    tools::Long nLen1=GetLen(m_aPt2-m_aPt1);
     if (nLen1!=nLen0) { // rounding error!
-        tools::Long dx=aPt2.X()-aPt1.X();
-        tools::Long dy=aPt2.Y()-aPt1.Y();
+        tools::Long dx=m_aPt2.X()-m_aPt1.X();
+        tools::Long dy=m_aPt2.Y()-m_aPt1.Y();
         dx=BigMulDiv(dx,nLen0,nLen1);
         dy=BigMulDiv(dy,nLen0,nLen1);
-        if (rRef==aPt2) {
-            aPt1.setX(aPt2.X()-dx );
-            aPt1.setY(aPt2.Y()-dy );
+        if (rRef==m_aPt2) {
+            m_aPt1.setX(m_aPt2.X()-dx );
+            m_aPt1.setY(m_aPt2.Y()-dy );
         } else {
-            aPt2.setX(aPt1.X()+dx );
-            aPt2.setY(aPt1.Y()+dy );
+            m_aPt2.setX(m_aPt1.X()+dx );
+            m_aPt2.setY(m_aPt1.Y()+dy );
         }
     }
     SetBoundAndSnapRectsDirty();
@@ -1035,23 +1035,23 @@ void SdrMeasureObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, do
 void SdrMeasureObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SdrTextObj::NbcMirror(rRef1,rRef2);
-    MirrorPoint(aPt1,rRef1,rRef2);
-    MirrorPoint(aPt2,rRef1,rRef2);
+    MirrorPoint(m_aPt1,rRef1,rRef2);
+    MirrorPoint(m_aPt2,rRef1,rRef2);
     SetBoundAndSnapRectsDirty();
 }
 
 void SdrMeasureObj::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
-    ShearPoint(aPt1,rRef,tn,bVShear);
-    ShearPoint(aPt2,rRef,tn,bVShear);
+    ShearPoint(m_aPt1,rRef,tn,bVShear);
+    ShearPoint(m_aPt2,rRef,tn,bVShear);
     SetBoundAndSnapRectsDirty();
     SetTextDirty();
 }
 
 Degree100 SdrMeasureObj::GetRotateAngle() const
 {
-    return GetAngle(aPt2-aPt1);
+    return GetAngle(m_aPt2-m_aPt1);
 }
 
 void SdrMeasureObj::RecalcSnapRect()
@@ -1073,8 +1073,8 @@ sal_uInt32 SdrMeasureObj::GetSnapPointCount() const
 
 Point SdrMeasureObj::GetSnapPoint(sal_uInt32 i) const
 {
-    if (i==0) return aPt1;
-    else return aPt2;
+    if (i==0) return m_aPt1;
+    else return m_aPt2;
 }
 
 bool SdrMeasureObj::IsPolyObj() const
@@ -1089,15 +1089,15 @@ sal_uInt32 SdrMeasureObj::GetPointCount() const
 
 Point SdrMeasureObj::GetPoint(sal_uInt32 i) const
 {
-     return (0 == i) ? aPt1 : aPt2;
+     return (0 == i) ? m_aPt1 : m_aPt2;
 }
 
 void SdrMeasureObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 {
     if (0 == i)
-        aPt1=rPnt;
+        m_aPt1=rPnt;
     if (1 == i)
-        aPt2=rPnt;
+        m_aPt2=rPnt;
     SetBoundAndSnapRectsDirty();
     SetTextDirty();
 }
@@ -1111,16 +1111,16 @@ void SdrMeasureObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrTextObj::SaveGeoData(rGeo);
     SdrMeasureObjGeoData& rMGeo=static_cast<SdrMeasureObjGeoData&>(rGeo);
-    rMGeo.aPt1=aPt1;
-    rMGeo.aPt2=aPt2;
+    rMGeo.aPt1=m_aPt1;
+    rMGeo.aPt2=m_aPt2;
 }
 
 void SdrMeasureObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     SdrTextObj::RestoreGeoData(rGeo);
     const SdrMeasureObjGeoData& rMGeo=static_cast<const SdrMeasureObjGeoData&>(rGeo);
-    aPt1=rMGeo.aPt1;
-    aPt2=rMGeo.aPt2;
+    m_aPt1=rMGeo.aPt1;
+    m_aPt2=rMGeo.aPt2;
     SetTextDirty();
 }
 
@@ -1268,13 +1268,13 @@ bool SdrMeasureObj::BegTextEdit(SdrOutliner& rOutl)
 
 const Size& SdrMeasureObj::GetTextSize() const
 {
-    if (bTextDirty) UndirtyText();
+    if (m_bTextDirty) UndirtyText();
     return SdrTextObj::GetTextSize();
 }
 
 OutlinerParaObject* SdrMeasureObj::GetOutlinerParaObject() const
 {
-    if(bTextDirty)
+    if(m_bTextDirty)
         UndirtyText();
     return SdrTextObj::GetOutlinerParaObject();
 }
@@ -1289,25 +1289,25 @@ void SdrMeasureObj::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> p
 void SdrMeasureObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
     tools::Rectangle* pAnchorRect, bool bLineWidth ) const
 {
-    if (bTextDirty) UndirtyText();
+    if (m_bTextDirty) UndirtyText();
     SdrTextObj::TakeTextRect( rOutliner, rTextRect, bNoEditText, pAnchorRect, bLineWidth );
 }
 
 void SdrMeasureObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 {
-    if (bTextDirty) UndirtyText();
+    if (m_bTextDirty) UndirtyText();
     SdrTextObj::TakeTextAnchorRect(rAnchorRect);
 }
 
 void SdrMeasureObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const
 {
-    if (bTextDirty) UndirtyText();
+    if (m_bTextDirty) UndirtyText();
     SdrTextObj::TakeTextEditArea(pPaperMin,pPaperMax,pViewInit,pViewMin);
 }
 
 EEAnchorMode SdrMeasureObj::GetOutlinerViewAnchorMode() const
 {
-    if (bTextDirty) UndirtyText();
+    if (m_bTextDirty) UndirtyText();
     ImpMeasureRec aRec;
     ImpMeasurePoly aMPol;
     ImpTakeAttr(aRec);
@@ -1369,7 +1369,7 @@ EEAnchorMode SdrMeasureObj::GetOutlinerViewAnchorMode() const
 bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // handle the same as a simple line since the definition is based on two points
-    const basegfx::B2DRange aRange(aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y());
+    const basegfx::B2DRange aRange(m_aPt1.X(), m_aPt1.Y(), m_aPt2.X(), m_aPt2.Y());
     basegfx::B2DTuple aScale(aRange.getRange());
     basegfx::B2DTuple aTranslate(aRange.getMinimum());
 
@@ -1410,14 +1410,14 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     const Point aNewPt1(basegfx::fround<tools::Long>(aPosA.getX()), basegfx::fround<tools::Long>(aPosA.getY()));
     const Point aNewPt2(basegfx::fround<tools::Long>(aPosB.getX()), basegfx::fround<tools::Long>(aPosB.getY()));
 
-    if(aNewPt1 == aPt1 && aNewPt2 == aPt2)
+    if(aNewPt1 == m_aPt1 && aNewPt2 == m_aPt2)
         return;
 
     // set model values and broadcast
     tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
 
-    aPt1 = aNewPt1;
-    aPt2 = aNewPt2;
+    m_aPt1 = aNewPt1;
+    m_aPt2 = aNewPt2;
 
     SetTextDirty();
     ActionChanged();

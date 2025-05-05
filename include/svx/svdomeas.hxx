@@ -51,9 +51,9 @@ private:
     SAL_DLLPRIVATE virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     SAL_DLLPRIVATE virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
-    Point                       aPt1;
-    Point                       aPt2;
-    bool                        bTextDirty;
+    Point                       m_aPt1;
+    Point                       m_aPt2;
+    bool                        m_bTextDirty;
 
     SAL_DLLPRIVATE void ImpTakeAttr(ImpMeasureRec& rRec) const;
     SAL_DLLPRIVATE OUString TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind) const;
@@ -62,7 +62,7 @@ private:
     SAL_DLLPRIVATE void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;
     void SetTextDirty()
     {
-        bTextDirty=true;
+        m_bTextDirty=true;
         SetTextSizeDirty();
         if (!getOutRectangle().IsEmpty())
         {
