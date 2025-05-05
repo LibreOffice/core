@@ -98,7 +98,7 @@ SERVICE = Union[ARRAY, BASIC, DICTIONARY, EXCEPTION, FILESYSTEM, L10N, PLATFORM,
                 DOCUMENT, BASE, CALC, CALCREFERENCE, CHART, FORM, FORMCONTROL, FORMDOCUMENT, WRITER,
                 MENU, CONTEXTMENU, POPUPMENU, TOOLBAR, TOOLBARBUTTON]
 #   UNO
-UNO = TypeVar('UNO')
+UNO = TypeVar('UNO', Any, Any)
 #   Other
 FILE = TypeVar('FILE', str, str)
 """ File or folder name expressed in accordance with the ``FileSystem.FileNaming`` notation. """
@@ -5096,6 +5096,12 @@ class SFDocuments:
         CurrentSelection: Union[RANGE, Tuple[RANGE, ...]]
         """ Get/set the single selected range as a string or the list of selected ranges as a tuple of strings. """
 
+        DefinedNames: Tuple[str, ...]
+        """ The list of all names defined in the document, at global and sheet levels.  """
+
+        Sheets: Tuple[str, ...]
+        """ The list with the names of all existing sheets. """
+
         def FirstCell(self, rangename: RANGE) -> RANGE:
             """
                 Returns the First used cell in a given range or sheet. When the argument is a sheet it will always
@@ -5724,6 +5730,28 @@ class SFDocuments:
                         The argument is mandatory if a ``filterformula`` is specified.
                     Returns
                         A string representing the modified area as a range of cells.
+                """
+            ...
+
+        def DefineName(self,
+                       definedname: str,
+                       value: Union[str, int, float],
+                       sheetname: SHEETNAME = ...
+                       ) -> bool:
+            """
+                Define a new name in the worksheet, at global or sheet level.
+                The Value of the new name may be a range, a scalar value or a formula.
+                    Args
+                        ``definedname``: The name as a string. If it already exists, it is overwritten without warning.
+                        Note that homonyms might exist, but not in the same sheet and not at global level.
+
+                        ``value``: Either a range reference as a string, a scalar value as a number or a string,
+                        or a formula starting with the "=" sign.
+
+                        ``Sheetname``: when present, the sheet where the name is applicable to. The "~" shortcut
+                        is accepted.
+                    Returns
+                        ``True`` when successful.
                 """
             ...
 

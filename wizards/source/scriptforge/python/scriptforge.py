@@ -2472,7 +2472,7 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Calc'
         servicesynonyms = ('calc', 'sfdocuments.calc')
-        serviceproperties = dict(CurrentSelection = 3, CustomProperties = 3, Description = 3,
+        serviceproperties = dict(CurrentSelection = 3, CustomProperties = 3, DefinedNames = 1, Description = 3,
                                  DocumentProperties = 1, DocumentType = 0, ExportFilters = 0,
                                  FileSystem = 0, ImportFilters = 0, IsAlive = 1, IsBase = 0, IsCalc = 0,
                                  IsDraw = 0, IsFormDocument = 0, IsImpress = 0, IsMath = 0,
@@ -2618,6 +2618,9 @@ class SFDocuments:
                          filterformula = '', filterscope = ''):
             return self.ExecMethod(self.vbMethod, 'DecorateFont', targetrange, fontname, fontsize, decoration,
                                    filterformula, filterscope)
+
+        def DefineName(self, definedname, value, sheetname = ''):
+            return self.ExecMethod(self.vbMethod, 'DefineName', definedname, value, sheetname)
 
         def ExportRangeToFile(self, range, filename, imagetype = 'pdf', overwrite = False):
             return self.ExecMethod(self.vbMethod, 'ExportRangeToFile', range, filename, imagetype, overwrite)

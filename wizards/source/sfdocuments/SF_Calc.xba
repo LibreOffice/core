@@ -226,6 +226,12 @@ Catch:
 End Property	&apos;	SFDocuments.SF_Calc.CurrentSelection (let)
 
 REM -----------------------------------------------------------------------------
+Property Get DefinedNames() As Variant
+&apos;&apos;&apos;	Returns the full sorted list of all named ranges in the document
+	DefinedNames = _PropertyGet(&quot;DefinedNames&quot;)
+End Property	&apos;	SFDocuments.SF_Calc.DefinedNames
+
+REM -----------------------------------------------------------------------------
 Property Get FirstCell(Optional ByVal RangeName As Variant) As String
 &apos;&apos;&apos;	Returns the First used cell in a given range or sheet
 &apos;&apos;&apos;	When the argument is a sheet it will always return the &quot;sheet.$A$1&quot; cell
@@ -1771,10 +1777,10 @@ Public Function DecorateFont(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the updated range
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.DecorateRange(&quot;SheetX.A1:J30&quot;, FontSize := 15, Decoration := &quot;BU&quot;, FilterFormula := &quot;IsNumeric(A1), FilterScope := &quot;CELL&quot;)
+&apos;&apos;&apos;		oDoc.DecorateFont(&quot;SheetX.A1:J30&quot;, FontSize := 15, Decoration := &quot;BU&quot;, FilterFormula := &quot;IsNumeric(A1), FilterScope := &quot;CELL&quot;)
 &apos;&apos;&apos;			&apos;	Modify the font size and apply bold and underline properties to the numeric cells
 
-Dim sDecorate As String		&apos;	Return value
+Dim sDecorate As String			&apos;	Return value
 Dim oRange As Object			&apos;	Alias of TargetRange
 Dim vRanges() As Variant		&apos;	Array of subranges resulting from the application of the filter
 Dim oDRange As Object			&apos;	A single element of vRanges
@@ -1834,6 +1840,95 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Calc.DecorateFont
+
+REM -----------------------------------------------------------------------------
+Public Function DefineName(Optional ByVal DefinedName As Variant _
+							, Optional ByVal Value As Variant _
+							, Optional ByVal SheetName As Variant _
+							) As Boolean
+&apos;&apos;&apos;	Define a new name in the worksheet, at global or sheet level.
+&apos;&apos;&apos;	The Value of the new name may be a range, a scalar value or a formula.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		DefinedName: The name as a string. If it already exists, it is overwritten without warning.
+&apos;&apos;&apos;			Note that homonyms might exist, but not in the same sheet.
+&apos;&apos;&apos;		Value: Either
+&apos;&apos;&apos;			a range reference as a string, often a single cell
+&apos;&apos;&apos;			a scalar value as a number or a string
+&apos;&apos;&apos;			a formula starting with the &quot;=&quot; sign
+&apos;&apos;&apos;		SheetName: when present, the sheet where the name is applicable to. The &quot;~&quot; shortcut is accepted.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful.
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.DefineName(&quot;NewName&quot;, Sheet := &quot;Sheet3&quot;, Value := &quot;H2&quot;)
+
+Dim bDefine As Boolean			&apos;	Return value
+Dim oContainer As Object		&apos;	com.sun.star.lang.XComponent or com.sun.star.sheet.XSpreadsheet
+Dim oRange As Object			&apos;	Range after parsing
+Dim oCell As Object				&apos;	com.sun.star.table.CellAddress
+Dim sContent As String			&apos;	The content to store in the name
+
+Const cstThisSub = &quot;SFDocuments.Calc.DefineName&quot;
+Const cstSubArgs = &quot;DefinedName, Value, [SheetName=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bDefine = False
+
+Check:
+	If IsMissing(SheetName) Or IsEmpty(SheetName) Then SheetName = &quot;&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(DefinedName, &quot;DefinedName&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Value, &quot;Value&quot;, Array(V_STRING, ScriptForge.V_NUMERIC)) Then GoTo Finally
+		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, False, True, True) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Set the default reference cell
+	Set oCell = New com.sun.star.table.CellAddress
+	With oCell
+		.Sheet = 0
+		.Column = 0
+		.Row = 0
+	End With
+
+	&apos;	Determine the content as a string, and the reference cell when Value is a range
+	Select Case VarType(Value)
+		Case V_STRING
+			&apos;	Is Value a range ?
+			Set oRange = _ParseAddress(Value, pbError := False)
+			If IsNull(oRange) Then
+				sContent = Value
+			Else
+				With oRange
+					sContent = .RangeName
+					oCell.Sheet = .SheetIndex
+					oCell.Column = .XCellRange.RangeAddress.StartColumn
+					oCell.Row = .XCellRange.RangeAddress.StartRow
+				End With
+			End If
+		Case Else
+			&apos;	Use a locale-independent conversion function
+			sContent = Str(Value)
+	End Select
+
+	&apos;	Determine the named ranges container, either at document or at sheet level
+	If Len(SheetName) = 0 Then Set oContainer = _Component Else Set oContainer = _Component.Sheets.getByName(SheetName)
+
+	&apos;	Set the new name or replace it if it exists
+	With oContainer.NamedRanges
+		If .hasByName(DefinedName) Then .removeByName(DefinedName)
+		.addNewByName(DefinedName, sContent, oCell, 0)
+	End With
+
+	bDefine = True
+
+Finally:
+	DefineName = bDefine
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Calc.DefineName
 
 REM -----------------------------------------------------------------------------
 Public Function ExportRangeToFile(Optional ByVal Range As Variant _
@@ -2601,6 +2696,7 @@ Public Function Methods() As Variant
 					, &quot;DAvg&quot; _
 					, &quot;DCount&quot; _
 					, &quot;DecorateFont&quot; _
+					, &quot;DefineName&quot; _
 					, &quot;DMax&quot; _
 					, &quot;DMin&quot; _
 					, &quot;DSum&quot; _
@@ -3054,6 +3150,7 @@ Public Function Properties() As Variant
 	Properties = Array( _
 					&quot;CurrentSelection&quot; _
 					, &quot;CustomProperties&quot; _
+					, &quot;DefinedNames&quot; _
 					, &quot;Description&quot; _
 					, &quot;DocumentProperties&quot; _
 					, &quot;DocumentType&quot; _
@@ -4807,6 +4904,54 @@ Finally:
 End Function	&apos;	SFDocuments.SF_Calc._LastCell
 
 REM -----------------------------------------------------------------------------
+Private Function _NamedRangesList(Optional ByVal pbAll As Boolean) As Variant
+&apos;&apos;&apos;	Return the list, as an array of all the named ranges of the document.
+&apos;&apos;&apos;	The list may, optionally, include the named ranges owned by sheets. Such names are qualified with the sheet name.
+&apos;&apos;&apos;	Note that synonyms across sheet named ranges may exist.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		pbAll: When true (default), returns the full list of names
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The resulting list is sorted.
+
+Dim vNamedRanges As Variant			&apos;	Return value
+Dim lTop As Long					&apos;	Upper bound of vNamedRanges
+Dim oSheets As Object				&apos;	com.sun.star.sheet.XSpreadsheets
+Dim vSheetNames As Variant			&apos;	Array of sheet names
+Dim sSheetName As String			&apos;	A single sheet name
+Dim vSheetNamedRanges As Variant	&apos;	Array of named ranges found in a sheet
+Dim sSheetNamedRange As String		&apos;	A single named range
+Dim arr As Object					:	Set arr = CreateScriptService(&quot;Array&quot;)
+
+	If IsMissing(pbAll) Then pbAll = True
+	vNamedRanges = Array()
+
+Try:
+	vNamedRanges = _Component.NamedRanges.getElementNames()
+	If pbAll Then
+		Set oSheets = _Component.Sheets
+		With oSheets
+			vSheetNames = .getElementNames()
+			&apos;	Explore sheet by sheet
+			For Each sSheetName In vSheetNames
+				vSheetNamedRanges = .GetByName(sSheetName).NamedRanges.getElementNames()
+				For Each sSheetNamedRange In vSheetNamedRanges
+					lTop = UBound(vNamedRanges) + 1
+					ReDim Preserve vNamedRanges(0 To lTop)
+					&apos;	The named range is coded &apos;sheet&apos;.range
+					vNamedRanges(lTop) = &quot;$&apos;&quot; &amp; sSheetName &amp; &quot;&apos;.&quot; &amp; sSheetNamedRange
+				Next sSheetNamedRange
+			Next sSheetName
+		End With
+	End If
+
+	vNamedRanges = arr.Sort(vNamedRanges, SortOrder := &quot;ASC&quot;, CaseSensitive := True)
+
+Finally:
+	_NamedRangesList = vNamedRanges
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Calc._NamedRangesList
+
+REM -----------------------------------------------------------------------------
 Public Function _Offset(ByRef pvRange As Variant _
 								, ByVal plRows As Long _
 								, ByVal plColumns As Long _
@@ -4890,14 +5035,15 @@ CatchAddress:
 End Function	&apos;	SFDocuments.SF_Calc._Offset
 
 REM -----------------------------------------------------------------------------
-Private Function _ParseAddress(ByVal psAddress As String) As Object
+Private Function _ParseAddress(ByVal psAddress As String, Optional ByVal pbError As Boolean) As Object
 &apos;&apos;&apos;	Parse and validate a sheet or range reference
 &apos;&apos;&apos;	Syntax to parse:
 &apos;&apos;&apos;		[Sheet].[Range]
 &apos;&apos;&apos;			Sheet 	=&gt; [$][&apos;]sheet[&apos;] or document named range or ~
 &apos;&apos;&apos;			Range	=&gt; A1:D10, A1, A:D, 10:10 ($ ignored), or sheet named range or ~ or *
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		An object of type _Address
+&apos;&apos;&apos;		An object of type _Address.
+&apos;&apos;&apos;		When parsing failed, an error is generated, except if pbError = False =&gt; Nothing is returned.
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		CALCADDRESSERROR		&apos;	Address could not be parsed to a valid address
 
@@ -4912,6 +5058,8 @@ Dim oNamedRanges As Object			&apos;	com.sun.star.sheet.XNamedRanges
 Dim oRangeAddress As Object			&apos;	Alias for rangeaddress
 Dim vLastCell As Variant			&apos;	Result of _LastCell() method
 Dim oSelect As Object				&apos;	Current selection
+
+	If IsMissing(pbError) Then pbError = True
 
 	&apos;	If psAddress has already been parsed, get the result back
 	If Not IsNull(_LastParsedAddress) Then
@@ -5020,8 +5168,12 @@ Finally:
 CatchError:
 	ScriptForge.SF_Exception.Clear()
 CatchAddress:
-	ScriptForge.SF_Exception.RaiseFatal(CALCADDRESSERROR, &quot;Range&quot;, psAddress _
+	If pbError Then
+		ScriptForge.SF_Exception.RaiseFatal(CALCADDRESSERROR, &quot;Range&quot;, psAddress _
 				, &quot;Document&quot;, [_Super]._FileIdent())
+	Else
+		Set oAddress = Nothing
+	End If
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Calc._ParseAddress
 
@@ -5063,13 +5215,8 @@ Const cstSubArgs = &quot;&quot;
 			Else
 				_PropertyGet = oSelect.AbsoluteName
 			End If
-		Case UCase(&quot;Height&quot;)
-			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
-				_PropertyGet = 0
-			Else
-				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
-				_PropertyGet = _ParseAddress(pvArg).Height
-			End If
+		Case UCase(&quot;DefinedNames&quot;)
+			_PropertyGet = _NamedRangesList(True)
 		Case UCase(&quot;FirstCell&quot;), UCase(&quot;FirstRow&quot;), UCase(&quot;FirstColumn&quot;) _
 				, UCase(&quot;LastCell&quot;), UCase(&quot;LastColumn&quot;), UCase(&quot;LastRow&quot;) _
 				, UCase(&quot;SheetName&quot;)
@@ -5091,6 +5238,13 @@ Const cstSubArgs = &quot;&quot;
 						Case UCase(&quot;SheetName&quot;)		:	_PropertyGet = oAddress.XSpreadsheet.Name
 					End Select
 				End With
+			End If
+		Case UCase(&quot;Height&quot;)
+			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
+				_PropertyGet = 0
+			Else
+				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
+				_PropertyGet = _ParseAddress(pvArg).Height
 			End If
 		Case UCase(&quot;Range&quot;)
 			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
