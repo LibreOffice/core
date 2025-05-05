@@ -1133,6 +1133,37 @@ namespace
             static_cast<SwPaM&>(m_rRedline) = *m_pCursor;
         }
     };
+
+/// Decides if it's OK to combine two types of redlines next to each other, e.g. insert and
+/// delete-on-insert can be combined if accepting an insert.
+bool CanCombineTypesForAccept(SwRedlineData& rInnerData, SwRangeRedline& rOuterRedline)
+{
+    if (rInnerData.GetType() != RedlineType::Insert)
+    {
+        return false;
+    }
+
+    switch (rOuterRedline.GetType())
+    {
+        case RedlineType::Delete:
+        case RedlineType::Format:
+            break;
+        default:
+            return false;
+    }
+
+    if (rOuterRedline.GetStackCount() <= 1)
+    {
+        return false;
+    }
+
+    if (rOuterRedline.GetType(1) != RedlineType::Insert)
+    {
+        return false;
+    }
+
+    return true;
+}
 }
 
 namespace sw
@@ -3199,13 +3230,11 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
-        else if (aOrigData.GetType() == RedlineType::Insert
-                 && pTmp->GetType() == RedlineType::Delete && pTmp->GetStackCount() > 1
-                 && pTmp->GetType(1) == RedlineType::Insert
+        else if (CanCombineTypesForAccept(aOrigData, *pTmp)
                  && pTmp->GetRedlineData(1).CanCombineForAcceptReject(aOrigData))
         {
-            // The Insert redline we want to accept has a deletion redline too
-            // we should leave the deletion redline, and only accept the inner insert.
+            // The Insert redline we want to accept has an other type of redline too
+            // we should leave the other type of redline, and only accept the inner insert.
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
