@@ -1320,11 +1320,19 @@ poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
         }
     }
 
+#if POPPLER_CHECK_VERSION(25, 5, 0)
+    std::unique_ptr<MemStream> pRgbStr(new MemStream(pBitmapData, 0,
+        nBitmapWidth * nBitmapHeight * 3, Object::null()));
+    std::unique_ptr<MemStream> pAlphaStr(new MemStream(reinterpret_cast<char *>(pSplashBitmap->getAlphaPtr()),
+        0, nBitmapWidth * nBitmapHeight, Object::null()));
+    auto aDecode = Object::null();
+#else
     std::unique_ptr<MemStream> pRgbStr(new MemStream(pBitmapData, 0,
         nBitmapWidth * nBitmapHeight * 3, Object(objNull)));
     std::unique_ptr<MemStream> pAlphaStr(new MemStream(reinterpret_cast<char *>(pSplashBitmap->getAlphaPtr()),
         0, nBitmapWidth * nBitmapHeight, Object(objNull)));
     auto aDecode = Object(objNull);
+#endif
 #if POPPLER_CHECK_VERSION(24, 10, 0)
     std::unique_ptr<GfxImageColorMap> pRgbIdentityColorMap(new GfxImageColorMap(8, &aDecode,
         std::make_unique<GfxDeviceRGBColorSpace>()));
