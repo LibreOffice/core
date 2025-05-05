@@ -3881,7 +3881,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         Point aRealOutPos( aOutPos );
                                         if ( ( rTextPortion.GetKind() == PortionKind::TEXT )
                                                && rTextPortion.GetExtraInfos() && rTextPortion.GetExtraInfos()->bCompressed
-                                               && rTextPortion.GetExtraInfos()->bFirstCharIsRightPunktuation )
+                                               && rTextPortion.GetExtraInfos()->bFirstCharIsRightPunctuation )
                                         {
                                             aRealOutPos.AdjustX(rTextPortion.GetExtraInfos()->nPortionOffsetX );
                                         }
@@ -4901,7 +4901,7 @@ bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
                             }
                             else
                             {
-                                pTextPortion->GetExtraInfos()->bFirstCharIsRightPunktuation = true;
+                                pTextPortion->GetExtraInfos()->bFirstCharIsRightPunctuation = true;
                                 pTextPortion->GetExtraInfos()->nPortionOffsetX = -nCompress;
                             }
                         }

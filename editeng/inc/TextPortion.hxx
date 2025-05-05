@@ -68,7 +68,7 @@ struct ExtraPortionInfo
     sal_uInt16 nMaxCompression100thPercent = 0;
 
     AsianCompressionFlags nAsianCompressionTypes = AsianCompressionFlags::Normal;
-    bool bFirstCharIsRightPunktuation = false;
+    bool bFirstCharIsRightPunctuation = false;
     bool bCompressed = false;
 
     std::unique_ptr<double[]> pOrgDXArray;
