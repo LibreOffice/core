@@ -92,8 +92,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     bool bNegativePage = GetViewData().GetDocument().IsNegativePage( GetViewData().GetTabNo() );
 
     SdrView* pDragEditView = nullptr;
-    const ScDragData& rData = ScModule::get()->GetDragData();
-    ScDrawTransferObj* pDrawTrans = rData.pDrawTransfer;
+    const ScDragData* pData = ScModule::get()->GetDragData();
+    ScDrawTransferObj* pDrawTrans = pData ? pData->pDrawTransfer : nullptr;
     if (pDrawTrans)
     {
         pDragEditView = pDrawTrans->GetDragSourceView();

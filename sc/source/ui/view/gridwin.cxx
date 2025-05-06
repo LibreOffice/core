@@ -4228,7 +4228,10 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt, const ScD
 
 sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    const ScDragData& rData = ScModule::get()->GetDragData();
+    const ScDragData* pData = ScModule::get()->GetDragData();
+    if (!pData)
+        return DND_ACTION_NONE;
+    const ScDragData& rData = *pData;
     if ( rEvt.mbLeaving )
     {
         DrawMarkDropObj( nullptr );
@@ -4880,7 +4883,10 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     DrawMarkDropObj( nullptr );    // drawing layer
 
     ScModule* pScMod = ScModule::get();
-    const ScDragData& rData = pScMod->GetDragData();
+    const ScDragData* pData = pScMod->GetDragData();
+    if (!pData)
+        return DND_ACTION_NONE;
+    const ScDragData& rData = *pData;
     if (rData.pCellTransfer)
         return ExecutePrivateDrop( rEvt, rData );
 

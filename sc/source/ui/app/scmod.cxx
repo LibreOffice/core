@@ -623,16 +623,15 @@ void ScModule::ResetDragObject()
     }
 }
 
-const ScDragData& ScModule::GetDragData() const
+const ScDragData* ScModule::GetDragData() const
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-        assert(pViewShell);
-        return pViewShell->GetDragData();
+        return pViewShell ? &pViewShell->GetDragData() : nullptr;
     }
-    else
-        return *m_pDragData;
+
+    return m_pDragData.get();
 }
 
 void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )

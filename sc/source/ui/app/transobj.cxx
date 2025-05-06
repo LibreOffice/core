@@ -180,9 +180,9 @@ ScTransferObj::~ScTransferObj()
 {
     SolarMutexGuard aSolarGuard;
 
-    bool bIsDisposing = comphelper::LibreOfficeKit::isActive() && !ScTabViewShell::GetActiveViewShell();
     ScModule* pScMod = ScModule::get();
-    if (pScMod && !bIsDisposing && pScMod->GetDragData().pCellTransfer == this)
+    const ScDragData* pDragData = pScMod ? pScMod->GetDragData() : nullptr;
+    if (pDragData && pDragData->pCellTransfer == this)
     {
         OSL_FAIL("ScTransferObj wasn't released");
         pScMod->ResetDragObject();
@@ -602,7 +602,8 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
     }
 
     ScModule* pScMod = ScModule::get();
-    if ( pScMod && pScMod->GetDragData().pCellTransfer == this )
+    const ScDragData* pDragData = pScMod ? pScMod->GetDragData() : nullptr;
+    if (pDragData && pDragData->pCellTransfer == this)
         pScMod->ResetDragObject();
 
     m_xDragSourceRanges = nullptr;       // don't keep source after dropping
