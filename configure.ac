@@ -696,8 +696,9 @@ if test "$build_os" = "cygwin" -o -n "$WSL_ONLY_AS_HELPER"; then
     # that would already set the PKG_CONFIG var and then bypass/skip this autoselection
     AC_PATH_PROG(PKG_CONFIG,pkgconf-2.4.3.exe,,[$PATH:$LODE_HOME/opt/bin])
     if test -z "$PKG_CONFIG"; then
-        AC_MSG_WARN([pkgconf-2.4.3.exe not found - A windows version of pkgconf is required to build harfbuzz])
-        add_warning "please add PKG_CONFIG=/path/to/pkgconf-2.4.3.exe to autogen.input or put it in PATH, a windows version of pkgconf is required to build harfbuzz"
+        AC_MSG_ERROR([
+            A windows version of pkgconf is required to build harfbuzz.
+            Add PKG_CONFIG=/path/to/pkgconf-2.4.3.exe to autogen.input or put it in PATH])
     fi
 else
     case "$build_os" in
