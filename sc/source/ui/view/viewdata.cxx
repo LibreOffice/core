@@ -1942,6 +1942,11 @@ void ScViewData::EditGrowX()
 
     //  get bGrow... variables the same way as in SetEditEngine
     const ScPatternAttr* pPattern = rLocalDoc.GetPattern( nEditCol, nEditRow, nTabNo );
+    if (!pPattern)
+    {
+        SAL_WARN("sc.viewdata", "No Pattern Found for: Col: " << nEditCol << ", Row: " << nEditRow << ", Tab: " << nTabNo);
+        pPattern = &rLocalDoc.getCellAttributeHelper().getDefaultCellAttribute();
+    }
     SvxCellHorJustify eJust = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
     bool bGrowCentered = ( eJust == SvxCellHorJustify::Center );
     bool bGrowToLeft = ( eJust == SvxCellHorJustify::Right );      // visual left
