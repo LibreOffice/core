@@ -318,7 +318,10 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     m_xSearchAttrText->hide();
 
     this->SetSearchLabel(u""_ustr); // hide the message but keep the box height
-    m_xSearchIcon->set_size_request(24, 24); // vcl/res/infobar.png is 32x32 - too large here
+
+    //weird findreplacedialog-mobile.ui case doesn't have searchicon or searchbox
+    if (m_xSearchIcon)
+        m_xSearchIcon->set_size_request(24, 24); // vcl/res/infobar.png is 32x32 - too large here
 
     m_xReplaceTmplLB->make_sorted();
     m_xReplaceAttrText->hide();
@@ -562,20 +565,26 @@ void SvxSearchDialog::SetSearchLabel(const OUString& rStr)
     if (!rStr.isEmpty())
     {
         m_xSearchLabel->show();
-        m_xSearchIcon->show();
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        if (rStyleSettings.GetDialogColor().IsDark())
-            m_xSearchBox->set_background(Color(0x00, 0x56, 0x80));
-        else
-            m_xSearchBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
+        if (m_xSearchIcon)
+        {
+            m_xSearchIcon->show();
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+            if (rStyleSettings.GetDialogColor().IsDark())
+                m_xSearchBox->set_background(Color(0x00, 0x56, 0x80));
+            else
+                m_xSearchBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
+        }
     }
     else
     {
-        const Size aSize = m_xSearchBox->get_preferred_size();
         m_xSearchLabel->hide();
-        m_xSearchIcon->hide();
-        m_xSearchBox->set_size_request(-1, aSize.Height());
-        m_xSearchBox->set_background(COL_TRANSPARENT);
+        if (m_xSearchIcon)
+        {
+            const Size aSize = m_xSearchBox->get_preferred_size();
+            m_xSearchIcon->hide();
+            m_xSearchBox->set_size_request(-1, aSize.Height());
+            m_xSearchBox->set_background(COL_TRANSPARENT);
+        }
     }
 
     if (rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND))
