@@ -85,51 +85,6 @@ private:
     mutable sal::systools::COMReference<IDWriteFontFace> mxDWFontFace;
 };
 
-/** Class that creates (and destroys) a compatible Device Context.
-
-This is to be used for GDI drawing into a DIB that we later use for a different
-drawing method, such as a texture for OpenGL drawing or surface for Skia drawing.
-*/
-class CompatibleDC
-{
-protected:
-    /// The compatible DC that we create for our purposes.
-    HDC mhCompatibleDC;
-
-    /// DIBSection that we use for the GDI drawing, and later obtain.
-    HBITMAP mhBitmap;
-
-    /// Return the previous bitmap to undo the SelectObject.
-    HBITMAP mhOrigBitmap;
-
-    /// DIBSection data.
-    sal_uInt32 *mpData;
-
-    /// Mapping between the GDI position and OpenGL, to use for OpenGL drawing.
-    SalTwoRect maRects;
-
-    /// The SalGraphicsImpl where we will draw.  If null, we ignore the drawing, it means it happened directly to the DC...
-    WinSalGraphicsImplBase *mpImpl;
-
-    // If 'disable' is true, this class is a simple wrapper for drawing directly. Subclasses should use true.
-    CompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height, bool disable=true);
-
-public:
-    static std::unique_ptr< CompatibleDC > create(SalGraphics &rGraphics, int x, int y, int width, int height);
-
-    virtual ~CompatibleDC();
-
-    HDC getCompatibleHDC() { return mhCompatibleDC; }
-
-    SalTwoRect getTwoRect() const { return maRects; }
-
-    tools::Long getBitmapWidth() const { return maRects.mnSrcWidth; }
-    tools::Long getBitmapHeight() const { return maRects.mnSrcHeight; }
-
-    /// Reset the DC with the defined color.
-    void fill(sal_uInt32 color);
-};
-
 /**
  * WinSalGraphics never owns the HDC it uses to draw, because the HDC can have
  * various origins with different ways to correctly free it. And WinSalGraphics

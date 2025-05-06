@@ -242,62 +242,6 @@ void ImplClearHDCCache( SalData* pData )
     }
 }
 
-std::unique_ptr< CompatibleDC > CompatibleDC::create(SalGraphics &rGraphics, int x, int y, int width, int height)
-{
-#if HAVE_FEATURE_SKIA
-    if (SkiaHelper::isVCLSkiaEnabled())
-        return std::make_unique< SkiaCompatibleDC >( rGraphics, x, y, width, height );
-#endif
-    return std::unique_ptr< CompatibleDC >( new CompatibleDC( rGraphics, x, y, width, height ));
-}
-
-CompatibleDC::CompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height, bool disable)
-    : mhBitmap(nullptr)
-    , mpData(nullptr)
-    , maRects(0, 0, width, height, x, y, width, height)
-    , mpImpl(nullptr)
-{
-    WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
-
-    if( disable )
-    {
-        // we avoid the OpenGL drawing, instead we draw directly to the DC
-        mhCompatibleDC = rWinGraphics.getHDC();
-        return;
-    }
-
-    mpImpl = rWinGraphics.getWinSalGraphicsImplBase();
-    mhCompatibleDC = CreateCompatibleDC(rWinGraphics.getHDC());
-
-    // move the origin so that we always paint at 0,0 - to keep the bitmap
-    // small
-    OffsetViewportOrgEx(mhCompatibleDC, -x, -y, nullptr);
-
-    mhBitmap = WinSalVirtualDevice::ImplCreateVirDevBitmap(mhCompatibleDC, width, height, 32, reinterpret_cast<void **>(&mpData));
-
-    mhOrigBitmap = static_cast<HBITMAP>(SelectObject(mhCompatibleDC, mhBitmap));
-}
-
-CompatibleDC::~CompatibleDC()
-{
-    if (mpImpl)
-    {
-        SelectObject(mhCompatibleDC, mhOrigBitmap);
-        DeleteObject(mhBitmap);
-        DeleteDC(mhCompatibleDC);
-    }
-}
-
-void CompatibleDC::fill(sal_uInt32 color)
-{
-    if (!mpData)
-        return;
-
-    sal_uInt32 *p = mpData;
-    for (int i = maRects.mnSrcWidth * maRects.mnSrcHeight; i > 0; --i)
-        *p++ = color;
-}
-
 WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd, [[maybe_unused]] SalGeometryProvider *pProvider):
     mhLocalDC(nullptr),
     mbPrinter(eType == WinSalGraphics::PRINTER),

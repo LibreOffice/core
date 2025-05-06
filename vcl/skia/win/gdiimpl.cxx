@@ -12,6 +12,7 @@
 #include <skia/win/gdiimpl.hxx>
 
 #include <win/saldata.hxx>
+#include <win/salvd.h>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
@@ -154,15 +155,11 @@ bool WinSkiaSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const&
     return true;
 }
 
-bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack,
-                                                         int nX, int nY,
+bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(SkiaCompatibleDC& rWhite,
+                                                         SkiaCompatibleDC& rBlack, int nX, int nY,
                                                          ControlCacheKey& aControlCacheKey)
 {
-    assert(dynamic_cast<SkiaCompatibleDC*>(&rWhite));
-    assert(dynamic_cast<SkiaCompatibleDC*>(&rBlack));
-
-    sk_sp<SkImage> image = static_cast<SkiaCompatibleDC&>(rBlack).getAsImageDiff(
-        static_cast<SkiaCompatibleDC&>(rWhite));
+    sk_sp<SkImage> image = rBlack.getAsImageDiff(rWhite);
     preDraw();
     SAL_INFO("vcl.skia.trace",
              "renderandcachednativecontrol("
@@ -346,9 +343,39 @@ void WinSkiaSalGraphicsImpl::ClearDevFontCache()
     initFontInfo(); // get font info again, just in case
 }
 
-SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height)
-    : CompatibleDC(rGraphics, x, y, width, height, false)
+SkiaCompatibleDC::SkiaCompatibleDC(WinSalGraphics& rGraphics, int x, int y, int width, int height)
+    : maRects(0, 0, width, height, x, y, width, height)
 {
+    mpImpl = rGraphics.getWinSalGraphicsImplBase();
+    mhCompatibleDC = CreateCompatibleDC(rGraphics.getHDC());
+
+    // move the origin so that we always paint at 0,0 - to keep the bitmap small
+    OffsetViewportOrgEx(mhCompatibleDC, -x, -y, nullptr);
+
+    mhBitmap = WinSalVirtualDevice::ImplCreateVirDevBitmap(mhCompatibleDC, width, height, 32,
+                                                           reinterpret_cast<void**>(&mpData));
+
+    mhOrigBitmap = static_cast<HBITMAP>(SelectObject(mhCompatibleDC, mhBitmap));
+}
+
+SkiaCompatibleDC::~SkiaCompatibleDC()
+{
+    if (mpImpl)
+    {
+        SelectObject(mhCompatibleDC, mhOrigBitmap);
+        DeleteObject(mhBitmap);
+        DeleteDC(mhCompatibleDC);
+    }
+}
+
+void SkiaCompatibleDC::fill(sal_uInt32 color)
+{
+    if (!mpData)
+        return;
+
+    sal_uInt32* p = mpData;
+    for (int i = maRects.mnSrcWidth * maRects.mnSrcHeight; i > 0; --i)
+        *p++ = color;
 }
 
 sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) const

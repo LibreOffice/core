@@ -13,6 +13,7 @@
 #include <ControlCacheKey.hxx>
 
 class ControlCacheKey;
+class SkiaCompatibleDC;
 
 // Base class for some functionality that OpenGL/Skia/GDI backends must each implement.
 class WinSalGraphicsImplBase
@@ -27,8 +28,8 @@ public:
     {
         abort();
     }
-    virtual bool RenderAndCacheNativeControl(CompatibleDC& /*rWhite*/, CompatibleDC& /*rBlack*/,
-                                             int /*nX*/, int /*nY*/,
+    virtual bool RenderAndCacheNativeControl(SkiaCompatibleDC& /*rWhite*/,
+                                             SkiaCompatibleDC& /*rBlack*/, int /*nX*/, int /*nY*/,
                                              ControlCacheKey& /*aControlCacheKey*/)
     {
         abort();

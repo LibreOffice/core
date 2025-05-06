@@ -40,6 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/themecolors.hxx>
+#include <vcl/skia/skiahelper.hxx>
 #include <salinst.hxx>
 #include <toolbarvalue.hxx>
 #include <menubarvalue.hxx>
@@ -51,6 +52,7 @@
 #include <win/salinst.h>
 #include <win/scoped_gdi.hxx>
 #include <win/wingdiimpl.hxx>
+#include <skia/win/gdiimpl.hxx>
 
 #include <uxtheme.h>
 #include <vssym32.h>
@@ -1653,22 +1655,30 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         // restore alignment
         SetTextAlign(getHDC(), ta);
     }
+#if HAVE_FEATURE_SKIA
+    else if (SkiaHelper::isVCLSkiaEnabled())
+    {
+        // We can do Skia
+        SkiaCompatibleDC aBlackDC( *this, cacheRect.Left(), cacheRect.Top(), cacheRect.GetWidth()+1, cacheRect.GetHeight()+1 );
+        SetTextAlign(aBlackDC.getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
+        aBlackDC.fill(RGB(0, 0, 0));
+
+        SkiaCompatibleDC aWhiteDC(*this, cacheRect.Left(), cacheRect.Top(), cacheRect.GetWidth()+1, cacheRect.GetHeight()+1);
+        SetTextAlign(aWhiteDC.getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
+        aWhiteDC.fill(RGB(0xff, 0xff, 0xff));
+
+        if (ImplDrawNativeControl(aBlackDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr, bUseDarkMode) &&
+            ImplDrawNativeControl(aWhiteDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr, bUseDarkMode))
+        {
+            bOk = pImpl->RenderAndCacheNativeControl(aWhiteDC, aBlackDC, cacheRect.Left(), cacheRect.Top(), aControlCacheKey);
+        }
+    }
+#endif
     else
     {
-        // We can do OpenGL/Skia
-        std::unique_ptr<CompatibleDC> aBlackDC(CompatibleDC::create(*this, cacheRect.Left(), cacheRect.Top(), cacheRect.GetWidth()+1, cacheRect.GetHeight()+1));
-        SetTextAlign(aBlackDC->getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
-        aBlackDC->fill(RGB(0, 0, 0));
-
-        std::unique_ptr<CompatibleDC> aWhiteDC(CompatibleDC::create(*this, cacheRect.Left(), cacheRect.Top(), cacheRect.GetWidth()+1, cacheRect.GetHeight()+1));
-        SetTextAlign(aWhiteDC->getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
-        aWhiteDC->fill(RGB(0xff, 0xff, 0xff));
-
-        if (ImplDrawNativeControl(aBlackDC->getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr, bUseDarkMode) &&
-            ImplDrawNativeControl(aWhiteDC->getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr, bUseDarkMode))
-        {
-            bOk = pImpl->RenderAndCacheNativeControl(*aWhiteDC, *aBlackDC, cacheRect.Left(), cacheRect.Top(), aControlCacheKey);
-        }
+        // Use normal GDI
+        SetTextAlign(getHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
+        ImplDrawNativeControl(getHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr, bUseDarkMode);
     }
 
     if (bUseDarkMode)
