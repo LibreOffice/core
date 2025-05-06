@@ -15,9 +15,13 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,harfbuzz))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 
+# See https://github.com/harfbuzz/harfbuzz/pull/5315 for
+# 0001-increase-maximum-set_flags-range.patch.1
+
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/tdf159529.patch.0 \
     external/harfbuzz/harfbuzz_visibility.patch.1 \
+    external/harfbuzz/0001-increase-maximum-set_flags-range.patch.1 \
 ))
 
 # meson will replace python3 from shebang in build commands with the

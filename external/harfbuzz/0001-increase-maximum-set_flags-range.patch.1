@@ -1,0 +1,44 @@
+From 3bb296559745a08d7d7d05bf3e39bf010c68de55 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Tue, 6 May 2025 11:48:46 +0100
+Subject: [PATCH] increase maximum set_flags range
+
+This a problem for LibreOffice since:
+
+commit 0d8717275ac5809812c254c1b0923f2fc052c582
+CommitDate: Tue Apr 22 15:40:06 2025 -0600
+
+    [buffer] Limit the extent of set_flags range
+
+where we now see an asset of:
+
+vcl/source/gdi/impglyphitem.cxx:319: void checkGlyphsEqual(const SalLayoutGlyphs&, const SalLayoutGlyphs&): Assertion `l1->isLayoutEquivalent(l2)' failed.
+
+as noted in https://gerrit.libreoffice.org/c/core/+/184761
+
+on checking in debug-builds if reusing a subset of a previous laid out
+string as a cache for the same subtext seen again does really give the
+same results.
+
+In our test documents, empirically checking what number here works,
+there's one case which still fails at len 2029 but succeeds at 2030.
+---
+ src/hb-buffer.hh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/hb-buffer.hh b/src/hb-buffer.hh
+index 6c620db69..c922ec592 100644
+--- a/src/hb-buffer.hh
++++ b/src/hb-buffer.hh
+@@ -412,7 +412,7 @@ struct hb_buffer_t
+   {
+     end = hb_min (end, len);
+ 
+-    if (unlikely (end - start > 255))
++    if (unlikely (end - start >= 2048))
+       return;
+ 
+     if (interior && !from_out_buffer && end - start < 2)
+-- 
+2.49.0
+
