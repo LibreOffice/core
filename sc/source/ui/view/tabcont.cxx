@@ -541,15 +541,16 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     EndSwitchPage();
 
     ScDocument& rDoc = rViewData.GetDocument();
-    const ScDragData& rData = ScModule::get()->GetDragData();
-    if ( rData.pCellTransfer && (rData.pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) &&
-            rData.pCellTransfer->GetSourceDocument() == &rDoc )
+    const ScDragData* pData = ScModule::get()->GetDragData();
+    if ( pData && pData->pCellTransfer &&
+         (pData->pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) &&
+         pData->pCellTransfer->GetSourceDocument() == &rDoc )
     {
         // moving of tables within the document
         SCTAB nPos = GetPrivatDropPos( rEvt.maPosPixel );
         HideDropPos();
 
-        if ( nPos == rData.pCellTransfer->GetVisibleTab() && rEvt.mnAction == DND_ACTION_MOVE )
+        if ( nPos == pData->pCellTransfer->GetVisibleTab() && rEvt.mnAction == DND_ACTION_MOVE )
         {
             // #i83005# do nothing - don't move to the same position
             // (too easily triggered unintentionally, and might take a long time in large documents)
@@ -561,7 +562,7 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 //! use table selection from the tab control where dragging was started?
                 rViewData.GetView()->MoveTable( lcl_DocShellNr(rDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
 
-                rData.pCellTransfer->SetDragWasInternal();          // don't delete
+                pData->pCellTransfer->SetDragWasInternal();          // don't delete
                 return DND_ACTION_COPY;
             }
         }
@@ -580,9 +581,10 @@ sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
     }
 
     const ScDocument& rDoc = rViewData.GetDocument();
-    const ScDragData& rData = ScModule::get()->GetDragData();
-    if ( rData.pCellTransfer && (rData.pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) &&
-            rData.pCellTransfer->GetSourceDocument() == &rDoc )
+    const ScDragData* pData = ScModule::get()->GetDragData();
+    if ( pData && pData->pCellTransfer &&
+         (pData->pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) &&
+         pData->pCellTransfer->GetSourceDocument() == &rDoc )
     {
         // moving of tables within the document
         if ( !rDoc.GetChangeTrack() && rDoc.IsDocEditable() )

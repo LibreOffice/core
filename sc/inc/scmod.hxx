@@ -134,7 +134,7 @@ public:
     void                AnythingChanged();
 
     //  Drag & Drop:
-    const ScDragData&   GetDragData() const;
+    const ScDragData*   GetDragData() const;
     void                SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
     void                ResetDragObject();
     void                SetDragLink(
