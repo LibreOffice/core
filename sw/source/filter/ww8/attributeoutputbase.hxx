@@ -179,7 +179,7 @@ public:
     virtual void StartRunProperties() = 0;
 
     /// Called after we end outputting the attributes.
-    virtual void EndRunProperties( const SwRedlineData* pRedlineData ) = 0;
+    virtual bool EndRunProperties( const SwRedlineData* pRedlineData ) = 0;
 
     /// docx requires footnoteRef/endnoteRef tag at the beginning of each of them
     virtual bool FootnoteEndnoteRefTag() { return false; };

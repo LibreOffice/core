@@ -634,6 +634,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161878)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165564)
+{
+    auto verify = [this]() {
+        auto para1 = getParagraph(1);
+        CPPUNIT_ASSERT_EQUAL(u"iXEndnote testiiY"_ustr, para1->getString());
+        auto para2 = getParagraph(2);
+        CPPUNIT_ASSERT_EQUAL(u"*1Footnote test2+"_ustr, para2->getString());
+    };
+    createSwDoc("tdf165564.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

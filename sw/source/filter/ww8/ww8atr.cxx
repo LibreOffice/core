@@ -1193,7 +1193,7 @@ void WW8AttributeOutput::EndRun( const SwTextNode* /*pNode*/, sal_Int32 nPos, sa
     }
 }
 
-void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
+bool WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 {
     Redline( pRedlineData );
 
@@ -1212,6 +1212,7 @@ void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
                 m_rWW8Export.m_pO->size(), m_rWW8Export.m_pO->data() );
     }
     m_rWW8Export.m_pO->clear();
+    return false;
 }
 
 void WW8AttributeOutput::RunText( const OUString& rText, rtl_TextEncoding eCharSet, const OUString& /*rSymbolFont*/ )

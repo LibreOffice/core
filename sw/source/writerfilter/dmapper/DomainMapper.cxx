@@ -4704,7 +4704,8 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                 pContext->GetFootnote()->setLabel( sText );
                 // tdf#141548 don't lose footnote/endnote text of the run with uFtnEdnRef
                 // (i.e. when footnoteRef/endnoteRef is followed by some text in the same run)
-                m_pImpl->appendTextPortion( sText, pContext );
+                if (!IsRTFImport())
+                    m_pImpl->appendTextPortion( sText, pContext );
             }
             else if (m_pImpl->IsOpenFieldCommand() && !m_pImpl->IsForceGenericFields())
             {
