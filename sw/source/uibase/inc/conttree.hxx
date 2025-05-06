@@ -236,7 +236,7 @@ public:
     /** Show the file */
     void            Display( bool bActiveView );
     /** In the clear the content types have to be deleted, also. */
-    void            clear(bool bLeaveFrozen = false);
+    void            clear();
 
     /** After a file is dropped on the Navigator, the new shell will be set */
     void            SetHiddenShell(SwWrtShell* pSh);
