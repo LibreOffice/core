@@ -6257,6 +6257,7 @@ if test "$cross_compiling" = "yes"; then
         REPORTBUILDER
         SCRIPTING
         ZLIB
+        ZSTD
         ZXCVBN
 "
     # converts BUILD_TYPE and PERMITTED_BUILD_TARGETS into non-whitespace,
