@@ -480,10 +480,11 @@ void RtfAttributeOutput::StartRunProperties()
     OSL_ENSURE(m_aStyles.getLength() == 0, "m_aStyles is not empty");
 }
 
-void RtfAttributeOutput::EndRunProperties(const SwRedlineData* /*pRedlineData*/)
+bool RtfAttributeOutput::EndRunProperties(const SwRedlineData* /*pRedlineData*/)
 {
     const OString aProperties = MoveCharacterProperties(true);
     m_aRun->append(aProperties);
+    return !aProperties.isEmpty();
 }
 
 OString RtfAttributeOutput::MoveCharacterProperties(bool aAutoWriteRtlLtr)
@@ -3112,8 +3113,8 @@ void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
     SAL_INFO("sw.rtf", __func__ << " start");
 
     m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_SUPER " ");
-    EndRunProperties(nullptr);
-    m_aRun->append(' ');
+    if (EndRunProperties(nullptr))
+        m_aRun->append(' ');
     WriteTextFootnoteNumStr(rFootnote);
     m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FOOTNOTE);
     if (rFootnote.IsEndNote() || m_rExport.m_rDoc.GetFootnoteInfo().m_ePos == FTNPOS_CHAPTER)

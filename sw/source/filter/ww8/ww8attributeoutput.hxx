@@ -64,7 +64,7 @@ public:
     virtual void StartRunProperties() override;
 
     /// After we end outputting the attributes.
-    virtual void EndRunProperties( const SwRedlineData* pRedlineData ) override;
+    virtual bool EndRunProperties( const SwRedlineData* pRedlineData ) override;
 
     /// Output text.
     virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8, const OUString& rSymbolFont = OUString() ) override;
