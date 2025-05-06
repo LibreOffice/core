@@ -4687,7 +4687,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
             pDocument->maFontsMissing.clear();
         }
 
-        // Try to take info about already painted tiles from an other view that has the same
+        // Try to take info about already painted tiles from another view that has the same
         // CanonicalViewId.
         const OString& rViewRenderState = pCallbackFlushHandler->getViewRenderState();
         for (const auto& rHandler : pDocument->mpCallbackFlushHandlers)
