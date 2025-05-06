@@ -107,6 +107,12 @@ PathFormat()
     #
     # /usr/bin/find.exe => C:/cygwin64/bin/find.exe
 
+    if test -z "$1"; then
+        formatted_path=""
+        formatted_path_unix=""
+        return
+    fi
+
     if test -n "$UNITTEST_WSL_PATHFORMAT"; then
         printf "PathFormat $1 ==> "
     fi
