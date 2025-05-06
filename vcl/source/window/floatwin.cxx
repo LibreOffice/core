@@ -956,6 +956,13 @@ void FloatingWindow::AddPopupModeWindow(vcl::Window* pWindow)
 
 bool SystemWindow::UpdatePositionData()
 {
+    // tdf#164337 don't update position data when waiting for a system resize
+    // When entering and exiting LibreOffice's internal full screen mode,
+    // updating position data causes the "exit full screen" floating
+    // toolbar to migrate after cycle.
+    if (mpWindowImpl->mbWaitSystemResize)
+        return false;
+
     auto pWin = ImplGetParent();
     if (pWin)
     {
