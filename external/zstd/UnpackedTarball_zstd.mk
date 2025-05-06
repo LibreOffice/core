@@ -11,4 +11,12 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,zstd))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,zstd,$(ZSTD_TARBALL)))
 
+ifneq ($(MSYSTEM),)
+# the tarball contains effectively dangling symlinks (links to files extracted later)
+# that breaks in git-bash/msys since MSYS defaults to not create links
+ifeq ($(filter winsymlinks%,$(MSYS)),)
+$(call gb_UnpackedTarball_get_target,zstd): export MSYS:=$(MSYS) winsymlinks
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
