@@ -1615,6 +1615,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf164907_rowHeightAtLeast)
     createSwDoc("tdf164907_rowHeightAtLeast.docx");
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nRowHeight = getXPath(pXmlDoc, "//body/tab/row[1]/infos/bounds", "bottom").toInt32();
+
+    // The first row has top and bottom padding - both should be added to the row's "minimum height"
+    // Without the fix, this was Actual  : 2732
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2852), nRowHeight);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf157829LTR)
