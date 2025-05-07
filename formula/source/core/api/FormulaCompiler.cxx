@@ -1284,6 +1284,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocHStack :
         case ocVStack :
         case ocTake :
+        case ocTextSplit :
         case ocToCol :
         case ocToRow :
         case ocUnique :

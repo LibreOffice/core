@@ -264,6 +264,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocTake,            {{ ReferenceOrRefArray, Value, Value,                   }, 0, ForceArrayReturn } },
     { ocTTest,           {{ ForceArray, ForceArray, Value, Value                 }, 0, Value }},
     { ocTextJoin_MS,     {{ Reference, Value, Reference                          }, 1, Value }},
+    { ocTextSplit,       {{ ReferenceOrRefArray, ReferenceOrRefArray, ReferenceOrRefArray, Value, Value, Value }, 0, ForceArrayReturn } },
     { ocToCol,           {{ ReferenceOrRefArray, Value, Value,                   }, 0, ForceArrayReturn } },
     { ocToRow,           {{ ReferenceOrRefArray, Value, Value,                   }, 0, ForceArrayReturn } },
     { ocTrend,           {{ Reference, Reference, Reference, Value               }, 0, Value }},

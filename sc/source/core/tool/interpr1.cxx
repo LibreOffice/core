@@ -9295,6 +9295,207 @@ void ScInterpreter::ScTake()
     ScTakeOrDrop(/*bTake*/ true);
 }
 
+
+static std::vector<OUString> lcl_SplitText(const OUString& rText, const std::vector<svl::SharedString>& rDelimiters,
+        bool bIgnoreEmpty, bool bMatchMode)
+{
+    std::vector<OUString> aResStr;
+    if (!rDelimiters.size() || rText.isEmpty())
+    {
+        aResStr.push_back(rText);
+    }
+    else
+    {
+        const sal_Int32 nLength (rText.getLength());
+        sal_Int32 nStart(0);
+        while (nStart < nLength)
+        {
+            sal_Int32 nIndex = nLength;
+            sal_Int32 nDelLength(0);
+
+            // Find the first delimiter
+            for (auto& rDelimiter : rDelimiters)
+            {
+                if (rDelimiter.isEmpty())
+                    continue;
+
+                OUString sDelimiter = rDelimiter.getString();
+                sal_Int32 nDelimiterIndex;
+                if (bMatchMode)
+                {
+                    nDelimiterIndex = ScGlobal::getCharClass().lowercase(rText).indexOf(
+                            ScGlobal::getCharClass().lowercase(sDelimiter), nStart);
+                }
+                else
+                    nDelimiterIndex = rText.indexOf(sDelimiter, nStart);
+
+                if (nDelimiterIndex != -1 && nDelimiterIndex < nIndex)
+                {
+                    nDelLength = sDelimiter.getLength();
+                    nIndex = nDelimiterIndex;
+                }
+            }
+
+            OUString sRes(rText.copy(nStart, nIndex - nStart));
+            if (!bIgnoreEmpty || !sRes.isEmpty())
+            {
+                aResStr.push_back(sRes);
+            }
+            nStart = nIndex + nDelLength;
+        }
+    }
+    return aResStr;
+}
+
+void ScInterpreter::ScTextSplit()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (!MustHaveParamCount(nParamCount, 1, 6))
+        return;
+
+    // 6rd argument optional - pad_with
+    std::optional<svl::SharedString> aPadWith;
+    if (nParamCount == 6)
+        aPadWith = GetString();
+
+    // 5rd argument optional - match_mode
+    bool bMatchMode = false;
+    if (nParamCount >= 5)
+    {
+        if (!IsMissing())
+        {
+            bMatchMode = GetBool();
+        }
+        else
+            Pop();
+    }
+
+    // 4rd argument optional - ignore_empty
+    bool bIgnoreEmpty = false;
+    if (nParamCount >= 4)
+    {
+        if (!IsMissing())
+            bIgnoreEmpty = GetBool();
+        else
+            Pop();
+    }
+
+    // 3rd argument optional - row_delimiter
+    std::vector<svl::SharedString> aRowDelimiters;
+    if (nParamCount >= 3)
+    {
+        ScMatrixRef pMatSource = nullptr;
+        SCSIZE nsC = 0, nsR = 0;
+        switch (GetStackType())
+        {
+            case svSingleRef:
+            case svDoubleRef:
+            case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            {
+                pMatSource = GetMatrix();
+                if (!pMatSource)
+                {
+                    PushIllegalParameter();
+                    return;
+                }
+
+                pMatSource->GetDimensions(nsC, nsR);
+                for (SCSIZE i = 0; i < nsC; i++)
+                {
+                    for (SCSIZE j = 0; j < nsR; j++)
+                    {
+                        aRowDelimiters.push_back(pMatSource->GetString(i,j));
+                    }
+                }
+            }
+            break;
+
+            default:
+                aRowDelimiters.push_back(GetString());
+        }
+    }
+
+    // 2nd argument optional - col_delimiter
+    std::vector<svl::SharedString> aColDelimiters;
+    if (nParamCount >= 2)
+    {
+        ScMatrixRef pMatSource = nullptr;
+        SCSIZE nsC = 0, nsR = 0;
+        switch (GetStackType())
+        {
+            case svSingleRef:
+            case svDoubleRef:
+            case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            {
+                pMatSource = GetMatrix();
+                if (!pMatSource)
+                {
+                    PushIllegalParameter();
+                    return;
+                }
+
+                pMatSource->GetDimensions(nsC, nsR);
+                for (SCSIZE i = 0; i < nsC; i++)
+                {
+                    for (SCSIZE j = 0; j < nsR; j++)
+                    {
+                        aColDelimiters.push_back(pMatSource->GetString(i,j));
+                    }
+                }
+            }
+            break;
+
+            default:
+                aColDelimiters.push_back(GetString());
+        }
+    }
+
+    // 1st argument: text
+    svl::SharedString sText = GetString();
+    if (sText.isEmpty())
+    {
+        PushIllegalParameter();
+        return;
+    }
+
+    std::vector<OUString> aRowStrs = lcl_SplitText(sText.getString(), aRowDelimiters, bIgnoreEmpty, bMatchMode);
+    std::vector<std::vector<OUString>> aRes;
+
+    SCSIZE nCols = 1;
+    SCSIZE nRows = aRowStrs.size();
+    for (auto& rRow : aRowStrs)
+    {
+        std::vector<OUString> aColStrs = lcl_SplitText(rRow, aColDelimiters, bIgnoreEmpty, bMatchMode);
+        nCols = std::max(nCols, aColStrs.size());
+        aRes.push_back(aColStrs);
+    }
+
+    ScMatrixRef pResMat = GetNewMat(nCols, nRows, /*bEmpty*/true);
+    for (SCSIZE col = 0; col < nCols; ++col)
+    {
+        for (SCSIZE row = 0; row < nRows; ++row)
+        {
+            if (col < aRes[row].size())
+            {
+                pResMat->PutString(mrStrPool.intern(aRes[row][col]), col, row);
+            }
+            else
+            {
+                if (!aPadWith.has_value())
+                    pResMat->PutError(FormulaError::NotAvailable, col, row);
+                else
+                    pResMat->PutString(aPadWith.value(), col, row);
+            }
+        }
+    }
+
+    PushMatrix(pResMat);
+}
+
 void ScInterpreter::ScToColOrRow(bool bCol)
 {
     sal_uInt8 nParamCount = GetByte();

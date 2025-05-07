@@ -736,6 +736,7 @@ private:
     void ScHStack();
     void ScVStack();
     void ScTake();
+    void ScTextSplit();
     void ScToCol();
     void ScToRow();
     void ScUnique();
