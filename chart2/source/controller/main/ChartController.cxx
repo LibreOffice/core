@@ -83,7 +83,23 @@
 #include <svx/ActionDescriptionProvider.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
+#include <editeng/eerdll.hxx>
+#include <editeng/editrids.hrc>
+#include <editeng/editids.hrc>
+#include <editeng/udlnitem.hxx>
+#include <svx/svdoutl.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/escapementitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/flstitem.hxx>
 
 // enable the following define to let the controller listen to model changes and
 // react on this by rebuilding the view
@@ -1306,13 +1322,144 @@ void SAL_CALL ChartController::dispatch(
                     if (xTitle.is())
                     {
                         OutlinerView* pOutlinerView = nullptr;
+                        SdrOutliner* pOutliner = nullptr;
                         if (m_pDrawViewWrapper)
                         {
                             pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+                            pOutliner = m_pDrawViewWrapper->GetTextEditOutliner();
                         }
-                        // if the Title is not in edit mode
-                        if (!pOutlinerView)
+
+                        // if the Title is in edit mode
+                        if (pOutlinerView && pOutliner)
                         {
+                            xProperties.pop_back();
+
+                            SolarMutexGuard aSolarGuard;
+                            SfxItemSet aEditAttr(pOutlinerView->GetAttribs());
+                            SfxItemSet aNewAttr(pOutliner->GetEmptyItemSet());
+
+                            if (aCommand == "CharFontName")
+                            {
+                                SvxFontItem aFont(EE_CHAR_FONTINFO);
+                                aFont.PutValue(rArgs[0].Value, 0);
+                                aNewAttr.Put(aFont);
+                            }
+                            else if (aCommand == "FontHeight")
+                            {
+                                SvxFontHeightItem aFontHeight(260, 100, EE_CHAR_FONTHEIGHT);
+                                aFontHeight.PutValue(rArgs[0].Value, MID_FONTHEIGHT);
+                                aNewAttr.Put(aFontHeight);
+
+                            }
+                            else if (aCommand == "Bold")
+                            {
+                                FontWeight eFW = aEditAttr.Get(EE_CHAR_WEIGHT).GetWeight();
+                                aNewAttr.Put(SvxWeightItem(eFW == WEIGHT_NORMAL ? WEIGHT_BOLD
+                                                                                : WEIGHT_NORMAL,
+                                                           EE_CHAR_WEIGHT));
+                            }
+                            else if (aCommand == "Italic")
+                            {
+                                FontItalic eFI = aEditAttr.Get(EE_CHAR_ITALIC).GetPosture();
+                                aNewAttr.Put(SvxPostureItem(eFI == ITALIC_NORMAL ? ITALIC_NONE
+                                                                                 : ITALIC_NORMAL,
+                                                            EE_CHAR_ITALIC));
+                            }
+                            else if (aCommand == "Underline")
+                            {
+                                sal_Int16 nFontUnderline = 0;
+                                sal_Int32 nFontUnderline32 = 0;
+                                if (!(rArgs[0].Value >>= nFontUnderline)
+                                    && (rArgs[0].Value >>= nFontUnderline32))
+                                {
+                                    aNewAttr.Put(SvxUnderlineItem(FontLineStyle(nFontUnderline32),
+                                                                  EE_CHAR_UNDERLINE));
+                                }
+                                else
+                                {
+                                    FontLineStyle eFU
+                                        = aEditAttr.Get(EE_CHAR_UNDERLINE).GetLineStyle();
+                                    aNewAttr.Put(SvxUnderlineItem(
+                                        eFU == LINESTYLE_SINGLE ? LINESTYLE_NONE : LINESTYLE_SINGLE,
+                                        EE_CHAR_UNDERLINE));
+                                }
+                            }
+                            else if (aCommand == "Strikeout")
+                            {
+                                FontStrikeout eFSO
+                                    = aEditAttr.Get(EE_CHAR_STRIKEOUT).GetStrikeout();
+                                aNewAttr.Put(SvxCrossedOutItem(
+                                    eFSO == STRIKEOUT_SINGLE ? STRIKEOUT_NONE : STRIKEOUT_SINGLE,
+                                    EE_CHAR_STRIKEOUT));
+                            }
+                            else if (aCommand == "Shadowed")
+                            {
+                                bool bShadow = aEditAttr.Get(EE_CHAR_SHADOW).GetValue();
+                                aNewAttr.Put(SvxShadowedItem(!bShadow, EE_CHAR_SHADOW));
+                            }
+                            else if (aCommand == "Color" || aCommand == "FontColor")
+                            {
+                                SvxColorItem aColor(EE_CHAR_COLOR);
+                                aColor.PutValue(rArgs[0].Value, MID_COLOR_RGB);
+                                aNewAttr.Put(aColor);
+                            }
+                            else if (aCommand == "Grow" || aCommand == "Shrink")
+                            {
+                                bool bGrow = (aCommand == "Grow");
+                                const SfxObjectShell* pObjSh = SfxObjectShell::Current();
+                                const SvxFontListItem* pFontListItem
+                                    = static_cast<const SvxFontListItem*>(
+                                        pObjSh ? pObjSh->GetItem(SID_ATTR_CHAR_FONTLIST) : nullptr);
+                                const FontList* pFontList
+                                    = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+                                pOutlinerView->GetEditView().ChangeFontSize(bGrow, pFontList);
+                            }
+                            else if (aCommand == "ResetAttributes")
+                            {
+                                aNewAttr.Put(SvxFontItem(EE_CHAR_FONTINFO));
+                                aNewAttr.Put(SvxFontHeightItem(260, 100, EE_CHAR_FONTHEIGHT));
+                                aNewAttr.Put(SvxWeightItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT));
+                                aNewAttr.Put(SvxPostureItem(ITALIC_NONE, EE_CHAR_ITALIC));
+                                aNewAttr.Put(SvxUnderlineItem(LINESTYLE_NONE, EE_CHAR_UNDERLINE));
+                                aNewAttr.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT));
+                                aNewAttr.Put(SvxShadowedItem(false, EE_CHAR_SHADOW));
+                                aNewAttr.Put(SvxColorItem(Color(0), EE_CHAR_COLOR));
+                                aNewAttr.Put(SvxKerningItem(0, EE_CHAR_KERNING));
+                                aNewAttr.Put(
+                                    SvxEscapementItem(SvxEscapement::Off, EE_CHAR_ESCAPEMENT));
+                            }
+                            else if (aCommand == "Spacing")
+                            {
+                                sal_Int16 nKerning = 0;
+                                rArgs[0].Value >>= nKerning;
+                                aNewAttr.Put(SvxKerningItem(nKerning, EE_CHAR_KERNING));
+                            }
+                            else if (aCommand == "SuperScript" || aCommand == "SubScript")
+                            {
+                                SvxEscapement eCmd = aCommand == "SuperScript"
+                                                         ? SvxEscapement::Superscript
+                                                         : SvxEscapement::Subscript;
+                                SvxEscapement eFE
+                                    = aEditAttr.Get(EE_CHAR_ESCAPEMENT).GetEscapement();
+                                aNewAttr.Put(SvxEscapementItem(
+                                    eFE == eCmd ? SvxEscapement::Off : eCmd, EE_CHAR_ESCAPEMENT));
+                            }
+
+                            // Set the Attributes to the Editview
+                            pOutlinerView->SetAttribs(aNewAttr);
+
+                            // update the sidebar
+                            ControllerCommandDispatch* pCommandDispatch
+                                = dynamic_cast<ControllerCommandDispatch*>(
+                                    m_aDispatchContainer.getChartDispatcher().get());
+                            if (pCommandDispatch)
+                            {
+                                pCommandDispatch->updateAndFireStatus();
+                            }
+                        }
+                        else
+                        {
+                            // if the Title is not in edit mode
                             const Sequence<Reference<chart2::XFormattedString>> aStrings(
                                 xTitle->getText());
                             xProperties.pop_back();
@@ -1323,9 +1470,6 @@ void SAL_CALL ChartController::dispatch(
                                 xProperties.push_back(xTitlePropSet);
                             }
                         }
-                        // Todo: implement the edit mode case here.
-                        // the edited text attributes are a bit different from the properties
-                        // SfxItemSet aItemSet = pOutlinerView->GetAttribs();
                     }
                 }
                 bool bAllPropertiesExist = (xProperties.size() > 0);
@@ -1336,6 +1480,7 @@ void SAL_CALL ChartController::dispatch(
                 }
                 if (bAllPropertiesExist)
                 {
+                    UndoGuard aUndoGuard(EditResId(RID_OUTLUNDO_ATTR), m_xUndoManager);
                     if (aCommand == "Bold")
                     {
                         executeDispatch_FontBold(xProperties);
@@ -1392,6 +1537,7 @@ void SAL_CALL ChartController::dispatch(
                     {
                         executeDispatch_FontSubScript(xProperties);
                     }
+                    aUndoGuard.commit();
                 }
             }
         }

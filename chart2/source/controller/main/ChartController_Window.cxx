@@ -599,6 +599,13 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
              ( rMEvt.IsRight() && pDrawViewWrapper->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt ) == SdrHitKind::MarkedObject ) )
         {
             pDrawViewWrapper->MouseButtonDown(rMEvt, pChartWindow->GetOutDev());
+            ControllerCommandDispatch* pCommandDispatch
+                = dynamic_cast<ControllerCommandDispatch*>(
+                    m_aDispatchContainer.getChartDispatcher().get());
+            if (pCommandDispatch)
+            {
+                pCommandDispatch->updateAndFireStatus();
+            }
             return;
         }
         else
@@ -771,7 +778,16 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         if(pDrawViewWrapper->IsTextEdit())
         {
             if( pDrawViewWrapper->MouseButtonUp(rMEvt,pChartWindow->GetOutDev()) )
+            {
+                ControllerCommandDispatch* pCommandDispatch
+                    = dynamic_cast<ControllerCommandDispatch*>(
+                        m_aDispatchContainer.getChartDispatcher().get());
+                if (pCommandDispatch)
+                {
+                    pCommandDispatch->updateAndFireStatus();
+                }
                 return;
+            }
         }
 
         // #i12587# support for shapes in chart
@@ -1353,6 +1369,13 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                 if( nCode == KEY_ESCAPE )
                 {
                     EndTextEdit();
+                }
+                ControllerCommandDispatch* pCommandDispatch
+                    = dynamic_cast<ControllerCommandDispatch*>(
+                        m_aDispatchContainer.getChartDispatcher().get());
+                if (pCommandDispatch)
+                {
+                    pCommandDispatch->updateAndFireStatus();
                 }
             }
         }
