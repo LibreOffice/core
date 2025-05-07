@@ -262,7 +262,7 @@ class JSWidget : public BaseInstanceClass, public BaseJSWidget
 {
 protected:
     rtl::Reference<JSDropTarget> m_xDropTarget;
-    bool m_bIsFreezed;
+    sal_Int8 m_nFreezeCounter;
 
     JSDialogSender* m_pSender;
 
@@ -270,7 +270,7 @@ public:
     JSWidget(JSDialogSender* pSender, VclClass* pObject, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership)
         : BaseInstanceClass(pObject, pBuilder, bTakeOwnership)
-        , m_bIsFreezed(false)
+        , m_nFreezeCounter(0)
         , m_pSender(pSender)
     {
     }
@@ -278,7 +278,7 @@ public:
     JSWidget(JSDialogSender* pSender, VclClass* pObject, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership, bool bUserManagedScrolling)
         : BaseInstanceClass(pObject, pBuilder, bTakeOwnership, bUserManagedScrolling)
-        , m_bIsFreezed(false)
+        , m_nFreezeCounter(0)
         , m_pSender(pSender)
     {
     }
@@ -288,7 +288,7 @@ public:
              bool bTakeOwnership)
         : BaseInstanceClass(pObject, pBuilder, rAlly, std::move(pUITestFactoryFunction), pUserData,
                             bTakeOwnership)
-        , m_bIsFreezed(false)
+        , m_nFreezeCounter(0)
         , m_pSender(pSender)
     {
     }
@@ -344,14 +344,16 @@ public:
     virtual void freeze() override
     {
         BaseInstanceClass::freeze();
-        m_bIsFreezed = true;
+        m_nFreezeCounter++;
     }
 
     virtual void thaw() override
     {
         BaseInstanceClass::thaw();
-        m_bIsFreezed = false;
-        sendUpdate();
+        assert(m_nFreezeCounter > 0);
+        m_nFreezeCounter--;
+        if (m_nFreezeCounter == 0)
+            sendUpdate();
     }
 
     virtual void grab_focus() override
@@ -370,32 +372,32 @@ public:
 
     virtual void sendUpdate(bool bForce = false) override
     {
-        if (!m_bIsFreezed && m_pSender)
+        if (!m_nFreezeCounter && m_pSender)
             m_pSender->sendUpdate(BaseInstanceClass::m_xWidget, bForce);
     }
 
     virtual void sendFullUpdate(bool bForce = false) override
     {
-        if ((!m_bIsFreezed || bForce) && m_pSender)
+        if ((!m_nFreezeCounter || bForce) && m_pSender)
             m_pSender->sendFullUpdate(bForce);
     }
 
     virtual void sendAction(std::unique_ptr<jsdialog::ActionDataMap> pData) override
     {
-        if (!m_bIsFreezed && m_pSender && pData)
+        if (!m_nFreezeCounter && m_pSender && pData)
             m_pSender->sendAction(BaseInstanceClass::m_xWidget, std::move(pData));
     }
 
     virtual void sendPopup(vcl::Window* pPopup, const OUString& rParentId,
                            const OUString& rCloseId) override
     {
-        if (!m_bIsFreezed && m_pSender)
+        if (!m_nFreezeCounter && m_pSender)
             m_pSender->sendPopup(pPopup, rParentId, rCloseId);
     }
 
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId) override
     {
-        if (!m_bIsFreezed && m_pSender)
+        if (!m_nFreezeCounter && m_pSender)
             m_pSender->sendClosePopup(nWindowId);
     }
 
