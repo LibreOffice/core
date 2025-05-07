@@ -841,8 +841,8 @@ Try:
 	If Len(FilterFormula) = 0 Then vRanges = Array(oRange) Else vRanges() = _ComputeFilter(oRange, FilterFormula, UCase(FilterScope))
 	For Each oCRange In vRanges
 		With oCRange.XCellRange
-			If Foreground &gt; 0 Then .CharColor = CLng(Foreground)
-			If Background &gt; 0 Then .CellBackColor = CLng(Background)
+			If Foreground &gt;= 0 Then .CharColor = CLng(Foreground)
+			If Background &gt;= 0 Then .CellBackColor = CLng(Background)
 		End With
 	Next oCRange
 
@@ -1850,7 +1850,7 @@ Public Function DefineName(Optional ByVal DefinedName As Variant _
 &apos;&apos;&apos;	The Value of the new name may be a range, a scalar value or a formula.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DefinedName: The name as a string. If it already exists, it is overwritten without warning.
-&apos;&apos;&apos;			Note that homonyms might exist, but not in the same sheet.
+&apos;&apos;&apos;			Note that homonyms might exist, but not in the same sheet and not at global level.
 &apos;&apos;&apos;		Value: Either
 &apos;&apos;&apos;			a range reference as a string, often a single cell
 &apos;&apos;&apos;			a scalar value as a number or a string
