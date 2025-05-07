@@ -213,7 +213,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pagerangetotalCheckbox">
-                    <property name="label" translatable="yes" context="pagenumberdlg|pagerangetotalCheckbox">Include page total in range</property>
+                    <property name="label" translatable="yes" context="pagenumberdlg|pagerangetotalCheckbox">Include page total in page numbering range</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -223,7 +223,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="pagerangetotalCheckbox-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pagenumberdlg|extended_tip|pagerangetotalCheckbox">Insert the total number of pages in the range lasting until the page numbering is reset.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pagenumberdlg|extended_tip|pagerangetotalCheckbox">Insert the total number of pages in the range lasting until the page numbering is modified.</property>
                       </object>
                     </child>
                   </object>

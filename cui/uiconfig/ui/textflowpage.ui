@@ -735,6 +735,11 @@
                 <accessibility>
                   <relation type="label-for" target="spinPageNumber"/>
                 </accessibility>
+                <child internal-child="accessible">
+                    <object class="AtkObject" id="pagenumcb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumcb-atkobject">Assigns the page number that you specify to the page that follows the manual page break. This option is only available if you assign an arbitrary page style to the page that follows manual page break.</property>
+                    </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
