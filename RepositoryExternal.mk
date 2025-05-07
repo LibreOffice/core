@@ -4478,4 +4478,11 @@ gb_LinkTarget__use_yrs :=
 
 endif
 
+gb_ExternalProject__use_meson :=
+ifneq (,$(filter MESON,$(BUILD_TYPE)))
+define gb_ExternalProject__use_meson
+$(call gb_ExternalProject_use_unpacked,$(1),meson)
+endef
+endif
+
 # vim: set noet sw=4 ts=4:

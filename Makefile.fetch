@@ -209,6 +209,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,MORE_FONTS,FONT_LUGRASIMO_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LUMANOSIMO_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LUNASIMA_TARBALL) \
+		$(call fetch_Optional,MESON,MESON_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,MYTHES,MYTHES_TARBALL) \

@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,harfbuzz,\
 $(eval $(call gb_ExternalProject_use_externals,harfbuzz,\
 	icu \
 	graphite \
+	meson \
 ))
 
 # We cannot use environment vars inside the meson cross-build file,
@@ -50,7 +51,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) : | $(call gb_Externa
 	$(call gb_ExternalProject_run,build,\
 		PKG_CONFIG_PATH="${PKG_CONFIG_PATH}$(LIBO_PATH_SEPARATOR)$(gb_UnpackedTarball_workdir)/graphite$(if $(SYSTEM_ICU),,$(LIBO_PATH_SEPARATOR)$(gb_UnpackedTarball_workdir)/icu)" \
 		PYTHONWARNINGS= \
-		$(if $(MESON_NO_PYTHON),,$(call gb_ExternalExecutable_get_command,python)) $(MESON) setup builddir \
+		$(MESON) setup builddir \
 			-Ddefault_library=static -Dbuildtype=$(if $(ENABLE_DBGUTIL),debug,$(if $(ENABLE_DEBUG),debugoptimized,release \
 			$(if $(call gb_Module__symbols_enabled,harfbuzz),$(addsuffix "$(strip $(gb_DEBUGINFO_FLAGS))",-Dc_args= -Dcpp_args=)))) \
 			-Dauto_features=disabled \
@@ -61,7 +62,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) : | $(call gb_Externa
 			-Dicu_builtin=true \
 			-Dgraphite2=enabled \
 			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
-		$(if $(MESON_NO_PYTHON),,$(call gb_ExternalExecutable_get_command,python)) $(MESON) compile -C builddir lib \
+		$(MESON) compile -C builddir lib \
 			$(if $(verbose),--verbose) \
 	)
 	$(call gb_Trace_EndRange,harfbuzz,EXTERNAL)

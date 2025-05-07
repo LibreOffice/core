@@ -6180,6 +6180,9 @@ if test "$cross_compiling" = "yes"; then
     # windows uses full-internal python and that in turn relies on openssl, so also enable openssl
     # when cross-compiling for aarch64, overriding the defaults below
     test "${PLATFORMID}" = "windows_aarch64" && sub_conf_opts="$sub_conf_opts --enable-openssl --with-tls=openssl"
+    # cross-compilations don't necessarily enable python support in the product/the sub-configure needs to know
+    # that the minimum supported python version is 3.7 or later...
+    test "$with_system_harfbuzz" != "yes" && sub_conf_opts="$sub_conf_opts NEED_MESON=TRUE"
 
     # Don't bother having configure look for stuff not needed for the build platform anyway
     # WARNING: any option with an argument containing spaces must be handled separately (see --with-theme)
@@ -10387,7 +10390,7 @@ AC_SUBST(LIBXML_LIBS)
 AC_SUBST(XMLLINT)
 
 # =====================================================================
-# Checking for a Python interpreter with version >= 3.3.
+# Checking for a Python interpreter with version >= 3.3 (or 3.7 if the build needs meson)
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
@@ -10401,7 +10404,12 @@ if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
         PYTHON_FOR_BUILD=$PYTHON
     else
         # This allows a lack of system python with no error, we use internal one in that case.
-        AM_PATH_PYTHON([3.3],, [:])
+        if test "$with_system_harfbuzz" = "yes"; then
+            AM_PATH_PYTHON([3.3],, [:])
+        else
+            # harfbuzz is built using meson, and current meson requires at least python 3.7
+            AM_PATH_PYTHON([3.7],, [:])
+        fi
         # Clean PYTHON_VERSION checked below if cross-compiling
         PYTHON_VERSION=""
         if test "$PYTHON" != ":"; then
@@ -10443,7 +10451,11 @@ no|disable)
         # we actually do check anew.
         AC_MSG_RESULT([])
         unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON am_cv_python_version am_cv_python_platform am_cv_python_pythondir am_cv_python_pyexecdir
-        AM_PATH_PYTHON([3.3],, [:])
+        if test -z "$NEED_MESON"; then
+            AM_PATH_PYTHON([3.3],, [:])
+        else
+            AM_PATH_PYTHON([3.7],, [:])
+        fi
         AC_MSG_CHECKING([which Python to use for Pyuno])
         if test "$PYTHON" = ":"; then
             if test -z "$PYTHON_FOR_BUILD"; then
@@ -10490,7 +10502,13 @@ if test $enable_python = system; then
         # we actually do check anew.
         unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON am_cv_python_version am_cv_python_platform am_cv_python_pythondir am_cv_python_pyexecdir
         # This causes an error if no python command is found
-        AM_PATH_PYTHON([3.3])
+        # the version found here also sets PYTHON_FOR_BUILD below, so the python picked here
+        # needs to be suitable for meson/the harfbuzz build
+        if test -z "$PYTHON_FOR_BUILD" -a "$with_system_harfbuzz" = "yes"; then
+            AM_PATH_PYTHON([3.7])
+        else
+            AM_PATH_PYTHON([3.3])
+        fi
         python_include=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('INCLUDEPY'));"`
         python_version=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
         python_libs=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBS'));"`
@@ -11537,7 +11555,6 @@ esac
 libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
 libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= $harfbuzz_required_version])
 
-MESON_NO_PYTHON=
 if test "$with_system_harfbuzz" = "yes"; then
     if test "$with_system_graphite" = "no"; then
         AC_MSG_ERROR([--with-system-graphite must be used when --with-system-harfbuzz is used])
@@ -11555,28 +11572,39 @@ else
         AC_MSG_ERROR([--without-system-graphite must be used when --without-system-harfbuzz is used])
     fi
     # harfbuzz is now built using meson
-    AC_PATH_PROGS(MESON,[meson.py meson],,[$LODE_HOME/packages/meson-1.7.2:$PATH])
-    PathFormat "$MESON"
-    MESON="$formatted_path"
+    AC_ARG_VAR(MESON, [point to a specific meson to use instead of autodetecting])
+    if test -z "$MESON"; then
+        if test -z "$PYTHON_FOR_BUILD"; then
+            # we also want to call meson with internal python and use internal meson
+            BUILD_TYPE="$BUILD_TYPE MESON"
+            MESON='$(gb_UnpackedTarball_workdir)/meson/meson.py'
+        else
+            # autodetect, prefer meson.py / standalone version that can more likely be run
+            # by different python runtimes
+            AC_PATH_PROGS(MESON,[meson.py meson],,[$LODE_HOME/packages/meson-1.7.2:$PATH])
+            if test -z "$MESON"; then
+                AC_MSG_WARN([meson not found, using internal copy])
+                BUILD_TYPE="$BUILD_TYPE MESON"
+                MESON='$(gb_UnpackedTarball_workdir)/meson/meson.py'
+            else
+                PathFormat "$MESON"
+                MESON="$formatted_path"
+                AC_MSG_CHECKING([whether meson can be run with "$PYTHON_FOR_BUILD $MESON"])
+                if ($PYTHON_FOR_BUILD $MESON runpython --version >/dev/null) ; then
+                    AC_MSG_RESULT([yes])
+                else
+                    AC_MSG_RESULT([no])
+                    AC_MSG_ERROR([meson incompatible with the specified python. Try using a different python runtime or a plain release of meson by adding PYTHON=/other/python.version and/or MESON=/path/to/meson.py to autogen.input])
+                fi
+            fi
+        fi
+        MESON='$(call gb_ExternalExecutable_get_command,python) '"$MESON"
+    fi
     AC_CHECK_PROG(NINJA,ninja,ninja)
     if test -z "$MESON" -o -z "$NINJA"; then
         AC_MSG_ERROR([you need to have meson and ninja in order to build harfbuzz])
     fi
-    if test -z "$PYTHON_FOR_BUILD"; then
-        if test "$(basename $MESON)" = "$(basename -s .py $MESON)"; then
-            MESON_NO_PYTHON=TRUE
-        fi
-    else
-        AC_MSG_CHECKING([whether meson can be run with "$PYTHON_FOR_BUILD $MESON"])
-        if ($PYTHON_FOR_BUILD $MESON --version >/dev/null) ; then
-            AC_MSG_RESULT([yes])
-        else
-            AC_MSG_RESULT([no])
-            AC_MSG_ERROR([meson incompatible with the specified python. Try using a different python runtime or a plain release of meson by adding PYTHON=/other/python.version and/or MESON=/path/to/meson.py to autogen.input])
-        fi
-    fi
 fi
-AC_SUBST(MESON_NO_PYTHON)
 if test -z "$NINJA" || test "$NINJA" = 'assumed to be available from Visual Studio'; then
     x_NINJA=[\#]
 else

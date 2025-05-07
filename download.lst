@@ -496,6 +496,11 @@ MDNSRESPONDER_TARBALL := mDNSResponder-878.200.35.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+MESON_SHA256SUM := 0a9b23311271519bd03dca12d7d8b0eab582c3a2c5da433d465b6e519dc88e2f
+MESON_TARBALL := meson-1.8.0.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 MSPUB_SHA256SUM := ef36c1a1aabb2ba3b0bedaaafe717bf4480be2ba8de6f3894be5fd3702b013ba
 MSPUB_TARBALL := libmspub-0.1.4.tar.xz
 # three static lines
