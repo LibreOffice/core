@@ -4329,6 +4329,24 @@ const TranslateId SC_OPCODE_TAKE_ARY[] =
     NC_("SC_OPCODE_TAKE", "The number of columns to take. A negative value takes from the end of the array.")
 };
 
+// -=*# Resource for function TEXTSPLIT #*=-
+const TranslateId SC_OPCODE_TEXTSPLIT_ARY[] =
+{
+    NC_("SC_OPCODE_TEXTSPLIT", "Splits text by a given delimiter to an array of multiple cells."),
+    NC_("SC_OPCODE_TEXTSPLIT", "Text"),
+    NC_("SC_OPCODE_TEXTSPLIT", "The text to split."),
+    NC_("SC_OPCODE_TEXTSPLIT", "Column Delimiter"),
+    NC_("SC_OPCODE_TEXTSPLIT", "The text to delimit the columns. Multiple delimiters can be supplied."),
+    NC_("SC_OPCODE_TEXTSPLIT", "Row Delimiter"),
+    NC_("SC_OPCODE_TEXTSPLIT", "The text to delimit the rows. Multiple delimiters can be supplied."),
+    NC_("SC_OPCODE_TEXTSPLIT", "Ignore Empty"),
+    NC_("SC_OPCODE_TEXTSPLIT", "Set to TRUE to ignore consecutive delimiters otherwise creates an empty cell. The default to FALSE."),
+    NC_("SC_OPCODE_TEXTSPLIT", "Match mode"),
+    NC_("SC_OPCODE_TEXTSPLIT", "Set to 1 to perform a case-insensitive match otherwise does a case-sensitive match. The default to 0."),
+    NC_("SC_OPCODE_TEXTSPLIT", "Pad with"),
+    NC_("SC_OPCODE_TEXTSPLIT", "The value with which to pad. The default is #N/A.")
+};
+
 // -=*# Resource for function TOCOL #*=-
 const TranslateId SC_OPCODE_TOCOL_ARY[] =
 {

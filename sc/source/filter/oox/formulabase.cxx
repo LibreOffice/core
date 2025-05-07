@@ -901,6 +901,7 @@ const FunctionData saFuncTable2024[] =
     { "COM.MICROSOFT.HSTACK",              "HSTACK",              NOID,   NOID,   1,  MX, A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.VSTACK",              "VSTACK",              NOID,   NOID,   1,  MX, A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.TAKE",                "TAKE",                NOID,   NOID,   1,  3,  A, { VO }, FuncFlags::MACROCALL_NEW },
+    { "COM.MICROSOFT.TEXTSPLIT",           "TEXTSPLIT",           NOID,   NOID,   1,  6,  A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.TOCOL",               "TOCOL",               NOID,   NOID,   1,  3,  A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.TOROW",               "TOROW",               NOID,   NOID,   1,  3,  A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.WRAPCOLS",            "WRAPCOLS",            NOID,   NOID,   2,  3,  A, { VO }, FuncFlags::MACROCALL_NEW },
