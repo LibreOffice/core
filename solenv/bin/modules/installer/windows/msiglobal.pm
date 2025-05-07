@@ -491,26 +491,6 @@ sub create_msi_database
 }
 
 #################################################################
-# Returning the msi version for the Summary Information Stream
-#################################################################
-
-sub get_msiversion_for_sis
-{
-    my $msiversion = "200";
-    return $msiversion;
-}
-
-#################################################################
-# Returning the word count for the Summary Information Stream
-#################################################################
-
-sub get_wordcount_for_sis
-{
-    my $wordcount = "0";
-    return $wordcount;
-}
-
-#################################################################
 # Returning the template for the Summary Information Stream
 #################################################################
 
@@ -554,44 +534,6 @@ sub get_packagecode_for_sis
 }
 
 #################################################################
-# Returning the author for the Summary Information Stream
-#################################################################
-
-sub get_author_for_sis
-{
-    my $author = $installer::globals::longmanufacturer;
-
-    $author = "\"" . $author . "\"";
-
-    return $author;
-}
-
-#################################################################
-# Returning the subject for the Summary Information Stream
-#################################################################
-
-sub get_subject_for_sis
-{
-    my ( $allvariableshashref ) = @_;
-
-    my $subject = $allvariableshashref->{'PRODUCTNAME'} . " " . $allvariableshashref->{'PRODUCTVERSION'};
-
-    $subject = "\"" . $subject . "\"";
-
-    return $subject;
-}
-
-######################################################################
-# Returning the security for the Summary Information Stream
-######################################################################
-
-sub get_security_for_sis
-{
-    my $security = "0";
-    return $security;
-}
-
-#################################################################
 # Writing the Summary information stream into the msi database
 # This works only on Windows
 #################################################################
@@ -608,18 +550,18 @@ sub write_summary_into_msi_database
 
     my $msiinfo = "msiinfo.exe";    # Has to be in the path
 
-    my $msiversion = get_msiversion_for_sis();
+    my $msiversion = 200;
     my $codepage = 0; # PID_CODEPAGE summary property in a signed short, therefore it is impossible to set 65001 here.
     my $template = get_template_for_sis($language, $allvariableshashref);
     my $guid = get_packagecode_for_sis();
     my $title = "\"Installation database\"";
-    my $author = get_author_for_sis();
-    my $subject = get_subject_for_sis($allvariableshashref);
+    my $author = "\"" . $installer::globals::longmanufacturer . "\"";
+    my $subject = "\"" . $allvariableshashref->{'PRODUCTNAME'} . " " . $allvariableshashref->{'PRODUCTVERSION'} . "\"";
     my $comment = "\"" . $allvariableshashref->{'PRODUCTNAME'} ."\"";
     my $keywords = "\"Install,MSI\"";
     my $appname = "\"Windows Installer\"";
-    my $security = get_security_for_sis();
-    my $wordcount = get_wordcount_for_sis();
+    my $security = 0;
+    my $wordcount = 0;
 
     $msifilename = installer::converter::make_path_conform($msifilename);
 
