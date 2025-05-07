@@ -48,6 +48,17 @@
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 
+#include <editeng/eeitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/escapementitem.hxx>
+
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -657,19 +668,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ u".uno:ScaleText"_ustr ] = bIsWritable && bModelStateIsValid ;
     m_aCommandArguments[ u".uno:ScaleText"_ustr ] <<= bModelStateIsValid && m_apModelState->bHasAutoScaledText;
 
-    bool bTitleIsInEditMode = false;
-    try
-    {
-        OUString aObjectCID2 = m_xChartController->getSelectionMember().getSelectedCID();
-        if (!aObjectCID2.isEmpty())
-            if (ObjectIdentifier::getObjectType(aObjectCID2) == OBJECTTYPE_TITLE)
-                if (m_xChartController->GetDrawViewWrapper())
-                    if (m_xChartController->GetDrawViewWrapper()->GetTextEditOutlinerView())
-                        bTitleIsInEditMode = true;
-    }
-    catch (const uno::Exception&) { TOOLS_WARN_EXCEPTION("chart2", ""); }
-
-    bool bEnableUnoCommands = bIsWritable && bModelStateIsValid && !bTitleIsInEditMode;
+    bool bEnableUnoCommands = bIsWritable && bModelStateIsValid;
     m_aCommandAvailability[u".uno:Bold"_ustr] = bEnableUnoCommands;
     m_aCommandAvailability[u".uno:Strikeout"_ustr] = bEnableUnoCommands;
     m_aCommandAvailability[u".uno:CharFontName"_ustr] = bEnableUnoCommands;
@@ -686,23 +685,20 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[u".uno:Spacing"_ustr] = bEnableUnoCommands;
     m_aCommandAvailability[u".uno:ResetAttributes"_ustr] = bEnableUnoCommands;
 
-    if (!bTitleIsInEditMode)
-    {
-        // at default they are not filled in the sidebar
-        m_aCommandArguments[u".uno:CharFontName"_ustr] <<= false;
-        m_aCommandArguments[u".uno:FontHeight"_ustr] <<= false;
-        m_aCommandArguments[u".uno:Bold"_ustr] <<= false;
-        m_aCommandArguments[u".uno:Strikeout"_ustr] <<= false;
-        m_aCommandArguments[u".uno:Italic"_ustr] <<= false;
-        m_aCommandArguments[u".uno:Underline"_ustr] <<= false;
-        m_aCommandArguments[u".uno:Shadowed"_ustr] <<= false;
-        m_aCommandArguments[u".uno:Color"_ustr] <<= false;
-        m_aCommandArguments[u".uno:FontColor"_ustr] <<= false;
-        m_aCommandArguments[u".uno:SuperScript"_ustr] <<= false;
-        m_aCommandArguments[u".uno:SubScript"_ustr] <<= false;
-        m_aCommandArguments[u".uno:Spacing"_ustr] <<= false;
-        m_aCommandArguments[u".uno:ResetAttributes"_ustr] <<= false;
-    }
+    // at default they are not filled in the sidebar
+    m_aCommandArguments[u".uno:CharFontName"_ustr] <<= false;
+    m_aCommandArguments[u".uno:FontHeight"_ustr] <<= false;
+    m_aCommandArguments[u".uno:Bold"_ustr] <<= false;
+    m_aCommandArguments[u".uno:Strikeout"_ustr] <<= false;
+    m_aCommandArguments[u".uno:Italic"_ustr] <<= false;
+    m_aCommandArguments[u".uno:Underline"_ustr] <<= false;
+    m_aCommandArguments[u".uno:Shadowed"_ustr] <<= false;
+    m_aCommandArguments[u".uno:Color"_ustr] <<= false;
+    m_aCommandArguments[u".uno:FontColor"_ustr] <<= false;
+    m_aCommandArguments[u".uno:SuperScript"_ustr] <<= false;
+    m_aCommandArguments[u".uno:SubScript"_ustr] <<= false;
+    m_aCommandArguments[u".uno:Spacing"_ustr] <<= false;
+    m_aCommandArguments[u".uno:ResetAttributes"_ustr] <<= false;
 
     // They are filled based on the text properties.. if there are only 1
     // but only those properties that are true for the whole text
@@ -712,7 +708,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
         // enable the uno commands only if the title is not in edit mode
         // Todo: enable font panel here if the panel will be able to handle edited title.
         OUString aObjectCID = m_xChartController->getSelectionMember().getSelectedCID();
-        if (!aObjectCID.isEmpty() && !bTitleIsInEditMode)
+        if (!aObjectCID.isEmpty())
         {
             // If the selected is not title, then we should check the text properties..
             // or the selected text properties?
@@ -728,81 +724,127 @@ void ControllerCommandDispatch::updateCommandAvailability()
                 {
                     const Sequence<Reference<chart2::XFormattedString>> aStrings(xTitle->getText());
                     xProperties.pop_back();
-                    for (const auto& aString : aStrings)
+
+                    OutlinerView* pOutlinerView = nullptr;
+                    if (m_xChartController->GetDrawViewWrapper())
                     {
-                        Reference<beans::XPropertySet> xTitlePropSet(aString, uno::UNO_QUERY);
-                        xProperties.push_back(xTitlePropSet);
+                        pOutlinerView
+                            = m_xChartController->GetDrawViewWrapper()->GetTextEditOutlinerView();
+                    }
+
+                    if (pOutlinerView)
+                    {
+                        SfxItemSet aEditAttr(pOutlinerView->GetAttribs());
+                        FontWeight eFW = aEditAttr.Get(EE_CHAR_WEIGHT).GetWeight();
+                        FontItalic eFI = aEditAttr.Get(EE_CHAR_ITALIC).GetPosture();
+                        FontLineStyle eFU = aEditAttr.Get(EE_CHAR_UNDERLINE).GetLineStyle();
+                        FontStrikeout eFSO = aEditAttr.Get(EE_CHAR_STRIKEOUT).GetStrikeout();
+
+                        uno::Any aFF;
+                        aEditAttr.Get(EE_CHAR_FONTINFO).QueryValue(aFF, 0);
+                        float nFFS = aEditAttr.Get(EE_CHAR_FONTHEIGHT).GetHeight();
+                        nFFS = o3tl::convert(nFFS, o3tl::Length::mm100, o3tl::Length::pt);
+                        frame::status::FontHeight aFontHeight;
+                        aFontHeight.Height = nFFS;
+                        bool eFSH = aEditAttr.Get(EE_CHAR_SHADOW).GetValue();
+                        SvxEscapement eFES = aEditAttr.Get(EE_CHAR_ESCAPEMENT).GetEscapement();
+
+                        m_aCommandArguments[u".uno:CharFontName"_ustr] = aFF;
+                        m_aCommandArguments[u".uno:FontHeight"_ustr] <<= aFontHeight;
+
+                        m_aCommandArguments[u".uno:Bold"_ustr] <<= (eFW != WEIGHT_NORMAL);
+                        m_aCommandArguments[u".uno:Italic"_ustr] <<= (eFI != ITALIC_NONE);
+                        m_aCommandArguments[u".uno:Underline"_ustr] <<= (eFU != LINESTYLE_NONE);
+                        m_aCommandArguments[u".uno:Strikeout"_ustr] <<= (eFSO != STRIKEOUT_NONE);
+
+                        m_aCommandArguments[u".uno:Shadowed"_ustr] <<= eFSH;
+                        m_aCommandArguments[u".uno:SuperScript"_ustr]
+                            <<= (eFES == SvxEscapement::Superscript);
+                        m_aCommandArguments[u".uno:SubScript"_ustr]
+                            <<= (eFES == SvxEscapement::Subscript);
+                    }
+                    else
+                    {
+                        for (const auto& aString : aStrings)
+                        {
+                            Reference<beans::XPropertySet> xTitlePropSet(aString,
+                                                                         uno::UNO_QUERY);
+                            xProperties.push_back(xTitlePropSet);
+                        }
                     }
                 }
             }
 
-            Reference<beans::XMultiPropertySet> aMObjProps(xProperties[0], uno::UNO_QUERY);
-            if (aMObjProps)
+            if (xProperties.size() > 0)
             {
-                awt::FontDescriptor aFont
-                    = CharacterProperties::createFontDescriptorFromPropertySet(aMObjProps);
-
-                if (!aFont.Name.isEmpty())
+                Reference<beans::XMultiPropertySet> aMObjProps(xProperties[0], uno::UNO_QUERY);
+                if (aMObjProps)
                 {
-                    if (getPropertyIfSame(xProperties, u"CharFontName"_ustr).hasValue())
+                    awt::FontDescriptor aFont
+                        = CharacterProperties::createFontDescriptorFromPropertySet(aMObjProps);
+
+                    if (!aFont.Name.isEmpty())
                     {
-                        m_aCommandArguments[u".uno:CharFontName"_ustr] <<= aFont;
+                        if (getPropertyIfSame(xProperties, u"CharFontName"_ustr).hasValue())
+                        {
+                            m_aCommandArguments[u".uno:CharFontName"_ustr] <<= aFont;
+                        }
                     }
                 }
-            }
-            if (frame::status::FontHeight aFontHeight;
-                getPropertyIfSame(xProperties, u"CharHeight"_ustr) >>= aFontHeight.Height)
-            {
-                // another type is needed here, so
-                m_aCommandArguments[u".uno:FontHeight"_ustr] <<= aFontHeight;
-            }
+                if (frame::status::FontHeight aFontHeight;
+                    getPropertyIfSame(xProperties, u"CharHeight"_ustr) >>= aFontHeight.Height)
+                {
+                    // another type is needed here, so
+                    m_aCommandArguments[u".uno:FontHeight"_ustr] <<= aFontHeight;
+                }
 
-            if (float nFontWeight;
-                getPropertyIfSame(xProperties, u"CharWeight"_ustr) >>= nFontWeight)
-            {
-                bool bFontWeight = (nFontWeight > 100.0);
-                m_aCommandArguments[u".uno:Bold"_ustr] <<= bFontWeight;
+                if (float nFontWeight;
+                    getPropertyIfSame(xProperties, u"CharWeight"_ustr) >>= nFontWeight)
+                {
+                    bool bFontWeight = (nFontWeight > 100.0);
+                    m_aCommandArguments[u".uno:Bold"_ustr] <<= bFontWeight;
+                }
+
+                if (awt::FontSlant nFontItalic;
+                    getPropertyIfSame(xProperties, u"CharPosture"_ustr) >>= nFontItalic)
+                {
+                    bool bItalic = (nFontItalic == awt::FontSlant_ITALIC);
+                    m_aCommandArguments[u".uno:Italic"_ustr] <<= bItalic;
+                }
+
+                if (sal_Int16 nFontStrikeout;
+                    getPropertyIfSame(xProperties, u"CharStrikeout"_ustr) >>= nFontStrikeout)
+                {
+                    bool bFontStrikeout = (nFontStrikeout > 0);
+                    m_aCommandArguments[u".uno:Strikeout"_ustr] <<= bFontStrikeout;
+                }
+
+                if (sal_Int16 nFontUnderline;
+                    getPropertyIfSame(xProperties, u"CharUnderline"_ustr) >>= nFontUnderline)
+                {
+                    bool bFontUnderline = (nFontUnderline > 0);
+                    m_aCommandArguments[u".uno:Underline"_ustr] <<= bFontUnderline;
+                }
+
+                if (bool bShadowed; getPropertyIfSame(xProperties, u"CharShadowed"_ustr) >>= bShadowed)
+                {
+                    m_aCommandArguments[u".uno:Shadowed"_ustr] <<= bShadowed;
+                }
+
+                // Font color is not set in panel... it is just enabled to use
+                m_aCommandArguments[u".uno:Color"_ustr] <<= false;
+                m_aCommandArguments[u".uno:FontColor"_ustr] <<= false;
+
+                if (sal_Int32 nCharEscapement;
+                    getPropertyIfSame(xProperties, u"CharEscapement"_ustr) >>= nCharEscapement)
+                {
+                    m_aCommandArguments[u".uno:SuperScript"_ustr] <<= (nCharEscapement > 0);
+                    m_aCommandArguments[u".uno:SubScript"_ustr] <<= (nCharEscapement < 0);
+                }
+
+                // Font Spacing is not set in panel... it is just enabled to use
+                m_aCommandArguments[u".uno:Spacing"_ustr] <<= false;
             }
-
-            if (awt::FontSlant nFontItalic;
-                getPropertyIfSame(xProperties, u"CharPosture"_ustr) >>= nFontItalic)
-            {
-                bool bItalic = (nFontItalic == awt::FontSlant_ITALIC);
-                m_aCommandArguments[u".uno:Italic"_ustr] <<= bItalic;
-            }
-
-            if (sal_Int16 nFontStrikeout;
-                getPropertyIfSame(xProperties, u"CharStrikeout"_ustr) >>= nFontStrikeout)
-            {
-                bool bFontStrikeout = (nFontStrikeout > 0);
-                m_aCommandArguments[u".uno:Strikeout"_ustr] <<= bFontStrikeout;
-            }
-
-            if (sal_Int16 nFontUnderline;
-                getPropertyIfSame(xProperties, u"CharUnderline"_ustr) >>= nFontUnderline)
-            {
-                bool bFontUnderline = (nFontUnderline > 0);
-                m_aCommandArguments[u".uno:Underline"_ustr] <<= bFontUnderline;
-            }
-
-            if (bool bShadowed; getPropertyIfSame(xProperties, u"CharShadowed"_ustr) >>= bShadowed)
-            {
-                m_aCommandArguments[u".uno:Shadowed"_ustr] <<= bShadowed;
-            }
-
-            // Font color is not set in panel... it is just enabled to use
-            m_aCommandArguments[u".uno:Color"_ustr] <<= false;
-            m_aCommandArguments[u".uno:FontColor"_ustr] <<= false;
-
-            if (sal_Int32 nCharEscapement;
-                getPropertyIfSame(xProperties, u"CharEscapement"_ustr) >>= nCharEscapement)
-            {
-                m_aCommandArguments[u".uno:SuperScript"_ustr] <<= (nCharEscapement > 0);
-                m_aCommandArguments[u".uno:SubScript"_ustr] <<= (nCharEscapement < 0);
-            }
-
-            // Font Spacing is not set in panel... it is just enabled to use
-            m_aCommandArguments[u".uno:Spacing"_ustr] <<= false;
         }
     }
     catch (const uno::Exception&)
@@ -886,6 +928,12 @@ bool ControllerCommandDispatch::commandAvailable(const OUString& rCommand) const
 bool ControllerCommandDispatch::commandHandled(const OUString& rCommand) const
 {
     return m_aCommandAvailability.contains(rCommand);
+}
+
+void ControllerCommandDispatch::updateAndFireStatus()
+{
+    updateCommandAvailability();
+    fireStatusEvent(OUString(), nullptr);
 }
 
 bool ControllerCommandDispatch::isShapeControllerCommandAvailable( const OUString& rCommand )

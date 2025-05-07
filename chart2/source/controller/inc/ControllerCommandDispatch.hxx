@@ -66,6 +66,7 @@ public:
 
     bool commandAvailable(const OUString& rCommand) const;
     bool commandHandled(const OUString& rCommand) const;
+    void updateAndFireStatus();
 
 protected:
     // ____ XDispatch ____
