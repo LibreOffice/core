@@ -832,6 +832,7 @@ void DocumentStateManager::YrsAddComment(SwPosition const& rPos,
                 assert(pComment);
                 ::std::unique_ptr<YOutput, YOutputDeleter> const pPos{yarray_get(pComment->value.y_type, pTxn, 0)};
                 assert(pPos);
+                assert(yarray_len(pPos->value.y_type) == 4);
                 ::std::unique_ptr<YOutput, YOutputDeleter> const pPosN{yarray_get(pPos->value.y_type, pTxn, 2)};
                 ::std::unique_ptr<YOutput, YOutputDeleter> const pPosC{yarray_get(pPos->value.y_type, pTxn, 3)};
                 // SwTextNode::Update already moved pMark
@@ -939,11 +940,13 @@ void DocumentStateManager::YrsRemoveComment(SwPosition const& rPos, OString cons
             assert(pComment);
             ::std::unique_ptr<YOutput, YOutputDeleter> const pPos{yarray_get(pComment->value.y_type, pTxn, 0)};
             assert(pPos);
+            assert(yarray_len(pPos->value.y_type) == 4);
             ::std::unique_ptr<YOutput, YOutputDeleter> const pPosN{yarray_get(pPos->value.y_type, pTxn, 2)};
             ::std::unique_ptr<YOutput, YOutputDeleter> const pPosC{yarray_get(pPos->value.y_type, pTxn, 3)};
             // SwTextNode::Update will move pMark soon
             assert(pPosN->value.integer == pMark->GetMarkStart().GetNodeIndex().get());
             assert(pPosC->value.integer == pMark->GetMarkStart().GetContentIndex());
+            yarray_remove_range(pPos->value.y_type, pTxn, 2, 2);
             YInput const anchorStartNode{yinput_long(pMark->GetMarkStart().GetNodeIndex().get())};
             YInput const anchorStartContent{yinput_long(pMark->GetMarkStart().GetContentIndex() - 1)};
             YInput posArray[]{anchorStartNode, anchorStartContent};
