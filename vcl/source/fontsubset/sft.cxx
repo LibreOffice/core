@@ -1259,7 +1259,7 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vec
 
     if (std::find(glyphlist.begin(), glyphlist.end(), glyphID) != glyphlist.end())
     {
-        SAL_WARN("vcl.fonts", "Endless loop found in a compound glyph.");
+        SAL_INFO("vcl.fonts", "Already have this glyph, don't need to get it again");
         return 0;
     }
 
