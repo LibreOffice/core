@@ -102,10 +102,10 @@ $(1).build $(1).check $(1).coverage $(foreach target,$(gb_Top_MODULE_CHECK_TARGE
 $(1).clean $(1).showdeliverables:
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
-$(1).allbuild $(1).buildall: bootstrap fetch
+$(1).allbuild $(1).buildall: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
 	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1)
 
-$(1).allcheck $(1).checkall: bootstrap fetch
+$(1).allcheck $(1).checkall: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
 	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)
 
 $(1).all:
