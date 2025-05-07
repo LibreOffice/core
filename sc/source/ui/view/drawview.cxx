@@ -421,8 +421,9 @@ void ScDrawView::MarkListHasChanged()
             bSubShellSet = true;
         }
         else if (pObj->GetObjIdentifier() != SdrObjKind::Text   // prevent switching to the drawing shell
-                    || !pViewSh->IsDrawTextShell())     // when creating a text object @#70206#
+                    && !pViewSh->IsDrawTextShell())     // when creating a text object @#70206#
         {
+            // tdf#166481: we only need to switch to draw shell if we have not already created a text shell for text edit mode
             pViewSh->SetDrawShell(true);
         }
     }
