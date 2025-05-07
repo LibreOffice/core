@@ -2524,7 +2524,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::getOver
     rOutDev.SetMapMode(aOrig);
     return aRetval;
 }
-} // end of anonymos namespace
+} // end of anonymous namespace
 
 void ScTabView::RefeshTextEditOverlay()
 {
