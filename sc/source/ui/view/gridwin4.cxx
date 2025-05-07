@@ -33,6 +33,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <tools/UnitConversion.hxx>
+#include <tools/weakbase.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
@@ -1438,7 +1439,7 @@ namespace
     class ScLOKProxyObjectContact final : public sdr::contact::ObjectContactOfPageView
     {
     private:
-        ScDrawView* mpScDrawView;
+        tools::WeakReference<ScDrawView> m_xScDrawView;
 
     public:
         explicit ScLOKProxyObjectContact(
@@ -1446,7 +1447,7 @@ namespace
             SdrPageWindow& rPageWindow,
             const char* pDebugName) :
             ObjectContactOfPageView(rPageWindow, pDebugName),
-            mpScDrawView(pDrawView)
+            m_xScDrawView(pDrawView)
         {
         }
 
@@ -1456,10 +1457,11 @@ namespace
             basegfx::B2DVector& rTarget,
             const sdr::contact::ViewObjectContact& rClient) const override
         {
-            if (!mpScDrawView)
+            ScDrawView* pScDrawView = m_xScDrawView.get();
+            if (!pScDrawView)
                 return;
 
-            SdrPageView* pPageView(mpScDrawView->GetSdrPageView());
+            SdrPageView* pPageView(pScDrawView->GetSdrPageView());
             if (!pPageView)
                 return;
 
