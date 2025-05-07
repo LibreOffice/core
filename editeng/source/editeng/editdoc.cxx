@@ -2924,7 +2924,7 @@ void EditDoc::YrsApplyEEDelta(YTransaction *const /*pTxn*/, YTextEvent const*con
                 else
                 {
                     if (pos == 0 && static_cast<size_t>(node) == maContents.size())
-                    {   // adjust past-the-end positon (formatting change)
+                    {   // adjust past-the-end position (formatting change)
                         --node;
                         pos = maContents[node]->Len();
                     }
@@ -3043,7 +3043,7 @@ EditDoc::~EditDoc()
     maContents.clear();
 }
 
-// not sure which of the members make sense to sync - if its only a cache for
+// not sure which of the members make sense to sync - if it's only a cache for
 // some value elsewhere in the model then probably not?
 void EditDoc::SetVertical(bool const bVertical)
 {
