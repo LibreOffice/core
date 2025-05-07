@@ -1281,6 +1281,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"RejectAllTrackedChanges", { PayloadType::EnabledPayload, true } },
         { u"AcceptTrackedChange", { PayloadType::EnabledPayload, true } },
         { u"RejectTrackedChange", { PayloadType::EnabledPayload, true } },
+        { u"ReinstateTrackedChange", { PayloadType::EnabledPayload, true } },
         { u"AcceptTrackedChangeToNext", { PayloadType::EnabledPayload, true } },
         { u"RejectTrackedChangeToNext", { PayloadType::EnabledPayload, true } },
         { u"NextTrackedChange", { PayloadType::EnabledPayload, true } },
