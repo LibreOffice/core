@@ -1239,9 +1239,7 @@ int GetTTGlyphPoints(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector<
     return GetTTGlyphOutline(ttf, glyphID, pointArray, nullptr, nullptr);
 }
 
-int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID,
-                         std::vector<sal_uInt32>& glyphlist,
-                         std::vector<sal_uInt32>& currentGlyphStack)
+int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal_uInt32 >& glyphlist)
 {
     int n = 1;
 
@@ -1259,9 +1257,9 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID,
     if (nOffset > nNextOffset)
         return 0;
 
-    if (std::find(currentGlyphStack.begin(), currentGlyphStack.end(), glyphID) != currentGlyphStack.end())
+    if (std::find(glyphlist.begin(), glyphlist.end(), glyphID) != glyphlist.end())
     {
-        SAL_WARN("vcl.fonts", "Endless glyph chain found in a compound glyph.");
+        SAL_WARN("vcl.fonts", "Endless loop found in a compound glyph.");
         return 0;
     }
 
@@ -1270,8 +1268,6 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID,
     // Empty glyph.
     if (nOffset == nNextOffset)
         return n;
-
-    currentGlyphStack.push_back(glyphID);
 
     const auto* ptr = glyf + nOffset;
     sal_uInt32 nRemainingData = glyflength - nOffset;
@@ -1291,7 +1287,7 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID,
 
             ptr += 4;
             nRemainingData -= 4;
-            n += GetTTGlyphComponents(ttf, index, glyphlist, currentGlyphStack);
+            n += GetTTGlyphComponents(ttf, index, glyphlist);
 
             sal_uInt32 nAdvance;
             if (flags & ARG_1_AND_2_ARE_WORDS) {
@@ -1316,8 +1312,6 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID,
             nRemainingData -= nAdvance;
         } while (flags & MORE_COMPONENTS);
     }
-
-    currentGlyphStack.pop_back();
 
     return n;
 }

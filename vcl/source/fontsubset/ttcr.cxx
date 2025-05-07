@@ -802,10 +802,9 @@ sal_uInt32 TrueTypeTableGlyf::glyfAdd(std::unique_ptr<GlyphData> glyphdata, Abst
 
     if (!glyphdata) return sal_uInt32(~0);
 
-    std::vector<sal_uInt32> glyphlist;
-    std::vector<sal_uInt32> currentGlyphStack;
+    std::vector< sal_uInt32 > glyphlist;
 
-    ncomponents = GetTTGlyphComponents(fnt, glyphdata->glyphID, glyphlist, currentGlyphStack);
+    ncomponents = GetTTGlyphComponents(fnt, glyphdata->glyphID, glyphlist);
 
     if (m_list.size() > 0) {
         ret = n = m_list.back()->newID + 1;
