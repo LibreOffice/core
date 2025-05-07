@@ -1880,10 +1880,20 @@ libo_FUZZ_ARG_ENABLE(gstreamer-1-0,
         [Disable building with the gstreamer 1.0 avmedia backend.]),
 ,test "${enable_gstreamer_1_0+set}" = set || enable_gstreamer_1_0=yes)
 
-libo_FUZZ_ARG_ENABLE([eot],
-    [AS_HELP_STRING([--enable-eot],
-        [Enable support for Embedded OpenType fonts.])],
-,test "${enable_eot+set}" = set || enable_eot=no)
+# Enable by default on Linux and macOS only
+if test $_os = Darwin -o $_os = Linux; then
+    libo_FUZZ_ARG_ENABLE([eot],
+        [AS_HELP_STRING([--disable-eot],
+            [Disable support for Embedded OpenType fonts.])],
+    ,test "${enable_eot+set}" = set || enable_eot=yes)
+else
+    libo_FUZZ_ARG_ENABLE([eot],
+        [AS_HELP_STRING([--enable-eot],
+            [Enable support for Embedded OpenType fonts.])],
+    ,test "${enable_eot+set}" = set || enable_eot=no)
+fi
+
+
 
 libo_FUZZ_ARG_ENABLE(cve-tests,
     AS_HELP_STRING([--disable-cve-tests],
