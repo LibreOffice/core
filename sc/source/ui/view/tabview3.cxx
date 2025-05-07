@@ -2301,7 +2301,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::createO
 
     ScViewData& rScViewData(mrScTabView.GetViewData());
     const EditView* pEditView(rScViewData.GetEditView(maScSplitPos));
-    DBG_ASSERT(nullptr != pEditView, "NO access to EditView in ScTextEditOverlayObject!");
+    assert(pEditView && "NO access to EditView in ScTextEditOverlayObject!");
 
     // use no transformations. The result will be in logic coordinates
     // based on aEditRectangle and the EditEngine setup, see
@@ -2352,7 +2352,7 @@ void ScTextEditOverlayObject::EditViewSelectionChange()
 {
     ScViewData& rScViewData(mrScTabView.GetViewData());
     EditView* pEditView(rScViewData.GetEditView(maScSplitPos));
-    DBG_ASSERT(nullptr != pEditView, "NO access to EditView in ScTextEditOverlayObject!");
+    assert(pEditView && "NO access to EditView in ScTextEditOverlayObject!");
 
     // get the selection rectangles
     std::vector<tools::Rectangle> aRects;
@@ -2442,7 +2442,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::getOver
 
     ScViewData& rScViewData(mrScTabView.GetViewData());
     EditView* pEditView(rScViewData.GetEditView(maScSplitPos));
-    DBG_ASSERT(nullptr != pEditView, "NO access to EditView in ScTextEditOverlayObject!");
+    assert(pEditView && "NO access to EditView in ScTextEditOverlayObject!");
 
     // call base implementation to get TextPrimitives in logic coordinates
     // directly from the setup EditEngine
