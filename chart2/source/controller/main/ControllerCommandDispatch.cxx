@@ -722,7 +722,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     // but only those properties that are true for the whole text
     try
     {
-        // if title is selected, and in edit mode, then he font panel shoulkd be disabled
+        // if title is selected, and in edit mode, then the font panel should be disabled
         // enable the uno commands only if the title is not in edit mode
         // Todo: enable font panel here if the panel will be able to handle edited title.
         OUString aObjectCID = m_xChartController->getSelectionMember().getSelectedCID();
@@ -819,7 +819,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
                 m_aCommandArguments[u".uno:Shadowed"_ustr] <<= bShadowed;
             }
 
-            // Font color is not set in panel.. it is just evnabled to use
+            // Font color is not set in panel... it is just enabled to use
             m_aCommandArguments[u".uno:Color"_ustr] <<= false;
             m_aCommandArguments[u".uno:FontColor"_ustr] <<= false;
 
@@ -832,7 +832,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
                 m_aCommandArguments[u".uno:SubScript"_ustr] <<= (nCharEscapement < 0);
             }
 
-            // Font Spacing is not set in panel.. it is just evnabled to use
+            // Font Spacing is not set in panel... it is just enabled to use
             m_aCommandArguments[u".uno:Spacing"_ustr] <<= false;
         }
     }
