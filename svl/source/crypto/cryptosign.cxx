@@ -1821,7 +1821,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     }
 
     HASH_HashType eHashType = HASH_GetHashTypeByOidTag(eOidTag);
-    HASHContext* pHASHContext = HASH_Create(eHashType);
+    HASHContext* pHASHContext = HASH_Create(bNonDetached ? HASH_AlgSHA1 : eHashType);
     if (!pHASHContext)
     {
         SAL_WARN("svl.crypto", "ValidateSignature: HASH_Create() failed");
@@ -1927,18 +1927,18 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     SECItem aSignedDigestItem {siBuffer, nullptr, 0};
 
     SECItem* pContentInfoContentData = pCMSSignedData->contentInfo.content.data;
-    if (bNonDetached && pContentInfoContentData && pContentInfoContentData->data)
+    if (pContentInfoContentData && pContentInfoContentData->data)
     {
         // Not a detached signature.
-        if (nActualResultLen == pContentInfoContentData->len &&
-            !std::memcmp(pActualResultBuffer, pContentInfoContentData->data, nMaxResultLen) &&
+        if (bNonDetached && nActualResultLen == pContentInfoContentData->len &&
+            !std::memcmp(pActualResultBuffer, pContentInfoContentData->data, nActualResultLen) &&
             HASH_HashBuf(eHashType, pActualResultBuffer, pContentInfoContentData->data, nActualResultLen) == SECSuccess)
         {
             aSignedDigestItem.data = pActualResultBuffer;
-            aSignedDigestItem.len = nActualResultLen;
+            aSignedDigestItem.len = nMaxResultLen;
         }
     }
-    else
+    else if (!bNonDetached)
     {
         // Detached, the usual case.
         aSignedDigestItem.data = pActualResultBuffer;

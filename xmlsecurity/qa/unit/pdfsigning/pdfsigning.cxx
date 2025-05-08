@@ -526,6 +526,8 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGood)
     const std::initializer_list<std::u16string_view> aNames = {
         // We failed to determine if this is good or bad.
         u"good-non-detached.pdf",
+        // adbe.pcks7.sha1 with SHA-256 in the second pass
+        u"good-non-detached-mixed.pdf",
         // Boolean value for dictionary key caused read error.
         u"dict-bool.pdf",
     };
@@ -626,6 +628,37 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGoodCustomMagic)
     // i.e. no signatures were found due to a custom non-comment magic after the header.
     std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
+}
+
+/// Test that we reject invalid adbe.pkcs7.sha1
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadNonDetached)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
+    const std::initializer_list<std::u16string_view> aNames = {
+        // SHA-1 mismatch
+        u"bad-non-detached-hash-mismatch.pdf",
+        // SHA-256 used instead of SHA-1 in the first pass
+        u"bad-non-detached-function-mismatch.pdf",
+        // the subfilter says adbe.pkcs7.sha1, the actual signature corresponds to adb.pkcs7.detached
+        u"bad-non-detached-subfilter-mismatch.pdf",
+        // CVE-2025-2866; SHA-1 matches, RSA signature invalid
+        u"bad-non-detached-rsa-mismatch.pdf"
+    };
+
+    for (const auto& rName : aNames)
+    {
+        std::vector<SignatureInformation> aInfos
+            = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + rName, 1);
+        CPPUNIT_ASSERT(!aInfos.empty());
+        SignatureInformation& rInformation = aInfos[0];
+        CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
+                             rInformation.nStatus);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
