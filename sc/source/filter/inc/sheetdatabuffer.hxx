@@ -139,7 +139,7 @@ private:
     /** Inserts the passed array formula into the sheet. */
     void                finalizeArrayFormula(
                             const ScRange& rRange,
-                            const ApiTokenSequence& rTokens ) const;
+                            const ApiTokenSequence& rTokens );
     /** Inserts the passed table operation into the sheet. */
     void finalizeTableOperation(
         const ScRange& rRange, const DataTableModel& rModel );

@@ -514,7 +514,7 @@ public:
 
                             // XArrayFormulaTokens
     virtual css::uno::Sequence< css::sheet::FormulaToken > SAL_CALL getArrayTokens() override;
-    virtual void SAL_CALL   setArrayTokens( const css::uno::Sequence<
+    SC_DLLPUBLIC virtual void SAL_CALL   setArrayTokens( const css::uno::Sequence<
                                     css::sheet::FormulaToken >& aTokens ) override;
 
                             // XCellRangeData
@@ -660,7 +660,7 @@ public:
     static const SfxItemPropertyMap& GetCellPropertyMap();
 
                             ScCellObj(ScDocShell* pDocSh, const ScAddress& rP);
-    virtual                 ~ScCellObj() override;
+    SC_DLLPUBLIC virtual    ~ScCellObj() override;
 
     virtual void            RefChanged() override;
 

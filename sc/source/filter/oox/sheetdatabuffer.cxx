@@ -48,6 +48,7 @@
 #include <formulabuffer.hxx>
 #include <numformat.hxx>
 #include <sax/tools/converter.hxx>
+#include <cellsuno.hxx>
 #include <docuno.hxx>
 
 namespace oox::xls {
@@ -631,12 +632,10 @@ ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const ScAddress& rAddr )
     return aTokens;
 }
 
-void SheetDataBuffer::finalizeArrayFormula( const ScRange& rRange, const ApiTokenSequence& rTokens ) const
+void SheetDataBuffer::finalizeArrayFormula( const ScRange& rRange, const ApiTokenSequence& rTokens )
 {
-    Reference< XArrayFormulaTokens > xTokens( getCellRange( rRange ), UNO_QUERY );
-    OSL_ENSURE( xTokens.is(), "SheetDataBuffer::finalizeArrayFormula - missing formula token interface" );
-    if( xTokens.is() )
-        xTokens->setArrayTokens( rTokens );
+    rtl::Reference<ScCellRangeObj> rCellRangeObj(new ScCellRangeObj(getScDocument().GetDocumentShell(), rRange));
+    rCellRangeObj->setArrayTokens(rTokens);
 }
 
 void SheetDataBuffer::finalizeTableOperation( const ScRange& rRange, const DataTableModel& rModel )
