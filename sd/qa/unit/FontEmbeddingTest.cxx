@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testRoundtripEmbeddedFontsPPTX)
     // Load the document
     createSdImpressDoc("BoldonseFontEmbedded.pptx");
 
-// FIXME: for some reason it doesn't work in macOS (see testSubsettedFullEmbeddedFont for asimilar case)
+// FIXME: for some reason it doesn't work in macOS (see testSubsettedFullEmbeddedFont for a similar case)
 #if !defined(MACOSX)
     // Expect the font to be available now, if we imported the embedded fonts correctly
     {
