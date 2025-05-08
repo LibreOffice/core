@@ -2144,6 +2144,11 @@ void SbRtl_Time(StarBASIC *, SbxArray & rPar, bool bWrite)
     {
         tools::Time aTime( tools::Time::SYSTEM );
         SbxVariable* pMeth = rPar.Get(0);
+        if (!pMeth->IsString())
+        {
+            pMeth->PutDate(aTime.GetTimeInDays());
+            return;
+        }
         OUString aRes;
         if( pMeth->IsFixed() )
         {

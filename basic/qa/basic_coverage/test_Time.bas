@@ -9,12 +9,13 @@
 Option Explicit
 
 Function doUnitTest as String
-    dim aDate as Date
-    aDate = Time$() ' Use string variant of the function, to limit precision to seconds
-    ' CDateToUnoTime CDateFromUnoTime
-    If ( CDateFromUnoTime( CDateToUnoTime( aDate ) ) <> aDate ) Then
-        doUnitTest = "FAIL"
-    Else
-        doUnitTest = "OK"
-    End If
+  ''' Return 'text' OR 'date' variable '''
+
+  If (TypeName(Time$)<>"String" Or Vartype(Time())<>V_DATE) Then
+    doUnitTest = "FAIL" ' not successful
+  Else
+    doUnitTest = "OK" ' Ok
+  End If
 End Function
+
+Sub DEV_TST : MsgBox doUnitTest : End Sub
