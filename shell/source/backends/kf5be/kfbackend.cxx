@@ -197,14 +197,7 @@ void initQApp(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings
 
 Service::Service()
 {
-    css::uno::Reference<css::uno::XCurrentContext> context(css::uno::getCurrentContext());
-    if (!context.is())
-        return;
-
-    OUString desktop;
-    context->getValueByName(u"system.desktop-environment"_ustr) >>= desktop;
-
-    if (desktop == "PLASMA5")
+    if (Application::GetDesktopEnvironment() == u"PLASMA5")
     {
         if (!qApp) // no qt event loop yet
         {

@@ -46,6 +46,7 @@
 #include <sal/types.h>
 #include <comphelper/diagnose_ex.hxx>
 #include <uno/current_context.hxx>
+#include <vcl/svapp.hxx>
 
 namespace {
 
@@ -275,16 +276,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_DesktopBackend_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    OUString desktop;
-    css::uno::Reference< css::uno::XCurrentContext > current(
-        css::uno::getCurrentContext());
-    if (current.is()) {
-        current->getValueByName(u"system.desktop-environment"_ustr) >>= desktop;
-    }
-
     // Fall back to the default if the specific backend is not available:
     css::uno::Reference< css::uno::XInterface > backend;
-    if (desktop == "PLASMA5")
+    if (Application::GetDesktopEnvironment() == u"PLASMA5")
         backend = createBackend(context,
             u"com.sun.star.configuration.backend.KF5Backend"_ustr);
     if (!backend)

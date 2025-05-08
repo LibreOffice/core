@@ -256,39 +256,6 @@ static Application *        pOwnSvApp = nullptr;
 // Exception handler. pExceptionHandler != NULL => VCL already inited
 static oslSignalHandler pExceptionHandler = nullptr;
 
-namespace {
-
-class DesktopEnvironmentContext: public cppu::WeakImplHelper< css::uno::XCurrentContext >
-{
-public:
-    explicit DesktopEnvironmentContext( css::uno::Reference< css::uno::XCurrentContext > ctx)
-        : m_xNextContext(std::move( ctx )) {}
-
-    // XCurrentContext
-    virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name ) override;
-
-private:
-    css::uno::Reference< css::uno::XCurrentContext > m_xNextContext;
-};
-
-}
-
-uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Name)
-{
-    uno::Any retVal;
-
-    if ( Name == "system.desktop-environment" )
-    {
-        retVal <<= Application::GetDesktopEnvironment();
-    }
-    else if( m_xNextContext.is() )
-    {
-        // Call next context in chain if found
-        retVal = m_xNextContext->getValueByName( Name );
-    }
-    return retVal;
-}
-
 bool IsVCLInit()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -336,10 +303,6 @@ bool InitVCL()
     if ( !pSVData->mpDefInst )
         return false;
     pSVData->mpDefInst->AcquireYieldMutex();
-
-    // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
-    css::uno::setCurrentContext(
-        new DesktopEnvironmentContext( css::uno::getCurrentContext() ) );
 
     // Initialize application instance (should be done after initialization of VCL SAL part)
     if (pSVData->mpApp)
