@@ -3260,7 +3260,7 @@ void SwCursorShell::YrsAddCursor(OString const& rId, ::std::optional<SwPosition>
     it->second->m_pVisibleCursor = new SwVisibleCursor{*it->second, this};
     it->second->m_pVisibleCursor->m_Author = rAuthor;
 
-    // TODO check if pos is valid? just call UC? add cursor parameter so it doesnt check all of them?
+    // TODO check if pos is valid? just call UC? add cursor parameter so it doesn't check all of them?
     UpdateCursor();
 }
 
