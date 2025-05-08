@@ -10,8 +10,15 @@
 $(eval $(call gb_Module_Module,libeot))
 
 $(eval $(call gb_Module_add_targets,libeot,\
-	ExternalProject_libeot \
 	UnpackedTarball_libeot \
 ))
-
+ifeq ($(COM),MSC)
+$(eval $(call gb_Module_add_targets,libeot,\
+	StaticLibrary_libeot \
+))
+else
+$(eval $(call gb_Module_add_targets,libeot,\
+	ExternalProject_libeot \
+))
+endif
 # vim: set noet sw=4 ts=4:

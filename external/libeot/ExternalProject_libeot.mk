@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,libeot,build) :
 			--disable-shared \
 			--disable-debug \
 			$(gb_CONFIGURE_PLATFORMS) \
-		&& $(MAKE) $(if $(verbose),V=1) \
+		&& $(MAKE) $(if $(verbose),V=1) libeot.la \
 	)
 	$(call gb_Trace_EndRange,libeot,EXTERNAL)
 

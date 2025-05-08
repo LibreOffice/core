@@ -3445,9 +3445,21 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(gb_UnpackedTarball_workdir)/libeot/inc \
 	$$(INCLUDE) \
 )
+
+ifeq ($(COM),MSC)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	libeot \
+)
+
+else
+
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libeot/.libs/libeot$(gb_StaticLibrary_PLAINEXT) \
 )
+
+endif
+
 $(call gb_LinkTarget_use_external_project,$(1),libeot)
 
 endef

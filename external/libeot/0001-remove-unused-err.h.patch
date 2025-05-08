@@ -1,0 +1,24 @@
+From cc2fbd324a2b3b014914ae253513d546e4076320 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Toma=C5=BE=20Vajngerl?= <tomaz.vajngerl@collabora.co.uk>
+Date: Fri, 9 May 2025 09:55:23 +0900
+Subject: [PATCH] remove unused err.h
+
+---
+ src/libeot.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/libeot.c b/src/libeot.c
+index 8bac0c0..dce12ba 100644
+--- a/src/libeot.c
++++ b/src/libeot.c
+@@ -6,7 +6,6 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <stdint.h>
+-#include <err.h>
+ 
+ #include <sys/stat.h>
+ 
+-- 
+2.49.0
+

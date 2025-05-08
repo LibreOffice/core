@@ -1881,7 +1881,7 @@ libo_FUZZ_ARG_ENABLE(gstreamer-1-0,
 ,test "${enable_gstreamer_1_0+set}" = set || enable_gstreamer_1_0=yes)
 
 # Enable by default on Linux and macOS only
-if test $_os = Darwin -o $_os = Linux; then
+if test $_os = Darwin -o $_os = Linux -o $_os = WINNT; then
     libo_FUZZ_ARG_ENABLE([eot],
         [AS_HELP_STRING([--disable-eot],
             [Disable support for Embedded OpenType fonts.])],
