@@ -37,20 +37,13 @@
 #include <osl/diagnose.h>
 #include <osl/file.h>
 #include <rtl/ustring.hxx>
+#include <vcl/qt/QtUtils.hxx>
 
 namespace kfaccess
 {
 namespace
 {
 namespace uno = css::uno;
-}
-
-namespace
-{
-OUString fromQStringToOUString(const QString& s)
-{
-    return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
-}
 }
 
 css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
@@ -66,7 +59,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
             aClientProgram = QStringLiteral("kmail");
         else
             aClientProgram = aClientProgram.section(QLatin1Char(' '), 0, 0);
-        sClientProgram = fromQStringToOUString(aClientProgram);
+        sClientProgram = toOUString(aClientProgram);
         return css::beans::Optional<css::uno::Any>(true, uno::Any(sClientProgram));
     }
     else if (id == u"SourceViewFontHeight")
@@ -79,7 +72,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
     {
         const QFont aFixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
         const QString aFontName = aFixedFont.family();
-        const OUString sFontName = fromQStringToOUString(aFontName);
+        const OUString sFontName = toOUString(aFontName);
         return css::beans::Optional<css::uno::Any>(true, uno::Any(sFontName));
     }
     else if (id == u"EnableATToolSupport")
@@ -98,7 +91,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         OUString sDocumentsURL;
         if (aDocumentsDir.endsWith(QLatin1Char('/')))
             aDocumentsDir.truncate(aDocumentsDir.length() - 1);
-        sDocumentsDir = fromQStringToOUString(aDocumentsDir);
+        sDocumentsDir = toOUString(aDocumentsDir);
         osl_getFileURLFromSystemPath(sDocumentsDir.pData, &sDocumentsURL.pData);
         return css::beans::Optional<css::uno::Any>(true, uno::Any(sDocumentsURL));
     }
@@ -125,7 +118,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         if (!aHTTPProxy.isEmpty())
         {
             QUrl aProxy(aHTTPProxy);
-            OUString sProxy = fromQStringToOUString(aProxy.host());
+            OUString sProxy = toOUString(aProxy.host());
             return css::beans::Optional<css::uno::Any>(true, uno::Any(sProxy));
         }
     }
@@ -179,7 +172,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         if (!aHTTPSProxy.isEmpty())
         {
             QUrl aProxy(aHTTPSProxy);
-            OUString sProxy = fromQStringToOUString(aProxy.host());
+            OUString sProxy = toOUString(aProxy.host());
             return css::beans::Optional<css::uno::Any>(true, uno::Any(sProxy));
         }
     }
@@ -229,7 +222,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
             OUString sNoProxyFor;
 
             aNoProxyFor = aNoProxyFor.replace(QLatin1Char(','), QLatin1Char(';'));
-            sNoProxyFor = fromQStringToOUString(aNoProxyFor);
+            sNoProxyFor = toOUString(aNoProxyFor);
             return css::beans::Optional<css::uno::Any>(true, uno::Any(sNoProxyFor));
         }
     }
