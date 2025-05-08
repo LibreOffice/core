@@ -20,6 +20,7 @@ Sub verify_testFormat
     Dim d As Date
     d = "2024-09-16 17:03:30"
     TestUtil.AssertEqual(Format(d, "YYYY-MM-DD"), "2024-09-16", "Format(d, ""YYYY-MM-DD"")")
+    TestUtil.AssertEqual(Format("2024-09-16 05:03:30 PM", "hh-mm-ss"), "17-03-30", "Format(""2024-09-16 05:03:30 PM"", ""hh-mm-ss"")")
 
     Exit Sub
 errorHandler:
