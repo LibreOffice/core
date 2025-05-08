@@ -167,6 +167,7 @@ private:
     bool RejectMovedRedlines(sal_uInt32 nMovedID, bool bCallDelete);
     void PreAppendInsertRedline(AppendRedlineContext& rCtx);
     void PreAppendDeleteRedline(AppendRedlineContext& rCtx);
+    void PreAppendFormatRedline(AppendRedlineContext& rCtx);
 
     DocumentRedlineManager(DocumentRedlineManager const&) = delete;
     DocumentRedlineManager& operator=(DocumentRedlineManager const&) = delete;
