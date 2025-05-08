@@ -234,8 +234,7 @@ css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
         return xdgDirectoryIfExists("Documents", true);
     }
 
-    if ( PropertyName == "EnableATToolSupport" ||
-         PropertyName == "ExternalMailer" ||
+    if ( PropertyName == "ExternalMailer" ||
          PropertyName == "SourceViewFontHeight" ||
          PropertyName == "SourceViewFontName" ||
          PropertyName == "ooInetHTTPProxyName" ||

@@ -75,13 +75,6 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         const OUString sFontName = toOUString(aFontName);
         return css::beans::Optional<css::uno::Any>(true, uno::Any(sFontName));
     }
-    else if (id == u"EnableATToolSupport")
-    {
-        /* does not make much sense without an accessibility bridge */
-        bool ATToolSupport = false;
-        return css::beans::Optional<css::uno::Any>(true,
-                                                   uno::Any(OUString::boolean(ATToolSupport)));
-    }
     else if (id == u"WorkPathVariable")
     {
         QString aDocumentsDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));

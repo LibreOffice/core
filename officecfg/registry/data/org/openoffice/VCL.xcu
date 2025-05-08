@@ -19,12 +19,6 @@
 <!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="VCL" oor:package="org.openoffice">
   <node oor:name="Settings">
-    <node oor:name="Accessibility" oor:op="replace">
-      <prop oor:name="EnableATToolSupport" oor:type="xs:string" oor:op="replace">
-        <value>false</value>
-        <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend EnableATToolSupport"/>
-      </prop>
-    </node>
     <node oor:name="DesktopManagement" oor:op="replace">
       <prop oor:name="DisablePrinting" oor:type="xs:string" oor:op="replace">
         <value>false</value>

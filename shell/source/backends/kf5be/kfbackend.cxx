@@ -137,10 +137,10 @@ OString getExecutable()
 void readKDESettings(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings)
 {
     const std::vector<OUString> aKeys
-        = { u"EnableATToolSupport"_ustr, u"ExternalMailer"_ustr,       u"SourceViewFontHeight"_ustr,
-            u"SourceViewFontName"_ustr,  u"WorkPathVariable"_ustr,     u"ooInetHTTPProxyName"_ustr,
-            u"ooInetHTTPProxyPort"_ustr, u"ooInetHTTPSProxyName"_ustr, u"ooInetHTTPSProxyPort"_ustr,
-            u"ooInetNoProxy"_ustr,       u"ooInetProxyType"_ustr };
+        = { u"ExternalMailer"_ustr,       u"SourceViewFontHeight"_ustr, u"SourceViewFontName"_ustr,
+            u"WorkPathVariable"_ustr,     u"ooInetHTTPProxyName"_ustr,  u"ooInetHTTPProxyPort"_ustr,
+            u"ooInetHTTPSProxyName"_ustr, u"ooInetHTTPSProxyPort"_ustr, u"ooInetNoProxy"_ustr,
+            u"ooInetProxyType"_ustr };
 
     for (const OUString& aKey : aKeys)
     {
@@ -218,12 +218,11 @@ void Service::setPropertyValue(OUString const&, css::uno::Any const&)
 
 css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
 {
-    if (PropertyName == "EnableATToolSupport" || PropertyName == "ExternalMailer"
-        || PropertyName == "SourceViewFontHeight" || PropertyName == "SourceViewFontName"
-        || PropertyName == "WorkPathVariable" || PropertyName == "ooInetHTTPProxyName"
-        || PropertyName == "ooInetHTTPProxyPort" || PropertyName == "ooInetHTTPSProxyName"
-        || PropertyName == "ooInetHTTPSProxyPort" || PropertyName == "ooInetNoProxy"
-        || PropertyName == "ooInetProxyType")
+    if (PropertyName == "ExternalMailer" || PropertyName == "SourceViewFontHeight"
+        || PropertyName == "SourceViewFontName" || PropertyName == "WorkPathVariable"
+        || PropertyName == "ooInetHTTPProxyName" || PropertyName == "ooInetHTTPProxyPort"
+        || PropertyName == "ooInetHTTPSProxyName" || PropertyName == "ooInetHTTPSProxyPort"
+        || PropertyName == "ooInetNoProxy" || PropertyName == "ooInetProxyType")
     {
         std::map<OUString, css::beans::Optional<css::uno::Any>>::iterator it
             = m_KDESettings.find(PropertyName);
