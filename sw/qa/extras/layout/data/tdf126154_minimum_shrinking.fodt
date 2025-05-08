@@ -153,7 +153,7 @@
  </office:settings>
  <office:font-face-decls>
   <style:font-face style:name="Liberation Sans" svg:font-family="Liberation Sans"/>
-  <style:font-face style:name="Liberation Sans1" svg:font-family="Liberation Sans" style:font-adornments="Bold" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Liberation Serif" svg:font-family="Liberation Serif" style:font-adornments="Bold" style:font-family-generic="swiss" style:font-pitch="variable"/>
  </office:font-face-decls>
  <office:styles>
   <style:default-style style:family="graphic">
@@ -183,7 +183,7 @@
  </office:styles>
  <office:automatic-styles>
   <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Heading_20_5">
-   <style:text-properties style:font-name="Liberation Sans1" fo:font-family="Liberation Sans" style:font-style-name="Bold" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-weight="bold"    />
+   <style:text-properties style:font-name="Liberation Serif" fo:font-family="Liberation Serif" style:font-style-name="Bold" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-weight="bold"    />
   </style:style>
   <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
    <style:paragraph-properties fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="true"/>
@@ -217,29 +217,29 @@
  <office:body>
   <office:text>
    <text:p text:style-name="P1">Only desired word spacing (100%, 100%, 100%)</text:p>
-   <text:p text:style-name="P2">,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P2">,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P2">,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P2">,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P2">,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P2">,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P2">,,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P2">,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P2">,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P2">,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P2">,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P2">,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P2">,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P2">,,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
    <text:p text:style-name="P1">Minimum word spacing (80%, 100%, 100%)</text:p>
-   <text:p text:style-name="P3">,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P3">,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P3">,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P3">,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P3">,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P3">,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P3">,,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P3">,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P3">,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P3">,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P3">,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P3">,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P3">,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P3">,,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
    <text:p text:style-name="P1">Minimum and maximum word spacing (80%, 100%, 133%)</text:p>
-   <text:p text:style-name="P4">,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P4">,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P4">,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P4">,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P4">,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P4">,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
-   <text:p text:style-name="P4">,,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum con sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P4">,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P4">,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P4">,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P4">,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P4">,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P4">,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
+   <text:p text:style-name="P4">,,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum c on sequat mi quis pretium semper.</text:p>
   </office:text>
  </office:body>
 </office:document>

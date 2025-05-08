@@ -298,6 +298,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud() &&
             // disable hyphenation at minimum word spacing
+            // (and at weighted word spacing between minimum and desired word spacing)
             !( nPropWordSpacing < aAdjustItem.GetPropWordSpacing() );
 
     // disable hyphenation according to hyphenation-keep and hyphenation-keep-type,

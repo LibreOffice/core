@@ -1056,6 +1056,119 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154)
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]", "portion",
         u",, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
+    // This was "... bulum c" (more shrinking, than needed to remove hyphenation)
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+                u"Vesti bulum ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+                u"Vesti bulum ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+                u"Vesti bulum ");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bu");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
+
+    // minimum, desired and maximum word spacing: 80%, 100%, 133%
+    // no hyphenation in the same text: hyphenation of all the short words are limited
+    // by the minimum and maximum word spacing settings
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[18]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
+    // This was "... bulum c" (more shrinking, than needed to remove hyphenation)
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[20]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+                u"Vesti bulum ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[21]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+                u"Vesti bulum ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[22]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+                u"Vesti bulum ");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[23]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[24]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
+{
+    createSwDoc("tdf106234.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // In justified paragraphs, there is justification between left tabulators and manual line breaks
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwGluePortion",
+                "type", u"PortionType::Margin");
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwGluePortion",
+                "width", u"0");
+    // but not after centered, right and decimal tabulators
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwGluePortion",
+                "type", u"PortionType::Margin");
+    // This was a justified line, without width
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwGluePortion",
+                "width", u"7882");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154_minimum_shrinking)
+{
+    // minimum, desired and maximum word spacing
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf126154_minimum_shrinking.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // only desired word space: 100%, 100%, 100%
+    // 5 lines are hyphenated
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bu");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bu");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bu");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bu");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bu");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
+
+    // also minimum word space: 80%, 100%, 100%
+    // only a single line is hyphenated from the previous ones
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[1]", "portion",
         u",,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
@@ -1099,28 +1212,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154)
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[24]/SwParaPortion/SwLineLayout[1]", "portion",
         u",,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
-}
-
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
-{
-    createSwDoc("tdf106234.fodt");
-    // Ensure that all text portions are calculated before testing.
-    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-    CPPUNIT_ASSERT(pViewShell);
-    pViewShell->Reformat();
-
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // In justified paragraphs, there is justification between left tabulators and manual line breaks
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwGluePortion",
-                "type", u"PortionType::Margin");
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwGluePortion",
-                "width", u"0");
-    // but not after centered, right and decimal tabulators
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwGluePortion",
-                "type", u"PortionType::Margin");
-    // This was a justified line, without width
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwGluePortion",
-                "width", u"7882");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155324)

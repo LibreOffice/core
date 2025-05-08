@@ -421,17 +421,37 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                     pGuess.emplace();
                     bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine, aAdjustItem.GetPropWordSpacing() );
                 }
-                if ( bWordSpacingMinimum )
+                if ( bWordSpacingMinimum && pGuess->HyphWord().is() && pGuess->BreakPos() > rInf.GetLineStart() )
                 {
                     std::optional<SwTextGuess> pGuess2(std::in_place);
                     SwTwips nOldExtraSpace = rInf.GetExtraSpace();
                     // break the line after the hyphenated word, if it's possible
                     // (hyphenation is disabled in Guess(), when called with GetPropWordSpacingMinimum())
-                    // FIXME: if there are multiple possible break points allowed by minimum
-                    // word spacing, choose the nearest to the desired word spacing, not the opposite
                     bool bFull2 = !pGuess2->Guess( *this, rInf, Height(), nSpacesInLine, aAdjustItem.GetPropWordSpacingMinimum() );
                     if ( pGuess2->BreakWidth() > nOldWidth )
                     {
+                        // instead of the maximum shrinking, break after the word which was hyphenated before
+                        for (sal_Int32 i = sal_Int32(pGuess->BreakPos()); i < sal_Int32(pGuess2->BreakPos()); ++i)
+                        {
+                            sal_Unicode cChar = rInf.GetText()[i];
+                            // first space after the hyphenated word, and it's not the chosen one
+                            if ( cChar == CH_BLANK )
+                            {
+                                // using a weighted word spacing, try to break the line after the hyphenated word
+                                sal_Int32 nOldBreak = sal_Int32(pGuess2->BreakPos()) - sal_Int32(pGuess->BreakPos());
+                                sal_Int32 nNewBreak = i - sal_Int32(pGuess->BreakPos());
+                                SwTwips nWeightedSpacing = aAdjustItem.GetPropWordSpacingMinimum() * (1.0 * nNewBreak/nOldBreak) +
+                                        aAdjustItem.GetPropWordSpacing() * (1.0 * (nOldBreak - nNewBreak)/nOldBreak);
+                                std::optional<SwTextGuess> pGuess3(std::in_place);
+                                pGuess3->Guess( *this, rInf, Height(), nSpacesInLine, nWeightedSpacing );
+                                if ( pGuess3->BreakWidth() > nOldWidth )
+                                {
+                                    pGuess2.emplace();
+                                    pGuess2 = std::move(pGuess3);
+                                }
+                                break;
+                            }
+                        }
                         pGuess = std::move(pGuess2);
                         bFull = bFull2;
                     }
