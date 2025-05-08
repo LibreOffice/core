@@ -1293,7 +1293,7 @@ void SAL_CALL ChartController::dispatch(
             rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
             if (xChartModel.is())
             {
-                // if the selected is title.. we should get the text propertyes instead...
+                // if the selected is title... we should get the text properties instead...
                 // or the selected text properties
                 std::vector<Reference<beans::XPropertySet>> xProperties;
                 xProperties.emplace(xProperties.end(),
