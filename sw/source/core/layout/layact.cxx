@@ -2321,8 +2321,14 @@ bool SwLayIdle::DoIdleJob(IdleJobType eJob, IdleJobArea eJobArea)
         }
 
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
+        // LOK case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
+        // visible area.
+        const SwRect &rVisArea = m_pImp->GetShell()->VisArea();
+        SwRect aLokVisArea(m_pImp->GetShell()->getLOKVisibleArea());
+        bool bUseLokVisArea = comphelper::LibreOfficeKit::isActive() && !aLokVisArea.IsEmpty();
+        const SwRect& rVis = bUseLokVisArea ? aLokVisArea : rVisArea;
         if (pPage && eJobArea == IdleJobArea::VISIBLE &&
-            !pPage->getFrameArea().Overlaps( m_pImp->GetShell()->VisArea()))
+            !pPage->getFrameArea().Overlaps(rVis))
         {
              break;
         }

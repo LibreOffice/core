@@ -191,11 +191,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAsyncLayout)
     CPPUNIT_ASSERT(pPage2->IsInvalidContent());
     CPPUNIT_ASSERT(pPage3->IsInvalidContent());
 
-    // And when processing all idle events:
-    SwDoc* pDoc = pDocShell->GetDoc();
-    IDocumentTimerAccess& rIDTA = pDoc->getIDocumentTimerAccess();
-    rIDTA.GetFireIdleJobsTimer().Stop();
-    rIDTA.StartIdling();
+    // And then processing all idle events:
     Scheduler::ProcessEventsToIdle();
 
     // Then make sure all pages get an async layout:
@@ -735,11 +731,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentsOnLoad)
     // When getting the list of comments from the document + listening for notifications from idle
     // layout:
     pXTextDocument->getPostIts(aWriter);
-    SwDocShell* pDocShell = getSwDocShell();
-    SwDoc* pDoc = pDocShell->GetDoc();
-    IDocumentTimerAccess& rIDTA = pDoc->getIDocumentTimerAccess();
-    rIDTA.GetFireIdleJobsTimer().Stop();
-    rIDTA.StartIdling();
     Scheduler::ProcessEventsToIdle();
 
     // Then make sure that:
@@ -760,6 +751,32 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentsOnLoad)
     // seemingly the comment was load on load (it was there, but not visible).
     auto aAction = aView.m_aComment.get_child("action").get_value<std::string>();
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aAction);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellcheckVisibleArea)
+{
+    // Given a document with 3 pages, the first page is visible:
+    OUString aURL = createFileURL(u"3pages.odt");
+    UnoApiXmlTest::loadFromURL(aURL);
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwPageFrame* pPage1 = pLayout->GetLower()->DynCastPageFrame();
+    pWrtShell->setLOKVisibleArea(pPage1->getFrameArea().SVRect());
+    pPage1->InvalidateAll();
+    SwPageFrame* pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    pPage2->InvalidateAll();
+    SwPageFrame* pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    pPage3->InvalidateAll();
+
+    // When doing idle layout and it's interrupted:
+    AnyInputCallback aAnyInput;
+    pWrtShell->LayoutIdle();
+
+    // Then make sure the visible area is spellchecked, but not the rest:
+    CPPUNIT_ASSERT(!pPage1->IsInvalidSpelling());
+    CPPUNIT_ASSERT(pPage2->IsInvalidSpelling());
+    CPPUNIT_ASSERT(pPage3->IsInvalidSpelling());
 }
 }
 

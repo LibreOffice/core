@@ -157,9 +157,9 @@ private:
 
 protected:
     // write access to mb*Valid flags
-    void setFrameAreaPositionValid(bool bNew);
-    void setFrameAreaSizeValid(bool bNew);
-    void setFramePrintAreaValid(bool bNew);
+    SW_DLLPUBLIC void setFrameAreaPositionValid(bool bNew);
+    SW_DLLPUBLIC void setFrameAreaSizeValid(bool bNew);
+    SW_DLLPUBLIC void setFramePrintAreaValid(bool bNew);
 
 public:
     SwFrameAreaDefinition();
@@ -847,7 +847,7 @@ public:
     inline void InvalidateAll();
     void ImplInvalidateSize();
     void ImplInvalidatePrt();
-    void ImplInvalidatePos();
+    SW_DLLPUBLIC void ImplInvalidatePos();
     void ImplInvalidateLineNum();
 
     inline void InvalidateNextPos( bool bNoFootnote = false );
