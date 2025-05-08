@@ -35,7 +35,6 @@
 #include <ReferenceSizeProvider.hxx>
 #include <RegressionCurveModel.hxx>
 #include "ShapeController.hxx"
-#include <ObjectIdentifier.hxx>
 #include <CharacterProperties.hxx>
 
 #include <vcl/svapp.hxx>
