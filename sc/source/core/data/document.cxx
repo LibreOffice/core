@@ -371,7 +371,7 @@ void ScDocument::CreateValidTabName(OUString& rName) const
 
         // Get Custom prefix
         const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
-        const OUString& aStrTable = rOpt.GetInitTabPrefix();
+        const OUString aStrTable = rOpt.GetInitTabPrefix();
 
         bool         bOk   = false;
 
@@ -414,7 +414,7 @@ void ScDocument::CreateValidTabNames(std::vector<OUString>& aNames, SCTAB nCount
 
     // Get Custom prefix
     const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
-    const OUString& aStrTable = rOpt.GetInitTabPrefix();
+    const OUString aStrTable = rOpt.GetInitTabPrefix();
 
     OUStringBuffer rName;
 

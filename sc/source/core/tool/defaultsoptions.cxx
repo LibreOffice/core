@@ -15,6 +15,7 @@
 #include <scresid.hxx>
 #include <sc.hrc>
 #include <utility>
+#include <comphelper/lok.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -30,6 +31,27 @@ void ScDefaultsOptions::SetDefaults()
     nInitTabCount  = 1;
     aInitTabPrefix = ScResId(STR_TABLE_DEF); // Default Prefix "Sheet"
     bJumboSheets = false;
+    bInitTabPrefixChanged = false;
+}
+
+void ScDefaultsOptions::SetInitTabPrefix(const OUString& aPrefix)
+{
+    if (aInitTabPrefix != aPrefix)
+    {
+        bInitTabPrefixChanged = true;
+        aInitTabPrefix = aPrefix;
+    }
+}
+
+OUString ScDefaultsOptions::GetInitTabPrefix() const
+{
+    if (comphelper::LibreOfficeKit::isActive() && !bInitTabPrefixChanged)
+    {
+        // LOKit may have different users with different locales, so the proper
+        // translation of the defualt TabPrefix has to be fetched each time
+        return ScResId(STR_TABLE_DEF);
+    }
+    return aInitTabPrefix;
 }
 
 bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
