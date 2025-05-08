@@ -60,8 +60,7 @@
         2. the content of layout object
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTORY_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTORY_HXX
+#pragma once
 
 #include <memory>
 #include "lwpcontent.hxx"
@@ -152,7 +151,5 @@ inline void LwpStory::AddBullStyleName2List(const OUString& rStyleName, sal_uInt
 {
     m_vBulletStyleNameList.push_back(std::make_pair(rStyleName, nPos));
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
