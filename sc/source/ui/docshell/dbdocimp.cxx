@@ -560,6 +560,10 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                     aNewMark, InsertDeleteFlags::CONTENTS );
         }
 
+
+        // tdf#117436 - adjust row height to accommodate potential multiline cells
+        rDoc.GetDocumentShell()->AdjustRowHeight(rParam.nRow1, nEndRow, nTab);
+
         // update database range
         pDBData->SetImportParam( rParam );
         pDBData->SetHeader( true );
