@@ -775,6 +775,21 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)
     // Without the accompanying fix in place, this test would have failed, the insert under format
     // was not accepted.
     CPPUNIT_ASSERT(!rRedlineData.Next());
+
+    // And when rejecting the insert:
+    pWrtShell->Undo();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, pTextNode->GetText());
+    pWrtShell->RejectRedline(0);
+
+    // Then make sure no redlines and no content remain:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. a format-on-insert redline remained.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rRedlines.size());
+    // Also make sure the text of the format-on-insert redline is removed.
+    CPPUNIT_ASSERT(pTextNode->GetText().isEmpty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
