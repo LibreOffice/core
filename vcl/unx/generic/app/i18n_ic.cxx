@@ -120,7 +120,7 @@ const XIMStyle g_nSupportedStatusStyle(
 
 // Constructor for an InputContext (IC)
 
-SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
+SalI18N_InputContext::SalI18N_InputContext(X11SalFrame* pFrame) :
         mbUseable( True ),
         maContext( nullptr ),
         mnSupportedPreeditStyle(
@@ -162,9 +162,8 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     if (pInputMethod->UseMethod()
         && SupportInputMethodStyle( pInputMethod->GetSupportedStyles() ) )
     {
-        const SystemEnvData& rEnv = pFrame->GetSystemData();
-        ::Window  aClientWindow = rEnv.aShellWindow;
-        ::Window  aFocusWindow  = rEnv.GetWindowHandle(pFrame);
+        ::Window aClientWindow = pFrame->GetShellWindow();
+        ::Window aFocusWindow  = pFrame->GetWindow();
 
         // for status callbacks and commit string callbacks
 #define PREEDIT_BUFSZ 16

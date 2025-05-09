@@ -72,7 +72,7 @@ public:
     void Map(X11SalFrame* pFrame);
     void Unmap();
 
-    SalI18N_InputContext( SalFrame *aFrame );
+    SalI18N_InputContext(X11SalFrame* pFrame);
     ~SalI18N_InputContext();
 };
 
