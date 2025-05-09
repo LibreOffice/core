@@ -44,10 +44,11 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/restartdialog.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/inputdlg.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <dlgname.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -743,14 +744,17 @@ void SvxJavaParameterDlg::EditParameter()
     if (nPos == -1)
         return;
 
-    InputDialog aParamEditDlg(m_xDialog.get(), CuiResId(RID_CUISTR_JAVA_START_PARAM));
     OUString editableClassPath = m_xAssignedList->get_selected_text();
-    aParamEditDlg.SetEntryText(editableClassPath);
-    aParamEditDlg.HideHelpBtn();
+    SvxNameDialog aNameDialog(m_xDialog.get(), editableClassPath, OUString(),
+                            CuiResId(RID_CUISTR_JAVA_START_PARAM));
 
-    if (!aParamEditDlg.run())
+    aNameDialog.SetCheckName([](OUString sNewName) -> bool {
+        return !o3tl::trim(sNewName).empty();
+    });
+
+    if (!aNameDialog.run())
         return;
-    OUString editedClassPath = comphelper::string::strip(aParamEditDlg.GetEntryText(), ' ');
+    OUString editedClassPath = comphelper::string::strip(aNameDialog.GetName(), ' ');
 
     if ( !editedClassPath.isEmpty() && editableClassPath != editedClassPath )
     {
