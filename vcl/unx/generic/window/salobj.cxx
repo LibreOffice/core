@@ -228,7 +228,6 @@ X11SalObject::X11SalObject()
     maSystemChildData.pSalFrame = nullptr;
     maSystemChildData.pWidget       = nullptr;
     maSystemChildData.pVisual       = nullptr;
-    maSystemChildData.aShellWindow  = 0;
     maSystemChildData.toolkit = SystemEnvData::Toolkit::Gen;
     maSystemChildData.platform = SystemEnvData::Platform::Xcb;
 

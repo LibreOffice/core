@@ -60,7 +60,6 @@ void GtkSalObjectBase::Init()
     // system data
     // tdf#139609 deliberately defer using m_pParent->GetNativeWindowHandle(m_pSocket)) to set m_aSystemData.aWindow
     // unless its explicitly needed
-    m_aSystemData.aShellWindow  = reinterpret_cast<sal_IntPtr>(this);
     m_aSystemData.pSalFrame     = nullptr;
     m_aSystemData.pWidget       = m_pSocket;
     m_aSystemData.nScreen       = m_pParent->getXScreenNumber().getXScreen();

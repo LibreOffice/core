@@ -153,15 +153,14 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             m_pQWidget->setAttribute(Qt::WA_AlwaysShowToolTips);
     }
 
-    FillSystemEnvData(m_aSystemData, reinterpret_cast<sal_IntPtr>(this), m_pQWidget, this);
+    FillSystemEnvData(m_aSystemData, m_pQWidget, this);
 
     SetIcon(SV_ICON_ID_OFFICE);
 }
 
 void QtFrame::screenChanged(QScreen*) { m_pQWidget->fakeResize(); }
 
-void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidget* pWidget,
-                                QtFrame* pFrame)
+void QtFrame::FillSystemEnvData(SystemEnvData& rData, QWidget* pWidget, QtFrame* pFrame)
 {
     assert(rData.platform == SystemEnvData::Platform::Invalid);
     assert(rData.toolkit == SystemEnvData::Toolkit::Invalid);
@@ -181,7 +180,6 @@ void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidge
 
     rData.toolkit = SystemEnvData::Toolkit::Qt;
     rData.pSalFrame = pFrame;
-    rData.aShellWindow = pWindow;
     rData.pWidget = pWidget;
 }
 
@@ -190,7 +188,6 @@ QtFrame::~QtFrame()
     GetQtInstance().eraseFrame(this);
     delete asChild();
     m_aSystemData.pSalFrame = nullptr;
-    m_aSystemData.aShellWindow = 0;
 }
 
 void QtFrame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,

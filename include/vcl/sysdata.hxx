@@ -70,9 +70,6 @@ struct VCL_DLLPUBLIC SystemEnvData
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
     int                 nScreen;        // the current screen of the window
-    // note: this is a "long" in Xlib *but* in the protocol it's only 32-bit
-    // however, the GTK3 vclplug wants to store pointers in here!
-    sal_IntPtr          aShellWindow;   // the window of the frame's shell
     Platform            platform;       // the windowing system in use
 private:
     sal_uIntPtr         aWindow;        // the window of the object
@@ -104,7 +101,6 @@ public:
         , pWidget(nullptr)
         , pVisual(nullptr)
         , nScreen(0)
-        , aShellWindow(0)
         , platform(Platform::Invalid)
         , aWindow(0)
 #endif

@@ -1233,7 +1233,6 @@ void GtkSalFrame::InitCommon()
 
     //system data
     m_aSystemData.SetWindowHandle(GetNativeWindowHandle(m_pWindow));
-    m_aSystemData.aShellWindow  = reinterpret_cast<sal_IntPtr>(this);
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
     m_aSystemData.nScreen       = m_nXScreen.getXScreen();
