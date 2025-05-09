@@ -124,9 +124,9 @@ public:
 
 class GtkDnDTransferable;
 
-class GtkInstDropTarget final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
-                                                           css::lang::XInitialization,
-                                                           css::lang::XServiceInfo>
+class GtkInstDropTarget final
+    : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
+                                           css::lang::XServiceInfo>
 {
     osl::Mutex m_aMutex;
     GtkSalFrame* m_pFrame;
@@ -137,11 +137,10 @@ class GtkInstDropTarget final : public cppu::WeakComponentImplHelper<css::datatr
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 public:
     GtkInstDropTarget();
+    GtkInstDropTarget(sal_IntPtr nFrame);
     virtual ~GtkInstDropTarget() override;
 
-    // XInitialization
-    virtual void        SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArgs) override;
-            void        deinitialize();
+    void deinitialize();
 
     // XDropTarget
     virtual void        SAL_CALL addDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
@@ -182,9 +181,9 @@ public:
 #endif
 };
 
-class GtkInstDragSource final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
-                                                           css::lang::XInitialization,
-                                                           css::lang::XServiceInfo>
+class GtkInstDragSource final
+    : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
+                                           css::lang::XServiceInfo>
 {
     osl::Mutex m_aMutex;
     GtkSalFrame* m_pFrame;
@@ -197,6 +196,7 @@ public:
         , m_pFrame(nullptr)
     {
     }
+    GtkInstDragSource(sal_IntPtr nFrame);
 
     void set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                           const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener);
@@ -217,9 +217,7 @@ public:
         const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
         const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener) override;
 
-    // XInitialization
-    virtual void        SAL_CALL initialize(const css::uno::Sequence<css::uno::Any >& rArguments) override;
-            void        deinitialize();
+    void deinitialize();
 
     OUString SAL_CALL getImplementationName() override;
 

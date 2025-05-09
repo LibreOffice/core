@@ -1622,6 +1622,16 @@ GtkInstDropTarget::GtkInstDropTarget()
 {
 }
 
+GtkInstDropTarget::GtkInstDropTarget(sal_IntPtr nFrame)
+    : GtkInstDropTarget()
+{
+    assert(nFrame && "missing SalFrame");
+
+    m_pFrame = reinterpret_cast<GtkSalFrame*>(nFrame);
+    m_pFrame->registerDropTarget(this);
+    m_bActive = true;
+}
+
 OUString SAL_CALL GtkInstDropTarget::getImplementationName()
 {
     return u"com.sun.star.datatransfer.dnd.VclGtkDropTarget"_ustr;
@@ -1648,28 +1658,6 @@ void GtkInstDropTarget::deinitialize()
 {
     m_pFrame = nullptr;
     m_bActive = false;
-}
-
-void GtkInstDropTarget::initialize(const Sequence<Any>& rArguments)
-{
-    if (rArguments.getLength() < 2)
-    {
-        throw RuntimeException(u"DropTarget::initialize: Cannot install window event handler"_ustr,
-                               getXWeak());
-    }
-
-    sal_IntPtr nFrame = 0;
-    rArguments.getConstArray()[1] >>= nFrame;
-
-    if (!nFrame)
-    {
-        throw RuntimeException(u"DropTarget::initialize: missing SalFrame"_ustr,
-                               getXWeak());
-    }
-
-    m_pFrame = reinterpret_cast<GtkSalFrame*>(nFrame);
-    m_pFrame->registerDropTarget(this);
-    m_bActive = true;
 }
 
 void GtkInstDropTarget::addDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener)
@@ -1756,7 +1744,18 @@ void GtkInstDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
 
 Reference<XInterface> GtkInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    return vcl::X11DnDHelper(new GtkInstDropTarget(), pSysEnv->aShellWindow);
+    css::uno::Reference<css::datatransfer::dnd::XDropTarget> xRet
+        = new GtkInstDropTarget(pSysEnv->aShellWindow);
+    return xRet;
+}
+
+GtkInstDragSource::GtkInstDragSource(sal_IntPtr nFrame)
+    : GtkInstDragSource()
+{
+    assert(nFrame && "missing SalFrame");
+
+    m_pFrame = reinterpret_cast<GtkSalFrame*>(nFrame);
+    m_pFrame->registerDragSource(this);
 }
 
 GtkInstDragSource::~GtkInstDragSource()
@@ -1786,27 +1785,6 @@ sal_Int32 GtkInstDragSource::getDefaultCursor( sal_Int8 )
     return 0;
 }
 
-void GtkInstDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rArguments)
-{
-    if (rArguments.getLength() < 2)
-    {
-        throw RuntimeException(u"DragSource::initialize: Cannot install window event handler"_ustr,
-                               getXWeak());
-    }
-
-    sal_IntPtr nFrame = 0;
-    rArguments.getConstArray()[1] >>= nFrame;
-
-    if (!nFrame)
-    {
-        throw RuntimeException(u"DragSource::initialize: missing SalFrame"_ustr,
-                               getXWeak());
-    }
-
-    m_pFrame = reinterpret_cast<GtkSalFrame*>(nFrame);
-    m_pFrame->registerDragSource(this);
-}
-
 OUString SAL_CALL GtkInstDragSource::getImplementationName()
 {
     return u"com.sun.star.datatransfer.dnd.VclGtkDragSource"_ustr;
@@ -1825,7 +1803,9 @@ css::uno::Sequence<OUString> SAL_CALL GtkInstDragSource::getSupportedServiceName
 
 Reference<XInterface> GtkInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    return vcl::X11DnDHelper(new GtkInstDragSource(), pSysEnv->aShellWindow);
+    css::uno::Reference<css::datatransfer::dnd::XDragSource> xRet
+        = new GtkInstDragSource(pSysEnv->aShellWindow);
+    return xRet;
 }
 
 namespace {
