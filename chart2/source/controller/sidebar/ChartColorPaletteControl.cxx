@@ -28,6 +28,7 @@
 #include <ChartColorPaletteHelper.hxx>
 #include "ChartColorPaletteControl.hxx"
 
+#include <vcl/event.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 
@@ -125,6 +126,18 @@ void ChartColorPaletteControl::updateStatus(bool bForce)
             pToolBox->SetItemImage(nId, Image(aSelItemImg));
         }
     }
+}
+
+void ChartColorPaletteControl::createDiagramSnapshot() const
+{
+    if (mpHandler)
+        mpHandler->createDiagramSnapshot();
+}
+
+void ChartColorPaletteControl::restoreOriginalDiagram() const
+{
+    if (mpHandler)
+        mpHandler->restoreOriginalDiagram();
 }
 
 void ChartColorPaletteControl::renderSelectedColorPalette(const VclPtr<VirtualDevice>& pDev) const
@@ -242,6 +255,9 @@ ChartColorPalettePopup::ChartColorPalettePopup(ChartColorPaletteControl* pContro
     , mxMonoValueSet(new ChartColorPalettes)
     , mxMonoValueSetWin(
           new weld::CustomWeld(*m_xBuilder, "monochromatic_palettes", *mxMonoValueSet))
+    , meHighlightedItemType(mxControl->getColorPaletteType())
+    , mnHighlightedItemId(mxControl->getColorPaletteIndex())
+    , mbItemSelected(false)
 {
     mxColorfulValueSet->SetColCount(2);
     mxColorfulValueSet->SetLineCount(2);
@@ -255,14 +271,22 @@ ChartColorPalettePopup::ChartColorPalettePopup(ChartColorPaletteControl* pContro
 
     mxColorfulValueSet->SetOptimalSize();
     mxColorfulValueSet->SetSelectHdl(LINK(this, ChartColorPalettePopup, SelectColorfulValueSetHdl));
+    mxColorfulValueSet->setMouseMoveHdl(LINK(this, ChartColorPalettePopup, ColorfulMouseMoveHdl));
 
     mxMonoValueSet->SetOptimalSize();
     mxMonoValueSet->SetSelectHdl(LINK(this, ChartColorPalettePopup, SelectMonoValueSetHdl));
+    mxMonoValueSet->setMouseMoveHdl(LINK(this, ChartColorPalettePopup, MonoMouseMoveHdl));
 
     selectItem(mxControl->getColorPaletteType(), mxControl->getColorPaletteIndex() + 1);
+
+    mxControl->createDiagramSnapshot();
 }
 
-ChartColorPalettePopup::~ChartColorPalettePopup() {}
+ChartColorPalettePopup::~ChartColorPalettePopup()
+{
+    if (!mbItemSelected)
+        mxControl->restoreOriginalDiagram();
+}
 
 void ChartColorPalettePopup::selectItem(const ChartColorPaletteType eType,
                                         const sal_uInt32 nIndex) const
@@ -330,8 +354,8 @@ IMPL_LINK_NOARG(ChartColorPalettePopup, SelectMonoValueSetHdl, ValueSet*, void)
     mxControl->EndPopupMode();
 }
 
-sal_uInt32 ChartColorPalettePopup::SelectValueSetHdl(
-    const std::unique_ptr<ChartColorPalettes>& xValueSet) const
+sal_uInt32
+ChartColorPalettePopup::SelectValueSetHdl(const std::unique_ptr<ChartColorPalettes>& xValueSet)
 {
     const sal_uInt32 nItemId = xValueSet->GetSelectedItemId();
 
@@ -343,9 +367,43 @@ sal_uInt32 ChartColorPalettePopup::SelectValueSetHdl(
     if (const ChartColorPalette* pPalette = xValueSet->getPalette(nIndex))
     {
         mxControl->applyColorPalette(pPalette);
+        mbItemSelected = true;
         return nIndex;
     }
     return -1;
+}
+
+IMPL_LINK_NOARG(ChartColorPalettePopup, ColorfulMouseMoveHdl, const MouseEvent&, void)
+{
+    MouseMoveHdl(mxColorfulValueSet, ChartColorPaletteType::Colorful);
+}
+
+IMPL_LINK_NOARG(ChartColorPalettePopup, MonoMouseMoveHdl, const MouseEvent&, void)
+{
+    MouseMoveHdl(mxMonoValueSet, ChartColorPaletteType::Monochromatic);
+}
+
+void ChartColorPalettePopup::MouseMoveHdl(const std::unique_ptr<ChartColorPalettes>& xValueSet,
+                                          const ChartColorPaletteType eHlItemType)
+{
+    const sal_uInt16 nHlId = xValueSet->GetHighlightedItemId();
+    if (eHlItemType == meHighlightedItemType && nHlId == mnHighlightedItemId)
+        return;
+
+    if (nHlId > 0)
+    {
+        if (const ChartColorPalette* pPalette = xValueSet->getPalette(nHlId - 1))
+        {
+            mxControl->applyColorPalette(pPalette);
+        }
+    }
+    else
+    {
+        mxControl->restoreOriginalDiagram();
+    }
+
+    meHighlightedItemType = eHlItemType;
+    mnHighlightedItemId = nHlId;
 }
 
 } // end namespace chart::sidebar

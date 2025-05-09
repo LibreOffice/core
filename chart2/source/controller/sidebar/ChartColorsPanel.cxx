@@ -27,6 +27,7 @@
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
 #include <DataSeries.hxx>
+#include <Diagram.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 
@@ -89,6 +90,9 @@ public:
     void updateModel(const rtl::Reference<ChartModel>& xModel);
     void updateData() const;
 
+    void createDiagramSnapshot() override;
+    void restoreOriginalDiagram() override;
+
     void select(ChartColorPaletteType eType, sal_uInt32 nIndex) override;
     void apply(const ChartColorPalette* pColorPalette) override;
     [[nodiscard]] std::shared_ptr<ChartColorPaletteHelper> getHelper() const override;
@@ -98,6 +102,7 @@ public:
 private:
     rtl::Reference<ChartModel> mxModel;
     ChartColorPaletteControl* mpControl;
+    rtl::Reference<Diagram> mxDiagramSnapshot;
 };
 
 ColorPaletteWrapper::ColorPaletteWrapper(rtl::Reference<ChartModel> xModel,
@@ -123,6 +128,23 @@ void ColorPaletteWrapper::updateData() const
 
     if (mpControl)
         mpControl->statusChanged(aEvent);
+}
+
+void ColorPaletteWrapper::createDiagramSnapshot()
+{
+    const rtl::Reference<Diagram> xDiagram = mxModel->getFirstChartDiagram();
+    mxDiagramSnapshot = new ::chart::Diagram(*xDiagram);
+}
+
+void ColorPaletteWrapper::restoreOriginalDiagram()
+{
+    if (mxDiagramSnapshot)
+    {
+        const rtl::Reference<Diagram> xDiagram = new ::chart::Diagram(*mxDiagramSnapshot);
+        // setDiagram didn't make a copy internally, so we need to pass a copy or
+        // the diagram snapshot would be modified on preview
+        mxModel->setFirstDiagram(xDiagram);
+    }
 }
 
 void ColorPaletteWrapper::select(ChartColorPaletteType eType, const sal_uInt32 nIndex)
