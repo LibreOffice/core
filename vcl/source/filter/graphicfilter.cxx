@@ -1213,8 +1213,10 @@ ErrCode GraphicFilter::readPICT(SvStream & rStream, Graphic & rGraphic, GfxLinkT
 
 ErrCode GraphicFilter::readMET(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType)
 {
-    if (ImportMetGraphic(rStream, rGraphic))
+    ImportOutput aImportOutput;
+    if (ImportMetGraphic(rStream, aImportOutput))
     {
+        rGraphic = Graphic(*aImportOutput.moGDIMetaFile);
         rLinkType = GfxLinkType::NativeMet;
         return ERRCODE_NONE;
     }

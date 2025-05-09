@@ -11,7 +11,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <filter/MetReader.hxx>
 
 using namespace css;
@@ -44,8 +44,8 @@ bool MetFilterTest::load(const OUString &,
     SfxFilterFlags, SotClipboardFormatId, unsigned int)
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
-    Graphic aGraphic;
-    return ImportMetGraphic(aFileStream, aGraphic);
+    ImportOutput aImportOutput;
+    return ImportMetGraphic(aFileStream, aImportOutput);
 }
 
 void MetFilterTest::testCVEs()

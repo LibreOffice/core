@@ -23,7 +23,7 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
@@ -2857,19 +2857,19 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
 //================== GraphicImport - the exported function ================
 
-bool ImportMetGraphic(SvStream & rStream, Graphic & rGraphic)
+bool ImportMetGraphic(SvStream& rStream, ImportOutput& rImportOutput)
 {
-    OS2METReader    aOS2METReader;
-    GDIMetaFile     aMTF;
-    bool            bRet = false;
+    OS2METReader aOS2METReader;
+    GDIMetaFile aMTF;
+    bool bRet = false;
 
     try
     {
-        aOS2METReader.ReadOS2MET( rStream, aMTF );
+        aOS2METReader.ReadOS2MET(rStream, aMTF);
 
-        if ( !rStream.GetError() )
+        if (!rStream.GetError())
         {
-            rGraphic=Graphic( aMTF );
+            rImportOutput.moGDIMetaFile = aMTF;
             bRet = true;
         }
     }
