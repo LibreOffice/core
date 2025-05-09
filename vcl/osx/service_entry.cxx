@@ -51,14 +51,18 @@ uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< A
 
 uno::Reference<XInterface> AquaSalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    return vcl::OleDnDHelper(new DragSource(), reinterpret_cast<sal_IntPtr>(pSysEnv->mpNSView),
-                             vcl::DragOrDrop::Drag);
+    rtl::Reference<DragSource> xDragSource = new DragSource();
+    vcl::OleDnDHelper(xDragSource, reinterpret_cast<sal_IntPtr>(pSysEnv->mpNSView),
+                      vcl::DragOrDrop::Drag);
+    return css::uno::Reference<css::datatransfer::dnd::XDragSource>(xDragSource);
 }
 
 uno::Reference<XInterface> AquaSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    return vcl::OleDnDHelper(new DropTarget(), reinterpret_cast<sal_IntPtr>(pSysEnv->mpNSView),
-                             vcl::DragOrDrop::Drop);
+    rtl::Reference<DropTarget> xDropTarget = new DropTarget();
+    vcl::OleDnDHelper(xDropTarget, reinterpret_cast<sal_IntPtr>(pSysEnv->mpNSView),
+                      vcl::DragOrDrop::Drop);
+    return css::uno::Reference<css::datatransfer::dnd::XDropTarget>(xDropTarget);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

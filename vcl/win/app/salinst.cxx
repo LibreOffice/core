@@ -1059,14 +1059,16 @@ void WinSalInstance::BeforeAbort(const OUString&, bool)
 
 css::uno::Reference<css::uno::XInterface> WinSalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    return vcl::OleDnDHelper(new DragSource(comphelper::getProcessComponentContext()),
-                             reinterpret_cast<sal_IntPtr>(pSysEnv->hWnd), vcl::DragOrDrop::Drag);
+    rtl::Reference<DragSource> xDragSource = new DragSource(comphelper::getProcessComponentContext());
+    vcl::OleDnDHelper(xDragSource, reinterpret_cast<sal_IntPtr>(pSysEnv->hWnd), vcl::DragOrDrop::Drag);
+    return css::uno::Reference<css::datatransfer::dnd::XDragSource>(xDragSource);
 }
 
 css::uno::Reference<css::uno::XInterface> WinSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    return vcl::OleDnDHelper(new DropTarget(comphelper::getProcessComponentContext()),
-                             reinterpret_cast<sal_IntPtr>(pSysEnv->hWnd), vcl::DragOrDrop::Drop);
+    rtl::Reference<DropTarget> xDropTarget = new DropTarget(comphelper::getProcessComponentContext());
+    vcl::OleDnDHelper(xDropTarget, reinterpret_cast<sal_IntPtr>(pSysEnv->hWnd), vcl::DragOrDrop::Drop);
+    return css::uno::Reference<css::datatransfer::dnd::XDropTarget>(xDropTarget);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
