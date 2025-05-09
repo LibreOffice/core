@@ -354,9 +354,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                // if paragraph end zone is not different from the hyphenation zone, skip its handling
                nTextHyphenZoneAlways != nTextHyphenZone &&
                // end of the paragraph
-               // FIXME: handle text portions
                rInf.GetText().getLength() - sal_Int32(nHyphZone) <
-               sal_Int32(m_nCutPos) - sal_Int32(rInf.GetIdx() ) )
+               sal_Int32(m_nCutPos) - sal_Int32(rInf.GetLineStart() ) )
         {
             nParaZone = nTextHyphenZoneAlways >= nLineWidth
                 ? 0
@@ -378,7 +377,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             // rInf.GetIdx()[nHyphZone] always disables the hyphenation, don't need to calculate
             // with its fitting part. Moreover, do not check double or more spaces there, they
             // are accepted outside of the hyphenation zone, too.
-            for (; sal_Int32(rInf.GetIdx()) <= nZonePos && nMaxZone <= nZonePos; --nZonePos )
+            for (; sal_Int32(rInf.GetLineStart()) <= nZonePos && nMaxZone <= nZonePos; --nZonePos )
             {
                 sal_Unicode cChar = rInf.GetText()[nZonePos];
                 if ( cChar == CH_BLANK || cChar == CH_FULL_BLANK || cChar == CH_SIX_PER_EM )
@@ -389,9 +388,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                         // still end of the paragraph, i.e. still more characters in the original
                         // last full line, then in the planned last paragraph line
                         // FIXME: guarantee, that last not full line won't become a full line
-                        // FIXME: handle text portions
                         rInf.GetText().getLength() - sal_Int32(nZonePos) <
-                        sal_Int32(m_nCutPos) - sal_Int32(rInf.GetIdx() ) )
+                            sal_Int32(m_nCutPos) - sal_Int32(rInf.GetLineStart() ) )
                     {
                         bHyph = false;
                     }
@@ -483,7 +481,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                             // apply this only if the space before the word is there
                             // in the actual line, i.e. start the long word in a new
                             // line, but still allows to break its last parts
-                            sal_Int32(rInf.GetIdx()) < nLastWord &&
+                            sal_Int32(rInf.GetLineStart()) < nLastWord &&
                             // if the case of bDoNotHyphenateLastLine == true, skip hyphenation
                             // only if the character length of the very last line of the paragraph
                             // would be still less, than the length of the recent last but one line
@@ -493,9 +491,8 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                                   // FIXME: character count is not fail-safe: remaining characters
                                   // can exceed the line, resulting two last full paragraph lines
                                   // with disabled hyphenation.
-                                  // FIXME: handle text portions
                                   rInf.GetText().getLength() - sal_Int32(nLastWord) <
-                                  sal_Int32(m_nCutPos) - sal_Int32(rInf.GetIdx() ) ) )
+                                      sal_Int32(m_nCutPos) - sal_Int32(rInf.GetLineStart() ) ) )
             {
                 m_nCutPos = TextFrameIndex(nLastWord);
             }

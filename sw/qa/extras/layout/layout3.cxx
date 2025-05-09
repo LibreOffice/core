@@ -1214,6 +1214,46 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154_minimum_shrinking)
         u",,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154_portion)
+{
+    // text portions with word spacing, paragraph end zone and hyphenation zone
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf126154_portion.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // only maximum word spacing: 133%
+    // This was "... Vesti bu" (not disabled hyphenation because of text portion)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,,,,,,,,,,,,,,,,,,, , , , , , , , , , , , , , , , Lorem ipsum dolor sit amet, "
+                u"consectetur adipiscing elit. Vesti ");
+
+    // prefer minimum word spacing, not maximum word spacing to disable hyphenation, if it's possible
+    // between the minimum and maximum values. (minumum: 80%, desired: 100%, maximum word spacing: 133%)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,,,,,,,,,,,,,,,,,,, , , , , , , , , , , , , , , , Lorem ipsum dolor sit amet, "
+                u"consectetur adipiscing elit. Vesti bulum ");
+
+    // paragraph end zone
+    // This was "... other celes" (not disabled hyphenation because of text portion)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[8]", "portion",
+                u"cally atmospherically atmospherically atmospherically. The Earth is no different "
+                u"to any other ");
+
+    // hyphenation
+    // This was "... other celes" (not disabled hyphenation because of text portion)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[8]", "portion",
+                u"cally atmospherically atmospherically atmospherically. The Earth is no different "
+                u"to any other ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155324)
 {
     createSwDoc("tox-update-wrong-pages.odt");
