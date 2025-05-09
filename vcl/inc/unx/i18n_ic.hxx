@@ -21,6 +21,8 @@
 
 #include "i18n_cb.hxx"
 
+#include <unx/salframe.h>
+
 enum class EndExtTextInputFlags;
 
 class SalI18N_InputContext
@@ -59,7 +61,7 @@ public:
     XIC  GetContext() const { return maContext; }
 
     void ExtendEventMask(  ::Window aFocusWindow );
-    void SetICFocus( SalFrame* pFocusFrame );
+    void SetICFocus(X11SalFrame* pFocusFrame);
     void UnsetICFocus();
     void HandleDestroyIM();
 
@@ -67,7 +69,7 @@ public:
     void CommitKeyEvent( sal_Unicode const * pText, std::size_t nLength );
     int  UpdateSpotLocation();
 
-    void Map( SalFrame *pFrame );
+    void Map(X11SalFrame* pFrame);
     void Unmap();
 
     SalI18N_InputContext( SalFrame *aFrame );

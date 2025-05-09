@@ -361,7 +361,7 @@ SalI18N_InputContext::Unmap()
 }
 
 void
-SalI18N_InputContext::Map( SalFrame *pFrame )
+SalI18N_InputContext::Map(X11SalFrame* pFrame)
 {
     if( !mbUseable )
         return;
@@ -539,16 +539,15 @@ SalI18N_InputContext::UpdateSpotLocation()
 // in unmapped state
 
 void
-SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
+SalI18N_InputContext::SetICFocus(X11SalFrame* pFocusFrame)
 {
     if ( !(mbUseable && (maContext != nullptr))  )
         return;
 
     maClientData.pFrame = pFocusFrame;
 
-    const SystemEnvData& rEnv   = pFocusFrame->GetSystemData();
-    ::Window  aClientWindow  = rEnv.aShellWindow;
-    ::Window  aFocusWindow   = rEnv.GetWindowHandle(pFocusFrame);
+    ::Window aClientWindow = pFocusFrame->GetShellWindow();
+    ::Window  aFocusWindow = pFocusFrame->GetWindow();
 
     XSetICValues( maContext,
                   XNFocusWindow,       aFocusWindow,
