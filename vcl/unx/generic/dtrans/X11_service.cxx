@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/test_info.hxx>
+#include <unx/salframe.h>
 #include <unx/salinst.h>
 #include <dndhelper.hxx>
 #include <vcl/sysdata.hxx>
@@ -36,11 +37,12 @@ using namespace x11;
 namespace
 {
 void InitializeDnD(const css::uno::Reference<css::lang::XInitialization>& xDnD,
-                   const sal_IntPtr pWin)
+                   const X11SalFrame* pFrame)
 {
-    if (pWin && xDnD)
+    ::Window aShellWindow = pFrame ? pFrame->GetShellWindow() : 0;
+    if (aShellWindow && xDnD)
         xDnD->initialize({ css::uno::Any(Application::GetDisplayConnection()),
-                           css::uno::Any(static_cast<sal_uInt64>(pWin)) });
+                           css::uno::Any(static_cast<sal_uInt64>(aShellWindow)) });
 }
 }
 
@@ -93,7 +95,7 @@ css::uno::Reference<css::datatransfer::dnd::XDragSource>
 X11SalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
     rtl::Reference<SelectionManagerHolder> xSelectionManagerHolder = new SelectionManagerHolder();
-    InitializeDnD(xSelectionManagerHolder, pSysEnv->aShellWindow);
+    InitializeDnD(xSelectionManagerHolder, static_cast<X11SalFrame*>(pSysEnv->pSalFrame));
     return xSelectionManagerHolder;
 }
 
@@ -101,7 +103,7 @@ css::uno::Reference<css::datatransfer::dnd::XDropTarget>
 X11SalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
     rtl::Reference<DropTarget> xDropTarget = new DropTarget();
-    InitializeDnD(xDropTarget, pSysEnv->aShellWindow);
+    InitializeDnD(xDropTarget, static_cast<X11SalFrame*>(pSysEnv->pSalFrame));
     return xDropTarget;
 }
 
