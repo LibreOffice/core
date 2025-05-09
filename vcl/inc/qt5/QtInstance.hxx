@@ -219,7 +219,7 @@ public:
     CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData*) override;
-    virtual css::uno::Reference<css::uno::XInterface>
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
     ImplCreateDropTarget(const SystemEnvData*) override;
 
     // for qt font options

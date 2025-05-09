@@ -664,7 +664,7 @@ QtInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
     return new QtDragSource(pSysEnv->aShellWindow);
 }
 
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<css::datatransfer::dnd::XDropTarget>
 QtInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
     css::uno::Reference<css::datatransfer::dnd::XDropTarget> xRet

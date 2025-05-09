@@ -455,16 +455,18 @@ SalInstance::CreateDragSource(const SystemEnvData* pSysEnv)
     return ImplCreateDragSource(pSysEnv);
 }
 
-uno::Reference<uno::XInterface> SalInstance::ImplCreateDropTarget(const SystemEnvData*)
+css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+SalInstance::ImplCreateDropTarget(const SystemEnvData*)
 {
-    return css::uno::Reference<css::uno::XInterface>();
+    return nullptr;
 }
 
-Reference< XInterface > SalInstance::CreateDropTarget(const SystemEnvData* pSysEnv)
+css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+SalInstance::CreateDropTarget(const SystemEnvData* pSysEnv)
 {
     // see SalInstance::CreateDragSource
     if (Application::IsHeadlessModeEnabled() || o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest())
-        return getXWeak(new vcl::GenericDropTarget());
+        return new vcl::GenericDropTarget();
     return ImplCreateDropTarget(pSysEnv);
 }
 

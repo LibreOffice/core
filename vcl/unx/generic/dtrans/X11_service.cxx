@@ -96,11 +96,12 @@ X11SalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
     return xSelectionManagerHolder;
 }
 
-css::uno::Reference<XInterface> X11SalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
+css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+X11SalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
     rtl::Reference<DropTarget> xDropTarget = new DropTarget();
     InitializeDnD(xDropTarget, pSysEnv->aShellWindow);
-    return css::uno::Reference<css::datatransfer::dnd::XDropTarget>(xDropTarget);
+    return xDropTarget;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

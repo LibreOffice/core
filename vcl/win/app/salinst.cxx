@@ -1065,11 +1065,12 @@ WinSalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
     return xDragSource;
 }
 
-css::uno::Reference<css::uno::XInterface> WinSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
+css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+WinSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
     rtl::Reference<DropTarget> xDropTarget = new DropTarget(comphelper::getProcessComponentContext());
     vcl::OleDnDHelper(xDropTarget, reinterpret_cast<sal_IntPtr>(pSysEnv->hWnd), vcl::DragOrDrop::Drop);
-    return css::uno::Reference<css::datatransfer::dnd::XDropTarget>(xDropTarget);
+    return xDropTarget;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1742,11 +1742,10 @@ void GtkInstDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
     m_nDefaultActions = nDefaultActions;
 }
 
-Reference<XInterface> GtkInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
+css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+GtkInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    css::uno::Reference<css::datatransfer::dnd::XDropTarget> xRet
-        = new GtkInstDropTarget(pSysEnv->aShellWindow);
-    return xRet;
+    return new GtkInstDropTarget(pSysEnv->aShellWindow);
 }
 
 GtkInstDragSource::GtkInstDragSource(sal_IntPtr nFrame)

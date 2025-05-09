@@ -58,12 +58,13 @@ AquaSalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
     return xDragSource;
 }
 
-uno::Reference<XInterface> AquaSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
+css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+AquaSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
     rtl::Reference<DropTarget> xDropTarget = new DropTarget();
     vcl::OleDnDHelper(xDropTarget, reinterpret_cast<sal_IntPtr>(pSysEnv->mpNSView),
                       vcl::DragOrDrop::Drop);
-    return css::uno::Reference<css::datatransfer::dnd::XDropTarget>(xDropTarget);
+    return xDropTarget;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
