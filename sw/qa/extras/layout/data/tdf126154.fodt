@@ -175,7 +175,7 @@
   </style:default-style>
   <style:style style:name="Standard" style:family="paragraph" style:class="text">
    <style:paragraph-properties fo:margin-top="0pt" fo:margin-bottom="0pt" style:contextual-spacing="false" fo:text-align="start" style:justify-single-word="false" fo:orphans="2" fo:widows="2" style:writing-mode="lr-tb"/>
-   <style:text-properties style:font-name="Liberation Sans" fo:font-family="Liberation Sans" fo:font-size="10pt" fo:language="en" fo:country="GB"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-family="Liberation Sans" fo:font-size="10pt" fo:language="en" fo:country="US"/>
   </style:style>
   <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
    <style:paragraph-properties fo:margin-top="0pt" fo:margin-bottom="7pt" style:contextual-spacing="false" fo:line-height="115%"/>
