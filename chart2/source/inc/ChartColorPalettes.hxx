@@ -16,7 +16,12 @@ namespace chart
 {
 class ChartColorPalettes final : public ValueSet
 {
+public:
+    typedef Link<const MouseEvent&, void> MouseEventHandler;
+
+private:
     std::vector<ChartColorPalette> maColorSets;
+    MouseEventHandler maMouseMoveHdl;
 
 public:
     ChartColorPalettes()
@@ -27,9 +32,11 @@ public:
     void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     void UserDraw(const UserDrawEvent& rUserDrawEvent) override;
     void StyleUpdated() override;
+    bool MouseMove(const MouseEvent& rMEvt) override;
 
     void insert(ChartColorPalette const& rColorSet);
     const ChartColorPalette* getPalette(sal_uInt32 nItem) const;
+    void setMouseMoveHdl(const MouseEventHandler& rLink);
 };
 } // end namespace chart
 

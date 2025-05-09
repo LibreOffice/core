@@ -34,7 +34,7 @@ const ChartColorPalette* ChartColorPalettes::getPalette(const sal_uInt32 nItem) 
 void ChartColorPalettes::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     ValueSet::SetDrawingArea(pDrawingArea);
-    SetStyle(WB_TABSTOP | WB_DOUBLEBORDER);
+    SetStyle(WB_TABSTOP | WB_DOUBLEBORDER | WB_FLATVALUESET);
     SetItemWidth(BORDER * 6 + SIZE * ChartColorPaletteSize / 2);
     SetItemHeight(BORDER * 5 + SIZE * 2);
 }
@@ -54,6 +54,16 @@ void ChartColorPalettes::StyleUpdated()
     Invalidate();
     ValueSet::StyleUpdated();
 }
+
+bool ChartColorPalettes::MouseMove(const MouseEvent& rMEvt)
+{
+    bool bRes = ValueSet::MouseMove(rMEvt);
+    maMouseMoveHdl.Call(rMEvt);
+    return bRes;
+}
+
+void ChartColorPalettes::setMouseMoveHdl(const MouseEventHandler& rLink) { maMouseMoveHdl = rLink; }
+
 } // end namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
