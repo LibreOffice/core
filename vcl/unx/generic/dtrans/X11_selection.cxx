@@ -667,15 +667,13 @@ bool SelectionManager::convertData(
     return bSuccess;
 }
 
-SelectionManager& SelectionManager::get( const OUString& rDisplayName )
+SelectionManager& SelectionManager::get()
 {
     osl::MutexGuard aGuard( *osl::Mutex::getGlobalMutex() );
 
-    OUString aDisplayName( rDisplayName );
-    if( aDisplayName.isEmpty() )
-        if (auto const env = getenv( "DISPLAY" )) {
-            aDisplayName = OStringToOUString( env, RTL_TEXTENCODING_ISO_8859_1 );
-        }
+    OUString aDisplayName;
+    if (auto const env = getenv( "DISPLAY" ))
+        aDisplayName = OStringToOUString( env, RTL_TEXTENCODING_ISO_8859_1 );
     SelectionManager* pInstance = nullptr;
 
     std::unordered_map< OUString, SelectionManager* >::iterator it = getInstances().find( aDisplayName );

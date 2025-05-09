@@ -413,7 +413,7 @@ namespace x11 {
         sal_Int8 getUserDragAction() const;
         sal_Int32 getSelectionTimeout();
     public:
-        static SelectionManager& get( const OUString& rDisplayName = OUString() );
+        static SelectionManager& get();
 
         Display * getDisplay() { return m_pDisplay; };
 
