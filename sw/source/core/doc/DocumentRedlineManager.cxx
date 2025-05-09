@@ -1136,7 +1136,7 @@ namespace
 
 /// Decides if it's OK to combine two types of redlines next to each other, e.g. insert and
 /// delete-on-insert can be combined if accepting an insert.
-bool CanCombineTypesForAccept(SwRedlineData& rInnerData, SwRangeRedline& rOuterRedline)
+bool CanCombineTypesForAcceptReject(SwRedlineData& rInnerData, SwRangeRedline& rOuterRedline)
 {
     if (rInnerData.GetType() != RedlineType::Insert)
     {
@@ -3284,7 +3284,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
-        else if (CanCombineTypesForAccept(aOrigData, *pTmp)
+        else if (CanCombineTypesForAcceptReject(aOrigData, *pTmp)
                  && pTmp->GetRedlineData(1).CanCombineForAcceptReject(aOrigData))
         {
             // The Insert redline we want to accept has an other type of redline too
@@ -3562,14 +3562,12 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             bRet |= lcl_RejectRedline(maRedlineTable, nRdlIdx, bCallDelete);
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
-        else if (aOrigData.GetType() == RedlineType::Insert
-                 && pTmp->GetType() == RedlineType::Delete && pTmp->GetStackCount() > 1
-                 && pTmp->GetType(1) == RedlineType::Insert
+        else if (CanCombineTypesForAcceptReject(aOrigData, *pTmp)
                  && pTmp->GetRedlineData(1).CanCombineForAcceptReject(aOrigData))
         {
-            // The Insert redline we want to reject has a deletion redline too
-            // without the insert, the delete is meaningless
-            // so we rather just accept the deletion redline
+            // The Insert redline we want to reject has an other type of redline too
+            // without the insert, the other type is meaningless
+            // so we rather just accept the other type of redline
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 std::unique_ptr<SwUndoAcceptRedline> pUndoRdl
@@ -3581,7 +3579,19 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             }
             nPamEndtNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
+            std::optional<SwPaM> oPam;
+            RedlineType eOuterType = pTmp->GetType();
+            if (eOuterType == RedlineType::Format)
+            {
+                // The accept won't implicitly delete the range, so track its boundaries.
+                oPam.emplace(*pTmp->Start(), *pTmp->End());
+            }
             bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
+            if (oPam)
+            {
+                // Handles undo/redo itself.
+                m_rDoc.getIDocumentContentOperations().DeleteRange(*oPam);
+            }
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
 
