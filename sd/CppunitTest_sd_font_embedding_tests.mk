@@ -70,6 +70,8 @@ $(eval $(call gb_CppunitTest_use_vcl,sd_font_embedding_tests))
 $(eval $(call gb_CppunitTest_use_rdb,sd_font_embedding_tests,services))
 $(eval $(call gb_CppunitTest_use_configuration,sd_font_embedding_tests))
 
-
+$(eval $(call gb_CppunitTest_add_arguments,sd_font_embedding_tests, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
 
 # vim: set noet sw=4 ts=4:
