@@ -19,8 +19,9 @@
 
 #pragma once
 
-#include <vcl/graph.hxx>
+class SvStream;
+class ImportOutput;
 
-VCL_DLLPUBLIC bool ImportPcxGraphic(SvStream& rStream, Graphic& rGraphic);
+VCL_DLLPUBLIC bool ImportPcxGraphic(SvStream& rStream, ImportOutput& rImportOutput);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

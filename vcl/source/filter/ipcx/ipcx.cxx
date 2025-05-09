@@ -19,7 +19,7 @@
 
 
 #include <memory>
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <tools/stream.hxx>
 #include <filter/PcxReader.hxx>
@@ -58,7 +58,7 @@ private:
 
 public:
     explicit PCXReader(SvStream &rStream);
-    bool                ReadPCX(Graphic & rGraphic );
+    bool                ReadPCX(ImportOutput& rImportOutput);
                         // Reads a PCX file from the stream and fills the GDIMetaFile
 };
 
@@ -83,7 +83,7 @@ PCXReader::PCXReader(SvStream &rStream)
 {
 }
 
-bool PCXReader::ReadPCX(Graphic & rGraphic)
+bool PCXReader::ReadPCX(ImportOutput& rImportOutput)
 {
     if ( m_rPCX.GetError() )
         return false;
@@ -143,7 +143,7 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
 
         if ( bStatus )
         {
-            rGraphic = vcl::bitmap::CreateFromData(std::move(*mpBitmap));
+            rImportOutput.moBitmap = vcl::bitmap::CreateFromData(std::move(*mpBitmap));
             return true;
         }
     }
@@ -399,10 +399,10 @@ void PCXReader::ImplReadPalette( unsigned int nCol )
 
 //================== GraphicImport - the exported function ================
 
-bool ImportPcxGraphic(SvStream & rStream, Graphic & rGraphic)
+bool ImportPcxGraphic(SvStream& rStream, ImportOutput& rImportOutput)
 {
     PCXReader aPCXReader(rStream);
-    bool bRetValue = aPCXReader.ReadPCX(rGraphic);
+    bool bRetValue = aPCXReader.ReadPCX(rImportOutput);
     if ( !bRetValue )
         rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     return bRetValue;

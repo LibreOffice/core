@@ -1234,8 +1234,12 @@ ErrCode GraphicFilter::readRAS(SvStream & rStream, Graphic & rGraphic)
 
 ErrCode GraphicFilter::readPCX(SvStream & rStream, Graphic & rGraphic)
 {
-    if (ImportPcxGraphic(rStream, rGraphic))
+    ImportOutput aImportOutput;
+    if (ImportPcxGraphic(rStream, aImportOutput))
+    {
+        rGraphic = Graphic(*aImportOutput.moBitmap);
         return ERRCODE_NONE;
+    }
     else
         return ERRCODE_GRFILTER_FILTERERROR;
 }

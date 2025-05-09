@@ -226,9 +226,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if (strcmp(argv[2], "pcx") == 0)
         {
-            Graphic aGraphic;
+            ImportOutput aImportOutput;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>(ImportPcxGraphic(aFileStream, aGraphic));
+            ret = static_cast<int>(ImportPcxGraphic(aFileStream, aImportOutput));
         }
         else if (strcmp(argv[2], "ras") == 0)
         {
