@@ -76,7 +76,6 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArgs) override;
-    void deinitialize();
 
     // XDropTarget
     virtual void SAL_CALL addDropTargetListener(

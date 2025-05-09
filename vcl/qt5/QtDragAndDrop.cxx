@@ -127,12 +127,6 @@ css::uno::Sequence<OUString> SAL_CALL QtDropTarget::getSupportedServiceNames()
 
 QtDropTarget::~QtDropTarget() {}
 
-void QtDropTarget::deinitialize()
-{
-    m_pFrame = nullptr;
-    m_bActive = false;
-}
-
 void QtDropTarget::initialize(const uno::Sequence<uno::Any>& rArguments)
 {
     if (rArguments.getLength() < 2)
