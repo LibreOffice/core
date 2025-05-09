@@ -111,7 +111,6 @@ private:
     bool m_bIsInExecute;
 
     OUString m_sPath;
-    OUString m_sStdDir;
     OUString m_sRootLabel;
     OUString m_sLastServiceUrl;
     int m_nCurrentFilter;
