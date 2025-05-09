@@ -286,7 +286,8 @@ public:
     virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
         createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) override;
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData*) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
@@ -308,7 +309,7 @@ public:
 
 private:
     GtkSalTimer *m_pTimer;
-    css::uno::Reference<css::uno::XInterface> m_aClipboards[2];
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_aClipboards[2];
     bool                        IsTimerExpired();
     bool                        bNeedsInit;
     cairo_font_options_t*       m_pLastCairoFontOptions;

@@ -88,7 +88,7 @@ public:
     sal_Int32                                     mnDPIX;           // #i100617# read DPI only once per office life
     sal_Int32                                     mnDPIY;           // #i100617# read DPI only once per office life
 
-    css::uno::Reference< css::uno::XInterface >   mxClipboard;
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> mxClipboard;
 
     SalData();
     ~SalData();

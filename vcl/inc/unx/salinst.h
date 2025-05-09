@@ -82,8 +82,8 @@ public:
     virtual void                AfterAppInit() override;
 
     // dtrans implementation
-    virtual css::uno::Reference< css::uno::XInterface >
-        CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) override;
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData*) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>

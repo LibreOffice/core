@@ -627,7 +627,7 @@ QtInstance::createFolderPicker(const css::uno::Reference<css::uno::XComponentCon
         createPicker(context, QFileDialog::Directory));
 }
 
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
 {
     OUString sel;
@@ -650,7 +650,7 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     if (it != m_aClipboards.end())
         return it->second;
 
-    css::uno::Reference<css::uno::XInterface> xClipboard
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard
         = EmscriptenLightweightRunInMainThread([&sel] { return QtClipboard::create(sel); });
     if (xClipboard.is())
         m_aClipboards[sel] = xClipboard;

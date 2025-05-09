@@ -59,7 +59,8 @@ Sequence< OUString > x11::Xdnd_dropTarget_getSupportedServiceNames()
     return { u"com.sun.star.datatransfer.dnd.X11DropTarget"_ustr };
 }
 
-css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
+css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+X11SalInstance::CreateClipboard(const Sequence<Any>& arguments)
 {
     if ( o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest() )
         return SalInstance::CreateClipboard( arguments );

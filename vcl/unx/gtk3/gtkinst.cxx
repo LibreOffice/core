@@ -1586,7 +1586,8 @@ void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::cl
     std::erase(m_aListeners, listener);
 }
 
-Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& arguments)
+Reference<css::datatransfer::clipboard::XClipboard>
+GtkInstance::CreateClipboard(const Sequence<Any>& arguments)
 {
     if ( o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest() )
         return SalInstance::CreateClipboard( arguments );
@@ -1605,7 +1606,7 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
     if (m_aClipboards[eSelection].is())
         return m_aClipboards[eSelection];
 
-    Reference<XInterface> xClipboard(getXWeak(new VclGtkClipboard(eSelection)));
+    Reference<css::datatransfer::clipboard::XClipboard> xClipboard(new VclGtkClipboard(eSelection));
     m_aClipboards[eSelection] = xClipboard;
     return xClipboard;
 }

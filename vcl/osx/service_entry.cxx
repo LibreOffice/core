@@ -38,14 +38,15 @@ using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
-uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
+uno::Reference<css::datatransfer::clipboard::XClipboard>
+AquaSalInstance::CreateClipboard(const Sequence<Any>& i_rArguments)
 {
     if ( Application::IsHeadlessModeEnabled() || o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest() )
         return SalInstance::CreateClipboard( i_rArguments );
 
     SalData* pSalData = GetSalData();
     if( ! pSalData->mxClipboard.is() )
-        pSalData->mxClipboard.set(static_cast< XClipboard* >(new AquaClipboard(nullptr, true)), UNO_QUERY);
+        pSalData->mxClipboard = new AquaClipboard(nullptr, true);
     return pSalData->mxClipboard;
 }
 

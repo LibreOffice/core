@@ -27,6 +27,7 @@
 
 #include "displayconnectiondispatch.hxx"
 
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -78,7 +79,7 @@ class VCL_DLLPUBLIC SalInstance
 private:
     rtl::Reference< vcl::DisplayConnectionDispatch > m_pEventInst;
     const std::unique_ptr<comphelper::SolarMutex> m_pYieldMutex;
-    css::uno::Reference<css::uno::XInterface> m_clipboard;
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_clipboard;
 
 protected:
     bool m_bSupportsBitmap32 = false;
@@ -188,7 +189,8 @@ public:
     virtual OUString        GetConnectionIdentifier() = 0;
 
     // dtrans implementation
-    virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments );
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments);
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData*);
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>

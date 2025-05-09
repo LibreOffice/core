@@ -412,14 +412,15 @@ Reference< XInterface > DropTarget_createInstance( const Reference< XMultiServic
 /*
 *   SalInstance generic
 */
-Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arguments )
+Reference<css::datatransfer::clipboard::XClipboard>
+SalInstance::CreateClipboard(const Sequence<Any>& arguments)
 {
     if (arguments.hasElements()) {
         throw css::lang::IllegalArgumentException(
             u"non-empty SalInstance::CreateClipboard arguments"_ustr, {}, -1);
     }
 #ifdef IOS
-    return getXWeak(new vcl::GenericClipboard());
+    return new vcl::GenericClipboard();
 #else
     if (comphelper::LibreOfficeKit::isActive()) {
         // In LOK, each document view shall have its own clipboard instance (whereas
@@ -434,7 +435,7 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
 #endif
     DBG_TESTSOLARMUTEX();
     if (!m_clipboard.is()) {
-        m_clipboard = getXWeak(new vcl::GenericClipboard());
+        m_clipboard = new vcl::GenericClipboard();
     }
     return m_clipboard;
 }
