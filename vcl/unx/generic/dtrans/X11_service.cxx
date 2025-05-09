@@ -33,6 +33,17 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace x11;
 
+namespace
+{
+void InitializeDnD(const css::uno::Reference<css::lang::XInitialization>& xDnD,
+                   const sal_IntPtr pWin)
+{
+    if (pWin && xDnD)
+        xDnD->initialize({ css::uno::Any(Application::GetDisplayConnection()),
+                           css::uno::Any(static_cast<sal_uInt64>(pWin)) });
+}
+}
+
 Sequence< OUString > x11::X11Clipboard_getSupportedServiceNames()
 {
     return { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
@@ -79,12 +90,16 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
 
 css::uno::Reference<XInterface> X11SalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    return vcl::X11DnDHelper(new SelectionManagerHolder(), pSysEnv->aShellWindow);
+    rtl::Reference<SelectionManagerHolder> xSelectionManagerHolder = new SelectionManagerHolder();
+    InitializeDnD(xSelectionManagerHolder, pSysEnv->aShellWindow);
+    return css::uno::Reference<css::datatransfer::dnd::XDragSource>(xSelectionManagerHolder);
 }
 
 css::uno::Reference<XInterface> X11SalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    return vcl::X11DnDHelper(new DropTarget(), pSysEnv->aShellWindow);
+    rtl::Reference<DropTarget> xDropTarget = new DropTarget();
+    InitializeDnD(xDropTarget, pSysEnv->aShellWindow);
+    return css::uno::Reference<css::datatransfer::dnd::XDropTarget>(xDropTarget);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

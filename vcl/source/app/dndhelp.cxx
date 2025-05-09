@@ -155,13 +155,4 @@ vcl::OleDnDHelper(const css::uno::Reference<css::lang::XInitialization>& xDnD, c
     return xDnD;
 }
 
-css::uno::Reference<css::uno::XInterface>
-vcl::X11DnDHelper(const css::uno::Reference<css::lang::XInitialization>& xDnD, const sal_IntPtr pWin)
-{
-    if (pWin && xDnD)
-        xDnD->initialize({ uno::Any(Application::GetDisplayConnection()),
-                           uno::Any(static_cast<sal_uInt64>(pWin)) });
-    return xDnD;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
