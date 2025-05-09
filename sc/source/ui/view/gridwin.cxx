@@ -6593,22 +6593,24 @@ void ScGridWindow::UpdateCursorOverlay()
         if (maVisibleRange.mnCol2 < nX || maVisibleRange.mnRow2 < nY)
             return;     // no further check needed, nothing visible
 
-        // fdo#87382 Also display the cell cursor for the visible part of
-        // merged cells if the view position is part of merged cells.
-        const ScMergeAttr& rMerge = pPattern->GetItem(ATTR_MERGE);
-        if (rMerge.GetColMerge() <= 1 && rMerge.GetRowMerge() <= 1)
-            return;     // not merged and invisible
+        if (pPattern)
+        {
+            // fdo#87382 Also display the cell cursor for the visible part of
+            // merged cells if the view position is part of merged cells.
+            const ScMergeAttr& rMerge = pPattern->GetItem(ATTR_MERGE);
+            if (rMerge.GetColMerge() <= 1 && rMerge.GetRowMerge() <= 1)
+                return;     // not merged and invisible
 
-        SCCOL nX2 = nX + rMerge.GetColMerge() - 1;
-        SCROW nY2 = nY + rMerge.GetRowMerge() - 1;
-        // Check if the middle or tail of the merged range is visible.
-        if (maVisibleRange.mnCol1 > nX2 || maVisibleRange.mnRow1 > nY2)
-            return;     // no visible part
+            SCCOL nX2 = nX + rMerge.GetColMerge() - 1;
+            SCROW nY2 = nY + rMerge.GetRowMerge() - 1;
+            // Check if the middle or tail of the merged range is visible.
+            if (maVisibleRange.mnCol1 > nX2 || maVisibleRange.mnRow1 > nY2)
+                return;     // no visible part
+        }
     }
 
     //  don't show the cursor in overlapped cells
-    const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
-    bool bOverlapped = rMergeFlag.IsOverlapped();
+    const bool bOverlapped = pPattern && pPattern->GetItem(ATTR_MERGE_FLAG).IsOverlapped();
 
     //  left or above of the screen?
     bool bVis = comphelper::LibreOfficeKit::isActive() || ( nX>=mrViewData.GetPosX(eHWhich) && nY>=mrViewData.GetPosY(eVWhich) );
@@ -6616,11 +6618,14 @@ void ScGridWindow::UpdateCursorOverlay()
     {
         SCCOL nEndX = nX;
         SCROW nEndY = nY;
-        const ScMergeAttr& rMerge = pPattern->GetItem(ATTR_MERGE);
-        if (rMerge.GetColMerge() > 1)
-            nEndX += rMerge.GetColMerge()-1;
-        if (rMerge.GetRowMerge() > 1)
-            nEndY += rMerge.GetRowMerge()-1;
+        if (pPattern)
+        {
+            const ScMergeAttr& rMerge = pPattern->GetItem(ATTR_MERGE);
+            if (rMerge.GetColMerge() > 1)
+                nEndX += rMerge.GetColMerge()-1;
+            if (rMerge.GetRowMerge() > 1)
+                nEndY += rMerge.GetRowMerge()-1;
+        }
         bVis = ( nEndX>=mrViewData.GetPosX(eHWhich) && nEndY>=mrViewData.GetPosY(eVWhich) );
     }
 
