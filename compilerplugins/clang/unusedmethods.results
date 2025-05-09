@@ -4324,12 +4324,6 @@ vcl/source/fontsubset/xlat.hxx:34
     unsigned short vcl::TranslateChar16(unsigned short)
 vcl/source/window/menuitemlist.hxx:123
     void MenuItemList::Clear()
-vcl/unx/generic/dtrans/X11_clipboard.hxx:106
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> x11::X11Clipboard_createInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
-vcl/unx/generic/dtrans/X11_selection.hxx:488
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> x11::Xdnd_createInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
-vcl/unx/generic/dtrans/X11_selection.hxx:492
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> x11::Xdnd_dropTarget_createInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 vcl/unx/generic/gdi/X11CairoSalGraphicsImpl.hxx:74
     void X11CairoSalGraphicsImpl::clipRegion(struct _cairo *)
 vcl/unx/gtk3/custom-theme.hxx:24

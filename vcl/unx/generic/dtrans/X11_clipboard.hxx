@@ -103,8 +103,6 @@ namespace x11 {
     };
 
     css::uno::Sequence< OUString > X11Clipboard_getSupportedServiceNames();
-    css::uno::Reference< css::uno::XInterface > SAL_CALL X11Clipboard_createInstance(
-        const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 } // namespace
 
