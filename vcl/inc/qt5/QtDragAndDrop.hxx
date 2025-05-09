@@ -46,7 +46,6 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
-    void deinitialize();
 
     OUString SAL_CALL getImplementationName() override;
 

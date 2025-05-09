@@ -25,8 +25,6 @@ using namespace com::sun::star;
 
 QtDragSource::~QtDragSource() {}
 
-void QtDragSource::deinitialize() { m_pFrame = nullptr; }
-
 sal_Bool QtDragSource::isDragImageSupported() { return true; }
 
 sal_Int32 QtDragSource::getDefaultCursor(sal_Int8) { return 0; }
