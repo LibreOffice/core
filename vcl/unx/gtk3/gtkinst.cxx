@@ -1801,11 +1801,10 @@ css::uno::Sequence<OUString> SAL_CALL GtkInstDragSource::getSupportedServiceName
     return aRet;
 }
 
-Reference<XInterface> GtkInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
+css::uno::Reference<css::datatransfer::dnd::XDragSource>
+GtkInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    css::uno::Reference<css::datatransfer::dnd::XDragSource> xRet
-        = new GtkInstDragSource(pSysEnv->aShellWindow);
-    return xRet;
+    return new GtkInstDragSource(pSysEnv->aShellWindow);
 }
 
 namespace {

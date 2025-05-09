@@ -1057,11 +1057,12 @@ void WinSalInstance::BeforeAbort(const OUString&, bool)
     ImplFreeSalGDI();
 }
 
-css::uno::Reference<css::uno::XInterface> WinSalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
+css::uno::Reference<css::datatransfer::dnd::XDragSource>
+WinSalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
     rtl::Reference<DragSource> xDragSource = new DragSource(comphelper::getProcessComponentContext());
     vcl::OleDnDHelper(xDragSource, reinterpret_cast<sal_IntPtr>(pSysEnv->hWnd), vcl::DragOrDrop::Drag);
-    return css::uno::Reference<css::datatransfer::dnd::XDragSource>(xDragSource);
+    return xDragSource;
 }
 
 css::uno::Reference<css::uno::XInterface> WinSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)

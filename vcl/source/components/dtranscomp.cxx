@@ -439,17 +439,19 @@ Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arg
     return m_clipboard;
 }
 
-uno::Reference<uno::XInterface> SalInstance::ImplCreateDragSource(const SystemEnvData*)
+css::uno::Reference<css::datatransfer::dnd::XDragSource>
+SalInstance::ImplCreateDragSource(const SystemEnvData*)
 {
-    return css::uno::Reference<css::uno::XInterface>();
+    return nullptr;
 }
 
-Reference< XInterface > SalInstance::CreateDragSource(const SystemEnvData* pSysEnv)
+css::uno::Reference<css::datatransfer::dnd::XDragSource>
+SalInstance::CreateDragSource(const SystemEnvData* pSysEnv)
 {
     // We run unit tests in parallel, which is a problem when touching a shared resource
     // the system clipboard, so rather use the dummy GenericClipboard.
     if (Application::IsHeadlessModeEnabled() || o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest())
-        return getXWeak(new vcl::GenericDragSource());
+        return new vcl::GenericDragSource();
     return ImplCreateDragSource(pSysEnv);
 }
 

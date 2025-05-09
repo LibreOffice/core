@@ -658,12 +658,10 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     return xClipboard;
 }
 
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<css::datatransfer::dnd::XDragSource>
 QtInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    css::uno::Reference<css::datatransfer::dnd::XDragSource> xRet
-        = new QtDragSource(pSysEnv->aShellWindow);
-    return xRet;
+    return new QtDragSource(pSysEnv->aShellWindow);
 }
 
 css::uno::Reference<css::uno::XInterface>

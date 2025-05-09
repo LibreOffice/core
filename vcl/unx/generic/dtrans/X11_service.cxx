@@ -88,11 +88,12 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
     return pClipboard;
 }
 
-css::uno::Reference<XInterface> X11SalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
+css::uno::Reference<css::datatransfer::dnd::XDragSource>
+X11SalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
     rtl::Reference<SelectionManagerHolder> xSelectionManagerHolder = new SelectionManagerHolder();
     InitializeDnD(xSelectionManagerHolder, pSysEnv->aShellWindow);
-    return css::uno::Reference<css::datatransfer::dnd::XDragSource>(xSelectionManagerHolder);
+    return xSelectionManagerHolder;
 }
 
 css::uno::Reference<XInterface> X11SalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)

@@ -84,7 +84,8 @@ public:
     // dtrans implementation
     virtual css::uno::Reference< css::uno::XInterface >
         CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) override;
-    virtual css::uno::Reference<css::uno::XInterface> ImplCreateDragSource(const SystemEnvData*) override;
+    virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
+    ImplCreateDragSource(const SystemEnvData*) override;
     virtual css::uno::Reference<css::uno::XInterface> ImplCreateDropTarget(const SystemEnvData*) override;
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 };

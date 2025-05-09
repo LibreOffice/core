@@ -27,6 +27,7 @@
 
 #include "displayconnectiondispatch.hxx"
 
+#include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
@@ -187,9 +188,11 @@ public:
 
     // dtrans implementation
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments );
-    virtual css::uno::Reference<css::uno::XInterface> ImplCreateDragSource(const SystemEnvData*);
+    virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
+    ImplCreateDragSource(const SystemEnvData*);
     virtual css::uno::Reference<css::uno::XInterface> ImplCreateDropTarget(const SystemEnvData*);
-    css::uno::Reference<css::uno::XInterface> CreateDragSource(const SystemEnvData* = nullptr);
+    css::uno::Reference<css::datatransfer::dnd::XDragSource>
+    CreateDragSource(const SystemEnvData* = nullptr);
     css::uno::Reference<css::uno::XInterface> CreateDropTarget(const SystemEnvData* = nullptr);
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) = 0;
 
