@@ -23,12 +23,11 @@
 
 using namespace com::sun::star;
 
-QtDragSource::QtDragSource(sal_IntPtr nFrame)
+QtDragSource::QtDragSource(QtFrame* pFrame)
     : WeakComponentImplHelper(m_aMutex)
+    , m_pFrame(pFrame)
 {
-    assert(nFrame && "missing SalFrame");
-
-    m_pFrame = reinterpret_cast<QtFrame*>(nFrame);
+    assert(m_pFrame && "missing SalFrame");
     m_pFrame->registerDragSource(this);
 }
 
@@ -91,16 +90,15 @@ css::uno::Sequence<OUString> SAL_CALL QtDragSource::getSupportedServiceNames()
     return { u"com.sun.star.datatransfer.dnd.QtDragSource"_ustr };
 }
 
-QtDropTarget::QtDropTarget(sal_IntPtr nFrame)
+QtDropTarget::QtDropTarget(QtFrame* pFrame)
     : WeakComponentImplHelper(m_aMutex)
+    , m_pFrame(pFrame)
+    , m_nDropAction(datatransfer::dnd::DNDConstants::ACTION_NONE)
     , m_bActive(false)
     , m_nDefaultActions(0)
 {
-    assert(nFrame && "missing SalFrame");
+    assert(m_pFrame && "missing SalFrame");
 
-    m_nDropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
-
-    m_pFrame = reinterpret_cast<QtFrame*>(nFrame);
     m_pFrame->registerDropTarget(this);
     m_bActive = true;
 }

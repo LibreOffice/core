@@ -226,7 +226,8 @@ public:
 
     void setInputLanguage(LanguageType);
     inline bool isPopup() const;
-    static void FillSystemEnvData(SystemEnvData&, sal_IntPtr pWindow, QWidget* pWidget);
+    static void FillSystemEnvData(SystemEnvData&, sal_IntPtr pWindow, QWidget* pWidget,
+                                  QtFrame* pFrame = nullptr);
 };
 
 inline bool QtFrame::CallCallback(SalEvent nEvent, const void* pEvent) const

@@ -661,14 +661,14 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
 css::uno::Reference<css::datatransfer::dnd::XDragSource>
 QtInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    return new QtDragSource(pSysEnv->aShellWindow);
+    return new QtDragSource(static_cast<QtFrame*>(pSysEnv->pSalFrame));
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDropTarget>
 QtInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
     css::uno::Reference<css::datatransfer::dnd::XDropTarget> xRet
-        = new QtDropTarget(pSysEnv->aShellWindow);
+        = new QtDropTarget(static_cast<QtFrame*>(pSysEnv->pSalFrame));
     return xRet;
 }
 

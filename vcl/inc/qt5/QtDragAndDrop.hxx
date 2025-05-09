@@ -25,7 +25,7 @@ class QtDragSource final : public cppu::WeakComponentImplHelper<css::datatransfe
     css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> m_xListener;
 
 public:
-    QtDragSource(sal_IntPtr nFrame);
+    QtDragSource(QtFrame* pFrame);
 
     virtual ~QtDragSource() override;
 
@@ -61,7 +61,7 @@ class QtDropTarget final
     bool m_bDropSuccessful;
 
 public:
-    QtDropTarget(sal_IntPtr nFrame);
+    QtDropTarget(QtFrame* pFrame);
     virtual ~QtDropTarget() override;
 
     // XDropTarget
