@@ -9,6 +9,7 @@
 
 libeot_patches :=
 libeot_patches += 0001-remove-unused-err.h.patch
+libeot_patches += debug-no-werror.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,libeot))
 

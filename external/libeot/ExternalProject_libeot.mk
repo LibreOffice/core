@@ -22,7 +22,7 @@ $(call gb_ExternalProject_get_state_target,libeot,build) :
 			--with-pic \
 			--enable-static \
 			--disable-shared \
-			--disable-debug \
+			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(MAKE) $(if $(verbose),V=1) libeot.la \
 	)
