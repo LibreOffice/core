@@ -12,26 +12,20 @@
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase.hxx>
 
 class QtFrame;
 
-class QtDragSource final
-    : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
-                                           css::lang::XInitialization, css::lang::XServiceInfo>
+class QtDragSource final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
+                                                                css::lang::XServiceInfo>
 {
     osl::Mutex m_aMutex;
     QtFrame* m_pFrame;
     css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> m_xListener;
 
 public:
-    QtDragSource()
-        : WeakComponentImplHelper(m_aMutex)
-        , m_pFrame(nullptr)
-    {
-    }
+    QtDragSource(sal_IntPtr nFrame);
 
     virtual ~QtDragSource() override;
 
@@ -44,9 +38,6 @@ public:
         const css::uno::Reference<css::datatransfer::XTransferable>& transferable,
         const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& listener) override;
 
-    // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
-
     OUString SAL_CALL getImplementationName() override;
 
     sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
@@ -57,10 +48,9 @@ public:
 };
 
 class QtDropTarget final
-    : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
-                                           css::datatransfer::dnd::XDropTargetDragContext,
-                                           css::datatransfer::dnd::XDropTargetDropContext,
-                                           css::lang::XInitialization, css::lang::XServiceInfo>
+    : public cppu::WeakComponentImplHelper<
+          css::datatransfer::dnd::XDropTarget, css::datatransfer::dnd::XDropTargetDragContext,
+          css::datatransfer::dnd::XDropTargetDropContext, css::lang::XServiceInfo>
 {
     osl::Mutex m_aMutex;
     QtFrame* m_pFrame;
@@ -71,11 +61,8 @@ class QtDropTarget final
     bool m_bDropSuccessful;
 
 public:
-    QtDropTarget();
+    QtDropTarget(sal_IntPtr nFrame);
     virtual ~QtDropTarget() override;
-
-    // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArgs) override;
 
     // XDropTarget
     virtual void SAL_CALL addDropTargetListener(

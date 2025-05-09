@@ -661,13 +661,17 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
 css::uno::Reference<css::uno::XInterface>
 QtInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    return vcl::X11DnDHelper(new QtDragSource(), pSysEnv->aShellWindow);
+    css::uno::Reference<css::datatransfer::dnd::XDragSource> xRet
+        = new QtDragSource(pSysEnv->aShellWindow);
+    return xRet;
 }
 
 css::uno::Reference<css::uno::XInterface>
 QtInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    return vcl::X11DnDHelper(new QtDropTarget(), pSysEnv->aShellWindow);
+    css::uno::Reference<css::datatransfer::dnd::XDropTarget> xRet
+        = new QtDropTarget(pSysEnv->aShellWindow);
+    return xRet;
 }
 
 const cairo_font_options_t* QtInstance::GetCairoFontOptions()

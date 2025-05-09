@@ -23,31 +23,20 @@
 
 using namespace com::sun::star;
 
+QtDragSource::QtDragSource(sal_IntPtr nFrame)
+    : WeakComponentImplHelper(m_aMutex)
+{
+    assert(nFrame && "missing SalFrame");
+
+    m_pFrame = reinterpret_cast<QtFrame*>(nFrame);
+    m_pFrame->registerDragSource(this);
+}
+
 QtDragSource::~QtDragSource() {}
 
 sal_Bool QtDragSource::isDragImageSupported() { return true; }
 
 sal_Int32 QtDragSource::getDefaultCursor(sal_Int8) { return 0; }
-
-void QtDragSource::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
-{
-    if (rArguments.getLength() < 2)
-    {
-        throw uno::RuntimeException(
-            u"DragSource::initialize: Cannot install window event handler"_ustr, getXWeak());
-    }
-
-    sal_IntPtr nFrame = 0;
-    rArguments.getConstArray()[1] >>= nFrame;
-
-    if (!nFrame)
-    {
-        throw uno::RuntimeException(u"DragSource::initialize: missing SalFrame"_ustr, getXWeak());
-    }
-
-    m_pFrame = reinterpret_cast<QtFrame*>(nFrame);
-    m_pFrame->registerDragSource(this);
-}
 
 void QtDragSource::startDrag(
     const datatransfer::dnd::DragGestureEvent& /*rEvent*/, sal_Int8 sourceActions,
@@ -102,12 +91,18 @@ css::uno::Sequence<OUString> SAL_CALL QtDragSource::getSupportedServiceNames()
     return { u"com.sun.star.datatransfer.dnd.QtDragSource"_ustr };
 }
 
-QtDropTarget::QtDropTarget()
+QtDropTarget::QtDropTarget(sal_IntPtr nFrame)
     : WeakComponentImplHelper(m_aMutex)
-    , m_pFrame(nullptr)
     , m_bActive(false)
     , m_nDefaultActions(0)
 {
+    assert(nFrame && "missing SalFrame");
+
+    m_nDropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
+
+    m_pFrame = reinterpret_cast<QtFrame*>(nFrame);
+    m_pFrame->registerDropTarget(this);
+    m_bActive = true;
 }
 
 OUString SAL_CALL QtDropTarget::getImplementationName()
@@ -126,29 +121,6 @@ css::uno::Sequence<OUString> SAL_CALL QtDropTarget::getSupportedServiceNames()
 }
 
 QtDropTarget::~QtDropTarget() {}
-
-void QtDropTarget::initialize(const uno::Sequence<uno::Any>& rArguments)
-{
-    if (rArguments.getLength() < 2)
-    {
-        throw uno::RuntimeException(
-            u"DropTarget::initialize: Cannot install window event handler"_ustr, getXWeak());
-    }
-
-    sal_IntPtr nFrame = 0;
-    rArguments.getConstArray()[1] >>= nFrame;
-
-    if (!nFrame)
-    {
-        throw uno::RuntimeException(u"DropTarget::initialize: missing SalFrame"_ustr, getXWeak());
-    }
-
-    m_nDropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
-
-    m_pFrame = reinterpret_cast<QtFrame*>(nFrame);
-    m_pFrame->registerDropTarget(this);
-    m_bActive = true;
-}
 
 void QtDropTarget::addDropTargetListener(
     const uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
