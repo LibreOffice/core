@@ -48,7 +48,8 @@ QtClipboard::QtClipboard(OUString aModeString, const QClipboard::Mode aMode)
             Qt::QueuedConnection);
 }
 
-css::uno::Reference<css::uno::XInterface> QtClipboard::create(const OUString& aModeString)
+css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+QtClipboard::create(const OUString& aModeString)
 {
     static const std::map<OUString, QClipboard::Mode> aNameToClipboardMap
         = { { "CLIPBOARD", QClipboard::Clipboard }, { "PRIMARY", QClipboard::Selection } };
@@ -57,9 +58,9 @@ css::uno::Reference<css::uno::XInterface> QtClipboard::create(const OUString& aM
 
     auto iter = aNameToClipboardMap.find(aModeString);
     if (iter != aNameToClipboardMap.end() && isSupported(iter->second))
-        return cppu::getXWeak(new QtClipboard(aModeString, iter->second));
+        return new QtClipboard(aModeString, iter->second);
     SAL_WARN("vcl.qt", "Ignoring unrecognized clipboard type: '" << aModeString << "'");
-    return css::uno::Reference<css::uno::XInterface>();
+    return nullptr;
 }
 
 void QtClipboard::flushClipboard()

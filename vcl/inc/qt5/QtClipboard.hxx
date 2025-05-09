@@ -64,7 +64,8 @@ signals:
 
 public:
     // factory function to construct only valid QtClipboard objects by name
-    static css::uno::Reference<css::uno::XInterface> create(const OUString& aModeString);
+    static css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    create(const OUString& aModeString);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
