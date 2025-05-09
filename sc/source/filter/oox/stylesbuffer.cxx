@@ -2272,10 +2272,10 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
     if (!pCachedPattern)
         rCache.add(nXfId, nNumFmtId, const_cast<ScPatternAttr*>(aEntry.getScPatternAttr()));
 
-    rAttrs.maAttrs.push_back(aEntry);
-
     if (!rDocImport.isLatinScript(*aEntry.getScPatternAttr()))
         rAttrs.mbLatinNumFmtOnly = false;
+
+    rAttrs.maAttrs.push_back(std::move(aEntry));
 }
 
 void Xf::writeToDoc( ScDocumentImport& rDoc, const ScRange& rRange )
