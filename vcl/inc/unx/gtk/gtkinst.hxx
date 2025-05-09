@@ -137,7 +137,7 @@ class GtkInstDropTarget final
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 public:
     GtkInstDropTarget();
-    GtkInstDropTarget(sal_IntPtr nFrame);
+    GtkInstDropTarget(GtkSalFrame* pFrame);
     virtual ~GtkInstDropTarget() override;
 
     void deinitialize();
@@ -196,7 +196,7 @@ public:
         , m_pFrame(nullptr)
     {
     }
-    GtkInstDragSource(sal_IntPtr nFrame);
+    GtkInstDragSource(GtkSalFrame* pFrame);
 
     void set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                           const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener);

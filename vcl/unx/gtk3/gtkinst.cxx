@@ -1623,12 +1623,12 @@ GtkInstDropTarget::GtkInstDropTarget()
 {
 }
 
-GtkInstDropTarget::GtkInstDropTarget(sal_IntPtr nFrame)
+GtkInstDropTarget::GtkInstDropTarget(GtkSalFrame* pFrame)
     : GtkInstDropTarget()
 {
-    assert(nFrame && "missing SalFrame");
+    assert(pFrame && "missing SalFrame");
 
-    m_pFrame = reinterpret_cast<GtkSalFrame*>(nFrame);
+    m_pFrame = pFrame;
     m_pFrame->registerDropTarget(this);
     m_bActive = true;
 }
@@ -1746,15 +1746,15 @@ void GtkInstDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
 css::uno::Reference<css::datatransfer::dnd::XDropTarget>
 GtkInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    return new GtkInstDropTarget(pSysEnv->aShellWindow);
+    return new GtkInstDropTarget(static_cast<GtkSalFrame*>(pSysEnv->pSalFrame));
 }
 
-GtkInstDragSource::GtkInstDragSource(sal_IntPtr nFrame)
+GtkInstDragSource::GtkInstDragSource(GtkSalFrame* pFrame)
     : GtkInstDragSource()
 {
-    assert(nFrame && "missing SalFrame");
+    assert(pFrame && "missing SalFrame");
 
-    m_pFrame = reinterpret_cast<GtkSalFrame*>(nFrame);
+    m_pFrame = pFrame;
     m_pFrame->registerDragSource(this);
 }
 
@@ -1804,7 +1804,7 @@ css::uno::Sequence<OUString> SAL_CALL GtkInstDragSource::getSupportedServiceName
 css::uno::Reference<css::datatransfer::dnd::XDragSource>
 GtkInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
-    return new GtkInstDragSource(pSysEnv->aShellWindow);
+    return new GtkInstDragSource(static_cast<GtkSalFrame*>(pSysEnv->pSalFrame));
 }
 
 namespace {
