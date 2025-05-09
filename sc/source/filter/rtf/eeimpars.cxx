@@ -397,11 +397,6 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                         pFormatter->ChangeIntl( LANGUAGE_SYSTEM);
                     }
 
-                    //  #105460#, #i4180# String cells can't contain tabs or linebreaks
-                    //  -> replace with spaces
-                    aStr = aStr.replaceAll( "\t", " " );
-                    aStr = aStr.replaceAll( "\n", " " );
-
                     if (bTextFormat)
                     {
                         aParam.mbDetectNumberFormat = false;
@@ -414,7 +409,8 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                         aParam.mbDetectScientificNumberFormat = bConvertScientific;
                     }
 
-                    mpDoc->SetString(nCol, nRow, nTab, aStr, &aParam);
+                    // tdf#117436 - set text cell to accommodate potential multiline cells
+                    mpDoc->SetTextCell(ScAddress(nCol, nRow, nTab), aStr, &aParam);
                 }
             }
             else if (std::unique_ptr<EditTextObject> pTextObject = IsValidSel(*mpEngine, pE->aSel) ? mpEngine->CreateTextObject(pE->aSel) : nullptr)

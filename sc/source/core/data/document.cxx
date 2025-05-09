@@ -3502,7 +3502,9 @@ SCROW ScDocument::GetFirstEditTextRow( const ScRange& rRange ) const
     return -1;
 }
 
-void ScDocument::SetTextCell( const ScAddress& rPos, const OUString& rStr )
+
+void ScDocument::SetTextCell(const ScAddress& rPos, const OUString& rStr,
+                             const ScSetStringParam* pParam)
 {
     if (ScTable* pTable = FetchTable(rPos.Tab()))
     {
@@ -3514,9 +3516,14 @@ void ScDocument::SetTextCell( const ScAddress& rPos, const OUString& rStr )
         }
         else
         {
-            ScSetStringParam aParam;
-            aParam.setTextInput();
-            pTable->SetString(rPos.Col(), rPos.Row(), rPos.Tab(), rStr, &aParam);
+            if (pParam)
+                pTable->SetString(rPos.Col(), rPos.Row(), rPos.Tab(), rStr, pParam);
+            else
+            {
+                ScSetStringParam aParam;
+                aParam.setTextInput();
+                pTable->SetString(rPos.Col(), rPos.Row(), rPos.Tab(), rStr, &aParam);
+            }
         }
     }
 }

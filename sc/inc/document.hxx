@@ -1212,7 +1212,9 @@ public:
      * Call this if you are not sure whether to put this as an edit text or a
      * simple text.
      */
-    SC_DLLPUBLIC void SetTextCell( const ScAddress& rPos, const OUString& rStr );
+    SC_DLLPUBLIC void SetTextCell(const ScAddress& rPos, const OUString& rStr,
+                                  const ScSetStringParam* pParam = nullptr);
+
     void              SetEmptyCell( const ScAddress& rPos );
     SC_DLLPUBLIC void SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     SC_DLLPUBLIC void SetValue( const ScAddress& rPos, double fVal );
