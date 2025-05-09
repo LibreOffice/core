@@ -50,16 +50,7 @@ void DropTarget::initialize( const Sequence< Any >& arguments )
     if( arguments.getLength() <= 1 )
         return;
 
-    OUString aDisplayName;
-    Reference< XDisplayConnection > xConn;
-    arguments.getConstArray()[0] >>= xConn;
-    if( xConn.is() )
-    {
-        Any aIdentifier;
-        aIdentifier >>= aDisplayName;
-    }
-
-    m_xSelectionManager = &SelectionManager::get( aDisplayName );
+    m_xSelectionManager = &SelectionManager::get();
     m_xSelectionManager->initialize( arguments );
 
     if( m_xSelectionManager->getDisplay() ) // #136582# sanity check

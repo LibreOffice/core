@@ -4092,20 +4092,7 @@ SelectionManagerHolder::~SelectionManagerHolder()
 
 void SelectionManagerHolder::initialize( const Sequence< Any >& arguments )
 {
-    OUString aDisplayName;
-
-    if( arguments.hasElements() )
-    {
-        css::uno::Reference< XDisplayConnection > xConn;
-        arguments.getConstArray()[0] >>= xConn;
-        if( xConn.is() )
-        {
-            Any aIdentifier;
-            aIdentifier >>= aDisplayName;
-        }
-    }
-
-    SelectionManager& rManager = SelectionManager::get( aDisplayName );
+    SelectionManager& rManager = SelectionManager::get();
     rManager.initialize( arguments );
     m_xRealDragSource = &rManager;
 }
