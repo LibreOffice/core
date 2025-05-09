@@ -58,7 +58,7 @@ SystemGraphicsData getiOSGraphicsData(unsigned char* pBuffer, long width, long h
 {
     double fDPIScale = 1.0;
 
-    // Onine uses the LOK_TILEMODE_RGBA by default so flip the normal flags
+    // Online uses the LOK_TILEMODE_RGBA by default so flip the normal flags
     // to kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big
     CGContextRef pCGContext
         = CGBitmapContextCreate(pBuffer, width, height, 8, width * 4, CGColorSpaceCreateDeviceRGB(),
