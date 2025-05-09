@@ -996,9 +996,9 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
     Atom nType = aProp.nitems ? aProp.encoding : XA_STRING;
     int nFormat = aProp.nitems ? aProp.format : 8;
     int nBytes = aProp.nitems ? aProp.nitems : aTitle.getLength();
-    const SystemEnvData& rEnv = pFrame->GetSystemData();
+    ::Window aShellWindow = pFrame->GetShellWindow();
     XChangeProperty( m_pDisplay,
-                     static_cast<::Window>(rEnv.aShellWindow),
+                     aShellWindow,
                      XA_WM_NAME,
                      nType,
                      nFormat,
@@ -1006,7 +1006,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
                      pData,
                      nBytes );
     XChangeProperty( m_pDisplay,
-                     static_cast<::Window>(rEnv.aShellWindow),
+                     aShellWindow,
                      XA_WM_ICON_NAME,
                      nType,
                      nFormat,
@@ -1014,7 +1014,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
                      pData,
                      nBytes );
     XChangeProperty( m_pDisplay,
-                     static_cast<::Window>(rEnv.aShellWindow),
+                     aShellWindow,
                      m_aWMAtoms[ WM_LOCALE_NAME ],
                      XA_STRING,
                      8,
@@ -1037,10 +1037,10 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) con
     WMAdaptor::setWMName( pFrame, rWMName );
 
     OString aTitle(OUStringToOString(rWMName, RTL_TEXTENCODING_UTF8));
-    const SystemEnvData& rEnv = pFrame->GetSystemData();
+    ::Window aShellWindow = pFrame->GetShellWindow();
     if( m_aWMAtoms[ NET_WM_NAME ] )
         XChangeProperty( m_pDisplay,
-                         static_cast<::Window>(rEnv.aShellWindow),
+                         aShellWindow,
                          m_aWMAtoms[ NET_WM_NAME ],
                          m_aWMAtoms[ UTF8_STRING ],
                          8,
@@ -1049,7 +1049,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) con
                          aTitle.getLength() );
     if( m_aWMAtoms[ NET_WM_ICON_NAME ] )
         XChangeProperty( m_pDisplay,
-                         static_cast<::Window>(rEnv.aShellWindow),
+                         aShellWindow,
                          m_aWMAtoms[ NET_WM_ICON_NAME ],
                          m_aWMAtoms[ UTF8_STRING ],
                          8,
