@@ -3564,7 +3564,7 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
         else if (CanCombineTypesForAcceptReject(aOrigData, *pTmp)
                  && pTmp->GetRedlineData(1).CanCombineForAcceptReject(aOrigData))
         {
-            // The Insert redline we want to reject has an other type of redline too
+            // The Insert redline we want to reject has another type of redline too
             // without the insert, the other type is meaningless
             // so we rather just accept the other type of redline
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
