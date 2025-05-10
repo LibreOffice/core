@@ -18,13 +18,6 @@
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="VCL" oor:package="org.openoffice">
-  <node oor:name="Settings">
-    <node oor:name="PrintDialog" oor:op="replace">
-      <prop oor:name="CollateBox" oor:op="replace" oor:type="xs:string">
-        <value>Default</value>
-      </prop>
-    </node>
-  </node>
   <node oor:name="DefaultFonts">
     <node oor:name="en" oor:op="replace">
       <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">

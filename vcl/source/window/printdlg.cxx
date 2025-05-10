@@ -809,9 +809,7 @@ void PrintDialog::readFromSettings()
         m_xDialog->set_window_state(aValue);
 
     // collate
-    aValue = pItem->getValue( u"PrintDialog"_ustr,
-                              u"CollateBox"_ustr );
-    if( aValue.equalsIgnoreAsciiCase("alwaysoff") )
+    if( officecfg::VCL::VCLSettings::PrintDialog::Collate::isReadOnly() )
     {
         mbCollateAlwaysOff = true;
         mxCollateBox->set_active( false );
