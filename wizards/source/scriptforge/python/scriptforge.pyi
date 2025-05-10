@@ -673,6 +673,16 @@ class SFScriptForge:
                 """
             ...
 
+        @classmethod
+        def Wait(cls, millisec: Union[int, float]) -> None:
+            """
+                Interrupts the program execution for the amount of time that you specify in milliseconds.
+                The method is an alternative to ``time.sleep()`` that sometimes freezes the LibreOffice
+                user interface.
+                    Args
+                        ``millisec``: The amount of time (in milliseconds) to wait before the program is continued.
+                """
+            ...
 
         @classmethod
         def Xray(cls, unoobject: UNO) -> None:

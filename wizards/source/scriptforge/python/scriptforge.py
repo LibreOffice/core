@@ -961,6 +961,10 @@ class SFScriptForge:
         thisDatabaseDocument, thisdatabasedocument = ThisDatabaseDocument, ThisDatabaseDocument
 
         @classmethod
+        def Wait(cls, millisec):
+            return cls.SIMPLEEXEC(cls.module + '.PyWait', millisec)
+
+        @classmethod
         def Xray(cls, unoobject = None):
             return cls.SIMPLEEXEC('XrayTool._main.xray', unoobject)
 

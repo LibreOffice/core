@@ -446,7 +446,7 @@ Public Function PyGlobalScope(ByVal Library As Variant) As Object
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The GlobalScope value
 &apos;&apos;&apos;	Example: (Python code)
-&apos;&apos;&apos;	    MsgBox bas.GlobalScope.BasicLibraries()
+&apos;&apos;&apos;	    bas.Xray(bas.GlobalScope.BasicLibraries())
 
 Const cstThisSub = &quot;Basic.GlobalScope.BasicLibraries&quot;	&apos;	or DialogLibraries
 Const cstSubArgs = &quot;&quot;
@@ -550,6 +550,39 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	ScriptForge.SF_PythonHelper.PyMsgBox
+
+REM -----------------------------------------------------------------------------
+Public Sub PyWait(ByVal Millisec As Variant)
+&apos;&apos;&apos;	Convenient function to replicate Wait() in Python scripts
+&apos;&apos;&apos;	This method is normally not necessary. But constructions like:
+&apos;&apos;&apos;		import time
+&apos;&apos;&apos;		while True:
+&apos;&apos;&apos;			time.sleep(1)
+&apos;&apos;&apos;	have the drawback to often freeze the LibreOffice user interface.
+&apos;&apos;&apos;		basic = CreateScriptService(&apos;Basic&apos;)
+&apos;&apos;&apos;		white True:
+&apos;&apos;&apos;			basic.Wait(1000)
+&apos;&apos;&apos;	might be a good alternative, although less precise due to the Python/Basic exchnages.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Millisec: the amount of time (in milliseconds) to wait before the program is continued
+
+Const cstThisSub = &quot;Basic.Wait&quot;
+Const cstSubArgs = &quot;millisec&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+
+Try:
+	Wait Millisec
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Sub
+Catch:
+	GoTo Finally
+End Sub	&apos;	ScriptForge.SF_PythonHelper.PyWait
 
 REM ============================================================= PRIVATE METHODS
 
