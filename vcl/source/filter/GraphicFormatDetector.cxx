@@ -651,36 +651,24 @@ bool GraphicFormatDetector::checkPCX()
         bRet = (cByte == 0 || cByte == 1);
         if (bRet)
         {
-            sal_uInt16 nTemp16;
-            sal_uInt16 nXmin;
-            sal_uInt16 nXmax;
-            sal_uInt16 nYmin;
-            sal_uInt16 nYmax;
-            sal_uInt16 nDPIx;
-            sal_uInt16 nDPIy;
-
             // Bits/Pixel
             mrStream.ReadUChar(cByte);
             maMetadata.mnBitsPerPixel = cByte;
 
             // image dimensions
-            mrStream.ReadUInt16(nTemp16);
-            nXmin = nTemp16;
-            mrStream.ReadUInt16(nTemp16);
-            nYmin = nTemp16;
-            mrStream.ReadUInt16(nTemp16);
-            nXmax = nTemp16;
-            mrStream.ReadUInt16(nTemp16);
-            nYmax = nTemp16;
+            sal_uInt16 nXmin(0), nXmax(0), nYmin(0), nYmax(0);
+            mrStream.ReadUInt16(nXmin);
+            mrStream.ReadUInt16(nYmin);
+            mrStream.ReadUInt16(nXmax);
+            mrStream.ReadUInt16(nYmax);
 
             maMetadata.maPixSize.setWidth(nXmax - nXmin + 1);
             maMetadata.maPixSize.setHeight(nYmax - nYmin + 1);
 
             // resolution
-            mrStream.ReadUInt16(nTemp16);
-            nDPIx = nTemp16;
-            mrStream.ReadUInt16(nTemp16);
-            nDPIy = nTemp16;
+            sal_uInt16 nDPIx(0), nDPIy(0);
+            mrStream.ReadUInt16(nDPIx);
+            mrStream.ReadUInt16(nDPIy);
 
             // set logical size
             MapMode aMap(MapUnit::MapInch, Point(), Fraction(1, nDPIx), Fraction(1, nDPIy));
