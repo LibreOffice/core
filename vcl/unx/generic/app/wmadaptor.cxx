@@ -30,8 +30,8 @@
 #include <sal/macros.h>
 #include <sal/log.hxx>
 #include <comphelper/string.hxx>
-#include <configsettings.hxx>
 #include <o3tl/string_view.hxx>
+#include <officecfg/VCL.hxx>
 
 #include <unx/wmadaptor.hxx>
 #include <unx/saldisp.hxx>
@@ -872,10 +872,9 @@ bool WMAdaptor::getWMshouldSwitchWorkspace() const
         WMAdaptor * pWMA = const_cast<WMAdaptor*>(this);
 
         pWMA->m_bWMshouldSwitchWorkspace = true;
-        vcl::SettingsConfigItem* pItem = vcl::SettingsConfigItem::get();
-        OUString aSetting( pItem->getValue( u"WM"_ustr,
-                                                 u"ShouldSwitchWorkspace"_ustr ) );
-        if( aSetting.isEmpty() )
+        bool aSetting = officecfg::VCL::VCLSettings::DesktopManagement::DisablePrinting::get();
+
+        if( aSetting )
         {
             if( m_aWMName == "awesome" )
             {
@@ -883,7 +882,7 @@ bool WMAdaptor::getWMshouldSwitchWorkspace() const
             }
         }
         else
-            pWMA->m_bWMshouldSwitchWorkspace = aSetting.toBoolean();
+            pWMA->m_bWMshouldSwitchWorkspace = aSetting;
         pWMA->m_bWMshouldSwitchWorkspaceInit = true;
     }
     return m_bWMshouldSwitchWorkspace;
