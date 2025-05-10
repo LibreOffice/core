@@ -234,6 +234,29 @@
     <p>THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED WARRANTY. IN PARTICULAR, NEITHER THE
     AUTHOR NOR LUCENT MAKES ANY REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY OF THIS SOFTWARE
     OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.</p>
+    <div class="DRAGONBOX">
+        <h2>Dragonbox</h2>
+        <p>The following software may be included in this product: Dragonbox.</p>
+        <p>Dragonbox code is covered by the following license:</p>
+        <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
+        <blockquote>
+            <p>--- LLVM Exceptions to the Apache 2.0 License ----</p>
+
+            <p>As an exception, if, as a result of your compiling your source code, portions
+            of this Software are embedded into an Object form of such source code, you
+            may redistribute such embedded portions in such Object form without complying
+            with the conditions of Sections 4(a), 4(b) and 4(d) of the License.</p>
+
+            <p>In addition, if you combine or link compiled forms of this Software with
+            software that is licensed under the GPLv2 ("Combined Software") and if a
+            court of competent jurisdiction determines that the patent provision (Section
+            3), the indemnity provision (Section 9) or other Section of the License
+            conflicts with the conditions of the GPLv2, you may retroactively and
+            prospectively choose to deem waived or otherwise exclude such Section(s) of
+            the License, but only in their entirety and only with respect to the Combined
+            Software.</p>
+        </blockquote>
+    </div>
     <div class="EPOXY">
         <h2>Epoxy</h2>
         <p>The following software may be included in this product: epoxy.</p>
@@ -784,6 +807,51 @@
         CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
         OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
         DAMAGE.</p>
+    </div>
+    <h2>libfixmath</h2>
+    <p>The following software may be included in this product: libfixmath.</p>
+    <p>libfixmath code is covered by the MIT license:</p>
+    <blockquote>
+    <p>libfixmath is Copyright (c) 2011-2021 Flatmush &lt;Flatmush@gmail.com&gt;,
+    Petteri Aimonen &lt;Petteri.Aimonen@gmail.com&gt;, &amp; libfixmath AUTHORS</p>
+    <p>Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:</p>
+    <p>The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.</p>
+    <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.</p>
+    </blockquote>
+    <div class ="LIBFFI">
+        <h2>libffi</h2>
+        <p>The following software may be included in this product: libffi</p>
+        <p>The libffi project code is covered by the MIT license:</p>
+        <p>libffi - Copyright (c) 1996-2019  Anthony Green, Red Hat, Inc and others.</p>
+        <p>See source files for details.</p>
+        <p>Permission is hereby granted, free of charge, to any person obtaining
+        a copy of this software and associated documentation files (the
+        ``Software''), to deal in the Software without restriction, including
+        without limitation the rights to use, copy, modify, merge, publish,
+        distribute, sublicense, and/or sell copies of the Software, and to
+        permit persons to whom the Software is furnished to do so, subject to
+        the following conditions:</p>
+        <p>The above copyright notice and this permission notice shall be
+        included in all copies or substantial portions of the Software.</p>
+        <p>THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
+        EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+        MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+        IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+        CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+        TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+        SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
     </div>
     <div class="FREEHAND">
         <h2>libfreehand</h2>
@@ -1693,29 +1761,6 @@
         ON AN "AS IS" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
         UPDATES, ENHANCEMENTS, OR MODIFICATIONS.</p>
     </div>
-    <div class ="LIBFFI">
-        <h2>libffi</h2>
-        <p>The following software may be included in this product: libffi</p>
-        <p>The libffi project code is covered by the MIT license:</p>
-        <p>libffi - Copyright (c) 1996-2019  Anthony Green, Red Hat, Inc and others.</p>
-        <p>See source files for details.</p>
-        <p>Permission is hereby granted, free of charge, to any person obtaining
-        a copy of this software and associated documentation files (the
-        ``Software''), to deal in the Software without restriction, including
-        without limitation the rights to use, copy, modify, merge, publish,
-        distribute, sublicense, and/or sell copies of the Software, and to
-        permit persons to whom the Software is furnished to do so, subject to
-        the following conditions:</p>
-        <p>The above copyright notice and this permission notice shall be
-        included in all copies or substantial portions of the Software.</p>
-        <p>THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
-        EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-        MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-        IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-        CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-        TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-        SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-    </div>
     <div class="PYTHON">
         <h2>Python</h2>
         <p>The following software may be included in this product: Python. Use of any of this software is governed by
@@ -1830,53 +1875,6 @@
         PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
         WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>
     </div>
-    <h2>Dragonbox</h2>
-    <p>The following software may be included in this product: Dragonbox.</p>
-    <p>Dragonbox code is covered by the following license:</p>
-    <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
-    <blockquote>
-        <p>--- LLVM Exceptions to the Apache 2.0 License ----</p>
-
-        <p>As an exception, if, as a result of your compiling your source code, portions
-        of this Software are embedded into an Object form of such source code, you
-        may redistribute such embedded portions in such Object form without complying
-        with the conditions of Sections 4(a), 4(b) and 4(d) of the License.</p>
-
-        <p>In addition, if you combine or link compiled forms of this Software with
-        software that is licensed under the GPLv2 ("Combined Software") and if a
-        court of competent jurisdiction determines that the patent provision (Section
-        3), the indemnity provision (Section 9) or other Section of the License
-        conflicts with the conditions of the GPLv2, you may retroactively and
-        prospectively choose to deem waived or otherwise exclude such Section(s) of
-        the License, but only in their entirety and only with respect to the Combined
-        Software.</p>
-    </blockquote>
-    <h2>libfixmath</h2>
-    <p>The following software may be included in this product: libfixmath.</p>
-    <p>libfixmath code is covered by the MIT license:</p>
-    <blockquote>
-    <p>libfixmath is Copyright (c) 2011-2021 Flatmush &lt;Flatmush@gmail.com&gt;,
-    Petteri Aimonen &lt;Petteri.Aimonen@gmail.com&gt;, &amp; libfixmath AUTHORS</p>
-
-    <p>Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:</p>
-
-    <p>The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.</p>
-
-    <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.</p>
-    </blockquote>
-
     <h2>Random123: a Library of Counter-Based Random Number Generators</h2>
     <p>The following software may be included in this product: Random123: a Library of Counter-Based Random Number
     Generators. Use of any of this software is governed by the terms of the license below:</p>
@@ -1961,6 +1959,31 @@
         <p>This file declares SANE application interface. See the SANE standard for a detailed explanation of the
         interface.</p>
     </div>
+    <div class="SKIA">
+        <h2>Skia</h2>
+        <p>The following software may be included in this product: Skia. Use of any of this software is governed by
+        the terms of the license below:</p>
+        <p>Copyright (c) 2011 Google Inc. All rights reserved.</p>
+        <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that
+        the following conditions are met:</p>
+        <ul>
+            <li>Redistributions of source code must retain the above copyright notice, this list of conditions and the
+            following disclaimer.</li>
+            <li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and
+            the following disclaimer in the documentation and/or other materials provided with the distribution.</li>
+            <li>Neither the name of Google Inc. nor the names of its contributors may be used to endorse or promote
+            products derived from this software without specific prior written permission.</li>
+        </ul>
+        <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+        WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+        PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY
+        DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+        PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+        OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+        DAMAGE.</p>
+    </div>
+    <hr />
     <h2>SVGPathSeg polyfill</h2>
     <p>The following software may be included in this product: SVGPathSeg polyfill. Use of any of this software is
     governed by the terms of the license below:</p>
@@ -2271,31 +2294,6 @@
         by the terms of the license below:</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
     </div>
-    <div class="SKIA">
-        <h2>Skia</h2>
-        <p>The following software may be included in this product: Skia. Use of any of this software is governed by
-        the terms of the license below:</p>
-        <p>Copyright (c) 2011 Google Inc. All rights reserved.</p>
-        <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that
-        the following conditions are met:</p>
-        <ul>
-            <li>Redistributions of source code must retain the above copyright notice, this list of conditions and the
-            following disclaimer.</li>
-            <li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and
-            the following disclaimer in the documentation and/or other materials provided with the distribution.</li>
-            <li>Neither the name of Google Inc. nor the names of its contributors may be used to endorse or promote
-            products derived from this software without specific prior written permission.</li>
-        </ul>
-        <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
-        WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-        PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY
-        DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-        PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
-        OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-        DAMAGE.</p>
-    </div>
-    <hr />
     <h1><a id="a__Extensions" name="a__Extensions">Extensions</a></h1>
     <p>Only third party extensions are listed here whose source code is not in the LibreOffice tree.</p>
     <div class="NLPSOLVER">
