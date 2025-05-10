@@ -1736,19 +1736,19 @@ SwCursor::DoSetBidiLevelLeftRight(
 
 static const SwTextFrame* GetTextFrame(const SwNode& rNode, SwRootFrame const*const pLayout)
 {
-    SwTextFrame const* pFrame(nullptr);
+    SwContentFrame const* pFrame(nullptr);
     if (pLayout)
     {
-        pFrame = static_cast<SwTextFrame const *>(rNode.GetContentNode()->getLayoutFrame(pLayout));
+        pFrame = rNode.GetContentNode()->getLayoutFrame(pLayout);
         if (pFrame)
         {
             while (pFrame->GetPrecede())
             {
-                pFrame = static_cast<SwTextFrame const*>(pFrame->GetPrecede());
+                pFrame = static_cast<SwContentFrame const*>(pFrame->GetPrecede());
             }
         }
     }
-    return pFrame;
+    return pFrame ? pFrame->DynCastTextFrame() : nullptr;
 }
 
 bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
