@@ -167,10 +167,7 @@ void QtFilePicker::prepareExecute()
 
     uno::Reference<css::frame::XDesktop> xDesktop(css::frame::Desktop::create(m_context),
                                                   UNO_QUERY_THROW);
-
-    // will hide the window, so do before show
     m_pFileDialog->setParent(pTransientParent, m_pFileDialog->windowFlags());
-    m_pFileDialog->show();
     xDesktop->addTerminateListener(this);
 }
 
