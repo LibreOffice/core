@@ -23,6 +23,32 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+/** QtMimeData subclass that ensures that at least one MIME type is
+ *  reported (using a dummy one if necessary), to prevent drag and drop
+ *  operations on Wayland from getting cancelled (see tdf#164380).
+ */
+class QtDragMimeData : public QtMimeData
+{
+public:
+    explicit QtDragMimeData(const css::uno::Reference<css::datatransfer::XTransferable>& rContents)
+        : QtMimeData(rContents)
+    {
+    }
+
+    QStringList formats() const override
+    {
+        QStringList aFormats = QtMimeData::formats();
+        if (!aFormats.empty())
+            return aFormats;
+
+        // report a dummy MIME type
+        return { "application/x.libreoffice-internal-drag-and-drop" };
+    }
+};
+}
+
 QtDragSource::~QtDragSource() {}
 
 void QtDragSource::deinitialize() { m_pFrame = nullptr; }
@@ -62,7 +88,7 @@ void QtDragSource::startDrag(
     if (m_pFrame)
     {
         QDrag* drag = new QDrag(m_pFrame->GetQWidget());
-        drag->setMimeData(new QtMimeData(rTrans));
+        drag->setMimeData(new QtDragMimeData(rTrans));
         // just a reminder that exec starts a nested event loop, so everything after
         // this call is just executed, after D'n'D has finished!
         drag->exec(toQtDropActions(sourceActions), getPreferredDropAction(sourceActions));
