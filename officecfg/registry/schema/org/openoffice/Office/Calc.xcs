@@ -1129,6 +1129,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="SeparatorType" oor:type="xs:short" oor:nillable="false">
+          <info>
+            <desc>Fixed width, separator or detected separator</desc>
+            <label>SeparatorType</label>
+          </info>
+          <value>2</value>
+        </prop>
         <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>If true, quoted field is always imported as text with no exception.</desc>
@@ -1242,6 +1249,13 @@
             <label>EvaluateFormulas</label>
           </info>
           <value>true</value>
+        </prop>
+        <prop oor:name="SeparatorType" oor:type="xs:short" oor:nillable="false">
+          <info>
+            <desc>Fixed width, separator or detected separator</desc>
+            <label>SeparatorType</label>
+          </info>
+          <value>2</value>
         </prop>
         <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
           <info>

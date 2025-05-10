@@ -193,12 +193,12 @@ static void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& 
             break;
         case SC_PASTETEXT:
             rSepPath = aSep_Path_Clpbrd;
-            nProperties = 14;
+            nProperties = 15;
             break;
         case SC_TEXTTOCOLUMNS:
         default:
             rSepPath = aSep_Path_Text2Col;
-            nProperties = 8;
+            nProperties = 9;
             break;
     }
     rNames.realloc( nProperties );
