@@ -112,7 +112,7 @@ typedef QtTransferable QtDnDTransferable;
  *
  * It's the "mirror" interface of the QtTransferable.
  **/
-class QtMimeData final : public QMimeData
+class QtMimeData : public QMimeData
 {
     Q_OBJECT
 
