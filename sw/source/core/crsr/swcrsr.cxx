@@ -1734,6 +1734,23 @@ SwCursor::DoSetBidiLevelLeftRight(
     return pSttFrame;
 }
 
+static const SwTextFrame* GetTextFrame(const SwNode& rNode, SwRootFrame const*const pLayout)
+{
+    SwTextFrame const* pFrame(nullptr);
+    if (pLayout)
+    {
+        pFrame = static_cast<SwTextFrame const *>(rNode.GetContentNode()->getLayoutFrame(pLayout));
+        if (pFrame)
+        {
+            while (pFrame->GetPrecede())
+            {
+                pFrame = static_cast<SwTextFrame const*>(pFrame->GetPrecede());
+            }
+        }
+    }
+    return pFrame;
+}
+
 bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                           bool bVisualAllowed,bool bSkipHidden, bool bInsertCursor,
                           SwRootFrame const*const pLayout, bool isFieldNames)
@@ -1753,18 +1770,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
     else
         fnGo = SwCursorSkipMode::Cells == nMode ? GoInContentCells : GoInContent;
 
-    SwTextFrame const* pFrame(nullptr);
-    if (pLayout)
-    {
-        pFrame = static_cast<SwTextFrame*>(rNode.GetContentNode()->getLayoutFrame(pLayout));
-        if (pFrame)
-        {
-            while (pFrame->GetPrecede())
-            {
-                pFrame = static_cast<SwTextFrame const*>(pFrame->GetPrecede());
-            }
-        }
-    }
+    SwTextFrame const* pFrame = GetTextFrame(rNode, pLayout);
 
     while( nCnt )
     {
@@ -1809,15 +1815,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
 
         if (pFrame)
         {
-            SwTextFrame const* pNewFrame(static_cast<SwTextFrame const*>(
-                GetPoint()->GetNode().GetContentNode()->getLayoutFrame(pLayout)));
-            if (pNewFrame)
-            {
-                while (pNewFrame->GetPrecede())
-                {
-                    pNewFrame = static_cast<SwTextFrame const*>(pNewFrame->GetPrecede());
-                }
-            }
+            SwTextFrame const* pNewFrame = GetTextFrame(GetPoint()->GetNode(), pLayout);
             // sw_redlinehide: fully redline-deleted nodes don't have frames...
             if (pFrame == pNewFrame || !pNewFrame)
             {
