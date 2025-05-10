@@ -883,8 +883,9 @@ bool PngImageReader::read(ImportOutput& rImportOutput) { return reader(mrStream,
 BitmapEx PngImageReader::read()
 {
     ImportOutput aImportOutput;
-    read(aImportOutput);
-    return *aImportOutput.moBitmap;
+    if (read(aImportOutput))
+        return *aImportOutput.moBitmap;
+    return BitmapEx();
 }
 
 BinaryDataContainer PngImageReader::getMicrosoftGifChunk(SvStream& rStream)
