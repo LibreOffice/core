@@ -1875,26 +1875,6 @@
         the License, but only in their entirety and only with respect to the Combined
         Software.</p>
     </blockquote>
-    <h2>dtoa</h2>
-    <p>The following software may be included in this product: dtoa.</p>
-    <p>dtoa code is covered by the MIT license:</p>
-    <blockquote>
-    <p> The author of this software is David M. Gay.</p>
-
-    <p> Copyright (c) 1991, 2000, 2001 by Lucent Technologies.</p>
-
-    <p>Permission to use, copy, modify, and distribute this software for any
-    purpose without fee is hereby granted, provided that this entire notice
-    is included in all copies of any software which is or includes a copy
-    or modification of this software and in all copies of the supporting
-    documentation for such software.</p>
-
-    <p>THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
-    WARRANTY.  IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
-    REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
-    OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.</p>
-    </blockquote>
-
     <h2>libfixmath</h2>
     <p>The following software may be included in this product: libfixmath.</p>
     <p>libfixmath code is covered by the MIT license:</p>
