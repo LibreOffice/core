@@ -59,11 +59,15 @@ AquaSkiaSalGraphicsImpl::AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent,
                                                  AquaSharedAttributes& rShared)
     : SkiaSalGraphicsImpl(rParent, rShared.mpFrame)
     , AquaGraphicsBackendBase(rShared, this)
+    , mbInFlushSurfaceToWindowContext(false)
 {
 }
 
 AquaSkiaSalGraphicsImpl::~AquaSkiaSalGraphicsImpl()
 {
+    if (lastFlushedGraphicsImpl == this)
+        lastFlushedGraphicsImpl = nullptr;
+
     DeInit(); // mac code doesn't call DeInit()
 }
 
@@ -125,11 +129,55 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToWindowContext()
     }
     else
     {
-        SkiaSalGraphicsImpl::flushSurfaceToWindowContext();
+        // Related: tdf#163945 don't directly flush graphics with Skia/Metal
+        // When dragging a selection box on an empty background in
+        // Impress and only with Skia/Metal, the selection box would
+        // not keep up with the pointer. The selection box would
+        // repaint sporadically or not at all if the pointer was
+        // dragged rapidly and the status bar was visible.
+        // Apparently, flushing a graphics doesn't actually do much of
+        // anything with Skia/Raster and Skia disabled so the selection
+        // box repaints without any noticeable delay.
+        // However, with Skia/Metal every flush of a graphics creates
+        // and queues a new CAMetalLayer drawable. During rapid
+        // dragging, this can lead to creating and queueing up to 200
+        // drawables per second leaving no spare time for the Impress
+        // selection box painting timer to fire. So with Skia/Metal,
+        // throttle the rate of flushing.
+        // tdf#166258 Assume a certain maximum flushing rate with Skia/Metal
+        // Previously, the fix for tdf#163945 was done in the
+        // AquaSalFrame::Flush() methods, but that caused tdf#166258
+        // so include flushes done by the Skia timer in the throttling
+        // of the maximum flushing rate. Currently, the maximum flushing
+        // rate is 100 flushes per second.
+        static const CFAbsoluteTime fMinFlushInterval = 0.01;
+
+        // Related: tdf#166258 prevent recursion as calling scheduleFlush()
+        // may immediately recurse into performFlush() leading to infinite
+        // recursion. If scheduleFlush() is recursing, assume that a flush
+        // is necessary.
+        // Also assume that a flush is necessary if the current graphics
+        // is different than the last flushed graphics. Otherwise, the
+        // "tip of the day" dialog or other windows will fail to draw
+        // immediately after the window opens.
+        CFAbsoluteTime fInterval = CFAbsoluteTimeGetCurrent() - lastFlushedGraphicsImplTime;
+        if (!mbInFlushSurfaceToWindowContext && lastFlushedGraphicsImpl == this && fInterval >= 0.0f
+            && fInterval < fMinFlushInterval)
+        {
+            // Just to be safe, enable the Skia timer so that the surface
+            // will eventually be flushed.
+            mbInFlushSurfaceToWindowContext = true;
+            scheduleFlush();
+            mbInFlushSurfaceToWindowContext = false;
+        }
+        else
+        {
+            lastFlushedGraphicsImpl = this;
+            SkiaSalGraphicsImpl::flushSurfaceToWindowContext();
+            lastFlushedGraphicsImplTime = CFAbsoluteTimeGetCurrent();
+        }
     }
 }
-
-void AquaSkiaSalGraphicsImpl::ScheduleFlush() { scheduleFlush(); }
 
 // For Raster we use our own screen blitting (see above).
 CGImageRef AquaSkiaSalGraphicsImpl::createCGImageFromRasterSurface(const NSRect& rDirtyRect,
