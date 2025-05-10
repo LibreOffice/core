@@ -113,6 +113,11 @@
                     <value>3</value>
                 </prop>
             </group>
+            <group oor:name="DesktopManagement">
+                <prop oor:name="DisablePrinting" oor:type="xs:boolean" oor:nillable="false">
+                    <value>false</value>
+                </prop>
+            </group>
     </group>
   </component>
 </oor:component-schema>

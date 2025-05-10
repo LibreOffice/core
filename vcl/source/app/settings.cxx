@@ -20,6 +20,7 @@
 #include <config_folders.h>
 
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/VCL.hxx>
 
 #ifdef _WIN32
 #include <win/svsys.h>
@@ -42,7 +43,6 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <configsettings.hxx>
 #include <vcl/outdev.hxx>
 
 #include <unotools/fontcfg.hxx>
@@ -2271,11 +2271,7 @@ bool MiscSettings::GetDisablePrinting() const
 {
     if( mxData->mnDisablePrinting == TRISTATE_INDET )
     {
-        OUString aEnable =
-            vcl::SettingsConfigItem::get()->
-            getValue( u"DesktopManagement"_ustr,
-                      u"DisablePrinting"_ustr );
-        mxData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
+        mxData->mnDisablePrinting = officecfg::VCL::VCLSettings::DesktopManagement::DisablePrinting::get() ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
     return mxData->mnDisablePrinting != TRISTATE_FALSE;
