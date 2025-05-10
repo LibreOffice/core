@@ -104,5 +104,15 @@
         <desc>Contains the localized font substitution tables for VCL (see template description).</desc>
       </info>
     </set>
+    <group oor:name="VCLSettings">
+        <info>
+            <desc>Contains VCL-related configurations (print dialog, menus, etc.).</desc>
+        </info>
+            <group oor:name="Transfer">
+                <prop oor:name="SelectionTimeout" oor:type="xs:int" oor:nillable="false">
+                    <value>3</value>
+                </prop>
+            </group>
+    </group>
   </component>
 </oor:component-schema>

@@ -89,7 +89,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/app/sm \
     vcl/unx/generic/app/wmadaptor \
     vcl/unx/generic/dtrans/bmp \
-    vcl/unx/generic/dtrans/config \
     vcl/unx/generic/dtrans/X11_clipboard \
     vcl/unx/generic/dtrans/X11_dndcontext \
     vcl/unx/generic/dtrans/X11_droptarget \

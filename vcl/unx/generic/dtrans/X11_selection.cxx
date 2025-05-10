@@ -68,6 +68,8 @@
 #include <comphelper/solarmutex.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <officecfg/VCL.hxx>
+
 #include <algorithm>
 
 constexpr auto DRAG_EVENT_MASK = ButtonPressMask |
@@ -217,7 +219,6 @@ SelectionManager::SelectionManager() :
         m_aThread( nullptr ),
         m_aDragExecuteThread( nullptr ),
         m_aWindow( None ),
-        m_nSelectionTimeout( 0 ),
         m_nSelectionTimestamp( CurrentTime ),
         m_bDropEnterSent( true ),
         m_aCurrentDropWindow( None ),
@@ -900,6 +901,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     tv_current = tv_last;
 
     XEvent aEvent;
+    auto nSelectionTimeout = officecfg::VCL::VCLSettings::Transfer::SelectionTimeout::get();
     do
     {
         bool bAdjustTime = false;
@@ -958,10 +960,10 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
         gettimeofday( &tv_current, nullptr );
         if( bAdjustTime )
             tv_last = tv_current;
-    } while( ! it->second->m_aDataArrived.check() && (tv_current.tv_sec - tv_last.tv_sec) < getSelectionTimeout() );
+    } while( ! it->second->m_aDataArrived.check() && (tv_current.tv_sec - tv_last.tv_sec) < nSelectionTimeout );
 
 #if OSL_DEBUG_LEVEL > 1
-    SAL_WARN_IF((tv_current.tv_sec - tv_last.tv_sec) > getSelectionTimeout(),
+    SAL_WARN_IF((tv_current.tv_sec - tv_last.tv_sec) > nSelectionTimeout,
             "vcl.unx.dtrans", "timed out.");
 #endif
 
@@ -1952,7 +1954,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
             std::vector< Atom > aTimeouts;
             for (auto const& incrementalTransfer : it->second)
             {
-                if( (nCurrentTime - incrementalTransfer.second.m_nTransferStartTime) > (getSelectionTimeout()+2) )
+                if( (nCurrentTime - incrementalTransfer.second.m_nTransferStartTime) > (officecfg::VCL::VCLSettings::Transfer::SelectionTimeout::get()+2) )
                 {
                     aTimeouts.push_back( incrementalTransfer.first );
 #if OSL_DEBUG_LEVEL > 1

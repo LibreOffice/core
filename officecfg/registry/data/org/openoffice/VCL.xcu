@@ -24,11 +24,6 @@
         <value>false</value>
       </prop>
     </node>
-    <node oor:name="Transfer" oor:op="replace">
-      <prop oor:name="SelectionTimeout" oor:type="xs:string" oor:op="replace">
-        <value>3</value>
-      </prop>
-    </node>
     <node oor:name="Menu" oor:op="replace">
       <prop oor:name="SuppressAccelerators" oor:type="xs:string" oor:op="replace">
         <value>false</value>
