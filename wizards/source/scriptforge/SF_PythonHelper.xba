@@ -562,7 +562,7 @@ Public Sub PyWait(ByVal Millisec As Variant)
 &apos;&apos;&apos;		basic = CreateScriptService(&apos;Basic&apos;)
 &apos;&apos;&apos;		white True:
 &apos;&apos;&apos;			basic.Wait(1000)
-&apos;&apos;&apos;	might be a good alternative, although less precise due to the Python/Basic exchnages.
+&apos;&apos;&apos;	might be a good alternative, although less precise due to the Python/Basic exchanges.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Millisec: the amount of time (in milliseconds) to wait before the program is continued
 
