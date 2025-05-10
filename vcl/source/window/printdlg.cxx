@@ -23,6 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/VCL.hxx>
 
 #include <utility>
 #include <vcl/QueueInfo.hxx>
@@ -748,6 +749,7 @@ void PrintDialog::setupPaperSidesBox()
 void PrintDialog::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     pItem->setValue( u"PrintDialog"_ustr,
                      u"LastPrinter"_ustr,
@@ -766,10 +768,7 @@ void PrintDialog::storeToSettings()
                      u"CopyCount"_ustr,
                      mxCopyCountField->get_text() );
 
-    pItem->setValue( u"PrintDialog"_ustr,
-                     u"Collate"_ustr,
-                     mxCollateBox->get_active() ? u"true"_ustr :
-                                                 u"false"_ustr );
+    officecfg::VCL::VCLSettings::PrintDialog::Collate::set( mxCollateBox->get_active(), batch );
 
     pItem->setValue( u"PrintDialog"_ustr,
                      u"CollateSingleJobs"_ustr,
@@ -781,6 +780,7 @@ void PrintDialog::storeToSettings()
                      hasPreview() ? u"true"_ustr :
                                     u"false"_ustr );
 
+    batch->commit();
     pItem->Commit();
 }
 
@@ -820,9 +820,7 @@ void PrintDialog::readFromSettings()
     else
     {
         mbCollateAlwaysOff = false;
-        aValue = pItem->getValue( u"PrintDialog"_ustr,
-                                  u"Collate"_ustr );
-        mxCollateBox->set_active( aValue.equalsIgnoreAsciiCase("true") );
+        mxCollateBox->set_active( officecfg::VCL::VCLSettings::PrintDialog::Collate::get() );
     }
 
     // collate single jobs
