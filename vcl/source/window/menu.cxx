@@ -56,13 +56,12 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <configsettings.hxx>
-
 #include <map>
 #include <string_view>
 #include <vector>
 
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/VCL.hxx>
 
 namespace vcl
 {
@@ -79,21 +78,6 @@ using namespace vcl;
 
 constexpr auto EXTRAITEMHEIGHT = 4;
 constexpr auto SPACE_AROUND_TITLE = 4;
-
-static bool ImplAccelDisabled()
-{
-    // display of accelerator strings may be suppressed via configuration
-    static int nAccelDisabled = -1;
-
-    if( nAccelDisabled == -1 )
-    {
-        OUString aStr =
-            vcl::SettingsConfigItem::get()->
-            getValue( u"Menu"_ustr, u"SuppressAccelerators"_ustr );
-        nAccelDisabled = aStr.equalsIgnoreAsciiCase("true") ? 1 : 0;
-    }
-    return nAccelDisabled == 1;
-}
 
 static void ImplSetMenuItemData( MenuItemData* pData )
 {
@@ -1549,7 +1533,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             }
 
             // Accel
-            if (!IsMenuBar()&& pData->aAccelKey.GetCode() && !ImplAccelDisabled())
+            if (!IsMenuBar()&& pData->aAccelKey.GetCode() && !officecfg::VCL::VCLSettings::Menu::SuppressAccelerators::get())
             {
                 OUString aName = pData->aAccelKey.GetName();
                 tools::Long nAccWidth = pWin->GetTextWidth( aName );
@@ -1984,7 +1968,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                     }
                     // how much space is there for the text?
                     tools::Long nMaxItemTextWidth = aOutSz.Width() - aTmpPos.X() - nExtra - nOuterSpaceX;
-                    if (!IsMenuBar() && pData->aAccelKey.GetCode() && !ImplAccelDisabled())
+                    if (!IsMenuBar() && pData->aAccelKey.GetCode() && !officecfg::VCL::VCLSettings::Menu::SuppressAccelerators::get())
                     {
                         OUString aAccText = pData->aAccelKey.GetName();
                         nMaxItemTextWidth -= rRenderContext.GetTextWidth(aAccText) + 3 * nExtra;
@@ -2024,7 +2008,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                 }
 
                 // Accel
-                if (!bLayout && !IsMenuBar() && pData->aAccelKey.GetCode() && !ImplAccelDisabled())
+                if (!bLayout && !IsMenuBar() && pData->aAccelKey.GetCode() && !officecfg::VCL::VCLSettings::Menu::SuppressAccelerators::get())
                 {
                     OUString aAccText = pData->aAccelKey.GetName();
                     aTmpPos.setX( aOutSz.Width() - rRenderContext.GetTextWidth(aAccText) );

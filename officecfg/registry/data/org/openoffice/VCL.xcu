@@ -19,11 +19,6 @@
 <!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="VCL" oor:package="org.openoffice">
   <node oor:name="Settings">
-    <node oor:name="Menu" oor:op="replace">
-      <prop oor:name="SuppressAccelerators" oor:type="xs:string" oor:op="replace">
-        <value>false</value>
-      </prop>
-    </node>
     <node oor:name="PrintDialog" oor:op="replace">
       <prop oor:name="Collate" oor:op="replace" oor:type="xs:string">
         <value>true</value>

@@ -118,6 +118,11 @@
                     <value>false</value>
                 </prop>
             </group>
+            <group oor:name="Menu">
+                <prop oor:name="SuppressAccelerators" oor:type="xs:boolean" oor:nillable="false">
+                    <value>false</value>
+                </prop>
+            </group>
     </group>
   </component>
 </oor:component-schema>
