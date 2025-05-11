@@ -474,27 +474,30 @@ void SfxItemSet::ClearInvalidItems()
     }
 }
 
+SfxItemState SfxItemSet::GetItemState_ForIter(PoolItemMap::const_iterator aHit, const SfxPoolItem **ppItem)
+{
+    if (IsInvalidItem(aHit->second))
+        // Different ones are present
+        return SfxItemState::INVALID;
+
+    if (IsDisabledItem(aHit->second))
+        // Item is Disabled
+        return SfxItemState::DISABLED;
+
+    // if we have the Item, add it to output an hand back
+    if (nullptr != ppItem)
+        *ppItem = aHit->second;
+
+    // Item is set
+    return SfxItemState::SET;
+}
+
 SfxItemState SfxItemSet::GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const
 {
     PoolItemMap::const_iterator aHit(m_aPoolItemMap.find(nWhich));
 
     if (aHit != m_aPoolItemMap.end())
-    {
-        if (IsInvalidItem(aHit->second))
-            // Different ones are present
-            return SfxItemState::INVALID;
-
-        if (IsDisabledItem(aHit->second))
-            // Item is Disabled
-            return SfxItemState::DISABLED;
-
-        // if we have the Item, add it to output an hand back
-        if (nullptr != ppItem)
-            *ppItem = aHit->second;
-
-        // Item is set
-        return SfxItemState::SET;
-    }
+        return GetItemState_ForIter(aHit, ppItem);
 
     if (GetRanges().doesContainWhich(nWhich))
     {
@@ -505,7 +508,6 @@ SfxItemState SfxItemSet::GetItemState_ForWhichID( SfxItemState eState, sal_uInt1
     // search in parent?
     if (bSrchInParent && nullptr != GetParent() && (SfxItemState::UNKNOWN == eState || SfxItemState::DEFAULT == eState))
     {
-        // nOffset was only valid for *local* SfxItemSet, need to continue with WhichID
         // Use the *highest* SfxItemState as result
         return GetParent()->GetItemState_ForWhichID( eState, nWhich, true, ppItem);
     }
@@ -1273,14 +1275,13 @@ bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
         const SfxPoolItem *pItem1(nullptr);
         const SfxPoolItem *pItem2(nullptr);
         const sal_uInt16 nWhich(aCandidate->first);
-        const SfxItemState aStateA(GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, false, &pItem1));
+        const SfxItemState aStateA(GetItemState_ForIter(aCandidate, &pItem1));
         const SfxItemState aStateB(rCmp.GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, false, &pItem2));
 
         if (aStateA != aStateB)
             return false;
 
-        // only compare items if SfxItemState::SET, else the item ptrs are not set
-        if (SfxItemState::SET == aStateA && !SfxPoolItem::areSame(pItem1, pItem2))
+        if (!SfxPoolItem::areSame(pItem1, pItem2))
             return false;
     }
 

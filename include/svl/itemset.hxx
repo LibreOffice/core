@@ -288,6 +288,9 @@ private:
 
     // GetItemStateImpl for input type WhichID
     SfxItemState GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const;
+
+    // GetItemStateImpl for iterator in m_aPoolItemMap
+    static SfxItemState GetItemState_ForIter(PoolItemMap::const_iterator aHit, const SfxPoolItem **ppItem);
 };
 
 //  Handles all Ranges. Ranges are automatically modified by putting items.
