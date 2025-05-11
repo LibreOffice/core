@@ -133,6 +133,9 @@
                 <prop oor:name="LastPrinter" oor:type="xs:string" oor:nillable="false">
                     <value/>
                 </prop>
+                <prop oor:name="WindowState" oor:type="xs:string" oor:nillable="false">
+                    <value/>
+                </prop>
             </group>
             <group oor:name="WM">
                 <prop oor:name="ShouldSwitchWorkspace" oor:type="xs:boolean" oor:nillable="false">

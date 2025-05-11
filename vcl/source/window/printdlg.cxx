@@ -756,9 +756,8 @@ void PrintDialog::storeToSettings()
     officecfg::VCL::VCLSettings::PrintDialog::LastPage::set(
                      mxTabCtrl->get_tab_label_text(mxTabCtrl->get_current_page_ident()), batch);
 
-    pItem->setValue( u"PrintDialog"_ustr,
-                     u"WindowState"_ustr,
-                     m_xDialog->get_window_state(vcl::WindowDataMask::All) );
+    officecfg::VCL::VCLSettings::PrintDialog::WindowState::set(
+                     m_xDialog->get_window_state(vcl::WindowDataMask::All), batch );
 
     pItem->setValue( u"PrintDialog"_ustr,
                      u"CopyCount"_ustr,
@@ -798,8 +797,7 @@ void PrintDialog::readFromSettings()
     }
 
     // persistent window state
-    aValue = pItem->getValue( u"PrintDialog"_ustr,
-                              u"WindowState"_ustr );
+    aValue = officecfg::VCL::VCLSettings::PrintDialog::WindowState::get();
     if (!aValue.isEmpty())
         m_xDialog->set_window_state(aValue);
 
