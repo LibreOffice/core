@@ -2113,11 +2113,13 @@ Private Sub _LoadDocumentProperties()
 &apos;&apos;&apos;	Special values:
 &apos;&apos;&apos;		Only valid dates are taken
 &apos;&apos;&apos;		Statistics are exploded in subitems. Subitems are specific to document type
-&apos;&apos;&apos;		Keywords are joined
+&apos;&apos;&apos;		Arrays of strings are joined
 &apos;&apos;&apos;		Language is aligned on L10N convention la-CO
 
 Dim oProperties As Object			&apos;	Document properties
 Dim vNamedValue As Variant			&apos;	com.sun.star.beans.NamedValue
+
+Const cstJoin = &quot;, &quot;
 
 			If IsNull(_DocumentProperties) Then
 				Set oProperties = _Component.getDocumentProperties
@@ -2127,20 +2129,29 @@ Dim vNamedValue As Variant			&apos;	com.sun.star.beans.NamedValue
 					.Add(&quot;AutoloadSecs&quot;, oProperties.AutoloadSecs)
 					.Add(&quot;AutoloadURL&quot;, oProperties.AutoloadURL)
 					If oProperties.CreationDate.Year &gt; 0 Then .Add(&quot;CreationDate&quot;, CDateFromUnoDateTime(oProperties.CreationDate))
+					.Add(&quot;Contributor&quot;, Join(oProperties.Contributor, cstJoin))
+					.Add(&quot;Coverage&quot;, oProperties.Coverage)
 					.Add(&quot;DefaultTarget&quot;, oProperties.DefaultTarget)
 					.Add(&quot;Description&quot;, oProperties.Description)	&apos;	The description can be multiline
 					&apos;	DocumentStatistics : number and names of statistics depend on document type
 					For Each vNamedValue In oProperties.DocumentStatistics
 						.Add(vNamedValue.Name, vNamedValue.Value)
 					Next vNamedValue
+					.Add(&quot;EditingCycles&quot;, oProperties.EditingCycles)
 					.Add(&quot;EditingDuration&quot;, oProperties.EditingDuration)
 					.Add(&quot;Generator&quot;, oProperties.Generator)
-					.Add(&quot;Keywords&quot;, Join(oProperties.Keywords, &quot;, &quot;))
+					.Add(&quot;Identifier&quot;, oProperties.Identifier)
+					.Add(&quot;Keywords&quot;, Join(oProperties.Keywords, cstJoin))
 					.Add(&quot;Language&quot;, oProperties.Language.Language &amp; Iif(Len(oProperties.Language.Country) &gt; 0, &quot;-&quot; &amp; oProperties.Language.Country, &quot;&quot;))
 					If oProperties.ModificationDate.Year &gt; 0 Then .Add(&quot;ModificationDate&quot;, CDateFromUnoDateTime(oProperties.ModificationDate))
 					If oProperties.PrintDate.Year &gt; 0 Then .Add(&quot;PrintDate&quot;, CDateFromUnoDateTime(oProperties.PrintDate))
 					.Add(&quot;PrintedBy&quot;, oProperties.PrintedBy)
+					.Add(&quot;Publisher&quot;, Join(oProperties.Publisher, cstJoin))
+					.Add(&quot;Relation&quot;, Join(oProperties.Relation, cstJoin))
+					.Add(&quot;Rights&quot;, oProperties.Rights)
+					.Add(&quot;Source&quot;, oProperties.Source)
 					.Add(&quot;Subject&quot;, oProperties.Subject)
+					.Add(&quot;Type&quot;, oProperties.Type)
 					If oProperties.TemplateDate.Year &gt; 0 Then .Add(&quot;TemplateDate&quot;, CDateFromUnoDateTime(oProperties.TemplateDate))
 					.Add(&quot;TemplateName&quot;, oProperties.TemplateName)
 					.Add(&quot;TemplateURL&quot;, oProperties.TemplateURL)
