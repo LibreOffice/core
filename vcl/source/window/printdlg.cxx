@@ -41,7 +41,6 @@
 #include <vcl/windowstate.hxx>
 
 #include <bitmaps.hlst>
-#include <configsettings.hxx>
 #include <printdlg.hxx>
 #include <strings.hrc>
 #include <svdata.hxx>
@@ -746,7 +745,6 @@ void PrintDialog::setupPaperSidesBox()
 
 void PrintDialog::storeToSettings()
 {
-    SettingsConfigItem* pItem = SettingsConfigItem::get();
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     officecfg::VCL::VCLSettings::PrintDialog::LastPrinter::set(
@@ -764,19 +762,13 @@ void PrintDialog::storeToSettings()
     officecfg::VCL::VCLSettings::PrintDialog::CollateSingleJobs::set(
                      mxSingleJobsBox->get_active(), batch );
 
-    pItem->setValue( u"PrintDialog"_ustr,
-                     u"HasPreview"_ustr,
-                     hasPreview() ? u"true"_ustr :
-                                    u"false"_ustr );
+    officecfg::VCL::VCLSettings::PrintDialog::HasPreview::set( hasPreview(), batch);
 
     batch->commit();
-    pItem->Commit();
 }
 
 void PrintDialog::readFromSettings()
 {
-    SettingsConfigItem* pItem = SettingsConfigItem::get();
-
     // read last selected tab page; if it exists, activate it
     OUString aValue = officecfg::VCL::VCLSettings::PrintDialog::LastPage::get();
     sal_uInt16 nCount = mxTabCtrl->get_n_pages();
@@ -812,12 +804,7 @@ void PrintDialog::readFromSettings()
     mxSingleJobsBox->set_active( officecfg::VCL::VCLSettings::PrintDialog::CollateSingleJobs::get() );
 
     // preview box
-    aValue = pItem->getValue( u"PrintDialog"_ustr,
-                              u"HasPreview"_ustr );
-    if ( aValue.equalsIgnoreAsciiCase("false") )
-        mxPreviewBox->set_active( false );
-    else
-        mxPreviewBox->set_active( true );
+    mxPreviewBox->set_active( officecfg::VCL::VCLSettings::PrintDialog::HasPreview::get() );
 
 }
 

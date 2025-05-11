@@ -130,6 +130,9 @@
                 <prop oor:name="CollateSingleJobs" oor:type="xs:boolean" oor:nillable="false">
                     <value>false</value>
                 </prop>
+                <prop oor:name="HasPreview" oor:type="xs:boolean" oor:nillable="false">
+                    <value>true</value>
+                </prop>
                 <prop oor:name="LastPage" oor:type="xs:string" oor:nillable="false">
                     <value/>
                 </prop>
