@@ -761,10 +761,8 @@ void PrintDialog::storeToSettings()
 
     officecfg::VCL::VCLSettings::PrintDialog::Collate::set( mxCollateBox->get_active(), batch );
 
-    pItem->setValue( u"PrintDialog"_ustr,
-                     u"CollateSingleJobs"_ustr,
-                     mxSingleJobsBox->get_active() ? u"true"_ustr :
-                                                     u"false"_ustr );
+    officecfg::VCL::VCLSettings::PrintDialog::CollateSingleJobs::set(
+                     mxSingleJobsBox->get_active(), batch );
 
     pItem->setValue( u"PrintDialog"_ustr,
                      u"HasPreview"_ustr,
@@ -811,9 +809,7 @@ void PrintDialog::readFromSettings()
     }
 
     // collate single jobs
-    aValue = pItem->getValue( u"PrintDialog"_ustr,
-                              u"CollateSingleJobs"_ustr );
-    mxSingleJobsBox->set_active(aValue.equalsIgnoreAsciiCase("true"));
+    mxSingleJobsBox->set_active( officecfg::VCL::VCLSettings::PrintDialog::CollateSingleJobs::get() );
 
     // preview box
     aValue = pItem->getValue( u"PrintDialog"_ustr,
