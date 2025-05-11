@@ -23,6 +23,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/safeint.hxx>
+#include <officecfg/VCL.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -34,7 +35,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
-#include <configsettings.hxx>
 #include <printdlg.hxx>
 #include <salinst.hxx>
 #include <salprn.hxx>
@@ -800,11 +800,9 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
     // make last used printer persistent for UI jobs
     if (i_xController->isShowDialogs() && !i_xController->isDirectPrint())
     {
-        SettingsConfigItem* pItem = SettingsConfigItem::get();
-        pItem->setValue( u"PrintDialog"_ustr,
-                         u"LastPrinterUsed"_ustr,
-                         GetName()
-                         );
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::VCL::VCLSettings::PrintDialog::LastPrinter::set( GetName(), batch );
+        batch->commit();
     }
 
     return true;

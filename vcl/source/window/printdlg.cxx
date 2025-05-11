@@ -606,9 +606,7 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     else
     {
         // fall back to last printer
-        SettingsConfigItem* pItem = SettingsConfigItem::get();
-        OUString aValue( pItem->getValue( u"PrintDialog"_ustr,
-                                        u"LastPrinter"_ustr ) );
+        OUString aValue( officecfg::VCL::VCLSettings::PrintDialog::LastPrinter::get() );
         if (mxPrinters->find_text(aValue) != -1)
         {
             mxPrinters->set_active_text(aValue);
@@ -751,10 +749,9 @@ void PrintDialog::storeToSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-    pItem->setValue( u"PrintDialog"_ustr,
-                     u"LastPrinter"_ustr,
+    officecfg::VCL::VCLSettings::PrintDialog::LastPrinter::set(
                       isPrintToFile() ? Printer::GetDefaultPrinterName()
-                                      : mxPrinters->get_active_text() );
+                                      : mxPrinters->get_active_text(), batch );
 
     pItem->setValue( u"PrintDialog"_ustr,
                      u"LastPage"_ustr,

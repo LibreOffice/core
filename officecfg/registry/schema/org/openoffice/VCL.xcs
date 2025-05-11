@@ -127,6 +127,9 @@
                 <prop oor:name="Collate" oor:type="xs:boolean" oor:nillable="false">
                     <value>true</value>
                 </prop>
+                <prop oor:name="LastPrinter" oor:type="xs:string" oor:nillable="false">
+                    <value/>
+                </prop>
             </group>
             <group oor:name="WM">
                 <prop oor:name="ShouldSwitchWorkspace" oor:type="xs:boolean" oor:nillable="false">
