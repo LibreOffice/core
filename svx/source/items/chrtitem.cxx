@@ -201,7 +201,7 @@ bool SvxChartColorPaletteItem::QueryValue(uno::Any& rVal, const sal_uInt8 nMembe
 {
     if (nMemberId == MID_CHART_COLOR_PALETTE_TYPE)
     {
-        rVal <<= static_cast<sal_Int32>(meType);
+        rVal <<= static_cast<sal_uInt8>(meType);
         return true;
     }
     if (nMemberId == MID_CHART_COLOR_PALETTE_INDEX)
@@ -216,7 +216,7 @@ bool SvxChartColorPaletteItem::PutValue(const uno::Any& rVal, const sal_uInt8 nM
 {
     if (nMemberId == MID_CHART_COLOR_PALETTE_TYPE)
     {
-        sal_Int32 nType = -1;
+        sal_uInt8 nType = 0;
         rVal >>= nType;
         meType = static_cast<ChartColorPaletteType>(nType);
         return true;
