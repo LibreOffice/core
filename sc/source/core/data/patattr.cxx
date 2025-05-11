@@ -445,11 +445,8 @@ static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
 {
     if (pStr1 == pStr2)
         return true;
-    if (pStr1 && !pStr2)
-        return false;
-    if (!pStr1 && pStr2)
-        return false;
-    assert(pStr1 && pStr2);
+    if (pStr1 == nullptr || pStr2 == nullptr)
+        return false; // one ptr is nullptr, not both, that would have triggered above
     return *pStr1 == *pStr2;
 }
 
