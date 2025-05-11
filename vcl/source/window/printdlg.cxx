@@ -753,9 +753,8 @@ void PrintDialog::storeToSettings()
                       isPrintToFile() ? Printer::GetDefaultPrinterName()
                                       : mxPrinters->get_active_text(), batch );
 
-    pItem->setValue( u"PrintDialog"_ustr,
-                     u"LastPage"_ustr,
-                     mxTabCtrl->get_tab_label_text(mxTabCtrl->get_current_page_ident()));
+    officecfg::VCL::VCLSettings::PrintDialog::LastPage::set(
+                     mxTabCtrl->get_tab_label_text(mxTabCtrl->get_current_page_ident()), batch);
 
     pItem->setValue( u"PrintDialog"_ustr,
                      u"WindowState"_ustr,
@@ -786,8 +785,7 @@ void PrintDialog::readFromSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
 
     // read last selected tab page; if it exists, activate it
-    OUString aValue = pItem->getValue( u"PrintDialog"_ustr,
-                              u"LastPage"_ustr );
+    OUString aValue = officecfg::VCL::VCLSettings::PrintDialog::LastPage::get();
     sal_uInt16 nCount = mxTabCtrl->get_n_pages();
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
