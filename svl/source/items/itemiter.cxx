@@ -25,16 +25,13 @@ SfxItemState SfxItemIter::GetItemState(bool bSrchInParent, const SfxPoolItem** p
     if (IsAtEnd())
         return SfxItemState::UNKNOWN;
 
-    const sal_uInt16 nWhich(maCurrent->first);
-    SfxItemState eState(
-        m_rSet.GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, true, ppItem));
+    SfxItemState eState(SfxItemSet::GetItemState_ForIter(maCurrent, ppItem));
 
     // search in parent?
     if (bSrchInParent && nullptr != m_rSet.GetParent()
         && (SfxItemState::UNKNOWN == eState || SfxItemState::DEFAULT == eState))
     {
-        // nOffset was only valid for *local* SfxItemSet, need to continue with WhichID
-        // const sal_uInt16 nWhich(m_rSet.GetWhichByOffset(m_nCurrent));
+        const sal_uInt16 nWhich(maCurrent->first);
         eState = m_rSet.GetParent()->GetItemState_ForWhichID(eState, nWhich, true, ppItem);
     }
 
