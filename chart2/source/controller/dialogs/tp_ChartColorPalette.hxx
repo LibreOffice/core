@@ -27,6 +27,8 @@ namespace chart
 class ChartModel;
 class ChartColorPaletteHelper;
 
+// This tab page is used to set up data series colors according to a given color palette
+// It is present in the Chart Format Dialog for several chart elements.
 class ChartColorPaletteTabPage final : public SfxTabPage
 {
 public:

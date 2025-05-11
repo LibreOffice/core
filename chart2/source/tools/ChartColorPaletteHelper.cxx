@@ -49,12 +49,12 @@ void ChartColorPaletteHelper::createBasePaletteFromTheme(
     {
         SAL_WARN("chart2",
                  "ChartColorPaletteHelper::createBasePaletteFromTheme: no valid theme provided");
-        mBasePalette[0] = Color::STRtoRGB(u"18A303");
-        mBasePalette[1] = Color::STRtoRGB(u"0369A3");
-        mBasePalette[2] = Color::STRtoRGB(u"A33E03");
-        mBasePalette[3] = Color::STRtoRGB(u"8E03A3");
-        mBasePalette[4] = Color::STRtoRGB(u"C99C00");
-        mBasePalette[5] = Color::STRtoRGB(u"C9211E");
+        mBasePalette[0] = 0x18A303;
+        mBasePalette[1] = 0x0369A3;
+        mBasePalette[2] = 0xA33E03;
+        mBasePalette[3] = 0x8E03A3;
+        mBasePalette[4] = 0xC99C00;
+        mBasePalette[5] = 0xC9211E;
     }
 }
 
