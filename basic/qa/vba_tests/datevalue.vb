@@ -24,4 +24,4 @@ Function verify_testDateValue() as String
     Exit Function
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testFix", Err, Error$, Erl)
-End Sub
+End Function

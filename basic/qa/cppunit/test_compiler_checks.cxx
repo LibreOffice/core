@@ -167,4 +167,59 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf93727_const)
     aMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("#Const directive causes compile error", !aMacro.HasError());
 }
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162983_property_get_end_function)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Property Get doUnitTest\n"
+                        "End Function\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(!aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162983_property_get_end_sub)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Property Get doUnitTest\n"
+                        "End Sub\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(!aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162983_sub_end_function)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Sub doUnitTest\n"
+                        "End Function\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162983_sub_end_property)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Sub doUnitTest\n"
+                        "End Property\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162983_function_end_sub)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Function doUnitTest\n"
+                        "End Sub\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162983_function_end_property)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Function doUnitTest\n"
+                        "End Property\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

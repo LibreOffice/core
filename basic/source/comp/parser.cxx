@@ -362,8 +362,8 @@ bool SbiParser::Parse()
     // end of parsing?
     if( eCurTok == eEndTok ||
         ( bVBASupportOn &&      // #i109075
-          (eCurTok == ENDFUNC || eCurTok == ENDPROPERTY || eCurTok == ENDSUB) &&
-          (eEndTok == ENDFUNC || eEndTok == ENDPROPERTY || eEndTok == ENDSUB) ) )
+          eEndTok == ENDPROPERTY &&
+          ( eCurTok == ENDFUNC || eCurTok == ENDSUB) ) )
     {
         Next();
         if( eCurTok != NIL )
