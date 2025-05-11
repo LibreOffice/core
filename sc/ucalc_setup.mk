@@ -52,6 +52,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc$(1), \
     editeng \
     for \
     forui \
+    fwk \
     i18nlangtag \
     i18nutil \
 	$(call gb_Helper_optional,OPENCL, \

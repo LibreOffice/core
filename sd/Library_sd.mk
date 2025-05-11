@@ -78,6 +78,7 @@ $(eval $(call gb_Library_use_libraries,sd,\
 	drawinglayercore \
 	drawinglayer \
 	editeng \
+	fwk \
 	i18nlangtag \
 	i18nutil \
 	icg \

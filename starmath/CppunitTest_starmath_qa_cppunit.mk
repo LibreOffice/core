@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
     cppu \
     cppuhelper \
     editeng \
+    fwk \
     i18nlangtag \
     i18nutil \
     msfilter \

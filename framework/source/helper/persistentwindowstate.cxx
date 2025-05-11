@@ -22,6 +22,10 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -101,13 +105,19 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
     if (sModuleName.isEmpty())
         return;
 
+    css::uno::Reference<css::frame::XModel> xModel;
+    if (auto xController = xFrame->getController())
+        xModel = xController->getModel();
+
     switch(aEvent.Action)
     {
         case css::frame::FrameAction_COMPONENT_ATTACHED :
             {
                 if (bRestoreWindowState)
                 {
-                    OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xContext, sModuleName);
+                    OUString sWindowState = PersistentWindowState::implst_getWindowStateFromModel(xModel);
+                    if (sWindowState.isEmpty())
+                        sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xContext, sModuleName);
                     PersistentWindowState::implst_setWindowStateOnWindow(xWindow,sWindowState);
                     SolarMutexGuard g;
                     m_bWindowStateAlreadySet = true;
@@ -282,6 +292,50 @@ void PersistentWindowState::SaveWindowStateToConfig(const css::uno::Reference<cs
 
     OUString sWindowState = PersistentWindowState::implst_getWindowStateFromWindow(xWindow);
     PersistentWindowState::implst_setWindowStateOnConfig(rContext, sModuleName, sWindowState);
+}
+
+OUString PersistentWindowState::implst_getWindowStateFromModel(const css::uno::Reference<css::frame::XModel>& xModel)
+{
+    if (!xModel)
+        return {};
+
+    OUString sWindowState;
+
+    if (auto xViewDataSupplier = xModel.query<css::document::XViewDataSupplier>())
+    {
+        css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
+        if (xIndexAccess && xIndexAccess->getCount() > 0)
+        {
+            css::uno::Sequence<css::beans::PropertyValue> aSeq;
+            if (xIndexAccess->getByIndex(0) >>= aSeq)
+            {
+                for (const auto& rProp : aSeq)
+                {
+                    OUString sName(rProp.Name);
+                    if (sName == "WindowState")
+                    {
+                        rProp.Value >>= sWindowState;
+                        if (!sWindowState.isEmpty())
+                        {
+                            return sWindowState;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // no view supplier or empty window state
+    if (auto xProps = xModel.query<css::beans::XPropertySet>())
+    {
+        if (auto xInfo = xProps->getPropertySetInfo();
+            xInfo && xInfo->hasPropertyByName(u"WindowState"_ustr))
+        {
+            css::uno::Any any = xProps->getPropertyValue(u"WindowState"_ustr);
+            any >>= sWindowState;
+        }
+    }
+
+    return sWindowState;
 }
 
 

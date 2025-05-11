@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -162,6 +163,13 @@ class PersistentWindowState final : public  ::cppu::WeakImplHelper<
          */
         static void implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
                                                   std::u16string_view                      sWindowState);
+
+        /** @short  retrieve the window state from the model if exported.
+
+            @return [string]
+                    contains the information about position and size.
+         */
+        static OUString implst_getWindowStateFromModel(const css::uno::Reference<css::frame::XModel>& xModel);
 
 }; // class PersistentWindowState
 

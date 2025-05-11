@@ -109,6 +109,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <framework/windowstatehelper.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svtools/embedhlp.hxx>
@@ -1508,6 +1509,10 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             rValue.Value >>= bKeepRatio;
             bGotKeepRatio = true;
         }
+        else if (rValue.Name == "WindowState")
+        {
+            rValue.Value >>= m_sOldWindowState;
+        }
         // Fallback to common SdrModel processing
         else
            GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->ReadUserDataSequenceValue(&rValue);
@@ -1687,6 +1692,9 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
 
     aVector.push_back(
         comphelper::makePropertyValue(u"KeepRatio"_ustr, m_pWrtShell->GetViewOptions()->IsKeepRatio()));
+
+    // get the current window state for export
+    aVector.push_back(comphelper::makePropertyValue(u"WindowState"_ustr, ::framework::WindowStateHelper::GetFromWindow(GetWindow())));
 
     rSequence = comphelper::containerToSequence(aVector);
 

@@ -77,6 +77,7 @@ $(eval $(call gb_Library_use_libraries,sc,\
     editeng \
     for \
     forui \
+    fwk \
     i18nlangtag \
     i18nutil \
     $(call gb_Helper_optional,OPENCL, \

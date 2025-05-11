@@ -56,6 +56,7 @@
 
 #include <Window.hxx>
 
+#include <framework/windowstatehelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
 #include <svx/charthelper.hxx>
@@ -943,7 +944,7 @@ sal_Int8 ViewShell::ExecuteDrop (
 void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
     const sal_Int32 nIndex = rSequence.getLength();
-    rSequence.realloc( nIndex + 1 );
+    rSequence.realloc( nIndex + 2 );
     auto pSequence = rSequence.getArray();
 
     OSL_ASSERT (GetViewShell()!=nullptr);
@@ -956,11 +957,19 @@ void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     pSequence[nIndex].Name = sUNO_View_ViewId;
     pSequence[nIndex].Value <<= "view" + OUString::number( static_cast<sal_uInt16>(nViewID));
 
+    pSequence[nIndex].Name = u"WindowState"_ustr;
+    pSequence[nIndex].Value <<= ::framework::WindowStateHelper::GetFromWindow(GetViewShellBase().GetWindow());
+
     mpFrameView->WriteUserDataSequence( rSequence );
 }
 
 void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
+    for (const css::beans::PropertyValue& rValue : rSequence)
+    {
+        if (rValue.Name == "WindowState")
+            rValue.Value >>= msOldWindowState;
+    }
     mpFrameView->ReadUserDataSequence( rSequence );
 }
 

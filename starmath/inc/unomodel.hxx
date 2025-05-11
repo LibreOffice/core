@@ -93,6 +93,7 @@ public:
     virtual Size getFormulaSize() const override;
 
 private:
+    OUString msOldWindowState; // imported window state
     SmDocShell* GetSmDocShell() const;
 };
 

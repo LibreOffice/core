@@ -125,6 +125,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/fwe/helper/titlehelper \
     framework/source/fwe/helper/documentundoguard \
     framework/source/fwe/helper/undomanagerhelper \
+    framework/source/fwe/helper/windowstatehelper \
     framework/source/fwe/xml/menuconfiguration \
     framework/source/fwe/xml/menudocumenthandler \
     framework/source/fwe/xml/saxnamespacefilter \

@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/Any.h>
 
 #include <officecfg/Office/Common.hxx>
+#include <framework/windowstatehelper.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
@@ -513,6 +514,10 @@ void SmXMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
     Reference<XPropertySet> xProps(GetModel(), UNO_QUERY);
     if (!xProps.is())
         return;
+
+    // update window state value
+    OUString sWindowState = ::framework::WindowStateHelper::GetFromModel(GetModel());
+    xProps->setPropertyValue(u"WindowState"_ustr, css::uno::Any(sWindowState));
 
     Reference<XPropertySetInfo> xPropertySetInfo = xProps->getPropertySetInfo();
     if (!xPropertySetInfo.is())

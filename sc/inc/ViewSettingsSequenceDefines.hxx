@@ -24,7 +24,7 @@
 // this are the defines for the position of the settings in the
 // ViewSettingsSequence
 
-#define SC_VIEWSETTINGS_COUNT               27
+#define SC_VIEWSETTINGS_COUNT               28
 
 #define SC_VIEW_ID                          0
 #define SC_TABLE_VIEWSETTINGS               1
@@ -53,6 +53,7 @@
 #define SC_RASTERSUBY                       24
 #define SC_RASTERSYNC                       25
 #define SC_FORMULA_BAR_HEIGHT               26
+#define SC_WINDOW_STATE                     27
 
 // this are the defines for the position of the settings in the
 // TableViewSettingsSequence
@@ -101,5 +102,7 @@ inline constexpr OUString SC_SHOWPAGEBREAKPREVIEW = u"ShowPageBreakPreview"_ustr
 inline constexpr OUString SC_FORMULABARHEIGHT = u"FormulaBarHeight"_ustr;
 inline constexpr OUString SC_VIEWID = u"ViewId"_ustr;
 #define SC_VIEW                             "view"
+
+inline constexpr OUString SC_WINDOWSTATE = u"WindowState"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

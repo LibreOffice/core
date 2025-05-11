@@ -19,6 +19,7 @@
 
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
+#include <framework/windowstatehelper.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <o3tl/string_view.hxx>
@@ -825,8 +826,8 @@ ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh) :
         {
             ++mnTabNumber;
             maTabData.emplace_back(nullptr);
+            maTabData[mnTabNumber].reset( new ScViewDataTable(mrDoc) );
         }
-        maTabData[mnTabNumber].reset( new ScViewDataTable(mrDoc) );
         pThisTab = maTabData[mnTabNumber].get();
     }
 
@@ -3844,6 +3845,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     pSettings[SC_RASTERSUBY].Value <<= static_cast<sal_Int32>(aGridOpt.GetFieldDivisionY());
     pSettings[SC_RASTERSYNC].Name = SC_UNO_RASTERSYNC;
     pSettings[SC_RASTERSYNC].Value <<= aGridOpt.GetSynchronize();
+    pSettings[SC_WINDOW_STATE].Name = SC_WINDOWSTATE;
+    pSettings[SC_WINDOW_STATE].Value <<= ::framework::WindowStateHelper::GetFromWindow( pView->GetWindow() );
 
     // Common SdrModel processing
     GetDocument().GetDrawLayer()->WriteUserDataSequence(rSettings);
@@ -3994,6 +3997,10 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         }
         else if ( sName == SC_UNO_VALUEHIGH && !comphelper::LibreOfficeKit::isActive() )
             maOptions.SetOption(sc::ViewOption::SYNTAX, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+        else if (sName == SC_WINDOWSTATE)
+        {
+            rSetting.Value >>= msOldWindowState;
+        }
         else
         {
             ScGridOptions aGridOpt(maOptions.GetGridOptions());
