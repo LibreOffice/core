@@ -759,10 +759,6 @@ void PrintDialog::storeToSettings()
     officecfg::VCL::VCLSettings::PrintDialog::WindowState::set(
                      m_xDialog->get_window_state(vcl::WindowDataMask::All), batch );
 
-    pItem->setValue( u"PrintDialog"_ustr,
-                     u"CopyCount"_ustr,
-                     mxCopyCountField->get_text() );
-
     officecfg::VCL::VCLSettings::PrintDialog::Collate::set( mxCollateBox->get_active(), batch );
 
     pItem->setValue( u"PrintDialog"_ustr,
