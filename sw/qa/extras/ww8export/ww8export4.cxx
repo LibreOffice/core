@@ -234,6 +234,17 @@ DECLARE_WW8EXPORT_TEST(testTdf162542, "tdf162542_notLayoutInCell_charLeft_wrapTh
     CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr)); // tdf#162551
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf166503, "tdf166503_DoNotUseHTMLParagraphAutoSpacing.doc")
+{
+    // forum-en-5864.doc: a file with m_xWDop->fDontUseHTMLAutoSpacing compat flag set.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    assertXPathContent(pDump, "//page[2]//section//txt[1]", u"First Heading");
+    sal_Int32 nTop = getXPath(pDump, "//page[2]//section//txt[1]//bounds","top").toInt32();
+    // The paragraph is to be laid out with a full 12pt before spacing (not reduced to 6pt).
+    // Without the fix, this was 17662
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(17782), nTop);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndDOC)
 {
     // Given a document, endnotes at collected at section end:

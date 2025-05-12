@@ -1551,6 +1551,10 @@ static void lcl_PartiallyCollapseUpper(const SwFrame& rFrame, SwTwips& rUpper)
     if (!bCompat15 && !bCompat14)
         return;
 
+    // are we even allowed to consolidate the below and above spacing between paragraphs?
+    if (rIDSA.get(DocumentSettingId::PARA_SPACE_MAX)) // DontUseHTMLAutoSpacing
+        return;
+
     const SwContentFrame* pPrevPara = pTextFrame->FindPrevCnt();
     while (pPrevPara && pPrevPara->IsHiddenNow())
         pPrevPara = pPrevPara->FindPrevCnt();
