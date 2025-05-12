@@ -533,7 +533,7 @@ public:
     /// Delete, split enumeration list.
     void DelNumRules();
 
-    void NumUpDown( bool bDown = true );
+    SW_DLLPUBLIC void NumUpDown( bool bDown = true );
 
     SW_DLLPUBLIC bool MoveParagraph( SwNodeOffset nOffset = SwNodeOffset(1));
     bool MoveNumParas( bool bUpperLower, bool bUpperLeft );
