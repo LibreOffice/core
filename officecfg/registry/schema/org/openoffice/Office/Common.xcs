@@ -3362,13 +3362,15 @@
         </info>
         <value>
           <it>•</it>
-          <it>●</it>
-          <it>○</it>
-          <it>□</it>
-          <it>►</it>
-          <it>→</it>
-          <it>-</it>
-          <it>–</it>
+          <it>◦</it>
+          <it>▪</it>
+          <it>•</it>
+          <it>◦</it>
+          <it>▪</it>
+          <it>•</it>
+          <it>◦</it>
+          <it>▪</it>
+          <it>•</it>
         </value>
       </prop>
       <prop oor:name="DefaultBulletsFonts" oor:type="oor:string-list" oor:nillable="false">
@@ -3376,6 +3378,8 @@
           <desc>List of default bullet fonts. Matching font for `DefaultBullets`.</desc>
         </info>
         <value>
+          <it>OpenSymbol</it>
+          <it>OpenSymbol</it>
           <it>OpenSymbol</it>
           <it>OpenSymbol</it>
           <it>OpenSymbol</it>

@@ -506,6 +506,43 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlysAnchorJoin)
     pWrtShell->SttEndDoc(/*bStt=*/false);
     CPPUNIT_ASSERT_EQUAL(u"second para"_ustr, pCursor->GetPointNode().GetTextNode()->GetText());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testBulletCharChangeOnIndent)
+{
+    // Given an empty document:
+    createSwDoc();
+
+    // When adding 2 bullets, A is level 1, B is level 2:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->BulletOn();
+    pWrtShell->Insert(u"A"_ustr);
+    pWrtShell->SplitNode();
+    // Increase indent: downgrade to level 2.
+    pWrtShell->NumUpDown(/*bDown=*/true);
+    pWrtShell->Insert(u"B"_ustr);
+
+    // Then make sure the bullet characters are different:
+    pWrtShell->Up(/*bSelect=*/false);
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    sal_UCS4 nBullet1 = 0;
+    {
+        SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
+        SwNumRule* pNumRule = pTextNode->GetNumRule();
+        const SwNumFormat& rNumFormat = pNumRule->Get(pTextNode->GetActualListLevel());
+        nBullet1 = rNumFormat.GetBulletChar();
+    }
+    pWrtShell->Down(/*bSelect=*/false);
+    sal_UCS4 nBullet2 = 0;
+    {
+        SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
+        SwNumRule* pNumRule = pTextNode->GetNumRule();
+        const SwNumFormat& rNumFormat = pNumRule->Get(pTextNode->GetActualListLevel());
+        nBullet2 = rNumFormat.GetBulletChar();
+    }
+    // Without the accompanying fix in place, this test would have failed, while nBullet1 should be
+    // • and nBullet2 should be ◦.
+    CPPUNIT_ASSERT(nBullet1 != nBullet2);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

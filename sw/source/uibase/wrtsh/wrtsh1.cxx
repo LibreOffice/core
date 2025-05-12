@@ -1638,9 +1638,11 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                     officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
                 uno::Sequence<OUString> aBulletSymbolsFonts(
                     officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
-                aFormat.SetBulletChar(aBulletSymbols[0].toChar());
+                sal_Int32 nBulletSymbolIndex = nLvl < aBulletSymbols.getLength() ? nLvl : 0;
+                aFormat.SetBulletChar(aBulletSymbols[nBulletSymbolIndex].toChar());
                 vcl::Font aFont;
-                aFont.SetFamilyName(aBulletSymbolsFonts[0]);
+                sal_Int32 nBulletSymbolsFontIndex = nLvl < aBulletSymbolsFonts.getLength() ? nLvl : 0;
+                aFont.SetFamilyName(aBulletSymbolsFonts[nBulletSymbolsFontIndex]);
                 aFormat.SetBulletFont(&aFont);
                 aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 // #i93908# clear suffix for bullet lists
