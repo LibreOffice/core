@@ -4169,6 +4169,7 @@ StackVar ScInterpreter::Interpret()
                     case ocHStack           : ScHStack();                   break;
                     case ocVStack           : ScVStack();                   break;
                     case ocTake             : ScTake();                     break;
+                    case ocTextBefore       : ScTextBefore();               break;
                     case ocTextSplit        : ScTextSplit();                break;
                     case ocToCol            : ScToCol();                    break;
                     case ocToRow            : ScToRow();                    break;

@@ -607,6 +607,7 @@ inline constexpr OUString HID_FUNC_EXPAND_MS = u"SC_HID_FUNC_EXPAND_MS"_ustr;
 inline constexpr OUString HID_FUNC_HSTACK_MS = u"SC_HID_FUNC_HSTACK_MS"_ustr;
 inline constexpr OUString HID_FUNC_VSTACK_MS = u"SC_HID_FUNC_VSTACK_MS"_ustr;
 inline constexpr OUString HID_FUNC_TAKE_MS = u"SC_HID_FUNC_TAKE_MS"_ustr;
+inline constexpr OUString HID_FUNC_TEXTBEFORE_MS = u"SC_HID_FUNC_TEXTBEFORE_MS"_ustr;
 inline constexpr OUString HID_FUNC_TEXTSPLIT_MS = u"SC_HID_FUNC_TEXTSPLIT_MS"_ustr;
 inline constexpr OUString HID_FUNC_TOCOL_MS = u"SC_HID_FUNC_TOCOL_MS"_ustr;
 inline constexpr OUString HID_FUNC_TOROW_MS = u"SC_HID_FUNC_TOROW_MS"_ustr;
