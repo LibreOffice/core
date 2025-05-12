@@ -186,7 +186,7 @@ void QtInstanceNotebook::currentTabChanged()
     m_sCurrentTabId = get_current_page_ident();
 
     if (!m_sCurrentTabId.isEmpty())
-        m_aLeavePageHdl.Call(m_sCurrentTabId);
+        m_aEnterPageHdl.Call(m_sCurrentTabId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
