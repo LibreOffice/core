@@ -9076,11 +9076,30 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
             break;
         case SvxAdjust::BlockLine:
         case SvxAdjust::Block:
+        {
             if (rAdjust.GetLastBlock() == SvxAdjust::Block)
                 pAdjustString = "distribute";
             else
                 pAdjustString = "both";
+            switch ( rAdjust.GetPropWordSpacingMinimum() )
+            {
+                case 133:
+                    if ( rAdjust.GetPropWordSpacingMaximum() == 133 )
+                        pAdjustString = "lowKashida";
+                    break;
+                case 200:
+                    if ( rAdjust.GetPropWordSpacingMaximum() == 200 )
+                        pAdjustString = "mediumKashida";
+                    break;
+                case 300:
+                    if ( rAdjust.GetPropWordSpacingMaximum() == 300 )
+                        pAdjustString = "highKashida";
+                    break;
+                default:
+                    break;
+            }
             break;
+        }
         case SvxAdjust::Center:
             pAdjustString = "center";
             break;

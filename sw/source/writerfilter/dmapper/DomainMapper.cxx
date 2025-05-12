@@ -4880,6 +4880,7 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::to
     style::ParagraphAdjust nAdjust = style::ParagraphAdjust_LEFT;
     style::ParagraphAdjust nLastLineAdjust = style::ParagraphAdjust_LEFT;
     OUString aStringValue = u"left"_ustr;
+    sal_uInt16 nWordSpacing = 100;
     switch(nIntValue)
     {
     case NS_ooxml::LN_Value_ST_Jc_center:
@@ -4898,6 +4899,21 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::to
         nAdjust = style::ParagraphAdjust_BLOCK;
         aStringValue = "both";
         break;
+    case NS_ooxml::LN_Value_ST_Jc_lowKashida:
+        nAdjust = style::ParagraphAdjust_BLOCK;
+        // modify this value also in sw/source/filter/ww8/docxattributeoutput.cxx
+        nWordSpacing = 133;
+        break;
+    case NS_ooxml::LN_Value_ST_Jc_mediumKashida:
+        nAdjust = style::ParagraphAdjust_BLOCK;
+        // modify this value also in sw/source/filter/ww8/docxattributeoutput.cxx
+        nWordSpacing = 200;
+        break;
+    case NS_ooxml::LN_Value_ST_Jc_highKashida:
+        nAdjust = style::ParagraphAdjust_BLOCK;
+        // modify this value also in sw/source/filter/ww8/docxattributeoutput.cxx
+        nWordSpacing = 300;
+        break;
     case NS_ooxml::LN_Value_ST_Jc_left:
     case NS_ooxml::LN_Value_ST_Jc_start:
     default:
@@ -4906,6 +4922,12 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::to
     }
     rContext->Insert( PROP_PARA_ADJUST, uno::Any( nAdjust ) );
     rContext->Insert( PROP_PARA_LAST_LINE_ADJUST, uno::Any( nLastLineAdjust ) );
+    if ( nWordSpacing > 100 )
+    {
+        rContext->Insert( PROP_PARA_WORD_SPACING, uno::Any( nWordSpacing ) );
+        rContext->Insert( PROP_PARA_WORD_SPACING_MINIMUM, uno::Any( nWordSpacing ) );
+        rContext->Insert( PROP_PARA_WORD_SPACING_MAXIMUM, uno::Any( nWordSpacing ) );
+    }
     m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, u"jc"_ustr, aStringValue);
 }
 

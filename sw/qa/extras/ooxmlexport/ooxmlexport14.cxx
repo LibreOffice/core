@@ -757,6 +757,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf161628, "tdf132599_frames_on_right_pages_no_hyph
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf155707)
+{
+    loadAndSave("tdf155707.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:jc", "val", u"lowKashida");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:jc", "val", u"mediumKashida");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[17]/w:pPr/w:jc", "val", u"highKashida");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf161643)
 {
     loadAndSave("fdo76163.docx");

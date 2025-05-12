@@ -369,7 +369,11 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
          pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING);
     bool bInteropSmartJustify = bFullJustified &&
             rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING);
+                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) &&
+                    // support different Kashida etc. values
+                    aAdjustItem.GetPropWordSpacing() == 100 &&
+                    aAdjustItem.GetPropWordSpacingMinimum() == 100 &&
+                    aAdjustItem.GetPropWordSpacingMaximum() == 100;
     bool bWordSpacing = bFullJustified && !bInteropSmartJustify &&
            aAdjustItem.GetPropWordSpacing() != 100;
     bool bWordSpacingMaximum = bFullJustified && !bInteropSmartJustify &&
