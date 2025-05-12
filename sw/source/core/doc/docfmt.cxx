@@ -2005,7 +2005,7 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
         pWriter = xmlNewTextWriterFilename("nodes.xml", 0);
         xmlTextWriterSetIndent(pWriter,1);
         (void)xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
-        (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        (void)xmlTextWriterStartDocument(pWriter, nullptr, "UTF-8", nullptr);
         bOwns = true;
     }
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwDoc"));

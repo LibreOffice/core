@@ -83,7 +83,7 @@ public:
                                css::style::NumberingType::BITMAP != nNumType;
                     }
 
-    void dumpAsXml(xmlTextWriterPtr w) const;
+    virtual void dumpAsXml(xmlTextWriterPtr w) const;
 };
 
 class EDITENG_DLLPUBLIC SvxNumberFormat : public SvxNumberType
@@ -233,6 +233,8 @@ public:
 
     bool GetIsLegal() const { return mbIsLegal; }
     void SetIsLegal(bool val) { mbIsLegal = val; }
+
+    void dumpAsXml(xmlTextWriterPtr w) const override;
 };
 
 //Feature-Flags (only sal_uInt16!)

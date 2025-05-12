@@ -273,6 +273,21 @@ bool SwNumFormat::IsItemize() const
 
 }
 
+void SwNumFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwNumFormat"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    SvxNumberFormat::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("grf-bullet-cp"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OUString(&m_cGrfBulletCP, 1).toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwNumFormat& SwNumFormat::operator=( const SwNumFormat& rNumFormat)
 {
     SvxNumberFormat::operator=(rNumFormat);
