@@ -106,6 +106,4 @@ https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part4-formula/OpenDocume
   * AVERAGEIFS
 * Text Functions
   * SEARCH
-  * TEXTAFTER
-  * TEXTBEFORE
 
