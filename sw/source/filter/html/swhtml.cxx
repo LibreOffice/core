@@ -5647,12 +5647,8 @@ void HTMLReader::SetupFilterOptions()
         return;
 
     OUString aFilterOptions = pItem->GetValue();
-    static constexpr OUString aXhtmlNsKey(u"xhtmlns="_ustr);
-    if (aFilterOptions.startsWith(aXhtmlNsKey))
-    {
-        OUString aNamespace = aFilterOptions.copy(aXhtmlNsKey.getLength());
+    if (OUString aNamespace; aFilterOptions.startsWith("xhtmlns=", &aNamespace))
         m_aNamespace = aNamespace;
-    }
 }
 
 namespace
