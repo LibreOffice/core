@@ -27,25 +27,25 @@
 
 class SVXCORE_DLLPUBLIC SvxIMapInfo final : public SdrObjUserData, public SfxListener
 {
-    ImageMap aImageMap;
+    ImageMap m_aImageMap;
 
 public:
     SvxIMapInfo(const ImageMap& rImageMap)
         : SdrObjUserData(SdrInventor::StarDrawUserData, SVX_IMAPINFO_ID)
-        , aImageMap(rImageMap){};
+        , m_aImageMap(rImageMap){};
 
     SvxIMapInfo(const SvxIMapInfo& rIMapInfo)
         : SdrObjUserData(SdrInventor::StarDrawUserData, SVX_IMAPINFO_ID)
         , SfxListener()
-        , aImageMap(rIMapInfo.aImageMap){};
+        , m_aImageMap(rIMapInfo.m_aImageMap){};
 
     virtual std::unique_ptr<SdrObjUserData> Clone(SdrObject*) const override
     {
         return std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*this));
     }
 
-    void SetImageMap(const ImageMap& rIMap) { aImageMap = rIMap; }
-    const ImageMap& GetImageMap() const { return aImageMap; }
+    void SetImageMap(const ImageMap& rIMap) { m_aImageMap = rIMap; }
+    const ImageMap& GetImageMap() const { return m_aImageMap; }
 
     static SvxIMapInfo* GetIMapInfo(const SdrObject* pObject);
     static IMapObject* GetHitIMapObject(const SdrObject* pObj, const Point& rWinPoint,
