@@ -4329,6 +4329,24 @@ const TranslateId SC_OPCODE_TAKE_ARY[] =
     NC_("SC_OPCODE_TAKE", "The number of columns to take. A negative value takes from the end of the array.")
 };
 
+// -=*# Resource for function TEXTAFTER #*=-
+const TranslateId SC_OPCODE_TEXTAFTER_ARY[] =
+{
+    NC_("SC_OPCODE_TEXTAFTER", "Returns the text that occurs after a given substring or delimiter."),
+    NC_("SC_OPCODE_TEXTAFTER", "Text"),
+    NC_("SC_OPCODE_TEXTAFTER", "The original text."),
+    NC_("SC_OPCODE_TEXTAFTER", "Delimiter"),
+    NC_("SC_OPCODE_TEXTAFTER", "The delimiter. Multiple delimiters can be supplied."),
+    NC_("SC_OPCODE_TEXTAFTER", "Instance Number"),
+    NC_("SC_OPCODE_TEXTAFTER", "The instance of the delimiter after which to extract text. The default is 1. A negative number starts searching from the end."),
+    NC_("SC_OPCODE_TEXTAFTER", "Match Mode"),
+    NC_("SC_OPCODE_TEXTAFTER", "Set to 1 to perform a case-insensitive match. The default is 0."),
+    NC_("SC_OPCODE_TEXTAFTER", "Match End"),
+    NC_("SC_OPCODE_TEXTAFTER", "Set to 1 to treat the end of text as a delimiter. The default is 0."),
+    NC_("SC_OPCODE_TEXTAFTER", "If Not Found"),
+    NC_("SC_OPCODE_TEXTAFTER", "The value returned if no match is found. The default is #N/A.")
+};
+
 // -=*# Resource for function TEXTBEFORE #*=-
 const TranslateId SC_OPCODE_TEXTBEFORE_ARY[] =
 {

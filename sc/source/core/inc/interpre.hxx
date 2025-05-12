@@ -736,6 +736,7 @@ private:
     void ScHStack();
     void ScVStack();
     void ScTake();
+    void ScTextAfter();
     void ScTextBefore();
     void ScTextSplit();
     void ScToCol();
@@ -747,6 +748,7 @@ private:
     void ScWrapRows();
 
 private:
+    void ScTextBeforeOrAfter(bool bBefore);
     void ScChooseColsOrRows(bool bCols);
     void ScToColOrRow(bool bCol);
     void ScWrapColsOrRows(bool bCols);

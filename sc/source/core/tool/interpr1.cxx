@@ -9295,7 +9295,17 @@ void ScInterpreter::ScTake()
     ScTakeOrDrop(/*bTake*/ true);
 }
 
+void ScInterpreter::ScTextAfter()
+{
+    ScTextBeforeOrAfter(/*bBefore*/ false);
+}
+
 void ScInterpreter::ScTextBefore()
+{
+    ScTextBeforeOrAfter(/*bBefore*/ true);
+}
+
+void ScInterpreter::ScTextBeforeOrAfter(bool bBefore)
 {
     sal_uInt8 nParamCount = GetByte();
     if (!MustHaveParamCount(nParamCount, 1, 6))
@@ -9393,10 +9403,13 @@ void ScInterpreter::ScTextBefore()
         return;
     }
 
+    std::vector<sal_Int32> aDelimiterPositions;
+    if (bMatchEnd && !bBefore)
+        aDelimiterPositions.push_back(0);
+
     OUString sStr(sText.getString());
     const sal_Int32 nLength (sStr.getLength());
     sal_Int32 nStart(0);
-    std::vector<sal_Int32> aDelimiterPositions;
     while (nStart < nLength)
     {
         sal_Int32 nIndex = nLength;
@@ -9428,12 +9441,17 @@ void ScInterpreter::ScTextBefore()
         }
 
         if (bFound)
-            aDelimiterPositions.push_back(nIndex);
+        {
+            if (bBefore)
+                aDelimiterPositions.push_back(nIndex);
+            else
+                aDelimiterPositions.push_back(nIndex + nDelLength);
+        }
 
         nStart = nIndex + nDelLength;
     }
 
-    if (bMatchEnd)
+    if (bMatchEnd && bBefore)
         aDelimiterPositions.push_back(nLength);
 
     sal_Int32 nSize(aDelimiterPositions.size());
@@ -9449,7 +9467,11 @@ void ScInterpreter::ScTextBefore()
         if (nInstanceNum < 0)
             nInstanceNum = nSize + nInstanceNum + 1;
 
-        PushString(sStr.copy(0, aDelimiterPositions[nInstanceNum - 1]));
+        sal_Int32 aDelPos(aDelimiterPositions[nInstanceNum - 1]);
+        if (bBefore)
+            PushString(sStr.copy(0, aDelPos));
+        else
+            PushString(sStr.copy(aDelPos, nLength - aDelPos));
     }
 }
 

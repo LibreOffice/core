@@ -626,6 +626,7 @@ const XclFunctionInfo saFuncTable_2024[] =
     EXC_FUNCENTRY_V_VR(  ocHStack,     1,  MX, 0,  "HSTACK" ),
     EXC_FUNCENTRY_V_VR(  ocVStack,     1,  MX, 0,  "VSTACK" ),
     EXC_FUNCENTRY_V_VR(  ocTake,       1,  3,  0,  "TAKE" ),
+    EXC_FUNCENTRY_V_VR(  ocTextAfter,  1,  6,  0,  "TEXTAFTER" ),
     EXC_FUNCENTRY_V_VR(  ocTextBefore, 1,  6,  0,  "TEXTBEFORE" ),
     EXC_FUNCENTRY_V_VR(  ocTextSplit,  1,  6,  0,  "TEXTSPLIT" ),
     EXC_FUNCENTRY_V_VR(  ocToCol,      1,  3,  0,  "TOCOL" ),
