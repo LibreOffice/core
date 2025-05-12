@@ -206,7 +206,7 @@ OUString SidebarTextControl::RequestHelp(tools::Rectangle& rHelpRect)
 #if defined(YRS)
 void SidebarTextControl::EditViewInvalidate(const tools::Rectangle& rRect)
 {
-    SAL_DEBUG("YRS EditViewInvalidate");
+    SAL_INFO("sw.yrs", "YRS EditViewInvalidate");
     mrDocView.GetDocShell()->GetDoc()->getIDocumentState().YrsNotifyCursorUpdate();
     mrDocView.GetDocShell()->GetDoc()->getIDocumentState().YrsCommitModified();
     return WeldEditView::EditViewInvalidate(rRect);
@@ -214,7 +214,7 @@ void SidebarTextControl::EditViewInvalidate(const tools::Rectangle& rRect)
 
 void SidebarTextControl::EditViewSelectionChange()
 {
-    SAL_DEBUG("YRS EditViewSelectionChange");
+    SAL_INFO("sw.yrs", "YRS EditViewSelectionChange");
     mrDocView.GetDocShell()->GetDoc()->getIDocumentState().YrsNotifyCursorUpdate();
     return WeldEditView::EditViewSelectionChange();
 }

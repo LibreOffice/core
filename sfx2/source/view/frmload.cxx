@@ -635,7 +635,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     uno::Reference<connection::XConnection> xConnection;
     if (!xModel.is() && aDescriptor.getOrDefault(u"URL"_ustr, OUString()) == "private:factory/swriter" && !getenv("YRSACCEPT"))
     {
-        SAL_DEBUG("YRS connect sfx2");
+        SAL_INFO("sfx.yrs", "YRS connect sfx2");
 
         // must read this SYNC
         auto const conn = u"pipe,name=ytest"_ustr;
@@ -652,7 +652,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                 | static_cast<sal_uInt8>(buf[3]) << 24};
         if (size != 0)
         {
-            SAL_DEBUG("YRS connect reading file of size " << size);
+            SAL_INFO("sfx.yrs", "YRS connect reading file of size " << size);
             uno::Sequence<sal_Int8> buff(size);
             if (xConnection->read(buff, size) != size)
             {

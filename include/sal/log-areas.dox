@@ -199,6 +199,7 @@ certain functionality.
 @li @c editeng.chaining
 @li @c editeng.items
 @li @c editeng.quicktextsize
+@li @c editeng.yrs
 
 @section embeddedobj
 
@@ -373,6 +374,7 @@ certain functionality.
 @li @c sfx.notify
 @li @c sfx.sidebar
 @li @c sfx.view
+@li @c sfx.yrs
 
 @section slideshow
 
@@ -566,6 +568,7 @@ certain functionality.
 @li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
 @li @c sw.ww8.level2 - further info for sw.ww8
 @li @c sw.xml - Writer .odt import/export
+@li @c sw.yrs
 
 @section writerfilter
 

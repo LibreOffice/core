@@ -384,7 +384,7 @@ void EditView::YrsApplyEECursor(OString const& rPeerId, OUString const& rAuthor,
     ::std::optional<EditSelection> const oSel{getEditEngine().GetEditDoc().YrsReadEECursor(point, oMark)};
     if (!oSel)
     {
-        SAL_DEBUG("YRS ignoring invalid cursor position");
+        SAL_INFO("editeng.yrs", "YRS ignoring invalid cursor position");
         return;
     }
     ESelection const esel{getEditEngine().getImpl().CreateESel(*oSel)};

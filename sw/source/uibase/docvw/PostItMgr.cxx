@@ -909,7 +909,7 @@ VclPtr<SwAnnotationWin> SwPostItMgr::GetOrCreateAnnotationWindow(SwAnnotationIte
         pPostIt->SetReadonly(mbReadOnly);
         rItem.mpPostIt = pPostIt;
 #if defined(YRS)
-        SAL_DEBUG("YRS GetOrCreateAnnotationWindow " << rItem.mpPostIt);
+        SAL_INFO("sw.yrs", "YRS GetOrCreateAnnotationWindow " << rItem.mpPostIt);
 #endif
         if (mpAnswer)
         {

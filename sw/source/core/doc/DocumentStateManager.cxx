@@ -214,10 +214,10 @@ public:
                 | static_cast<sal_uInt8>(buf[3]) << 24};
             if (size == 0)
             {
-                SAL_DEBUG("YRS 0");
+                SAL_INFO("sw.yrs", "YRS 0");
                 break;
             }
-            SAL_DEBUG("YRS receive " << size);
+            SAL_INFO("sw.yrs", "YRS receive " << size);
             ::std::unique_ptr<uno::Sequence<sal_Int8>> pBuf{new uno::Sequence<sal_Int8>(size)};
             m_xConnection->read(*pBuf, size);
             Application::PostUserEvent(LINK(this, YrsThread, HandleMessage), pBuf.release());
@@ -238,7 +238,7 @@ struct ObserveState
 
 extern "C" void observe_comments(void *const pState, uint32_t count, YEvent const*const events)
 {
-    SAL_DEBUG("YRS observe_comments");
+    SAL_INFO("sw.yrs", "YRS observe_comments");
     ObserveState & rState{*static_cast<ObserveState*>(pState)};
     // DO NOT call rState.rYrsSupplier.GetWriteTransaction()!
     YTransaction *const pTxn{rState.pTxn};
@@ -566,7 +566,7 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
         yvalidate(rNode.IsTextNode());
         yvalidate(it.first.second <= o3tl::make_unsigned(rNode.GetTextNode()->Len()));
         SwPosition anchorPos{*rNode.GetTextNode(), static_cast<sal_Int32>(it.first.second)};
-        SAL_DEBUG("YRS " << anchorPos);
+        SAL_INFO("sw.yrs", "YRS " << anchorPos);
         SwWrtShell *const pShell{dynamic_cast<SwWrtShell*>(rState.rDoc.getIDocumentLayoutAccess().GetCurrentViewShell())};
         SwPostItFieldType* pType = static_cast<SwPostItFieldType*>(pShell->GetFieldType(0, SwFieldIds::Postit));
         auto pField{
@@ -824,7 +824,7 @@ void YrsReadCursor(ObserveCursorState & rState, OString const& rPeerId,
 
 extern "C" void observe_cursors(void *const pState, uint32_t count, YEvent const*const events)
 {
-    SAL_DEBUG("YRS observe_cursors");
+    SAL_INFO("sw.yrs", "YRS observe_cursors");
     // note: it (very rarely) happens that observe_cursors will be called
     // when a cursor is moved into a comment that is newly inserted, but
     // observe_comments hasn't been called to actually insert the comment yet
@@ -952,11 +952,11 @@ void writeLength(sal_Int8 *& rpBuf, sal_Int32 const len)
 
 IMPL_LINK(YrsThread, HandleMessage, void*, pVoid, void)
 {
-    SAL_DEBUG("YRS HandleMessage");
+    SAL_INFO("sw.yrs", "YRS HandleMessage");
     DBG_TESTSOLARMUTEX();
     if (!m_pDSM)
     {
-        SAL_DEBUG("m_pDSM died");
+        SAL_INFO("sw.yrs", "m_pDSM died");
         return;
     }
     // wrap this, not strictly needed but can't hurt?
@@ -968,7 +968,7 @@ IMPL_LINK(YrsThread, HandleMessage, void*, pVoid, void)
     {
         case ::std::underlying_type_t<Message>(Message::RequestStateVector):
         {
-            SAL_DEBUG("sending state vector");
+            SAL_INFO("sw.yrs", "sending state vector");
             YTransaction *const pTxn{m_pDSM->m_pYrsSupplier->GetWriteTransaction()};
             uint32_t len{0};
             char * pSV = ytransaction_state_vector_v1(pTxn, &len);
@@ -992,7 +992,7 @@ IMPL_LINK(YrsThread, HandleMessage, void*, pVoid, void)
         }
         case ::std::underlying_type_t<Message>(Message::SendStateVector):
         {
-            SAL_DEBUG("received state vector");
+            SAL_INFO("sw.yrs", "received state vector");
             YTransaction *const pTxn{m_pDSM->m_pYrsSupplier->GetWriteTransaction()};
             uint32_t len{0};
             char * pUpdate = ytransaction_state_diff_v1(pTxn,
@@ -1017,13 +1017,13 @@ IMPL_LINK(YrsThread, HandleMessage, void*, pVoid, void)
         }
         case ::std::underlying_type_t<Message>(Message::SendStateDiff):
         {
-            SAL_DEBUG("apply update: " << yupdate_debug_v1(reinterpret_cast<char const*>(pBuf->begin()) + 1, length - 1));
+            SAL_INFO("sw.yrs", "apply update: " << yupdate_debug_v1(reinterpret_cast<char const*>(pBuf->begin()) + 1, length - 1));
             YTransaction *const pTxn{m_pDSM->m_pYrsSupplier->GetWriteTransaction()};
             m_pDSM->m_pYrsSupplier->SetMode(IYrsTransactionSupplier::Mode::Replay);
             auto const err = ytransaction_apply(pTxn, reinterpret_cast<char const*>(pBuf->begin()) + 1, length - 1);
             if (err != 0)
             {
-                SAL_DEBUG("ytransaction_apply error " << err);
+                SAL_INFO("sw.yrs", "ytransaction_apply error " << err);
                 abort();
             }
             // let's have one observe_deep instead of a observe on every
@@ -1066,7 +1066,7 @@ void DocumentStateManager::YrsNotifySetResolved(OString const& rCommentId, SwPos
 
 void DocumentStateManager::YrsAddCommentImpl(SwPosition const& rAnchorPos, OString const& commentId)
 {
-    SAL_DEBUG("YRS AddCommentImpl");
+    SAL_INFO("sw.yrs", "YRS AddCommentImpl");
     ::std::vector<SwAnnotationItem *> items;
     // ??? TODO how should this work for multiple viewshells? every shell has its own EditEngine? unclear.
     for (SwViewShell & rShell : m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->GetRingContainer())
@@ -1092,7 +1092,7 @@ void DocumentStateManager::YrsAddComment(SwPosition const& rPos,
     ::std::optional<SwPosition> const oAnchorStart, SwPostItField const& rField,
     bool const isInsert)
 {
-    SAL_DEBUG("YRS AddComment " << rPos);
+    SAL_INFO("sw.yrs", "YRS AddComment " << rPos);
     OString const commentId{m_pYrsSupplier->GenNewCommentId()};
     // this calls EditViewInvalidate so prevent destroying pTxn
     YrsAddCommentImpl(rPos, commentId);
@@ -1199,7 +1199,7 @@ void DocumentStateManager::YrsRemoveCommentImpl(OString const& rCommentId)
 
 void DocumentStateManager::YrsRemoveComment(SwPosition const& rPos, OString const& rCommentId)
 {
-    SAL_DEBUG("YRS RemoveComment");
+    SAL_INFO("sw.yrs", "YRS RemoveComment");
     YrsRemoveCommentImpl(rCommentId);
     YTransaction *const pTxn{m_pYrsSupplier->GetWriteTransaction()};
     if (!pTxn)
@@ -1270,7 +1270,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
     {
         return;
     }
-    SAL_DEBUG("YRS NotifyCursorUpdate");
+    SAL_INFO("sw.yrs", "YRS NotifyCursorUpdate");
     YDoc *const pYDoc{m_pYrsSupplier->GetYDoc()};
     auto const id{ydoc_id(pYDoc)};
     ::std::unique_ptr<YOutput, YOutputDeleter> pEntry{ymap_get(m_pYrsSupplier->m_pCursors, pTxn, OString::number(id).getStr())};
@@ -1403,7 +1403,7 @@ void DocumentStateManager::YrsInitAcceptor()
     {
         auto const conn = u"pipe,name=ytest"_ustr;
         auto const xContext{comphelper::getProcessComponentContext()};
-        SAL_DEBUG("YRS accept");
+        SAL_INFO("sw.yrs", "YRS accept");
         m_xAcceptor = css::connection::Acceptor::create(xContext);
         // TODO move to thread?
         uno::Reference<connection::XConnection> xConnection = m_xAcceptor->accept(conn);
@@ -1416,7 +1416,7 @@ void DocumentStateManager::YrsInitAcceptor()
             {
                 try
                 {
-                    SAL_DEBUG("YRS send file: " << url);
+                    SAL_INFO("sw.yrs", "YRS send file: " << url);
                     ::ucbhelper::Content temp{url, {}, xContext};
                     uno::Reference<io::XInputStream> const xInStream{temp.openStreamNoLock()};
                     uno::Reference<io::XSeekable> const xSeekable{xInStream, uno::UNO_QUERY};
@@ -1467,7 +1467,7 @@ void DocumentStateManager::YrsInitAcceptor()
         m_pYrsReader = new YrsThread(xConnection, *this);
         //m_xAcceptor->stopAccepting();
         m_pYrsReader->launch();
-        SAL_DEBUG("YRS started");
+        SAL_INFO("sw.yrs", "YRS started");
         // inserting comments needs sidebar wins so needs a view shell first
         SwFieldType & rType{*m_rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false)};
         std::vector<SwFormatField*> fields;
@@ -1521,7 +1521,7 @@ void DocumentStateManager::YrsInitConnector(uno::Any const& raConnection)
 
     m_pYrsReader = new YrsThread(xConnection, *this);
     m_pYrsReader->launch();
-    SAL_DEBUG("YRS started (InitConnector)");
+    SAL_INFO("sw.yrs", "YRS started (InitConnector)");
 }
 
 #endif
@@ -1570,7 +1570,7 @@ void DocumentStateManager::SetModified()
         m_rDoc.DeleteAutoCorrExceptWord();
 
 #if defined(YRS)
-    SAL_DEBUG("YRS SetModified");
+    SAL_INFO("sw.yrs", "YRS SetModified");
     YrsCommitModified();
 #endif
 }

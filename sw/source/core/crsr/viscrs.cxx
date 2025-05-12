@@ -977,7 +977,7 @@ void SwShellCursor::FillRects()
             {
                 cursorRect.Width(20);
             }
-            SAL_DEBUG("YRS FillRects extra rect " << cursorRect);
+            SAL_INFO("sw.yrs", "YRS FillRects extra rect " << cursorRect);
             emplace_back(cursorRect);
             SwRect const temp{Point{cursorRect.Left() - cursorRect.Height()/2,
                 cursorRect.Bottom()}, Size{cursorRect.Height() + 20, 20}};

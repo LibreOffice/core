@@ -1281,7 +1281,7 @@ void YrsAddPara(IYrsTransactionSupplier *const pYrsSupplier,
     {
         return;
     }
-    SAL_DEBUG("YRS YrsAddPara");
+    SAL_INFO("editeng.yrs", "YRS YrsAddPara");
     // need to encode into 1 YText
     char const para[]{ CH_PARA, '\0' };
     uint32_t i{0};
@@ -3146,7 +3146,7 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
     mbDisableAttributeExpanding(false)
 {
 #if defined(YRS)
-    SAL_DEBUG("YRS +EditDoc");
+    SAL_INFO("editeng.yrs", "YRS +EditDoc");
 #endif
     // Don't create an empty node, Clear() will be called in EditEngine-CTOR
 };
@@ -3154,7 +3154,7 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
 EditDoc::~EditDoc()
 {
 #if defined(YRS)
-    SAL_DEBUG("YRS -EditDoc");
+    SAL_INFO("editeng.yrs", "YRS -EditDoc");
 #endif
     maContents.clear();
 }
