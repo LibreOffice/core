@@ -55,7 +55,7 @@ QtInstanceBuilder::QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRo
 
 QtInstanceBuilder::~QtInstanceBuilder() {}
 
-bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
+bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::Widget* pParent)
 {
     // set of supported UI files
     //
@@ -88,6 +88,8 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"cui/ui/tipofthedaydialog.ui"_ustr,
         u"cui/ui/toolbarmodedialog.ui"_ustr,
         u"cui/ui/uitabpage.ui"_ustr,
+        u"cui/ui/welcomedialog.ui"_ustr,
+        u"cui/ui/whatsnewtabpage.ui"_ustr,
         u"cui/ui/zoomdialog.ui"_ustr,
         u"dbaccess/ui/savedialog.ui"_ustr,
         u"dbaccess/ui/tabledesignsavemodifieddialog.ui"_ustr,
@@ -156,7 +158,12 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"writerperfect/ui/exportepub.ui"_ustr,
     };
 
-    return aSupportedUIFiles.contains(rUIFile);
+    if (aSupportedUIFiles.contains(rUIFile))
+        return true;
+
+    // this tab page is currently only supported in the "Welcome" dialog, but
+    // not in the "Tools" -> "Options" dialog that's not using native Qt widgets yet
+    return rUIFile == u"cui/ui/appearance.ui" && dynamic_cast<const QtInstanceWidget*>(pParent);
 }
 
 std::unique_ptr<weld::MessageDialog> QtInstanceBuilder::weld_message_dialog(const OUString& id)

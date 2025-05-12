@@ -27,7 +27,7 @@ public:
     QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRoot, const OUString& rUIFile);
     ~QtInstanceBuilder();
 
-    static bool IsUIFileSupported(const OUString& rUIFile);
+    static bool IsUIFileSupported(const OUString& rUIFile, const weld::Widget* pParent);
 
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OUString& id) override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OUString& rId) override;
