@@ -202,7 +202,8 @@ XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) 
     FilterBase( rxContext ),
     mxImpl( new XmlFilterBaseImpl ),
     mnRelId( 1 ),
-    mnMaxDocId( 0 ),
+    // mnMaxDocId has to start from 1, Word doesn't accept id 0 for eg. grouped shapes
+    mnMaxDocId( 1 ),
     mbMSO2007(false),
     mbMSO(false),
     mbMissingExtDrawing(false)
