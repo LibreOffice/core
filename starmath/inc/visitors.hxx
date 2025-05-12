@@ -186,7 +186,6 @@ public:
 
         maPos.pSelectedNode->Accept( this );
     }
-    virtual ~SmCaretPos2LineVisitor() {}
     void Visit( SmTextNode* pNode ) override;
     using SmDefaultingVisitor::Visit;
     const SmCaretLine& GetResult( ) const {
@@ -223,7 +222,6 @@ public:
             mrDev.ReMirror(maPosition);
         pTree->Accept( this );
     }
-    virtual ~SmDrawingVisitor() {}
     void Visit( SmTableNode* pNode ) override;
     void Visit( SmBraceNode* pNode ) override;
     void Visit( SmBracebodyNode* pNode ) override;
@@ -281,7 +279,6 @@ class SmSetSelectionVisitor final : public SmDefaultingVisitor
 {
 public:
     SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pNode);
-    virtual ~SmSetSelectionVisitor() {}
     void Visit( SmBinHorNode* pNode ) override;
     void Visit( SmUnHorNode* pNode ) override;
     void Visit( SmFontNode* pNode ) override;
@@ -341,7 +338,7 @@ class SmCaretPosGraphBuildingVisitor final : public SmVisitor
 public:
     /** Builds a caret position graph for pRootNode */
     explicit SmCaretPosGraphBuildingVisitor( SmNode* pRootNode );
-    virtual ~SmCaretPosGraphBuildingVisitor();
+    ~SmCaretPosGraphBuildingVisitor();
     void Visit( SmTableNode* pNode ) override;
     void Visit( SmBraceNode* pNode ) override;
     void Visit( SmBracebodyNode* pNode ) override;
@@ -390,7 +387,6 @@ public:
     SmCloningVisitor()
         : mpResult(nullptr)
     {}
-    virtual ~SmCloningVisitor() {}
     void Visit( SmTableNode* pNode ) override;
     void Visit( SmBraceNode* pNode ) override;
     void Visit( SmBracebodyNode* pNode ) override;
@@ -470,7 +466,6 @@ class SmNodeToTextVisitor final : public SmVisitor
 {
 public:
     SmNodeToTextVisitor( SmNode* pNode, OUString &rText );
-    virtual ~SmNodeToTextVisitor() {}
 
     void Visit( SmTableNode* pNode ) override;
     void Visit( SmBraceNode* pNode ) override;

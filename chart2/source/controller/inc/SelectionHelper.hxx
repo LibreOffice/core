@@ -97,7 +97,7 @@ public:
                     , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     explicit SelectionHelper( SdrObject* pSelectedObj );
-    virtual ~SelectionHelper();
+    ~SelectionHelper();
 
     //MarkHandleProvider:
     virtual bool getMarkHandles( SdrHdlList& rHdlList ) override;

@@ -34,7 +34,7 @@ class CellTextProvider final : public svx::ITextProvider
 {
 public:
     explicit CellTextProvider(sdr::table::CellRef xCell);
-    virtual ~CellTextProvider();
+    ~CellTextProvider();
 
 private:
     virtual sal_Int32 getTextCount() const override;

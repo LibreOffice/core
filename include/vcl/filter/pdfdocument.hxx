@@ -550,7 +550,7 @@ class VCL_DLLPUBLIC PDFDocument final : public PDFObjectContainer
 
 public:
     PDFDocument();
-    virtual ~PDFDocument();
+    ~PDFDocument();
     PDFDocument& operator=(const PDFDocument&) = delete;
     PDFDocument(const PDFDocument&) = delete;
     /// @name Low-level functions, to be used by PDFElement subclasses.

@@ -45,7 +45,7 @@ namespace sdr
 
     public:
         MasterPageDescriptor(SdrPage& aOwnerPage, SdrPage& aUsedPage);
-        virtual ~MasterPageDescriptor();
+        ~MasterPageDescriptor();
 
         // ViewContact part
         sdr::contact::ViewContact& GetViewContact() const;

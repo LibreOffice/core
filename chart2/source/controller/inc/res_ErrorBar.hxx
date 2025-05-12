@@ -56,7 +56,7 @@ public:
 
     ErrorBarResources(
         weld::Builder* pParent, weld::DialogController* pControllerDialog, const SfxItemSet& rInAttrs, bool bNoneAvailable, chart::ErrorBarResources::tErrorBarType eType = ERROR_BAR_Y);
-    virtual ~ErrorBarResources();
+    ~ErrorBarResources();
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
     void SetErrorBarType( tErrorBarType eNewType );

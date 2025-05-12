@@ -78,7 +78,7 @@ namespace vcl
             : m_rTargetDevice( _rTargetDevice )
         {
         }
-        virtual ~DefaultTextLayout();
+        ~DefaultTextLayout();
 
         // TextLayoutCommon overridables
         SAL_DLLPRIVATE virtual tools::Long GetTextWidth( const OUString& _rText,

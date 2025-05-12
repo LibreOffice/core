@@ -76,7 +76,7 @@ public:
     /** The destructor deletes any remaining entries of the local list of
         templates.
     */
-    virtual ~TemplateScanner();
+    ~TemplateScanner();
 
     /** Implementation of the AsynchronousTask interface method.
     */

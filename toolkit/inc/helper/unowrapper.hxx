@@ -61,7 +61,7 @@ public:
     void                WindowDestroyed( vcl::Window* pWindow ) override;
 
 private:
-    virtual ~UnoWrapper();
+    ~UnoWrapper();
 };
 
 #endif // INCLUDED_TOOLKIT_INC_HELPER_UNOWRAPPER_HXX

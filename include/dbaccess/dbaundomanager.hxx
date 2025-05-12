@@ -59,7 +59,7 @@ namespace dbaui
     {
     public:
         DBACCESS_DLLPUBLIC UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex );
-        virtual ~UndoManager();
+        ~UndoManager();
 
         DBACCESS_DLLPUBLIC SfxUndoManager& GetSfxUndoManager() const;
 
