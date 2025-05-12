@@ -31,6 +31,7 @@ private:
     OString maNamespace;
 
 public:
+    // rNamespace, when non-empty, must include trailing colon
     HtmlWriter(SvStream& rStream, std::string_view rNamespace = std::string_view());
     ~HtmlWriter();
 

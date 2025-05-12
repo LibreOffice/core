@@ -340,6 +340,8 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
             // XHTML is always just a fragment inside ReqIF.
             mbSkipHeaderFooter = true;
         }
+        if (!maNamespace.isEmpty())
+            maNamespace += ":";
         // XHTML namespace implies XHTML.
         mbXHTML = true;
     }
@@ -1606,14 +1608,6 @@ sal_Int32 SwHTMLWriter::indexOfDotLeaders( sal_uInt16 nPoolId, std::u16string_vi
                  return i;
     }
     return -1;
-}
-
-OString SwHTMLWriter::GetNamespace() const
-{
-    if (maNamespace.isEmpty())
-        return OString();
-
-    return maNamespace + ":";
 }
 
 OUString SwHTMLWriter::normalizeURL(const OUString& url, bool own) const

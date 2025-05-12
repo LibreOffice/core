@@ -139,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNamespace)
 {
     SvMemoryStream aStream;
 
-    HtmlWriter aHtml(aStream, "reqif-xhtml");
+    HtmlWriter aHtml(aStream, "reqif-xhtml:");
     aHtml.prettyPrint(false);
     aHtml.single("br"_ostr);
 

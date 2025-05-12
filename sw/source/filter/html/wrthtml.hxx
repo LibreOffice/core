@@ -271,6 +271,9 @@ enum class Css1Background
 
 class SwHTMLWriter : public Writer
 {
+    /// XML namespace, in case of XHTML.
+    OString maNamespace;
+
     SwHTMLPosFlyFrames m_aHTMLPosFlyFrames;
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;// current numbering
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNextNumRuleInfo;
@@ -415,8 +418,6 @@ public:
     std::unique_ptr<utl::TempFileNamed> mpTempBaseURL;
     /// If XHTML markup should be written instead of HTML.
     bool mbXHTML = false;
-    /// XML namespace, in case of XHTML.
-    OString maNamespace;
     /// If the ReqIF subset of XHTML should be written.
     bool mbReqIF = false;
 
@@ -626,7 +627,7 @@ public:
     sal_Int32 indexOfDotLeaders( sal_uInt16 nPoolId, std::u16string_view rText );
 
     /// Determines the prefix string needed to respect the requested namespace alias.
-    OString GetNamespace() const;
+    OString GetNamespace() const { return maNamespace; }
 
     bool IsPrettyPrint() const { return !m_bSpacePreserve && m_bPrettyPrint; }
     bool IsLFPossible() const { return !m_bSpacePreserve && m_bLFPossible; }

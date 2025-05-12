@@ -15,13 +15,9 @@
 
 HtmlWriter::HtmlWriter(SvStream& rStream, std::string_view rNamespace) :
     mrStream(rStream),
-    mbPrettyPrint(true)
+    mbPrettyPrint(true),
+    maNamespace(rNamespace)
 {
-    if (!rNamespace.empty())
-    {
-        // Convert namespace alias to a prefix.
-        maNamespace = OString::Concat(rNamespace) + ":";
-    }
 }
 
 HtmlWriter::~HtmlWriter()

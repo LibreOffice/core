@@ -1907,7 +1907,7 @@ static SwHTMLWriter & OutHTML_FrameFormatAsImage( SwHTMLWriter& rWrt, const SwFr
 
     OutHTML_ImageOLEStart(rWrt, aGraphic, rFrameFormat);
 
-    HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
+    HtmlWriter aHtml(rWrt.Strm(), rWrt.GetNamespace());
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, GraphicURL, aGraphic, rFrameFormat.GetName().toString(), aSz,
                     HtmlFrmOpts::GenImgMask, "frame",
                     aIMap.GetIMapObjectCount() ? &aIMap : nullptr, aMimeType, true);
@@ -2055,7 +2055,7 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
 
     OutHTML_ImageOLEStart(rWrt, aGraphic, rFrameFormat);
 
-    HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
+    HtmlWriter aHtml(rWrt.Strm(), rWrt.GetNamespace());
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, aGraphicURL, aGraphic, pGrfNd->GetTitle(),
                   pGrfNd->GetTwipSize(), nFrameFlags, "graphic", nullptr, aMimeType, bOwn );
 

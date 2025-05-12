@@ -1523,7 +1523,7 @@ static void OutHTMLGraphic(SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat
     HtmlFrmOpts nFlags = bInCntnr ? HtmlFrmOpts::GenImgAllMask : HtmlFrmOpts::GenImgMask;
     if (bObjectOpened)
         nFlags |= HtmlFrmOpts::Replacement;
-    HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
+    HtmlWriter aHtml(rWrt.Strm(), rWrt.GetNamespace());
     OutHTML_ImageStart(aHtml, rWrt, rFrameFormat, aGraphicURL, rGraphic, pOLENd->GetTitle(),
                        pOLENd->GetTwipSize(), nFlags, "ole", nullptr, aMimeType, true);
     OutHTML_ImageEnd(aHtml, rWrt);

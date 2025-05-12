@@ -2085,7 +2085,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
 
         rWrt.SetLFPossible(true);
 
-        HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
+        HtmlWriter aHtml(rWrt.Strm(), rWrt.GetNamespace());
         aHtml.prettyPrint(rWrt.IsPrettyPrint());
         aHtml.start(OOO_STRING_SVTOOLS_HTML_horzrule ""_ostr);
 
@@ -2539,7 +2539,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
                     if( 0x0a == c )
                     {
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm() );
-                        HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
+                        HtmlWriter aHtml(rWrt.Strm(), rWrt.GetNamespace());
                         aHtml.prettyPrint(rWrt.IsPrettyPrint());
                         aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
                     }
@@ -2618,7 +2618,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         }
         else
         {
-            HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
+            HtmlWriter aHtml(rWrt.Strm(), rWrt.GetNamespace());
             aHtml.prettyPrint(rWrt.IsPrettyPrint());
             aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
             const SvxULSpaceItem& rULSpace = pNd->GetSwAttrSet().Get(RES_UL_SPACE);
@@ -2645,7 +2645,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
             pString = OOO_STRING_SVTOOLS_HTML_AL_right;
         }
 
-        HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
+        HtmlWriter aHtml(rWrt.Strm(), rWrt.GetNamespace());
         aHtml.prettyPrint(rWrt.IsPrettyPrint());
         aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak ""_ostr);
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, pString);
