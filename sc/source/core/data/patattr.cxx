@@ -140,7 +140,7 @@ const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& 
 
 void CellAttributeHelper::doUnregister(const ScPatternAttr& rCandidate)
 {
-    if (&rCandidate == &getDefaultCellAttribute())
+    if (&rCandidate == mpDefaultCellAttribute)
         return;
 
     assert(rCandidate.isRegistered());
