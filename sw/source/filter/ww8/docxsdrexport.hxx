@@ -82,15 +82,15 @@ public:
     /// Writes a drawing as VML data.
     void writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat);
     /// Writes a drawing as DML.
-    void writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFormat* pFrameFormat, int nAnchorId);
+    void writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFormat* pFrameFormat);
     /// Writes shape in both DML and VML format.
-    void writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat, int nAnchorId);
+    void writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat);
     /// Write <a:effectLst>, the effect list.
     void writeDMLEffectLst(const SwFrameFormat& rFrameFormat);
     /// Writes a diagram (smartart).
-    void writeDiagram(const SdrObject* sdrObject, const SwFrameFormat& rFrameFormat, int nDiagramId);
+    void writeDiagram(const SdrObject* sdrObject, const SwFrameFormat& rFrameFormat);
     /// Writes text frame in DML format.
-    void writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAnchorId, bool bTextBoxOnly = false);
+    void writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bTextBoxOnly = false);
     /// Writes text frame in VML format.
     void writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bTextBoxOnly = false);
     /// Is this a standalone TextFrame, or used as a TextBox of a shape?

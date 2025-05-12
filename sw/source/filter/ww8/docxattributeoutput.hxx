@@ -1046,7 +1046,6 @@ private:
     std::vector<std::pair<const SwPostItField*, PostItDOCXData>> m_postitFields;
     /// Number of postit fields which already have a commentReference written.
     unsigned int m_postitFieldsMaxId;
-    int m_anchorId;
     int m_nextFontId;
     struct EmbeddedFontRef
     {
