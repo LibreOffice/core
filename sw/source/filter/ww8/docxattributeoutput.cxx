@@ -1178,7 +1178,7 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
                 */
                 {
                     DocxTableExportContext aDMLTableExportContext(*this);
-                    m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++);
+                    m_rExport.SdrExporter().writeDMLTextFrame(&aFrame);
                 }
                 m_pSerializer->endElementNS(XML_mc, XML_Choice);
                 SetAlternateContentChoiceOpen( false );
@@ -3773,9 +3773,9 @@ void DocxAttributeOutput::WritePostponedGraphic()
 
 void DocxAttributeOutput::WritePostponedDiagram()
 {
-    for( const auto & rPostponedDiagram : *m_oPostponedDiagrams )
+    for(const auto & rPostponedDiagram : *m_oPostponedDiagrams)
         m_rExport.SdrExporter().writeDiagram(rPostponedDiagram.object,
-            *rPostponedDiagram.frame, m_anchorId++);
+            *rPostponedDiagram.frame);
     m_oPostponedDiagrams.reset();
 }
 
@@ -5346,11 +5346,11 @@ uno::Reference<css::text::XTextFrame> DocxAttributeOutput::GetUnoTextFrame(
 }
 
 static rtl::Reference<::sax_fastparser::FastAttributeList> CreateDocPrAttrList(
-    DocxExport & rExport, int const nAnchorId, std::u16string_view const& rName,
+    DocxExport & rExport, std::u16string_view const& rName,
     std::u16string_view const& rTitle, std::u16string_view const& rDescription)
 {
     rtl::Reference<::sax_fastparser::FastAttributeList> const pAttrs(FastSerializerHelper::createAttrList());
-    pAttrs->add(XML_id, OString::number(nAnchorId));
+    pAttrs->add(XML_id, OString::number(rExport.GetFilter().GetUniqueId()));
     pAttrs->add(XML_name, rName);
     if (rExport.GetFilter().getVersion() != oox::core::ECMA_376_1ST_EDITION)
     {
@@ -5476,7 +5476,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     OUString const descr(pGrfNode ? pGrfNode->GetDescription() : pOLEFrameFormat->GetObjDescription());
     OUString const title(pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle());
     auto const docPrattrList(CreateDocPrAttrList(
-        GetExport(), m_anchorId++, pFrameFormat->GetName().toString(), title, descr));
+        GetExport(), pFrameFormat->GetName().toString(), title, descr));
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrattrList );
 
     OUString sURL, sRelId;
@@ -5687,7 +5687,7 @@ void DocxAttributeOutput::WritePostponedChart()
                docPr Id should be unique, ensuring the same here.
                */
             auto const docPrattrList(CreateDocPrAttrList(
-                GetExport(), m_anchorId++, sName, title, descr));
+                GetExport(), sName, title, descr));
             m_pSerializer->singleElementNS(XML_wp, XML_docPr, docPrattrList);
 
             m_pSerializer->singleElementNS(XML_wp, XML_cNvGraphicFramePr);
@@ -6375,12 +6375,10 @@ void DocxAttributeOutput::WritePostponedCustomShape()
 
     for( const auto & rPostponedDrawing : *m_oPostponedCustomShape)
     {
-        m_rExport.GetFilter().SetMaxDocId(m_anchorId + 1);
         if ( IsAlternateContentChoiceOpen() )
-            m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame, m_anchorId++);
+            m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame);
         else
-            m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
-        m_anchorId = m_rExport.GetFilter().GetMaxDocId();
+            m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame);
     }
     m_oPostponedCustomShape.reset();
 }
@@ -6399,12 +6397,10 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     for( const auto & rPostponedDrawing : *pPostponedDMLDrawings )
     {
         // Avoid w:drawing within another w:drawing.
-        m_rExport.GetFilter().SetMaxDocId(m_anchorId + 1);
         if ( IsAlternateContentChoiceOpen() && !( m_rExport.SdrExporter().IsDrawingOpen()) )
-           m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame, m_anchorId++);
+           m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame);
         else
-            m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
-        m_anchorId = m_rExport.GetFilter().GetMaxDocId();
+            m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame);
     }
 
     m_oPostponedOLEs = std::move(pPostponedOLEs);
@@ -6448,7 +6444,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                         if ( !m_oPostponedDiagrams )
                         {
                             m_bPostponedProcessingFly = false ;
-                            m_rExport.SdrExporter().writeDiagram( pSdrObj, rFrame.GetFrameFormat(), m_anchorId++);
+                            m_rExport.SdrExporter().writeDiagram( pSdrObj, rFrame.GetFrameFormat());
                         }
                         else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                         {    // so write it out later
@@ -6460,19 +6456,16 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                     {
                         if (!m_oPostponedDMLDrawings)
                         {
-                            m_rExport.GetFilter().SetMaxDocId(m_anchorId + 1);
                             if ( IsAlternateContentChoiceOpen() )
                             {
                                 // Do not write w:drawing inside w:drawing. Instead Postpone the Inner Drawing.
                                 if( m_rExport.SdrExporter().IsDrawingOpen() )
                                     m_oPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
                                 else
-                                    m_rExport.SdrExporter().writeDMLDrawing( pSdrObj, &rFrame.GetFrameFormat(), m_anchorId++);
+                                    m_rExport.SdrExporter().writeDMLDrawing( pSdrObj, &rFrame.GetFrameFormat());
                             }
                             else
-                                m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrameFormat(), m_anchorId++);
-                            m_anchorId = m_rExport.GetFilter().GetMaxDocId();
-
+                                m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrameFormat());
                             m_bPostponedProcessingFly = false ;
                         }
                         // IsAlternateContentChoiceOpen(): check is to ensure that only one object is getting added. Without this check, plus one object gets added
@@ -6768,7 +6761,7 @@ void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
     if (pAnchor) //pAnchor can be null, so that's why not assert here.
     {
         ww8::Frame aFrame(*pTextBox, *pAnchor);
-        m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
+        m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
         if (bFlyAtPage)
         {
             delete pAnchor;
@@ -10537,7 +10530,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nChartCount(0),
       m_PendingPlaceholder( nullptr ),
       m_postitFieldsMaxId( 0 ),
-      m_anchorId( 1 ),
       m_nextFontId( 1 ),
       m_bIgnoreNextFill(false),
       m_pTableStyleExport(std::make_shared<DocxTableStyleExport>(rExport.m_rDoc, pSerializer)),

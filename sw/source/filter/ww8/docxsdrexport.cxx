@@ -1402,8 +1402,7 @@ void AddExtLst(sax_fastparser::FSHelperPtr const& pFS, DocxExport const& rExport
     }
 }
 
-void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFormat* pFrameFormat,
-                                    int nAnchorId)
+void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFormat* pFrameFormat)
 {
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape());
     if (!Impl::isSupportedDMLShape(xShape, pSdrObject))
@@ -1418,7 +1417,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
 
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    pDocPrAttrList->add(XML_id, OString::number(nAnchorId));
+    pDocPrAttrList->add(XML_id, OString::number(m_pImpl->getExport().GetFilter().GetUniqueId()));
     pDocPrAttrList->add(XML_name, pSdrObject->GetName());
     if (!pSdrObject->GetTitle().isEmpty())
         pDocPrAttrList->add(XML_title, pSdrObject->GetTitle());
@@ -1598,7 +1597,7 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XSha
 }
 
 void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
-                                          const SwFrameFormat& rFrameFormat, int nAnchorId)
+                                          const SwFrameFormat& rFrameFormat)
 {
     bool bDMLAndVMLDrawingOpen = m_pImpl->getDMLAndVMLDrawingOpen();
     m_pImpl->setDMLAndVMLDrawingOpen(true);
@@ -1621,7 +1620,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
         auto pObjGroup = dynamic_cast<const SdrObjGroup*>(sdrObj);
         m_pImpl->getSerializer()->startElementNS(XML_mc, XML_Choice, XML_Requires,
                                                  (pObjGroup ? "wpg" : "wps"));
-        writeDMLDrawing(sdrObj, &rFrameFormat, nAnchorId);
+        writeDMLDrawing(sdrObj, &rFrameFormat);
         m_pImpl->getSerializer()->endElementNS(XML_mc, XML_Choice);
 
         m_pImpl->getSerializer()->startElementNS(XML_mc, XML_Fallback);
@@ -1698,8 +1697,7 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
     m_pImpl->getSerializer()->endElementNS(XML_a, XML_effectLst);
 }
 
-void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat& rFrameFormat,
-                                 int nDiagramId)
+void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat& rFrameFormat)
 {
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObject)->getUnoShape(),
                                            uno::UNO_QUERY);
@@ -1709,7 +1707,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     startDMLAnchorInline(&rFrameFormat, aSize);
 
     m_pImpl->getDrawingML()->SetFS(m_pImpl->getSerializer());
-    m_pImpl->getDrawingML()->WriteDiagram(xShape, nDiagramId);
+    m_pImpl->getDrawingML()->WriteDiagram(xShape, m_pImpl->getExport().GetFilter().GetUniqueId());
 
     endDMLAnchorInline(&rFrameFormat);
 }
@@ -1779,8 +1777,7 @@ void DocxSdrExport::writeBoxItemLine(const SvxBoxItem& rBox)
     pFS->endElementNS(XML_a, XML_ln);
 }
 
-void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAnchorId,
-                                      bool bTextBoxOnly)
+void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bTextBoxOnly)
 {
     bool bDMLAndVMLDrawingOpen = m_pImpl->getDMLAndVMLDrawingOpen();
     m_pImpl->setDMLAndVMLDrawingOpen(IsAnchorTypeInsideParagraph(pParentFrame));
@@ -1823,7 +1820,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
 
         rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
             = sax_fastparser::FastSerializerHelper::createAttrList();
-        pDocPrAttrList->add(XML_id, OString::number(nAnchorId));
+        pDocPrAttrList->add(XML_id,
+                            OString::number(m_pImpl->getExport().GetFilter().GetUniqueId()));
         pDocPrAttrList->add(XML_name, rFrameFormat.GetName().toString());
 
         pFS->startElementNS(XML_wp, XML_docPr, pDocPrAttrList);

@@ -852,8 +852,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149996, "lorem_hyperlink.fodt")
     // because the exported file was corrupted.
 }
 
-DECLARE_OOXMLEXPORT_TEST(testGroupedShapeLink, "grouped_link.docx")
+CPPUNIT_TEST_FIXTURE(Test, testGroupedShapeLink)
 {
+    loadAndSave("grouped_link.docx");
     // tdf#145147 Hyperlink in grouped shape not imported
     // tdf#154469 Hyperlink in grouped shape not exported
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
@@ -861,6 +862,14 @@ DECLARE_OOXMLEXPORT_TEST(testGroupedShapeLink, "grouped_link.docx")
                          getProperty<OUString>(xGroupShape->getByIndex(0), u"Hyperlink"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"https://www.documentfoundation.org"_ustr,
                          getProperty<OUString>(xGroupShape->getByIndex(1), u"Hyperlink"_ustr));
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The id of the grouped shape's docPr must be > 0, otherwise Word fails to open the exported docx
+    sal_Int32 aId = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr",
+             "id").toInt32();
+    CPPUNIT_ASSERT(aId > 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf147810, "tdf147810.odt")
