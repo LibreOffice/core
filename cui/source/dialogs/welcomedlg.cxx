@@ -28,9 +28,11 @@ constexpr OUString sAppearanceTab = u"AppearanceTabPage"_ustr;
 
 WelcomeDialog::WelcomeDialog(weld::Window* pParent)
     : SfxTabDialogController(pParent, u"cui/ui/welcomedialog.ui"_ustr, u"WelcomeDialog"_ustr)
-    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr)) // release notes / apply
+    , m_xActionBtn(m_xBuilder->weld_button(u"action"_ustr)) // release notes / apply
+    , m_xNextBtn(m_xBuilder->weld_button(u"next"_ustr)) // next / close
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr)) // hidden
     , m_xResetBtn(m_xBuilder->weld_button(u"reset"_ustr)) // hidden
-    , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr)) // next / close
+    , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr)) // hidden
 {
     m_xDialog->set_title(SfxResId(STR_WELCOME_LINE1));
 
@@ -40,8 +42,11 @@ WelcomeDialog::WelcomeDialog(weld::Window* pParent)
 
     m_xTabCtrl->connect_enter_page(LINK(this, WelcomeDialog, OnActivatePage));
     m_xResetBtn->set_visible(false);
-    m_xOKBtn->connect_clicked(LINK(this, WelcomeDialog, OnApplyClick));
-    m_xCancelBtn->connect_clicked(LINK(this, WelcomeDialog, OnNextClick));
+    m_xOKBtn->set_visible(false);
+    m_xCancelBtn->set_visible(false);
+
+    m_xNextBtn->connect_clicked(LINK(this, WelcomeDialog, OnNextClick));
+    m_xActionBtn->connect_clicked(LINK(this, WelcomeDialog, OnActionClick));
 
     m_xTabCtrl->set_current_page(sNewsTab);
     OnActivatePage(sNewsTab);
@@ -50,14 +55,14 @@ WelcomeDialog::WelcomeDialog(weld::Window* pParent)
 IMPL_LINK(WelcomeDialog, OnActivatePage, const OUString&, rPage, void)
 {
     if (rPage == sNewsTab)
-        m_xOKBtn->set_label(SfxResId(STR_CREDITS_BUTTON));
+        m_xActionBtn->set_label(SfxResId(STR_CREDITS_BUTTON));
     else
-        m_xOKBtn->set_label(SfxResId(STR_WELCOME_APPLY));
+        m_xActionBtn->set_label(SfxResId(STR_WELCOME_APPLY));
 
     if (rPage == sAppearanceTab)
-        m_xCancelBtn->set_label(SfxResId(STR_WELCOME_CLOSE));
+        m_xNextBtn->set_label(SfxResId(STR_WELCOME_CLOSE));
     else
-        m_xCancelBtn->set_label(SfxResId(STR_WELCOME_NEXT));
+        m_xNextBtn->set_label(SfxResId(STR_WELCOME_NEXT));
 }
 
 IMPL_LINK_NOARG(WelcomeDialog, OnNextClick, weld::Button&, void)
@@ -73,7 +78,7 @@ IMPL_LINK_NOARG(WelcomeDialog, OnNextClick, weld::Button&, void)
         m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(WelcomeDialog, OnApplyClick, weld::Button&, void)
+IMPL_LINK_NOARG(WelcomeDialog, OnActionClick, weld::Button&, void)
 {
     switch (m_xTabCtrl->get_current_page())
     {

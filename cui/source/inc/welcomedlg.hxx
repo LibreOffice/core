@@ -14,11 +14,14 @@
 class WelcomeDialog : public SfxTabDialogController
 {
 private:
-    std::unique_ptr<weld::Button> m_xOKBtn; // release notes / apply
+    std::unique_ptr<weld::Button> m_xActionBtn; // release notes / apply
+    std::unique_ptr<weld::Button> m_xNextBtn; // next / close
+    std::unique_ptr<weld::Button> m_xOKBtn; // hidden
     std::unique_ptr<weld::Button> m_xResetBtn; // hidden
-    std::unique_ptr<weld::Button> m_xCancelBtn; // next / close
+    std::unique_ptr<weld::Button> m_xCancelBtn; // hidden
+
     DECL_LINK(OnActivatePage, const OUString&, void);
-    DECL_LINK(OnApplyClick, weld::Button&, void);
+    DECL_LINK(OnActionClick, weld::Button&, void);
     DECL_LINK(OnNextClick, weld::Button&, void);
 
 public:
