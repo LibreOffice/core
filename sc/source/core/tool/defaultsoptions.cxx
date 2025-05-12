@@ -48,7 +48,7 @@ OUString ScDefaultsOptions::GetInitTabPrefix() const
     if (comphelper::LibreOfficeKit::isActive() && !bInitTabPrefixChanged)
     {
         // LOKit may have different users with different locales, so the proper
-        // translation of the defualt TabPrefix has to be fetched each time
+        // translation of the default TabPrefix has to be fetched each time
         return ScResId(STR_TABLE_DEF);
     }
     return aInitTabPrefix;
