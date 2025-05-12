@@ -58,7 +58,7 @@ namespace connectivity
     public:
         OParseContext();
 
-        virtual ~OParseContext();
+        ~OParseContext();
         // retrieves language specific error messages
         virtual OUString getErrorMessage(ErrorCode _eCodes) const override;
 

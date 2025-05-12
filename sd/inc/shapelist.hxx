@@ -31,7 +31,7 @@ namespace sd
     {
     public:
         ShapeList();
-        virtual ~ShapeList();
+        ~ShapeList();
 
         /** adds the given shape to this list */
         void addShape( SdrObject& rObject );

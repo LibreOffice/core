@@ -53,7 +53,7 @@ private:
     oslInterlockedCount m_aRefCount;
     JavaInteractionHandler(JavaInteractionHandler const&) = delete;
     JavaInteractionHandler& operator = (JavaInteractionHandler const &) = delete;
-    SVT_DLLPRIVATE virtual ~JavaInteractionHandler();
+    SVT_DLLPRIVATE ~JavaInteractionHandler();
 };
 }
 

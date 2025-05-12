@@ -111,7 +111,7 @@ namespace svx
 
     public:
         FmTextControlShell( SfxViewFrame* _pFrame );
-        virtual ~FmTextControlShell();
+        ~FmTextControlShell();
 
         // clean up any resources associated with this instance
         void    dispose();

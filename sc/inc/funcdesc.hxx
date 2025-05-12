@@ -42,7 +42,7 @@ class ScFuncDesc final : public formula::IFunctionDescription
 {
 public:
     ScFuncDesc();
-    virtual ~ScFuncDesc();
+    ~ScFuncDesc();
 
     /**
       Clears the object
@@ -273,7 +273,6 @@ class ScFunctionCategory final : public formula::IFunctionCategory
 public:
     ScFunctionCategory(const ::std::vector<const ScFuncDesc*>& _rCategory,sal_uInt32 _nCategory)
             : m_rCategory(_rCategory),m_nCategory(_nCategory){}
-    virtual ~ScFunctionCategory(){}
 
     /**
       @return count of functions in this category
@@ -315,7 +314,7 @@ public:
       The function lists of the categories are sorted by (case insensitive) function name
     */
             ScFunctionMgr();
-    virtual ~ScFunctionMgr();
+    ~ScFunctionMgr();
 
     /**
       Returns name of category.

@@ -43,7 +43,7 @@ namespace svt
             nothing happens.
          */
         JavaContext( const css::uno::Reference< css::uno::XCurrentContext> & ctx );
-        virtual ~JavaContext();
+        ~JavaContext();
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface(

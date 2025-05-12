@@ -160,7 +160,7 @@ class SwPrintUIOptions final : public vcl::PrinterOptionsHelper
 
 public:
     SwPrintUIOptions( sal_uInt16 nCurrentPage, bool bWeb, bool bSwSrcView, bool bHasSelection, bool bHasPostIts, const SwPrintData &rDefaultPrintData );
-    virtual ~SwPrintUIOptions();
+    ~SwPrintUIOptions();
 
     bool processPropertiesAndCheckFormat( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp );
 

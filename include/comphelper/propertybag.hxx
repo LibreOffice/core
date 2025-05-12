@@ -45,7 +45,7 @@ namespace comphelper
         bool m_bAllowEmptyPropertyName;
     public:
         PropertyBag();
-        virtual ~PropertyBag();
+        ~PropertyBag();
 
         /** allow adding property with empty string as name
             (by default, such names are rejected with IllegalActionException).

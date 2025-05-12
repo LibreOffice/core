@@ -328,7 +328,7 @@ class OWeakRefListener final : public XReference
 public:
     explicit OWeakRefListener(const Reference< XInterface >& xInt);
     explicit OWeakRefListener(const Reference< XWeak >& xInt);
-    virtual ~OWeakRefListener();
+    ~OWeakRefListener();
 
     // noncopyable
     OWeakRefListener(const OWeakRefListener&) = delete;

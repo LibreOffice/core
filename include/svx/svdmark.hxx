@@ -55,7 +55,7 @@ class SVXCORE_DLLPUBLIC SdrMark final : public sdr::ObjectUser
 public:
     explicit SdrMark(SdrObject* pNewObj = nullptr, SdrPageView* pNewPageView = nullptr);
     SAL_DLLPRIVATE SdrMark(const SdrMark& rMark);
-    virtual ~SdrMark();
+    ~SdrMark();
 
     // Derived from ObjectUser
     SAL_DLLPRIVATE virtual void ObjectInDestruction(const SdrObject& rObject) override;

@@ -137,7 +137,7 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     mutable bool m_bCloseModelScheduled = false;
 
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
-    virtual ~SfxObjectShell_Impl();
+    ~SfxObjectShell_Impl();
 
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getCurrentMacroExecMode() const override;

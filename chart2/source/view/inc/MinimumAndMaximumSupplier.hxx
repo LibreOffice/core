@@ -58,7 +58,7 @@ class MergedMinimumAndMaximumSupplier final : public MinimumAndMaximumSupplier
 {
 public:
     MergedMinimumAndMaximumSupplier();
-    virtual ~MergedMinimumAndMaximumSupplier();
+    ~MergedMinimumAndMaximumSupplier();
 
     void addMinimumAndMaximumSupplier( MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier );
     bool hasMinimumAndMaximumSupplier( MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier );
