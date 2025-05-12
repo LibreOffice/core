@@ -568,6 +568,21 @@ OUString SvxNumberFormat::CreateRomanString( sal_Int32 nNo, bool bUpper )
                   : sRet.makeStringAndClear().toAsciiLowerCase();
 }
 
+void SvxNumberFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxNumberFormat"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    SvxNumberType::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("bullet"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OUString(&cBullet, 1).toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 void SvxNumberFormat::SetPrefix(const OUString& rSet)
 {
     // ListFormat manages the prefix. If badly changed via this function, sListFormat is invalidated

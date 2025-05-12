@@ -88,6 +88,8 @@ public:
 
     bool IsEnumeration() const; // #i22362#
     bool IsItemize() const; // #i29560#
+
+    void dumpAsXml(xmlTextWriterPtr w) const override;
 };
 
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
