@@ -36,6 +36,9 @@ namespace test3
 class Foo final
 {
     ~Foo() { f(); }
+#if __has_warning("-Wunnecessary-virtual-specifier")
+#pragma clang diagnostic ignored "-Wunnecessary-virtual-specifier"
+#endif
     virtual void f();
 };
 }
