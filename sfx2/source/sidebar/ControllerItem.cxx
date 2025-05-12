@@ -44,10 +44,15 @@ ControllerItem::~ControllerItem()
     dispose();
 }
 
+static bool IsCloneable(const SfxPoolItem* pState)
+{
+    return pState && !IsInvalidItem(pState) && !IsDisabledItem(pState);
+}
+
 void ControllerItem::ReceiverNotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState)
 {
-    if (nSID == SID_ATTR_METRIC && pState && comphelper::LibreOfficeKit::isActive())
+    if (nSID == SID_ATTR_METRIC && IsCloneable(pState) && comphelper::LibreOfficeKit::isActive())
     {
         std::unique_ptr<SfxPoolItem> xClose(pState->Clone());
         MeasurementSystem eSystem
