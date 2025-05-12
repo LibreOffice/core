@@ -143,9 +143,12 @@ void QtInstanceDrawingArea::handlePaintEvent()
 
 void QtInstanceDrawingArea::handleResizeEvent()
 {
-    const Size aSize = toSize(m_pLabel->size());
-    m_xDevice->SetOutputSizePixel(aSize);
-    m_aSizeAllocateHdl.Call(aSize);
+    const QMargins aMargins = m_pLabel->contentsMargins();
+    const QSize aMarginSize(aMargins.left() + aMargins.right(), aMargins.top() + aMargins.bottom());
+    const QSize aLabelSize = m_pLabel->size();
+    const Size aOutputSize = toSize(aLabelSize - aMarginSize);
+    m_xDevice->SetOutputSizePixel(aOutputSize);
+    m_aSizeAllocateHdl.Call(toSize(aLabelSize));
 }
 
 bool QtInstanceDrawingArea::handleToolTipEvent(QHelpEvent& rEvent)
