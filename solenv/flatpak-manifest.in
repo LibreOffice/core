@@ -845,6 +845,13 @@
                     "dest-filename": "@LIBPNG_TARBALL@"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/@LIBEOT_TARBALL@",
+                    "sha256": "@LIBEOT_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@LIBEOT_TARBALL@"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/extern/@OPENSYMBOL_TTF@",
                     "sha256": "@OPENSYMBOL_SHA256SUM@",
                     "type": "file",
