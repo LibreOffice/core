@@ -1236,7 +1236,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154_portion)
                 u"consectetur adipiscing elit. Vesti ");
 
     // prefer minimum word spacing, not maximum word spacing to disable hyphenation, if it's possible
-    // between the minimum and maximum values. (minumum: 80%, desired: 100%, maximum word spacing: 133%)
+    // between the minimum and maximum values. (minimum: 80%, desired: 100%, maximum word spacing: 133%)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
                 u",,,,,,,,,,,,,,,,,,,,, , , , , , , , , , , , , , , , Lorem ipsum dolor sit amet, "
                 u"consectetur adipiscing elit. Vesti bulum ");
