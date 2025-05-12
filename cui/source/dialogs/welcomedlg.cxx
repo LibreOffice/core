@@ -14,6 +14,8 @@
 #include "../options/appearance.hxx"
 
 #include <comphelper/dispatchcommand.hxx>
+#include <officecfg/Office/UI/ToolbarMode.hxx>
+#include <unotools/confignode.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -93,6 +95,32 @@ IMPL_LINK_NOARG(WelcomeDialog, OnActionClick, weld::Button&, void)
         {
             UITabPage* pUITabPage = static_cast<UITabPage*>(GetCurTabPage());
             OUString sCmd = pUITabPage->GetSelectedMode();
+
+            std::shared_ptr<comphelper::ConfigurationChanges> aBatch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::UI::ToolbarMode::ActiveWriter::set(sCmd, aBatch);
+            officecfg::Office::UI::ToolbarMode::ActiveCalc::set(sCmd, aBatch);
+            officecfg::Office::UI::ToolbarMode::ActiveImpress::set(sCmd, aBatch);
+            officecfg::Office::UI::ToolbarMode::ActiveDraw::set(sCmd, aBatch);
+            aBatch->commit();
+
+            const OUString sCurrentApp = UITabPage::GetCurrentApp();
+            if (SfxViewFrame::Current())
+            {
+                const auto& xContext = comphelper::getProcessComponentContext();
+                const utl::OConfigurationTreeRoot aAppNode(
+                    xContext, u"org.openoffice.Office.UI.ToolbarMode/Applications/"_ustr, true);
+                if (sCurrentApp != "Writer")
+                    aAppNode.setNodeValue(u"Writer/Active"_ustr, css::uno::Any(sCmd));
+                if (sCurrentApp != "Calc")
+                    aAppNode.setNodeValue(u"Calc/Active"_ustr, css::uno::Any(sCmd));
+                if (sCurrentApp != "Impress")
+                    aAppNode.setNodeValue(u"Impress/Active"_ustr, css::uno::Any(sCmd));
+                if (sCurrentApp != "Draw")
+                    aAppNode.setNodeValue(u"Draw/Active"_ustr, css::uno::Any(sCmd));
+                aAppNode.commit();
+            };
+
             comphelper::dispatchCommand(".uno:ToolbarMode?Mode:string=" + sCmd, {});
         }
         break;
