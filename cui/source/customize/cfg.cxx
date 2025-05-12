@@ -3061,21 +3061,16 @@ namespace
 void SvxIconSelectorDialog::ImportGraphics(
     const uno::Sequence< OUString >& rPaths )
 {
-    std::vector< OUString > rejected( rPaths.getLength() );
-    sal_Int32 rejectedCount = 0;
-
-    sal_uInt16 ret = 0;
-    sal_Int32 aIndex;
-    OUString aIconName;
+    std::vector<OUString> rejected;
 
     if ( rPaths.getLength() == 1 )
     {
         if ( m_xImportedImageManager->hasImage( SvxConfigPageHelper::GetImageType(), rPaths[0] ) )
         {
-            aIndex = rPaths[0].lastIndexOf( '/' );
-            aIconName = rPaths[0].copy( aIndex+1 );
+            sal_Int32 aIndex = rPaths[0].lastIndexOf('/');
+            OUString aIconName = rPaths[0].copy(aIndex + 1);
             SvxIconReplacementDialog aDlg(m_xDialog.get(), aIconName, false);
-            ret = aDlg.run();
+            sal_uInt16 ret = aDlg.run();
             if ( ret == 2 )
             {
                 ReplaceGraphicItem( rPaths[0] );
@@ -3085,72 +3080,66 @@ void SvxIconSelectorDialog::ImportGraphics(
         {
             if ( !ImportGraphic( rPaths[0] ) )
             {
-                rejected[0] = rPaths[0];
-                rejectedCount = 1;
+                rejected.push_back(rPaths[0]);
             }
         }
     }
     else
     {
         OUString aSourcePath( rPaths[0] );
-        if ( rPaths[0].lastIndexOf( '/' ) != rPaths[0].getLength() -1 )
-            aSourcePath = rPaths[0] + "/";
+        if (!aSourcePath.endsWith("/"))
+            aSourcePath += "/";
+        bool replaceAll = false;
 
         for ( sal_Int32 i = 1; i < rPaths.getLength(); ++i )
         {
             OUString aPath = aSourcePath + rPaths[i];
+            bool result = true;
             if ( m_xImportedImageManager->hasImage( SvxConfigPageHelper::GetImageType(), aPath ) )
             {
-                aIndex = rPaths[i].lastIndexOf( '/' );
-                aIconName = rPaths[i].copy( aIndex+1 );
-                SvxIconReplacementDialog aDlg(m_xDialog.get(), aIconName, true);
-                ret = aDlg.run();
-                if ( ret == 2 )
+                bool replace = replaceAll;
+                if (!replace)
                 {
-                    ReplaceGraphicItem( aPath );
-                }
-                else if ( ret == 5 )
-                {
-                    for ( sal_Int32 k = i; k < rPaths.getLength(); ++k )
+                    sal_Int32 aIndex = rPaths[i].lastIndexOf('/');
+                    OUString aIconName = rPaths[i].copy(aIndex + 1);
+                    SvxIconReplacementDialog aDlg(m_xDialog.get(), aIconName, true);
+                    sal_uInt16 ret = aDlg.run();
+                    if (ret == 2)
                     {
-                        aPath = aSourcePath + rPaths[k];
-                        bool bHasReplaced = ReplaceGraphicItem( aPath );
-
-                        if ( !bHasReplaced )
-                        {
-                            bool result = ImportGraphic( aPath );
-                            if ( !result )
-                            {
-                                rejected[ rejectedCount ] = rPaths[i];
-                                ++rejectedCount;
-                            }
-                        }
+                        replace = true;
                     }
-                    break;
+                    else if (ret == 5)
+                    {
+                        replace = true;
+                        replaceAll = true;
+                    }
+                }
+                if (replace)
+                {
+                    ReplaceGraphicItem(aPath);
                 }
             }
             else
             {
-                bool result = ImportGraphic( aSourcePath + rPaths[i] );
-                if ( !result )
-                {
-                    rejected[ rejectedCount ] = rPaths[i];
-                    ++rejectedCount;
-                }
+                result = ImportGraphic(aPath);
+            }
+            if (!result)
+            {
+                rejected.push_back(rPaths[i]);
             }
         }
     }
 
-    if ( rejectedCount == 0 )
+    if (rejected.empty())
         return;
 
     OUStringBuffer message;
     OUString fPath;
-    if (rejectedCount > 1)
+    if (rPaths.getLength() > 1)
           fPath = OUString::Concat(rPaths[0].subView(8)) + "/";
-    for ( sal_Int32 i = 0; i < rejectedCount; ++i )
+    for (const auto& rejected_item : rejected)
     {
-        message.append(fPath + rejected[i] + "\n");
+        message.append(fPath + rejected_item + "\n");
     }
 
     SvxIconChangeDialog aDialog(m_xDialog.get(), message.makeStringAndClear());
