@@ -36,7 +36,7 @@ private:
 
     SalXLib *mpXLib;
 
-    virtual SalX11Display* CreateDisplay() const;
+    SalX11Display* CreateDisplay() const;
 
 public:
     explicit X11SalInstance(std::unique_ptr<SalYieldMutex> pMutex);

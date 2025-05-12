@@ -357,7 +357,7 @@ public:
     virtual ~SalX11Display() override;
 
     virtual void        Dispatch( XEvent *pEvent ) override;
-    virtual void        Yield();
+    void        Yield();
     virtual void        TriggerUserEventProcessing() override;
 
     bool                IsEvent();
