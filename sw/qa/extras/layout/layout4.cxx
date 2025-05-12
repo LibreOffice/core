@@ -30,6 +30,8 @@
 #include <dcontact.hxx>
 #include <frameformats.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 namespace
 {
 /// Test to assert layout / rendering result of Writer.
@@ -45,6 +47,16 @@ public:
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testHiddenSectionPageDescs)
 {
     createSwDoc("hidden-sections-with-pagestyles.odt");
+
+    // disable Field Names warning dialog
+    const bool bAsk = officecfg::Office::Common::Misc::QueryShowFieldName::get();
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges;
+    if (bAsk)
+    {
+        xChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::Misc::QueryShowFieldName::set(false, xChanges);
+        xChanges->commit();
+    }
 
     // hide these just so that the height of the section is what is expected;
     // otherwise height depends on which tests run previously
@@ -73,6 +85,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testHiddenSectionPageDescs)
         assertXPath(pXmlDoc, "/root/page[2]/body/section[2]", "formatName", u"Rueckantwort");
         assertXPath(pXmlDoc, "/root/page[2]/body/section[2]/infos/bounds", "height", u"0");
         assertXPath(pXmlDoc, "/root/page[2]", "formatName", u"Folgeseite");
+    }
+
+    if (bAsk)
+    {
+        officecfg::Office::Common::Misc::QueryShowFieldName::set(true, xChanges);
+        xChanges->commit();
     }
 
     // toggle one section hidden and other visible

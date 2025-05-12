@@ -1558,6 +1558,11 @@
 #define STR_QUERY_INSMODE_TEXT NC_("STR_QUERY_INSMODE_TEXT", "The overwrite mode allows to type over text. It is indicated by a block cursor and at the statusbar. Press Insert again to switch back.")
 #define STR_QUERY_INSMODE_QUESTION NC_("STR_QUERY_INSMODE_QUESTION", "Do you want to continue?")
 
+// To translators: title, text, question for confirmation whether to activate Field Names
+#define STR_QUERY_FIELDNAME_TITLE NC_("STR_QUERY_FIELDNAME_TITLE", "You activated Field Names")
+#define STR_QUERY_FIELDNAME_TEXT NC_("STR_QUERY_FIELDNAME_TEXT", "This will show the names of fields not as they appear in the final document but with their internal identifiers.")
+#define STR_QUERY_FIELDNAME_QUESTION NC_("STR_QUERY_FIELDNAME_QUESTION", "Do you want to activate Field Names?")
+
 // To translators: title and question for confirmation whether to delete all comments / all comments by author; text intentionally empty
 #define STR_QUERY_DELALLCOMMENTS_TITLE NC_("STR_QUERY_DELALLCOMMENTS_TITLE", "Confirm delete")
 #define STR_QUERY_DELALLCOMMENTS_QUESTION NC_("STR_QUERY_DELALLCOMMENTS_QUESTION", "Are you sure you want to delete all comments?")

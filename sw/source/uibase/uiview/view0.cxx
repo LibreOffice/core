@@ -73,6 +73,8 @@
 
 #include <sfx2/sidebar/SidebarController.hxx>
 
+#include <strings.hrc>
+
 using namespace ::com::sun::star;
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
@@ -558,12 +560,31 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         pOpt->SetViewAnyRuler( bFlag );
         break;
     case FN_VIEW_FIELDNAME:
+    {
         if( STATE_TOGGLE == eState )
             bFlag = !pOpt->IsFieldName() ;
-
-        pOpt->SetFieldName( bFlag );
+        const bool bDoAsk = officecfg::Office::Common::Misc::QueryShowFieldName::get();
+        short nresult = RET_YES;
+        if (bFlag && bDoAsk)
+        {
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            auto pDlg = pFact->CreateQueryDialog(
+                GetWrtShell().GetView().GetFrameWeld(), SwResId(STR_QUERY_FIELDNAME_TITLE),
+                SwResId(STR_QUERY_FIELDNAME_TEXT), SwResId(STR_QUERY_FIELDNAME_QUESTION), true);
+            nresult = pDlg->Execute();
+            if (pDlg->ShowAgain() == false)
+            {
+                std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+                    comphelper::ConfigurationChanges::create());
+                officecfg::Office::Common::Misc::QueryShowFieldName::set(false, xChanges);
+                xChanges->commit();
+            }
+            pDlg->disposeOnce();
+        }
+        if (nresult == RET_YES)
+            pOpt->SetFieldName(bFlag);
         break;
-
+    }
     case FN_VIEW_MARKS:
         if( STATE_TOGGLE == eState )
             bFlag = !lcl_IsViewMarks(*pOpt) ;

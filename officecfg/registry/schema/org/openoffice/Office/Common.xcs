@@ -5426,6 +5426,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="QueryShowFieldName" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether to show the field name when entering the field mode.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="QueryDeleteAllComments" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines whether to confirm delete all comments or all by user.</desc>
