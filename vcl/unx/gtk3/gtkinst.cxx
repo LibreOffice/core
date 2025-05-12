@@ -12833,6 +12833,13 @@ public:
 #endif
     {
     }
+
+    void set_inconsistent(bool bInconsistent) override
+    {
+        weld::RadioButton::set_inconsistent(bInconsistent);
+    }
+
+    bool get_inconsistent() const override { return weld::RadioButton::get_inconsistent(); }
 };
 
 }

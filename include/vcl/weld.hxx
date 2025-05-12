@@ -1715,6 +1715,15 @@ public:
 
 class VCL_DLLPUBLIC RadioButton : virtual public CheckButton
 {
+public:
+    // radio button doesn't support inconsistent state
+    void set_inconsistent(bool bInconsistent) override
+    {
+        assert(!bInconsistent && "Radio button doesn't support inconsistent state");
+        (void)bInconsistent;
+    }
+
+    bool get_inconsistent() const override { return false; }
 };
 
 class VCL_DLLPUBLIC LinkButton : virtual public Widget

@@ -2028,10 +2028,6 @@ public:
 
     virtual void set_from_icon_name(const OUString& rIconName) override;
 
-    virtual void set_inconsistent(bool /*inconsistent*/) override;
-
-    virtual bool get_inconsistent() const override;
-
     virtual void set_label(const OUString& rText) override { SalInstanceButton::set_label(rText); }
 
     virtual OUString get_label() const override { return SalInstanceButton::get_label(); }

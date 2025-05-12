@@ -3172,13 +3172,6 @@ void SalInstanceRadioButton::set_from_icon_name(const OUString& rIconName)
     m_xRadioButton->SetModeRadioImage(Image(StockImage::Yes, rIconName));
 }
 
-void SalInstanceRadioButton::set_inconsistent(bool /*inconsistent*/)
-{
-    //not available
-}
-
-bool SalInstanceRadioButton::get_inconsistent() const { return false; }
-
 void SalInstanceRadioButton::set_label_wrap(bool bWrap)
 {
     ::set_label_wrap(*m_xRadioButton, bWrap);

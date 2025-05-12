@@ -34,14 +34,6 @@ bool QtInstanceRadioButton::get_active() const
     return bActive;
 }
 
-void QtInstanceRadioButton::set_inconsistent(bool) { assert(false && "Not implemented yet"); }
-
-bool QtInstanceRadioButton::get_inconsistent() const
-{
-    assert(false && "Not implemented yet");
-    return false;
-}
-
 void QtInstanceRadioButton::set_label(const OUString& rText)
 {
     SolarMutexGuard g;
