@@ -263,6 +263,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocSumXMY2,         {{ ForceArray, ForceArray                               }, 0, Value }},
     { ocTake,            {{ ReferenceOrRefArray, Value, Value,                   }, 0, ForceArrayReturn } },
     { ocTTest,           {{ ForceArray, ForceArray, Value, Value                 }, 0, Value }},
+    { ocTextBefore,      {{ ReferenceOrRefArray, ReferenceOrRefArray, ReferenceOrRefArray, Value, Value, Value }, 0, Value } },
     { ocTextJoin_MS,     {{ Reference, Value, Reference                          }, 1, Value }},
     { ocTextSplit,       {{ ReferenceOrRefArray, ReferenceOrRefArray, ReferenceOrRefArray, Value, Value, Value }, 0, ForceArrayReturn } },
     { ocToCol,           {{ ReferenceOrRefArray, Value, Value,                   }, 0, ForceArrayReturn } },

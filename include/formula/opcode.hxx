@@ -520,6 +520,7 @@ enum OpCode : sal_uInt16
         ocHStack            = SC_OPCODE_HSTACK,
         ocVStack            = SC_OPCODE_VSTACK,
         ocTake              = SC_OPCODE_TAKE,
+        ocTextBefore        = SC_OPCODE_TEXTBEFORE,
         ocTextSplit         = SC_OPCODE_TEXTSPLIT,
         ocToCol             = SC_OPCODE_TOCOL,
         ocToRow             = SC_OPCODE_TOROW,
@@ -1017,6 +1018,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocHStack: return "HStack";
     case ocVStack: return "VStack";
     case ocTake: return "Take";
+    case ocTextBefore: return "TextBefore";
     case ocTextSplit: return "TextSplit";
     case ocToCol: return "ToCol";
     case ocToRow: return "ToRow";

@@ -524,13 +524,14 @@
 #define SC_OPCODE_HSTACK            509
 #define SC_OPCODE_VSTACK            510
 #define SC_OPCODE_TAKE              511
-#define SC_OPCODE_TEXTSPLIT         512
-#define SC_OPCODE_TOCOL             513
-#define SC_OPCODE_TOROW             514
-#define SC_OPCODE_UNIQUE            515
-#define SC_OPCODE_WRAPCOLS          516
-#define SC_OPCODE_WRAPROWS          517
-#define SC_OPCODE_STOP_2_PAR        518     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_TEXTBEFORE        512
+#define SC_OPCODE_TEXTSPLIT         513
+#define SC_OPCODE_TOCOL             514
+#define SC_OPCODE_TOROW             515
+#define SC_OPCODE_UNIQUE            516
+#define SC_OPCODE_WRAPCOLS          517
+#define SC_OPCODE_WRAPROWS          518
+#define SC_OPCODE_STOP_2_PAR        519     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */

@@ -3179,6 +3179,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "SUBSTITUTE",
         "T",
         "TEXT",
+        "TEXTBEFORE",
         "TEXTJOIN",
         "TRIM",
         "UNICHAR",

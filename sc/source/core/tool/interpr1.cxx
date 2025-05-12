@@ -9295,6 +9295,163 @@ void ScInterpreter::ScTake()
     ScTakeOrDrop(/*bTake*/ true);
 }
 
+void ScInterpreter::ScTextBefore()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (!MustHaveParamCount(nParamCount, 1, 6))
+        return;
+
+    // 6rd argument optional - if_not_found
+    std::optional<svl::SharedString> aIfNotFound;
+    if (nParamCount == 6)
+        aIfNotFound = GetString();
+
+    // 5rd argument optional - match_end
+    bool bMatchEnd = false;
+    if (nParamCount >= 5)
+    {
+        if (!IsMissing())
+        {
+            bMatchEnd = GetBool();
+        }
+        else
+            Pop();
+    }
+
+    // 4rd argument optional - match_mode
+    bool bMatchMode = false;
+    if (nParamCount >= 4)
+    {
+        if (!IsMissing())
+        {
+            bMatchMode = GetBool();
+        }
+        else
+            Pop();
+    }
+
+    // 3nd argument optional - instance_num
+    sal_Int32 nInstanceNum(1);
+    if (nParamCount >= 3)
+    {
+        if (!IsMissing())
+        {
+            nInstanceNum = GetInt32WithDefault(1);
+        }
+        else
+            Pop();
+    }
+
+    if (nInstanceNum == 0)
+    {
+        PushError(FormulaError::NotAvailable);
+        return;
+    }
+
+    // 2nd argument delimiter
+    std::vector<svl::SharedString> aDelimiters;
+    if (nParamCount >= 2)
+    {
+        ScMatrixRef pMatSource = nullptr;
+        SCSIZE nsC = 0, nsR = 0;
+        switch (GetStackType())
+        {
+            case svSingleRef:
+            case svDoubleRef:
+            case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            {
+                pMatSource = GetMatrix();
+                if (!pMatSource)
+                {
+                    PushIllegalParameter();
+                    return;
+                }
+
+                pMatSource->GetDimensions(nsC, nsR);
+                for (SCSIZE i = 0; i < nsC; i++)
+                {
+                    for (SCSIZE j = 0; j < nsR; j++)
+                    {
+                        aDelimiters.push_back(pMatSource->GetString(i,j));
+                    }
+                }
+            }
+            break;
+
+            default:
+                aDelimiters.push_back(GetString());
+        }
+    }
+
+    // 1st argument: text
+    svl::SharedString sText = GetString();
+    if (sText.isEmpty())
+    {
+        PushIllegalParameter();
+        return;
+    }
+
+    OUString sStr(sText.getString());
+    const sal_Int32 nLength (sStr.getLength());
+    sal_Int32 nStart(0);
+    std::vector<sal_Int32> aDelimiterPositions;
+    while (nStart < nLength)
+    {
+        sal_Int32 nIndex = nLength;
+        sal_Int32 nDelLength(0);
+        bool bFound = false;
+
+        // Find the first delimiter
+        for (auto& rDelimiter : aDelimiters)
+        {
+            if (rDelimiter.isEmpty())
+                continue;
+
+            OUString sDelimiter = rDelimiter.getString();
+            sal_Int32 nDelimiterIndex;
+            if (bMatchMode)
+            {
+                nDelimiterIndex = ScGlobal::getCharClass().lowercase(sStr).indexOf(
+                        ScGlobal::getCharClass().lowercase(sDelimiter), nStart);
+            }
+            else
+                nDelimiterIndex = sStr.indexOf(sDelimiter, nStart);
+
+            if (nDelimiterIndex != -1 && nDelimiterIndex < nIndex)
+            {
+                bFound = true;
+                nDelLength = sDelimiter.getLength();
+                nIndex = nDelimiterIndex;
+            }
+        }
+
+        if (bFound)
+            aDelimiterPositions.push_back(nIndex);
+
+        nStart = nIndex + nDelLength;
+    }
+
+    if (bMatchEnd)
+        aDelimiterPositions.push_back(nLength);
+
+    sal_Int32 nSize(aDelimiterPositions.size());
+    if (nSize == 0 || std::abs(nInstanceNum) > nSize)
+    {
+        if (aIfNotFound.has_value())
+            PushString(aIfNotFound.value());
+        else
+            PushError(FormulaError::NotAvailable);
+    }
+    else
+    {
+        if (nInstanceNum < 0)
+            nInstanceNum = nSize + nInstanceNum + 1;
+
+        PushString(sStr.copy(0, aDelimiterPositions[nInstanceNum - 1]));
+    }
+}
 
 static std::vector<OUString> lcl_SplitText(const OUString& rText, const std::vector<svl::SharedString>& rDelimiters,
         bool bIgnoreEmpty, bool bMatchMode)
