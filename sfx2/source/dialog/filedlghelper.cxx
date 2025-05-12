@@ -646,7 +646,7 @@ void FileDialogHelper_Impl::updatePreviewState( bool _bUpdatePreviewWindow )
 void FileDialogHelper_Impl::updateVersions()
 {
     Sequence < OUString > aEntries;
-    Sequence < OUString > aPathSeq = mxFileDlg->getFiles();
+    Sequence < OUString > aPathSeq = mxFileDlg->getSelectedFiles();
 
     if ( aPathSeq.getLength() == 1 )
     {
@@ -719,7 +719,7 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl, Timer *, void)
     if ( ! xFilePicker.is() )
         return;
 
-    Sequence < OUString > aPathSeq = mxFileDlg->getFiles();
+    Sequence < OUString > aPathSeq = mxFileDlg->getSelectedFiles();
 
     if ( mbShowPreview && ( aPathSeq.getLength() == 1 ) )
     {
@@ -832,7 +832,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
     // rhbz#1079672 do not return maGraphic, it needs not to be the selected file
 
     OUString aPath;
-    Sequence<OUString> aPathSeq = mxFileDlg->getFiles();
+    Sequence<OUString> aPathSeq = mxFileDlg->getSelectedFiles();
 
     if (aPathSeq.getLength() == 1)
     {
@@ -993,14 +993,12 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
     mbAsyncPicker = lcl_isAsyncFilePicker(mxFileDlg);
 
-    uno::Reference< XInitialization > xInit( mxFileDlg, UNO_QUERY );
-
     if ( ! mxFileDlg.is() )
     {
         return;
     }
 
-
+    uno::Reference< XInitialization > xInit( mxFileDlg, UNO_QUERY );
     if ( xInit.is() )
     {
         sal_Int16 nTemplateDescription = TemplateDescription::FILEOPEN_SIMPLE;
@@ -1405,48 +1403,6 @@ void FileDialogHelper_Impl::implStartExecute()
     }
 }
 
-void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker, std::vector<OUString>& rpURLList)
-{
-    rpURLList.clear();
-
-    // a) the new way (optional!)
-    uno::Reference< XFilePicker3 > xPickNew(xPicker, UNO_QUERY);
-    if (xPickNew.is())
-    {
-        Sequence< OUString > lFiles    = xPickNew->getSelectedFiles();
-        comphelper::sequenceToContainer(rpURLList, lFiles);
-    }
-
-    // b) the olde way ... non optional.
-    else
-    {
-        uno::Reference< XFilePicker3 > xPickOld(xPicker, UNO_QUERY_THROW);
-        Sequence< OUString > lFiles = xPickOld->getFiles();
-        ::sal_Int32          nFiles = lFiles.getLength();
-        if ( nFiles == 1 )
-        {
-            rpURLList.push_back(lFiles[0]);
-        }
-        else if ( nFiles > 1 )
-        {
-            INetURLObject aPath( lFiles[0] );
-            aPath.setFinalSlash();
-
-            for (::sal_Int32 i = 1; i < nFiles; i++)
-            {
-                if (i == 1)
-                    aPath.Append( lFiles[i] );
-                else
-                    aPath.setName( lFiles[i] );
-
-                rpURLList.push_back(aPath.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-            }
-        }
-    }
-
-    mlLastURLs = rpURLList;
-}
-
 ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                                         std::optional<SfxAllItemSet>& rpSet,
                                         OUString&       rFilter,
@@ -1571,7 +1527,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
 
         // fill the rpURLList
-        implGetAndCacheFiles( mxFileDlg, rpURLList );
+        comphelper::sequenceToContainer(rpURLList, mxFileDlg->getSelectedFiles());
         if ( rpURLList.empty() )
             return ERRCODE_ABORT;
 
@@ -2732,75 +2688,17 @@ void FileDialogHelper::SetTitle( const OUString& rNewTitle )
 
 OUString FileDialogHelper::GetPath() const
 {
-    OUString aPath;
+    if (mpImpl->mxFileDlg)
+        if (auto aPathSeq = mpImpl->mxFileDlg->getSelectedFiles(); aPathSeq.hasElements())
+            return aPathSeq[0];
 
-    if ( !mpImpl->mlLastURLs.empty())
-        return mpImpl->mlLastURLs[0];
-
-    if ( mpImpl->mxFileDlg.is() )
-    {
-        Sequence < OUString > aPathSeq = mpImpl->mxFileDlg->getFiles();
-
-        if ( aPathSeq.getLength() == 1 )
-        {
-            aPath = aPathSeq[0];
-        }
-    }
-
-    return aPath;
-}
-
-Sequence < OUString > FileDialogHelper::GetMPath() const
-{
-    if ( !mpImpl->mlLastURLs.empty())
-        return comphelper::containerToSequence(mpImpl->mlLastURLs);
-
-    if ( mpImpl->mxFileDlg.is() )
-        return mpImpl->mxFileDlg->getFiles();
-    else
-    {
-        Sequence < OUString > aEmpty;
-        return aEmpty;
-    }
+    return {};
 }
 
 Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
 {
-    // a) the new way (optional!)
-    uno::Sequence< OUString > aResultSeq;
-    if (mpImpl->mxFileDlg.is())
-    {
-        aResultSeq = mpImpl->mxFileDlg->getSelectedFiles();
-    }
-    // b) the olde way ... non optional.
-    else
-    {
-        uno::Reference< XFilePicker > xPickOld(mpImpl->mxFileDlg, UNO_QUERY_THROW);
-        Sequence< OUString > lFiles = xPickOld->getFiles();
-        ::sal_Int32          nFiles = lFiles.getLength();
-        if ( nFiles > 1 )
-        {
-            aResultSeq = Sequence< OUString >( nFiles-1 );
-            auto pResultSeq = aResultSeq.getArray();
-
-            INetURLObject aPath( lFiles[0] );
-            aPath.setFinalSlash();
-
-            for (::sal_Int32 i = 1; i < nFiles; i++)
-            {
-                if (i == 1)
-                    aPath.Append( lFiles[i] );
-                else
-                    aPath.setName( lFiles[i] );
-
-                pResultSeq[i-1] = aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            }
-        }
-        else
-            aResultSeq = std::move(lFiles);
-    }
-
-    return aResultSeq;
+    uno::Reference<XFilePicker3> xFileDlg(mpImpl->mxFileDlg, uno::UNO_SET_THROW);
+    return xFileDlg->getSelectedFiles();
 }
 
 OUString FileDialogHelper::GetDisplayDirectory() const

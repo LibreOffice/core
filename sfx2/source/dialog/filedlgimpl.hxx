@@ -53,8 +53,6 @@ namespace sfx2
         FileDialogHelper*           mpAntiImpl;
         weld::Window*               mpFrameWeld;
 
-        ::std::vector< OUString > mlLastURLs;
-
         OUString             maPath;
         OUString             maFileName;
         OUString             maCurFilter;
@@ -139,9 +137,6 @@ namespace sfx2
         void                    implInitializeFileName( );
 
         void                    verifyPath( );
-
-        void                    implGetAndCacheFiles( const css::uno::Reference< XInterface >& xPicker  ,
-                                                      std::vector<OUString>&                   rpURLList );
 
         DECL_LINK( TimeOutHdl_Impl, Timer *, void);
 
