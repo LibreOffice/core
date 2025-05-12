@@ -203,7 +203,6 @@ public:
         , mnBaseValue(USHRT_MAX)
         , mdX( -1.0 )
         , mdY( -1.0 )
-        , mbMouseCaptured(false)
     {
     }
 
@@ -241,7 +240,6 @@ private:
     sal_uInt16 mnBaseValue;
     double mdX;
     double mdY;
-    bool mbMouseCaptured;
     Point maPosition;
     VclPtr<VirtualDevice> mxBitmap;
     Link<ColorFieldControl&,void> maModifyHdl;
@@ -443,7 +441,6 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
 bool ColorFieldControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     CaptureMouse();
-    mbMouseCaptured = true;
     ShowPosition(rMEvt.GetPosPixel(), true);
     Modify();
     return true;
@@ -451,7 +448,7 @@ bool ColorFieldControl::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool ColorFieldControl::MouseMove(const MouseEvent& rMEvt)
 {
-    if (mbMouseCaptured)
+    if (IsMouseCaptured())
     {
         ShowPosition(rMEvt.GetPosPixel(), true);
         Modify();
@@ -462,7 +459,6 @@ bool ColorFieldControl::MouseMove(const MouseEvent& rMEvt)
 bool ColorFieldControl::MouseButtonUp(const MouseEvent&)
 {
     ReleaseMouse();
-    mbMouseCaptured = false;
     return true;
 }
 
