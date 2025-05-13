@@ -18,7 +18,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/tdf159529.patch.0 \
     external/harfbuzz/harfbuzz_visibility.patch.1 \
-    external/harfbuzz/0001-buffer-Allow-unsafe_to_break-whole-buffer-to-succeed.patch.1 \
 ))
 
 # meson will replace python3 from shebang in build commands with the
