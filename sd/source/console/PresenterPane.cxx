@@ -149,7 +149,8 @@ void PresenterPane::Invalidate (const css::awt::Rectangle& rRepaintBox)
 
 void PresenterPane::UpdateBoundingBox()
 {
-    if (mxBorderWindow.is() && IsVisible())
+    uno::Reference<css::awt::XWindow2> xWindow(mxBorderWindow, UNO_QUERY);
+    if (xWindow.is() && xWindow->isVisible())
         maBoundingBox = mxBorderWindow->getPosSize();
     else
         maBoundingBox = awt::Rectangle();

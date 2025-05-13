@@ -250,11 +250,6 @@ void PresenterPaneBase::LayoutContextWindow()
         awt::PosSize::POSSIZE);
 }
 
-bool PresenterPaneBase::IsVisible()
-{
-    return false;
-}
-
 void PresenterPaneBase::ThrowIfDisposed()
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

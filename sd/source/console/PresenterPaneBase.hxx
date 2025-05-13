@@ -113,7 +113,6 @@ protected:
     void PaintBorder (const css::awt::Rectangle& rUpdateRectangle);
     void ToTop();
     void LayoutContextWindow();
-    static bool IsVisible();
 
     /** @throws css::lang::DisposedException when the object has already been
         disposed.
