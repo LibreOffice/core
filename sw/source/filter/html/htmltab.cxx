@@ -1493,7 +1493,10 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 std::unique_ptr<SvxBoxItem> pOldBoxItem;
                 if (const SvxBoxItem* pBoxItem2 = rAttrSet.GetItemIfSet(RES_BOX))
                     pOldBoxItem.reset(pBoxItem2->Clone());
-                pTableFormat->UpdateToSet(nPos, m_nRows==1, m_nCols==1,
+
+                bool bSpansToEndV = m_nRows == 1 || (nRowSpan > 1 && nRow + nRowSpan == m_nRows);
+                bool bSpansToEndH = m_nCols == 1 || (nColSpan > 1 && nCol + nColSpan == m_nCols);
+                pTableFormat->UpdateToSet(nPos, bSpansToEndV, bSpansToEndH,
                                           const_cast<SfxItemSet&>(rAttrSet),
                                           SwTableAutoFormatUpdateFlags::Box,
                                           pFrameFormat->GetDoc()->GetNumberFormatter());
