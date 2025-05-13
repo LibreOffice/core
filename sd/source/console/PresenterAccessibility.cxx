@@ -325,7 +325,7 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
         if (mpPresenterController.is())
             mpPresenterController->SetAccessibilityActiveState(true);
     }
-    return mpAccessibleConsole->getAccessibleContext();
+    return mpAccessibleConsole;
 }
 
 //----- XFocusListener ----------------------------------------------------
