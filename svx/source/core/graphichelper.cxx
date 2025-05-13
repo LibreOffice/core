@@ -237,7 +237,7 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
 
         if( aDialogHelper.Execute() == ERRCODE_NONE )
         {
-            OUString sPath( xFilePicker->getFiles().getConstArray()[0] );
+            OUString sPath(xFilePicker->getSelectedFiles()[0]);
             if( !rGraphicName.isEmpty() &&
                 nDefaultFilter == rGraphicFilter.GetExportFormatNumber( xFilePicker->getCurrentFilter()))
             {
@@ -425,7 +425,7 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
 
         if( aDialogHelper.Execute() == ERRCODE_NONE )
         {
-            OUString sPath( xFilePicker->getFiles().getConstArray()[0] );
+            OUString sPath(xFilePicker->getSelectedFiles()[0]);
             OUString aExportMimeType( aMimeTypeMap[xFilePicker->getCurrentFilter()] );
 
             GraphicHelper::SaveShapeAsGraphicToPath(xComponent, xShape, aExportMimeType, sPath);
