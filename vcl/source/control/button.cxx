@@ -1855,13 +1855,14 @@ void CancelButton::Click()
         {
             if ( pParent->IsDialog() )
             {
-                if ( static_cast<Dialog*>(pParent)->IsInExecute() )
-                    static_cast<Dialog*>(pParent)->EndDialog();
+                Dialog* pDialog = static_cast<Dialog*>(pParent);
+                if (pDialog->IsInExecute())
+                    pDialog->EndDialog();
                 // prevent recursive calls
-                else if ( !static_cast<Dialog*>(pParent)->IsInClose() )
+                else if (!pDialog->IsInClose())
                 {
                     if ( pParent->GetStyle() & WB_CLOSEABLE )
-                        static_cast<Dialog*>(pParent)->Close();
+                        pDialog->Close();
                 }
             }
             else
