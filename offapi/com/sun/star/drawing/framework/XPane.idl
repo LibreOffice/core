@@ -22,7 +22,7 @@ module com { module sun { module star { module drawing { module framework {
 /** A pane is an abstraction of a window and is one of the resources managed
     by the drawing framework.
     <p>Apart from the area that displays a view a pane may contain other
-    parts like title, menu, closer button.</p>
+    parts like title, menu, close button.</p>
     <p>The URL prefix of panes is <code>private:resource/floater</code></p>
 */
 interface XPane
