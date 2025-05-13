@@ -693,7 +693,8 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles()
       and unimplementable for some heterogeneous pseudo-URIs eg. search:
       Thus crop unconditionally to a single selection.
     */
-    aFiles.realloc (1);
+    if (aFiles.getLength() > 1)
+        aFiles.realloc(1);
     return aFiles;
 }
 
