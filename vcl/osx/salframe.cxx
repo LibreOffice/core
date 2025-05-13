@@ -57,10 +57,6 @@
 #include <quartz/CGHelpers.hxx>
 #include <postmac.h>
 
-#if HAVE_FEATURE_SKIA
-#include <vcl/skia/SkiaHelper.hxx>
-#endif
-
 const int nMinBlinkCursorDelay = 500;
 
 AquaSalFrame* AquaSalFrame::s_pCaptureFrame = nullptr;
@@ -1148,34 +1144,12 @@ bool AquaSalFrame::doFlush()
 
     if( mbForceFlushScrolling || mbForceFlushProgressBar || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
     {
-        // Related: tdf#163945 don't directly flush graphics with Skia/Metal
-        // When dragging a selection box on an empty background in
-        // Impress and only with Skia/Metal, the selection box
-        // would not keep up with the pointer. The selection box
-        // would repaint sporadically or not at all if the pointer
-        // was dragged rapidly and the status bar was visible.
-        // Apparently, flushing a graphics doesn't actually do much
-        // of anything with Skia/Raster and Skia disabled so the
-        // selection box repaints without any noticeable delay.
-        // However, with Skia/Metal every flush of a graphics
-        // creates and queues a new CAMetalLayer drawable. During
-        // rapid dragging, this can lead to creating and queueing
-        // up to 200 drawables per second leaving no spare time for
-        // the Impress selection box painting timer to fire.
-        // So with Skia/Metal, throttle the rate of flushing by
-        // calling display on the view.
-        bool bDisplay = false;
-#if HAVE_FEATURE_SKIA
-        // tdf#164428 Skia/Metal needs flush after drawing progress bar
-        bDisplay = !mbForceFlushProgressBar && SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster;
-#endif
-        if (!bDisplay)
-            mpGraphics->Flush();
+        mpGraphics->Flush();
 
         // Related: tdf#155266 skip redisplay of the view when forcing flush
         // It appears that calling -[NSView display] overwhelms some Intel Macs
         // so only flush the graphics and skip immediate redisplay of the view.
-        bRet = bDisplay || ImplGetSVData()->maAppData.mnDispatchLevel <= 0;
+        bRet = ImplGetSVData()->maAppData.mnDispatchLevel <= 0;
 
         mbForceFlushScrolling = false;
         mbForceFlushProgressBar = false;

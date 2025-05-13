@@ -114,9 +114,14 @@ enum class SalEvent;
     NSTrackingArea* mpLastTrackingArea;
 
     BOOL            mbInViewDidChangeEffectiveAppearance;
+
+    NSTimer*        mpMouseDraggedTimer;
+    NSEvent*        mpPendingMouseDraggedEvent;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
+-(void)clearMouseDraggedTimer;
+-(void)clearPendingMouseDraggedEvent;
 -(void)dealloc;
 -(AquaSalFrame*)getSalFrame;
 -(BOOL)acceptsFirstResponder;
@@ -273,6 +278,8 @@ enum class SalEvent;
 -(NSArray <id<NSAccessibilityElement>> *)accessibilityChildrenInNavigationOrder;
 
 -(void)viewDidChangeEffectiveAppearance;
+
+-(void)mouseDraggedWithTimer:(NSTimer *)pTimer;
 
 @end
 

@@ -961,13 +961,39 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
         mpLastTrackingArea = nil;
 
         mbInViewDidChangeEffectiveAppearance = NO;
+
+        mpMouseDraggedTimer = nil;
+        mpPendingMouseDraggedEvent = nil;
     }
 
     return self;
 }
 
+-(void)clearMouseDraggedTimer
+{
+    if ( mpMouseDraggedTimer )
+    {
+        [mpMouseDraggedTimer invalidate];
+        [mpMouseDraggedTimer release];
+        mpMouseDraggedTimer = nil;
+    }
+
+    // Clear the pending mouse dragged event as well
+    [self clearPendingMouseDraggedEvent];
+}
+
+-(void)clearPendingMouseDraggedEvent
+{
+    if ( mpPendingMouseDraggedEvent )
+    {
+        [mpPendingMouseDraggedEvent release];
+        mpPendingMouseDraggedEvent = nil;
+    }
+}
+
 -(void)dealloc
 {
+    [self clearMouseDraggedTimer];
     [self clearLastEvent];
     [self clearLastMarkedText];
     [self clearLastTrackingArea];
@@ -1137,17 +1163,47 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
 
 -(void)mouseDragged: (NSEvent*)pEvent
 {
-    if ( mpMouseEventListener != nil &&
-         [mpMouseEventListener respondsToSelector: @selector(mouseDragged:)])
+    // tdf#163945 Coalesce mouse dragged events
+    // When dragging a selection box on an empty background in Impress
+    // while using Skia/Metal, the selection box would not keep up with
+    // the pointer. The selection box would repaint sporadically or not
+    // at all if the pointer was dragged rapidly and the status bar was
+    // visible.
+    // Apparently, flushing a graphics doesn't actually do much of
+    // anything with Skia/Raster and Skia disabled so the selection box
+    // repaints without any noticeable delay.
+    // However, with Skia/Metal every flush of a graphics creates and
+    // queues a new CAMetalLayer drawable. During rapid dragging, this
+    // can lead to creating and queueing up to 200 drawables per second
+    // leaving no spare time for the Impress selection box painting
+    // timer to fire. So coalesce mouse dragged events so that only
+    // a maximum of 50 mouse dragged events are dispatched per second.
+    [self clearPendingMouseDraggedEvent];
+    mpPendingMouseDraggedEvent = [pEvent retain];
+    if ( !mpMouseDraggedTimer )
     {
-        [mpMouseEventListener mouseDragged: [pEvent copyWithZone: nullptr]];
+        mpMouseDraggedTimer = [NSTimer scheduledTimerWithTimeInterval:0.025f target:self selector:@selector(mouseDraggedWithTimer:) userInfo:nil repeats:YES];
+        if ( mpMouseDraggedTimer )
+        {
+            [mpMouseDraggedTimer retain];
+
+            // The timer won't fire without a call to
+            // Application::Reschedule() unless we copy the fix for
+            // #i84055# from vcl/osx/saltimer.cxx and add the timer
+            // to the NSEventTrackingRunLoopMode run loop mode
+            [[NSRunLoop currentRunLoop] addTimer:mpMouseDraggedTimer forMode:NSEventTrackingRunLoopMode];
+        }
     }
-    s_nLastButton = MOUSE_LEFT;
-    [self sendMouseEventToFrame:pEvent button:MOUSE_LEFT eventtype:SalEvent::MouseMove];
 }
 
 -(void)mouseUp: (NSEvent*)pEvent
 {
+    // Dispatch any pending mouse dragged event before dispatching the
+    // mouse up event
+    if ( mpPendingMouseDraggedEvent )
+        [self mouseDraggedWithTimer: nil];
+    [self clearMouseDraggedTimer];
+
     s_nLastButton = 0;
     [self sendMouseEventToFrame:pEvent button:MOUSE_LEFT eventtype:SalEvent::MouseButtonUp];
 }
@@ -2882,6 +2938,29 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
     }
 
     mbInViewDidChangeEffectiveAppearance = NO;
+}
+
+-(void)mouseDraggedWithTimer: (NSTimer *)pTimer
+{
+    (void)pTimer;
+
+    if ( mpPendingMouseDraggedEvent )
+    {
+        if ( mpMouseEventListener != nil &&
+             [mpMouseEventListener respondsToSelector: @selector(mouseDragged:)])
+        {
+            [mpMouseEventListener mouseDragged: [mpPendingMouseDraggedEvent copyWithZone: nullptr]];
+        }
+
+        s_nLastButton = MOUSE_LEFT;
+        [self sendMouseEventToFrame:mpPendingMouseDraggedEvent button:MOUSE_LEFT eventtype:SalEvent::MouseMove];
+
+        [self clearPendingMouseDraggedEvent];
+    }
+    else
+    {
+        [self clearMouseDraggedTimer];
+    }
 }
 
 @end
