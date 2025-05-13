@@ -556,11 +556,6 @@ private:
     */
     ::std::unique_ptr< ::sd::WindowUpdater> mpWindowUpdater;
 
-    /** Code common to all constructors.  It generally is a bad idea
-        to call this function from outside a constructor.
-    */
-    void construct();
-
     /** Create the rulers.
     */
     void SetupRulers();

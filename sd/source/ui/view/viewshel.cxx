@@ -150,66 +150,25 @@ SfxViewFrame* ViewShell::GetViewFrame() const
 /// declare SFX-Slotmap and standard interface
 
 ViewShell::ViewShell( vcl::Window* pParentWindow, ViewShellBase& rViewShellBase)
-:   SfxShell(&rViewShellBase)
-,   mpParentWindow(pParentWindow)
+    :   SfxShell(&rViewShellBase)
+    ,   mbHasRulers(false)
+    ,   mpActiveWindow(nullptr)
+    ,   mpView(nullptr)
+    ,   mpFrameView(nullptr)
+    ,   mpZoomList(new ZoomList( this ))
+    ,   mfLastZoomScale(0)
+    ,   mbStartShowWithDialog(false)
+    ,   mnPrintedHandoutPageNum(1)
+    ,   mnPrintedHandoutPageCount(0)
+    ,   meShellType(ST_NONE)
+    ,   mpImpl(new Implementation(*this))
+    ,   mpParentWindow(pParentWindow)
+    ,   mpWindowUpdater(new ::sd::WindowUpdater())
 {
-    construct();
-}
-
-ViewShell::~ViewShell()
-{
-    // Keep the content window from accessing in its destructor the
-    // WindowUpdater.
-    if (mpContentWindow)
-        suppress_fun_call_w_exception(mpContentWindow->SetViewShell(nullptr));
-
-    mpZoomList.reset();
-
-    mpLayerTabBar.disposeAndClear();
-
-    if (mpImpl->mpSubShellFactory)
-        GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(
-            this,mpImpl->mpSubShellFactory);
-
-    if (mpContentWindow)
-    {
-        SAL_INFO(
-            "sd.view",
-            "destroying mpContentWindow at " << mpContentWindow.get()
-                << " with parent " << mpContentWindow->GetParent());
-        mpContentWindow.disposeAndClear();
-    }
-
-    mpVerticalRuler.disposeAndClear();
-    mpHorizontalRuler.disposeAndClear();
-    mpVerticalScrollBar.disposeAndClear();
-    mpHorizontalScrollBar.disposeAndClear();
-}
-
-/**
- * common initialization part of both constructors
- */
-void ViewShell::construct()
-{
-    mbHasRulers = false;
-    mpActiveWindow = nullptr;
-    mpView = nullptr;
-    mpFrameView = nullptr;
-    mpZoomList = nullptr;
-    mfLastZoomScale = 0;
-    mbStartShowWithDialog = false;
-    mnPrintedHandoutPageNum = 1;
-    mnPrintedHandoutPageCount = 0;
-    mpWindowUpdater.reset( new ::sd::WindowUpdater() );
-    mpImpl.reset(new Implementation(*this));
-    meShellType = ST_NONE;
-
     OSL_ASSERT (GetViewShell()!=nullptr);
 
     if (IsMainViewShell())
         GetDocSh()->Connect (this);
-
-    mpZoomList.reset( new ZoomList( this ) );
 
     mpContentWindow.reset(VclPtr< ::sd::Window >::Create(GetParentWindow()));
     SetActiveWindow (mpContentWindow.get());
@@ -251,6 +210,36 @@ void ViewShell::construct()
     // Register the sub shell factory.
     mpImpl->mpSubShellFactory = std::make_shared<ViewShellObjectBarFactory>(*this);
     GetViewShellBase().GetViewShellManager()->AddSubShellFactory(this,mpImpl->mpSubShellFactory);
+}
+
+ViewShell::~ViewShell()
+{
+    // Keep the content window from accessing in its destructor the
+    // WindowUpdater.
+    if (mpContentWindow)
+        suppress_fun_call_w_exception(mpContentWindow->SetViewShell(nullptr));
+
+    mpZoomList.reset();
+
+    mpLayerTabBar.disposeAndClear();
+
+    if (mpImpl->mpSubShellFactory)
+        GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(
+            this,mpImpl->mpSubShellFactory);
+
+    if (mpContentWindow)
+    {
+        SAL_INFO(
+            "sd.view",
+            "destroying mpContentWindow at " << mpContentWindow.get()
+                << " with parent " << mpContentWindow->GetParent());
+        mpContentWindow.disposeAndClear();
+    }
+
+    mpVerticalRuler.disposeAndClear();
+    mpHorizontalRuler.disposeAndClear();
+    mpVerticalScrollBar.disposeAndClear();
+    mpHorizontalScrollBar.disposeAndClear();
 }
 
 void ViewShell::doShow()
