@@ -80,12 +80,6 @@ vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWind
     return pVCLXWindow ? pVCLXWindow->GetWindow() : nullptr;
 }
 
-vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow2>& rxWindow )
-{
-    VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>( rxWindow.get() );
-    return pVCLXWindow ? pVCLXWindow->GetWindow() : nullptr;
-}
-
 vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindowPeer>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>( rxWindow.get() );
