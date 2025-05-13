@@ -1412,8 +1412,6 @@ ErrCode FileDialogHelper_Impl::execute( css::uno::Sequence<OUString>& rpURLList,
     // changing this would surely break code
     // rpSet is in/out parameter, usually just a media-descriptor that can be changed by dialog
 
-    uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-
     // retrieves parameters from rpSet
     // for now only Password is used
     if ( rpSet )
@@ -1421,16 +1419,16 @@ ErrCode FileDialogHelper_Impl::execute( css::uno::Sequence<OUString>& rpURLList,
         // check password checkbox if the document had password before
         if( mbHasPassword )
         {
-            const SfxBoolItem* pPassItem = SfxItemSet::GetItem<SfxBoolItem>(&*rpSet, SID_PASSWORDINTERACTION, false);
+            const SfxBoolItem* pPassItem = rpSet->GetItem(SID_PASSWORDINTERACTION, false);
             // TODO: tdf#158839 problem: Is also true if the file is GPG encrypted. (not with a password)
             mbPwdCheckBoxState = ( pPassItem != nullptr && pPassItem->GetValue() );
 
             // in case the document has password to modify, the dialog should be shown
-            const SfxUnoAnyItem* pPassToModifyItem = SfxItemSet::GetItem<SfxUnoAnyItem>(&*rpSet, SID_MODIFYPASSWORDINFO, false);
+            const SfxUnoAnyItem* pPassToModifyItem = rpSet->GetItem(SID_MODIFYPASSWORDINFO, false);
             mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue().hasValue() );
         }
 
-        const SfxBoolItem* pSelectItem = SfxItemSet::GetItem<SfxBoolItem>(&*rpSet, SID_SELECTION, false);
+        const SfxBoolItem* pSelectItem = rpSet->GetItem(SID_SELECTION, false);
         if ( pSelectItem )
             mbSelection = pSelectItem->GetValue();
         else
@@ -1462,177 +1460,174 @@ ErrCode FileDialogHelper_Impl::execute( css::uno::Sequence<OUString>& rpURLList,
     if ( ! mxFileDlg.is() )
         return ERRCODE_ABORT;
 
-    if ( ExecutableDialogResults::CANCEL != implDoExecute() )
-    {
-        // create an itemset if there is no
-        if( !rpSet )
-            rpSet.emplace( SfxGetpApp()->GetPool() );
-
-        // the item should remain only if it was set by the dialog
-        rpSet->ClearItem( SID_SELECTION );
-
-        if( mbExport && mbHasSelectionBox )
-        {
-            try
-            {
-                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
-                bool bSelection = false;
-                if ( aValue >>= bSelection )
-                    rpSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
-            }
-            catch( const IllegalArgumentException& )
-            {
-                TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
-            }
-        }
-
-
-        // set the read-only flag. When inserting a file, this flag is always set
-        if ( mbInsert )
-            rpSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
-        else
-        {
-            if ( ( FILEOPEN_READONLY_VERSION == m_nDialogType ) && xCtrlAccess.is() )
-            {
-                try
-                {
-                    Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
-                    bool bReadOnly = false;
-                    if ( ( aValue >>= bReadOnly ) && bReadOnly )
-                        rpSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
-                }
-                catch( const IllegalArgumentException& )
-                {
-                    TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
-                }
-            }
-        }
-        if ( mbHasVersions && xCtrlAccess.is() )
-        {
-            try
-            {
-                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
-                                                    ControlActions::GET_SELECTED_ITEM_INDEX );
-                sal_Int32 nVersion = 0;
-                if ( ( aValue >>= nVersion ) && nVersion > 0 )
-                    // open a special version; 0 == current version
-                    rpSet->Put( SfxInt16Item( SID_VERSION, static_cast<short>(nVersion) ) );
-            }
-            catch( const IllegalArgumentException& ){}
-        }
-
-        // set the filter
-        getRealFilter( rFilter );
-
-        std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
-
-        // fill the rpURLList
-        rpURLList = mxFileDlg->getSelectedFiles();
-        if (!rpURLList.hasElements())
-            return ERRCODE_ABORT;
-
-        // check, whether or not we have to display a password box
-        if ( pCurrentFilter && mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
-        {
-            try
-            {
-                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
-                bool bPassWord = false;
-                if ( ( aValue >>= bPassWord ) && bPassWord )
-                {
-                    SvtSaveOptions::ODFSaneDefaultVersion nVersion{
-                        SvtSaveOptions::ODFSVER_LATEST_EXTENDED};
-                    if (!comphelper::IsFuzzing())
-                    {
-                        nVersion = GetODFSaneDefaultVersion();
-                    }
-                    // old per-zip-entry ODF encryption destroys macro signatures
-                    if (!::sfx2::UseODFWholesomeEncryption(nVersion)
-                        && (   SignatureState::OK == nScriptingSignatureState
-                            || SignatureState::INVALID == nScriptingSignatureState
-                            || SignatureState::NOTVALIDATED == nScriptingSignatureState
-                            || SignatureState::PARTIAL_OK == nScriptingSignatureState))
-                    {
-                        std::unique_ptr<weld::MessageDialog> xBox(
-                            Application::CreateMessageDialog(mpFrameWeld,
-                                VclMessageType::Question, VclButtonsType::YesNo,
-                                SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSCRIPTINGSIGNATURE)));
-                        if (xBox->run() == RET_NO)
-                        {
-                            bPassWord = false;
-                        }
-                    }
-                }
-
-                if (bPassWord)
-                {
-                    // ask for a password
-                    const OUString& aDocName(rpURLList[0]);
-                    // TODO: tdf#158839 problem: Also asks for a password if CHECKBOX_GPGENCRYPTION && CHECKBOX_PASSWORD
-                    //       are checked. But only encrypts using GPG and discards the password.
-                    ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, &*rpSet, GetFrameInterface());
-                    if (errCode != ERRCODE_NONE)
-                        return errCode;
-                }
-            }
-            catch( const IllegalArgumentException& ){}
-        }
-        // check, whether or not we have to display a key selection box
-        if ( pCurrentFilter && mbHasPassword && xCtrlAccess.is() )
-        {
-            try
-            {
-                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION, 0 );
-                bool bGpg = false;
-                if ( ( aValue >>= bGpg ) && bGpg )
-                {
-                    uno::Sequence< beans::NamedValue > aEncryptionData;
-                    while(true)
-                    {
-                        try
-                        {
-                            // ask for keys
-                            aEncryptionData
-                                = ::comphelper::OStorageHelper::CreateGpgPackageEncryptionData(
-                                    GetFrameInterface());
-                            break; // user cancelled or we've some keys now
-                        }
-                        catch( const IllegalArgumentException& )
-                        {
-                            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(mpFrameWeld,
-                                                                                     VclMessageType::Warning, VclButtonsType::Ok,
-                                                                                     SfxResId(RID_SVXSTR_GPG_ENCRYPT_FAILURE)));
-                            xBox->run();
-                        }
-                    }
-
-                    if ( aEncryptionData.hasElements() )
-                        rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData) ) );
-                    else
-                        return ERRCODE_ABORT;
-                }
-            }
-            catch( const IllegalArgumentException& ){}
-        }
-        if ( pCurrentFilter && xCtrlAccess.is() )
-        {
-            try
-            {
-                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_GPGSIGN, 0 );
-                bool bSign = false;
-                if ((aValue >>= bSign) && bSign)
-                {
-                    rpSet->Put(SfxBoolItem(SID_GPGSIGN, bSign));
-                }
-            }
-            catch( const IllegalArgumentException& ){}
-        }
-
-        SaveLastUsedFilter();
-        return ERRCODE_NONE;
-    }
-    else
+    if (ExecutableDialogResults::CANCEL == implDoExecute())
         return ERRCODE_ABORT;
+
+    // fill the rpURLList
+    rpURLList = mxFileDlg->getSelectedFiles();
+    if (!rpURLList.hasElements())
+        return ERRCODE_ABORT;
+
+    uno::Reference<XFilePickerControlAccess> xCtrlAccess(mxFileDlg, UNO_QUERY);
+
+    // create an itemset if there is no
+    if( !rpSet )
+        rpSet.emplace( SfxGetpApp()->GetPool() );
+
+    // the item should remain only if it was set by the dialog
+    rpSet->ClearItem( SID_SELECTION );
+
+    if (mbExport && mbHasSelectionBox && xCtrlAccess)
+    {
+        try
+        {
+            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
+            bool bSelection = false;
+            if ( aValue >>= bSelection )
+                rpSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
+        }
+        catch( const IllegalArgumentException& )
+        {
+            TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+        }
+    }
+
+
+    // set the read-only flag. When inserting a file, this flag is always set
+    if ( mbInsert )
+        rpSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+    else if ( ( FILEOPEN_READONLY_VERSION == m_nDialogType ) && xCtrlAccess.is() )
+    {
+        try
+        {
+            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
+            bool bReadOnly = false;
+            if ( ( aValue >>= bReadOnly ) && bReadOnly )
+                rpSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
+        }
+        catch( const IllegalArgumentException& )
+        {
+            TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+        }
+    }
+    if ( mbHasVersions && xCtrlAccess.is() )
+    {
+        try
+        {
+            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+                                                ControlActions::GET_SELECTED_ITEM_INDEX );
+            sal_Int32 nVersion = 0;
+            if ( ( aValue >>= nVersion ) && nVersion > 0 )
+                // open a special version; 0 == current version
+                rpSet->Put( SfxInt16Item( SID_VERSION, static_cast<short>(nVersion) ) );
+        }
+        catch( const IllegalArgumentException& ){}
+    }
+
+    // set the filter
+    getRealFilter( rFilter );
+
+    std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
+
+    // check, whether or not we have to display a password box
+    if ( pCurrentFilter && mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
+    {
+        try
+        {
+            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
+            bool bPassWord = false;
+            if ( ( aValue >>= bPassWord ) && bPassWord )
+            {
+                SvtSaveOptions::ODFSaneDefaultVersion nVersion{
+                    SvtSaveOptions::ODFSVER_LATEST_EXTENDED};
+                if (!comphelper::IsFuzzing())
+                {
+                    nVersion = GetODFSaneDefaultVersion();
+                }
+                // old per-zip-entry ODF encryption destroys macro signatures
+                if (!::sfx2::UseODFWholesomeEncryption(nVersion)
+                    && (   SignatureState::OK == nScriptingSignatureState
+                        || SignatureState::INVALID == nScriptingSignatureState
+                        || SignatureState::NOTVALIDATED == nScriptingSignatureState
+                        || SignatureState::PARTIAL_OK == nScriptingSignatureState))
+                {
+                    std::unique_ptr<weld::MessageDialog> xBox(
+                        Application::CreateMessageDialog(mpFrameWeld,
+                            VclMessageType::Question, VclButtonsType::YesNo,
+                            SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSCRIPTINGSIGNATURE)));
+                    if (xBox->run() == RET_NO)
+                    {
+                        bPassWord = false;
+                    }
+                }
+            }
+
+            if (bPassWord)
+            {
+                // ask for a password
+                const OUString& aDocName(rpURLList[0]);
+                // TODO: tdf#158839 problem: Also asks for a password if CHECKBOX_GPGENCRYPTION && CHECKBOX_PASSWORD
+                //       are checked. But only encrypts using GPG and discards the password.
+                ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, &*rpSet, GetFrameInterface());
+                if (errCode != ERRCODE_NONE)
+                    return errCode;
+            }
+        }
+        catch( const IllegalArgumentException& ){}
+    }
+    // check, whether or not we have to display a key selection box
+    if ( pCurrentFilter && mbHasPassword && xCtrlAccess.is() )
+    {
+        try
+        {
+            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION, 0 );
+            bool bGpg = false;
+            if ( ( aValue >>= bGpg ) && bGpg )
+            {
+                uno::Sequence< beans::NamedValue > aEncryptionData;
+                while(true)
+                {
+                    try
+                    {
+                        // ask for keys
+                        aEncryptionData
+                            = ::comphelper::OStorageHelper::CreateGpgPackageEncryptionData(
+                                GetFrameInterface());
+                        break; // user cancelled or we've some keys now
+                    }
+                    catch( const IllegalArgumentException& )
+                    {
+                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(mpFrameWeld,
+                                                                                 VclMessageType::Warning, VclButtonsType::Ok,
+                                                                                 SfxResId(RID_SVXSTR_GPG_ENCRYPT_FAILURE)));
+                        xBox->run();
+                    }
+                }
+
+                if ( aEncryptionData.hasElements() )
+                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData) ) );
+                else
+                    return ERRCODE_ABORT;
+            }
+        }
+        catch( const IllegalArgumentException& ){}
+    }
+    if ( pCurrentFilter && xCtrlAccess.is() )
+    {
+        try
+        {
+            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_GPGSIGN, 0 );
+            bool bSign = false;
+            if ((aValue >>= bSign) && bSign)
+            {
+                rpSet->Put(SfxBoolItem(SID_GPGSIGN, bSign));
+            }
+        }
+        catch( const IllegalArgumentException& ){}
+    }
+
+    SaveLastUsedFilter();
+    return ERRCODE_NONE;
 }
 
 ErrCode FileDialogHelper_Impl::execute()
