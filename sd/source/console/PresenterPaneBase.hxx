@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEBASE_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEBASE_HXX
 
+#include "PresenterPaneBorderPainter.hxx"
+
 #include <PresenterHelper.hxx>
 
 #include <cppuhelper/basemutex.hxx>
@@ -27,7 +29,6 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XPaneBorderPainter.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <rtl/ref.hxx>
@@ -37,12 +38,9 @@ namespace sdext::presenter {
 
 class PresenterController;
 
-typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XPane,
-    css::lang::XInitialization,
-    css::awt::XWindowListener,
-    css::awt::XPaintListener
-> PresenterPaneBaseInterfaceBase;
+typedef ::cppu::WeakComponentImplHelper<css::drawing::framework::XPane, css::awt::XWindowListener,
+                                        css::awt::XPaintListener>
+    PresenterPaneBaseInterfaceBase;
 
 /** Base class of the panes used by the presenter screen.  Pane objects are
     stored in the PresenterPaneContainer.  Sizes and positions are
@@ -69,9 +67,12 @@ public:
     const OUString& GetTitle() const;
     const css::uno::Reference<css::drawing::framework::XPaneBorderPainter>& GetPaneBorderPainter() const;
 
-    // XInitialization
-
-    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    void initialize(const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+                    const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
+                    const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
+                    const OUString& rTitle,
+                    const rtl::Reference<PresenterPaneBorderPainter>& rxBorderPainter,
+                    bool bIsWindowVisibleOnCreation);
 
     // XResourceId
 

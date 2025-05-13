@@ -241,15 +241,8 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
         xPane.set( new PresenterPane(xContext, mpPresenterController));
     }
 
-    // Supply arguments.
-    Sequence<Any> aArguments{ Any(rxPaneId),
-                              Any(rxParentPane->getWindow()),
-                              Any(rxParentPane->getCanvas()),
-                              Any(OUString()),
-                              Any(Reference<drawing::framework::XPaneBorderPainter>(
-                                  mpPresenterController->GetPaneBorderPainter())),
-                              Any(!bIsSpritePane) };
-    xPane->initialize(aArguments);
+    xPane->initialize(rxPaneId, rxParentPane->getWindow(), rxParentPane->getCanvas(), OUString(),
+                      mpPresenterController->GetPaneBorderPainter(), !bIsSpritePane);
 
     // Store pane and canvases and windows in container.
     ::rtl::Reference<PresenterPaneContainer> pContainer (

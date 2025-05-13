@@ -105,9 +105,12 @@ const Reference<drawing::framework::XPaneBorderPainter>&
     return mxBorderPainter;
 }
 
-//----- XInitialization -------------------------------------------------------
-
-void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
+void PresenterPaneBase::initialize(
+    const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+    const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
+    const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas, const OUString& rTitle,
+    const rtl::Reference<PresenterPaneBorderPainter>& rxBorderPainter,
+    bool bIsWindowVisibleOnCreation)
 {
     ThrowIfDisposed();
 
@@ -118,85 +121,25 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             static_cast<XWeak*>(this));
     }
 
-    if (rArguments.getLength() != 5 && rArguments.getLength() != 6)
+    mxPaneId = rxPaneId;
+    mxParentWindow = rxParentWindow;
+
+    Reference<rendering::XSpriteCanvas> xParentCanvas(rxParentCanvas, UNO_QUERY_THROW);
+    msTitle = rTitle;
+    mxBorderPainter = rxBorderPainter;
+
+    CreateWindows(bIsWindowVisibleOnCreation);
+
+    if (mxBorderWindow.is())
     {
-        throw RuntimeException(
-            u"PresenterSpritePane: invalid number of arguments"_ustr,
-                static_cast<XWeak*>(this));
+        mxBorderWindow->addWindowListener(this);
+        mxBorderWindow->addPaintListener(this);
     }
 
-    try
-    {
-        // Get the resource id from the first argument.
-        if ( ! (rArguments[0] >>= mxPaneId))
-        {
-            throw lang::IllegalArgumentException(
-                u"PresenterPane: invalid pane id"_ustr,
-                static_cast<XWeak*>(this),
-                0);
-        }
+    CreateCanvases(xParentCanvas);
 
-        if ( ! (rArguments[1] >>= mxParentWindow))
-        {
-            throw lang::IllegalArgumentException(
-                u"PresenterPane: invalid parent window"_ustr,
-                static_cast<XWeak*>(this),
-                1);
-        }
-
-        Reference<rendering::XSpriteCanvas> xParentCanvas;
-        if ( ! (rArguments[2] >>= xParentCanvas))
-        {
-            throw lang::IllegalArgumentException(
-                u"PresenterPane: invalid parent canvas"_ustr,
-                static_cast<XWeak*>(this),
-                2);
-        }
-
-        if ( ! (rArguments[3] >>= msTitle))
-        {
-            throw lang::IllegalArgumentException(
-                u"PresenterPane: invalid title"_ustr,
-                static_cast<XWeak*>(this),
-                3);
-        }
-
-        if ( ! (rArguments[4] >>= mxBorderPainter))
-        {
-            throw lang::IllegalArgumentException(
-                u"PresenterPane: invalid border painter"_ustr,
-                static_cast<XWeak*>(this),
-                4);
-        }
-
-        bool bIsWindowVisibleOnCreation (true);
-        if (rArguments.getLength()>5 && ! (rArguments[5] >>= bIsWindowVisibleOnCreation))
-        {
-            throw lang::IllegalArgumentException(
-                u"PresenterPane: invalid window visibility flag"_ustr,
-                static_cast<XWeak*>(this),
-                5);
-        }
-
-        CreateWindows(bIsWindowVisibleOnCreation);
-
-        if (mxBorderWindow.is())
-        {
-            mxBorderWindow->addWindowListener(this);
-            mxBorderWindow->addPaintListener(this);
-        }
-
-        CreateCanvases(xParentCanvas);
-
-        // Raise new windows.
-        ToTop();
-    }
-    catch (Exception&)
-    {
-        mxContentWindow = nullptr;
-        mxComponentContext = nullptr;
-        throw;
-    }
+    // Raise new windows.
+    ToTop();
 }
 
 //----- XResourceId -----------------------------------------------------------
