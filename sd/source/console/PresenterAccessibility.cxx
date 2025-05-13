@@ -57,21 +57,6 @@ namespace sdext::presenter {
 
 namespace {
 
-class AccessibleConsole
-{
-public:
-    static rtl::Reference<AccessibleObject> Create()
-    {
-        const OUString sName = SdResId(STR_A11Y_PRESENTER_CONSOLE);
-        rtl::Reference<AccessibleObject> pObject (
-            new AccessibleObject(AccessibleRole::PANEL, sName));
-        pObject->LateInitialization();
-        pObject->UpdateStateSet();
-
-        return pObject;
-    }
-};
-
 //===== AccessiblePreview =====================================================
 
 class AccessiblePreview
@@ -328,7 +313,12 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
             mxMainWindow = xMainPane->getWindow();
             mxMainWindow->addFocusListener(this);
         }
-        mpAccessibleConsole = AccessibleConsole::Create();
+
+        const OUString sName = SdResId(STR_A11Y_PRESENTER_CONSOLE);
+        mpAccessibleConsole = new AccessibleObject(AccessibleRole::PANEL, sName);
+        mpAccessibleConsole->LateInitialization();
+        mpAccessibleConsole->UpdateStateSet();
+
         mpAccessibleConsole->SetWindow(mxMainWindow, nullptr);
         mpAccessibleConsole->SetAccessibleParent(mxAccessibleParent);
         UpdateAccessibilityHierarchy();
