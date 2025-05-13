@@ -65,7 +65,7 @@ public:
     const css::uno::Reference<css::awt::XWindow>& GetBorderWindow() const;
     void SetTitle (const OUString& rsTitle);
     const OUString& GetTitle() const;
-    const css::uno::Reference<css::drawing::framework::XPaneBorderPainter>& GetPaneBorderPainter() const;
+    const rtl::Reference<PresenterPaneBorderPainter>& GetPaneBorderPainter() const;
 
     void initialize(const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
                     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
@@ -101,7 +101,7 @@ protected:
     css::uno::Reference<css::awt::XWindow> mxContentWindow;
     css::uno::Reference<css::rendering::XCanvas> mxContentCanvas;
     css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
-    css::uno::Reference<css::drawing::framework::XPaneBorderPainter> mxBorderPainter;
+    rtl::Reference<PresenterPaneBorderPainter> mxBorderPainter;
     OUString msTitle;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 
@@ -113,7 +113,7 @@ protected:
     void PaintBorder (const css::awt::Rectangle& rUpdateRectangle);
     void ToTop();
     void LayoutContextWindow();
-    bool IsVisible() const;
+    static bool IsVisible();
 
     /** @throws css::lang::DisposedException when the object has already been
         disposed.

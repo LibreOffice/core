@@ -99,7 +99,7 @@ const OUString& PresenterPaneBase::GetTitle() const
     return msTitle;
 }
 
-const Reference<drawing::framework::XPaneBorderPainter>&
+const rtl::Reference<PresenterPaneBorderPainter>&
     PresenterPaneBase::GetPaneBorderPainter() const
 {
     return mxBorderPainter;
@@ -250,12 +250,8 @@ void PresenterPaneBase::LayoutContextWindow()
         awt::PosSize::POSSIZE);
 }
 
-bool PresenterPaneBase::IsVisible() const
+bool PresenterPaneBase::IsVisible()
 {
-    Reference<awt::XWindow2> xWindow2 (mxBorderPainter, UNO_QUERY);
-    if (xWindow2.is())
-        return xWindow2->isVisible();
-
     return false;
 }
 

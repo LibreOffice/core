@@ -629,7 +629,7 @@ void PresenterSlideSorter::UpdateLayout()
         if ( ! pPane->mxPane.is())
             break;
 
-        Reference<drawing::framework::XPaneBorderPainter> xBorderPainter (
+        rtl::Reference<PresenterPaneBorderPainter> xBorderPainter (
             pPane->mxPane->GetPaneBorderPainter());
         if ( ! xBorderPainter.is())
             break;
