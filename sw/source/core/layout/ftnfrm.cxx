@@ -2668,7 +2668,17 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
                 nRet += nTmp;
         }
         else
-            nRet -= aRectFnSet.GetHeight(pPg->getFramePrintArea())/5;
+        {
+            assert(pPg);
+
+            const SwDoc* pDoc = GetFormat()->GetDoc();
+            const IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+
+            if (rIDSA.get(DocumentSettingId::TAB_OVER_SPACING))
+                nRet -= aRectFnSet.GetHeight(pPg->getFramePrintArea()) / 20;
+            else
+                nRet -= aRectFnSet.GetHeight(pPg->getFramePrintArea()) / 5;
+        }
         if( nRet < 0 )
             nRet = 0;
     }
