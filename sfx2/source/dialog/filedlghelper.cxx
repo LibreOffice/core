@@ -1403,7 +1403,7 @@ void FileDialogHelper_Impl::implStartExecute()
     }
 }
 
-ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
+ErrCode FileDialogHelper_Impl::execute( css::uno::Sequence<OUString>& rpURLList,
                                         std::optional<SfxAllItemSet>& rpSet,
                                         OUString&       rFilter,
                                         SignatureState const nScriptingSignatureState)
@@ -1456,7 +1456,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
             SvtSecurityOptions::IsOptionSet( SvtSecurityOptions::EOption::DocWarnRecommendPassword ) );
     }
 
-    rpURLList.clear();
+    rpURLList = {};
     maPath.clear(); // tdf#165228 This should not survive between calls to execute
 
     if ( ! mxFileDlg.is() )
@@ -1527,8 +1527,8 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
 
         // fill the rpURLList
-        comphelper::sequenceToContainer(rpURLList, mxFileDlg->getSelectedFiles());
-        if ( rpURLList.empty() )
+        rpURLList = mxFileDlg->getSelectedFiles();
+        if (!rpURLList.hasElements())
             return ERRCODE_ABORT;
 
         // check, whether or not we have to display a password box
@@ -2625,7 +2625,7 @@ IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker, void*, void)
 }
 
 // rDirPath has to be a directory
-ErrCode FileDialogHelper::Execute( std::vector<OUString>& rpURLList,
+ErrCode FileDialogHelper::Execute( css::uno::Sequence<OUString>& rpURLList,
                                    std::optional<SfxAllItemSet>& rpSet,
                                    OUString&       rFilter,
                                    const OUString& rDirPath )
@@ -2645,7 +2645,7 @@ ErrCode FileDialogHelper::Execute( std::optional<SfxAllItemSet>& rpSet,
                                    SignatureState const nScriptingSignatureState)
 {
     ErrCode nRet;
-    std::vector<OUString> rURLList;
+    css::uno::Sequence<OUString> rURLList;
     nRet = mpImpl->execute(rURLList, rpSet, rFilter, nScriptingSignatureState);
     return nRet;
 }
@@ -2835,7 +2835,7 @@ void FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              sal_Int16 nDialogType,
                              FileDialogFlags nFlags,
-                             std::vector<OUString>& rpURLList,
+                             css::uno::Sequence<OUString>& rpURLList,
                              OUString& rFilter,
                              std::optional<SfxAllItemSet>& rpSet,
                              const OUString* pPath,

@@ -173,7 +173,7 @@ namespace sfx2
                                 );
         virtual                 ~FileDialogHelper_Impl() override;
 
-        ErrCode                 execute( std::vector<OUString>& rpURLList,
+        ErrCode                 execute( css::uno::Sequence<OUString>& rpURLList,
                                          std::optional<SfxAllItemSet>& rpSet,
                                          OUString&       rFilter,
                                          SignatureState nScriptingSignatureState);

@@ -612,7 +612,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( !pFileNameItem )
     {
         // get FileName from dialog
-        std::vector<OUString> aURLList;
+        css::uno::Sequence<OUString> aURLList;
         OUString aFilter;
         std::optional<SfxAllItemSet> pSet;
         OUString aPath;
@@ -669,7 +669,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         rReq.AppendItem( SfxStringItem( SID_REFERER, u"private:user"_ustr ) );
         pSet.reset();
 
-        if(!aURLList.empty())
+        if (aURLList.hasElements())
         {
             if ( nSID == SID_OPENTEMPLATE )
                 rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, false ) );

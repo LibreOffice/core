@@ -272,7 +272,7 @@ public:
 
    DECL_DLLPRIVATE_LINK( ExecuteSystemFilePicker, void*, void );
 
-   ErrCode                  Execute( std::vector<OUString>& rpURLList,
+   ErrCode                  Execute( css::uno::Sequence<OUString>& rpURLList,
                                      std::optional<SfxAllItemSet>& rpSet,
                                      OUString&         rFilter,
                                      const OUString&   rDirPath );
@@ -289,7 +289,7 @@ public:
 ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              sal_Int16 nDialogType,
                              FileDialogFlags nFlags,
-                             std::vector<OUString>& rpURLList,
+                             css::uno::Sequence<OUString>& rpURLList,
                              OUString& rFilter,
                              std::optional<SfxAllItemSet>& rpSet,
                              const OUString* pPath,
