@@ -560,15 +560,30 @@ OUString QtInstanceWidget::get_tooltip_text() const
 
 void QtInstanceWidget::set_cursor_data(void*) { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::grab_mouse() { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::grab_mouse()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getQWidget()->grabMouse(); });
+}
 
 bool QtInstanceWidget::has_mouse_grab() const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bHasMouseGrab = false;
+    GetQtInstance().RunInMainThread(
+        [&] { bHasMouseGrab = QWidget::mouseGrabber() == getQWidget(); });
+
+    return bHasMouseGrab;
 }
 
-void QtInstanceWidget::release_mouse() { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::release_mouse()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getQWidget()->releaseMouse(); });
+}
 
 bool QtInstanceWidget::get_extents_relative_to(const Widget& rRelative, int& rX, int& rY,
                                                int& rWidth, int& rHeight) const
