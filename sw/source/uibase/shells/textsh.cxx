@@ -20,11 +20,13 @@
 #include <config_features.h>
 
 #include <hintids.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <svl/globalnameitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <i18nutil/transliteration.hxx>
@@ -419,6 +421,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case FN_INSERT_SMA:
         {
+            // if sidebar is closed - open to show elements deck
+            if (comphelper::LibreOfficeKit::isActive())
+                sfx2::sidebar::Sidebar::Setup(u"");
+
             // #i34343# Inserting a math object into an autocompletion crashes
             // the suggestion has to be removed before
             GetView().GetEditWin().StopQuickHelp();
