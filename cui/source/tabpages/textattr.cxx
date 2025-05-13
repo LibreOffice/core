@@ -455,6 +455,11 @@ void SvxTextAttrPage::Construct()
             m_xDrawingText->hide();
             m_xCustomShapeText->show();
             break;
+        case SdrObjKind::Edge:
+        case SdrObjKind::Line:
+            //contour NOT possible for connector and line objects
+            bContourEnabled = false;
+            break;
         default:
             bFitToSizeEnabled = bContourEnabled = true;
             bWordWrapTextEnabled = bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = false;
