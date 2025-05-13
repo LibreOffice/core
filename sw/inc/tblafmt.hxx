@@ -207,7 +207,13 @@ public:
 
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
                                 SwTableAutoFormatUpdateFlags eFlags, SvNumberFormatter const * );
-    void UpdateToSet( const sal_uInt8 nPos, const bool bSingleRowTable, const bool bSingleColTable,
+    // bCellSpansToEndV means either "single-row table", or "a cell that spans several rows till the
+    // bottom of the table", i.e. "include the bottom border properties in the set, in addition to
+    // the properties of its starting position (when eFlags include Box)".
+    // bCellSpansToEndH means either "single-column table", or "a cell that spans several columns
+    // till the right of the table", i.e. "include the right border properties in the set, in
+    // addition to the properties of its starting position (when eFlags include Box)".
+    void UpdateToSet( sal_uInt8 nPos, bool bCellSpansToEndV, bool bCellSpansToEndH,
                         SfxItemSet& rSet, SwTableAutoFormatUpdateFlags eFlags,
                         SvNumberFormatter* ) const ;
 

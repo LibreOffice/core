@@ -555,7 +555,7 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
     // we cannot handle the rest, that's specific to StarCalc
 }
 
-void SwTableAutoFormat::UpdateToSet(const sal_uInt8 nPos, const bool bSingleRowTable, const bool bSingleColTable, SfxItemSet& rSet,
+void SwTableAutoFormat::UpdateToSet(const sal_uInt8 nPos, const bool bCellSpansToEndV, const bool bCellSpansToEndH, SfxItemSet& rSet,
                                  SwTableAutoFormatUpdateFlags eFlags, SvNumberFormatter* pNFormatr) const
 {
     const SwBoxAutoFormat& rChg = GetBoxFormat( nPos );
@@ -616,20 +616,21 @@ void SwTableAutoFormat::UpdateToSet(const sal_uInt8 nPos, const bool bSingleRowT
     {
         SvxBoxItem aAutoFormatBox = rChg.GetBox();
 
-        // No format box is adequate to specify the borders of single column/row tables, so combine first/last.
-        if ( bSingleRowTable || bSingleColTable )
+        // No format box is adequate to specify the borders of single column/row tables (or cells
+        // that span to the respective end), so combine first/last.
+        if (bCellSpansToEndV || bCellSpansToEndH)
         {
-            sal_uInt8 nSingleRowOrColumnId = 15; //LAST_ROW_END_COLUMN
-            if ( !bSingleRowTable )
-                nSingleRowOrColumnId = nPos + 3;  //LAST COLUMN (3, 7, 11, 15)
-            else if ( !bSingleColTable )
-                nSingleRowOrColumnId = nPos + 12; //LAST ROW (12, 13, 14, 15)
+            sal_uInt8 nLastRowOrColumnId = 15; //LAST_ROW_END_COLUMN
+            if (!bCellSpansToEndV)
+                nLastRowOrColumnId = (nPos / 4 * 4) + 3; //LAST COLUMN (3, 7, 11, 15)
+            else if (!bCellSpansToEndH)
+                nLastRowOrColumnId = (nPos % 4) + 12; //LAST ROW (12, 13, 14, 15)
 
-            assert( nSingleRowOrColumnId < 16 );
-            const SvxBoxItem aLastAutoFormatBox( GetBoxFormat(nSingleRowOrColumnId).GetBox() );
-            if ( bSingleRowTable )
+            assert(nLastRowOrColumnId < 16);
+            const SvxBoxItem& aLastAutoFormatBox(GetBoxFormat(nLastRowOrColumnId).GetBox());
+            if (bCellSpansToEndV)
                 aAutoFormatBox.SetLine( aLastAutoFormatBox.GetLine(SvxBoxItemLine::BOTTOM), SvxBoxItemLine::BOTTOM );
-            if ( bSingleColTable )
+            if (bCellSpansToEndH)
                 aAutoFormatBox.SetLine( aLastAutoFormatBox.GetLine(SvxBoxItemLine::RIGHT), SvxBoxItemLine::RIGHT );
         }
 
