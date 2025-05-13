@@ -363,6 +363,7 @@ bool SbiParser::Parse()
     if( eCurTok == eEndTok ||
         ( bVBASupportOn &&      // #i109075
           eEndTok == ENDPROPERTY &&
+          (pProc && pProc->getPropertyMode() == PropertyMode::Get) &&
           ( eCurTok == ENDFUNC || eCurTok == ENDSUB) ) )
     {
         Next();

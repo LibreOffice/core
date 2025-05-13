@@ -222,4 +222,40 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162983_function_end_property)
     CPPUNIT_ASSERT(aMacro.HasError());
 }
 
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162986_property_set_end_sub)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Property Set doUnitTest\n"
+                        "End Sub\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162986_property_set_end_function)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Property Set doUnitTest\n"
+                        "End Function\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162986_property_let_end_sub)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Property Let doUnitTest\n"
+                        "End Sub\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162986_property_let_end_function)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Property Let doUnitTest\n"
+                        "End Function\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
