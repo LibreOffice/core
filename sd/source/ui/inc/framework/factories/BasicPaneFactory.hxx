@@ -56,8 +56,7 @@ class BasicPaneFactory final
     : public BasicPaneFactoryInterfaceBase
 {
 public:
-    explicit BasicPaneFactory (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    explicit BasicPaneFactory(
         const rtl::Reference<::sd::DrawController>& rxController);
     virtual ~BasicPaneFactory() override;
 
@@ -84,7 +83,6 @@ public:
         const css::lang::EventObject& rEventObject) override;
 
 private:
-    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     unotools::WeakReference<sd::framework::ConfigurationController>
         mxConfigurationControllerWeak;
     ViewShellBase* mpViewShellBase;
@@ -106,7 +104,6 @@ private:
     */
     css::uno::Reference<css::drawing::framework::XResource>
         CreateFullScreenPane (
-            const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
 
     /** Create a new instance of ChildWindowPane.

@@ -26,6 +26,7 @@
 #include "FrameWindowPane.hxx"
 #include "FullScreenPane.hxx"
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ConfigurationController.hxx>
@@ -85,11 +86,9 @@ public:
 
 //===== PaneFactory ===========================================================
 
-BasicPaneFactory::BasicPaneFactory (
-    const Reference<XComponentContext>& rxContext,
+BasicPaneFactory::BasicPaneFactory(
     const rtl::Reference<::sd::DrawController>& rxController)
-    : mxComponentContext(rxContext),
-      mpViewShellBase(nullptr),
+    : mpViewShellBase(nullptr),
       mpPaneContainer(new PaneContainer)
 {
     try
@@ -225,7 +224,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
                 break;
 
             case FullScreenPaneId:
-                xPane = CreateFullScreenPane(mxComponentContext, rxPaneId);
+                xPane = CreateFullScreenPane(rxPaneId);
                 break;
 
             case LeftImpressPaneId:
@@ -341,13 +340,14 @@ Reference<XResource> BasicPaneFactory::CreateFrameWindowPane (
     return new FrameWindowPane(rxPaneId, mpViewShellBase->GetViewWindow());
 }
 
-Reference<XResource> BasicPaneFactory::CreateFullScreenPane (
-    const Reference<XComponentContext>& rxComponentContext,
+Reference<XResource> BasicPaneFactory::CreateFullScreenPane(
     const Reference<XResourceId>& rxPaneId)
 {
+    const Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+
     Reference<XResource> xPane (
         new FullScreenPane(
-            rxComponentContext,
+            xContext,
             rxPaneId,
             mpViewShellBase->GetViewWindow(),
             mpViewShellBase->GetDocShell()));

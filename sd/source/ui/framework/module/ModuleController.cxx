@@ -138,13 +138,9 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
     if (  xFactory.is())
         return;
 
-    // Create a new instance of the factory.
-    const Reference<uno::XComponentContext>& xContext =
-        ::comphelper::getProcessComponentContext();
-
     // Create the factory service.
     if (iFactory->second == "com.sun.star.drawing.framework.BasicPaneFactory")
-        xFactory = uno::Reference<css::drawing::framework::XResourceFactory>(new BasicPaneFactory(xContext, mxController));
+        xFactory = uno::Reference<css::drawing::framework::XResourceFactory>(new BasicPaneFactory(mxController));
     else if (iFactory->second == "com.sun.star.drawing.framework.BasicViewFactory")
         xFactory = uno::Reference<css::drawing::framework::XResourceFactory>(new BasicViewFactory(mxController));
     else if (iFactory->second == "com.sun.star.drawing.framework.BasicToolBarFactory")
