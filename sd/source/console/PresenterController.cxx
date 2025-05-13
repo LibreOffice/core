@@ -140,17 +140,14 @@ PresenterController::PresenterController (
     mpPaneBorderPainter = new PresenterPaneBorderPainter(rxContext);
     mpWindowManager->SetPaneBorderPainter(mpPaneBorderPainter);
 
-    if (mxSlideShowController.is())
+    mxSlideShowController->activate();
+    Reference<beans::XPropertySet> xProperties (mxSlideShowController, UNO_QUERY);
+    if (xProperties.is())
     {
-        mxSlideShowController->activate();
-        Reference<beans::XPropertySet> xProperties (mxSlideShowController, UNO_QUERY);
-        if (xProperties.is())
-        {
-            Reference<awt::XWindow> xWindow (
-                xProperties->getPropertyValue(u"ParentWindow"_ustr), UNO_QUERY);
-            if (xWindow.is())
-                xWindow->addKeyListener(this);
-        }
+        Reference<awt::XWindow> xWindow (
+            xProperties->getPropertyValue(u"ParentWindow"_ustr), UNO_QUERY);
+        if (xWindow.is())
+            xWindow->addKeyListener(this);
     }
 
     UpdateCurrentSlide(0);
