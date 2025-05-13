@@ -31,8 +31,6 @@
 
 #include <memory>
 
-#define PSH         (&m_rView.GetWrtShell())
-
 using namespace ::com::sun::star;
 
 // interactive separation
@@ -65,36 +63,38 @@ void SwHyphWrapper::SpellContinue()
 {
     // for automatic separation, make actions visible only at the end
     std::optional<SwWait> oWait;
+    SwWrtShell &rSh = m_rView.GetWrtShell();
     if( m_bAutomatic )
     {
-        PSH->StartAllAction();
+        rSh.StartAllAction();
         oWait.emplace( *m_rView.GetDocShell(), true );
     }
 
     uno::Reference< uno::XInterface >  xHyphWord = m_bInSelection ?
-                PSH->HyphContinue( nullptr, nullptr ) :
-                PSH->HyphContinue( &m_nPageCount, &m_nPageStart );
+                rSh.HyphContinue( nullptr, nullptr ) :
+                rSh.HyphContinue( &m_nPageCount, &m_nPageStart );
     SetLast( xHyphWord );
 
     // for automatic separation, make actions visible only at the end
     if( m_bAutomatic )
     {
-        PSH->EndAllAction();
+        rSh.EndAllAction();
         oWait.reset();
     }
 }
 
 void SwHyphWrapper::SpellEnd()
 {
-    PSH->HyphEnd();
+    m_rView.GetWrtShell().HyphEnd();
     SvxSpellWrapper::SpellEnd();
 }
 
 bool SwHyphWrapper::SpellMore()
 {
-    PSH->Push();
+    SwWrtShell &rSh = m_rView.GetWrtShell();
+    rSh.Push();
     m_bInfoBox = true;
-    PSH->Combine();
+    rSh.Combine();
     return false;
 }
 
@@ -105,7 +105,7 @@ void SwHyphWrapper::InsertHyphen( const sal_Int32 nPos )
                                         // insert hyphen after first char?
                                         // (instead of nPos == 0)
     else
-        PSH->HyphIgnore();
+        m_rView.GetWrtShell().HyphIgnore();
 }
 
 SwHyphWrapper::~SwHyphWrapper()
