@@ -58,9 +58,6 @@ FullScreenPane::FullScreenPane (
     if ( ! rxPaneId.is())
         throw lang::IllegalArgumentException();
 
-    if (!mpWorkWindow)
-        return;
-
     // Create a new top-level window that is displayed full screen.
     if (bFullScreen)
         mpWorkWindow->ShowFullScreenMode(bFullScreen, nScreenNumber);
