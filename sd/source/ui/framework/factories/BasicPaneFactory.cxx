@@ -81,8 +81,7 @@ public:
 
 BasicPaneFactory::BasicPaneFactory(
     const rtl::Reference<::sd::DrawController>& rxController)
-    : mpViewShellBase(nullptr),
-      mpPaneContainer(new PaneContainer)
+    : mpViewShellBase(nullptr)
 {
     try
     {
@@ -100,27 +99,27 @@ BasicPaneFactory::BasicPaneFactory(
             aDescriptor.msPaneURL = FrameworkHelper::msCenterPaneURL;
             aDescriptor.mePaneId = CenterPaneId;
             aDescriptor.mbIsReleased = false;
-            mpPaneContainer->push_back(aDescriptor);
+            maPaneContainer.push_back(aDescriptor);
             xCC->addResourceFactory(aDescriptor.msPaneURL, this);
 
             aDescriptor.msPaneURL = FrameworkHelper::msFullScreenPaneURL;
             aDescriptor.mePaneId = FullScreenPaneId;
-            mpPaneContainer->push_back(aDescriptor);
+            maPaneContainer.push_back(aDescriptor);
             xCC->addResourceFactory(aDescriptor.msPaneURL, this);
 
             aDescriptor.msPaneURL = FrameworkHelper::msLeftImpressPaneURL;
             aDescriptor.mePaneId = LeftImpressPaneId;
-            mpPaneContainer->push_back(aDescriptor);
+            maPaneContainer.push_back(aDescriptor);
             xCC->addResourceFactory(aDescriptor.msPaneURL, this);
 
             aDescriptor.msPaneURL = FrameworkHelper::msBottomImpressPaneURL;
             aDescriptor.mePaneId = BottomImpressPaneId;
-            mpPaneContainer->push_back(aDescriptor);
+            maPaneContainer.push_back(aDescriptor);
             xCC->addResourceFactory(aDescriptor.msPaneURL, this);
 
             aDescriptor.msPaneURL = FrameworkHelper::msLeftDrawPaneURL;
             aDescriptor.mePaneId = LeftDrawPaneId;
-            mpPaneContainer->push_back(aDescriptor);
+            maPaneContainer.push_back(aDescriptor);
             xCC->addResourceFactory(aDescriptor.msPaneURL, this);
         }
 
@@ -159,7 +158,7 @@ void BasicPaneFactory::disposing(std::unique_lock<std::mutex>&)
         mxConfigurationControllerWeak.clear();
     }
 
-    for (const auto& rDescriptor : *mpPaneContainer)
+    for (const auto& rDescriptor : maPaneContainer)
     {
         if (rDescriptor.mbIsReleased)
         {
@@ -186,13 +185,13 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
     // corresponding factory descriptor.
     PaneContainer::iterator iDescriptor (
         ::std::find_if (
-            mpPaneContainer->begin(),
-            mpPaneContainer->end(),
+            maPaneContainer.begin(),
+            maPaneContainer.end(),
             [&] (PaneDescriptor const& rPane) {
                 return rPane.CompareURL(rxPaneId->getResourceURL());
             } ));
 
-    if (iDescriptor == mpPaneContainer->end())
+    if (iDescriptor == maPaneContainer.end())
     {
         // The requested pane can not be created by any of the factories
         // managed by the called BasicPaneFactory object.
@@ -250,11 +249,11 @@ void SAL_CALL BasicPaneFactory::releaseResource (
     // descriptor.
     PaneContainer::iterator iDescriptor (
         ::std::find_if(
-            mpPaneContainer->begin(),
-            mpPaneContainer->end(),
+            maPaneContainer.begin(),
+            maPaneContainer.end(),
             [&] (PaneDescriptor const& rPane) { return rPane.ComparePane(rxPane); } ));
 
-    if (iDescriptor == mpPaneContainer->end())
+    if (iDescriptor == maPaneContainer.end())
     {
         // The given XPane reference is either empty or the pane was not
         // created by any of the factories managed by the called
@@ -313,11 +312,11 @@ void SAL_CALL BasicPaneFactory::disposing (
         // reference to that pane, but not the pane descriptor.
         Reference<XResource> xPane (rEventObject.Source, UNO_QUERY);
         PaneContainer::iterator iDescriptor (
-            ::std::find_if (
-                mpPaneContainer->begin(),
-                mpPaneContainer->end(),
+            ::std::find_if(
+                maPaneContainer.begin(),
+                maPaneContainer.end(),
                 [&] (PaneDescriptor const& rPane) { return rPane.ComparePane(xPane); } ));
-        if (iDescriptor != mpPaneContainer->end())
+        if (iDescriptor != maPaneContainer.end())
         {
             iDescriptor->mxPane = nullptr;
         }

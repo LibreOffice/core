@@ -88,7 +88,8 @@ private:
     ViewShellBase* mpViewShellBase;
     class PaneDescriptor;
     using PaneContainer = std::vector<PaneDescriptor>;
-    std::unique_ptr<PaneContainer> mpPaneContainer;
+
+    PaneContainer maPaneContainer;
 
     /** Create a new instance of FrameWindowPane.
         @param rPaneId
