@@ -737,7 +737,7 @@ void OConnection::impl_checkTableQueryNames_nothrow()
 
         for ( auto const & queryName : aQueryNames )
         {
-            if ( aSortedTableNames.find( queryName ) != aSortedTableNames.end() )
+            if ( aSortedTableNames.contains(queryName) )
             {
                 OUString sConflictWarning( DBA_RES( RID_STR_CONFLICTING_NAMES ) );
                 m_aWarnings.appendWarning( sConflictWarning, "01SB0", *this );
