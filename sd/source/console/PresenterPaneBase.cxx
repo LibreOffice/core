@@ -108,7 +108,7 @@ const Reference<drawing::framework::XPaneBorderPainter>&
 void PresenterPaneBase::initialize(
     const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-    const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas, const OUString& rTitle,
+    const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
     const rtl::Reference<PresenterPaneBorderPainter>& rxBorderPainter,
     bool bIsWindowVisibleOnCreation)
 {
@@ -125,7 +125,6 @@ void PresenterPaneBase::initialize(
     mxParentWindow = rxParentWindow;
 
     Reference<rendering::XSpriteCanvas> xParentCanvas(rxParentCanvas, UNO_QUERY_THROW);
-    msTitle = rTitle;
     mxBorderPainter = rxBorderPainter;
 
     CreateWindows(bIsWindowVisibleOnCreation);

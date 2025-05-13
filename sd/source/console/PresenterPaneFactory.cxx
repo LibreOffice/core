@@ -241,7 +241,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
         xPane.set( new PresenterPane(xContext, mpPresenterController));
     }
 
-    xPane->initialize(rxPaneId, rxParentPane->getWindow(), rxParentPane->getCanvas(), OUString(),
+    xPane->initialize(rxPaneId, rxParentPane->getWindow(), rxParentPane->getCanvas(),
                       mpPresenterController->GetPaneBorderPainter(), !bIsSpritePane);
 
     // Store pane and canvases and windows in container.

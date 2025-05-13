@@ -70,7 +70,6 @@ public:
     void initialize(const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
                     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
                     const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
-                    const OUString& rTitle,
                     const rtl::Reference<PresenterPaneBorderPainter>& rxBorderPainter,
                     bool bIsWindowVisibleOnCreation);
 
