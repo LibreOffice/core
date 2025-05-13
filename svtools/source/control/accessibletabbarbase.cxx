@@ -20,6 +20,7 @@
 #include "accessibletabbarbase.hxx"
 #include "accessibletabbarpagelist.hxx"
 
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <svtools/tabbar.hxx>
 #include <vcl/vclevent.hxx>
 
@@ -37,6 +38,14 @@ AccessibleTabBarBase::AccessibleTabBarBase( TabBar* pTabBar ) :
 AccessibleTabBarBase::~AccessibleTabBarBase()
 {
     ClearTabBarPointer();
+}
+
+css::uno::Reference<css::accessibility::XAccessibleContext>
+AccessibleTabBarBase::getAccessibleContext()
+{
+    comphelper::OExternalLockGuard aGuard(this);
+
+    return this;
 }
 
 IMPL_LINK( AccessibleTabBarBase, WindowEventListener, VclWindowEvent&, rEvent, void )

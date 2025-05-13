@@ -347,20 +347,7 @@ Sequence< OUString > AccessibleTabBarPageList::getSupportedServiceNames()
     return { u"com.sun.star.awt.AccessibleTabBarPageList"_ustr };
 }
 
-
-// XAccessible
-
-
-Reference< XAccessibleContext > AccessibleTabBarPageList::getAccessibleContext(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    return this;
-}
-
-
 // XAccessibleContext
-
 
 sal_Int64 AccessibleTabBarPageList::getAccessibleChildCount()
 {
