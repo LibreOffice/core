@@ -420,6 +420,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             }
             else
             {
+                bool bOrigHyphenated = pGuess->HyphWord().is() &&
+                        pGuess->BreakPos() > rInf.GetLineStart();
                 if ( bWordSpacing || bWordSpacingMaximum )
                 {
                     pGuess.emplace();
@@ -428,7 +430,13 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                 // if both maximum word spacing or minimum word spacing can disable
                 // hyphenation, prefer the last one
                 if ( bWordSpacingMinimum && ( bWordSpacingMaximum ||
-                        ( pGuess->HyphWord().is() && pGuess->BreakPos() > rInf.GetLineStart() ) ) )
+                        ( pGuess->HyphWord().is() && pGuess->BreakPos() > rInf.GetLineStart() ) ) &&
+                        // if the desired word spacing is 100% (!bWordSpacing), and it was possible
+                        // to break the line without hyphenation in the first run (where maximum
+                        // word spacing was not used), no need to check minimum word spacing
+                        // FIXME: avoid too much shrinking, if desired word spacing is not 100%
+                        ( bWordSpacing || bOrigHyphenated )
+                   )
                 {
                     std::optional<SwTextGuess> pGuess2(std::in_place);
                     SwTwips nOldExtraSpace = rInf.GetExtraSpace();
