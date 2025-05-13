@@ -30,58 +30,55 @@
 namespace accessibility
 {
 
+class AccessibleTabBar final : public cppu::ImplInheritanceHelper<
+                                   AccessibleTabBarBase,
+                                   css::accessibility::XAccessible,
+                                   css::lang::XServiceInfo>
+{
+    std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
 
+    virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
+    void            FillAccessibleStateSet( sal_Int64& rStateSet );
 
+    // OAccessibleComponentHelper
+    virtual css::awt::Rectangle implGetBounds(  ) override;
 
-    class AccessibleTabBar final : public cppu::ImplInheritanceHelper<
-                                       AccessibleTabBarBase,
-                                       css::accessibility::XAccessible,
-                                       css::lang::XServiceInfo>
-    {
-        std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
+    // XComponent
+    virtual void SAL_CALL   disposing() override;
 
-        virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-        void            FillAccessibleStateSet( sal_Int64& rStateSet );
+public:
+    AccessibleTabBar( TabBar* pTabBar );
 
-        // OAccessibleComponentHelper
-        virtual css::awt::Rectangle implGetBounds(  ) override;
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-        // XComponent
-        virtual void SAL_CALL   disposing() override;
+    // XAccessible
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
-    public:
-        AccessibleTabBar( TabBar* pTabBar );
+    // XAccessibleContext
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
+    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
+    virtual OUString SAL_CALL getAccessibleName(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
+    virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
-        // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    // XAccessibleComponent
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual void SAL_CALL grabFocus(  ) override;
+    virtual sal_Int32 SAL_CALL getForeground(  ) override;
+    virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
-        // XAccessible
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
-
-        // XAccessibleContext
-        virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-        virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
-        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
-        virtual OUString SAL_CALL getAccessibleDescription(  ) override;
-        virtual OUString SAL_CALL getAccessibleName(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
-        virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
-        virtual css::lang::Locale SAL_CALL getLocale(  ) override;
-
-        // XAccessibleComponent
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-        virtual void SAL_CALL grabFocus(  ) override;
-        virtual sal_Int32 SAL_CALL getForeground(  ) override;
-        virtual sal_Int32 SAL_CALL getBackground(  ) override;
-
-        // XAccessibleExtendedComponent
-        virtual OUString SAL_CALL getTitledBorderText(  ) override;
-        virtual OUString SAL_CALL getToolTipText(  ) override;
-    };
+    // XAccessibleExtendedComponent
+    virtual OUString SAL_CALL getTitledBorderText(  ) override;
+    virtual OUString SAL_CALL getToolTipText(  ) override;
+};
 
 
 }   // namespace accessibility
