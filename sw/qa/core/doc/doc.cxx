@@ -792,6 +792,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)
     CPPUNIT_ASSERT(pTextNode->GetText().isEmpty());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
+{
+    // Given a document with <del>A<format>B</format>C</del> style redlines:
+    // When importing that document:
+    createSwDoc("del-then-format.docx");
+
+    // When accepting the delete:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->AcceptRedline(0);
+
+    // Then make sure no redlines and no content remain:
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the delete-then-format redline remained in the document.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rRedlines.size());
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // Also make sure the text of the format-on-delete redline is removed.
+    CPPUNIT_ASSERT(pTextNode->GetText().isEmpty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1138,6 +1138,14 @@ namespace
 /// delete-on-insert can be combined if accepting an insert.
 bool CanCombineTypesForAcceptReject(SwRedlineData& rInnerData, SwRangeRedline& rOuterRedline)
 {
+    if (rInnerData.GetType() == RedlineType::Delete)
+    {
+        // Delete is OK to have 'format' on it, but 'insert' will be next to the 'delete'.
+        return rOuterRedline.GetType() == RedlineType::Format
+            && rOuterRedline.GetStackCount() > 1
+            && rOuterRedline.GetType(1) == RedlineType::Delete;
+    }
+
     if (rInnerData.GetType() != RedlineType::Insert)
     {
         return false;
@@ -3287,8 +3295,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
         else if (CanCombineTypesForAcceptReject(aOrigData, *pTmp)
                  && pTmp->GetRedlineData(1).CanCombineForAcceptReject(aOrigData))
         {
-            // The Insert redline we want to accept has an other type of redline too
-            // we should leave the other type of redline, and only accept the inner insert.
+            // The Insert/Delete redline we want to accept has an other type of redline too
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
@@ -3296,7 +3303,18 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             }
             nPamEndtNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
-            bRet |= lcl_AcceptInnerInsertRedline(maRedlineTable, nRdlIdx, 1);
+            if (aOrigData.GetType() == RedlineType::Delete)
+            {
+                // We should delete the other type of redline when accepting the inner delete.
+                SwPaM aPam(*pTmp->Start(), *pTmp->End());
+                bRet |= lcl_RejectRedline(maRedlineTable, nRdlIdx, bCallDelete);
+                m_rDoc.getIDocumentContentOperations().DeleteRange(aPam);
+            }
+            else
+            {
+                // we should leave the other type of redline, and only accept the inner insert.
+                bRet |= lcl_AcceptInnerInsertRedline(maRedlineTable, nRdlIdx, 1);
+            }
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
     } while (nRdlIdx > 0);
