@@ -36,7 +36,7 @@ class ConstCustomShape final : public SwDrawBase
 
  public:
 
-    ConstCustomShape( SwWrtShell* pSh, SwEditWin* pWin, SwView* pView, SfxRequest const & rReq );
+    ConstCustomShape( SwWrtShell* pSh, SwEditWin* pWin, SwView& rView, SfxRequest const & rReq );
 
                                        // Mouse- & Key-Events
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;

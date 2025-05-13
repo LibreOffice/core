@@ -178,7 +178,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     , ConfigItem(u"Office.Writer/InsertData/DataSet"_ustr, ConfigItemMode::NONE)
     , m_aDBData(std::move(aData))
     , m_sNoTmpl(SwResId(SW_STR_NONE))
-    , m_pView(&rView)
+    , m_rView(rView)
     , m_xRbAsTable(m_xBuilder->weld_radio_button(u"astable"_ustr))
     , m_xRbAsField(m_xBuilder->weld_radio_button(u"asfields"_ustr))
     , m_xRbAsText(m_xBuilder->weld_radio_button(u"astext"_ustr))
@@ -212,7 +212,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
 
     if (xColSupp.is())
     {
-        SwWrtShell& rSh = m_pView->GetWrtShell();
+        SwWrtShell& rSh = m_rView.GetWrtShell();
         SvNumberFormatter* pNumFormatr = rSh.GetNumberFormatter();
         rtl::Reference<SvNumberFormatsSupplierObj> pNumFormat = new SvNumberFormatsSupplierObj( pNumFormatr );
         Reference< util::XNumberFormats > xDocNumberFormats = pNumFormat->getNumberFormats();
@@ -309,7 +309,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
 
     // fill paragraph templates-ListBox
     {
-        SfxStyleSheetBasePool* pPool = m_pView->GetDocShell()->GetStyleSheetPool();
+        SfxStyleSheetBasePool* pPool = m_rView.GetDocShell()->GetStyleSheetPool();
         m_xLbDbParaColl->append_text( m_sNoTmpl );
 
         const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Para);
@@ -322,7 +322,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     }
 
     // when the cursor is inside of a table, table must NEVER be selectable
-    if( m_pView->GetWrtShell().GetTableFormat() )
+    if( m_rView.GetWrtShell().GetTableFormat() )
     {
         m_xRbAsField->set_active(true);
         m_xRbAsTable->set_sensitive(false);
@@ -614,7 +614,7 @@ IMPL_LINK(SwInsertDBColAutoPilot, DblClickHdl, weld::TreeView&, rBox, bool)
 
 IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
 {
-    SwWrtShell& rSh = m_pView->GetWrtShell();
+    SwWrtShell& rSh = m_rView.GetWrtShell();
     bool bNewSet = false;
     if( !m_pTableSet )
     {
@@ -689,7 +689,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
         m_pTableSet->Put( SwPtrItem( FN_TABLE_REP, m_pRep.get() ));
 
         m_pTableSet->Put( SfxUInt16Item( SID_HTML_MODE,
-                    ::GetHtmlMode( m_pView->GetDocShell() )));
+                    ::GetHtmlMode( m_rView.GetDocShell() )));
     }
 
     sal_Int32 nCols = m_xLbTableCol->n_children();
@@ -739,7 +739,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, AutoFormatHdl, weld::Button&, void)
 {
     SwAbstractDialogFactory& rFact = swui::GetFactory();
 
-    VclPtr<AbstractSwAutoFormatDlg> pDlg(rFact.CreateSwAutoFormatDlg(m_xDialog.get(), m_pView->GetWrtShellPtr(), false, m_xTAutoFormat.get()));
+    VclPtr<AbstractSwAutoFormatDlg> pDlg(rFact.CreateSwAutoFormatDlg(m_xDialog.get(), m_rView.GetWrtShellPtr(), false, m_xTAutoFormat.get()));
     pDlg->StartExecuteAsync(
         [this, pDlg] (sal_Int32 nResult)->void
         {
@@ -898,7 +898,7 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
 
                 if( bInsField )
                 {
-                    SwWrtShell& rSh = m_pView->GetWrtShell();
+                    SwWrtShell& rSh = m_rView.GetWrtShell();
                     SwDBFieldType aFieldType( rSh.GetDoc(), aSrch.sColumn,
                                             m_aDBData );
                     pNew = new DB_Column( rFndCol, *new SwDBField(
@@ -930,14 +930,14 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     auto xResultSet = xResultSet_in;
 
     const Any* pSelection = rSelection.hasElements() ? rSelection.getConstArray() : nullptr;
-    SwWrtShell& rSh = m_pView->GetWrtShell();
+    SwWrtShell& rSh = m_rView.GetWrtShell();
 
     //with the drag and drop interface no result set is initially available
     bool bDisposeResultSet = false;
     // we don't have a cursor, so we have to create our own RowSet
     if ( !xResultSet.is() )
     {
-        xResultSet = SwDBManager::createCursor(m_aDBData.sDataSource,m_aDBData.sCommand,m_aDBData.nCommandType,xConnection,m_pView);
+        xResultSet = SwDBManager::createCursor(m_aDBData.sDataSource,m_aDBData.sCommand,m_aDBData.nCommandType,xConnection, &m_rView);
         bDisposeResultSet = xResultSet.is();
     }
 
@@ -1005,7 +1005,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
         const SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
 
-        bool bHTML = 0 != (::GetHtmlMode( m_pView->GetDocShell() ) & HTMLMODE_ON);
+        bool bHTML = 0 != (::GetHtmlMode( m_rView.GetDocShell() ) & HTMLMODE_ON);
         rSh.InsertTable(
             pModOpt->GetInsTableFlags(bHTML),
             nRows, nCols, (pSelection ? m_xTAutoFormat.get(): nullptr) );
@@ -1139,7 +1139,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 break;
 
             if( 10 == i )
-                oWait.emplace( *m_pView->GetDocShell(), true );
+                oWait.emplace( *m_rView.GetDocShell(), true );
         }
 
         rSh.MoveTable( GotoCurrTable, fnTableStart );
@@ -1363,7 +1363,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     rSh.SwEditShell::SplitNode();
 
                 if( 10 == i )
-                    oWait.emplace( *m_pView->GetDocShell(), true );
+                    oWait.emplace( *m_rView.GetDocShell(), true );
             }
 
             if( !bSetCursor && pMark != nullptr)
@@ -1394,7 +1394,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
 void SwInsertDBColAutoPilot::SetTabSet()
 {
-    SwWrtShell& rSh = m_pView->GetWrtShell();
+    SwWrtShell& rSh = m_rView.GetWrtShell();
     const SfxPoolItem* pItem;
 
     if (m_xTAutoFormat)
@@ -1540,7 +1540,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
 
     LanguageType ePrevLang(0xffff);
 
-    SvNumberFormatter& rNFormatr = *m_pView->GetWrtShell().GetNumberFormatter();
+    SvNumberFormatter& rNFormatr = *m_rView.GetWrtShell().GetNumberFormatter();
     for(size_t nCol = 0; nCol < m_aDBColumns.size(); nCol++)
     {
         SwInsDBColumn* pColumn = m_aDBColumns[nCol].get();
@@ -1593,7 +1593,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
 void SwInsertDBColAutoPilot::Load()
 {
     const Sequence<OUString> aNames = GetNodeNames(OUString());
-    SvNumberFormatter& rNFormatr = *m_pView->GetWrtShell().GetNumberFormatter();
+    SvNumberFormatter& rNFormatr = *m_rView.GetWrtShell().GetNumberFormatter();
     for(OUString const & nodeName : aNames)
     {
         //search for entries with the appropriate data source and table

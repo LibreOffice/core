@@ -25,7 +25,7 @@
 class DrawSelection final : public SwDrawBase
 {
 public:
-    DrawSelection(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
+    DrawSelection(SwWrtShell* pSh, SwEditWin* pWin, SwView& rView);
 
     virtual void Activate(const sal_uInt16 nSlotId) override; // activate function
 };

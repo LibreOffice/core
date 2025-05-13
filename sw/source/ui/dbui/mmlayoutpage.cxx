@@ -98,7 +98,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage(weld::Container* pPage, SwMailMerge
         aTempFile.EnableKillingFile();
         m_sExampleURL = aTempFile.GetURL();
     }
-    SwView* pView = m_pWizard->GetSwView();
+    SwView& rView = m_pWizard->GetSwView();
     // Don't save embedded data set! It would steal it from current document.
     uno::Sequence< beans::PropertyValue > aValues =
     {
@@ -106,7 +106,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage(weld::Container* pPage, SwMailMerge
         comphelper::makePropertyValue(u"NoEmbDataSet"_ustr, true)
     };
 
-    uno::Reference< frame::XStorable > xStore( pView->GetDocShell()->GetModel(), uno::UNO_QUERY);
+    uno::Reference< frame::XStorable > xStore( rView.GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( m_sExampleURL, aValues   );
 
     Link<SwOneExampleFrame&,void> aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
@@ -219,20 +219,20 @@ bool SwMailMergeLayoutPage::commitPage(::vcl::WizardTypes::CommitPageReason eRea
     return true;
 }
 
-SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView const * pView,
+SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView& rView,
         SwMailMergeConfigItem& rConfigItem,
         const Point& rAddressPosition,
         bool bAlignToBody)
 {
     SwFrameFormat* pAddressBlockFormat = nullptr;
-    pView->GetWrtShell().StartUndo(SwUndoId::INSERT);
+    rView.GetWrtShell().StartUndo(SwUndoId::INSERT);
     if(rConfigItem.IsAddressBlock() && !rConfigItem.IsAddressInserted())
     {
         //insert the frame
         Point aAddressPosition(DEFAULT_LEFT_DISTANCE, DEFAULT_TOP_DISTANCE);
         if(rAddressPosition.X() > 0 && rAddressPosition.Y() > 0)
             aAddressPosition = rAddressPosition;
-        pAddressBlockFormat = InsertAddressFrame( pView->GetWrtShell(),
+        pAddressBlockFormat = InsertAddressFrame( rView.GetWrtShell(),
                                         rConfigItem,
                                         aAddressPosition, bAlignToBody, false);
         rConfigItem.SetAddressInserted();
@@ -240,10 +240,10 @@ SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView const * p
     //now the greeting
     if(rConfigItem.IsGreetingLine(false) && !rConfigItem.IsGreetingInserted())
     {
-        InsertGreeting( pView->GetWrtShell(), rConfigItem, false);
+        InsertGreeting( rView.GetWrtShell(), rConfigItem, false);
         rConfigItem.SetGreetingInserted();
     }
-    pView->GetWrtShell().EndUndo(SwUndoId::INSERT);
+    rView.GetWrtShell().EndUndo(SwUndoId::INSERT);
     return pAddressBlockFormat;
 }
 

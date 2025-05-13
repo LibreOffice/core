@@ -27,8 +27,8 @@
 #include <drawbase.hxx>
 #include <conform.hxx>
 
-ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, SdrObjKind eObjKind)
-    : SwDrawBase(pWrtShell, pEditWin, pSwView)
+ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView& rSwView, SdrObjKind eObjKind)
+    : SwDrawBase(pWrtShell, pEditWin, rSwView)
     , m_eObjKind(eObjKind)
 {
     m_bInsForm = true;

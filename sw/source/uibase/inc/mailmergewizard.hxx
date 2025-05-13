@@ -35,7 +35,7 @@ using vcl::WizardTypes::WizardState;
 
 class SwMailMergeWizard final : public ::vcl::RoadmapWizardMachine
 {
-    SwView*                 m_pSwView;
+    SwView&                 m_rSwView;
     OUString                m_sDocumentURL;
     bool                    m_bDocumentLoad;
 
@@ -61,7 +61,7 @@ public:
     SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem> xConfigItem);
     virtual ~SwMailMergeWizard() override;
 
-    SwView*                     GetSwView() {return m_pSwView;}
+    SwView&                     GetSwView() {return m_rSwView;}
     SwMailMergeConfigItem&      GetConfigItem() { return *m_xConfigItem;}
 
     void                    SetReloadDocument(const OUString& rURL) {m_sDocumentURL = rURL;}

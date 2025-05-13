@@ -77,7 +77,7 @@ public:
 }
 
 SwHHCWrapper::SwHHCWrapper(
-        SwView* pSwView,
+        SwView& rSwView,
         const uno::Reference< uno::XComponentContext >& rxContext,
         LanguageType nSourceLanguage,
         LanguageType nTargetLanguage,
@@ -85,14 +85,14 @@ SwHHCWrapper::SwHHCWrapper(
         sal_Int32 nConvOptions,
         bool bIsInteractive,
         bool bStart, bool bOther, bool bSelection )
-    : editeng::HangulHanjaConversion(pSwView->GetEditWin().GetFrameWeld(), rxContext,
+    : editeng::HangulHanjaConversion(rSwView.GetEditWin().GetFrameWeld(), rxContext,
                                 LanguageTag::convertToLocale( nSourceLanguage ),
                                 LanguageTag::convertToLocale( nTargetLanguage ),
                                 pTargetFont,
                                 nConvOptions,
                                 bIsInteractive )
-    , m_pView( pSwView )
-    , m_rWrtShell( pSwView->GetWrtShell() )
+    , m_rView( rSwView )
+    , m_rWrtShell( rSwView.GetWrtShell() )
     , m_nLastPos( 0 )
     , m_nUnitOffset( 0 )
     , m_nPageCount( 0 )
@@ -115,22 +115,22 @@ SwHHCWrapper::~SwHHCWrapper() COVERITY_NOEXCEPT_FALSE
     // check for existence of a draw view which means that there are
     // (or previously were) draw objects present in the document.
     // I.e. we like to check those too.
-    if ( m_bIsDrawObj /*&& bLastRet*/ && m_pView->GetWrtShell().HasDrawView() )
+    if ( m_bIsDrawObj /*&& bLastRet*/ && m_rView.GetWrtShell().HasDrawView() )
     {
-        vcl::Cursor *pSave = m_pView->GetWindow()->GetCursor();
+        vcl::Cursor *pSave = m_rView.GetWindow()->GetCursor();
         {
             SwKeepConversionDirectionStateContext aContext;
 
-            SdrHHCWrapper aSdrConvWrap( m_pView, GetSourceLanguage(),
+            SdrHHCWrapper aSdrConvWrap( m_rView, GetSourceLanguage(),
                     GetTargetLanguage(), GetTargetFont(),
                     GetConversionOptions(), IsInteractive() );
             aSdrConvWrap.StartTextConversion();
         }
-        m_pView->GetWindow()->SetCursor( pSave );
+        m_rView.GetWindow()->SetCursor( pSave );
     }
 
     if( m_nPageCount )
-        ::EndProgress( m_pView->GetDocShell() );
+        ::EndProgress( m_rView.GetDocShell() );
 
     // finally for chinese translation we need to change the documents
     // default language and font to the new ones to be used.
@@ -138,7 +138,7 @@ SwHHCWrapper::~SwHHCWrapper() COVERITY_NOEXCEPT_FALSE
     if (!IsChinese( nTargetLang ))
         return;
 
-    SwDoc *pDoc = m_pView->GetDocShell()->GetDoc();
+    SwDoc *pDoc = m_rView.GetDocShell()->GetDoc();
 
     //!! Note: This also effects the default language of text boxes (EditEngine/EditView) !!
     pDoc->SetDefault( SvxLanguageItem( nTargetLang, RES_CHRATR_CJK_LANGUAGE ) );
@@ -502,7 +502,7 @@ void SwHHCWrapper::Convert()
 {
     OSL_ENSURE( m_pConvArgs == nullptr, "NULL pointer expected" );
     {
-        SwPaM *pCursor = m_pView->GetWrtShell().GetCursor();
+        SwPaM *pCursor = m_rView.GetWrtShell().GetCursor();
         auto [pSttPos, pEndPos] = pCursor->StartEnd(); // SwPosition*
 
         if (pSttPos->GetNode().IsTextNode() &&
@@ -513,7 +513,7 @@ void SwHHCWrapper::Convert()
         else    // we are not in the text (maybe a graphic or OLE object is selected) let's start from the top
         {
             // get PaM that points to the start of the document
-            SwNode& rNode = m_pView->GetDocShell()->GetDoc()->GetNodes().GetEndOfContent();
+            SwNode& rNode = m_rView.GetDocShell()->GetDoc()->GetNodes().GetEndOfContent();
             SwPaM aPam(rNode);
             aPam.Move( fnMoveBackward, GoInDoc ); // move to start of document
 
@@ -658,12 +658,12 @@ void SwHHCWrapper::FindConvText_impl()
 void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs, SvxSpellArea eArea )
 {
     m_bIsDrawObj = SvxSpellArea::Other == eArea;
-    m_pView->SpellStart( eArea, m_bStartDone, m_bEndDone, /* [out] */ pConversionArgs );
+    m_rView.SpellStart( eArea, m_bStartDone, m_bEndDone, /* [out] */ pConversionArgs );
 }
 
 void SwHHCWrapper::ConvEnd_impl( SwConversionArgs const *pConversionArgs )
 {
-    m_pView->SpellEnd( pConversionArgs );
+    m_rView.SpellEnd( pConversionArgs );
 }
 
 bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
@@ -671,7 +671,7 @@ bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
     bool bProgress = !m_bIsDrawObj && !m_bIsSelection;
     pConversionArgs->aConvText.clear();
     pConversionArgs->nConvTextLang = LANGUAGE_NONE;
-    m_pView->GetWrtShell().SpellContinue( &m_nPageCount, bProgress ? &m_nPageStart : nullptr, pConversionArgs );
+    m_rView.GetWrtShell().SpellContinue( &m_nPageCount, bProgress ? &m_nPageStart : nullptr, pConversionArgs );
     return !pConversionArgs->aConvText.isEmpty();
 }
 

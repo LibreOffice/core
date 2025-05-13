@@ -26,8 +26,8 @@
 #include <drawbase.hxx>
 #include <dselect.hxx>
 
-DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
-    : SwDrawBase(pWrtShell, pEditWin, pSwView)
+DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView& rSwView)
+    : SwDrawBase(pWrtShell, pEditWin, rSwView)
 {
     m_bCreateObj = false;
 }

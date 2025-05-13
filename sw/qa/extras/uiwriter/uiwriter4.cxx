@@ -1951,7 +1951,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf105417)
     // Automatic hyphenation means not opening a dialog, but going ahead
     // non-interactively.
     xLinguProperties->setIsHyphAuto(true);
-    SwHyphWrapper aWrap(pView, xHyphenator, /*bStart=*/false, /*bOther=*/true,
+    SwHyphWrapper aWrap(*pView, xHyphenator, /*bStart=*/false, /*bOther=*/true,
                         /*bSelection=*/false);
     // This never returned, it kept trying to hyphenate the last word
     // (greenbacks) again and again.

@@ -25,7 +25,7 @@
 class ConstPolygon final : public SwDrawBase
 {
 public:
-    ConstPolygon(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
+    ConstPolygon(SwWrtShell* pSh, SwEditWin* pWin, SwView& rView);
 
     // Mouse- & Key-Events
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;

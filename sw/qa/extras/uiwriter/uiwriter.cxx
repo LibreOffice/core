@@ -1352,7 +1352,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionBlank)
     SwPaM aPaM(aIdx);
 
     // When
-    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, nullptr,
+    SwHHCWrapper aWrap( *pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, nullptr,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();
@@ -1377,7 +1377,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionNonChineseText)
     pDoc->getIDocumentContentOperations().InsertString(aPaM, NON_CHINESE_CONTENT);
 
     // When
-    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, nullptr,
+    SwHHCWrapper aWrap( *pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, nullptr,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();
@@ -1402,7 +1402,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionTraditionalToSimplifie
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(CHINESE_TRADITIONAL_CONTENT));
 
     // When
-    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, nullptr,
+    SwHHCWrapper aWrap( *pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, nullptr,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();
@@ -1427,7 +1427,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionSimplifiedToTraditiona
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(CHINESE_SIMPLIFIED_CONTENT));
 
     // When
-    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_SIMPLIFIED, LANGUAGE_CHINESE_TRADITIONAL, nullptr,
+    SwHHCWrapper aWrap( *pView, xContext, LANGUAGE_CHINESE_SIMPLIFIED, LANGUAGE_CHINESE_TRADITIONAL, nullptr,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();

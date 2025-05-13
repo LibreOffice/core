@@ -30,7 +30,7 @@ class SwPaM;
 
 class SW_DLLPUBLIC SwHHCWrapper final : public editeng::HangulHanjaConversion
 {
-    SwView *    m_pView;
+    SwView&    m_rView;
     SwWrtShell &m_rWrtShell;
 
     std::unique_ptr<SwConversionArgs> m_pConvArgs;    /**< object for arguments (and results) needed
@@ -84,7 +84,7 @@ class SW_DLLPUBLIC SwHHCWrapper final : public editeng::HangulHanjaConversion
 
 public:
     SwHHCWrapper(
-        SwView* pView,
+        SwView& rView,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         LanguageType nSourceLanguage, LanguageType nTargetLanguage,
         const vcl::Font *pTargetFont,

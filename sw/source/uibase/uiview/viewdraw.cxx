@@ -237,7 +237,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
     {
         case SID_OBJECT_SELECT:
         case SID_DRAW_SELECT:
-            pFuncPtr.reset( new DrawSelection(m_pWrtShell.get(), m_pEditWin, this) );
+            pFuncPtr.reset( new DrawSelection(m_pWrtShell.get(), m_pEditWin, *this) );
             m_nDrawSfxId = m_nFormSfxId = SID_OBJECT_SELECT;
             m_sDrawCustom.clear();
             break;
@@ -259,7 +259,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
-            pFuncPtr.reset( new ConstRectangle(m_pWrtShell.get(), m_pEditWin, this) );
+            pFuncPtr.reset( new ConstRectangle(m_pWrtShell.get(), m_pEditWin, *this) );
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();
@@ -273,7 +273,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
         case SID_DRAW_BEZIER_FILL:
         case SID_DRAW_FREELINE_NOFILL:
         case SID_DRAW_FREELINE:
-            pFuncPtr.reset( new ConstPolygon(m_pWrtShell.get(), m_pEditWin, this) );
+            pFuncPtr.reset( new ConstPolygon(m_pWrtShell.get(), m_pEditWin, *this) );
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();
             break;
@@ -281,14 +281,14 @@ void SwView::ExecDraw(const SfxRequest& rReq)
         case SID_DRAW_ARC:
         case SID_DRAW_PIE:
         case SID_DRAW_CIRCLECUT:
-            pFuncPtr.reset( new ConstArc(m_pWrtShell.get(), m_pEditWin, this) );
+            pFuncPtr.reset( new ConstArc(m_pWrtShell.get(), m_pEditWin, *this) );
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();
             break;
 
         case SID_FM_CREATE_CONTROL:
         {
-            pFuncPtr.reset(new ConstFormControl(m_pWrtShell.get(), m_pEditWin, this, eNewFormObjKind));
+            pFuncPtr.reset(new ConstFormControl(m_pWrtShell.get(), m_pEditWin, *this, eNewFormObjKind));
             m_nFormSfxId = nSlotId;
             m_eFormObjKind = eNewFormObjKind;
         }
@@ -302,7 +302,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
         case SID_DRAWTBX_CS_STAR :
         case SID_DRAW_CS_ID :
         {
-            pFuncPtr.reset( new ConstCustomShape(m_pWrtShell.get(), m_pEditWin, this, rReq ) );
+            pFuncPtr.reset( new ConstCustomShape(m_pWrtShell.get(), m_pEditWin, *this, rReq ) );
 
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
 

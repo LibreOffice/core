@@ -26,8 +26,8 @@
 #include <drawbase.hxx>
 #include <conpoly.hxx>
 
-ConstPolygon::ConstPolygon(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
-                SwDrawBase(pWrtShell, pEditWin, pSwView)
+ConstPolygon::ConstPolygon(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView& rSwView) :
+                SwDrawBase(pWrtShell, pEditWin, rSwView)
 {
 }
 

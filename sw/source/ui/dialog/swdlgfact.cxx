@@ -383,10 +383,10 @@ template <class Dialog>
 using AbstractTabController_Impl = AbstractTabController_Impl_BASE<SfxAbstractTabDialog, Dialog>;
 }
 
-VclPtr<SfxAbstractTabDialog>  SwAbstractDialogFactory_Impl::CreateSwCharDlg(weld::Window* pParent, SwView& pVw,
+VclPtr<SfxAbstractTabDialog>  SwAbstractDialogFactory_Impl::CreateSwCharDlg(weld::Window* pParent, SwView& rView,
     const SfxItemSet& rCoreSet, SwCharDlgMode nDialogMode, const OUString* pFormatStr)
 {
-    return VclPtr<AbstractTabController_Impl<SwCharDlg>>::Create(pParent, pVw, rCoreSet, nDialogMode, pFormatStr);
+    return VclPtr<AbstractTabController_Impl<SwCharDlg>>::Create(pParent, rView, rCoreSet, nDialogMode, pFormatStr);
 }
 
 namespace

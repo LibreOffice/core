@@ -246,7 +246,7 @@ void SwView::StartTextConversion(
     {
         const uno::Reference< uno::XComponentContext >& xContext(
                     comphelper::getProcessComponentContext() );
-        SwHHCWrapper aWrap( this, xContext, nSourceLang, nTargetLang, pTargetFont,
+        SwHHCWrapper aWrap( *this, xContext, nSourceLang, nTargetLang, pTargetFont,
                             nOptions, bIsInteractive,
                             bStart, bOther, bSelection );
         aWrap.Convert();
@@ -458,7 +458,7 @@ void SwView::HyphenateDocument()
 
         if( !bStop )
         {
-            SwHyphWrapper aWrap( this, xHyph, bStart, bOther, bSelection );
+            SwHyphWrapper aWrap( *this, xHyph, bStart, bOther, bSelection );
             aWrap.SpellDocument();
             m_pWrtShell->EndUndo(SwUndoId::INSATTR);
         }

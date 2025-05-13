@@ -38,7 +38,7 @@ using vcl::RoadmapWizardTypes::PathId;
 
 SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem> xItem)
     : RoadmapWizardMachine(rView.GetFrameWeld())
-    , m_pSwView(&rView)
+    , m_rSwView(rView)
     , m_bDocumentLoad(false)
     , m_xConfigItem(std::move(xItem))
     , m_sStarting(SwResId(ST_STARTING))
@@ -148,7 +148,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
         {
             bEnablePrev = false; // the first page
 
-            OUString sDataSourceName = GetSwView()->GetDataSourceName();
+            OUString sDataSourceName = GetSwView().GetDataSourceName();
             if(!sDataSourceName.isEmpty() &&
                !SwView::IsDataSourceAvailable(sDataSourceName))
             {

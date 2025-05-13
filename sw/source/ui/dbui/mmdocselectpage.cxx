@@ -89,7 +89,7 @@ IMPL_LINK_NOARG(SwMailMergeDocSelectPage, DocSelectHdl, weld::Toggleable&, void)
 {
     m_xRecentDocLB->set_sensitive(m_xRecentDocRB->get_active());
     m_pWizard->UpdateRoadmap();
-    OUString sDataSourceName = m_pWizard->GetSwView()->GetDataSourceName();
+    OUString sDataSourceName = m_pWizard->GetSwView().GetDataSourceName();
 
     if(m_xCurrentDocRB->get_active() &&
        !sDataSourceName.isEmpty() &&
@@ -134,7 +134,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, weld::Button&, rButton, void)
         aDlgHelper.SetContext(sfx2::FileDialogHelper::WriterMailMerge);
         Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
-        SfxObjectFactory &rFact = m_pWizard->GetSwView()->GetDocShell()->GetFactory();
+        SfxObjectFactory &rFact = m_pWizard->GetSwView().GetDocShell()->GetFactory();
         SfxFilterMatcher aMatcher( rFact.GetFactoryName() );
         SfxFilterMatcherIter aIter( aMatcher );
         std::shared_ptr<const SfxFilter> pFlt = aIter.First();
@@ -166,7 +166,7 @@ IMPL_LINK_NOARG(SwMailMergeDocSelectPage, ExchangeDatabaseHdl, weld::Button&, vo
 {
 
     SwAbstractDialogFactory& rFact = ::swui::GetFactory();
-    VclPtr<AbstractChangeDbDialog> pDlg(rFact.CreateSwChangeDBDlg(*m_pWizard->GetSwView()));
+    VclPtr<AbstractChangeDbDialog> pDlg(rFact.CreateSwChangeDBDlg(m_pWizard->GetSwView()));
     pDlg->StartExecuteAsync(
         [this, pDlg] (sal_Int32 nResult)->void
         {
@@ -174,7 +174,7 @@ IMPL_LINK_NOARG(SwMailMergeDocSelectPage, ExchangeDatabaseHdl, weld::Button&, vo
                 pDlg->UpdateFields();
             pDlg->disposeOnce();
 
-            OUString sDataSourceName = m_pWizard->GetSwView()->GetDataSourceName();
+            OUString sDataSourceName = m_pWizard->GetSwView().GetDataSourceName();
 
             if(m_xCurrentDocRB->get_active() &&
                !sDataSourceName.isEmpty() &&

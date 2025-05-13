@@ -281,9 +281,9 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, weld::Button&, void)
 {
-    SwView* pView = m_pAddressPage->GetWizard()->GetSwView();
+    SwView& rView = m_pAddressPage->GetWizard()->GetSwView();
 
-    const OUString sNewSource = SwDBManager::LoadAndRegisterDataSource(m_xDialog.get(), pView ? pView->GetDocShell() : nullptr);
+    const OUString sNewSource = SwDBManager::LoadAndRegisterDataSource(m_xDialog.get(), rView.GetDocShell());
     if(!sNewSource.isEmpty())
     {
         m_xListLB->append(m_xIter.get());

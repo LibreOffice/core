@@ -27,7 +27,7 @@ private:
     SdrObjKind m_eObjKind;
 
 public:
-    ConstFormControl(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView, SdrObjKind eObjKind);
+    ConstFormControl(SwWrtShell* pSh, SwEditWin* pWin, SwView& rView, SdrObjKind eObjKind);
 
                                        // Mouse- & Key-Events
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;

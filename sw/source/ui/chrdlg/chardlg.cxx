@@ -38,11 +38,11 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
-SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
+SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rView, const SfxItemSet& rCoreSet,
     SwCharDlgMode nDialogMode, const OUString* pStr)
     : SfxTabDialogController(pParent, u"modules/swriter/ui/characterproperties.ui"_ustr,
                              u"CharacterPropertiesDialog"_ustr, &rCoreSet, pStr != nullptr)
-    , m_rView(rVw)
+    , m_rView(rView)
     , m_nDialogMode(nDialogMode)
 {
     if (pStr)

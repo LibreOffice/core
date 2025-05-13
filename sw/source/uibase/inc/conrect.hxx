@@ -31,7 +31,7 @@ class ConstRectangle final : public SwDrawBase
     bool mbVertical;
 
  public:
-    ConstRectangle(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
+    ConstRectangle(SwWrtShell* pSh, SwEditWin* pWin, SwView& rView);
 
                                        // Mouse- & Key-Events
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;

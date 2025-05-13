@@ -26,8 +26,8 @@
 #include <drawbase.hxx>
 #include <conarc.hxx>
 
-ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
-    : SwDrawBase(pWrtShell, pEditWin, pSwView)
+ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView& rSwView)
+    : SwDrawBase(pWrtShell, pEditWin, rSwView)
     , m_nButtonUpCount(0)
 {
 }

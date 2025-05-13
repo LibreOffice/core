@@ -28,7 +28,7 @@ class ConstArc final : public SwDrawBase
     sal_uInt16 m_nButtonUpCount;
 
 public:
-    ConstArc(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
+    ConstArc(SwWrtShell* pSh, SwEditWin* pWin, SwView& rView);
 
                                        // Mouse- & Key-Events
     virtual bool    MouseButtonUp(const MouseEvent& rMEvt) override;

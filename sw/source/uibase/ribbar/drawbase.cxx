@@ -41,8 +41,8 @@
 
 using namespace ::com::sun::star;
 
-SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwView) :
-    m_pView(pSwView),
+SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView& rSwView) :
+    m_rView(rSwView),
     m_pSh(pSwWrtShell),
     m_pWin(pWindow),
     m_nSlotId(USHRT_MAX),
@@ -55,7 +55,7 @@ SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwV
 
 SwDrawBase::~SwDrawBase()
 {
-    if (m_pView->GetWrtShellPtr()) // In the view-dtor could the wrtsh already been deleted...
+    if (m_rView.GetWrtShellPtr()) // In the view-dtor could the wrtsh already been deleted...
         m_pSh->GetDrawView()->SetEditMode();
 }
 
@@ -257,7 +257,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
         if(rMEvt.IsRight())
         {
             m_pSh->BreakCreate();
-            m_pView->LeaveDrawCreate();
+            m_rView.LeaveDrawCreate();
         }
         else
         {
@@ -291,7 +291,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 bAutoCap = true;
                 if(m_pWin->GetFrameColCount() > 1)
                 {
-                    SfxItemSetFixed<RES_COL,RES_COL> aSet(m_pView->GetPool());
+                    SfxItemSetFixed<RES_COL,RES_COL> aSet(m_rView.GetPool());
                     SwFormatCol aCol(aSet.Get(RES_COL));
                     aCol.Init(m_pWin->GetFrameColCount(), aCol.GetGutterWidth(), aCol.GetWishWidth());
                     aSet.Put(aCol);
@@ -334,14 +334,14 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 
                     if (!m_pSh->GetSelectedObjCount())
                     {
-                        m_pView->LeaveDrawCreate();    // Switch to selection mode
+                        m_rView.LeaveDrawCreate();    // Switch to selection mode
 
                         m_pSh->GetView().GetViewFrame().GetBindings().Invalidate(SID_INSERT_DRAW);
 
                         if (m_pSh->IsSelFrameMode())
                             m_pSh->LeaveSelFrameMode();
                     }
-                    m_pView->NoRotate();
+                    m_rView.NoRotate();
 
                     bCheckShell = true; // if necessary turn on BezierShell
                 }
@@ -352,11 +352,11 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                             m_pSh->IsSelFrameMode() ) ? SW_ADD_SELECT : 0 );
                     else
                     {
-                        m_pView->LeaveDrawCreate();
+                        m_rView.LeaveDrawCreate();
                         if (m_pSh->IsSelFrameMode())
                             m_pSh->LeaveSelFrameMode();
                     }
-                    m_pView->NoRotate();
+                    m_rView.NoRotate();
 
                     bReturn = true;
                 }
@@ -392,14 +392,14 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 
                     if (!m_pSh->GetSelectedObjCount())
                     {
-                        m_pView->LeaveDrawCreate();    // Switch to selection mode
+                        m_rView.LeaveDrawCreate();    // Switch to selection mode
 
                         m_pSh->GetView().GetViewFrame().GetBindings().Invalidate(SID_INSERT_DRAW);
 
                         if (m_pSh->IsSelFrameMode())
                             m_pSh->LeaveSelFrameMode();
                     }
-                    m_pView->NoRotate();
+                    m_rView.NoRotate();
 
                     bCheckShell = true; // if necessary turn on BezierShell
                 }
@@ -409,22 +409,22 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 
             if (!m_pSh->GetSelectedObjCount() && !m_pWin->IsDrawAction())
             {
-                m_pView->LeaveDrawCreate();
+                m_rView.LeaveDrawCreate();
                 if (m_pSh->IsSelFrameMode())
                     m_pSh->LeaveSelFrameMode();
 
-                m_pView->NoRotate();
+                m_rView.NoRotate();
                 bReturn = true;
             }
         }
     }
 
     if (bCheckShell)
-        m_pView->AttrChangedNotify(nullptr); // if necessary turn on BezierShell
+        m_rView.AttrChangedNotify(nullptr); // if necessary turn on BezierShell
 
     //!!!!!!!!!! Attention suicide !!!!!!!!!!! Everything should be renewed once
     if ( bAutoCap )
-        m_pView->AutoCaption(FRAME_CAP);   //Can currently only be FRAME, otherwise convert
+        m_rView.AutoCaption(FRAME_CAP);   //Can currently only be FRAME, otherwise convert
                                            // to enums
     return bReturn;
 }
@@ -500,18 +500,18 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
         m_pSh->SelectObj(aPnt);
         if (rMEvt.GetModifier() == KEY_SHIFT || !m_pSh->GetSelectedObjCount())
         {
-            m_pView->LeaveDrawCreate();    // Switch to selection mode
+            m_rView.LeaveDrawCreate();    // Switch to selection mode
 
             m_pSh->GetView().GetViewFrame().GetBindings().Invalidate(SID_INSERT_DRAW);
         }
     }
     else
     {
-        m_pView->LeaveDrawCreate();
+        m_rView.LeaveDrawCreate();
         if (m_pSh->IsSelFrameMode())
             m_pSh->LeaveSelFrameMode();
     }
-    m_pView->NoRotate();
+    m_rView.NoRotate();
 }
 
 void SwDrawBase::CreateDefaultObject()
@@ -533,7 +533,7 @@ void SwDrawBase::CreateDefaultObjectAtPosWithSize(Point aPos, Size aSize)
     aPos.AdjustX(-sal_Int32(aSize.getWidth() / 2));
     aPos.AdjustY(-sal_Int32(aSize.getHeight() / 2));
 
-    SdrView* sdrView =  m_pView->GetDrawView();
+    SdrView* sdrView =  m_rView.GetDrawView();
     SdrPageView *pPV = sdrView->GetSdrPageView();
 
     if(sdrView->IsSnapEnabled())

@@ -36,8 +36,8 @@
 #include <conrect.hxx>
 
 ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
-                                SwView* pSwView )
-    : SwDrawBase( pWrtShell, pEditWin, pSwView )
+                                SwView& rSwView )
+    : SwDrawBase( pWrtShell, pEditWin, rSwView )
     , m_bMarquee(false)
     , m_bCapVertical(false)
     , mbVertical(false)
@@ -52,16 +52,16 @@ bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     {
         if (m_pWin->GetSdrDrawMode() == SdrObjKind::Caption)
         {
-            m_pView->NoRotate();
-            if (m_pView->IsDrawSelMode())
+            m_rView.NoRotate();
+            if (m_rView.IsDrawSelMode())
             {
-                m_pView->FlipDrawSelMode();
-                m_pSh->GetDrawView()->SetFrameDragSingles(m_pView->IsDrawSelMode());
+                m_rView.FlipDrawSelMode();
+                m_pSh->GetDrawView()->SetFrameDragSingles(m_rView.IsDrawSelMode());
             }
         }
         else
         {
-            SdrObject* pObj = m_pView->GetDrawView()->GetCreateObj();
+            SdrObject* pObj = m_rView.GetDrawView()->GetCreateObj();
             if (pObj)
             {
                 SfxItemSet aAttr(pObj->getSdrModelFromSdrObject().GetItemPool());
@@ -127,9 +127,9 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             if( pObj )
             {
                 SdrPageView* pPV = pSdrView->GetSdrPageView();
-                m_pView->BeginTextEdit( pObj, pPV, m_pWin, true );
+                m_rView.BeginTextEdit( pObj, pPV, m_pWin, true );
             }
-            m_pView->LeaveDrawCreate();  // Switch to selection mode
+            m_rView.LeaveDrawCreate();  // Switch to selection mode
             m_pSh->GetView().GetViewFrame().GetBindings().Invalidate(SID_INSERT_DRAW);
             break;
 

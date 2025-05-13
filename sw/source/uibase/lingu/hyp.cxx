@@ -31,16 +31,16 @@
 
 #include <memory>
 
-#define PSH         (&m_pView->GetWrtShell())
+#define PSH         (&m_rView.GetWrtShell())
 
 using namespace ::com::sun::star;
 
 // interactive separation
-SwHyphWrapper::SwHyphWrapper( SwView* pVw,
+SwHyphWrapper::SwHyphWrapper( SwView& rView,
             uno::Reference< linguistic2::XHyphenator > const &rxHyph,
             bool bStart, bool bOther, bool bSelect ) :
-    SvxSpellWrapper( pVw->GetEditWin().GetFrameWeld(), rxHyph, bStart, bOther ),
-    m_pView( pVw ),
+    SvxSpellWrapper( rView.GetEditWin().GetFrameWeld(), rxHyph, bStart, bOther ),
+    m_rView( rView ),
     m_nPageCount( 0 ),
     m_nPageStart( 0 ),
     m_bInSelection( bSelect ),
@@ -54,11 +54,11 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 {
     if( SvxSpellArea::Other == eSpell && m_nPageCount )
     {
-        ::EndProgress( m_pView->GetDocShell() );
+        ::EndProgress( m_rView.GetDocShell() );
         m_nPageCount = 0;
         m_nPageStart = 0;
     }
-    m_pView->HyphStart( eSpell );
+    m_rView.HyphStart( eSpell );
 }
 
 void SwHyphWrapper::SpellContinue()
@@ -68,7 +68,7 @@ void SwHyphWrapper::SpellContinue()
     if( m_bAutomatic )
     {
         PSH->StartAllAction();
-        oWait.emplace( *m_pView->GetDocShell(), true );
+        oWait.emplace( *m_rView.GetDocShell(), true );
     }
 
     uno::Reference< uno::XInterface >  xHyphWord = m_bInSelection ?
@@ -111,10 +111,10 @@ void SwHyphWrapper::InsertHyphen( const sal_Int32 nPos )
 SwHyphWrapper::~SwHyphWrapper()
 {
     if( m_nPageCount )
-        ::EndProgress( m_pView->GetDocShell() );
+        ::EndProgress( m_rView.GetDocShell() );
     if( m_bInfoBox && !Application::IsHeadlessModeEnabled() )
     {
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_pView->GetEditWin().GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_rView.GetEditWin().GetFrameWeld(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       SwResId(STR_HYP_OK)));
         xInfoBox->run();
