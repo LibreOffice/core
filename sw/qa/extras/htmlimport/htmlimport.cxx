@@ -357,6 +357,17 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
     aBorder = getProperty<table::BorderLine2>(xCell, u"RightBorder"_ustr);
     // This was 0. Single column tables had no right border.  tdf#115576
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Right Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
+
+    // Test a cell merged horizontally to the table end
+    xTable.set(xTables->getByIndex(2), uno::UNO_QUERY_THROW);
+    xCell.set(xTable->getCellByName(u"B2"_ustr), uno::UNO_QUERY_THROW);
+    aBorder = getProperty<table::BorderLine2>(xCell, u"BottomBorder"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(18), aBorder.LineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCell, u"LeftBorder"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(18), aBorder.LineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCell, u"RightBorder"_ustr);
+    // This was 0, merged cell had no right border.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(18), aBorder.LineWidth);
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSize)
