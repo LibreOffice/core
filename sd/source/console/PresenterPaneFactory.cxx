@@ -259,7 +259,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
         xWindow->setVisible(true);
     }
 
-    return Reference<XResource>(static_cast<XWeak*>(xPane.get()), UNO_QUERY_THROW);
+    return xPane;
 }
 
 void PresenterPaneFactory::ThrowIfDisposed() const
