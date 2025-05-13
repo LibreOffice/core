@@ -340,11 +340,11 @@ public:
     virtual bool get_extents_relative_to(const Widget& rRelative, int& x, int& y, int& width,
                                          int& height) const override;
 
-    virtual void grab_add() override;
+    virtual void grab_mouse() override;
 
-    virtual bool has_grab() const override;
+    virtual bool has_mouse_grab() const override;
 
-    virtual void grab_remove() override;
+    virtual void release_mouse() override;
 
     virtual bool get_direction() const override;
 

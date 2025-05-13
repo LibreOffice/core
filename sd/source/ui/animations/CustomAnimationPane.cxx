@@ -2098,7 +2098,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, weld::TreeView&, void)
 
 IMPL_LINK_NOARG(CustomAnimationPane, SelectionHandler, Timer*, void)
 {
-    if (mxLBAnimation->has_grab()) // tdf#136474 try again later
+    if (mxLBAnimation->has_mouse_grab()) // tdf#136474 try again later
     {
         maIdle.Start();
         return;

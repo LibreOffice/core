@@ -2872,8 +2872,10 @@ private:
     gulong m_nDragDataDeleteignalId;
     gulong m_nDragGetSignalId;
 
+    // whether mouse has explicitly been grabbed from LO application code
+    bool m_bMouseGrabbed;
+
 #if GTK_CHECK_VERSION(4, 0, 0)
-    int m_nGrabCount;
     GtkEventController* m_pFocusController;
     GtkEventController* m_pClickController;
     GtkEventController* m_pMotionController;
@@ -3448,8 +3450,8 @@ public:
         , m_nDragFailedSignalId(0)
         , m_nDragDataDeleteignalId(0)
         , m_nDragGetSignalId(0)
+        , m_bMouseGrabbed(false)
 #if GTK_CHECK_VERSION(4, 0, 0)
-        , m_nGrabCount(0)
         , m_pFocusController(nullptr)
         , m_pClickController(nullptr)
         , m_pMotionController(nullptr)
@@ -4080,31 +4082,32 @@ public:
     }
 #endif
 
-    virtual void grab_add() override
+    virtual void grab_mouse() override
     {
-#if GTK_CHECK_VERSION(4, 0, 0)
-        ++m_nGrabCount;
-#else
-        gtk_grab_add(m_pWidget);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        // have at most one grab owned by LO application code
+        if (!m_bMouseGrabbed)
+            gtk_grab_add(m_pWidget);
 #endif
+        m_bMouseGrabbed = true;
     }
 
-    virtual bool has_grab() const override
+    virtual bool has_mouse_grab() const override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        return m_nGrabCount != 0;
+        return m_bMouseGrabbed;
 #else
         return gtk_widget_has_grab(m_pWidget);
 #endif
     }
 
-    virtual void grab_remove() override
+    virtual void release_mouse() override
     {
-#if GTK_CHECK_VERSION(4, 0, 0)
-        --m_nGrabCount;
-#else
-        gtk_grab_remove(m_pWidget);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        if (m_bMouseGrabbed)
+            gtk_grab_remove(m_pWidget);
 #endif
+        m_bMouseGrabbed = false;
     }
 
     virtual bool get_direction() const override
@@ -8755,7 +8758,7 @@ public:
     virtual ScrollType get_scroll_type() const override
     {
         // tdf#153049 want a mousewheel spin to be treated as DontKnow
-        return has_grab() ? ScrollType::Drag : ScrollType::DontKnow;
+        return has_mouse_grab() ? ScrollType::Drag : ScrollType::DontKnow;
     }
 
     virtual int get_scroll_thickness() const override

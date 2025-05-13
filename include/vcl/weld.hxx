@@ -301,9 +301,9 @@ public:
         m_aStyleUpdatedHdl = rLink;
     }
 
-    virtual void grab_add() = 0;
-    virtual bool has_grab() const = 0;
-    virtual void grab_remove() = 0;
+    virtual void grab_mouse() = 0;
+    virtual bool has_mouse_grab() const = 0;
+    virtual void release_mouse() = 0;
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual vcl::Font get_font() = 0;

@@ -90,12 +90,12 @@ public:
             return m_pDrawingArea->get_accessible_id();
         return OUString();
     }
-    void CaptureMouse() { m_pDrawingArea->grab_add(); }
-    bool IsMouseCaptured() const { return m_pDrawingArea->has_grab(); }
+    void CaptureMouse() { m_pDrawingArea->grab_mouse(); }
+    bool IsMouseCaptured() const { return m_pDrawingArea->has_mouse_grab(); }
     Point GetPointerPosPixel() const { return m_pDrawingArea->get_pointer_position(); }
     void EnableRTL(bool bEnable) { m_pDrawingArea->set_direction(bEnable); }
     bool IsRTLEnabled() const { return m_pDrawingArea->get_direction(); }
-    void ReleaseMouse() { m_pDrawingArea->grab_remove(); }
+    void ReleaseMouse() { m_pDrawingArea->release_mouse(); }
     void SetPointer(PointerStyle ePointerStyle) { m_pDrawingArea->set_cursor(ePointerStyle); }
     void SetHelpId(const OUString& rHelpId) { m_pDrawingArea->set_help_id(rHelpId); }
     void SetAccessibleName(const OUString& rName) { m_pDrawingArea->set_accessible_name(rName); }

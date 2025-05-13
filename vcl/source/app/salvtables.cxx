@@ -590,11 +590,11 @@ bool SalInstanceWidget::get_extents_relative_to(const Widget& rRelative, int& x,
     return true;
 }
 
-void SalInstanceWidget::grab_add() { m_xWidget->CaptureMouse(); }
+void SalInstanceWidget::grab_mouse() { m_xWidget->CaptureMouse(); }
 
-bool SalInstanceWidget::has_grab() const { return m_xWidget->IsMouseCaptured(); }
+bool SalInstanceWidget::has_mouse_grab() const { return m_xWidget->IsMouseCaptured(); }
 
-void SalInstanceWidget::grab_remove() { m_xWidget->ReleaseMouse(); }
+void SalInstanceWidget::release_mouse() { m_xWidget->ReleaseMouse(); }
 
 bool SalInstanceWidget::get_direction() const { return m_xWidget->IsRTLEnabled(); }
 
