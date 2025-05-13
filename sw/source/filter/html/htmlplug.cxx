@@ -672,6 +672,9 @@ bool SwHTMLParser::InsertEmbed()
         uno::Sequence<uno::Any> aArguments{ uno::Any(aValues) };
         xObjInitialization->initialize(aArguments);
     }
+
+    SanitizeAnchor(aFrameSet);
+
     SwFrameFormat* pFlyFormat =
         m_xDoc->getIDocumentContentOperations().InsertEmbObject(*m_pPam,
                 ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
