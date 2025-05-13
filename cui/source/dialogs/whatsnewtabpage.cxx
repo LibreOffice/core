@@ -52,9 +52,11 @@ void AnimatedBrand::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     const Point aGraphicPosition((rRect.GetWidth() - m_pGraphicSize.Width()),
                                  (rRect.GetHeight() - m_pGraphicSize.Height()) >> 1);
+#ifndef MACOSX
     if (m_pGraphic.IsAnimated() && MiscSettings::IsAnimatedOthersAllowed())
         m_pGraphic.StartAnimation(rRenderContext, aGraphicPosition, m_pGraphicSize);
     else
+#endif
         m_pGraphic.Draw(rRenderContext, aGraphicPosition, m_pGraphicSize);
 
     tools::Rectangle aTextRect;
