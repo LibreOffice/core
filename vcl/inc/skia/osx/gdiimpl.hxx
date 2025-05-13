@@ -49,10 +49,6 @@ private:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
     virtual void flushSurfaceToWindowContext() override;
     static inline sk_sp<SkFontMgr> fontManager;
-    static inline AquaSkiaSalGraphicsImpl* lastFlushedGraphicsImpl = nullptr;
-    static inline CFAbsoluteTime lastFlushedGraphicsImplTime = 0;
-
-    bool mbInFlushSurfaceToWindowContext;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
