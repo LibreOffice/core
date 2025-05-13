@@ -77,13 +77,6 @@ public:
     bool ComparePane(const Reference<XResource>& rxPane) const { return mxPane == rxPane; }
 };
 
-class BasicPaneFactory::PaneContainer
-    : public ::std::vector<PaneDescriptor>
-{
-public:
-    PaneContainer() {}
-};
-
 //===== PaneFactory ===========================================================
 
 BasicPaneFactory::BasicPaneFactory(

@@ -87,7 +87,7 @@ private:
         mxConfigurationControllerWeak;
     ViewShellBase* mpViewShellBase;
     class PaneDescriptor;
-    class PaneContainer;
+    using PaneContainer = std::vector<PaneDescriptor>;
     std::unique_ptr<PaneContainer> mpPaneContainer;
 
     /** Create a new instance of FrameWindowPane.
