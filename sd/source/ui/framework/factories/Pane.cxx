@@ -103,16 +103,6 @@ void SAL_CALL Pane::setVisible (sal_Bool bIsVisible)
         pWindow->Show(bIsVisible);
 }
 
-Reference<css::accessibility::XAccessible> SAL_CALL Pane::getAccessible()
-{
-    ThrowIfDisposed();
-    vcl::Window* pWindow = GetWindow();
-    if (pWindow != nullptr)
-        return pWindow->GetAccessible(false);
-    else
-        return nullptr;
-}
-
 void SAL_CALL Pane::setAccessible (
     const Reference<css::accessibility::XAccessible>& rxAccessible)
 {

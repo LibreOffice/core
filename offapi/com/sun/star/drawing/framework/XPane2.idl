@@ -49,11 +49,6 @@ interface XPane2
             May be an empty reference.
     */
     void setAccessible ([in] ::com::sun::star::accessibility::XAccessible xAccessible);
-
-    /** Return the accessibility object that is currently associated with
-        the windows that implement the pane.
-    */
-    ::com::sun::star::accessibility::XAccessible getAccessible ();
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework

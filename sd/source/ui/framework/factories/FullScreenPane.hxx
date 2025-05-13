@@ -65,8 +65,6 @@ public:
 
     virtual void SAL_CALL setVisible (sal_Bool bIsVisible) override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible() override;
-
     virtual void SAL_CALL setAccessible (
         const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible) override;
 
