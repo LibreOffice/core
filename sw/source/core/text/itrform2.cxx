@@ -2242,6 +2242,15 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
     if ( pGrid && GetInfo().SnapToGrid() )
     {
+        // tdf#88752: Grid base height is ignored for table rows in compat mode
+        if (m_pFrame->IsInTab()
+            && m_pFrame->GetDoc().getIDocumentSettingAccess().get(
+                DocumentSettingId::MS_WORD_COMP_GRID_METRICS))
+        {
+            m_pCurr->SetRealHeight(nLineHeight);
+            return;
+        }
+
         const sal_uInt16 nGridWidth = pGrid->GetBaseHeight();
         const sal_uInt16 nRubyHeight = pGrid->GetRubyHeight();
         const bool bRubyTop = ! pGrid->GetRubyTextBelow();
