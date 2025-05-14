@@ -841,6 +841,7 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
         {
             pTextRefMark->SetDontExpand(true);
             pTextRefMark->SetLockExpandFlag(true);
+            pTextRefMark->SetDontExpandStartAttr(true);
         }
 
         if (nFieldIndex >= aFields.getLength())
