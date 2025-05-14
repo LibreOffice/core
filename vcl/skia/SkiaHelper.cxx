@@ -39,6 +39,7 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 #include <config_skia.h>
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
+#include <atomic>
 #include <list>
 #include <o3tl/lru_map.hxx>
 
@@ -241,7 +242,47 @@ static void writeSkiaRasterInfo()
 static std::unique_ptr<skwindow::WindowContext> getTemporaryWindowContext();
 #endif
 
-static void checkDeviceDenylisted(bool blockDisable = false)
+static RenderMethod initRenderMethodToUse()
+{
+    if (Application::IsBitmapRendering())
+        return RenderRaster;
+
+    if (const char* env = getenv("SAL_SKIA"))
+    {
+        if (strcmp(env, "raster") == 0)
+            return RenderRaster;
+#if defined SK_METAL
+        if (strcmp(env, "metal") == 0)
+            return RenderMetal;
+#elif defined SK_VULKAN
+        if (strcmp(env, "vulkan") == 0)
+            return RenderVulkan;
+#endif
+        SAL_WARN("vcl.skia", "Unrecognized value of SAL_SKIA");
+        abort();
+    }
+    if (officecfg::Office::Common::VCL::ForceSkiaRaster::get())
+        return RenderRaster;
+#if defined SK_METAL
+    return RenderMetal;
+#elif defined SK_VULKAN
+    return RenderVulkan;
+#else
+    return RenderRaster;
+#endif
+}
+
+static std::atomic<RenderMethod>& accessRenderMethodToUse()
+{
+    static std::atomic<RenderMethod> methodToUse = initRenderMethodToUse();
+    return methodToUse;
+}
+
+RenderMethod renderMethodToUse() { return accessRenderMethodToUse(); }
+
+static void forceRasterRenderMethod() { accessRenderMethodToUse() = RenderRaster; }
+
+static void checkDeviceDenylisted(bool blockDisable)
 {
     static bool done = false;
     if (done)
@@ -289,7 +330,7 @@ static void checkDeviceDenylisted(bool blockDisable = false)
                 SAL_INFO("vcl.skia", "Vulkan could not be initialized");
             if (denylisted && !blockDisable)
             {
-                disableRenderMethod(RenderVulkan);
+                forceRasterRenderMethod();
                 useRaster = true;
             }
 
@@ -321,7 +362,7 @@ static void checkDeviceDenylisted(bool blockDisable = false)
                 if (!blockDisable && !DefaultMTLDeviceIsSupported())
                 {
                     SAL_INFO("vcl.skia", "Metal default device not supported");
-                    disableRenderMethod(RenderMetal);
+                    forceRasterRenderMethod();
                     useRaster = true;
                 }
                 else
@@ -334,7 +375,7 @@ static void checkDeviceDenylisted(bool blockDisable = false)
             else
             {
                 SAL_INFO("vcl.skia", "Metal could not be initialized");
-                disableRenderMethod(RenderMetal);
+                forceRasterRenderMethod();
                 useRaster = true;
             }
 #else
@@ -356,41 +397,26 @@ static void checkDeviceDenylisted(bool blockDisable = false)
     done = true;
 }
 
-static bool skiaSupportedByBackend = false;
+static std::atomic<bool> skiaSupportedByBackend = false;
 static bool supportsVCLSkia()
 {
-    if (!skiaSupportedByBackend)
-    {
-        SAL_INFO("vcl.skia", "Skia not supported by VCL backend, disabling");
-        return false;
-    }
-    return getenv("SAL_DISABLESKIA") == nullptr;
+    if (skiaSupportedByBackend)
+        return true;
+    SAL_INFO("vcl.skia", "Skia not supported by VCL backend, disabling");
+    return false;
 }
 
-static void initInternal();
-
-bool isVCLSkiaEnabled()
+static bool initVCLSkiaEnabled()
 {
     /**
-     * The !bSet part should only be called once! Changing the results in the same
+     * Should only be called once! Changing the results in the same
      * run will mix Skia and normal rendering.
      */
 
-    static bool bSet = false;
-    static bool bEnable = false;
-    static bool bForceSkia = false;
-
     // allow global disable when testing SystemPrimitiveRenderer since current Skia on Win does not
     // harmonize with using Direct2D and D2DPixelProcessor2D
-    static const bool bTestSystemPrimitiveRenderer(
-        nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER"));
-    if (bTestSystemPrimitiveRenderer)
+    if (std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER") != nullptr)
         return false;
-
-    if (bSet)
-    {
-        return bForceSkia || bEnable;
-    }
 
     /*
      * There are a number of cases that these environment variables cover:
@@ -398,116 +424,44 @@ bool isVCLSkiaEnabled()
      *  * SAL_DISABLESKIA avoids the use of Skia regardless of any option
      */
 
-    bSet = true;
-    bForceSkia = !!getenv("SAL_FORCESKIA") || officecfg::Office::Common::VCL::ForceSkia::get();
-
     bool bRet = false;
-    bool bSupportsVCLSkia = supportsVCLSkia();
-    if (bForceSkia && bSupportsVCLSkia)
+    if (supportsVCLSkia() && getenv("SAL_DISABLESKIA") == nullptr)
     {
-        bRet = true;
-        initInternal();
-        // don't actually block if denylisted, but log it if enabled, and also get the vendor id
-        checkDeviceDenylisted(true);
-    }
-    else if (getenv("SAL_FORCEGL"))
-    {
-        // Skia usage is checked before GL usage, so if GL is forced (and Skia is not), do not
-        // enable Skia in order to allow GL.
-        bRet = false;
-    }
-    else if (bSupportsVCLSkia)
-    {
-        static bool bEnableSkiaEnv = !!getenv("SAL_ENABLESKIA");
+        const bool bForceSkia = getenv("SAL_FORCESKIA") != nullptr
+                                || officecfg::Office::Common::VCL::ForceSkia::get();
 
-        bEnable = bEnableSkiaEnv;
-
-        if (officecfg::Office::Common::VCL::UseSkia::get())
-            bEnable = true;
-
-        // Force disable in safe mode
-        if (Application::IsSafeModeEnabled())
-            bEnable = false;
-
-        if (bEnable)
+        bRet = bForceSkia;
+        // If not forced, don't enable in safe mode
+        if (!bRet && !Application::IsSafeModeEnabled())
         {
-            initInternal();
-            checkDeviceDenylisted(); // switch to raster if driver is denylisted
+            bRet = getenv("SAL_ENABLESKIA") != nullptr
+                   || officecfg::Office::Common::VCL::UseSkia::get();
         }
 
-        bRet = bEnable;
+        if (bRet)
+        {
+            // Set up all things needed for using Skia.
+            SkGraphics::Init();
+            SkLoOpts::Init();
+            // if bForceSkia, don't actually block if denylisted, but log it if enabled,
+            // and also get the vendor id; otherwise, switch to raster if driver is denylisted
+            checkDeviceDenylisted(bForceSkia);
+            WatchdogThread::start();
+        }
     }
-
-    if (bRet)
-        WatchdogThread::start();
 
     CrashReporter::addKeyValue(u"UseSkia"_ustr, OUString::boolean(bRet), CrashReporter::Write);
 
     return bRet;
 }
 
+bool isVCLSkiaEnabled()
+{
+    static const bool val = initVCLSkiaEnabled();
+    return val;
+}
+
 bool isAlphaMaskBlendingEnabled() { return false; }
-
-static RenderMethod methodToUse = RenderRaster;
-
-static bool initRenderMethodToUse()
-{
-    if (Application::IsBitmapRendering())
-    {
-        methodToUse = RenderRaster;
-        return true;
-    }
-
-    if (const char* env = getenv("SAL_SKIA"))
-    {
-        if (strcmp(env, "raster") == 0)
-        {
-            methodToUse = RenderRaster;
-            return true;
-        }
-#ifdef MACOSX
-        if (strcmp(env, "metal") == 0)
-        {
-            methodToUse = RenderMetal;
-            return true;
-        }
-#else
-        if (strcmp(env, "vulkan") == 0)
-        {
-            methodToUse = RenderVulkan;
-            return true;
-        }
-#endif
-        SAL_WARN("vcl.skia", "Unrecognized value of SAL_SKIA");
-        abort();
-    }
-    methodToUse = RenderRaster;
-    if (officecfg::Office::Common::VCL::ForceSkiaRaster::get())
-        return true;
-#ifdef SK_METAL
-    methodToUse = RenderMetal;
-#endif
-#ifdef SK_VULKAN
-    methodToUse = RenderVulkan;
-#endif
-    return true;
-}
-
-RenderMethod renderMethodToUse()
-{
-    static bool methodToUseInited = initRenderMethodToUse();
-    if (methodToUseInited) // Used just to ensure thread-safe one-time init.
-        return methodToUse;
-    abort();
-}
-
-void disableRenderMethod(RenderMethod method)
-{
-    if (renderMethodToUse() != method)
-        return;
-    // Choose a fallback, right now always raster.
-    methodToUse = RenderRaster;
-}
 
 // If needed, we'll allocate one extra window context so that we have a valid GrDirectContext
 // from Vulkan/MetalWindowContext.
@@ -561,7 +515,7 @@ GrDirectContext* getSharedGrDirectContext()
                 "Cannot create Vulkan GPU context, falling back to Raster");
     SAL_WARN_IF(renderMethodToUse() == RenderMetal, "vcl.skia",
                 "Cannot create Metal GPU context, falling back to Raster");
-    disableRenderMethod(renderMethodToUse());
+    forceRasterRenderMethod();
     return nullptr;
 }
 
@@ -857,13 +811,6 @@ void setBlenderXor(SkPaint* paint)
         xorBlender = effect.effect->makeBlender(nullptr);
     }
     paint->setBlender(xorBlender);
-}
-
-static void initInternal()
-{
-    // Set up all things needed for using Skia.
-    SkGraphics::Init();
-    SkLoOpts::Init();
 }
 
 void cleanup()

@@ -51,8 +51,6 @@ namespace SkiaHelper
 // Get the one shared GrDirectContext instance.
 GrDirectContext* getSharedGrDirectContext();
 
-void disableRenderMethod(RenderMethod method);
-
 // Create SkSurface, GPU-backed if possible.
 VCL_DLLPUBLIC sk_sp<SkSurface> createSkSurface(int width, int height,
                                                SkColorType type = kN32_SkColorType,
