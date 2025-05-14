@@ -1095,6 +1095,7 @@ bool SwFieldMgr::InsertField(
                         pCurShell->GetRefMark(rData.m_sPar1)->GetTextRefMark());
                     xTextRefMark->SetDontExpand(true);
                     xTextRefMark->SetLockExpandFlag(true);
+                    xTextRefMark->SetDontExpandStartAttr(true);
                 }
 
                 if (!bHadMark && !rRefmarkText.isEmpty())
