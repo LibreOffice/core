@@ -148,8 +148,6 @@ static OUString getDenylistFile()
     return url + "/skia/skia_denylist_vulkan.xml";
 }
 
-static uint32_t driverVersion = 0;
-
 static OUString versionAsString(uint32_t version)
 {
     return OUString::number(version >> 22) + "." + OUString::number((version >> 12) & 0x3ff) + "."
@@ -185,11 +183,10 @@ static bool isVulkanDenylisted(const VkPhysicalDeviceProperties& props)
 {
     static const char* const types[]
         = { "other", "integrated", "discrete", "virtual", "cpu", "??" }; // VkPhysicalDeviceType
-    driverVersion = props.driverVersion;
     vendorId = props.vendorID;
     OUString vendorIdStr = "0x" + OUString::number(props.vendorID, 16);
     OUString deviceIdStr = "0x" + OUString::number(props.deviceID, 16);
-    OUString driverVersionString = versionAsString(driverVersion);
+    OUString driverVersionString = versionAsString(props.driverVersion);
     OUString apiVersion = versionAsString(props.apiVersion);
     const char* deviceType = types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types) - 1)];
 
