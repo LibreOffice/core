@@ -272,15 +272,58 @@ void PresenterController::GetSlides (const sal_Int32 nOffset)
     }
 }
 
+namespace
+{
+OUString lcl_replacePlaceholders(const OUString& rTemplate, std::u16string_view sCurrentSlideNumber,
+                             std::u16string_view sCurrentSlideName, std::u16string_view sSlideCount)
+{
+    // Placeholders
+    static constexpr OUStringLiteral sCurrentSlideNumberPlaceholder(u"CURRENT_SLIDE_NUMBER");
+    static constexpr OUStringLiteral sCurrentSlideNamePlaceholder(u"CURRENT_SLIDE_NAME");
+    static constexpr OUStringLiteral sSlideCountPlaceholder(u"SLIDE_COUNT");
+
+    OUStringBuffer sResult;
+    sResult.ensureCapacity(rTemplate.getLength());
+
+    sal_Int32 nIndex (0);
+    while (true)
+    {
+        sal_Int32 nStartIndex = rTemplate.indexOf('%', nIndex);
+        if (nStartIndex < 0)
+        {
+            // Add the remaining part of the string.
+            sResult.append(rTemplate.subView(nIndex));
+            break;
+        }
+        else
+        {
+            // Add the part preceding the next %.
+            sResult.append(rTemplate.subView(nIndex, nStartIndex-nIndex));
+
+            // Get the placeholder
+            ++nStartIndex;
+            const sal_Int32 nEndIndex (rTemplate.indexOf('%', nStartIndex+1));
+            const std::u16string_view sPlaceholder (rTemplate.subView(nStartIndex, nEndIndex-nStartIndex));
+            nIndex = nEndIndex+1;
+
+            // Replace the placeholder with its current value.
+            if (sPlaceholder == sCurrentSlideNumberPlaceholder)
+                sResult.append(sCurrentSlideNumber);
+            else if (sPlaceholder == sCurrentSlideNamePlaceholder)
+                sResult.append(sCurrentSlideName);
+            else if (sPlaceholder == sSlideCountPlaceholder)
+                sResult.append(sSlideCount);
+        }
+    }
+
+    return sResult.makeStringAndClear();
+}
+}
+
 void PresenterController::UpdatePaneTitles()
 {
     if ( ! mxSlideShowController.is())
         return;
-
-    // Get placeholders and their values.
-    static constexpr OUStringLiteral sCurrentSlideNumberPlaceholder (u"CURRENT_SLIDE_NUMBER");
-    static constexpr OUStringLiteral sCurrentSlideNamePlaceholder (u"CURRENT_SLIDE_NAME");
-    static constexpr OUStringLiteral sSlideCountPlaceholder (u"SLIDE_COUNT");
 
     // Get string for slide count.
     const OUString sSlideCount = OUString::number(mxSlideShowController->getSlideCount());
@@ -323,41 +366,8 @@ void PresenterController::UpdatePaneTitles()
         if (sTemplate.isEmpty())
             continue;
 
-        OUStringBuffer sResult;
-        sResult.ensureCapacity(sTemplate.getLength());
-
-        sal_Int32 nIndex (0);
-        while (true)
-        {
-            sal_Int32 nStartIndex = sTemplate.indexOf('%', nIndex);
-            if (nStartIndex < 0)
-            {
-                // Add the remaining part of the string.
-                sResult.append(sTemplate.subView(nIndex));
-                break;
-            }
-            else
-            {
-                // Add the part preceding the next %.
-                sResult.append(sTemplate.subView(nIndex, nStartIndex-nIndex));
-
-                // Get the placeholder
-                ++nStartIndex;
-                const sal_Int32 nEndIndex (sTemplate.indexOf('%', nStartIndex+1));
-                const std::u16string_view sPlaceholder (sTemplate.subView(nStartIndex, nEndIndex-nStartIndex));
-                nIndex = nEndIndex+1;
-
-                // Replace the placeholder with its current value.
-                if (sPlaceholder == sCurrentSlideNumberPlaceholder)
-                    sResult.append(sCurrentSlideNumber);
-                else if (sPlaceholder == sCurrentSlideNamePlaceholder)
-                    sResult.append(sCurrentSlideName);
-                else if (sPlaceholder == sSlideCountPlaceholder)
-                    sResult.append(sSlideCount);
-            }
-        }
-
-        rxPane->msTitle = sResult.makeStringAndClear();
+        rxPane->msTitle = lcl_replacePlaceholders(sTemplate, sCurrentSlideNumber, sCurrentSlideName,
+                                                  sSlideCount);
         if (rxPane->mxPane.is())
             rxPane->mxPane->SetTitle(rxPane->msTitle);
     }
