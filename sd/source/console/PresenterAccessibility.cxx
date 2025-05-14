@@ -126,11 +126,6 @@ void PresenterAccessible::UpdateAccessibilityHierarchy()
     if ( ! mpPresenterController.is())
         return;
 
-    Reference<drawing::framework::XConfigurationController> xConfigurationController(
-        mpPresenterController->GetConfigurationController());
-    if ( ! xConfigurationController.is())
-        return;
-
     rtl::Reference<PresenterPaneContainer> pPaneContainer (
         mpPresenterController->GetPaneContainer());
     if ( ! pPaneContainer.is())
