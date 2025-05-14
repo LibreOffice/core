@@ -100,8 +100,7 @@ PresenterController::PresenterController (
       mnCurrentSlideIndex(-1),
       mpWindowManager(new PresenterWindowManager(rxContext,mpPaneContainer,this)),
       mpCanvasHelper(std::make_shared<PresenterCanvasHelper>()),
-      mnPendingSlideNumber(-1),
-      mbIsAccessibilityActive(false)
+      mnPendingSlideNumber(-1)
 {
     OSL_ASSERT(mxController.is());
 
@@ -220,10 +219,8 @@ void PresenterController::UpdateCurrentSlide (const sal_Int32 nOffset)
     UpdateViews();
 
     // Update the accessibility object.
-    if (IsAccessibilityActive())
-    {
+    if (mpAccessibleObject.is())
         mpAccessibleObject->NotifyCurrentSlideChange();
-    }
 }
 
 void PresenterController::GetSlides (const sal_Int32 nOffset)
@@ -593,12 +590,6 @@ bool PresenterController::HasCustomAnimation (Reference<drawing::XDrawPage> cons
     return bCustomAnimation;
 }
 
-void PresenterController::SetAccessibilityActiveState (const bool bIsActive)
-{
-    mbIsAccessibilityActive = bIsActive;
-}
-
-
 void PresenterController::HandleMouseClick (const awt::MouseEvent& rEvent)
 {
     if (!mxSlideShowController.is())
@@ -740,11 +731,9 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
             break;
 
         case ConfigurationUpdateEndEventType:
-            if (IsAccessibilityActive())
-            {
+            if (mpAccessibleObject.is())
                 mpAccessibleObject->UpdateAccessibilityHierarchy();
-                UpdateCurrentSlide(0);
-            }
+            UpdateCurrentSlide(0);
             break;
     }
 }

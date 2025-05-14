@@ -121,8 +121,6 @@ public:
     const css::uno::Reference<css::drawing::XDrawPage>& GetCurrentSlide() const;
     static bool HasTransition (css::uno::Reference<css::drawing::XDrawPage> const & rxPage);
     static bool HasCustomAnimation (css::uno::Reference<css::drawing::XDrawPage> const & rxPage);
-    void SetAccessibilityActiveState (const bool bIsActive);
-    bool IsAccessibilityActive() const { return mbIsAccessibilityActive;}
 
     void HandleMouseClick (const css::awt::MouseEvent& rEvent);
     void UpdatePaneTitles();
@@ -197,7 +195,6 @@ private:
     sal_Int32 mnPendingSlideNumber;
     css::uno::Reference<css::util::XURLTransformer> mxUrlTransformer;
     ::rtl::Reference<PresenterAccessible> mpAccessibleObject;
-    bool mbIsAccessibilityActive;
     IPresentationTime* mpPresentationTime;
 
     void GetSlides (const sal_Int32 nOffset);

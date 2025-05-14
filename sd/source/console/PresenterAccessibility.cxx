@@ -293,8 +293,6 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
         mpAccessibleConsole->SetWindow(mxMainWindow, nullptr);
         mpAccessibleConsole->SetAccessibleParent(mxAccessibleParent);
         UpdateAccessibilityHierarchy();
-        if (mpPresenterController.is())
-            mpPresenterController->SetAccessibilityActiveState(true);
     }
     return mpAccessibleConsole;
 }
