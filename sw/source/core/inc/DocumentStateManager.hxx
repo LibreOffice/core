@@ -21,7 +21,7 @@
 
 #include <IDocumentState.hxx>
 
-#if defined(YRS)
+#if ENABLE_YRS
 #include <rtl/ref.hxx>
 #include <com/sun/star/connection/XAcceptor.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
@@ -33,7 +33,7 @@ class SwDoc;
 
 namespace sw {
 
-#if defined(YRS)
+#if ENABLE_YRS
 class YrsThread;
 class YrsTransactionSupplier;
 #endif
@@ -69,7 +69,7 @@ private:
     bool mbNewDoc        ;    //< TRUE: new Doc.
     bool mbInCallModified;    //< TRUE: in Set/Reset-Modified link.
 
-#if defined(YRS)
+#if ENABLE_YRS
     friend class YrsThread;
     ::rtl::Reference<YrsThread> m_pYrsReader;
     css::uno::Reference<css::connection::XAcceptor> m_xAcceptor;

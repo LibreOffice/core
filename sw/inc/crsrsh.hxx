@@ -203,7 +203,7 @@ private:
     SwShellTableCursor* m_pTableCursor; /**< table Cursor; only in tables when the
                                    selection lays over 2 columns */
 
-#if defined(YRS)
+#if ENABLE_YRS
 public:
     ::std::unordered_map<OString, ::std::unique_ptr<VisibleCursorState>> m_PeerCursors;
     SwVisibleCursor * FindVisibleCursorForPeer(SwSelPaintRects const& rCursor) const;

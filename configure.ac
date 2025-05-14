@@ -2843,7 +2843,10 @@ AC_ARG_WITH(hamcrest,
 AC_ARG_WITH(yrs,
     AS_HELP_STRING([--with-yrs=<absolute path to yrs build>],
         [Specifies the built yrs git repo for very experimental experiments.]),
-    WITH_YRS=$withval)
+    WITH_YRS=$withval
+    if test "x$withval" != "xno"; then
+        AC_DEFINE(ENABLE_YRS)
+    fi)
 AC_SUBST(WITH_YRS)
 
 AC_ARG_WITH(perl-home,
@@ -16064,6 +16067,7 @@ AC_CONFIG_HEADERS([config_host/config_eot.h])
 AC_CONFIG_HEADERS([config_host/config_extensions.h])
 AC_CONFIG_HEADERS([config_host/config_cairo_canvas.h])
 AC_CONFIG_HEADERS([config_host/config_cairo_rgba.h])
+AC_CONFIG_HEADERS([config_host/config_collab.h])
 AC_CONFIG_HEADERS([config_host/config_cxxabi.h])
 AC_CONFIG_HEADERS([config_host/config_dbus.h])
 AC_CONFIG_HEADERS([config_host/config_emscripten.h])

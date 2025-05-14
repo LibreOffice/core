@@ -9,7 +9,6 @@
 
 #pragma once
 
-#define YRS_WEAK
 extern "C" {
 #if defined(__clang__)
 #pragma clang diagnostic push
@@ -21,8 +20,6 @@ extern "C" {
 #endif
 }
 
-#include <rtl/string.hxx>
-
 // check input is valid values to find encoding bugs early
 #define yvalidate(cond)                                                                            \
     if (!(cond))                                                                                   \
@@ -33,38 +30,6 @@ extern "C" {
 struct YOutputDeleter
 {
     void operator()(YOutput* const p) const { youtput_destroy(p); }
-};
-
-class IYrsTransactionSupplier
-{
-public:
-    enum class Mode
-    {
-        Edit,
-        Replay
-    };
-
-protected:
-    Mode m_Mode{ Mode::Edit };
-
-public:
-    IYrsTransactionSupplier() = default;
-    virtual ~IYrsTransactionSupplier() = default;
-
-    Mode SetMode(Mode const mode)
-    {
-        Mode ret = mode;
-        std::swap(ret, m_Mode);
-        return ret;
-    }
-
-    virtual YDoc* GetYDoc() = 0;
-    virtual Branch* GetCommentMap() = 0;
-    virtual Branch* GetCursorMap() = 0;
-    virtual YTransaction* GetReadTransaction() = 0;
-    virtual YTransaction* GetWriteTransaction() = 0;
-    virtual bool CommitTransaction(bool isForce = false) = 0;
-    virtual OString GenNewCommentId() = 0;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

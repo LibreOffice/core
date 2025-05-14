@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_collab.h>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -46,7 +47,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#if defined(YRS)
+#if ENABLE_YRS
 #include <com/sun/star/io/SequenceInputStream.hpp>
 #include <com/sun/star/connection/Connector.hpp>
 #endif
@@ -631,7 +632,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     Reference< XModel2 > xModel = aDescriptor.getOrDefault( u"Model"_ustr, Reference< XModel2 >() );
     const bool bExternalModel = xModel.is();
 
-#if defined(YRS)
+#if ENABLE_YRS
     uno::Reference<connection::XConnection> xConnection;
     if (!xModel.is() && aDescriptor.getOrDefault(u"URL"_ustr, OUString()) == "private:factory/swriter" && !getenv("YRSACCEPT"))
     {

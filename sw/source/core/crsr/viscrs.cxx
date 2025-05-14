@@ -472,7 +472,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         if (xTargetOverlay.is())
         {
             ::std::optional<Color> oColor;
-#if defined(YRS)
+#if ENABLE_YRS
             if (SwVisibleCursor *const pVisibleCursor{GetShell()->FindVisibleCursorForPeer(*this)})
             {
                 ::std::size_t const authorId{SwModule::get()->InsertRedlineAuthor(*pVisibleCursor->m_Author)};
@@ -966,7 +966,7 @@ void SwShellCursor::FillRects()
     {
         GetShell()->GetLayout()->CalcFrameRects(*this, *this);
     }
-#if defined(YRS)
+#if ENABLE_YRS
     if (!HasMark())
     {
         if (SwVisibleCursor *const pVisibleCursor{GetShell()->FindVisibleCursorForPeer(*this)})

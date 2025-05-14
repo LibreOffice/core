@@ -347,7 +347,7 @@ void EditView::GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects
     return getImpl().GetSelectionRectangles(getImpl().GetEditSelection(), rLogicRects);
 }
 
-#if defined(YRS)
+#if ENABLE_YRS
 void EditView::YrsGetSelectionRectangles(
     ::std::vector<::std::pair<OUString, ::std::vector<tools::Rectangle>>>& rLogicRects) const
 {

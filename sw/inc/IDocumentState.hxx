@@ -19,9 +19,11 @@
 
 #pragma once
 
-#if defined(YRS)
+#include <config_collab.h>
+
+#if ENABLE_YRS
 #include <com/sun/star/uno/Any.h>
-#include <editeng/yrs.hxx>
+#include <editeng/yrstransactionsupplier.hxx>
 #include <optional>
 struct SwPosition;
 class SwPostItField;
@@ -55,7 +57,7 @@ public:
     virtual bool IsEnableSetModified() const = 0;
     virtual void SetEnableSetModified(bool bEnableSetModified) = 0;
 
-#if defined(YRS)
+#if ENABLE_YRS
     virtual void YrsInitAcceptor() = 0;
     virtual void YrsInitConnector(css::uno::Any const& raConnector) = 0;
     virtual IYrsTransactionSupplier::Mode SetYrsMode(IYrsTransactionSupplier::Mode mode) = 0;

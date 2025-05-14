@@ -55,7 +55,7 @@
 #include <wrtsh.hxx>
 #include <AnnotationWin.hxx>
 #include <IDocumentDeviceAccess.hxx>
-#if defined(YRS)
+#if ENABLE_YRS
 #include <IDocumentState.hxx>
 #include <swmodule.hxx>
 #endif
@@ -203,7 +203,7 @@ OUString SidebarTextControl::RequestHelp(tools::Rectangle& rHelpRect)
     return OUString();
 }
 
-#if defined(YRS)
+#if ENABLE_YRS
 void SidebarTextControl::EditViewInvalidate(const tools::Rectangle& rRect)
 {
     SAL_INFO("sw.yrs", "YRS EditViewInvalidate");
@@ -278,7 +278,7 @@ void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const tools::
 
     DoPaint(rRenderContext, rRect);
 
-#if defined(YRS)
+#if ENABLE_YRS
     if (EditView *const pEditView{GetEditView()})
     {
         rRenderContext.Push(vcl::PushFlags::ALL);

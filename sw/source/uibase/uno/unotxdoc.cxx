@@ -523,7 +523,7 @@ Reference< XInterface >  SwXTextDocument::getCurrentSelection()
 
 sal_Bool SwXTextDocument::attachResource(const OUString& aURL, const Sequence< beans::PropertyValue >& aArgs)
 {
-#if defined(YRS)
+#if ENABLE_YRS
     // this is for new document
     for (auto const& rArg : aArgs)
     {

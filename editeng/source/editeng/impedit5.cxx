@@ -90,7 +90,7 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
         if ( pCurStyle )
             EndListening( *pCurStyle );
         pNode->SetStyleSheet( pStyle, maStatus.UseCharAttribs() );
-#if defined(YRS)
+#if ENABLE_YRS
         maEditDoc.YrsSetStyle(nPara, pStyle ? pStyle->GetName() : OUString());
 #endif
         if ( pStyle )
@@ -553,7 +553,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
                 {
                     pNode->GetContentAttribs().GetItems().Put( rItem );
                     bParaAttribFound = true;
-#if defined(YRS)
+#if ENABLE_YRS
                     maEditDoc.YrsSetParaAttr(nNode, rItem);
 #endif
                 }

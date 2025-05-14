@@ -75,7 +75,7 @@
 #include <txmsrt.hxx>
 #include <unotools/useroptions.hxx>
 #include <IDocumentContentOperations.hxx>
-#if defined(YRS)
+#if ENABLE_YRS
 #include <IDocumentState.hxx>
 #include <txtfld.hxx>
 #endif
@@ -1572,7 +1572,7 @@ bool SwFieldMgr::InsertField(
 
     pCurShell->EndAllAction();
 
-#if defined(YRS)
+#if ENABLE_YRS
     if (isSuccess)
     {
         // now the SwAnnotationWin are created

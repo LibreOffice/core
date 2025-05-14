@@ -45,7 +45,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#if defined(YRS)
+#if ENABLE_YRS
 #include <IDocumentState.hxx>
 #endif
 #include <docstyle.hxx>
@@ -520,7 +520,7 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
         [&pBroadcast](const std::unique_ptr<SwAnnotationItem>& pField) { return pField->GetBroadcaster() == pBroadcast; });
     if (i != mvPostItFields.end())
     {
-#if defined(YRS)
+#if ENABLE_YRS
         mpView->GetDocShell()->GetDoc()->getIDocumentState().YrsRemoveComment(
             (*i)->GetAnchorPosition(),
             (*i)->mpPostIt->GetOutlinerView()->GetEditView().GetYrsCommentId());
@@ -908,7 +908,7 @@ VclPtr<SwAnnotationWin> SwPostItMgr::GetOrCreateAnnotationWindow(SwAnnotationIte
         pPostIt->InitControls();
         pPostIt->SetReadonly(mbReadOnly);
         rItem.mpPostIt = pPostIt;
-#if defined(YRS)
+#if ENABLE_YRS
         SAL_INFO("sw.yrs", "YRS GetOrCreateAnnotationWindow " << rItem.mpPostIt);
 #endif
         if (mpAnswer)

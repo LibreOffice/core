@@ -21,6 +21,8 @@
 #include <sal/config.h>
 #include "swdllapi.h"
 
+#include <config_collab.h>
+
 #include <cstddef>
 #include <memory>
 #include <vector>
@@ -128,7 +130,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
         SwAnnotationItem*  InsertItem( SfxBroadcaster* pItem, bool bCheckExistence, bool bFocus);
         void            RemoveItem( SfxBroadcaster* pBroadcast );
 
-#if defined(YRS)
+#if ENABLE_YRS
     public:
 #endif
         VclPtr<sw::annotation::SwAnnotationWin> GetOrCreateAnnotationWindow(SwAnnotationItem& rItem, bool& rCreated);

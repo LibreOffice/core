@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_collab.h>
 #include <config_feature_desktop.h>
 
 #include <vcl/cursor.hxx>
@@ -68,7 +69,7 @@ public:
 
     std::optional<OString> getLOKPayload(int nType, int nViewId) const;
 
-#if defined(YRS)
+#if ENABLE_YRS
     ::std::optional<OUString> m_Author;
 #endif
 };

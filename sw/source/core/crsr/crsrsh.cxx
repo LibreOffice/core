@@ -60,7 +60,7 @@
 #include <comphelper/flagguard.hxx>
 #include <strings.hrc>
 #include <IDocumentLayoutAccess.hxx>
-#if defined(YRS)
+#if ENABLE_YRS
 #include <IDocumentState.hxx>
 #endif
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -1781,7 +1781,7 @@ void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         bVis = true;
         m_pVisibleCursor->Hide();
     }
-#if defined(YRS)
+#if ENABLE_YRS
     for (auto const& it : m_PeerCursors)
     {
         if (it.second->m_pCurrentCursor)
@@ -1819,7 +1819,7 @@ void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     if( m_bSVCursorVis && bVis ) // also show SV cursor again
         m_pVisibleCursor->Show();
-#if defined(YRS)
+#if ENABLE_YRS
     for (auto const& it : m_PeerCursors)
     {
         if (it.second->m_pCurrentCursor && it.second->m_bSVCursorVis)
@@ -2186,7 +2186,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
     }
 
     m_pVisibleCursor->Hide(); // always hide visible Cursor
-#if defined(YRS)
+#if ENABLE_YRS
     for (auto const& it : m_PeerCursors)
     {
         if (it.second->m_pCurrentCursor)
@@ -2273,7 +2273,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
     }
     };
     MoveIntoContent(m_pCurrentCursor);
-#if defined(YRS)
+#if ENABLE_YRS
     for (auto const& it : m_PeerCursors)
     {
         if (it.second->m_pCurrentCursor)
@@ -2448,7 +2448,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
     *ppFrame = pFrame;
     return true;
     };
-#if defined(YRS)
+#if ENABLE_YRS
     for (auto const& it : m_PeerCursors)
     {
         if (it.second->m_pCurrentCursor)
@@ -2487,7 +2487,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
                     pNxt = pNxt->GetNext();
                 }
             }
-#if defined(YRS)
+#if ENABLE_YRS
             for (auto const& it : m_PeerCursors)
             {
                 if (it.second->m_pCurrentCursor)
@@ -2526,7 +2526,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
 
     if( m_bSVCursorVis )
         m_pVisibleCursor->Show(); // show again
-#if defined(YRS)
+#if ENABLE_YRS
     for (auto const& it : m_PeerCursors)
     {
         if (it.second->m_pCurrentCursor && it.second->m_bSVCursorVis)
@@ -3240,7 +3240,7 @@ SwVisibleCursor* SwCursorShell::GetVisibleCursor() const
     return m_pVisibleCursor;
 }
 
-#if defined(YRS)
+#if ENABLE_YRS
 void SwCursorShell::YrsAddCursor(OString const& rId, ::std::optional<SwPosition> const& roPoint,
         ::std::optional<SwPosition> const& roMark, OUString const& rAuthor)
 {
@@ -3633,7 +3633,7 @@ SwCursorShell::~SwCursorShell()
     else
         ClearTableBoxContent();
 
-#if defined(YRS)
+#if ENABLE_YRS
     for (auto const& it : m_PeerCursors)
     {
         delete it.second->m_pVisibleCursor;

@@ -36,8 +36,9 @@
 #include <com/sun/star/uno/Reference.h>
 #include <editeng/editengdllapi.h>
 
+#include <config_collab.h>
 
-#if defined(YRS)
+#if ENABLE_YRS
 class IYrsTransactionSupplier;
 typedef struct TransactionInner YTransaction;
 typedef struct YTextEvent YTextEvent;
@@ -412,7 +413,7 @@ public:
     void SetNegativeX(bool bSet);
     bool IsNegativeX() const;
 
-#if defined(YRS)
+#if ENABLE_YRS
     void SetYrsCommentId(IYrsTransactionSupplier *, OString const& rId);
     void YrsWriteEEState();
     void YrsReadEEState(YTransaction *);

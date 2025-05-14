@@ -3832,7 +3832,7 @@ void ImpEditEngine::UpdateSelections()
         {
             pView->getImpl().SetEditSelection(aCurSel);
         }
-#if defined(YRS)
+#if ENABLE_YRS
         for (auto & it : pView->getImpl().m_PeerCursors)
         {
             EditSelection sel(CreateSel(it.second.second));
@@ -3847,7 +3847,7 @@ void ImpEditEngine::UpdateSelections()
     maDeletedNodes.clear();
 }
 
-#if defined(YRS)
+#if ENABLE_YRS
 static bool UpdatePosDelete(EPaM & rPos, ESelection const& rDeleted)
 {
     // correct towards start: RemoveParagraph(Count()) can't work otherwise
@@ -3934,7 +3934,7 @@ void ImpEditEngine::UpdateSelectionsDelete(ESelection const& rDeleted)
         (void)pView;
         (void)deleted;
 #endif
-#if defined(YRS)
+#if ENABLE_YRS
         for (auto & it : pView->getImpl().m_PeerCursors)
         {
             UpdatePosDelete(it.second.second.start, deleted);
@@ -3966,7 +3966,7 @@ void ImpEditEngine::UpdateSelectionsInsert(ESelection const& rInserted)
         {
             pView->getImpl().SetEditSelection(CreateSel(esel));
         }
-#if defined(YRS)
+#if ENABLE_YRS
         for (auto & it : pView->getImpl().m_PeerCursors)
         {
             UpdatePosInsert(it.second.second.start, rInserted);

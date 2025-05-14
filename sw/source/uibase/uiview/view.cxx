@@ -1027,7 +1027,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     // Set DocShell
     m_xGlueDocShell.reset(new SwViewGlueDocShell(*this, rDocSh));
     m_pPostItMgr.reset(new SwPostItMgr(this));
-#if defined(YRS)
+#if ENABLE_YRS
     m_pWrtShell->GetDoc()->getIDocumentState().YrsInitAcceptor();
 #endif
 

@@ -57,7 +57,7 @@ class SidebarTextControl : public WeldEditView
 
         virtual EditEngine* GetEditEngine() const override;
 
-#if defined(YRS)
+#if ENABLE_YRS
         virtual void EditViewInvalidate(const tools::Rectangle& rRect) override;
         virtual void EditViewSelectionChange() override;
 #endif

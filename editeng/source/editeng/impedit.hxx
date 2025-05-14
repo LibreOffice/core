@@ -287,7 +287,7 @@ private:
     EESelectionMode meSelectionMode;
     EditSelection maEditSelection;
     EEAnchorMode meAnchorMode;
-#if defined(YRS)
+#if ENABLE_YRS
 public:
     /// when SwAnnotationWin::UpdateData() is called, the EE is cleared
     /// and recreated, so use ESelection not EditSelection to survive this!
@@ -531,7 +531,7 @@ public:
 class ImpEditEngine : public SfxListener, public svl::StyleSheetUser
 {
     friend class EditEngine;
-#if defined(YRS)
+#if ENABLE_YRS
     friend class EditDoc;
 #endif
 

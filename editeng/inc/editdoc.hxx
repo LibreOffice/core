@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <config_collab.h>
+
 #include "ParagraphPortionList.hxx"
 #include "editattr.hxx"
 #include "edtspell.hxx"
@@ -46,7 +48,7 @@
 
 enum class TextRotation;
 
-#if defined(YRS)
+#if ENABLE_YRS
 class ImpEditEngine;
 class IYrsTransactionSupplier;
 typedef struct TransactionInner YTransaction;
@@ -128,7 +130,7 @@ private:
     bool            mbModified:1;
     bool            mbDisableAttributeExpanding:1;
 
-#if defined(YRS)
+#if ENABLE_YRS
     OString m_CommentId;
     IYrsTransactionSupplier * m_pYrsSupplier{nullptr};
 public:

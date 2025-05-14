@@ -23,7 +23,7 @@
 #include <DocumentLayoutManager.hxx>
 #include <acorrect.hxx>
 
-#if defined(YRS)
+#if ENABLE_YRS
 #include <AnnotationWin.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -60,7 +60,7 @@
 namespace sw
 {
 
-#if defined(YRS)
+#if ENABLE_YRS
 using sw::annotation::SwAnnotationWin;
 
 namespace {
@@ -740,7 +740,7 @@ void YrsReadCursor(ObserveCursorState & rState, OString const& rPeerId,
         {
             Branch const*const pArray{rCursor.value.y_type};
             auto const len{yarray_len(pArray)};
-#if defined(YRS_WEAK)
+#if ENABLE_YRS_WEAK
             if (len == 2
                 && yarray_get(pArray, rState.pTxn, 0)->tag == Y_JSON_STR)
 #else
@@ -753,7 +753,7 @@ void YrsReadCursor(ObserveCursorState & rState, OString const& rPeerId,
                 YrsInvalidateEECursors(rState, rPeerId, &commentId);
                 YrsInvalidateSwCursors(rState, rPeerId, rAuthor, false);
                 ::std::optional<::std::pair<int64_t, int64_t>> oMark;
-#if defined(YRS_WEAK)
+#if ENABLE_YRS_WEAK
                 ::std::unique_ptr<YOutput, YOutputDeleter> const pWeak{yarray_get(pArray, rState.pTxn, 1)};
                 yvalidate(pWeak->tag == Y_WEAK_LINK);
                 Branch * pBranch{nullptr};
@@ -921,7 +921,7 @@ extern "C" void observe_cursors(void *const pState, uint32_t count, YEvent const
                 YrsReadCursor(rState, peerId, pChange[2].values[0], author, false);
                 break;
             }
-#if defined(YRS_WEAK)
+#if ENABLE_YRS_WEAK
             case Y_WEAK_LINK:
             {
                 // not sure what this is, but yffi doesn't have any API
@@ -1292,7 +1292,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
             pShell->GetView().GetPostItMgr()->GetActiveSidebarWin()})
     {
         // TODO StickyIndex cannot be inserted into YDoc ?
-#if defined(YRS_WEAK)
+#if ENABLE_YRS_WEAK
         if (pWin->GetOutlinerView()->GetEditView().YrsWriteEECursor(pTxn, *pEntry->value.y_type, pCurrent.get()))
         {
             YrsCommitModified();
@@ -1378,7 +1378,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
         {
             if (pCurrent == nullptr || pCurrent->tag != Y_ARRAY
                 || yarray_len(pCurrent->value.y_type) != 2
-#if defined(YRS_WEAK)
+#if ENABLE_YRS_WEAK
                 || yarray_get(pCurrent->value.y_type, pTxn, 0)->tag != Y_JSON_INT
 #endif
                 || yarray_get(pCurrent->value.y_type, pTxn, 0)->value.integer != positions[0].value.integer
@@ -1534,14 +1534,14 @@ DocumentStateManager::DocumentStateManager( SwDoc& i_rSwdoc ) :
     mbNewDoc(false),
     mbInCallModified(false)
 {
-#if defined(YRS)
+#if ENABLE_YRS
     m_pYrsSupplier.reset(new YrsTransactionSupplier);
 #endif
 }
 
 DocumentStateManager::~DocumentStateManager()
 {
-#if defined(YRS)
+#if ENABLE_YRS
     if (m_pYrsReader) // not in e.g. AutoText docs
     {
         m_pYrsReader->m_xConnection->close();
@@ -1569,13 +1569,13 @@ void DocumentStateManager::SetModified()
     if( m_rDoc.GetAutoCorrExceptWord() && !m_rDoc.GetAutoCorrExceptWord()->IsDeleted() )
         m_rDoc.DeleteAutoCorrExceptWord();
 
-#if defined(YRS)
+#if ENABLE_YRS
     SAL_INFO("sw.yrs", "YRS SetModified");
     YrsCommitModified();
 #endif
 }
 
-#if defined(YRS)
+#if ENABLE_YRS
 void DocumentStateManager::YrsCommitModified()
 {
     if (m_pYrsSupplier->CommitTransaction())

@@ -1209,7 +1209,7 @@ void SwDocShell::LoadingFinished()
     // before <FinishedLoading(..)> is called.
     const bool bHasDocToStayModified( m_xDoc->getIDocumentState().IsModified() && m_xDoc->getIDocumentLinksAdministration().LinksUpdated() );
 
-#if defined(YRS)
+#if ENABLE_YRS
 #if 0
     // this doesn't even filter as advertised!
     auto const args{GetBaseModel()->getArgs2({u"YrsConnect"_ustr})};

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <editdoc.hxx>
+
 #include <editeng/tstpitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -42,7 +44,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
-#if defined(YRS)
+#if ENABLE_YRS
 #include <editeng/frmdiritem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
@@ -53,7 +55,6 @@
 #include <svl/itemiter.hxx>
 #endif
 
-#include <editdoc.hxx>
 #include <editeng/eerdll.hxx>
 #include <eerdll2.hxx>
 #include "impedit.hxx"
@@ -724,7 +725,8 @@ void EditSelection::Adjust( const EditDoc& rNodes )
     }
 }
 
-#if defined(YRS)
+#if ENABLE_YRS
+#include <editeng/yrstransactionsupplier.hxx>
 #include <editeng/yrs.hxx>
 
 namespace {
@@ -2774,7 +2776,7 @@ bool EditDoc::YrsWriteEECursor(YTransaction *const pTxn, Branch const& rArray,
     ::std::optional<::std::pair<int64_t, int64_t>> const i_oMark)
 {
     ::std::optional<EditPaM> oMark;
-#if defined(YRS_WEAK)
+#if ENABLE_YRS_WEAK
     auto start{i_point.first}; // returned from yweak_read(), need to convert
     ContentNode * pNode{nullptr};
     for (decltype(Count()) i = 0; i < Count(); ++i)
@@ -3145,7 +3147,7 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
     mbModified(false),
     mbDisableAttributeExpanding(false)
 {
-#if defined(YRS)
+#if ENABLE_YRS
     SAL_INFO("editeng.yrs", "YRS +EditDoc");
 #endif
     // Don't create an empty node, Clear() will be called in EditEngine-CTOR
@@ -3153,7 +3155,7 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
 
 EditDoc::~EditDoc()
 {
-#if defined(YRS)
+#if ENABLE_YRS
     SAL_INFO("editeng.yrs", "YRS -EditDoc");
 #endif
     maContents.clear();
@@ -3164,7 +3166,7 @@ EditDoc::~EditDoc()
 void EditDoc::SetVertical(bool const bVertical)
 {
     mbIsVertical = bVertical;
-#if defined(YRS)
+#if ENABLE_YRS
     YrsSetVertical(m_pYrsSupplier, m_CommentId, mbIsVertical);
 #endif
 }
@@ -3172,7 +3174,7 @@ void EditDoc::SetVertical(bool const bVertical)
 void EditDoc::SetRotation(TextRotation const nRotation)
 {
     mnRotation = nRotation;
-#if defined(YRS)
+#if ENABLE_YRS
     YrsSetRotation(m_pYrsSupplier, m_CommentId, mnRotation);
 #endif
 }
@@ -3180,7 +3182,7 @@ void EditDoc::SetRotation(TextRotation const nRotation)
 void EditDoc::SetDefTab(sal_uInt16 const nTab)
 {
     mnDefTab = nTab ? nTab : DEFTAB;
-#if defined(YRS)
+#if ENABLE_YRS
     YrsSetDefTab(m_pYrsSupplier, m_CommentId, mnDefTab);
 #endif
 }
@@ -3319,7 +3321,7 @@ void EditDoc::Insert(sal_Int32 nPos, std::unique_ptr<ContentNode> pNode)
         return;
     }
     maContents.insert(maContents.begin()+nPos, std::move(pNode));
-#if defined(YRS)
+#if ENABLE_YRS
     YrsAddPara(m_pYrsSupplier, m_CommentId, *this, nPos);
 #endif
 }
@@ -3331,7 +3333,7 @@ void EditDoc::Remove(sal_Int32 nPos)
         SAL_WARN( "editeng", "EditDoc::Remove - out of bounds pos " << nPos);
         return;
     }
-#if defined(YRS)
+#if ENABLE_YRS
     YrsRemovePara(m_pYrsSupplier, m_CommentId, *this, nPos);
 #endif
     maContents.erase(maContents.begin() + nPos);
@@ -3345,7 +3347,7 @@ std::unique_ptr<ContentNode> EditDoc::Release(sal_Int32 nPos)
         return nullptr;
     }
 
-#if defined(YRS)
+#if ENABLE_YRS
     YrsRemovePara(m_pYrsSupplier, m_CommentId, *this, nPos);
 #endif
     std::unique_ptr<ContentNode> pNode = std::move(maContents[nPos]);
@@ -3434,7 +3436,7 @@ EditPaM EditDoc::Clear()
 {
     maContents.clear();
 
-#if defined(YRS)
+#if ENABLE_YRS
     // Insert will call YrsAddPara()
     YrsClear(m_pYrsSupplier, m_CommentId);
 #endif
@@ -3482,7 +3484,7 @@ EditPaM EditDoc::RemoveText()
 
     maContents.clear();
 
-#if defined(YRS)
+#if ENABLE_YRS
     // Insert will call YrsAddPara()
     YrsClear(m_pYrsSupplier, m_CommentId);
 #endif
@@ -3513,7 +3515,7 @@ EditPaM EditDoc::InsertText( EditPaM aPaM, const OUString& rStr )
 
     SetModified( true );
 
-#if defined(YRS)
+#if ENABLE_YRS
     YrsInsertText(m_pYrsSupplier, m_CommentId, *this, GetPos(aPaM.GetNode()), aPaM.GetIndex() - rStr.getLength(), rStr);
 #endif
 
@@ -3554,19 +3556,19 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     // Character attributes may need to be copied or trimmed:
     pNode->CopyAndCutAttribs( aPaM.GetNode(), GetItemPool(), bKeepEndingAttribs );
 
-#if defined(YRS)
+#if ENABLE_YRS
     {
         // skip the YrsAddPara in Insert
         YrsReplayGuard const g{m_pYrsSupplier};
 #endif
     Insert(nPos+1, std::unique_ptr<ContentNode>(pNode));
-#if defined(YRS)
+#if ENABLE_YRS
     }
 #endif
 
     SetModified(true);
 
-#if defined(YRS)
+#if ENABLE_YRS
     YrsInsertParaBreak(m_pYrsSupplier, m_CommentId, *this, nPos, aPaM.GetIndex());
 #endif
 
@@ -3589,7 +3591,7 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
 
     SetModified( true );
 
-#if defined(YRS)
+#if ENABLE_YRS
     YrsInsertFeature(m_pYrsSupplier, m_CommentId, *this, GetPos(aPaM.GetNode()), pAttrib);
 #endif
 
@@ -3608,19 +3610,19 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
 
     // the one to the right disappears.
     sal_Int32 nRight = GetPos( pRight );
-#if defined(YRS)
+#if ENABLE_YRS
     {
     // skip the YrsRemovePara in Remove, the node even still has the text...
         YrsReplayGuard const g{m_pYrsSupplier};
 #endif
     Remove( nRight );
-#if defined(YRS)
+#if ENABLE_YRS
     }
 #endif
 
     SetModified(true);
 
-#if defined(YRS)
+#if ENABLE_YRS
     assert(nRight != 0);
     YrsConnectPara(m_pYrsSupplier, m_CommentId, *this, nRight - 1, aPaM.GetIndex());
 #endif
@@ -3636,7 +3638,7 @@ void EditDoc::RemoveChars( EditPaM aPaM, sal_Int32 nChars )
 
     SetModified( true );
 
-#if defined(YRS)
+#if ENABLE_YRS
     YrsRemoveChars(m_pYrsSupplier, m_CommentId, *this, GetPos(aPaM.GetNode()), aPaM.GetIndex(), nChars);
 #endif
 }
@@ -3672,21 +3674,21 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal
         // Will become a large Attribute.
         pEndingAttrib->GetEnd() = pStartingAttrib->GetEnd();
         pNode->GetCharAttribs().Remove(pStartingAttrib);
-#if defined(YRS)
+#if ENABLE_YRS
         YrsInsertAttrib(m_pYrsSupplier, m_CommentId, *this, GetPos(pNode), pEndingAttrib);
 #endif
     }
     else if ( pStartingAttrib && ( *(pStartingAttrib->GetItem()) == rPoolItem ) )
     {
         pStartingAttrib->GetStart() = nStart;
-#if defined(YRS)
+#if ENABLE_YRS
         YrsInsertAttrib(m_pYrsSupplier, m_CommentId, *this, GetPos(pNode), pStartingAttrib);
 #endif
     }
     else if ( pEndingAttrib && ( *(pEndingAttrib->GetItem()) == rPoolItem ) )
     {
         pEndingAttrib->GetEnd() = nEnd;
-#if defined(YRS)
+#if ENABLE_YRS
         YrsInsertAttrib(m_pYrsSupplier, m_CommentId, *this, GetPos(pNode), pEndingAttrib);
 #endif
     }
@@ -3743,7 +3745,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
                 if ( pAttr->GetEnd() > nEnd )
                 {
                     bNeedsSorting = true;
-#if defined(YRS)
+#if ENABLE_YRS
                     YrsRemoveAttrib(m_pYrsSupplier, m_CommentId, *this, GetPos(pNode), pAttr->Which(), pAttr->GetStart(), nEnd);
 #endif
                     pAttr->GetStart() = nEnd;   // then it starts after this
@@ -3764,7 +3766,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
                 bChanged = true;
                 if ( ( pAttr->GetStart() < nStart ) && !pAttr->IsFeature() )
                 {
-#if defined(YRS)
+#if ENABLE_YRS
                     YrsRemoveAttrib(m_pYrsSupplier, m_CommentId, *this, GetPos(pNode), pAttr->Which(), nStart, pAttr->GetEnd());
 #endif
                     pAttr->GetEnd() = nStart;   // then it ends here
@@ -3784,7 +3786,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
                 {
                     bNeedsSorting = true;
                     pAttr->GetStart() = nEnd;
-#if defined(YRS)
+#if ENABLE_YRS
                     YrsRemoveAttrib(m_pYrsSupplier, m_CommentId, *this, GetPos(pNode), pAttr->Which(), nStart, nEnd);
 #endif
                     rpStarting = pAttr;
@@ -3794,7 +3796,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
                 else if ( pAttr->GetEnd() == nEnd )
                 {
                     pAttr->GetEnd() = nStart;
-#if defined(YRS)
+#if ENABLE_YRS
                     YrsRemoveAttrib(m_pYrsSupplier, m_CommentId, *this, GetPos(pNode), pAttr->Which(), nStart, nEnd);
 #endif
                     rpEnding = pAttr;
@@ -3807,13 +3809,13 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
                     sal_Int32 nOldEnd = pAttr->GetEnd();
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
-#if defined(YRS)
+#if ENABLE_YRS
                     YrsRemoveAttrib(m_pYrsSupplier, m_CommentId, *this, GetPos(pNode), pAttr->Which(), nStart, nEnd);
                     {
                     YrsReplayGuard const g{m_pYrsSupplier};
 #endif
                     InsertAttrib( *pAttr->GetItem(), pNode, nEnd, nOldEnd );
-#if defined(YRS)
+#if ENABLE_YRS
                     }
 #endif
                     if ( nWhich )
@@ -3823,7 +3825,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
         }
         if ( bRemoveAttrib )
         {
-#if defined(YRS)
+#if ENABLE_YRS
             YrsRemoveAttrib(m_pYrsSupplier, m_CommentId, *this, GetPos(pNode), pAttr->Which(), pAttr->GetStart(), pAttr->GetEnd());
 #endif
             DBG_ASSERT( ( pAttr != rpStarting ) && ( pAttr != rpEnding ), "Delete and retain the same attribute?" );
@@ -3862,7 +3864,7 @@ void EditDoc::InsertAttrib( const SfxPoolItem& rPoolItem, ContentNode* pNode, sa
 
     SetModified( true );
 
-#if defined(YRS)
+#if ENABLE_YRS
     YrsInsertAttrib(m_pYrsSupplier, m_CommentId, *this, GetPos(pNode), pAttrib);
 #endif
 }
