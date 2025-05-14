@@ -411,7 +411,6 @@ void AccessibleNotes::SetTextView (
     {
         rtl::Reference<AccessibleParagraph> pParagraph (
             new AccessibleParagraph(
-                "Paragraph"+OUString::number(nIndex),
                 rpTextView->GetParagraph(nIndex),
                 nIndex));
         pParagraph->LateInitialization();

@@ -43,7 +43,6 @@ class AccessibleParagraph
 {
 public:
     AccessibleParagraph(
-        const OUString& rsName,
         SharedPresenterTextParagraph pParagraph,
         const sal_Int32 nParagraphIndex);
 

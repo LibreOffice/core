@@ -41,7 +41,7 @@ class AccessibleObject
                                          css::accessibility::XAccessible, css::awt::XWindowListener>
 {
 public:
-    AccessibleObject(const sal_Int16 nRole, OUString sName);
+    AccessibleObject(const sal_Int16 nRole, const OUString& rName = OUString());
     void LateInitialization();
 
     virtual void SetWindow (

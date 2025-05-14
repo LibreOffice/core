@@ -110,10 +110,9 @@ AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType(AccessibleR
 
 
 AccessibleParagraph::AccessibleParagraph(
-    const OUString& rsName,
     SharedPresenterTextParagraph xParagraph,
     const sal_Int32 nParagraphIndex)
-    : PresenterAccessibleParagraphInterfaceBase(AccessibleRole::PARAGRAPH, rsName),
+    : PresenterAccessibleParagraphInterfaceBase(AccessibleRole::PARAGRAPH),
       mpParagraph(std::move(xParagraph)),
       mnParagraphIndex(nParagraphIndex)
 {

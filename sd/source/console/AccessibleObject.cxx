@@ -28,8 +28,8 @@
 
 AccessibleObject::AccessibleObject(
     const sal_Int16 nRole,
-    OUString sName)
-    : msName(std::move(sName)),
+    const OUString& rName)
+    : msName(rName),
       mnRole(nRole),
       mnStateSet(0),
       mbIsFocused(false)
