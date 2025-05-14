@@ -137,9 +137,6 @@ void PresenterAccessible::UpdateAccessibilityHierarchy()
     // Get the preview pane (standard or notes view) or the slide overview
     // pane.
     PresenterPaneContainer::SharedPaneDescriptor pPreviewPane(GetPreviewPane());
-    Reference<drawing::framework::XPane> xPreviewPane;
-    if (pPreviewPane)
-        xPreviewPane = pPreviewPane->mxPane.get();
 
     // Get the notes pane.
     PresenterPaneContainer::SharedPaneDescriptor pNotesPane(
