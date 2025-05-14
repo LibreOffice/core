@@ -9252,6 +9252,7 @@ sd/qa/unit/tiledrendering/tiledrendering.cxx
 sd/qa/unit/uimpress.cxx
 sd/source/console/AccessibleFocusManager.cxx
 sd/source/console/AccessibleFocusManager.hxx
+sd/source/console/AccessibleNotes.cxx
 sd/source/console/AccessibleObject.cxx
 sd/source/console/AccessibleObject.hxx
 sd/source/console/AccessibleParagraph.cxx

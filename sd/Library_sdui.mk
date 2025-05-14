@@ -92,6 +92,7 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/ui/dlg/PhotoAlbumDialog \
     sd/source/ui/dlg/BulletAndPositionDlg \
     sd/source/console/AccessibleFocusManager \
+    sd/source/console/AccessibleNotes \
     sd/source/console/AccessibleObject \
     sd/source/console/AccessibleParagraph \
     sd/source/console/PresenterAccessibility \
