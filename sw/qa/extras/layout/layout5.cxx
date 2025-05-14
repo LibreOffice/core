@@ -1654,6 +1654,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166210)
     CPPUNIT_ASSERT_LESS(rowHeight2, rowHeight3);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf88752)
+{
+    createSwDoc("tdf88752.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 2
+    assertXPath(pXmlDoc, "/root/page", 1);
+
+    auto nHeight = getXPath(pXmlDoc, "/root/page[1]//row[3]//txt/infos/bounds", "height").toInt32();
+
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1670), nHeight);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected less than: 1690
+    // - Actual  : 3480
+    CPPUNIT_ASSERT_LESS(sal_Int32(1690), nHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
