@@ -141,9 +141,6 @@ void PresenterAccessible::UpdateAccessibilityHierarchy()
     // Get the notes pane.
     PresenterPaneContainer::SharedPaneDescriptor pNotesPane(
         pPaneContainer->FindPaneURL(PresenterPaneFactory::msNotesPaneURL));
-    Reference<drawing::framework::XPane> xNotesPane;
-    if (pNotesPane)
-        xNotesPane = pNotesPane->mxPane.get();
 
     // Get the notes view.
     Reference<drawing::framework::XView> xNotesView;
