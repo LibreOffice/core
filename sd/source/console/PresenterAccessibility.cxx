@@ -163,7 +163,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy()
     UpdateAccessibilityHierarchy(
         pPreviewPane ? pPreviewPane->mxContentWindow : Reference<awt::XWindow>(),
         pPreviewPane ? pPreviewPane->mxBorderWindow : Reference<awt::XWindow>(),
-        pPreviewPane ? pPreviewPane->msTitle : OUString(),
+        pPreviewPane ? pPreviewPane->msAccessibleName : OUString(),
         pNotesPane ? pNotesPane->mxContentWindow : Reference<awt::XWindow>(),
         pNotesPane ? pNotesPane->mxBorderWindow : Reference<awt::XWindow>(),
         pNotesView.is()
@@ -233,7 +233,7 @@ void PresenterAccessible::NotifyCurrentSlideChange ()
     {
         PresenterPaneContainer::SharedPaneDescriptor pPreviewPane (GetPreviewPane());
         mpAccessiblePreview->SetAccessibleName(
-            pPreviewPane ? pPreviewPane->msTitle : OUString());
+            pPreviewPane ? pPreviewPane->msAccessibleName : OUString());
     }
 
     // Play some focus ping-pong to trigger AT tools.

@@ -65,7 +65,7 @@ void PresenterPaneContainer::PreparePane (
         pDescriptor->msTitleTemplate = rsTitle;
         pDescriptor->msTitle.clear();
     }
-    pDescriptor->msAccessibleTitleTemplate = rsAccessibleTitle;
+    pDescriptor->msAccessibleNameTemplate = rsAccessibleTitle;
     pDescriptor->maViewInitialization = rViewInitialization;
     pDescriptor->mbIsActive = true;
     pDescriptor->mbIsOpaque = bIsOpaque;

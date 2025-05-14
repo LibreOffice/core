@@ -1882,7 +1882,7 @@
           <value xml:lang="en-US">Current Slide (%CURRENT_SLIDE_NUMBER% of %SLIDE_COUNT%)</value>
         </prop>
         <prop oor:name="AccessibleTitle">
-          <value xml:lang="en-US">Current Slide, %CURRENT_SLIDE_NAME%, %CURRENT_SLIDE_NUMBER% of %SLIDE_COUNT%</value>
+          <value xml:lang="en-US">Current Slide (%CURRENT_SLIDE_NUMBER% of %SLIDE_COUNT%), %CURRENT_SLIDE_NAME%</value>
         </prop>
         <prop oor:name="IsOpaque">
           <value>true</value>

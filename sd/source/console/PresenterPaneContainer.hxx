@@ -77,8 +77,9 @@ public:
         css::uno::Reference<css::awt::XWindow> mxContentWindow;
         css::uno::Reference<css::awt::XWindow> mxBorderWindow;
         OUString msTitleTemplate;
-        OUString msAccessibleTitleTemplate;
+        OUString msAccessibleNameTemplate;
         OUString msTitle;
+        OUString msAccessibleName;
         ViewInitializationFunction maViewInitialization;
         bool mbIsActive;
         bool mbIsOpaque;

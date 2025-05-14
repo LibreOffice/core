@@ -360,13 +360,13 @@ void PresenterController::UpdatePaneTitles()
     {
         OSL_ASSERT(rxPane != nullptr);
 
-        OUString sTemplate (IsAccessibilityActive()
-            ? rxPane->msAccessibleTitleTemplate
-            : rxPane->msTitleTemplate);
-        if (sTemplate.isEmpty())
+        rxPane->msAccessibleName = lcl_replacePlaceholders(rxPane->msAccessibleNameTemplate, sCurrentSlideNumber,
+                                                           sCurrentSlideName, sSlideCount);
+
+        if (rxPane->msTitleTemplate.isEmpty())
             continue;
 
-        rxPane->msTitle = lcl_replacePlaceholders(sTemplate, sCurrentSlideNumber, sCurrentSlideName,
+        rxPane->msTitle = lcl_replacePlaceholders(rxPane->msTitleTemplate, sCurrentSlideNumber, sCurrentSlideName,
                                                   sSlideCount);
         if (rxPane->mxPane.is())
             rxPane->mxPane->SetTitle(rxPane->msTitle);
@@ -595,11 +595,7 @@ bool PresenterController::HasCustomAnimation (Reference<drawing::XDrawPage> cons
 
 void PresenterController::SetAccessibilityActiveState (const bool bIsActive)
 {
-    if ( mbIsAccessibilityActive != bIsActive)
-    {
-        mbIsAccessibilityActive = bIsActive;
-        UpdatePaneTitles();
-    }
+    mbIsAccessibilityActive = bIsActive;
 }
 
 
