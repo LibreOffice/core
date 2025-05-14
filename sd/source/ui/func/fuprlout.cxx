@@ -46,18 +46,18 @@ namespace sd
 #define DOCUMENT_TOKEN '#'
 
 FuPresentationLayout::FuPresentationLayout (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuPresentationLayout::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuPresentationLayout::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuPresentationLayout( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuPresentationLayout( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -77,7 +77,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     /* if we are on a master page, the changes apply for all pages and notes-
        pages who are using the relevant layout */
     bool bOnMaster = false;
-    if (DrawViewShell *pShell = dynamic_cast<DrawViewShell*>(mpViewShell))
+    if (DrawViewShell *pShell = dynamic_cast<DrawViewShell*>(&mrViewShell))
     {
         EditMode eEditMode = pShell->GetEditMode();
         if (eEditMode == EditMode::MasterPage)
@@ -90,7 +90,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         //We later rely on IsSelected, so transfer the selection here
         //into the document
         slidesorter::SlideSorterViewShell* pSlideSorterViewShell
-            = slidesorter::SlideSorterViewShell::GetSlideSorter(mpViewShell->GetViewShellBase());
+            = slidesorter::SlideSorterViewShell::GetSlideSorter(mrViewShell.GetViewShellBase());
         if (pSlideSorterViewShell)
         {
             std::shared_ptr<slidesorter::SlideSorterViewShell::PageSelection> xSelection(
@@ -195,7 +195,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     /* That isn't quite right. If the masterpageview is active and you are
        removing a masterpage, it's possible that you are removing the
        current masterpage. So you have to call ResetActualPage ! */
-    if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bCheckMasters )
+    if( dynamic_cast< const DrawViewShell *>( &mrViewShell ) !=  nullptr && !bCheckMasters )
         static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(true);
 
     if (bLoad)
@@ -222,7 +222,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     }
 
     // remove blocking
-    if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bCheckMasters )
+    if( dynamic_cast< const DrawViewShell *>( &mrViewShell ) !=  nullptr && !bCheckMasters )
         static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(false);
 
     // if the master page was visible, show it again
@@ -230,14 +230,14 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     {
         if (bOnMaster)
         {
-            if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+            if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
             {
                 ::sd::View* pView = pDrawViewShell->GetView();
                 for (auto pSelectedPage : aSelectedPages)
                 {
                     sal_uInt16 nPgNum = pSelectedPage->TRG_GetMasterPage().GetPageNum();
 
-                    if (static_cast<DrawViewShell*>(mpViewShell)->GetPageKind() == PageKind::Notes)
+                    if (static_cast<DrawViewShell*>(&mrViewShell)->GetPageKind() == PageKind::Notes)
                         nPgNum++;
 
                     pView->HideSdrPage();
@@ -246,7 +246,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             }
 
             // force update of TabBar
-            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_MASTERPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+            mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_MASTERPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
         }
         else
         {
@@ -261,7 +261,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
 
     // fake a mode change to repaint the page tab bar
-    if( auto pDrawViewSh = dynamic_cast<DrawViewShell *>( mpViewShell ) )
+    if( auto pDrawViewSh = dynamic_cast<DrawViewShell *>( &mrViewShell ) )
     {
         EditMode eMode = pDrawViewSh->GetEditMode();
         bool bLayer = pDrawViewSh->IsLayerModeActive();

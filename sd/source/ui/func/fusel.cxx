@@ -68,12 +68,12 @@ using namespace ::com::sun::star;
 namespace sd {
 
 FuSelection::FuSelection (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
+    : FuDraw(rViewSh, pWin, pView, pDoc, rReq),
       bTempRotation(false),
       bSelectionChanged(false),
       pHdl(nullptr),
@@ -89,9 +89,9 @@ FuSelection::FuSelection (
 {
 }
 
-rtl::Reference<FuPoor> FuSelection::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuSelection::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuSelection( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuSelection( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -195,7 +195,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if (eHit == SdrHitKind::TextEditObj && (mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >(aVEvt.mpObj) != nullptr))
+        if (eHit == SdrHitKind::TextEditObj && (mrViewShell.GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >(aVEvt.mpObj) != nullptr))
         {
             bTextEdit = true;
         }
@@ -205,7 +205,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             bTextEdit = true;
 
         bool bPreventModify = mpDocSh->IsReadOnly();
-        SfxViewShell* pViewShell = mpViewShell->GetViewShell();
+        SfxViewShell* pViewShell = mrViewShell.GetViewShell();
         if (bPreventModify && pViewShell && pViewShell->GetSignPDFCertificate().Is())
         {
             // If the just added signature line shape is selected, allow moving / resizing it.
@@ -265,7 +265,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         mpView->UnmarkAll();
 
                     SfxUInt16Item aItem(SID_TEXTEDIT, 1);
-                    mpViewShell->GetViewFrame()->GetDispatcher()->
+                    mrViewShell.GetViewFrame()->GetDispatcher()->
                     ExecuteList(SID_TEXTEDIT,
                             SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                             { &aItem });
@@ -283,7 +283,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 // If tiled rendering, let client handles URL execution and early returns.
                 if (comphelper::LibreOfficeKit::isActive())
                 {
-                    SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
+                    SfxViewShell& rSfxViewShell = mrViewShell.GetViewShellBase();
                     rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aVEvt.mpURLField->GetURL().toUtf8());
                     return true;
                 }
@@ -294,7 +294,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.mpURLField->GetURL());
                 SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
                 SfxBoolItem aBrowseItem( SID_BROWSE, true );
-                SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+                SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
                 mpWindow->ReleaseMouse();
 
                 if (rMEvt.IsMod1())
@@ -316,7 +316,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 bReturn = true;
             }
             else if(!rMEvt.IsMod2()
-                && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
+                && dynamic_cast< const DrawViewShell *>( &mrViewShell ) !=  nullptr
                 )
             {
                 pObj = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
@@ -385,9 +385,9 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if ( !rMEvt.IsShift() && !rMEvt.IsMod2() )
                     {
-                        OSL_ASSERT (mpViewShell->GetViewShell()!=nullptr);
+                        OSL_ASSERT (mrViewShell.GetViewShell()!=nullptr);
                         Client* pIPClient = static_cast<Client*>(
-                            mpViewShell->GetViewShell()->GetIPClient());
+                            mrViewShell.GetViewShell()->GetIPClient());
 
                         if (pIPClient && pIPClient->IsObjectInPlaceActive())
                         {
@@ -676,7 +676,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             /******************************************************************
             * Object was moved
             ******************************************************************/
-            FrameView* pFrameView = mpViewShell->GetFrameView();
+            FrameView* pFrameView = mrViewShell.GetFrameView();
             bool bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
             if (bDragWithCopy)
@@ -739,7 +739,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     && mpView->IsRotateAllowed()
 
                     && (rMEvt.GetClicks() != 2)
-                    && (mpViewShell->GetFrameView()->IsClickChangeRotation()
+                    && (mrViewShell.GetFrameView()->IsClickChangeRotation()
                         || (pSingleObj
                             && pSingleObj->GetObjInventor()==SdrInventor::E3d))
                     && ! bSelectionOnly)
@@ -808,7 +808,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             if( rMEvt.IsRight() )
             {
                 // In watering-can mode, on press onto right mouse button, an undo is executed
-                mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_UNDO, SfxCallMode::ASYNCHRON );
+                mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_UNDO, SfxCallMode::ASYNCHRON );
             }
             else if (pWaterCanCandidate != nullptr)
             {
@@ -869,7 +869,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             auto& pAnnotationData = pSingleObj->getAnnotationData();
             if (pAnnotationData)
             {
-                auto* pDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
+                auto* pDrawViewShell = dynamic_cast<DrawViewShell*>(&mrViewShell);
                 if (pDrawViewShell && pDrawViewShell->getAnnotationManagerPtr())
                     pDrawViewShell->getAnnotationManagerPtr()->SelectAnnotation(pAnnotationData->mxAnnotation, true);
             }
@@ -890,7 +890,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             pHdl = nullptr;
             mpWindow->ReleaseMouse();
             FuDraw::MouseButtonUp(rMEvt);
-            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::SYNCHRON);
+            mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::SYNCHRON);
             return bReturn; // CAUTION, due to the synchronous slot, the object is deleted now.
         }
 
@@ -909,7 +909,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             }
             else if ( mpView->IsDragObj() )
             {
-                FrameView* pFrameView = mpViewShell->GetFrameView();
+                FrameView* pFrameView = mrViewShell.GetFrameView();
                 bool bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
                 if (bDragWithCopy)
@@ -1060,7 +1060,7 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
         {
             mpView->ResetCreationActive();
 
-            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+            mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
         }
     }
 
@@ -1214,7 +1214,7 @@ void FuSelection::SelectionHasChanged()
     }
 
     // Activate the right tool bar for the current context of the view.
-    mpViewShell->GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*mpViewShell, *mpView);
+    mrViewShell.GetViewShellBase().GetToolBarManager()->SelectionHasChanged(mrViewShell, *mpView);
 }
 
 /**
@@ -1235,7 +1235,7 @@ void FuSelection::SetEditMode(sal_uInt16 nMode)
 
     ForcePointer();
 
-    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mrViewShell.GetViewFrame()->GetBindings();
     rBindings.Invalidate(SID_BEZIER_MOVE);
     rBindings.Invalidate(SID_BEZIER_INSERT);
 }
@@ -1291,7 +1291,7 @@ bool FuSelection::HandleImageMapClick(const SdrObject* pObj, const Point& rPos)
                 mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem(SID_FILE_NAME, pIMapObj->GetURL());
                 SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
-                SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+                SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
                 SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                 SfxBoolItem aBrowseItem(SID_BROWSE, true);
                 mpWindow->ReleaseMouse();
@@ -1318,7 +1318,7 @@ bool FuSelection::cancel()
     if (mpView->Is3DRotationCreationActive())
     {
         mpView->ResetCreationActive();
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
         return true;
     }
     else

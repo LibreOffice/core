@@ -111,7 +111,7 @@ public:
         @return
             May be empty.
     */
-    ViewShell* GetViewShell() const { return mpViewShell;}
+    ViewShell& GetViewShell() const { return mrViewShell;}
 
     /** Return the XController object of the main view.
     */
@@ -168,7 +168,7 @@ private:
     std::unique_ptr<model::SlideSorterModel> mpSlideSorterModel;
     std::unique_ptr<view::SlideSorterView> mpSlideSorterView;
     css::uno::WeakReference<css::frame::XController> mxControllerWeak;
-    ViewShell* mpViewShell;
+    ViewShell& mrViewShell;
     ViewShellBase* mpViewShellBase;
     VclPtr<sd::Window> mpContentWindow;
     VclPtr<ScrollAdaptor> mpHorizontalScrollBar;

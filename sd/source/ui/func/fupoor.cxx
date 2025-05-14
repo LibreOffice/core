@@ -54,13 +54,13 @@ namespace sd {
 
 
 FuPoor::FuPoor (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDrDoc,
     SfxRequest& rReq)
     : mpView(pView),
-      mpViewShell(pViewSh),
+      mrViewShell(rViewSh),
       mpWindow(pWin),
       mpDocSh( pDrDoc->GetDocSh() ),
       mpDoc(pDrDoc),
@@ -123,12 +123,12 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     aScrollTimer.Stop();
 
     if ( mpView->IsDragHelpLine() || mpView->IsSetPageOrg() ||
-         (SlideShow::IsRunning( mpViewShell->GetViewShellBase() )
-            && !SlideShow::IsInteractiveSlideshow( &mpViewShell->GetViewShellBase() )) ) // IASS
+         (SlideShow::IsRunning( mrViewShell.GetViewShellBase() )
+            && !SlideShow::IsInteractiveSlideshow( &mrViewShell.GetViewShellBase() )) ) // IASS
         return;
 
     Point aPos = mpWindow->OutputToScreenPixel(aPixPos);
-    const ::tools::Rectangle& rRect = mpViewShell->GetAllWindowRect();
+    const ::tools::Rectangle& rRect = mrViewShell.GetAllWindowRect();
 
     if ( bNoScrollUntilInside )
     {
@@ -149,7 +149,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
             if (bScrollable)
             {
                 // scroll action in derived class
-                mpViewShell->ScrollLines(dx, dy);
+                mrViewShell.ScrollLines(dx, dy);
                 aScrollTimer.Start();
             }
             else if (! bDelayActive) StartDelayToScrollTimer ();
@@ -177,8 +177,8 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 {
     sal_uInt16          nCode = rKEvt.GetKeyCode().GetCode();
     bool            bReturn = false;
-    bool bSlideShow = SlideShow::IsRunning( mpViewShell->GetViewShellBase() )
-        && !SlideShow::IsInteractiveSlideshow( &mpViewShell->GetViewShellBase() ); // IASS
+    bool bSlideShow = SlideShow::IsRunning( mrViewShell.GetViewShellBase() )
+        && !SlideShow::IsInteractiveSlideshow( &mrViewShell.GetViewShellBase() ); // IASS
 
     switch (nCode)
     {
@@ -186,7 +186,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(rKEvt.GetKeyCode().IsMod1())
             {
-                if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
                 {
                     SdPage* pActualPage = pDrawViewShell->GetActualPage();
                     SdrTextObj* pCandidate = nullptr;
@@ -218,13 +218,13 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         mpView->UnMarkAll();
                         mpView->MarkObj(pCandidate, mpView->GetSdrPageView());
 
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(
                             SID_ATTR_CHAR, SfxCallMode::ASYNCHRON);
                     }
                     else
                     {
                         // insert a new page with the same page layout
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(
                             SID_INSERTPAGE_QUICK, SfxCallMode::ASYNCHRON);
                     }
 
@@ -245,15 +245,15 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     if( dynamic_cast< const SdrOle2Obj* >( pObj ) && !mpDocSh->IsUIActive() )
                     {
                         //HMHmpView->HideMarkHdl();
-                        mpViewShell->ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
+                        mrViewShell.ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
                     }
                     else if( pObj && pObj->IsEmptyPresObj() && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr )
                     {
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+                        mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                     }
                     else
                     {
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+                        mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                     }
 
                     // consumed
@@ -301,9 +301,9 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // increase zoom
-                mpViewShell->SetZoom(mpWindow->GetZoom() * 3 / 2);
+                mrViewShell.SetZoom(mpWindow->GetZoom() * 3 / 2);
 
-                if( auto pViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                if( auto pViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
                     pViewShell->SetZoomOnPage(false);
 
                 bReturn = true;
@@ -316,9 +316,9 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // decrease zoom
-                mpViewShell->SetZoom(mpWindow->GetZoom() * 2 / 3);
+                mrViewShell.SetZoom(mpWindow->GetZoom() * 2 / 3);
 
-                if( auto pViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                if( auto pViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
                     pViewShell->SetZoomOnPage(false);
 
                 bReturn = true;
@@ -331,7 +331,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if (!mpView->IsTextEdit() && !bSlideShow)
             {
                 // zoom to page
-                mpViewShell->GetViewFrame()->GetDispatcher()->
+                mrViewShell.GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
                 bReturn = true;
             }
@@ -343,7 +343,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if (!mpView->IsTextEdit() && !bSlideShow)
             {
                 // zoom to selected objects
-                mpViewShell->GetViewFrame()->GetDispatcher()->
+                mrViewShell.GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_OPTIMAL, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
                 bReturn = true;
             }
@@ -352,12 +352,12 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_POINT:
         {
-            ZoomList* pZoomList = mpViewShell->GetZoomList();
+            ZoomList* pZoomList = mrViewShell.GetZoomList();
 
             if (!mpView->IsTextEdit() && pZoomList->IsNextPossible() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // use next ZoomRect
-                mpViewShell->SetZoomRect(pZoomList->GetNextZoomRect());
+                mrViewShell.SetZoomRect(pZoomList->GetNextZoomRect());
                 bReturn = true;
             }
         }
@@ -365,12 +365,12 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_COMMA:
         {
-            ZoomList* pZoomList = mpViewShell->GetZoomList();
+            ZoomList* pZoomList = mrViewShell.GetZoomList();
 
             if (!mpView->IsTextEdit() && pZoomList->IsPreviousPossible() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // use previous ZoomRect
-                mpViewShell->SetZoomRect(pZoomList->GetPreviousZoomRect());
+                mrViewShell.SetZoomRect(pZoomList->GetPreviousZoomRect());
                 bReturn = true;
             }
         }
@@ -379,7 +379,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         case KEY_HOME:
         {
             if (!mpView->IsTextEdit() && !bSlideShow)
-                if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
                 {
                    // jump to first page
                    pDrawViewShell->SwitchPage(0);
@@ -391,7 +391,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         case KEY_END:
         {
             if (!mpView->IsTextEdit() && !bSlideShow)
-                if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
                 {
                     // jump to last page
                     SdPage* pPage = pDrawViewShell->GetActualPage();
@@ -409,7 +409,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if( bSlideShow)
                 break;
 
-            if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ) )
+            if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ) )
             {
                 // The page-up key switches layers or pages depending on the
                 // modifier key.
@@ -455,7 +455,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
                 break;
-            if(dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bSlideShow)
+            if(dynamic_cast< const DrawViewShell *>( &mrViewShell ) !=  nullptr && !bSlideShow)
             {
                 // The page-down key switches layers or pages depending on the
                 // modifier key.
@@ -466,7 +466,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     // Next page.
                     bReturn = true;
-                    SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
+                    SdPage* pPage = static_cast<DrawViewShell*>(&mrViewShell)->GetActualPage();
                     sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
 
                     if (nSdPage < mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
@@ -475,10 +475,10 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         // deactivation the old page and activating the new
                         // one.
                         TabControl& rPageTabControl =
-                            static_cast<DrawViewShell*>(mpViewShell)->GetPageTabControl();
+                            static_cast<DrawViewShell*>(&mrViewShell)->GetPageTabControl();
                         if (rPageTabControl.IsReallyShown())
                             rPageTabControl.SendDeactivatePageEvent ();
-                        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage + 1);
+                        static_cast<DrawViewShell*>(&mrViewShell)->SwitchPage(nSdPage + 1);
                         if (rPageTabControl.IsReallyShown())
                             rPageTabControl.SendActivatePageEvent ();
                     }
@@ -486,7 +486,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 else if (rKEvt.GetKeyCode().IsMod1())
                 {
                     // With the CONTROL modifier we switch layers.
-                    if (static_cast<DrawViewShell*>(mpViewShell)->IsLayerModeActive())
+                    if (static_cast<DrawViewShell*>(&mrViewShell)->IsLayerModeActive())
                     {
                         // With the layer mode active pressing page-down
                         // moves to the next layer.
@@ -761,7 +761,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 else
                 {
                     // scroll page
-                    mpViewShell->ScrollLines(nX, nY);
+                    mrViewShell.ScrollLines(nX, nY);
                 }
 
                 bReturn = true;
@@ -799,7 +799,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         // try to activate textedit mode for the selected object
                         SfxStringItem aInputString(SID_ATTR_CHAR, OUString(rKEvt.GetCharCode()));
 
-                        mpViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+                        mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
                             SID_ATTR_CHAR,
                             SfxCallMode::ASYNCHRON,
                             { &aInputString });
@@ -813,7 +813,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // test if there is a title object there. If yes, try to
                 // set it to edit mode and start typing...
-                DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
+                DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(&mrViewShell);
                 if (pDrawViewShell && EditEngine::IsSimpleCharInput(rKEvt))
                 {
                     SdPage* pActualPage = pDrawViewShell->GetActualPage();
@@ -847,7 +847,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         mpView->MarkObj(pCandidate, mpView->GetSdrPageView());
                         SfxStringItem aInputString(SID_ATTR_CHAR, OUString(rKEvt.GetCharCode()));
 
-                        mpViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+                        mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
                             SID_ATTR_CHAR,
                             SfxCallMode::ASYNCHRON,
                             { &aInputString });
@@ -914,7 +914,7 @@ void FuPoor::DoPasteUnformatted()
 {
     if (mpView)
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewShell->GetActiveWindow() ) );
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mrViewShell.GetActiveWindow() ) );
         if (aDataHelper.GetTransferable().is())
         {
             sal_Int8 nAction = DND_ACTION_COPY;
@@ -1036,7 +1036,7 @@ void FuPoor::ImpForceQuadratic(::tools::Rectangle& rRect)
 
 void FuPoor::SwitchLayer (sal_Int32 nOffset)
 {
-    auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell );
+    auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell );
     if(!pDrawViewShell)
         return;
 
@@ -1053,7 +1053,7 @@ void FuPoor::SwitchLayer (sal_Int32 nOffset)
     if (nIndex != pDrawViewShell->GetActiveTabLayerIndex ())
     {
         LayerTabBar* pLayerTabControl =
-            static_cast<DrawViewShell*>(mpViewShell)->GetLayerTabControl();
+            static_cast<DrawViewShell*>(&mrViewShell)->GetLayerTabControl();
         if (pLayerTabControl != nullptr)
             pLayerTabControl->SendDeactivatePageEvent ();
 
@@ -1074,7 +1074,7 @@ bool FuPoor::cancel()
 {
     if ( dynamic_cast< const FuSelection *>( this ) ==  nullptr )
     {
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         return true;
     }
 

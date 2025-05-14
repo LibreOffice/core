@@ -95,7 +95,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             else
             {
                 // open the zoom dialog here
-                SetCurrentFunction( FuScale::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+                SetCurrentFunction( FuScale::Create( *this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
             }
             Cancel();
         }
@@ -260,7 +260,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         {
             if( rReq.GetArgs() )
             {
-                SetCurrentFunction( FuTemplate::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+                SetCurrentFunction( FuTemplate::Create( *this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
                 Cancel();
             }
 
@@ -270,7 +270,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_PRESENTATION_DLG:
         {
-            SetCurrentFunction( FuSlideShowDlg::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+            SetCurrentFunction( FuSlideShowDlg::Create( *this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
             Cancel();
         }
         break;
@@ -287,7 +287,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_CUSTOMSHOW_DLG:
         {
-            SetCurrentFunction( FuCustomShowDlg::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+            SetCurrentFunction( FuCustomShowDlg::Create( *this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
             Cancel();
         }
         break;
@@ -381,7 +381,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_INSERT_ZWSP:
         case SID_CHARMAP:
         {
-            SetCurrentFunction( FuBullet::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+            SetCurrentFunction( FuBullet::Create( *this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
             Cancel();
         }
         break;
@@ -390,14 +390,14 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case FN_SVX_SET_BULLET:
         case FN_SVX_SET_NUMBER:
         {
-            SetCurrentFunction( FuBulletAndPosition::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+            SetCurrentFunction( FuBulletAndPosition::Create( *this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_THESAURUS:
         {
-            SetCurrentFunction( FuThesaurus::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+            SetCurrentFunction( FuThesaurus::Create( *this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
         }
@@ -406,21 +406,21 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_CHAR_DLG_EFFECT:
         case SID_CHAR_DLG:
         {
-            SetCurrentFunction( FuChar::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+            SetCurrentFunction( FuChar::Create( *this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_INSERTFILE:
         {
-            SetCurrentFunction( FuInsertFile::Create(this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq) );
+            SetCurrentFunction( FuInsertFile::Create(*this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq) );
             Cancel();
         }
         break;
 
         case SID_PRESENTATIONOBJECT:
         {
-            SetCurrentFunction( FuPresentationObjects::Create(this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq) );
+            SetCurrentFunction( FuPresentationObjects::Create(*this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq) );
             Cancel();
         }
         break;
@@ -436,7 +436,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_SUMMARY_PAGE:
         {
             pOlView->SetSelectedPages();
-            SetCurrentFunction( FuSummaryPage::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+            SetCurrentFunction( FuSummaryPage::Create( *this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
             pOlView->GetOutliner().Clear();
             pOlView->FillOutliner();
             pOlView->GetActualPage();
@@ -447,7 +447,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_EXPAND_PAGE:
         {
             pOlView->SetSelectedPages();
-            SetCurrentFunction( FuExpandPage::Create( this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
+            SetCurrentFunction( FuExpandPage::Create( *this, GetActiveWindow(), pOlView.get(), GetDoc(), rReq ) );
             pOlView->GetOutliner().Clear();
             pOlView->FillOutliner();
             pOlView->GetActualPage();

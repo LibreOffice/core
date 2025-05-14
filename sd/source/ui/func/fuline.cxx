@@ -32,18 +32,18 @@ namespace sd {
 
 
 FuLine::FuLine (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuLine::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuLine( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuLine( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -66,7 +66,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
 
     bool bHasMarked = rMarkList.GetMarkCount() != 0;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    VclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSvxLineTabDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc, pObj, bHasMarked) );
+    VclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSvxLineTabDialog(mrViewShell.GetFrameWeld(), &aNewAttr, mpDoc, pObj, bHasMarked) );
 
     pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult){
         if (nResult == RET_OK)
@@ -86,11 +86,11 @@ void FuLine::DoExecute( SfxRequest& rReq )
                 SID_ATTR_LINE_CAP,                  // (SID_SVX_START+1111)
                 0 };
 
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+            mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
         }
 
         // deferred until the dialog ends
-        mpViewShell->Cancel();
+        mrViewShell.Cancel();
 
         pDlg->disposeOnce();
     });

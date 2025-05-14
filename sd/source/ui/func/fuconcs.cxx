@@ -46,19 +46,19 @@ namespace sd {
 
 
 FuConstructCustomShape::FuConstructCustomShape (
-        ViewShell*          pViewSh,
+        ViewShell&          rViewSh,
         ::sd::Window*       pWin,
         ::sd::View*         pView,
         SdDrawDocument*     pDoc,
         SfxRequest&         rReq ) :
-    FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+    FuConstruct(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuConstructCustomShape::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+rtl::Reference<FuPoor> FuConstructCustomShape::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
 {
     FuConstructCustomShape* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructCustomShape( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructCustomShape( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent( bPermanent );
     return xFunc;
@@ -75,7 +75,7 @@ void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
         aCustomShape = rItm.GetValue();
     }
 
-    mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
+    mrViewShell.GetViewShellBase().GetToolBarManager()->SetToolBar(
         ToolBarManager::ToolBarGroup::Function,
         ToolBarManager::msDrawingObjectToolBar);
 }
@@ -149,7 +149,7 @@ bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
 
     if (!bPermanent)
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
     return bReturn;
 }

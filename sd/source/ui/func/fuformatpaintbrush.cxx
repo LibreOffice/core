@@ -58,17 +58,17 @@ bool ShouldPasteParaFormatPerSelection(const OutlinerView* pOLV)
 namespace sd {
 
 
-FuFormatPaintBrush::FuFormatPaintBrush( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
-: FuText(pViewSh, pWin, pView, pDoc, rReq)
+FuFormatPaintBrush::FuFormatPaintBrush( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+: FuText(rViewSh, pWin, pView, pDoc, rReq)
     , mnDepth(-1)
     , mbPermanent( false )
     , mbOldIsQuickTextEditMode(true)
 {
 }
 
-rtl::Reference<FuPoor> FuFormatPaintBrush::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuFormatPaintBrush::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuFormatPaintBrush( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuFormatPaintBrush( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute( rReq );
     return xFunc;
 }
@@ -89,9 +89,9 @@ void FuFormatPaintBrush::DoExecute( SfxRequest& rReq )
 
 void FuFormatPaintBrush::implcancel()
 {
-    if( mpViewShell && mpViewShell->GetViewFrame() )
+    if( mrViewShell.GetViewFrame() )
     {
-        SfxViewFrame* pViewFrame = mpViewShell->GetViewFrame();
+        SfxViewFrame* pViewFrame = mrViewShell.GetViewFrame();
         pViewFrame->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
         pViewFrame->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
     }
@@ -110,7 +110,7 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if( (eHit == SdrHitKind::TextEdit) || (eHit == SdrHitKind::TextEditObj && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast<sdr::table::SdrTableObj*>(aVEvt.mpObj) != nullptr ) ))
+        if( (eHit == SdrHitKind::TextEdit) || (eHit == SdrHitKind::TextEditObj && ( mrViewShell.GetFrameView()->IsQuickEdit() || dynamic_cast<sdr::table::SdrTableObj*>(aVEvt.mpObj) != nullptr ) ))
         {
             SdrPageView* pPV=nullptr;
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
@@ -204,8 +204,7 @@ bool FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
             pOLV->MouseButtonUp(rMEvt);
 
         Paste( bNoCharacterFormats, bNoParagraphFormats );
-        if(mpViewShell)
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+        mrViewShell.GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
 
         if( mbPermanent )
             return true;
@@ -227,10 +226,10 @@ bool FuFormatPaintBrush::KeyInput(const KeyEvent& rKEvt)
 
 void FuFormatPaintBrush::Activate()
 {
-    mbOldIsQuickTextEditMode = mpViewShell->GetFrameView()->IsQuickEdit();
+    mbOldIsQuickTextEditMode = mrViewShell.GetFrameView()->IsQuickEdit();
     if( !mbOldIsQuickTextEditMode  )
     {
-        mpViewShell->GetFrameView()->SetQuickEdit(true);
+        mrViewShell.GetFrameView()->SetQuickEdit(true);
         mpView->SetQuickTextEditMode(true);
     }
 }
@@ -239,7 +238,7 @@ void FuFormatPaintBrush::Deactivate()
 {
     if( !mbOldIsQuickTextEditMode  )
     {
-        mpViewShell->GetFrameView()->SetQuickEdit(false);
+        mrViewShell.GetFrameView()->SetQuickEdit(false);
         mpView->SetQuickTextEditMode(false);
     }
 }
@@ -269,7 +268,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
     // except in a few cases (?)
     if( pObj )
     {
-        OUString sLabel( mpViewShell->GetViewShellBase().RetrieveLabelFromCommand(u".uno:FormatPaintbrush"_ustr ) );
+        OUString sLabel( mrViewShell.GetViewShellBase().RetrieveLabelFromCommand(u".uno:FormatPaintbrush"_ustr ) );
         mpDoc->BegUndo( sLabel );
         if (dynamic_cast< sdr::table::SdrTableObj* >( pObj ) == nullptr)
             mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );

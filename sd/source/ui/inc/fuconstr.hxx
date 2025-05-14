@@ -53,7 +53,7 @@ public:
             const bool bUseFillStyle, const bool bUseNoFillStyle );
 
 protected:
-    FuConstruct (ViewShell* pViewSh,
+    FuConstruct (ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,

@@ -41,11 +41,11 @@ SFX_IMPL_INTERFACE(MediaObjectBar, SfxShell)
 
 void MediaObjectBar::InitInterface_Impl() {}
 
-MediaObjectBar::MediaObjectBar(const ViewShell* pSdViewShell, ::sd::View* pSdView)
-    : SfxShell(pSdViewShell->GetViewShell())
+MediaObjectBar::MediaObjectBar(ViewShell& rSdViewShell, ::sd::View* pSdView)
+    : SfxShell(rSdViewShell.GetViewShell())
     , mpView(pSdView)
 {
-    DrawDocShell* pDocShell = pSdViewShell->GetDocSh();
+    DrawDocShell* pDocShell = rSdViewShell.GetDocSh();
 
     SetPool(&pDocShell->GetPool());
     SetUndoManager(pDocShell->GetUndoManager());

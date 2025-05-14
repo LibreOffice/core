@@ -166,11 +166,11 @@ public:
 
 using namespace ::sd;
 
-HeaderFooterDialog::HeaderFooterDialog(ViewShell* pViewShell, weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
+HeaderFooterDialog::HeaderFooterDialog(ViewShell& rViewShell, weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
     : GenericDialogController(pParent, u"modules/simpress/ui/headerfooterdialog.ui"_ustr, u"HeaderFooterDialog"_ustr)
     , mpDoc( pDoc )
     , mpCurrentPage( pCurrentPage )
-    , mpViewShell( pViewShell )
+    , mrViewShell( rViewShell )
     , mxTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
     , mxPBApplyToAll(m_xBuilder->weld_button(u"apply_all"_ustr))
     , mxPBApply(m_xBuilder->weld_button(u"apply"_ustr))
@@ -251,7 +251,7 @@ short HeaderFooterDialog::run()
 {
     short nRet = GenericDialogController::run();
     if (nRet)
-        mpViewShell->GetDocSh()->SetModified();
+        mrViewShell.GetDocSh()->SetModified();
     return nRet;
 }
 
@@ -344,7 +344,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
     }
 
     // give the undo group to the undo manager
-    mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
+    mrViewShell.GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
 }
 
 void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings )

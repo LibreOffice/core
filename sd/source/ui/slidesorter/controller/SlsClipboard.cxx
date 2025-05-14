@@ -163,10 +163,9 @@ Clipboard::~Clipboard()
 */
 void Clipboard::HandleSlotCall (SfxRequest& rRequest)
 {
-    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+    ViewShell& rViewShell = mrSlideSorter.GetViewShell();
     rtl::Reference<FuPoor> xFunc;
-    if (pViewShell != nullptr)
-        xFunc = pViewShell->GetCurrentFunction();
+    xFunc = rViewShell.GetCurrentFunction();
     switch (rRequest.GetSlot())
     {
         case SID_CUT:
@@ -452,7 +451,7 @@ void Clipboard::CreateSlideTransferable (
     mrSlideSorter.GetView().BrkAction();
     rtl::Reference<SdTransferable> pTransferable = TransferableData::CreateTransferable (
         pDocument,
-        dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()),
+        dynamic_cast<SlideSorterViewShell*>(&mrSlideSorter.GetViewShell()),
         std::move(aRepresentatives));
 
     if (bDrag)
@@ -477,9 +476,8 @@ void Clipboard::CreateSlideTransferable (
     vcl::Window* pActionWindow = pWindow;
     if (pActionWindow == nullptr)
     {
-        ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-        if (pViewShell != nullptr)
-            pActionWindow = pViewShell->GetActiveWindow();
+        ViewShell& rViewShell = mrSlideSorter.GetViewShell();
+        pActionWindow = rViewShell.GetActiveWindow();
     }
 
     assert(pActionWindow);
@@ -677,7 +675,7 @@ sal_Int8 Clipboard::AcceptDrop (
 
             // Show the insertion marker and the substitution for a drop.
             SelectionFunction* pSelectionFunction = dynamic_cast<SelectionFunction*>(
-                mrSlideSorter.GetViewShell()->GetCurrentFunction().get());
+                mrSlideSorter.GetViewShell().GetCurrentFunction().get());
             if (pSelectionFunction != nullptr)
                 pSelectionFunction->MouseDragged(rEvent, nAction);
 
@@ -757,7 +755,7 @@ sal_Int8 Clipboard::ExecuteDrop (
                 // Handle a general drop operation.
                 mxUndoContext.reset(new UndoContext (
                     mrSlideSorter.GetModel().GetDocument(),
-                    mrSlideSorter.GetViewShell()->GetViewShellBase().GetMainViewShell()));
+                    mrSlideSorter.GetViewShell().GetViewShellBase().GetMainViewShell()));
                 mxSelectionObserverContext.reset(new SelectionObserver::Context(mrSlideSorter));
 
                 if (rEvent.mnAction == DND_ACTION_MOVE)
@@ -787,7 +785,7 @@ sal_Int8 Clipboard::ExecuteDrop (
                 TransferableData::GetFromTransferable(pDragTransferable));
             assert(pSlideSorterTransferable);
             if (pSlideSorterTransferable
-                && pSlideSorterTransferable->GetSourceViewShell() != mrSlideSorter.GetViewShell())
+                && pSlideSorterTransferable->GetSourceViewShell() != &mrSlideSorter.GetViewShell())
             {
                 DragFinished(nResult);
             }
@@ -827,7 +825,7 @@ bool Clipboard::IsInsertionTrivial (
     std::shared_ptr<TransferableData> pSlideSorterTransferable (
         TransferableData::GetFromTransferable(pTransferable));
     if (pSlideSorterTransferable
-        && pSlideSorterTransferable->GetSourceViewShell() != mrSlideSorter.GetViewShell())
+        && pSlideSorterTransferable->GetSourceViewShell() != &mrSlideSorter.GetViewShell())
         return false;
     return mrController.GetInsertionIndicatorHandler()->IsInsertionTrivial(nDndAction);
 }
@@ -895,9 +893,8 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     // is implemented in the ViewShell class and uses the page view of the
     // main edit view.  This is not possible without a DrawViewShell.
     std::shared_ptr<DrawViewShell> pDrawViewShell;
-    if (mrSlideSorter.GetViewShell() != nullptr)
-        pDrawViewShell = std::dynamic_pointer_cast<DrawViewShell>(
-            mrSlideSorter.GetViewShell()->GetViewShellBase().GetMainViewShell());
+    pDrawViewShell = std::dynamic_pointer_cast<DrawViewShell>(
+        mrSlideSorter.GetViewShell().GetViewShellBase().GetMainViewShell());
     if (pDrawViewShell != nullptr
         && (pDrawViewShell->GetShellType() == ViewShell::ST_IMPRESS
             || pDrawViewShell->GetShellType() == ViewShell::ST_DRAW))

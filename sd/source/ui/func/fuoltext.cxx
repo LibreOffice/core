@@ -85,7 +85,7 @@ const sal_uInt16 SidArray[] = {
 void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
 {
     FuSimpleOutlinerText::UpdateForKeyPress(rEvent);
-    mpViewShell->UpdatePreview(mpViewShell->GetActualPage());
+    mrViewShell.UpdatePreview(mrViewShell.GetActualPage());
 }
 
 /**
@@ -107,23 +107,23 @@ bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
     return false;
 }
 
-rtl::Reference<FuPoor> FuOutlineText::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuOutlineText::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuOutlineText( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuOutlineText( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute( rReq );
     return xFunc;
 }
 
-FuOutlineText::FuOutlineText(ViewShell* pViewShell, ::sd::Window* pWindow,
+FuOutlineText::FuOutlineText(ViewShell& rViewShell, ::sd::Window* pWindow,
                              ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc,
                              SfxRequest& rReq)
-       : FuSimpleOutlinerText(pViewShell, pWindow, pView, pDoc, rReq)
+       : FuSimpleOutlinerText(rViewShell, pWindow, pView, pDoc, rReq)
 {}
 
-FuSimpleOutlinerText::FuSimpleOutlinerText(ViewShell* pViewShell, ::sd::Window* pWindow,
+FuSimpleOutlinerText::FuSimpleOutlinerText(ViewShell& rViewShell, ::sd::Window* pWindow,
                              ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc,
                              SfxRequest& rReq)
-       : FuPoor(pViewShell, pWindow, pView, pDoc, rReq),
+       : FuPoor(rViewShell, pWindow, pView, pDoc, rReq),
          mpSimpleOutlinerView (pView)
 {
 }
@@ -157,7 +157,7 @@ bool FuSimpleOutlinerText::MouseButtonDown(const MouseEvent& rMEvt)
     if (bReturn)
     {
         // Now the attributes of the current text position can be different
-        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+        mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
     {
@@ -186,7 +186,7 @@ bool FuSimpleOutlinerText::MouseButtonUp(const MouseEvent& rMEvt)
     if (bReturn)
     {
         // Now the attributes of the current text position can be different
-        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+        mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
     {
@@ -202,7 +202,7 @@ bool FuSimpleOutlinerText::MouseButtonUp(const MouseEvent& rMEvt)
                 SfxStringItem aStrItem( SID_FILE_NAME, pURLField->GetURL() );
                 SfxStringItem aReferer( SID_REFERER, mpDocSh->GetMedium()->GetName() );
                 SfxBoolItem aBrowseItem( SID_BROWSE, true );
-                SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+                SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
 
                 if ( rMEvt.IsMod1() )
                 {
@@ -260,7 +260,7 @@ bool FuSimpleOutlinerText::KeyInput(const KeyEvent& rKEvt)
 void FuSimpleOutlinerText::UpdateForKeyPress (const KeyEvent& /*rEvent*/)
 {
     // Attributes at the current text position may have changed.
-    mpViewShell->GetViewFrame()->GetBindings().Invalidate(SidArray);
+    mrViewShell.GetViewFrame()->GetBindings().Invalidate(SidArray);
 }
 
 /**
@@ -292,7 +292,7 @@ void FuSimpleOutlinerText::DoPaste(bool /*bMergeMasterPagesOnly*/)
  */
 void FuSimpleOutlinerText::DoPasteUnformatted()
 {
-   TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewShell->GetActiveWindow() ) );
+   TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mrViewShell.GetActiveWindow() ) );
    if (aDataHelper.GetTransferable().is())
    {
        OUString aText;

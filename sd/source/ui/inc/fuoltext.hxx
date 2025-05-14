@@ -55,7 +55,7 @@ public:
 
 protected:
     FuSimpleOutlinerText(
-        ViewShell* pViewShell,
+        ViewShell& rViewShell,
         ::sd::Window* pWin,
         ::sd::SimpleOutlinerView* pView,
         SdDrawDocument* pDoc,
@@ -67,7 +67,7 @@ protected:
 class FuOutlineText final : public FuSimpleOutlinerText
 {
 public:
-    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     /** Call this method when the text in the outliner (may) have changed.
@@ -78,7 +78,7 @@ public:
 
 private:
     FuOutlineText(
-        ViewShell* pViewShell,
+        ViewShell& rViewShell,
         ::sd::Window* pWin,
         ::sd::SimpleOutlinerView* pView,
         SdDrawDocument* pDoc,

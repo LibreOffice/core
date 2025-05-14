@@ -36,7 +36,7 @@ class TableObjectBar final : public SfxShell
 public:
     SFX_DECL_INTERFACE( SD_IF_SDDRAWTABLEOBJECTBAR )
 
-    TableObjectBar( ::sd::ViewShell* pSdViewShell, ::sd::View* pSdView);
+    TableObjectBar( ::sd::ViewShell& rSdViewShell, ::sd::View* pSdView);
     virtual ~TableObjectBar() override;
 
     void            GetState( SfxItemSet& rSet );
@@ -48,7 +48,7 @@ private:
     static void InitInterface_Impl();
 
     ::sd::View* mpView;
-    ::sd::ViewShell* mpViewSh;
+    ::sd::ViewShell& mrViewSh;
 };
 
 }

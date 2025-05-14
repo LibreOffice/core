@@ -30,8 +30,8 @@
 namespace sd {
 
 
-FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
-: FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuDisplayOrder::FuDisplayOrder( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
+: FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 , maPtr(PointerStyle::Arrow)
 , mpRefObj(nullptr)
 {
@@ -46,9 +46,9 @@ void FuDisplayOrder::implClearOverlay()
     mpOverlay.reset();
 }
 
-rtl::Reference<FuPoor> FuDisplayOrder::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuDisplayOrder::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuDisplayOrder( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuDisplayOrder( rViewSh, pWin, pView, pDoc, rReq ) );
     return xFunc;
 }
 
@@ -110,7 +110,7 @@ bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
         }
     }
 
-    mpViewShell->Cancel();
+    mrViewShell.Cancel();
 
     return true;
 }

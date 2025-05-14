@@ -30,7 +30,7 @@ class FuZoom final
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     // Mouse- & Key-Events
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
@@ -52,7 +52,7 @@ private:
     PointerStyle aPtr;
 
     FuZoom (
-        ViewShell* pViewSh,
+        ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,

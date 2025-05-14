@@ -59,12 +59,12 @@ namespace sd {
     sal_uInt16  mnWidth;         // Default: 0
     OUString    msShapeName;     // Default: ""*/
 FuConstructBezierPolygon::FuConstructBezierPolygon (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuConstruct(pViewSh, pWin, pView, pDoc, rReq),
+    : FuConstruct(rViewSh, pWin, pView, pDoc, rReq),
       nEditMode(SID_BEZIER_MOVE),
       mnTransparence(0),
       mnWidth(0)
@@ -90,10 +90,10 @@ bool isSticky(const SfxRequest& rReq)
 
 }
 
-rtl::Reference<FuPoor> FuConstructBezierPolygon::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+rtl::Reference<FuPoor> FuConstructBezierPolygon::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
 {
     FuConstructBezierPolygon* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructBezierPolygon( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructBezierPolygon( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent(bPermanent || isSticky(rReq));
     return xFunc;
@@ -278,7 +278,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 
     if ((!bPermanent && bCreated) || bDeleted)
     {
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
     }
 
     return bReturn;
@@ -353,8 +353,8 @@ void FuConstructBezierPolygon::SelectionHasChanged()
 {
     FuDraw::SelectionHasChanged();
 
-    mpViewShell->GetViewShellBase().GetToolBarManager()->SelectionHasChanged(
-        *mpViewShell,
+    mrViewShell.GetViewShellBase().GetToolBarManager()->SelectionHasChanged(
+        mrViewShell,
         *mpView);
 }
 
@@ -399,7 +399,7 @@ void FuConstructBezierPolygon::SetEditMode(sal_uInt16 nMode)
     nEditMode = nMode;
     ForcePointer();
 
-    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mrViewShell.GetViewFrame()->GetBindings();
     rBindings.Invalidate(SID_BEZIER_MOVE);
     rBindings.Invalidate(SID_BEZIER_INSERT);
 }

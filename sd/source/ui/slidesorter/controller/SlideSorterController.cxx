@@ -282,9 +282,7 @@ bool SlideSorterController::Command (
     if (pWindow == nullptr)
         return false;
 
-    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    if (pViewShell == nullptr)
-        return false;
+    ViewShell& rViewShell = mrSlideSorter.GetViewShell();
 
     switch (rEvent.GetCommand())
     {
@@ -345,7 +343,7 @@ bool SlideSorterController::Command (
                 }
             }
 
-            if (SfxDispatcher* pDispatcher = pViewShell->GetDispatcher())
+            if (SfxDispatcher* pDispatcher = rViewShell.GetDispatcher())
             {
                 mbContextMenuOpen = true;
                 if (!rEvent.IsMouseEvent())
@@ -389,7 +387,7 @@ bool SlideSorterController::Command (
                 mrSlideSorter.GetView().GetLayouter().SetColumnCount (
                         nColumnCount, nColumnCount);
                 Rearrange(true);
-                mrSlideSorter.GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_PAGES_PER_ROW);
+                mrSlideSorter.GetViewShell().GetViewFrame()->GetBindings().Invalidate(SID_PAGES_PER_ROW);
                 bEventHasBeenHandled = true;
             }
             // tdf#119745: ScrollLines gives accurate distance scrolled on touchpad. NotchDelta sign
@@ -443,9 +441,8 @@ void SlideSorterController::PreModelChange()
     if (mbPostModelChangePending)
         return;
 
-    if (mrSlideSorter.GetViewShell() != nullptr)
-        mrSlideSorter.GetViewShell()->Broadcast(
-            ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
+    mrSlideSorter.GetViewShell().Broadcast(
+        ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
 
     GetCurrentSlideManager()->PrepareModelChange();
 
@@ -476,9 +473,8 @@ void SlideSorterController::PostModelChange()
         Rearrange(mbIsForcedRearrangePending);
     }
 
-    if (mrSlideSorter.GetViewShell() != nullptr)
-        mrSlideSorter.GetViewShell()->Broadcast(
-            ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
+    mrSlideSorter.GetViewShell().Broadcast(
+        ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
 }
 
 void SlideSorterController::HandleModelChange()
@@ -550,8 +546,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, vo
                 DrawModeFlags nDrawMode (Application::GetSettings().GetStyleSettings().GetHighContrastMode()
                     ? sd::OUTPUT_DRAWMODE_CONTRAST
                     : sd::OUTPUT_DRAWMODE_COLOR);
-                if (mrSlideSorter.GetViewShell() != nullptr)
-                    mrSlideSorter.GetViewShell()->GetFrameView()->SetDrawMode(nDrawMode);
+                mrSlideSorter.GetViewShell().GetFrameView()->SetDrawMode(nDrawMode);
                 if (pActiveWindow != nullptr)
                     pActiveWindow->GetOutDev()->SetDrawMode(nDrawMode);
                 mrView.HandleDrawModeChange();
@@ -712,7 +707,7 @@ rtl::Reference<FuPoor> SlideSorterController::CreateSelectionFunction (SfxReques
 
 ::rtl::Reference<SelectionFunction> SlideSorterController::GetCurrentSelectionFunction() const
 {
-    rtl::Reference<FuPoor> pFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
+    rtl::Reference<FuPoor> pFunction (mrSlideSorter.GetViewShell().GetCurrentFunction());
     return ::rtl::Reference<SelectionFunction>(dynamic_cast<SelectionFunction*>(pFunction.get()));
 }
 
@@ -744,9 +739,8 @@ void SlideSorterController::PrepareEditModeChange()
     }
 
     // Remember the current page.
-    if (mrSlideSorter.GetViewShell() != nullptr)
-        mnCurrentPageBeforeSwitch = (mrSlideSorter.GetViewShell()->GetViewShellBase()
-        .GetMainViewShell()->GetActualPage()->GetPageNum()-1)/2;
+    mnCurrentPageBeforeSwitch = (mrSlideSorter.GetViewShell().GetViewShellBase()
+    .GetMainViewShell()->GetActualPage()->GetPageNum()-1)/2;
 }
 
 void SlideSorterController::ChangeEditMode (EditMode eEditMode)

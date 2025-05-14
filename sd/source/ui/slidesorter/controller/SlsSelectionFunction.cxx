@@ -364,21 +364,21 @@ bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
         case KEY_RETURN:
         {
             model::SharedPageDescriptor pDescriptor (rFocusManager.GetFocusedPageDescriptor());
-            ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-            if (rFocusManager.HasFocus() && pDescriptor && pViewShell!=nullptr)
+            ViewShell& rViewShell = mrSlideSorter.GetViewShell();
+            if (rFocusManager.HasFocus() && pDescriptor)
             {
                 // The Return key triggers different functions depending on
                 // whether the slide sorter is the main view or displayed in
                 // the right pane.
-                if (pViewShell->IsMainViewShell())
+                if (rViewShell.IsMainViewShell())
                 {
                     mpModeHandler->SetCurrentPage(pDescriptor);
                     mpModeHandler->SwitchView(pDescriptor);
                 }
-                else if (pViewShell->GetDispatcher() != nullptr)
+                else if (rViewShell.GetDispatcher() != nullptr)
                 {
                     // tdf#111737 - add new (master) page depending on the edit mode
-                    pViewShell->GetDispatcher()->Execute(
+                    rViewShell.GetDispatcher()->Execute(
                         mrSlideSorter.GetModel().GetEditMode() == EditMode::Page
                             ? SID_INSERTPAGE
                             : SID_INSERT_MASTER_PAGE,
@@ -917,14 +917,14 @@ void SelectionFunction::ModeHandler::SwitchView (const model::SharedPageDescript
 {
     // Switch to the draw view.  This is done only when the current
     // view is the main view.
-    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    if (pViewShell==nullptr || !pViewShell->IsMainViewShell())
+    ViewShell& rViewShell = mrSlideSorter.GetViewShell();
+    if (!rViewShell.IsMainViewShell())
         return;
 
     if (rpDescriptor && rpDescriptor->GetPage()!=nullptr)
     {
         mrSlideSorter.GetModel().GetDocument()->SetSelected(rpDescriptor->GetPage(), true);
-        pViewShell->GetFrameView()->SetSelectedPage(
+        rViewShell.GetFrameView()->SetSelectedPage(
             (rpDescriptor->GetPage()->GetPageNum()-1)/2);
     }
     if (mrSlideSorter.GetViewShellBase() != nullptr)
@@ -1033,7 +1033,7 @@ bool NormalModeHandler::ProcessButtonDownEvent (
             mrSlideSorter.GetController().GetSelectionManager()->SetInsertionPosition(
                 pInsertionIndicatorHandler->GetInsertionPageIndex());
 
-            mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
+            mrSlideSorter.GetViewShell().GetDispatcher()->Execute(
                 SID_INSERTPAGE,
                 SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 
@@ -1388,10 +1388,10 @@ DragAndDropModeHandler::DragAndDropModeHandler (
 {
     SdModule* mod = SdModule::get();
     SdTransferable* pDragTransferable = mod->pTransferDrag;
-    if (pDragTransferable==nullptr && mrSlideSorter.GetViewShell() != nullptr)
+    if (pDragTransferable==nullptr)
     {
         SlideSorterViewShell* pSlideSorterViewShell
-            = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
+            = dynamic_cast<SlideSorterViewShell*>(&mrSlideSorter.GetViewShell());
         if (pSlideSorterViewShell != nullptr)
             pSlideSorterViewShell->StartDrag(rMousePosition, pWindow);
         pDragTransferable = mod->pTransferDrag;

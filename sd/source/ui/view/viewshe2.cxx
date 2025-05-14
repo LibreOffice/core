@@ -799,7 +799,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
 
         if ( !pSdClient )
         {
-            pSdClient = new Client(pObj, this, GetActiveWindow());
+            pSdClient = new Client(pObj, *this, GetActiveWindow());
         }
 
         ::tools::Rectangle aRect = pObj->GetLogicRect();

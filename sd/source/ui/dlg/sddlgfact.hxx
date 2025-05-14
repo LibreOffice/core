@@ -53,7 +53,7 @@ public:
 
     virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage*) override;
 
-    virtual VclPtr<AbstractHeaderFooterDialog> CreateHeaderFooterDialog(sd::ViewShell* pViewShell,
+    virtual VclPtr<AbstractHeaderFooterDialog> CreateHeaderFooterDialog(sd::ViewShell& rViewShell,
                                                                         weld::Window* pParent,
                                                                         SdDrawDocument* pDoc,
                                                                         SdPage* pCurrentPage) override;

@@ -37,15 +37,15 @@
 namespace sd {
 
 
-FuSnapLine::FuSnapLine(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
+FuSnapLine::FuSnapLine(ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
                        SdDrawDocument* pDoc, SfxRequest& rReq) :
-    FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuSnapLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuSnapLine::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuSnapLine( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuSnapLine( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -69,7 +69,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
     if (!pArgs)
     {
-        SfxItemSetFixed<ATTR_SNAPLINE_START, ATTR_SNAPLINE_END> aNewAttr(mpViewShell->GetPool());
+        SfxItemSetFixed<ATTR_SNAPLINE_START, ATTR_SNAPLINE_END> aNewAttr(mrViewShell.GetPool());
         bool bLineExist (false);
         Point aLinePos;
 
@@ -78,7 +78,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
             // The index of the snap line is not provided as argument to the
             // request.  Determine it from the mouse position.
 
-            aLinePos = static_cast<DrawViewShell*>(mpViewShell)->GetMousePos();
+            aLinePos = static_cast<DrawViewShell*>(&mrViewShell)->GetMousePos();
 
             if ( aLinePos.X() >= 0 )
             {
@@ -106,7 +106,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         aNewAttr.Put(SfxInt32Item(ATTR_SNAPLINE_Y, aLinePos.Y()));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        vcl::Window* pWin = mpViewShell->GetActiveWindow();
+        vcl::Window* pWin = mrViewShell.GetActiveWindow();
         ScopedVclPtr<AbstractSdSnapLineDlg> pDlg( pFact->CreateSdSnapLineDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, mpView) );
 
         if ( bLineExist )

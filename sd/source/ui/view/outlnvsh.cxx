@@ -669,7 +669,7 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
             rOutl.GetUndoManager().Clear();
             rOutl.UpdateFields();
 
-            SetCurrentFunction( FuOutlineText::Create(this,GetActiveWindow(),pOlView.get(),GetDoc(),rReq) );
+            SetCurrentFunction( FuOutlineText::Create(*this,GetActiveWindow(),pOlView.get(),GetDoc(),rReq) );
 
             rReq.Done();
         }

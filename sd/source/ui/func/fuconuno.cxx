@@ -38,21 +38,21 @@ namespace sd {
 
 
 FuConstructUnoControl::FuConstructUnoControl (
-    ViewShell*  pViewSh,
+    ViewShell&  rViewSh,
     ::sd::Window*       pWin,
     ::sd::View*         pView,
     SdDrawDocument* pDoc,
     SfxRequest&     rReq)
-    : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+    : FuConstruct(rViewSh, pWin, pView, pDoc, rReq)
     , nInventor(SdrInventor::Unknown)
     , nIdentifier(SdrObjKind::NONE)
 {
 }
 
-rtl::Reference<FuPoor> FuConstructUnoControl::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+rtl::Reference<FuPoor> FuConstructUnoControl::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
 {
     FuConstructUnoControl* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructUnoControl( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructUnoControl( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent(bPermanent);
     return xFunc;
@@ -69,7 +69,7 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
     if( pIdentifierItem )
         nIdentifier = static_cast<SdrObjKind>(pIdentifierItem->GetValue());
 
-    mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
+    mrViewShell.GetViewShellBase().GetToolBarManager()->SetToolBar(
         ToolBarManager::ToolBarGroup::Function,
         ToolBarManager::msDrawingObjectToolBar);
 }
@@ -105,7 +105,7 @@ bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
     bReturn = (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 
     if (!bPermanent)
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
     return bReturn;
 }

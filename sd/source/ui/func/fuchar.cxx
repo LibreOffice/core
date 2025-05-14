@@ -37,18 +37,18 @@ namespace sd {
 
 
 FuChar::FuChar (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuChar::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuChar::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuChar( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuChar( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -62,11 +62,11 @@ void FuChar::DoExecute( SfxRequest& rReq )
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
 
-        SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END> aNewAttr(mpViewShell->GetPool());
+        SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END> aNewAttr(mrViewShell.GetPool());
         aNewAttr.Put( aEditAttr, false );
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabCharDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc->GetDocSh() ) );
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabCharDialog(mrViewShell.GetFrameWeld(), &aNewAttr, mpDoc->GetDocSh() ) );
         if (rReq.GetSlot() == SID_CHAR_DLG_EFFECT)
         {
             pDlg->SetCurPageId(u"RID_SVXPAGE_CHAR_EFFECTS"_ustr);
@@ -112,7 +112,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
                     SID_ATTR_CHAR_BACK_COLOR,
                     0 };
 
-    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+    mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
 
     if( mpDoc->GetOnlineSpell() )
     {

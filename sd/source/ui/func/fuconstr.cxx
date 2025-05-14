@@ -51,12 +51,12 @@ namespace sd {
 
 
 FuConstruct::FuConstruct (
-    ViewShell*      pViewSh,
+    ViewShell&      rViewSh,
     ::sd::Window*           pWin,
     ::sd::View*         pView,
     SdDrawDocument* pDoc,
     SfxRequest&     rReq)
-    : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
+    : FuDraw(rViewSh, pWin, pView, pDoc, rReq),
       bSelectionChanged(false)
 {
 }
@@ -142,7 +142,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( mpView && mpView->IsDragObj() )
     {
-        FrameView* pFrameView = mpViewShell->GetFrameView();
+        FrameView* pFrameView = mrViewShell.GetFrameView();
         bool bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
         if (bDragWithCopy)
@@ -179,7 +179,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 mpView->MarkObj(aPnt, nHitLog);
             }
 
-            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+            mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         }
         else if (rMEvt.IsLeft() && !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
                  !bSelectionChanged                   &&
@@ -196,7 +196,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
             const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
             if (!bTiledRendering && (mpView->GetDragMode() == SdrDragMode::Move && mpView->IsRotateAllowed() &&
-                (mpViewShell->GetFrameView()->IsClickChangeRotation() ||
+                (mrViewShell.GetFrameView()->IsClickChangeRotation() ||
                  (pSingleObj && pSingleObj->GetObjInventor()==SdrInventor::E3d))))
             {
                 mpView->SetDragMode(SdrDragMode::Rotate);

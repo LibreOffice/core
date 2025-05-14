@@ -39,19 +39,19 @@ private:
 
 public:
     TextObjectBar (
-        ViewShell* pSdViewShell,
+        ViewShell& rSdViewShell,
         SfxItemPool& rItemPool,
         ::sd::View* pSdView);
     virtual ~TextObjectBar() override;
 
     void GetAttrState( SfxItemSet& rSet );
-    static void GetAttrStateImpl(const ViewShell* pViewShell, ::sd::View* pView, SfxItemSet& rSet, SfxShell* pTextObjectBar);
+    static void GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, SfxItemSet& rSet, SfxShell* pTextObjectBar);
     void GetCharState( SfxItemSet& rSet );
-    static void GetCharStateImpl(const ViewShell* pViewShell, const ::sd::View* pView, SfxItemSet& rSet);
+    static void GetCharStateImpl(ViewShell& rViewShell, const ::sd::View* pView, SfxItemSet& rSet);
     void Execute( SfxRequest &rReq );
 
 private:
-    ViewShell* mpViewShell;
+    ViewShell& mrViewShell;
     ::sd::View* mpView;
 };
 

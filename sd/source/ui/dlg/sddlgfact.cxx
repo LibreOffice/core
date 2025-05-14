@@ -425,12 +425,12 @@ VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog
     return VclPtr<SdAbstractGenericDialog_Impl<sd::MasterLayoutDialog>>::Create(pParent, pDoc, pCurrentPage);
 }
 
-VclPtr<AbstractHeaderFooterDialog> SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog(sd::ViewShell* pViewShell,
+VclPtr<AbstractHeaderFooterDialog> SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog(sd::ViewShell& rViewShell,
     weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
 {
     using AbstractHeaderFooterDialog_Impl
         = ScreenshottedDialog_Impl_Async<AbstractHeaderFooterDialog, sd::HeaderFooterDialog>;
-    return VclPtr<AbstractHeaderFooterDialog_Impl>::Create(pViewShell, pParent, pDoc, pCurrentPage);
+    return VclPtr<AbstractHeaderFooterDialog_Impl>::Create(rViewShell, pParent, pDoc, pCurrentPage);
 }
 
 VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog(weld::Window* pParent, SdDrawDocument* pDoc)

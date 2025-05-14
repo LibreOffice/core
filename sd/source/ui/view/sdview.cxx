@@ -961,7 +961,7 @@ void View::DoConnect(SdrOle2Obj* pObj)
     if ( pSdClient )
         return;
 
-    pSdClient = new Client(pObj, mpViewSh, pWindow);
+    pSdClient = new Client(pObj, *mpViewSh, pWindow);
     ::tools::Rectangle aRect = pObj->GetLogicRect();
     {
         // TODO/LEAN: working with visual area can switch object to running state

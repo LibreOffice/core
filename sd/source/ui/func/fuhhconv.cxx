@@ -52,21 +52,21 @@ namespace sd {
 
 
 FuHangulHanjaConversion::FuHangulHanjaConversion (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDocument,
     SfxRequest& rReq )
-       : FuPoor(pViewSh, pWin, pView, pDocument, rReq),
+       : FuPoor(rViewSh, pWin, pView, pDocument, rReq),
     pSdOutliner(nullptr),
     bOwnOutliner(false)
 {
-    if ( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr )
+    if ( dynamic_cast< const DrawViewShell *>( &mrViewShell ) !=  nullptr )
     {
         bOwnOutliner = true;
         pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
     }
-    else if ( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr )
+    else if ( dynamic_cast< const OutlineViewShell *>( &mrViewShell ) !=  nullptr )
     {
         bOwnOutliner = false;
         pSdOutliner = mpDoc->GetOutliner();
@@ -85,9 +85,9 @@ FuHangulHanjaConversion::~FuHangulHanjaConversion()
         delete pSdOutliner;
 }
 
-rtl::Reference<FuPoor> FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuHangulHanjaConversion::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuHangulHanjaConversion( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuHangulHanjaConversion( rViewSh, pWin, pView, pDoc, rReq ) );
     return xFunc;
 }
 
@@ -101,12 +101,11 @@ void FuHangulHanjaConversion::StartConversion( LanguageType nSourceLanguage, Lan
     mpView->BegUndo(SdResId(STR_UNDO_HANGULHANJACONVERSION));
 
     ViewShellBase* pBase = dynamic_cast<ViewShellBase*>( SfxViewShell::Current() );
-    if (pBase != nullptr)
-        mpViewShell = pBase->GetMainViewShell().get();
+    ViewShell* pViewShell = pBase ? pBase->GetMainViewShell().get() : nullptr;
 
-    if( mpViewShell )
+    if( pViewShell )
     {
-        if ( pSdOutliner && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bOwnOutliner )
+        if ( pSdOutliner && dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr && !bOwnOutliner )
         {
             pSdOutliner->EndConversion();
 
@@ -114,7 +113,7 @@ void FuHangulHanjaConversion::StartConversion( LanguageType nSourceLanguage, Lan
             pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
             pSdOutliner->BeginConversion();
         }
-        else if ( pSdOutliner && dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr && bOwnOutliner )
+        else if ( pSdOutliner && dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr && bOwnOutliner )
         {
             pSdOutliner->EndConversion();
             delete pSdOutliner;
@@ -130,11 +129,11 @@ void FuHangulHanjaConversion::StartConversion( LanguageType nSourceLanguage, Lan
 
     // Due to changing between edit mode, notes mode, and handout mode the
     // view has most likely changed.  Get the new one.
-    mpViewShell = pBase ? pBase->GetMainViewShell().get() : nullptr;
-    if (mpViewShell != nullptr)
+    pViewShell = pBase ? pBase->GetMainViewShell().get() : nullptr;
+    if (pViewShell != nullptr)
     {
-        mpView = mpViewShell->GetView();
-        mpWindow = mpViewShell->GetActiveWindow();
+        mpView = pViewShell->GetView();
+        mpWindow = pViewShell->GetActiveWindow();
     }
     else
     {

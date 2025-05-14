@@ -46,19 +46,19 @@ namespace sd {
 
 
 FuConstructArc::FuConstructArc (
-    ViewShell*  pViewSh,
+    ViewShell&  rViewSh,
     ::sd::Window*       pWin,
     ::sd::View*         pView,
     SdDrawDocument* pDoc,
     SfxRequest&     rReq )
-    : FuConstruct( pViewSh, pWin, pView, pDoc, rReq )
+    : FuConstruct( rViewSh, pWin, pView, pDoc, rReq )
 {
 }
 
-rtl::Reference<FuPoor> FuConstructArc::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent  )
+rtl::Reference<FuPoor> FuConstructArc::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent  )
 {
     FuConstructArc* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructArc( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructArc( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent(bPermanent);
     return xFunc;
@@ -68,7 +68,7 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
 
-    mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
+    mrViewShell.GetViewShellBase().GetToolBarManager()->SetToolBar(
         ToolBarManager::ToolBarGroup::Function,
         ToolBarManager::msDrawingObjectToolBar);
 
@@ -154,7 +154,7 @@ bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
 
     if (!bPermanent && bCreated)
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
     return bReturn;
 }

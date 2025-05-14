@@ -31,7 +31,7 @@ class FuSelection final
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq ) override;
 
                                        // Mouse- & Key-Events
@@ -61,7 +61,7 @@ public:
     virtual void ForcePointer(const MouseEvent* pMEvt = nullptr) override;
 
 private:
-    FuSelection (ViewShell* pViewSh,
+    FuSelection (ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,

@@ -31,14 +31,14 @@
 
 namespace sd {
 
-FuArea::FuArea( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDrawDocument* pDoc, SfxRequest& rReq)
-: FuPoor(pViewSh, pWin, _pView, pDoc, rReq)
+FuArea::FuArea( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDrawDocument* pDoc, SfxRequest& rReq)
+: FuPoor(rViewSh, pWin, _pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuArea::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuArea::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuArea( pViewSh, pWin, _pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuArea( rViewSh, pWin, _pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -55,11 +55,11 @@ void FuArea::DoExecute( SfxRequest& rReq )
     mpView->GetAttributes( aNewAttr );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    bool bHasSlideBackground = mpViewShell->GetDoc()->GetDocumentType() == DocumentType::Impress;
+    bool bHasSlideBackground = mrViewShell.GetDoc()->GetDocumentType() == DocumentType::Impress;
     VclPtr<AbstractSvxAreaTabDialog> pDlg(
-        pFact->CreateSvxAreaTabDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc, true, bHasSlideBackground));
+        pFact->CreateSvxAreaTabDialog(mrViewShell.GetFrameWeld(), &aNewAttr, mpDoc, true, bHasSlideBackground));
 
-    pDlg->StartExecuteAsync([pDlg, pView = this->mpView, pViewShell = this->mpViewShell](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, pView = this->mpView, pViewShell = &this->mrViewShell](sal_Int32 nResult){
         if (nResult == RET_OK)
         {
             pView->SetAttributes (*(pDlg->GetOutputItemSet ()));

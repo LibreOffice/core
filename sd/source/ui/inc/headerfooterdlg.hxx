@@ -43,7 +43,7 @@ private:
 
     SdDrawDocument*         mpDoc;
     SdPage*                 mpCurrentPage;
-    ViewShell*              mpViewShell;
+    ViewShell&              mrViewShell;
 
     std::unique_ptr<weld::Notebook> mxTabCtrl;
     std::unique_ptr<weld::Button> mxPBApplyToAll;
@@ -56,7 +56,7 @@ private:
     void change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings );
 
 public:
-    HeaderFooterDialog(ViewShell* pViewShell, weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage);
+    HeaderFooterDialog(ViewShell& rViewShell, weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage);
     virtual ~HeaderFooterDialog() override;
 
     void ApplyToAll();

@@ -104,18 +104,18 @@ namespace sd {
 
 
 FuInsertFile::FuInsertFile (
-    ViewShell*    pViewSh,
+    ViewShell&    rViewSh,
     ::sd::Window*      pWin,
     ::sd::View*        pView,
     SdDrawDocument* pDoc,
     SfxRequest&    rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuInsertFile::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuInsertFile::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertFile( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertFile( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -251,7 +251,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
     SfxGetpApp()->GetFilterMatcher().GuessFilter(*xMedium, pFilter);
 
-    bool                bDrawMode = dynamic_cast< const DrawViewShell *>( mpViewShell ) != nullptr;
+    bool                bDrawMode = dynamic_cast< const DrawViewShell *>( &mrViewShell ) != nullptr;
     bool                bInserted = false;
 
     if( pFilter )
@@ -316,7 +316,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     mpDocSh->SetWaitCursor( false );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    weld::Window* pParent = mpViewShell ? mpViewShell->GetFrameWeld() : nullptr;
+    weld::Window* pParent = mrViewShell.GetFrameWeld();
     ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg( pFact->CreateSdInsertPagesObjsDlg(pParent, mpDoc, pMedium, aFile) );
 
     sal_uInt16 nRet = pDlg->Execute();
@@ -330,7 +330,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
         std::vector<OUString> aBookmarkList = pDlg->GetList( 1 ); // pages
         bool bLink = pDlg->IsLink();
         SdPage* pPage = nullptr;
-        ::sd::View* pView = mpViewShell ? mpViewShell->GetView() : nullptr;
+        ::sd::View* pView = mrViewShell.GetView();
 
         if (pView)
         {
@@ -397,7 +397,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg( pFact->CreateSdInsertPagesObjsDlg(mpViewShell->GetFrameWeld(), mpDoc, nullptr, aFile) );
+    ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg( pFact->CreateSdInsertPagesObjsDlg(mrViewShell.GetFrameWeld(), mpDoc, nullptr, aFile) );
 
     mpDocSh->SetWaitCursor( false );
 
@@ -426,7 +426,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     // set reference device
     aOutliner.SetRefDevice(SdModule::get()->GetVirtualRefDevice());
 
-    SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
+    SdPage* pPage = static_cast<DrawViewShell*>(&mrViewShell)->GetActualPage();
     aLayoutName = pPage->GetLayoutName();
     sal_Int32 nIndex = aLayoutName.indexOf(SD_LT_SEPARATOR);
     if( nIndex != -1 )
@@ -449,7 +449,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     else
     {
         // is it a master page?
-        if (static_cast<DrawViewShell*>(mpViewShell)->GetEditMode() == EditMode::MasterPage &&
+        if (static_cast<DrawViewShell*>(&mrViewShell)->GetEditMode() == EditMode::MasterPage &&
             !pPage->IsMasterPage())
         {
             pPage = static_cast<SdPage*>(&(pPage->TRG_GetMasterPage()));
@@ -612,7 +612,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         nNewPages = 0;
 
-        ViewShellId nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
+        ViewShellId nViewShellId = mrViewShell.GetViewShellBase().GetViewShellId();
         rDocliner.GetUndoManager().EnterListAction(
                                     SdResId(STR_UNDO_INSERT_FILE), OUString(), 0, nViewShellId );
 

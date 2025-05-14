@@ -84,11 +84,9 @@ void TextObjectBar::Execute(SfxRequest& rReq)
 
     std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
 
-    assert(mpViewShell);
-
     if (OutlineView* pOView = dynamic_cast<OutlineView*>(mpView))
     {
-        pOLV = pOView->GetViewByWindow(mpViewShell->GetActiveWindow());
+        pOLV = pOView->GetViewByWindow(mrViewShell.GetActiveWindow());
         aGuard.reset( new OutlineViewModelChangeGuard( static_cast<OutlineView&>(*mpView) ) );
     }
 
@@ -99,8 +97,8 @@ void TextObjectBar::Execute(SfxRequest& rReq)
             if( pArgs )
             {
                 SdDrawDocument& rDoc = mpView->GetDoc();
-                assert(mpViewShell->GetViewShell());
-                rtl::Reference<FuPoor> xFunc( FuTemplate::Create( mpViewShell, static_cast< ::sd::Window*>( mpViewShell->GetViewShell()->GetWindow()), mpView, &rDoc, rReq ) );
+                assert(mrViewShell.GetViewShell());
+                rtl::Reference<FuPoor> xFunc( FuTemplate::Create( mrViewShell, static_cast< ::sd::Window*>( mrViewShell.GetViewShell()->GetWindow()), mpView, &rDoc, rReq ) );
 
                 if(xFunc.is())
                 {
@@ -109,15 +107,15 @@ void TextObjectBar::Execute(SfxRequest& rReq)
 
                     if( rReq.GetSlot() == SID_STYLE_APPLY )
                     {
-                        if (mpViewShell->GetViewFrame())
-                            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
+                        if (mrViewShell.GetViewFrame())
+                            mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
                     }
                 }
             }
             else
             {
-                if (mpViewShell->GetViewFrame())
-                    mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON );
+                if (mrViewShell.GetViewFrame())
+                    mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON );
             }
 
             rReq.Done();
@@ -168,13 +166,13 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                     }
                 }
                 pOLV->GetOutliner()->UndoActionEnd();
-                mpViewShell->Invalidate( SID_UNDO );
+                mrViewShell.Invalidate( SID_UNDO );
             }
             rReq.Done();
 
             Invalidate();
             // to refresh preview (in outline mode), slot has to be invalidated:
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
+            mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
 
         }
         break;
@@ -234,7 +232,7 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                     }
                 }
                 pOLV->GetOutliner()->UndoActionEnd();
-                mpViewShell->Invalidate( SID_UNDO );
+                mrViewShell.Invalidate( SID_UNDO );
             }
             else
             {
@@ -279,8 +277,8 @@ void TextObjectBar::Execute(SfxRequest& rReq)
 
             Invalidate();
             // to refresh preview (in outline mode), slot has to be invalidated:
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_PARA_ULSPACE, true );
+            mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
+            mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_ATTR_PARA_ULSPACE, true );
         }
         break;
 
@@ -293,7 +291,7 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                 // Ensure bold/italic etc. icon state updates
                 Invalidate();
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
+                mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
             }
             rReq.Done();
         }
@@ -308,7 +306,7 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                 // Ensure bold/italic etc. icon state updates
                 Invalidate();
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
+                mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
             }
             rReq.Done();
         }
@@ -361,7 +359,7 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                 pOLV->AdjustHeight( -1 );
 
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
+                mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
             }
             rReq.Done();
         }
@@ -374,7 +372,7 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                 pOLV->AdjustHeight( 1 );
 
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
+                mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
             }
             rReq.Done();
         }
@@ -395,7 +393,7 @@ void TextObjectBar::Execute(SfxRequest& rReq)
             rReq.Done( aAttr );
             mpView->SetAttributes( aAttr );
             Invalidate();
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
+            mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
         }
         break;
 
@@ -464,7 +462,7 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                         }
                     }
                 }
-                SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
+                SfxBindings& rBindings = mrViewShell.GetViewFrame()->GetBindings();
                 rBindings.Invalidate( FN_NUM_BULLET_ON );
                 rBindings.Invalidate( FN_NUM_NUMBERING_ON );
             }
@@ -473,14 +471,14 @@ void TextObjectBar::Execute(SfxRequest& rReq)
         case SID_GROW_FONT_SIZE:
         case SID_SHRINK_FONT_SIZE:
         {
-            const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(mpViewShell->GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST ));
+            const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(mrViewShell.GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST ));
             const FontList* pFontList = pFonts ? pFonts->GetFontList(): nullptr;
             if( pFontList )
             {
                 FuText::ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pOLV, pFontList, mpView );
                 if( pOLV )
                     pOLV->SetAttribs( pOLV->GetEditView().GetEmptyItemSet() );
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+                mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
             }
             rReq.Done();
         }
@@ -679,7 +677,7 @@ SET_ADJUST:
                     // attributes for TextObjectBar
                     case SID_ATTR_CHAR_FONT:
                     case SID_ATTR_CHAR_FONTHEIGHT:
-                        mpViewShell->GetViewFrame()->GetDispatcher()->
+                        mrViewShell.GetViewFrame()->GetDispatcher()->
                             Execute( SID_CHAR_DLG, SfxCallMode::ASYNCHRON );
                     break;
                     case SID_ATTR_CHAR_COLOR:
@@ -688,7 +686,7 @@ SET_ADJUST:
                         const sal_uInt16 nEEWhich
                             = aEditAttr.GetPool()->GetWhichIDFromSlotID(nSlot);
                         const std::optional<NamedColor> oColor
-                            = mpViewShell->GetDocSh()->GetRecentColor(nSlot);
+                            = mrViewShell.GetDocSh()->GetRecentColor(nSlot);
                         if (oColor.has_value())
                         {
                             const model::ComplexColor aCol = (*oColor).getComplexColor();
@@ -821,7 +819,7 @@ SET_ADJUST:
             Invalidate();
 
             // to refresh preview (in outline mode), slot has to be invalidated:
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
+            mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
         }
         break;
     }

@@ -30,7 +30,7 @@ class ViewShell;
 class ZoomList
 {
 public:
-    ZoomList(ViewShell* pViewShell);
+    ZoomList(ViewShell& rViewShell);
 
     void InsertZoomRect(const ::tools::Rectangle& rRect);
     ::tools::Rectangle const& GetNextZoomRect();
@@ -39,7 +39,7 @@ public:
     bool IsPreviousPossible() const;
 
 private:
-    ViewShell* mpViewShell;
+    ViewShell& mrViewShell;
     sal_uInt32 mnCurPos;
 
     std::vector<::tools::Rectangle> maRectangles;

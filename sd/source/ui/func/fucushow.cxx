@@ -33,18 +33,18 @@ namespace sd {
 
 
 FuCustomShowDlg::FuCustomShowDlg (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window*    pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
+    : FuPoor( rViewSh, pWin, pView, pDoc, rReq )
 {
 }
 
-rtl::Reference<FuPoor> FuCustomShowDlg::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuCustomShowDlg::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuCustomShowDlg( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuCustomShowDlg( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -52,7 +52,7 @@ rtl::Reference<FuPoor> FuCustomShowDlg::Create( ViewShell* pViewSh, ::sd::Window
 void FuCustomShowDlg::DoExecute( SfxRequest& )
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    vcl::Window* pWin = mpViewShell->GetActiveWindow();
+    vcl::Window* pWin = mrViewShell.GetActiveWindow();
     ScopedVclPtr<AbstractSdCustomShowDlg> pDlg( pFact->CreateSdCustomShowDlg(pWin ? pWin->GetFrameWeld() : nullptr, *mpDoc) );
     sal_uInt16 nRet = pDlg->Execute();
     mpDoc->SetChanged();
@@ -67,9 +67,9 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
             rSettings.mbCustomShow = pDlg->IsCustomShow();
         }
 
-        mpViewShell->SetStartShowWithDialog(true);
+        mrViewShell.SetStartShowWithDialog(true);
 
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
+        mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
                 SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
     }
     if (nRet == RET_OK)

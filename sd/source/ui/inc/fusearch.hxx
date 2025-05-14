@@ -30,7 +30,7 @@ class FuSearch final : public FuPoor
 {
 public:
 
-    static FuSearch* createPtr(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq);
+    static FuSearch* createPtr(ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq);
 
     virtual void DoExecute( SfxRequest& rReq ) override;
 
@@ -43,7 +43,7 @@ private:
     bool m_bOwnOutliner;
 
     FuSearch (
-        ViewShell* pViewSh,
+        ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,

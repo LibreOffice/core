@@ -67,7 +67,7 @@ SlideSorter::SlideSorter (
     sd::Window* pContentWindow,
     ScrollAdaptor* pHorizontalScrollBar,
     ScrollAdaptor* pVerticalScrollBar)
-    : mpViewShell(&rViewShell),
+    : mrViewShell(rViewShell),
       mpViewShellBase(&rViewShell.GetViewShellBase()),
       mpContentWindow(pContentWindow),
       mpHorizontalScrollBar(pHorizontalScrollBar),
@@ -272,10 +272,7 @@ void SlideSorter::RelocateToWindow (vcl::Window* pParentWindow)
 
     ReleaseListeners();
 
-    if (mpViewShell)
-    {
-        mpViewShell->ViewShell::RelocateToParentWindow(pParentWindow);
-    }
+    mrViewShell.ViewShell::RelocateToParentWindow(pParentWindow);
 
     SetupControls();
     SetupListeners();
@@ -294,11 +291,8 @@ void SlideSorter::RelocateToWindow (vcl::Window* pParentWindow)
 
 void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
 {
-    if (GetViewShell() != nullptr)
-    {
-        GetViewShell()->SetCurrentFunction(rpFunction);
-        GetViewShell()->SetOldFunction(rpFunction);
-    }
+    GetViewShell().SetCurrentFunction(rpFunction);
+    GetViewShell().SetOldFunction(rpFunction);
 }
 
 std::shared_ptr<controller::Properties> const & SlideSorter::GetProperties() const

@@ -46,25 +46,25 @@ namespace sd {
 
 
 FuPresentationObjects::FuPresentationObjects (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+     : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuPresentationObjects::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuPresentationObjects::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuPresentationObjects( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuPresentationObjects( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
 
 void FuPresentationObjects::DoExecute( SfxRequest& )
 {
-    OutlineViewShell* pOutlineViewShell = dynamic_cast< OutlineViewShell* >( mpViewShell );
+    OutlineViewShell* pOutlineViewShell = dynamic_cast< OutlineViewShell* >( &mrViewShell );
     DBG_ASSERT( pOutlineViewShell, "sd::FuPresentationObjects::DoExecute(), does not work without an OutlineViewShell!");
     if( !pOutlineViewShell )
         return;
@@ -135,7 +135,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
 
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdPresLayoutTemplateDlg(mpDocSh, mpViewShell->GetFrameWeld(),
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdPresLayoutTemplateDlg(mpDocSh, mrViewShell.GetFrameWeld(),
                                                         false, rStyleSheet, ePO, pStyleSheetPool));
     if( pDlg->Execute() == RET_OK )
     {

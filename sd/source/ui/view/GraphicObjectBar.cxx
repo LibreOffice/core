@@ -48,12 +48,12 @@ void GraphicObjectBar::InitInterface_Impl()
 
 
 GraphicObjectBar::GraphicObjectBar (
-    const ViewShell* pSdViewShell,
+    const ViewShell& rSdViewShell,
     ::sd::View* pSdView )
-    : SfxShell (pSdViewShell->GetViewShell()),
+    : SfxShell (rSdViewShell.GetViewShell()),
       mpView   ( pSdView )
 {
-    DrawDocShell* pDocShell = pSdViewShell->GetDocSh();
+    DrawDocShell* pDocShell = rSdViewShell.GetDocSh();
 
     SetPool( &pDocShell->GetPool() );
     SetUndoManager( pDocShell->GetUndoManager() );

@@ -41,16 +41,16 @@
 using namespace svx::sidebar;
 namespace sd {
 
-FuBulletAndPosition::FuBulletAndPosition(ViewShell* pViewShell, ::sd::Window* pWindow,
+FuBulletAndPosition::FuBulletAndPosition(ViewShell& rViewShell, ::sd::Window* pWindow,
                                  ::sd::View* pView, SdDrawDocument* pDoc,
                                  SfxRequest& rReq)
-       : FuPoor(pViewShell, pWindow, pView, pDoc, rReq)
+       : FuPoor(rViewShell, pWindow, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuBulletAndPosition::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuBulletAndPosition::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuBulletAndPosition( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuBulletAndPosition( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -79,14 +79,14 @@ void FuBulletAndPosition::DoExecute( SfxRequest& rReq )
     SfxItemSet aEditAttr( mpDoc->GetPool() );
     mpView->GetAttributes( aEditAttr );
 
-    SfxItemSetFixed<EE_PARA_NUMBULLET, EE_PARA_BULLET> aNewAttr( mpViewShell->GetPool() );
+    SfxItemSetFixed<EE_PARA_NUMBULLET, EE_PARA_BULLET> aNewAttr( mrViewShell.GetPool() );
     aNewAttr.Put( aEditAttr, false );
 
     auto pView = mpView;
 
     // create and execute dialog
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxBulletAndPositionDlg> pDlg(pFact->CreateSvxBulletAndPositionDlg(mpViewShell->GetFrameWeld(), &aNewAttr, mpView));
+    ScopedVclPtr<AbstractSvxBulletAndPositionDlg> pDlg(pFact->CreateSvxBulletAndPositionDlg(mrViewShell.GetFrameWeld(), &aNewAttr, mpView));
     sal_uInt16 nResult = pDlg->Execute();
 
     if( nResult == RET_OK )
@@ -97,7 +97,7 @@ void FuBulletAndPosition::DoExecute( SfxRequest& rReq )
 
         if (OutlineView* pOutlineView = dynamic_cast<OutlineView*>(pView))
         {
-            pOLV = pOutlineView->GetViewByWindow(mpViewShell->GetActiveWindow());
+            pOLV = pOutlineView->GetViewByWindow(mrViewShell.GetActiveWindow());
             aGuard.reset(new OutlineViewModelChangeGuard(*pOutlineView));
         }
 
@@ -132,14 +132,14 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
         return;
     }
 
-    SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aNewAttr( mpViewShell->GetPool() );
+    SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aNewAttr( mrViewShell.GetPool() );
     {
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
         aNewAttr.Put( aEditAttr, false );
     }
 
-    const DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+    const DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(&mrViewShell);
     //Init bullet level in "Customize" tab page in bullet dialog in master page view
     const bool bInMasterView = pDrawViewShell && pDrawViewShell->GetEditMode() == EditMode::MasterPage;
     if ( bInMasterView )
@@ -218,7 +218,7 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
     std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
     if (OutlineView* pView = dynamic_cast<OutlineView*>(mpView))
     {
-        pOLV = pView->GetViewByWindow(mpViewShell->GetActiveWindow());
+        pOLV = pView->GetViewByWindow(mrViewShell.GetActiveWindow());
         aGuard.reset(new OutlineViewModelChangeGuard(*pView));
     }
 
@@ -247,7 +247,7 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     if (bInMasterView && pNumRule)
     {
-        SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aSetAttr( mpViewShell->GetPool() );
+        SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aSetAttr( mrViewShell.GetPool() );
         aSetAttr.Put(SvxNumBulletItem( *pNumRule, nNumItemId ));
         mpView->SetAttributes(aSetAttr);
     }

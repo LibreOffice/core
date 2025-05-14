@@ -34,15 +34,15 @@
 
 using namespace sd;
 
-FuTransform::FuTransform(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
+FuTransform::FuTransform(ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
                          SdDrawDocument* pDoc, SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuTransform::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuTransform::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuTransform( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuTransform( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -94,7 +94,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         mpView->GetAttributes( aNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        pDlg.reset(pFact->CreateCaptionDialog(mpViewShell->GetFrameWeld(), mpView));
+        pDlg.reset(pFact->CreateCaptionDialog(mrViewShell.GetFrameWeld(), mpView));
 
         const WhichRangesContainer aRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
         SfxItemSet aCombSet( *aNewAttr.GetPool(), aRange );
@@ -105,7 +105,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     else
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        pDlg.reset(pFact->CreateSvxTransformTabDialog(mpViewShell->GetFrameWeld(), &aSet, mpView));
+        pDlg.reset(pFact->CreateSvxTransformTabDialog(mrViewShell.GetFrameWeld(), &aSet, mpView));
         bWelded = true;
     }
 
@@ -123,8 +123,8 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         }
 
         // deferred until the dialog ends
-        mpViewShell->Invalidate(SID_RULER_OBJECT);
-        mpViewShell->Cancel();
+        mrViewShell.Invalidate(SID_RULER_OBJECT);
+        mrViewShell.Cancel();
         if (bWelded)
             pDlg->disposeOnce();
     });

@@ -27,8 +27,8 @@
 
 namespace sd
 {
-ZoomList::ZoomList(ViewShell* pViewShell)
-    : mpViewShell(pViewShell)
+ZoomList::ZoomList(ViewShell& rViewShell)
+    : mrViewShell(rViewShell)
     , mnCurPos(0)
 {
 }
@@ -47,7 +47,7 @@ void ZoomList::InsertZoomRect(const ::tools::Rectangle& rRect)
 
     maRectangles.insert(maRectangles.begin() + mnCurPos, rRect);
 
-    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mrViewShell.GetViewFrame()->GetBindings();
     rBindings.Invalidate(SID_ZOOM_NEXT);
     rBindings.Invalidate(SID_ZOOM_PREV);
 }
@@ -60,7 +60,7 @@ void ZoomList::InsertZoomRect(const ::tools::Rectangle& rRect)
     if (nRectCount > 0 && mnCurPos > nRectCount - 1)
         mnCurPos = nRectCount - 1;
 
-    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mrViewShell.GetViewFrame()->GetBindings();
     rBindings.Invalidate(SID_ZOOM_NEXT);
     rBindings.Invalidate(SID_ZOOM_PREV);
 
@@ -72,7 +72,7 @@ void ZoomList::InsertZoomRect(const ::tools::Rectangle& rRect)
     if (mnCurPos > 0)
         mnCurPos--;
 
-    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mrViewShell.GetViewFrame()->GetBindings();
     rBindings.Invalidate(SID_ZOOM_NEXT);
     rBindings.Invalidate(SID_ZOOM_PREV);
 

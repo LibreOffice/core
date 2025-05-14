@@ -51,19 +51,19 @@ namespace sd {
 
 
 FuConstruct3dObject::FuConstruct3dObject (
-    ViewShell*  pViewSh,
+    ViewShell&  rViewSh,
     ::sd::Window*       pWin,
     ::sd::View*         pView,
     SdDrawDocument* pDoc,
     SfxRequest&     rReq)
-    : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+    : FuConstruct(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuConstruct3dObject::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+rtl::Reference<FuPoor> FuConstruct3dObject::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
 {
     FuConstruct3dObject* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstruct3dObject( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstruct3dObject( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent(bPermanent);
     return xFunc;
@@ -72,7 +72,7 @@ rtl::Reference<FuPoor> FuConstruct3dObject::Create( ViewShell* pViewSh, ::sd::Wi
 void FuConstruct3dObject::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
-    mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
+    mrViewShell.GetViewShellBase().GetToolBarManager()->SetToolBar(
         ToolBarManager::ToolBarGroup::Function,
         ToolBarManager::msDrawingObjectToolBar);
 }
@@ -307,7 +307,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject const * p3DOb
 
     pScene->SetTransform(aTransformation * pScene->GetTransform());
 
-    SfxItemSet aAttr (mpViewShell->GetPool());
+    SfxItemSet aAttr (mrViewShell.GetPool());
     pScene->SetMergedItemSetAndBroadcast(aAttr);
 }
 
@@ -322,7 +322,7 @@ bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
         mpWindow->CaptureMouse();
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
 
-        weld::WaitObject aWait(mpViewShell->GetFrameWeld());
+        weld::WaitObject aWait(mrViewShell.GetFrameWeld());
 
         rtl::Reference<E3dCompoundObject> p3DObj = ImpCreateBasic3DShape();
         rtl::Reference<E3dScene> pScene = mpView->SetCurrent3DObj(p3DObj.get());
@@ -383,7 +383,7 @@ bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
     bReturn = FuConstruct::MouseButtonUp(rMEvt) || bReturn;
 
     if (!bPermanent)
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
     return bReturn;
 }

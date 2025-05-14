@@ -29,9 +29,9 @@ using namespace com::sun::star;
 
 namespace sd {
 
-Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, vcl::Window* pWindow) :
-    SfxInPlaceClient(pViewShell->GetViewShell(), pWindow, pObj->GetAspect() ),
-    mpViewShell(pViewShell),
+Client::Client(SdrOle2Obj* pObj, ViewShell& rViewShell, vcl::Window* pWindow) :
+    SfxInPlaceClient(rViewShell.GetViewShell(), pWindow, pObj->GetAspect() ),
+    mrViewShell(rViewShell),
     pSdrOle2Obj(pObj)
 {
     SetObject( pObj->GetObjRef() );
@@ -48,7 +48,7 @@ Client::~Client()
  */
 void Client::RequestNewObjectArea( ::tools::Rectangle& aObjRect )
 {
-    ::sd::View* pView = mpViewShell->GetView();
+    ::sd::View* pView = mrViewShell.GetView();
 
     bool bSizeProtect = false;
     bool bPosProtect = false;
@@ -91,7 +91,7 @@ void Client::RequestNewObjectArea( ::tools::Rectangle& aObjRect )
 
 void Client::ObjectAreaChanged()
 {
-    ::sd::View* pView = mpViewShell->GetView();
+    ::sd::View* pView = mrViewShell.GetView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if (rMarkList.GetMarkCount() != 1)
         return;
@@ -136,10 +136,10 @@ void Client::ViewChanged()
 
     //TODO/LATER: should we try to avoid the recalculation of the visareasize
     //if we know that it didn't change?
-    if (!mpViewShell->GetActiveWindow())
+    if (!mrViewShell.GetActiveWindow())
         return;
 
-    ::sd::View* pView = mpViewShell->GetView();
+    ::sd::View* pView = mrViewShell.GetView();
     if (!pView)
         return;
 

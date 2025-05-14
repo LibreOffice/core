@@ -75,18 +75,18 @@ namespace sd
 
 
 FuTemplate::FuTemplate (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq )
-    : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
+    : FuPoor( rViewSh, pWin, pView, pDoc, rReq )
 {
 }
 
-rtl::Reference<FuPoor> FuTemplate::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuTemplate::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuTemplate( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuTemplate( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -243,7 +243,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 {
                     mpView->SetStyleSheet( static_cast<SfxStyleSheet*>(pStyleSheet));
                     mpDoc->SetChanged();
-                    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
+                    mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
         break;
@@ -264,7 +264,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     static_cast<SdStyleSheetPool*>( pSSPool )->SetActualStyleSheet( pStyleSheet );
 
                     // we switch explicitly into selection mode
-                    mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_SELECT,
+                    mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_SELECT,
                                         SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
 
                 }
@@ -275,7 +275,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             {
                 mod->SetWaterCan(false);
                 // we have to re-enable to tools-bar
-                mpViewShell->Invalidate();
+                mrViewShell.Invalidate();
             }
         }
         break;
@@ -301,7 +301,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 if (eFamily == SfxStyleFamily::Para)
                 {
-                    pStdDlg.disposeAndReset(pFact ? pFact->CreateSdTabTemplateDlg(mpViewShell->GetFrameWeld(), mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView) : nullptr);
+                    pStdDlg.disposeAndReset(pFact ? pFact->CreateSdTabTemplateDlg(mrViewShell.GetFrameWeld(), mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView) : nullptr);
                 }
                 else if (eFamily == SfxStyleFamily::Pseudo)
                 {
@@ -360,7 +360,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if( !bOldDocInOtherLanguage )
                     {
-                        pPresDlg.disposeAndReset(pFact ? pFact->CreateSdPresLayoutTemplateDlg(mpDocSh,  mpViewShell->GetFrameWeld(), bBackground, *pStyleSheet, ePO, pSSPool ) : nullptr);
+                        pPresDlg.disposeAndReset(pFact ? pFact->CreateSdPresLayoutTemplateDlg(mpDocSh,  mrViewShell.GetFrameWeld(), bBackground, *pStyleSheet, ePO, pSSPool ) : nullptr);
                     }
                 }
 
@@ -494,13 +494,13 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                         static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
 
-                        DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( mpViewShell );
+                        DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( &mrViewShell );
                         if( pDrawViewShell )
                         {
                             PageKind ePageKind = pDrawViewShell->GetPageKind();
                             if( ePageKind == PageKind::Notes || ePageKind == PageKind::Handout )
                             {
-                                SdPage* pPage = mpViewShell->GetActualPage();
+                                SdPage* pPage = mrViewShell.GetActualPage();
 
                                 if(pDrawViewShell->GetEditMode() == EditMode::MasterPage)
                                 {
@@ -583,7 +583,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
                     mpDoc->SetChanged();
 
-                    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
+                    mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
         }
@@ -610,7 +610,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
                     mpDoc->SetChanged();
-                    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
+                    mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
         }

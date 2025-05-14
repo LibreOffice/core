@@ -108,11 +108,7 @@ public:
     virtual bool doConstructOrthogonal() const;
 
 protected:
-    /**
-        @param pViewSh
-            May be NULL.
-    */
-    FuPoor (ViewShell* pViewSh,
+    FuPoor (ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
@@ -142,7 +138,7 @@ protected:
     void SwitchLayer (sal_Int32 nOffset);
 
     ::sd::View* mpView;
-    ViewShell* mpViewShell;
+    ViewShell& mrViewShell;
     VclPtr< ::sd::Window> mpWindow;
     DrawDocShell* mpDocSh;
     SdDrawDocument* mpDoc;

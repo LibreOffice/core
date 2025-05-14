@@ -78,12 +78,12 @@ namespace sd {
 
 
 FuConstructRectangle::FuConstructRectangle (
-    ViewShell*  pViewSh,
+    ViewShell&  rViewSh,
     ::sd::Window*       pWin,
     ::sd::View*         pView,
     SdDrawDocument* pDoc,
     SfxRequest&     rReq)
-    : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+    : FuConstruct(rViewSh, pWin, pView, pDoc, rReq)
     , mnFillTransparence(0)
     , mnLineStyle(SAL_MAX_UINT16)
 {
@@ -108,10 +108,10 @@ bool isSticky(const SfxRequest& rReq)
 
 }
 
-rtl::Reference<FuPoor> FuConstructRectangle::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+rtl::Reference<FuPoor> FuConstructRectangle::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
 {
     FuConstructRectangle* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructRectangle( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructRectangle( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent(bPermanent || isSticky(rReq));
     return xFunc;
@@ -121,7 +121,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
 
-    mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
+    mrViewShell.GetViewShellBase().GetToolBarManager()->SetToolBar(
         ToolBarManager::ToolBarGroup::Function,
         ToolBarManager::msDrawingObjectToolBar);
 
@@ -341,7 +341,7 @@ bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
 
     if (!bPermanent)
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
     return bReturn;
 }
@@ -507,18 +507,13 @@ void FuConstructRectangle::Deactivate()
     }
 
     // Finished drawing a signature rectangle, now set it up.
-    if (!mpViewShell)
-    {
-        return;
-    }
-
-    SfxViewShell* pViewShell = mpViewShell->GetViewShell();
+    SfxViewShell* pViewShell = mrViewShell.GetViewShell();
     svl::crypto::CertificateOrName aCertificateOrName = pViewShell->GetSigningCertificate();
     if (aCertificateOrName.m_aName.isEmpty())
     {
         aCertificateOrName.m_xCertificate = svx::SignatureLineHelper::getSignatureCertificate(
-            mpViewShell->GetObjectShell(), mpViewShell->GetViewShell(),
-            mpViewShell->GetFrameWeld());
+            mrViewShell.GetObjectShell(), mrViewShell.GetViewShell(),
+            mrViewShell.GetFrameWeld());
         if (!aCertificateOrName.m_xCertificate.is())
         {
             return;
@@ -528,7 +523,7 @@ void FuConstructRectangle::Deactivate()
     svx::SignatureLineHelper::setShapeCertificate(pViewShell, aCertificateOrName);
 
     // Update infobar to offer "finish signing".
-    SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+    SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
     if (pFrame && pFrame->HasInfoBarWithID(u"readonly"))
     {
         pFrame->RemoveInfoBar(u"readonly");

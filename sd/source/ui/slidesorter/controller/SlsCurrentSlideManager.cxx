@@ -129,11 +129,11 @@ void CurrentSlideManager::SwitchCurrentSlide (
     ReleaseCurrentSlide();
     AcquireCurrentSlide((rpDescriptor->GetPage()->GetPageNum()-1)/2);
 
-    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    if (pViewShell != nullptr && pViewShell->IsMainViewShell())
+    ViewShell& rViewShell = mrSlideSorter.GetViewShell();
+    if (rViewShell.IsMainViewShell())
     {
         // The slide sorter is the main view.
-        FrameView* pFrameView = pViewShell->GetFrameView();
+        FrameView* pFrameView = rViewShell.GetFrameView();
         if (pFrameView != nullptr)
             pFrameView->SetSelectedPage(sal::static_int_cast<sal_uInt16>(mnCurrentSlideIndex));
         mrSlideSorter.GetController().GetPageSelector().SetCoreSelection();
@@ -171,7 +171,7 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
     if(!pBase)
         return;
 
-    if (mrSlideSorter.GetViewShell() && mrSlideSorter.GetViewShell()->IsMainViewShell())
+    if (mrSlideSorter.GetViewShell().IsMainViewShell())
     {
         SdDrawDocument* pDoc = pBase->GetDocument();
         if (!pDoc)

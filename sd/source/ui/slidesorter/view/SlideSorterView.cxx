@@ -112,7 +112,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     : ::sd::View (
           *rSlideSorter.GetModel().GetDocument(),
           rSlideSorter.GetContentWindow()->GetOutDev(),
-          rSlideSorter.GetViewShell()),
+          &rSlideSorter.GetViewShell()),
       mrSlideSorter(rSlideSorter),
       mrModel(rSlideSorter.GetModel()),
       mbIsDisposed(false),
@@ -308,7 +308,7 @@ void SlideSorterView::UpdateOrientation()
 {
     // The layout of slides depends on whether the slide sorter is
     // displayed in the center or the side pane.
-    if (mrSlideSorter.GetViewShell()->IsMainViewShell())
+    if (mrSlideSorter.GetViewShell().IsMainViewShell())
         SetOrientation(Layouter::GRID);
     else
     {

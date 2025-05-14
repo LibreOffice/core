@@ -56,18 +56,18 @@ namespace sd {
 #define ATTR_SET        2       ///< Attribute unique
 
 FuObjectAnimationParameters::FuObjectAnimationParameters (
-    ViewShell*   pViewSh,
+    ViewShell&   rViewSh,
     ::sd::Window*        pWin,
     ::sd::View*      pView,
     SdDrawDocument* pDoc,
     SfxRequest&  rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuObjectAnimationParameters::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuObjectAnimationParameters::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuObjectAnimationParameters( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuObjectAnimationParameters( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -446,7 +446,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         rReq.Ignore(); // the 'old' request is not relevant any more
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        VclPtr<SfxAbstractDialog> pDlg( pFact->CreatSdActionDialog(mpViewShell->GetFrameWeld(), *aSet, mpView) );
+        VclPtr<SfxAbstractDialog> pDlg( pFact->CreatSdActionDialog(mrViewShell.GetFrameWeld(), *aSet, mpView) );
         rtl::Reference<FuObjectAnimationParameters> xThis( this ); // avoid destruction within async processing
         pDlg->StartExecuteAsync([pDlg, xThis, xRequest=std::move(xRequest), aSet=std::move(aSet)](sal_Int32 nResult){
             if (nResult == RET_OK) {
@@ -459,7 +459,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
 void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRequest, const VclPtr<SfxAbstractDialog>& pDlg )
 {
-    SfxUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
+    SfxUndoManager* pUndoMgr = mrViewShell.GetViewFrame()->GetObjectShell()->GetUndoManager();
 
     const SdrMarkList& rMarkList  = mpView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -664,7 +664,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
 
     // with 'following curves', we have an additional UndoAction
     // therefore cling? here
-    pUndoMgr->EnterListAction(aComment, aComment, 0, mpViewShell->GetViewShellBase().GetViewShellId());
+    pUndoMgr->EnterListAction(aComment, aComment, 0, mrViewShell.GetViewShellBase().GetViewShellId());
 
     // create undo group
     std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(mpDoc));

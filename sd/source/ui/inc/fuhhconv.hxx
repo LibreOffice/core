@@ -29,7 +29,7 @@ class FuHangulHanjaConversion final : public FuPoor
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     void StartConversion( LanguageType nSourceLanguage,  LanguageType nTargetLanguage,
                           const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
@@ -45,7 +45,7 @@ private:
     bool            bOwnOutliner;
 
     FuHangulHanjaConversion (
-        ViewShell* pViewSh,
+        ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,

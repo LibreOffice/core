@@ -91,21 +91,21 @@ namespace sd {
 
 
 FuInsertGraphic::FuInsertGraphic (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq,
     bool replaceExistingImage)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq),
       mbReplaceExistingImage(replaceExistingImage)
 {
 }
 
-rtl::Reference<FuPoor> FuInsertGraphic::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
+rtl::Reference<FuPoor> FuInsertGraphic::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
                                                 SdDrawDocument* pDoc, SfxRequest& rReq, bool replaceExistingImage )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertGraphic( pViewSh, pWin, pView, pDoc, rReq, replaceExistingImage ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertGraphic( rViewSh, pWin, pView, pDoc, rReq, replaceExistingImage ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -166,7 +166,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
                 aTransform.rotate( aRotation );
             }
         }
-        if( dynamic_cast< DrawViewShell *>( mpViewShell ) )
+        if( dynamic_cast< DrawViewShell *>( &mrViewShell ) )
         {
             sal_Int8    nAction = DND_ACTION_COPY;
             SdrObject* pPickObj = nullptr;
@@ -207,18 +207,18 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
 }
 
 FuInsertClipboard::FuInsertClipboard (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuInsertClipboard::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuInsertClipboard::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertClipboard( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertClipboard( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -229,7 +229,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     SotClipboardFormatId                        nFormatId;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(mpViewShell->GetFrameWeld()));
+    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(mrViewShell.GetFrameWeld()));
     pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, OUString() );
     pDlg->Insert( SotClipboardFormatId::LINK_SOURCE, OUString() );
     pDlg->Insert( SotClipboardFormatId::DRAWING, OUString() );
@@ -256,7 +256,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
                             mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
                             nAction, false, nFormatId ))
     {
-        pDrViewSh = dynamic_cast<DrawViewShell*>(mpViewShell);
+        pDrViewSh = dynamic_cast<DrawViewShell*>(&mrViewShell);
     }
 
     if (!pDrViewSh)
@@ -276,18 +276,18 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
 }
 
 FuInsertOLE::FuInsertOLE (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuInsertOLE::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuInsertOLE::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertOLE( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertOLE( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -312,7 +312,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         else if (nSlotId == SID_INSERT_MATH)
             aName = SvGlobalName(SO3_SM_CLASSID);
 
-        uno::Reference < embed::XEmbeddedObject > xObj = mpViewShell->GetViewFrame()->GetObjectShell()->
+        uno::Reference < embed::XEmbeddedObject > xObj = mrViewShell.GetViewFrame()->GetObjectShell()->
                 GetEmbeddedObjectContainer().CreateEmbeddedObject( aName.GetByteSequence(), aObjName );
         if ( xObj.is() )
         {
@@ -425,7 +425,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 aVisualSize.Width = aTmp.Width();
                 aVisualSize.Height = aTmp.Height();
                 xObj->setVisualAreaSize( nAspect, aVisualSize );
-                mpViewShell->ActivateObject(pOleObj.get(), embed::EmbedVerbs::MS_OLEVERB_SHOW);
+                mrViewShell.ActivateObject(pOleObj.get(), embed::EmbedVerbs::MS_OLEVERB_SHOW);
 
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
@@ -458,7 +458,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         if ( nSlotId == SID_INSERT_OBJECT && pNameItem )
         {
             const SvGlobalName& aClassName = pNameItem->GetValue();
-            xObj =  mpViewShell->GetViewFrame()->GetObjectShell()->
+            xObj =  mrViewShell.GetViewFrame()->GetObjectShell()->
                     GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
         }
         else
@@ -492,7 +492,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     ScopedVclPtr<SfxAbstractInsertObjectDialog> pDlg(
-                            pFact->CreateInsertObjectDialog( mpViewShell->GetFrameWeld(), SdModule::get()->GetSlotPool()->GetSlot(nSlotId)->GetCommand(),
+                            pFact->CreateInsertObjectDialog( mrViewShell.GetFrameWeld(), SdModule::get()->GetSlotPool()->GetSlot(nSlotId)->GetCommand(),
                             xStorage, &aServerLst ));
                     pDlg->Execute();
                     bCreateNew = pDlg->IsCreateNew();
@@ -503,7 +503,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         nAspect = embed::Aspects::MSOLE_ICON;
 
                     if ( xObj.is() )
-                        mpViewShell->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                        mrViewShell.GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
 
                     break;
                 }
@@ -649,12 +649,12 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 xObj->setVisualAreaSize( nAspect, aSz );
                             }
 
-                            mpViewShell->ActivateObject(pObj.get(), embed::EmbedVerbs::MS_OLEVERB_SHOW);
+                            mrViewShell.ActivateObject(pObj.get(), embed::EmbedVerbs::MS_OLEVERB_SHOW);
                         }
 
                         Size aVisSizePixel = mpWindow->GetOutputSizePixel();
                         ::tools::Rectangle aVisAreaWin = mpWindow->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
-                        mpViewShell->VisAreaChanged(aVisAreaWin);
+                        mrViewShell.VisAreaChanged(aVisAreaWin);
                         mpDocSh->SetVisArea(aVisAreaWin);
                     }
                 }
@@ -669,18 +669,18 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 }
 
 FuInsertAVMedia::FuInsertAVMedia(
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuInsertAVMedia::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuInsertAVMedia::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertAVMedia( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertAVMedia( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -725,7 +725,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
         if( mpWindow )
             mpWindow->EnterWait();
 
-        SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+        SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
         if (!pFrame)
             return;
 

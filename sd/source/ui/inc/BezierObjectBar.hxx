@@ -32,7 +32,7 @@ class BezierObjectBar final : public SfxShell
 public:
     SFX_DECL_INTERFACE(SD_IF_SDDRAWBEZIEROBJECTBAR)
 
-    BezierObjectBar(ViewShell* pSdViewShell, View* pSdView);
+    BezierObjectBar(ViewShell& rSdViewShell, View* pSdView);
     virtual ~BezierObjectBar() override;
 
     void GetAttrState(SfxItemSet& rSet);
@@ -43,7 +43,7 @@ private:
     static void InitInterface_Impl();
 
     View* mpView;
-    ViewShell* mpViewSh;
+    ViewShell& mrViewSh;
 };
 
 } // end of namespace sd

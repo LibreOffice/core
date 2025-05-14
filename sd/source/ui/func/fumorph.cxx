@@ -49,24 +49,24 @@ using namespace com::sun::star;
 namespace sd {
 
 FuMorph::FuMorph (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq )
-    :   FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    :   FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
 rtl::Reference<FuPoor> FuMorph::Create(
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq
 )
 {
-    rtl::Reference<FuPoor> xFunc( new FuMorph( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuMorph( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }

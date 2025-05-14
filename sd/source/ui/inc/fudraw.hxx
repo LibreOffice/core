@@ -60,7 +60,7 @@ public:
     virtual bool cancel() override;
 
 protected:
-    FuDraw (ViewShell* pViewSh,
+    FuDraw (ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,

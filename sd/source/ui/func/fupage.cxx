@@ -99,9 +99,9 @@ static void mergeItemSetsImpl( SfxItemSet& rTarget, const SfxItemSet& rSource )
     rTarget.Put(rSource);
 }
 
-FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
+FuPage::FuPage( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
                  SdDrawDocument* pDoc, SfxRequest& rReq )
-:   FuPoor(pViewSh, pWin, pView, pDoc, rReq),
+:   FuPoor(rViewSh, pWin, pView, pDoc, rReq),
     mbPageBckgrdDeleted( false ),
     mbMasterPage( false ),
     mbDisplayBackgroundTabPage( true ),
@@ -110,16 +110,16 @@ FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
 {
 }
 
-rtl::Reference<FuPoor> FuPage::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuPage::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuPage( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuPage( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
 
 void FuPage::DoExecute(SfxRequest& rReq)
 {
-    mpDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
+    mpDrawViewShell = dynamic_cast<DrawViewShell*>(&mrViewShell);
     DBG_ASSERT( mpDrawViewShell, "sd::FuPage::FuPage(), called without a current DrawViewShell!" );
 
     if( mpDrawViewShell )
@@ -347,7 +347,7 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
 
         // create the dialog and start async execution
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        VclPtr<SfxAbstractTabDialog> xDlg( pFact->CreateSdTabPageDialog(mpViewShell->GetFrameWeld(),
+        VclPtr<SfxAbstractTabDialog> xDlg( pFact->CreateSdTabPageDialog(mrViewShell.GetFrameWeld(),
                                            aMergedAttr.get(), mpDocSh, mbDisplayBackgroundTabPage, bIsImpressDoc) );
         rtl::Reference<FuPage> xThis( this ); // avoid destruction within async processing
         xDlg->StartExecuteAsync([xDlg, xThis, pStyleSheet, aNewAttr=std::move(aNewAttr),

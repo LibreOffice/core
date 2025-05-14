@@ -33,7 +33,7 @@ class FuConstruct3dObject final
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
     virtual void DoExecute( SfxRequest& rReq ) override;
 
     // Mouse- & Key-Events
@@ -46,7 +46,7 @@ public:
 
 private:
     FuConstruct3dObject (
-        ViewShell* pViewSh,
+        ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,

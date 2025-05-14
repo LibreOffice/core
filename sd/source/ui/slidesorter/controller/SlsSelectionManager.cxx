@@ -102,8 +102,8 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
     else
         --nNewCurrentSlide;
 
-    const auto pViewShell = mrSlideSorter.GetViewShell();
-    const auto pDrawViewShell = pViewShell ? std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell->GetViewShellBase().GetMainViewShell()) : nullptr;
+    ViewShell& rViewShell = mrSlideSorter.GetViewShell();
+    const auto pDrawViewShell = std::dynamic_pointer_cast<sd::DrawViewShell>(rViewShell.GetViewShellBase().GetMainViewShell());
     const auto pDrawView = pDrawViewShell ? pDrawViewShell->GetDrawView() : nullptr;
 
     if (pDrawView)
@@ -219,27 +219,25 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
 
 void SelectionManager::SelectionHasChanged ()
 {
-    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    if (pViewShell == nullptr)
-        return;
+    ViewShell& rViewShell = mrSlideSorter.GetViewShell();
 
-    pViewShell->Invalidate (SID_EXPAND_PAGE);
-    pViewShell->Invalidate (SID_SUMMARY_PAGE);
-    pViewShell->Invalidate(SID_SHOW_SLIDE);
-    pViewShell->Invalidate(SID_HIDE_SLIDE);
-    pViewShell->Invalidate(SID_DELETE_PAGE);
-    pViewShell->Invalidate(SID_DELETE_MASTER_PAGE);
-    pViewShell->Invalidate(SID_ASSIGN_LAYOUT);
+    rViewShell.Invalidate (SID_EXPAND_PAGE);
+    rViewShell.Invalidate (SID_SUMMARY_PAGE);
+    rViewShell.Invalidate(SID_SHOW_SLIDE);
+    rViewShell.Invalidate(SID_HIDE_SLIDE);
+    rViewShell.Invalidate(SID_DELETE_PAGE);
+    rViewShell.Invalidate(SID_DELETE_MASTER_PAGE);
+    rViewShell.Invalidate(SID_ASSIGN_LAYOUT);
 
     // StatusBar
-    pViewShell->Invalidate (SID_STATUS_PAGE);
-    pViewShell->Invalidate (SID_STATUS_LAYOUT);
-    pViewShell->Invalidate (SID_SCALE);
+    rViewShell.Invalidate (SID_STATUS_PAGE);
+    rViewShell.Invalidate (SID_STATUS_LAYOUT);
+    rViewShell.Invalidate (SID_SCALE);
 
     OSL_ASSERT(mrController.GetCurrentSlideManager());
     SharedPageDescriptor pDescriptor(mrController.GetCurrentSlideManager()->GetCurrentSlide());
     if (pDescriptor)
-        pViewShell->UpdatePreview(pDescriptor->GetPage());
+        rViewShell.UpdatePreview(pDescriptor->GetPage());
 
     // Tell the selection change listeners that the selection has changed.
     for (const auto& rLink : maSelectionChangeListeners)

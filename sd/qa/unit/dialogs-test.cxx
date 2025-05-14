@@ -547,7 +547,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             SdPage* pSdPage = pDrawDoc->GetSdPage(0, PageKind::Standard);
             CPPUNIT_ASSERT(pSdPage);
             pRetval = getSdAbstractDialogFactory()->CreateHeaderFooterDialog(
-                getViewShell(),
+                *getViewShell(),
                 Application::GetDefDialogParent(),
                 pDrawDoc,
                 pSdPage);

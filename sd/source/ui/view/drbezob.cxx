@@ -57,13 +57,13 @@ void BezierObjectBar::InitInterface_Impl()
 
 
 BezierObjectBar::BezierObjectBar(
-    ViewShell* pSdViewShell,
+    ViewShell& rSdViewShell,
     ::sd::View* pSdView)
-    : SfxShell(pSdViewShell->GetViewShell()),
+    : SfxShell(rSdViewShell.GetViewShell()),
       mpView(pSdView),
-      mpViewSh(pSdViewShell)
+      mrViewSh(rSdViewShell)
 {
-    DrawDocShell* pDocShell = mpViewSh->GetDocSh();
+    DrawDocShell* pDocShell = mrViewSh.GetDocSh();
     SetPool(&pDocShell->GetPool());
     SetUndoManager(pDocShell->GetUndoManager());
     SetRepeatTarget(mpView);
@@ -84,7 +84,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
     mpView->GetAttributes( aAttrSet );
     rSet.Put(aAttrSet, false); // <- sal_False, so DontCare-Status gets acquired
 
-    rtl::Reference<FuPoor> xFunc( mpViewSh->GetCurrentFunction() );
+    rtl::Reference<FuPoor> xFunc( mrViewSh.GetCurrentFunction() );
 
     if(xFunc.is())
     {
@@ -275,7 +275,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
             }
 
             if( (pIPPEC == mpView) && rMarkList.GetMarkCount() == 0 )
-                mpViewSh->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+                mrViewSh.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
             rReq.Ignore();
         }
@@ -292,7 +292,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
         case SID_BEZIER_MOVE:
         case SID_BEZIER_INSERT:
         {
-            rtl::Reference<FuPoor> xFunc( mpViewSh->GetCurrentFunction() );
+            rtl::Reference<FuPoor> xFunc( mrViewSh.GetCurrentFunction() );
 
             if(xFunc.is())
             {

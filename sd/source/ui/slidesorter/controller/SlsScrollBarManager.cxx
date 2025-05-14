@@ -482,21 +482,18 @@ bool ScrollBarManager::RepeatAutoScroll()
 {
     if (maAutoScrollOffset != Size(0,0))
     {
-        if (mrSlideSorter.GetViewShell() != nullptr)
-        {
-            mrSlideSorter.GetViewShell()->Scroll(
-                maAutoScrollOffset.Width(),
-                maAutoScrollOffset.Height());
-            mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
+        mrSlideSorter.GetViewShell().Scroll(
+            maAutoScrollOffset.Width(),
+            maAutoScrollOffset.Height());
+        mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
 
-            if (maAutoScrollFunctor)
-                maAutoScrollFunctor();
+        if (maAutoScrollFunctor)
+            maAutoScrollFunctor();
 
-            mbIsAutoScrollActive = true;
-            maAutoScrollTimer.Start();
+        mbIsAutoScrollActive = true;
+        maAutoScrollTimer.Start();
 
-            return true;
-        }
+        return true;
     }
 
     clearAutoScrollFunctor();

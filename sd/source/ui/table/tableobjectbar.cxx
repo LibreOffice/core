@@ -51,7 +51,7 @@ namespace sd::ui::table {
 /** creates a table object bar for the given ViewShell */
 SfxShell* CreateTableObjectBar( ViewShell& rShell, ::sd::View* pView )
 {
-    return new TableObjectBar( &rShell, pView );
+    return new TableObjectBar( rShell, pView );
 }
 
 /** registers the interfaces from the table ui */
@@ -67,12 +67,12 @@ void TableObjectBar::InitInterface_Impl()
 {
 }
 
-TableObjectBar::TableObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView )
-:   SfxShell( pSdViewShell->GetViewShell() )
+TableObjectBar::TableObjectBar( ViewShell& rSdViewShell, ::sd::View* pSdView )
+:   SfxShell( rSdViewShell.GetViewShell() )
 ,   mpView( pSdView )
-,   mpViewSh( pSdViewShell )
+,   mrViewSh( rSdViewShell )
 {
-    DrawDocShell* pDocShell = mpViewSh->GetDocSh();
+    DrawDocShell* pDocShell = mrViewSh.GetDocSh();
     if( pDocShell )
     {
         SetPool( &pDocShell->GetPool() );
@@ -102,7 +102,7 @@ void TableObjectBar::GetState( SfxItemSet& rSet )
 
 void TableObjectBar::GetAttrState( SfxItemSet& rSet )
 {
-    DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( mpViewSh );
+    DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( &mrViewSh );
     if( pDrawViewShell )
         pDrawViewShell->GetAttrState( rSet );
 }
@@ -113,7 +113,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
         return;
 
     SdrView* pView = mpView;
-    SfxBindings* pBindings = &mpViewSh->GetViewFrame()->GetBindings();
+    SfxBindings* pBindings = &mrViewSh.GetViewFrame()->GetBindings();
 
     rtl::Reference< sdr::SelectionController > xController( mpView->getSelectionController() );
     sal_uInt16 nSlotId = rReq.GetSlot();

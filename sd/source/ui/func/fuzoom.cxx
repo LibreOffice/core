@@ -41,12 +41,12 @@ const sal_uInt16 SidArrayZoom[] = {
 
 
 FuZoom::FuZoom(
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq),
       bVisible(false),
       bStartDrag(false),
       aPtr(PointerStyle::Arrow)
@@ -58,16 +58,16 @@ FuZoom::~FuZoom()
     if (bVisible)
     {
         // Hide ZoomRect
-        mpViewShell->DrawMarkRect(aZoomRect);
+        mrViewShell.DrawMarkRect(aZoomRect);
 
         bVisible = false;
         bStartDrag = false;
     }
 }
 
-rtl::Reference<FuPoor> FuZoom::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuZoom::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuZoom( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuZoom( rViewSh, pWin, pView, pDoc, rReq ) );
     return xFunc;
 }
 
@@ -98,7 +98,7 @@ bool FuZoom::MouseMove(const MouseEvent& rMEvt)
     {
         if (bVisible)
         {
-            mpViewShell->DrawMarkRect(aZoomRect);
+            mrViewShell.DrawMarkRect(aZoomRect);
         }
 
         Point aPosPix = rMEvt.GetPosPixel();
@@ -122,7 +122,7 @@ bool FuZoom::MouseMove(const MouseEvent& rMEvt)
                 {
                     aScroll.setX( aScroll.X() / ( aWorkSize.Width()  / aPageSize.Width()) );
                     aScroll.setY( aScroll.Y() / ( aWorkSize.Height() / aPageSize.Height()) );
-                    mpViewShell->Scroll(aScroll.X(), aScroll.Y());
+                    mrViewShell.Scroll(aScroll.X(), aScroll.Y());
                     aBeginPosPix = aPosPix;
                 }
             }
@@ -132,7 +132,7 @@ bool FuZoom::MouseMove(const MouseEvent& rMEvt)
             ::tools::Rectangle aRect(aBeginPos, aEndPos);
             aZoomRect = aRect;
             aZoomRect.Normalize();
-            mpViewShell->DrawMarkRect(aZoomRect);
+            mrViewShell.DrawMarkRect(aZoomRect);
             bVisible = true;
         }
     }
@@ -148,7 +148,7 @@ bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
     if (bVisible)
     {
         // Hide ZoomRect
-        mpViewShell->DrawMarkRect(aZoomRect);
+        mrViewShell.DrawMarkRect(aZoomRect);
         bVisible = false;
     }
 
@@ -181,13 +181,13 @@ bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
             aZoomRect.SetSize(aSize);
         }
 
-        mpViewShell->SetZoomRect(aZoomRect);
-        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
+        mrViewShell.SetZoomRect(aZoomRect);
+        mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
     }
 
     ::tools::Rectangle aVisAreaWin = mpWindow->PixelToLogic(::tools::Rectangle(Point(0,0),
                                            mpWindow->GetOutputSizePixel()));
-    mpViewShell->GetZoomList()->InsertZoomRect(aVisAreaWin);
+    mrViewShell.GetZoomList()->InsertZoomRect(aVisAreaWin);
 
     bStartDrag = false;
     mpWindow->ReleaseMouse();
@@ -212,7 +212,7 @@ void FuZoom::Activate()
 void FuZoom::Deactivate()
 {
     mpWindow->SetPointer( aPtr );
-    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
+    mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
 }
 } // end of namespace sd
 

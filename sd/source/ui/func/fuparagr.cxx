@@ -39,18 +39,18 @@ namespace sd {
 
 
 FuParagraph::FuParagraph (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuParagraph::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuParagraph::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuParagraph( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuParagraph( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -88,7 +88,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdParagraphTabDlg(mpViewShell->GetFrameWeld(), &aNewAttr));
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdParagraphTabDlg(mrViewShell.GetFrameWeld(), &aNewAttr));
 
         sal_uInt16 nResult = pDlg->Execute();
 
@@ -147,7 +147,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         SID_PARASPACE_DECREASE,
         0 };
 
-    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+    mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
 }
 
 void FuParagraph::Activate()

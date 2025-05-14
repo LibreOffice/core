@@ -38,38 +38,37 @@ namespace sd {
 
 
 FuNavigation::FuNavigation (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuNavigation::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuNavigation::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuNavigation( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuNavigation( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
 
 void FuNavigation::DoExecute( SfxRequest& rReq )
 {
-    assert(mpViewShell);
-    bool bSlideShow = SlideShow::IsRunning( mpViewShell->GetViewShellBase() )
-        && !SlideShow::IsInteractiveSlideshow( &mpViewShell->GetViewShellBase() ); // IASS
+    bool bSlideShow = SlideShow::IsRunning( mrViewShell.GetViewShellBase() )
+        && !SlideShow::IsInteractiveSlideshow( &mrViewShell.GetViewShellBase() ); // IASS
 
     switch ( rReq.GetSlot() )
     {
         case SID_GO_TO_FIRST_PAGE:
         {
             if (!mpView->IsTextEdit()
-                && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
+                && dynamic_cast< const DrawViewShell *>( &mrViewShell ) !=  nullptr
                 && !bSlideShow)
             {
                // jump to first page
-               static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(0);
+               static_cast<DrawViewShell*>(&mrViewShell)->SwitchPage(0);
             }
         }
         break;
@@ -77,7 +76,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
         case SID_GO_TO_PREVIOUS_PAGE:
         {
             if( !bSlideShow)
-                if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ) )
+                if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ) )
                 {
                     // With no modifier pressed we move to the previous
                     // slide.
@@ -93,11 +92,11 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
                         // deactivation the old page and activating the new
                         // one.
                         TabControl& rPageTabControl =
-                            static_cast<DrawViewShell*>(mpViewShell)
+                            static_cast<DrawViewShell*>(&mrViewShell)
                             ->GetPageTabControl();
                         if (rPageTabControl.IsReallyShown())
                             rPageTabControl.SendDeactivatePageEvent ();
-                        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage - 1);
+                        static_cast<DrawViewShell*>(&mrViewShell)->SwitchPage(nSdPage - 1);
                         if (rPageTabControl.IsReallyShown())
                             rPageTabControl.SendActivatePageEvent ();
                     }
@@ -108,7 +107,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
         case SID_GO_TO_NEXT_PAGE:
         {
             if( !bSlideShow)
-                if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
                 {
                     // With no modifier pressed we move to the next slide.
                     mpView->SdrEndTextEdit();
@@ -123,10 +122,10 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
                         // deactivation the old page and activating the new
                         // one.
                         TabControl& rPageTabControl =
-                            static_cast<DrawViewShell*>(mpViewShell)->GetPageTabControl();
+                            static_cast<DrawViewShell*>(&mrViewShell)->GetPageTabControl();
                         if (rPageTabControl.IsReallyShown())
                             rPageTabControl.SendDeactivatePageEvent ();
-                        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage + 1);
+                        static_cast<DrawViewShell*>(&mrViewShell)->SwitchPage(nSdPage + 1);
                         if (rPageTabControl.IsReallyShown())
                             rPageTabControl.SendActivatePageEvent ();
                     }
@@ -137,7 +136,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
         case SID_GO_TO_LAST_PAGE:
         {
             if (!mpView->IsTextEdit() && !bSlideShow)
-                if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
                 {
                     // jump to last page
                     SdPage* pPage = pDrawViewShell->GetActualPage();
@@ -150,7 +149,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
         case SID_GO_TO_PAGE:
         {
             if( !bSlideShow)
-                if(auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                if(auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
                 {
                     OUString sTitle = SdResId(STR_GOTO_PAGE_DLG_TITLE);
                     OUString sLabel = SdResId(STR_PAGE_NAME) + ":";
@@ -170,7 +169,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
         break;
     }
     // Refresh toolbar icons
-    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mrViewShell.GetViewFrame()->GetBindings();
     rBindings.Invalidate(SID_GO_TO_FIRST_PAGE);
     rBindings.Invalidate(SID_GO_TO_PREVIOUS_PAGE);
     rBindings.Invalidate(SID_GO_TO_NEXT_PAGE);

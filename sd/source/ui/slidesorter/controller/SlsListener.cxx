@@ -84,9 +84,8 @@ Listener::Listener (
 
     // Connect to the frame to listen for controllers being exchanged.
     bool bIsMainViewShell (false);
-    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    if (pViewShell != nullptr)
-        bIsMainViewShell = pViewShell->IsMainViewShell();
+    ViewShell& rViewShell = mrSlideSorter.GetViewShell();
+    bIsMainViewShell = rViewShell.IsMainViewShell();
     if ( ! bIsMainViewShell)
     {
         // Listen to changes of certain properties.
@@ -111,7 +110,7 @@ Listener::Listener (
     {
         ViewShell* pMainViewShell = mpBase->GetMainViewShell().get();
         if (pMainViewShell != nullptr
-            && pMainViewShell!=pViewShell)
+            && pMainViewShell!=&rViewShell)
         {
             StartListening(*pMainViewShell);
         }
@@ -174,11 +173,11 @@ void Listener::ReleaseListeners()
 
 void Listener::ConnectToController()
 {
-    ViewShell* pShell = mrSlideSorter.GetViewShell();
+    ViewShell& rShell = mrSlideSorter.GetViewShell();
 
     // Register at the controller of the main view shell (if we are that not
     // ourself).
-    if (pShell!=nullptr && pShell->IsMainViewShell())
+    if (rShell.IsMainViewShell())
         return;
 
     Reference<frame::XController> xController (mrSlideSorter.GetXController());
@@ -340,7 +339,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
                 mbIsMainViewChangePending = false;
                 ViewShell* pMainViewShell = mpBase->GetMainViewShell().get();
                 if (pMainViewShell != nullptr
-                    && pMainViewShell!=mrSlideSorter.GetViewShell())
+                    && pMainViewShell!=&mrSlideSorter.GetViewShell())
                 {
                     StartListening (*pMainViewShell);
                 }

@@ -44,18 +44,18 @@ namespace sd {
 
 
 FuSummaryPage::FuSummaryPage (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuSummaryPage::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuSummaryPage::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuSummaryPage( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuSummaryPage( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -217,7 +217,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         mpView->EndUndo();
     pOutl.reset();
 
-    DrawViewShell* pDrawViewShell= dynamic_cast< DrawViewShell* >( mpViewShell );
+    DrawViewShell* pDrawViewShell= dynamic_cast< DrawViewShell* >( &mrViewShell );
     if(pDrawViewShell)
     {
         pDrawViewShell->SwitchPage( (pSummaryPage->GetPageNum() - 1) / 2);

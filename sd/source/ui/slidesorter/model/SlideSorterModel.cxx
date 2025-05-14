@@ -406,28 +406,25 @@ void SlideSorterModel::SetDocumentSlides (
             pDescriptor->GetPage());
     }
 
-    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    if (pViewShell != nullptr)
+    ViewShell& rViewShell = mrSlideSorter.GetViewShell();
+    SdPage* pPage = rViewShell.getCurrentPage();
+    if (pPage != nullptr)
+        mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+            pPage);
+    else
     {
-        SdPage* pPage = pViewShell->getCurrentPage();
-        if (pPage != nullptr)
+        // No current page.  This can only be when the slide sorter is
+        // the main view shell.  Get current slide form frame view.
+        const FrameView* pFrameView = rViewShell.GetFrameView();
+        if (pFrameView != nullptr)
             mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
-                pPage);
+                pFrameView->GetSelectedPage());
         else
         {
-            // No current page.  This can only be when the slide sorter is
-            // the main view shell.  Get current slide form frame view.
-            const FrameView* pFrameView = pViewShell->GetFrameView();
-            if (pFrameView != nullptr)
-                mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
-                    pFrameView->GetSelectedPage());
-            else
-            {
-                // No frame view.  As a last resort use the first slide as
-                // current slide.
-                mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
-                    sal_Int32(0));
-            }
+            // No frame view.  As a last resort use the first slide as
+            // current slide.
+            mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+                sal_Int32(0));
         }
     }
 

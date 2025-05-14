@@ -44,18 +44,18 @@ namespace sd {
 
 
 FuSlideShowDlg::FuSlideShowDlg (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
+    : FuPoor( rViewSh, pWin, pView, pDoc, rReq )
 {
 }
 
-rtl::Reference<FuPoor> FuSlideShowDlg::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuSlideShowDlg::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuSlideShowDlg( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuSlideShowDlg( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -228,7 +228,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
         // live slideshow? pass pen state on immediately
         Reference< XSlideShowController > xSlideShowController(
-            SlideShow::GetSlideShowController(mpViewShell->GetViewShellBase() ) );
+            SlideShow::GetSlideShowController(mrViewShell.GetViewShellBase() ) );
         if( xSlideShowController.is() )
             if(rPresentationSettings.mbInteractive)
                 xSlideShowController->setUsePen( bValue );

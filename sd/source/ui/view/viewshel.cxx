@@ -155,7 +155,7 @@ ViewShell::ViewShell( vcl::Window* pParentWindow, ViewShellBase& rViewShellBase)
     ,   mpActiveWindow(nullptr)
     ,   mpView(nullptr)
     ,   mpFrameView(nullptr)
-    ,   mpZoomList(new ZoomList( this ))
+    ,   mpZoomList(new ZoomList( *this ))
     ,   mfLastZoomScale(0)
     ,   mbStartShowWithDialog(false)
     ,   mnPrintedHandoutPageNum(1)
@@ -1740,20 +1740,20 @@ SfxShell* ViewShellObjectBarFactory::CreateShell( ::sd::ShellId nId )
     switch (nId)
     {
         case ToolbarId::Bezier_Toolbox_Sd:
-            pShell = new ::sd::BezierObjectBar(&mrViewShell, pView);
+            pShell = new ::sd::BezierObjectBar(mrViewShell, pView);
             break;
 
         case ToolbarId::Draw_Text_Toolbox_Sd:
             pShell = new ::sd::TextObjectBar(
-                &mrViewShell, mrViewShell.GetDoc()->GetPool(), pView);
+                mrViewShell, mrViewShell.GetDoc()->GetPool(), pView);
             break;
 
         case ToolbarId::Draw_Graf_Toolbox:
-            pShell = new ::sd::GraphicObjectBar(&mrViewShell, pView);
+            pShell = new ::sd::GraphicObjectBar(mrViewShell, pView);
             break;
 
         case ToolbarId::Draw_Media_Toolbox:
-            pShell = new ::sd::MediaObjectBar(&mrViewShell, pView);
+            pShell = new ::sd::MediaObjectBar(mrViewShell, pView);
             break;
 
         case ToolbarId::Draw_Table_Toolbox:

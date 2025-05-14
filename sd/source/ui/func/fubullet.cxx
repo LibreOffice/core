@@ -55,18 +55,18 @@ const sal_Unicode CHAR_NNBSP        =   u'\x202F'; //NARROW NO-BREAK SPACE
 
 
 FuBullet::FuBullet (
-    ViewShell* pViewSh,
+    ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* _pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, _pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, _pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuBullet::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuBullet::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuBullet( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuBullet( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -104,17 +104,17 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     ::Outliner*   pOL = nullptr;
 
     // depending on ViewShell set Outliner and OutlinerView
-    if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
+    if( dynamic_cast< const DrawViewShell *>( &mrViewShell ) !=  nullptr)
     {
         pOV = mpView->GetTextEditOutlinerView();
         if (pOV)
             pOL = mpView->GetTextEditOutliner();
     }
-    else if( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr)
+    else if( dynamic_cast< const OutlineViewShell *>( &mrViewShell ) !=  nullptr)
     {
         pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
         pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-            mpViewShell->GetActiveWindow());
+            mrViewShell.GetActiveWindow());
     }
 
     // insert string
@@ -131,7 +131,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     // prepare undo
     EditUndoManager& rUndoMgr =  pOL->GetUndoManager();
     rUndoMgr.EnterListAction(SdResId(STR_UNDO_INSERT_SPECCHAR),
-                                u""_ustr, 0, mpViewShell->GetViewShellBase().GetViewShellId() );
+                                u""_ustr, 0, mrViewShell.GetViewShellBase().GetViewShellId() );
 
     // insert given text
     OUString aStr( cMark );
@@ -189,11 +189,8 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         css::uno::Reference<css::frame::XFrame> xFrame;
-        if (mpViewShell)
-        {
-            if (SfxViewFrame* pFrame = mpViewShell->GetFrame())
-                xFrame = pFrame->GetFrame().GetFrameInterface();
-        }
+        if (SfxViewFrame* pFrame = mrViewShell.GetFrame())
+            xFrame = pFrame->GetFrame().GetFrameInterface();
         VclPtr<SfxAbstractDialog> pDlg( pFact->CreateCharMapDialog(mpView->GetViewShell()->GetFrameWeld(), aSet,
             xFrame) );
 
@@ -216,7 +213,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
     ::Outliner*   pOL = nullptr;
 
     // determine depending on ViewShell Outliner and OutlinerView
-    if(dynamic_cast< const DrawViewShell *>( mpViewShell ))
+    if(dynamic_cast< const DrawViewShell *>( &mrViewShell ))
     {
         pOV = mpView->GetTextEditOutlinerView();
         if (pOV)
@@ -224,11 +221,11 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
             pOL = mpView->GetTextEditOutliner();
         }
     }
-    else if(dynamic_cast< const OutlineViewShell *>( mpViewShell ))
+    else if(dynamic_cast< const OutlineViewShell *>( &mrViewShell ))
     {
         pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
         pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-            mpViewShell->GetActiveWindow());
+            mrViewShell.GetActiveWindow());
     }
 
     // insert special character
@@ -250,7 +247,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
     aOldSet.Put( pOV->GetAttribs() );
 
     EditUndoManager& rUndoMgr = pOL->GetUndoManager();
-    ViewShellId nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
+    ViewShellId nViewShellId = mrViewShell.GetViewShellBase().GetViewShellId();
     rUndoMgr.EnterListAction(SdResId(STR_UNDO_INSERT_SPECCHAR),
                              u""_ustr, 0, nViewShellId );
     pOV->InsertText(aChars, true);

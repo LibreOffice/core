@@ -100,14 +100,14 @@ private:
 class FuNotesPane : public FuSimpleOutlinerText
 {
 public:
-    static rtl::Reference<FuPoor> Create(ViewShell* pViewSh, ::sd::Window* pWin,
+    static rtl::Reference<FuPoor> Create(ViewShell& rViewSh, ::sd::Window* pWin,
                                          ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc,
                                          SfxRequest& rReq);
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
 
 protected:
-    FuNotesPane(ViewShell* pViewShell, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView,
+    FuNotesPane(ViewShell& rViewShell, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView,
                 SdDrawDocument* pDoc, SfxRequest& rReq);
 };
 

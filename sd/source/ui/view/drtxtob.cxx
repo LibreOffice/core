@@ -82,11 +82,11 @@ void TextObjectBar::InitInterface_Impl()
 
 
 TextObjectBar::TextObjectBar (
-    ViewShell* pSdViewSh,
+    ViewShell& rSdViewSh,
     SfxItemPool& rItemPool,
     ::sd::View* pSdView )
-    : SfxShell(pSdViewSh->GetViewShell()),
-      mpViewShell( pSdViewSh ),
+    : SfxShell(rSdViewSh.GetViewShell()),
+      mrViewShell( rSdViewSh ),
       mpView( pSdView )
 {
     SetPool(&rItemPool);
@@ -104,7 +104,7 @@ TextObjectBar::TextObjectBar (
             if( pDocShell )
             {
                 SetUndoManager(pDocShell->GetUndoManager());
-                DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( pSdViewSh );
+                DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( &rSdViewSh );
                 if ( pDrawViewShell )
                     SetRepeatTarget(pSdView);
             }
@@ -123,15 +123,15 @@ TextObjectBar::~TextObjectBar()
 
 void TextObjectBar::GetCharState( SfxItemSet& rSet )
 {
-    GetCharStateImpl(mpViewShell, mpView, rSet);
+    GetCharStateImpl(mrViewShell, mpView, rSet);
 }
 
-void TextObjectBar::GetCharStateImpl(const ViewShell* pViewShell, const ::sd::View* pView, SfxItemSet& rSet)
+void TextObjectBar::GetCharStateImpl(ViewShell& rViewShell, const ::sd::View* pView, SfxItemSet& rSet)
 {
     SfxItemSet  aCharAttrSet( pView->GetDoc().GetPool() );
     pView->GetAttributes( aCharAttrSet );
 
-    SfxItemSetFixed<EE_ITEMS_START,EE_ITEMS_END> aNewAttr( pViewShell->GetPool() );
+    SfxItemSetFixed<EE_ITEMS_START,EE_ITEMS_END> aNewAttr( rViewShell.GetPool() );
 
     aNewAttr.Put(aCharAttrSet, false);
     rSet.Put(aNewAttr, false);
@@ -149,13 +149,13 @@ void TextObjectBar::GetCharStateImpl(const ViewShell* pViewShell, const ::sd::Vi
 
 void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 {
-    GetAttrStateImpl(mpViewShell, mpView, rSet, this);
+    GetAttrStateImpl(mrViewShell, mpView, rSet, this);
 }
 
 /**
  * Status of attribute items.
  */
-void TextObjectBar::GetAttrStateImpl(const ViewShell* pViewShell, ::sd::View* pView, SfxItemSet& rSet, SfxShell* pTextObjectBar)
+void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, SfxItemSet& rSet, SfxShell* pTextObjectBar)
 {
     SfxWhichIter        aIter( rSet );
     sal_uInt16              nWhich = aIter.FirstWhich();
@@ -194,19 +194,17 @@ void TextObjectBar::GetAttrStateImpl(const ViewShell* pViewShell, ::sd::View* pV
                     OutlinerView* pOLV = pView->GetTextEditOutlinerView();
                     SdrOutliner *pOutliner = pView->GetTextEditOutliner();
 
-                    assert(pViewShell);
-
                     if (OutlineView* pOView = dynamic_cast<OutlineView*>(pView))
-                        pOLV = pOView->GetViewByWindow(pViewShell->GetActiveWindow());
+                        pOLV = pOView->GetViewByWindow(rViewShell.GetActiveWindow());
 
                     if (pOutliner)
                         stretchY = pOutliner->getScalingParameters().fFontY;
 
                     if(pOLV && !pOLV->GetSelection().HasRange())
                     {
-                        if (pViewShell->GetViewShell() && pViewShell->GetViewShell()->GetWindow())
+                        if (rViewShell.GetViewShell() && rViewShell.GetViewShell()->GetWindow())
                         {
-                            LanguageType nInputLang = pViewShell->GetViewShell()->GetWindow()->GetInputLanguage();
+                            LanguageType nInputLang = rViewShell.GetViewShell()->GetWindow()->GetInputLanguage();
                             if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
                                 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
                         }
@@ -259,7 +257,7 @@ void TextObjectBar::GetAttrStateImpl(const ViewShell* pViewShell, ::sd::View* pV
                 bool bDisableDown     = true;
 
                 //fdo#78151 it doesn't make sense to promote or demote outline levels in master view.
-                const DrawViewShell* pDrawViewShell = dynamic_cast< const DrawViewShell* >(pViewShell);
+                const DrawViewShell* pDrawViewShell = dynamic_cast< const DrawViewShell* >(&rViewShell);
                 const bool bInMasterView = pDrawViewShell && pDrawViewShell->GetEditMode() == EditMode::MasterPage;
 
                 if (!bInMasterView)
@@ -267,9 +265,9 @@ void TextObjectBar::GetAttrStateImpl(const ViewShell* pViewShell, ::sd::View* pV
                     OutlinerView* pOLV = pView->GetTextEditOutlinerView();
 
                     if (OutlineView* pOView = dynamic_cast<OutlineView*>(pView))
-                        pOLV = pOView->GetViewByWindow(pViewShell->GetActiveWindow());
+                        pOLV = pOView->GetViewByWindow(rViewShell.GetActiveWindow());
 
-                    bool bOutlineViewSh = dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr;
+                    bool bOutlineViewSh = dynamic_cast< const OutlineViewShell *>( &rViewShell ) !=  nullptr;
 
                     if (pOLV)
                     {
@@ -449,7 +447,7 @@ void TextObjectBar::GetAttrStateImpl(const ViewShell* pViewShell, ::sd::View* pV
             case FN_NUM_NUMBERING_ON:
             {
                 bool bEnable = false;
-                const DrawViewShell* pDrawViewShell = dynamic_cast< const DrawViewShell* >(pViewShell);
+                const DrawViewShell* pDrawViewShell = dynamic_cast< const DrawViewShell* >(&rViewShell);
                 if (pDrawViewShell)
                 {
                     SdrView* pDrawView = pDrawViewShell->GetDrawView();
@@ -498,9 +496,8 @@ void TextObjectBar::GetAttrStateImpl(const ViewShell* pViewShell, ::sd::View* pV
     rSet.Put( aAttrSet, false ); // <- sal_False, so DontCare-Status gets acquired
 
     // these are disabled in outline-mode
-    if (!pViewShell
-        || !(dynamic_cast<const DrawViewShell*>(pViewShell)
-             || dynamic_cast<const NotesPanelViewShell*>(pViewShell)))
+    if (!(dynamic_cast<const DrawViewShell*>(&rViewShell)
+             || dynamic_cast<const NotesPanelViewShell*>(&rViewShell)))
     {
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_LEFT );
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_RIGHT );

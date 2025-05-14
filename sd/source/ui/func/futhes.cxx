@@ -48,15 +48,15 @@ class SfxRequest;
 namespace sd {
 
 
-FuThesaurus::FuThesaurus( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
+FuThesaurus::FuThesaurus( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
                   SdDrawDocument* pDoc, SfxRequest& rReq )
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+       : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuThesaurus::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuThesaurus::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuThesaurus( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuThesaurus( rViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -65,7 +65,7 @@ void FuThesaurus::DoExecute(SfxRequest& rReq)
 {
     SvxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, OUString(), mpWindow->GetFrameWeld());
 
-    if (dynamic_cast< DrawViewShell *>( mpViewShell ))
+    if (dynamic_cast< DrawViewShell *>( &mrViewShell ))
     {
         SdrTextObj* pTextObj = nullptr;
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
@@ -103,7 +103,7 @@ void FuThesaurus::DoExecute(SfxRequest& rReq)
             DBG_ASSERT(eState != EESpellState::NoSpeller, "No SpellChecker");
         }
     }
-    else if (dynamic_cast< OutlineViewShell *>( mpViewShell ))
+    else if (dynamic_cast< OutlineViewShell *>( &mrViewShell ))
     {
         Outliner* pOutliner = mpDoc->GetOutliner();
         OutlinerView* pOutlView = pOutliner->GetView(0);

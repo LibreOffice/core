@@ -630,8 +630,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
 void AccessibleSlideSorterView::Implementation::ConnectListeners()
 {
     StartListening (*mrSlideSorter.GetModel().GetDocument());
-    if (mrSlideSorter.GetViewShell() != nullptr)
-        StartListening (*mrSlideSorter.GetViewShell());
+    StartListening (mrSlideSorter.GetViewShell());
     mbListeningToDocument = true;
 
     if (mpWindow != nullptr)
@@ -661,10 +660,10 @@ void AccessibleSlideSorterView::Implementation::ReleaseListeners()
 
     if (mbListeningToDocument)
     {
-        if (mrSlideSorter.GetViewShell() != nullptr && !IsListening(*mrSlideSorter.GetViewShell()))
+        if (!IsListening(mrSlideSorter.GetViewShell()))
         {   // ??? is it even possible that ConnectListeners is called with no
             // view shell and this one with a view shell?
-            StartListening(*mrSlideSorter.GetViewShell());
+            StartListening(mrSlideSorter.GetViewShell());
         }
         EndListening (*mrSlideSorter.GetModel().GetDocument());
         mbListeningToDocument = false;
