@@ -71,7 +71,6 @@ protected:
     void SetDontMoveAttr( bool bFlag )      { m_bDontMoveAttr = bFlag; }
     void SetCharFormatAttr( bool bFlag )       { m_bCharFormatAttr = bFlag; }
     void SetOverlapAllowedAttr( bool bFlag ){ m_bOverlapAllowedAttr = bFlag; }
-    void SetDontExpandStartAttr(bool bFlag) { m_bDontExpandStart = bFlag; }
     void SetNesting(const bool bFlag)       { m_bNesting = bFlag; }
     void SetHasDummyChar(const bool bFlag)  { m_bHasDummyChar = bFlag; }
     void SetHasContent( const bool bFlag )  { m_bHasContent = bFlag; }
@@ -109,6 +108,7 @@ public:
     void SetFormatIgnoreEnd  (bool bFlag)   { m_bFormatIgnoreEnd   = bFlag; }
     bool HasContent() const                 { return m_bHasContent; }
     void SetLockExpandFlag(bool bFlag)      { m_bLockExpandFlag = bFlag; }
+    void SetDontExpandStartAttr(bool bFlag) { m_bDontExpandStart = bFlag; }
 
     inline const SfxPoolItem& GetAttr() const;
     inline       SfxPoolItem& GetAttr();

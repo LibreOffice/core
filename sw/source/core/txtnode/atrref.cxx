@@ -175,8 +175,10 @@ void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, const OU
 
     bool oldLockValue = this->IsLockExpandFlag();
     bool oldDontExpandValue = this->DontExpand();
+    bool oldDontExpandStartAttr = this->IsDontExpandStartAttr();
     this->SetLockExpandFlag(false);
     this->SetDontExpand(false);
+    this->SetDontExpandStartAttr(false);
     if (rIDCO.InsertString(aMarkers, u"XY"_ustr))
     {
         SwPaM aPasteEnd(SwPosition(rTextNode, *this->End()));
@@ -207,6 +209,7 @@ void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, const OU
     }
     this->SetDontExpand(oldDontExpandValue);
     this->SetLockExpandFlag(oldLockValue);
+    this->SetDontExpandStartAttr(oldDontExpandStartAttr);
 
 }
 
