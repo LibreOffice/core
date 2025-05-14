@@ -187,15 +187,6 @@ Reference<awt::XWindow> SAL_CALL ChildWindowPane::getWindow()
     return Pane::getWindow();
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2(
-    ChildWindowPane,
-    ChildWindowPaneInterfaceBase,
-    Pane);
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(
-    ChildWindowPane,
-    ChildWindowPaneInterfaceBase,
-    Pane);
-
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL ChildWindowPane::disposing (const lang::EventObject& rEvent)

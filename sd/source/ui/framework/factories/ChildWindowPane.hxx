@@ -74,9 +74,6 @@ public:
     virtual css::uno::Reference<css::awt::XWindow>
         SAL_CALL getWindow() override;
 
-    DECLARE_XINTERFACE()
-    DECLARE_XTYPEPROVIDER()
-
     // XEventListener
 
     virtual void SAL_CALL disposing(
