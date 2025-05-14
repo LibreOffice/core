@@ -85,7 +85,7 @@ const sal_uInt16 SidArray[] = {
 void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
 {
     FuSimpleOutlinerText::UpdateForKeyPress(rEvent);
-    pOutlineViewShell->UpdatePreview(pOutlineViewShell->GetActualPage());
+    mpViewShell->UpdatePreview(mpViewShell->GetActualPage());
 }
 
 /**
@@ -124,7 +124,6 @@ FuSimpleOutlinerText::FuSimpleOutlinerText(ViewShell* pViewShell, ::sd::Window* 
                              ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc,
                              SfxRequest& rReq)
        : FuPoor(pViewShell, pWindow, pView, pDoc, rReq),
-         pOutlineViewShell (pViewShell),
          mpSimpleOutlinerView (pView)
 {
 }

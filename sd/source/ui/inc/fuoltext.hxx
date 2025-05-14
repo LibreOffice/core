@@ -61,7 +61,6 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    ViewShell* pOutlineViewShell;
     SimpleOutlinerView* mpSimpleOutlinerView;
 };
 
