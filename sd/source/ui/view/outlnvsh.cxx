@@ -177,7 +177,6 @@ Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController()
  * Default constructor, windows must not center themselves automatically
  */
 OutlineViewShell::OutlineViewShell (
-    SfxViewFrame* /*pFrame*/,
     ViewShellBase& rViewShellBase,
     vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument)

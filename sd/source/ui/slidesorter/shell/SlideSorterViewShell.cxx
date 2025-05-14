@@ -101,7 +101,6 @@ void SlideSorterViewShell::InitInterface_Impl()
 
 
 std::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
-    SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
     vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument)
@@ -110,7 +109,7 @@ std::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
     try
     {
         pViewShell.reset(
-            new SlideSorterViewShell(pFrame,rViewShellBase,pParentWindow,pFrameViewArgument));
+            new SlideSorterViewShell(rViewShellBase,pParentWindow,pFrameViewArgument));
         pViewShell->Initialize();
         if (pViewShell->mpSlideSorter == nullptr)
             pViewShell.reset();
@@ -123,7 +122,6 @@ std::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
 }
 
 SlideSorterViewShell::SlideSorterViewShell (
-    SfxViewFrame* /*pFrame*/,
     ViewShellBase& rViewShellBase,
     vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument)

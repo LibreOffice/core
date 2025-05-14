@@ -35,8 +35,8 @@ public:
             The frame view that makes it possible to pass information from
             one view shell to the next.
     */
-    NotesPanelViewShell(SfxViewFrame* pFrame, ViewShellBase& rViewShellBase,
-                        vcl::Window* pParentWindow, FrameView* pFrameView);
+    NotesPanelViewShell(ViewShellBase& rViewShellBase, vcl::Window* pParentWindow,
+                        FrameView* pFrameView);
 
     virtual ~NotesPanelViewShell() override;
 

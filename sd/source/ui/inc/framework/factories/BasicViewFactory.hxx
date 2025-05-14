@@ -93,7 +93,6 @@ private:
 
     std::shared_ptr<ViewDescriptor> CreateView (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        SfxViewFrame& rFrame,
         vcl::Window& rWindow,
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane,
         FrameView* pFrameView,
@@ -101,7 +100,6 @@ private:
 
     std::shared_ptr<ViewShell> CreateViewShell (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        SfxViewFrame& rFrame,
         vcl::Window& rWindow,
         FrameView* pFrameView);
 

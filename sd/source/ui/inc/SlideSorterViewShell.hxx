@@ -46,7 +46,6 @@ private:
 
 public:
     static std::shared_ptr<SlideSorterViewShell> Create(
-        SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
         FrameView* pFrameView);
@@ -201,7 +200,6 @@ private:
     bool mbIsArrangeGUIElementsPending;
 
     SlideSorterViewShell (
-        SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
         FrameView* pFrameView);

@@ -53,7 +53,6 @@ public:
             one view shell to the next.
     */
     OutlineViewShell (
-        SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
         FrameView* pFrameView);

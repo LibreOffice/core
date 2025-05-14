@@ -109,8 +109,8 @@ void NotesPanelViewShell::InitInterface_Impl()
 /**
  * Default constructor, windows must not center themselves automatically
  */
-NotesPanelViewShell::NotesPanelViewShell(SfxViewFrame* /*pFrame*/, ViewShellBase& rViewShellBase,
-                                         vcl::Window* pParentWindow, FrameView* pFrameViewArgument)
+NotesPanelViewShell::NotesPanelViewShell(ViewShellBase& rViewShellBase, vcl::Window* pParentWindow,
+                                         FrameView* pFrameViewArgument)
     : ViewShell(pParentWindow, rViewShellBase)
 {
     if (pFrameViewArgument != nullptr)

@@ -172,12 +172,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     if (xPane.is())
         pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
 
-    // Get the view frame.
-    SfxViewFrame* pFrame = nullptr;
-    if (mpBase != nullptr)
-        pFrame = &mpBase->GetViewFrame();
-
-    if (!pFrame || !mpBase || !pWindow)
+    if (!mpBase || !pWindow)
         return nullptr;
 
     // Try to get the view from the cache.
@@ -186,7 +181,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     // When the requested view is not in the cache then create a new view.
     if (pDescriptor == nullptr)
     {
-        pDescriptor = CreateView(rxViewId, *pFrame, *pWindow, xPane, pFrameView, bIsCenterPane);
+        pDescriptor = CreateView(rxViewId, *pWindow, xPane, pFrameView, bIsCenterPane);
     }
 
     rtl::Reference<ViewShellWrapper> xView = pDescriptor->mxView;
@@ -253,7 +248,6 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
 
 std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
     const Reference<XResourceId>& rxViewId,
-    SfxViewFrame& rFrame,
     vcl::Window& rWindow,
     const Reference<XPane>& rxPane,
     FrameView* pFrameView,
@@ -263,7 +257,6 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
 
     pDescriptor->mpViewShell = CreateViewShell(
         rxViewId,
-        rFrame,
         rWindow,
         pFrameView);
     pDescriptor->mxViewId = rxViewId;
@@ -297,7 +290,6 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
 
 std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     const Reference<XResourceId>& rxViewId,
-    SfxViewFrame& rFrame,
     vcl::Window& rWindow,
     FrameView* pFrameView)
 {
@@ -324,7 +316,6 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     {
         pViewShell =
             std::make_shared<OutlineViewShell>(
-                &rFrame,
                 *mpBase,
                 &rWindow,
                 pFrameView);
@@ -362,7 +353,6 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     else if (sViewURL == FrameworkHelper::msSlideSorterURL)
     {
         pViewShell = ::sd::slidesorter::SlideSorterViewShell::Create (
-            &rFrame,
             *mpBase,
             &rWindow,
             pFrameView);
@@ -370,7 +360,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     }
     else if (sViewURL == FrameworkHelper::msNotesPanelViewURL)
     {
-        pViewShell = std::make_shared<NotesPanelViewShell>(&rFrame, *mpBase, &rWindow, pFrameView);
+        pViewShell = std::make_shared<NotesPanelViewShell>(*mpBase, &rWindow, pFrameView);
         pViewShell->GetContentWindow()->set_id(u"notes_panel_win"_ustr);
     }
 
