@@ -64,7 +64,6 @@ public:
 
     const css::uno::Reference<css::awt::XWindow>& GetBorderWindow() const;
     void SetTitle (const OUString& rsTitle);
-    const OUString& GetTitle() const;
     const rtl::Reference<PresenterPaneBorderPainter>& GetPaneBorderPainter() const;
 
     void initialize(const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,

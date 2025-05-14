@@ -94,11 +94,6 @@ void PresenterPaneBase::SetTitle (const OUString& rsTitle)
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
 
-const OUString& PresenterPaneBase::GetTitle() const
-{
-    return msTitle;
-}
-
 const rtl::Reference<PresenterPaneBorderPainter>&
     PresenterPaneBase::GetPaneBorderPainter() const
 {
