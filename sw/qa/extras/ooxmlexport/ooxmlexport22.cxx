@@ -199,6 +199,20 @@ CPPUNIT_TEST_FIXTURE(Test, testBadFormulaResult)
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[4]/w:t", u"6");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatDocxExport)
+{
+    // Given a document with <del>A<format>B</format>C</del> style redlines:
+    // When exporting that document:
+    loadAndSave("del-then-format.docx");
+
+    // Then make sure delete "under" format uses the <w:delText> markup:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - In <>, XPath '/w:document/w:body/w:p/w:del[2]/w:r/w:delText' not found
+    // i.e. <w:t> was used, not <w:delText>.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:del[2]/w:r/w:delText", u"BBB");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf139418, "tdf139418.docx")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(

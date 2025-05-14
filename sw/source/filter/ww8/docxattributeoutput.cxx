@@ -3852,6 +3852,36 @@ static bool impl_WriteRunText( FSHelperPtr const & pSerializer, sal_Int32 nTextT
     return true;
 }
 
+namespace
+{
+/// Decides if pRedlineData is a delete or is something on a delete.
+RedlineType GetRedlineTypeForTextToken(const SwRedlineData* pRedlineData)
+{
+    if (!pRedlineData)
+    {
+        return RedlineType::None;
+    }
+
+    if (pRedlineData->GetType() == RedlineType::Delete)
+    {
+        return RedlineType::Delete;
+    }
+
+    const SwRedlineData* pNext = pRedlineData->Next();
+    if (!pNext)
+    {
+        return RedlineType::None;
+    }
+
+    if (pNext->GetType() == RedlineType::Delete)
+    {
+        return RedlineType::Delete;
+    }
+
+    return RedlineType::None;
+}
+}
+
 void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCharSet*/, const OUString& rSymbolFont )
 {
     if( m_closeHyperlinkInThisRun )
@@ -3888,7 +3918,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
                   // tdf#150166 save tracked moving around TOC as w:ins, w:del
                   SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
 
-    if ( m_pRedlineData && m_pRedlineData->GetType() == RedlineType::Delete && !bMoved )
+    if (GetRedlineTypeForTextToken(m_pRedlineData) == RedlineType::Delete && !bMoved)
     {
         nTextToken = XML_delText;
     }
