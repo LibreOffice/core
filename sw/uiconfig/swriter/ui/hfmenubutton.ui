@@ -52,11 +52,11 @@
       <object class="GtkMenuItem" id="insert_pagecount_in_range">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="headerfootermenu|insert_pagecount_in_range">Insert Page Count In Range</property>
+        <property name="label" translatable="yes" context="headerfootermenu|insert_pagecount_in_range">Insert Page Count In Page Numbering Range</property>
         <property name="use-underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="insert_pagecount_in_range-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="headerfootermenu|insert_pagecount_in_range|tooltip_text">Insert number of pages In the range of pages until the next page numbering reset.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="headerfootermenu|insert_pagecount_in_range|tooltip_text">Insert number of pages in the range of pages until the next page numbering change.</property>
           </object>
         </child>
       </object>
