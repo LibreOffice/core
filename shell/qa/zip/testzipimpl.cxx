@@ -46,10 +46,9 @@ TestZipImpl::~TestZipImpl() {}
 
 bool TestZipImpl::test_directory()
 {
-    ZipFile::DirectoryPtr_t contents = zipFile.GetDirectory();
-    std::vector<std::string>& stringVector = *contents;
-    std::sort(stringVector.begin(), stringVector.end());
-    return expectedContents == stringVector;
+    std::vector<std::string> contents = zipFile.GetDirectory();
+    std::sort(contents.begin(), contents.end());
+    return expectedContents == contents;
 }
 
 bool TestZipImpl::test_hasContentCaseInSensitive() { return zipFile.HasContent("mimetype"); }

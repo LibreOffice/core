@@ -38,65 +38,47 @@ namespace
 
 struct LocalFileHeader
 {
-    unsigned short min_version;
-    unsigned short general_flag;
-    unsigned short compression;
-    unsigned short lastmod_time;
-    unsigned short lastmod_date;
-    unsigned crc32;
-    unsigned compressed_size;
-    unsigned uncompressed_size;
-    unsigned short filename_size;
-    unsigned short extra_field_size;
+    unsigned short min_version = 0;
+    unsigned short general_flag = 0;
+    unsigned short compression = 0;
+    unsigned short lastmod_time = 0;
+    unsigned short lastmod_date = 0;
+    unsigned crc32 = 0;
+    unsigned compressed_size = 0;
+    unsigned uncompressed_size = 0;
     std::string filename;
     std::string extra_field;
-    LocalFileHeader()
-        : min_version(0), general_flag(0), compression(0), lastmod_time(0), lastmod_date(0),
-          crc32(0), compressed_size(0), uncompressed_size(0), filename_size(0), extra_field_size(0),
-          filename(), extra_field() {}
 };
 
 struct CentralDirectoryEntry
 {
-    unsigned short creator_version;
-    unsigned short min_version;
-    unsigned short general_flag;
-    unsigned short compression;
-    unsigned short lastmod_time;
-    unsigned short lastmod_date;
-    unsigned crc32;
-    unsigned compressed_size;
-    unsigned uncompressed_size;
-    unsigned short filename_size;
-    unsigned short extra_field_size;
-    unsigned short file_comment_size;
-    unsigned short disk_num;
-    unsigned short internal_attr;
-    unsigned external_attr;
-    unsigned offset;
+    unsigned short creator_version = 0;
+    unsigned short min_version = 0;
+    unsigned short general_flag = 0;
+    unsigned short compression = 0;
+    unsigned short lastmod_time = 0;
+    unsigned short lastmod_date = 0;
+    unsigned crc32 = 0;
+    unsigned compressed_size = 0;
+    unsigned uncompressed_size = 0;
+    unsigned short disk_num = 0;
+    unsigned short internal_attr = 0;
+    unsigned external_attr = 0;
+    unsigned offset = 0;
     std::string filename;
     std::string extra_field;
     std::string file_comment;
-    CentralDirectoryEntry()
-        : creator_version(0), min_version(0), general_flag(0), compression(0), lastmod_time(0),
-          lastmod_date(0), crc32(0), compressed_size(0), uncompressed_size(0), filename_size(0),
-          extra_field_size(0), file_comment_size(0), disk_num(0), internal_attr(0),
-          external_attr(0), offset(0), filename(), extra_field(), file_comment() {}
 };
 
 struct CentralDirectoryEnd
 {
-    unsigned short disk_num;
-    unsigned short cdir_disk;
-    unsigned short disk_entries;
-    unsigned short cdir_entries;
-    unsigned cdir_size;
-    unsigned cdir_offset;
-    unsigned short comment_size;
+    unsigned short disk_num = 0;
+    unsigned short cdir_disk = 0;
+    unsigned short disk_entries = 0;
+    unsigned short cdir_entries = 0;
+    unsigned cdir_size = 0;
+    unsigned cdir_offset = 0;
     std::string comment;
-    CentralDirectoryEnd()
-        : disk_num(0), cdir_disk(0), disk_entries(0), cdir_entries(0),
-          cdir_size(0), cdir_offset(0), comment_size(0), comment() {}
 };
 
 #define CDIR_ENTRY_SIG 0x02014b50
@@ -159,8 +141,8 @@ bool readCentralDirectoryEnd(StreamInterface *stream, CentralDirectoryEnd &end)
         end.cdir_entries = readShort(stream);
         end.cdir_size = readInt(stream);
         end.cdir_offset = readInt(stream);
-        end.comment_size = readShort(stream);
-        end.comment.assign(readString(stream, end.comment_size));
+        unsigned short comment_size = readShort(stream);
+        end.comment.assign(readString(stream, comment_size));
     }
     catch (...)
     {
@@ -186,16 +168,16 @@ bool readCentralDirectoryEntry(StreamInterface *stream, CentralDirectoryEntry &e
         entry.crc32 = readInt(stream);
         entry.compressed_size = readInt(stream);
         entry.uncompressed_size = readInt(stream);
-        entry.filename_size = readShort(stream);
-        entry.extra_field_size = readShort(stream);
-        entry.file_comment_size = readShort(stream);
+        unsigned short filename_size = readShort(stream);
+        unsigned short extra_field_size = readShort(stream);
+        unsigned short file_comment_size = readShort(stream);
         entry.disk_num = readShort(stream);
         entry.internal_attr = readShort(stream);
         entry.external_attr = readInt(stream);
         entry.offset = readInt(stream);
-        entry.filename.assign(readString(stream, entry.filename_size));
-        entry.extra_field.assign(readString(stream, entry.extra_field_size));
-        entry.file_comment.assign(readString(stream, entry.file_comment_size));
+        entry.filename.assign(readString(stream, filename_size));
+        entry.extra_field.assign(readString(stream, extra_field_size));
+        entry.file_comment.assign(readString(stream, file_comment_size));
     }
     catch (...)
     {
@@ -220,10 +202,10 @@ bool readLocalFileHeader(StreamInterface *stream, LocalFileHeader &header)
         header.crc32 = readInt(stream);
         header.compressed_size = readInt(stream);
         header.uncompressed_size = readInt(stream);
-        header.filename_size = readShort(stream);
-        header.extra_field_size = readShort(stream);
-        header.filename.assign(readString(stream, header.filename_size));
-        header.extra_field.assign(readString(stream, header.extra_field_size));
+        unsigned short filename_size = readShort(stream);
+        unsigned short extra_field_size = readShort(stream);
+        header.filename.assign(readString(stream, filename_size));
+        header.extra_field.assign(readString(stream, extra_field_size));
     }
     catch (...)
     {
@@ -323,30 +305,51 @@ bool isZipStream(StreamInterface *stream)
     return true;
 }
 
-} // anonymous namespace
-
-namespace internal
+// Iteration ends when Func returns true
+template <typename Func>
+    requires std::is_invocable_r_v<bool, Func, const CentralDirectoryEntry&>
+bool IterateEntries(StreamInterface* stream, Func func)
 {
-
-namespace {
-
-/* for case in-sensitive string comparison */
-struct stricmp
-{
-    explicit stricmp(const std::string &str) : str_(str)
-    {}
-
-    bool operator() (const std::string &other)
+    if (!findCentralDirectoryEnd(stream))
+        return false;
+    CentralDirectoryEnd end;
+    if (!readCentralDirectoryEnd(stream, end))
+        return false;
+    stream->sseek(end.cdir_offset, SEEK_SET);
+    CentralDirectoryEntry entry;
+    while (stream->stell() != -1
+           && o3tl::make_unsigned(stream->stell()) < end.cdir_offset + end.cdir_size)
     {
-        return (0 == _stricmp(str_.c_str(), other.c_str()));
+        if (!readCentralDirectoryEntry(stream, entry))
+            return false;
+        if (func(entry))
+            return true;
     }
-
-    std::string str_;
-};
-
+    return false;
 }
 
-} // namespace internal
+bool FindEntry(StreamInterface* stream, const std::string& name,
+               /* out, opt */ CentralDirectoryEntry* entry = nullptr)
+{
+    return IterateEntries(
+        stream,
+        [&name, entry](const CentralDirectoryEntry& candidate)
+        {
+            //#i34314# we need to compare package content names
+            //case in-sensitive as it is not defined that such
+            //names must be handled case sensitive
+            if (name.length() == candidate.filename.length()
+                && _strnicmp(name.c_str(), candidate.filename.c_str(), name.length()) == 0)
+            {
+                if (entry)
+                    *entry = candidate;
+                return true;
+            }
+            return false;
+        });
+}
+
+} // anonymous namespace
 
 /** Checks whether a file is a zip file or not
 
@@ -440,30 +443,12 @@ ZipFile::~ZipFile()
 }
 
 /** Provides an interface to read the uncompressed data of a content of the zip file
-
-    @precond    The specified content must exist in this file
-            ppstm must not be NULL
 */
 void ZipFile::GetUncompressedContent(
     const std::string &ContentName, /*inout*/ ZipContentBuffer_t &ContentBuffer)
 {
-    if (!findCentralDirectoryEnd(m_pStream))
-        return;
-    CentralDirectoryEnd end;
-    if (!readCentralDirectoryEnd(m_pStream, end))
-        return;
-    m_pStream->sseek(end.cdir_offset, SEEK_SET);
     CentralDirectoryEntry entry;
-    while (m_pStream->stell() != -1 && o3tl::make_unsigned(m_pStream->stell()) < end.cdir_offset + end.cdir_size)
-    {
-        if (!readCentralDirectoryEntry(m_pStream, entry))
-            return;
-        if (ContentName.length() == entry.filename_size && !_stricmp(entry.filename.c_str(), ContentName.c_str()))
-            break;
-    }
-    if (ContentName.length() != entry.filename_size)
-        return;
-    if (_stricmp(entry.filename.c_str(), ContentName.c_str()))
+    if (!FindEntry(m_pStream, ContentName, &entry))
         return;
     m_pStream->sseek(entry.offset, SEEK_SET);
     LocalFileHeader header;
@@ -472,21 +457,19 @@ void ZipFile::GetUncompressedContent(
     if (!areHeadersConsistent(header, entry))
         return;
     ContentBuffer.clear();
-    ContentBuffer = ZipContentBuffer_t(entry.uncompressed_size);
     if (!entry.compression)
+    {
+        ContentBuffer.resize(entry.uncompressed_size);
         m_pStream->sread(reinterpret_cast<unsigned char *>(ContentBuffer.data()), entry.uncompressed_size);
+    }
     else
     {
-        int ret;
-        z_stream strm;
+        z_stream strm{
+            .next_in = Z_NULL, .avail_in = 0, .zalloc = Z_NULL, .zfree = Z_NULL, .opaque = Z_NULL
+        };
 
         /* allocate inflate state */
-        strm.zalloc = Z_NULL;
-        strm.zfree = Z_NULL;
-        strm.opaque = Z_NULL;
-        strm.avail_in = 0;
-        strm.next_in = Z_NULL;
-        ret = inflateInit2(&strm,-MAX_WBITS);
+        int ret = inflateInit2(&strm,-MAX_WBITS);
         if (ret != Z_OK)
             return;
 
@@ -497,56 +480,42 @@ void ZipFile::GetUncompressedContent(
         strm.avail_in = entry.compressed_size;
         strm.next_in = reinterpret_cast<Bytef *>(tmpBuffer.data());
 
+        ContentBuffer.resize(entry.uncompressed_size);
         strm.avail_out = entry.uncompressed_size;
         strm.next_out = reinterpret_cast<Bytef *>(ContentBuffer.data());
         ret = inflate(&strm, Z_FINISH);
+        (void)inflateEnd(&strm);
         switch (ret)
         {
         case Z_NEED_DICT:
         case Z_DATA_ERROR:
         case Z_MEM_ERROR:
-            (void)inflateEnd(&strm);
             ContentBuffer.clear();
             return;
         }
-        (void)inflateEnd(&strm);
     }
 }
 
 /** Returns a list with the content names contained within this file
 
 */
-ZipFile::DirectoryPtr_t ZipFile::GetDirectory() const
+std::vector<std::string> ZipFile::GetDirectory() const
 {
-    DirectoryPtr_t dir(new Directory_t());
-    if (!findCentralDirectoryEnd(m_pStream))
-        return dir;
-    CentralDirectoryEnd end;
-    if (!readCentralDirectoryEnd(m_pStream, end))
-        return dir;
-    m_pStream->sseek(end.cdir_offset, SEEK_SET);
-    CentralDirectoryEntry entry;
-    while (m_pStream->stell() != -1 && o3tl::make_unsigned(m_pStream->stell()) < end.cdir_offset + end.cdir_size)
-    {
-        if (!readCentralDirectoryEntry(m_pStream, entry))
-            return dir;
-        if (entry.filename_size)
-            dir->push_back(entry.filename);
-    }
+    std::vector<std::string> dir;
+    IterateEntries(m_pStream,
+                   [&dir](const CentralDirectoryEntry& entry)
+                   {
+                       if (!entry.filename.empty())
+                           dir.push_back(entry.filename);
+                       return false;
+                   });
     return dir;
 }
 
-/** Convenience query function may even realized with
-    iterating over a ZipFileDirectory returned by
-    GetDirectory */
+/** Convenience query function */
 bool ZipFile::HasContent(const std::string &ContentName) const
 {
-    //#i34314# we need to compare package content names
-    //case in-sensitive as it is not defined that such
-    //names must be handled case sensitive
-    DirectoryPtr_t dir = GetDirectory();
-
-    return std::any_of(dir->begin(), dir->end(), internal::stricmp(ContentName));
+    return FindEntry(m_pStream, ContentName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

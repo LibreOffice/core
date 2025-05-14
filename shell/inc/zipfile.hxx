@@ -33,8 +33,6 @@ class StreamInterface;
 class ZipFile
 {
 public:
-    typedef std::vector<std::string> Directory_t;
-    typedef std::unique_ptr<Directory_t> DirectoryPtr_t;
     typedef std::vector<char> ZipContentBuffer_t;
 
 public:
@@ -100,12 +98,8 @@ public:
     @param      ContentName
                 The name of the content in the zip file
 
-    @param      ppstm
-                Pointer to pointer, will receive an interface pointer
-                to IUnknown on success
-
-    @precond    The specified content must exist in this file
-                ppstm must not be NULL
+    @param      ContentBuffer
+                Will receive the data on success
 
     @throws     std::bad_alloc if the necessary buffer could not be
                 allocated
@@ -120,11 +114,9 @@ public:
 
         @throws ZipException if an error in the zlib happens
     */
-    DirectoryPtr_t GetDirectory() const;
+    std::vector<std::string> GetDirectory() const;
 
-    /** Convenience query function may even realized with
-        iterating over a ZipFileDirectory returned by
-        GetDirectory
+    /** Convenience query function
     */
     bool HasContent(const std::string& ContentName) const;
 
