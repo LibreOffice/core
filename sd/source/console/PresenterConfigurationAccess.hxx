@@ -75,8 +75,7 @@ public:
         @param rsPathToNode
             The relative path from the root (as given the constructor) to the node.
     */
-    css::uno::Any GetConfigurationNode (
-        const OUString& rsPathToNode);
+    css::uno::Any GetConfigurationNode(const OUString& rsPathToNode) const;
 
     /** Return <TRUE/> when opening the configuration (via creating a new
         PresenterConfigurationAccess object) or previous calls to

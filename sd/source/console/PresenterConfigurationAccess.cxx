@@ -76,7 +76,7 @@ bool PresenterConfigurationAccess::IsValid() const
     return mxRoot.is();
 }
 
-Any PresenterConfigurationAccess::GetConfigurationNode (const OUString& sPathToNode)
+Any PresenterConfigurationAccess::GetConfigurationNode(const OUString& sPathToNode) const
 {
     return GetConfigurationNode(
         Reference<container::XHierarchicalNameAccess>(mxRoot, UNO_QUERY),
