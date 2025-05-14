@@ -855,7 +855,7 @@ void PresenterScreen::SetupView(
         aViewDescriptor = iDescriptor->second;
 
     // Prepare the pane.
-    OSL_ASSERT(mpPaneContainer);
+    assert(mpPaneContainer);
     mpPaneContainer->PreparePane(
         xPaneId,
         rsViewURL,
