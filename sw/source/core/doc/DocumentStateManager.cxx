@@ -1586,7 +1586,7 @@ void DocumentStateManager::SetModified()
 #if ENABLE_YRS
 void DocumentStateManager::YrsCommitModified()
 {
-    if (m_pYrsSupplier->CommitTransaction())
+    if (m_pYrsSupplier->CommitTransaction() && m_pYrsReader.is())
     {
         uno::Sequence<sal_Int8> buf(5);
         sal_Int8 * it{buf.getArray()};

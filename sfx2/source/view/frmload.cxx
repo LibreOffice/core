@@ -634,7 +634,9 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
 #if ENABLE_YRS
     uno::Reference<connection::XConnection> xConnection;
-    if (!xModel.is() && aDescriptor.getOrDefault(u"URL"_ustr, OUString()) == "private:factory/swriter" && !getenv("YRSACCEPT"))
+    if (!xModel.is()
+        && aDescriptor.getOrDefault(u"URL"_ustr, OUString()) == "private:factory/swriter"
+        && getenv("YRSCONNECT"))
     {
         SAL_INFO("sfx.yrs", "YRS connect sfx2");
 

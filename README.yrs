@@ -29,8 +29,9 @@ Currently, communication happens over a hard-coded pipe:
   (you can also create a new Writer document but that will be boring if all
   you can do is insert comments into empty doc)
 
-* start another soffice with a different user profile, create new Writer
-  document, and it will connect and load the document from the other side
+* start another soffice YRSCONNECT=1 with a different user profile, create
+  new Writer document, and it will connect and load the document from the
+  other side
 
 All sorts of paragraph and character formattings should work inside comments.
 
