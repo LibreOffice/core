@@ -47,7 +47,6 @@ Reference<awt::XWindow> PresenterHelper::createWindow (
 
     // Create a new window.
     VclPtr<vcl::Window> pWindow = VclPtr<vcl::Window>::Create(pParentWindow);
-    Reference<awt::XWindow> xWindow (pWindow->GetComponentInterface(), UNO_QUERY);
 
     pWindow->Show(bInitiallyVisible);
 
@@ -56,7 +55,7 @@ Reference<awt::XWindow> PresenterHelper::createWindow (
     pWindow->SetParentClipMode(ParentClipMode::NoClip);
     pWindow->SetPaintTransparent(true);
 
-    return xWindow;
+    return VCLUnoHelper::GetInterface(pWindow);
 }
 
 Reference<rendering::XCanvas> PresenterHelper::createSharedCanvas (
