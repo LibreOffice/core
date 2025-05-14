@@ -49,7 +49,6 @@ public:
     void GetCharState( SfxItemSet& rSet );
     static void GetCharStateImpl(const ViewShell* mpViewShell, const ::sd::View* mpView, SfxItemSet& rSet);
     void Execute( SfxRequest &rReq );
-    static void ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxRequest& rReq, SfxShell* pTextObjectBar);
 
 private:
     ViewShell* mpViewShell;
