@@ -283,10 +283,7 @@ void PresenterController::UpdatePaneTitles()
     static constexpr OUStringLiteral sSlideCountPlaceholder (u"SLIDE_COUNT");
 
     // Get string for slide count.
-    OUString sSlideCount (u"---"_ustr);
-    Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
-    if (xIndexAccess.is())
-        sSlideCount = OUString::number(xIndexAccess->getCount());
+    const OUString sSlideCount = OUString::number(mxSlideShowController->getSlideCount());
 
     // Get string for current slide index.
     OUString sCurrentSlideNumber (OUString::number(mnCurrentSlideIndex + 1));
