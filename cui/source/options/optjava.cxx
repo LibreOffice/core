@@ -748,8 +748,8 @@ void SvxJavaParameterDlg::EditParameter()
     SvxNameDialog aNameDialog(m_xDialog.get(), editableClassPath, OUString(),
                             CuiResId(RID_CUISTR_JAVA_START_PARAM));
 
-    aNameDialog.SetCheckName([](OUString sNewName) -> bool {
-        return !o3tl::trim(sNewName).empty();
+    aNameDialog.SetCheckName([](const OUString& rNewName) -> bool {
+        return !o3tl::trim(rNewName).empty();
     });
 
     if (!aNameDialog.run())
