@@ -58,6 +58,9 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 
+#include <strings.hrc>
+#include <vcl/abstdlg.hxx>
+
 #define POS_CONTENT 0
 #define POS_INDEX   1
 
@@ -134,6 +137,7 @@ SwIndexMarkPane::SwIndexMarkPane(std::shared_ptr<weld::Dialog> xDialog, weld::Bu
     , m_bDel(false)
     , m_bNewMark(bNewDlg)
     , m_bSelected(false)
+    , m_bModified(false)
     , m_bPhoneticED0_ChangedByUser(false)
     , m_bPhoneticED1_ChangedByUser(false)
     , m_bPhoneticED2_ChangedByUser(false)
@@ -161,8 +165,9 @@ SwIndexMarkPane::SwIndexMarkPane(std::shared_ptr<weld::Dialog> xDialog, weld::Bu
     , m_xApplyToAllCB(rBuilder.weld_check_button(u"applytoallcb"_ustr))
     , m_xSearchCaseSensitiveCB(rBuilder.weld_check_button(u"searchcasesensitivecb"_ustr))
     , m_xSearchCaseWordOnlyCB(rBuilder.weld_check_button(u"searchcasewordonlycb"_ustr))
-    , m_xOKBT(bNewDlg ? rBuilder.weld_button(u"insert"_ustr) : rBuilder.weld_button(u"ok"_ustr))
+    , m_xOKBT(rBuilder.weld_button(u"insert"_ustr))
     , m_xCloseBT(rBuilder.weld_button(u"close"_ustr))
+    , m_xResetBT(rBuilder.weld_button(u"reset"_ustr))
     , m_xDelBT(rBuilder.weld_button(u"delete"_ustr))
     , m_xPrevSameBT(rBuilder.weld_button(u"first"_ustr))
     , m_xNextSameBT(rBuilder.weld_button(u"last"_ustr))
@@ -210,6 +215,7 @@ SwIndexMarkPane::SwIndexMarkPane(std::shared_ptr<weld::Dialog> xDialog, weld::Bu
     m_xKey1DCB->connect_changed(LINK(this,SwIndexMarkPane,      KeyDCBModifyHdl));
     m_xKey2DCB->connect_changed(LINK(this,SwIndexMarkPane,     KeyDCBModifyHdl));
     m_xCloseBT->connect_clicked(LINK(this,SwIndexMarkPane,      CloseHdl));
+    m_xResetBT->connect_clicked(LINK(this,SwIndexMarkPane,      ResetHdl));
     m_xEntryED->connect_changed(LINK(this,SwIndexMarkPane,     ModifyEditHdl));
     m_xNewBT->connect_clicked(LINK(this, SwIndexMarkPane,       NewUserIdxHdl));
     m_xApplyToAllCB->connect_toggled(LINK(this, SwIndexMarkPane, SearchTypeHdl));
@@ -218,11 +224,22 @@ SwIndexMarkPane::SwIndexMarkPane(std::shared_ptr<weld::Dialog> xDialog, weld::Bu
     m_xPhoneticED2->connect_changed(LINK(this,SwIndexMarkPane, PhoneticEDModifyHdl));
     m_xSyncED->connect_clicked(LINK(this, SwIndexMarkPane, SyncSelectionHdl));
 
+    m_xSearchCaseWordOnlyCB->connect_toggled(LINK(this, SwIndexMarkPane, GenericToggleModifiedHdl));
+    m_xSearchCaseSensitiveCB->connect_toggled(LINK(this, SwIndexMarkPane, GenericToggleModifiedHdl));
+    m_xMainEntryCB->connect_toggled(LINK(this, SwIndexMarkPane, GenericToggleModifiedHdl));
+    m_xLevelNF->connect_changed(LINK(this, SwIndexMarkPane, GenericEntryModifiedHdl));
+
     if (m_bNewMark)
+    {
         m_xDelBT->hide();
+        m_xOKBT->show();
+    }
     else
+    {
         m_xNewBT->hide();
-    m_xOKBT->show();
+        m_xResetBT->show();
+        m_xResetBT->set_sensitive(m_bModified);
+    }
     m_xOKBT->connect_clicked(LINK(this, SwIndexMarkPane, InsertHdl));
 
     m_xEntryED->grab_focus();
@@ -492,6 +509,8 @@ void SwIndexMarkPane::InsertUpdate()
 
     nKey1Pos = m_xKey1DCB->find_text(m_xKey1DCB->get_active_text());
     nKey2Pos = m_xKey2DCB->find_text(m_xKey2DCB->get_active_text());
+
+    SetModified(false);
 }
 
 // insert mark
@@ -672,21 +691,26 @@ IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl, weld::Button&, void)
 
 IMPL_LINK( SwIndexMarkPane, SearchTypeHdl, weld::Toggleable&, rBox, void)
 {
+    SetModified(true);
     const bool bEnable = rBox.get_active() && rBox.get_sensitive();
     m_xSearchCaseWordOnlyCB->set_sensitive(bEnable);
     m_xSearchCaseSensitiveCB->set_sensitive(bEnable);
 }
 
-IMPL_LINK(SwIndexMarkPane, InsertHdl, weld::Button&, rButton, void)
+IMPL_LINK_NOARG(SwIndexMarkPane, InsertHdl, weld::Button&, void)
 {
     Apply();
-    //close the dialog if only one entry is available
-    if(!m_bNewMark && !m_xPrevBT->get_visible() && !m_xNextBT->get_visible())
-        CloseHdl(rButton);
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl, weld::Button&, void)
 {
+    if (!m_bDel && m_bModified &&
+        (!m_bNewMark ||
+         (!m_pSh->HasReadonlySel() &&
+         (!m_xEntryED->get_text().isEmpty() || m_pSh->GetCursorCnt(false)))
+        ) && ShowWarning4Modifications() == RET_YES)
+            Apply();
+
     if (m_bNewMark)
     {
         if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
@@ -696,20 +720,47 @@ IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl, weld::Button&, void)
         }
     }
     else
-    {
         m_xDialog->response(RET_CLOSE);
-    }
+}
+
+IMPL_LINK_NOARG(SwIndexMarkPane, ResetHdl, weld::Button&, void)
+{
+    UpdateDialog();
+}
+
+IMPL_LINK_NOARG(SwIndexMarkPane, GenericEntryModifiedHdl, weld::Entry&, void)
+{
+    SetModified(true);
+}
+
+IMPL_LINK_NOARG(SwIndexMarkPane, GenericToggleModifiedHdl, weld::Toggleable&, void)
+{
+    SetModified(true);
 }
 
 // select index type only when inserting
 IMPL_LINK(SwIndexMarkPane, ModifyListBoxHdl, weld::ComboBox&, rBox, void)
 {
+    SetModified(true);
     ModifyHdl(rBox);
 }
 
 IMPL_LINK(SwIndexMarkPane, ModifyEditHdl, weld::Entry&, rEdit, void)
 {
+    SetModified(true);
     ModifyHdl(rEdit);
+}
+
+short SwIndexMarkPane::ShowWarning4Modifications()
+{
+    short nresult = RET_NO;
+    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+    auto pDlg = pFact->CreateQueryDialog(
+        m_xDialog.get(), SwResId(STR_QUERY_CLOSE_TITLE),
+        SwResId(STR_QUERY_CLOSE_TEXT), SwResId(STR_QUERY_CLOSE_QUESTION), false);
+    nresult = pDlg->Execute();
+
+    return nresult;
 }
 
 void SwIndexMarkPane::ModifyHdl(const weld::Widget& rBox)
@@ -788,28 +839,32 @@ void SwIndexMarkPane::ModifyHdl(const weld::Widget& rBox)
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NextHdl, weld::Button&, void)
 {
-    InsertUpdate();
+    if (m_bModified && ShowWarning4Modifications() == RET_YES)
+        InsertUpdate();
     m_pTOXMgr->NextTOXMark();
     UpdateDialog();
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NextSameHdl, weld::Button&, void)
 {
-    InsertUpdate();
+    if (m_bModified && ShowWarning4Modifications() == RET_YES)
+        InsertUpdate();
     m_pTOXMgr->NextTOXMark(true);
     UpdateDialog();
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, PrevHdl, weld::Button&, void)
 {
-    InsertUpdate();
+    if (m_bModified && ShowWarning4Modifications() == RET_YES)
+        InsertUpdate();
     m_pTOXMgr->PrevTOXMark();
     UpdateDialog();
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, PrevSameHdl, weld::Button&, void)
 {
-    InsertUpdate();
+    if (m_bModified && ShowWarning4Modifications() == RET_YES)
+        InsertUpdate();
     m_pTOXMgr->PrevTOXMark(true);
     UpdateDialog();
 }
@@ -824,7 +879,9 @@ IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl, weld::Button&, void)
         UpdateDialog();
     else
     {
+        m_bDel = true;
         CloseHdl(*m_xCloseBT);
+        m_bDel = false;
         if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
             pViewFrm->GetBindings().Invalidate(FN_EDIT_IDX_ENTRY_DLG);
     }
@@ -933,11 +990,14 @@ void SwIndexMarkPane::UpdateDialog()
     m_pSh->SwapPam();
 
     m_pSh->EndCursorMove();
+
+    SetModified(false);
 }
 
 // Remind whether the edit boxes for Phonetic reading are changed manually
 IMPL_LINK(SwIndexMarkPane, PhoneticEDModifyHdl, weld::Entry&, rEdit, void)
 {
+    SetModified(true);
     if (m_xPhoneticED0.get() == &rEdit)
     {
         m_bPhoneticED0_ChangedByUser = !rEdit.get_text().isEmpty();
@@ -955,6 +1015,7 @@ IMPL_LINK(SwIndexMarkPane, PhoneticEDModifyHdl, weld::Entry&, rEdit, void)
 // Enable Disable of the 2nd key
 IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, weld::ComboBox&, rBox, void )
 {
+    SetModified(true);
     if (m_xKey1DCB.get() == &rBox)
     {
         bool bEnable = !rBox.get_active_text().isEmpty();
@@ -1005,6 +1066,15 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, weld::ComboBox&, rBox, void )
     m_xPhoneticED1->set_sensitive(bKey1HasText && m_bIsPhoneticReadingEnabled);
     m_xPhoneticFT2->set_sensitive(bKey2HasText && m_bIsPhoneticReadingEnabled);
     m_xPhoneticED2->set_sensitive(bKey2HasText && m_bIsPhoneticReadingEnabled);
+}
+
+void SwIndexMarkPane::SetModified(bool bModified)
+{
+    if (m_bModified == bModified)
+        return;
+
+    m_bModified = bModified;
+    m_xResetBT->set_sensitive(bModified);
 }
 
 SwIndexMarkPane::~SwIndexMarkPane()

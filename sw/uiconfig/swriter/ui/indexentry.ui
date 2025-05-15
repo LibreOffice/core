@@ -89,8 +89,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="insert">
-                <property name="label" translatable="yes" context="indexentry|insert">Insert</property>
+              <object class="GtkButton" id="reset">
+                <property name="label" translatable="yes" context="indexentry">Reset</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
                 <property name="has-default">True</property>
@@ -104,14 +104,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes" context="stock">_Apply</property>
+              <object class="GtkButton" id="insert">
+                <property name="label" translatable="yes" context="indexentry|insert">Insert</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
                 <property name="has-default">True</property>
                 <property name="receives-default">True</property>
                 <property name="no-show-all">True</property>
-                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -726,7 +725,7 @@
       <action-widget response="-7">close</action-widget>
       <action-widget response="101">delete</action-widget>
       <action-widget response="102">insert</action-widget>
-      <action-widget response="-5">ok</action-widget>
+      <action-widget response="103">reset</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
     <child internal-child="accessible">

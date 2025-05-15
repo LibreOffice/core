@@ -1568,6 +1568,11 @@
 #define STR_QUERY_DELALLCOMMENTS_QUESTION NC_("STR_QUERY_DELALLCOMMENTS_QUESTION", "Are you sure you want to delete all comments?")
 #define STR_QUERY_DELALLCOMMENTSAUTHOR_QUESTION NC_("STR_QUERY_DELALLCOMMENTS_QUESTION", "Are you sure you want to delete all comments by %AUTHOR?")
 
+// To translators: title, text, question for confirmation whether to switch overwrite mode on
+#define STR_QUERY_CLOSE_TITLE NC_("STR_QUERY_CLOSE_TITLE", "Confirm changes")
+#define STR_QUERY_CLOSE_TEXT NC_("STR_QUERY_CLOSE_TEXT", "The current index entry was modified.")
+#define STR_QUERY_CLOSE_QUESTION NC_("STR_QUERY_CLOSE_QUESTION", "Do you want to save changes?")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
