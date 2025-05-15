@@ -135,11 +135,12 @@ public:
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
 
     class Context;
+    class Element;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 
-    class ElementContainerPart;
+    using ElementContainerPart = std::vector<rtl::Reference<Element>>;
     typedef std::shared_ptr<ElementContainerPart> SharedElementContainerPart;
     typedef ::std::vector<SharedElementContainerPart> ElementContainer;
     ElementContainer maElementContainer;

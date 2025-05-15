@@ -109,14 +109,12 @@ public:
 
 //===== PresenterToolBar::Element =============================================
 
-namespace {
-
 typedef cppu::WeakComponentImplHelper<
     css::document::XEventListener,
     css::frame::XStatusListener
     > ElementInterfaceBase;
 
-class Element
+class PresenterToolBar::Element
     : private ::cppu::BaseMutex,
       public ElementInterfaceBase
 {
@@ -182,18 +180,11 @@ private:
     bool mbIsEnabled;
 };
 
-} // end of anonymous namespace
-
-class PresenterToolBar::ElementContainerPart
-    : public ::std::vector<rtl::Reference<Element> >
-{
-};
-
 //===== Button ================================================================
 
 namespace {
 
-class Button : public Element
+class Button : public PresenterToolBar::Element
 {
 public:
     static ::rtl::Reference<Element> Create (
@@ -227,7 +218,7 @@ private:
 
 //===== Label =================================================================
 
-class Label : public Element
+class Label : public PresenterToolBar::Element
 {
 public:
     explicit Label (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
@@ -258,7 +249,7 @@ public:
     virtual void TimeHasChanged (const oslDateTime& rCurrentTime) = 0;
 protected:
     explicit TimeLabel(const ::rtl::Reference<PresenterToolBar>& rpToolBar);
-    using Element::disposing;
+    using PresenterToolBar::Element::disposing;
     virtual void SAL_CALL disposing() override;
 private:
     class Listener : public PresenterClockTimer::Listener
@@ -317,7 +308,7 @@ private:
     virtual void TimeHasChanged (const oslDateTime& rCurrentTime) override;
 };
 
-class VerticalSeparator : public Element
+class VerticalSeparator : public PresenterToolBar::Element
 {
 public:
     explicit VerticalSeparator (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
@@ -331,7 +322,7 @@ protected:
         const Reference<rendering::XCanvas>& rxCanvas) override;
 };
 
-class HorizontalSeparator : public Element
+class HorizontalSeparator : public PresenterToolBar::Element
 {
 public:
     explicit HorizontalSeparator (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
@@ -412,7 +403,7 @@ void SAL_CALL PresenterToolBar::disposing()
         mxWindow = nullptr;
     }
 
-    // Dispose tool bar elements.
+    // Dispose tool bar PresenterToolBar::Elements.
     for (const auto& rxPart : maElementContainer)
     {
         OSL_ASSERT(rxPart != nullptr);
@@ -1115,9 +1106,7 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterToolBarView::getCurrentPage()
 
 //===== PresenterToolBar::Element =============================================
 
-namespace {
-
-Element::Element (
+PresenterToolBar::Element::Element (
     ::rtl::Reference<PresenterToolBar> pToolBar)
     : ElementInterfaceBase(m_aMutex),
       mpToolBar(std::move(pToolBar)),
@@ -1133,7 +1122,7 @@ Element::Element (
     }
 }
 
-void Element::SetModes (
+void PresenterToolBar::Element::SetModes (
     const SharedElementMode& rpNormalMode,
     const SharedElementMode& rpMouseOverMode,
     const SharedElementMode& rpSelectedMode,
@@ -1148,38 +1137,38 @@ void Element::SetModes (
     mpMode = rpNormalMode;
 }
 
-void Element::disposing()
+void PresenterToolBar::Element::disposing()
 {
 }
 
-awt::Size const & Element::GetBoundingSize (
+awt::Size const & PresenterToolBar::Element::GetBoundingSize (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
     maSize = CreateBoundingSize(rxCanvas);
     return maSize;
 }
 
-awt::Rectangle Element::GetBoundingBox() const
+awt::Rectangle PresenterToolBar::Element::GetBoundingBox() const
 {
     return awt::Rectangle(maLocation.X,maLocation.Y, maSize.Width, maSize.Height);
 }
 
-void Element::CurrentSlideHasChanged()
+void PresenterToolBar::Element::CurrentSlideHasChanged()
 {
     UpdateState();
 }
 
-void Element::SetLocation (const awt::Point& rLocation)
+void PresenterToolBar::Element::SetLocation (const awt::Point& rLocation)
 {
     maLocation = rLocation;
 }
 
-void Element::SetSize (const geometry::RealSize2D& rSize)
+void PresenterToolBar::Element::SetSize (const geometry::RealSize2D& rSize)
 {
     maSize = awt::Size(sal_Int32(0.5+rSize.Width), sal_Int32(0.5+rSize.Height));
 }
 
-bool Element::SetState (
+bool PresenterToolBar::Element::SetState (
     const bool bIsOver,
     const bool bIsPressed)
 {
@@ -1232,13 +1221,13 @@ bool Element::SetState (
     return bModified;
 }
 
-void Element::Invalidate (const bool bSynchronous)
+void PresenterToolBar::Element::Invalidate (const bool bSynchronous)
 {
     OSL_ASSERT(mpToolBar.is());
     mpToolBar->InvalidateArea(GetBoundingBox(), bSynchronous);
 }
 
-bool Element::IsOutside (const awt::Rectangle& rBox)
+bool PresenterToolBar::Element::IsOutside (const awt::Rectangle& rBox)
 {
     if (rBox.X >= maLocation.X+maSize.Width)
         return true;
@@ -1253,12 +1242,12 @@ bool Element::IsOutside (const awt::Rectangle& rBox)
 }
 
 
-bool Element::IsFilling() const
+bool PresenterToolBar::Element::IsFilling() const
 {
     return false;
 }
 
-void Element::UpdateState()
+void PresenterToolBar::Element::UpdateState()
 {
     OSL_ASSERT(mpToolBar);
     OSL_ASSERT(mpToolBar->GetPresenterController());
@@ -1277,18 +1266,18 @@ void Element::UpdateState()
 
 //----- lang::XEventListener --------------------------------------------------
 
-void SAL_CALL Element::disposing (const css::lang::EventObject&) {}
+void SAL_CALL PresenterToolBar::Element::disposing (const css::lang::EventObject&) {}
 
 //----- document::XEventListener ----------------------------------------------
 
-void SAL_CALL Element::notifyEvent (const css::document::EventObject&)
+void SAL_CALL PresenterToolBar::Element::notifyEvent (const css::document::EventObject&)
 {
     UpdateState();
 }
 
 //----- frame::XStatusListener ------------------------------------------------
 
-void SAL_CALL Element::statusChanged (const css::frame::FeatureStateEvent& rEvent)
+void SAL_CALL PresenterToolBar::Element::statusChanged (const css::frame::FeatureStateEvent& rEvent)
 {
     bool bIsSelected (mbIsSelected);
     bool bIsEnabled (rEvent.IsEnabled);
@@ -1303,7 +1292,6 @@ void SAL_CALL Element::statusChanged (const css::frame::FeatureStateEvent& rEven
     }
 }
 
-} // end of anonymous namespace
 
 //===== ElementMode ===========================================================
 
@@ -1371,7 +1359,7 @@ void ElementMode::ReadElementMode (
 
 namespace {
 
-::rtl::Reference<Element> Button::Create (
+::rtl::Reference<PresenterToolBar::Element> Button::Create (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
 {
     ::rtl::Reference<Button> pElement (new Button(rpToolBar));
@@ -1381,7 +1369,7 @@ namespace {
 
 Button::Button (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
-    : Element(rpToolBar),
+    : PresenterToolBar::Element(rpToolBar),
       mbIsListenerRegistered(false)
 {
     OSL_ASSERT(mpToolBar);
@@ -1406,7 +1394,7 @@ void Button::disposing()
         mbIsListenerRegistered = false;
         mpToolBar->GetPresenterController()->GetWindowManager()->RemoveLayoutListener(this);
     }
-    Element::disposing();
+    PresenterToolBar::Element::disposing();
 }
 
 void Button::Paint (
@@ -1527,7 +1515,7 @@ PresenterBitmapDescriptor::Mode Button::GetMode() const
 void SAL_CALL Button::disposing (const css::lang::EventObject& rEvent)
 {
     mbIsListenerRegistered = false;
-    Element::disposing(rEvent);
+    PresenterToolBar::Element::disposing(rEvent);
 }
 
 } // end of anonymous namespace
@@ -1537,7 +1525,7 @@ void SAL_CALL Button::disposing (const css::lang::EventObject& rEvent)
 namespace {
 
 Label::Label (const ::rtl::Reference<PresenterToolBar>& rpToolBar)
-    : Element(rpToolBar)
+    : PresenterToolBar::Element(rpToolBar)
 {
 }
 
@@ -1585,7 +1573,7 @@ void Label::Paint (
 bool Label::SetState (const bool, const bool)
 {
     // For labels there is no mouse over effect.
-    return Element::SetState(false, false);
+    return PresenterToolBar::Element::SetState(false, false);
 }
 
 } // end of anonymous namespace
@@ -1730,7 +1718,7 @@ void TimeLabel::ConnectToTimer()
 
 //===== CurrentTimeLabel ======================================================
 
-::rtl::Reference<Element> CurrentTimeLabel::Create (
+::rtl::Reference<PresenterToolBar::Element> CurrentTimeLabel::Create (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
 {
     ::rtl::Reference<TimeLabel> pElement(new CurrentTimeLabel(rpToolBar));
@@ -1767,7 +1755,7 @@ void CurrentTimeLabel::SetModes (
 
 //===== PresentationTimeLabel =================================================
 
-::rtl::Reference<Element> PresentationTimeLabel::Create (
+::rtl::Reference<PresenterToolBar::Element> PresentationTimeLabel::Create (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
 {
     ::rtl::Reference<TimeLabel> pElement(new PresentationTimeLabel(rpToolBar));
@@ -1910,7 +1898,7 @@ void PresentationTimeLabel::SetModes (
 
 VerticalSeparator::VerticalSeparator (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
-    : Element(rpToolBar)
+    : PresenterToolBar::Element(rpToolBar)
 {
 }
 
@@ -1959,7 +1947,7 @@ bool VerticalSeparator::IsFilling() const
 
 HorizontalSeparator::HorizontalSeparator (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
-    : Element(rpToolBar)
+    : PresenterToolBar::Element(rpToolBar)
 {
 }
 
