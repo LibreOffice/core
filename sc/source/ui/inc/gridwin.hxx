@@ -48,7 +48,7 @@ class ScDPFieldButton;
 class ScOutputData;
 class SdrObject;
 class SdrEditView;
-class ScNoteMarker;
+class ScNoteOverlay;
 class SdrHdlList;
 class ScTransferObj;
 struct SpellCallbackInfo;
@@ -160,7 +160,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     ScHSplitPos             eHWhich;
     ScVSplitPos             eVWhich;
 
-    std::unique_ptr<ScNoteMarker, o3tl::default_delete<ScNoteMarker>> mpNoteMarker;
+    std::unique_ptr<ScNoteOverlay, o3tl::default_delete<ScNoteOverlay>> mpNoteOverlay;
 
     std::shared_ptr<ScFilterListBox> mpFilterBox;
     std::unique_ptr<ScCheckListMenuControl> mpAutoFilterPopup;
@@ -400,6 +400,8 @@ public:
     void            FakeButtonUp();
 
     const Point&    GetMousePosPixel() const { return aCurMousePos; }
+    ScSplitPos      getScSplitPos() const { return eWhich; }
+
     void            UpdateStatusPosSize();
 
     void            ClickExtern();
@@ -450,7 +452,7 @@ public:
     void            UpdateListValPos( bool bVisible, const ScAddress& rPos );
 
     bool            ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard );
-    void            HideNoteMarker();
+    void            HideNoteOverlay();
 
     /// MapMode for the drawinglayer objects.
     MapMode         GetDrawMapMode( bool bForce = false );

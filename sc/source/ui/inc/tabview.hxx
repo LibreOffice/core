@@ -284,7 +284,7 @@ protected:
 
     void            MakeDrawView( TriState nForceDesignMode );
 
-    void            HideNoteMarker();
+    void            HideNoteOverlay();
 
     void            UpdateIMap( SdrObject* pObj );
 

@@ -19,51 +19,48 @@
 
 #pragma once
 
-#include <vcl/mapmod.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/vclptr.hxx>
-#include <tools/gen.hxx>
 #include <address.hxx>
-#include <postit.hxx>
+#include <rtl/ref.hxx>
+#include <tools/gen.hxx>
+#include <svx/sdr/overlay/overlayobjectlist.hxx>
 
-namespace vcl { class Window; }
-
-class SdrModel;
+class ScGridWindow;
 class SdrCaptionObj;
 
-class ScNoteMarker
+class ScNoteOverlay : public Timer
 {
-private:
-    VclPtr<vcl::Window>     m_pWindow;
-    VclPtr<vcl::Window>     m_pRightWin;
-    VclPtr<vcl::Window>     m_pBottomWin;
-    VclPtr<vcl::Window>     m_pDiagWin;
-    ScDocument* m_pDoc;
-    ScAddress   m_aDocPos;
-    OUString    m_aUserText;
-    tools::Rectangle   m_aVisRect;
-    Timer       m_aTimer;
-    MapMode     m_aMapMode;
-    bool        m_bLeft;
-    bool        m_bByKeyboard;
+    ScGridWindow&                   mrScGridWindow;
+    ScAddress                       maDocPos;
+    OUString                        maUserText;
+    sdr::overlay::OverlayObjectList maNoteOverlayGroup;
+    rtl::Reference<SdrCaptionObj>   mxObject;
+    drawinglayer::primitive2d::Primitive2DContainer maSequence;
+    bool                            mbLeft;
+    bool                            mbKeyboard;
 
-    tools::Rectangle       m_aRect;
-    std::unique_ptr<SdrModel>           m_pModel;
-    rtl::Reference<SdrCaptionObj> m_xObject;
-    bool            m_bVisible;
-    DECL_LINK( TimeHdl, Timer*, void );
+    tools::Rectangle calculateVisibleRectangle();
+    const drawinglayer::primitive2d::Primitive2DContainer& getOrCreatePrimitive2DSequence();
+    void createAdditionalRepresentations();
+    void createOverlaySubContent(
+        ScGridWindow* pTarget,
+        const basegfx::B2DHomMatrix& rTransformToPixels,
+        const basegfx::B2DPoint& rTopLeft);
 
 public:
-                ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
-                                ScDocument* pD, const ScAddress& aPos, OUString aUser,
-                                const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard);
-                ~ScNoteMarker();
+    ScNoteOverlay(
+        ScGridWindow& rScGridWindow,
+        ScAddress& aPos,
+        OUString aUser,
+        bool bLeftEdge,
+        bool bForce,
+        bool bKeyboard);
+    ~ScNoteOverlay();
 
-    void        Draw();
-    void        InvalidateWin();
-
-    const ScAddress& GetDocPos() const       { return m_aDocPos; }
-    bool        IsByKeyboard() const    { return m_bByKeyboard; }
+    virtual void Invoke() override;
+    bool IsByKeyboard() const { return mbKeyboard; }
+    const ScAddress& GetDocPos() const { return maDocPos; }
 };
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

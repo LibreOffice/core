@@ -76,7 +76,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if (nParts & ( PaintPartFlags::Left | PaintPartFlags::Top ))    // only if widths or heights changed
                 UpdateAllOverlays();
 
-            HideNoteMarker();
+            HideNoteOverlay();
         }
     }
     else if (rHint.GetId() == SfxHintId::ScEditView) // create Edit-View
@@ -90,7 +90,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             SCCOL nCol = pEditViewHint->GetCol();
             SCROW nRow = pEditViewHint->GetRow();
             {
-                HideNoteMarker();
+                HideNoteOverlay();
 
                 MakeEditView( pEditViewHint->GetEngine(), nCol, nRow );
 

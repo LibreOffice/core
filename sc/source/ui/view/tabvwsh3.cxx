@@ -991,7 +991,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_ZOOM_IN:
         case SID_ZOOM_OUT:
             {
-                HideNoteMarker();
+                HideNoteOverlay();
 
                 if (!GetViewData().GetViewShell()->GetViewFrame().GetFrame().IsInPlace())
                 {

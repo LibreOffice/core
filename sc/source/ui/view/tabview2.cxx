@@ -1607,11 +1607,11 @@ void ScTabView::StopMarking()
         pRowBar[eV]->StopMarking();
 }
 
-void ScTabView::HideNoteMarker()
+void ScTabView::HideNoteOverlay()
 {
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
         if (pWin && pWin->IsVisible())
-            pWin->HideNoteMarker();
+            pWin->HideNoteOverlay();
 }
 
 void ScTabView::MakeDrawLayer()

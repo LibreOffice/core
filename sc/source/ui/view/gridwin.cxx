@@ -458,7 +458,7 @@ void ScGridWindow::dispose()
     ImpDestroyOverlayObjects();
 
     mpFilterBox.reset();
-    mpNoteMarker.reset();
+    mpNoteOverlay.reset();
     mpAutoFilterPopup.reset();
     mpDPFieldPopup.reset();
     aComboButton.SetOutputDevice(nullptr);
@@ -1858,7 +1858,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     // so the following query is no longer necessary:
     ClickExtern();  // deletes FilterBox when available
 
-    HideNoteMarker();
+    HideNoteOverlay();
 
     bEEMouse = false;
 
@@ -2784,8 +2784,8 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 {
     aCurMousePos = rMEvt.GetPosPixel();
 
-    if (rMEvt.IsLeaveWindow() && mpNoteMarker && !mpNoteMarker->IsByKeyboard())
-        HideNoteMarker();
+    if (rMEvt.IsLeaveWindow() && mpNoteOverlay && !mpNoteOverlay->IsByKeyboard())
+        HideNoteOverlay();
 
     ScModule* pScMod = ScModule::get();
     if (pScMod->IsModalMode(mrViewData.GetSfxDocShell()))
@@ -3134,7 +3134,7 @@ void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
     if (mpFilterBox || nPagebreakMouse)
         return;
 
-    HideNoteMarker();
+    HideNoteOverlay();
 
     CommandEvent aDragEvent( rPosPixel, CommandEventId::StartDrag, true );
 
@@ -3778,7 +3778,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         }
         //  query for existing note marker before calling ViewShell's keyboard handling
         //  which may remove the marker
-        bool bHadKeyMarker = mpNoteMarker && mpNoteMarker->IsByKeyboard();
+        bool bHadKeyMarker(mpNoteOverlay && mpNoteOverlay->IsByKeyboard());
         ScTabViewShell* pViewSh = mrViewData.GetViewShell();
 
         if (mrViewData.GetDocShell()->GetProgress())
@@ -3813,7 +3813,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         if ( aCode.GetCode() == KEY_ESCAPE && aCode.GetModifier() == 0 )
         {
             if ( bHadKeyMarker )
-                HideNoteMarker();
+                HideNoteOverlay();
             else
                 pViewSh->Escape();
             return;
@@ -3824,7 +3824,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             //  (hard-coded because F1 can't be configured)
 
             if ( bHadKeyMarker )
-                HideNoteMarker();       // hide when previously visible
+                HideNoteOverlay();       // hide when previously visible
             else
                 ShowNoteMarker( mrViewData.GetCurX(), mrViewData.GetCurY(), true );
             return;
@@ -5119,7 +5119,7 @@ void ScGridWindow::UpdateEditViewPos()
 void ScGridWindow::ScrollPixel( tools::Long nDifX, tools::Long nDifY )
 {
     ClickExtern();
-    HideNoteMarker();
+    HideNoteOverlay();
 
     SetMapMode(MapMode(MapUnit::MapPixel));
     Scroll( nDifX, nDifY, ScrollFlags::Children );

@@ -498,7 +498,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
 void ScViewFunc::ShowNote( bool bShow )
 {
     if( bShow )
-        HideNoteMarker();
+        HideNoteOverlay();
     const ScViewData& rViewData = GetViewData();
     ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
     // show note moved to ScDocFunc, to be able to use it in notesuno.cxx
@@ -532,7 +532,7 @@ void ScViewFunc::EditNote()
         return;
 
     // hide temporary note caption
-    HideNoteMarker();
+    HideNoteOverlay();
     // show caption object without changing internal visibility state
     pNote->ShowCaptionTemp( aPos );
 

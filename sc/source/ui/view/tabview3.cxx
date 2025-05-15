@@ -3596,7 +3596,7 @@ void ScTabView::ZoomChanged()
     rBindings.Invalidate(SID_ZOOM_IN);
     rBindings.Invalidate(SID_ZOOM_OUT);
 
-    HideNoteMarker();
+    HideNoteOverlay();
 
     // To not change too much, use pWin here
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get();

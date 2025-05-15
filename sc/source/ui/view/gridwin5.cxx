@@ -152,15 +152,15 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
     {
         bool bNew = true;
         bool bFast = false;
-        if (mpNoteMarker) // A note already shown
+        if (mpNoteOverlay) // A note already shown
         {
-            if (mpNoteMarker->GetDocPos() == aCellPos)
+            if (mpNoteOverlay->GetDocPos() == aCellPos)
                 bNew = false; // then stop
             else
                 bFast = true; // otherwise, at once
 
             //  marker which was shown for ctrl-F1 isn't removed by mouse events
-            if (mpNoteMarker->IsByKeyboard() && !bKeyboard)
+            if (mpNoteOverlay->IsByKeyboard() && !bKeyboard)
                 bNew = false;
         }
         if (bNew)
@@ -168,31 +168,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
             if (bKeyboard)
                 bFast = true; // keyboard also shows the marker immediately
 
-            mpNoteMarker.reset();
-
-            bool bHSplit = mrViewData.GetHSplitMode() != SC_SPLIT_NONE;
-            bool bVSplit = mrViewData.GetVSplitMode() != SC_SPLIT_NONE;
-
-            vcl::Window* pLeft = mrViewData.GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT );
-            vcl::Window* pRight = bHSplit ? mrViewData.GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT ) : nullptr;
-            vcl::Window* pBottom = bVSplit ? mrViewData.GetView()->GetWindowByPos( SC_SPLIT_BOTTOMLEFT ) : nullptr;
-            vcl::Window* pDiagonal = (bHSplit && bVSplit) ? mrViewData.GetView()->GetWindowByPos( SC_SPLIT_BOTTOMRIGHT ) : nullptr;
-            assert(pLeft && "ScGridWindow::ShowNoteMarker - missing top-left grid window");
-
-            /*  If caption is shown from right or bottom windows, adjust
-                mapmode to include size of top-left window. */
-            MapMode aMapMode = GetDrawMapMode( true );
-            Size aLeftSize = pLeft->PixelToLogic( pLeft->GetOutputSizePixel(), aMapMode );
-            Point aOrigin = aMapMode.GetOrigin();
-            if( (this == pRight) || (this == pDiagonal) )
-                aOrigin.AdjustX(aLeftSize.Width() );
-            if( (this == pBottom) || (this == pDiagonal) )
-                aOrigin.AdjustY(aLeftSize.Height() );
-            aMapMode.SetOrigin( aOrigin );
-
-            mpNoteMarker.reset(new ScNoteMarker(pLeft, pRight, pBottom, pDiagonal,
-                                                &rDoc, aCellPos, aTrackText,
-                                                aMapMode, bLeftEdge, bFast, bKeyboard));
+            mpNoteOverlay.reset(new ScNoteOverlay(*this, aCellPos, aTrackText, bLeftEdge, bFast, bKeyboard));
         }
 
         bDone = true;       // something is shown (old or new)
@@ -238,15 +214,15 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         }
     }
 
-    if (!bDone && mpNoteMarker)
+    if (!bDone && mpNoteOverlay)
     {
-        if (mpNoteMarker->IsByKeyboard())
+        if (mpNoteOverlay->IsByKeyboard())
         {
             //  marker which was shown for ctrl-F1 isn't removed by mouse events
         }
         else
         {
-            mpNoteMarker.reset();
+            mpNoteOverlay.reset();
         }
     }
 
@@ -390,9 +366,9 @@ bool ScGridWindow::IsMyModel(const SdrEditView* pSdrView)
             &pSdrView->GetModel() == mrViewData.GetDocument().GetDrawLayer();
 }
 
-void ScGridWindow::HideNoteMarker()
+void ScGridWindow::HideNoteOverlay()
 {
-    mpNoteMarker.reset();
+    mpNoteOverlay.reset();
 }
 
 css::uno::Reference< css::accessibility::XAccessible >

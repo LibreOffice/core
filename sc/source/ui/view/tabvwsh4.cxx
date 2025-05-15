@@ -270,7 +270,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
     }
     else
     {
-        HideNoteMarker();           // note marker
+        HideNoteOverlay();           // note marker
 
         // in LOK case this could be triggered on every action from other view (doc_setView)
         // we don't want to hide tooltip only because other view did some action
@@ -1232,7 +1232,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
     bool bAnyEdit   = pScMod->IsInputMode();    // only characters & backspace
     bool bDraw      = IsDrawTextEdit();
 
-    HideNoteMarker();   // note marker
+    HideNoteOverlay();   // note marker
 
     // don't do extra HideCursor/ShowCursor calls if EnterHandler will switch to a different sheet
     bool bOnRefSheet = ( GetViewData().GetRefTabNo() == GetViewData().GetTabNo() );

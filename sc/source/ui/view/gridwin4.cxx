@@ -1315,9 +1315,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     else
         rDevice.SetMapMode(aDrawMode);
 
-    if (mpNoteMarker)
-        mpNoteMarker->Draw(); // Above the cursor, in drawing map mode
-
     if (bPage && bInitialPageBreaks)
         SetupInitialPageBreaks(rDoc, nTab);
 }

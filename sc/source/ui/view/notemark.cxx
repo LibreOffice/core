@@ -17,186 +17,345 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdoutl.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdocapt.hxx>
-#include <svl/itempool.hxx>
-#include <utility>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/window.hxx>
-
 #include <notemark.hxx>
-#include <document.hxx>
 #include <postit.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <dbfunc.hxx>
 
-#define SC_NOTEMARK_TIME    800
-#define SC_NOTEMARK_SHORT   70
+#define SC_NOTEOVERLAY_TIME    800
+#define SC_NOTEOVERLAY_SHORT   70
 
-ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
-                            ScDocument* pD, const ScAddress& aPos, OUString aUser,
-                            const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard) :
-    m_pWindow( pWin ),
-    m_pRightWin( pRight ),
-    m_pBottomWin( pBottom ),
-    m_pDiagWin( pDiagonal ),
-    m_pDoc( pD ),
-    m_aDocPos( aPos ),
-    m_aUserText(std::move( aUser )),
-    m_aTimer("ScNoteMarker m_aTimer"),
-    m_aMapMode( rMap ),
-    m_bLeft( bLeftEdge ),
-    m_bByKeyboard( bKeyboard ),
-    m_bVisible( false )
+ScNoteOverlay::ScNoteOverlay(
+    ScGridWindow& rScGridWindow,
+    ScAddress& aPos,
+    OUString aUser,
+    bool bLeftEdge,
+    bool bForce,
+    bool bKeyboard)
+: Timer("ScNoteOverlay Timer")
+, mrScGridWindow(rScGridWindow)
+, maDocPos(aPos)
+, maUserText(std::move(aUser))
+, maNoteOverlayGroup()
+, mxObject()
+, maSequence()
+, mbLeft(bLeftEdge)
+, mbKeyboard(bKeyboard)
 {
-    Size aSizePixel = m_pWindow->GetOutputSizePixel();
-    if( m_pRightWin )
-        aSizePixel.AdjustWidth(m_pRightWin->GetOutputSizePixel().Width() );
-    if( m_pBottomWin )
-        aSizePixel.AdjustHeight(m_pBottomWin->GetOutputSizePixel().Height() );
-    tools::Rectangle aVisPixel( Point( 0, 0 ), aSizePixel );
-    m_aVisRect = m_pWindow->PixelToLogic( aVisPixel, m_aMapMode );
-
-    m_aTimer.SetInvokeHandler( LINK( this, ScNoteMarker, TimeHdl ) );
-    m_aTimer.SetTimeout( bForce ? SC_NOTEMARK_SHORT : SC_NOTEMARK_TIME );
-    m_aTimer.Start();
+    SetTimeout(bForce ? SC_NOTEOVERLAY_SHORT : SC_NOTEOVERLAY_TIME);
+    Start();
 }
 
-ScNoteMarker::~ScNoteMarker()
+const drawinglayer::primitive2d::Primitive2DContainer& ScNoteOverlay::getOrCreatePrimitive2DSequence()
 {
-    m_xObject.clear();
+    if (!maSequence.empty())
+        // sequence already created, return it
+        return maSequence;
 
-    InvalidateWin();
+    // get some local data ptrs
+    ScViewData& rViewData(mrScGridWindow.getViewData());
+    ScDocument& rDoc(rViewData.GetDocument());
+    ScDrawLayer* pScDrawLayer(rDoc.GetDrawLayer());
 
-    m_pModel.reset();
-}
+    // use existing SdrPage - old version did allocate a SdrModel/SdrPage
+    // for every visualization
+    SdrPage* pSdrPage(pScDrawLayer->GetPage(0));
+    if (nullptr == pSdrPage)
+        return maSequence;
 
-IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
-{
-    if (!m_bVisible)
+    // when using existing SdrPage do not forget to save change state of
+    // the DrawingLayer. Unfortunately CreateTempCaption below *does* add
+    // the SdrObject to the SdrPage - not necessary for the model stuff,
+    // but a comment there claims that else the text cannot be set (?)
+    const bool bModelChanged(pScDrawLayer->IsChanged());
+    const tools::Rectangle aVisibleRectangle(calculateVisibleRectangle());
+
+    // create the temporary SdrObject
+    mxObject = ScNoteUtil::CreateTempCaption(
+        rDoc,
+        maDocPos,
+        *pSdrPage,
+        maUserText,
+        aVisibleRectangle,
+        mbLeft);
+
+    if (mxObject.is())
     {
-        m_pModel.reset( new SdrModel() );
-        m_pModel->SetScaleUnit(MapUnit::Map100thMM);
-        SfxItemPool& rPool = m_pModel->GetItemPool();
-        rPool.SetDefaultMetric(MapUnit::Map100thMM);
+        // get the primitives from it
+        mxObject->GetViewContact().getViewIndependentPrimitive2DContainer(maSequence);
 
-        OutputDevice* pPrinter = m_pDoc->GetRefDevice();
-        if (pPrinter)
+        // cleanup: remove again immediately
+        pSdrPage->NbcRemoveObject(mxObject->GetOrdNum());
+
+        // show the visualization with slight transparency
+        static bool bUseTransparency(true);
+        if (bUseTransparency && !maSequence.empty())
         {
-            // On the outliner of the draw model also the printer is set as RefDevice,
-            // and it should look uniform.
-            Outliner& rOutliner = m_pModel->GetDrawOutliner();
-            rOutliner.SetRefDevice(pPrinter);
+            maSequence = drawinglayer::primitive2d::Primitive2DContainer{
+                rtl::Reference<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(maSequence), 0.1))};
         }
+    }
 
-        if( rtl::Reference<SdrPage> pPage = m_pModel->AllocPage( false ) )
+    // restore changed state of DrawingLayer
+    pScDrawLayer->SetChanged(bModelChanged);
+    return maSequence;
+}
 
+tools::Rectangle ScNoteOverlay::calculateVisibleRectangle()
+{
+    // to not change anything for now in positioning/object
+    // creation sticked together from previous versions. This
+    // can (should) be converted to transformation stuff
+    // later. In principle it calculates the size of the
+    // merged WindowSpace (all SplitWindows) and transforms
+    // that range to logical coordinates in one of the
+    // ScGridWindow's
+    const ScViewData& rViewData(mrScGridWindow.getViewData());
+    const bool bHSplit(SC_SPLIT_NONE != rViewData.GetHSplitMode());
+    const bool bVSplit(SC_SPLIT_NONE != rViewData.GetVSplitMode());
+    const ScTabView* pScTabView(rViewData.GetView());
+    const vcl::Window* pLeft(pScTabView->GetWindowByPos(bVSplit ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT));
+    const vcl::Window* pRight(bHSplit ? pScTabView->GetWindowByPos( bVSplit ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT ) : nullptr);
+    const vcl::Window* pBottom(bVSplit ? pScTabView->GetWindowByPos( SC_SPLIT_BOTTOMLEFT ) : nullptr);
+    const vcl::Window* pDiagonal((bHSplit && bVSplit) ? pScTabView->GetWindowByPos(SC_SPLIT_BOTTOMRIGHT) : nullptr);
+    assert(pLeft && "ScNoteOverlay - missing top-left grid window");
+
+    /*  If caption is shown from right or bottom windows, adjust
+        mapmode to include size of top-left window. */
+    Size aSizePixel(pLeft->GetOutputSizePixel());
+    MapMode aMapMode(mrScGridWindow.GetDrawMapMode(true));
+    const Size aLeftSize(pLeft->PixelToLogic(aSizePixel, aMapMode));
+    Point aOrigin(aMapMode.GetOrigin());
+
+    if ((&mrScGridWindow == pRight) || (&mrScGridWindow == pDiagonal))
+        aOrigin.AdjustX(aLeftSize.Width());
+
+    if ((&mrScGridWindow == pBottom) || (&mrScGridWindow == pDiagonal))
+        aOrigin.AdjustY(aLeftSize.Height());
+
+    aMapMode.SetOrigin(aOrigin);
+
+    if (nullptr != pRight)
+        aSizePixel.AdjustWidth(pRight->GetOutputSizePixel().Width());
+
+    if (nullptr != pBottom)
+        aSizePixel.AdjustHeight(pBottom->GetOutputSizePixel().Height());
+
+    return mrScGridWindow.PixelToLogic(tools::Rectangle(Point(0, 0), aSizePixel), aMapMode);
+}
+
+void ScNoteOverlay::createOverlaySubContent(
+    ScGridWindow* pTarget,
+    const basegfx::B2DHomMatrix& rTransformToPixels,
+    const basegfx::B2DPoint& rTopLeft)
+{
+    // create additional visualization in given ScGridWindow
+    // with given partial transform and discrete offset
+    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager(pTarget->getOverlayManager());
+    if (!xOverlayManager.is())
+        // no OverlayManager, no visualization
+        return;
+
+    // create a transformation from initial ScGridWindow for which the
+    // visualization was created and in who's DrawMapMode it is to the
+    // target ScGridWindow. That transformation spans over the merged
+    // SplitWindow display. To do so, transform:
+    // 1 from initial ScGridWindow logic DrawMapMode to discrete (pixels)
+    //   in the displaying window
+    // 2 to merged SplitWindow display (may have different top-left)
+    // 3 to window displaying target ScGridWindow
+    // 4 to logic coordinates in it's DrawMapMode
+    // NOTE: 1+2 are already in rTransformToPixels
+    basegfx::B2DHomMatrix aTransformToTarget(rTransformToPixels);
+    aTransformToTarget.translate(-rTopLeft);
+    const MapMode aOrig(pTarget->GetMapMode());
+    pTarget->SetMapMode(pTarget->GetDrawMapMode(true));
+    aTransformToTarget = pTarget->GetOutDev()->GetInverseViewTransformation() * aTransformToTarget;
+    pTarget->SetMapMode(aOrig);
+
+    // embed to TransformPrimitive
+    drawinglayer::primitive2d::Primitive2DContainer aSequence(getOrCreatePrimitive2DSequence());
+    aSequence = drawinglayer::primitive2d::Primitive2DContainer{
+        rtl::Reference<drawinglayer::primitive2d::TransformPrimitive2D>(
+            new drawinglayer::primitive2d::TransformPrimitive2D(
+                aTransformToTarget,
+                std::move(aSequence)))};
+
+    // create OverlayObject
+    std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
+        new sdr::overlay::OverlayPrimitive2DSequenceObject(
+            std::move(aSequence)));
+
+    // add to OverlayManager and local data holder (for
+    // destruction)
+    xOverlayManager->add(*pOverlayObject);
+    maNoteOverlayGroup.append(std::move(pOverlayObject));
+}
+
+void ScNoteOverlay::createAdditionalRepresentations()
+{
+    // check if we have a split at all
+    const ScViewData& rViewData(mrScGridWindow.getViewData());
+    const ScTabView* pScTabView(rViewData.GetView());
+    const bool bHSplit(SC_SPLIT_NONE != rViewData.GetHSplitMode());
+    const bool bVSplit(SC_SPLIT_NONE != rViewData.GetVSplitMode());
+
+    if (!bHSplit && !bVSplit)
+        // no split screen, no additional visualizations needed
+        return;
+
+    if (getOrCreatePrimitive2DSequence().empty())
+        // no visualization, done
+        return;
+
+    // if we have a split screen with multiple ScGridWindow's
+    // the visualization might overlap with other ones than the
+    // one this gets initially constructed. get the logic range
+    // of the original visualization in the original ScGridWindow
+    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    const basegfx::B2DRange aContentRange(getOrCreatePrimitive2DSequence().getB2DRange(aViewInformation2D));
+
+    // prep values to be filled in own scope to not hold the vars
+    basegfx::B2DRange aGlobalPixel(aContentRange);
+    basegfx::B2DVector aTopLeftOffset;
+    basegfx::B2DHomMatrix aTransformToPixels;
+
+    {
+        // calculate general TopLeft offsets for potential other windows
+        // from top-left window
+        const ScSplitPos myScSplitPos(mrScGridWindow.getScSplitPos());
+        const ScGridWindow* pLeft(static_cast<ScGridWindow*>(
+            pScTabView->GetWindowByPos(bVSplit ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT)));
+        aTopLeftOffset.setX(pLeft->GetOutputSizePixel().Width());
+        aTopLeftOffset.setY(pLeft->GetOutputSizePixel().Height());
+
+        // create transformation from logic coordinates in original
+        // ScGridWindow to discrete coordinates (pixels), then to
+        // merged SplitWindow display
+        const MapMode aOrig(mrScGridWindow.GetMapMode());
+        mrScGridWindow.SetMapMode(mrScGridWindow.GetDrawMapMode(true));
+        aTransformToPixels = mrScGridWindow.GetOutDev()->GetViewTransformation();
+        if (SC_SPLIT_TOPRIGHT == myScSplitPos || SC_SPLIT_BOTTOMRIGHT == myScSplitPos)
+            aTransformToPixels.translate(aTopLeftOffset.getX(), 0);
+        if (SC_SPLIT_BOTTOMLEFT == myScSplitPos || SC_SPLIT_BOTTOMRIGHT == myScSplitPos)
+            aTransformToPixels.translate(0, aTopLeftOffset.getY());
+        aGlobalPixel.transform(aTransformToPixels);
+        mrScGridWindow.SetMapMode(aOrig);
+    }
+
+    // try all four possible ScGridWindows
+    ScGridWindow* pBottomLeft(static_cast<ScGridWindow*>(pScTabView->GetWindowByPos(SC_SPLIT_BOTTOMLEFT)));
+
+    // nothing to do when ScGridWindow does not exists or is same as
+    // original ScGridWindow for which visualization is already done
+    if (nullptr != pBottomLeft && pBottomLeft != &mrScGridWindow)
+    {
+        // calculate pixel range relative to merged SplitWindow display
+        const basegfx::B2DPoint aTopLeft(0, bVSplit ? aTopLeftOffset.getY() : 0);
+        const basegfx::B2DVector aSize(pBottomLeft->GetOutputSizePixel().Width(), pBottomLeft->GetOutputSizePixel().Height());
+        const basegfx::B2DRange aLocalPixel(aTopLeft, aTopLeft + aSize);
+
+        if(aLocalPixel.overlaps(aGlobalPixel))
         {
-            m_xObject = ScNoteUtil::CreateTempCaption( *m_pDoc, m_aDocPos, *pPage, m_aUserText, m_aVisRect, m_bLeft );
-            if( m_xObject )
-            {
-                // Here, SyncForGrid and GetGridOffset was used with the comment:
-                // // Need to include grid offset: GetCurrentBoundRect is removing it
-                // // but we need to know actual rect position
-                // This is no longer true - SdrObject::RecalcBoundRect() uses the
-                // GetViewContact().getViewIndependentPrimitive2DContainer()) call
-                // that now by default adds the eventually needed GridOffset. Thus
-                // I have removed that adaptation stuff.
-                m_aRect = m_xObject->GetCurrentBoundRect();
-            }
-
-            // Insert page so that the model recognise it and also deleted
-            m_pModel->InsertPage( pPage.get() );
-
+            // if needed visualization is visible there, create an OverlayObject there
+            // with the same content but at corrected position
+            createOverlaySubContent(pBottomLeft, aTransformToPixels, aTopLeft);
         }
-        m_bVisible = true;
     }
 
-    Draw();
-}
-
-static void lcl_DrawWin( const SdrObject* pObject, vcl::RenderContext* pWindow, const MapMode& rMap )
-{
-    MapMode aOld = pWindow->GetMapMode();
-    pWindow->SetMapMode( rMap );
-
-    DrawModeFlags nOldDrawMode = pWindow->GetDrawMode();
-    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    ScGridWindow* pBottomRight(static_cast<ScGridWindow*>(pScTabView->GetWindowByPos(SC_SPLIT_BOTTOMRIGHT)));
+    if (nullptr != pBottomRight && pBottomRight != &mrScGridWindow)
     {
-        pWindow->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
-                            DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
+        const basegfx::B2DPoint aTopLeft(bHSplit ? aTopLeftOffset.getX() : 0, bVSplit ? aTopLeftOffset.getY() : 0);
+        const basegfx::B2DVector aSize(pBottomRight->GetOutputSizePixel().Width(), pBottomRight->GetOutputSizePixel().Height());
+        const basegfx::B2DRange aLocalPixel(aTopLeft, aTopLeft + aSize);
+
+        if(aLocalPixel.overlaps(aGlobalPixel))
+        {
+            createOverlaySubContent(pBottomRight, aTransformToPixels, aTopLeft);
+        }
     }
 
-    pObject->SingleObjectPainter( *pWindow ); // #110094#-17
-
-    pWindow->SetDrawMode( nOldDrawMode );
-    pWindow->SetMapMode( aOld );
-}
-
-static MapMode lcl_MoveMapMode( const MapMode& rMap, const Size& rMove )
-{
-    MapMode aNew = rMap;
-    Point aOrigin = aNew.GetOrigin();
-    aOrigin.AdjustX( -(rMove.Width()) );
-    aOrigin.AdjustY( -rMove.Height() );
-    aNew.SetOrigin(aOrigin);
-    return aNew;
-}
-
-void ScNoteMarker::Draw()
-{
-    if ( !(m_xObject && m_bVisible) )
-        return;
-
-    lcl_DrawWin( m_xObject.get(), m_pWindow->GetOutDev(), m_aMapMode );
-
-    if ( m_pRightWin || m_pBottomWin )
+    ScGridWindow* pTopLeft(static_cast<ScGridWindow*>(pScTabView->GetWindowByPos(SC_SPLIT_TOPLEFT)));
+    if (nullptr != pTopLeft && pTopLeft != &mrScGridWindow)
     {
-        Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
-        if ( m_pRightWin )
-            lcl_DrawWin( m_xObject.get(), m_pRightWin->GetOutDev(),
-                            lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ) );
-        if ( m_pBottomWin )
-            lcl_DrawWin( m_xObject.get(), m_pBottomWin->GetOutDev(),
-                            lcl_MoveMapMode( m_aMapMode, Size( 0, aWinSize.Height() ) ) );
-        if ( m_pDiagWin )
-            lcl_DrawWin( m_xObject.get(), m_pDiagWin->GetOutDev(), lcl_MoveMapMode( m_aMapMode, aWinSize ) );
+        const basegfx::B2DPoint aTopLeft(0, 0);
+        const basegfx::B2DVector aSize(pTopLeft->GetOutputSizePixel().Width(), pTopLeft->GetOutputSizePixel().Height());
+        const basegfx::B2DRange aLocalPixel(aTopLeft, aTopLeft + aSize);
+
+        if(aLocalPixel.overlaps(aGlobalPixel))
+        {
+            createOverlaySubContent(pTopLeft, aTransformToPixels, aTopLeft);
+        }
+    }
+
+    ScGridWindow* pTopRight(static_cast<ScGridWindow*>(pScTabView->GetWindowByPos(SC_SPLIT_TOPRIGHT)));
+    if (nullptr != pTopRight && pTopRight != &mrScGridWindow)
+    {
+        const basegfx::B2DPoint aTopLeft(bHSplit ? aTopLeftOffset.getX() : 0, 0);
+        const basegfx::B2DVector aSize(pTopRight->GetOutputSizePixel().Width(), pTopRight->GetOutputSizePixel().Height());
+        const basegfx::B2DRange aLocalPixel(aTopLeft, aTopLeft + aSize);
+
+        if(aLocalPixel.overlaps(aGlobalPixel))
+        {
+            createOverlaySubContent(pTopRight, aTransformToPixels, aTopLeft);
+        }
     }
 }
 
-void ScNoteMarker::InvalidateWin()
+void ScNoteOverlay::Invoke()
 {
-    if (!m_bVisible)
+    if (0 != maNoteOverlayGroup.count())
+        // already visualized, done
         return;
 
-    // Extend the invalidated rectangle by 1 pixel in each direction in case AA would slightly
-    // paint outside the nominal area.
-    tools::Rectangle aRect(m_aRect);
-    const Size aPixelSize = m_pWindow->PixelToLogic(Size(1, 1));
-    aRect.AdjustLeft(-aPixelSize.getWidth());
-    aRect.AdjustTop(-aPixelSize.getHeight());
-    aRect.AdjustRight(aPixelSize.getWidth());
-    aRect.AdjustBottom(aPixelSize.getHeight());
-
-    m_pWindow->Invalidate( OutputDevice::LogicToLogic(aRect, m_aMapMode, m_pWindow->GetMapMode()) );
-
-    if ( !(m_pRightWin || m_pBottomWin) )
+    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager(
+        mrScGridWindow.getOverlayManager());
+    if (!xOverlayManager.is())
+        // no OverlayManager, no display
         return;
 
-    Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
-    if ( m_pRightWin )
-        m_pRightWin->Invalidate( OutputDevice::LogicToLogic(aRect,
-                                lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ),
-                                m_pRightWin->GetMapMode()) );
-    if ( m_pBottomWin )
-        m_pBottomWin->Invalidate( OutputDevice::LogicToLogic(aRect,
-                                lcl_MoveMapMode( m_aMapMode, Size( 0, aWinSize.Height() ) ),
-                                m_pBottomWin->GetMapMode()) );
-    if ( m_pDiagWin )
-        m_pDiagWin->Invalidate( OutputDevice::LogicToLogic(aRect,
-                                lcl_MoveMapMode( m_aMapMode, aWinSize ),
-                                m_pDiagWin->GetMapMode()) );
+    if (getOrCreatePrimitive2DSequence().empty())
+        // no visualization data, no display
+        return;
+
+    // create OverlayObject for initial ScGridWindow
+    drawinglayer::primitive2d::Primitive2DContainer aSequence(
+        getOrCreatePrimitive2DSequence());
+    std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(
+        new sdr::overlay::OverlayPrimitive2DSequenceObject(
+            std::move(aSequence)));
+
+    // add to OverlayManager and local data holder (for
+    // destruction)
+    xOverlayManager->add(*pNewOverlayObject);
+    maNoteOverlayGroup.append(std::move(pNewOverlayObject));
+
+    // check and evtl. create visualizations for other ScGridWindows
+    // in SplitScreen mode
+    createAdditionalRepresentations();
+}
+
+ScNoteOverlay::~ScNoteOverlay()
+{
+    // cleanup OverlayObjects - would also be done by destructor
+    maNoteOverlayGroup.clear();
+
+    // destruct temporary SdrObject. It *needs* to be kept alive
+    // during visualization due to it being used for decmpose
+    // of the TextPrimitive. That is an old compromize in the
+    // primitives: the text primitive is not self-contained in
+    // the sense that it needs the SdrTextObj for decompose.
+    // Would be hard to correct, but would be good for the future
+    mxObject.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

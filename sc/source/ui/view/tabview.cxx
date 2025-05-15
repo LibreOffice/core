@@ -976,7 +976,7 @@ void ScTabView::SetZoomPercentFromCommand(sal_uInt16 nZoomPercent)
 
 bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
 {
-    HideNoteMarker();
+    HideNoteOverlay();
 
     bool bDone = false;
     const CommandWheelData* pData = rCEvt.GetWheelData();
@@ -1016,7 +1016,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
 
 bool ScTabView::GesturePanCommand(const CommandEvent& rCEvt)
 {
-    HideNoteMarker();
+    HideNoteOverlay();
 
     bool bDone = false;
     const CommandGesturePanData* pData = rCEvt.GetGesturePanData();
@@ -1039,7 +1039,7 @@ bool ScTabView::GesturePanCommand(const CommandEvent& rCEvt)
 
 bool ScTabView::GestureZoomCommand(const CommandEvent& rCEvt)
 {
-    HideNoteMarker();
+    HideNoteOverlay();
 
     const CommandGestureZoomData* pData = rCEvt.GetGestureZoomData();
     if (!pData)
