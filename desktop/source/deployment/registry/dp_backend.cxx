@@ -191,7 +191,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     if (insertion.second)
     { // first insertion
         SAL_WARN_IF(
-            Reference<XInterface>(insertion.first->second) != xNewPackage,
+            insertion.first->second != xNewPackage,
             "desktop.deployment", "mismatch");
     }
     else
