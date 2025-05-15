@@ -168,11 +168,6 @@ rtl::Reference<SwXBookmark> SwXBookmark::CreateXBookmark(
     }
     if (!xBookmark.is())
     {
-        OSL_ENSURE(!pBookmark ||
-            dynamic_cast< ::sw::mark::IBookmark* >(pBookmark) ||
-            IDocumentMarkAccess::GetType(*pBookmark) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK,
-            "<SwXBookmark::GetObject(..)>"
-            "SwXBookmark requested for non-bookmark mark and non-annotation mark.");
         SwXBookmark *const pXBookmark =
             pBookmark ? new SwXBookmark(&rDoc) : new SwXBookmark;
         xBookmark.set(pXBookmark);
