@@ -16,6 +16,7 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/AutoTextContainer.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -1351,6 +1352,42 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164885)
     // - Actual  :
     // because the interception didn't happen
     CPPUNIT_ASSERT_EQUAL(u".uno:Open"_ustr, interceptor->pDispatch->sLastCommand);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMarkWithPreexistingNameInsertion)
+{
+    createSwDoc();
+
+    // Add a second paragraph, and create a bookmark there, with a specific name
+    auto xTextDocument = mxComponent.queryThrow<text::XTextDocument>();
+    auto xText = xTextDocument->getText();
+    xText->insertControlCharacter(xText->getEnd(), text::ControlCharacter::PARAGRAPH_BREAK, false);
+
+    auto xFac = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+    auto xMark = xFac->createInstance(u"com.sun.star.text.Bookmark"_ustr);
+    auto xNamed = xMark.queryThrow<container::XNamed>();
+    xNamed->setName(u"Bookmark 1"_ustr);
+    xText->insertTextContent(xText->getEnd(), xMark.queryThrow<text::XTextContent>(), false);
+
+    // Insert the content of a file, which has a bookmark with the same name, before existing one
+    dispatchCommand(
+        mxComponent, u".uno:InsertDoc"_ustr,
+        { comphelper::makePropertyValue(u"Name"_ustr, createFileURL(u"bookmark_1.html")) });
+
+    // The pre-existing bookmark's name must not change
+    // Before the fix, this would fail with "Actual  : Bookmark 1 Copy 1"
+    CPPUNIT_ASSERT_EQUAL(u"Bookmark 1"_ustr, xNamed->getName());
+
+    auto xSupplier = mxComponent.queryThrow<text::XBookmarksSupplier>();
+    auto xBookmarks = xSupplier->getBookmarks();
+    auto names = xBookmarks->getElementNames();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), names.getLength());
+    // names[1] is the pre-existing bookmark
+    CPPUNIT_ASSERT_EQUAL(u"Bookmark 1"_ustr, names[1]);
+    // names[0] is the bookmark coming from the inserted file
+    OUString rest;
+    CPPUNIT_ASSERT(names[0].startsWith("Bookmark 1", &rest));
+    CPPUNIT_ASSERT(!rest.isEmpty()); // should be " Copy 1"
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
