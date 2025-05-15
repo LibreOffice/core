@@ -5354,17 +5354,21 @@ static rtl::Reference<::sax_fastparser::FastAttributeList> CreateDocPrAttrList(
     pAttrs->add(XML_name, rName);
     if (rExport.GetFilter().getVersion() != oox::core::ECMA_376_1ST_EDITION)
     {
-        pAttrs->add(XML_descr, rDescription);
-        pAttrs->add(XML_title, rTitle);
+        if (!rDescription.empty())
+            pAttrs->add(XML_descr, rDescription);
+        if (!rTitle.empty())
+            pAttrs->add(XML_title, rTitle);
     }
     else
     {   // tdf#148952 no title attribute, merge it into descr
-        OUString const value(rTitle.empty()
-            ? OUString(rDescription)
-            : rDescription.empty()
-                ? OUString(rTitle)
-                : OUString::Concat(rTitle) + "\n" + rDescription);
-        pAttrs->add(XML_descr, value);
+        if (!rTitle.empty() || !rDescription.empty())
+        {
+            OUString const value(rTitle.empty() ? OUString(rDescription)
+                                 : rDescription.empty()
+                                     ? OUString(rTitle)
+                                     : OUString::Concat(rTitle) + "\n" + rDescription);
+            pAttrs->add(XML_descr, value);
+        }
     }
     return pAttrs;
 }
