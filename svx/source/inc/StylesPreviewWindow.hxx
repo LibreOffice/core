@@ -83,7 +83,7 @@ public:
         : Idle("StylesListUpdateTask")
         , m_rStylesList(rStylesList)
     {
-        SetPriority(TaskPriority::HIGH_IDLE);
+        SetPriority(TaskPriority::DEFAULT_IDLE);
     }
 
     virtual void Invoke() override;
