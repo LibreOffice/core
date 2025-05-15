@@ -274,7 +274,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument& rDoc, const 
             else if (aCell.hasNumeric())
                 rElement <<= aCell.getValue();
             else
-                rElement <<= aCell.getString(&rDoc);
+                rElement <<= aCell.getString(rDoc);
         }
         pRowAry[nRow] = std::move(aColSeq);
     }

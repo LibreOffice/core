@@ -81,16 +81,16 @@ class ScHTMLParser : public ScEEParser
     ScHTMLStyles                maStyles;
 protected:
     sal_uInt32                  maFontHeights[ SC_HTML_FONTSIZES ];
-    ScDocument*                 mpDoc;          /// The destination document.
+    ScDocument&                 mrDoc;          /// The destination document.
 
 public:
-    explicit                    ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc );
+    explicit                    ScHTMLParser( EditEngine* pEditEngine, ScDocument& rDoc );
     virtual                     ~ScHTMLParser() override;
 
     virtual ErrCode             Read( SvStream& rStrm, const OUString& rBaseURL  ) override = 0;
 
     ScHTMLStyles&               GetStyles() { return maStyles;}
-    ScDocument&                 GetDoc() { return *mpDoc;}
+    ScDocument&                 GetDoc() { return mrDoc;}
 
     /** Returns the "global table" which contains the entire HTML document. */
     virtual const ScHTMLTable*  GetGlobalTable() const = 0;
@@ -217,7 +217,7 @@ private:
     void HandleDataSheetsAttributes(const HTMLOptions& rOptions);
 
 public:
-                        ScHTMLLayoutParser( EditEngine*, OUString aBaseURL, const Size& aPageSize, ScDocument* );
+                        ScHTMLLayoutParser( EditEngine*, OUString aBaseURL, const Size& aPageSize, ScDocument& );
     virtual             ~ScHTMLLayoutParser() override;
     virtual ErrCode     Read( SvStream&, const OUString& rBaseURL  ) override;
     virtual const ScHTMLTable*  GetGlobalTable() const override;
@@ -430,7 +430,7 @@ public:
     void                GetDocRange( ScRange& rRange ) const;
 
     /** Applies border formatting to the passed document. */
-    void                ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos ) const;
+    void                ApplyCellBorders( ScDocument& rDoc, const ScAddress& rFirstPos ) const;
 
     SvNumberFormatter* GetFormatTable();
 
@@ -585,7 +585,7 @@ public:
 class ScHTMLQueryParser : public ScHTMLParser
 {
 public:
-    explicit            ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc );
+    explicit            ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument& rDoc );
     virtual             ~ScHTMLQueryParser() override;
 
     virtual ErrCode     Read( SvStream& rStrm, const OUString& rBaseURL  ) override;

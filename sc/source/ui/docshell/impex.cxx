@@ -2529,7 +2529,7 @@ bool ScImportExport::Doc2RTF( SvStream& rStrm )
 bool ScImportExport::Doc2Dif( SvStream& rStrm )
 {
     // for DIF in the clipboard, IBM_850 is always used
-    ScFormatFilter::Get().ScExportDif( rStrm, &rDoc, aRange, RTL_TEXTENCODING_IBM_850 );
+    ScFormatFilter::Get().ScExportDif( rStrm, rDoc, aRange, RTL_TEXTENCODING_IBM_850 );
     return true;
 }
 
@@ -2566,7 +2566,7 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
 
 bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
-    std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateRTFImport( &rDoc, aRange );
+    std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateRTFImport( rDoc, aRange );
     if (!pImp)
         return false;
     pImp->Read( rStrm, rBaseURL );
@@ -2585,7 +2585,7 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
 
 bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
-    std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateHTMLImport( &rDoc, rBaseURL, aRange);
+    std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateHTMLImport( rDoc, rBaseURL, aRange);
     if (!pImp)
         return false;
 

@@ -2829,12 +2829,12 @@ class StrCellIterator
     PosType maPos;
     sc::CellStoreType::const_iterator miBeg;
     sc::CellStoreType::const_iterator miEnd;
-    const ScDocument* mpDoc;
+    const ScDocument& mrDoc;
 public:
-    StrCellIterator(const sc::CellStoreType& rCells, SCROW nStart, const ScDocument* pDoc) :
-        miBeg(rCells.begin()), miEnd(rCells.end()), mpDoc(pDoc)
+    StrCellIterator(const sc::CellStoreType& rCells, SCROW nStart, const ScDocument& rDoc) :
+        miBeg(rCells.begin()), miEnd(rCells.end()), mrDoc(rDoc)
     {
-        if (pDoc->ValidRow(nStart))
+        if (rDoc.ValidRow(nStart))
             maPos = rCells.position(nStart);
         else
             // Make this iterator invalid.
@@ -2932,7 +2932,7 @@ public:
             case sc::element_type_edittext:
             {
                 const EditTextObject* p = sc::edittext_block::at(*maPos.first->data, maPos.second);
-                return ScEditUtil::GetString(*p, mpDoc);
+                return ScEditUtil::GetString(*p, mrDoc);
             }
             default:
                 ;
@@ -2951,8 +2951,8 @@ bool ScColumn::GetDataEntries(
     // going upward and downward directions in parallel. The start position
     // cell must be skipped.
 
-    StrCellIterator aItrUp(maCells, nStartRow, &GetDoc());
-    StrCellIterator aItrDown(maCells, nStartRow+1, &GetDoc());
+    StrCellIterator aItrUp(maCells, nStartRow, GetDoc());
+    StrCellIterator aItrDown(maCells, nStartRow+1, GetDoc());
 
     bool bMoveUp = aItrUp.valid();
     if (!bMoveUp)

@@ -44,7 +44,7 @@ class ScSortedRangeCache final : public SvtListener
 {
 public:
     /// MUST be new'd because Notify() deletes.
-    ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange, const ScQueryParam& param,
+    ScSortedRangeCache(ScDocument& rDoc, const ScRange& rRange, const ScQueryParam& param,
                        ScInterpreterContext* context, bool invalid = false,
                        bool bNewSearchFunction = false, sal_uInt8 nSortedBinarySearch = 0x00);
 
@@ -117,7 +117,7 @@ private:
     std::vector<size_t> mRowToIndex; // indexed by 'SCROW - maRange.aStart.Row()'
     std::vector<size_t> mColToIndex; // indexed by 'SCCOL - maRange.aStart.Col()'
     ScRange maRange;
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     bool mValid;
     bool mRowSearch;
     ValueType mValueType;

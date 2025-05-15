@@ -2491,7 +2491,7 @@ void ScTabView::EnableAutoSpell( bool bEnable )
     const bool bWasEnabled = IsAutoSpell();
     if (bEnable)
         mpSpellCheckCxt =
-            std::make_shared<sc::SpellCheckContext>(&aViewData.GetDocument(),
+            std::make_shared<sc::SpellCheckContext>(aViewData.GetDocument(),
                                       aViewData.GetTabNo());
     else
         mpSpellCheckCxt.reset();

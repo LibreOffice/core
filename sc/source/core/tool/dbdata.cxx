@@ -838,7 +838,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
         {
             if (pCell->hasString())
             {
-                const OUString aStr = pCell->getString( pDoc);
+                const OUString aStr = pCell->getString(*pDoc);
                 if (aStr.isEmpty())
                     bHaveEmpty = true;
                 else
@@ -890,12 +890,12 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
     mbTableColumnNamesDirty = false;
 }
 
-void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange )
+void ScDBData::RefreshTableColumnNames( ScDocument& rDoc, const ScRange& rRange )
 {
     // Header-less tables get names generated, completely empty a full refresh.
     if (mbTableColumnNamesDirty && (!HasHeader() || maTableColumnNames.empty()))
     {
-        RefreshTableColumnNames( pDoc);
+        RefreshTableColumnNames( &rDoc);
         return;
     }
 
@@ -908,7 +908,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange 
     // listener if multiple cells were affected. We don't know if there were
     // more. Also, we need the full check anyway in case a duplicated name was
     // entered.
-    RefreshTableColumnNames( pDoc);
+    RefreshTableColumnNames( &rDoc);
 }
 
 sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
@@ -1505,7 +1505,7 @@ void ScDBCollection::RefreshDirtyTableColumnNames()
         for (auto const& it : maNamedDBs)
         {
             if (it->AreTableColumnNamesDirty())
-                it->RefreshTableColumnNames( &maNamedDBs.mrDoc, rRange);
+                it->RefreshTableColumnNames( maNamedDBs.mrDoc, rRange);
         }
     }
     maNamedDBs.maDirtyTableColumnNames.RemoveAll();

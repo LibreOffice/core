@@ -784,7 +784,7 @@ static bool lcl_GetCellContent( const ScRefCellValue& rCell, bool bIsStr1, doubl
             if (rCell.getType() == CELLTYPE_STRING)
                 rArgStr = rCell.getSharedString()->getString();
             else if (rCell.getEditText())
-                rArgStr = ScEditUtil::GetString(*rCell.getEditText(), &rDoc);
+                rArgStr = ScEditUtil::GetString(*rCell.getEditText(), rDoc);
         break;
         default:
             ;

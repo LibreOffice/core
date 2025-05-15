@@ -4457,12 +4457,12 @@ short ScInterpreter::CompareCell( sal_uInt16 nSort,
                 if (eType1 == CELLTYPE_STRING)
                     aStr1 = rCell1.getSharedString()->getString();
                 else
-                    aStr1 = rCell1.getString(&mrDoc);
+                    aStr1 = rCell1.getString(mrDoc);
 
                 if (eType2 == CELLTYPE_STRING)
                     aStr2 = rCell2.getSharedString()->getString();
                 else
-                    aStr2 = rCell2.getString(&mrDoc);
+                    aStr2 = rCell2.getString(mrDoc);
 
                 CollatorWrapper& rSortCollator = ScGlobal::GetCollator(aSortParam.bCaseSens);
                 nRes = static_cast<short>( rSortCollator.compareString( aStr1, aStr2 ) );

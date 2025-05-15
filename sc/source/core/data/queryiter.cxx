@@ -219,7 +219,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
                             if (bNumSearch)
                                 rItemTmp.mfVal = aBFCell.getValue();
                             else if (bStringSearch)
-                                rItemTmp.maString = svl::SharedString(aBFCell.getString(&rDoc));
+                                rItemTmp.maString = svl::SharedString(aBFCell.getString(rDoc));
 
                             ScQueryEvaluator queryEvaluatorTmp(rDoc, *rDoc.maTabs[nTab], aParamTmp, &mrContext, nullptr, bNewSearchFunction);
                             if (queryEvaluatorTmp.ValidQuery(nRow, (nCol == static_cast<SCCOL>(nFirstQueryField) ? &aCell : nullptr)))

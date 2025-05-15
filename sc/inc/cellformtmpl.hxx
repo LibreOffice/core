@@ -41,7 +41,7 @@ auto ScCellFormat::visitInputSharedString(const ScRefCellValue& rCell, sal_uInt3
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            return rOper(rCell.getSharedString(&rDoc, rStrPool));
+            return rOper(rCell.getSharedString(rDoc, rStrPool));
         case CELLTYPE_VALUE:
             return rOper(rStrPool.intern(rContext.NFGetInputLineString(
                 rCell.getDouble(), nFormat, bFiltering, bForceSystemLocale)));

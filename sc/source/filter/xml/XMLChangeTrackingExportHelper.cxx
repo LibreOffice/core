@@ -139,7 +139,7 @@ void ScChangeTrackingExportHelper::WriteGenerated(const ScChangeAction* pGenerat
 #endif
     SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_CELL_CONTENT_DELETION, true, true);
     WriteBigRange(pGeneratedAction->GetBigRange(), XML_CELL_ADDRESS);
-    OUString sValue = static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewString(&m_rDoc);
+    OUString sValue = static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewString(m_rDoc);
     WriteCell(static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewCell(), sValue);
 }
 
@@ -157,7 +157,7 @@ void ScChangeTrackingExportHelper::WriteDeleted(const ScChangeAction* pDeletedAc
                 SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_CELL_CONTENT_DELETION, true, true);
                 if (static_cast<const ScChangeActionContent*>(pDeletedAction)->IsTopContent() && pDeletedAction->IsDeletedIn())
                 {
-                    OUString sValue = pContentAction->GetNewString(&m_rDoc);
+                    OUString sValue = pContentAction->GetNewString(m_rDoc);
                     WriteCell(pContentAction->GetNewCell(), sValue);
                 }
             }
@@ -288,7 +288,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
 
     OUString sString;
     if (rCell.getEditText())
-        sString = ScEditUtil::GetString(*rCell.getEditText(), &m_rDoc);
+        sString = ScEditUtil::GetString(*rCell.getEditText(), m_rDoc);
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
@@ -394,7 +394,7 @@ void ScChangeTrackingExportHelper::WriteContentChange(const ScChangeAction* pAct
         if (pPrevAction)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pPrevAction->GetActionNumber()));
         SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_PREVIOUS, true, true);
-        OUString sValue = static_cast<const ScChangeActionContent*>(pAction)->GetOldString(&m_rDoc);
+        OUString sValue = static_cast<const ScChangeActionContent*>(pAction)->GetOldString(m_rDoc);
         WriteCell(static_cast<const ScChangeActionContent*>(pAction)->GetOldCell(), sValue);
     }
 }

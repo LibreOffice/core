@@ -35,7 +35,7 @@ class ScEditEngineDefaulter;
 
 class ScEditUtil
 {
-    ScDocument*     pDoc;
+    ScDocument&     rDoc;
     SCCOL           nCol;
     SCROW           nRow;
     SCTAB           nTab;
@@ -54,17 +54,15 @@ public:
     static OUString GetSpaceDelimitedString( const EditEngine& rEngine );
 
     /// Retrieves string with paragraphs delimited by new lines ('\n').
-    static OUString GetMultilineString( const EditEngine& rEngine );
+    SC_DLLPUBLIC static OUString GetMultilineString( const EditEngine& rEngine );
     static OUString GetMultilineString( const EditTextObject& rEdit );
 
     /** Retrieves string with paragraphs delimited by new lines ('\n').
 
-        @param pDoc
-               If not NULL, use pDoc->GetEditEngine() to retrieve field content.
-               If NULL, a static mutex-guarded ScFieldEditEngine is used that
-               is not capable of resolving document specific fields; avoid.
+        @param rDoc
+               use rDoc.GetEditEngine() to retrieve field content.
      */
-    SC_DLLPUBLIC static OUString GetString( const EditTextObject& rEditText, const ScDocument* pDoc );
+    SC_DLLPUBLIC static OUString GetString( const EditTextObject& rEditText, const ScDocument& rDoc );
 
     static std::unique_ptr<EditTextObject> CreateURLObjectFromURL(
         ScDocument& rDoc, const OUString& rURL, const OUString& rText );
@@ -77,7 +75,7 @@ public:
         const SvxFieldData& rFieldData, const ScDocument* pDoc, std::optional<Color>* ppTextColor, std::optional<FontLineStyle>* ppFldLineStyle );
 
 public:
-                ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
+                ScEditUtil( ScDocument& rDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rCellPos,
                             OutputDevice* pDevice, double nScaleX, double nScaleY,
                             const Fraction& rX, const Fraction& rY, bool bPrintTwips = false );
@@ -195,9 +193,9 @@ class SC_DLLPUBLIC ScTabEditEngine final : public ScFieldEditEngine
 private:
     void    Init(const ScPatternAttr& rPattern);
 public:
-    ScTabEditEngine( ScDocument* pDoc );            // Default
+    ScTabEditEngine( ScDocument& rDoc );            // Default
     ScTabEditEngine(const ScPatternAttr& rPattern,
-                    SfxItemPool *pEngineItemPool, ScDocument *pDoc,
+                    SfxItemPool *pEngineItemPool, ScDocument& rDoc,
                     SfxItemPool* pTextObjectPool = nullptr );
 };
 

@@ -644,14 +644,14 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
 
     if(nSpecial==RD_SPECIAL_CONTENT)
     {
-        aContent = pScChangeAction->GetOldString(pDoc);
+        aContent = pScChangeAction->GetOldString(*pDoc);
         if (aContent.isEmpty())
             aContent = aStrEmpty;
         aDesc = aStrChildOrgContent + ": " + aContent;
     }
     else
     {
-        const OUString aTmp( pScChangeAction->GetNewString(pDoc));
+        const OUString aTmp( pScChangeAction->GetNewString(*pDoc));
         if (aTmp.isEmpty())
             aContent = aStrEmpty;
         else

@@ -620,7 +620,7 @@ bool ScValidationData::IsDataValid( const ScRefCellValue& rCell, const ScAddress
         break;
         case CELLTYPE_EDIT:
             if (rCell.getEditText())
-                aString = ScEditUtil::GetString(*rCell.getEditText(), &GetDocument());
+                aString = ScEditUtil::GetString(*rCell.getEditText(), GetDocument());
             bIsVal = false;
         break;
         case CELLTYPE_FORMULA:

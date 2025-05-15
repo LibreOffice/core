@@ -97,7 +97,7 @@ void ScUndoDeleteContents::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack && (nFlags & InsertDeleteFlags::CONTENTS) )
-        pChangeTrack->AppendContentRange( aRange, pUndoDoc.get(),
+        pChangeTrack->AppendContentRange( aRange, *pUndoDoc,
             nStartChangeAction, nEndChangeAction );
     else
         nStartChangeAction = nEndChangeAction = 0;
@@ -249,7 +249,7 @@ void ScUndoFillTable::SetChangeTrack()
             {
                 aWorkRange.aStart.SetTab(rTab);
                 aWorkRange.aEnd.SetTab(rTab);
-                pChangeTrack->AppendContentRange( aWorkRange, pUndoDoc.get(),
+                pChangeTrack->AppendContentRange( aWorkRange, *pUndoDoc,
                     nTmpAction, nEndChangeAction );
                 if ( !nStartChangeAction )
                     nStartChangeAction = nTmpAction;
@@ -509,7 +509,7 @@ void ScUndoAutoFill::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
-        pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc.get(),
+        pChangeTrack->AppendContentRange( aBlockRange, *pUndoDoc,
             nStartChangeAction, nEndChangeAction );
     else
         nStartChangeAction = nEndChangeAction = 0;

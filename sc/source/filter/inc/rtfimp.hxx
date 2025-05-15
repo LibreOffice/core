@@ -24,7 +24,7 @@
 class ScRTFImport : public ScEEImport
 {
 public:
-    ScRTFImport(ScDocument* pDoc, const ScRange& rRange);
+    ScRTFImport(ScDocument& rDoc, const ScRange& rRange);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

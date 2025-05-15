@@ -289,9 +289,9 @@ void ScHTMLStyles::insertProp(
 
 // BASE class for HTML parser classes
 
-ScHTMLParser::ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
+ScHTMLParser::ScHTMLParser( EditEngine* pEditEngine, ScDocument& rDoc ) :
     ScEEParser( pEditEngine ),
-    mpDoc( pDoc )
+    mrDoc( rDoc )
 {
     maFontHeights[0] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::get() * 20;
     maFontHeights[1] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::get() * 20;
@@ -308,8 +308,8 @@ ScHTMLParser::~ScHTMLParser()
 
 ScHTMLLayoutParser::ScHTMLLayoutParser(
     EditEngine* pEditP, OUString _aBaseURL, const Size& aPageSizeP,
-    ScDocument* pDocP ) :
-        ScHTMLParser( pEditP, pDocP ),
+    ScDocument& rDoc ) :
+        ScHTMLParser( pEditP, rDoc ),
         aPageSize( aPageSizeP ),
         aBaseURL(std::move( _aBaseURL )),
         xLockedList( new ScRangeList ),
@@ -351,7 +351,7 @@ ErrCode ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
     Link<HtmlImportInfo&,void> aOldLink = pEdit->GetHtmlImportHdl();
     pEdit->SetHtmlImportHdl( LINK( this, ScHTMLLayoutParser, HTMLImportHdl ) );
 
-    ScDocShell* pObjSh = mpDoc->GetDocumentShell();
+    ScDocShell* pObjSh = mrDoc.GetDocumentShell();
     bool bLoading = pObjSh && pObjSh->IsLoading();
 
     SvKeyValueIteratorRef xValues;
@@ -537,7 +537,7 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
 
 void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
 {
-    if ( !mpDoc->ValidCol(pE->nCol) )
+    if ( !mrDoc.ValidCol(pE->nCol) )
         return;
 
 // Or else this would create a wrong value at ScAddress (chance for an infinite loop)!
@@ -549,7 +549,7 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
     bool bFail = o3tl::checked_add<SCCOL>(pE->nCol, pE->nColOverlap - 1, nEndCol) ||
                  o3tl::checked_add<SCROW>(pE->nRow, pE->nRowOverlap - 1, nEndRow);
 
-    if (bFail || nEndRow > mpDoc->MaxRow())
+    if (bFail || nEndRow > mrDoc.MaxRow())
     {
         SAL_WARN("sc", "invalid range: " << pE->nCol << " " << pE->nColOverlap <<
                                      " " << pE->nRow << " " << pE->nRowOverlap);
@@ -568,7 +568,7 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
                 SCCOL nTmp(0);
                 bFail = o3tl::checked_add<SCCOL>(rR.aEnd.Col(), 1, pE->nCol) ||
                         o3tl::checked_add<SCCOL>(pE->nCol, pE->nRowOverlap - 1, nTmp);
-                if ( bFail || pE->nCol > mpDoc->MaxCol() || nTmp > mpDoc->MaxCol() )
+                if ( bFail || pE->nCol > mrDoc.MaxCol() || nTmp > mrDoc.MaxCol() )
                     bBadCol = true;
                 else
                 {
@@ -1069,7 +1069,7 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
             case HtmlOptionId::COLSPAN:
             {
                 sal_Int32 nColOverlap = rOption.GetString().toInt32();
-                if (nColOverlap >= 0 && nColOverlap <= mpDoc->MaxCol())
+                if (nColOverlap >= 0 && nColOverlap <= mrDoc.MaxCol())
                     mxActEntry->nColOverlap = static_cast<SCCOL>(nColOverlap);
                 else
                     SAL_WARN("sc", "ScHTMLLayoutParser::TableDataOn ignoring colspan: " << nColOverlap);
@@ -1078,7 +1078,7 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
             case HtmlOptionId::ROWSPAN:
             {
                 sal_Int32 nRowOverlap = rOption.GetString().toInt32();
-                if (nRowOverlap >= 0 && nRowOverlap <= mpDoc->MaxRow())
+                if (nRowOverlap >= 0 && nRowOverlap <= mrDoc.MaxRow())
                     mxActEntry->nRowOverlap = static_cast<SCROW>(nRowOverlap);
                 else
                     SAL_WARN("sc", "ScHTMLLayoutParser::TableDataOn ignoring rowspan: " << nRowOverlap);
@@ -1645,7 +1645,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
     switch ( pInfo->nToken )
     {
         case HtmlTokenId::META:
-        if (ScDocShell* pDocSh = mpDoc->GetDocumentShell())
+        if (ScDocShell* pDocSh = mrDoc.GetDocumentShell())
         {
             HTMLParser* pParser = static_cast<HTMLParser*>(pInfo->pParser);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -1663,7 +1663,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         break;
         case HtmlTokenId::TITLE_OFF:
         {
-            ScDocShell* pDocSh = mpDoc->GetDocumentShell();
+            ScDocShell* pDocSh = mrDoc.GetDocumentShell();
             if ( bInTitle && !aString.isEmpty() && pDocSh )
             {
                 // Remove blanks from line breaks
@@ -2432,10 +2432,9 @@ void ScHTMLTable::GetDocRange( ScRange& rRange ) const
     }
 }
 
-void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos ) const
+void ScHTMLTable::ApplyCellBorders( ScDocument& rDoc, const ScAddress& rFirstPos ) const
 {
-    OSL_ENSURE( pDoc, "ScHTMLTable::ApplyCellBorders - no document" );
-    if( pDoc && mbBorderOn )
+    if( mbBorderOn )
     {
         const SCCOL nLastCol = maSize.mnCols - 1;
         const SCROW nLastRow = maSize.mnRows - 1;
@@ -2465,7 +2464,7 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
                     {
                         aBorderItem.SetLine( (nCellRow == nCellRow1) ? pTopLine : nullptr, SvxBoxItemLine::TOP );
                         aBorderItem.SetLine( (nCellRow == nCellRow2) ? pBottomLine : nullptr, SvxBoxItemLine::BOTTOM );
-                        pDoc->ApplyAttr( nCellCol, nCellRow, rFirstPos.Tab(), aBorderItem );
+                        rDoc.ApplyAttr( nCellCol, nCellRow, rFirstPos.Tab(), aBorderItem );
                     }
                 }
             }
@@ -2473,7 +2472,7 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
     }
 
     for( ScHTMLTableIterator aIter( mxNestedTables.get() ); aIter.is(); ++aIter )
-        aIter->ApplyCellBorders( pDoc, rFirstPos );
+        aIter->ApplyCellBorders( rDoc, rFirstPos );
 }
 
 SvNumberFormatter* ScHTMLTable::GetFormatTable()
@@ -2964,13 +2963,13 @@ void ScHTMLGlobalTable::Recalc()
     RecalcDocPos( GetDocPos() );
 }
 
-ScHTMLQueryParser::ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
-    ScHTMLParser( pEditEngine, pDoc ),
+ScHTMLQueryParser::ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument& rDoc ) :
+    ScHTMLParser( pEditEngine, rDoc ),
     mnUnusedId( SC_HTML_GLOBAL_TABLE ),
     mbTitleOn( false )
 {
     mxGlobTable.reset(
-        new ScHTMLGlobalTable(*pPool, *pEdit, maList, mnUnusedId, this, *pDoc));
+        new ScHTMLGlobalTable(*pPool, *pEdit, maList, mnUnusedId, this, rDoc));
     mpCurrTable = mxGlobTable.get();
 }
 
@@ -2983,7 +2982,7 @@ ErrCode ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
     SvKeyValueIteratorRef xValues;
     SvKeyValueIterator* pAttributes = nullptr;
 
-    ScDocShell* pObjSh = mpDoc->GetDocumentShell();
+    ScDocShell* pObjSh = mrDoc.GetDocumentShell();
     if( pObjSh && pObjSh->IsLoading() )
     {
         pAttributes = pObjSh->GetHeaderAttributes();
@@ -3158,15 +3157,15 @@ void ScHTMLQueryParser::FontOn( const HtmlImportInfo& rInfo )
 
 void ScHTMLQueryParser::MetaOn( const HtmlImportInfo& rInfo )
 {
-    if( mpDoc->GetDocumentShell() )
+    if( mrDoc.GetDocumentShell() )
     {
         HTMLParser* pParser = static_cast< HTMLParser* >( rInfo.pParser );
 
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            static_cast<cppu::OWeakObject*>(mpDoc->GetDocumentShell()->GetModel()), uno::UNO_QUERY_THROW);
+            static_cast<cppu::OWeakObject*>(mrDoc.GetDocumentShell()->GetModel()), uno::UNO_QUERY_THROW);
         pParser->ParseMetaOptions(
             xDPS->getDocumentProperties(),
-            mpDoc->GetDocumentShell()->GetHeaderAttributes() );
+            mrDoc.GetDocumentShell()->GetHeaderAttributes() );
     }
 }
 
@@ -3182,10 +3181,10 @@ void ScHTMLQueryParser::TitleOff( const HtmlImportInfo& rInfo )
         return;
 
     OUString aTitle = maTitle.makeStringAndClear().trim();
-    if (!aTitle.isEmpty() && mpDoc->GetDocumentShell())
+    if (!aTitle.isEmpty() && mrDoc.GetDocumentShell())
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            static_cast<cppu::OWeakObject*>(mpDoc->GetDocumentShell()->GetModel()), uno::UNO_QUERY_THROW);
+            static_cast<cppu::OWeakObject*>(mrDoc.GetDocumentShell()->GetModel()), uno::UNO_QUERY_THROW);
 
         xDPS->getDocumentProperties()->setTitle(aTitle);
     }

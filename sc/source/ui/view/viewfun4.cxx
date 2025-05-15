@@ -89,7 +89,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         const bool bRecord (rDoc.IsUndoEnabled());
 
         const ScPatternAttr* pPattern = rDoc.GetPattern( nStartCol, nStartRow, nTab );
-        std::optional<ScTabEditEngine> pEngine(std::in_place, *pPattern, rDoc.GetEnginePool(), &rDoc );
+        std::optional<ScTabEditEngine> pEngine(std::in_place, *pPattern, rDoc.GetEnginePool(), rDoc );
         pEngine->EnableUndo( false );
 
         vcl::Window* pActWin = GetActiveWin();

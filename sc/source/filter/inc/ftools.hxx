@@ -272,19 +272,19 @@ public:
         // eFormat == EIF_BIFF_LE4 -> only non-storage files _could_ lead to success
     virtual ErrCode ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const rtl_TextEncoding eSrc ) override;
-    virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) override;
-    virtual ErrCode ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange,
+    virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument&, ScRange& rRange ) override;
+    virtual ErrCode ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument&, ScRange& rRange,
                                    double nOutputFactor, bool bCalcWidthHeight,
                                    SvNumberFormatter* pFormatter, bool bConvertDate, bool bConvertScientific ) override;
 
-    virtual std::unique_ptr<ScEEAbsImport> CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) override;
-    virtual std::unique_ptr<ScEEAbsImport> CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) override;
+    virtual std::unique_ptr<ScEEAbsImport> CreateRTFImport( ScDocument& rDoc, const ScRange& rRange ) override;
+    virtual std::unique_ptr<ScEEAbsImport> CreateHTMLImport( ScDocument& rDoc, const OUString& rBaseURL, const ScRange& rRange ) override;
     virtual OUString       GetHTMLRangeNameList( ScDocument& rDoc, const OUString& rOrigName ) override;
 
     // various export filters
     virtual ErrCode ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) override;
-    virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest ) override;
-    virtual void ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) override;
+    virtual void ScExportDif( SvStream&, ScDocument&, const ScAddress& rOutPos, const rtl_TextEncoding eDest ) override;
+    virtual void ScExportDif( SvStream&, ScDocument&, const ScRange& rRange, const rtl_TextEncoding eDest ) override;
     virtual void ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,
                   const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions ) override;
     virtual void ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) override;

@@ -496,7 +496,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         CellType eType = aCell.getType();
                         if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)
                         {
-                            aStr2 = aCell.getString(&rDocument);
+                            aStr2 = aCell.getString(rDocument);
                             nFlag2 = lcl_DecompValueString(aStr2, nVal2, &rMinDigits);
                             if (nFlag1 == nFlag2 && aStr == aStr2)
                             {
@@ -740,7 +740,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         CellType eType = aCell.getType();
                         if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                         {
-                            aStr = aCell.getString(&rDocument);
+                            aStr = aCell.getString(rDocument);
                             nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
                             if ( nFlag1 == nFlag2 )
                             {
@@ -1467,7 +1467,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     case CELLTYPE_STRING:
                     case CELLTYPE_EDIT:
                     {
-                        aValue = aCell.getString(&rDocument);
+                        aValue = aCell.getString(rDocument);
 
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                         {
@@ -1547,7 +1547,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     case CELLTYPE_STRING:
                     case CELLTYPE_EDIT:
                     {
-                        aValue = aCell.getString(&rDocument);
+                        aValue = aCell.getString(rDocument);
                         nHeadNoneTail = lcl_DecompValueString( aValue, nVal );
                         if ( nHeadNoneTail )
                             nStart = static_cast<double>(nVal);
@@ -1991,7 +1991,7 @@ void ScTable::FillAutoSimple(
                             if (aSrcCell.getType() == CELLTYPE_STRING)
                                 aValue = aSrcCell.getSharedString()->getString();
                             else
-                                aValue = ScEditUtil::GetString(*aSrcCell.getEditText(), &rDocument);
+                                aValue = ScEditUtil::GetString(*aSrcCell.getEditText(), rDocument);
                             if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
                             {
                                 nCellDigits = 0;    // look at each source cell individually
@@ -2544,7 +2544,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if (eCellType == CELLTYPE_STRING)
                     aValue = aSrcCell.getSharedString()->getString();
                 else
-                    aValue = ScEditUtil::GetString(*aSrcCell.getEditText(), &rDocument);
+                    aValue = ScEditUtil::GetString(*aSrcCell.getEditText(), rDocument);
                 sal_Int32 nStringValue;
                 sal_uInt16 nMinDigits = nArgMinDigits;
                 short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );

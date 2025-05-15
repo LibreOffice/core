@@ -3217,7 +3217,7 @@ void ScXMLExport::WriteCell(ScDocument& rDoc, const ScMyCell& aCell, sal_Int32 n
         case table::CellContentType_TEXT :
             {
                 OUString sFormattedString(lcl_GetFormattedString(rDoc, aCell.maBaseCell, aCell.maCellAddress));
-                OUString sCellString = aCell.maBaseCell.getString(&rDoc);
+                OUString sCellString = aCell.maBaseCell.getString(rDoc);
                 bool bExportValue = sCellString.indexOf('\x001') == -1;
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                         sCellString, sFormattedString, bExportValue);
@@ -3256,7 +3256,7 @@ void ScXMLExport::WriteCell(ScDocument& rDoc, const ScMyCell& aCell, sal_Int32 n
                     if (pFormulaCell->GetErrCode() != FormulaError::NONE)
                     {
                         AddAttribute(sAttrValueType, XML_STRING);
-                        AddAttribute(sAttrStringValue, aCell.maBaseCell.getString(&rDoc));
+                        AddAttribute(sAttrStringValue, aCell.maBaseCell.getString(rDoc));
                         if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                         {
                             //export calcext:value-type="error"
@@ -3278,10 +3278,10 @@ void ScXMLExport::WriteCell(ScDocument& rDoc, const ScMyCell& aCell, sal_Int32 n
                     }
                     else
                     {
-                        if (!aCell.maBaseCell.getString(&rDoc).isEmpty())
+                        if (!aCell.maBaseCell.getString(rDoc).isEmpty())
                         {
                             AddAttribute(sAttrValueType, XML_STRING);
-                            AddAttribute(sAttrStringValue, aCell.maBaseCell.getString(&rDoc));
+                            AddAttribute(sAttrStringValue, aCell.maBaseCell.getString(rDoc));
                             if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                             {
                                 AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, XML_STRING);
@@ -3939,7 +3939,7 @@ bool ScXMLExport::IsCellEqual(const ScDocument& rDoc, const ScMyCell& aCell1, co
                                 bIsEqual = false;
                             else
                             {
-                                bIsEqual = (aCell1.maBaseCell.getString(&rDoc) == aCell2.maBaseCell.getString(&rDoc));
+                                bIsEqual = (aCell1.maBaseCell.getString(rDoc) == aCell2.maBaseCell.getString(rDoc));
                             }
                         }
                         break;

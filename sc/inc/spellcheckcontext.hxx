@@ -55,14 +55,14 @@ class SpellCheckContext
 
     std::unique_ptr<SpellCheckCache> mpCache;
     std::unique_ptr<SpellCheckResult> mpResult;
-    ScDocument* pDoc;
+    ScDocument& rDoc;
     std::unique_ptr<ScTabEditEngine> mpEngine;
     std::unique_ptr<SpellCheckStatus> mpStatus;
     SCTAB mnTab;
     LanguageType meLanguage;
 
 public:
-    SpellCheckContext(ScDocument* pDocument, SCTAB nTab);
+    SpellCheckContext(ScDocument& rDocument, SCTAB nTab);
     ~SpellCheckContext();
     void dispose();
 

@@ -1153,20 +1153,6 @@ css::lang::Locale& ScGlobal::GetLocale()
         []() { return new css::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale()); });
 }
 
-ScFieldEditEngine& ScGlobal::GetStaticFieldEditEngine()
-{
-    assert(!bThreadedGroupCalcInProgress);
-    if (!xFieldEditEngine)
-    {
-        // Creating a ScFieldEditEngine with pDocument=NULL leads to document
-        // specific fields not being resolvable! See
-        // ScFieldEditEngine::CalcFieldValue(). pEnginePool=NULL lets
-        // EditEngine internally create and delete a default pool.
-        xFieldEditEngine.reset(new ScFieldEditEngine( nullptr, nullptr));
-    }
-    return *xFieldEditEngine;
-}
-
 sc::SharedStringPoolPurge& ScGlobal::GetSharedStringPoolPurge()
 {
     return *comphelper::doubleCheckedInit( pSharedStringPoolPurge,

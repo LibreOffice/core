@@ -1589,7 +1589,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 {
                     pInStream->Seek( 0 );
                     ScRange aRange;
-                    eError = ScFormatFilter::Get().ScImportRTF( *pInStream, rMedium.GetBaseURL(), m_pDocument.get(), aRange );
+                    eError = ScFormatFilter::Get().ScImportRTF( *pInStream, rMedium.GetBaseURL(), *m_pDocument, aRange );
                     if (eError != ERRCODE_NONE)
                     {
                         if (!GetErrorIgnoreWarning())
@@ -1643,7 +1643,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     // HTML does its own ColWidth/RowHeight
                     CalcOutputFactor();
                     SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eLang);
-                    eError = ScFormatFilter::Get().ScImportHTML( *pInStream, rMedium.GetBaseURL(), m_pDocument.get(), aRange,
+                    eError = ScFormatFilter::Get().ScImportHTML( *pInStream, rMedium.GetBaseURL(), *m_pDocument, aRange,
                                             GetOutputFactor(), !bWebQuery, &aNumFormatter, bDateConvert, bScientificConvert );
                     if (eError != ERRCODE_NONE)
                     {
@@ -2738,7 +2738,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             }
 
             weld::WaitObject aWait( GetActiveDialogParent() );
-            ScFormatFilter::Get().ScExportDif( *pStream, m_pDocument.get(), ScAddress(0,0,0),
+            ScFormatFilter::Get().ScExportDif( *pStream, *m_pDocument, ScAddress(0,0,0),
                 ScGlobal::GetCharsetValue(sItStr) );
             bRet = true;
 

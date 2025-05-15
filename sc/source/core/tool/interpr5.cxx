@@ -431,7 +431,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
             }
             else if (aCell.hasString())
             {
-                pMat->PutString( mrStrPool.intern( aCell.getString(&mrDoc)), nMatCol, nMatRow);
+                pMat->PutString( mrStrPool.intern( aCell.getString(mrDoc)), nMatCol, nMatRow);
             }
             else
             {

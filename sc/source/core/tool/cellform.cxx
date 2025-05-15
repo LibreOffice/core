@@ -49,7 +49,7 @@ OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nForma
         case CELLTYPE_EDIT:
         {
             OUString str;
-            rContext.NFGetOutputString(rCell.getString(&rDoc), nFormat, str, ppColor );
+            rContext.NFGetOutputString(rCell.getString(rDoc), nFormat, str, ppColor );
             return str;
         }
         case CELLTYPE_VALUE:
@@ -140,7 +140,7 @@ OUString ScCellFormat::GetInputString(
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            return rCell.getString(&rDoc);
+            return rCell.getString(rDoc);
         case CELLTYPE_VALUE:
             return rContext.NFGetInputLineString(rCell.getDouble(), nFormat, bFiltering, bForceSystemLocale);
         break;

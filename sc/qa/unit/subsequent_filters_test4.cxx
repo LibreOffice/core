@@ -515,8 +515,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Sheet name is "));
     CPPUNIT_ASSERT_MESSAGE("Sheet name field item not found.",
                            pEditText->HasField(text::textfield::Type::TABLE));
-    CPPUNIT_ASSERT_EQUAL(u"Sheet name is Test."_ustr, ScEditUtil::GetString(*pEditText, pDoc));
-    CPPUNIT_ASSERT_EQUAL(u"Sheet name is ?."_ustr, ScEditUtil::GetString(*pEditText, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"Sheet name is Test."_ustr, ScEditUtil::GetString(*pEditText, *pDoc));
+
+    ScFieldEditEngine* pEE = new ScFieldEditEngine(nullptr, nullptr);
+    pEE->SetText(*pEditText);
+    CPPUNIT_ASSERT_EQUAL(u"Sheet name is ?."_ustr, ScEditUtil::GetMultilineString(*pEE));
 
     // Cell with URL field item.
     aPos.IncRow();
@@ -529,9 +532,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("URL field item not found.",
                            pEditText->HasField(text::textfield::Type::URL));
     CPPUNIT_ASSERT_EQUAL(u"URL: http://libreoffice.org"_ustr,
-                         ScEditUtil::GetString(*pEditText, pDoc));
-    CPPUNIT_ASSERT_EQUAL(u"URL: http://libreoffice.org"_ustr,
-                         ScEditUtil::GetString(*pEditText, nullptr));
+                         ScEditUtil::GetString(*pEditText, *pDoc));
+    pEE->SetText(*pEditText);
+    CPPUNIT_ASSERT_EQUAL(u"URL: http://libreoffice.org"_ustr, ScEditUtil::GetMultilineString(*pEE));
 
     // Cell with Date field item.
     aPos.IncRow();
@@ -544,9 +547,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("Date field item not found.",
                            pEditText->HasField(text::textfield::Type::DATE));
     CPPUNIT_ASSERT_MESSAGE("Date field not resolved with pDoc->",
-                           ScEditUtil::GetString(*pEditText, pDoc).indexOf("/20") > 0);
+                           ScEditUtil::GetString(*pEditText, *pDoc).indexOf("/20") > 0);
+    pEE->SetText(*pEditText);
     CPPUNIT_ASSERT_MESSAGE("Date field not resolved with NULL.",
-                           ScEditUtil::GetString(*pEditText, nullptr).indexOf("/20") > 0);
+                           ScEditUtil::GetMultilineString(*pEE).indexOf("/20") > 0);
 
     // Cell with DocInfo title field item.
     aPos.IncRow();
@@ -558,8 +562,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Title: "));
     CPPUNIT_ASSERT_MESSAGE("DocInfo title field item not found.",
                            pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
-    CPPUNIT_ASSERT_EQUAL(u"Title: Test Document"_ustr, ScEditUtil::GetString(*pEditText, pDoc));
-    CPPUNIT_ASSERT_EQUAL(u"Title: ?"_ustr, ScEditUtil::GetString(*pEditText, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"Title: Test Document"_ustr, ScEditUtil::GetString(*pEditText, *pDoc));
+    pEE->SetText(*pEditText);
+    CPPUNIT_ASSERT_EQUAL(u"Title: ?"_ustr, ScEditUtil::GetMultilineString(*pEE));
 
     // Cell with sentence with both bold and italic sequences.
     aPos.IncRow();

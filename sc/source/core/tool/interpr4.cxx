@@ -233,7 +233,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScRefCell
         {
             // SUM(A1:A2) differs from A1+A2. No good. But people insist on
             // it ... #i5658#
-            OUString aStr = rCell.getString(&mrDoc);
+            OUString aStr = rCell.getString(mrDoc);
             fValue = ConvertStringToValue( aStr );
         }
         break;
@@ -253,7 +253,7 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, const ScRefCellValue
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            rStr = rCell.getSharedString(&mrDoc, mrStrPool);
+            rStr = rCell.getSharedString(mrDoc, mrStrPool);
         break;
         case CELLTYPE_FORMULA:
         {
@@ -404,7 +404,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     {
                         case CELLTYPE_STRING:
                         case CELLTYPE_EDIT:
-                            aStr = aCell.getString(&mrDoc);
+                            aStr = aCell.getString(mrDoc);
                             break;
                         case CELLTYPE_FORMULA:
                             if (!aCell.getFormula()->IsValue())
@@ -508,7 +508,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     {
                         case CELLTYPE_STRING :
                         case CELLTYPE_EDIT :
-                            aStr = aCell.getString(&mrDoc);
+                            aStr = aCell.getString(mrDoc);
                             nType = 1;
                             break;
                         case CELLTYPE_VALUE :
@@ -1419,7 +1419,7 @@ void ScInterpreter::PopRefListPushMatrixOrRef()
                         else if (aCell.hasEmptyValue())
                             xMat->PutEmpty( 0, i);
                         else if (aCell.hasString())
-                            xMat->PutString( mrStrPool.intern( aCell.getString(&mrDoc)), 0, i);
+                            xMat->PutString( mrStrPool.intern( aCell.getString(mrDoc)), 0, i);
                         else
                             xMat->PutDouble( aCell.getValue(), 0, i);
                     }
@@ -3562,7 +3562,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
             break;
             case CELLTYPE_STRING :
             case CELLTYPE_EDIT :
-                pVar->PutString(aCell.getString(&mrDoc));
+                pVar->PutString(aCell.getString(mrDoc));
             break;
             case CELLTYPE_FORMULA :
                 nErr = aCell.getFormula()->GetErrCode();

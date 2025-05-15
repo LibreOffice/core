@@ -81,7 +81,7 @@ void ScDuplicateRecordsDlg::SetDialogData(bool bToggle)
             {
                 aCell.assign(mrViewData.GetDocument(),
                              ScAddress{ i, mrRange.aStart.Row(), mrRange.aStart.Tab() });
-                InsertEntry(aCell.getString(&mrViewData.GetDocument()), bToggle);
+                InsertEntry(aCell.getString(mrViewData.GetDocument()), bToggle);
             }
         }
         else
@@ -104,7 +104,7 @@ void ScDuplicateRecordsDlg::SetDialogData(bool bToggle)
             {
                 aCell.assign(mrViewData.GetDocument(),
                              ScAddress{ mrRange.aStart.Col(), i, mrRange.aStart.Tab() });
-                InsertEntry(aCell.getString(&mrViewData.GetDocument()), bToggle);
+                InsertEntry(aCell.getString(mrViewData.GetDocument()), bToggle);
             }
         }
         else

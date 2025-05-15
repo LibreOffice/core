@@ -1182,10 +1182,10 @@ bool Test::checkHorizontalIterator(ScDocument& rDoc, const std::vector<std::vect
             return false;
         }
 
-        if (OUString::createFromAscii(pChecks[i].pVal) != pCell->getString(&rDoc))
+        if (OUString::createFromAscii(pChecks[i].pVal) != pCell->getString(rDoc))
         {
             cerr << "String mismatch " << pChecks[i].pVal << " vs. " <<
-                pCell->getString(&rDoc) << endl;
+                pCell->getString(rDoc) << endl;
             return false;
         }
     }

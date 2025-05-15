@@ -2143,7 +2143,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                         ScDocument& rDoc = pDocShell->GetDocument();
                         ScRefCellValue aCell(rDoc, aAddr);
 
-                        OUString aStr = aCell.getString(&rDoc);
+                        OUString aStr = aCell.getString(rDoc);
                         EditEngine aEngine( rDoc.GetEnginePool() );
                         aEngine.SetEditTextObjectPool(rDoc.GetEditPool());
 

@@ -957,7 +957,7 @@ void ScColumn::CopyStaticToDocument(
                 for (; itData != itDataEnd; ++itData)
                 {
                     const EditTextObject& rObj = **itData;
-                    svl::SharedString aSS = rDocument.GetSharedStringPool().intern(ScEditUtil::GetString(rObj, &rDocument));
+                    svl::SharedString aSS = rDocument.GetSharedStringPool().intern(ScEditUtil::GetString(rObj, rDocument));
                     aConverted.push_back(aSS);
                 }
                 aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nCurRow, aConverted.begin(), aConverted.end());

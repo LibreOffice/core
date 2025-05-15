@@ -631,10 +631,10 @@ class SAL_DLLPUBLIC_RTTI ScChangeActionContent final : public ScChangeAction
     void ClearTrack();
 
     static OUString GetStringOfCell(
-        const ScCellValue& rCell, const ScDocument* pDoc, const ScAddress& rPos );
+        const ScCellValue& rCell, const ScDocument& rDoc, const ScAddress& rPos );
 
     static OUString GetStringOfCell(
-        const ScCellValue& rCell, const ScDocument* pDoc, sal_uLong nFormat );
+        const ScCellValue& rCell, const ScDocument& rDoc, sal_uLong nFormat );
 
     static void SetValue( OUString& rStr, ScCellValue& rCell, const ScAddress& rPos,
                           const ScCellValue& rOrgCell, const ScDocument* pFromDoc,
@@ -644,14 +644,14 @@ class SAL_DLLPUBLIC_RTTI ScChangeActionContent final : public ScChangeAction
                           const ScCellValue& rOrgCell, const ScDocument* pFromDoc,
                           ScDocument* pToDoc );
 
-    static void SetCell( OUString& rStr, const ScCellValue& rCell, sal_uLong nFormat, const ScDocument* pDoc );
+    static void SetCell( OUString& rStr, const ScCellValue& rCell, sal_uLong nFormat, const ScDocument& rDoc );
 
     static bool NeedsNumberFormat( const ScCellValue& rVal );
 
     void SetValueString( OUString& rValue, ScCellValue& rCell, const OUString& rStr, ScDocument* pDoc );
 
     OUString GetValueString( const OUString& rValue, const ScCellValue& rCell,
-                             const ScDocument* pDoc ) const;
+                             const ScDocument& rDoc ) const;
 
     OUString GetFormulaString( const ScFormulaCell* pCell ) const;
 
@@ -685,11 +685,11 @@ public:
         const sal_uLong nRejectingNumber, const ScBigRange& aBigRange,
         const OUString& aUser, const DateTime& aDateTime,
         const OUString &sComment, ScCellValue aOldCell,
-        const ScDocument* pDoc, const OUString& sOldValue ); // to use for XML Import
+        const ScDocument& rDoc, const OUString& sOldValue ); // to use for XML Import
 
     ScChangeActionContent(
         const sal_uLong nActionNumber, ScCellValue aNewCell,
-        const ScBigRange& aBigRange, const ScDocument* pDoc,
+        const ScBigRange& aBigRange, const ScDocument& rDoc,
         const OUString& sNewValue ); // to use for XML Import of Generated Actions
 
     virtual ~ScChangeActionContent() override;
@@ -716,12 +716,12 @@ public:
     // Used in import filter AppendContentOnTheFly,
     void SetOldNewCells(
         const ScCellValue& rOldCell, sal_uLong nOldFormat,
-        const ScCellValue& rNewCell, sal_uLong nNewFormat, const ScDocument* pDoc );
+        const ScCellValue& rNewCell, sal_uLong nNewFormat, const ScDocument& rDoc );
 
     // Use this only in the XML import,
     // takes ownership of cell.
     void SetNewCell(
-        const ScCellValue& rCell, const ScDocument* pDoc, const OUString& rFormatted );
+        const ScCellValue& rCell, const ScDocument& rDoc, const OUString& rFormatted );
 
                         // These functions should be protected but for
                         // the XML import they are public.
@@ -734,8 +734,8 @@ public:
     // assigns string / creates formula cell
     void SetOldValue( const OUString& rOld, ScDocument* pDoc );
 
-    OUString GetOldString( const ScDocument* pDoc ) const;
-    OUString GetNewString( const ScDocument* pDoc ) const;
+    OUString GetOldString( const ScDocument& rDoc ) const;
+    OUString GetNewString( const ScDocument& rDoc ) const;
     const ScCellValue& GetOldCell() const { return maOldCell;}
     const ScCellValue& GetNewCell() const { return maNewCell;}
     virtual OUString GetDescription(
@@ -886,7 +886,7 @@ class SAL_DLLPUBLIC_RTTI ScChangeTrack final : public utl::ConfigurationListener
     void                SetLastMerge( sal_uLong nVal ) { nLastMerge = nVal; }
     sal_uLong               GetLastMerge() const { return nLastMerge; }
 
-    void                SetLastCutMoveRange( const ScRange&, ScDocument* );
+    void                SetLastCutMoveRange( const ScRange&, ScDocument& );
 
                         // create block of ModifyMsg
     void                StartBlockModify( ScChangeTrackMsgType,
@@ -1000,11 +1000,11 @@ public:
                         // after new value was set in the document,
                         // old value from RefDoc/UndoDoc
     void                AppendContent( const ScAddress& rPos,
-                            const ScDocument* pRefDoc );
+                            const ScDocument& rRefDoc );
                         // after new values were set in the document,
                         // old values from RefDoc/UndoDoc
     void                AppendContentRange( const ScRange& rRange,
-                            ScDocument* pRefDoc,
+                            ScDocument& rRefDoc,
                             sal_uLong& nStartAction, sal_uLong& nEndAction,
                             ScChangeActionClipMode eMode = SC_CACM_NONE );
                         // after new value was set in the document,
@@ -1132,7 +1132,7 @@ public:
     bool IsTimeNanoSeconds() const { return bTimeNanoSeconds; }
 
     void AppendCloned( ScChangeAction* pAppend );
-    SC_DLLPUBLIC ScChangeTrack* Clone( ScDocument* pDocument ) const;
+    SC_DLLPUBLIC ScChangeTrack* Clone( ScDocument& rDocument ) const;
     static void MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct );
     /// Get info about all ScChangeAction elements.
     void GetChangeTrackInfo(tools::JsonWriter&);

@@ -33,21 +33,21 @@
 #include <formula/errorcodes.hxx>
 #include <tools/stream.hxx>
 
-void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
+void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument& rDoc,
     const ScAddress& rOutPos, const rtl_TextEncoding eNach )
 {
     SCCOL       nEndCol;
     SCROW       nEndRow;
-    pDoc->GetTableArea( rOutPos.Tab(), nEndCol, nEndRow );
+    rDoc.GetTableArea( rOutPos.Tab(), nEndCol, nEndRow );
     ScAddress   aEnd( nEndCol, nEndRow, rOutPos.Tab() );
     ScAddress   aStart( rOutPos );
 
     aStart.PutInOrder( aEnd );
 
-    ScExportDif( rStream, pDoc, ScRange( aStart, aEnd ), eNach );
+    ScExportDif( rStream, rDoc, ScRange( aStart, aEnd ), eNach );
 }
 
-void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
+void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument& rDoc,
     const ScRange&rRange, const rtl_TextEncoding eCharSet )
 {
     OSL_ENSURE( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range not sorted!" );
@@ -99,14 +99,14 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     SCROW               nNumRows = nEndRow - rRange.aStart.Row() + 1;
     SCTAB               nTab = rRange.aStart.Tab();
 
-    ScProgress          aPrgrsBar( pDoc->GetDocumentShell(), ScResId( STR_LOAD_DOC ), nNumRows, true );
+    ScProgress          aPrgrsBar( rDoc.GetDocumentShell(), ScResId( STR_LOAD_DOC ), nNumRows, true );
 
     aPrgrsBar.SetState( 0 );
 
     // TABLE
-    OSL_ENSURE( pDoc->HasTable( nTab ), "*ScExportDif(): Table not existent!" );
+    OSL_ENSURE( rDoc.HasTable( nTab ), "*ScExportDif(): Table not existent!" );
 
-    pDoc->GetName( nTab, aString );
+    rDoc.GetName( nTab, aString );
     aOS.append(OUString::Concat(pKeyTABLE)
         + "\n0,1\n\""
         + aString
@@ -154,7 +154,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
         {
             assert( aOS.isEmpty() && "aOS should be empty");
             bool bWriteStringData = false;
-            ScRefCellValue aCell(*pDoc, ScAddress(nColCnt, nRowCnt, nTab));
+            ScRefCellValue aCell(rDoc, ScAddress(nColCnt, nRowCnt, nTab));
 
             switch (aCell.getType())
             {
@@ -162,12 +162,12 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     aOS.append(pEmptyData);
                 break;
                 case CELLTYPE_VALUE:
-                    aString = pDoc->GetInputString( nColCnt, nRowCnt, nTab );
+                    aString = rDoc.GetInputString( nColCnt, nRowCnt, nTab );
                     aOS.append(pNumData + aString + "\nV\n");
                 break;
                 case CELLTYPE_EDIT:
                 case CELLTYPE_STRING:
-                    aString = aCell.getString(pDoc);
+                    aString = aCell.getString(rDoc);
                     bWriteStringData = true;
                 break;
                 case CELLTYPE_FORMULA:
@@ -175,7 +175,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                         aOS.append(pNumDataERROR);
                     else if (aCell.getFormula()->IsValue())
                     {
-                        aString = pDoc->GetInputString( nColCnt, nRowCnt, nTab );
+                        aString = rDoc.GetInputString( nColCnt, nRowCnt, nTab );
                         aOS.append(pNumData + aString + "\nV\n");
                     }
                     else

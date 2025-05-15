@@ -35,7 +35,7 @@ class ScEEImport : public ScEEAbsImport
 {
 protected:
     ScRange             maRange;
-    ScDocument*         mpDoc;
+    ScDocument&         mrDoc;
     std::unique_ptr<ScTabEditEngine>
                         mpEngine;
     std::unique_ptr<ScEEParser>        // needs mpEngine
@@ -47,7 +47,7 @@ protected:
     void                InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                        ScEEParseEntry* );
 public:
-    ScEEImport( ScDocument* pDoc, const ScRange& rRange );
+    ScEEImport( ScDocument& rDoc, const ScRange& rRange );
     virtual ~ScEEImport() override;
 
     virtual ErrCode  Read( SvStream& rStream, const OUString& rBaseURL ) override;

@@ -23,9 +23,9 @@
 #include <rtfparse.hxx>
 #include <ftools.hxx>
 
-ErrCode ScFormatFilterPluginImpl::ScImportRTF( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc, ScRange& rRange )
+ErrCode ScFormatFilterPluginImpl::ScImportRTF( SvStream &rStream, const OUString& rBaseURL, ScDocument& rDoc, ScRange& rRange )
 {
-    ScRTFImport aImp( pDoc, rRange );
+    ScRTFImport aImp( rDoc, rRange );
     ErrCode nErr = aImp.Read( rStream, rBaseURL );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
@@ -33,13 +33,13 @@ ErrCode ScFormatFilterPluginImpl::ScImportRTF( SvStream &rStream, const OUString
     return nErr;
 }
 
-std::unique_ptr<ScEEAbsImport> ScFormatFilterPluginImpl::CreateRTFImport( ScDocument* pDoc, const ScRange& rRange )
+std::unique_ptr<ScEEAbsImport> ScFormatFilterPluginImpl::CreateRTFImport( ScDocument& rDoc, const ScRange& rRange )
 {
-    return std::make_unique<ScRTFImport>( pDoc, rRange );
+    return std::make_unique<ScRTFImport>( rDoc, rRange );
 }
 
-ScRTFImport::ScRTFImport( ScDocument* pDocP, const ScRange& rRange ) :
-    ScEEImport( pDocP, rRange )
+ScRTFImport::ScRTFImport( ScDocument& rDoc, const ScRange& rRange ) :
+    ScEEImport( rDoc, rRange )
 {
     mpParser.reset(new ScRTFParser( mpEngine.get() ));
 }

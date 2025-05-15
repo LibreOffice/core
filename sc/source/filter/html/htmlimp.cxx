@@ -43,11 +43,11 @@
 #include <ftools.hxx>
 #include <tokenarray.hxx>
 
-ErrCode ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc,
+ErrCode ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument& rDoc,
         ScRange& rRange, double nOutputFactor, bool bCalcWidthHeight, SvNumberFormatter* pFormatter,
         bool bConvertDate, bool bConvertScientific )
 {
-    ScHTMLImport aImp( pDoc, rBaseURL, rRange, bCalcWidthHeight );
+    ScHTMLImport aImp( rDoc, rBaseURL, rRange, bCalcWidthHeight );
     ErrCode nErr = aImp.Read( rStream, rBaseURL );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
@@ -55,18 +55,18 @@ ErrCode ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUStrin
     return nErr;
 }
 
-std::unique_ptr<ScEEAbsImport> ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange )
+std::unique_ptr<ScEEAbsImport> ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument& rDoc, const OUString& rBaseURL, const ScRange& rRange )
 {
-    return std::make_unique<ScHTMLImport>( pDocP, rBaseURL, rRange, true/*bCalcWidthHeight*/ );
+    return std::make_unique<ScHTMLImport>( rDoc, rBaseURL, rRange, true/*bCalcWidthHeight*/ );
 }
 
-ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) :
-    ScEEImport( pDocP, rRange )
+ScHTMLImport::ScHTMLImport( ScDocument& rDoc, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) :
+    ScEEImport( rDoc, rRange )
 {
     Size aPageSize;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    const OUString aPageStyle = mpDoc->GetPageStyle( rRange.aStart.Tab() );
-    ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(mpDoc->
+    const OUString aPageStyle = mrDoc.GetPageStyle( rRange.aStart.Tab() );
+    ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(mrDoc.
         GetStyleSheetPool()->Find( aPageStyle, SfxStyleFamily::Page ));
     if ( pStyleSheet )
     {
@@ -94,9 +94,9 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
             SvxPaperInfo::GetPaperSize( PAPER_A4 ), MapMode( MapUnit::MapTwip ) );
     }
     if( bCalcWidthHeight )
-        mpParser.reset( new ScHTMLLayoutParser( mpEngine.get(), rBaseURL, aPageSize, pDocP ));
+        mpParser.reset( new ScHTMLLayoutParser( mpEngine.get(), rBaseURL, aPageSize, rDoc ));
     else
-        mpParser.reset( new ScHTMLQueryParser( mpEngine.get(), pDocP ));
+        mpParser.reset( new ScHTMLQueryParser( mpEngine.get(), rDoc ));
 }
 
 void ScHTMLImport::InsertRangeName( ScDocument& rDoc, const OUString& rName, const ScRange& rRange )
@@ -123,7 +123,7 @@ void ScHTMLImport::WriteToDocument(
         return;
 
     // set cell borders for HTML table cells
-    pGlobTable->ApplyCellBorders( mpDoc, maRange.aStart );
+    pGlobTable->ApplyCellBorders( mrDoc, maRange.aStart );
 
     // correct cell borders for merged cells
     for ( size_t i = 0, n = pParser->ListSize(); i < n; ++i )
@@ -132,27 +132,27 @@ void ScHTMLImport::WriteToDocument(
         if( (pEntry->nColOverlap > 1) || (pEntry->nRowOverlap > 1) )
         {
             SCTAB nTab = maRange.aStart.Tab();
-            const ScMergeAttr* pItem = mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE );
+            const ScMergeAttr* pItem = mrDoc.GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE );
             if( pItem->IsMerged() )
             {
                 SCCOL nColMerge = pItem->GetColMerge();
                 SCROW nRowMerge = pItem->GetRowMerge();
 
-                const SvxBoxItem* pToItem = mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER );
+                const SvxBoxItem* pToItem = mrDoc.GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER );
                 SvxBoxItem aNewItem( *pToItem );
                 if( nColMerge > 1 )
                 {
                     const SvxBoxItem* pFromItem =
-                        mpDoc->GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER );
+                        mrDoc.GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER );
                     aNewItem.SetLine( pFromItem->GetLine( SvxBoxItemLine::RIGHT ), SvxBoxItemLine::RIGHT );
                 }
                 if( nRowMerge > 1 )
                 {
                     const SvxBoxItem* pFromItem =
-                        mpDoc->GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER );
+                        mrDoc.GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER );
                     aNewItem.SetLine( pFromItem->GetLine( SvxBoxItemLine::BOTTOM ), SvxBoxItemLine::BOTTOM );
                 }
-                mpDoc->ApplyAttr( pEntry->nCol, pEntry->nRow, nTab, aNewItem );
+                mrDoc.ApplyAttr( pEntry->nCol, pEntry->nRow, nTab, aNewItem );
             }
         }
     }
@@ -162,10 +162,10 @@ void ScHTMLImport::WriteToDocument(
     ScRange aNewRange( maRange.aStart );
     aNewRange.aEnd.IncCol( static_cast<SCCOL>(pGlobTable->GetDocSize( tdCol )) - 1 );
     aNewRange.aEnd.IncRow( pGlobTable->GetDocSize( tdRow ) - 1 );
-    InsertRangeName( *mpDoc, ScfTools::GetHTMLDocName(), aNewRange );
+    InsertRangeName( mrDoc, ScfTools::GetHTMLDocName(), aNewRange );
 
     // 2 - all tables
-    InsertRangeName( *mpDoc, ScfTools::GetHTMLTablesName(), ScRange( maRange.aStart ) );
+    InsertRangeName( mrDoc, ScfTools::GetHTMLTablesName(), ScRange( maRange.aStart ) );
 
     // 3 - single tables
     SCCOL nColDiff = maRange.aStart.Col();
@@ -178,7 +178,7 @@ void ScHTMLImport::WriteToDocument(
     while( (pTable = pGlobTable->FindNestedTable( ++nTableId )) != nullptr )
     {
         pTable->GetDocRange( aNewRange );
-        if (!aNewRange.Move( nColDiff, nRowDiff, nTabDiff, aErrorRange, *mpDoc ))
+        if (!aNewRange.Move( nColDiff, nRowDiff, nTabDiff, aErrorRange, mrDoc ))
         {
             assert(!"can't move");
         }
@@ -191,8 +191,8 @@ void ScHTMLImport::WriteToDocument(
         if (!pTable->GetTableCaption().isEmpty())
             aName.append(" - " + pTable->GetTableCaption());
         const OUString sName(aName.makeStringAndClear());
-        if (!mpDoc->GetRangeName()->findByUpperName(ScGlobal::getCharClass().uppercase(sName)))
-            InsertRangeName(*mpDoc, sName, aNewRange);
+        if (!mrDoc.GetRangeName()->findByUpperName(ScGlobal::getCharClass().uppercase(sName)))
+            InsertRangeName(mrDoc, sName, aNewRange);
     }
 }
 

@@ -470,7 +470,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateContentAc
     OUString sComment (pAction->aInfo.sComment);
 
     return std::make_unique<ScChangeActionContent>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
-        pAction->aBigRange, aUser, aDateTime, sComment, aCell, &rDoc, sInputString);
+        pAction->aBigRange, aUser, aDateTime, sComment, aCell, rDoc, sInputString);
 }
 
 void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(std::vector<ScMyGenerated>& rList, ScDocument& rDoc)
@@ -585,7 +585,7 @@ void ScXMLChangeTrackingImportHelper::SetContentDependencies(const ScMyContentAc
     if (rOldCell.isEmpty())
         return;
 
-    pPrevActContent->SetNewCell(rOldCell, &rDoc, OUString());
+    pPrevActContent->SetNewCell(rOldCell, rDoc, OUString());
 }
 
 void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction, ScDocument& rDoc)
@@ -616,7 +616,7 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction, S
                         {
                             // #i40704# Don't overwrite SetNewCell result by calling SetNewValue,
                             // instead pass the input string to SetNewCell.
-                            pContentAct->SetNewCell(rCell, &rDoc, rDeleted.pCellInfo->sInputString);
+                            pContentAct->SetNewCell(rCell, rDoc, rDeleted.pCellInfo->sInputString);
                         }
                     }
                 }
@@ -665,7 +665,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
             if (aCell.getType() != CELLTYPE_FORMULA)
             {
                 aNewCell = aCell;
-                pChangeActionContent->SetNewCell(aNewCell, &rDoc, OUString());
+                pChangeActionContent->SetNewCell(aNewCell, rDoc, OUString());
                 pChangeActionContent->SetNewValue(aCell, &rDoc);
             }
             else
@@ -699,7 +699,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
                     aNewCell.getFormula()->SetMatColsRows(nCols, nRows);
                 }
                 aNewCell.getFormula()->SetInChangeTrack(true);
-                pChangeActionContent->SetNewCell(aNewCell, &rDoc, OUString());
+                pChangeActionContent->SetNewCell(aNewCell, rDoc, OUString());
                 // #i40704# don't overwrite the formula string via SetNewValue()
             }
         }

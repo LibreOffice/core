@@ -27,7 +27,7 @@ private:
     static void         InsertRangeName( ScDocument& rDoc, const OUString& rName, const ScRange& rRange );
 
 public:
-    ScHTMLImport( ScDocument* pDoc, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );
+    ScHTMLImport( ScDocument& rDoc, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );
 
     virtual void        WriteToDocument( bool bSizeColsRows = false, double nOutputFactor = 1.0,
                                          SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true,

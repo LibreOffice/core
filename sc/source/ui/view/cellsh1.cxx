@@ -3744,7 +3744,7 @@ void ScCellShell::ExecuteFillSingleEdit()
             aInit += pCode->CreateString(aCxt, aCurPos);
         }
         else
-            aInit = aCell.getString(&rDoc);
+            aInit = aCell.getString(rDoc);
     }
 
     ScModule::get()->SetInputMode(SC_INPUT_TABLE, &aInit);

@@ -1059,7 +1059,7 @@ void WorksheetGlobals::insertHyperlink( const ScAddress& rAddress, const OUStrin
 
     if (aCell.getType() == CELLTYPE_STRING || aCell.getType() == CELLTYPE_EDIT)
     {
-        OUString aStr = aCell.getString(&rDoc.getDoc());
+        OUString aStr = aCell.getString(rDoc.getDoc());
         ScFieldEditEngine& rEE = rDoc.getDoc().GetEditEngine();
         rEE.Clear();
 

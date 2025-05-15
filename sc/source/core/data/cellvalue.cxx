@@ -187,7 +187,7 @@ bool hasNumericImpl( CellType eType, ScFormulaCell* pFormula )
 }
 
 template <typename T>
-OUString getStringImpl( const T& rCell, const ScDocument* pDoc )
+OUString getStringImpl( const T& rCell, const ScDocument& rDoc )
 {
     switch (rCell.getType())
     {
@@ -197,7 +197,7 @@ OUString getStringImpl( const T& rCell, const ScDocument* pDoc )
             return rCell.getSharedString()->getString();
         case CELLTYPE_EDIT:
             if (rCell.getEditText())
-                return ScEditUtil::GetString(*rCell.getEditText(), pDoc);
+                return ScEditUtil::GetString(*rCell.getEditText(), rDoc);
         break;
         case CELLTYPE_FORMULA:
             return rCell.getFormula()->GetString().getString();
@@ -218,7 +218,7 @@ OUString getRawStringImpl( const CellT& rCell, const ScDocument& rDoc )
             return rCell.getSharedString()->getString();
         case CELLTYPE_EDIT:
             if (rCell.getEditText())
-                return ScEditUtil::GetString(*rCell.getEditText(), &rDoc);
+                return ScEditUtil::GetString(*rCell.getEditText(), rDoc);
         break;
         case CELLTYPE_FORMULA:
             return rCell.getFormula()->GetRawString().getString();
@@ -514,7 +514,7 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType
 
 OUString ScCellValue::getString( const ScDocument& rDoc ) const
 {
-    return getStringImpl(*this, &rDoc);
+    return getStringImpl(*this, rDoc);
 }
 
 bool ScCellValue::isEmpty() const
@@ -655,12 +655,12 @@ double ScRefCellValue::getRawValue() const
     return 0.0;
 }
 
-OUString ScRefCellValue::getString( const ScDocument* pDoc ) const
+OUString ScRefCellValue::getString( const ScDocument& rDoc ) const
 {
-    return getStringImpl(*this, pDoc);
+    return getStringImpl(*this, rDoc);
 }
 
-svl::SharedString ScRefCellValue::getSharedString( const ScDocument* pDoc, svl::SharedStringPool& rStrPool ) const
+svl::SharedString ScRefCellValue::getSharedString( const ScDocument& rDoc, svl::SharedStringPool& rStrPool ) const
 {
     switch (getType())
     {
@@ -670,7 +670,7 @@ svl::SharedString ScRefCellValue::getSharedString( const ScDocument* pDoc, svl::
             return *getSharedString();
         case CELLTYPE_EDIT:
             if (auto pEditText = getEditText())
-                return rStrPool.intern(ScEditUtil::GetString(*pEditText, pDoc));
+                return rStrPool.intern(ScEditUtil::GetString(*pEditText, rDoc));
             break;
         case CELLTYPE_FORMULA:
             return getFormula()->GetString();

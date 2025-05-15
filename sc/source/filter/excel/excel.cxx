@@ -442,7 +442,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCalcRTF(SvStream &rStream)
 
     try
     {
-        bRet = ScFormatFilter::Get().ScImportRTF(rStream, OUString(), &aDocument, aRange) == ERRCODE_NONE;
+        bRet = ScFormatFilter::Get().ScImportRTF(rStream, OUString(), aDocument, aRange) == ERRCODE_NONE;
     }
     catch (const std::range_error&)
     {

@@ -3036,7 +3036,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
             Fraction aFract(1,1);
-            tools::Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
+            tools::Rectangle aUtilRect = ScEditUtil( *mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.setWidth( aUtilRect.GetWidth() );
         }
@@ -3957,7 +3957,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
             Fraction aFract(1,1);
-            tools::Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
+            tools::Rectangle aUtilRect = ScEditUtil( *mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.setWidth( aUtilRect.GetWidth() );
         }
@@ -4253,7 +4253,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
             Fraction aFract(1,1);
-            tools::Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
+            tools::Rectangle aUtilRect = ScEditUtil( *mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.setWidth( aUtilRect.GetWidth() );
         }

@@ -1179,14 +1179,14 @@ protected:
     };
 
     std::vector<StrEntry> maStrEntries;
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
 
-    StrEntries(sc::CellStoreType& rCells, ScDocument* pDoc) : mrCells(rCells), mpDoc(pDoc) {}
+    StrEntries(sc::CellStoreType& rCells, ScDocument& rDoc) : mrCells(rCells), mrDoc(rDoc) {}
 
 public:
     void commitStrings()
     {
-        svl::SharedStringPool& rPool = mpDoc->GetSharedStringPool();
+        svl::SharedStringPool& rPool = mrDoc.GetSharedStringPool();
         sc::CellStoreType::iterator it = mrCells.begin();
         for (const auto& rStrEntry : maStrEntries)
             it = mrCells.set(it, rStrEntry.mnRow, rPool.intern(rStrEntry.maStr));
@@ -1198,7 +1198,7 @@ class RemoveEditAttribsHandler : public StrEntries
     std::unique_ptr<ScFieldEditEngine> mpEngine;
 
 public:
-    RemoveEditAttribsHandler(sc::CellStoreType& rCells, ScDocument* pDoc) : StrEntries(rCells, pDoc) {}
+    RemoveEditAttribsHandler(sc::CellStoreType& rCells, ScDocument& rDoc) : StrEntries(rCells, rDoc) {}
 
     void operator() (size_t nRow, EditTextObject*& pObj)
     {
@@ -1210,10 +1210,10 @@ public:
         //  test for attributes
         if (!mpEngine)
         {
-            mpEngine.reset(new ScFieldEditEngine(mpDoc, mpDoc->GetEditPool()));
+            mpEngine.reset(new ScFieldEditEngine(&mrDoc, mrDoc.GetEditPool()));
             //  EEControlBits::ONLINESPELLING if there are errors already
             mpEngine->SetControlWord(mpEngine->GetControlWord() | EEControlBits::ONLINESPELLING);
-            mpDoc->ApplyAsianEditSettings(*mpEngine);
+            mrDoc.ApplyAsianEditSettings(*mpEngine);
         }
         mpEngine->SetTextCurrentDefaults(*pObj);
         sal_Int32 nParCount = mpEngine->GetParagraphCount();
@@ -1274,7 +1274,7 @@ public:
 
 void ScColumn::RemoveEditAttribs( sc::ColumnBlockPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow )
 {
-    RemoveEditAttribsHandler aFunc(maCells, &GetDoc());
+    RemoveEditAttribsHandler aFunc(maCells, GetDoc());
 
     rBlockPos.miCellPos = sc::ProcessEditText(
         rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc);
@@ -2444,7 +2444,7 @@ formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )
         case sc::element_type_edittext:
         {
             const EditTextObject* pText = sc::edittext_block::at(*it->data, aPos.second);
-            OUString aStr = ScEditUtil::GetString(*pText, &GetDoc());
+            OUString aStr = ScEditUtil::GetString(*pText, GetDoc());
             svl::SharedString aSS( GetDoc().GetSharedStringPool().intern(aStr));
             return formula::FormulaTokenRef(new formula::FormulaStringToken(std::move(aSS)));
         }
@@ -2462,12 +2462,12 @@ class ToMatrixHandler
     ScMatrix& mrMat;
     SCCOL mnMatCol;
     SCROW mnTopRow;
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     svl::SharedStringPool& mrStrPool;
 public:
-    ToMatrixHandler(ScMatrix& rMat, SCCOL nMatCol, SCROW nTopRow, ScDocument* pDoc) :
+    ToMatrixHandler(ScMatrix& rMat, SCCOL nMatCol, SCROW nTopRow, ScDocument& rDoc) :
         mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow),
-        mpDoc(pDoc), mrStrPool(pDoc->GetSharedStringPool()) {}
+        mrDoc(rDoc), mrStrPool(rDoc.GetSharedStringPool()) {}
 
     void operator() (size_t nRow, double fVal)
     {
@@ -2491,7 +2491,7 @@ public:
 
     void operator() (size_t nRow, const EditTextObject* pStr)
     {
-        mrMat.PutString(mrStrPool.intern(ScEditUtil::GetString(*pStr, mpDoc)), mnMatCol, nRow - mnTopRow);
+        mrMat.PutString(mrStrPool.intern(ScEditUtil::GetString(*pStr, mrDoc)), mnMatCol, nRow - mnTopRow);
     }
 };
 
@@ -2502,7 +2502,7 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
     if (nRow1 > nRow2)
         return false;
 
-    ToMatrixHandler aFunc(rMat, nMatCol, nRow1, &GetDoc());
+    ToMatrixHandler aFunc(rMat, nMatCol, nRow1, GetDoc());
     sc::ParseAllNonEmpty(maCells.begin(), maCells, nRow1, nRow2, aFunc);
     return true;
 }
@@ -2556,14 +2556,14 @@ class FillMatrixHandler
     size_t mnMatCol;
     size_t mnTopRow;
 
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     svl::SharedStringPool& mrPool;
     svl::SharedStringPool* mpPool; // if matrix is not in the same document
 
 public:
-    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, ScDocument* pDoc, svl::SharedStringPool* pPool) :
+    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, ScDocument& rDoc, svl::SharedStringPool* pPool) :
         mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow),
-        mpDoc(pDoc), mrPool(pDoc->GetSharedStringPool()), mpPool(pPool) {}
+        mrDoc(rDoc), mrPool(rDoc.GetSharedStringPool()), mpPool(pPool) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
@@ -2607,7 +2607,7 @@ public:
                 std::advance(itEnd, nDataSize);
                 for (; it != itEnd; ++it)
                 {
-                    OUString aStr = ScEditUtil::GetString(**it, mpDoc);
+                    OUString aStr = ScEditUtil::GetString(**it, mrDoc);
                     if (!mpPool)
                         aSSs.push_back(mrPool.intern(aStr));
                     else
@@ -2700,7 +2700,7 @@ public:
 
 void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2, svl::SharedStringPool* pPool ) const
 {
-    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, &GetDoc(), pPool);
+    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, GetDoc(), pPool);
     sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 }
 
@@ -2727,10 +2727,10 @@ void getBlockIterators(
 }
 
 bool appendToBlock(
-    ScDocument* pDoc, sc::FormulaGroupContext& rCxt, sc::FormulaGroupContext::ColArray& rColArray,
+    ScDocument& rDoc, sc::FormulaGroupContext& rCxt, sc::FormulaGroupContext::ColArray& rColArray,
     size_t nPos, size_t nArrayLen, const sc::CellStoreType::iterator& _it, const sc::CellStoreType::iterator& itEnd )
 {
-    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
+    svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
     size_t nLenRemain = nArrayLen - nPos;
 
     for (sc::CellStoreType::iterator it = _it; it != itEnd; ++it)
@@ -2755,7 +2755,7 @@ bool appendToBlock(
 
                 for (; itData != itDataEnd; ++itData, ++nPos)
                 {
-                    OUString aStr = ScEditUtil::GetString(**itData, pDoc);
+                    OUString aStr = ScEditUtil::GetString(**itData, rDoc);
                     (*rColArray.mpStrArray)[nPos] = rPool.intern(aStr).getData();
                 }
             }
@@ -2870,7 +2870,7 @@ void copyFirstStringBlock(
             for (; it != itEnd; ++it, ++itArray)
             {
                 EditTextObject* pText = *it;
-                OUString aStr = ScEditUtil::GetString(*pText, &rDoc);
+                OUString aStr = ScEditUtil::GetString(*pText, rDoc);
                 *itArray = rPool.intern(aStr).getData();
             }
         }
@@ -3027,7 +3027,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             // Fill the remaining array with values from the following blocks.
             size_t nPos = itBlk->size;
             ++itBlk;
-            if (!appendToBlock(&rDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
+            if (!appendToBlock(rDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
             {
                 rCxt.discardCachedColArray(nTab, nCol);
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
@@ -3063,7 +3063,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             // Fill the remaining array with values from the following blocks.
             size_t nPos = itBlk->size;
             ++itBlk;
-            if (!appendToBlock(&rDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
+            if (!appendToBlock(rDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
             {
                 rCxt.discardCachedColArray(nTab, nCol);
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
@@ -3111,7 +3111,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
 
             size_t nPos = itBlk->size;
             ++itBlk;
-            if (!appendToBlock(&rDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
+            if (!appendToBlock(rDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
             {
                 rCxt.discardCachedColArray(nTab, nCol);
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
@@ -3145,7 +3145,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             // Fill the remaining array with values from the following blocks.
             size_t nPos = itBlk->size;
             ++itBlk;
-            if (!appendToBlock(&rDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
+            if (!appendToBlock(rDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
             {
                 rCxt.discardCachedColArray(nTab, nCol);
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);

@@ -169,15 +169,12 @@ public:
      *
      *  Note that this method is NOT thread-safe.
      *
-     *  @param  pDoc
+     *  @param  rDoc
      *          Needed to resolve EditCells' field contents, obtain a
-     *          ScFieldEditEngine from that document. May be NULL if there is
-     *          no ScDocument in the calling context but then the document
-     *          specific fields can not be resolved. See
-     *          ScEditUtil::GetString().
+     *          ScFieldEditEngine from that document.
      */
-    SC_DLLPUBLIC OUString getString( const ScDocument* pDoc ) const;
-    SC_DLLPUBLIC svl::SharedString getSharedString( const ScDocument* pDoc, svl::SharedStringPool& rStrPool ) const;
+    SC_DLLPUBLIC OUString getString( const ScDocument& rDoc ) const;
+    SC_DLLPUBLIC svl::SharedString getSharedString( const ScDocument& rDoc, svl::SharedStringPool& rStrPool ) const;
 
     /**
      * Retrieve a string value without modifying the states of any objects in

@@ -3634,7 +3634,7 @@ FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& r
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            aStr = aCell.getString(this);
+            aStr = aCell.getString(*this);
         break;
         case CELLTYPE_FORMULA:
         {

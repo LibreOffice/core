@@ -1525,7 +1525,7 @@ static FormulaToken* convertToToken( ScDocument& rHostDoc, const ScDocument& rSr
         case CELLTYPE_EDIT:
         case CELLTYPE_STRING:
         {
-            OUString aStr = rCell.getString(&rSrcDoc);
+            OUString aStr = rCell.getString(rSrcDoc);
             svl::SharedString aSS = rHostDoc.GetSharedStringPool().intern(aStr);
             return new formula::FormulaStringToken(std::move(aSS));
         }
@@ -2958,7 +2958,7 @@ public:
                 case CELLTYPE_STRING:
                 case CELLTYPE_EDIT:
                 {
-                    OUString aStr = aCell.getString(&mpCurCol->GetDoc());
+                    OUString aStr = aCell.getString(mpCurCol->GetDoc());
                     svl::SharedString aSS = mrStrPool.intern(aStr);
                     pTok.reset(new formula::FormulaStringToken(std::move(aSS)));
                 }

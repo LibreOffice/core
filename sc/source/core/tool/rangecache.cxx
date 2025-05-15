@@ -49,12 +49,12 @@ static ScSortedRangeCache::ValueType toValueType(const ScQueryParam& param)
                            : ScSortedRangeCache::ValueType::StringsCaseInsensitive;
 }
 
-ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
+ScSortedRangeCache::ScSortedRangeCache(ScDocument& rDoc, const ScRange& rRange,
                                        const ScQueryParam& param, ScInterpreterContext* context,
                                        bool invalid, bool bNewSearchFunction,
                                        sal_uInt8 nSortedBinarySearch)
     : maRange(rRange)
-    , mpDoc(pDoc)
+    , mrDoc(rDoc)
     , mValid(false)
     , mRowSearch(param.bByRow)
     , mValueType(toValueType(param))
@@ -80,7 +80,7 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
     SCCOL startCol = maRange.aStart.Col();
     SCCOL endCol = maRange.aEnd.Col();
     if (!item.mbMatchEmpty)
-        if (!pDoc->ShrinkToDataArea(nTab, startCol, startRow, endCol, endRow))
+        if (!rDoc.ShrinkToDataArea(nTab, startCol, startRow, endCol, endRow))
             return; // no data cells, no need for a cache
 
     if (mValueType == ValueType::Values)
@@ -96,7 +96,7 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
         {
             for (SCROW nRow = startRow; nRow <= endRow; ++nRow)
             {
-                ScRefCellValue cell(pDoc->GetRefCellValue(ScAddress(nCol, nRow, nTab)));
+                ScRefCellValue cell(rDoc.GetRefCellValue(ScAddress(nCol, nRow, nTab)));
                 if (ScQueryEvaluator::isQueryByValue(mQueryOp, mQueryType, cell))
                     colrowData.push_back(ColRowData{ mRowSearch ? nRow : nCol, cell.getValue() });
                 else if (ScQueryEvaluator::isQueryByString(mQueryOp, mQueryType, cell))
@@ -112,11 +112,11 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
                     // the whole column which includes a textual header). But if it can possibly
                     // match, then bail out and leave it to the unoptimized case.
                     // TODO Maybe it would actually work to use the numeric value obtained here?
-                    if (!bNewSearchFunction && !ScQueryEvaluator::isMatchWholeCell(*pDoc, mQueryOp))
+                    if (!bNewSearchFunction && !ScQueryEvaluator::isMatchWholeCell(rDoc, mQueryOp))
                         return; // substring matching cannot be sorted, but new search functions are sorted
                     sal_uInt32 format = 0;
                     double value;
-                    if (context->NFIsNumberFormat(cell.getString(pDoc), format, value))
+                    if (context->NFIsNumberFormat(cell.getString(rDoc), format, value))
                         return;
                 }
             }
@@ -169,14 +169,14 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
         std::vector<ColRowData> colrowData;
         // Try to reuse as much ScQueryEvaluator code as possible, this should
         // basically do the same comparisons.
-        assert(pDoc->FetchTable(nTab) != nullptr);
-        ScQueryEvaluator evaluator(*pDoc, *pDoc->FetchTable(nTab), param, context, nullptr,
+        assert(rDoc.FetchTable(nTab) != nullptr);
+        ScQueryEvaluator evaluator(rDoc, *rDoc.FetchTable(nTab), param, context, nullptr,
                                    bNewSearchFunction);
         for (SCCOL nCol = startCol; nCol <= endCol; ++nCol)
         {
             for (SCROW nRow = startRow; nRow <= endRow; ++nRow)
             {
-                ScRefCellValue cell(pDoc->GetRefCellValue(ScAddress(nCol, nRow, nTab)));
+                ScRefCellValue cell(rDoc.GetRefCellValue(ScAddress(nCol, nRow, nTab)));
                 // This should be used only with ScQueryEntry::ByString, and that
                 // means that ScQueryEvaluator::isQueryByString() should be the only
                 // possibility in the generic handling in ScQueryEvaluator::processEntry()
@@ -250,11 +250,11 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
 
 void ScSortedRangeCache::Notify(const SfxHint& rHint)
 {
-    if (!mpDoc->IsInDtorClear())
+    if (!mrDoc.IsInDtorClear())
     {
         if (rHint.GetId() == SfxHintId::ScDataChanged || rHint.GetId() == SfxHintId::ScAreaChanged)
         {
-            mpDoc->RemoveSortedRangeCache(*this);
+            mrDoc.RemoveSortedRangeCache(*this);
             // this ScSortedRangeCache is deleted by RemoveSortedRangeCache
         }
     }

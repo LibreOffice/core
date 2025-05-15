@@ -941,7 +941,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 #if OSL_DEBUG_LEVEL > 0
                 OUString aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
-                    aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( m_pDocument.get() );
+                    aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( *m_pDocument );
                 SAL_WARN( "sc", aValue << " omitted");
 #endif
             }
@@ -1002,7 +1002,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
                             OSL_ENSURE( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
                             ScAddress aPos = aSourceRange.aStart;
-                            OUString aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( m_pDocument.get() );
+                            OUString aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( *m_pDocument );
                             ScMatrixMode eMatrix = ScMatrixMode::NONE;
                             const ScCellValue& rCell = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewCell();
                             if (rCell.getType() == CELLTYPE_FORMULA)
@@ -1203,7 +1203,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                 pTmpDoc->CreateValidTabName( sTabName );
                 pTmpDoc->InsertTab( SC_TAB_APPEND, sTabName );
             }
-            m_pDocument->GetChangeTrack()->Clone( &*pTmpDoc );
+            m_pDocument->GetChangeTrack()->Clone( *pTmpDoc );
             ScChangeActionMergeMap aOwnInverseMergeMap;
             pSharedDocShell->MergeDocument( *pTmpDoc, true, true, 0, &aOwnInverseMergeMap, true );
             pTmpDoc.reset();
@@ -1254,7 +1254,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                 pTmpDoc->CreateValidTabName( sTabName );
                 pTmpDoc->InsertTab( SC_TAB_APPEND, sTabName );
             }
-            pThisTrack->Clone( &*pTmpDoc );
+            pThisTrack->Clone( *pTmpDoc );
 
             // undo own changes since last save in own document
             sal_uLong nStartShared = pThisAction->GetActionNumber();

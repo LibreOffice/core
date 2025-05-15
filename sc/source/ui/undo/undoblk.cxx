@@ -835,7 +835,7 @@ void ScUndoCut::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
-        pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc.get(),
+        pChangeTrack->AppendContentRange( aBlockRange, *pUndoDoc,
             nStartChangeAction, nEndChangeAction, SC_CACM_CUT );
     else
         nStartChangeAction = nEndChangeAction = 0;
@@ -954,7 +954,7 @@ void ScUndoPaste::SetChangeTrack()
     {
         for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
         {
-            pChangeTrack->AppendContentRange(maBlockRanges[i], pUndoDoc.get(),
+            pChangeTrack->AppendContentRange(maBlockRanges[i], *pUndoDoc,
                 nStartChangeAction, nEndChangeAction, SC_CACM_PASTE );
         }
     }
@@ -1259,7 +1259,7 @@ void ScUndoDragDrop::SetChangeTrack()
             nEndChangeAction = pChangeTrack->GetActionMax();
         }
         else
-            pChangeTrack->AppendContentRange( aDestRange, pRefUndoDoc.get(),
+            pChangeTrack->AppendContentRange( aDestRange, *pRefUndoDoc,
                 nStartChangeAction, nEndChangeAction );
     }
     else
@@ -1998,7 +1998,7 @@ void ScUndoEnterMatrix::SetChangeTrack()
     ScDocument& rDoc = pDocShell->GetDocument();
     ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
-        pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc.get(),
+        pChangeTrack->AppendContentRange( aBlockRange, *pUndoDoc,
             nStartChangeAction, nEndChangeAction );
     else
         nStartChangeAction = nEndChangeAction = 0;

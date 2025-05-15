@@ -196,8 +196,8 @@ struct SpellCheckContext::SpellCheckResult
     }
 };
 
-SpellCheckContext::SpellCheckContext(ScDocument* pDocument, SCTAB nTab) :
-    pDoc(pDocument),
+SpellCheckContext::SpellCheckContext(ScDocument& rDocument, SCTAB nTab) :
+    rDoc(rDocument),
     mnTab(nTab),
     meLanguage(ScGlobal::GetEditDefaultLanguage())
 {
@@ -212,7 +212,6 @@ void SpellCheckContext::dispose()
 {
     mpEngine.reset();
     mpCache.reset();
-    pDoc = nullptr;
 }
 
 void SpellCheckContext::setTabNo(SCTAB nTab)
@@ -242,7 +241,7 @@ void SpellCheckContext::setMisspellRanges(
     if (!mpEngine || !mpCache)
         reset();
 
-    ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, mnTab));
+    ScRefCellValue aCell(rDoc, ScAddress(nCol, nRow, mnTab));
     CellType eType = aCell.getType();
 
     if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
@@ -276,9 +275,9 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
     }
 
     // perhaps compute the pivot rangelist once in some pivot-table change handler ?
-    if (pDoc->HasPivotTable())
+    if (rDoc.HasPivotTable())
     {
-        if (ScDPCollection* pDPs = pDoc->GetDPCollection())
+        if (ScDPCollection* pDPs = rDoc.GetDPCollection())
         {
             ScRangeList aPivotRanges = pDPs->GetAllTableRanges(mnTab);
             if (aPivotRanges.Contains(ScRange(ScAddress(nCol, nRow, mnTab)))) // Don't spell check within pivot tables
@@ -289,7 +288,7 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
         }
     }
 
-    ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, mnTab));
+    ScRefCellValue aCell(rDoc, ScAddress(nCol, nRow, mnTab));
     CellType eType = aCell.getType();
 
     if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
@@ -304,7 +303,7 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
 
     // For spell-checking, we currently only use the primary
     // language; not CJK nor CTL.
-    const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, mnTab);
+    const ScPatternAttr* pPattern = rDoc.GetPattern(nCol, nRow, mnTab);
     LanguageType eCellLang = pPattern->GetItem(ATTR_FONT_LANGUAGE).GetValue();
 
     if (eCellLang == LANGUAGE_SYSTEM)
@@ -368,7 +367,7 @@ void SpellCheckContext::resetCache(bool bContentChangeOnly)
 
 void SpellCheckContext::setup()
 {
-    mpEngine.reset(new ScTabEditEngine(pDoc));
+    mpEngine.reset(new ScTabEditEngine(rDoc));
     mpStatus.reset(new SpellCheckStatus());
 
     mpEngine->SetControlWord(

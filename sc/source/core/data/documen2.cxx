@@ -1283,7 +1283,7 @@ ScSortedRangeCache& ScDocument::GetSortedRangeCache( const ScRange & rRange, con
     auto [findIt, bInserted] = mxScSortedRangeCache->aCacheMap.emplace(key, nullptr);
     if (bInserted)
     {
-        findIt->second = std::make_unique<ScSortedRangeCache>(this, rRange, param, pContext, invalid, bNewSearchFunction, nSortedBinarySearch);
+        findIt->second = std::make_unique<ScSortedRangeCache>(*this, rRange, param, pContext, invalid, bNewSearchFunction, nSortedBinarySearch);
         StartListeningArea(rRange, false, findIt->second.get());
     }
     return *findIt->second;

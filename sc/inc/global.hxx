@@ -698,10 +698,6 @@ public:
     /** Obtain the ordinal suffix for a number according to the system locale */
     static OUString         GetOrdinalSuffix( sal_Int32 nNumber);
 
-    /** A static instance of ScFieldEditEngine not capable of resolving
-        document specific fields, to be used only by ScEditUtil::GetString(). */
-    static ScFieldEditEngine&   GetStaticFieldEditEngine();
-
     static sc::SharedStringPoolPurge& GetSharedStringPoolPurge();
 
     /** Replaces the first occurrence of rPlaceholder in rString with

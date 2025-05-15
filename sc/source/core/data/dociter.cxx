@@ -452,7 +452,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                         incPos();
                     else
                     {
-                        rValue.maString = aCell.getString(&mrDoc);
+                        rValue.maString = aCell.getString(mrDoc);
                         rValue.mfValue = 0.0;
                         rValue.mnError = FormulaError::NONE;
                         rValue.mbIsNumber = false;
@@ -981,7 +981,7 @@ bool ScCellIterator::getCurrent()
 
 OUString ScCellIterator::getString() const
 {
-    return maCurCell.getString(&mrDoc);
+    return maCurCell.getString(mrDoc);
 }
 
 ScCellValue ScCellIterator::getCellValue() const

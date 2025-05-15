@@ -54,11 +54,11 @@ using namespace com::sun::star;
 
 //  delimiters additionally to EditEngine default:
 
-ScEditUtil::ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
+ScEditUtil::ScEditUtil( ScDocument& rDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rCellPos,
                             OutputDevice* pDevice, double nScaleX, double nScaleY,
                             const Fraction& rX, const Fraction& rY, bool bPrintTwips ) :
-                    pDoc(pDocument),nCol(nX),nRow(nY),nTab(nZ),
+                    rDoc(rDocument),nCol(nX),nRow(nY),nTab(nZ),
                     aCellPos(rCellPos),pDev(pDevice),
                     nPPTX(nScaleX),nPPTY(nScaleY),aZoomX(rX),aZoomY(rY),
                     bInPrintTwips(bPrintTwips) {}
@@ -119,7 +119,7 @@ OUString ScEditUtil::GetMultilineString( const EditTextObject& rEdit )
     return lcl_GetDelimitedString(rEdit, '\n');
 }
 
-OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocument* pDoc )
+OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocument& rDoc )
 {
     if( !rEditText.HasField())
         return GetMultilineString( rEditText );
@@ -127,21 +127,12 @@ OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocumen
     static std::mutex aMutex;
     std::scoped_lock aGuard( aMutex);
     // ScFieldEditEngine is needed to resolve field contents.
-    if (pDoc)
-    {
-        /* TODO: make ScDocument::GetEditEngine() const? Most likely it's only
-         * not const because of the pointer assignment, make that mutable, and
-         * then remove the ugly const_cast here. */
-        EditEngine& rEE = const_cast<ScDocument*>(pDoc)->GetEditEngine();
-        rEE.SetText( rEditText);
-        return GetMultilineString( rEE);
-    }
-    else
-    {
-        EditEngine& rEE = ScGlobal::GetStaticFieldEditEngine();
-        rEE.SetText( rEditText);
-        return GetMultilineString( rEE);
-    }
+    /* TODO: make ScDocument::GetEditEngine() const? Most likely it's only
+     * not const because of the pointer assignment, make that mutable, and
+     * then remove the ugly const_cast here. */
+    EditEngine& rEE = const_cast<ScDocument&>(rDoc).GetEditEngine();
+    rEE.SetText( rEditText);
+    return GetMultilineString( rEE);
 }
 
 std::unique_ptr<EditTextObject> ScEditUtil::CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText )
@@ -311,7 +302,7 @@ OUString ScEditUtil::GetCellFieldValue(
 tools::Long ScEditUtil::GetIndent(const ScPatternAttr* pPattern) const
 {
     if (!pPattern)
-        pPattern = pDoc->GetPattern( nCol, nRow, nTab );
+        pPattern = rDoc.GetPattern( nCol, nRow, nTab );
 
     if ( pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue() ==
                 SvxCellHorJustify::Left )
@@ -329,7 +320,7 @@ void ScEditUtil::GetMargins(const ScPatternAttr* pPattern, tools::Long& nLeftMar
                             tools::Long& nRightMargin, tools::Long& nBottomMargin) const
 {
     if (!pPattern)
-        pPattern = pDoc->GetPattern( nCol, nRow, nTab );
+        pPattern = rDoc.GetPattern( nCol, nRow, nTab );
 
     const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
     if (!pMargin)
@@ -347,16 +338,16 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     // (sal_False for querying URLs etc.)
 
     if (!pPattern)
-        pPattern = pDoc->GetPattern( nCol, nRow, nTab );
+        pPattern = rDoc.GetPattern( nCol, nRow, nTab );
 
     Point aStartPos = aCellPos;
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
-    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     tools::Long nLayoutSign = (bLayoutRTL && !bIsTiledRendering) ? -1 : 1;
 
     const ScMergeAttr* pMerge = &pPattern->GetItem(ATTR_MERGE);
-    tools::Long nCellX = pDoc->GetColWidth(nCol,nTab);
+    tools::Long nCellX = rDoc.GetColWidth(nCol,nTab);
     if (!bInPrintTwips)
         nCellX = static_cast<tools::Long>( nCellX * nPPTX );
     if ( pMerge->GetColMerge() > 1 )
@@ -364,20 +355,20 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         SCCOL nCountX = pMerge->GetColMerge();
         for (SCCOL i=1; i<nCountX; i++)
         {
-            tools::Long nColWidth = pDoc->GetColWidth(nCol+i,nTab);
+            tools::Long nColWidth = rDoc.GetColWidth(nCol+i,nTab);
             nCellX += (bInPrintTwips ? nColWidth : static_cast<tools::Long>( nColWidth * nPPTX ));
         }
     }
-    tools::Long nCellY = pDoc->GetRowHeight(nRow,nTab);
+    tools::Long nCellY = rDoc.GetRowHeight(nRow,nTab);
     if (!bInPrintTwips)
         nCellY = static_cast<tools::Long>( nCellY * nPPTY );
     if ( pMerge->GetRowMerge() > 1 )
     {
         SCROW nCountY = pMerge->GetRowMerge();
         if (bInPrintTwips)
-            nCellY += pDoc->GetRowHeight(nRow + 1, nRow + nCountY - 1, nTab);
+            nCellY += rDoc.GetRowHeight(nRow + 1, nRow + nCountY - 1, nTab);
         else
-            nCellY += pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY);
+            nCellY += rDoc.GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY);
     }
 
     tools::Long nRightMargin = 0;
@@ -424,7 +415,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         MapMode aMode = pDev->GetMapMode();
         pDev->SetMapMode(MapMode(bInPrintTwips ? MapUnit::MapTwip : MapUnit::MapPixel));
 
-        tools::Long nTextHeight = pDoc->GetNeededSize( nCol, nRow, nTab,
+        tools::Long nTextHeight = rDoc.GetNeededSize( nCol, nRow, nTab,
                                                 pDev, nPPTX, nPPTY, aZoomX, aZoomY, false /* bWidth */,
                                                 false /* bTotalSize */, bInPrintTwips );
         if (!nTextHeight)
@@ -738,17 +729,17 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
         SetUpdateLayout( true );
 }
 
-ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )
-        : ScFieldEditEngine( pDoc, pDoc->GetEnginePool() )
+ScTabEditEngine::ScTabEditEngine( ScDocument& rDoc )
+        : ScFieldEditEngine( &rDoc, rDoc.GetEnginePool() )
 {
-    SetEditTextObjectPool( pDoc->GetEditPool() );
-    const ScPatternAttr& rScPatternAttr(pDoc->getCellAttributeHelper().getDefaultCellAttribute());
+    SetEditTextObjectPool( rDoc.GetEditPool() );
+    const ScPatternAttr& rScPatternAttr(rDoc.getCellAttributeHelper().getDefaultCellAttribute());
     Init(rScPatternAttr);
 }
 
 ScTabEditEngine::ScTabEditEngine( const ScPatternAttr& rPattern,
-            SfxItemPool* pEngineItemPool, ScDocument* pDoc, SfxItemPool* pTextObjectPool )
-        : ScFieldEditEngine( pDoc, pEngineItemPool, pTextObjectPool )
+            SfxItemPool* pEngineItemPool, ScDocument& rDoc, SfxItemPool* pTextObjectPool )
+        : ScFieldEditEngine( &rDoc, pEngineItemPool, pTextObjectPool )
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );

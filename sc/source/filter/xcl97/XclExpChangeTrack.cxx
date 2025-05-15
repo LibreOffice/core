@@ -926,7 +926,7 @@ void XclExpChTrCellContent::GetCellData(
                 XclExpHyperlinkHelper aLinkHelper( rRoot, aPosition );
                 if (rScCell.getEditText())
                 {
-                    sCellStr = ScEditUtil::GetString(*rScCell.getEditText(), &GetDoc());
+                    sCellStr = ScEditUtil::GetString(*rScCell.getEditText(), GetDoc());
                     rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
                         rRoot, *rScCell.getEditText(), nullptr, aLinkHelper);
                 }
@@ -1618,7 +1618,7 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
     if(nOrigCount != xTempDoc->GetTableCount())
         return nullptr;
 
-    return pOrigChangeTrack->Clone(xTempDoc.get());
+    return pOrigChangeTrack->Clone(*xTempDoc);
 }
 
 void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
