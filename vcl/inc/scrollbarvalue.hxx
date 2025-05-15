@@ -25,7 +25,7 @@
  *
  *   Value container for scrollbars.
  */
-class ScrollbarValue final : public ImplControlValue
+class SAL_DLLPUBLIC_RTTI ScrollbarValue final : public ImplControlValue
 {
 public:
     tools::Long mnMin;
