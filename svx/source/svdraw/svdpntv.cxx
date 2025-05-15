@@ -214,6 +214,16 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         if (bObjChg)
         {
             mbSomeObjChgdFlag=true;
+            const SdrModel& rModel = GetModel();
+            if (rModel.IsWriterIdle())
+            {
+                // We're inside Writer idle layout: don't pick a high priority.
+                maComeBackIdle.SetPriority(TaskPriority::DEFAULT_IDLE);
+            }
+            else
+            {
+                maComeBackIdle.SetPriority(TaskPriority::REPAINT);
+            }
             maComeBackIdle.Start();
         }
     }

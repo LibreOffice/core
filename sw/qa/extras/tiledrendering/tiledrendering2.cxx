@@ -37,6 +37,8 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <swtestviewcallback.hxx>
+#include <viewimp.hxx>
+#include <dview.hxx>
 
 namespace
 {
@@ -777,6 +779,33 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellcheckVisibleArea)
     CPPUNIT_ASSERT(!pPage1->IsInvalidSpelling());
     CPPUNIT_ASSERT(pPage2->IsInvalidSpelling());
     CPPUNIT_ASSERT(pPage3->IsInvalidSpelling());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIdleLayoutShape)
+{
+    // Given a loaded document with a defined viewport:
+    awt::Rectangle aVisibleArea{ 0, 0, 12240, 15840 };
+    comphelper::LibreOfficeKit::setInitialClientVisibleArea(aVisibleArea);
+    comphelper::ScopeGuard g([] { comphelper::LibreOfficeKit::setInitialClientVisibleArea({}); });
+    OUString aURL = createFileURL(u"3pages-shape.odt");
+    UnoApiXmlTest::loadFromURL(aURL);
+
+    // When doing idle layout:
+    AnyInputCallback aAnyInput;
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->LayoutIdle();
+
+    // Then make sure that the draw task started during idle layout has no high priority, either:
+    SdrPaintView* pDrawView = pWrtShell->Imp()->GetDrawView();
+    CPPUNIT_ASSERT(pDrawView);
+    const Idle& rDrawIdle = pDrawView->GetComeBackIdle();
+    CPPUNIT_ASSERT(rDrawIdle.IsActive());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 4
+    // - Actual  : 4
+    // i.e. the priority was TaskPriority::REPAINT instead of TaskPriority::DEFAULT_IDLE.
+    CPPUNIT_ASSERT_GREATER(TaskPriority::REPAINT, rDrawIdle.GetPriority());
 }
 }
 

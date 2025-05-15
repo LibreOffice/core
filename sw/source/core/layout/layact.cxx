@@ -69,6 +69,7 @@
 #include <vector>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/lok.hxx>
+#include <drawdoc.hxx>
 
 void SwLayAction::CheckWaitCursor()
 {
@@ -2405,7 +2406,23 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
             aAction.SetInputType( VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER) );
             aAction.SetIdle( true );
             aAction.SetWaitAllowed( false );
+
+            SdrModel* pSdrModel = m_pImp->GetShell()->getIDocumentDrawModelAccess().GetDrawModel();
+            bool bSdrModelIdle{};
+            if (pSdrModel)
+            {
+                // Let the draw views know that we're inside the idle layout.
+                bSdrModelIdle = pSdrModel->IsWriterIdle();
+                pSdrModel->SetWriterIdle(true);
+            }
+
             aAction.Action(m_pImp->GetShell()->GetOut());
+
+            if (pSdrModel)
+            {
+                pSdrModel->SetWriterIdle(bSdrModelIdle);
+            }
+
             bInterrupt = aAction.IsInterrupt();
         }
 
