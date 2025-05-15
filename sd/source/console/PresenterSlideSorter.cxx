@@ -599,6 +599,8 @@ void SAL_CALL PresenterSlideSorter::setCurrentPage (const Reference<drawing::XDr
     mpPresenterController->GetPaintManager()->Invalidate(
         mxWindow,
         maCurrentSlideFrameBoundingBox);
+
+    ScrollSlideIntoView(mnCurrentSlideIndex);
 }
 
 Reference<drawing::XDrawPage> SAL_CALL PresenterSlideSorter::getCurrentPage()
@@ -1012,6 +1014,20 @@ void PresenterSlideSorter::SetVerticalOffset (const double nYOffset)
 void PresenterSlideSorter::GotoSlide (const sal_Int32 nSlideIndex)
 {
     mxSlideShowController->gotoSlideIndex(nSlideIndex);
+}
+
+void PresenterSlideSorter::ScrollSlideIntoView(sal_Int32 nSlideIndex)
+{
+    const double fThumbPos = mpVerticalScrollBar->GetThumbPosition();
+    const double fThumbSize = mpVerticalScrollBar->GetThumbSize();
+    const double fSlidePos = mpLayout->GetPoint(nSlideIndex, -1, -1).Y;
+
+    const bool bFullyVisible
+        = (fSlidePos - mpLayout->mnVerticalBorder >= fThumbPos)
+          && (fSlidePos + mpLayout->maPreviewSize.Height + mpLayout->mnVerticalBorder
+              <= fThumbPos + fThumbSize);
+    if (!bFullyVisible)
+        mpVerticalScrollBar->SetThumbPosition(fSlidePos - mpLayout->mnVerticalBorder, false);
 }
 
 bool PresenterSlideSorter::ProvideCanvas()

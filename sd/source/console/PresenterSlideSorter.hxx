@@ -174,6 +174,7 @@ private:
     void SetHorizontalOffset (const double nXOffset);
     void SetVerticalOffset (const double nYOffset);
     void GotoSlide (const sal_Int32 nSlideIndex);
+    void ScrollSlideIntoView(sal_Int32 nSlideIndex);
     bool ProvideCanvas();
 
     /** @throws css::lang::DisposedException when the object has already been
