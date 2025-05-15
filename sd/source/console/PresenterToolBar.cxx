@@ -663,10 +663,9 @@ void PresenterToolBar::Layout (
     mbIsLayoutPending = false;
 
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
-    ::std::vector<geometry::RealSize2D> aPartSizes (maElementContainer.size());
+    std::unordered_map<SharedElementContainerPart, geometry::RealSize2D> aPartSizes;
     geometry::RealSize2D aTotalSize (0,0);
     bool bIsHorizontal (true);
-    sal_Int32 nIndex (0);
     double nTotalHorizontalGap (0);
     sal_Int32 nGapCount (0);
     for (const auto& rxPart : maElementContainer)
@@ -674,7 +673,7 @@ void PresenterToolBar::Layout (
         geometry::RealSize2D aSize (CalculatePartSize(rxCanvas, rxPart, bIsHorizontal));
 
         // Remember the size of each part for later.
-        aPartSizes[nIndex] = aSize;
+        aPartSizes[rxPart] = aSize;
 
         // Add gaps between elements.
         if (rxPart->size()>1 && bIsHorizontal)
@@ -689,7 +688,6 @@ void PresenterToolBar::Layout (
         aTotalSize.Width += aSize.Width;
         // Height is the maximum height of all parts.
         aTotalSize.Height = ::std::max(aTotalSize.Height, aSize.Height);
-        ++nIndex;
     }
     // Add gaps between parts.
     if (maElementContainer.size() > 1)
@@ -730,38 +728,35 @@ void PresenterToolBar::Layout (
     /* push front or back ? ... */
     /// check whether RTL interface or not
     if(!AllSettings::GetLayoutRTL()){
-        nIndex = 0;
         for (const auto& rxPart : maElementContainer)
         {
             geometry::RealRectangle2D aBoundingBox(
                 nX, nY,
-                nX+aPartSizes[nIndex].Width, nY+aTotalSize.Height);
+                nX + aPartSizes[rxPart].Width, nY + aTotalSize.Height);
 
             // Add space for gaps between elements.
             if (rxPart->size() > 1 && bIsHorizontal)
                 aBoundingBox.X2 += (rxPart->size() - 1) * nGapWidth;
 
-            LayoutPart(rxCanvas, rxPart, aBoundingBox, aPartSizes[nIndex], bIsHorizontal);
+            LayoutPart(rxCanvas, rxPart, aBoundingBox, aPartSizes[rxPart], bIsHorizontal);
             bIsHorizontal = !bIsHorizontal;
             nX += aBoundingBox.X2 - aBoundingBox.X1 + nGapWidth;
-            ++nIndex;
         }
     }
     else {
         ElementContainer::reverse_iterator iPart;
-        nIndex = aPartSizes.size() - 1;
-        for (iPart = maElementContainer.rbegin(); iPart != maElementContainer.rend(); ++iPart, --nIndex)
+        for (iPart = maElementContainer.rbegin(); iPart != maElementContainer.rend(); ++iPart)
         {
             geometry::RealRectangle2D aBoundingBox(
                 nX, nY,
-                nX+aPartSizes[nIndex].Width, nY+aTotalSize.Height);
+                nX + aPartSizes[*iPart].Width, nY + aTotalSize.Height);
 
             // Add space for gaps between elements.
             if ((*iPart)->size() > 1)
                 if (bIsHorizontal)
                     aBoundingBox.X2 += ((*iPart)->size()-1) * nGapWidth;
 
-            LayoutPart(rxCanvas, *iPart, aBoundingBox, aPartSizes[nIndex], bIsHorizontal);
+            LayoutPart(rxCanvas, *iPart, aBoundingBox, aPartSizes[*iPart], bIsHorizontal);
             bIsHorizontal = !bIsHorizontal;
             nX += aBoundingBox.X2 - aBoundingBox.X1 + nGapWidth;
         }
