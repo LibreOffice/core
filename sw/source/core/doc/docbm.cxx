@@ -500,19 +500,37 @@ namespace sw::mark
         , m_pLastActiveFieldmark(nullptr)
     { }
 
-    void MarkManager::disableUniqueNameChecks() { m_bCheckUniqueNames = false; }
+    // In the mode where the names are not checked, we need to avoid a case where there was a
+    // bookmark, and a file is inserted at an earlier point, with the same-name bookmark, causing
+    // a rename of the pre-existing bookmark. m_aUsedNames and m_vUncheckedNameMarks are used for
+    // that. m_aUsedNames is pre-populated with the existing names (at the moment when the mode
+    // started); and m_vUncheckedNameMarks stores only the marks needing the checks.
+
+    void MarkManager::disableUniqueNameChecks()
+    {
+        if (!m_bCheckUniqueNames)
+            return; // nested call
+        m_bCheckUniqueNames = false;
+        assert(m_aUsedNames.empty());
+
+        // Populate the pre-existing already deduplicated names
+        for (auto& pMark : m_vAllMarks)
+            m_aUsedNames.insert(pMark->GetName().toString());
+    }
     void MarkManager::enableUniqueNameChecks()
     {
         if (m_bCheckUniqueNames)
             return;
-        // Make sure that all names are unique
-        std::unordered_set<OUString> usedNames;
+        // Make sure that all previously unchecked names are unique
         for (auto& pMark : m_vAllMarks)
         {
-            assert(pMark);
-            pMark->SetName(getUniqueMarkName(pMark->GetName(), [&usedNames](const SwMarkName& n)
-                                             { return usedNames.insert(n.toString()).second; }));
+            if (!m_vUncheckedNameMarks.contains(pMark))
+                continue; // mark was added and removed while in the performance mode
+            pMark->SetName(getUniqueMarkName(pMark->GetName(), [this](const SwMarkName& n)
+                                             { return m_aUsedNames.insert(n.toString()).second; }));
         }
+        m_aUsedNames.clear();
+        m_vUncheckedNameMarks.clear();
         m_bCheckUniqueNames = true;
     }
 
@@ -632,10 +650,19 @@ namespace sw::mark
             pMark->Swap();
 
         // for performance reasons, we trust UnoMarks to have a (generated) unique name
-        if (eType != IDocumentMarkAccess::MarkType::UNO_BOOKMARK && m_bCheckUniqueNames)
-            pMark->SetName(getUniqueMarkName(
-                pMark->GetName(), [this](const SwMarkName& n)
-                { return lcl_FindMarkByName(n, m_vAllMarks) == m_vAllMarks.end(); }));
+        if (eType != IDocumentMarkAccess::MarkType::UNO_BOOKMARK)
+        {
+            if (m_bCheckUniqueNames)
+            {
+                pMark->SetName(getUniqueMarkName(
+                    pMark->GetName(), [this](const SwMarkName& n)
+                    { return lcl_FindMarkByName(n, m_vAllMarks) == m_vAllMarks.end(); }));
+            }
+            else
+            {
+                m_vUncheckedNameMarks.insert(pMark.get());
+            }
+        }
 
         // insert any dummy chars before inserting into sorted vectors
         pMark->InitDoc(m_rDoc, eMode, pSepPos);
@@ -1343,6 +1370,7 @@ namespace sw::mark
         m_vFieldmarks.clear();
         m_vBookmarks.clear();
         m_vAnnotationMarks.clear();
+        m_vUncheckedNameMarks.clear();
         for (const auto & p : m_vAllMarks)
             delete p;
         m_vAllMarks.clear();

@@ -153,6 +153,11 @@ namespace sw::mark {
             // container for all marks, this container owns the objects it points to
             container_t m_vAllMarks;
 
+            // container for all marks with possibly duplicating names (m_bCheckUniqueNames mode)
+            std::unordered_set<sw::mark::MarkBase*> m_vUncheckedNameMarks;
+            // container for deduplicating names (m_bCheckUniqueNames mode)
+            std::unordered_set<OUString> m_aUsedNames;
+
             // additional container for bookmarks
             std::vector<sw::mark::Bookmark*> m_vBookmarks;
             // additional container for fieldmarks

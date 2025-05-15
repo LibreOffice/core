@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <osl/diagnose.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -201,13 +202,14 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
 
         mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
-        // Preformance mode: import all bookmarks names as defined in the document
-        mxDoc->getIDocumentMarkAccess()->disableUniqueNameChecks();
+        {
+            // Preformance mode: import all bookmarks names as defined in the document
+            mxDoc->getIDocumentMarkAccess()->disableUniqueNameChecks();
+            comphelper::ScopeGuard perfModeGuard(
+                [this]() { mxDoc->getIDocumentMarkAccess()->enableUniqueNameChecks(); });
 
-        nError = po->Read( *mxDoc, msBaseURL, *pPam, maFileName );
-
-        // End performance mode: now make sure that all names are unique
-        mxDoc->getIDocumentMarkAccess()->enableUniqueNameChecks();
+            nError = po->Read(*mxDoc, msBaseURL, *pPam, maFileName);
+        }
 
         // an ODF document may contain redline mode in settings.xml; save it!
         ePostReadRedlineFlags = mxDoc->getIDocumentRedlineAccess().GetRedlineFlags();
