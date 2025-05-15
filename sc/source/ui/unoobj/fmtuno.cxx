@@ -142,14 +142,14 @@ ScCondFormatEntryItem::ScCondFormatEntryItem() :
 }
 
 ScTableConditionalFormat::ScTableConditionalFormat(
-        const ScDocument* pDoc, sal_uLong nKey, SCTAB nTab, FormulaGrammar::Grammar eGrammar)
+        const ScDocument& rDoc, sal_uLong nKey, SCTAB nTab, FormulaGrammar::Grammar eGrammar)
 {
     //  read the entry from the document...
 
-    if ( !(pDoc && nKey) )
+    if ( !nKey )
         return;
 
-    ScConditionalFormatList* pList = pDoc->GetCondFormList(nTab);
+    ScConditionalFormatList* pList = rDoc.GetCondFormList(nTab);
     if (!pList)
         return;
 
@@ -158,7 +158,7 @@ ScTableConditionalFormat::ScTableConditionalFormat(
         return;
 
     // During save to XML.
-    if (pDoc->IsInExternalReferenceMarking())
+    if (rDoc.IsInExternalReferenceMarking())
         pFormat->MarkUsedExternalReferences();
 
     size_t nEntryCount = pFormat->size();

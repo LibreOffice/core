@@ -58,7 +58,7 @@ public:
                                    ScConditionMode eMode = ScConditionMode::EqGreater);
     SC_DLLPUBLIC ScColorScaleEntry();
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
-    ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry);
+    ScColorScaleEntry(ScDocument& rDoc, const ScColorScaleEntry& rEntry);
     SC_DLLPUBLIC ~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE;
 
     const Color& GetColor() const { return maColor;}
@@ -225,7 +225,7 @@ struct ScIconSetMap {
 class SAL_DLLPUBLIC_RTTI ScColorFormat : public ScFormatEntry
 {
 public:
-    ScColorFormat(ScDocument* pDoc);
+    ScColorFormat(ScDocument& rDoc);
     SC_DLLPUBLIC virtual ~ScColorFormat() override;
 
     SC_DLLPUBLIC const ScRangeList& GetRange() const;
@@ -260,13 +260,13 @@ private:
     void calcMinMax(double& nMin, double& nMax) const;
     double CalcValue(double nMin, double nMax, const ScColorScaleEntries::const_iterator& rItr) const;
 public:
-    SC_DLLPUBLIC ScColorScaleFormat(ScDocument* pDoc);
-    ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);
+    SC_DLLPUBLIC ScColorScaleFormat(ScDocument& rDoc);
+    ScColorScaleFormat(ScDocument& rDoc, const ScColorScaleFormat& rFormat);
     ScColorScaleFormat(const ScColorScaleFormat&) = delete;
     virtual ~ScColorScaleFormat() override;
     const ScColorScaleFormat& operator=(const ScColorScaleFormat&) = delete;
 
-    virtual ScColorFormat* Clone(ScDocument* pDoc) const override;
+    virtual ScColorFormat* Clone(ScDocument& rDoc) const override;
 
     virtual void SetParent(ScConditionalFormat* pParent) override;
 
@@ -301,9 +301,9 @@ public:
 class SAL_DLLPUBLIC_RTTI ScDataBarFormat final : public ScColorFormat
 {
 public:
-    SC_DLLPUBLIC ScDataBarFormat(ScDocument* pDoc);
-    ScDataBarFormat(ScDocument* pDoc, const ScDataBarFormat& rFormat);
-    virtual ScColorFormat* Clone(ScDocument* pDoc) const override;
+    SC_DLLPUBLIC ScDataBarFormat(ScDocument& rDoc);
+    ScDataBarFormat(ScDocument& rDoc, const ScDataBarFormat& rFormat);
+    virtual ScColorFormat* Clone(ScDocument& rDoc) const override;
 
     virtual void SetParent(ScConditionalFormat* pParent) override;
 
@@ -364,10 +364,10 @@ struct ScIconSetFormatData
 class SAL_DLLPUBLIC_RTTI ScIconSetFormat final : public ScColorFormat
 {
 public:
-    SC_DLLPUBLIC ScIconSetFormat(ScDocument* pDoc);
-    ScIconSetFormat(ScDocument* pDoc, const ScIconSetFormat& rFormat);
+    SC_DLLPUBLIC ScIconSetFormat(ScDocument& rDoc);
+    ScIconSetFormat(ScDocument& rDoc, const ScIconSetFormat& rFormat);
 
-    virtual ScColorFormat* Clone(ScDocument* pDoc) const override;
+    virtual ScColorFormat* Clone(ScDocument& rDoc) const override;
 
     virtual void SetParent(ScConditionalFormat* pParent) override;
 

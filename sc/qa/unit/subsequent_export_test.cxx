@@ -2118,7 +2118,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testConditionalFormatNumberInTextRule)
     ScDocument* pDocument = getScDoc();
     ScAddress aAddress(0, 0, 0);
 
-    auto pFormat = std::make_unique<ScConditionalFormat>(0, pDocument);
+    auto pFormat = std::make_unique<ScConditionalFormat>(0, *pDocument);
     ScRange aCondFormatRange(aAddress);
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);

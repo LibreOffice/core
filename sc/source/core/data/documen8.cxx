@@ -1103,7 +1103,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
             SCTAB nTab2 = aOutRange.aEnd.Tab();
 
             ScRefUpdateRes eRes =
-                ScRefUpdate::Update( this, eUpdateRefMode,
+                ScRefUpdate::Update( *this, eUpdateRefMode,
                     rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
                     rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
                     nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );

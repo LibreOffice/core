@@ -222,7 +222,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, ScDocShell* pDocShell ) :
     {
         mxPoolHelper = new ScPoolHelper( *this );
         if (!comphelper::IsFuzzing()) //just too slow
-            pBASM.reset( new ScBroadcastAreaSlotMachine( this ) );
+            pBASM.reset( new ScBroadcastAreaSlotMachine( *this ) );
         pChartListenerCollection.reset( new ScChartListenerCollection( *this ) );
         pRefreshTimerControl.reset( new ScRefreshTimerControl );
     }
@@ -777,12 +777,12 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
                 pRangeName->UpdateMoveTab(aCxt);
 
             pDBCollection->UpdateMoveTab( nOldPos, nNewPos );
-            xColNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
-            xRowNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
+            xColNameRanges->UpdateReference( URM_REORDER, *this, aSourceRange, 0,0,nDz );
+            xRowNameRanges->UpdateReference( URM_REORDER, *this, aSourceRange, 0,0,nDz );
             if (pDPCollection)
                 pDPCollection->UpdateReference( URM_REORDER, aSourceRange, 0,0,nDz );
             if (pDetOpList)
-                pDetOpList->UpdateReference( this, URM_REORDER, aSourceRange, 0,0,nDz );
+                pDetOpList->UpdateReference( *this, URM_REORDER, aSourceRange, 0,0,nDz );
             UpdateChartRef( URM_REORDER,
                     0,0,nOldPos, MaxCol(),MaxRow(),nOldPos, 0,0,nDz );
             UpdateRefAreaLinks( URM_REORDER, aSourceRange, 0,0,nDz );
@@ -853,8 +853,8 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 SetNoListening( true );
 
                 ScRange aRange( 0,0,nNewPos, MaxCol(),MaxRow(),MAXTAB );
-                xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
-                xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
+                xColNameRanges->UpdateReference( URM_INSDEL, *this, aRange, 0,0,1 );
+                xRowNameRanges->UpdateReference( URM_INSDEL, *this, aRange, 0,0,1 );
                 if (pRangeName)
                     pRangeName->UpdateInsertTab(aCxt);
 
@@ -863,7 +863,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if (pDetOpList)
-                    pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,1 );
+                    pDetOpList->UpdateReference( *this, URM_INSDEL, aRange, 0,0,1 );
                 UpdateChartRef( URM_INSDEL, 0,0,nNewPos, MaxCol(),MaxRow(),MAXTAB, 0,0,1 );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,1 );
                 if ( pUnoBroadcaster )

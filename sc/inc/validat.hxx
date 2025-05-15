@@ -99,9 +99,9 @@ public:
     SC_DLLPUBLIC virtual ~ScValidationData() override;
 
     ScValidationData* Clone() const     // real copy
-                    { return new ScValidationData( *GetDocument(), *this ); }
-    ScValidationData* Clone(ScDocument* pNew) const override
-                    { return new ScValidationData( *pNew, *this ); }
+                    { return new ScValidationData( GetDocument(), *this ); }
+    ScValidationData* Clone(ScDocument& rNew) const override
+                    { return new ScValidationData( rNew, *this ); }
 
     SC_DLLPUBLIC void ResetInput();
     SC_DLLPUBLIC void ResetError();

@@ -103,7 +103,7 @@ ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImpo
     ScRangeStringConverter::GetRangeListFromString(aRangeList, sRange, *pDoc,
             formula::FormulaGrammar::CONV_ODF);
 
-    mxFormat.reset(new ScConditionalFormat(0, pDoc));
+    mxFormat.reset(new ScConditionalFormat(0, *pDoc));
     mxFormat->SetRange(aRangeList);
 }
 
@@ -375,7 +375,7 @@ ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport
     ScXMLImportContext( rImport ),
     pColorScaleFormat(nullptr)
 {
-    pColorScaleFormat = new ScColorScaleFormat(GetScImport().GetDocument());
+    pColorScaleFormat = new ScColorScaleFormat(*GetScImport().GetDocument());
     pFormat->AddEntry(pColorScaleFormat);
 }
 
@@ -451,7 +451,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
         }
     }
 
-    ScDataBarFormat* pDataBarFormat = new ScDataBarFormat(rImport.GetDocument());
+    ScDataBarFormat* pDataBarFormat = new ScDataBarFormat(*rImport.GetDocument());
     mpFormatData = new ScDataBarFormatData();
     pDataBarFormat->SetDataBarData(mpFormatData);
     if(!sGradient.isEmpty())
@@ -587,7 +587,7 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport,
         }
     }
 
-    ScIconSetFormat* pIconSetFormat = new ScIconSetFormat(GetScImport().GetDocument());
+    ScIconSetFormat* pIconSetFormat = new ScIconSetFormat(*GetScImport().GetDocument());
     ScIconSetFormatData* pIconSetFormatData = new ScIconSetFormatData;
 
     if(!sShowValue.isEmpty())
@@ -1002,7 +1002,7 @@ ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport,
         }
     }
 
-    ScCondDateFormatEntry* pFormatEntry = new ScCondDateFormatEntry(GetScImport().GetDocument());
+    ScCondDateFormatEntry* pFormatEntry = new ScCondDateFormatEntry(*GetScImport().GetDocument());
     pFormatEntry->SetStyleName(sStyle);
     pFormatEntry->SetDateType(getDateFromString(sDateType));
     pFormat->AddEntry(pFormatEntry);

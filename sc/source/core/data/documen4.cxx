@@ -730,7 +730,7 @@ sal_uInt32 ScDocument::AddValidationEntry( const ScValidationData& rNew )
 
     // might be called from ScPatternAttr::MigrateToDocument; thus clone (real copy)
     sal_uInt32 nNewKey = nMax + 1;
-    std::unique_ptr<ScValidationData> pInsert(rNew.Clone(this));
+    std::unique_ptr<ScValidationData> pInsert(rNew.Clone(*this));
     pInsert->SetKey( nNewKey );
     ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     pValidationList->InsertNew( std::move(pInsert) );

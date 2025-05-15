@@ -35,7 +35,7 @@ void ScDetOpList::DeleteOnTab( SCTAB nTab )
         });
 }
 
-void ScDetOpList::UpdateReference( const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
+void ScDetOpList::UpdateReference( const ScDocument& rDoc, UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     for (auto& rxDetOpData : aDetOpDataVector )
@@ -49,7 +49,7 @@ void ScDetOpList::UpdateReference( const ScDocument* pDoc, UpdateRefMode eUpdate
         SCTAB nTab2 = nTab1;
 
         ScRefUpdateRes eRes =
-            ScRefUpdate::Update( pDoc, eUpdateRefMode,
+            ScRefUpdate::Update( rDoc, eUpdateRefMode,
                 rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
                 rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );

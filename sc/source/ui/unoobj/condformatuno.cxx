@@ -355,7 +355,7 @@ sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCel
 
     SCTAB nTab = aCoreRange[0].aStart.Tab();
 
-    auto pNewFormat = std::make_unique<ScConditionalFormat>(0, &mpDocShell->GetDocument());
+    auto pNewFormat = std::make_unique<ScConditionalFormat>(0, mpDocShell->GetDocument());
     pNewFormat->SetRange(aCoreRange);
     return mpDocShell->GetDocument().AddCondFormat(std::move(pNewFormat), nTab);
 }
@@ -479,19 +479,19 @@ void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
                     rDoc, pFormat->GetRange().GetTopLeftCorner(), u""_ustr);
         break;
         case sheet::ConditionEntryType::COLORSCALE:
-            pNewEntry = new ScColorScaleFormat(&rDoc);
+            pNewEntry = new ScColorScaleFormat(rDoc);
             static_cast<ScColorScaleFormat*>(pNewEntry)->EnsureSize();
         break;
         case sheet::ConditionEntryType::DATABAR:
-            pNewEntry = new ScDataBarFormat(&rDoc);
+            pNewEntry = new ScDataBarFormat(rDoc);
             static_cast<ScDataBarFormat*>(pNewEntry)->EnsureSize();
         break;
         case sheet::ConditionEntryType::ICONSET:
-            pNewEntry = new ScIconSetFormat(&rDoc);
+            pNewEntry = new ScIconSetFormat(rDoc);
             static_cast<ScIconSetFormat*>(pNewEntry)->EnsureSize();
         break;
         case sheet::ConditionEntryType::DATE:
-            pNewEntry = new ScCondDateFormatEntry(&rDoc);
+            pNewEntry = new ScCondDateFormatEntry(rDoc);
         break;
         default:
             SAL_WARN("sc", "unknown conditional format type");

@@ -2272,7 +2272,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxInt16Item* pParam = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
                 if (pParam)
                 {
-                    auto pFormat = std::make_unique<ScConditionalFormat>(0, &rDoc);
+                    auto pFormat = std::make_unique<ScConditionalFormat>(0, rDoc);
                     pFormat->SetRange(aRangeList);
 
                     if (nSlot == SID_OPENDLG_ICONSET)
@@ -2280,7 +2280,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScIconSetType eIconSetType = limit_cast<ScIconSetType>(pParam->GetValue(), IconSet_3Arrows, IconSet_5Boxes);
                         const int nSteps = ScIconSetFormat::getIconSetElements(eIconSetType);
 
-                        ScIconSetFormat* pEntry = new ScIconSetFormat(&rDoc);
+                        ScIconSetFormat* pEntry = new ScIconSetFormat(rDoc);
                         ScIconSetFormatData* pIconSetFormatData = new ScIconSetFormatData(eIconSetType);
 
                         pIconSetFormatData->m_Entries.emplace_back(new ScColorScaleEntry(0, COL_RED, COLORSCALE_PERCENT));
@@ -2358,7 +2358,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         sal_uInt16 nTheme = pParam->GetValue();
                         if (nTheme < aScaleThemes.size())
                         {
-                            ScColorScaleFormat* pFormatEntry = new ScColorScaleFormat(&rDoc);
+                            ScColorScaleFormat* pFormatEntry = new ScColorScaleFormat(rDoc);
 
                             auto& aTheme = aScaleThemes[nTheme];
 
@@ -2402,7 +2402,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         sal_uInt16 nTheme = pParam->GetValue();
                         if (nTheme < aDatabarThemes.size())
                         {
-                            ScDataBarFormat* pFormatEntry = new ScDataBarFormat(&rDoc);
+                            ScDataBarFormat* pFormatEntry = new ScDataBarFormat(rDoc);
 
                             auto& aTheme = aDatabarThemes[nTheme];
 

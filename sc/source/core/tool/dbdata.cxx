@@ -578,7 +578,7 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
     SetModified(bChanged);
 }
 
-bool ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
+bool ScDBData::UpdateReference(const ScDocument& rDoc, UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 SCCOL nDx, SCROW nDy, SCTAB nDz)
@@ -594,7 +594,7 @@ bool ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefM
     SCCOL nOldCol1 = theCol1, nOldCol2 = theCol2;
 
     ScRefUpdateRes eRet
-        = ScRefUpdate::Update(pDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx,
+        = ScRefUpdate::Update(rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx,
                               nDy, nDz, theCol1, theRow1, theTab1, theCol2, theRow2, theTab2);
 
     bool bDoUpdate = eRet != UR_NOTHING;
@@ -621,7 +621,7 @@ bool ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefM
     if ( GetAdvancedQuerySource(aRangeAdvSource) )
     {
         aRangeAdvSource.GetVars( theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 );
-        if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+        if ( ScRefUpdate::Update( rDoc, eUpdateRefMode,
                                     nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
                                     theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) )
         {
@@ -1543,7 +1543,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
         if (nTab1 == nTab2 && nDz == 0)
         {
             // Delete the database range, if some part of the reference became invalid.
-            if (pData->UpdateReference(&rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
+            if (pData->UpdateReference(rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
                                        nTab2, nDx, nDy, nDz))
                 rDoc.SetAnonymousDBData(nTab1, nullptr);
         }
@@ -1556,7 +1556,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
     for (auto it = maNamedDBs.begin(); it != maNamedDBs.end(); )
     {
         // Delete the database range, if some part of the reference became invalid.
-        if (it->get()->UpdateReference(&rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
+        if (it->get()->UpdateReference(rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
                                        nTab2, nDx, nDy, nDz))
             it = maNamedDBs.erase(it);
         else
@@ -1565,7 +1565,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
     for (auto it = maAnonDBs.begin(); it != maAnonDBs.end(); )
     {
         // Delete the database range, if some part of the reference became invalid.
-        if (it->get()->UpdateReference(&rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
+        if (it->get()->UpdateReference(rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
                                        nTab2, nDx, nDy, nDz))
             it = maAnonDBs.erase(it);
         else

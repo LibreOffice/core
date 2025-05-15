@@ -2832,7 +2832,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
         const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
         bool bChanged = aRanges.UpdateReference(
-            rRef.GetMode(), m_pDocument, rRef.GetRange(), rRef.GetDx(), rRef.GetDy(), rRef.GetDz());
+            rRef.GetMode(), *m_pDocument, rRef.GetRange(), rRef.GetDx(), rRef.GetDy(), rRef.GetDz());
 
         if (bChanged)
         {

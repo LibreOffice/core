@@ -51,7 +51,7 @@ public:
 
     void            Join( const ScRange&, bool bIsInList = false );
 
-    bool            UpdateReference( UpdateRefMode, const ScDocument*,
+    bool            UpdateReference( UpdateRefMode, const ScDocument&,
                                      const ScRange& rWhere,
                                      SCCOL nDx,
                                      SCROW nDy,
@@ -139,7 +139,7 @@ public:
                             maPairs.push_back( rRangePair );
                         }
     void                Join( const ScRangePair&, bool bIsInList = false );
-    void                UpdateReference( UpdateRefMode, const ScDocument*,
+    void                UpdateReference( UpdateRefMode, const ScDocument&,
                                     const ScRange& rWhere,
                                     SCCOL nDx, SCROW nDy, SCTAB nDz );
     void                DeleteOnTab( SCTAB nTab );

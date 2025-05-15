@@ -708,7 +708,7 @@ void ScOrcusSheetProperties::set_merge_cell_range(const orcus::spreadsheet::rang
 ScOrcusConditionalFormat::ScOrcusConditionalFormat(SCTAB nTab, ScDocument& rDoc)
     : mnTab(nTab)
     , mrDoc(rDoc)
-    , mpCurrentFormat(new ScConditionalFormat(0, &mrDoc))
+    , mpCurrentFormat(new ScConditionalFormat(0, mrDoc))
     , meEntryType(ScFormatEntry::Type::Condition)
 {
 }
@@ -854,7 +854,7 @@ void ScOrcusConditionalFormat::set_range(os::row_t row_start, os::col_t col_star
 void ScOrcusConditionalFormat::commit_format()
 {
     SAL_INFO("sc.orcus.condformat", "commit_format");
-    mpCurrentFormat.reset(new ScConditionalFormat(0, &mrDoc));
+    mpCurrentFormat.reset(new ScConditionalFormat(0, mrDoc));
 }
 
 ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS, SCTAB nTab,

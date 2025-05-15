@@ -225,7 +225,7 @@ struct SC_DLLPUBLIC ScCondFormatData
 class SC_DLLPUBLIC ScFormatEntry
 {
 public:
-    ScFormatEntry(ScDocument* pDoc);
+    ScFormatEntry(ScDocument& rDoc);
     virtual ~ScFormatEntry() {}
 
     enum class Type
@@ -244,7 +244,7 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) = 0;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) = 0;
 
-    virtual ScFormatEntry* Clone( ScDocument* pDoc ) const = 0;
+    virtual ScFormatEntry* Clone( ScDocument& rDoc ) const = 0;
 
     virtual void SetParent( ScConditionalFormat* pNew ) = 0;
 
@@ -255,7 +255,7 @@ public:
     virtual void endRendering();
     virtual void updateValues();
 protected:
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
 
 };
 
@@ -405,7 +405,7 @@ public:
 
     virtual Type GetType() const override { return eConditionType; }
 
-    virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
+    virtual ScFormatEntry* Clone(ScDocument& rDoc) const override;
 
     static ScConditionMode GetModeFromApi(css::sheet::ConditionOperator nOperator);
 
@@ -417,7 +417,7 @@ public:
 
 protected:
     virtual void    DataChanged() const;
-    ScDocument*     GetDocument() const     { return mpDoc; }
+    ScDocument&     GetDocument() const     { return mrDoc; }
     ScConditionalFormat*    pCondFormat;
 
 private:
@@ -481,7 +481,7 @@ public:
 
     const OUString&   GetStyle() const        { return aStyleName; }
     void            UpdateStyleName(const OUString& rNew)  { aStyleName=rNew; }
-    virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
+    virtual ScFormatEntry* Clone(ScDocument& rDoc) const override;
     virtual Type GetType() const override { return eCondFormatType; }
 
 private:
@@ -512,8 +512,8 @@ enum ScCondFormatDateType
 class SC_DLLPUBLIC ScCondDateFormatEntry final : public ScFormatEntry
 {
 public:
-    ScCondDateFormatEntry(ScDocument* pDoc);
-    ScCondDateFormatEntry(ScDocument* pDoc, const ScCondDateFormatEntry& rEntry);
+    ScCondDateFormatEntry(ScDocument& rDoc);
+    ScCondDateFormatEntry(ScDocument& rDoc, const ScCondDateFormatEntry& rEntry);
 
     bool IsValid( const ScAddress& rPos ) const;
 
@@ -529,7 +529,7 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& ) override {}
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& ) override {}
 
-    virtual ScFormatEntry* Clone( ScDocument* pDoc ) const override;
+    virtual ScFormatEntry* Clone( ScDocument& rDoc ) const override;
 
     virtual void SetParent( ScConditionalFormat* ) override {}
 
@@ -561,7 +561,7 @@ public:
 //  complete conditional formatting
 class ScConditionalFormat
 {
-    ScDocument*         mpDoc;
+    ScDocument&         mrDoc;
     sal_uInt32          mnKey;               // Index in attributes
 
     std::vector<std::unique_ptr<ScFormatEntry>> maEntries;
@@ -570,7 +570,7 @@ class ScConditionalFormat
     mutable std::unique_ptr<ScColorFormatCache> mpCache;
 
 public:
-    SC_DLLPUBLIC ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
+    SC_DLLPUBLIC ScConditionalFormat(sal_uInt32 nNewKey, ScDocument& rDocument);
     SC_DLLPUBLIC ~ScConditionalFormat();
      ScConditionalFormat(const ScConditionalFormat&) = delete;
      const ScConditionalFormat& operator=(const ScConditionalFormat&) = delete;
@@ -588,7 +588,7 @@ public:
     bool IsEmpty() const;
     SC_DLLPUBLIC size_t size() const;
 
-    ScDocument* GetDocument();
+    ScDocument& GetDocument();
 
     void            CompileAll();
     void            CompileXML();

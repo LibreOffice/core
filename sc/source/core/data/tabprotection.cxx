@@ -435,7 +435,7 @@ bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, const ScDocume
     for (auto& rEnhancedProtection : maEnhancedProtection)
     {
         if (rEnhancedProtection.maRangeList.is())
-            bChanged |= rEnhancedProtection.maRangeList->UpdateReference( eMode, &rDoc, rWhere, nDx, nDy, nDz);
+            bChanged |= rEnhancedProtection.maRangeList->UpdateReference( eMode, rDoc, rWhere, nDx, nDy, nDz);
     }
     return bChanged;
 }

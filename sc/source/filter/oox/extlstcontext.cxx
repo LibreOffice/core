@@ -151,7 +151,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         ScDocument& rDoc = getScDocument();
         SCTAB nTab = getSheetIndex();
         ScAddress aPos(0, 0, nTab);
-        mpCurrentRule->SetData(&rIconSet, &rDoc, aPos);
+        mpCurrentRule->SetData(&rIconSet, rDoc, aPos);
         mpCurrentRule.reset();
     }
     if (nElement == XLS14_TOKEN(cfRule))
@@ -170,7 +170,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
             if (aExt == getExtLst().end())
             {
                 pInfo = new ScDataBarFormatData();
-                auto pFormat = std::make_unique<ScDataBarFormat>(&getScDocument());
+                auto pFormat = std::make_unique<ScDataBarFormat>(getScDocument());
                 pFormat->SetDataBarData(pInfo);
                 getCondFormats().importExtFormatEntries().push_back(std::move(pFormat));
             }
@@ -189,7 +189,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         {
             ScDocument& rDoc = getScDocument();
             mpCurrentRule.reset(new IconSetRule(*this));
-            maEntries.push_back(std::make_unique<ScIconSetFormat>(&rDoc));
+            maEntries.push_back(std::make_unique<ScIconSetFormat>(rDoc));
             return new IconSetContext(*this, mpCurrentRule.get());
         }
         else if (aType == "cellIs")

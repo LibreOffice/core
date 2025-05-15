@@ -1042,8 +1042,8 @@ void ScDocument::UpdateReference(
         SCROW nRow1 = rCxt.maRange.aStart.Row(), nRow2 = rCxt.maRange.aEnd.Row();
         SCTAB nTab1 = rCxt.maRange.aStart.Tab(), nTab2 = rCxt.maRange.aEnd.Tab();
 
-        xColNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
-        xRowNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
+        xColNameRanges->UpdateReference( eUpdateRefMode, *this, aRange, nDx, nDy, nDz );
+        xRowNameRanges->UpdateReference( eUpdateRefMode, *this, aRange, nDx, nDy, nDz );
         pDBCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
         if (pRangeName)
             pRangeName->UpdateReference(rCxt);
@@ -1057,7 +1057,7 @@ void ScDocument::UpdateReference(
             pValidationList->UpdateReference(rCxt);
         }
         if ( pDetOpList )
-            pDetOpList->UpdateReference( this, eUpdateRefMode, aRange, nDx, nDy, nDz );
+            pDetOpList->UpdateReference( *this, eUpdateRefMode, aRange, nDx, nDy, nDz );
         if ( pUnoBroadcaster )
             pUnoBroadcaster->Broadcast( ScUpdateRefHint(
                                 eUpdateRefMode, aRange, nDx, nDy, nDz ) );
@@ -1098,7 +1098,7 @@ void ScDocument::UpdateReference(
         SCROW nRow1 = rCxt.maRange.aStart.Row(), nRow2 = rCxt.maRange.aEnd.Row();
         SCTAB nTab1 = rCxt.maRange.aStart.Tab(), nTab2 = rCxt.maRange.aEnd.Tab();
 
-        if ( ScRefUpdate::Update( this, eUpdateRefMode, nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
+        if ( ScRefUpdate::Update( *this, eUpdateRefMode, nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
                                     nDx,nDy,nDz, theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) )
         {
             aEmbedRange = ScRange( theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 );

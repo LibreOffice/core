@@ -145,7 +145,7 @@ std::unique_ptr<ScConditionalFormat> ScCondFormatList::GetConditionalFormat() co
     if(maEntries.empty())
         return nullptr;
 
-    std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(0, &mrDoc));
+    std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(0, mrDoc));
     pFormat->SetRange(maRanges);
 
     for(auto & rEntry: maEntries)

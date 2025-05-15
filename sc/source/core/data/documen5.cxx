@@ -417,7 +417,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
             SCROW theRow2 = rRange.aEnd.Row();
             SCTAB theTab2 = rRange.aEnd.Tab();
             ScRefUpdateRes eRes = ScRefUpdate::Update(
-                this, eUpdateRefMode,
+                *this, eUpdateRefMode,
                 nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
                 nDx,nDy,nDz,
                 theCol1,theRow1,theTab1,

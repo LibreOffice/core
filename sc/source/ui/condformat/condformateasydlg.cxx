@@ -235,7 +235,7 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
 {
     if (&rButton == mxButtonOk.get())
     {
-        std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(0, &mrDocument));
+        std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(0, mrDocument));
 
         OUString sExpression1 = (mxNumberEntry->get_visible() && mxAllInputs->get_visible()
                                      ? mxNumberEntry->get_text()

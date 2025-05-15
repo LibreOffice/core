@@ -813,7 +813,7 @@ void ScColorScale2FrmtEntry::Init()
 
 ScFormatEntry* ScColorScale2FrmtEntry::createColorscaleEntry() const
 {
-    ScColorScaleFormat* pColorScale = new ScColorScaleFormat(&mrDoc);
+    ScColorScaleFormat* pColorScale = new ScColorScaleFormat(mrDoc);
     pColorScale->AddEntry(createColorScaleEntry(*mxLbEntryTypeMin, *mxLbColMin, *mxEdMin, mrDoc, maPos));
     pColorScale->AddEntry(createColorScaleEntry(*mxLbEntryTypeMax, *mxLbColMax, *mxEdMax, mrDoc, maPos));
     return pColorScale;
@@ -961,7 +961,7 @@ void ScColorScale3FrmtEntry::Init()
 
 ScFormatEntry* ScColorScale3FrmtEntry::createColorscaleEntry() const
 {
-    ScColorScaleFormat* pColorScale = new ScColorScaleFormat(&mrDoc);
+    ScColorScaleFormat* pColorScale = new ScColorScaleFormat(mrDoc);
     pColorScale->AddEntry(createColorScaleEntry(*mxLbEntryTypeMin, *mxLbColMin, *mxEdMin, mrDoc, maPos));
     if (mxLbColorFormat->get_active() == 1)
         pColorScale->AddEntry(createColorScaleEntry(*mxLbEntryTypeMiddle, *mxLbColMiddle, *mxEdMiddle, mrDoc, maPos));
@@ -1171,7 +1171,7 @@ ScFormatEntry* ScDataBarFrmtEntry::createDatabarEntry() const
                        *mxEdDataBarMin, mrDoc, maPos);
     SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *mxLbDataBarMaxType,
                        *mxEdDataBarMax, mrDoc, maPos);
-    ScDataBarFormat* pDataBar = new ScDataBarFormat(&mrDoc);
+    ScDataBarFormat* pDataBar = new ScDataBarFormat(mrDoc);
     pDataBar->SetDataBarData(new ScDataBarFormatData(*mpDataBarData));
     return pDataBar;
 }
@@ -1310,7 +1310,7 @@ void ScDateFrmtEntry::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 ScFormatEntry* ScDateFrmtEntry::GetEntry() const
 {
-    ScCondDateFormatEntry* pNewEntry = new ScCondDateFormatEntry(&mrDoc);
+    ScCondDateFormatEntry* pNewEntry = new ScCondDateFormatEntry(mrDoc);
     condformat::ScCondFormatDateType eType = static_cast<condformat::ScCondFormatDateType>(mxLbDateEntry->get_active());
     pNewEntry->SetDateType(eType);
     pNewEntry->SetStyleName(mxLbStyle->get_active_text());
@@ -1549,7 +1549,7 @@ void ScIconSetFrmtEntry::SetInactive()
 
 ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
 {
-    ScIconSetFormat* pFormat = new ScIconSetFormat(&mrDoc);
+    ScIconSetFormat* pFormat = new ScIconSetFormat(mrDoc);
 
     ScIconSetFormatData* pData = new ScIconSetFormatData;
     pData->eIconSetType = static_cast<ScIconSetType>(mxLbIconSetType->get_active());

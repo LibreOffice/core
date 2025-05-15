@@ -453,7 +453,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableStyleContext::
     if( nElement == XML_ELEMENT(STYLE, XML_MAP) )
     {
         if(!mpCondFormat)
-            mpCondFormat = new ScConditionalFormat( 0, GetScImport().GetDocument() );
+            mpCondFormat = new ScConditionalFormat( 0, *GetScImport().GetDocument() );
         ScXMLMapContext* pMapContext = new ScXMLMapContext(GetImport(), nElement, xAttrList);
         xContext = pMapContext;
         mpCondFormat->AddEntry(pMapContext->CreateConditionEntry());

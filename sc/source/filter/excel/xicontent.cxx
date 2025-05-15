@@ -688,7 +688,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     if( !mxScCondFmt )
     {
-        mxScCondFmt.reset( new ScConditionalFormat( 0/*nKey*/, &GetDoc() ) );
+        mxScCondFmt.reset( new ScConditionalFormat( 0/*nKey*/, GetDoc() ) );
         if(maRanges.size() > 1)
             maRanges.Join(maRanges[0], true);
         mxScCondFmt->SetRange(maRanges);

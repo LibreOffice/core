@@ -356,7 +356,7 @@ bool ScRangeList::operator!=( const ScRangeList& r ) const
 
 bool ScRangeList::UpdateReference(
     UpdateRefMode eUpdateRefMode,
-    const ScDocument* pDoc,
+    const ScDocument& rDoc,
     const ScRange& rWhere,
     SCCOL nDx,
     SCROW nDy,
@@ -405,7 +405,7 @@ bool ScRangeList::UpdateReference(
         SCROW theRow2;
         SCTAB theTab2;
         rR.GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 );
-        if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+        if ( ScRefUpdate::Update( rDoc, eUpdateRefMode,
                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
                 nDx, nDy, nDz,
                 theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 )
@@ -1227,7 +1227,7 @@ size_t ScRangePairList::size() const
 }
 
 void ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                    const ScDocument* pDoc, const ScRange& rWhere,
+                                    const ScDocument& rDoc, const ScRange& rWhere,
                                     SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     if ( maPairs.empty() )
@@ -1252,7 +1252,7 @@ void ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
             SCROW theRow2;
             SCTAB theTab2;
             rRange.GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 );
-            if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+            if ( ScRefUpdate::Update( rDoc, eUpdateRefMode,
                     nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
                     nDx, nDy, nDz,
                     theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 )

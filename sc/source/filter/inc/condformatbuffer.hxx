@@ -97,7 +97,7 @@ public:
     void importCfvo( const AttributeList& rAttribs );
     void importColor( const AttributeList& rAttribs );
 
-    void AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
+    void AddEntries( ScColorScaleFormat* pFormat, ScDocument& rDoc, const ScAddress& rAddr );
 
     const std::vector< ColorScaleRuleModelEntry > & getModelEntries() const { return maColorScaleRuleEntries; }
     sal_uInt32 getCfvo() const { return mnCfvo; }
@@ -117,7 +117,7 @@ public:
     void importColor( const AttributeList& rAttribs );
     void importAttribs( const AttributeList& rAttribs );
 
-    void SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
+    void SetData( ScDataBarFormat* pFormat, ScDocument& rDoc, const ScAddress& rAddr );
 
     ScDataBarFormatData* getDataBarFormatData() { return mxFormat.get(); }
 
@@ -137,7 +137,7 @@ public:
     void importFormula(const OUString& rFormula);
     void importIcon(const AttributeList& rAttribs);
 
-    void SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
+    void SetData( ScIconSetFormat* pFormat, ScDocument& rDoc, const ScAddress& rAddr );
 
 private:
     std::vector< ColorScaleRuleModelEntry > maEntries;

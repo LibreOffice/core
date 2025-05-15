@@ -148,7 +148,7 @@ class ScBroadcastAreaSlot
 private:
     ScBroadcastAreas    aBroadcastAreaTbl;
     mutable ScBroadcastArea aTmpSeekBroadcastArea;      // for FindBroadcastArea()
-    ScDocument*         pDoc;
+    ScDocument&         rDoc;
     ScBroadcastAreaSlotMachine* pBASM;
     bool                mbInBroadcastIteration;
 
@@ -182,7 +182,7 @@ private:
     }
 
 public:
-                        ScBroadcastAreaSlot( ScDocument* pDoc,
+                        ScBroadcastAreaSlot( ScDocument& rDoc,
                                         ScBroadcastAreaSlotMachine* pBASM );
                         ~ScBroadcastAreaSlot();
 
@@ -313,7 +313,7 @@ private:
     TableSlotsMap         aTableSlotsMap;
     AreasToBeErased       maAreasToBeErased;
     std::unique_ptr<SvtBroadcaster> pBCAlways;             // for the RC_ALWAYS special range
-    ScDocument           *pDoc;
+    ScDocument           &rDoc;
     ScBroadcastArea      *pUpdateChain;
     ScBroadcastArea      *pEOUpdateChain;
     sal_uInt32            nInBulkBroadcast;
@@ -327,7 +327,7 @@ private:
 #endif
 
 public:
-                        ScBroadcastAreaSlotMachine( ScDocument* pDoc );
+                        ScBroadcastAreaSlotMachine( ScDocument& rDoc );
                         ~ScBroadcastAreaSlotMachine();
     void StartListeningArea(
         const ScRange& rRange, bool bGroupListening, SvtListener* pListener );

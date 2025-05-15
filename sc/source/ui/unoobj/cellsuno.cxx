@@ -1545,7 +1545,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if ( rDoc.HasUnoRefUndo() )
             pUndoRanges.reset(new ScRangeList( aRanges ));
 
-        if ( aRanges.UpdateReference( pRefHint->GetMode(), &rDoc, pRefHint->GetRange(),
+        if ( aRanges.UpdateReference( pRefHint->GetMode(), rDoc, pRefHint->GetRange(),
                                     pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() ) )
         {
             AdjustUpdatedRanges(pRefHint->GetMode());
@@ -1929,7 +1929,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
                             aAny <<= uno::Reference<sheet::XSheetConditionalEntries>(
-                                    new ScTableConditionalFormat( &rDoc, 0, aRanges[0].aStart.Tab(), eGrammar ));
+                                    new ScTableConditionalFormat( rDoc, 0, aRanges[0].aStart.Tab(), eGrammar ));
                         }
                         break;
                     case SC_WID_UNO_VALIDAT:
@@ -2242,7 +2242,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                             // Then we can apply new conditional format if there is one
                             if (pFormat->getCount())
                             {
-                                auto pNew = std::make_unique<ScConditionalFormat>( 0, &rDoc );    // Index will be set on inserting
+                                auto pNew = std::make_unique<ScConditionalFormat>( 0, rDoc );    // Index will be set on inserting
                                 pFormat->FillFormat( *pNew, rDoc, eGrammar );
                                 pNew->SetRange( aRanges );
                                 pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, std::move(pNew), nTab, aRanges );
@@ -2409,7 +2409,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                         if(!rIndex.empty())
                             nIndex = rIndex[0];
                         rAny <<= uno::Reference<sheet::XSheetConditionalEntries>(
-                                new ScTableConditionalFormat( &rDoc, nIndex, aRanges.front().aStart.Tab(), eGrammar ));
+                                new ScTableConditionalFormat( rDoc, nIndex, aRanges.front().aStart.Tab(), eGrammar ));
                     }
                 }
                 break;
@@ -8388,7 +8388,7 @@ void ScCellsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         auto pRefHint = static_cast<const ScUpdateRefHint*>(&rHint);
-        aRanges.UpdateReference( pRefHint->GetMode(), &pDocShell->GetDocument(), pRefHint->GetRange(),
+        aRanges.UpdateReference( pRefHint->GetMode(), pDocShell->GetDocument(), pRefHint->GetRange(),
                                         pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() );
     }
     else if ( rHint.GetId() == SfxHintId::Dying )
@@ -8502,7 +8502,7 @@ void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
         const ScUpdateRefHint* pRefHint = static_cast<const ScUpdateRefHint*>(&rHint);
         if (pDocShell)
         {
-            aRanges.UpdateReference( pRefHint->GetMode(), &pDocShell->GetDocument(), pRefHint->GetRange(),
+            aRanges.UpdateReference( pRefHint->GetMode(), pDocShell->GetDocument(), pRefHint->GetRange(),
                                      pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() );
 
             pMark.reset();       // recreate from moved area
@@ -8510,7 +8510,7 @@ void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
             if (!bAtEnd)        // adjust aPos
             {
                 ScRangeList aNew { ScRange(aPos) };
-                aNew.UpdateReference( pRefHint->GetMode(), &pDocShell->GetDocument(), pRefHint->GetRange(),
+                aNew.UpdateReference( pRefHint->GetMode(), pDocShell->GetDocument(), pRefHint->GetRange(),
                                       pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() );
                 if (aNew.size()==1)
                 {

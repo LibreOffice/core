@@ -516,8 +516,8 @@ bool ScDocument::InsertTab(
                 sc::RefUpdateInsertTabContext aCxt( *this, nPos, 1);
 
                 ScRange aRange( 0,0,nPos, MaxCol(),MaxRow(),MAXTAB );
-                xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
-                xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
+                xColNameRanges->UpdateReference( URM_INSDEL, *this, aRange, 0,0,1 );
+                xRowNameRanges->UpdateReference( URM_INSDEL, *this, aRange, 0,0,1 );
                 if (pRangeName)
                     pRangeName->UpdateInsertTab(aCxt);
                 pDBCollection->UpdateReference(
@@ -525,7 +525,7 @@ bool ScDocument::InsertTab(
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if (pDetOpList)
-                    pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,1 );
+                    pDetOpList->UpdateReference( *this, URM_INSDEL, aRange, 0,0,1 );
                 UpdateChartRef( URM_INSDEL, 0,0,nPos, MaxCol(),MaxRow(),MAXTAB, 0,0,1 );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,1 );
                 if ( pUnoBroadcaster )
@@ -603,8 +603,8 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
             {
                 sc::RefUpdateInsertTabContext aCxt( *this, nPos, nNewSheets);
                 ScRange aRange( 0,0,nPos, MaxCol(),MaxRow(),MAXTAB );
-                xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,nNewSheets );
-                xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,nNewSheets );
+                xColNameRanges->UpdateReference( URM_INSDEL, *this, aRange, 0,0,nNewSheets );
+                xRowNameRanges->UpdateReference( URM_INSDEL, *this, aRange, 0,0,nNewSheets );
                 if (pRangeName)
                     pRangeName->UpdateInsertTab(aCxt);
                 pDBCollection->UpdateReference(
@@ -612,7 +612,7 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,nNewSheets );
                 if (pDetOpList)
-                    pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,nNewSheets );
+                    pDetOpList->UpdateReference( *this, URM_INSDEL, aRange, 0,0,nNewSheets );
                 UpdateChartRef( URM_INSDEL, 0,0,nPos, MaxCol(),MaxRow(),MAXTAB, 0,0,nNewSheets );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0, nNewSheets );
                 if ( pUnoBroadcaster )
@@ -692,8 +692,8 @@ bool ScDocument::DeleteTab( SCTAB nTab )
             // normal reference update
 
             aRange.aEnd.SetTab(GetTableCount() - 1);
-            xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1 );
-            xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1 );
+            xColNameRanges->UpdateReference( URM_INSDEL, *this, aRange, 0,0,-1 );
+            xRowNameRanges->UpdateReference( URM_INSDEL, *this, aRange, 0,0,-1 );
             if (pRangeName)
                 pRangeName->UpdateDeleteTab(aCxt);
             pDBCollection->UpdateReference(
@@ -701,7 +701,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
             if (pDPCollection)
                 pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
             if (pDetOpList)
-                pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,-1 );
+                pDetOpList->UpdateReference( *this, URM_INSDEL, aRange, 0,0,-1 );
             UpdateChartRef( URM_INSDEL, 0,0,nTab, MaxCol(),MaxRow(),MAXTAB, 0,0,-1 );
             UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1 );
             if (pValidationList)
@@ -791,14 +791,14 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
             // normal reference update
 
             ScRange aRange( 0, 0, nTab, MaxCol(), MaxRow(), nTabCount - 1 );
-            xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1*nSheets );
-            xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1*nSheets );
+            xColNameRanges->UpdateReference( URM_INSDEL, *this, aRange, 0,0,-1*nSheets );
+            xRowNameRanges->UpdateReference( URM_INSDEL, *this, aRange, 0,0,-1*nSheets );
             pDBCollection->UpdateReference(
                                 URM_INSDEL, 0,0,nTab, MaxCol(),MaxRow(),MAXTAB, 0,0,-1*nSheets );
             if (pDPCollection)
                 pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,-1*nSheets );
             if (pDetOpList)
-                pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,-1*nSheets );
+                pDetOpList->UpdateReference( *this, URM_INSDEL, aRange, 0,0,-1*nSheets );
             UpdateChartRef( URM_INSDEL, 0,0,nTab, MaxCol(),MaxRow(),MAXTAB, 0,0,-1*nSheets );
             UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1*nSheets );
             if (pValidationList)

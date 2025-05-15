@@ -1075,7 +1075,7 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
     SCTAB nTab2 = maOutputRange.aEnd.Tab();
 
     ScRefUpdateRes eRes =
-        ScRefUpdate::Update(mpDocument, eUpdateRefMode,
+        ScRefUpdate::Update(*mpDocument, eUpdateRefMode,
             rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
             rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
             nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
@@ -1100,7 +1100,7 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
     nRow2 = rSrcRange.aEnd.Row();
     nTab2 = rSrcRange.aEnd.Tab();
 
-    eRes = ScRefUpdate::Update(mpDocument, eUpdateRefMode,
+    eRes = ScRefUpdate::Update(*mpDocument, eUpdateRefMode,
             rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
             rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
             nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
@@ -3077,7 +3077,7 @@ void ScDPCollection::SheetCaches::updateReference(
         SCTAB nTab2 = rKeyRange.aEnd.Tab();
 
         ScRefUpdateRes eRes = ScRefUpdate::Update(
-            &mrDoc, eMode,
+            mrDoc, eMode,
             r.aStart.Col(), r.aStart.Row(), r.aStart.Tab(),
             r.aEnd.Col(), r.aEnd.Row(), r.aEnd.Tab(), nDx, nDy, nDz,
             nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);

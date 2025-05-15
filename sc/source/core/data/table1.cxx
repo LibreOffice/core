@@ -1923,7 +1923,7 @@ void ScTable::UpdateReference(
             nERow = rPrintRange.aEnd.Row();
 
             // do not try to modify sheet index of print range
-            if ( ScRefUpdate::Update( &rDocument, eUpdateRefMode,
+            if ( ScRefUpdate::Update( rDocument, eUpdateRefMode,
                                       nCol1,nRow1,nTab, nCol2,nRow2,nTab,
                                       nDx,nDy,0,
                                       nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
@@ -1941,7 +1941,7 @@ void ScTable::UpdateReference(
             nERow = moRepeatColRange->aEnd.Row();
 
             // do not try to modify sheet index of repeat range
-            if ( ScRefUpdate::Update( &rDocument, eUpdateRefMode,
+            if ( ScRefUpdate::Update( rDocument, eUpdateRefMode,
                                       nCol1,nRow1,nTab, nCol2,nRow2,nTab,
                                       nDx,nDy,0,
                                       nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
@@ -1961,7 +1961,7 @@ void ScTable::UpdateReference(
             nERow = moRepeatRowRange->aEnd.Row();
 
             // do not try to modify sheet index of repeat range
-            if ( ScRefUpdate::Update( &rDocument, eUpdateRefMode,
+            if ( ScRefUpdate::Update( rDocument, eUpdateRefMode,
                                       nCol1,nRow1,nTab, nCol2,nRow2,nTab,
                                       nDx,nDy,0,
                                       nSCol,nSRow,nSTab, nECol,nERow,nETab ) )

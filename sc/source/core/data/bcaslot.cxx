@@ -40,10 +40,10 @@ ScBroadcastArea::ScBroadcastArea( const ScRange& rRange ) :
     mbInUpdateChain(false),
     mbGroupListening(false) {}
 
-ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
+ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument& rDocument,
         ScBroadcastAreaSlotMachine* pBASMa ) :
     aTmpSeekBroadcastArea( ScRange()),
-    pDoc( pDocument ),
+    rDoc( rDocument ),
     pBASM( pBASMa ),
     mbInBroadcastIteration( false),
     mbHasErasedArea(false)
@@ -68,20 +68,20 @@ ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
 
 ScDocument::HardRecalcState ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
 {
-    ScDocument::HardRecalcState eState = pDoc->GetHardRecalcState();
+    ScDocument::HardRecalcState eState = rDoc.GetHardRecalcState();
     if (eState == ScDocument::HardRecalcState::OFF)
     {
         if (aBroadcastAreaTbl.size() >= aBroadcastAreaTbl.max_size())
         {   // this is more hypothetical now, check existed for old SV_PTRARR_SORT
-            ScDocShell* pShell = pDoc->GetDocumentShell();
+            ScDocShell* pShell = rDoc.GetDocumentShell();
             OSL_ENSURE( pShell, "Missing DocShell :-/" );
 
             if ( pShell )
                 pShell->SetError(SCWARN_CORE_HARD_RECALC);
 
-            pDoc->SetAutoCalc( false );
+            rDoc.SetAutoCalc( false );
             eState = ScDocument::HardRecalcState::ETERNAL;
-            pDoc->SetHardRecalcState( eState );
+            rDoc.SetHardRecalcState( eState );
         }
     }
     return eState;
@@ -92,7 +92,7 @@ bool ScBroadcastAreaSlot::StartListeningArea(
 {
     bool bNewArea = false;
     OSL_ENSURE(pListener, "StartListeningArea: pListener Null");
-    assert(!pDoc->IsDelayedFormulaGrouping()); // otherwise the group size might be incorrect
+    assert(!rDoc.IsDelayedFormulaGrouping()); // otherwise the group size might be incorrect
     if (CheckHardRecalcStateCondition() == ScDocument::HardRecalcState::ETERNAL)
         return false;
     if ( !rpArea )
@@ -357,7 +357,7 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
         else
         {
             pArea->GetRange().GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2);
-            if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+            if ( ScRefUpdate::Update( rDoc, eUpdateRefMode,
                     nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
                     theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ))
             {
@@ -553,8 +553,8 @@ ScBroadcastAreaSlotMachine::TableSlots::~TableSlots()
 }
 
 ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
-        ScDocument* pDocument ) :
-    pDoc( pDocument ),
+        ScDocument& rDocument ) :
+    rDoc( rDocument ),
     pUpdateChain( nullptr ),
     pEOUpdateChain( nullptr ),
     nInBulkBroadcast( 0 )
@@ -575,7 +575,7 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
     sal_Int32 nCol1 = 0;
     sal_Int32 nCol2 = 1024;
     SCSIZE nSliceCol = 16;
-    while (nCol2 <= pDoc->GetMaxColCount())
+    while (nCol2 <= rDoc.GetMaxColCount())
     {
         SCROW nRow1 = 0;
         SCROW nRow2 = 32*1024;
@@ -583,7 +583,7 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
         SCSIZE nSlotsCol = 0;
         SCSIZE nSlotsStartCol = nSlots;
         // Must be sorted by row1,row2!
-        while (nRow2 <= pDoc->GetMaxRowCount())
+        while (nRow2 <= rDoc.GetMaxRowCount())
         {
             maSlotDistribution.emplace_back(nRow1, nRow2, nSliceRow, nSlotsCol, nCol1, nCol2, nSliceCol, nSlotsStartCol);
             nSlotsCol += (nRow2 - nRow1) / nSliceRow;
@@ -621,7 +621,7 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
 {
     SCROW nRow = rAddress.Row();
     SCCOL nCol = rAddress.Col();
-    if ( !pDoc->ValidRow(nRow) || !pDoc->ValidCol(nCol) )
+    if ( !rDoc.ValidRow(nRow) || !rDoc.ValidCol(nCol) )
     {
         OSL_FAIL( "Row/Col invalid, using first slot!" );
         return 0;
@@ -693,7 +693,7 @@ void ScBroadcastAreaSlotMachine::DoChecks()
     compare( ComputeSlotOffset( ScAddress( nSliceCol - 1, 0, 0 )),
              ComputeSlotOffset( ScAddress( nSliceCol, 0, 0 )) - mnBcaSlotsCol, __LINE__ );
     // Check that last cell is the last slot.
-    compare( ComputeSlotOffset( ScAddress( pDoc->GetMaxColCount() - 1, pDoc->GetMaxRowCount() - 1, 0 )),
+    compare( ComputeSlotOffset( ScAddress( rDoc.GetMaxColCount() - 1, rDoc.GetMaxRowCount() - 1, 0 )),
              mnBcaSlots - 1, __LINE__ );
     // Check that adjacent rows in the same column but in different distribution areas differ by one slot.
     for( size_t i = 0; i < maSlotDistribution.size() - 1; ++i )
@@ -723,7 +723,7 @@ void ScBroadcastAreaSlotMachine::DoChecks()
         }
     }
     // Iterate all slots.
-    ScRange range( ScAddress( 0, 0, 0 ), ScAddress( pDoc->MaxCol(), pDoc->MaxRow(), 0 ));
+    ScRange range( ScAddress( 0, 0, 0 ), ScAddress( rDoc.MaxCol(), rDoc.MaxRow(), 0 ));
     SCSIZE nStart, nEnd, nRowBreak;
     ComputeAreaPoints( range, nStart, nEnd, nRowBreak );
     assert( nStart == 0 );
@@ -740,8 +740,8 @@ void ScBroadcastAreaSlotMachine::DoChecks()
         compare( nOff, previous + 1, __LINE__ );
     }
     // Iterate slots in the last row (each will differ by mnBcaSlotsCol).
-    range = ScRange( ScAddress( 0, pDoc->MaxRow(), 0 ),
-                     ScAddress( pDoc->MaxCol(), pDoc->MaxRow() - 1, 0 ));
+    range = ScRange( ScAddress( 0, rDoc.MaxRow(), 0 ),
+                     ScAddress( rDoc.MaxCol(), rDoc.MaxRow() - 1, 0 ));
     ComputeAreaPoints( range, nStart, nEnd, nRowBreak );
     assert( nStart == mnBcaSlotsCol - 1 );
     assert( nEnd == mnBcaSlots - 1 );
@@ -791,7 +791,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea(
             while ( !bDone && nOff <= nEnd )
             {
                 if ( !*pp )
-                    *pp = new ScBroadcastAreaSlot( pDoc, this );
+                    *pp = new ScBroadcastAreaSlot( rDoc, this );
                 if (!pArea)
                 {
                     // If the call to StartListeningArea didn't create the
@@ -1088,7 +1088,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
 
         // update range
         aRange.GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2);
-        if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+        if ( ScRefUpdate::Update( rDoc, eUpdateRefMode,
                 nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
                 theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ))
         {
@@ -1114,7 +1114,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             while ( nOff <= nEnd )
             {
                 if (!*pp)
-                    *pp = new ScBroadcastAreaSlot( pDoc, this );
+                    *pp = new ScBroadcastAreaSlot( rDoc, this );
                 (*pp)->UpdateInsert( pArea );
                 ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
             }
@@ -1147,10 +1147,10 @@ void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast( SfxHintId nHintId )
         ScBroadcastAreasBulk().swap( aBulkBroadcastAreas);
         bool bBroadcasted = BulkBroadcastGroupAreas();
         // Trigger the "final" tracking.
-        if (pDoc->IsTrackFormulasPending())
-            pDoc->FinalTrackFormulas( nHintId );
+        if (rDoc.IsTrackFormulasPending())
+            rDoc.FinalTrackFormulas( nHintId );
         else if (bBroadcasted)
-            pDoc->TrackFormulas( nHintId );
+            rDoc.TrackFormulas( nHintId );
     }
 }
 
@@ -1169,7 +1169,7 @@ void ScBroadcastAreaSlotMachine::InsertBulkGroupArea( ScBroadcastArea* pArea, co
     }
 
     sc::ColumnSpanSet& rSet = it->second;
-    rSet.set(*pDoc, rRange, true);
+    rSet.set(rDoc, rRange, true);
 }
 
 bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
@@ -1177,7 +1177,7 @@ bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
     if (m_BulkGroupAreas.empty())
         return false;
 
-    sc::BulkDataHint aHint( *pDoc );
+    sc::BulkDataHint aHint( rDoc );
 
     bool bBroadcasted = false;
     for (const auto& [pArea, rSpans] : m_BulkGroupAreas)

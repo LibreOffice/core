@@ -75,7 +75,7 @@ private:
     void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
 public:
                             ScTableConditionalFormat() = delete;
-                            ScTableConditionalFormat(const ScDocument* pDoc, sal_uLong nKey,
+                            ScTableConditionalFormat(const ScDocument& rDoc, sal_uLong nKey,
                                     SCTAB nTab, formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableConditionalFormat() override;
 

@@ -184,7 +184,7 @@ static bool lcl_MoveItCutBig( sal_Int64& rRef, sal_Int32 nDelta )
     return bCut;
 }
 
-ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
+ScRefUpdateRes ScRefUpdate::Update( const ScDocument& rDoc, UpdateRefMode eUpdateRefMode,
                                         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                         SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                         SCCOL nDx, SCROW nDy, SCTAB nDz,
@@ -204,13 +204,13 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
 
     if (eUpdateRefMode == URM_INSDEL)
     {
-        bool bExpand = pDoc->IsExpandRefs();
+        bool bExpand = rDoc.IsExpandRefs();
         if ( nDx && (theRow1 >= nRow1) && (theRow2 <= nRow2) &&
                     (theTab1 >= nTab1) && (theTab2 <= nTab2))
         {
             bool bExp = (bExpand && IsExpand( theCol1, theCol2, nCol1, nDx ));
-            bCut1 = lcl_MoveStart( theCol1, nCol1, nDx, pDoc->MaxCol() );
-            bCut2 = lcl_MoveEnd( theCol2, nCol1, nDx, pDoc->MaxCol() );
+            bCut1 = lcl_MoveStart( theCol1, nCol1, nDx, rDoc.MaxCol() );
+            bCut2 = lcl_MoveEnd( theCol2, nCol1, nDx, rDoc.MaxCol() );
             if ( theCol2 < theCol1 )
             {
                 eRet = UR_INVALID;
@@ -225,28 +225,28 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
                 Expand( theCol1, theCol2, nCol1, nDx );
                 eRet = UR_UPDATED;
             }
-            if (eRet != UR_NOTHING && oldCol1 == 0 && oldCol2 == pDoc->MaxCol())
+            if (eRet != UR_NOTHING && oldCol1 == 0 && oldCol2 == rDoc.MaxCol())
             {
                 eRet = UR_STICKY;
                 theCol1 = oldCol1;
                 theCol2 = oldCol2;
             }
-            else if (oldCol2 == pDoc->MaxCol() && oldCol1 < pDoc->MaxCol())
+            else if (oldCol2 == rDoc.MaxCol() && oldCol1 < rDoc.MaxCol())
             {
                 // End was sticky, but start may have been moved. Only on range.
                 theCol2 = oldCol2;
                 if (eRet == UR_NOTHING)
                     eRet = UR_STICKY;
             }
-            // Else, if (bCut2 && theCol2 == pDoc->MaxCol()) then end becomes sticky,
+            // Else, if (bCut2 && theCol2 == rDoc.MaxCol()) then end becomes sticky,
             // but currently there's nothing to do.
         }
         if ( nDy && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theTab1 >= nTab1) && (theTab2 <= nTab2))
         {
             bool bExp = (bExpand && IsExpand( theRow1, theRow2, nRow1, nDy ));
-            bCut1 = lcl_MoveStart( theRow1, nRow1, nDy, pDoc->MaxRow() );
-            bCut2 = lcl_MoveEnd( theRow2, nRow1, nDy, pDoc->MaxRow() );
+            bCut1 = lcl_MoveStart( theRow1, nRow1, nDy, rDoc.MaxRow() );
+            bCut2 = lcl_MoveEnd( theRow2, nRow1, nDy, rDoc.MaxRow() );
             if ( theRow2 < theRow1 )
             {
                 eRet = UR_INVALID;
@@ -261,26 +261,26 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
                 Expand( theRow1, theRow2, nRow1, nDy );
                 eRet = UR_UPDATED;
             }
-            if (eRet != UR_NOTHING && oldRow1 == 0 && oldRow2 == pDoc->MaxRow())
+            if (eRet != UR_NOTHING && oldRow1 == 0 && oldRow2 == rDoc.MaxRow())
             {
                 eRet = UR_STICKY;
                 theRow1 = oldRow1;
                 theRow2 = oldRow2;
             }
-            else if (oldRow2 == pDoc->MaxRow() && oldRow1 < pDoc->MaxRow())
+            else if (oldRow2 == rDoc.MaxRow() && oldRow1 < rDoc.MaxRow())
             {
                 // End was sticky, but start may have been moved. Only on range.
                 theRow2 = oldRow2;
                 if (eRet == UR_NOTHING)
                     eRet = UR_STICKY;
             }
-            // Else, if (bCut2 && theRow2 == pDoc->MaxRow()) then end becomes sticky,
+            // Else, if (bCut2 && theRow2 == rDoc.MaxRow()) then end becomes sticky,
             // but currently there's nothing to do.
         }
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) )
         {
-            SCTAB nMaxTab = pDoc->GetTableCount() - 1;
+            SCTAB nMaxTab = rDoc.GetTableCount() - 1;
             nMaxTab = sal::static_int_cast<SCTAB>(nMaxTab + nDz);      // adjust to new count
             bool bExp = (bExpand && IsExpand( theTab1, theTab2, nTab1, nDz ));
             bCut1 = lcl_MoveStart( theTab1, nTab1, nDz, nMaxTab, false /*bShrink*/);
@@ -306,11 +306,11 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
         {
             if ( nDx )
             {
-                bCut1 = lcl_MoveItCut( theCol1, nDx, pDoc->MaxCol() );
-                bCut2 = lcl_MoveItCut( theCol2, nDx, pDoc->MaxCol() );
+                bCut1 = lcl_MoveItCut( theCol1, nDx, rDoc.MaxCol() );
+                bCut2 = lcl_MoveItCut( theCol2, nDx, rDoc.MaxCol() );
                 if ( bCut1 || bCut2 )
                     eRet = UR_UPDATED;
-                if (eRet != UR_NOTHING && oldCol1 == 0 && oldCol2 == pDoc->MaxCol())
+                if (eRet != UR_NOTHING && oldCol1 == 0 && oldCol2 == rDoc.MaxCol())
                 {
                     eRet = UR_STICKY;
                     theCol1 = oldCol1;
@@ -319,11 +319,11 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
             }
             if ( nDy )
             {
-                bCut1 = lcl_MoveItCut( theRow1, nDy, pDoc->MaxRow() );
-                bCut2 = lcl_MoveItCut( theRow2, nDy, pDoc->MaxRow() );
+                bCut1 = lcl_MoveItCut( theRow1, nDy, rDoc.MaxRow() );
+                bCut2 = lcl_MoveItCut( theRow2, nDy, rDoc.MaxRow() );
                 if ( bCut1 || bCut2 )
                     eRet = UR_UPDATED;
-                if (eRet != UR_NOTHING && oldRow1 == 0 && oldRow2 == pDoc->MaxRow())
+                if (eRet != UR_NOTHING && oldRow1 == 0 && oldRow2 == rDoc.MaxRow())
                 {
                     eRet = UR_STICKY;
                     theRow1 = oldRow1;
@@ -332,7 +332,7 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
             }
             if ( nDz )
             {
-                SCTAB nMaxTab = pDoc->GetTableCount() - 1;
+                SCTAB nMaxTab = rDoc.GetTableCount() - 1;
                 bCut1 = lcl_MoveItCut( theTab1, nDz, nMaxTab );
                 bCut2 = lcl_MoveItCut( theTab2, nDz, nMaxTab );
                 if ( bCut1 || bCut2 )
