@@ -884,7 +884,12 @@ BitmapEx PngImageReader::read()
 {
     ImportOutput aImportOutput;
     if (read(aImportOutput))
-        return *aImportOutput.moBitmap;
+    {
+        if (!aImportOutput.mbIsAnimated)
+            return *aImportOutput.moBitmap;
+        else
+            return aImportOutput.moAnimation->GetBitmapEx();
+    }
     return BitmapEx();
 }
 
