@@ -190,6 +190,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
                 mxPreviewBorderWindow);
             mpAccessibleConsole->AddChild(mpAccessiblePreview);
             mpAccessiblePreview->SetAccessibleName(rsTitle);
+            mpAccessiblePreview->SetAccessibleParent(this);
         }
     }
 
