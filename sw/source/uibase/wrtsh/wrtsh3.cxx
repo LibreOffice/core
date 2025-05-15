@@ -389,4 +389,9 @@ bool SwWrtShell::GetURLFromButton( OUString& rURL, OUString& rDescr ) const
     return bRet;
 }
 
+SwPostItMgr* SwWrtShell::GetPostItMgr()
+{
+    return m_rView.GetPostItMgr();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

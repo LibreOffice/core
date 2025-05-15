@@ -1582,7 +1582,7 @@ void SwTextNode::Update(
                 for (SwViewShell& rShell : pDocShell->GetWrtShell()->GetRingContainer())
                 {
                     auto pWrtShell = dynamic_cast<SwWrtShell*>(&rShell);
-                    if (!pWrtShell || pWrtShell == pDocShell->GetWrtShell())
+                    if (!pWrtShell || pWrtShell == dynamic_cast<SwWrtShell*>(GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell()))
                         continue;
 
                     SwShellCursor* pCursor = pWrtShell->GetCursor_();

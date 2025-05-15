@@ -611,7 +611,7 @@ public:
     void DeleteReplacementBitmaps();
 
     const SwPostItMgr* GetPostItMgr() const { return const_cast<SwViewShell*>(this)->GetPostItMgr(); }
-    SW_DLLPUBLIC SwPostItMgr* GetPostItMgr();
+    SW_DLLPUBLIC virtual SwPostItMgr* GetPostItMgr();
 
     /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags
     void ToggleHeaderFooterEdit();
