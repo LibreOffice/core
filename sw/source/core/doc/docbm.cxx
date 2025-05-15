@@ -500,6 +500,22 @@ namespace sw::mark
         , m_pLastActiveFieldmark(nullptr)
     { }
 
+    void MarkManager::disableUniqueNameChecks() { m_bCheckUniqueNames = false; }
+    void MarkManager::enableUniqueNameChecks()
+    {
+        if (m_bCheckUniqueNames)
+            return;
+        // Make sure that all names are unique
+        std::unordered_set<OUString> usedNames;
+        for (auto& pMark : m_vAllMarks)
+        {
+            assert(pMark);
+            pMark->SetName(getUniqueMarkName(pMark->GetName(), [&usedNames](const SwMarkName& n)
+                                             { return usedNames.insert(n.toString()).second; }));
+        }
+        m_bCheckUniqueNames = true;
+    }
+
     ::sw::mark::MarkBase* MarkManager::makeMark(const SwPaM& rPaM,
         const SwMarkName& rName,
         const IDocumentMarkAccess::MarkType eType,
@@ -616,8 +632,10 @@ namespace sw::mark
             pMark->Swap();
 
         // for performance reasons, we trust UnoMarks to have a (generated) unique name
-        if ( eType != IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
-            pMark->SetName( getUniqueMarkName( pMark->GetName() ) );
+        if (eType != IDocumentMarkAccess::MarkType::UNO_BOOKMARK && m_bCheckUniqueNames)
+            pMark->SetName(getUniqueMarkName(
+                pMark->GetName(), [this](const SwMarkName& n)
+                { return lcl_FindMarkByName(n, m_vAllMarks) == m_vAllMarks.end(); }));
 
         // insert any dummy chars before inserting into sorted vectors
         pMark->InitDoc(m_rDoc, eMode, pSepPos);
@@ -1760,7 +1778,9 @@ namespace sw::mark
         }
     }
 
-    SwMarkName MarkManager::getUniqueMarkName(const SwMarkName& rName) const
+    template <class IsNameUniqueFunc>
+        requires std::is_invocable_r_v<bool, IsNameUniqueFunc, const SwMarkName&>
+    SwMarkName MarkManager::getUniqueMarkName(const SwMarkName& rName, IsNameUniqueFunc f) const
     {
         OSL_ENSURE(rName.toString().getLength(),
             "<MarkManager::getUniqueMarkName(..)> - a name should be proposed");
@@ -1772,7 +1792,7 @@ namespace sw::mark
             return SwMarkName(newName);
         }
 
-        if (lcl_FindMarkByName(rName, m_vAllMarks) == m_vAllMarks.end())
+        if (f(rName))
         {
             return rName;
         }
@@ -1790,7 +1810,7 @@ namespace sw::mark
         {
             sTmp = aPrefix + OUString::number(nCnt);
             nCnt++;
-            if (lcl_FindMarkByName(SwMarkName(sTmp), m_vAllMarks) == m_vAllMarks.end())
+            if (f(SwMarkName(sTmp)))
             {
                 break;
             }

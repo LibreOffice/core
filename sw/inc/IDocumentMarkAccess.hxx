@@ -96,6 +96,20 @@ class IDocumentMarkAccess
             const SwPaM& rPaM,
             const SwMarkName& rName ) = 0;
 
+        /** A performance optimization mode
+
+           Creating and inserting a lot of marks, the checks in makeMark if name is unique may
+           become a bottleneck, because there we have to iterate over all marks, checking their
+           names, which creates a quadratic complexity. This may e.g. slow down loading documents
+           with thousands of bookmarks.
+
+           When the check is disabled using disableUniqueNameChecks, duplicate names are allowed.
+           When the check is eventually enabled using enableUniqueNameChecks, one pass over all
+           marks is performed, and all duplicated names are made unique.
+        */
+        virtual void disableUniqueNameChecks() = 0;
+        virtual void enableUniqueNameChecks() = 0;
+
         /** Returns a mark in the document for a paragraph.
             If there is none, a mark will be created.
 

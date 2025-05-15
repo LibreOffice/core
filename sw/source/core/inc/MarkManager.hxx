@@ -57,6 +57,9 @@ namespace sw::mark {
                 const SwPaM& rPaM,
                 const SwMarkName& rName ) override;
 
+            virtual void disableUniqueNameChecks() override;
+            virtual void enableUniqueNameChecks() override;
+
             virtual void repositionMark(::sw::mark::MarkBase* io_pMark, const SwPaM& rPaM) override;
             virtual bool renameMark(::sw::mark::MarkBase* io_pMark, const SwMarkName& rNewName) override;
             virtual void correctMarksAbsolute(const SwNode& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset) override;
@@ -140,7 +143,9 @@ namespace sw::mark {
             MarkManager& operator=(MarkManager const&) = delete;
 
             // make names
-            SwMarkName getUniqueMarkName(const SwMarkName& rName) const;
+            template <class IsNameUniqueFunc>
+                requires std::is_invocable_r_v<bool, IsNameUniqueFunc, const SwMarkName&>
+            SwMarkName getUniqueMarkName(const SwMarkName& rName, IsNameUniqueFunc f) const;
 
             void sortSubsetMarks();
             void sortMarks();
@@ -161,6 +166,8 @@ namespace sw::mark {
             SwDoc& m_rDoc;
 
             sw::mark::FieldmarkWithDropDownButton* m_pLastActiveFieldmark;
+
+            bool m_bCheckUniqueNames = true;
     };
 
 }
