@@ -140,11 +140,6 @@ void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
         mpWorkWindow->Show(bIsVisible);
 }
 
-void SAL_CALL FullScreenPane::setAccessible(const Reference<css::accessibility::XAccessible>&)
-{
-    assert(false && "Shouldn't get here");
-}
-
 IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
     switch (rEvent.GetId())

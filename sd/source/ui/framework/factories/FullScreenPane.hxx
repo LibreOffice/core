@@ -65,9 +65,6 @@ public:
 
     virtual void SAL_CALL setVisible (sal_Bool bIsVisible) override;
 
-    virtual void SAL_CALL setAccessible (
-        const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible) override;
-
     DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
 
 protected:

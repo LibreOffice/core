@@ -20,8 +20,7 @@
 module com { module sun { module star { module drawing { module framework {
 
 /** An extension of the XPane interface that adds support for
-    a) showing and hiding the windows that internally belong to the pane and
-    b) setting the accessibility object.
+    showing and hiding the windows that internally belong to the pane.
     This is typically an optional interface.
 */
 interface XPane2
@@ -40,15 +39,6 @@ interface XPane2
             When `TRUE` then show the pane.  Hide it otherwise.
     */
     void setVisible ([in] boolean bIsVisible);
-
-    /** Set the accessibility object for the pane. When there is more than
-        one window used to implement the pane then the given accessibility
-        object is usually set at the topmost window.  However, the details
-        are implementation dependent.
-        @param xAccessible
-            May be an empty reference.
-    */
-    void setAccessible ([in] ::com::sun::star::accessibility::XAccessible xAccessible);
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework
