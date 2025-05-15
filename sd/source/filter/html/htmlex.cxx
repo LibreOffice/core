@@ -632,19 +632,19 @@ constexpr OUStringLiteral gaHTMLHeader(
 // constructor for the html export helper classes
 HtmlExport::HtmlExport(
     OUString aPath,
-    SdDrawDocument* pExpDoc,
+    SdDrawDocument& rExpDoc,
     sd::DrawDocShell* pDocShell )
     :   maPath(std::move( aPath )),
-        mpDoc(pExpDoc),
+        mrDoc(rExpDoc),
         mpDocSh( pDocShell )
 {
-    bool bChange = mpDoc->IsChanged();
+    bool bChange = mrDoc.IsChanged();
 
     Init();
 
     ExportSingleDocument();
 
-    mpDoc->SetChanged(bChange);
+    mrDoc.SetChanged(bChange);
 }
 
 HtmlExport::~HtmlExport()
@@ -653,7 +653,7 @@ HtmlExport::~HtmlExport()
 
 void HtmlExport::Init()
 {
-    SdPage* pPage = mpDoc->GetSdPage(0, PageKind::Standard);
+    SdPage* pPage = mrDoc.GetSdPage(0, PageKind::Standard);
 
     // we come up with a destination...
     INetURLObject aINetURLObj( maPath );
@@ -662,10 +662,10 @@ void HtmlExport::Init()
     maExportPath = aINetURLObj.GetPartBeforeLastName(); // with trailing '/'
     maIndex = aINetURLObj.GetLastName();
 
-    mnSdPageCount = mpDoc->GetSdPageCount( PageKind::Standard );
+    mnSdPageCount = mrDoc.GetSdPageCount( PageKind::Standard );
     for( sal_uInt16 nPage = 0; nPage < mnSdPageCount; nPage++ )
     {
-        pPage = mpDoc->GetSdPage( nPage, PageKind::Standard );
+        pPage = mrDoc.GetSdPage( nPage, PageKind::Standard );
 
         maPages.push_back( pPage );
     }
@@ -676,7 +676,7 @@ void HtmlExport::Init()
 
 void HtmlExport::ExportSingleDocument()
 {
-    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+    SdrOutliner* pOutliner = mrDoc.GetInternalOutliner();
 
     mnPagesWritten = 0;
     InitProgress(mnSdPageCount);

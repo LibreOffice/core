@@ -44,7 +44,7 @@ class HtmlExport final
 
     OUString maPath;
 
-    SdDrawDocument* mpDoc;
+    SdDrawDocument& mrDoc;
     ::sd::DrawDocShell* mpDocSh;
 
     std::unique_ptr<SfxProgress> mpProgress;
@@ -68,7 +68,7 @@ class HtmlExport final
 
  public:
     HtmlExport(OUString aPath,
-               SdDrawDocument* pExpDoc,
+               SdDrawDocument& rExpDoc,
                sd::DrawDocShell* pDocShell);
 
     ~HtmlExport();

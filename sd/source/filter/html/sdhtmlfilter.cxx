@@ -36,7 +36,7 @@ bool SdHTMLFilter::Export()
     mrMedium.Close();
     mrMedium.Commit();
 
-    HtmlExport aExport(mrMedium.GetName(), &mrDocument, &mrDocShell);
+    HtmlExport aExport(mrMedium.GetName(), mrDocument, &mrDocShell);
 
     return true;
 }
