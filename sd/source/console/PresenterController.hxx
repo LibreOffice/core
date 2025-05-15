@@ -194,7 +194,7 @@ private:
     std::shared_ptr<PresenterPaintManager> mpPaintManager;
     sal_Int32 mnPendingSlideNumber;
     css::uno::Reference<css::util::XURLTransformer> mxUrlTransformer;
-    ::rtl::Reference<PresenterAccessible> mxAccessibleObject;
+    ::rtl::Reference<PresenterAccessible> mpAccessibleObject;
     IPresentationTime* mpPresentationTime;
 
     void GetSlides (const sal_Int32 nOffset);

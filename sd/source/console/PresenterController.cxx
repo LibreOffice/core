@@ -219,8 +219,8 @@ void PresenterController::UpdateCurrentSlide (const sal_Int32 nOffset)
     UpdateViews();
 
     // Update the accessibility object.
-    if (mxAccessibleObject.is())
-        mxAccessibleObject->NotifyCurrentSlideChange();
+    if (mpAccessibleObject.is())
+        mpAccessibleObject->NotifyCurrentSlideChange();
 }
 
 void PresenterController::GetSlides (const sal_Int32 nOffset)
@@ -731,8 +731,8 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
             break;
 
         case ConfigurationUpdateEndEventType:
-            if (mxAccessibleObject.is())
-                mxAccessibleObject->UpdateAccessibilityHierarchy();
+            if (mpAccessibleObject.is())
+                mpAccessibleObject->UpdateAccessibilityHierarchy();
             UpdateCurrentSlide(0);
             break;
     }
@@ -743,8 +743,8 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
 void SAL_CALL PresenterController::disposing (
     const lang::EventObject& rEvent)
 {
-    if (mxAccessibleObject)
-        mxAccessibleObject->dispose();
+    if (mpAccessibleObject)
+        mpAccessibleObject->dispose();
 
     if (rEvent.Source.get() == static_cast<cppu::OWeakObject*>(mxController.get()))
         mxController = nullptr;
@@ -1027,7 +1027,7 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     if ( ! rxPane.is())
         return;
 
-    mxAccessibleObject = new PresenterAccessible(this, rxPane);
+    mpAccessibleObject = new PresenterAccessible(this, rxPane);
 
     LoadTheme(rxPane);
 
