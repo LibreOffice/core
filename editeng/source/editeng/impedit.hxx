@@ -1059,7 +1059,8 @@ public:
     void            SetText( const EditTextObject& rTextObject );
     EditSelection   InsertText( const EditTextObject& rTextObject, EditSelection aSel );
 
-    EditSelection const & MoveCursor( const KeyEvent& rKeyEvent, EditView* pEditView );
+    EditSelection const& MoveCursor(const KeyEvent& rKeyEvent, EditView* pEditView,
+                                    CursorFlags* pOutCursorFlags = nullptr);
 
     EditSelection   MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos, EditView* pCurView );
 

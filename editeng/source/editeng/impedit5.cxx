@@ -1030,7 +1030,7 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
                     if ( ImpEditEngine::DoVisualCursorTraveling() && ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) /* || ( nCode == KEY_HOME ) || ( nCode == KEY_END ) */ ) )
                         bSetCursorFlags = false;    // Will be manipulated within visual cursor move
 
-                    aCurSel = MoveCursor( rKeyEvent, pEditView );
+                    aCurSel = MoveCursor(rKeyEvent, pEditView, &aNewCursorFlags);
 
                     if ( aCurSel.HasRange() ) {
                         css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
@@ -1038,11 +1038,6 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
                     }
 
                     bMoved = true;
-                    if ( nCode == KEY_HOME )
-                        aNewCursorFlags.bStartOfLine = true;
-                    else if ( nCode == KEY_END )
-                        aNewCursorFlags.bEndOfLine = true;
-
                 }
 #if OSL_DEBUG_LEVEL > 1
                 GetLanguage(getImpl().GetEditDoc().GetPos( aCurSel.Max().GetNode() ), aCurSel.Max().GetIndex());

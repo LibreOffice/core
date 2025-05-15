@@ -806,8 +806,8 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode const * pNode, bool bIgnoreU
 
 //  Cursor movements
 
-
-EditSelection const & ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pEditView )
+EditSelection const& ImpEditEngine::MoveCursor(const KeyEvent& rKeyEvent, EditView* pEditView,
+                                               CursorFlags* pOutCursorFlags)
 {
     // Actually, only necessary for up/down, but whatever.
     CheckIdleFormatter();
@@ -815,6 +815,40 @@ EditSelection const & ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, Edit
     EditPaM aPaM(pEditView->getImpl().GetEditSelection().Max());
 
     EditPaM aOldPaM( aPaM );
+
+    // tdf#151336: Moving the cursor may advance to another paragraph. When that happens,
+    // special handling is needed for correct visual cursor placement in RTL text.
+    auto fnSetStartOfLineFlag = [&]
+    {
+        if (pOutCursorFlags)
+        {
+            pOutCursorFlags->bStartOfLine = true;
+        }
+    };
+
+    auto fnSetParaChangeStartOfLineFlag = [&]
+    {
+        if (pOutCursorFlags && aPaM.GetNode() != aOldPaM.GetNode())
+        {
+            pOutCursorFlags->bStartOfLine = true;
+        }
+    };
+
+    auto fnSetEndOfLineFlag = [&]
+    {
+        if (pOutCursorFlags)
+        {
+            pOutCursorFlags->bEndOfLine = true;
+        }
+    };
+
+    auto fnSetParaChangeEndOfLineFlag = [&]
+    {
+        if (pOutCursorFlags && aPaM.GetNode() != aOldPaM.GetNode())
+        {
+            pOutCursorFlags->bEndOfLine = true;
+        }
+    };
 
     TextDirectionality eTextDirection = TextDirectionality::LeftToRight_TopToBottom;
     if (IsEffectivelyVertical() && IsTopToBottom())
@@ -847,12 +881,16 @@ EditSelection const & ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, Edit
         case KEY_DOWN:      aPaM = CursorDown( aPaM, pEditView );
                             break;
         case KEY_LEFT:      aPaM = bCtrl ? WordLeft( aPaM ) : CursorLeft( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? i18n::CharacterIteratorMode::SKIPCHARACTER : i18n::CharacterIteratorMode::SKIPCELL );
+                            fnSetParaChangeEndOfLineFlag();
                             break;
         case KEY_RIGHT:     aPaM = bCtrl ? WordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? i18n::CharacterIteratorMode::SKIPCHARACTER : i18n::CharacterIteratorMode::SKIPCELL );
+                            fnSetParaChangeStartOfLineFlag();
                             break;
         case KEY_HOME:      aPaM = bCtrl ? CursorStartOfDoc() : CursorStartOfLine( aPaM );
+                            fnSetStartOfLineFlag();
                             break;
         case KEY_END:       aPaM = bCtrl ? CursorEndOfDoc() : CursorEndOfLine( aPaM );
+                            fnSetEndOfLineFlag();
                             break;
         case KEY_PAGEUP:    aPaM = bCtrl ? CursorStartOfDoc() : PageUp( aPaM, pEditView );
                             break;
@@ -860,10 +898,12 @@ EditSelection const & ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, Edit
                             break;
         case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
                             aPaM = CursorStartOfLine( aPaM );
+                            fnSetStartOfLineFlag();
                             bKeyModifySelection = false;
                             break;
         case css::awt::Key::MOVE_TO_END_OF_LINE:
                             aPaM = CursorEndOfLine( aPaM );
+                            fnSetEndOfLineFlag();
                             bKeyModifySelection = false;
                             break;
         case css::awt::Key::MOVE_WORD_BACKWARD:
