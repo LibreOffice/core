@@ -9107,6 +9107,8 @@ void DomainMapper_Impl::PopFieldContext()
                         }
                     }
                 }
+
+                SetIsFirstRun(false); // the end marker counts as a run - affecting page breaks
             }
             catch(const lang::IllegalArgumentException&)
             {
