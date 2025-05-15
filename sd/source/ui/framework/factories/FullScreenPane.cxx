@@ -140,25 +140,9 @@ void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
         mpWorkWindow->Show(bIsVisible);
 }
 
-void SAL_CALL FullScreenPane::setAccessible (
-    const Reference<css::accessibility::XAccessible>& rxAccessible)
+void SAL_CALL FullScreenPane::setAccessible(const Reference<css::accessibility::XAccessible>&)
 {
-    ThrowIfDisposed();
-
-    if (mpWindow == nullptr)
-        return;
-
-    Reference<lang::XInitialization> xInitializable (rxAccessible, UNO_QUERY);
-    if (xInitializable.is())
-    {
-        vcl::Window* pParentWindow = mpWindow->GetParent();
-        Reference<css::accessibility::XAccessible> xAccessibleParent;
-        if (pParentWindow != nullptr)
-            xAccessibleParent = pParentWindow->GetAccessible();
-        Sequence<Any> aArguments{ Any(xAccessibleParent) };
-        xInitializable->initialize(aArguments);
-    }
-    GetWindow()->SetAccessible(rxAccessible);
+    assert(false && "Shouldn't get here");
 }
 
 IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)

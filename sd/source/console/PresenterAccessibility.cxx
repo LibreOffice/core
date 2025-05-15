@@ -45,6 +45,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/window.hxx>
 
 #include <algorithm>
 #include <utility>
@@ -89,10 +91,14 @@ PresenterAccessible::PresenterAccessible (
     const Reference<drawing::framework::XPane>& rxMainPane)
     : PresenterAccessibleInterfaceBase(m_aMutex),
       mpPresenterController(std::move(xPresenterController)),
-      mxMainPane(rxMainPane, UNO_QUERY)
+      mxMainPane(rxMainPane)
 {
-    if (mxMainPane.is())
-        mxMainPane->setAccessible(this);
+    assert(rxMainPane.is());
+    if (VclPtr<vcl::Window> pMainPaneWin = VCLUnoHelper::GetWindow(rxMainPane->getWindow()))
+    {
+        pMainPaneWin->SetAccessible(this);
+        mxAccessibleParent = pMainPaneWin->GetAccessibleParent();
+    }
 }
 
 PresenterAccessible::~PresenterAccessible()
@@ -246,7 +252,10 @@ void SAL_CALL PresenterAccessible::disposing()
         mxMainWindow->removeFocusListener(this);
 
         if (mxMainPane.is())
-            mxMainPane->setAccessible(nullptr);
+        {
+            if (VclPtr<vcl::Window> pMainPaneWin = VCLUnoHelper::GetWindow(mxMainPane->getWindow()))
+                pMainPaneWin->SetAccessible(nullptr);
+        }
     }
 
     if (mpAccessiblePreview)
@@ -268,10 +277,9 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
 {
     if ( ! mpAccessibleConsole.is())
     {
-        Reference<XPane> xMainPane (mxMainPane, UNO_QUERY);
-        if (xMainPane.is())
+        if (mxMainPane.is())
         {
-            mxMainWindow = xMainPane->getWindow();
+            mxMainWindow = mxMainPane->getWindow();
             mxMainWindow->addFocusListener(this);
         }
 
@@ -308,18 +316,6 @@ void SAL_CALL PresenterAccessible::disposing (const css::lang::EventObject& rEve
 {
     if (rEvent.Source == mxMainWindow)
         mxMainWindow = nullptr;
-}
-
-//----- XInitialize -----------------------------------------------------------
-
-void SAL_CALL PresenterAccessible::initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
-{
-    if (rArguments.hasElements())
-    {
-        mxAccessibleParent.set(rArguments[0], UNO_QUERY);
-        if (mpAccessibleConsole.is())
-            mpAccessibleConsole->SetAccessibleParent(mxAccessibleParent);
-    }
 }
 
 } // end of namespace ::sd::presenter

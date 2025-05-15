@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_libraries,sdui,\
     svt \
     svxcore \
     svx \
+    tk \
     tl \
     utl \
     vcl \

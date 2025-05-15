@@ -40,11 +40,8 @@ namespace sdext::presenter {
 class PresenterController;
 class PresenterTextView;
 
-typedef ::cppu::WeakComponentImplHelper <
-    css::accessibility::XAccessible,
-    css::lang::XInitialization,
-    css::awt::XFocusListener
-> PresenterAccessibleInterfaceBase;
+typedef ::cppu::WeakComponentImplHelper<css::accessibility::XAccessible, css::awt::XFocusListener>
+    PresenterAccessibleInterfaceBase;
 
 class PresenterAccessible
     : public ::cppu::BaseMutex,
@@ -77,13 +74,9 @@ public:
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;
 
-    //----- XInitialization ---------------------------------------------------
-
-    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
-
 private:
     ::rtl::Reference<PresenterController> mpPresenterController;
-    css::uno::Reference<css::drawing::framework::XPane2> mxMainPane;
+    css::uno::Reference<css::drawing::framework::XPane> mxMainPane;
     css::uno::Reference<css::awt::XWindow> mxMainWindow;
     css::uno::Reference<css::awt::XWindow> mxPreviewContentWindow;
     css::uno::Reference<css::awt::XWindow> mxPreviewBorderWindow;
