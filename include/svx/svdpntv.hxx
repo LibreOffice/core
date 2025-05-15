@@ -230,6 +230,7 @@ public:
     SdrPaintWindow* GetPaintWindow(sal_uInt32 nIndex) const;
     // Replacement for GetWin(0), may return 0L (!)
     OutputDevice* GetFirstOutputDevice() const;
+    const Idle& GetComeBackIdle() const { return maComeBackIdle; };
 
 private:
     DECL_DLLPRIVATE_LINK(ImpComeBackHdl, Timer*, void);

@@ -182,6 +182,7 @@ protected:
     sal_uInt16          m_nPageNumsDirtyFrom = SAL_MAX_UINT16;
     sal_uInt16          m_nMasterPageNumsDirtyFrom = SAL_MAX_UINT16;
     bool                m_bIsWriter:1;        // to clean up pMyPool from 303a
+    bool                m_bIsWriterIdle:1;
     bool                m_bThemedControls:1;  // If false UnoControls should not use theme colors
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
     bool                mbChanged:1;
@@ -567,6 +568,8 @@ public:
     void disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner );
 
     bool IsWriter() const { return m_bIsWriter; }
+    void SetWriterIdle(bool bIsWriterIdle) { m_bIsWriterIdle = bIsWriterIdle; }
+    bool IsWriterIdle() const { return m_bIsWriterIdle; }
 
     bool IsPDFDocument() const { return m_bIsPDFDocument; }
     void setPDFDocument(bool bIsPDFDocument)
