@@ -42,6 +42,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
+#include <com/sun/star/drawing/framework/XPane2.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -1027,7 +1028,7 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     if ( ! rxPane.is())
         return;
 
-    mpAccessibleObject = new PresenterAccessible(this, rxPane);
+    mpAccessibleObject = PresenterAccessible::Create(this, rxPane);
 
     LoadTheme(rxPane);
 

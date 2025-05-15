@@ -48,7 +48,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 
-#include <algorithm>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -86,15 +85,16 @@ public:
 
 //===== PresenterAccessible ===================================================
 
-PresenterAccessible::PresenterAccessible (
-    ::rtl::Reference<PresenterController> xPresenterController,
+PresenterAccessible::PresenterAccessible(
+    const rtl::Reference<PresenterController>& xPresenterController,
     const Reference<drawing::framework::XPane>& rxMainPane)
-    : PresenterAccessibleInterfaceBase(m_aMutex),
-      mpPresenterController(std::move(xPresenterController)),
-      mxMainPane(rxMainPane)
+    : ImplInheritanceHelper(AccessibleRole::PANEL, SdResId(STR_A11Y_PRESENTER_CONSOLE))
+    , mpPresenterController(xPresenterController)
+    , mxMainPane(rxMainPane)
 {
-    assert(rxMainPane.is());
-    if (VclPtr<vcl::Window> pMainPaneWin = VCLUnoHelper::GetWindow(rxMainPane->getWindow()))
+    assert(mxMainPane.is());
+    mxMainWindow = mxMainPane->getWindow();
+    if (VclPtr<vcl::Window> pMainPaneWin = VCLUnoHelper::GetWindow(mxMainWindow))
     {
         pMainPaneWin->SetAccessible(this);
         mxAccessibleParent = pMainPaneWin->GetAccessibleParent();
@@ -137,9 +137,6 @@ void PresenterAccessible::UpdateAccessibilityHierarchy()
     if ( ! pPaneContainer.is())
         return;
 
-    if ( ! mpAccessibleConsole.is())
-        return;
-
     // Get the preview pane (standard or notes view) or the slide overview
     // pane.
     PresenterPaneContainer::SharedPaneDescriptor pPreviewPane(GetPreviewPane());
@@ -174,14 +171,11 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
     const Reference<awt::XWindow>& rxNotesBorderWindow,
     const std::shared_ptr<PresenterTextView>& rpNotesTextView)
 {
-    if ( ! mpAccessibleConsole.is())
-        return;
-
     if (mxPreviewContentWindow != rxPreviewContentWindow)
     {
         if (mpAccessiblePreview.is())
         {
-            mpAccessibleConsole->RemoveChild(mpAccessiblePreview);
+            RemoveChild(mpAccessiblePreview);
             mpAccessiblePreview->dispose();
             mpAccessiblePreview = nullptr;
         }
@@ -194,7 +188,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
             mpAccessiblePreview = AccessiblePreview::Create(
                 mxPreviewContentWindow,
                 mxPreviewBorderWindow);
-            mpAccessibleConsole->AddChild(mpAccessiblePreview);
+            AddChild(mpAccessiblePreview);
             mpAccessiblePreview->SetAccessibleName(rsTitle);
             mpAccessiblePreview->SetAccessibleParent(this);
         }
@@ -205,7 +199,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
 
     if (mpAccessibleNotes.is())
     {
-        mpAccessibleConsole->RemoveChild(mpAccessibleNotes);
+        RemoveChild(mpAccessibleNotes);
         mpAccessibleNotes->dispose();
         mpAccessibleNotes = nullptr;
     }
@@ -219,7 +213,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
             mxNotesContentWindow,
             mxNotesBorderWindow,
             rpNotesTextView);
-        mpAccessibleConsole->AddChild(mpAccessibleNotes);
+        AddChild(mpAccessibleNotes);
     }
 }
 
@@ -233,7 +227,7 @@ void PresenterAccessible::NotifyCurrentSlideChange ()
     }
 
     // Play some focus ping-pong to trigger AT tools.
-    //AccessibleFocusManager::Instance()->FocusObject(mpAccessibleConsole);
+    //AccessibleFocusManager::Instance()->FocusObject(this);
     AccessibleFocusManager::Instance()->FocusObject(mpAccessiblePreview);
 }
 
@@ -266,33 +260,25 @@ void SAL_CALL PresenterAccessible::disposing()
         mpAccessibleNotes->dispose();
     mpAccessibleNotes = nullptr;
 
-    if (mpAccessibleConsole)
-        mpAccessibleConsole->dispose();
-    mpAccessibleConsole = nullptr;
+    AccessibleObject::disposing();
 }
 
-//----- XAccessible -----------------------------------------------------------
-
-Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext()
+rtl::Reference<PresenterAccessible>
+PresenterAccessible::Create(const rtl::Reference<PresenterController>& xPresenterController,
+                            const css::uno::Reference<css::drawing::framework::XPane>& rxMainPane)
 {
-    if ( ! mpAccessibleConsole.is())
-    {
-        if (mxMainPane.is())
-        {
-            mxMainWindow = mxMainPane->getWindow();
-            mxMainWindow->addFocusListener(this);
-        }
+    rtl::Reference<PresenterAccessible> pPresenterAcc
+        = new PresenterAccessible(xPresenterController, rxMainPane);
+    pPresenterAcc->mxMainWindow->addFocusListener(pPresenterAcc);
 
-        const OUString sName = SdResId(STR_A11Y_PRESENTER_CONSOLE);
-        mpAccessibleConsole = new AccessibleObject(AccessibleRole::PANEL, sName);
-        mpAccessibleConsole->LateInitialization();
-        mpAccessibleConsole->UpdateStateSet();
+    pPresenterAcc->LateInitialization();
+    pPresenterAcc->UpdateStateSet();
 
-        mpAccessibleConsole->SetWindow(mxMainWindow, nullptr);
-        mpAccessibleConsole->SetAccessibleParent(mxAccessibleParent);
-        UpdateAccessibilityHierarchy();
-    }
-    return mpAccessibleConsole;
+    pPresenterAcc->SetWindow(pPresenterAcc->mxMainWindow, nullptr);
+    pPresenterAcc->SetAccessibleParent(pPresenterAcc->mxAccessibleParent);
+    pPresenterAcc->UpdateAccessibilityHierarchy();
+
+    return pPresenterAcc;
 }
 
 //----- XFocusListener ----------------------------------------------------
@@ -301,7 +287,7 @@ void SAL_CALL PresenterAccessible::focusGained (const css::awt::FocusEvent&)
 {
     SAL_INFO("sdext.presenter", __func__ << ": PresenterAccessible::focusGained at " << this
         << " and window " << mxMainWindow.get());
-    AccessibleFocusManager::Instance()->FocusObject(mpAccessibleConsole);
+    AccessibleFocusManager::Instance()->FocusObject(this);
 }
 
 void SAL_CALL PresenterAccessible::focusLost (const css::awt::FocusEvent&)
