@@ -172,7 +172,7 @@ bool SdPPTFilter::Import()
                 mrMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
             else
             {
-                bRet = ImportPPT( &mrDocument, *pDocStream, *pStorage, mrMedium );
+                bRet = ImportPPT( mrDocument, *pDocStream, *pStorage, mrMedium );
 
                 if ( !bRet )
                     mrMedium.SetError(SVSTREAM_WRONGVERSION);

@@ -65,7 +65,7 @@ SD_DLLPUBLIC bool ExportPPT( const std::vector< css::beans::PropertyValue >& rMe
 
 // exported function
 SD_DLLPUBLIC bool ImportPPT(
-        SdDrawDocument* pDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium );
+        SdDrawDocument& rDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium );
 
 SD_DLLPUBLIC bool SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas );
 
