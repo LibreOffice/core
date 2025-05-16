@@ -91,7 +91,7 @@ public:
     void ReadElementMode (
         const Reference<beans::XPropertySet>& rxProperties,
         const OUString& rsModeName,
-        std::shared_ptr<ElementMode> const & rpDefaultMode,
+        const ElementMode& rDefaultMode,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 };
 typedef std::shared_ptr<ElementMode> SharedElementMode;
@@ -606,11 +606,11 @@ void PresenterToolBar::ProcessEntry (
     SharedElementMode pSelectedMode = std::make_shared<ElementMode>();
     SharedElementMode pDisabledMode = std::make_shared<ElementMode>();
     SharedElementMode pMouseOverSelectedMode = std::make_shared<ElementMode>();
-    pNormalMode->ReadElementMode(rxProperties, u"Normal"_ustr, pNormalMode, mxCanvas);
-    pMouseOverMode->ReadElementMode(rxProperties, u"MouseOver"_ustr, pNormalMode, mxCanvas);
-    pSelectedMode->ReadElementMode(rxProperties, u"Selected"_ustr, pNormalMode, mxCanvas);
-    pDisabledMode->ReadElementMode(rxProperties, u"Disabled"_ustr, pNormalMode, mxCanvas);
-    pMouseOverSelectedMode->ReadElementMode(rxProperties, u"MouseOverSelected"_ustr, pSelectedMode, mxCanvas);
+    pNormalMode->ReadElementMode(rxProperties, u"Normal"_ustr, *pNormalMode, mxCanvas);
+    pMouseOverMode->ReadElementMode(rxProperties, u"MouseOver"_ustr, *pNormalMode, mxCanvas);
+    pSelectedMode->ReadElementMode(rxProperties, u"Selected"_ustr, *pNormalMode, mxCanvas);
+    pDisabledMode->ReadElementMode(rxProperties, u"Disabled"_ustr, *pNormalMode, mxCanvas);
+    pMouseOverSelectedMode->ReadElementMode(rxProperties, u"MouseOverSelected"_ustr, *pSelectedMode, mxCanvas);
 
     // Create new element.
     ::rtl::Reference<Element> pElement;
@@ -1266,7 +1266,7 @@ ElementMode::ElementMode()
 void ElementMode::ReadElementMode (
     const Reference<beans::XPropertySet>& rxElementProperties,
     const OUString& rsModeName,
-    std::shared_ptr<ElementMode> const & rpDefaultMode,
+    const ElementMode& rDefaultMode,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
 {
     try
@@ -1276,38 +1276,34 @@ void ElementMode::ReadElementMode (
         UNO_QUERY);
     Reference<beans::XPropertySet> xProperties (
         PresenterConfigurationAccess::GetNodeProperties(xNode, OUString()));
-    if (!xProperties.is() && rpDefaultMode != nullptr)
+    if (!xProperties.is())
     {
         // The mode is not specified.  Use the given, possibly empty,
         // default mode instead.
-        mpIcon = rpDefaultMode->mpIcon;
-        msAction = rpDefaultMode->msAction;
-        maText = rpDefaultMode->maText;
+        mpIcon = rDefaultMode.mpIcon;
+        msAction = rDefaultMode.msAction;
+        maText = rDefaultMode.maText;
     }
 
     // Read action.
     if ( ! (PresenterConfigurationAccess::GetProperty(xProperties, u"Action"_ustr) >>= msAction))
-        if (rpDefaultMode != nullptr)
-            msAction = rpDefaultMode->msAction;
+        msAction = rDefaultMode.msAction;
 
     // Read text and font
     {
-        OUString sText(rpDefaultMode != nullptr ? rpDefaultMode->maText.GetText() : OUString());
+        OUString sText = rDefaultMode.maText.GetText();
         PresenterConfigurationAccess::GetProperty(xProperties, u"Text"_ustr) >>= sText;
         Reference<container::XHierarchicalNameAccess> xFontNode (
             PresenterConfigurationAccess::GetProperty(xProperties, u"Font"_ustr), UNO_QUERY);
         PresenterTheme::SharedFontDescriptor pFont(PresenterTheme::ReadFont(
-            xFontNode, rpDefaultMode != nullptr ? rpDefaultMode->maText.GetFont()
-                                                : PresenterTheme::SharedFontDescriptor()));
+            xFontNode, rDefaultMode.maText.GetFont()));
         maText = Text(std::move(sText), std::move(pFont));
     }
 
     // Read bitmaps to display as icons.
     Reference<container::XHierarchicalNameAccess> xIconNode (
         PresenterConfigurationAccess::GetProperty(xProperties, u"Icon"_ustr), UNO_QUERY);
-    mpIcon = PresenterBitmapContainer::LoadBitmap(
-        xIconNode, u""_ustr, rxCanvas,
-        rpDefaultMode != nullptr ? rpDefaultMode->mpIcon : SharedBitmapDescriptor());
+    mpIcon = PresenterBitmapContainer::LoadBitmap(xIconNode, u""_ustr, rxCanvas, rDefaultMode.mpIcon);
     }
     catch(Exception&)
     {
