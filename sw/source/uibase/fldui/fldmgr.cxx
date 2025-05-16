@@ -1573,7 +1573,7 @@ bool SwFieldMgr::InsertField(
     pCurShell->EndAllAction();
 
 #if ENABLE_YRS
-    if (isSuccess)
+    if (isSuccess && rData.m_nTypeId == SwFieldTypesEnum::Postit)
     {
         // now the SwAnnotationWin are created
         // shell cursor is behind field

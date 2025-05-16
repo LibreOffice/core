@@ -1129,10 +1129,10 @@ void DocumentStateManager::YrsAddComment(SwPosition const& rPos,
                 pItem->GetFormatField().GetTextField())};
             ::sw::mark::AnnotationMark const*const pMark{rHint.GetAnnotationMark()};
             if (pMark != nullptr
+                && it.first != commentId // see testImageCommentAtChar with start == field pos
                 && rPos.nNode == pMark->GetMarkStart().nNode
                 && rPos.nContent <= pMark->GetMarkStart().nContent)
             {
-                assert(it.first != commentId); // start always before inserted char
                 ::std::unique_ptr<YOutput, YOutputDeleter> const pComment{
                     ymap_get(m_pYrsSupplier->m_pComments, pTxn, it.first.getStr())};
                 assert(pComment);
@@ -1237,10 +1237,10 @@ void DocumentStateManager::YrsRemoveComment(SwPosition const& rPos, OString cons
             pItem->GetFormatField().GetTextField())};
         ::sw::mark::AnnotationMark const*const pMark{rHint.GetAnnotationMark()};
         if (pMark != nullptr
+            && it.first != rCommentId
             && rPos.nNode == pMark->GetMarkStart().nNode
             && rPos.nContent <= pMark->GetMarkStart().nContent)
         {
-            assert(it.first != rCommentId); // start always before inserted char
             ::std::unique_ptr<YOutput, YOutputDeleter> const pComment{
                 ymap_get(m_pYrsSupplier->m_pComments, pTxn, it.first.getStr())};
             assert(pComment);
@@ -1266,7 +1266,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
 {
     SwWrtShell *const pShell{dynamic_cast<SwWrtShell*>(m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell())};
     YTransaction *const pTxn{m_pYrsSupplier ? m_pYrsSupplier->GetWriteTransaction() : nullptr};
-    if (!pTxn || !pShell->GetView().GetPostItMgr())
+    if (!pTxn || !pShell || !pShell->GetView().GetPostItMgr())
     {
         return;
     }
