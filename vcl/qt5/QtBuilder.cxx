@@ -255,7 +255,17 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         if (!sIconName.isEmpty())
         {
             const Image aImage = loadThemeImage(sIconName);
-            pLabel->setPixmap(toQPixmap(aImage));
+            if (!aImage.GetBitmapEx().IsEmpty())
+            {
+                pLabel->setPixmap(toQPixmap(aImage));
+            }
+            else
+            {
+                const QIcon aIcon = QIcon::fromTheme(toQString(sIconName));
+                assert(!aIcon.isNull() && "No icon found for that icon name");
+                const int nIconSize = QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
+                pLabel->setPixmap(aIcon.pixmap(nIconSize));
+            }
         }
         pObject = pLabel;
     }
