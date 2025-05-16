@@ -35,7 +35,7 @@ ScDatabaseDocUtil::StrData::StrData() :
 {
 }
 
-void ScDatabaseDocUtil::PutData(ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
+bool ScDatabaseDocUtil::PutData(ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const uno::Reference<sdbc::XRow>& xRow, sal_Int32 nRowPos,
                                 tools::Long nType, bool bCurrency, StrData* pStrData)
 {
@@ -196,6 +196,7 @@ void ScDatabaseDocUtil::PutData(ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB 
         else
             rDoc.SetEmptyCell(aPos);
     }
+    return bError;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

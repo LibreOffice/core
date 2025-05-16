@@ -23,6 +23,7 @@
 #include <tools/urlobj.hxx>
 #include <svl/converter.hxx>
 #include <svl/numformat.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/types.hxx>
@@ -383,6 +384,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
 
         SCROW nRow = 1;     // 0 is column titles
         bool bEnd = false;
+        size_t nErrors(0);
         while ( !bEnd && xRowSet->next() )
         {
             if (nRow <= m_pDocument->MaxRow())
@@ -392,9 +394,13 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
                 for (sal_Int32 i=0; i<nColCount; i++)
                 {
                     ScDatabaseDocUtil::StrData aStrData;
-                    ScDatabaseDocUtil::PutData( *m_pDocument, nCol, nRow, 0,
+                    bool bWasError =
+                        ScDatabaseDocUtil::PutData( *m_pDocument, nCol, nRow, 0,
                                                 xRow, i+1, pTypeArr[i], false,
                                                 &aStrData );
+
+                    if (bWasError)
+                        ++nErrors;
 
                     if (aStrData.mnStrLength > aColWidthParam[nCol].mnMaxTextLen)
                     {
@@ -409,6 +415,12 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
                     }
 
                     ++nCol;
+                }
+                if (nErrors > 65535 && comphelper::IsFuzzing())
+                {
+                    bEnd = true;
+                    nErr = ERRCODE_IO_GENERAL;
+                    SAL_WARN("sc", "Too many errors: abandoning.");
                 }
                 if (!bSimpleRow)
                     rRowHeightsRecalc.setTrue(nRow, nRow);
