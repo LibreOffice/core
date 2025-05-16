@@ -81,7 +81,7 @@ private:
         mxConfigurationController;
     class ViewDescriptor;
     using ViewShellContainer = std::vector<std::shared_ptr<ViewDescriptor>>;
-    std::unique_ptr<ViewShellContainer> mpViewShellContainer;
+    ViewShellContainer maViewShellContainer;
     ViewShellBase* mpBase;
     FrameView* mpFrameView;
 

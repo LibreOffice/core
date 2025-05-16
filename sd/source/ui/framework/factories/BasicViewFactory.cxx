@@ -68,8 +68,7 @@ public:
 //===== ViewFactory ===========================================================
 
 BasicViewFactory::BasicViewFactory (const rtl::Reference<::sd::DrawController>& rxController)
-    : mpViewShellContainer(new ViewShellContainer),
-      mpBase(nullptr),
+    : mpBase(nullptr),
       mpFrameView(nullptr),
       mpWindow(VclPtr<WorkWindow>::Create(nullptr,WB_STDWORK)),
       mpViewCache(std::make_shared<ViewCache>()),
@@ -126,11 +125,11 @@ void BasicViewFactory::disposing(std::unique_lock<std::mutex>&)
     // trivial requirement, because no one other than us holds a shared
     // pointer).
     //    ViewShellContainer::const_iterator iView;
-    for (const auto& rxView : *mpViewShellContainer)
+    for (const auto& rxView : maViewShellContainer)
     {
         OSL_ASSERT(rxView->mpViewShell.use_count() == 1);
     }
-    mpViewShellContainer.reset();
+    maViewShellContainer.clear();
 }
 
 Reference<XResource> SAL_CALL BasicViewFactory::createResource (
@@ -170,7 +169,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
 
     rtl::Reference<ViewShellWrapper> xView = pDescriptor->mxView;
 
-    mpViewShellContainer->push_back(pDescriptor);
+    maViewShellContainer.push_back(pDescriptor);
 
     if (bIsCenterPane)
         ActivateCenterView(pDescriptor);
@@ -190,12 +189,12 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
 
     ViewShellContainer::iterator iViewShell (
         ::std::find_if(
-            mpViewShellContainer->begin(),
-            mpViewShellContainer->end(),
+            maViewShellContainer.begin(),
+            maViewShellContainer.end(),
             [&] (std::shared_ptr<ViewDescriptor> const& pVD) {
                 return ViewDescriptor::CompareView(pVD, rxView);
             } ));
-    if (iViewShell == mpViewShellContainer->end())
+    if (iViewShell == maViewShellContainer.end())
     {
         throw lang::IllegalArgumentException();
     }
@@ -227,7 +226,7 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
 
     ReleaseView(*iViewShell, false);
 
-    mpViewShellContainer->erase(iViewShell);
+    maViewShellContainer.erase(iViewShell);
 }
 
 std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
