@@ -161,8 +161,7 @@ private:
     css::geometry::RealSize2D CalculatePartSize(
         const SharedElementContainerPart& rpPart,
         const bool bIsHorizontal);
-    static void LayoutPart (
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+    void LayoutPart(
         const SharedElementContainerPart& rpPart,
         const css::geometry::RealRectangle2D& rBoundingBox,
         const css::geometry::RealSize2D& rPartSize,

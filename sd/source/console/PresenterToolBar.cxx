@@ -720,7 +720,7 @@ void PresenterToolBar::Layout()
         if (rxPart->size() > 1 && bIsHorizontal)
             aBoundingBox.X2 += (rxPart->size() - 1) * nGapWidth;
 
-        LayoutPart(mxCanvas, rxPart, aBoundingBox, aPartSizes[rxPart], bIsHorizontal);
+        LayoutPart(rxPart, aBoundingBox, aPartSizes[rxPart], bIsHorizontal);
         bIsHorizontal = !bIsHorizontal;
         nX += aBoundingBox.X2 - aBoundingBox.X1 + nGapWidth;
     };
@@ -770,8 +770,7 @@ geometry::RealSize2D PresenterToolBar::CalculatePartSize(
     return aTotalSize;
 }
 
-void PresenterToolBar::LayoutPart (
-    const Reference<rendering::XCanvas>& rxCanvas,
+void PresenterToolBar::LayoutPart(
     const SharedElementContainerPart& rpPart,
     const geometry::RealRectangle2D& rBoundingBox,
     const geometry::RealSize2D& rPartSize,
@@ -797,7 +796,7 @@ void PresenterToolBar::LayoutPart (
             if (!rxElement)
                 continue;
 
-            const awt::Size aElementSize (rxElement->GetBoundingSize(rxCanvas));
+            const awt::Size aElementSize = rxElement->GetBoundingSize(mxCanvas);
             if (bIsHorizontal)
             {
                 if (rxElement->IsFilling())
@@ -835,7 +834,7 @@ void PresenterToolBar::LayoutPart (
 
             if (bIsHorizontal)
             {
-                const awt::Size aElementSize ((*iElement)->GetBoundingSize(rxCanvas));
+                const awt::Size aElementSize ((*iElement)->GetBoundingSize(mxCanvas));
                 if ((*iElement)->IsFilling())
                 {
                     nY = rBoundingBox.Y1;
@@ -855,7 +854,7 @@ void PresenterToolBar::LayoutPart (
                 else if (iElement == iFirst - 2){
                     iElement = iFirst;
                 }
-                const awt::Size aElementSize ((*iElement)->GetBoundingSize(rxCanvas));
+                const awt::Size aElementSize ((*iElement)->GetBoundingSize(mxCanvas));
                 if ((*iElement)->IsFilling())
                 {
                     nX = rBoundingBox.X1;
