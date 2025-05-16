@@ -412,7 +412,9 @@ public:
 */
 class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
 {
-    std::unique_ptr<SvxMSDffBLIPInfos>      m_pBLIPInfos;
+    /// Offsets of the BLIP in data stream.
+    /// They are sorted by the order of their appearance.
+    std::vector<sal_uInt32>   m_aBLIPOffsets;
     std::unique_ptr<SvxMSDffShapeInfos_ByTxBxComp> m_xShapeInfosByTxBxComp;
     std::unique_ptr<SvxMSDffShapeInfos_ById> m_xShapeInfosById;
     SvxMSDffShapeOrders     m_aShapeOrders;

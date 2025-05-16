@@ -187,19 +187,7 @@ enum class OfficeArtBlipRecInstance : sal_uInt32
     TIFF = 0x6E4 // defined in section 2.2.30.
 };
 
-struct SvxMSDffBLIPInfo
-{
-    sal_uInt32  nFilePos;    ///< offset of the BLIP in data stream
-    explicit SvxMSDffBLIPInfo(sal_uInt32 nFPos)
-        : nFilePos(nFPos)
-    {
-    }
-};
-
 }
-
-/// the following will be sorted by the order of their appearance:
-struct SvxMSDffBLIPInfos : public std::vector<SvxMSDffBLIPInfo> {};
 
 /************************************************************************/
 void Impl_OlePres::Write( SvStream & rStm )
@@ -5768,7 +5756,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  SvStream* pStData2_,
                                  bool bSkipImages )
     :DffPropertyReader( *this ),
-     m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      nOffsDgg( nOffsDgg_ ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first check if the
@@ -5811,7 +5798,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
 
 SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, OUString aBaseURL )
     :DffPropertyReader( *this ),
-     m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      nOffsDgg( 0 ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first have to check
@@ -6109,7 +6095,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uInt32 nL
                     nBLIPCount++;
 
                 // now save the info for later access
-                m_pBLIPInfos->push_back(SvxMSDffBLIPInfo(nBLIPPos));
+                m_aBLIPOffsets.push_back(nBLIPPos);
             }
             if (!checkSeek(rSt, rSt.Tell() + nLength))
                 return; // invalid offset
@@ -6455,7 +6441,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rGraphic, tools::Rectan
     if (!bOk)
     {
         sal_uInt16 nIdx = sal_uInt16( nIdx_ );
-        if (!nIdx || (m_pBLIPInfos->size() < nIdx))
+        if (!nIdx || (m_aBLIPOffsets.size() < nIdx))
             return false;
 
         // possibly delete old error flag(s)
@@ -6470,9 +6456,9 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rGraphic, tools::Rectan
         sal_uInt64 nOldPosData = pStData->Tell();
 
         // fetch matching info struct out of the pointer array
-        SvxMSDffBLIPInfo& rInfo = (*m_pBLIPInfos)[ nIdx-1 ];
+        const sal_uInt32 nBlipFilePos = m_aBLIPOffsets[ nIdx-1 ];
         // jump to the BLIP atom in the data stream
-        bOk = checkSeek(*pStData, rInfo.nFilePos);
+        bOk = checkSeek(*pStData, nBlipFilePos);
         // possibly reset error status
         if (!bOk || pStData->GetError())
             pStData->ResetError();
@@ -6486,7 +6472,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rGraphic, tools::Rectan
                 pStData2->ResetError();
             sal_uInt64 nOldPosData2 = pStData2->Tell();
             // jump to the BLIP atom in the second data stream
-            bOk = checkSeek(*pStData2, rInfo.nFilePos);
+            bOk = checkSeek(*pStData2, nBlipFilePos);
             // reset error status if necessary
             if (!bOk || pStData2->GetError())
                 pStData2->ResetError();
