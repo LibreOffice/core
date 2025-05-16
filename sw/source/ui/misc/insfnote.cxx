@@ -177,9 +177,11 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(weld::Window *pParent, SwWrtShell &rShell, bo
     if (m_bEdit)
     {
         Init();
-
-        m_xPrevBT->show();
-        m_xNextBT->show();
+    }
+    else
+    {
+        m_xPrevBT->hide();
+        m_xNextBT->hide();
     }
 }
 
