@@ -998,7 +998,9 @@ namespace
         return bRet;
     }
 
-    bool lcl_AcceptInnerInsertRedline(SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
+    /// Given a redline that has an other underlying redline, drop that underlying redline.
+    /// Used to accept an insert or rejecting a delete, i.e. no changes to the text node strings.
+    bool lcl_DeleteInnerRedline(SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
                                       int nDepth)
     {
         SwRangeRedline* pRedl = rArr[rPos];
@@ -3313,7 +3315,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             else
             {
                 // we should leave the other type of redline, and only accept the inner insert.
-                bRet |= lcl_AcceptInnerInsertRedline(maRedlineTable, nRdlIdx, 1);
+                bRet |= lcl_DeleteInnerRedline(maRedlineTable, nRdlIdx, 1);
             }
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
@@ -3343,7 +3345,7 @@ bool DocumentRedlineManager::AcceptMovedRedlines(sal_uInt32 nMovedID, bool bCall
             if (pTmp->GetMoved(0) == nMovedID)
                 bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
             else
-                bRet |= lcl_AcceptInnerInsertRedline(maRedlineTable, nRdlIdx, 1);
+                bRet |= lcl_DeleteInnerRedline(maRedlineTable, nRdlIdx, 1);
 
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
@@ -3483,7 +3485,7 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete,
         // For now it is called only if it is an Insert redline in a delete redline.
         SwRedlineTable::size_type nRdlIdx = 0;
         maRedlineTable.FindAtPosition(*rPam.Start(), nRdlIdx);
-        if (lcl_AcceptInnerInsertRedline(maRedlineTable, nRdlIdx, 1))
+        if (lcl_DeleteInnerRedline(maRedlineTable, nRdlIdx, 1))
             nRet = 1;
     }
     if( nRet > 0 )
@@ -3583,9 +3585,7 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
         else if (CanCombineTypesForAcceptReject(aOrigData, *pTmp)
                  && pTmp->GetRedlineData(1).CanCombineForAcceptReject(aOrigData))
         {
-            // The Insert redline we want to reject has an other type of redline too
-            // without the insert, the other type is meaningless
-            // so we rather just accept the other type of redline
+            // The Insert/Delete redline we want to reject has an other type of redline too
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 std::unique_ptr<SwUndoAcceptRedline> pUndoRdl
@@ -3598,13 +3598,25 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             nPamEndtNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
             std::optional<SwPaM> oPam;
+            RedlineType eInnerType = aOrigData.GetType();
             RedlineType eOuterType = pTmp->GetType();
-            if (eOuterType == RedlineType::Format)
+            if (eInnerType == RedlineType::Insert && eOuterType == RedlineType::Format)
             {
                 // The accept won't implicitly delete the range, so track its boundaries.
                 oPam.emplace(*pTmp->Start(), *pTmp->End());
             }
-            bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
+
+            if (eInnerType == RedlineType::Delete && eOuterType == RedlineType::Format)
+            {
+                // Keep the outer redline, just get rid of the underlying delete.
+                bRet |= lcl_DeleteInnerRedline(maRedlineTable, nRdlIdx, 1);
+            }
+            else
+            {
+                // without the insert, the other type is meaningless
+                // so we rather just accept the other type of redline
+                bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
+            }
             if (oPam)
             {
                 // Handles undo/redo itself.
