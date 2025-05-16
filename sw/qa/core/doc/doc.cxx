@@ -815,6 +815,23 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // Also make sure the text of the format-on-delete redline is removed.
     CPPUNIT_ASSERT(pTextNode->GetText().isEmpty());
+
+    // And when rejecting the delete:
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, pTextNode->GetText());
+    pWrtShell->RejectRedline(0);
+
+    // Then make sure the delete goes away, but the text node string and the format redline stays:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the format redline on top of the delete was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlines[0]->GetType());
+    const SwRedlineData& rRedlineData = rRedlines[0]->GetRedlineData();
+    CPPUNIT_ASSERT(!rRedlineData.Next());
+    // This was AAACCC.
+    CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, pTextNode->GetText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
