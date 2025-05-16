@@ -748,9 +748,9 @@ void PresenterToolBar::Layout (
         }
     }
     else {
-        ElementContainer::iterator iPart;
-        ElementContainer::iterator iBegin (maElementContainer.begin());
-        for (iPart=maElementContainer.end()-1, nIndex=2; iPart!=iBegin-1; --iPart, --nIndex)
+        ElementContainer::reverse_iterator iPart;
+        nIndex = aPartSizes.size() - 1;
+        for (iPart = maElementContainer.rbegin(); iPart != maElementContainer.rend(); ++iPart, --nIndex)
         {
             geometry::RealRectangle2D aBoundingBox(
                 nX, nY,
@@ -862,10 +862,10 @@ void PresenterToolBar::LayoutPart (
         }
     }
     else {
-        ElementContainerPart::const_iterator iElement;
-        ElementContainerPart::const_iterator iBegin (rpPart->begin());
+        ElementContainerPart::const_reverse_iterator iElement;
+        ElementContainerPart::const_reverse_iterator iFirst = rpPart->rend() - 1;
 
-        for (iElement=rpPart->end()-1; iElement!=iBegin-1; --iElement)
+        for (iElement= rpPart->rbegin(); iElement!= rpPart->rend(); ++iElement)
         {
             if (iElement->get() == nullptr)
                 continue;
@@ -886,11 +886,11 @@ void PresenterToolBar::LayoutPart (
             else
             {
                 // reverse presentation time with current time
-                if (iElement==iBegin){
-                    iElement=iBegin+2;
+                if (iElement == iFirst){
+                    iElement = iFirst - 2;
                 }
-                else if (iElement==iBegin+2){
-                    iElement=iBegin;
+                else if (iElement == iFirst - 2){
+                    iElement = iFirst;
                 }
                 const awt::Size aNewElementSize ((*iElement)->GetBoundingSize(rxCanvas));
                 if ((*iElement)->IsFilling())
@@ -904,10 +904,10 @@ void PresenterToolBar::LayoutPart (
                 nY += aNewElementSize.Height + nGap;
 
                 // return the index as it was before the reversing
-                if (iElement==iBegin)
-                    iElement=iBegin+2;
-                else if (iElement==iBegin+2)
-                    iElement=iBegin;
+                if (iElement == iFirst)
+                    iElement = iFirst - 2;
+                else if (iElement == iFirst - 2)
+                    iElement = iFirst;
             }
         }
     }
