@@ -1247,6 +1247,9 @@ public:
     /// Check if previous paragraph has borders in between and do the border magic to it if so
     bool handlePreviousParagraphBorderInBetween() const;
 
+    /// An empty SectPr paragraph is not kept in LO. Do some adjustments before it gets deleted.
+    void handleSectPrBeforeRemoval();
+
     /// Handle redline text portions in a frame, footnotes and redlines:
     /// store their data, and create them after frame creation or footnote/endnote copying
     bool m_bIsActualParagraphFramed;
