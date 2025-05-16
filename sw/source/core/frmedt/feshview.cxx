@@ -92,6 +92,8 @@
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <calbck.hxx>
+#include <PostItMgr.hxx>
+#include <AnnotationWin.hxx>
 #include <flyfrms.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/svxids.hrc>
@@ -269,6 +271,14 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     {
         KillPams();
         ClearMark();
+        if (pObj && dynamic_cast<SwWrtShell*>(this)) // ensure it's own mgr
+        {
+            if (::sw::annotation::SwAnnotationWin *const pAnnotation{
+                    GetPostItMgr()->GetActiveSidebarWin()})
+            {
+                pAnnotation->UnsetActiveSidebarWin();
+            }
+        }
     }
 
     if ( pObj )
