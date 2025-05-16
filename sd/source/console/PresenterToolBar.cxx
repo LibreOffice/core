@@ -848,9 +848,9 @@ void PresenterToolBar::LayoutPart (
             if (iElement->get() == nullptr)
                 continue;
 
-            const awt::Size aElementSize ((*iElement)->GetBoundingSize(rxCanvas));
             if (bIsHorizontal)
             {
+                const awt::Size aElementSize ((*iElement)->GetBoundingSize(rxCanvas));
                 if ((*iElement)->IsFilling())
                 {
                     nY = rBoundingBox.Y1;
@@ -870,16 +870,16 @@ void PresenterToolBar::LayoutPart (
                 else if (iElement == iFirst - 2){
                     iElement = iFirst;
                 }
-                const awt::Size aNewElementSize ((*iElement)->GetBoundingSize(rxCanvas));
+                const awt::Size aElementSize ((*iElement)->GetBoundingSize(rxCanvas));
                 if ((*iElement)->IsFilling())
                 {
                     nX = rBoundingBox.X1;
-                    (*iElement)->SetSize(geometry::RealSize2D(rBoundingBox.X2 - rBoundingBox.X1, aNewElementSize.Height));
+                    (*iElement)->SetSize(geometry::RealSize2D(rBoundingBox.X2 - rBoundingBox.X1, aElementSize.Height));
                 }
                 else
-                    nX = rBoundingBox.X1 + (rBoundingBox.X2-rBoundingBox.X1 - aNewElementSize.Width) / 2;
+                    nX = rBoundingBox.X1 + (rBoundingBox.X2-rBoundingBox.X1 - aElementSize.Width) / 2;
                 (*iElement)->SetLocation(awt::Point(sal_Int32(0.5 + nX), sal_Int32(0.5 + nY)));
-                nY += aNewElementSize.Height + nGap;
+                nY += aElementSize.Height + nGap;
 
                 // return the index as it was before the reversing
                 if (iElement == iFirst)
