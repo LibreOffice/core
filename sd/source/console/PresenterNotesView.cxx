@@ -410,32 +410,30 @@ void PresenterNotesView::Layout()
                 {
                     OSL_ASSERT(false);
                 }
+
+            mpScrollBar->SetVisible(bShowVerticalScrollbar);
             if(AllSettings::GetLayoutRTL())
             {
-                    mpScrollBar->SetVisible(bShowVerticalScrollbar);
+
                     mpScrollBar->SetPosSize(
                                             geometry::RealRectangle2D(
                                                                       aNewTextBoundingBox.X1 - mpScrollBar->GetSize(),
                                                                       aNewTextBoundingBox.Y1,
                                                                       aNewTextBoundingBox.X1,
                                                                       aNewTextBoundingBox.Y2));
-                    if( ! bShowVerticalScrollbar)
-                        mpScrollBar->SetThumbPosition(0, false);
-                    UpdateScrollBar();
             }
             else
             {
-                    mpScrollBar->SetVisible(bShowVerticalScrollbar);
                     mpScrollBar->SetPosSize(
                                             geometry::RealRectangle2D(
                                                                       aWindowBox.Width - mpScrollBar->GetSize(),
                                                                       aNewTextBoundingBox.Y1,
                                                                       aNewTextBoundingBox.X2 + mpScrollBar->GetSize(),
                                                                       aNewTextBoundingBox.Y2));
-                    if( ! bShowVerticalScrollbar)
-                        mpScrollBar->SetThumbPosition(0, false);
-                    UpdateScrollBar();
             }
+            if (!bShowVerticalScrollbar)
+                mpScrollBar->SetThumbPosition(0, false);
+            UpdateScrollBar();
     }
     // Has the text area has changed it position or size?
     if (aNewTextBoundingBox.X1 != maTextBoundingBox.X1
