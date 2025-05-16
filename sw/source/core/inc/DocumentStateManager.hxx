@@ -86,7 +86,7 @@ public:
     void YrsAddComment(SwPosition const& rPos, ::std::optional<SwPosition> oAnchorStart,
             SwPostItField const& rField, bool isInsert) override;
     void YrsRemoveCommentImpl(OString const& rCommentId) override;
-    void YrsRemoveComment(SwPosition const& rPos, OString const& rCommentId) override;
+    void YrsRemoveComment(SwPosition const& rPos) override;
     void YrsNotifyCursorUpdate() override;
 #endif
 };

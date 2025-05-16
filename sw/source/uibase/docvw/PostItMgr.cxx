@@ -521,9 +521,9 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
     if (i != mvPostItFields.end())
     {
 #if ENABLE_YRS
+        // note: (*i)->mpPostIt may be null here, if it's in hidden text - see testMissingDefaultLineColor
         mpView->GetDocShell()->GetDoc()->getIDocumentState().YrsRemoveComment(
-            (*i)->GetAnchorPosition(),
-            (*i)->mpPostIt->GetOutlinerView()->GetEditView().GetYrsCommentId());
+            (*i)->GetAnchorPosition());
 #endif
         std::unique_ptr<SwAnnotationItem> p = std::move(*i);
         // tdf#120487 remove from list before dispose, so comment window

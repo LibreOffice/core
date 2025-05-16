@@ -69,7 +69,7 @@ public:
                                SwPostItField const& rField, bool isInsert)
         = 0;
     virtual void YrsRemoveCommentImpl(rtl::OString const& rCommentId) = 0;
-    virtual void YrsRemoveComment(SwPosition const& rPos, rtl::OString const& rCommentId) = 0;
+    virtual void YrsRemoveComment(SwPosition const& rPos) = 0;
     virtual void YrsNotifyCursorUpdate() = 0;
 #endif
 

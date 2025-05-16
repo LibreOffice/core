@@ -1197,17 +1197,25 @@ void DocumentStateManager::YrsRemoveCommentImpl(OString const& rCommentId)
     m_pYrsSupplier->m_Comments.erase(rCommentId);
 }
 
-void DocumentStateManager::YrsRemoveComment(SwPosition const& rPos, OString const& rCommentId)
+void DocumentStateManager::YrsRemoveComment(SwPosition const& rPos)
 {
     SAL_INFO("sw.yrs", "YRS RemoveComment");
-    YrsRemoveCommentImpl(rCommentId);
+    auto const it2{::std::find_if(m_pYrsSupplier->m_Comments.begin(), m_pYrsSupplier->m_Comments.end(),
+        [&rPos](auto const& it){ return it.second.front()->GetAnchorPosition() == rPos; })};
+    if (it2 == m_pYrsSupplier->m_Comments.end())
+    {
+        SAL_INFO("sw.yrs", "YRS RemoveComment anchor does not exist");
+        return; // TODO this may happen on mail merge or presumably insert file
+    }
+    OString const commentId{it2->first};
+    YrsRemoveCommentImpl(commentId);
     YTransaction *const pTxn{m_pYrsSupplier->GetWriteTransaction()};
     if (!pTxn)
     {
         return;
     }
 
-    ymap_remove(m_pYrsSupplier->m_pComments, pTxn, rCommentId.getStr());
+    ymap_remove(m_pYrsSupplier->m_pComments, pTxn, commentId.getStr());
 
     // first, adjust position of all other comments in the paragraph
     for (auto const& it : m_pYrsSupplier->m_Comments)
@@ -1237,7 +1245,7 @@ void DocumentStateManager::YrsRemoveComment(SwPosition const& rPos, OString cons
             pItem->GetFormatField().GetTextField())};
         ::sw::mark::AnnotationMark const*const pMark{rHint.GetAnnotationMark()};
         if (pMark != nullptr
-            && it.first != rCommentId
+            && it.first != commentId
             && rPos.nNode == pMark->GetMarkStart().nNode
             && rPos.nContent <= pMark->GetMarkStart().nContent)
         {
