@@ -225,7 +225,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 {
     auto const [aRect, bIsCursorPosChanged] {SetPos()};
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (SfxViewShell* pNotifyViewShell = comphelper::LibreOfficeKit::isActive() ? m_pCursorShell->GetSfxViewShell() : nullptr)
     {
         // notify about page number change (if that happened)
         sal_uInt16 nPage, nVirtPage;
@@ -236,7 +236,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         {
             m_nPageLastTime = nPage;
             OString aPayload = OString::number(nPage - 1);
-            m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
+            pNotifyViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
         }
 
         // This may get called often, so instead of sending data on each update, just notify
@@ -245,21 +245,21 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         m_aLastLOKRect = aRect;
         if (pViewShell)
         {
-            if (pViewShell == m_pCursorShell->GetSfxViewShell())
+            if (pViewShell == pNotifyViewShell)
             {
                 SfxLokHelper::notifyUpdatePerViewId(pViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
             }
             else
             {
-                SfxLokHelper::notifyUpdatePerViewId(pViewShell, m_pCursorShell->GetSfxViewShell(), pViewShell,
+                SfxLokHelper::notifyUpdatePerViewId(pViewShell, pNotifyViewShell, pViewShell,
                     LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
             }
         }
         else if ( bIsCursorPosChanged || m_pCursorShell->IsTableMode())
         {
-            SfxLokHelper::notifyUpdatePerViewId(m_pCursorShell->GetSfxViewShell(), SfxViewShell::Current(),
-                m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
-            SfxLokHelper::notifyOtherViewsUpdatePerViewId(m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
+            SfxLokHelper::notifyUpdatePerViewId(pNotifyViewShell, SfxViewShell::Current(),
+                pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
+            SfxLokHelper::notifyOtherViewsUpdatePerViewId(pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
         }
     }
 
