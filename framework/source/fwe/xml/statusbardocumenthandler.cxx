@@ -188,7 +188,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::endDocument()
 void SAL_CALL OReadStatusBarDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 {
-    StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName );
+    auto pStatusBarEntry = m_aStatusBarMap.find( aName );
     if ( pStatusBarEntry == m_aStatusBarMap.end() )
         return;
 
@@ -384,7 +384,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
 
 void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
 {
-    StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName );
+    auto pStatusBarEntry = m_aStatusBarMap.find( aName );
     if ( pStatusBarEntry == m_aStatusBarMap.end() )
         return;
 

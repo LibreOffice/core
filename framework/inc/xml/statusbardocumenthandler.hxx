@@ -89,14 +89,9 @@ class OReadStatusBarDocumentHandler final : public OReadStatusBarDocumentHandler
     private:
         OUString getErrorLineString();
 
-        class StatusBarHashMap : public std::unordered_map<OUString,
-                                                           StatusBar_XML_Entry >
-        {
-        };
-
         bool                                                      m_bStatusBarStartFound;
         bool                                                      m_bStatusBarItemStartFound;
-        StatusBarHashMap                                          m_aStatusBarMap;
+        std::unordered_map<OUString, StatusBar_XML_Entry >        m_aStatusBarMap;
         css::uno::Reference< css::container::XIndexContainer >    m_aStatusBarItems;
         css::uno::Reference< css::xml::sax::XLocator >            m_xLocator;
 };

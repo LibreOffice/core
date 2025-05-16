@@ -87,14 +87,10 @@ class OReadImagesDocumentHandler final : public ::cppu::WeakImplHelper< css::xml
     private:
         OUString getErrorLineString();
 
-        class ImageHashMap : public std::unordered_map< OUString, Image_XML_Entry >
-        {
-        };
-
         bool                                                m_bImageContainerStartFound;
         bool                                                m_bImageContainerEndFound;
         bool                                                m_bImagesStartFound;
-        ImageHashMap                                        m_aImageMap;
+        std::unordered_map< OUString, Image_XML_Entry >     m_aImageMap;
         ImageItemDescriptorList&                            m_rImageList;
         css::uno::Reference< css::xml::sax::XLocator >      m_xLocator;
 };

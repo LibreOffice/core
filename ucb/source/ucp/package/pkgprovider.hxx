@@ -41,11 +41,11 @@ namespace package_ucp {
                 "application/" PACKAGE_ZIP_URL_SCHEME "-stream"
 
 
-class Packages;
+class Package;
 
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
-    std::unique_ptr<Packages> m_pPackages;
+    std::unordered_map<OUString, Package*> m_aPackages;
 
 public:
     explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );

@@ -137,7 +137,7 @@ void SAL_CALL OReadImagesDocumentHandler::endDocument()
 void SAL_CALL OReadImagesDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 {
-    ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName );
+    auto pImageEntry = m_aImageMap.find( aName );
     if ( pImageEntry == m_aImageMap.end() )
         return;
 
@@ -224,7 +224,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
 void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
 {
-    ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName );
+    auto pImageEntry = m_aImageMap.find( aName );
     if ( pImageEntry == m_aImageMap.end() )
         return;
 

@@ -90,8 +90,7 @@ OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModu
     // SAFE
     std::unique_lock g(m_aMutex);
 
-    FactoryManagerMap::const_iterator pIter =
-        m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, rName, rModule ));
+    auto pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, rName, rModule ));
     if ( pIter != m_aFactoryManagerMap.end() )
         return pIter->second;
     else
@@ -128,7 +127,7 @@ void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( st
 
     OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
 
-    FactoryManagerMap::const_iterator pIter = m_aFactoryManagerMap.find( aHashKey );
+    auto pIter = m_aFactoryManagerMap.find( aHashKey );
 
     if ( pIter != m_aFactoryManagerMap.end() )
         throw ElementExistException();
@@ -142,7 +141,7 @@ void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModul
 
     OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
 
-    FactoryManagerMap::const_iterator pIter = m_aFactoryManagerMap.find( aHashKey );
+    auto pIter = m_aFactoryManagerMap.find( aHashKey );
 
     if ( pIter == m_aFactoryManagerMap.end() )
         throw NoSuchElementException();

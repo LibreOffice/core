@@ -176,7 +176,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::endDocument()
 void SAL_CALL OReadToolBoxDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 {
-    ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName );
+    auto pToolBoxEntry = m_aToolBoxMap.find( aName );
     if ( pToolBoxEntry == m_aToolBoxMap.end() )
         return;
 
@@ -442,7 +442,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
 
 void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
 {
-    ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName );
+    auto pToolBoxEntry = m_aToolBoxMap.find( aName );
     if ( pToolBoxEntry == m_aToolBoxMap.end() )
         return;
 

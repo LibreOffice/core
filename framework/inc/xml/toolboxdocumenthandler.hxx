@@ -88,17 +88,12 @@ class OReadToolBoxDocumentHandler final : public OReadToolBoxDocumentHandler_Bas
     private:
         OUString getErrorLineString();
 
-        class ToolBoxHashMap : public std::unordered_map<OUString,
-                                                         ToolBox_XML_Entry>
-        {
-        };
-
         bool                                                      m_bToolBarStartFound : 1;
         bool                                                      m_bToolBarItemStartFound : 1;
         bool                                                      m_bToolBarSpaceStartFound : 1;
         bool                                                      m_bToolBarBreakStartFound : 1;
         bool                                                      m_bToolBarSeparatorStartFound : 1;
-        ToolBoxHashMap                                            m_aToolBoxMap;
+        std::unordered_map<OUString, ToolBox_XML_Entry>           m_aToolBoxMap;
         css::uno::Reference< css::container::XIndexContainer >    m_rItemContainer;
         css::uno::Reference< css::xml::sax::XLocator >            m_xLocator;
 
