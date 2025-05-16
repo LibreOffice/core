@@ -44,11 +44,13 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <paratr.hxx>
 #include <cellatr.hxx>
 #include <fldbas.hxx>
+#include <docufld.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <UndoCore.hxx>
@@ -329,12 +331,23 @@ void SwHistorySetTextField::SetInDoc( SwDoc* pDoc, bool )
     m_pField->GetField()->ChgTyp( pNewFieldType ); // change field type
 
     SwTextNode * pTextNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTextNode();
-    OSL_ENSURE( pTextNd, "SwHistorySetTextField: no TextNode" );
+    assert(pTextNd);
 
     if ( pTextNd )
     {
         pTextNd->InsertItem( *m_pField, m_nPos, m_nPos,
                     SetAttrMode::NOTXTATRCHR );
+#if ENABLE_YRS
+        if (m_nFieldWhich == SwFieldIds::Postit)
+        {
+            SwPosition const pos{*pTextNd, m_nPos};
+            pTextNd->GetDoc().getIDocumentState().YrsAddComment(
+                pos, {}, // FIXME no way to get anchor start here?
+                static_cast<SwPostItField const&>(*pTextNd->GetFieldTextAttrAt(pos.GetContentIndex(),
+                    ::sw::GetTextAttrMode::Default)->GetFormatField().GetField()),
+                true);
+        }
+#endif
     }
 }
 
