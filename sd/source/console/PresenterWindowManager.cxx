@@ -57,7 +57,7 @@ PresenterWindowManager::PresenterWindowManager (
       mpPaneContainer(std::move(pPaneContainer)),
       mbIsLayoutPending(true),
       mbIsLayouting(false),
-      meLayoutMode(LM_Generic),
+      meLayoutMode(LayoutMode::Generic),
       mbIsSlideSorterActive(false),
       mbIsHelpViewActive(false),
       mbisPaused(false),
@@ -363,7 +363,7 @@ void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
 
     mpPresenterController->RequestViews(
         mbIsSlideSorterActive,
-        meLayoutMode==LM_Notes,
+        meLayoutMode == LayoutMode::Notes,
         mbIsHelpViewActive);
     Layout();
     NotifyLayoutModeChange();
@@ -381,7 +381,7 @@ void PresenterWindowManager::SetSlideSorterState (bool bIsActive)
 
     mpPresenterController->RequestViews(
         mbIsSlideSorterActive,
-        meLayoutMode==LM_Notes,
+        meLayoutMode == LayoutMode::Notes,
         mbIsHelpViewActive);
     Layout();
     NotifyLayoutModeChange();
@@ -399,7 +399,7 @@ void PresenterWindowManager::SetHelpViewState (bool bIsActive)
 
     mpPresenterController->RequestViews(
         mbIsSlideSorterActive,
-        meLayoutMode==LM_Notes,
+        meLayoutMode == LayoutMode::Notes,
         mbIsHelpViewActive);
     Layout();
     NotifyLayoutModeChange();
@@ -422,13 +422,13 @@ void PresenterWindowManager::SetViewMode (const ViewMode eMode)
         case VM_Standard:
             SetSlideSorterState(false);
             SetHelpViewState(false);
-            SetLayoutMode(LM_Standard);
+            SetLayoutMode(LayoutMode::Standard);
             break;
 
         case VM_Notes:
             SetSlideSorterState(false);
             SetHelpViewState(false);
-            SetLayoutMode(LM_Notes);
+            SetLayoutMode(LayoutMode::Notes);
             break;
 
         case VM_SlideOverview:
@@ -451,7 +451,7 @@ PresenterWindowManager::ViewMode PresenterWindowManager::GetViewMode() const
         return VM_Help;
     else if (mbIsSlideSorterActive)
         return VM_SlideOverview;
-    else if (meLayoutMode == LM_Notes)
+    else if (meLayoutMode == LayoutMode::Notes)
         return VM_Notes;
     else
         return VM_Standard;
@@ -550,12 +550,12 @@ void PresenterWindowManager::Layout()
         else
             switch (meLayoutMode)
             {
-                case LM_Standard:
+                case LayoutMode::Standard:
                 default:
                     LayoutStandardMode();
                     break;
 
-                case LM_Notes:
+                case LayoutMode::Notes:
                     LayoutNotesMode();
                     break;
             }

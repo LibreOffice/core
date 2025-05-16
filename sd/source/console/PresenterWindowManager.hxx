@@ -85,7 +85,7 @@ public:
     void SetHelpViewState (bool bIsActive);
     void SetPauseState (bool bIsPaused);
 
-    enum LayoutMode { LM_Standard, LM_Notes, LM_Generic };
+    enum class LayoutMode { Standard, Notes, Generic };
 private:
     void SetLayoutMode (const LayoutMode eMode);
 
