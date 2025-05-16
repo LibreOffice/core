@@ -26,11 +26,6 @@
 
 class XMLAxisOOoContext;
 
-class XMLAxisContextVector :
-    public ::std::vector< ::rtl::Reference< XMLAxisOOoContext > >
-{
-};
-
 class XMLChartPlotAreaOOoTContext  : public XMLProcAttrTransformerContext
 {
 public:
@@ -47,7 +42,7 @@ public:
 private:
     void AddContent( rtl::Reference<XMLAxisOOoContext> const & pContent );
 
-    XMLAxisContextVector m_aChildContexts;
+    std::vector< ::rtl::Reference< XMLAxisOOoContext > > m_aChildContexts;
 };
 
 // INCLUDED_XMLOFF_SOURCE_TRANSFORM_CHARTPLOTAREAOOOTCONTEXT_HXX
