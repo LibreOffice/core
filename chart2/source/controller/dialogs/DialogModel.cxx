@@ -402,9 +402,10 @@ std::vector< rtl::Reference< ChartType > >
                 xDiagram->getBaseCoordinateSystems());
             for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysSeq )
             {
+                aResult.insert(aResult.end(),
+                               coords->getChartTypes2().begin(),
+                               coords->getChartTypes2().end());
 
-                for (const auto & rxChartType : coords->getChartTypes2())
-                    aResult.push_back(rxChartType);
             }
         }
     }
