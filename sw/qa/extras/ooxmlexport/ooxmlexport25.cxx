@@ -43,6 +43,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166544_noTopMargin_fields, "tdf166544_noTopMargi
     CPPUNIT_ASSERT_EQUAL(sal_Int32(269), nHeight);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf166510_sectPr_bottomSpacing, "tdf166510_sectPr_bottomSpacing.docx")
+{
+    // given with a sectPr with different bottom spacing (undefined in this case - i.e. zero)
+    auto pXmlDoc = parseLayoutDump();
+
+    // The last paragraph (sectPr) has 0 below spacing, so no reduction of page 2's 200pt top margin
+    sal_Int32 nHeight = getXPath(pXmlDoc, "//page[2]//body/txt/infos/bounds", "height").toInt32();
+    // Without the fix, the text height (showing no top margin at all) was 253
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4253), nHeight);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
