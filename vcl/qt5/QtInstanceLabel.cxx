@@ -47,7 +47,7 @@ void QtInstanceLabel::set_mnemonic_widget(Widget* pTarget)
     GetQtInstance().RunInMainThread([&] { m_pLabel->setBuddy(pTargetWidget->getQWidget()); });
 }
 
-void QtInstanceLabel::set_font(const vcl::Font&) { assert(false && "Not implemented yet"); }
+void QtInstanceLabel::set_font(const vcl::Font& rFont) { setFont(rFont); }
 
 void QtInstanceLabel::set_label_type(weld::LabelType eType)
 {

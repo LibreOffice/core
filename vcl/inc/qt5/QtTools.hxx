@@ -154,6 +154,8 @@ MouseEvent toVclMouseEvent(QMouseEvent& rEvent);
 
 QImage toQImage(const Image& rImage);
 
+QFont toQtFont(const vcl::Font& rVclFont);
+
 bool toVclFont(const QFont& rQFont, const css::lang::Locale& rLocale, vcl::Font& rVclFont);
 
 QMessageBox::Icon vclMessageTypeToQtIcon(VclMessageType eType);

@@ -90,7 +90,7 @@ void QtInstanceTextView::set_monospace(bool) { assert(false && "Not implemented 
 
 void QtInstanceTextView::set_max_length(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceTextView::set_font(const vcl::Font&) { assert(false && "Not implemented yet"); }
+void QtInstanceTextView::set_font(const vcl::Font& rFont) { setFont(rFont); }
 
 void QtInstanceTextView::set_font_color(const Color& rColor) { setFontColor(rColor); }
 

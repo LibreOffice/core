@@ -177,6 +177,7 @@ public:
 
     virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
 
+    void setFont(vcl::Font rFont);
     static void setHelpId(QWidget& rWidget, const OUString& rHelpId);
 
 private Q_SLOTS:

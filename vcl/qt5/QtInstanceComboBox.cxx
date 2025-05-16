@@ -315,7 +315,7 @@ void QtInstanceComboBox::copy_entry_clipboard() { assert(false && "Not implement
 
 void QtInstanceComboBox::paste_entry_clipboard() { assert(false && "Not implemented yet"); }
 
-void QtInstanceComboBox::set_font(const vcl::Font&) { assert(false && "Not implemented yet"); }
+void QtInstanceComboBox::set_font(const vcl::Font& rFont) { setFont(rFont); }
 
 void QtInstanceComboBox::set_entry_font(const vcl::Font&)
 {

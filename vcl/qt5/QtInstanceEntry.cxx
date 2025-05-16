@@ -176,7 +176,7 @@ bool QtInstanceEntry::get_overwrite_mode() const
     return false;
 }
 
-void QtInstanceEntry::set_font(const vcl::Font&) { assert(false && "Not implemented yet"); }
+void QtInstanceEntry::set_font(const vcl::Font& rFont) { setFont(rFont); }
 
 void QtInstanceEntry::set_font_color(const Color& rColor) { setFontColor(rColor); }
 

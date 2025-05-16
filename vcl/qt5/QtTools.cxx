@@ -18,6 +18,7 @@
  */
 
 #include <QtTools.hxx>
+#include <QtFont.hxx>
 #include <QtFontFace.hxx>
 #include <unx/fontmanager.hxx>
 
@@ -254,6 +255,17 @@ QImage toQImage(const Image& rImage)
     }
 
     return aImage;
+}
+
+QFont toQtFont(const vcl::Font& rVclFont)
+{
+    QFont aQFont(toQString(rVclFont.GetFamilyName()), rVclFont.GetFontHeight());
+
+    QtFont::applyStretch(aQFont, rVclFont.GetWidthType());
+    QtFont::applyStyle(aQFont, rVclFont.GetItalic());
+    QtFont::applyWeight(aQFont, rVclFont.GetWeight());
+
+    return aQFont;
 }
 
 bool toVclFont(const QFont& rQFont, const css::lang::Locale& rLocale, vcl::Font& rVclFont)

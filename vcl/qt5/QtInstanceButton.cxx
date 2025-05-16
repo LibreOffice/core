@@ -71,10 +71,7 @@ OUString QtInstanceButton::get_label() const
     return qtToVclStringWithAccelerator(m_pButton->text());
 }
 
-void QtInstanceButton::set_font(const vcl::Font& /*rFont*/)
-{
-    assert(false && "Not implemented yet");
-}
+void QtInstanceButton::set_font(const vcl::Font& rFont) { setFont(rFont); }
 
 void QtInstanceButton::set_custom_button(VirtualDevice* /*pDevice*/)
 {

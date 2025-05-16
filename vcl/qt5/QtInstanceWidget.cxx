@@ -310,6 +310,13 @@ bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
     }
 }
 
+void QtInstanceWidget::setFont(vcl::Font rFont)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getQWidget()->setFont(toQtFont(rFont)); });
+}
+
 void QtInstanceWidget::setHelpId(QWidget& rWidget, const OUString& rHelpId)
 {
     SolarMutexGuard g;
