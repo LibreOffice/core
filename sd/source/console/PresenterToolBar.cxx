@@ -584,14 +584,13 @@ void PresenterToolBar::CreateControls (
             xEntries,
             [this] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
             {
-                return this->ProcessEntry(xProps, mxCanvas);
+                return this->ProcessEntry(xProps);
             });
     }
 }
 
 void PresenterToolBar::ProcessEntry (
-    const Reference<beans::XPropertySet>& rxProperties,
-    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
+    const Reference<beans::XPropertySet>& rxProperties)
 {
     if ( ! rxProperties.is())
         return;
@@ -607,11 +606,11 @@ void PresenterToolBar::ProcessEntry (
     SharedElementMode pSelectedMode = std::make_shared<ElementMode>();
     SharedElementMode pDisabledMode = std::make_shared<ElementMode>();
     SharedElementMode pMouseOverSelectedMode = std::make_shared<ElementMode>();
-    pNormalMode->ReadElementMode(rxProperties, u"Normal"_ustr, pNormalMode, rxCanvas);
-    pMouseOverMode->ReadElementMode(rxProperties, u"MouseOver"_ustr, pNormalMode, rxCanvas);
-    pSelectedMode->ReadElementMode(rxProperties, u"Selected"_ustr, pNormalMode, rxCanvas);
-    pDisabledMode->ReadElementMode(rxProperties, u"Disabled"_ustr, pNormalMode, rxCanvas);
-    pMouseOverSelectedMode->ReadElementMode(rxProperties, u"MouseOverSelected"_ustr, pSelectedMode, rxCanvas);
+    pNormalMode->ReadElementMode(rxProperties, u"Normal"_ustr, pNormalMode, mxCanvas);
+    pMouseOverMode->ReadElementMode(rxProperties, u"MouseOver"_ustr, pNormalMode, mxCanvas);
+    pSelectedMode->ReadElementMode(rxProperties, u"Selected"_ustr, pNormalMode, mxCanvas);
+    pDisabledMode->ReadElementMode(rxProperties, u"Disabled"_ustr, pNormalMode, mxCanvas);
+    pMouseOverSelectedMode->ReadElementMode(rxProperties, u"MouseOverSelected"_ustr, pSelectedMode, mxCanvas);
 
     // Create new element.
     ::rtl::Reference<Element> pElement;

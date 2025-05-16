@@ -179,9 +179,7 @@ private:
         const bool bOverWindow,
         const bool bMouseDown=false);
 
-    void ProcessEntry (
-        const css::uno::Reference<css::beans::XPropertySet>& rProperties,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
+    void ProcessEntry(const css::uno::Reference<css::beans::XPropertySet>& rProperties);
 
     /** @throws css::lang::DisposedException when the object has already been
         disposed.
