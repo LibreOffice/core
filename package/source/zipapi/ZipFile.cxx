@@ -90,7 +90,6 @@ ZipFile::ZipFile( rtl::Reference< comphelper::RefCountedMutex > aMutexHolder,
 : m_aMutexHolder(std::move( aMutexHolder ))
 , m_Checks(checks)
 , aGrabber( xInput )
-, aInflater( std::make_unique<ZipUtils::InflateZlib>(true) )
 , xStream(xInput)
 , m_xContext (std::move( xContext ))
 , bRecoveryMode( bForceRecovery )

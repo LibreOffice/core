@@ -16,7 +16,6 @@ InflaterBytesZstd::InflaterBytesZstd()
     : bFinished(false)
     , sInBuffer(nullptr)
     , pDCtx(ZSTD_createDCtx())
-    , nLastInflateError(0)
     , bStreamInitialized(false)
 {
     inBuffer = { nullptr, 0, 0 };
@@ -63,7 +62,6 @@ sal_Int32 InflaterBytesZstd::doInflateBytes(sal_Int8* pOutBuffer, sal_Int32 nNew
     size_t ret = ZSTD_decompressStream(pDCtx, &outBuffer, &inBuffer);
     if (ZSTD_isError(ret))
     {
-        nLastInflateError = static_cast<sal_Int32>(ret);
         ZSTD_DCtx_reset(pDCtx, ZSTD_reset_session_only);
         return 0;
     }
@@ -74,7 +72,6 @@ sal_Int32 InflaterBytesZstd::doInflateBytes(sal_Int8* pOutBuffer, sal_Int32 nNew
     }
     if (ret == 0)
         bFinished = true;
-    nLastInflateError = 0;
 
     return static_cast<sal_Int32>(outBuffer.pos);
 }

@@ -21,7 +21,6 @@ private:
     bool bFinished;
     const sal_Int8* sInBuffer;
     ZSTD_DCtx* pDCtx;
-    sal_Int32 nLastInflateError;
     ZSTD_inBuffer inBuffer;
     bool bStreamInitialized;
 

@@ -20,7 +20,6 @@ class DLLPUBLIC_PACKAGE InflateZstd : public Inflater
 {
 private:
     bool bFinished;
-    bool bNeedDict;
     sal_Int32 nLastInflateError;
     css::uno::Sequence<sal_Int8> sInBuffer;
     ZSTD_DCtx* pDCtx;
@@ -35,7 +34,7 @@ public:
     virtual ~InflateZstd() override;
 
     virtual void setInput(const css::uno::Sequence<sal_Int8>& rBuffer) override;
-    virtual bool needsDictionary() const override { return bNeedDict; }
+    virtual bool needsDictionary() const override { return false; }
     virtual bool finished() const override { return bFinished; }
     virtual sal_Int32 doInflateSegment(css::uno::Sequence<sal_Int8>& rBuffer, sal_Int32 nNewOffset,
                                        sal_Int32 nNewLength) override;

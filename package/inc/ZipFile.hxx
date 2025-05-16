@@ -62,7 +62,6 @@ private:
 
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
-    std::unique_ptr<ZipUtils::Inflater> aInflater;
     css::uno::Reference < css::io::XInputStream > xStream;
     const css::uno::Reference < css::uno::XComponentContext > m_xContext;
 

@@ -15,7 +15,6 @@ using namespace ZipUtils;
 
 InflateZstd::InflateZstd(bool)
     : bFinished(false)
-    , bNeedDict(false)
     , nLastInflateError(0)
     , pDCtx(ZSTD_createDCtx())
     , bStreamInitialized(false)
