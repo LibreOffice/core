@@ -212,21 +212,61 @@ canvas/inc/rendering/irendermodule.hxx:60
     void canvas::IRenderModule::~IRenderModule()
 canvas/inc/rendering/isurface.hxx:34
     void canvas::ISurface::~ISurface()
+chart2/source/inc/ChartType.hxx:122
+    _Bool chart::ChartType::isSupportingMainAxis(int,int,)
+chart2/source/inc/ChartType.hxx:123
+    _Bool chart::ChartType::isSupportingStatisticProperties(int,)
+chart2/source/inc/ChartType.hxx:124
+    _Bool chart::ChartType::isSupportingRegressionProperties(int,)
+chart2/source/inc/ChartType.hxx:125
+    _Bool chart::ChartType::isSupportingGeometryProperties(int,)
+chart2/source/inc/ChartType.hxx:126
+    _Bool chart::ChartType::isSupportingAreaProperties(int,)
+chart2/source/inc/ChartType.hxx:127
+    _Bool chart::ChartType::isSupportingSymbolProperties(int,)
+chart2/source/inc/ChartType.hxx:128
+    _Bool chart::ChartType::isSupportingSecondaryAxis(int,)
+chart2/source/inc/ChartType.hxx:129
+    _Bool chart::ChartType::isSupportingRightAngledAxes()
+chart2/source/inc/ChartType.hxx:130
+    _Bool chart::ChartType::isSupportingOverlapAndGapWidthProperties(int,)
+chart2/source/inc/ChartType.hxx:131
+    _Bool chart::ChartType::isSupportingBarConnectors(int,)
+chart2/source/inc/ChartType.hxx:132
+    _Bool chart::ChartType::isSupportingAxisSideBySide(int,)
+chart2/source/inc/ChartType.hxx:133
+    _Bool chart::ChartType::isSupportingBaseValue()
+chart2/source/inc/ChartType.hxx:134
+    _Bool chart::ChartType::isSupportingAxisPositioning(int,int,)
+chart2/source/inc/ChartType.hxx:135
+    _Bool chart::ChartType::isSupportingStartingAngle()
+chart2/source/inc/ChartType.hxx:136
+    _Bool chart::ChartType::isSupportingDateAxis(int,)
+chart2/source/inc/ChartType.hxx:137
+    _Bool chart::ChartType::isSupportingComplexCategory()
+chart2/source/inc/ChartType.hxx:138
+    _Bool chart::ChartType::isSupportingCategoryPositioning(int,)
+chart2/source/inc/ChartType.hxx:139
+    _Bool chart::ChartType::isSupportingOnlyDeepStackingFor3D()
+chart2/source/inc/ChartType.hxx:140
+    _Bool chart::ChartType::isSeriesInFrontOfAxisLine()
+chart2/source/inc/ChartType.hxx:142
+    int chart::ChartType::getAxisType(int,)
 extensions/source/dbpilots/unoautopilot.hxx:81
     class cppu::IPropertyArrayHelper * dbp::OUnoAutoPilot::createArrayHelper()const
-extensions/source/propctrlr/commoncontrol.hxx:129
+extensions/source/propctrlr/commoncontrol.hxx:128
     short pcr::CommonBehaviourControl::getControlType()
-extensions/source/propctrlr/commoncontrol.hxx:131
+extensions/source/propctrlr/commoncontrol.hxx:130
     class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlContext> pcr::CommonBehaviourControl::getControlContext()
-extensions/source/propctrlr/commoncontrol.hxx:133
+extensions/source/propctrlr/commoncontrol.hxx:132
     void pcr::CommonBehaviourControl::setControlContext(const class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlContext> &,)
-extensions/source/propctrlr/commoncontrol.hxx:135
+extensions/source/propctrlr/commoncontrol.hxx:134
     class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> pcr::CommonBehaviourControl::getControlWindow()
-extensions/source/propctrlr/commoncontrol.hxx:137
+extensions/source/propctrlr/commoncontrol.hxx:136
     unsigned char pcr::CommonBehaviourControl::isModified()
-extensions/source/propctrlr/commoncontrol.hxx:139
+extensions/source/propctrlr/commoncontrol.hxx:138
     void pcr::CommonBehaviourControl::notifyModifiedValue()
-extensions/source/propctrlr/commoncontrol.hxx:154
+extensions/source/propctrlr/commoncontrol.hxx:153
     void pcr::CommonBehaviourControl::disposing()
 forms/source/xforms/datatypes.hxx:215
     class cppu::IPropertyArrayHelper * xforms::ODerivedDataType::createArrayHelper()const
@@ -270,6 +310,8 @@ include/svl/svdde.hxx:243
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
+include/svx/sdr/overlay/overlaymanager.hxx:94
+    void sdr::overlay::OverlayManager::flush()
 include/svx/svdundo.hxx:765
     class std::unique_ptr<class SdrUndoAction> SdrUndoFactory::CreateUndoDiagramModelData(class SdrObject &,class std::shared_ptr<class svx::diagram::DiagramDataState> &,)
 include/vbahelper/vbacollectionimpl.hxx:289
@@ -294,21 +336,23 @@ include/vbahelper/vbareturntypes.hxx:38
     void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
 include/vbahelper/vbareturntypes.hxx:39
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
-include/vcl/customweld.hxx:45
+include/vcl/customweld.hxx:42
+    _Bool weld::CustomWidgetController::KeyUp(const class KeyEvent &,)
+include/vcl/customweld.hxx:46
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
 include/vcl/menu.hxx:404
     void Menu::DumpAsPropertyTree(class tools::JsonWriter &,)const
 include/vcl/weld.hxx:128
     void weld::Widget::set_visible(_Bool,)
-sc/source/core/opencl/opbase.hxx:446
+sc/source/core/opencl/opbase.hxx:443
     _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction()const
-sc/source/core/opencl/opbase.hxx:447
+sc/source/core/opencl/opbase.hxx:444
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
-sc/source/core/opencl/opbase.hxx:480
+sc/source/core/opencl/opbase.hxx:477
     void sc::opencl::ParallelReductionVectorRef::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
-sc/source/core/opencl/opbase.hxx:481
+sc/source/core/opencl/opbase.hxx:478
     class std::basic_string<char> sc::opencl::ParallelReductionVectorRef::GenSlidingWindowDeclRef(_Bool,)const
-sc/source/core/opencl/opbase.hxx:484
+sc/source/core/opencl/opbase.hxx:481
     unsigned long sc::opencl::ParallelReductionVectorRef::Marshal(struct _cl_kernel *,int,int,struct _cl_program *,)
 sc/source/ui/vba/vbacondition.hxx:40
     class rtl::OUString ScVbaCondition::Formula1()
@@ -398,14 +442,12 @@ slideshow/source/engine/animationfactory.cxx:617
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
 slideshow/source/engine/animationfactory.cxx:620
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
-slideshow/source/inc/shape.hxx:221
+slideshow/source/inc/shape.hxx:217
     void slideshow::internal::Shape::setIsForeground(const _Bool,)
 sw/source/writerfilter/dmapper/TableManager.hxx:495
     void writerfilter::dmapper::TableManager::tableExceptionProps(const class tools::SvRef<class writerfilter::dmapper::TablePropertyMap> &,)
 toolkit/inc/controls/geometrycontrolmodel.hxx:185
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
-toolkit/source/controls/table/tablecontrol_impl.hxx:257
-    _Bool svt::table::TableControl_Impl::dispatchAction(enum svt::table::TableControlAction,)
 ux-gnu/../../../include/c++/14/bits/locale_classes.h:799
     int std::collate::do_compare(const type-parameter-0-0 *,const type-parameter-0-0 *,const type-parameter-0-0 *,const type-parameter-0-0 *,)const
 ux-gnu/../../../include/c++/14/bits/locale_classes.h:813
@@ -430,39 +472,39 @@ ux-gnu/../../../include/c++/14/bits/locale_facets.h:1869
     basic_string<type-parameter-0-0, char_traits<type-parameter-0-0>, allocator<type-parameter-0-0> > std::numpunct::do_truename()const
 ux-gnu/../../../include/c++/14/bits/locale_facets.h:1882
     basic_string<type-parameter-0-0, char_traits<type-parameter-0-0>, allocator<type-parameter-0-0> > std::numpunct::do_falsename()const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2220
-    type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,_Bool &,)const
 ux-gnu/../../../include/c++/14/bits/locale_facets.h:2223
+    type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,_Bool &,)const
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2226
     type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,long &,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2228
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2231
     type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,unsigned short &,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2233
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2236
     type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,unsigned int &,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2238
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2241
     type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,unsigned long &,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2244
-    type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,long long &,)const
 ux-gnu/../../../include/c++/14/bits/locale_facets.h:2249
+    type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,long long &,)const
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2254
     type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,unsigned long long &,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2255
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2261
     type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,float &,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2258
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2264
     type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,double &,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2272
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2278
     type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,long double &,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2277
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2283
     type-parameter-0-1 std::num_get::do_get(type-parameter-0-1,type-parameter-0-1,class std::ios_base &,enum std::_Ios_Iostate &,void *&,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2535
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2544
     type-parameter-0-1 std::num_put::do_put(type-parameter-0-1,class std::ios_base &,type-parameter-0-0,_Bool,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2538
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2547
     type-parameter-0-1 std::num_put::do_put(type-parameter-0-1,class std::ios_base &,type-parameter-0-0,long,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2542
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2551
     type-parameter-0-1 std::num_put::do_put(type-parameter-0-1,class std::ios_base &,type-parameter-0-0,unsigned long,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2548
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2559
     type-parameter-0-1 std::num_put::do_put(type-parameter-0-1,class std::ios_base &,type-parameter-0-0,long long,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2553
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2564
     type-parameter-0-1 std::num_put::do_put(type-parameter-0-1,class std::ios_base &,type-parameter-0-0,unsigned long long,)const
-ux-gnu/../../../include/c++/14/bits/locale_facets.h:2571
+ux-gnu/../../../include/c++/14/bits/locale_facets.h:2583
     type-parameter-0-1 std::num_put::do_put(type-parameter-0-1,class std::ios_base &,type-parameter-0-0,const void *,)const
 ux-gnu/../../../include/c++/14/bits/locale_facets_nonio.h:636
     enum std::time_base::dateorder std::time_get::do_date_order()const
@@ -529,9 +571,9 @@ ux-gnu/../../../include/c++/14/bits/shared_ptr_base.h:621
 ux-gnu/../../../include/c++/14/bits/shared_ptr_base.h:634
     void * std::_Sp_counted_ptr_inplace::_M_get_deleter(const class std::type_info &,)
 ux-gnu/../../../include/c++/14/bits/shared_ptr_base.h:697
-    void std::_Sp_counted_ptr_inplace<type-parameter-0-0, type-parameter-0-1, _Lp>::_M_dispose()
+    void std::_Sp_counted_ptr_inplace<type-parameter-0-0, type-parameter-0-1, value-parameter-0-2>::_M_dispose()
 ux-gnu/../../../include/c++/14/bits/shared_ptr_base.h:704
-    void std::_Sp_counted_ptr_inplace<type-parameter-0-0, type-parameter-0-1, _Lp>::_M_destroy()
+    void std::_Sp_counted_ptr_inplace<type-parameter-0-0, type-parameter-0-1, value-parameter-0-2>::_M_destroy()
 ux-gnu/../../../include/c++/14/bits/shared_ptr_base.h:843
     void std::_Sp_counted_array::_M_dispose()
 ux-gnu/../../../include/c++/14/bits/shared_ptr_base.h:851
@@ -541,17 +583,17 @@ ux-gnu/../../../include/c++/14/cxxabi.h:307
 ux-gnu/../../../include/c++/14/fstream:412
     long std::basic_filebuf::showmanyc()
 ux-gnu/../../../include/c++/14/fstream:420
-    typename type-parameter-0-1::int_type std::basic_filebuf::underflow()
+    type-parameter-0-1::int_type std::basic_filebuf::underflow()
 ux-gnu/../../../include/c++/14/fstream:423
-    typename type-parameter-0-1::int_type std::basic_filebuf::pbackfail(typename type-parameter-0-1::int_type,)
+    type-parameter-0-1::int_type std::basic_filebuf::pbackfail(type-parameter-0-1::int_type,)
 ux-gnu/../../../include/c++/14/fstream:433
-    typename type-parameter-0-1::int_type std::basic_filebuf::overflow(typename type-parameter-0-1::int_type,)
+    type-parameter-0-1::int_type std::basic_filebuf::overflow(type-parameter-0-1::int_type,)
 ux-gnu/../../../include/c++/14/fstream:453
     basic_streambuf<type-parameter-0-0, type-parameter-0-1> * std::basic_filebuf::setbuf(type-parameter-0-0 *,long,)
 ux-gnu/../../../include/c++/14/fstream:456
-    typename type-parameter-0-1::pos_type std::basic_filebuf::seekoff(typename type-parameter-0-1::off_type,enum std::_Ios_Seekdir,enum std::_Ios_Openmode,)
+    type-parameter-0-1::pos_type std::basic_filebuf::seekoff(type-parameter-0-1::off_type,enum std::_Ios_Seekdir,enum std::_Ios_Openmode,)
 ux-gnu/../../../include/c++/14/fstream:460
-    typename type-parameter-0-1::pos_type std::basic_filebuf::seekpos(typename type-parameter-0-1::pos_type,enum std::_Ios_Openmode,)
+    type-parameter-0-1::pos_type std::basic_filebuf::seekpos(type-parameter-0-1::pos_type,enum std::_Ios_Openmode,)
 ux-gnu/../../../include/c++/14/fstream:471
     int std::basic_filebuf::sync()
 ux-gnu/../../../include/c++/14/fstream:474
@@ -569,25 +611,25 @@ ux-gnu/../../../include/c++/14/future:1516
 ux-gnu/../../../include/c++/14/sstream:346
     long std::basic_stringbuf::showmanyc()
 ux-gnu/../../../include/c++/14/sstream:358
-    typename type-parameter-0-1::int_type std::basic_stringbuf::underflow()
+    type-parameter-0-1::int_type std::basic_stringbuf::underflow()
 ux-gnu/../../../include/c++/14/sstream:361
-    typename type-parameter-0-1::int_type std::basic_stringbuf::pbackfail(typename type-parameter-0-1::int_type,)
+    type-parameter-0-1::int_type std::basic_stringbuf::pbackfail(type-parameter-0-1::int_type,)
 ux-gnu/../../../include/c++/14/sstream:364
-    typename type-parameter-0-1::int_type std::basic_stringbuf::overflow(typename type-parameter-0-1::int_type,)
+    type-parameter-0-1::int_type std::basic_stringbuf::overflow(type-parameter-0-1::int_type,)
 ux-gnu/../../../include/c++/14/sstream:378
     basic_streambuf<type-parameter-0-0, type-parameter-0-1> * std::basic_stringbuf::setbuf(type-parameter-0-0 *,long,)
 ux-gnu/../../../include/c++/14/sstream:397
-    typename type-parameter-0-1::pos_type std::basic_stringbuf::seekoff(typename type-parameter-0-1::off_type,enum std::_Ios_Seekdir,enum std::_Ios_Openmode,)
+    type-parameter-0-1::pos_type std::basic_stringbuf::seekoff(type-parameter-0-1::off_type,enum std::_Ios_Seekdir,enum std::_Ios_Openmode,)
 ux-gnu/../../../include/c++/14/sstream:401
-    typename type-parameter-0-1::pos_type std::basic_stringbuf::seekpos(typename type-parameter-0-1::pos_type,enum std::_Ios_Openmode,)
+    type-parameter-0-1::pos_type std::basic_stringbuf::seekpos(type-parameter-0-1::pos_type,enum std::_Ios_Openmode,)
 ux-gnu/../../../include/c++/14/streambuf:583
     void std::basic_streambuf::imbue(const class std::locale &,)
 ux-gnu/../../../include/c++/14/streambuf:598
     basic_streambuf<_CharT, _Traits> * std::basic_streambuf::setbuf(type-parameter-0-0 *,long,)
 ux-gnu/../../../include/c++/14/streambuf:609
-    typename type-parameter-0-1::pos_type std::basic_streambuf::seekoff(typename type-parameter-0-1::off_type,enum std::_Ios_Seekdir,enum std::_Ios_Openmode,)
+    type-parameter-0-1::pos_type std::basic_streambuf::seekoff(type-parameter-0-1::off_type,enum std::_Ios_Seekdir,enum std::_Ios_Openmode,)
 ux-gnu/../../../include/c++/14/streambuf:621
-    typename type-parameter-0-1::pos_type std::basic_streambuf::seekpos(typename type-parameter-0-1::pos_type,enum std::_Ios_Openmode,)
+    type-parameter-0-1::pos_type std::basic_streambuf::seekpos(type-parameter-0-1::pos_type,enum std::_Ios_Openmode,)
 ux-gnu/../../../include/c++/14/streambuf:634
     int std::basic_streambuf::sync()
 ux-gnu/../../../include/c++/14/streambuf:656
@@ -595,72 +637,60 @@ ux-gnu/../../../include/c++/14/streambuf:656
 ux-gnu/../../../include/c++/14/streambuf:672
     long std::basic_streambuf::xsgetn(type-parameter-0-0 *,long,)
 ux-gnu/../../../include/c++/14/streambuf:694
-    typename type-parameter-0-1::int_type std::basic_streambuf::underflow()
+    type-parameter-0-1::int_type std::basic_streambuf::underflow()
 ux-gnu/../../../include/c++/14/streambuf:707
-    typename type-parameter-0-1::int_type std::basic_streambuf::uflow()
+    type-parameter-0-1::int_type std::basic_streambuf::uflow()
 ux-gnu/../../../include/c++/14/streambuf:731
-    typename type-parameter-0-1::int_type std::basic_streambuf::pbackfail(typename type-parameter-0-1::int_type,)
+    type-parameter-0-1::int_type std::basic_streambuf::pbackfail(type-parameter-0-1::int_type,)
 ux-gnu/../../../include/c++/14/streambuf:749
     long std::basic_streambuf::xsputn(const type-parameter-0-0 *,long,)
 ux-gnu/../../../include/c++/14/streambuf:775
-    typename type-parameter-0-1::int_type std::basic_streambuf::overflow(typename type-parameter-0-1::int_type,)
+    type-parameter-0-1::int_type std::basic_streambuf::overflow(type-parameter-0-1::int_type,)
 ux-gnu/qt5/QtGui/qpaintdevice.h:74
     int QPaintDevice::devType()const
 ux-gnu/qt5/QtGui/qtextdocument.h:86
     void QAbstractUndoItem::~QAbstractUndoItem()
 vcl/inc/font/LogicalFontInstance.hxx:127
     void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:296
+vcl/inc/jsdialog/jsdialogbuilder.hxx:297
     void JSWidget::show()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:309
+vcl/inc/jsdialog/jsdialogbuilder.hxx:310
     void JSWidget::hide()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:323
+vcl/inc/jsdialog/jsdialogbuilder.hxx:324
     void JSWidget::set_sensitive(_Bool,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:336
+vcl/inc/jsdialog/jsdialogbuilder.hxx:337
     class com::sun::star::uno::Reference<class com::sun::star::datatransfer::dnd::XDropTarget> JSWidget::get_drop_target()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:344
+vcl/inc/jsdialog/jsdialogbuilder.hxx:345
     void JSWidget::freeze()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:350
+vcl/inc/jsdialog/jsdialogbuilder.hxx:351
     void JSWidget::thaw()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:357
+vcl/inc/jsdialog/jsdialogbuilder.hxx:358
     void JSWidget::grab_focus()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:402
+vcl/inc/jsdialog/jsdialogbuilder.hxx:403
     void JSWidget::set_buildable_name(const class rtl::OUString &,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:533
-    void JSComboBox::set_entry_text_without_notify(const class rtl::OUString &,)
-vcl/inc/qt5/QtFrame.hxx:164
-    void QtFrame::registerDragSource(class QtDragSource *,)
-vcl/inc/qt5/QtFrame.hxx:165
-    void QtFrame::deregisterDragSource(const class QtDragSource *,)
-vcl/inc/qt5/QtFrame.hxx:166
-    void QtFrame::registerDropTarget(class QtDropTarget *,)
-vcl/inc/qt5/QtFrame.hxx:167
-    void QtFrame::deregisterDropTarget(const class QtDropTarget *,)
-vcl/inc/qt5/QtInstanceMessageDialog.hxx:47
-    class QPushButton * QtInstanceMessageDialog::buttonForResponseCode(int,)
-vcl/inc/salframe.hxx:147
+vcl/inc/salframe.hxx:146
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
-vcl/inc/salframe.hxx:199
+vcl/inc/salframe.hxx:198
     void SalFrame::Flush(const class tools::Rectangle &,)
-vcl/inc/salframe.hxx:219
+vcl/inc/salframe.hxx:218
     void SalFrame::FlashWindow()const
-vcl/inc/salframe.hxx:319
+vcl/inc/salframe.hxx:318
     void SalFrame::SetTaskBarProgress(int,)
-vcl/inc/salframe.hxx:320
+vcl/inc/salframe.hxx:319
     void SalFrame::SetTaskBarState(enum VclTaskBarStates,)
-vcl/inc/salgdiimpl.hxx:181
+vcl/inc/salgdiimpl.hxx:180
     _Bool SalGraphicsImpl::drawEPS(long,long,long,long,void *,unsigned int,)
-vcl/inc/salinst.hxx:95
+vcl/inc/salinst.hxx:97
     _Bool SalInstance::SVMainHook(int *,)
-vcl/inc/salinst.hxx:210
+vcl/inc/salinst.hxx:217
     void SalInstance::releaseMainThread()
-vcl/inc/salinst.hxx:219
+vcl/inc/salinst.hxx:226
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
-vcl/inc/salmenu.hxx:77
+vcl/inc/salmenu.hxx:76
     void SalMenu::GetSystemMenuData(struct SystemMenuData &,)
-vcl/inc/salobj.hxx:49
+vcl/inc/salobj.hxx:48
     void SalObject::Enable(_Bool,)
-vcl/inc/salprn.hxx:124
+vcl/inc/salprn.hxx:123
     enum SalPrinterError SalPrinter::GetErrorCode()
 vcl/inc/skia/gdiimpl.hxx:225
     void SkiaSalGraphicsImpl::createSurface()
@@ -668,16 +698,6 @@ vcl/inc/skia/gdiimpl.hxx:235
     void SkiaSalGraphicsImpl::flushSurfaceToWindowContext()
 vcl/inc/skia/gdiimpl.hxx:258
     int SkiaSalGraphicsImpl::getWindowScaling()const
-vcl/inc/unx/gtk/gtkdata.hxx:273
-    int GtkSalDisplay::CaptureMouse(class SalFrame *,)
-vcl/inc/unx/saldata.hxx:48
-    void X11SalData::Init()
-vcl/inc/unx/saldisp.hxx:360
-    void SalX11Display::Yield()
-vcl/inc/unx/salframe.h:208
-    void X11SalFrame::updateGraphics(_Bool,)
-vcl/inc/unx/salinst.h:39
-    class SalX11Display * X11SalInstance::CreateDisplay()const
 xmloff/source/forms/elementimport.hxx:548
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OColumnImport::createElement()
 

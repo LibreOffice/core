@@ -255,11 +255,6 @@ namespace sdr::overlay
             ImpDrawMembers(aRegionRange, rTarget);
         }
 
-        void OverlayManager::flush()
-        {
-            // default has nothing to do
-        }
-
         void OverlayManager::add(OverlayObject& rOverlayObject)
         {
             OSL_ENSURE(nullptr == rOverlayObject.mpOverlayManager, "OverlayObject is added twice to an OverlayManager (!)");

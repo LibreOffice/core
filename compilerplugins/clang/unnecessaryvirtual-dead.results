@@ -8,7 +8,9 @@ canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
 include/basegfx/utils/unopolypolygon.hxx:93
     void basegfx::unotools::UnoPolyPolygon::modifying()const
-sc/source/core/opencl/opbase.hxx:447
+include/svx/sdr/overlay/overlaymanager.hxx:94
+    void sdr::overlay::OverlayManager::flush()
+sc/source/core/opencl/opbase.hxx:444
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
 slideshow/source/engine/animationfactory.cxx:617
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
@@ -18,19 +20,19 @@ ux-gnu/../../../include/c++/14/streambuf:583
     void std::basic_streambuf::imbue(const class std::locale &,)
 vcl/inc/font/LogicalFontInstance.hxx:127
     void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
-vcl/inc/salframe.hxx:147
+vcl/inc/salframe.hxx:146
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
-vcl/inc/salframe.hxx:219
+vcl/inc/salframe.hxx:218
     void SalFrame::FlashWindow()const
-vcl/inc/salframe.hxx:319
+vcl/inc/salframe.hxx:318
     void SalFrame::SetTaskBarProgress(int,)
-vcl/inc/salframe.hxx:320
+vcl/inc/salframe.hxx:319
     void SalFrame::SetTaskBarState(enum VclTaskBarStates,)
-vcl/inc/salinst.hxx:210
+vcl/inc/salinst.hxx:217
     void SalInstance::releaseMainThread()
-vcl/inc/salinst.hxx:219
+vcl/inc/salinst.hxx:226
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
-vcl/inc/salmenu.hxx:77
+vcl/inc/salmenu.hxx:76
     void SalMenu::GetSystemMenuData(struct SystemMenuData &,)
-vcl/inc/salobj.hxx:49
+vcl/inc/salobj.hxx:48
     void SalObject::Enable(_Bool,)

@@ -119,27 +119,27 @@ public:
     void deleteSeries( const rtl::Reference< ::chart::DataSeries > & xSeries );
 
     // Tools
-    virtual bool isSupportingMainAxis(sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex);
-    virtual bool isSupportingStatisticProperties(sal_Int32 nDimensionCount);
-    virtual bool isSupportingRegressionProperties(sal_Int32 nDimensionCount);
-    virtual bool isSupportingGeometryProperties(sal_Int32 nDimensionCount);
-    virtual bool isSupportingAreaProperties(sal_Int32 nDimensionCount);
-    virtual bool isSupportingSymbolProperties(sal_Int32 nDimensionCount);
-    virtual bool isSupportingSecondaryAxis(sal_Int32 nDimensionCount);
-    virtual bool isSupportingRightAngledAxes();
-    virtual bool isSupportingOverlapAndGapWidthProperties(sal_Int32 nDimensionCount);
-    virtual bool isSupportingBarConnectors(sal_Int32 nDimensionCount);
-    virtual bool isSupportingAxisSideBySide(sal_Int32 nDimensionCount);
-    virtual bool isSupportingBaseValue();
-    virtual bool isSupportingAxisPositioning(sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex);
-    virtual bool isSupportingStartingAngle();
-    virtual bool isSupportingDateAxis(sal_Int32 nDimensionIndex);
-    virtual bool isSupportingComplexCategory();
-    virtual bool isSupportingCategoryPositioning(sal_Int32 nDimensionIndex);
-    virtual bool isSupportingOnlyDeepStackingFor3D();
-    virtual bool isSeriesInFrontOfAxisLine();
+    bool isSupportingMainAxis(sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex);
+    bool isSupportingStatisticProperties(sal_Int32 nDimensionCount);
+    bool isSupportingRegressionProperties(sal_Int32 nDimensionCount);
+    bool isSupportingGeometryProperties(sal_Int32 nDimensionCount);
+    bool isSupportingAreaProperties(sal_Int32 nDimensionCount);
+    bool isSupportingSymbolProperties(sal_Int32 nDimensionCount);
+    bool isSupportingSecondaryAxis(sal_Int32 nDimensionCount);
+    bool isSupportingRightAngledAxes();
+    bool isSupportingOverlapAndGapWidthProperties(sal_Int32 nDimensionCount);
+    bool isSupportingBarConnectors(sal_Int32 nDimensionCount);
+    bool isSupportingAxisSideBySide(sal_Int32 nDimensionCount);
+    bool isSupportingBaseValue();
+    bool isSupportingAxisPositioning(sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex);
+    bool isSupportingStartingAngle();
+    bool isSupportingDateAxis(sal_Int32 nDimensionIndex);
+    bool isSupportingComplexCategory();
+    bool isSupportingCategoryPositioning(sal_Int32 nDimensionIndex);
+    bool isSupportingOnlyDeepStackingFor3D();
+    bool isSeriesInFrontOfAxisLine();
 
-    virtual sal_Int32 getAxisType(sal_Int32 nDimensionIndex);
+    sal_Int32 getAxisType(sal_Int32 nDimensionIndex);
 
 protected:
 
