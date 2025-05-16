@@ -737,11 +737,6 @@ class AbstractSwRenameXNamedDlg_Impl
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void SetForbiddenChars(const OUString& rSet) override { m_pDlg->SetForbiddenChars(rSet); }
-    void SetAlternativeAccess(css::uno::Reference<css::container::XNameAccess>& xSecond,
-                              css::uno::Reference<css::container::XNameAccess>& xThird) override
-    {
-        m_pDlg->SetAlternativeAccess(xSecond, xThird);
-    }
 };
 }
 

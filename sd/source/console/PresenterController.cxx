@@ -527,12 +527,6 @@ util::URL PresenterController::CreateURLFromString (const OUString& rsURL) const
     return aURL;
 }
 
-const Reference<drawing::framework::XConfigurationController>&
-    PresenterController::GetConfigurationController() const
-{
-    return mxConfigurationController;
-}
-
 const Reference<drawing::XDrawPage>& PresenterController::GetCurrentSlide() const
 {
     return mxCurrentSlide;

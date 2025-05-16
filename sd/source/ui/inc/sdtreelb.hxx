@@ -71,8 +71,6 @@ public:
 class SdPageObjsTLV
 {
 private:
-    static bool bIsInDrag;      ///< static, in the case the navigator is deleted in ExecuteDrag
-
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
     std::unique_ptr<SdPageObjsTLVDropTarget> m_xDropTargetHelper;
@@ -163,7 +161,6 @@ private:
     bool PageBelongsToCurrentShow (const SdPage* pPage) const;
 
     bool DoDrag();
-    static void OnDragFinished();
 
     // DragSourceHelper
     bool StartDrag();
@@ -326,8 +323,6 @@ public:
     bool IsEqualToShapeList(std::unique_ptr<weld::TreeIter>& rEntry, const SdrObjList& rList,
                             std::u16string_view rListName);
 
-    static bool             IsInDrag();
-
     /** Return the view shell that is linked to the given doc shell.
         Call this method when the there is a chance that the doc shell
         has been disconnected from the view shell (but not the other
@@ -435,7 +430,6 @@ public:
 
         virtual void      AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
-        virtual void      DragFinished( sal_Int8 nDropAction ) override;
     };
 
     friend class SdPageObjsTLV::SdPageObjsTransferable;

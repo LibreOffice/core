@@ -145,16 +145,6 @@ public:
     virtual bool            IsUsed() const override;
 };
 
-namespace std {
-template<>
-struct hash<std::pair<SfxStyleFamily,OUString>>
-{
-    std::size_t operator()(std::pair<SfxStyleFamily,OUString> const & pair) const
-    { return static_cast<std::size_t>(pair.first) ^ std::size_t(pair.second.hashCode()); }
-};
-}
-
-
 // Iterator for Pool.
 class SwStyleSheetIterator final : public SfxStyleSheetIterator, public SfxListener
 {

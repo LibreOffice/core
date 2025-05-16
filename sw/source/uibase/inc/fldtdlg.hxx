@@ -52,7 +52,6 @@ public:
     DECL_LINK(CancelHdl, weld::Button&, void);
 
     void                Initialize(SfxChildWinInfo const *pInfo);
-    void                ReInitDlg();
     void                EnableInsert(bool bEnable);
     void                InsertHdl();
     void                ActivateDatabasePage();

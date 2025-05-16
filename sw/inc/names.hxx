@@ -26,7 +26,6 @@ public:
     bool operator==(const OUString& s) const { return m_s == s; }
     bool operator==(std::u16string_view s) const { return m_s == s; }
     bool operator<(const UIName& s) const { return m_s < s.m_s; }
-    bool operator>(const UIName& s) const { return m_s > s.m_s; }
 
 private:
     OUString m_s;
@@ -74,7 +73,6 @@ public:
     bool operator==(const OUString& s) const { return m_s == s; }
     bool operator==(std::u16string_view s) const { return m_s == s; }
     bool operator<(const SwMarkName& s) const { return m_s < s.m_s; }
-    bool operator>(const SwMarkName& s) const { return m_s > s.m_s; }
 
 private:
     OUString m_s;
@@ -104,10 +102,7 @@ public:
     const OUString& toString() const { return m_s; }
     bool isEmpty() const { return m_s.isEmpty(); }
     bool operator==(const TableStyleName& s) const = default;
-    bool operator==(const OUString& s) const { return m_s == s; }
     bool operator==(std::u16string_view s) const { return m_s == s; }
-    bool operator<(const TableStyleName& s) const { return m_s < s.m_s; }
-    bool operator>(const TableStyleName& s) const { return m_s > s.m_s; }
 
 private:
     OUString m_s;

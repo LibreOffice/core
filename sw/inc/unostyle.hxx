@@ -454,7 +454,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    rtl::Reference<SwXBaseStyle> getStyleByUIName(const UIName& rName);
     rtl::Reference<SwXBaseStyle> getStyleByName(const OUString& rName);
     rtl::Reference<SwXPageStyle> getPageStyleByName(const OUString& rName);
     rtl::Reference<SwXStyle> getCharacterStyleByName(const OUString& rName);

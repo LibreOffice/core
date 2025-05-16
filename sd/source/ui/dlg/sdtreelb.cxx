@@ -76,13 +76,6 @@ sd::DrawViewShell* lcl_getDrawViewShell(const SdDrawDocument* pDoc)
 
 }
 
-bool SdPageObjsTLV::bIsInDrag = false;
-
-bool SdPageObjsTLV::IsInDrag()
-{
-    return bIsInDrag;
-}
-
 SotClipboardFormatId SdPageObjsTLV::SdPageObjsTransferable::mnListBoxDropFormatId = static_cast<SotClipboardFormatId>(SAL_MAX_UINT32);
 
 SdPageObjsTLV::SdPageObjsTransferable::SdPageObjsTransferable(
@@ -126,12 +119,6 @@ bool SdPageObjsTLV::SdPageObjsTransferable::GetData( const css::datatransfer::Da
         default:
             return false;
     }
-}
-
-void SdPageObjsTLV::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
-{
-    SdPageObjsTLV::OnDragFinished();
-    SdTransferable::DragFinished(nDropAction);
 }
 
 SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData )
@@ -457,7 +444,6 @@ bool SdPageObjsTLV::DoDrag()
 
     m_xDropTargetHelper->SetDrawView(pViewShell->GetDrawView());
     m_xDropTargetHelper->SetOrderFrontToBack(m_bOrderFrontToBack);
-    bIsInDrag = true;
 
     std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
     bool bUserData = m_xTreeView->get_cursor(xEntry.get());
@@ -493,11 +479,6 @@ bool SdPageObjsTLV::DoDrag()
     }
 
     return false;
-}
-
-void SdPageObjsTLV::OnDragFinished()
-{
-    bIsInDrag = false;
 }
 
 SdPageObjsTLVDropTarget::SdPageObjsTLVDropTarget(weld::TreeView& rTreeView)

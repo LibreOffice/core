@@ -30,8 +30,6 @@ class EDITENG_DLLPUBLIC SvxRubyItem : public SfxPoolItem
     sal_Int16 m_ePosition = css::text::RubyPosition::ABOVE;
 
 public:
-    static SfxPoolItem* CreateDefault();
-
     DECLARE_ITEM_TYPE_FUNCTION(SvxRubyItem)
     explicit SvxRubyItem(const sal_uInt16 nId);
 

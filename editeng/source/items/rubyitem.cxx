@@ -22,8 +22,6 @@
 
 using namespace ::com::sun::star;
 
-SfxPoolItem* SvxRubyItem::CreateDefault() { return new SvxRubyItem(0); }
-
 SvxRubyItem::SvxRubyItem(const sal_uInt16 nId)
     : SfxPoolItem(nId)
 {

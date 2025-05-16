@@ -41,15 +41,6 @@ const int MinimumPanelWidth = 250;
 
 namespace svx::sidebar
 {
-std::unique_ptr<PanelLayout> InspectorTextPanel::Create(weld::Widget* pParent,
-                                                        SfxBindings* pBindings)
-{
-    if (pParent == nullptr)
-        throw lang::IllegalArgumentException(
-            u"no parent Window given to InspectorTextPanel::Create"_ustr, nullptr, 0);
-    return std::make_unique<InspectorTextPanel>(pParent, pBindings);
-}
-
 InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent, SfxBindings* pBindings)
     : PanelLayout(pParent, u"InspectorTextPanel"_ustr, u"svx/ui/inspectortextpanel.ui"_ustr)
     , mpListBoxStyles(m_xBuilder->weld_tree_view(u"listbox_fonts"_ustr))

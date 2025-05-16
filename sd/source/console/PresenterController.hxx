@@ -116,8 +116,6 @@ public:
     css::uno::Reference<css::frame::XDispatch> GetDispatch (
         const css::util::URL& rURL) const;
     css::util::URL CreateURLFromString (const OUString& rsURL) const;
-    const css::uno::Reference<css::drawing::framework::XConfigurationController>&
-        GetConfigurationController() const;
     const css::uno::Reference<css::drawing::XDrawPage>& GetCurrentSlide() const;
     static bool HasTransition (css::uno::Reference<css::drawing::XDrawPage> const & rxPage);
     static bool HasCustomAnimation (css::uno::Reference<css::drawing::XDrawPage> const & rxPage);

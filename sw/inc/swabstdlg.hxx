@@ -359,9 +359,6 @@ protected:
     virtual ~AbstractSwRenameXNamedDlg() override = default;
 public:
     virtual void    SetForbiddenChars( const OUString& rSet ) = 0;
-    virtual void SetAlternativeAccess(
-             css::uno::Reference< css::container::XNameAccess > & xSecond,
-             css::uno::Reference< css::container::XNameAccess > & xThird ) = 0;
 };
 
 /**

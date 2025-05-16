@@ -87,13 +87,6 @@ class SW_DLLPUBLIC SwFrameFormat
 
     std::shared_ptr< SwTextBoxNode > m_pOtherTextBoxFormats;
 
-    struct change_name
-    {
-        change_name(const UIName &rName) : mName(rName) {}
-        void operator()(SwFormat *pFormat) { pFormat->m_aFormatName = mName; }
-        const UIName &mName;
-    };
-
 protected:
     SwFrameFormat(
         SwAttrPool& rPool,
