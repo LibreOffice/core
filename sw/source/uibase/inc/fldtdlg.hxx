@@ -32,7 +32,6 @@ struct SfxChildWinInfo;
 
 class SwFieldDlg final : public SfxTabDialogController
 {
-    SwChildWinWrapper*  m_pChildWin;
     SfxBindings*        m_pBindings;
     bool                m_bHtmlMode;
     bool                m_bDataBaseMode;

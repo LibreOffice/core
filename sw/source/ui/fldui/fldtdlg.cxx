@@ -48,9 +48,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 // carrier of the dialog
-SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent)
+SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* /*pCW*/, weld::Window *pParent)
     : SfxTabDialogController(pParent, u"modules/swriter/ui/fielddialog.ui"_ustr, u"FieldDialog"_ustr)
-    , m_pChildWin(pCW)
     , m_pBindings(pB)
     , m_bDataBaseMode(false)
     , m_bClosing(false)

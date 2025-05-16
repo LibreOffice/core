@@ -1304,13 +1304,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     // using the editeng.
     // It's being done after EndDrawLayers() to get it outside the overlay
     // buffer and on top of everything.
-    if (bInPlaceEditing && !bIsTiledRendering)
-    {
-        aEditRectangle = tools::Rectangle(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
-
-        if (bInPlaceVisCursor)
-            pInPlaceCrsr->Show();
-    }
+    if (bInPlaceEditing && !bIsTiledRendering && bInPlaceVisCursor)
+        pInPlaceCrsr->Show();
 
     if (mrViewData.HasEditView(eWhich))
     {

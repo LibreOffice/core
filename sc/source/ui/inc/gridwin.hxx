@@ -203,7 +203,6 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
 
     sal_uInt16              nPaintCount;
     tools::Rectangle               aRepaintPixel;
-    tools::Rectangle               aEditRectangle;
 
     ScAddress               aAutoMarkPos;
     ScAddress               aListValPos;

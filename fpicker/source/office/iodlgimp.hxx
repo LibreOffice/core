@@ -138,8 +138,6 @@ public:
     SvtFileDlgType m_eDlgType;
     PickerFlags m_nStyle;
 
-    OUString m_aStdDir;
-
     // delay filter when traveling the filterbox
     Idle m_aFilterIdle;
 

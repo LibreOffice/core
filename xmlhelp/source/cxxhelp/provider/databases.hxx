@@ -229,7 +229,6 @@ namespace chelp {
 
         std::mutex                                               m_aMutex;
         css::uno::Reference< css::uno::XComponentContext >       m_xContext;
-        css::uno::Reference< css::lang::XMultiComponentFactory > m_xSMgr;
         css::uno::Reference< css::ucb::XSimpleFileAccess3 >      m_xSFA;
 
         bool   m_bShowBasic;

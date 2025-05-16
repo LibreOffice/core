@@ -141,8 +141,6 @@ Databases::Databases( bool showBasic,
       m_bShowBasic(showBasic),
       m_aCSS(styleSheet.toAsciiLowerCase())
 {
-    m_xSMgr = m_xContext->getServiceManager();
-
     m_vAdd[0] = 12;
     m_vAdd[1] = 15;
     m_vAdd[2] = 11;
