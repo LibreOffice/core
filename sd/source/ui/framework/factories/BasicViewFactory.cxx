@@ -65,26 +65,10 @@ public:
     { return rpDescriptor->mxView.get() == rxView.get(); }
 };
 
-//===== BasicViewFactory::ViewShellContainer ==================================
-
-class BasicViewFactory::ViewShellContainer
-    : public ::std::vector<std::shared_ptr<ViewDescriptor> >
-{
-public:
-    ViewShellContainer() {};
-};
-
-class BasicViewFactory::ViewCache
-    : public ::std::vector<std::shared_ptr<ViewDescriptor> >
-{
-public:
-    ViewCache() {};
-};
-
 //===== ViewFactory ===========================================================
 
 BasicViewFactory::BasicViewFactory (const rtl::Reference<::sd::DrawController>& rxController)
-    : mpViewShellContainer(new ViewShellContainer()),
+    : mpViewShellContainer(new ViewShellContainer),
       mpBase(nullptr),
       mpFrameView(nullptr),
       mpWindow(VclPtr<WorkWindow>::Create(nullptr,WB_STDWORK)),

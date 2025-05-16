@@ -80,12 +80,12 @@ private:
     css::uno::Reference<css::drawing::framework::XConfigurationController>
         mxConfigurationController;
     class ViewDescriptor;
-    class ViewShellContainer;
+    using ViewShellContainer = std::vector<std::shared_ptr<ViewDescriptor>>;
     std::unique_ptr<ViewShellContainer> mpViewShellContainer;
     ViewShellBase* mpBase;
     FrameView* mpFrameView;
 
-    class ViewCache;
+    using ViewCache = std::vector<std::shared_ptr<ViewDescriptor>>;
     ScopedVclPtr<vcl::Window> mpWindow;
     std::shared_ptr<ViewCache> mpViewCache;
 
