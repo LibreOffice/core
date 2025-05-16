@@ -28,7 +28,7 @@
 #include <QtGui/QRawFont>
 #include <QtGui/QPainterPath>
 
-static inline void applyWeight(QtFont& rFont, FontWeight eWeight)
+void QtFont::applyWeight(QFont& rFont, FontWeight eWeight)
 {
     switch (eWeight)
     {
@@ -66,7 +66,7 @@ static inline void applyWeight(QtFont& rFont, FontWeight eWeight)
     }
 }
 
-static inline void applyStretch(QtFont& rFont, FontWidth eWidthType)
+void QtFont::applyStretch(QFont& rFont, FontWidth eWidthType)
 {
     switch (eWidthType)
     {
@@ -105,7 +105,7 @@ static inline void applyStretch(QtFont& rFont, FontWidth eWidthType)
     }
 }
 
-static inline void applyStyle(QtFont& rFont, FontItalic eItalic)
+void QtFont::applyStyle(QFont& rFont, FontItalic eItalic)
 {
     switch (eItalic)
     {
