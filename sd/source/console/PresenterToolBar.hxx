@@ -133,8 +133,6 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide) override;
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
-
-    class Context;
     class Element;
 
 private:
@@ -183,7 +181,7 @@ private:
 
     void ProcessEntry (
         const css::uno::Reference<css::beans::XPropertySet>& rProperties,
-        Context const & rContext);
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 
     /** @throws css::lang::DisposedException when the object has already been
         disposed.

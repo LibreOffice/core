@@ -92,20 +92,11 @@ public:
         const Reference<beans::XPropertySet>& rxProperties,
         const OUString& rsModeName,
         std::shared_ptr<ElementMode> const & rpDefaultMode,
-        ::sdext::presenter::PresenterToolBar::Context const & rContext);
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 };
 typedef std::shared_ptr<ElementMode> SharedElementMode;
 
 }  // end of anonymous namespace
-
-class PresenterToolBar::Context
-{
-public:
-    Context() = default;
-    Context(const Context&) = delete;
-    Context& operator=(const Context&) = delete;
-    css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-};
 
 //===== PresenterToolBar::Element =============================================
 
@@ -587,23 +578,20 @@ void PresenterToolBar::CreateControls (
     Reference<container::XNameAccess> xEntries (
         PresenterConfigurationAccess::GetConfigurationNode(xToolBarNode, u"Entries"_ustr),
         UNO_QUERY);
-    Context aContext;
-    aContext.mxCanvas = mxCanvas;
-    if (xEntries.is()
-        && aContext.mxCanvas.is())
+    if (xEntries.is() && mxCanvas.is())
     {
         PresenterConfigurationAccess::ForAll(
             xEntries,
-            [this, &aContext] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
+            [this] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
             {
-                return this->ProcessEntry(xProps, aContext);
+                return this->ProcessEntry(xProps, mxCanvas);
             });
     }
 }
 
 void PresenterToolBar::ProcessEntry (
     const Reference<beans::XPropertySet>& rxProperties,
-    Context const & rContext)
+    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
 {
     if ( ! rxProperties.is())
         return;
@@ -619,11 +607,11 @@ void PresenterToolBar::ProcessEntry (
     SharedElementMode pSelectedMode = std::make_shared<ElementMode>();
     SharedElementMode pDisabledMode = std::make_shared<ElementMode>();
     SharedElementMode pMouseOverSelectedMode = std::make_shared<ElementMode>();
-    pNormalMode->ReadElementMode(rxProperties, u"Normal"_ustr, pNormalMode, rContext);
-    pMouseOverMode->ReadElementMode(rxProperties, u"MouseOver"_ustr, pNormalMode, rContext);
-    pSelectedMode->ReadElementMode(rxProperties, u"Selected"_ustr, pNormalMode, rContext);
-    pDisabledMode->ReadElementMode(rxProperties, u"Disabled"_ustr, pNormalMode, rContext);
-    pMouseOverSelectedMode->ReadElementMode(rxProperties, u"MouseOverSelected"_ustr, pSelectedMode, rContext);
+    pNormalMode->ReadElementMode(rxProperties, u"Normal"_ustr, pNormalMode, rxCanvas);
+    pMouseOverMode->ReadElementMode(rxProperties, u"MouseOver"_ustr, pNormalMode, rxCanvas);
+    pSelectedMode->ReadElementMode(rxProperties, u"Selected"_ustr, pNormalMode, rxCanvas);
+    pDisabledMode->ReadElementMode(rxProperties, u"Disabled"_ustr, pNormalMode, rxCanvas);
+    pMouseOverSelectedMode->ReadElementMode(rxProperties, u"MouseOverSelected"_ustr, pSelectedMode, rxCanvas);
 
     // Create new element.
     ::rtl::Reference<Element> pElement;
@@ -1283,7 +1271,7 @@ void ElementMode::ReadElementMode (
     const Reference<beans::XPropertySet>& rxElementProperties,
     const OUString& rsModeName,
     std::shared_ptr<ElementMode> const & rpDefaultMode,
-    ::sdext::presenter::PresenterToolBar::Context const & rContext)
+    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
 {
     try
     {
@@ -1322,7 +1310,7 @@ void ElementMode::ReadElementMode (
     Reference<container::XHierarchicalNameAccess> xIconNode (
         PresenterConfigurationAccess::GetProperty(xProperties, u"Icon"_ustr), UNO_QUERY);
     mpIcon = PresenterBitmapContainer::LoadBitmap(
-        xIconNode, u""_ustr, rContext.mxCanvas,
+        xIconNode, u""_ustr, rxCanvas,
         rpDefaultMode != nullptr ? rpDefaultMode->mpIcon : SharedBitmapDescriptor());
     }
     catch(Exception&)
