@@ -790,7 +790,7 @@ void PresenterToolBar::LayoutPart(
     double nY (rBoundingBox.Y1);
 
     /// check whether RTL interface or not
-    if(!AllSettings::GetLayoutRTL()){
+    if (!AllSettings::GetLayoutRTL() || !bIsHorizontal){
         for (auto& rxElement : *rpPart)
         {
             if (!rxElement)
@@ -823,54 +823,24 @@ void PresenterToolBar::LayoutPart(
             }
         }
     }
-    else {
+    else
+    {
         ElementContainerPart::const_reverse_iterator iElement;
-        ElementContainerPart::const_reverse_iterator iFirst = rpPart->rend() - 1;
-
         for (iElement= rpPart->rbegin(); iElement!= rpPart->rend(); ++iElement)
         {
             if (iElement->get() == nullptr)
                 continue;
 
-            if (bIsHorizontal)
+            const awt::Size aElementSize ((*iElement)->GetBoundingSize(mxCanvas));
+            if ((*iElement)->IsFilling())
             {
-                const awt::Size aElementSize ((*iElement)->GetBoundingSize(mxCanvas));
-                if ((*iElement)->IsFilling())
-                {
-                    nY = rBoundingBox.Y1;
-                    (*iElement)->SetSize(geometry::RealSize2D(aElementSize.Width, rBoundingBox.Y2 - rBoundingBox.Y1));
-                }
-                else
-                    nY = rBoundingBox.Y1 + (rBoundingBox.Y2-rBoundingBox.Y1 - aElementSize.Height) / 2;
-                (*iElement)->SetLocation(awt::Point(sal_Int32(0.5 + nX), sal_Int32(0.5 + nY)));
-                nX += aElementSize.Width + nGap;
+                nY = rBoundingBox.Y1;
+                (*iElement)->SetSize(geometry::RealSize2D(aElementSize.Width, rBoundingBox.Y2 - rBoundingBox.Y1));
             }
             else
-            {
-                // reverse presentation time with current time
-                if (iElement == iFirst){
-                    iElement = iFirst - 2;
-                }
-                else if (iElement == iFirst - 2){
-                    iElement = iFirst;
-                }
-                const awt::Size aElementSize ((*iElement)->GetBoundingSize(mxCanvas));
-                if ((*iElement)->IsFilling())
-                {
-                    nX = rBoundingBox.X1;
-                    (*iElement)->SetSize(geometry::RealSize2D(rBoundingBox.X2 - rBoundingBox.X1, aElementSize.Height));
-                }
-                else
-                    nX = rBoundingBox.X1 + (rBoundingBox.X2-rBoundingBox.X1 - aElementSize.Width) / 2;
-                (*iElement)->SetLocation(awt::Point(sal_Int32(0.5 + nX), sal_Int32(0.5 + nY)));
-                nY += aElementSize.Height + nGap;
-
-                // return the index as it was before the reversing
-                if (iElement == iFirst)
-                    iElement = iFirst - 2;
-                else if (iElement == iFirst - 2)
-                    iElement = iFirst;
-            }
+                nY = rBoundingBox.Y1 + (rBoundingBox.Y2-rBoundingBox.Y1 - aElementSize.Height) / 2;
+            (*iElement)->SetLocation(awt::Point(sal_Int32(0.5 + nX), sal_Int32(0.5 + nY)));
+            nX += aElementSize.Width + nGap;
         }
     }
 }
