@@ -158,8 +158,7 @@ private:
     void CreateControls (
         const OUString& rsConfigurationPath);
     void Layout();
-    css::geometry::RealSize2D CalculatePartSize (
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+    css::geometry::RealSize2D CalculatePartSize(
         const SharedElementContainerPart& rpPart,
         const bool bIsHorizontal);
     static void LayoutPart (

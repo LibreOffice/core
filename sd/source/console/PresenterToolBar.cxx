@@ -656,7 +656,7 @@ void PresenterToolBar::Layout()
     sal_Int32 nGapCount (0);
     for (const auto& rxPart : maElementContainer)
     {
-        geometry::RealSize2D aSize (CalculatePartSize(mxCanvas, rxPart, bIsHorizontal));
+        geometry::RealSize2D aSize  = CalculatePartSize(rxPart, bIsHorizontal);
 
         // Remember the size of each part for later.
         aPartSizes[rxPart] = aSize;
@@ -738,8 +738,7 @@ void PresenterToolBar::Layout()
     xManager->Invalidate(mxWindow);
 }
 
-geometry::RealSize2D PresenterToolBar::CalculatePartSize (
-    const Reference<rendering::XCanvas>& rxCanvas,
+geometry::RealSize2D PresenterToolBar::CalculatePartSize(
     const SharedElementContainerPart& rpPart,
     const bool bIsHorizontal)
 {
@@ -753,7 +752,7 @@ geometry::RealSize2D PresenterToolBar::CalculatePartSize (
             if (!rxElement)
                 continue;
 
-            const awt::Size aBSize (rxElement->GetBoundingSize(rxCanvas));
+            const awt::Size aBSize = rxElement->GetBoundingSize(mxCanvas);
             if (bIsHorizontal)
             {
                 aTotalSize.Width += aBSize.Width;
