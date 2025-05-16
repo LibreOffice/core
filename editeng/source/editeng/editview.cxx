@@ -717,7 +717,7 @@ ErrCode EditView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterat
 
 OString EditView::GetSimpleHtml() const
 {
-    return mpImpEditView->mpEditEngine->mpImpEditEngine->GetSimpleHtml();
+    return getImpl().mpEditEngine->mpImpEditEngine->GetSimpleHtml();
 }
 
 void EditView::Cut()
@@ -1217,7 +1217,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
                     xVirDev->DrawImage(Point(0, 0), aImage);
                     xInsertMenu->append(OUString::number(MN_DICTSTART + i), xDicTmp->getName(), *xVirDev);
                 }
-                aDicNameSingle = xDicTmp->getName();
+                getImpl().maDicNameSingle = xDicTmp->getName();
             }
         }
     }
@@ -1304,7 +1304,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
             aDicName = pPopupParent->strip_mnemonic(xInsertMenu->get_label(sId));
         }
         else
-            aDicName = aDicNameSingle;
+            aDicName = getImpl().maDicNameSingle;
 
         uno::Reference< linguistic2::XDictionary >      xDic;
         if (xDicList.is())

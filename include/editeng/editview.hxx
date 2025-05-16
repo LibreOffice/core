@@ -176,7 +176,6 @@ public:
 
 private:
     std::unique_ptr<ImpEditView> mpImpEditView;
-    OUString        aDicNameSingle;
 
                     EditView( const EditView& ) = delete;
     EditView&       operator=( const EditView& ) = delete;
