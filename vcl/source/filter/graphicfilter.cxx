@@ -443,8 +443,10 @@ ErrCode GraphicFilter::CanImportGraphic( std::u16string_view rMainUrl, SvStream&
 }
 
 //SJ: TODO, we need to create a GraphicImporter component
-ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
-                                     sal_uInt16 nFormat, sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags )
+ErrCode GraphicFilter::ImportGraphic(
+    Graphic& rGraphic, const INetURLObject& rPath, sal_uInt16 nFormat,
+    sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
     SAL_WARN_IF( rPath.GetProtocol() == INetProtocol::NotValid, "vcl.filter", "GraphicFilter::ImportGraphic() : ProtType == INetProtocol::NotValid" );
 
@@ -459,7 +461,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rP
     std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::READ | StreamMode::SHARE_DENYNONE ));
     if (xStream)
     {
-        nRetValue = ImportGraphic( rGraphic, aMainUrl, *xStream, nFormat, pDeterminedFormat, nImportFlags );
+        nRetValue = ImportGraphic(rGraphic, aMainUrl, *xStream, nFormat, pDeterminedFormat, nImportFlags, -1, xInteractionHandler);
     }
     return nRetValue;
 }
@@ -1133,8 +1135,9 @@ ErrCode GraphicFilter::readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
     return readWMF_EMF(rStream, rGraphic, rLinkType, VectorGraphicDataType::Emf);
 }
 
-ErrCode GraphicFilter::readPDF(SvStream& rStream, Graphic& rGraphic, GfxLinkType& rLinkType,
-                               sal_Int32 nPageIndex)
+ErrCode GraphicFilter::readPDF(
+   SvStream& rStream, Graphic& rGraphic, GfxLinkType& rLinkType, sal_Int32 nPageIndex,
+   const css::uno::Reference<css::task::XInteractionHandler>& /*xInteractionHandler*/)
 {
     if (vcl::ImportPDF(rStream, rGraphic, nPageIndex))
     {
@@ -1317,7 +1320,8 @@ ErrCode GraphicFilter::readWEBP(SvStream & rStream, Graphic & rGraphic, GfxLinkT
 ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPath,
                                      SvStream& rIStream, sal_uInt16 nFormat,
                                      sal_uInt16* pDeterminedFormat,
-                                     GraphicFilterImportFlags nImportFlags, sal_Int32 nPageIndex)
+                                     GraphicFilterImportFlags nImportFlags, sal_Int32 nPageIndex,
+                                     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
     OUString aFilterName;
     sal_uInt64 nStreamBegin;
@@ -1408,7 +1412,7 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_PDF))
         {
-            nStatus = readPDF(rIStream, rGraphic, eLinkType, nPageIndex);
+            nStatus = readPDF(rIStream, rGraphic, eLinkType, nPageIndex, xInteractionHandler);
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_TIFF) )
         {
@@ -1938,9 +1942,10 @@ GraphicFilter& GraphicFilter::GetGraphicFilter()
     return gStandardFilter.m_aFilter;
 }
 
-ErrCode GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterName,
+ErrCode GraphicFilter::LoadGraphic(const OUString &rPath, const OUString &rFilterName,
                  Graphic& rGraphic, GraphicFilter* pFilter,
-                 sal_uInt16* pDeterminedFormat )
+                 sal_uInt16* pDeterminedFormat,
+                 const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
     if ( !pFilter )
         pFilter = &GetGraphicFilter();
@@ -1962,9 +1967,9 @@ ErrCode GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilt
 
     ErrCode nRes = ERRCODE_NONE;
     if ( !pStream )
-        nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter, pDeterminedFormat );
+        nRes = pFilter->ImportGraphic(rGraphic, aURL, nFilter, pDeterminedFormat, GraphicFilterImportFlags::NONE, xInteractionHandler);
     else
-        nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream, nFilter, pDeterminedFormat );
+        nRes = pFilter->ImportGraphic(rGraphic, rPath, *pStream, nFilter, pDeterminedFormat, GraphicFilterImportFlags::NONE, -1, xInteractionHandler);
 
 #ifdef DBG_UTIL
     OUString aReturnString;

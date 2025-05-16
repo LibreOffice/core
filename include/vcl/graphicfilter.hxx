@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/graph.hxx>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <comphelper/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/BinaryDataContainer.hxx>
@@ -262,19 +263,22 @@ public:
                                       sal_uInt16 nFormat,
                                       sal_uInt16 * pDeterminedFormat);
 
-    ErrCode             ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
-                                   sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                   sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE );
+    ErrCode ImportGraphic(
+        Graphic& rGraphic, const INetURLObject& rPath,
+        sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW, sal_uInt16 * pDeterminedFormat = nullptr,
+        GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
+        const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
     ErrCode             CanImportGraphic( std::u16string_view rPath, SvStream& rStream,
                                       sal_uInt16 nFormat,
                                       sal_uInt16 * pDeterminedFormat);
 
-    ErrCode ImportGraphic(Graphic& rGraphic, std::u16string_view rPath, SvStream& rStream,
-                          sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
-                          sal_uInt16* pDeterminedFormat = nullptr,
-                          GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
-                          sal_Int32 nPageNum = -1);
+    ErrCode ImportGraphic(
+        Graphic& rGraphic, std::u16string_view rPath, SvStream& rStream,
+        sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW, sal_uInt16* pDeterminedFormat = nullptr,
+        GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
+        sal_Int32 nPageNum = -1,
+        const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
     /// Imports multiple graphics.
     ///
@@ -296,10 +300,11 @@ public:
 
     Link<ConvertData&,bool> GetFilterCallback() const;
     static GraphicFilter& GetGraphicFilter();
-    static ErrCode  LoadGraphic( const OUString& rPath, const OUString& rFilter,
+    static ErrCode  LoadGraphic(const OUString& rPath, const OUString& rFilter,
                      Graphic& rGraphic,
                      GraphicFilter* pFilter = nullptr,
-                     sal_uInt16* pDeterminedFormat = nullptr );
+                     sal_uInt16* pDeterminedFormat = nullptr,
+                     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
     ErrCode         compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream);
 
@@ -318,7 +323,8 @@ public:
     SAL_DLLPRIVATE static ErrCode readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
 
     SAL_DLLPRIVATE static ErrCode readPDF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
-                           sal_Int32 nPageIndex = -1);
+                           sal_Int32 nPageIndex = -1,
+                           const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
     SAL_DLLPRIVATE static ErrCode readTIFF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     SAL_DLLPRIVATE static ErrCode readWithTypeSerializer(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, std::u16string_view aFilterName);
     SAL_DLLPRIVATE static ErrCode readBMP(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
