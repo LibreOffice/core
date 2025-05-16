@@ -436,7 +436,7 @@ void PresenterToolBar::RequestLayout()
 geometry::RealSize2D const & PresenterToolBar::GetMinimalSize()
 {
     if (mbIsLayoutPending)
-        Layout(mxCanvas);
+        Layout();
     return maMinimalSize;
 }
 
@@ -488,7 +488,7 @@ void SAL_CALL PresenterToolBar::windowPaint (const css::awt::PaintEvent& rEvent)
         PresenterGeometryHelper::CreatePolygon(rEvent.UpdateRect, mxCanvas->getDevice()));
 
     if (mbIsLayoutPending)
-        Layout(mxCanvas);
+        Layout();
 
     Paint(rEvent.UpdateRect, aViewState);
 
@@ -641,8 +641,7 @@ void PresenterToolBar::ProcessEntry (
     }
 }
 
-void PresenterToolBar::Layout (
-    const Reference<rendering::XCanvas>& rxCanvas)
+void PresenterToolBar::Layout()
 {
     if (maElementContainer.empty())
         return;
@@ -657,7 +656,7 @@ void PresenterToolBar::Layout (
     sal_Int32 nGapCount (0);
     for (const auto& rxPart : maElementContainer)
     {
-        geometry::RealSize2D aSize (CalculatePartSize(rxCanvas, rxPart, bIsHorizontal));
+        geometry::RealSize2D aSize (CalculatePartSize(mxCanvas, rxPart, bIsHorizontal));
 
         // Remember the size of each part for later.
         aPartSizes[rxPart] = aSize;
@@ -721,7 +720,7 @@ void PresenterToolBar::Layout (
         if (rxPart->size() > 1 && bIsHorizontal)
             aBoundingBox.X2 += (rxPart->size() - 1) * nGapWidth;
 
-        LayoutPart(rxCanvas, rxPart, aBoundingBox, aPartSizes[rxPart], bIsHorizontal);
+        LayoutPart(mxCanvas, rxPart, aBoundingBox, aPartSizes[rxPart], bIsHorizontal);
         bIsHorizontal = !bIsHorizontal;
         nX += aBoundingBox.X2 - aBoundingBox.X1 + nGapWidth;
     };
