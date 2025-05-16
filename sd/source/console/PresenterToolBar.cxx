@@ -1271,39 +1271,39 @@ void ElementMode::ReadElementMode (
 {
     try
     {
-    Reference<container::XHierarchicalNameAccess> xNode (
-        PresenterConfigurationAccess::GetProperty(rxElementProperties, rsModeName),
-        UNO_QUERY);
-    Reference<beans::XPropertySet> xProperties (
-        PresenterConfigurationAccess::GetNodeProperties(xNode, OUString()));
-    if (!xProperties.is())
-    {
-        // The mode is not specified.  Use the given, possibly empty,
-        // default mode instead.
-        mpIcon = rDefaultMode.mpIcon;
-        msAction = rDefaultMode.msAction;
-        maText = rDefaultMode.maText;
-    }
+        Reference<container::XHierarchicalNameAccess> xNode (
+            PresenterConfigurationAccess::GetProperty(rxElementProperties, rsModeName),
+            UNO_QUERY);
+        Reference<beans::XPropertySet> xProperties (
+            PresenterConfigurationAccess::GetNodeProperties(xNode, OUString()));
+        if (!xProperties.is())
+        {
+            // The mode is not specified.  Use the given, possibly empty,
+            // default mode instead.
+            mpIcon = rDefaultMode.mpIcon;
+            msAction = rDefaultMode.msAction;
+            maText = rDefaultMode.maText;
+        }
 
-    // Read action.
-    if ( ! (PresenterConfigurationAccess::GetProperty(xProperties, u"Action"_ustr) >>= msAction))
-        msAction = rDefaultMode.msAction;
+        // Read action.
+        if ( ! (PresenterConfigurationAccess::GetProperty(xProperties, u"Action"_ustr) >>= msAction))
+            msAction = rDefaultMode.msAction;
 
-    // Read text and font
-    {
-        OUString sText = rDefaultMode.maText.GetText();
-        PresenterConfigurationAccess::GetProperty(xProperties, u"Text"_ustr) >>= sText;
-        Reference<container::XHierarchicalNameAccess> xFontNode (
-            PresenterConfigurationAccess::GetProperty(xProperties, u"Font"_ustr), UNO_QUERY);
-        PresenterTheme::SharedFontDescriptor pFont(PresenterTheme::ReadFont(
-            xFontNode, rDefaultMode.maText.GetFont()));
-        maText = Text(std::move(sText), std::move(pFont));
-    }
+        // Read text and font
+        {
+            OUString sText = rDefaultMode.maText.GetText();
+            PresenterConfigurationAccess::GetProperty(xProperties, u"Text"_ustr) >>= sText;
+            Reference<container::XHierarchicalNameAccess> xFontNode (
+                PresenterConfigurationAccess::GetProperty(xProperties, u"Font"_ustr), UNO_QUERY);
+            PresenterTheme::SharedFontDescriptor pFont(PresenterTheme::ReadFont(
+                xFontNode, rDefaultMode.maText.GetFont()));
+            maText = Text(std::move(sText), std::move(pFont));
+        }
 
-    // Read bitmaps to display as icons.
-    Reference<container::XHierarchicalNameAccess> xIconNode (
-        PresenterConfigurationAccess::GetProperty(xProperties, u"Icon"_ustr), UNO_QUERY);
-    mpIcon = PresenterBitmapContainer::LoadBitmap(xIconNode, u""_ustr, rxCanvas, rDefaultMode.mpIcon);
+        // Read bitmaps to display as icons.
+        Reference<container::XHierarchicalNameAccess> xIconNode (
+            PresenterConfigurationAccess::GetProperty(xProperties, u"Icon"_ustr), UNO_QUERY);
+        mpIcon = PresenterBitmapContainer::LoadBitmap(xIconNode, u""_ustr, rxCanvas, rDefaultMode.mpIcon);
     }
     catch(Exception&)
     {
