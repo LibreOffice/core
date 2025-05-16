@@ -781,7 +781,7 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl, Timer *, void)
 }
 
 ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
-                                           Graphic& rGraphic ) const
+                                           Graphic& rGraphic )
 {
     if ( utl::UCBContentHelper::IsFolder( rURL ) )
         return ERRCODE_IO_NOTAFILE;
@@ -804,6 +804,9 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
         aURLObj.SetSmartURL( rURL );
     }
 
+    uno::Reference<task::XInteractionHandler2> xInteractionHandler =
+        task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(),  GetFrameInterface());
+
     ErrCode nRet = ERRCODE_NONE;
 
     GraphicFilterImportFlags nFilterImportFlags = GraphicFilterImportFlags::SetLogsizeForJpeg;
@@ -813,19 +816,19 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
         std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ );
 
         if( pStream )
-            nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter, nullptr, nFilterImportFlags );
+            nRet = mpGraphicFilter->ImportGraphic(rGraphic, rURL, *pStream, nFilter, nullptr, nFilterImportFlags, -1, xInteractionHandler);
         else
-            nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
+            nRet = mpGraphicFilter->ImportGraphic(rGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags, xInteractionHandler);
     }
     else
     {
-        nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
+        nRet = mpGraphicFilter->ImportGraphic(rGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags, xInteractionHandler);
     }
 
     return nRet;
 }
 
-ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
+ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic )
 {
     ErrCode nRet = ERRCODE_NONE;
 

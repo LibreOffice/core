@@ -116,7 +116,7 @@ namespace sfx2
         std::shared_ptr<const SfxFilter>        getCurrentSfxFilter();
         bool                updateExtendedControl( sal_Int16 _nExtendedControlId, bool _bEnable );
 
-        ErrCode                 getGraphic( const OUString& rURL, Graphic& rGraphic ) const;
+        ErrCode                 getGraphic( const OUString& rURL, Graphic& rGraphic );
         void                    setDefaultValues();
 
         void                    preExecute();
@@ -193,7 +193,7 @@ namespace sfx2
         OUString                getFilter() const;
         void                    getRealFilter( OUString& _rFilter ) const;
 
-        ErrCode                 getGraphic( Graphic& rGraphic ) const;
+        ErrCode                 getGraphic( Graphic& rGraphic );
         void                    createMatcher( const OUString& rFactory );
 
         bool                    isShowFilterExtensionEnabled() const;
