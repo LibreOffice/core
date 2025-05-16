@@ -80,55 +80,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButtonBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="margin-top">12</property>
-                    <property name="layout-style">spread</property>
-                    <child>
-                      <object class="GtkButton" id="newschemebtn">
-                        <property name="label" translatable="yes" context="appearancetabpage|newschemebtn">New</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="margin-end">3</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="newschemebtn-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|newschemebutton">Click to add a new theme to the list. </property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="removeschemebtn">
-                        <property name="label" translatable="yes" context="appearancetabpage|removeschemebtn">Remove</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="margin-start">3</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="removeschemebtn-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|removeschemebtn">Click to remove the applied scheme. The theme is reset to Automatic.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -239,7 +191,6 @@
                             <property name="receives-default">True</property>
                             <property name="halign">start</property>
                             <property name="draw-indicator">True</property>
-                            <property name="label" translatable="no"></property>
                             <child>
                               <placeholder/>
                             </child>

@@ -38,8 +38,6 @@ private:
 
     std::unique_ptr<weld::ComboBox> m_xSchemeList;
     std::unique_ptr<weld::Button> m_xMoreThemesBtn;
-    std::unique_ptr<weld::Button> m_xAddSchemeBtn;
-    std::unique_ptr<weld::Button> m_xRemoveSchemeBtn;
     std::unique_ptr<weld::ComboBox> m_xColorEntryBtn;
     std::unique_ptr<ColorListBox> m_xColorChangeBtn;
     std::unique_ptr<weld::CheckButton> m_xShowInDocumentChkBtn;
@@ -58,8 +56,6 @@ private:
     DECL_LINK(SchemeChangeHdl, weld::ComboBox&, void);
     DECL_LINK(SchemeListToggleHdl, weld::ComboBox&, void);
     DECL_STATIC_LINK(SvxAppearanceTabPage, MoreThemesHdl, weld::Button&, void);
-    DECL_LINK(AddRemoveSchemeHdl, weld::Button&, void);
-    DECL_LINK(CheckNameHdl_Impl, AbstractSvxNameDialog&, bool);
     DECL_LINK(ColorImageToggleHdl, weld::Toggleable&, void);
     DECL_LINK(StretchedTiledToggleHdl, weld::Toggleable&, void);
     DECL_LINK(BitmapChangeHdl, weld::ComboBox&, void);
@@ -69,7 +65,6 @@ private:
     void InitCustomization();
     void LoadSchemeList();
 
-    void UpdateRemoveBtnState();
     void EnableImageControls(bool bEnabled);
     void UpdateColorDropdown();
     void FillItemsList();

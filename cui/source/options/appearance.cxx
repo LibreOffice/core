@@ -102,8 +102,6 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , pColorConfig(new EditableColorConfig)
     , m_xSchemeList(m_xBuilder->weld_combo_box(u"scheme"_ustr))
     , m_xMoreThemesBtn(m_xBuilder->weld_button(u"morethemesbtn"_ustr))
-    , m_xAddSchemeBtn(m_xBuilder->weld_button(u"newschemebtn"_ustr))
-    , m_xRemoveSchemeBtn(m_xBuilder->weld_button(u"removeschemebtn"_ustr))
     , m_xColorEntryBtn(m_xBuilder->weld_combo_box(u"registrydropdown"_ustr))
     , m_xColorChangeBtn((new ColorListBox(m_xBuilder->weld_menu_button(u"colorsdropdownbtn"_ustr),
                                           [this] { return GetFrameWeld(); })))
@@ -196,8 +194,6 @@ void SvxAppearanceTabPage::Reset(const SfxItemSet* /* rSet */)
     m_xSchemeList->set_sensitive(
         !officecfg::Office::Common::Appearance::ApplicationAppearance::isReadOnly());
     m_xSchemeList->save_value();
-
-    UpdateRemoveBtnState();
 
     // reset ColorConfig
     pColorConfig->ClearModified();
@@ -337,7 +333,6 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, SchemeChangeHdl, weld::ComboBox&, void)
         m_bRestartRequired = true;
 
     UpdateColorDropdown();
-    UpdateRemoveBtnState();
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, SchemeListToggleHdl, weld::ComboBox&, void)
@@ -345,69 +340,11 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, SchemeListToggleHdl, weld::ComboBox&, void
     LoadSchemeList();
 }
 
-IMPL_LINK(SvxAppearanceTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog&, rDialog, bool)
-{
-    OUString sName = rDialog.GetName();
-    return !sName.isEmpty() && m_xSchemeList->find_text(sName) == -1;
-}
-
 IMPL_STATIC_LINK_NOARG(SvxAppearanceTabPage, MoreThemesHdl, weld::Button&, void)
 {
     css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
         u"AdditionsTag"_ustr, u"Themes"_ustr) };
     comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
-}
-
-IMPL_LINK(SvxAppearanceTabPage, AddRemoveSchemeHdl, weld::Button&, rButton, void)
-{
-    if (m_xAddSchemeBtn.get() == &rButton)
-    {
-        OUString sName;
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
-            GetFrameWeld(), sName, CuiResId(RID_CUISTR_COLOR_CONFIG_SAVE2)));
-        aNameDlg->SetCheckNameHdl(LINK(this, SvxAppearanceTabPage, CheckNameHdl_Impl));
-        aNameDlg->SetText(CuiResId(RID_CUISTR_COLOR_CONFIG_SAVE1));
-        aNameDlg->SetHelpId(HID_OPTIONS_COLORCONFIG_SAVE_SCHEME);
-        aNameDlg->SetCheckNameHdl(LINK(this, SvxAppearanceTabPage, CheckNameHdl_Impl));
-        if (RET_OK == aNameDlg->Execute())
-        {
-            sName = aNameDlg->GetName();
-            pColorConfig->AddScheme(sName);
-            m_xSchemeList->append_text(sName);
-            m_xSchemeList->set_active_text(sName);
-            SchemeChangeHdl(*m_xSchemeList);
-
-            ColorConfigValue aValue;
-            aValue.nDarkColor = COL_AUTO;
-            aValue.nLightColor = COL_AUTO;
-
-            for (size_t i = 0; i < WINDOWCOLOR; ++i)
-                pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(i), aValue);
-        }
-    }
-    else
-    {
-        DBG_ASSERT(m_xSchemeList->get_count() > 1, "don't delete the last scheme");
-        std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(
-            GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
-            CuiResId(RID_CUISTR_COLOR_CONFIG_DELETE)));
-        xQuery->set_title(CuiResId(RID_CUISTR_COLOR_CONFIG_DELETE_TITLE));
-
-        if (RET_YES == xQuery->run())
-        {
-            OUString sDeleteScheme(m_xSchemeList->get_active_text());
-            m_xSchemeList->remove(m_xSchemeList->get_active());
-            m_xSchemeList->set_active(0);
-            SchemeChangeHdl(*m_xSchemeList);
-            //first select the new scheme and then delete the old one
-            pColorConfig->DeleteScheme(sDeleteScheme);
-        }
-    }
-
-    // disable remove button if only one scheme available
-    // or if the selected theme is AUTOMATIC_COLOR_SCHEME
-    UpdateRemoveBtnState();
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorImageToggleHdl, weld::Toggleable&, void)
@@ -485,11 +422,7 @@ void SvxAppearanceTabPage::InitThemes()
 
     m_xSchemeList->connect_changed(LINK(this, SvxAppearanceTabPage, SchemeChangeHdl));
     m_xSchemeList->connect_popup_toggled(LINK(this, SvxAppearanceTabPage, SchemeListToggleHdl));
-    m_xAddSchemeBtn->connect_clicked(LINK(this, SvxAppearanceTabPage, AddRemoveSchemeHdl));
     m_xMoreThemesBtn->connect_clicked(LINK(this, SvxAppearanceTabPage, MoreThemesHdl));
-    m_xRemoveSchemeBtn->connect_clicked(LINK(this, SvxAppearanceTabPage, AddRemoveSchemeHdl));
-
-    UpdateRemoveBtnState();
 }
 
 void SvxAppearanceTabPage::InitCustomization()
@@ -521,12 +454,6 @@ void SvxAppearanceTabPage::InitCustomization()
     // DOCCOLOR uses color, so image controls are disabled
     m_xColorRadioBtn->set_active(true);
     EnableImageControls(false);
-}
-
-// enable remove button for custom themes only
-void SvxAppearanceTabPage::UpdateRemoveBtnState()
-{
-    m_xRemoveSchemeBtn->set_sensitive(ThemeColors::IsCustomTheme(m_xSchemeList->get_active_id()));
 }
 
 void SvxAppearanceTabPage::EnableImageControls(bool bEnabled)
