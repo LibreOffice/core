@@ -725,42 +725,25 @@ void PresenterToolBar::Layout (
     double nY ((aWindowBox.Height - aTotalSize.Height) / 2);
     bIsHorizontal = true;
 
-    /* push front or back ? ... */
-    /// check whether RTL interface or not
-    if(!AllSettings::GetLayoutRTL()){
-        for (const auto& rxPart : maElementContainer)
-        {
-            geometry::RealRectangle2D aBoundingBox(
-                nX, nY,
-                nX + aPartSizes[rxPart].Width, nY + aTotalSize.Height);
+    auto aFunc = [&](const SharedElementContainerPart& rxPart)
+    {
+        geometry::RealRectangle2D aBoundingBox(nX, nY, nX + aPartSizes[rxPart].Width,
+                                               nY + aTotalSize.Height);
 
-            // Add space for gaps between elements.
-            if (rxPart->size() > 1 && bIsHorizontal)
-                aBoundingBox.X2 += (rxPart->size() - 1) * nGapWidth;
+        // Add space for gaps between elements.
+        if (rxPart->size() > 1 && bIsHorizontal)
+            aBoundingBox.X2 += (rxPart->size() - 1) * nGapWidth;
 
-            LayoutPart(rxCanvas, rxPart, aBoundingBox, aPartSizes[rxPart], bIsHorizontal);
-            bIsHorizontal = !bIsHorizontal;
-            nX += aBoundingBox.X2 - aBoundingBox.X1 + nGapWidth;
-        }
-    }
-    else {
-        ElementContainer::reverse_iterator iPart;
-        for (iPart = maElementContainer.rbegin(); iPart != maElementContainer.rend(); ++iPart)
-        {
-            geometry::RealRectangle2D aBoundingBox(
-                nX, nY,
-                nX + aPartSizes[*iPart].Width, nY + aTotalSize.Height);
+        LayoutPart(rxCanvas, rxPart, aBoundingBox, aPartSizes[rxPart], bIsHorizontal);
+        bIsHorizontal = !bIsHorizontal;
+        nX += aBoundingBox.X2 - aBoundingBox.X1 + nGapWidth;
+    };
 
-            // Add space for gaps between elements.
-            if ((*iPart)->size() > 1)
-                if (bIsHorizontal)
-                    aBoundingBox.X2 += ((*iPart)->size()-1) * nGapWidth;
-
-            LayoutPart(rxCanvas, *iPart, aBoundingBox, aPartSizes[*iPart], bIsHorizontal);
-            bIsHorizontal = !bIsHorizontal;
-            nX += aBoundingBox.X2 - aBoundingBox.X1 + nGapWidth;
-        }
-    }
+    // process in reverse order for RTL
+    if (!AllSettings::GetLayoutRTL())
+        std::for_each(maElementContainer.begin(), maElementContainer.end(), aFunc);
+    else
+        std::for_each(maElementContainer.rbegin(), maElementContainer.rend(), aFunc);
 
     // The whole window has to be repainted.
     std::shared_ptr<PresenterPaintManager> xManager(mpPresenterController->GetPaintManager());
