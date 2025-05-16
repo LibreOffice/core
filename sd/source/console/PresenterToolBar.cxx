@@ -285,9 +285,9 @@ public:
         const SharedElementMode& rpSelectedMode,
         const SharedElementMode& rpDisabledMode,
         const SharedElementMode& rpMouseOverSelectedMode) override;
-    virtual void restart() override;
-    virtual bool isPaused() override;
-    virtual void setPauseStatus(const bool pauseStatus) override;
+    virtual void restart() override final;
+    virtual bool isPaused() override final;
+    virtual void setPauseStatus(const bool pauseStatus) override final;
     const TimeValue& getPauseTimeValue() const;
     void setPauseTimeValue(const TimeValue pauseTime);
 private:
