@@ -49,7 +49,7 @@ namespace abp
     using namespace ::com::sun::star::uno;
 
     OAddressBookSourcePilot::OAddressBookSourcePilot(weld::Window* _pParent, const Reference< XComponentContext >& _rxORB)
-        :OAddressBookSourcePilot_Base( _pParent )
+        :vcl::RoadmapWizardMachine(_pParent)
         ,m_xORB(_rxORB)
         ,m_aNewDataSource(_rxORB)
         ,m_eNewDataSourceType( AST_INVALID )
@@ -164,7 +164,7 @@ namespace abp
 
     short OAddressBookSourcePilot::run()
     {
-        short nRet = OAddressBookSourcePilot_Base::run();
+        short nRet = vcl::RoadmapWizardMachine::run();
 
         implCleanup();
 
@@ -173,7 +173,7 @@ namespace abp
 
     bool OAddressBookSourcePilot::onFinish()
     {
-        if ( !OAddressBookSourcePilot_Base::onFinish() )
+        if (!vcl::RoadmapWizardMachine::onFinish())
             return false;
 
         implCommitAll();
@@ -201,13 +201,13 @@ namespace abp
                 break;
         }
 
-        OAddressBookSourcePilot_Base::enterState(_nState);
+        vcl::RoadmapWizardMachine::enterState(_nState);
     }
 
 
     bool OAddressBookSourcePilot::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
-        if ( !OAddressBookSourcePilot_Base::prepareLeaveCurrentState( _eReason ) )
+        if (!vcl::RoadmapWizardMachine::prepareLeaveCurrentState(_eReason))
             return false;
 
         if ( _eReason == vcl::WizardTypes::eTravelBackward )
