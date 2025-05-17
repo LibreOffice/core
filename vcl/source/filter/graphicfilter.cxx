@@ -1137,9 +1137,9 @@ ErrCode GraphicFilter::readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
 
 ErrCode GraphicFilter::readPDF(
    SvStream& rStream, Graphic& rGraphic, GfxLinkType& rLinkType, sal_Int32 nPageIndex,
-   const css::uno::Reference<css::task::XInteractionHandler>& /*xInteractionHandler*/)
+   const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
-    if (vcl::ImportPDF(rStream, rGraphic, nPageIndex))
+    if (vcl::ImportPDF(rStream, rGraphic, nPageIndex, xInteractionHandler))
     {
         rLinkType = GfxLinkType::NativePdf;
         return ERRCODE_NONE;

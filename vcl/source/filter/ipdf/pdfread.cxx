@@ -101,11 +101,12 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
     return rBitmaps.size();
 }
 
-bool importPdfVectorGraphicData(SvStream& rStream,
-                                std::shared_ptr<VectorGraphicData>& rVectorGraphicData,
-                                sal_Int32 nPageIndex)
+bool importPdfVectorGraphicData(
+    SvStream& rStream, std::shared_ptr<VectorGraphicData>& rVectorGraphicData, sal_Int32 nPageIndex,
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
-    BinaryDataContainer aDataContainer = vcl::pdf::createBinaryDataContainer(rStream);
+    BinaryDataContainer aDataContainer
+        = vcl::pdf::createBinaryDataContainer(rStream, xInteractionHandler);
     if (aDataContainer.isEmpty())
     {
         SAL_WARN("vcl.filter", "ImportPDF: empty PDF data array");
@@ -118,10 +119,11 @@ bool importPdfVectorGraphicData(SvStream& rStream,
     return true;
 }
 
-bool ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex)
+bool ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex,
+               const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
     std::shared_ptr<VectorGraphicData> pVectorGraphicData;
-    if (!importPdfVectorGraphicData(rStream, pVectorGraphicData, nPageIndex))
+    if (!importPdfVectorGraphicData(rStream, pVectorGraphicData, nPageIndex, xInteractionHandler))
         return false;
     rGraphic = Graphic(pVectorGraphicData);
     return true;

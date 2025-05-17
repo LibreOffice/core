@@ -17,6 +17,7 @@
 #include <vcl/graph.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
 #include <vcl/pdf/PDFAnnotationMarker.hxx>
@@ -29,13 +30,15 @@ VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize,
                                       int nPages = 1, const basegfx::B2DTuple* pSizeHint = nullptr);
 
 /// Imports a PDF stream as a VectorGraphicData.
-VCL_DLLPUBLIC bool
-importPdfVectorGraphicData(SvStream& rStream,
-                           std::shared_ptr<VectorGraphicData>& rVectorGraphicData,
-                           sal_Int32 nPageIndex = -1);
+VCL_DLLPUBLIC bool importPdfVectorGraphicData(
+    SvStream& rStream, std::shared_ptr<VectorGraphicData>& rVectorGraphicData,
+    sal_Int32 nPageIndex = -1,
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
 /// Imports a PDF stream into rGraphic.
-VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex = -1);
+VCL_DLLPUBLIC bool
+ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex = -1,
+          const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
 // When inserting a PDF file as an image or pasting PDF data from the clipboard, at least on a
 // Retina iMac, the resulting rendered image does not look sharp without this surprisingly large

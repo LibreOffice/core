@@ -12,6 +12,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <tools/stream.hxx>
 #include <vcl/BinaryDataContainer.hxx>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
 namespace vcl::pdf
 {
@@ -27,13 +28,19 @@ bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize);
 /// Converts to highest supported format version (currently 1.6).
 /// Usually used to deal with missing referenced objects in the
 /// source pdf stream.
-bool convertToHighestSupported(SvStream& rInStream, SvStream& rOutStream);
+bool convertToHighestSupported(
+    SvStream& rInStream, SvStream& rOutStream,
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
 /// Takes care of transparently downgrading the version of the PDF stream in
 /// case it's too new for our PDF export.
-bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream);
+bool getCompatibleStream(
+    SvStream& rInStream, SvStream& rOutStream,
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler);
 
-BinaryDataContainer createBinaryDataContainer(SvStream& rStream);
+BinaryDataContainer createBinaryDataContainer(
+    SvStream& rStream,
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
 } // end of vcl::filter::ipdf namespace
 

@@ -41,7 +41,10 @@ bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
 /// Converts to highest supported format version (1.6).
 /// Usually used to deal with missing referenced objects in source
 /// pdf stream.
-bool convertToHighestSupported(SvStream& rInStream, SvStream& rOutStream)
+
+bool convertToHighestSupported(
+    SvStream& rInStream, SvStream& rOutStream,
+    const css::uno::Reference<css::task::XInteractionHandler>& /*xInteractionHandler*/)
 {
     sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN;
     sal_uInt64 nSize = STREAM_SEEK_TO_END;
@@ -76,7 +79,9 @@ bool convertToHighestSupported(SvStream& rInStream, SvStream& rOutStream)
 
 /// Takes care of transparently downgrading the version of the PDF stream in
 /// case it's too new for our PDF export.
-bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
+bool getCompatibleStream(
+    SvStream& rInStream, SvStream& rOutStream,
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
     sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN;
     sal_uInt64 nSize = STREAM_SEEK_TO_END;
@@ -86,16 +91,18 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
         // Not converting.
         rOutStream.WriteStream(rInStream, nSize);
     else
-        convertToHighestSupported(rInStream, rOutStream);
+        convertToHighestSupported(rInStream, rOutStream, xInteractionHandler);
 
     return rOutStream.good();
 }
 
-BinaryDataContainer createBinaryDataContainer(SvStream& rStream)
+BinaryDataContainer createBinaryDataContainer(
+    SvStream& rStream,
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
     // Save the original PDF stream for later use.
     SvMemoryStream aMemoryStream;
-    if (!getCompatibleStream(rStream, aMemoryStream))
+    if (!getCompatibleStream(rStream, aMemoryStream, xInteractionHandler))
         return {};
 
     const sal_uInt64 nStreamLength = aMemoryStream.TellEnd();
