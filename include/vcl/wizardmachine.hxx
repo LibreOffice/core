@@ -344,7 +344,4 @@ namespace vcl
     };
 }   // namespace vcl
 
-#define WIZARDDIALOG_BUTTON_STDOFFSET_X         6
-#define WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X    3
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
