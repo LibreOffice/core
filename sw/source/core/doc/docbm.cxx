@@ -525,7 +525,7 @@ namespace sw::mark
         for (auto& pMark : m_vAllMarks)
         {
             if (!m_vUncheckedNameMarks.contains(pMark))
-                continue; // mark was added and removed while in the performance mode
+                continue;
             pMark->SetName(getUniqueMarkName(pMark->GetName(), [this](const SwMarkName& n)
                                              { return m_aUsedNames.insert(n.toString()).second; }));
         }
