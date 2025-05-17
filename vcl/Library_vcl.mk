@@ -255,6 +255,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/prgsbar \
     vcl/source/control/roadmap \
     vcl/source/control/roadmapwizard \
+    vcl/source/control/roadmapwizardmachine \
     vcl/source/control/scrbar \
     vcl/source/control/slider \
     vcl/source/control/spinbtn \

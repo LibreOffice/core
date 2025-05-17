@@ -23,7 +23,7 @@
 #include "IItemSetHelper.hxx"
 #include <tools/urlobj.hxx>
 #include <memory>
-#include <vcl/roadmapwizard.hxx>
+#include <vcl/roadmapwizardmachine.hxx>
 
 namespace com::sun::star {
     namespace beans {

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
-#include <vcl/roadmapwizard.hxx>
+#include <vcl/roadmapwizardmachine.hxx>
 #include <map>
 #include <memory>
 

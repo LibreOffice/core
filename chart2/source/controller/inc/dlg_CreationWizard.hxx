@@ -23,7 +23,7 @@
 #include "TabPageNotifiable.hxx"
 
 #include <rtl/ref.hxx>
-#include <vcl/roadmapwizard.hxx>
+#include <vcl/roadmapwizardmachine.hxx>
 
 #include <memory>
 

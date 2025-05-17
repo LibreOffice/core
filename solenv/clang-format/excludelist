@@ -6201,7 +6201,7 @@ include/vcl/prntypes.hxx
 include/vcl/ptrstyle.hxx
 include/vcl/quickselectionengine.hxx
 include/vcl/region.hxx
-include/vcl/roadmapwizard.hxx
+include/vcl/roadmapwizardmachine.hxx
 include/vcl/salctype.hxx
 include/vcl/salgtype.hxx
 include/vcl/salnativewidgets.hxx
@@ -14585,6 +14585,7 @@ vcl/source/control/prgsbar.cxx
 vcl/source/control/quickselectionengine.cxx
 vcl/source/control/roadmap.cxx
 vcl/source/control/roadmapwizard.cxx
+vcl/source/control/roadmapwizardmachine.cxx
 vcl/source/control/scrbar.cxx
 vcl/source/control/slider.cxx
 vcl/source/control/spinbtn.cxx

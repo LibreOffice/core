@@ -4242,15 +4242,15 @@ include/vcl/rendercontext/DrawModeFlags.hxx:27
     enum DrawModeFlags Default
 include/vcl/rendercontext/SalLayoutFlags.hxx:37
     enum SalLayoutFlags UnclusteredGlyphs
-include/vcl/roadmapwizard.hxx:38
+include/vcl/roadmapwizardmachine.hxx:38
     enum vcl::RoadmapWizardTypes::PathId COMMON_FIRST_STATE
-include/vcl/roadmapwizard.hxx:39
+include/vcl/roadmapwizardmachine.hxx:39
     enum vcl::RoadmapWizardTypes::PathId COMPLETE
-include/vcl/roadmapwizard.hxx:40
+include/vcl/roadmapwizardmachine.hxx:40
     enum vcl::RoadmapWizardTypes::PathId NO_SETTINGS
-include/vcl/roadmapwizard.hxx:41
+include/vcl/roadmapwizardmachine.hxx:41
     enum vcl::RoadmapWizardTypes::PathId NO_FIELDS
-include/vcl/roadmapwizard.hxx:42
+include/vcl/roadmapwizardmachine.hxx:42
     enum vcl::RoadmapWizardTypes::PathId NO_SETTINGS_NO_FIELDS
 include/vcl/salgtype.hxx:30
     enum DeviceFormat WITH_ALPHA

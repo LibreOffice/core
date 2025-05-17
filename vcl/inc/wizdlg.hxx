@@ -22,7 +22,7 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/roadmap.hxx>
-#include <vcl/roadmapwizard.hxx>
+#include <vcl/roadmapwizardmachine.hxx>
 #include <vcl/tabpage.hxx>
 
 #include <map>

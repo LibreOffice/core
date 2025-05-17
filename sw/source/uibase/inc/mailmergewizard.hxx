@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MAILMERGEWIZARD_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MAILMERGEWIZARD_HXX
 
-#include <vcl/roadmapwizard.hxx>
+#include <vcl/roadmapwizardmachine.hxx>
 #include <rtl/ustring.hxx>
 
 class SwView;

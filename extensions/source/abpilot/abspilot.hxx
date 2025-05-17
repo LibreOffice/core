@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/roadmapwizard.hxx>
+#include <vcl/roadmapwizardmachine.hxx>
 #include "addresssettings.hxx"
 #include "datasourcehandling.hxx"
 

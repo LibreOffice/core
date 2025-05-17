@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <vcl/roadmapwizard.hxx>
+#include <vcl/roadmapwizardmachine.hxx>
 
 #define ITEM_ID_INTRODUCTION            0
 #define ITEM_ID_SLIDES                  1
