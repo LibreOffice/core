@@ -19,11 +19,15 @@
 
 #pragma once
 
-#include <memory>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/roadmap.hxx>
 #include <vcl/roadmapwizard.hxx>
 #include <vcl/tabpage.hxx>
+
+#include <map>
+#include <memory>
+#include <set>
 
 struct ImplWizPageData
 {
@@ -40,12 +44,55 @@ struct ImplWizButtonData
 
 namespace vcl
 {
-    struct RoadmapWizardImpl;
     class RoadmapWizard;
 
     namespace RoadmapWizardTypes
     {
         typedef VclPtr<TabPage> (* RoadmapPageFactory)( RoadmapWizard& );
+    };
+
+    using namespace RoadmapWizardTypes;
+    namespace
+    {
+        typedef ::std::set< WizardTypes::WizardState > StateSet;
+
+        typedef ::std::map<
+            PathId,
+            WizardPath
+            > Paths;
+
+        typedef ::std::map<
+            WizardTypes::WizardState,
+            ::std::pair<
+                OUString,
+                RoadmapPageFactory
+                >
+            > StateDescriptions;
+    }
+
+    struct RoadmapWizardImpl
+    {
+        ScopedVclPtr<ORoadmap> pRoadmap;
+        std::map<VclPtr<vcl::Window>, short> maResponses;
+        Paths               aPaths;
+        PathId              nActivePath;
+        StateDescriptions   aStateDescriptors;
+        StateSet            aDisabledStates;
+        bool                bActivePathIsDefinite;
+
+        RoadmapWizardImpl()
+            :pRoadmap( nullptr )
+            ,nActivePath( PathId::INVALID )
+            ,bActivePathIsDefinite( false )
+        {
+        }
+
+        /// returns the index of the current state in given path, or -1
+        static sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath );
+        /// returns the index of the current state in the path with the given id, or -1
+        sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, PathId _nPathId );
+        /// returns the index of the first state in which the two given paths differ
+        static sal_Int32 getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS );
     };
 
     //= RoadmapWizard
