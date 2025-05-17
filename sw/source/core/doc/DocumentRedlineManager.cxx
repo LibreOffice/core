@@ -997,7 +997,7 @@ namespace
         return bRet;
     }
 
-    /// Given a redline that has an other underlying redline, drop that underlying redline.
+    /// Given a redline that has another underlying redline, drop that underlying redline.
     /// Used to accept an insert or rejecting a delete, i.e. no changes to the text node strings.
     bool lcl_DeleteInnerRedline(const SwRedlineTable& rArr, const SwRedlineTable::size_type& rPos,
                                       int nDepth)
