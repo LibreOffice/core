@@ -36,7 +36,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     /// Printer graphics
     AquaSalGraphics*        mpGraphics;
     /// is Graphics used
-    bool                    mbGraphics;
+    bool                    mbGraphicsAcquired;
     /// job active ?
     bool                    mbJob;
 

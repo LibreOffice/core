@@ -132,7 +132,7 @@ WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitC
     : mhLocalDC(hDC),          // HDC or 0 for Cache Device
       mhBmp(hBMP),             // Memory Bitmap
       mnBitCount(nBitCount),   // BitCount (0 or 1)
-      mbGraphics(false),       // is Graphics used
+      mbGraphicsAcquired(false), // is Graphics used
       mbForeignDC(bForeignDC), // uses a foreign DC instead of a bitmap
       mnWidth(nWidth),
       mnHeight(nHeight)
@@ -181,18 +181,18 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
 
 SalGraphics* WinSalVirtualDevice::AcquireGraphics()
 {
-    if ( mbGraphics )
+    if ( mbGraphicsAcquired )
         return nullptr;
 
     if ( mpGraphics )
-        mbGraphics = true;
+        mbGraphicsAcquired = true;
 
     return mpGraphics.get();
 }
 
 void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
-    mbGraphics = false;
+    mbGraphicsAcquired = false;
 }
 
 bool WinSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )

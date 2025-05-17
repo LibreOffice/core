@@ -48,7 +48,7 @@ using namespace com::sun::star::beans;
 
 AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mpGraphics( nullptr ),
-    mbGraphics( false ),
+    mbGraphicsAcquired( false ),
     mbJob( false ),
     mpPrinter( nil ),
     mpPrintInfo( nil ),
@@ -153,14 +153,14 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
 
 SalGraphics* AquaSalInfoPrinter::AcquireGraphics()
 {
-    SalGraphics* pGraphics = mbGraphics ? nullptr : mpGraphics;
-    mbGraphics = true;
+    SalGraphics* pGraphics = mbGraphicsAcquired ? nullptr : mpGraphics;
+    mbGraphicsAcquired = true;
     return pGraphics;
 }
 
 void AquaSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 {
-    mbGraphics = false;
+    mbGraphicsAcquired = false;
 }
 
 bool AquaSalInfoPrinter::Setup( weld::Window*, ImplJobSetup* )

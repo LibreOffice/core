@@ -869,7 +869,7 @@ WinSalFrame::WinSalFrame()
     mnMaxHeight         = SHRT_MAX;
     mnInputLang         = 0;
     mnInputCodePage     = 0;
-    mbGraphics          = false;
+    mbGraphicsAcquired  = false;
     mbCaption           = false;
     mbBorder            = false;
     mbFixBorder         = false;
@@ -1015,7 +1015,7 @@ bool WinSalFrame::InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND 
 
 SalGraphics* WinSalFrame::AcquireGraphics()
 {
-    if ( mbGraphics || !mhWnd )
+    if ( mbGraphicsAcquired || !mhWnd )
         return nullptr;
 
     SalData* pSalData = GetSalData();
@@ -1031,13 +1031,13 @@ SalGraphics* WinSalFrame::AcquireGraphics()
         mpLocalGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
         mpLocalGraphics->setHDC( hDC );
     }
-    mbGraphics = true;
+    mbGraphicsAcquired = true;
     return mpLocalGraphics;
 }
 
 void WinSalFrame::ReleaseGraphics( SalGraphics* /*pGraphics*/ )
 {
-    mbGraphics = false;
+    mbGraphicsAcquired = false;
 }
 
 bool WinSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)

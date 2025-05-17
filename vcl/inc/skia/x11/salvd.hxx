@@ -17,7 +17,7 @@ class X11SkiaSalVirtualDevice final : public SalVirtualDevice
 {
     SalDisplay* mpDisplay;
     std::unique_ptr<X11SalGraphics> mpGraphics;
-    bool mbGraphics; // is Graphics used
+    bool mbGraphicsAcquired; // is Graphics used
     SalX11Screen mnXScreen;
     int mnWidth;
     int mnHeight;

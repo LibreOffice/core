@@ -57,7 +57,7 @@ public:
     int                             mnMinHeight;            // min. client height in pixels
     int                             mnMaxWidth;             // max. client width in pixels
     int                             mnMaxHeight;            // max. client height in pixels
-    bool                            mbGraphics;             // is Graphics used?
+    bool                            mbGraphicsAcquired;     // is Graphics used?
     bool                            mbShown;
     bool                            mbInitShow;
     bool                            mbPositioned;

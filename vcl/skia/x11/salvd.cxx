@@ -33,7 +33,7 @@ X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, t
                                                  tools::Long nDY,
                                                  std::unique_ptr<X11SalGraphics> pNewGraphics)
     : mpGraphics(std::move(pNewGraphics))
-    , mbGraphics(false)
+    , mbGraphicsAcquired(false)
     , mnXScreen(0)
 {
     assert(mpGraphics);
@@ -50,7 +50,7 @@ X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, t
                                                  const SystemGraphicsData& /*rData*/,
                                                  std::unique_ptr<X11SalGraphics> pNewGraphics)
     : mpGraphics(std::move(pNewGraphics))
-    , mbGraphics(false)
+    , mbGraphicsAcquired(false)
     , mnXScreen(0)
 {
     // TODO Check where a VirtualDevice is created from SystemGraphicsData
@@ -67,16 +67,16 @@ X11SkiaSalVirtualDevice::~X11SkiaSalVirtualDevice() {}
 
 SalGraphics* X11SkiaSalVirtualDevice::AcquireGraphics()
 {
-    if (mbGraphics)
+    if (mbGraphicsAcquired)
         return nullptr;
 
     if (mpGraphics)
-        mbGraphics = true;
+        mbGraphicsAcquired = true;
 
     return mpGraphics.get();
 }
 
-void X11SkiaSalVirtualDevice::ReleaseGraphics(SalGraphics*) { mbGraphics = false; }
+void X11SkiaSalVirtualDevice::ReleaseGraphics(SalGraphics*) { mbGraphicsAcquired = false; }
 
 bool X11SkiaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
 {

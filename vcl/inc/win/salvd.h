@@ -38,7 +38,7 @@ private:
     std::unique_ptr<WinSalGraphics> mpGraphics;     // current VirDev graphics
     WinSalVirtualDevice*    mpNext;                 // next VirDev
     sal_uInt16              mnBitCount;             // BitCount (0 or 1)
-    bool                    mbGraphics;             // is Graphics used
+    bool                    mbGraphicsAcquired;     // is Graphics used
     bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
     tools::Long                    mnWidth;
     tools::Long                    mnHeight;

@@ -71,7 +71,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mnMinHeight(0),
     mnMaxWidth(0),
     mnMaxHeight(0),
-    mbGraphics(false),
+    mbGraphicsAcquired(false),
     mbShown(false),
     mbInitShow(true),
     mbPositioned(false),
@@ -309,7 +309,7 @@ void AquaSalFrame::screenParametersChanged()
 
 SalGraphics* AquaSalFrame::AcquireGraphics()
 {
-    if ( mbGraphics )
+    if ( mbGraphicsAcquired )
         return nullptr;
 
     if ( !mpGraphics )
@@ -318,14 +318,14 @@ SalGraphics* AquaSalFrame::AcquireGraphics()
         mpGraphics->SetWindowGraphics( this );
     }
 
-    mbGraphics = true;
+    mbGraphicsAcquired = true;
     return mpGraphics;
 }
 
 void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
     SAL_WARN_IF( pGraphics != mpGraphics, "vcl", "graphics released on wrong frame" );
-    mbGraphics = false;
+    mbGraphicsAcquired = false;
 }
 
 bool AquaSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
@@ -1149,7 +1149,7 @@ void AquaSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
 
 void AquaSalFrame::Flush()
 {
-    if( !(mbGraphics && mpGraphics && mpNSView && mbShown) )
+    if( !(mbGraphicsAcquired && mpGraphics && mpNSView && mbShown) )
         return;
 
     OSX_SALDATA_RUNINMAIN( Flush() )
@@ -1165,7 +1165,7 @@ void AquaSalFrame::Flush()
 
 void AquaSalFrame::Flush( const tools::Rectangle& rRect )
 {
-    if( !(mbGraphics && mpGraphics && mpNSView && mbShown) )
+    if( !(mbGraphicsAcquired && mpGraphics && mpNSView && mbShown) )
         return;
 
     OSX_SALDATA_RUNINMAIN( Flush( rRect ) )
