@@ -1019,18 +1019,20 @@ SalGraphics* WinSalFrame::AcquireGraphics()
         return nullptr;
 
     SalData* pSalData = GetSalData();
-
     assert(pSalData->mpInstance->IsMainThread());
     SAL_WARN_IF(!pSalData->mpInstance->IsMainThread(), "vcl", "ERROR: pSalData->mpInstance is not main thread!");
-    if ( !mpLocalGraphics )
-        mpLocalGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
-    WinSalGraphics* pGraphics = mpLocalGraphics;
-    HDC hDC = pGraphics->getHDC();
-    if ( !hDC )
-        hDC = GetDC( mhWnd );
 
-    mbGraphics = InitFrameGraphicsDC( pGraphics, hDC, mhWnd );
-    return mbGraphics ? pGraphics : nullptr;
+    if ( !mpLocalGraphics )
+    {
+        HDC hDC = GetDC( mhWnd );
+        if (!hDC)
+            return nullptr;
+
+        mpLocalGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
+        mpLocalGraphics->setHDC( hDC );
+    }
+    mbGraphics = true;
+    return mpLocalGraphics;
 }
 
 void WinSalFrame::ReleaseGraphics( SalGraphics* /*pGraphics*/ )
