@@ -98,11 +98,8 @@ void ColorPaletteWrapper::updateModel(const rtl::Reference<ChartModel>& xModel)
 
 void ColorPaletteWrapper::updateData() const
 {
-    util::URL aUrl;
-    aUrl.Complete = sUnoChartColorPalette;
-
     frame::FeatureStateEvent aEvent;
-    aEvent.FeatureURL = aUrl;
+    aEvent.FeatureURL.Complete = sUnoChartColorPalette;
     aEvent.IsEnabled = true;
 
     if (mpControl)
