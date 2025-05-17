@@ -203,7 +203,7 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
         mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
         {
-            // Preformance mode: import all bookmarks names as defined in the document
+            // Performance mode: import all bookmarks names as defined in the document
             mxDoc->getIDocumentMarkAccess()->disableUniqueNameChecks();
             comphelper::ScopeGuard perfModeGuard(
                 [this]() { mxDoc->getIDocumentMarkAccess()->enableUniqueNameChecks(); });
