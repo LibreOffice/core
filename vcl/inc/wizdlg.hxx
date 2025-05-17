@@ -31,7 +31,12 @@ struct ImplWizPageData
     VclPtr<TabPage>     mpPage;
 };
 
-struct ImplWizButtonData;
+struct ImplWizButtonData
+{
+    ImplWizButtonData* mpNext;
+    VclPtr<Button> mpButton;
+    tools::Long mnOffset;
+};
 
 namespace vcl
 {

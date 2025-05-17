@@ -30,13 +30,6 @@ struct WizPageData
     std::unique_ptr<BuilderPage> mxPage;
 };
 
-struct ImplWizButtonData
-{
-    ImplWizButtonData*  mpNext;
-    VclPtr<Button>      mpButton;
-    tools::Long                mnOffset;
-};
-
 namespace vcl
 {
     struct WizardMachineImplData
