@@ -502,36 +502,54 @@ namespace sw::mark
 
     // In the mode where the names are not checked, we need to avoid a case where there was a
     // bookmark, and a file is inserted at an earlier point, with the same-name bookmark, causing
-    // a rename of the pre-existing bookmark. m_aUsedNames and m_vUncheckedNameMarks are used for
-    // that. m_aUsedNames is pre-populated with the existing names (at the moment when the mode
-    // started); and m_vUncheckedNameMarks stores only the marks needing the checks.
+    // a rename of the pre-existing bookmark. usedNames and uncheckedNameMarks are used for that.
+    // usedNames is pre-populated with the existing names (at the moment when the mode started);
+    // and uncheckedNameMarks stores only the marks needing the checks.
 
-    void MarkManager::disableUniqueNameChecks()
+    class UniqueNameChecksGuard_impl : public MarkManager::UniqueNameChecksGuard
     {
-        if (!m_bCheckUniqueNames)
-            return; // nested call
-        m_bCheckUniqueNames = false;
-        assert(m_aUsedNames.empty());
-
-        // Populate the pre-existing already deduplicated names
-        for (auto& pMark : m_vAllMarks)
-            m_aUsedNames.insert(pMark->GetName().toString());
-    }
-    void MarkManager::enableUniqueNameChecks()
-    {
-        if (m_bCheckUniqueNames)
-            return;
-        // Make sure that all previously unchecked names are unique
-        for (auto& pMark : m_vAllMarks)
+    public:
+        UniqueNameChecksGuard_impl(MarkManager& aParent)
+            : parent(aParent)
         {
-            if (!m_vUncheckedNameMarks.contains(pMark))
-                continue;
-            pMark->SetName(getUniqueMarkName(pMark->GetName(), [this](const SwMarkName& n)
-                                             { return m_aUsedNames.insert(n.toString()).second; }));
+            assert(parent.m_pUniqueNameChecksGuard == nullptr);
+            parent.m_pUniqueNameChecksGuard = this;
+
+            // Populate the pre-existing already deduplicated names
+            for (auto& pMark : parent.m_vAllMarks)
+                usedNames.insert(pMark->GetName().toString());
         }
-        m_aUsedNames.clear();
-        m_vUncheckedNameMarks.clear();
-        m_bCheckUniqueNames = true;
+        ~UniqueNameChecksGuard_impl() override
+        {
+            assert(parent.m_pUniqueNameChecksGuard == this);
+            for (auto& pMark : parent.m_vAllMarks)
+            {
+                if (!uncheckedNameMarks.contains(pMark))
+                    continue;
+                pMark->SetName(
+                    parent.getUniqueMarkName(pMark->GetName(), [this](const SwMarkName& n)
+                                             { return usedNames.insert(n.toString()).second; }));
+            }
+            parent.m_pUniqueNameChecksGuard = nullptr;
+        }
+
+        void add(sw::mark::MarkBase* mark) { uncheckedNameMarks.insert(mark); }
+
+    private:
+        MarkManager& parent;
+        // marks with possibly duplicating names
+        std::unordered_set<sw::mark::MarkBase*> uncheckedNameMarks;
+        // container for deduplicating names
+        std::unordered_set<OUString> usedNames;
+    };
+
+    std::unique_ptr<MarkManager::UniqueNameChecksGuard> MarkManager::disableUniqueNameChecks()
+    {
+        if (m_pUniqueNameChecksGuard)
+            return {}; // nested call
+
+        return std::unique_ptr<MarkManager::UniqueNameChecksGuard>(
+            new UniqueNameChecksGuard_impl(*this));
     }
 
     ::sw::mark::MarkBase* MarkManager::makeMark(const SwPaM& rPaM,
@@ -652,7 +670,7 @@ namespace sw::mark
         // for performance reasons, we trust UnoMarks to have a (generated) unique name
         if (eType != IDocumentMarkAccess::MarkType::UNO_BOOKMARK)
         {
-            if (m_bCheckUniqueNames)
+            if (!m_pUniqueNameChecksGuard)
             {
                 pMark->SetName(getUniqueMarkName(
                     pMark->GetName(), [this](const SwMarkName& n)
@@ -660,7 +678,7 @@ namespace sw::mark
             }
             else
             {
-                m_vUncheckedNameMarks.insert(pMark.get());
+                m_pUniqueNameChecksGuard->add(pMark.get());
             }
         }
 
@@ -1370,7 +1388,6 @@ namespace sw::mark
         m_vFieldmarks.clear();
         m_vBookmarks.clear();
         m_vAnnotationMarks.clear();
-        m_vUncheckedNameMarks.clear();
         for (const auto & p : m_vAllMarks)
             delete p;
         m_vAllMarks.clear();

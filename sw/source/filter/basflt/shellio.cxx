@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <comphelper/scopeguard.hxx>
 #include <osl/diagnose.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -204,9 +203,7 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
 
         {
             // Performance mode: import all bookmarks names as defined in the document
-            mxDoc->getIDocumentMarkAccess()->disableUniqueNameChecks();
-            comphelper::ScopeGuard perfModeGuard(
-                [this]() { mxDoc->getIDocumentMarkAccess()->enableUniqueNameChecks(); });
+            auto perfModeGuard = mxDoc->getIDocumentMarkAccess()->disableUniqueNameChecks();
 
             nError = po->Read(*mxDoc, msBaseURL, *pPam, maFileName);
         }

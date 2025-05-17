@@ -32,6 +32,8 @@ namespace sw::mark {
 
     class AnnotationMark;
 
+    class UniqueNameChecksGuard_impl;
+
     class MarkManager final
         : virtual public IDocumentMarkAccess
     {
@@ -57,8 +59,7 @@ namespace sw::mark {
                 const SwPaM& rPaM,
                 const SwMarkName& rName ) override;
 
-            virtual void disableUniqueNameChecks() override;
-            virtual void enableUniqueNameChecks() override;
+            virtual std::unique_ptr<UniqueNameChecksGuard> disableUniqueNameChecks() override;
 
             virtual void repositionMark(::sw::mark::MarkBase* io_pMark, const SwPaM& rPaM) override;
             virtual bool renameMark(::sw::mark::MarkBase* io_pMark, const SwMarkName& rNewName) override;
@@ -153,11 +154,6 @@ namespace sw::mark {
             // container for all marks, this container owns the objects it points to
             container_t m_vAllMarks;
 
-            // container for all marks with possibly duplicating names (m_bCheckUniqueNames mode)
-            std::unordered_set<sw::mark::MarkBase*> m_vUncheckedNameMarks;
-            // container for deduplicating names (m_bCheckUniqueNames mode)
-            std::unordered_set<OUString> m_aUsedNames;
-
             // additional container for bookmarks
             std::vector<sw::mark::Bookmark*> m_vBookmarks;
             // additional container for fieldmarks
@@ -172,7 +168,8 @@ namespace sw::mark {
 
             sw::mark::FieldmarkWithDropDownButton* m_pLastActiveFieldmark;
 
-            bool m_bCheckUniqueNames = true;
+            friend class UniqueNameChecksGuard_impl;
+            UniqueNameChecksGuard_impl* m_pUniqueNameChecksGuard = nullptr;
     };
 
 }

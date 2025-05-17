@@ -104,11 +104,15 @@ class IDocumentMarkAccess
            with thousands of bookmarks.
 
            When the check is disabled using disableUniqueNameChecks, duplicate names are allowed.
-           When the check is eventually enabled using enableUniqueNameChecks, one pass over all
-           marks is performed, and all duplicated names are made unique.
+           When the check is eventually enabled (when the returned guard is destroyed), one pass
+           over all new marks is performed, and all duplicated names are made unique.
         */
-        virtual void disableUniqueNameChecks() = 0;
-        virtual void enableUniqueNameChecks() = 0;
+        class UniqueNameChecksGuard
+        {
+        public:
+            virtual ~UniqueNameChecksGuard() = default;
+        };
+        virtual std::unique_ptr<UniqueNameChecksGuard> disableUniqueNameChecks() = 0;
 
         /** Returns a mark in the document for a paragraph.
             If there is none, a mark will be created.
