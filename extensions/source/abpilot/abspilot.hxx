@@ -67,7 +67,7 @@ namespace abp
         virtual bool                prepareLeaveCurrentState( CommitPageReason _eReason ) override;
         virtual bool                onFinish() override;
 
-        // RoadmapWizard
+        // RoadmapWizardMachine
         virtual OUString            getStateDisplayName( WizardState _nState ) const override;
 
         /** creates a new data source of the type indicated by m_aSettings

@@ -44,7 +44,7 @@ namespace vcl
 
     };
 
-    //= RoadmapWizard
+    //= RoadmapWizardMachine
 
     /** is - no, not a wizard for a roadmap, but the base class for wizards
         <em>supporting</em> a roadmap.

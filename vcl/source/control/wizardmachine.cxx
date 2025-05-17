@@ -411,7 +411,7 @@ namespace vcl
         {
             // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
             // Perhaps we should rollback the skipping here...
-            OSL_FAIL("RoadmapWizard::skip: very unpolite...");
+            OSL_FAIL("WizardMachine::skip: very unpolite...");
                 // if somebody does a skip and then does not allow to leave...
                 // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
                 // somebody behaves really strange ...)
@@ -576,7 +576,7 @@ namespace vcl
     void WizardMachine::updateTravelUI()
     {
         const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
-        OSL_ENSURE( pController != nullptr, "RoadmapWizard::updateTravelUI: no controller for the current page!" );
+        OSL_ENSURE( pController != nullptr, "WizardMachine::updateTravelUI: no controller for the current page!" );
 
         bool bCanAdvance =
                 ( !pController || pController->canAdvance() )   // the current page allows to advance
