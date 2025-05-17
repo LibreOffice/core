@@ -20,10 +20,10 @@
 #include <comphelper/lok.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/debug.hxx>
+#include <vcl/roadmapwizard.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <strings.hrc>
 #include <svdata.hxx>
-#include <wizdlg.hxx>
 #include <stack>
 #include "wizimpldata.hxx"
 
