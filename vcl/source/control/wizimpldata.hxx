@@ -24,6 +24,9 @@
 #include <set>
 #include <vcl/toolkit/roadmap.hxx>
 
+constexpr OUString HID_WIZARD_NEXT = u"SVT_HID_WIZARD_NEXT"_ustr;
+constexpr OUString HID_WIZARD_PREVIOUS = u"SVT_HID_WIZARD_PREVIOUS"_ustr;
+
 struct WizPageData
 {
     WizPageData*    mpNext;
