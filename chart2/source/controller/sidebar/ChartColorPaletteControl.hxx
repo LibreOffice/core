@@ -52,7 +52,7 @@ public:
 
     ~ChartColorPaletteControl() override;
 
-    void setColorPaletteHandler(std::shared_ptr<IColorPaletteHandler> rColorPaletteHandler);
+    void setColorPaletteHandler(const std::shared_ptr<IColorPaletteHandler>& rColorPaletteHandler);
     std::shared_ptr<ChartColorPaletteHelper> getColorPaletteHelper() const;
     ChartColorPaletteType getColorPaletteType() const;
     sal_uInt32 getColorPaletteIndex() const;

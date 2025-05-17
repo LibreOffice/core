@@ -155,7 +155,7 @@ void ChartColorPaletteControl::renderSelectedColorPalette(const VclPtr<VirtualDe
 }
 
 void ChartColorPaletteControl::setColorPaletteHandler(
-    std::shared_ptr<IColorPaletteHandler> rColorPaletteHandler)
+    const std::shared_ptr<IColorPaletteHandler>& rColorPaletteHandler)
 {
     if (!mpHandler)
     {
