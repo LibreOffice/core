@@ -284,23 +284,8 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
                 const OUString &rText = pTNd->GetText();
                 if (rText[0] == sChar[0])
                 {
-                    // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
-                    sal_Int32 nFirstLineIndent=0;
-                    SfxItemSetFixed<RES_MARGIN_FIRSTLINE, RES_MARGIN_FIRSTLINE> aSet(m_rDoc.GetAttrPool());
-                    if ( pTNd->GetAttr(aSet) )
-                    {
-                        const SvxFirstLineIndentItem *const pFirstLine(aSet.GetItem<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE));
-                        if (pFirstLine)
-                        {
-                            nFirstLineIndent = pFirstLine->ResolveTextFirstLineOffset({});
-                        }
-                    }
-
                     rPaMPointPos.SetContent(0);
                     m_pPaM->SetMark();
-                    // Strip out aesthetic tabs we may have inserted on export #i24762#
-                    if (nFirstLineIndent < 0 && rText.getLength() > 1 && rText[1] == 0x09)
-                        m_pPaM->GetMark()->AdjustContent(1);
                     m_pPaM->GetMark()->AdjustContent(1);
                     m_xReffingStck->Delete(*m_pPaM);
                     m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
