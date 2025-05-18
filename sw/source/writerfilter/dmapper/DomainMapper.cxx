@@ -4481,20 +4481,6 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
             m_pImpl->HandleLineBreak(m_pImpl->GetTopContext());
         }
     }
-    else if (len == 1 && sText[0] == '\t' )
-    {
-        if (m_pImpl->m_StreamStateStack.top().bCheckFirstFootnoteTab && m_pImpl->IsInFootOrEndnote())
-        {
-            // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
-            m_pImpl->m_StreamStateStack.top().bCheckFirstFootnoteTab = false;
-            sal_Int32 nFirstLineIndent = 0;
-            m_pImpl->GetAnyProperty(PROP_PARA_FIRST_LINE_INDENT, m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)) >>= nFirstLineIndent;
-            if ( nFirstLineIndent < 0 )
-            {
-                return;
-            }
-        }
-    }
     if (!m_pImpl->hasTableManager())
         return;
 

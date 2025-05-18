@@ -251,8 +251,6 @@ struct SubstreamContext
     bool bParaAutoBefore = false;
     /// Raw table cell depth.
     sal_Int32 nTableCellDepth = 0;
-    /// If the next tab should be ignored, used for footnotes.
-    bool bCheckFirstFootnoteTab = false;
     std::optional<sal_Int16> oLineBreakClear;
     bool bIsInTextBox = false;
     rtl::Reference<SwXTextEmbeddedObject> xEmbedded;
