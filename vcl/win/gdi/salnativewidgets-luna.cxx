@@ -31,6 +31,8 @@
 // Drawing in non-client area (general DWM-related info):
 //   http://msdn.microsoft.com/en-us/library/windows/desktop/bb688195%28v=vs.85%29.aspx
 
+#include <config_features.h>
+
 #include <rtl/ustring.h>
 
 #include <osl/diagnose.h>
@@ -52,7 +54,9 @@
 #include <win/salinst.h>
 #include <win/scoped_gdi.hxx>
 #include <win/wingdiimpl.hxx>
+#if HAVE_FEATURE_SKIA
 #include <skia/win/gdiimpl.hxx>
+#endif
 
 #include <uxtheme.h>
 #include <vssym32.h>
