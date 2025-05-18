@@ -19,7 +19,6 @@
 
 
 #include "filterdet.hxx"
-#include "inc/pdfihelper.hxx"
 #include "inc/pdfparse.hxx"
 
 #include <osl/file.h>
@@ -38,6 +37,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/stream.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/pwdinteract.hxx>
 #include <memory>
 #include <utility>
 #include <string.h>
@@ -366,7 +366,7 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
                 if (bMayUseUI && xIntHdl.is())
                 {
                     OUString aDocName(rInPDFFileURL.copy(rInPDFFileURL.lastIndexOf('/') + 1));
-                    bAgain = getPassword(xIntHdl, io_rPwd, !bAgain, aDocName);
+                    bAgain = vcl::pdf::getPassword(xIntHdl, io_rPwd, !bAgain, aDocName);
                     SAL_INFO("sdext.pdfimport", "getEmbeddedFile pdfium Pass result: " << bAgain);
                     continue;
                 }
@@ -812,7 +812,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                                     bool bEntered = false;
                                     do
                                     {
-                                        bEntered = getPassword( xIntHdl, io_rPwd, ! bEntered, aDocName );
+                                        bEntered = vcl::pdf::getPassword( xIntHdl, io_rPwd, ! bEntered, aDocName );
                                         OString aIsoPwd = OUStringToOString( io_rPwd,
                                                                                        RTL_TEXTENCODING_ISO_8859_1 );
                                         bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd );

@@ -20,7 +20,6 @@
 #include <config_folders.h>
 
 #include <contentsink.hxx>
-#include <pdfihelper.hxx>
 #include <wrapper.hxx>
 
 #include <o3tl/string_view.hxx>
@@ -54,6 +53,7 @@
 
 #include <vcl/metric.hxx>
 #include <vcl/font.hxx>
+#include <vcl/pdf/pwdinteract.hxx>
 #include <vcl/virdev.hxx>
 
 #include <cstddef>
@@ -1137,7 +1137,7 @@ bool xpdf_ImportFromFile(const OUString& rURL,
                 // already got one (e.g. if the hybrid detect prompted for one)
                 if (!bPasswordOnEntry)
                 {
-                    bEntered = getPassword(xIHdl, aPwd, !bEntered, aDocName);
+                    bEntered = vcl::pdf::getPassword(xIHdl, aPwd, !bEntered, aDocName);
                     if (!bEntered)
                     {
                         // User cancelled password input

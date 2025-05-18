@@ -22,7 +22,7 @@
 #include <cassert>
 #include <mutex>
 
-#include <pdfihelper.hxx>
+#include <vcl/pdf/pwdinteract.hxx>
 
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -117,7 +117,7 @@ void PDFPasswordRequest::select()
 
 } // namespace
 
-namespace pdfi
+namespace vcl::pdf
 {
 
 bool getPassword( const uno::Reference< task::XInteractionHandler >& xHandler,

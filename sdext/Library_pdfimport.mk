@@ -55,7 +55,6 @@ $(eval $(call gb_Library_add_defs,pdfimport, \
 $(eval $(call gb_Library_add_exception_objects,pdfimport,\
     sdext/source/pdfimport/filterdet \
     sdext/source/pdfimport/misc/pdfihelper \
-    sdext/source/pdfimport/misc/pwdinteract \
     sdext/source/pdfimport/odf/odfemitter \
     sdext/source/pdfimport/pdfiadaptor \
     sdext/source/pdfimport/pdfparse/pdfentries \

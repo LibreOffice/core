@@ -214,15 +214,6 @@ namespace pdfi
             return seed;
         }
     };
-
-    /** retrieve password from user
-     */
-    bool getPassword( const css::uno::Reference<
-                            css::task::XInteractionHandler >& xHandler,
-                      OUString&                                       rOutPwd,
-                      bool                                                 bFirstTry,
-                      const OUString&                                 rDocName
-                      );
 }
 
 #endif

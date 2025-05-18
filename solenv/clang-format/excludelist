@@ -9977,7 +9977,6 @@ sdext/source/pdfimport/inc/treevisitorfactory.hxx
 sdext/source/pdfimport/inc/wrapper.hxx
 sdext/source/pdfimport/inc/xmlemitter.hxx
 sdext/source/pdfimport/misc/pdfihelper.cxx
-sdext/source/pdfimport/misc/pwdinteract.cxx
 sdext/source/pdfimport/odf/odfemitter.cxx
 sdext/source/pdfimport/pdfiadaptor.cxx
 sdext/source/pdfimport/pdfiadaptor.hxx
@@ -14768,6 +14767,7 @@ vcl/source/outdev/textline.cxx
 vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
+vcl/source/pdf/pwdinteract.cxx
 vcl/source/text/ImplLayoutRuns.cxx
 vcl/source/text/textlayout.cxx
 vcl/source/toolkit/group.cxx

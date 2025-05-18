@@ -566,6 +566,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/pdf/PDFEncryptor \
     vcl/source/pdf/PDFEncryptorR6 \
     vcl/source/pdf/PdfConfig \
+    vcl/source/pdf/pwdinteract \
     vcl/source/pdf/ResourceDict \
     vcl/source/pdf/Matrix3 \
     vcl/source/pdf/XmpMetadata \
