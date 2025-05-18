@@ -4173,7 +4173,6 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
     SAL_WARN_IF(m_StreamStateStack.top().eSubstreamType != SubstreamType::Body, "writerfilter.dmapper", "PushFootOrEndnote() is called from another foot or endnote");
     m_StreamStateStack.top().eSubstreamType = bIsFootnote ? SubstreamType::Footnote : SubstreamType::Endnote;
-    m_StreamStateStack.top().bCheckFirstFootnoteTab = true;
     try
     {
         // Redlines outside the footnote should not affect footnote content

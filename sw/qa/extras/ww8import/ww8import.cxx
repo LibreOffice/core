@@ -265,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142003)
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xParagraph(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     //before change was incorrect, Loren ipsum , doconsectetur ...
-    CPPUNIT_ASSERT(xParagraph->getString().startsWith("Lorem ipsum , consectetur adipiscing elit."));
+    CPPUNIT_ASSERT(xParagraph->getString().startsWith("\tLorem ipsum , consectetur adipiscing elit."));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf160301)

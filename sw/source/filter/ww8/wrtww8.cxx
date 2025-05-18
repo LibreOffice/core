@@ -1832,7 +1832,8 @@ void MSWordExportBase::WriteSpecialText( SwNodeOffset nStart, SwNodeOffset nEnd,
     SwPaM* pOldEnd = m_pOrigPam;
     bool bOldPageDescs = m_bOutPageDescs;
     m_bOutPageDescs = false;
-    if ( nTTyp == TXT_FTN || nTTyp == TXT_EDN )
+    if ((nTTyp == TXT_FTN || nTTyp == TXT_EDN)
+        && !m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER))
         m_bAddFootnoteTab = true;   // enable one aesthetic tab for this footnote
 
     SetCurPam(nStart, nEnd);

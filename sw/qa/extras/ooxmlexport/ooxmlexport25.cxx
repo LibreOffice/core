@@ -20,6 +20,7 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <wrtsh.hxx>
 
 namespace
 {
@@ -52,6 +53,62 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166510_sectPr_bottomSpacing, "tdf166510_sectPr_b
     sal_Int32 nHeight = getXPath(pXmlDoc, "//page[2]//body/txt/infos/bounds", "height").toInt32();
     // Without the fix, the text height (showing no top margin at all) was 253
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4253), nHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
+{
+    createSwDoc();
+    {
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->Insert(u"Body text"_ustr);
+        pWrtShell->InsertFootnote({}, /*bEndNote=*/true, /*bEdit=*/true);
+        pWrtShell->Insert(u"Endnote text"_ustr);
+    }
+
+    // Exporting to a Word format, a tab is prepended to the endnote text. When imported, the
+    // NoGapAfterNoteNumber compatibility flag is enabled; and the exported tab is the only thing
+    // that separates the number and the text. The tab must not be stripped away on import.
+    saveAndReload(mpFilter);
+    {
+        auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+        auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
+        CPPUNIT_ASSERT(getProperty<bool>(xSettings, u"NoGapAfterNoteNumber"_ustr));
+
+        auto xSupplier = mxComponent.queryThrow<text::XEndnotesSupplier>();
+        auto xEndnotes = xSupplier->getEndnotes();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEndnotes->getCount());
+        auto xEndnoteText = xEndnotes->getByIndex(0).queryThrow<text::XText>();
+        CPPUNIT_ASSERT_EQUAL(u"\tEndnote text"_ustr, xEndnoteText->getString());
+    }
+    // Do a second round-trip. It must not duplicate the tab.
+    saveAndReload(mpFilter);
+    {
+        auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+        auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
+        CPPUNIT_ASSERT(getProperty<bool>(xSettings, u"NoGapAfterNoteNumber"_ustr));
+
+        auto xSupplier = mxComponent.queryThrow<text::XEndnotesSupplier>();
+        auto xEndnotes = xSupplier->getEndnotes();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEndnotes->getCount());
+        auto xEndnoteText = xEndnotes->getByIndex(0).queryThrow<text::XText>();
+        CPPUNIT_ASSERT_EQUAL(u"\tEndnote text"_ustr, xEndnoteText->getString());
+
+        // Remove the tab
+        xEndnoteText->setString(u"Endnote text"_ustr);
+    }
+    // Do a third round-trip. It must not introduce the tab, because of the compatibility flag.
+    saveAndReload(mpFilter);
+    {
+        auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+        auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
+        CPPUNIT_ASSERT(getProperty<bool>(xSettings, u"NoGapAfterNoteNumber"_ustr));
+
+        auto xSupplier = mxComponent.queryThrow<text::XEndnotesSupplier>();
+        auto xEndnotes = xSupplier->getEndnotes();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEndnotes->getCount());
+        auto xEndnoteText = xEndnotes->getByIndex(0).queryThrow<text::XText>();
+        CPPUNIT_ASSERT_EQUAL(u"Endnote text"_ustr, xEndnoteText->getString());
+    }
 }
 
 } // end of anonymous namespace

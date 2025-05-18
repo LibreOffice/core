@@ -565,7 +565,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCp1000018)
 
         OUString const aActual = xTextRange->getString();
 
-        CPPUNIT_ASSERT_EQUAL(u"Footnote first line." SAL_NEWLINE_STRING ""_ustr, aActual);
+        CPPUNIT_ASSERT_EQUAL(u"\tFootnote first line." SAL_NEWLINE_STRING ""_ustr, aActual);
     };
     createSwDoc("cp1000018.rtf");
     verify();
