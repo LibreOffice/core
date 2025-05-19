@@ -2824,6 +2824,10 @@ uno::Reference<beans::XPropertySet>
 GetSelectedShapeOfView(const uno::Reference<frame::XController>& xController)
 {
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(xController, uno::UNO_QUERY);
+    if (!xSelectionSupplier)
+    {
+        return {};
+    }
     uno::Reference<drawing::XShapes> xShapes(xSelectionSupplier->getSelection(), uno::UNO_QUERY);
     if (!xShapes.is() || xShapes->getCount() != 1)
     {
