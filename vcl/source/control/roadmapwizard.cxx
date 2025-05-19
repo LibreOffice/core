@@ -711,7 +711,7 @@ namespace vcl
         WizardTypes::WizardState nCurrentRollbackState = getCurrentState();
         while ( nCurrentRollbackState != _nTargetState )
         {
-            DBG_ASSERT( !aTravelVirtually.empty(), "RoadmapWizard::skipBackwardUntil: this target state does not exist in the history!" );
+            assert(!aTravelVirtually.empty() && "RoadmapWizard::skipBackwardUntil: this target state does not exist in the history!");
             nCurrentRollbackState = aTravelVirtually.top();
             aTravelVirtually.pop();
         }
@@ -729,11 +729,7 @@ namespace vcl
         while ( nCurrentState != _nTargetState )
         {
             WizardTypes::WizardState nNextState = determineNextState( nCurrentState );
-            if ( WZS_INVALID_STATE == nNextState )
-            {
-                OSL_FAIL( "RoadmapWizard::skipUntil: the given target state does not exist!" );
-                return false;
-            }
+            assert(nNextState != WZS_INVALID_STATE && "RoadmapWizard::skipUntil: the given target state does not exist!");
 
             // remember the skipped state in the history
             aTravelVirtually.push( nCurrentState );
