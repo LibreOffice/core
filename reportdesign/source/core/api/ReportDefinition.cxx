@@ -1346,19 +1346,19 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     // Try to write to settings.xml, meta.xml, and styles.xml; only really care about success of
     // write to content.xml (keeping logic of commit 94ccba3eebc83b58e74e18f0e028c6a995ce6aa6)
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"settings.xml"_ustr));
-    WriteThroughComponent(xCom, "settings.xml", "com.sun.star.comp.report.XMLSettingsExporter",
+    WriteThroughComponent(xCom, u"settings.xml"_ustr, u"com.sun.star.comp.report.XMLSettingsExporter"_ustr,
                           aDelegatorArguments, aProps, _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"meta.xml"_ustr));
-    WriteThroughComponent(xCom, "meta.xml", "com.sun.star.comp.report.XMLMetaExporter",
+    WriteThroughComponent(xCom, u"meta.xml"_ustr, u"com.sun.star.comp.report.XMLMetaExporter"_ustr,
                           aDelegatorArguments, aProps, _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"styles.xml"_ustr));
-    WriteThroughComponent(xCom, "styles.xml", "com.sun.star.comp.report.XMLStylesExporter",
+    WriteThroughComponent(xCom, u"styles.xml"_ustr, u"com.sun.star.comp.report.XMLStylesExporter"_ustr,
                           aDelegatorArguments, aProps, _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
-    bool bOk = WriteThroughComponent(xCom, "content.xml", "com.sun.star.comp.report.ExportFilter",
+    bool bOk = WriteThroughComponent(xCom, u"content.xml"_ustr, u"com.sun.star.comp.report.ExportFilter"_ustr,
                                      aDelegatorArguments, aProps, _xStorageToSaveTo);
 
     uno::Any aImage;
@@ -1448,18 +1448,15 @@ void SAL_CALL OReportDefinition::removeStorageChangeListener( const uno::Referen
 
 bool OReportDefinition::WriteThroughComponent(
     const uno::Reference<lang::XComponent> & xComponent,
-    const char* pStreamName,
-    const char* pServiceName,
+    const OUString& rStreamName,
+    const OUString& rServiceName,
     const uno::Sequence<uno::Any> & rArguments,
     const uno::Sequence<beans::PropertyValue> & rMediaDesc,
     const uno::Reference<embed::XStorage>& _xStorageToSaveTo)
 {
-    OSL_ENSURE( nullptr != pStreamName, "Need stream name!" );
-    OSL_ENSURE( nullptr != pServiceName, "Need service name!" );
-
     // open stream
-    OUString sStreamName = OUString::createFromAscii( pStreamName );
-    uno::Reference<io::XStream> xStream = _xStorageToSaveTo->openStreamElement( sStreamName,embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+    uno::Reference<io::XStream> xStream = _xStorageToSaveTo->openStreamElement(rStreamName,
+                                                                               embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE);
     if ( !xStream.is() )
         return false;
     uno::Reference<io::XOutputStream> xOutputStream = xStream->getOutputStream();
@@ -1487,7 +1484,7 @@ bool OReportDefinition::WriteThroughComponent(
     // write the stuff
     bool bRet = WriteThroughComponent(
         xOutputStream, xComponent,
-        pServiceName, rArguments, rMediaDesc );
+        rServiceName, rArguments, rMediaDesc);
     // finally, commit stream.
     return bRet;
 }
@@ -1495,13 +1492,12 @@ bool OReportDefinition::WriteThroughComponent(
 bool OReportDefinition::WriteThroughComponent(
     const uno::Reference<io::XOutputStream> & xOutputStream,
     const uno::Reference<lang::XComponent> & xComponent,
-    const char* pServiceName,
+    const OUString& rServiceName,
     const uno::Sequence<uno::Any> & rArguments,
     const uno::Sequence<beans::PropertyValue> & rMediaDesc)
 {
     OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );
     OSL_ENSURE( xComponent.is(), "Need component!" );
-    OSL_ENSURE( nullptr != pServiceName, "Need component name!" );
 
     // get component
     uno::Reference< xml::sax::XWriter > xSaxWriter(
@@ -1519,7 +1515,7 @@ bool OReportDefinition::WriteThroughComponent(
     // get filter component
     uno::Reference< document::XExporter > xExporter(
         m_aProps->m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            OUString::createFromAscii(pServiceName), aArgs,m_aProps->m_xContext), uno::UNO_QUERY);
+            rServiceName, aArgs, m_aProps->m_xContext), uno::UNO_QUERY);
     OSL_ENSURE( xExporter.is(),
             "can't instantiate export filter component" );
     if( !xExporter.is() )
