@@ -57,7 +57,6 @@ namespace vcl
 
     struct RoadmapWizardImpl
     {
-        ScopedVclPtr<ORoadmap> pRoadmap;
         std::map<VclPtr<vcl::Window>, short> maResponses;
         Paths               aPaths;
         PathId              nActivePath;
@@ -65,8 +64,7 @@ namespace vcl
         bool                bActivePathIsDefinite;
 
         RoadmapWizardImpl()
-            :pRoadmap( nullptr )
-            ,nActivePath( PathId::INVALID )
+            :nActivePath( PathId::INVALID )
             ,bActivePathIsDefinite( false )
         {
         }
@@ -109,7 +107,7 @@ namespace vcl
         VclPtr<TabPage>         mpCurTabPage;
         VclPtr<PushButton>      mpPrevBtn;
         VclPtr<PushButton>      mpNextBtn;
-        VclPtr<vcl::Window>     mpViewWindow;
+        VclPtr<ORoadmap>        mpRoadmap;
         sal_uInt16              mnCurLevel;
         sal_Int16               mnLeftAlignCount;
         bool                    mbEmptyViewMargin;

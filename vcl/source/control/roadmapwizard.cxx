@@ -90,7 +90,6 @@ namespace vcl
         mpCurTabPage    = nullptr;
         mpPrevBtn       = nullptr;
         mpNextBtn       = nullptr;
-        mpViewWindow    = nullptr;
         mnCurLevel      = 0;
         mbEmptyViewMargin =  false;
         mnLeftAlignCount = 0;
@@ -103,22 +102,21 @@ namespace vcl
         SetLeftAlignedButtonCount( 1 );
         mbEmptyViewMargin = true;
 
-        m_xRoadmapImpl->pRoadmap.disposeAndReset( VclPtr<ORoadmap>::Create( this, WB_TABSTOP ) );
-        m_xRoadmapImpl->pRoadmap->SetText( VclResId( STR_WIZDLG_ROADMAP_TITLE ) );
-        m_xRoadmapImpl->pRoadmap->SetPosPixel( Point( 0, 0 ) );
-        m_xRoadmapImpl->pRoadmap->SetItemSelectHdl( LINK( this, RoadmapWizard, OnRoadmapItemSelected ) );
+        mpRoadmap = VclPtr<ORoadmap>::Create(this, WB_TABSTOP);
+        mpRoadmap->SetText( VclResId( STR_WIZDLG_ROADMAP_TITLE ) );
+        mpRoadmap->SetPosPixel( Point( 0, 0 ) );
+        mpRoadmap->SetItemSelectHdl( LINK( this, RoadmapWizard, OnRoadmapItemSelected ) );
 
         Size aRoadmapSize = LogicToPixel(Size(85, 0), MapMode(MapUnit::MapAppFont));
         aRoadmapSize.setHeight( GetSizePixel().Height() );
-        m_xRoadmapImpl->pRoadmap->SetSizePixel( aRoadmapSize );
+        mpRoadmap->SetSizePixel( aRoadmapSize );
 
-        mpViewWindow = m_xRoadmapImpl->pRoadmap;
-        m_xRoadmapImpl->pRoadmap->Show();
+        mpRoadmap->Show();
     }
 
     void RoadmapWizard::ShowRoadmap(bool bShow)
     {
-        m_xRoadmapImpl->pRoadmap->Show(bShow);
+        mpRoadmap->Show(bShow);
         CalcAndSetSize();
     }
 
@@ -161,18 +159,18 @@ namespace vcl
         mpCurTabPage.clear();
         mpPrevBtn.clear();
         mpNextBtn.clear();
-        mpViewWindow.clear();
+        mpRoadmap.disposeAndClear();
         Dialog::dispose();
     }
 
     void RoadmapWizard::SetRoadmapHelpId( const OUString& _rId )
     {
-        m_xRoadmapImpl->pRoadmap->SetHelpId( _rId );
+        mpRoadmap->SetHelpId( _rId );
     }
 
     void RoadmapWizard::SetRoadmapBitmap(const BitmapEx& rBmp)
     {
-        m_xRoadmapImpl->pRoadmap->SetRoadmapBitmap(rBmp);
+        mpRoadmap->SetRoadmapBitmap(rBmp);
     }
 
     void RoadmapWizard::SetLeftAlignedButtonCount( sal_Int16 _nCount )
@@ -204,9 +202,9 @@ namespace vcl
         rSize.AdjustHeight(nMaxHeight);
 
         // add in the view window size
-        if ( mpViewWindow && mpViewWindow->IsVisible() )
+        if ( mpRoadmap && mpRoadmap->IsVisible() )
         {
-            Size aViewSize = mpViewWindow->GetSizePixel();
+            Size aViewSize = mpRoadmap->GetSizePixel();
             // align left
             rSize.AdjustWidth(aViewSize.Width() );
         }
@@ -287,7 +285,7 @@ namespace vcl
             nOffY -= WIZARDDIALOG_BUTTON_OFFSET_Y;
         }
 
-        if ( !(mpViewWindow && mpViewWindow->IsVisible()) )
+        if ( !(mpRoadmap && mpRoadmap->IsVisible()) )
             return;
 
         tools::Long    nViewOffX = 0;
@@ -312,7 +310,7 @@ namespace vcl
             }
             nViewPosFlags  |= PosSizeFlags::Height;
         }
-        mpViewWindow->setPosSizePixel( nViewOffX, nViewOffY,
+        mpRoadmap->setPosSizePixel( nViewOffX, nViewOffY,
                                       nViewWidth, nViewHeight,
                                       nViewPosFlags );
     }
@@ -355,9 +353,9 @@ namespace vcl
         aDlgSize.AdjustHeight( -nMaxHeight );
         tools::Long nOffX = 0;
         tools::Long nOffY = 0;
-        if ( mpViewWindow && mpViewWindow->IsVisible() )
+        if ( mpRoadmap && mpRoadmap->IsVisible() )
         {
-            Size aViewSize = mpViewWindow->GetSizePixel();
+            Size aViewSize = mpRoadmap->GetSizePixel();
             // align left
             tools::Long nViewOffset = mbEmptyViewMargin ? 0 : WIZARDDIALOG_VIEW_DLGOFFSET_X;
             nOffX += aViewSize.Width() + nViewOffset;
@@ -562,7 +560,7 @@ namespace vcl
 
         // synchronize the roadmap
         implUpdateRoadmap();
-        m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID(getCurrentState());
+        mpRoadmap->SelectRoadmapItemByID(getCurrentState());
 
         ImplShowTabPage( ImplGetPage( mnCurLevel ) );
     }
@@ -858,10 +856,10 @@ namespace vcl
 
         // now, we have to remove all items after nCurrentStatePathIndex, and insert the items from the active
         // path, up to (excluding) nUpperStepBoundary
-        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, m_xRoadmapImpl->pRoadmap->GetItemCount() );
+        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, mpRoadmap->GetItemCount() );
         for ( RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
         {
-            bool bExistentItem = ( nItemIndex < m_xRoadmapImpl->pRoadmap->GetItemCount() );
+            bool bExistentItem = ( nItemIndex < mpRoadmap->GetItemCount() );
             bool bNeedItem = ( nItemIndex < nUpperStepBoundary );
 
             bool bInsertItem = false;
@@ -869,19 +867,19 @@ namespace vcl
             {
                 if ( !bNeedItem )
                 {
-                    while ( nItemIndex < m_xRoadmapImpl->pRoadmap->GetItemCount() )
-                        m_xRoadmapImpl->pRoadmap->DeleteRoadmapItem( nItemIndex );
+                    while ( nItemIndex < mpRoadmap->GetItemCount() )
+                        mpRoadmap->DeleteRoadmapItem( nItemIndex );
                     break;
                 }
                 else
                 {
                     // there is an item with this index in the roadmap - does it match what is requested by
                     // the respective state in the active path?
-                    RoadmapTypes::ItemId nPresentItemId = m_xRoadmapImpl->pRoadmap->GetItemID( nItemIndex );
+                    RoadmapTypes::ItemId nPresentItemId = mpRoadmap->GetItemID( nItemIndex );
                     WizardTypes::WizardState nRequiredState = rActivePath[ nItemIndex ];
                     if ( nPresentItemId != nRequiredState )
                     {
-                        m_xRoadmapImpl->pRoadmap->DeleteRoadmapItem( nItemIndex );
+                        mpRoadmap->DeleteRoadmapItem( nItemIndex );
                         bInsertItem = true;
                     }
                 }
@@ -895,7 +893,7 @@ namespace vcl
             WizardTypes::WizardState nState( rActivePath[ nItemIndex ] );
             if ( bInsertItem )
             {
-                m_xRoadmapImpl->pRoadmap->InsertRoadmapItem(
+                mpRoadmap->InsertRoadmapItem(
                     nItemIndex,
                     getStateDisplayName( nState ),
                     nState,
@@ -904,10 +902,10 @@ namespace vcl
             }
 
             const bool bEnable = m_xRoadmapImpl->aDisabledStates.find( nState ) == m_xRoadmapImpl->aDisabledStates.end();
-            m_xRoadmapImpl->pRoadmap->EnableRoadmapItem( m_xRoadmapImpl->pRoadmap->GetItemID( nItemIndex ), bEnable );
+            mpRoadmap->EnableRoadmapItem( mpRoadmap->GetItemID( nItemIndex ), bEnable );
         }
 
-        m_xRoadmapImpl->pRoadmap->SetRoadmapComplete( !bIncompletePath );
+        mpRoadmap->SetRoadmapComplete( !bIncompletePath );
     }
 
     WizardTypes::WizardState RoadmapWizard::determineNextState( WizardTypes::WizardState _nCurrentState ) const
@@ -942,7 +940,7 @@ namespace vcl
 
     IMPL_LINK_NOARG(RoadmapWizard, OnRoadmapItemSelected, LinkParamNone*, void)
     {
-        RoadmapTypes::ItemId nCurItemId = m_xRoadmapImpl->pRoadmap->GetCurrentRoadmapItemID();
+        RoadmapTypes::ItemId nCurItemId = mpRoadmap->GetCurrentRoadmapItemID();
         if ( nCurItemId == getCurrentState() )
             // nothing to do
             return;
@@ -984,28 +982,28 @@ namespace vcl
 
     void RoadmapWizard::InsertRoadmapItem(int nItemIndex, const OUString& rText, int nItemId, bool bEnable)
     {
-        m_xRoadmapImpl->pRoadmap->InsertRoadmapItem(nItemIndex, rText, nItemId, bEnable);
+        mpRoadmap->InsertRoadmapItem(nItemIndex, rText, nItemId, bEnable);
     }
 
     void RoadmapWizard::SelectRoadmapItemByID(int nItemId, bool bGrabFocus)
     {
-        m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID(nItemId, bGrabFocus);
+        mpRoadmap->SelectRoadmapItemByID(nItemId, bGrabFocus);
     }
 
     void RoadmapWizard::DeleteRoadmapItems()
     {
-        while (m_xRoadmapImpl->pRoadmap->GetItemCount())
-            m_xRoadmapImpl->pRoadmap->DeleteRoadmapItem(0);
+        while (mpRoadmap->GetItemCount())
+            mpRoadmap->DeleteRoadmapItem(0);
     }
 
     void RoadmapWizard::SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl )
     {
-        m_xRoadmapImpl->pRoadmap->SetItemSelectHdl(_rHdl);
+        mpRoadmap->SetItemSelectHdl(_rHdl);
     }
 
     int RoadmapWizard::GetCurrentRoadmapItemID() const
     {
-        return m_xRoadmapImpl->pRoadmap->GetCurrentRoadmapItemID();
+        return mpRoadmap->GetCurrentRoadmapItemID();
     }
 
     FactoryFunction RoadmapWizard::GetUITestFactory() const
@@ -1062,7 +1060,7 @@ namespace vcl
                 {
                     vcl::Window* pChild = GetChild(i);
 
-                    if (!isButton(pChild->GetType()) && pChild != mpViewWindow)
+                    if (!isButton(pChild->GetType()) && pChild != mpRoadmap)
                     {
                         auto childNode = rJsonWriter.startStruct();
                         pChild->DumpAsPropertyTree(rJsonWriter);
