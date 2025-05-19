@@ -587,7 +587,9 @@ namespace vcl
         WizardTypes::WizardState nCurrentLevel = GetCurLevel();
         GetOrCreatePage( nCurrentLevel );
 
-        enterState( nCurrentLevel );
+        // synchronize the roadmap
+        implUpdateRoadmap();
+        m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID(getCurrentState());
     }
 
     bool RoadmapWizard::ShowPage( sal_uInt16 nLevel )
@@ -1036,13 +1038,6 @@ namespace vcl
 
         if ( !bResult )
             m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
-    }
-
-    void RoadmapWizard::enterState(WizardTypes::WizardState /*nState*/)
-    {
-        // synchronize the roadmap
-        implUpdateRoadmap( );
-        m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
     }
 
     OUString RoadmapWizard::getStateDisplayName( WizardTypes::WizardState _nState ) const

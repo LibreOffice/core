@@ -204,9 +204,6 @@ namespace vcl
         /// to override to create new pages
         VclPtr<TabPage>     createPage(WizardTypes::WizardState nState);
 
-        /// will be called when a new page is about to be displayed
-        void                enterState(WizardTypes::WizardState _nState);
-
         /** determine the next state to travel from the given one
 
             This method ensures that traveling happens along the active path.
