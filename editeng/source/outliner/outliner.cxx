@@ -1226,20 +1226,19 @@ bool Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView )
 }
 
 Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
-    : mnFirstSelPage(0)
+    : pEditEngine(new OutlinerEditEng(this, pPool))
+    , pParaList(new ParagraphList)
+    , mnFirstSelPage(0)
     , nDepthChangedHdlPrevDepth(0)
     , nMaxDepth(9)
     , bFirstParaIsEmpty(true)
     , nBlockInsCallback(0)
     , bPasting(false)
 {
-
-    pParaList.reset( new ParagraphList );
     pParaList->SetVisibleStateChangedHdl( LINK( this, Outliner, ParaVisibleStateChangedHdl ) );
     std::unique_ptr<Paragraph> pPara(new Paragraph( 0 ));
     pParaList->Append(std::move(pPara));
 
-    pEditEngine.reset( new OutlinerEditEng( this, pPool ) );
     pEditEngine->SetBeginMovingParagraphsHdl( LINK( this, Outliner, BeginMovingParagraphsHdl ) );
     pEditEngine->SetEndMovingParagraphsHdl( LINK( this, Outliner, EndMovingParagraphsHdl ) );
     pEditEngine->SetBeginPasteOrDropHdl( LINK( this, Outliner, BeginPasteOrDropHdl ) );
