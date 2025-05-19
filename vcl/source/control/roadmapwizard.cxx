@@ -582,20 +582,15 @@ namespace vcl
             SetPage( i_nState, pNewPage );
     }
 
-    void RoadmapWizard::ActivatePage()
+    bool RoadmapWizard::ShowPage( sal_uInt16 nLevel )
     {
-        WizardTypes::WizardState nCurrentLevel = GetCurLevel();
-        GetOrCreatePage( nCurrentLevel );
+        mnCurLevel = nLevel;
+        GetOrCreatePage(mnCurLevel);
 
         // synchronize the roadmap
         implUpdateRoadmap();
         m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID(getCurrentState());
-    }
 
-    bool RoadmapWizard::ShowPage( sal_uInt16 nLevel )
-    {
-        mnCurLevel = nLevel;
-        ActivatePage();
         ImplShowTabPage( ImplGetPage( mnCurLevel ) );
         return true;
     }

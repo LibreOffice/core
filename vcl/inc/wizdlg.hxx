@@ -167,8 +167,6 @@ namespace vcl
         virtual void        StateChanged( StateChangedType nStateChange ) override;
         virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
 
-        void                ActivatePage();
-
         virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
         bool                ShowPage( sal_uInt16 nLevel );
