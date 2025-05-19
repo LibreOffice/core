@@ -556,36 +556,9 @@ namespace vcl
         return Dialog::EventNotify( rNEvt );
     }
 
-    void RoadmapWizard::GetOrCreatePage( const WizardTypes::WizardState i_nState )
-    {
-        if ( nullptr != GetPage( i_nState ) )
-            return;
-
-        VclPtr<TabPage> pNewPage = createPage( i_nState );
-        DBG_ASSERT( pNewPage, "RoadmapWizard::GetOrCreatePage: invalid new page (NULL)!" );
-
-        // fill up the page sequence of our base class (with dummies)
-        while ( m_xWizardImpl->nFirstUnknownPage < i_nState )
-        {
-            AddPage( nullptr );
-            ++m_xWizardImpl->nFirstUnknownPage;
-        }
-
-        if ( m_xWizardImpl->nFirstUnknownPage == i_nState )
-        {
-            // encountered this page number the first time
-            AddPage( pNewPage );
-            ++m_xWizardImpl->nFirstUnknownPage;
-        }
-        else
-            // already had this page - just change it
-            SetPage( i_nState, pNewPage );
-    }
-
     void RoadmapWizard::ShowPage(sal_uInt16 nLevel)
     {
         mnCurLevel = nLevel;
-        GetOrCreatePage(mnCurLevel);
 
         // synchronize the roadmap
         implUpdateRoadmap();
@@ -1017,12 +990,6 @@ namespace vcl
     {
         SAL_WARN("vcl", "RoadmapWizard::getStateDisplayName: no name available for this state!");
         return OUString();
-    }
-
-    VclPtr<TabPage> RoadmapWizard::createPage( WizardTypes::WizardState /* _nState */)
-    {
-        SAL_WARN("vcl", "RoadmapWizard::createPage: no default implementation available for this state!");
-        return nullptr;
     }
 
     void RoadmapWizard::InsertRoadmapItem(int nItemIndex, const OUString& rText, int nItemId, bool bEnable)

@@ -182,10 +182,6 @@ namespace vcl
         FactoryFunction GetUITestFactory() const override;
 
     private:
-
-        /// to override to create new pages
-        static VclPtr<TabPage> createPage(WizardTypes::WizardState nState);
-
         /** determine the next state to travel from the given one
 
             This method ensures that traveling happens along the active path.
@@ -269,8 +265,6 @@ namespace vcl
         bool                   isTravelingSuspended() const;
 
     private:
-        void GetOrCreatePage(const WizardTypes::WizardState i_nState);
-
         void             ImplCalcSize( Size& rSize );
         void             ImplPosCtrls();
         void             ImplPosTabPage();
