@@ -1553,7 +1553,7 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
     // #i15113#
     bool bRespectDriverRST = false;
     Any aSetting;
-    if ( getDataSourceSetting( ::dbaccess::getDataSource( m_xActiveConnection ), "RespectDriverResultSetType", aSetting ) )
+    if (getDataSourceSetting(::dbaccess::getDataSource(m_xActiveConnection), u"RespectDriverResultSetType"_ustr, aSetting))
     {
         OSL_VERIFY( aSetting >>= bRespectDriverRST );
     }

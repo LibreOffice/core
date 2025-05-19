@@ -965,7 +965,7 @@ void ODBExport::exportForms()
 {
     Any aValue;
     OUString sService;
-    dbtools::getDataSourceSetting(getDataSource(),"Forms",aValue);
+    dbtools::getDataSourceSetting(getDataSource(), u"Forms"_ustr, aValue);
     aValue >>= sService;
     if ( !sService.isEmpty() )
         return;
@@ -986,7 +986,7 @@ void ODBExport::exportReports()
 {
     Any aValue;
     OUString sService;
-    dbtools::getDataSourceSetting(getDataSource(),"Reports",aValue);
+    dbtools::getDataSourceSetting(getDataSource(), u"Reports"_ustr, aValue);
     aValue >>= sService;
     if ( !sService.isEmpty() )
         return;
@@ -1007,7 +1007,7 @@ void ODBExport::exportQueries(bool _bExportContext)
 {
     Any aValue;
     OUString sService;
-    dbtools::getDataSourceSetting(getDataSource(),"CommandDefinitions",aValue);
+    dbtools::getDataSourceSetting(getDataSource(), u"CommandDefinitions"_ustr, aValue);
     aValue >>= sService;
     if ( !sService.isEmpty() )
         return;

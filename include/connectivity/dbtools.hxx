@@ -340,8 +340,8 @@ namespace dbtools
 
         @param _rxDataSource
             a data source component
-        @param _pAsciiSettingsName
-            the ASCII name of the setting to obtain
+        @param _sSettingsName
+            the name of the setting to obtain
         @param _rSettingsValue
             the value of the setting, upon successful return
 
@@ -350,12 +350,6 @@ namespace dbtools
             member of the data source
             <TRUE/> otherwise
     */
-    OOO_DLLPUBLIC_DBTOOLS
-    bool    getDataSourceSetting(
-        const css::uno::Reference< css::uno::XInterface >& _rxDataSource,
-        const char* _pAsciiSettingsName,
-        css::uno::Any& /* [out] */ _rSettingsValue
-    );
     OOO_DLLPUBLIC_DBTOOLS
     bool    getDataSourceSetting(
         const css::uno::Reference< css::uno::XInterface >& _rxDataSource,

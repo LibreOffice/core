@@ -625,13 +625,6 @@ bool getDataSourceSetting( const Reference< XInterface >& _xChild, const OUStrin
     return bIsPresent;
 }
 
-bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const char* _pAsciiSettingsName,
-    Any& /* [out] */ _rSettingsValue )
-{
-    OUString sAsciiSettingsName = OUString::createFromAscii(_pAsciiSettingsName);
-    return getDataSourceSetting( _rxDataSource, sAsciiSettingsName,_rSettingsValue );
-}
-
 bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp, const OUString& _sProperty, bool _bDefault)
 {
     bool bEnabled = _bDefault;

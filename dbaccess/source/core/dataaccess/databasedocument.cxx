@@ -1421,7 +1421,7 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
     {
         Any aValue;
         css::uno::Reference< css::uno::XInterface > xMy(*this);
-        if ( dbtools::getDataSourceSetting(xMy,bFormsContainer ? "Forms" : "Reports",aValue) )
+        if (dbtools::getDataSourceSetting(xMy, bFormsContainer ? u"Forms"_ustr : u"Reports"_ustr, aValue))
         {
             OUString sSupportService;
             aValue >>= sSupportService;

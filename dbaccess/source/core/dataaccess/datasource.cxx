@@ -1173,7 +1173,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( )
     {
         Any aValue;
         css::uno::Reference< css::uno::XInterface > xMy(*this);
-        if ( dbtools::getDataSourceSetting(xMy,"CommandDefinitions",aValue) )
+        if (dbtools::getDataSourceSetting(xMy, u"CommandDefinitions"_ustr, aValue))
         {
             OUString sSupportService;
             aValue >>= sSupportService;

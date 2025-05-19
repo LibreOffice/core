@@ -66,7 +66,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDatabase::createFa
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Any aValue;
                 OUString sService;
-                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"Forms",aValue);
+                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(), u"Forms"_ustr, aValue);
                 aValue >>= sService;
                 if ( sService.isEmpty() )
                 {
@@ -81,7 +81,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDatabase::createFa
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Any aValue;
                 OUString sService;
-                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"Reports",aValue);
+                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(), u"Reports"_ustr, aValue);
                 aValue >>= sService;
                 if ( sService.isEmpty() )
                 {
@@ -96,7 +96,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDatabase::createFa
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Any aValue;
                 OUString sService;
-                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"CommandDefinitions",aValue);
+                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(), u"CommandDefinitions"_ustr, aValue);
                 aValue >>= sService;
                 if ( sService.isEmpty() )
                 {
