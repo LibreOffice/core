@@ -1790,8 +1790,10 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     // possible to verify the signature, even if we didn't have the certificate
     // previously.
     std::vector<CERTCertificate*> aDocumentCertificates;
-    for (size_t i = 0; pCMSSignedData->rawCerts[i]; ++i)
-        aDocumentCertificates.push_back(CERT_NewTempCertificate(CERT_GetDefaultCertDB(), pCMSSignedData->rawCerts[i], nullptr, 0, 0));
+    if (auto aCerts = pCMSSignedData->rawCerts) {
+        while (*aCerts)
+            aDocumentCertificates.push_back(CERT_NewTempCertificate(CERT_GetDefaultCertDB(), *aCerts++, nullptr, 0, 0));
+    }
 
     NSSCMSSignerInfo* pCMSSignerInfo = NSS_CMSSignedData_GetSignerInfo(pCMSSignedData, 0);
     if (!pCMSSignerInfo)
@@ -1800,7 +1802,13 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         return false;
     }
 
-    SECItem aAlgorithm = NSS_CMSSignedData_GetDigestAlgs(pCMSSignedData)[0]->algorithm;
+    auto aDigestAlgs = NSS_CMSSignedData_GetDigestAlgs(pCMSSignedData);
+    if (!aDigestAlgs || !*aDigestAlgs) {
+        SAL_WARN("svl.crypto", "ValidateSignature: digestAlgorithms missing");
+        return false;
+    }
+
+    SECItem aAlgorithm = aDigestAlgs[0]->algorithm;
     SECOidTag eOidTag = SECOID_FindOIDTag(&aAlgorithm);
 
     // Map a sign algorithm to a digest algorithm.

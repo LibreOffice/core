@@ -661,6 +661,33 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadNonDetached)
     }
 }
 
+/// Test that we do not crash when processing incomplete signatures
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testIncompleteCMS)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
+    const std::initializer_list<std::u16string_view> aNames
+        = { // empty digestAlgorithms; used to crash when using NSS
+            u"bad-empty-digestalgorithms.pdf",
+            // missing certificates; used to crash when using NSS
+            u"bad-missing-certificates.pdf"
+          };
+
+    for (const auto& rName : aNames)
+    {
+        std::vector<SignatureInformation> aInfos
+            = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + rName, 1);
+        CPPUNIT_ASSERT(!aInfos.empty());
+        SignatureInformation& rInformation = aInfos[0];
+        CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
+                             rInformation.nStatus);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
