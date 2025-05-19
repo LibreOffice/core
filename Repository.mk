@@ -96,6 +96,7 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	cppumaker \
 	javamaker \
 	netmaker \
+	pythonmaker \
     $(call gb_CondExeSp2bv,sp2bv) \
 	$(if $(filter ODK,$(BUILD_TYPE)),unoapploader) \
 	unoidl-read \

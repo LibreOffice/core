@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,codemaker,\
     Executable_javamaker \
     Executable_cppumaker \
     Executable_netmaker \
+    Executable_pythonmaker \
 ))
 endif
 
