@@ -783,6 +783,36 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     }
 }
 
+namespace
+{
+/// Similar to CanCombineTypesForAcceptReject(), but for import purposes.
+bool CanCombineTypesForImport(RedlineInfo* pRedlineInfo)
+{
+    if (!pRedlineInfo->pNextRedline)
+    {
+        return false;
+    }
+
+    RedlineType eInnerType = pRedlineInfo->pNextRedline->eType;
+    if (eInnerType != RedlineType::Insert)
+    {
+        return false;
+    }
+
+    RedlineType eOuterType = pRedlineInfo->eType;
+    switch (eOuterType)
+    {
+        case RedlineType::Delete:
+        case RedlineType::Format:
+            break;
+        default:
+            return false;
+    }
+
+    return true;
+}
+}
+
 SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     RedlineInfo* pRedlineInfo,
     SwDoc* pDoc)
@@ -807,9 +837,7 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     // 3) recursively convert next redline
     //    ( check presence and sanity of hierarchical redline info )
     SwRedlineData* pNext = nullptr;
-    if ( (nullptr != pRedlineInfo->pNextRedline) &&
-         (RedlineType::Delete == pRedlineInfo->eType) &&
-         (RedlineType::Insert == pRedlineInfo->pNextRedline->eType) )
+    if (CanCombineTypesForImport(pRedlineInfo))
     {
         pNext = ConvertRedline(pRedlineInfo->pNextRedline, pDoc);
     }

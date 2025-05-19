@@ -63,6 +63,8 @@ enum class RedlineType : sal_uInt16
     Any = USHRT_MAX // special value to indicate any redline type in some method calls
 };
 
+SVX_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const RedlineType& eType);
+
 /// Struct for sorting data.
 class SAL_WARN_UNUSED SVX_DLLPUBLIC RedlinData
 {

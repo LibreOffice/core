@@ -30,6 +30,7 @@
 #include <helpids.h>
 
 #include <svx/ctredlin.hxx>
+#include <o3tl/unreachable.hxx>
 
 #define WRITER_DATE     2
 #define CALC_DATE       3
@@ -1007,6 +1008,39 @@ IMPL_LINK(SvxAcceptChgCtr, DeactivatePageHdl, const OUString&, rPage, bool)
     else if (rPage == "view")
         m_xTPView->DeactivatePage();
     return true;
+}
+
+std::ostream& operator<<(std::ostream& rStream, const RedlineType& eType)
+{
+    switch (eType)
+    {
+        case RedlineType::Insert:
+            return rStream << "RedlineType::Insert";
+        case RedlineType::Delete:
+            return rStream << "RedlineType::Delete";
+        case RedlineType::Format:
+            return rStream << "RedlineType::Format";
+        case RedlineType::Table:
+            return rStream << "RedlineType::Table";
+        case RedlineType::FmtColl:
+            return rStream << "RedlineType::FmtColl";
+        case RedlineType::ParagraphFormat:
+            return rStream << "RedlineType::ParagraphFormat";
+        case RedlineType::TableRowInsert:
+            return rStream << "RedlineType::TableRowInsert";
+        case RedlineType::TableRowDelete:
+            return rStream << "RedlineType::TableRowDelete";
+        case RedlineType::TableCellInsert:
+            return rStream << "RedlineType::TableCellInsert";
+        case RedlineType::TableCellDelete:
+            return rStream << "RedlineType::TableCellDelete";
+        case RedlineType::None:
+            return rStream << "RedlineType::None";
+        case RedlineType::Any:
+            return rStream << "RedlineType::Any";
+        default:
+            O3TL_UNREACHABLE;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
