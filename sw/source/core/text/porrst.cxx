@@ -420,7 +420,8 @@ bool SwTextFrame::FormatEmpty()
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrame::FormatEmpty with swapped frame" );
 
-    bool bCollapse = EmptyHeight( ) == 1 && IsCollapse( );
+    SwTwips nHeight = EmptyHeight();
+    bool bCollapse = nHeight == 1 && IsCollapse();
 
     // sw_redlinehide: just disable FormatEmpty optimisation for now
     // Split fly frames: non-last parts of the anchor want this optimization to clear the old
@@ -479,8 +480,6 @@ bool SwTextFrame::FormatEmpty()
             return false;
         }
     }
-
-    SwTwips nHeight = EmptyHeight();
 
     if (aSet.GetParaGrid().GetValue() &&
             IsInDocBody() )
