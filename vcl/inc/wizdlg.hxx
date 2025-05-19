@@ -57,7 +57,6 @@ namespace vcl
 
     struct RoadmapWizardImpl
     {
-        std::map<VclPtr<vcl::Window>, short> maResponses;
         Paths               aPaths;
         PathId              nActivePath;
         StateSet            aDisabledStates;
@@ -108,6 +107,7 @@ namespace vcl
         VclPtr<PushButton>      mpPrevBtn;
         VclPtr<PushButton>      mpNextBtn;
         VclPtr<ORoadmap>        mpRoadmap;
+        std::map<VclPtr<vcl::Window>, short> maResponses;
         sal_uInt16              mnCurLevel;
         sal_Int16               mnLeftAlignCount;
         bool                    mbEmptyViewMargin;

@@ -160,6 +160,7 @@ namespace vcl
         mpPrevBtn.clear();
         mpNextBtn.clear();
         mpRoadmap.disposeAndClear();
+        maResponses.clear();
         Dialog::dispose();
     }
 
@@ -403,7 +404,7 @@ namespace vcl
 
     void RoadmapWizard::AddButtonResponse( Button* pButton, int response)
     {
-        m_xRoadmapImpl->maResponses[pButton] = response;
+        maResponses[pButton] = response;
     }
 
     void RoadmapWizard::implConstruct()
@@ -1032,7 +1033,7 @@ namespace vcl
         rJsonWriter.put("dialogid", sDialogId.copy(nStartPos));
         {
             auto aResponses = rJsonWriter.startArray("responses");
-            for (const auto& rResponse : m_xRoadmapImpl->maResponses)
+            for (const auto& rResponse : maResponses)
             {
                 auto aResponse = rJsonWriter.startStruct();
                 rJsonWriter.put("id", rResponse.first->get_id());
