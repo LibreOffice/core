@@ -31,7 +31,7 @@ class SVXCORE_DLLPUBLIC XFillFloatTransparenceItem final : public XFillGradientI
 {
 private:
 
-    bool                    bEnabled;
+    bool                    m_bEnabled;
 
 public:
 
@@ -50,8 +50,8 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePres, MapUnit eCoreMetric,
                                   MapUnit ePresMetric, OUString &rText, const IntlWrapper& rIntlWrapper ) const override;
 
-    bool                    IsEnabled() const { return bEnabled; }
-    void                    SetEnabled( bool bEnable ) { bEnabled = bEnable; }
+    bool                    IsEnabled() const { return m_bEnabled; }
+    void                    SetEnabled( bool bEnable ) { m_bEnabled = bEnable; }
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     std::unique_ptr<XFillFloatTransparenceItem> checkForUniqueItem( SdrModel& rModel ) const;

@@ -2506,32 +2506,32 @@ SfxPoolItem* XFillFloatTransparenceItem::CreateDefault() { return new XFillFloat
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
     XFillGradientItem(XATTR_FILLFLOATTRANSPARENCE),
-    bEnabled( false )
+    m_bEnabled( false )
 {
 }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(const OUString& rName, const basegfx::BGradient& rGradient, bool bEnable ) :
     XFillGradientItem   ( rName, rGradient, XATTR_FILLFLOATTRANSPARENCE ),
-    bEnabled            ( bEnable )
+    m_bEnabled            ( bEnable )
 {
 }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem ) :
     XFillGradientItem   ( rItem ),
-    bEnabled            ( rItem.bEnabled )
+    m_bEnabled            ( rItem.m_bEnabled )
 {
 }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(const basegfx::BGradient& rTheGradient, bool bEnable )
 :   XFillGradientItem   ( -1, rTheGradient, XATTR_FILLFLOATTRANSPARENCE ),
-    bEnabled            ( bEnable )
+    m_bEnabled            ( bEnable )
 {
 }
 
 bool XFillFloatTransparenceItem::operator==( const SfxPoolItem& rItem ) const
 {
     return ( XFillGradientItem::operator==(rItem) ) &&
-           ( bEnabled == static_cast<const XFillFloatTransparenceItem&>(rItem).bEnabled );
+           ( m_bEnabled == static_cast<const XFillFloatTransparenceItem&>(rItem).m_bEnabled );
 }
 
 XFillFloatTransparenceItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
@@ -2622,7 +2622,7 @@ boost::property_tree::ptree XFillFloatTransparenceItem::dumpAsJSON() const
     boost::property_tree::ptree aTree = XFillGradientItem::dumpAsJSON();
     aTree.put("commandName", ".uno:FillFloatTransparence");
 
-    if (!bEnabled)
+    if (!m_bEnabled)
     {
         boost::property_tree::ptree& rState = aTree.get_child("state");
         // When gradient fill is disabled, the intensity fields contain the
