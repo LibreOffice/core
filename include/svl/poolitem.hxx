@@ -794,7 +794,7 @@ private:
 // stuff - better use an intelligent, pro-Item implementation
 // that does e.g. hashing or whatever might be feasible for
 // that specific Item (see other derivations)
-class SVL_DLLPUBLIC DefaultItemInstanceManager : public ItemInstanceManager
+class SVL_DLLPUBLIC DefaultItemInstanceManager final : public ItemInstanceManager
 {
     std::unordered_map<sal_uInt16, std::unordered_set<const SfxPoolItem*>>  maRegistered;
 

@@ -116,7 +116,7 @@ public:
     virtual void SAL_CALL setParentStyle(const OUString& aParentStyle) override;
 
     //XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo>
+    SW_DLLPUBLIC virtual css::uno::Reference<css::beans::XPropertySetInfo>
         SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
                                            const css::uno::Any& aValue) override;
@@ -221,7 +221,7 @@ public:
 };
 
 typedef cppu::ImplInheritanceHelper<SwXStyle, css::document::XEventsSupplier> SwXFrameStyle_Base;
-class SwXFrameStyle : public SwXFrameStyle_Base, public sw::ICoreFrameStyle
+class SwXFrameStyle final : public SwXFrameStyle_Base, public sw::ICoreFrameStyle
 {
 public:
     SwXFrameStyle(SfxStyleSheetBasePool& rPool, SwDoc* pDoc, const UIName& rStyleName)
@@ -238,7 +238,7 @@ public:
     virtual css::document::XEventsSupplier& GetEventsSupplier() override { return *this; };
 };
 
-class SAL_DLLPUBLIC_RTTI SwXPageStyle : public SwXStyle
+class SW_DLLPUBLIC SwXPageStyle final : public SwXStyle
 {
 protected:
     void SetPropertyValues_Impl(const css::uno::Sequence<OUString>& aPropertyNames,

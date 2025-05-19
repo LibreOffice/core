@@ -39,7 +39,7 @@ class AccessibleSlideSorterObject;
     of the AccessibleSlideSorterObject class to the make the page objects
     accessible.
 */
-class AccessibleSlideSorterView
+class AccessibleSlideSorterView final
     : public cppu::ImplInheritanceHelper<
           comphelper::OAccessibleComponentHelper, css::accessibility::XAccessible,
           css::accessibility::XAccessibleSelection, css::lang::XServiceInfo>

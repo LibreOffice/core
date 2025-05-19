@@ -26,7 +26,7 @@
 
 namespace drawinglayer::primitive2d
 {
-class BufferedDecompositionFlusher : public osl::Thread
+class BufferedDecompositionFlusher final : public osl::Thread
 {
 public:
     static void update(const BufferedDecompositionPrimitive2D*);

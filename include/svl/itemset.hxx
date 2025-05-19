@@ -313,7 +313,7 @@ private:
 // To adapt, there is the static makeFixedSfxItemSet member in SfxItemSet. Did
 // that in one place to check functionality (easy hack...?)
 template<sal_uInt16... WIDs>
-class SfxItemSetFixed : public SfxItemSet
+class SfxItemSetFixed final : public SfxItemSet
 {
 public:
     SfxItemSetFixed( SfxItemPool& rPool)

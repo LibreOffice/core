@@ -12,7 +12,7 @@
 
 #include <vcl/bitmap/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapDarkenBlendFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapDarkenBlendFilter final : public BitmapFilter
 {
 private:
     BitmapEx maBlendBitmapBitmapEx;

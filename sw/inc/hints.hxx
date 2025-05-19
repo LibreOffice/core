@@ -43,7 +43,7 @@ class SwUpdateAttr;
 
 // Base class for all Message-Hints:
 // "Overhead" of SfxPoolItem is handled here
-class SwMsgPoolItem : public SfxPoolItem
+class SwMsgPoolItem final : public SfxPoolItem
 {
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SwMsgPoolItem)

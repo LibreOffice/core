@@ -25,7 +25,7 @@ namespace accessibility {
 
 /** This class makes Impress shapes accessible.
 */
-class AccessiblePresentationOLEShape
+class AccessiblePresentationOLEShape final
     :   public AccessibleOLEShape
 {
 public:

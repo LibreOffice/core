@@ -26,7 +26,7 @@
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_NUMBER
 */
-class XMLNumberPropHdl : public XMLPropertyHandler
+class XMLNumberPropHdl final : public XMLPropertyHandler
 {
     sal_Int8 nBytes;
 
@@ -41,7 +41,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_NUMBER_NONE
 */
-class XMLNumberNonePropHdl : public XMLPropertyHandler
+class XMLNumberNonePropHdl final : public XMLPropertyHandler
 {
     OUString sZeroStr;
     sal_Int8        nBytes;
@@ -57,7 +57,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_MEASURE
 */
-class XMLMeasurePropHdl : public XMLPropertyHandler
+class XMLMeasurePropHdl final : public XMLPropertyHandler
 {
     sal_Int8 nBytes;
 public:
@@ -71,7 +71,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_UNIT_MEASURE
 */
-class XMLUnitMeasurePropHdl : public XMLPropertyHandler
+class XMLUnitMeasurePropHdl final : public XMLPropertyHandler
 {
 public:
     bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -81,7 +81,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_PERCENT
 */
-class XMLPercentPropHdl : public XMLPropertyHandler
+class XMLPercentPropHdl final : public XMLPropertyHandler
 {
     sal_Int8 nBytes;
 public:
@@ -96,14 +96,14 @@ public:
     PropertyHandler for the XML-data-type: XML_TYPE_PERCENT
     that is mapped on a double from 0.0 to 1.0
 */
-class XMLDoublePercentPropHdl : public XMLPropertyHandler
+class XMLDoublePercentPropHdl final : public XMLPropertyHandler
 {
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /// Maps between XML percentage and our 100th percent ints.
-class XML100thPercentPropHdl : public XMLPropertyHandler
+class XML100thPercentPropHdl final : public XMLPropertyHandler
 {
     virtual bool importXML(const OUString& rStrImpValue, css::uno::Any& rValue,
                            const SvXMLUnitConverter& rUnitConverter) const override;
@@ -114,7 +114,7 @@ class XML100thPercentPropHdl : public XMLPropertyHandler
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_NEG_PERCENT
 */
-class XMLNegPercentPropHdl : public XMLPropertyHandler
+class XMLNegPercentPropHdl final : public XMLPropertyHandler
 {
     sal_Int8 nBytes;
 public:
@@ -128,7 +128,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_PERCENT
 */
-class XMLMeasurePxPropHdl : public XMLPropertyHandler
+class XMLMeasurePxPropHdl final : public XMLPropertyHandler
 {
     sal_Int8 nBytes;
 public:
@@ -151,7 +151,7 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
-class XMLBoolFalsePropHdl : public XMLBoolPropHdl
+class XMLBoolFalsePropHdl final : public XMLBoolPropHdl
 {
 public:
     virtual ~XMLBoolFalsePropHdl() override;
@@ -164,7 +164,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_COLOR
 */
-class XMLColorPropHdl : public XMLPropertyHandler
+class XMLColorPropHdl final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLColorPropHdl() override;
@@ -176,7 +176,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_HEX
 */
-class XMLHexPropHdl : public XMLPropertyHandler
+class XMLHexPropHdl final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLHexPropHdl() override;
@@ -200,7 +200,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_STYLENAME
 */
-class XMLStyleNamePropHdl : public XMLStringPropHdl
+class XMLStyleNamePropHdl final : public XMLStringPropHdl
 {
 public:
     virtual ~XMLStyleNamePropHdl() override;
@@ -224,7 +224,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_NBOOL
 */
-class XMLNBoolPropHdl : public XMLPropertyHandler
+class XMLNBoolPropHdl final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLNBoolPropHdl() override;
@@ -236,7 +236,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_COLORTRANSPARENT
 */
-class XMLColorTransparentPropHdl : public XMLPropertyHandler
+class XMLColorTransparentPropHdl final : public XMLPropertyHandler
 {
     const OUString sTransparent;
 
@@ -251,7 +251,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_ISTRANSPARENT
 */
-class XMLIsTransparentPropHdl : public XMLPropertyHandler
+class XMLIsTransparentPropHdl final : public XMLPropertyHandler
 {
     const OUString sTransparent;
     bool bTransPropValue;
@@ -268,7 +268,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_COLORAUTO
 */
-class XMLColorAutoPropHdl : public XMLPropertyHandler
+class XMLColorAutoPropHdl final : public XMLPropertyHandler
 {
 public:
     XMLColorAutoPropHdl();
@@ -281,7 +281,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_COLORISAUTO
 */
-class XMLIsAutoColorPropHdl : public XMLPropertyHandler
+class XMLIsAutoColorPropHdl final : public XMLPropertyHandler
 {
 public:
     XMLIsAutoColorPropHdl();
@@ -296,7 +296,7 @@ public:
     PropertyHandler for properties that cannot make use of importXML
     and exportXML methods, but can make use of the default comparison
 */
-class XMLCompareOnlyPropHdl : public XMLPropertyHandler
+class XMLCompareOnlyPropHdl final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLCompareOnlyPropHdl() override;
@@ -310,7 +310,7 @@ public:
     Reads/writes numeric properties, but fails for the value zero
     (i.e., a value 0 property will not be written)
 */
-class XMLNumberWithoutZeroPropHdl : public XMLPropertyHandler
+class XMLNumberWithoutZeroPropHdl final : public XMLPropertyHandler
 {
     sal_Int8        nBytes;
 public:

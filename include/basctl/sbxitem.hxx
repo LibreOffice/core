@@ -35,7 +35,7 @@ enum SbxItemType
     SBX_TYPE_METHOD
 };
 
-class BASCTL_DLLPUBLIC SbxItem : public SfxPoolItem
+class BASCTL_DLLPUBLIC SbxItem final : public SfxPoolItem
 {
     const ScriptDocument    m_aDocument;
     const OUString          m_aLibName;

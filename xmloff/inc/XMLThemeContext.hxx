@@ -20,7 +20,7 @@ class Theme;
 }
 
 /// Imports the theme
-class XMLThemeContext : public SvXMLImportContext
+class XMLThemeContext final : public SvXMLImportContext
 {
     // Any UNO object that has the "Theme" property - usually XPage (master page) or XModel
     css::uno::Reference<css::uno::XInterface> m_xObjectWithThemeProperty;
@@ -38,7 +38,7 @@ public:
 };
 
 /// Imports the theme colors of a theme
-class XMLThemeColorsContext : public SvXMLImportContext
+class XMLThemeColorsContext final : public SvXMLImportContext
 {
     model::Theme& mrTheme;
     std::shared_ptr<model::ColorSet> m_pColorSet;
@@ -56,7 +56,7 @@ public:
 };
 
 /// Imports a color for a color table
-class XMLColorContext : public SvXMLImportContext
+class XMLColorContext final : public SvXMLImportContext
 {
 public:
     XMLColorContext(SvXMLImport& rImport,

@@ -23,7 +23,7 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 
-class EDITENG_DLLPUBLIC SvxRubyItem : public SfxPoolItem
+class EDITENG_DLLPUBLIC SvxRubyItem final : public SfxPoolItem
 {
     OUString m_aText;
     css::text::RubyAdjust m_eAdjustment = css::text::RubyAdjust::RubyAdjust_LEFT;

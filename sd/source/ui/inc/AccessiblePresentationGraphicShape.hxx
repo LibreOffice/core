@@ -28,7 +28,7 @@ namespace accessibility {
 
 /** This class makes Impress shapes accessible.
 */
-class AccessiblePresentationGraphicShape
+class AccessiblePresentationGraphicShape final
     :   public AccessibleGraphicShape
 {
 public:

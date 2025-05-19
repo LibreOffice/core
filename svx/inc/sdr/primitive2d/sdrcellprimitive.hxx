@@ -24,7 +24,7 @@
 
 namespace drawinglayer::primitive2d
 {
-class SdrCellPrimitive2D : public BufferedDecompositionPrimitive2D
+class SdrCellPrimitive2D final : public BufferedDecompositionPrimitive2D
 {
 private:
     basegfx::B2DHomMatrix maTransform;

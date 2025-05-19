@@ -16,7 +16,7 @@
 namespace oox::shape {
 
 /// Generic (i.e. not specific to PPTX) handler for the prerendered diagram parsing.
-class OOX_DLLPUBLIC ShapeDrawingFragmentHandler : public oox::core::FragmentHandler2
+class OOX_DLLPUBLIC ShapeDrawingFragmentHandler final : public oox::core::FragmentHandler2
 {
 public:
     ShapeDrawingFragmentHandler(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, oox::drawingml::ShapePtr pGroupShapePtr);

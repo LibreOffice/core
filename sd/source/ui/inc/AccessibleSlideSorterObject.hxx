@@ -33,7 +33,7 @@ namespace accessibility {
 
 /** This class makes page objects of the slide sorter accessible.
 */
-class AccessibleSlideSorterObject
+class AccessibleSlideSorterObject final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
                                          css::accessibility::XAccessible, css::lang::XServiceInfo>
 {

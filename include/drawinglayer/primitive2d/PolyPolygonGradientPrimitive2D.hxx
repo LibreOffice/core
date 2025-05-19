@@ -33,7 +33,7 @@ namespace drawinglayer::primitive2d
     decomosition will create a MaskPrimitive2D containing a
     FillGradientPrimitive2D.
  */
-class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D final
     : public BufferedDecompositionPrimitive2D
 {
 private:

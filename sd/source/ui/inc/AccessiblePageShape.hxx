@@ -29,7 +29,7 @@ namespace accessibility {
 
 /** A page shape represents the actual page as seen on the screen.
 */
-class AccessiblePageShape
+class AccessiblePageShape final
     :   public AccessibleShape
 {
 public:

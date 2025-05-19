@@ -15,7 +15,7 @@
 
 using namespace css;
 
-class XMLOFF_DLLPUBLIC XMLComplexColorHandler : public XMLPropertyHandler
+class XMLOFF_DLLPUBLIC XMLComplexColorHandler final : public XMLPropertyHandler
 {
 public:
     bool importXML(const OUString& /*rStrImpValue*/, css::uno::Any& /*rValue*/,

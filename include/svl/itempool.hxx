@@ -64,7 +64,7 @@ public:
     sal_uInt16 getItemInfoFlags() const { return m_nItemInfoFlags; }
 };
 
-class SVL_DLLPUBLIC ItemInfoStatic : public ItemInfo
+class SVL_DLLPUBLIC ItemInfoStatic final : public ItemInfo
 {
     friend class ItemInfoPackage;
     void setItem(SfxPoolItem* pItem)
@@ -84,7 +84,7 @@ public:
     virtual const SfxPoolItem* getItem() const override { return m_pItem.get(); }
 };
 
-class SVL_DLLPUBLIC ItemInfoDynamic : public ItemInfo
+class SVL_DLLPUBLIC ItemInfoDynamic final : public ItemInfo
 {
     std::unique_ptr<const SfxPoolItem> m_pItem;
 
@@ -96,7 +96,7 @@ public:
     virtual const SfxPoolItem* getItem() const override { return m_pItem.get(); }
 };
 
-class UNLESS_MERGELIBS(SVL_DLLPUBLIC) ItemInfoUser : public ItemInfo
+class UNLESS_MERGELIBS(SVL_DLLPUBLIC) ItemInfoUser final : public ItemInfo
 {
     const SfxPoolItem* m_pItem;
 

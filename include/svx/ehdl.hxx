@@ -12,7 +12,7 @@
 #include <svx/svxdllapi.h>
 #include <svtools/ehdl.hxx>
 
-class SVX_DLLPUBLIC SvxErrorContext : public SfxErrorContext
+class SVX_DLLPUBLIC SvxErrorContext final : public SfxErrorContext
 {
 public:
     SvxErrorContext(sal_uInt16 nCtxIdP, OUString aArg1, weld::Window* pWin);

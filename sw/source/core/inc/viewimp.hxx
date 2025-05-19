@@ -48,7 +48,7 @@ class SwTextFrame;
 // --> OD #i76669#
 //namespace sdr::contact { class ViewObjectContactRedirector; }
 // <--
-class SwViewObjectContactRedirector : public sdr::contact::ViewObjectContactRedirector
+class SwViewObjectContactRedirector final : public sdr::contact::ViewObjectContactRedirector
 {
     private:
         const SwViewShell& mrViewShell;

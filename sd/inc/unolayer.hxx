@@ -39,7 +39,7 @@ enum LayerAttribute { VISIBLE, PRINTABLE, LOCKED };
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SdLayer : public ::cppu::WeakImplHelper< css::drawing::XLayer,
+class SdLayer final : public ::cppu::WeakImplHelper< css::drawing::XLayer,
                                                 css::lang::XServiceInfo,
                                                 css::container::XChild,
                                                 css::lang::XComponent >
@@ -95,7 +95,7 @@ private:
 *                                                                      *
 ***********************************************************************/
 
-class SdLayerManager : public ::cppu::WeakImplHelper< css::drawing::XLayerManager,
+class SdLayerManager final : public ::cppu::WeakImplHelper< css::drawing::XLayerManager,
                                                        css::container::XNameAccess,
                                                        css::lang::XServiceInfo,
                                                        css::lang::XComponent >
