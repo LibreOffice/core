@@ -112,7 +112,7 @@ namespace vcl
         assert(nCurrentStatePathIndex >= 0 && o3tl::make_unsigned(nCurrentStatePathIndex) < rActivePath.size());
 
         // determine up to which index (in the new path) we have to display the items
-        RoadmapTypes::ItemIndex nUpperStepBoundary = static_cast<RoadmapTypes::ItemIndex>(rActivePath.size());
+        int nUpperStepBoundary = rActivePath.size();
         if ( !m_pImpl->bActivePathIsDefinite )
         {
             for (auto const& path : m_pImpl->aPaths)
@@ -145,9 +145,9 @@ namespace vcl
 
         // now, we have to remove all items after nCurrentStatePathIndex, and insert the items from the active
         // path, up to (excluding) nUpperStepBoundary
-        RoadmapTypes::ItemIndex nRoadmapItems = m_xAssistant->get_n_pages();
-        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, nRoadmapItems );
-        for ( RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
+        int nRoadmapItems = m_xAssistant->get_n_pages();
+        int nLoopUntil = ::std::max(nUpperStepBoundary, nRoadmapItems);
+        for (int nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex)
         {
             bool bExistentItem = ( nItemIndex < nRoadmapItems );
             bool bNeedItem = ( nItemIndex < nUpperStepBoundary );
@@ -169,7 +169,7 @@ namespace vcl
                 {
                     // there is an item with this index in the roadmap - does it match what is requested by
                     // the respective state in the active path?
-                    RoadmapTypes::ItemId nPresentItemId = m_xAssistant->get_page_ident(nItemIndex).toInt32();
+                    sal_Int32 nPresentItemId = m_xAssistant->get_page_ident(nItemIndex).toInt32();
                     WizardTypes::WizardState nRequiredState = rActivePath[ nItemIndex ];
                     if ( nPresentItemId != nRequiredState )
                     {
