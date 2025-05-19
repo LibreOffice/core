@@ -703,7 +703,7 @@ namespace vcl
         Finish( RET_OK );
     }
 
-    bool RoadmapWizard::skipBackwardUntil( WizardTypes::WizardState _nTargetState )
+    void RoadmapWizard::skipBackwardUntil(WizardTypes::WizardState _nTargetState)
     {
         // don't travel directly on m_xWizardImpl->aStateHistory, in case something goes wrong
         std::stack< WizardTypes::WizardState > aTravelVirtually = m_xWizardImpl->aStateHistory;
@@ -717,10 +717,9 @@ namespace vcl
         }
         m_xWizardImpl->aStateHistory = std::move(aTravelVirtually);
         ShowPage(_nTargetState);
-        return true;
     }
 
-    bool RoadmapWizard::skipUntil( WizardTypes::WizardState _nTargetState )
+    void RoadmapWizard::skipUntil(WizardTypes::WizardState _nTargetState)
     {
         WizardTypes::WizardState nCurrentState = getCurrentState();
 
@@ -740,7 +739,6 @@ namespace vcl
         m_xWizardImpl->aStateHistory = std::move(aTravelVirtually);
         // show the target page
         ShowPage(nCurrentState);
-        return true;
     }
 
     void RoadmapWizard::travelNext()
@@ -964,10 +962,9 @@ namespace vcl
             return;
         }
 
-        bool bResult = true;
         if ( nNewIndex > nCurrentIndex )
         {
-            bResult = skipUntil( static_cast<WizardTypes::WizardState>(nCurItemId) );
+            skipUntil(static_cast<WizardTypes::WizardState>(nCurItemId));
             WizardTypes::WizardState nTemp = static_cast<WizardTypes::WizardState>(nCurItemId);
             while( nTemp )
             {
@@ -976,10 +973,7 @@ namespace vcl
             }
         }
         else
-            bResult = skipBackwardUntil( static_cast<WizardTypes::WizardState>(nCurItemId) );
-
-        if ( !bResult )
-            m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
+            skipBackwardUntil(static_cast<WizardTypes::WizardState>(nCurItemId));
     }
 
     OUString RoadmapWizard::getStateDisplayName( WizardTypes::WizardState /* _nState */)

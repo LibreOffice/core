@@ -210,13 +210,10 @@ namespace vcl
 
             The skipped states appear in the state history, so <method>travelPrevious</method> will make use of them.
 
-            @return
-                <TRUE/> if and only if traveling was successful
-
             @see skip
             @see skipBackwardUntil
         */
-        bool                    skipUntil(WizardTypes::WizardState nTargetState);
+        void skipUntil(WizardTypes::WizardState nTargetState);
 
         /** moves back one or more states, until a given state is reached
 
@@ -228,13 +225,10 @@ namespace vcl
             since you're interested in the target page only. Using <member>skipBackwardUntil</member> relieves
             you of this.
 
-            @return
-                <TRUE/> if and only if traveling was successful
-
             @see skipUntil
             @see skip
         */
-        bool                    skipBackwardUntil(WizardTypes::WizardState nTargetState);
+        void skipBackwardUntil(WizardTypes::WizardState nTargetState);
 
         /** returns the current state of the machine
 
