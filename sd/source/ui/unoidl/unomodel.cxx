@@ -3840,6 +3840,11 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
 DrawViewShell* SdXImpressDocument::GetViewShell()
 {
+    if (!mpDocShell)
+    {
+        return nullptr;
+    }
+
     DrawViewShell* pViewSh = dynamic_cast<DrawViewShell*>(mpDocShell->GetViewShell());
     if (!pViewSh)
     {
