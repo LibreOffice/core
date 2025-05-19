@@ -698,7 +698,7 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
             rSh.SelectTableRowCol( *m_xRowColumnSelectionStart, &aPos, m_bIsRowDrag );
         }
         else
-            rSh.CallSetCursor( &aModPt, false, m_eScrollSizeMode );
+            rSh.CallSetCursor( &aModPt, true, m_eScrollSizeMode );
 
         // It can be that a "jump" over a table cannot be accomplished like
         // that. So we jump over the table by Up/Down here.
