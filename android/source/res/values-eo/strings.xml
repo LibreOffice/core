@@ -1,3 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    </resources>
+    <string name="about_notice">Vidigi rimarkon</string>
+    <string name="default_document_name">sentitola</string>
+    <string name="app_description">LibreOffice-Vidigilo estas dokument-vidigilo bazita sur LibreOffice.</string>
+    <string name="app_name_settings">Agordaro por LibreOffice-vidigilo</string>
+    <string name="app_credits">https://www.libreoffice.org</string>
+    <string name="app_vendor">Ĉi tiun eldonon liveris $VENDOR.</string>
+    <string name="readonly_file">Ĉi tiu dosiero estas nurlega.</string>
+    <string name="about_license">Vidigi permesilon</string>
+    <string name="about_privacy_policy">Deklaro pri privateco</string>
+    <string name="create_file">Krei novan dosieron</string>
+    <string name="new_presentation">Nova prezentaĵo</string>
+    <string name="new_drawing">Nova desegnaĵo</string>
+    <string name="action_UNO_commands">Sendi UNO-komandon</string>
+    <string name="message_saved">Dato de kompletigo</string>
+    <string name="message_saving">Konservi la dokumenton…</string>
+    <string name="message_saving_failed">Malsukcesis konservi la dokumenton.</string>
+    <string name="action_undo">Malfari</string>
+    <string name="action_redo">Refari</string>
+    <string name="save_alert_dialog_title">Ĉu konservi la dokumenton antaŭ ol fermi?</string>
+    <string name="select_file_to_open">Elekti dosieron malfermotan</string>
+    <string name="search_find_next">Serĉi sekvan</string>
+    <string name="search_find_previous">Serĉi antaŭan</string>
+    <string name="file_icon_desc">dosiera bildsimbolo</string>
+    <string name="title_recents">Lastatempaj dosieroj</string>
+    <string name="title_browser">Ĉiuj dosieroj</string>
+    <string name="pref_category_general">Ĝenerale</string>
+    <string name="pref_experimental_editing">Eksperimenta reĝimo</string>
+    <string name="pref_experimental_editing_summary">Enŝalti la eksperimentan redaktan reĝimon. Uzi je via propra risko.</string>
+    <string name="pref_developer_mode">Evoluiga reĝimo</string>
+    <string name="pref_developer_mode_summary">Enŝalti evoluigan reĝimon kie vi povas sendi UNO-komandojn ene de la aplikaĵo. Uzi je via propra risko.</string>
+    <string name="action_about">Pri</string>
+    <string name="action_parts">Partoj</string>
+    <string name="action_settings">Agordaro</string>
+    <string name="action_keyboard">Vidigi klavaron</string>
+    <string name="action_save">Konservi</string>
+    <string name="action_save_as">Konservi kiel…</string>
+    <string name="action_fromat">Enŝalti formaton</string>
+    <string name="action_search">Serĉi</string>
+    <string name="app_name">LibreOffice-vidigilo</string>
+    <string name="app_version">Versio: %1$s&lt;br&gt;Build ID: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
+    <string name="new_textdocument">Nova teksta dokumento</string>
+    <string name="new_spreadsheet">Nova kalkultabelo</string>
+    <string name="password">Pasvorto</string>
+</resources>
