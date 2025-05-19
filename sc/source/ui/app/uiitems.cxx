@@ -108,9 +108,9 @@ ScIndexHint::~ScIndexHint()
 /**
  * Create new EditView for Cursorposition
  */
-ScEditViewHint::ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos ) :
+ScEditViewHint::ScEditViewHint( ScEditEngineDefaulter& rEngine, const ScAddress& rCurPos ) :
     SfxHint(SfxHintId::ScEditView),
-    pEditEngine( pEngine ),
+    rEditEngine( rEngine ),
     aCursorPos( rCurPos )
 {
 }

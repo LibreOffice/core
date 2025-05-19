@@ -248,7 +248,7 @@ void ScSpellDialogChildWindow::Init()
         mpDoc->GetEnginePool(), *mpViewData, mxUndoDoc.get(), mxRedoDoc.get(), LinguMgr::GetSpellChecker() ) );
     mxEngine->SetRefDevice( mpViewData->GetActiveWin()->GetOutDev() );
 
-    mpViewShell->MakeEditView( mxEngine.get(), nCol, nRow );
+    mpViewShell->MakeEditView(*mxEngine, nCol, nRow);
     EditView* pEditView = mpViewData->GetEditView( mpViewData->GetActivePart() );
     mpViewData->SetSpellingView( pEditView );
     tools::Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );

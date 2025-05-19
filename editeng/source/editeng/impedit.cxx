@@ -178,11 +178,11 @@ Point LOKSpecialPositioning::GetRefPoint() const
 
 //  class ImpEditView
 
-ImpEditView::ImpEditView(EditView* pView, EditEngine* pEditEngine, vcl::Window* pWindow)
+ImpEditView::ImpEditView(EditView* pView, EditEngine& rEditEngine, vcl::Window* pWindow)
     : mpEditView(pView)
     , mpViewShell(nullptr)
     , mpOtherShell(nullptr)
-    , mpEditEngine(pEditEngine)
+    , mpEditEngine(&rEditEngine)
     , mpOutputWindow(pWindow)
     , mnInvalidateMore(1)
     , mnControl(EVControlBits::AUTOSCROLL | EVControlBits::ENABLEPASTE)
@@ -192,7 +192,7 @@ ImpEditView::ImpEditView(EditView* pView, EditEngine* pEditEngine, vcl::Window* 
     , mbReadOnly(false)
     , mbClickedInSelection(false)
     , mbActiveDragAndDropListener(false)
-    , maOutputArea(Point(), mpEditEngine->GetPaperSize())
+    , maOutputArea(Point(), rEditEngine.GetPaperSize())
     , meSelectionMode(EESelectionMode::Std)
     , meAnchorMode(EEAnchorMode::TopLeft)
     , mpEditViewCallbacks(nullptr)
@@ -200,8 +200,8 @@ ImpEditView::ImpEditView(EditView* pView, EditEngine* pEditEngine, vcl::Window* 
     , mbSuppressLOKMessages(false)
     , mbNegativeX(false)
 {
-    maEditSelection.Min() = mpEditEngine->GetEditDoc().GetStartPaM();
-    maEditSelection.Max() = mpEditEngine->GetEditDoc().GetEndPaM();
+    maEditSelection.Min() = rEditEngine.GetEditDoc().GetStartPaM();
+    maEditSelection.Max() = rEditEngine.GetEditDoc().GetEndPaM();
 
     SelectionChanged();
 }

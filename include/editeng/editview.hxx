@@ -171,7 +171,7 @@ public:
     ImpEditView& getImpl() const { return *mpImpEditView; }
     SAL_DLLPRIVATE ImpEditEngine& getImpEditEngine() const;
 
-    void setEditEngine(EditEngine* pEditEngine);
+    void setEditEngine(EditEngine& rEditEngine);
     EditEngine& getEditEngine() const;
 
 private:
@@ -185,8 +185,8 @@ private:
     SAL_DLLPRIVATE sal_Int32       countFieldsOffsetSum(sal_Int32 nPara, sal_Int32 nPo, bool bCanOverflow) const;
 
 public:
-                    EditView( EditEngine* pEng, vcl::Window* pWindow );
-                    ~EditView();
+    EditView(EditEngine& rEng, vcl::Window* pWindow);
+    ~EditView();
 
     // set EditViewCallbacks for external handling of Repaints/Visualization
     void setEditViewCallbacks(EditViewCallbacks* pEditViewCallbacks);

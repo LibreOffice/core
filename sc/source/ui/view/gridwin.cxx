@@ -6002,7 +6002,7 @@ bool ScGridWindow::GetEditUrl(const Point& rPos, OUString* pName, OUString* pUrl
     Point aLogicClick = PixelToLogic(rPos,aEditMode);
     if ( aLogicEdit.Contains(aLogicClick) )
     {
-        EditView aTempView(pEngine.get(), this);
+        EditView aTempView(*pEngine, this);
         aTempView.SetOutputArea( aLogicEdit );
 
         bool bRet;

@@ -1553,7 +1553,7 @@ void notifyCellCursorAt(const ScTabViewShell* pViewShell, SCCOL nCol, SCROW nRow
 }
 
 void ScViewData::SetEditEngine( ScSplitPos eWhich,
-                                ScEditEngineDefaulter* pNewEngine,
+                                ScEditEngineDefaulter& rNewEngine,
                                 vcl::Window* pWin, SCCOL nNewX, SCROW nNewY )
 {
     bool bLayoutRTL = mrDoc.IsLayoutRTL(nTabNo);
@@ -1575,7 +1575,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         else
         {
             lcl_LOKRemoveWindow(GetViewShell(), eWhich);
-            pEditView[eWhich]->setEditEngine(pNewEngine);
+            pEditView[eWhich]->setEditEngine(rNewEngine);
         }
 
         if (pEditView[eWhich]->GetWindow() != pWin)
@@ -1587,7 +1587,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     }
     else
     {
-        pEditView[eWhich].reset(new EditView(pNewEngine, pWin));
+        pEditView[eWhich].reset(new EditView(rNewEngine, pWin));
 
         if (bLOKActive)
         {
@@ -1616,8 +1616,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     // if view is gone then during IdleFormat sometimes a cursor is drawn
 
-    EEControlBits nEC = pNewEngine->GetControlWord();
-    pNewEngine->SetControlWord(nEC & ~EEControlBits::DOIDLEFORMAT);
+    EEControlBits nEC = rNewEngine.GetControlWord();
+    rNewEngine.SetControlWord(nEC & ~EEControlBits::DOIDLEFORMAT);
 
     EVControlBits nVC = pEditView[eWhich]->GetControlWord();
     pEditView[eWhich]->SetControlWord(nVC & ~EVControlBits::AUTOSCROLL);
@@ -1635,7 +1635,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bool bBreak = ( eJust == SvxCellHorJustify::Block ) ||
                     pPattern->GetItem(ATTR_LINEBREAK).GetValue();
 
-    bool bAsianVertical = pNewEngine->IsEffectivelyVertical();     // set by InputHandler
+    bool bAsianVertical = rNewEngine.IsEffectivelyVertical();     // set by InputHandler
 
     tools::Rectangle aPixRect = ScEditUtil(mrDoc, nNewX, nNewY, nTabNo, GetScrPos(nNewX, nNewY, eWhich),
                                         pWin->GetOutDev(), nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
@@ -1793,12 +1793,12 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             }
         }
 
-        pNewEngine->SetPaperSize( aPaperSize );
+        rNewEngine.SetPaperSize( aPaperSize );
         if (bLOKPrintTwips)
-            pNewEngine->SetLOKSpecialPaperSize(aPaperSizePTwips);
+            rNewEngine.SetLOKSpecialPaperSize(aPaperSizePTwips);
 
         // sichtbarer Ausschnitt
-        Size aPaper = pNewEngine->GetPaperSize();
+        Size aPaper = rNewEngine.GetPaperSize();
         tools::Rectangle aVis = pEditView[eWhich]->GetVisArea();
         tools::Rectangle aVisPTwips;
         if (bLOKPrintTwips)
@@ -1841,9 +1841,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             pEditView[eWhich]->SetLOKSpecialVisArea(aVisPTwips);
         //  UpdateMode has been disabled in ScInputHandler::StartTable
         //  must be enabled before EditGrowY (GetTextHeight)
-        pNewEngine->SetUpdateLayout( true );
+        rNewEngine.SetUpdateLayout( true );
 
-        pNewEngine->SetStatusEventHdl( LINK( this, ScViewData, EditEngineHdl ) );
+        rNewEngine.SetStatusEventHdl( LINK( this, ScViewData, EditEngineHdl ) );
 
         EditGrowY( true );      // adjust to existing text content
         EditGrowX();
@@ -1856,7 +1856,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                                     // here bEditActive needs to be set already
                                                     // (due to Map-Mode during Paint)
     if (!bWasThere)
-        pNewEngine->InsertView(pEditView[eWhich].get());
+        rNewEngine.InsertView(pEditView[eWhich].get());
 
     //      background color of the cell
     Color aBackCol = pPattern->GetItem(ATTR_BACKGROUND).GetColor();

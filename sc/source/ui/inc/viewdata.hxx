@@ -582,7 +582,7 @@ public:
     void            KillEditView();
     void            ResetEditView();
     void            SetEditEngine( ScSplitPos eWhich,
-                                    ScEditEngineDefaulter* pNewEngine,
+                                    ScEditEngineDefaulter& rNewEngine,
                                     vcl::Window* pWin, SCCOL nNewX, SCROW nNewY );
     void            GetEditView( ScSplitPos eWhich, EditView*& rViewPtr, SCCOL& rCol, SCROW& rRow );
     bool            HasEditView( ScSplitPos eWhich ) const

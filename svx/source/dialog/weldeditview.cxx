@@ -1558,7 +1558,7 @@ void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     m_xEditEngine->SetControlWord(m_xEditEngine->GetControlWord() | EEControlBits::MARKFIELDS);
 
-    m_xEditView.reset(new EditView(m_xEditEngine.get(), nullptr));
+    m_xEditView.reset(new EditView(*m_xEditEngine, nullptr));
     m_xEditView->setEditViewCallbacks(this);
     m_xEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
 

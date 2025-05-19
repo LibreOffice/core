@@ -3050,7 +3050,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
         {
             if (StartTable(0, false, eMode == SC_INPUT_TABLE, pTopEngine))
             {
-                pActiveViewSh->GetViewData().GetDocShell()->PostEditView( mpEditEngine.get(), aCursorPos );
+                pActiveViewSh->GetViewData().GetDocShell()->PostEditView(*mpEditEngine, aCursorPos);
             }
         }
 
@@ -3966,7 +3966,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             if (bNewView )                          // Create anew
             {
                 if (pActiveViewSh)
-                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView( mpEditEngine.get(), aCursorPos );
+                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView(*mpEditEngine, aCursorPos);
                 UpdateActiveView();
                 if (eMode==SC_INPUT_NONE)
                     if (pTableView || pTopView)
@@ -4200,7 +4200,7 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
         {
             if (bNewView)                           // create new edit view
             {
-                pActiveViewSh->GetViewData().GetDocShell()->PostEditView( mpEditEngine.get(), aCursorPos );
+                pActiveViewSh->GetViewData().GetDocShell()->PostEditView(*mpEditEngine, aCursorPos);
                 UpdateActiveView();
                 if (eMode==SC_INPUT_NONE)
                     if (pTableView || pTopView)
@@ -4563,7 +4563,7 @@ void ScInputHandler::InputChanged( const EditView* pView, bool bFromNotify )
     {
         ScViewData& rViewData = pActiveViewSh->GetViewData();
         if ( bNewView )
-            rViewData.GetDocShell()->PostEditView( mpEditEngine.get(), aCursorPos );
+            rViewData.GetDocShell()->PostEditView(*mpEditEngine, aCursorPos);
 
         rViewData.EditGrowY();
         rViewData.EditGrowX();

@@ -313,7 +313,7 @@ public:
      */
     void            CheckConfigOptions();
 
-    void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
+    void            PostEditView(ScEditEngineDefaulter& rEditEngine, const ScAddress& rCursorPos);
 
     tools::Long     GetTwipWidthHint(const ScAddress& rPos);
 

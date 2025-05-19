@@ -63,7 +63,7 @@ namespace frm
         m_pAntiImpl->SetMapMode( aRefDeviceMapMode );
         m_pViewport->SetMapMode( aRefDeviceMapMode );
 
-        m_pView.reset(new EditView( m_pEngine, m_pViewport ));
+        m_pView.reset(new EditView(*m_pEngine, m_pViewport));
         m_pEngine->InsertView( m_pView.get() );
         m_pViewport->setView( *m_pView );
 

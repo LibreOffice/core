@@ -112,7 +112,7 @@ void SmEditTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     EditEngine* pEditEngine = GetEditEngine();
 
-    m_xEditView.reset(new EditView(pEditEngine, nullptr));
+    m_xEditView.reset(new EditView(*pEditEngine, nullptr));
     m_xEditView->setEditViewCallbacks(this);
 
     pEditEngine->InsertView(m_xEditView.get());

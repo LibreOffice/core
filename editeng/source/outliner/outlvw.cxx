@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 OutlinerView::OutlinerView( Outliner* pOut, vcl::Window* pWin )
 {
     pOwner                      = pOut;
-    pEditView.reset( new EditView( pOut->pEditEngine.get(), pWin ) );
+    pEditView.reset( new EditView( *pOut->pEditEngine, pWin ) );
 }
 
 OutlinerView::~OutlinerView()

@@ -2546,7 +2546,7 @@ void ScTabView::RefeshTextEditOverlay()
     }
 }
 
-void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW nRow )
+void ScTabView::MakeEditView( ScEditEngineDefaulter& rEngine, SCCOL nCol, SCROW nRow )
 {
     DrawDeselectAll();
 
@@ -2592,7 +2592,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
                     pScGridWindow->UpdateEditViewPos();
                 }
 
-                aViewData.SetEditEngine(aScSplitPos, pEngine, pScGridWindow, nCol,
+                aViewData.SetEditEngine(aScSplitPos, rEngine, pScGridWindow, nCol,
                                         nRow);
 
                 // get OverlayManager and initialize TextEditOnOverlay for it
@@ -2640,7 +2640,7 @@ void ScTabView::UpdateEditView()
             tools::Long nY = GetViewData().GetCurYForTab(nRefTabNo);
 
             aViewData.SetEditEngine(eCurrent,
-                static_cast<ScEditEngineDefaulter*>(&pEditView->getEditEngine()),
+                static_cast<ScEditEngineDefaulter&>(pEditView->getEditEngine()),
                 pGridWin[i], nX, nY );
             if (eCurrent == eActive)
                 pEditView->ShowCursor( false );

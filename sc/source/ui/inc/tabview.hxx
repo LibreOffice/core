@@ -527,7 +527,7 @@ public:
     void            OnLibreOfficeKitTabChanged();
     void            AddWindowToForeignEditView(SfxViewShell* pViewShell, ScSplitPos eWhich);
     void            RemoveWindowFromForeignEditView(SfxViewShell* pViewShell, ScSplitPos eWhich);
-    void            MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW nRow );
+    void            MakeEditView( ScEditEngineDefaulter& rEngine, SCCOL nCol, SCROW nRow );
     void            KillEditView( bool bNoPaint );
     void            UpdateEditView();
     void            RefeshTextEditOverlay();

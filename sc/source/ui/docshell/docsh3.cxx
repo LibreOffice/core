@@ -76,7 +76,7 @@
 
 //          Redraw - Notifications
 
-void ScDocShell::PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos )
+void ScDocShell::PostEditView( ScEditEngineDefaulter& rEditEngine, const ScAddress& rCursorPos )
 {
 //  Broadcast( ScEditViewHint( pEditEngine, rCursorPos ) );
 
@@ -85,7 +85,7 @@ void ScDocShell::PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddre
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if (pViewSh && pViewSh->GetViewData().GetDocShell() == this)
     {
-        ScEditViewHint aHint( pEditEngine, rCursorPos );
+        ScEditViewHint aHint(rEditEngine, rCursorPos);
         pViewSh->Notify( *this, aHint );
     }
 }

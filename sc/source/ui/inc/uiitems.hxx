@@ -95,18 +95,18 @@ public:
 
 class ScEditViewHint final : public SfxHint
 {
-    ScEditEngineDefaulter*  pEditEngine;
+    ScEditEngineDefaulter&  rEditEngine;
     ScAddress                   aCursorPos;
 
 public:
                     ScEditViewHint() = delete;
-                    ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos );
+                    ScEditViewHint(ScEditEngineDefaulter& rEngine, const ScAddress& rCurPos);
                     virtual ~ScEditViewHint() override;
 
     SCCOL           GetCol() const      { return aCursorPos.Col(); }
     SCROW           GetRow() const      { return aCursorPos.Row(); }
     SCTAB           GetTab() const      { return aCursorPos.Tab(); }
-    ScEditEngineDefaulter*  GetEngine() const   { return pEditEngine; }
+    ScEditEngineDefaulter&  GetEngine() const   { return rEditEngine; }
 };
 
 class ScIndexHint : public SfxHint

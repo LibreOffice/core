@@ -152,10 +152,9 @@ EditViewCallbacks::~EditViewCallbacks()
 {
 }
 
-EditView::EditView(EditEngine* pEditEngine, vcl::Window* pWindow)
-    : mpImpEditView(new ImpEditView(this, pEditEngine, pWindow))
+EditView::EditView(EditEngine& rEditEngine, vcl::Window* pWindow)
+    : mpImpEditView(new ImpEditView(this, rEditEngine, pWindow))
 {
-    assert(pEditEngine);
     getImpl().mbReadOnly = getImpl().mbReadOnly || SfxViewShell::IsCurrentLokViewReadOnly();
 }
 
@@ -407,11 +406,9 @@ void EditView::Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice
     getImpEditEngine().Paint(&getImpl(), rRect, pTargetDevice);
 }
 
-void EditView::setEditEngine(EditEngine* pEditEngine)
+void EditView::setEditEngine(EditEngine& rEditEngine)
 {
-    assert(pEditEngine);
-
-    getImpl().mpEditEngine = pEditEngine;
+    getImpl().mpEditEngine = &rEditEngine;
     EditSelection aStartSel( getEditEngine().GetEditDoc().GetStartPaM() );
     getImpl().SetEditSelection( aStartSel );
 }
@@ -717,7 +714,7 @@ ErrCode EditView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterat
 
 OString EditView::GetSimpleHtml() const
 {
-    return getImpl().mpEditEngine->mpImpEditEngine->GetSimpleHtml();
+    return getImpl().getEditEngine().mpImpEditEngine->GetSimpleHtml();
 }
 
 void EditView::Cut()

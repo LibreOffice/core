@@ -348,7 +348,7 @@ protected:
     tools::Rectangle ImplGetEditCursor(EditPaM const& rPaM, CursorFlags aShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const;
 
 public:
-    ImpEditView(EditView* pView, EditEngine* pEditEngine, vcl::Window* pWindow);
+    ImpEditView(EditView* pView, EditEngine& rEditEngine, vcl::Window* pWindow);
     virtual ~ImpEditView() override;
 
     EditView* GetEditViewPtr() { return mpEditView; }

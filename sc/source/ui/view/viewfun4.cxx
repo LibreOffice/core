@@ -97,7 +97,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         {
             pEngine->SetPaperSize(Size(100000,100000));
             ScopedVclPtrInstance< vcl::Window > aWin( pActWin );
-            EditView aEditView( &*pEngine, aWin.get() );
+            EditView aEditView(*pEngine, aWin.get());
             aEditView.SetOutputArea(tools::Rectangle(0,0,100000,100000));
 
             // same method now for clipboard or drag&drop
@@ -361,7 +361,7 @@ void ScViewFunc::DoThesaurus()
     pThesaurusEngine->SetEditTextObjectPool( rDoc.GetEditPool() );
     pThesaurusEngine->SetRefDevice(GetViewData().GetActiveWin()->GetOutDev());
     pThesaurusEngine->SetSpeller(xSpeller);
-    MakeEditView(pThesaurusEngine.get(), nCol, nRow );
+    MakeEditView(*pThesaurusEngine, nCol, nRow);
     const ScPatternAttr* pPattern = rDoc.GetPattern(nCol, nRow, nTab);
     if (pPattern)
     {
@@ -520,7 +520,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
 
     assert(pEngine && "all cases result in pEngine set");
 
-    MakeEditView( pEngine.get(), nCol, nRow );
+    MakeEditView(*pEngine, nCol, nRow);
     pEngine->SetRefDevice( rViewData.GetActiveWin()->GetOutDev() );
                                         // simulate dummy cell:
     pEditView = rViewData.GetEditView( rViewData.GetActivePart() );

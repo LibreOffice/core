@@ -1578,7 +1578,7 @@ void ScTextWnd::InitEditEngine()
     else
         static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get())->SetTextCurrentDefaults(aString); // At least the right text then
 
-    m_xEditView = std::make_unique<EditView>(m_xEditEngine.get(), nullptr);
+    m_xEditView = std::make_unique<EditView>(*m_xEditEngine, nullptr);
 
     // we get cursor, selection etc. messages from the VCL/window layer
     // otherwise these are injected into the document causing confusion.
@@ -2125,7 +2125,7 @@ void ScTextWnd::MakeDialogEditView()
     static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get())->SetDefaults( std::move(aSet) );
     m_xEditEngine->SetUpdateLayout( bPrevUpdateLayout );
 
-    m_xEditView = std::make_unique<EditView>(m_xEditEngine.get(), nullptr);
+    m_xEditView = std::make_unique<EditView>(*m_xEditEngine, nullptr);
     m_xEditView->setEditViewCallbacks(this);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
