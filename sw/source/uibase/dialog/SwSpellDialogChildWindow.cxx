@@ -759,8 +759,8 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     aTmpOutliner.SetPaperSize( pTextObj->GetLogicRect().GetSize() );
                     aTmpOutliner.SetSpeller( xSpell );
 
-                    OutlinerView aOutlView( &aTmpOutliner, &(rView.GetEditWin()) );
-                    aOutlView.GetOutliner()->SetRefDevice( rSh.getIDocumentDeviceAccess().getPrinter( false ) );
+                    OutlinerView aOutlView( aTmpOutliner, &(rView.GetEditWin()) );
+                    aOutlView.GetOutliner().SetRefDevice( rSh.getIDocumentDeviceAccess().getPrinter( false ) );
                     aTmpOutliner.InsertView( &aOutlView );
                     Size aSize(1,1);
                     tools::Rectangle aRect( Point(), aSize );

@@ -341,7 +341,7 @@ void SwAnnotationWin::InitControls()
     aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner.get() );
     mpOutliner->SetUpdateLayout( true );
 
-    mpOutlinerView.reset(new OutlinerView(mpOutliner.get(), nullptr));
+    mpOutlinerView.reset(new OutlinerView(*mpOutliner, nullptr));
     mpOutliner->InsertView(mpOutlinerView.get());
 
     //create Scrollbars

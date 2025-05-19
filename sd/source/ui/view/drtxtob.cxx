@@ -272,21 +272,21 @@ void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, S
                     if (pOLV)
                     {
                         // Outliner at outline-mode
-                        ::Outliner* pOutl = pOLV->GetOutliner();
+                        ::Outliner& rOutl = pOLV->GetOutliner();
 
                         std::vector<Paragraph*> aSelList;
                         pOLV->CreateSelectionList(aSelList);
                         Paragraph* pPara = aSelList.empty() ? nullptr : *(aSelList.begin());
 
                         // find out if we are an OutlineView
-                        bool bIsOutlineView(OutlinerMode::OutlineView == pOLV->GetOutliner()->GetOutlinerMode());
+                        bool bIsOutlineView(OutlinerMode::OutlineView == pOLV->GetOutliner().GetOutlinerMode());
 
                         // This is ONLY for OutlineViews
                         if(bIsOutlineView)
                         {
                             // allow move up if position is 2 or greater OR it
                             // is a title object (and thus depth==1)
-                            if(pOutl->GetAbsPos(pPara) > 1 || ( ::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
+                            if(rOutl.GetAbsPos(pPara) > 1 || ( ::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE) && rOutl.GetAbsPos(pPara) > 0 ) )
                             {
                                 // not at top
                                 bDisableUp = false;
@@ -295,7 +295,7 @@ void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, S
                         else
                         {
                             // old behaviour for OutlinerMode::OutlineObject
-                            if(pOutl->GetAbsPos(pPara) > 0)
+                            if(rOutl.GetAbsPos(pPara) > 0)
                             {
                                 // not at top
                                 bDisableUp = false;
@@ -306,7 +306,7 @@ void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, S
                         {
                             pPara = rpItem;
 
-                            sal_Int16 nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
+                            sal_Int16 nDepth = rOutl.GetDepth( rOutl.GetAbsPos( pPara ) );
 
                             if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE )) )
                             {
@@ -314,16 +314,16 @@ void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, S
                                 bDisableLeft = false;
                             }
 
-                            if( (nDepth < pOLV->GetOutliner()->GetMaxDepth() && ( !bOutlineViewSh || pOutl->GetAbsPos(pPara) != 0 )) ||
-                                (bOutlineViewSh && (nDepth <= 0) && ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
+                            if( (nDepth < pOLV->GetOutliner().GetMaxDepth() && ( !bOutlineViewSh || rOutl.GetAbsPos(pPara) != 0 )) ||
+                                (bOutlineViewSh && (nDepth <= 0) && ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) && rOutl.GetAbsPos(pPara) != 0) )
                             {
                                 // not maximum depth and not at top
                                 bDisableRight = false;
                             }
                         }
 
-                        if ( ( pOutl->GetAbsPos(pPara) < pOutl->GetParagraphCount() - 1 ) &&
-                             ( pOutl->GetParagraphCount() > 1 || !bOutlineViewSh) )
+                        if ( ( rOutl.GetAbsPos(pPara) < rOutl.GetParagraphCount() - 1 ) &&
+                             ( rOutl.GetParagraphCount() > 1 || !bOutlineViewSh) )
                         {
                             // not last paragraph
                             bDisableDown = false;
@@ -334,9 +334,9 @@ void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, S
 
                         if(!bDisableDown && bIsOutlineView
                             && pPara
-                            && 0 == pOutl->GetAbsPos(pPara)
-                            && pOutl->GetParagraphCount() > 1
-                            && !::Outliner::HasParaFlag( pOutl->GetParagraph(1), ParaFlag::ISPAGE ) )
+                            && 0 == rOutl.GetAbsPos(pPara)
+                            && rOutl.GetParagraphCount() > 1
+                            && !::Outliner::HasParaFlag( rOutl.GetParagraph(1), ParaFlag::ISPAGE ) )
                         {
                             // Needs to be disabled
                             bDisableDown = true;
@@ -528,13 +528,13 @@ void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, S
             if( !aSel.HasRange() )
             {
                 nStartPara = 0;
-                nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
+                nEndPara = pOLV->GetOutliner().GetParagraphCount() - 1;
             }
             ::tools::Long nUpper = 0;
 
             for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
             {
-                const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( nPara );
+                const SfxItemSet& rItems = pOLV->GetOutliner().GetParaAttribs( nPara );
                 const SvxULSpaceItem& rItem = rItems.Get( EE_PARA_ULSPACE );
                 nUpper = std::max( nUpper, static_cast<::tools::Long>(rItem.GetUpper()) );
             }

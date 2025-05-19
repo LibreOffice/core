@@ -490,7 +490,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 
     GetView().GetViewFrame().GetBindings().InvalidateAll(false);
 
-    if (IsTextEdit() && pOLV->GetOutliner()->IsModified())
+    if (IsTextEdit() && pOLV->GetOutliner().IsModified())
         rSh.SetModified();
 }
 

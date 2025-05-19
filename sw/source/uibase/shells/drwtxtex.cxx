@@ -679,7 +679,7 @@ void SwDrawTextShell::ExecutePost( const SfxRequest& rReq, sal_uInt16 nEEWhich, 
 
     GetView().GetViewFrame().GetBindings().InvalidateAll(false);
 
-    if (IsTextEdit() && pOLV->GetOutliner()->IsModified())
+    if (IsTextEdit() && pOLV->GetOutliner().IsModified())
         rSh.SetModified();
 
     if (bRestoreSelection)

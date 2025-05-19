@@ -182,7 +182,7 @@ class EDITENG_DLLPUBLIC OutlinerView final
 {
     friend class Outliner;
 
-    Outliner*                   pOwner;
+    Outliner&                   rOwner;
     std::unique_ptr<EditView>   pEditView;
 
     enum class MouseTarget {
@@ -205,8 +205,8 @@ class EDITENG_DLLPUBLIC OutlinerView final
     Link<LinkParamNone*,void> aEndCutPasteLink;
 
 public:
-                OutlinerView( Outliner* pOut, vcl::Window* pWindow );
-                ~OutlinerView();
+    OutlinerView(Outliner& rOutliner, vcl::Window* pWindow);
+    ~OutlinerView();
 
     EditView&   GetEditView() const { return *pEditView; }
 
@@ -223,7 +223,7 @@ public:
     void        HideCursor( bool bDeactivate = false );
     bool IsCursorVisible() const;
 
-    Outliner*   GetOutliner() const { return pOwner; }
+    Outliner&   GetOutliner() const { return rOwner; }
 
     void        SetWindow( vcl::Window* pWindow );
     vcl::Window*     GetWindow() const;
@@ -642,6 +642,8 @@ private:
     SAL_DLLPRIVATE bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 nFirstPage, sal_Int32 nPages );
 
     SAL_DLLPRIVATE void        ImplCheckDepth( sal_Int16& rnDepth ) const;
+
+    SAL_DLLPRIVATE OutlinerEditEng& getOutlinerEditEng() { return *pEditEngine; }
 
 protected:
     SAL_DLLPRIVATE void            ParagraphInserted( sal_Int32 nParagraph );

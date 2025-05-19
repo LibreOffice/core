@@ -666,33 +666,33 @@ bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
     // read in like in the character mode
     if (InsSDDinDrMode(pMedium))
     {
-        ::Outliner* pOutliner = pOlView->GetViewByWindow(mpWindow)->GetOutliner();
+        ::Outliner& rOutliner = pOlView->GetViewByWindow(mpWindow)->GetOutliner();
 
         // cut notification links temporarily
-        Link<Outliner::ParagraphHdlParam,void> aOldParagraphInsertedHdl = pOutliner->GetParaInsertedHdl();
-        pOutliner->SetParaInsertedHdl( Link<Outliner::ParagraphHdlParam,void>());
-        Link<Outliner::ParagraphHdlParam,void> aOldParagraphRemovingHdl = pOutliner->GetParaRemovingHdl();
-        pOutliner->SetParaRemovingHdl( Link<Outliner::ParagraphHdlParam,void>());
-        Link<Outliner::DepthChangeHdlParam,void> aOldDepthChangedHdl = pOutliner->GetDepthChangedHdl();
-        pOutliner->SetDepthChangedHdl( Link<::Outliner::DepthChangeHdlParam,void>());
-        Link<::Outliner*,void> aOldBeginMovingHdl = pOutliner->GetBeginMovingHdl();
-        pOutliner->SetBeginMovingHdl( Link<::Outliner*,void>());
-        Link<::Outliner*,void> aOldEndMovingHdl = pOutliner->GetEndMovingHdl();
-        pOutliner->SetEndMovingHdl( Link<::Outliner*,void>());
+        Link<Outliner::ParagraphHdlParam,void> aOldParagraphInsertedHdl = rOutliner.GetParaInsertedHdl();
+        rOutliner.SetParaInsertedHdl( Link<Outliner::ParagraphHdlParam,void>());
+        Link<Outliner::ParagraphHdlParam,void> aOldParagraphRemovingHdl = rOutliner.GetParaRemovingHdl();
+        rOutliner.SetParaRemovingHdl( Link<Outliner::ParagraphHdlParam,void>());
+        Link<Outliner::DepthChangeHdlParam,void> aOldDepthChangedHdl = rOutliner.GetDepthChangedHdl();
+        rOutliner.SetDepthChangedHdl( Link<::Outliner::DepthChangeHdlParam,void>());
+        Link<::Outliner*,void> aOldBeginMovingHdl = rOutliner.GetBeginMovingHdl();
+        rOutliner.SetBeginMovingHdl( Link<::Outliner*,void>());
+        Link<::Outliner*,void> aOldEndMovingHdl = rOutliner.GetEndMovingHdl();
+        rOutliner.SetEndMovingHdl( Link<::Outliner*,void>());
 
-        Link<EditStatus&,void> aOldStatusEventHdl = pOutliner->GetStatusEventHdl();
-        pOutliner->SetStatusEventHdl(Link<EditStatus&,void>());
+        Link<EditStatus&,void> aOldStatusEventHdl = rOutliner.GetStatusEventHdl();
+        rOutliner.SetStatusEventHdl(Link<EditStatus&,void>());
 
-        pOutliner->Clear();
+        rOutliner.Clear();
         pOlView->FillOutliner();
 
         // set links again
-        pOutliner->SetParaInsertedHdl(aOldParagraphInsertedHdl);
-        pOutliner->SetParaRemovingHdl(aOldParagraphRemovingHdl);
-        pOutliner->SetDepthChangedHdl(aOldDepthChangedHdl);
-        pOutliner->SetBeginMovingHdl(aOldBeginMovingHdl);
-        pOutliner->SetEndMovingHdl(aOldEndMovingHdl);
-        pOutliner->SetStatusEventHdl(aOldStatusEventHdl);
+        rOutliner.SetParaInsertedHdl(aOldParagraphInsertedHdl);
+        rOutliner.SetParaRemovingHdl(aOldParagraphRemovingHdl);
+        rOutliner.SetDepthChangedHdl(aOldDepthChangedHdl);
+        rOutliner.SetBeginMovingHdl(aOldBeginMovingHdl);
+        rOutliner.SetEndMovingHdl(aOldEndMovingHdl);
+        rOutliner.SetStatusEventHdl(aOldStatusEventHdl);
 
         return true;
     }

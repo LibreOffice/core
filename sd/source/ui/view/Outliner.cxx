@@ -2121,7 +2121,7 @@ void SdOutliner::Implementation::ProvideOutlinerView (
             if (mpOutlineView == nullptr || !rOutliner.GetEditEngine().HasView(&mpOutlineView->GetEditView()))
             {
                 delete mpOutlineView;
-                mpOutlineView = new OutlinerView(&rOutliner, pWindow);
+                mpOutlineView = new OutlinerView(rOutliner, pWindow);
                 mbOwnOutlineView = true;
                 bInsert = true;
             }

@@ -247,7 +247,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     aSet.PutAsTargetWhich( *aNewItem, EE_CHAR_FONTINFO );
 
                     //  If nothing is selected, then SetAttribs of the View selects a word
-                    pOutView->GetOutliner()->QuickSetAttribs( aSet, pOutView->GetSelection() );
+                    pOutView->GetOutliner().QuickSetAttribs( aSet, pOutView->GetSelection() );
                     pOutView->InsertText(aString);
                 }
 
@@ -587,21 +587,20 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
 {
     //! Outliner should have RemoveFields with a selection
 
-    Outliner* pOutliner = rOutView.GetOutliner();
-    if (!pOutliner) return;
+    Outliner& rOutliner = rOutView.GetOutliner();
 
     ESelection aOldSel = rOutView.GetSelection();
     ESelection aSel = aOldSel;
     aSel.Adjust();
     sal_Int32 nNewEnd = aSel.end.nIndex;
 
-    bool bUpdate = pOutliner->IsUpdateLayout();
+    bool bUpdate = rOutliner.IsUpdateLayout();
     bool bChanged = false;
 
     //! GetPortions and GetAttribs should be const!
-    EditEngine& rEditEng = const_cast<EditEngine&>(pOutliner->GetEditEngine());
+    EditEngine& rEditEng = const_cast<EditEngine&>(rOutliner.GetEditEngine());
 
-    sal_Int32 nParCount = pOutliner->GetParagraphCount();
+    sal_Int32 nParCount = rOutliner.GetParagraphCount();
     for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
         if (nPar >= aSel.start.nPara && nPar <= aSel.end.nPara)
         {
@@ -625,17 +624,17 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                         if (!bChanged)
                         {
                             if (bUpdate)
-                                pOutliner->SetUpdateLayout( false );
+                                rOutliner.SetUpdateLayout( false );
                             OUString aName = ScResId( STR_UNDO_DELETECONTENTS );
                             ViewShellId nViewShellId(-1);
                             if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
                                 nViewShellId = pViewSh->GetViewShellId();
-                            pOutliner->GetUndoManager().EnterListAction( aName, aName, 0, nViewShellId );
+                            rOutliner.GetUndoManager().EnterListAction( aName, aName, 0, nViewShellId );
                             bChanged = true;
                         }
 
                         OUString aFieldText = rEditEng.GetText( aFieldSel );
-                        pOutliner->QuickInsertText( aFieldText, aFieldSel );
+                        rOutliner.QuickInsertText( aFieldText, aFieldSel );
                         if (nPar == aSel.end.nPara)
                         {
                             nNewEnd = nNewEnd + aFieldText.getLength();
@@ -648,8 +647,8 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
 
     if (bUpdate && bChanged)
     {
-        pOutliner->GetUndoManager().LeaveListAction();
-        pOutliner->SetUpdateLayout( true );
+        rOutliner.GetUndoManager().LeaveListAction();
+        rOutliner.SetUpdateLayout( true );
     }
 
     if ( aOldSel == aSel )          // aSel is adjusted

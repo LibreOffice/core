@@ -1927,13 +1927,10 @@ void SwPostItMgr::FormatAll(const SfxItemSet &rNewAttr)
         //save old selection
         ESelection aOrigSel(pOLV->GetSelection());
         //select all
-        Outliner *pOutliner = pOLV->GetOutliner();
-        if (pOutliner)
-        {
-            sal_Int32 nParaCount = pOutliner->GetParagraphCount();
-            if (nParaCount > 0)
-                pOLV->SelectRange(0, nParaCount);
-        }
+        Outliner& rOutliner = pOLV->GetOutliner();
+        sal_Int32 nParaCount = rOutliner.GetParagraphCount();
+        if (nParaCount > 0)
+            pOLV->SelectRange(0, nParaCount);
         //set new char properties
         pOLV->SetAttribs(rNewAttr);
         //restore old selection

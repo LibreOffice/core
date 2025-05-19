@@ -238,12 +238,12 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
         return nullptr;
 
     OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-    ::Outliner* pOL = pOLV ? pOLV->GetOutliner() : nullptr;
-    if (!pOL)
+    if (!pOLV)
         return nullptr;
+    ::Outliner& rOL = pOLV->GetOutliner();
     rSel = pOLV->GetSelection();
 
-    return pOL;
+    return &rOL;
 }
 
 void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )

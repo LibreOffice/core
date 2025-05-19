@@ -201,8 +201,8 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_OUTLINE_FORMAT:
         {
-            ::Outliner* pOutl = pOutlinerView->GetOutliner();
-            pOutl->SetFlatMode( !pOutl->IsFlatMode() );
+            ::Outliner& rOutl = pOutlinerView->GetOutliner();
+            rOutl.SetFlatMode( !rOutl.IsFlatMode() );
             Invalidate( SID_COLORVIEW );
             Cancel();
             rReq.Done();
@@ -234,18 +234,18 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_COLORVIEW:
         {
-            ::Outliner* pOutl = pOutlinerView->GetOutliner();
-            EEControlBits nCntrl = pOutl->GetControlWord();
+            ::Outliner& rOutl = pOutlinerView->GetOutliner();
+            EEControlBits nCntrl = rOutl.GetControlWord();
 
             if ( !(nCntrl & EEControlBits::NOCOLORS) )
             {
                 // color view is enabled: disable
-                pOutl->SetControlWord(nCntrl | EEControlBits::NOCOLORS);
+                rOutl.SetControlWord(nCntrl | EEControlBits::NOCOLORS);
             }
             else
             {
                 // color view is disabled: enable
-                pOutl->SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
+                rOutl.SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
             }
 
             InvalidateWindows();
@@ -594,9 +594,8 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                     {
                         pOutlinerView->SetAttribs( aSet );
 
-                        ::Outliner* pOutliner = pOutlinerView->GetOutliner();
-                        if( pOutliner )
-                            pOutliner->UpdateFields();
+                        ::Outliner& rOutliner = pOutlinerView->GetOutliner();
+                        rOutliner.UpdateFields();
                     }
                 }
             }

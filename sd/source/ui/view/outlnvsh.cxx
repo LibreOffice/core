@@ -324,8 +324,8 @@ void OutlineViewShell::Activate( bool bIsMDIActivate )
     if( bIsMDIActivate )
     {
         OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-        ::Outliner* pOutl = pOutlinerView->GetOutliner();
-        pOutl->UpdateFields();
+        ::Outliner& rOutl = pOutlinerView->GetOutliner();
+        rOutl.UpdateFields();
     }
 }
 

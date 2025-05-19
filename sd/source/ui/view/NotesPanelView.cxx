@@ -34,7 +34,7 @@ NotesPanelView::NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
     : ::sd::SimpleOutlinerView(*rDocSh.GetDoc(), pWindow->GetOutDev(), &rNotesPanelViewShell)
     , mrNotesPanelViewShell(rNotesPanelViewShell)
     , maOutliner(&mrDoc, OutlinerMode::TextObject)
-    , maOutlinerView(&maOutliner, pWindow)
+    , maOutlinerView(maOutliner, pWindow)
     , aModifyIdle("NotesEditWindow ModifyIdle")
 {
     aModifyIdle.SetInvokeHandler(LINK(this, NotesPanelView, ModifyTimerHdl));

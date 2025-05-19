@@ -100,7 +100,7 @@ OutlineView::OutlineView(DrawDocShell& rDocSh, vcl::Window* pWindow,
         mnPaperWidth = 19000;
     }
 
-    mpOutlinerViews[0].reset( new OutlinerView(&mrOutliner, pWindow) );
+    mpOutlinerViews[0].reset( new OutlinerView(mrOutliner, pWindow) );
     mpOutlinerViews[0]->SetOutputArea(::tools::Rectangle());
     mrOutliner.SetUpdateLayout(false);
     mrOutliner.InsertView(mpOutlinerViews[0].get(), EE_APPEND);
@@ -210,7 +210,7 @@ void OutlineView::AddDeviceToPaintView(OutputDevice& rDev, vcl::Window* pWindow)
     {
         if (mpOutlinerViews[nView] == nullptr)
         {
-            mpOutlinerViews[nView].reset( new OutlinerView(&mrOutliner, dynamic_cast< ::sd::Window* >(rDev.GetOwnerWindow())) );
+            mpOutlinerViews[nView].reset( new OutlinerView(mrOutliner, dynamic_cast< ::sd::Window* >(rDev.GetOwnerWindow())) );
             mpOutlinerViews[nView]->SetBackgroundColor( aWhiteColor );
             mrOutliner.InsertView(mpOutlinerViews[nView].get(), EE_APPEND);
             bAdded = true;

@@ -80,19 +80,19 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     sal_Int16   nDepth, nTmp;
     OutlineView* pOlView = static_cast<OutlineView*>(pOutlineViewShell->GetView());
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( static_cast<Window*>(mpWindow) );
-    ::Outliner* pOutl = pOutlinerView->GetOutliner();
+    ::Outliner& rOutl = pOutlinerView->GetOutliner();
 
     std::vector<Paragraph*> aSelList;
     pOutlinerView->CreateSelectionList(aSelList);
 
     Paragraph* pPara = aSelList.empty() ? nullptr : aSelList.front();
 
-    nDepth = pOutl->GetDepth(pOutl->GetAbsPos( pPara ) );
+    nDepth = rOutl.GetDepth(rOutl.GetAbsPos( pPara ) );
     bool bPage = ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE );
 
     for( const auto& rpPara : aSelList )
     {
-        nTmp = pOutl->GetDepth( pOutl->GetAbsPos( rpPara ) );
+        nTmp = rOutl.GetDepth( rOutl.GetAbsPos( rpPara ) );
 
         if( nDepth != nTmp )
         {

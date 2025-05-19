@@ -754,7 +754,7 @@ void TextEditOverlayObject::checkDataChange(const basegfx::B2DRange& rMinTextEdi
     }
 
     // check if text primitives did change
-    SdrOutliner* pSdrOutliner = dynamic_cast<SdrOutliner*>(getOutlinerView().GetOutliner());
+    SdrOutliner* pSdrOutliner = dynamic_cast<SdrOutliner*>(&getOutlinerView().GetOutliner());
 
     if (pSdrOutliner)
     {
@@ -987,7 +987,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
     if (!comphelper::LibreOfficeKit::isActive() || !rRect.IsEmpty())
         aBlankRect.Intersection(rRect);
 
-    rOutlView.GetOutliner()->SetUpdateLayout(true); // Bugfix #22596#
+    rOutlView.GetOutliner().SetUpdateLayout(true); // Bugfix #22596#
     rOutlView.Paint(aBlankRect, &rTargetDevice);
 
     if (!bModified)
@@ -1090,7 +1090,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerVie
 
     if (pOutlView == nullptr)
     {
-        pOutlView = new OutlinerView(mpTextEditOutliner.get(), pWin);
+        pOutlView = new OutlinerView(*mpTextEditOutliner, pWin);
     }
     else
     {
@@ -2528,8 +2528,8 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             }
             mpTextEditOutlinerView->SetAttribs(rSet);
 
-            Outliner* pTEOutliner = mpTextEditOutlinerView->GetOutliner();
-            if (pTEOutliner && pTEOutliner->IsModified())
+            const Outliner& rTEOutliner = mpTextEditOutlinerView->GetOutliner();
+            if (rTEOutliner.IsModified())
             {
                 GetModel().SetChanged();
                 SetInnerTextAreaForLOKit();
@@ -2575,13 +2575,11 @@ void SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveH
     // on all paragraphs in the Outliner for the edit view
     if (nullptr != mpTextEditOutlinerView)
     {
-        Outliner* pOutliner = mpTextEditOutlinerView->GetOutliner();
+        Outliner& rOutliner = mpTextEditOutlinerView->GetOutliner();
 
-        const sal_Int32 nParaCount = pOutliner->GetParagraphCount();
+        const sal_Int32 nParaCount = rOutliner.GetParagraphCount();
         for (sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
-        {
-            pOutliner->SetStyleSheet(nPara, pStyleSheet);
-        }
+            rOutliner.SetStyleSheet(nPara, pStyleSheet);
     }
 
     SdrGlueEditView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
@@ -3094,28 +3092,24 @@ void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, sal_Int16 nDe
     }
     else
     {
-        ::Outliner* pOutliner = pOLV->GetOutliner();
-        if (pOutliner)
-        {
-            const EditEngine& rEditEngine = pOutliner->GetEditEngine();
+        ::Outliner& rOutliner = pOLV->GetOutliner();
+        const EditEngine& rEditEngine = rOutliner.GetEditEngine();
 
-            ESelection aSel(pOLV->GetSelection());
-            bool fullParaSelection
-                = aSel.end.nPara != aSel.start.nPara || pOLV->GetEditView().IsSelectionFullPara();
-            if (!aSel.HasRange())
-                pOLV->SetSelection(rEditEngine.GetWord(aSel, css::i18n::WordType::DICTIONARY_WORD));
-            const bool bRemoveParaAttribs = !bNoParagraphFormats && !fullParaSelection;
-            pOLV->RemoveAttribsKeepLanguages(bRemoveParaAttribs);
-            SfxItemSet aSet(pOLV->GetAttribs());
-            SfxItemSet aPaintSet(CreatePaintSet(GetFormatRangeImpl(true), *aSet.GetPool(),
-                                                rFormatSet, aSet, bNoCharacterFormats,
-                                                bNoParagraphFormats));
-            pOLV->SetAttribs(aPaintSet);
-            if (!bNoParagraphFormats && nDepth > -2)
-            {
-                for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; ++nPara)
-                    pOLV->SetDepth(nPara, nDepth);
-            }
+        ESelection aSel(pOLV->GetSelection());
+        bool fullParaSelection
+            = aSel.end.nPara != aSel.start.nPara || pOLV->GetEditView().IsSelectionFullPara();
+        if (!aSel.HasRange())
+            pOLV->SetSelection(rEditEngine.GetWord(aSel, css::i18n::WordType::DICTIONARY_WORD));
+        const bool bRemoveParaAttribs = !bNoParagraphFormats && !fullParaSelection;
+        pOLV->RemoveAttribsKeepLanguages(bRemoveParaAttribs);
+        SfxItemSet aSet(pOLV->GetAttribs());
+        SfxItemSet aPaintSet(CreatePaintSet(GetFormatRangeImpl(true), *aSet.GetPool(), rFormatSet,
+                                            aSet, bNoCharacterFormats, bNoParagraphFormats));
+        pOLV->SetAttribs(aPaintSet);
+        if (!bNoParagraphFormats && nDepth > -2)
+        {
+            for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; ++nPara)
+                pOLV->SetDepth(nPara, nDepth);
         }
     }
 

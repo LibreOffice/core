@@ -3197,9 +3197,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             pOLV->SetAttribs( aSet );
 
-                            ::Outliner* pOutliner = pOLV->GetOutliner();
-                            if( pOutliner )
-                                pOutliner->UpdateFields();
+                            ::Outliner& rOutliner = pOLV->GetOutliner();
+                            rOutliner.UpdateFields();
                         }
 
                         if(pField)

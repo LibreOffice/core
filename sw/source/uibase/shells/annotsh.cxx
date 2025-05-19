@@ -151,7 +151,7 @@ SfxUndoManager* SwAnnotationShell::GetUndoManager()
         OSL_ENSURE(pPostItMgr,"PostItMgr::Layout(): We are looping forever");
         return nullptr;
     }
-    return &pPostItMgr->GetActiveSidebarWin()->GetOutlinerView()->GetOutliner()->GetUndoManager();
+    return &pPostItMgr->GetActiveSidebarWin()->GetOutlinerView()->GetOutliner().GetUndoManager();
 }
 
 void SwAnnotationShell::Exec( SfxRequest &rReq )
@@ -359,13 +359,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         break;
         case SID_SELECTALL:
         {
-            Outliner * pOutliner = pOLV->GetOutliner();
-            if(pOutliner)
-            {
-                sal_Int32 nParaCount = pOutliner->GetParagraphCount();
-                if (nParaCount > 0)
-                    pOLV->SelectRange(0, nParaCount );
-            }
+            Outliner& rOutliner = pOLV->GetOutliner();
+            sal_Int32 nParaCount = rOutliner.GetParagraphCount();
+            if (nParaCount > 0)
+                pOLV->SelectRange(0, nParaCount );
             break;
         }
         case FN_FORMAT_RESET:
@@ -649,7 +646,7 @@ void SwAnnotationShell::ExecPost( const SfxRequest& rReq, sal_uInt16 nEEWhich, S
         pOLV->SetAttribs(rNewAttr);
 
     m_rView.GetViewFrame().GetBindings().InvalidateAll(false);
-    if ( pOLV->GetOutliner()->IsModified() )
+    if ( pOLV->GetOutliner().IsModified() )
         m_rView.GetWrtShell().SetModified();
 }
 
@@ -862,7 +859,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    if(pOLV->GetOutliner() && pOLV->GetOutliner()->IsVertical())
+                    if (pOLV->GetOutliner().IsVertical())
                         rSet.DisableItem( nWhich );
                     else
                     {
@@ -1860,8 +1857,8 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
 
     // do not flicker
     pOLV->HideCursor();
-    Outliner * pOutliner = pOLV->GetOutliner();
-    pOutliner->SetUpdateLayout(false);
+    Outliner& rOutliner = pOLV->GetOutliner();
+    rOutliner.SetUpdateLayout(false);
 
     SfxItemSet aOldSet( pOLV->GetAttribs() );
     SfxItemSet aFontSet(SfxItemSet::makeFixedSfxItemSet<
@@ -1902,7 +1899,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     pOLV->SetAttribs( aFontSet );
 
     // From now on show it again
-    pOutliner->SetUpdateLayout(true);
+    rOutliner.SetUpdateLayout(true);
     pOLV->ShowCursor();
 
     rReq.AppendItem( SfxStringItem( SID_CHARMAP, sSym ) );

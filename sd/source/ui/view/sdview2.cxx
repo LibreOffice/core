@@ -289,36 +289,33 @@ void View::DoPaste (::sd::Window* pWindow,bool /*bMergeMasterPagesOnly*/)
 
         SdrObject*  pObj = GetTextEditObject();
         SdPage*     pPage = static_cast<SdPage*>( pObj ? pObj->getSdrPageFromSdrObject() : nullptr );
-        ::Outliner* pOutliner = pOLV->GetOutliner();
+        ::Outliner& rOutliner = pOLV->GetOutliner();
 
-        if( pOutliner)
+        if( pObj && pPage && pPage->GetPresObjKind(pObj) == PresObjKind::Title )
         {
-            if( pObj && pPage && pPage->GetPresObjKind(pObj) == PresObjKind::Title )
+            // remove all hard linebreaks from the title
+            if (rOutliner.GetParagraphCount() > 1)
             {
-                // remove all hard linebreaks from the title
-                if (pOutliner->GetParagraphCount() > 1)
+                bool bOldUpdateMode = rOutliner.SetUpdateLayout( false );
+
+                const EditEngine& rEdit = rOutliner.GetEditEngine();
+                const sal_Int32 nParaCount = rEdit.GetParagraphCount();
+
+                for( sal_Int32 nPara = nParaCount - 2; nPara >= 0; nPara-- )
                 {
-                    bool bOldUpdateMode = pOutliner->SetUpdateLayout( false );
-
-                    const EditEngine& rEdit = pOutliner->GetEditEngine();
-                    const sal_Int32 nParaCount = rEdit.GetParagraphCount();
-
-                    for( sal_Int32 nPara = nParaCount - 2; nPara >= 0; nPara-- )
-                    {
-                        const sal_Int32 nParaLen = rEdit.GetTextLen( nPara );
-                        pOutliner->QuickInsertLineBreak(ESelection(nPara, nParaLen, nPara + 1, 0));
-                    }
-
-                    DBG_ASSERT( rEdit.GetParagraphCount() <= 1, "Titleobject contains hard line breaks" );
-                    pOutliner->SetUpdateLayout(bOldUpdateMode);
+                    const sal_Int32 nParaLen = rEdit.GetTextLen( nPara );
+                    rOutliner.QuickInsertLineBreak(ESelection(nPara, nParaLen, nPara + 1, 0));
                 }
-            }
 
-            if( !mrDoc.IsChanged() )
-            {
-                if (pOutliner->IsModified())
-                    mrDoc.SetChanged();
+                DBG_ASSERT( rEdit.GetParagraphCount() <= 1, "Titleobject contains hard line breaks" );
+                rOutliner.SetUpdateLayout(bOldUpdateMode);
             }
+        }
+
+        if( !mrDoc.IsChanged() )
+        {
+            if (rOutliner.IsModified())
+                mrDoc.SetChanged();
         }
     }
     else

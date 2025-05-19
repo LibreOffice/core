@@ -171,9 +171,9 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                 {
                     // Presentation object outline
                     OutlinerView* pOV   = GetTextEditOutlinerView();
-                    ::Outliner* pOutliner = pOV->GetOutliner();
+                    ::Outliner& rOutliner = pOV->GetOutliner();
 
-                    pOutliner->SetUpdateLayout(false);
+                    rOutliner.SetUpdateLayout(false);
                     mpDocSh->SetWaitCursor( true );
 
                     // replace placeholder by template name
@@ -189,8 +189,8 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                     while (pPara)
                     {
-                        sal_Int32 nParaPos = pOutliner->GetAbsPos( pPara );
-                        sal_Int16 nDepth = pOutliner->GetDepth( nParaPos );
+                        sal_Int32 nParaPos = rOutliner.GetAbsPos( pPara );
+                        sal_Int16 nDepth = rOutliner.GetDepth( nParaPos );
                         OUString aName = rPage.GetLayoutName() + " " +
                             OUString::number((nDepth <= 0) ? 1 : nDepth + 1);
                         SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->Find(aName, SfxStyleFamily::Page));
@@ -242,13 +242,13 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             iter = aSelList.rend();
                             --iter;
 
-                            if (pOutliner->GetDepth(pOutliner->GetAbsPos(*iter)) > 0)
-                                pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
+                            if (rOutliner.GetDepth(rOutliner.GetAbsPos(*iter)) > 0)
+                                pPara = rOutliner.GetParagraph( 0 );  // Put NumBulletItem in outline level 1
                         }
                     }
 
                     mpDocSh->SetWaitCursor( false );
-                    pOV->GetOutliner()->SetUpdateLayout(true);
+                    pOV->GetOutliner().SetUpdateLayout(true);
 
                     mpDocSh->GetUndoManager()->LeaveListAction();
 

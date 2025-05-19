@@ -270,7 +270,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
     pOV->SetSelection(aSel);
 
     // do not go ahead with setting attributes of special characters
-    pOV->GetOutliner()->QuickSetAttribs(aOldSet, aSel);
+    pOV->GetOutliner().QuickSetAttribs(aOldSet, aSel);
 
     rUndoMgr.LeaveListAction();
 

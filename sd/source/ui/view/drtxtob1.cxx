@@ -134,19 +134,17 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                 if( !aSel.HasRange() )
                 {
                     nStartPara = 0;
-                    nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
+                    nEndPara = pOLV->GetOutliner().GetParagraphCount() - 1;
                 }
 
-                pOLV->GetOutliner()->UndoActionStart( OLUNDO_ATTR );
+                pOLV->GetOutliner().UndoActionStart( OLUNDO_ATTR );
                 for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
-                    SfxStyleSheet* pStyleSheet = nullptr;
-                    if (pOLV->GetOutliner() != nullptr)
-                        pStyleSheet = pOLV->GetOutliner()->GetStyleSheet(nPara);
+                    SfxStyleSheet* pStyleSheet = pOLV->GetOutliner().GetStyleSheet(nPara);
                     if (pStyleSheet != nullptr)
                     {
                         SfxItemSet aAttr( pStyleSheet->GetItemSet() );
-                        SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
+                        SfxItemSet aTmpSet( pOLV->GetOutliner().GetParaAttribs( nPara ) );
                         aAttr.Put( aTmpSet, false );
                         const SvxLRSpaceItem& rItem = aAttr.Get( EE_PARA_LRSPACE );
                         std::unique_ptr<SvxLRSpaceItem> pNewItem(rItem.Clone());
@@ -162,10 +160,10 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                         pNewItem->SetLeft(SvxIndentValue::twips(static_cast<sal_uInt16>(nLeft)));
 
                         aAttr.Put( std::move(pNewItem) );
-                        pOLV->GetOutliner()->SetParaAttribs( nPara, aAttr );
+                        pOLV->GetOutliner().SetParaAttribs( nPara, aAttr );
                     }
                 }
-                pOLV->GetOutliner()->UndoActionEnd();
+                pOLV->GetOutliner().UndoActionEnd();
                 mrViewShell.Invalidate( SID_UNDO );
             }
             rReq.Done();
@@ -189,19 +187,17 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                 if( !aSel.HasRange() )
                 {
                     nStartPara = 0;
-                    nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
+                    nEndPara = pOLV->GetOutliner().GetParagraphCount() - 1;
                 }
 
-                pOLV->GetOutliner()->UndoActionStart( OLUNDO_ATTR );
+                pOLV->GetOutliner().UndoActionStart( OLUNDO_ATTR );
                 for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
-                    SfxStyleSheet* pStyleSheet = nullptr;
-                    if (pOLV->GetOutliner() != nullptr)
-                        pStyleSheet = pOLV->GetOutliner()->GetStyleSheet(nPara);
+                    SfxStyleSheet* pStyleSheet = pOLV->GetOutliner().GetStyleSheet(nPara);
                     if (pStyleSheet != nullptr)
                     {
                         SfxItemSet aAttr( pStyleSheet->GetItemSet() );
-                        SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
+                        SfxItemSet aTmpSet( pOLV->GetOutliner().GetParaAttribs( nPara ) );
                         aAttr.Put( aTmpSet, false ); // sal_False= InvalidItems is not default, handle it as "holes"
                         const SvxULSpaceItem& rItem = aAttr.Get( EE_PARA_ULSPACE );
                         std::unique_ptr<SvxULSpaceItem> pNewItem(rItem.Clone());
@@ -228,10 +224,10 @@ void TextObjectBar::Execute(SfxRequest& rReq)
 
                         SfxItemSet aNewAttrs(std::move(aAttr));
                         aNewAttrs.Put( std::move(pNewItem) );
-                        pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
+                        pOLV->GetOutliner().SetParaAttribs( nPara, aNewAttrs );
                     }
                 }
-                pOLV->GetOutliner()->UndoActionEnd();
+                pOLV->GetOutliner().UndoActionEnd();
                 mrViewShell.Invalidate( SID_UNDO );
             }
             else
@@ -419,47 +415,44 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                     //effectively a preview of the equivalent style level, and
                     //changing the level disconnects it from the style
 
-                    ::Outliner* pOL = pOLV->GetOutliner();
-                    if (pOL)
+                    ::Outliner& rOL = pOLV->GetOutliner();
+                    const SvxNumBulletItem *pItem = nullptr;
+                    SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
+                    OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 1");
+                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find(sStyleName, SfxStyleFamily::Pseudo);
+                    if( pFirstStyleSheet )
+                        pItem = pFirstStyleSheet->GetItemSet().GetItemIfSet(EE_PARA_NUMBULLET, false);
+
+                    if (pItem )
                     {
-                        const SvxNumBulletItem *pItem = nullptr;
-                        SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
-                        OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 1");
-                        SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find(sStyleName, SfxStyleFamily::Pseudo);
-                        if( pFirstStyleSheet )
-                            pItem = pFirstStyleSheet->GetItemSet().GetItemIfSet(EE_PARA_NUMBULLET, false);
-
-                        if (pItem )
+                        SvxNumRule aNewRule(pItem->GetNumRule());
+                        ESelection aSel = pOLV->GetSelection();
+                        aSel.Adjust();
+                        sal_Int32 nStartPara = aSel.start.nPara;
+                        sal_Int32 nEndPara = aSel.end.nPara;
+                        for (sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara)
                         {
-                            SvxNumRule aNewRule(pItem->GetNumRule());
-                            ESelection aSel = pOLV->GetSelection();
-                            aSel.Adjust();
-                            sal_Int32 nStartPara = aSel.start.nPara;
-                            sal_Int32 nEndPara = aSel.end.nPara;
-                            for (sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara)
+                            sal_uInt16 nLevel = rOL.GetDepth(nPara);
+                            SvxNumberFormat aFmt(aNewRule.GetLevel(nLevel));
+
+                            if (aFmt.GetNumberingType() == SVX_NUM_NUMBER_NONE)
                             {
-                                sal_uInt16 nLevel = pOL->GetDepth(nPara);
-                                SvxNumberFormat aFmt(aNewRule.GetLevel(nLevel));
-
-                                if (aFmt.GetNumberingType() == SVX_NUM_NUMBER_NONE)
-                                {
-                                    aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-                                    SdStyleSheetPool::setDefaultOutlineNumberFormatBulletAndIndent(nLevel, aFmt);
-                                }
-                                else
-                                {
-                                    aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
-                                    aFmt.SetAbsLSpace(0);
-                                    aFmt.SetFirstLineOffset(0);
-                                }
-
-                                aNewRule.SetLevel(nLevel, aFmt);
+                                aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                                SdStyleSheetPool::setDefaultOutlineNumberFormatBulletAndIndent(nLevel, aFmt);
+                            }
+                            else
+                            {
+                                aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
+                                aFmt.SetAbsLSpace(0);
+                                aFmt.SetFirstLineOffset(0);
                             }
 
-                            pFirstStyleSheet->GetItemSet().Put(SvxNumBulletItem(std::move(aNewRule), EE_PARA_NUMBULLET));
-
-                            SdStyleSheet::BroadcastSdStyleSheetChange(pFirstStyleSheet, PresentationObjects::Outline_1, pSSPool);
+                            aNewRule.SetLevel(nLevel, aFmt);
                         }
+
+                        pFirstStyleSheet->GetItemSet().Put(SvxNumBulletItem(std::move(aNewRule), EE_PARA_NUMBULLET));
+
+                        SdStyleSheet::BroadcastSdStyleSheetChange(pFirstStyleSheet, PresentationObjects::Outline_1, pSSPool);
                     }
                 }
                 SfxBindings& rBindings = mrViewShell.GetViewFrame()->GetBindings();

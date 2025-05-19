@@ -1277,7 +1277,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     const bool bToggleOn = ShouldToggleOn( bToggle, bHandleBullets );
 
     std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OutlinerMode::TextObject, rSdrModel));
-    OutlinerView aOutlinerView(pOutliner.get(), pWindow);
+    OutlinerView aOutlinerView(*pOutliner, pWindow);
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();

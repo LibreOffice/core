@@ -314,8 +314,8 @@ void NotesPanelViewShell::Activate(bool bIsMDIActivate)
     if (bIsMDIActivate)
     {
         OutlinerView* pOutlinerView = mpNotesPanelView->GetOutlinerView();
-        ::Outliner* pOutl = pOutlinerView->GetOutliner();
-        pOutl->UpdateFields();
+        ::Outliner& rOutl = pOutlinerView->GetOutliner();
+        rOutl.UpdateFields();
     }
 }
 
@@ -1128,9 +1128,8 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
                     {
                         pOutlinerView->SetAttribs(aSet);
 
-                        ::Outliner* pOutliner = pOutlinerView->GetOutliner();
-                        if (pOutliner)
-                            pOutliner->UpdateFields();
+                        ::Outliner& rOutliner = pOutlinerView->GetOutliner();
+                        rOutliner.UpdateFields();
                     }
                 }
             }

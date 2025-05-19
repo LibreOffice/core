@@ -3607,12 +3607,12 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
         {
             //  handle selection within the OutlinerView
 
-            Outliner* pOutliner = pOlView->GetOutliner();
-            const EditEngine& rEditEngine = pOutliner->GetEditEngine();
+            Outliner& rOutliner = pOlView->GetOutliner();
+            const EditEngine& rEditEngine = rOutliner.GetEditEngine();
             tools::Rectangle aVisArea = pOlView->GetVisArea();
 
             Point aTextPos = aLogicPos;
-            if ( pOutliner->IsVertical() )              // have to manually transform position
+            if ( rOutliner.IsVertical() )              // have to manually transform position
             {
                 aTextPos -= aOutputArea.TopRight();
                 tools::Long nTemp = -aTextPos.X();

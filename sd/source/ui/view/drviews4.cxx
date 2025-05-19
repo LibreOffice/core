@@ -600,11 +600,8 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             LanguageType eLanguage( LANGUAGE_SYSTEM );
 
             // Format popup with outliner language, if possible
-            if( pOLV->GetOutliner() )
-            {
-                ESelection aSelection( pOLV->GetSelection() );
-                eLanguage = pOLV->GetOutliner()->GetLanguage( aSelection.start.nPara, aSelection.start.nIndex );
-            }
+            ESelection aSelection( pOLV->GetSelection() );
+            eLanguage = pOLV->GetOutliner().GetLanguage( aSelection.start.nPara, aSelection.start.nIndex );
 
             //fdo#44998 if the outliner has captured the mouse events release the lock
             //so the SdFieldPopup can get them
