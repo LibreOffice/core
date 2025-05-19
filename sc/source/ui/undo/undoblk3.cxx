@@ -195,7 +195,7 @@ void ScUndoDeleteContents::Redo()
 void ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
-        pViewTarget->GetViewShell()->DeleteContents( nFlags );
+        pViewTarget->GetViewShell().DeleteContents( nFlags );
 }
 
 bool ScUndoDeleteContents::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -331,7 +331,7 @@ void ScUndoFillTable::Redo()
 void ScUndoFillTable::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
-        pViewTarget->GetViewShell()->FillTab( nFlags, nFunction, bSkipEmpty, bAsLink );
+        pViewTarget->GetViewShell().FillTab( nFlags, nFunction, bSkipEmpty, bAsLink );
 }
 
 bool ScUndoFillTable::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -462,7 +462,7 @@ void ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScTabViewShell& rViewShell = *pViewTarget->GetViewShell();
+        ScTabViewShell& rViewShell = pViewTarget->GetViewShell();
         if (maLineOuter.getItem())
             rViewShell.ApplyPatternLines(*aApplyPattern.getScPatternAttr(),
                 *static_cast<const SvxBoxItem*>(maLineOuter.getItem()),
@@ -617,7 +617,7 @@ void ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScTabViewShell& rViewShell = *pViewTarget->GetViewShell();
+        ScTabViewShell& rViewShell = pViewTarget->GetViewShell();
         if (eFillCmd==FILL_SIMPLE)
             rViewShell.FillSimple( eFillDir );
         else
@@ -750,7 +750,7 @@ void ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScTabViewShell& rViewShell = *pViewTarget->GetViewShell();
+        ScTabViewShell& rViewShell = pViewTarget->GetViewShell();
         rViewShell.MergeCells( false, false, false, 0 );
     }
 }
@@ -902,7 +902,7 @@ void ScUndoAutoFormat::Redo()
 void ScUndoAutoFormat::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
-        pViewTarget->GetViewShell()->AutoFormat( nFormatNo );
+        pViewTarget->GetViewShell().AutoFormat( nFormatNo );
 }
 
 bool ScUndoAutoFormat::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1081,7 +1081,7 @@ void ScUndoReplace::Redo()
 void ScUndoReplace::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
-        pViewTarget->GetViewShell()->SearchAndReplace( pSearchItem.get(), true, false );
+        pViewTarget->GetViewShell().SearchAndReplace( pSearchItem.get(), true, false );
 }
 
 bool ScUndoReplace::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1266,7 +1266,7 @@ void ScUndoConversion::Redo()
 void ScUndoConversion::Repeat( SfxRepeatTarget& rTarget )
 {
     if( auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget) )
-        pViewTarget->GetViewShell()->DoSheetConversion( maConvParam );
+        pViewTarget->GetViewShell().DoSheetConversion( maConvParam );
 }
 
 bool ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1352,7 +1352,7 @@ void ScUndoRefConversion::Redo()
 void ScUndoRefConversion::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
-        pViewTarget->GetViewShell()->DoRefConversion();
+        pViewTarget->GetViewShell().DoRefConversion();
 }
 
 bool ScUndoRefConversion::CanRepeat(SfxRepeatTarget& rTarget) const

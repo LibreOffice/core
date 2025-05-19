@@ -26,14 +26,14 @@ class ScTabViewShell;
 class ScTabViewTarget : public SfxRepeatTarget
 {
 private:
-    ScTabViewShell* pViewShell;
+    ScTabViewShell& rViewShell;
 
 public:
 
-                    ScTabViewTarget( ScTabViewShell* pShell ) : pViewShell( pShell ) {}
+                    ScTabViewTarget( ScTabViewShell& rShell ) : rViewShell( rShell ) {}
     virtual         ~ScTabViewTarget() override;
 
-    ScTabViewShell* GetViewShell() const { return pViewShell; }
+    ScTabViewShell& GetViewShell() const { return rViewShell; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

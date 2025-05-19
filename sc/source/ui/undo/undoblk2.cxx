@@ -175,7 +175,7 @@ void ScUndoWidthOrHeight::Redo()
 void ScUndoWidthOrHeight::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
-        pViewTarget->GetViewShell()->SetMarkedWidthOrHeight( bWidth, eMode, nNewSize );
+        pViewTarget->GetViewShell().SetMarkedWidthOrHeight( bWidth, eMode, nNewSize );
 }
 
 bool ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const

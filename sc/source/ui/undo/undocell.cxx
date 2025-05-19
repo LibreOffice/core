@@ -150,7 +150,7 @@ void ScUndoCursorAttr::Redo()
 void ScUndoCursorAttr::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
-        pViewTarget->GetViewShell()->ApplySelectionPattern( *aApplyPattern.getScPatternAttr() );
+        pViewTarget->GetViewShell().ApplySelectionPattern( *aApplyPattern.getScPatternAttr() );
 }
 
 bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -298,7 +298,7 @@ void ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
         OUString aTemp = maNewString;
-        pViewTarget->GetViewShell()->EnterDataAtCursor( aTemp );
+        pViewTarget->GetViewShell().EnterDataAtCursor( aTemp );
     }
 }
 
@@ -557,7 +557,7 @@ void ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScTabViewShell& rViewShell = *pViewTarget->GetViewShell();
+        ScTabViewShell& rViewShell = pViewTarget->GetViewShell();
 
         if (bInsert)
             rViewShell.InsertPageBreak(bColumn);
@@ -630,7 +630,7 @@ void ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScTabViewShell& rViewShell = *pViewTarget->GetViewShell();
+        ScTabViewShell& rViewShell = pViewTarget->GetViewShell();
         ScViewData& rViewData = rViewShell.GetViewData();
         rViewData.GetDocShell()->SetPrintZoom( rViewData.GetTabNo(), nNewScale, nNewPages );
     }
@@ -714,7 +714,7 @@ void ScUndoThesaurus::Redo()
 void ScUndoThesaurus::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
-        pViewTarget->GetViewShell()->DoThesaurus();
+        pViewTarget->GetViewShell().DoThesaurus();
 }
 
 bool ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const
