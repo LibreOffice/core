@@ -448,6 +448,8 @@ bool SwTextFrame::FormatEmpty()
     const SvxLineSpacingItem &rSpacing = aSet.GetLineSpacing();
     if( !bCollapse && ( SvxLineSpaceRule::Min == rSpacing.GetLineSpaceRule() ||
         SvxLineSpaceRule::Fix == rSpacing.GetLineSpaceRule() ||
+        (rSpacing.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop
+            && rSpacing.GetPropLineSpace() < 100) ||
         aSet.GetFirstLineIndent().IsAutoFirst()))
     {
         return false;
