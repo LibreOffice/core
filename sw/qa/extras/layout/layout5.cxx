@@ -1663,6 +1663,40 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf88752)
     CPPUNIT_ASSERT_LESS(sal_Int32(1690), nHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166652)
+{
+    createSwDoc("line-spacing-80percent.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // Check that all line heights are identical
+    assertXPath(pXmlDoc, "//cell[1]/txt", 11);
+    assertXPath(pXmlDoc, "//cell[1]/txt[1]/infos/bounds", "height", u"552");
+    // Before the fix, this was 691
+    assertXPath(pXmlDoc, "//cell[1]/txt[2]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[1]/txt[3]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[1]/txt[4]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[1]/txt[5]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[1]/txt[6]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[1]/txt[7]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[1]/txt[8]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[1]/txt[9]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[1]/txt[10]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[1]/txt[11]/infos/bounds", "height", u"552");
+
+    assertXPath(pXmlDoc, "//cell[2]/txt", 11);
+    assertXPath(pXmlDoc, "//cell[2]/txt[1]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[2]/txt[2]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[2]/txt[3]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[2]/txt[4]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[2]/txt[5]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[2]/txt[6]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[2]/txt[7]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[2]/txt[8]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[2]/txt[9]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[2]/txt[10]/infos/bounds", "height", u"552");
+    assertXPath(pXmlDoc, "//cell[2]/txt[11]/infos/bounds", "height", u"552");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
