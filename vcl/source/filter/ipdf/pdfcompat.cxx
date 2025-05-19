@@ -12,6 +12,7 @@
 #include <o3tl/string_view.hxx>
 #include <tools/solar.h>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/pwdinteract.hxx>
 #include <sal/log.hxx>
 
 namespace vcl::pdf
@@ -44,7 +45,7 @@ bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
 
 bool convertToHighestSupported(
     SvStream& rInStream, SvStream& rOutStream,
-    const css::uno::Reference<css::task::XInteractionHandler>& /*xInteractionHandler*/)
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
     sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN;
     sal_uInt64 nSize = STREAM_SEEK_TO_END;
@@ -59,19 +60,51 @@ bool convertToHighestSupported(
     aInBuffer.WriteStream(rInStream, nSize);
 
     SvMemoryStream aSaved;
+    bool bAgain = false;
+    OUString aPassword;
+    do
     {
         // Load the buffer using pdfium.
-        std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-            = pPdfium->openDocument(aInBuffer.GetData(), aInBuffer.GetSize(), OString());
-        if (!pPdfDocument)
-            return false;
+        OString aIsoPwd = OUStringToOString(aPassword, RTL_TEXTENCODING_ISO_8859_1);
 
+        std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+            = pPdfium->openDocument(aInBuffer.GetData(), aInBuffer.GetSize(), aIsoPwd);
+        auto nPdfiumErr = pPdfium->getLastErrorCode();
+        if (!pPdfDocument && nPdfiumErr != vcl::pdf::PDFErrorType::Password)
+        {
+            SAL_WARN("vcl.filter",
+                     "convertToHighestSupported pdfium err: " << pPdfium->getLastError());
+            return false;
+        }
+
+        if (!pPdfDocument && nPdfiumErr == vcl::pdf::PDFErrorType::Password)
+        {
+            if (!xInteractionHandler || !xInteractionHandler.is())
+            {
+                SAL_WARN("vcl.filter", "convertToHighestSupported no Int handler for pass");
+                return false;
+            }
+
+            // We don't have a filename for the GUI here
+            bAgain = vcl::pdf::getPassword(xInteractionHandler, aPassword, !bAgain, u"PDF"_ustr);
+            SAL_INFO("vcl.filter", "convertToHighestSupported pass result: " << bAgain);
+            if (!bAgain)
+            {
+                SAL_WARN("vcl.filter", "convertToHighestSupported Failed to get pass");
+                return false;
+            }
+            continue;
+        }
+        bAgain = false;
+
+        SAL_INFO("vcl.filter", "convertToHighestSupported do save");
         // 16 means PDF-1.6.
         if (!pPdfDocument->saveWithVersion(aSaved, 16))
             return false;
-    }
+    } while (bAgain);
 
     aSaved.Seek(STREAM_SEEK_TO_BEGIN);
+    SAL_INFO("vcl.filter", "convertToHighestSupported do write");
     rOutStream.WriteStream(aSaved);
 
     return rOutStream.good();
