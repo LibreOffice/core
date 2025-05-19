@@ -519,7 +519,8 @@ namespace sw::mark
             for (auto& pMark : parent.m_vAllMarks)
                 usedNames.insert(pMark->GetName().toString());
         }
-        ~UniqueNameChecksGuard_impl() override
+
+        void ImplDestroy()
         {
             assert(parent.m_pUniqueNameChecksGuard == this);
             for (auto& pMark : parent.m_vAllMarks)
@@ -531,6 +532,11 @@ namespace sw::mark
                                              { return usedNames.insert(n.toString()).second; }));
             }
             parent.m_pUniqueNameChecksGuard = nullptr;
+        }
+
+        ~UniqueNameChecksGuard_impl() override
+        {
+            suppress_fun_call_w_exception(ImplDestroy());
         }
 
         void add(sw::mark::MarkBase* mark) { uncheckedNameMarks.insert(mark); }
