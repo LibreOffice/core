@@ -2113,7 +2113,7 @@ void SalInstanceAssistant::set_current_page(int nPage)
         m_xWizard->SetPageSizePixel(aFinalSize);
     }
 
-    (void)m_xWizard->ShowPage(m_aIds[nPage]);
+    m_xWizard->ShowPage(m_aIds[nPage]);
     enable_notify_events();
 }
 

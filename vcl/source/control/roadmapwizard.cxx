@@ -582,7 +582,7 @@ namespace vcl
             SetPage( i_nState, pNewPage );
     }
 
-    bool RoadmapWizard::ShowPage( sal_uInt16 nLevel )
+    void RoadmapWizard::ShowPage(sal_uInt16 nLevel)
     {
         mnCurLevel = nLevel;
         GetOrCreatePage(mnCurLevel);
@@ -592,7 +592,6 @@ namespace vcl
         m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID(getCurrentState());
 
         ImplShowTabPage( ImplGetPage( mnCurLevel ) );
-        return true;
     }
 
     void RoadmapWizard::Finish( tools::Long nResult )
@@ -735,7 +734,6 @@ namespace vcl
     {
         // don't travel directly on m_xWizardImpl->aStateHistory, in case something goes wrong
         std::stack< WizardTypes::WizardState > aTravelVirtually = m_xWizardImpl->aStateHistory;
-        std::stack< WizardTypes::WizardState > aOldStateHistory = m_xWizardImpl->aStateHistory;
 
         WizardTypes::WizardState nCurrentRollbackState = getCurrentState();
         while ( nCurrentRollbackState != _nTargetState )
@@ -745,11 +743,7 @@ namespace vcl
             aTravelVirtually.pop();
         }
         m_xWizardImpl->aStateHistory = std::move(aTravelVirtually);
-        if ( !ShowPage( _nTargetState ) )
-        {
-            m_xWizardImpl->aStateHistory = std::move(aOldStateHistory);
-            return false;
-        }
+        ShowPage(_nTargetState);
         return true;
     }
 
@@ -759,7 +753,6 @@ namespace vcl
 
         // don't travel directly on m_xWizardImpl->aStateHistory, in case something goes wrong
         std::stack< WizardTypes::WizardState > aTravelVirtually = m_xWizardImpl->aStateHistory;
-        std::stack< WizardTypes::WizardState > aOldStateHistory = m_xWizardImpl->aStateHistory;
         while ( nCurrentState != _nTargetState )
         {
             WizardTypes::WizardState nNextState = determineNextState( nCurrentState );
@@ -777,14 +770,7 @@ namespace vcl
         }
         m_xWizardImpl->aStateHistory = std::move(aTravelVirtually);
         // show the target page
-        if ( !ShowPage( nCurrentState ) )
-        {
-            // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
-            // but ShowPage doesn't? Somebody behaves very strange here...
-            OSL_FAIL( "RoadmapWizard::skipUntil: very unpolite..." );
-            m_xWizardImpl->aStateHistory = std::move(aOldStateHistory);
-            return false;
-        }
+        ShowPage(nCurrentState);
         return true;
     }
 
@@ -799,10 +785,7 @@ namespace vcl
         // the state history is used by the enterState method
         // all fine
         m_xWizardImpl->aStateHistory.push(nCurrentState);
-        if (!ShowPage(nNextState))
-        {
-            m_xWizardImpl->aStateHistory.pop();
-        }
+        ShowPage(nNextState);
     }
 
     void RoadmapWizard::travelPrevious()
@@ -815,12 +798,7 @@ namespace vcl
         // the state history is used by the enterState method
         m_xWizardImpl->aStateHistory.pop();
         // show this page
-        if (!ShowPage(nPreviousState))
-        {
-            m_xWizardImpl->aStateHistory.push(nPreviousState);
-        }
-
-        // all fine
+        ShowPage(nPreviousState);
     }
 
     void  RoadmapWizard::removePageFromHistory( WizardTypes::WizardState nToRemove )

@@ -169,7 +169,7 @@ namespace vcl
 
         virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
-        bool                ShowPage( sal_uInt16 nLevel );
+        void                ShowPage(sal_uInt16 nLevel);
         void                Finish( tools::Long nResult = 0 );
         sal_uInt16          GetCurLevel() const { return mnCurLevel; }
 
