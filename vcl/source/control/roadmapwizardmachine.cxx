@@ -299,17 +299,10 @@ namespace vcl
         implUpdateRoadmap();
     }
 
-    OUString RoadmapWizardMachine::getStateDisplayName( WizardTypes::WizardState _nState ) const
+    OUString RoadmapWizardMachine::getStateDisplayName( WizardTypes::WizardState /* _nState */) const
     {
-        OUString sDisplayName;
-
-        StateDescriptions::const_iterator pos = m_pImpl->aStateDescriptors.find( _nState );
-        OSL_ENSURE( pos != m_pImpl->aStateDescriptors.end(),
-                   "RoadmapWizard::getStateDisplayName: no default implementation available for this state!" );
-        if ( pos != m_pImpl->aStateDescriptors.end() )
-            sDisplayName = pos->second.first;
-
-        return sDisplayName;
+        SAL_WARN("vcl", "RoadmapWizardMachine::getStateDisplayName: no default implementation available");
+        return OUString();
     }
 
     void RoadmapWizardMachine::enableState( WizardTypes::WizardState _nState, bool _bEnable )

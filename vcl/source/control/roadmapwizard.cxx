@@ -1013,33 +1013,16 @@ namespace vcl
             m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
     }
 
-    OUString RoadmapWizard::getStateDisplayName( WizardTypes::WizardState _nState ) const
+    OUString RoadmapWizard::getStateDisplayName( WizardTypes::WizardState /* _nState */)
     {
-        OUString sDisplayName;
-
-        StateDescriptions::const_iterator pos = m_xRoadmapImpl->aStateDescriptors.find( _nState );
-        OSL_ENSURE( pos != m_xRoadmapImpl->aStateDescriptors.end(),
-            "RoadmapWizard::getStateDisplayName: no default implementation available for this state!" );
-        if ( pos != m_xRoadmapImpl->aStateDescriptors.end() )
-            sDisplayName = pos->second.first;
-
-        return sDisplayName;
+        SAL_WARN("vcl", "RoadmapWizard::getStateDisplayName: no name available for this state!");
+        return OUString();
     }
 
-    VclPtr<TabPage> RoadmapWizard::createPage( WizardTypes::WizardState _nState )
+    VclPtr<TabPage> RoadmapWizard::createPage( WizardTypes::WizardState /* _nState */)
     {
-        VclPtr<TabPage> pPage;
-
-        StateDescriptions::const_iterator pos = m_xRoadmapImpl->aStateDescriptors.find( _nState );
-        OSL_ENSURE( pos != m_xRoadmapImpl->aStateDescriptors.end(),
-            "RoadmapWizard::createPage: no default implementation available for this state!" );
-        if ( pos != m_xRoadmapImpl->aStateDescriptors.end() )
-        {
-            RoadmapPageFactory pFactory = pos->second.second;
-            pPage = (*pFactory)( *this );
-        }
-
-        return pPage;
+        SAL_WARN("vcl", "RoadmapWizard::createPage: no default implementation available for this state!");
+        return nullptr;
     }
 
     void RoadmapWizard::InsertRoadmapItem(int nItemIndex, const OUString& rText, int nItemId, bool bEnable)

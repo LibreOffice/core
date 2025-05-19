@@ -44,13 +44,6 @@ struct ImplWizButtonData
 
 namespace vcl
 {
-    class RoadmapWizard;
-
-    namespace RoadmapWizardTypes
-    {
-        typedef VclPtr<TabPage> (* RoadmapPageFactory)( RoadmapWizard& );
-    };
-
     using namespace RoadmapWizardTypes;
     namespace
     {
@@ -60,14 +53,6 @@ namespace vcl
             PathId,
             WizardPath
             > Paths;
-
-        typedef ::std::map<
-            WizardTypes::WizardState,
-            ::std::pair<
-                OUString,
-                RoadmapPageFactory
-                >
-            > StateDescriptions;
     }
 
     struct RoadmapWizardImpl
@@ -76,7 +61,6 @@ namespace vcl
         std::map<VclPtr<vcl::Window>, short> maResponses;
         Paths               aPaths;
         PathId              nActivePath;
-        StateDescriptions   aStateDescriptors;
         StateSet            aDisabledStates;
         bool                bActivePathIsDefinite;
 
@@ -200,7 +184,7 @@ namespace vcl
     private:
 
         /// to override to create new pages
-        VclPtr<TabPage>     createPage(WizardTypes::WizardState nState);
+        static VclPtr<TabPage> createPage(WizardTypes::WizardState nState);
 
         /** determine the next state to travel from the given one
 
@@ -262,14 +246,8 @@ namespace vcl
         */
         WizardTypes::WizardState getCurrentState() const { return GetCurLevel(); }
 
-        /** returns a human readable name for a given state
-
-            There is a default implementation for this method, which returns the display name
-            as given in a call to describeState. If there is no description for the given state,
-            this is worth an assertion in a non-product build, and then an empty string is
-            returned.
-        */
-        OUString  getStateDisplayName(WizardTypes::WizardState nState) const;
+        /** returns a human readable name for a given state */
+        static OUString getStateDisplayName(WizardTypes::WizardState nState);
 
         DECL_LINK( OnRoadmapItemSelected, LinkParamNone*, void );
 
