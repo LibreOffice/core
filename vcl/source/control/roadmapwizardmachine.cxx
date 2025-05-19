@@ -18,9 +18,9 @@
  */
 
 
+#include "wizimpldata.hxx"
+
 #include <strings.hrc>
-#include <svdata.hxx>
-#include <wizdlg.hxx>
 
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>

@@ -21,8 +21,11 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/builderpage.hxx>
+#include <vcl/roadmapwizardmachine.hxx>
 #include <vcl/wizardmachine.hxx>
 
+#include <map>
+#include <set>
 #include <stack>
 
 constexpr OUString HID_WIZARD_NEXT = u"SVT_HID_WIZARD_NEXT"_ustr;
@@ -36,6 +39,38 @@ struct WizPageData
 
 namespace vcl
 {
+    using namespace RoadmapWizardTypes;
+    namespace
+    {
+    typedef ::std::set< WizardTypes::WizardState > StateSet;
+
+    typedef ::std::map<
+        PathId,
+        WizardPath
+        > Paths;
+    }
+
+    struct RoadmapWizardImpl
+    {
+        Paths               aPaths;
+        PathId              nActivePath;
+        StateSet            aDisabledStates;
+        bool                bActivePathIsDefinite;
+
+        RoadmapWizardImpl()
+            :nActivePath( PathId::INVALID )
+            ,bActivePathIsDefinite( false )
+        {
+        }
+
+        /// returns the index of the current state in given path, or -1
+        static sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath );
+        /// returns the index of the current state in the path with the given id, or -1
+        sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, PathId _nPathId );
+        /// returns the index of the first state in which the two given paths differ
+        static sal_Int32 getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS );
+    };
+
     struct WizardMachineImplData
     {
         OUString                        sTitleBase;         // the base for the title
