@@ -2296,9 +2296,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143384_tableInFoot_negativeMargins,
                          "tdf143384_tableInFoot_negativeMargins.docx")
 {
     // There should be no crash during loading of the document
-    // so, let's check just how much pages we have
-    // Ideally this would be 1, matching Word.
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
