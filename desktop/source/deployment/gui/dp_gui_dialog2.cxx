@@ -636,8 +636,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 {
     sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
     aDlgHelper.SetContext(sfx2::FileDialogHelper::ExtensionManager);
-    const uno::Reference<ui::dialogs::XFilePicker3>& xFilePicker = aDlgHelper.GetFilePicker();
-    xFilePicker->setTitle( m_sAddPackages );
+    aDlgHelper.SetTitle( m_sAddPackages );
 
     // collect and set filter list:
     typedef std::map< OUString, OUString > t_string2string;
@@ -674,26 +673,26 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         }();
 
     // All files at top:
-    xFilePicker->appendFilter( StrAllFiles, u"*.*"_ustr );
-    xFilePicker->appendFilter( DpResId(RID_STR_ALL_SUPPORTED), supportedFilters.makeStringAndClear() );
+    aDlgHelper.AddFilter( StrAllFiles, u"*.*"_ustr );
+    aDlgHelper.AddFilter( DpResId(RID_STR_ALL_SUPPORTED), supportedFilters.makeStringAndClear() );
     // then supported ones:
     for (auto const& elem : title2filter)
     {
         try
         {
-            xFilePicker->appendFilter( elem.first, elem.second );
+            aDlgHelper.AddFilter( elem.first, elem.second );
         }
         catch (const lang::IllegalArgumentException &)
         {
             TOOLS_WARN_EXCEPTION( "desktop", "" );
         }
     }
-    xFilePicker->setCurrentFilter( DpResId(RID_STR_ALL_SUPPORTED) );
+    aDlgHelper.SetCurrentFilter( DpResId(RID_STR_ALL_SUPPORTED) );
 
-    if ( xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK )
+    if ( aDlgHelper.Execute() == ERRCODE_ABORT )
         return uno::Sequence<OUString>(); // cancelled
 
-    uno::Sequence< OUString > files( xFilePicker->getSelectedFiles() );
+    uno::Sequence< OUString > files( aDlgHelper.GetSelectedFiles() );
     OSL_ASSERT( files.hasElements() );
     return files;
 }
