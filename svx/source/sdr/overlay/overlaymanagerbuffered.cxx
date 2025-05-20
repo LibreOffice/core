@@ -425,9 +425,23 @@ namespace sdr::overlay
             if(rRange.isEmpty())
                 return;
 
+            if (maMapModeLastCompleteRedraw == MapMode())
+                // there was no CompleteRedraw yet, done
+                return;
+
             // buffered output, do not invalidate but use the timer
             // to trigger a timer event for refresh
             maBufferIdle.Start();
+
+            // tdf#166520 need to also use MapModeLastCompleteRedraw for
+            // the invalidates -> Calc is just completely unstable using
+            // MapModes at any Window. The one remembered at full
+            // repaint has to be the DrawingLayer one - overlay works
+            // in DrawingLayer coordinates/MapMode(s)
+            const MapMode aPrevMapMode(getOutputDevice().GetMapMode());
+            const bool bPatchMapMode(aPrevMapMode != maMapModeLastCompleteRedraw);
+            if (bPatchMapMode)
+                getOutputDevice().SetMapMode(maMapModeLastCompleteRedraw);
 
             // add the discrete range to the remembered region
             // #i75163# use double precision and floor/ceil rounding to get overlapped pixel region, even
@@ -460,6 +474,11 @@ namespace sdr::overlay
                 maBufferRememberedRangePixel.expand(aTopLeft);
                 maBufferRememberedRangePixel.expand(aBottomRight);
             }
+
+            // restore evtl. temporarily patched MapMode (see explanation
+            // above)
+            if (bPatchMapMode)
+                getOutputDevice().SetMapMode(aPrevMapMode);
         }
 } // end of namespace
 
