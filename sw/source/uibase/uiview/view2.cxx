@@ -327,7 +327,8 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             SfxLokHelper::sendNetworkAccessError("insert");
     }
 
-    aResult = GraphicFilter::LoadGraphic( rPath, rFilter, aGraphic, pFilter );
+    auto xHandler(GetDocShell()->GetMedium()->GetInteractionHandler());
+    aResult = GraphicFilter::LoadGraphic(rPath, rFilter, aGraphic, pFilter, nullptr, xHandler);
 
     if( ERRCODE_NONE == aResult )
     {
