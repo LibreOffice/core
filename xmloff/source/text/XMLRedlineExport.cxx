@@ -43,6 +43,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <unotools/securityoptions.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 
 using namespace ::com::sun::star;
@@ -361,7 +362,8 @@ void XMLRedlineExport::ExportChangedRegion(
         aAny = rPropSet->getPropertyValue(u"RedlineText"_ustr);
         Reference<XText> xText;
         aAny >>= xText;
-        if (xText.is())
+        // Avoid double export for format-on-delete: no write on format, only on delete.
+        if (xText.is() && sType == u"Delete")
         {
             rExport.GetTextParagraphExport()->exportText(xText);
             // default parameters: bProgress, bExportParagraph ???
@@ -380,15 +382,31 @@ void XMLRedlineExport::ExportChangedRegion(
     // process change info
     if (aSuccessorData.hasElements())
     {
-        // The only change that can be "undone" is an insertion -
-        // after all, you can't re-insert a deletion, but you can
-        // delete an insertion. This assumption is asserted in
-        // ExportChangeInfo(Sequence<PropertyValue>&).
+        // Look up the type of the change. In practice this is always insert or delete, other types
+        // can't have additional redlines on top of them.
+        OUString sType;
+        comphelper::SequenceAsHashMap aMap(aSuccessorData);
+        auto it = aMap.find("RedlineType");
+        if (it != aMap.end())
+        {
+            it->second >>= sType;
+        }
         SvXMLElementExport aSecondChangeElem(
-            rExport, XML_NAMESPACE_TEXT, XML_INSERTION,
+            rExport, XML_NAMESPACE_TEXT, ConvertTypeName(sType),
             true, true);
 
         ExportChangeInfo(aSuccessorData);
+        it = aMap.find("RedlineText");
+        if (it != aMap.end())
+        {
+            // Delete has its own content outside the body text: export it here.
+            uno::Reference<text::XText> xText;
+            it->second >>= xText;
+            if (xText.is())
+            {
+                rExport.GetTextParagraphExport()->exportText(xText);
+            }
+        }
     }
     // else: no hierarchical change
 }
@@ -529,10 +547,10 @@ void XMLRedlineExport::ExportChangeInfo(
         }
         else if( rVal.Name == "RedlineType" )
         {
-            // check if this is an insertion; cf. comment at calling location
+            // check if this has one of the expected types
             OUString sTmp;
             rVal.Value >>= sTmp;
-            DBG_ASSERT(sTmp == "Insert",
+            DBG_ASSERT(sTmp == "Insert" || sTmp == "Delete",
                        "hierarchical change must be insertion");
         }
         // else: unknown value -> ignore
