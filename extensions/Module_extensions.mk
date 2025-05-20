@@ -84,12 +84,6 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	CustomTarget_so_activex_idl \
 ))
 
-ifeq ($(BUILD_X64),TRUE)
-$(eval $(call gb_Module_add_targets,extensions,\
-	CustomTarget_so_activex_x64 \
-	Library_so_activex_x64 \
-))
-endif # BUILD_X64
 endif # COM=MSC
 
 $(eval $(call gb_Module_add_targets,extensions,\

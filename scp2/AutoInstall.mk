@@ -11,7 +11,6 @@ $(eval $(call gb_AutoInstall_AutoInstall))
 
 $(eval $(call gb_AutoInstall_add_module,activexbinarytable,LIBO_LIB_FILE_BINARYTABLE))
 $(eval $(call gb_AutoInstall_add_module,activex,LIBO_LIB_FILE))
-$(eval $(call gb_AutoInstall_add_module,activexwin64,LIBO_LIB_FILE_COMPONENTCONDITION,,,,"VersionNT64"))
 $(eval $(call gb_AutoInstall_add_module,base,LIBO_LIB_FILE,LIBO_EXECUTABLE))
 $(eval $(call gb_AutoInstall_add_module,base_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))

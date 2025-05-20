@@ -20,7 +20,6 @@
 
 #include "AutoInstall/activexbinarytable"
 #include "AutoInstall/activex"
-#include "AutoInstall/activexwin64"
 
 Module gid_Module_Optional_Activexcontrol
     PackageInfo = "packinfo_office.txt";
@@ -29,6 +28,5 @@ Module gid_Module_Optional_Activexcontrol
     Default = NO;
     ParentID = gid_Module_Optional;
     Files = (auto_activexbinarytable_ALL,
-        auto_activex_ALL,
-        auto_activexwin64_ALL);
+        auto_activex_ALL);
 End

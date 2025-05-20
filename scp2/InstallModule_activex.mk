@@ -12,7 +12,6 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/activex))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/activex,\
 	activexbinarytable \
 	activex \
-	activexwin64 \
 ))
 
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/activex,\
