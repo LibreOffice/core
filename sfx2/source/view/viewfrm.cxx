@@ -1645,30 +1645,43 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 #if !ENABLE_WASM_STRIP_PINGUSER
                 if (!SfxApplication::IsHeadlessOrUITest()) //uitest.uicheck fails when the dialog is open
                 {
+                    bool bIsWhatsNewShown = false; //suppress tipoftheday if whatsnew was shown
+
                     static const bool bRunningUnitTest = o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest();
-                    if (officecfg::Office::Common::Misc::FirstRun::get() && !IsInModalMode() && !bRunningUnitTest)
+                    static const bool bIsFirstStart = officecfg::Office::Common::Misc::FirstRun::get();
+                    if (bIsFirstStart && !IsInModalMode() && !bRunningUnitTest)
                     {
                         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                         ScopedVclPtr<SfxAbstractTabDialog> pDlg(
-                            pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld()));
+                            pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld(), true));
                         pDlg->Execute();
+                        bIsWhatsNewShown = true;
                     }
 
-                    bool bIsWhatsNewShown = false; //suppress tipoftheday if whatsnew was shown
-
                     //what's new dialog
-                    static bool wantsWhatsNew = utl::isProductVersionUpgraded() && !IsInModalMode();
+                    static bool wantsWhatsNew = utl::isProductVersionUpgraded() && !IsInModalMode() && !bIsFirstStart;
                     if (wantsWhatsNew)
                     {
                         wantsWhatsNew = false;
                         if (officecfg::Setup::Product::WhatsNew::get())
                         {
-                            VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"whatsnew"_ustr, u""_ustr, SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
-                            if (pInfoBar)
+                            if (officecfg::Setup::Product::WhatsNewDialog::get())
                             {
-                                weld::Button& rWhatsNewButton = pInfoBar->addButton();
-                                rWhatsNewButton.set_label(SfxResId(STR_WHATSNEW_BUTTON));
-                                rWhatsNewButton.connect_clicked(LINK(this, SfxViewFrame, WhatsNewHandler));
+                                SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                                ScopedVclPtr<SfxAbstractTabDialog> pDlg(
+                                    pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld(), false));
+                                pDlg->Execute();
+                            }
+                            else
+                            {
+                                OUString sText(SfxResId(STR_WHATSNEW_TEXT));
+                                VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"whatsnew"_ustr, u""_ustr, sText.replaceAll("\n",""), InfobarType::INFO);
+                                if (pInfoBar)
+                                {
+                                    weld::Button& rWhatsNewButton = pInfoBar->addButton();
+                                    rWhatsNewButton.set_label(SfxResId(STR_WHATSNEW_BUTTON));
+                                    rWhatsNewButton.connect_clicked(LINK(this, SfxViewFrame, WhatsNewHandler));
+                                }
                             }
                             bIsInfobarShown = true;
                             bIsWhatsNewShown = true;

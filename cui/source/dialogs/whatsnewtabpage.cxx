@@ -25,8 +25,6 @@ WhatsNewTabPage::WhatsNewTabPage(weld::Container* pPage, weld::DialogController*
     , m_aBrand()
     , m_pBrand(new weld::CustomWeld(*m_xBuilder, u"imBrand"_ustr, m_aBrand))
 {
-    const Size aGraphicSize = m_aBrand.GetGraphicSize();
-    m_pBrand->set_size_request(aGraphicSize.getWidth(), aGraphicSize.getHeight());
 }
 
 std::unique_ptr<SfxTabPage> WhatsNewTabPage::Create(weld::Container* pPage,
@@ -34,6 +32,18 @@ std::unique_ptr<SfxTabPage> WhatsNewTabPage::Create(weld::Container* pPage,
                                                     const SfxItemSet* rAttr)
 {
     return std::make_unique<WhatsNewTabPage>(pPage, pController, *rAttr);
+}
+
+void WhatsNewTabPage::Reset(const SfxItemSet* rSet) { ActivatePage(*rSet); }
+
+void WhatsNewTabPage::ActivatePage(const SfxItemSet& /* rSet */)
+{
+    const Size aGraphicSize = m_aBrand.GetGraphicSize();
+    m_pBrand->set_size_request(aGraphicSize.getWidth(), aGraphicSize.getHeight());
+
+    auto& aProperties = getAdditionalProperties();
+    auto aIterator = aProperties.find(u"IsFirstRun"_ustr);
+    m_aBrand.SetIsFirstStart(aIterator->second.get<sal_Bool>());
 }
 
 AnimatedBrand::AnimatedBrand()
@@ -69,7 +79,7 @@ void AnimatedBrand::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         aTextRect = rRect;
 
     //text
-    OUString sText(SfxResId(STR_WHATSNEW_FIRST));
+    OUString sText(SfxResId(m_bIsFirstStart ? STR_WELCOME_TEXT : STR_WHATSNEW_TEXT));
 
     vcl::Font aFont = rRenderContext.GetFont();
     aFont.SetFontSize(Size(0, 24));

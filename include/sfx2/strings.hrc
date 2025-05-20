@@ -270,8 +270,8 @@
 // Translators: text will be abbreviated at >8 characters, eg. "Please D..."
 #define STR_DONATE_BUTTON                       NC_("STR_DONATE_BUTTON", "Donate")
 #define STR_CREDITS_BUTTON                      NC_("STR_CREDITS_BUTTON", "~Credits")
-#define STR_WHATSNEW_TEXT                       NC_("STR_WHATSNEW", "You are running version %PRODUCTVERSION of %PRODUCTNAME for the first time. Do you want to learn what's new?")
-#define STR_WHATSNEW_FIRST                      NC_("STR_WHATSNEW_FIRST", "You are running %PRODUCTNAME for the first time.\n\nPlease take a moment to personalize your settings.")
+#define STR_WHATSNEW_TEXT                       NC_("STR_WHATSNEW_TEXT", "You are running version %PRODUCTVERSION of %PRODUCTNAME for the first time. \n\nDo you want to learn what's new?")
+#define STR_WELCOME_TEXT                        NC_("STR_WELCOME_TEXT", "You are running %PRODUCTNAME for the first time.\n\nPlease take a moment to personalize your settings.")
 #define STR_WHATSNEW_BUTTON                     NC_("STR_WHATSNEW_BUTTON", "~Release Notes")
 #define STR_WELCOME_APPLY                       NC_("STR_WELCOME_APPLY", "~Apply")
 #define STR_WELCOME_CLOSE                       NC_("STR_WELCOME_CLOSE", "~Close")

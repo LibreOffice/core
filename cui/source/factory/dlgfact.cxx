@@ -1404,9 +1404,9 @@ public:
 };
 }
 
-VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateWelcomeDialog(weld::Window* pParent)
+VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateWelcomeDialog(weld::Window* pParent, const bool bIsFirstStart)
 {
-    return VclPtr<CuiAbstractTabController_Impl<WelcomeDialog>>::Create(pParent);
+    return VclPtr<CuiAbstractTabController_Impl<WelcomeDialog>>::Create(pParent, bIsFirstStart);
 }
 
 VclPtr<SfxAbstractPasteDialog> AbstractDialogFactory_Impl::CreatePasteDialog(weld::Window* pParent)

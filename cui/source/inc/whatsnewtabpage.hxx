@@ -16,6 +16,7 @@
 class AnimatedBrand : public weld::CustomWidgetController
 {
 private:
+    bool m_bIsFirstStart;
     Graphic m_pGraphic;
     Size m_pGraphicSize;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
@@ -23,6 +24,7 @@ private:
 public:
     AnimatedBrand();
     const Size& GetGraphicSize() const { return m_pGraphicSize; };
+    void SetIsFirstStart(const bool bIsFirstStart) { m_bIsFirstStart = bIsFirstStart; };
 };
 
 class WhatsNewTabPage : public SfxTabPage
@@ -30,6 +32,9 @@ class WhatsNewTabPage : public SfxTabPage
 private:
     AnimatedBrand m_aBrand;
     std::unique_ptr<weld::CustomWeld> m_pBrand;
+
+    virtual void ActivatePage(const SfxItemSet&) override;
+    virtual void Reset(const SfxItemSet* rSet) override;
 
 public:
     WhatsNewTabPage(weld::Container* pPage, weld::DialogController* pController,

@@ -15,6 +15,7 @@
 
 #include <comphelper/dispatchcommand.hxx>
 #include <officecfg/Office/UI/ToolbarMode.hxx>
+#include <officecfg/Setup.hxx>
 #include <unotools/confignode.hxx>
 
 #include <sfx2/bindings.hxx>
@@ -28,13 +29,15 @@ constexpr OUString sNewsTab = u"WhatsNewTabPage"_ustr;
 constexpr OUString sUITab = u"UITabPage"_ustr;
 constexpr OUString sAppearanceTab = u"AppearanceTabPage"_ustr;
 
-WelcomeDialog::WelcomeDialog(weld::Window* pParent)
+WelcomeDialog::WelcomeDialog(weld::Window* pParent, const bool bIsFirstStart)
     : SfxTabDialogController(pParent, u"cui/ui/welcomedialog.ui"_ustr, u"WelcomeDialog"_ustr)
+    , m_bFirstStart(bIsFirstStart)
     , m_xActionBtn(m_xBuilder->weld_button(u"action"_ustr)) // release notes / apply
     , m_xNextBtn(m_xBuilder->weld_button(u"next"_ustr)) // next / close
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr)) // hidden
     , m_xResetBtn(m_xBuilder->weld_button(u"reset"_ustr)) // hidden
     , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr)) // hidden
+    , m_xShowAgain(m_xBuilder->weld_check_button(u"cbShowAgain"_ustr))
 {
     m_xDialog->set_title(SfxResId(STR_WELCOME_LINE1));
 
@@ -50,14 +53,35 @@ WelcomeDialog::WelcomeDialog(weld::Window* pParent)
     m_xNextBtn->connect_clicked(LINK(this, WelcomeDialog, OnNextClick));
     m_xActionBtn->connect_clicked(LINK(this, WelcomeDialog, OnActionClick));
 
+    m_xShowAgain->set_visible(!m_bFirstStart);
+
     m_xTabCtrl->set_current_page(sNewsTab);
     OnActivatePage(sNewsTab);
+}
+
+WelcomeDialog::~WelcomeDialog()
+{
+    if (!m_xShowAgain->get_active())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Setup::Product::WhatsNewDialog::set(false, xChanges);
+        xChanges->commit();
+    }
+}
+
+void WelcomeDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
+{
+    if (rId == sNewsTab)
+    {
+        rPage.getAdditionalProperties().emplace(u"IsFirstRun"_ustr, css::uno::Any(m_bFirstStart));
+    }
 }
 
 IMPL_LINK(WelcomeDialog, OnActivatePage, const OUString&, rPage, void)
 {
     if (rPage == sNewsTab)
-        m_xActionBtn->set_label(SfxResId(STR_CREDITS_BUTTON));
+        m_xActionBtn->set_label(SfxResId(m_bFirstStart ? STR_CREDITS_BUTTON : STR_WHATSNEW_BUTTON));
     else
         m_xActionBtn->set_label(SfxResId(STR_WELCOME_APPLY));
 
@@ -88,7 +112,8 @@ IMPL_LINK_NOARG(WelcomeDialog, OnActionClick, weld::Button&, void)
         {
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if (pViewFrame)
-                pViewFrame->GetBindings().GetDispatcher()->Execute(SID_CREDITS);
+                pViewFrame->GetBindings().GetDispatcher()->Execute(m_bFirstStart ? SID_CREDITS
+                                                                                 : SID_WHATSNEW);
         }
         break;
         case 1:
