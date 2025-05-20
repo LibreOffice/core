@@ -65,7 +65,7 @@ public:
 
     MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
     virtual ~MyWorkWindow() override { disposeOnce(); }
-    virtual void dispose() override { mpFixedBitmap.clear(); WorkWindow::dispose(); }
+    virtual void dispose() override { mpFixedBitmap.reset(); WorkWindow::dispose(); }
     void LoadGraphic( const OUString& sImageFile );
 
     virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;

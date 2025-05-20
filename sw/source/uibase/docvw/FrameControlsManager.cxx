@@ -258,7 +258,7 @@ const SwPageFrame* SwFrameMenuButtonBase::GetPageFrame() const
 
 void SwFrameMenuButtonBase::dispose()
 {
-    m_pEditWin.clear();
+    m_pEditWin.reset();
     m_pFrame = nullptr;
     m_xVirDev.disposeAndClear();
     InterimItemWindow::dispose();

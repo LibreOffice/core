@@ -218,9 +218,9 @@ void FloatingWindow::dispose()
 
     mpImplData.reset();
 
-    mpNextFloat.clear();
-    mpFirstPopupModeWin.clear();
-    mxPrevFocusWin.clear();
+    mpNextFloat.reset();
+    mpFirstPopupModeWin.reset();
+    mxPrevFocusWin.reset();
     SystemWindow::dispose();
 }
 

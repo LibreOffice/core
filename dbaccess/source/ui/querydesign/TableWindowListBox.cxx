@@ -87,7 +87,7 @@ void OTableWindowListBox::dispose()
         Application::RemoveUserEvent(m_nDropEvent);
     if (m_nUiEvent)
         Application::RemoveUserEvent(m_nUiEvent);
-    m_pTabWin.clear();
+    m_pTabWin.reset();
     m_xDragDropTargetHelper.reset();
     m_xTreeView.reset();
     InterimItemWindow::dispose();

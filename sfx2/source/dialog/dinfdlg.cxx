@@ -846,7 +846,7 @@ SfxDocumentPage::~SfxDocumentPage()
     if (m_xPasswordDialog)
     {
         m_xPasswordDialog->Response(RET_CANCEL);
-        m_xPasswordDialog.clear();
+        m_xPasswordDialog.reset();
     }
 }
 

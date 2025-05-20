@@ -2014,7 +2014,7 @@ void Edit::Command( const CommandEvent& rCEvt )
                 }
             }
         }
-        pPopup.clear();
+        pPopup.reset();
         mbActivePopup = false;
     }
     else if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput )
@@ -2573,7 +2573,7 @@ void Edit::SetModifyFlag()
 void Edit::SetSubEdit(Edit* pEdit)
 {
     mpSubEdit.disposeAndClear();
-    mpSubEdit.set(pEdit);
+    mpSubEdit.reset(pEdit);
 
     if (mpSubEdit)
     {

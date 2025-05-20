@@ -119,7 +119,7 @@ public:
    virtual void         dispose() override
                         {
                             aTimer.Stop();
-                            pOwner.clear();
+                            pOwner.reset();
                             SplitWindow::dispose();
                         }
 
@@ -292,7 +292,7 @@ void SfxSplitWindow::dispose()
     pEmptyWin.disposeAndClear();
 
     maDockArr.clear();
-    pActive.clear();
+    pActive.reset();
     SplitWindow::dispose();
 }
 

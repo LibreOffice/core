@@ -2255,8 +2255,8 @@ void SplitWindow::RemoveItem( sal_uInt16 nId )
     }
 
     // Clear and delete
-    pWindow.clear();
-    pOrgParent.clear();
+    pWindow.reset();
+    pOrgParent.reset();
 }
 
 void SplitWindow::SplitItem( sal_uInt16 nId, tools::Long nNewSize,

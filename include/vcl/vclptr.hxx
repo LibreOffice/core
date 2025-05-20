@@ -140,11 +140,6 @@ public:
         return m_rInnerRef.get();
     }
 
-    void set(reference_type *pBody)
-    {
-        m_rInnerRef.set(pBody);
-    }
-
     void reset(reference_type *pBody)
     {
         m_rInnerRef.set(pBody);
@@ -177,11 +172,6 @@ public:
     explicit operator bool () const
     {
         return m_rInnerRef.get() != nullptr;
-    }
-
-    void clear()
-    {
-        m_rInnerRef.clear();
     }
 
     void reset()
@@ -278,7 +268,7 @@ public:
     {
         if (pBody != this->get()) {
             VclPtr<reference_type>::disposeAndClear();
-            VclPtr<reference_type>::set(pBody);
+            VclPtr<reference_type>::reset(pBody);
         }
     }
 

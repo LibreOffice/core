@@ -49,7 +49,7 @@ VCLXAccessibleTabControl::VCLXAccessibleTabControl(vcl::Window* pWindow)
         return;
     if (m_pTabControl->isDisposed())
     {
-        m_pTabControl.clear();
+        m_pTabControl.reset();
         return;
     }
     m_aAccessibleChildren.assign( m_pTabControl->GetPageCount(), rtl::Reference< VCLXAccessibleTabPage >() );

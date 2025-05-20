@@ -74,7 +74,7 @@ ScPivotLayoutTreeListData::~ScPivotLayoutTreeListData()
     if (mpFunctionDlg)
     {
         mpFunctionDlg->Response(RET_CANCEL);
-        mpFunctionDlg.clear();
+        mpFunctionDlg.reset();
     }
 }
 

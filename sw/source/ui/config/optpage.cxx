@@ -904,7 +904,7 @@ SwStdFontTabPage::~SwStdFontTabPage()
     if (m_bDisposePrinter)
         m_pPrt.disposeAndClear();
     else
-        m_pPrt.clear();
+        m_pPrt.reset();
 }
 
 std::unique_ptr<SfxTabPage> SwStdFontTabPage::Create( weld::Container* pPage, weld::DialogController* pController,

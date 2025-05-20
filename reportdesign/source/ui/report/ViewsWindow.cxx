@@ -185,7 +185,7 @@ void OViewsWindow::dispose()
     for (auto& rxSection : m_aSections)
         rxSection.disposeAndClear();
     m_aSections.clear();
-    m_pParent.clear();
+    m_pParent.reset();
     vcl::Window::dispose();
 }
 

@@ -73,7 +73,7 @@ SwEnvPrtPage::SwEnvPrtPage(weld::Container* pPage, weld::DialogController* pCont
 
 SwEnvPrtPage::~SwEnvPrtPage()
 {
-    m_xPrt.clear();
+    m_xPrt.reset();
 }
 
 IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, weld::Toggleable&, void)

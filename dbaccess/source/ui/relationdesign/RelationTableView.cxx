@@ -74,7 +74,7 @@ void ORelationTableView::dispose()
 {
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
-    m_pExistingConnection.clear();
+    m_pExistingConnection.reset();
     OJoinTableView::dispose();
 }
 

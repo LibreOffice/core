@@ -83,7 +83,7 @@ void PopupWindowControllerImpl::SetFloatingWindow()
         mpFloatingWindow.disposeAndClear();
     }
     mpFloatingWindow = mpPopupWindow;
-    mpPopupWindow.clear();
+    mpPopupWindow.reset();
 }
 
 IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWindowEvent, void )
@@ -171,7 +171,7 @@ sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& Servic
 // XComponent
 void SAL_CALL PopupWindowController::dispose()
 {
-    mxInterimPopover.clear();
+    mxInterimPopover.reset();
     mxPopoverContainer.reset();
     mxImpl.reset();
     svt::ToolboxController::dispose();

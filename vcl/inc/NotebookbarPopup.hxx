@@ -31,7 +31,7 @@ class NotebookbarPopup final : public FloatingWindow
 {
 private:
     VclPtr<VclHBox> m_pBox;
-    ScopedVclPtr<VclHBox> m_pParent;
+    VclPtr<VclHBox> m_pParent;
 
 public:
     explicit NotebookbarPopup(const VclPtr<VclHBox>& pParent);

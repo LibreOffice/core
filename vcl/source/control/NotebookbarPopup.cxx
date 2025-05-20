@@ -108,7 +108,7 @@ void NotebookbarPopup::dispose()
 {
     PopupModeEnd();
     m_pBox.disposeAndClear();
-    m_pParent.clear();
+    m_pParent.reset();
 
     FloatingWindow::dispose();
 }

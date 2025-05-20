@@ -45,7 +45,7 @@ void ScTabView::HideTip()
         aTipRectangle = tools::Rectangle();
         nTipAlign = QuickHelpFlags::NONE;
         sTipString.clear();
-        sTopParent.clear();
+        sTopParent.reset();
     }
 }
 

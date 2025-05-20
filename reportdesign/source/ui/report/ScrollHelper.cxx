@@ -77,7 +77,7 @@ void OScrollWindowHelper::dispose()
     m_aHScroll.disposeAndClear();
     m_aVScroll.disposeAndClear();
     m_aReportWindow.disposeAndClear();
-    m_pParent.clear();
+    m_pParent.reset();
     OScrollWindowHelper_BASE::dispose();
 }
 

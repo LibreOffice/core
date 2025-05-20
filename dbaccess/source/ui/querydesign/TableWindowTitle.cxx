@@ -44,7 +44,7 @@ void OTableWindowTitle::dispose()
 {
     m_xImage.reset();
     m_xLabel.reset();
-    m_pTabWin.clear();
+    m_pTabWin.reset();
     InterimItemWindow::dispose();
 }
 

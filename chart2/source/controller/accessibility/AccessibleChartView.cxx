@@ -139,7 +139,7 @@ awt::Rectangle AccessibleChartView::implGetBounds()
 
 void SAL_CALL AccessibleChartView::disposing()
 {
-    m_pChartWindow.clear();
+    m_pChartWindow.reset();
 
     AccessibleBase::disposing();
 }
@@ -221,7 +221,7 @@ void AccessibleChartView::initialize( ChartController& rNewChartController,
         xChartModel.clear();
         xChartView.clear();
         xParent.clear();
-        pChartWindow.clear();
+        pChartWindow.reset();
 
         bNewInvalid = true;
     }
@@ -319,7 +319,7 @@ void AccessibleChartView::initialize()
         m_xChartModel = xChartModel.get();
         m_xChartView = xChartView.get();
         m_xParent.clear();
-        m_pChartWindow.clear();
+        m_pChartWindow.reset();
     }
 
     if( bOldInvalid )
@@ -345,7 +345,7 @@ void AccessibleChartView::initialize()
         aAccInfo.m_xChartDocument = m_xChartModel;
         aAccInfo.m_xChartController = m_xChartController;
         aAccInfo.m_xView = m_xChartView;
-        aAccInfo.m_pWindow.clear();
+        aAccInfo.m_pWindow.reset();
         aAccInfo.m_pParent = nullptr;
         aAccInfo.m_spObjectHierarchy = m_spObjectHierarchy;
         aAccInfo.m_pSdrView = m_pSdrView;

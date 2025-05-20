@@ -84,7 +84,7 @@ void ImplEntryList::Clear()
 void ImplEntryList::dispose()
 {
     Clear();
-    mpWindow.clear();
+    mpWindow.reset();
 }
 
 void ImplEntryList::SelectEntry( sal_Int32 nPos, bool bSelect )
@@ -2854,7 +2854,7 @@ ImplListBoxFloatingWindow::~ImplListBoxFloatingWindow()
 
 void ImplListBoxFloatingWindow::dispose()
 {
-    mpImplLB.clear();
+    mpImplLB.reset();
     FloatingWindow::dispose();
 }
 

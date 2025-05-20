@@ -97,7 +97,7 @@ void Deck::dispose()
     mxContents.reset();
     mxVerticalScrollBar.reset();
 
-    mxParentWindow.clear();
+    mxParentWindow.reset();
 
     InterimItemWindow::dispose();
 }

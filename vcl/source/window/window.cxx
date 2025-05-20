@@ -3977,7 +3977,7 @@ void WindowOutputDevice::dispose()
     ::OutputDevice::dispose();
     // need to do this after OutputDevice::dispose so that the call to WindowOutputDevice::ReleaseGraphics
     // can release the graphics properly
-    mxOwnerWindow.clear();
+    mxOwnerWindow.reset();
 }
 
 css::awt::DeviceInfo WindowOutputDevice::GetDeviceInfo() const

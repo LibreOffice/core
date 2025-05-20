@@ -544,7 +544,7 @@ void SvHeaderTabListBox::dispose()
     m_aAccessibleChildren.clear();
     m_xAccessible.clear();
 
-    m_xHeaderBar.clear();
+    m_xHeaderBar.reset();
     SvTabListBox::dispose();
 }
 

@@ -86,7 +86,7 @@ void VclStatusListener<T>::dispose()
         mxDispatch.clear();
     }
     mxFrame.clear();
-    mWidget.clear();
+    mWidget.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

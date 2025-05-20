@@ -50,7 +50,7 @@ public:
     SwHeaderFooterDashedLine(SwEditWin* pEditWin, const SwFrame *pFrame, bool bIsHeader);
 
     virtual ~SwHeaderFooterDashedLine() override { disposeOnce(); }
-    virtual void dispose() override { m_pWin.disposeAndClear(); m_pEditWin.clear(); SwDashedLine::dispose(); }
+    virtual void dispose() override { m_pWin.disposeAndClear(); m_pEditWin.reset(); SwDashedLine::dispose(); }
 
     virtual const SwFrame* GetFrame() override { return m_pFrame; }
     virtual SwEditWin* GetEditWin() override { return m_pEditWin; }

@@ -124,7 +124,7 @@ void SAL_CALL GenericToolbarController::dispose()
     svt::ToolboxController::dispose();
 
     m_pToolbar = nullptr;
-    m_xToolbar.clear();
+    m_xToolbar.reset();
     m_nID = ToolBoxItemId(0);
 }
 

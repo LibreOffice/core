@@ -137,7 +137,7 @@ void NotebookBar::dispose()
     m_pContextContainers.clear();
     if (m_pSystemWindow && m_pSystemWindow->ImplIsInTaskPaneList(this))
         m_pSystemWindow->GetTaskPaneList()->RemoveWindow(this);
-    m_pSystemWindow.clear();
+    m_pSystemWindow.reset();
 
     if (m_rDisposeLink.IsSet())
         m_rDisposeLink.Call(m_pViewShell);
@@ -296,7 +296,7 @@ void NotebookBar::SetupListener(bool bListen)
 
 void SAL_CALL NotebookBarContextChangeEventListener::disposing(const ::css::lang::EventObject&)
 {
-    mpParent.clear();
+    mpParent.reset();
 }
 
 void NotebookBar::DataChanged(const DataChangedEvent& rDCEvt)

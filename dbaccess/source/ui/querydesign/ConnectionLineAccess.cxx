@@ -147,7 +147,7 @@ namespace dbaui
     {
         // clear vector
         clearLineData();
-        m_pParent.clear();
+        m_pParent.reset();
         vcl::Window::dispose();
     }
     Reference< XAccessibleContext > SAL_CALL OConnectionLineAccess::getAccessibleContext(  )

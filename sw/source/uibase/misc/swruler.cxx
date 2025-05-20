@@ -103,7 +103,7 @@ SwCommentRuler::~SwCommentRuler() { disposeOnce(); }
 
 void SwCommentRuler::dispose()
 {
-    mpSwWin.clear();
+    mpSwWin.reset();
     SvxRuler::dispose();
 }
 

@@ -125,7 +125,7 @@ void OReportSection::dispose()
         delete m_pView;
         m_pView = nullptr;
     }
-    m_pParent.clear();
+    m_pParent.reset();
     vcl::Window::dispose();
 }
 

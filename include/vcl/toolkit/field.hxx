@@ -63,7 +63,7 @@ protected:
     SAL_DLLPRIVATE void ImplResetLocaleDataWrapper() const;
 
     Edit*                   GetField() const            { return mpField; }
-    void                    ClearField() { mpField.clear(); }
+    void                    ClearField() { mpField.reset(); }
 
 public:
     explicit                FormatterBase(Edit* pField);

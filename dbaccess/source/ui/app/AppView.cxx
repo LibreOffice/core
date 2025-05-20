@@ -72,7 +72,7 @@ void OAppBorderWindow::dispose()
     m_xDetailView.reset();
     m_xPanelParent.reset();
     m_xDetailViewParent.reset();
-    m_xView.clear();
+    m_xView.reset();
     InterimItemWindow::dispose();
 }
 

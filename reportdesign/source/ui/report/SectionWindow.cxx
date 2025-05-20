@@ -115,7 +115,7 @@ void OSectionWindow::dispose()
     m_aReportSection.disposeAndClear();
     m_aSplitter.disposeAndClear();
     m_aEndMarker.disposeAndClear();
-    m_pParent.clear();
+    m_pParent.reset();
     vcl::Window::dispose();
 }
 

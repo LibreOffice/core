@@ -269,7 +269,7 @@ void SwHeaderFooterWin::dispose()
 {
     m_xPushButton.reset();
     m_xMenuButton.reset();
-    m_pEditWin.clear();
+    m_pEditWin.reset();
     m_xVirDev.disposeAndClear();
     InterimItemWindow::dispose();
 }

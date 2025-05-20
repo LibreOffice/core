@@ -145,8 +145,8 @@ void EditBrowseBox::dispose()
         Application::RemoveUserEvent(nCellModifiedEvent);
 
     pCheckBoxPaint.disposeAndClear();
-    m_pFocusWhileRequest.clear();
-    pHeader.clear();
+    m_pFocusWhileRequest.reset();
+    pHeader.reset();
     BrowseBox::dispose();
 }
 

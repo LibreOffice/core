@@ -1656,7 +1656,7 @@ void SfxHelpTextWindow_Impl::dispose()
     m_xSrchDlg.reset();
     xToolBox.reset();
     xOnStartupCB.reset();
-    xHelpWin.clear();
+    xHelpWin.reset();
     pTextWin.disposeAndClear();
     vcl::Window::dispose();
 }

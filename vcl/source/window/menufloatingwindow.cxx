@@ -118,9 +118,9 @@ MenuFloatingWindow::~MenuFloatingWindow()
 void MenuFloatingWindow::dispose()
 {
     doShutdown();
-    pMenu.clear();
-    pActivePopup.clear();
-    xSaveFocusId.clear();
+    pMenu.reset();
+    pActivePopup.reset();
+    xSaveFocusId.reset();
 
     // unset accessible taken from the PopupMenu (s. CreateAccessible),
     // it is owned and therefore disposed by the PopupMenu

@@ -668,7 +668,7 @@ TextWindow::~TextWindow()
 
 void TextWindow::dispose()
 {
-    mxParent.clear();
+    mxParent.reset();
     mpExtTextView.reset();
     mpExtTextEngine.reset();
     Window::dispose();
@@ -845,7 +845,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
                 mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
             }
         }
-        pPopup.clear();
+        pPopup.reset();
         mbActivePopup = false;
     }
     else

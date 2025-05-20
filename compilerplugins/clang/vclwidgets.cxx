@@ -558,7 +558,8 @@ static void findDisposeAndClearStatements(std::set<const FieldDecl*>& aVclPtrFie
     if (!isa<CXXMethodDecl>(pCallExpr->getDirectCallee())) return;
     auto check = loplugin::DeclCheck(
         dyn_cast<CXXMethodDecl>(pCallExpr->getDirectCallee()));
-    if (!(check.Function("disposeAndClear") || check.Function("clear")))
+    // clear() is for containers like std::map<VclPtr<...>, ...>
+    if (!(check.Function("disposeAndClear") || check.Function("reset") || check.Function("clear")))
             return;
 
     if (!pCallExpr->getCallee()) return;
@@ -651,7 +652,7 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
             findDisposeAndClearStatements( aVclPtrFields, pMethodDecl->getBody() );
             if (!aVclPtrFields.empty()) {
                 //pMethodDecl->dump();
-                std::string aMessage = BASE_REF_COUNTED_CLASS " subclass dispose() method does not call disposeAndClear() or clear() on the following field(s): ";
+                std::string aMessage = BASE_REF_COUNTED_CLASS " subclass dispose() method does not call disposeAndClear() or reset() on the following field(s): ";
                 for(auto s : aVclPtrFields)
                     aMessage += ", " + s->getNameAsString();
                 report(

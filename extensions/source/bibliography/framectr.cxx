@@ -234,7 +234,7 @@ void BibFrameController_Impl::dispose()
     m_xImpl->aLC.disposeAndClear(aObject);
     m_xDatMan.clear();
     m_aStatusListeners.clear();
-    m_xLastQueriedFocusWin.clear();
+    m_xLastQueriedFocusWin.reset();
     m_xWindow.clear();
     m_xImpl.clear();
 }

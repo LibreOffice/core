@@ -1083,8 +1083,8 @@ void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
         SAL_WARN_IF( !nUserEvent->mbCall, "vcl",
                     "Application::RemoveUserEvent(): Event is already removed" );
 
-        nUserEvent->mpWindow.clear();
-        nUserEvent->mpInstanceRef.clear();
+        nUserEvent->mpWindow.reset();
+        nUserEvent->mpInstanceRef.reset();
         nUserEvent->mbCall = false;
     }
 }

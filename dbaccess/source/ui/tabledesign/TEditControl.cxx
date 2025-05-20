@@ -270,7 +270,7 @@ void OTableEditorCtrl::dispose()
     pDescrCell.disposeAndClear();
     pHelpTextCell.disposeAndClear();
     pDescrWin = nullptr;
-    m_pView.clear();
+    m_pView.reset();
     OTableRowView::dispose();
 }
 

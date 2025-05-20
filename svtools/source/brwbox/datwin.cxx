@@ -212,7 +212,7 @@ void BrowserDataWin::dispose()
     bInDtor = true;
 
     aInvalidRegion.clear();
-    pHeaderBar.clear();
+    pHeaderBar.reset();
     DragSourceHelper::dispose();
     DropTargetHelper::dispose();
     Control::dispose();

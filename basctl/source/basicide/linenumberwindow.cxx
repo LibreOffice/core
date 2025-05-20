@@ -37,7 +37,7 @@ LineNumberWindow::~LineNumberWindow() { disposeOnce(); }
 
 void LineNumberWindow::dispose()
 {
-    m_pModulWindow.clear();
+    m_pModulWindow.reset();
     Window::dispose();
 }
 

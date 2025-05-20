@@ -862,7 +862,7 @@ void SAL_CALL ToolBarManager::dispose()
 
         // We have to destroy our toolbar instance now.
         Destroy();
-        m_pToolBar.clear();
+        m_pToolBar.reset();
 
         if ( m_bFrameActionRegistered && m_xFrame.is() )
         {

@@ -61,7 +61,7 @@ void SwOutlineContentVisibilityWin::dispose()
     m_bDestroyed = true;
     m_aDelayTimer.Stop();
 
-    m_pEditWin.clear();
+    m_pEditWin.reset();
     m_pFrame = nullptr;
 
     m_xHideBtn.reset();

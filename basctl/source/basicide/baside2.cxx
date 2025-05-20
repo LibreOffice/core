@@ -1497,7 +1497,7 @@ void ModulWindowLayout::dispose()
 {
     aWatchWindow.disposeAndClear();
     aStackWindow.disposeAndClear();
-    pChild.clear();
+    pChild.reset();
     Layout::dispose();
 }
 

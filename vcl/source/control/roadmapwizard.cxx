@@ -156,9 +156,9 @@ namespace vcl
         while ( mpFirstPage )
             RemovePage( mpFirstPage->mpPage );
 
-        mpCurTabPage.clear();
-        mpPrevBtn.clear();
-        mpNextBtn.clear();
+        mpCurTabPage.reset();
+        mpPrevBtn.reset();
+        mpNextBtn.reset();
         mpRoadmap.disposeAndClear();
         maResponses.clear();
         Dialog::dispose();

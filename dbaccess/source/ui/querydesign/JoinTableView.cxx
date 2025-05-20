@@ -95,7 +95,7 @@ void OScrollWindowHelper::dispose()
 {
     m_aHScrollBar.disposeAndClear();
     m_aVScrollBar.disposeAndClear();
-    m_pTableView.clear();
+    m_pTableView.reset();
     vcl::Window::dispose();
 }
 
@@ -184,11 +184,11 @@ void OJoinTableView::dispose()
     }
     // delete lists
     clearLayoutInformation();
-    m_pDragWin.clear();
-    m_pSizingWin.clear();
-    m_pSelectedConn.clear();
-    m_pLastFocusTabWin.clear();
-    m_pView.clear();
+    m_pDragWin.reset();
+    m_pSizingWin.reset();
+    m_pSelectedConn.reset();
+    m_pLastFocusTabWin.reset();
+    m_pView.reset();
     m_vTableConnection.clear();
     vcl::Window::dispose();
 }

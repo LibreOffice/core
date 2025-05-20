@@ -1609,7 +1609,7 @@ ImplBorderWindow::~ImplBorderWindow()
 void ImplBorderWindow::dispose()
 {
     mpBorderView.reset();
-    mpMenuBarWindow.clear();
+    mpMenuBarWindow.reset();
     mpNotebookBar.disposeAndClear();
     vcl::Window::dispose();
 }

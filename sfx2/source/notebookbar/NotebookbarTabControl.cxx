@@ -114,7 +114,7 @@ public:
         }
         catch( const css::uno::RuntimeException& ) {}
 
-        m_pParent.clear();
+        m_pParent.reset();
     }
 };
 

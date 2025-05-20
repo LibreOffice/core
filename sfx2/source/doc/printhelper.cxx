@@ -468,7 +468,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                 SolarMutexGuard aGuard;
                 while( m_pPrinter->IsPrinting() && !Application::IsQuit())
                     Application::Yield();
-                m_pPrinter.clear(); // don't delete it! It's borrowed only :-)
+                m_pPrinter.reset(); // don't delete it! It's borrowed only :-)
             }
             /* } SAFE */
 

@@ -59,7 +59,7 @@ void VCLXAccessibleComponent::DisconnectEvents()
         m_xWindow->RemoveEventListener(LINK(this, VCLXAccessibleComponent, WindowEventListener));
         m_xWindow->RemoveChildEventListener(
             LINK(this, VCLXAccessibleComponent, WindowChildEventListener));
-        m_xWindow.clear();
+        m_xWindow.reset();
     }
 }
 

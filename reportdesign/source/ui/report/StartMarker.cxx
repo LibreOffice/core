@@ -83,7 +83,7 @@ void OStartMarker::dispose()
         s_pDefExpanded = nullptr;
     }
     m_aVRuler.disposeAndClear();
-    m_pParent.clear();
+    m_pParent.reset();
     OColorListener::dispose();
 }
 

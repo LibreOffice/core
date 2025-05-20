@@ -255,7 +255,7 @@ namespace
     public:
         explicit OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent);
         virtual ~OSelectionBrwBoxHeader() override { disposeOnce(); }
-        virtual void dispose() override { m_pBrowseBox.clear(); ::svt::EditBrowserHeader::dispose(); }
+        virtual void dispose() override { m_pBrowseBox.reset(); ::svt::EditBrowserHeader::dispose(); }
     };
     OSelectionBrwBoxHeader::OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent)
         : ::svt::EditBrowserHeader(pParent,WB_BUTTONSTYLE|WB_DRAG)

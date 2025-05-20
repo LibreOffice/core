@@ -1489,7 +1489,7 @@ VclFrame::~VclFrame()
 
 void VclFrame::dispose()
 {
-    m_pLabel.clear();
+    m_pLabel.reset();
     VclBin::dispose();
 }
 
@@ -2388,10 +2388,10 @@ void MessageDialog::create_message_area()
     VclContainer *pContainer = get_content_area();
     assert(pContainer);
 
-    m_pGrid.set( VclPtr<VclGrid>::Create(pContainer) );
+    m_pGrid.reset( VclPtr<VclGrid>::Create(pContainer) );
     m_pGrid->reorderWithinParent(0);
     m_pGrid->set_column_spacing(12);
-    m_pMessageBox.set(VclPtr<VclVBox>::Create(m_pGrid));
+    m_pMessageBox.reset(VclPtr<VclVBox>::Create(m_pGrid));
     m_pMessageBox->set_grid_left_attach(1);
     m_pMessageBox->set_grid_top_attach(0);
     m_pMessageBox->set_spacing(GetTextHeight());
@@ -2450,7 +2450,7 @@ void MessageDialog::create_message_area()
         case VclButtonsType::NONE:
             break;
         case VclButtonsType::Ok:
-            pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
+            pBtn.reset( VclPtr<OKButton>::Create(pButtonBox) );
             pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
             pBtn->Show();
             pBtn->set_id(u"ok"_ustr);
@@ -2458,7 +2458,7 @@ void MessageDialog::create_message_area()
             nDefaultResponse = RET_OK;
             break;
         case VclButtonsType::Close:
-            pBtn.set( VclPtr<CloseButton>::Create(pButtonBox) );
+            pBtn.reset( VclPtr<CloseButton>::Create(pButtonBox) );
             pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
             pBtn->Show();
             pBtn->set_id(u"close"_ustr);
@@ -2466,7 +2466,7 @@ void MessageDialog::create_message_area()
             nDefaultResponse = RET_CLOSE;
             break;
         case VclButtonsType::Cancel:
-            pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
+            pBtn.reset( VclPtr<CancelButton>::Create(pButtonBox) );
             pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
             pBtn->Show();
             pBtn->set_id(u"cancel"_ustr);
@@ -2480,7 +2480,7 @@ void MessageDialog::create_message_area()
             pBtn->set_id(u"yes"_ustr);
             add_button(pBtn, RET_YES, true);
 
-            pBtn.set( VclPtr<PushButton>::Create(pButtonBox) );
+            pBtn.reset( VclPtr<PushButton>::Create(pButtonBox) );
             pBtn->SetText(GetStandardText(StandardButtonType::No));
             pBtn->Show();
             pBtn->set_id(u"no"_ustr);
@@ -2488,12 +2488,12 @@ void MessageDialog::create_message_area()
             nDefaultResponse = RET_NO;
             break;
         case VclButtonsType::OkCancel:
-            pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
+            pBtn.reset( VclPtr<OKButton>::Create(pButtonBox) );
             pBtn->Show();
             pBtn->set_id(u"ok"_ustr);
             add_button(pBtn, RET_OK, true);
 
-            pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
+            pBtn.reset( VclPtr<CancelButton>::Create(pButtonBox) );
             pBtn->Show();
             pBtn->set_id(u"cancel"_ustr);
             add_button(pBtn, RET_CANCEL, true);
@@ -2513,10 +2513,10 @@ void MessageDialog::create_owned_areas()
 #else
     set_border_width(12);
 #endif
-    m_pOwnedContentArea.set(VclPtr<VclVBox>::Create(this, false, 24));
+    m_pOwnedContentArea.reset(VclPtr<VclVBox>::Create(this, false, 24));
     set_content_area(m_pOwnedContentArea);
     m_pOwnedContentArea->Show();
-    m_pOwnedActionArea.set( VclPtr<VclHButtonBox>::Create(m_pOwnedContentArea) );
+    m_pOwnedActionArea.reset( VclPtr<VclHButtonBox>::Create(m_pOwnedContentArea) );
     set_action_area(m_pOwnedActionArea);
     m_pOwnedActionArea->Show();
 }

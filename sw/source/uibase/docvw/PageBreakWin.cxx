@@ -159,8 +159,8 @@ void SwPageBreakWin::dispose()
     m_aFadeTimer.Stop();
     m_xVirDev.disposeAndClear();
 
-    m_pLine.clear();
-    m_pEditWin.clear();
+    m_pLine.reset();
+    m_pEditWin.reset();
 
     m_xMenuButton.reset();
     InterimItemWindow::dispose();

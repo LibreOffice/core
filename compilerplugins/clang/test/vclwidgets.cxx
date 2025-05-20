@@ -34,7 +34,7 @@ struct Widget : public VclReferenceBase
 
     void dispose() override
     {
-        mpParent.clear();
+        mpParent.reset();
         VclReferenceBase::dispose();
     }
 };

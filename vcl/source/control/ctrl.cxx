@@ -57,7 +57,7 @@ Control::~Control()
 void Control::dispose()
 {
     mxLayoutData.reset();
-    mpReferenceDevice.clear();
+    mpReferenceDevice.reset();
     Window::dispose();
 }
 

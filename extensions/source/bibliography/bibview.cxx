@@ -75,7 +75,7 @@ namespace bib
     void BibView::dispose()
     {
         VclPtr<BibGeneralPage> pGeneralPage = m_pGeneralPage;
-        m_pGeneralPage.clear();
+        m_pGeneralPage.reset();
         pGeneralPage.disposeAndClear(); // dispose will commit any uncommitted weld::Entry changes
 
         if ( m_aFormControlContainer.isFormConnected() )

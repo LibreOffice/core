@@ -270,7 +270,7 @@ void LifecycleTest::testLeakage()
     }
 
     aObjects.push_back(LeakTestObject::Create<Dialog>(xParent, u"PrintProgressDialog"_ustr, "vcl/ui/printprogressdialog.ui"));
-    xParent.clear();
+    xParent.reset();
 
     for (auto i = aObjects.rbegin(); i != aObjects.rend(); ++i)
         (*i)->getRef()->Show();

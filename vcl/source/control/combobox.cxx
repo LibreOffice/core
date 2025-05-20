@@ -80,7 +80,7 @@ void ComboBox::dispose()
     m_pSubEdit.disposeAndClear();
 
     VclPtr< ImplListBox > pImplLB = m_pImplLB;
-    m_pImplLB.clear();
+    m_pImplLB.reset();
     pImplLB.disposeAndClear();
 
     m_pFloatWin.disposeAndClear();
@@ -185,7 +185,7 @@ void ComboBox::ImplInit(vcl::Window* pParent, WinBits eStyle)
         }
     }
 
-    m_pSubEdit.set(VclPtr<Edit>::Create(this, eEditStyle));
+    m_pSubEdit.reset(VclPtr<Edit>::Create(this, eEditStyle));
     m_pSubEdit->EnableRTL( false );
     SetSubEdit( m_pSubEdit );
     m_pSubEdit->SetPosPixel( Point() );

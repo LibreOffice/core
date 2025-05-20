@@ -71,7 +71,7 @@ void SAL_CALL ComplexToolbarController::dispose()
     svt::ToolboxController::dispose();
 
     m_xURLTransformer.clear();
-    m_xToolbar.clear();
+    m_xToolbar.reset();
     m_nID = ToolBoxItemId(0);
 }
 

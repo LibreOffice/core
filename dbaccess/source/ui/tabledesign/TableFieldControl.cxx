@@ -41,7 +41,7 @@ OTableFieldControl::OTableFieldControl(weld::Container* pParent, OTableDesignHel
 
 void OTableFieldControl::dispose()
 {
-    m_xView.clear();
+    m_xView.reset();
 }
 
 OTableFieldControl::~OTableFieldControl()

@@ -926,8 +926,8 @@ void Printer::dispose()
     if ( mpNext )
         mpNext->mpPrev = mpPrev;
 
-    mpPrev.clear();
-    mpNext.clear();
+    mpPrev.reset();
+    mpNext.reset();
     OutputDevice::dispose();
 }
 

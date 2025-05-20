@@ -2875,7 +2875,7 @@ CodeCompleteWindow::~CodeCompleteWindow()
 void CodeCompleteWindow::dispose()
 {
     m_xListBox.reset();
-    pParent.clear();
+    pParent.reset();
     InterimItemWindow::dispose();
 }
 

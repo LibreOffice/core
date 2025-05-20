@@ -2261,7 +2261,7 @@ void NotebookbarTabControlBase::dispose()
 
 void NotebookbarTabControlBase::SetToolBox( ToolBox* pToolBox )
 {
-    m_pShortcuts.set( pToolBox );
+    m_pShortcuts.reset( pToolBox );
 }
 
 void NotebookbarTabControlBase::SetIconClickHdl( Link<NotebookBar*, void> aHdl )

@@ -61,7 +61,7 @@ void Layout::dispose()
 {
     aLeftSide.dispose();
     aBottomSide.dispose();
-    pChild.clear();
+    pChild.reset();
     Window::dispose();
 }
 
@@ -179,7 +179,7 @@ void Layout::SplittedSide::dispose()
     for (auto & item : vItems)
     {
         item.pSplit.disposeAndClear();
-        item.pWin.clear();
+        item.pWin.reset();
     }
 }
 
@@ -220,7 +220,7 @@ void Layout::SplittedSide::Remove (DockingWindow* pWin)
         return;
     // remove
     vItems[iWin].pSplit.disposeAndClear();
-    vItems[iWin].pWin.clear();
+    vItems[iWin].pWin.reset();
     vItems.erase(vItems.begin() + iWin);
     // if that was the first one, remove the first splitter line
     if (iWin == 0 && !vItems.empty())

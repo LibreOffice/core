@@ -397,8 +397,8 @@ void Dialog::ImplInitDialogData()
     mbInSyncExecute         = false;
     mbInClose               = false;
     mbModalMode             = false;
-    mpContentArea.clear();
-    mpActionArea.clear();
+    mpContentArea.reset();
+    mpActionArea.reset();
     mnMousePositioned       = 0;
     mpDialogImpl.reset(new DialogImpl);
 }
@@ -593,7 +593,7 @@ Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
 
 void Dialog::set_action_area(VclButtonBox* pBox)
 {
-    mpActionArea.set(pBox);
+    mpActionArea.reset(pBox);
     if (pBox)
     {
         const DialogStyle& rDialogStyle =
@@ -604,7 +604,7 @@ void Dialog::set_action_area(VclButtonBox* pBox)
 
 void Dialog::set_content_area(VclBox* pBox)
 {
-    mpContentArea.set(pBox);
+    mpContentArea.reset(pBox);
 }
 
 void Dialog::settingOptimalLayoutSize(Window *pBox)
@@ -626,8 +626,8 @@ void Dialog::dispose()
 
     mpDialogImpl->disposeAndClear();
     RemoveFromDlgList();
-    mpActionArea.clear();
-    mpContentArea.clear();
+    mpActionArea.reset();
+    mpContentArea.reset();
 
     const css::uno::Reference< css::uno::XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
@@ -1102,7 +1102,7 @@ short Dialog::Execute()
     assert (!mpDialogParent || !mpDialogParent->isDisposed());
 #endif
     if ( !xWindow->isDisposed() )
-        xWindow.clear();
+        xWindow.reset();
     else
     {
         OSL_FAIL( "Dialog::Execute() - Dialog destroyed in Execute()" );

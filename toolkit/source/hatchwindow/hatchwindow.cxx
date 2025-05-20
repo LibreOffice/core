@@ -130,7 +130,7 @@ void SAL_CALL VCLXHatchWindow::setController( const uno::Reference< embed::XHatc
 
 void SAL_CALL VCLXHatchWindow::dispose()
 {
-    pHatchWindow.clear();
+    pHatchWindow.reset();
     VCLXWindow::dispose();
 }
 

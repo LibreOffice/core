@@ -1311,7 +1311,7 @@ void ToolBox::dispose()
     delete pSVData->maCtrlData.mpTBDragMgr;
     pSVData->maCtrlData.mpTBDragMgr = nullptr;
 
-    mpFloatWin.clear();
+    mpFloatWin.reset();
 
     mpIdle.reset();
 

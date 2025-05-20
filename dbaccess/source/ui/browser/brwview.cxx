@@ -126,8 +126,8 @@ void UnoDataBrowserView::dispose()
     }
     catch(const Exception&)
     {}
-    m_pTreeView.clear();
-    m_pVclControl.clear();
+    m_pTreeView.reset();
+    m_pVclControl.reset();
     ODataView::dispose();
 }
 

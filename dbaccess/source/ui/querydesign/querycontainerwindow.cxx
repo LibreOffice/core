@@ -64,7 +64,7 @@ namespace dbaui
         }
         if ( m_pBeamer )
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-        m_pBeamer.clear();
+        m_pBeamer.reset();
         if ( m_xBeamer.is() )
         {
             Reference< css::util::XCloseable > xCloseable(m_xBeamer,UNO_QUERY);

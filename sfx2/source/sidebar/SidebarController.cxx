@@ -245,7 +245,7 @@ void SidebarController::disposeDecks()
             mpParentWindow->ReleaseLOKNotifier();
     }
 
-    mpCurrentDeck.clear();
+    mpCurrentDeck.reset();
     maFocusManager.Clear();
     mpResourceManager->disposeDecks();
 }

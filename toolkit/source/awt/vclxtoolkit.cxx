@@ -1970,7 +1970,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
             {
                 // system child window could not be created
                 DBG_UNHANDLED_EXCEPTION("toolkit");
-                pChildWindow.clear();
+                pChildWindow.reset();
             }
         }
     }

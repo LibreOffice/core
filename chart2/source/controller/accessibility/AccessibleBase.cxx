@@ -354,7 +354,7 @@ void SAL_CALL AccessibleBase::disposing()
         OAccessibleComponentHelper::disposing();
 
         // reset pointers
-        m_aAccInfo.m_pWindow.clear();
+        m_aAccInfo.m_pWindow.reset();
         m_aAccInfo.m_pParent = nullptr;
 
         m_nStateSet = AccessibleStateType::DEFUNC;

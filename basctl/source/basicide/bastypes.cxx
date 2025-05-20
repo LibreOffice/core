@@ -82,8 +82,8 @@ void BaseWindow::dispose()
         pShellVScrollBar->SetScrollHdl( Link<weld::Scrollbar&,void>() );
     if (pShellHScrollBar && !pShellHScrollBar->isDisposed())
         pShellHScrollBar->SetScrollHdl( Link<weld::Scrollbar&,void>() );
-    pShellVScrollBar.clear();
-    pShellHScrollBar.clear();
+    pShellVScrollBar.reset();
+    pShellHScrollBar.reset();
     vcl::Window::dispose();
 }
 
@@ -338,7 +338,7 @@ void DockingWindow::dispose()
 {
     m_xContainer.reset();
     m_xBuilder.reset();
-    pLayout.clear();
+    pLayout.reset();
     ResizableDockingWindow::dispose();
 }
 

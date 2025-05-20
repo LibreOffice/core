@@ -179,8 +179,8 @@ void OutputDevice::dispose()
     mxFontCollection.reset();
 
     mpAlphaVDev.disposeAndClear();
-    mpPrevGraphics.clear();
-    mpNextGraphics.clear();
+    mpPrevGraphics.reset();
+    mpNextGraphics.reset();
     VclReferenceBase::dispose();
 }
 

@@ -28,7 +28,7 @@ ScPivotLayoutTreeList::~ScPivotLayoutTreeList()
     if (mpSubtotalDlg)
     {
         mpSubtotalDlg->Response(RET_CANCEL);
-        mpSubtotalDlg.clear();
+        mpSubtotalDlg.reset();
     }
 }
 

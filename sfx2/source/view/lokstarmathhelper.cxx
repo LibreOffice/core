@@ -111,7 +111,7 @@ vcl::Window* LokStarMathHelper::GetGraphicWindow()
         if (mxFrame)
         {
             css::uno::Reference<css::awt::XWindow> xDockerWin = mxFrame->getContainerWindow();
-            mpGraphicWindow.set(FindSmGraphicWindow(VCLUnoHelper::GetWindow(xDockerWin)));
+            mpGraphicWindow.reset(FindSmGraphicWindow(VCLUnoHelper::GetWindow(xDockerWin)));
         }
     }
 
@@ -121,7 +121,7 @@ vcl::Window* LokStarMathHelper::GetGraphicWindow()
 vcl::Window* LokStarMathHelper::GetWidgetWindow()
 {
     if (!mpWidgetWindow)
-        mpWidgetWindow.set(FindChildSmGraphicWidgetWindow(GetGraphicWindow()));
+        mpWidgetWindow.reset(FindChildSmGraphicWidgetWindow(GetGraphicWindow()));
 
     return mpWidgetWindow.get();
 }

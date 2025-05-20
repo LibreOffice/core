@@ -1885,7 +1885,7 @@ void SalInstanceDialog::undo_collapse()
     m_aHiddenWidgets.clear();
 
     m_xRefEdit->set_width_request(m_nOldEditWidthReq);
-    m_xRefEdit.clear();
+    m_xRefEdit.reset();
     m_xDialog->set_border_width(m_nOldBorderWidth);
     if (vcl::Window* pActionArea = m_xDialog->get_action_area())
         pActionArea->Show();
@@ -7121,7 +7121,7 @@ std::unique_ptr<weld::MessageDialog> SalInstanceBuilder::weld_message_dialog(con
     if (pMessageDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-        m_aOwnedToplevel.set(pMessageDialog);
+        m_aOwnedToplevel.reset(pMessageDialog);
         m_xBuilder->drop_ownership(pMessageDialog);
     }
     return pRet;
@@ -7135,7 +7135,7 @@ std::unique_ptr<weld::Dialog> SalInstanceBuilder::weld_dialog(const OUString& id
     if (pDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-        m_aOwnedToplevel.set(pDialog);
+        m_aOwnedToplevel.reset(pDialog);
         m_xBuilder->drop_ownership(pDialog);
     }
     return pRet;
@@ -7149,7 +7149,7 @@ std::unique_ptr<weld::Assistant> SalInstanceBuilder::weld_assistant(const OUStri
     if (pDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-        m_aOwnedToplevel.set(pDialog);
+        m_aOwnedToplevel.reset(pDialog);
         m_xBuilder->drop_ownership(pDialog);
     }
     return pRet;
@@ -7163,7 +7163,7 @@ std::unique_ptr<weld::Window> SalInstanceBuilder::create_screenshot_window()
     if (SystemWindow* pWindow = dynamic_cast<SystemWindow*>(pRoot))
     {
         std::unique_ptr<weld::Window> xRet(new SalInstanceWindow(pWindow, this, false));
-        m_aOwnedToplevel.set(pWindow);
+        m_aOwnedToplevel.reset(pWindow);
         m_xBuilder->drop_ownership(pWindow);
         return xRet;
     }
@@ -7179,7 +7179,7 @@ std::unique_ptr<weld::Window> SalInstanceBuilder::create_screenshot_window()
     pRoot->Show();
     xDialog->SetHelpId(pRoot->GetHelpId());
 
-    m_aOwnedToplevel.set(xDialog);
+    m_aOwnedToplevel.reset(xDialog);
 
     return std::unique_ptr<weld::Dialog>(new SalInstanceDialog(xDialog, this, false));
 }
@@ -7436,7 +7436,7 @@ std::unique_ptr<weld::Popover> SalInstanceBuilder::weld_popover(const OUString& 
     if (pDockingWindow)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-        m_aOwnedToplevel.set(pDockingWindow);
+        m_aOwnedToplevel.reset(pDockingWindow);
         m_xBuilder->drop_ownership(pDockingWindow);
     }
     return pRet;

@@ -203,7 +203,7 @@ public:
     FocusWindowWaitGuard()
     {
         SolarMutexGuard aGuard;
-        mpWindow.set(Application::GetFocusWindow());
+        mpWindow.reset(Application::GetFocusWindow());
         if (mpWindow)
             mpWindow->EnterWait();
     }

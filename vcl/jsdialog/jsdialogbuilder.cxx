@@ -394,7 +394,7 @@ JSInstanceBuilder::~JSInstanceBuilder()
     if (m_aWindowToRelease)
     {
         m_aWindowToRelease->ReleaseLOKNotifier();
-        m_aWindowToRelease.clear();
+        m_aWindowToRelease.reset();
     }
 
     if (m_nWindowId && (m_bHasTopLevelDialog || m_bIsNotebookbar))
@@ -446,7 +446,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OUString& id)
         InsertWindowToMap(getMapIdFromWindowId());
 
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-        m_aOwnedToplevel.set(pDialog);
+        m_aOwnedToplevel.reset(pDialog);
         m_xBuilder->drop_ownership(pDialog);
         m_bHasTopLevelDialog = true;
 
@@ -474,7 +474,7 @@ std::unique_ptr<weld::Assistant> JSInstanceBuilder::weld_assistant(const OUStrin
         InsertWindowToMap(getMapIdFromWindowId());
 
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-        m_aOwnedToplevel.set(pDialog);
+        m_aOwnedToplevel.reset(pDialog);
         m_xBuilder->drop_ownership(pDialog);
         m_bHasTopLevelDialog = true;
 
@@ -502,7 +502,7 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
         InsertWindowToMap(getMapIdFromWindowId());
 
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-        m_aOwnedToplevel.set(pMessageDialog);
+        m_aOwnedToplevel.reset(pMessageDialog);
         m_xBuilder->drop_ownership(pMessageDialog);
         m_bHasTopLevelDialog = true;
 
@@ -837,7 +837,7 @@ std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OUString& i
     if (pDockingWindow)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-        m_aOwnedToplevel.set(pDockingWindow);
+        m_aOwnedToplevel.reset(pDockingWindow);
         m_xBuilder->drop_ownership(pDockingWindow);
 
         if (VclPtr<vcl::Window> pWin = pDockingWindow->GetParentWithLOKNotifier())

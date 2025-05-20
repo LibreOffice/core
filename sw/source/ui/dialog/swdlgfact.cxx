@@ -1210,7 +1210,7 @@ bool AbstractMailMergeWizard_Impl::StartExecuteAsync(AsyncContext& rCtx)
 {
     // SwMailMergeWizardExecutor wants to run the lifecycle of this dialog
     // so clear mxOwner here and leave it up to SwMailMergeWizardExecutor
-    rCtx.mxOwner.clear();
+    rCtx.mxOwner.reset();
     return AbstractDialogImpl_BASE::StartExecuteAsync(rCtx);
 }
 }

@@ -43,7 +43,7 @@ BrowserHeader::~BrowserHeader()
 
 void BrowserHeader::dispose()
 {
-    _pBrowseBox.clear();
+    _pBrowseBox.reset();
     HeaderBar::dispose();
 }
 

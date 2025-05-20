@@ -131,7 +131,7 @@ void SAL_CALL ButtonToolbarController::dispose()
         m_xContext.clear();
         m_xURLTransformer.clear();
         m_xFrame.clear();
-        m_pToolbar.clear();
+        m_pToolbar.reset();
         m_bDisposed = true;
     }
 }

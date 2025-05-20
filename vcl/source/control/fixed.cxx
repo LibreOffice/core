@@ -425,7 +425,7 @@ FixedText::~FixedText()
 void FixedText::dispose()
 {
     set_mnemonic_widget(nullptr);
-    m_pMnemonicWindow.clear();
+    m_pMnemonicWindow.reset();
     Control::dispose();
 }
 

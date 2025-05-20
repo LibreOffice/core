@@ -134,8 +134,8 @@ void BibBookContainer::dispose()
     }
 
     CloseBibModul( pBibMod );
-    pTopWin.clear();
-    pBottomWin.clear();
+    pTopWin.reset();
+    pBottomWin.reset();
     BibSplitWindow::dispose();
 }
 

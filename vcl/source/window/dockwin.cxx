@@ -121,7 +121,7 @@ void ImplDockFloatWin::dispose()
 
     disposeBuilder();
 
-    mpDockWin.clear();
+    mpDockWin.reset();
     FloatingWindow::dispose();
 }
 
@@ -401,9 +401,9 @@ void DockingWindow::dispose()
         SetFloatingMode(false);
     }
     mpImplData.reset();
-    mpFloatWin.clear();
-    mpOldBorderWin.clear();
-    mpDialogParent.clear();
+    mpFloatWin.reset();
+    mpOldBorderWin.reset();
+    mpDialogParent.reset();
     disposeBuilder();
     Window::dispose();
 }
@@ -1101,7 +1101,7 @@ DropdownDockingWindow::~DropdownDockingWindow()
 
 void DropdownDockingWindow::dispose()
 {
-    m_xBox.clear();
+    m_xBox.reset();
     DockingWindow::dispose();
 }
 
@@ -1139,7 +1139,7 @@ ResizableDockingWindow::~ResizableDockingWindow()
 
 void ResizableDockingWindow::dispose()
 {
-    m_xBox.clear();
+    m_xBox.reset();
     DockingWindow::dispose();
 }
 

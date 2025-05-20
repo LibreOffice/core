@@ -845,7 +845,7 @@ void VclBuilder::disposeBuilder()
         aI->m_pMenu.disposeAndClear();
     }
     m_aMenus.clear();
-    m_pParent.clear();
+    m_pParent.reset();
 }
 
 namespace
