@@ -104,20 +104,20 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testConnectorConnection)
     uno::Reference<beans::XPropertySet> xConnectorProps(xConnector, uno::UNO_QUERY);
 
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 0
+    // - Expected: 4
     // - Actual  : -1
     // i.e. the connector shape is not attaching to the shape
     sal_Int32 nStartGlueId;
     xConnectorProps->getPropertyValue("StartGluePointIndex") >>= nStartGlueId;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nStartGlueId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nStartGlueId);
 
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 2
+    // - Expected: 6
     // - Actual  : -1
     // i.e. the connector shape is not attaching to the shape
     sal_Int32 nEndGlueId;
     xConnectorProps->getPropertyValue("EndGluePointIndex") >>= nEndGlueId;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nEndGlueId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nEndGlueId);
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testElbowConnectors)
