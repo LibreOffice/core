@@ -40,7 +40,7 @@ class InvalidNames(UITestCase):
                         type_text(xEdit, name)
 
                         # tdf#132869 - Without the fix in place, this test would have failed with
-                        # - Expected: "Invalid name. Start with a letter, use only letters, numbers and underscore."
+                        # - Expected: "Invalid name. It must start with a letter (excluding c, C, r, or R followed by a number) or underscore.\nOnly letters, numbers, and underscores are permitted."
                         # - Actual  : ""
                         self.assertNotEqual(success_text, get_state_as_dict(xEdit)["QuickHelpText"])
                         self.assertEqual(get_state_as_dict(xAddBtn)["Enabled"], "false")

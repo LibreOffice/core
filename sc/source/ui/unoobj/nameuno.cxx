@@ -477,7 +477,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
                 break;
             case ScRangeData::IsNameValidType::NAME_INVALID_BAD_STRING:
                 throw uno::RuntimeException(
-                    u"Invalid name. Start with a letter, use only letters, numbers and underscore"_ustr,
+                    u"Invalid name. It must start with a letter (excluding c, C, r, or R followed by a number) or underscore.\nOnly letters, numbers, and underscores are permitted."_ustr,
                     getXWeak());
                 break;
             case ScRangeData::IsNameValidType::NAME_VALID:
