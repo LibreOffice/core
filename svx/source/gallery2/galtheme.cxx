@@ -134,7 +134,8 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
     mpGalleryStorageEngine->insertObject(rObj, pFoundEntry, nInsertPos);
 
     ImplSetModified(true);
-    ImplBroadcast(pFoundEntry? iFoundPos: nInsertPos);
+    Broadcast( GalleryHint( GalleryHintType::ADD_OBJECT, GetName(),
+        reinterpret_cast<void*>(static_cast<sal_uIntPtr>(pFoundEntry? iFoundPos: nInsertPos)) ) );
 
     return true;
 }
