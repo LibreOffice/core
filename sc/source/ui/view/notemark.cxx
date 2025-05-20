@@ -172,7 +172,7 @@ void ScNoteOverlay::createOverlaySubContent(
     //   in the displaying window
     // 2 to merged SplitWindow display (may have different top-left)
     // 3 to window displaying target ScGridWindow
-    // 4 to logic coordinates in it's DrawMapMode
+    // 4 to logic coordinates in its DrawMapMode
     // NOTE: 1+2 are already in rTransformToPixels
     basegfx::B2DHomMatrix aTransformToTarget(rTransformToPixels);
     aTransformToTarget.translate(-rTopLeft);
@@ -350,7 +350,7 @@ ScNoteOverlay::~ScNoteOverlay()
     maNoteOverlayGroup.clear();
 
     // destruct temporary SdrObject. It *needs* to be kept alive
-    // during visualization due to it being used for decmpose
+    // during visualization due to it being used for decompose
     // of the TextPrimitive. That is an old compromize in the
     // primitives: the text primitive is not self-contained in
     // the sense that it needs the SdrTextObj for decompose.
