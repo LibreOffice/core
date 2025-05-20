@@ -4263,14 +4263,16 @@ bool SfxObjectShell::QueryAllowExoticFormat_Impl( const uno::Reference< task::XI
 uno::Reference< task::XInteractionHandler > SfxObjectShell::getInteractionHandler() const
 {
     uno::Reference< task::XInteractionHandler > xRet;
-    if ( GetMedium() )
-        xRet = GetMedium()->GetInteractionHandler();
+    if (SfxMedium* pRetrMedium = GetMedium())
+        xRet = pRetrMedium->GetInteractionHandler();
     return xRet;
 }
 
 OUString SfxObjectShell::getDocumentBaseURL() const
 {
-    return GetMedium()->GetBaseURL();
+    if (SfxMedium* pRetrMedium = GetMedium())
+        return pRetrMedium->GetBaseURL();
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
