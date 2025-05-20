@@ -44,12 +44,28 @@ namespace
 OUString getCID(const uno::Reference<frame::XModel>& xModel)
 {
     const uno::Reference<frame::XController> xController(xModel->getCurrentController());
-    const uno::Reference<view::XSelectionSupplier> xSelectionSupplier(xController, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(xController, uno::UNO_QUERY);
     if (!xSelectionSupplier.is())
-        return OUString();
+        return {};
 
-    const uno::Any aAny = xSelectionSupplier->getSelection();
-    assert(aAny.hasValue());
+    uno::Any aAny = xSelectionSupplier->getSelection();
+    if (!aAny.hasValue())
+    {
+        // if no selection, default to diagram wall so sidebar can show some editable properties
+        if (auto* pController = dynamic_cast<ChartController*>(xController.get()))
+        {
+            pController->select(
+                uno::Any(ObjectIdentifier::createClassifiedIdentifier(OBJECTTYPE_PAGE, u"")));
+            xSelectionSupplier
+                = uno::Reference<css::view::XSelectionSupplier>(xController, uno::UNO_QUERY);
+            if (xSelectionSupplier.is())
+                aAny = xSelectionSupplier->getSelection();
+        }
+
+        if (!aAny.hasValue())
+            return {};
+    }
+
     OUString aCID;
     aAny >>= aCID;
     return aCID;
@@ -183,6 +199,8 @@ void ChartColorsPanel::updateData()
         return;
 
     const OUString aCID = getCID(mxModel);
+    if (aCID.isEmpty())
+        return;
     const ObjectType eType = ObjectIdentifier::getObjectType(aCID);
 
     if (std::find(maAcceptedTypes.begin(), maAcceptedTypes.end(), eType) == maAcceptedTypes.end())
