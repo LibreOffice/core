@@ -181,7 +181,9 @@ void RecentFilesMenuController::fillPopupMenu(std::unique_lock<std::mutex>& /*rG
             nItemPos++;
         };
 
-        if (m_aModuleName != "com.sun.star.frame.StartModule")
+        if (m_aModuleName != "com.sun.star.frame.StartModule"
+            // tdf#164794 - show complete list of recent documents in the macro window
+            && m_aModuleName != "com.sun.star.script.BasicIDE")
         {
             ::comphelper::MimeConfigurationHelper aConfigHelper(
                 comphelper::getProcessComponentContext());
