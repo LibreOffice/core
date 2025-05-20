@@ -197,6 +197,39 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testPageDescThatFollowsItself)
     CPPUNIT_ASSERT_EQUAL(pNewPageDesc, pNewPageDesc->GetFollow());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf148703CopyFooterAcrossDocuments)
+{
+    // A document containing some text to overwrite and no custom page styles.
+    createSwDoc("tdf148703-dest.odt");
+
+    // A document containing a custom page style, two paragraphs, and a footer.
+    uno::Reference<css::lang::XComponent> xSrcComponent
+        = loadFromDesktop(createFileURL(u"tdf148703-src.odt"), OUString(), {});
+
+    dispatchCommand(xSrcComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(xSrcComponent, u".uno:Copy"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // Without the fix, the Undo command crashes with:
+    // SwUndoDelete::UndoImpl(sw::UndoRedoContext&): Assertion `pStartNode' failed.
+    // That happens because the footer nodes remained in the SwNodes
+    // after undo and messed up the index where the SwUndoDelete re-inserts
+    // the deleted content.
+
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // Clear the redo stack by doing any other operation, to test the whether
+    // the destructor works.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

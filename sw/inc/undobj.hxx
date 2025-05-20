@@ -295,6 +295,28 @@ public:
     SwUndoCpyDoc( const SwPaM& );
 };
 
+/// Undo for copying a header or footer from one document into another.
+/// This needs special handling because undoing the copy needs to completely
+/// remove it from the doc nodes; in other cases the header/footer content
+/// is just left in the doc nodes.
+class SwUndoCopyHeaderFooter final : public SwUndo, private SwUndoSaveSection
+{
+    SwNodeOffset m_aOff;
+    UIName m_aFmtName;
+
+    bool m_bIsHeader;
+    bool m_bIsMaster;
+    bool m_bIsLeft;
+    bool m_bIsFirstMaster;
+    bool m_bIsFirstLeft;
+
+public:
+    SwUndoCopyHeaderFooter(SwDoc& rDoc, SwNode& rSttNd, const UIName& rFmtName);
+
+    virtual void UndoImpl(::sw::UndoRedoContext & rContext) override;
+    virtual void RedoImpl(::sw::UndoRedoContext & rContext) override;
+};
+
 class SwUndoFlyBase : public SwUndo, private SwUndoSaveSection
 {
 protected:

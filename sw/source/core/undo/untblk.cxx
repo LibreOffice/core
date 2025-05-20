@@ -34,6 +34,9 @@
 #include <rolbck.hxx>
 #include <redline.hxx>
 #include <frameformats.hxx>
+#include <fmtcntnt.hxx>
+#include <fmthdft.hxx>
+
 
 namespace sw {
 
@@ -485,6 +488,106 @@ SwUndoInsDoc::SwUndoInsDoc( const SwPaM& rPam )
 SwUndoCpyDoc::SwUndoCpyDoc( const SwPaM& rPam )
     : SwUndoInserts( SwUndoId::COPY, rPam )
 {
+}
+
+SwUndoCopyHeaderFooter::SwUndoCopyHeaderFooter(SwDoc& rDoc, SwNode& rSttNd, const UIName& rFmtName)
+    : SwUndo(SwUndoId::COPY_HEADER_FOOTER, rDoc)
+    , m_aOff(rSttNd.GetIndex())
+    , m_aFmtName(rFmtName)
+{
+}
+
+static const SfxPoolItem* lcl_itemForFormat(SwFrameFormat& rFmt, bool bIsHeader)
+{
+    sal_uInt16 nAttr = bIsHeader ? sal_uInt16(RES_HEADER) : sal_uInt16(RES_FOOTER);
+    const SfxPoolItem* pItem;
+    if (SfxItemState::SET != rFmt.GetAttrSet().GetItemState(nAttr, false, &pItem))
+        return nullptr;
+
+    return pItem;
+}
+
+static bool lcl_checkMatchesFormat(SwFrameFormat& rFmt, bool bIsHeader, SwNodeOffset aOff)
+{
+    const SfxPoolItem* pItem = lcl_itemForFormat(rFmt, bIsHeader);
+    if (!pItem)
+        return false;
+
+    const SwFrameFormat* pHdFtFormat = bIsHeader
+        ? (pItem->StaticWhichCast(RES_HEADER).GetHeaderFormat())
+        : (pItem->StaticWhichCast(RES_FOOTER).GetFooterFormat());
+    if (!pHdFtFormat)
+        return false;
+
+    const SwFormatContent& rContent = pHdFtFormat->GetAttrSet().GetContent(false);
+
+    const SwNodeIndex *pFmtIdx = rContent.GetContentIdx();
+    if (!pFmtIdx)
+        return false;
+
+    return pFmtIdx->GetIndex() == aOff;
+}
+
+void SwUndoCopyHeaderFooter::UndoImpl(::sw::UndoRedoContext& rContext)
+{
+    SwDoc& rDoc = rContext.GetDoc();
+
+    SwPageDesc* pPgDesc = rDoc.FindPageDesc(m_aFmtName);
+
+    // We have to initialize these here because the PageDesc doesn't have the content of its
+    // frames set at the time that this class is constructed.
+
+    m_bIsMaster = lcl_checkMatchesFormat(pPgDesc->GetMaster(), true, m_aOff);
+    m_bIsLeft = lcl_checkMatchesFormat(pPgDesc->GetLeft(), true, m_aOff);
+    m_bIsFirstMaster = lcl_checkMatchesFormat(pPgDesc->GetFirstMaster(), true, m_aOff);
+    m_bIsFirstLeft = lcl_checkMatchesFormat(pPgDesc->GetFirstLeft(), true, m_aOff);
+
+    m_bIsHeader = m_bIsMaster || m_bIsLeft || m_bIsFirstMaster || m_bIsFirstLeft;
+
+    if (!m_bIsHeader)
+    {
+        m_bIsMaster = lcl_checkMatchesFormat(pPgDesc->GetMaster(), false, m_aOff);
+        m_bIsLeft = lcl_checkMatchesFormat(pPgDesc->GetLeft(), false, m_aOff);
+        m_bIsFirstMaster = lcl_checkMatchesFormat(pPgDesc->GetFirstMaster(), false, m_aOff);
+        m_bIsFirstLeft = lcl_checkMatchesFormat(pPgDesc->GetFirstLeft(), false, m_aOff);
+    }
+
+    SaveSection(SwNodeIndex(rDoc.GetNodes(), m_aOff));
+}
+
+void SwUndoCopyHeaderFooter::RedoImpl(::sw::UndoRedoContext& rContext)
+{
+    SwDoc& rDoc = rContext.GetDoc();
+
+    if (m_bIsHeader)
+        RestoreSection(rDoc, nullptr, SwHeaderStartNode);
+    else
+        RestoreSection(rDoc, nullptr, SwFooterStartNode);
+
+    SwPageDesc* pPgDesc = rDoc.FindPageDesc(m_aFmtName);
+
+    const SfxPoolItem* pItem = nullptr;
+    if (m_bIsMaster)
+        pItem = lcl_itemForFormat(pPgDesc->GetMaster(), m_bIsHeader);
+    else if (m_bIsLeft)
+        pItem = lcl_itemForFormat(pPgDesc->GetLeft(), m_bIsHeader);
+    else if (m_bIsFirstMaster)
+        pItem = lcl_itemForFormat(pPgDesc->GetFirstMaster(), m_bIsHeader);
+    else if (m_bIsFirstLeft)
+        pItem = lcl_itemForFormat(pPgDesc->GetFirstLeft(), m_bIsHeader);
+
+    assert(pItem);
+
+    SwFrameFormat* pHdFtFormat = const_cast<SwFrameFormat*>(
+        m_bIsHeader
+        ? (pItem->StaticWhichCast(RES_HEADER).GetHeaderFormat())
+        : (pItem->StaticWhichCast(RES_FOOTER).GetFooterFormat())
+    );
+
+    assert(pHdFtFormat);
+
+    if (pHdFtFormat->GetAttrSet().GetItemIfSet(RES_CNTNT, false))
+        pHdFtFormat->SetFormatAttr(SwFormatContent(static_cast<SwStartNode*>(rDoc.GetNodes()[m_aOff])));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
