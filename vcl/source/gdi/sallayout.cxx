@@ -352,12 +352,14 @@ void GenericSalLayout::Justify(double nNewWidth)
     }
 
     // move rightmost glyph to requested position
-    nOldWidth -= pGlyphIterRight->origWidth();
+    auto nRightGlyphOffset = nOldWidth - pGlyphIterRight->linearPos().getX();
+    nOldWidth -= nRightGlyphOffset;
+
     if( nOldWidth <= 0.0 )
         return;
     if( nNewWidth < nMaxGlyphWidth)
         nNewWidth = nMaxGlyphWidth;
-    nNewWidth -= pGlyphIterRight->origWidth();
+    nNewWidth -= nRightGlyphOffset;
     pGlyphIterRight->setLinearPosX( nNewWidth );
 
     // justify glyph widths and positions
