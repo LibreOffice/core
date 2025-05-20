@@ -71,7 +71,7 @@ print(", \\\n".join(["    " + gid for gid in allgids]))
 for (gid, link, target) in autosdklibs:
     print("SDK_LIBRARY_LINK(" + gid + "," + link + "," + target + ")")
 
-scp2libtemplates = set([ "URE_PRIVATE_LIB", "LIBO_LIB_FILE", "LIBO_LIB_FILE_BINARYTABLE", "LIBO_LIB_FILE_COMPONENTCONDITION", "SHLXTHDL_LIB_FILE", "SHLXTHDL_X64_LIB_FILE_COMPONENTCONDITION" ])
+scp2libtemplates = set([ "URE_PRIVATE_LIB", "LIBO_LIB_FILE", "LIBO_LIB_FILE_BINARYTABLE", "LIBO_LIB_FILE_COMPONENTCONDITION", "SHLXTHDL_LIB_FILE" ])
 for (gid, libfile) in autolibs:
     if scp2libtemplate not in scp2libtemplates:
         raise Exception("invalid scp2libtemplate \"" + scp2libtemplate + "\"")

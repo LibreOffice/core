@@ -28,18 +28,6 @@ RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer
     Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl.dll";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{087B3AE3-E237-4467-B8DB-5A38AB959AC9}\InprocServer32";
-    Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
@@ -48,18 +36,6 @@ RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer
     Value = "Apartment";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32_TM_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{087B3AE3-E237-4467-B8DB-5A38AB959AC9}\InprocServer32";
-    Name = "ThreadingModel";
-    Value = "Apartment";
-End
-#endif
-
 RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_Approved
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Optional_Winexplorerext;
@@ -67,19 +43,6 @@ RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_Approved
     Name = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
     Value = "%PRODUCTNAME Infotip Handler";
 End
-
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_Approved_x64
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved";
-    Name = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-    Value = "%PRODUCTNAME Infotip Handler";
-End
-
-#endif
 
 // End registry items for the Infotip handler
 
@@ -92,18 +55,6 @@ RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer
     Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl.dll";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{3B092F0C-7696-40E3-A80F-68D74DA84210}\InprocServer32";
-    Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
@@ -113,19 +64,6 @@ RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer
     Val64 = "Apartment";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32_TM_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{3B092F0C-7696-40E3-A80F-68D74DA84210}\InprocServer32";
-    Name = "ThreadingModel";
-    Value = "Apartment";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_Approved
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Optional_Winexplorerext;
@@ -133,19 +71,6 @@ RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_Approved
     Name = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
     Value = "%PRODUCTNAME Thumbnail Viewer";
 End
-
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_Approved_x64
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved";
-    Name = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-    Value = "%PRODUCTNAME Thumbnail Viewer";
-End
-
-#endif
 
 // End registry items for the Thumbnail viewer
 
@@ -158,36 +83,12 @@ RegistryItem gid_Regitem_Folder_shellex_ColHandl_C52AF81D_F7A0_4AAB_8E87_F80A60C
     Value = "%PRODUCTNAME Column Handler";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Folder_shellex_ColHandl_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "Folder\shellex\ColumnHandlers\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}";
-    Value = "%PRODUCTNAME Column Handler";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}\InprocServer32";
     Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl.dll";
 End
-
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}\InprocServer32";
-    Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
-End
-
-#endif
 
 RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -197,19 +98,6 @@ RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer
     Value = "Apartment";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32_TM_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}\InprocServer32";
-    Name = "ThreadingModel";
-    Value = "Apartment";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_Approved
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Optional_Winexplorerext;
@@ -217,19 +105,6 @@ RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_Approved
     Name = "{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}";
     Value = "%PRODUCTNAME Column Handler";
 End
-
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_Approved_x64
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved";
-    Name = "{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}";
-    Value = "%PRODUCTNAME Column Handler";
-End
-
-#endif
 
 // End registry items for the Column handler
 
@@ -242,18 +117,6 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262
     Value = "OpenDocument Format Filter";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
-    Value = "OpenDocument Format Filter";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
@@ -261,18 +124,6 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer
     Value = "[INSTALLLOCATION]program\shlxthdl\ooofilt.dll";
     Val64 = "[INSTALLLOCATION]program\shlxthdl\ooofilt_x64.dll";
 End
-
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
-    Value = "[INSTALLLOCATION]program\shlxthdl\ooofilt_x64.dll";
-End
-
-#endif
 
 RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -282,19 +133,6 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer
     Value = "Apartment";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_TM_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
-    Name = "ThreadingModel";
-    Value = "Apartment";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
@@ -302,36 +140,12 @@ RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262
     Value = "OpenDocument Format Persistent Handler";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
-    Value = "OpenDocument Format Persistent Handler";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsReg
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}";
     Value = "{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
 End
-
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsReg_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}";
-    Value = "{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
-End
-
-#endif
 
 // End registry items for the MS Indexing server filter component
 
@@ -344,18 +158,6 @@ RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer
     Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl.dll";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{63542C48-9552-494A-84F7-73AA6A7C99C1}\InprocServer32";
-    Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
@@ -364,19 +166,6 @@ RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer
     Value = "Apartment";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32_TM_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{63542C48-9552-494A-84F7-73AA6A7C99C1}\InprocServer32";
-    Name = "ThreadingModel";
-    Value = "Apartment";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_Approved
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Optional_Winexplorerext;
@@ -384,19 +173,6 @@ RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_Approved
     Name = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
     Value = "%PRODUCTNAME Property Sheet Handler";
 End
-
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_Approved_x64
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved";
-    Name = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
-    Value = "%PRODUCTNAME Property Sheet Handler";
-End
-
-#endif
 
 // End registry entries for the PropertySheet handler
 
@@ -417,44 +193,12 @@ RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_EnableShareD
     Value = "#1";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_PropHdl_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
-    Value = "%PRODUCTNAME Property Handler";
-End
-
-RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_EnableShareDenyWrite_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
-    Name = "EnableShareDenyNone";
-    Value = "#1";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
     Value = "[INSTALLLOCATION]program\shlxthdl\propertyhdl.dll";
 End
-
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
-    Value = "[INSTALLLOCATION]program\shlxthdl\propertyhdl_x64.dll";
-End
-
-#endif
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -464,19 +208,6 @@ RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer
     Value = "Apartment";
 End
 
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_TM_x64
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
-    Name = "ThreadingModel";
-    Value = "Apartment";
-End
-
-#endif
-
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_Approved
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Optional_Winexplorerext;
@@ -484,18 +215,5 @@ RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_Approved
     Name = "{AE424E85-F6DF-4910-A6A9-438797986431}";
     Value = "%PRODUCTNAME Property Handler";
 End
-
-#ifdef BUILD_X64
-
-RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_Approved_x64
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64";
-    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved";
-    Name = "{AE424E85-F6DF-4910-A6A9-438797986431}";
-    Value = "%PRODUCTNAME Property Handler";
-End
-
-#endif
 
 // End registry entries for the Property handler

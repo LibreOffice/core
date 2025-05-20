@@ -760,18 +760,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexp
 	shlxthdl \
 ))
 
-ifneq ($(BUILD_X64),)
-$(eval $(call gb_Helper_register_packages_for_install,winexplorerextwin64, \
-	$(if $(filter MSC,$(COM)),msvc_dlls) \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexplorerextwin64, \
-	ooofilt_x64 \
-	propertyhdl_x64 \
-	shlxthdl_x64 \
-))
-endif # BUILD_X64
-
 endif # WNT
 
 $(eval $(call gb_Helper_register_libraries_for_install,RTVERLIBS,ure, \

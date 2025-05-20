@@ -365,11 +365,6 @@ $(call gb_LinkTarget_add_libs,$(1),-lz)
 
 endef
 
-# nothing on system
-define gb_LinkTarget__use_zlib_x64
-
-endef
-
 gb_ExternalProject__use_zlib :=
 
 else # !SYSTEM_ZLIB
@@ -394,11 +389,6 @@ endef
 
 define gb_LinkTarget__use_zlib
 $(call gb_LinkTarget__use_zlib_multiarch,$(1),zlib)
-
-endef
-
-define gb_LinkTarget__use_zlib_x64
-$(call gb_LinkTarget__use_zlib_multiarch,$(1),zlib_x64)
 
 endef
 
@@ -534,11 +524,6 @@ endif # SYSTEM_EXPAT
 
 define gb_LinkTarget__use_expat
 $(call gb_LinkTarget__use_expat_impl,$(1),expat)
-
-endef
-
-define gb_LinkTarget__use_expat_x64
-$(call gb_LinkTarget__use_expat_impl,$(1),expat_x64)
 
 endef
 

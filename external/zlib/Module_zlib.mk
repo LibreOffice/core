@@ -14,10 +14,4 @@ $(eval $(call gb_Module_add_targets,zlib,\
 	UnpackedTarball_zlib \
 ))
 
-ifeq ($(BUILD_X64),TRUE)
-$(eval $(call gb_Module_add_targets,zlib,\
-	StaticLibrary_zlib_x64 \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
