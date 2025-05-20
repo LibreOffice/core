@@ -385,7 +385,7 @@ void ORptExport::exportComponent(const Reference<XReportComponent>& _xReportComp
 
 void ORptExport::exportFormatConditions(const Reference<XReportControlModel>& _xReportElement)
 {
-    OSL_ENSURE(_xReportElement.is(),"_xReportElement is NULL -> GPF");
+    assert(_xReportElement.is() && "_xReportElement is NULL -> GPF");
     const sal_Int32 nCount = _xReportElement->getCount();
     try
     {
@@ -409,7 +409,7 @@ void ORptExport::exportFormatConditions(const Reference<XReportControlModel>& _x
 
 void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xReportElement)
 {
-    OSL_ENSURE(_xReportElement.is(),"_xReportElement is NULL -> GPF");
+    assert(_xReportElement.is() && "_xReportElement is NULL -> GPF");
     if ( !_xReportElement->getPrintWhenGroupChange() )
         AddAttribute(XML_NAMESPACE_REPORT, XML_PRINT_WHEN_GROUP_CHANGE, XML_FALSE );
 
@@ -489,7 +489,7 @@ void ORptExport::collectStyleNames(XmlStyleFamily _nFamily, const ::std::vector<
 
 void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
 {
-    OSL_ENSURE(_xProp != nullptr,"Section is NULL -> GPF");
+    assert(_xProp && "Section is NULL -> GPF");
     exportAutoStyle(_xProp);
 
     Reference<XReportDefinition> xReport = _xProp->getReportDefinition();
@@ -689,7 +689,7 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
 
 void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader)
 {
-    OSL_ENSURE(_xSection.is(),"Section is NULL -> GPF");
+    assert(_xSection.is() && "Section is NULL -> GPF");
     AddAttribute(XML_NAMESPACE_TABLE, XML_NAME,_xSection->getName());
 
     if ( !_xSection->getVisible() )
@@ -1019,7 +1019,7 @@ void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
     if ( _nPos >= 0 && _nPos < nCount )
     {
         Reference<XGroup> xGroup(xGroups->getByIndex(_nPos),uno::UNO_QUERY);
-        OSL_ENSURE(xGroup.is(),"No Group prepare for GPF");
+        assert(xGroup.is() && "No Group prepare for GPF");
         if ( _bExportAutoStyle )
         {
             if ( xGroup->getHeaderOn() )
