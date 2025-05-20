@@ -490,6 +490,13 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
             ImplUpdateViews( reinterpret_cast<size_t>(rGalleryHint.GetData1()) + 1 );
         }
         break;
+        case GalleryHintType::ADD_OBJECT:
+        case GalleryHintType::CLOSE_OBJECT:
+        {
+            FillThemeEntries();
+            ImplUpdateViews(0);
+        }
+        break;
 
         default:
         break;
@@ -1500,26 +1507,28 @@ IMPL_LINK(GalleryBrowser1, SelectTbxHdl, weld::Toggleable&, rBox, void)
 
 void GalleryBrowser1::FillThemeEntries()
 {
-        for (size_t i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; ++i)
+    maFoundThemeEntries.clear();
+    maAllThemeEntries.clear();
+    for (size_t i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; ++i)
+    {
+        const GalleryThemeEntry* pThemeInfo = mpGallery->GetThemeInfo( i );
+        OUString aThemeName = pThemeInfo->GetThemeName();
+        //sal_uInt32 nId = pThemeInfo->GetId();
+        if (GalleryTheme* pTheme = mpGallery->AcquireTheme(aThemeName, maLocalListener))
         {
-            const GalleryThemeEntry* pThemeInfo = mpGallery->GetThemeInfo( i );
-            OUString aThemeName = pThemeInfo->GetThemeName();
-            //sal_uInt32 nId = pThemeInfo->GetId();
-            if (GalleryTheme* pTheme = mpGallery->AcquireTheme(aThemeName, maLocalListener))
+            sal_uInt32 nObjectCount = pTheme->GetObjectCount();
+            for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
             {
-                sal_uInt32 nObjectCount = pTheme->GetObjectCount();
-                for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
+                if (std::unique_ptr<SgaObject> xSgaObject = pTheme->AcquireObject(nObject))
                 {
-                    if (std::unique_ptr<SgaObject> xSgaObject = pTheme->AcquireObject(nObject))
-                    {
-                        OUString aTitle = GetItemText(*xSgaObject, GalleryItemFlags::Title);
-                        maAllThemeEntries.push_back(ThemeEntry(aThemeName, aTitle, nObject));
-                    }
+                    OUString aTitle = GetItemText(*xSgaObject, GalleryItemFlags::Title);
+                    maAllThemeEntries.push_back(ThemeEntry(aThemeName, aTitle, nObject));
                 }
-                mpGallery->ReleaseTheme(pTheme, maLocalListener);
             }
+            mpGallery->ReleaseTheme(pTheme, maLocalListener);
         }
-        maFoundThemeEntries.assign(maAllThemeEntries.begin(), maAllThemeEntries.end());
+    }
+    maFoundThemeEntries.assign(maAllThemeEntries.begin(), maAllThemeEntries.end());
 }
 IMPL_LINK(GalleryBrowser1, SearchHdl, weld::Entry&, searchEdit, void)
 {
