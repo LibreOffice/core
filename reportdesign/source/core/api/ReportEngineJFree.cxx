@@ -167,11 +167,10 @@ OUString OReportEngineJFree::getNewOutputName()
     }
     m_xReport->storeToStorage(xTemp,aEmpty); // store to temp file because it may contain information which isn't in the database yet.
 
-    OUString sFileURL;
     OUString sName = m_xReport->getCaption();
     if ( sName.isEmpty() )
         sName = m_xReport->getName();
-    sFileURL = ::utl::CreateTempURL(sName, false, sExt);
+    OUString sFileURL = ::utl::CreateTempURL(sName, false, sExt);
     if ( sFileURL.isEmpty() )
     {
         ::utl::TempFileNamed aTestFile(sName, false, sExt);
