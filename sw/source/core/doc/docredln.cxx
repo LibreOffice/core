@@ -1585,6 +1585,24 @@ void SwRangeRedline::CallDisplayFunc(size_t nMyPos)
         ShowOriginal(0, nMyPos);
 }
 
+namespace
+{
+RedlineType GetRedlineTypeIgnoringAdditonalFormat(const SwRangeRedline& rRedline)
+{
+    RedlineType eType = rRedline.GetType();
+
+    if (eType == RedlineType::Format && rRedline.GetStackCount() > 1
+        && rRedline.GetType(1) == RedlineType::Delete)
+    {
+        // Consider format-on-delete the same as simple delete, so the range gets moved to the
+        // "Deleted Change Tracking content" toplevel section from body content during file save.
+        eType = RedlineType::Delete;
+    }
+
+    return eType;
+}
+}
+
 void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos, bool bForced)
 {
     SwDoc& rDoc = GetDoc();
@@ -1606,7 +1624,7 @@ void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos, bool bForced)
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
-    switch( GetType() )
+    switch (GetRedlineTypeIgnoringAdditonalFormat(*this))
     {
     case RedlineType::Insert:           // Content has been inserted
         m_bIsVisible = true;
@@ -1646,7 +1664,7 @@ void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos, bool /*bForced*/)
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
-    switch( GetType() )
+    switch (GetRedlineTypeIgnoringAdditonalFormat(*this))
     {
     case RedlineType::Insert:           // Content has been inserted
         m_bIsVisible = true;

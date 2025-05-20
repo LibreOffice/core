@@ -1286,6 +1286,27 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testNestedSpans)
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, fWeight);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDeleteThenFormatOdtExport)
+{
+    // Given a document that has a delete redline, and then a format redline on top of it:
+    loadFromFile(u"del-then-format.docx");
+
+    // When exporting that to DOCX:
+    save(u"writer8"_ustr);
+
+    // Then make sure <text:changed-region> not only has the <text:format-change> child, but also an
+    // <text:deletion> one, with text:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//text:tracked-changes/text:changed-region[2]/text:deletion' number of nodes is incorrect
+    // i.e. <text:insertion> was written for a delete-then-format.
+    assertXPath(pXmlDoc, "//text:tracked-changes/text:changed-region[2]/text:deletion");
+    // Also the delete's text was in the body text.
+    assertXPath(pXmlDoc, "//text:tracked-changes/text:changed-region[2]/text:deletion/text:p");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

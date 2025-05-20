@@ -176,6 +176,22 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRa
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
     if(pNext)
     {
+        uno::Reference<text::XText> xRedlineText;
+        if (pNext->GetType() == RedlineType::Delete)
+        {
+            // Something on delete: produce the XText for the underlying delete.
+            const SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
+            if (pNodeIdx
+                && (pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex())
+                       > SwNodeOffset(1))
+            {
+                // We have at least one node between the start and end node, create the
+                // SwXRedlineText.
+                SwDoc& rDoc = rRedline.GetDoc();
+                xRedlineText = new SwXRedlineText(&rDoc, *pNodeIdx);
+            }
+        }
+
         return
         {
             // GetAuthorString(n) walks the SwRedlineData* chain;
@@ -183,10 +199,11 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRa
             comphelper::makePropertyValue(UNO_NAME_REDLINE_AUTHOR, rRedline.GetAuthorString(1)),
             comphelper::makePropertyValue(UNO_NAME_REDLINE_DATE_TIME, pNext->GetTimeStamp().GetUNODateTime()),
             comphelper::makePropertyValue(UNO_NAME_REDLINE_COMMENT, pNext->GetComment()),
-            comphelper::makePropertyValue(UNO_NAME_REDLINE_TYPE, SwRedlineTypeToOUString(pNext->GetType()))
+            comphelper::makePropertyValue(UNO_NAME_REDLINE_TYPE, SwRedlineTypeToOUString(pNext->GetType())),
+            comphelper::makePropertyValue(UNO_NAME_REDLINE_TEXT, xRedlineText)
         };
     }
-    return uno::Sequence<beans::PropertyValue>(4);
+    return uno::Sequence<beans::PropertyValue>(5);
 }
 
 uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )

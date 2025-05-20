@@ -4135,4 +4135,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:text/>
     </rng:element>
   </rng:define>
+
+  <!-- TODO(vmiklos) no proposal for insert/delete redline under another redline -->
+  <rng:define name="text-changed-region" combine="choice">
+    <rng:element name="text:changed-region">
+      <rng:ref name="text-changed-region-attr"/>
+      <rng:ref name="text-changed-region-content"/>
+      <rng:optional>
+        <rng:ref name="text-changed-region-content"/>
+      </rng:optional>
+    </rng:element>
+  </rng:define>
 </rng:grammar>
