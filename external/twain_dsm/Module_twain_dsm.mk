@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,twain_dsm))
 
 ifeq ($(OS),WNT)
-ifeq ($(BUILD_X86),TRUE)
+ifneq ($(CXX_X86_BINARY),)
 $(eval $(call gb_Module_add_targets,twain_dsm,\
     UnpackedTarball_twain_dsm \
 ))

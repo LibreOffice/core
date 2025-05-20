@@ -4684,47 +4684,21 @@ if test "$_os" = "WINNT"; then
         add_warning "You should have at least Visual Studio 2019 version 16.10 to avoid build problems. Otherwise, you may face problems with the build of some modules including dragonbox."
     fi
 
-    # Check for 64-bit (cross-)compiler to use to build the 64-bit
-    # version of the Explorer extension (and maybe other small
-    # bits, too) needed when installing a 32-bit LibreOffice on a
-    # 64-bit OS. The 64-bit Explorer extension is a feature that
-    # has been present since long in OOo. Don't confuse it with
-    # building LibreOffice itself as 64-bit code.
-
-    BUILD_X64=
-    CXX_X64_BINARY=
-
-    if test "$WIN_HOST_ARCH" = "x86" -a -n "$WIN_OTHER_ARCH"; then
-        AC_MSG_CHECKING([for the libraries to build the 64-bit Explorer extensions])
-        if test -f "$COMPATH/atlmfc/lib/x64/atls.lib" -o \
-             -f "$COMPATH/atlmfc/lib/spectre/x64/atls.lib"
-        then
-            BUILD_X64=TRUE
-            CXX_X64_BINARY=`win_short_path_for_make "$MSVC_MULTI_PATH/cl.exe"`
-            AC_MSG_RESULT([found])
-        else
-            AC_MSG_RESULT([not found])
-            AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
-        fi
-    elif test "$WIN_HOST_ARCH" = "x64"; then
-        CXX_X64_BINARY=$CXX
-    fi
-    AC_SUBST(BUILD_X64)
-
-    # These are passed to the environment and then used in gbuild/platform/com_MSC_class.mk
-    AC_SUBST(CXX_X64_BINARY)
+    # we used to build 64bit bits for 32bit windows (explorer shell extension, activex, similar)
+    # dating back when there was no 64bit version of LibreOffice yet (pre 5.0)
+    # now (since 25.8) we only care about the inverse, building the 32bit twain and activex spsupp
+    # lib when targeting/building the 64bit version for Windows
 
     # Check for 32-bit compiler to use to build the 32-bit TWAIN shim
     # needed to support TWAIN scan on both 32- and 64-bit systems
 
     case "$WIN_HOST_ARCH" in
     x64)
+        CXX_X64_BINARY=$CXX
         AC_MSG_CHECKING([for a x86 compiler and libraries for 32-bit binaries required for TWAIN support])
         if test -n "$CXX_X86_BINARY"; then
-            BUILD_X86=TRUE
-            AC_MSG_RESULT([preset])
+            AC_MSG_RESULT([provided via environment variable])
         elif test -n "$WIN_MULTI_ARCH"; then
-            BUILD_X86=TRUE
             CXX_X86_BINARY=`win_short_path_for_make "$MSVC_MULTI_PATH/cl.exe"`
             AC_MSG_RESULT([found])
         else
@@ -4733,11 +4707,11 @@ if test "$_os" = "WINNT"; then
         fi
         ;;
     x86)
-        BUILD_X86=TRUE
         CXX_X86_BINARY=$MSVC_CXX
         ;;
     esac
-    AC_SUBST(BUILD_X86)
+    # These are passed to the environment and then used in gbuild/platform/com_MSC_class.mk
+    AC_SUBST(CXX_X64_BINARY)
     AC_SUBST(CXX_X86_BINARY)
 fi
 AC_SUBST(VCVER)
@@ -7173,26 +7147,11 @@ find_msms()
     local version="$1"
 
     AC_MSG_CHECKING([for MSVC $version merge modules directory])
-    local my_msm_file="Microsoft_VC${version}_CRT_x86.msm"
-    local my_msm_dir
-
-    echo "$as_me:$LINENO: searching for $my_msm_file" >&5
-
-    msmdir=
-    case "$VCVER" in
-    16.0 | 17.0 | 17.14)
-        for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
-            my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
-            echo "$as_me:$LINENO: looking for $my_msm_dir${my_msm_file}])" >&5
-            if test -e "$my_msm_dir${my_msm_file}"; then
-                msmdir=$my_msm_dir
-            fi
-        done
-        ;;
-    esac
-
-    if test -n "$msmdir"; then
-        PathFormat "$msmdir"
+    local my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/${version}/MergeModules"
+    local my_msm_file="$my_msm_dir/Microsoft_VC${version}_CRT_x86.msm"
+    echo "$as_me:$LINENO: looking for ${my_msm_file}" >&5
+    if test -e "${my_msm_file}"; then
+        PathFormat "$my_msm_dir/"
         msmdir="$formatted_path"
         AC_MSG_RESULT([$msmdir])
     else
@@ -7203,40 +7162,6 @@ find_msms()
             add_warning "MSM ${my_msm_file} not found"
         fi
     fi
-}
-
-find_msvc_x64_dlls()
-{
-    # Return value: $msvcdllpath, $msvcdlls
-
-    AC_MSG_CHECKING([for MSVC x64 DLL path])
-
-    dnl Order crtver in increasing order. Then check the directories returned by
-    dnl ls in an inner loop; assuming they are also ordered in increasing order,
-    dnl the result will be the highest CRT version found in the highest directory.
-
-    msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
-    case "$VCVER" in
-    16.0 | 17.0 | 17.14)
-        for crtver in 141 142 143; do
-            for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
-                echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC$crtver.CRT" >&5
-                if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC$crtver.CRT"; then
-                    msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC$crtver.CRT"
-                fi
-            done
-        done
-        ;;
-    esac
-    AC_MSG_RESULT([$msvcdllpath])
-    AC_MSG_CHECKING([for MSVC x64 DLLs])
-    msvcdlls="msvcp140.dll vcruntime140.dll"
-    for dll in $msvcdlls; do
-        if ! test -f "$msvcdllpath/$dll"; then
-            AC_MSG_FAILURE([missing $dll])
-        fi
-    done
-    AC_MSG_RESULT([found all ($msvcdlls)])
 }
 
 dnl =========================================
@@ -9046,18 +8971,10 @@ fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
 if test $_os = "WINNT"; then
-    find_msvc_x64_dlls
-    MSVC_DLL_PATH=`win_short_path_for_make "$msvcdllpath"`
-    MSVC_DLLS="$msvcdlls"
-    if echo "$msvcdllpath" | grep -q "VC143.CRT$"; then
-        with_redist=143
-    elif echo "$msvcdllpath" | grep -q "VC142.CRT$"; then
-        with_redist=142
-    elif echo "$msvcdllpath" | grep -q "VC141.CRT$"; then
-        with_redist=141
-    fi
     for i in $PKGFORMAT; do
         if test "$i" = msi; then
+            dnl strip initial v from the version label found by find_msvc
+            with_vcredis=${VCTOOLSET:1}
             find_msms "$with_redist"
             if test -n "$msmdir"; then
                 MSM_PATH=`win_short_path_for_make "$msmdir"`/
@@ -9068,8 +8985,6 @@ if test $_os = "WINNT"; then
     done
 fi
 
-AC_SUBST(MSVC_DLL_PATH)
-AC_SUBST(MSVC_DLLS)
 AC_SUBST(MSM_PATH)
 
 
