@@ -246,47 +246,45 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
 
 uno::Reference< frame::XModel > OReportEngineJFree::createDocumentAlive( const uno::Reference< frame::XFrame >& _frame,bool _bHidden )
 {
-    uno::Reference< frame::XModel > xModel;
     OUString sOutputName = getNewOutputName(); // starts implicitly the report generator
-    if ( !sOutputName.isEmpty() )
+    if (sOutputName.isEmpty())
+        return nullptr;
+
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportEngineBase::rBHelper.bDisposed);
+    uno::Reference<frame::XComponentLoader> xFrameLoad(_frame,uno::UNO_QUERY);
+    if ( !xFrameLoad.is() )
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        ::connectivity::checkDisposed(ReportEngineBase::rBHelper.bDisposed);
-        uno::Reference<frame::XComponentLoader> xFrameLoad(_frame,uno::UNO_QUERY);
-        if ( !xFrameLoad.is() )
-        {
-            // if there is no frame given, find the right
-            xFrameLoad = frame::Desktop::create(m_xContext);
-            sal_Int32 const nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-            uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY_THROW)->findFrame(u"_blank"_ustr,nFrameSearchFlag);
-            xFrameLoad.set( xFrame,uno::UNO_QUERY);
-        }
-
-        if ( xFrameLoad.is() )
-        {
-            uno::Sequence < beans::PropertyValue > aArgs( _bHidden ? 3 : 2 );
-            auto pArgs = aArgs.getArray();
-            sal_Int32 nLen = 0;
-            pArgs[nLen].Name = "AsTemplate";
-            pArgs[nLen++].Value <<= false;
-
-            pArgs[nLen].Name = "ReadOnly";
-            pArgs[nLen++].Value <<= true;
-
-            if ( _bHidden )
-            {
-                pArgs[nLen].Name = "Hidden";
-                pArgs[nLen++].Value <<= true;
-            }
-
-            xModel.set( xFrameLoad->loadComponentFromURL(
-                sOutputName,
-                OUString(), // empty frame name
-                0,
-                aArgs
-                ),uno::UNO_QUERY);
-        }
+        // if there is no frame given, find the right
+        xFrameLoad = frame::Desktop::create(m_xContext);
+        sal_Int32 const nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
+        uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY_THROW)->findFrame(u"_blank"_ustr,nFrameSearchFlag);
+        xFrameLoad.set( xFrame,uno::UNO_QUERY);
     }
+
+    if (!xFrameLoad.is())
+        return nullptr;
+
+    uno::Sequence < beans::PropertyValue > aArgs( _bHidden ? 3 : 2 );
+    auto pArgs = aArgs.getArray();
+    sal_Int32 nLen = 0;
+    pArgs[nLen].Name = "AsTemplate";
+    pArgs[nLen++].Value <<= false;
+
+    pArgs[nLen].Name = "ReadOnly";
+    pArgs[nLen++].Value <<= true;
+
+    if ( _bHidden )
+    {
+        pArgs[nLen].Name = "Hidden";
+        pArgs[nLen++].Value <<= true;
+    }
+
+    uno::Reference<frame::XModel> xModel(
+        xFrameLoad->loadComponentFromURL(sOutputName,
+                                         OUString(), // empty frame name
+                                         0, aArgs),
+        uno::UNO_QUERY);
     return xModel;
 }
 
