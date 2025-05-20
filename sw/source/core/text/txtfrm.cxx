@@ -3596,11 +3596,11 @@ SwTwips SwTextFrame::GetParHeight() const
     if( !HasPara() )
     {   // For non-empty paragraphs this is a special case
         // For UnderSized we can simply just ask 1 Twip more
-        sal_uInt16 nRet = o3tl::narrowing<sal_uInt16>(getFramePrintArea().SSize().Height());
+        SwTwips nRet = getFramePrintArea().SSize().Height();
         if( IsUndersized() )
         {
             if( IsEmpty() || GetText().isEmpty() )
-                nRet = o3tl::narrowing<sal_uInt16>(EmptyHeight());
+                nRet = EmptyHeight();
             else
                 ++nRet;
         }
@@ -3724,16 +3724,8 @@ SwTwips SwTextFrame::CalcFitToContent()
     if ( pTextNode->IsNumbered(getRootFrame()) &&
         pTextNode->IsCountedInList() && pTextNode->GetNumRule() )
     {
-        int nListLevel = pTextNode->GetActualListLevel();
-
-        if (nListLevel < 0)
-            nListLevel = 0;
-
-        if (nListLevel >= MAXLEVEL)
-            nListLevel = MAXLEVEL - 1;
-
-        const SwNumFormat& rNumFormat =
-                pTextNode->GetNumRule()->Get( o3tl::narrowing<sal_uInt16>(nListLevel) );
+        sal_uInt16 nListLevel = std::clamp(pTextNode->GetActualListLevel(), 0, MAXLEVEL - 1);
+        const SwNumFormat& rNumFormat = pTextNode->GetNumRule()->Get(nListLevel);
         if ( rNumFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             const SwAttrSet& rSet = pTextNode->GetSwAttrSet();
@@ -3769,16 +3761,8 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
         pTextNode->IsCountedInList() && pTextNode->GetNumRule()))
         return;
 
-    int nListLevel = pTextNode->GetActualListLevel();
-
-    if (nListLevel < 0)
-        nListLevel = 0;
-
-    if (nListLevel >= MAXLEVEL)
-        nListLevel = MAXLEVEL - 1;
-
-    const SwNumFormat& rNumFormat =
-            pTextNode->GetNumRule()->Get( o3tl::narrowing<sal_uInt16>(nListLevel) );
+    sal_uInt16 nListLevel = std::clamp(pTextNode->GetActualListLevel(), 0, MAXLEVEL - 1);
+    const SwNumFormat& rNumFormat = pTextNode->GetNumRule()->Get(nListLevel);
     if ( rNumFormat.GetPositionAndSpaceMode() != SvxNumberFormat::LABEL_ALIGNMENT )
         return;
 
