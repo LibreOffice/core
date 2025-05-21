@@ -29,7 +29,6 @@
 #include <rtl/character.hxx>
 #include <o3tl/string_view.hxx>
 #include <utility>
-#include <vector>
 
 SbiScanner::SbiScanner(OUString _aBuf, StarBASIC* p)
     : aBuf(std::move(_aBuf))
@@ -211,14 +210,14 @@ bool SbiScanner::readLine()
 }
 
 // Function to check if a string is a valid compiler directive
-static bool isValidCompilerDirective(std::u16string_view directive) {
-    static const std::vector<std::u16string_view> validDirectives = {
-        u"if", u"elseif", u"else", u"end", u"const"
-    };
+static bool isValidCompilerDirective(std::u16string_view directive)
+{
+    static constexpr std::string_view validDirectives[]
+        = { "if", "elseif", "else", "end", "const" };
 
-    return std::any_of(validDirectives.begin(), validDirectives.end(), [&](const auto& valid) {
-        return o3tl::matchIgnoreAsciiCase(directive, valid);
-    });
+    return std::any_of(std::begin(validDirectives), std::end(validDirectives),
+                       [&directive](const auto& valid)
+                       { return o3tl::matchIgnoreAsciiCase(directive, valid); });
 }
 
 bool SbiScanner::NextSym()
