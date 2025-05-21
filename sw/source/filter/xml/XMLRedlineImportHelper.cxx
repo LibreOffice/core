@@ -640,6 +640,23 @@ static auto RecursiveContains(SwStartNode const& rRedlineSection, SwNode const& 
     return false;
 }
 
+namespace
+{
+/// Similar to GetRedlineTypeIgnoringAdditonalFormat(), but for import purposes.
+RedlineType GetRedlineTypeIgnoringAdditonalFormatForImport(RedlineInfo& rRedlineInfo)
+{
+    RedlineType eType = rRedlineInfo.eType;
+
+    if (eType == RedlineType::Format && rRedlineInfo.pNextRedline
+        && rRedlineInfo.pNextRedline->eType == RedlineType::Delete)
+    {
+        eType = RedlineType::Delete;
+    }
+
+    return eType;
+}
+}
+
 void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 {
     assert(pRedlineInfo && "need redline info");
@@ -741,7 +758,8 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // the already inserted redlines temporarily and inserting them back in reverse
         // order after inserting pRedline
         std::vector<const SwRangeRedline*> aSwapRedlines;
-        if ( RedlineType::Delete == pRedlineInfo->eType )
+        // Move both delete and format-on-delete redlines to aSwapRedlines.
+        if (GetRedlineTypeIgnoringAdditonalFormatForImport(*pRedlineInfo) == RedlineType::Delete)
         {
             SwRedlineTable::size_type n = 0;
             while ( const SwRangeRedline* pRedline2 =
@@ -793,13 +811,19 @@ bool CanCombineTypesForImport(RedlineInfo* pRedlineInfo)
         return false;
     }
 
+    RedlineType eOuterType = pRedlineInfo->eType;
     RedlineType eInnerType = pRedlineInfo->pNextRedline->eType;
+    if (eInnerType == RedlineType::Delete)
+    {
+        // Delete can only have format on it.
+        return eOuterType == RedlineType::Format;
+    }
+
     if (eInnerType != RedlineType::Insert)
     {
         return false;
     }
 
-    RedlineType eOuterType = pRedlineInfo->eType;
     switch (eOuterType)
     {
         case RedlineType::Delete:
