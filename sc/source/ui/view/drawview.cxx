@@ -380,7 +380,8 @@ void ScDrawView::MarkListHasChanged()
     if (nMarkCount == 1)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if (pObj->GetObjIdentifier() == SdrObjKind::OLE2)
+        SdrObjKind nSdrObjKind = pObj->GetObjIdentifier();
+        if (nSdrObjKind == SdrObjKind::OLE2)
         {
             pOle2Obj = static_cast<SdrOle2Obj*>(pObj);
             if (!ScDocument::IsChart(pObj) )
@@ -389,21 +390,27 @@ void ScDrawView::MarkListHasChanged()
                 pViewSh->SetChartShell(true);
             bSubShellSet = true;
         }
-        else if (pObj->GetObjIdentifier() == SdrObjKind::Graphic)
+        else if (nSdrObjKind == SdrObjKind::Graphic)
         {
             pGrafObj = static_cast<SdrGrafObj*>(pObj);
             pViewSh->SetGraphicShell(true);
             bSubShellSet = true;
         }
-        else if (pObj->GetObjIdentifier() == SdrObjKind::Media)
+        else if (nSdrObjKind == SdrObjKind::Media)
         {
             pViewSh->SetMediaShell(true);
             bSubShellSet = true;
         }
-        else if (pObj->GetObjIdentifier() != SdrObjKind::Text   // prevent switching to the drawing shell
-                    && !pViewSh->IsDrawTextShell())     // when creating a text object @#70206#
+        else if (nSdrObjKind == SdrObjKind::Text)
         {
-            // tdf#166481: we only need to switch to draw shell if we have not already created a text shell for text edit mode
+            // prevent switching to the drawing shell
+            if (!pViewSh->IsDrawTextShell()) // when creating a text object @#70206#
+                pViewSh->SetDrawShell(true);
+        }
+        else if (nSdrObjKind != SdrObjKind::Text && !pViewSh->IsDrawTextShell())
+        {
+            // tdf#166481: we only need to switch to draw shell if we have not
+            // already created a text shell for text edit mode
             pViewSh->SetDrawShell(true);
         }
     }
