@@ -179,15 +179,6 @@ protected:
     // XTypeProvider
     DECLARE_XTYPEPROVIDER( )
 
-    // XAccessibleContext
-    /// @throws css::uno::RuntimeException
-    sal_Int64 baseGetAccessibleChildCount(  );
-    /// @throws css::lang::IndexOutOfBoundsException
-    /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::accessibility::XAccessible > baseGetAccessibleChild( sal_Int64 i );
-    /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::accessibility::XAccessibleRelationSet > baseGetAccessibleRelationSet(  );
-
     // XAccessibleEventListener
     virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override final;
 

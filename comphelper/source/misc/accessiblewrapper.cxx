@@ -380,29 +380,6 @@ Any SAL_CALL OAccessibleContextWrapperHelper::queryInterface( const Type& _rType
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleContextWrapperHelper, OComponentProxyAggregationHelper, OAccessibleContextWrapperHelper_Base )
 
-
-sal_Int64 OAccessibleContextWrapperHelper::baseGetAccessibleChildCount(  )
-{
-    return m_xInnerContext->getAccessibleChildCount();
-}
-
-
-Reference< XAccessible > OAccessibleContextWrapperHelper::baseGetAccessibleChild( sal_Int64 i )
-{
-    // get the child of the wrapped component
-    Reference< XAccessible > xInnerChild = m_xInnerContext->getAccessibleChild( i );
-    return m_xChildMapper->getAccessibleWrapperFor( xInnerChild );
-}
-
-
-Reference< XAccessibleRelationSet > OAccessibleContextWrapperHelper::baseGetAccessibleRelationSet(  )
-{
-    return m_xInnerContext->getAccessibleRelationSet();
-        // TODO: if this relation set would contain relations to siblings, we would normally need
-        // to wrap them, too...
-}
-
-
 void SAL_CALL OAccessibleContextWrapperHelper::notifyEvent( const AccessibleEventObject& _rEvent )
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -489,13 +466,15 @@ OAccessibleContextWrapper::~OAccessibleContextWrapper()
 
 sal_Int64 SAL_CALL OAccessibleContextWrapper::getAccessibleChildCount(  )
 {
-    return baseGetAccessibleChildCount();
+    return m_xInnerContext->getAccessibleChildCount();
 }
 
 
 Reference< XAccessible > SAL_CALL OAccessibleContextWrapper::getAccessibleChild( sal_Int64 i )
 {
-    return baseGetAccessibleChild( i );
+    // get the child of the wrapped component
+    Reference<XAccessible> xInnerChild = m_xInnerContext->getAccessibleChild(i);
+    return m_xChildMapper->getAccessibleWrapperFor(xInnerChild);
 }
 
 
@@ -531,7 +510,9 @@ OUString SAL_CALL OAccessibleContextWrapper::getAccessibleName(  )
 
 Reference< XAccessibleRelationSet > SAL_CALL OAccessibleContextWrapper::getAccessibleRelationSet(  )
 {
-    return baseGetAccessibleRelationSet();
+    return m_xInnerContext->getAccessibleRelationSet();
+        // TODO: if this relation set would contain relations to siblings, we would normally need
+        // to wrap them, too...
 }
 
 
