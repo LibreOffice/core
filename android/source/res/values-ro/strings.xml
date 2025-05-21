@@ -7,4 +7,7 @@
     <string name="app_credits">https://www.libreoffice.org</string>
     <string name="app_vendor">Această versiune a fost furnizată de $VENDOR.</string>
     <string name="readonly_file">Acest fișier este în modul doar citire.</string>
+    <string name="about_license">Afișează licența</string>
+    <string name="about_notice">Afișează notificarea</string>
+    <string name="about_privacy_policy">Politica de confidențialitate</string>
 </resources>
