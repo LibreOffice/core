@@ -43,8 +43,8 @@ public:
     virtual ~ScXMLCellImportPropertyMapper() override;
 
     /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
-    virtual void finished(
-            ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const override;
+    virtual void finished(std::vector<XMLPropertyState>& rProperties, sal_Int32 nStartIndex,
+                          sal_Int32 nEndIndex, const sal_uInt32 nPropType) const override;
 };
 
 class ScXMLRowImportPropertyMapper : public SvXMLImportPropertyMapper
@@ -59,8 +59,8 @@ public:
     virtual ~ScXMLRowImportPropertyMapper() override;
 
     /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
-    virtual void finished(
-            ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const override;
+    virtual void finished(std::vector<XMLPropertyState>& rProperties, sal_Int32 nStartIndex,
+                          sal_Int32 nEndIndex, const sal_uInt32 nPropType) const override;
 };
 
 class XMLTableStylesContext;

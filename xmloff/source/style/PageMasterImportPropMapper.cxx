@@ -85,9 +85,11 @@ bool PageMasterImportPropertyMapper::handleSpecialItem(
 }
 
 
-void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
+void PageMasterImportPropertyMapper::finished(std::vector<XMLPropertyState>& rProperties,
+                                              sal_Int32 nStartIndex, sal_Int32 nEndIndex,
+                                              const sal_uInt32 nPropType) const
 {
-    SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
+    SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex, nPropType);
     XMLPropertyState* pAllPaddingProperty = nullptr;
     XMLPropertyState* pPadding[4] = { nullptr, nullptr, nullptr, nullptr };
     XMLPropertyState* pNewPadding[4] = { nullptr, nullptr, nullptr, nullptr };
