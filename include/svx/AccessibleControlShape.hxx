@@ -165,6 +165,9 @@ private:
     */
     void        initializeComposedState( );
 
+    /// determines whether the control is in alive mode
+    bool isControlInAliveMode();
+
     AccessibleControlShape(const AccessibleControlShape&) = delete;
     AccessibleControlShape& operator= (const AccessibleControlShape&) = delete;
 

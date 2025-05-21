@@ -89,13 +89,6 @@ namespace
                 &&  ( AccessibleStateType::VISIBLE != _nState )
                 );
     }
-
-    /// determines whether the given control is in alive mode
-    bool    isAliveMode( const Reference< XControl >& _rxControl )
-    {
-        OSL_PRECOND( _rxControl.is(), "AccessibleControlShape::isAliveMode: invalid control" );
-        return _rxControl.is() && !_rxControl->isDesignMode();
-    }
 }
 
 AccessibleControlShape::AccessibleControlShape (
@@ -214,7 +207,7 @@ void AccessibleControlShape::Init()
             m_aControlContext = WeakReference< XAccessibleContext >( xNativeControlContext );
 
             // add as listener to the context - we want to multiplex some states
-            if ( isAliveMode( m_xUnoControl ) && xNativeControlContext.is() )
+            if (isControlInAliveMode() && xNativeControlContext.is() )
             {   // (but only in alive mode)
                 startStateMultiplexing( );
             }
@@ -224,7 +217,7 @@ void AccessibleControlShape::Init()
             initializeComposedState();
 
             // some initialization for our child manager, which is used in alive mode only
-            if ( isAliveMode( m_xUnoControl ) )
+            if (isControlInAliveMode())
             {
                 sal_Int64 nStates( getAccessibleStateSet( ) );
                 m_pChildManager->setTransientChildren( nStates & AccessibleStateType::MANAGES_DESCENDANTS );
@@ -266,7 +259,7 @@ void AccessibleControlShape::Init()
 
 void SAL_CALL AccessibleControlShape::grabFocus()
 {
-    if ( !m_xUnoControl.is() || !isAliveMode( m_xUnoControl ) )
+    if (!m_xUnoControl.is() || !isControlInAliveMode())
     {
         // in design mode, we simply forward the request to the base class
         AccessibleShape::grabFocus();
@@ -486,7 +479,7 @@ sal_Int64 SAL_CALL AccessibleControlShape::getAccessibleChildCount( )
 {
     if ( !m_xUnoControl.is() )
         return 0;
-    else if ( !isAliveMode( m_xUnoControl ) )
+    else if (!isControlInAliveMode())
         // no special action required when in design mode
         return AccessibleShape::getAccessibleChildCount( );
     else
@@ -506,7 +499,7 @@ Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sa
     {
         throw IndexOutOfBoundsException();
     }
-    if ( !isAliveMode( m_xUnoControl ) )
+    if (!isControlInAliveMode())
     {
         // no special action required when in design mode - let the base class handle this
         xChild = AccessibleShape::getAccessibleChild( i );
@@ -679,7 +672,7 @@ void AccessibleControlShape::startStateMultiplexing()
 
 #if OSL_DEBUG_LEVEL > 0
     // we should have a control, and it should be in alive mode
-    OSL_PRECOND( isAliveMode( m_xUnoControl ),
+    OSL_PRECOND(isControlInAliveMode(),
         "AccessibleControlShape::startStateMultiplexing: should be done in alive mode only!" );
 #endif
     // we should have the native context of the control
@@ -731,7 +724,7 @@ OUString AccessibleControlShape::getControlModelStringProperty( const OUString& 
 void AccessibleControlShape::adjustAccessibleRole( )
 {
     // if we're in design mode, we are a simple SHAPE, in alive mode, we use the role of our inner context
-    if ( !isAliveMode( m_xUnoControl ) )
+    if (!isControlInAliveMode())
         return;
 
     // we're in alive mode -> determine the role of the inner context
@@ -745,7 +738,7 @@ void AccessibleControlShape::adjustAccessibleRole( )
 
 bool AccessibleControlShape::SetState( sal_Int64 _nState )
 {
-    OSL_ENSURE( !isAliveMode( m_xUnoControl ) || !isComposedState( _nState ),
+    OSL_ENSURE(!isControlInAliveMode() || !isComposedState(_nState),
         "AccessibleControlShape::SetState: a state which should be determined by the control context is set from outside!" );
     return AccessibleShape::SetState( _nState );
 }
@@ -753,7 +746,7 @@ bool AccessibleControlShape::SetState( sal_Int64 _nState )
 
 void AccessibleControlShape::initializeComposedState()
 {
-    if ( !isAliveMode( m_xUnoControl ) )
+    if (!isControlInAliveMode())
         // no action necessary for design mode
         return;
 
@@ -782,6 +775,12 @@ void AccessibleControlShape::initializeComposedState()
             mnStateSet |= nState;
         }
     }
+}
+
+bool AccessibleControlShape::isControlInAliveMode()
+{
+    OSL_PRECOND(m_xUnoControl.is(), "AccessibleControlShape::isAliveMode: invalid control");
+    return m_xUnoControl.is() && !m_xUnoControl->isDesignMode();
 }
 
 void SAL_CALL AccessibleControlShape::elementInserted( const css::container::ContainerEvent& _rEvent )
