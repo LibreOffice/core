@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 #include <tools/urlobj.hxx>
 
 #include <vcl/window.hxx>
@@ -122,14 +123,14 @@ void SAL_CALL RunDialog::windowOpened(const css::lang::EventObject& e)
 
     //Don't popdown dialogs if a tooltip appears elsewhere, that's ok, but do pop down
     //if another dialog/frame is launched.
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible(e.Source, css::uno::UNO_QUERY);
-    if (xAccessible.is())
+    css::uno::Reference<css::awt::XWindow> xWindow(e.Source, css::uno::UNO_QUERY);
+    if (xWindow.is())
     {
-        css::uno::Reference<css::accessibility::XAccessibleContext> xContext(xAccessible->getAccessibleContext());
-        if (xContext.is() && xContext->getAccessibleRole() == css::accessibility::AccessibleRole::TOOL_TIP)
-        {
+        UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
+        assert(pWrapper);
+        VclPtr<vcl::Window> pWindow = pWrapper->GetWindow(xWindow);
+        if (pWindow && pWindow->GetType() == WindowType::HELPTEXTWINDOW)
             return;
-        }
     }
 
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, nullptr);
