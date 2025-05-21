@@ -76,6 +76,9 @@ public:
     static bool IsThemeReset() { return GetThemeState() == ThemeState::RESET; }
     static void ResetTheme() { SetThemeState(ThemeState::RESET); }
 
+    static bool UseOnlyWhiteDocBackground();
+    static void SetUseOnlyWhiteDocBackground(bool bFlag);
+
     // !IsThemeCached means that the ThemeColors object doesn't have the colors from the registry yet.
     // IsThemeReset means that the user pressed the Reset All  button and the UI colors in the registry
     //      are not valid anymore => read from the system again
