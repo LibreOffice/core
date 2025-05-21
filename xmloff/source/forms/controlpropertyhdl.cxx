@@ -212,13 +212,8 @@ namespace xmloff
                 if ( SvXMLUnitConverter::convertEnum( nStyle, sToken, aBorderTypeMap ) )
                 {
                     _rValue <<= nStyle;
+                    return true;
                 }
-                else
-                {
-                    // The internal LO default is flat, which deviates from the import default of 3d
-                    _rValue <<= sal_uInt16(1);
-                }
-                return true;
             }
 
             // try interpreting it as color value

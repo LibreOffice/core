@@ -94,9 +94,8 @@ public:
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const override;
 
-    virtual void finished(
-        ::std::vector< XMLPropertyState >& rProperties,
-        sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const override;
+    virtual void finished(std::vector<XMLPropertyState>& rProperties, sal_Int32 nStartIndex,
+                          sal_Int32 nEndIndex, const sal_uInt32 nPropType) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
