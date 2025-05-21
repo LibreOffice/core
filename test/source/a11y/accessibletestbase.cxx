@@ -30,9 +30,11 @@
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -82,7 +84,10 @@ void test::AccessibleTestBase::loadFromSrc(const rtl::OUString& sSrcPath)
 uno::Reference<accessibility::XAccessibleContext>
 test::AccessibleTestBase::getWindowAccessibleContext()
 {
-    uno::Reference<accessibility::XAccessible> xAccessible(mxWindow, uno::UNO_QUERY_THROW);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
+    assert(pWindow);
+    css::uno::Reference<css::accessibility::XAccessible> xAccessible = pWindow->GetAccessible();
+    assert(xAccessible.is());
 
     return xAccessible->getAccessibleContext();
 }
