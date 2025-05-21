@@ -71,6 +71,8 @@
 #include <cellvalue.hxx>
 #include <columnspanset.hxx>
 #include <dbdata.hxx>
+#include <cellsuno.hxx>
+#include <fmtuno.hxx>
 
 #include <svl/stritem.hxx>
 #include <editeng/eeitem.hxx>
@@ -229,7 +231,7 @@ public:
     /** Returns the XCellRange interface for the passed cell range address. */
     Reference< XCellRange > getCellRange( const ScRange& rRange ) const;
     /** Returns the XSheetCellRanges interface for the passed cell range addresses. */
-    Reference< XSheetCellRanges > getCellRangeList( const ScRangeList& rRanges ) const;
+    rtl::Reference<ScCellRangesObj> getCellRangeList( const ScRangeList& rRanges ) const;
 
     /** Returns the XCellRange interface for a column. */
     Reference< XCellRange > getColumn( sal_Int32 nCol ) const;
@@ -402,8 +404,6 @@ private:
     bool                mbHasDefWidth;      /// True = default column width is set from defaultColWidth attribute.
 };
 
-constexpr OUStringLiteral gaSheetCellRanges( u"com.sun.star.sheet.SheetCellRanges" ); /// Service name for a SheetCellRanges object.
-
 WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, SCTAB nSheet ) :
     WorkbookHelper( rHelper ),
     mrMaxApiPos( rHelper.getAddressConverter().getMaxApiAddress() ),
@@ -479,17 +479,14 @@ Reference< XCellRange > WorksheetGlobals::getCellRange( const ScRange& rRange ) 
     return xRange;
 }
 
-Reference< XSheetCellRanges > WorksheetGlobals::getCellRangeList( const ScRangeList& rRanges ) const
+rtl::Reference<ScCellRangesObj> WorksheetGlobals::getCellRangeList( const ScRangeList& rRanges ) const
 {
-    Reference< XSheetCellRanges > xRanges;
-    if( mxSheet.is() && !rRanges.empty() ) try
+    rtl::Reference<ScCellRangesObj> xRanges;
+    if( mxSheet.is() && !rRanges.empty() )
     {
-        xRanges.set( getBaseFilter().getModelFactory()->createInstance( gaSheetCellRanges ), UNO_QUERY_THROW );
-        Reference< XSheetCellRangeContainer > xRangeCont( xRanges, UNO_QUERY_THROW );
-        xRangeCont->addRangeAddresses( AddressConverter::toApiSequence(rRanges), false );
-    }
-    catch( Exception& )
-    {
+        ScDocShell* pDocShell = getScDocument().GetDocumentShell();
+        xRanges = new ScCellRangesObj(pDocShell, ScRangeList());
+        xRanges->addRangeAddresses( rRanges, false );
     }
     return xRanges;
 }
@@ -1090,12 +1087,12 @@ void WorksheetGlobals::finalizeValidationRanges() const
 {
     for (auto const& validation : maValidations)
     {
-        PropertySet aPropSet( getCellRangeList(validation.maRanges) );
+        rtl::Reference<ScCellRangesObj> xRanges = getCellRangeList(validation.maRanges);
+        rtl::Reference<ScTableValidationObj> xValidation = xRanges->getValidation();
 
-        Reference< XPropertySet > xValidation( aPropSet.getAnyProperty( PROP_Validation ), UNO_QUERY );
         if( xValidation.is() )
         {
-            PropertySet aValProps( xValidation );
+            PropertySet aValProps(( Reference< XPropertySet >(xValidation) ));
 
             try
             {
@@ -1109,8 +1106,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
                 xCell = xDBCellRange->getCellByPosition( 0, 0 );
                 Reference<XCellAddressable> xCellAddressable( xCell, UNO_QUERY_THROW );
                 CellAddress aFirstCell = xCellAddressable->getCellAddress();
-                Reference<XSheetCondition> xCondition( xValidation, UNO_QUERY_THROW );
-                xCondition->setSourcePosition( aFirstCell );
+                xValidation->setSourcePosition( aFirstCell );
             }
             catch(const Exception&)
             {
@@ -1158,26 +1154,18 @@ void WorksheetGlobals::finalizeValidationRanges() const
             // allow blank cells
             aValProps.setProperty( PROP_IgnoreBlankCells, validation.mbAllowBlank );
 
-            try
-            {
-                // condition operator
-                Reference< XSheetCondition2 > xSheetCond( xValidation, UNO_QUERY_THROW );
-                if( eType == ValidationType_CUSTOM )
-                    xSheetCond->setConditionOperator( ConditionOperator2::FORMULA );
-                else
-                    xSheetCond->setConditionOperator( CondFormatBuffer::convertToApiOperator( validation.mnOperator ) );
+            // condition operator
+            if( eType == ValidationType_CUSTOM )
+                xValidation->setConditionOperator( ConditionOperator2::FORMULA );
+            else
+                xValidation->setConditionOperator( CondFormatBuffer::convertToApiOperator( validation.mnOperator ) );
 
-                // condition formulas
-                Reference< XMultiFormulaTokens > xTokens( xValidation, UNO_QUERY_THROW );
-                xTokens->setTokens( 0, validation.maTokens1 );
-                xTokens->setTokens( 1, validation.maTokens2 );
-            }
-            catch( Exception& )
-            {
-            }
+            // condition formulas
+            xValidation->setTokens( 0, validation.maTokens1 );
+            xValidation->setTokens( 1, validation.maTokens2 );
 
             // write back validation settings to cell range(s)
-            aPropSet.setProperty( PROP_Validation, xValidation );
+            xRanges->setValidation( xValidation );
         }
     }
 }

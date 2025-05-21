@@ -147,7 +147,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScTableValidationObj final : public cppu::WeakImplHelper<
+class SC_DLLPUBLIC ScTableValidationObj final : public cppu::WeakImplHelper<
                             css::sheet::XSheetCondition2,
                             css::sheet::XMultiFormulaTokens,
                             css::beans::XPropertySet,

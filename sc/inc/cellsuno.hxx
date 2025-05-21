@@ -113,6 +113,7 @@ class SfxItemPropertyMap;
 class SfxItemPropertySet;
 struct SfxItemPropertyMapEntry;
 class ScTableRowsObj;
+class ScTableValidationObj;
 class SolarMutexGuard;
 
 namespace editeng { class SvxBorderLine; }
@@ -253,6 +254,9 @@ public:
     void                    SetCursorOnly(bool bSet);
     bool                    IsCursorOnly() const            { return bCursorOnly; }
 
+    SC_DLLPUBLIC rtl::Reference<ScTableValidationObj> getValidation();
+    SC_DLLPUBLIC void setValidation(const rtl::Reference<ScTableValidationObj>&);
+
                             // XSheetOperation
     virtual double SAL_CALL computeFunction( css::sheet::GeneralFunction nFunction ) override;
     virtual void SAL_CALL   clearContents( sal_Int32 nContentFlags ) override;
@@ -379,7 +383,7 @@ using ScCellRangesObj_BASE = cppu::ImplInheritanceHelper<ScCellRangesBase,
                                                          css::sheet::XSheetCellRangeContainer,
                                                          css::container::XNameContainer,
                                                          css::container::XEnumerationAccess>;
-class UNLESS_MERGELIBS(SC_DLLPUBLIC) ScCellRangesObj final : public ScCellRangesObj_BASE
+class SC_DLLPUBLIC ScCellRangesObj final : public ScCellRangesObj_BASE
 {
 public:
     struct ScNamedEntry
@@ -448,6 +452,8 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    void addRangeAddresses( const ScRangeList& rRanges, bool bMergeRanges );
 };
 
 using ScCellRangeObj_BASE = cppu::ImplInheritanceHelper<ScCellRangesBase,
