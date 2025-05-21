@@ -113,6 +113,9 @@ class SfxHint;
 class SfxItemPropertyMap;
 class SfxItemPropertySet;
 struct SfxItemPropertyMapEntry;
+class ScTableRowsObj;
+class ScTableValidationObj;
+class SolarMutexGuard;
 
 namespace editeng { class SvxBorderLine; }
 
@@ -252,6 +255,9 @@ public:
     void                    SetCursorOnly(bool bSet);
     bool                    IsCursorOnly() const            { return bCursorOnly; }
 
+    SC_DLLPUBLIC rtl::Reference<ScTableValidationObj> getValidation();
+    SC_DLLPUBLIC void setValidation(const rtl::Reference<ScTableValidationObj>&);
+
                             // XSheetOperation
     virtual double SAL_CALL computeFunction( css::sheet::GeneralFunction nFunction ) override;
     virtual void SAL_CALL   clearContents( sal_Int32 nContentFlags ) override;
@@ -374,7 +380,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class UNLESS_MERGELIBS(SC_DLLPUBLIC) ScCellRangesObj final : public ScCellRangesBase,
+class SC_DLLPUBLIC ScCellRangesObj final : public ScCellRangesBase,
                         public css::sheet::XSheetCellRangeContainer,
                         public css::container::XNameContainer,
                         public css::container::XEnumerationAccess
@@ -393,12 +399,10 @@ private:
     rtl::Reference<ScCellRangeObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
-    IF_MERGELIBS(SC_DLLPUBLIC)
                             ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR);
     virtual                 ~ScCellRangesObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    IF_MERGELIBS(SC_DLLPUBLIC)
     virtual void SAL_CALL   acquire() noexcept override;
     virtual void SAL_CALL   release() noexcept override;
 
@@ -455,6 +459,8 @@ public:
                             // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+
+    void addRangeAddresses( const ScRangeList& rRanges, bool bMergeRanges );
 };
 
 class SAL_DLLPUBLIC_RTTI ScCellRangeObj : public ScCellRangesBase,

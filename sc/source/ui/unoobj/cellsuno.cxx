@@ -2455,6 +2455,57 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
         }
 }
 
+rtl::Reference<ScTableValidationObj> ScCellRangesBase::getValidation()
+{
+    SolarMutexGuard aGuard;
+
+    const ScPatternAttr* pPattern = GetCurrentAttrsDeep();
+    if ( !pPattern )
+        return nullptr;
+
+    if ( !pDocShell || aRanges.empty() )
+        throw uno::RuntimeException();
+
+    const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( u"Validation" );
+    assert(pEntry);
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    bool bEnglish = ( pEntry->nWID != SC_WID_UNO_VALILOC );
+    bool bXML = ( pEntry->nWID == SC_WID_UNO_VALIXML );
+    formula::FormulaGrammar::Grammar eGrammar = (bXML ?
+            rDoc.GetStorageGrammar() :
+           formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
+    sal_uLong nIndex =
+            pPattern->GetItem(ATTR_VALIDDATA).GetValue();
+    return new ScTableValidationObj( rDoc, nIndex, eGrammar );
+}
+
+void ScCellRangesBase::setValidation(const rtl::Reference<ScTableValidationObj>& pValidObj)
+{
+    SolarMutexGuard aGuard;
+
+    const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( u"Validation" );
+    assert(pEntry);
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    bool bEnglish = ( pEntry->nWID != SC_WID_UNO_VALILOC );
+    bool bXML = ( pEntry->nWID == SC_WID_UNO_VALIXML );
+    formula::FormulaGrammar::Grammar eGrammar = (bXML ?
+           formula::FormulaGrammar::GRAM_UNSPECIFIED :
+           formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
+
+    std::unique_ptr<ScValidationData> pNewData(
+            pValidObj->CreateValidationData( rDoc, eGrammar ));
+    sal_uInt32 nIndex = rDoc.AddValidationEntry( *pNewData );
+    pNewData.reset();
+
+    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
+    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
+    pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), aPattern, true );
+}
+
 void SAL_CALL ScCellRangesBase::addPropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
@@ -4125,6 +4176,13 @@ void SAL_CALL ScCellRangesObj::addRangeAddresses( const uno::Sequence<table::Cel
                 static_cast<SCTAB>(rRange.Sheet));
         AddRange(aRange, bMergeRanges);
     }
+}
+
+void ScCellRangesObj::addRangeAddresses( const ScRangeList& rRanges, bool bMergeRanges )
+{
+    SolarMutexGuard aGuard;
+    for (const ScRange& rRange : rRanges)
+        AddRange(rRange, bMergeRanges);
 }
 
 void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRangeSeq )
