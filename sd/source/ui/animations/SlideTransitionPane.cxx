@@ -543,15 +543,10 @@ void SlideTransitionPane::updateControls()
     {
          // ToDo: That 0 is "no transition" is documented nowhere except in the
         // CTOR of sdpage
-        OUString sSelectedId = mxTransitionsIconView->get_selected_id();
-        auto* pTransitionEntry = weld::fromId<TransitionEntry*>(sSelectedId);
-
         if( aEffect.mnType == 0 )
             mxTransitionsIconView->select(0);
-        else if(!pTransitionEntry)
-            updateVariants(getPreset(aEffect));
         else
-            updateVariants(pTransitionEntry->mpPreset);
+            updateVariants(getPreset(aEffect));
     }
 
     if( aEffect.mbDurationAmbiguous )
@@ -880,8 +875,6 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         aResult.mbLoopSound = mxCB_LOOP_SOUND->get_active();
         aResult.mbLoopSoundAmbiguous = false;
     }
-
-    mpDrawDoc->Broadcast(SdrHint(SdrHintKind::ObjectChange));
 
     return aResult;
 }
