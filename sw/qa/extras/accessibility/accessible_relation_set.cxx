@@ -33,6 +33,8 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/window.hxx>
 
 #include <test/a11y/AccessibilityTools.hxx>
 
@@ -82,7 +84,10 @@ void AccessibleRelationSet::init(uno::Reference<css::accessibility::XAccessible>
     uno::Reference<frame::XFrame> xFrame(xController->getFrame(), uno::UNO_SET_THROW);
     uno::Reference<awt::XWindow> xWindow(xFrame->getComponentWindow(), uno::UNO_SET_THROW);
 
-    css::uno::Reference<css::accessibility::XAccessible> xRoot(xWindow, uno::UNO_QUERY_THROW);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    CPPUNIT_ASSERT_MESSAGE("Couldn't retrieve vcl::Window", pWindow);
+    css::uno::Reference<css::accessibility::XAccessible> xRoot = pWindow->GetAccessible();
+    CPPUNIT_ASSERT_MESSAGE("Couldn't retrieve window's accessible", xRoot.is());
     ctx = AccessibilityTools::getAccessibleObjectForRole(xRoot, AccessibleRole::DOCUMENT_TEXT);
     CPPUNIT_ASSERT_MESSAGE("Couldn't get AccessibleRole.DOCUMENT_TEXT object", ctx.is());
     para1 = ctx->getAccessibleChild(0);

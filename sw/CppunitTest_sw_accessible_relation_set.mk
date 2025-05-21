@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_accessible_relation_set, \
     subsequenttest \
     sw \
     test \
+    tk \
 	tl \
     unotest \
     utl \
