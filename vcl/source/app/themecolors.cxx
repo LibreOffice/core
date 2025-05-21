@@ -24,4 +24,16 @@ ThemeState ThemeColors::GetThemeState()
     return static_cast<ThemeState>(officecfg::Office::Common::Appearance::LibreOfficeTheme::get());
 }
 
+bool ThemeColors::UseOnlyWhiteDocBackground()
+{
+    return officecfg::Office::Common::Appearance::UseOnlyWhiteDocBackground::get();
+}
+
+void ThemeColors::SetUseOnlyWhiteDocBackground(bool bFlag)
+{
+    auto pChange(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Appearance::UseOnlyWhiteDocBackground::set(bFlag, pChange);
+    pChange->commit();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

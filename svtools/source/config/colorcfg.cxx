@@ -725,6 +725,10 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
                         break;
                 }
             }
+
+            if (ThemeColors::UseOnlyWhiteDocBackground())
+                nAppMod = clLight;
+
             aRet = cAutoColors[eEntry][nAppMod];
     }
     // fdo#71511: if in a11y HC mode, do pull background color from theme

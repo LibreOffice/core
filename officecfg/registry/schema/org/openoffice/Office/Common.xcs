@@ -5245,6 +5245,14 @@
         </constraints>
         <value>0</value>
       </prop>
+      <prop oor:name="UseOnlyWhiteDocBackground" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Use only white colors for document background and don't let
+          the theme change it.</desc>
+          <label>Use white document background</label>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Misc">
       <info>
