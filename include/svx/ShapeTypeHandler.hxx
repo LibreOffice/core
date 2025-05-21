@@ -87,15 +87,6 @@ public:
      */
     static ShapeTypeHandler& Instance();
 
-    /**  Determines the type id of a shape with the given service name.
-         @param aServiceName
-             Service name of the shape for which to return the type id.
-         @return
-             Returns the type id of the shape with the given service name or
-             -1 when the service name is not known.
-     */
-    ShapeTypeId GetTypeId (const OUString& aServiceName) const;
-
     /**  Determines the type id of the specified shape.
          @param xShape
              Reference to the shape for which to return the type id.
