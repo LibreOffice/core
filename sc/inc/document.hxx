@@ -536,6 +536,7 @@ private:
     bool                bInsertingFromOtherDoc;
     bool                bLoadingMedium;
     bool                bImportingXML;      // special handling of formula text
+    bool                mbImportingXLSX;
     bool                bCalcingAfterLoad;              // in CalcAfterLoad TRUE
     // don't construct/destruct listeners temporarily
     bool                bNoListening;
@@ -2304,6 +2305,8 @@ public:
     void            SetLoadingMedium( bool bVal );
     SC_DLLPUBLIC void SetImportingXML( bool bVal );
     bool            IsImportingXML() const { return bImportingXML; }
+    SC_DLLPUBLIC void SetImportingXLSX( bool bVal );
+    bool            IsImportingXLSX() const { return mbImportingXLSX; }
     bool            IsCalcingAfterLoad() const { return bCalcingAfterLoad; }
     void            SetNoListening( bool bVal ) { bNoListening = bVal; }
     bool            GetNoListening() const { return bNoListening; }

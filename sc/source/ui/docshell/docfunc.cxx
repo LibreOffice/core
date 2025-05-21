@@ -1455,6 +1455,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
         bRecord = false;
 
     bool bImportingXML = rDoc.IsImportingXML();
+    bool bImportingXLSX = rDoc.IsImportingXLSX();
     // Cell formats can still be set if the range isn't editable only because of matrix formulas.
     // #i62483# When loading XML, the check can be skipped altogether.
     bool bOnlyNotBecauseOfMatrix;
@@ -1493,7 +1494,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
 
     // While loading XML it is not necessary to ask HasAttrib. It needs too much time.
     sal_uInt16 nExtFlags = 0;
-    if ( !bImportingXML )
+    if ( !bImportingXML && !bImportingXLSX )
         rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content before the change
 
     bool bChanged = false;
@@ -1501,7 +1502,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
 
     if(bChanged)
     {
-        if ( !bImportingXML )
+        if ( !bImportingXML && !bImportingXLSX )
             rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content after the change
 
         if (!AdjustRowHeight( aMultiRange, true, bApi ))

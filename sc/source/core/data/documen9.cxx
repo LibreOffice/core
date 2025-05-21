@@ -604,6 +604,11 @@ void ScDocument::SetImportingXML( bool bVal )
     SetLoadingMedium(bVal);
 }
 
+void ScDocument::SetImportingXLSX( bool bVal )
+{
+    mbImportingXLSX = bVal;
+}
+
 const std::shared_ptr<SvxForbiddenCharactersTable>& ScDocument::GetForbiddenCharacters() const
 {
     return xForbiddenCharacters;

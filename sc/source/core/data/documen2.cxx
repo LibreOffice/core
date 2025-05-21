@@ -171,6 +171,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, ScDocShell* pDocShell ) :
         bInsertingFromOtherDoc( false ),
         bLoadingMedium( false ),
         bImportingXML( false ),
+        mbImportingXLSX( false ),
         bCalcingAfterLoad( false ),
         bNoListening( false ),
         mbIdleEnabled(true),
