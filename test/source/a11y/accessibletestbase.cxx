@@ -9,8 +9,6 @@
 
 #include <test/a11y/accessibletestbase.hxx>
 
-#include <string>
-
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
