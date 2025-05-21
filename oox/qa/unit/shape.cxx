@@ -200,6 +200,30 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testStandardConnectors)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf164623)
+{
+    loadFromFile(u"tdf164623.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    sal_Int32 nEdgeLineDelta;
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapeProps->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr));
+    xShapeProps->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: -662
+    // - Actual  : 3370
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-662), nEdgeLineDelta);
+    xShapeProps->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nEdgeLineDelta);
+    xShapeProps->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nEdgeLineDelta);
+}
+
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
 {
     loadFromFile(u"tdf141463_GroupTransform.pptx");
