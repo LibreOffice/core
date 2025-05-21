@@ -1464,10 +1464,14 @@ Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  )
     if ( !xCurrentContext.is() )
     {
         if ( !mbDesignMode )
-        {   // in alive mode, use the AccessibleContext of the peer
-            Reference< XAccessible > xPeerAcc( getPeer(), UNO_QUERY );
-            if ( xPeerAcc.is() )
-                xCurrentContext = xPeerAcc->getAccessibleContext( );
+        {
+            // in alive mode, use the accessible context of the window
+            if (vcl::Window* pWindow = VCLUnoHelper::GetWindow(getPeer()))
+            {
+                Reference<XAccessible> xWinAcc = pWindow->GetAccessible();
+                if (xWinAcc.is())
+                    xCurrentContext = xWinAcc->getAccessibleContext();
+            }
         }
         else
             // in design mode, use a fallback
