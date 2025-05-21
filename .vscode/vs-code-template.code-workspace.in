@@ -33,7 +33,8 @@
 			"/translations/": true
 		},
 		"files.associations": {
-			"*.patch.[0-9]": "diff"
+			"*.patch.[0-9]": "diff",
+			"autogen.sh": "perl"
 		},
 		"C_Cpp.default.compileCommands": "@BUILDDIR@/compile_commands.json",
 		// only used if the file doesn't match anything in the compile_commands.json - aka externals
@@ -58,7 +59,53 @@
 			{
 				"prefix": "tdf#",
 				"url": "https://bugs.documentfoundation.org/show_bug.cgi?id=<num>"
+			},
+			{
+				// issues filed against LibreOffice will redirect to bugs.documentfoundation.org
+				// but there might be some pointers to other projects/to issues not migrated to
+				// our instance of bugzilla
+				"prefix": "fdo#",
+				"url": "https://bugs.freedesktop.org/show_bug.cgi?id=<num>"
+			},
+			{
+				// viewing coverity issues requires an account/be added to the LibreOffice
+				// project - send a message to the dev-list if you're interested
+				"prefix": "cid#",
+				"url": "https://scan5.scan.coverity.com/#/project-view/41345/10276?selectedIssue=<num>"
+			},
+			{
+				"prefix": "coverity#",
+				"url": "https://scan5.scan.coverity.com/#/project-view/41345/10276?selectedIssue=<num>"
+			},
+			{
+				"prefix": "ofz#",
+				"url": "https://issues.oss-fuzz.com/issues/<num>"
+			},
+			{
+				// might not all resolve, for old stuff there is some overlap with a Sun-internal
+				// tracker that is usually referred to by #i<num># style (i.e. typos)
+				"prefix": "i#",
+				"url": "https://bz.apache.org/ooo/show_bug.cgi?=<num>"
+			},
+			{
+				// not all are publicly accessible
+				"prefix": "rhbz#",
+				"url": "https://bugzilla.redhat.com/show_bug.cgi?id=<num>"
+			},
+			{
+				"prefix": "cool#",
+				"url": "https://github.com/CollaboraOnline/online/issues/<num>"
+			},
+			{
+				"prefix": "lp#",
+				"url": "http://bugs.launchpad.net/bugs/<num>"
+			},
+			{
+				"prefix": "deb#",
+				"url": "http://bugs.debian.org/<num>"
 			}
+			// now defunct: n# / bnc# (bugzilla.novell.com)
+			// no public URL: forcepoint#
 		],
 		"terminal.integrated.profiles.windows": {
 			"Cygwin": {
