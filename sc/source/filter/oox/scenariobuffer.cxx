@@ -33,6 +33,7 @@
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
 #include <docuno.hxx>
+#include <cellsuno.hxx>
 
 namespace oox::xls {
 
@@ -122,7 +123,7 @@ void Scenario::finalizeImport()
         OUString aScenName = ContainerHelper::getUnusedName( xSheetsNA, maModel.maName, '_' );
 
         // create the new scenario sheet
-        Reference< XScenariosSupplier > xScenariosSupp( getSheetFromDoc( mnSheet ), UNO_QUERY_THROW );
+        rtl::Reference< ScTableSheetObj > xScenariosSupp( getSheetFromDoc( mnSheet ) );
         Reference< XScenarios > xScenarios( xScenariosSupp->getScenarios(), UNO_SET_THROW );
         xScenarios->addNewByName( aScenName, AddressConverter::toApiSequence(aRanges), maModel.maComment );
 

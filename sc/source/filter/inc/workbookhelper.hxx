@@ -59,6 +59,8 @@ class ScEditEngineDefaulter;
 class ScDBData;
 class ScRangeData;
 class ScModelObj;
+class ScDatabaseRangeObj;
+class ScTableSheetObj;
 
 namespace oox::xls {
 
@@ -193,7 +195,7 @@ public:
     const rtl::Reference< ScModelObj >& getDocument() const;
 
     /** Returns a reference to the specified spreadsheet in the document model. */
-    css::uno::Reference< css::sheet::XSpreadsheet >
+    rtl::Reference< ScTableSheetObj >
                         getSheetFromDoc( sal_Int32 nSheet ) const;
     /** Returns a reference to the specified spreadsheet in the document model. */
     css::uno::Reference< css::sheet::XSpreadsheet >

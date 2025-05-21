@@ -70,6 +70,7 @@
 #include <drwlayer.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <cellsuno.hxx>
 
 #include <formulabuffer.hxx>
 #include <editutil.hxx>
@@ -852,18 +853,10 @@ const rtl::Reference< ScModelObj > & WorkbookHelper::getDocument() const
     return mrBookGlob.getDocument();
 }
 
-Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int32 nSheet ) const
+rtl::Reference< ScTableSheetObj > WorkbookHelper::getSheetFromDoc( sal_Int32 nSheet ) const
 {
-    Reference< XSpreadsheet > xSheet;
-    try
-    {
-        Reference< XIndexAccess > xSheetsIA( getDocument()->getSheets(), UNO_QUERY_THROW );
-        xSheet.set( xSheetsIA->getByIndex( nSheet ), UNO_QUERY_THROW );
-    }
-    catch( Exception& )
-    {
-    }
-    return xSheet;
+    rtl::Reference< ScTableSheetsObj > xSheetsIA( getDocument()->getScSheets() );
+    return xSheetsIA->GetSheetByIndex( nSheet );
 }
 
 Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( const OUString& rSheet ) const

@@ -115,6 +115,7 @@ class SfxItemPropertySet;
 struct SfxItemPropertyMapEntry;
 class ScTableRowsObj;
 class ScTableValidationObj;
+class ScCellObj;
 class SolarMutexGuard;
 
 namespace editeng { class SvxBorderLine; }
@@ -496,7 +497,7 @@ protected:
 
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::table::XCell >
+    rtl::Reference< ScCellObj >
                             GetCellByPosition_Impl( sal_Int32 nColumn, sal_Int32 nRow );
 
             /// @throws css::uno::RuntimeException
@@ -632,6 +633,20 @@ public:
                             // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+
+    rtl::Reference< ScCellRangeObj >
+                            getScCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
+                                sal_Int32 nRight, sal_Int32 nBottom );
+    SC_DLLPUBLIC rtl::Reference< ScCellRangeObj >
+                            getScCellRangeByName( const OUString& aRange );
+    rtl::Reference< ScCellRangeObj >
+                            getScCellRangeByName( const OUString& aRange, const ScAddress::Details& rDetails );
+    rtl::Reference< ScTableRowsObj >
+                            getScRowsByPosition( SolarMutexGuard& rGuard, sal_Int32 nLeft, sal_Int32 nTop,
+                                sal_Int32 nRight, sal_Int32 nBottom );
+    rtl::Reference< ScTableRowsObj > getScRows();
+    SC_DLLPUBLIC rtl::Reference< ScCellObj >
+                            getScCellByPosition( sal_Int32 nColumn, sal_Int32 nRow );
 };
 
 //! really derive cell from range?
@@ -676,7 +691,7 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL   acquire() noexcept override;
-    virtual void SAL_CALL   release() noexcept override;
+    SC_DLLPUBLIC virtual void SAL_CALL release() noexcept override;
 
     virtual void            RefChanged() override;
 
@@ -737,7 +752,7 @@ public:
     virtual void SAL_CALL   setTokens( const css::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
 
                             // XCellAddressable
-    virtual css::table::CellAddress SAL_CALL getCellAddress() override;
+    SC_DLLPUBLIC virtual css::table::CellAddress SAL_CALL getCellAddress() override;
 
                             // XSheetAnnotationAnchor
     virtual css::uno::Reference< css::sheet::XSheetAnnotation > SAL_CALL
@@ -770,7 +785,7 @@ public:
     virtual sal_Int16 SAL_CALL resetActionLocks() override;
 };
 
-class SAL_DLLPUBLIC_RTTI ScTableSheetObj final : public ScCellRangeObj,
+class SC_DLLPUBLIC ScTableSheetObj final : public ScCellRangeObj,
                         public css::sheet::XSpreadsheet,
                         public css::container::XNamed,
                         public css::sheet::XSheetPageBreak,
@@ -874,7 +889,7 @@ public:
                             getScenarios() override;
 
                             // XSheetAnnotationsSupplier
-    SC_DLLPUBLIC virtual css::uno::Reference< css::sheet::XSheetAnnotations > SAL_CALL
+    virtual css::uno::Reference< css::sheet::XSheetAnnotations > SAL_CALL
                             getAnnotations() override;
 
                             // XDrawPageSupplier

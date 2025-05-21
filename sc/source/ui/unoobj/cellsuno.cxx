@@ -4639,7 +4639,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellRangeObj::getImplementationId()
 //  ColumnCount / RowCount vanished
 //! are used in Writer for tables ???
 
-uno::Reference<table::XCell> ScCellRangeObj::GetCellByPosition_Impl(
+rtl::Reference<ScCellObj> ScCellRangeObj::GetCellByPosition_Impl(
                                         sal_Int32 nColumn, sal_Int32 nRow )
 {
     ScDocShell* pDocSh = GetDocShell();
@@ -4662,6 +4662,12 @@ uno::Reference<table::XCell> ScCellRangeObj::GetCellByPosition_Impl(
 }
 
 uno::Reference<table::XCell> SAL_CALL ScCellRangeObj::getCellByPosition(
+                                        sal_Int32 nColumn, sal_Int32 nRow )
+{
+    return getScCellByPosition(nColumn, nRow);
+}
+
+rtl::Reference<ScCellObj> ScCellRangeObj::getScCellByPosition(
                                         sal_Int32 nColumn, sal_Int32 nRow )
 {
     SolarMutexGuard aGuard;
@@ -4700,11 +4706,23 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPositio
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByName(
                         const OUString& aName )
 {
-    return getCellRangeByName( aName, ScAddress::detailsOOOa1 );
+    return getScCellRangeByName( aName, ScAddress::detailsOOOa1 );
 }
 
 uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
                         const OUString& aName, const ScAddress::Details& rDetails  )
+{
+    return getScCellRangeByName( aName, rDetails );
+}
+
+rtl::Reference<ScCellRangeObj> ScCellRangeObj::getScCellRangeByName(
+                const OUString& aName )
+{
+    return getScCellRangeByName( aName, ScAddress::detailsOOOa1 );
+}
+
+rtl::Reference<ScCellRangeObj> ScCellRangeObj::getScCellRangeByName(
+                const OUString& aName, const ScAddress::Details& rDetails )
 {
     //  name refers to the whole document (with the range's table as default),
     //  valid only if the range is within this range
