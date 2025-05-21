@@ -46,8 +46,7 @@ namespace
 class AccessibleStatusBarTest : public test::AccessibleTestBase
 {
 private:
-    uno::Reference<accessibility::XAccessibleContext>
-    getTestObject(const uno::Reference<awt::XWindow>& xWindow);
+    uno::Reference<accessibility::XAccessibleContext> getTestObject();
     void runAllTests();
     void testDocument(std::string_view sKind);
 
@@ -67,15 +66,14 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-uno::Reference<accessibility::XAccessibleContext>
-AccessibleStatusBarTest::getTestObject(const uno::Reference<awt::XWindow>& xWindow)
+uno::Reference<accessibility::XAccessibleContext> AccessibleStatusBarTest::getTestObject()
 {
-    uno::Reference<accessibility::XAccessible> xAccessible(xWindow, uno::UNO_QUERY_THROW);
-    std::cout << "got accessible: " << xAccessible << std::endl;
-    std::cout << "accessible name: " << AccessibilityTools::debugString(xAccessible) << std::endl;
+    uno::Reference<accessibility::XAccessibleContext> xWinContext = getWindowAccessibleContext();
+    std::cout << "got accessible: " << xWinContext << std::endl;
+    std::cout << "accessible name: " << AccessibilityTools::debugString(xWinContext) << std::endl;
 
     auto xContext = AccessibilityTools::getAccessibleObjectForRole(
-        xAccessible, accessibility::AccessibleRole::STATUS_BAR);
+        xWinContext, accessibility::AccessibleRole::STATUS_BAR);
     std::cout << "got context: " << xContext << std::endl;
     std::cout << "context name: " << AccessibilityTools::debugString(xContext) << std::endl;
 
@@ -93,7 +91,7 @@ AccessibleStatusBarTest::getTestObject(const uno::Reference<awt::XWindow>& xWind
 
 void AccessibleStatusBarTest::runAllTests()
 {
-    auto xContext = getTestObject(mxWindow);
+    auto xContext = getTestObject();
 
     uno::Reference<accessibility::XAccessibleComponent> xAccessibleComponent(xContext,
                                                                              uno::UNO_QUERY_THROW);
