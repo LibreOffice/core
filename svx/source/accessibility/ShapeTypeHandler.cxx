@@ -166,25 +166,16 @@ void ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
     }
 }
 
-
-tools::Long ShapeTypeHandler::GetSlotId (const OUString& aServiceName) const
+tools::Long ShapeTypeHandler::GetSlotId(const uno::Reference<drawing::XShape>& rxShape) const
 {
-    tServiceNameToSlotId::const_iterator I (maServiceNameToSlotId.find (aServiceName));
+    if (!rxShape.is())
+        return 0;
+
+    tServiceNameToSlotId::const_iterator I (maServiceNameToSlotId.find(rxShape->getShapeType()));
     if (I != maServiceNameToSlotId.end())
         return I->second;
-    else
-        return 0;
-}
 
-
-// Extract the given shape's service name and forward request to appropriate
-// method.
-tools::Long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape) const
-{
-    if (rxShape.is())
-        return GetSlotId (rxShape->getShapeType());
-    else
-        return 0;
+    return 0;
 }
 
 /// get the accessible base name for an object

@@ -172,16 +172,6 @@ private:
 
     /**  Determine the slot id of the specified shape type.  With this id
          internal methods can access the associated type descriptor.
-         @param aServiceName
-             Service name of the shape for which to return the slot id.
-         @return
-             Returns the slot id of the shape with the given service name or
-             0 when the service name is not known.
-     */
-    SVX_DLLPRIVATE tools::Long GetSlotId (const OUString& aServiceName) const;
-
-    /**  Determine the slot id of the specified shape type.  With this id
-         internal methods can access the associated type descriptor.
          @param rxShape
              Shape for which to return the slot id.
          @return
