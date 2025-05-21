@@ -66,9 +66,7 @@ class VclPtr
 public:
     /** Constructor...
      */
-    VclPtr()
-        : m_rInnerRef()
-    {}
+    VclPtr() = default;
 
     /** Constructor...
      */
@@ -91,11 +89,8 @@ public:
         @param rRef another reference
     */
     template< class derived_type >
-    VclPtr(
-        const VclPtr< derived_type > & rRef,
-        typename std::enable_if<
-            std::is_base_of<reference_type, derived_type>::value, int>::type
-            = 0 )
+        requires std::is_base_of_v<reference_type, derived_type>
+    VclPtr(const VclPtr<derived_type>& rRef)
         : m_rInnerRef( static_cast<reference_type*>(rRef) )
     {
     }
@@ -124,9 +119,9 @@ public:
      *
      * @tparam reference_type must be a subclass of vcl::Window
      */
-    template<typename... Arg> [[nodiscard]] static VclPtr< reference_type > Create(Arg &&... arg)
+    template<typename... Arg> [[nodiscard]] static VclPtr Create(Arg &&... arg)
     {
-        return VclPtr< reference_type >( new reference_type(std::forward<Arg>(arg)...), SAL_NO_ACQUIRE );
+        return VclPtr( new reference_type(std::forward<Arg>(arg)...), SAL_NO_ACQUIRE );
     }
 
     /** Probably most common used: handle->someBodyOp().
@@ -162,13 +157,10 @@ public:
         @param rRef another reference
     */
     template<typename derived_type>
-    typename std::enable_if<
-        std::is_base_of<reference_type, derived_type>::value,
-        VclPtr &>::type
-    operator =(VclPtr<derived_type> const & rRef)
+        requires std::is_base_of_v<reference_type, derived_type>
+    VclPtr & operator =(VclPtr<derived_type> const& rRef)
     {
-        m_rInnerRef.set(rRef.get());
-        return *this;
+        return operator=(rRef.get());
     }
 
     VclPtr & operator =(reference_type * pBody)
@@ -210,7 +202,7 @@ public:
 
     /** Needed to place VclPtr's into STL collection.
      */
-    bool operator< (const VclPtr<reference_type> & handle) const
+    bool operator< (const VclPtr & handle) const
     {
         return (m_rInnerRef < handle.m_rInnerRef);
     }
@@ -237,29 +229,6 @@ template<typename T> inline bool operator ==(T const * p1, VclPtr<T> const & p2)
 
 template<typename T> inline bool operator ==(T * p1, VclPtr<T> const & p2) {
     return p1 == p2.get();
-}
-
-template<typename T1, typename T2>
-inline bool operator !=(VclPtr<T1> const & p1, VclPtr<T2> const & p2) {
-    return !(p1 == p2);
-}
-
-template<typename T> inline bool operator !=(VclPtr<T> const & p1, T const * p2)
-{
-    return !(p1 == p2);
-}
-
-template<typename T> inline bool operator !=(VclPtr<T> const & p1, T * p2) {
-    return !(p1 == p2);
-}
-
-template<typename T> inline bool operator !=(T const * p1, VclPtr<T> const & p2)
-{
-    return !(p1 == p2);
-}
-
-template<typename T> inline bool operator !=(T * p1, VclPtr<T> const & p2) {
-    return !(p1 == p2);
 }
 
 /**
@@ -294,15 +263,7 @@ class ScopedVclPtr : public VclPtr<reference_type>
 public:
     /** Constructor...
      */
-    ScopedVclPtr()
-        : VclPtr<reference_type>()
-    {}
-
-    /** Constructor
-     */
-    ScopedVclPtr (reference_type * pBody)
-        : VclPtr<reference_type>(pBody)
-    {}
+    using VclPtr<reference_type>::VclPtr;
 
     /** Copy constructor...
      */
@@ -324,28 +285,10 @@ public:
     /**
        Assignment that releases the last reference.
      */
-    ScopedVclPtr<reference_type>& operator = (reference_type * pBody)
+    ScopedVclPtr& operator = (reference_type * pBody)
     {
         disposeAndReset(pBody);
         return *this;
-    }
-
-    /** Up-casting conversion constructor: Copies interface reference.
-
-        Does not work for up-casts to ambiguous bases.  For the special case of
-        up-casting to Reference< XInterface >, see the corresponding conversion
-        operator.
-
-        @param rRef another reference
-    */
-    template< class derived_type >
-    ScopedVclPtr(
-        const VclPtr< derived_type > & rRef,
-        typename std::enable_if<
-            std::is_base_of<reference_type, derived_type>::value, int>::type
-            = 0 )
-        : VclPtr<reference_type>( rRef )
-    {
     }
 
     /** Up-casting assignment operator.
@@ -355,13 +298,10 @@ public:
         @param rRef another VclPtr
     */
     template<typename derived_type>
-    typename std::enable_if<
-        std::is_base_of<reference_type, derived_type>::value,
-        ScopedVclPtr &>::type
-    operator =(VclPtr<derived_type> const & rRef)
+        requires std::is_base_of_v<reference_type, derived_type>
+    ScopedVclPtr& operator =(VclPtr<derived_type> const& rRef)
     {
-        disposeAndReset(rRef.get());
-        return *this;
+        return operator=(rRef.get());
     }
 
     /**
