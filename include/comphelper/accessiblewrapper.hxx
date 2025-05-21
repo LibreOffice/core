@@ -45,11 +45,8 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace comphelper
 {
 
-
     //= OAccessibleWrapper
 
-
-    class OAccessibleContextWrapper;
     class OWrappedAccessibleChildrenManager;
 
     using OAccessibleWrapper_Base = cppu::ImplHelper1<css::accessibility::XAccessible>;
