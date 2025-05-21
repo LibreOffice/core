@@ -45,9 +45,8 @@ public:
             const SvXMLNamespaceMap& rNamespaceMap ) const override;
 
     /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
-    virtual void finished(
-            ::std::vector< XMLPropertyState >& rProperties,
-            sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const override;
+    virtual void finished(std::vector<XMLPropertyState>& rProperties, sal_Int32 nStartIndex,
+                          sal_Int32 nEndIndex, const sal_uInt32 nPropType) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

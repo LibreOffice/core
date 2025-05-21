@@ -33,6 +33,8 @@
 #include <xmloff/txtimppr.hxx>
 #include <xmloff/maptype.hxx>
 
+#include <xmlsdtypes.hxx>
+
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
 #define XML_LINE_TOP 2
@@ -347,14 +349,15 @@ void lcl_SeparateBorder(
 
 }
 
-void XMLTextImportPropertyMapper::finished(
-            ::std::vector< XMLPropertyState >& rProperties,
-            sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
+void XMLTextImportPropertyMapper::finished(std::vector<XMLPropertyState>& rProperties,
+                                           sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/,
+                                           const sal_uInt32 nPropType) const
 {
     bool bHasAnyHeight = false;
     bool bHasAnyMinHeight = false;
     bool bHasAnyWidth = false;
     bool bHasAnyMinWidth = false;
+    bool bHasControlBorder = false;
 
     XMLPropertyState* pFontFamilyName = nullptr;
     XMLPropertyState* pFontStyleName = nullptr;
@@ -420,6 +423,8 @@ void XMLTextImportPropertyMapper::finished(
 
         switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ) )
         {
+        case CTF_CONTROL_BORDER: bHasControlBorder = true; break;
+
         case CTF_FONTFAMILYNAME:    pFontFamilyName = property; break;
         case CTF_FONTSTYLENAME: pFontStyleName = property;  break;
         case CTF_FONTFAMILY:    pFontFamily = property; break;
@@ -779,6 +784,16 @@ void XMLTextImportPropertyMapper::finished(
             rProperties.push_back( *pCharNewBorders[i] );
             delete pCharNewBorders[i];
         }
+    }
+
+    // The internal LO default (app) is flat (at least for the ORichTextModel),
+    // which deviates from the import default (file) of 3d - so always provide as a property
+    if (!bHasControlBorder && nPropType == XML_TYPE_PROP_GRAPHIC)
+    {
+        const sal_Int32 nIndex = getPropertySetMapper()->FindEntryIndex(CTF_CONTROL_BORDER);
+        XMLPropertyState aControlBorderState(nIndex);
+        aControlBorderState.maValue <<= static_cast<sal_uInt16>(1); // 3d
+        rProperties.push_back(aControlBorderState);
     }
 
     if( bHasAnyHeight )
