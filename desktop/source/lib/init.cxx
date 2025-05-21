@@ -3336,6 +3336,18 @@ static char* lo_extractDocumentStructureRequest(LibreOfficeKit* /*pThis*/, const
     return strdup("{ }");
 }
 
+namespace {
+
+enum class JoinThreads
+{
+    ALL,
+    RESTARTS_ON_DEMAND
+};
+
+}
+
+static int joinThreads(JoinThreads eCategory);
+
 static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
 {
     vcl::lok::trimMemory(nTarget);
@@ -3368,6 +3380,10 @@ static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
                 }
             }
         }
+
+        // When more agressively reclaiming memory then shutdown threads which
+        // will restart on demand.
+        joinThreads(JoinThreads::RESTARTS_ON_DEMAND);
     }
 
     if (nTarget > 1000)
@@ -3545,8 +3561,7 @@ static void lo_stopURP(LibreOfficeKit* /* pThis */,
     static_cast<FunctionBasedURPConnection*>(pFunctionBasedURPConnection)->close();
 }
 
-
-static int lo_joinThreads(LibreOfficeKit* /* pThis */)
+static int joinThreads(JoinThreads eCategory)
 {
     comphelper::ThreadPool &pool = comphelper::ThreadPool::getSharedOptimalPool();
     if (!pool.joinThreadsIfIdle())
@@ -3560,17 +3575,20 @@ static int lo_joinThreads(LibreOfficeKit* /* pThis */)
     if (joinable && !joinable->joinThreads())
         return 0;
 
-    auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.ucb.WebDAVManager", xContext);
-    joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(ucpWebdav.get());
-    if (joinable && !joinable->joinThreads())
-        return 0;
+    if (eCategory == JoinThreads::ALL)
+    {
+        auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.ucb.WebDAVManager", xContext);
+        joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(ucpWebdav.get());
+        if (joinable && !joinable->joinThreads())
+            return 0;
 
-    auto progressThread = xContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.task.StatusIndicatorFactory", xContext);
-    joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(progressThread.get());
-    if (joinable && !joinable->joinThreads())
-        return 0;
+        auto progressThread = xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.task.StatusIndicatorFactory", xContext);
+        joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(progressThread.get());
+        if (joinable && !joinable->joinThreads())
+            return 0;
+    }
 
     // Ensure configmgr's write thread is down
     css::uno::Reference< css::util::XFlushable >(
@@ -3578,9 +3596,15 @@ static int lo_joinThreads(LibreOfficeKit* /* pThis */)
             comphelper::getProcessComponentContext()),
         css::uno::UNO_QUERY_THROW)->flush();
 
-    salhelper::Timer::joinThread();
+    if (eCategory == JoinThreads::ALL)
+        salhelper::Timer::joinThread();
 
     return 1;
+}
+
+static int lo_joinThreads(LibreOfficeKit* /* pThis */)
+{
+    return joinThreads(JoinThreads::ALL);
 }
 
 static void lo_startThreads(LibreOfficeKit* /* pThis */)
