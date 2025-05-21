@@ -715,17 +715,30 @@ sal_uInt32 ScDocument::AddValidationEntry( const ScValidationData& rNew )
     {
         ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
         pValidationList.reset(new ScValidationDataList);
+        mnLastValidationListMax = 0;
     }
 
     sal_uInt32 nMax = 0;
-    for( const auto& rxData : *pValidationList )
+    if (IsImportingXLSX())
     {
-        const ScValidationData* pData = rxData.get();
-        sal_uInt32 nKey = pData->GetKey();
-        if ( pData->EqualEntries( rNew ) )
-            return nKey;
-        if ( nKey > nMax )
-            nMax = nKey;
+        // During import, the search becomes an O(n^2) problem.
+        // Just ignore any duplicates we might find, which seems to be rare.
+        nMax = mnLastValidationListMax;
+        ++mnLastValidationListMax;
+    }
+    else
+    {
+        for( const auto& rxData : *pValidationList )
+        {
+            const ScValidationData* pData = rxData.get();
+            sal_uInt32 nKey = pData->GetKey();
+            if ( pData->EqualEntries( rNew ) )
+            {
+                return nKey;
+            }
+            if ( nKey > nMax )
+                nMax = nKey;
+        }
     }
 
     // might be called from ScPatternAttr::MigrateToDocument; thus clone (real copy)
