@@ -102,6 +102,7 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , pColorConfig(new EditableColorConfig)
     , m_xSchemeList(m_xBuilder->weld_combo_box(u"scheme"_ustr))
     , m_xMoreThemesBtn(m_xBuilder->weld_button(u"morethemesbtn"_ustr))
+    , m_xEnableAppTheming(m_xBuilder->weld_check_button(u"enableapptheming"_ustr))
     , m_xColorEntryBtn(m_xBuilder->weld_combo_box(u"registrydropdown"_ustr))
     , m_xColorChangeBtn((new ColorListBox(m_xBuilder->weld_menu_button(u"colorsdropdownbtn"_ustr),
                                           [this] { return GetFrameWeld(); })))
@@ -213,6 +214,13 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ShowInDocumentHdl, weld::Toggleable&, void
     // set colorconfig value
     aCurrentEntryColor.bIsVisible = m_xShowInDocumentChkBtn->get_active();
     pColorConfig->SetColorValue(nEntry, aCurrentEntryColor);
+}
+
+IMPL_LINK_NOARG(SvxAppearanceTabPage, EnableAppThemingHdl, weld::Toggleable&, void)
+{
+    ThemeColors::SetThemeState(m_xEnableAppTheming->get_active() ? ThemeState::ENABLED
+                                                                 : ThemeState::DISABLED);
+    m_bRestartRequired = true;
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorEntryChgHdl, weld::ComboBox&, void)
@@ -423,6 +431,9 @@ void SvxAppearanceTabPage::InitThemes()
     m_xSchemeList->connect_changed(LINK(this, SvxAppearanceTabPage, SchemeChangeHdl));
     m_xSchemeList->connect_popup_toggled(LINK(this, SvxAppearanceTabPage, SchemeListToggleHdl));
     m_xMoreThemesBtn->connect_clicked(LINK(this, SvxAppearanceTabPage, MoreThemesHdl));
+
+    m_xEnableAppTheming->connect_toggled(LINK(this, SvxAppearanceTabPage, EnableAppThemingHdl));
+    m_xEnableAppTheming->set_active(ThemeColors::IsThemeEnabled());
 }
 
 void SvxAppearanceTabPage::InitCustomization()

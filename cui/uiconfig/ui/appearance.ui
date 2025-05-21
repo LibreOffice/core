@@ -35,6 +35,7 @@
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">3</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
@@ -83,6 +84,25 @@
                     <property name="position">0</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="enableapptheming">
+                    <property name="label" translatable="yes" context="appearance|enableapptheming">Enable application theming</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="enableapptheming-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|enableapptheming">Check to enable application theming with extension themes.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="label">
@@ -119,7 +139,6 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-start">13</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <property name="orientation">vertical</property>
