@@ -16,6 +16,9 @@ pdfium_patches += constexpr-template.patch
 
 pdfium_patches += system-abseil.diff
 
+# https://pdfium-review.googlesource.com/c/pdfium/+/130970
+pdfium_patches += retrieve-MIME-type-from-PDF-attachments.patch.1
+
 ifeq ($(OS),WNT)
 pdfium_patches += pdfium-vs2019-arm64_no-__umulh.patch.1
 endif
