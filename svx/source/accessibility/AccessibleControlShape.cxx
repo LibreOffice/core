@@ -179,82 +179,82 @@ void AccessibleControlShape::Init()
         SdrView* pView = maShapeTreeInfo.GetSdrView();
         OSL_ENSURE( pView && pViewWindow && pUnoObjectImpl, "AccessibleControlShape::Init: no view, or no view window, no SdrUnoObj!" );
 
-        if ( pView && pViewWindow && pUnoObjectImpl )
+        if (!pView || !pViewWindow || !pUnoObjectImpl)
+            return;
+
+        // get the context of the control - it will be our "inner" context
+        m_xUnoControl = pUnoObjectImpl->GetUnoControl( *pView, *pViewWindow->GetOutDev() );
+
+        if ( !m_xUnoControl.is() )
         {
-            // get the context of the control - it will be our "inner" context
-            m_xUnoControl = pUnoObjectImpl->GetUnoControl( *pView, *pViewWindow->GetOutDev() );
+            // the control has not yet been created. Though speaking strictly, it is a bug that
+            // our instance here is created without an existing control (because an AccessibleControlShape
+            // is a representation of a view object, and can only live if the view it should represent
+            // is complete, which implies a living control), it's by far the easiest and most riskless way
+            // to fix this here in this class.
+            // Okay, we will add as listener to the control container where we expect our control to appear.
+            OSL_ENSURE( !m_bWaitingForControl, "AccessibleControlShape::Init: already waiting for the control!" );
 
-            if ( !m_xUnoControl.is() )
+            Reference< XContainer > xControlContainer = lcl_getControlContainer( pViewWindow->GetOutDev(), maShapeTreeInfo.GetSdrView() );
+            OSL_ENSURE( xControlContainer.is(), "AccessibleControlShape::Init: unable to find my ControlContainer!" );
+            if ( xControlContainer.is() )
             {
-                // the control has not yet been created. Though speaking strictly, it is a bug that
-                // our instance here is created without an existing control (because an AccessibleControlShape
-                // is a representation of a view object, and can only live if the view it should represent
-                // is complete, which implies a living control), it's by far the easiest and most riskless way
-                // to fix this here in this class.
-                // Okay, we will add as listener to the control container where we expect our control to appear.
-                OSL_ENSURE( !m_bWaitingForControl, "AccessibleControlShape::Init: already waiting for the control!" );
-
-                Reference< XContainer > xControlContainer = lcl_getControlContainer( pViewWindow->GetOutDev(), maShapeTreeInfo.GetSdrView() );
-                OSL_ENSURE( xControlContainer.is(), "AccessibleControlShape::Init: unable to find my ControlContainer!" );
-                if ( xControlContainer.is() )
-                {
-                    xControlContainer->addContainerListener( this );
-                    m_bWaitingForControl = true;
-                }
+                xControlContainer->addContainerListener( this );
+                m_bWaitingForControl = true;
             }
-            else
+        }
+        else
+        {
+            Reference< XModeChangeBroadcaster > xControlModes( m_xUnoControl, UNO_QUERY );
+            Reference< XAccessible > xControlAccessible( xControlModes, UNO_QUERY );
+            Reference< XAccessibleContext > xNativeControlContext;
+            if ( xControlAccessible.is() )
+                xNativeControlContext = xControlAccessible->getAccessibleContext();
+            OSL_ENSURE( xNativeControlContext.is(), "AccessibleControlShape::Init: no AccessibleContext for the control!" );
+            m_aControlContext = WeakReference< XAccessibleContext >( xNativeControlContext );
+
+            // add as listener to the context - we want to multiplex some states
+            if ( isAliveMode( m_xUnoControl ) && xNativeControlContext.is() )
+            {   // (but only in alive mode)
+                startStateMultiplexing( );
+            }
+
+            // now that we have all information about our control, do some adjustments
+            adjustAccessibleRole();
+            initializeComposedState();
+
+            // some initialization for our child manager, which is used in alive mode only
+            if ( isAliveMode( m_xUnoControl ) )
             {
-                Reference< XModeChangeBroadcaster > xControlModes( m_xUnoControl, UNO_QUERY );
-                Reference< XAccessible > xControlAccessible( xControlModes, UNO_QUERY );
-                Reference< XAccessibleContext > xNativeControlContext;
-                if ( xControlAccessible.is() )
-                    xNativeControlContext = xControlAccessible->getAccessibleContext();
-                OSL_ENSURE( xNativeControlContext.is(), "AccessibleControlShape::Init: no AccessibleContext for the control!" );
-                m_aControlContext = WeakReference< XAccessibleContext >( xNativeControlContext );
+                sal_Int64 nStates( getAccessibleStateSet( ) );
+                m_pChildManager->setTransientChildren( nStates & AccessibleStateType::MANAGES_DESCENDANTS );
+            }
 
-                // add as listener to the context - we want to multiplex some states
-                if ( isAliveMode( m_xUnoControl ) && xNativeControlContext.is() )
-                {   // (but only in alive mode)
-                    startStateMultiplexing( );
-                }
+            // finally, aggregate a proxy for the control context
+            // first a factory for the proxy
+            Reference< XProxyFactory > xFactory = ProxyFactory::create( comphelper::getProcessComponentContext() );
+            // then the proxy itself
+            if ( xNativeControlContext.is() )
+            {
+                m_xControlContextProxy = xFactory->createProxy( xNativeControlContext );
+                m_xControlContextTypeAccess.set( xNativeControlContext, UNO_QUERY_THROW );
+                m_xControlContextComponent.set( xNativeControlContext, UNO_QUERY_THROW );
 
-                // now that we have all information about our control, do some adjustments
-                adjustAccessibleRole();
-                initializeComposedState();
-
-                // some initialization for our child manager, which is used in alive mode only
-                if ( isAliveMode( m_xUnoControl ) )
+                // aggregate the proxy
+                osl_atomic_increment( &m_refCount );
+                if ( m_xControlContextProxy.is() )
                 {
-                    sal_Int64 nStates( getAccessibleStateSet( ) );
-                    m_pChildManager->setTransientChildren( nStates & AccessibleStateType::MANAGES_DESCENDANTS );
+                    // At this point in time, the proxy has a ref count of exactly one - in m_xControlContextProxy.
+                    // Remember to _not_ reset this member unless the delegator of the proxy has been reset, too!
+                    m_xControlContextProxy->setDelegator( *this );
                 }
+                osl_atomic_decrement( &m_refCount );
 
-                // finally, aggregate a proxy for the control context
-                // first a factory for the proxy
-                Reference< XProxyFactory > xFactory = ProxyFactory::create( comphelper::getProcessComponentContext() );
-                // then the proxy itself
-                if ( xNativeControlContext.is() )
-                {
-                    m_xControlContextProxy = xFactory->createProxy( xNativeControlContext );
-                    m_xControlContextTypeAccess.set( xNativeControlContext, UNO_QUERY_THROW );
-                    m_xControlContextComponent.set( xNativeControlContext, UNO_QUERY_THROW );
+                m_bDisposeNativeContext = true;
 
-                    // aggregate the proxy
-                    osl_atomic_increment( &m_refCount );
-                    if ( m_xControlContextProxy.is() )
-                    {
-                        // At this point in time, the proxy has a ref count of exactly one - in m_xControlContextProxy.
-                        // Remember to _not_ reset this member unless the delegator of the proxy has been reset, too!
-                        m_xControlContextProxy->setDelegator( *this );
-                    }
-                    osl_atomic_decrement( &m_refCount );
-
-                    m_bDisposeNativeContext = true;
-
-                    // Finally, we need to add ourself as mode listener to the control. In case the mode switches,
-                    // we need to dispose ourself.
-                    xControlModes->addModeChangeListener( this );
-                }
+                // Finally, we need to add ourself as mode listener to the control. In case the mode switches,
+                // we need to dispose ourself.
+                xControlModes->addModeChangeListener( this );
             }
         }
     }
