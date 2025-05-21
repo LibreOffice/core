@@ -125,12 +125,13 @@ void OWrappedAccessibleChildrenManager::dispose()
         if( xComp.is() )
             xComp->removeEventListener( this );
 
-        Reference< XComponent > xContextComponent;
         if( rChild.second.is() )
-            xContextComponent.set( rChild.second->getContextNoCreate(),
-                                   ::css::uno::UNO_QUERY );
-        if( xContextComponent.is() )
-            xContextComponent->dispose();
+        {
+            Reference<XComponent> xContextComponent(rChild.second->getContextNoCreate(),
+                                                    css::uno::UNO_QUERY);
+            if (xContextComponent.is())
+                xContextComponent->dispose();
+        }
     }
 
     // clear our children
