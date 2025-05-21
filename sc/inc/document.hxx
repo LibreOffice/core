@@ -401,6 +401,7 @@ private:
     std::unique_ptr<ScDrawLayer> mpDrawLayer;           // SdrModel
     rtl::Reference<XColorList> pColorList;
     std::unique_ptr<ScValidationDataList> pValidationList;              // validity
+    sal_uInt32 mnLastValidationListMax = 0;
     SvNumberFormatterIndexTable* pFormatExchangeList;    // for application of number formats
     TableContainer maTabs;
     rtl::Reference<ScSheetLimits> mxSheetLimits;
