@@ -52,12 +52,7 @@ namespace comphelper
     class OAccessibleContextWrapper;
     class OWrappedAccessibleChildrenManager;
 
-    struct OAccessibleWrapper_Base :
-        public ::cppu::ImplHelper1 < css::accessibility::XAccessible >
-    {
-    protected:
-        ~OAccessibleWrapper_Base() {}
-    };
+    using OAccessibleWrapper_Base = cppu::ImplHelper1<css::accessibility::XAccessible>;
 
     /** a class which aggregates a proxy for an XAccessible, and wrapping the context returned by this
         XAccessible.
