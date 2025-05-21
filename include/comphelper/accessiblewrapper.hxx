@@ -39,6 +39,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
+#include <unotools/weakref.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -47,6 +48,7 @@ namespace comphelper
 
 //= OAccessibleWrapper
 
+class OAccessibleContextWrapper;
 class OWrappedAccessibleChildrenManager;
 
 using OAccessibleWrapper_Base = cppu::ImplHelper1<css::accessibility::XAccessible>;
@@ -61,8 +63,7 @@ class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAccessibleWrapper final : pub
 private:
     css::uno::Reference< css::accessibility::XAccessible >
             m_xParentAccessible;
-    css::uno::WeakReference< css::accessibility::XAccessibleContext >
-            m_aContext;
+    unotools::WeakReference<OAccessibleContextWrapper> m_aContext;
     css::uno::Reference< css::accessibility::XAccessible >
             m_xInnerAccessible;
 

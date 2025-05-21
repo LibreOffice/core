@@ -290,13 +290,13 @@ Any OAccessibleWrapper::queryInterface( const Type& _rType )
 
 Reference< XAccessibleContext > OAccessibleWrapper::getContextNoCreate( ) const
 {
-    return m_aContext;
+    return m_aContext.get();
 }
 
 Reference< XAccessibleContext > SAL_CALL OAccessibleWrapper::getAccessibleContext(  )
 {
     // see if the context is still alive (we cache it)
-    Reference< XAccessibleContext > xContext = m_aContext;
+    rtl::Reference<OAccessibleContextWrapper> xContext = m_aContext.get();
     if ( !xContext.is() )
     {
         // create a new context
@@ -305,7 +305,7 @@ Reference< XAccessibleContext > SAL_CALL OAccessibleWrapper::getAccessibleContex
         {
             xContext = new OAccessibleContextWrapper(getComponentContext(), xInnerContext, this, m_xParentAccessible);
             // cache it
-            m_aContext = WeakReference< XAccessibleContext >( xContext );
+            m_aContext = unotools::WeakReference<OAccessibleContextWrapper>(xContext);
         }
     }
 
