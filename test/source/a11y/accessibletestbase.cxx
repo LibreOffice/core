@@ -81,12 +81,19 @@ void test::AccessibleTestBase::loadFromSrc(const rtl::OUString& sSrcPath)
     load(m_directories.getURLFromSrc(sSrcPath));
 }
 
-uno::Reference<accessibility::XAccessibleContext>
-test::AccessibleTestBase::getWindowAccessibleContext()
+uno::Reference<accessibility::XAccessible> test::AccessibleTestBase::getWindowAccessible()
 {
     vcl::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
     assert(pWindow);
     css::uno::Reference<css::accessibility::XAccessible> xAccessible = pWindow->GetAccessible();
+
+    return xAccessible;
+}
+
+uno::Reference<accessibility::XAccessibleContext>
+test::AccessibleTestBase::getWindowAccessibleContext()
+{
+    css::uno::Reference<css::accessibility::XAccessible> xAccessible = getWindowAccessible();
     assert(xAccessible.is());
 
     return xAccessible->getAccessibleContext();

@@ -493,8 +493,7 @@ CPPUNIT_TEST_FIXTURE(Atspi2TestTree, Test1)
     auto xAtspiPane = getDescendentAtPath(xAtspiWindow, 0, ATSPI_ROLE_PANEL, 1, ATSPI_ROLE_PANEL, 0,
                                           ATSPI_ROLE_ROOT_PANE);
 
-    compareTrees(uno::Reference<accessibility::XAccessible>(mxWindow, uno::UNO_QUERY_THROW),
-                 xAtspiPane);
+    compareTrees(getWindowAccessible(), xAtspiPane);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -51,6 +51,7 @@ protected:
     virtual void load(const rtl::OUString& sURL);
     virtual void loadFromSrc(const rtl::OUString& sSrcPath);
     void close();
+    css::uno::Reference<css::accessibility::XAccessible> getWindowAccessible();
     css::uno::Reference<css::accessibility::XAccessibleContext> getWindowAccessibleContext();
     virtual css::uno::Reference<css::accessibility::XAccessibleContext>
     getDocumentAccessibleContext();
