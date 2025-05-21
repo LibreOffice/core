@@ -20,6 +20,9 @@ pdfium_patches += freebsd.patch
 
 pdfium_patches += system-abseil.diff
 
+# https://pdfium-review.googlesource.com/c/pdfium/+/130970
+pdfium_patches += retrieve-MIME-type-from-PDF-attachments.patch.1
+
 # TODO, attempt upstream
 pdfium_patches += ofz451333752.patch
 

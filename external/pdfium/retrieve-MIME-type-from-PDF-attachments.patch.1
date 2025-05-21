@@ -1,0 +1,89 @@
+From 87a497287e02ba8cfa61418c2443e205d5b7e054 Mon Sep 17 00:00:00 2001
+From: Helmut Januschka <helmut@januschka.com>
+Date: Mon, 28 Apr 2025 16:48:20 -0700
+Subject: [PATCH] Add API to retrieve MIME type from PDF attachments
+
+Adds new API to retrieve values from the embedded file stream
+dictionary of PDF attachments:
+
+FPDFAttachment_GetSubtype() - Specifically retrieves the MIME type
+
+Bug: 408241034
+Change-Id: Ia42813d0423dbdad3105f9ac1c8da4f3976e92c9
+Reviewed-on: https://pdfium-review.googlesource.com/c/pdfium/+/130970
+Commit-Queue: Lei Zhang <thestig@chromium.org>
+Reviewed-by: Tom Sepez <tsepez@chromium.org>
+Reviewed-by: Lei Zhang <thestig@chromium.org>
+---
+ fpdfsdk/fpdf_attachment.cpp              | 27 ++++++++++++++++++
+ fpdfsdk/fpdf_attachment_embeddertest.cpp | 36 ++++++++++++++++++++++++
+ fpdfsdk/fpdf_view_c_api_test.c           |  1 +
+ public/fpdf_attachment.h                 | 17 +++++++++++
+ 4 files changed, 81 insertions(+)
+
+diff --git a/fpdfsdk/fpdf_attachment.cpp b/fpdfsdk/fpdf_attachment.cpp
+index c5f251538..eaba2a78f 100644
+--- a/fpdfsdk/fpdf_attachment.cpp
++++ b/fpdfsdk/fpdf_attachment.cpp
+@@ -304,3 +304,30 @@ FPDFAttachment_GetFile(FPDF_ATTACHMENT attachment,
+                                        static_cast<size_t>(buflen))));
+   return true;
+ }
++
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAttachment_GetSubtype(FPDF_ATTACHMENT attachment,
++                          FPDF_WCHAR* buffer,
++                          unsigned long buflen) {
++  CPDF_Object* file = CPDFObjectFromFPDFAttachment(attachment);
++  if (!file) {
++    return 0;
++  }
++
++  // SAFETY: required from caller.
++  auto buffer_span = UNSAFE_BUFFERS(SpanFromFPDFApiArgs(buffer, buflen));
++  CPDF_FileSpec spec(pdfium::WrapRetain(file));
++  RetainPtr<const CPDF_Stream> file_stream = spec.GetFileStream();
++  if (!file_stream) {
++    return Utf16EncodeMaybeCopyAndReturnLength(WideString(), buffer_span);
++  }
++
++  ByteString subtype = file_stream->GetDict()->GetNameFor("Subtype");
++  if (subtype.IsEmpty()) {
++    // Per API description, return an empty string in these cases.
++    return Utf16EncodeMaybeCopyAndReturnLength(WideString(), buffer_span);
++  }
++
++  return Utf16EncodeMaybeCopyAndReturnLength(
++      PDF_DecodeText(subtype.unsigned_span()), buffer_span);
++}
+diff --git a/public/fpdf_attachment.h b/public/fpdf_attachment.h
+index d25bddab6..a8a40b34b 100644
+--- a/public/fpdf_attachment.h
++++ b/public/fpdf_attachment.h
+@@ -172,6 +172,23 @@ FPDFAttachment_GetFile(FPDF_ATTACHMENT attachment,
+                        unsigned long buflen,
+                        unsigned long* out_buflen);
+ 
++// Experimental API.
++// Get the MIME type (Subtype) of the embedded file |attachment|. |buffer| is
++// only modified if |buflen| is longer than the length of the MIME type string.
++// If the Subtype is not found or if there is no file stream, an empty string
++// would be copied to |buffer| and the return value would be 2. On other errors,
++// nothing would be added to |buffer| and the return value would be 0.
++//
++//   attachment - handle to an attachment.
++//   buffer     - buffer for holding the MIME type string encoded in UTF-16LE.
++//   buflen     - length of the buffer in bytes.
++//
++// Returns the length of the MIME type string in bytes.
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAttachment_GetSubtype(FPDF_ATTACHMENT attachment,
++                          FPDF_WCHAR* buffer,
++                          unsigned long buflen);
++
+ #ifdef __cplusplus
+ }  // extern "C"
+ #endif  // __cplusplus
+-- 
+2.43.0
+
