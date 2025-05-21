@@ -710,8 +710,7 @@ void ChildrenManagerImpl::impl_dispose()
             xController, uno::UNO_QUERY);
         if (xSelectionSupplier.is())
         {
-            xSelectionSupplier->removeSelectionChangeListener (
-                static_cast<view::XSelectionChangeListener*>(this));
+            xSelectionSupplier->removeSelectionChangeListener(this);
         }
     }
     catch( uno::RuntimeException&)
