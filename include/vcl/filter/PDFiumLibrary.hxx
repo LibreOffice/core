@@ -274,7 +274,8 @@ public:
     virtual int getSignatureCount() = 0;
     virtual int getFileVersion() = 0;
     virtual int getAttachmentCount() = 0;
-    virtual bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion) = 0;
+    virtual bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion, bool bRemoveSecurity)
+        = 0;
 
     virtual std::unique_ptr<PDFiumPage> openPage(int nIndex) = 0;
     virtual std::unique_ptr<PDFiumSignature> getSignature(int nIndex) = 0;

@@ -573,7 +573,7 @@ public:
     int getSignatureCount() override;
     int getAttachmentCount() override;
     int getFileVersion() override;
-    bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion) override;
+    bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion, bool bRemoveSecurity) override;
 
     std::unique_ptr<PDFiumPage> openPage(int nIndex) override;
     std::unique_ptr<PDFiumSignature> getSignature(int nIndex) override;
@@ -962,12 +962,14 @@ int PDFiumDocumentImpl::getFileVersion()
     return nFileVersion;
 }
 
-bool PDFiumDocumentImpl::saveWithVersion(SvMemoryStream& rStream, int nFileVersion)
+bool PDFiumDocumentImpl::saveWithVersion(SvMemoryStream& rStream, int nFileVersion,
+                                         bool bRemoveSecurity)
 {
     CompatibleWriter aWriter(rStream);
     aWriter.version = 1;
     aWriter.WriteBlock = &CompatibleWriterCallback;
-    if (!FPDF_SaveWithVersion(mpPdfDocument, &aWriter, 0, nFileVersion))
+    if (!FPDF_SaveWithVersion(mpPdfDocument, &aWriter, bRemoveSecurity ? FPDF_REMOVE_SECURITY : 0,
+                              nFileVersion))
     {
         return false;
     }

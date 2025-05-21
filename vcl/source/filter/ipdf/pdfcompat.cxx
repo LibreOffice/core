@@ -99,7 +99,8 @@ bool convertToHighestSupported(
 
         SAL_INFO("vcl.filter", "convertToHighestSupported do save");
         // 16 means PDF-1.6.
-        if (!pPdfDocument->saveWithVersion(aSaved, 16))
+        // true means 'remove security' - i.e. not passworded
+        if (!pPdfDocument->saveWithVersion(aSaved, 16, true))
             return false;
     } while (bAgain);
 
