@@ -807,5 +807,7 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
 void BackingWindow::clearRecentFileList()
 {
     mxAllRecentThumbnails->Clear();
+    // tdf#166349 - reload recent documents to show pinned items
+    mxAllRecentThumbnails->Reload();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab:*/
