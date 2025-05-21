@@ -101,11 +101,12 @@ ConnectorHelper::getConnectorTransformMatrix(const oox::drawingml::ShapePtr& pCo
         aTransform.scale(1.0, -1.0);
     if (pConnector->getRotation() == 0)
         return aTransform;
-    if (pConnector->getRotation() == 5400000)
+
+    if (pConnector->getRotation() == 5400000 || pConnector->getRotation() == -16200000)
         aTransform *= basegfx::B2DHomMatrix(0, -1, 0, 1, 0, 0);
-    else if (pConnector->getRotation() == 10800000)
+    else if (pConnector->getRotation() == 10800000 || pConnector->getRotation() == -10800000)
         aTransform *= basegfx::B2DHomMatrix(-1, 0, 0, 0, -1, 0);
-    else if (pConnector->getRotation() == 16200000)
+    else if (pConnector->getRotation() == 16200000 || pConnector->getRotation() == -5400000)
         aTransform *= basegfx::B2DHomMatrix(0, 1, 0, -1, 0, 0);
     else
         SAL_WARN("oox", "tdf#157888 LibreOffice cannot handle such connector rotation");
