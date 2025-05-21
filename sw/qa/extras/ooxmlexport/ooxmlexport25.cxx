@@ -55,6 +55,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166510_sectPr_bottomSpacing, "tdf166510_sectPr_b
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4253), nHeight);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf165478_bottomAligned, "tdf165478_bottomAligned.docx")
+{
+    // given a layoutInCell, wrap-through image, paragraph-anchored to a bottom-aligned cell
+    auto pXmlDoc = parseLayoutDump();
+
+    // The text in the cell should be at the bottom of the cell
+    assertXPathContent(pXmlDoc, "//cell[2]/txt", u"Bottom aligned");
+    sal_Int32 nTextBottom = getXPath(pXmlDoc, "//cell[2]/txt/infos/bounds", "bottom").toInt32();
+    sal_Int32 nCellBottom = getXPath(pXmlDoc, "//cell[2]/infos/bounds", "bottom").toInt32();
+
+    // Without the fix, the text was at the top of the cell (2002) instead of at the bottom (4423)
+    CPPUNIT_ASSERT_EQUAL(nCellBottom, nTextBottom);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
 {
     createSwDoc();
