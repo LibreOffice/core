@@ -166,7 +166,7 @@ void ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
     }
 }
 
-tools::Long ShapeTypeHandler::GetSlotId(const uno::Reference<drawing::XShape>& rxShape) const
+ShapeTypeId ShapeTypeHandler::GetSlotId(const uno::Reference<drawing::XShape>& rxShape) const
 {
     if (!rxShape.is())
         return 0;

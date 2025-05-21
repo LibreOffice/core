@@ -178,7 +178,7 @@ private:
              Returns the slot id of the shape with the given service name or
              0 when the service name is not known.
      */
-    SVX_DLLPRIVATE tools::Long GetSlotId (const css::uno::Reference<
+    SVX_DLLPRIVATE ShapeTypeId GetSlotId(const css::uno::Reference<
         css::drawing::XShape>& rxShape) const;
 };
 
