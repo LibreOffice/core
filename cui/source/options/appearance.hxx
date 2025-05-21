@@ -38,6 +38,7 @@ private:
 
     std::unique_ptr<weld::ComboBox> m_xSchemeList;
     std::unique_ptr<weld::Button> m_xMoreThemesBtn;
+    std::unique_ptr<weld::CheckButton> m_xEnableAppTheming;
     std::unique_ptr<weld::ComboBox> m_xColorEntryBtn;
     std::unique_ptr<ColorListBox> m_xColorChangeBtn;
     std::unique_ptr<weld::CheckButton> m_xShowInDocumentChkBtn;
@@ -53,6 +54,7 @@ private:
     DECL_LINK(ColorEntryChgHdl, weld::ComboBox&, void);
     DECL_LINK(ColorValueChgHdl, ColorListBox&, void);
     DECL_LINK(ShowInDocumentHdl, weld::Toggleable&, void);
+    DECL_LINK(EnableAppThemingHdl, weld::Toggleable&, void);
     DECL_LINK(SchemeChangeHdl, weld::ComboBox&, void);
     DECL_LINK(SchemeListToggleHdl, weld::ComboBox&, void);
     DECL_STATIC_LINK(SvxAppearanceTabPage, MoreThemesHdl, weld::Button&, void);
