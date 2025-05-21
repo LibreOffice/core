@@ -86,43 +86,36 @@ void OWrappedAccessibleChildrenManager::invalidateAll( )
 Reference< XAccessible > OWrappedAccessibleChildrenManager::getAccessibleWrapperFor(
     const Reference< XAccessible >& _rxKey )
 {
-    rtl::Reference< OAccessibleWrapper > xValue;
-
     if( !_rxKey.is() )
-    {
-        // fprintf( stderr, "It was this path that was crashing stuff\n" );
-        return xValue;
-    }
+        return {};
 
     // do we have this child in the cache?
     AccessibleMap::const_iterator aPos = m_aChildrenMap.find( _rxKey );
     if ( m_aChildrenMap.end() != aPos )
+        return aPos->second;
+
+    // not found in the cache, and allowed to create
+    // -> new wrapper
+    rtl::Reference<OAccessibleWrapper> xValue
+        = new OAccessibleWrapper(m_xContext, _rxKey, m_aOwningAccessible);
+
+    // see if we do cache children
+    if ( !m_bTransientChildren )
     {
-        xValue = aPos->second;
-    }
-    else
-    {   // not found in the cache, and allowed to create
-        // -> new wrapper
-        xValue = new OAccessibleWrapper( m_xContext, _rxKey, m_aOwningAccessible );
-
-        // see if we do cache children
-        if ( !m_bTransientChildren )
+        if (!m_aChildrenMap.emplace( _rxKey, xValue ).second)
         {
-            if (!m_aChildrenMap.emplace( _rxKey, xValue ).second)
-            {
-                OSL_FAIL(
-                    "OWrappedAccessibleChildrenManager::"
-                        "getAccessibleWrapperFor: element was already"
-                        " inserted!" );
-            }
-
-            // listen for disposals of inner children - this may happen when the inner context
-            // is the owner for the inner children (it will dispose these children, and of course
-            // not our wrapper for these children)
-            Reference< XComponent > xComp( _rxKey, UNO_QUERY );
-            if ( xComp.is() )
-                xComp->addEventListener( this );
+            OSL_FAIL(
+                "OWrappedAccessibleChildrenManager::"
+                    "getAccessibleWrapperFor: element was already"
+                    " inserted!" );
         }
+
+        // listen for disposals of inner children - this may happen when the inner context
+        // is the owner for the inner children (it will dispose these children, and of course
+        // not our wrapper for these children)
+        Reference< XComponent > xComp( _rxKey, UNO_QUERY );
+        if ( xComp.is() )
+            xComp->addEventListener( this );
     }
 
     return xValue;
