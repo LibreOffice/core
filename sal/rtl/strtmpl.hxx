@@ -67,8 +67,6 @@ template <typename C> struct null_terminated
     {
         friend bool operator==(EndDetector, C* iter) { return *iter == 0; }
         friend bool operator==(C* iter, EndDetector) { return *iter == 0; }
-        friend bool operator!=(EndDetector, C* iter) { return *iter != 0; }
-        friend bool operator!=(C* iter, EndDetector) { return *iter != 0; }
     };
     static auto end() { return EndDetector{}; }
 };
