@@ -1098,14 +1098,11 @@ void WorksheetGlobals::finalizeValidationRanges() const
             {
                 const OUString aToken = validation.msRef.getToken( 0, ' ' );
 
-                Reference<XSpreadsheet> xSheet = getSheetFromDoc( getCurrentSheetIndex() );
-                Reference<XCellRange> xDBCellRange;
-                Reference<XCell> xCell;
-                xDBCellRange = xSheet->getCellRangeByName( aToken );
+                rtl::Reference<ScTableSheetObj> xSheet = getSheetFromDoc( getCurrentSheetIndex() );
+                rtl::Reference<ScCellRangeObj> xDBCellRange = xSheet->getScCellRangeByName( aToken );
 
-                xCell = xDBCellRange->getCellByPosition( 0, 0 );
-                Reference<XCellAddressable> xCellAddressable( xCell, UNO_QUERY_THROW );
-                CellAddress aFirstCell = xCellAddressable->getCellAddress();
+                rtl::Reference<ScCellObj> xCell = xDBCellRange->getScCellByPosition( 0, 0 );
+                CellAddress aFirstCell = xCell->getCellAddress();
                 xValidation->setSourcePosition( aFirstCell );
             }
             catch(const Exception&)

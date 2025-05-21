@@ -438,7 +438,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScTableSheetsObj final : public cppu::WeakImplHelper<
+class SC_DLLPUBLIC ScTableSheetsObj final : public cppu::WeakImplHelper<
                                 css::sheet::XSpreadsheets2,
                                 css::sheet::XCellRangesAccess,
                                 css::container::XEnumerationAccess,

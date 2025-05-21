@@ -1271,7 +1271,7 @@ void PivotTable::finalizeImport()
     try
     {
         // create a new data pilot descriptor based on the source data
-        Reference< XDataPilotTablesSupplier > xDPTablesSupp( getSheetFromDoc( maLocationModel.maRange.aStart.Tab() ), UNO_QUERY_THROW );
+        rtl::Reference< ScTableSheetObj > xDPTablesSupp( getSheetFromDoc( maLocationModel.maRange.aStart.Tab() ) );
         Reference< XDataPilotTables > xDPTables( xDPTablesSupp->getDataPilotTables(), UNO_SET_THROW );
         mxDPDescriptor = static_cast<ScDataPilotDescriptorBase*>( xDPTables->createDataPilotDescriptor().get() );
         ScRange aRange = mpPivotCache->getSourceRange();

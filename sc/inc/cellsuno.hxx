@@ -114,6 +114,7 @@ class SfxItemPropertySet;
 struct SfxItemPropertyMapEntry;
 class ScTableRowsObj;
 class ScTableValidationObj;
+class ScCellObj;
 class SolarMutexGuard;
 
 namespace editeng { class SvxBorderLine; }
@@ -490,7 +491,7 @@ protected:
 
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::table::XCell >
+    rtl::Reference< ScCellObj >
                             GetCellByPosition_Impl( sal_Int32 nColumn, sal_Int32 nRow );
 
             /// @throws css::uno::RuntimeException
@@ -621,10 +622,16 @@ public:
     rtl::Reference< ScCellRangeObj >
                             getScCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom );
+    SC_DLLPUBLIC rtl::Reference< ScCellRangeObj >
+                            getScCellRangeByName( const OUString& aRange );
+    rtl::Reference< ScCellRangeObj >
+                            getScCellRangeByName( const OUString& aRange, const ScAddress::Details& rDetails );
     rtl::Reference< ScTableRowsObj >
                             getScRowsByPosition( SolarMutexGuard& rGuard, sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom );
     rtl::Reference< ScTableRowsObj > getScRows();
+    SC_DLLPUBLIC rtl::Reference< ScCellObj >
+                            getScCellByPosition( sal_Int32 nColumn, sal_Int32 nRow );
 };
 
 //! really derive cell from range?
@@ -727,7 +734,7 @@ public:
     virtual void SAL_CALL   setTokens( const css::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
 
                             // XCellAddressable
-    virtual css::table::CellAddress SAL_CALL getCellAddress() override;
+    SC_DLLPUBLIC virtual css::table::CellAddress SAL_CALL getCellAddress() override;
 
                             // XSheetAnnotationAnchor
     virtual css::uno::Reference< css::sheet::XSheetAnnotation > SAL_CALL
@@ -776,7 +783,7 @@ using ScTableSheetObj_BASE = cppu::ImplInheritanceHelper<ScCellRangeObj,
                                                          css::sheet::XScenarioEnhanced,
                                                          css::sheet::XExternalSheetName,
                                                          css::document::XEventsSupplier>;
-class SAL_DLLPUBLIC_RTTI ScTableSheetObj final : public ScTableSheetObj_BASE
+class SC_DLLPUBLIC ScTableSheetObj final : public ScTableSheetObj_BASE
 {
     friend class ScTableSheetsObj;      // for insertByName()
 
@@ -857,7 +864,7 @@ public:
                             getScenarios() override;
 
                             // XSheetAnnotationsSupplier
-    SC_DLLPUBLIC virtual css::uno::Reference< css::sheet::XSheetAnnotations > SAL_CALL
+    virtual css::uno::Reference< css::sheet::XSheetAnnotations > SAL_CALL
                             getAnnotations() override;
 
                             // XDrawPageSupplier

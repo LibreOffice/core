@@ -37,6 +37,7 @@
 #include <worksheetbuffer.hxx>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
+#include <cellsuno.hxx>
 #include <compiler.hxx>
 #include <document.hxx>
 
@@ -317,7 +318,7 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
     {
     case BIFF_DEFNAME_PRINTAREA:
     {
-        Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
+        rtl::Reference< ScTableSheetObj > xPrintAreas( getSheetFromDoc( mnCalcSheet ) );
         ScRangeList aPrintRanges;
         getFormulaParser().extractCellRangeList( aPrintRanges, aFTokenSeq, mnCalcSheet );
         if( xPrintAreas.is() && !aPrintRanges.empty() )
@@ -326,7 +327,7 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
     break;
     case BIFF_DEFNAME_PRINTTITLES:
     {
-        Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
+        rtl::Reference< ScTableSheetObj > xPrintAreas( getSheetFromDoc( mnCalcSheet ) );
         ScRangeList aTitleRanges;
         getFormulaParser().extractCellRangeList( aTitleRanges, aFTokenSeq, mnCalcSheet );
         if( xPrintAreas.is() && !aTitleRanges.empty() )
