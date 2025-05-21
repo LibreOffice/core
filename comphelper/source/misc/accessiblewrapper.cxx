@@ -102,13 +102,7 @@ Reference< XAccessible > OWrappedAccessibleChildrenManager::getAccessibleWrapper
     // see if we do cache children
     if ( !m_bTransientChildren )
     {
-        if (!m_aChildrenMap.emplace( _rxKey, xValue ).second)
-        {
-            OSL_FAIL(
-                "OWrappedAccessibleChildrenManager::"
-                    "getAccessibleWrapperFor: element was already"
-                    " inserted!" );
-        }
+        m_aChildrenMap.emplace(_rxKey, xValue);
 
         // listen for disposals of inner children - this may happen when the inner context
         // is the owner for the inner children (it will dispose these children, and of course
