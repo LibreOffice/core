@@ -28,8 +28,8 @@
 #include <AccObjectWinManager.hxx>
 #include <unomsaaevent.hxx>
 
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/window.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/sysdata.hxx>
 
 using namespace com::sun::star::uno;
@@ -78,10 +78,10 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
     {
         if(xChild.is())
         {
-            VCLXWindow* pvclwindow = dynamic_cast<VCLXWindow*>(m_xAccessible.get());
-            assert(pvclwindow);
-            const SystemEnvData* systemdata
-                = pvclwindow->GetWindow()->GetSystemData();
+            VCLXAccessibleComponent* pVCLAccComponent = dynamic_cast<VCLXAccessibleComponent*>(
+                m_xAccessible->getAccessibleContext().get());
+            assert(pVCLAccComponent);
+            const SystemEnvData* systemdata = pVCLAccComponent->GetWindow()->GetSystemData();
 
             m_rObjManager.InsertAccObj(xChild.get(), m_xAccessible.get(), systemdata->hWnd);
             m_rObjManager.InsertChildrenAccObj(xChild.get());
