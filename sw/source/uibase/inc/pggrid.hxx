@@ -34,6 +34,7 @@ class SwTextGridPage final : public SfxTabPage
     bool        m_bSquaredMode;
     bool        m_bHRulerChanged;
     bool        m_bVRulerChanged;
+    bool        m_bModified = false;
 
     SwPageGridExample m_aExampleWN;
     std::unique_ptr<weld::RadioButton> m_xNoGridRB;

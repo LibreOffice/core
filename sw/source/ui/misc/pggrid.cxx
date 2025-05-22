@@ -131,18 +131,18 @@ std::unique_ptr<SfxTabPage> SwTextGridPage::Create(weld::Container* pPage, weld:
 bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bRet = false;
-    if (m_xNoGridRB->get_state_changed_from_saved() ||
-        m_xLinesGridRB->get_state_changed_from_saved() ||
-        m_xLinesPerPageNF->get_value_changed_from_saved() ||
-        m_xTextSizeMF->get_value_changed_from_saved() ||
-        m_xCharsPerLineNF->get_value_changed_from_saved() ||
-        m_xSnapToCharsCB->get_state_changed_from_saved() ||
-        m_xRubySizeMF->get_value_changed_from_saved() ||
-        m_xCharWidthMF->get_value_changed_from_saved() ||
-        m_xRubyBelowCB->get_state_changed_from_saved() ||
-        m_xDisplayCB->get_state_changed_from_saved() ||
-        m_xPrintCB->get_state_changed_from_saved() ||
-        m_xColorLB->IsValueChangedFromSaved())
+    if (m_xNoGridRB->get_state_changed_from_saved()
+        || m_xLinesGridRB->get_state_changed_from_saved()
+        || m_xLinesPerPageNF->get_value_changed_from_saved()
+        || m_xTextSizeMF->get_value_changed_from_saved()
+        || m_xCharsPerLineNF->get_value_changed_from_saved()
+        || m_xSnapToCharsCB->get_state_changed_from_saved()
+        || m_xRubySizeMF->get_value_changed_from_saved()
+        || m_xCharWidthMF->get_value_changed_from_saved()
+        || m_xRubyBelowCB->get_state_changed_from_saved()
+        || m_xDisplayCB->get_state_changed_from_saved()
+        || m_xPrintCB->get_state_changed_from_saved() || m_xColorLB->IsValueChangedFromSaved()
+        || m_bModified)
     {
         PutGridItem(*rSet);
         bRet = true;
@@ -206,6 +206,8 @@ void    SwTextGridPage::Reset(const SfxItemSet *rSet)
     m_xDisplayCB->save_state();
     m_xPrintCB->save_state();
     m_xColorLB->SaveValue();
+
+    m_bModified = false;
 }
 
 void    SwTextGridPage::ActivatePage( const SfxItemSet& rSet )
@@ -525,6 +527,7 @@ IMPL_LINK_NOARG(SwTextGridPage, DisplayGridHdl, weld::Toggleable&, void)
     bool bChecked = m_xDisplayCB->get_active();
     m_xPrintCB->set_sensitive(bChecked);
     m_xPrintCB->set_active(bChecked);
+    GridModifyHdl();
 }
 
 IMPL_LINK_NOARG(SwTextGridPage, GridModifyClickHdl, weld::Toggleable&, void)
@@ -546,6 +549,7 @@ void SwTextGridPage::GridModifyHdl()
         aSet.Put(*pExSet);
     PutGridItem(aSet);
     m_aExampleWN.UpdateExample(aSet);
+    m_bModified = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
