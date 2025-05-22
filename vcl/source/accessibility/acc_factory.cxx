@@ -68,11 +68,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(Fixed
     return new VCLXAccessibleFixedText(pFixedText);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(FixedHyperlink* pFixedHyperlink)
-{
-    return new VCLXAccessibleFixedHyperlink(pFixedHyperlink);
-}
-
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ScrollBar* pScrollBar)
 {
     return new VCLXAccessibleScrollBar(pScrollBar);

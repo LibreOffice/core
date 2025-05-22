@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <accessibility/vclxaccessiblefixedhyperlink.hxx>
+
 #include <vcl/event.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/settings.hxx>
@@ -79,6 +81,11 @@ bool FixedHyperlink::ImplIsOverText(Point aPosition) const
     }
 
     return bIsOver;
+}
+
+css::uno::Reference<css::accessibility::XAccessible> FixedHyperlink::CreateAccessible()
+{
+    return new VCLXAccessibleFixedHyperlink(this);
 }
 
 void FixedHyperlink::MouseMove( const MouseEvent& rMEvt )

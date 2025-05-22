@@ -71,6 +71,8 @@ public:
     */
     FixedHyperlink( vcl::Window* pParent, WinBits nWinStyle = 0 );
 
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+
     /** overwrites Window::GetFocus().
 
         Changes the color of the text and shows a focus rectangle.

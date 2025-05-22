@@ -65,8 +65,6 @@ public:
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(FixedText* pFixedText);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(FixedHyperlink* pFixedHyperlink);
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(ScrollBar* pScrollBar);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(Edit* pEdit);

@@ -19,9 +19,23 @@
 
 #include <accessibility/vclxaccessiblefixedhyperlink.hxx>
 
+#include <comphelper/accessiblecontexthelper.hxx>
+
 using namespace ::com::sun::star;
 
-// VCLXAccessibleFixedHyperlink
+VCLXAccessibleFixedHyperlink::VCLXAccessibleFixedHyperlink(vcl::Window* pWindow)
+    : ImplInheritanceHelper(pWindow)
+{
+}
+
+// XAccessible
+
+css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+VCLXAccessibleFixedHyperlink::getAccessibleContext()
+{
+    comphelper::OExternalLockGuard aGuard(this);
+    return this;
+}
 
 // XServiceInfo
 

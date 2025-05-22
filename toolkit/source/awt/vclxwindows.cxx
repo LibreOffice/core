@@ -2759,12 +2759,6 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
     }
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXFixedHyperlink::CreateAccessibleContext()
-{
-    VclPtr<FixedHyperlink> pFixedHyperlink = GetAs<FixedHyperlink>();
-    return AccessibleFactory::createAccessibleContext(pFixedHyperlink);
-}
-
 void VCLXFixedHyperlink::setText( const OUString& Text )
 {
     SolarMutexGuard aGuard;
