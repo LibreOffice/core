@@ -189,7 +189,7 @@ namespace
     };
 }
 
-void Comment::finalizeImport()
+void Comment::finalizeImport(const VmlDrawing::NoteShapesMap& rNoteShapesMap)
 {
     // BIFF12 stores cell range instead of cell address, use first cell of this range
     OSL_ENSURE( maModel.maRange.aStart == maModel.maRange.aEnd,
@@ -222,8 +222,10 @@ void Comment::finalizeImport()
 
         // convert shape formatting and visibility
         bool bVisible = true;
-        if( const ::oox::vml::ShapeBase* pVmlNoteShape = getVmlDrawing().getNoteShape( maModel.maRange.aStart ) )
+        auto it = rNoteShapesMap.find(std::make_pair(maModel.maRange.aStart.Col(), maModel.maRange.aStart.Row()));
+        if( it != rNoteShapesMap.end() )
         {
+            const ::oox::vml::ShapeBase* pVmlNoteShape = it->second;
             // position and formatting
             css::awt::Rectangle aShapeRect = pVmlNoteShape->getShapeRectangle();
             if (aShapeRect.Width > 0 || aShapeRect.Height > 0)
@@ -314,7 +316,10 @@ void CommentsBuffer::finalizeImport()
     auto pModel = getScDocument().GetDrawLayer();
     bool bWasLocked = pModel->isLocked();
     pModel->setLock(true);
-    maComments.forEachMem( &Comment::finalizeImport );
+    // build an index once, instead of scanning a potentially large list for every note.
+    VmlDrawing::NoteShapesMap aNoteShapesIndex = getVmlDrawing().buildNoteShapesMap();
+    for (const std::shared_ptr<Comment> & rxComment : maComments)
+        rxComment->finalizeImport(aNoteShapesIndex);
     pModel->setLock(bWasLocked);
 }
 
