@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "accessiblewrapper.hxx"
+
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <DescriptionGenerator.hxx>
@@ -38,7 +40,6 @@
 #include <svx/svdouno.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
-#include <comphelper/accessiblewrapper.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/strings.hrc>
@@ -101,7 +102,7 @@ AccessibleControlShape::AccessibleControlShape (
     ,   m_bDisposeNativeContext( false )
     ,   m_bWaitingForControl( false )
 {
-    m_pChildManager = new comphelper::OWrappedAccessibleChildrenManager( comphelper::getProcessComponentContext() );
+    m_pChildManager = new OWrappedAccessibleChildrenManager( comphelper::getProcessComponentContext() );
 
     osl_atomic_increment( &m_refCount );
     {

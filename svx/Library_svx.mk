@@ -110,7 +110,9 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/GraphCtlAccessibleContext \
     svx/source/accessibility/ShapeTypeHandler \
     svx/source/accessibility/SvxShapeTypes \
+    svx/source/accessibility/accessiblewrapper \
     svx/source/accessibility/lookupcolorname \
+    svx/source/accessibility/proxyaggregation \
 ))
 endif
 

@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/accessiblewrapper.hxx>
+#include "accessiblewrapper.hxx"
+
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
@@ -27,7 +28,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 
-namespace comphelper
+namespace accessibility
 {
 OWrappedAccessibleChildrenManager::OWrappedAccessibleChildrenManager( const Reference< XComponentContext >& _rxContext )
     :m_xContext( _rxContext )

@@ -19,13 +19,14 @@
 
 #include <sal/config.h>
 
+#include "proxyaggregation.hxx"
+
 #include <cassert>
 
-#include <comphelper/proxyaggregation.hxx>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 
 
-namespace comphelper
+namespace accessibility
 {
 
 
@@ -237,7 +238,7 @@ namespace comphelper
     }
 
 
-}   // namespace comphelper
+}   // namespace accessibility
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

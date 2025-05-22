@@ -165,9 +165,9 @@ void SalCall::handleFunctionDecl(FunctionDecl const* decl)
     if (auto recordDecl = dyn_cast<CXXRecordDecl>(decl->getDeclContext()))
     {
         auto dc = loplugin::DeclCheck(recordDecl);
-        if (dc.Class("OProxyAggregation").Namespace("comphelper").GlobalNamespace()
+        if (dc.Class("OProxyAggregation").Namespace("accessibility").GlobalNamespace()
             || dc.Class("OComponentProxyAggregationHelper")
-                   .Namespace("comphelper")
+                   .Namespace("accessibility")
                    .GlobalNamespace()
             || dc.Class("SvxShapeMaster").GlobalNamespace()
             || dc.Class("ListBoxAccessibleBase").Namespace("accessibility").GlobalNamespace()

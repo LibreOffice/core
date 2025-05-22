@@ -1237,7 +1237,6 @@ comphelper/source/misc/accessibleeventnotifier.cxx
 comphelper/source/misc/accessiblekeybindinghelper.cxx
 comphelper/source/misc/accessibleselectionhelper.cxx
 comphelper/source/misc/accessibletexthelper.cxx
-comphelper/source/misc/accessiblewrapper.cxx
 comphelper/source/misc/anycompare.cxx
 comphelper/source/misc/anytohash.cxx
 comphelper/source/misc/anytostring.cxx
@@ -1267,7 +1266,6 @@ comphelper/source/misc/numberedcollection.cxx
 comphelper/source/misc/numbers.cxx
 comphelper/source/misc/officerestartmanager.cxx
 comphelper/source/misc/officerestartmanager.hxx
-comphelper/source/misc/proxyaggregation.cxx
 comphelper/source/misc/sequenceashashmap.cxx
 comphelper/source/misc/sharedmutex.cxx
 comphelper/source/misc/solarmutex.cxx
@@ -4724,7 +4722,6 @@ include/comphelper/accessibleeventnotifier.hxx
 include/comphelper/accessiblekeybindinghelper.hxx
 include/comphelper/accessibleselectionhelper.hxx
 include/comphelper/accessibletexthelper.hxx
-include/comphelper/accessiblewrapper.hxx
 include/comphelper/anycompare.hxx
 include/comphelper/asyncnotification.hxx
 include/comphelper/attributelist.hxx
@@ -4775,7 +4772,6 @@ include/comphelper/propertysetinfo.hxx
 include/comphelper/propertystatecontainer.hxx
 include/comphelper/propmultiplex.hxx
 include/comphelper/propstate.hxx
-include/comphelper/proxyaggregation.hxx
 include/comphelper/scopeguard.hxx
 include/comphelper/seekableinput.hxx
 include/comphelper/seqstream.hxx
@@ -11167,7 +11163,11 @@ svx/source/accessibility/ChildrenManagerImpl.hxx
 svx/source/accessibility/GraphCtlAccessibleContext.cxx
 svx/source/accessibility/ShapeTypeHandler.cxx
 svx/source/accessibility/SvxShapeTypes.cxx
+svx/source/accessibility/accessiblewrapper.cxx
+svx/source/accessibility/accessiblewrapper.hxx
 svx/source/accessibility/charmapacc.cxx
+svx/source/accessibility/proxyaggregation.cxx
+svx/source/accessibility/proxyaggregation.hxx
 svx/source/accessibility/svxpixelctlaccessiblecontext.cxx
 svx/source/accessibility/svxrectctaccessiblecontext.cxx
 svx/source/core/extedit.cxx

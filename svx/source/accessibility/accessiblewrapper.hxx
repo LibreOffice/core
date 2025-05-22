@@ -22,9 +22,10 @@
 #include <config_options.h>
 #include <sal/config.h>
 
+#include "proxyaggregation.hxx"
+
 #include <map>
 
-#include <comphelper/proxyaggregation.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
@@ -36,13 +37,12 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-namespace comphelper
+namespace accessibility
 {
 
 //= OAccessibleWrapper
@@ -55,8 +55,7 @@ using OAccessibleWrapper_Base = cppu::ImplHelper1<css::accessibility::XAccessibl
 /** a class which aggregates a proxy for an XAccessible, and wrapping the context returned by this
     XAccessible.
 */
-class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAccessibleWrapper final : public OAccessibleWrapper_Base
-                        ,public OComponentProxyAggregation
+class OAccessibleWrapper final : public OAccessibleWrapper_Base, public OComponentProxyAggregation
 
 {
 private:
@@ -123,9 +122,8 @@ typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessibleEventListener
 
     @seealso OAccessibleContextWrapper
 */
-class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAccessibleContextWrapperHelper
-            :private OComponentProxyAggregationHelper
-            ,public OAccessibleContextWrapperHelper_Base
+class OAccessibleContextWrapperHelper : private OComponentProxyAggregationHelper,
+                                        public OAccessibleContextWrapperHelper_Base
 {
 protected:
     /// the context we're wrapping (properly typed, in opposite to OComponentProxyAggregationHelper::m_xInner)
@@ -215,10 +213,9 @@ typedef ::cppu::WeakComponentImplHelper<    css::accessibility::XAccessibleEvent
                                         ,   css::accessibility::XAccessibleContext
                                         >   OAccessibleContextWrapper_CBase;
 
-class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAccessibleContextWrapper final
-                :public cppu::BaseMutex
-                ,public OAccessibleContextWrapper_CBase
-                ,public OAccessibleContextWrapperHelper
+class OAccessibleContextWrapper final : public cppu::BaseMutex,
+                                        public OAccessibleContextWrapper_CBase,
+                                        public OAccessibleContextWrapperHelper
 {
 private:
     ::comphelper::AccessibleEventNotifier::TClientId    m_nNotifierClient;      // for notifying AccessibleEvents
@@ -294,7 +291,7 @@ private:
 
 
 typedef ::std::map  <   css::uno::Reference< css::accessibility::XAccessible >
-                    ,   rtl::Reference< comphelper::OAccessibleWrapper >
+                    ,   rtl::Reference<OAccessibleWrapper >
                     >   AccessibleMap;
                     // TODO: think about if we should hold these objects weak
 
@@ -302,7 +299,7 @@ typedef ::cppu::WeakImplHelper<   css::lang::XEventListener
                               >   OWrappedAccessibleChildrenManager_Base;
 /** manages wrapping XAccessible's to XAccessible's
 */
-class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OWrappedAccessibleChildrenManager final : public OWrappedAccessibleChildrenManager_Base
+class OWrappedAccessibleChildrenManager final : public OWrappedAccessibleChildrenManager_Base
 {
     css::uno::Reference< css::uno::XComponentContext >
                             m_xContext;

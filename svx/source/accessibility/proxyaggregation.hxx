@@ -25,7 +25,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/compbase_ex.hxx>
-#include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star::uno {
     class XComponentContext;
@@ -71,7 +70,7 @@ namespace com::sun::star::lang { class XComponent; }
 */
 
 
-namespace comphelper
+namespace accessibility
 {
 
 
@@ -126,9 +125,8 @@ namespace comphelper
         calls which your derived class gets to the dispose method of this class.</p>
     */
 
-    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OComponentProxyAggregationHelper
-        : public ::cppu::ImplHelper1<css::lang::XEventListener>,
-          private OProxyAggregation
+    class OComponentProxyAggregationHelper : public ::cppu::ImplHelper1<css::lang::XEventListener>,
+                                             private OProxyAggregation
     {
     private:
         typedef ::cppu::ImplHelper1 <   css::lang::XEventListener
@@ -178,9 +176,9 @@ namespace comphelper
 
     //= OComponentProxyAggregation
 
-    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OComponentProxyAggregation : public cppu::BaseMutex
-                                        ,public cppu::WeakComponentImplHelperBase
-                                        ,public OComponentProxyAggregationHelper
+    class OComponentProxyAggregation : public cppu::BaseMutex,
+                                       public cppu::WeakComponentImplHelperBase,
+                                       public OComponentProxyAggregationHelper
     {
     protected:
         OComponentProxyAggregation(
@@ -210,6 +208,6 @@ namespace comphelper
     };
 
 
-}   // namespace comphelper
+}   // namespace accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

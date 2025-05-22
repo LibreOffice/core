@@ -85,7 +85,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/accessiblekeybindinghelper \
     comphelper/source/misc/accessibleselectionhelper \
     comphelper/source/misc/accessibletexthelper \
-    comphelper/source/misc/accessiblewrapper \
     comphelper/source/misc/AccessibleImplementationHelper \
     comphelper/source/misc/anycompare \
     comphelper/source/misc/anytohash \
@@ -125,7 +124,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/numbers \
     comphelper/source/misc/officerestartmanager \
     comphelper/source/misc/traceevent \
-    comphelper/source/misc/proxyaggregation \
     comphelper/source/misc/random \
     comphelper/source/misc/SelectionMultiplex \
     comphelper/source/misc/sequenceashashmap \

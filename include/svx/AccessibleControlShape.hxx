@@ -43,7 +43,7 @@ namespace com::sun::star {
     namespace uno { class XAggregation; }
 }
 
-namespace comphelper
+namespace accessibility
 {
     class OWrappedAccessibleChildrenManager;
 }
@@ -187,7 +187,7 @@ private:
     css::uno::Reference< css::lang::XComponent >
                     m_xControlContextComponent;     // cached interface of our aggregate
 
-    rtl::Reference<::comphelper::OWrappedAccessibleChildrenManager>
+    rtl::Reference<::accessibility::OWrappedAccessibleChildrenManager>
                     m_pChildManager;
 
     bool        m_bListeningForName     : 1;    // are we currently listening for changes of the "Name" property?
