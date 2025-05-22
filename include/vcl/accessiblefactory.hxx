@@ -63,8 +63,6 @@ public:
     AccessibleFactory() = delete;
 
     static css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(ScrollBar* pScrollBar);
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(Edit* pEdit);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(ComboBox* pComboBox);

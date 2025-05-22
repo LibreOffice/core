@@ -3127,12 +3127,6 @@ VCLXScrollBar::VCLXScrollBar() : maAdjustmentListeners( *this )
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXScrollBar::CreateAccessibleContext()
-{
-    VclPtr<ScrollBar> pScrollBar = GetAs<ScrollBar>();
-    return AccessibleFactory::createAccessibleContext(pScrollBar);
-}
-
 // css::lang::XComponent
 void VCLXScrollBar::dispose()
 {

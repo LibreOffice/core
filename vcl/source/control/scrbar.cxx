@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <accessibility/vclxaccessiblescrollbar.hxx>
+
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/timer.hxx>
@@ -923,6 +925,11 @@ bool ScrollBar::IsHorizontal() const
 tools::Rectangle ScrollBar::GetScrollbarRegion() const
 {
     return tools::Rectangle(Point(0, 0), GetOutputSizePixel());
+}
+
+css::uno::Reference<css::accessibility::XAccessible> ScrollBar::CreateAccessible()
+{
+    return new VCLXAccessibleScrollBar(this);
 }
 
 void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
