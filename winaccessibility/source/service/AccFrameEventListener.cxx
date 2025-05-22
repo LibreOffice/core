@@ -78,15 +78,14 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
     {
         if(xChild.is())
         {
-            XAccessible* pAcc = xChild.get();
             VCLXWindow* pvclwindow = dynamic_cast<VCLXWindow*>(m_xAccessible.get());
             assert(pvclwindow);
             const SystemEnvData* systemdata
                 = pvclwindow->GetWindow()->GetSystemData();
 
-            m_rObjManager.InsertAccObj(pAcc, m_xAccessible.get(), systemdata->hWnd);
-            m_rObjManager.InsertChildrenAccObj(pAcc);
-            m_rObjManager.NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
+            m_rObjManager.InsertAccObj(xChild.get(), m_xAccessible.get(), systemdata->hWnd);
+            m_rObjManager.InsertChildrenAccObj(xChild.get());
+            m_rObjManager.NotifyAccEvent(xChild.get(), UnoMSAAEvent::CHILD_ADDED);
         }
     }
     else if (oldValue >>= xChild)
