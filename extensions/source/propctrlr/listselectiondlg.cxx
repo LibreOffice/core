@@ -95,8 +95,7 @@ namespace pcr
         if ( !m_xListBox.is() )
             return;
 
-        std::vector< sal_Int16 > aSelection;
-        collectSelection( aSelection );
+        std::vector<sal_Int16> aSelection(collectSelection());
 
         try
         {
@@ -117,12 +116,14 @@ namespace pcr
         m_xEntries->thaw();
     }
 
-    void ListSelectionDialog::collectSelection( std::vector< sal_Int16 >& /* [out] */ _rSelection )
+    std::vector<sal_Int16> ListSelectionDialog::collectSelection() const
     {
+        std::vector<sal_Int16> aRetSelection;
         auto aSelection = m_xEntries->get_selected_rows();
-        _rSelection.resize(aSelection.size());
+        aRetSelection.reserve(aSelection.size());
         for (auto row : aSelection)
-            _rSelection.push_back(row);
+            aRetSelection.push_back(row);
+        return aRetSelection;
     }
 
     void ListSelectionDialog::selectEntries( const Sequence< sal_Int16 >& /* [in ] */ _rSelection )
