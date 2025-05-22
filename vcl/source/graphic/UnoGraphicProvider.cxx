@@ -346,24 +346,13 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         }
     }
 
-    // Check for the goal width and height if they are defined
-    sal_uInt16 nExtWidth = 0;
-    sal_uInt16 nExtHeight = 0;
     sal_uInt16 nExtMapMode = 0;
     for (const auto& rProp : aFilterData)
     {
         const OUString   aName( rProp.Name );
         const uno::Any          aValue( rProp.Value );
 
-        if (aName == "ExternalWidth")
-        {
-            aValue >>= nExtWidth;
-        }
-        else if (aName == "ExternalHeight")
-        {
-            aValue >>= nExtHeight;
-        }
-        else if (aName == "ExternalMapMode")
+        if (aName == "ExternalMapMode")
         {
             aValue >>= nExtMapMode;
         }
@@ -400,43 +389,32 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     {
         ::GraphicFilter& rFilter = ::GraphicFilter::GetGraphicFilter();
 
+        if ( nExtMapMode > 0 )
         {
-            Graphic aVCLGraphic;
+            bLazyRead = false;
+        }
 
-            // Define APM Header if goal height and width are defined
-            WmfExternal aExtHeader;
-            aExtHeader.xExt = nExtWidth;
-            aExtHeader.yExt = nExtHeight;
-            aExtHeader.mapMode = nExtMapMode;
-            if ( nExtMapMode > 0 )
-            {
-                bLazyRead = false;
-            }
+        Graphic aVCLGraphic;
+        ErrCode error = ERRCODE_NONE;
+        if (bLazyRead)
+        {
+            aVCLGraphic = rFilter.ImportUnloadedGraphic(*pIStm);
+        }
+        if (aVCLGraphic.IsNone())
+            error = rFilter.ImportGraphic(aVCLGraphic, aPath, *pIStm, GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE);
 
-            ErrCode error = ERRCODE_NONE;
-            if (bLazyRead)
-            {
-                Graphic aGraphic = rFilter.ImportUnloadedGraphic(*pIStm);
-                if (!aGraphic.IsNone())
-                    aVCLGraphic = std::move(aGraphic);
-            }
-            if (aVCLGraphic.IsNone())
-                error = rFilter.ImportGraphic(aVCLGraphic, aPath, *pIStm, GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE);
+        if (error == ERRCODE_NONE && !aVCLGraphic.IsNone())
+        {
+            if (!aPath.isEmpty() && bLoadAsLink)
+                aVCLGraphic.setOriginURL(aPath);
 
-            if( (error == ERRCODE_NONE ) &&
-                ( aVCLGraphic.GetType() != GraphicType::NONE ) )
-            {
-                if (!aPath.isEmpty() && bLoadAsLink)
-                    aVCLGraphic.setOriginURL(aPath);
+            rtl::Reference<::unographic::Graphic> pUnoGraphic = new ::unographic::Graphic;
 
-                rtl::Reference<::unographic::Graphic> pUnoGraphic = new ::unographic::Graphic;
-
-                pUnoGraphic->init( aVCLGraphic );
-                xRet = pUnoGraphic;
-            }
-            else{
-                SAL_WARN("svtools", "Could not create graphic for:" << aPath << " error: " << error);
-            }
+            pUnoGraphic->init( aVCLGraphic );
+            xRet = pUnoGraphic;
+        }
+        else{
+            SAL_WARN("svtools", "Could not create graphic for:" << aPath << " error: " << error);
         }
     }
 
