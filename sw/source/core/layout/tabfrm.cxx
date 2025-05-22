@@ -6186,7 +6186,6 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         // #i43913# - no vertical alignment, if wrapping
         // style influence is considered on object positioning and
         // an object is anchored inside the cell.
-        const bool bConsiderWrapOnObjPos( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) );
         // No alignment if fly with wrap overlaps the cell.
         if ( pPg->GetSortedObjs() )
         {
@@ -6198,8 +6197,17 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 {
                     const SwFrameFormat* pAnchoredObjFrameFormat = pAnchoredObj->GetFrameFormat();
                     const SwFormatSurround &rSur = pAnchoredObjFrameFormat->GetSurround();
+                    const IDocumentSettingAccess& rIDSA = GetFormat()->getIDocumentSettingAccess();
 
-                    if ( bConsiderWrapOnObjPos || css::text::WrapTextMode_THROUGH != rSur.GetSurround() )
+                    // Note: I think that technically, bConsiderWrapOnObjPos should not apply here.
+                    // However, Word's UI strongly encourages vertical offsets that match
+                    // the layout that results from this use of bConsiderWrapOnObjPos. tdf#166710
+                    const bool bConsiderWrapOnObjPos
+                        = rIDSA.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+                    const bool bForceTopVAlign = bConsiderWrapOnObjPos && rIDSA.get(
+                        DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR);
+
+                    if (bForceTopVAlign || css::text::WrapTextMode_THROUGH != rSur.GetSurround())
                     {
                         // frames, which the cell is a lower of, aren't relevant
                         if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )

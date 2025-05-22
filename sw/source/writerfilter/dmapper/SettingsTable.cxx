@@ -128,6 +128,8 @@ struct SettingsTable_Impl
     bool m_bAllowTextAfterFloatingTableBreak = false;
     /// Endnotes at section end, not at document end.
     bool m_bEndnoteIsCollectAtSectionEnd = false;
+    /// Don't vertically align table cells containing shapes
+    bool m_bDoNotVertAlignCellWithSp = false; // tdf#37153
 
     SettingsTable_Impl() :
       m_nDefaultTabStop( 720 ) //default is 1/2 in
@@ -464,6 +466,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         break;
     case NS_ooxml::LN_CT_Compat_ulTrailSpace:
         m_pImpl->m_bMsWordUlTrailSpace = true;
+        break;
+    case NS_ooxml::LN_CT_Compat_doNotVertAlignCellWithSp:
+        m_pImpl->m_bDoNotVertAlignCellWithSp = nIntValue != 0;
         break;
     default:
     {
@@ -862,6 +867,11 @@ bool SettingsTable::GetRecordChanges() const { return m_pImpl->m_bRecordChanges;
 bool SettingsTable::GetEndnoteIsCollectAtSectionEnd() const
 {
     return m_pImpl->m_bEndnoteIsCollectAtSectionEnd;
+}
+
+bool SettingsTable::GetDoNotVertAlignCellWithSp() const
+{
+    return m_pImpl->m_bDoNotVertAlignCellWithSp;
 }
 
 }//namespace dmapper

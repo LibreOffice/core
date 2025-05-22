@@ -1976,6 +1976,9 @@ void SwWW8ImplReader::ImportDop()
         rIDSA.set(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES, true);
     }
 
+    if (m_xWDop->fDontVertAlignCellWithSp)
+        rIDSA.set(DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR, true);
+
     // COMPATIBILITY FLAGS END
 
     // Import magic doptypography information, if it's there

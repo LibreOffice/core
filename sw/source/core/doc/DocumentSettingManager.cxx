@@ -284,6 +284,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::MS_WORD_UL_TRAIL_SPACE: return mbMsWordUlTrailSpace;
         case DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES:
             return mbBalanceSpacesAndIdeographicSpaces;
+        case DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR:
+            return mbForceTopAlignmentInCellWithFloatingAnchor;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -621,6 +623,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES:
             mbBalanceSpacesAndIdeographicSpaces = value;
             break;
+        case DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR:
+            mbForceTopAlignmentInCellWithFloatingAnchor = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -804,6 +809,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbNoClippingWithWrapPolygon = rSource.mbNoClippingWithWrapPolygon;
     mbMsWordUlTrailSpace = rSource.mbMsWordUlTrailSpace;
     mbBalanceSpacesAndIdeographicSpaces = rSource.mbBalanceSpacesAndIdeographicSpaces;
+    mbForceTopAlignmentInCellWithFloatingAnchor = rSource.mbForceTopAlignmentInCellWithFloatingAnchor;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -1209,6 +1215,13 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(
         pWriter, BAD_CAST("value"),
         BAD_CAST(OString::boolean(mbBalanceSpacesAndIdeographicSpaces).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter,
+                                    BAD_CAST("mbForceTopAlignmentInCellWithFloatingAnchor"));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("value"),
+        BAD_CAST(OString::boolean(mbForceTopAlignmentInCellWithFloatingAnchor).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);

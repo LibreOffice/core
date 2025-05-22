@@ -7992,7 +7992,7 @@ void WW8Dop::SetCompatibilityOptions2(sal_uInt32 a32Bit)
     fUnderlineTabInNumList                               = ( a32Bit &  0x02000800 ) >> 25 ;
     fHangulWidthLikeWW11                                 = ( a32Bit &  0x04000800 ) >> 26 ;
     fSplitPgBreakAndParaMark                             = ( a32Bit &  0x08000800 ) >> 27 ;
-    fDontVertAlignCellWithSp                             = ( a32Bit &  0x10000800 ) >> 28 ;
+    fDontVertAlignCellWithSp = true; // always true      = ( a32Bit &  0x10000800 ) >> 28 ;
     fDontBreakConstrainedForcedTables                    = ( a32Bit &  0x20000800 ) >> 29 ;
     fDontVertAlignInTxbx                                 = ( a32Bit &  0x40000800 ) >> 30 ;
     fWord11KerningPairs                                  = ( a32Bit &  0x80000000 ) >> 31 ;

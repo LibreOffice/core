@@ -67,6 +67,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf165478_bottomAligned, "tdf165478_bottomAligned.d
 
     // Without the fix, the text was at the top of the cell (2002) instead of at the bottom (4423)
     CPPUNIT_ASSERT_EQUAL(nCellBottom, nTextBottom);
+
+    // The image is inside of the table
+    sal_Int32 nFlyTop = getXPath(pXmlDoc, "//cell[2]//fly/infos/bounds", "top").toInt32();
+    sal_Int32 nCellTop = getXPath(pXmlDoc, "//cell[2]/infos/bounds", "top").toInt32();
+    // Without the fix, the image was above the table (284) instead of inside the cell (1887)
+    CPPUNIT_ASSERT_GREATER(nCellTop, nFlyTop); // image is below the cell top
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1887), nFlyTop);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf166620)

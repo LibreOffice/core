@@ -1812,7 +1812,8 @@ public:
     bool fUnderlineTabInNumList : 1 = false;
     bool fHangulWidthLikeWW11 : 1 = false;
     bool fSplitPgBreakAndParaMark : 1 = false;
-    bool fDontVertAlignCellWithSp : 1 = false;
+    /// Don't vertically align table cells with shapes
+    bool fDontVertAlignCellWithSp : 1 = true; // tdf#37153
     bool fDontBreakConstrainedForcedTables : 1 = false;
     bool fDontVertAlignInTxbx : 1 = false;
     bool fWord11KerningPairs : 1 = false;

@@ -145,6 +145,8 @@ enum class DocumentSettingId
     MS_WORD_UL_TRAIL_SPACE,
     // tdf#88908 optionally adjust normal spaces in CJK context to halfwidth
     BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES,
+    // tdf#37153 Word-compatibility: force top-alignment for cells containing a floating shape
+    FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR,
 };
 
 /** Provides access to settings of a document

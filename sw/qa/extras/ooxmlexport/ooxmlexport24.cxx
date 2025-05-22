@@ -82,6 +82,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99227)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.docx")
 {
+    // NOTE: this is now known to have nothing to do with considerWrapOnObjPos...
+
+    // Given a Word 2007 file WITHOUT compat flag doNotVertAlignCellWithSp
+    // the fly should be at the bottom of the cell (since the cell calls for bottom-align).
+    // Because the fly is layout-in-cell (although it is also wrap-through),
+    // it SHOULD try to stay within the cell (although it can escape if necessary).
+    // TODO: Since it is not necessary to escape, it should push the paragraph marker upwards...
+
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH,
                          getProperty<text::WrapTextMode>(getShape(1), u"Surround"_ustr));
 
@@ -93,12 +101,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.docx")
         text::VertOrientation::BOTTOM,
         getProperty<sal_Int16>(xTable->getCellByName(u"A1"_ustr), u"VertOrient"_ustr));
 
-    //For MSO compatibility, the textbox should be at the top of the cell, not at the bottom - despite VertOrientation::BOTTOM
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nFlyTop
-        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt/anchored/fly/infos/bounds", "top")
-              .toInt32();
-    CPPUNIT_ASSERT_MESSAGE("FlyTop should be 2865, not 5649", nFlyTop < sal_Int32(3000));
+    // For MSO compatibility, the textbox should be at the bottom of the cell, not below the cell
+    // sal_Int32 nFlyBottom = getXPath(pXmlDoc, "//cell[1]//fly/infos/bounds", "bottom").toInt32();
+    // CPPUNIT_ASSERT_MESSAGE("FlyBottom should be ~ 5810, not 6331", sal_Int32(5810), nFlyBottom);
+
     sal_Int32 nTextTop
         = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt[1]/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT_MESSAGE("TextTop should be 3856", nTextTop > 3000);

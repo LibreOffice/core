@@ -108,6 +108,8 @@ public:
 
     bool GetEndnoteIsCollectAtSectionEnd() const;
 
+    bool GetDoNotVertAlignCellWithSp() const;
+
 private:
     // Properties
     virtual void lcl_attribute(Id Name, const Value& val) override;

@@ -188,6 +188,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="ForceTopAlignmentInCellWithFloatingAnchor" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Use old Word-compatible layout, forcing cell contents to be top-aligned if the cell contains a floating shape</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>

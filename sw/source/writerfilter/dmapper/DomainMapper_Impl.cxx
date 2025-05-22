@@ -9997,6 +9997,10 @@ void DomainMapper_Impl::ApplySettingsTable()
                 xSettings->setPropertyValue(u"ModifyPasswordInfo"_ustr, uno::Any(aWriteProtection));
         if (m_pSettingsTable->GetMsWordUlTrailSpace())
             xSettings->setPropertyValue(u"MsWordUlTrailSpace"_ustr, uno::Any(true));
+        if (m_pSettingsTable->GetDoNotVertAlignCellWithSp())
+            xSettings->setPropertyValue(u"ForceTopAlignmentInCellWithFloatingAnchor"_ustr,
+                                        uno::Any(true));
+
     }
     catch(const uno::Exception&)
     {

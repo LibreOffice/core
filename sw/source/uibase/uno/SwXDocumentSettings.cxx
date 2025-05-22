@@ -169,6 +169,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON,
     HANDLE_MS_WORD_UL_TRAIL_SPACE,
     HANDLE_BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES,
+    HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR,
 };
 
 }
@@ -284,6 +285,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { u"NoClippingWithWrapPolygon"_ustr, HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON, cppu::UnoType<bool>::get(), 0 },
         { u"MsWordUlTrailSpace"_ustr, HANDLE_MS_WORD_UL_TRAIL_SPACE, cppu::UnoType<bool>::get(), 0 },
         { u"BalanceSpacesAndIdeographicSpaces"_ustr, HANDLE_BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, cppu::UnoType<bool>::get(), 0 },
+        { u"ForceTopAlignmentInCellWithFloatingAnchor"_ustr, HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1231,6 +1233,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, bTmp);
             }
             break;
+        case HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR:
+            if (bool bTmp; rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR, bTmp);
+            }
+            break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1852,6 +1861,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES);
+        }
+        break;
+        case HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR);
         }
         break;
         default:

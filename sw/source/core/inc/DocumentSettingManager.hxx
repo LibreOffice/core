@@ -192,6 +192,7 @@ class DocumentSettingManager final :
     bool mbNoClippingWithWrapPolygon : 1; // tdf#161233
     bool mbMsWordUlTrailSpace : 1 = false;
     bool mbBalanceSpacesAndIdeographicSpaces : 1 = false; // tdf#88908
+    bool mbForceTopAlignmentInCellWithFloatingAnchor : 1 = false; // tdf#37153
 
 public:
 
