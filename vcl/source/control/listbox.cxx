@@ -25,6 +25,8 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <sal/log.hxx>
 
+#include <accessibility/vclxaccessibledropdownlistbox.hxx>
+#include <accessibility/vclxaccessiblelistbox.hxx>
 #include <svdata.hxx>
 #include <listbox.hxx>
 #include <dndeventdispatcher.hxx>
@@ -313,6 +315,15 @@ void ListBox::ToggleDropDown()
         mpFloatWin->StartFloat( true );
         CallEventListeners( VclEventId::DropdownOpen );
     }
+}
+
+css::uno::Reference<css::accessibility::XAccessible> ListBox::CreateAccessible()
+{
+    const bool bIsDropDownBox = (GetStyle() & WB_DROPDOWN) == WB_DROPDOWN;
+    if (bIsDropDownBox)
+        return new VCLXAccessibleDropDownListBox(this);
+    else
+        return new VCLXAccessibleListBox(this);
 }
 
 void ListBox::ApplySettings(vcl::RenderContext& rRenderContext)

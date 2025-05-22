@@ -1776,14 +1776,6 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXListBox::CreateAccessibleContext()
-{
-    SolarMutexGuard aGuard;
-
-    VclPtr<ListBox> pListBox = GetAs<ListBox>();
-    return AccessibleFactory::createAccessibleContext(pListBox);
-}
-
 void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
     SolarMutexGuard aGuard;

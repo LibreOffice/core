@@ -63,18 +63,6 @@ bool hasFloatingChild(vcl::Window *pWindow)
 }
 };
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ListBox* pListBox)
-{
-    bool bIsDropDownBox = false;
-    if (pListBox)
-        bIsDropDownBox = ((pListBox->GetStyle() & WB_DROPDOWN) == WB_DROPDOWN);
-
-    if ( bIsDropDownBox )
-        return new VCLXAccessibleDropDownListBox(pListBox);
-    else
-        return new VCLXAccessibleListBox(pListBox);
-}
-
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(FixedText* pFixedText)
 {
     return new VCLXAccessibleFixedText(pFixedText);

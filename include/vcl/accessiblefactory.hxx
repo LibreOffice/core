@@ -63,8 +63,6 @@ public:
     AccessibleFactory() = delete;
 
     static css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(ListBox* pListBox);
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(FixedText* pFixedText);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(FixedHyperlink* pFixedHyperlink);

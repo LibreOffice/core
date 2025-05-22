@@ -123,6 +123,8 @@ public:
     SAL_DLLPRIVATE virtual ~ListBox() override;
     SAL_DLLPRIVATE virtual void dispose() override;
 
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+
     SAL_DLLPRIVATE virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     SAL_DLLPRIVATE virtual void Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     SAL_DLLPRIVATE virtual void Resize() override;
