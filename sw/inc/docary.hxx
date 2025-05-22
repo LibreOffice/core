@@ -213,7 +213,7 @@ struct CompareSwRedlineTable
 // Notification type for notifying about redlines to LOK clients
 enum class RedlineNotification { Add, Remove, Modify };
 
-class SwRedlineTable
+class SW_DLLPUBLIC SwRedlineTable
 {
 public:
     typedef o3tl::sorted_vector<SwRangeRedline*, CompareSwRedlineTable,

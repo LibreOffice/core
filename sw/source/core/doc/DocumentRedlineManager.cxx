@@ -3290,7 +3290,18 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             }
             nPamEndtNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
-            bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
+
+            if (pTmp->GetType() == RedlineType::Format && pTmp->GetStackCount() > 1
+                && pTmp->GetType(1) == RedlineType::Insert)
+            {
+                // This combination of 2 redline types prefers accepting the inner one first.
+                bRet |= lcl_DeleteInnerRedline(maRedlineTable, nRdlIdx, 1);
+            }
+            else
+            {
+                bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
+            }
+
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
         else if (CanCombineTypesForAcceptReject(aOrigData, *pTmp)
