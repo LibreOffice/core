@@ -19,9 +19,8 @@
 
 
 #include <sal/log.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
-
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
@@ -30,6 +29,7 @@
 #include <unomsaaevent.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 
 using namespace com::sun::star::uno;
 
@@ -100,10 +100,8 @@ void AccTopWindowListener::windowOpened( const css::lang::EventObject& e )
 
     SolarMutexGuard g;
 
-    VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>(e.Source.get());
-    assert(pVCLXWindow && "Window is not a VCLXWindow");
-
-    vcl::Window* pWindow = pVCLXWindow->GetWindow();
+    css::uno::Reference<css::awt::XWindow> xWindow(e.Source, UNO_QUERY_THROW);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     assert(pWindow);
 
     HandleWindowOpened(pWindow);
@@ -171,10 +169,8 @@ void AccTopWindowListener::windowClosed( const css::lang::EventObject& e )
     if ( !e.Source.is())
         return;
 
-    VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>(e.Source.get());
-    assert(pVCLXWindow && "Window is not a VCLXWindow");
-
-    vcl::Window* pWindow = pVCLXWindow->GetWindow();
+    css::uno::Reference<css::awt::XWindow> xWindow(e.Source, UNO_QUERY_THROW);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     assert(pWindow);
 
     Reference<css::accessibility::XAccessible> xAccessible = pWindow->GetAccessible();
