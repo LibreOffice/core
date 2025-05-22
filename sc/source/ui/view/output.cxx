@@ -313,15 +313,6 @@ bool ScOutputData::ReopenPDFStructureElement(vcl::pdf::StructElement aType, SCRO
                 bReopenTag = true;
             }
         }
-        else if (aType == vcl::pdf::StructElement::Table)
-        {
-            if (pPDF->GetScPDFState()->m_TableId != -1)
-            {
-                sal_Int32 nId = pPDF->GetScPDFState()->m_TableId;
-                pPDF->BeginStructureElement(nId);
-                bReopenTag = true;
-            }
-        }
         else if (aType == vcl::pdf::StructElement::TableRow)
         {
             const auto aIter = pPDF->GetScPDFState()->m_TableRowMap.find(nRow);

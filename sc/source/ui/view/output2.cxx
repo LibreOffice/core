@@ -1493,14 +1493,8 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
     bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
     if (bTaggedPDF)
     {
-        bool bReopenTag = ReopenPDFStructureElement(vcl::pdf::StructElement::Table);
-        if (!bReopenTag)
-        {
-            sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-            pPDF->InitStructureElement(nId, vcl::pdf::StructElement::Table, u"Table"_ustr);
-            pPDF->BeginStructureElement(nId);
-            pPDF->GetScPDFState()->m_TableId = nId;
-        }
+        pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::Table, u"Table"_ustr);
+        pPDF->GetScPDFState()->m_TableRowMap.clear();
     }
 
     bool bOrigIsInLayoutStrings = mpDoc->IsInLayoutStrings();
@@ -1565,31 +1559,12 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
         SCROW nY = pThisRowInfo->nRowNo;
         if (pThisRowInfo->bChanged)
         {
-            if (bTaggedPDF)
-            {
-                bool bReopenTag = false;
-                if (nLoopStartX != 0)
-                {
-                    bReopenTag
-                        = ReopenPDFStructureElement(vcl::pdf::StructElement::TableRow, nY);
-                }
-                if (!bReopenTag)
-                {
-                    sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-                    pPDF->InitStructureElement(nId, vcl::pdf::StructElement::TableRow, u"TR"_ustr);
-                    pPDF->BeginStructureElement(nId);
-                    pPDF->GetScPDFState()->m_TableRowMap.emplace(nY, nId);
-                }
-            }
-
+            bool bReopenRowTag = false;
             tools::Long nPosX = nInitPosX;
             if ( nLoopStartX < nX1 )
                 nPosX -= pRowInfo[0].basicCellInfo(nLoopStartX).nWidth * nLayoutSign;
             for (SCCOL nX=nLoopStartX; nX<=nX2; nX++)
             {
-                if (bTaggedPDF)
-                    pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::TableData, u"TD"_ustr);
-
                 bool bMergeEmpty = false;
                 const ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 bool bEmpty = nX < nX1 || pThisRowInfo->basicCellInfo(nX).bEmptyCellText;
@@ -1922,8 +1897,26 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                     // Mark the tagged "TD" structure element to be drawn in DrawEdit
                     if (bTaggedPDF)
                     {
+                        if (bReopenRowTag)
+                            ReopenPDFStructureElement(vcl::pdf::StructElement::TableRow, nY);
+                        else
+                        {
+                            sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
+                            pPDF->InitStructureElement(nId, vcl::pdf::StructElement::TableRow,
+                                                       u"TR"_ustr);
+                            pPDF->BeginStructureElement(nId);
+                            pPDF->GetScPDFState()->m_TableRowMap.emplace(nY, nId);
+                            bReopenRowTag = true;
+                        }
+
+                        pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::TableData,
+                                                        u"TD"_ustr);
+
                         sal_Int32 nId = pPDF->GetCurrentStructureElement();
-                        pPDF->GetScPDFState()->m_TableDataMap[{nY, nX}] = nId;
+                        pPDF->GetScPDFState()->m_TableDataMap[{ nY, nX }] = nId;
+
+                        pPDF->EndStructureElement(); // TableData
+                        pPDF->EndStructureElement(); // TableRow
                     }
                 }
                 if ( bDoCell )
@@ -2134,7 +2127,25 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                         if (!aString.isEmpty())
                         {
                             if (bTaggedPDF)
-                                pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph, u"P"_ustr);
+                            {
+                                if (bReopenRowTag)
+                                    ReopenPDFStructureElement(vcl::pdf::StructElement::TableRow,
+                                                              nY);
+                                else
+                                {
+                                    sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
+                                    pPDF->InitStructureElement(
+                                        nId, vcl::pdf::StructElement::TableRow, u"TR"_ustr);
+                                    pPDF->BeginStructureElement(nId);
+                                    pPDF->GetScPDFState()->m_TableRowMap.emplace(nY, nId);
+                                    bReopenRowTag = true;
+                                }
+
+                                pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::TableData,
+                                                                u"TD"_ustr);
+                                pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph,
+                                                                u"P"_ustr);
+                            }
 
                             // If the string is clipped, make it shorter for
                             // better performance since drawing by HarfBuzz is
@@ -2203,7 +2214,11 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                                     aVars.GetLayoutGlyphs(aShort));
                             }
                             if (bTaggedPDF)
-                                pPDF->EndStructureElement();
+                            {
+                                pPDF->EndStructureElement(); // Paragraph
+                                pPDF->EndStructureElement(); // TableData
+                                pPDF->EndStructureElement(); // TableRow
+                            }
                         }
 
                         if ( bHClip || bVClip )
@@ -2224,16 +2239,12 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                     }
                 }
                 nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
-                if (bTaggedPDF)
-                    pPDF->EndStructureElement();
             }
-            if (bTaggedPDF)
-                pPDF->EndStructureElement();
         }
         nPosY += pRowInfo[nArrY].nHeight;
     }
     if (bTaggedPDF)
-        pPDF->EndStructureElement();
+        pPDF->EndStructureElement(); // Table
 
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();

@@ -68,7 +68,6 @@ typedef std::map<std::pair<SCROW, SCCOL>, sal_Int32> TableDataIdMap;
 struct ScEnhancedPDFState
 {
     sal_Int32 m_WorksheetId = -1;
-    sal_Int32 m_TableId = -1;
     TableRowIdMap m_TableRowMap;
     TableDataIdMap m_TableDataMap;
     ScEnhancedPDFState(){};
