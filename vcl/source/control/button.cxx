@@ -37,6 +37,7 @@
 #include <vcl/uitest/uiobject.hxx>
 
 #include <accessibility/vclxaccessiblebutton.hxx>
+#include <accessibility/vclxaccessiblecheckbox.hxx>
 #include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <window.h>
@@ -3256,6 +3257,11 @@ CheckBox::CheckBox( vcl::Window* pParent, WinBits nStyle ) :
 {
     ImplInitCheckBoxData();
     ImplInit( pParent, nStyle );
+}
+
+css::uno::Reference<css::accessibility::XAccessible> CheckBox::CreateAccessible()
+{
+    return new VCLXAccessibleCheckBox(this);
 }
 
 void CheckBox::MouseButtonDown( const MouseEvent& rMEvt )

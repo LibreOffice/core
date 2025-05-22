@@ -777,12 +777,6 @@ VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *th
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
-{
-    VclPtr<CheckBox> pCheckBox = GetAs<CheckBox>();
-    return AccessibleFactory::createAccessibleContext(pCheckBox);
-}
-
 void VCLXCheckBox::dispose()
 {
     SolarMutexGuard aGuard;

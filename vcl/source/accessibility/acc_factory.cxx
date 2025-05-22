@@ -63,11 +63,6 @@ bool hasFloatingChild(vcl::Window *pWindow)
 }
 };
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(CheckBox* pCheckBox)
-{
-    return new VCLXAccessibleCheckBox(pCheckBox);
-}
-
 Reference<XAccessibleContext> AccessibleFactory::createAccessibleContext(RadioButton* pRadioButton)
 {
     return new VCLXAccessibleRadioButton(pRadioButton);

@@ -330,6 +330,8 @@ public:
 public:
     explicit        CheckBox( vcl::Window* pParent, WinBits nStyle = 0 );
 
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
