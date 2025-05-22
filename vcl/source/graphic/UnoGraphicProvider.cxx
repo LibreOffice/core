@@ -18,6 +18,7 @@
  */
 
 #include <o3tl/string_view.hxx>
+#include <o3tl/temporary.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
@@ -53,39 +54,42 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+SvMemoryStream AsStream(const css::uno::Sequence<sal_Int8>& s)
+{
+    return SvMemoryStream(const_cast<sal_Int8*>(s.getConstArray()), s.getLength(),
+                          StreamMode::READ);
+}
+
+Bitmap BitmapFromDIB(const css::uno::Sequence<sal_Int8>& dib)
+{
+    Bitmap bmp;
+    if (dib.hasElements())
+        ReadDIB(bmp, o3tl::temporary(AsStream(dib)), true);
+    return bmp;
+}
+}
+
 namespace vcl
 {
 BitmapEx GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap)
 {
-    BitmapEx aBmp;
+    if (!xBitmap)
+        return {};
+
     if (auto xGraphic = xBitmap.query<css::graphic::XGraphic>())
+        return Graphic(xGraphic).GetBitmapEx();
+
+    // This is an unknown implementation of a XBitmap interface
+    if (Bitmap aMask = BitmapFromDIB(xBitmap->getMaskDIB()); !aMask.IsEmpty())
     {
-        Graphic aGraphic(xGraphic);
-        aBmp = aGraphic.GetBitmapEx();
+        aMask.Invert(); // Convert from transparency to alpha
+        return BitmapEx(BitmapFromDIB(xBitmap->getDIB()), aMask);
     }
-    else if (xBitmap)
-    {
-        // This is an unknown implementation of a XBitmap interface
-        Bitmap aMask;
-        if (css::uno::Sequence<sal_Int8> aBytes = xBitmap->getMaskDIB(); aBytes.hasElements())
-        {
-            SvMemoryStream aMem(aBytes.getArray(), aBytes.getLength(), StreamMode::READ);
-            ReadDIB(aMask, aMem, true);
-            aMask.Invert(); // Convert from transparency to alpha
-        }
-        css::uno::Sequence<sal_Int8> aBytes = xBitmap->getDIB();
-        SvMemoryStream aMem(aBytes.getArray(), aBytes.getLength(), StreamMode::READ);
-        if (!aMask.IsEmpty())
-        {
-            Bitmap aDIB;
-            ReadDIB(aDIB, aMem, true);
-            aBmp = BitmapEx(aDIB, aMask);
-        }
-        else
-        {
-            ReadDIBBitmapEx(aBmp, aMem, true);
-        }
-    }
+
+    BitmapEx aBmp;
+    ReadDIBBitmapEx(aBmp, o3tl::temporary(AsStream(xBitmap->getDIB())), true);
     return aBmp;
 }
 
