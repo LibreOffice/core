@@ -30,7 +30,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(AutoRedactionTest, testImageRedaction)
 {
-    // Get the images size and postion from the writer
+    // Get the images size and position from the writer
     loadFromFile(u"autoredact_img.fodt");
     CPPUNIT_ASSERT_MESSAGE("Failed to load autoredact_img.odt", mxComponent.is());
 
