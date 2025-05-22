@@ -100,9 +100,7 @@ css::uno::Reference<css::graphic::XGraphic> GetGraphic(const css::uno::Any& any)
 
     if (BitmapEx aBmpEx = GetBitmap(any.query<css::awt::XBitmap>()); !aBmpEx.IsEmpty())
     {
-        rtl::Reference pUnoGraphic(new unographic::Graphic);
-        pUnoGraphic->init(aBmpEx);
-        return pUnoGraphic;
+        return Graphic(aBmpEx).GetXGraphic();
     }
 
     return {};
