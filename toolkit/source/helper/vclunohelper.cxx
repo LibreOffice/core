@@ -69,9 +69,7 @@ BitmapEx VCLUnoHelper::GetBitmap( const css::uno::Reference< css::awt::XBitmap>&
 
 css::uno::Reference< css::awt::XBitmap> VCLUnoHelper::CreateBitmap( const BitmapEx& rBitmap )
 {
-    Graphic aGraphic( rBitmap );
-    css::uno::Reference< css::awt::XBitmap> xBmp( aGraphic.GetXGraphic(), css::uno::UNO_QUERY );
-    return xBmp;
+    return Graphic(rBitmap).GetXGraphic().query<css::awt::XBitmap>();
 }
 
 vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow )
