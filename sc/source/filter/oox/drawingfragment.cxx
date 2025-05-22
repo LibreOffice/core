@@ -483,6 +483,26 @@ const ::oox::vml::ShapeBase* VmlDrawing::getNoteShape( const ScAddress& rPos ) c
     return getShapes().findShape( VmlFindNoteFunc( rPos ) );
 }
 
+VmlDrawing::NoteShapesMap VmlDrawing::buildNoteShapesMap() const
+{
+    VmlDrawing::NoteShapesMap aMap;
+    for (const std::shared_ptr<oox::vml::ShapeBase> & rxShape : getShapes().getAllShapes())
+    {
+        const ::oox::vml::ClientData* pClientData = rxShape->getClientData();
+        if (pClientData)
+            aMap[std::make_pair(pClientData->mnCol, pClientData->mnRow)] = rxShape.get();
+    }
+    return aMap;
+}
+
+size_t VmlDrawing::NoteShapesMapHash::operator()(const std::pair<sal_Int32, sal_Int32>& rKey) const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, rKey.first);
+    o3tl::hash_combine(seed, rKey.second);
+    return seed;
+}
+
 bool VmlDrawing::isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const
 {
     const ::oox::vml::ClientData* pClientData = rShape.getClientData();

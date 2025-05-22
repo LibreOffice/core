@@ -53,6 +53,8 @@ struct ShapeParentAnchor
 class ShapeContainer
 {
 public:
+    typedef RefVector< ShapeBase >                  ShapeVector;
+
     explicit            ShapeContainer( Drawing& rDrawing );
                         ~ShapeContainer();
 
@@ -106,9 +108,10 @@ public:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = nullptr ) const;
 
+    const ShapeVector & getAllShapes() const { return maShapes; }
+
 private:
     typedef RefVector< ShapeType >                  ShapeTypeVector;
-    typedef RefVector< ShapeBase >                  ShapeVector;
     typedef RefMap< OUString, ShapeType >    ShapeTypeMap;
     typedef RefMap< OUString, ShapeBase >    ShapeMap;
 

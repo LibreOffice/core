@@ -141,10 +141,18 @@ private:
 class VmlDrawing final : public ::oox::vml::Drawing, public WorksheetHelper
 {
 public:
+    struct NoteShapesMapHash
+    {
+        size_t operator()(const std::pair<sal_Int32, sal_Int32> & key) const;
+    };
+    using NoteShapesMap = std::unordered_map<std::pair<sal_Int32,sal_Int32>, const ::oox::vml::ShapeBase*, NoteShapesMapHash>;
+
     explicit            VmlDrawing( const WorksheetHelper& rHelper );
 
     /** Returns the drawing shape for a cell note at the specified position. */
     const ::oox::vml::ShapeBase* getNoteShape( const ScAddress& rPos ) const;
+
+    NoteShapesMap buildNoteShapesMap() const;
 
     /** Filters cell note shapes. */
     virtual bool        isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const override;
