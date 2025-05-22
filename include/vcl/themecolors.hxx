@@ -116,13 +116,6 @@ public:
     void SetInactiveBorderColor(const Color& rColor) { m_aInactiveBorderColor = rColor; }
     void SetThemeName(const OUString& rName) { m_sThemeName = rName; }
 
-    void SetAppBackBitmapFileName(const OUString& rBitmapStr)
-    {
-        m_aAppBackBitmapFileName = rBitmapStr;
-    }
-    void SetAppBackBitmapStretched(bool bStretched) { m_bStretched = bStretched; }
-    void SetAppBackUseBitmap(bool bDrawBitmap) { m_bUseBitmapForAppBack = bDrawBitmap; }
-
     const Color& GetWindowColor() const { return m_aWindowColor; }
     const Color& GetWindowTextColor() const { return m_aWindowTextColor; }
     const Color& GetBaseColor() const { return m_aBaseColor; }
@@ -151,10 +144,6 @@ public:
     const Color& GetInactiveTextColor() const { return m_aInactiveTextColor; }
     const Color& GetInactiveBorderColor() const { return m_aInactiveBorderColor; }
     const OUString& GetThemeName() const { return m_sThemeName; }
-
-    const OUString& GetAppBackBitmapFileName() const { return m_aAppBackBitmapFileName; }
-    bool IsAppBackBitmapStretched() { return m_bStretched; }
-    bool GetAppBackUseBitmap() { return m_bUseBitmapForAppBack; }
 
 private:
     Color m_aWindowColor;
@@ -186,14 +175,6 @@ private:
     Color m_aInactiveBorderColor;
 
     OUString m_sThemeName;
-
-    // using values for now as only one element is bitmap customizable. but as the number increases
-    // we might want to replace these colors with structs similar to `struct ColorConfigValue`
-    // The actual bitmap object is in StyleSettings because we cannot have non primitive objects in
-    // static singleton classes as the order of initialization would be undefined.
-    bool m_bStretched = false;
-    bool m_bUseBitmapForAppBack = false;
-    OUString m_aAppBackBitmapFileName = "";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

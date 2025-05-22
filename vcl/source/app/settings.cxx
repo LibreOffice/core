@@ -250,9 +250,6 @@ struct ImplStyleData
     Size                            maListBoxPreviewDefaultLogicSize = getInitListBoxPreviewDefaultLogicSize();
     // on-demand calculated in GetListBoxPreviewDefaultPixelSize()
     Size                    mutable maListBoxPreviewDefaultPixelSize;
-    BitmapEx                mutable maAppBackgroundBitmap; // cache AppBackground bitmap
-    OUString                mutable maAppBackgroundBitmapFileName; // cache AppBackground bitmap file name
-
     bool operator==(const ImplStyleData& rSet) const;
 };
 
@@ -1953,49 +1950,6 @@ StyleSettings::GetDialogStyle() const
     return mxData->maDialogStyle;
 }
 
-static BitmapEx readBitmapEx(const OUString& rPath)
-{
-    OUString aPath(rPath);
-    rtl::Bootstrap::expandMacros(aPath);
-
-    // import the image
-    Graphic aGraphic;
-    if (GraphicFilter::LoadGraphic(aPath, OUString(), aGraphic) != ERRCODE_NONE)
-        return BitmapEx();
-    return aGraphic.GetBitmapEx();
-}
-
-static void setupAppBackgroundBitmap(OUString& rAppBackBitmapFileName, BitmapEx& rAppBackBitmap)
-{
-    if (Application::IsHeadlessModeEnabled()
-        || !ThemeColors::GetThemeColors().GetAppBackUseBitmap())
-        return;
-
-    OUString sAppBackgroundBitmap = ThemeColors::GetThemeColors().GetAppBackBitmapFileName();
-    if (rAppBackBitmapFileName == sAppBackgroundBitmap)
-        return;
-
-    rAppBackBitmapFileName = sAppBackgroundBitmap;
-
-    if (!rAppBackBitmapFileName.isEmpty())
-    {
-        rAppBackBitmap = readBitmapEx("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/gallery/backgrounds/"
-                                      + rAppBackBitmapFileName);
-    }
-
-    if (rAppBackBitmap.IsEmpty())
-    {
-        SAL_WARN("vcl.app", "Failed to load AppBackground bitmap file: " << rAppBackBitmapFileName);
-        ThemeColors::GetThemeColors().SetAppBackUseBitmap(false);
-    }
-}
-
-BitmapEx const& StyleSettings::GetAppBackgroundBitmap() const
-{
-    setupAppBackgroundBitmap(mxData->maAppBackgroundBitmapFileName, mxData->maAppBackgroundBitmap);
-    return mxData->maAppBackgroundBitmap;
-}
-
 void
 StyleSettings::SetEdgeBlending(sal_uInt16 nCount)
 {
@@ -2236,9 +2190,7 @@ bool ImplStyleData::operator==(const ImplStyleData& rSet) const
            (mnListBoxMaximumLineCount         == rSet.mnListBoxMaximumLineCount)          &&
            (mnColorValueSetColumnCount        == rSet.mnColorValueSetColumnCount)         &&
            (maListBoxPreviewDefaultLogicSize  == rSet.maListBoxPreviewDefaultLogicSize)   &&
-           (mbPreviewUsesCheckeredBackground  == rSet.mbPreviewUsesCheckeredBackground)   &&
-           (maAppBackgroundBitmapFileName     == rSet.maAppBackgroundBitmapFileName)      &&
-           (maAppBackgroundBitmap             == rSet.maAppBackgroundBitmap);
+           (mbPreviewUsesCheckeredBackground  == rSet.mbPreviewUsesCheckeredBackground);
 }
 
 ImplMiscData::ImplMiscData() :

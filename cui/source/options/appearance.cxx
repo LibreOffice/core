@@ -26,67 +26,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <map>
 
-namespace
-{
-struct BitmapData
-{
-    OUString aTranslatedBitmapLabel;
-    OUString aBitmapFileName;
-};
-
-std::vector<BitmapData> const& getBitmapList()
-{
-    static const std::vector<BitmapData> aBitmapList = {
-        { CuiResId(BMP_FUZZY_LIGHTGREY), "fuzzy-lightgrey.jpg" },
-        { CuiResId(BMP_ICE_LIGHT), "ice-light.jpg" },
-        { CuiResId(BMP_PAINTED_WHITE), "painted-white.jpg" },
-        { CuiResId(BMP_TEXTURE_PAPER), "texture-paper.jpg" },
-        { CuiResId(BMP_CRUMPLED_PAPER), "crumpled-paper.jpg" },
-        { CuiResId(BMP_MARBLE), "marble.jpg" },
-        { CuiResId(BMP_CONCRETE), "concrete.jpg" },
-        { CuiResId(BMP_FUZZY_GREY), "fuzzy-grey.jpg" },
-        { CuiResId(BMP_FUZZY_DARKGREY), "fuzzy-darkgrey.jpg" },
-        { CuiResId(BMP_STONE), "stone.jpg" },
-        { CuiResId(BMP_WHITE_DIFFUSION), "white-diffusion.jpg" },
-        { CuiResId(BMP_SAND_LIGHT), "sand-light.jpg" },
-        { CuiResId(BMP_SAND), "sand.jpg" },
-        { CuiResId(BMP_SURFACE), "surface.jpg" },
-        { CuiResId(BMP_STUDIO), "studio.jpg" },
-        { CuiResId(BMP_INVOICE_PAPER), "invoice-paper.jpg" },
-        { CuiResId(BMP_PARCHMENT_PAPER), "parchment-paper.jpg" },
-        { CuiResId(BMP_CARDBOARD), "cardboard.jpg" },
-        { CuiResId(BMP_FENCE), "fence.jpg" },
-        { CuiResId(BMP_WOODEN_FENCE), "wooden-fence.jpg" },
-        { CuiResId(BMP_WOOD), "wood.jpg" },
-        { CuiResId(BMP_WOODEN_BOARD), "wooden-board.jpg" },
-        { CuiResId(BMP_PAINTED_WOOD), "painted-wood.jpg" },
-        { CuiResId(BMP_STONES), "stones.jpg" },
-        { CuiResId(BMP_PEBBLE_LIGHT), "pebble-light.jpg" },
-        { CuiResId(BMP_STONE_WALL), "stone-wall.jpg" },
-        { CuiResId(BMP_STONE_GRAY), "stone-gray.jpg" },
-        { CuiResId(BMP_ROCK_WALL), "rock-wall.jpg" },
-        { CuiResId(BMP_SURFACE_BLACK), "surface-black.jpg" },
-        { CuiResId(BMP_BRICK_WALL), "brick-wall.png" },
-        { CuiResId(BMP_TILES), "tiles.jpg" },
-        { CuiResId(BMP_GRAPH_PAPER), "graph-paper.png" },
-        { CuiResId(BMP_CLOUD), "cloud.jpg" },
-        { CuiResId(BMP_POOL), "pool.jpg" },
-        { CuiResId(BMP_SKY), "sky.jpg" },
-        { CuiResId(BMP_CIRCUIT_BOARD), "circuit-board.jpg" },
-        { CuiResId(BMP_COFFEE), "coffee.jpg" },
-        { CuiResId(BMP_COLOR_STRIPES), "color-stripes.png" },
-        { CuiResId(BMP_FLORAL), "floral.png" },
-        { CuiResId(BMP_LEAF), "leaf.jpg" },
-        { CuiResId(BMP_MAPLE_LEAVES), "maple-leaves.jpg" },
-        { CuiResId(BMP_SPACE), "space.png" },
-        { CuiResId(BMP_GIRAFFE), "giraffe.png" },
-        { CuiResId(BMP_TIGER), "tiger.jpg" },
-        { CuiResId(BMP_ZEBRA), "zebra.png" },
-    };
-    return aBitmapList;
-}
-}
-
 static bool IsDarkModeEnabled()
 {
     return MiscSettings::GetAppColorMode() == AppearanceMode::DARK
@@ -109,11 +48,6 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
                                           [this] { return GetFrameWeld(); })))
     , m_xShowInDocumentChkBtn(m_xBuilder->weld_check_button(u"showindocumentchkbtn"_ustr))
     , m_xResetAllBtn(m_xBuilder->weld_button(u"resetallbtn"_ustr))
-    , m_xColorRadioBtn(m_xBuilder->weld_radio_button(u"colorradiobtn"_ustr))
-    , m_xImageRadioBtn(m_xBuilder->weld_radio_button(u"imageradiobtn"_ustr))
-    , m_xStretchedRadioBtn(m_xBuilder->weld_radio_button(u"stretchedradiobtn"_ustr))
-    , m_xTiledRadioBtn(m_xBuilder->weld_radio_button(u"tiledradiobtn"_ustr))
-    , m_xBitmapDropDownBtn(m_xBuilder->weld_combo_box(u"bitmapdropdown"_ustr))
 {
     InitThemes();
     InitCustomization();
@@ -249,33 +183,6 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorEntryChgHdl, weld::ComboBox&, void)
 
     m_xShowInDocumentChkBtn->set_active(rCurrentEntryColor.bIsVisible);
 
-    // load image related settings if supported
-    if (cNames[nEntry].bCanHaveBitmap)
-    {
-        EnableImageControls(true);
-        m_xImageRadioBtn->set_active(rCurrentEntryColor.bUseBitmapBackground);
-        m_xStretchedRadioBtn->set_active(rCurrentEntryColor.bIsBitmapStretched);
-
-        // bitmap file name to translated label
-        size_t i;
-        for (i = 0; i < getBitmapList().size(); ++i)
-        {
-            if (rCurrentEntryColor.sBitmapFileName == getBitmapList()[i].aBitmapFileName)
-                break;
-        }
-
-        // if bitmap not in the list then reset to 0
-        if (i == getBitmapList().size())
-            i = 0;
-
-        m_xBitmapDropDownBtn->set_active(i);
-    }
-    else
-    {
-        m_xColorRadioBtn->set_active(true);
-        EnableImageControls(false);
-    }
-
     // show/hide show in document button
     if (!cNames[nEntry].bCanBeVisible)
         m_xShowInDocumentChkBtn->hide();
@@ -362,52 +269,6 @@ IMPL_STATIC_LINK_NOARG(SvxAppearanceTabPage, MoreThemesHdl, weld::Button&, void)
     comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
 }
 
-IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorImageToggleHdl, weld::Toggleable&, void)
-{
-    // get the active entry
-    ColorConfigEntry nEntry = GetActiveEntry();
-    if (nEntry == ColorConfigEntryCount)
-        return;
-
-    ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
-
-    aCurrentEntryColor.bUseBitmapBackground = !m_xColorRadioBtn->get_active();
-    pColorConfig->SetColorValue(nEntry, aCurrentEntryColor);
-    m_bRestartRequired = true;
-}
-
-IMPL_LINK_NOARG(SvxAppearanceTabPage, StretchedTiledToggleHdl, weld::Toggleable&, void)
-{
-    // get the active entry
-    ColorConfigEntry nEntry = GetActiveEntry();
-    if (nEntry == ColorConfigEntryCount)
-        return;
-
-    ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
-
-    aCurrentEntryColor.bIsBitmapStretched = m_xStretchedRadioBtn->get_active();
-
-    pColorConfig->SetColorValue(nEntry, aCurrentEntryColor);
-    m_bRestartRequired = true;
-}
-
-IMPL_LINK_NOARG(SvxAppearanceTabPage, BitmapChangeHdl, weld::ComboBox&, void)
-{
-    // get the active entry
-    ColorConfigEntry nEntry = GetActiveEntry();
-    if (nEntry == ColorConfigEntryCount)
-        return;
-
-    ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
-
-    // save the bitmap file name
-    aCurrentEntryColor.sBitmapFileName
-        = getBitmapList()[m_xBitmapDropDownBtn->get_active()].aBitmapFileName;
-
-    pColorConfig->SetColorValue(nEntry, aCurrentEntryColor);
-    m_bRestartRequired = true;
-}
-
 IMPL_LINK_NOARG(SvxAppearanceTabPage, ResetAllBtnHdl, weld::Button&, void)
 {
     // load default document colors
@@ -452,12 +313,7 @@ void SvxAppearanceTabPage::InitCustomization()
     m_xColorEntryBtn->connect_changed(LINK(this, SvxAppearanceTabPage, ColorEntryChgHdl));
     m_xColorChangeBtn->SetSelectHdl(LINK(this, SvxAppearanceTabPage, ColorValueChgHdl));
     m_xShowInDocumentChkBtn->connect_toggled(LINK(this, SvxAppearanceTabPage, ShowInDocumentHdl));
-    m_xBitmapDropDownBtn->connect_changed(LINK(this, SvxAppearanceTabPage, BitmapChangeHdl));
     m_xResetAllBtn->connect_clicked(LINK(this, SvxAppearanceTabPage, ResetAllBtnHdl));
-
-    m_xColorRadioBtn->connect_toggled(LINK(this, SvxAppearanceTabPage, ColorImageToggleHdl));
-    m_xStretchedRadioBtn->connect_toggled(
-        LINK(this, SvxAppearanceTabPage, StretchedTiledToggleHdl));
 
     FillItemsList();
 
@@ -467,23 +323,6 @@ void SvxAppearanceTabPage::InitCustomization()
 
     m_xShowInDocumentChkBtn->set_active(pColorConfig->GetColorValue(DOCCOLOR).bIsVisible);
     m_xShowInDocumentChkBtn->hide();
-
-    // load bitmap names
-    for (size_t i = 0; i < getBitmapList().size(); ++i)
-        m_xBitmapDropDownBtn->append_text(getBitmapList()[i].aTranslatedBitmapLabel);
-    m_xBitmapDropDownBtn->set_active(0);
-
-    // DOCCOLOR uses color, so image controls are disabled
-    m_xColorRadioBtn->set_active(true);
-    EnableImageControls(false);
-}
-
-void SvxAppearanceTabPage::EnableImageControls(bool bEnabled)
-{
-    m_xImageRadioBtn->set_sensitive(bEnabled);
-    m_xStretchedRadioBtn->set_sensitive(bEnabled);
-    m_xTiledRadioBtn->set_sensitive(bEnabled);
-    m_xBitmapDropDownBtn->set_sensitive(bEnabled);
 }
 
 void SvxAppearanceTabPage::UpdateColorDropdown()

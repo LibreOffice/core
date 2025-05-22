@@ -49,7 +49,6 @@ using namespace utl;
 using namespace com::sun::star;
 
 const char g_sIsVisible[] = "/IsVisible";
-const char g_sBackgroundType[] = "/BackgroundType";
 
 
 namespace svtools
@@ -112,10 +111,6 @@ namespace {
 
 uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
 {
-    // this assumes that all the entries will have at max 3 properties. this
-    // might not be the case as more and more UI elements support the bitmap
-    // background property. If that happens we might want to increase it to
-    // 5 * ColorConfigEntryCount; shouldn't be a problem now
     uno::Sequence<OUString> aNames(3 * ColorConfigEntryCount);
     OUString* pNames = aNames.getArray();
     int nIndex = 0;
@@ -129,12 +124,6 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
         OUString sBaseName = sBase + "/" + cNames[i].cName;
         pNames[nIndex++] = sBaseName + "/Light";
         pNames[nIndex++] = sBaseName + "/Dark";
-
-        if (cNames[i].bCanHaveBitmap)
-        {
-            pNames[nIndex++] = sBaseName + "/BackgroundType";
-            pNames[nIndex++] = sBaseName + "/Bitmap";
-        }
 
         if(cNames[i].bCanBeVisible)
             pNames[nIndex++] = sBaseName + g_sIsVisible;
@@ -226,34 +215,6 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
         if(nIndex >= aColors.getLength())
             break;
 
-        m_aConfigValues[i].bUseBitmapBackground = false;
-
-        // for entries that support bitmap background customization
-        if (pColorNames[nIndex].endsWith(g_sBackgroundType))
-        {
-            // use bitmap for background
-            bool bUseBitmapBackground = false;
-            pColors[nIndex++] >>= bUseBitmapBackground;
-            m_aConfigValues[i].bUseBitmapBackground = bUseBitmapBackground;
-
-            OUString aBitmapStr = "";
-            pColors[nIndex++] >>= aBitmapStr;
-
-            // stretched or tiled
-            bool bIsBitmapStretched = aBitmapStr.endsWith("stretched");
-            m_aConfigValues[i].bIsBitmapStretched = bIsBitmapStretched;
-
-            // bitmap file name
-            int nNameEnding = aBitmapStr.indexOf(";");
-            std::u16string_view aBitmapFileName;
-            if (aBitmapStr.isEmpty())
-                aBitmapFileName = u"";
-            else
-                aBitmapFileName = aBitmapStr.subView(0, nNameEnding);
-
-            m_aConfigValues[i].sBitmapFileName = aBitmapFileName;
-        }
-
         // we check if the property ends with "/IsVisible" because not all entries are visible
         // see cNames[nIndex].bCanBeVisible
         if(pColorNames[nIndex].endsWith(g_sIsVisible))
@@ -341,21 +302,6 @@ void ColorConfig_Impl::ImplCommit()
 
         if(nIndex >= aColorNames.getLength())
             break;
-
-        if (pColorNames[nIndex].endsWith(g_sBackgroundType))
-        {
-            pPropValues[nIndex].Name = pColorNames[nIndex];
-            pPropValues[nIndex].Value <<= m_aConfigValues[i].bUseBitmapBackground;
-
-            ++nIndex; // Bitmap
-            OUString aBitmapStr = m_aConfigValues[i].sBitmapFileName + ";";
-            aBitmapStr += m_aConfigValues[i].bIsBitmapStretched ? std::u16string_view(u"stretched")
-                                                                : std::u16string_view(u"tiled");
-
-            pPropValues[nIndex].Name = pColorNames[nIndex];
-            pPropValues[nIndex].Value <<= aBitmapStr;
-            ++nIndex;
-        }
 
         // we check if the property ends with "/IsVisible" because not all entries are visible
         // see cNames[nIndex].bCanBeVisible
@@ -468,16 +414,6 @@ void ColorConfig_Impl::LoadThemeColorsFromRegistry()
     rThemeColors.SetInactiveTextColor(GetColorValue(svtools::INACTIVETEXTCOLOR).nColor);
     rThemeColors.SetInactiveBorderColor(GetColorValue(svtools::INACTIVEBORDERCOLOR).nColor);
     rThemeColors.SetThemeName(GetCurrentSchemeName());
-
-    // as more controls support it, we might want to have ColorConfigValue entries in ThemeColors
-    // instead of just colors. for now that seems overkill for just one control.
-    rThemeColors.SetAppBackBitmapFileName(
-        GetColorConfigValue(svtools::APPBACKGROUND).sBitmapFileName);
-    rThemeColors.SetAppBackUseBitmap(
-        GetColorConfigValue(svtools::APPBACKGROUND).bUseBitmapBackground);
-    rThemeColors.SetAppBackBitmapStretched(
-        GetColorConfigValue(svtools::APPBACKGROUND).bIsBitmapStretched);
-
     ThemeColors::SetThemeCached(true);
 }
 

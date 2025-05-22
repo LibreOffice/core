@@ -45,13 +45,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xShowInDocumentChkBtn;
     std::unique_ptr<weld::Button> m_xResetAllBtn;
 
-    std::unique_ptr<weld::RadioButton> m_xColorRadioBtn;
-    std::unique_ptr<weld::RadioButton> m_xImageRadioBtn;
-    std::unique_ptr<weld::RadioButton> m_xStretchedRadioBtn;
-    std::unique_ptr<weld::RadioButton> m_xTiledRadioBtn;
-
-    std::unique_ptr<weld::ComboBox> m_xBitmapDropDownBtn;
-
     DECL_LINK(ColorEntryChgHdl, weld::ComboBox&, void);
     DECL_LINK(ColorValueChgHdl, ColorListBox&, void);
     DECL_LINK(ShowInDocumentHdl, weld::Toggleable&, void);
@@ -60,16 +53,12 @@ private:
     DECL_LINK(SchemeChangeHdl, weld::ComboBox&, void);
     DECL_LINK(SchemeListToggleHdl, weld::ComboBox&, void);
     DECL_STATIC_LINK(SvxAppearanceTabPage, MoreThemesHdl, weld::Button&, void);
-    DECL_LINK(ColorImageToggleHdl, weld::Toggleable&, void);
-    DECL_LINK(StretchedTiledToggleHdl, weld::Toggleable&, void);
-    DECL_LINK(BitmapChangeHdl, weld::ComboBox&, void);
     DECL_LINK(ResetAllBtnHdl, weld::Button&, void);
 
     void InitThemes();
     void InitCustomization();
     void LoadSchemeList();
 
-    void EnableImageControls(bool bEnabled);
     void UpdateColorDropdown();
     void FillItemsList();
     ColorConfigEntry GetActiveEntry();

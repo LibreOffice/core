@@ -162,12 +162,6 @@
           <prop oor:name="Dark">
             <value xsi:nil="true"/>
           </prop>
-          <prop oor:name="BackgroundType">
-            <value xsi:nil="true"/>
-          </prop>
-          <prop oor:name="Bitmap">
-            <value xsi:nil="true"/>
-          </prop>
         </node>
         <node oor:name="TableBoundaries">
           <prop oor:name="Light">
@@ -935,12 +929,6 @@
           <prop oor:name="Dark">
             <value xsi:nil="true"/>
           </prop>
-          <prop oor:name="BackgroundType">
-            <value xsi:nil="true"/>
-          </prop>
-          <prop oor:name="Bitmap">
-            <value xsi:nil="true"/>
-          </prop>
         </node>
         <node oor:name="TableBoundaries">
           <prop oor:name="Light">
@@ -1706,12 +1694,6 @@
             <value xsi:nil="true"/>
           </prop>
           <prop oor:name="Dark">
-            <value xsi:nil="true"/>
-          </prop>
-          <prop oor:name="BackgroundType">
-            <value xsi:nil="true"/>
-          </prop>
-          <prop oor:name="Bitmap">
             <value xsi:nil="true"/>
           </prop>
         </node>

@@ -90,22 +90,6 @@
             <desc>Specifies dark color for the application background.</desc>
           </info>
         </prop>
-        <prop oor:name="BackgroundType" oor:type="xs:boolean">
-          <info>
-            <desc>
-              Specifies whether to use color or bitmap for the background,
-              true for bitmap and false for color.
-            </desc>
-          </info>
-        </prop>
-        <prop oor:name="Bitmap" oor:type="xs:string">
-          <info>
-            <desc>
-              Specifies bitmap and stretched/tiled for the bitmap
-              like "wood.jpg;stretched" or "wood.jpg;tiled"
-            </desc>
-          </info>
-        </prop>
       </group>
       <group oor:name="TableBoundaries">
         <info>
