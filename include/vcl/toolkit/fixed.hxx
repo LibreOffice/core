@@ -57,6 +57,8 @@ public:
     virtual         ~FixedText() override;
     virtual void    dispose() override;
 
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+
     virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;

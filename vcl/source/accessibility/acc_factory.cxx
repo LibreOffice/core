@@ -63,11 +63,6 @@ bool hasFloatingChild(vcl::Window *pWindow)
 }
 };
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(FixedText* pFixedText)
-{
-    return new VCLXAccessibleFixedText(pFixedText);
-}
-
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ScrollBar* pScrollBar)
 {
     return new VCLXAccessibleScrollBar(pScrollBar);

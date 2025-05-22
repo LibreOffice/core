@@ -21,14 +21,20 @@
 
 #include <accessibility/vclxaccessibletextcomponent.hxx>
 
-class VCLXAccessibleFixedText final : public VCLXAccessibleTextComponent
+class VCLXAccessibleFixedText final
+    : public cppu::ImplInheritanceHelper<VCLXAccessibleTextComponent,
+                                         css::accessibility::XAccessible>
 {
     virtual ~VCLXAccessibleFixedText() override = default;
 
     virtual void FillAccessibleStateSet(sal_Int64& rStateSet) override;
 
 public:
-    using VCLXAccessibleTextComponent::VCLXAccessibleTextComponent;
+    VCLXAccessibleFixedText(vcl::Window* pWindow);
+
+    // XAccessible
+    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

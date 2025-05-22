@@ -3005,12 +3005,6 @@ VCLXFixedText::~VCLXFixedText()
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXFixedText::CreateAccessibleContext()
-{
-    VclPtr<FixedText> pFixedText = GetAs<FixedText>();
-    return AccessibleFactory::createAccessibleContext(pFixedText);
-}
-
 void VCLXFixedText::setText( const OUString& Text )
 {
     SolarMutexGuard aGuard;

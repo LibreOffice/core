@@ -269,8 +269,6 @@ public:
 
 class VCLXFixedText final : public cppu::ImplInheritanceHelper<VCLXWindow, css::awt::XFixedText>
 {
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
-
 public:
                         VCLXFixedText();
                         virtual ~VCLXFixedText() override;

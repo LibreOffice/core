@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <accessibility/vclxaccessiblefixedtext.hxx>
+
 #include <vcl/cvtgrf.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
@@ -160,6 +162,11 @@ void FixedText::ImplDraw(OutputDevice* pDev, SystemTextColorFlags nSystemTextCol
     DrawControlText(*pDev, aRect, aText, nTextStyle,
         bFillLayout ? &mxLayoutData->m_aUnicodeBoundRects : nullptr,
         bFillLayout ? &mxLayoutData->m_aDisplayText : nullptr);
+}
+
+css::uno::Reference<css::accessibility::XAccessible> FixedText::CreateAccessible()
+{
+    return new VCLXAccessibleFixedText(this);
 }
 
 void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
