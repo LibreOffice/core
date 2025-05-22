@@ -79,6 +79,11 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     if (!pViewFrm)
         return;
 
+    ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
+    weld::Window* pParent = weld::GetPopupParent(GetStatusBar(), aRect);
+    if (!pParent)
+        return;
+
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/swriter/ui/bookmarkmenu.ui"_ustr));
     std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
@@ -92,13 +97,11 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     {
         if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
-            xPopup->append(OUString::number(nPopupId), (*ppBookmark)->GetName().toString());
+            xPopup->append(OUString::number(nPopupId), pParent->escape_ui_str((*ppBookmark)->GetName().toString()));
             aBookmarkIdx[nPopupId] = o3tl::narrowing<sal_uInt16>(ppBookmark - ppBookmarkStart);
             nPopupId++;
         }
     }
-    ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
-    weld::Window* pParent = weld::GetPopupParent(GetStatusBar(), aRect);
     OUString sResult = xPopup->popup_at_rect(pParent, aRect);
     if (!sResult.isEmpty())
     {
