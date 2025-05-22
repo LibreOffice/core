@@ -26,6 +26,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapColor.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -164,13 +165,7 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
 
     if (!maGraphic.IsNone())
     {
-        SvMemoryStream aMemoryStream;
-
-        AlphaMask aMask = maGraphic.GetBitmapEx().GetAlphaMask();
-        // for backwards compatibility for extensions, we need to convert from alpha to transparency
-        aMask.Invert();
-        WriteDIB(aMask.GetBitmap(), aMemoryStream, false, true);
-        return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMemoryStream.GetData()), aMemoryStream.Tell() );
+        return vcl::bitmap::GetMaskDIB(maGraphic.GetBitmapEx());
     }
     else
     {

@@ -678,7 +678,10 @@ css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
     if ( aBmpEx.IsAlpha() )
     {
         SvMemoryStream aMem;
-        WriteDIB(aBmpEx.GetAlphaMask().GetBitmap(), aMem, false, true);
+        AlphaMask aMask = aBmpEx.GetAlphaMask();
+        // for backwards compatibility for extensions, we need to convert from alpha to transparency
+        aMask.Invert();
+        WriteDIB(aMask.GetBitmap(), aMem, false, true);
         return css::uno::Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
     }
 
