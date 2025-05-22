@@ -38,6 +38,7 @@
 
 #include <accessibility/vclxaccessiblebutton.hxx>
 #include <accessibility/vclxaccessiblecheckbox.hxx>
+#include <accessibility/vclxaccessibleradiobutton.hxx>
 #include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <window.h>
@@ -2431,6 +2432,11 @@ void RadioButton::dispose()
         m_xGroup.reset();
     }
     Button::dispose();
+}
+
+css::uno::Reference<css::accessibility::XAccessible> RadioButton::CreateAccessible()
+{
+    return new VCLXAccessibleRadioButton(this);
 }
 
 void RadioButton::MouseButtonDown( const MouseEvent& rMEvt )

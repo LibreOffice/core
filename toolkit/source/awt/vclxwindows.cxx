@@ -1056,12 +1056,6 @@ VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXRadioButton::CreateAccessibleContext()
-{
-    VclPtr<RadioButton> pRadioButton = GetAs<RadioButton>();
-    return AccessibleFactory::createAccessibleContext(pRadioButton);
-}
-
 void VCLXRadioButton::dispose()
 {
     SolarMutexGuard aGuard;

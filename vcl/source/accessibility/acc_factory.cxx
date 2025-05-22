@@ -63,11 +63,6 @@ bool hasFloatingChild(vcl::Window *pWindow)
 }
 };
 
-Reference<XAccessibleContext> AccessibleFactory::createAccessibleContext(RadioButton* pRadioButton)
-{
-    return new VCLXAccessibleRadioButton(pRadioButton);
-}
-
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ListBox* pListBox)
 {
     bool bIsDropDownBox = false;

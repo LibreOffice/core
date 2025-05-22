@@ -192,7 +192,6 @@ private:
 
     void            ImplClickedOrToggled( bool bToggled );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 public:
                     VCLXRadioButton();

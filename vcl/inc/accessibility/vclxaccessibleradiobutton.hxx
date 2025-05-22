@@ -27,11 +27,10 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/toolkit/button.hxx>
 
-
-class VCLXAccessibleRadioButton final : public cppu::ImplInheritanceHelper<
-                                            VCLXAccessibleTextComponent,
-                                            css::accessibility::XAccessibleAction,
-                                            css::accessibility::XAccessibleValue>
+class VCLXAccessibleRadioButton final
+    : public cppu::ImplInheritanceHelper<
+          VCLXAccessibleTextComponent, css::accessibility::XAccessible,
+          css::accessibility::XAccessibleAction, css::accessibility::XAccessibleValue>
 {
     virtual ~VCLXAccessibleRadioButton() override = default;
 
@@ -46,6 +45,10 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    // XAccessible
+    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
 
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) override;

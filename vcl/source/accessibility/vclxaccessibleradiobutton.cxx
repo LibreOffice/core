@@ -117,6 +117,14 @@ Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames()
     return { u"com.sun.star.awt.AccessibleRadioButton"_ustr };
 }
 
+// XAccessible
+
+css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+VCLXAccessibleRadioButton::getAccessibleContext()
+{
+    OExternalLockGuard aGuard(this);
+    return this;
+}
 
 // XAccessibleAction
 
