@@ -1777,47 +1777,49 @@ public:
     sal_Int16 hpsZoomFontPag = 0;
     sal_Int16 dywDispPag = 0;
 
-     // [MS-DOC] 2.7.11 Copts A..H
-     bool       fCompatibilityOptions_Unknown2_1 : 1 /*= false*/;  // #i78591#
-     bool       fCompatibilityOptions_Unknown2_2 : 1 /*= false*/;  // #i78591#
-     bool       fDontUseHTMLAutoSpacing : 1 /*= false*/;
-     bool       fCompatibilityOptions_Unknown2_4 : 1 /*= false*/;  // #i78591#
-     bool       fCompatibilityOptions_Unknown2_5 : 1 /*= false*/;  // #i78591#
-     bool       fCompatibilityOptions_Unknown2_6 : 1 /*= false*/;  // #i78591#
-     bool       fCompatibilityOptions_Unknown2_7 : 1 /*= false*/;  // #i78591#
-     bool       fCompatibilityOptions_Unknown2_8 : 1 /*= false*/;  // #i78591#
+    // [MS-DOC] 2.7.11 Copts A..H
+    bool fSpLayoutLikeWW8 : 1 = false;
+    bool fFtnLayoutLikeWW8 : 1 = false;
+    bool fDontUseHTMLAutoSpacing : 1 = false;
+    bool fDontAdjustLineHeightInTable : 1 = false;
+    bool fForgetLastTabAlign : 1 = false;
+    bool fUseAutospaceForFullWidthAlpha : 1 = false;
+    bool fAlignTablesRowByRow : 1 = false;
+    bool fLayoutRawTableWidth : 1 = false;
 
-     // [MS-DOC] 2.7.11 Copts I..P
-     bool       fCompatibilityOptions_Unknown2_9 : 1 /*= false*/;  // #i78591#
-     bool       fCompatibilityOptions_Unknown2_10 : 1 /*= false*/; // #i78591#
-     bool       fDontBreakWrappedTables : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_12 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_13 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_14 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_15 : 1 /*= false*/; // #i78591#
+    // [MS-DOC] 2.7.11 Copts I..P
+    bool fLayoutTableRowsApart : 1 = false;
+    bool fUseWord97LineBreakingRules : 1 = false;
+    bool fDontBreakWrappedTables : 1 = false;
+    bool fDontSnapToGridInCell : 1 = false;
+    bool fDontAllowFieldEndSelect : 1 = false;
+    bool fApplyBreakingRules : 1 = false;
+    bool fDontWrapTextWithPunct : 1 = false;
+    bool fDontUseAsianBreakRules : 1 = false;
 
-     // [MS-DOC] 2.7.11 Copts Q..X
-     bool       fCompatibilityOptions_Unknown2_16 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_17 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_18 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_19 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_20 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_21 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_22 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_23 : 1 /*= false*/; // #i78591#
+    // [MS-DOC] 2.7.11 Copts Q..X
+    bool fUseWord2002TableStyleRules : 1 = false;
+    bool fGrowAutoFit : 1 = false;
+    bool fUseNormalStyleForList : 1 = false;
+    bool fDontUseIndentAsNumberingTabStop : 1 = false;
+    bool fFELineBreak11 : 1 = false;
+    bool fAllowSpaceOfSameStyleInTable : 1 = false;
+    bool fWW11IndentRules : 1 = false;
+    bool fDontAutofitConstrainedTables : 1 = false;
 
-     // [MS-DOC] 2.7.11 Copts Y..f
-     bool       fCompatibilityOptions_Unknown2_24 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_25 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_26 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_27 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_28 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_29 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_30 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown2_31 : 1 /*= false*/; // #i78591#
+    // [MS-DOC] 2.7.11 Copts Y..f
+    bool fAutofitLikeWW11 : 1 = false;
+    bool fUnderlineTabInNumList : 1 = false;
+    bool fHangulWidthLikeWW11 : 1 = false;
+    bool fSplitPgBreakAndParaMark : 1 = false;
+    bool fDontVertAlignCellWithSp : 1 = false;
+    bool fDontBreakConstrainedForcedTables : 1 = false;
+    bool fDontVertAlignInTxbx : 1 = false;
+    bool fWord11KerningPairs : 1 = false;
 
-     // [MS-DOC] 2.7.11 Copts g
-     bool       fCompatibilityOptions_Unknown2_32 : 1 /*= false*/; // #i78591#
+    // [MS-DOC] 2.7.11 Copts g
+    bool fCachedColBalance : 1 = false; // if used, needs a Get/SetCompatibilityOptions3
+    sal_uInt32 fCompatibilityOptions_UnUsed3 : 31 { 0 };
 
      sal_uInt16 fUnknown3 : 15 /*= 0*/;
      bool       fUseBackGroundInAllmodes : 1 /*= false*/;

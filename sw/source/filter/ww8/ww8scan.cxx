@@ -7612,22 +7612,6 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize):
     fCompatibilityOptions_Unknown1_31(false), fUsePrinterMetrics(false), lvl(0), fHtmlDoc(false),
     fSnapBorder(false), fIncludeHeader(false), fIncludeFooter(false), fForcePageSizePag(false),
     fMinFontSizePag(false), fHaveVersions(false), fAutoVersion(false),
-    fCompatibilityOptions_Unknown2_1(false), fCompatibilityOptions_Unknown2_2(false),
-    fDontUseHTMLAutoSpacing(false), fCompatibilityOptions_Unknown2_4(false),
-    fCompatibilityOptions_Unknown2_5(false), fCompatibilityOptions_Unknown2_6(false),
-    fCompatibilityOptions_Unknown2_7(false), fCompatibilityOptions_Unknown2_8(false),
-    fCompatibilityOptions_Unknown2_9(false), fCompatibilityOptions_Unknown2_10(false),
-    fDontBreakWrappedTables(false), fCompatibilityOptions_Unknown2_12(false),
-    fCompatibilityOptions_Unknown2_13(false), fCompatibilityOptions_Unknown2_14(false),
-    fCompatibilityOptions_Unknown2_15(false), fCompatibilityOptions_Unknown2_16(false),
-    fCompatibilityOptions_Unknown2_17(false), fCompatibilityOptions_Unknown2_18(false),
-    fCompatibilityOptions_Unknown2_19(false), fCompatibilityOptions_Unknown2_20(false),
-    fCompatibilityOptions_Unknown2_21(false), fCompatibilityOptions_Unknown2_22(false),
-    fCompatibilityOptions_Unknown2_23(false), fCompatibilityOptions_Unknown2_24(false),
-    fCompatibilityOptions_Unknown2_25(false), fCompatibilityOptions_Unknown2_26(false),
-    fCompatibilityOptions_Unknown2_27(false), fCompatibilityOptions_Unknown2_28(false),
-    fCompatibilityOptions_Unknown2_29(false), fCompatibilityOptions_Unknown2_30(false),
-    fCompatibilityOptions_Unknown2_31(false), fCompatibilityOptions_Unknown2_32(false),
     fUnknown3(0), fUseBackGroundInAllmodes(false), fDoNotEmbedSystemFont(false), fWordCompat(false),
     fLiveRecover(false), fEmbedFactoids(false), fFactoidXML(false), fFactoidAllDone(false),
     fFolioPrint(false), fReverseFolio(false), iTextLineEnding(0), fHideFcc(false),
@@ -7884,22 +7868,6 @@ WW8Dop::WW8Dop():
     fSnapBorder(false), fIncludeHeader(true), fIncludeFooter(true), fForcePageSizePag(false),
     fMinFontSizePag(false), fHaveVersions(false), fAutoVersion(false),
     cChWS(0), cChWSFootnoteEdn(0), cDBC(0), cDBCFootnoteEdn(0), nfcEdnRef(2),
-    fCompatibilityOptions_Unknown2_1(false), fCompatibilityOptions_Unknown2_2(false),
-    fDontUseHTMLAutoSpacing(false), fCompatibilityOptions_Unknown2_4(false),
-    fCompatibilityOptions_Unknown2_5(false), fCompatibilityOptions_Unknown2_6(false),
-    fCompatibilityOptions_Unknown2_7(false), fCompatibilityOptions_Unknown2_8(false),
-    fCompatibilityOptions_Unknown2_9(false), fCompatibilityOptions_Unknown2_10(false),
-    fDontBreakWrappedTables(false), fCompatibilityOptions_Unknown2_12(false),
-    fCompatibilityOptions_Unknown2_13(false), fCompatibilityOptions_Unknown2_14(false),
-    fCompatibilityOptions_Unknown2_15(false), fCompatibilityOptions_Unknown2_16(false),
-    fCompatibilityOptions_Unknown2_17(false), fCompatibilityOptions_Unknown2_18(false),
-    fCompatibilityOptions_Unknown2_19(false), fCompatibilityOptions_Unknown2_20(false),
-    fCompatibilityOptions_Unknown2_21(false), fCompatibilityOptions_Unknown2_22(false),
-    fCompatibilityOptions_Unknown2_23(false), fCompatibilityOptions_Unknown2_24(false),
-    fCompatibilityOptions_Unknown2_25(false), fCompatibilityOptions_Unknown2_26(false),
-    fCompatibilityOptions_Unknown2_27(false), fCompatibilityOptions_Unknown2_28(false),
-    fCompatibilityOptions_Unknown2_29(false), fCompatibilityOptions_Unknown2_30(false),
-    fCompatibilityOptions_Unknown2_31(false), fCompatibilityOptions_Unknown2_32(false),
     fUnknown3(0), fUseBackGroundInAllmodes(false), fDoNotEmbedSystemFont(false), fWordCompat(false),
     fLiveRecover(false), fEmbedFactoids(false), fFactoidXML(false), fFactoidAllDone(false),
     fFolioPrint(false), fReverseFolio(false), iTextLineEnding(0), fHideFcc(false),
@@ -7996,79 +7964,79 @@ sal_uInt32 WW8Dop::GetCompatibilityOptions() const
 // i#78591#
 void WW8Dop::SetCompatibilityOptions2(sal_uInt32 a32Bit)
 {
-    fCompatibilityOptions_Unknown2_1                        = ( a32Bit &  0x00000001 );
-    fCompatibilityOptions_Unknown2_2                        = ( a32Bit &  0x00000002 ) >>  1 ;
+    fSpLayoutLikeWW8                                     = ( a32Bit &  0x00000001 );
+    fFtnLayoutLikeWW8                                    = ( a32Bit &  0x00000002 ) >>  1 ;
     fDontUseHTMLAutoSpacing     = ( a32Bit &  0x00000004 ) >>  2 ;
-    fCompatibilityOptions_Unknown2_4                    = ( a32Bit &  0x00000008 ) >>  3 ;
-    fCompatibilityOptions_Unknown2_5                 = ( a32Bit &  0x00000010 ) >>  4 ;
-    fCompatibilityOptions_Unknown2_6                 = ( a32Bit &  0x00000020 ) >>  5 ;
-    fCompatibilityOptions_Unknown2_7                 = ( a32Bit &  0x00000040 ) >>  6 ;
-    fCompatibilityOptions_Unknown2_8                 = ( a32Bit &  0x00000080 ) >>  7 ;
-    fCompatibilityOptions_Unknown2_9                 = ( a32Bit &  0x00000100 ) >>  8 ;
-    fCompatibilityOptions_Unknown2_10                    = ( a32Bit &  0x00000200 ) >>  9 ;
+    fDontAdjustLineHeightInTable                         = ( a32Bit &  0x00000008 ) >>  3 ;
+    fForgetLastTabAlign                                  = ( a32Bit &  0x00000010 ) >>  4 ;
+    fUseAutospaceForFullWidthAlpha                       = ( a32Bit &  0x00000020 ) >>  5 ;
+    fAlignTablesRowByRow                                 = ( a32Bit &  0x00000040 ) >>  6 ;
+    fLayoutRawTableWidth                                 = ( a32Bit &  0x00000080 ) >>  7 ;
+    fLayoutTableRowsApart                                = ( a32Bit &  0x00000100 ) >>  8 ;
+    fUseWord97LineBreakingRules                          = ( a32Bit &  0x00000200 ) >>  9 ;
     fDontBreakWrappedTables                              = ( a32Bit &  0x00000400 ) >> 10 ;
-    fCompatibilityOptions_Unknown2_12                    = ( a32Bit &  0x00000800 ) >> 11 ;
-    fCompatibilityOptions_Unknown2_13                   = ( a32Bit &  0x00001000 ) >> 12 ;
-    fCompatibilityOptions_Unknown2_14                   = ( a32Bit &  0x00002000 ) >> 13 ;
-    fCompatibilityOptions_Unknown2_15                   = ( a32Bit &  0x00004000 ) >> 14 ;
-    fCompatibilityOptions_Unknown2_16                   = ( a32Bit &  0x00008000 ) >> 15 ;
-    fCompatibilityOptions_Unknown2_17                    = ( a32Bit &  0x00010000 ) >> 16 ;
-    fCompatibilityOptions_Unknown2_18                    = ( a32Bit &  0x00020000 ) >> 17 ;
-    fCompatibilityOptions_Unknown2_19                    = ( a32Bit &  0x00040000 ) >> 18 ;
-    fCompatibilityOptions_Unknown2_20                    = ( a32Bit &  0x00080000 ) >> 19 ;
-    fCompatibilityOptions_Unknown2_21                   = ( a32Bit &  0x00100000 ) >> 20 ;
-    fCompatibilityOptions_Unknown2_22                    = ( a32Bit &  0x00200000 ) >> 21 ;
-    fCompatibilityOptions_Unknown2_23                   = ( a32Bit &  0x00400000 ) >> 22 ;
-    fCompatibilityOptions_Unknown2_24                   = ( a32Bit &  0x00800800 ) >> 23 ;
-    fCompatibilityOptions_Unknown2_25                   = ( a32Bit &  0x01000800 ) >> 24 ;
-    fCompatibilityOptions_Unknown2_26                   = ( a32Bit &  0x02000800 ) >> 25 ;
-    fCompatibilityOptions_Unknown2_27                   = ( a32Bit &  0x04000800 ) >> 26 ;
-    fCompatibilityOptions_Unknown2_28                   = ( a32Bit &  0x08000800 ) >> 27 ;
-    fCompatibilityOptions_Unknown2_29                   = ( a32Bit &  0x10000800 ) >> 28 ;
-    fCompatibilityOptions_Unknown2_30                   = ( a32Bit &  0x20000800 ) >> 29 ;
-    fCompatibilityOptions_Unknown2_31                   = ( a32Bit &  0x40000800 ) >> 30 ;
-    fCompatibilityOptions_Unknown2_32                    = ( a32Bit &  0x80000000 ) >> 31 ;
+    fDontSnapToGridInCell                                = ( a32Bit &  0x00000800 ) >> 11 ;
+    fDontAllowFieldEndSelect                             = ( a32Bit &  0x00001000 ) >> 12 ;
+    fApplyBreakingRules                                  = ( a32Bit &  0x00002000 ) >> 13 ;
+    fDontWrapTextWithPunct                               = ( a32Bit &  0x00004000 ) >> 14 ;
+    fDontUseAsianBreakRules                              = ( a32Bit &  0x00008000 ) >> 15 ;
+    fUseWord2002TableStyleRules                          = ( a32Bit &  0x00010000 ) >> 16 ;
+    fGrowAutoFit                                         = ( a32Bit &  0x00020000 ) >> 17 ;
+    fUseNormalStyleForList                               = ( a32Bit &  0x00040000 ) >> 18 ;
+    fDontUseIndentAsNumberingTabStop                     = ( a32Bit &  0x00080000 ) >> 19 ;
+    fFELineBreak11                                       = ( a32Bit &  0x00100000 ) >> 20 ;
+    fAllowSpaceOfSameStyleInTable                        = ( a32Bit &  0x00200000 ) >> 21 ;
+    fWW11IndentRules                                     = ( a32Bit &  0x00400000 ) >> 22 ;
+    fDontAutofitConstrainedTables                        = ( a32Bit &  0x00800800 ) >> 23 ;
+    fAutofitLikeWW11                                     = ( a32Bit &  0x01000800 ) >> 24 ;
+    fUnderlineTabInNumList                               = ( a32Bit &  0x02000800 ) >> 25 ;
+    fHangulWidthLikeWW11                                 = ( a32Bit &  0x04000800 ) >> 26 ;
+    fSplitPgBreakAndParaMark                             = ( a32Bit &  0x08000800 ) >> 27 ;
+    fDontVertAlignCellWithSp                             = ( a32Bit &  0x10000800 ) >> 28 ;
+    fDontBreakConstrainedForcedTables                    = ( a32Bit &  0x20000800 ) >> 29 ;
+    fDontVertAlignInTxbx                                 = ( a32Bit &  0x40000800 ) >> 30 ;
+    fWord11KerningPairs                                  = ( a32Bit &  0x80000000 ) >> 31 ;
 }
 
 sal_uInt32 WW8Dop::GetCompatibilityOptions2() const
 {
     sal_uInt32 a32Bit = 0;
-    if (fCompatibilityOptions_Unknown2_1)           a32Bit |= 0x00000001;
-    if (fCompatibilityOptions_Unknown2_2)           a32Bit |= 0x00000002;
+    if (fSpLayoutLikeWW8)                           a32Bit |= 0x00000001;
+    if (fFtnLayoutLikeWW8)                          a32Bit |= 0x00000002;
     if (fDontUseHTMLAutoSpacing)     a32Bit |= 0x00000004;
-    if (fCompatibilityOptions_Unknown2_4)           a32Bit |= 0x00000008;
-    if (fCompatibilityOptions_Unknown2_5)           a32Bit |= 0x00000010;
-    if (fCompatibilityOptions_Unknown2_6)           a32Bit |= 0x00000020;
-    if (fCompatibilityOptions_Unknown2_7)           a32Bit |= 0x00000040;
-    if (fCompatibilityOptions_Unknown2_8)           a32Bit |= 0x00000080;
-    if (fCompatibilityOptions_Unknown2_9)           a32Bit |= 0x00000100;
-    if (fCompatibilityOptions_Unknown2_10)          a32Bit |= 0x00000200;
+    if (fDontAdjustLineHeightInTable)               a32Bit |= 0x00000008;
+    if (fForgetLastTabAlign)                        a32Bit |= 0x00000010;
+    if (fUseAutospaceForFullWidthAlpha)             a32Bit |= 0x00000020;
+    if (fAlignTablesRowByRow)                       a32Bit |= 0x00000040;
+    if (fLayoutRawTableWidth)                       a32Bit |= 0x00000080;
+    if (fLayoutTableRowsApart)                      a32Bit |= 0x00000100;
+    if (fUseWord97LineBreakingRules)                a32Bit |= 0x00000200;
     if (fDontBreakWrappedTables)                    a32Bit |= 0x00000400;
-    if (fCompatibilityOptions_Unknown2_12)          a32Bit |= 0x00000800;
-    if (fCompatibilityOptions_Unknown2_13)          a32Bit |= 0x00001000;
+    if (fDontSnapToGridInCell)                      a32Bit |= 0x00000800;
+    if (fDontAllowFieldEndSelect)                   a32Bit |= 0x00001000;
     //#i42909# set thai "line breaking rules" compatibility option
     // pflin, wonder whether bUseThaiLineBreakingRules is correct
     // when importing word document.
     if (bUseThaiLineBreakingRules)          a32Bit |= 0x00002000;
-    else if (fCompatibilityOptions_Unknown2_14)         a32Bit |= 0x00002000;
-    if (fCompatibilityOptions_Unknown2_15)          a32Bit |= 0x00004000;
-    if (fCompatibilityOptions_Unknown2_16)          a32Bit |= 0x00008000;
-    if (fCompatibilityOptions_Unknown2_17)          a32Bit |= 0x00010000;
-    if (fCompatibilityOptions_Unknown2_18)          a32Bit |= 0x00020000;
-    if (fCompatibilityOptions_Unknown2_19)          a32Bit |= 0x00040000;
-    if (fCompatibilityOptions_Unknown2_20)          a32Bit |= 0x00080000;
-    if (fCompatibilityOptions_Unknown2_21)          a32Bit |= 0x00100000;
-    if (fCompatibilityOptions_Unknown2_22)          a32Bit |= 0x00200000;
-    if (fCompatibilityOptions_Unknown2_23)          a32Bit |= 0x00400000;
-    if (fCompatibilityOptions_Unknown2_24)          a32Bit |= 0x00800000;
-    if (fCompatibilityOptions_Unknown2_25)          a32Bit |= 0x01000000;
-    if (fCompatibilityOptions_Unknown2_26)          a32Bit |= 0x02000000;
-    if (fCompatibilityOptions_Unknown2_27)          a32Bit |= 0x04000000;
-    if (fCompatibilityOptions_Unknown2_28)          a32Bit |= 0x08000000;
-    if (fCompatibilityOptions_Unknown2_29)          a32Bit |= 0x10000000;
-    if (fCompatibilityOptions_Unknown2_30)          a32Bit |= 0x20000000;
-    if (fCompatibilityOptions_Unknown2_31)          a32Bit |= 0x40000000;
-    if (fCompatibilityOptions_Unknown2_32)          a32Bit |= 0x80000000;
+    else if (fApplyBreakingRules)                   a32Bit |= 0x00002000;
+    if (fDontWrapTextWithPunct)                     a32Bit |= 0x00004000;
+    if (fDontUseAsianBreakRules)                    a32Bit |= 0x00008000;
+    if (fUseWord2002TableStyleRules)                a32Bit |= 0x00010000;
+    if (fGrowAutoFit)                               a32Bit |= 0x00020000;
+    if (fUseNormalStyleForList)                     a32Bit |= 0x00040000;
+    if (fDontUseIndentAsNumberingTabStop)           a32Bit |= 0x00080000;
+    if (fFELineBreak11)                             a32Bit |= 0x00100000;
+    if (fAllowSpaceOfSameStyleInTable)              a32Bit |= 0x00200000;
+    if (fWW11IndentRules)                           a32Bit |= 0x00400000;
+    if (fDontAutofitConstrainedTables)              a32Bit |= 0x00800000;
+    if (fAutofitLikeWW11)                           a32Bit |= 0x01000000;
+    if (fUnderlineTabInNumList)                     a32Bit |= 0x02000000;
+    if (fHangulWidthLikeWW11)                       a32Bit |= 0x04000000;
+    if (fSplitPgBreakAndParaMark)                   a32Bit |= 0x08000000;
+    if (fDontVertAlignCellWithSp)                   a32Bit |= 0x10000000;
+    if (fDontBreakConstrainedForcedTables)          a32Bit |= 0x20000000;
+    if (fDontVertAlignInTxbx)                       a32Bit |= 0x40000000;
+    if (fWord11KerningPairs)                        a32Bit |= 0x80000000;
     return a32Bit;
 }
 
