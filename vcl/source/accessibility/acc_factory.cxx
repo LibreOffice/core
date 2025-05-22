@@ -68,18 +68,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(Edit*
     return new VCLXAccessibleEdit(pEdit);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ComboBox* pComboBox)
-{
-    bool bIsDropDownBox = false;
-    if (pComboBox)
-        bIsDropDownBox = ((pComboBox->GetStyle() & WB_DROPDOWN) == WB_DROPDOWN);
-
-    if ( bIsDropDownBox )
-        return new VCLXAccessibleDropDownComboBox(pComboBox);
-    else
-        return new VCLXAccessibleComboBox(pComboBox);
-}
-
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(vcl::Window* pWindow)
 {
     if (!pWindow)

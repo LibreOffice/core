@@ -3959,14 +3959,6 @@ VCLXComboBox::~VCLXComboBox()
     SAL_INFO("toolkit", __FUNCTION__);
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXComboBox::CreateAccessibleContext()
-{
-    SolarMutexGuard aGuard;
-
-    VclPtr<ComboBox> pComboBox = GetAs<ComboBox>();
-    return AccessibleFactory::createAccessibleContext(pComboBox);
-}
-
 void VCLXComboBox::dispose()
 {
     SolarMutexGuard aGuard;

@@ -28,6 +28,8 @@
 #include <vcl/event.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
+#include <accessibility/vclxaccessibledropdowncombobox.hxx>
+#include <accessibility/vclxaccessiblecombobox.hxx>
 #include <listbox.hxx>
 #include <comphelper/lok.hxx>
 #include <o3tl/string_view.hxx>
@@ -1131,6 +1133,15 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
         rnCols = (nCharWidth > 0) ? static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth) : 1;
         rnLines = 1;
     }
+}
+
+css::uno::Reference<css::accessibility::XAccessible> ComboBox::CreateAccessible()
+{
+    const bool bIsDropDownBox = (GetStyle() & WB_DROPDOWN) == WB_DROPDOWN;
+    if (bIsDropDownBox)
+        return new VCLXAccessibleDropDownComboBox(this);
+
+    return new VCLXAccessibleComboBox(this);
 }
 
 void ComboBox::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags eFlags)

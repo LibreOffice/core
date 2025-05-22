@@ -65,8 +65,6 @@ public:
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(Edit* pEdit);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(ComboBox* pComboBox);
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(ToolBox* pToolBox);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(HeaderBar* pHeaderBar);
