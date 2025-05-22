@@ -1948,7 +1948,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         // pRefUndoDoc is filled in InsertCol / InsertRow
 
-        pUndoData.reset(new ScRefUndoData( &rDoc ));
+        pUndoData.reset(new ScRefUndoData( rDoc ));
 
         rDoc.BeginDrawUndo();
     }
@@ -2621,7 +2621,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         pRefUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pRefUndoDoc->InitUndo( rDoc, 0, nTabCount-1 );
 
-        pUndoData.reset(new ScRefUndoData( &rDoc ));
+        pUndoData.reset(new ScRefUndoData( rDoc ));
 
         rDoc.BeginDrawUndo();
     }
@@ -3394,7 +3394,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
         //  Drawing-Layer has to take care of its own undo!!!
         rDoc.BeginDrawUndo();                          //  DeleteTab generates SdrUndoDelPage
 
-        pUndoData.reset(new ScRefUndoData( &rDoc ));
+        pUndoData.reset(new ScRefUndoData( rDoc ));
     }
 
     if (rDoc.DeleteTab(nTab))

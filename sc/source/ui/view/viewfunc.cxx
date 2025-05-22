@@ -2115,7 +2115,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
         pUndoDoc->AddUndoTab( 0, nTabCount-1 );
         rDoc.CopyToDocument( 0,0,0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB, InsertDeleteFlags::FORMULA,false,*pUndoDoc );
 
-        pUndoData.reset(new ScRefUndoData( &rDoc ));
+        pUndoData.reset(new ScRefUndoData( rDoc ));
 
         rDoc.BeginDrawUndo();
     }

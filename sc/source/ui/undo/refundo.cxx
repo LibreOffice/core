@@ -30,34 +30,34 @@
 #include <scopetools.hxx>
 #include <refupdatecontext.hxx>
 
-ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
-    pPrintRanges(pDoc->CreatePrintRangeSaver())
+ScRefUndoData::ScRefUndoData( ScDocument& rDoc ) :
+    pPrintRanges(rDoc.CreatePrintRangeSaver())
 {
-    const ScDBCollection* pOldDBColl = pDoc->GetDBCollection();
+    const ScDBCollection* pOldDBColl = rDoc.GetDBCollection();
     if (pOldDBColl && !pOldDBColl->empty())
         pDBCollection.reset(new ScDBCollection(*pOldDBColl));
 
-    const ScRangeName* pOldRanges = pDoc->GetRangeName();
+    const ScRangeName* pOldRanges = rDoc.GetRangeName();
     if (pOldRanges && !pOldRanges->empty())
         pRangeName.reset(new ScRangeName(*pOldRanges));
 
     // when handling Pivot solely keep the range?
 
-    const ScDPCollection* pOldDP = pDoc->GetDPCollection();
+    const ScDPCollection* pOldDP = rDoc.GetDPCollection();
     if (pOldDP && pOldDP->GetCount())
         pDPCollection.reset(new ScDPCollection(*pOldDP));
 
-    const ScDetOpList* pOldDetOp = pDoc->GetDetOpList();
+    const ScDetOpList* pOldDetOp = rDoc.GetDetOpList();
     if (pOldDetOp && pOldDetOp->Count())
         pDetOpList.reset(new ScDetOpList(*pOldDetOp));
 
-    const ScChartListenerCollection* pOldChartLisColl = pDoc->GetChartListenerCollection();
+    const ScChartListenerCollection* pOldChartLisColl = rDoc.GetChartListenerCollection();
     if (pOldChartLisColl)
         pChartListenerCollection.reset(new ScChartListenerCollection(*pOldChartLisColl));
 
-    pAreaLinks = ScAreaLinkSaveCollection::CreateFromDoc(pDoc);     // returns NULL if empty
+    pAreaLinks = ScAreaLinkSaveCollection::CreateFromDoc(rDoc);     // returns NULL if empty
 
-    const_cast<ScDocument*>(pDoc)->BeginUnoRefUndo();
+    rDoc.BeginUnoRefUndo();
 }
 
 ScRefUndoData::~ScRefUndoData()
@@ -71,38 +71,38 @@ ScRefUndoData::~ScRefUndoData()
     pAreaLinks.reset();
 }
 
-void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
+void ScRefUndoData::DeleteUnchanged( ScDocument& rDoc )
 {
     if (pDBCollection)
     {
-        ScDBCollection* pNewDBColl = pDoc->GetDBCollection();
+        ScDBCollection* pNewDBColl = rDoc.GetDBCollection();
         if ( pNewDBColl && *pDBCollection == *pNewDBColl )
             pDBCollection.reset();
     }
     if (pRangeName)
     {
-        ScRangeName* pNewRanges = pDoc->GetRangeName();
+        ScRangeName* pNewRanges = rDoc.GetRangeName();
         if ( pNewRanges && *pRangeName == *pNewRanges )
             pRangeName.reset();
     }
 
     if (pPrintRanges)
     {
-        std::unique_ptr<ScPrintRangeSaver> pNewRanges = pDoc->CreatePrintRangeSaver();
+        std::unique_ptr<ScPrintRangeSaver> pNewRanges = rDoc.CreatePrintRangeSaver();
         if ( pNewRanges && *pPrintRanges == *pNewRanges )
             pPrintRanges.reset();
     }
 
     if (pDPCollection)
     {
-        ScDPCollection* pNewDP = const_cast<ScDocument*>(pDoc)->GetDPCollection();    //! const
+        ScDPCollection* pNewDP = rDoc.GetDPCollection();    //! const
         if ( pNewDP && pDPCollection->RefsEqual(*pNewDP) )
             pDPCollection.reset();
     }
 
     if (pDetOpList)
     {
-        ScDetOpList* pNewDetOp = pDoc->GetDetOpList();
+        ScDetOpList* pNewDetOp = rDoc.GetDetOpList();
         if ( pNewDetOp && *pDetOpList == *pNewDetOp )
             pDetOpList.reset();
     }
@@ -110,7 +110,7 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
     if ( pChartListenerCollection )
     {
         ScChartListenerCollection* pNewChartListenerCollection =
-            pDoc->GetChartListenerCollection();
+            rDoc.GetChartListenerCollection();
         if ( pNewChartListenerCollection &&
                 *pChartListenerCollection == *pNewChartListenerCollection )
             pChartListenerCollection.reset();
@@ -118,13 +118,13 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
 
     if (pAreaLinks)
     {
-        if ( pAreaLinks->IsEqual( pDoc ) )
+        if ( pAreaLinks->IsEqual( rDoc ) )
             pAreaLinks.reset();
     }
 
-    if ( pDoc->HasUnoRefUndo() )
+    if ( rDoc.HasUnoRefUndo() )
     {
-        pUnoRefs = const_cast<ScDocument*>(pDoc)->EndUnoRefUndo();
+        pUnoRefs = rDoc.EndUnoRefUndo();
         if ( pUnoRefs && pUnoRefs->IsEmpty() )
         {
             pUnoRefs.reset();
@@ -132,45 +132,45 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
     }
 }
 
-void ScRefUndoData::DoUndo( ScDocument* pDoc, bool bUndoRefFirst )
+void ScRefUndoData::DoUndo( ScDocument& rDoc, bool bUndoRefFirst )
 {
     if (pDBCollection)
-        pDoc->SetDBCollection( std::unique_ptr<ScDBCollection>(new ScDBCollection(*pDBCollection)) );
+        rDoc.SetDBCollection( std::unique_ptr<ScDBCollection>(new ScDBCollection(*pDBCollection)) );
     if (pRangeName)
-        pDoc->SetRangeName( std::unique_ptr<ScRangeName>(new ScRangeName(*pRangeName)) );
+        rDoc.SetRangeName( std::unique_ptr<ScRangeName>(new ScRangeName(*pRangeName)) );
 
     if (pPrintRanges)
-        pDoc->RestorePrintRanges(*pPrintRanges);
+        rDoc.RestorePrintRanges(*pPrintRanges);
 
     if (pDPCollection)
     {
-        ScDPCollection* pDocDP = pDoc->GetDPCollection();
+        ScDPCollection* pDocDP = rDoc.GetDPCollection();
         if (pDocDP)
             pDPCollection->WriteRefsTo( *pDocDP );
     }
 
     if (pDetOpList)
-        pDoc->SetDetOpList( std::unique_ptr<ScDetOpList>(new ScDetOpList(*pDetOpList)) );
+        rDoc.SetDetOpList( std::unique_ptr<ScDetOpList>(new ScDetOpList(*pDetOpList)) );
 
     // bUndoRefFirst is bSetChartRangeLists
     if ( pChartListenerCollection )
-        pDoc->SetChartListenerCollection( std::make_unique<ScChartListenerCollection>(
+        rDoc.SetChartListenerCollection( std::make_unique<ScChartListenerCollection>(
             *pChartListenerCollection ), bUndoRefFirst );
 
     if (pDBCollection || pRangeName)
     {
-        sc::AutoCalcSwitch aACSwitch(*pDoc, false);
-        pDoc->CompileAll();
+        sc::AutoCalcSwitch aACSwitch(rDoc, false);
+        rDoc.CompileAll();
 
         sc::SetFormulaDirtyContext aCxt;
-        pDoc->SetAllFormulasDirty(aCxt);
+        rDoc.SetAllFormulasDirty(aCxt);
     }
 
     if (pAreaLinks)
-        pAreaLinks->Restore( pDoc );
+        pAreaLinks->Restore( rDoc );
 
     if ( pUnoRefs )
-        pUnoRefs->Undo( pDoc );
+        pUnoRefs->Undo( rDoc );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

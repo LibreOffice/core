@@ -55,12 +55,12 @@ void ScAreaLinkSaver::WriteToLink( ScAreaLink& rLink ) const
     rLink.SetDestArea( aDestArea );
 }
 
-void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc )
+void ScAreaLinkSaver::InsertNewLink( ScDocument& rDoc )
 {
     // (see ScUndoRemoveAreaLink::Undo)
 
-    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-    ScDocShell* pObjSh = pDoc->GetDocumentShell();
+    sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
+    ScDocShell* pObjSh = rDoc.GetDocumentShell();
 
     if ( pLinkManager && pObjSh )
     {
@@ -79,12 +79,12 @@ ScAreaLinkSaveCollection::ScAreaLinkSaveCollection() {}
 
 ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection() {}
 
-bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
+bool ScAreaLinkSaveCollection::IsEqual( ScDocument& rDoc ) const
 {
     // IsEqual can be checked in sequence.
     // Neither ref-update nor removing links will change the order.
 
-    const sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    const sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
     if (pLinkManager)
     {
         size_t nPos = 0;
@@ -121,14 +121,14 @@ static ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScArea
     return nullptr;    // not found
 }
 
-void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc )
+void ScAreaLinkSaveCollection::Restore( ScDocument& rDoc )
 {
     // The save collection may contain additional entries that are not in the document.
     // They must be inserted again.
     // Entries from the save collection must be searched via source data, as the order
     // of links changes if deleted entries are re-added to the link manager (always at the end).
 
-    sfx2::LinkManager* pLinkManager = pDoc->GetDocLinkManager().getLinkManager(false);
+    sfx2::LinkManager* pLinkManager = rDoc.GetDocLinkManager().getLinkManager(false);
     if (!pLinkManager)
         return;
 
@@ -141,15 +141,15 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc )
         if ( pLink )
             rSaver.WriteToLink( *pLink );          // restore output position
         else
-            rSaver.InsertNewLink( pDoc );          // re-insert deleted link
+            rSaver.InsertNewLink( rDoc );          // re-insert deleted link
     }
 }
 
-std::unique_ptr<ScAreaLinkSaveCollection> ScAreaLinkSaveCollection::CreateFromDoc( const ScDocument* pDoc )
+std::unique_ptr<ScAreaLinkSaveCollection> ScAreaLinkSaveCollection::CreateFromDoc( ScDocument& rDoc )
 {
     std::unique_ptr<ScAreaLinkSaveCollection> pColl;
 
-    sfx2::LinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();

@@ -427,7 +427,7 @@ ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocumentUniquePtr pRefDoc, std::un
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     if (pRefUndoData)
-        pRefUndoData->DeleteUnchanged(&rDoc);
+        pRefUndoData->DeleteUnchanged(rDoc);
     pDrawUndo = GetSdrUndoAction( &rDoc );
 }
 
@@ -444,7 +444,7 @@ void ScMoveUndo::UndoRef()
     ScRange aRange(0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),pRefUndoDoc->GetTableCount()-1);
     pRefUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::FORMULA, false, rDoc, nullptr, false);
     if (pRefUndoData)
-        pRefUndoData->DoUndo( &rDoc, false );
+        pRefUndoData->DoUndo( rDoc, false );
 }
 
 void ScMoveUndo::BeginUndo()

@@ -175,7 +175,7 @@ void TestCopyPaste::prepareUndoBeforePaste(bool bCut, ScDocumentUniquePtr& pPast
         pPasteRefUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
         pPasteRefUndoDoc->InitUndo(*m_pDoc, 0, nTabCount - 1);
 
-        pUndoData.reset(new ScRefUndoData(m_pDoc));
+        pUndoData.reset(new ScRefUndoData(*m_pDoc));
     }
 }
 
@@ -9344,7 +9344,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
     m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, *pRedoDoc, &aMark);
 
     // Create an undo object for this.
-    std::unique_ptr<ScRefUndoData> pRefUndoData(new ScRefUndoData(m_pDoc));
+    std::unique_ptr<ScRefUndoData> pRefUndoData(new ScRefUndoData(*m_pDoc));
     ScUndoPaste aUndo(m_xDocShell.get(), aDestRange, aMark, std::move(pUndoDoc),
                       std::move(pRedoDoc), InsertDeleteFlags::ALL, std::move(pRefUndoData));
 

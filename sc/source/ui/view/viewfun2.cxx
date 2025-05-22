@@ -2623,7 +2623,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
 
         rDoc.BeginDrawUndo();                          //  DeleteTab creates a SdrUndoDelPage
 
-        pUndoData.reset(new ScRefUndoData( &rDoc ));
+        pUndoData.reset(new ScRefUndoData( rDoc ));
     }
 
     bool bDelDone = false;

@@ -811,7 +811,7 @@ ScUndoPaste* ScUcalcTestBase::createUndoPaste(ScDocShell& rDocSh, const ScRange&
     ScDocument& rDoc = rDocSh.GetDocument();
     ScMarkData aMarkData(rDoc.GetSheetLimits());
     aMarkData.SetMarkArea(rRange);
-    std::unique_ptr<ScRefUndoData> pRefUndoData(new ScRefUndoData(&rDoc));
+    std::unique_ptr<ScRefUndoData> pRefUndoData(new ScRefUndoData(rDoc));
 
     return new ScUndoPaste(
         &rDocSh, rRange, aMarkData, std::move(pUndoDoc), nullptr, InsertDeleteFlags::ALL, std::move(pRefUndoData), false);

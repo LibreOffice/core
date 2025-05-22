@@ -34,12 +34,12 @@ void ScUnoRefList::Add( sal_Int64 nId, const ScRangeList& rOldRanges )
     aEntries.emplace_back( nId, rOldRanges );
 }
 
-void ScUnoRefList::Undo( ScDocument* pDoc )
+void ScUnoRefList::Undo( ScDocument& rDoc )
 {
     for (const auto & entry: aEntries)
     {
         ScUnoRefUndoHint aHint(entry);
-        pDoc->BroadcastUno( aHint );
+        rDoc.BroadcastUno( aHint );
     }
 }
 

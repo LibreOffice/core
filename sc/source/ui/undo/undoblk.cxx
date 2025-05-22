@@ -926,7 +926,7 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
     bRedoFilled( bRedoIsFilled )
 {
     if ( pRefUndoData )
-        pRefUndoData->DeleteUnchanged( &pDocShell->GetDocument() );
+        pRefUndoData->DeleteUnchanged( pDocShell->GetDocument() );
 
     if ( pOptions )
         aPasteOptions = *pOptions;      // used only for Repeat
@@ -970,7 +970,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     //  (with DeleteUnchanged after the DoUndo call)
     bool bCreateRedoData = ( bUndo && pRefUndoData && !pRefRedoData );
     if ( bCreateRedoData )
-        pRefRedoData.reset( new ScRefUndoData( &rDoc ) );
+        pRefRedoData.reset( new ScRefUndoData( rDoc ) );
 
     ScRefUndoData* pWorkRefData = bUndo ? pRefUndoData.get() : pRefRedoData.get();
 
@@ -1058,14 +1058,14 @@ void ScUndoPaste::DoChange(bool bUndo)
 
     if (pWorkRefData)
     {
-        pWorkRefData->DoUndo( &rDoc, true );     // true = bSetChartRangeLists for SetChartListenerCollection
+        pWorkRefData->DoUndo( rDoc, true );     // true = bSetChartRangeLists for SetChartListenerCollection
         if (!maBlockRanges.empty() &&
             rDoc.RefreshAutoFilter(0, 0, rDoc.MaxCol(), rDoc.MaxRow(), maBlockRanges[0].aStart.Tab()))
             bPaintAll = true;
     }
 
     if ( bCreateRedoData && pRefRedoData )
-        pRefRedoData->DeleteUnchanged( &rDoc );
+        pRefRedoData->DeleteUnchanged( rDoc );
 
     if (bUndo)      // Undo: UndoToDocument after handling RefData
     {

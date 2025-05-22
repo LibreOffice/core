@@ -45,11 +45,11 @@ private:
     std::unique_ptr<ScUnoRefList> pUnoRefs;
 
 public:
-                ScRefUndoData( const ScDocument* pDoc );
+                ScRefUndoData(ScDocument& rDoc );
                 ~ScRefUndoData();
 
-    void        DeleteUnchanged( const ScDocument* pDoc );
-    void        DoUndo( ScDocument* pDoc, bool bUndoRefFirst );
+    void        DeleteUnchanged(ScDocument& rDoc);
+    void        DoUndo(ScDocument& rDoc, bool bUndoRefFirst );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

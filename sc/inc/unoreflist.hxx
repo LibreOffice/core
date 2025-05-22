@@ -49,7 +49,7 @@ public:
                 ~ScUnoRefList();
 
     void        Add( sal_Int64 nId, const ScRangeList& rOldRanges );
-    void        Undo( ScDocument* pDoc );
+    void        Undo( ScDocument& rDoc );
 
     bool        IsEmpty() const     { return aEntries.empty(); }
 };

@@ -44,7 +44,7 @@ public:
     bool        IsEqualSource( const ScAreaLink& rCompare ) const;
 
     void        WriteToLink( ScAreaLink& rLink ) const;
-    void        InsertNewLink( ScDocument* pDoc );
+    void        InsertNewLink( ScDocument& rDoc );
 };
 
 class ScAreaLinkSaveCollection
@@ -55,11 +55,11 @@ public:
     ScAreaLinkSaveCollection();
     ~ScAreaLinkSaveCollection();
 
-    bool        IsEqual( const ScDocument* pDoc ) const;
-    void Restore( ScDocument* pDoc );
+    bool        IsEqual( ScDocument& rDoc ) const;
+    void Restore( ScDocument& rDoc );
 
     // returns NULL if empty
-    static std::unique_ptr<ScAreaLinkSaveCollection> CreateFromDoc( const ScDocument* pDoc );
+    static std::unique_ptr<ScAreaLinkSaveCollection> CreateFromDoc( ScDocument& rDoc );
 
     ScAreaLinkSaver& operator[](size_t nIndex);
     const ScAreaLinkSaver& operator[](size_t nIndex) const;

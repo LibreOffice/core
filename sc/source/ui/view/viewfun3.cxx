@@ -1276,7 +1276,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             pRefUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             pRefUndoDoc->InitUndo( rDoc, 0, nTabCount-1 );
 
-            pUndoData.reset(new ScRefUndoData( &rDoc ));
+            pUndoData.reset(new ScRefUndoData( rDoc ));
         }
     }
 

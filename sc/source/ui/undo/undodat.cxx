@@ -1820,7 +1820,7 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
         mxMarkData->SetMarkArea(aBlockRange);   //  mark paste block
 
     if (xRefUndoData)
-        xRefUndoData->DeleteUnchanged(&pDocShell->GetDocument());
+        xRefUndoData->DeleteUnchanged(pDocShell->GetDocument());
 }
 
 OUString ScUndoDataForm::GetComment() const
@@ -1865,7 +1865,7 @@ void ScUndoDataForm::DoChange( const bool bUndo )
     //      (with DeleteUnchanged after the DoUndo call)
     bool bCreateRedoData = (bUndo && xRefUndoData && !xRefRedoData);
     if (bCreateRedoData)
-        xRefRedoData.reset(new ScRefUndoData(&rDoc));
+        xRefRedoData.reset(new ScRefUndoData(rDoc));
 
     ScRefUndoData* pWorkRefData = bUndo ? xRefUndoData.get() : xRefRedoData.get();
 
@@ -1905,13 +1905,13 @@ void ScUndoDataForm::DoChange( const bool bUndo )
 
     if (pWorkRefData)
     {
-        pWorkRefData->DoUndo( &rDoc, true );             // TRUE = bSetChartRangeLists for SetChartListenerCollection
+        pWorkRefData->DoUndo( rDoc, true );             // TRUE = bSetChartRangeLists for SetChartListenerCollection
         if ( rDoc.RefreshAutoFilter( 0,0, rDoc.MaxCol(),rDoc.MaxRow(), aBlockRange.aStart.Tab() ) )
             bPaintAll = true;
     }
 
     if (bCreateRedoData && xRefRedoData)
-        xRefRedoData->DeleteUnchanged(&rDoc);
+        xRefRedoData->DeleteUnchanged(rDoc);
 
     if ( bUndo )
     {
