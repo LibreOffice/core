@@ -114,12 +114,10 @@ const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& 
         return mpLastHit;
     }
     const OUString* pCandidateStyleName = rCandidate.GetStyleName();
-    auto it = maRegisteredCellAttributes.lower_bound(pCandidateStyleName);
-    for (; it != maRegisteredCellAttributes.end(); ++it)
+    auto [it, itEnd] = maRegisteredCellAttributes.equal_range(pCandidateStyleName);
+    for (; it != itEnd; ++it)
     {
         const ScPatternAttr* pCheck = *it;
-        if (CompareStringPtr(pCheck->GetStyleName(), pCandidateStyleName) != 0)
-            break;
         if (ScPatternAttr::areSame(pCheck, &rCandidate))
         {
             pCheck->mnRefCount++;
