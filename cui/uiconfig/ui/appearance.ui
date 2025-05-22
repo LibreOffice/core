@@ -157,26 +157,12 @@
                 <property name="orientation">vertical</property>
                 <property name="spacing">3</property>
                 <child>
-                  <!-- n-columns=2 n-rows=5 -->
+                  <!-- n-columns=2 n-rows=3 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="row-spacing">3</property>
                     <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="itemslb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="appearancetabpage|items">Items: </property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">registrydropdown</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="GtkComboBoxText" id="registrydropdown">
                         <property name="visible">True</property>
@@ -185,13 +171,13 @@
                         <property name="hexpand">False</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="registrydropdown-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|registrycolorslist">registrycolorslist</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|registrydropdown">Select the item to customize color or render with an image.</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|registrycolorslist">Items</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|registrydropdown">Select the item to color customize.</property>
                           </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="left-attach">1</property>
+                        <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
@@ -208,13 +194,14 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colorsdropdownbtn-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|colorsdropdownbtn">Select the color of the item.</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|colorsdropdownbtn">Color</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|colorsdropdownbtn">Select the color for the selected item.</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -231,8 +218,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -241,10 +228,11 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
+                        <property name="halign">start</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">4</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
