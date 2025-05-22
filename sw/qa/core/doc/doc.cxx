@@ -790,6 +790,29 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rRedlines.size());
     // Also make sure the text of the format-on-insert redline is removed.
     CPPUNIT_ASSERT(pTextNode->GetText().isEmpty());
+
+    // And when accepting the format-on-insert:
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, pTextNode->GetText());
+    SwPaM* pCursor = pWrtShell->GetCursor();
+    pCursor->DeleteMark();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Move inside "BBB".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    SwRedlineTable::size_type nRedline{};
+    rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    pWrtShell->AcceptRedline(nRedline);
+
+    // Then make sure the format is kept and the insert is accepted:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Move inside "BBB".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    const SwRangeRedline* pRedline = rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    // Without the accompanying fix in place, this test would have failed, there was no redline for
+    // "BBB".
+    CPPUNIT_ASSERT(pRedline);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, pRedline->GetType());
+    CPPUNIT_ASSERT(!pRedline->GetRedlineData().Next());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
