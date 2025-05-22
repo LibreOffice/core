@@ -28,10 +28,11 @@
 #include <patattr.hxx>
 #include <svtools/colorcfg.hxx>
 
-ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomY, ScDocument* pDoc) :
-    mpDoc(pDoc),
+ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings& rStyle, const Fraction& rZoomY, ScDocument& rDoc):
+    maZoomY(rZoomY),
+    mrDoc(rDoc),
     mpOutDev(pOutDev),
-    mpStyle(pStyle),
+    mrStyle(rStyle),
     mnToggleIndent(0),
     mbBaseButton(true),
     mbPopupButton(false),
@@ -42,10 +43,6 @@ ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pSt
     mbPopupPressed(false),
     mbPopupLeft(false)
 {
-    if (pZoomY)
-        maZoomY = *pZoomY;
-    else
-        maZoomY = Fraction(1, 1);
 }
 
 ScDPFieldButton::~ScDPFieldButton()
@@ -116,16 +113,16 @@ void ScDPFieldButton::draw()
     {
         // Background
         tools::Rectangle aRect(maPos, maSize);
-        mpOutDev->SetLineColor(mpStyle->GetFaceColor());
-        mpOutDev->SetFillColor(mpStyle->GetFaceColor());
+        mpOutDev->SetLineColor(mrStyle.GetFaceColor());
+        mpOutDev->SetFillColor(mrStyle.GetFaceColor());
         mpOutDev->DrawRect(aRect);
 
         // Border lines
-        mpOutDev->SetLineColor(mpStyle->GetLightColor());
+        mpOutDev->SetLineColor(mrStyle.GetLightColor());
         mpOutDev->DrawLine(maPos, Point(maPos.X(), maPos.Y()+maSize.Height()-1));
         mpOutDev->DrawLine(maPos, Point(maPos.X()+maSize.Width()-1, maPos.Y()));
 
-        mpOutDev->SetLineColor(mpStyle->GetShadowColor());
+        mpOutDev->SetLineColor(mrStyle.GetShadowColor());
         mpOutDev->DrawLine(Point(maPos.X(), maPos.Y()+maSize.Height()-1),
                            Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
         mpOutDev->DrawLine(Point(maPos.X()+maSize.Width()-1, maPos.Y()),
@@ -133,16 +130,13 @@ void ScDPFieldButton::draw()
 
         // Field name.
         // Get the font and size the same way as in scenario selection (lcl_DrawOneFrame in gridwin4.cxx)
-        vcl::Font aTextFont( mpStyle->GetAppFont() );
-        if ( mpDoc )
-        {
-            //  use ScPatternAttr::GetFont only for font size
-            vcl::Font aAttrFont;
-            mpDoc->getCellAttributeHelper().getDefaultCellAttribute().fillFontOnly(aAttrFont, mpOutDev, &maZoomY);
-            aTextFont.SetFontSize(aAttrFont.GetFontSize());
-        }
+        vcl::Font aTextFont( mrStyle.GetAppFont() );
+        //  use ScPatternAttr::GetFont only for font size
+        vcl::Font aAttrFont;
+        mrDoc.getCellAttributeHelper().getDefaultCellAttribute().fillFontOnly(aAttrFont, mpOutDev, &maZoomY);
+        aTextFont.SetFontSize(aAttrFont.GetFontSize());
         mpOutDev->SetFont(aTextFont);
-        mpOutDev->SetTextColor(mpStyle->GetButtonTextColor());
+        mpOutDev->SetTextColor(mrStyle.GetButtonTextColor());
 
         Point aTextPos = maPos;
         tools::Long nTHeight = mpOutDev->GetTextHeight();
@@ -229,23 +223,23 @@ void ScDPFieldButton::drawPopupButton()
     float fScaleFactor = mpOutDev->GetDPIScaleFactor();
 
     // Button background color
-    Color aFaceColor = mpStyle->GetFaceColor();
+    Color aFaceColor = mrStyle.GetFaceColor();
     Color aBackgroundColor
-        = mbHasHiddenMember ? mpStyle->GetHighlightColor()
-                            : mbPopupPressed ? mpStyle->GetShadowColor() : aFaceColor;
+        = mbHasHiddenMember ? mrStyle.GetHighlightColor()
+                            : mbPopupPressed ? mrStyle.GetShadowColor() : aFaceColor;
 
     // Button line color
-    mpOutDev->SetLineColor(mpStyle->GetLabelTextColor());
+    mpOutDev->SetLineColor(mrStyle.GetLabelTextColor());
     // If the document background is light and face color is dark, use ShadowColor instead
     Color aDocColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     if (aDocColor.IsBright() && aFaceColor.IsDark())
-        mpOutDev->SetLineColor(mpStyle->GetShadowColor());
+        mpOutDev->SetLineColor(mrStyle.GetShadowColor());
 
     mpOutDev->SetFillColor(aBackgroundColor);
     mpOutDev->DrawRect(tools::Rectangle(aPos, aSize));
 
     // the arrowhead
-    Color aArrowColor = mbHasHiddenMember ? mpStyle->GetHighlightTextColor() : mpStyle->GetButtonTextColor();
+    Color aArrowColor = mbHasHiddenMember ? mrStyle.GetHighlightTextColor() : mrStyle.GetButtonTextColor();
     // FIXME: HACK: The following DrawPolygon draws twice in lok rtl mode for some reason.
     // => one at the correct location with fill (possibly no outline)
     // => and the other at an x offset with outline and without fill

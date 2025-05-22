@@ -123,7 +123,7 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     Size aScrSize(nSizeX-1, nSizeY-1);
 
     // Check if the mouse cursor is clicking on the popup arrow box.
-    mpFilterButton.reset(new ScDPFieldButton(GetOutDev(), &GetSettings().GetStyleSettings(), &mrViewData.GetZoomY(), &rDoc));
+    mpFilterButton.reset(new ScDPFieldButton(GetOutDev(), GetSettings().GetStyleSettings(), mrViewData.GetZoomY(), rDoc));
     mpFilterButton->setBoundingBox(aScrPos, aScrSize, bLayoutRTL && !bLOKActive);
     mpFilterButton->setPopupLeft(bLayoutRTL && bLOKActive ? false : bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
     Point aPopupPos;
@@ -262,7 +262,7 @@ void ScGridWindow::DoPushPivotToggle( SCCOL nCol, SCROW nRow, const MouseEvent& 
         nIndent = pIndentItem->GetValue();
 
     // Check if the mouse cursor is clicking on the toggle +/- box.
-    ScDPFieldButton aBtn(GetOutDev(), &GetSettings().GetStyleSettings(), &GetMapMode().GetScaleY());
+    ScDPFieldButton aBtn(GetOutDev(), GetSettings().GetStyleSettings(), GetMapMode().GetScaleY(), mrViewData.GetDocument());
     aBtn.setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
     aBtn.setDrawToggleButton(true, true, nIndent);
     Point aPopupPos;
@@ -407,7 +407,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(
     Size aScrSize(nSizeX-1, nSizeY-1);
 
     // Check if the mouse cursor is clicking on the popup arrow box.
-    ScDPFieldButton aBtn(GetOutDev(), &GetSettings().GetStyleSettings(), &GetMapMode().GetScaleY());
+    ScDPFieldButton aBtn(GetOutDev(), GetSettings().GetStyleSettings(), GetMapMode().GetScaleY(), mrViewData.GetDocument());
     aBtn.setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
     aBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
     Point aPopupPos;
@@ -437,7 +437,7 @@ bool ScGridWindow::DPTestMultiFieldPopupArrow(
     Size aScrSize(nSizeX - 1, nSizeY - 1);
 
     // Check if the mouse cursor is clicking on the popup arrow box.
-    ScDPFieldButton aBtn(GetOutDev(), &GetSettings().GetStyleSettings(), &GetMapMode().GetScaleY());
+    ScDPFieldButton aBtn(GetOutDev(), GetSettings().GetStyleSettings(), GetMapMode().GetScaleY(), mrViewData.GetDocument());
     aBtn.setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
     aBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
     aBtn.setDrawPopupButtonMulti(true);
