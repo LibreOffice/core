@@ -63,8 +63,6 @@ public:
     AccessibleFactory() = delete;
 
     static css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(PushButton* pButton);
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(CheckBox* pCheckBox);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(RadioButton* pRadioButton);

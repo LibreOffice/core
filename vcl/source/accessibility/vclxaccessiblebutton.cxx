@@ -112,6 +112,13 @@ Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames()
     return { u"com.sun.star.awt.AccessibleButton"_ustr };
 }
 
+// XAccessible
+css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+VCLXAccessibleButton::getAccessibleContext()
+{
+    OExternalLockGuard aGuard(this);
+    return this;
+}
 
 // XAccessibleContext
 

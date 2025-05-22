@@ -381,12 +381,6 @@ VCLXButton::~VCLXButton()
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
-{
-    VclPtr<PushButton> pButton = GetAs<PushButton>();
-    return AccessibleFactory::createAccessibleContext(pButton);
-}
-
 void VCLXButton::dispose()
 {
     SolarMutexGuard aGuard;

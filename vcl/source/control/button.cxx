@@ -36,6 +36,7 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
+#include <accessibility/vclxaccessiblebutton.hxx>
 #include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <window.h>
@@ -1264,6 +1265,11 @@ PushButton::PushButton( vcl::Window* pParent, WinBits nStyle ) :
 {
     ImplInitPushButtonData();
     ImplInit( pParent, nStyle );
+}
+
+css::uno::Reference<css::accessibility::XAccessible> PushButton::CreateAccessible()
+{
+    return new VCLXAccessibleButton(this);
 }
 
 void PushButton::MouseButtonDown( const MouseEvent& rMEvt )

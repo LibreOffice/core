@@ -63,11 +63,6 @@ bool hasFloatingChild(vcl::Window *pWindow)
 }
 };
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(PushButton* pButton)
-{
-    return new VCLXAccessibleButton(pButton);
-}
-
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(CheckBox* pCheckBox)
 {
     return new VCLXAccessibleCheckBox(pCheckBox);

@@ -27,13 +27,10 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/toolkit/button.hxx>
 
-
-
-
-class VCLXAccessibleButton final : public cppu::ImplInheritanceHelper<
-                                       VCLXAccessibleTextComponent,
-                                       css::accessibility::XAccessibleAction,
-                                       css::accessibility::XAccessibleValue>
+class VCLXAccessibleButton final
+    : public cppu::ImplInheritanceHelper<
+          VCLXAccessibleTextComponent, css::accessibility::XAccessible,
+          css::accessibility::XAccessibleAction, css::accessibility::XAccessibleValue>
 {
     virtual ~VCLXAccessibleButton() override = default;
 
@@ -47,6 +44,10 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    // XAccessible
+    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
 
     // XAccessibleContext
     virtual OUString SAL_CALL getAccessibleName(  ) override;
