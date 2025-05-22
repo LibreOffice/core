@@ -731,6 +731,19 @@ bool ScCondFormatItem::operator==( const SfxPoolItem& rCmp ) const
         && memcmp(&maIndex.front(), &other.maIndex.front(), maIndex.size() * sizeof(sal_uInt32)) == 0;
 }
 
+bool ScCondFormatItem::supportsHashCode() const
+{
+    return true;
+}
+
+size_t ScCondFormatItem::hashCode() const
+{
+    std::size_t seed = 0;
+    for (const auto & rIdx : maIndex)
+        o3tl::hash_combine(seed, rIdx);
+    return seed;
+}
+
 ScCondFormatItem* ScCondFormatItem::Clone(SfxItemPool*) const
 {
     return new ScCondFormatItem(maIndex);

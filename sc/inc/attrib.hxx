@@ -283,6 +283,8 @@ public:
     virtual ~ScCondFormatItem() override;
 
     virtual bool operator==(const SfxPoolItem& rCmp ) const override;
+    virtual bool supportsHashCode() const override;
+    virtual size_t hashCode() const override;
     virtual ScCondFormatItem*  Clone( SfxItemPool* = nullptr ) const override;
 
     const ScCondFormatIndexes& GetCondFormatData() const { return maIndex;}
