@@ -72,7 +72,7 @@ namespace pcr
             // initialize the multi-selection flag
             bool bMultiSelection = false;
             OSL_VERIFY( m_xListBox->getPropertyValue( PROPERTY_MULTISELECTION ) >>= bMultiSelection );
-            m_xEntries->set_selection_mode(bMultiSelection ? SelectionMode::Single : SelectionMode::Multiple);
+            m_xEntries->set_selection_mode(bMultiSelection ? SelectionMode::Multiple : SelectionMode::Single);
 
             // fill the list box with all entries
             Sequence< OUString > aListEntries;
