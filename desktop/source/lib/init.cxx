@@ -3381,7 +3381,7 @@ static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
             }
         }
 
-        // When more agressively reclaiming memory then shutdown threads which
+        // When more aggressively reclaiming memory then shutdown threads which
         // will restart on demand.
         joinThreads(JoinThreads::RESTARTS_ON_DEMAND);
     }
