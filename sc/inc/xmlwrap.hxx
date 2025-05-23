@@ -63,7 +63,7 @@ class ScXMLImportWrapper
     SfxMedium*      pMedium;
     css::uno::Reference< css::embed::XStorage > xStorage;
 
-    std::vector<OUString> maEmbeddedFontNames;
+    std::unordered_map<OString, OUString> maEmbeddedFontFiles;
 
     css::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator() const;
 

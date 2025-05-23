@@ -579,12 +579,12 @@ bool SwXMLWriter::WriteThroughComponent(
     if (pFilter)
     {
         pFilter->SetLibreOfficeKitNotifier(SfxViewShell::Current());
-        pFilter->setEmbeddedFontNames(maEmbeddedFontNames);
+        pFilter->setEmbeddedFontFiles(maEmbeddedFontFiles);
     }
     bool result = xFilter->filter( rMediaDesc );
     if (pFilter)
     {
-        maEmbeddedFontNames = pFilter->getEmbeddedFontNames();
+        maEmbeddedFontFiles = pFilter->getEmbeddedFontFiles();
     }
     return result;
 }

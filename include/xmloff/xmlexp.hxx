@@ -164,9 +164,8 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
 
     const OUString               msWS;           // " "
 
+    // A map of font hashes and names that were already embedded, including previous passes
     std::unordered_map<OString, OUString> m_aEmbeddedFontFiles;
-    // A list of font names that were already embedded, including previous passes
-    std::unordered_set<OUString> m_aEmbeddedFontNames;
 
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory meModelType;
@@ -317,8 +316,8 @@ public:
     // doesn't handle some style-specific content like headers/footers. These methods are for
     // passing the "already embedded" information from one instance to another.
 
-    std::vector<OUString> getEmbeddedFontNames() const;
-    void setEmbeddedFontNames(const std::vector<OUString>&);
+    std::unordered_map<OString, OUString> getEmbeddedFontFiles() const;
+    void setEmbeddedFontFiles(const std::unordered_map<OString, OUString>&);
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;

@@ -896,7 +896,7 @@ bool SdXMLFilter::Export()
             aServices[i].mpStream  = nullptr;
 
             XML_SERVICEMAP* pServices = aServices;
-            std::vector<OUString> aEmbeddedFontNames;
+            std::unordered_map<OString, OUString> maEmbeddedFontFiles;
 
             // doc export
             do
@@ -954,13 +954,13 @@ bool SdXMLFilter::Export()
                         auto pFilter = dynamic_cast<SvXMLExport*>(xFilter.get());
                         if (pFilter)
                         {
-                            pFilter->setEmbeddedFontNames(aEmbeddedFontNames);
+                            pFilter->setEmbeddedFontFiles(maEmbeddedFontFiles);
                         }
                         // outputstream will be closed by SAX parser
                         bDocRet = xFilter->filter( aDescriptor );
                         if (pFilter)
                         {
-                            aEmbeddedFontNames = pFilter->getEmbeddedFontNames();
+                            maEmbeddedFontFiles = pFilter->getEmbeddedFontFiles();
                         }
                     }
                 }

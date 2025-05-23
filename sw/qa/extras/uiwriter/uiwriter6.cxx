@@ -2361,7 +2361,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
         assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 2']", 1);
     }
 
-    // Check content - No font-face-src nodes should be present
+    // Check content - font-face-src should be present for all fonts
     pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -2371,7 +2371,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     {
         OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 2']");
-        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 2']", 0);
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 2']", 1);
     }
 
     // CASE 3 - font embedding enabled, embed only used fonts enabled
@@ -2423,19 +2423,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
         assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 1);
     }
 
-    // Check content - font-face-src should be present only for Carlito fonts
+    // Check content - font-face-src should be present only for Carlito and Liberation Serif fonts
+    // Note that the used sets of fonts are different for styles.xml and content.xml
     pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 3']", 6);
-    for (auto fontName : { "Caladea", "Liberation Sans", "Liberation Sans1", "Liberation Serif",
-                           "Liberation Serif1" })
+    for (auto fontName : { "Caladea", "Liberation Sans", "Liberation Sans1" })
     {
         OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 3']");
         assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 0);
     }
-    for (auto fontName : { "Carlito" })
+    for (auto fontName : { "Carlito", "Liberation Serif", "Liberation Serif1" })
     {
         OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 3']");
