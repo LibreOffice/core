@@ -53,20 +53,12 @@
 #include <formulaiter.hxx>
 #include <tokenarray.hxx>
 
-struct TableLink_Impl
-{
-    ScDocShell*            m_pDocSh;
-    Link<sfx2::SvBaseLink&,void> m_aEndEditLink;
-
-    TableLink_Impl() : m_pDocSh( nullptr ) {}
-};
-
-ScTableLink::ScTableLink(ScDocShell* pShell, OUString aFile,
+ScTableLink::ScTableLink(ScDocShell& rShell, OUString aFile,
                             OUString aFilter, OUString aOpt,
                             sal_Int32 nRefreshDelaySeconds ):
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
     ScRefreshTimer( nRefreshDelaySeconds ),
-    pImpl( new TableLink_Impl ),
+    m_rDocSh( rShell ),
     aFileName(std::move(aFile)),
     aFilterName(std::move(aFilter)),
     aOptions(std::move(aOpt)),
@@ -74,7 +66,6 @@ ScTableLink::ScTableLink(ScDocShell* pShell, OUString aFile,
     bInEdit( false ),
     bAddUndo( true )
 {
-    pImpl->m_pDocSh = pShell;
 }
 
 ScTableLink::~ScTableLink()
@@ -82,7 +73,7 @@ ScTableLink::~ScTableLink()
     // cancel connection
 
     StopRefreshTimer();
-    ScDocument& rDoc = pImpl->m_pDocSh->GetDocument();
+    ScDocument& rDoc = m_rDocSh.GetDocument();
     SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (rDoc.IsLinked(nTab) && aFileName == rDoc.GetLinkDoc(nTab))
@@ -91,7 +82,7 @@ ScTableLink::~ScTableLink()
 
 void ScTableLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl)
 {
-    pImpl->m_aEndEditLink = rEndEditHdl;
+    m_aEndEditLink = rEndEditHdl;
 
     bInEdit = true;
     SvBaseLink::Edit( pParent, LINK( this, ScTableLink, TableEndEditHdl ) );
@@ -100,7 +91,7 @@ void ScTableLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEnd
 ::sfx2::SvBaseLink::UpdateResult ScTableLink::DataChanged(
     const OUString&, const css::uno::Any& )
 {
-    sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument().GetLinkManager();
+    sfx2::LinkManager* pLinkManager=m_rDocSh.GetDocument().GetLinkManager();
     if (pLinkManager!=nullptr)
     {
         OUString aFile, aFilter;
@@ -119,13 +110,13 @@ void ScTableLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEnd
 void ScTableLink::Closed()
 {
     // delete link: Undo
-    ScDocument& rDoc = pImpl->m_pDocSh->GetDocument();
+    ScDocument& rDoc = m_rDocSh.GetDocument();
     bool bUndo (rDoc.IsUndoEnabled());
 
     if (bAddUndo && bUndo)
     {
-        pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoRemoveLink>( *pImpl->m_pDocSh, aFileName ) );
+        m_rDocSh.GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoRemoveLink>( m_rDocSh, aFileName ) );
 
         bAddUndo = false;   // only once
     }
@@ -137,7 +128,7 @@ void ScTableLink::Closed()
 
 bool ScTableLink::IsUsed() const
 {
-    return pImpl->m_pDocSh->GetDocument().HasLink( aFileName, aFilterName, aOptions );
+    return m_rDocSh.GetDocument().HasLink( aFileName, aFilterName, aOptions );
 }
 
 bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
@@ -148,14 +139,14 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     if (rNewFile.isEmpty() || rNewFilter.isEmpty())
         return false;
 
-    OUString aNewUrl = ScGlobal::GetAbsDocName(rNewFile, pImpl->m_pDocSh);
+    OUString aNewUrl = ScGlobal::GetAbsDocName(rNewFile, &m_rDocSh);
     bool bNewUrlName = aFileName != aNewUrl;
 
-    std::shared_ptr<const SfxFilter> pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
+    std::shared_ptr<const SfxFilter> pFilter = m_rDocSh.GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
         return false;
 
-    ScDocument& rDoc = pImpl->m_pDocSh->GetDocument();
+    ScDocument& rDoc = m_rDocSh.GetDocument();
     rDoc.SetInLinkUpdate( true );
 
     bool bUndo(rDoc.IsUndoEnabled());
@@ -194,7 +185,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
     //  copy tables
 
-    ScDocShellModificator aModificator( *pImpl->m_pDocSh );
+    ScDocShellModificator aModificator( m_rDocSh );
 
     bool bNotFound = false;
     ScDocument& rSrcDoc = pSrcShell->GetDocument();
@@ -362,12 +353,12 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     //  Undo
 
     if (bAddUndo && bUndo)
-        pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoRefreshLink>( *pImpl->m_pDocSh, std::move(pUndoDoc) ) );
+        m_rDocSh.GetUndoManager()->AddUndoAction(
+                    std::make_unique<ScUndoRefreshLink>( m_rDocSh, std::move(pUndoDoc) ) );
 
     //  Paint (may be several tables)
 
-    pImpl->m_pDocSh->PostPaint( ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB),
+    m_rDocSh.PostPaint( ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB),
                                 PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left | PaintPartFlags::Extras );
     aModificator.SetDocumentModified();
 
@@ -389,7 +380,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
 IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink&, rLink, void )
 {
-    pImpl->m_aEndEditLink.Call( rLink );
+    m_aEndEditLink.Call( rLink );
     bInEdit = false;
 }
 

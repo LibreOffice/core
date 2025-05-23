@@ -27,14 +27,14 @@
 #include <memory>
 
 class ScDocShell;
-struct TableLink_Impl;
 
 namespace weld { class Window; }
 
 class ScTableLink final : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
-    std::unique_ptr<TableLink_Impl> pImpl;
+    ScDocShell&            m_rDocSh;
+    Link<sfx2::SvBaseLink&,void> m_aEndEditLink;
     OUString aFileName;
     OUString aFilterName;
     OUString aOptions;
@@ -43,7 +43,7 @@ private:
     bool bAddUndo:1;
 
 public:
-    ScTableLink( ScDocShell* pDocSh, OUString aFile,
+    ScTableLink( ScDocShell& rDocSh, OUString aFile,
                     OUString aFilter, OUString aOpt, sal_Int32 nRefreshDelaySeconds );
     virtual ~ScTableLink() override;
     virtual void Closed() override;

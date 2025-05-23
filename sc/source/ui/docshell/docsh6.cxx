@@ -374,7 +374,7 @@ void ScDocShell::UpdateLinks()
 
         if (!bThere)
         {
-            ScTableLink* pLink = new ScTableLink( this, aDocName, aFltName, aOptions, nRefresh );
+            ScTableLink* pLink = new ScTableLink( *this, aDocName, aFltName, aOptions, nRefresh );
             pLink->SetInCreate(true);
             pLinkManager->InsertFileLink(*pLink, sfx2::SvBaseLinkObjectType::ClientFile, aDocName, &aFltName);
             pLink->Update();

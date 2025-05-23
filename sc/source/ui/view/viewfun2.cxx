@@ -2823,7 +2823,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 
         if (!bWasThere)         // Insert link only once per source document
         {
-            ScTableLink* pLink = new ScTableLink( pDocSh, aFileName, aFilterName, aOptions, nRefresh );
+            ScTableLink* pLink = new ScTableLink( *pDocSh, aFileName, aFilterName, aOptions, nRefresh );
             pLink->SetInCreate( true );
             pLinkManager->InsertFileLink( *pLink, sfx2::SvBaseLinkObjectType::ClientFile, aFileName, &aFilterName );
             pLink->Update();
