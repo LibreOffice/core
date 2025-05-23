@@ -584,7 +584,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             std::unique_ptr<ScDBData> pRedoDBData(new ScDBData(*pDBData));
 
             rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoImportData>( &rDocShell, nTab,
+                std::make_unique<ScUndoImportData>( rDocShell, nTab,
                                         rParam, nUndoEndCol, nUndoEndRow,
                                         nFormulaCols,
                                         std::move(pUndoDoc), std::move(pRedoDoc),

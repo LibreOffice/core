@@ -29,16 +29,16 @@ class ScUndoUtil
 {
 public:
     /**  Mark Block (invisible - has to be repainted) */
-    static void MarkSimpleBlock( const ScDocShell* pDocShell,
+    static void MarkSimpleBlock( const ScDocShell& rDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ );
-    static void MarkSimpleBlock( const ScDocShell* pDocShell,
+    static void MarkSimpleBlock( const ScDocShell& rDocShell,
                                 const ScAddress& rBlockStart,
                                 const ScAddress& rBlockEnd );
-    static void MarkSimpleBlock( const ScDocShell* pDocShell,
+    static void MarkSimpleBlock( const ScDocShell& rDocShell,
                                 const ScRange& rRange );
 
-    static void PaintMore( ScDocShell* pDocShell,
+    static void PaintMore( ScDocShell& rDocShell,
                                 const ScRange& rRange );
 
     /** Search for Data base range in Document ("untitled" or by region)

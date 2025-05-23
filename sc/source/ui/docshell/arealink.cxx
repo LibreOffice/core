@@ -47,13 +47,13 @@
 #include <clipparam.hxx>
 
 
-ScAreaLink::ScAreaLink( ScDocShell* pShell, OUString aFile,
+ScAreaLink::ScAreaLink( ScDocShell& rShell, OUString aFile,
                         OUString aFilter, OUString aOpt,
                         OUString aArea, const ScRange& rDest,
                         sal_Int32 nRefreshDelaySeconds ) :
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
     ScRefreshTimer  ( nRefreshDelaySeconds ),
-    m_pDocSh(pShell),
+    m_rDocSh(rShell),
     aFileName       (std::move(aFile)),
     aFilterName     (std::move(aFilter)),
     aOptions        (std::move(aOpt)),
@@ -64,7 +64,7 @@ ScAreaLink::ScAreaLink( ScDocShell* pShell, OUString aFile,
     bDoInsert       (true)
 {
     SetRefreshHandler( LINK( this, ScAreaLink, RefreshHdl ) );
-    SetRefreshControl( &m_pDocSh->GetDocument().GetRefreshTimerControlAddress() );
+    SetRefreshControl( &m_rDocSh.GetDocument().GetRefreshTimerControlAddress() );
 }
 
 ScAreaLink::~ScAreaLink()
@@ -101,7 +101,7 @@ void ScAreaLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& /* rE
     if (bInCreate)
         return SUCCESS;
 
-    sfx2::LinkManager* pLinkManager=m_pDocSh->GetDocument().GetLinkManager();
+    sfx2::LinkManager* pLinkManager=m_rDocSh.GetDocument().GetLinkManager();
     if (pLinkManager!=nullptr)
     {
         OUString aFile, aArea, aFilter;
@@ -135,11 +135,11 @@ void ScAreaLink::Closed()
 {
     // delete link: Undo
 
-    ScDocument& rDoc = m_pDocSh->GetDocument();
+    ScDocument& rDoc = m_rDocSh.GetDocument();
     bool bUndo (rDoc.IsUndoEnabled());
     if (bAddUndo && bUndo)
     {
-        m_pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoRemoveAreaLink>( m_pDocSh,
+        m_rDocSh.GetUndoManager()->AddUndoAction( std::make_unique<ScUndoRemoveAreaLink>( m_rDocSh,
                                                         aFileName, aFilterName, aOptions,
                                                         aSourceArea, aDestArea, GetRefreshDelaySeconds() ) );
 
@@ -226,17 +226,17 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     if (rNewFile.isEmpty() || rNewFilter.isEmpty())
         return false;
 
-    if (!m_pDocSh->GetEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+    if (!m_rDocSh.GetEmbeddedObjectContainer().getUserAllowsLinkUpdate())
         return false;
 
-    OUString aNewUrl( ScGlobal::GetAbsDocName( rNewFile, m_pDocSh ) );
+    OUString aNewUrl( ScGlobal::GetAbsDocName( rNewFile, &m_rDocSh ) );
     bool bNewUrlName = (aNewUrl != aFileName);
 
-    std::shared_ptr<const SfxFilter> pFilter = m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
+    std::shared_ptr<const SfxFilter> pFilter = m_rDocSh.GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
         return false;
 
-    ScDocument& rDoc = m_pDocSh->GetDocument();
+    ScDocument& rDoc = m_rDocSh.GetDocument();
 
     bool bUndo (rDoc.IsUndoEnabled());
     rDoc.SetInLinkUpdate( true );
@@ -324,7 +324,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                   rDoc.CanFitBlock( aOldRange, aNewRange );
     if (bCanDo)
     {
-        ScDocShellModificator aModificator( *m_pDocSh );
+        ScDocShellModificator aModificator( m_rDocSh );
 
         SCCOL nOldEndX = aOldRange.aEnd.Col();
         SCROW nOldEndY = aOldRange.aEnd.Row();
@@ -417,8 +417,8 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
             pRedoDoc->InitUndo( rDoc, nDestTab, nDestTab );
             rDoc.CopyToDocument(aNewRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pRedoDoc);
 
-            m_pDocSh->GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoUpdateAreaLink>( m_pDocSh,
+            m_rDocSh.GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoUpdateAreaLink>( m_rDocSh,
                                             aFileName, aFilterName, aOptions,
                                             aSourceArea, aOldRange, GetRefreshDelaySeconds(),
                                             aNewUrl, rNewFilter, aNewOpt,
@@ -451,8 +451,8 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         if ( aOldRange.aEnd.Row() != aNewRange.aEnd.Row() )
             nPaintEndY = rDoc.MaxRow();
 
-        if ( !m_pDocSh->AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
-            m_pDocSh->PostPaint(
+        if ( !m_rDocSh.AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
+            m_rDocSh.PostPaint(
                 ScRange(aDestPos.Col(), aDestPos.Row(), nDestTab, nPaintEndX, nPaintEndY, nDestTab),
                 PaintPartFlags::Grid);
         aModificator.SetDocumentModified();
@@ -464,7 +464,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
         //! Link dialog must set default parent
         //  "cannot insert rows"
-        weld::Window* pWin = Application::GetFrameWeld(m_pDocSh->GetDialogParent());
+        weld::Window* pWin = Application::GetFrameWeld(m_rDocSh.GetDialogParent());
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin,
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       ScResId(STR_MSSG_DOSUBTOTALS_2)));

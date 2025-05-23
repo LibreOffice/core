@@ -17,10 +17,10 @@
 #include <utility>
 
 ScUndoAllRangeNames::ScUndoAllRangeNames(
-    ScDocShell* pDocSh,
+    ScDocShell& rDocSh,
     const std::map<OUString, ScRangeName*>& rOldNames,
     const std::map<OUString, ScRangeName>& rNewNames)
-        : ScSimpleUndo(pDocSh)
+        : ScSimpleUndo(rDocSh)
 {
     for (const auto& [rName, pRangeName] : rOldNames)
     {
@@ -63,7 +63,7 @@ OUString ScUndoAllRangeNames::GetComment() const
 
 void ScUndoAllRangeNames::DoChange(const std::map<OUString, ScRangeName>& rNames)
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     rDoc.PreprocessAllRangeNamesUpdate(rNames);
     rDoc.SetAllRangeNames(rNames);
@@ -72,8 +72,8 @@ void ScUndoAllRangeNames::DoChange(const std::map<OUString, ScRangeName>& rNames
     SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScAreasChanged));
 }
 
-ScUndoAddRangeData::ScUndoAddRangeData(ScDocShell* pDocSh, const ScRangeData* pRangeData, SCTAB nTab) :
-    ScSimpleUndo(pDocSh),
+ScUndoAddRangeData::ScUndoAddRangeData(ScDocShell& rDocSh, const ScRangeData* pRangeData, SCTAB nTab) :
+    ScSimpleUndo(rDocSh),
     mpRangeData(new ScRangeData(*pRangeData)),
     mnTab(nTab)
 {
@@ -86,7 +86,7 @@ ScUndoAddRangeData::~ScUndoAddRangeData()
 
 void ScUndoAddRangeData::Undo()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     ScRangeName* pRangeName = nullptr;
     if (mnTab == -1)
     {
@@ -103,7 +103,7 @@ void ScUndoAddRangeData::Undo()
 
 void ScUndoAddRangeData::Redo()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     ScRangeName* pRangeName = nullptr;
     if (mnTab == -1)
     {

@@ -4268,7 +4268,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRenameTable)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("table not renamed", nameToSet, nameJustSet);
 
     //test case 4 , check if  undo works
-    SfxUndoAction* pUndo = new ScUndoRenameTab(m_xDocShell.get(),0,anOldName,nameToSet);
+    SfxUndoAction* pUndo = new ScUndoRenameTab(*m_xDocShell,0,anOldName,nameToSet);
     pUndo->Undo();
     m_pDoc->GetName(0,nameJustSet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("the correct name is not set after undo", nameJustSet, anOldName);
@@ -4303,7 +4303,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSetBackgroundColor)
                            aColor, m_pDoc->GetTabBgColor(0));
 
     //now check for undo
-    SfxUndoAction* pUndo = new ScUndoTabColor(m_xDocShell.get(), 0, aOldTabBgColor, aColor);
+    SfxUndoAction* pUndo = new ScUndoTabColor(*m_xDocShell, 0, aOldTabBgColor, aColor);
     pUndo->Undo();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("the correct color is not set after undo", aOldTabBgColor, m_pDoc->GetTabBgColor(0));
     pUndo->Redo();
@@ -5933,7 +5933,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteContents)
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
-    ScUndoDeleteContents aUndo(m_xDocShell.get(), aMark, aRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
+    ScUndoDeleteContents aUndo(*m_xDocShell, aMark, aRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
 
     clearRange(m_pDoc, aRange);
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3,15,0))); // formula

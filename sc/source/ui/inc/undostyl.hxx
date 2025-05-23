@@ -52,12 +52,12 @@ private:
     ScStyleSaveData aOldData;
     ScStyleSaveData aNewData;
 
-    static void     DoChange( ScDocShell* pDocSh,
+    static void     DoChange( ScDocShell& rDocSh,
                                 const OUString& rName, SfxStyleFamily eStyleFamily,
                                 const ScStyleSaveData& rData );
 
 public:
-                    ScUndoModifyStyle( ScDocShell* pDocSh,
+                    ScUndoModifyStyle( ScDocShell& rDocSh,
                                         SfxStyleFamily eFam,
                                         const ScStyleSaveData& rOld,
                                         const ScStyleSaveData& rNew );
@@ -74,7 +74,7 @@ public:
 class ScUndoApplyPageStyle: public ScSimpleUndo
 {
 public:
-                    ScUndoApplyPageStyle( ScDocShell* pDocSh, OUString aNewStyle );
+                    ScUndoApplyPageStyle( ScDocShell& rDocSh, OUString aNewStyle );
     virtual         ~ScUndoApplyPageStyle() override;
 
     void            AddSheetAction( SCTAB nTab, const OUString& rOld );

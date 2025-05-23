@@ -321,7 +321,7 @@ void ScDBFunc::ToggleAutoFilter()
         ScRange aRange;
         pDBData->GetArea( aRange );
         pDocSh->GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoAutoFilter>( pDocSh, aRange, pDBData->GetName(), false ) );
+            std::make_unique<ScUndoAutoFilter>( *pDocSh, aRange, pDBData->GetName(), false ) );
 
         pDBData->SetAutoFilter(false);
 
@@ -330,7 +330,7 @@ void ScDBFunc::ToggleAutoFilter()
 
         pDocSh->GetUndoManager()->LeaveListAction();
 
-        ScDBFunc::ModifiedAutoFilter(pDocSh);
+        ScDBFunc::ModifiedAutoFilter(*pDocSh);
     }
     else                                    // show filter buttons
     {
@@ -353,11 +353,11 @@ void ScDBFunc::ToggleAutoFilter()
                         pDBData->SetHeader( true );     //! Undo ??
                     }
 
-                    ApplyAutoFilter(pDocSh, rViewData, pDBData, nRow, nTab, aParam);
+                    ApplyAutoFilter(*pDocSh, rViewData, pDBData, nRow, nTab, aParam);
                 });
             }
             else
-                ApplyAutoFilter(pDocSh, rViewData, pDBData, nRow, nTab, aParam);
+                ApplyAutoFilter(*pDocSh, rViewData, pDBData, nRow, nTab, aParam);
         }
         else
         {
@@ -375,14 +375,14 @@ IMPL_STATIC_LINK_NOARG(ScDBFunc, InstallLOKNotifierHdl, void*, vcl::ILibreOffice
     return GetpApp();
 }
 
-void ScDBFunc::ApplyAutoFilter(ScDocShell* pDocSh, ScViewData& rViewData, ScDBData* pDBData,
+void ScDBFunc::ApplyAutoFilter(ScDocShell& rDocSh, ScViewData& rViewData, ScDBData* pDBData,
                                SCROW nRow, SCTAB nTab, const ScQueryParam& aParam)
 {
     ScDocument& rDoc = rViewData.GetDocument();
     ScRange aRange;
     pDBData->GetArea(aRange);
-    pDocSh->GetUndoManager()->AddUndoAction(
-        std::make_unique<ScUndoAutoFilter>(pDocSh, aRange, pDBData->GetName(), true));
+    rDocSh.GetUndoManager()->AddUndoAction(
+        std::make_unique<ScUndoAutoFilter>(rDocSh, aRange, pDBData->GetName(), true));
 
     pDBData->SetAutoFilter(true);
 
@@ -391,18 +391,18 @@ void ScDBFunc::ApplyAutoFilter(ScDocShell* pDocSh, ScViewData& rViewData, ScDBDa
         ScMF nFlag = rDoc.GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG)->GetValue();
         rDoc.ApplyAttr(nCol, nRow, nTab, ScMergeFlagAttr(nFlag | ScMF::Auto));
     }
-    pDocSh->PostPaint(ScRange(aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab),
+    rDocSh.PostPaint(ScRange(aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab),
                         PaintPartFlags::Grid);
 
-    ScDBFunc::ModifiedAutoFilter(pDocSh);
+    ScDBFunc::ModifiedAutoFilter(rDocSh);
 }
 
-void ScDBFunc::ModifiedAutoFilter(ScDocShell* pDocSh)
+void ScDBFunc::ModifiedAutoFilter(ScDocShell& rDocSh)
 {
-    ScDocShellModificator aModificator(*pDocSh);
+    ScDocShellModificator aModificator(rDocSh);
     aModificator.SetDocumentModified();
 
-    if (SfxBindings* pBindings = pDocSh->GetViewBindings())
+    if (SfxBindings* pBindings = rDocSh.GetViewBindings())
     {
         pBindings->Invalidate(SID_AUTO_FILTER);
         pBindings->Invalidate(SID_AUTOFILTER_HIDE);
@@ -434,7 +434,7 @@ void ScDBFunc::HideAutoFilter()
     ScRange aRange;
     pDBData->GetArea( aRange );
     pDocSh->GetUndoManager()->AddUndoAction(
-        std::make_unique<ScUndoAutoFilter>( pDocSh, aRange, pDBData->GetName(), false ) );
+        std::make_unique<ScUndoAutoFilter>( *pDocSh, aRange, pDBData->GetName(), false ) );
 
     pDBData->SetAutoFilter(false);
 

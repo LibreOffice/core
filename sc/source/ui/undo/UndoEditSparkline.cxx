@@ -17,10 +17,9 @@
 
 namespace sc
 {
-UndoEditSparkline::UndoEditSparkline(ScDocShell& rDocShell,
-                                     std::shared_ptr<sc::Sparkline> pSparkline, SCTAB nTab,
-                                     ScRangeList aDataRange)
-    : ScSimpleUndo(&rDocShell)
+UndoEditSparkline::UndoEditSparkline(ScDocShell& rShell, std::shared_ptr<sc::Sparkline> pSparkline,
+                                     SCTAB nTab, ScRangeList aDataRange)
+    : ScSimpleUndo(rShell)
     , mpSparkline(std::move(pSparkline))
     , mnTab(nTab)
     , maOldDataRange(mpSparkline->getInputRange())
@@ -36,7 +35,7 @@ void UndoEditSparkline::Undo()
 
     mpSparkline->setInputRange(maOldDataRange);
 
-    pDocShell->PostPaintCell(ScAddress(mpSparkline->getColumn(), mpSparkline->getRow(), mnTab));
+    rDocShell.PostPaintCell(ScAddress(mpSparkline->getColumn(), mpSparkline->getRow(), mnTab));
 
     EndUndo();
 }
@@ -47,7 +46,7 @@ void UndoEditSparkline::Redo()
 
     mpSparkline->setInputRange(maNewDataRange);
 
-    pDocShell->PostPaintCell(ScAddress(mpSparkline->getColumn(), mpSparkline->getRow(), mnTab));
+    rDocShell.PostPaintCell(ScAddress(mpSparkline->getColumn(), mpSparkline->getRow(), mnTab));
 
     EndRedo();
 }

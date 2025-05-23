@@ -18,8 +18,8 @@
 
 namespace sc
 {
-UndoUngroupSparklines::UndoUngroupSparklines(ScDocShell& rDocShell, ScRange const& rRange)
-    : ScSimpleUndo(&rDocShell)
+UndoUngroupSparklines::UndoUngroupSparklines(ScDocShell& rShell, ScRange const& rRange)
+    : ScSimpleUndo(rShell)
     , m_aRange(rRange)
 {
 }
@@ -30,7 +30,7 @@ void UndoUngroupSparklines::Undo()
 {
     BeginUndo();
 
-    ScDocument& rDocument = pDocShell->GetDocument();
+    ScDocument& rDocument = rDocShell.GetDocument();
 
     for (SparklineUndoData& rUndoData : m_aUndoData)
     {
@@ -42,7 +42,7 @@ void UndoUngroupSparklines::Undo()
 
     m_aUndoData.clear();
 
-    pDocShell->PostPaint(m_aRange, PaintPartFlags::All);
+    rDocShell.PostPaint(m_aRange, PaintPartFlags::All);
 
     EndUndo();
 }
@@ -51,7 +51,7 @@ void UndoUngroupSparklines::Redo()
 {
     BeginRedo();
 
-    ScDocument& rDocument = pDocShell->GetDocument();
+    ScDocument& rDocument = rDocShell.GetDocument();
 
     for (ScAddress aAddress = m_aRange.aStart; aAddress.Col() <= m_aRange.aEnd.Col();
          aAddress.IncCol())
@@ -72,7 +72,7 @@ void UndoUngroupSparklines::Redo()
         }
     }
 
-    pDocShell->PostPaint(m_aRange, PaintPartFlags::All);
+    rDocShell.PostPaint(m_aRange, PaintPartFlags::All);
 
     EndRedo();
 }

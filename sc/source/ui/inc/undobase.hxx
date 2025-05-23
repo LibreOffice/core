@@ -38,7 +38,7 @@ class SAL_DLLPUBLIC_RTTI ScSimpleUndo: public SfxUndoAction
 public:
     typedef std::map<SCTAB, std::unique_ptr<sc::ColumnSpanSet>> DataSpansType;
 
-                    ScSimpleUndo( ScDocShell* pDocSh );
+                    ScSimpleUndo( ScDocShell& rDocSh );
 
     virtual bool    Merge( SfxUndoAction *pNextAction ) override;
     /// See SfxUndoAction::GetViewShellId().
@@ -47,12 +47,12 @@ public:
     virtual std::optional<ScRange> getAffectedRange() const { return std::nullopt; }
 
 protected:
-    ScDocShell*     pDocShell;
+    ScDocShell&     rDocShell;
     std::unique_ptr<SfxUndoAction>
                     pDetectiveUndo;
     ViewShellId     mnViewShellId;
 
-    bool            IsPaintLocked() const { return pDocShell->IsPaintLocked(); }
+    bool            IsPaintLocked() const { return rDocShell.IsPaintLocked(); }
 
     bool            SetViewMarkData( const ScMarkData& rMarkData );
 
@@ -80,7 +80,7 @@ enum ScBlockUndoMode { SC_UNDO_SIMPLE, SC_UNDO_MANUALHEIGHT, SC_UNDO_AUTOHEIGHT 
 class ScBlockUndo: public ScSimpleUndo
 {
 public:
-                    ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
+                    ScBlockUndo( ScDocShell& rDocSh, const ScRange& rRange,
                                  ScBlockUndoMode eBlockMode );
     virtual         ~ScBlockUndo() override;
 
@@ -103,7 +103,7 @@ protected:
 class SC_DLLPUBLIC ScMultiBlockUndo: public ScSimpleUndo
 {
 public:
-    ScMultiBlockUndo(ScDocShell* pDocSh, ScRangeList aRanges);
+    ScMultiBlockUndo(ScDocShell& rDocSh, ScRangeList aRanges);
     virtual ~ScMultiBlockUndo() override;
 
 protected:
@@ -127,7 +127,7 @@ protected:
     ScRange         aOriginalRange;
 
 public:
-                    ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal );
+                    ScDBFuncUndo( ScDocShell& rDocSh, const ScRange& rOriginal );
     virtual         ~ScDBFuncUndo() override;
 
     void            BeginUndo();
@@ -139,7 +139,7 @@ public:
 class ScMoveUndo: public ScSimpleUndo               // with references
 {
 public:
-                    ScMoveUndo( ScDocShell* pDocSh,
+                    ScMoveUndo( ScDocShell& rDocSh,
                                 ScDocumentUniquePtr pRefDoc, std::unique_ptr<ScRefUndoData> pRefData );
     virtual         ~ScMoveUndo() override;
 

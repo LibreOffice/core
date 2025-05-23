@@ -75,9 +75,9 @@ void ScStyleSaveData::InitFromStyle( const SfxStyleSheetBase* pSource )
     }
 }
 
-ScUndoModifyStyle::ScUndoModifyStyle( ScDocShell* pDocSh, SfxStyleFamily eFam,
+ScUndoModifyStyle::ScUndoModifyStyle( ScDocShell& rShell, SfxStyleFamily eFam,
                     const ScStyleSaveData& rOld, const ScStyleSaveData& rNew ) :
-    ScSimpleUndo( pDocSh ),
+    ScSimpleUndo( rShell ),
     eFamily( eFam ),
     aOldData( rOld ),
     aNewData( rNew )
@@ -114,10 +114,10 @@ static void lcl_DocStyleChanged( ScDocument* pDoc, const SfxStyleSheetBase* pSty
         pHdl->ForgetLastPattern();
 }
 
-void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
+void ScUndoModifyStyle::DoChange( ScDocShell& rDocSh, const OUString& rName,
                                     SfxStyleFamily eStyleFamily, const ScStyleSaveData& rData )
 {
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = rDocSh.GetDocument();
     ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
     const OUString& aNewName = rData.GetName();
     bool bDelete = aNewName.isEmpty();         // no new name -> delete style
@@ -185,14 +185,14 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
                 if (pNewSet)
                     rDoc.ModifyStyleSheet( *pStyle, *pNewSet );
 
-                pDocSh->PageStyleModified( aNewName, true );
+                rDocSh.PageStyleModified( aNewName, true );
             }
             else
                 static_cast<SfxStyleSheet*>(pStyle)->Broadcast(SfxHint(SfxHintId::DataChanged));
         }
     }
 
-    pDocSh->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
+    rDocSh.PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
 
     //! undo/redo document modifications for deleted styles
     //! undo/redo modifications of number formatter
@@ -201,14 +201,14 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
 void ScUndoModifyStyle::Undo()
 {
     BeginUndo();
-    DoChange( pDocShell, aNewData.GetName(), eFamily, aOldData );
+    DoChange( rDocShell, aNewData.GetName(), eFamily, aOldData );
     EndUndo();
 }
 
 void ScUndoModifyStyle::Redo()
 {
     BeginRedo();
-    DoChange( pDocShell, aOldData.GetName(), eFamily, aNewData );
+    DoChange( rDocShell, aOldData.GetName(), eFamily, aNewData );
     EndRedo();
 }
 
@@ -229,8 +229,8 @@ ScUndoApplyPageStyle::ApplyStyleEntry::ApplyStyleEntry( SCTAB nTab, OUString aOl
 {
 }
 
-ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell* pDocSh, OUString aNewStyle ) :
-    ScSimpleUndo( pDocSh ),
+ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell& rDocSh, OUString aNewStyle ) :
+    ScSimpleUndo( rDocSh ),
     maNewStyle(std::move( aNewStyle ))
 {
 }
@@ -254,8 +254,8 @@ void ScUndoApplyPageStyle::Undo()
     BeginUndo();
     for( const auto& rEntry : maEntries )
     {
-        pDocShell->GetDocument().SetPageStyle( rEntry.mnTab, rEntry.maOldStyle );
-        ScPrintFunc( pDocShell, pDocShell->GetPrinter(), rEntry.mnTab ).UpdatePages();
+        rDocShell.GetDocument().SetPageStyle( rEntry.mnTab, rEntry.maOldStyle );
+        ScPrintFunc( &rDocShell, rDocShell.GetPrinter(), rEntry.mnTab ).UpdatePages();
     }
     EndUndo();
 }
@@ -265,8 +265,8 @@ void ScUndoApplyPageStyle::Redo()
     BeginRedo();
     for( const auto& rEntry : maEntries )
     {
-        pDocShell->GetDocument().SetPageStyle( rEntry.mnTab, maNewStyle );
-        ScPrintFunc( pDocShell, pDocShell->GetPrinter(), rEntry.mnTab ).UpdatePages();
+        rDocShell.GetDocument().SetPageStyle( rEntry.mnTab, maNewStyle );
+        ScPrintFunc( &rDocShell, rDocShell.GetPrinter(), rEntry.mnTab ).UpdatePages();
     }
     EndRedo();
 }

@@ -138,7 +138,7 @@ bool changeStyles(ScDocShell& rDocShell, model::ColorSet const& rColorSet)
                 ScStyleSaveData aNewData;
                 aNewData.InitFromStyle(pStyle);
                 rDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoModifyStyle>(
-                    &rDocShell, SfxStyleFamily::Para, aOldData, aNewData));
+                    rDocShell, SfxStyleFamily::Para, aOldData, aNewData));
             }
             static_cast<SfxStyleSheet*>(pStyle)->Broadcast(SfxHint(SfxHintId::DataChanged));
             bChanged = true;
@@ -192,7 +192,7 @@ bool changeSheets(ScDocShell& rDocShell, ScTabViewShell* pViewShell, ScDrawLayer
                                              &aMark);
 
                     auto pUndo = std::make_unique<ScUndoSelectionAttr>(
-                        &rDocShell, aMark, aRange.aStart.Col(), aRange.aStart.Row(),
+                        rDocShell, aMark, aRange.aStart.Col(), aRange.aStart.Row(),
                         aRange.aStart.Tab(), aRange.aEnd.Col(), aRange.aEnd.Row(),
                         aRange.aEnd.Tab(), std::move(pUndoDoc), true, &aNewPattern);
 
@@ -224,7 +224,7 @@ bool changeSheets(ScDocShell& rDocShell, ScTabViewShell* pViewShell, ScDrawLayer
             if (pUndo)
             {
                 bChanged = true;
-                auto pUndoDraw = std::make_unique<ScUndoDraw>(std::move(pUndo), &rDocShell);
+                auto pUndoDraw = std::make_unique<ScUndoDraw>(std::move(pUndo), rDocShell);
                 rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoDraw));
             }
         }

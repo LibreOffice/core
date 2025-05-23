@@ -36,7 +36,7 @@ class SdrUndoAction;
 class ScUndoDoOutline: public ScSimpleUndo
 {
 public:
-                    ScUndoDoOutline( ScDocShell* pNewDocShell,
+                    ScUndoDoOutline( ScDocShell& rNewDocShell,
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocumentUniquePtr pNewUndoDoc, bool bNewColumns,
                             sal_uInt16 nNewLevel, sal_uInt16 nNewEntry, bool bNewShow );
@@ -64,7 +64,7 @@ private:
 class ScUndoMakeOutline: public ScSimpleUndo
 {
 public:
-                    ScUndoMakeOutline( ScDocShell* pNewDocShell,
+                    ScUndoMakeOutline( ScDocShell& rNewDocShell,
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             std::unique_ptr<ScOutlineTable> pNewUndoTab,
@@ -90,7 +90,7 @@ private:
 class ScUndoOutlineLevel: public ScSimpleUndo
 {
 public:
-    ScUndoOutlineLevel(ScDocShell* pNewDocShell,
+    ScUndoOutlineLevel(ScDocShell& rNewDocShell,
                        SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                        ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
                        bool bNewColumns, sal_uInt16 nNewLevel);
@@ -115,7 +115,7 @@ private:
 class ScUndoOutlineBlock: public ScSimpleUndo
 {
 public:
-    ScUndoOutlineBlock(ScDocShell* pNewDocShell,
+    ScUndoOutlineBlock(ScDocShell& rNewDocShell,
                        SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                        SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                        ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
@@ -139,7 +139,7 @@ private:
 class ScUndoRemoveAllOutlines: public ScSimpleUndo
 {
 public:
-    ScUndoRemoveAllOutlines(ScDocShell* pNewDocShell,
+    ScUndoRemoveAllOutlines(ScDocShell& rNewDocShell,
             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
             ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab);
@@ -161,7 +161,7 @@ private:
 class ScUndoAutoOutline: public ScSimpleUndo
 {
 public:
-    ScUndoAutoOutline(ScDocShell* pNewDocShell,
+    ScUndoAutoOutline(ScDocShell& rNewDocShell,
                       SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                       SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                       ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab);
@@ -183,7 +183,7 @@ private:
 class ScUndoSubTotals: public ScDBFuncUndo
 {
 public:
-    ScUndoSubTotals(ScDocShell* pNewDocShell, SCTAB nNewTab,
+    ScUndoSubTotals(ScDocShell& rNewDocShell, SCTAB nNewTab,
                     const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                     ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
                     std::unique_ptr<ScRangeName> pNewUndoRange, std::unique_ptr<ScDBCollection> pNewUndoDB);
@@ -208,7 +208,7 @@ private:
 class ScUndoQuery: public ScDBFuncUndo
 {
 public:
-                    ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab,
+                    ScUndoQuery( ScDocShell& rNewDocShell, SCTAB nNewTab,
                             const ScQueryParam& rParam, ScDocumentUniquePtr pNewUndoDoc,
                             std::unique_ptr<ScDBCollection> pNewUndoDB, const ScRange* pOld,
                             bool bSize, const ScRange* pAdvSrc );
@@ -243,7 +243,7 @@ private:
     void            DoChange( bool bUndo );
 
 public:
-                    ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
+                    ScUndoAutoFilter( ScDocShell& rNewDocShell, const ScRange& rRange,
                                       OUString aName, bool bSet );
     virtual         ~ScUndoAutoFilter() override;
 
@@ -258,7 +258,7 @@ public:
 class ScUndoDBData: public ScSimpleUndo
 {
 public:
-                    ScUndoDBData( ScDocShell* pNewDocShell,
+                    ScUndoDBData( ScDocShell& rNewDocShell,
                             std::unique_ptr<ScDBCollection> pNewUndoColl,
                             std::unique_ptr<ScDBCollection> pNewRedoColl );
     virtual         ~ScUndoDBData() override;
@@ -278,7 +278,7 @@ private:
 class ScUndoImportData: public ScSimpleUndo
 {
 public:
-    ScUndoImportData(ScDocShell* pNewDocShell, SCTAB nNewTab,
+    ScUndoImportData(ScDocShell& rNewDocShell, SCTAB nNewTab,
                      const ScImportParam& rParam, SCCOL nNewEndX, SCROW nNewEndY,
                      SCCOL nNewFormula,
                      ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
@@ -307,7 +307,7 @@ private:
 class ScUndoRepeatDB: public ScSimpleUndo
 {
 public:
-    ScUndoRepeatDB(ScDocShell* pNewDocShell, SCTAB nNewTab,
+    ScUndoRepeatDB(ScDocShell& rNewDocShell, SCTAB nNewTab,
                    SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
                    SCROW nResultEndRow, SCCOL nCurX, SCROW nCurY,
                    ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
@@ -338,7 +338,7 @@ private:
 class ScUndoDataPilot: public ScSimpleUndo
 {
 public:
-    ScUndoDataPilot(ScDocShell* pNewDocShell,
+    ScUndoDataPilot(ScDocShell& rNewDocShell,
                     ScDocumentUniquePtr pOldDoc, ScDocumentUniquePtr pNewDoc,
                     const ScDPObject* pOldObj, const ScDPObject* pNewObj,
                     bool bMove);
@@ -361,7 +361,7 @@ private:
 class ScUndoConsolidate: public ScSimpleUndo
 {
 public:
-    ScUndoConsolidate(ScDocShell* pNewDocShell,
+    ScUndoConsolidate(ScDocShell& rNewDocShell,
                       const ScArea& rArea, const ScConsolidateParam& rPar,
                       ScDocumentUniquePtr pNewUndoDoc, bool bReference,
                       SCROW nInsCount, std::unique_ptr<ScOutlineTable> pTab,
@@ -387,10 +387,10 @@ private:
 class ScUndoChartData: public ScSimpleUndo
 {
 public:
-                        ScUndoChartData( ScDocShell* pNewDocShell,
+                        ScUndoChartData( ScDocShell& rNewDocShell,
                                 OUString aName, const ScRange& rNew,
                                 bool bColHdr, bool bRowHdr, bool bAdd );
-                        ScUndoChartData( ScDocShell* pNewDocShell,
+                        ScUndoChartData( ScDocShell& rNewDocShell,
                                 OUString aName, ScRangeListRef xNew,
                                 bool bColHdr, bool bRowHdr, bool bAdd );
     virtual             ~ScUndoChartData() override;
@@ -419,7 +419,7 @@ private:
 class ScUndoDataForm: public ScBlockUndo
 {
 public:
-    ScUndoDataForm(ScDocShell* pNewDocShell,
+    ScUndoDataForm(ScDocShell& rNewDocShell,
                    SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                    SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                    const ScMarkData& rMark,

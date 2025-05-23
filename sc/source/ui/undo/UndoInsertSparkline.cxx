@@ -19,10 +19,10 @@
 
 namespace sc
 {
-UndoInsertSparkline::UndoInsertSparkline(ScDocShell& rDocShell,
+UndoInsertSparkline::UndoInsertSparkline(ScDocShell& rShell,
                                          std::vector<SparklineData> aSparklineDataVector,
                                          std::shared_ptr<sc::SparklineGroup> pSparklineGroup)
-    : ScSimpleUndo(&rDocShell)
+    : ScSimpleUndo(rShell)
     , maSparklineDataVector(std::move(aSparklineDataVector))
     , mpSparklineGroup(std::move(pSparklineGroup))
 {
@@ -34,7 +34,7 @@ void UndoInsertSparkline::Undo()
 {
     BeginUndo();
 
-    ScDocument& rDocument = pDocShell->GetDocument();
+    ScDocument& rDocument = rDocShell.GetDocument();
     ScRangeList aRanges;
     for (auto const& rSparklineData : maSparklineDataVector)
     {
@@ -51,7 +51,7 @@ void UndoInsertSparkline::Undo()
         aRanges.push_back(aCurrRange);
     }
 
-    pDocShell->PostPaint(aRanges, PaintPartFlags::All, SC_PF_TESTMERGE);
+    rDocShell.PostPaint(aRanges, PaintPartFlags::All, SC_PF_TESTMERGE);
 
     EndUndo();
 }
@@ -60,7 +60,7 @@ void UndoInsertSparkline::Redo()
 {
     BeginRedo();
 
-    ScDocument& rDocument = pDocShell->GetDocument();
+    ScDocument& rDocument = rDocShell.GetDocument();
     ScRangeList aRanges;
     for (auto const& rSparklineData : maSparklineDataVector)
     {
@@ -78,7 +78,7 @@ void UndoInsertSparkline::Redo()
         aRanges.push_back(aCurrRange);
     }
 
-    pDocShell->PostPaint(aRanges, PaintPartFlags::All, SC_PF_TESTMERGE);
+    rDocShell.PostPaint(aRanges, PaintPartFlags::All, SC_PF_TESTMERGE);
 
     EndRedo();
 }

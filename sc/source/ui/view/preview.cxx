@@ -1115,7 +1115,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     if( bUndo )
                     {
                         pDocShell->GetUndoManager()->AddUndoAction(
-                            std::make_unique<ScUndoModifyStyle>( pDocShell, SfxStyleFamily::Page,
+                            std::make_unique<ScUndoModifyStyle>( *pDocShell, SfxStyleFamily::Page,
                             aOldData, aNewData ) );
                     }
 
@@ -1215,7 +1215,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     if( bUndo )
                     {
                         pDocShell->GetUndoManager()->AddUndoAction(
-                            std::make_unique<ScUndoModifyStyle>( pDocShell, SfxStyleFamily::Page,
+                            std::make_unique<ScUndoModifyStyle>( *pDocShell, SfxStyleFamily::Page,
                             aOldData, aNewData ) );
                     }
 

@@ -132,7 +132,7 @@ void ScSpellDialogChildWindow::Reset()
             SCCOL nNewCol = mpViewData->GetCurX();
             SCROW nNewRow = mpViewData->GetCurY();
             mpDocShell->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoConversion>(
-                mpDocShell, mpViewData->GetMarkData(),
+                *mpDocShell, mpViewData->GetMarkData(),
                 nOldCol, nOldRow, nTab, std::move(mxUndoDoc),
                 nNewCol, nNewRow, nTab, std::move(mxRedoDoc),
                 ScConversionParam( SC_CONVERSION_SPELLCHECK ) ) );

@@ -22,7 +22,7 @@ class ScDocShell;
 class ScUndoAllRangeNames final : public ScSimpleUndo
 {
 public:
-    ScUndoAllRangeNames(ScDocShell* pDocSh, const std::map<OUString, ScRangeName*>& rOldNames,
+    ScUndoAllRangeNames(ScDocShell& rDocSh, const std::map<OUString, ScRangeName*>& rOldNames,
                         const std::map<OUString, ScRangeName>& rNewNames);
 
     virtual ~ScUndoAllRangeNames() override;
@@ -45,7 +45,7 @@ class ScUndoAddRangeData final : public ScSimpleUndo
 {
 public:
     // nTab = -1 for global range names
-    ScUndoAddRangeData(ScDocShell* pDocSh, const ScRangeData* pRangeData, SCTAB nTab);
+    ScUndoAddRangeData(ScDocShell& rDocSh, const ScRangeData* pRangeData, SCTAB nTab);
 
     virtual ~ScUndoAddRangeData() override;
 

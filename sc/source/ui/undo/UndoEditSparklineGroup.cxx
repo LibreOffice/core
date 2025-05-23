@@ -20,9 +20,9 @@
 namespace sc
 {
 UndoEditSparklneGroup::UndoEditSparklneGroup(
-    ScDocShell& rDocShell, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup,
+    ScDocShell& rShell, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup,
     sc::SparklineAttributes aAttributes)
-    : ScSimpleUndo(&rDocShell)
+    : ScSimpleUndo(rShell)
     , m_pSparklineGroup(pSparklineGroup)
     , m_aNewAttributes(std::move(aAttributes))
     , m_aOriginalAttributes(pSparklineGroup->getAttributes())
@@ -36,7 +36,7 @@ void UndoEditSparklneGroup::Undo()
     BeginUndo();
 
     m_pSparklineGroup->setAttributes(m_aOriginalAttributes);
-    pDocShell->PostPaintGridAll();
+    rDocShell.PostPaintGridAll();
 
     EndUndo();
 }
@@ -46,7 +46,7 @@ void UndoEditSparklneGroup::Redo()
     BeginRedo();
 
     m_pSparklineGroup->setAttributes(m_aNewAttributes);
-    pDocShell->PostPaintGridAll();
+    rDocShell.PostPaintGridAll();
 
     EndRedo();
 }

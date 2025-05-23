@@ -144,7 +144,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                 ScMarkData aDestMark(rDoc.GetSheetLimits());
                 aDestMark.SetMarkArea( aMarkRange );
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoPaste>( pDocSh, aMarkRange, aDestMark,
+                    std::make_unique<ScUndoPaste>( *pDocSh, aMarkRange, aDestMark,
                                      std::move(pUndoDoc), std::move(pRedoDoc), InsertDeleteFlags::ALL, nullptr));
             }
         }
@@ -294,7 +294,7 @@ void ScViewFunc::DoRefConversion()
         rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, *pRedoDoc, &rMark );
 
         pDocSh->GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoRefConversion>( pDocSh,
+            std::make_unique<ScUndoRefConversion>( *pDocSh,
                                     aMarkRange, rMark, std::move(pUndoDoc), std::move(pRedoDoc), bMulti) );
     }
 
@@ -422,7 +422,7 @@ void ScViewFunc::DoThesaurus()
         {
             GetViewData().GetDocShell()->GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoThesaurus>(
-                    GetViewData().GetDocShell(), nCol, nRow, nTab, aOldText, aNewText));
+                    *GetViewData().GetDocShell(), nCol, nRow, nTab, aOldText, aNewText));
         }
     }
 
@@ -547,7 +547,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
             SCROW nNewRow = rViewData.GetCurY();
             rViewData.GetDocShell()->GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoConversion>(
-                        pDocSh, rMark,
+                        *pDocSh, rMark,
                         nCol, nRow, nTab, std::move(pUndoDoc),
                         nNewCol, nNewRow, nTab, std::move(pRedoDoc), rConvParam ) );
         }

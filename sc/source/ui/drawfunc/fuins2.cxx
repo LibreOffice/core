@@ -567,7 +567,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                 if (bUndo)
                 {
                     pScDocSh->GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoInsertTab>( pScDocSh, nNewTab,
+                        std::make_unique<ScUndoInsertTab>( *pScDocSh, nNewTab,
                                              true/*bAppend*/, aTabName ) );
                 }
 

@@ -28,11 +28,11 @@
 #include <markdata.hxx>
 #include <osl/diagnose.h>
 
-void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
+void ScUndoUtil::MarkSimpleBlock( const ScDocShell& rDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ )
 {
-    if ( pDocShell->IsPaintLocked() )
+    if ( rDocShell.IsPaintLocked() )
         return;
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -51,18 +51,18 @@ void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
     pViewShell->MarkDataChanged();
 }
 
-void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
+void ScUndoUtil::MarkSimpleBlock( const ScDocShell& rDocShell,
                                 const ScAddress& rBlockStart,
                                 const ScAddress& rBlockEnd )
 {
-    MarkSimpleBlock( pDocShell, rBlockStart.Col(), rBlockStart.Row(), rBlockStart.Tab(),
+    MarkSimpleBlock( rDocShell, rBlockStart.Col(), rBlockStart.Row(), rBlockStart.Tab(),
                                 rBlockEnd.Col(), rBlockEnd.Row(), rBlockEnd.Tab() );
 }
 
-void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
+void ScUndoUtil::MarkSimpleBlock( const ScDocShell& rDocShell,
                                 const ScRange& rRange )
 {
-    MarkSimpleBlock( pDocShell, rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
+    MarkSimpleBlock( rDocShell, rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
                                 rRange.aEnd.Col(),   rRange.aEnd.Row(),   rRange.aEnd.Tab()   );
 }
 
@@ -94,20 +94,20 @@ ScDBData* ScUndoUtil::GetOldDBData( const ScDBData* pUndoData, ScDocument* pDoc,
     return pRet;
 }
 
-void ScUndoUtil::PaintMore( ScDocShell* pDocShell,
+void ScUndoUtil::PaintMore( ScDocShell& rDocShell,
                                 const ScRange& rRange )
 {
     SCCOL nCol1 = rRange.aStart.Col();
     SCROW nRow1 = rRange.aStart.Row();
     SCCOL nCol2 = rRange.aEnd.Col();
     SCROW nRow2 = rRange.aEnd.Row();
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     if (nCol1 > 0) --nCol1;
     if (nRow1 > 0) --nRow1;
     if (nCol2<rDoc.MaxCol()) ++nCol2;
     if (nRow2<rDoc.MaxRow()) ++nRow2;
 
-    pDocShell->PostPaint( nCol1,nRow1,rRange.aStart.Tab(),
+    rDocShell.PostPaint( nCol1,nRow1,rRange.aStart.Tab(),
                           nCol2,nRow2,rRange.aEnd.Tab(), PaintPartFlags::Grid );
 }
 

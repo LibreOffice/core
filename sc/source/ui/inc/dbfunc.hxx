@@ -35,8 +35,8 @@ class SAL_DLLPUBLIC_RTTI ScDBFunc : public ScViewFunc
 {
 private:
     void GetSelectedMemberList(ScDPUniqueStringSet& rEntries, tools::Long& rDimension);
-    static void ModifiedAutoFilter(ScDocShell* pDocSh);
-    static void ApplyAutoFilter(ScDocShell* pDocSh, ScViewData& rViewData, ScDBData* pDBData,
+    static void ModifiedAutoFilter(ScDocShell& rDocSh);
+    static void ApplyAutoFilter(ScDocShell& rDocSh, ScViewData& rViewData, ScDBData* pDBData,
                                 SCROW nRow, SCTAB nTab, const ScQueryParam& aParam);
 
     DECL_STATIC_LINK(ScDBFunc, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);

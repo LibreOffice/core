@@ -14,8 +14,8 @@
 
 namespace sc {
 
-UndoFormulaToValue::UndoFormulaToValue( ScDocShell* pDocSh, TableValues& rUndoValues ) :
-    ScSimpleUndo(pDocSh)
+UndoFormulaToValue::UndoFormulaToValue( ScDocShell& rDocSh, TableValues& rUndoValues ) :
+    ScSimpleUndo(rDocSh)
 {
     maUndoValues.swap(rUndoValues);
 }
@@ -37,13 +37,13 @@ void UndoFormulaToValue::Redo()
 
 void UndoFormulaToValue::Execute()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     rDoc.SwapNonEmpty(maUndoValues);
 
-    ScUndoUtil::MarkSimpleBlock(pDocShell, maUndoValues.getRange());
+    ScUndoUtil::MarkSimpleBlock(rDocShell, maUndoValues.getRange());
 
-    pDocShell->PostPaint(maUndoValues.getRange(), PaintPartFlags::Grid);
-    pDocShell->PostDataChanged();
+    rDocShell.PostPaint(maUndoValues.getRange(), PaintPartFlags::Grid);
+    rDocShell.PostDataChanged();
     rDoc.BroadcastCells(maUndoValues.getRange(), SfxHintId::ScDataChanged);
 }
 

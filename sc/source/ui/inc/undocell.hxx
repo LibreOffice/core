@@ -35,7 +35,7 @@ class ScFormulaCell;
 class ScUndoCursorAttr: public ScSimpleUndo
 {
 public:
-                    ScUndoCursorAttr( ScDocShell* pNewDocShell,
+                    ScUndoCursorAttr( ScDocShell& rNewDocShell,
                             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             const ScPatternAttr* pOldPat, const ScPatternAttr* pNewPat,
                             const ScPatternAttr* pApplyPat );
@@ -83,7 +83,7 @@ public:
     typedef std::vector<Value> ValuesType;
 
     ScUndoEnterData(
-        ScDocShell* pNewDocShell, const ScAddress& rPos,
+        ScDocShell& rNewDocShell, const ScAddress& rPos,
         ValuesType& rOldValues, OUString aNewStr, std::unique_ptr<EditTextObject> pObj );
 
     virtual void    Undo() override;
@@ -111,7 +111,7 @@ class ScUndoEnterValue: public ScSimpleUndo
 {
 public:
     ScUndoEnterValue(
-        ScDocShell* pNewDocShell, const ScAddress& rNewPos,
+        ScDocShell& rNewDocShell, const ScAddress& rNewPos,
         ScCellValue aUndoCell, double nVal );
 
     virtual         ~ScUndoEnterValue() override;
@@ -137,7 +137,7 @@ private:
 class ScUndoSetCell : public ScSimpleUndo
 {
 public:
-    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, ScCellValue aOldVal, ScCellValue aNewVal );
+    ScUndoSetCell( ScDocShell& rDocSh, const ScAddress& rPos, ScCellValue aOldVal, ScCellValue aNewVal );
 
     virtual ~ScUndoSetCell() override;
 
@@ -164,7 +164,7 @@ private:
 class ScUndoPageBreak: public ScSimpleUndo
 {
 public:
-                    ScUndoPageBreak( ScDocShell* pNewDocShell,
+                    ScUndoPageBreak( ScDocShell& rNewDocShell,
                             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             bool bNewColumn, bool bNewInsert );
     virtual         ~ScUndoPageBreak() override;
@@ -189,7 +189,7 @@ private:
 class ScUndoPrintZoom: public ScSimpleUndo
 {
 public:
-                    ScUndoPrintZoom( ScDocShell* pNewDocShell, SCTAB nT,
+                    ScUndoPrintZoom( ScDocShell& rNewDocShell, SCTAB nT,
                                     sal_uInt16 nOS, sal_uInt16 nOP, sal_uInt16 nNS, sal_uInt16 nNP );
     virtual         ~ScUndoPrintZoom() override;
 
@@ -213,7 +213,7 @@ private:
 class ScUndoThesaurus: public ScSimpleUndo
 {
 public:
-    ScUndoThesaurus( ScDocShell* pNewDocShell,
+    ScUndoThesaurus( ScDocShell& rNewDocShell,
                      SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                      ScCellValue aOldText, ScCellValue aNewText );
     virtual         ~ScUndoThesaurus() override;
@@ -305,7 +305,7 @@ private:
 class ScUndoDetective: public ScSimpleUndo
 {
 public:
-                    ScUndoDetective( ScDocShell* pNewDocShell,
+                    ScUndoDetective( ScDocShell& rNewDocShell,
                                     std::unique_ptr<SdrUndoAction> pDraw, const ScDetOpData* pOperation,
                                     std::unique_ptr<ScDetOpList> pUndoList = nullptr );
     virtual         ~ScUndoDetective() override;
@@ -329,7 +329,7 @@ class ScUndoRangeNames: public ScSimpleUndo
 {
 public:
                     //use nTab = -1 for global range names
-                    ScUndoRangeNames( ScDocShell* pNewDocShell,
+                    ScUndoRangeNames( ScDocShell& rNewDocShell,
                                       std::unique_ptr<ScRangeName> pOld, std::unique_ptr<ScRangeName> pNew , SCTAB nTab);
     virtual         ~ScUndoRangeNames() override;
 
@@ -359,7 +359,7 @@ class UndoSetCells : public ScSimpleUndo
     void DoChange( const CellValues& rValues );
 
 public:
-    UndoSetCells( ScDocShell* pDocSh, const ScAddress& rTopPos );
+    UndoSetCells( ScDocShell& rDocSh, const ScAddress& rTopPos );
     virtual ~UndoSetCells() override;
 
     virtual void Undo() override;

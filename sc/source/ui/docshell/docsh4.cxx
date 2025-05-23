@@ -1541,7 +1541,7 @@ void ScDocShell::ExecuteChartSourcePost(bool bUndo, bool bMultiRange,
         if (bUndo)
         {
             GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoChartData>( this, rChartName, rRangeListRef,
+                std::make_unique<ScUndoChartData>( *this, rChartName, rRangeListRef,
                                         bColHeaders, bRowHeaders, bAddRange ) );
         }
         m_pDocument->UpdateChartArea( rChartName, rRangeListRef,
@@ -1553,7 +1553,7 @@ void ScDocShell::ExecuteChartSourcePost(bool bUndo, bool bMultiRange,
         if (bUndo)
         {
             GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoChartData>( this, rChartName, aNewRange,
+                std::make_unique<ScUndoChartData>( *this, rChartName, aNewRange,
                                         bColHeaders, bRowHeaders, bAddRange ) );
         }
         m_pDocument->UpdateChartArea( rChartName, aNewRange,
@@ -1827,7 +1827,7 @@ void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages 
         sal_uInt16 nOldScale = rSet.Get(ATTR_PAGE_SCALE).GetValue();
         sal_uInt16 nOldPages = rSet.Get(ATTR_PAGE_SCALETOPAGES).GetValue();
         GetUndoManager()->AddUndoAction( std::make_unique<ScUndoPrintZoom>(
-                        this, nTab, nOldScale, nOldPages, nScale, nPages ) );
+                        *this, nTab, nOldScale, nOldPages, nScale, nPages ) );
     }
 
     rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nScale ) );
@@ -2032,7 +2032,7 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                                 if (bUndo)
                                 {
                                     GetUndoManager()->AddUndoAction(
-                                            std::make_unique<ScUndoModifyStyle>( this, SfxStyleFamily::Page,
+                                            std::make_unique<ScUndoModifyStyle>( *this, SfxStyleFamily::Page,
                                                         *xOldData, aNewData ) );
                                 }
 

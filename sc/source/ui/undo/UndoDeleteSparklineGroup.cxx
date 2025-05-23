@@ -21,8 +21,8 @@
 namespace sc
 {
 UndoDeleteSparklineGroup::UndoDeleteSparklineGroup(
-    ScDocShell& rDocShell, std::shared_ptr<sc::SparklineGroup> pSparklineGroup, SCTAB nTab)
-    : ScSimpleUndo(&rDocShell)
+    ScDocShell& rDocSh, std::shared_ptr<sc::SparklineGroup> pSparklineGroup, SCTAB nTab)
+    : ScSimpleUndo(rDocSh)
     , mpSparklineGroup(std::move(pSparklineGroup))
     , mnTab(nTab)
 {
@@ -34,7 +34,7 @@ void UndoDeleteSparklineGroup::Undo()
 {
     BeginUndo();
 
-    ScDocument& rDocument = pDocShell->GetDocument();
+    ScDocument& rDocument = rDocShell.GetDocument();
 
     for (auto const& pSparkline : maSparklines)
     {
@@ -43,7 +43,7 @@ void UndoDeleteSparklineGroup::Undo()
         pNewSparkline->setInputRange(pSparkline->getInputRange());
     }
 
-    pDocShell->PostPaintGridAll();
+    rDocShell.PostPaintGridAll();
 
     EndUndo();
 }
@@ -52,7 +52,7 @@ void UndoDeleteSparklineGroup::Redo()
 {
     BeginRedo();
 
-    ScDocument& rDocument = pDocShell->GetDocument();
+    ScDocument& rDocument = rDocShell.GetDocument();
     auto* pList = rDocument.GetSparklineList(mnTab);
     if (pList)
     {
@@ -64,7 +64,7 @@ void UndoDeleteSparklineGroup::Redo()
             rDocument.DeleteSparkline(aAddress);
         }
     }
-    pDocShell->PostPaintGridAll();
+    rDocShell.PostPaintGridAll();
 
     EndRedo();
 }

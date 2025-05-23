@@ -39,8 +39,8 @@
 #include <sizedev.hxx>
 
 
-ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
-    pDocShell( pDocSh ),
+ScSimpleUndo::ScSimpleUndo( ScDocShell& rDocSh ) :
+    rDocShell( rDocSh ),
     mnViewShellId(-1)
 {
     if (ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell())
@@ -89,7 +89,7 @@ bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
 
 void ScSimpleUndo::BeginUndo()
 {
-    pDocShell->SetInUndo( true );
+    rDocShell.SetInUndo( true );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -108,8 +108,8 @@ namespace
         ScDocument& m_rDoc;
         bool m_bUndoEnabled;
     public:
-        explicit DisableUndoGuard(ScDocShell *pDocShell)
-            : m_rDoc(pDocShell->GetDocument())
+        explicit DisableUndoGuard(ScDocShell& rDocShell)
+            : m_rDoc(rDocShell.GetDocument())
             , m_bUndoEnabled(m_rDoc.IsUndoEnabled())
         {
             m_rDoc.EnableUndo(false);
@@ -127,8 +127,8 @@ void ScSimpleUndo::EndUndo()
     {
         // rhbz#1352881 Temporarily turn off undo generation during
         // SetDocumentModified
-        DisableUndoGuard aGuard(pDocShell);
-        pDocShell->SetDocumentModified();
+        DisableUndoGuard aGuard(rDocShell);
+        rDocShell.SetDocumentModified();
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -139,12 +139,12 @@ void ScSimpleUndo::EndUndo()
         pViewShell->ShowAllCursors();
     }
 
-    pDocShell->SetInUndo( false );
+    rDocShell.SetInUndo( false );
 }
 
 void ScSimpleUndo::BeginRedo()
 {
-    pDocShell->SetInUndo( true );   //! own Flag for Redo?
+    rDocShell.SetInUndo( true );   //! own Flag for Redo?
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -159,8 +159,8 @@ void ScSimpleUndo::EndRedo()
     {
         // rhbz#1352881 Temporarily turn off undo generation during
         // SetDocumentModified
-        DisableUndoGuard aGuard(pDocShell);
-        pDocShell->SetDocumentModified();
+        DisableUndoGuard aGuard(rDocShell);
+        rDocShell.SetDocumentModified();
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -171,12 +171,12 @@ void ScSimpleUndo::EndRedo()
         pViewShell->ShowAllCursors();
     }
 
-    pDocShell->SetInUndo( false );
+    rDocShell.SetInUndo( false );
 }
 
 void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     rDoc.BroadcastCells(rRange, SfxHintId::ScDataChanged);
 }
 
@@ -211,7 +211,7 @@ public:
 
 void ScSimpleUndo::BroadcastChanges( const DataSpansType& rSpans )
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     SpanBroadcaster aBroadcaster(rDoc);
 
     for (const auto& rEntry : rSpans)
@@ -241,13 +241,13 @@ void ScSimpleUndo::ShowTable( const ScRange& rRange )
     }
 }
 
-ScBlockUndo::ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
+ScBlockUndo::ScBlockUndo( ScDocShell& rDocSh, const ScRange& rRange,
                                             ScBlockUndoMode eBlockMode ) :
-    ScSimpleUndo( pDocSh ),
+    ScSimpleUndo( rDocSh ),
     aBlockRange( rRange ),
     eMode( eBlockMode )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &rDocShell.GetDocument() );
 }
 
 ScBlockUndo::~ScBlockUndo()
@@ -258,7 +258,7 @@ ScBlockUndo::~ScBlockUndo()
 void ScBlockUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();
-    EnableDrawAdjust( &pDocShell->GetDocument(), false );
+    EnableDrawAdjust( &rDocShell.GetDocument(), false );
 }
 
 void ScBlockUndo::EndUndo()
@@ -266,8 +266,8 @@ void ScBlockUndo::EndUndo()
     if (eMode == SC_UNDO_AUTOHEIGHT)
         AdjustHeight();
 
-    EnableDrawAdjust( &pDocShell->GetDocument(), true );
-    DoSdrUndoAction( pDrawUndo.get(), &pDocShell->GetDocument() );
+    EnableDrawAdjust( &rDocShell.GetDocument(), true );
+    DoSdrUndoAction( pDrawUndo.get(), &rDocShell.GetDocument() );
 
     // tdf#161712 invoke ScSimpleUndo::EndUndo() before ShowBlock()
     // If this is an instance of ScUndoAutoFill, ShowBlock() will invoke
@@ -288,9 +288,9 @@ void ScBlockUndo::EndRedo()
 
 bool ScBlockUndo::AdjustHeight()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
-    ScSizeDeviceProvider aProv(pDocShell);
+    ScSizeDeviceProvider aProv(&rDocShell);
     Fraction aZoomX( 1, 1 );
     Fraction aZoomY = aZoomX;
     double nPPTX, nPPTY;
@@ -327,7 +327,7 @@ bool ScBlockUndo::AdjustHeight()
         // tdf#76183: recalculate objects' positions
         rDoc.SetDrawPageSize(aBlockRange.aStart.Tab());
 
-        pDocShell->PostPaint( 0,      aBlockRange.aStart.Row(), aBlockRange.aStart.Tab(),
+        rDocShell.PostPaint( 0,      aBlockRange.aStart.Row(), aBlockRange.aStart.Tab(),
                               rDoc.MaxCol(), rDoc.MaxRow(),                   aBlockRange.aEnd.Tab(),
                               PaintPartFlags::Grid | PaintPartFlags::Left );
     }
@@ -356,11 +356,11 @@ void ScBlockUndo::ShowBlock()
 }
 
 ScMultiBlockUndo::ScMultiBlockUndo(
-    ScDocShell* pDocSh, ScRangeList aRanges) :
-    ScSimpleUndo(pDocSh),
+    ScDocShell& rDocSh, ScRangeList aRanges) :
+    ScSimpleUndo(rDocSh),
     maBlockRanges(std::move(aRanges))
 {
-    mpDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    mpDrawUndo = GetSdrUndoAction( &rDocShell.GetDocument() );
 }
 
 ScMultiBlockUndo::~ScMultiBlockUndo()
@@ -371,13 +371,13 @@ ScMultiBlockUndo::~ScMultiBlockUndo()
 void ScMultiBlockUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();
-    EnableDrawAdjust(&pDocShell->GetDocument(), false);
+    EnableDrawAdjust(&rDocShell.GetDocument(), false);
 }
 
 void ScMultiBlockUndo::EndUndo()
 {
-    EnableDrawAdjust(&pDocShell->GetDocument(), true);
-    DoSdrUndoAction(mpDrawUndo.get(), &pDocShell->GetDocument());
+    EnableDrawAdjust(&rDocShell.GetDocument(), true);
+    DoSdrUndoAction(mpDrawUndo.get(), &rDocShell.GetDocument());
 
     ShowBlock();
     ScSimpleUndo::EndUndo();
@@ -420,12 +420,12 @@ void ScMultiBlockUndo::ShowBlock()
     }
 }
 
-ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocumentUniquePtr pRefDoc, std::unique_ptr<ScRefUndoData> pRefData ) :
-    ScSimpleUndo( pDocSh ),
+ScMoveUndo::ScMoveUndo( ScDocShell& rDocSh, ScDocumentUniquePtr pRefDoc, std::unique_ptr<ScRefUndoData> pRefData ) :
+    ScSimpleUndo( rDocSh ),
     pRefUndoDoc( std::move(pRefDoc) ),
     pRefUndoData( std::move(pRefData) )
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     if (pRefUndoData)
         pRefUndoData->DeleteUnchanged(rDoc);
     pDrawUndo = GetSdrUndoAction( &rDoc );
@@ -440,7 +440,7 @@ ScMoveUndo::~ScMoveUndo()
 
 void ScMoveUndo::UndoRef()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     ScRange aRange(0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),pRefUndoDoc->GetTableCount()-1);
     pRefUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::FORMULA, false, rDoc, nullptr, false);
     if (pRefUndoData)
@@ -451,26 +451,26 @@ void ScMoveUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();
 
-    EnableDrawAdjust( &pDocShell->GetDocument(), false );
+    EnableDrawAdjust( &rDocShell.GetDocument(), false );
 }
 
 void ScMoveUndo::EndUndo()
 {
-    DoSdrUndoAction( pDrawUndo.get(), &pDocShell->GetDocument() );     // must also be called when pointer is null
+    DoSdrUndoAction( pDrawUndo.get(), &rDocShell.GetDocument() );     // must also be called when pointer is null
 
     if (pRefUndoDoc)
         UndoRef();
 
-    EnableDrawAdjust( &pDocShell->GetDocument(), true );
+    EnableDrawAdjust( &rDocShell.GetDocument(), true );
 
     ScSimpleUndo::EndUndo();
 }
 
-ScDBFuncUndo::ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal ) :
-    ScSimpleUndo( pDocSh ),
+ScDBFuncUndo::ScDBFuncUndo( ScDocShell& rDocSh, const ScRange& rOriginal ) :
+    ScSimpleUndo( rDocSh ),
     aOriginalRange( rOriginal )
 {
-    pAutoDBRange = pDocSh->GetOldAutoDBRange();
+    pAutoDBRange = rDocSh.GetOldAutoDBRange();
 }
 
 ScDBFuncUndo::~ScDBFuncUndo()
@@ -481,7 +481,7 @@ ScDBFuncUndo::~ScDBFuncUndo()
 void ScDBFuncUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();
-    DoSdrUndoAction( nullptr, &pDocShell->GetDocument() );
+    DoSdrUndoAction( nullptr, &rDocShell.GetDocument() );
 }
 
 void ScDBFuncUndo::EndUndo()
@@ -491,7 +491,7 @@ void ScDBFuncUndo::EndUndo()
     if ( !pAutoDBRange )
         return;
 
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     SCTAB nTab = rDoc.GetVisibleTab();
     ScDBData* pNoNameData = rDoc.GetAnonymousDBData(nTab);
     if (!pNoNameData )
@@ -503,7 +503,7 @@ void ScDBFuncUndo::EndUndo()
     SCROW nRangeY2;
     SCTAB nRangeTab;
     pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-    pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
+    rDocShell.DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
 
     *pNoNameData = *pAutoDBRange;
 
@@ -512,7 +512,7 @@ void ScDBFuncUndo::EndUndo()
         // restore AutoFilter buttons
         pAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
         rDoc.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
-        pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
+        rDocShell.PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
     }
 }
 
@@ -523,7 +523,7 @@ void ScDBFuncUndo::BeginRedo()
     {
         // move the database range to this function's position again (see ScDocShell::GetDBData)
 
-        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDocument& rDoc = rDocShell.GetDocument();
         ScDBData* pNoNameData = rDoc.GetAnonymousDBData(aOriginalRange.aStart.Tab());
         if ( pNoNameData )
         {
@@ -534,7 +534,7 @@ void ScDBFuncUndo::BeginRedo()
             SCROW nRangeY2;
             SCTAB nRangeTab;
             pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-            pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
+            rDocShell.DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
 
             pNoNameData->SetSortParam( ScSortParam() );
             pNoNameData->SetQueryParam( ScQueryParam() );

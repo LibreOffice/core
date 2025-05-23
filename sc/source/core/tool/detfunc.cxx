@@ -1400,7 +1400,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
 
     ScDocShell* pDocSh = rDoc.GetDocumentShell();
     pDocSh->GetUndoManager()->AddUndoAction(
-        std::make_unique<ScUndoModifyStyle>(pDocSh, pStyleSheet->GetFamily(), aOldData, aNewData));
+        std::make_unique<ScUndoModifyStyle>(*pDocSh, pStyleSheet->GetFamily(), aOldData, aNewData));
 }
 
 void ScDetectiveFunc::UpdateAllArrowColors()

@@ -1014,7 +1014,7 @@ void ScViewFunc::RemoveManualBreaks()
         pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
         rDoc.CopyToDocument( 0,0,nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
         pDocSh->GetUndoManager()->AddUndoAction(
-                                std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, std::move(pUndoDoc) ) );
+                                std::make_unique<ScUndoRemoveBreaks>( *pDocSh, nTab, std::move(pUndoDoc) ) );
     }
 
     rDoc.RemoveManualBreaks(nTab);
@@ -1144,7 +1144,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
         }
 
         pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoPrintRange>( pDocSh, nCurTab, std::move(pOldRanges), std::move(pNewRanges) ) );
+                    std::make_unique<ScUndoPrintRange>( *pDocSh, nCurTab, std::move(pOldRanges), std::move(pNewRanges) ) );
     }
     else
         pOldRanges.reset();
@@ -1751,7 +1751,7 @@ void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool 
     if (bUndo)
     {   //! for ChangeTrack not until the end
         pDocSh->GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoFillTable>( pDocSh, rMark,
+            std::make_unique<ScUndoFillTable>( *pDocSh, rMark,
                                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), nTab,
                                 aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), nTab,
                                 std::move(pUndoDoc), bMulti, nTab, nFlags, nFunction, bSkipEmpty, bAsLink ) );
@@ -2063,7 +2063,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             if (bAddUndo)
             {
                 GetViewData().GetDocShell()->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoReplace>( GetViewData().GetDocShell(), *pUndoMark,
+                    std::make_unique<ScUndoReplace>( *GetViewData().GetDocShell(), *pUndoMark,
                                         nCol, nRow, nTab,
                                         aUndoStr, std::move(pUndoDoc), pSearchItem ) );
             }
@@ -2452,7 +2452,7 @@ void ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
 
     if (bRecord)
         pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoInsertTables>( pDocSh, nTab, std::move(aNames)));
+                    std::make_unique<ScUndoInsertTables>( *pDocSh, nTab, std::move(aNames)));
 
     //    Update views
 
@@ -2479,7 +2479,7 @@ bool ScViewFunc::AppendTable( const OUString& rName, bool bRecord )
         SCTAB nTab = rDoc.GetTableCount()-1;
         if (bRecord)
             pDocSh->GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoInsertTab>( pDocSh, nTab, true, rName));
+                        std::make_unique<ScUndoInsertTab>( *pDocSh, nTab, true, rName));
         GetViewData().InsertTab( nTab );
         SetTabNo( nTab, true );
         pDocSh->PostPaintExtras();
@@ -2645,7 +2645,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
     if (bRecord)
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoDeleteTab>( GetViewData().GetDocShell(), TheTabs,
+                    std::make_unique<ScUndoDeleteTab>( *GetViewData().GetDocShell(), TheTabs,
                                             std::move(pUndoDoc), std::move(pUndoData) ));
     }
 
@@ -2837,7 +2837,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     if (bUndo)
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoImportTab>( pDocSh, nTab, nCount ) );
+                std::make_unique<ScUndoImportTab>( *pDocSh, nTab, nCount ) );
     }
 
     for (i=0; i<nInsCount; i++)
@@ -2994,7 +2994,7 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
             OUString sName;
             rDestDoc.GetName(nDestTab, sName);
             pDestShell->GetUndoManager()->AddUndoAction(
-                            std::make_unique<ScUndoImportTab>( pDestShell, nDestTab,
+                            std::make_unique<ScUndoImportTab>( *pDestShell, nDestTab,
                                 static_cast<SCTAB>(TheTabs.size())));
 
         }
@@ -3194,13 +3194,13 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
             {
                 pDocShell->GetUndoManager()->AddUndoAction(
                         std::make_unique<ScUndoCopyTab>(
-                            pDocShell, std::move(pSrcTabs), std::move(pDestTabs), std::move(pDestNames)));
+                            *pDocShell, std::move(pSrcTabs), std::move(pDestTabs), std::move(pDestNames)));
             }
             else
             {
                 pDocShell->GetUndoManager()->AddUndoAction(
                         std::make_unique<ScUndoMoveTab>(
-                            pDocShell, std::move(pSrcTabs), std::move(pDestTabs), std::move(pTabNames), std::move(pDestNames)));
+                            *pDocShell, std::move(pSrcTabs), std::move(pDestTabs), std::move(pTabNames), std::move(pDestNames)));
             }
         }
 
@@ -3253,7 +3253,7 @@ void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
     {
         if (bUndo)
         {
-            pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( pDocSh, std::move(undoTabs), true ) );
+            pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( *pDocSh, std::move(undoTabs), true ) );
         }
         pDocSh->PostPaint(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Extras);
         pDocSh->SetDocumentModified();
@@ -3301,7 +3301,7 @@ void ScViewFunc::HideTable( const ScMarkData& rMark, SCTAB nTabToSelect )
 
     if (bUndo)
     {
-        pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( pDocSh, std::move(undoTabs), false ) );
+        pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( *pDocSh, std::move(undoTabs), false ) );
     }
 
     //  Update views

@@ -15,20 +15,20 @@
 
 namespace sc {
 
-UndoSetCells::UndoSetCells( ScDocShell* pDocSh, const ScAddress& rTopPos ) :
-    ScSimpleUndo(pDocSh), maTopPos(rTopPos) {}
+UndoSetCells::UndoSetCells( ScDocShell& rDocSh, const ScAddress& rTopPos ) :
+    ScSimpleUndo(rDocSh), maTopPos(rTopPos) {}
 
 UndoSetCells::~UndoSetCells() {}
 
 void UndoSetCells::DoChange( const CellValues& rValues )
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     rDoc.CopyCellValuesFrom(maTopPos, rValues);
 
     ScRange aRange(maTopPos);
     aRange.aEnd.IncRow(rValues.size());
     BroadcastChanges(aRange);
-    pDocShell->PostPaintGridAll();
+    rDocShell.PostPaintGridAll();
 }
 
 void UndoSetCells::Undo()

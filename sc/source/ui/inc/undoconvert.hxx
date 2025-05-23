@@ -19,7 +19,7 @@ class UndoFormulaToValue : public ScSimpleUndo
     TableValues maUndoValues;
 
 public:
-    UndoFormulaToValue(ScDocShell* pDocSh, TableValues& rUndoValues);
+    UndoFormulaToValue(ScDocShell& rDocSh, TableValues& rUndoValues);
 
     virtual OUString GetComment() const override;
     virtual void Undo() override;

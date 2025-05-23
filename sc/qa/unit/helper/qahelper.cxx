@@ -786,7 +786,7 @@ ScUndoCut* ScUcalcTestBase::cutToClip(ScDocShell& rDocSh, const ScRange& rRange,
     aMark.MarkToSimple();
 
     if (pUndoDoc)
-        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, std::move(pUndoDoc) );
+        return new ScUndoCut( rDocSh, rRange, rRange.aEnd, aMark, std::move(pUndoDoc) );
 
     return nullptr;
 }
@@ -814,7 +814,7 @@ ScUndoPaste* ScUcalcTestBase::createUndoPaste(ScDocShell& rDocSh, const ScRange&
     std::unique_ptr<ScRefUndoData> pRefUndoData(new ScRefUndoData(rDoc));
 
     return new ScUndoPaste(
-        &rDocSh, rRange, aMarkData, std::move(pUndoDoc), nullptr, InsertDeleteFlags::ALL, std::move(pRefUndoData), false);
+        rDocSh, rRange, aMarkData, std::move(pUndoDoc), nullptr, InsertDeleteFlags::ALL, std::move(pRefUndoData), false);
 }
 
 void ScUcalcTestBase::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)

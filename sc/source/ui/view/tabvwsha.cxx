@@ -1321,7 +1321,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                                 rDoc.SetPageStyle( rTab, aStyleName );
                                 ScPrintFunc( pDocSh, GetPrinter(true), rTab ).UpdatePages();
                                 if( !pUndoAction )
-                                    pUndoAction.reset(new ScUndoApplyPageStyle( pDocSh, aStyleName ));
+                                    pUndoAction.reset(new ScUndoApplyPageStyle( *pDocSh, aStyleName ));
                                 pUndoAction->AddSheetAction( rTab, aOldName );
                             }
                         }
@@ -1727,7 +1727,7 @@ void ScTabViewShell::ExecuteStyleEditPost(SfxRequest& rReq, SfxStyleSheetBase* p
 
     if ( bAddUndo && bUndo)
         pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoModifyStyle>( pDocSh, eFamily, rOldData, rNewData ) );
+                    std::make_unique<ScUndoModifyStyle>( *pDocSh, eFamily, rOldData, rNewData ) );
 
     if ( bStyleToMarked )
     {

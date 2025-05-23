@@ -27,13 +27,13 @@ class ScDocShell;
 class ScUndoDraw: public SfxUndoAction
 {
     std::unique_ptr<SfxUndoAction>  pDrawUndo;
-    ScDocShell*     pDocShell;
+    ScDocShell&     rDocShell;
     ViewShellId     mnViewShellId;
 
     void            UpdateSubShell();
 
 public:
-                            ScUndoDraw( std::unique_ptr<SfxUndoAction> pUndo, ScDocShell* pDocSh );
+                            ScUndoDraw( std::unique_ptr<SfxUndoAction> pUndo, ScDocShell& rDocSh );
     virtual                 ~ScUndoDraw() override;
 
     std::unique_ptr<SfxUndoAction> ReleaseDrawUndo()   { return std::move(pDrawUndo); }

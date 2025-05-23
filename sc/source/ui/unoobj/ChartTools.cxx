@@ -139,11 +139,11 @@ SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab, ::tools::Long nIn
     return nullptr;
 }
 
-std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(std::u16string_view sPivotTableName, ScDocShell* pDocShell)
+std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(std::u16string_view sPivotTableName, ScDocShell& rDocShell)
 {
     std::vector<SdrOle2Obj*> aObjects;
 
-    ScDocument& rDocument = pDocShell->GetDocument();
+    ScDocument& rDocument = rDocShell.GetDocument();
     ScDrawLayer* pModel = rDocument.GetDrawLayer();
     if (!pModel)
         return aObjects;
@@ -155,7 +155,7 @@ std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(std::u16string_view sPivot
         if (!pPage)
             continue;
 
-        sc::tools::ChartIterator aIterator(pDocShell, nPageNo, ChartSourceType::PIVOT_TABLE);
+        sc::tools::ChartIterator aIterator(&rDocShell, nPageNo, ChartSourceType::PIVOT_TABLE);
         SdrOle2Obj* pObject = aIterator.next();
         while (pObject)
         {

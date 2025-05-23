@@ -120,16 +120,16 @@ void lcl_UndoCommandResult(const ScTabViewShell& rViewShell,
 }
 }
 
-ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
+ScUndoInsertTab::ScUndoInsertTab( ScDocShell& rNewDocShell,
                                   SCTAB nTabNum,
                                   bool bApp,
                                   OUString aNewName) :
-    ScSimpleUndo( pNewDocShell ),
+    ScSimpleUndo( rNewDocShell ),
     sNewName(std::move( aNewName )),
     nTab( nTabNum ),
     bAppend( bApp )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &rDocShell.GetDocument() );
     SetChangeTrack();
 }
 
@@ -148,7 +148,7 @@ OUString ScUndoInsertTab::GetComment() const
 
 void ScUndoInsertTab::SetChangeTrack()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
     {
@@ -168,21 +168,21 @@ void ScUndoInsertTab::Undo()
 
     pViewShell->SetTabNo(nTab);
 
-    pDocShell->SetInUndo( true );               //! BeginUndo
+    rDocShell.SetInUndo( true );               //! BeginUndo
     bDrawIsInUndo = true;
     pViewShell->DeleteTable( nTab, false );
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( false );              //! EndUndo
+    rDocShell.SetInUndo( false );              //! EndUndo
 
-    DoSdrUndoAction( pDrawUndo.get(), &pDocShell->GetDocument() );
+    DoSdrUndoAction( pDrawUndo.get(), &rDocShell.GetDocument() );
 
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
+    ScChangeTrack* pChangeTrack = rDocShell.GetDocument().GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nEndChangeAction, nEndChangeAction );
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDocument& rDoc = rDocShell.GetDocument();
         lcl_OnTabsChanged(*pViewShell, rDoc, nTab);
         std::vector<SCTAB> aTabs{nTab};
         lcl_UndoCommandResult(*pViewShell, ".uno:Undo", "ScUndoInsertTab", &aTabs);
@@ -190,7 +190,7 @@ void ScUndoInsertTab::Undo()
     }
 
     //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
-    pDocShell->Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
+    rDocShell.Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
 }
 
 void ScUndoInsertTab::Redo()
@@ -201,7 +201,7 @@ void ScUndoInsertTab::Redo()
 
     RedoSdrUndoAction( pDrawUndo.get() );             // Draw Redo first
 
-    pDocShell->SetInUndo( true );               //! BeginRedo
+    rDocShell.SetInUndo( true );               //! BeginRedo
     bDrawIsInUndo = true;
     if (bAppend)
         pViewShell->AppendTable( sNewName, false );
@@ -211,13 +211,13 @@ void ScUndoInsertTab::Redo()
         pViewShell->InsertTable( sNewName, nTab, false );
     }
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( false );              //! EndRedo
+    rDocShell.SetInUndo( false );              //! EndRedo
 
     SetChangeTrack();
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDocument& rDoc = rDocShell.GetDocument();
         lcl_OnTabsChanged(*pViewShell, rDoc, nTab);
         std::vector<SCTAB> aTabs{nTab};
         lcl_UndoCommandResult(*pViewShell, ".uno:Redo", "ScUndoInsertTab", &aTabs);
@@ -236,14 +236,14 @@ bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
+ScUndoInsertTables::ScUndoInsertTables( ScDocShell& rNewDocShell,
                                         SCTAB nTabNum,
                                         std::vector<OUString>&& newNameList) :
-    ScSimpleUndo( pNewDocShell ),
+    ScSimpleUndo( rNewDocShell ),
     aNameList( std::move(newNameList) ),
     nTab( nTabNum )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &rDocShell.GetDocument() );
 
     SetChangeTrack();
 }
@@ -260,7 +260,7 @@ OUString ScUndoInsertTables::GetComment() const
 
 void ScUndoInsertTables::SetChangeTrack()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
     {
@@ -287,22 +287,22 @@ void ScUndoInsertTables::Undo()
 
     pViewShell->SetTabNo(nTab);
 
-    pDocShell->SetInUndo( true );               //! BeginUndo
+    rDocShell.SetInUndo( true );               //! BeginUndo
     bDrawIsInUndo = true;
 
     pViewShell->DeleteTables( nTab, static_cast<SCTAB>(aNameList.size()) );
 
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( false );              //! EndUndo
+    rDocShell.SetInUndo( false );              //! EndUndo
 
-    DoSdrUndoAction( pDrawUndo.get(), &pDocShell->GetDocument() );
+    DoSdrUndoAction( pDrawUndo.get(), &rDocShell.GetDocument() );
 
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
+    ScChangeTrack* pChangeTrack = rDocShell.GetDocument().GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
     //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
-    pDocShell->Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
+    rDocShell.Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
 }
 
 void ScUndoInsertTables::Redo()
@@ -313,12 +313,12 @@ void ScUndoInsertTables::Redo()
 
     RedoSdrUndoAction( pDrawUndo.get() );       // Draw Redo first
 
-    pDocShell->SetInUndo( true );               //! BeginRedo
+    rDocShell.SetInUndo( true );               //! BeginRedo
     bDrawIsInUndo = true;
     pViewShell->InsertTables( aNameList, nTab, static_cast<SCTAB>(aNameList.size()),false );
 
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( false );              //! EndRedo
+    rDocShell.SetInUndo( false );              //! EndRedo
 
     SetChangeTrack();
 }
@@ -335,9 +335,9 @@ bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell, const vector<SCTAB> &aTab,
+ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell& rNewDocShell, const vector<SCTAB> &aTab,
                                     ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData ) :
-    ScMoveUndo( pNewDocShell, std::move(pUndoDocument), std::move(pRefData) )
+    ScMoveUndo( rNewDocShell, std::move(pUndoDocument), std::move(pRefData) )
 {
     theTabs.insert(theTabs.end(), aTab.begin(), aTab.end() );
     SetChangeTrack();
@@ -355,7 +355,7 @@ OUString ScUndoDeleteTab::GetComment() const
 
 void ScUndoDeleteTab::SetChangeTrack()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
     {
@@ -386,7 +386,7 @@ static SCTAB lcl_GetVisibleTabBefore( const ScDocument& rDoc, SCTAB nTab )
 void ScUndoDeleteTab::Undo()
 {
     BeginUndo();
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     bool bLink = false;
     OUString aName;
@@ -436,12 +436,12 @@ void ScUndoDeleteTab::Undo()
     }
     if (bLink)
     {
-        pDocShell->UpdateLinks(); // update Link Manager
+        rDocShell.UpdateLinks(); // update Link Manager
     }
 
     EndUndo();      // Draw-Undo has to be called before Broadcast!
 
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
+    ScChangeTrack* pChangeTrack = rDocShell.GetDocument().GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
@@ -457,7 +457,7 @@ void ScUndoDeleteTab::Undo()
 
     for(SCTAB nTab: theTabs)
     {
-        pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab) );
+        rDocShell.Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab) );
     }
     SfxApplication* pSfxApp = SfxGetpApp();                                // Navigator
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
@@ -465,7 +465,7 @@ void ScUndoDeleteTab::Undo()
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 
-    pDocShell->PostPaint(0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::All );  // incl. extras
+    rDocShell.PostPaint(0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::All );  // incl. extras
 
     // not ShowTable due to SetTabNo(..., sal_True):
     if (pViewShell)
@@ -478,27 +478,27 @@ void ScUndoDeleteTab::Redo()
     if (!pViewShell)
         return;
 
-    pViewShell->SetTabNo( lcl_GetVisibleTabBefore( pDocShell->GetDocument(), theTabs.front() ) );
+    pViewShell->SetTabNo( lcl_GetVisibleTabBefore( rDocShell.GetDocument(), theTabs.front() ) );
 
     RedoSdrUndoAction( pDrawUndo.get() );       // Draw Redo first
 
-    pDocShell->SetInUndo( true );               //! BeginRedo
+    rDocShell.SetInUndo( true );               //! BeginRedo
     bDrawIsInUndo = true;
     pViewShell->DeleteTables( theTabs, false );
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( true );               //! EndRedo
+    rDocShell.SetInUndo( true );               //! EndRedo
 
     SetChangeTrack();
 
     if (comphelper::LibreOfficeKit::isActive() && !theTabs.empty())
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDocument& rDoc = rDocShell.GetDocument();
         lcl_OnTabsChanged(*pViewShell, rDoc, theTabs[0]);
         lcl_UndoCommandResult(*pViewShell, ".uno:Redo", "ScUndoDeleteTab", &theTabs);
     }
 
     //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
-    pDocShell->Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
+    rDocShell.Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
 }
 
 void ScUndoDeleteTab::Repeat(SfxRepeatTarget& rTarget)
@@ -515,11 +515,11 @@ bool ScUndoDeleteTab::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-ScUndoRenameTab::ScUndoRenameTab( ScDocShell* pNewDocShell,
+ScUndoRenameTab::ScUndoRenameTab( ScDocShell& rNewDocShell,
                                   SCTAB nT,
                                   const OUString& rOldName,
                                   const OUString& rNewName) :
-    ScSimpleUndo( pNewDocShell ),
+    ScSimpleUndo( rNewDocShell ),
     nTab     ( nT )
 {
     sOldName = rOldName;
@@ -537,15 +537,15 @@ OUString ScUndoRenameTab::GetComment() const
 
 void ScUndoRenameTab::DoChange( SCTAB nTabP, const OUString& rName ) const
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     rDoc.RenameTab( nTabP, rName );
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );    // Navigator
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreasChanged ) );     // Also Name Box
 
-    pDocShell->PostPaintGridAll();
-    pDocShell->PostPaintExtras();
-    pDocShell->PostDataChanged();
+    rDocShell.PostPaintGridAll();
+    rDocShell.PostPaintExtras();
+    rDocShell.PostDataChanged();
 
     // The sheet name might be used in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -574,9 +574,9 @@ bool ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoMoveTab::ScUndoMoveTab(
-    ScDocShell* pNewDocShell, std::unique_ptr<vector<SCTAB>> pOldTabs, std::unique_ptr<vector<SCTAB>> pNewTabs,
+    ScDocShell& rNewDocShell, std::unique_ptr<vector<SCTAB>> pOldTabs, std::unique_ptr<vector<SCTAB>> pNewTabs,
     std::unique_ptr<vector<OUString>> pOldNames, std::unique_ptr<vector<OUString>> pNewNames) :
-    ScSimpleUndo( pNewDocShell ),
+    ScSimpleUndo( rNewDocShell ),
     mpOldTabs(std::move(pOldTabs)), mpNewTabs(std::move(pNewTabs)),
     mpOldNames(std::move(pOldNames)), mpNewNames(std::move(pNewNames))
 {
@@ -601,11 +601,11 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
     if (!pViewShell)
         return;
 
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     if (bUndo)                                      // UnDo
     {
         size_t i = mpNewTabs->size();
-        ScProgress aProgress(pDocShell, ScResId(STR_UNDO_MOVE_TAB),
+        ScProgress aProgress(&rDocShell, ScResId(STR_UNDO_MOVE_TAB),
                                         i * rDoc.GetCodeCount(), true);
         for (; i > 0; --i)
         {
@@ -627,7 +627,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
     else
     {
         size_t n = mpNewTabs->size();
-        ScProgress aProgress(pDocShell, ScResId(STR_UNDO_MOVE_TAB),
+        ScProgress aProgress(&rDocShell, ScResId(STR_UNDO_MOVE_TAB),
                                             n * rDoc.GetCodeCount(), true);
         for (size_t i = 0; i < n; ++i)
         {
@@ -659,9 +659,9 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );    // Navigator
 
-    pDocShell->PostPaintGridAll();
-    pDocShell->PostPaintExtras();
-    pDocShell->PostDataChanged();
+    rDocShell.PostPaintGridAll();
+    rDocShell.PostPaintExtras();
+    rDocShell.PostDataChanged();
 }
 
 void ScUndoMoveTab::Undo()
@@ -685,15 +685,15 @@ bool ScUndoMoveTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoCopyTab::ScUndoCopyTab(
-    ScDocShell* pNewDocShell,
+    ScDocShell& rNewDocShell,
     std::unique_ptr<vector<SCTAB>> pOldTabs, std::unique_ptr<vector<SCTAB>> pNewTabs,
     std::unique_ptr<vector<OUString>> pNewNames) :
-    ScSimpleUndo( pNewDocShell ),
+    ScSimpleUndo( rNewDocShell ),
     mpOldTabs(std::move(pOldTabs)),
     mpNewTabs(std::move(pNewTabs)),
     mpNewNames(std::move(pNewNames))
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &rDocShell.GetDocument() );
 
     // The sizes differ.  Something is wrong.
     assert(!mpNewNames || mpNewTabs->size() == mpNewNames->size());
@@ -720,14 +720,14 @@ void ScUndoCopyTab::DoChange() const
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreasChanged ) );
 
-    pDocShell->PostPaintGridAll();
-    pDocShell->PostPaintExtras();
-    pDocShell->PostDataChanged();
+    rDocShell.PostPaintGridAll();
+    rDocShell.PostPaintExtras();
+    rDocShell.PostDataChanged();
 }
 
 void ScUndoCopyTab::Undo()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     DoSdrUndoAction( pDrawUndo.get(), &rDoc );         // before the sheets are deleted
 
@@ -752,7 +752,7 @@ void ScUndoCopyTab::Undo()
         if (nDestTab > MAXTAB)                          // append?
             nDestTab = rDoc.GetTableCount() - 1;
 
-        pDocShell->Broadcast( ScTablesHint( SC_TAB_DELETED, nDestTab ) );
+        rDocShell.Broadcast( ScTablesHint( SC_TAB_DELETED, nDestTab ) );
     }
 
     DoChange();
@@ -764,7 +764,7 @@ void ScUndoCopyTab::Redo()
     if (!pViewShell)
         return;
 
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     SCTAB nDestTab = 0;
     for (size_t i = 0, n = mpNewTabs->size(); i < n; ++i)
@@ -828,8 +828,8 @@ bool ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoTabColor::ScUndoTabColor(
-    ScDocShell* pNewDocShell, SCTAB nT, const Color& aOTabBgColor, const Color& aNTabBgColor) :
-    ScSimpleUndo( pNewDocShell )
+    ScDocShell& rNewDocShell, SCTAB nT, const Color& aOTabBgColor, const Color& aNTabBgColor) :
+    ScSimpleUndo( rNewDocShell )
 {
     ScUndoTabColorInfo aInfo(nT);
     aInfo.maOldTabBgColor = aOTabBgColor;
@@ -838,9 +838,9 @@ ScUndoTabColor::ScUndoTabColor(
 }
 
 ScUndoTabColor::ScUndoTabColor(
-    ScDocShell* pNewDocShell,
+    ScDocShell& rNewDocShell,
     ScUndoTabColorInfo::List&& rUndoTabColorList) :
-    ScSimpleUndo(pNewDocShell),
+    ScSimpleUndo(rNewDocShell),
     aTabColorList(std::move(rUndoTabColorList))
 {
 }
@@ -858,7 +858,7 @@ OUString ScUndoTabColor::GetComment() const
 
 void ScUndoTabColor::DoChange(bool bUndoType) const
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     size_t nTabColorCount = aTabColorList.size();
     for (size_t i = 0; i < nTabColorCount; ++i)
@@ -868,8 +868,8 @@ void ScUndoTabColor::DoChange(bool bUndoType) const
             bUndoType ? rTabColor.maOldTabBgColor : rTabColor.maNewTabBgColor);
     }
 
-    pDocShell->PostPaintExtras();
-    ScDocShellModificator aModificator( *pDocShell );
+    rDocShell.PostPaintExtras();
+    ScDocShellModificator aModificator( rDocShell );
     aModificator.SetDocumentModified();
 }
 
@@ -893,12 +893,12 @@ bool ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
+ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell& rNewDocShell,
                         SCTAB nSrc, SCTAB nDest,
                         OUString aN, OUString aC,
                         const Color& rCol, ScScenarioFlags nF,
                         const ScMarkData& rMark ) :
-    ScSimpleUndo( pNewDocShell ),
+    ScSimpleUndo( rNewDocShell ),
     mpMarkData(new ScMarkData(rMark)),
     nSrcTab( nSrc ),
     nDestTab( nDest ),
@@ -907,7 +907,7 @@ ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
     aColor( rCol ),
     nFlags( nF )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &rDocShell.GetDocument() );
 }
 
 ScUndoMakeScenario::~ScUndoMakeScenario()
@@ -922,18 +922,18 @@ OUString ScUndoMakeScenario::GetComment() const
 
 void ScUndoMakeScenario::Undo()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
-    pDocShell->SetInUndo( true );
+    rDocShell.SetInUndo( true );
     bDrawIsInUndo = true;
     rDoc.DeleteTab( nDestTab );
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( false );
+    rDocShell.SetInUndo( false );
 
     DoSdrUndoAction( pDrawUndo.get(), &rDoc );
 
-    pDocShell->PostPaint(0,0,nDestTab,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::All);
-    pDocShell->PostDataChanged();
+    rDocShell.PostPaint(0,0,nDestTab,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::All);
+    rDocShell.PostDataChanged();
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -942,7 +942,7 @@ void ScUndoMakeScenario::Undo()
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
 
     //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
-    pDocShell->Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
+    rDocShell.Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
 }
 
 void ScUndoMakeScenario::Redo()
@@ -951,13 +951,13 @@ void ScUndoMakeScenario::Redo()
 
     RedoSdrUndoAction( pDrawUndo.get() ); // Draw Redo first
 
-    pDocShell->SetInUndo( true );
+    rDocShell.SetInUndo( true );
     bDrawIsInUndo = true;
 
-    pDocShell->MakeScenario( nSrcTab, aName, aComment, aColor, nFlags, *mpMarkData, false );
+    rDocShell.MakeScenario( nSrcTab, aName, aComment, aColor, nFlags, *mpMarkData, false );
 
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( false );
+    rDocShell.SetInUndo( false );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -979,13 +979,13 @@ bool ScUndoMakeScenario::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-ScUndoImportTab::ScUndoImportTab(ScDocShell* pShell,
+ScUndoImportTab::ScUndoImportTab(ScDocShell& rShell,
                                  SCTAB nNewTab, SCTAB nNewCount)
-    : ScSimpleUndo(pShell)
+    : ScSimpleUndo(rShell)
     , nTab(nNewTab)
     , nCount(nNewCount)
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &rDocShell.GetDocument() );
 }
 
 ScUndoImportTab::~ScUndoImportTab()
@@ -1004,7 +1004,7 @@ void ScUndoImportTab::DoChange() const
     if (!pViewShell)
         return;
 
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
     if(nTab<nTabCount)
     {
@@ -1016,7 +1016,7 @@ void ScUndoImportTab::DoChange() const
     }
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );    // Navigator
-    pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB,
+    rDocShell.PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB,
                                 PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left | PaintPartFlags::Extras );
 }
 
@@ -1025,7 +1025,7 @@ void ScUndoImportTab::Undo()
     // Inserted range names, etc.
 
     SCTAB i;
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     bool bMakeRedo = !xRedoDoc;
     if (bMakeRedo)
     {
@@ -1080,7 +1080,7 @@ void ScUndoImportTab::Redo()
         return;
     }
 
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     OUString aName;
     SCTAB i;
     for (i=0; i<nCount; i++)                // first insert all sheets (#63304#)
@@ -1132,13 +1132,13 @@ bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, OUString _aDocName ) :
-    ScSimpleUndo( pShell ),
+ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell& rShell, OUString _aDocName ) :
+    ScSimpleUndo( rShell ),
     aDocName(std::move( _aDocName )),
     nRefreshDelay( 0 ),
     nCount( 0 )
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
     pTabs.reset( new SCTAB[nTabCount] );
     pModes.reset( new ScLinkMode[nTabCount] );
@@ -1181,13 +1181,13 @@ OUString ScUndoRemoveLink::GetComment() const
 
 void ScUndoRemoveLink::DoChange( bool bLink ) const
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     for (sal_uInt16 i=0; i<nCount; i++)
         if (bLink)      // establish link
             rDoc.SetLink( pTabs[i], pModes[i], aDocName, aFltName, aOptions, pTabNames[i], nRefreshDelay );
         else            // remove link
             rDoc.SetLink( pTabs[i], ScLinkMode::NONE, u""_ustr, u""_ustr, u""_ustr, u""_ustr, 0 );
-    pDocShell->UpdateLinks();
+    rDocShell.UpdateLinks();
 }
 
 void ScUndoRemoveLink::Undo()
@@ -1210,8 +1210,8 @@ bool ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, std::vector<SCTAB>&& newUndoTabs, bool bNewShow ) :
-    ScSimpleUndo( pShell ),
+ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell& rShell, std::vector<SCTAB>&& newUndoTabs, bool bNewShow ) :
+    ScSimpleUndo( rShell ),
     undoTabs( std::move(newUndoTabs) ),
     bShow( bNewShow )
 {
@@ -1227,7 +1227,7 @@ void ScUndoShowHideTab::DoChange( bool bShowP ) const
     if (!pViewShell)
         return;
 
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     for(const SCTAB& nTab : undoTabs)
     {
         rDoc.SetVisible( nTab, bShowP );
@@ -1235,7 +1235,7 @@ void ScUndoShowHideTab::DoChange( bool bShowP ) const
     }
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
-    pDocShell->SetDocumentModified();
+    rDocShell.SetDocumentModified();
 }
 
 void ScUndoShowHideTab::Undo()
@@ -1276,8 +1276,8 @@ OUString ScUndoShowHideTab::GetComment() const
     return ScResId(pId);
 }
 
-ScUndoDocProtect::ScUndoDocProtect(ScDocShell* pShell, unique_ptr<ScDocProtection> && pProtectSettings) :
-    ScSimpleUndo(pShell),
+ScUndoDocProtect::ScUndoDocProtect(ScDocShell& rShell, unique_ptr<ScDocProtection> && pProtectSettings) :
+    ScSimpleUndo(rShell),
     mpProtectSettings(std::move(pProtectSettings))
 {
 }
@@ -1288,7 +1288,7 @@ ScUndoDocProtect::~ScUndoDocProtect()
 
 void ScUndoDocProtect::DoProtect(bool bProtect)
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     if (bProtect)
     {
@@ -1310,7 +1310,7 @@ void ScUndoDocProtect::DoProtect(bool bProtect)
         pViewShell->UpdateInputHandler(true);   // so that input can be immediately entered again
     }
 
-    pDocShell->PostPaintGridAll();
+    rDocShell.PostPaintGridAll();
 }
 
 void ScUndoDocProtect::Undo()
@@ -1343,8 +1343,8 @@ OUString ScUndoDocProtect::GetComment() const
     return ScResId(pId);
 }
 
-ScUndoTabProtect::ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab, unique_ptr<ScTableProtection> && pProtectSettings) :
-    ScSimpleUndo(pShell),
+ScUndoTabProtect::ScUndoTabProtect(ScDocShell& rShell, SCTAB nTab, unique_ptr<ScTableProtection> && pProtectSettings) :
+    ScSimpleUndo(rShell),
     mnTab(nTab),
     mpProtectSettings(std::move(pProtectSettings))
 {
@@ -1356,7 +1356,7 @@ ScUndoTabProtect::~ScUndoTabProtect()
 
 void ScUndoTabProtect::DoProtect(bool bProtect)
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     if (bProtect)
     {
@@ -1380,7 +1380,7 @@ void ScUndoTabProtect::DoProtect(bool bProtect)
         pViewShell->UpdateInputHandler(true);   // so that input can be immediately entered again
     }
 
-    pDocShell->PostPaintGridAll();
+    rDocShell.PostPaintGridAll();
 }
 
 void ScUndoTabProtect::Undo()
@@ -1413,9 +1413,9 @@ OUString ScUndoTabProtect::GetComment() const
     return ScResId(pId);
 }
 
-ScUndoPrintRange::ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
+ScUndoPrintRange::ScUndoPrintRange( ScDocShell& rShell, SCTAB nNewTab,
                                     std::unique_ptr<ScPrintRangeSaver> pOld, std::unique_ptr<ScPrintRangeSaver> pNew ) :
-    ScSimpleUndo( pShell ),
+    ScSimpleUndo( rShell ),
     nTab( nNewTab ),
     pOldRanges( std::move(pOld) ),
     pNewRanges( std::move(pNew) )
@@ -1430,7 +1430,7 @@ ScUndoPrintRange::~ScUndoPrintRange()
 
 void ScUndoPrintRange::DoChange(bool bUndo)
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     if (bUndo)
         rDoc.RestorePrintRanges( *pOldRanges );
     else
@@ -1440,7 +1440,7 @@ void ScUndoPrintRange::DoChange(bool bUndo)
     if (pViewShell)
         pViewShell->SetTabNo( nTab );
 
-    ScPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab ).UpdatePages();
+    ScPrintFunc( &rDocShell, rDocShell.GetPrinter(), nTab ).UpdatePages();
 
     if (pViewShell && comphelper::LibreOfficeKit::isActive())
     {
@@ -1454,7 +1454,7 @@ void ScUndoPrintRange::DoChange(bool bUndo)
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_PRINT_RANGES, message);
     }
 
-    pDocShell->PostPaint( ScRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab), PaintPartFlags::Grid );
+    rDocShell.PostPaint( ScRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab), PaintPartFlags::Grid );
 }
 
 void ScUndoPrintRange::Undo()
@@ -1486,10 +1486,10 @@ OUString ScUndoPrintRange::GetComment() const
     return ScResId( STR_UNDO_PRINTRANGES );
 }
 
-ScUndoScenarioFlags::ScUndoScenarioFlags(ScDocShell* pNewDocShell, SCTAB nT,
+ScUndoScenarioFlags::ScUndoScenarioFlags(ScDocShell& rNewDocShell, SCTAB nT,
                     OUString aON, OUString aNN, OUString aOC, OUString aNC,
                     const Color& rOCol, const Color& rNCol, ScScenarioFlags nOF, ScScenarioFlags nNF) :
-    ScSimpleUndo( pNewDocShell ),
+    ScSimpleUndo( rNewDocShell ),
     nTab        ( nT ),
     aOldName    (std::move( aON )),
     aNewName    (std::move( aNN )),
@@ -1513,12 +1513,12 @@ OUString ScUndoScenarioFlags::GetComment() const
 
 void ScUndoScenarioFlags::Undo()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     rDoc.RenameTab( nTab, aOldName );
     rDoc.SetScenarioData( nTab, aOldComment, aOldColor, nOldFlags );
 
-    pDocShell->PostPaintGridAll();
+    rDocShell.PostPaintGridAll();
     // The sheet name might be used in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -1530,12 +1530,12 @@ void ScUndoScenarioFlags::Undo()
 
 void ScUndoScenarioFlags::Redo()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     rDoc.RenameTab( nTab, aNewName );
     rDoc.SetScenarioData( nTab, aNewComment, aNewColor, nNewFlags );
 
-    pDocShell->PostPaintGridAll();
+    rDocShell.PostPaintGridAll();
     // The sheet name might be used in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -1556,9 +1556,9 @@ bool ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 //      (move to different file?)
-ScUndoRenameObject::ScUndoRenameObject( ScDocShell* pNewDocShell, OUString aPN,
+ScUndoRenameObject::ScUndoRenameObject( ScDocShell& rNewDocShell, OUString aPN,
                                         OUString aON, OUString aNN ) :
-    ScSimpleUndo( pNewDocShell ),
+    ScSimpleUndo( rNewDocShell ),
     aPersistName(std::move( aPN )),
     aOldName    (std::move( aON )),
     aNewName    (std::move( aNN ))
@@ -1577,7 +1577,7 @@ OUString ScUndoRenameObject::GetComment() const
 
 SdrObject* ScUndoRenameObject::GetObject()
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     if ( pDrawLayer )
     {
@@ -1632,8 +1632,8 @@ bool ScUndoRenameObject::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScUndoLayoutRTL::ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, bool bNewRTL ) :
-    ScSimpleUndo( pShell ),
+ScUndoLayoutRTL::ScUndoLayoutRTL( ScDocShell& rShell, SCTAB nNewTab, bool bNewRTL ) :
+    ScSimpleUndo( rShell ),
     nTab( nNewTab ),
     bRTL( bNewRTL )
 {
@@ -1645,18 +1645,18 @@ ScUndoLayoutRTL::~ScUndoLayoutRTL()
 
 void ScUndoLayoutRTL::DoChange( bool bNew )
 {
-    pDocShell->SetInUndo( true );
+    rDocShell.SetInUndo( true );
 
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     rDoc.SetLayoutRTL(nTab, bNew, ScObjectHandling::MirrorRTLMode);
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->SetTabNo(nTab,true);
 
-    pDocShell->SetDocumentModified();
+    rDocShell.SetDocumentModified();
 
-    pDocShell->SetInUndo( false );
+    rDocShell.SetInUndo( false );
 }
 
 void ScUndoLayoutRTL::Undo()

@@ -33,13 +33,13 @@
 #include <svx/svdundo.hxx>
 
 /** Change column widths or row heights */
-ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
+ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell& rNewDocShell,
                 const ScMarkData& rMark,
                 SCCOLROW nNewStart, SCTAB nNewStartTab, SCCOLROW nNewEnd, SCTAB nNewEndTab,
                 ScDocumentUniquePtr pNewUndoDoc, std::vector<sc::ColRowSpan>&& rRanges,
                 std::unique_ptr<ScOutlineTable> pNewUndoTab,
                 ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips, bool bNewWidth ) :
-    ScSimpleUndo( pNewDocShell ),
+    ScSimpleUndo( rNewDocShell ),
     aMarkData( rMark ),
     nStart( nNewStart ),
     nEnd( nNewEnd ),
@@ -52,7 +52,7 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
     bWidth( bNewWidth ),
     eMode( eNewMode )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &rDocShell.GetDocument() );
 }
 
 ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
@@ -80,7 +80,7 @@ void ScUndoWidthOrHeight::Undo()
 {
     BeginUndo();
 
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     SCCOLROW nPaintStart = nStart > 0 ? nStart-1 : static_cast<SCCOLROW>(0);
 
@@ -110,14 +110,14 @@ void ScUndoWidthOrHeight::Undo()
                                      static_cast<SCCOL>(nEnd), rDoc.MaxRow(), rTab, InsertDeleteFlags::NONE,
                                      false, rDoc);
             rDoc.UpdatePageBreaks( rTab );
-            pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, rTab,
+            rDocShell.PostPaint( static_cast<SCCOL>(nPaintStart), 0, rTab,
                     rDoc.MaxCol(), rDoc.MaxRow(), rTab, PaintPartFlags::Grid | PaintPartFlags::Top );
         }
         else        // Height
         {
             pUndoDoc->CopyToDocument(0, nStart, rTab, rDoc.MaxCol(), nEnd, rTab, InsertDeleteFlags::NONE, false, rDoc);
             rDoc.UpdatePageBreaks( rTab );
-            pDocShell->PostPaint( 0, nPaintStart, rTab, rDoc.MaxCol(), rDoc.MaxRow(), rTab, PaintPartFlags::Grid | PaintPartFlags::Left );
+            rDocShell.PostPaint( 0, nPaintStart, rTab, rDoc.MaxCol(), rDoc.MaxRow(), rTab, PaintPartFlags::Grid | PaintPartFlags::Left );
         }
     }
 
@@ -144,7 +144,7 @@ void ScUndoWidthOrHeight::Redo()
 {
     BeginRedo();
 
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     bool bPaintAll = false;
     if (eMode==SC_SIZE_OPTIMAL)
@@ -167,7 +167,7 @@ void ScUndoWidthOrHeight::Redo()
 
     // paint grid if selection was changed directly at the MarkData
     if (bPaintAll)
-        pDocShell->PostPaint( 0, 0, nStartTab, rDoc.MaxCol(), rDoc.MaxRow(), nEndTab, PaintPartFlags::Grid );
+        rDocShell.PostPaint( 0, 0, nStartTab, rDoc.MaxCol(), rDoc.MaxRow(), nEndTab, PaintPartFlags::Grid );
 
     EndRedo();
 }

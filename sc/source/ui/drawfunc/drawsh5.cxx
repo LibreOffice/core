@@ -544,7 +544,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                             if(!aPersistName.isEmpty())
                                             {
                                                 pDocSh->GetUndoManager()->AddUndoAction(
-                                                    std::make_unique<ScUndoRenameObject>(pDocSh, aPersistName, pSelected->GetName(), aNewName));
+                                                    std::make_unique<ScUndoRenameObject>(*pDocSh, aPersistName, pSelected->GetName(), aNewName));
                                             }
                                         }
 

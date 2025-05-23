@@ -147,7 +147,7 @@ void ScViewFunc::CutToClip()
 
         if ( bRecord )                          // Draw-Undo now available
             pDocSh->GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoCut>( pDocSh, aRange, aOldEnd, rMark, std::move(pUndoDoc) ) );
+                std::make_unique<ScUndoCut>( *pDocSh, aRange, aOldEnd, rMark, std::move(pUndoDoc) ) );
 
         aModificator.SetDocumentModified();
         pDocSh->UpdateOle(GetViewData());
@@ -1433,7 +1433,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         aOptions.eMoveMode  = eMoveMode;
 
         std::unique_ptr<SfxUndoAction> pUndo(new ScUndoPaste(
-            pDocSh, ScRange(nStartCol, nStartRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
+            *pDocSh, ScRange(nStartCol, nStartRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
             aFilteredMark, std::move(pUndoDoc), std::move(pRedoDoc), nFlags | nUndoFlags, std::move(pUndoData),
             false, &aOptions ));     // false = Redo data not yet copied
 
@@ -1649,7 +1649,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
         aOptions.bAsLink    = bAsLink;
         aOptions.eMoveMode  = eMoveMode;
 
-        std::unique_ptr<ScUndoPaste> pUndo(new ScUndoPaste(pDocSh,
+        std::unique_ptr<ScUndoPaste> pUndo(new ScUndoPaste(*pDocSh,
             aMarkedRange, aMark, std::move(pUndoDoc), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions));
 
         if (bInsertCells)
@@ -1818,7 +1818,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
         pUndoMgr->AddUndoAction(
             std::make_unique<ScUndoPaste>(
-                pDocSh, aRanges, aMark, std::move(pUndoDoc), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions));
+                *pDocSh, aRanges, aMark, std::move(pUndoDoc), nullptr, nFlags|nUndoFlags, nullptr, false, &aOptions));
         pUndoMgr->LeaveListAction();
     }
 
@@ -2034,7 +2034,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         }
     }
     pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );  // content after the change
-    std::unique_ptr<SfxUndoAction> pUndo( new ScUndoDataForm( pDocSh,
+    std::unique_ptr<SfxUndoAction> pUndo( new ScUndoDataForm( *pDocSh,
                                                nStartCol, nCurrentRow, nStartTab,
                                                nUndoEndCol, nUndoEndRow, nEndTab, rMark,
                                                std::move(pUndoDoc), std::move(pRedoDoc),

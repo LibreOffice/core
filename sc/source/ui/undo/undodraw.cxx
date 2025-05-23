@@ -22,9 +22,9 @@
 #include <tabvwsh.hxx>
 
 
-ScUndoDraw::ScUndoDraw( std::unique_ptr<SfxUndoAction> pUndo, ScDocShell* pDocSh ) :
+ScUndoDraw::ScUndoDraw( std::unique_ptr<SfxUndoAction> pUndo, ScDocShell& rDocSh ) :
     pDrawUndo( std::move(pUndo) ),
-    pDocShell( pDocSh ),
+    rDocShell( rDocSh ),
     mnViewShellId( -1 )
 {
     if (ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell())
@@ -65,7 +65,7 @@ bool  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
 void ScUndoDraw::UpdateSubShell()
 {
     // #i26822# remove the draw shell if the selected object has been removed
-    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell();
+    ScTabViewShell* pViewShell = rDocShell.GetBestViewShell();
     if (pViewShell)
         pViewShell->UpdateDrawShell();
 }
@@ -75,7 +75,7 @@ void ScUndoDraw::Undo()
     if (pDrawUndo)
     {
         pDrawUndo->Undo();
-        pDocShell->SetDrawModified();
+        rDocShell.SetDrawModified();
         UpdateSubShell();
     }
 }
@@ -85,7 +85,7 @@ void ScUndoDraw::Redo()
     if (pDrawUndo)
     {
         pDrawUndo->Redo();
-        pDocShell->SetDrawModified();
+        rDocShell.SetDrawModified();
         UpdateSubShell();
     }
 }

@@ -16,8 +16,8 @@
 
 namespace sc {
 
-UndoSort::UndoSort( ScDocShell* pDocSh, ReorderParam aParam ) :
-    ScSimpleUndo(pDocSh), maParam(std::move(aParam)) {}
+UndoSort::UndoSort( ScDocShell& rDocSh, ReorderParam aParam ) :
+    ScSimpleUndo(rDocSh), maParam(std::move(aParam)) {}
 
 OUString UndoSort::GetComment() const
 {
@@ -40,7 +40,7 @@ void UndoSort::Redo()
 
 void UndoSort::Execute( bool bUndo )
 {
-    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
     sc::ReorderParam aParam = maParam;
     if (bUndo)
         aParam.reverse();
@@ -68,19 +68,19 @@ void UndoSort::Execute( bool bUndo )
             if (aMarkRange.aStart.Col() > 0)
                 aMarkRange.aStart.IncCol(-1);
         }
-        ScUndoUtil::MarkSimpleBlock(pDocShell, aMarkRange);
+        ScUndoUtil::MarkSimpleBlock(rDocShell, aMarkRange);
     }
     else
     {
-        ScUndoUtil::MarkSimpleBlock(pDocShell, aOverallRange);
+        ScUndoUtil::MarkSimpleBlock(rDocShell, aOverallRange);
     }
 
     rDoc.SetDirty(maParam.maSortRange, true);
     if (!aParam.mbUpdateRefs)
         rDoc.BroadcastCells(aParam.maSortRange, SfxHintId::ScDataChanged);
 
-    pDocShell->PostPaint(aOverallRange, PaintPartFlags::Grid);
-    pDocShell->PostDataChanged();
+    rDocShell.PostPaint(aOverallRange, PaintPartFlags::Grid);
+    rDocShell.PostDataChanged();
 }
 
 }

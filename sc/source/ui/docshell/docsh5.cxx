@@ -324,7 +324,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             {
                 m_pDocument->CompileHybridFormula();
 
-                GetUndoManager()->AddUndoAction( std::make_unique<ScUndoDBData>( this,
+                GetUndoManager()->AddUndoAction( std::make_unique<ScUndoDBData>( *this,
                         std::move(pUndoColl),
                         std::make_unique<ScDBCollection>( *pColl ) ) );
             }
@@ -613,7 +613,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
                 m_pDocument->CopyToDocument(aOldDest, InsertDeleteFlags::ALL, false, *pUndoDoc);
 
             GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoConsolidate>( this, aDestArea, rParam, std::move(pUndoDoc),
+                    std::make_unique<ScUndoConsolidate>( *this, aDestArea, rParam, std::move(pUndoDoc),
                                             true, nInsertCount, std::move(pUndoTab), std::move(pUndoData) ) );
         }
         else
@@ -630,7 +630,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
                 m_pDocument->CopyToDocument(aOldDest, InsertDeleteFlags::ALL, false, *pUndoDoc);
 
             GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoConsolidate>( this, aDestArea, rParam, std::move(pUndoDoc),
+                    std::make_unique<ScUndoConsolidate>( *this, aDestArea, rParam, std::move(pUndoDoc),
                                             false, 0, nullptr, std::move(pUndoData) ) );
         }
     }
@@ -730,7 +730,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                     }
 
                     GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoUseScenario>( this, aScenMark,
+                        std::make_unique<ScUndoUseScenario>( *this, aScenMark,
                                         ScArea( nTab,nStartCol,nStartRow,nEndCol,nEndRow ),
                                         std::move(pUndoDoc), rName ) );
                 }
@@ -778,7 +778,7 @@ void ScDocShell::ModifyScenario( SCTAB nTab, const OUString& rName, const OUStri
     ScScenarioFlags nOldFlags;
     m_pDocument->GetScenarioData( nTab, aOldComment, aOldColor, nOldFlags );
     GetUndoManager()->AddUndoAction(
-        std::make_unique<ScUndoScenarioFlags>(this, nTab,
+        std::make_unique<ScUndoScenarioFlags>(*this, nTab,
                 aOldName, rName, aOldComment, rComment,
                 aOldColor, rColor, nOldFlags, nFlags) );
 
@@ -823,7 +823,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             if (bRecord)
             {
                 GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoMakeScenario>( this, nTab, nNewTab,
+                        std::make_unique<ScUndoMakeScenario>( *this, nTab, nNewTab,
                                                 rName, rComment, rColor, nFlags, rMark ));
             }
 
@@ -949,7 +949,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
                 unique_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
                 unique_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
                 GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoCopyTab>(this, std::move(pSrcList), std::move(pDestList)));
+                        std::make_unique<ScUndoCopyTab>(*this, std::move(pSrcList), std::move(pDestList)));
             }
 
             bool bVbaEnabled = m_pDocument->IsInVBAMode();
@@ -1013,7 +1013,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
             unique_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
             unique_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
             GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoMoveTab>(this, std::move(pSrcList), std::move(pDestList)));
+                    std::make_unique<ScUndoMoveTab>(*this, std::move(pSrcList), std::move(pDestList)));
         }
 
         Broadcast( ScTablesHint( SC_TAB_MOVED, nSrcTab, nDestTab ) );

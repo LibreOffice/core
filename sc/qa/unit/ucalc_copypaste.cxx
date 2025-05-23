@@ -224,7 +224,7 @@ void TestCopyPaste::prepareUndoAfterPaste(ScDocumentUniquePtr& pPasteUndoDoc,
     aOptions.bAsLink = bAsLink;
     aOptions.eMoveMode = eMoveMode;
 
-    pUndoPaste.reset(new ScUndoPaste(&*m_xDocShell, rDestRange, rDestMark, std::move(pPasteUndoDoc),
+    pUndoPaste.reset(new ScUndoPaste(*m_xDocShell, rDestRange, rDestMark, std::move(pPasteUndoDoc),
                                      std::move(pPasteRedoDoc), nUndoFlags, std::move(pUndoData),
                                      false,
                                      &aOptions)); // false = Redo data not yet copied
@@ -9345,8 +9345,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
 
     // Create an undo object for this.
     std::unique_ptr<ScRefUndoData> pRefUndoData(new ScRefUndoData(*m_pDoc));
-    ScUndoPaste aUndo(m_xDocShell.get(), aDestRange, aMark, std::move(pUndoDoc),
-                      std::move(pRedoDoc), InsertDeleteFlags::ALL, std::move(pRefUndoData));
+    ScUndoPaste aUndo(*m_xDocShell, aDestRange, aMark, std::move(pUndoDoc), std::move(pRedoDoc),
+                      InsertDeleteFlags::ALL, std::move(pRefUndoData));
 
     // Check the content after the paste.
     {
@@ -9457,7 +9457,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteRefUndo)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A2 in the undo document should be referencing B2.", u"=B2"_ustr,
                                  pUndoDoc->GetFormula(0, 1, 0));
 
-    ScUndoPaste aUndo(m_xDocShell.get(), ScRange(2, 1, 0), aMark, std::move(pUndoDoc), nullptr,
+    ScUndoPaste aUndo(*m_xDocShell, ScRange(2, 1, 0), aMark, std::move(pUndoDoc), nullptr,
                       InsertDeleteFlags::CONTENTS, nullptr, false, nullptr);
     aUndo.Undo();
 
@@ -9645,7 +9645,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testUndoCut)
     ASSERT_DOUBLES_EQUAL(1.0, pUndoDoc->GetValue(ScAddress(0, 0, 0)));
     ASSERT_DOUBLES_EQUAL(10.0, pUndoDoc->GetValue(ScAddress(0, 1, 0)));
     ASSERT_DOUBLES_EQUAL(100.0, pUndoDoc->GetValue(ScAddress(0, 2, 0)));
-    ScUndoCut aUndo(m_xDocShell.get(), aRange, aRange.aEnd, aMark, std::move(pUndoDoc));
+    ScUndoCut aUndo(*m_xDocShell, aRange, aRange.aEnd, aMark, std::move(pUndoDoc));
 
     // "Cut" the selection.
     m_pDoc->DeleteSelection(InsertDeleteFlags::ALL, aMark);

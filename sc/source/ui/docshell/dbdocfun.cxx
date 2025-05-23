@@ -106,7 +106,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )
     if (bUndo)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoDBData>( &rDocShell, std::move(pUndoColl),
+                        std::make_unique<ScUndoDBData>( rDocShell, std::move(pUndoColl),
                             std::make_unique<ScDBCollection>( *pDocColl ) ) );
     }
 
@@ -139,7 +139,7 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
         if (bUndo)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                            std::make_unique<ScUndoDBData>( &rDocShell, std::move(pUndoColl),
+                            std::make_unique<ScUndoDBData>( rDocShell, std::move(pUndoColl),
                                 std::make_unique<ScDBCollection>( *pDocColl ) ) );
         }
 
@@ -183,7 +183,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
             if (bUndo)
             {
                 rDocShell.GetUndoManager()->AddUndoAction(
-                                std::make_unique<ScUndoDBData>( &rDocShell, std::move(pUndoColl),
+                                std::make_unique<ScUndoDBData>( rDocShell, std::move(pUndoColl),
                                     std::make_unique<ScDBCollection>( *pDocColl ) ) );
             }
             else
@@ -235,7 +235,7 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     if (bUndo)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoDBData>( &rDocShell, std::move(pUndoColl),
+                        std::make_unique<ScUndoDBData>( rDocShell, std::move(pUndoColl),
                             std::make_unique<ScDBCollection>( *pDocColl ) ) );
     }
 
@@ -275,7 +275,7 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     if (bRecord)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoDBData>(&rDocShell, std::move(pUndoColl),
+            std::make_unique<ScUndoDBData>(rDocShell, std::move(pUndoColl),
                 std::make_unique<ScDBCollection>(rNewColl)));
     }
 }
@@ -442,7 +442,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
                 }
 
                 rDocShell.GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoRepeatDB>( &rDocShell, nTab,
+                    std::make_unique<ScUndoRepeatDB>( rDocShell, nTab,
                                             nStartCol, nStartRow, nEndCol, nEndRow,
                                             nNewEndRow,
                                             //nCurX, nCurY,
@@ -615,7 +615,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     {
         // Set up an undo object.
         rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<sc::UndoSort>(&rDocShell, aUndoParam));
+            std::make_unique<sc::UndoSort>(rDocShell, aUndoParam));
     }
 
     pDBData->SetSortParam(rSortParam);
@@ -992,7 +992,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     {
         // create undo action after executing, because of drawing layer undo
         rDocShell.GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoQuery>( &rDocShell, nTab, rQueryParam, std::move(pUndoDoc), std::move(pUndoDB),
+                    std::make_unique<ScUndoQuery>( rDocShell, nTab, rQueryParam, std::move(pUndoDoc), std::move(pUndoDB),
                                         pOld, bDoSize, pAdvSource ) );
     }
 
@@ -1173,7 +1173,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     {
 //          ScDBData* pUndoDBData = pDBData ? new ScDBData( *pDBData ) : NULL;
         rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoSubTotals>( &rDocShell, nTab,
+            std::make_unique<ScUndoSubTotals>( rDocShell, nTab,
                                     rParam, aNewParam.nRow2,
                                     std::move(pUndoDoc), std::move(pUndoTab), // pUndoDBData,
                                     std::move(pUndoRange), std::move(pUndoDB) ) );
@@ -1391,7 +1391,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     {
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoDataPilot>(
-                &rDocShell, std::move(pOldUndoDoc), std::move(pNewUndoDoc), &aUndoDPObj, pOldObj, bAllowMove));
+                rDocShell, std::move(pOldUndoDoc), std::move(pNewUndoDoc), &aUndoDPObj, pOldObj, bAllowMove));
     }
 
     // notify API objects
@@ -1415,7 +1415,7 @@ bool ScDBDocFunc::RemovePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     {
         // If we come from GUI - ask to delete the associated pivot charts too...
         std::vector<SdrOle2Obj*> aListOfObjects =
-                    sc::tools::getAllPivotChartsConnectedTo(rDPObj.GetName(), &rDocShell);
+                    sc::tools::getAllPivotChartsConnectedTo(rDPObj.GetName(), rDocShell);
 
         ScDrawLayer* pModel = rDoc.GetDrawLayer();
 
@@ -1474,7 +1474,7 @@ bool ScDBDocFunc::RemovePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     {
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoDataPilot>(
-                &rDocShell, std::move(pOldUndoDoc), nullptr, pUndoDPObj.get(), nullptr, false));
+                rDocShell, std::move(pOldUndoDoc), nullptr, pUndoDPObj.get(), nullptr, false));
 
         // pUndoDPObj is copied
     }
@@ -1585,7 +1585,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     if (bRecord)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoDataPilot>(&rDocShell, nullptr, std::move(pNewUndoDoc), nullptr, &rDestObj, false));
+            std::make_unique<ScUndoDataPilot>(rDocShell, nullptr, std::move(pNewUndoDoc), nullptr, &rDestObj, false));
     }
 
     // notify API objects
@@ -1660,7 +1660,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoDataPilot>(
-                &rDocShell, std::move(pOldUndoDoc), std::move(pNewUndoDoc), &aUndoDPObj, &rDPObj, false));
+                rDocShell, std::move(pOldUndoDoc), std::move(pNewUndoDoc), &aUndoDPObj, &rDPObj, false));
     }
 
     // notify API objects
