@@ -837,9 +837,30 @@ bool lcl_CanCombineWithRange(SwRangeRedline* pOrigin, SwRangeRedline* pActual,
 
     if (!pOrigin->GetRedlineData(0).CanCombineForAcceptReject(pOther->GetRedlineData(0)))
     {
-        if (!bCheckChilds || pOther->GetStackCount() <= 1
-            || !pOrigin->GetRedlineData(0).CanCombineForAcceptReject(pOther->GetRedlineData(1)))
+        if (!bCheckChilds)
+        {
             return false;
+        }
+
+        // See if pOrigin and pOther can be combined because one redline data can combine with the
+        // underlying redline data of the other redline.
+        bool bChildCanCombine = false;
+        if (pOther->GetStackCount() > 1
+            && pOrigin->GetRedlineData(0).CanCombineForAcceptReject(pOther->GetRedlineData(1)))
+        {
+            bChildCanCombine = true;
+        }
+
+        if (!bChildCanCombine && pOrigin->GetStackCount() > 1
+            && pOther->GetRedlineData(0).CanCombineForAcceptReject(pOrigin->GetRedlineData(1)))
+        {
+            bChildCanCombine = true;
+        }
+
+        if (!bChildCanCombine)
+        {
+            return false;
+        }
     }
     if (pOther->Start()->GetNode().StartOfSectionNode()
         != pActual->Start()->GetNode().StartOfSectionNode())
