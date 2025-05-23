@@ -807,12 +807,20 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)
     pWrtShell->SttEndDoc(/*bStt=*/true);
     // Move inside "BBB".
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    // Search from start in the table again, for a redline that covers the cursor position.
+    nRedline = 0;
     const SwRangeRedline* pRedline = rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
     // Without the accompanying fix in place, this test would have failed, there was no redline for
     // "BBB".
     CPPUNIT_ASSERT(pRedline);
     CPPUNIT_ASSERT_EQUAL(RedlineType::Format, pRedline->GetType());
     CPPUNIT_ASSERT(!pRedline->GetRedlineData().Next());
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 3
+    // i.e. the insert redlines before/after BBB were not accepted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
