@@ -513,8 +513,8 @@ private:
     css::uno::Reference<css::presentation::XSlideShow> mxSlideShow;
 };
 
-    /// Merge the background properties together and deposit the result in rMergeAttr
-    void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool bMasterPage, SfxItemSet& rMergedAttr);
+/// Merge the background properties together and deposit the result in rMergeAttr
+SD_DLLPUBLIC void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool bMasterPage, SfxItemSet& rMergedAttr);
 
 } // end of namespace sd
 

@@ -38,10 +38,13 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <comphelper/base64.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <undo/undomanager.hxx>
 #include <GraphicViewShell.hxx>
 #include <sdpage.hxx>
+#include <app.hrc>
+#include <DrawViewShell.hxx>
 #include <LayerTabBar.hxx>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
@@ -50,6 +53,8 @@
 #include <svx/view3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sdmetitm.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xbtmpit.hxx>
 #include <unomodel.hxx>
 
 using namespace ::com::sun::star;
@@ -86,6 +91,7 @@ public:
     void testTdf164284();
     void testEncodedTableStyles();
     void testTdf157117();
+    void testPageBackgroundImages();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396);
@@ -111,6 +117,7 @@ public:
     CPPUNIT_TEST(testTdf164284);
     CPPUNIT_TEST(testEncodedTableStyles);
     CPPUNIT_TEST(testTdf157117);
+    CPPUNIT_TEST(testPageBackgroundImages);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1025,6 +1032,146 @@ void SdMiscTest::testTdf157117()
     // Check that the new last page is moved to. Before, the first page was always moved to when
     // the last page was deleted.
     CPPUNIT_ASSERT_EQUAL(1, (nPageNum - 1) / 2);
+}
+
+void SdMiscTest::testPageBackgroundImages()
+{
+    // Create empty document
+    createSdDrawDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    auto* pDrawViewShell = dynamic_cast<sd::DrawViewShell*>(pViewShell);
+    CPPUNIT_ASSERT(pDrawViewShell);
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDocument);
+
+    // Check we have 1 Page
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDocument->GetSdPageCount(PageKind::Standard));
+
+    // Add 3 pages
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+
+    // Check we have 4 Pages now
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDocument->GetSdPageCount(PageKind::Standard));
+
+    // Add a background graphic to page 1
+    {
+        CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(0));
+        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+            { "FileName", uno::Any(createFileURL(u"TestImage1.png")) },
+        }));
+
+        dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);
+    }
+
+    // Add a background graphic to page 2
+    {
+        CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(1));
+        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+            { "FileName", uno::Any(createFileURL(u"TestImage2.png")) },
+        }));
+
+        dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);
+    }
+
+    // Add a background graphic to page 3
+    {
+        CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(2));
+        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+            { "FileName", uno::Any(createFileURL(u"TestImage3.png")) },
+        }));
+
+        dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);
+    }
+
+    // Add a background graphic to page 4
+    {
+        CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(3));
+        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+            { "FileName", uno::Any(createFileURL(u"TestImage4.png")) },
+        }));
+
+        dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);
+    }
+
+    // Store graphic names
+    std::unordered_set<OUString> aGraphicNames;
+
+    // Check page 1
+    {
+        CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(0));
+        SdPage* pPage = pViewShell->GetActualPage();
+
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aMergedAttr(pDocument->GetPool());
+        SdStyleSheet* pStyleSheet = pPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
+        sd::MergePageBackgroundFilling(pPage, pStyleSheet, false, aMergedAttr);
+
+        // Style should be "BITMAP"
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
+                             aMergedAttr.Get(XATTR_FILLSTYLE).GetValue());
+        auto aItem = aMergedAttr.Get<XFillBitmapItem>(XATTR_FILLBITMAP);
+        aGraphicNames.insert(aItem.GetName());
+    }
+
+    // Check page 2
+    {
+        CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(1));
+        SdPage* pPage = pViewShell->GetActualPage();
+
+        // Style should be "BITMAP"
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aMergedAttr(pDocument->GetPool());
+        SdStyleSheet* pStyleSheet = pPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
+        sd::MergePageBackgroundFilling(pPage, pStyleSheet, false, aMergedAttr);
+
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
+                             aMergedAttr.Get(XATTR_FILLSTYLE).GetValue());
+        auto aItem = aMergedAttr.Get<XFillBitmapItem>(XATTR_FILLBITMAP);
+        aGraphicNames.insert(aItem.GetName());
+    }
+
+    // Check page 3
+    {
+        CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(2));
+        SdPage* pPage = pViewShell->GetActualPage();
+
+        // Style should be "BITMAP"
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aMergedAttr(pDocument->GetPool());
+        SdStyleSheet* pStyleSheet = pPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
+        sd::MergePageBackgroundFilling(pPage, pStyleSheet, false, aMergedAttr);
+
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
+                             aMergedAttr.Get(XATTR_FILLSTYLE).GetValue());
+        auto aItem = aMergedAttr.Get<XFillBitmapItem>(XATTR_FILLBITMAP);
+        aGraphicNames.insert(aItem.GetName());
+    }
+
+    // Check page 4
+    {
+        CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(3));
+        SdPage* pPage = pViewShell->GetActualPage();
+
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aMergedAttr(pDocument->GetPool());
+        SdStyleSheet* pStyleSheet = pPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
+        sd::MergePageBackgroundFilling(pPage, pStyleSheet, false, aMergedAttr);
+
+        // Style should be "BITMAP"
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
+                             aMergedAttr.Get(XATTR_FILLSTYLE).GetValue());
+        auto aItem = aMergedAttr.Get<XFillBitmapItem>(XATTR_FILLBITMAP);
+        aGraphicNames.insert(aItem.GetName());
+    }
+
+    // Size of graphic names should be 4 - this means each page has a unique name
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aGraphicNames.size());
+    // Check none of the graphic names is empty
+    for (OUString const& rName : aGraphicNames)
+        CPPUNIT_ASSERT(!rName.isEmpty());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);

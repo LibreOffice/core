@@ -340,7 +340,7 @@ public:
 
     /** @return the presentation style with the given helpid from this masterpage or this
         slides masterpage */
-    SdStyleSheet* getPresentationStyle( sal_uInt32 nHelpId ) const;
+    SD_DLLPUBLIC SdStyleSheet* getPresentationStyle( sal_uInt32 nHelpId ) const;
 
     /** removes all empty presentation objects from this slide */
     void RemoveEmptyPresentationObjects();
