@@ -813,10 +813,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if (redactImage && redactImage->GetValue())
             {
-                RedactionTarget* redactiontarget
-                    = new RedactionTarget({ "Images", RedactionTargetType::REDACTION_TARGET_IMAGE,
+                RedactionTarget redactiontarget({ "Images", RedactionTargetType::REDACTION_TARGET_IMAGE,
                                             "All Images", false, false, 0 });
-                aRedactionTargets.push_back({*redactiontarget, redactiontarget->sName});
+                aRedactionTargets.push_back({redactiontarget, redactiontarget.sName});
             }
             else if (nResult != RET_OK || !aDlg.hasTargets() || !aDlg.isValidState())
             {
