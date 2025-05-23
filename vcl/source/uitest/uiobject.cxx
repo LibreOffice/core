@@ -35,7 +35,6 @@
 #include <vcl/uitest/logger.hxx>
 #include <uiobject-internal.hxx>
 #include <verticaltabctrl.hxx>
-#include <vcl/toolbox.hxx>
 
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
@@ -1666,69 +1665,6 @@ std::unique_ptr<UIObject> VerticalTabControlUIObject::create(vcl::Window* pWindo
     VerticalTabControl* pTabControl = dynamic_cast<VerticalTabControl*>(pWindow);
     assert(pTabControl);
     return std::unique_ptr<UIObject>(new VerticalTabControlUIObject(pTabControl));
-}
-
-
-ToolBoxUIObject::ToolBoxUIObject(const VclPtr<ToolBox>& xToolBox):
-    WindowUIObject(xToolBox),
-    mxToolBox(xToolBox)
-{
-}
-
-ToolBoxUIObject::~ToolBoxUIObject()
-{
-}
-
-void ToolBoxUIObject::execute(const OUString& rAction,
-        const StringMap& rParameters)
-{
-    if (rAction == "CLICK")
-    {
-        if (rParameters.find(u"POS"_ustr) != rParameters.end())
-        {
-            auto itr = rParameters.find(u"POS"_ustr);
-            sal_uInt16 nPos = itr->second.toUInt32();
-            mxToolBox->SetCurItemId(mxToolBox->GetItemId(nPos));
-            mxToolBox->Click();
-            mxToolBox->Select();
-        }
-    }
-    else
-        WindowUIObject::execute(rAction, rParameters);
-}
-
-OUString ToolBoxUIObject::get_action(VclEventId nEvent) const
-{
-    if (nEvent == VclEventId::ToolboxClick)
-    {
-        return "Click on item number " + OUString::number(sal_uInt16(mxToolBox->GetCurItemId())) +
-                " in " + mxToolBox->get_id();
-    }
-    else
-        return WindowUIObject::get_action(nEvent);
-}
-
-StringMap ToolBoxUIObject::get_state()
-{
-    StringMap aMap = WindowUIObject::get_state();
-    ToolBoxItemId nCurItemId = mxToolBox->GetCurItemId();
-    aMap[u"CurrSelectedItemID"_ustr] = OUString::number(sal_uInt16(nCurItemId));
-    aMap[u"CurrSelectedItemText"_ustr] = nCurItemId ? mxToolBox->GetItemText(nCurItemId) : u""_ustr;
-    aMap[u"CurrSelectedItemCommand"_ustr] = nCurItemId ? mxToolBox->GetItemCommand(nCurItemId) : u""_ustr;
-    aMap[u"ItemCount"_ustr] = OUString::number(mxToolBox->GetItemCount());
-    return aMap;
-}
-
-OUString ToolBoxUIObject::get_name() const
-{
-    return u"ToolBoxUIObject"_ustr;
-}
-
-std::unique_ptr<UIObject> ToolBoxUIObject::create(vcl::Window* pWindow)
-{
-    ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
-    assert(pToolBox);
-    return std::unique_ptr<UIObject>(new ToolBoxUIObject(pToolBox));
 }
 
 MenuButtonUIObject::MenuButtonUIObject(const VclPtr<MenuButton>& xMenuButton):

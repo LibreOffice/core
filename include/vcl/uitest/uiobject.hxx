@@ -39,7 +39,6 @@ class VclExpander;
 class VclDrawingArea;
 class VclMultiLineEdit;
 class MenuButton;
-class ToolBox;
 namespace vcl { class Window; }
 namespace weld { class CustomWidgetController; }
 
@@ -530,30 +529,6 @@ public:
     virtual StringMap get_state() override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
-
-private:
-
-    virtual OUString get_name() const override;
-};
-
-class ToolBoxUIObject final : public WindowUIObject
-{
-private:
-    VclPtr<ToolBox> mxToolBox;
-
-public:
-
-    ToolBoxUIObject(const VclPtr<ToolBox>& mxToolBox);
-    virtual ~ToolBoxUIObject() override;
-
-    virtual void execute(const OUString& rAction,
-            const StringMap& rParameters) override;
-
-    virtual StringMap get_state() override;
-
-    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
-
-    virtual OUString get_action(VclEventId nEvent) const override;
 
 private:
 

@@ -39,6 +39,7 @@
 #include <vcl/commandinfoprovider.hxx>
 
 #include <svdata.hxx>
+#include <uitest/toolboxuiobject.hxx>
 #include <brdwin.hxx>
 #include <toolbox.h>
 
