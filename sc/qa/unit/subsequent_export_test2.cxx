@@ -1210,6 +1210,50 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf142881)
     assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:to/xdr:row"_ostr, "19");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf161365)
+{
+    createScDoc("xlsx/tdf161365.xlsx");
+
+    save("Calc Office Open XML");
+
+    xmlDocUniquePtr pSheet1 = parseExport("xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet1);
+
+    assertXPathContent(
+        pSheet1,
+        "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/mc:Choice/x:control/x:controlPr/x:anchor/x:from/xdr:col"_ostr,
+        "1");
+    assertXPathContent(
+        pSheet1,
+        "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/mc:Choice/x:control/x:controlPr/x:anchor/x:from/xdr:row"_ostr,
+        "2");
+
+    assertXPathContent(
+        pSheet1,
+        "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/mc:Choice/x:control/x:controlPr/x:anchor/x:to/xdr:col"_ostr,
+        "2");
+    assertXPathContent(
+        pSheet1,
+        "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/mc:Choice/x:control/x:controlPr/x:anchor/x:to/xdr:row"_ostr,
+        "3");
+
+    xmlDocUniquePtr pDrawing1 = parseExport("xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing1);
+
+    assertXPathContent(
+        pDrawing1,
+        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:from/xdr:col"_ostr, "1");
+    assertXPathContent(
+        pDrawing1,
+        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:from/xdr:row"_ostr, "2");
+    assertXPathContent(
+        pDrawing1, "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:to/xdr:col"_ostr,
+        "2");
+    assertXPathContent(
+        pDrawing1, "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:to/xdr:row"_ostr,
+        "3");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112567b)
 {
     // Set the system locale to Hungarian (a language with different range separator)

@@ -1213,6 +1213,30 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
                                       /*pWrapAttrList=*/nullptr, /*bOOxmlExport=*/true, mnShapeId);
 }
 
+void XclExpTbxControlObj::WriteAnchor(sax_fastparser::FSHelperPtr& rTarget, bool bIsDrawing) const
+{
+    tools::Rectangle aAreaFrom;
+    tools::Rectangle aAreaTo;
+    bool bNeedFromToCorrection = maAreaFrom.IsEmpty() || maAreaTo.IsEmpty();
+
+    if (bNeedFromToCorrection)
+    {
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
+        lcl_GetFromTo(mrRoot, pObj->GetLogicRect(), GetTab(), aAreaFrom, aAreaTo, /*bInEMU=*/true);
+    }
+
+    const tools::Rectangle& rAreaFrom = bNeedFromToCorrection ? aAreaFrom : maAreaFrom;
+    const tools::Rectangle& rAreaTo = bNeedFromToCorrection ? aAreaTo : maAreaTo;
+
+    rTarget->startElement(bIsDrawing ? FSNS(XML_xdr, XML_from) : XML_from);
+    lcl_WriteAnchorVertex(rTarget, rAreaFrom);
+    rTarget->endElement(bIsDrawing ? FSNS(XML_xdr, XML_from) : XML_from);
+
+    rTarget->startElement(bIsDrawing ? FSNS(XML_xdr, XML_to) : XML_to);
+    lcl_WriteAnchorVertex(rTarget, rAreaTo);
+    rTarget->endElement(bIsDrawing ? FSNS(XML_xdr, XML_to) : XML_to);
+}
+
 // save into xl\drawings\drawing1.xml
 void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -1226,12 +1250,7 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
 
     pDrawing->startElement(FSNS(XML_xdr, XML_twoCellAnchor), XML_editAs, "oneCell");
     {
-        pDrawing->startElement(FSNS(XML_xdr, XML_from));
-        lcl_WriteAnchorVertex(pDrawing, maAreaFrom);
-        pDrawing->endElement(FSNS(XML_xdr, XML_from));
-        pDrawing->startElement(FSNS(XML_xdr, XML_to));
-        lcl_WriteAnchorVertex(pDrawing, maAreaTo);
-        pDrawing->endElement(FSNS(XML_xdr, XML_to));
+        WriteAnchor(pDrawing, /* bIsDrawing */ true);
 
         pDrawing->startElement(FSNS(XML_xdr, XML_sp));
         {
@@ -1473,13 +1492,8 @@ void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& a
             rWorksheet->write(">");
 
             rWorksheet->startElement(XML_anchor, XML_moveWithCells, "true", XML_sizeWithCells, "false");
-            rWorksheet->startElement(XML_from);
-            lcl_WriteAnchorVertex(rWorksheet, maAreaFrom);
-            rWorksheet->endElement(XML_from);
-            rWorksheet->startElement(XML_to);
-            lcl_WriteAnchorVertex(rWorksheet, maAreaTo);
-            rWorksheet->endElement(XML_to);
-            rWorksheet->endElement( XML_anchor );
+            WriteAnchor(rWorksheet, /* bIsDrawing */ false);
+            rWorksheet->endElement(XML_anchor);
 
             rWorksheet->write("</controlPr>");
 
