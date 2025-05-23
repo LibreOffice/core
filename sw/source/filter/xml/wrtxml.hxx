@@ -57,7 +57,7 @@ public:
     virtual ErrCodeMsg Write( SwPaM&, SfxMedium&, const OUString* ) override;
 
 private:
-    std::vector<OUString> maEmbeddedFontNames;
+    std::unordered_map<OString, OUString> maEmbeddedFontFiles;
 
     // helper methods to write XML streams
 

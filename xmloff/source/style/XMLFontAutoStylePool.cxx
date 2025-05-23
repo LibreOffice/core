@@ -425,10 +425,8 @@ void SvXMLExport::exportFonts(const std::vector<XMLFontAutoStylePoolEntry_Impl*>
 
         SvXMLElementExport aElement(*this, XML_NAMESPACE_STYLE, XML_FONT_FACE, true, true);
 
-        // When embedding is requested, and embedded only is not set or font is used, and the font
-        // was not embedded already in a different pass
-        if (bEmbedFonts && (!bEmbedUsedOnly || aUsedFontNames.contains(pEntry->GetFamilyName()))
-            && !m_aEmbeddedFontNames.contains(pEntry->GetName()))
+        // When embedding is requested, and embedded only is not set or font is used
+        if (bEmbedFonts && (!bEmbedUsedOnly || aUsedFontNames.contains(pEntry->GetFamilyName())))
         {
             const bool bExportFlat(getExportFlags() & SvXMLExportFlags::EMBEDDED);
 
@@ -467,7 +465,6 @@ void SvXMLExport::exportFonts(const std::vector<XMLFontAutoStylePoolEntry_Impl*>
             }
             if (!aEmbeddedFonts.empty())
             {
-                m_aEmbeddedFontNames.insert(pEntry->GetName());
                 SvXMLElementExport fontFaceSrc(*this, XML_NAMESPACE_SVG, XML_FONT_FACE_SRC, true, true);
                 for (EmbeddedFontInfo const & rEmbeddedFont : aEmbeddedFonts)
                 {
@@ -516,15 +513,14 @@ void SvXMLExport::exportFonts(const std::vector<XMLFontAutoStylePoolEntry_Impl*>
     }
 }
 
-std::vector<OUString> SvXMLExport::getEmbeddedFontNames() const
+std::unordered_map<OString, OUString> SvXMLExport::getEmbeddedFontFiles() const
 {
-    return std::vector(m_aEmbeddedFontNames.begin(), m_aEmbeddedFontNames.end());
+    return m_aEmbeddedFontFiles;
 }
 
-void SvXMLExport::setEmbeddedFontNames(const std::vector<OUString>& newNames)
+void SvXMLExport::setEmbeddedFontFiles(const std::unordered_map<OString, OUString>& value)
 {
-    m_aEmbeddedFontNames.clear();
-    m_aEmbeddedFontNames.insert(newNames.begin(), newNames.end());
+    m_aEmbeddedFontFiles = value;
 }
 
 void XMLFontAutoStylePool::exportXML()

@@ -650,7 +650,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
         ScXMLExport* pExport = static_cast<ScXMLExport*>(dynamic_cast<SvXMLExport*>(xFilter.get()));
         assert(pExport && "can only succeed");
         pExport->SetSharedData(std::move(pSharedData));
-        pExport->setEmbeddedFontNames(maEmbeddedFontNames);
+        pExport->setEmbeddedFontFiles(maEmbeddedFontFiles);
 
         // if there are sheets to copy, get the source stream
         if ( sName == "content.xml" && lcl_HasValidStream(rDoc) && ( pExport->getExportFlags() & SvXMLExportFlags::OASIS ) )
@@ -698,7 +698,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
         else
             bRet = xFilter->filter( aDescriptor );
 
-        maEmbeddedFontNames = pExport->getEmbeddedFontNames();
+        maEmbeddedFontFiles = pExport->getEmbeddedFontFiles();
         pSharedData = pExport->ReleaseSharedData();
     }
 
