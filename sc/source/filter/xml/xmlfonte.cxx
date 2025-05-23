@@ -142,10 +142,39 @@ XMLFontAutoStylePool* ScXMLExport::CreateFontAutoStylePool()
     return new ScXMLFontAutoStylePool_Impl(GetDocument(), *this);
 }
 
-bool ScXMLExport::getEmbedFonts() { return GetDocument()->IsEmbedFonts(); }
-bool ScXMLExport::getEmbedOnlyUsedFonts() { return GetDocument()->IsEmbedUsedFontsOnly(); }
-bool ScXMLExport::getEmbedLatinScript() { return GetDocument()->IsEmbedFontScriptLatin(); }
-bool ScXMLExport::getEmbedAsianScript() { return GetDocument()->IsEmbedFontScriptAsian(); }
-bool ScXMLExport::getEmbedComplexScript() { return GetDocument()->IsEmbedFontScriptComplex(); }
+bool ScXMLExport::getEmbedFonts()
+{
+    if (ScDocument* pDoc = GetDocument())
+        return pDoc->IsEmbedFonts();
+    return SvXMLExport::getEmbedFonts();
+}
+
+bool ScXMLExport::getEmbedOnlyUsedFonts()
+{
+    if (ScDocument* pDoc = GetDocument())
+        return pDoc->IsEmbedUsedFontsOnly();
+    return SvXMLExport::getEmbedOnlyUsedFonts();
+}
+
+bool ScXMLExport::getEmbedLatinScript()
+{
+    if (ScDocument* pDoc = GetDocument())
+        return pDoc->IsEmbedFontScriptLatin();
+    return SvXMLExport::getEmbedLatinScript();
+}
+
+bool ScXMLExport::getEmbedAsianScript()
+{
+    if (ScDocument* pDoc = GetDocument())
+        return pDoc->IsEmbedFontScriptAsian();
+    return SvXMLExport::getEmbedAsianScript();
+}
+
+bool ScXMLExport::getEmbedComplexScript()
+{
+    if (ScDocument* pDoc = GetDocument())
+        return pDoc->IsEmbedFontScriptComplex();
+    return SvXMLExport::getEmbedComplexScript();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
