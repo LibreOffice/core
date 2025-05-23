@@ -226,6 +226,12 @@ protected:
     virtual XMLPageExport* CreatePageExport() override;
     virtual XMLShapeExport* CreateShapeExport() override;
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool() override;
+    virtual bool getEmbedFonts() override;
+    virtual bool getEmbedOnlyUsedFonts() override;
+    virtual bool getEmbedLatinScript() override;
+    virtual bool getEmbedAsianScript() override;
+    virtual bool getEmbedComplexScript() override;
+
 public:
     ScXMLExport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,

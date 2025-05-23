@@ -109,6 +109,11 @@ protected:
     virtual XMLPageExport* CreatePageExport() override;
     virtual XMLShapeExport* CreateShapeExport() override;
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool() override;
+    virtual bool getEmbedFonts() override;
+    virtual bool getEmbedOnlyUsedFonts() override;
+    virtual bool getEmbedLatinScript() override;
+    virtual bool getEmbedAsianScript() override;
+    virtual bool getEmbedComplexScript() override;
 
 public:
     SwXMLExport(

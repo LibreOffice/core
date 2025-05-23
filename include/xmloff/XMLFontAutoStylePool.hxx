@@ -40,23 +40,12 @@ private:
 
     std::unique_ptr<XMLFontAutoStylePool_Impl> m_pFontAutoStylePool;
     std::set<OUString> m_aNames;
-    bool m_bTryToEmbedFonts;
-    std::unordered_map<OString, OUString> m_aEmbeddedFontFiles;
-
-    OUString embedFontFile(OUString const & rFileUrl, OUString const & rFamilyName);
-
-    std::unordered_set<OUString> getUsedFontList();
 
 protected:
-    bool m_bEmbedUsedOnly;
-    bool m_bEmbedLatinScript;
-    bool m_bEmbedAsianScript;
-    bool m_bEmbedComplexScript;
-
     SvXMLExport& GetExport() { return m_rExport; }
 
 public:
-    XMLFontAutoStylePool( SvXMLExport& rExport, bool tryToEmbedFonts = false );
+    XMLFontAutoStylePool(SvXMLExport& rExport);
     virtual ~XMLFontAutoStylePool() override;
 
     OUString Add(
@@ -74,17 +63,6 @@ public:
             rtl_TextEncoding eEnc )const;
 
     void exportXML();
-
-    void setEmbedOnlyUsedFonts(bool bEmbedUsedOnly)
-    {
-        m_bEmbedUsedOnly = bEmbedUsedOnly;
-    }
-    void setEmbedFontScripts(bool bEmbedLatinScript, bool bEmbedAsianScript, bool bEmbedComplexScript)
-    {
-        m_bEmbedLatinScript = bEmbedLatinScript;
-        m_bEmbedAsianScript = bEmbedAsianScript;
-        m_bEmbedComplexScript = bEmbedComplexScript;
-    }
 };
 
 #endif // INCLUDED_XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX

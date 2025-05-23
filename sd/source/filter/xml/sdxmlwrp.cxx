@@ -38,6 +38,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlexp.hxx>
 
 #include <DrawDocShell.hxx>
 
@@ -895,6 +896,7 @@ bool SdXMLFilter::Export()
             aServices[i].mpStream  = nullptr;
 
             XML_SERVICEMAP* pServices = aServices;
+            std::vector<OUString> aEmbeddedFontNames;
 
             // doc export
             do
@@ -948,8 +950,18 @@ bool SdXMLFilter::Export()
                     if( xExporter.is() )
                     {
                         xExporter->setSourceDocument( mxModel );
+
+                        auto pFilter = dynamic_cast<SvXMLExport*>(xFilter.get());
+                        if (pFilter)
+                        {
+                            pFilter->setEmbeddedFontNames(aEmbeddedFontNames);
+                        }
                         // outputstream will be closed by SAX parser
                         bDocRet = xFilter->filter( aDescriptor );
+                        if (pFilter)
+                        {
+                            aEmbeddedFontNames = pFilter->getEmbeddedFontNames();
+                        }
                     }
                 }
 

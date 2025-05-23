@@ -51,6 +51,8 @@
 
 #include <vector>
 #include <memory>
+#include <unordered_map>
+#include <unordered_set>
 #include <o3tl/typed_flags_set.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -71,6 +73,7 @@ class SvXMLNamespaceMap;
 class SvXMLExport_Impl;
 class ProgressBarHelper;
 class XMLEventExport;
+class XMLFontAutoStylePoolEntry_Impl;
 class XMLImageMapExport;
 class XMLErrors;
 class LanguageTag;
@@ -161,6 +164,10 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
 
     const OUString               msWS;           // " "
 
+    std::unordered_map<OString, OUString> m_aEmbeddedFontFiles;
+    // A list of font names that were already embedded, including previous passes
+    std::unordered_set<OUString> m_aEmbeddedFontNames;
+
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory meModelType;
     SAL_DLLPRIVATE void DetermineModelType_();
@@ -175,6 +182,9 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     SAL_DLLPRIVATE void ImplExportContent(); // <office:body>
     virtual void SetBodyAttributes();
     void GetViewSettingsAndViews(css::uno::Sequence<css::beans::PropertyValue>& rProps);
+
+    OUString embedFontFile(OUString const& rFileUrl, OUString const& rFamilyName);
+    std::unordered_set<OUString> getUsedFontList();
 
 protected:
     void setExportFlags( SvXMLExportFlags nExportFlags ) { mnExportFlags = nExportFlags; }
@@ -227,6 +237,12 @@ protected:
     xmloff::OFormLayerXMLExport* CreateFormExport();
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps);
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps);
+
+    virtual bool getEmbedFonts() { return false; }
+    virtual bool getEmbedOnlyUsedFonts() { return false; }
+    virtual bool getEmbedLatinScript() { return true; }
+    virtual bool getEmbedAsianScript() { return true; }
+    virtual bool getEmbedComplexScript() { return true; }
 
     struct SettingsGroup
     {
@@ -293,6 +309,16 @@ public:
     virtual ~SvXMLExport() override;
 
     virtual void collectAutoStyles();
+    void exportFonts(const std::vector<XMLFontAutoStylePoolEntry_Impl*>& rFonts);
+
+    // We write font info to both content.xml and styles.xml, but they are written by different
+    // SvXMLExport instances, and would therefore embed each font file twice, if done naively. On
+    // the other hand, we can't limit the embedding only to content.xml phase, because there it
+    // doesn't handle some style-specific content like headers/footers. These methods are for
+    // passing the "already embedded" information from one instance to another.
+
+    std::vector<OUString> getEmbeddedFontNames() const;
+    void setEmbeddedFontNames(const std::vector<OUString>&);
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
