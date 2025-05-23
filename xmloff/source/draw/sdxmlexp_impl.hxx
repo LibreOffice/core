@@ -109,6 +109,12 @@ class SdXMLExport : public SvXMLExport
 
     bool            mbIsDraw;
 
+    bool mbEmbedFonts = false;
+    bool mbEmbedUsedOnly = false;
+    bool mbEmbedLatinScript = true;
+    bool mbEmbedAsianScript = true;
+    bool mbEmbedComplexScript = true;
+
     virtual void ExportStyles_(bool bUsed) override;
     virtual void ExportAutoStyles_() override;
     virtual void ExportFontDecls_() override;
@@ -150,6 +156,11 @@ protected:
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool() override;
+    virtual bool getEmbedFonts() override { return mbEmbedFonts; }
+    virtual bool getEmbedOnlyUsedFonts() override { return mbEmbedUsedOnly; }
+    virtual bool getEmbedLatinScript() override { return mbEmbedLatinScript; }
+    virtual bool getEmbedAsianScript() override { return mbEmbedAsianScript; }
+    virtual bool getEmbedComplexScript() override { return mbEmbedComplexScript; }
 
 public:
     SdXMLExport(

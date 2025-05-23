@@ -41,7 +41,7 @@ private:
     void AddFontItems(const sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const bool bExportDefaults);
 
 public:
-    ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXMLExport& rExport, bool bEmbedFonts);
+    ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXMLExport& rExport);
 };
 
 }
@@ -71,8 +71,8 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(const sal_uInt16* pWhichIds, sal_
     }
 }
 
-ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXMLExport& rExportP, bool bEmbedFonts)
-    : XMLFontAutoStylePool(rExportP, bEmbedFonts)
+ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXMLExport& rExportP)
+    : XMLFontAutoStylePool(rExportP)
 {
     if (!pDoc)
         return;
@@ -91,11 +91,6 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXML
     AddFontItems(aEditWhichIds, 3, pEditPool, false);
 
     std::unique_ptr<SfxStyleSheetIterator> pItr = pDoc->GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Page);
-
-    m_bEmbedUsedOnly = pDoc->IsEmbedUsedFontsOnly();
-    m_bEmbedLatinScript = pDoc->IsEmbedFontScriptLatin();
-    m_bEmbedAsianScript = pDoc->IsEmbedFontScriptAsian();
-    m_bEmbedComplexScript = pDoc->IsEmbedFontScriptComplex();
 
     if(!pItr)
         return;
@@ -148,17 +143,13 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXML
 
 XMLFontAutoStylePool* ScXMLExport::CreateFontAutoStylePool()
 {
-    bool blockFontEmbedding = false;
-    // We write font info to both content.xml and styles.xml, but they are both
-    // written by different ScXMLExport instance, and would therefore write each
-    // font file twice without complicated checking for duplicates, so handle
-    // the embedding only in one of them.
-    if(!( getExportFlags() & SvXMLExportFlags::CONTENT ))
-        blockFontEmbedding = true;
-    ScDocument* pDoc = GetDocument();
-    if (pDoc && !pDoc->IsEmbedFonts())
-        blockFontEmbedding = true;
-    return new ScXMLFontAutoStylePool_Impl(pDoc, *this, !blockFontEmbedding);
+    return new ScXMLFontAutoStylePool_Impl(GetDocument(), *this);
 }
+
+bool ScXMLExport::getEmbedFonts() { return GetDocument()->IsEmbedFonts(); }
+bool ScXMLExport::getEmbedOnlyUsedFonts() { return GetDocument()->IsEmbedUsedFontsOnly(); }
+bool ScXMLExport::getEmbedLatinScript() { return GetDocument()->IsEmbedFontScriptLatin(); }
+bool ScXMLExport::getEmbedAsianScript() { return GetDocument()->IsEmbedFontScriptAsian(); }
+bool ScXMLExport::getEmbedComplexScript() { return GetDocument()->IsEmbedFontScriptComplex(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

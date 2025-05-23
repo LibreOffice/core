@@ -63,6 +63,8 @@ class ScXMLImportWrapper
     SfxMedium*      pMedium;
     css::uno::Reference< css::embed::XStorage > xStorage;
 
+    std::vector<OUString> maEmbeddedFontNames;
+
     css::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator() const;
 
     ErrCodeMsg ImportFromComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,

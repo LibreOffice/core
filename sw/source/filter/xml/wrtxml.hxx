@@ -25,6 +25,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <shellio.hxx>
 
+#include <vector>
+
 class SwPaM;
 class SfxMedium;
 
@@ -55,6 +57,7 @@ public:
     virtual ErrCodeMsg Write( SwPaM&, SfxMedium&, const OUString* ) override;
 
 private:
+    std::vector<OUString> maEmbeddedFontNames;
 
     // helper methods to write XML streams
 
@@ -73,7 +76,7 @@ private:
 
     // write a single output stream
     // (to be called either directly or by WriteThroughComponent(...))
-    static bool WriteThroughComponent(
+    bool WriteThroughComponent(
         const css::uno::Reference<css::io::XOutputStream> & xOutputStream,
         const css::uno::Reference<css::lang::XComponent> & xComponent,
         const css::uno::Reference<css::uno::XComponentContext> & rFactory,

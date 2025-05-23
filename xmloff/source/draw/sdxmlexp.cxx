@@ -2774,47 +2774,36 @@ com_sun_star_comp_Impress_XMLClipboardExporter_get_implementation(
 
 XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
 {
-    bool bEmbedFonts = false;
-    bool bEmbedUsedOnly = false;
-    bool bEmbedLatinScript = true;
-    bool bEmbedAsianScript = true;
-    bool bEmbedComplexScript = true;
-
-    if (getExportFlags() & SvXMLExportFlags::CONTENT)
+    try
     {
-        try
-        {
-            Reference<lang::XMultiServiceFactory> xFactory(GetModel(), UNO_QUERY);
-            Reference<beans::XPropertySet> xProps;
-            Reference<beans::XPropertySetInfo> xInfo;
+        Reference<lang::XMultiServiceFactory> xFactory(GetModel(), UNO_QUERY);
+        Reference<beans::XPropertySet> xProps;
+        Reference<beans::XPropertySetInfo> xInfo;
 
-            if (xFactory.is())
-                xProps.set(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), UNO_QUERY);
-            if (xProps.is())
-                xInfo =  xProps->getPropertySetInfo();
-            if (xInfo.is() && xProps.is())
-            {
-                if (xInfo->hasPropertyByName(u"EmbedFonts"_ustr))
-                    xProps->getPropertyValue(u"EmbedFonts"_ustr) >>= bEmbedFonts;
-                if (xInfo->hasPropertyByName(u"EmbedOnlyUsedFonts"_ustr))
-                    xProps->getPropertyValue(u"EmbedOnlyUsedFonts"_ustr) >>= bEmbedUsedOnly;
-                if (xInfo->hasPropertyByName(u"EmbedLatinScriptFonts"_ustr))
-                    xProps->getPropertyValue(u"EmbedLatinScriptFonts"_ustr) >>= bEmbedLatinScript;
-                if (xInfo->hasPropertyByName(u"EmbedAsianScriptFonts"_ustr))
-                    xProps->getPropertyValue(u"EmbedAsianScriptFonts"_ustr) >>= bEmbedAsianScript;
-                if (xInfo->hasPropertyByName(u"EmbedComplexScriptFonts"_ustr))
-                    xProps->getPropertyValue(u"EmbedComplexScriptFonts"_ustr) >>= bEmbedComplexScript;
-            }
-        } catch(...)
+        if (xFactory.is())
+            xProps.set(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), UNO_QUERY);
+        if (xProps.is())
+            xInfo =  xProps->getPropertySetInfo();
+        if (xInfo.is() && xProps.is())
         {
-            // clipboard document doesn't have shell so throws from getPropertyValue
-            // gallery elements may not support com.sun.star.document.Settings so throws from createInstance
+            if (xInfo->hasPropertyByName(u"EmbedFonts"_ustr))
+                xProps->getPropertyValue(u"EmbedFonts"_ustr) >>= mbEmbedFonts;
+            if (xInfo->hasPropertyByName(u"EmbedOnlyUsedFonts"_ustr))
+                xProps->getPropertyValue(u"EmbedOnlyUsedFonts"_ustr) >>= mbEmbedUsedOnly;
+            if (xInfo->hasPropertyByName(u"EmbedLatinScriptFonts"_ustr))
+                xProps->getPropertyValue(u"EmbedLatinScriptFonts"_ustr) >>= mbEmbedLatinScript;
+            if (xInfo->hasPropertyByName(u"EmbedAsianScriptFonts"_ustr))
+                xProps->getPropertyValue(u"EmbedAsianScriptFonts"_ustr) >>= mbEmbedAsianScript;
+            if (xInfo->hasPropertyByName(u"EmbedComplexScriptFonts"_ustr))
+                xProps->getPropertyValue(u"EmbedComplexScriptFonts"_ustr) >>= mbEmbedComplexScript;
         }
+    } catch(...)
+    {
+        // clipboard document doesn't have shell so throws from getPropertyValue
+        // gallery elements may not support com.sun.star.document.Settings so throws from createInstance
     }
 
-    XMLFontAutoStylePool *pPool = new XMLFontAutoStylePool( *this, bEmbedFonts );
-    pPool->setEmbedOnlyUsedFonts(bEmbedUsedOnly);
-    pPool->setEmbedFontScripts(bEmbedLatinScript, bEmbedAsianScript, bEmbedComplexScript);
+    XMLFontAutoStylePool* pPool = new XMLFontAutoStylePool(*this);
 
     Reference< beans::XPropertySet > xProps( GetModel(), UNO_QUERY );
     if ( xProps.is() ) {

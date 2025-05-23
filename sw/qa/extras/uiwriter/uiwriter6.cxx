@@ -2230,6 +2230,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     createSwDoc("testFontEmbedding.odt");
 
     OString aContentBaseXpath("/office:document-content/office:font-face-decls"_ostr);
+    OString aStylesBaseXpath("/office:document-styles/office:font-face-decls"_ostr);
     OString aSettingsBaseXpath(
         "/office:document-settings/office:settings/config:config-item-set"_ostr);
 
@@ -2261,36 +2262,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     assertXPathContent(
         pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", u"false");
 
+    // Check styles - No font-face-src nodes should be present
+    pXmlDoc = parseExport(u"styles.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 1']", 6);
+    for (auto fontName : { "Caladea", "Carlito", "Liberation Sans", "Liberation Sans1",
+                           "Liberation Serif", "Liberation Serif1" })
+    {
+        OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 1']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 1']", 0);
+    }
+
     // Check content - No font-face-src nodes should be present
     pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face", 6);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']");
-    assertXPath(
-        pXmlDoc,
-        aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']/svg:font-face-src", 0);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans1']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath
-                    + "/style:font-face[@style:name='Liberation Sans1']/svg:font-face-src",
-                0);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath
-                    + "/style:font-face[@style:name='Liberation Serif']/svg:font-face-src",
-                0);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif1']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath
-                    + "/style:font-face[@style:name='Liberation Serif1']/svg:font-face-src",
-                0);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Carlito']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath + "/style:font-face[@style:name='Carlito']/svg:font-face-src", 0);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Caladea']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath + "/style:font-face[@style:name='Caladea']/svg:font-face-src", 0);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 1']", 6);
+    for (auto fontName : { "Caladea", "Carlito", "Liberation Sans", "Liberation Sans1",
+                           "Liberation Serif", "Liberation Serif1" })
+    {
+        OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 1']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 1']", 0);
+    }
 
     // CASE 2 - font embedding enabled, but embed used fonts disabled
 
@@ -2302,7 +2298,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     save(u"writer8"_ustr);
     CPPUNIT_ASSERT(maTempFile.IsValid());
 
-    // Check setting - font embedding should be enabled + embed only used fonts and scripts
+    // Check setting - font embedding should be enabled
     pXmlDoc = parseExport(u"settings.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathContent(
@@ -2320,37 +2316,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
         pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedComplexScriptFonts']",
         u"true");
 
-    // Check content - font-face-src should be present only for "Liberation Sans" fonts
+    // Check styles - font-face-src should be present for all fonts
+    pXmlDoc = parseExport(u"styles.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
 
+    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 2']", 6);
+    for (auto fontName : { "Caladea", "Carlito", "Liberation Sans", "Liberation Sans1",
+                           "Liberation Serif", "Liberation Serif1" })
+    {
+        OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 2']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 2']", 1);
+    }
+
+    // Check content - No font-face-src nodes should be present
     pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face", 6);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']");
-    assertXPath(
-        pXmlDoc,
-        aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']/svg:font-face-src", 1);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans1']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath
-                    + "/style:font-face[@style:name='Liberation Sans1']/svg:font-face-src",
-                1);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath
-                    + "/style:font-face[@style:name='Liberation Serif']/svg:font-face-src",
-                1);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif1']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath
-                    + "/style:font-face[@style:name='Liberation Serif1']/svg:font-face-src",
-                1);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Carlito']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath + "/style:font-face[@style:name='Carlito']/svg:font-face-src", 1);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Caladea']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath + "/style:font-face[@style:name='Caladea']/svg:font-face-src", 1);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 2']", 6);
+    for (auto fontName : { "Caladea", "Carlito", "Liberation Sans", "Liberation Sans1",
+                           "Liberation Serif", "Liberation Serif1" })
+    {
+        OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 2']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 2']", 0);
+    }
 
     // CASE 3 - font embedding enabled, embed only used fonts enabled
 
@@ -2383,37 +2373,42 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
         pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedComplexScriptFonts']",
         u"true");
 
-    // Check content - font-face-src should be present only for "Liberation Sans" fonts
+    // Check styles - font-face-src should be present only for "Liberation Serif" fonts
+    pXmlDoc = parseExport(u"styles.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
 
+    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 3']", 6);
+    for (auto fontName : { "Caladea", "Carlito", "Liberation Sans", "Liberation Sans1" })
+    {
+        OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 3']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 0);
+    }
+    for (auto fontName : { "Liberation Serif", "Liberation Serif1" })
+    {
+        OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 3']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 1);
+    }
+
+    // Check content - font-face-src should be present only for Carlito fonts
     pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face", 6);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']");
-    assertXPath(
-        pXmlDoc,
-        aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans']/svg:font-face-src", 0);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Sans1']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath
-                    + "/style:font-face[@style:name='Liberation Sans1']/svg:font-face-src",
-                0);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath
-                    + "/style:font-face[@style:name='Liberation Serif']/svg:font-face-src",
-                1);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Liberation Serif1']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath
-                    + "/style:font-face[@style:name='Liberation Serif1']/svg:font-face-src",
-                1);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Carlito']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath + "/style:font-face[@style:name='Carlito']/svg:font-face-src", 1);
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face[@style:name='Caladea']");
-    assertXPath(pXmlDoc,
-                aContentBaseXpath + "/style:font-face[@style:name='Caladea']/svg:font-face-src", 0);
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 3']", 6);
+    for (auto fontName : { "Caladea", "Liberation Sans", "Liberation Sans1", "Liberation Serif",
+                           "Liberation Serif1" })
+    {
+        OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 3']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 0);
+    }
+    for (auto fontName : { "Carlito" })
+    {
+        OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 3']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 1);
+    }
 #endif
 }
 

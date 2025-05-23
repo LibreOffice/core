@@ -18,6 +18,7 @@
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/text/ColumnSeparatorStyle.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
@@ -61,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)
 #if !defined(MACOSX)
     // Test that font style/weight of embedded fonts is exposed.
     // Test file is a normal ODT, except EmbedFonts is set to true in settings.xml.
-    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     // These failed, the attributes were missing.
     assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-style", u"normal");
     assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-weight", u"normal");
@@ -72,6 +73,45 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)
     assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-style", u"italic");
     assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-weight", u"bold");
 #endif
+}
+
+CPPUNIT_TEST_FIXTURE(Test, tdf166627)
+{
+    loadAndReload("font_used_in_header_only.fodt");
+    // Liberation Sans wasn't embedded before fix, because it was only seen used in header
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
+
+    // There should be four files embedded for the font
+    assertXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='Liberation Sans']/svg:font-face-src/svg:font-face-uri", 4);
+
+    uno::Reference<container::XNameAccess> xZipNames(
+        packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(),
+                                                    maTempFile.GetURL()),
+        uno::UNO_SET_THROW);
+
+    OUString url = getXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='Liberation Sans']/svg:font-face-src/svg:font-face-uri[1]",
+        "href");
+    CPPUNIT_ASSERT(xZipNames->hasByName(url));
+    url = getXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='Liberation Sans']/svg:font-face-src/svg:font-face-uri[2]",
+        "href");
+    CPPUNIT_ASSERT(xZipNames->hasByName(url));
+    url = getXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='Liberation Sans']/svg:font-face-src/svg:font-face-uri[3]",
+        "href");
+    CPPUNIT_ASSERT(xZipNames->hasByName(url));
+    url = getXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='Liberation Sans']/svg:font-face-src/svg:font-face-uri[4]",
+        "href");
+    CPPUNIT_ASSERT(xZipNames->hasByName(url));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
