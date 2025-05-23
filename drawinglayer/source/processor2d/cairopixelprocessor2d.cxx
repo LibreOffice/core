@@ -2034,6 +2034,16 @@ void CairoPixelProcessor2D::processBackgroundColorPrimitive2D(
         || rBackgroundColorCandidate.getTransparency() >= 1.0)
         return;
 
+    if (!getViewInformation2D().getViewport().isEmpty())
+    {
+        // we have a Viewport set with limitations, render as needed/defined
+        // by BackgroundColorPrimitive2D::create2DDecomposition. Alternatively,
+        // just use recursion/decompose in this case
+        process(rBackgroundColorCandidate);
+        return;
+    }
+
+    // no Viewport set, render surface completely
     cairo_save(mpRT);
     const basegfx::BColor aFillColor(
         maBColorModifierStack.getModifiedColor(rBackgroundColorCandidate.getBColor()));
