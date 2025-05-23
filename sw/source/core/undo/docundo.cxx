@@ -353,6 +353,10 @@ UndoManager::EndUndo(SwUndoId eUndoId, SwRewriter const*const pRewriter)
             OSL_ENSURE(false, "EndUndo(): no comment?");
         }
     }
+    else
+    {
+        eUndoId = SwUndoId::EMPTY;
+    }
 
     return eUndoId;
 }
