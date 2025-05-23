@@ -48,6 +48,7 @@ void WhatsNewTabPage::ActivatePage(const SfxItemSet& /* rSet */)
 }
 
 AnimatedBrand::AnimatedBrand()
+    : m_bIsFirstStart(false)
 {
     OUString aURL(u"$BRAND_BASE_DIR/" LIBO_SHARE_SHELL_FOLDER "/animatedbrand.gif"_ustr);
     rtl::Bootstrap::expandMacros(aURL);
