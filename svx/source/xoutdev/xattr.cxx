@@ -153,7 +153,7 @@ OUString NameOrIndex::CheckNamedItem(const sal_uInt16 nWhich, const SfxItemPool*
             const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
 
             // need to check for WhichID, GetItemSurrogatesForItem does buffer on type only
-            if( pNameOrIndex->Which() == nWhich && pNameOrIndex->GetName() == GetName() )
+            if( pNameOrIndex != this && pNameOrIndex->Which() == nWhich && pNameOrIndex->GetName() == GetName() )
             {
                 // if there is already an item with the same name and the same
                 // value it's ok to set it
@@ -242,7 +242,7 @@ OUString NameOrIndex::CheckNamedItem(const sal_uInt16 nWhich, const SfxItemPool*
                 const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
 
                 // need to check for WhichID, GetItemSurrogatesForItem does buffer on type only
-                if( pNameOrIndex->Which() == nWhich && !pNameOrIndex->GetName().isEmpty() )
+                if( pNameOrIndex != this && pNameOrIndex->Which() == nWhich && !pNameOrIndex->GetName().isEmpty() )
                 {
                     if( !bForceNew && pCompareValueFunc( pNameOrIndex, this ) )
                         return pNameOrIndex->GetName();
