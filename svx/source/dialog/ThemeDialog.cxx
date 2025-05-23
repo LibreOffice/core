@@ -13,6 +13,7 @@
 #include <svx/ColorSets.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/lok.hxx>
+#include <vcl/virdev.hxx>
 
 namespace svx
 {
@@ -20,16 +21,11 @@ ThemeDialog::ThemeDialog(weld::Window* pParent, model::Theme* pTheme)
     : GenericDialogController(pParent, u"svx/ui/themedialog.ui"_ustr, u"ThemeDialog"_ustr)
     , mpWindow(pParent)
     , mpTheme(pTheme)
-    , mxValueSetThemeColors(new svx::ThemeColorValueSet)
-    , mxValueSetThemeColorsWindow(
-          new weld::CustomWeld(*m_xBuilder, u"valueset_theme_colors"_ustr, *mxValueSetThemeColors))
+    , mxIconViewThemeColors(m_xBuilder->weld_icon_view(u"iconview_theme_colors"_ustr))
     , mxAdd(m_xBuilder->weld_button(u"button_add"_ustr))
 {
-    mxValueSetThemeColors->SetColCount(3);
-    mxValueSetThemeColors->SetLineCount(4);
-    mxValueSetThemeColors->SetColor(Application::GetSettings().GetStyleSettings().GetFaceColor());
-    mxValueSetThemeColors->SetDoubleClickHdl(LINK(this, ThemeDialog, DoubleClickValueSetHdl));
-    mxValueSetThemeColors->SetSelectHdl(LINK(this, ThemeDialog, SelectItem));
+    mxIconViewThemeColors->connect_item_activated(LINK(this, ThemeDialog, ItemActivatedHdl));
+    mxIconViewThemeColors->connect_selection_changed(LINK(this, ThemeDialog, SelectionChangedHdl));
 
     mxAdd->connect_clicked(LINK(this, ThemeDialog, ButtonClicked));
 
@@ -37,7 +33,7 @@ ThemeDialog::ThemeDialog(weld::Window* pParent, model::Theme* pTheme)
 
     if (!maColorSets.empty())
     {
-        mxValueSetThemeColors->SelectItem(1); // ItemId 1, position 0
+        mxIconViewThemeColors->select(0);
         mpCurrentColorSet = std::make_shared<model::ColorSet>(maColorSets[0]);
     }
 }
@@ -56,28 +52,73 @@ void ThemeDialog::initColorSets()
     auto const& rColorSetVector = ColorSets::get().getColorSetVector();
     maColorSets.insert(maColorSets.end(), rColorSetVector.begin(), rColorSetVector.end());
 
-    for (auto const& rColorSet : maColorSets)
+    for (size_t i = 0; i < maColorSets.size(); ++i)
     {
-        mxValueSetThemeColors->insert(rColorSet);
-    }
+        auto const& rColorSet = maColorSets[i];
+        VclPtr<VirtualDevice> pVirDev = CreateColorSetPreview(rColorSet);
 
-    mxValueSetThemeColors->SetOptimalSize();
+        OUString sId = OUString::number(i);
+        OUString sName = rColorSet.getName();
+        mxIconViewThemeColors->insert(-1, &sName, &sId, pVirDev, nullptr);
+    }
 }
 
-IMPL_LINK_NOARG(ThemeDialog, DoubleClickValueSetHdl, ValueSet*, void)
+VclPtr<VirtualDevice> ThemeDialog::CreateColorSetPreview(const model::ColorSet& rColorSet)
 {
-    SelectItem(nullptr);
+    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    const Size aSize(100, 50);
+    pVDev->SetOutputSizePixel(aSize);
+
+    const int nRows = 2;
+    const int nCols = 4;
+    const int nHorizontalPadding = 9;
+    const int nVerticalPadding = 3;
+    const int nMargin = 3;
+
+    const int nAvailableWidth = aSize.Width() - (2 * nHorizontalPadding);
+    const int nAvailableHeight = aSize.Height() - (2 * nVerticalPadding);
+
+    const int nColorCellHeight = (nAvailableHeight - ((nRows - 1) * nMargin)) / nRows;
+    const int nColorCellWidth = (nAvailableWidth - ((nCols - 1) * nMargin)) / nCols;
+
+    // Draw border around entire color set
+    pVDev->SetLineColor(COL_LIGHTGRAY);
+    pVDev->DrawRect(tools::Rectangle(Point(0, 0), aSize));
+
+    for (int i = 0; i < 8; ++i)
+    {
+        const int nCol = i / 2;
+        const int nRow = i % 2;
+
+        const int nX = nHorizontalPadding + (nCol * (nColorCellWidth + nMargin));
+        const int nY = nVerticalPadding + (nRow * (nColorCellHeight + nMargin));
+
+        const tools::Rectangle aRect(Point(nX, nY), Size(nColorCellWidth, nColorCellHeight));
+
+        Color aColor = rColorSet.getColor(static_cast<model::ThemeColorType>(i + 2));
+
+        pVDev->SetLineColor(COL_LIGHTGRAY);
+        pVDev->SetFillColor(aColor);
+        pVDev->DrawRect(aRect);
+    }
+    return pVDev;
+}
+
+IMPL_LINK(ThemeDialog, ItemActivatedHdl, weld::IconView&, iter, bool)
+{
+    SelectionChangedHdl(iter);
     if (!comphelper::LibreOfficeKit::isActive())
         m_xDialog->response(RET_OK);
+    return true;
 }
 
-IMPL_LINK_NOARG(ThemeDialog, SelectItem, ValueSet*, void)
+IMPL_LINK_NOARG(ThemeDialog, SelectionChangedHdl, weld::IconView&, void)
 {
-    sal_uInt32 nItemId = mxValueSetThemeColors->GetSelectedItemId();
-    if (!nItemId)
+    OUString sId = mxIconViewThemeColors->get_selected_id();
+    if (sId.isEmpty())
         return;
 
-    sal_uInt32 nIndex = nItemId - 1;
+    sal_uInt32 nIndex = sId.toUInt32();
 
     if (nIndex >= maColorSets.size())
         return;
@@ -104,11 +145,11 @@ void ThemeDialog::runThemeColorEditDialog()
         {
             ColorSets::get().insert(aColorSet, ColorSets::IdenticalNameAction::AutoRename);
             maColorSets.clear();
-            mxValueSetThemeColors->Clear();
+            mxIconViewThemeColors->clear();
 
             initColorSets();
 
-            mxValueSetThemeColors->SelectItem(maColorSets.size() - 1);
+            mxIconViewThemeColors->select(maColorSets.size() - 1);
             mpCurrentColorSet
                 = std::make_shared<model::ColorSet>(maColorSets[maColorSets.size() - 1]);
         }
