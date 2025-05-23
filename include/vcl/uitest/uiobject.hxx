@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_UITEST_UIOBJECT_HXX
-#define INCLUDED_VCL_UITEST_UIOBJECT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <map>
@@ -594,7 +593,5 @@ public:
     virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
