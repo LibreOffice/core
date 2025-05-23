@@ -43,7 +43,8 @@ void WhatsNewTabPage::ActivatePage(const SfxItemSet& /* rSet */)
 
     auto& aProperties = getAdditionalProperties();
     auto aIterator = aProperties.find(u"IsFirstRun"_ustr);
-    m_aBrand.SetIsFirstStart(aIterator->second.get<sal_Bool>());
+    if (aIterator != aProperties.end())
+        m_aBrand.SetIsFirstStart(aIterator->second.get<sal_Bool>());
 }
 
 AnimatedBrand::AnimatedBrand()
