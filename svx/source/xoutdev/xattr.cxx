@@ -145,10 +145,8 @@ OUString NameOrIndex::CheckNamedItem(const sal_uInt16 nWhich, const SfxItemPool*
 
     if (!aUniqueName.isEmpty() && pPool1)
     {
-        ItemSurrogates aSurrogates;
         // use special version to get buffered NameOrIndex Items
-        pPool1->GetItemSurrogatesForItem(aSurrogates, *this);
-        for (const SfxPoolItem* pItem : aSurrogates)
+        for (const SfxPoolItem* pItem : pPool1->GetItemSurrogatesForItem(*this))
         {
             const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
 
@@ -234,10 +232,8 @@ OUString NameOrIndex::CheckNamedItem(const sal_uInt16 nWhich, const SfxItemPool*
 
         if (aUniqueName.isEmpty() && pPool1)
         {
-            ItemSurrogates aSurrogates;
             // use special version to get buffered NameOrIndex Items
-            pPool1->GetItemSurrogatesForItem(aSurrogates, *this);
-            for (const SfxPoolItem* pItem : aSurrogates)
+            for (const SfxPoolItem* pItem : pPool1->GetItemSurrogatesForItem(*this))
             {
                 const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
 
@@ -1254,9 +1250,9 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
     const SfxItemPool& rPool1 = rModel.GetItemPool();
     if (!aUniqueName.isEmpty())
     {
-        ItemSurrogates aSurrogates;
-        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
-        for (const SfxPoolItem* p : aSurrogates)
+        // XATTR_LINESTART
+        for (const SfxPoolItem* p :
+             rPool1.GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
         {
             auto pItem = static_cast<const XLineStartItem*>(p);
 
@@ -1276,8 +1272,9 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
 
         if( !bForceNew )
         {
-            rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
-            for (const SfxPoolItem* p : aSurrogates)
+            // XATTR_LINEEND
+            for (const SfxPoolItem* p :
+                 rPool1.GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
             {
                 auto pItem = static_cast<const XLineEndItem*>(p);
 
@@ -1300,9 +1297,9 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
     const SfxItemPool* pPool2 = rModel.GetStyleSheetPool() ? &rModel.GetStyleSheetPool()->GetPool() : nullptr;
     if( !aUniqueName.isEmpty() && pPool2)
     {
-        ItemSurrogates aSurrogates;
-        pPool2->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
-        for (const SfxPoolItem* p : aSurrogates)
+        // XATTR_LINESTART
+        for (const SfxPoolItem* p :
+             pPool2->GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
         {
             auto pItem = static_cast<const XLineStartItem*>(p);
 
@@ -1322,8 +1319,9 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
 
         if( !bForceNew )
         {
-            pPool2->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
-            for (const SfxPoolItem* p : aSurrogates)
+            // XATTR_LINEEND
+            for (const SfxPoolItem* p :
+                 pPool2->GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
             {
                 auto pItem = static_cast<const XLineEndItem*>(p);
 
@@ -1352,9 +1350,9 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
         sal_Int32 nUserIndex = 1;
         const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
 
-        ItemSurrogates aSurrogates;
-        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
-        for (const SfxPoolItem* p : aSurrogates)
+        // XATTR_LINESTART
+        for (const SfxPoolItem* p :
+             rPool1.GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
         {
             auto pItem = static_cast<const XLineStartItem*>(p);
 
@@ -1376,8 +1374,8 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
             }
         }
 
-        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
-        for (const SfxPoolItem* p : aSurrogates)
+        // XATTR_LINEEND
+        for (const SfxPoolItem* p : rPool1.GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
         {
             auto pItem = static_cast<const XLineEndItem*>(p);
 
@@ -1499,9 +1497,9 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
     const SfxItemPool& rPool1 = rModel.GetItemPool();
     if (!aUniqueName.isEmpty())
     {
-        ItemSurrogates aSurrogates;
-        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
-        for (const SfxPoolItem* p : aSurrogates)
+        // XATTR_LINESTART
+        for (const SfxPoolItem* p :
+             rPool1.GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
         {
             auto pItem = static_cast<const XLineStartItem*>(p);
 
@@ -1521,8 +1519,9 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
 
         if( !bForceNew )
         {
-            rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
-            for (const SfxPoolItem* p : aSurrogates)
+            // XATTR_LINEEND
+            for (const SfxPoolItem* p :
+                 rPool1.GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
             {
                 auto pItem = static_cast<const XLineEndItem*>(p);
 
@@ -1545,9 +1544,9 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
     const SfxItemPool* pPool2 = rModel.GetStyleSheetPool() ? &rModel.GetStyleSheetPool()->GetPool() : nullptr;
     if( !aUniqueName.isEmpty() && pPool2)
     {
-        ItemSurrogates aSurrogates;
-        pPool2->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
-        for (const SfxPoolItem* p : aSurrogates)
+        // XATTR_LINESTART
+        for (const SfxPoolItem* p :
+             pPool2->GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
         {
             auto pItem = static_cast<const XLineStartItem*>(p);
 
@@ -1567,8 +1566,9 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
 
         if( !bForceNew )
         {
-            pPool2->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
-            for (const SfxPoolItem* p : aSurrogates)
+            // XATTR_LINEEND
+            for (const SfxPoolItem* p :
+                 pPool2->GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
             {
                 auto pItem = static_cast<const XLineEndItem*>(p);
 
@@ -1597,9 +1597,9 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
         sal_Int32 nUserIndex = 1;
         const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
 
-        ItemSurrogates aSurrogates;
-        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
-        for (const SfxPoolItem* p : aSurrogates)
+        // XATTR_LINESTART
+        for (const SfxPoolItem* p :
+             rPool1.GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
         {
             auto pItem = static_cast<const XLineStartItem*>(p);
 
@@ -1621,8 +1621,8 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
             }
         }
 
-        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
-        for (const SfxPoolItem* p : aSurrogates)
+        // XATTR_LINEEND
+        for (const SfxPoolItem* p : rPool1.GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
         {
             auto pItem = static_cast<const XLineEndItem*>(p);
 

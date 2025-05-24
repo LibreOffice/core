@@ -1435,9 +1435,7 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItem
         case XATTR_LINEDASH: eItemType = SfxItemType::XLineDashItemType; break;
         default: assert(false); abort();
     }
-    ItemSurrogates aSurrogates;
-    rSet.GetPool()->GetItemSurrogatesForItem(aSurrogates, eItemType);
-    for (const SfxPoolItem* p : aSurrogates)
+    for (const SfxPoolItem* p : rSet.GetPool()->GetItemSurrogatesForItem(eItemType))
     {
         const NameOrIndex* pItem = static_cast<const NameOrIndex*>(p);
         if( pItem->GetName() == aName )

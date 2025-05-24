@@ -1412,9 +1412,7 @@ void RtfExport::OutColorTable()
     }
 
     // TextFrame or paragraph background solid fill.
-    ItemSurrogates aSurrogates;
-    rPool.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XFillColorItemType);
-    for (const SfxPoolItem* pItem : aSurrogates)
+    for (const SfxPoolItem* pItem : rPool.GetItemSurrogatesForItem(SfxItemType::XFillColorItemType))
     {
         const auto& rColorItem = static_cast<const XFillColorItem&>(*pItem);
         InsColor(rColorItem.GetColorValue());

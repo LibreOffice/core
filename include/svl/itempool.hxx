@@ -324,8 +324,8 @@ public:
     ItemSurrogates GetItemSurrogates(sal_uInt16 nWhich) const;
 
     // special version for read-only itemSurrogates for NameOrIndex Items
-    void GetItemSurrogatesForItem(ItemSurrogates& rTarget, const SfxPoolItem& rItem) const;
-    void GetItemSurrogatesForItem(ItemSurrogates& rTarget, SfxItemType eItemType) const;
+    ItemSurrogates GetItemSurrogatesForItem(const SfxPoolItem& rItem) const;
+    ItemSurrogates GetItemSurrogatesForItem(SfxItemType eItemType) const;
 
     sal_uInt16 GetFirstWhich() const { return mnStart; }
     sal_uInt16 GetLastWhich() const { return mnEnd; }

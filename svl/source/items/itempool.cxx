@@ -882,23 +882,24 @@ void SfxItemPool::iterateItemSurrogates(
     }
 }
 
-void SfxItemPool::GetItemSurrogatesForItem(ItemSurrogates& rTarget, SfxItemType eItemType) const
+ItemSurrogates SfxItemPool::GetItemSurrogatesForItem(SfxItemType eItemType) const
 {
-    rTarget.clear();
+    ItemSurrogates aTarget;
     const registeredNameOrIndex& rRegistered(GetMasterPool()->maRegisteredNameOrIndex);
     registeredNameOrIndex::const_iterator aHit(rRegistered.find(eItemType));
     if (aHit != rRegistered.end())
     {
-        rTarget.reserve(aHit->second.size());
+        aTarget.reserve(aHit->second.size());
         for (const auto& entry : aHit->second)
-            rTarget.push_back(entry.first);
+            aTarget.push_back(entry.first);
     }
+    return aTarget;
 }
 
-void SfxItemPool::GetItemSurrogatesForItem(ItemSurrogates& rTarget, const SfxPoolItem& rItem) const
+ItemSurrogates SfxItemPool::GetItemSurrogatesForItem(const SfxPoolItem& rItem) const
 {
     assert(rItem.isNameOrIndex() && "ITEM: only Items derived from NameOrIndex supported for this mechanism (!)");
-    GetItemSurrogatesForItem(rTarget, rItem.ItemType());
+    return GetItemSurrogatesForItem(rItem.ItemType());
 }
 
 ItemSurrogates SfxItemPool::GetItemSurrogates(sal_uInt16 nWhich) const
