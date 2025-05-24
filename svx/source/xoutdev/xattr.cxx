@@ -1209,6 +1209,97 @@ bool XLineStartItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
+static bool HasConflictingStartEndItems(const SfxItemPool& pool, std::u16string_view name,
+                                        const basegfx::B2DPolyPolygon& value)
+{
+    // XATTR_LINESTART
+    for (const SfxPoolItem* p : pool.GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
+    {
+        auto pItem = static_cast<const XLineStartItem*>(p);
+
+        if (pItem->GetName() == name)
+        {
+            // if there is already an item with the same name and the same value it's not a conflict
+            if (pItem->GetLineStartValue() == value)
+                break;
+            // same name but different value
+            return true;
+        }
+    }
+    // XATTR_LINEEND
+    for (const SfxPoolItem* p : pool.GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
+    {
+        auto pItem = static_cast<const XLineEndItem*>(p);
+
+        if (pItem->GetName() == name)
+        {
+            // if there is already an item with the same name and the same value it's not a conflict
+            if (pItem->GetLineEndValue() == value)
+                break;
+            // same name but different value
+            return true;
+        }
+    }
+    return false;
+}
+
+/** this function searches in both the models pool and the styles pool for XLineStartItem and
+    XLineEndItem with the same name and returns true when it exists and has a different value. */
+static bool HasConflictingStartEndItems(const SdrModel& model, std::u16string_view name,
+                                        const basegfx::B2DPolyPolygon& value)
+{
+    return HasConflictingStartEndItems(model.GetItemPool(), name, value)
+           || (model.GetStyleSheetPool()
+               && HasConflictingStartEndItems(model.GetStyleSheetPool()->GetPool(), name, value));
+}
+
+static OUString CreateNameForValue(const SfxItemPool& pool, const basegfx::B2DPolyPolygon& value,
+                                   bool forceNew)
+{
+    sal_Int32 nUserIndex = 1;
+    const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
+
+    // XATTR_LINEEND first, because previous code preferred existing name from it
+    for (const SfxPoolItem* p : pool.GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
+    {
+        auto pItem = static_cast<const XLineEndItem*>(p);
+
+        if (!pItem->GetName().isEmpty())
+        {
+            if (!forceNew && pItem->GetLineEndValue() == value)
+                return pItem->GetName(); // Found existing
+
+            if (pItem->GetName().startsWith(aUser))
+            {
+                sal_Int32 nThisIndex = o3tl::toInt32(pItem->GetName().subView(aUser.getLength()));
+                if (nThisIndex >= nUserIndex)
+                    nUserIndex = nThisIndex + 1;
+            }
+        }
+    }
+
+    // XATTR_LINESTART
+    for (const SfxPoolItem* p : pool.GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
+    {
+        auto pItem = static_cast<const XLineStartItem*>(p);
+
+        if (!pItem->GetName().isEmpty())
+        {
+            if (!forceNew && pItem->GetLineStartValue() == value)
+                return pItem->GetName(); // Found existing
+
+            if (pItem->GetName().startsWith(aUser))
+            {
+                sal_Int32 nThisIndex = o3tl::toInt32(pItem->GetName().subView(aUser.getLength()));
+                if (nThisIndex >= nUserIndex)
+                    nUserIndex = nThisIndex + 1;
+            }
+        }
+    }
+
+    return aUser + " " + OUString::number(nUserIndex);
+}
+
 /** this function searches in both the models pool and the styles pool for XLineStartItem
     and XLineEndItem with the same value or name and returns an item with the value of
     this item and a unique name for an item with this value. */
@@ -1247,160 +1338,20 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
     // 2. if we have a name check if there is already an item with the
     // same name in the documents pool with a different line end or start
 
-    const SfxItemPool& rPool1 = rModel.GetItemPool();
-    if (!aUniqueName.isEmpty())
+    if (!aUniqueName.isEmpty()
+        && HasConflictingStartEndItems(rModel, pLineStartItem->GetName(),
+                                       pLineStartItem->GetLineStartValue()))
     {
-        // XATTR_LINESTART
-        for (const SfxPoolItem* p :
-             rPool1.GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
-        {
-            auto pItem = static_cast<const XLineStartItem*>(p);
-
-            if( pItem->GetName() == pLineStartItem->GetName() )
-            {
-                // if there is already an item with the same name and the same
-                // value it's ok to set it
-                if( pItem->GetLineStartValue() != pLineStartItem->GetLineStartValue() )
-                {
-                    // same name but different value, we need a new name for this item
-                    aUniqueName.clear();
-                    bForceNew = true;
-                }
-                break;
-            }
-        }
-
-        if( !bForceNew )
-        {
-            // XATTR_LINEEND
-            for (const SfxPoolItem* p :
-                 rPool1.GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
-            {
-                auto pItem = static_cast<const XLineEndItem*>(p);
-
-                if( pItem->GetName() == pLineStartItem->GetName() )
-                {
-                    // if there is already an item with the same name and the same
-                    // value it's ok to set it
-                    if( pItem->GetLineEndValue() != pLineStartItem->GetLineStartValue() )
-                    {
-                        // same name but different value, we need a new name for this item
-                        aUniqueName.clear();
-                        bForceNew = true;
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    const SfxItemPool* pPool2 = rModel.GetStyleSheetPool() ? &rModel.GetStyleSheetPool()->GetPool() : nullptr;
-    if( !aUniqueName.isEmpty() && pPool2)
-    {
-        // XATTR_LINESTART
-        for (const SfxPoolItem* p :
-             pPool2->GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
-        {
-            auto pItem = static_cast<const XLineStartItem*>(p);
-
-            if( pItem->GetName() == pLineStartItem->GetName() )
-            {
-                // if there is already an item with the same name and the same
-                // value it's ok to set it
-                if( pItem->GetLineStartValue() != pLineStartItem->GetLineStartValue() )
-                {
-                    // same name but different value, we need a new name for this item
-                    aUniqueName.clear();
-                    bForceNew = true;
-                }
-                break;
-            }
-        }
-
-        if( !bForceNew )
-        {
-            // XATTR_LINEEND
-            for (const SfxPoolItem* p :
-                 pPool2->GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
-            {
-                auto pItem = static_cast<const XLineEndItem*>(p);
-
-                if( pItem->GetName() == pLineStartItem->GetName() )
-                {
-                    // if there is already an item with the same name and the same
-                    // value it's ok to set it
-                    if( pItem->GetLineEndValue() != pLineStartItem->GetLineStartValue() )
-                    {
-                        // same name but different value, we need a new name for this item
-                        aUniqueName.clear();
-                        bForceNew = true;
-                    }
-                    break;
-                }
-            }
-        }
+        bForceNew = true;
+        aUniqueName.clear();
     }
 
     // if we have no name yet, find existing item with same content or
     // create a unique name
     if( aUniqueName.isEmpty() )
     {
-        bool bFoundExisting = false;
-
-        sal_Int32 nUserIndex = 1;
-        const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
-
-        // XATTR_LINESTART
-        for (const SfxPoolItem* p :
-             rPool1.GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
-        {
-            auto pItem = static_cast<const XLineStartItem*>(p);
-
-            if (!pItem->GetName().isEmpty())
-            {
-                if (!bForceNew && pItem->GetLineStartValue() == pLineStartItem->GetLineStartValue())
-                {
-                    aUniqueName = pItem->GetName();
-                    bFoundExisting = true;
-                    break;
-                }
-
-                if (pItem->GetName().startsWith(aUser))
-                {
-                    sal_Int32 nThisIndex = o3tl::toInt32(pItem->GetName().subView(aUser.getLength()));
-                    if (nThisIndex >= nUserIndex)
-                        nUserIndex = nThisIndex + 1;
-                }
-            }
-        }
-
-        // XATTR_LINEEND
-        for (const SfxPoolItem* p : rPool1.GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
-        {
-            auto pItem = static_cast<const XLineEndItem*>(p);
-
-            if (!pItem->GetName().isEmpty())
-            {
-                if (!bForceNew && pItem->GetLineEndValue() == pLineStartItem->GetLineStartValue())
-                {
-                    aUniqueName = pItem->GetName();
-                    bFoundExisting = true;
-                    break;
-                }
-
-                if (pItem->GetName().startsWith(aUser))
-                {
-                    sal_Int32 nThisIndex = o3tl::toInt32(pItem->GetName().subView(aUser.getLength()));
-                    if (nThisIndex >= nUserIndex)
-                        nUserIndex = nThisIndex + 1;
-                }
-            }
-        }
-
-        if( !bFoundExisting )
-        {
-            aUniqueName = aUser + " " + OUString::number( nUserIndex );
-        }
+        aUniqueName = CreateNameForValue(rModel.GetItemPool(), pLineStartItem->GetLineStartValue(),
+                                         bForceNew);
     }
 
     // if the given name is not valid, replace it!
@@ -1494,160 +1445,20 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
     // 2. if we have a name check if there is already an item with the
     // same name in the documents pool with a different line end or start
 
-    const SfxItemPool& rPool1 = rModel.GetItemPool();
-    if (!aUniqueName.isEmpty())
+    if (!aUniqueName.isEmpty()
+        && HasConflictingStartEndItems(rModel, pLineEndItem->GetName(),
+                                       pLineEndItem->GetLineEndValue()))
     {
-        // XATTR_LINESTART
-        for (const SfxPoolItem* p :
-             rPool1.GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
-        {
-            auto pItem = static_cast<const XLineStartItem*>(p);
-
-            if( pItem->GetName() == pLineEndItem->GetName() )
-            {
-                // if there is already an item with the same name and the same
-                // value it's ok to set it
-                if( pItem->GetLineStartValue() != pLineEndItem->GetLineEndValue() )
-                {
-                    // same name but different value, we need a new name for this item
-                    aUniqueName.clear();
-                    bForceNew = true;
-                }
-                break;
-            }
-        }
-
-        if( !bForceNew )
-        {
-            // XATTR_LINEEND
-            for (const SfxPoolItem* p :
-                 rPool1.GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
-            {
-                auto pItem = static_cast<const XLineEndItem*>(p);
-
-                if( pItem->GetName() == pLineEndItem->GetName() )
-                {
-                    // if there is already an item with the same name and the same
-                    // value it's ok to set it
-                    if( pItem->GetLineEndValue() != pLineEndItem->GetLineEndValue() )
-                    {
-                        // same name but different value, we need a new name for this item
-                        aUniqueName.clear();
-                        bForceNew = true;
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    const SfxItemPool* pPool2 = rModel.GetStyleSheetPool() ? &rModel.GetStyleSheetPool()->GetPool() : nullptr;
-    if( !aUniqueName.isEmpty() && pPool2)
-    {
-        // XATTR_LINESTART
-        for (const SfxPoolItem* p :
-             pPool2->GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
-        {
-            auto pItem = static_cast<const XLineStartItem*>(p);
-
-            if( pItem->GetName() == pLineEndItem->GetName() )
-            {
-                // if there is already an item with the same name and the same
-                // value it's ok to set it
-                if( pItem->GetLineStartValue() != pLineEndItem->GetLineEndValue() )
-                {
-                    // same name but different value, we need a new name for this item
-                    aUniqueName.clear();
-                    bForceNew = true;
-                }
-                break;
-            }
-        }
-
-        if( !bForceNew )
-        {
-            // XATTR_LINEEND
-            for (const SfxPoolItem* p :
-                 pPool2->GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
-            {
-                auto pItem = static_cast<const XLineEndItem*>(p);
-
-                if( pItem->GetName() == pLineEndItem->GetName() )
-                {
-                    // if there is already an item with the same name and the same
-                    // value it's ok to set it
-                    if( pItem->GetLineEndValue() != pLineEndItem->GetLineEndValue() )
-                    {
-                        // same name but different value, we need a new name for this item
-                        aUniqueName.clear();
-                        bForceNew = true;
-                    }
-                    break;
-                }
-            }
-        }
+        bForceNew = true;
+        aUniqueName.clear();
     }
 
     // if we have no name yet, find existing item with same content or
     // create a unique name
     if( aUniqueName.isEmpty() )
     {
-        bool bFoundExisting = false;
-
-        sal_Int32 nUserIndex = 1;
-        const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
-
-        // XATTR_LINESTART
-        for (const SfxPoolItem* p :
-             rPool1.GetItemSurrogatesForItem(SfxItemType::XLineStartItemType))
-        {
-            auto pItem = static_cast<const XLineStartItem*>(p);
-
-            if (!pItem->GetName().isEmpty())
-            {
-                if (!bForceNew && pItem->GetLineStartValue() == pLineEndItem->GetLineEndValue())
-                {
-                    aUniqueName = pItem->GetName();
-                    bFoundExisting = true;
-                    break;
-                }
-
-                if (pItem->GetName().startsWith(aUser))
-                {
-                    sal_Int32 nThisIndex = o3tl::toInt32(pItem->GetName().subView(aUser.getLength()));
-                    if (nThisIndex >= nUserIndex)
-                        nUserIndex = nThisIndex + 1;
-                }
-            }
-        }
-
-        // XATTR_LINEEND
-        for (const SfxPoolItem* p : rPool1.GetItemSurrogatesForItem(SfxItemType::XLineEndItemType))
-        {
-            auto pItem = static_cast<const XLineEndItem*>(p);
-
-            if (!pItem->GetName().isEmpty())
-            {
-                if (!bForceNew && pItem->GetLineEndValue() == pLineEndItem->GetLineEndValue())
-                {
-                    aUniqueName = pItem->GetName();
-                    bFoundExisting = true;
-                    break;
-                }
-
-                if (pItem->GetName().startsWith(aUser))
-                {
-                    sal_Int32 nThisIndex = o3tl::toInt32(pItem->GetName().subView(aUser.getLength()));
-                    if (nThisIndex >= nUserIndex)
-                        nUserIndex = nThisIndex + 1;
-                }
-            }
-        }
-
-        if( !bFoundExisting )
-        {
-            aUniqueName = aUser + " " + OUString::number( nUserIndex );
-        }
+        aUniqueName = CreateNameForValue(rModel.GetItemPool(), pLineEndItem->GetLineEndValue(),
+                                         bForceNew);
     }
 
     // if the given name is not valid, replace it!
