@@ -32,6 +32,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/toolkit/edit.hxx>
+
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 #include <osx/a11yfactory.h>
 #include <osx/salframe.h>
@@ -328,6 +332,62 @@ static void updateWindowCollectionBehavior( const SalFrameStyleFlags nStyle, con
     }
     if ( eCollectionBehavior != eOldCollectionBehavior )
         [pNSWindow setCollectionBehavior: eCollectionBehavior];
+}
+
+static NSString* getCurrentSelection()
+{
+    SolarMutexGuard aGuard;
+
+    // The following is needed for text fields in dialogs, etc.
+    vcl::Window *pWin = ImplGetSVData()->mpWinData->mpFocusWin;
+    if (pWin)
+    {
+        Edit *pEditWin = dynamic_cast<Edit*>(pWin);
+        if (pEditWin)
+            return [CreateNSString(pEditWin->GetSelected()) autorelease];
+    }
+
+    css::uno::Reference<css::frame::XDesktop> xDesktop = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
+    if (xDesktop.is())
+    {
+        css::uno::Reference<css::frame::XModel> xModel(xDesktop->getCurrentComponent(), css::uno::UNO_QUERY);
+        if (xModel)
+        {
+            css::uno::Reference<css::uno::XInterface> xSelection(xModel->getCurrentSelection(), css::uno::UNO_QUERY);
+            if (xSelection)
+            {
+                css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xSelection, css::uno::UNO_QUERY);
+                if (xIndexAccess.is())
+                {
+                    if (xIndexAccess->getCount() > 0)
+                    {
+                        css::uno::Reference<css::text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), css::uno::UNO_QUERY);
+                        if (xTextRange.is())
+                            return [CreateNSString(xTextRange->getString()) autorelease];
+                    }
+                }
+
+                // The Basic IDE returns a XEnumeration with a single item
+                // Note: the following code was adapted from
+                // svx/source/tbxctrls/tbunosearchcontrollers.cxx
+                css::uno::Reference<css::container::XEnumeration> xEnum(xSelection, css::uno::UNO_QUERY);
+                if (xEnum.is() && xEnum->hasMoreElements())
+                {
+                    OUString aString;
+                    xEnum->nextElement() >>= aString;
+                    return [CreateNSString(aString) autorelease];
+                }
+
+                // The following is needed for cells and text fields in Calc
+                // and Impress
+                css::uno::Reference<css::text::XTextRange> xTextRange(xSelection, css::uno::UNO_QUERY);
+                if (xTextRange.is())
+                    return [CreateNSString(xTextRange->getString()) autorelease];
+            }
+        }
+    }
+
+    return nil;
 }
 
 @interface NSResponder (SalFrameWindow)
@@ -2305,6 +2365,20 @@ static void updateWindowCollectionBehavior( const SalFrameStyleFlags nStyle, con
     // NSNotFound, -[NSResponder interpretKeyEvents:] will not call
     // [self firstRectForCharacterRange:actualRange:] and will not display the
     // special character input method popup.
+    // tdf#128600 Implement handling of macOS "Reverse Conversion" menu item
+    // When a Japanese keyboard is selected, the keyboard's "Reverse Conversion"
+    // menu item would silently fail when an empty range was returned by
+    // -[SalFrameView selectedRange].
+    // So return a valid range in that call using the following steps:
+    // 1. If there is marked text, return the marked text range
+    // 2. If LibreOffice is selected text, return the selected text length
+    // Similar steps in the same order are in
+    // -[SalFrameView attributedSubstringForProposedRange:actualRange:].
+    if ( [self hasMarkedText] )
+        return ( mMarkedRange.location == NSNotFound ? NSMakeRange( 0, 0 ) : mMarkedRange );
+    NSString *pSelectedText = getCurrentSelection();
+    if ( pSelectedText )
+        return NSMakeRange( 0, [pSelectedText length] );
     return ( mSelectedRange.location == NSNotFound ? NSMakeRange( 0, 0 ) : mSelectedRange );
 }
 
@@ -2442,10 +2516,39 @@ static void updateWindowCollectionBehavior( const SalFrameStyleFlags nStyle, con
 
 - (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
-    (void) aRange;
-    (void) actualRange;
+    (void)aRange;
 
-    // FIXME - Implement
+    // tdf#128600 Implement handling of macOS "Reverse Conversion" menu item
+    // When a Japanese keyboard is selected, the keyboard's "Reverse Conversion"
+    // menu item would silently fail when nil was returned by the unimplemented
+    // -[SalFrameView attributedSubstringForProposedRange:actualRange:].
+    // So return a valid string in that call using the following steps:
+    // 1. If there is marked text, return the last marked text
+    // 2. If LibreOffice is selected text, return the selected text
+    // Similar steps in the same order are in -[SalFrameView selectedRange].
+    if ( [self hasMarkedText] )
+    {
+        if ( actualRange )
+            *actualRange = mMarkedRange;
+        return mpLastMarkedText;
+    }
+    NSString *pSelectedText = getCurrentSelection();
+    if ( pSelectedText )
+    {
+        // Related: tdf#128600 "Reverse Conversion" with Japanese keyboards
+        // only edits the first non-whitespace chunk of selected text but
+        // I don't know how to adjust LibreOffice's selected range to match
+        // the substring that the input method will edit. This causes the
+        // entire LibreOffice selection to be overwritten by the substring
+        // so return nil if there is any whitespace in the selection.
+        NSRange aWhitespaceRange = [pSelectedText rangeOfCharacterFromSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if ( aWhitespaceRange.location == NSNotFound )
+        {
+            if ( actualRange )
+                *actualRange = NSMakeRange( 0, [pSelectedText length] );
+            return [[[NSAttributedString alloc] initWithString: pSelectedText] autorelease];
+        }
+    }
     return nil;
 }
 
