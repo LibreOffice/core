@@ -1905,6 +1905,8 @@ OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> cons
     Graphic aGraphic(rxGraphic);
     const OUString& aOriginURL = aGraphic.getOriginURL();
 
+    SAL_INFO("xmloff.core", "AddEmbeddedXGraphic (entry): rOutMimeType: " << rOutMimeType <<
+                            " OriginURL:" << aOriginURL);
     if (!aOriginURL.isEmpty())
     {
         sURL = GetRelativeReference(aOriginURL);
@@ -1917,6 +1919,8 @@ OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> cons
                 sURL = mxGraphicStorageHandler->saveGraphicByName(rxGraphic, rOutMimeType, rRequestedName);
         }
     }
+    SAL_INFO("xmloff.core", "AddEmbeddedXGraphic (exit): rOutMimeType: " << rOutMimeType <<
+                            " OriginURL:" << aOriginURL << " sURL:" << sURL);
     return sURL;
 }
 

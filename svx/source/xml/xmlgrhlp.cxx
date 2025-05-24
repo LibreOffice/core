@@ -654,6 +654,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
 {
     Graphic aGraphic(rxGraphic);
 
+    SAL_INFO("svx", "implSaveGraphic: entry");
     auto aIterator = maExportGraphics.find(aGraphic);
     if (aIterator != maExportGraphics.end())
     {
@@ -670,6 +671,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
         OUString aExtension;
         bool bUseGfxLink = true;
 
+        SAL_INFO("svx", "implSaveGraphic: Type!=None");
         if (aGfxLink.GetDataSize())
         {
             switch (aGfxLink.GetType())
@@ -719,6 +721,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
         }
         else
         {
+            SAL_INFO("svx", "implSaveGraphic: Link !size");
             if (aGraphicObject.GetType() == GraphicType::Bitmap)
             {
                 if (aGraphicObject.IsAnimated())
@@ -737,6 +740,8 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     aExtension = ".svm";
             }
         }
+
+        SAL_INFO("svx", "implSaveGraphic: Extension:" << aExtension);
 
         OUString rPictureStreamName;
         if (!rRequestName.empty())
@@ -797,14 +802,17 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
             if (bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData())
             {
+                SAL_INFO("svx", "implSaveGraphic: link");
                 pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
                 rOutSavedMimeType = aMimeType;
                 bSuccess = (pStream->GetError() == ERRCODE_NONE);
             }
             else
             {
+                SAL_INFO("svx", "implSaveGraphic: !link");
                 if (aGraphic.GetType() == GraphicType::Bitmap)
                 {
+                    SAL_INFO("svx", "implSaveGraphic: !link - Bitmap");
                     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
                     OUString aFormat;
 
@@ -822,6 +830,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                 }
                 else if (aGraphic.GetType() == GraphicType::GdiMetafile)
                 {
+                    SAL_INFO("svx", "implSaveGraphic: !link - Gdi");
                     pStream->SetVersion(SOFFICE_FILEFORMAT_8);
                     pStream->SetCompressMode(SvStreamCompressFlags::ZBITMAP);
                     rOutSavedMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension("svm");
@@ -850,6 +859,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     bSuccess = (pStream->GetError() == ERRCODE_NONE);
                 }
             }
+            SAL_INFO("svx", "implSaveGraphic: (mid)");
 
             if (!bSuccess)
                 return OUString();
@@ -864,6 +874,8 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
 
             // put into cache
             maExportGraphics[aGraphic] = std::make_pair(aStoragePath, rOutSavedMimeType);
+            SAL_INFO("svx", "implSaveGraphic: exit: Path: " << aStoragePath <<
+                            " Mime: " << rOutSavedMimeType);
 
             return aStoragePath;
         }

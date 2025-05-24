@@ -1557,6 +1557,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
     Graphic     aGraphic = ImpGetScaledGraphic( rGraphic, aConfigItem );
     eType = aGraphic.GetType();
 
+    SAL_INFO("vcl.filter", "GraphicFilter::ExportGraphic() Filter: " << aFilterName);
     if( pConfig->IsExportPixelFormat( nFormat ) )
     {
         if( eType != GraphicType::Bitmap )
