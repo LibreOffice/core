@@ -5505,7 +5505,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
             return;
     }
 
-    if (!getFramePrintArea().HasArea())
+    if (!getFrameArea().HasArea())
     { // hidden text frame, may be called by upper from PaintSwFrameBackground()
         return;
     }
