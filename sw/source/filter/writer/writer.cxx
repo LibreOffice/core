@@ -381,9 +381,7 @@ void Writer::AddFontItems_( SfxItemPool& rPool, TypedWhichId<SvxFontItem> nWhich
     else
     {
         // nWhich is one of EE_CHAR_FONTINFO /  EE_CHAR_FONTINFO_CJK / rPool, EE_CHAR_FONTINFO_CTL
-        ItemSurrogates aSurrogates;
-        rPool.GetItemSurrogates(aSurrogates, nWhich);
-        for (const SfxPoolItem* pItem : aSurrogates)
+        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nWhich))
             AddFontItem( rPool, *static_cast<const SvxFontItem*>(pItem) );
     }
 }

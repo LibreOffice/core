@@ -5195,9 +5195,7 @@ static HasAttrFlags OptimizeHasAttrib( HasAttrFlags nMask, const ScDocumentPool*
         //  (as in fillinfo)
 
         bool bAnyItem = false;
-        ItemSurrogates aSurrogates;
-        pPool->GetItemSurrogates(aSurrogates, ATTR_ROTATE_VALUE);
-        for (const SfxPoolItem* pItem : aSurrogates)
+        for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_ROTATE_VALUE))
         {
             // 90 or 270 degrees is former SvxOrientationItem - only look for other values
             // (see ScPatternAttr::GetCellOrientation)

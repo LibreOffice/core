@@ -186,9 +186,7 @@ public:
 
 bool isRotateItemUsed(const ScDocumentPool *pPool)
 {
-    ItemSurrogates aSurrogates;
-    pPool->GetItemSurrogates(aSurrogates, ATTR_ROTATE_VALUE);
-    return aSurrogates.size() > 0;
+    return pPool->GetItemSurrogates(ATTR_ROTATE_VALUE).size() > 0;
 }
 
 void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,

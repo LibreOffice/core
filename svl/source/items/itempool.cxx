@@ -901,12 +901,10 @@ void SfxItemPool::GetItemSurrogatesForItem(ItemSurrogates& rTarget, const SfxPoo
     GetItemSurrogatesForItem(rTarget, rItem.ItemType());
 }
 
-void SfxItemPool::GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const
+ItemSurrogates SfxItemPool::GetItemSurrogates(sal_uInt16 nWhich) const
 {
-    rTarget.clear();
-
     if (0 == nWhich)
-        return;
+        return {};
 
     // NOTE: This is pre-collected, in this case mainly to
     //   remove all double listings of SfxPoolItems which can
@@ -928,7 +926,7 @@ void SfxItemPool::GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) 
         if (rCand->Which() == nWhich && nullptr != rCand->getItem())
             aNewSurrogates.insert(rCand->getItem());
 
-    rTarget = ItemSurrogates(aNewSurrogates.begin(), aNewSurrogates.end());
+    return ItemSurrogates(aNewSurrogates.begin(), aNewSurrogates.end());
 }
 
 sal_uInt16 SfxItemPool::GetWhichIDFromSlotID(sal_uInt16 nSlotId, bool bDeep) const

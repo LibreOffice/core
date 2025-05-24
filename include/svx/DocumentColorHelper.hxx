@@ -26,9 +26,7 @@ inline Color getColorFromItem(const SvxBrushItem* pItem) { return pItem->GetColo
 template <class T>
 void queryColors(const sal_uInt16 nAttrib, const SfxItemPool* pPool, std::set<Color>& rOutput)
 {
-    ItemSurrogates aSurrogates;
-    pPool->GetItemSurrogates(aSurrogates, nAttrib);
-    for (const SfxPoolItem* pItem : aSurrogates)
+    for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(nAttrib))
     {
         auto pColorItem = static_cast<const T*>(pItem);
         Color aColor(getColorFromItem(pColorItem));

@@ -2973,8 +2973,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
                 for(sal_uInt16 nWhichId : aWhichIds)
                 {
-                    ItemSurrogates aSurrogates;
-                    rPool.GetItemSurrogates(aSurrogates, nWhichId);
+                    ItemSurrogates aSurrogates = rPool.GetItemSurrogates(nWhichId);
                     const sal_uInt32 nItems(aSurrogates.size());
 
                     aSeq.realloc( aSeq.getLength() + nItems*5 + 5 );
@@ -3001,7 +3000,6 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
                 }
 
-                aSeq.realloc( nSeqIndex );
                 aAny <<= aSeq;
                 break;
             }

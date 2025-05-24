@@ -59,9 +59,7 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(const sal_uInt16* pWhichIds, sal_
                     pFont->GetFamily(), pFont->GetPitch(),
                     pFont->GetCharSet() );
         }
-        ItemSurrogates aSurrogates;
-        pItemPool->GetItemSurrogates( aSurrogates, nWhichId );
-        for (const SfxPoolItem* pItem : aSurrogates)
+        for (const SfxPoolItem* pItem : pItemPool->GetItemSurrogates(nWhichId))
         {
             const SvxFontItem *pFont(static_cast<const SvxFontItem *>(pItem));
             Add( pFont->GetFamilyName(), pFont->GetStyleName(),
@@ -111,9 +109,7 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXML
 
         for (sal_uInt16 nPageWhichId : aPageWhichIds)
         {
-            ItemSurrogates aSurrogates;
-            rPagePool.GetItemSurrogates( aSurrogates, nPageWhichId );
-            for (const SfxPoolItem* pItem : aSurrogates)
+            for (const SfxPoolItem* pItem : rPagePool.GetItemSurrogates(nPageWhichId))
             {
                 const ScPageHFItem* pPageItem = static_cast<const ScPageHFItem*>(pItem);
                 const EditTextObject* pLeftArea(pPageItem->GetLeftArea());

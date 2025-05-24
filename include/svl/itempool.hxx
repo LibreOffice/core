@@ -321,7 +321,7 @@ public:
     // Read-only access to registered SfxPoolItems
     // NOTE: In *no* case use const_cast and change those Items (!)
     // Read commit text for more information
-    void GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const;
+    ItemSurrogates GetItemSurrogates(sal_uInt16 nWhich) const;
 
     // special version for read-only itemSurrogates for NameOrIndex Items
     void GetItemSurrogatesForItem(ItemSurrogates& rTarget, const SfxPoolItem& rItem) const;

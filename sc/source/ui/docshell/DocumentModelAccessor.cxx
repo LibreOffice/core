@@ -23,9 +23,7 @@ std::vector<sfx::CurrencyID> DocumentModelAccessor::getDocumentCurrencies() cons
 {
     std::vector<sfx::CurrencyID> aCurrencyIDs;
 
-    ItemSurrogates aSurrogates;
-    m_pDocument->GetPool()->GetItemSurrogates(aSurrogates, ATTR_VALUE_FORMAT);
-    for (const SfxPoolItem* pItem : aSurrogates)
+    for (const SfxPoolItem* pItem : m_pDocument->GetPool()->GetItemSurrogates(ATTR_VALUE_FORMAT))
     {
         auto* pIntItem = static_cast<const SfxUInt32Item*>(pItem);
         sal_Int32 nFormat = pIntItem->GetValue();

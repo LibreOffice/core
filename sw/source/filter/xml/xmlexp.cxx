@@ -170,9 +170,7 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                                         EE_CHAR_XMLATTRIBS };
             for( sal_uInt16 nWhichId : aWhichIds )
             {
-                ItemSurrogates aSurrogates;
-                rPool.GetItemSurrogates(aSurrogates, nWhichId);
-                for (const SfxPoolItem* pItem : aSurrogates)
+                for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nWhichId))
                 {
                     auto pUnknown = dynamic_cast<const SvXMLAttrContainerItem*>( pItem  );
                     OSL_ENSURE( pUnknown, "illegal attribute container item" );
