@@ -493,6 +493,30 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf145998_firstHeader)
     assertXPathContent(pXmlDoc, "/root/page[2]/header/txt", u"Normal Header");
 }
 
+CPPUNIT_TEST_FIXTURE(HeaderFooterTest, tdf166205_first_page_header_footer_visible)
+{
+    createSwDoc("tdf166205_first_page_header_footer_visible.docx");
+
+    // Sanity check - always good to test when dealing with page styles and breaks.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPathContent(pXmlDoc, "/root/page[1]/header/txt[1]", u"HEADER TOP #1");
+    assertXPathContent(pXmlDoc, "/root/page[1]/header/txt[5]", u"HEADER BOTTOM #1");
+    assertXPathContent(pXmlDoc, "/root/page[1]/footer/txt", u"THIS IS FOOTER #1");
+
+    // make sure the first-page-header is visible
+    OUString headerHeight1 = getXPath(pXmlDoc, "/root/page[1]/header/infos/bounds", "height");
+    CPPUNIT_ASSERT((headerHeight1.toInt32()) >= 14162);
+    OUString headerHeight2
+        = getXPath(pXmlDoc, "/root/page[1]/header/txt[5]/infos/prtBounds", "height");
+    CPPUNIT_ASSERT((headerHeight2.toInt32()) >= 280);
+
+    // make sure the first-page-footer is visible
+    OUString footerHeight = getXPath(pXmlDoc, "/root/page[1]/footer/txt/infos/bounds", "height");
+    CPPUNIT_ASSERT((footerHeight.toInt32()) >= 517);
+}
+
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Import)
 {
     // Related tdf#135216
