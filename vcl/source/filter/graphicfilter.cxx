@@ -1139,7 +1139,8 @@ ErrCode GraphicFilter::readPDF(
    SvStream& rStream, Graphic& rGraphic, GfxLinkType& rLinkType, sal_Int32 nPageIndex,
    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
-    if (vcl::ImportPDF(rStream, rGraphic, nPageIndex, xInteractionHandler))
+    bool bEncrypted;
+    if (vcl::ImportPDF(rStream, rGraphic, nPageIndex, xInteractionHandler, bEncrypted))
     {
         rLinkType = GfxLinkType::NativePdf;
         return ERRCODE_NONE;

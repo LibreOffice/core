@@ -136,10 +136,9 @@ bool getCompatibleStream(
 }
 
 BinaryDataContainer createBinaryDataContainer(
-    SvStream& rStream,
+    SvStream& rStream, bool& bEncrypted,
     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
-    bool bEncrypted;
     // Save the original PDF stream for later use.
     SvMemoryStream aMemoryStream;
     if (!getCompatibleStream(rStream, aMemoryStream, xInteractionHandler, bEncrypted))

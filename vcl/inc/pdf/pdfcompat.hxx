@@ -42,7 +42,7 @@ bool getCompatibleStream(
     bool& bEncrypted);
 
 BinaryDataContainer createBinaryDataContainer(
-    SvStream& rStream,
+    SvStream& rStream, bool& bEncrypted,
     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
 } // end of vcl::filter::ipdf namespace

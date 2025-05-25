@@ -101,30 +101,19 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
     return rBitmaps.size();
 }
 
-bool importPdfVectorGraphicData(
-    SvStream& rStream, std::shared_ptr<VectorGraphicData>& rVectorGraphicData, sal_Int32 nPageIndex,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
+bool ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex,
+               const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+               bool& bEncrypted)
 {
     BinaryDataContainer aDataContainer
-        = vcl::pdf::createBinaryDataContainer(rStream, xInteractionHandler);
+        = vcl::pdf::createBinaryDataContainer(rStream, bEncrypted, xInteractionHandler);
     if (aDataContainer.isEmpty())
     {
         SAL_WARN("vcl.filter", "ImportPDF: empty PDF data array");
         return false;
     }
-
-    rVectorGraphicData = std::make_shared<VectorGraphicData>(
+    std::shared_ptr<VectorGraphicData> pVectorGraphicData = std::make_shared<VectorGraphicData>(
         aDataContainer, VectorGraphicDataType::Pdf, nPageIndex);
-
-    return true;
-}
-
-bool ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex,
-               const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
-{
-    std::shared_ptr<VectorGraphicData> pVectorGraphicData;
-    if (!importPdfVectorGraphicData(rStream, pVectorGraphicData, nPageIndex, xInteractionHandler))
-        return false;
     rGraphic = Graphic(pVectorGraphicData);
     return true;
 }
@@ -354,9 +343,10 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
 {
     std::unique_ptr<SvStream> xStream(
         ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
+    bool bEncrypted;
 
     // Save the original PDF stream for later use.
-    BinaryDataContainer aDataContainer = vcl::pdf::createBinaryDataContainer(*xStream);
+    BinaryDataContainer aDataContainer = vcl::pdf::createBinaryDataContainer(*xStream, bEncrypted);
     if (aDataContainer.isEmpty())
         return 0;
 

@@ -29,28 +29,29 @@ VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize,
                                       std::vector<BitmapEx>& rBitmaps, size_t nFirstPage = 0,
                                       int nPages = 1, const basegfx::B2DTuple* pSizeHint = nullptr);
 
-/// Imports a PDF stream as a VectorGraphicData.
-VCL_DLLPUBLIC bool importPdfVectorGraphicData(
-    SvStream& rStream, std::shared_ptr<VectorGraphicData>& rVectorGraphicData,
-    sal_Int32 nPageIndex = -1,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
-
-/// Imports a PDF stream into rGraphic.
 VCL_DLLPUBLIC bool
-ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex = -1,
-          const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
+ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex,
+          const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+          bool& bEncrypted);
 
-// When inserting a PDF file as an image or pasting PDF data from the clipboard, at least on a
-// Retina iMac, the resulting rendered image does not look sharp without this surprisingly large
-// extra scaling factor. Exact reasons unknown. And it isn't enough to have it be just 2 (which is
-// the actual Retina factor on my iMac). Possibly the fuzziness is related to what Pdfium uses to
-// render text.
+inline bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
+{
+    bool bEncrypted;
 
-// Also, look at CountDPIScaleFactor() in vcl/source/window/window.cxx. The GetDPIScaleFactor() API
-// lies on macOS even more than it does on other platforms, it claims that the DPI scale factor is
-// always 1. But in fact most Macs nowadays have a HiDPI ("Retina") display. But we can't just "fix"
-// things by making GetDPIScaleFactor() always return 2 on macOS, even if that wouldn't be any more
-// wrong, because that then causes other regressions that I have no time to look into now.
+    return ImportPDF(rStream, rGraphic, -1, nullptr, bEncrypted);
+}
+
+    // When inserting a PDF file as an image or pasting PDF data from the clipboard, at least on a
+    // Retina iMac, the resulting rendered image does not look sharp without this surprisingly large
+    // extra scaling factor. Exact reasons unknown. And it isn't enough to have it be just 2 (which is
+    // the actual Retina factor on my iMac). Possibly the fuzziness is related to what Pdfium uses to
+    // render text.
+
+    // Also, look at CountDPIScaleFactor() in vcl/source/window/window.cxx. The GetDPIScaleFactor() API
+    // lies on macOS even more than it does on other platforms, it claims that the DPI scale factor is
+    // always 1. But in fact most Macs nowadays have a HiDPI ("Retina") display. But we can't just "fix"
+    // things by making GetDPIScaleFactor() always return 2 on macOS, even if that wouldn't be any more
+    // wrong, because that then causes other regressions that I have no time to look into now.
 
 #ifdef MACOSX
 constexpr int PDF_INSERT_MAGIC_SCALE_FACTOR = 8;
