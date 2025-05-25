@@ -11,6 +11,7 @@
 
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
+#include <vcl/dropcache.hxx>
 #include <vcl/timer.hxx>
 
 #include <memory>
@@ -22,7 +23,7 @@ namespace vcl::graphic
 {
 class MemoryManaged;
 
-class VCL_DLLPUBLIC MemoryManager final
+class VCL_DLLPUBLIC MemoryManager final : public CacheOwner
 {
 private:
     o3tl::sorted_vector<MemoryManaged*> maObjectList;
@@ -55,8 +56,8 @@ public:
     void checkStartReduceTimer();
     void reduceMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll = false);
     void loopAndReduceMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll = false);
-    void reduceAllAndNow();
-    void dumpState(rtl::OStringBuffer& rState);
+    virtual void dropCaches() override;
+    virtual void dumpState(rtl::OStringBuffer& rState) override;
 };
 
 } // end namespace vcl::graphic

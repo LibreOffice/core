@@ -424,6 +424,16 @@ ImplSVData::ImplSVData()
     mpWinData = &private_aImplSVWinData::get();
 }
 
+void ImplSVData::registerCacheOwner(CacheOwner& rCacheOwner)
+{
+    maCacheOwners.insert(&rCacheOwner);
+}
+
+void ImplSVData::deregisterCacheOwner(CacheOwner& rCacheOwner)
+{
+    maCacheOwners.erase(&rCacheOwner);
+}
+
 void ImplSVData::dropCaches()
 {
     // we are iterating over a map and doing erase while inside a loop which is doing erase
@@ -433,6 +443,28 @@ void ImplSVData::dropCaches()
 
     maGDIData.maThemeDrawCommandsCache.clear();
     maGDIData.maThemeImageCache.clear();
+    mpBlendFrameCache.reset();
+
+    // copy, some caches self-delete on emptying, e.g. SwOLELRUCache
+    auto aCacheOwners = maCacheOwners;
+    for (CacheOwner* pCacheOwner : aCacheOwners)
+        pCacheOwner->dropCaches();
+}
+
+CacheOwner::CacheOwner()
+{
+    if (ImplSVData* pSVData = ImplGetSVData())
+    {
+        pSVData->registerCacheOwner(*this);
+        return;
+    }
+    SAL_WARN("vcl.app", "Cache owner ctor before ImplSVData created. This is useless.");
+}
+
+CacheOwner::~CacheOwner()
+{
+    if (ImplSVData* pSVData = ImplGetSVData())
+        pSVData->deregisterCacheOwner(*this);
 }
 
 void ImplSVData::dumpState(rtl::OStringBuffer &rState)
@@ -449,6 +481,18 @@ void ImplSVData::dumpState(rtl::OStringBuffer &rState)
         rState.append("x");
         rState.append(static_cast<sal_Int32>(it->first.maDestSize.Height()));
     }
+
+    if (mpBlendFrameCache)
+    {
+        rState.append("\nBlendFrameCache:");
+        rState.append("\n\t");
+        rState.append(static_cast<sal_Int32>(mpBlendFrameCache->m_aLastSize.Width()));
+        rState.append("x");
+        rState.append(static_cast<sal_Int32>(mpBlendFrameCache->m_aLastSize.Height()));
+    }
+
+    for (CacheOwner* pCacheOwner : maCacheOwners)
+        pCacheOwner->dumpState(rState);
 }
 
 ImplSVHelpData* CreateSVHelpData()

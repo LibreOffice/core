@@ -25,6 +25,7 @@
 
 #include <o3tl/lru_map.hxx>
 #include <vcl/glyphitem.hxx>
+#include <vcl/dropcache.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
@@ -38,7 +39,7 @@ Allows caching for OutputDevice::DrawText() and similar calls. Pass the text and
 for the call to OutputDevice::ImplLayout(). Items are cached per output device and its font.
 If something more changes, call clear().
 */
-class VCL_DLLPUBLIC SalLayoutGlyphsCache final
+class VCL_DLLPUBLIC SalLayoutGlyphsCache final : public CacheOwner
 {
 public:
     // NOTE: The lifetime of the returned value is guaranteed only until the next call
@@ -95,6 +96,9 @@ public:
     };
 
 private:
+    virtual void dropCaches() override;
+    virtual void dumpState(rtl::OStringBuffer& rState) override;
+
     struct CachedGlyphsHash
     {
         size_t operator()(const CachedGlyphsKey& key) const { return key.hashValue; }

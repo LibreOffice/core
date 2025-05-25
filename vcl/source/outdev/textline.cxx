@@ -25,6 +25,7 @@
 #include <o3tl/lru_map.hxx>
 #include <comphelper/configuration.hxx>
 #include <tools/lazydelete.hxx>
+#include <vcl/dropcache.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
@@ -40,7 +41,7 @@
 #define STRIKEOUT_LAST      STRIKEOUT_X
 
 namespace {
-    struct WavyLineCache final
+    struct WavyLineCache final : public CacheOwner
     {
         WavyLineCache () : m_aItems( 10 ) {}
 
@@ -64,6 +65,17 @@ namespace {
             Key aKey = { nWaveHeight, sal_uInt32(aLineColor) };
             m_aItems.insert( std::pair< Key, WavyLineCacheItem>( aKey, { nLineWidth, nWordWidth, aBitmap } ) );
             rOutput = aBitmap;
+        }
+
+        virtual void dropCaches() override
+        {
+            m_aItems.clear();
+        }
+
+        virtual void dumpState(rtl::OStringBuffer& rState) override
+        {
+            rState.append("\nWavyLineCache:\t");
+            rState.append(static_cast<sal_Int32>(m_aItems.size()));
         }
 
         private:

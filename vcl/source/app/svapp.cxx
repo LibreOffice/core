@@ -1778,8 +1778,6 @@ void dumpState(rtl::OStringBuffer &rState)
         pWin = Application::GetNextTopLevelWindow( pWin );
     }
 
-    vcl::graphic::MemoryManager::get().dumpState(rState);
-
     pSVData->dumpState(rState);
 
 #ifndef NDEBUG
@@ -1795,7 +1793,6 @@ void trimMemory(int nTarget)
         if (!pSVData) // shutting down
             return;
         pSVData->dropCaches();
-        vcl::graphic::MemoryManager::get().reduceAllAndNow();
     }
     // else for now caches re-fill themselves as/when used.
 }
