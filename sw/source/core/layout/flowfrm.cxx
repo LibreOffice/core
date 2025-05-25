@@ -1049,10 +1049,7 @@ bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
               << (isRightPage ? pDesc->GetRightFormat(bFirst) : pDesc->GetLeftFormat(bFirst)) << " "
               << (isRightPage ? pDesc->GetLeftFormat(bFirst) : pDesc->GetRightFormat(bFirst)) );
 
-    return (pNew->GetPageDesc() != pDesc)   //  own desc ?
-        || (pNew->GetFormat() !=
-              (isRightPage ? pDesc->GetRightFormat(bFirst) : pDesc->GetLeftFormat(bFirst)))
-        || (pNewDesc && pNewDesc == pDesc);
+    return (pNewDesc && pNewDesc == pDesc);
 }
 
 /// Returns the next layout leaf in which we can move the frame.
