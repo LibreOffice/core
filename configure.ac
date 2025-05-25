@@ -10422,7 +10422,7 @@ if test $enable_python = system; then
         # This causes an error if no python command is found
         # the version found here also sets PYTHON_FOR_BUILD below, so the python picked here
         # needs to be suitable for meson/the harfbuzz build
-        if test -z "$PYTHON_FOR_BUILD" -a "$with_system_harfbuzz" = "yes"; then
+        if test "$with_system_harfbuzz" = "yes" -o -n "$NEED_MESON" ; then
             AM_PATH_PYTHON([3.7])
         else
             AM_PATH_PYTHON([3.3])
@@ -11508,7 +11508,7 @@ else
                 PathFormat "$MESON"
                 MESON="$formatted_path"
                 AC_MSG_CHECKING([whether meson can be run with "$PYTHON_FOR_BUILD $MESON"])
-                if ($PYTHON_FOR_BUILD $MESON runpython --version >/dev/null) ; then
+                if ($PYTHON_FOR_BUILD $MESON --version >/dev/null) ; then
                     AC_MSG_RESULT([yes])
                 else
                     AC_MSG_RESULT([no])
