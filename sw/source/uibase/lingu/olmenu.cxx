@@ -363,8 +363,16 @@ SwSpellPopup::SwSpellPopup(
     }
 
     sal_uInt16 nDiff = nItemId - MN_DICTIONARIES_START;
-    m_xPopupMenu->EnableItem(m_nAddMenuId, nDiff > 2);
-    m_xPopupMenu->EnableItem(m_nAddId, nDiff == 2);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_xPopupMenu->EnableItem(m_nAddMenuId, nDiff > 2);
+        m_xPopupMenu->EnableItem(m_nAddId, nDiff == 2);
+    }
+    else
+    {
+        m_xPopupMenu->EnableItem(m_nAddMenuId, nDiff > 1);
+        m_xPopupMenu->EnableItem(m_nAddId, nDiff == 1);
+    }
 
     //ADD NEW LANGUAGE MENU ITEM
 
