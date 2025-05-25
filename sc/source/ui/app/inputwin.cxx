@@ -2305,12 +2305,13 @@ void ScPosWnd::SetFormulaMode( bool bSet )
 {
     if ( bSet != bFormulaMode )
     {
-        bFormulaMode = bSet;
 
         if ( bSet )
             FillFunctions();
         else
             FillRangeNames();
+
+        bFormulaMode = bSet;
 
         HideTip();
     }
@@ -2362,7 +2363,7 @@ void ScPosWnd::FillRangeNames(bool initialize)
         }
     }
 
-    if (aSet == aRangeNames && !initialize)
+    if (!bFormulaMode && !initialize && aSet == aRangeNames)
         return;
 
     aRangeNames = aSet;
