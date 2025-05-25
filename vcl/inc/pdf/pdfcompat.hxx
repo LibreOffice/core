@@ -23,7 +23,7 @@ inline double pointToPixel(const double fPoint, const double fResolutionDPI)
 }
 
 /// Decide if PDF data is old enough to be compatible.
-bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize);
+bool isCompatible(SvStream& rInStream);
 
 /// Converts to highest supported format version (currently 1.6).
 /// Usually used to deal with missing referenced objects in the

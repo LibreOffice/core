@@ -18,14 +18,11 @@
 namespace vcl::pdf
 {
 /// Decide if PDF data is old enough to be compatible.
-bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
+bool isCompatible(SvStream& rInStream)
 {
-    if (nSize < 8)
-        return false;
-
     // %PDF-x.y
     sal_uInt8 aFirstBytes[8];
-    rInStream.Seek(nPos);
+    rInStream.Seek(STREAM_SEEK_TO_BEGIN);
     sal_uLong nRead = rInStream.ReadBytes(aFirstBytes, 8);
     if (nRead < 8)
         return false;
@@ -117,13 +114,11 @@ bool getCompatibleStream(
     SvStream& rInStream, SvStream& rOutStream,
     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
-    sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN;
-    sal_uInt64 nSize = STREAM_SEEK_TO_END;
-    bool bCompatible = isCompatible(rInStream, nPos, nSize);
-    rInStream.Seek(nPos);
+    bool bCompatible = isCompatible(rInStream);
+    rInStream.Seek(STREAM_SEEK_TO_BEGIN);
     if (bCompatible)
         // Not converting.
-        rOutStream.WriteStream(rInStream, nSize);
+        rOutStream.WriteStream(rInStream, STREAM_SEEK_TO_END);
     else
         convertToHighestSupported(rInStream, rOutStream, xInteractionHandler);
 
