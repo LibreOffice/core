@@ -323,8 +323,9 @@ public:
     SAL_DLLPRIVATE static ErrCode readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
 
     SAL_DLLPRIVATE static ErrCode readPDF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
-                           sal_Int32 nPageIndex = -1,
-                           const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
+                    sal_Int32 nPageIndex,
+                    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+                    BinaryDataContainer & rpGraphicContent);
     SAL_DLLPRIVATE static ErrCode readTIFF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     SAL_DLLPRIVATE static ErrCode readWithTypeSerializer(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, std::u16string_view aFilterName);
     SAL_DLLPRIVATE static ErrCode readBMP(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);

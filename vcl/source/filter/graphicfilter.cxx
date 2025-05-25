@@ -1137,12 +1137,27 @@ ErrCode GraphicFilter::readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
 
 ErrCode GraphicFilter::readPDF(
    SvStream& rStream, Graphic& rGraphic, GfxLinkType& rLinkType, sal_Int32 nPageIndex,
-   const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
+   const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+                               BinaryDataContainer& rpGraphicContent)
 {
     bool bEncrypted;
     if (vcl::ImportPDF(rStream, rGraphic, nPageIndex, xInteractionHandler, bEncrypted))
     {
+        // ImportPDF put a modified version of the PDF in the Graphic, but
+        // by default we stash the original in the Link
         rLinkType = GfxLinkType::NativePdf;
+        if (bEncrypted)
+        {
+            // However, when we load an encrypted PDF, we want the modified PDF
+            // to stash into the Link as well, so that when the user opens a odg etc
+            // they don't need to enter multiple PDF passwords
+            auto const &rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
+            if (rVectorGraphicDataPtr &&
+                    !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty())
+            {
+                rpGraphicContent = rVectorGraphicDataPtr->getBinaryDataContainer();
+            }
+        }
         return ERRCODE_NONE;
     }
     else
@@ -1413,7 +1428,7 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_PDF))
         {
-            nStatus = readPDF(rIStream, rGraphic, eLinkType, nPageIndex, xInteractionHandler);
+            nStatus = readPDF(rIStream, rGraphic, eLinkType, nPageIndex, xInteractionHandler, aGraphicContent);
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_TIFF) )
         {
