@@ -924,10 +924,11 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
 
     ScDocument& rDoc = GetDoc();
     bool connectionXml = rDoc.hasConnectionXml();
+    const ConnectionVector& vConnVector = rDoc.getConnectionVector();
 
-    if (connectionXml)
+    if (connectionXml && !vConnVector.empty())
     {
-        // save xl/connections.xml reference into [Content_Types].xml
+        // save xl/connections.xml reference into [Content_Types].xml and open stream to xl/connections.xml
         sax_fastparser::FSHelperPtr aConnectionsXml = rStrm.CreateOutputStream(
             "xl/connections.xml", u"connections.xml", rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.connections+xml",
@@ -950,7 +951,6 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
             rStrm.getNamespaceURL(OOX_NS(xr16)), FSNS(XML_mc, XML_Ignorable), "xr16");
 
         // get a list of <connection> element and export it with its child elements
-        ConnectionVector vConnVector = rDoc.getConnectionVector();
         for (const auto& rConnection : vConnVector)
         {
             const oox::xls::ConnectionModel& rModel = rConnection->getModel();
@@ -1036,26 +1036,28 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
                 </xsd:sequence>
             */
 
-            { // export <dbPr>
-
+            css::uno::Sequence<css::uno::Any> aSeqs;
+            aSeqs = rConnection->getDbPrSequenceAny();
+            // export <dbPr> if not empty
+            if (aSeqs.hasElements())
+            {
                 rtl::Reference<sax_fastparser::FastAttributeList> pAttrListDbPr
                     = sax_fastparser::FastSerializerHelper::createAttrList();
 
-                css::uno::Sequence<css::uno::Any> aSeqs = rConnection->getDbPrSequenceAny();
                 addElemensToAttrList(pAttrListDbPr, aSeqs);
 
                 rStrm.GetCurrentStream()->singleElement(XML_dbPr, pAttrListDbPr);
             }
 
-            { // export <olapPr>
-
+            aSeqs = rConnection->getOlapPrSequenceAny();
+            // export <olapPr> if not empty
+            if (aSeqs.hasElements())
+            {
                 rtl::Reference<sax_fastparser::FastAttributeList> pAttrListOlapPr
                     = sax_fastparser::FastSerializerHelper::createAttrList();
 
-                css::uno::Sequence<css::uno::Any> aSeqs = rConnection->getOlapPrSequenceAny();
                 addElemensToAttrList(pAttrListOlapPr, aSeqs);
 
-                // this prints empty <olapPr/> even if aSeqs is empty, TODO: check if aSeqs is empty
                 rStrm.GetCurrentStream()->singleElement(XML_olapPr, pAttrListOlapPr);
             }
 

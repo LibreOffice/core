@@ -2276,6 +2276,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166413)
                        u"RIGHT(A4,LEN(\"\"\"ABC\"\"\"))=\"\"\"ABC\"\"\"");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166712)
+{
+    createScDoc("xlsx/tdf166712.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pConn = parseExport(u"xl/connections.xml"_ustr);
+    CPPUNIT_ASSERT(pConn);
+
+    // empty dbPr/olapPr mustn't exist in the result's xl/connections.xml
+    assertXPath(pConn, "/x:connections/x:connection/x:dbPr", 0);
+
+    assertXPath(pConn, "/x:connections/x:connection/x:olapPr", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
