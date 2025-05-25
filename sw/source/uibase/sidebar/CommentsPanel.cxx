@@ -174,7 +174,7 @@ Thread::Thread(weld::Container* pParent)
     , mxExpander(mxBuilder->weld_expander("expander"))
     , mxCommentBox(mxBuilder->weld_box("comments_box"))
 {
-    // mxContainer->set_size_request(-1, mxContainer->get_preferred_size().Height());
+    mxContainer->set_size_request(mxContainer->get_preferred_size().Width(), -1);
 }
 
 Thread::~Thread() {}
