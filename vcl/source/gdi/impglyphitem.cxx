@@ -590,4 +590,12 @@ size_t SalLayoutGlyphsCache::GlyphsCost::operator()(const SalLayoutGlyphs& glyph
     return cost;
 }
 
+void SalLayoutGlyphsCache::dropCaches() { clear(); }
+
+void SalLayoutGlyphsCache::dumpState(rtl::OStringBuffer& rState)
+{
+    rState.append("\nSalLayoutGlyphsCache:\t");
+    rState.append(static_cast<sal_Int32>(mCachedGlyphs.size()));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,11 +23,13 @@
 
 #include <o3tl/lru_map.hxx>
 #include <o3tl/hash_combine.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <osl/conditn.hxx>
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/dropcache.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -422,6 +424,7 @@ struct ImplSVData
     css::uno::Reference< css::lang::XComponent > mxAccessBridge;
     std::unique_ptr<vcl::SettingsConfigItem> mpSettingsConfigItem;
     std::unordered_map< int, OUString > maPaperNames;
+    o3tl::sorted_vector<CacheOwner*> maCacheOwners;
 
     css::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;
 
@@ -439,6 +442,8 @@ struct ImplSVData
     LibreOfficeKitWakeCallback mpWakeCallback = nullptr;
     void *mpPollClosure = nullptr;
 
+    void registerCacheOwner(CacheOwner&);
+    void deregisterCacheOwner(CacheOwner&);
     void dropCaches();
     void dumpState(rtl::OStringBuffer &rState);
 };

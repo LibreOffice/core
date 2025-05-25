@@ -43,7 +43,7 @@ namespace {
 
 typedef struct FT_FaceRec_* FT_Face;
 
-class CairoFontsCache
+class CairoFontsCache : public CacheOwner
 {
 public:
     struct CacheId
@@ -62,16 +62,30 @@ public:
     };
 
 private:
-    typedef         std::deque< std::pair<cairo_font_face_t*, CacheId> > LRUFonts;
-    static LRUFonts maLRUFonts;
-public:
-                                CairoFontsCache() = delete;
+    typedef std::deque< std::pair<cairo_font_face_t*, CacheId> > LRUFonts;
+    LRUFonts maLRUFonts;
 
-    static void                 CacheFont(cairo_font_face_t* pFont, const CacheId &rId);
-    static cairo_font_face_t*   FindCachedFont(const CacheId &rId);
+    virtual void dropCaches() override
+    {
+        maLRUFonts.clear();
+    }
+
+    virtual void dumpState(rtl::OStringBuffer& rState) override
+    {
+        rState.append("\nCairoFontsCache:\t");
+        rState.append(static_cast<sal_Int32>(maLRUFonts.size()));
+    }
+
+public:
+    void               CacheFont(cairo_font_face_t* pFont, const CacheId &rId);
+    cairo_font_face_t* FindCachedFont(const CacheId &rId);
 };
 
-CairoFontsCache::LRUFonts CairoFontsCache::maLRUFonts;
+CairoFontsCache& getCairoFontsCache()
+{
+    static CairoFontsCache aCache;
+    return aCache;
+}
 
 void CairoFontsCache::CacheFont(cairo_font_face_t* pFont, const CairoFontsCache::CacheId &rId)
 {
@@ -188,13 +202,14 @@ CairoTextRender::~CairoTextRender()
 static void ApplyFont(cairo_t* cr, const CairoFontsCache::CacheId& rId, double nWidth, double nHeight, int nGlyphRotation,
                       const GenericSalLayout& rLayout)
 {
-    cairo_font_face_t* font_face = CairoFontsCache::FindCachedFont(rId);
+    CairoFontsCache& rCache = getCairoFontsCache();
+    cairo_font_face_t* font_face = rCache.FindCachedFont(rId);
     if (!font_face)
     {
         const FontConfigFontOptions *pOptions = rId.mpOptions;
         FcPattern *pPattern = pOptions->GetPattern();
         font_face = cairo_ft_font_face_create_for_pattern(pPattern);
-        CairoFontsCache::CacheFont(font_face, rId);
+        rCache.CacheFont(font_face, rId);
     }
     cairo_set_font_face(cr, font_face);
 

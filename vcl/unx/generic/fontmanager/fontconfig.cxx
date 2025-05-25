@@ -27,6 +27,7 @@
 #include <unx/fontmanager.hxx>
 #include <unx/helper.hxx>
 #include <comphelper/sequence.hxx>
+#include <vcl/dropcache.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <font/FontSelectPattern.hxx>
@@ -113,7 +114,7 @@ struct FcPatternDeleter
 
 typedef std::unique_ptr<FcPattern, FcPatternDeleter> FcPatternUniquePtr;
 
-class CachedFontConfigFontOptions
+class CachedFontConfigFontOptions : public CacheOwner
 {
 private:
     o3tl::lru_map<FontOptionsKey, FcPatternUniquePtr> lru_options_cache;
@@ -137,6 +138,17 @@ public:
         lru_options_cache.insert(std::make_pair(rKey, FcPatternUniquePtr(FcPatternDuplicate(pPattern))));
     }
 
+private:
+    virtual void dropCaches() override
+    {
+        lru_options_cache.clear();
+    }
+
+    virtual void dumpState(rtl::OStringBuffer& rState) override
+    {
+        rState.append("\nCachedFontConfigFontOptions:\t");
+        rState.append(static_cast<sal_Int32>(lru_options_cache.size()));
+    }
 };
 
 typedef std::pair<FcChar8*, FcChar8*> lang_and_element;

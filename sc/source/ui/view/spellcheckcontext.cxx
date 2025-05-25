@@ -12,6 +12,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <vcl/dropcache.hxx>
 
 #include <scitems.hxx>
 #include <document.hxx>
@@ -29,7 +30,7 @@ using namespace css;
 
 using sc::SpellCheckContext;
 
-class SpellCheckContext::SpellCheckCache
+class SpellCheckContext::SpellCheckCache : public CacheOwner
 {
     struct CellPos
     {
@@ -89,6 +90,20 @@ class SpellCheckContext::SpellCheckCache
 
     SharedStringMapType  maStringMisspells;
     CellMapType          maEditTextMisspells;
+
+    virtual void dropCaches() override
+    {
+        clear();
+    }
+
+    virtual void dumpState(rtl::OStringBuffer& rState) override
+    {
+        rState.append("\nSpellCheckCache:\t");
+        rState.append("\t string misspells: ");
+        rState.append(static_cast<sal_Int32>(maStringMisspells.size()));
+        rState.append("\t editeng misspells: ");
+        rState.append(static_cast<sal_Int32>(maEditTextMisspells.size()));
+    }
 
 public:
 

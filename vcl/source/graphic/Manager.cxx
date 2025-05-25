@@ -119,7 +119,7 @@ void MemoryManager::swappedOut(MemoryManaged* pMemoryManaged, sal_Int64 nNewSize
     changeExisting(pMemoryManaged, nNewSize);
 }
 
-void MemoryManager::reduceAllAndNow()
+void MemoryManager::dropCaches()
 {
     std::unique_lock aGuard(maMutex);
     reduceMemory(aGuard, true);

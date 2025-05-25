@@ -23,9 +23,11 @@
 
 #include <o3tl/hash_combine.hxx>
 #include <o3tl/lru_map.hxx>
+#include <rtl/strbuf.hxx>
 #include <unotools/configmgr.hxx>
 #include <tools/lazydelete.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/dropcache.hxx>
 
 namespace vcl::text
 {
@@ -48,25 +50,56 @@ struct TextLayoutCacheCost
         return item->runs.size() * sizeof(item->runs.front());
     }
 };
-} // namespace
 
-std::shared_ptr<const TextLayoutCache> TextLayoutCache::Create(OUString const& rString)
+struct TextLayoutCacheMap : public CacheOwner
 {
     typedef o3tl::lru_map<OUString, std::shared_ptr<const TextLayoutCache>, FirstCharsStringHash,
                           FastStringCompareEqual, TextLayoutCacheCost>
         Cache;
-    static tools::DeleteOnDeinit<Cache> cache(
-        !comphelper::IsFuzzing() ? officecfg::Office::Common::Cache::Font::TextRunsCacheSize::get()
-                                 : 100);
-    if (Cache* map = cache.get())
+
+    Cache cache;
+
+    TextLayoutCacheMap(int capacity)
+        : cache(capacity)
     {
-        auto it = map->find(rString);
-        if (it != map->end())
+    }
+
+    std::shared_ptr<const TextLayoutCache> Create(OUString const& rString)
+    {
+        auto it = cache.find(rString);
+        if (it != cache.end())
             return it->second;
         auto ret = std::make_shared<const TextLayoutCache>(rString.getStr(), rString.getLength());
-        map->insert({ rString, ret });
+        cache.insert({ rString, ret });
         return ret;
     }
+
+    virtual void dropCaches() override { cache.clear(); }
+
+    virtual void dumpState(rtl::OStringBuffer& rState) override
+    {
+        rState.append("\nTextLayoutCache:\t");
+        rState.append(static_cast<sal_Int32>(cache.size()));
+
+        TextLayoutCacheCost cost;
+        size_t nTotalCost = 0;
+        for (auto it = cache.begin(); it != cache.end(); ++it)
+            nTotalCost += cost(it->second);
+
+        rState.append("\t cost: ");
+        rState.append(static_cast<sal_Int64>(nTotalCost));
+    }
+};
+
+} // namespace
+
+std::shared_ptr<const TextLayoutCache> TextLayoutCache::Create(OUString const& rString)
+{
+    static tools::DeleteOnDeinit<TextLayoutCacheMap> cache(
+        !comphelper::IsFuzzing() ? officecfg::Office::Common::Cache::Font::TextRunsCacheSize::get()
+                                 : 100);
+    if (TextLayoutCacheMap* map = cache.get())
+        return map->Create(rString);
     return std::make_shared<const TextLayoutCache>(rString.getStr(), rString.getLength());
 }
 }
