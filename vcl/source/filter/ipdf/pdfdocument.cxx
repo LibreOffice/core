@@ -1384,7 +1384,9 @@ bool PDFDocument::ReadWithPossibleFixup(SvStream& rStream)
     // Read failed, try a roundtrip through pdfium and then retry.
     rStream.Seek(0);
     SvMemoryStream aStandardizedStream;
-    vcl::pdf::convertToHighestSupported(rStream, aStandardizedStream);
+    bool bEncrypted;
+    vcl::pdf::convertToHighestSupported(rStream, aStandardizedStream, nullptr, true /* force */,
+                                        bEncrypted);
     return Read(aStandardizedStream);
 }
 

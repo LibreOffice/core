@@ -39,14 +39,16 @@ bool isCompatible(SvStream& rInStream)
 /// Converts to highest supported format version (1.6).
 /// Usually used to deal with missing referenced objects in source
 /// pdf stream.
-
+/// The conversion takes place if either the stream is encrypted, or 'bForce' is true
 bool convertToHighestSupported(
     SvStream& rInStream, SvStream& rOutStream,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler, bool bForce,
+    bool& bEncrypted)
 {
     sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN;
     sal_uInt64 nSize = STREAM_SEEK_TO_END;
     rInStream.Seek(nPos);
+    bEncrypted = false;
     // Convert to PDF-1.6.
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -83,6 +85,7 @@ bool convertToHighestSupported(
             }
 
             // We don't have a filename for the GUI here
+            bEncrypted = true;
             bAgain = vcl::pdf::getPassword(xInteractionHandler, aPassword, !bAgain, u"PDF"_ustr);
             SAL_INFO("vcl.filter", "convertToHighestSupported pass result: " << bAgain);
             if (!bAgain)
@@ -102,9 +105,14 @@ bool convertToHighestSupported(
     } while (bAgain);
 
     aSaved.Seek(STREAM_SEEK_TO_BEGIN);
-    SAL_INFO("vcl.filter", "convertToHighestSupported do write");
-    rOutStream.WriteStream(aSaved);
+    if (bEncrypted || bForce)
+    {
+        SAL_INFO("vcl.filter", "convertToHighestSupported do write");
+        rOutStream.WriteStream(aSaved);
+    }
 
+    SAL_INFO("vcl.filter",
+             "convertToHighestSupported exit: encrypted: " << bEncrypted << " force: " << bForce);
     return rOutStream.good();
 }
 
@@ -112,15 +120,17 @@ bool convertToHighestSupported(
 /// case it's too new for our PDF export.
 bool getCompatibleStream(
     SvStream& rInStream, SvStream& rOutStream,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+    bool& bEncrypted)
 {
     bool bCompatible = isCompatible(rInStream);
+
+    // This will convert if either the file is encrypted, or !bCompatible
+    convertToHighestSupported(rInStream, rOutStream, xInteractionHandler, !bCompatible, bEncrypted);
     rInStream.Seek(STREAM_SEEK_TO_BEGIN);
-    if (bCompatible)
-        // Not converting.
+    if (bCompatible && !bEncrypted)
+        // Just pass the original through
         rOutStream.WriteStream(rInStream, STREAM_SEEK_TO_END);
-    else
-        convertToHighestSupported(rInStream, rOutStream, xInteractionHandler);
 
     return rOutStream.good();
 }
@@ -129,9 +139,10 @@ BinaryDataContainer createBinaryDataContainer(
     SvStream& rStream,
     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
+    bool bEncrypted;
     // Save the original PDF stream for later use.
     SvMemoryStream aMemoryStream;
-    if (!getCompatibleStream(rStream, aMemoryStream, xInteractionHandler))
+    if (!getCompatibleStream(rStream, aMemoryStream, xInteractionHandler, bEncrypted))
         return {};
 
     const sal_uInt64 nStreamLength = aMemoryStream.TellEnd();
