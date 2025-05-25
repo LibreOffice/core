@@ -4117,6 +4117,37 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168116)
     assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf165094)
+{
+    // Given a document that:
+    // 1. Has 45 leading paragraphs (more than SwLayHelper::mnMaxParaPerPage);
+    // 2. Has the next paragraph hidden;
+    // 2.1. That hidden paragraph has "page break before with page style";
+    // 2.2. That page style is different than page style used before;
+    // 2.3. That hidden paragraph has "with page number", and the number is odd (previous page is
+    //      also odd) - this is actually an alternative to 2.2;
+    // 3. Then immediately goes a table.
+    createSwDoc("tdf165094.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // Check that the page break is created, with correct settings
+
+    assertXPath(pXmlDoc, "//page"_ostr, 3);
+
+    assertXPath(pXmlDoc, "//page[1]"_ostr, "formatName"_ostr, u"Default Page Style"_ustr);
+    assertXPath(pXmlDoc, "//page[1]/page_info"_ostr, "virtNum"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "//page[1]/body/txt"_ostr, 45);
+
+    assertXPath(pXmlDoc, "//page[2]/page_info"_ostr, "virtNum"_ostr, u"2"_ustr);
+    assertXPath(pXmlDoc, "//page[2]/infos/bounds"_ostr, "height"_ostr, u"0"_ustr); // hidden
+    assertXPath(pXmlDoc, "//page[2]/body"_ostr, 0);
+
+    assertXPath(pXmlDoc, "//page[3]"_ostr, "formatName"_ostr, u"Style1"_ustr);
+    assertXPath(pXmlDoc, "//page[3]/page_info"_ostr, "virtNum"_ostr, u"5"_ustr);
+    assertXPath(pXmlDoc, "//page[3]/body/txt[1]/infos/bounds"_ostr, "height"_ostr, u"0"_ustr); // hidden
+    assertXPath(pXmlDoc, "//page[3]/body/tab"_ostr, 1);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
