@@ -4312,16 +4312,6 @@ vcl/source/edit/textdat2.hxx:87
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const TETextPortion *, std::__cxx1998::vector<TETextPortion> >, std::vector<TETextPortion> > TETextPortionList::end() const
 vcl/source/filter/FilterConfigCache.hxx:68
     const rtl::OUString & FilterConfigCache::GetImportFormatMediaType(unsigned short)
-vcl/source/fontsubset/xlat.hxx:30
-    unsigned short vcl::TranslateChar12(unsigned short)
-vcl/source/fontsubset/xlat.hxx:31
-    unsigned short vcl::TranslateChar13(unsigned short)
-vcl/source/fontsubset/xlat.hxx:32
-    unsigned short vcl::TranslateChar14(unsigned short)
-vcl/source/fontsubset/xlat.hxx:33
-    unsigned short vcl::TranslateChar15(unsigned short)
-vcl/source/fontsubset/xlat.hxx:34
-    unsigned short vcl::TranslateChar16(unsigned short)
 vcl/source/window/menuitemlist.hxx:123
     void MenuItemList::Clear()
 vcl/unx/generic/gdi/X11CairoSalGraphicsImpl.hxx:74

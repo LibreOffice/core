@@ -42,7 +42,6 @@
 #include <tools/fix16.hxx>
 #endif
 #include "ttcr.hxx"
-#include "xlat.hxx"
 #include <rtl/crc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

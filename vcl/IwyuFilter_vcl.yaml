@@ -52,9 +52,6 @@ excludelist:
     vcl/source/filter/wmf/wmfexternal.cxx:
     # Actually these are used
     - com/sun/star/beans/PropertyValue.hpp
-    vcl/source/fontsubset/sft.cxx:
-    # Needed on WIN32 / MAC / IOS
-    - xlat.hxx
     vcl/source/gdi/configsettings.cxx:
     # Needed for OSL_DEBUG_LEVEL > 2
     - sal/log.hxx
