@@ -65,7 +65,7 @@ private:
     void CreateOLEData();
 
 public:
-            ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDocShell* pContainerShell,
+            ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDocShell& rContainerShell,
                                 TransferableObjectDescriptor aDesc );
     virtual ~ScDrawTransferObj() override;
 

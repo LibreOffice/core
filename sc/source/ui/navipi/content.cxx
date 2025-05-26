@@ -1131,11 +1131,11 @@ static bool lcl_GetRange( const ScDocument& rDoc, ScContentId nType, const OUStr
     return bFound;
 }
 
-static bool lcl_DoDragObject( ScDocShell* pSrcShell, std::u16string_view rName, ScContentId nType, weld::TreeView& rTreeView )
+static bool lcl_DoDragObject( ScDocShell& rSrcShell, std::u16string_view rName, ScContentId nType, weld::TreeView& rTreeView )
 {
     bool bDisallow = true;
 
-    ScDocument& rSrcDoc = pSrcShell->GetDocument();
+    ScDocument& rSrcDoc = rSrcShell.GetDocument();
     ScDrawLayer* pModel = rSrcDoc.GetDrawLayer();
     if (pModel)
     {
@@ -1168,11 +1168,11 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, std::u16string_view rName, 
             ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
             TransferableObjectDescriptor aObjDesc;
-            pSrcShell->FillTransferableObjectDescriptor( aObjDesc );
-            aObjDesc.maDisplayName = pSrcShell->GetMedium()->GetURLObject().GetURLNoPass();
+            rSrcShell.FillTransferableObjectDescriptor( aObjDesc );
+            aObjDesc.maDisplayName = rSrcShell.GetMedium()->GetURLObject().GetURLNoPass();
             // maSize is set in ScDrawTransferObj ctor
 
-            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pDragModel), pSrcShell, std::move(aObjDesc) );
+            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pDragModel), rSrcShell, std::move(aObjDesc) );
 
             pTransferObj->SetDragSourceObj( *pObject, nTab );
             pTransferObj->SetDragSourceFlags(ScDragSrc::Navigator);
@@ -1189,11 +1189,11 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, std::u16string_view rName, 
     return bDisallow;
 }
 
-static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDragSrc nFlags, weld::TreeView& rTreeView )
+static bool lcl_DoDragCells( ScDocShell& rSrcShell, const ScRange& rRange, ScDragSrc nFlags, weld::TreeView& rTreeView )
 {
     bool bDisallow = true;
 
-    ScDocument& rSrcDoc = pSrcShell->GetDocument();
+    ScDocument& rSrcDoc = rSrcShell.GetDocument();
     ScMarkData aMark(rSrcDoc.GetSheetLimits());
     aMark.SelectTable( rRange.aStart.Tab(), true );
     aMark.SetMarkArea( rRange );
@@ -1208,13 +1208,13 @@ static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDra
         // pClipDoc->ExtendMerge( rRange, sal_True );
 
         TransferableObjectDescriptor aObjDesc;
-        pSrcShell->FillTransferableObjectDescriptor( aObjDesc );
-        aObjDesc.maDisplayName = pSrcShell->GetMedium()->GetURLObject().GetURLNoPass();
+        rSrcShell.FillTransferableObjectDescriptor( aObjDesc );
+        aObjDesc.maDisplayName = rSrcShell.GetMedium()->GetURLObject().GetURLNoPass();
         // maSize is set in ScTransferObj ctor
 
         rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( std::move(pClipDoc), std::move(aObjDesc) );
 
-        pTransferObj->SetDragSource( pSrcShell, aMark );
+        pTransferObj->SetDragSource( &rSrcShell, aMark );
         pTransferObj->SetDragSourceFlags( nFlags );
 
         ScModule::get()->SetDragObject(pTransferObj.get(), nullptr); // for internal D&D
@@ -1325,7 +1325,7 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
                             ScRange aRange;
                             if ( lcl_GetRange( rSrcDoc, nType, aText, aRange ) )
                             {
-                                bDisallow = lcl_DoDragCells( pSrcShell, aRange, ScDragSrc::Navigator, *m_xTreeView );
+                                bDisallow = lcl_DoDragCells( *pSrcShell, aRange, ScDragSrc::Navigator, *m_xTreeView );
                             }
                         }
                         else if ( nType == ScContentId::TABLE )
@@ -1334,13 +1334,13 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
                             if ( rSrcDoc.GetTable( aText, nTab ) )
                             {
                                 ScRange aRange(0, 0, nTab, rSrcDoc.MaxCol(), rSrcDoc.MaxRow(), nTab);
-                                bDisallow = lcl_DoDragCells( pSrcShell, aRange, (ScDragSrc::Navigator | ScDragSrc::Table), *m_xTreeView );
+                                bDisallow = lcl_DoDragCells( *pSrcShell, aRange, (ScDragSrc::Navigator | ScDragSrc::Table), *m_xTreeView );
                             }
                         }
                         else if ( nType == ScContentId::GRAPHIC || nType == ScContentId::OLEOBJECT ||
                                     nType == ScContentId::DRAWING )
                         {
-                            bDisallow = lcl_DoDragObject( pSrcShell, aText, nType, *m_xTreeView );
+                            bDisallow = lcl_DoDragObject( *pSrcShell, aText, nType, *m_xTreeView );
 
                             //  during ExecuteDrag the navigator can be deleted
                             //  -> don't access member anymore !!!

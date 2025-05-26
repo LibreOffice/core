@@ -69,7 +69,7 @@ constexpr sal_uInt32 SCDRAWTRANS_TYPE_EMBOBJ    = 1;
 constexpr sal_uInt32 SCDRAWTRANS_TYPE_DRAWMODEL = 2;
 constexpr sal_uInt32 SCDRAWTRANS_TYPE_DOCUMENT  = 3;
 
-ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDocShell* pContainerShell,
+ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDocShell& rContainerShell,
                                         TransferableObjectDescriptor aDesc ) :
     m_pModel( std::move(pClipModel) ),
     m_aObjDesc(std::move( aDesc )),
@@ -78,7 +78,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
     m_bOleObj( false ),
     m_nDragSourceFlags( ScDragSrc::Undefined ),
     m_bDragWasInternal( false ),
-    maShellID(SfxObjectShell::CreateShellID(pContainerShell))
+    maShellID(SfxObjectShell::CreateShellID(&rContainerShell))
 {
 
     //  check what kind of objects are contained
@@ -147,16 +147,13 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
                                 {
                                     OUString aUrl = sTmp;
                                     OUString aAbs = aUrl;
-                                    if (pContainerShell)
+                                    const SfxMedium* pMedium = rContainerShell.GetMedium();
+                                    if (pMedium)
                                     {
-                                        const SfxMedium* pMedium = pContainerShell->GetMedium();
-                                        if (pMedium)
-                                        {
-                                            bool bWasAbs = true;
-                                            aAbs = pMedium->GetURLObject().smartRel2Abs( aUrl, bWasAbs ).
-                                                        GetMainURL(INetURLObject::DecodeMechanism::NONE);
-                                            // full path as stored INetBookmark must be encoded
-                                        }
+                                        bool bWasAbs = true;
+                                        aAbs = pMedium->GetURLObject().smartRel2Abs( aUrl, bWasAbs ).
+                                                    GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                                        // full path as stored INetBookmark must be encoded
                                     }
 
                                     // Label
@@ -201,13 +198,10 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
 
     // remember a unique ID of the source document
 
-    if ( pContainerShell )
+    ScDocument& rDoc = rContainerShell.GetDocument();
+    if ( pPage )
     {
-        ScDocument& rDoc = pContainerShell->GetDocument();
-        if ( pPage )
-        {
-            ScChartHelper::FillProtectedChartRangesVector( m_aProtectedChartRangesVector, rDoc, pPage );
-        }
+        ScChartHelper::FillProtectedChartRangesVector( m_aProtectedChartRangesVector, rDoc, pPage );
     }
 }
 

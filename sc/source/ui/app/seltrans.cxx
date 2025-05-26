@@ -337,7 +337,7 @@ void ScSelectionTransferObj::CreateDrawData()
             aObjDesc.maDisplayName = rDocSh.GetMedium()->GetURLObject().GetURLNoPass();
             // maSize is set in ScDrawTransferObj ctor
 
-            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), &rDocSh, std::move(aObjDesc) );
+            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), rDocSh, std::move(aObjDesc) );
 
             pTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
             pTransferObj->SetDragSource( pDrawView );       // copies selection
