@@ -78,8 +78,8 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
     {
         if(xChild.is())
         {
-            VCLXAccessibleComponent* pVCLAccComponent = dynamic_cast<VCLXAccessibleComponent*>(
-                m_xAccessible->getAccessibleContext().get());
+            VCLXAccessibleComponent* pVCLAccComponent
+                = dynamic_cast<VCLXAccessibleComponent*>(m_xAccessible.get());
             assert(pVCLAccComponent);
             const SystemEnvData* systemdata = pVCLAccComponent->GetWindow()->GetSystemData();
 

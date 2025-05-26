@@ -1037,9 +1037,8 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
         }
 
         // tdf#141197 if we have a sysobj child then include that in the hierarchy
-        rtl::Reference<VCLXAccessibleComponent> pVCLAccComponent
-            = dynamic_cast<VCLXAccessibleComponent*>(rxAccessible->getAccessibleContext().get());
-        if (pVCLAccComponent.is())
+        if (VCLXAccessibleComponent* pVCLAccComponent
+            = dynamic_cast<VCLXAccessibleComponent*>(rxAccessible.get()))
         {
             VclPtr<vcl::Window> xWindow = pVCLAccComponent->GetWindow();
             if (xWindow && xWindow->GetType() == WindowType::SYSTEMCHILDWINDOW)
