@@ -47,13 +47,12 @@ using osl::MutexGuard;
 namespace chart
 {
 
-AccessibleChartView::AccessibleChartView(SdrView* pView ) :
-        impl::AccessibleChartView_Base(
-            AccessibleElementInfo(), // empty for now
-            true, // has children
-            true  // always transparent
-            ),
-        m_pSdrView( pView )
+AccessibleChartView::AccessibleChartView(SdrView* pView)
+    : ImplInheritanceHelper(AccessibleElementInfo(), // empty for now
+                            true, // has children
+                            true // always transparent
+                            )
+    , m_pSdrView(pView)
 {
     AddState( AccessibleStateType::OPAQUE );
 }

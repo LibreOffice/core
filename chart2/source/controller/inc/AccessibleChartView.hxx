@@ -38,16 +38,8 @@ namespace chart
 {
 class ChartView;
 
-namespace impl
-{
-typedef ::cppu::ImplInheritanceHelper<
-        ::chart::AccessibleBase,
-        css::view::XSelectionChangeListener >
-    AccessibleChartView_Base;
-}
-
-class AccessibleChartView final :
-        public impl::AccessibleChartView_Base
+class AccessibleChartView final
+    : public cppu::ImplInheritanceHelper<chart::AccessibleBase, css::view::XSelectionChangeListener>
 {
 public:
     AccessibleChartView( SdrView* pView );
