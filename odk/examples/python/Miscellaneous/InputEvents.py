@@ -66,19 +66,7 @@ def demo():
                 #subXWindow.addMouseMotionListener(listener),  # very much events
             ))
 
-        # Maybe the event handlers can also be registered via one of the objects
-        # this function iterates through. But currently this function just
-        # prints the accessible roles of the objects.
-        #recursive_acc_ctx("", xWindow.AccessibleContext.AccessibleParent);
-        #recursive_acc_ctx("", xWindow);
-
         input("Waiting for events. Press Enter to quit...\n")
-
-
-def recursive_acc_ctx(path, obj):
-    print("recursive_acc_ctx: " + path + find_accessible_role(obj.getAccessibleContext().getAccessibleRole()))
-    for i in range(obj.getAccessibleContext().AccessibleChildCount):
-        recursive_acc_ctx(path+str(i)+": ", obj.getAccessibleContext().getAccessibleChild(i))
 
 
 def recursive_windows(path, xWindow, func):
