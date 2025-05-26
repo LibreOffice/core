@@ -5901,16 +5901,6 @@ css::uno::Any VCLXPatternField::getProperty( const OUString& PropertyName )
     return aProp;
 }
 
-
-
-VCLXToolBox::VCLXToolBox()
-{
-}
-
-VCLXToolBox::~VCLXToolBox()
-{
-}
-
 VCLXHeaderBar::VCLXHeaderBar()
 {
 }

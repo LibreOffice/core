@@ -1641,7 +1641,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
             break;
             case WindowType::TOOLBOX:
                 pNewWindow = VclPtr<ToolBox>::Create( pParent, nWinBits );
-                *ppNewComp = new VCLXToolBox;
+                *ppNewComp = new VCLXWindow;
             break;
             case WindowType::TRISTATEBOX:
                 pNewWindow = VclPtr<CheckBox>::Create( pParent, nWinBits );

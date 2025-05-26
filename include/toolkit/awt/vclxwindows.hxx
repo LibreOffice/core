@@ -691,14 +691,6 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-//  class VCLXToolBox
-class VCLXToolBox final : public VCLXWindow
-{
-public:
-                        VCLXToolBox();
-                        virtual ~VCLXToolBox() override;
-};
-
 class VCLXHeaderBar final : public VCLXWindow
 {
 public:
