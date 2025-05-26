@@ -1832,8 +1832,24 @@ void ScColumn::SwapCol(ScColumn& rCol)
     std::swap(mnBlkCountCellNotes, rCol.mnBlkCountCellNotes);
 
     // notes update caption
-    UpdateNoteCaptions(0, GetDoc().MaxRow());
-    rCol.UpdateNoteCaptions(0, GetDoc().MaxRow());
+    auto lclUpdateNoteCaptions = [](ScColumn& rColumn)
+    {
+        auto aFunc = [&rColumn]( size_t nRow, ScPostIt* p )
+        {
+            // We only need to update position if this note has been instantiated i.e. made visible.
+            if (p->GetCaption())
+            {
+                ScAddress aAddr(rColumn.nCol, nRow, rColumn.nTab);
+                p->UpdateCaptionPos(aAddr);
+                // Notify our LOK clients
+                ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Modify, rColumn.GetDoc(), aAddr, p);
+            }
+        };
+        sc::ProcessNote(rColumn.maCellNotes.begin(), rColumn.maCellNotes, 0, rColumn.GetDoc().MaxRow(), aFunc);
+    };
+
+    lclUpdateNoteCaptions(*this);
+    lclUpdateNoteCaptions(rCol);
 
     std::swap(pAttrArray, rCol.pAttrArray);
 
