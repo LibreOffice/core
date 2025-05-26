@@ -3852,6 +3852,7 @@ if test $_os = Darwin; then
         if test -n "$identity"; then
             MACOSX_CODESIGNING_IDENTITY=$identity
             pretty_name=`security find-identity -p codesigning -v | grep "$MACOSX_CODESIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
+            MACOSX_CODESIGNING_TEAM_IDENTIFIER=`echo $pretty_name | sed -e 's#.*(\([[:alnum:]]*\))#\1#'`
             AC_MSG_RESULT([yes, using the identity $MACOSX_CODESIGNING_IDENTITY for $pretty_name])
         else
             AC_MSG_ERROR([cannot determine identity to use])
@@ -3920,6 +3921,7 @@ AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
 AC_SUBST(INSTALL_NAME_TOOL)
 AC_SUBST(LIBTOOL) # Note that the macOS libtool command is unrelated to GNU libtool
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
+AC_SUBST(MACOSX_CODESIGNING_TEAM_IDENTIFIER)
 AC_SUBST(MACOSX_PACKAGE_SIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
@@ -6092,6 +6094,7 @@ if test "$cross_compiling" = "yes"; then
         instsetoo_native/util/openoffice.lst.in \
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in \
+        sysui/desktop/macosx/LaunchConstraint.plist.in \
         sysui/desktop/macosx/hardened_runtime.xcent.in \
         sysui/desktop/macosx/lo.xcent.in \
         .vscode/vs-code-template.code-workspace.in \
@@ -15950,6 +15953,7 @@ AC_CONFIG_FILES([
                  bin/officeotron.sh
                  instsetoo_native/util/openoffice.lst
                  sysui/desktop/macosx/Info.plist
+                 sysui/desktop/macosx/LaunchConstraint.plist
                  hardened_runtime.xcent:sysui/desktop/macosx/hardened_runtime.xcent.in
                  lo.xcent:sysui/desktop/macosx/lo.xcent.in
                  extensions/source/macosx/quicklookpreview/appex/Info.plist
