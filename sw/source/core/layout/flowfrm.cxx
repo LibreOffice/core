@@ -2866,7 +2866,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
             // No <CheckPageDesc(..)> in online layout
             if ( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) )
             {
-                if ( bCheckPageDescs && pNewPage->GetNext() )
+                if (bCheckPageDescs && (bCheckPageDescOfNextPage || pNewPage->GetNext()))
                 {
                     SwPageFrame* pStartPage = bCheckPageDescOfNextPage ?
                                             pNewPage :
