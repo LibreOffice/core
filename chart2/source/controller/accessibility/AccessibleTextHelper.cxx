@@ -52,12 +52,13 @@ AccessibleTextHelper::~AccessibleTextHelper()
 {
 }
 
-void AccessibleTextHelper::initialize( const OUString& aCID,
-                                const Reference< XAccessible >& xEventSource,
-                                vcl::Window* pWindow)
+void AccessibleTextHelper::initialize(
+    const OUString& aCID,
+    const rtl::Reference<comphelper::OAccessibleComponentHelper>& rEventSource,
+    vcl::Window* pWindow)
 {
     OSL_ENSURE( !aCID.isEmpty(), "Empty CID" );
-    assert(xEventSource.is() && "Empty Event Source");
+    assert(rEventSource.is() && "Empty Event Source");
     if (aCID.isEmpty())
         return;
 
@@ -73,7 +74,7 @@ void AccessibleTextHelper::initialize( const OUString& aCID,
             if( pTextObj )
             {
                 m_oTextHelper.emplace(std::make_unique<SvxTextEditSource>(*pTextObj, nullptr, *m_pDrawViewWrapper, *pWindow->GetOutDev()));
-                m_oTextHelper->SetEventSource( xEventSource );
+                m_oTextHelper->SetEventSource(rEventSource);
             }
         }
     }
