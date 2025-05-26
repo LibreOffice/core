@@ -44,10 +44,10 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/toolkit/unowrap.hxx>
 
 #include "atkwrapper.hxx"
 #include "atkregistry.hxx"
@@ -1012,10 +1012,11 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
         }
 
         // tdf#141197 if we have a sysobj child then include that in the hierarchy
-        if (UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper())
+        rtl::Reference<VCLXAccessibleComponent> pVCLAccComponent
+            = dynamic_cast<VCLXAccessibleComponent*>(rxAccessible->getAccessibleContext().get());
+        if (pVCLAccComponent.is())
         {
-            css::uno::Reference<css::awt::XWindow> xAWTWindow(rxAccessible, css::uno::UNO_QUERY);
-            VclPtr<vcl::Window> xWindow = pWrapper->GetWindow(xAWTWindow);
+            VclPtr<vcl::Window> xWindow = pVCLAccComponent->GetWindow();
             if (xWindow && xWindow->GetType() == WindowType::SYSTEMCHILDWINDOW)
             {
                 const SystemEnvData* pEnvData = static_cast<SystemChildWindow*>(xWindow.get())->GetSystemData();
