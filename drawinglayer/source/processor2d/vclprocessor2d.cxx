@@ -553,13 +553,6 @@ void VclProcessor2D::RenderFillGraphicPrimitive2D(
         return;
     }
 
-    if (rFillBitmapCandidate.hasTransparency())
-    {
-        // cannot handle yet, use decomposition
-        process(rFillBitmapCandidate);
-        return;
-    }
-
     bool bPrimitiveAccepted = RenderFillGraphicPrimitive2DImpl(rFillBitmapCandidate);
 
     if (!bPrimitiveAccepted)
