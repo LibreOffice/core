@@ -214,9 +214,6 @@ void Window::dispose()
     if ( pWrapper )
         pWrapper->WindowDestroyed( this );
 
-    // MT: Must be called after WindowDestroyed!
-    // Otherwise, if the accessible is a VCLXWindow, it will try to destroy this window again!
-    // But accessibility implementations from applications need this dispose.
     if ( mpWindowImpl->mxAccessible.is() )
     {
         Reference< XComponent> xC( mpWindowImpl->mxAccessible, UNO_QUERY );
