@@ -63,11 +63,6 @@ bool hasFloatingChild(vcl::Window *pWindow)
 }
 };
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(Edit* pEdit)
-{
-    return new VCLXAccessibleEdit(pEdit);
-}
-
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(vcl::Window* pWindow)
 {
     if (!pWindow)

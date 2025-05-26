@@ -3592,12 +3592,6 @@ VCLXEdit::VCLXEdit() : maTextListeners( *this )
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXEdit::CreateAccessibleContext()
-{
-    VclPtr<Edit> pEdit = GetAs<Edit>();
-    return AccessibleFactory::createAccessibleContext(pEdit);
-}
-
 void VCLXEdit::dispose()
 {
     SolarMutexGuard aGuard;
@@ -4583,12 +4577,6 @@ VCLXDateField::~VCLXDateField()
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXDateField::CreateAccessibleContext()
-{
-    VclPtr<Edit> pEdit = GetAs<Edit>();
-    return AccessibleFactory::createAccessibleContext(pEdit);
-}
-
 void VCLXDateField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
@@ -4910,12 +4898,6 @@ VCLXTimeField::VCLXTimeField()
 
 VCLXTimeField::~VCLXTimeField()
 {
-}
-
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXTimeField::CreateAccessibleContext()
-{
-    VclPtr<Edit> pEdit = GetAs<Edit>();
-    return AccessibleFactory::createAccessibleContext(pEdit);
 }
 
 void VCLXTimeField::setTime( const util::Time& aTime )
@@ -7787,12 +7769,6 @@ void VCLXMultiLineEdit::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds, true );
-}
-
-css::uno::Reference<css::accessibility::XAccessibleContext> VCLXMultiLineEdit::CreateAccessibleContext()
-{
-    VclPtr<MultiLineEdit> pMultiLineEdit = GetAs<MultiLineEdit>();
-    return AccessibleFactory::createAccessibleContext(pMultiLineEdit);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

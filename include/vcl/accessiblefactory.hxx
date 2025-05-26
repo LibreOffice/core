@@ -21,20 +21,11 @@
 
 #include <vcl/dllapi.h>
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-
-#include <salhelper/simplereferenceobject.hxx>
-#include <tools/gen.hxx>
-#include <rtl/ref.hxx>
 
 namespace com::sun::star {
     namespace accessibility {
-        class XAccessible;
         class XAccessibleContext;
-    }
-    namespace awt {
-        class XWindow;
     }
 }
 
@@ -62,8 +53,6 @@ class VCL_DLLPUBLIC AccessibleFactory
 public:
     AccessibleFactory() = delete;
 
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(Edit* pEdit);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(vcl::Window* pWindow);
 };

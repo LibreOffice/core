@@ -356,8 +356,6 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
-
 
 public:
                     VCLXEdit();
@@ -453,9 +451,6 @@ public:
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
-
-protected:
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext> CreateAccessibleContext() override;
 };
 
 //  class VCLXSpinField

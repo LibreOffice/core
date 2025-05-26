@@ -33,6 +33,7 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/weld.hxx>
 
+#include <accessibility/vclxaccessibleedit.hxx>
 #include <window.h>
 #include <svdata.hxx>
 #include <strings.hrc>
@@ -1273,6 +1274,11 @@ void Edit::ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboar
     catch(const css::uno::Exception&)
     {
     }
+}
+
+css::uno::Reference<css::accessibility::XAccessible> Edit::CreateAccessible()
+{
+    return new VCLXAccessibleEdit(this);
 }
 
 void Edit::MouseButtonDown( const MouseEvent& rMEvt )

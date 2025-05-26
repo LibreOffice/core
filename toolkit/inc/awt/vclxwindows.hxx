@@ -263,8 +263,6 @@ public:
 class VCLXDateField :
     public cppu::ImplInheritanceHelper<VCLXFormattedSpinField, css::awt::XDateField>
 {
-protected:
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 public:
                     VCLXDateField();
                     virtual ~VCLXDateField() override;
@@ -302,7 +300,6 @@ public:
 class VCLXTimeField final :
     public cppu::ImplInheritanceHelper<VCLXFormattedSpinField, css::awt::XTimeField>
 {
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 public:
                     VCLXTimeField();
                     virtual ~VCLXTimeField() override;
