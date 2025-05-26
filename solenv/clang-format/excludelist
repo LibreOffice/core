@@ -5955,7 +5955,6 @@ include/toolkit/controls/unocontrolcontainer.hxx
 include/toolkit/controls/unocontrolcontainermodel.hxx
 include/toolkit/controls/unocontrolmodel.hxx
 include/toolkit/controls/unocontrols.hxx
-include/toolkit/helper/accessiblefactory.hxx
 include/toolkit/helper/listenermultiplexer.hxx
 include/toolkit/helper/macros.hxx
 include/toolkit/helper/vclunohelper.hxx
@@ -6126,7 +6125,6 @@ include/vcl/ImageTree.hxx
 include/vcl/Scanline.hxx
 include/vcl/abstdlg.hxx
 include/vcl/accessibility/vclxaccessiblecomponent.hxx
-include/vcl/accessiblefactory.hxx
 include/vcl/accessibletableprovider.hxx
 include/vcl/alpha.hxx
 include/vcl/bitmap.hxx
@@ -14122,7 +14120,6 @@ vcl/source/accessibility/AccessibleBrowseBoxHeaderCell.cxx
 vcl/source/accessibility/AccessibleBrowseBoxTable.cxx
 vcl/source/accessibility/AccessibleBrowseBoxTableBase.cxx
 vcl/source/accessibility/AccessibleBrowseBoxTableCell.cxx
-vcl/source/accessibility/acc_factory.cxx
 vcl/source/accessibility/accessiblebrowseboxcell.cxx
 vcl/source/accessibility/accessibleiconchoicectrl.cxx
 vcl/source/accessibility/accessibleiconchoicectrlentry.cxx

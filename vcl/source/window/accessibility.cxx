@@ -22,9 +22,15 @@
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/wrkwin.hxx>
 #include <comphelper/lok.hxx>
 
+#include <accessibility/floatingwindowaccessible.hxx>
+#include <accessibility/vclxaccessiblefixedtext.hxx>
+#include <accessibility/vclxaccessiblestatusbar.hxx>
+#include <accessibility/vclxaccessibletabcontrol.hxx>
+#include <accessibility/vclxaccessibletabpagewindow.hxx>
 #include <window.h>
 #include <brdwin.hxx>
 
@@ -75,10 +81,38 @@ css::uno::Reference< css::accessibility::XAccessible > Window::GetAccessible( bo
     return mpWindowImpl->mxAccessible;
 }
 
+namespace {
+
+bool hasFloatingChild(vcl::Window *pWindow)
+{
+    vcl::Window * pChild = pWindow->GetAccessibleChildWindow(0);
+    return pChild && pChild->GetType() == WindowType::FLOATINGWINDOW;
+}
+};
+
 css::uno::Reference< css::accessibility::XAccessible > Window::CreateAccessible()
 {
-    css::uno::Reference< css::accessibility::XAccessible > xAcc( GetComponentInterface(), css::uno::UNO_QUERY );
-    return xAcc;
+    const WindowType eType = GetType();
+
+    if (eType == WindowType::STATUSBAR)
+        return new VCLXAccessibleStatusBar(this);
+
+    if (eType == WindowType::TABCONTROL)
+        return new VCLXAccessibleTabControl(this);
+
+    if (eType == WindowType::TABPAGE && GetAccessibleParentWindow() && GetAccessibleParentWindow()->GetType() == WindowType::TABCONTROL)
+        return new VCLXAccessibleTabPageWindow(this);
+
+    if (eType == WindowType::FLOATINGWINDOW)
+        return new FloatingWindowAccessible(this);
+
+    if (eType == WindowType::BORDERWINDOW && hasFloatingChild(this))
+        return new FloatingWindowAccessible(this);
+
+    if ((eType == WindowType::HELPTEXTWINDOW) || (eType == WindowType::FIXEDLINE))
+        return new VCLXAccessibleFixedText(this);
+
+    return new VCLXAccessibleComponent(this);
 }
 
 void Window::SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& x )

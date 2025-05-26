@@ -46,7 +46,6 @@
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <tools/debug.hxx>
-#include <vcl/accessiblefactory.hxx>
 #include <vcl/event.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -861,12 +860,8 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 uno::Reference< accessibility::XAccessibleContext > VCLXWindow::CreateAccessibleContext()
 {
-    SolarMutexGuard aGuard;
-    if (mpImpl->mbDisposing)
-        return nullptr;
-
-    VclPtr<vcl::Window> pWindow = GetWindow();
-    return AccessibleFactory::createAccessibleContext(pWindow);
+    assert(false && "This code path shouldn't be reached any more.");
+    return {};
 }
 
 void VCLXWindow::SetSynthesizingVCLEvent( bool _b )
