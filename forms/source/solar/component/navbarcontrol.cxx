@@ -455,14 +455,6 @@ namespace frm
             // this will connect if not already connected and just update else
     }
 
-
-    void SAL_CALL ONavigationBarPeer::disposing( const EventObject& _rSource )
-    {
-        VCLXWindow::disposing( _rSource );
-        OFormNavigationHelper::disposing( _rSource );
-    }
-
-
     void ONavigationBarPeer::getSupportedFeatures( ::std::vector< sal_Int16 >& _rFeatureIds )
     {
         _rFeatureIds.push_back( FormFeature::MoveAbsolute );

@@ -1113,9 +1113,6 @@ void FmXGridPeer::disposing(const EventObject& e)
             }
         }
     }
-
-    if ( !bKnownSender )
-        VCLXWindow::disposing(e);
 }
 
 

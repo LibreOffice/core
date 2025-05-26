@@ -665,9 +665,8 @@ void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& )
 }
 
 
-void SAL_CALL SVTXGridControl::disposing( const EventObject& Source )
+void SAL_CALL SVTXGridControl::disposing(const EventObject&)
 {
-    VCLXWindow::disposing( Source );
 }
 
 

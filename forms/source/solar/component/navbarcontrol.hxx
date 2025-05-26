@@ -108,9 +108,6 @@ namespace frm
         void SAL_CALL setProperty( const OUString& _rPropertyName, const css::uno::Any& _rValue ) override;
         css::uno::Any SAL_CALL getProperty( const OUString& _rPropertyName ) override;
 
-        // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-
         // OFormNavigationHelper overriables
         virtual void    interceptorsChanged( ) override;
         virtual void    featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled ) override;

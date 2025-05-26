@@ -343,9 +343,8 @@ namespace toolkit
     }
 
 
-    void SAL_CALL AnimatedImagesPeer::disposing( const EventObject& i_event )
+    void SAL_CALL AnimatedImagesPeer::disposing(const EventObject&)
     {
-        VCLXWindow::disposing( i_event );
     }
 
 

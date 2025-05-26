@@ -123,9 +123,6 @@ public:
 
     std::unique_ptr<UnoPropertyArrayHelper>
                                         mpPropHelper;
-
-    css::uno::Reference< css::accessibility::XAccessibleContext >
-                                        mxAccessibleContext;
     css::uno::Reference< css::awt::XGraphics >
                                         mxViewGraphics;
     rtl::Reference< toolkit::WindowStyleSettings >
@@ -858,12 +855,6 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-uno::Reference< accessibility::XAccessibleContext > VCLXWindow::CreateAccessibleContext()
-{
-    assert(false && "This code path shouldn't be reached any more.");
-    return {};
-}
-
 void VCLXWindow::SetSynthesizingVCLEvent( bool _b )
 {
     mpImpl->mbSynthesizingVCLEvent = _b;
@@ -912,21 +903,6 @@ void VCLXWindow::dispose(  )
         SetOutputDevice( nullptr );
         pWindow.disposeAndClear();
     }
-
-    // #i14103# dispose the accessible context after the window has been destroyed,
-    // otherwise the old value in the child event fired in VCLXAccessibleComponent::ProcessWindowEvent()
-    // for VclEventId::WindowChildDestroyed contains a reference to an already disposed accessible object
-    try
-    {
-        css::uno::Reference< css::lang::XComponent > xComponent( mpImpl->mxAccessibleContext, css::uno::UNO_QUERY );
-        if ( xComponent.is() )
-            xComponent->dispose();
-    }
-    catch ( const css::uno::Exception& )
-    {
-        OSL_FAIL( "VCLXWindow::dispose: could not dispose the accessible context!" );
-    }
-    mpImpl->mxAccessibleContext.clear();
 }
 
 void VCLXWindow::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
@@ -2378,47 +2354,6 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ )
         aZoom.ReduceInaccurate(10); // to avoid runovers and BigInt mapping
         GetWindow()->SetZoom(aZoom);
     }
-}
-
-// css::lang::XEventListener
-void SAL_CALL VCLXWindow::disposing( const css::lang::EventObject& _rSource )
-{
-    SolarMutexGuard aGuard;
-
-    if (mpImpl->mbDisposing)
-        return;
-
-    // check if it comes from our AccessibleContext
-    uno::Reference< uno::XInterface > aAC( mpImpl->mxAccessibleContext, uno::UNO_QUERY );
-    uno::Reference< uno::XInterface > xSource( _rSource.Source, uno::UNO_QUERY );
-
-    if ( aAC.get() == xSource.get() )
-    {   // yep, it does
-        mpImpl->mxAccessibleContext.clear();
-    }
-}
-
-// css::accessibility::XAccessible
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  )
-{
-    SolarMutexGuard aGuard;
-
-    // already disposed
-    if (mpImpl->mbDisposing)
-        return uno::Reference< accessibility::XAccessibleContext >();
-
-    if ( !mpImpl->mxAccessibleContext.is() && GetWindow() )
-    {
-        mpImpl->mxAccessibleContext = CreateAccessibleContext();
-
-        // add as event listener to this component
-        // in case somebody disposes it, we do not want to have a reference to a dead object
-        uno::Reference< lang::XComponent > xComp( mpImpl->mxAccessibleContext, uno::UNO_QUERY );
-        if ( xComp.is() )
-            xComp->addEventListener( this );
-    }
-
-    return mpImpl->mxAccessibleContext;
 }
 
 // css::awt::XDockable

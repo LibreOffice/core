@@ -1088,7 +1088,7 @@ class SVTXRoadmap final : public SVTXRoadmap_Base
 public:
     SVTXRoadmap();
 
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) override { VCLXWindow::disposing( Source ); }
+    void SAL_CALL disposing(const css::lang::EventObject&) override { }
 
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;

@@ -2120,13 +2120,9 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent )
     }
 }
 
-void SAL_CALL VCLXListBox::disposing( const EventObject& i_rEvent )
+void SAL_CALL VCLXListBox::disposing(const EventObject&)
 {
-    // just disambiguate
-    VCLXWindow::disposing( i_rEvent );
 }
-
-
 
 
 void VCLXMessageBox::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
@@ -4416,12 +4412,9 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent )
                 lcl_getImageFromURL(rItem.Second));
     }
 }
-void SAL_CALL VCLXComboBox::disposing( const EventObject& i_rEvent )
+void SAL_CALL VCLXComboBox::disposing(const EventObject&)
 {
-    // just disambiguate
-    VCLXEdit::disposing( i_rEvent );
 }
-
 
 
 void VCLXFormattedSpinField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
