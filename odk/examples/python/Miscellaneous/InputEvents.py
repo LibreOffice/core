@@ -15,7 +15,6 @@ from com.sun.star.awt import XMouseClickHandler
 from com.sun.star.awt import XMouseMotionHandler
 from com.sun.star.awt import XMouseListener
 from com.sun.star.awt import XMouseMotionListener
-from com.sun.star.accessibility import AccessibleRole
 
 
 """
@@ -70,7 +69,7 @@ def demo():
 
 
 def recursive_windows(path, xWindow, func):
-    print("recursive_windows: " + path + find_accessible_role(xWindow.getAccessibleContext().getAccessibleRole()))
+    print("recursive_windows: " + path)
     func(xWindow)
     try:
         windows = xWindow.getWindows()  # XVclContainer.getWindows()
@@ -79,12 +78,6 @@ def recursive_windows(path, xWindow, func):
     for i in range(len(windows)):
         subXWindow = windows[i]
         recursive_windows(path+str(i)+": ", subXWindow, func)
-
-
-def find_accessible_role(role_int):
-    for role_name in dir(AccessibleRole):
-        if role_int == eval("AccessibleRole." + role_name):
-            return role_name
 
 
 class MyXKeyMouseClickMotionHandler(unohelper.Base, XKeyHandler, XKeyListener, XMouseClickHandler, XMouseMotionHandler, XMouseListener, XMouseMotionListener):
