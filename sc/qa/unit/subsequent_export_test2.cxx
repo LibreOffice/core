@@ -1252,6 +1252,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf161365)
     assertXPathContent(
         pDrawing1, "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:to/xdr:row"_ostr,
         "3");
+
+    // Checked state - first off, second on
+
+    xmlDocUniquePtr pVmlDrawing1 = parseExport("xl/drawings/vmlDrawing1.vml");
+    CPPUNIT_ASSERT(pVmlDrawing1);
+
+    assertXPath(pVmlDrawing1, "/xml/v:shape[1]/xx:ClientData/xx:Checked"_ostr, 0);
+    assertXPathContent(pVmlDrawing1, "/xml/v:shape[2]/xx:ClientData/xx:Checked"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112567b)
