@@ -175,8 +175,9 @@ void Menu::dispose()
 
     m_pWindow.disposeAndClear();
 
-    // dispose accessible components
-    comphelper::disposeComponent(mxAccessible);
+    if (mpAccessible.is())
+        mpAccessible->dispose();
+    mpAccessible.clear();
 
     if ( nEventId )
         Application::RemoveUserEvent( nEventId );
@@ -1298,7 +1299,7 @@ bool Menu::ImplIsSelectable( sal_uInt16 nPos ) const
     return bSelectable;
 }
 
-css::uno::Reference<css::accessibility::XAccessible> Menu::CreateAccessible()
+rtl::Reference<comphelper::OAccessibleComponentHelper> Menu::CreateAccessible()
 {
     rtl::Reference<OAccessibleMenuBaseComponent> xAccessible;
     if (IsMenuBar())
@@ -1311,9 +1312,9 @@ css::uno::Reference<css::accessibility::XAccessible> Menu::CreateAccessible()
 
 css::uno::Reference<css::accessibility::XAccessible> Menu::GetAccessible()
 {
-    // Since PopupMenu are sometimes shared by different instances of MenuBar, the mxAccessible member gets
+    // Since PopupMenu are sometimes shared by different instances of MenuBar, the mpAccessible member gets
     // overwritten and may contain a disposed object when the initial menubar gets set again. So use the
-    // mxAccessible member only for sub menus.
+    // mpAccessible member only for sub menus.
     if (pStartedFrom && pStartedFrom != this)
     {
         for ( sal_uInt16 i = 0, nCount = pStartedFrom->GetItemCount(); i < nCount; ++i )
@@ -1331,15 +1332,15 @@ css::uno::Reference<css::accessibility::XAccessible> Menu::GetAccessible()
             }
         }
     }
-    else if ( !mxAccessible.is() )
-        mxAccessible = CreateAccessible();
+    else if (!mpAccessible.is())
+        mpAccessible = CreateAccessible();
 
-    return mxAccessible;
+    return mpAccessible;
 }
 
-void Menu::SetAccessible(const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible )
+void Menu::SetAccessible(const rtl::Reference<comphelper::OAccessibleComponentHelper>& rAccessible)
 {
-    mxAccessible = rxAccessible;
+    mpAccessible = rAccessible;
 }
 
 Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderContext, tools::Long& rCheckHeight, tools::Long& rRadioHeight ) const

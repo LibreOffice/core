@@ -23,6 +23,7 @@
 #include <memory>
 #include <string_view>
 
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <vcl/vclenum.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
@@ -152,7 +153,7 @@ private:
     bool bInCallback : 1; ///< In Activate/Deactivate
     bool bKilled : 1; ///< Killed
 
-    css::uno::Reference<css::accessibility::XAccessible > mxAccessible;
+    rtl::Reference<comphelper::OAccessibleComponentHelper> mpAccessible;
     mutable std::unique_ptr<vcl::MenuLayoutData> mpLayoutData;
     std::unique_ptr<SalMenu> mpSalMenu;
 
@@ -368,7 +369,7 @@ public:
     tools::Rectangle GetBoundingRectangle( sal_uInt16 nItemPos ) const;
 
     css::uno::Reference<css::accessibility::XAccessible> GetAccessible();
-    void SetAccessible(const css::uno::Reference<css::accessibility::XAccessible >& rxAccessible);
+    void SetAccessible(const rtl::Reference<comphelper::OAccessibleComponentHelper>& rAccessible);
 
     // gets the activation key of the specified item
     KeyEvent GetActivationKey( sal_uInt16 nItemId ) const;
@@ -404,7 +405,7 @@ public:
     virtual void DumpAsPropertyTree(tools::JsonWriter&) const;
 
 private:
-    css::uno::Reference<css::accessibility::XAccessible> CreateAccessible();
+    rtl::Reference<comphelper::OAccessibleComponentHelper> CreateAccessible();
 };
 
 struct MenuBarButtonCallbackArg
