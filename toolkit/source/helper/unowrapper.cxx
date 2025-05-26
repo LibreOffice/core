@@ -87,8 +87,6 @@ static rtl::Reference<VCLXWindow> CreateXWindow( vcl::Window const * pWindow )
         case WindowType::TABPAGE:        return new VCLXContainer;
         case WindowType::TABCONTROL:     return new VCLXMultiPage;
 
-        case WindowType::HEADERBAR:     return new VCLXHeaderBar;
-
         case WindowType::BORDERWINDOW:
         {
             if (pWindow->IsNativeFrame())
@@ -111,6 +109,7 @@ static rtl::Reference<VCLXWindow> CreateXWindow( vcl::Window const * pWindow )
         // case WindowType::SCROLLBARBOX:
         // case WindowType::PATTERNBOX:
         // case WindowType::CURRENCYBOX:
+        case WindowType::HEADERBAR:
         case WindowType::TOOLBOX:
         default:                    return new VCLXWindow( true );
     }

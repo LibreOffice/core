@@ -5901,14 +5901,6 @@ css::uno::Any VCLXPatternField::getProperty( const OUString& PropertyName )
     return aProp;
 }
 
-VCLXHeaderBar::VCLXHeaderBar()
-{
-}
-
-VCLXHeaderBar::~VCLXHeaderBar()
-{
-}
-
 VCLXFrame::VCLXFrame()
 {
 }

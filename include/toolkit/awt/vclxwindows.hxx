@@ -691,11 +691,4 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class VCLXHeaderBar final : public VCLXWindow
-{
-public:
-    VCLXHeaderBar();
-    virtual ~VCLXHeaderBar() override;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
