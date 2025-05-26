@@ -765,6 +765,9 @@ void PowerPointExport::WriteEmbeddedFontList()
         aAnySeq[nSeqIndex++] >>= ePitch;
         aAnySeq[nSeqIndex++] >>= eCharSet;
 
+        if (EmbeddedFontsHelper::isCommonFont(sFamilyName))
+            continue;
+
         if (mbEmbedUsedOnly && !aUsedFonts.contains(sFamilyName))
             continue;
 
@@ -811,7 +814,7 @@ void PowerPointExport::WriteEmbeddedFontList()
 
                 if (aFile.isEndOfFile(&eof) != osl::File::E_None)
                 {
-                    SAL_WARN("sw.ww8", "Error reading font file " << sFontUrl);
+                    SAL_WARN("sd.eppt", "Error reading font file " << sFontUrl);
                     break;
                 }
                 if (eof)
@@ -819,7 +822,7 @@ void PowerPointExport::WriteEmbeddedFontList()
 
                 if (aFile.read(buffer.data(), 4096, readSize) != osl::File::E_None)
                 {
-                    SAL_WARN("sw.ww8", "Error reading font file " << sFontUrl);
+                    SAL_WARN("sd.eppt", "Error reading font file " << sFontUrl);
                     break;
                 }
 
@@ -830,7 +833,7 @@ void PowerPointExport::WriteEmbeddedFontList()
                 aHashCalc.update(reinterpret_cast<const unsigned char*>(buffer.data()), readSize);
             }
 
-            std::string aHash =  comphelper::hashToString(aHashCalc.finalize());
+            std::string aHash = comphelper::hashToString(aHashCalc.finalize());
             auto iterator = aFontDeduplicationMap.find(aHash);
             if (iterator == aFontDeduplicationMap.end())
             {

@@ -10,6 +10,9 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_set.h>
 #include <config_folders.h>
 #include <config_eot.h>
 
@@ -25,7 +28,6 @@
 #include <font/PhysicalFontCollection.hxx>
 #include <salgdi.hxx>
 #include <sft.hxx>
-
 
 #if ENABLE_EOT
 extern "C"
@@ -398,6 +400,28 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
         }
     }
     return ok ? url : u""_ustr;
+}
+
+bool EmbeddedFontsHelper::isCommonFont(std::u16string_view aFontName)
+{
+    static constexpr auto aCommonFontsList = frozen::make_unordered_set<std::u16string_view>({
+        // LO Common
+        u"Liberation Sans",
+        u"Liberation Serif",
+        u"Liberation Sans Narrow",
+        u"Liberation Mono",
+        u"Caladea",
+        u"Carlito",
+        // MSO
+        u"Times New Roman",
+        u"Arial",
+        u"Arial Narrow",
+        u"Courier New",
+        u"Cambria",
+        u"Calibri",
+    });
+
+    return aCommonFontsList.contains(aFontName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -22,10 +22,7 @@
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
-/**
- Helper functions for handling embedded fonts in documents.
-
-*/
+/** Helper functions for handling embedded fonts in documents. */
 class VCL_DLLPUBLIC EmbeddedFontsHelper
 {
 private:
@@ -99,6 +96,20 @@ public:
       @internal
     */
     static void clearTemporaryFontFiles();
+
+    /** True if the font is common and doesn't need to be embedded
+     *
+     * A font is common is a font that is available or can be substituted
+     * for a metric compatible font on common platforms and editors. Not
+     * embedding such a font should not cause any issues with the document
+     * format and rendering.
+     *
+     * For example "Liberation Serif" is a common font because it's available
+     * in any typical LibreOffice installation or is substituted for the
+     * "Times New Roman" metric compatible font for compatibility with other
+     * editors.
+     */
+    static bool isCommonFont(std::u16string_view aFontName);
 
     ~EmbeddedFontsHelper() COVERITY_NOEXCEPT_FALSE
     {

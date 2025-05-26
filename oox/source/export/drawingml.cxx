@@ -118,6 +118,7 @@
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/embeddedfontshelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
@@ -2836,7 +2837,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
 
         mAny >>= usTypeface;
 
-        if (!mbEmbedFonts)
+        if (!mbEmbedFonts || EmbeddedFontsHelper::isCommonFont(usTypeface))
         {
             OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
             if (!aSubstName.isEmpty())
@@ -2861,7 +2862,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         OUString usTypeface;
 
         mAny >>= usTypeface;
-        if (!mbEmbedFonts)
+        if (!mbEmbedFonts || EmbeddedFontsHelper::isCommonFont(usTypeface))
         {
             OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
             if (!aSubstName.isEmpty())
