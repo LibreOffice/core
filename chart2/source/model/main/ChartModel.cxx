@@ -71,6 +71,7 @@
 #include <libxml/xmlwriter.h>
 
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
 #include <com/sun/star/util/XTheme.hpp>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
@@ -1434,7 +1435,16 @@ void ChartModel::setColorPalette(ChartColorPaletteType eType, sal_uInt32 nIndex)
     m_nColorPaletteIndex = nIndex;
 }
 
-void ChartModel::clearColorPalette() { setColorPalette(ChartColorPaletteType::Unknown, 0); }
+void ChartModel::clearColorPalette()
+{
+    // Not reset the selected palette if user is just previewing a color
+    // for a data series or a data point
+    SfxViewShell* pCurrentShell = SfxViewShell::Current();
+    if (pCurrentShell && pCurrentShell->IsLOKColorPreviewEnabled())
+        return;
+
+    setColorPalette(ChartColorPaletteType::Unknown, 0);
+}
 
 bool ChartModel::usesColorPalette() const
 {

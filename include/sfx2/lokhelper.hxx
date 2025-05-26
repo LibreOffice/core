@@ -135,6 +135,8 @@ public:
     static LOKDeviceFormFactor getDeviceFormFactor();
     /// Set the device form factor that should be used for a new view.
     static void setDeviceFormFactor(std::u16string_view rDeviceFormFactor);
+    /// Set color preview state for the given view.
+    static void setColorPreviewState(int nId, bool nEnabled);
 
     /// Set timezone of the given view.
     /// @isSet true to use @rTimezone, even if it's empty. Otherwise, no timezone.

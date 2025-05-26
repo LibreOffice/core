@@ -17,9 +17,12 @@
 #include <ChartModel.hxx>
 #include <ViewElementListProvider.hxx>
 #include <PropertyHelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <chartview/DrawModelWrapper.hxx>
 #include <com/sun/star/chart2/XDiagram.hpp>
+#include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <sfx2/weldutils.hxx>
 #include <svx/xfltrit.hxx>
@@ -519,8 +522,47 @@ void ChartAreaPanel::modelInvalid()
 
 void ChartAreaPanel::selectionChanged(bool bCorrectType)
 {
-    if (bCorrectType)
-        updateData();
+    if (!bCorrectType)
+        return;
+
+    // set the initial correct color for the color picker
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+        if (xPropSet.is())
+        {
+            css::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
+            if (xInfo.is())
+            {
+                SolarMutexGuard aGuard;
+                if (xInfo->hasPropertyByName(u"FillStyle"_ustr))
+                {
+                    css::drawing::FillStyle eFillStyle = css::drawing::FillStyle::FillStyle_NONE;
+                    xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
+                    if (eFillStyle == css::drawing::FillStyle_SOLID)
+                    {
+                        if (xInfo->hasPropertyByName(u"FillColor"_ustr))
+                        {
+                            sal_uInt32 nFillColor = -1;
+                            xPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+                            if (nFillColor != static_cast<sal_uInt32>(-1))
+                            {
+                                if (SfxViewShell* pViewShell = SfxViewShell::Current())
+                                {
+                                    const OString sCommand = ".uno:FillColor"_ostr;
+                                    pViewShell->libreOfficeKitViewCallback(
+                                        LOK_CALLBACK_STATE_CHANGED,
+                                        sCommand + "=" + OString::number(nFillColor));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    updateData();
 }
 
 void ChartAreaPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel)

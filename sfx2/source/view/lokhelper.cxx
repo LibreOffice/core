@@ -428,6 +428,20 @@ void SfxLokHelper::setDeviceFormFactor(std::u16string_view rDeviceFormFactor)
         g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
+void SfxLokHelper::setColorPreviewState(int nId, bool nEnabled)
+{
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell && pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            pViewShell->SetLOKColorPreviewState(nEnabled);
+            return;
+        }
+    }
+}
+
 void SfxLokHelper::setDefaultTimezone(bool isSet, const OUString& rTimezone)
 {
     g_isDefaultTimezoneSet = isSet;

@@ -943,6 +943,17 @@ public:
         mpDoc->pClass->setViewOption(mpDoc, pOption, pValue);
     }
 
+    /**
+     * Set color preview state for the window with the specified nId.
+     *
+     * @param nId a view ID, returned by createView().
+     * @param nEnabled true/false
+     */
+    void setColorPreviewState(int nId, bool nEnabled)
+    {
+        mpDoc->pClass->setColorPreviewState(mpDoc, nId, nEnabled);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
