@@ -2231,6 +2231,22 @@ static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pCont
                 LOGFONTW aLogFont;
                 ImplGetLogFontFromFontSelect(pContext->mpFont->GetFontSelectPattern(),
                                              nullptr, aLogFont, true);
+
+                // tdf#147299: To enable vertical input mode, Windows IMEs check the face
+                // name string for a leading '@'.
+                SalExtTextInputPosEvent aPosEvt;
+                pFrame->CallCallback(SalEvent::ExtTextInputPos, &aPosEvt);
+                if (aPosEvt.mbVertical)
+                {
+                    std::array<WCHAR, LF_FACESIZE> aTmpFaceName;
+                    std::copy(aLogFont.lfFaceName, aLogFont.lfFaceName + LF_FACESIZE,
+                              aTmpFaceName.begin());
+                    aLogFont.lfFaceName[0] = L'@';
+                    std::copy(aTmpFaceName.begin(), aTmpFaceName.end() - 1,
+                              aLogFont.lfFaceName + 1);
+                    aLogFont.lfFaceName[LF_FACESIZE - 1] = L'\0';
+                }
+
                 ImmSetCompositionFontW( hIMC, &aLogFont );
                 ImmReleaseContext( pFrame->mhWnd, hIMC );
             }
