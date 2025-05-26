@@ -1820,8 +1820,8 @@ void OutlineViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
     <type>AccessibleDrawDocumentView</type>.  Otherwise return an empty
     reference.
 */
-css::uno::Reference<css::accessibility::XAccessible>
-    OutlineViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
+rtl::Reference<comphelper::OAccessibleComponentHelper>
+OutlineViewShell::CreateAccessibleDocumentView(::sd::Window* pWindow)
 {
     OSL_ASSERT (GetViewShell()!=nullptr);
     if (GetViewShell()->GetController() != nullptr)
@@ -1837,7 +1837,7 @@ css::uno::Reference<css::accessibility::XAccessible>
     }
 
     SAL_WARN("sd", "OutlineViewShell::CreateAccessibleDocumentView: no controller");
-    return css::uno::Reference< css::accessibility::XAccessible >();
+    return {};
 }
 
 void OutlineViewShell::GetState (SfxItemSet& rSet)

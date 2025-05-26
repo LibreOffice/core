@@ -19,8 +19,8 @@
 
 #pragma once
 
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <rtl/ref.hxx>
-
 #include <sfx2/viewsh.hxx>
 #include <svl/typedwhich.hxx>
 #include <svtools/scrolladaptor.hxx>
@@ -293,8 +293,8 @@ public:
         @return
             This default implementation returns an empty reference.
     */
-    virtual css::uno::Reference<css::accessibility::XAccessible>
-        CreateAccessibleDocumentView (::sd::Window* pWindow);
+    virtual rtl::Reference<comphelper::OAccessibleComponentHelper>
+    CreateAccessibleDocumentView(::sd::Window* pWindow);
 
     virtual void SwitchViewFireFocus( const css::uno::Reference< css::accessibility::XAccessible >& xAcc );
     void SwitchActiveViewFireFocus( );

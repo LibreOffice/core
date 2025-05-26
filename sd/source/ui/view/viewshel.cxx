@@ -1511,12 +1511,12 @@ void ViewShell::ExecReq( SfxRequest& rReq )
 /** This default implementation returns only an empty reference.  See derived
     classes for more interesting examples.
 */
-css::uno::Reference<css::accessibility::XAccessible>
-ViewShell::CreateAccessibleDocumentView (::sd::Window* )
+rtl::Reference<comphelper::OAccessibleComponentHelper>
+ViewShell::CreateAccessibleDocumentView(::sd::Window*)
 {
     OSL_FAIL("ViewShell::CreateAccessibleDocumentView should not be called!, perhaps Meyers, 3rd edition, Item 9:");
 
-    return css::uno::Reference<css::accessibility::XAccessible> ();
+    return {};
 }
 
 ::sd::WindowUpdater* ViewShell::GetWindowUpdater() const

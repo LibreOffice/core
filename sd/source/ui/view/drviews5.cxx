@@ -587,8 +587,8 @@ void DrawViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
     <type>AccessibleDrawDocumentView</type>.  Otherwise return an empty
     reference.
 */
-css::uno::Reference<css::accessibility::XAccessible>
-    DrawViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
+rtl::Reference<comphelper::OAccessibleComponentHelper>
+DrawViewShell::CreateAccessibleDocumentView(::sd::Window* pWindow)
 {
     if (GetViewShellBase().GetController() != nullptr)
     {
@@ -603,7 +603,7 @@ css::uno::Reference<css::accessibility::XAccessible>
     }
 
     SAL_WARN("sd", "DrawViewShell::CreateAccessibleDocumentView: no controller");
-    return css::uno::Reference< css::accessibility::XAccessible>();
+    return {};
 }
 
 int DrawViewShell::GetActiveTabLayerIndex() const

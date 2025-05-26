@@ -252,8 +252,8 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
     to the base class to return a default object (probably an empty
     reference).
 */
-css::uno::Reference<css::accessibility::XAccessible>
-    SlideSorterViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
+rtl::Reference<comphelper::OAccessibleComponentHelper>
+SlideSorterViewShell::CreateAccessibleDocumentView(::sd::Window* pWindow)
 {
     // When the view is not set then the initialization is not yet complete
     // and we can not yet provide an accessibility object.

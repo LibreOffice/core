@@ -317,8 +317,8 @@ public:
         @return
             Returns an <type>AccessibleDrawDocumentView</type> object.
    */
-    virtual css::uno::Reference<css::accessibility::XAccessible>
-        CreateAccessibleDocumentView (::sd::Window* pWindow) override;
+    virtual rtl::Reference<comphelper::OAccessibleComponentHelper>
+    CreateAccessibleDocumentView(::sd::Window* pWindow) override;
 
     /** Return the number of layers managed by the layer tab control.  This
         will usually differ from the number of layers managed by the layer
