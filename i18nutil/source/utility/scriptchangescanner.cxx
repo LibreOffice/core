@@ -136,7 +136,6 @@ private:
     sal_Int32 m_nNextStart = 0;
     sal_Int16 m_nPrevScript = css::i18n::ScriptType::WEAK;
     bool m_bAtEnd = false;
-    bool m_bApplyAsianToWeakQuotes = false;
 
     void AdvanceOnce()
     {
@@ -193,15 +192,6 @@ private:
             else if (nScript == css::i18n::ScriptType::WEAK)
             {
                 nScript = m_nPrevScript;
-                if (m_bApplyAsianToWeakQuotes)
-                {
-                    auto nType = unicode::getUnicodeType(nChar);
-                    if (nType == css::i18n::UnicodeType::INITIAL_PUNCTUATION
-                        || nType == css::i18n::UnicodeType::FINAL_PUNCTUATION)
-                    {
-                        nScript = css::i18n::ScriptType::ASIAN;
-                    }
-                }
             }
 
             if (nScript != m_nPrevScript)
@@ -261,25 +251,6 @@ public:
             if (m_nPrevScript == css::i18n::ScriptType::WEAK)
             {
                 m_nPrevScript = nScript;
-            }
-
-            if (nScript == css::i18n::ScriptType::COMPLEX)
-            {
-                m_bApplyAsianToWeakQuotes = false;
-                break;
-            }
-
-            auto nUnicodeScript = u_getIntPropertyValue(nChar, UCHAR_SCRIPT);
-            switch (nUnicodeScript)
-            {
-                case USCRIPT_HAN:
-                case USCRIPT_HIRAGANA:
-                case USCRIPT_KATAKANA:
-                    m_bApplyAsianToWeakQuotes = true;
-                    break;
-
-                default:
-                    break;
             }
         }
 
