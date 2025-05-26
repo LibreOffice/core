@@ -15,7 +15,7 @@
 
 #include <sfx2/lokhelper.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 
 void test::EventPosterHelper::postKeyEventAsync(int nType, int nCharCode, int nKeyCode) const
 {
@@ -32,15 +32,20 @@ void test::AccessibleEventPosterHelper::setWindow(
 {
     while (auto xParent = xAcc->getAccessibleContext()->getAccessibleParent())
         xAcc = xParent;
-    auto vclXWindow = dynamic_cast<VCLXWindow*>(xAcc.get());
-    if (!vclXWindow)
+    assert(xAcc);
+    css::uno::Reference<css::accessibility::XAccessibleContext> xAccContext
+        = xAcc->getAccessibleContext();
+    assert(xAccContext.is());
+    rtl::Reference<VCLXAccessibleComponent> pVCLAccComponent
+        = dynamic_cast<VCLXAccessibleComponent*>(xAccContext.get());
+    if (!pVCLAccComponent)
     {
         std::cerr << "WARNING: AccessibleEventPosterHelper::setWindow() called on "
                      "unsupported object "
                   << AccessibilityTools::debugString(xAcc) << ". Event delivery will not work."
                   << std::endl;
     }
-    mxWindow = vclXWindow ? vclXWindow->GetWindow() : nullptr;
+    mxWindow = pVCLAccComponent ? pVCLAccComponent->GetWindow() : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

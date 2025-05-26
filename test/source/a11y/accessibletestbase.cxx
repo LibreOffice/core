@@ -111,8 +111,12 @@ uno::Reference<accessibility::XAccessibleContext>
 test::AccessibleTestBase::getDocumentAccessibleContext()
 {
     uno::Reference<frame::XModel> xModel(mxDocument, uno::UNO_QUERY_THROW);
-    uno::Reference<accessibility::XAccessible> xAccessible(
-        xModel->getCurrentController()->getFrame()->getComponentWindow(), uno::UNO_QUERY_THROW);
+    uno::Reference<css::awt::XWindow> xComponentWin
+        = xModel->getCurrentController()->getFrame()->getComponentWindow();
+    assert(xComponentWin.is());
+    uno::Reference<accessibility::XAccessible> xAccessible
+        = VCLUnoHelper::GetWindow(xComponentWin)->GetAccessible();
+    assert(xAccessible.is());
 
     return AccessibilityTools::getAccessibleObjectForPredicate(
         xAccessible->getAccessibleContext(),
@@ -480,7 +484,10 @@ test::AccessibleTestBase::Dialog::Dialog(const uno::Reference<awt::XDialog2>& xD
 {
     CPPUNIT_ASSERT(xDialog2.is());
 
-    mxAccessible.set(xDialog2, uno::UNO_QUERY);
+    uno::Reference<css::awt::XWindow> xWindow(xDialog2, uno::UNO_QUERY_THROW);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    assert(pWindow);
+    mxAccessible = pWindow->GetAccessible();
     if (mxAccessible)
         setWindow(mxAccessible);
     else
