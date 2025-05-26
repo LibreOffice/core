@@ -232,8 +232,7 @@ void ScriptChangeScannerTest::testNonspacingMark()
 
 void ScriptChangeScannerTest::testSmartQuoteCompatibilityCJ()
 {
-    // tdf#66791: For compatibility with other programs, weak-script quotes in paragraphs
-    // containing CJ characters should be treated as Asian script
+    // tdf#166104: Weak-script quotes should take the previously-seen script type
 
     auto aText = u"Before \u201c水\u201d After"_ustr;
     auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
@@ -242,13 +241,13 @@ void ScriptChangeScannerTest::testSmartQuoteCompatibilityCJ()
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), pScanner->Peek().m_nEndIndex);
 
     pScanner->Advance();
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::ASIAN, pScanner->Peek().m_nScriptType);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), pScanner->Peek().m_nStartIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pScanner->Peek().m_nEndIndex);
 
     pScanner->Advance();
