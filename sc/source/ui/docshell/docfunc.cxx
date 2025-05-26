@@ -168,7 +168,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi )
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow   = rRange.aEnd.Row();
 
-    ScSizeDeviceProvider aProv( &rDocShell );
+    ScSizeDeviceProvider aProv( rDocShell );
     Fraction aOne(1,1);
 
     sc::RowHeightContext aCxt(rDoc.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
@@ -678,7 +678,7 @@ tools::Long ScDocShell::GetTwipWidthHint(const ScAddress& rPos)
     if (!pViewData)
         return -1;
 
-    ScSizeDeviceProvider aProv(this);
+    ScSizeDeviceProvider aProv(*this);
     Fraction aZoomX, aZoomY;
     double nPPTX, nPPTY;
     pViewData->setupSizeDeviceProviderForColWidth(aProv, aZoomX, aZoomY, nPPTX, nPPTY);
@@ -3660,7 +3660,7 @@ bool ScDocFunc::SetTabBgColor(
 
 static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCTAB nTab )
 {
-    ScSizeDeviceProvider aProv(&rDocShell);
+    ScSizeDeviceProvider aProv(rDocShell);
     OutputDevice* pDev = aProv.GetDevice();         // has pixel MapMode
     double nPPTX = aProv.GetPPTX();
     double nPPTY = aProv.GetPPTY();
@@ -3756,7 +3756,7 @@ bool ScDocFunc::SetWidthOrHeight(
                     }
                 }
 
-                ScSizeDeviceProvider aProv( &rDocShell );
+                ScSizeDeviceProvider aProv( rDocShell );
                 Fraction aOne(1,1);
                 sc::RowHeightContext aCxt(rDoc.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
                 aCxt.setForceAutoSize(bAll);

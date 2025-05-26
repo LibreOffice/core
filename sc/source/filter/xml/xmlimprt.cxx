@@ -1432,7 +1432,7 @@ void SAL_CALL ScXMLImport::endDocument()
                 mpDoc->UnlockAdjustHeight();
             }
 
-            ScSizeDeviceProvider aProv(mpDoc->GetDocumentShell());
+            ScSizeDeviceProvider aProv(*mpDoc->GetDocumentShell());
             ScDocRowHeightUpdater aUpdater(*mpDoc, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), &maRecalcRowRanges);
             aUpdater.update();
 

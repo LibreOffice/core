@@ -1749,14 +1749,14 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         if (bSetRowHeights)
         {
             // Update all rows in all tables.
-            ScSizeDeviceProvider aProv(this);
+            ScSizeDeviceProvider aProv(*this);
             ScDocRowHeightUpdater aUpdater(*m_pDocument, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), nullptr);
             aUpdater.update();
         }
         else if (!aRecalcRowRangesArray.empty())
         {
             // Update only specified row ranges for better performance.
-            ScSizeDeviceProvider aProv(this);
+            ScSizeDeviceProvider aProv(*this);
             ScDocRowHeightUpdater aUpdater(*m_pDocument, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), &aRecalcRowRangesArray);
             aUpdater.update();
         }

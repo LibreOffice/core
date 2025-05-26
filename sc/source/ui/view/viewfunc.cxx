@@ -330,7 +330,7 @@ sal_uInt16 ScViewFunc::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula
     ScDocument& rDoc = rDocSh.GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
 
-    ScSizeDeviceProvider aProv(&rDocSh);
+    ScSizeDeviceProvider aProv(rDocSh);
 
     Fraction aZoomX, aZoomY;
     double nPPTX, nPPTY;
@@ -2432,7 +2432,7 @@ void ScViewFunc::SetWidthOrHeight(
                     Fraction aZoomX = GetViewData().GetZoomX();
                     Fraction aZoomY = GetViewData().GetZoomY();
 
-                    ScSizeDeviceProvider aProv(&rDocSh);
+                    ScSizeDeviceProvider aProv(rDocSh);
                     if (aProv.IsPrinter())
                     {
                         nPPTX = aProv.GetPPTX();
@@ -2693,7 +2693,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
                 Fraction aZoomX = GetViewData().GetZoomX();
                 Fraction aZoomY = GetViewData().GetZoomY();
 
-                ScSizeDeviceProvider aProv(&rDocSh);
+                ScSizeDeviceProvider aProv(rDocSh);
                 if (aProv.IsPrinter())
                 {
                     nPPTX = aProv.GetPPTX();

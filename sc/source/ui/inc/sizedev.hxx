@@ -34,7 +34,7 @@ class ScSizeDeviceProvider
     MapMode              aOldMapMode;
 
 public:
-                ScSizeDeviceProvider( ScDocShell* pDocSh );
+                ScSizeDeviceProvider( ScDocShell& rDocSh );
                 ~ScSizeDeviceProvider();
 
     OutputDevice*   GetDevice() const   { return pDevice.get(); }

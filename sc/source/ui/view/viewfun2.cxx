@@ -139,7 +139,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
     Fraction aZoomX = GetViewData().GetZoomX();
     Fraction aZoomY = GetViewData().GetZoomY();
 
-    ScSizeDeviceProvider aProv(&rDocSh);
+    ScSizeDeviceProvider aProv(rDocSh);
     if (aProv.IsPrinter())
     {
         nPPTX = aProv.GetPPTX();
@@ -209,7 +209,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi )
     if (nStartRow == nEndRow)
         nOldPixel = static_cast<sal_uInt16>(rDoc.GetRowHeight(nStartRow,nTab) * nPPTY);
 
-    ScSizeDeviceProvider aProv(&rDocSh);
+    ScSizeDeviceProvider aProv(rDocSh);
     if (aProv.IsPrinter())
     {
         nPPTX = aProv.GetPPTX();

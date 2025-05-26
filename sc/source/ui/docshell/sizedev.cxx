@@ -25,12 +25,12 @@
 #include <scmod.hxx>
 #include <inputopt.hxx>
 
-ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
+ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell& rDocSh )
 {
     bool bTextWysiwyg = ScModule::get()->GetInputOptions().GetTextWysiwyg();
     if ( bTextWysiwyg )
     {
-        pDevice = pDocSh->GetPrinter();
+        pDevice = rDocSh.GetPrinter();
         bOwner = false;
 
         aOldMapMode = pDevice->GetMapMode();
@@ -49,7 +49,7 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
     nPPTY = aLogic.Y() / 1000.0;
 
     if ( !bTextWysiwyg )
-        nPPTX /= pDocSh->GetOutputFactor();
+        nPPTX /= rDocSh.GetOutputFactor();
 }
 
 ScSizeDeviceProvider::~ScSizeDeviceProvider()

@@ -290,7 +290,7 @@ bool ScBlockUndo::AdjustHeight()
 {
     ScDocument& rDoc = rDocShell.GetDocument();
 
-    ScSizeDeviceProvider aProv(&rDocShell);
+    ScSizeDeviceProvider aProv(rDocShell);
     Fraction aZoomX( 1, 1 );
     Fraction aZoomY = aZoomX;
     double nPPTX, nPPTY;
