@@ -32,10 +32,8 @@ namespace dbaui
     /** the class OConnectionLineAccess represents the accessible object for the connection between two table windows
         like they are used in the QueryDesign and the RelationDesign
     */
-    class OConnectionLineAccess     :   public cppu::ImplInheritanceHelper<
-                                            VCLXAccessibleComponent,
-                                            css::accessibility::XAccessibleRelationSet,
-                                            css::accessibility::XAccessible>
+    class OConnectionLineAccess : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent,
+                                                                     css::accessibility::XAccessibleRelationSet>
     {
         VclPtr<const OTableConnection>             m_pLine; // the window which I should give accessibility to
     protected:
@@ -48,9 +46,6 @@ namespace dbaui
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-
-        // XAccessible
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
         // XAccessibleContext
         virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

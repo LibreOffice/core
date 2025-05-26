@@ -33,7 +33,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
 VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar(HeaderBar* pHeaderBar)
-    : ImplInheritanceHelper(pHeaderBar)
+    : VCLXAccessibleComponent(pHeaderBar)
 {
     m_pHeadBar = pHeaderBar;
 }
@@ -50,15 +50,6 @@ OUString VCLXAccessibleHeaderBar::getImplementationName()
 Sequence<OUString> VCLXAccessibleHeaderBar::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.AccessibleHeaderBar"_ustr };
-}
-
-// XAccessible
-
-css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-VCLXAccessibleHeaderBar::getAccessibleContext()
-{
-    comphelper::OExternalLockGuard aGuard(this);
-    return this;
 }
 
 // =======XAccessibleContext=======

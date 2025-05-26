@@ -523,15 +523,6 @@ void VCLXAccessibleList::HandleChangedItemList()
         Any(), Any());
 }
 
-// XAccessible
-
-Reference<XAccessibleContext> SAL_CALL
-    VCLXAccessibleList::getAccessibleContext()
-{
-    return this;
-}
-
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL VCLXAccessibleList::getAccessibleChildCount()

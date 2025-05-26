@@ -588,19 +588,18 @@ void Paragraph::implGetLineBoundary( const OUString& rText,
     }
 }
 
-Document::Document(vcl::Window* pWindow, ::TextEngine & rEngine,
-                   ::TextView & rView)
-    : ImplInheritanceHelper(pWindow),
-    m_rEngine(rEngine),
-    m_rView(rView),
-    m_aEngineListener(*this),
-    m_aViewListener(LINK(this, Document, WindowEventHandler)),
-    m_nVisibleBeginOffset(0),
-    m_nSelectionFirstPara(-1),
-    m_nSelectionFirstPos(-1),
-    m_nSelectionLastPara(-1),
-    m_nSelectionLastPos(-1),
-    m_bSelectionChangedNotification(false)
+Document::Document(vcl::Window* pWindow, ::TextEngine& rEngine, ::TextView& rView)
+    : VCLXAccessibleComponent(pWindow)
+    , m_rEngine(rEngine)
+    , m_rView(rView)
+    , m_aEngineListener(*this)
+    , m_aViewListener(LINK(this, Document, WindowEventHandler))
+    , m_nVisibleBeginOffset(0)
+    , m_nSelectionFirstPara(-1)
+    , m_nSelectionFirstPos(-1)
+    , m_nSelectionLastPara(-1)
+    , m_nSelectionLastPos(-1)
+    , m_bSelectionChangedNotification(false)
 {
     const sal_uInt32 nCount = m_rEngine.GetParagraphCount();
     m_aParagraphs.reserve(nCount);
@@ -613,15 +612,6 @@ Document::Document(vcl::Window* pWindow, ::TextEngine & rEngine,
     m_nFocused = m_aParagraphs.size();
     m_aEngineListener.startListening(m_rEngine);
     m_aViewListener.startListening(*m_rView.GetWindow());
-}
-
-css::uno::Reference<css::accessibility::XAccessibleContext>
-    SAL_CALL Document::getAccessibleContext()
-{
-    SolarMutexGuard aGuard;
-    ensureAlive();
-
-    return this;
 }
 
 css::lang::Locale Document::retrieveLocale()

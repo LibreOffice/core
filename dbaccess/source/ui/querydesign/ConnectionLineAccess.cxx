@@ -150,10 +150,6 @@ namespace dbaui
         m_pParent.reset();
         vcl::Window::dispose();
     }
-    Reference< XAccessibleContext > SAL_CALL OConnectionLineAccess::getAccessibleContext(  )
-    {
-        return this;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

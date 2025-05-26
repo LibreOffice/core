@@ -26,8 +26,7 @@ class VCLXAccessibleHeaderBarItem;
 
 typedef std::vector<unotools::WeakReference<VCLXAccessibleHeaderBarItem>> ListItems;
 
-class VCLXAccessibleHeaderBar final
-    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent, css::accessibility::XAccessible>
+class VCLXAccessibleHeaderBar final : public VCLXAccessibleComponent
 {
     VclPtr<HeaderBar> m_pHeadBar;
 
@@ -35,10 +34,6 @@ public:
     virtual ~VCLXAccessibleHeaderBar() override;
 
     VCLXAccessibleHeaderBar(HeaderBar* pHeaderBar);
-
-    // XAccessible
-    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;

@@ -182,15 +182,6 @@ Sequence< OUString > VCLXAccessibleEdit::getSupportedServiceNames()
     return { u"com.sun.star.awt.AccessibleEdit"_ustr };
 }
 
-// XAccessible
-
-css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-VCLXAccessibleEdit::getAccessibleContext()
-{
-    OExternalLockGuard aGuard(this);
-    return this;
-}
-
 // XAccessibleContext
 
 sal_Int64 VCLXAccessibleEdit::getAccessibleChildCount()

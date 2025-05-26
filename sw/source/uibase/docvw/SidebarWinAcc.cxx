@@ -31,7 +31,7 @@ namespace sw::sidebarwindows
 SidebarWinAccessible::SidebarWinAccessible(sw::annotation::SwAnnotationWin& rSidebarWin,
                                            SwViewShell& rViewShell,
                                            const SwAnnotationItem& rSidebarItem)
-    : ImplInheritanceHelper(&rSidebarWin)
+    : VCLXAccessibleComponent(&rSidebarWin)
     , mrViewShell(rViewShell)
     , mpAnchorFrame(rSidebarItem.maLayoutInfo.mpAnchorFrame)
 {
@@ -45,14 +45,6 @@ void SidebarWinAccessible::ChangeSidebarItem(const SwAnnotationItem& rSidebarIte
     SolarMutexGuard aGuard;
 
     mpAnchorFrame = rSidebarItem.maLayoutInfo.mpAnchorFrame;
-}
-
-css::uno::Reference<css::accessibility::XAccessibleContext>
-SidebarWinAccessible::getAccessibleContext()
-{
-    ensureAlive();
-
-    return this;
 }
 
 css::uno::Reference<css::accessibility::XAccessible> SidebarWinAccessible::getAccessibleParent()

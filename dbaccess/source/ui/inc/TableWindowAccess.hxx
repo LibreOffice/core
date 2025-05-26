@@ -32,10 +32,9 @@ namespace dbaui
     /** the class OTableWindowAccess represents the accessible object for table windows
         like they are used in the QueryDesign and the RelationDesign
     */
-    class OTableWindowAccess    :   public cppu::ImplInheritanceHelper<
+    class OTableWindowAccess : public cppu::ImplInheritanceHelper<
                                         VCLXAccessibleComponent,
-                                        css::accessibility::XAccessibleRelationSet,
-                                        css::accessibility::XAccessible>
+                                        css::accessibility::XAccessibleRelationSet>
     {
         VclPtr<OTableWindow>   m_pTable; // the window which I should give accessibility to
 
@@ -52,9 +51,6 @@ namespace dbaui
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-        // XAccessible
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
         // XAccessibleContext
         virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

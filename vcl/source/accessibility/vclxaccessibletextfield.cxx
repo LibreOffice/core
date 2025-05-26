@@ -29,10 +29,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-
-VCLXAccessibleTextField::VCLXAccessibleTextField(ListBox* pListBox, const Reference<XAccessible>& _xParent)
-    : ImplInheritanceHelper(pListBox)
-    , m_xParent( _xParent )
+VCLXAccessibleTextField::VCLXAccessibleTextField(ListBox* pListBox,
+                                                 const Reference<XAccessible>& _xParent)
+    : VCLXAccessibleTextComponent(pListBox)
+    , m_xParent(_xParent)
 {
 }
 
@@ -46,16 +46,6 @@ OUString VCLXAccessibleTextField::implGetText()
 
     return aText;
 }
-
-
-// XAccessible
-
-Reference<XAccessibleContext> SAL_CALL
-    VCLXAccessibleTextField::getAccessibleContext()
-{
-    return this;
-}
-
 
 // XAccessibleContext
 

@@ -28,7 +28,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 VCLXAccessibleFixedText::VCLXAccessibleFixedText(vcl::Window* pWindow)
-    : ImplInheritanceHelper(pWindow)
+    : VCLXAccessibleTextComponent(pWindow)
 {
 }
 
@@ -38,15 +38,6 @@ void VCLXAccessibleFixedText::FillAccessibleStateSet(sal_Int64& rStateSet)
 
     if (GetWindow() && GetWindow()->GetStyle() & WB_WORDBREAK)
         rStateSet |= AccessibleStateType::MULTI_LINE;
-}
-
-// XAccessible
-
-css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-VCLXAccessibleFixedText::getAccessibleContext()
-{
-    comphelper::OExternalLockGuard aGuard(this);
-    return this;
 }
 
 // XServiceInfo

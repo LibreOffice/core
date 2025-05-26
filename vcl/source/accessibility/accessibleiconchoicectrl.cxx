@@ -103,14 +103,6 @@ Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames
             u"com.sun.star.awt.AccessibleIconChoiceControl"_ustr};
 }
 
-// XAccessible
-
-Reference< XAccessibleContext > SAL_CALL AccessibleIconChoiceCtrl::getAccessibleContext(  )
-{
-    ensureAlive();
-    return this;
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL AccessibleIconChoiceCtrl::getAccessibleChildCount(  )

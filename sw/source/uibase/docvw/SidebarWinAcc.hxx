@@ -32,16 +32,12 @@ class SwAnnotationWin;
 
 namespace sw::sidebarwindows
 {
-class SidebarWinAccessible
-    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent, css::accessibility::XAccessible>
+class SidebarWinAccessible : public VCLXAccessibleComponent
 {
 public:
     explicit SidebarWinAccessible(sw::annotation::SwAnnotationWin& rSidebarWin,
                                   SwViewShell& rViewShell, const SwAnnotationItem& rSidebarItem);
     virtual ~SidebarWinAccessible() override;
-
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
 
     virtual css::uno::Reference<css::accessibility::XAccessible>
         SAL_CALL getAccessibleParent() override;

@@ -31,14 +31,6 @@ EditBrowseBoxTableCell::EditBrowseBoxTableCell(svt::ControlBase* pControl)
 {
 }
 
-Reference<css::accessibility::XAccessibleContext>
-    SAL_CALL EditBrowseBoxTableCell::getAccessibleContext()
-{
-    OExternalLockGuard aGuard(this);
-    ensureAlive();
-    return this;
-}
-
 OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName()
 {
     return u"com.sun.star.comp.svtools.TableCellProxy"_ustr;

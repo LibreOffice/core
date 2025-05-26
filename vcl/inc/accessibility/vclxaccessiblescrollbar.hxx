@@ -28,7 +28,7 @@
 #include <vcl/toolkit/scrbar.hxx>
 
 class VCLXAccessibleScrollBar final
-    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent, css::accessibility::XAccessible,
+    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent,
                                          css::accessibility::XAccessibleAction,
                                          css::accessibility::XAccessibleValue>
 {
@@ -44,10 +44,6 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // XAccessible
-    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
 
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) override;

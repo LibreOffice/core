@@ -29,16 +29,11 @@
     accessible by this class.  When the selected item changes then also the
     exported text changes.
 */
-class VCLXAccessibleTextField final :
-    public cppu::ImplInheritanceHelper<VCLXAccessibleTextComponent, css::accessibility::XAccessible>
+class VCLXAccessibleTextField final : public VCLXAccessibleTextComponent
 {
 public:
     VCLXAccessibleTextField(ListBox* pListBox,
                             const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
-
-    // XAccessible
-    css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext() override;
 
     // XAccessibleContext
     sal_Int64 SAL_CALL getAccessibleChildCount() override;

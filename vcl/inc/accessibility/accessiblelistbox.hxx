@@ -32,11 +32,9 @@ class AccessibleListBoxEntry;
 class SvTreeListBox;
 class SvTreeListEntry;
 
-class AccessibleListBox :
-    public cppu::ImplInheritanceHelper<
-        VCLXAccessibleComponent,
-        css::accessibility::XAccessible,
-        css::accessibility::XAccessibleSelection>
+class AccessibleListBox
+    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent,
+                                         css::accessibility::XAccessibleSelection>
 {
 
     css::uno::Reference< css::accessibility::XAccessible > m_xParent;
@@ -73,9 +71,6 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

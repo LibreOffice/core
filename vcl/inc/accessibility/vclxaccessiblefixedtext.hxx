@@ -21,9 +21,7 @@
 
 #include <accessibility/vclxaccessibletextcomponent.hxx>
 
-class VCLXAccessibleFixedText final
-    : public cppu::ImplInheritanceHelper<VCLXAccessibleTextComponent,
-                                         css::accessibility::XAccessible>
+class VCLXAccessibleFixedText final : public VCLXAccessibleTextComponent
 {
     virtual ~VCLXAccessibleFixedText() override = default;
 
@@ -31,10 +29,6 @@ class VCLXAccessibleFixedText final
 
 public:
     VCLXAccessibleFixedText(vcl::Window* pWindow);
-
-    // XAccessible
-    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

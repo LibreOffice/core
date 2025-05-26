@@ -517,14 +517,6 @@ Sequence< OUString > VCLXAccessibleToolBox::getSupportedServiceNames()
                                        std::initializer_list<OUString>{u"com.sun.star.accessibility.AccessibleToolBox"_ustr});
 }
 
-// XAccessible
-css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-VCLXAccessibleToolBox::getAccessibleContext()
-{
-    OExternalLockGuard aGuard(this);
-    return this;
-}
-
 // XAccessibleContext
 sal_Int64 SAL_CALL VCLXAccessibleToolBox::getAccessibleChildCount(  )
 {

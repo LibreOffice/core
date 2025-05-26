@@ -21,18 +21,12 @@
 
 #include <accessibility/vclxaccessibletextcomponent.hxx>
 
-class VCLXAccessibleFixedHyperlink final
-    : public cppu::ImplInheritanceHelper<VCLXAccessibleTextComponent,
-                                         css::accessibility::XAccessible>
+class VCLXAccessibleFixedHyperlink final : public VCLXAccessibleTextComponent
 {
     virtual ~VCLXAccessibleFixedHyperlink() override = default;
 
 public:
     VCLXAccessibleFixedHyperlink(vcl::Window* pWindow);
-
-    // XAccessible
-    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

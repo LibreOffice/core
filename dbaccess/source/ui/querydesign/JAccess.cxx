@@ -32,8 +32,8 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
 
     OJoinDesignViewAccess::OJoinDesignViewAccess(OJoinTableView* _pTableView)
-        :ImplInheritanceHelper(_pTableView)
-        ,m_pTableView(_pTableView)
+        : VCLXAccessibleComponent(_pTableView)
+        , m_pTableView(_pTableView)
     {
     }
     OUString SAL_CALL OJoinDesignViewAccess::getImplementationName()
@@ -76,10 +76,6 @@ namespace dbaui
     sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  )
     {
         return AccessibleRole::VIEW_PORT;
-    }
-    Reference< XAccessibleContext > SAL_CALL OJoinDesignViewAccess::getAccessibleContext(  )
-    {
-        return this;
     }
 }
 

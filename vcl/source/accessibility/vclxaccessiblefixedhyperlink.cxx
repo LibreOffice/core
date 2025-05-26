@@ -24,17 +24,8 @@
 using namespace ::com::sun::star;
 
 VCLXAccessibleFixedHyperlink::VCLXAccessibleFixedHyperlink(vcl::Window* pWindow)
-    : ImplInheritanceHelper(pWindow)
+    : VCLXAccessibleTextComponent(pWindow)
 {
-}
-
-// XAccessible
-
-css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-VCLXAccessibleFixedHyperlink::getAccessibleContext()
-{
-    comphelper::OExternalLockGuard aGuard(this);
-    return this;
 }
 
 // XServiceInfo

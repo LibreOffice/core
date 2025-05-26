@@ -30,7 +30,7 @@ class VCLXAccessibleToolBoxItem;
 typedef std::map< sal_Int32, rtl::Reference< VCLXAccessibleToolBoxItem > > ToolBoxItemsMap;
 
 class VCLXAccessibleToolBox final
-    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent, css::accessibility::XAccessible,
+    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent,
                                          css::accessibility::XAccessibleSelection>
 {
 private:
@@ -69,10 +69,6 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // XAccessible
-    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

@@ -255,14 +255,6 @@ Sequence< OUString > SAL_CALL AccessibleListBox::getSupportedServiceNames()
             u"com.sun.star.awt.AccessibleTreeListBox"_ustr};
 }
 
-// XAccessible
-
-Reference< XAccessibleContext > SAL_CALL AccessibleListBox::getAccessibleContext(  )
-{
-    ensureAlive();
-    return this;
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL AccessibleListBox::getAccessibleChildCount(  )

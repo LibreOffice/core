@@ -243,15 +243,6 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
     }
 }
 
-//=====  XAccessible  =========================================================
-
-Reference< XAccessibleContext > SAL_CALL VCLXAccessibleBox::getAccessibleContext(  )
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    return this;
-}
-
 //=====  XAccessibleContext  ==================================================
 
 sal_Int64 VCLXAccessibleBox::getAccessibleChildCount()

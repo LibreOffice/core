@@ -36,10 +36,8 @@ class VCLXAccessibleListItem;
     classes for selection.
 */
 class VCLXAccessibleList final
-    : public cppu::ImplInheritanceHelper<
-          VCLXAccessibleComponent,
-          css::accessibility::XAccessible,
-          css::accessibility::XAccessibleSelection>
+    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent,
+                                         css::accessibility::XAccessibleSelection>
 {
 public:
     enum BoxType {COMBOBOX, LISTBOX};
@@ -67,10 +65,6 @@ public:
             item.  It is used to retrieve the index of that item.
     */
     void UpdateSelection (std::u16string_view sTextOfSelectedItem);
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override final;

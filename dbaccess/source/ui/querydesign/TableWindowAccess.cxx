@@ -229,11 +229,6 @@ namespace dbaui
             sAccessibleName = m_pTable->getTitle();
         return sAccessibleName;
     }
-    Reference< XAccessibleContext > SAL_CALL OTableWindowAccess::getAccessibleContext(  )
-    {
-        return this;
-    }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

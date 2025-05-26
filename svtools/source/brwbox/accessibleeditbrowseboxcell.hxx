@@ -22,15 +22,10 @@
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 
-class EditBrowseBoxTableCell final
-    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent, css::accessibility::XAccessible>
+class EditBrowseBoxTableCell final : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent>
 {
 public:
     EditBrowseBoxTableCell(svt::ControlBase* pControl);
-
-    // XAccessible
-    css::uno::Reference<css::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

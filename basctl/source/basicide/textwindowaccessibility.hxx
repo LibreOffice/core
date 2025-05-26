@@ -285,16 +285,10 @@ private:
 typedef std::unordered_map< OUString,
                          css::beans::PropertyValue > tPropValMap;
 
-class Document final
-    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent, css::accessibility::XAccessible>,
-      public ::SfxListener
+class Document final : public VCLXAccessibleComponent, public ::SfxListener
 {
 public:
     Document(vcl::Window* pWindow, ::TextEngine & rEngine, ::TextView & rView);
-
-    // XAccessible
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
 
     css::lang::Locale retrieveLocale();
 

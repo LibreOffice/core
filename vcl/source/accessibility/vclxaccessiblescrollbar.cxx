@@ -79,15 +79,6 @@ Sequence< OUString > VCLXAccessibleScrollBar::getSupportedServiceNames()
     return { u"com.sun.star.awt.AccessibleScrollBar"_ustr };
 }
 
-// XAccessible
-
-css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-VCLXAccessibleScrollBar::getAccessibleContext()
-{
-    OExternalLockGuard aGuard(this);
-    return this;
-}
-
 // XAccessibleAction
 
 constexpr sal_Int32 ACCESSIBLE_ACTION_COUNT=4;
