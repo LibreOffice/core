@@ -508,7 +508,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/fontsubset/fontsubset \
     vcl/source/fontsubset/sft \
     vcl/source/fontsubset/ttcr \
-    vcl/source/fontsubset/xlat \
     vcl/source/pdf/COSWriter \
     vcl/source/pdf/EncryptionHashTransporter \
     vcl/source/pdf/ExternalPDFStreams \
