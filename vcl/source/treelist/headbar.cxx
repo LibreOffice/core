@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <accessibility/vclxaccessibleheaderbar.hxx>
+
 #include <vcl/headbar.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
@@ -1281,7 +1283,7 @@ css::uno::Reference< css::accessibility::XAccessible > HeaderBar::CreateAccessib
         maCreateAccessibleHdl.Call( this );
 
         if ( !mxAccessible.is() )
-            mxAccessible = Window::CreateAccessible();
+            mxAccessible = new VCLXAccessibleHeaderBar(this);
     }
 
     return mxAccessible;

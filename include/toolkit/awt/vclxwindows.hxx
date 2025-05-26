@@ -696,9 +696,6 @@ class VCLXHeaderBar final : public VCLXWindow
 public:
     VCLXHeaderBar();
     virtual ~VCLXHeaderBar() override;
-
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
-
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

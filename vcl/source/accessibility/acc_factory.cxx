@@ -110,11 +110,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(vcl::
     }
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(HeaderBar* pHeaderBar)
-{
-    return new VCLXAccessibleHeaderBar(pHeaderBar);
-}
-
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(FormattedField* pFormattedField)
 {
     return new SVTXAccessibleNumericField(pFormattedField);

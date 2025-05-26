@@ -20,6 +20,7 @@
 #include <accessibility/vclxaccessibleheaderbar.hxx>
 #include <accessibility/vclxaccessibleheaderbaritem.hxx>
 
+#include <comphelper/accessiblecontexthelper.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/headbar.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -32,7 +33,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
 VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar(HeaderBar* pHeaderBar)
-    : VCLXAccessibleComponent(pHeaderBar)
+    : ImplInheritanceHelper(pHeaderBar)
 {
     m_pHeadBar = pHeaderBar;
 }
@@ -49,6 +50,15 @@ OUString VCLXAccessibleHeaderBar::getImplementationName()
 Sequence<OUString> VCLXAccessibleHeaderBar::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.AccessibleHeaderBar"_ustr };
+}
+
+// XAccessible
+
+css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+VCLXAccessibleHeaderBar::getAccessibleContext()
+{
+    comphelper::OExternalLockGuard aGuard(this);
+    return this;
 }
 
 // =======XAccessibleContext=======

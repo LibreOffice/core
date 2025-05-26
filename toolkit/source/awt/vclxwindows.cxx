@@ -5909,13 +5909,6 @@ VCLXHeaderBar::~VCLXHeaderBar()
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXHeaderBar::CreateAccessibleContext()
-{
-    VclPtr<HeaderBar> pHeaderBar = GetAs<HeaderBar>();
-    return AccessibleFactory::createAccessibleContext(pHeaderBar);
-}
-
-
 VCLXFrame::VCLXFrame()
 {
 }
