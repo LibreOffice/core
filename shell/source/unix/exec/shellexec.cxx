@@ -41,6 +41,7 @@
 #endif
 
 #ifdef EMSCRIPTEN
+#include <emscripten/threading.h>
 #include <rtl/uri.hxx>
 extern void execute_browser(const char* sUrl);
 #endif
@@ -279,7 +280,8 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
     OUString sEscapedURI(rtl::Uri::encode(aCommand, rtl_UriCharClassUric,
                                           rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8));
-    execute_browser(sEscapedURI.toUtf8().getStr());
+    emscripten_sync_run_in_main_runtime_thread(
+        EM_FUNC_SIG_VI, execute_browser, sEscapedURI.toUtf8().getStr());
 #endif
 }
 
