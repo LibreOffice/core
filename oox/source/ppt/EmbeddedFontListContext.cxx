@@ -87,6 +87,7 @@ void EmbeddedFontListContext::onEndElement()
     if (mxDocSettings.is())
     {
         mxDocSettings->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
+        mxDocSettings->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(true));
     }
 
     if (!moCurrentFont->aRegularID.isEmpty())
