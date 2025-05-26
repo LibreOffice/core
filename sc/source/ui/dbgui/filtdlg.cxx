@@ -399,7 +399,7 @@ void ScFilterDlg::Init()
 
 void ScFilterDlg::Close()
 {
-    rViewData.GetDocShell()->CancelAutoDBRange();
+    rViewData.GetDocShell().CancelAutoDBRange();
 
     DoClose( ScFilterDlgWrapper::GetChildWindowId() );
 }

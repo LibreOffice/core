@@ -83,7 +83,7 @@ void ScDrawView::Construct()
 
     bool bEx = rViewData.GetViewShell()->IsDrawSelMode();
     bool bProt = rDoc.IsTabProtected( nViewTab ) ||
-                 rViewData.GetSfxDocShell()->IsReadOnly();
+                 rViewData.GetSfxDocShell().IsReadOnly();
 
     SdrLayer* pLayer;
     SdrLayerAdmin& rAdmin = GetModel().GetLayerAdmin();
@@ -227,7 +227,7 @@ void ScDrawView::SetMarkedToLayer( SdrLayerID nLayerNo )
 
     //  repaint is done in SetLayer
 
-    rViewData.GetDocShell()->SetDrawModified();
+    rViewData.GetDocShell().SetDrawModified();
 
     //  check mark list now instead of later in a timer
     CheckMarked();
@@ -695,7 +695,7 @@ void ScDrawView::SelectCurrentViewObject( std::u16string_view rName )
     if ( pFound->GetLayer() == SC_LAYER_BACK &&
             !rViewData.GetViewShell()->IsDrawSelMode() &&
             !rDoc.IsTabProtected( nTab ) &&
-            !rViewData.GetSfxDocShell()->IsReadOnly() )
+            !rViewData.GetSfxDocShell().IsReadOnly() )
     {
         SdrLayer* pLayer = GetModel().GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
         if (pLayer)
@@ -755,7 +755,7 @@ bool ScDrawView::SelectObject( std::u16string_view rName )
         if ( pFound->GetLayer() == SC_LAYER_BACK &&
                 !rViewData.GetViewShell()->IsDrawSelMode() &&
                 !rDoc.IsTabProtected( nTab ) &&
-                !rViewData.GetSfxDocShell()->IsReadOnly() )
+                !rViewData.GetSfxDocShell().IsReadOnly() )
         {
             LockBackgroundLayer(false);
         }
@@ -834,9 +834,9 @@ void ScDrawView::DeleteMarked()
     if( SdrObject* pCaptObj = GetMarkedNoteCaption( &pCaptData ) )
     {
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        ScDocShell* pDocShell = rViewData.GetDocShell();
-        SfxUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : nullptr;
-        bool bUndo = pDrawLayer && pDocShell && pUndoMgr && rDoc.IsUndoEnabled();
+        ScDocShell& rDocShell = rViewData.GetDocShell();
+        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        bool bUndo = pDrawLayer && pUndoMgr && rDoc.IsUndoEnabled();
 
         // remove the cell note from document, we are its owner now
         std::unique_ptr<ScPostIt> pNote = rDoc.ReleaseNote( pCaptData->maStart );
@@ -853,10 +853,9 @@ void ScDrawView::DeleteMarked()
             pNote.reset();
             // add the undo action for the note
             if( bUndo )
-                pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( *pDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
+                pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( rDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
             // repaint the cell to get rid of the note marker
-            if( pDocShell )
-                pDocShell->PostPaintCell( pCaptData->maStart );
+            rDocShell.PostPaintCell( pCaptData->maStart );
             // done, return now to skip call of FmFormView::DeleteMarked()
             return;
         }
@@ -1068,8 +1067,8 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
 std::unique_ptr<SdrUndoManager> ScDrawView::createLocalTextUndoManager()
 {
     std::unique_ptr<SdrUndoManager> pUndoManager(new SdrUndoManager);
-    ScDocShell* pDocShell = rViewData.GetDocShell();
-    pUndoManager->SetDocShell(pDocShell);
+    ScDocShell& rDocShell = rViewData.GetDocShell();
+    pUndoManager->SetDocShell(&rDocShell);
     return pUndoManager;
 }
 

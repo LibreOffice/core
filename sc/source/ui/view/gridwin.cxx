@@ -307,7 +307,7 @@ static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScVie
     {
         const ScProtectionAttr* pProtAttr = rDoc.GetAttr( aCellPos, ATTR_PROTECTION );
         bool bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell() ;
-        bool bProtectDoc =  rDoc.IsTabProtected( aCellPos.Tab() ) || rViewData.GetSfxDocShell()->IsReadOnly() ;
+        bool bProtectDoc =  rDoc.IsTabProtected( aCellPos.Tab() ) || rViewData.GetSfxDocShell().IsReadOnly() ;
         // unlock internal layer (if not protected), will be relocked in ScDrawView::MarkListHasChanged()
         pView->LockInternalLayer( bProtectDoc && bProtectAttr );
     }
@@ -1863,7 +1863,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     bEEMouse = false;
 
     ScModule* pScMod = ScModule::get();
-    if (pScMod->IsModalMode(mrViewData.GetSfxDocShell()))
+    if (pScMod->IsModalMode(&mrViewData.GetSfxDocShell()))
         return;
 
     const bool bWasMouseCaptured = IsMouseCaptured();
@@ -2252,7 +2252,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
 
     ScModule* pScMod = ScModule::get();
-    if (pScMod->IsModalMode(mrViewData.GetSfxDocShell()))
+    if (pScMod->IsModalMode(&mrViewData.GetSfxDocShell()))
         return;
 
     SfxBindings& rBindings = mrViewData.GetBindings();
@@ -2323,7 +2323,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     if (nMouseStatus == SC_GM_WATERUNDO)    // Undo in format paintbrush mode
     {
-        SfxUndoManager* pMgr = mrViewData.GetDocShell()->GetUndoManager();
+        SfxUndoManager* pMgr = mrViewData.GetDocShell().GetUndoManager();
         if ( pMgr->GetUndoActionCount() && dynamic_cast<ScUndoSelectionStyle*>(pMgr->GetUndoAction()) )
             pMgr->Undo();
         return;
@@ -2436,7 +2436,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
         if ( aEndPos != aBlockRange.aEnd )
         {
-            mrViewData.GetDocShell()->GetDocFunc().ResizeMatrix( aBlockRange, aEndPos );
+            mrViewData.GetDocShell().GetDocFunc().ResizeMatrix( aBlockRange, aEndPos );
             mrViewData.GetView()->MarkRange( ScRange( aBlockRange.aStart, aEndPos ) );
         }
     }
@@ -2447,7 +2447,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         pView->StopRefMode();
         mrViewData.ResetFillMode();
         pView->GetFunctionSet().SetAnchorFlag( false );
-        mrViewData.GetDocShell()->UpdateOle(mrViewData);
+        mrViewData.GetDocShell().UpdateOle(mrViewData);
     }
 
     bool bRefMode = mrViewData.IsRefMode();
@@ -2482,7 +2482,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                         mrViewData.GetDocument().SetPageStyle( mrViewData.GetTabNo(),
                                                                pStyleSheet->GetName() );
 
-                        ScPrintFunc( mrViewData.GetDocShell(),
+                        ScPrintFunc( &mrViewData.GetDocShell(),
                                      mrViewData.GetViewShell()->GetPrinter(true),
                                      mrViewData.GetTabNo() ).UpdatePages();
 
@@ -2543,7 +2543,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     // toggle single entry
                     ScDPObject aNewObj( *pDPObj );
                     pDPObj->ToggleDetails( aData, &aNewObj );
-                    ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
+                    ScDBDocFunc aFunc( mrViewData.GetDocShell() );
                     aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
                     mrViewData.GetView()->CursorPosChanged();       // shells may be switched
                 }
@@ -2684,7 +2684,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 if (lcl_GetHyperlinkCell(rDoc, nPosX, nPosY, nTab, aCell, sURL))
                 {
                     ScAddress aCellPos( nPosX, nPosY, nTab );
-                    uno::Reference< table::XCell > xCell( new ScCellObj( mrViewData.GetDocShell(), aCellPos ) );
+                    uno::Reference< table::XCell > xCell( new ScCellObj( &mrViewData.GetDocShell(), aCellPos ) );
                     uno::Sequence< uno::Any > aArgs{ uno::Any(xCell) };
                     xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_FOLLOWHYPERLINK, aArgs );
                 }
@@ -2788,7 +2788,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         HideNoteOverlay();
 
     ScModule* pScMod = ScModule::get();
-    if (pScMod->IsModalMode(mrViewData.GetSfxDocShell()))
+    if (pScMod->IsModalMode(&mrViewData.GetSfxDocShell()))
         return;
 
     // If the Drag&Drop is started in the edit mode then sadly nothing else is kept
@@ -3302,7 +3302,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
     // #i7560# FormulaMode check is below scrolling - scrolling is allowed during formula input
     bool bDisable = pScMod->IsFormulaMode() ||
-                    pScMod->IsModalMode(mrViewData.GetSfxDocShell());
+                    pScMod->IsModalMode(&mrViewData.GetSfxDocShell());
     if (bDisable)
         return;
 
@@ -3781,7 +3781,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         bool bHadKeyMarker(mpNoteOverlay && mpNoteOverlay->IsByKeyboard());
         ScTabViewShell* pViewSh = mrViewData.GetViewShell();
 
-        if (mrViewData.GetDocShell()->GetProgress())
+        if (mrViewData.GetDocShell().GetProgress())
             return;
 
         if (DrawKeyInput(rKEvt, this))
@@ -3918,7 +3918,7 @@ void ScGridWindow::StopMarking()
 
 void ScGridWindow::UpdateInputContext()
 {
-    bool bReadOnly = mrViewData.GetDocShell()->IsReadOnly();
+    bool bReadOnly = mrViewData.GetDocShell().IsReadOnly();
     InputContextFlags nOptions = bReadOnly ? InputContextFlags::NONE : ( InputContextFlags::Text | InputContextFlags::ExtText );
 
     //  when font from InputContext is used,
@@ -4239,7 +4239,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
         return AcceptPrivateDrop( rEvt, rData );   // hide drop marker for internal D&D
     }
 
-    if ( mrViewData.GetDocShell()->IsReadOnly() )
+    if ( mrViewData.GetDocShell().IsReadOnly() )
         return DND_ACTION_NONE;
 
     ScDocument& rThisDoc = mrViewData.GetDocument();
@@ -4259,9 +4259,9 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
         if ( !rData.aLinkDoc.isEmpty() )
         {
             OUString aThisName;
-            ScDocShell* pDocSh = mrViewData.GetDocShell();
-            if (pDocSh && pDocSh->HasName())
-                aThisName = pDocSh->GetMedium()->GetName();
+            ScDocShell& rDocSh = mrViewData.GetDocShell();
+            if (rDocSh.HasName())
+                aThisName = rDocSh.GetMedium()->GetName();
 
             if ( rData.aLinkDoc != aThisName )
                 nRet = rEvt.mnAction;
@@ -4528,7 +4528,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
         return 0;
 
     ScDocument* pSourceDoc = pTransObj->GetSourceDocument();
-    ScDocShell* pDocSh     = mrViewData.GetDocShell();
+    ScDocShell& rDocSh     = mrViewData.GetDocShell();
     ScDocument& rThisDoc   = mrViewData.GetDocument();
     ScViewFunc* pView      = mrViewData.GetView();
     SCTAB       nThisTab   = mrViewData.GetTabNo();
@@ -4594,7 +4594,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             if ( rThisDoc.IsDocEditable() )
             {
                 SCTAB nSrcTab = aSource.aStart.Tab();
-                mrViewData.GetDocShell()->MoveTable( nSrcTab, nThisTab, !bIsMove, true );   // with Undo
+                mrViewData.GetDocShell().MoveTable( nSrcTab, nThisTab, !bIsMove, true );   // with Undo
                 pView->SetTabNo( nThisTab, true );
                 bDone = true;
             }
@@ -4628,7 +4628,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                         nSourceTab != nThisTab )
             {
                 OUString aUndo = ScResId( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
-                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
+                rDocSh.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
 
                 SCCOL nCorrectCursorPosCol = 0;
                 SCROW nCorrectCursorPosRow = 0;
@@ -4637,7 +4637,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 if ( meDragInsertMode != INS_NONE )
                 {
                     // call with bApi = sal_True to avoid error messages in drop handler
-                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
+                    bDone = rDocSh.GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                     if ( bDone )
                     {
                         if ( nThisTab == nSourceTab )
@@ -4657,7 +4657,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                                 nCorrectCursorPosCol = nSizeX;
                             }
                         }
-                        pDocSh->UpdateOle(mrViewData);
+                        rDocSh.UpdateOle(mrViewData);
                         pView->CellContentChanged();
                     }
                 }
@@ -4690,7 +4690,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                          ( eCmd == DelCellCmd::CellsLeft && nDestPosY == aSource.aStart.Row() ) )
                     {
                         // call with bApi = sal_True to avoid error messages in drop handler
-                        bDone = pDocSh->GetDocFunc().DeleteCells( aSource, nullptr, eCmd, true /*bApi*/ );
+                        bDone = rDocSh.GetDocFunc().DeleteCells( aSource, nullptr, eCmd, true /*bApi*/ );
                         if ( bDone )
                         {
                             if ( eCmd == DelCellCmd::CellsUp && nDestPosY > aSource.aEnd.Row() )
@@ -4703,7 +4703,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                                 ScRange aErrorRange( ScAddress::UNINITIALIZED );
                                 bDone = aDest.Move( -nSizeX, 0, 0, aErrorRange, rThisDoc );
                             }
-                            pDocSh->UpdateOle(mrViewData);
+                            rDocSh.UpdateOle(mrViewData);
                             pView->CellContentChanged();
                         }
                     }
@@ -4728,7 +4728,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     pView->SetCursor( aDest.aStart.Col() + nDCol, aDest.aStart.Row() + nDRow );
                 }
 
-                pDocSh->GetUndoManager()->LeaveListAction();
+                rDocSh.GetUndoManager()->LeaveListAction();
 
             }
             else
@@ -4782,16 +4782,16 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             if (pSourceSh)
             {
                 OUString aUndo = ScResId( STR_UNDO_COPY );
-                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
+                rDocSh.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
 
                 bDone = true;
                 if ( meDragInsertMode != INS_NONE )
                 {
                     // call with bApi = sal_True to avoid error messages in drop handler
-                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
+                    bDone = rDocSh.GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                     if ( bDone )
                     {
-                        pDocSh->UpdateOle(mrViewData);
+                        rDocSh.UpdateOle(mrViewData);
                         pView->CellContentChanged();
                     }
                 }
@@ -4833,7 +4833,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     pView->SetCursor( aDest.aStart.Col(), aDest.aStart.Row() );
                 }
 
-                pDocSh->GetUndoManager()->LeaveListAction();
+                rDocSh.GetUndoManager()->LeaveListAction();
             }
         }
         else
@@ -4842,16 +4842,16 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             //! or don't start dragging on a part of a matrix
 
             OUString aUndo = ScResId( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
-            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
+            rDocSh.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
 
             bDone = true;
             if ( meDragInsertMode != INS_NONE )
             {
                 // call with bApi = sal_True to avoid error messages in drop handler
-                bDone = pDocSh->GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
+                bDone = rDocSh.GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                 if ( bDone )
                 {
-                    pDocSh->UpdateOle(mrViewData);
+                    rDocSh.UpdateOle(mrViewData);
                     pView->CellContentChanged();
                 }
             }
@@ -4868,7 +4868,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 }
             }
 
-            pDocSh->GetUndoManager()->LeaveListAction();
+            rDocSh.GetUndoManager()->LeaveListAction();
 
             //  no longer call ResetMark here - the inserted block has been selected
             //  and may have been copied to primary selection
@@ -4899,9 +4899,9 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
         bool bOk = true;
         OUString aThisName;
-        ScDocShell* pDocSh = mrViewData.GetDocShell();
-        if (pDocSh && pDocSh->HasName())
-            aThisName = pDocSh->GetMedium()->GetName();
+        ScDocShell& rDocSh = mrViewData.GetDocShell();
+        if (rDocSh.HasName())
+            aThisName = rDocSh.GetMedium()->GetName();
 
         if ( rData.aLinkDoc == aThisName )              // error - no link within a document
             bOk = false;
@@ -5044,7 +5044,7 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
                 //  because only DragData is checked directly inside PasteDraw
                 mrViewData.GetView()->PasteDraw(
                     aLogicPos, pDrawTransfer->GetModel(), false,
-                    pDrawTransfer->GetShellID(), SfxObjectShell::CreateShellID(mrViewData.GetDocShell()));
+                    pDrawTransfer->GetShellID(), SfxObjectShell::CreateShellID(&mrViewData.GetDocShell()));
             }
         }
     }
@@ -5360,7 +5360,7 @@ void ScGridWindow::GetFocus()
                             //     -> GetFocus/MouseButtonDown order on Mac
     }
 
-    mrViewData.GetDocShell()->CheckConfigOptions();
+    mrViewData.GetDocShell().CheckConfigOptions();
     Window::GetFocus();
 }
 
@@ -5383,7 +5383,7 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
     {
         ScRangeFindList* pRangeFinder = pHdl->GetRangeFindList();
         if ( pRangeFinder && !pRangeFinder->IsHidden() &&
-                pRangeFinder->GetDocName() == mrViewData.GetDocShell()->GetTitle() )
+                pRangeFinder->GetDocName() == mrViewData.GetDocShell().GetTitle() )
         {
             ScDocument& rDoc = mrViewData.GetDocument();
             SCTAB nTab = mrViewData.GetTabNo();
@@ -5478,7 +5478,7 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
 #define SCE_RIGHT   8
 #define SCE_ALL     15
 
-static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uInt16 nEdges )
+static void lcl_PaintOneRange( ScDocShell& rDocSh, const ScRange& rRange, sal_uInt16 nEdges )
 {
     // the range is always properly oriented
 
@@ -5491,7 +5491,7 @@ static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uI
     bool bHiddenEdge = false;
     SCROW nTmp;
 
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = rDocSh.GetDocument();
     while ( nCol1 > 0 && rDoc.ColHidden(nCol1, nTab1) )
     {
         --nCol1;
@@ -5523,19 +5523,19 @@ static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uI
     {
         // Only along the edges (The corners are hit twice)
         if ( nEdges & SCE_TOP )
-            pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol2, nRow1, nTab2, PaintPartFlags::Marks );
+            rDocSh.PostPaint( nCol1, nRow1, nTab1, nCol2, nRow1, nTab2, PaintPartFlags::Marks );
         if ( nEdges & SCE_LEFT )
-            pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol1, nRow2, nTab2, PaintPartFlags::Marks );
+            rDocSh.PostPaint( nCol1, nRow1, nTab1, nCol1, nRow2, nTab2, PaintPartFlags::Marks );
         if ( nEdges & SCE_RIGHT )
-            pDocSh->PostPaint( nCol2, nRow1, nTab1, nCol2, nRow2, nTab2, PaintPartFlags::Marks );
+            rDocSh.PostPaint( nCol2, nRow1, nTab1, nCol2, nRow2, nTab2, PaintPartFlags::Marks );
         if ( nEdges & SCE_BOTTOM )
-            pDocSh->PostPaint( nCol1, nRow2, nTab1, nCol2, nRow2, nTab2, PaintPartFlags::Marks );
+            rDocSh.PostPaint( nCol1, nRow2, nTab1, nCol2, nRow2, nTab2, PaintPartFlags::Marks );
     }
     else    // everything in one call
-        pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, PaintPartFlags::Marks );
+        rDocSh.PostPaint( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, PaintPartFlags::Marks );
 }
 
-static void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, const ScRange& rNewUn )
+static void lcl_PaintRefChanged( ScDocShell& rDocSh, const ScRange& rOldUn, const ScRange& rNewUn )
 {
     //  Repaint for the parts of the frame in old, which in are no more in New
 
@@ -5545,9 +5545,9 @@ static void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, cons
     aNew.PutInOrder();
 
     if ( aOld.aStart == aOld.aEnd )                 //! Ignore sheet ?
-        pDocSh->GetDocument().ExtendMerge(aOld);
+        rDocSh.GetDocument().ExtendMerge(aOld);
     if ( aNew.aStart == aNew.aEnd )                 //! Ignore sheet ?
-        pDocSh->GetDocument().ExtendMerge(aNew);
+        rDocSh.GetDocument().ExtendMerge(aNew);
 
     SCCOL nOldCol1 = aOld.aStart.Col();
     SCROW nOldRow1 = aOld.aStart.Row();
@@ -5568,43 +5568,43 @@ static void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, cons
         // Completely removed or changed all sides
         // (check <= instead of <  goes wrong for single rows/columns)
 
-        lcl_PaintOneRange( pDocSh, aOld, SCE_ALL );
+        lcl_PaintOneRange( rDocSh, aOld, SCE_ALL );
     }
     else        // Test all four corners separately
     {
         // upper part
         if ( nNewRow1 < nOldRow1 )                  // only delete upper line
-            lcl_PaintOneRange( pDocSh, ScRange(
+            lcl_PaintOneRange( rDocSh, ScRange(
                     nOldCol1, nOldRow1, nTab1, nOldCol2, nOldRow1, nTab2 ), SCE_ALL );
         else if ( nNewRow1 > nOldRow1 )             // the upper part which is will be removed
-            lcl_PaintOneRange( pDocSh, ScRange(
+            lcl_PaintOneRange( rDocSh, ScRange(
                     nOldCol1, nOldRow1, nTab1, nOldCol2, nNewRow1-1, nTab2 ),
                     SCE_ALL &~ SCE_BOTTOM );
 
         //  bottom part
         if ( nNewRow2 > nOldRow2 )                  // only delete bottom line
-            lcl_PaintOneRange( pDocSh, ScRange(
+            lcl_PaintOneRange( rDocSh, ScRange(
                     nOldCol1, nOldRow2, nTab1, nOldCol2, nOldRow2, nTab2 ), SCE_ALL );
         else if ( nNewRow2 < nOldRow2 )             // the bottom part which is will be removed
-            lcl_PaintOneRange( pDocSh, ScRange(
+            lcl_PaintOneRange( rDocSh, ScRange(
                     nOldCol1, nNewRow2+1, nTab1, nOldCol2, nOldRow2, nTab2 ),
                     SCE_ALL &~ SCE_TOP );
 
         //  left part
         if ( nNewCol1 < nOldCol1 )                  // only delete left line
-            lcl_PaintOneRange( pDocSh, ScRange(
+            lcl_PaintOneRange( rDocSh, ScRange(
                     nOldCol1, nOldRow1, nTab1, nOldCol1, nOldRow2, nTab2 ), SCE_ALL );
         else if ( nNewCol1 > nOldCol1 )             // the left part which is will be removed
-            lcl_PaintOneRange( pDocSh, ScRange(
+            lcl_PaintOneRange( rDocSh, ScRange(
                     nOldCol1, nOldRow1, nTab1, nNewCol1-1, nOldRow2, nTab2 ),
                     SCE_ALL &~ SCE_RIGHT );
 
         // right part
         if ( nNewCol2 > nOldCol2 )                  // only delete right line
-            lcl_PaintOneRange( pDocSh, ScRange(
+            lcl_PaintOneRange( rDocSh, ScRange(
                     nOldCol2, nOldRow1, nTab1, nOldCol2, nOldRow2, nTab2 ), SCE_ALL );
         else if ( nNewCol2 < nOldCol2 )             // the right part which is will be removed
-            lcl_PaintOneRange( pDocSh, ScRange(
+            lcl_PaintOneRange( rDocSh, ScRange(
                     nNewCol2+1, nOldRow1, nTab1, nOldCol2, nOldRow2, nTab2 ),
                     SCE_ALL &~ SCE_LEFT );
     }
@@ -5735,15 +5735,15 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
     {
         pHdl->UpdateRange( nRFIndex, aNew );
 
-        ScDocShell* pDocSh = mrViewData.GetDocShell();
+        ScDocShell& rDocSh = mrViewData.GetDocShell();
 
         pHdl->UpdateLokReferenceMarks();
 
         // only redrawing what has been changed...
-        lcl_PaintRefChanged( pDocSh, aOld, aNew );
+        lcl_PaintRefChanged( rDocSh, aOld, aNew );
 
         // only redraw new frame (synchronously)
-        pDocSh->Broadcast( ScIndexHint( SfxHintId::ScShowRangeFinder, nRFIndex ) );
+        rDocSh.Broadcast( ScIndexHint( SfxHintId::ScShowRangeFinder, nRFIndex ) );
 
         PaintImmediately();   // what you move, will be seen immediately
     }
@@ -5785,12 +5785,12 @@ SvxAdjust toSvxAdjust( const ScPatternAttr& rPat )
     return eSvxAdjust;
 }
 
-std::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell* pDocSh, const ScPatternAttr& rPat )
+std::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell& rDocSh, const ScPatternAttr& rPat )
 {
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = rDocSh.GetDocument();
 
     auto pEngine = std::make_shared<ScFieldEditEngine>(&rDoc, rDoc.GetEditPool());
-    ScSizeDeviceProvider aProv(pDocSh);
+    ScSizeDeviceProvider aProv(&rDocSh);
     pEngine->SetRefDevice(aProv.GetDevice());
     pEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
     SfxItemSet aDefault(pEngine->GetEmptyItemSet());
@@ -5875,8 +5875,8 @@ static std::vector<std::unique_ptr<SvxFieldItem>> lcl_GetEditEngineFields(const 
 
 std::vector<UrlData> ScGridWindow::GetEditUrls(const ScAddress& rSelectedCell)
 {
-    ScDocShell* pDocSh = mrViewData.GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = mrViewData.GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
 
     SCCOL nPosX = rSelectedCell.Col();
     SCROW nPosY = rSelectedCell.Row();
@@ -5893,7 +5893,7 @@ std::vector<UrlData> ScGridWindow::GetEditUrls(const ScAddress& rSelectedCell)
 
     const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
 
-    std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
+    std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(rDocSh, *pPattern);
 
     lcl_SetEngineTextKeepingDefaults(pEngine, rDoc, aCell, sURL);
 
@@ -5925,8 +5925,8 @@ bool ScGridWindow::GetEditUrl(const Point& rPos, OUString* pName, OUString* pUrl
     mrViewData.GetPosFromPixel( rPos.X(), rPos.Y(), eWhich, nPosX, nPosY );
 
     SCTAB nTab = mrViewData.GetTabNo();
-    ScDocShell* pDocSh = mrViewData.GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = mrViewData.GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     OUString sURL;
     ScRefCellValue aCell;
     bool bFound = lcl_GetHyperlinkCell(rDoc, nPosX, nPosY, nTab, aCell, sURL);
@@ -5952,7 +5952,7 @@ bool ScGridWindow::GetEditUrl(const Point& rPos, OUString* pName, OUString* pUrl
 
         //  EditEngine
 
-    std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
+    std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(rDocSh, *pPattern);
 
     MapMode aEditMode = mrViewData.GetLogicMode(eWhich);            // without draw scaling
     tools::Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );

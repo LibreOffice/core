@@ -1316,7 +1316,7 @@ void ScTabView::SelectAllTables()
         for (SCTAB i=0; i<nCount; i++)
             rMark.SelectTable( i, true );
 
-        aViewData.GetDocShell()->PostPaintExtras();
+        aViewData.GetDocShell().PostPaintExtras();
         SfxBindings& rBind = aViewData.GetBindings();
         rBind.Invalidate( FID_FILL_TAB );
         rBind.Invalidate( FID_TAB_DESELECTALL );
@@ -1333,7 +1333,7 @@ void ScTabView::DeselectAllTables()
     for (SCTAB i=0; i<nCount; i++)
         rMark.SelectTable( i, ( i == nTab ) );
 
-    aViewData.GetDocShell()->PostPaintExtras();
+    aViewData.GetDocShell().PostPaintExtras();
     SfxBindings& rBind = aViewData.GetBindings();
     rBind.Invalidate( FID_FILL_TAB );
     rBind.Invalidate( FID_TAB_DESELECTALL );
@@ -1470,8 +1470,8 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                         if ( nFixPosY != 0 )
                             aWinSize.AdjustHeight(GetGridHeight( SC_SPLIT_TOP ) );
 
-                        ScDocShell* pDocSh = aViewData.GetDocShell();
-                        double nPPTX = ScGlobal::nScreenPPTX / pDocSh->GetOutputFactor();
+                        ScDocShell& rDocSh = aViewData.GetDocShell();
+                        double nPPTX = ScGlobal::nScreenPPTX / rDocSh.GetOutputFactor();
                         double nPPTY = ScGlobal::nScreenPPTY;
 
                         sal_uInt16 nMin = MINZOOM;
@@ -1519,7 +1519,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
 
                     if ( pStyleSheet )
                     {
-                        ScPrintFunc aPrintFunc( aViewData.GetDocShell(),
+                        ScPrintFunc aPrintFunc( &aViewData.GetDocShell(),
                                                 aViewData.GetViewShell()->GetPrinter(true),
                                                 nCurTab );
 
@@ -1566,7 +1566,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                 aWinSize.setHeight( nOtherHeight );
                         }
 
-                        double nPPTX = ScGlobal::nScreenPPTX / aViewData.GetDocShell()->GetOutputFactor();
+                        double nPPTX = ScGlobal::nScreenPPTX / aViewData.GetDocShell().GetOutputFactor();
                         double nPPTY = ScGlobal::nScreenPPTY;
 
                         tools::Long nZoomX = static_cast<tools::Long>( aWinSize.Width() * 100 /
@@ -1619,7 +1619,7 @@ void ScTabView::MakeDrawLayer()
     if (pDrawView)
         return;
 
-    aViewData.GetDocShell()->MakeDrawLayer();
+    aViewData.GetDocShell().MakeDrawLayer();
 
     // pDrawView is set per Notify
     OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer does not work");
@@ -1654,7 +1654,7 @@ void ScTabView::ErrorMessage(TranslateId pGlobStrId)
 
     if (pGlobStrId && pGlobStrId == STR_PROTECTIONERR)
     {
-        if (aViewData.GetDocShell()->IsReadOnly())
+        if (aViewData.GetDocShell().IsReadOnly())
         {
             pGlobStrId = STR_READONLYERR;
         }
@@ -1681,8 +1681,8 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
 
     if (aViewData.IsPagebreakMode())
     {
-        ScDocShell* pDocSh = aViewData.GetDocShell();
-        ScDocument& rDoc = pDocSh->GetDocument();
+        ScDocShell& rDocSh = aViewData.GetDocShell();
+        ScDocument& rDoc = rDocSh.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
 
         sal_uInt16 nCount = rDoc.GetPrintRangeCount(nTab);
@@ -1690,7 +1690,7 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
             nCount = 1;
         pNewData.reset( new ScPageBreakData(nCount) );
 
-        ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab, 0,0,nullptr, nullptr, pNewData.get() );
+        ScPrintFunc aPrintFunc( &rDocSh, rDocSh.GetPrinter(), nTab, 0,0,nullptr, nullptr, pNewData.get() );
         // ScPrintFunc fills the PageBreakData in ctor
         if ( nCount > 1 )
         {

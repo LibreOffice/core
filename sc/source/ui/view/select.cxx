@@ -184,10 +184,10 @@ void ScViewFunctionSet::BeginDrag()
                             ( DND_ACTION_COPYMOVE | DND_ACTION_LINK ) :
                             ( DND_ACTION_COPY | DND_ACTION_LINK );
 
-    ScDocShell* pDocSh = m_rViewData.GetDocShell();
+    ScDocShell& rDocSh = m_rViewData.GetDocShell();
     TransferableObjectDescriptor aObjDesc;
-    pDocSh->FillTransferableObjectDescriptor( aObjDesc );
-    aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+    rDocSh.FillTransferableObjectDescriptor( aObjDesc );
+    aObjDesc.maDisplayName = rDocSh.GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScTransferObj ctor
 
     rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( std::move(pClipDoc), std::move(aObjDesc) );
@@ -202,7 +202,7 @@ void ScViewFunctionSet::BeginDrag()
     pTransferObj->SetSourceCursorPos( m_rViewData.GetCurX(), m_rViewData.GetCurY() );
     pTransferObj->SetVisibleTab( nTab );
 
-    pTransferObj->SetDragSource( pDocSh, rMark );
+    pTransferObj->SetDragSource( &rDocSh, rMark );
 
     vcl::Window* pWindow = m_rViewData.GetActiveWin();
     if ( pWindow->IsTracking() )
@@ -486,7 +486,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
     if (bRefMode)
     {
         // if no input is possible from this doc, don't move the reference cursor around
-        if ( !ScModule::get()->IsModalMode(m_rViewData.GetSfxDocShell()) && (!CheckRefBounds(nPosX, nPosY) || SfxLokHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE))
+        if ( !ScModule::get()->IsModalMode(&m_rViewData.GetSfxDocShell()) && (!CheckRefBounds(nPosX, nPosY) || SfxLokHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE))
         {
             if (!m_bAnchor)
             {

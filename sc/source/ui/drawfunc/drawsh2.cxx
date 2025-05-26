@@ -70,7 +70,7 @@ ScDrawShell::ScDrawShell( ScViewData& rData ) :
             pFrame->GetFrame().GetController(),
             vcl::EnumContext::Context::Cell);
     SetPool( &rViewData.GetScDrawView()->GetModel().GetItemPool() );
-    SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = rViewData.GetSfxDocShell().GetUndoManager();
     SetUndoManager( pMgr );
     if ( !rViewData.GetDocument().IsUndoEnabled() )
     {

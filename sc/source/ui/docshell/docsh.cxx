@@ -249,7 +249,7 @@ std::shared_ptr<model::ColorSet> ScDocShell::GetThemeColors()
 void ScDocShell::DoEnterHandler()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if (pViewSh && pViewSh->GetViewData().GetDocShell() == this)
+    if (pViewSh && &pViewSh->GetViewData().GetDocShell() == this)
         ScModule::get()->InputEnterHandler();
 }
 

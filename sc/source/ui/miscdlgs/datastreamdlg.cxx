@@ -17,10 +17,10 @@
 
 namespace sc
 {
-DataStreamDlg::DataStreamDlg(ScDocShell* pDocShell, weld::Window* pParent)
+DataStreamDlg::DataStreamDlg(ScDocShell& rDocShell, weld::Window* pParent)
     : GenericDialogController(pParent, u"modules/scalc/ui/datastreams.ui"_ustr,
                               u"DataStreamDialog"_ustr)
-    , m_pDocShell(pDocShell)
+    , m_rDocShell(rDocShell)
     , m_xCbUrl(new SvtURLBox(m_xBuilder->weld_combo_box(u"url"_ustr)))
     , m_xBtnBrowse(m_xBuilder->weld_button(u"browse"_ustr))
     , m_xRBValuesInLine(m_xBuilder->weld_radio_button(u"valuesinline"_ustr))
@@ -95,7 +95,7 @@ void DataStreamDlg::UpdateEnable()
 ScRange DataStreamDlg::GetStartRange()
 {
     OUString aStr = m_xEdRange->get_text();
-    ScDocument& rDoc = m_pDocShell->GetDocument();
+    ScDocument& rDoc = m_rDocShell.GetDocument();
     ScRange aRange;
     ScRefFlags nRes = aRange.Parse(aStr, rDoc, rDoc.GetAddressConvention());
     if (((nRes & ScRefFlags::VALID) == ScRefFlags::ZERO) || !aRange.IsValid())
@@ -115,7 +115,7 @@ ScRange DataStreamDlg::GetStartRange()
 void DataStreamDlg::Init(const DataStream& rStrm)
 {
     m_xCbUrl->set_entry_text(rStrm.GetURL());
-    ScDocument& rDoc = m_pDocShell->GetDocument();
+    ScDocument& rDoc = m_rDocShell.GetDocument();
 
     ScRange aRange = rStrm.GetRange();
     ScRange aTopRange = aRange;
@@ -166,7 +166,7 @@ void DataStreamDlg::StartStream()
     DataStream::MoveType eMove
         = m_xRBRangeDown->get_active() ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
 
-    DataStream* pStream = DataStream::Set(m_pDocShell, rURL, aStartRange, nLimit, eMove);
+    DataStream* pStream = DataStream::Set(&m_rDocShell, rURL, aStartRange, nLimit, eMove);
     pStream->SetRefreshOnEmptyLine(m_xCBRefreshOnEmpty->get_active());
     DataStream::MakeToolbarVisible();
     pStream->StartImport();

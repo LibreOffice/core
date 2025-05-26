@@ -376,7 +376,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl, weld::Button&, void)
     // be created at this point:
     if (!bInvalid)
     {
-        ScDBDocFunc aFunc(*m_rViewData.GetDocShell());
+        ScDBDocFunc aFunc(m_rViewData.GetDocShell());
         aFunc.ModifyAllDBData(aLocalDbCol, aRemoveList);
         response(RET_OK);
     }

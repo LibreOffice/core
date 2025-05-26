@@ -270,7 +270,7 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
             pFormat->AddEntry(pEntry.release());
             pFormat->SetRange(aRange);
             auto& rRangeList = pFormat->GetRange();
-            mrViewData.GetDocShell()->GetDocFunc().ReplaceConditionalFormat(
+            mrViewData.GetDocShell().GetDocFunc().ReplaceConditionalFormat(
                 0, std::move(pFormat), maPosition.Tab(), rRangeList);
         }
         m_xDialog->response(RET_OK);

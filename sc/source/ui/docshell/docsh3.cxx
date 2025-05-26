@@ -83,7 +83,7 @@ void ScDocShell::PostEditView( ScEditEngineDefaulter& rEditEngine, const ScAddre
         //  Test: only active ViewShell
 
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if (pViewSh && pViewSh->GetViewData().GetDocShell() == this)
+    if (pViewSh && &pViewSh->GetViewData().GetDocShell() == this)
     {
         ScEditViewHint aHint(rEditEngine, rCursorPos);
         pViewSh->Notify( *this, aHint );

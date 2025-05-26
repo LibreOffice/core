@@ -37,9 +37,9 @@ TranslateId ScChiSquareTestDialog::GetUndoNameId()
     return STR_CHI_SQUARE_TEST;
 }
 
-ScRange ScChiSquareTestDialog::ApplyOutput(ScDocShell* pDocShell)
+ScRange ScChiSquareTestDialog::ApplyOutput(ScDocShell& rDocShell)
 {
-    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, rDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
 

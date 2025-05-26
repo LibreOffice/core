@@ -317,7 +317,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     bool bHOutline   = bOutlMode && lcl_HasColOutline(aViewData);
     bool bVOutline   = bOutlMode && lcl_HasRowOutline(aViewData);
 
-    if ( aViewData.GetDocShell()->IsPreview() )
+    if ( aViewData.GetDocShell().IsPreview() )
         bHScroll = bVScroll = bTabControl = bHeaders = bHOutline = bVOutline = false;
 
     tools::Long nBarX = 0;
@@ -1635,7 +1635,7 @@ void ScTabView::UpdateShow()
     bool bShowH = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
     bool bShowV = ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
 
-    if ( aViewData.GetDocShell()->IsPreview() )
+    if ( aViewData.GetDocShell().IsPreview() )
         bHScrollMode = bVScrollMode = bTabMode = bHeader = bHOutline = bVOutline = false;
 
         // create Windows
@@ -2146,7 +2146,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
     if ( bFreeze )
     {
         Point aWinStart = pWin->GetPosPixel();
-        aViewData.GetDocShell()->SetDocumentModified();
+        aViewData.GetDocShell().SetDocumentModified();
 
         Point aSplit;
         SCCOL nPosX = 1;
@@ -2302,7 +2302,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
 void ScTabView::RemoveSplit()
 {
     if (aViewData.GetHSplitMode() == SC_SPLIT_FIX || aViewData.GetVSplitMode() == SC_SPLIT_FIX)
-        aViewData.GetDocShell()->SetDocumentModified();
+        aViewData.GetDocShell().SetDocumentModified();
     DoHSplit( 0 );
     DoVSplit( 0 );
     RepeatResize();
@@ -2816,8 +2816,8 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
     if (nEnd <= nMaxTiledIndex - nExtra) // No need to extend.
         return;
 
-    ScDocShell* pDocSh = rViewData.GetDocShell();
-    ScModelObj* pModelObj = pDocSh ? pDocSh->GetModel() : nullptr;
+    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScModelObj* pModelObj = rDocSh.GetModel();
     Size aOldSize(0, 0);
     if (pModelObj)
         aOldSize = pModelObj->getDocumentSize();
@@ -2832,9 +2832,6 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
     Size aNewSize(0, 0);
     if (pModelObj)
         aNewSize = pModelObj->getDocumentSize();
-
-    if (!pDocSh)
-        return;
 
     if (pModelObj)
     {

@@ -653,7 +653,7 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 {
     ScDocShell* pDocSh = nullptr;
     if (pViewShell)
-        pDocSh = pViewShell->GetViewData().GetDocShell();
+        pDocSh = &pViewShell->GetViewData().GetDocShell();
     return pDocSh;
 }
 

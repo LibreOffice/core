@@ -632,7 +632,7 @@ void ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
     {
         ScTabViewShell& rViewShell = pViewTarget->GetViewShell();
         ScViewData& rViewData = rViewShell.GetViewData();
-        rViewData.GetDocShell()->SetPrintZoom( rViewData.GetTabNo(), nNewScale, nNewPages );
+        rViewData.GetDocShell().SetPrintZoom( rViewData.GetTabNo(), nNewScale, nNewPages );
     }
 }
 

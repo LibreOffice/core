@@ -409,7 +409,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_FORMATPAGE:
         case SID_STATUS_PAGESTYLE:
         case SID_HFEDIT:
-            GetViewData().GetDocShell()->
+            GetViewData().GetDocShell().
                 ExecutePageStyle( *this, rReq, GetViewData().GetTabNo() );
             break;
 
@@ -873,7 +873,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         if (!GetViewData().GetMarkData().IsMarked())
                             GetViewData().GetViewShell()->ExtendSingleSelection(aCellRange);
 
-                        uno::Reference<frame::XModel> xModel(GetViewData().GetDocShell()->GetModel());
+                        uno::Reference<frame::XModel> xModel(GetViewData().GetDocShell().GetModel());
                         uno::Reference<sheet::XSheetCellRange> xSheetRange(
                                 xActiveSheet->getCellRangeByPosition(
                                     aCellRange.StartColumn, aCellRange.StartRow, aCellRange.EndColumn,
@@ -962,7 +962,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScDocument& rDoc = rViewData.GetDocument();
                 rDoc.SetViewOptions(aSetOpts);
 
-                rViewData.GetDocShell()->PostPaintGridAll();
+                rViewData.GetDocShell().PostPaintGridAll();
 
                 rBindings.Invalidate( FID_TOGGLEFORMULA );
                 rReq.AppendItem( SfxBoolItem( nSlot, bFormulaMode ) );
@@ -1239,7 +1239,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         SetTabNo( nFirstVisTab );
                     }
 
-                    rViewData.GetDocShell()->PostPaintExtras();
+                    rViewData.GetDocShell().PostPaintExtras();
                     SfxBindings& rBind = rViewData.GetBindings();
                     rBind.Invalidate( FID_FILL_TAB );
                     rBind.Invalidate( FID_TAB_DESELECTALL );
@@ -1322,8 +1322,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                             rOtherBind.Invalidate( SID_WINDOW_FIX_COL );
                             rOtherBind.Invalidate( SID_WINDOW_FIX_ROW );
                         });
-                        if (!GetViewData().GetDocShell()->IsReadOnly())
-                            GetViewData().GetDocShell()->SetDocumentModified();
+                        if (!GetViewData().GetDocShell().IsReadOnly())
+                            GetViewData().GetDocShell().SetDocumentModified();
                     }
                 }
             }
@@ -1361,8 +1361,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                             rOtherBind.Invalidate( SID_WINDOW_FIX );
                             rOtherBind.Invalidate(nSlot);
                         });
-                        if (!GetViewData().GetDocShell()->IsReadOnly())
-                            GetViewData().GetDocShell()->SetDocumentModified();
+                        if (!GetViewData().GetDocShell().IsReadOnly())
+                            GetViewData().GetDocShell().SetDocumentModified();
                     }
                 }
                 else
@@ -1402,9 +1402,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 ScViewData& rData = GetViewData();
                 ScAddress aCursorPos( rData.GetCurX(), rData.GetCurY(), rData.GetTabNo() );
-                ScDocShell* pDocSh = rData.GetDocShell();
+                ScDocShell& rDocSh = rData.GetDocShell();
 
-                ScChangeAction* pAction = pDocSh->GetChangeAction( aCursorPos );
+                ScChangeAction* pAction = rDocSh.GetChangeAction( aCursorPos );
                 if ( pAction )
                 {
                     const SfxPoolItem* pItem;
@@ -1413,12 +1413,12 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                          dynamic_cast<const SfxStringItem*>( pItem) !=  nullptr )
                     {
                         OUString aComment = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                        pDocSh->SetChangeComment( pAction, aComment );
+                        rDocSh.SetChangeComment( pAction, aComment );
                         rReq.Done();
                     }
                     else
                     {
-                        pDocSh->ExecuteChangeCommentDialog(pAction, GetFrameWeld());
+                        rDocSh.ExecuteChangeCommentDialog(pAction, GetFrameWeld());
                         rReq.Done();
                     }
                 }
@@ -1430,7 +1430,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             //  the extras
             if (!GetScDrawView())
             {
-                GetViewData().GetDocShell()->MakeDrawLayer();
+                GetViewData().GetDocShell().MakeDrawLayer();
                 rBindings.InvalidateAll(false);
             }
             break;
@@ -1524,7 +1524,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     auto pColorSet = pDialog->getCurrentColorSet();
                     if (pColorSet)
                     {
-                        sc::ThemeColorChanger aChanger(*GetViewData().GetDocShell());
+                        sc::ThemeColorChanger aChanger(GetViewData().GetDocShell());
                         aChanger.apply(pColorSet);
                     }
                 });

@@ -1068,8 +1068,8 @@ bool ScModelObj::isMimeTypeSupported()
 
 static void lcl_sendLOKDocumentBackground(const ScViewData* pViewData)
 {
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = pViewData->GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     const SfxPoolItem& rItem(rDoc.getCellAttributeHelper().getDefaultCellAttribute().GetItem(ATTR_BACKGROUND));
     const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
     const Color& rColor = rBackground.GetColor();

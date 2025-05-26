@@ -30,7 +30,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* 
     : ScAnyRefDlgController( pB, pCW, pParent, u"modules/scalc/ui/definename.ui"_ustr, u"DefineNameDialog"_ustr)
     , mbUndo( bUndo )
     , mrDoc(rViewData.GetDocument())
-    , mpDocShell ( rViewData.GetDocShell() )
+    , mrDocShell ( rViewData.GetDocShell() )
     , maCursorPos( aCursorPos )
     , maGlobalNameStr  ( ScResId(STR_GLOBAL_SCOPE) )
     , maErrInvalidNameStr( ScResId(STR_ERR_NAME_INVALID))
@@ -267,15 +267,15 @@ void ScNameDefDlg::AddPushed()
 
                 assert( pNewEntry);     // undo of no insertion smells fishy
                 if (pNewEntry)
-                    mpDocShell->GetUndoManager()->AddUndoAction(
-                            std::make_unique<ScUndoAddRangeData>( *mpDocShell, pNewEntry, nTab) );
+                    mrDocShell.GetUndoManager()->AddUndoAction(
+                            std::make_unique<ScUndoAddRangeData>( mrDocShell, pNewEntry, nTab) );
 
                 // set table stream invalid, otherwise RangeName won't be saved if no other
                 // call invalidates the stream
                 if (nTab != -1)
                     mrDoc.SetStreamValid(nTab, false);
                 SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreasChanged ) );
-                mpDocShell->SetDocumentModified();
+                mrDocShell.SetDocumentModified();
                 Close();
             }
             else

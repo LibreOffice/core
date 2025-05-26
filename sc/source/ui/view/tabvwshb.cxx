@@ -85,8 +85,8 @@ void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
 
     pClient = new ScClient( this, pWin, &GetScDrawView()->GetModel(), pObj );
     ScViewData& rViewData = GetViewData();
-    ScDocShell* pDocSh = rViewData.GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.GetTabNo());
     if (bNegativeX)
         pClient->SetNegativeX(true);
@@ -165,8 +165,8 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
 
     {
         ScViewData& rViewData = GetViewData();
-        ScDocShell* pDocSh = rViewData.GetDocShell();
-        ScDocument& rDoc = pDocSh->GetDocument();
+        ScDocShell& rDocSh = rViewData.GetDocShell();
+        ScDocument& rDoc = rDocSh.GetDocument();
         bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.GetTabNo());
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
@@ -275,7 +275,7 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
     }
     //! SetDocumentName should already happen in Sfx ???
     //TODO/LATER: how "SetDocumentName"?
-    //xIPObj->SetDocumentName( GetViewData().GetDocShell()->GetTitle() );
+    //xIPObj->SetDocumentName( GetViewData().GetDocShell().GetTitle() );
 }
 
 ErrCode ScTabViewShell::DoVerb(sal_Int32 nVerb)
@@ -334,8 +334,8 @@ IMPL_LINK( ScTabViewShell, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*
         ScTabView* pTabView = GetViewData().GetView();
         ScDrawView* pView = pTabView->GetScDrawView();
         ScViewData& rData = GetViewData();
-        ScDocShell* pScDocSh = rData.GetDocShell();
-        ScDocument& rScDoc = pScDocSh->GetDocument();
+        ScDocShell& pScDocSh = rData.GetDocShell();
+        ScDocument& rScDoc = pScDocSh.GetDocument();
         // leave OLE inplace mode and unmark
         OSL_ASSERT( pView );
         DeactivateOle();
@@ -385,8 +385,8 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     ScTabView*   pTabView  = GetViewData().GetView();
     vcl::Window*      pWin      = pTabView->GetActiveWin();
     ScDrawView*  pView     = pTabView->GetScDrawView();
-    ScDocShell*  pDocSh    = GetViewData().GetDocShell();
-    ScDocument&  rDoc      = pDocSh->GetDocument();
+    ScDocShell&  rDocSh    = GetViewData().GetDocShell();
+    ScDocument&  rDoc      = rDocSh.GetDocument();
     SdrModel& rModel = pView->GetModel();
 
     switch ( nSlot )
@@ -404,7 +404,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_INSERT_DIAGRAM:
             FuInsertChart(*this, pWin, pView, &rModel, rReq, LINK( this, ScTabViewShell, DialogClosedHdl ));
             if (comphelper::LibreOfficeKit::isActive())
-                pDocSh->SetModified();
+                rDocSh.SetModified();
             break;
 
         case SID_INSERT_OBJECT:
@@ -416,7 +416,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_INSERT_SIGNATURELINE:
         case SID_EDIT_SIGNATURELINE:
             {
-                const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell()->GetBaseModel() );
+                const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell().GetBaseModel() );
 
                 VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                 VclPtr<AbstractSignatureLineDialog> pDialog(pFact->CreateSignatureLineDialog(
@@ -438,7 +438,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_SIGN_SIGNATURELINE:
             {
                 const uno::Reference<frame::XModel> xModel(
-                    GetViewData().GetDocShell()->GetBaseModel());
+                    GetViewData().GetDocShell().GetBaseModel());
 
                 VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                 VclPtr<AbstractSignSignatureLineDialog> pDialog(
@@ -457,7 +457,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_INSERT_QRCODE:
         case SID_EDIT_QRCODE:
             {
-                const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell()->GetBaseModel() );
+                const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell().GetBaseModel() );
 
                 VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractQrCodeGenDialog> pDialog(pFact->CreateQrCodeGenDialog(
@@ -592,8 +592,8 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
     bool bOle = GetViewFrame().GetFrame().IsInPlace();
     bool bTabProt = GetViewData().GetDocument().IsTabProtected(GetViewData().GetTabNo());
-    ScDocShell* pDocShell = GetViewData().GetDocShell();
-    bool bShared = pDocShell && pDocShell->IsDocShared();
+    ScDocShell& rDocShell = GetViewData().GetDocShell();
+    bool bShared = rDocShell.IsDocShared();
     SdrView* pSdrView = GetScDrawView();
 
     SfxWhichIter aIter(rSet);
@@ -752,7 +752,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
     ScUndoManager* pUndoManager = static_cast<ScUndoManager*>(pSh->GetUndoManager());
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
 
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
@@ -814,7 +814,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 // lock paint for more than one cell undo action (not for editing within a cell)
                 bool bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );
                 if ( bLockPaint )
-                    pDocSh->LockPaint();
+                    rDocSh.LockPaint();
 
                 try
                 {
@@ -836,7 +836,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 }
 
                 if ( bLockPaint )
-                    pDocSh->UnlockPaint();
+                    rDocSh.UnlockPaint();
 
                 GetViewFrame().GetBindings().InvalidateAll(false);
             }

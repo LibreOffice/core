@@ -121,8 +121,8 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
         const ScViewData& rViewData = rViewShell.GetViewData();
         ScDocument& rDoc = rViewData.GetDocument();
         SCTAB nTab = rViewData.GetTabNo();
-        ScDocShell* pDocSh = rViewData.GetDocShell();
-        bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || (pDocSh && pDocSh->IsReadOnly());
+        ScDocShell& rDocSh = rViewData.GetDocShell();
+        bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || rDocSh.IsReadOnly();
 
         // search the last object (on top) in the object list
         SdrObjListIter aIter( pPageView->GetObjList(), SdrIterMode::DeepNoGroups, true );

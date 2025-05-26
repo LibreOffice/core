@@ -35,7 +35,7 @@ public:
 protected:
     void CalculateInputAndWriteToOutput();
 
-    virtual ScRange ApplyOutput(ScDocShell* pDocShell) = 0;
+    virtual ScRange ApplyOutput(ScDocShell& rDocShell) = 0;
     virtual TranslateId GetUndoNameId() = 0;
     virtual bool InputRangesValid();
     void ValidateDialogInput();

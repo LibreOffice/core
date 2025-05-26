@@ -23,7 +23,7 @@ class ScNameDefDlg : public ScAnyRefDlgController
 private:
     bool mbUndo; //if true we need to add an undo action after creating a range name
     ScDocument& mrDoc;
-    ScDocShell* mpDocShell;
+    ScDocShell& mrDocShell;
 
     ScAddress maCursorPos;
     OUString maStrInfoDefault;

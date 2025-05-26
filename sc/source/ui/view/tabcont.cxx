@@ -485,8 +485,8 @@ void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 
 void ScTabControl::DoDrag()
 {
-    ScDocShell* pDocSh = rViewData.GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
 
     SCTAB nTab = rViewData.GetTabNo();
     ScRange aTabRange( 0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab );
@@ -499,15 +499,15 @@ void ScTabControl::DoDrag()
     rDoc.CopyToClip(aClipParam, pClipDoc.get(), &aTabMark, false, false);
 
     TransferableObjectDescriptor aObjDesc;
-    pDocSh->FillTransferableObjectDescriptor( aObjDesc );
-    aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+    rDocSh.FillTransferableObjectDescriptor( aObjDesc );
+    aObjDesc.maDisplayName = rDocSh.GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScTransferObj ctor
 
     rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( std::move(pClipDoc), std::move(aObjDesc) );
 
     pTransferObj->SetDragSourceFlags(ScDragSrc::Table);
 
-    pTransferObj->SetDragSource( pDocSh, aTabMark );
+    pTransferObj->SetDragSource( &rDocSh, aTabMark );
 
     pTransferObj->SetSourceCursorPos( rViewData.GetCurX(), rViewData.GetCurY() );
 
@@ -629,7 +629,7 @@ TabBarAllowRenamingReturnCode ScTabControl::AllowRenaming()
             OSL_FAIL("ScTabControl::AllowRenaming: nested calls");
             nRet = TABBAR_RENAMING_NO;
         }
-        else if (rViewData.GetDocShell()->IsInModalMode())
+        else if (rViewData.GetDocShell().IsInModalMode())
         {
             //  don't show error message above any modal dialog
             //  instead cancel renaming without error message

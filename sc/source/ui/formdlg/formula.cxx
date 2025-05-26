@@ -123,7 +123,7 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
     m_pViewShell->InitFormEditData();                             // create new
     pData = m_pViewShell->GetFormEditData();
     pData->SetInputHandler(pInputHdl);
-    pData->SetDocShell(rViewData.GetDocShell());
+    pData->SetDocShell(&rViewData.GetDocShell());
 
     OSL_ENSURE(pData,"FormEditData not available");
 

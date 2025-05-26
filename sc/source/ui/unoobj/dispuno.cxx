@@ -211,7 +211,7 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
         ScViewData& rViewData = pViewShell->GetViewData();
         ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
 
-        ScDBDocFunc aFunc( *rViewData.GetDocShell() );
+        ScDBDocFunc aFunc( rViewData.GetDocShell() );
         aFunc.DoImportUno( aPos, aArgs );
         bDone = true;
     }

@@ -177,7 +177,7 @@ void ScSpellDialogChildWindow::Init()
 
     mxOldSel.reset( new ScSelectionState( *mpViewData ) );
 
-    mpDocShell = mpViewData->GetDocShell();
+    mpDocShell = &mpViewData->GetDocShell();
     mpDoc = &mpDocShell->GetDocument();
 
     const ScAddress& rCursor = mxOldSel->GetCellCursor();

@@ -93,7 +93,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
         m_xEdName->set_sensitive(false);
     }
 
-    bool bShared = rViewData.GetDocShell() && rViewData.GetDocShell()->IsDocShared();
+    bool bShared = rViewData.GetDocShell().IsDocShared();
 
     if ( !bFromFile || bShared )
     {

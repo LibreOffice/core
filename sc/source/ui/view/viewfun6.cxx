@@ -73,57 +73,57 @@ using ::std::vector;
 
 void ScViewFunc::DetectiveAddPred()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().DetectiveAddPred( GetViewData().GetCurPos() );
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    rDocSh.GetDocFunc().DetectiveAddPred( GetViewData().GetCurPos() );
     RecalcPPT();    //! use broadcast in DocFunc instead?
 }
 
 void ScViewFunc::DetectiveDelPred()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().DetectiveDelPred( GetViewData().GetCurPos() );
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    rDocSh.GetDocFunc().DetectiveDelPred( GetViewData().GetCurPos() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveAddSucc()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().DetectiveAddSucc( GetViewData().GetCurPos() );
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    rDocSh.GetDocFunc().DetectiveAddSucc( GetViewData().GetCurPos() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveDelSucc()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().DetectiveDelSucc( GetViewData().GetCurPos() );
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    rDocSh.GetDocFunc().DetectiveDelSucc( GetViewData().GetCurPos() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveAddError()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().DetectiveAddError( GetViewData().GetCurPos() );
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    rDocSh.GetDocFunc().DetectiveAddError( GetViewData().GetCurPos() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveDelAll()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().DetectiveDelAll( GetViewData().GetTabNo() );
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    rDocSh.GetDocFunc().DetectiveDelAll( GetViewData().GetTabNo() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveMarkInvalid()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().DetectiveMarkInvalid( GetViewData().GetTabNo() );
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    rDocSh.GetDocFunc().DetectiveMarkInvalid( GetViewData().GetTabNo() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveRefresh()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().DetectiveRefresh();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    rDocSh.GetDocFunc().DetectiveRefresh();
     RecalcPPT();
 }
 
@@ -140,7 +140,7 @@ static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, const ScDo
 void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
 {
     ScViewData& rView = GetViewData();
-    ScDocShell* pDocSh = rView.GetDocShell();
+    ScDocShell& rDocSh = rView.GetDocShell();
 
     ScRangeList aRangesToMark;
     ScAddress aCurPos = rView.GetCurPos();
@@ -159,7 +159,7 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
 
     // Jump to the first range of all precedent ranges.
     const ScRange & r = aRangesToMark.front();
-    lcl_jumpToRange(r, &rView, pDocSh->GetDocument());
+    lcl_jumpToRange(r, &rView, rDocSh.GetDocument());
 
     ListSize = aRangesToMark.size();
     for ( size_t i = 0; i < ListSize; ++i )
@@ -171,8 +171,8 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
 void ScViewFunc::DetectiveMarkPred()
 {
     ScViewData& rView = GetViewData();
-    ScDocShell* pDocSh = rView.GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = rView.GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     ScMarkData& rMarkData = rView.GetMarkData();
     ScAddress aCurPos = rView.GetCurPos();
     ScRangeList aRanges;
@@ -182,7 +182,7 @@ void ScViewFunc::DetectiveMarkPred()
         aRanges.push_back(ScRange(aCurPos));
 
     vector<ScTokenRef> aRefTokens;
-    pDocSh->GetDocFunc().DetectiveCollectAllPreds(aRanges, aRefTokens);
+    rDocSh.GetDocFunc().DetectiveCollectAllPreds(aRanges, aRefTokens);
 
     if (aRefTokens.empty())
         // No precedents found.  Nothing to do.
@@ -235,7 +235,7 @@ void ScViewFunc::DetectiveMarkPred()
 void ScViewFunc::DetectiveMarkSucc()
 {
     ScViewData& rView = GetViewData();
-    ScDocShell* pDocSh = rView.GetDocShell();
+    ScDocShell& rDocSh = rView.GetDocShell();
     ScMarkData& rMarkData = rView.GetMarkData();
     ScAddress aCurPos = rView.GetCurPos();
     ScRangeList aRanges;
@@ -245,7 +245,7 @@ void ScViewFunc::DetectiveMarkSucc()
         aRanges.push_back(ScRange(aCurPos));
 
     vector<ScTokenRef> aRefTokens;
-    pDocSh->GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);
+    rDocSh.GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);
 
     if (aRefTokens.empty())
         // No dependents found.  Nothing to do.
@@ -279,8 +279,8 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
     ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl(rViewData.GetViewShell());
     bool bInputMode = (pInputHdl && pInputHdl->IsInputMode());
 
-    ScDocShell* pDocSh = rViewData.GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     ScAddress aCurPos = rViewData.GetCurPos();
     const sal_uInt32 nCurNumFormat = rDoc.GetNumberFormat(ScRange(aCurPos));
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
@@ -478,10 +478,10 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
 
         }
 
-        SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+        SfxUndoManager* pUndoMgr = rDocSh.GetUndoManager();
         pUndoMgr->EnterListAction(rUndoStr, rUndoStr, 0, rViewData.GetViewShell()->GetViewShellId());
 
-        pDocSh->GetDocFunc().SetValueCell(aCurPos, fVal, true);
+        rDocSh.GetDocFunc().SetValueCell(aCurPos, fVal, true);
 
         // Set the new cell format only when it differs from the current cell
         // format type. Preserve a date+time format unless we force a format
@@ -502,7 +502,7 @@ void ScViewFunc::ShowNote( bool bShow )
     const ScViewData& rViewData = GetViewData();
     ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
     // show note moved to ScDocFunc, to be able to use it in notesuno.cxx
-    rViewData.GetDocShell()->GetDocFunc().ShowNote( aPos, bShow );
+    rViewData.GetDocShell().GetDocFunc().ShowNote( aPos, bShow );
 }
 
 void ScViewFunc::EditNote()
@@ -513,15 +513,15 @@ void ScViewFunc::EditNote()
 
     // for editing display and activate
 
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     SCCOL nCol = GetViewData().GetCurX();
     SCROW nRow = GetViewData().GetCurY();
     SCTAB nTab = GetViewData().GetTabNo();
     ScAddress aPos( nCol, nRow, nTab );
 
     // start drawing undo to catch undo action for insertion of the caption object
-    pDocSh->MakeDrawLayer();
+    rDocSh.MakeDrawLayer();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     pDrawLayer->BeginCalcUndo(true);
     // generated undo action is processed in FuText::StopEditMode

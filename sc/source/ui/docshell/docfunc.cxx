@@ -1150,7 +1150,7 @@ bool ScDocFunc::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCel
 void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if ( !(pViewSh && pViewSh->GetViewData().GetDocShell() == &rDocShell) )
+    if ( !(pViewSh && &pViewSh->GetViewData().GetDocShell() == &rDocShell) )
         return;
 
     ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl();

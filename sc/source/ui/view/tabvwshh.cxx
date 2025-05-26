@@ -169,7 +169,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                     uno::Reference < embed::XEmbeddedObject > xOLE = lcl_GetSelectedObj( GetScDrawView() );
                     if (xOLE.is())
                     {
-                        aName = GetViewData().GetSfxDocShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xOLE );
+                        aName = GetViewData().GetSfxDocShell().GetEmbeddedObjectContainer().GetEmbeddedObjectName( xOLE );
                     }
                     rSet.Put( SfxStringItem( nWhich, aName ) );
                 }

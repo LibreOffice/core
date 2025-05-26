@@ -214,7 +214,7 @@ IMPL_LINK_NOARG(ScHighlightChgDlg, OKBtnHdl, weld::Button&, void)
     aChangeViewSet.SetTheRangeList(aLocalRangeList);
     aChangeViewSet.AdjustDateMode( rDoc );
     rDoc.SetChangeViewSettings(aChangeViewSet);
-    m_rViewData.GetDocShell()->PostPaintGridAll();
+    m_rViewData.GetDocShell().PostPaintGridAll();
     response(RET_OK);
 }
 

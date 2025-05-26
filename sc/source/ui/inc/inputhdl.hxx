@@ -272,7 +272,7 @@ public:
     /// Returns true if there is a partial autocomplete suggestion.
     bool            HasPartialComplete() const              { return mbPartialPrefix; };
 
-    bool            IsModalMode( const SfxObjectShell* pDocSh );
+    bool            IsModalMode( const SfxObjectShell& rDocSh );
 
     void            ForgetLastPattern();
 
@@ -291,7 +291,7 @@ public:
 
     void SetDocumentDisposing( bool b );
 
-    static ReferenceMark GetReferenceMark( const ScViewData& rViewData, ScDocShell* pDocSh,
+    static ReferenceMark GetReferenceMark( const ScViewData& rViewData, ScDocShell& rDocSh,
                                     tools::Long nX1, tools::Long nX2, tools::Long nY1, tools::Long nY2,
                                     tools::Long nTab, const Color& rColor );
 

@@ -254,8 +254,8 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(DIST& distribution, std::mt1
     OUString aDistributionName = ScResId(pDistributionStringId);
     aUndo = aUndo.replaceAll("%1",  aDistributionName);
 
-    ScDocShell* pDocShell = mrViewData.GetDocShell();
-    SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
+    ScDocShell& rDocShell = mrViewData.GetDocShell();
+    SfxUndoManager* pUndoManager = rDocShell.GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
 
     SCROW nRowStart = maInputRange.aStart.Row();
@@ -284,13 +284,13 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(DIST& distribution, std::mt1
                     aVals.push_back(distribution(seed));
             }
 
-            pDocShell->GetDocFunc().SetValueCells(aPos, aVals, true);
+            rDocShell.GetDocFunc().SetValueCells(aPos, aVals, true);
         }
     }
 
     pUndoManager->LeaveListAction();
 
-    pDocShell->PostPaint( maInputRange, PaintPartFlags::Grid );
+    rDocShell.PostPaint( maInputRange, PaintPartFlags::Grid );
 }
 
 IMPL_LINK_NOARG( ScRandomNumberGeneratorDialog, OkClicked, weld::Button&, void )

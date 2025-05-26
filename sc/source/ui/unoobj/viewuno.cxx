@@ -286,15 +286,15 @@ uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
     SolarMutexGuard aGuard;
     if (pViewShell)
     {
-        ScDocShell* pDocSh = pViewShell->GetViewData().GetDocShell();
+        ScDocShell& rDocSh = pViewShell->GetViewData().GetDocShell();
 
         table::CellRangeAddress aAdr(getVisibleRange());        //! helper function with ScRange?
         ScRange aRange( static_cast<SCCOL>(aAdr.StartColumn), static_cast<SCROW>(aAdr.StartRow), aAdr.Sheet,
                         static_cast<SCCOL>(aAdr.EndColumn), static_cast<SCROW>(aAdr.EndRow), aAdr.Sheet );
         if ( aRange.aStart == aRange.aEnd )
-            return new ScCellObj( pDocSh, aRange.aStart );
+            return new ScCellObj( &rDocSh, aRange.aStart );
         else
-            return new ScCellRangeObj( pDocSh, aRange );
+            return new ScCellRangeObj( &rDocSh, aRange );
     }
 
     return nullptr;
@@ -510,9 +510,9 @@ void SAL_CALL ScTabViewObj::release() noexcept
     SfxBaseController::release();
 }
 
-static void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, ScSheetEventId nEvent )
+static void lcl_CallActivate( ScDocShell& rDocSh, SCTAB nTab, ScSheetEventId nEvent )
 {
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = rDocSh.GetDocument();
     // when deleting a sheet, nPreviousTab can be invalid
     // (could be handled with reference updates)
     if (!rDoc.HasTable(nTab))
@@ -528,7 +528,7 @@ static void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, ScSheetEventId nEv
             uno::Sequence<uno::Any> aParams;
             uno::Sequence<sal_Int16> aOutArgsIndex;
             uno::Sequence<uno::Any> aOutArgs;
-            /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
+            /*ErrCode eRet =*/ rDocSh.CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
         }
     }
 
@@ -551,13 +551,13 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
         return;
 
     ScViewData& rViewData = GetViewShell()->GetViewData();
-    ScDocShell* pDocSh = rViewData.GetDocShell();
+    ScDocShell& rDocSh = rViewData.GetDocShell();
     if (!aActivationListeners.empty())
     {
         sheet::ActivationEvent aEvent;
         uno::Reference< sheet::XSpreadsheetView > xView(this);
         aEvent.Source.set(xView, uno::UNO_QUERY);
-        aEvent.ActiveSheet = new ScTableSheetObj(pDocSh, rViewData.GetTabNo());
+        aEvent.ActiveSheet = new ScTableSheetObj(&rDocSh, rViewData.GetTabNo());
         // Listener's handler may remove it from the listeners list
         for (size_t i = aActivationListeners.size(); i > 0; --i)
         {
@@ -577,8 +577,8 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
     SCTAB nNewTab = rViewData.GetTabNo();
     if ( !bSameTabButMoved && (nNewTab != nPreviousTab) )
     {
-        lcl_CallActivate( pDocSh, nPreviousTab, ScSheetEventId::UNFOCUS );
-        lcl_CallActivate( pDocSh, nNewTab, ScSheetEventId::FOCUS );
+        lcl_CallActivate( rDocSh, nPreviousTab, ScSheetEventId::UNFOCUS );
+        lcl_CallActivate( rDocSh, nNewTab, ScSheetEventId::FOCUS );
     }
     nPreviousTab = nNewTab;
 }
@@ -700,7 +700,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
     if (pRangesImp)                                     // Cell ranges
     {
         ScViewData& rViewData = pViewSh->GetViewData();
-        if ( rViewData.GetDocShell() == pRangesImp->GetDocShell() )
+        if ( &rViewData.GetDocShell() == pRangesImp->GetDocShell() )
         {
             //  perhaps remove drawing selection first
             //  (MarkListHasChanged removes sheet selection)
@@ -742,7 +742,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 pViewSh->InitOwnBlockMode( rFirst );    /* TODO: or even the overall range? */
                 rViewData.GetMarkData().MarkFromRangeList( rRanges, true );
                 pViewSh->MarkDataChanged();
-                rViewData.GetDocShell()->PostPaintGridAll();   // Marks (old&new)
+                rViewData.GetDocShell().PostPaintGridAll();   // Marks (old&new)
                 pViewSh->AlignToCursor( rFirst.aStart.Col(), rFirst.aStart.Row(),
                                             SC_FOLLOW_JUMP );
                 pViewSh->SetCursor( rFirst.aStart.Col(), rFirst.aStart.Row() );
@@ -876,7 +876,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         //  otherwise sheet (cell) selection
 
         ScViewData& rViewData = pViewSh->GetViewData();
-        ScDocShell* pDocSh = rViewData.GetDocShell();
+        ScDocShell& rDocSh = rViewData.GetDocShell();
 
         const ScMarkData& rMark = rViewData.GetMarkData();
         SCTAB nTabs = rMark.GetSelectCount();
@@ -886,7 +886,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         if ( nTabs == 1 && (eMarkType == SC_MARK_SIMPLE) )
         {
             // tdf#154803 - check if range is entirely merged
-            ScDocument& rDoc = pDocSh->GetDocument();
+            ScDocument& rDoc = rDocSh.GetDocument();
             const ScMergeAttr* pMergeAttr = rDoc.GetAttr(aRange.aStart, ATTR_MERGE);
             SCCOL nColSpan = 1;
             SCROW nRowSpan = 1;
@@ -899,14 +899,14 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
             if (aRange.aStart == aRange.aEnd
                 || (aRange.aEnd.Col() - aRange.aStart.Col() == nColSpan - 1
                     && aRange.aEnd.Row() - aRange.aStart.Row() == nRowSpan - 1))
-                pObj = new ScCellObj( pDocSh, aRange.aStart );
+                pObj = new ScCellObj( &rDocSh, aRange.aStart );
             else
-                pObj = new ScCellRangeObj( pDocSh, aRange );
+                pObj = new ScCellRangeObj( &rDocSh, aRange );
         }
         else if ( nTabs == 1 && (eMarkType == SC_MARK_SIMPLE_FILTERED) )
         {
             ScMarkData aFilteredMark( rMark );
-            ScViewUtil::UnmarkFiltered( aFilteredMark, pDocSh->GetDocument());
+            ScViewUtil::UnmarkFiltered( aFilteredMark, rDocSh.GetDocument());
             ScRangeList aRangeList;
             aFilteredMark.FillRangeListWithMarks( &aRangeList, false);
             // Theoretically a selection may start and end on a filtered row.
@@ -915,19 +915,19 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
                 case 0:
                     // No unfiltered row, we have to return some object, so
                     // here is one with no ranges.
-                    pObj = new ScCellRangesObj( pDocSh, aRangeList );
+                    pObj = new ScCellRangesObj( &rDocSh, aRangeList );
                     break;
                 case 1:
                     {
                         const ScRange& rRange = aRangeList[ 0 ];
                         if (rRange.aStart == rRange.aEnd)
-                            pObj = new ScCellObj( pDocSh, rRange.aStart );
+                            pObj = new ScCellObj( &rDocSh, rRange.aStart );
                         else
-                            pObj = new ScCellRangeObj( pDocSh, rRange );
+                            pObj = new ScCellRangeObj( &rDocSh, rRange );
                     }
                     break;
                 default:
-                    pObj = new ScCellRangesObj( pDocSh, aRangeList );
+                    pObj = new ScCellRangesObj( &rDocSh, aRangeList );
             }
         }
         else            //  multiselection
@@ -940,7 +940,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
             if ( nTabs > 1 )
                 rMark.ExtendRangeListTables( xRanges.get() );
 
-            pObj = new ScCellRangesObj( pDocSh, *xRanges );
+            pObj = new ScCellRangesObj( &rDocSh, *xRanges );
         }
 
         if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
@@ -957,8 +957,8 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
 
 uno::Any SAL_CALL ScTabViewObj::getSelectionFromString( const OUString& aStrRange )
 {
-    ScDocShell* pDocSh = GetViewShell()->GetViewData().GetDocShell();
-    const sal_Int16 nTabCount = pDocSh->GetDocument().GetTableCount();
+    ScDocShell& rDocSh = GetViewShell()->GetViewData().GetDocShell();
+    const sal_Int16 nTabCount = rDocSh.GetDocument().GetTableCount();
 
     StringRangeEnumerator aRangeEnum(aStrRange , 0, nTabCount-1);
 
@@ -976,7 +976,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelectionFromString( const OUString& aStrRang
         ++aIter;
     }
 
-    rtl::Reference<ScCellRangesBase> pObj = new ScCellRangesObj(pDocSh, *aRangeList);
+    rtl::Reference<ScCellRangesBase> pObj = new ScCellRangesObj(&rDocSh, *aRangeList);
 
     // SetCursorOnly tells the range the specific cells selected are irrelevant - maybe could rename?
     pObj->SetCursorOnly(true);
@@ -1089,7 +1089,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
     {
         ScViewData& rViewData = pViewSh->GetViewData();
         SCTAB nTab = rViewData.GetTabNo();
-        return new ScTableSheetObj( rViewData.GetDocShell(), nTab );
+        return new ScTableSheetObj( &rViewData.GetDocShell(), nTab );
     }
     return nullptr;
 }
@@ -1107,7 +1107,7 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
     //  XSpreadsheet and ScCellRangesBase -> has to be the same sheet
 
     ScCellRangesBase* pRangesImp = dynamic_cast<ScCellRangesBase*>( xActiveSheet.get() );
-    if ( pRangesImp && pViewSh->GetViewData().GetDocShell() == pRangesImp->GetDocShell() )
+    if ( pRangesImp && &pViewSh->GetViewData().GetDocShell() == pRangesImp->GetDocShell() )
     {
         const ScRangeList& rRanges = pRangesImp->GetRangeList();
         if ( rRanges.size() == 1 )
@@ -1132,7 +1132,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
         rData.GetPosFromPixel( rPoint.X(), rPoint.Y(), eSplitMode, nX, nY);
 
         ScAddress aCellPos (nX, nY, nTab);
-        rtl::Reference<ScCellObj> pCellObj = new ScCellObj(rData.GetDocShell(), aCellPos);
+        rtl::Reference<ScCellObj> pCellObj = new ScCellObj(&rData.GetDocShell(), aCellPos);
 
         xTarget.set(uno::Reference<table::XCell>(pCellObj), uno::UNO_QUERY);
 
@@ -1225,8 +1225,8 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
 
         ScTabViewShell* pViewSh = GetViewShell();
         ScViewData& rViewData = pViewSh->GetViewData();
-        ScDocShell* pDocSh = rViewData.GetDocShell();
-        ScDocument& rDoc = pDocSh->GetDocument();
+        ScDocShell& rDocSh = rViewData.GetDocShell();
+        ScDocument& rDoc = rDocSh.GetDocument();
         SCTAB nTab = rViewData.GetTabNo();
         const ScSheetEvents* pEvents = rDoc.GetSheetEvents(nTab);
         if (pEvents)
@@ -1241,7 +1241,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
                 uno::Sequence<sal_Int16> aOutArgsIndex;
                 uno::Sequence<uno::Any> aOutArgs;
 
-                /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
+                /*ErrCode eRet =*/ rDocSh.CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
 
                 // look for a boolean return value of true
                 bool bRetValue = false;
@@ -1278,8 +1278,8 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
         {
             ScTabViewShell* pViewSh = GetViewShell();
             ScViewData& rViewData = pViewSh->GetViewData();
-            ScDocShell* pDocSh = rViewData.GetDocShell();
-            ScDocument& rDoc = pDocSh->GetDocument();
+            ScDocShell& rDocSh = rViewData.GetDocShell();
+            ScDocument& rDoc = rDocSh.GetDocument();
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
             uno::Sequence< uno::Any > aArgs{ getSelection() };
             xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
@@ -1700,8 +1700,8 @@ void ScTabViewObj::SelectionChanged()
     // handle sheet events
     ScTabViewShell* pViewSh = GetViewShell();
     ScViewData& rViewData = pViewSh->GetViewData();
-    ScDocShell* pDocSh = rViewData.GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
     const ScSheetEvents* pEvents = rDoc.GetSheetEvents(nTab);
     if (pEvents)
@@ -1714,7 +1714,7 @@ void ScTabViewObj::SelectionChanged()
             uno::Any aRet;
             uno::Sequence<sal_Int16> aOutArgsIndex;
             uno::Sequence<uno::Any> aOutArgs;
-            /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
+            /*ErrCode eRet =*/ rDocSh.CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
         }
     }
 
@@ -1872,7 +1872,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
 
     rViewData.SetOptions( aNewOpt );
     rViewData.GetDocument().SetViewOptions( aNewOpt );
-    rViewData.GetDocShell()->SetDocumentModified();    //! really?
+    rViewData.GetDocShell().SetDocumentModified();    //! really?
 
     pViewSh->UpdateFixPos();
     pViewSh->PaintGrid();

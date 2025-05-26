@@ -2824,7 +2824,7 @@ ScTabViewShell* ScDocShell::GetBestViewShell( bool bOnlyVisible )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     // wrong Doc?
-    if( pViewSh && pViewSh->GetViewData().GetDocShell() != this )
+    if( pViewSh && &pViewSh->GetViewData().GetDocShell() != this )
         pViewSh = nullptr;
     if( !pViewSh )
     {

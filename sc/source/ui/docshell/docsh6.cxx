@@ -124,7 +124,7 @@ void ScDocShell::SetVisAreaOrSize( const tools::Rectangle& rVisArea )
         ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
         if (pViewSh)
         {
-            if (pViewSh->GetViewData().GetDocShell() == this)
+            if (&pViewSh->GetViewData().GetDocShell() == this)
                 pViewSh->UpdateOleZoom();
         }
     }

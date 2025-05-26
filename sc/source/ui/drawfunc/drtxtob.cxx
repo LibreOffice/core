@@ -119,7 +119,7 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData& rData) :
     SetPool( mrViewData.GetScDrawView()->GetDefaultAttr().GetPool() );
 
     //  At the switching-over the UndoManager is changed to edit mode
-    SfxUndoManager* pMgr = mrViewData.GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = mrViewData.GetSfxDocShell().GetUndoManager();
     SetUndoManager( pMgr );
     if ( !mrViewData.GetDocument().IsUndoEnabled() )
     {
@@ -924,7 +924,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             {
                 const sal_uInt16 nEEWhich = GetPool().GetWhichIDFromSlotID(nSlot);
                 const std::optional<NamedColor> oColor
-                    = mrViewData.GetDocShell()->GetRecentColor(nSlot);
+                    = mrViewData.GetDocShell().GetRecentColor(nSlot);
                 if (oColor.has_value())
                 {
                     const model::ComplexColor aCol = (*oColor).getComplexColor();

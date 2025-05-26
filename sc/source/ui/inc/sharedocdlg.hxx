@@ -32,7 +32,7 @@ private:
     OUString            m_aStrUnknownUser;
     OUString            m_aStrExclusiveAccess;
 
-    ScDocShell*         mpDocShell;
+    ScDocShell&         mrDocShell;
 
     std::unique_ptr<weld::CheckButton> m_xCbShare;
     std::unique_ptr<weld::Label> m_xFtWarning;

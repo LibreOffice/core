@@ -68,9 +68,9 @@ TranslateId ScDescriptiveStatisticsDialog::GetUndoNameId()
     return STR_DESCRIPTIVE_STATISTICS_UNDO_NAME;
 }
 
-ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
+ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell& rDocShell)
 {
-    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, rDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
 

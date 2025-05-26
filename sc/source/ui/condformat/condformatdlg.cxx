@@ -620,11 +620,11 @@ void ScCondFormatDlg::OkPressed()
         if(pFormat)
         {
             auto& rRangeList = pFormat->GetRange();
-            mrViewData.GetDocShell()->GetDocFunc().ReplaceConditionalFormat(mnKey,
+            mrViewData.GetDocShell().GetDocFunc().ReplaceConditionalFormat(mnKey,
                     std::move(pFormat), maPos.Tab(), rRangeList);
         }
         else
-            mrViewData.GetDocShell()->GetDocFunc().ReplaceConditionalFormat(mnKey,
+            mrViewData.GetDocShell().GetDocFunc().ReplaceConditionalFormat(mnKey,
                     nullptr, maPos.Tab(), ScRangeList());
     }
     else

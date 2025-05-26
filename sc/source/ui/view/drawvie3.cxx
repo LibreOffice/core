@@ -79,7 +79,7 @@ void ScDrawView::SetPageAnchored()
     }
     EndUndo();
 
-    rViewData.GetDocShell()->SetDrawModified();
+    rViewData.GetDocShell().SetDrawModified();
 
     // Remove the anchor object.
     maHdlList.RemoveAllByKind(SdrHdlKind::Anchor);
@@ -103,7 +103,7 @@ void ScDrawView::SetCellAnchored(bool bResizeWithCell)
     }
     EndUndo();
 
-    rViewData.GetDocShell()->SetDrawModified();
+    rViewData.GetDocShell().SetDrawModified();
 
     // Set the anchor object.
     AddCustomHdl();

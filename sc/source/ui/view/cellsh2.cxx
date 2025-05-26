@@ -197,7 +197,7 @@ static bool lcl_GetSortParam( const ScViewData& rData, const ScSortParam& rSortP
         else
         {
             bSort = false;
-            rData.GetDocShell()->CancelAutoDBRange();
+            rData.GetDocShell().CancelAutoDBRange();
         }
 
         pTabViewShell->ClearHighlightRanges();
@@ -339,7 +339,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         ScRange aRange;
                         pDBData->GetArea(aRange);
-                        GetViewData().GetDocShell()->RefreshPivotTables(aRange);
+                        GetViewData().GetDocShell().RefreshPivotTables(aRange);
                     }
                 }
                 rReq.Done();
@@ -362,7 +362,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                 if((aEnd.Col() - aStart.Col()) >= MAX_DATAFORM_COLS)
                 {
-                    rData.GetDocShell()->ErrorMessage(STR_TOO_MANY_COLUMNS_DATA_FORM);
+                    rData.GetDocShell().ErrorMessage(STR_TOO_MANY_COLUMNS_DATA_FORM);
                     break;
                 }
 
@@ -589,7 +589,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    rData.GetDocShell()->CancelAutoDBRange();
+                                    rData.GetDocShell().CancelAutoDBRange();
                                 }
                             };
 
@@ -1086,11 +1086,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if ( pDlg->Execute() == RET_OK )
                     {
-                        ScDocShell* pDocSh = rData.GetDocShell();
-                        OSL_ENSURE( pDocSh, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDocSh is null!" );
+                        ScDocShell& rDocSh = rData.GetDocShell();
 
                         OUString aUndo = ScResId( STR_UNDO_TEXTTOCOLUMNS );
-                        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
+                        rDocSh.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
 
                         ScImportExport aImport( rDoc, aRange.aStart );
                         ScAsciiOptions aOptions;
@@ -1103,7 +1102,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aStream.Seek( 0 );
                         aImport.ImportStream( aStream, OUString(), SotClipboardFormatId::STRING );
 
-                        pDocSh->GetUndoManager()->LeaveListAction();
+                        rDocSh.GetUndoManager()->LeaveListAction();
                     }
                 }
             }
@@ -1115,8 +1114,8 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     ScViewData& rData       = GetViewData();
-    ScDocShell* pDocSh      = rData.GetDocShell();
-    ScDocument& rDoc        = pDocSh->GetDocument();
+    ScDocShell& rDocSh      = rData.GetDocShell();
+    ScDocument& rDoc        = rDocSh.GetDocument();
     SCCOL       nPosX       = rData.GetCurX();
     SCROW       nPosY       = rData.GetCurY();
     SCTAB       nTab        = rData.GetTabNo();
@@ -1181,7 +1180,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 {
                     //! move ReadOnly check to idl flags
 
-                    if ( pDocSh->IsReadOnly() || rDoc.GetChangeTrack()!=nullptr ||
+                    if ( rDocSh.IsReadOnly() || rDoc.GetChangeTrack()!=nullptr ||
                             GetViewData().IsMultiMarked() )
                     {
                         rSet.DisableItem( nWhich );
@@ -1348,7 +1347,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
 
             case SID_DEFINE_DBNAME:
                 {
-                    if ( pDocSh->IsDocShared() )
+                    if ( rDocSh.IsDocShared() )
                     {
                         rSet.DisableItem( nWhich );
                     }

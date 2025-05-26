@@ -154,17 +154,17 @@ void AddressWalker::push(SCCOL aRelativeCol, SCROW aRelativeRow, SCTAB aRelative
     mAddressStack.push_back(mCurrentAddress);
 }
 
-AddressWalkerWriter::AddressWalkerWriter(const ScAddress& aInitialAddress, ScDocShell* pDocShell, ScDocument& rDocument,
+AddressWalkerWriter::AddressWalkerWriter(const ScAddress& aInitialAddress, ScDocShell& rDocShell, ScDocument& rDocument,
         formula::FormulaGrammar::Grammar eGrammar ) :
     AddressWalker(aInitialAddress),
-    mpDocShell(pDocShell),
+    mrDocShell(rDocShell),
     mrDocument(rDocument),
     meGrammar(eGrammar)
 {}
 
 void AddressWalkerWriter::writeFormula(const OUString& aFormula)
 {
-    mpDocShell->GetDocFunc().SetFormulaCell(mCurrentAddress,
+    mrDocShell.GetDocFunc().SetFormulaCell(mCurrentAddress,
             new ScFormulaCell(mrDocument, mCurrentAddress, aFormula, meGrammar), true);
 }
 
@@ -174,7 +174,7 @@ void AddressWalkerWriter::writeFormulas(const std::vector<OUString>& rFormulas)
     if (!nLength)
         return;
 
-    const size_t nMaxLen = mpDocShell->GetDocument().MaxRow() - mCurrentAddress.Row() + 1;
+    const size_t nMaxLen = mrDocShell.GetDocument().MaxRow() - mCurrentAddress.Row() + 1;
     // If not done already, trim the length to fit.
     if (nLength > nMaxLen)
         nLength = nMaxLen;
@@ -187,7 +187,7 @@ void AddressWalkerWriter::writeFormulas(const std::vector<OUString>& rFormulas)
         aAddr.IncRow(1);
     }
 
-    mpDocShell->GetDocFunc().SetFormulaCells(mCurrentAddress, aFormulaCells, true);
+    mrDocShell.GetDocFunc().SetFormulaCells(mCurrentAddress, aFormulaCells, true);
 }
 
 void AddressWalkerWriter::writeMatrixFormula(const OUString& aFormula, SCCOL nCols, SCROW nRows)
@@ -199,12 +199,12 @@ void AddressWalkerWriter::writeMatrixFormula(const OUString& aFormula, SCCOL nCo
         aRange.aEnd.IncCol(nCols - 1);
     if (nRows > 1)
         aRange.aEnd.IncRow(nRows - 1);
-    mpDocShell->GetDocFunc().EnterMatrix(aRange, nullptr, nullptr, aFormula, false, false, OUString(), meGrammar );
+    mrDocShell.GetDocFunc().EnterMatrix(aRange, nullptr, nullptr, aFormula, false, false, OUString(), meGrammar );
 }
 
 void AddressWalkerWriter::writeString(const OUString& aString)
 {
-    mpDocShell->GetDocFunc().SetStringCell(mCurrentAddress, aString, true);
+    mrDocShell.GetDocFunc().SetStringCell(mCurrentAddress, aString, true);
 }
 
 void AddressWalkerWriter::writeString(const char* aCharArray)
@@ -223,12 +223,12 @@ void AddressWalkerWriter::writeBoldString(const OUString& aString)
     aItemSet.Put(aJustify);
     rEngine.QuickSetAttribs(aItemSet, ESelection(0, 0, 0, aString.getLength()) );
     std::unique_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
-    mpDocShell->GetDocFunc().SetEditCell(mCurrentAddress, *pEditText, true);
+    mrDocShell.GetDocFunc().SetEditCell(mCurrentAddress, *pEditText, true);
 }
 
 void AddressWalkerWriter::writeValue(double aValue)
 {
-    mpDocShell->GetDocFunc().SetValueCell(mCurrentAddress, aValue, true);
+    mrDocShell.GetDocFunc().SetValueCell(mCurrentAddress, aValue, true);
 }
 
 // Applies a column header format to the current cell and subsequent (nCols - 1) columns

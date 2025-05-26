@@ -52,7 +52,7 @@ class ScOptSolverDlg : public ScAnyRefDlgController
 {
 public:
     ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-                 ScDocShell* pDocSh, const ScAddress& aCursorPos );
+                 ScDocShell& rDocSh, const ScAddress& aCursorPos );
     virtual ~ScOptSolverDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
@@ -64,7 +64,7 @@ private:
     OUString        maInputError;
     OUString        maConditionError;
 
-    ScDocShell*     mpDocShell;
+    ScDocShell&     mrDocShell;
     ScDocument&     mrDoc;
     const SCTAB     mnCurTab;
     bool            mbDlgLostFocus;

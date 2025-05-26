@@ -54,7 +54,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             // if the current sheet has pending row height updates (sheet links refreshed),
             // execute them before invalidating the window
-            GetViewData().GetDocShell()->UpdatePendingRowHeights( GetViewData().GetTabNo() );
+            GetViewData().GetDocShell().UpdatePendingRowHeights( GetViewData().GetTabNo() );
 
             if (nParts & PaintPartFlags::Size)
                 RepeatResize();                     //! InvalidateBorder ???
@@ -280,9 +280,9 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 //  from, always switch the design mode when the ReadOnly state
                 //  really was changed:
 
-                if ( GetViewData().GetSfxDocShell()->IsReadOnly() != bReadOnly )
+                if ( GetViewData().GetSfxDocShell().IsReadOnly() != bReadOnly )
                 {
-                    bReadOnly = GetViewData().GetSfxDocShell()->IsReadOnly();
+                    bReadOnly = GetViewData().GetSfxDocShell().IsReadOnly();
 
                     SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly);
                     GetViewData().GetDispatcher().ExecuteList(SID_FM_DESIGN_MODE,

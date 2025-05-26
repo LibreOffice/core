@@ -486,9 +486,9 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl, weld::Button&, void)
     rDoc.GetRowNameRangesRef() = xRowNameRanges;
     // changed ranges need to take effect
     rDoc.CompileColRowNameFormula();
-    ScDocShell* pDocShell = m_rViewData.GetDocShell();
-    pDocShell->PostPaint(ScRange(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB), PaintPartFlags::Grid);
-    pDocShell->SetDocumentModified();
+    ScDocShell& rDocShell = m_rViewData.GetDocShell();
+    rDocShell.PostPaint(ScRange(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB), PaintPartFlags::Grid);
+    rDocShell.SetDocumentModified();
 
     response(RET_OK);
 }

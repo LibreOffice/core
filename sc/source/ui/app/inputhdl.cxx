@@ -362,8 +362,8 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
     DeleteRangeFinder();
     if (!pActiveViewSh || !ScModule::get()->GetInputOptions().GetRangeFinder())
         return;
-    ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = pActiveViewSh->GetViewData().GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     const sal_Unicode cSheetSep = rDoc.GetSheetSeparator();
 
     OUString aDelimiters = ScEditUtil::ModifyDelimiters(u" !~%\"\t\n"_ustr);
@@ -458,7 +458,7 @@ handle_r1c1:
                 if (!nCount)
                 {
                     mpEditEngine->SetUpdateLayout( false );
-                    pRangeFindList.reset(new ScRangeFindList( pDocSh->GetTitle() ));
+                    pRangeFindList.reset(new ScRangeFindList( rDocSh.GetTitle() ));
                 }
 
                 Color nColor = pRangeFindList->Insert( ScRangeFindData( aRange, nFlags, aSel));
@@ -479,11 +479,11 @@ handle_r1c1:
     {
         mpEditEngine->SetUpdateLayout( true );
 
-        pDocSh->Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );
+        rDocSh.Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );
     }
 }
 
-ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScDocShell* pDocSh,
+ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScDocShell& rDocSh,
                                     tools::Long nX1, tools::Long nX2, tools::Long nY1, tools::Long nY2,
                                     tools::Long nTab, const Color& rColor )
 {
@@ -495,7 +495,7 @@ ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScD
     {
         SCCOL nCol1 = nX1, nCol2 = nX2;
         SCROW nRow1 = nY1, nRow2 = nY2;
-        ScDocument& rDoc = pDocSh->GetDocument();
+        ScDocument& rDoc = rDocSh.GetDocument();
 
         PutInOrder(nCol1, nCol2);
         PutInOrder(nRow1, nRow2);
@@ -524,11 +524,11 @@ ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScD
     Fraction aZoomY = rViewData.GetZoomY();
 
     ScTableInfo aTabInfo(nY1, nY2, true);
-    pDocSh->GetDocument().FillInfo( aTabInfo, nX1, nY1, nX2, nY2,
+    rDocSh.GetDocument().FillInfo( aTabInfo, nX1, nY1, nX2, nY2,
                                     nTab, nPPTX, nPPTY, false, false );
 
     ScOutputData aOutputData( nullptr, OUTTYPE_WINDOW, aTabInfo,
-                              &( pDocSh->GetDocument() ), nTab,
+                              &( rDocSh.GetDocument() ), nTab,
                               nScrX, nScrY,
                               nX1, nY1, nX2, nY2,
                               nPPTX, nPPTY,
@@ -550,7 +550,7 @@ void ScInputHandler::UpdateLokReferenceMarks()
         return;
 
     ScViewData& rViewData = pShell->GetViewData();
-    ScDocShell* pDocSh = rViewData.GetDocShell();
+    ScDocShell& rDocSh = rViewData.GetDocShell();
     ScRangeFindList* pRangeFinder = GetRangeFindList();
 
     if ( !pRangeFinder && !rViewData.IsRefMode() )
@@ -577,7 +577,7 @@ void ScInputHandler::UpdateLokReferenceMarks()
         PutInOrder(nX1, nX2);
         PutInOrder(nY1, nY2);
 
-        aReferenceMarks[0] = ScInputHandler::GetReferenceMark( rViewData, pDocSh,
+        aReferenceMarks[0] = ScInputHandler::GetReferenceMark( rViewData, rDocSh,
                                                    nX1, nX2, nY1, nY2,
                                                    nTab, aRefColor );
     }
@@ -587,7 +587,7 @@ void ScInputHandler::UpdateLokReferenceMarks()
     aReferenceMarks.resize( nCount );
 
     if ( nCount && pRangeFinder && !pRangeFinder->IsHidden() &&
-         pRangeFinder->GetDocName() == pDocSh->GetTitle() )
+         pRangeFinder->GetDocName() == rDocSh.GetTitle() )
     {
         for (sal_uInt16 i = 0; i < nCount - nAdditionalMarks; i++)
         {
@@ -601,7 +601,7 @@ void ScInputHandler::UpdateLokReferenceMarks()
             tools::Long nY2 = aRef.aEnd.Row();
             tools::Long nTab = aRef.aStart.Tab();
 
-            aReferenceMarks[i + nAdditionalMarks] = ScInputHandler::GetReferenceMark( rViewData, pDocSh,
+            aReferenceMarks[i + nAdditionalMarks] = ScInputHandler::GetReferenceMark( rViewData, rDocSh,
                                                                           nX1, nX2, nY1, nY2,
                                                                           nTab, rData.nColor );
 
@@ -706,9 +706,9 @@ void ScInputHandler::DeleteRangeFinder()
     ScTabViewShell* pPaintView = pRefViewSh ? pRefViewSh : pActiveViewSh;
     if ( pRangeFindList && pPaintView )
     {
-        ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
+        ScDocShell& rDocSh = pActiveViewSh->GetViewData().GetDocShell();
         pRangeFindList->SetHidden(true);
-        pDocSh->Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );  // Steal
+        rDocSh.Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );  // Steal
         pRangeFindList.reset();
     }
 }
@@ -925,7 +925,7 @@ void ScInputHandler::ImplCreateEditEngine()
 
     // we cannot create a properly initialised EditEngine until we have a document
     assert( pActiveViewSh );
-    ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
+    ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell().GetDocument();
     mpEditEngine = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
     mpEditEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( mpEditEngine->GetWordDelimiters() ) );
     UpdateRefDevice();      // also sets MapMode
@@ -1014,7 +1014,7 @@ void ScInputHandler::GetFormulaData()
     if ( !pActiveViewSh )
         return;
 
-    ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
+    ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell().GetDocument();
 
     if ( pFormulaData )
         pFormulaData->clear();
@@ -1130,9 +1130,9 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
     if ( !pActiveViewSh )
         return;
 
-    ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
+    ScDocShell& rDocSh = pActiveViewSh->GetViewData().GetDocShell();
     const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
-    const sal_Unicode cSheetSep = pDocSh->GetDocument().GetSheetSeparator();
+    const sal_Unicode cSheetSep = rDocSh.GetDocument().GetSheetSeparator();
     FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
     bool bFound = false;
     while( !bFound )
@@ -1861,7 +1861,7 @@ void ScTabViewShell::LOKSendFormulabarUpdate(const EditView* pActiveView,
     maSendFormulabarUpdate.m_nTimeStamp = now;
 
     ScViewData& rViewData = this->GetViewData();
-    const ScDocument& rDoc = rViewData.GetDocShell()->GetDocument();
+    const ScDocument& rDoc = rViewData.GetDocShell().GetDocument();
     const ScPatternAttr* pPattern = rDoc.GetPattern(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetRefTabNo());
 
     if (pPattern)
@@ -1957,7 +1957,7 @@ void ScInputHandler::FormulaPreview()
         OUString aPart = pActiveView->GetSelected();
         if (aPart.isEmpty())
             aPart = mpEditEngine->GetText(0);
-        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
+        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell().GetDocument();
         aValue = lcl_Calculate( aPart, rDoc, aCursorPos );
     }
 
@@ -2089,7 +2089,7 @@ void ScInputHandler::GetColData()
     if ( !pActiveViewSh )
         return;
 
-    ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
+    ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell().GetDocument();
 
     if ( pColumnData )
         pColumnData->clear();
@@ -2432,7 +2432,7 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
                     bNumber = (cTyped>='0' && cTyped<='9');     // Only ciphers are numbers
                 else if ( pActiveViewSh )
                 {
-                    ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
+                    ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell().GetDocument();
                     bNumber = ( rDoc.GetCellType( aCursorPos ) == CELLTYPE_VALUE );
                 }
                 eSvxAdjust = bNumber ? SvxAdjust::Right : SvxAdjust::Left;
@@ -2512,7 +2512,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
     if (pActiveViewSh)
     {
-        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
+        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell().GetDocument();
 
         if (!rDoc.ValidCol(aCursorPos.Col()))
             return false;
@@ -2540,7 +2540,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             // activation is requested (double-click or F2) or a click in input
             // line.
             bool bShowError = (!bInputActivated || !aTester.GetMessageId() || aTester.GetMessageId() != STR_PROTECTIONERR) &&
-                !pActiveViewSh->GetViewData().GetDocShell()->IsReadOnly();
+                !pActiveViewSh->GetViewData().GetDocShell().IsReadOnly();
             if (bShowError)
             {
                 eMode = SC_INPUT_NONE;
@@ -3050,7 +3050,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
         {
             if (StartTable(0, false, eMode == SC_INPUT_TABLE, pTopEngine))
             {
-                pActiveViewSh->GetViewData().GetDocShell()->PostEditView(*mpEditEngine, aCursorPos);
+                pActiveViewSh->GetViewData().GetDocShell().PostEditView(*mpEditEngine, aCursorPos);
             }
         }
 
@@ -3577,12 +3577,12 @@ void ScInputHandler::CancelHandler()
     }
 }
 
-bool ScInputHandler::IsModalMode( const SfxObjectShell* pDocSh )
+bool ScInputHandler::IsModalMode( const SfxObjectShell& rDocSh )
 {
     // References to unnamed document; that doesn't work
     return bFormulaMode && pRefViewSh
-            && pRefViewSh->GetViewData().GetDocument().GetDocumentShell() != pDocSh
-            && !pDocSh->HasName();
+            && pRefViewSh->GetViewData().GetDocument().GetDocumentShell() != &rDocSh
+            && !rDocSh.HasName();
 }
 
 void ScInputHandler::AddRefEntry()
@@ -3966,7 +3966,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             if (bNewView )                          // Create anew
             {
                 if (pActiveViewSh)
-                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView(*mpEditEngine, aCursorPos);
+                    pActiveViewSh->GetViewData().GetDocShell().PostEditView(*mpEditEngine, aCursorPos);
                 UpdateActiveView();
                 if (eMode==SC_INPUT_NONE)
                     if (pTableView || pTopView)
@@ -4089,8 +4089,8 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             // right away at the start of the edit, so that the content is
             // saved even when the user leaves the document before hitting
             // Enter
-            if (comphelper::LibreOfficeKit::isActive() && bSetModified && pActiveViewSh && !pActiveViewSh->GetViewData().GetDocShell()->IsModified())
-                pActiveViewSh->GetViewData().GetDocShell()->SetModified();
+            if (comphelper::LibreOfficeKit::isActive() && bSetModified && pActiveViewSh && !pActiveViewSh->GetViewData().GetDocShell().IsModified())
+                pActiveViewSh->GetViewData().GetDocShell().SetModified();
 
             InvalidateAttribs();        //! in DataChanged?
         }
@@ -4200,7 +4200,7 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
         {
             if (bNewView)                           // create new edit view
             {
-                pActiveViewSh->GetViewData().GetDocShell()->PostEditView(*mpEditEngine, aCursorPos);
+                pActiveViewSh->GetViewData().GetDocShell().PostEditView(*mpEditEngine, aCursorPos);
                 UpdateActiveView();
                 if (eMode==SC_INPUT_NONE)
                     if (pTableView || pTopView)
@@ -4324,8 +4324,8 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                 const EditTextObject*   pData   = pState->GetEditData();
                 OUString aString = pState->GetString();
                 bool bTxtMod = false;
-                ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
-                ScDocument& rDoc = pDocSh->GetDocument();
+                ScDocShell& rDocSh = pActiveViewSh->GetViewData().GetDocShell();
+                ScDocument& rDoc = rDocSh.GetDocument();
 
                 aCursorPos  = pState->GetPos();
 
@@ -4563,7 +4563,7 @@ void ScInputHandler::InputChanged( const EditView* pView, bool bFromNotify )
     {
         ScViewData& rViewData = pActiveViewSh->GetViewData();
         if ( bNewView )
-            rViewData.GetDocShell()->PostEditView(*mpEditEngine, aCursorPos);
+            rViewData.GetDocShell().PostEditView(*mpEditEngine, aCursorPos);
 
         rViewData.EditGrowY();
         rViewData.EditGrowX();

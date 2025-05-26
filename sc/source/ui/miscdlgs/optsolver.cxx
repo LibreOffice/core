@@ -138,13 +138,13 @@ IMPL_LINK(ScCursorRefEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 }
 
 ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-                               ScDocShell* pDocSh, const ScAddress& aCursorPos)
+                               ScDocShell& rDocSh, const ScAddress& aCursorPos)
     : ScAnyRefDlgController(pB, pCW, pParent, u"modules/scalc/ui/solverdlg.ui"_ustr, u"SolverDialog"_ustr)
     , maInputError(ScResId(STR_INVALIDINPUT))
     , maConditionError(ScResId(STR_INVALIDCONDITION))
 
-    , mpDocShell(pDocSh)
-    , mrDoc(pDocSh->GetDocument())
+    , mrDocShell(rDocSh)
+    , mrDoc(rDocSh.GetDocument())
     , mnCurTab(aCursorPos.Tab())
     , mbDlgLostFocus(false)
     , nScrollPos(0)
@@ -948,7 +948,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
     ReadConditions();
 
-    rtl::Reference<ScModelObj> xDocument( mpDocShell->GetModel() );
+    rtl::Reference<ScModelObj> xDocument( mrDocShell.GetModel() );
 
     ScRange aObjRange;
     if ( !ParseRef( aObjRange, m_xEdObjectiveCell->GetText(), false ) )
@@ -1153,15 +1153,15 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         uno::Sequence<double> aSolution = xSolver->getSolution();
         if ( aSolution.getLength() == nVarCount )
         {
-            mpDocShell->LockPaint();
-            ScDocFunc &rFunc = mpDocShell->GetDocFunc();
+            mrDocShell.LockPaint();
+            ScDocFunc &rFunc = mrDocShell.GetDocFunc();
             for (nVarPos=0; nVarPos<nVarCount; ++nVarPos)
             {
                 ScAddress aCellPos;
                 ScUnoConversion::FillScAddress(aCellPos, aVariables[nVarPos]);
                 rFunc.SetValueCell(aCellPos, aSolution[nVarPos], false);
             }
-            mpDocShell->UnlockPaint();
+            mrDocShell.UnlockPaint();
         }
         //! else error?
 
@@ -1190,15 +1190,15 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
     if ( bRestore )         // restore old values
     {
-        mpDocShell->LockPaint();
-        ScDocFunc &rFunc = mpDocShell->GetDocFunc();
+        mrDocShell.LockPaint();
+        ScDocFunc &rFunc = mrDocShell.GetDocFunc();
         for (nVarPos=0; nVarPos<nVarCount; ++nVarPos)
         {
             ScAddress aCellPos;
             ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
             rFunc.SetValueCell(aCellPos, aOldValues[nVarPos], false);
         }
-        mpDocShell->UnlockPaint();
+        mrDocShell.UnlockPaint();
     }
 
     // Generate sensitivity report if user wants it
@@ -1236,7 +1236,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             }
 
             // Insert new sheet to the document and start writing the report
-            ScDocFunc &rFunc = mpDocShell->GetDocFunc();
+            ScDocFunc &rFunc = mrDocShell.GetDocFunc();
             rFunc.InsertTable(mnCurTab + 1, sNewTabName, false, false);
             SCTAB nReportTab;
             if (!mrDoc.GetTable(sNewTabName, nReportTab))
@@ -1248,7 +1248,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             // Used to input data in the new sheet
             ScAddress aOutputAddress(0, 0, nReportTab);
             ScAddress::Details mAddressDetails(mrDoc, aOutputAddress);
-            AddressWalkerWriter aOutput(aOutputAddress, mpDocShell, mrDoc,
+            AddressWalkerWriter aOutput(aOutputAddress, mrDocShell, mrDoc,
                                         formula::FormulaGrammar::mergeToGrammar(formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
             aOutput.writeBoldString(ScResId(STR_SENSITIVITY_TITLE));
             aOutput.newLine();

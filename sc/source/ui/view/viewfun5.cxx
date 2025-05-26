@@ -144,7 +144,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             aDescAny <<= aProperties;
             SfxUnoAnyItem aDataDesc(SID_SBA_IMPORT, aDescAny);
 
-            ScDocShell* pDocSh = GetViewData().GetDocShell();
+            ScDocShell& rDocSh = GetViewData().GetDocShell();
             SCTAB nTab = GetViewData().GetTabNo();
 
             ClickCursor(nPosX, nPosY, false);               // set cursor position
@@ -152,7 +152,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             //  Creation of database area "Import1" isn't here, but in the DocShell
             //  slot execute, so it can be added to the undo action
 
-            ScDBData* pDBData = pDocSh->GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, ScGetDBSelection::Keep );
+            ScDBData* pDBData = rDocSh.GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, ScGetDBSelection::Keep );
             OUString sTarget;
             if (pDBData)
                 sTarget = pDBData->GetName();
@@ -592,7 +592,7 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
 
             if (xStm.is())
             {
-                xObj = GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
+                xObj = GetViewData().GetDocShell().GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
             }
             else
             {
@@ -611,7 +611,7 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
                     // for example whether the object should be an iconified one
                     xObj = aInfo.Object;
                     if ( xObj.is() )
-                        GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                        GetViewData().GetDocShell().GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
                 }
                 catch( uno::Exception& )
                 {}

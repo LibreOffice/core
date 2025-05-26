@@ -534,7 +534,7 @@ void SparklineDialog::perform()
     maAttributes.setColorFirst(mxColorFirst->GetSelectedEntry().getComplexColor());
     maAttributes.setColorLast(mxColorLast->GetSelectedEntry().getComplexColor());
 
-    auto& rDocFunc = mrViewData.GetDocShell()->GetDocFunc();
+    auto& rDocFunc = mrViewData.GetDocShell().GetDocFunc();
 
     if (mpSparklineGroup)
     {

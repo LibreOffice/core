@@ -183,7 +183,7 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
                                         xPropSet->setPropertyValue( sPropLabel, uno::Any(rName) );
                                     }
 
-                                    OUString aTmp = INetURLObject::GetAbsURL( rViewData.GetDocShell()->GetMedium()->GetBaseURL(), rURL );
+                                    OUString aTmp = INetURLObject::GetAbsURL( rViewData.GetDocShell().GetMedium()->GetBaseURL(), rURL );
                                     xPropSet->setPropertyValue( sPropTargetURL, uno::Any(aTmp) );
 
                                     if( !rTarget.isEmpty() && xInfo->hasPropertyByName( sPropTargetFrame ) )
@@ -197,7 +197,7 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
                                     }
 
                                     //! Undo ???
-                                    rViewData.GetDocShell()->SetDocumentModified();
+                                    rViewData.GetDocShell().SetDocumentModified();
                                     bDone = true;
                                 }
                             }
@@ -514,7 +514,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             {
                                 if (nResult == RET_OK)
                                 {
-                                    ScDocShell* pDocSh = rViewData.GetDocShell();
+                                    ScDocShell& rDocSh = rViewData.GetDocShell();
                                     OUString aNewName = pDlg->GetName();
 
                                     if (aNewName != pSelected->GetName())
@@ -543,8 +543,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                                             if(!aPersistName.isEmpty())
                                             {
-                                                pDocSh->GetUndoManager()->AddUndoAction(
-                                                    std::make_unique<ScUndoRenameObject>(*pDocSh, aPersistName, pSelected->GetName(), aNewName));
+                                                rDocSh.GetUndoManager()->AddUndoAction(
+                                                    std::make_unique<ScUndoRenameObject>(rDocSh, aPersistName, pSelected->GetName(), aNewName));
                                             }
                                         }
 
@@ -553,8 +553,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                     }
 
                                     // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                                    pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
-                                    pDocSh->SetDrawModified();
+                                    rDocSh.GetDocument().SetChartListenerCollectionNeedsUpdate( true );
+                                    rDocSh.SetDrawModified();
                                 }
                                 pDlg->disposeOnce();
                             }
@@ -589,7 +589,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             {
                                 if (nResult == RET_OK)
                                 {
-                                    ScDocShell* pDocSh = rViewData.GetDocShell();
+                                    ScDocShell& rDocSh = rViewData.GetDocShell();
 
                                     // handle Title and Description
                                     pSelected->SetTitle(pDlg->GetTitle());
@@ -597,8 +597,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                     pSelected->SetDecorative(pDlg->IsDecorative());
 
                                     // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                                    pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
-                                    pDocSh->SetDrawModified();
+                                    rDocSh.GetDocument().SetChartListenerCollectionNeedsUpdate( true );
+                                    rDocSh.SetDrawModified();
                                 }
                                 pDlg->disposeOnce();
                             }

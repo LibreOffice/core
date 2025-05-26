@@ -1662,14 +1662,14 @@ bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
             // in LOK case when no ChildWindow for this view was detected -> fallback
             ScInputHandler* pHdl = GetInputHdl();
             if ( pHdl )
-                bIsModal = pHdl->IsModalMode(pDocSh);
+                bIsModal = pHdl->IsModalMode(*pDocSh);
         }
     }
     else if (pDocSh)
     {
         ScInputHandler* pHdl = GetInputHdl();
         if ( pHdl )
-            bIsModal = pHdl->IsModalMode(pDocSh);
+            bIsModal = pHdl->IsModalMode(*pDocSh);
     }
 
     return bIsModal;

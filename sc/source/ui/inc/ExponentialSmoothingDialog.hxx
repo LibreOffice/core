@@ -31,7 +31,7 @@ public:
 
 protected:
     virtual TranslateId GetUndoNameId() override;
-    virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
+    virtual ScRange ApplyOutput(ScDocShell& rDocShell) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

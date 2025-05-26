@@ -506,7 +506,7 @@ void ScPivotLayoutDialog::ApplyChanges()
             }
             if (pDPObj)
             {
-                ScDBDocFunc aFunc( *(mrViewData.GetDocShell() ));
+                ScDBDocFunc aFunc( mrViewData.GetDocShell() );
                 aFunc.RemovePivotTable( *pDPObj, true, false);
                 mrViewData.GetView()->CursorPosChanged();
             }

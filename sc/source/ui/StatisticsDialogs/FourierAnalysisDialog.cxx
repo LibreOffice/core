@@ -51,10 +51,10 @@ void ScFourierAnalysisDialog::Close()
 
 TranslateId ScFourierAnalysisDialog::GetUndoNameId() { return STR_FOURIER_ANALYSIS_UNDO_NAME; }
 
-ScRange ScFourierAnalysisDialog::ApplyOutput(ScDocShell* pDocShell)
+ScRange ScFourierAnalysisDialog::ApplyOutput(ScDocShell& rDocShell)
 {
     getOptions();
-    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, rDocShell, mDocument,
                                 formula::FormulaGrammar::mergeToGrammar(
                                     formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);

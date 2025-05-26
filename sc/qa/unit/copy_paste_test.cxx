@@ -458,8 +458,8 @@ void ScCopyPasteTest::testTdf88782_autofillLinearNumbersInMergedCells()
     // merge the yellow cells
     ScCellMergeOption aMergeOptions(9, 11, 10, 13);     //J12:K14
     aMergeOptions.maTabs.insert(0);
-    ScDocShell* pDocSh = pViewShell->GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().MergeCells(aMergeOptions, false, true, true, false);
+    ScDocShell& rDocSh = pViewShell->GetViewData().GetDocShell();
+    rDocSh.GetDocFunc().MergeCells(aMergeOptions, false, true, true, false);
 
     // fillauto numbers, these areas contain mostly merged cells
     pViewShell->FillAuto(FILL_TO_BOTTOM, 1, 8, 3, 14, 7);    // B9:D15 ->  B9:D22

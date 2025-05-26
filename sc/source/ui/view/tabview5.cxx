@@ -345,8 +345,8 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScModelObj* pModelObj = pDocSh ? pDocSh->GetModel() : nullptr;
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    ScModelObj* pModelObj = rDocSh.GetModel();
 
     if (!pModelObj)
         return;
@@ -368,8 +368,8 @@ void ScTabView::UpdateLayerLocks()
     SCTAB nTab = aViewData.GetTabNo();
     bool bEx = aViewData.GetViewShell()->IsDrawSelMode();
     bool bProt = aViewData.GetDocument().IsTabProtected( nTab ) ||
-                 aViewData.GetSfxDocShell()->IsReadOnly();
-    bool bShared = aViewData.GetDocShell()->IsDocShared();
+                 aViewData.GetSfxDocShell().IsReadOnly();
+    bool bShared = aViewData.GetDocShell().IsDocShared();
 
     SdrLayer* pLayer;
     SdrLayerAdmin& rAdmin = pDrawView->GetModel().GetLayerAdmin();

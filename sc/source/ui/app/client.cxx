@@ -168,7 +168,7 @@ void ScClient::ObjectAreaChanged()
     pDrawObj->setSuppressSetVisAreaSize(false);
 
     //  set document modified (SdrModel::SetChanged is not used)
-    pViewSh->GetViewData().GetDocShell()->SetDrawModified();
+    pViewSh->GetViewData().GetDocShell().SetDrawModified();
     pViewSh->ScrollToObject(pDrawObj);
 }
 
@@ -232,7 +232,7 @@ void ScClient::ViewChanged()
             pDrawObj->SetLogicRect( aLogicRect );
 
             // set document modified (SdrModel::SetChanged is not used)
-            pViewSh->GetViewData().GetDocShell()->SetDrawModified();
+            pViewSh->GetViewData().GetDocShell().SetDrawModified();
         }
     }
 }

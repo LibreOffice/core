@@ -83,8 +83,8 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
     {
         HideAllCursors();
 
-        ScDocShell* pDocSh = GetViewData().GetDocShell();
-        ScDocument& rDoc = pDocSh->GetDocument();
+        ScDocShell& rDocSh = GetViewData().GetDocShell();
+        ScDocument& rDoc = rDocSh.GetDocument();
         SCTAB nTab = GetViewData().GetTabNo();
         const bool bRecord (rDoc.IsUndoEnabled());
 
@@ -143,8 +143,8 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                 ScRange aMarkRange(nStartCol, nStartRow, nTab, nStartCol, nEndRow, nTab);
                 ScMarkData aDestMark(rDoc.GetSheetLimits());
                 aDestMark.SetMarkArea( aMarkRange );
-                pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoPaste>( *pDocSh, aMarkRange, aDestMark,
+                rDocSh.GetUndoManager()->AddUndoAction(
+                    std::make_unique<ScUndoPaste>( rDocSh, aMarkRange, aDestMark,
                                      std::move(pUndoDoc), std::move(pRedoDoc), InsertDeleteFlags::ALL, nullptr));
             }
         }
@@ -156,8 +156,8 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
     else
     {
         HideAllCursors();
-        ScDocShell* pDocSh = GetViewData().GetDocShell();
-        ScImportExport aImpEx( pDocSh->GetDocument(),
+        ScDocShell& rDocSh = GetViewData().GetDocShell();
+        ScImportExport aImpEx( rDocSh.GetDocument(),
             ScAddress( nStartCol, nStartRow, GetViewData().GetTabNo() ) );
 
         OUString aStr;
@@ -173,7 +173,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             aImpEx.ImportString( aStr, SotClipboardFormatId::RICHTEXT );
 
         AdjustRowHeight( nStartRow, aImpEx.GetRange().aEnd.Row(), true );
-        pDocSh->UpdateOle(GetViewData());
+        rDocSh.UpdateOle(GetViewData());
         ShowAllCursors();
     }
 }
@@ -206,7 +206,7 @@ void ScViewFunc::DoRefConversion()
         return;
     }
 
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
     bool bOk = false;
 
     ScDocumentUniquePtr pUndoDoc;
@@ -293,14 +293,14 @@ void ScViewFunc::DoRefConversion()
         aCopyRange.aEnd.SetTab(nTabCount-1);
         rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, *pRedoDoc, &rMark );
 
-        pDocSh->GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoRefConversion>( *pDocSh,
+        rDocSh.GetUndoManager()->AddUndoAction(
+            std::make_unique<ScUndoRefConversion>( rDocSh,
                                     aMarkRange, rMark, std::move(pUndoDoc), std::move(pRedoDoc), bMulti) );
     }
 
-    pDocSh->PostPaint( aMarkRange, PaintPartFlags::Grid );
-    pDocSh->UpdateOle(GetViewData());
-    pDocSh->SetDocumentModified();
+    rDocSh.PostPaint( aMarkRange, PaintPartFlags::Grid );
+    rDocSh.UpdateOle(GetViewData());
+    rDocSh.SetDocumentModified();
     CellContentChanged();
 
     if (!bOk)
@@ -313,8 +313,8 @@ void ScViewFunc::DoThesaurus()
     SCCOL nCol;
     SCROW nRow;
     SCTAB nTab;
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
     ScSplitPos eWhich = GetViewData().GetActivePart();
     EESpellState eState;
@@ -417,17 +417,17 @@ void ScViewFunc::DoThesaurus()
             rDoc.SetString(nCol, nRow, nTab, aStr);
         }
 
-        pDocSh->SetDocumentModified();
+        rDocSh.SetDocumentModified();
         if (bRecord)
         {
-            GetViewData().GetDocShell()->GetUndoManager()->AddUndoAction(
+            GetViewData().GetDocShell().GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoThesaurus>(
-                    *GetViewData().GetDocShell(), nCol, nRow, nTab, aOldText, aNewText));
+                    GetViewData().GetDocShell(), nCol, nRow, nTab, aOldText, aNewText));
         }
     }
 
     KillEditView(true);
-    pDocSh->PostPaintGridAll();
+    rDocSh.PostPaintGridAll();
 }
 
 void ScViewFunc::DoHangulHanjaConversion()
@@ -442,8 +442,8 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     SCROW nRow;
     SCTAB nTab;
     ScViewData& rViewData = GetViewData();
-    ScDocShell* pDocSh = rViewData.GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     ScMarkData& rMark = rViewData.GetMarkData();
     ScSplitPos eWhich = rViewData.GetActivePart();
     EditView* pEditView = nullptr;
@@ -545,9 +545,9 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
         {
             SCCOL nNewCol = rViewData.GetCurX();
             SCROW nNewRow = rViewData.GetCurY();
-            rViewData.GetDocShell()->GetUndoManager()->AddUndoAction(
+            rViewData.GetDocShell().GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoConversion>(
-                        *pDocSh, rMark,
+                        rDocSh, rMark,
                         nCol, nRow, nTab, std::move(pUndoDoc),
                         nNewCol, nNewRow, nTab, std::move(pRedoDoc), rConvParam ) );
         }
@@ -555,7 +555,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
         sc::SetFormulaDirtyContext aCxt;
         rDoc.SetAllFormulasDirty(aCxt);
 
-        pDocSh->SetDocumentModified();
+        rDocSh.SetDocumentModified();
     }
     else
     {
@@ -568,7 +568,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     rViewData.SetSpellingView( nullptr );
     KillEditView(true);
     pEngine.reset();
-    pDocSh->PostPaintGridAll();
+    rDocSh.PostPaintGridAll();
     rViewData.GetViewShell()->UpdateInputHandler();
     rDoc.EnableIdle(bOldEnabled);
 }
@@ -750,7 +750,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
 bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
 {
     ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
-    ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocShell().GetDocument();
 
     const EditTextObject* pData = rDoc.GetEditText(aPos);
     if (!pData)

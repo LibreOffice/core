@@ -225,7 +225,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
 
                 ScDPObject aNewObj( *pDPObj );
                 aNewObj.SetSheetDesc( aNewDesc );
-                ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
+                ScDBDocFunc aFunc( mrViewData.GetDocShell() );
                 aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
                 mrViewData.GetView()->CursorPosChanged();       // shells may be switched
             }
@@ -277,7 +277,7 @@ void ScGridWindow::DoPushPivotToggle( SCCOL nCol, SCROW nRow, const MouseEvent& 
         pDPObj->GetHeaderPositionData(aCellPos, aData);
         ScDPObject aNewObj(*pDPObj);
         pDPObj->ToggleDetails(aData, &aNewObj);
-        ScDBDocFunc aFunc(*mrViewData.GetDocShell());
+        ScDBDocFunc aFunc(mrViewData.GetDocShell());
         aFunc.DataPilotUpdate(pDPObj, &aNewObj, true, false);
     }
 }
@@ -381,7 +381,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 
             ScDPObject aNewObj( *pDragDPObj );
             aNewObj.SetSaveData( aSaveData );
-            ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
+            ScDBDocFunc aFunc( mrViewData.GetDocShell() );
             // when dragging fields, allow re-positioning (bAllowMove)
             aFunc.DataPilotUpdate( pDragDPObj, &aNewObj, true, false, true );
             mrViewData.GetView()->CursorPosChanged();       // shells may be switched
@@ -813,7 +813,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     }
     pDim->UpdateMemberVisibility(aResult);
 
-    ScDBDocFunc aFunc(*mrViewData.GetDocShell());
+    ScDBDocFunc aFunc(mrViewData.GetDocShell());
     aFunc.UpdatePivotTable(*pDPObj, true, false);
 }
 
@@ -1179,8 +1179,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
     if ( bUp )
     {
         ScViewFunc* pViewFunc = mrViewData.GetView();
-        ScDocShell* pDocSh = mrViewData.GetDocShell();
-        ScDocument& rDoc = pDocSh->GetDocument();
+        ScDocShell& rDocSh = mrViewData.GetDocShell();
+        ScDocument& rDoc = rDocSh.GetDocument();
         SCTAB nTab = mrViewData.GetTabNo();
         bool bUndo (rDoc.IsUndoEnabled());
 
@@ -1193,7 +1193,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                 if (bUndo)
                 {
                     OUString aUndo = ScResId( STR_UNDO_DRAG_BREAK );
-                    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
+                    rDocSh.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
                 }
 
                 bool bGrow = !bHide && nNew > nPagebreakBreak;
@@ -1219,7 +1219,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                             pViewFunc->InsertPageBreak( true, true, &aPrev, false );
                         }
 
-                        if (!pDocSh->AdjustPrintZoom( ScRange(
+                        if (!rDocSh.AdjustPrintZoom( ScRange(
                                       static_cast<SCCOL>(nPagebreakPrev),0,nTab, static_cast<SCCOL>(nNew-1),0,nTab ) ))
                             bGrow = false;
                     }
@@ -1246,7 +1246,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                             pViewFunc->InsertPageBreak( false, true, &aPrev, false );
                         }
 
-                        if (!pDocSh->AdjustPrintZoom( ScRange(
+                        if (!rDocSh.AdjustPrintZoom( ScRange(
                                       0,nPagebreakPrev,nTab, 0,nNew-1,nTab ) ))
                             bGrow = false;
                     }
@@ -1254,13 +1254,13 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
 
                 if (bUndo)
                 {
-                    pDocSh->GetUndoManager()->LeaveListAction();
+                    rDocSh.GetUndoManager()->LeaveListAction();
                 }
 
                 if (!bGrow)     // otherwise has already happened in AdjustPrintZoom
                 {
                     pViewFunc->UpdatePageBreakData( true );
-                    pDocSh->SetDocumentModified();
+                    rDocSh.SetDocumentModified();
                 }
             }
         }

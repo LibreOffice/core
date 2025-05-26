@@ -247,9 +247,9 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             PutInOrder(nStartX,nEndX);
             PutInOrder(nStartY,nEndY);
             rDoc.SetEmbedded( ScRange(nStartX,nStartY,nTab, nEndX,nEndY,nTab) );
-            ScDocShell* pDocSh = aViewData.GetDocShell();
-            pDocSh->UpdateOle( aViewData, true );
-            pDocSh->SetDocumentModified();
+            ScDocShell& rDocSh = aViewData.GetDocShell();
+            rDocSh.UpdateOle( aViewData, true );
+            rDocSh.SetDocumentModified();
         }
 
         SCCOL nPaintStartX;

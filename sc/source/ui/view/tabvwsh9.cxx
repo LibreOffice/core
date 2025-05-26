@@ -137,7 +137,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                     else
                         pIMapInfo->SetImageMap( rImageMap );
 
-                    GetViewData().GetDocShell()->SetDrawModified();
+                    GetViewData().GetDocShell().SetDrawModified();
                 }
             }
         }

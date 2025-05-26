@@ -271,9 +271,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     // Enter
                     // NOTE: This also means we want to set the modified state
                     // regardless of the DontCommit parameter's value.
-                    if (comphelper::LibreOfficeKit::isActive() && !GetViewData().GetDocShell()->IsModified())
+                    if (comphelper::LibreOfficeKit::isActive() && !GetViewData().GetDocShell().IsModified())
                     {
-                        GetViewData().GetDocShell()->SetModified();
+                        GetViewData().GetDocShell().SetModified();
                         rBindings.Invalidate(SID_SAVEDOC);
                         rBindings.Invalidate(SID_DOC_MODIFIED);
                     }

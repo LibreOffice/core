@@ -796,7 +796,7 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
         nPPTY(0.0),
         maMarkData  (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
         maHighlightData (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
-        pDocShell   ( pDocSh ),
+        mrDocShell   ( pDocSh ? *pDocSh : *pDoc->GetDocumentShell() ),
         mrDoc       (pDocSh ? pDocSh->GetDocument() : *pDoc),
         pView       ( pViewSh ),
         maOptions   (pDocSh ? pDocSh->GetDocument().GetViewOptions() : DefaultOptions()),
@@ -2962,8 +2962,7 @@ void ScViewData::GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSp
         SCCOL nEndCol = mrDoc.MaxCol();
         SCROW nEndRow = mrDoc.MaxRow();
         mrDoc.ExtendMerge(0, 0, nEndCol, nEndRow, nTabNo, true);
-        if (pDocShell)
-            pDocShell->PostPaint(ScRange(0, 0, nTabNo, mrDoc.MaxCol(), mrDoc.MaxRow(), nTabNo),
+        mrDocShell.PostPaint(ScRange(0, 0, nTabNo, mrDoc.MaxCol(), mrDoc.MaxRow(), nTabNo),
                                  PaintPartFlags::Grid);
     }
 }
@@ -3199,7 +3198,7 @@ void ScViewData::SetScreen( const tools::Rectangle& rVisArea )
 
 ScDocFunc& ScViewData::GetDocFunc() const
 {
-    return pDocShell->GetDocFunc();
+    return mrDocShell.GetDocFunc();
 }
 
 SfxBindings& ScViewData::GetBindings()
@@ -3283,8 +3282,7 @@ void ScViewData::CalcPPT()
     double nOldPPTX = nPPTX;
     double nOldPPTY = nPPTY;
     nPPTX = ScGlobal::nScreenPPTX * static_cast<double>(GetZoomX());
-    if (pDocShell)
-        nPPTX = nPPTX / pDocShell->GetOutputFactor();   // Factor is printer to screen
+    nPPTX = nPPTX / mrDocShell.GetOutputFactor();   // Factor is printer to screen
     nPPTY = ScGlobal::nScreenPPTY * static_cast<double>(GetZoomY());
 
     //  if detective objects are present,
@@ -3554,8 +3552,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
                 Point& rSplitPos = rTabSett.maSplitPos;
                 rSplitPos = Point( bHSplit ? nExHSplitPos : 0, bVSplit ? nExVSplitPos : 0 );
                 rSplitPos = Application::GetDefaultDevice()->PixelToLogic( rSplitPos, MapMode( MapUnit::MapTwip ) );
-                if( pDocShell )
-                    rSplitPos.setX( static_cast<tools::Long>(static_cast<double>(rSplitPos.X()) / pDocShell->GetOutputFactor()) );
+                rSplitPos.setX( static_cast<tools::Long>(static_cast<double>(rSplitPos.X()) / mrDocShell.GetOutputFactor()) );
             }
             else if( bFrozen )
             {
@@ -3683,9 +3680,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                                 rTabSett.maSplitPos, MapMode( MapUnit::MapTwip ) );  //! Zoom?
                 // the test for use of printer metrics for text formatting here
                 // effectively results in the nFactor = 1.0 regardless of the Option setting.
-                if (pDocShell && ScModule::get()->GetInputOptions().GetTextWysiwyg())
+                if (ScModule::get()->GetInputOptions().GetTextWysiwyg())
                 {
-                    double nFactor = pDocShell->GetOutputFactor();
+                    double nFactor = mrDocShell.GetOutputFactor();
                     aPixel.setX( static_cast<tools::Long>( aPixel.X() * nFactor + 0.5 ) );
                 }
 
@@ -4094,7 +4091,7 @@ void ScViewData::UpdateInputHandler( bool bForce )
 
 bool ScViewData::IsOle() const
 {
-    return pDocShell && pDocShell->IsOle();
+    return mrDocShell.IsOle();
 }
 
 bool ScViewData::UpdateFixX( SCTAB nTab )                   // true = value changed

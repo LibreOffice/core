@@ -40,7 +40,7 @@ public:
 
 protected:
     virtual TranslateId GetUndoNameId() override;
-    virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
+    virtual ScRange ApplyOutput(ScDocShell& rDocShell) override;
     virtual bool InputRangesValid() override;
 
 private:

@@ -34,7 +34,7 @@ SparklineShell::SparklineShell(ScTabViewShell* pViewShell)
 {
     SetPool(&m_pViewShell->GetPool());
     ScViewData& rViewData = m_pViewShell->GetViewData();
-    SfxUndoManager* pUndoManager = rViewData.GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pUndoManager = rViewData.GetSfxDocShell().GetUndoManager();
     SetUndoManager(pUndoManager);
     if (!rViewData.GetDocument().IsUndoEnabled())
     {

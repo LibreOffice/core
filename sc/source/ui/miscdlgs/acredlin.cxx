@@ -865,11 +865,11 @@ IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef, void )
             }
             return false;
         });
-        ScDocShell* pDocSh=pViewData->GetDocShell();
-        pDocSh->PostPaintExtras();
-        pDocSh->PostPaintGridAll();
-        pDocSh->GetUndoManager()->Clear();
-        pDocSh->SetDocumentModified();
+        ScDocShell& rDocSh=pViewData->GetDocShell();
+        rDocSh.PostPaintExtras();
+        rDocSh.PostPaintGridAll();
+        rDocSh.GetUndoManager()->Clear();
+        rDocSh.SetDocumentModified();
         ClearView();
         UpdateView();
     }
@@ -905,10 +905,10 @@ IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
             }
             return false;
         });
-        ScDocShell* pDocSh=pViewData->GetDocShell();
-        pDocSh->PostPaintExtras();
-        pDocSh->PostPaintGridAll();
-        pDocSh->SetDocumentModified();
+        ScDocShell& rDocSh=pViewData->GetDocShell();
+        rDocSh.PostPaintExtras();
+        rDocSh.PostPaintGridAll();
+        rDocSh.SetDocumentModified();
         ClearView();
         UpdateView();
     }
@@ -967,11 +967,11 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle, SvxTPView*, void)
 
         pViewData->SetTabNo(0);
 
-        ScDocShell* pDocSh=pViewData->GetDocShell();
-        pDocSh->PostPaintExtras();
-        pDocSh->PostPaintGridAll();
-        pDocSh->GetUndoManager()->Clear();
-        pDocSh->SetDocumentModified();
+        ScDocShell& rDocSh=pViewData->GetDocShell();
+        rDocSh.PostPaintExtras();
+        rDocSh.PostPaintGridAll();
+        rDocSh.GetUndoManager()->Clear();
+        rDocSh.SetDocumentModified();
         ClearView();
         UpdateView();
     }
@@ -993,10 +993,10 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, void)
         else
             pChanges->AcceptAll();
 
-        ScDocShell* pDocSh=pViewData->GetDocShell();
-        pDocSh->PostPaintExtras();
-        pDocSh->PostPaintGridAll();
-        pDocSh->SetDocumentModified();
+        ScDocShell& rDocSh=pViewData->GetDocShell();
+        rDocSh.PostPaintExtras();
+        rDocSh.PostPaintGridAll();
+        rDocSh.SetDocumentModified();
         ClearView();
         UpdateView();
     }
@@ -1614,7 +1614,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
                 if (pEntryData)
                 {
                     ScChangeAction* pScChangeAction = static_cast<ScChangeAction*>(pEntryData->pData);
-                    pViewData->GetDocShell()->ExecuteChangeCommentDialog(pScChangeAction, m_xDialog.get(), false);
+                    pViewData->GetDocShell().ExecuteChangeCommentDialog(pScChangeAction, m_xDialog.get(), false);
                 }
             }
         }

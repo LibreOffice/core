@@ -469,7 +469,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(rViewData.GetDialogParent(), rViewData.GetDocShell()));
+                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(rViewData.GetDialogParent(), &rViewData.GetDocShell()));
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
@@ -505,12 +505,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 SfxItemSet aAttrs( pTableView->GetAttribs() );
 
-                SfxObjectShell* pObjSh = rViewData.GetSfxDocShell();
+                SfxObjectShell& rObjSh = rViewData.GetSfxDocShell();
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
-                    rViewData.GetDialogParent(), &aAttrs, pObjSh, false));
+                    rViewData.GetDialogParent(), &aAttrs, &rObjSh, false));
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId(u"fonteffects"_ustr);
@@ -574,7 +574,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                     bool bCellLinksOnly
                         = (ScModule::get()->GetAppOptions().GetLinksInsertedLikeMSExcel()
-                          && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())
+                          && rViewData.GetSfxDocShell().GetMedium()->GetFilter()->IsMSOFormat())
                           || comphelper::LibreOfficeKit::isActive();
 
                     bool bDone = false;
@@ -780,7 +780,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     SvxHyperlinkItem aHLinkItem;
                     bool bCellLinksOnly
                         = (ScModule::get()->GetAppOptions().GetLinksInsertedLikeMSExcel()
-                          && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())
+                          && rViewData.GetSfxDocShell().GetMedium()->GetFilter()->IsMSOFormat())
                           || comphelper::LibreOfficeKit::isActive();
                     std::unique_ptr<const SvxFieldData> aSvxFieldDataPtr(GetURLField());
                     const SvxURLField* pURLField(static_cast<const SvxURLField*>(aSvxFieldDataPtr.get()));
@@ -1039,7 +1039,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 {
                     const sal_uInt16 nEEWhich = GetPool().GetWhichIDFromSlotID(nSlot);
                     const std::optional<NamedColor> oColor
-                        = rViewData.GetDocShell()->GetRecentColor(nSlot);
+                        = rViewData.GetDocShell().GetRecentColor(nSlot);
                     if (oColor.has_value())
                     {
                         const model::ComplexColor aCol = (*oColor).getComplexColor();

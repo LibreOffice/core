@@ -52,7 +52,7 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
 {
     SetPool( &pViewSh->GetPool() );
     ScViewData& rViewData = pViewSh->GetViewData();
-    SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = rViewData.GetSfxDocShell().GetUndoManager();
     SetUndoManager( pMgr );
     if ( !rViewData.GetDocument().IsUndoEnabled() )
     {
@@ -113,7 +113,7 @@ void ScPivotShell::Execute( const SfxRequest& rReq )
 
                     ScDPObject aNewObj( *pDPObj );
                     aNewObj.SetSheetDesc( aNewDesc );
-                    ScDBDocFunc aFunc( *rViewData.GetDocShell() );
+                    ScDBDocFunc aFunc( rViewData.GetDocShell() );
                     aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
                     rViewData.GetView()->CursorPosChanged();       // shells may be switched
                 }
@@ -125,9 +125,9 @@ void ScPivotShell::Execute( const SfxRequest& rReq )
 
 void ScPivotShell::GetState( SfxItemSet& rSet )
 {
-    ScDocShell* pDocSh = pViewShell->GetViewData().GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
-    bool bDisable = pDocSh->IsReadOnly() || rDoc.GetChangeTrack();
+    ScDocShell& rDocSh = pViewShell->GetViewData().GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
+    bool bDisable = rDocSh.IsReadOnly() || rDoc.GetChangeTrack();
     bool bFilterDisable = bDisable;
     if (!bDisable)
     {

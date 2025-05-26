@@ -80,7 +80,7 @@ void ScDBFunc::GotoDBArea( const OUString& rDBName )
 
 ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
     ScDBData* pData = nullptr;
     ScRange aRange;
     ScMarkType eMarkType = GetViewData().GetSimpleArea(aRange);
@@ -115,7 +115,7 @@ ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection e
             case ScGetDBSelection::RowDown:
                 {
                     // Shrink the selection to actual used area.
-                    ScDocument& rDoc = pDocSh->GetDocument();
+                    ScDocument& rDoc = rDocSh.GetDocument();
                     SCCOL nCol1 = aRange.aStart.Col(), nCol2 = aRange.aEnd.Col();
                     SCROW nRow1 = aRange.aStart.Row(), nRow2 = aRange.aEnd.Row();
                     bool bShrunk;
@@ -133,10 +133,10 @@ ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection e
             default:
                 ;   // nothing
         }
-        pData = pDocSh->GetDBData( aRange, eMode, eSel );
+        pData = rDocSh.GetDBData( aRange, eMode, eSel );
     }
     else if ( eMode != SC_DB_OLD )
-        pData = pDocSh->GetDBData(
+        pData = rDocSh.GetDBData(
                     ScRange( GetViewData().GetCurX(), GetViewData().GetCurY(),
                              GetViewData().GetTabNo() ),
                     eMode, ScGetDBSelection::Keep );
@@ -155,7 +155,7 @@ ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection e
 
 ScDBData* ScDBFunc::GetAnonymousDBData()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
     ScRange aRange;
     ScMarkType eMarkType = GetViewData().GetSimpleArea(aRange);
     if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
@@ -169,14 +169,14 @@ ScDBData* ScDBFunc::GetAnonymousDBData()
         SCCOL nCol2 = aRange.aEnd.Col();
         SCROW nRow1 = aRange.aStart.Row();
         SCROW nRow2 = aRange.aEnd.Row();
-        pDocSh->GetDocument().GetDataArea(aRange.aStart.Tab(), nCol1, nRow1, nCol2, nRow2, false, false);
+        rDocSh.GetDocument().GetDataArea(aRange.aStart.Tab(), nCol1, nRow1, nCol2, nRow2, false, false);
         aRange.aStart.SetCol(nCol1);
         aRange.aStart.SetRow(nRow1);
         aRange.aEnd.SetCol(nCol2);
         aRange.aEnd.SetRow(nRow2);
     }
 
-    return pDocSh->GetAnonymousDBData(aRange);
+    return rDocSh.GetAnonymousDBData(aRange);
 }
 
 //      main functions
@@ -185,8 +185,8 @@ ScDBData* ScDBFunc::GetAnonymousDBData()
 
 void ScDBFunc::UISort( const ScSortParam& rSortParam )
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
     SCTAB nTab = GetViewData().GetTabNo();
     ScDBData* pDBData = rDoc.GetDBAtArea( nTab, rSortParam.nCol1, rSortParam.nRow1,
                                                     rSortParam.nCol2, rSortParam.nRow2 );
@@ -212,9 +212,9 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam )
 
 void ScDBFunc::Sort( const ScSortParam& rSortParam, bool bRecord, bool bPaint )
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
     SCTAB nTab = GetViewData().GetTabNo();
-    ScDBDocFunc aDBDocFunc( *pDocSh );
+    ScDBDocFunc aDBDocFunc( rDocSh );
     bool bSuccess = aDBDocFunc.Sort( nTab, rSortParam, bRecord, bPaint, false );
     if ( bSuccess && !rSortParam.bInplace )
     {
@@ -233,9 +233,9 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, bool bRecord, bool bPaint )
 
 void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource, bool bRecord )
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
     SCTAB nTab = GetViewData().GetTabNo();
-    ScDBDocFunc aDBDocFunc( *pDocSh );
+    ScDBDocFunc aDBDocFunc( rDocSh );
     bool bSuccess = aDBDocFunc.Query( nTab, rQueryParam, pAdvSource, bRecord, false );
 
     if (!bSuccess)
@@ -245,7 +245,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
     if (bCopy)
     {
         //  mark target range (data base range has been set up if applicable)
-        ScDocument& rDoc = pDocSh->GetDocument();
+        ScDocument& rDoc = rDocSh.GetDocument();
         ScDBData* pDestData = rDoc.GetDBAtCursor(
                                         rQueryParam.nDestCol, rQueryParam.nDestRow,
                                         rQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
@@ -276,7 +276,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
 void ScDBFunc::ToggleAutoFilter()
 {
     ScViewData& rViewData = GetViewData();
-    ScDocShell* pDocSh = rViewData.GetDocShell();
+    ScDocShell& rDocSh = rViewData.GetDocShell();
 
     ScQueryParam    aParam;
     ScDocument&     rDoc    = rViewData.GetDocument();
@@ -316,21 +316,21 @@ void ScDBFunc::ToggleAutoFilter()
         // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
 
         OUString aUndo = ScResId( STR_UNDO_QUERY );
-        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rViewData.GetViewShell()->GetViewShellId() );
+        rDocSh.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rViewData.GetViewShell()->GetViewShellId() );
 
         ScRange aRange;
         pDBData->GetArea( aRange );
-        pDocSh->GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoAutoFilter>( *pDocSh, aRange, pDBData->GetName(), false ) );
+        rDocSh.GetUndoManager()->AddUndoAction(
+            std::make_unique<ScUndoAutoFilter>( rDocSh, aRange, pDBData->GetName(), false ) );
 
         pDBData->SetAutoFilter(false);
 
         aParam.bDuplicate = true;
         Query( aParam, nullptr, true );
 
-        pDocSh->GetUndoManager()->LeaveListAction();
+        rDocSh.GetUndoManager()->LeaveListAction();
 
-        ScDBFunc::ModifiedAutoFilter(*pDocSh);
+        ScDBFunc::ModifiedAutoFilter(rDocSh);
     }
     else                                    // show filter buttons
     {
@@ -347,17 +347,17 @@ void ScDBFunc::ToggleAutoFilter()
                 xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
                 xBox->set_default_response(RET_YES);
                 xBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
-                xBox->runAsync(xBox, [pDocSh, &rViewData, pDBData, nRow, nTab, aParam] (sal_Int32 nResult) {
+                xBox->runAsync(xBox, [&rDocSh, &rViewData, pDBData, nRow, nTab, aParam] (sal_Int32 nResult) {
                     if (nResult == RET_YES)
                     {
                         pDBData->SetHeader( true );     //! Undo ??
                     }
 
-                    ApplyAutoFilter(*pDocSh, rViewData, pDBData, nRow, nTab, aParam);
+                    ApplyAutoFilter(rDocSh, rViewData, pDBData, nRow, nTab, aParam);
                 });
             }
             else
-                ApplyAutoFilter(*pDocSh, rViewData, pDBData, nRow, nTab, aParam);
+                ApplyAutoFilter(rDocSh, rViewData, pDBData, nRow, nTab, aParam);
         }
         else
         {
@@ -413,10 +413,10 @@ void ScDBFunc::ModifiedAutoFilter(ScDocShell& rDocSh)
 
 void ScDBFunc::HideAutoFilter()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScDocShellModificator aModificator( *pDocSh );
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    ScDocShellModificator aModificator( rDocSh );
 
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = rDocSh.GetDocument();
 
     ScDBData* pDBData = GetDBData( false );
 
@@ -433,12 +433,12 @@ void ScDBFunc::HideAutoFilter()
 
     ScRange aRange;
     pDBData->GetArea( aRange );
-    pDocSh->GetUndoManager()->AddUndoAction(
-        std::make_unique<ScUndoAutoFilter>( *pDocSh, aRange, pDBData->GetName(), false ) );
+    rDocSh.GetUndoManager()->AddUndoAction(
+        std::make_unique<ScUndoAutoFilter>( rDocSh, aRange, pDBData->GetName(), false ) );
 
     pDBData->SetAutoFilter(false);
 
-    pDocSh->PostPaint(ScRange(nCol1, nRow1, nTab, nCol2, nRow1, nTab), PaintPartFlags::Grid );
+    rDocSh.PostPaint(ScRange(nCol1, nRow1, nTab, nCol2, nRow1, nTab), PaintPartFlags::Grid );
     aModificator.SetDocumentModified();
 
     SfxBindings& rBindings = GetViewData().GetBindings();
@@ -448,8 +448,8 @@ void ScDBFunc::HideAutoFilter()
 
 void ScDBFunc::ClearAutoFilter()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    ScDocument& rDoc = rDocSh.GetDocument();
 
     SCCOL nCol = GetViewData().GetCurX();
     SCROW nRow = GetViewData().GetCurY();
@@ -487,7 +487,7 @@ bool ScDBFunc::ImportData( const ScImportParam& rParam )
         return false;
     }
 
-    ScDBDocFunc aDBDocFunc( *GetViewData().GetDocShell() );
+    ScDBDocFunc aDBDocFunc( GetViewData().GetDocShell() );
     return aDBDocFunc.DoImport( GetViewData().GetTabNo(), rParam, nullptr );
 }
 

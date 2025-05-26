@@ -71,9 +71,9 @@ private:
     sal_Int64 GetPopulationSize() const;
     void LimitSampleSizeAndPeriod();
 
-    ScRange PerformRandomSampling(ScDocShell* pDocShell);
-    ScRange PerformRandomSamplingKeepOrder(ScDocShell* pDocShell);
-    ScRange PerformPeriodicSampling(ScDocShell* pDocShell);
+    ScRange PerformRandomSampling(ScDocShell& rDocShell);
+    ScRange PerformRandomSamplingKeepOrder(ScDocShell& rDocShell);
+    ScRange PerformPeriodicSampling(ScDocShell& rDocShell);
 
     DECL_LINK( ButtonClicked, weld::Button&, void );
     DECL_LINK( GetEditFocusHandler, formula::RefEdit&, void );

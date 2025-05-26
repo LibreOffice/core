@@ -262,11 +262,11 @@ void ScSelectionTransferObj::CreateCellData()
         //  similar to ScViewFunctionSet::BeginDrag
         if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
         {
-            ScDocShell* pDocSh = rViewData.GetDocShell();
+            ScDocShell& rDocSh = rViewData.GetDocShell();
 
             const ScRange& aSelRange = aNewMark.GetMarkArea();
             ScDocShellRef aDragShellRef;
-            if ( pDocSh->GetDocument().HasOLEObjectsInArea( aSelRange, &aNewMark ) )
+            if ( rDocSh.GetDocument().HasOLEObjectsInArea( aSelRange, &aNewMark ) )
             {
                 aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
                 aDragShellRef->DoInitNew();
@@ -284,8 +284,8 @@ void ScSelectionTransferObj::CreateCellData()
             if ( bCopied )
             {
                 TransferableObjectDescriptor aObjDesc;
-                pDocSh->FillTransferableObjectDescriptor( aObjDesc );
-                aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+                rDocSh.FillTransferableObjectDescriptor( aObjDesc );
+                aObjDesc.maDisplayName = rDocSh.GetMedium()->GetURLObject().GetURLNoPass();
                 // maSize is set in ScTransferObj ctor
 
                 rtl::Reference<ScTransferObj> xTransferObj = new ScTransferObj( std::move(pClipDoc), std::move(aObjDesc) );
@@ -295,7 +295,7 @@ void ScSelectionTransferObj::CreateCellData()
 
                 xTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
 
-                xTransferObj->SetDragSource( pDocSh, aNewMark );
+                xTransferObj->SetDragSource( &rDocSh, aNewMark );
 
                 mxCellData = std::move(xTransferObj);
             }
@@ -330,14 +330,14 @@ void ScSelectionTransferObj::CreateDrawData()
             ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
             ScViewData& rViewData = pView->GetViewData();
-            ScDocShell* pDocSh = rViewData.GetDocShell();
+            ScDocShell& rDocSh = rViewData.GetDocShell();
 
             TransferableObjectDescriptor aObjDesc;
-            pDocSh->FillTransferableObjectDescriptor( aObjDesc );
-            aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+            rDocSh.FillTransferableObjectDescriptor( aObjDesc );
+            aObjDesc.maDisplayName = rDocSh.GetMedium()->GetURLObject().GetURLNoPass();
             // maSize is set in ScDrawTransferObj ctor
 
-            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, std::move(aObjDesc) );
+            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), &rDocSh, std::move(aObjDesc) );
 
             pTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
             pTransferObj->SetDragSource( pDrawView );       // copies selection
