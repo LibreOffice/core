@@ -1519,7 +1519,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
 
                     if ( pStyleSheet )
                     {
-                        ScPrintFunc aPrintFunc( &aViewData.GetDocShell(),
+                        ScPrintFunc aPrintFunc( aViewData.GetDocShell(),
                                                 aViewData.GetViewShell()->GetPrinter(true),
                                                 nCurTab );
 
@@ -1690,7 +1690,7 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
             nCount = 1;
         pNewData.reset( new ScPageBreakData(nCount) );
 
-        ScPrintFunc aPrintFunc( &rDocSh, rDocSh.GetPrinter(), nTab, 0,0,nullptr, nullptr, pNewData.get() );
+        ScPrintFunc aPrintFunc( rDocSh, rDocSh.GetPrinter(), nTab, 0,0,nullptr, nullptr, pNewData.get() );
         // ScPrintFunc fills the PageBreakData in ctor
         if ( nCount > 1 )
         {

@@ -84,7 +84,7 @@ struct ScPrintPageLocation
 class ScPrintFuncCache
 {
     ScPrintSelectionStatus  aSelection;
-    ScDocShell*             pDocSh;
+    ScDocShell&             rDocSh;
     tools::Long                    nTotalPages;
     std::vector<tools::Long>       nPages;
     std::vector<tools::Long>       nFirstAttr;
@@ -92,7 +92,7 @@ class ScPrintFuncCache
     bool                    bLocInitialized;
 
 public:
-            ScPrintFuncCache(ScDocShell* pD, const ScMarkData& rMark, ScPrintSelectionStatus aStatus,
+            ScPrintFuncCache(ScDocShell& pShell, const ScMarkData& rMark, ScPrintSelectionStatus aStatus,
                              Size aPageSize = {}, bool bLandscape = false, bool bUse = false);
             ~ScPrintFuncCache();
 

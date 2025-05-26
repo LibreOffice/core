@@ -1764,7 +1764,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
                 if (m_pDocument->GetPageStyle(nTab) == aNewName)   // already adjusted to new
                 {
                     m_pDocument->PageStyleModified( nTab, aNewName );
-                    ScPrintFunc aPrintFunc( this, GetPrinter(), nTab );
+                    ScPrintFunc aPrintFunc( *this, GetPrinter(), nTab );
                     aPrintFunc.UpdatePages();
                 }
 
@@ -1833,7 +1833,7 @@ void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages 
     rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nScale ) );
     rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, nPages ) );
 
-    ScPrintFunc aPrintFunc( this, GetPrinter(), nTab );
+    ScPrintFunc aPrintFunc( *this, GetPrinter(), nTab );
     aPrintFunc.UpdatePages();
     aModificator.SetDocumentModified();
 
@@ -1898,7 +1898,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 
         Size aPhysPage;
         tools::Long nHdr, nFtr;
-        ScPrintFunc aOldPrFunc( this, GetPrinter(), nTab );
+        ScPrintFunc aOldPrFunc( *this, GetPrinter(), nTab );
         aOldPrFunc.GetScaleData( aPhysPage, nHdr, nFtr );
         nBlkTwipsY += nHdr + nFtr;
 
@@ -1937,7 +1937,7 @@ void ScDocShell::PageStyleModified( std::u16string_view rStyleName, bool bApi )
     {
         bool bWarn = false;
 
-        ScPrintFunc aPrintFunc( this, GetPrinter(), nUseTab );  //! cope without CountPages
+        ScPrintFunc aPrintFunc( *this, GetPrinter(), nUseTab );  //! cope without CountPages
         if (!aPrintFunc.UpdatePages())                          //  sets breaks on all tabs
             bWarn = true;
 

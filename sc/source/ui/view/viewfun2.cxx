@@ -1152,7 +1152,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
     //  update page breaks
 
     for (const auto& rTab : rMark)
-        ScPrintFunc( &rDocSh, rDocSh.GetPrinter(), rTab ).UpdatePages();
+        ScPrintFunc( rDocSh, rDocSh.GetPrinter(), rTab ).UpdatePages();
 
     SfxBindings& rBindings = GetViewData().GetBindings();
     rBindings.Invalidate( SID_DELETE_PRINTAREA );

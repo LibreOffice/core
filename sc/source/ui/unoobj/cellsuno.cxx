@@ -6608,7 +6608,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         else
         {
             //  update breaks like in ScDocShell::PageStyleModified:
-            ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab );
+            ScPrintFunc aPrintFunc( *pDocSh, pDocSh->GetPrinter(), nTab );
             aPrintFunc.UpdatePages();
         }
 
@@ -6652,7 +6652,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getRowPageBre
         else
         {
             //  update breaks like in ScDocShell::PageStyleModified:
-            ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab );
+            ScPrintFunc aPrintFunc( *pDocSh, pDocSh->GetPrinter(), nTab );
             aPrintFunc.UpdatePages();
         }
         return rDoc.GetRowBreakData(nTab);
@@ -6853,7 +6853,7 @@ void ScTableSheetObj::PrintAreaUndo_Impl( std::unique_ptr<ScPrintRangeSaver> pOl
                 rDoc.CreatePrintRangeSaver())); // create new ranges
     }
 
-    ScPrintFunc(pDocSh, pDocSh->GetPrinter(), nTab).UpdatePages();
+    ScPrintFunc(*pDocSh, pDocSh->GetPrinter(), nTab).UpdatePages();
     SfxBindings* pBindings = pDocSh->GetViewBindings();
 
     if(pBindings)
@@ -7648,7 +7648,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry
             rDoc.SetPageStyle( nTab, aNewStr );
             if (!rDoc.IsImportingXML())
             {
-                ScPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab ).UpdatePages();
+                ScPrintFunc( *pDocSh, pDocSh->GetPrinter(), nTab ).UpdatePages();
 
                 SfxBindings* pBindings = pDocSh->GetViewBindings();
                 if (pBindings)

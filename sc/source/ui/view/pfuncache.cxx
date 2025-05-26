@@ -27,19 +27,19 @@
 #include <prevloc.hxx>
 #include <utility>
 
-ScPrintFuncCache::ScPrintFuncCache(ScDocShell* pD, const ScMarkData& rMark,
+ScPrintFuncCache::ScPrintFuncCache(ScDocShell& rShell, const ScMarkData& rMark,
                                    ScPrintSelectionStatus aStatus, Size aPrintPageSize, bool bPrintPageLandscape,
                                    bool bUsePrintDialogSetting)
     :
     aSelection(std::move( aStatus )),
-    pDocSh( pD ),
+    rDocSh( rShell ),
     nTotalPages( 0 ),
     bLocInitialized( false )
 {
     //  page count uses the stored cell widths for the printer anyway,
     //  so ScPrintFunc with the document's printer can be used to count
 
-    SfxPrinter* pPrinter = pDocSh->GetPrinter();
+    SfxPrinter* pPrinter = rDocSh.GetPrinter();
 
     ScRange aRange;
     const ScRange* pSelRange = nullptr;
@@ -49,12 +49,12 @@ ScPrintFuncCache::ScPrintFuncCache(ScDocShell* pD, const ScMarkData& rMark,
         pSelRange = &aRange;
     }
 
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = rDocSh.GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
 
     // avoid repeated progress bars if row heights for all sheets are needed
     if ( nTabCount > 1 && rMark.GetSelectCount() == nTabCount )
-        pDocSh->UpdatePendingRowHeights( nTabCount-1, true );
+        rDocSh.UpdatePendingRowHeights( nTabCount-1, true );
 
     SCTAB nTab;
     for ( nTab=0; nTab<nTabCount; nTab++ )
@@ -64,7 +64,7 @@ ScPrintFuncCache::ScPrintFuncCache(ScDocShell* pD, const ScMarkData& rMark,
         tools::Long nThisTab = 0;
         if ( rMark.GetTableSelect( nTab ) )
         {
-            ScPrintFunc aFunc(pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange,
+            ScPrintFunc aFunc(rDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange,
                               &aSelection.GetOptions(), nullptr, aPrintPageSize,
                               bPrintPageLandscape, bUsePrintDialogSetting);
             nThisTab = aFunc.GetTotalPages();
@@ -98,13 +98,13 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
     tools::Long nRenderer = 0;     // 0-based physical page number across sheets
     tools::Long nTabStart = 0;
 
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = rDocSh.GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
     for (SCTAB nTab : rMark)
     {
         if (nTab >= nTabCount)
             break;
-        ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange, &aSelection.GetOptions() );
+        ScPrintFunc aFunc( pDev, rDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange, &aSelection.GetOptions() );
         aFunc.SetRenderFlag( true );
 
         tools::Long nDisplayStart = GetDisplayStart( nTab );
@@ -152,7 +152,7 @@ bool ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) 
 
 SCTAB ScPrintFuncCache::GetTabForPage( tools::Long nPage ) const
 {
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = rDocSh.GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
     SCTAB nTab = 0;
     while ( nTab < nTabCount && nPage >= nPages[nTab] )
@@ -176,7 +176,7 @@ tools::Long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
     //! merge with lcl_GetDisplayStart in preview?
 
     tools::Long nDisplayStart = 0;
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = rDocSh.GetDocument();
     for (SCTAB i=0; i<nTab; i++)
     {
         if ( rDoc.NeedPageResetAfterTab(i) )

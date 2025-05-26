@@ -1440,7 +1440,7 @@ void ScUndoPrintRange::DoChange(bool bUndo)
     if (pViewShell)
         pViewShell->SetTabNo( nTab );
 
-    ScPrintFunc( &rDocShell, rDocShell.GetPrinter(), nTab ).UpdatePages();
+    ScPrintFunc( rDocShell, rDocShell.GetPrinter(), nTab ).UpdatePages();
 
     if (pViewShell && comphelper::LibreOfficeKit::isActive())
     {

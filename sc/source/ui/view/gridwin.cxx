@@ -2482,7 +2482,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                         mrViewData.GetDocument().SetPageStyle( mrViewData.GetTabNo(),
                                                                pStyleSheet->GetName() );
 
-                        ScPrintFunc( &mrViewData.GetDocShell(),
+                        ScPrintFunc( mrViewData.GetDocShell(),
                                      mrViewData.GetViewShell()->GetPrinter(true),
                                      mrViewData.GetTabNo() ).UpdatePages();
 

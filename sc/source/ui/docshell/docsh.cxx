@@ -3146,7 +3146,7 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
     if ( pPrinter )
         for ( SCTAB i=0; i<rDocStat.nTableCount; i++ )
             rDocStat.nPageCount = sal::static_int_cast<sal_uInt16>( rDocStat.nPageCount +
-                static_cast<sal_uInt16>(ScPrintFunc( this, pPrinter, i ).GetTotalPages()) );
+                static_cast<sal_uInt16>(ScPrintFunc( *this, pPrinter, i ).GetTotalPages()) );
 }
 
 std::shared_ptr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet)

@@ -255,7 +255,7 @@ void ScUndoApplyPageStyle::Undo()
     for( const auto& rEntry : maEntries )
     {
         rDocShell.GetDocument().SetPageStyle( rEntry.mnTab, rEntry.maOldStyle );
-        ScPrintFunc( &rDocShell, rDocShell.GetPrinter(), rEntry.mnTab ).UpdatePages();
+        ScPrintFunc( rDocShell, rDocShell.GetPrinter(), rEntry.mnTab ).UpdatePages();
     }
     EndUndo();
 }
@@ -266,7 +266,7 @@ void ScUndoApplyPageStyle::Redo()
     for( const auto& rEntry : maEntries )
     {
         rDocShell.GetDocument().SetPageStyle( rEntry.mnTab, maNewStyle );
-        ScPrintFunc( &rDocShell, rDocShell.GetPrinter(), rEntry.mnTab ).UpdatePages();
+        ScPrintFunc( rDocShell, rDocShell.GetPrinter(), rEntry.mnTab ).UpdatePages();
     }
     EndRedo();
 }

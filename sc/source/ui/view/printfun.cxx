@@ -154,7 +154,7 @@ static tools::Long lcl_LineTotal(const ::editeng::SvxBorderLine* pLine)
 
 void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
 {
-    pDocShell->UpdatePendingRowHeights( nPrintTab );
+    rDocShell.UpdatePendingRowHeights( nPrintTab );
 
     SfxPrinter* pDocPrinter = rDoc.GetPrinter();   // use the printer, even for preview
     if (pDocPrinter)
@@ -195,11 +195,11 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
     pPageData = nullptr;       // is only needed for initialisation
 }
 
-ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab, tools::Long nPage,
+ScPrintFunc::ScPrintFunc(ScDocShell& rShell, SfxPrinter* pNewPrinter, SCTAB nTab, tools::Long nPage,
                          tools::Long nDocP, const ScRange* pArea, const ScPrintOptions* pOptions,
                          ScPageBreakData* pData, Size aSize, bool bPrintLandscape, bool bUsed)
-    :   pDocShell           ( pShell ),
-        rDoc(pDocShell->GetDocument()),
+    :   rDocShell           ( rShell ),
+        rDoc(rDocShell.GetDocument()),
         pPrinter            ( pNewPrinter ),
         pDrawView           ( nullptr ),
         nPrintTab           ( nTab ),
@@ -227,11 +227,11 @@ ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab
     Construct( pOptions );
 }
 
-ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter, const ScPrintState& rState,
+ScPrintFunc::ScPrintFunc(ScDocShell& rShell, SfxPrinter* pNewPrinter, const ScPrintState& rState,
                          const ScPrintOptions* pOptions, Size aSize, bool bPrintLandscape,
                          bool bUsed)
-    :   pDocShell           ( pShell ),
-        rDoc(pDocShell->GetDocument()),
+    :   rDocShell           ( rShell ),
+        rDoc(rDocShell.GetDocument()),
         pPrinter            ( pNewPrinter ),
         pDrawView           ( nullptr ),
         pUserArea           ( nullptr ),
@@ -264,11 +264,11 @@ ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter, const ScPr
     Construct( pOptions );
 }
 
-ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
+ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell& rShell, SCTAB nTab,
                             tools::Long nPage, tools::Long nDocP, const ScRange* pArea,
                             const ScPrintOptions* pOptions )
-    :   pDocShell           ( pShell ),
-        rDoc(pDocShell->GetDocument()),
+    :   rDocShell           ( rShell ),
+        rDoc(rDocShell.GetDocument()),
         pPrinter            ( nullptr ),
         pDrawView           ( nullptr ),
         nPrintTab           ( nTab ),
@@ -295,11 +295,11 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
     Construct( pOptions );
 }
 
-ScPrintFunc::ScPrintFunc(OutputDevice* pOutDev, ScDocShell* pShell, const ScPrintState& rState,
+ScPrintFunc::ScPrintFunc(OutputDevice* pOutDev, ScDocShell& rShell, const ScPrintState& rState,
                          const ScPrintOptions* pOptions, Size aSize, bool bPrintLandscape,
                          bool bUsed)
-    :   pDocShell           ( pShell ),
-        rDoc(pDocShell->GetDocument()),
+    :   rDocShell           ( rShell ),
+        rDoc(rDocShell.GetDocument()),
         pPrinter            ( nullptr ),
         pDrawView           ( nullptr ),
         pUserArea           ( nullptr ),
@@ -1095,12 +1095,12 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     SetDateTime( DateTime( DateTime::SYSTEM ) );
 
-    if( pDocShell->getDocProperties()->getTitle().getLength() != 0 )
-        aFieldData.aTitle = pDocShell->getDocProperties()->getTitle();
+    if( rDocShell.getDocProperties()->getTitle().getLength() != 0 )
+        aFieldData.aTitle = rDocShell.getDocProperties()->getTitle();
     else
-        aFieldData.aTitle = pDocShell->GetTitle();
+        aFieldData.aTitle = rDocShell.GetTitle();
 
-    const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
+    const INetURLObject& rURLObj = rDocShell.GetMedium()->GetURLObject();
     aFieldData.aLongDocName = rURLObj.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
     if ( !aFieldData.aLongDocName.isEmpty() )
         aFieldData.aShortDocName = rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
@@ -1327,8 +1327,8 @@ void ScPrintFunc::DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long 
             else
                 pRefDev = rDoc.GetPrinter();   // use printer also for preview
             OUString referer;
-            if (pDocShell->HasName()) {
-                referer = pDocShell->GetMedium()->GetName();
+            if (rDocShell.HasName()) {
+                referer = rDocShell.GetMedium()->GetName();
             }
             lcl_DrawGraphic(*pBackground, *pDev, pRefDev, aFrameRect, aFrameRect, referer);
         }
@@ -2476,7 +2476,7 @@ bool ScPrintFunc::UpdatePages()
 
             //  set breaks
             ResetBreaks(nTab);
-            pDocShell->PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab, PaintPartFlags::Grid);
+            rDocShell.PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab, PaintPartFlags::Grid);
         }
 
     return true;
@@ -2628,7 +2628,7 @@ void ScPrintFunc::InitModes()               // set MapModes from  nZoom etc.
 
     if ( !pPrinter && !bIsRender )                          // adjust scale for preview
     {
-        double nFact = pDocShell->GetOutputFactor();
+        double nFact = rDocShell.GetOutputFactor();
         aHorFract = Fraction( static_cast<tools::Long>( nEffZoom / nFact ), 10000 );
     }
 

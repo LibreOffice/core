@@ -607,7 +607,7 @@ void ScUndoPrintZoom::DoChange( bool bUndo )
         rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nScale ) );
         rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, nPages ) );
 
-        ScPrintFunc aPrintFunc( &rDocShell, rDocShell.GetPrinter(), nTab );
+        ScPrintFunc aPrintFunc( rDocShell, rDocShell.GetPrinter(), nTab );
         aPrintFunc.UpdatePages();
     }
 }

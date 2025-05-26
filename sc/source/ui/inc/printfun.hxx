@@ -218,7 +218,7 @@ struct ScPrintState
 class ScPrintFunc
 {
 private:
-    ScDocShell*         pDocShell;
+    ScDocShell&         rDocShell;
     ScDocument&         rDoc;
     VclPtr<SfxPrinter>   pPrinter;
     VclPtr<OutputDevice> pDev;
@@ -307,7 +307,7 @@ private:
     bool                bUsePrintDialogSetting; // use Print dialog setting
 
 public:
-                    ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab,
+                    ScPrintFunc( ScDocShell& rShell, SfxPrinter* pNewPrinter, SCTAB nTab,
                                  tools::Long nPage = 0, tools::Long nDocP = 0,
                                  const ScRange* pArea = nullptr,
                                  const ScPrintOptions* pOptions = nullptr,
@@ -316,7 +316,7 @@ public:
                                  bool bPrintPageLandscape = false,
                                  bool bUsePrintDialogSetting = false );
 
-                    ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter,
+                    ScPrintFunc( ScDocShell& rShell, SfxPrinter* pNewPrinter,
                                 const ScPrintState& rState, const ScPrintOptions* pOptions,
                                 Size aPrintPageSize = {},
                                 bool bPrintPageLandscape = false,
@@ -324,12 +324,12 @@ public:
 
                     // ctors for device other than printer - for preview and pdf:
 
-                    ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
+                    ScPrintFunc( OutputDevice* pOutDev, ScDocShell& rShell, SCTAB nTab,
                                  tools::Long nPage = 0, tools::Long nDocP = 0,
                                  const ScRange* pArea = nullptr,
                                  const ScPrintOptions* pOptions = nullptr );
 
-                    ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
+                    ScPrintFunc( OutputDevice* pOutDev, ScDocShell& rShell,
                                  const ScPrintState& rState,
                                  const ScPrintOptions* pOptions, Size aPrintPageSize = {},
                                  bool bPrintPageLandscape = false,

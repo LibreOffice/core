@@ -1276,7 +1276,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     {
                         if ( rDoc.RemovePageStyleInUse( pStyleSheet->GetName() ) )
                         {
-                            ScPrintFunc( &rDocSh, GetPrinter(true), nCurTab ).UpdatePages();
+                            ScPrintFunc( rDocSh, GetPrinter(true), nCurTab ).UpdatePages();
                             rBindings.Invalidate( SID_STATUS_PAGESTYLE );
                             rBindings.Invalidate( FID_RESET_PRINTZOOM );
                         }
@@ -1318,7 +1318,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                             if ( aOldName != aStyleName )
                             {
                                 rDoc.SetPageStyle( rTab, aStyleName );
-                                ScPrintFunc( &rDocSh, GetPrinter(true), rTab ).UpdatePages();
+                                ScPrintFunc( rDocSh, GetPrinter(true), rTab ).UpdatePages();
                                 if( !pUndoAction )
                                     pUndoAction.reset(new ScUndoApplyPageStyle( rDocSh, aStyleName ));
                                 pUndoAction->AddSheetAction( rTab, aOldName );
@@ -1362,7 +1362,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
                         // If being used -> Update
                         if ( bUsed )
-                            ScPrintFunc( &rDocSh, GetPrinter(true), nInTab ).UpdatePages();
+                            ScPrintFunc( rDocSh, GetPrinter(true), nInTab ).UpdatePages();
 
                         xNewData->InitFromStyle( pStyleSheet );
                         bAddUndo = true;

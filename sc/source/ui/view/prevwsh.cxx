@@ -719,7 +719,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                     const sal_uInt16 nCurrentZoom   = pItem->GetValue();
                     SfxItemSet& rSet            = pStyleSheet->GetItemSet();
                     rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nCurrentZoom ) );
-                    ScPrintFunc aPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab );
+                    ScPrintFunc aPrintFunc( *pDocShell, pDocShell->GetPrinter(), nTab );
                     aPrintFunc.UpdatePages();
                     rReq.Done();
                 }

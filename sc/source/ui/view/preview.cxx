@@ -250,7 +250,7 @@ void ScPreview::CalcPages()
         tools::Long nAttrPage = i > 0 ? nFirstAttr[i-1] : 1;
 
         tools::Long nThisStart = nTotalPages;
-        ScPrintFunc aPrintFunc( GetOutDev(), pDocShell, i, nAttrPage, 0, nullptr, &aOptions );
+        ScPrintFunc aPrintFunc( GetOutDev(), *pDocShell, i, nAttrPage, 0, nullptr, &aOptions );
         tools::Long nThisTab = aPrintFunc.GetTotalPages();
         if (!aPrintFunc.HasPrintRange())
             mbHasEmptyRangeTable = true;
@@ -375,9 +375,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
         if (bStateValid)
-            pPrintFunc.reset(new ScPrintFunc(GetOutDev(), pDocShell, aState, &aOptions));
+            pPrintFunc.reset(new ScPrintFunc(GetOutDev(), *pDocShell, aState, &aOptions));
         else
-            pPrintFunc.reset(new ScPrintFunc(GetOutDev(), pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions));
+            pPrintFunc.reset(new ScPrintFunc(GetOutDev(), *pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions));
 
         pPrintFunc->SetOffset(aOffset);
         pPrintFunc->SetManualZoom(nZoom);
@@ -1121,7 +1121,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     if ( ValidTab( nTab ) )
                     {
-                        ScPrintFunc aPrintFunc( GetOutDev(), pDocShell, nTab );
+                        ScPrintFunc aPrintFunc( GetOutDev(), *pDocShell, nTab );
                         aPrintFunc.UpdatePages();
                     }
 
@@ -1221,7 +1221,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     if ( ValidTab( nTab ) )
                     {
-                        ScPrintFunc aPrintFunc( GetOutDev(), pDocShell, nTab );
+                        ScPrintFunc aPrintFunc( GetOutDev(), *pDocShell, nTab );
                         aPrintFunc.UpdatePages();
                     }
 
@@ -1281,7 +1281,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 }
                 if ( ValidTab( nTab ) )
                 {
-                    ScPrintFunc aPrintFunc( GetOutDev(), pDocShell, nTab );
+                    ScPrintFunc aPrintFunc( GetOutDev(), *pDocShell, nTab );
                     aPrintFunc.UpdatePages();
                 }
                 tools::Rectangle aRect(0, 0, 10000, 10000);
@@ -1313,9 +1313,9 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
 
         std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
         if (bStateValid)
-            pPrintFunc.reset(new ScPrintFunc( GetOutDev(), pDocShell, aState, &aOptions ));
+            pPrintFunc.reset(new ScPrintFunc( GetOutDev(), *pDocShell, aState, &aOptions ));
         else
-            pPrintFunc.reset(new ScPrintFunc( GetOutDev(), pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions ));
+            pPrintFunc.reset(new ScPrintFunc( GetOutDev(), *pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions ));
 
         nLeftMargin = o3tl::convert(pPrintFunc->GetLeftMargin(), o3tl::Length::twip, o3tl::Length::mm100) - aOffset.X();
         nRightMargin = o3tl::convert(pPrintFunc->GetRightMargin(), o3tl::Length::twip, o3tl::Length::mm100);
