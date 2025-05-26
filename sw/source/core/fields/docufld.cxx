@@ -1858,6 +1858,10 @@ std::unique_ptr<SwField> SwPostItField::Copy() const
     if (mpText)
         pRet->SetTextObject( *mpText );
 
+#if ENABLE_YRS
+    pRet->SetYrsCommentId(m_CommentId);
+#endif
+
     // Note: member <m_xTextObject> not copied.
 
     return std::unique_ptr<SwField>(pRet.release());

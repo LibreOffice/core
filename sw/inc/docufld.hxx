@@ -20,6 +20,8 @@
 
 #include <sal/config.h>
 
+#include <config_collab.h>
+
 #include <string_view>
 
 #include <editeng/outlobj.hxx>
@@ -464,6 +466,12 @@ class SW_DLLPUBLIC SwPostItField final : public SwField
     sal_uInt32 m_nParaId;
     sal_uInt32 m_nParentPostItId;
     SwMarkName m_sParentName; /// Parent comment's name.
+#if ENABLE_YRS
+    OString m_CommentId;
+public:
+    OString GetYrsCommentId() const { return m_CommentId; }
+    void SetYrsCommentId(OString const& rCommentId) { m_CommentId = rCommentId; }
+#endif
 
 public:
     static sal_uInt32 s_nLastPostItId;

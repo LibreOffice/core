@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <editeng/yrstransactionsupplier.hxx>
 #include <optional>
+class SfxUndoAction;
 struct SwPosition;
 class SwPostItField;
 #endif
@@ -61,9 +62,10 @@ public:
     virtual void YrsInitAcceptor() = 0;
     virtual void YrsInitConnector(css::uno::Any const& raConnector) = 0;
     virtual IYrsTransactionSupplier::Mode SetYrsMode(IYrsTransactionSupplier::Mode mode) = 0;
-    virtual void YrsCommitModified() = 0;
+    virtual void YrsCommitModified(bool isUnfinishedUndo) = 0;
 
     virtual void YrsNotifySetResolved(OString const& rCommentId, SwPostItField const& rField) = 0;
+    virtual OString YrsGenNewCommentId() = 0;
     virtual void YrsAddCommentImpl(SwPosition const& rPos, OString const& rCommentId) = 0;
     virtual void YrsAddComment(SwPosition const& rPos, ::std::optional<SwPosition> oAnchorStart,
                                SwPostItField const& rField, bool isInsert)
@@ -71,6 +73,9 @@ public:
     virtual void YrsRemoveCommentImpl(rtl::OString const& rCommentId) = 0;
     virtual void YrsRemoveComment(SwPosition const& rPos) = 0;
     virtual void YrsNotifyCursorUpdate() = 0;
+    virtual void YrsEndUndo() = 0;
+    virtual void YrsDoUndo(SfxUndoAction const* pUndo) = 0;
+    virtual void YrsDoRedo(SfxUndoAction const* pUndo) = 0;
 #endif
 
 protected:

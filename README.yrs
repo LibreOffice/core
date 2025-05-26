@@ -16,6 +16,8 @@ Then, put the yrs build directory in autogen.input:
 
 `--with-yrs=/path/to/y-crdt`
 
+All the related code should be behind macros in `config_host/config_collab.h`
+
 ### How to run
 
 To prevent crashes at runtime, set the environment variable
@@ -29,19 +31,100 @@ Currently, communication happens over a hard-coded pipe:
   (you can also create a new Writer document but that will be boring if all
   you can do is insert comments into empty doc)
 
-* start another soffice YRSCONNECT=1 with a different user profile, create
-  new Writer document, and it will connect and load the document from the
-  other side
+* start another soffice with YRSCONNECT=1 with a different user profile,
+  create new Writer document, and it will connect and load the document from
+  the other side
 
 All sorts of paragraph and character formattings should work inside comments.
+
+Peer cursors should be displayed both in the sw document body and inside
+comments.
 
 Inserting hyperlinks also works, although sadly i wasn't able to figure out
 how to enable the menu items in read-only mode, so it only works in editable
 mode.
 
-Undo/Redo doesn't work at all, it's disabled in readonly mode anyway.
-
 Switching to editable mode is also possible, but only comment-related editing
 is synced via yrs, so if other editing operations change the positions of
 comments, a crash will be inevitable.
+
+### Implementation
+
+Most of it is in 2 classes: EditDoc and sw::DocumentStateManager (for now);
+the latter gets a new member YrsTransactionSupplier.
+
+DocumentStateManager starts a thread to communicate, and this sends new
+messages to the main thread via PostUserEvent().
+
+The EditDoc models of the comments are duplicated in a yrs YDocument model
+and this is then synced remotely by yrs.
+
+The structure of the yrs model is:
+
+* YMap of comments (key: CommentId created from peer id + counter)
+  - YArray
+    - anchor pos: 2 or 4 ints [manually updated when editing sw]
+    - YMap of comment properties
+    - YText containing mapped EditDoc state
+* YMap of cursors (key: peer id)
+  - either sw cursor: 2 or 4 ints [manually updated when editing sw]
+    or EditDoc position: CommentId + 2 or 4 ints, or WeakRef
+    or Y_JSON_NULL (for sw non-text selections, effectively ignored)
+
+Some confusing object relationships:
+
+SwAnnotationWin -> Outliner -> OutlinerEditEng -> EditEngine -> ImpEditEngine -> EditDoc
+                -> OutlinerView -> EditView -> ImpEditView -> EditEngine
+
+                -> SidebarTextControl
+
+### Undo
+
+There was no Undo for edits inside comments anyway, only when losing the
+focus a SwUndoFieldFromDoc is created.
+
+There are 2 approaches how Undo could work: either let all the SwUndo
+actions modify the yrs model, or use the yrs yundo_manager and ensure that
+for every top-level SwUndo there is exactly one item in the yundo_manager's
+stack, so that Undo/Redo will have the same effect in the sw model and
+the yrs model.
+
+Let's try if the second approach can be made to work.
+
+The yundo_manager by default creates stack items based on a timer, so we
+configure that to a 2^31 timeout and invoke yundo_manager_stop() to create
+all the items manually.
+
+yundo_manager_undo()/redo() etc internally create a YTransaction and commit
+it, which will of course fail if one already exists!
+
+The yundo_manager creates a new item also for things like cursor movements
+(because we put the cursors in the same YDocument as the content); there is
+a way to filter the changes by Branch, but that filtering happens when the
+undo/redo is invoked, not when the stack item is created - so the
+"temporary" stack item is always extended with yrs changes until a "real"
+change that has a corresponding SwUndo happens and there is a corresponding
+yundo_manager_stop() then.
+
+There are still some corner cases where the 2 undo stacks aren't synced so
+there are various workarounds like DummyUndo action or m_nTempUndoOffset
+counter for these.
+
+Also the SwUndoFieldFromDoc batch action is problematic: it is created when
+the comment loses focus, but all editing operations in the comment are
+inserted in the yrs model immediately as they happen - so if changes are
+received from peers, the creation of the SwUndoFieldFromDoc must be forced
+to happen before the peer changes are applied in the sw document model, to
+keep the actions in order.
+
+The comment id is used as a key in yrs ymap so it should be the same when
+the Undo or Redo inserts a comment again, hence it's added to SwPostItField.
+
+For edits that are received from peers, what happens is that all the
+received changes must be grouped into one SwUndo (list) action because there
+is going to be one yrs undo item; and invoking Undo will just send the
+changes to peers and they will create a new undo stack item as the local
+instance goes back in the undo stack, and it's not possible to do it
+differently because the undo stack items may contain different changes on
+each peer.
 

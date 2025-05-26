@@ -33,6 +33,8 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <txtannotationfld.hxx>
 #include <ndtxt.hxx>
+#include <undobj.hxx>
+#include <rolbck.hxx>
 
 #include <editeng/yrs.hxx>
 #include <editeng/editview.hxx>
@@ -63,6 +65,12 @@ namespace sw
 #if ENABLE_YRS
 using sw::annotation::SwAnnotationWin;
 
+#define yvalidate_undo(rDSM, offset) { \
+    SAL_INFO("sw.yrs", "UNDO sw: " << (rDSM).m_rDoc.GetIDocumentUndoRedo().GetUndoActionCount() << " yrs: " << yundo_manager_undo_stack_len((rDSM).m_pYrsSupplier->GetUndoManager()) << " offset: " << offset << " tempoffset: " << (rDSM).m_pYrsSupplier->m_nTempUndoOffset); \
+    assert((rDSM).m_rDoc.GetIDocumentUndoRedo().GetUndoActionCount(false) + (offset) == yundo_manager_undo_stack_len((rDSM).m_pYrsSupplier->GetUndoManager()) + (rDSM).m_pYrsSupplier->m_nTempUndoOffset \
+        || (rDSM).m_pYrsReader == nullptr); \
+}
+
 namespace {
 
 enum class Message : sal_uInt8
@@ -83,19 +91,35 @@ struct YDocDeleter { void operator()(YDoc *const p) const { ydoc_destroy(p); } }
     return ::std::unique_ptr<YDoc, YDocDeleter>{pYDoc};
 }
 
+// max possible timeout => force combining everything until yundo_manager_stop()
+const YUndoManagerOptions g_YUndoOptions{SAL_MAX_INT32};
+
+class DummyUndo : public SwUndo
+{
+public:
+    DummyUndo(SwDoc & rDoc)
+        : SwUndo(SwUndoId::COMPAREDOC, rDoc)
+    {}
+    virtual void UndoImpl(::sw::UndoRedoContext &) override {}
+    virtual void RedoImpl(::sw::UndoRedoContext &) override {}
+};
+
 } // namespace
 
 class YrsTransactionSupplier : public IYrsTransactionSupplier
 {
 private:
     friend class DocumentStateManager;
+    friend class YrsThread;
     ::std::unique_ptr<YDoc, YDocDeleter> m_pYDoc;
     Branch * m_pComments;
     Branch * m_pCursors;
+    YUndoManager * m_pUndoManager;
     YTransaction * m_pCurrentReadTransaction { nullptr };
     YTransaction * m_pCurrentWriteTransaction { nullptr };
     int m_nLocalComments { 0 };
     ::std::map<OString, ::std::vector<SwAnnotationItem *>> m_Comments;
+    int m_nTempUndoOffset { 0 }; ///< for "unfinished" yrs undo (cursor move or EE edit)
 
 public:
     YrsTransactionSupplier();
@@ -104,6 +128,7 @@ public:
     YDoc* GetYDoc() override { return m_pYDoc.get(); }
     Branch* GetCommentMap() override { return m_pComments; }
     Branch* GetCursorMap() override { return m_pCursors; }
+    YUndoManager * GetUndoManager() { return m_pUndoManager; }
     YTransaction * GetReadTransaction() override;
     YTransaction * GetWriteTransaction() override;
     bool CommitTransaction(bool isForce = false) override;
@@ -116,11 +141,15 @@ YrsTransactionSupplier::YrsTransactionSupplier()
     // ymap implicitly calls transact_mut()
     , m_pComments(ymap(m_pYDoc.get(), "comments"))
     , m_pCursors(ymap(m_pYDoc.get(), "cursors"))
+    , m_pUndoManager(yundo_manager(m_pYDoc.get(), &g_YUndoOptions))
 {
+    yundo_manager_add_scope(m_pUndoManager, m_pComments);
 }
 
 YrsTransactionSupplier::~YrsTransactionSupplier()
 {
+    YrsTransactionSupplier::CommitTransaction(true); // yundo_manager_destroy requires no txn exists
+    yundo_manager_destroy(m_pUndoManager);
     // with cursors there will always be a pending transaction, and there is no api to cancel it, so just ignore it...
     //assert(m_pCurrentWriteTransaction == nullptr);
     (void) m_pCurrentWriteTransaction;
@@ -188,11 +217,17 @@ OString YrsTransactionSupplier::GenNewCommentId()
     return OString::number(id) + OString::number(counter);
 }
 
+OString DocumentStateManager::YrsGenNewCommentId()
+{
+    return m_pYrsSupplier->GenNewCommentId();
+}
+
 class YrsThread : public ::salhelper::Thread
 {
 public:
     uno::Reference<connection::XConnection> m_xConnection;
     DocumentStateManager * m_pDSM;
+    bool m_hasFirstState{false};
 
 public:
     YrsThread(uno::Reference<connection::XConnection> const& xConnection,
@@ -236,13 +271,22 @@ struct ObserveState
     YTransaction *const pTxn;
 };
 
+struct ObserveCommentState : public ObserveState
+{
+    bool isUndoAction = false;
+};
+
 extern "C" void observe_comments(void *const pState, uint32_t count, YEvent const*const events)
 {
     SAL_INFO("sw.yrs", "YRS observe_comments");
-    ObserveState & rState{*static_cast<ObserveState*>(pState)};
+    ObserveCommentState & rState{*static_cast<ObserveCommentState*>(pState)};
     // DO NOT call rState.rYrsSupplier.GetWriteTransaction()!
     YTransaction *const pTxn{rState.pTxn};
 // ??? that is TransactionMut - there is no way to construct YTransaction from it???                                            YTransaction *const pTxn{pEvent->txn};
+
+    SwWrtShell *const pShell{dynamic_cast<SwWrtShell*>(rState.rDoc.getIDocumentLayoutAccess().GetCurrentViewShell())};
+
+    pShell->StartUndo(SwUndoId::INSDOKUMENT, nullptr);
 
     ::std::vector<::std::tuple<OString, uint64_t, uint64_t>> posUpdates;
     ::std::vector<::std::tuple<OString, uint64_t, uint64_t>> startUpdates;
@@ -270,14 +314,7 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
 
                 SwAnnotationWin & rWin{*rState.rYrsSupplier.GetComments().find(commentId)->second.front()->mpPostIt};
                 rWin.GetOutlinerView()->GetEditView().YrsApplyEEDelta(rState.pTxn, pEvent);
-                if ((rWin.GetStyle() & WB_DIALOGCONTROL) == 0)
-                {
-                    rWin.UpdateData(); // not active window, force update
-                }
-                else
-                {   // apparently this repaints active window
-                    rWin.GetOutlinerView()->GetEditView().Invalidate();
-                }
+                rWin.UpdateData(); // invalidate, and create SwUndo
             }
             break;
             case Y_ARRAY:
@@ -302,40 +339,83 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
                 switch (lenC)
                 {
                     case 2:
-                        yvalidate(pChange[0].tag == Y_EVENT_CHANGE_DELETE);
-                        yvalidate(pChange[0].len == 2);
-                        yvalidate(pChange[1].tag == Y_EVENT_CHANGE_ADD);
-                        yvalidate(pChange[1].len == 2);
-                        yvalidate(pChange[1].values[0].tag == Y_JSON_INT);
-                        yvalidate(pChange[1].values[1].tag == Y_JSON_INT);
-                        posUpdates.emplace_back(commentId, pChange[1].values[0].value.integer, pChange[1].values[1].value.integer);
+                        if (pChange[0].tag == Y_EVENT_CHANGE_DELETE)
+                        {
+                            yvalidate(pChange[0].len == 2);
+                            yvalidate(pChange[1].tag == Y_EVENT_CHANGE_ADD);
+                            yvalidate(pChange[1].len == 2);
+                            yvalidate(pChange[1].values[0].tag == Y_JSON_INT);
+                            yvalidate(pChange[1].values[1].tag == Y_JSON_INT);
+                            posUpdates.emplace_back(commentId, pChange[1].values[0].value.integer, pChange[1].values[1].value.integer);
+                        }
+                        else // Undo can send with different order...
+                        {
+                            yvalidate(pChange[0].tag == Y_EVENT_CHANGE_ADD);
+                            yvalidate(pChange[0].len == 2);
+                            yvalidate(pChange[0].values[0].tag == Y_JSON_INT);
+                            yvalidate(pChange[0].values[1].tag == Y_JSON_INT);
+                            yvalidate(pChange[1].tag == Y_EVENT_CHANGE_DELETE);
+                            yvalidate(pChange[1].len == 2);
+                            posUpdates.emplace_back(commentId, pChange[0].values[0].value.integer, pChange[0].values[1].value.integer);
+                        }
                         break;
                     case 3:
                         yvalidate(pChange[0].tag == Y_EVENT_CHANGE_RETAIN);
                         yvalidate(pChange[0].len == 2);
-                        yvalidate(pChange[1].tag == Y_EVENT_CHANGE_DELETE);
-                        yvalidate(pChange[1].len == 2);
-                        yvalidate(pChange[2].tag == Y_EVENT_CHANGE_ADD);
-                        yvalidate(pChange[2].len == 2);
-                        yvalidate(pChange[2].values[0].tag == Y_JSON_INT);
-                        yvalidate(pChange[2].values[1].tag == Y_JSON_INT);
-                        startUpdates.emplace_back(commentId, pChange[2].values[0].value.integer, pChange[2].values[1].value.integer);
+                        if (pChange[1].tag == Y_EVENT_CHANGE_DELETE)
+                        {
+                            yvalidate(pChange[1].len == 2);
+                            yvalidate(pChange[2].tag == Y_EVENT_CHANGE_ADD);
+                            yvalidate(pChange[2].len == 2);
+                            yvalidate(pChange[2].values[0].tag == Y_JSON_INT);
+                            yvalidate(pChange[2].values[1].tag == Y_JSON_INT);
+                            startUpdates.emplace_back(commentId, pChange[2].values[0].value.integer, pChange[2].values[1].value.integer);
+                        }
+                        else // Undo can send with different order...
+                        {
+                            yvalidate(pChange[1].tag == Y_EVENT_CHANGE_ADD);
+                            yvalidate(pChange[1].len == 2);
+                            yvalidate(pChange[1].values[0].tag == Y_JSON_INT);
+                            yvalidate(pChange[1].values[1].tag == Y_JSON_INT);
+                            yvalidate(pChange[2].tag == Y_EVENT_CHANGE_DELETE);
+                            yvalidate(pChange[2].len == 2);
+                            startUpdates.emplace_back(commentId, pChange[1].values[0].value.integer, pChange[1].values[1].value.integer);
+                        }
                         break;
                     case 4:
-                        yvalidate(pChange[0].tag == Y_EVENT_CHANGE_DELETE);
-                        yvalidate(pChange[0].len == 2);
-                        yvalidate(pChange[1].tag == Y_EVENT_CHANGE_ADD);
-                        yvalidate(pChange[1].len == 2);
-                        yvalidate(pChange[1].values[0].tag == Y_JSON_INT);
-                        yvalidate(pChange[1].values[1].tag == Y_JSON_INT);
-                        yvalidate(pChange[2].tag == Y_EVENT_CHANGE_DELETE);
-                        yvalidate(pChange[2].len == 2);
-                        yvalidate(pChange[3].tag == Y_EVENT_CHANGE_ADD);
-                        yvalidate(pChange[3].len == 2);
-                        yvalidate(pChange[3].values[0].tag == Y_JSON_INT);
-                        yvalidate(pChange[3].values[1].tag == Y_JSON_INT);
-                        posUpdates.emplace_back(commentId, pChange[1].values[0].value.integer, pChange[1].values[1].value.integer);
-                        startUpdates.emplace_back(commentId, pChange[3].values[0].value.integer, pChange[3].values[1].value.integer);
+                        if (pChange[0].tag == Y_EVENT_CHANGE_DELETE)
+                        {
+                            yvalidate(pChange[0].len == 2);
+                            yvalidate(pChange[1].tag == Y_EVENT_CHANGE_ADD);
+                            yvalidate(pChange[1].len == 2);
+                            yvalidate(pChange[1].values[0].tag == Y_JSON_INT);
+                            yvalidate(pChange[1].values[1].tag == Y_JSON_INT);
+                            yvalidate(pChange[2].tag == Y_EVENT_CHANGE_DELETE);
+                            yvalidate(pChange[2].len == 2);
+                            yvalidate(pChange[3].tag == Y_EVENT_CHANGE_ADD);
+                            yvalidate(pChange[3].len == 2);
+                            yvalidate(pChange[3].values[0].tag == Y_JSON_INT);
+                            yvalidate(pChange[3].values[1].tag == Y_JSON_INT);
+                            posUpdates.emplace_back(commentId, pChange[1].values[0].value.integer, pChange[1].values[1].value.integer);
+                            startUpdates.emplace_back(commentId, pChange[3].values[0].value.integer, pChange[3].values[1].value.integer);
+                        }
+                        else // Undo can send with different order...
+                        {
+                            yvalidate(pChange[0].tag == Y_EVENT_CHANGE_ADD);
+                            yvalidate(pChange[0].len == 2);
+                            yvalidate(pChange[0].values[0].tag == Y_JSON_INT);
+                            yvalidate(pChange[0].values[1].tag == Y_JSON_INT);
+                            yvalidate(pChange[1].tag == Y_EVENT_CHANGE_DELETE);
+                            yvalidate(pChange[1].len == 2);
+                            yvalidate(pChange[2].tag == Y_EVENT_CHANGE_ADD);
+                            yvalidate(pChange[2].len == 2);
+                            yvalidate(pChange[2].values[0].tag == Y_JSON_INT);
+                            yvalidate(pChange[2].values[1].tag == Y_JSON_INT);
+                            yvalidate(pChange[3].tag == Y_EVENT_CHANGE_DELETE);
+                            yvalidate(pChange[3].len == 2);
+                            posUpdates.emplace_back(commentId, pChange[0].values[0].value.integer, pChange[0].values[1].value.integer);
+                            startUpdates.emplace_back(commentId, pChange[2].values[0].value.integer, pChange[2].values[1].value.integer);
+                        }
                         break;
                     default:
                         yvalidate(false);
@@ -351,6 +431,42 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
                 Branch const*const pMap{ymap_event_target(pEvent)};
                 uint32_t lenP{0};
                 YPathSegment *const pPath{ymap_event_path(pEvent, &lenP)};
+
+                auto const HandleDeleteComment = [=](OString const& rCommentId,
+                        ::std::vector<SwAnnotationItem *> const& rItems)
+                {
+                    pShell->Push();
+                    *pShell->GetCursor()->GetPoint() = rItems.front()->GetAnchorPosition();
+                    pShell->SetMark();
+                    pShell->Right(SwCursorSkipMode::Chars, true, 1, false, false);
+                    pShell->DelRight();
+                    pShell->Pop(SwCursorShell::PopMode::DeleteStack);
+                    rState.rDoc.getIDocumentState().YrsRemoveCommentImpl(rCommentId);
+                };
+
+                auto const HandleNewComment = [=, &newComments](auto const& rChange)
+                {
+                    // new comment
+                    yvalidate(pMap == rState.rYrsSupplier.GetCommentMap());
+                    yvalidate(lenP == 0);
+                    Branch const*const pArray{rChange.new_value->value.y_type};
+                    yvalidate(yarray_len(pArray) == 3);
+                    ::std::unique_ptr<YOutput, YOutputDeleter> const pPos{yarray_get(pArray, pTxn, 0)};
+                    yvalidate(pPos->tag == Y_ARRAY);
+                    ::std::unique_ptr<YOutput, YOutputDeleter> const pNode{yarray_get(pPos->value.y_type, pTxn, 0)};
+                    yvalidate(pNode->tag == Y_JSON_INT);
+                    ::std::unique_ptr<YOutput, YOutputDeleter> const pContent{yarray_get(pPos->value.y_type, pTxn, 1)};
+                    yvalidate(pContent->tag == Y_JSON_INT);
+
+                    if (!newComments.insert({
+                            {pNode->value.integer, pContent->value.integer},
+                            {rChange.key, pArray}
+                        }).second)
+                    {
+                        abort();
+                    }
+                };
+
                 uint32_t lenK{0};
                 YEventKeyChange *const pChange{ymap_event_keys(pEvent, &lenK)};
                 for (decltype(lenK) j = 0; j < lenK; ++j)
@@ -370,25 +486,7 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
                                     break;
                                 case Y_ARRAY:
                                     {
-                                        // new comment
-                                        yvalidate(pMap == rState.rYrsSupplier.GetCommentMap());
-                                        yvalidate(lenP == 0);
-                                        Branch const*const pArray{pChange[j].new_value->value.y_type};
-                                        yvalidate(yarray_len(pArray) == 3);
-                                        ::std::unique_ptr<YOutput, YOutputDeleter> const pPos{yarray_get(pArray, pTxn, 0)};
-                                        yvalidate(pPos->tag == Y_ARRAY);
-                                        ::std::unique_ptr<YOutput, YOutputDeleter> const pNode{yarray_get(pPos->value.y_type, pTxn, 0)};
-                                        yvalidate(pNode->tag == Y_JSON_INT);
-                                        ::std::unique_ptr<YOutput, YOutputDeleter> const pContent{yarray_get(pPos->value.y_type, pTxn, 1)};
-                                        yvalidate(pContent->tag == Y_JSON_INT);
-
-                                        if (!newComments.insert({
-                                                {pNode->value.integer, pContent->value.integer},
-                                                {pChange[j].key, pArray}
-                                            }).second)
-                                        {
-                                            abort();
-                                        }
+                                        HandleNewComment(pChange[j]);
                                     }
                                     break;
                                 case Y_MAP:
@@ -421,14 +519,7 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
                                     OString const commentId{pChange[j].key};
                                     auto const it{rState.rYrsSupplier.GetComments().find(commentId)};
                                     yvalidate(it != rState.rYrsSupplier.GetComments().end());
-                                    SwWrtShell *const pShell{dynamic_cast<SwWrtShell*>(rState.rDoc.getIDocumentLayoutAccess().GetCurrentViewShell())};
-                                    pShell->Push();
-                                    *pShell->GetCursor()->GetPoint() = it->second.front()->GetAnchorPosition();
-                                    pShell->SetMark();
-                                    pShell->Right(SwCursorSkipMode::Chars, true, 1, false, false);
-                                    pShell->DelRight();
-                                    pShell->Pop(SwCursorShell::PopMode::DeleteStack);
-                                    rState.rDoc.getIDocumentState().YrsRemoveCommentImpl(commentId);
+                                    HandleDeleteComment(commentId, it->second);
                                     break;
                                 }
                                 default:
@@ -437,7 +528,7 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
                             break;
                         case Y_EVENT_KEY_CHANGE_UPDATE:
                         {
-                            OString const prop{pChange[j].key};
+                            OString const key{pChange[j].key};
                             switch (pChange[j].new_value->tag)
                             {
                                 case Y_JSON_BOOL:
@@ -449,13 +540,25 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
                                     // in props map...
                                     yvalidate(pPath[1].tag == Y_EVENT_PATH_INDEX);
                                     yvalidate(pPath[1].value.index == 1);
-                                    yvalidate(prop == "resolved");
+                                    yvalidate(key == "resolved");
 
                                     auto const it{rState.rYrsSupplier.GetComments().find(commentId)};
                                     yvalidate(it != rState.rYrsSupplier.GetComments().end());
+
                                     it->second.front()->mpPostIt->SetResolved(
                                         pChange[j].new_value->value.flag == Y_TRUE);
 
+                                    break;
+                                }
+                                case Y_ARRAY:
+                                {
+                                    auto const it{rState.rYrsSupplier.GetComments().find(key)};
+                                    if (it != rState.rYrsSupplier.GetComments().end())
+                                    {   // comment may or may not exist
+                                        // if it does, have to delete it
+                                        HandleDeleteComment(key, it->second);
+                                    }
+                                    HandleNewComment(pChange[j]);
                                     break;
                                 }
                                 default:
@@ -567,7 +670,6 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
         yvalidate(it.first.second <= o3tl::make_unsigned(rNode.GetTextNode()->Len()));
         SwPosition anchorPos{*rNode.GetTextNode(), static_cast<sal_Int32>(it.first.second)};
         SAL_INFO("sw.yrs", "YRS " << anchorPos);
-        SwWrtShell *const pShell{dynamic_cast<SwWrtShell*>(rState.rDoc.getIDocumentLayoutAccess().GetCurrentViewShell())};
         SwPostItFieldType* pType = static_cast<SwPostItFieldType*>(pShell->GetFieldType(0, SwFieldIds::Postit));
         auto pField{
             new SwPostItField{
@@ -582,6 +684,8 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
         {
             pField->SetParentPostItId(*oParentId);
         }
+        OString const commentId{it.second.first};
+        pField->SetYrsCommentId(commentId);
 
         pShell->Push();
         *pShell->GetCursor()->GetPoint() = anchorPos;
@@ -598,10 +702,11 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
         assert(b); (void)b;
         pShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
         --anchorPos.nContent;
-        OString const commentId{it.second.first};
         rState.rDoc.getIDocumentState().YrsAddCommentImpl(anchorPos, commentId);
 
-        rState.rYrsSupplier.GetComments().find(commentId)->second.front()->mpPostIt->GetOutlinerView()->GetEditView().YrsReadEEState(rState.pTxn);
+        SwAnnotationWin & rWin{*rState.rYrsSupplier.GetComments().find(commentId)->second.front()->mpPostIt};
+        rWin.GetOutlinerView()->GetEditView().YrsReadEEState(rState.pTxn);
+        rWin.UpdateData(); // force SwPostItField::mpText for Undo!
     }
 
     // comments inserted, now check position updates for consistency
@@ -623,6 +728,11 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
         SwPosition const pos{rHint.GetAnnotationMark()->GetMarkStart()};
         yvalidate(o3tl::make_unsigned(pos.GetNodeIndex().get()) == ::std::get<1>(rUpdate));
         yvalidate(o3tl::make_unsigned(pos.GetContentIndex()) == ::std::get<2>(rUpdate));
+    }
+
+    if (pShell->EndUndo() != SwUndoId::EMPTY)
+    {
+        rState.isUndoAction = true;
     }
 }
 
@@ -1017,7 +1127,32 @@ IMPL_LINK(YrsThread, HandleMessage, void*, pVoid, void)
         }
         case ::std::underlying_type_t<Message>(Message::SendStateDiff):
         {
+            if (m_pDSM->m_pYrsSupplier->m_nTempUndoOffset != 0)
+            {
+                SAL_INFO("sw.yrs", "pre apply update: finish EE undo");
+                yvalidate_undo(*m_pDSM, 0);
+                // prevent our yrs undo from being combined with peer yrs undo
+                m_pDSM->m_pYrsSupplier->CommitTransaction();
+                yundo_manager_stop(m_pDSM->m_pYrsSupplier->GetUndoManager());
+                // reset it before creating the SwUndo - not ideal but there
+                // is currently nothing to check it before the SwUndo and
+                // YrsEndUndo() then checks it
+                m_pDSM->m_pYrsSupplier->m_nTempUndoOffset = 0;
+                SwWrtShell *const pShell{dynamic_cast<SwWrtShell*>(m_pDSM->m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell())};
+                if (sw::annotation::SwAnnotationWin *const pWin{
+                        pShell->GetView().GetPostItMgr()->GetActiveSidebarWin()})
+                {
+                    // note: this does YrsEndUndo() and thus possibly
+                    // YrsCommitModified() but that should be a no-op because
+                    // we called it already (unconditionally!)
+                    pWin->UpdateData();
+                }
+                else
+                    // this should not be possible? LoseFocus calls YrsEndUndo
+                    assert(false);
+            }
             SAL_INFO("sw.yrs", "apply update: " << yupdate_debug_v1(reinterpret_cast<char const*>(pBuf->begin()) + 1, length - 1));
+            yvalidate_undo(*m_pDSM, 0);
             YTransaction *const pTxn{m_pDSM->m_pYrsSupplier->GetWriteTransaction()};
             m_pDSM->m_pYrsSupplier->SetMode(IYrsTransactionSupplier::Mode::Replay);
             auto const err = ytransaction_apply(pTxn, reinterpret_cast<char const*>(pBuf->begin()) + 1, length - 1);
@@ -1028,16 +1163,38 @@ IMPL_LINK(YrsThread, HandleMessage, void*, pVoid, void)
             }
             // let's have one observe_deep instead of a observe on every
             // YText - need to be notified on new comments being created...
-            ObserveState state{*m_pDSM->m_pYrsSupplier, m_pDSM->m_rDoc, pTxn};
+            ObserveCommentState state{*m_pDSM->m_pYrsSupplier, m_pDSM->m_rDoc, pTxn, false};
             YSubscription *const pSubComments = yobserve_deep(m_pDSM->m_pYrsSupplier->GetCommentMap(), &state, observe_comments);
             ObserveCursorState cursorState{*m_pDSM->m_pYrsSupplier, m_pDSM->m_rDoc, pTxn, {}};
             // not sure if yweak_observe would work for (weakref) cursors
             YSubscription *const pSubCursors = yobserve_deep(m_pDSM->m_pYrsSupplier->GetCursorMap(), &cursorState, observe_cursors);
+            auto const undos{yundo_manager_undo_stack_len(m_pDSM->m_pYrsSupplier->GetUndoManager())};
             m_pDSM->m_pYrsSupplier->CommitTransaction(true);
+            if (state.isUndoAction)
+            {
+                yundo_manager_stop(m_pDSM->m_pYrsSupplier->GetUndoManager());
+            }
+            else if (undos != yundo_manager_undo_stack_len(m_pDSM->m_pYrsSupplier->GetUndoManager()))
+            {
+                // argh, something changed but nothing changed!
+                // example: both peers undo a delete comment then sync.
+                // add a dummy SwUndo to match the yrs one.
+                yundo_manager_stop(m_pDSM->m_pYrsSupplier->GetUndoManager());
+                m_pDSM->m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                    ::std::make_unique<DummyUndo>(m_pDSM->m_rDoc));
+            }
             YrsCursorUpdates(cursorState);
+            yvalidate_undo(*m_pDSM, 0);
             m_pDSM->m_pYrsSupplier->SetMode(IYrsTransactionSupplier::Mode::Edit);
             yunobserve(pSubComments);
             yunobserve(pSubCursors);
+            if (!m_hasFirstState)
+            {
+                // the first message contains the "initial state" - don't allow Undo before that
+                m_pDSM->m_rDoc.GetIDocumentUndoRedo().DelAllUndoObj();
+                yundo_manager_clear(m_pDSM->m_pYrsSupplier->GetUndoManager());
+                m_hasFirstState = true;
+            }
             break;
         }
     }
@@ -1061,10 +1218,13 @@ void DocumentStateManager::YrsNotifySetResolved(OString const& rCommentId, SwPos
     ::std::unique_ptr<YOutput, YOutputDeleter> const pProps{yarray_get(pComment->value.y_type, pTxn, 1)};
     YInput const resolved{yinput_bool(rField.GetResolved() ? Y_TRUE : Y_FALSE)};
     ymap_insert(pProps->value.y_type, pTxn, "resolved", &resolved);
-    YrsCommitModified();
+    YrsCommitModified(false);
+    yundo_manager_stop(m_pYrsSupplier->GetUndoManager());
+    // UpdateData() is called later than this
+    yvalidate_undo(*this, 1);
 }
 
-void DocumentStateManager::YrsAddCommentImpl(SwPosition const& rAnchorPos, OString const& commentId)
+void DocumentStateManager::YrsAddCommentImpl(SwPosition const& rAnchorPos, OString const& rCommentId)
 {
     SAL_INFO("sw.yrs", "YRS AddCommentImpl");
     ::std::vector<SwAnnotationItem *> items;
@@ -1081,11 +1241,11 @@ void DocumentStateManager::YrsAddCommentImpl(SwPosition const& rAnchorPos, OStri
                 SwAnnotationWin *const pWin{
                     rShell.GetPostItMgr()->GetOrCreateAnnotationWindow(*it, isNew)};
                 assert(pWin);
-                pWin->GetOutlinerView()->GetEditView().SetYrsCommentId(m_pYrsSupplier.get(), commentId);
+                pWin->GetOutlinerView()->GetEditView().SetYrsCommentId(m_pYrsSupplier.get(), rCommentId);
             }
         }
     }
-    m_pYrsSupplier->m_Comments.emplace(commentId, items);
+    m_pYrsSupplier->m_Comments.emplace(rCommentId, items);
 }
 
 void DocumentStateManager::YrsAddComment(SwPosition const& rPos,
@@ -1093,7 +1253,8 @@ void DocumentStateManager::YrsAddComment(SwPosition const& rPos,
     bool const isInsert)
 {
     SAL_INFO("sw.yrs", "YRS AddComment " << rPos);
-    OString const commentId{m_pYrsSupplier->GenNewCommentId()};
+    OString const commentId{rField.GetYrsCommentId()};
+    assert(!commentId.isEmpty());
     // this calls EditViewInvalidate so prevent destroying pTxn
     YrsAddCommentImpl(rPos, commentId);
     YTransaction *const pTxn{m_pYrsSupplier->GetWriteTransaction()};
@@ -1189,6 +1350,13 @@ void DocumentStateManager::YrsAddComment(SwPosition const& rPos,
 
     // either update the cursors here, or wait for round-trip?
 //do it in 1 caller so that load document can batch it?    CommitModified(); // SetModified is called earlier
+    if (isInsert)
+    {
+        // stop causes commit to create a new undo stack item
+        YrsCommitModified(false);
+        yundo_manager_stop(m_pYrsSupplier->GetUndoManager());
+        yvalidate_undo(*this, 0);
+    }
 }
 
 void DocumentStateManager::YrsRemoveCommentImpl(OString const& rCommentId)
@@ -1210,7 +1378,7 @@ void DocumentStateManager::YrsRemoveComment(SwPosition const& rPos)
     OString const commentId{it2->first};
     YrsRemoveCommentImpl(commentId);
     YTransaction *const pTxn{m_pYrsSupplier->GetWriteTransaction()};
-    if (!pTxn)
+    if (!pTxn || !m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         return;
     }
@@ -1267,7 +1435,48 @@ void DocumentStateManager::YrsRemoveComment(SwPosition const& rPos)
             yarray_insert_range(pPos->value.y_type, pTxn, 2, posArray, 2);
         }
     }
+    YrsCommitModified(false);
+    yundo_manager_stop(m_pYrsSupplier->GetUndoManager());
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+    {   // SwUndoDelete is being constructed on stack and not yet inserted!
+        yvalidate_undo(*this, 1);
+    }
     // either update the cursors here, or wait for round-trip?
+}
+
+void DocumentStateManager::YrsEndUndo()
+{
+    if (m_pYrsSupplier->m_Mode == IYrsTransactionSupplier::Mode::Edit)
+    {
+        YrsCommitModified(false);
+        yundo_manager_stop(m_pYrsSupplier->GetUndoManager());
+        yvalidate_undo(*this, 0);
+    }
+}
+
+void DocumentStateManager::YrsDoUndo(SfxUndoAction const*const pUndo)
+{
+    YrsCommitModified(false);
+    // this creates a transaction and commits
+    yvalidate(yundo_manager_undo(m_pYrsSupplier->GetUndoManager()) == Y_TRUE
+        // ugly: yundo_manager_undo returns false both for nothing happened
+        // and for error so manually ignore the case where it's expected
+        // nothing happens
+        || dynamic_cast<DummyUndo const*>(pUndo) != nullptr
+        || !m_pYrsReader.is()); // CppunitTest_sw_core_docnode asserts
+//implicit    yundo_manager_stop(m_pYrsSupplier->GetUndoManager());
+    yvalidate_undo(*this, 0);
+}
+
+void DocumentStateManager::YrsDoRedo(SfxUndoAction const*const pUndo)
+{
+    YrsCommitModified(false);
+    // this creates a transaction and commits
+    yvalidate(yundo_manager_redo(m_pYrsSupplier->GetUndoManager()) == Y_TRUE
+        || dynamic_cast<DummyUndo const*>(pUndo) != nullptr
+        || !m_pYrsReader.is()); // CppunitTest_sw_core_docnode asserts
+//implicit    yundo_manager_stop(m_pYrsSupplier->GetUndoManager());
+    yvalidate_undo(*this, 0);
 }
 
 void DocumentStateManager::YrsNotifyCursorUpdate()
@@ -1303,7 +1512,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
 #if ENABLE_YRS_WEAK
         if (pWin->GetOutlinerView()->GetEditView().YrsWriteEECursor(pTxn, *pEntry->value.y_type, pCurrent.get()))
         {
-            YrsCommitModified();
+            YrsCommitModified(true);
         }
 #else
         ESelection const sel{pWin->GetOutlinerView()->GetSelection()};
@@ -1327,7 +1536,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
                 YInput const input{yinput_yarray(positions.data(), 5)};
                 yarray_remove_range(pEntry->value.y_type, pTxn, 1, 1);
                 yarray_insert_range(pEntry->value.y_type, pTxn, 1, &input, 1);
-                YrsCommitModified();
+                YrsCommitModified(true);
             }
         }
         else
@@ -1341,7 +1550,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
                 YInput const input{yinput_yarray(positions.data(), 3)};
                 yarray_remove_range(pEntry->value.y_type, pTxn, 1, 1);
                 yarray_insert_range(pEntry->value.y_type, pTxn, 1, &input, 1);
-                YrsCommitModified();
+                YrsCommitModified(true);
             }
         }
 #endif
@@ -1356,7 +1565,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
             YInput const input{yinput_null()};
             yarray_remove_range(pEntry->value.y_type, pTxn, 1, 1);
             yarray_insert_range(pEntry->value.y_type, pTxn, 1, &input, 1);
-            YrsCommitModified();
+            YrsCommitModified(true);
         }
     }
     else
@@ -1379,7 +1588,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
                 YInput const input{yinput_yarray(positions.data(), 4)};
                 yarray_remove_range(pEntry->value.y_type, pTxn, 1, 1);
                 yarray_insert_range(pEntry->value.y_type, pTxn, 1, &input, 1);
-                YrsCommitModified();
+                YrsCommitModified(true);
             }
         }
         else
@@ -1395,7 +1604,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
                 YInput const input{yinput_yarray(positions.data(), 2)};
                 yarray_remove_range(pEntry->value.y_type, pTxn, 1, 1);
                 yarray_insert_range(pEntry->value.y_type, pTxn, 1, &input, 1);
-                YrsCommitModified();
+                YrsCommitModified(true);
             }
         }
     }
@@ -1492,6 +1701,9 @@ void DocumentStateManager::YrsInitAcceptor()
             }
             YrsAddComment(pos, oAnchorStart, rField, false);
         }
+        YrsCommitModified(false); // no txn for undo!
+        m_pYrsReader->m_hasFirstState = true;
+        yundo_manager_clear(m_pYrsSupplier->GetUndoManager());
         // initiate sync of comments to other side
     //AddComment would have done this    m_pYrsSupplier->GetWriteTransaction();
         YrsNotifyCursorUpdate();
@@ -1576,29 +1788,39 @@ void DocumentStateManager::SetModified()
 
     if( m_rDoc.GetAutoCorrExceptWord() && !m_rDoc.GetAutoCorrExceptWord()->IsDeleted() )
         m_rDoc.DeleteAutoCorrExceptWord();
-
-#if ENABLE_YRS
-    SAL_INFO("sw.yrs", "YRS SetModified");
-    YrsCommitModified();
-#endif
 }
 
 #if ENABLE_YRS
-void DocumentStateManager::YrsCommitModified()
+void DocumentStateManager::YrsCommitModified(bool const isUnfinishedUndo)
 {
-    if (m_pYrsSupplier->CommitTransaction() && m_pYrsReader.is())
+    auto const undos{yundo_manager_undo_stack_len(m_pYrsSupplier->GetUndoManager())};
+    if (!isUnfinishedUndo)
     {
-        uno::Sequence<sal_Int8> buf(5);
-        sal_Int8 * it{buf.getArray()};
-        writeLength(it, 1);
-        *it = ::std::underlying_type_t<Message>(Message::RequestStateVector);
-        try {
-            m_pYrsReader->m_xConnection->write(buf);
-        }
-        catch (io::IOException const&)
+        m_pYrsSupplier->m_nTempUndoOffset = 0;
+    }
+    if (m_pYrsSupplier->CommitTransaction())
+    {
+        if (isUnfinishedUndo)
         {
-            TOOLS_WARN_EXCEPTION("sw", "YRS CommitTransaction");
-            m_pYrsReader->m_xConnection->close();
+            if (undos != yundo_manager_undo_stack_len(m_pYrsSupplier->GetUndoManager()))
+            {
+                m_pYrsSupplier->m_nTempUndoOffset = -1;
+            }
+        }
+        if (m_pYrsReader.is())
+        {
+            uno::Sequence<sal_Int8> buf(5);
+            sal_Int8 * it{buf.getArray()};
+            writeLength(it, 1);
+            *it = ::std::underlying_type_t<Message>(Message::RequestStateVector);
+            try {
+                m_pYrsReader->m_xConnection->write(buf);
+            }
+            catch (io::IOException const&)
+            {
+                TOOLS_WARN_EXCEPTION("sw", "YRS CommitTransaction");
+                m_pYrsReader->m_xConnection->close();
+            }
         }
     }
 }

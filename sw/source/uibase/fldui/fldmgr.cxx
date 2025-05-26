@@ -921,6 +921,9 @@ bool SwFieldMgr::InsertField(
                 pPostItField->SetParentPostItId(std::get<1>(*rData.m_oParentId));
                 pPostItField->SetParentName(std::get<2>(*rData.m_oParentId));
             }
+#if ENABLE_YRS
+            pPostItField->SetYrsCommentId(pCurShell->GetDoc()->getIDocumentState().YrsGenNewCommentId());
+#endif
             pField.reset(pPostItField);
         }
         break;
@@ -1591,7 +1594,6 @@ bool SwFieldMgr::InsertField(
             pos, oAnchorStart,
             static_cast<SwPostItField const&>(*SwCursorShell::GetTextFieldAtPos(&pos, ::sw::GetTextAttrMode::Default)->GetFormatField().GetField()),
             true);
-        pCurShell->GetDoc()->getIDocumentState().YrsCommitModified();
     }
 #endif
 

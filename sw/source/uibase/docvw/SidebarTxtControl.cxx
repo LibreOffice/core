@@ -208,7 +208,7 @@ void SidebarTextControl::EditViewInvalidate(const tools::Rectangle& rRect)
 {
     SAL_INFO("sw.yrs", "YRS EditViewInvalidate");
     mrDocView.GetDocShell()->GetDoc()->getIDocumentState().YrsNotifyCursorUpdate();
-    mrDocView.GetDocShell()->GetDoc()->getIDocumentState().YrsCommitModified();
+    mrDocView.GetDocShell()->GetDoc()->getIDocumentState().YrsCommitModified(true);
     return WeldEditView::EditViewInvalidate(rRect);
 }
 

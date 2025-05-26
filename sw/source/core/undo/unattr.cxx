@@ -59,6 +59,11 @@
 #include <frameformats.hxx>
 #include <editsh.hxx>
 
+#if ENABLE_YRS
+#include <docufld.hxx>
+#endif
+
+
 SwUndoFormatAttrHelper::SwUndoFormatAttrHelper(SwFormat& rFormat, bool bSvDrwPt)
     : SwClient(&rFormat)
     , m_rFormat(rFormat)
@@ -927,6 +932,16 @@ void SwUndoAttr::redoAttribute(SwPaM& rPam, const sw::UndoRedoContext & rContext
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     } else {
         rDoc.getIDocumentContentOperations().InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
+#if ENABLE_YRS
+        SwFormatField const*const pItem{m_AttrSet.GetItemIfSet(RES_TXTATR_ANNOTATION, false)};
+        if (pItem != nullptr && pItem->GetField()->Which() == SwFieldIds::Postit)
+        {
+            SwPosition const pos{rPam.GetPoint()->nContent, -1};
+            OString const commentId{static_cast<SwPostItField const*>(pItem->GetField())->GetYrsCommentId()};
+            assert(!commentId.isEmpty());
+            rDoc.getIDocumentState().YrsAddCommentImpl(pos, commentId);
+        }
+#endif
     }
 }
 

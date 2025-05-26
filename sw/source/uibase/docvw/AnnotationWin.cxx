@@ -261,15 +261,18 @@ void SwAnnotationWin::SetResolved(bool resolved)
         mxMetadataResolved->hide();
 
     if(IsResolved() != oldState)
+    {
         mbResolvedStateUpdated = true;
+#if ENABLE_YRS
+        // for undo, before UpdateData()
+        mrView.GetDocShell()->GetDoc()->getIDocumentState().YrsNotifySetResolved(
+            GetOutlinerView()->GetEditView().GetYrsCommentId(),
+            *static_cast<SwPostItField const*>(mpFormatField->GetField()));
+#endif
+    }
     UpdateData();
     Invalidate();
     collectUIInformation(u"SETRESOLVED"_ustr,get_id());
-#if ENABLE_YRS
-    mrView.GetDocShell()->GetDoc()->getIDocumentState().YrsNotifySetResolved(
-        GetOutlinerView()->GetEditView().GetYrsCommentId(),
-        *static_cast<SwPostItField const*>(mpFormatField->GetField()));
-#endif
 }
 
 void SwAnnotationWin::ToggleResolved()
@@ -376,6 +379,9 @@ void SwAnnotationWin::UpdateData()
             SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
             rUndoRedo.AppendUndo(
                 std::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, true));
+#if ENABLE_YRS
+            mrView.GetDocShell()->GetDoc()->getIDocumentState().YrsEndUndo();
+#endif
         }
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         mrMgr.SetLayout();
@@ -503,6 +509,9 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject const & rText)
         SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
         rUndoRedo.AppendUndo(
             std::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, true));
+#if ENABLE_YRS
+// no! there is a StartUndo wrapping this        mrView.GetDocShell()->GetDoc()->getIDocumentState().YrsEndUndo();
+#endif
     }
     mpOutliner->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     mpOutliner->ClearModifyFlag();

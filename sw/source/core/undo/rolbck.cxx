@@ -59,6 +59,7 @@
 #include <strings.hrc>
 #include <bookmark.hxx>
 #include <frameformats.hxx>
+
 #include <memory>
 #include <utility>
 
@@ -360,11 +361,10 @@ void SwHistorySetTextField::SetInDoc( SwDoc& rDoc, bool )
         if (m_nFieldWhich == SwFieldIds::Postit)
         {
             SwPosition const pos{*pTextNd, m_nPos};
-            pTextNd->GetDoc().getIDocumentState().YrsAddComment(
-                pos, {}, // FIXME no way to get anchor start here?
-                static_cast<SwPostItField const&>(*pTextNd->GetFieldTextAttrAt(pos.GetContentIndex(),
-                    ::sw::GetTextAttrMode::Default)->GetFormatField().GetField()),
-                true);
+            // do use the same comment id because it's a ymap key!
+            OString const commentId{static_cast<SwPostItField const*>(m_pField->GetField())->GetYrsCommentId()};
+            assert(!commentId.isEmpty());
+            pTextNd->GetDoc().getIDocumentState().YrsAddCommentImpl(pos, commentId);
         }
 #endif
     }

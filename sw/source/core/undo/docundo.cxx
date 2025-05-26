@@ -702,11 +702,30 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo, size_t nUndoOffset)
     // N.B. these may throw!
     if (UndoOrRedoType::Undo == undoOrRedo)
     {
+#if ENABLE_YRS
+        SfxUndoAction * pUndo{GetUndoActionCount() ? GetUndoAction() : nullptr};
+        if (auto const*const pListAction = dynamic_cast<SfxListUndoAction*>(pUndo))
+        {
+            if (pListAction->GetId() == sal_uInt16(SwUndoId::HEADER_FOOTER))
+            {   // urgh! argh! this one destroys itself! aieeeee!
+                pUndo = nullptr;
+            }
+        }
+#endif
         bRet = SdrUndoManager::UndoWithContext(context);
+#if ENABLE_YRS
+        m_rState.YrsDoUndo(pUndo);
+#endif
     }
     else
     {
+#if ENABLE_YRS
+        SfxUndoAction *const pUndo{GetRedoActionCount() ? GetRedoAction() : nullptr};
+#endif
         bRet = SdrUndoManager::RedoWithContext(context);
+#if ENABLE_YRS
+        m_rState.YrsDoRedo(pUndo);
+#endif
     }
 
     if (bRet)

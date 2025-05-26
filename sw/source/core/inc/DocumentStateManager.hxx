@@ -79,15 +79,19 @@ public:
     void YrsInitAcceptor() override;
     void YrsInitConnector(css::uno::Any const& raConnector) override;
     IYrsTransactionSupplier::Mode SetYrsMode(IYrsTransactionSupplier::Mode mode) override;
-    void YrsCommitModified() override;
+    void YrsCommitModified(bool isUnfinishedUndo) override;
 
     void YrsNotifySetResolved(OString const& rCommentId, SwPostItField const& rField) override;
+    OString YrsGenNewCommentId() override;
     void YrsAddCommentImpl(SwPosition const& rPos, OString const& rCommentId) override;
     void YrsAddComment(SwPosition const& rPos, ::std::optional<SwPosition> oAnchorStart,
             SwPostItField const& rField, bool isInsert) override;
     void YrsRemoveCommentImpl(OString const& rCommentId) override;
     void YrsRemoveComment(SwPosition const& rPos) override;
     void YrsNotifyCursorUpdate() override;
+    void YrsEndUndo() override;
+    void YrsDoUndo(SfxUndoAction const* pUndo) override;
+    void YrsDoRedo(SfxUndoAction const* pUndo) override;
 #endif
 };
 

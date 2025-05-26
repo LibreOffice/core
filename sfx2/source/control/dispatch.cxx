@@ -1704,6 +1704,8 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
                 {
                     OUString sCommand = pSlot->GetCommand();
                     if (sCommand == u".uno:InsertAnnotation"_ustr
+                        || sCommand == u".uno:Undo"_ustr
+                        || sCommand == u".uno:Redo"_ustr
                         || ((sCommand == u".uno:FontDialog"_ustr
                              || sCommand == u".uno:ParagraphDialog"_ustr)
                             && pIFace->GetClassName() == "SwAnnotationShell"_ostr))

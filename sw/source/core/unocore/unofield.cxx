@@ -1394,6 +1394,9 @@ void SAL_CALL SwXTextField::attach(
                         pPostItField->SetTextObject( m_pImpl->m_xTextObject->CreateText() );
                         pPostItField->SetPar2(m_pImpl->m_xTextObject->GetText());
                     }
+#if ENABLE_YRS
+                    pPostItField->SetYrsCommentId(pDoc->getIDocumentState().YrsGenNewCommentId());
+#endif
                     xField.reset(pPostItField);
                 }
                 break;
