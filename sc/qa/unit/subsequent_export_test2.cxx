@@ -1227,6 +1227,60 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf142881)
     assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:to/xdr:row"_ostr, u"19"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf161365)
+{
+    createScDoc("xlsx/tdf161365.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pSheet1 = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet1);
+
+    assertXPathContent(pSheet1,
+                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
+                       "mc:Choice/x:control/x:controlPr/x:anchor/x:from/xdr:col"_ostr,
+                       u"1"_ustr);
+    assertXPathContent(pSheet1,
+                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
+                       "mc:Choice/x:control/x:controlPr/x:anchor/x:from/xdr:row"_ostr,
+                       u"2"_ustr);
+
+    assertXPathContent(pSheet1,
+                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
+                       "mc:Choice/x:control/x:controlPr/x:anchor/x:to/xdr:col"_ostr,
+                       u"2"_ustr);
+    assertXPathContent(pSheet1,
+                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
+                       "mc:Choice/x:control/x:controlPr/x:anchor/x:to/xdr:row"_ostr,
+                       u"3"_ustr);
+
+    xmlDocUniquePtr pDrawing1 = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing1);
+
+    assertXPathContent(
+        pDrawing1,
+        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:from/xdr:col"_ostr,
+        u"1"_ustr);
+    assertXPathContent(
+        pDrawing1,
+        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:from/xdr:row"_ostr,
+        u"2"_ustr);
+    assertXPathContent(
+        pDrawing1, "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:to/xdr:col"_ostr,
+        u"2"_ustr);
+    assertXPathContent(
+        pDrawing1, "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:to/xdr:row"_ostr,
+        u"3"_ustr);
+
+    // Checked state - first off, second on
+
+    xmlDocUniquePtr pVmlDrawing1 = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
+    CPPUNIT_ASSERT(pVmlDrawing1);
+
+    assertXPath(pVmlDrawing1, "/xml/v:shape[1]/xx:ClientData/xx:Checked"_ostr, 0);
+    assertXPathContent(pVmlDrawing1, "/xml/v:shape[2]/xx:ClientData/xx:Checked"_ostr, u"1"_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112567b)
 {
     // Set the system locale to Hungarian (a language with different range separator)
