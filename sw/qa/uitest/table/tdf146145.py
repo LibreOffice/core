@@ -8,20 +8,24 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 import time
 
 from com.sun.star.accessibility.AccessibleStateType import ENABLED
 
 class tdf146145(UITestCase):
 
-    # access to the private:resource changes toolbar via accessibility API
     def is_enabled_Accept_Track_Change(self):
         xFrame = self.document.getCurrentController().getFrame()
 
         for i in xFrame.getPropertyValue("LayoutManager").getElements():
             if i.getPropertyValue('ResourceURL') == 'private:resource/toolbar/changes':
-                return (ENABLED & i.getRealInterface().getAccessibleContext().getAccessibleChild(5).getAccessibleStateSet()) == ENABLED
+                xToolBox = self.xUITest.getWindow(i.getRealInterface())
+                for child_name in xToolBox.getChildren():
+                    child = xToolBox.getChild(child_name)
+                    states = get_state_as_dict(child)
+                    if states['Text'] == 'Accept':
+                        return states['Enabled'] == 'true'
 
         return False
 
