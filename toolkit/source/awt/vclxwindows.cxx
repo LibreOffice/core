@@ -5911,12 +5911,6 @@ VCLXToolBox::~VCLXToolBox()
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXToolBox::CreateAccessibleContext()
-{
-    VclPtr<ToolBox> pToolBox = GetAs<ToolBox>();
-    return AccessibleFactory::createAccessibleContext(pToolBox);
-}
-
 VCLXHeaderBar::VCLXHeaderBar()
 {
 }

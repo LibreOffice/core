@@ -38,6 +38,7 @@
 #include <vcl/IconThemeInfo.hxx>
 #include <vcl/commandinfoprovider.hxx>
 
+#include <accessibility/vclxaccessibletoolbox.hxx>
 #include <svdata.hxx>
 #include <uitest/toolboxuiobject.hxx>
 #include <brdwin.hxx>
@@ -327,6 +328,11 @@ void ToolBox::ImplUpdateItem( ImplToolItems::size_type nIndex )
         else
             maPaintRect.Union( mpData->m_aItems[nIndex].maRect );
     }
+}
+
+css::uno::Reference<css::accessibility::XAccessible> ToolBox::CreateAccessible()
+{
+    return new VCLXAccessibleToolBox(this);
 }
 
 void ToolBox::Click()

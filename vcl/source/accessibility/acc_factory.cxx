@@ -110,11 +110,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(vcl::
     }
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ToolBox* pToolBox)
-{
-    return new VCLXAccessibleToolBox(pToolBox);
-}
-
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(HeaderBar* pHeaderBar)
 {
     return new VCLXAccessibleHeaderBar(pHeaderBar);

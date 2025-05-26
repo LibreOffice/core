@@ -694,9 +694,6 @@ public:
 //  class VCLXToolBox
 class VCLXToolBox final : public VCLXWindow
 {
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-                        CreateAccessibleContext() override;
-
 public:
                         VCLXToolBox();
                         virtual ~VCLXToolBox() override;
