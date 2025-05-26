@@ -1957,36 +1957,6 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value)
         VCLXWindow::setProperty( PropertyName, Value );
 }
 
-
-Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
-{
-    Reference< XAccessibleContext > xContext;
-
-    // use the AccessibleContext provided by the VCL window
-    VclPtr<vcl::Window> pGrid = GetWindow();
-    if ( pGrid )
-    {
-        Reference< XAccessible > xAcc( pGrid->GetAccessible() );
-        if ( xAcc.is() )
-            xContext = xAcc->getAccessibleContext();
-        // TODO: this has a slight conceptual problem:
-
-        // We know that the XAccessible and XAccessibleContext implementation of the browse
-        // box is the same (the class implements both interfaces), which, speaking strictly,
-        // is bad here (means when a browse box acts as UnoControl): We (the FmXGridPeer) are
-        // the XAccessible here, and the browse box should be able to provide us an XAccessibleContext,
-        // but it should _not_ be the XAccessible itself.
-        // However, as long as no client implementation uses dirty hacks such as querying an
-        // XAccessibleContext for XAccessible, this should not be a problem.
-    }
-
-    if ( !xContext.is() )
-        xContext = VCLXWindow::CreateAccessibleContext( );
-
-    return xContext;
-}
-
-
 Any FmXGridPeer::getProperty( const OUString& _rPropertyName )
 {
     Any aProp;

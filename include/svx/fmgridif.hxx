@@ -426,8 +426,6 @@ public:
 // VCLXWindow
     virtual void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
     virtual css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-                    CreateAccessibleContext() override;
 
 // css::form::XGridControl
     virtual void SAL_CALL addGridControlListener( const css::uno::Reference< css::form::XGridControlListener >& _listener ) override;
