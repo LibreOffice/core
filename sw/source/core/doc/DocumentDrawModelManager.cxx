@@ -134,7 +134,9 @@ void DocumentDrawModelManager::InitDrawModel()
     if ( pRefDev )
         mpDrawModel->SetRefDevice( pRefDev );
 
-    mpDrawModel->SetNotifyUndoActionHdl( std::bind( &SwDoc::AddDrawUndo, &m_rDoc, std::placeholders::_1 ));
+    mpDrawModel->SetNotifyUndoActionHdl([&rDoc = m_rDoc](std::unique_ptr<SdrUndoAction> pAction) {
+        rDoc.AddDrawUndo(std::move(pAction));
+    });
     SwViewShell* const pSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
     if ( !pSh )
         return;
