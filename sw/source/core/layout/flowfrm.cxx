@@ -2434,28 +2434,20 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                 if ( nDiff > 1 )
                 {
                     pNewUpper = m_rThis.GetLeaf( MAKEPAGE_NONE, false );
-                    // i#53139
-                    // Now <pNewUpper> is a previous layout frame, which contains
-                    // content. But the new upper layout frame has to be the next one.
-                    // Thus, hack for issue i14206 no longer needed, but fix for issue 114442
-                    // Correct fix for i53139
-                    // Check for wrong page description before using next new upper.
-                    // i#66051 - further correction of fix for i53139
-                    // Check for correct type of new next upper layout frame
-                    // Another correction of fix for i53139
-                    // Assumption, that in all cases <pNewUpper> is a previous
-                    // layout frame, which contains content, is wrong.
-                    // Another correction of fix for i53139
-                    // Beside type check, check also, if proposed new next upper
-                    // frame is inside the same frame types.
-                    // i#73194 - and yet another correction
-                    // of fix for i53139:
-                    // Assure that the new next upper layout frame doesn't
-                    // equal the current one.
-                    // E.g.: content is on page 3, on page 2 is only a 'ghost'
-                    // section and on page 1 is normal content. Method <FindPrev(..)>
-                    // will find the last content of page 1, but <GetLeaf(..)>
-                    // returns new upper on page 2.
+                    // * i#53139: Now <pNewUpper> is a previous layout frame, which contains
+                    //   content. But the new upper layout frame has to be the next one.
+                    // * Check for wrong page description before using next new upper.
+                    // * i#66051: Check for correct type of new next upper layout frame
+                    // * Assumption, that in all cases <pNewUpper> is a previous
+                    //   layout frame, which contains content, is wrong.
+                    // * Beside type check, check also, if proposed new next upper
+                    //   frame is inside the same frame types.
+                    // * i#73194: Assure that the new next upper layout frame doesn't
+                    //   equal the current one.
+                    //   E.g.: content is on page 3, on page 2 is only a 'ghost'
+                    //   section and on page 1 is normal content. Method <FindPrev(..)>
+                    //   will find the last content of page 1, but <GetLeaf(..)>
+                    //   returns new upper on page 2.
                     if (pNewUpper && pNewUpper->Lower())
                     {
                         SwLayoutFrame* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, true );
