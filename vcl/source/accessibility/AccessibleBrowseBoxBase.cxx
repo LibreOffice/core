@@ -94,16 +94,6 @@ css::awt::Rectangle AccessibleBrowseBoxBase::implGetBounds()
     return vcl::unohelper::ConvertToAWTRect(implGetBoundingBox());
 }
 
-// css::accessibility::XAccessible
-
-Reference<css::accessibility::XAccessibleContext>
-    SAL_CALL AccessibleBrowseBoxBase::getAccessibleContext()
-{
-    osl::MutexGuard aGuard(getMutex());
-    ensureIsAlive();
-    return this;
-}
-
 // css::accessibility::XAccessibleContext
 
 Reference< css::accessibility::XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleParent()

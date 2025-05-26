@@ -34,9 +34,7 @@
 namespace tools { class Rectangle; }
 class AbsoluteScreenPixelRectangle;
 
-class ScAccessibleContextBase
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible>,
+class ScAccessibleContextBase : public comphelper::OAccessibleComponentHelper,
       public SfxListener
 {
 
@@ -60,12 +58,6 @@ public:
     ///=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-    ///=====  XAccessible  =====================================================
-
-    /// Return the XAccessibleContext.
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext() override;
 
     // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds() override;

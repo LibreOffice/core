@@ -31,7 +31,6 @@ class ThumbnailViewItem;
 
 class ThumbnailViewAcc
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible,
                                          css::accessibility::XAccessibleSelection>
 {
 public:
@@ -55,9 +54,6 @@ public:
         Stores the new focus state and broadcasts a state change event.
     */
     void LoseFocus();
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

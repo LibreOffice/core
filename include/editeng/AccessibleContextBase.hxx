@@ -34,7 +34,7 @@ namespace accessibility {
 
 class EDITENG_DLLPUBLIC AccessibleContextBase
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::lang::XServiceInfo, css::accessibility::XAccessible>
+                                         css::lang::XServiceInfo>
 {
 public:
     /** The origin of the accessible name or description.
@@ -142,14 +142,6 @@ public:
     */
     void SetRelationSet (
         const rtl::Reference< utl::AccessibleRelationSetHelper>& rxRelationSet);
-
-
-    //=====  XAccessible  =====================================================
-
-    /// Return the XAccessibleContext.
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext() override;
-
 
     //=====  XAccessibleContext  ==============================================
 

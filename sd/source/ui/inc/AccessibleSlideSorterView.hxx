@@ -40,9 +40,9 @@ class AccessibleSlideSorterObject;
     accessible.
 */
 class AccessibleSlideSorterView final
-    : public cppu::ImplInheritanceHelper<
-          comphelper::OAccessibleComponentHelper, css::accessibility::XAccessible,
-          css::accessibility::XAccessibleSelection, css::lang::XServiceInfo>
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::accessibility::XAccessibleSelection,
+                                         css::lang::XServiceInfo>
 {
 public:
     AccessibleSlideSorterView(
@@ -65,11 +65,6 @@ public:
             Index of the child for which to return the implementation object.
     */
     AccessibleSlideSorterObject* GetAccessibleChildImplementation (sal_Int32 nIndex);
-
-    //===== XAccessible =======================================================
-
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
-        getAccessibleContext() override;
 
     //=====  XAccessibleContext  ==============================================
 

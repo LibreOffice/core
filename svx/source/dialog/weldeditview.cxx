@@ -507,9 +507,7 @@ public:
 };
 }
 
-class WeldEditAccessible
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible>
+class WeldEditAccessible : public comphelper::OAccessibleComponentHelper
 {
     weld::CustomWidgetController* m_pController;
     EditEngine* m_pEditEngine;
@@ -560,13 +558,6 @@ public:
         m_xTextHelper.reset();
 
         OAccessibleComponentHelper::dispose();
-    }
-
-    // XAccessible
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override
-    {
-        return this;
     }
 
     // XAccessibleComponent

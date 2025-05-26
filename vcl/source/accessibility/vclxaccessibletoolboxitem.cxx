@@ -273,13 +273,6 @@ Sequence< OUString > VCLXAccessibleToolBoxItem::getSupportedServiceNames()
             u"com.sun.star.accessibility.AccessibleToolBoxItem"_ustr};
 }
 
-// XAccessible
-
-Reference< XAccessibleContext > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleContext(  )
-{
-    return this;
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChildCount(  )

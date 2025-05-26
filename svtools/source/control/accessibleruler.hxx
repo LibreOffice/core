@@ -32,18 +32,11 @@
 namespace tools { class Rectangle; }
 class Ruler;
 
-class SvtRulerAccessible final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible>
+class SvtRulerAccessible final : public comphelper::OAccessibleComponentHelper
 {
 public:
     SvtRulerAccessible(
         css::uno::Reference< css::accessibility::XAccessible> xParent, Ruler& rRepresentation, OUString aName );
-
-    //=====  XAccessible  =====================================================
-
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext() override;
 
     //=====  XAccessibleComponent  ============================================
 

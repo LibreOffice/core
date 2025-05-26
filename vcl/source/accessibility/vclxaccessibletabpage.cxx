@@ -251,18 +251,6 @@ Sequence< OUString > VCLXAccessibleTabPage::getSupportedServiceNames()
     return { u"com.sun.star.awt.AccessibleTabPage"_ustr };
 }
 
-
-// XAccessible
-
-
-Reference< XAccessibleContext > VCLXAccessibleTabPage::getAccessibleContext(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    return this;
-}
-
-
 // XAccessibleContext
 
 

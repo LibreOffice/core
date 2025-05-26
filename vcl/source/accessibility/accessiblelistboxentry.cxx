@@ -216,14 +216,6 @@ sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rSer
     return cppu::supportsService(this, _rServiceName);
 }
 
-// XAccessible
-
-Reference< XAccessibleContext > SAL_CALL AccessibleListBoxEntry::getAccessibleContext(  )
-{
-    EnsureIsAlive();
-    return this;
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  )

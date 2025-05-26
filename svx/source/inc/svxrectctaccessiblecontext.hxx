@@ -36,9 +36,8 @@
 class SvxRectCtl;
 class SvxRectCtlChildAccessibleContext;
 
-class SvxRectCtlAccessibleContext final : public cppu::ImplInheritanceHelper<
-                                              ::comphelper::OAccessibleSelectionHelper,
-                                              css::accessibility::XAccessible>
+class SvxRectCtlAccessibleContext final
+    : public cppu::ImplInheritanceHelper<::comphelper::OAccessibleSelectionHelper>
 {
 public:
     // internal
@@ -48,7 +47,6 @@ public:
     virtual void SAL_CALL grabFocus() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint(const css::awt::Point& rPoint) override;
 
-    // XAccessible
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleChild(sal_Int64 nIndex) override;
@@ -59,7 +57,6 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext() override { return this; }
     virtual sal_Int32 SAL_CALL getForeground() override;
     virtual sal_Int32 SAL_CALL getBackground() override;
 
@@ -120,11 +117,10 @@ private:
     tools::Long                                mnSelectedChild;
 };
 
-class SvxRectCtlChildAccessibleContext final : public cppu::ImplInheritanceHelper<
-                                                   ::comphelper::OAccessibleComponentHelper,
-                                                   css::accessibility::XAccessible,
-                                                   css::accessibility::XAccessibleValue,
-                                                   css::accessibility::XAccessibleAction>
+class SvxRectCtlChildAccessibleContext final
+    : public cppu::ImplInheritanceHelper<::comphelper::OAccessibleComponentHelper,
+                                         css::accessibility::XAccessibleValue,
+                                         css::accessibility::XAccessibleAction>
 {
 public:
     SvxRectCtlChildAccessibleContext(
@@ -146,8 +142,6 @@ public:
     virtual OUString SAL_CALL getAccessibleName() override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
-
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext() override { return this; }
 
     virtual sal_Int32 SAL_CALL getForeground() override;
     virtual sal_Int32 SAL_CALL getBackground() override;

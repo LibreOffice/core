@@ -45,12 +45,6 @@ ThumbnailViewAcc::~ThumbnailViewAcc()
 {
 }
 
-uno::Reference< accessibility::XAccessibleContext > SAL_CALL ThumbnailViewAcc::getAccessibleContext()
-{
-    ThrowIfDisposed();
-    return this;
-}
-
 sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleChildCount()
 {
     const SolarMutexGuard aSolarGuard;

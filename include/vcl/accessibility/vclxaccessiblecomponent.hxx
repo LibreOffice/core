@@ -39,7 +39,7 @@ class AccessibleRelationSetHelper;
 
 class VCL_DLLPUBLIC VCLXAccessibleComponent
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::lang::XServiceInfo, css::accessibility::XAccessible>
+                                         css::lang::XServiceInfo>
 {
 private:
     VclPtr<vcl::Window> m_xWindow;
@@ -72,10 +72,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // XAccessible
-    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override final;
 
     // css::accessibility::XAccessibleContext
     sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

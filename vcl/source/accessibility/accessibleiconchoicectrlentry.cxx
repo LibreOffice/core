@@ -203,14 +203,6 @@ sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::supportsService( const OUString
     return cppu::supportsService(this, _rServiceName);
 }
 
-// XAccessible
-
-Reference< XAccessibleContext > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleContext(  )
-{
-    EnsureIsAlive();
-    return this;
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleChildCount(  )

@@ -80,16 +80,6 @@ void SAL_CALL AccessibleObject::disposing()
     SetWindow(nullptr, nullptr);
 }
 
-//----- XAccessible -------------------------------------------------------
-
-Reference<XAccessibleContext> SAL_CALL
-    AccessibleObject::getAccessibleContext()
-{
-    ensureAlive();
-
-    return this;
-}
-
 //-----  XAccessibleContext  ----------------------------------------------
 
 sal_Int64 SAL_CALL AccessibleObject::getAccessibleChildCount()

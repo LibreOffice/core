@@ -89,14 +89,6 @@ void ScAccessibleContextBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-//=====  XAccessible  =========================================================
-
-uno::Reference< XAccessibleContext> SAL_CALL
-    ScAccessibleContextBase::getAccessibleContext()
-{
-    return this;
-}
-
 // OAccessibleComponentHelper
 
 awt::Rectangle ScAccessibleContextBase::implGetBounds(  )

@@ -39,16 +39,13 @@ namespace accessibility
  */
 class AccessibleImageBullet final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
+                                         css::lang::XServiceInfo>
 {
 
 public:
     /// Create accessible object for given parent
     AccessibleImageBullet(css::uno::Reference<css::accessibility::XAccessible> xParent,
                           sal_Int64 nIndexInParent);
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;

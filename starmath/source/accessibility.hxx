@@ -37,7 +37,7 @@ namespace accessibility { class AccessibleTextHelper; }
 
 class SmGraphicAccessible final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::lang::XServiceInfo, css::accessibility::XAccessible,
+                                         css::lang::XServiceInfo,
                                          css::accessibility::XAccessibleText>
 {
     OUString                            aAccName;
@@ -63,9 +63,6 @@ public:
                             const css::uno::Any &rNewVal);
 
     void SAL_CALL disposing() override;
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleComponent
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;

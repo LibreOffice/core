@@ -64,16 +64,6 @@ void SAL_CALL AccessibleGridControlBase::disposing()
     //m_aTable = NULL;
 }
 
-// css::accessibility::XAccessible
-
-css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL AccessibleGridControlBase::getAccessibleContext()
-{
-    SolarMutexGuard g;
-
-    ensureAlive();
-    return this;
-}
-
 // css::accessibility::XAccessibleContext
 
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleParent()

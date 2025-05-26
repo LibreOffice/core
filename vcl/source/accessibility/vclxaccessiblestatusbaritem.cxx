@@ -209,18 +209,6 @@ Sequence< OUString > VCLXAccessibleStatusBarItem::getSupportedServiceNames()
     return { u"com.sun.star.awt.AccessibleStatusBarItem"_ustr };
 }
 
-
-// XAccessible
-
-
-Reference< XAccessibleContext > VCLXAccessibleStatusBarItem::getAccessibleContext(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    return this;
-}
-
-
 // XAccessibleContext
 
 

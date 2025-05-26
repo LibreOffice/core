@@ -77,12 +77,6 @@ void ValueItemAcc::ValueSetItemDestroyed()
     mpValueSetItem = nullptr;
 }
 
-uno::Reference< accessibility::XAccessibleContext > SAL_CALL ValueItemAcc::getAccessibleContext()
-{
-    return this;
-}
-
-
 sal_Int64 SAL_CALL ValueItemAcc::getAccessibleChildCount()
 {
     return 0;
@@ -329,15 +323,6 @@ void ValueSetAcc::LoseFocus()
         css::accessibility::AccessibleEventId::STATE_CHANGED,
         aOldState, aNewState);
 }
-
-
-uno::Reference< accessibility::XAccessibleContext > SAL_CALL ValueSetAcc::getAccessibleContext()
-{
-    // still allow retrieving a11y context when not disposed yet, but ValueSet is unset
-    ThrowIfDisposed(false);
-    return this;
-}
-
 
 sal_Int64 SAL_CALL ValueSetAcc::getAccessibleChildCount()
 {

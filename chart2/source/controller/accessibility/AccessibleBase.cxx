@@ -370,12 +370,6 @@ void SAL_CALL AccessibleBase::disposing()
         OSL_ENSURE( m_aChildList.empty(), "Child list should be empty" );
 }
 
-// ________ XAccessible ________
-Reference< XAccessibleContext > SAL_CALL AccessibleBase::getAccessibleContext()
-{
-    return this;
-}
-
 // ________ AccessibleBase::XAccessibleContext ________
 sal_Int64 SAL_CALL AccessibleBase::getAccessibleChildCount()
 {

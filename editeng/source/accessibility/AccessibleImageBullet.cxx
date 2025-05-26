@@ -64,12 +64,6 @@ AccessibleImageBullet::AccessibleImageBullet(uno::Reference<XAccessible> xParent
     mnStateSet |= AccessibleStateType::SENSITIVE;
 }
 
-uno::Reference< XAccessibleContext > SAL_CALL AccessibleImageBullet::getAccessibleContext(  )
-{
-    // We implement the XAccessibleContext interface in the same object
-    return uno::Reference< XAccessibleContext > ( this );
-}
-
 sal_Int64 SAL_CALL  AccessibleImageBullet::getAccessibleChildCount()
 {
     return 0;

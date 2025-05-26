@@ -33,9 +33,7 @@
 class SvxPixelCtl;
 class SvxPixelCtlAccessible;
 
-class SvxPixelCtlAccessibleChild final : public cppu::ImplInheritanceHelper<
-                                             ::comphelper::OAccessibleComponentHelper,
-                                             css::accessibility::XAccessible>
+class SvxPixelCtlAccessibleChild final : public comphelper::OAccessibleComponentHelper
 {
 public:
     SvxPixelCtlAccessibleChild(
@@ -58,9 +56,6 @@ public:
     virtual OUString SAL_CALL getAccessibleName(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
     virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
-
-    //XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
@@ -87,9 +82,7 @@ private:
     tools::Long mnIndexInParent;
 };
 
-class SvxPixelCtlAccessible final : public cppu::ImplInheritanceHelper<
-                                        ::comphelper::OAccessibleSelectionHelper,
-                                        css::accessibility::XAccessible>
+class SvxPixelCtlAccessible final : public comphelper::OAccessibleSelectionHelper
 {
 public:
     SvxPixelCtlAccessible(SvxPixelCtl* pPixelCtl);
@@ -98,7 +91,6 @@ public:
     virtual void SAL_CALL grabFocus(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 
-    //XAccessible
     //XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
@@ -109,7 +101,6 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
     virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 

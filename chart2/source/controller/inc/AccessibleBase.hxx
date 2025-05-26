@@ -72,9 +72,7 @@ struct AccessibleElementInfo
 
 /** Base class for all Chart Accessibility objects
  */
-class AccessibleBase
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible>
+class AccessibleBase : public comphelper::OAccessibleComponentHelper
 {
 public:
     enum class EventType
@@ -189,9 +187,6 @@ protected:
 
     // ________ WeakComponentImplHelper (XComponent::dispose) ________
     virtual void SAL_CALL disposing() override;
-
-    // ________ XAccessible ________
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() override;
 
     // ________ XAccessibleContext ________
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;

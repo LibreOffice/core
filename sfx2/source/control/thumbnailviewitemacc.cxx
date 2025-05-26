@@ -51,11 +51,6 @@ void ThumbnailViewItemAcc::ThumbnailViewItemDestroyed()
     mpThumbnailViewItem = nullptr;
 }
 
-uno::Reference< accessibility::XAccessibleContext > SAL_CALL ThumbnailViewItemAcc::getAccessibleContext()
-{
-    return this;
-}
-
 sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleChildCount()
 {
     return 0;

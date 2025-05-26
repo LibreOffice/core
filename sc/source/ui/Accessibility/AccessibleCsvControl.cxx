@@ -1232,7 +1232,7 @@ ScAccessibleCsvCell::ScAccessibleCsvCell(
         ScCsvGrid& rGrid,
         OUString aCellText,
         sal_Int32 nRow, sal_Int32 nColumn ) :
-    ImplInheritanceHelper( rGrid ),
+    ScAccessibleCsvControl( rGrid ),
     AccessibleStaticTextBase( SvxEditSourcePtr() ),
     maCellText(std::move( aCellText )),
     mnLine( nRow ? (nRow + rGrid.GetFirstVisLine() - 1) : CSV_LINE_HEADER ),
@@ -1323,11 +1323,12 @@ sal_Int64 SAL_CALL ScAccessibleCsvCell::getAccessibleStateSet()
 
 // XInterface -----------------------------------------------------------------
 
-IMPLEMENT_FORWARD_XINTERFACE2( ScAccessibleCsvCell, ImplInheritanceHelper, AccessibleStaticTextBase )
+IMPLEMENT_FORWARD_XINTERFACE2(ScAccessibleCsvCell, ScAccessibleCsvControl, AccessibleStaticTextBase)
 
 // XTypeProvider --------------------------------------------------------------
 
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScAccessibleCsvCell, ImplInheritanceHelper, AccessibleStaticTextBase )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2(ScAccessibleCsvCell, ScAccessibleCsvControl,
+                                 AccessibleStaticTextBase)
 
 // helpers --------------------------------------------------------------------
 

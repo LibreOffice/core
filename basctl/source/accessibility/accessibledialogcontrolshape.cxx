@@ -293,12 +293,6 @@ Sequence< OUString > AccessibleDialogControlShape::getSupportedServiceNames()
     return { u"com.sun.star.drawing.AccessibleShape"_ustr };
 }
 
-// XAccessible
-Reference< XAccessibleContext > AccessibleDialogControlShape::getAccessibleContext(  )
-{
-    return this;
-}
-
 // XAccessibleContext
 sal_Int64 AccessibleDialogControlShape::getAccessibleChildCount()
 {

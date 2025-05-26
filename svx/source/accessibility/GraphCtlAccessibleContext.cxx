@@ -127,12 +127,6 @@ Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessible( const Sdr
     return xAccessibleShape;
 }
 
-// XAccessible
-Reference< XAccessibleContext > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleContext()
-{
-    return this;
-}
-
 Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );

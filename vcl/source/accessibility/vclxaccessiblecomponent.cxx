@@ -501,15 +501,6 @@ TRANSIENT
     */
 }
 
-// XAccessible
-
-css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-VCLXAccessibleComponent::getAccessibleContext()
-{
-    OExternalLockGuard aGuard(this);
-    return this;
-}
-
 // accessibility::XAccessibleContext
 sal_Int64 VCLXAccessibleComponent::getAccessibleChildCount()
 {

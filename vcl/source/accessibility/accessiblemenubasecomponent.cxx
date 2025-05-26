@@ -632,18 +632,6 @@ sal_Bool OAccessibleMenuBaseComponent::supportsService( const OUString& rService
     return cppu::supportsService(this, rServiceName);
 }
 
-
-// XAccessible
-
-
-Reference< XAccessibleContext > OAccessibleMenuBaseComponent::getAccessibleContext(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    return this;
-}
-
-
 // XAccessibleContext
 
 

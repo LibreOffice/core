@@ -26,9 +26,9 @@
 #include <accessibility/vclxaccessiblelist.hxx>
 
 class VCLXAccessibleListItem final
-    : public cppu::ImplInheritanceHelper<
-          comphelper::OAccessibleComponentHelper, css::accessibility::XAccessible,
-          css::accessibility::XAccessibleText, css::lang::XServiceInfo>,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::accessibility::XAccessibleText,
+                                         css::lang::XServiceInfo>,
       public comphelper::OCommonAccessibleText
 {
 private:
@@ -73,9 +73,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

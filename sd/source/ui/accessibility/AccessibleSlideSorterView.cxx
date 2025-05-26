@@ -154,15 +154,6 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::GetAccessibleChildImplem
     return pResult;
 }
 
-//=====  XAccessible  =========================================================
-
-Reference<XAccessibleContext > SAL_CALL
-    AccessibleSlideSorterView::getAccessibleContext()
-{
-    ThrowIfDisposed ();
-    return this;
-}
-
 //=====  XAccessibleContext  ==================================================
 
 sal_Int64 SAL_CALL AccessibleSlideSorterView::getAccessibleChildCount()

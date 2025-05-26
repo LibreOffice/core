@@ -64,7 +64,6 @@ struct ValueSetItem
 
 class ValueSetAcc final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible,
                                          css::accessibility::XAccessibleSelection>
 {
 public:
@@ -89,9 +88,6 @@ public:
 
     /** Called by the corresponding ValueSet when it gets destroyed. */
     void Invalidate();
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
@@ -162,8 +158,7 @@ private:
     bool HasNoneField() const;
 };
 
-class ValueItemAcc : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                                        css::accessibility::XAccessible>
+class ValueItemAcc : public comphelper::OAccessibleComponentHelper
 {
 private:
     ValueSetItem*                                                       mpValueSetItem;
@@ -176,11 +171,6 @@ public:
     void    ValueSetItemDestroyed();
 
     void    FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
-
-public:
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

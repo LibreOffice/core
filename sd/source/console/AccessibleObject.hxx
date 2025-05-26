@@ -36,9 +36,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-class AccessibleObject
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible, css::awt::XWindowListener>
+class AccessibleObject : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                                            css::awt::XWindowListener>
 {
 public:
     AccessibleObject(const sal_Int16 nRole, const OUString& rName = OUString());
@@ -63,11 +62,6 @@ public:
         const css::uno::Any& rNewValue);
 
     void UpdateStateSet();
-
-    //----- XAccessible -------------------------------------------------------
-
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext() override;
 
     //-----  XAccessibleContext  ----------------------------------------------
 

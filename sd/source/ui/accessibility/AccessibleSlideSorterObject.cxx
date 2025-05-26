@@ -71,15 +71,6 @@ void AccessibleSlideSorterObject::FireAccessibleEvent (
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
 
-//===== XAccessible ===========================================================
-
-Reference<XAccessibleContext> SAL_CALL
-    AccessibleSlideSorterObject::getAccessibleContext()
-{
-    ensureAlive();
-    return this;
-}
-
 //===== XAccessibleContext ====================================================
 
 sal_Int64 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount()

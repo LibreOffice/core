@@ -520,12 +520,6 @@ Sequence< OUString > AccessibleDialogWindow::getSupportedServiceNames()
     return { u"com.sun.star.awt.AccessibleWindow"_ustr };
 }
 
-// XAccessible
-Reference< XAccessibleContext > AccessibleDialogWindow::getAccessibleContext(  )
-{
-    return this;
-}
-
 // XAccessibleContext
 sal_Int64 AccessibleDialogWindow::getAccessibleChildCount()
 {

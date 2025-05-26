@@ -122,14 +122,6 @@ void Paragraph::notifyEvent(::sal_Int16 nEventId,
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
-Paragraph::getAccessibleContext()
-{
-    ensureAlive();
-    return this;
-}
-
-// virtual
 sal_Int64 SAL_CALL Paragraph::getAccessibleChildCount()
 {
     ensureAlive();

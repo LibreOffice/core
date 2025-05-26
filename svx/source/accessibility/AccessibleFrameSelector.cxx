@@ -47,11 +47,6 @@ AccFrameSelector::~AccFrameSelector()
 {
 }
 
-Reference< XAccessibleContext > AccFrameSelector::getAccessibleContext(  )
-{
-    return this;
-}
-
 sal_Int64 AccFrameSelector::getAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
@@ -229,11 +224,6 @@ AccFrameSelectorChild::AccFrameSelectorChild(FrameSelector& rFrameSel, FrameBord
 
 AccFrameSelectorChild::~AccFrameSelectorChild()
 {
-}
-
-Reference< XAccessibleContext > AccFrameSelectorChild::getAccessibleContext(  )
-{
-    return this;
 }
 
 sal_Int64 AccFrameSelectorChild::getAccessibleChildCount(  )

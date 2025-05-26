@@ -169,13 +169,6 @@ Sequence< OUString > VCLXAccessibleListItem::getSupportedServiceNames()
             u"com.sun.star.accessibility.AccessibleListItem"_ustr};
 }
 
-// XAccessible
-
-Reference< XAccessibleContext > SAL_CALL VCLXAccessibleListItem::getAccessibleContext(  )
-{
-    return this;
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleChildCount(  )

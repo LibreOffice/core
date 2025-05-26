@@ -32,9 +32,7 @@ namespace accessibility {
 
 /** This class makes page objects of the slide sorter accessible.
 */
-class AccessibleSlideSorterObject final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible>
+class AccessibleSlideSorterObject final : public comphelper::OAccessibleComponentHelper
 {
 public:
     /** Create a new object that represents a page object in the slide
@@ -64,11 +62,6 @@ public:
         short nEventId,
         const css::uno::Any& rOldValue,
         const css::uno::Any& rNewValue);
-
-    //===== XAccessible =======================================================
-
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext > SAL_CALL
-        getAccessibleContext() override;
 
     //=====  XAccessibleContext  ==============================================
 

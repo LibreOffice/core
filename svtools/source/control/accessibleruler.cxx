@@ -46,13 +46,6 @@ SvtRulerAccessible::SvtRulerAccessible(uno::Reference<XAccessible> xParent, Rule
 {
 }
 
-//=====  XAccessible  =========================================================
-
-uno::Reference< XAccessibleContext > SAL_CALL SvtRulerAccessible::getAccessibleContext()
-{
-    return this;
-}
-
 //=====  XAccessibleComponent  ================================================
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint( const awt::Point& )

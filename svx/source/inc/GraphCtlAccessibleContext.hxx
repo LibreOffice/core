@@ -52,7 +52,6 @@ class SdrView;
 
 class SvxGraphCtrlAccessibleContext final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible,
                                          css::accessibility::XAccessibleSelection,
                                          css::lang::XServiceInfo, css::lang::XServiceName>,
       public SfxListener,
@@ -65,11 +64,6 @@ public:
     SvxGraphCtrlAccessibleContext(GraphCtrl& rRepresentation);
 
     void Notify( SfxBroadcaster& aBC, const SfxHint& aHint ) override;
-
-    // XAccessible
-    /// Return the XAccessibleContext.
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext() override;
 
     // XAccessibleComponent
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;

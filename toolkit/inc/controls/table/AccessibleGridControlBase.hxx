@@ -44,7 +44,7 @@ namespace accessibility {
     implements basic functionality. */
 class AccessibleGridControlBase
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
+                                         css::lang::XServiceInfo>
 {
 public:
     /** Constructor.
@@ -61,11 +61,6 @@ protected:
     virtual void SAL_CALL disposing() override;
 
 public:
-    // XAccessible
-    /** @return  The XAccessibleContext interface of this object. */
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL
-    getAccessibleContext() override;
-
     // XAccessibleContext
 
     /** @return  A reference to the parent accessible object. */

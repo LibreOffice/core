@@ -552,13 +552,6 @@ bool AccessibleEditableTextPara::GetAttributeRun( sal_Int32& nStartIndex, sal_In
                                                nIndex );
 }
 
-// XAccessible
-uno::Reference< XAccessibleContext > SAL_CALL AccessibleEditableTextPara::getAccessibleContext()
-{
-    // We implement the XAccessibleContext interface in the same object
-    return uno::Reference< XAccessibleContext > ( this );
-}
-
 // XAccessibleContext
 sal_Int64 SAL_CALL AccessibleEditableTextPara::getAccessibleChildCount()
 {

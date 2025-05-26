@@ -55,8 +55,7 @@ class AccessibleParaManager;
  */
 class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) AccessibleEditableTextPara final
     : public cppu::ImplInheritanceHelper<
-          comphelper::OAccessibleComponentHelper, css::accessibility::XAccessible,
-          css::accessibility::XAccessibleEditableText,
+          comphelper::OAccessibleComponentHelper, css::accessibility::XAccessibleEditableText,
           css::accessibility::XAccessibleTextAttributes, css::accessibility::XAccessibleHypertext,
           css::accessibility::XAccessibleMultiLineText>,
       private ::comphelper::OCommonAccessibleText
@@ -77,9 +76,6 @@ public:
     //   created and manages this accessible paragraph.
     AccessibleEditableTextPara ( css::uno::Reference< css::accessibility::XAccessible > xParent,
                                  const AccessibleParaManager* _pParaManager = nullptr );
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;

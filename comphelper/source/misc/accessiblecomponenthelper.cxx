@@ -62,6 +62,12 @@ void SAL_CALL OAccessibleComponentHelper::disposing()
     }
 }
 
+css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+OAccessibleComponentHelper::getAccessibleContext()
+{
+    OExternalLockGuard aGuard(this);
+    return this;
+}
 
 void SAL_CALL OAccessibleComponentHelper::addAccessibleEventListener(const Reference< XAccessibleEventListener >& _rxListener)
 {

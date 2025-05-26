@@ -149,16 +149,6 @@ void AccessibleContextBase::SetRelationSet (
     mxRelationSet = rxNewRelationSet;
 }
 
-
-// XAccessible
-
-uno::Reference< XAccessibleContext> SAL_CALL
-    AccessibleContextBase::getAccessibleContext()
-{
-    return this;
-}
-
-
 // XAccessibleContext
 
 /** No children.

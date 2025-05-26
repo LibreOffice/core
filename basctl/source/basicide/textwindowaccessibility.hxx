@@ -114,11 +114,9 @@ private:
 typedef std::vector< ParagraphInfo > Paragraphs;
 
 typedef cppu::ImplInheritanceHelper<
-    comphelper::OAccessibleComponentHelper,
-    css::accessibility::XAccessible,
-    css::accessibility::XAccessibleEditableText,
-    css::accessibility::XAccessibleMultiLineText,
-    css::accessibility::XAccessibleTextAttributes> ParagraphBase;
+    comphelper::OAccessibleComponentHelper, css::accessibility::XAccessibleEditableText,
+    css::accessibility::XAccessibleMultiLineText, css::accessibility::XAccessibleTextAttributes>
+    ParagraphBase;
 
 // The Paragraph's number is the absolute position within the text engine (from
 // 0 to N - 1), whereas the Paragraph's index is the position within the text
@@ -155,9 +153,6 @@ private:
     virtual void implGetLineBoundary( const OUString& rText,
                                       css::i18n::Boundary& rBoundary,
                                       ::sal_Int32 nIndex ) override;
-
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-    SAL_CALL getAccessibleContext() override;
 
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 

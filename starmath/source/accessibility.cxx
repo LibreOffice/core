@@ -91,11 +91,6 @@ void SmGraphicAccessible::LaunchEvent(
     NotifyAccessibleEvent(nAccessibleEventId, rOldVal, rNewVal);
 }
 
-uno::Reference< XAccessibleContext > SAL_CALL SmGraphicAccessible::getAccessibleContext()
-{
-    return this;
-}
-
 uno::Reference<XAccessible> SAL_CALL SmGraphicAccessible::getAccessibleAtPoint(const awt::Point&)
 {
     SolarMutexGuard aGuard;

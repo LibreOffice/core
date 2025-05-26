@@ -39,13 +39,11 @@ class DlgEdModel;
 class DlgEdObj;
 class AccessibleDialogControlShape;
 
-
-class AccessibleDialogWindow final : public cppu::ImplInheritanceHelper<
-                                         comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible,
+class AccessibleDialogWindow final
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
                                          css::accessibility::XAccessibleSelection,
                                          css::lang::XServiceInfo>,
-                                public SfxListener
+      public SfxListener
 {
 private:
 
@@ -101,9 +99,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

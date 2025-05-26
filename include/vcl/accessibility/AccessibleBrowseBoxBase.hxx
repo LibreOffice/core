@@ -43,8 +43,7 @@ namespace vcl {
     implements basic functionality for various Accessibility interfaces. */
 class VCL_DLLPUBLIC AccessibleBrowseBoxBase
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible, css::awt::XFocusListener,
-                                         css::lang::XServiceInfo>
+                                         css::awt::XFocusListener, css::lang::XServiceInfo>
 {
 public:
     /** Constructor sets specified name and description. If the constant of a
@@ -88,10 +87,6 @@ protected:
     virtual css::awt::Rectangle implGetBounds() override;
 
 public:
-    // XAccessible
-    css::uno::Reference<css::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
-
     // XAccessibleContext
     /** @return  A reference to the parent accessible object. */
     virtual css::uno::Reference<css::accessibility::XAccessible > SAL_CALL getAccessibleParent() override;

@@ -41,7 +41,8 @@ namespace comphelper
 */
 class COMPHELPER_DLLPUBLIC OAccessibleComponentHelper
     : public cppu::BaseMutex,
-      public cppu::WeakComponentImplHelper<css::accessibility::XAccessibleContext2,
+      public cppu::WeakComponentImplHelper<css::accessibility::XAccessible,
+                                           css::accessibility::XAccessibleContext2,
                                            css::accessibility::XAccessibleEventBroadcaster,
                                            css::accessibility::XAccessibleExtendedComponent>
 {
@@ -61,6 +62,10 @@ private:
     void operator =(OAccessibleComponentHelper &&) = delete;
 
 public:
+    // XAccessible
+    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override final;
+
     // XAccessibleEventBroadcaster
     virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
     virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
