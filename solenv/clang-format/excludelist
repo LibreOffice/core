@@ -1235,7 +1235,6 @@ comphelper/source/misc/SelectionMultiplex.cxx
 comphelper/source/misc/accessiblecomponenthelper.cxx
 comphelper/source/misc/accessibleeventnotifier.cxx
 comphelper/source/misc/accessiblekeybindinghelper.cxx
-comphelper/source/misc/accessibleselectionhelper.cxx
 comphelper/source/misc/accessibletexthelper.cxx
 comphelper/source/misc/anycompare.cxx
 comphelper/source/misc/anytohash.cxx
@@ -4720,7 +4719,6 @@ include/comphelper/accessiblecomponenthelper.hxx
 include/comphelper/accessiblecontexthelper.hxx
 include/comphelper/accessibleeventnotifier.hxx
 include/comphelper/accessiblekeybindinghelper.hxx
-include/comphelper/accessibleselectionhelper.hxx
 include/comphelper/accessibletexthelper.hxx
 include/comphelper/anycompare.hxx
 include/comphelper/asyncnotification.hxx

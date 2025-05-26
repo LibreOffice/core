@@ -20,147 +20,129 @@
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
 
-
 namespace comphelper
 {
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::accessibility;
 
+OCommonAccessibleSelection::OCommonAccessibleSelection() {}
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::accessibility;
+OCommonAccessibleSelection::~OCommonAccessibleSelection() {}
 
-    OCommonAccessibleSelection::OCommonAccessibleSelection( )
+void OCommonAccessibleSelection::selectAccessibleChild(sal_Int64 nChildIndex)
+{
+    implSelect(nChildIndex, true);
+}
+
+bool OCommonAccessibleSelection::isAccessibleChildSelected(sal_Int64 nChildIndex)
+{
+    return implIsSelected(nChildIndex);
+}
+
+void OCommonAccessibleSelection::clearAccessibleSelection()
+{
+    implSelect(ACCESSIBLE_SELECTION_CHILD_ALL, false);
+}
+
+void OCommonAccessibleSelection::selectAllAccessibleChildren()
+{
+    implSelect(ACCESSIBLE_SELECTION_CHILD_ALL, true);
+}
+
+sal_Int64 OCommonAccessibleSelection::getSelectedAccessibleChildCount()
+{
+    sal_Int64 nRet = 0;
+    Reference<XAccessibleContext> xParentContext(implGetAccessibleContext());
+
+    OSL_ENSURE(xParentContext.is(),
+               "OCommonAccessibleSelection::getSelectedAccessibleChildCount: no parent context!");
+
+    if (xParentContext.is())
     {
+        for (sal_Int64 i = 0, nChildCount = xParentContext->getAccessibleChildCount();
+             i < nChildCount; i++)
+            if (implIsSelected(i))
+                ++nRet;
     }
 
-    OCommonAccessibleSelection::~OCommonAccessibleSelection() {}
+    return nRet;
+}
 
+Reference<XAccessible>
+OCommonAccessibleSelection::getSelectedAccessibleChild(sal_Int64 nSelectedChildIndex)
+{
+    Reference<XAccessible> xRet;
+    Reference<XAccessibleContext> xParentContext(implGetAccessibleContext());
 
-    void OCommonAccessibleSelection::selectAccessibleChild( sal_Int64 nChildIndex )
+    OSL_ENSURE(xParentContext.is(),
+               "OCommonAccessibleSelection::getSelectedAccessibleChildCount: no parent context!");
+
+    if (xParentContext.is())
     {
-        implSelect( nChildIndex, true );
+        for (sal_Int64 i = 0, nChildCount = xParentContext->getAccessibleChildCount(), nPos = 0;
+             (i < nChildCount) && !xRet.is(); i++)
+            if (implIsSelected(i) && (nPos++ == nSelectedChildIndex))
+                xRet = xParentContext->getAccessibleChild(i);
     }
 
+    return xRet;
+}
 
-    bool OCommonAccessibleSelection::isAccessibleChildSelected( sal_Int64 nChildIndex )
-    {
-        return implIsSelected( nChildIndex );
-    }
+void OCommonAccessibleSelection::deselectAccessibleChild(sal_Int64 nSelectedChildIndex)
+{
+    implSelect(nSelectedChildIndex, false);
+}
 
+OAccessibleSelectionHelper::OAccessibleSelectionHelper() {}
 
-    void OCommonAccessibleSelection::clearAccessibleSelection(  )
-    {
-        implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, false );
-    }
+Reference<XAccessibleContext> OAccessibleSelectionHelper::implGetAccessibleContext()
+{
+    return this;
+}
 
+void SAL_CALL OAccessibleSelectionHelper::selectAccessibleChild(sal_Int64 nChildIndex)
+{
+    OExternalLockGuard aGuard(this);
+    OCommonAccessibleSelection::selectAccessibleChild(nChildIndex);
+}
 
-    void OCommonAccessibleSelection::selectAllAccessibleChildren(  )
-    {
-        implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, true );
-    }
+sal_Bool SAL_CALL OAccessibleSelectionHelper::isAccessibleChildSelected(sal_Int64 nChildIndex)
+{
+    OExternalLockGuard aGuard(this);
+    return OCommonAccessibleSelection::isAccessibleChildSelected(nChildIndex);
+}
 
+void SAL_CALL OAccessibleSelectionHelper::clearAccessibleSelection()
+{
+    OExternalLockGuard aGuard(this);
+    OCommonAccessibleSelection::clearAccessibleSelection();
+}
 
-    sal_Int64 OCommonAccessibleSelection::getSelectedAccessibleChildCount(  )
-    {
-        sal_Int64 nRet = 0;
-        Reference< XAccessibleContext > xParentContext( implGetAccessibleContext() );
+void SAL_CALL OAccessibleSelectionHelper::selectAllAccessibleChildren()
+{
+    OExternalLockGuard aGuard(this);
+    OCommonAccessibleSelection::selectAllAccessibleChildren();
+}
 
-        OSL_ENSURE( xParentContext.is(), "OCommonAccessibleSelection::getSelectedAccessibleChildCount: no parent context!" );
+sal_Int64 SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChildCount()
+{
+    OExternalLockGuard aGuard(this);
+    return OCommonAccessibleSelection::getSelectedAccessibleChildCount();
+}
 
-        if( xParentContext.is() )
-        {
-            for( sal_Int64 i = 0, nChildCount = xParentContext->getAccessibleChildCount(); i < nChildCount; i++ )
-                if( implIsSelected( i ) )
-                    ++nRet;
-        }
+Reference<XAccessible>
+    SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChild(sal_Int64 nSelectedChildIndex)
+{
+    OExternalLockGuard aGuard(this);
+    return OCommonAccessibleSelection::getSelectedAccessibleChild(nSelectedChildIndex);
+}
 
-        return nRet;
-    }
+void SAL_CALL OAccessibleSelectionHelper::deselectAccessibleChild(sal_Int64 nSelectedChildIndex)
+{
+    OExternalLockGuard aGuard(this);
+    OCommonAccessibleSelection::deselectAccessibleChild(nSelectedChildIndex);
+}
 
-
-    Reference< XAccessible > OCommonAccessibleSelection::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
-    {
-        Reference< XAccessible >        xRet;
-        Reference< XAccessibleContext > xParentContext( implGetAccessibleContext() );
-
-        OSL_ENSURE( xParentContext.is(), "OCommonAccessibleSelection::getSelectedAccessibleChildCount: no parent context!" );
-
-        if( xParentContext.is() )
-        {
-            for( sal_Int64 i = 0, nChildCount = xParentContext->getAccessibleChildCount(), nPos = 0; ( i < nChildCount ) && !xRet.is(); i++ )
-                if( implIsSelected( i ) && ( nPos++ == nSelectedChildIndex ) )
-                    xRet = xParentContext->getAccessibleChild( i );
-        }
-
-        return xRet;
-    }
-
-
-    void OCommonAccessibleSelection::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
-    {
-        implSelect( nSelectedChildIndex, false );
-    }
-
-    OAccessibleSelectionHelper::OAccessibleSelectionHelper()
-    {
-    }
-
-
-    Reference< XAccessibleContext > OAccessibleSelectionHelper::implGetAccessibleContext()
-    {
-        return this;
-    }
-
-
-    void SAL_CALL OAccessibleSelectionHelper::selectAccessibleChild( sal_Int64 nChildIndex )
-    {
-        OExternalLockGuard aGuard( this );
-        OCommonAccessibleSelection::selectAccessibleChild( nChildIndex );
-    }
-
-
-    sal_Bool SAL_CALL OAccessibleSelectionHelper::isAccessibleChildSelected( sal_Int64 nChildIndex )
-    {
-        OExternalLockGuard aGuard( this );
-        return OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex );
-    }
-
-
-    void SAL_CALL OAccessibleSelectionHelper::clearAccessibleSelection(  )
-    {
-        OExternalLockGuard aGuard( this );
-        OCommonAccessibleSelection::clearAccessibleSelection();
-    }
-
-
-    void SAL_CALL OAccessibleSelectionHelper::selectAllAccessibleChildren(  )
-    {
-        OExternalLockGuard aGuard( this );
-        OCommonAccessibleSelection::selectAllAccessibleChildren();
-    }
-
-
-    sal_Int64 SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
-    {
-        OExternalLockGuard aGuard( this );
-        return OCommonAccessibleSelection::getSelectedAccessibleChildCount();
-    }
-
-
-    Reference< XAccessible > SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
-    {
-        OExternalLockGuard aGuard( this );
-        return OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex );
-    }
-
-
-    void SAL_CALL OAccessibleSelectionHelper::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
-    {
-        OExternalLockGuard aGuard( this );
-        OCommonAccessibleSelection::deselectAccessibleChild( nSelectedChildIndex );
-    }
-
-
-}   // namespace comphelper
-
+} // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
