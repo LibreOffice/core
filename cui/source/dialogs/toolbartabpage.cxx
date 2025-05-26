@@ -42,8 +42,10 @@ void ToolbarTabPage::Reset(const SfxItemSet* /* rSet*/)
         comphelper::getProcessComponentContext());
     if (!xContext)
         return;
-    css::uno::Reference<css::frame::XFrame> xFrame
-        = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (!pViewFrm)
+        return;
+    css::uno::Reference<css::frame::XFrame> xFrame = pViewFrm->GetFrame().GetFrameInterface();
     if (!xFrame)
         return;
     css::uno::Reference<css::ui::XModuleUIConfigurationManagerSupplier> xSupplier
