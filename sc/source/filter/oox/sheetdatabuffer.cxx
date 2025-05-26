@@ -634,8 +634,8 @@ ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const ScAddress& rAddr )
 
 void SheetDataBuffer::finalizeArrayFormula( const ScRange& rRange, const ApiTokenSequence& rTokens )
 {
-    rtl::Reference<ScCellRangeObj> rCellRangeObj(new ScCellRangeObj(getScDocument().GetDocumentShell(), rRange));
-    rCellRangeObj->setArrayTokens(rTokens);
+    rtl::Reference<ScCellRangeObj> xCellRangeObj(new ScCellRangeObj(getScDocument().GetDocumentShell(), rRange));
+    xCellRangeObj->setArrayTokens(rTokens);
 }
 
 void SheetDataBuffer::finalizeTableOperation( const ScRange& rRange, const DataTableModel& rModel )
