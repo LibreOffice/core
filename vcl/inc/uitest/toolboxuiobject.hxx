@@ -30,6 +30,10 @@ public:
 
     virtual OUString get_action(VclEventId nEvent) const override;
 
+    std::set<OUString> get_children() const override;
+
+    std::unique_ptr<UIObject> get_child(const OUString& rID) override;
+
 private:
     virtual OUString get_name() const override;
 };

@@ -7,9 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <uitest/toolboxitemuiobject.hxx>
 #include <uitest/toolboxuiobject.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <vcl/toolbox.hxx>
+
+constexpr OUString TOOLBOX_ITEM_ID_PREFIX = u"toolboxitem-"_ustr;
 
 ToolBoxUIObject::ToolBoxUIObject(const VclPtr<ToolBox>& xToolBox)
     : WindowUIObject(xToolBox)
@@ -57,6 +61,33 @@ StringMap ToolBoxUIObject::get_state()
         = nCurItemId ? mxToolBox->GetItemCommand(nCurItemId) : u""_ustr;
     aMap[u"ItemCount"_ustr] = OUString::number(mxToolBox->GetItemCount());
     return aMap;
+}
+
+std::set<OUString> ToolBoxUIObject::get_children() const
+{
+    std::set<OUString> aChildren = WindowUIObject::get_children();
+
+    const size_t nItemCount = mxToolBox->GetItemCount();
+    for (size_t i = 0; i < nItemCount; ++i)
+    {
+        const OUString sId
+            = TOOLBOX_ITEM_ID_PREFIX + OUString::number(sal_uInt16(mxToolBox->GetItemId(i)));
+        aChildren.insert(sId);
+    }
+
+    return aChildren;
+}
+
+std::unique_ptr<UIObject> ToolBoxUIObject::get_child(const OUString& rID)
+{
+    if (rID.startsWith(TOOLBOX_ITEM_ID_PREFIX))
+    {
+        const sal_Int32 nPrefixLength = TOOLBOX_ITEM_ID_PREFIX.getLength();
+        const ToolBoxItemId nItemId(o3tl::toInt32(rID.subView(nPrefixLength)));
+        return std::make_unique<ToolBoxItemUIObject>(mxToolBox, nItemId);
+    }
+
+    return WindowUIObject::get_child(rID);
 }
 
 OUString ToolBoxUIObject::get_name() const { return u"ToolBoxUIObject"_ustr; }

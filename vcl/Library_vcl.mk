@@ -570,6 +570,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/pdf/Matrix3 \
     vcl/source/pdf/XmpMetadata \
     vcl/source/uitest/logger \
+    vcl/source/uitest/toolboxitemuiobject \
     vcl/source/uitest/toolboxuiobject \
     vcl/source/uitest/uiobject \
     vcl/source/uitest/uitest \
