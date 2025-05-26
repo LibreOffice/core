@@ -767,39 +767,15 @@ ScSplitPos ScViewDataTable::SanitizeWhichActive() const
     return eWhichActive;
 }
 
-ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh)
-    : ScViewData(nullptr, &rDocSh, pViewSh)
-{
-}
-
-ScViewData::ScViewData(ScDocument& rDoc)
-    : ScViewData(&rDoc, nullptr, nullptr)
-{
-}
-
-static ScViewOptions DefaultOptions()
-{
-    ScViewOptions aOptions;
-    aOptions.SetOption(VOPT_GRID, true);
-    aOptions.SetOption(VOPT_SYNTAX, false);
-    aOptions.SetOption(VOPT_HEADER, true);
-    aOptions.SetOption(VOPT_TABCONTROLS, true);
-    aOptions.SetOption(VOPT_VSCROLL, true);
-    aOptions.SetOption(VOPT_HSCROLL, true);
-    aOptions.SetOption(VOPT_OUTLINER, true);
-    return aOptions;
-}
-
-// Either pDoc or pDocSh must be valid
-ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pViewSh) :
+ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh) :
         nPPTX(0.0),
         nPPTY(0.0),
-        maMarkData  (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
-        maHighlightData (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
-        mrDocShell   ( pDocSh ? *pDocSh : *pDoc->GetDocumentShell() ),
-        mrDoc       (pDocSh ? pDocSh->GetDocument() : *pDoc),
+        mrDocShell   ( rDocSh ),
+        mrDoc       (rDocSh.GetDocument()),
+        maMarkData  (mrDoc.GetSheetLimits()),
+        maHighlightData (mrDoc.GetSheetLimits()),
         pView       ( pViewSh ),
-        maOptions   (pDocSh ? pDocSh->GetDocument().GetViewOptions() : DefaultOptions()),
+        maOptions   (mrDoc.GetViewOptions()),
         pSpellingView ( nullptr ),
         aLogicMode  ( MapUnit::Map100thMM ),
         eDefZoomType( SvxZoomType::PERCENT ),
@@ -835,7 +811,6 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
         nFormulaBarLines(1),
         m_nLOKPageUpDownOffset( 0 )
 {
-    assert(bool(pDoc) != bool(pDocSh)); // either one or the other, not both
     maMarkData.SelectOneTable(0); // Sync with nTabNo
 
     aScrSize = Size( o3tl::convert(STD_COL_WIDTH * OLE_STD_CELLS_X, o3tl::Length::twip, o3tl::Length::px),
