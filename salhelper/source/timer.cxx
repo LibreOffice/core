@@ -80,26 +80,26 @@ public:
             ensureThread();
     }
 
-    std::shared_ptr<TimerManager> ensureThread()
+    TimerManager& ensureThread()
     {
         if (!m_pImpl)
             m_pImpl.reset(new TimerManager(m_pHead, m_Lock));
-        return m_pImpl;
+        return *m_pImpl;
     }
 
     void registerTimer(salhelper::Timer* pTimer)
     {
-        ensureThread()->registerTimer(pTimer);
+        ensureThread().registerTimer(pTimer);
     }
 
     void unregisterTimer(salhelper::Timer * pTimer)
     {
-        ensureThread()->unregisterTimer(pTimer);
+        ensureThread().unregisterTimer(pTimer);
     }
 
     bool lookupTimer(const salhelper::Timer* pTimer)
     {
-        return ensureThread()->lookupTimer(pTimer);
+        return ensureThread().lookupTimer(pTimer);
     }
 };
 
