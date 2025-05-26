@@ -1095,12 +1095,13 @@ class VmlFormControlExporter : public oox::vml::VMLExport
     OUString m_sFmlaLink;
     OUString m_aLabel;
     OUString m_aMacroName;
+    sal_Int16 m_nState;
 
 public:
     VmlFormControlExporter(const sax_fastparser::FSHelperPtr& p, sal_uInt16 nObjType,
                            const tools::Rectangle& rAreaFrom, const tools::Rectangle& rAreaTo,
                            const OUString& sControlName, const OUString& sFmlaLink,
-                           OUString aLabel, OUString aMacroName);
+                           OUString aLabel, OUString aMacroName, sal_Int16 nState);
 
 protected:
     using VMLExport::StartShape;
@@ -1115,7 +1116,8 @@ VmlFormControlExporter::VmlFormControlExporter(const sax_fastparser::FSHelperPtr
                                                const tools::Rectangle& rAreaTo,
                                                const OUString& sControlName,
                                                const OUString& sFmlaLink,
-                                               OUString aLabel, OUString aMacroName)
+                                               OUString aLabel, OUString aMacroName,
+                                               sal_Int16 nState)
     : VMLExport(p)
     , m_nObjType(nObjType)
     , m_aAreaFrom(rAreaFrom)
@@ -1124,6 +1126,7 @@ VmlFormControlExporter::VmlFormControlExporter(const sax_fastparser::FSHelperPtr
     , m_sFmlaLink(sFmlaLink)
     , m_aLabel(std::move(aLabel))
     , m_aMacroName(std::move(aMacroName))
+    , m_nState(nState)
 {
 }
 
@@ -1172,6 +1175,11 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
         XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_FmlaMacro), m_aMacroName);
     }
 
+    if (m_nObjType == EXC_OBJTYPE_CHECKBOX && m_nState == EXC_OBJ_CHECKBOX_CHECKED)
+    {
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Checked), "1");
+    }
+
     // XclExpOcxControlObj::WriteSubRecs() has the same fixed values.
     if (m_nObjType == EXC_OBJTYPE_BUTTON)
     {
@@ -1204,7 +1212,8 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
               : OUString();
 
     VmlFormControlExporter aFormControlExporter(rStrm.GetCurrentStream(), GetObjType(), aAreaFrom,
-                                                aAreaTo, msCtrlName, sCellLink, msLabel, GetMacroName());
+                                                aAreaTo, msCtrlName, sCellLink, msLabel, GetMacroName(),
+                                                mnState);
     aFormControlExporter.SetSkipwzName(true);  // use XML_id for legacyid, not XML_ID
     aFormControlExporter.OverrideShapeIDGen(true, "_x0000_s"_ostr);
     aFormControlExporter.AddSdrObject(*pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1,
