@@ -328,38 +328,6 @@ Reference< XAccessible > AccessibleDialogControlShape::getAccessibleParent(  )
     return xParent;
 }
 
-
-sal_Int64 AccessibleDialogControlShape::getAccessibleIndexInParent(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    sal_Int64 nIndexInParent = -1;
-    Reference< XAccessible > xParent( getAccessibleParent() );
-    if ( xParent.is() )
-    {
-        Reference< XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
-        if ( xParentContext.is() )
-        {
-            for ( sal_Int64 i = 0, nCount = xParentContext->getAccessibleChildCount(); i < nCount; ++i )
-            {
-                Reference< XAccessible > xChild( xParentContext->getAccessibleChild( i ) );
-                if ( xChild.is() )
-                {
-                    Reference< XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-                    if ( xChildContext == static_cast<XAccessibleContext*>(this) )
-                    {
-                        nIndexInParent = i;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    return nIndexInParent;
-}
-
-
 sal_Int16 AccessibleDialogControlShape::getAccessibleRole(  )
 {
     OExternalLockGuard aGuard( this );
