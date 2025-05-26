@@ -844,15 +844,26 @@ void PowerPointExport::WriteEmbeddedFontList()
                 if (!aConverter.convert(rEOT))
                     continue;
 
-                OUString sFontFileName = "font" + OUString::number(nextFontId) + ".fntdata";
+                OUString sFontType = u"Regular"_ustr;
+                if (eItalic == ITALIC_NONE && eWeight == WEIGHT_BOLD)
+                    sFontType = u"Bold"_ustr;
+                else if (eItalic == ITALIC_NORMAL && eWeight == WEIGHT_NORMAL)
+                    sFontType = u"Italic"_ustr;
+                else if (eItalic == ITALIC_NORMAL && eWeight == WEIGHT_BOLD)
+                    sFontType = u"BoldItalic"_ustr;
+
+                OUString sFontFileName = "Font_" + OUString::number(nextFontId) + "_" +
+                    sFamilyName.replaceAll(" ", "_") + "_" + sFontType +".fntdata";
+
                 OUString sArchivePath = "ppt/fonts/" + sFontFileName;
+
                 uno::Reference<css::io::XOutputStream> xOutStream = openFragmentStream(sArchivePath, u"application/x-fontdata"_ustr);
                 xOutStream->writeBytes(uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(rEOT.data()), rEOT.size()));
                 xOutStream->closeOutput();
 
                 OUString sRelID = addRelation(mPresentationFS->getOutputStream(),
                                               oox::getRelationship(Relationship::FONT),
-                                              Concat2View("fonts/font" + OUString::number(nextFontId) + ".fntdata"));
+                                              Concat2View("fonts/" + sFontFileName));
 
                 ++nextFontId;
 
@@ -865,21 +876,13 @@ void PowerPointExport::WriteEmbeddedFontList()
             }
 
             if (eItalic == ITALIC_NONE && eWeight == WEIGHT_NORMAL)
-            {
                 aInfo.aRegularRelID = uRelID;
-            }
             else if (eItalic == ITALIC_NONE && eWeight == WEIGHT_BOLD)
-            {
                 aInfo.aBoldRelID = uRelID;
-            }
             else if (eItalic == ITALIC_NORMAL && eWeight == WEIGHT_NORMAL)
-            {
                 aInfo.aItalicRelID = uRelID;
-            }
             else if (eItalic == ITALIC_NORMAL && eWeight == WEIGHT_BOLD)
-            {
                 aInfo.aBoldItalicRelID = uRelID;
-            }
         }
 
         aEmbeddedFontInfo.push_back(aInfo);

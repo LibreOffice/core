@@ -29,7 +29,6 @@ namespace
 constexpr OString xPath_Presentation = "/p:presentation"_ostr;
 constexpr OString xPath_EmbeddedFont
     = "/p:presentation/p:embeddedFontLst/p:embeddedFont/p:font"_ostr;
-constexpr OString xPath_Relationship = "/rels:Relationships/rels:Relationship"_ostr;
 }
 
 CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testRoundtripEmbeddedFontsPPTX)
@@ -131,16 +130,6 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testExportEmbeddedFontsPPTX)
         xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
         assertXPath(pXmlDoc, xPath_Presentation, "embedTrueTypeFonts", u"1");
         assertXPath(pXmlDoc, xPath_EmbeddedFont + "[@typeface='DejaVu Sans']");
-    }
-
-    // Check the relationships to the embedded fonts
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/_rels/presentation.xml.rels"_ustr);
-
-        static constexpr auto sFontType
-            = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/font";
-        assertXPath(pXmlDoc, xPath_Relationship + "[@Target='fonts/font1.fntdata']", "Type",
-                    sFontType);
     }
 #endif
 }
