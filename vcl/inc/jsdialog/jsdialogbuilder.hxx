@@ -450,6 +450,15 @@ public:
                 bool bTakeOwnership);
 
     void move(weld::Widget* pWidget, weld::Container* pNewParent) override;
+
+    // all widgets below has to be updated in this case
+    virtual void set_sensitive(bool sensitive) override
+    {
+        bool bIsSensitive = SalInstanceContainer::get_sensitive();
+        SalInstanceContainer::set_sensitive(sensitive);
+        if (bIsSensitive != sensitive)
+            sendUpdate();
+    }
 };
 
 class JSScrolledWindow final : public JSWidget<SalInstanceScrolledWindow, ::VclScrolledWindow>

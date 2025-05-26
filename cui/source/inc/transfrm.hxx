@@ -96,13 +96,13 @@ private:
     SvxRatioConnector m_aRatioBottom;
 
     // position
-    std::unique_ptr<weld::Widget> m_xFlPosition;
+    std::unique_ptr<weld::Container> m_xFlPosition;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrPosX;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrPosY;
     std::unique_ptr<weld::CustomWeld> m_xCtlPos;
 
     // size
-    std::unique_ptr<weld::Widget> m_xFlSize;
+    std::unique_ptr<weld::Container> m_xFlSize;
     std::unique_ptr<weld::Label> m_xFtWidth;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrWidth;
     std::unique_ptr<weld::Label> m_xFtHeight;
@@ -114,12 +114,12 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xCtlSize;
 
     // protect
-    std::unique_ptr<weld::Widget> m_xFlProtect;
+    std::unique_ptr<weld::Container> m_xFlProtect;
     std::unique_ptr<weld::CheckButton> m_xTsbPosProtect;
     std::unique_ptr<weld::CheckButton> m_xTsbSizeProtect;
 
     // adjust
-    std::unique_ptr<weld::Widget> m_xFlAdjust;
+    std::unique_ptr<weld::Container> m_xFlAdjust;
     std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowWidth;
     std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowHeight;
 
