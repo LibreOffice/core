@@ -8,6 +8,7 @@
  */
 
 #include <toolbarmodedlg.hxx>
+#include <toolbartabpage.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
 #include <dialmgr.hxx>
@@ -26,24 +27,25 @@ ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
     , m_xResetBtn(m_xBuilder->weld_button(u"reset"_ustr)) // Apply to All
 {
     AddTabPage("uimode", UITabPage::Create, nullptr);
+    AddTabPage("toolbars", ToolbarTabPage::Create, nullptr);
 
     m_xOKBtn->set_visible(false);
     m_xHelpBtn->set_visible(false);
     m_xCancelBtn->set_label(CuiResId(RID_CUISTR_HYPDLG_CLOSEBUT)); // "close"
+
+    m_xApplyBtn->set_label(
+        CuiResId(RID_CUISTR_UI_APPLY).replaceFirst("%MODULE", UITabPage::GetCurrentApp()));
+    m_xApplyBtn->set_from_icon_name("sw/res/sc20558.png");
+    m_xResetBtn->set_label(CuiResId(RID_CUISTR_UI_APPLYALL));
+    m_xApplyBtn->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
+    m_xResetBtn->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
 }
 
 void ToolbarmodeDialog::ActivatePage(const OUString& rPage)
 {
-    if (rPage == "uimode")
-    {
-        m_xApplyBtn->set_label(
-            CuiResId(RID_CUISTR_UI_APPLY).replaceFirst("%MODULE", UITabPage::GetCurrentApp()));
-        m_xApplyBtn->set_from_icon_name("sw/res/sc20558.png");
-        m_xResetBtn->set_label(CuiResId(RID_CUISTR_UI_APPLYALL));
-
-        m_xApplyBtn->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
-        m_xResetBtn->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
-    }
+    const bool bOn(rPage == "uimode");
+    m_xApplyBtn->set_visible(bOn); // preferrably set_active() but not (yet) available
+    m_xResetBtn->set_visible(bOn);
 }
 
 IMPL_LINK(ToolbarmodeDialog, OnApplyClick, weld::Button&, rButton, void)

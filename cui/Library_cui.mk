@@ -163,6 +163,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/toolbarmodedlg \
     cui/source/dialogs/whatsnewtabpage \
     cui/source/dialogs/uitabpage \
+    cui/source/dialogs/toolbartabpage \
     cui/source/dialogs/welcomedlg \
     cui/source/dialogs/zoom \
     cui/source/factory/cuiexp \
