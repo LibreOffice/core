@@ -81,7 +81,7 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testRoundtripEmbeddedFontsPPTX)
         xSettings->getPropertyValue(u"EmbedComplexScriptFonts"_ustr) >>= bEmbedComplexScript;
 
         CPPUNIT_ASSERT_EQUAL(true, bEmbedFonts);
-        CPPUNIT_ASSERT_EQUAL(false, bEmbedUsedOnly);
+        CPPUNIT_ASSERT_EQUAL(true, bEmbedUsedOnly);
         CPPUNIT_ASSERT_EQUAL(true, bEmbedLatinScript);
         CPPUNIT_ASSERT_EQUAL(true, bEmbedAsianScript);
         CPPUNIT_ASSERT_EQUAL(true, bEmbedComplexScript);
