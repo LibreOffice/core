@@ -1640,16 +1640,14 @@ void ChartController::SetAndApplySelection(const Reference<drawing::XShape>& rxS
     }
 }
 
-
-
-uno::Reference< XAccessible > ChartController::CreateAccessible()
+rtl::Reference<AccessibleChartView> ChartController::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     rtl::Reference< AccessibleChartView > xResult = new AccessibleChartView( GetDrawViewWrapper() );
     impl_initializeAccessible( *xResult );
     return xResult;
 #else
-    return uno::Reference< XAccessible >();
+    return {};
 #endif
 }
 

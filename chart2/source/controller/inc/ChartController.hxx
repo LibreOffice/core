@@ -20,6 +20,7 @@
 
 #include <LifeTime.hxx>
 #include <ReferenceSizeProvider.hxx>
+#include "AccessibleChartView.hxx"
 #include "CommandDispatchContainer.hxx"
 #include "SelectionHelper.hxx"
 
@@ -85,7 +86,6 @@ class DrawModelWrapper;
 class DrawViewWrapper;
 class ViewElementListProvider;
 class Diagram;
-class AccessibleChartView;
 class AccessibleTextHelper;
 
 enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
@@ -303,7 +303,7 @@ public:
         ::Point aAtLogicPosition, bool bIsBalloonHelp,
         OUString & rOutQuickHelpText, css::awt::Rectangle & rOutEqualRect );
 
-    css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
+    rtl::Reference<AccessibleChartView> CreateAccessible();
 
     /** Creates a helper accessibility class that must be initialized via initialize().  For
         parameters see
