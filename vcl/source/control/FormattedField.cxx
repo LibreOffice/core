@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <accessibility/svtaccessiblenumericfield.hxx>
+
 #include <rtl/math.hxx>
 #include <svl/numformat.hxx>
 #include <comphelper/processfactory.hxx>
@@ -47,6 +49,11 @@ void FormattedField::dispose()
     m_pFormatter = nullptr;
     m_xOwnFormatter.reset();
     SpinField::dispose();
+}
+
+css::uno::Reference<css::accessibility::XAccessible> FormattedField::CreateAccessible()
+{
+    return new SVTXAccessibleNumericField(this);
 }
 
 void FormattedField::SetText(const OUString& rStr)

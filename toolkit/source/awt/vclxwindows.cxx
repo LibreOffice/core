@@ -7274,14 +7274,6 @@ SVTXNumericField::~SVTXNumericField()
 {
 }
 
-
-css::uno::Reference<accessibility::XAccessibleContext> SVTXNumericField::CreateAccessibleContext()
-{
-    VclPtr<FormattedField> pFormattedField = GetAs<FormattedField>();
-    return AccessibleFactory::createAccessibleContext(pFormattedField);
-}
-
-
 void SVTXNumericField::setValue( double Value )
 {
     SolarMutexGuard aGuard;

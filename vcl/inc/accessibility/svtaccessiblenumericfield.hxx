@@ -28,12 +28,17 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
 class SVTXAccessibleNumericField final
-    : public cppu::ImplInheritanceHelper<VCLXAccessibleEdit, css::accessibility::XAccessibleValue>
+    : public cppu::ImplInheritanceHelper<VCLXAccessibleEdit, css::accessibility::XAccessible,
+                                         css::accessibility::XAccessibleValue>
 {
 public:
     SVTXAccessibleNumericField(FormattedField* pFormattedField);
 
     virtual void ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent) override;
+
+    // XAccessible
+    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
 
     // XAccessibleContext
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;

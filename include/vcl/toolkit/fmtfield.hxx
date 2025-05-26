@@ -33,6 +33,8 @@ public:
 
     virtual void dispose() override;
 
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+
     // Spin-Handling
     virtual void Up() override;
     virtual void Down() override;

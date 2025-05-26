@@ -65,8 +65,6 @@ public:
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(Edit* pEdit);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(FormattedField* pFormattedField);
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(vcl::Window* pWindow);
 };
 

@@ -110,9 +110,4 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(vcl::
     }
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(FormattedField* pFormattedField)
-{
-    return new SVTXAccessibleNumericField(pFormattedField);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

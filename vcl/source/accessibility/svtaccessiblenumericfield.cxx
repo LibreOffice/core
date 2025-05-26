@@ -42,6 +42,15 @@ void SVTXAccessibleNumericField::ProcessWindowEvent(const VclWindowEvent& rVclWi
     }
 }
 
+// XAccessible
+
+css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+SVTXAccessibleNumericField::getAccessibleContext()
+{
+    OExternalLockGuard aGuard(this);
+    return this;
+}
+
 sal_Int16 SVTXAccessibleNumericField::getAccessibleRole() { return AccessibleRole::SPIN_BOX; }
 
 css::uno::Any SAL_CALL SVTXAccessibleNumericField::getCurrentValue()
