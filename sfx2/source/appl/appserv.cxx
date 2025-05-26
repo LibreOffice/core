@@ -1206,11 +1206,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
-        case SID_TOOLBAR_MODE_UI:
+        case SID_UI_PICKER:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             ScopedVclPtr<VclAbstractDialog> pDlg(
-                pFact->CreateToolbarmodeDialog(rReq.GetFrameWeld()));
+                pFact->CreateUIPickerDialog(rReq.GetFrameWeld()));
             pDlg->Execute();
             bDone = true;
             break;

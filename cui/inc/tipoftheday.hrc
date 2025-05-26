@@ -51,7 +51,7 @@ enum tipModule : sal_uInt8
 
 const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGARRAY[] =
 {
-     { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME offers a variety of user interface options to make you feel at home"), ".uno:ToolbarModeUI", "toolbarmode.png", soffice},
+     { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME offers a variety of user interface options to make you feel at home"), ".uno:UIPicker", "toolbarmode.png", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to allow changes to parts of a read-only document in Writer? Insert frames or sections that can authorize changes."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/section_edit.html", "", swriter}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "To print the notes of your slides go to File ▸ Print ▸ %PRODUCTNAME Impress tab and select Notes under Document ▸ Type."), "", "printnote.png", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "To start temporarily with a fresh user profile, or to restore a non-working %PRODUCTNAME, use Help ▸ Restart in Safe Mode."), "svx/ui/safemodedialog/SafeModeDialog", "", soffice}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/01/profile_safe_mode.html

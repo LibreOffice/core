@@ -5493,7 +5493,7 @@ SfxVoidItem ToolbarMode SID_TOOLBAR_MODE
     GroupId = SfxGroupId::Application;
 ]
 
-SfxVoidItem ToolbarModeUI SID_TOOLBAR_MODE_UI
+SfxVoidItem UIPicker SID_UI_PICKER
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

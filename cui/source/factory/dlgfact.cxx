@@ -94,7 +94,7 @@
 #include <thesdlg.hxx>
 #include <tipofthedaydlg.hxx>
 #include <widgettestdlg.hxx>
-#include <toolbarmodedlg.hxx>
+#include <uipickerdlg.hxx>
 #include <DiagramDialog.hxx>
 #include <fileextcheckdlg.hxx>
 #include <TextColumnsPage.hxx>
@@ -1590,9 +1590,9 @@ AbstractDialogFactory_Impl::CreateWidgetTestDialog(weld::Window* pParent)
 }
 
 VclPtr<VclAbstractDialog>
-AbstractDialogFactory_Impl::CreateToolbarmodeDialog(weld::Window* pParent)
+AbstractDialogFactory_Impl::CreateUIPickerDialog(weld::Window* pParent)
 {
-    return VclPtr<CuiAbstractController_Impl<ToolbarmodeDialog>>::Create(pParent);
+    return VclPtr<CuiAbstractController_Impl<UIPickerDialog>>::Create(pParent);
 }
 
 VclPtr<AbstractDiagramDialog>

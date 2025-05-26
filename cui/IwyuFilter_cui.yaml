@@ -30,7 +30,7 @@ excludelist:
     cui/source/dialogs/tipofthedaydlg.cxx:
     # Needed for direct member access
     - com/sun/star/beans/PropertyValue.hpp
-    cui/source/dialogs/toolbarmodedlg.cxx:
+    cui/source/dialogs/uipickerdlg.cxx:
     # Needed for direct member access
     - com/sun/star/beans/PropertyValue.hpp
     cui/source/tabpages/numfmt.cxx:

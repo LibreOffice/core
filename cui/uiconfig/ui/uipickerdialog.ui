@@ -2,10 +2,10 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkDialog" id="ToolbarModeDialog">
+  <object class="GtkDialog" id="UIPickerDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes" context="toolbarmodedialog|ToolbarModeDialog">Select Your Preferred User Interface</property>
+    <property name="title" translatable="yes" context="uipickerdialog|UIPickerDialog">Select Your Preferred User Interface</property>
     <property name="modal">True</property>
     <property name="default-width">0</property>
     <property name="default-height">0</property>
@@ -122,7 +122,7 @@
               <object class="GtkLabel" id="uimode">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="toolbarmodedialog|uimode">User Interface</property>
+                <property name="label" translatable="yes" context="uipickerdialog|uimode">User Interface</property>
               </object>
               <packing>
                 <property name="tab-fill">False</property>
@@ -145,7 +145,7 @@
               <object class="GtkLabel" id="toolbars">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="toolbarmodedialog|toolbars">Toolbars</property>
+                <property name="label" translatable="yes" context="uipickerdialog|toolbars">Toolbars</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -169,8 +169,8 @@
       <action-widget response="102">apply</action-widget>
     </action-widgets>
     <child internal-child="accessible">
-      <object class="AtkObject" id="ToolbarModeDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="toolbarmodedialog|extended_tip|ToolbarModeDialog">Sets the fill properties of the selected drawing object.</property>
+      <object class="AtkObject" id="UIPickerDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="uipickerdialog|extended_tip|UIPickerDialog">Sets the fill properties of the selected drawing object.</property>
       </object>
     </child>
   </object>

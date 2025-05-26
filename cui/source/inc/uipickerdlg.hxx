@@ -10,9 +10,8 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
-#include "uitabpage.hxx"
 
-class ToolbarmodeDialog : public SfxTabDialogController
+class UIPickerDialog : public SfxTabDialogController
 {
 private:
     std::unique_ptr<weld::Button> m_xOKBtn;
@@ -26,7 +25,7 @@ private:
     DECL_LINK(OnApplyClick, weld::Button&, void);
 
 public:
-    ToolbarmodeDialog(weld::Window* pParent);
+    UIPickerDialog(weld::Window* pParent);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

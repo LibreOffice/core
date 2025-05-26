@@ -292,7 +292,7 @@ class SvxZoomItem;
 #define SID_REPLACEABLE                     TypedWhichId<SfxBoolItem>(SID_SFX_START + 1739)
 #define SID_ADDITIONS_DIALOG                (SID_SFX_START + 1740)
 #define FN_PARAM_ADDITIONS_TAG              TypedWhichId<SfxStringItem>(SID_SFX_START + 1741)
-#define SID_TOOLBAR_MODE_UI                 (SID_SFX_START + 1742)
+#define SID_UI_PICKER                       (SID_SFX_START + 1742)
 #define SID_TOOLBAR_LOCK                    TypedWhichId<SfxBoolItem>(SID_SFX_START + 1743)
 #define SID_WIDGET_TEST_DIALOG              (SID_SFX_START + 1744)
 #define FN_CHANGE_THEME                     (SID_SFX_START + 1745)

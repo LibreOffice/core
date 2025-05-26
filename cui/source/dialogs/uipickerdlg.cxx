@@ -7,7 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <toolbarmodedlg.hxx>
+#include <uipickerdlg.hxx>
+#include <uitabpage.hxx>
 #include <toolbartabpage.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
@@ -17,9 +18,8 @@
 #include <strings.hrc>
 #include <unotools/confignode.hxx>
 
-ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
-    : SfxTabDialogController(pParent, u"cui/ui/toolbarmodedialog.ui"_ustr,
-                             u"ToolbarModeDialog"_ustr)
+UIPickerDialog::UIPickerDialog(weld::Window* pParent)
+    : SfxTabDialogController(pParent, u"cui/ui/uipickerdialog.ui"_ustr, u"UIPickerDialog"_ustr)
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xApplyBtn(m_xBuilder->weld_button(u"apply"_ustr)) // Apply to %Module
     , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr)) // Close
@@ -37,24 +37,24 @@ ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
         CuiResId(RID_CUISTR_UI_APPLY).replaceFirst("%MODULE", UITabPage::GetCurrentApp()));
     m_xApplyBtn->set_from_icon_name("sw/res/sc20558.png");
     m_xResetBtn->set_label(CuiResId(RID_CUISTR_UI_APPLYALL));
-    m_xApplyBtn->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
-    m_xResetBtn->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
+    m_xApplyBtn->connect_clicked(LINK(this, UIPickerDialog, OnApplyClick));
+    m_xResetBtn->connect_clicked(LINK(this, UIPickerDialog, OnApplyClick));
 }
 
-void ToolbarmodeDialog::ActivatePage(const OUString& rPage)
+void UIPickerDialog::ActivatePage(const OUString& rPage)
 {
     const bool bOn(rPage == "uimode");
     m_xApplyBtn->set_visible(bOn); // preferably set_active() but not (yet) available
     m_xResetBtn->set_visible(bOn);
 }
 
-IMPL_LINK(ToolbarmodeDialog, OnApplyClick, weld::Button&, rButton, void)
+IMPL_LINK(UIPickerDialog, OnApplyClick, weld::Button&, rButton, void)
 {
     UITabPage* pUITabPage = static_cast<UITabPage*>(GetCurTabPage());
     OUString sCmd = pUITabPage->GetSelectedMode();
     if (sCmd.isEmpty())
     {
-        SAL_WARN("cui.dialogs", "ToolbarmodeDialog: no mode selected");
+        SAL_WARN("cui.dialogs", "UIPickerDialog: no mode selected");
         return;
     }
 

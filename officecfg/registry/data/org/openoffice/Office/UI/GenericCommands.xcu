@@ -6404,7 +6404,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:ToolbarModeUI" oor:op="replace">
+      <node oor:name=".uno:UIPicker" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">User ~Interface...</value>
         </prop>

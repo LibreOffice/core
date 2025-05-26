@@ -176,7 +176,7 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-    SID_TOOLBAR_MODE_UI
+    SID_UI_PICKER
     [
         ExecMethod = MiscExec_Impl ;
     ]
