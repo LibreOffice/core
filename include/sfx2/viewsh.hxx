@@ -178,6 +178,7 @@ friend class SfxPrinterController;
     std::unordered_set<OUString>    mvLOKBlockedCommandList;
     OUString maLOKTimezone;
     bool maLOKIsTimezoneSet;
+    bool                        mbLOKColorPreviewEnabled;
 
     /// Used to set the DocId at construction time. See SetCurrentDocId.
     static ViewShellDocId       mnCurrentDocId;
@@ -454,6 +455,10 @@ public:
     void SetLOKAccessibilityState(bool bEnabled);
     /// Get LibreOfficeKit AT support state for this view.
     bool GetLOKAccessibilityState() const { return mbLOKAccessibilityEnabled; }
+    /// Set LibreOfficeKit color preview state for this view.
+    void SetLOKColorPreviewState(bool bEnabled);
+    /// Return LibreOfficeKit color preview state for this view.
+    bool IsLOKColorPreviewEnabled() const { return mbLOKColorPreviewEnabled; }
 
     /// Get the LibreOfficeKit timezone of this view. See @SetLOKTimezone.
     std::pair<bool, OUString> GetLOKTimezone() const

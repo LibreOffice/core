@@ -562,6 +562,9 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setViewOption
     void (*setViewOption)(LibreOfficeKitDocument* pThis, const char* pOption, const char* pValue);
 
+    /// @see lok::Document::setColorPreviewState().
+    void (*setColorPreviewState) (LibreOfficeKitDocument* pThis, int nId, bool nEnabled);
+
     /// @see lok::Document::setAllowManageRedlines().
     void (*setAllowManageRedlines)(LibreOfficeKitDocument* pThis, int nId, bool allow);
 

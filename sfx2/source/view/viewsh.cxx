@@ -2745,6 +2745,7 @@ SfxViewShell::SfxViewShell
 ,   maLOKLocale(LANGUAGE_NONE)
 ,   maLOKDeviceFormFactor(LOKDeviceFormFactor::UNKNOWN)
 ,   mbLOKAccessibilityEnabled(false)
+,   mbLOKColorPreviewEnabled(false)
 {
     SetMargin( rViewFrame.GetMargin_Impl() );
 
@@ -3506,6 +3507,11 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
             LOK_WARN("SetLOKAccessibilityState", "Exception caught processing LOKDocumentFocusListener::detachRecursive");
         }
     }
+}
+
+void SfxViewShell::SetLOKColorPreviewState(bool bEnabled)
+{
+    mbLOKColorPreviewEnabled = bEnabled;
 }
 
 void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)

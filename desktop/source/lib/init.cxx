@@ -1352,6 +1352,8 @@ static bool doc_renderNextSlideLayer(
 
 static void doc_setViewOption(LibreOfficeKitDocument* pDoc, const char* pOption, const char* pValue);
 
+static void doc_setColorPreviewState(LibreOfficeKitDocument* pThis, int nId, bool bEnabled);
+
 } // extern "C"
 
 namespace {
@@ -1555,6 +1557,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->postSlideshowCleanup = doc_postSlideshowCleanup;
         m_pDocumentClass->renderNextSlideLayer = doc_renderNextSlideLayer;
         m_pDocumentClass->setViewOption = doc_setViewOption;
+        m_pDocumentClass->setColorPreviewState = doc_setColorPreviewState;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -7651,6 +7654,13 @@ static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocumen
         return;
 
     SfxLokHelper::setAccessibilityState(nId, nEnabled);
+}
+
+static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId,
+                                     bool bEnabled)
+{
+    SolarMutexGuard aGuard;
+    SfxLokHelper::setColorPreviewState(nId, bEnabled);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
