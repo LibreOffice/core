@@ -103,7 +103,7 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testExportEmbeddedFontsPPTX)
 {
 #if HAVE_MORE_FONTS
 
-    createSdImpressDoc();
+    createSdImpressDoc("TestEmbeddedFonts_DejaVu.odp");
 
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xProps(
@@ -130,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testExportEmbeddedFontsPPTX)
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
         assertXPath(pXmlDoc, xPath_Presentation, "embedTrueTypeFonts", u"1");
-        assertXPath(pXmlDoc, xPath_EmbeddedFont + "[@typeface='Liberation Sans']");
+        assertXPath(pXmlDoc, xPath_EmbeddedFont + "[@typeface='DejaVu Sans']");
     }
 
     // Check the relationships to the embedded fonts
