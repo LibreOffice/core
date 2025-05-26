@@ -34,7 +34,7 @@ published interface XSheetConditionalEntries: com::sun::star::container::XIndexA
         <p>Supported properties are:</p>
 
         <dl>
-        <dt>ConditionOperator Operator</dt>
+        <dt>com::sun::star::sheet::ConditionOperator Operator</dt>
         <dd>contains the operation to perform for this condition.</dd>
 
         <dt>`string` Formula1</dt>
@@ -45,8 +45,7 @@ published interface XSheetConditionalEntries: com::sun::star::container::XIndexA
         ConditionOperator::BETWEEN or
         ConditionOperator::NOT_BETWEEN operations).</dd>
 
-        <dt>com::sun::star::table::CellAddress
-        SourcePosition</dt>
+        <dt>com::sun::star::table::CellAddress SourcePosition</dt>
         <dd>contains the base address for relative cell references in formulas.
         </dd>
 
