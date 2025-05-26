@@ -123,6 +123,74 @@
                     <property name="position">2</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="usebmpforappback">
+                    <property name="label" translatable="yes" context="appearance|enableapptheming">Use bitmap for application background</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="usebmpforappback-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|useonlywhitedocbackground">Check to disable document color customizations and only use white document colors.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="spacing">3</property>
+                    <child>
+                      <object class="GtkComboBoxText" id="bitmapdropdown">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="hexpand">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="bitmapdropdown-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|bitmapdropdown">Select bitmap for application background from the dropdown.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="bitmapdrawtypedropdown">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="hexpand">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="bitmapdrawtypedropdown-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|bitmapdrawtypedropdown">Select application background bitmap draw type from the dropdown.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="label">

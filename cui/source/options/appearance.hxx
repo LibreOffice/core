@@ -45,6 +45,10 @@ private:
     std::unique_ptr<weld::CheckButton> m_xShowInDocumentChkBtn;
     std::unique_ptr<weld::Button> m_xResetAllBtn;
 
+    std::unique_ptr<weld::CheckButton> m_xUseBmpForAppBack;
+    std::unique_ptr<weld::ComboBox> m_xBitmapDropDown;
+    std::unique_ptr<weld::ComboBox> m_xBitmapDrawTypeDropDown;
+
     DECL_LINK(ColorEntryChgHdl, weld::ComboBox&, void);
     DECL_LINK(ColorValueChgHdl, ColorListBox&, void);
     DECL_LINK(ShowInDocumentHdl, weld::Toggleable&, void);
@@ -55,10 +59,15 @@ private:
     DECL_STATIC_LINK(SvxAppearanceTabPage, MoreThemesHdl, weld::Button&, void);
     DECL_LINK(ResetAllBtnHdl, weld::Button&, void);
 
+    DECL_LINK(BitmapDropDownHdl, weld::ComboBox&, void);
+    DECL_LINK(BitmapDrawTypeDropDownHdl, weld::ComboBox&, void);
+    DECL_LINK(UseBmpForAppBackHdl, weld::Toggleable&, void);
+
     void InitThemes();
     void InitCustomization();
     void LoadSchemeList();
 
+    void UpdateBmpControlsState();
     void UpdateColorDropdown();
     void FillItemsList();
     ColorConfigEntry GetActiveEntry();

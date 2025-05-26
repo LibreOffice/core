@@ -26,6 +26,76 @@
 #include <comphelper/propertyvalue.hxx>
 #include <map>
 
+namespace
+{
+struct StringPair
+{
+    OUString aTranslatedString;
+    OUString aRawString;
+};
+
+std::vector<StringPair> const& getBitmapList()
+{
+    static const std::vector<StringPair> aBitmapList = {
+        { CuiResId(BMP_FUZZY_LIGHTGREY), "fuzzy-lightgrey.jpg" },
+        { CuiResId(BMP_ICE_LIGHT), "ice-light.jpg" },
+        { CuiResId(BMP_PAINTED_WHITE), "painted-white.jpg" },
+        { CuiResId(BMP_TEXTURE_PAPER), "texture-paper.jpg" },
+        { CuiResId(BMP_CRUMPLED_PAPER), "crumpled-paper.jpg" },
+        { CuiResId(BMP_MARBLE), "marble.jpg" },
+        { CuiResId(BMP_CONCRETE), "concrete.jpg" },
+        { CuiResId(BMP_FUZZY_GREY), "fuzzy-grey.jpg" },
+        { CuiResId(BMP_FUZZY_DARKGREY), "fuzzy-darkgrey.jpg" },
+        { CuiResId(BMP_STONE), "stone.jpg" },
+        { CuiResId(BMP_WHITE_DIFFUSION), "white-diffusion.jpg" },
+        { CuiResId(BMP_SAND_LIGHT), "sand-light.jpg" },
+        { CuiResId(BMP_SAND), "sand.jpg" },
+        { CuiResId(BMP_SURFACE), "surface.jpg" },
+        { CuiResId(BMP_STUDIO), "studio.jpg" },
+        { CuiResId(BMP_INVOICE_PAPER), "invoice-paper.jpg" },
+        { CuiResId(BMP_PARCHMENT_PAPER), "parchment-paper.jpg" },
+        { CuiResId(BMP_CARDBOARD), "cardboard.jpg" },
+        { CuiResId(BMP_FENCE), "fence.jpg" },
+        { CuiResId(BMP_WOODEN_FENCE), "wooden-fence.jpg" },
+        { CuiResId(BMP_WOOD), "wood.jpg" },
+        { CuiResId(BMP_WOODEN_BOARD), "wooden-board.jpg" },
+        { CuiResId(BMP_PAINTED_WOOD), "painted-wood.jpg" },
+        { CuiResId(BMP_STONES), "stones.jpg" },
+        { CuiResId(BMP_PEBBLE_LIGHT), "pebble-light.jpg" },
+        { CuiResId(BMP_STONE_WALL), "stone-wall.jpg" },
+        { CuiResId(BMP_STONE_GRAY), "stone-gray.jpg" },
+        { CuiResId(BMP_ROCK_WALL), "rock-wall.jpg" },
+        { CuiResId(BMP_SURFACE_BLACK), "surface-black.jpg" },
+        { CuiResId(BMP_BRICK_WALL), "brick-wall.png" },
+        { CuiResId(BMP_TILES), "tiles.jpg" },
+        { CuiResId(BMP_GRAPH_PAPER), "graph-paper.png" },
+        { CuiResId(BMP_CLOUD), "cloud.jpg" },
+        { CuiResId(BMP_POOL), "pool.jpg" },
+        { CuiResId(BMP_SKY), "sky.jpg" },
+        { CuiResId(BMP_CIRCUIT_BOARD), "circuit-board.jpg" },
+        { CuiResId(BMP_COFFEE), "coffee.jpg" },
+        { CuiResId(BMP_COLOR_STRIPES), "color-stripes.png" },
+        { CuiResId(BMP_FLORAL), "floral.png" },
+        { CuiResId(BMP_LEAF), "leaf.jpg" },
+        { CuiResId(BMP_MAPLE_LEAVES), "maple-leaves.jpg" },
+        { CuiResId(BMP_SPACE), "space.png" },
+        { CuiResId(BMP_GIRAFFE), "giraffe.png" },
+        { CuiResId(BMP_TIGER), "tiger.jpg" },
+        { CuiResId(BMP_ZEBRA), "zebra.png" },
+    };
+    return aBitmapList;
+}
+
+std::vector<StringPair> const& getBitmapDrawTypeList()
+{
+    static std::vector<StringPair> aBitmapDrawTypeList = {
+        { CuiResId(BMP_DRAWTYPE_TILED), "Tiled" },
+        { CuiResId(BMP_DRAWTYPE_STRETCHED), "Stretched" },
+    };
+    return aBitmapDrawTypeList;
+}
+}
+
 static bool IsDarkModeEnabled()
 {
     return MiscSettings::GetAppColorMode() == AppearanceMode::DARK
@@ -48,6 +118,9 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
                                           [this] { return GetFrameWeld(); })))
     , m_xShowInDocumentChkBtn(m_xBuilder->weld_check_button(u"showindocumentchkbtn"_ustr))
     , m_xResetAllBtn(m_xBuilder->weld_button(u"resetallbtn"_ustr))
+    , m_xUseBmpForAppBack(m_xBuilder->weld_check_button(u"usebmpforappback"_ustr))
+    , m_xBitmapDropDown(m_xBuilder->weld_combo_box(u"bitmapdropdown"_ustr))
+    , m_xBitmapDrawTypeDropDown(m_xBuilder->weld_combo_box(u"bitmapdrawtypedropdown"_ustr))
 {
     InitThemes();
     InitCustomization();
@@ -291,6 +364,22 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ResetAllBtnHdl, weld::Button&, void)
     }
 }
 
+IMPL_LINK_NOARG(SvxAppearanceTabPage, BitmapDropDownHdl, weld::ComboBox&, void)
+{
+    ThemeColors::SetAppBackBmpFileName(m_xBitmapDropDown->get_active_id());
+}
+
+IMPL_LINK_NOARG(SvxAppearanceTabPage, BitmapDrawTypeDropDownHdl, weld::ComboBox&, void)
+{
+    ThemeColors::SetAppBackBmpDrawType(m_xBitmapDrawTypeDropDown->get_active_id());
+}
+
+IMPL_LINK_NOARG(SvxAppearanceTabPage, UseBmpForAppBackHdl, weld::Toggleable&, void)
+{
+    ThemeColors::SetUseBmpForAppBack(m_xUseBmpForAppBack->get_active());
+    UpdateBmpControlsState();
+}
+
 void SvxAppearanceTabPage::InitThemes()
 {
     // init schemes combobox
@@ -306,6 +395,55 @@ void SvxAppearanceTabPage::InitThemes()
     m_xUseOnlyWhiteDocBackground->connect_toggled(
         LINK(this, SvxAppearanceTabPage, UseOnlyWhiteDocBackgroundHdl));
     m_xUseOnlyWhiteDocBackground->set_active(ThemeColors::UseOnlyWhiteDocBackground());
+
+    // connnect callbacks for bitmap controls
+    m_xUseBmpForAppBack->connect_toggled(LINK(this, SvxAppearanceTabPage, UseBmpForAppBackHdl));
+    m_xBitmapDropDown->connect_changed(LINK(this, SvxAppearanceTabPage, BitmapDropDownHdl));
+    m_xBitmapDrawTypeDropDown->connect_changed(
+        LINK(this, SvxAppearanceTabPage, BitmapDrawTypeDropDownHdl));
+
+    // initialize bitmap controls
+    m_xUseBmpForAppBack->set_active(ThemeColors::UseBmpForAppBack());
+
+    // insert bitmap entrires
+    for (size_t i = 0; i < getBitmapList().size(); ++i)
+        m_xBitmapDropDown->append(getBitmapList()[i].aRawString,
+                                  getBitmapList()[i].aTranslatedString);
+
+    // check if the registry setting is valid or not
+    bool bFound = false;
+    for (size_t i = 0; i < getBitmapList().size(); ++i)
+    {
+        if (ThemeColors::GetAppBackBmpFileName() == getBitmapList()[i].aRawString)
+        {
+            bFound = true;
+            m_xBitmapDropDown->set_active_id(ThemeColors::GetAppBackBmpFileName());
+            break;
+        }
+    }
+    if (!bFound)
+        m_xBitmapDropDown->set_active(0);
+
+    // insert bitmap draw type entries
+    for (size_t i = 0; i < getBitmapDrawTypeList().size(); ++i)
+        m_xBitmapDrawTypeDropDown->append(getBitmapDrawTypeList()[i].aRawString,
+                                          getBitmapDrawTypeList()[i].aTranslatedString);
+
+    // check if the registry setting is valid or not
+    bFound = false;
+    for (size_t i = 0; i < getBitmapList().size(); ++i)
+    {
+        if (ThemeColors::GetAppBackBmpDrawType() == getBitmapDrawTypeList()[i].aRawString)
+        {
+            bFound = true;
+            m_xBitmapDrawTypeDropDown->set_active_id(ThemeColors::GetAppBackBmpDrawType());
+            break;
+        }
+    }
+    if (!bFound)
+        m_xBitmapDrawTypeDropDown->set_active(0);
+
+    UpdateBmpControlsState();
 }
 
 void SvxAppearanceTabPage::InitCustomization()
@@ -341,6 +479,13 @@ void SvxAppearanceTabPage::UpdateColorDropdown()
         m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nDarkColor);
     else
         m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nLightColor);
+}
+
+void SvxAppearanceTabPage::UpdateBmpControlsState()
+{
+    bool bEnabled = m_xUseBmpForAppBack->get_active();
+    m_xBitmapDropDown->set_sensitive(bEnabled);
+    m_xBitmapDrawTypeDropDown->set_sensitive(bEnabled);
 }
 
 void SvxAppearanceTabPage::FillItemsList()

@@ -187,6 +187,8 @@ class SAL_DLLPUBLIC_RTTI SwViewShell : public sw::Ring<SwViewShell>
     // PaintDesktop split. This pars is also used by PreviewPage.
     void PaintDesktop_(const SwRegionRects &rRegion);
 
+    static bool DrawAppBackgroundBitmap(vcl::RenderContext* rRenderContext, const SwRect& rRect);
+
     bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
                                                                     // trigger an action.
 

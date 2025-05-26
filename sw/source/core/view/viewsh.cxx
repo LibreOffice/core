@@ -1787,7 +1787,7 @@ void SwViewShell::PaintDesktop(const vcl::RenderContext& rRenderContext, const S
 // PaintDesktop is split in two, this part is also used by PreviewPage
 void SwViewShell::PaintDesktop_(const SwRegionRects &rRegion)
 {
-    if (Application::IsHeadlessModeEnabled())
+    if (DrawAppBackgroundBitmap(GetOut(), rRegion.GetOrigin()))
         return;
 
     // OD 2004-04-23 #116347#
@@ -1837,6 +1837,28 @@ void SwViewShell::PaintDesktop_(const SwRegionRects &rRegion)
     }
 
     GetOut()->Pop();
+}
+
+bool SwViewShell::DrawAppBackgroundBitmap(vcl::RenderContext* rRenderContext, const SwRect& rRect)
+{
+    if (Application::IsHeadlessModeEnabled() || !ThemeColors::UseBmpForAppBack())
+        return false;
+
+    const BitmapEx& aAppBackImg
+        = Application::GetSettings().GetStyleSettings().GetAppBackgroundBitmap();
+    if (aAppBackImg.IsEmpty())
+        return false;
+
+    Wallpaper aWallpaper(aAppBackImg);
+    if (ThemeColors::GetAppBackBmpDrawType() == u"Tiled"_ustr)
+        aWallpaper.SetStyle(WallpaperStyle::Tile);
+    else if (ThemeColors::GetAppBackBmpDrawType() == u"Stretched"_ustr)
+        aWallpaper.SetStyle(WallpaperStyle::Scale);
+    else
+        aWallpaper.SetStyle(WallpaperStyle::Tile);
+
+    rRenderContext->DrawWallpaper(rRect.SVRect(), aWallpaper);
+    return true;
 }
 
 bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )

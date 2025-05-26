@@ -79,6 +79,13 @@ public:
     static bool UseOnlyWhiteDocBackground();
     static void SetUseOnlyWhiteDocBackground(bool bFlag);
 
+    static bool UseBmpForAppBack();
+    static OUString GetAppBackBmpFileName();
+    static OUString GetAppBackBmpDrawType();
+    static void SetAppBackBmpFileName(const OUString& rFileName);
+    static void SetAppBackBmpDrawType(const OUString& rDrawType);
+    static void SetUseBmpForAppBack(bool bUseBmp);
+
     // !IsThemeCached means that the ThemeColors object doesn't have the colors from the registry yet.
     // IsThemeReset means that the user pressed the Reset All  button and the UI colors in the registry
     //      are not valid anymore => read from the system again

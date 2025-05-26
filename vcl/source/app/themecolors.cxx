@@ -36,4 +36,40 @@ void ThemeColors::SetUseOnlyWhiteDocBackground(bool bFlag)
     pChange->commit();
 }
 
+bool ThemeColors::UseBmpForAppBack()
+{
+    return officecfg::Office::Common::Appearance::UseBmpForAppBack::get();
+}
+
+OUString ThemeColors::GetAppBackBmpFileName()
+{
+    return officecfg::Office::Common::Appearance::AppBackBmpFileName::get();
+}
+
+OUString ThemeColors::GetAppBackBmpDrawType()
+{
+    return officecfg::Office::Common::Appearance::AppBackBmpDrawType::get();
+}
+
+void ThemeColors::SetAppBackBmpFileName(const OUString& rFileName)
+{
+    auto pChange(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Appearance::AppBackBmpFileName::set(rFileName, pChange);
+    pChange->commit();
+}
+
+void ThemeColors::SetAppBackBmpDrawType(const OUString& rDrawType)
+{
+    auto pChange(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Appearance::AppBackBmpDrawType::set(rDrawType, pChange);
+    pChange->commit();
+}
+
+void ThemeColors::SetUseBmpForAppBack(bool bUseBmp)
+{
+    auto pChange(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Appearance::UseBmpForAppBack::set(bUseBmp, pChange);
+    pChange->commit();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

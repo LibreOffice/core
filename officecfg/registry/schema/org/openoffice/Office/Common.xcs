@@ -5253,6 +5253,27 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="UseBmpForAppBack" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether to use bitmap or color for application background.</desc>
+          <label>Use bitmap for application background</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="AppBackBmpFileName" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Determines the bitmap file name for application background.</desc>
+          <label>Application background bitmap file name</label>
+        </info>
+        <value>maple-leaves.jpg</value>
+      </prop>
+      <prop oor:name="AppBackBmpDrawType" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Determines the draw type for application background bitmap.</desc>
+          <label>Application background bitmap draw type</label>
+        </info>
+        <value>Tiled</value>
+      </prop>
     </group>
     <group oor:name="Misc">
       <info>
