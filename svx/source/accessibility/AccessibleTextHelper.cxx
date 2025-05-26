@@ -98,9 +98,9 @@ public:
 
     void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
-    void SetEventSource( const uno::Reference< XAccessible >& rInterface )
+    void SetEventSource(const rtl::Reference<comphelper::OAccessibleComponentHelper>& rEventSource)
     {
-        mxFrontEnd = rInterface;
+        mpFrontEnd = rEventSource;
     }
 
     void SetOffset( const Point& );
@@ -176,7 +176,7 @@ private:
     // our frontend class (the one implementing the actual
     // interface). That's not necessarily the one containing the impl
     // pointer!
-    uno::Reference< XAccessible > mxFrontEnd;
+    rtl::Reference<comphelper::OAccessibleComponentHelper> mpFrontEnd;
 
     // a wrapper for the text forwarders (guarded by solar mutex)
     mutable SvxEditSourceAdapter maEditSource;
@@ -251,15 +251,15 @@ AccessibleTextHelper_Impl::~AccessibleTextHelper_Impl()
 SvxTextForwarder& AccessibleTextHelper_Impl::GetTextForwarder() const
 {
     if( !maEditSource.IsValid() )
-        throw uno::RuntimeException(u"Unknown edit source"_ustr, mxFrontEnd);
+        throw uno::RuntimeException(u"Unknown edit source"_ustr);
 
     SvxTextForwarder* pTextForwarder = maEditSource.GetTextForwarder();
 
     if( !pTextForwarder )
-        throw uno::RuntimeException(u"Unable to fetch text forwarder, model might be dead"_ustr, mxFrontEnd);
+        throw uno::RuntimeException(u"Unable to fetch text forwarder, model might be dead"_ustr);
 
     if( !pTextForwarder->IsValid() )
-        throw uno::RuntimeException(u"Text forwarder is invalid, model might be dead"_ustr, mxFrontEnd);
+        throw uno::RuntimeException(u"Text forwarder is invalid, model might be dead"_ustr);
 
     return *pTextForwarder;
 }
@@ -267,15 +267,15 @@ SvxTextForwarder& AccessibleTextHelper_Impl::GetTextForwarder() const
 SvxViewForwarder& AccessibleTextHelper_Impl::GetViewForwarder() const
 {
     if( !maEditSource.IsValid() )
-        throw uno::RuntimeException(u"Unknown edit source"_ustr, mxFrontEnd);
+        throw uno::RuntimeException(u"Unknown edit source"_ustr);
 
     SvxViewForwarder* pViewForwarder = maEditSource.GetViewForwarder();
 
     if( !pViewForwarder )
-        throw uno::RuntimeException(u"Unable to fetch view forwarder, model might be dead"_ustr, mxFrontEnd);
+        throw uno::RuntimeException(u"Unable to fetch view forwarder, model might be dead"_ustr);
 
     if( !pViewForwarder->IsValid() )
-        throw uno::RuntimeException(u"View forwarder is invalid, model might be dead"_ustr, mxFrontEnd);
+        throw uno::RuntimeException(u"View forwarder is invalid, model might be dead"_ustr);
 
     return *pViewForwarder;
 }
@@ -283,18 +283,18 @@ SvxViewForwarder& AccessibleTextHelper_Impl::GetViewForwarder() const
 SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder() const
 {
     if( !maEditSource.IsValid() )
-        throw uno::RuntimeException(u"Unknown edit source"_ustr, mxFrontEnd);
+        throw uno::RuntimeException(u"Unknown edit source"_ustr);
 
     SvxEditViewForwarder* pViewForwarder = maEditSource.GetEditViewForwarder();
 
     if( !pViewForwarder )
     {
-        throw uno::RuntimeException(u"No edit view forwarder, object not in edit mode"_ustr, mxFrontEnd);
+        throw uno::RuntimeException(u"No edit view forwarder, object not in edit mode"_ustr);
     }
 
     if( !pViewForwarder->IsValid() )
     {
-        throw uno::RuntimeException(u"View forwarder is invalid, object not in edit mode"_ustr, mxFrontEnd);
+        throw uno::RuntimeException(u"View forwarder is invalid, object not in edit mode"_ustr);
     }
 
     return *pViewForwarder;
@@ -303,7 +303,8 @@ SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder() const
 SvxEditSourceAdapter& AccessibleTextHelper_Impl::GetEditSource() const
 {
     if( !maEditSource.IsValid() )
-        throw uno::RuntimeException(u"AccessibleTextHelper_Impl::GetEditSource: no edit source"_ustr, mxFrontEnd );
+        throw uno::RuntimeException(
+            u"AccessibleTextHelper_Impl::GetEditSource: no edit source"_ustr);
     return maEditSource;
 }
 
@@ -393,9 +394,9 @@ void AccessibleTextHelper_Impl::SetShapeFocus( bool bHaveFocus )
 
     if( bHaveFocus )
     {
-        if( mxFrontEnd.is() )
+        if (mpFrontEnd.is())
         {
-            AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
+            AccessibleCell* pAccessibleCell = dynamic_cast<AccessibleCell*>(mpFrontEnd.get());
             if ( !pAccessibleCell )
                 FireEvent(AccessibleEventId::STATE_CHANGED, uno::Any(AccessibleStateType::FOCUSED));
             else    // the focus event on cell should be fired on table directly
@@ -411,9 +412,9 @@ void AccessibleTextHelper_Impl::SetShapeFocus( bool bHaveFocus )
     {
         // The focus state should be reset directly on table.
         //LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
-        if( mxFrontEnd.is() )
+        if (mpFrontEnd.is())
         {
-            AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
+            AccessibleCell* pAccessibleCell = dynamic_cast<AccessibleCell*>(mpFrontEnd.get());
             if ( !pAccessibleCell )
                 FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::Any(AccessibleStateType::FOCUSED) );
             else
@@ -462,9 +463,9 @@ bool AccessibleTextHelper_Impl::IsActive() const
         if( !pViewForwarder )
             return false;
 
-        if( mxFrontEnd.is() )
+        if (mpFrontEnd.is())
         {
-            AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
+            AccessibleCell* pAccessibleCell = dynamic_cast<AccessibleCell*>(mpFrontEnd.get());
             if ( pAccessibleCell )
             {
                 sdr::table::CellRef xCell = pAccessibleCell->getCellRef();
@@ -693,7 +694,7 @@ void AccessibleTextHelper_Impl::ShutdownEditSource()
     maParaManager.SetNum(0);
 
     // lost all children
-    if( mxFrontEnd.is() )
+    if (mpFrontEnd.is())
         FireEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN);
 
     // quit listen on stale edit source
@@ -759,13 +760,15 @@ void AccessibleTextHelper_Impl::UpdateVisibleChildren( bool bBroadcastEvents )
             if (nCurrPara == 0)
                 mnFirstVisibleChild = nCurrPara;
             mnLastVisibleChild = nCurrPara;
-            if (mxFrontEnd.is() && bBroadcastEvents)
+            if (mpFrontEnd.is() && bBroadcastEvents)
             {
                 // child not yet created?
                 if (!maParaManager.HasCreatedChild(nCurrPara))
                 {
-                    FireEvent(AccessibleEventId::CHILD, uno::Any(maParaManager.CreateChild(nCurrPara - mnFirstVisibleChild,
-                                                                                           mxFrontEnd, GetEditSource(), nCurrPara)));
+                    FireEvent(AccessibleEventId::CHILD,
+                              uno::Any(maParaManager.CreateChild(nCurrPara - mnFirstVisibleChild,
+                                                                 mpFrontEnd, GetEditSource(),
+                                                                 nCurrPara)));
                 }
             }
         }
@@ -1380,7 +1383,7 @@ void AccessibleTextHelper_Impl::Dispose()
 
     // clear references
     maEditSource.SetEditSource( ::std::unique_ptr< SvxEditSource >() );
-    mxFrontEnd = nullptr;
+    mpFrontEnd = nullptr;
 }
 
 void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
@@ -1390,11 +1393,11 @@ void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::
     {
         std::scoped_lock aGuard(maMutex);
 
-        DBG_ASSERT(mxFrontEnd.is(), "AccessibleTextHelper::FireEvent: no event source set");
+        DBG_ASSERT(mpFrontEnd.is(), "AccessibleTextHelper::FireEvent: no event source set");
 
-        if (mxFrontEnd.is())
-            aEvent = AccessibleEventObject(mxFrontEnd->getAccessibleContext(), nEventId,
-                                           rNewValue, rOldValue, -1);
+        if (mpFrontEnd.is())
+            aEvent = AccessibleEventObject(mpFrontEnd->getAccessibleContext(), nEventId, rNewValue,
+                                           rOldValue, -1);
         else
             aEvent = AccessibleEventObject(uno::Reference<uno::XInterface>(), nEventId,
                                            rNewValue, rOldValue, -1);
@@ -1423,13 +1426,14 @@ uno::Reference< XAccessible > AccessibleTextHelper_Impl::getAccessibleChild( sal
     if( 0 > i || i >= getAccessibleChildCount() ||
         GetTextForwarder().GetParagraphCount() <= i )
     {
-        throw lang::IndexOutOfBoundsException(u"Invalid child index"_ustr, mxFrontEnd);
+        throw lang::IndexOutOfBoundsException(u"Invalid child index"_ustr);
     }
 
-    DBG_ASSERT(mxFrontEnd.is(), "AccessibleTextHelper_Impl::UpdateVisibleChildren: no frontend set");
+    DBG_ASSERT(mpFrontEnd.is(),
+               "AccessibleTextHelper_Impl::UpdateVisibleChildren: no frontend set");
 
-    if( mxFrontEnd.is() )
-        return maParaManager.CreateChild(i, mxFrontEnd, GetEditSource(), mnFirstVisibleChild + i);
+    if (mpFrontEnd.is())
+        return maParaManager.CreateChild(i, mpFrontEnd, GetEditSource(), mnFirstVisibleChild + i);
     else
         return nullptr;
 }
@@ -1462,15 +1466,9 @@ void AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Refere
 uno::Reference< XAccessible > AccessibleTextHelper_Impl::getAccessibleAtPoint( const awt::Point& _aPoint )
 {
     // make given position relative
-    if( !mxFrontEnd.is() )
-        throw uno::RuntimeException(u"AccessibleTextHelper_Impl::getAccessibleAt: frontend invalid"_ustr, mxFrontEnd );
-
-    uno::Reference< XAccessibleContext > xFrontEndContext = mxFrontEnd->getAccessibleContext();
-
-    if( !xFrontEndContext.is() )
-        throw uno::RuntimeException(u"AccessibleTextHelper_Impl::getAccessibleAt: frontend invalid"_ustr, mxFrontEnd );
-
-    uno::Reference< XAccessibleComponent > xFrontEndComponent( xFrontEndContext, uno::UNO_QUERY_THROW );
+    if (!mpFrontEnd.is())
+        throw uno::RuntimeException(
+            u"AccessibleTextHelper_Impl::getAccessibleAt: frontend invalid"_ustr);
 
     // #103862# No longer need to make given position relative
     Point aPoint( _aPoint.X, _aPoint.Y );
@@ -1545,13 +1543,14 @@ void AccessibleTextHelper::SetEditSource( ::std::unique_ptr< SvxEditSource > && 
 #endif
 }
 
-void AccessibleTextHelper::SetEventSource( const uno::Reference< XAccessible >& rInterface )
+void AccessibleTextHelper::SetEventSource(
+    const rtl::Reference<comphelper::OAccessibleComponentHelper>& rEventSource)
 {
 #ifdef DBG_UTIL
     mpImpl->CheckInvariants();
 #endif
 
-    mpImpl->SetEventSource( rInterface );
+    mpImpl->SetEventSource(rEventSource);
 
 #ifdef DBG_UTIL
     mpImpl->CheckInvariants();

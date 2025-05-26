@@ -24,6 +24,8 @@
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <comphelper/accessiblecomponenthelper.hxx>
+#include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 
@@ -200,11 +202,11 @@ public:
         Dispose() when you as the owner are disposing, since until
         then this object will hold that reference
 
-        @param rInterface
-        The interface that should be set as the source for
+        @param rEventSource
+        The accessible that should be set as the source for
         accessibility events sent by this object.
     */
-    void SetEventSource(const css::uno::Reference<css::accessibility::XAccessible>& rInterface);
+    void SetEventSource(const rtl::Reference<comphelper::OAccessibleComponentHelper>& rEventSource);
 
     /** Set offset of EditEngine/Outliner from parent
 
