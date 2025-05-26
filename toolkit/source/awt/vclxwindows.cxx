@@ -4583,14 +4583,9 @@ VCLXDateField::~VCLXDateField()
 {
 }
 
-//change the window type here to match the role
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXDateField::CreateAccessibleContext()
 {
     VclPtr<Edit> pEdit = GetAs<Edit>();
-    if (pEdit)
-    {
-        pEdit->SetType( WindowType::DATEFIELD );
-    }
     return AccessibleFactory::createAccessibleContext(pEdit);
 }
 
@@ -4917,14 +4912,9 @@ VCLXTimeField::~VCLXTimeField()
 {
 }
 
-//change the window type here to match the role
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXTimeField::CreateAccessibleContext()
 {
     VclPtr<Edit> pEdit = GetAs<Edit>();
-    if (pEdit)
-    {
-        pEdit->SetType( WindowType::TIMEFIELD );
-    }
     return AccessibleFactory::createAccessibleContext(pEdit);
 }
 

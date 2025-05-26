@@ -2007,7 +2007,7 @@ void DateFormatter::ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart )
 }
 
 DateField::DateField( vcl::Window* pParent, WinBits nWinStyle ) :
-    SpinField( pParent, nWinStyle ),
+    SpinField(pParent, nWinStyle, WindowType::DATEFIELD),
     DateFormatter(this),
     maFirst( GetMin() ),
     maLast( GetMax() )
@@ -2885,7 +2885,7 @@ void TimeFormatter::Reformat()
 }
 
 TimeField::TimeField( vcl::Window* pParent, WinBits nWinStyle ) :
-    SpinField( pParent, nWinStyle ),
+    SpinField(pParent, nWinStyle, WindowType::TIMEFIELD),
     TimeFormatter(this),
     maFirst( GetMin() ),
     maLast( GetMax() )
