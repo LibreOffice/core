@@ -33,7 +33,6 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 
 #include <comphelper/flagguard.hxx>
-#include <vcl/accessiblefactory.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/settings.hxx>

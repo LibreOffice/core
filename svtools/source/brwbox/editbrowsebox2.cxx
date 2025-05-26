@@ -25,7 +25,6 @@
 #include <svtools/svtresid.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
-#include <vcl/accessiblefactory.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>

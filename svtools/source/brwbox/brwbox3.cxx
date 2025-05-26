@@ -22,7 +22,6 @@
 #include <vcl/accessibility/AccessibleBrowseBoxHeaderCell.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
-#include <vcl/accessiblefactory.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>

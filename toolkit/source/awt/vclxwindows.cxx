@@ -37,7 +37,6 @@
 #include <awt/vclxwindows.hxx>
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
-#include <vcl/accessiblefactory.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/graph.hxx>

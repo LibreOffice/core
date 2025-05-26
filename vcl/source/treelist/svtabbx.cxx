@@ -20,7 +20,6 @@
 #include <accessibility/accessibletablistbox.hxx>
 
 #include <comphelper/types.hxx>
-#include <vcl/accessiblefactory.hxx>
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/svlbitm.hxx>

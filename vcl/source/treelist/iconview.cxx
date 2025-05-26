@@ -24,7 +24,6 @@
 #include <vcl/toolkit/viewdataentry.hxx>
 #include <iconview.hxx>
 #include "iconviewimpl.hxx"
-#include <vcl/accessiblefactory.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/toolkit/svlbitm.hxx>

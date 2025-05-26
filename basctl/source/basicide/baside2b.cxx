@@ -48,7 +48,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
 #include <utility>
-#include <vcl/accessiblefactory.hxx>
 #include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
