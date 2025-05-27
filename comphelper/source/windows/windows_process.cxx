@@ -129,11 +129,10 @@ static wchar_t* ArgToString(wchar_t *d, const wchar_t *s)
  */
 static wchar_t* MakeCommandLine(wchar_t **argv)
 {
-    int i;
     int len = 0;
 
     // The + 1 of the last argument handles the allocation for null termination
-    for (i = 0; argv[i]; ++i)
+    for (int i = 0; argv[i]; ++i)
         len += ArgStrLen(argv[i]) + 1;
 
     // Protect against callers that pass 0 arguments
@@ -145,7 +144,7 @@ static wchar_t* MakeCommandLine(wchar_t **argv)
         return nullptr;
 
     wchar_t *c = s;
-    for (i = 0; argv[i]; ++i)
+    for (int i = 0; argv[i]; ++i)
     {
         c = ArgToString(c, argv[i]);
         if (argv[i + 1])
@@ -166,10 +165,9 @@ WinLaunchChild(const wchar_t *exePath,
                HANDLE userToken,
                HANDLE *hProcess)
 {
-    wchar_t *cl;
     bool ok;
 
-    cl = MakeCommandLine(argv);
+    wchar_t* cl = MakeCommandLine(argv);
     if (!cl)
     {
         return FALSE;
