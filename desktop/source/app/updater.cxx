@@ -149,11 +149,9 @@ void CopyUpdaterToTempDir(const OUString& rInstallDirURL, const OUString& rTempD
 
 #ifdef UNX
 typedef char CharT;
-#define tstrncpy std::strncpy
 char const * toStream(char const * s) { return s; }
 #elif defined(_WIN32)
 typedef wchar_t CharT;
-#define tstrncpy std::wcsncpy
 OUString toStream(wchar_t const * s) { return OUString(o3tl::toU(s)); }
 #else
 #error "Need an implementation"
@@ -164,12 +162,12 @@ void createStr(const OUString& rStr, CharT** pArgs, size_t i)
 #ifdef UNX
     OString aStr = OUStringToOString(rStr, RTL_TEXTENCODING_UTF8);
 #elif defined(_WIN32)
-    OUString aStr = rStr;
+    const OUString& aStr = rStr;
 #else
 #error "Need an implementation"
 #endif
     CharT* pStr = new CharT[aStr.getLength() + 1];
-    tstrncpy(pStr, (CharT*)aStr.getStr(), aStr.getLength());
+    std::copy_n(aStr.getStr(), aStr.getLength(), pStr);
     pStr[aStr.getLength()] = '\0';
     pArgs[i] = pStr;
 }
