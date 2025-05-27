@@ -460,7 +460,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         OUStringBuffer sStrBuffer(sName);
                         sal_Int32 nTextLen = sText.getLength();
                         sal_Int32 nNameLen = sName.getLength();
-                        if (nNameLen > nTextLen)
+                        if (nTextLen > 0 && nNameLen > nTextLen)
                         {
                             for (sal_Int32 i = nTextLen - 1; i < nNameLen; i += nTextLen)
                                 sStrBuffer.insert(i + 1, std::u16string_view(u"\n"));
