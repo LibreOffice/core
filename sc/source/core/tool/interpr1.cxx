@@ -4856,14 +4856,17 @@ private:
 /** returns -1 when the matrix value is smaller than the query value, 0 when
     they are equal, and 1 when the matrix value is larger than the query
     value. */
-sal_Int32 lcl_CompareMatrix2Query(
-    SCSIZE i, const VectorMatrixAccessor& rMat, const ScQueryParam& rParam, const ScQueryEntry& rEntry, bool bMatchWholeCell )
+sal_Int32 lcl_CompareMatrix2Query( SCSIZE i, const VectorMatrixAccessor& rMat, const ScQueryParam& rParam,
+        const ScQueryEntry& rEntry, bool bMatchWholeCell, bool bEmptyIsLess = true )
 {
     if (rMat.IsEmpty(i))
     {
         /* TODO: in case we introduced query for real empty this would have to
          * be changed! */
-        return -1;      // empty always less than anything else
+        if (bEmptyIsLess)
+            return -1;  // empty always less than anything else
+        else
+            return 1;   // empty always greater than anything else
     }
 
     /* FIXME: what is an empty path (result of IF(false;true_path) in
@@ -7249,7 +7252,8 @@ void ScInterpreter::ScLookup()
         for (SCSIZE nLen = nLast-nFirst; nLen > 0; nLen = nLast-nFirst)
         {
             SCSIZE nMid = nFirst + nLen/2;
-            sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, aMatAcc2, aParam, rEntry, bMatchWholeCell );
+            sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, aMatAcc2, aParam, rEntry, bMatchWholeCell,
+                    false /* bEmptyIsLess, instead empty are sorted to end */);
             if (nCmp == 0)
             {
                 // exact match.  find the last item with the same value.
@@ -7275,7 +7279,8 @@ void ScInterpreter::ScLookup()
 
         if (nDelta == static_cast<SCCOLROW>(nLenMajor-2)) // last item
         {
-            sal_Int32 nCmp = lcl_CompareMatrix2Query(nDelta+1, aMatAcc2, aParam, rEntry, bMatchWholeCell );
+            sal_Int32 nCmp = lcl_CompareMatrix2Query(nDelta+1, aMatAcc2, aParam, rEntry, bMatchWholeCell,
+                    false /* bEmptyIsLess, instead empty are sorted to end */);
             if (nCmp <= 0)
             {
                 // either the last item is an exact match or the real
