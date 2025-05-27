@@ -3595,10 +3595,22 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
         }
         else if (pTmp->GetRedlineData(0).CanCombineForAcceptReject(aOrigData))
         {
+            bool bFormatOnInsert = pTmp->GetType() == RedlineType::Format
+                                   && pTmp->GetStackCount() > 1
+                                   && pTmp->GetType(1) == RedlineType::Insert;
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                std::unique_ptr<SwUndoRejectRedline> pUndoRdl
-                    = std::make_unique<SwUndoRejectRedline>(*pTmp);
+                std::unique_ptr<SwUndoRedline> pUndoRdl;
+                if (bFormatOnInsert)
+                {
+                    // Format on insert: this is rejected by accepting the format + deleting the
+                    // range.
+                    pUndoRdl = std::make_unique<SwUndoAcceptRedline>(*pTmp);
+                }
+                else
+                {
+                    pUndoRdl = std::make_unique<SwUndoRejectRedline>(*pTmp);
+                }
 #if OSL_DEBUG_LEVEL > 0
                 pUndoRdl->SetRedlineCountDontCheck(true);
 #endif
@@ -3606,7 +3618,20 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             }
             nPamEndtNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
-            bRet |= lcl_RejectRedline(maRedlineTable, nRdlIdx, bCallDelete);
+
+            if (bFormatOnInsert)
+            {
+                // Accept the format itself and then reject the insert by deleting the range.
+                SwPaM aPam(*pTmp->Start(), *pTmp->End());
+                bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
+                // Handles undo/redo itself.
+                m_rDoc.getIDocumentContentOperations().DeleteRange(aPam);
+            }
+            else
+            {
+                bRet |= lcl_RejectRedline(maRedlineTable, nRdlIdx, bCallDelete);
+            }
+
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
         else if (CanCombineTypesForAcceptReject(aOrigData, *pTmp)

@@ -280,6 +280,25 @@ void SwHistorySetText::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
+void SwHistorySetText::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistorySetText"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("node-index"),
+                                      BAD_CAST(OString::number(sal_Int32(m_nNodeIndex)).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("start"),
+                                      BAD_CAST(OString::number(sal_Int32(m_nStart)).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("end"),
+                                      BAD_CAST(OString::number(sal_Int32(m_nEnd)).getStr()));
+    SwHistoryHint::dumpAsXml(pWriter);
+
+    if (m_pAttr)
+    {
+        m_pAttr->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwHistorySetTextField::SwHistorySetTextField( const SwTextField* pTextField, SwNodeOffset nNodePos )
     : SwHistoryHint( HSTRY_SETTXTFLDHNT )
     , m_pField( new SwFormatField( *pTextField->GetFormatField().GetField() ) )

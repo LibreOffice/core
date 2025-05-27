@@ -1376,6 +1376,17 @@ void SwUndoDelete::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoDelete"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    if (m_aSttStr)
+    {
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("stt-str"),
+                                          BAD_CAST(m_aSttStr->toUtf8().getStr()));
+    }
+    if (m_aEndStr)
+    {
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("end-str"),
+                                          BAD_CAST(m_aEndStr->toUtf8().getStr()));
+    }
+
     SwUndo::dumpAsXml(pWriter);
     SwUndoSaveContent::dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
