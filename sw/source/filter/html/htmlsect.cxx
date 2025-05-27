@@ -641,6 +641,8 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             aPropInfo.m_aId.clear();
         }
 
+        SanitizeAnchor(aFrameItemSet);
+
         InsertFlyFrame(aFrameItemSet, xCntxt.get(), UIName(aFlyName));
 
         xCntxt->SetPopStack( true );
