@@ -88,7 +88,7 @@ constexpr std::u16string_view aSofficeExeName = u"soffice.exe";
 OUString normalizePath(const OUString& rPath)
 {
     OUString aPath =  rPath;
-#if defined WNT
+#if defined(_WIN32)
     aPath = aPath.replace('\\', '/');
 #endif
 
@@ -114,7 +114,7 @@ OUString normalizePath(const OUString& rPath)
         aPath = aTempPath.copy(0, i) + aPath.copy(nIndex + 3);
     }
 
-#if defined WNT
+#if defined(_WIN32)
     aPath = aPath.replace('/', '\\');
 #endif
     return aPath;
