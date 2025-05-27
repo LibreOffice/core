@@ -25,6 +25,7 @@ private:
     const TableDirectoryEntry* mpTableDirectoryEntry;
     const char* mpNameTablePointer;
     const NameTable* mpNameTable;
+    sal_uInt16 mnNumberOfRecords;
 
     const char* getTablePointer(const TableDirectoryEntry* pEntry, size_t nEntrySize)
     {
@@ -49,7 +50,25 @@ public:
         , mpTableDirectoryEntry(pTableDirectoryEntry)
         , mpNameTablePointer(getTablePointer(mpTableDirectoryEntry, sizeof(NameTable)))
         , mpNameTable(reinterpret_cast<const NameTable*>(mpNameTablePointer))
+        , mnNumberOfRecords(0)
     {
+        if (mpNameTable)
+        {
+            mnNumberOfRecords = mpNameTable->nCount;
+
+            const char* pEnd = mrFontDataContainer.getPointer() + mrFontDataContainer.size();
+            const char* pStart = mpNameTablePointer + sizeof(NameTable);
+            size_t nAvailableData = pEnd - pStart;
+            size_t nMaxRecordsPossible = nAvailableData / sizeof(NameRecord);
+            if (mnNumberOfRecords > nMaxRecordsPossible)
+            {
+                SAL_WARN("vcl.fonts", "Font claimed to have "
+                                          << mnNumberOfRecords
+                                          << " name records, but only space for "
+                                          << nMaxRecordsPossible);
+                mnNumberOfRecords = nMaxRecordsPossible;
+            }
+        }
     }
 
     sal_uInt32 getTableOffset() { return mpTableDirectoryEntry->offset; }
@@ -57,7 +76,7 @@ public:
     const NameTable* getNameTable() { return mpNameTable; }
 
     /** Number of tables */
-    sal_uInt16 getNumberOfRecords() { return mpNameTable ? mpNameTable->nCount : 0; }
+    sal_uInt16 getNumberOfRecords() { return mnNumberOfRecords; }
 
     /** Get a name table record for index */
     const NameRecord* getNameRecord(sal_uInt32 index)
