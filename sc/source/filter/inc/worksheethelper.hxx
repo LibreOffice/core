@@ -292,9 +292,6 @@ public:
     void setCellFormulaValue(
         const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
 
-    ScDocument& getScDocument();
-
-
 private:
     WorksheetGlobals&   mrSheetGlob;
 };

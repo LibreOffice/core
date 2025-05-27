@@ -1412,11 +1412,6 @@ WorksheetHelper::WorksheetHelper( WorksheetGlobals& rSheetGlob ) :
 {
 }
 
-ScDocument& WorksheetHelper::getScDocument()
-{
-    return getDocImport().getDoc();
-}
-
 /*static*/ WorksheetGlobalsRef WorksheetHelper::constructGlobals( const WorkbookHelper& rHelper,
         const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, SCTAB nSheet )
 {
