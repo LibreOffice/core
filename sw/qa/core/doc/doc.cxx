@@ -821,6 +821,28 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)
     // - Actual  : 3
     // i.e. the insert redlines before/after BBB were not accepted.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+
+    // And when rejecting the format-on-insert:
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, pTextNode->GetText());
+    // Undo() creates a new cursor.
+    pCursor = pWrtShell->GetCursor();
+    pCursor->DeleteMark();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Move inside "BBB".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    nRedline = 0;
+    rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    // A redline is found.
+    CPPUNIT_ASSERT_LESS(rRedlines.size(), nRedline);
+    pWrtShell->RejectRedline(nRedline);
+
+    // Then make sure the format-on-insert is rejected, i.e. BBB is not in the text anymore:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: AAACCC
+    // - Actual  : AAABBBCCC
+    // i.e. only the format part of BBB was rejected, it wasn't removed from the document.
+    CPPUNIT_ASSERT_EQUAL(u"AAACCC"_ustr, pTextNode->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)

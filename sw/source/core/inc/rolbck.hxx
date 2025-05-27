@@ -129,6 +129,7 @@ public:
     virtual ~SwHistorySetText() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwHistorySetTextField final : public SwHistoryHint
