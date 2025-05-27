@@ -99,12 +99,25 @@ private:
     }
 
 public:
-    TableEntriesHandler(FontDataContainer const& rFontDataContainer, const char* pPosition,
-                        sal_uInt16 nNumberOfTables)
+    TableEntriesHandler(FontDataContainer const& rFontDataContainer)
         : mrFontDataContainer(rFontDataContainer)
-        , mpFirstPosition(pPosition)
-        , mnNumberOfTables(nNumberOfTables)
     {
+        const char* pData = mrFontDataContainer.getPointer();
+        assert(mrFontDataContainer.size() >= sizeof(TableDirectory));
+        mpFirstPosition = pData + sizeof(TableDirectory);
+
+        const TableDirectory* pDirectory = reinterpret_cast<const TableDirectory*>(pData);
+        mnNumberOfTables = pDirectory->nNumberOfTables;
+
+        size_t nAvailableData = mrFontDataContainer.size() - sizeof(TableDirectory);
+        size_t nMaxRecordsPossible = nAvailableData / sizeof(TableDirectoryEntry);
+        if (mnNumberOfTables > nMaxRecordsPossible)
+        {
+            SAL_WARN("vcl.fonts", "Font claimed to have " << mnNumberOfTables
+                                                          << " table records, but only space for "
+                                                          << nMaxRecordsPossible);
+            mnNumberOfTables = nMaxRecordsPossible;
+        }
     }
 
     const TableDirectoryEntry* getEntry(sal_uInt32 nTag)
@@ -171,11 +184,6 @@ public:
     {
     }
 
-    const TableDirectory* getTableDirector()
-    {
-        return reinterpret_cast<const TableDirectory*>(mrFontDataContainer.getPointer());
-    }
-
     std::unique_ptr<TableEntriesHandler> getTableEntriesHandler()
     {
         size_t nSize = mrFontDataContainer.size();
@@ -184,12 +192,7 @@ public:
             SAL_WARN("vcl.fonts", "Font Data shorter than a TableDirectory");
             return nullptr;
         }
-        const char* pPosition = mrFontDataContainer.getPointer() + sizeof(TableDirectory);
-
-        auto* pDirectory = getTableDirector();
-        std::unique_ptr<TableEntriesHandler> pHandler(
-            new TableEntriesHandler(mrFontDataContainer, pPosition, pDirectory->nNumberOfTables));
-        return pHandler;
+        return std::make_unique<TableEntriesHandler>(mrFontDataContainer);
     }
 
     /** Gets the string from a name table */
