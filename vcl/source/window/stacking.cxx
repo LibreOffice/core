@@ -842,6 +842,12 @@ void Window::SetParent( vcl::Window* pNewParent )
     if( !pNewParent || pNewParent == this )
         return;
 
+    if (!mpWindowImpl)
+    {
+        SAL_WARN("vcl", "Window::SetParent(): mpWindowImpl == NULL");
+        return;
+    }
+
     // check if the taskpanelist would change and move the window pointer accordingly
     SystemWindow *pSysWin = ImplGetLastSystemWindow(this);
     SystemWindow *pNewSysWin = nullptr;
@@ -865,12 +871,6 @@ void Window::SetParent( vcl::Window* pNewParent )
     }
 
     ImplSetFrameParent( pNewParent );
-
-    if (!mpWindowImpl)
-    {
-        SAL_WARN("vcl", "Window::SetParent(): mpWindowImpl == NULL");
-        return;
-    }
 
     if ( mpWindowImpl->mpBorderWindow )
     {
