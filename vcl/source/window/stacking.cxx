@@ -866,6 +866,12 @@ void Window::SetParent( vcl::Window* pNewParent )
 
     ImplSetFrameParent( pNewParent );
 
+    if (!mpWindowImpl)
+    {
+        SAL_WARN("vcl", "Window::SetParent(): mpWindowImpl == NULL");
+        return;
+    }
+
     if ( mpWindowImpl->mpBorderWindow )
     {
         mpWindowImpl->mpRealParent = pNewParent;
