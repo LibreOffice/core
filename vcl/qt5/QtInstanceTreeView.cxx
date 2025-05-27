@@ -438,10 +438,17 @@ int QtInstanceTreeView::get_iter_depth(const weld::TreeIter& rIter) const
     return nDepth;
 }
 
-int QtInstanceTreeView::get_iter_index_in_parent(const weld::TreeIter&) const
+int QtInstanceTreeView::get_iter_index_in_parent(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    int nIndex;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aIndex = modelIndex(rIter);
+        nIndex = aIndex.row();
+    });
+
+    return nIndex;
 }
 
 int QtInstanceTreeView::iter_compare(const weld::TreeIter&, const weld::TreeIter&) const
