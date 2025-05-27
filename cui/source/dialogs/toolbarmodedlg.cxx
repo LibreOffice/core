@@ -44,7 +44,7 @@ ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
 void ToolbarmodeDialog::ActivatePage(const OUString& rPage)
 {
     const bool bOn(rPage == "uimode");
-    m_xApplyBtn->set_visible(bOn); // preferrably set_active() but not (yet) available
+    m_xApplyBtn->set_visible(bOn); // preferably set_active() but not (yet) available
     m_xResetBtn->set_visible(bOn);
 }
 
