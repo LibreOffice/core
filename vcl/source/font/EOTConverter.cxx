@@ -165,4 +165,15 @@ bool EOTConverter::convert(std::vector<sal_uInt8>& rEotOutput)
 
 } // end font namespace
 
+int TestEOT(const void* data, sal_uInt32 size)
+{
+    const sal_uInt8* bytes = static_cast<const sal_uInt8*>(data);
+    std::vector<sal_uInt8> input(bytes, bytes + size);
+
+    std::vector<sal_uInt8> aEOT;
+    font::FontDataContainer aContainer(input);
+    font::EOTConverter aConverter(aContainer);
+    return aConverter.convert(aEOT) ? 1 : 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

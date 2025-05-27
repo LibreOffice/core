@@ -64,4 +64,6 @@ public:
 
 } // end font namespace
 
+int VCL_DLLPUBLIC TestEOT(const void* data, sal_uInt32 size);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

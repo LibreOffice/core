@@ -170,5 +170,6 @@ cp fodtfuzzer_seed_corpus.zip fodt2pdffuzzer_seed_corpus.zip
 cp rtffuzzer_seed_corpus.zip rtf2pdffuzzer_seed_corpus.zip
 cp fodsfuzzer_seed_corpus.zip fods2xlsfuzzer_seed_corpus.zip
 cp htmlfuzzer_seed_corpus.zip schtmlfuzzer_seed_corpus.zip
+cp sftfuzzer_seed_corpus.zip eotfuzzer_seed_corpus.zip
 
 echo end downloading dependencies at `date -u`

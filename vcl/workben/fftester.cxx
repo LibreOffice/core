@@ -47,6 +47,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/filter/SvmReader.hxx>
+#include <vcl/font/EOTConverter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wmf.hxx>
@@ -260,6 +261,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             std::vector<sal_uInt8> aData(aFileStream.remainingSize());
             aFileStream.ReadBytes(aData.data(), aData.size());
             ret = TestFontSubset(aData.data(), aData.size());
+        }
+        else if (strcmp(argv[2], "eot") == 0)
+        {
+            SvFileStream aFileStream(out, StreamMode::READ);
+            std::vector<sal_uInt8> aData(aFileStream.remainingSize());
+            aFileStream.ReadBytes(aData.data(), aData.size());
+            ret = TestEOT(aData.data(), aData.size());
         }
 #ifndef DISABLE_DYNLOADING
         else if ((strcmp(argv[2], "doc") == 0) || (strcmp(argv[2], "ww8") == 0))
