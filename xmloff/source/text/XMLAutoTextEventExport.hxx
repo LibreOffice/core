@@ -52,7 +52,7 @@ public:
 
 private:
 
-    /// export the events off all autotexts
+    /// export the events of all autotexts
     virtual ErrCode exportDoc(
         enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) override;
 
