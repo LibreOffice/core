@@ -120,7 +120,7 @@ OUString normalizePath(const OUString& rPath)
     return aPath;
 }
 
-void CopyFileToDir(const OUString& rTempDirURL, const OUString & rFileName, const OUString& rOldDir)
+bool CopyFileToDir(const OUString& rTempDirURL, const OUString & rFileName, const OUString& rOldDir)
 {
     OUString aSourceURL = rOldDir + "/" + rFileName;
     OUString aDestURL = rTempDirURL + "/" + rFileName;
@@ -129,8 +129,9 @@ void CopyFileToDir(const OUString& rTempDirURL, const OUString & rFileName, cons
     if (eError != osl::File::E_None)
     {
         SAL_WARN("desktop.updater", "could not copy the file to a temp directory: " << rFileName);
-        throw std::exception();
+        return false;
     }
+    return true;
 }
 
 OUString getPathFromURL(const OUString& rURL)
@@ -141,10 +142,10 @@ OUString getPathFromURL(const OUString& rURL)
     return normalizePath(aPath);
 }
 
-void CopyUpdaterToTempDir(const OUString& rInstallDirURL, const OUString& rTempDirURL)
+bool CopyUpdaterToTempDir(const OUString& rInstallDirURL, const OUString& rTempDirURL)
 {
-    CopyFileToDir(rTempDirURL, aUpdaterName, rInstallDirURL);
-    CopyFileToDir(rTempDirURL, u"updater.ini"_ustr, rInstallDirURL);
+    return CopyFileToDir(rTempDirURL, aUpdaterName, rInstallDirURL)
+           && CopyFileToDir(rTempDirURL, u"updater.ini"_ustr, rInstallDirURL);
 }
 
 #ifdef UNX
@@ -296,7 +297,8 @@ bool update()
 {
     utl::TempFileNamed aTempDir(nullptr, true);
     OUString aTempDirURL = aTempDir.GetURL();
-    CopyUpdaterToTempDir(Updater::getExecutableDirURL(), aTempDirURL);
+    if (!CopyUpdaterToTempDir(Updater::getExecutableDirURL(), aTempDirURL))
+        return false;
 
     OUString aUpdaterPath = getPathFromURL(aTempDirURL + "/" + aUpdaterName);
 
