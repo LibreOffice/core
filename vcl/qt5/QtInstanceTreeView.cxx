@@ -35,6 +35,8 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
     connect(m_pTreeView, &QTreeView::activated, this, &QtInstanceTreeView::handleActivated);
     connect(m_pSelectionModel, &QItemSelectionModel::selectionChanged, this,
             &QtInstanceTreeView::handleSelectionChanged);
+    connect(m_pModel, &QSortFilterProxyModel::dataChanged, this,
+            &QtInstanceTreeView::handleDataChanged);
 }
 
 void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const OUString* pStr,
@@ -1007,6 +1009,14 @@ QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionM
     }
 }
 
+int QtInstanceTreeView::externalColumnIndex(const QModelIndex& rIndex)
+{
+    if (m_bExtraToggleButtonColumnEnabled)
+        return rIndex.column() - 1;
+
+    return rIndex.column();
+}
+
 QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol,
                                            const QModelIndex& rParentIndex) const
 {
@@ -1092,6 +1102,22 @@ void QtInstanceTreeView::handleActivated()
 {
     SolarMutexGuard g;
     signal_row_activated();
+}
+
+void QtInstanceTreeView::handleDataChanged(const QModelIndex& rTopLeft,
+                                           const QModelIndex& rBottomRight,
+                                           const QVector<int>& rRoles)
+{
+    SolarMutexGuard g;
+
+    // only notify about check state changes
+    if (!rRoles.contains(Qt::CheckStateRole))
+        return;
+
+    assert(rTopLeft == rBottomRight && "Case of multiple changes not implemented yet");
+    (void)rBottomRight;
+
+    signal_toggled(iter_col(QtInstanceTreeIter(rTopLeft), externalColumnIndex(rTopLeft)));
 }
 
 void QtInstanceTreeView::handleSelectionChanged()
