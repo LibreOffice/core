@@ -35,8 +35,8 @@ CPPUNIT_TEST_FIXTURE(TTFTest, testReadTTFStructure)
 
     font::FontDataContainer aContainer(aFontBytes);
     font::TTFFont aFont(aContainer);
-    auto pHanlder = aFont.getTableEntriesHandler();
-    const font::OS2Table* pOS2 = pHanlder->getOS2Table();
+    auto pHandler = aFont.getTableEntriesHandler();
+    const font::OS2Table* pOS2 = pHandler->getOS2Table();
     CPPUNIT_ASSERT(pOS2);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(400), sal_uInt16(pOS2->nWeightClass));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), sal_uInt16(pOS2->nWidthClass));
@@ -48,33 +48,33 @@ CPPUNIT_TEST_FIXTURE(TTFTest, testReadTTFStructure)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), sal_uInt16(pOS2->nUnicodeRange3));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), sal_uInt16(pOS2->nUnicodeRange4));
 
-    const font::HeadTable* pHeadTable = pHanlder->getHeadTable();
+    const font::HeadTable* pHeadTable = pHandler->getHeadTable();
     CPPUNIT_ASSERT(pHeadTable);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1000), sal_uInt16(pHeadTable->nUnitsPerEm));
 
-    auto pNameTableHanlder = pHanlder->getNameTableHandler();
-    CPPUNIT_ASSERT(pNameTableHanlder);
+    auto pNameTableHandler = pHandler->getNameTableHandler();
+    CPPUNIT_ASSERT(pNameTableHandler);
 
     sal_uInt64 nOffset = 0;
     sal_uInt16 nLength = 0;
 
-    CPPUNIT_ASSERT(pNameTableHanlder->findEnglishUnicodeNameOffset(font::NameID::FamilyName,
+    CPPUNIT_ASSERT(pNameTableHandler->findEnglishUnicodeNameOffset(font::NameID::FamilyName,
                                                                    nOffset, nLength));
     OUString aFamilyName = aFont.getNameTableString(nOffset, nLength);
     CPPUNIT_ASSERT_EQUAL(u"Ahem"_ustr, aFamilyName);
 
-    CPPUNIT_ASSERT(pNameTableHanlder->findEnglishUnicodeNameOffset(font::NameID::FullFontName,
+    CPPUNIT_ASSERT(pNameTableHandler->findEnglishUnicodeNameOffset(font::NameID::FullFontName,
                                                                    nOffset, nLength));
     OUString aFullFontName = aFont.getNameTableString(nOffset, nLength);
     CPPUNIT_ASSERT_EQUAL(u"Ahem"_ustr, aFullFontName);
 
-    CPPUNIT_ASSERT(pNameTableHanlder->findEnglishUnicodeNameOffset(font::NameID::SubfamilyName,
+    CPPUNIT_ASSERT(pNameTableHandler->findEnglishUnicodeNameOffset(font::NameID::SubfamilyName,
                                                                    nOffset, nLength));
     OUString aSubFamilyName = aFont.getNameTableString(nOffset, nLength);
     CPPUNIT_ASSERT_EQUAL(u"Regular"_ustr, aSubFamilyName);
 
     CPPUNIT_ASSERT(
-        pNameTableHanlder->findEnglishUnicodeNameOffset(font::NameID::Version, nOffset, nLength));
+        pNameTableHandler->findEnglishUnicodeNameOffset(font::NameID::Version, nOffset, nLength));
     OUString aVersion = aFont.getNameTableString(nOffset, nLength);
     CPPUNIT_ASSERT_EQUAL(u"Version 1.1"_ustr, aVersion);
 }

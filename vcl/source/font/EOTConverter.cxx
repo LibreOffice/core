@@ -23,7 +23,7 @@ namespace
 {
 // Writes padding, length and string data to font output
 void writeNameTableString(font::TTFFont& rFont,
-                          std::unique_ptr<NameTableHandler>& pNameTableHanlder,
+                          std::unique_ptr<NameTableHandler>& pNameTableHandler,
                           font::NameID eNameID, std::vector<sal_uInt8>& rEotOutput)
 {
     sal_uInt64 nOffset = 0;
@@ -33,8 +33,8 @@ void writeNameTableString(font::TTFFont& rFont,
     rEotOutput.push_back(0);
     rEotOutput.push_back(0);
 
-    if (pNameTableHanlder
-        && pNameTableHanlder->findEnglishUnicodeNameOffset(eNameID, nOffset, nLength))
+    if (pNameTableHandler
+        && pNameTableHandler->findEnglishUnicodeNameOffset(eNameID, nOffset, nLength))
     {
         // Length
         rEotOutput.push_back(sal_uInt8((nLength + 2) & 0xff));
@@ -78,11 +78,11 @@ bool EOTConverter::convert(std::vector<sal_uInt8>& rEotOutput)
     pEot->nReserved3 = 0;
     pEot->nReserved4 = 0;
 
-    auto pHanlder = aFont.getTableEntriesHandler();
-    if (!pHanlder)
+    auto pHandler = aFont.getTableEntriesHandler();
+    if (!pHandler)
         return false;
 
-    const font::OS2Table* pOS2 = pHanlder->getOS2Table();
+    const font::OS2Table* pOS2 = pHandler->getOS2Table();
     if (pOS2)
     {
         for (sal_uInt32 n = 0; n < 10; n++)
@@ -101,18 +101,18 @@ bool EOTConverter::convert(std::vector<sal_uInt8>& rEotOutput)
         pEot->nCodePageRange2 = pOS2->nCodePageRange2;
     }
 
-    const font::HeadTable* pHeadTable = pHanlder->getHeadTable();
+    const font::HeadTable* pHeadTable = pHandler->getHeadTable();
     if (pHeadTable)
     {
         pEot->nCheckSumAdjustment = pHeadTable->nCheckSumAdjustment;
     }
 
-    auto pNameTableHanlder = pHanlder->getNameTableHandler();
+    auto pNameTableHandler = pHandler->getNameTableHandler();
 
-    writeNameTableString(aFont, pNameTableHanlder, font::NameID::FamilyName, rEotOutput);
-    writeNameTableString(aFont, pNameTableHanlder, font::NameID::SubfamilyName, rEotOutput);
-    writeNameTableString(aFont, pNameTableHanlder, font::NameID::Version, rEotOutput);
-    writeNameTableString(aFont, pNameTableHanlder, font::NameID::FullFontName, rEotOutput);
+    writeNameTableString(aFont, pNameTableHandler, font::NameID::FamilyName, rEotOutput);
+    writeNameTableString(aFont, pNameTableHandler, font::NameID::SubfamilyName, rEotOutput);
+    writeNameTableString(aFont, pNameTableHandler, font::NameID::Version, rEotOutput);
+    writeNameTableString(aFont, pNameTableHandler, font::NameID::FullFontName, rEotOutput);
 
     // Padding5
     rEotOutput.push_back(0);
