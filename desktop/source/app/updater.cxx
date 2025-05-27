@@ -158,7 +158,7 @@ OUString toStream(wchar_t const * s) { return OUString(o3tl::toU(s)); }
 #error "Need an implementation"
 #endif
 
-void createStr(const OUString& rStr, CharT** pArgs, size_t i)
+CharT* createStr(const OUString& rStr)
 {
 #ifdef UNX
     OString aStr = OUStringToOString(rStr, RTL_TEXTENCODING_UTF8);
@@ -170,34 +170,34 @@ void createStr(const OUString& rStr, CharT** pArgs, size_t i)
     CharT* pStr = new CharT[aStr.getLength() + 1];
     std::copy_n(aStr.getStr(), aStr.getLength(), pStr);
     pStr[aStr.getLength()] = '\0';
-    pArgs[i] = pStr;
+    return pStr;
 }
 
-CharT** createCommandLine(OUString const & argv0)
+std::vector<CharT*> createCommandLine(OUString const & argv0)
 {
     OUString aInstallDir = Updater::getInstallationPath();
 
     size_t nCommandLineArgs = rtl_getAppCommandArgCount();
-    size_t nArgs = 8 + nCommandLineArgs;
-    CharT** pArgs = new CharT*[nArgs];
-    createStr(argv0, pArgs, 0);
+    std::vector<CharT*> aArgs;
+    aArgs.reserve(nCommandLineArgs + 8);
+    aArgs.push_back(createStr(argv0));
     {
         // directory with the patch log
         OUString aPatchDir = Updater::getPatchDirURL();
         rtl::Bootstrap::expandMacros(aPatchDir);
         OUString aTempDirPath = getPathFromURL(aPatchDir);
         Updater::log("Patch Dir: " + aTempDirPath);
-        createStr(aTempDirPath, pArgs, 1);
+        aArgs.push_back(createStr(aTempDirPath));
     }
     {
         // the actual update directory
         Updater::log("Install Dir: " + aInstallDir);
-        createStr(aInstallDir, pArgs, 2);
+        aArgs.push_back(createStr(aInstallDir));
     }
     {
         // the temporary updated build
         Updater::log("Working Dir: " + aInstallDir);
-        createStr(aInstallDir, pArgs, 3);
+        aArgs.push_back(createStr(aInstallDir));
     }
     {
 #ifdef UNX
@@ -210,20 +210,20 @@ CharT** createCommandLine(OUString const & argv0)
 #else
 #error "Need an implementation"
 #endif
-        createStr(aPID, pArgs, 4);
+        aArgs.push_back(createStr(aPID));
     }
     {
         OUString aExeDir = Updater::getExecutableDirURL();
         OUString aSofficePath = getPathFromURL(aExeDir);
         Updater::log("soffice Path: " + aSofficePath);
-        createStr(aSofficePath, pArgs, 5);
+        aArgs.push_back(createStr(aSofficePath));
     }
     {
         // the executable to start after the successful update
         OUString aExeDir = Updater::getExecutableDirURL();
         OUString aSofficePathURL = aExeDir + aSofficeExeName;
         OUString aSofficePath = getPathFromURL(aSofficePathURL);
-        createStr(aSofficePath, pArgs, 6);
+        aArgs.push_back(createStr(aSofficePath));
     }
 
     // add the command line arguments from the soffice list
@@ -231,12 +231,12 @@ CharT** createCommandLine(OUString const & argv0)
     {
         OUString aCommandLineArg;
         rtl_getAppCommandArg(i, &aCommandLineArg.pData);
-        createStr(aCommandLineArg, pArgs, 7 + i);
+        aArgs.push_back(createStr(aCommandLineArg));
     }
 
-    pArgs[nArgs - 1] = nullptr;
+    aArgs.push_back(nullptr);
 
-    return pArgs;
+    return aArgs;
 }
 
 struct update_file
@@ -303,7 +303,7 @@ bool update()
     OUString aUpdaterPath = getPathFromURL(aTempDirURL + "/" + aUpdaterName);
 
     Updater::log("Calling the updater with parameters: ");
-    CharT** pArgs = createCommandLine(aUpdaterPath);
+    std::vector<CharT*> aArgs = createCommandLine(aUpdaterPath);
 
     bool bSuccess = true;
     const char* pUpdaterTestReplace = std::getenv("LIBO_UPDATER_TEST_REPLACE");
@@ -311,30 +311,29 @@ bool update()
     {
 #if UNX
         OString aPath = OUStringToOString(aUpdaterPath, RTL_TEXTENCODING_UTF8);
-        if (execv(aPath.getStr(), pArgs))
+        if (execv(aPath.getStr(), aArgs.data()))
         {
             printf("execv failed with error %d %s\n",errno,strerror(errno));
             bSuccess = false;
         }
 #elif defined(_WIN32)
-        bSuccess = WinLaunchChild(o3tl::toW(aUpdaterPath.getStr()), pArgs);
+        bSuccess = WinLaunchChild(o3tl::toW(aUpdaterPath.getStr()), aArgs.data());
 #endif
     }
     else
     {
         SAL_WARN("desktop.updater", "Updater executable path: " << aUpdaterPath);
-        for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
+        for (auto arg : aArgs)
         {
-            SAL_WARN("desktop.updater", toStream(pArgs[i]));
+            SAL_WARN("desktop.updater", toStream(arg));
         }
         bSuccess = false;
     }
 
-    for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
+    for (auto arg : aArgs)
     {
-        delete[] pArgs[i];
+        delete[] arg;
     }
-    delete[] pArgs;
 
     return bSuccess;
 }
