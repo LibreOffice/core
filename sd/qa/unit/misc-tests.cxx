@@ -41,7 +41,6 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <comphelper/base64.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <undo/undomanager.hxx>
 #include <GraphicViewShell.hxx>
