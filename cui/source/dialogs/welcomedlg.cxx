@@ -61,6 +61,7 @@ WelcomeDialog::WelcomeDialog(weld::Window* pParent, const bool bIsFirstStart)
 
 WelcomeDialog::~WelcomeDialog()
 {
+    m_xTabCtrl->set_current_page(sNewsTab); // ensure next start with the first page
     if (!m_xShowAgain->get_active())
     {
         std::shared_ptr<comphelper::ConfigurationChanges> xChanges(

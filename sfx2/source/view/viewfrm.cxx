@@ -1648,24 +1648,29 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     bool bIsWhatsNewShown = false; //suppress tipoftheday if whatsnew was shown
 
                     static const bool bRunningUnitTest = o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest();
-                    static const bool bIsFirstStart = officecfg::Office::Common::Misc::FirstRun::get();
-                    if (bIsFirstStart && !IsInModalMode() && !bRunningUnitTest)
+                    std::optional<bool> bShowWelcome = officecfg::Setup::Product::WhatsNewDialog::get(); // nil at first start = welcome dialog
+                    if (!bShowWelcome.has_value() && !IsInModalMode() && !bRunningUnitTest)
                     {
                         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                         ScopedVclPtr<SfxAbstractTabDialog> pDlg(
                             pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld(), true));
                         pDlg->Execute();
+
+                        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                        officecfg::Setup::Product::WhatsNewDialog::set(true, batch); // true after first start = whatsnew dialog
+                        batch->commit();
+
                         bIsWhatsNewShown = true;
                     }
 
                     //what's new dialog
-                    static bool wantsWhatsNew = utl::isProductVersionUpgraded() && !IsInModalMode() && !bIsFirstStart;
+                    static bool wantsWhatsNew = utl::isProductVersionUpgraded() && !IsInModalMode() && bShowWelcome.has_value();
                     if (wantsWhatsNew)
                     {
                         wantsWhatsNew = false;
                         if (officecfg::Setup::Product::WhatsNew::get())
                         {
-                            if (officecfg::Setup::Product::WhatsNewDialog::get())
+                            if (bShowWelcome)
                             {
                                 SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(
