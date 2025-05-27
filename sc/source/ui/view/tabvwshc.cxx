@@ -766,9 +766,9 @@ OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal, const Op
     return aFormula;
 }
 
-void ScTabViewShell::InitFormEditData()
+void ScTabViewShell::InitFormEditData(ScDocShell& rShell)
 {
-    mpFormEditData.reset(new ScFormEditData);
+    mpFormEditData.reset(new ScFormEditData(rShell));
 }
 
 void ScTabViewShell::ClearFormEditData()

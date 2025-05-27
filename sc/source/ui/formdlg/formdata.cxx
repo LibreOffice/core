@@ -19,9 +19,9 @@
 
 #include <formdata.hxx>
 
-ScFormEditData::ScFormEditData()
+ScFormEditData::ScFormEditData(ScDocShell& rShell)
     : pInputHandler(nullptr)
-    , pScDocShell(nullptr)
+    , rDocShell(rShell)
 {
     Reset();
 }

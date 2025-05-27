@@ -26,14 +26,13 @@ class ScDocShell;
 class ScFormEditData : public formula::FormEditData
 {
 public:
-                        ScFormEditData();
+                        ScFormEditData(ScDocShell& rShell);
                         virtual ~ScFormEditData() override;
 
     ScInputHandler*     GetInputHandler()   { return pInputHandler;}
-    ScDocShell*         GetDocShell()       { return pScDocShell;}
+    ScDocShell&         GetDocShell()       { return rDocShell;}
 
     void                SetInputHandler(ScInputHandler* pHdl)   { pInputHandler=pHdl;}
-    void                SetDocShell(ScDocShell* pSds)           { pScDocShell=pSds;}
 
     virtual void            SaveValues() override;
 
@@ -42,7 +41,7 @@ private:
     void operator =(ScFormEditData const &) = delete;
 
     ScInputHandler*     pInputHandler;
-    ScDocShell*         pScDocShell;
+    ScDocShell&         rDocShell;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

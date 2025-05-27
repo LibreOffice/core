@@ -452,7 +452,7 @@ public:
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
     SC_DLLPUBLIC static css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
 
-    void InitFormEditData();
+    void InitFormEditData(ScDocShell& rShell);
     void ClearFormEditData();
     ScFormEditData* GetFormEditData() { return mpFormEditData.get(); }
 

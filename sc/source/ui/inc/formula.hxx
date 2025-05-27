@@ -99,7 +99,7 @@ private:
     static void  SaveLRUEntry(const ScFuncDesc* pFuncDesc);
 
     static bool  IsInputHdl(const ScInputHandler* pHdl);
-    static ScInputHandler* GetNextInputHandler(const ScDocShell* pDocShell, ScTabViewShell** ppViewSh);
+    static ScInputHandler* GetNextInputHandler(const ScDocShell& rDocShell, ScTabViewShell** ppViewSh);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -120,10 +120,9 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
     SCTAB nTab = rViewData.GetTabNo();
     m_CursorPos = ScAddress( nCol, nRow, nTab );
 
-    m_pViewShell->InitFormEditData();                             // create new
+    m_pViewShell->InitFormEditData(rViewData.GetDocShell()); // create new
     pData = m_pViewShell->GetFormEditData();
     pData->SetInputHandler(pInputHdl);
-    pData->SetDocShell(&rViewData.GetDocShell());
 
     OSL_ENSURE(pData,"FormEditData not available");
 
@@ -264,11 +263,11 @@ bool ScFormulaDlg::IsInputHdl(const ScInputHandler* pHdl)
 
 }
 
-ScInputHandler* ScFormulaDlg::GetNextInputHandler(const ScDocShell* pDocShell, ScTabViewShell** ppViewSh)
+ScInputHandler* ScFormulaDlg::GetNextInputHandler(const ScDocShell& rDocShell, ScTabViewShell** ppViewSh)
 {
     ScInputHandler* pHdl=nullptr;
 
-    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( &rDocShell );
     while( pFrame && pHdl==nullptr)
     {
         SfxViewShell* p = pFrame->GetViewShell();
@@ -278,7 +277,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(const ScDocShell* pDocShell, S
             pHdl=pViewSh->GetInputHandler();
             if(ppViewSh!=nullptr) *ppViewSh=pViewSh;
         }
-        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
+        pFrame = SfxViewFrame::GetNext( *pFrame, &rDocShell );
     }
 
     return pHdl;
