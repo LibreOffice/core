@@ -1154,8 +1154,14 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_vendor/distlib/metadata.py \
 	Lib/pip/_vendor/distlib/resources.py \
 	Lib/pip/_vendor/distlib/scripts.py \
+	Lib/pip/_vendor/distlib/t32.exe \
+	Lib/pip/_vendor/distlib/t64-arm.exe \
+	Lib/pip/_vendor/distlib/t64.exe \
 	Lib/pip/_vendor/distlib/util.py \
 	Lib/pip/_vendor/distlib/version.py \
+	Lib/pip/_vendor/distlib/w32.exe \
+	Lib/pip/_vendor/distlib/w64-arm.exe \
+	Lib/pip/_vendor/distlib/w64.exe \
 	Lib/pip/_vendor/distlib/wheel.py \
 ))
 
@@ -1596,6 +1602,10 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/_reqs.py \
 	Lib/setuptools/archive_util.py \
 	Lib/setuptools/build_meta.py \
+	Lib/setuptools/cli-32.exe \
+	Lib/setuptools/cli-64.exe \
+	Lib/setuptools/cli-arm64.exe \
+	Lib/setuptools/cli.exe \
 	Lib/setuptools/dep_util.py \
 	Lib/setuptools/depends.py \
 	Lib/setuptools/discovery.py \
@@ -1603,6 +1613,10 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/setuptools/errors.py \
 	Lib/setuptools/extension.py \
 	Lib/setuptools/glob.py \
+	Lib/setuptools/gui-32.exe \
+	Lib/setuptools/gui-64.exe \
+	Lib/setuptools/gui-arm64.exe \
+	Lib/setuptools/gui.exe \
 	Lib/setuptools/installer.py \
 	Lib/setuptools/launch.py \
 	Lib/setuptools/logging.py \
