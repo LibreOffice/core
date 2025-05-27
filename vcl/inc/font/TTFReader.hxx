@@ -26,8 +26,19 @@ private:
     const char* mpNameTablePointer;
     const NameTable* mpNameTable;
 
-    const char* getTablePointer(const TableDirectoryEntry* pEntry)
+    const char* getTablePointer(const TableDirectoryEntry* pEntry, size_t nEntrySize)
     {
+        size_t nSize = mrFontDataContainer.size();
+        if (pEntry->offset > nSize)
+        {
+            SAL_WARN("vcl.fonts", "Table offset beyond end of available data");
+            return nullptr;
+        }
+        if (nEntrySize > nSize - pEntry->offset)
+        {
+            SAL_WARN("vcl.fonts", "Insufficient available data for table entry");
+            return nullptr;
+        }
         return mrFontDataContainer.getPointer() + pEntry->offset;
     }
 
@@ -36,7 +47,7 @@ public:
                      const TableDirectoryEntry* pTableDirectoryEntry)
         : mrFontDataContainer(rFontDataContainer)
         , mpTableDirectoryEntry(pTableDirectoryEntry)
-        , mpNameTablePointer(getTablePointer(mpTableDirectoryEntry))
+        , mpNameTablePointer(getTablePointer(mpTableDirectoryEntry, sizeof(NameTable)))
         , mpNameTable(reinterpret_cast<const NameTable*>(mpNameTablePointer))
     {
     }
@@ -46,7 +57,7 @@ public:
     const NameTable* getNameTable() { return mpNameTable; }
 
     /** Number of tables */
-    sal_uInt16 getNumberOfRecords() { return mpNameTable->nCount; }
+    sal_uInt16 getNumberOfRecords() { return mpNameTable ? mpNameTable->nCount : 0; }
 
     /** Get a name table record for index */
     const NameRecord* getNameRecord(sal_uInt32 index)
