@@ -649,7 +649,7 @@ void ScFormulaDlg::setCurrentFormula(const OUString& _sReplacement)
         //to repaint, e.g. when switching to another window and back, then in
         //ScMultiTextWnd::Paint a new editengine will have been created via
         //GetEditView with its default Modification handler enabled. So ensure
-        //its off when we will access it via InputReplaceSelection
+        //it's off when we will access it via InputReplaceSelection
         pScMod->InputTurnOffWinEngine();
     }
     pScMod->InputReplaceSelection(_sReplacement);
