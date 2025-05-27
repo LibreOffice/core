@@ -6243,6 +6243,7 @@ if test "$cross_compiling" = "yes"; then
         LIBLANGTAG
         LibO
         LIBFFI
+        LIBEOT
         LIBPN
         LIBTIFF
         LIBWEBP
