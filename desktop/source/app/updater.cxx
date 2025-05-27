@@ -76,11 +76,11 @@ public:
 };
 
 #ifdef UNX
-const char* const pUpdaterName = "updater";
-const char* const pSofficeExeName = "soffice";
+constexpr OUString aUpdaterName = u"updater"_ustr;
+constexpr std::u16string_view aSofficeExeName = u"soffice";
 #elif defined(_WIN32)
-const char* pUpdaterName = "updater.exe";
-const char* pSofficeExeName = "soffice.exe";
+constexpr OUString aUpdaterName = u"updater.exe"_ustr;
+constexpr std::u16string_view aSofficeExeName = u"soffice.exe";
 #else
 #error "Need implementation"
 #endif
@@ -143,7 +143,6 @@ OUString getPathFromURL(const OUString& rURL)
 
 void CopyUpdaterToTempDir(const OUString& rInstallDirURL, const OUString& rTempDirURL)
 {
-    OUString aUpdaterName = OUString::fromUtf8(pUpdaterName);
     CopyFileToDir(rTempDirURL, aUpdaterName, rInstallDirURL);
     CopyFileToDir(rTempDirURL, u"updater.ini"_ustr, rInstallDirURL);
 }
@@ -223,7 +222,7 @@ CharT** createCommandLine(OUString const & argv0)
     {
         // the executable to start after the successful update
         OUString aExeDir = Updater::getExecutableDirURL();
-        OUString aSofficePathURL = aExeDir + OUString::fromUtf8(pSofficeExeName);
+        OUString aSofficePathURL = aExeDir + aSofficeExeName;
         OUString aSofficePath = getPathFromURL(aSofficePathURL);
         createStr(aSofficePath, pArgs, 6);
     }
@@ -301,7 +300,7 @@ bool update()
     OUString aTempDirURL = aTempDir.GetURL();
     CopyUpdaterToTempDir(Updater::getExecutableDirURL(), aTempDirURL);
 
-    OUString aUpdaterPath = getPathFromURL(aTempDirURL + "/" + OUString::fromUtf8(pUpdaterName));
+    OUString aUpdaterPath = getPathFromURL(aTempDirURL + "/" + aUpdaterName);
 
     Updater::log("Calling the updater with parameters: ");
     CharT** pArgs = createCommandLine(aUpdaterPath);
