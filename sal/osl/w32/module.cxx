@@ -32,6 +32,8 @@
 #include <systools/win32/extended_max_path.hxx>
 #include <vector>
 
+#ifndef DISABLE_DYNLOADING
+
 /*
     under WIN32, we use the void* oslModule
     as a WIN32 HANDLE (which is also a 32-bit value)
@@ -103,6 +105,8 @@ oslModule osl_loadModuleRelativeAscii(
 {
     return osl_loadModuleRelative(baseModule, OUString::createFromAscii(relativePath).pData, mode);
 }
+
+#endif // !DISABLE_DYNLOADING
 
 sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
