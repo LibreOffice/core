@@ -12,6 +12,7 @@
 #include <font/TTFStructure.hxx>
 #include <vcl/font/FontDataContainer.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 namespace font
 {
@@ -177,9 +178,15 @@ public:
 
     std::unique_ptr<TableEntriesHandler> getTableEntriesHandler()
     {
-        auto* pDirectory = getTableDirector();
+        size_t nSize = mrFontDataContainer.size();
+        if (nSize < sizeof(TableDirectory))
+        {
+            SAL_WARN("vcl.fonts", "Font Data shorter than a TableDirectory");
+            return nullptr;
+        }
         const char* pPosition = mrFontDataContainer.getPointer() + sizeof(TableDirectory);
 
+        auto* pDirectory = getTableDirector();
         std::unique_ptr<TableEntriesHandler> pHandler(
             new TableEntriesHandler(mrFontDataContainer, pPosition, pDirectory->nNumberOfTables));
         return pHandler;
