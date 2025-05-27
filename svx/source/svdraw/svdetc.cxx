@@ -92,34 +92,34 @@ OLEObjCache::OLEObjCache()
 // This limit is only useful on 32-bit windows, where we can run out of virtual memory (see tdf#95579)
 // For everything else, we are better off keeping it in main memory rather than using our hacky page-out thing
 #if defined _WIN32 && !defined _WIN64
-        nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
+        mnSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
 #else
-        nSize = SAL_MAX_INT32; // effectively disable the page-out mechanism
+        mnSize = SAL_MAX_INT32; // effectively disable the page-out mechanism
 #endif
     }
     else
-        nSize = 100;
-    pTimer.reset( new AutoTimer( "svx OLEObjCache pTimer UnloadCheck" ) );
-    pTimer->SetInvokeHandler( LINK(this, OLEObjCache, UnloadCheckHdl) );
-    pTimer->SetTimeout(20000);
-    pTimer->SetStatic();
+        mnSize = 100;
+    mpTimer.reset( new AutoTimer( "svx OLEObjCache pTimer UnloadCheck" ) );
+    mpTimer->SetInvokeHandler( LINK(this, OLEObjCache, UnloadCheckHdl) );
+    mpTimer->SetTimeout(20000);
+    mpTimer->SetStatic();
 }
 
 OLEObjCache::~OLEObjCache()
 {
-    pTimer->Stop();
+    mpTimer->Stop();
 }
 
 IMPL_LINK_NOARG(OLEObjCache, UnloadCheckHdl, Timer*, void)
 {
-    if (nSize >= maObjs.size())
+    if (mnSize >= maObjs.size())
         return;
 
     // more objects than configured cache size try to remove objects
     // of course not the freshly inserted one at nIndex=0
     size_t nCount2 = maObjs.size();
     size_t nIndex = nCount2-1;
-    while( nIndex && nCount2 > nSize )
+    while( nIndex && nCount2 > mnSize )
     {
         SdrOle2Obj* pUnloadObj = maObjs[nIndex--];
         if (!pUnloadObj)
@@ -188,10 +188,10 @@ void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
 
     // if a new object was inserted, recalculate the cache
     if (!bFound)
-        pTimer->Invoke();
+        mpTimer->Invoke();
 
-    if (!bFound || !pTimer->IsActive())
-        pTimer->Start();
+    if (!bFound || !mpTimer->IsActive())
+        mpTimer->Start();
 }
 
 void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
@@ -200,7 +200,7 @@ void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
     if (it != maObjs.end())
         maObjs.erase(it);
     if (maObjs.empty())
-        pTimer->Stop();
+        mpTimer->Stop();
 }
 
 size_t OLEObjCache::size() const
@@ -364,7 +364,7 @@ std::unique_ptr<SdrOutliner> SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrMode
 std::vector<Link<SdrObjCreatorParams, rtl::Reference<SdrObject>>>& ImpGetUserMakeObjHdl()
 {
     SdrGlobalData& rGlobalData=GetSdrGlobalData();
-    return rGlobalData.aUserMakeObjHdl;
+    return rGlobalData.maUserMakeObjHdl;
 }
 
 bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE)

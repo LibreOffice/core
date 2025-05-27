@@ -151,8 +151,8 @@ class OLEObjCache
 {
     std::vector<SdrOle2Obj*> maObjs;
 
-    size_t         nSize;
-    std::unique_ptr<AutoTimer>  pTimer;
+    size_t         mnSize;
+    std::unique_ptr<AutoTimer>  mpTimer;
 
     static bool UnloadObj(SdrOle2Obj& rObj);
     DECL_LINK( UnloadCheckHdl, Timer*, void );
@@ -175,14 +175,14 @@ class SVXCORE_DLLPUBLIC SdrGlobalData
     SvtSysLocale  maSysLocale;     // follows always locale settings
 public:
     std::vector<Link<SdrObjCreatorParams, rtl::Reference<SdrObject>>>
-                        aUserMakeObjHdl;
-    OLEObjCache         aOLEObjCache;
+                        maUserMakeObjHdl;
+    OLEObjCache         maOLEObjCache;
 
     SAL_DLLPRIVATE SdrGlobalData();
 
     const SvtSysLocale& GetSysLocale() { return maSysLocale;  } // follows always locale settings
     const LocaleDataWrapper& GetLocaleData();    // follows always SysLocale
-    OLEObjCache&        GetOLEObjCache() { return aOLEObjCache; }
+    OLEObjCache&        GetOLEObjCache() { return maOLEObjCache; }
 };
 
 SVXCORE_DLLPUBLIC SdrGlobalData & GetSdrGlobalData();
