@@ -400,7 +400,6 @@ private:
     rtl::Reference<ScCellRangeObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
-    IF_MERGELIBS(SC_DLLPUBLIC)
                             ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR);
     virtual                 ~ScCellRangesObj() override;
 
