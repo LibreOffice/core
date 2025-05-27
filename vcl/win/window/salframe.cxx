@@ -5302,6 +5302,10 @@ static bool ImplHandleIMEEndComposition( HWND hWnd )
             pFrame->mbCandidateMode = false;
             bDef = false;
         }
+
+        // tdf#155158: Windows IMEs do not necessarily send a composition message if they are
+        // dismissed during composition (for example, by an input method/language change).
+        pFrame->CallCallback(SalEvent::EndExtTextInput, nullptr);
     }
 
     ImplSalYieldMutexRelease();
