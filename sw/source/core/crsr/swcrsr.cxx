@@ -1785,8 +1785,8 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
         if (!bLeft && pLayout && pLayout->GetFieldmarkMode() == sw::FieldmarkMode::ShowResult)
         {
             SwTextNode const*const pNode(GetPoint()->GetNode().GetTextNode());
-            assert(pNode);
-            if (pNode->Len() != GetPoint()->GetContentIndex()
+            SAL_WARN_IF(!pNode, "sw.core", "expected a SwTextNode");
+            if (pNode && pNode->Len() != GetPoint()->GetContentIndex()
                 && pNode->GetText()[GetPoint()->GetContentIndex()] == CH_TXT_ATR_FIELDSTART)
             {
                 IDocumentMarkAccess const& rIDMA(*GetDoc().getIDocumentMarkAccess());
