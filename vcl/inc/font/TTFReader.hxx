@@ -93,8 +93,19 @@ private:
     const char* mpFirstPosition;
     sal_uInt16 mnNumberOfTables;
 
-    const char* getTablePointer(const TableDirectoryEntry* pEntry)
+    const char* getTablePointer(const TableDirectoryEntry* pEntry, size_t nEntrySize)
     {
+        size_t nSize = mrFontDataContainer.size();
+        if (pEntry->offset > nSize)
+        {
+            SAL_WARN("vcl.fonts", "Table offset beyond end of available data");
+            return nullptr;
+        }
+        if (nEntrySize > nSize - pEntry->offset)
+        {
+            SAL_WARN("vcl.fonts", "Insufficient available data for table entry");
+            return nullptr;
+        }
         return mrFontDataContainer.getPointer() + pEntry->offset;
     }
 
@@ -138,7 +149,7 @@ public:
         const auto* pEntry = getEntry(T_OS2);
         if (!pEntry)
             return nullptr;
-        return reinterpret_cast<const OS2Table*>(getTablePointer(pEntry));
+        return reinterpret_cast<const OS2Table*>(getTablePointer(pEntry, sizeof(OS2Table)));
     }
 
     const HeadTable* getHeadTable()
@@ -146,7 +157,7 @@ public:
         const auto* pEntry = getEntry(T_head);
         if (!pEntry)
             return nullptr;
-        return reinterpret_cast<const HeadTable*>(getTablePointer(pEntry));
+        return reinterpret_cast<const HeadTable*>(getTablePointer(pEntry, sizeof(HeadTable)));
     }
 
     const NameTable* getNameTable()
@@ -154,7 +165,7 @@ public:
         const auto* pEntry = getEntry(T_name);
         if (!pEntry)
             return nullptr;
-        return reinterpret_cast<const NameTable*>(getTablePointer(pEntry));
+        return reinterpret_cast<const NameTable*>(getTablePointer(pEntry, sizeof(NameTable)));
     }
 
     std::unique_ptr<NameTableHandler> getNameTableHandler()
