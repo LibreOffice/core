@@ -79,6 +79,8 @@ bool EOTConverter::convert(std::vector<sal_uInt8>& rEotOutput)
     pEot->nReserved4 = 0;
 
     auto pHanlder = aFont.getTableEntriesHandler();
+    if (!pHanlder)
+        return false;
 
     const font::OS2Table* pOS2 = pHanlder->getOS2Table();
     if (pOS2)

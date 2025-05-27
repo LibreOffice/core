@@ -12,6 +12,7 @@
 #include <font/TTFStructure.hxx>
 #include <vcl/font/FontDataContainer.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 namespace font
 {
@@ -24,9 +25,21 @@ private:
     const TableDirectoryEntry* mpTableDirectoryEntry;
     const char* mpNameTablePointer;
     const NameTable* mpNameTable;
+    sal_uInt16 mnNumberOfRecords;
 
-    const char* getTablePointer(const TableDirectoryEntry* pEntry)
+    const char* getTablePointer(const TableDirectoryEntry* pEntry, size_t nEntrySize)
     {
+        size_t nSize = mrFontDataContainer.size();
+        if (pEntry->offset > nSize)
+        {
+            SAL_WARN("vcl.fonts", "Table offset beyond end of available data");
+            return nullptr;
+        }
+        if (nEntrySize > nSize - pEntry->offset)
+        {
+            SAL_WARN("vcl.fonts", "Insufficient available data for table entry");
+            return nullptr;
+        }
         return mrFontDataContainer.getPointer() + pEntry->offset;
     }
 
@@ -35,9 +48,27 @@ public:
                      const TableDirectoryEntry* pTableDirectoryEntry)
         : mrFontDataContainer(rFontDataContainer)
         , mpTableDirectoryEntry(pTableDirectoryEntry)
-        , mpNameTablePointer(getTablePointer(mpTableDirectoryEntry))
+        , mpNameTablePointer(getTablePointer(mpTableDirectoryEntry, sizeof(NameTable)))
         , mpNameTable(reinterpret_cast<const NameTable*>(mpNameTablePointer))
+        , mnNumberOfRecords(0)
     {
+        if (mpNameTable)
+        {
+            mnNumberOfRecords = mpNameTable->nCount;
+
+            const char* pEnd = mrFontDataContainer.getPointer() + mrFontDataContainer.size();
+            const char* pStart = mpNameTablePointer + sizeof(NameTable);
+            size_t nAvailableData = pEnd - pStart;
+            size_t nMaxRecordsPossible = nAvailableData / sizeof(NameRecord);
+            if (mnNumberOfRecords > nMaxRecordsPossible)
+            {
+                SAL_WARN("vcl.fonts", "Font claimed to have "
+                                          << mnNumberOfRecords
+                                          << " name records, but only space for "
+                                          << nMaxRecordsPossible);
+                mnNumberOfRecords = nMaxRecordsPossible;
+            }
+        }
     }
 
     sal_uInt32 getTableOffset() { return mpTableDirectoryEntry->offset; }
@@ -45,7 +76,7 @@ public:
     const NameTable* getNameTable() { return mpNameTable; }
 
     /** Number of tables */
-    sal_uInt16 getNumberOfRecords() { return mpNameTable->nCount; }
+    sal_uInt16 getNumberOfRecords() { return mnNumberOfRecords; }
 
     /** Get a name table record for index */
     const NameRecord* getNameRecord(sal_uInt32 index)
@@ -92,18 +123,42 @@ private:
     const char* mpFirstPosition;
     sal_uInt16 mnNumberOfTables;
 
-    const char* getTablePointer(const TableDirectoryEntry* pEntry)
+    const char* getTablePointer(const TableDirectoryEntry* pEntry, size_t nEntrySize)
     {
+        size_t nSize = mrFontDataContainer.size();
+        if (pEntry->offset > nSize)
+        {
+            SAL_WARN("vcl.fonts", "Table offset beyond end of available data");
+            return nullptr;
+        }
+        if (nEntrySize > nSize - pEntry->offset)
+        {
+            SAL_WARN("vcl.fonts", "Insufficient available data for table entry");
+            return nullptr;
+        }
         return mrFontDataContainer.getPointer() + pEntry->offset;
     }
 
 public:
-    TableEntriesHandler(FontDataContainer const& rFontDataContainer, const char* pPosition,
-                        sal_uInt16 nNumberOfTables)
+    TableEntriesHandler(FontDataContainer const& rFontDataContainer)
         : mrFontDataContainer(rFontDataContainer)
-        , mpFirstPosition(pPosition)
-        , mnNumberOfTables(nNumberOfTables)
     {
+        const char* pData = mrFontDataContainer.getPointer();
+        assert(mrFontDataContainer.size() >= sizeof(TableDirectory));
+        mpFirstPosition = pData + sizeof(TableDirectory);
+
+        const TableDirectory* pDirectory = reinterpret_cast<const TableDirectory*>(pData);
+        mnNumberOfTables = pDirectory->nNumberOfTables;
+
+        size_t nAvailableData = mrFontDataContainer.size() - sizeof(TableDirectory);
+        size_t nMaxRecordsPossible = nAvailableData / sizeof(TableDirectoryEntry);
+        if (mnNumberOfTables > nMaxRecordsPossible)
+        {
+            SAL_WARN("vcl.fonts", "Font claimed to have " << mnNumberOfTables
+                                                          << " table records, but only space for "
+                                                          << nMaxRecordsPossible);
+            mnNumberOfTables = nMaxRecordsPossible;
+        }
     }
 
     const TableDirectoryEntry* getEntry(sal_uInt32 nTag)
@@ -124,7 +179,7 @@ public:
         const auto* pEntry = getEntry(T_OS2);
         if (!pEntry)
             return nullptr;
-        return reinterpret_cast<const OS2Table*>(getTablePointer(pEntry));
+        return reinterpret_cast<const OS2Table*>(getTablePointer(pEntry, sizeof(OS2Table)));
     }
 
     const HeadTable* getHeadTable()
@@ -132,7 +187,7 @@ public:
         const auto* pEntry = getEntry(T_head);
         if (!pEntry)
             return nullptr;
-        return reinterpret_cast<const HeadTable*>(getTablePointer(pEntry));
+        return reinterpret_cast<const HeadTable*>(getTablePointer(pEntry, sizeof(HeadTable)));
     }
 
     const NameTable* getNameTable()
@@ -140,7 +195,7 @@ public:
         const auto* pEntry = getEntry(T_name);
         if (!pEntry)
             return nullptr;
-        return reinterpret_cast<const NameTable*>(getTablePointer(pEntry));
+        return reinterpret_cast<const NameTable*>(getTablePointer(pEntry, sizeof(NameTable)));
     }
 
     std::unique_ptr<NameTableHandler> getNameTableHandler()
@@ -170,19 +225,15 @@ public:
     {
     }
 
-    const TableDirectory* getTableDirector()
-    {
-        return reinterpret_cast<const TableDirectory*>(mrFontDataContainer.getPointer());
-    }
-
     std::unique_ptr<TableEntriesHandler> getTableEntriesHandler()
     {
-        auto* pDirectory = getTableDirector();
-        const char* pPosition = mrFontDataContainer.getPointer() + sizeof(TableDirectory);
-
-        std::unique_ptr<TableEntriesHandler> pHandler(
-            new TableEntriesHandler(mrFontDataContainer, pPosition, pDirectory->nNumberOfTables));
-        return pHandler;
+        size_t nSize = mrFontDataContainer.size();
+        if (nSize < sizeof(TableDirectory))
+        {
+            SAL_WARN("vcl.fonts", "Font Data shorter than a TableDirectory");
+            return nullptr;
+        }
+        return std::make_unique<TableEntriesHandler>(mrFontDataContainer);
     }
 
     /** Gets the string from a name table */
