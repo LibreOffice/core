@@ -63,6 +63,8 @@ class TimerManagerImpl final
 {
     std::mutex m_Lock; // shared lock with each impl. thread
     salhelper::Timer* m_pHead; // the underlying shared queue
+
+    std::mutex m_implLock;
     std::shared_ptr<TimerManager> m_pImpl;
 
 public:
@@ -70,6 +72,7 @@ public:
 
     void joinThread()
     {
+        std::scoped_lock g(m_implLock);
         m_pImpl.reset();
     }
 
@@ -82,6 +85,7 @@ public:
 
     TimerManager& ensureThread()
     {
+        std::scoped_lock g(m_implLock);
         if (!m_pImpl)
             m_pImpl.reset(new TimerManager(m_pHead, m_Lock));
         return *m_pImpl;
