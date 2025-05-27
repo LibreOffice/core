@@ -49,15 +49,15 @@ FuPresentationLayout::FuPresentationLayout (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuPresentationLayout::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuPresentationLayout::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuPresentationLayout( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuPresentationLayout( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -101,7 +101,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                 {
                     if (pPage->IsSelected() || pPage->GetPageKind() != PageKind::Standard)
                         continue;
-                    mpDoc->SetSelected(pPage, true);
+                    mrDoc.SetSelected(pPage, true);
                     aUnselect.push_back(pPage);
                 }
             }
@@ -111,9 +111,9 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     std::vector<SdPage*> aSelectedPages;
     std::vector<sal_uInt16> aSelectedPageNums;
     // determine the active pages
-    for (sal_uInt16 nPage = 0; nPage < mpDoc->GetSdPageCount(PageKind::Standard); nPage++)
+    for (sal_uInt16 nPage = 0; nPage < mrDoc.GetSdPageCount(PageKind::Standard); nPage++)
     {
-        SdPage* pPage = mpDoc->GetSdPage(nPage, PageKind::Standard);
+        SdPage* pPage = mrDoc.GetSdPage(nPage, PageKind::Standard);
         if (pPage->IsSelected())
         {
             aSelectedPages.push_back(pPage);
@@ -128,7 +128,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     bool   bLoad = false;           // appear the new master pages?
     OUString aFile;
 
-    SfxItemSetFixed<ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END> aSet(mpDoc->GetPool() );
+    SfxItemSetFixed<ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END> aSet(mrDoc.GetPool() );
 
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad));
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_MASTER_PAGE, bMasterPage ) );
@@ -202,7 +202,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     {
         sal_Int32 nIdx{ 0 };
         OUString aFileName = aFile.getToken(0, DOCUMENT_TOKEN, nIdx);
-        SdDrawDocument* pTempDoc = mpDoc->OpenBookmarkDoc( aFileName );
+        SdDrawDocument* pTempDoc = mrDoc.OpenBookmarkDoc( aFileName );
 
         // #69581: If I chose the standard-template I got no filename and so I get no
         //         SdDrawDocument-Pointer. But the method SetMasterPage is able to handle
@@ -211,14 +211,14 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         if( pTempDoc )
             aLayoutName = aFile.getToken(0, DOCUMENT_TOKEN, nIdx);
         for (auto nSelectedPage : aSelectedPageNums)
-            mpDoc->SetMasterPage(nSelectedPage, aLayoutName, pTempDoc, bMasterPage, bCheckMasters);
-        mpDoc->CloseBookmarkDoc();
+            mrDoc.SetMasterPage(nSelectedPage, aLayoutName, pTempDoc, bMasterPage, bCheckMasters);
+        mrDoc.CloseBookmarkDoc();
     }
     else
     {
         // use master page with the layout name aFile from current Doc
         for (auto nSelectedPage : aSelectedPageNums)
-            mpDoc->SetMasterPage(nSelectedPage, aFile, mpDoc, bMasterPage, bCheckMasters);
+            mrDoc.SetMasterPage(nSelectedPage, aFile, &mrDoc, bMasterPage, bCheckMasters);
     }
 
     // remove blocking
@@ -257,7 +257,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
     //Undo transfer to document selection
     for (auto pPage : aUnselect)
-        mpDoc->SetSelected(pPage, false);
+        mrDoc.SetSelected(pPage, false);
 
 
     // fake a mode change to repaint the page tab bar

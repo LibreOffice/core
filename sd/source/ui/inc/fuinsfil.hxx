@@ -32,7 +32,7 @@ class FuInsertFile final
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq ) override;
 
     static void     GetSupportedFilterVector( ::std::vector< OUString >& rFilterVector );
@@ -42,7 +42,7 @@ private:
         ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq);
 
     OUString        aLayoutName;    ///< layout name of the currently inserted page

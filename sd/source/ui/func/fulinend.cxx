@@ -37,14 +37,14 @@ namespace sd {
 
 
 FuLineEnd::FuLineEnd(ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
-                    SdDrawDocument* pDoc, SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+                    SdDrawDocument& rDoc, SfxRequest& rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuLineEnd::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuLineEnd::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuLineEnd( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuLineEnd( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -91,7 +91,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
     // Delete the created poly-object
     pConvPolyObj.clear();
 
-    XLineEndListRef pLineEndList = mpDoc->GetLineEndList();
+    XLineEndListRef pLineEndList = mrDoc.GetLineEndList();
 
     OUString aNewName( SdResId( STR_LINEEND ) );
     OUString aDesc( SdResId( STR_DESC_LINEEND ) );

@@ -109,7 +109,7 @@ bool changeStyle(sd::DrawDocShell* pDocShell, SdStyleSheet* pStyle,
     if (bChanged)
     {
         pDocShell->GetUndoManager()->AddUndoAction(
-            std::make_unique<StyleSheetUndoAction>(pDocShell->GetDoc(), *pStyle, &aItemSet));
+            std::make_unique<StyleSheetUndoAction>(*pDocShell->GetDoc(), *pStyle, &aItemSet));
         pStyle->GetItemSet().Put(aItemSet);
         pStyle->Broadcast(SfxHint(SfxHintId::DataChanged));
     }

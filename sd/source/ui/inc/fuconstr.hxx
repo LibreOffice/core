@@ -56,7 +56,7 @@ protected:
     FuConstruct (ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq);
 private:
     bool bSelectionChanged;

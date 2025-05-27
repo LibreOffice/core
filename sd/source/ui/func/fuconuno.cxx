@@ -41,18 +41,18 @@ FuConstructUnoControl::FuConstructUnoControl (
     ViewShell&  rViewSh,
     ::sd::Window*       pWin,
     ::sd::View*         pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest&     rReq)
-    : FuConstruct(rViewSh, pWin, pView, pDoc, rReq)
+    : FuConstruct(rViewSh, pWin, pView, rDoc, rReq)
     , nInventor(SdrInventor::Unknown)
     , nIdentifier(SdrObjKind::NONE)
 {
 }
 
-rtl::Reference<FuPoor> FuConstructUnoControl::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+rtl::Reference<FuPoor> FuConstructUnoControl::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq, bool bPermanent )
 {
     FuConstructUnoControl* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructUnoControl( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructUnoControl( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent(bPermanent);
     return xFunc;

@@ -47,33 +47,33 @@ FuSlideShowDlg::FuSlideShowDlg (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor( rViewSh, pWin, pView, pDoc, rReq )
+    : FuPoor( rViewSh, pWin, pView, rDoc, rReq )
 {
 }
 
-rtl::Reference<FuPoor> FuSlideShowDlg::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuSlideShowDlg::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuSlideShowDlg( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuSlideShowDlg( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
 
 void FuSlideShowDlg::DoExecute( SfxRequest& )
 {
-    PresentationSettings& rPresentationSettings = mpDoc->getPresentationSettings();
+    PresentationSettings& rPresentationSettings = mrDoc.getPresentationSettings();
 
-    SfxItemSetFixed<ATTR_PRESENT_START, ATTR_PRESENT_END> aDlgSet( mpDoc->GetPool() );
-    std::vector<OUString> aPageNameList(mpDoc->GetSdPageCount( PageKind::Standard ));
+    SfxItemSetFixed<ATTR_PRESENT_START, ATTR_PRESENT_END> aDlgSet( mrDoc.GetPool() );
+    std::vector<OUString> aPageNameList(mrDoc.GetSdPageCount( PageKind::Standard ));
     const OUString& rPresPage = rPresentationSettings.maPresPage;
     OUString        aFirstPage;
     SdPage*         pPage = nullptr;
     ::tools::Long            nPage;
 
-    for( nPage = mpDoc->GetSdPageCount( PageKind::Standard ) - 1; nPage >= 0; nPage-- )
+    for( nPage = mrDoc.GetSdPageCount( PageKind::Standard ) - 1; nPage >= 0; nPage-- )
     {
-        pPage = mpDoc->GetSdPage( static_cast<sal_uInt16>(nPage), PageKind::Standard );
+        pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPage), PageKind::Standard );
         OUString aStr( pPage->GetName() );
 
         if ( aStr.isEmpty() )
@@ -89,7 +89,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
         else if ( pPage->IsSelected() && aFirstPage.isEmpty() )
             aFirstPage = aStr;
     }
-    SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
+    SdCustomShowList* pCustomShowList = mrDoc.GetCustomShowList(); // No Create
 
     if( aFirstPage.isEmpty() && pPage )
         aFirstPage = pPage->GetName();
@@ -238,7 +238,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
     // is something has changed, we set the modified flag
     if ( bValuesChanged )
-        mpDoc->SetChanged();
+        mrDoc.SetChanged();
 }
 
 } // end of namespace sd

@@ -52,9 +52,9 @@ FuMorph::FuMorph (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq )
-    :   FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    :   FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
@@ -62,11 +62,11 @@ rtl::Reference<FuPoor> FuMorph::Create(
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq
 )
 {
-    rtl::Reference<FuPoor> xFunc( new FuMorph( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuMorph( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }

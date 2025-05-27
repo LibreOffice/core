@@ -81,9 +81,9 @@ FuConstructRectangle::FuConstructRectangle (
     ViewShell&  rViewSh,
     ::sd::Window*       pWin,
     ::sd::View*         pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest&     rReq)
-    : FuConstruct(rViewSh, pWin, pView, pDoc, rReq)
+    : FuConstruct(rViewSh, pWin, pView, rDoc, rReq)
     , mnFillTransparence(0)
     , mnLineStyle(SAL_MAX_UINT16)
 {
@@ -108,10 +108,10 @@ bool isSticky(const SfxRequest& rReq)
 
 }
 
-rtl::Reference<FuPoor> FuConstructRectangle::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+rtl::Reference<FuPoor> FuConstructRectangle::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq, bool bPermanent )
 {
     FuConstructRectangle* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructRectangle( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructRectangle( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent(bPermanent || isSticky(rReq));
     return xFunc;
@@ -267,7 +267,7 @@ bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 
         if (pObj)
         {
-            SfxItemSet aAttr(mpDoc->GetPool());
+            SfxItemSet aAttr(mrDoc.GetPool());
             SetStyleSheet(aAttr, pObj);
             SetAttributes(aAttr, pObj);
             SetLineEnds(aAttr, *pObj);
@@ -295,7 +295,7 @@ bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         {
             if(SID_DRAW_MEASURELINE == nSlotId)
             {
-                SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
+                SdrLayerAdmin& rAdmin = mrDoc.GetLayerAdmin();
                 pObj->SetLayer(rAdmin.GetLayerID(sUNO_LayerName_measurelines));
             }
 
@@ -631,7 +631,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
             pObj->SetStyleSheet(pSheet, false);
         }
 
-        SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
+        SdrLayerAdmin& rAdmin = mrDoc.GetLayerAdmin();
         pObj->SetLayer(rAdmin.GetLayerID(sUNO_LayerName_measurelines));
     }
     else if (nSlotId == SID_DRAW_RECT)
@@ -723,7 +723,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         aSquare.append(aNewSquare);
     }
 
-    SfxItemSet aSet( mpDoc->GetPool() );
+    SfxItemSet aSet( mrDoc.GetPool() );
     mpView->GetAttributes( aSet );
 
     // #i3908# Here, the default Line Start/End width for arrow construction is
@@ -1061,7 +1061,7 @@ rtl::Reference<SdrObject> FuConstructRectangle::CreateDefaultObject(const sal_uI
             }
         }
 
-        SfxItemSet aAttr(mpDoc->GetPool());
+        SfxItemSet aAttr(mrDoc.GetPool());
         SetStyleSheet(aAttr, pObj.get());
         SetAttributes(aAttr, pObj.get());
         SetLineEnds(aAttr, *pObj);

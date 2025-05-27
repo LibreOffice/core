@@ -32,7 +32,7 @@ class FuBullet final : public FuPoor
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq ) override;
 
     static void GetSlotState( SfxItemSet& rSet, ViewShell const * pViewShell, SfxViewFrame* pViewFrame );
@@ -42,7 +42,7 @@ private:
         ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq);
 
     void InsertSpecialCharacter( SfxRequest const & rReq );

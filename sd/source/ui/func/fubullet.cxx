@@ -58,15 +58,15 @@ FuBullet::FuBullet (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* _pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, _pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, _pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuBullet::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuBullet::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuBullet( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuBullet( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -168,7 +168,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
         }
         else
         {
-            SfxItemSet aFontAttr( mpDoc->GetPool() );
+            SfxItemSet aFontAttr( mrDoc.GetPool() );
             mpView->GetAttributes( aFontAttr );
             const SvxFontItem* pFItem = aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
             if( pFItem )
@@ -178,10 +178,10 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
 
     if (aChars.isEmpty())
     {
-        SfxAllItemSet aSet( mpDoc->GetPool() );
+        SfxAllItemSet aSet( mrDoc.GetPool() );
         aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
 
-        SfxItemSet aFontAttr( mpDoc->GetPool() );
+        SfxItemSet aFontAttr( mrDoc.GetPool() );
         mpView->GetAttributes( aFontAttr );
         const SvxFontItem* pFontItem = aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
         if( pFontItem )
@@ -243,7 +243,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
        empty string). */
     pOV->InsertText( u""_ustr );
 
-    SfxItemSetFixed<EE_CHAR_FONTINFO, EE_CHAR_FONTINFO> aOldSet( mpDoc->GetPool() );
+    SfxItemSetFixed<EE_CHAR_FONTINFO, EE_CHAR_FONTINFO> aOldSet( mrDoc.GetPool() );
     aOldSet.Put( pOV->GetAttribs() );
 
     EditUndoManager& rUndoMgr = pOL->GetUndoManager();

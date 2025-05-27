@@ -49,16 +49,16 @@ FuConstructCustomShape::FuConstructCustomShape (
         ViewShell&          rViewSh,
         ::sd::Window*       pWin,
         ::sd::View*         pView,
-        SdDrawDocument*     pDoc,
+        SdDrawDocument&     rDoc,
         SfxRequest&         rReq ) :
-    FuConstruct(rViewSh, pWin, pView, pDoc, rReq)
+    FuConstruct(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuConstructCustomShape::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+rtl::Reference<FuPoor> FuConstructCustomShape::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq, bool bPermanent )
 {
     FuConstructCustomShape* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructCustomShape( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructCustomShape( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent( bPermanent );
     return xFunc;
@@ -104,7 +104,7 @@ bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
                 bForceFillStyle = false;
                 bForceNoFillStyle = true;
             }
-            SfxItemSet aAttr(mpDoc->GetPool());
+            SfxItemSet aAttr(mrDoc.GetPool());
             SetStyleSheet( aAttr, pObj, bForceFillStyle, bForceNoFillStyle );
             pObj->SetMergedItemSet(aAttr);
         }
@@ -240,7 +240,7 @@ rtl::Reference<SdrObject> FuConstructCustomShape::CreateDefaultObject(const sal_
             ImpForceQuadratic( aRect );
         pObj->SetLogicRect( aRect );
         SetAttributes( pObj.get() );
-        SfxItemSet aAttr(mpDoc->GetPool());
+        SfxItemSet aAttr(mrDoc.GetPool());
         SetStyleSheet(aAttr, pObj.get());
         pObj->SetMergedItemSet(aAttr);
     }

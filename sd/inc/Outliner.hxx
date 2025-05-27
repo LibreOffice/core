@@ -125,7 +125,7 @@ public:
     friend class ::sd::outliner::OutlinerContainer;
 
     /** Create a new sd outliner object.
-        @param pDoc
+        @param rDoc
             The draw document from which to take the content.
         @param nMode
             The valid values <const>OutlinerMode::DontKnow</const>,
@@ -135,7 +135,7 @@ public:
             <const>OutlinerMode::OutlineView</const> are defined in
             editeng/outliner.hxx.
     */
-    SdOutliner(SdDrawDocument* pDoc, OutlinerMode nMode);
+    SdOutliner(SdDrawDocument& rDoc, OutlinerMode nMode);
     virtual ~SdOutliner() override;
     /// Forbid copy construction and copy assignment
     SdOutliner(const Outliner&) = delete;
@@ -193,7 +193,7 @@ public:
     int GetIgnoreCurrentPageChangesLevel() const { return mnIgnoreCurrentPageChangesLevel; };
     void IncreIgnoreCurrentPageChangesLevel() { mnIgnoreCurrentPageChangesLevel++; };
     void DecreIgnoreCurrentPageChangesLevel() { mnIgnoreCurrentPageChangesLevel--; };
-    SdDrawDocument* GetDoc() const { return mpDrawDocument; }
+    SdDrawDocument& GetDoc() const { return mrDrawDocument; }
 
 private:
     class Implementation;
@@ -221,7 +221,7 @@ private:
     /// This window contains the view.
     VclPtr<::sd::Window> mpWindow;
     /// The document on whose objects and pages this class operates.
-    SdDrawDocument* mpDrawDocument;
+    SdDrawDocument& mrDrawDocument;
 
     /** this is the language that is used for current text conversion.
         Only valid if meMode is TEXT_CONVERSION.

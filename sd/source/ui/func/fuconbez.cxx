@@ -62,9 +62,9 @@ FuConstructBezierPolygon::FuConstructBezierPolygon (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuConstruct(rViewSh, pWin, pView, pDoc, rReq),
+    : FuConstruct(rViewSh, pWin, pView, rDoc, rReq),
       nEditMode(SID_BEZIER_MOVE),
       mnTransparence(0),
       mnWidth(0)
@@ -90,10 +90,10 @@ bool isSticky(const SfxRequest& rReq)
 
 }
 
-rtl::Reference<FuPoor> FuConstructBezierPolygon::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+rtl::Reference<FuPoor> FuConstructBezierPolygon::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq, bool bPermanent )
 {
     FuConstructBezierPolygon* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructBezierPolygon( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructBezierPolygon( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent(bPermanent || isSticky(rReq));
     return xFunc;
@@ -178,7 +178,7 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
         if (pObj)
         {
-            SfxItemSet aAttr(mpDoc->GetPool());
+            SfxItemSet aAttr(mrDoc.GetPool());
             SetStyleSheet(aAttr, pObj);
             SetAttributes(aAttr, pObj);
             pObj->SetMergedItemSet(aAttr);

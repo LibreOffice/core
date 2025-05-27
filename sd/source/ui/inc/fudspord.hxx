@@ -31,7 +31,7 @@ class FuDisplayOrder final
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq );
 
     // Mouse- & Key-Events
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
@@ -53,7 +53,7 @@ private:
         ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq);
 };
 

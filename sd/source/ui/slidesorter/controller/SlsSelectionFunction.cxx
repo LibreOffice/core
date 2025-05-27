@@ -295,7 +295,7 @@ SelectionFunction::SelectionFunction (
         rSlideSorter.GetViewShell(),
         rSlideSorter.GetContentWindow(),
         &rSlideSorter.GetView(),
-        rSlideSorter.GetModel().GetDocument(),
+        *rSlideSorter.GetModel().GetDocument(),
         rRequest),
       mrSlideSorter(rSlideSorter),
       mrController(mrSlideSorter.GetController()),

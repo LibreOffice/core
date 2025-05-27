@@ -101,14 +101,14 @@ class FuNotesPane : public FuSimpleOutlinerText
 {
 public:
     static rtl::Reference<FuPoor> Create(ViewShell& rViewSh, ::sd::Window* pWin,
-                                         ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc,
+                                         ::sd::SimpleOutlinerView* pView, SdDrawDocument& rDoc,
                                          SfxRequest& rReq);
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
 
 protected:
     FuNotesPane(ViewShell& rViewShell, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView,
-                SdDrawDocument* pDoc, SfxRequest& rReq);
+                SdDrawDocument& rDoc, SfxRequest& rReq);
 };
 
 } // end of namespace sd

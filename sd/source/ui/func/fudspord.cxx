@@ -30,8 +30,8 @@
 namespace sd {
 
 
-FuDisplayOrder::FuDisplayOrder( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
-: FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+FuDisplayOrder::FuDisplayOrder( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq)
+: FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 , maPtr(PointerStyle::Arrow)
 , mpRefObj(nullptr)
 {
@@ -46,9 +46,9 @@ void FuDisplayOrder::implClearOverlay()
     mpOverlay.reset();
 }
 
-rtl::Reference<FuPoor> FuDisplayOrder::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuDisplayOrder::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuDisplayOrder( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuDisplayOrder( rViewSh, pWin, pView, rDoc, rReq ) );
     return xFunc;
 }
 

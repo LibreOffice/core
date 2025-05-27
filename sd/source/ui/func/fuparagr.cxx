@@ -42,15 +42,15 @@ FuParagraph::FuParagraph (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuParagraph::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuParagraph::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuParagraph( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuParagraph( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -64,7 +64,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aEditAttr( mpDoc->GetPool() );
+        SfxItemSet aEditAttr( mrDoc.GetPool() );
         mpView->GetAttributes( aEditAttr );
         SfxItemPool *pPool =  aEditAttr.GetPool();
         SfxItemSet aNewAttr(SfxItemSet::makeFixedSfxItemSet<

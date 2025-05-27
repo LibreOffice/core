@@ -107,15 +107,15 @@ FuInsertFile::FuInsertFile (
     ViewShell&    rViewSh,
     ::sd::Window*      pWin,
     ::sd::View*        pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest&    rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuInsertFile::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuInsertFile::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertFile( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertFile( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -142,7 +142,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
         aFileDialog.SetTitle( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE) );
 
-        if( mpDoc->GetDocumentType() == DocumentType::Impress )
+        if( mrDoc.GetDocumentType() == DocumentType::Impress )
         {
             aOwnCont = "simpress";
             aOtherCont = "sdraw";
@@ -165,7 +165,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 lcl_AddFilter( aFilterVector, pFilter );
 
                 // get template filter
-                if( mpDoc->GetDocumentType() == DocumentType::Impress )
+                if( mrDoc.GetDocumentType() == DocumentType::Impress )
                     pFilter = DrawDocShell::Factory().GetTemplateFilter();
                 else
                     pFilter = GraphicDocShell::Factory().GetTemplateFilter();
@@ -317,7 +317,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     mpDocSh->SetWaitCursor( false );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     weld::Window* pParent = mrViewShell.GetFrameWeld();
-    ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg( pFact->CreateSdInsertPagesObjsDlg(pParent, mpDoc, pMedium, aFile) );
+    ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg( pFact->CreateSdInsertPagesObjsDlg(pParent, &mrDoc, pMedium, aFile) );
 
     sal_uInt16 nRet = pDlg->Execute();
 
@@ -373,7 +373,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             bNameOK = mpView->GetExchangeList( aExchangeList, aBookmarkList, 0 );
 
             if( bNameOK )
-                bOK = mpDoc->InsertFileAsPage( aBookmarkList, &aExchangeList,
+                bOK = mrDoc.InsertFileAsPage( aBookmarkList, &aExchangeList,
                                     bLink, nPos, nullptr );
 
             aBookmarkList.clear();
@@ -384,11 +384,11 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
         bNameOK = mpView->GetExchangeList( aExchangeList, aObjectBookmarkList, 1 );
 
         if( bNameOK )
-            bOK = mpDoc->InsertBookmarkAsObject( aObjectBookmarkList, aExchangeList,
+            bOK = mrDoc.InsertBookmarkAsObject( aObjectBookmarkList, aExchangeList,
                                 nullptr, nullptr, false );
 
         if( pDlg->IsRemoveUnnecessaryMasterPages() )
-            mpDoc->RemoveUnnecessaryMasterPages();
+            mrDoc.RemoveUnnecessaryMasterPages();
     }
 
     return bOK;
@@ -397,7 +397,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg( pFact->CreateSdInsertPagesObjsDlg(mrViewShell.GetFrameWeld(), mpDoc, nullptr, aFile) );
+    ScopedVclPtr<AbstractSdInsertPagesObjsDlg> pDlg( pFact->CreateSdInsertPagesObjsDlg(mrViewShell.GetFrameWeld(), &mrDoc, nullptr, aFile) );
 
     mpDocSh->SetWaitCursor( false );
 
@@ -421,7 +421,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
        - the draw outliner of the drawing engine has to draw something in
          between
        - the global outliner could be used in SdPage::CreatePresObj */
-    SdOutliner aOutliner( mpDoc, OutlinerMode::TextObject );
+    SdOutliner aOutliner( mrDoc, OutlinerMode::TextObject );
 
     // set reference device
     aOutliner.SetRefDevice(SdModule::get()->GetVirtualRefDevice());
@@ -498,7 +498,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             /* can be bigger as the maximal allowed size:
                limit object size if necessary */
             Size aSize(aOutliner.CalcTextSize());
-            Size aMaxSize = mpDoc->GetMaxObjSize();
+            Size aMaxSize = mrDoc.GetMaxObjSize();
             aSize.setHeight( std::min(aSize.Height(), aMaxSize.Height()) );
             aSize.setWidth( std::min(aSize.Width(), aMaxSize.Width()) );
             aSize = mpWindow->LogicToPixel(aSize);
@@ -519,7 +519,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
             if( bUndo )
             {
-                mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoInsertObject(*pTO));
+                mpView->AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoInsertObject(*pTO));
                 mpView->EndUndo();
             }
         }
@@ -559,7 +559,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
             nPage++;
         pPara = rDocliner.GetParagraph( nPos - 1 );
     }
-    SdPage* pPage = mpDoc->GetSdPage(nPage, PageKind::Standard);
+    SdPage* pPage = mrDoc.GetSdPage(nPage, PageKind::Standard);
     aLayoutName = pPage->GetLayoutName();
     sal_Int32 nIndex = aLayoutName.indexOf(SD_LT_SEPARATOR);
     if( nIndex != -1 )
@@ -571,8 +571,8 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
        - the draw outliner of the drawing engine has to draw something in
          between
        - the global outliner could be used in SdPage::CreatePresObj */
-    ::Outliner aOutliner( &mpDoc->GetItemPool(), OutlinerMode::OutlineObject );
-    aOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
+    ::Outliner aOutliner( &mrDoc.GetItemPool(), OutlinerMode::OutlineObject );
+    aOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mrDoc.GetStyleSheetPool()));
 
     // set reference device
     aOutliner.SetRefDevice(SdModule::get()->GetVirtualRefDevice());
@@ -632,7 +632,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
                 OUString aStyleSheetName( pStyleSheet->GetName() );
                 aStyleSheetName = aStyleSheetName.subView( 0, aStyleSheetName.getLength()-1 ) +
                     OUString::number( nDepth <= 0 ? 1 : nDepth+1 );
-                SfxStyleSheetBasePool* pStylePool = mpDoc->GetStyleSheetPool();
+                SfxStyleSheetBasePool* pStylePool = mrDoc.GetStyleSheetPool();
                 SfxStyleSheet* pOutlStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() ) );
                 rDocliner.SetStyleSheet( nTargetPos, pOutlStyle );
             }

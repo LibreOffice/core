@@ -205,7 +205,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                 *pShell,
                 mrSlideSorter.GetContentWindow(),
                 &mrSlideSorter.GetView(),
-                pDocument,
+                *pDocument,
                 rRequest);
             break;
 
@@ -214,7 +214,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                 *pShell,
                 mrSlideSorter.GetContentWindow(),
                 &mrSlideSorter.GetView(),
-                pDocument,
+                *pDocument,
                 rRequest);
                 break;
 
@@ -223,7 +223,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                 *pShell,
                 mrSlideSorter.GetContentWindow(),
                 &mrSlideSorter.GetView(),
-                pDocument,
+                *pDocument,
                 rRequest);
             break;
 
@@ -232,7 +232,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                 *pShell,
                 mrSlideSorter.GetContentWindow(),
                 &mrSlideSorter.GetView(),
-                pDocument,
+                *pDocument,
                 rRequest);
             break;
 

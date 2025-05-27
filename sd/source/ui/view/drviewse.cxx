@@ -244,7 +244,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_TEXT_FITTOSIZE:
         case SID_TEXT_FITTOSIZE_VERTICAL:
         {
-            SetCurrentFunction( FuText::Create(*this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
+            SetCurrentFunction( FuText::Create(*this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq) );
             GetCurrentFunction()->DoExecute(rReq);
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
@@ -267,7 +267,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
         case SID_FM_CREATE_CONTROL:
         {
-            SetCurrentFunction( FuConstructUnoControl::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent ) );
+            SetCurrentFunction( FuConstructUnoControl::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent ) );
             rReq.Done();
         }
         break;
@@ -400,7 +400,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 }
             }
 
-            SetCurrentFunction( FuSelection::Create(*this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
+            SetCurrentFunction( FuSelection::Create(*this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq) );
             rReq.Done();
             Invalidate( SID_OBJECT_SELECT );
         }
@@ -503,7 +503,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
             bRectangle = true;
-            SetCurrentFunction( FuConstructRectangle::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent ) );
+            SetCurrentFunction( FuConstructRectangle::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent ) );
             rReq.Done();
         }
         break;
@@ -520,7 +520,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             // defaults -- to be consistent with the line insert case above.
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
 
-            SetCurrentFunction( FuConstructBezierPolygon::Create(*this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent) );
+            SetCurrentFunction( FuConstructBezierPolygon::Create(*this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent) );
             rReq.Done();
         }
         break;
@@ -529,7 +529,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         {
             if (nOldSId != SID_GLUE_EDITMODE)
             {
-                SetCurrentFunction( FuEditGluePoints::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent ) );
+                SetCurrentFunction( FuEditGluePoints::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent ) );
             }
             else
             {
@@ -551,7 +551,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAW_CIRCLECUT:
         case SID_DRAW_CIRCLECUT_NOFILL:
         {
-            SetCurrentFunction( FuConstructArc::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent) );
+            SetCurrentFunction( FuConstructArc::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent) );
             rReq.Done();
         }
         break;
@@ -565,7 +565,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_3D_CONE:
         case SID_3D_PYRAMID:
         {
-            SetCurrentFunction( FuConstruct3dObject::Create(*this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent ) );
+            SetCurrentFunction( FuConstruct3dObject::Create(*this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent ) );
             rReq.Done();
         }
         break;
@@ -578,7 +578,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAWTBX_CS_STAR :
         case SID_DRAW_CS_ID :
         {
-            SetCurrentFunction( FuConstructCustomShape::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent ) );
+            SetCurrentFunction( FuConstructCustomShape::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent ) );
             rReq.Done();
 
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
@@ -599,7 +599,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
         case SID_FORMATPAINTBRUSH:
         {
-            SetCurrentFunction( FuFormatPaintBrush::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq ) );
+            SetCurrentFunction( FuFormatPaintBrush::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
             rReq.Done();
             SfxBindings& rBind = GetViewFrame()->GetBindings();
             rBind.Invalidate( nSId );
@@ -613,7 +613,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             if (nOldSId != nSId)
             {
                 mbZoomOnPage = false;
-                SetCurrentFunction( FuZoom::Create(*this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq ) );
+                SetCurrentFunction( FuZoom::Create(*this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
             }
             else
             {

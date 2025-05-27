@@ -29,12 +29,12 @@ class FuExecuteInteraction final : public FuPoor
 {
 public:
     static rtl::Reference<FuPoor> Create(ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
-                                         SdDrawDocument* pDoc, SfxRequest& rReq);
+                                         SdDrawDocument& rDoc, SfxRequest& rReq);
     virtual void DoExecute(SfxRequest& rReq) override;
 
 private:
     FuExecuteInteraction(ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
-                         SdDrawDocument* pDoc, SfxRequest& rReq);
+                         SdDrawDocument& rDoc, SfxRequest& rReq);
 
     css::uno::Reference<css::media::XPlayer> mxPlayer;
 };

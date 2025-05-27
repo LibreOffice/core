@@ -59,15 +59,15 @@ FuObjectAnimationParameters::FuObjectAnimationParameters (
     ViewShell&   rViewSh,
     ::sd::Window*        pWin,
     ::sd::View*      pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest&  rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuObjectAnimationParameters::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuObjectAnimationParameters::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuObjectAnimationParameters( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuObjectAnimationParameters( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -335,7 +335,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     if(!pArgs)
     {
         // fill ItemSet for dialog
-        std::shared_ptr<SfxItemSet> aSet = std::make_shared<SfxItemSetFixed<ATTR_ANIMATION_START, ATTR_ACTION_END>>(mpDoc->GetPool());
+        std::shared_ptr<SfxItemSet> aSet = std::make_shared<SfxItemSetFixed<ATTR_ANIMATION_START, ATTR_ACTION_END>>(mrDoc.GetPool());
 
         // fill the set
         if (nAnimationSet == ATTR_SET)
@@ -667,7 +667,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
     pUndoMgr->EnterListAction(aComment, aComment, 0, mrViewShell.GetViewShellBase().GetViewShellId());
 
     // create undo group
-    std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(mpDoc));
+    std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(&mrDoc));
     pUndoGroup->SetComment(aComment);
 
     // for the path effect, remember some stuff
@@ -716,7 +716,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
             Size aDistance(aNewCenter.X() - aCurCenter.X(), aNewCenter.Y() - aCurCenter.Y());
             pRunningObj->Move(aDistance);
 
-            pUndoMgr->AddUndoAction(mpDoc->GetSdrUndoFactory().CreateUndoMoveObject( *pRunningObj, aDistance));
+            pUndoMgr->AddUndoAction(mrDoc.GetSdrUndoFactory().CreateUndoMoveObject( *pRunningObj, aDistance));
         }
     }
 
@@ -737,7 +737,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
         if (eEffect == presentation::AnimationEffect_PATH && pObject == pPath)
         {
             SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction
-                                            (mpDoc, pObject, bCreated);
+                                            (&mrDoc, pObject, bCreated);
             pAction->SetActive(pInfo->mbActive, pInfo->mbActive);
             pAction->SetEffect(pInfo->meEffect, pInfo->meEffect);
             pAction->SetTextEffect(pInfo->meTextEffect, pInfo->meTextEffect);
@@ -763,7 +763,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
 
             // create undo action with old and new sizes
             SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction
-                                            (mpDoc, pObject, bCreated);
+                                            (&mrDoc, pObject, bCreated);
             pAction->SetActive(pInfo->mbActive, bActive);
             pAction->SetEffect(pInfo->meEffect, eEffect);
             pAction->SetTextEffect(pInfo->meTextEffect, eTextEffect);
@@ -841,7 +841,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
     pUndoMgr->LeaveListAction();
 
     // Model changed
-    mpDoc->SetChanged();
+    mrDoc.SetChanged();
     // not seen, therefore we do not need to invalidate at the bindings
 }
 

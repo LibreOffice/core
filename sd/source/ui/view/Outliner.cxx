@@ -156,13 +156,13 @@ OutlinerView* lclGetNotesPaneOutliner(const std::shared_ptr<sd::ViewShell>& pVie
 
 } // end anonymous namespace
 
-SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
-    : SdrOutliner( &pDoc->GetItemPool(), nMode ),
+SdOutliner::SdOutliner( SdDrawDocument& rDoc, OutlinerMode nMode )
+    : SdrOutliner( &rDoc.GetItemPool(), nMode ),
       mpImpl(new Implementation()),
       meMode(SEARCH),
       mpView(nullptr),
       mpWindow(nullptr),
-      mpDrawDocument(pDoc),
+      mrDrawDocument(rDoc),
       mnConversionLanguage(LANGUAGE_NONE),
       mnIgnoreCurrentPageChangesLevel(0),
       mbStringFound(false),
@@ -183,10 +183,10 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
       mpStartEditedObject(nullptr),
       mbPrepareSpellingPending(true)
 {
-    SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mpDrawDocument->GetStyleSheetPool() ));
-    SetEditTextObjectPool( &pDoc->GetItemPool() );
+    SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mrDrawDocument.GetStyleSheetPool() ));
+    SetEditTextObjectPool( &rDoc.GetItemPool() );
     SetCalcFieldValueHdl(LINK(SdModule::get(), SdModule, CalcFieldValueHdl));
-    SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
+    SetForbiddenCharsTable( rDoc.GetForbiddenCharsTable() );
 
     EEControlBits nCntrl = GetControlWord();
     nCntrl |= EEControlBits::ALLOWBIGOBJS;
@@ -195,11 +195,11 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
 
     bool bOnlineSpell = false;
 
-    sd::DrawDocShell* pDocSh = mpDrawDocument->GetDocSh();
+    sd::DrawDocShell* pDocSh = mrDrawDocument.GetDocSh();
 
     if (pDocSh)
     {
-        bOnlineSpell = mpDrawDocument->GetOnlineSpell();
+        bOnlineSpell = mrDrawDocument.GetOnlineSpell();
     }
     else
     {
@@ -350,8 +350,8 @@ void SdOutliner::EndSpelling()
     {
         if(auto pOutlineView = dynamic_cast<sd::OutlineView *>( mpView ))
             pOutlineView->PrepareClose();
-        if(mpDrawDocument && !mpDrawDocument->IsChanged())
-            mpDrawDocument->SetChanged();
+        if(!mrDrawDocument.IsChanged())
+            mrDrawDocument.SetChanged();
     }
 
     // Now clear the modify flag to have a specified state of
@@ -382,7 +382,7 @@ bool SdOutliner::SpellNextDocument()
     {
         if( auto pOutlineView = dynamic_cast<sd::OutlineView *>( mpView ))
             pOutlineView->PrepareClose();
-        mpDrawDocument->GetDocSh()->SetWaitCursor( true );
+        mrDrawDocument.GetDocSh()->SetWaitCursor( true );
 
         Initialize (true);
 
@@ -392,7 +392,7 @@ bool SdOutliner::SpellNextDocument()
             pOutlinerView->SetWindow(mpWindow);
         ProvideNextTextObject ();
 
-        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
+        mrDrawDocument.GetDocSh()->SetWaitCursor( false );
         ClearModifyFlag();
     }
 
@@ -451,7 +451,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     // clear the search toolbar entry
     SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( true );
+    mrDrawDocument.GetDocSh()->SetWaitCursor( true );
 
     // Since REPLACE is really a replaceAndSearchNext instead of a searchAndReplace,
     // make sure that the search portion has not changed since the last FIND.
@@ -529,7 +529,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         }
     }
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( false );
+    mrDrawDocument.GetDocSh()->SetWaitCursor( false );
 
     return bEndOfSearch;
 }
@@ -953,7 +953,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                     if ( ! GetEditEngine().HasView( &getOutlinerView()->GetEditView() )
                          && maCurrentPosition.mePageKind != PageKind::Notes )
                     {
-                        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
+                        mrDrawDocument.GetDocSh()->SetWaitCursor( false );
                         return true;
                     }
 
@@ -974,7 +974,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
         }
         else if (nullptr != dynamic_cast<const sd::OutlineViewShell*>(pViewShell.get()))
         {
-            mpDrawDocument->GetDocSh()->SetWaitCursor(false);
+            mrDrawDocument.GetDocSh()->SetWaitCursor(false);
             // The following loop is executed more than once only when a
             // wrap around search is done.
             while (true)
@@ -995,7 +995,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
         }
     }
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( false );
+    mrDrawDocument.GetDocSh()->SetWaitCursor( false );
 
     if (pViewShell && comphelper::LibreOfficeKit::isActive() && mbStringFound)
     {
@@ -1058,7 +1058,7 @@ void SdOutliner::DetectChange()
 
         RememberStartPosition ();
 
-        mnPageCount = mpDrawDocument->GetSdPageCount(pDrawViewShell->GetPageKind());
+        mnPageCount = mrDrawDocument.GetSdPageCount(pDrawViewShell->GetPageKind());
         maObjectIterator = sd::outliner::OutlinerContainer(this).current();
     }
 
@@ -1073,17 +1073,17 @@ void SdOutliner::DetectChange()
     // Detect change of page count.  Restart search at first/last page in
     // that case.
     else if (aPosition.meEditMode == EditMode::Page
-        && mpDrawDocument->GetSdPageCount(aPosition.mePageKind) != mnPageCount)
+        && mrDrawDocument.GetSdPageCount(aPosition.mePageKind) != mnPageCount)
     {
         // The number of pages has changed.
-        mnPageCount = mpDrawDocument->GetSdPageCount(aPosition.mePageKind);
+        mnPageCount = mrDrawDocument.GetSdPageCount(aPosition.mePageKind);
         maObjectIterator = sd::outliner::OutlinerContainer(this).current();
     }
     else if (aPosition.meEditMode == EditMode::MasterPage
-        && mpDrawDocument->GetSdPageCount(aPosition.mePageKind) != mnPageCount)
+        && mrDrawDocument.GetSdPageCount(aPosition.mePageKind) != mnPageCount)
     {
         // The number of master pages has changed.
-        mnPageCount = mpDrawDocument->GetSdPageCount(aPosition.mePageKind);
+        mnPageCount = mrDrawDocument.GetSdPageCount(aPosition.mePageKind);
         maObjectIterator = sd::outliner::OutlinerContainer(this).current();
     }
 }
@@ -1357,7 +1357,7 @@ void SdOutliner::ProvideNextTextObject()
 
                         mpView->MarkObj(mpObj, pPageView, false, false, std::move(aSubSelections));
 
-                        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
+                        mrDrawDocument.GetDocSh()->SetWaitCursor( false );
                     }
                     else
                     {
@@ -1510,7 +1510,7 @@ bool SdOutliner::ShowWrapAroundDialog()
         return false;
 
     // The question text depends on the search direction.
-    bool bImpress = mpDrawDocument && mpDrawDocument->GetDocumentType() == DocumentType::Impress;
+    bool bImpress = mrDrawDocument.GetDocumentType() == DocumentType::Impress;
 
     TranslateId pStringId;
     if (mbDirectionIsForward)
@@ -1587,7 +1587,7 @@ void SdOutliner::PrepareSearchAndReplace()
 
     EnterEditMode(false);
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor(false);
+    mrDrawDocument.GetDocSh()->SetWaitCursor(false);
 
     OutlinerView* pOutlinerView = getOutlinerView();
     if (pOutlinerView != nullptr)
@@ -1663,7 +1663,7 @@ void SdOutliner::SetViewMode (PageKind ePageKind)
     // Update the number of pages so that
     // <member>DetectChange()</member> has the correct value to compare
     // to.
-    mnPageCount = mpDrawDocument->GetSdPageCount(ePageKind);
+    mnPageCount = mrDrawDocument.GetSdPageCount(ePageKind);
 
     maObjectIterator = std::move(aIterator);
     mbMatchMayExist = bMatchMayExist;
@@ -1950,7 +1950,7 @@ void SdOutliner::PrepareConversion()
 
         EnterEditMode(true);
 
-        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
+        mrDrawDocument.GetDocSh()->SetWaitCursor( false );
         // Start search at the right end of the current object's text
         // depending on the search direction.
     }
@@ -2000,7 +2000,7 @@ bool SdOutliner::ConvertNextDocument()
     if (dynamic_cast< const sd::OutlineViewShell *>( pViewShell.get() ) )
         return false;
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( true );
+    mrDrawDocument.GetDocSh()->SetWaitCursor( true );
 
     Initialize ( true );
 
@@ -2012,7 +2012,7 @@ bool SdOutliner::ConvertNextDocument()
     }
     ProvideNextTextObject ();
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( false );
+    mrDrawDocument.GetDocSh()->SetWaitCursor( false );
     ClearModifyFlag();
 
     // for text conversion we automatically wrap around one

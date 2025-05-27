@@ -58,17 +58,17 @@ bool ShouldPasteParaFormatPerSelection(const OutlinerView* pOLV)
 namespace sd {
 
 
-FuFormatPaintBrush::FuFormatPaintBrush( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
-: FuText(rViewSh, pWin, pView, pDoc, rReq)
+FuFormatPaintBrush::FuFormatPaintBrush( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
+: FuText(rViewSh, pWin, pView, rDoc, rReq)
     , mnDepth(-1)
     , mbPermanent( false )
     , mbOldIsQuickTextEditMode(true)
 {
 }
 
-rtl::Reference<FuPoor> FuFormatPaintBrush::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuFormatPaintBrush::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuFormatPaintBrush( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuFormatPaintBrush( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute( rReq );
     return xFunc;
 }
@@ -259,7 +259,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
         return;
 
     SdrObject* pObj( nullptr );
-    bool bUndo = mpDoc->IsUndoEnabled();
+    bool bUndo = mrDoc.IsUndoEnabled();
 
     if( bUndo && !mpView->GetTextEditOutlinerView() )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -269,16 +269,16 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
     if( pObj )
     {
         OUString sLabel( mrViewShell.GetViewShellBase().RetrieveLabelFromCommand(u".uno:FormatPaintbrush"_ustr ) );
-        mpDoc->BegUndo( sLabel );
+        mrDoc.BegUndo( sLabel );
         if (dynamic_cast< sdr::table::SdrTableObj* >( pObj ) == nullptr)
-            mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );
+            mrDoc.AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );
     }
 
     mpView->ApplyFormatPaintBrush( *mxItemSet, mnDepth, bNoCharacterFormats, bNoParagraphFormats );
 
     if( pObj )
     {
-        mpDoc->EndUndo();
+        mrDoc.EndUndo();
     }
 }
 

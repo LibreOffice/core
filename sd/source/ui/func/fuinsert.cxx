@@ -94,18 +94,18 @@ FuInsertGraphic::FuInsertGraphic (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq,
     bool replaceExistingImage)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq),
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq),
       mbReplaceExistingImage(replaceExistingImage)
 {
 }
 
 rtl::Reference<FuPoor> FuInsertGraphic::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
-                                                SdDrawDocument* pDoc, SfxRequest& rReq, bool replaceExistingImage )
+                                                SdDrawDocument& rDoc, SfxRequest& rReq, bool replaceExistingImage )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertGraphic( rViewSh, pWin, pView, pDoc, rReq, replaceExistingImage ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertGraphic( rViewSh, pWin, pView, rDoc, rReq, replaceExistingImage ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -210,15 +210,15 @@ FuInsertClipboard::FuInsertClipboard (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuInsertClipboard::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuInsertClipboard::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertClipboard( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertClipboard( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -279,15 +279,15 @@ FuInsertOLE::FuInsertOLE (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuInsertOLE::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuInsertOLE::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertOLE( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertOLE( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -477,7 +477,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         break;
                     }
                     aServerLst.FillInsertObjects();
-                    if (mpDoc->GetDocumentType() == DocumentType::Draw)
+                    if (mrDoc.GetDocumentType() == DocumentType::Draw)
                     {
                         aServerLst.Remove( GraphicDocShell::Factory().GetClassId() );
                     }
@@ -672,15 +672,15 @@ FuInsertAVMedia::FuInsertAVMedia(
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuInsertAVMedia::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuInsertAVMedia::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertAVMedia( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertAVMedia( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }

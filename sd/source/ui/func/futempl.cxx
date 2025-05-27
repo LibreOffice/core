@@ -78,15 +78,15 @@ FuTemplate::FuTemplate (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq )
-    : FuPoor( rViewSh, pWin, pView, pDoc, rReq )
+    : FuPoor( rViewSh, pWin, pView, rDoc, rReq )
 {
 }
 
-rtl::Reference<FuPoor> FuTemplate::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuTemplate::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuTemplate( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuTemplate( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -97,7 +97,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     sal_uInt16 nSId = rReq.GetSlot();
 
     // get StyleSheet parameter
-    SfxStyleSheetBasePool* pSSPool = mpDoc->GetDocSh()->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pSSPool = mrDoc.GetDocSh()->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = nullptr;
 
     const SfxPoolItem* pItem;
@@ -136,7 +136,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             {
                 try
                 {
-                    Reference< XStyleFamiliesSupplier > xModel(mpDoc->GetDocSh()->GetModel(), UNO_QUERY_THROW );
+                    Reference< XStyleFamiliesSupplier > xModel(mrDoc.GetDocSh()->GetModel(), UNO_QUERY_THROW );
                     Reference< XNameAccess > xCont( xModel->getStyleFamilies() );
                     Reference< XNameAccess > xStyles( xCont->getByName(pFamilyItem->GetValue()), UNO_QUERY_THROW );
                     Reference< XPropertySet > xInfo( xStyles->getByName( pNameItem->GetValue() ), UNO_QUERY_THROW );
@@ -204,7 +204,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             {
                 pSSPool->Remove( pStyleSheet );
                 nRetMask = sal_uInt16(true);
-                mpDoc->SetChanged();
+                mrDoc.SetChanged();
             }
             else
             {
@@ -239,10 +239,10 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     (pStyleSheet->GetFamily() == SfxStyleFamily::Para && pOldStyleSheet->GetHelpId( aStr ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS) ||
 
                     // allow if old was presentation and we are a drawing document
-                    (pOldStyleSheet->GetFamily() == SfxStyleFamily::Page && mpDoc->GetDocumentType() == DocumentType::Draw) )
+                    (pOldStyleSheet->GetFamily() == SfxStyleFamily::Page && mrDoc.GetDocumentType() == DocumentType::Draw) )
                 {
                     mpView->SetStyleSheet( static_cast<SfxStyleSheet*>(pStyleSheet));
-                    mpDoc->SetChanged();
+                    mrDoc.SetChanged();
                     mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
@@ -301,7 +301,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 if (eFamily == SfxStyleFamily::Para)
                 {
-                    pStdDlg.disposeAndReset(pFact ? pFact->CreateSdTabTemplateDlg(mrViewShell.GetFrameWeld(), mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView) : nullptr);
+                    pStdDlg.disposeAndReset(pFact ? pFact->CreateSdTabTemplateDlg(mrViewShell.GetFrameWeld(), mrDoc.GetDocSh(), *pStyleSheet, &mrDoc, mpView) : nullptr);
                 }
                 else if (eFamily == SfxStyleFamily::Pseudo)
                 {
@@ -437,7 +437,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         const SfxPoolItem* pOldItem = nullptr;
                         if( rAttr.GetItemState( XATTR_FILLBITMAP, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillBitmapItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillBitmapItem*>(pOldItem)->checkForUniqueItem( mrDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -445,7 +445,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         }
                         if( rAttr.GetItemState( XATTR_LINEDASH, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineDashItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineDashItem*>(pOldItem)->checkForUniqueItem( mrDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -453,7 +453,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         }
                         if( rAttr.GetItemState( XATTR_LINESTART, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineStartItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineStartItem*>(pOldItem)->checkForUniqueItem( mrDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -461,7 +461,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         }
                         if( rAttr.GetItemState( XATTR_LINEEND, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineEndItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineEndItem*>(pOldItem)->checkForUniqueItem( mrDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -469,7 +469,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         }
                         if( rAttr.GetItemState( XATTR_FILLGRADIENT, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillGradientItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillGradientItem*>(pOldItem)->checkForUniqueItem( mrDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -477,7 +477,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         }
                         if( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillFloatTransparenceItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillFloatTransparenceItem*>(pOldItem)->checkForUniqueItem( mrDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -485,7 +485,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         }
                         if( rAttr.GetItemState( XATTR_FILLHATCH, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillHatchItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillHatchItem*>(pOldItem)->checkForUniqueItem( mrDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -524,18 +524,18 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             }
                         }
 
-                        if( mpDoc->GetOnlineSpell() )
+                        if( mrDoc.GetOnlineSpell() )
                         {
                             if( SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE, false ) ||
                                 SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CJK, false ) ||
                                 SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CTL, false ) )
                             {
-                                mpDoc->StopOnlineSpelling();
-                                mpDoc->StartOnlineSpelling();
+                                mrDoc.StopOnlineSpelling();
+                                mrDoc.StartOnlineSpelling();
                             }
                         }
 
-                        mpDoc->SetChanged();
+                        mrDoc.SetChanged();
                     }
                     break;
 
@@ -555,7 +555,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             if( pStyleSheet )
             {
                 nRetMask = static_cast<sal_uInt16>(pStyleSheet->GetMask());
-                SfxItemSet aCoreSet( mpDoc->GetPool() );
+                SfxItemSet aCoreSet( mrDoc.GetPool() );
                 mpView->GetAttributes( aCoreSet, true );
 
                 // if the object had a template, this becomes parent of the new template
@@ -581,7 +581,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     }
 
                     static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
-                    mpDoc->SetChanged();
+                    mrDoc.SetChanged();
 
                     mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
@@ -600,7 +600,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 if( pStyleSheet )
                 {
                     nRetMask = static_cast<sal_uInt16>(pStyleSheet->GetMask());
-                    SfxItemSet aCoreSet( mpDoc->GetPool() );
+                    SfxItemSet aCoreSet( mrDoc.GetPool() );
                     mpView->GetAttributes( aCoreSet );
 
                     SfxItemSet* pStyleSet = &pStyleSheet->GetItemSet();
@@ -609,7 +609,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     mpView->SetStyleSheet( static_cast<SfxStyleSheet*>(pStyleSheet));
 
                     static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
-                    mpDoc->SetChanged();
+                    mrDoc.SetChanged();
                     mrViewShell.GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }

@@ -211,7 +211,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                         xFuSearch = rtl::Reference<FuSearch>(
                             FuSearch::createPtr(*mpViewShell,
                                                 mpViewShell->GetActiveWindow(),
-                                                pView, mpDoc, rReq));
+                                                pView, *mpDoc, rReq));
 
                         pView->getSearchContext().setSearchFunction(xFuSearch);
                     }
@@ -270,7 +270,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if( mpViewShell )
             {
-                rtl::Reference<FuPoor> aFunc( FuHangulHanjaConversion::Create(*mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
+                rtl::Reference<FuPoor> aFunc( FuHangulHanjaConversion::Create(*mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), *mpDoc, rReq ) );
                 static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr, i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true );
             }
         }
@@ -280,7 +280,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if( mpViewShell )
             {
-                rtl::Reference<FuPoor> aFunc( FuHangulHanjaConversion::Create(*mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
+                rtl::Reference<FuPoor> aFunc( FuHangulHanjaConversion::Create(*mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), *mpDoc, rReq ) );
                 static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartChineseConversion();
             }
         }

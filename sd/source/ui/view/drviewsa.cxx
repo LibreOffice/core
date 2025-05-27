@@ -829,7 +829,7 @@ OUString const & DrawViewShell::GetSidebarContextName() const
 
 void DrawViewShell::ExecGoToNextPage (SfxRequest& rReq)
 {
-    SetCurrentFunction( FuNavigation::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
+    SetCurrentFunction( FuNavigation::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq) );
     Cancel();
 }
 
@@ -844,7 +844,7 @@ void DrawViewShell::GetStateGoToNextPage (SfxItemSet& rSet)
 
 void DrawViewShell::ExecGoToPreviousPage (SfxRequest& rReq)
 {
-    SetCurrentFunction( FuNavigation::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
+    SetCurrentFunction( FuNavigation::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq) );
     Cancel();
 }
 
@@ -859,7 +859,7 @@ void DrawViewShell::GetStateGoToPreviousPage (SfxItemSet& rSet)
 
 void DrawViewShell::ExecGoToFirstPage (SfxRequest& rReq)
 {
-    SetCurrentFunction( FuNavigation::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
+    SetCurrentFunction( FuNavigation::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq) );
     Cancel();
 }
 
@@ -873,7 +873,7 @@ void DrawViewShell::GetStateGoToFirstPage (SfxItemSet& rSet)
 
 void DrawViewShell::ExecGoToLastPage (SfxRequest& rReq)
 {
-    SetCurrentFunction( FuNavigation::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
+    SetCurrentFunction( FuNavigation::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq) );
     Cancel();
 }
 
@@ -888,7 +888,7 @@ void DrawViewShell::GetStateGoToLastPage (SfxItemSet& rSet)
 
 void DrawViewShell::ExecGoToPage (SfxRequest& rReq)
 {
-    SetCurrentFunction( FuNavigation::Create( *this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
+    SetCurrentFunction( FuNavigation::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq) );
     Cancel();
 }
 

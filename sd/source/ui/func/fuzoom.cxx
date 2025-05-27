@@ -44,9 +44,9 @@ FuZoom::FuZoom(
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq),
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq),
       bVisible(false),
       bStartDrag(false),
       aPtr(PointerStyle::Arrow)
@@ -65,9 +65,9 @@ FuZoom::~FuZoom()
     }
 }
 
-rtl::Reference<FuPoor> FuZoom::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuZoom::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuZoom( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuZoom( rViewSh, pWin, pView, rDoc, rReq ) );
     return xFunc;
 }
 

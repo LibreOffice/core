@@ -49,15 +49,15 @@ FuPresentationObjects::FuPresentationObjects (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-     : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+     : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuPresentationObjects::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuPresentationObjects::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuPresentationObjects( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuPresentationObjects( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -71,7 +71,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
 
     /* does the selections end in a unique presentation layout?
        if not, it is not allowed to edit the templates */
-    SfxItemSetFixed<SID_STATUS_LAYOUT, SID_STATUS_LAYOUT> aSet(mpDoc->GetItemPool() );
+    SfxItemSetFixed<SID_STATUS_LAYOUT, SID_STATUS_LAYOUT> aSet(mrDoc.GetItemPool() );
     pOutlineViewShell->GetStatusBarState( aSet );
     OUString aLayoutName = aSet.Get(SID_STATUS_LAYOUT).GetValue();
     DBG_ASSERT(!aLayoutName.isEmpty(), "Layout not defined");
@@ -142,7 +142,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
         // Undo-Action
         mpDocSh->GetUndoManager()->AddUndoAction(
-            std::make_unique<StyleSheetUndoAction>(mpDoc, static_cast<SfxStyleSheet&>(rStyleSheet), pOutSet));
+            std::make_unique<StyleSheetUndoAction>(mrDoc, static_cast<SfxStyleSheet&>(rStyleSheet), pOutSet));
 
         rStyleSheet.GetItemSet().Put( *pOutSet );
         static_cast<SfxStyleSheet&>( rStyleSheet ).Broadcast( SfxHint( SfxHintId::DataChanged ) );

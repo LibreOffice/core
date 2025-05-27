@@ -490,7 +490,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
 
                         aReq.AppendItem( aItem1 );
                         aReq.AppendItem( aItem2 );
-                        FuInsertFile::Create( *mpViewSh, pWin, this, &mrDoc, aReq );
+                        FuInsertFile::Create( *mpViewSh, pWin, this, mrDoc, aReq );
                         bHandled = true;
                     }
                 }

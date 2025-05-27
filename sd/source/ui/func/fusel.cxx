@@ -71,9 +71,9 @@ FuSelection::FuSelection (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuDraw(rViewSh, pWin, pView, pDoc, rReq),
+    : FuDraw(rViewSh, pWin, pView, rDoc, rReq),
       bTempRotation(false),
       bSelectionChanged(false),
       pHdl(nullptr),
@@ -89,9 +89,9 @@ FuSelection::FuSelection (
 {
 }
 
-rtl::Reference<FuPoor> FuSelection::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuSelection::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuSelection( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuSelection( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -825,9 +825,9 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             // Added UNDOs for the WaterCan mode. This was never done in
                             // the past, thus it was missing all the time.
-                            std::unique_ptr<SdrUndoAction> pUndoAttr = mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, true, true);
+                            std::unique_ptr<SdrUndoAction> pUndoAttr = mrDoc.GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, true, true);
                             mpView->BegUndo(pUndoAttr->GetComment());
-                            mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoGeoObject(*pWaterCanCandidate));
+                            mpView->AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoGeoObject(*pWaterCanCandidate));
                             mpView->AddUndo(std::move(pUndoAttr));
 
                             pWaterCanCandidate->SetStyleSheet (pStyleSheet, false);
@@ -1250,7 +1250,7 @@ bool FuSelection::HandleImageMapClick(const SdrObject* pObj, const Point& rPos)
 
     if (bClosed)
     {
-        SfxItemSet aSet(mpDoc->GetPool());
+        SfxItemSet aSet(mrDoc.GetPool());
 
         aSet.Put(pObj->GetMergedItemSet());
 

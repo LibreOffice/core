@@ -33,7 +33,7 @@ NotesPanelView::NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
                                NotesPanelViewShell& rNotesPanelViewShell)
     : ::sd::SimpleOutlinerView(*rDocSh.GetDoc(), pWindow->GetOutDev(), &rNotesPanelViewShell)
     , mrNotesPanelViewShell(rNotesPanelViewShell)
-    , maOutliner(&mrDoc, OutlinerMode::TextObject)
+    , maOutliner(mrDoc, OutlinerMode::TextObject)
     , maOutlinerView(maOutliner, pWindow)
     , aModifyIdle("NotesEditWindow ModifyIdle")
 {

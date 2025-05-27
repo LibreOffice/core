@@ -107,23 +107,23 @@ bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
     return false;
 }
 
-rtl::Reference<FuPoor> FuOutlineText::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuOutlineText::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuOutlineText( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuOutlineText( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute( rReq );
     return xFunc;
 }
 
 FuOutlineText::FuOutlineText(ViewShell& rViewShell, ::sd::Window* pWindow,
-                             ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc,
+                             ::sd::SimpleOutlinerView* pView, SdDrawDocument& rDoc,
                              SfxRequest& rReq)
-       : FuSimpleOutlinerText(rViewShell, pWindow, pView, pDoc, rReq)
+       : FuSimpleOutlinerText(rViewShell, pWindow, pView, rDoc, rReq)
 {}
 
 FuSimpleOutlinerText::FuSimpleOutlinerText(ViewShell& rViewShell, ::sd::Window* pWindow,
-                             ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc,
+                             ::sd::SimpleOutlinerView* pView, SdDrawDocument& rDoc,
                              SfxRequest& rReq)
-       : FuPoor(rViewShell, pWindow, pView, pDoc, rReq),
+       : FuPoor(rViewShell, pWindow, pView, rDoc, rReq),
          mpSimpleOutlinerView (pView)
 {
 }

@@ -63,8 +63,8 @@ namespace sd {
  * Base-class for all drawmodul-specific functions
  */
 FuDraw::FuDraw(ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
-               SdDrawDocument* pDoc, SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+               SdDrawDocument& rDoc, SfxRequest& rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
     , aNewPointer(PointerStyle::Arrow)
     , aOldPointer(PointerStyle::Arrow)
     , bMBDown(false)

@@ -47,15 +47,15 @@ FuCopy::FuCopy (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuCopy::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuCopy::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuCopy( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuCopy( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -78,7 +78,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         SfxItemSetFixed<ATTR_COPY_START, ATTR_COPY_END> aSet( mrViewShell.GetPool() );
 
         // indicate color attribute
-        SfxItemSet aAttr( mpDoc->GetPool() );
+        SfxItemSet aAttr( mrDoc.GetPool() );
         mpView->GetAttributes( aAttr );
 
         if( const XFillStyleItem* pFillStyleItem = aAttr.GetItemIfSet( XATTR_FILLSTYLE ) )

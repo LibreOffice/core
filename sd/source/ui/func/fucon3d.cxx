@@ -54,16 +54,16 @@ FuConstruct3dObject::FuConstruct3dObject (
     ViewShell&  rViewSh,
     ::sd::Window*       pWin,
     ::sd::View*         pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest&     rReq)
-    : FuConstruct(rViewSh, pWin, pView, pDoc, rReq)
+    : FuConstruct(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuConstruct3dObject::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+rtl::Reference<FuPoor> FuConstruct3dObject::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq, bool bPermanent )
 {
     FuConstruct3dObject* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstruct3dObject( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstruct3dObject( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent(bPermanent);
     return xFunc;
@@ -334,7 +334,7 @@ bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 
         if (pObj)
         {
-            SfxItemSet aAttr(mpDoc->GetPool());
+            SfxItemSet aAttr(mrDoc.GetPool());
             SetStyleSheet(aAttr, pObj);
 
             // extract LineStyle
@@ -408,7 +408,7 @@ rtl::Reference<SdrObject> FuConstruct3dObject::CreateDefaultObject(const sal_uIn
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
     ::tools::Rectangle a3DRect(0, 0, static_cast<::tools::Long>(fW), static_cast<::tools::Long>(fH));
-    rtl::Reference< E3dScene > pScene(new E3dScene(*mpDoc));
+    rtl::Reference< E3dScene > pScene(new E3dScene(mrDoc));
 
     // copied code from E3dView::InitScene
     double fCamZ(aVolume.getMaxZ() + ((fW + fH) / 4.0));
@@ -424,7 +424,7 @@ rtl::Reference<SdrObject> FuConstruct3dObject::CreateDefaultObject(const sal_uIn
     pScene->InsertObject(p3DObj.get());
     pScene->NbcSetSnapRect(a3DRect);
     ImpPrepareBasic3DShape(p3DObj.get(), pScene.get());
-    SfxItemSet aAttr(mpDoc->GetPool());
+    SfxItemSet aAttr(mrDoc.GetPool());
     SetStyleSheet(aAttr, p3DObj.get());
     aAttr.Put(XLineStyleItem (drawing::LineStyle_NONE));
     p3DObj->SetMergedItemSet(aAttr);

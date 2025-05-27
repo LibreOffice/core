@@ -30,7 +30,7 @@ class FuInsertGraphic final
 public:
 
     static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin,
-                                          ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq,
+                                          ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq,
                                           bool replaceExistingImage);
     virtual void DoExecute( SfxRequest& rReq ) override;
 
@@ -40,7 +40,7 @@ private:
         ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq,
         bool replaceExistingImage);
 
@@ -54,7 +54,7 @@ class FuInsertClipboard final
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq ) override;
 
 private:
@@ -62,7 +62,7 @@ private:
         ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq);
 };
 
@@ -73,7 +73,7 @@ class FuInsertOLE final
 {
  public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq ) override;
 
 private:
@@ -81,7 +81,7 @@ private:
         ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq);
 };
 
@@ -92,7 +92,7 @@ class FuInsertAVMedia final
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq ) override;
 
 private:
@@ -100,7 +100,7 @@ private:
         ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq);
 
 #if HAVE_FEATURE_AVMEDIA

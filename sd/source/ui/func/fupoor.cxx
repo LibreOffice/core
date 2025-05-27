@@ -57,13 +57,13 @@ FuPoor::FuPoor (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDrDoc,
+    SdDrawDocument& rDrDoc,
     SfxRequest& rReq)
     : mpView(pView),
       mrViewShell(rViewSh),
       mpWindow(pWin),
-      mpDocSh( pDrDoc->GetDocSh() ),
-      mpDoc(pDrDoc),
+      mpDocSh( rDrDoc.GetDocSh() ),
+      mrDoc(rDrDoc),
       nSlotId( rReq.GetSlot() ),
       aScrollTimer("sd FuPoor aScrollTimer"),
       aDragTimer("sd FuPoor aDragTimer"),
@@ -395,7 +395,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     // jump to last page
                     SdPage* pPage = pDrawViewShell->GetActualPage();
-                    pDrawViewShell->SwitchPage(mpDoc->GetSdPageCount(
+                    pDrawViewShell->SwitchPage(mrDoc.GetSdPageCount(
                             pPage->GetPageKind()) - 1);
                     bReturn = true;
                 }
@@ -469,7 +469,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     SdPage* pPage = static_cast<DrawViewShell*>(&mrViewShell)->GetActualPage();
                     sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
 
-                    if (nSdPage < mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+                    if (nSdPage < mrDoc.GetSdPageCount(pPage->GetPageKind()) - 1)
                     {
                         // Switch the page and send events regarding
                         // deactivation the old page and activating the new

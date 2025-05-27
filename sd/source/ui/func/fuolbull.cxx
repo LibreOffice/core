@@ -42,15 +42,15 @@ using namespace svx::sidebar;
 namespace sd {
 
 FuBulletAndPosition::FuBulletAndPosition(ViewShell& rViewShell, ::sd::Window* pWindow,
-                                 ::sd::View* pView, SdDrawDocument* pDoc,
+                                 ::sd::View* pView, SdDrawDocument& rDoc,
                                  SfxRequest& rReq)
-       : FuPoor(rViewShell, pWindow, pView, pDoc, rReq)
+       : FuPoor(rViewShell, pWindow, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuBulletAndPosition::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuBulletAndPosition::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuBulletAndPosition( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuBulletAndPosition( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -76,7 +76,7 @@ void FuBulletAndPosition::DoExecute( SfxRequest& rReq )
     }
 
     // fill ItemSet for Dialog
-    SfxItemSet aEditAttr( mpDoc->GetPool() );
+    SfxItemSet aEditAttr( mrDoc.GetPool() );
     mpView->GetAttributes( aEditAttr );
 
     SfxItemSetFixed<EE_PARA_NUMBULLET, EE_PARA_BULLET> aNewAttr( mrViewShell.GetPool() );
@@ -113,7 +113,7 @@ void FuBulletAndPosition::DoExecute( SfxRequest& rReq )
 
 void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
 {
-    if (!mpDoc || !mpView)
+    if (!mpView)
         return;
 
     const sal_uInt16 nSId = rReq.GetSlot();
@@ -134,7 +134,7 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aNewAttr( mrViewShell.GetPool() );
     {
-        SfxItemSet aEditAttr( mpDoc->GetPool() );
+        SfxItemSet aEditAttr( mrDoc.GetPool() );
         mpView->GetAttributes( aEditAttr );
         aNewAttr.Put( aEditAttr, false );
     }

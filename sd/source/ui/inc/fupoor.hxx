@@ -111,7 +111,7 @@ protected:
     FuPoor (ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq);
     virtual ~FuPoor() override;
 
@@ -141,7 +141,7 @@ protected:
     ViewShell& mrViewShell;
     VclPtr< ::sd::Window> mpWindow;
     DrawDocShell* mpDocSh;
-    SdDrawDocument* mpDoc;
+    SdDrawDocument& mrDoc;
 
     sal_uInt16          nSlotId;
 

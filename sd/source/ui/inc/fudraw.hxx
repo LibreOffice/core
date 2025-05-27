@@ -63,7 +63,7 @@ protected:
     FuDraw (ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq);
 
     virtual ~FuDraw() override;

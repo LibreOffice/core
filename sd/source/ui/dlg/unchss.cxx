@@ -33,19 +33,19 @@
 #include <stlsheet.hxx>
 #include <strings.hxx>
 
-StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
+StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument& rTheDoc,
                                            SfxStyleSheet& rTheStyleSheet,
                                            const SfxItemSet* pTheNewItemSet)
-    : SdUndoAction(pTheDoc),
+    : SdUndoAction(&rTheDoc),
       mrStyleSheet(rTheStyleSheet)
 {
     // Create ItemSets; Attention, it is possible that the new one is from a,
     // different pool. Therefore we clone it with its items.
     mpNewSet = std::make_unique<SfxItemSet>(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), pTheNewItemSet->GetRanges());
-    SdrModel::MigrateItemSet( pTheNewItemSet, mpNewSet.get(), *pTheDoc );
+    SdrModel::MigrateItemSet( pTheNewItemSet, mpNewSet.get(), rTheDoc );
 
     mpOldSet = std::make_unique<SfxItemSet>(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), mrStyleSheet.GetItemSet().GetRanges());
-    SdrModel::MigrateItemSet( &mrStyleSheet.GetItemSet(), mpOldSet.get(), *pTheDoc );
+    SdrModel::MigrateItemSet( &mrStyleSheet.GetItemSet(), mpOldSet.get(), rTheDoc );
 
     OUString aComment(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
     OUString aName(mrStyleSheet.GetName());

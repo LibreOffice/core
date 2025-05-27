@@ -35,14 +35,14 @@
 using namespace sd;
 
 FuTransform::FuTransform(ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
-                         SdDrawDocument* pDoc, SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+                         SdDrawDocument& rDoc, SfxRequest& rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuTransform::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuTransform::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuTransform( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuTransform( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -90,7 +90,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         pObj->GetObjIdentifier() == SdrObjKind::Caption )
     {
         // --------- itemset for caption --------
-        SfxItemSet aNewAttr( mpDoc->GetPool() );
+        SfxItemSet aNewAttr( mrDoc.GetPool() );
         mpView->GetAttributes( aNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

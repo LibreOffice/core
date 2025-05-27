@@ -50,17 +50,17 @@ using namespace css;
 namespace sd
 {
 FuExecuteInteraction::FuExecuteInteraction(ViewShell& rViewSh, ::sd::Window* pWin,
-                                           ::sd::View* pView, SdDrawDocument* pDoc,
+                                           ::sd::View* pView, SdDrawDocument& rDoc,
                                            SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
 rtl::Reference<FuPoor> FuExecuteInteraction::Create(ViewShell& rViewSh, ::sd::Window* pWin,
-                                                    ::sd::View* pView, SdDrawDocument* pDoc,
+                                                    ::sd::View* pView, SdDrawDocument& rDoc,
                                                     SfxRequest& rReq)
 {
-    rtl::Reference<FuPoor> xFunc(new FuExecuteInteraction(rViewSh, pWin, pView, pDoc, rReq));
+    rtl::Reference<FuPoor> xFunc(new FuExecuteInteraction(rViewSh, pWin, pView, rDoc, rReq));
     xFunc->DoExecute(rReq);
     return xFunc;
 }

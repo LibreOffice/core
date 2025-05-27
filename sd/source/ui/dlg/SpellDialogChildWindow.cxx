@@ -100,7 +100,7 @@ void SpellDialogChildWindow::EndSpellingAndClearOutliner()
 {
     if (!mpSdOutliner)
         return;
-    EndListening(*mpSdOutliner->GetDoc());
+    EndListening(mpSdOutliner->GetDoc());
     mpSdOutliner->EndSpelling();
     if (mbOwnOutliner)
         delete mpSdOutliner;
@@ -146,7 +146,7 @@ void SpellDialogChildWindow::ProvideOutliner()
         // to create one.
         mbOwnOutliner = true;
         SdDrawDocument *pDoc = pViewShell->GetDoc();
-        mpSdOutliner = new SdOutliner(pDoc, OutlinerMode::TextObject);
+        mpSdOutliner = new SdOutliner(*pDoc, OutlinerMode::TextObject);
         StartListening(*pDoc);
     }
     else if( dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr)

@@ -932,7 +932,7 @@ SdOutliner* SdDrawDocument::GetOutliner(bool bCreateOutliner)
 {
     if (!mpOutliner && bCreateOutliner)
     {
-        mpOutliner.reset(new SdOutliner( this, OutlinerMode::TextObject ));
+        mpOutliner.reset(new SdOutliner( *this, OutlinerMode::TextObject ));
 
         if (mpDocSh)
             mpOutliner->SetRefDevice(SdModule::get()->GetVirtualRefDevice());
@@ -950,7 +950,7 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
 {
     if ( !mpInternalOutliner && bCreateOutliner )
     {
-        mpInternalOutliner.reset( new SdOutliner( this, OutlinerMode::TextObject ) );
+        mpInternalOutliner.reset( new SdOutliner( *this, OutlinerMode::TextObject ) );
 
         // This outliner is only used to create special text objects. As no
         // information about portions is saved in this outliner, the update mode

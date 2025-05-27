@@ -41,15 +41,15 @@ FuNavigation::FuNavigation (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuNavigation::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuNavigation::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuNavigation( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuNavigation( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -116,7 +116,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
                     SdPage* pPage = pDrawViewShell->GetActualPage();
                     sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
 
-                    if (nSdPage < mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+                    if (nSdPage < mrDoc.GetSdPageCount(pPage->GetPageKind()) - 1)
                     {
                         // Switch the page and send events regarding
                         // deactivation the old page and activating the new
@@ -140,7 +140,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
                 {
                     // jump to last page
                     SdPage* pPage = pDrawViewShell->GetActualPage();
-                    pDrawViewShell->SwitchPage(mpDoc->GetSdPageCount(
+                    pDrawViewShell->SwitchPage(mrDoc.GetSdPageCount(
                             pPage->GetPageKind()) - 1);
                 }
         }
@@ -154,14 +154,14 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
                     OUString sTitle = SdResId(STR_GOTO_PAGE_DLG_TITLE);
                     OUString sLabel = SdResId(STR_PAGE_NAME) + ":";
 
-                    if (mpDoc->GetDocumentType() == DocumentType::Impress)
+                    if (mrDoc.GetDocumentType() == DocumentType::Impress)
                     {
                         sTitle = SdResId(STR_GOTO_SLIDE_DLG_TITLE);
                         sLabel = SdResId(STR_SLIDE_NAME) + ":";
                     }
                     svx::GotoPageDlg aDlg(pDrawViewShell->GetFrameWeld(), sTitle, sLabel,
                          pDrawViewShell->GetCurPagePos() + 1,
-                         mpDoc->GetSdPageCount(PageKind::Standard));
+                         mrDoc.GetSdPageCount(PageKind::Standard));
                     if (aDlg.run() == RET_OK)
                         pDrawViewShell->SwitchPage(aDlg.GetPageSelection() - 1);
                 }

@@ -132,17 +132,17 @@ const sal_uInt16 SidArray[] = {
 /**
  * base class for text functions
  */
-FuText::FuText( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
-: FuConstruct(rViewSh, pWin, pView, pDoc, rReq)
+FuText::FuText( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
+: FuConstruct(rViewSh, pWin, pView, rDoc, rReq)
 , bFirstObjCreated(false)
 , bJustEndedEdit(false)
 , rRequest (rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuText::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuText::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuText( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuText( rViewSh, pWin, pView, rDoc, rReq ) );
     return xFunc;
 }
 
@@ -157,7 +157,7 @@ void FuText::disposing()
         ::Outliner* pOutliner = mpView->GetTextEditOutliner();
 
         if (pOutliner)
-            pOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
+            pOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mrDoc.GetStyleSheetPool()));
     }
 }
 
@@ -1026,7 +1026,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                  nSdrObjKind == SdrObjKind::OutlineText || !pTextObj->IsEmptyPresObj() ) )
             {
                 // create new outliner (owned by SdrObjEditView)
-                std::unique_ptr<SdrOutliner> pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *mpDoc);
+                std::unique_ptr<SdrOutliner> pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, mrDoc);
 
                 if (bEmptyOutliner)
                     mpView->SdrEndTextEdit(true);

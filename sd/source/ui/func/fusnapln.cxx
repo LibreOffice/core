@@ -38,14 +38,14 @@ namespace sd {
 
 
 FuSnapLine::FuSnapLine(ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
-                       SdDrawDocument* pDoc, SfxRequest& rReq) :
-    FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+                       SdDrawDocument& rDoc, SfxRequest& rReq) :
+    FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuSnapLine::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuSnapLine::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuSnapLine( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuSnapLine( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }

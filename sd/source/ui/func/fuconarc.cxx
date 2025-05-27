@@ -49,16 +49,16 @@ FuConstructArc::FuConstructArc (
     ViewShell&  rViewSh,
     ::sd::Window*       pWin,
     ::sd::View*         pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest&     rReq )
-    : FuConstruct( rViewSh, pWin, pView, pDoc, rReq )
+    : FuConstruct( rViewSh, pWin, pView, rDoc, rReq )
 {
 }
 
-rtl::Reference<FuPoor> FuConstructArc::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent  )
+rtl::Reference<FuPoor> FuConstructArc::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq, bool bPermanent  )
 {
     FuConstructArc* pFunc;
-    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructArc( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( pFunc = new FuConstructArc( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     pFunc->SetPermanent(bPermanent);
     return xFunc;
@@ -117,7 +117,7 @@ bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 
         if (pObj)
         {
-            SfxItemSet aAttr(mpDoc->GetPool());
+            SfxItemSet aAttr(mrDoc.GetPool());
             SetStyleSheet(aAttr, pObj);
 
             pObj->SetMergedItemSet(aAttr);
@@ -229,7 +229,7 @@ rtl::Reference<SdrObject> FuConstructArc::CreateDefaultObject(const sal_uInt16 n
 
             pObj->SetLogicRect(aRect);
 
-            SfxItemSet aAttr(mpDoc->GetPool());
+            SfxItemSet aAttr(mrDoc.GetPool());
             aAttr.Put(makeSdrCircStartAngleItem(9000_deg100));
             aAttr.Put(makeSdrCircEndAngleItem(0_deg100));
 

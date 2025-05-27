@@ -36,15 +36,15 @@ FuCustomShowDlg::FuCustomShowDlg (
     ViewShell& rViewSh,
     ::sd::Window*    pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor( rViewSh, pWin, pView, pDoc, rReq )
+    : FuPoor( rViewSh, pWin, pView, rDoc, rReq )
 {
 }
 
-rtl::Reference<FuPoor> FuCustomShowDlg::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuCustomShowDlg::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuCustomShowDlg( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuCustomShowDlg( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -53,10 +53,10 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     vcl::Window* pWin = mrViewShell.GetActiveWindow();
-    ScopedVclPtr<AbstractSdCustomShowDlg> pDlg( pFact->CreateSdCustomShowDlg(pWin ? pWin->GetFrameWeld() : nullptr, *mpDoc) );
+    ScopedVclPtr<AbstractSdCustomShowDlg> pDlg( pFact->CreateSdCustomShowDlg(pWin ? pWin->GetFrameWeld() : nullptr, mrDoc) );
     sal_uInt16 nRet = pDlg->Execute();
-    mpDoc->SetChanged();
-    sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
+    mrDoc.SetChanged();
+    sd::PresentationSettings& rSettings = mrDoc.getPresentationSettings();
 
     if( nRet == RET_YES )
     {
@@ -74,7 +74,7 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
     }
     if (nRet == RET_OK)
     {
-        if (mpDoc->GetCustomShowList())
+        if (mrDoc.GetCustomShowList())
         {
             if (!pDlg->IsCustomShow())
             {

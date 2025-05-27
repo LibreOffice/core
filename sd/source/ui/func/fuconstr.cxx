@@ -54,9 +54,9 @@ FuConstruct::FuConstruct (
     ViewShell&      rViewSh,
     ::sd::Window*           pWin,
     ::sd::View*         pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest&     rReq)
-    : FuDraw(rViewSh, pWin, pView, pDoc, rReq),
+    : FuDraw(rViewSh, pWin, pView, rDoc, rReq),
       bSelectionChanged(false)
 {
 }
@@ -330,7 +330,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
 {
     SdPage* pPage = static_cast<SdPage*>(mpView->GetSdrPageView()->GetPage());
     if ( pPage->IsMasterPage() && pPage->GetPageKind() == PageKind::Standard &&
-         mpDoc->GetDocumentType() == DocumentType::Impress )
+         mrDoc.GetDocumentType() == DocumentType::Impress )
     {
         /**********************************************
         * Objects was created on the slide master page

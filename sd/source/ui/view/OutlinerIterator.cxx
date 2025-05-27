@@ -162,7 +162,7 @@ Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
         // There is a selection.  Search only in this.
         return CreateSelectionIterator (
             mpOutliner->maMarkListCopy,
-            mpOutliner->mpDrawDocument,
+            &mpOutliner->mrDrawDocument,
             pOverridingShell ? std::move(pOverridingShell) :
             mpOutliner->mpWeakViewShell.lock(),
             mpOutliner->mbDirectionIsForward,
@@ -170,7 +170,7 @@ Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
     else
         // Search in the whole document.
         return CreateDocumentIterator (
-            mpOutliner->mpDrawDocument,
+            &mpOutliner->mrDrawDocument,
             pOverridingShell ? std::move(pOverridingShell) :
             mpOutliner->mpWeakViewShell.lock(),
             mpOutliner->mbDirectionIsForward,

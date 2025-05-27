@@ -338,7 +338,7 @@ void NotesPanelViewShell::FuPermanent(SfxRequest& rReq)
             rOutl.UpdateFields();
 
             SetCurrentFunction(FuNotesPane::Create(*this, GetActiveWindow(), mpNotesPanelView.get(),
-                                                   GetDoc(), rReq));
+                                                   *GetDoc(), rReq));
 
             rReq.Done();
         }
@@ -679,7 +679,7 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
             {
                 // open the zoom dialog here
                 SetCurrentFunction(FuScale::Create(*this, GetActiveWindow(), mpNotesPanelView.get(),
-                                                   GetDoc(), rReq));
+                                                   *GetDoc(), rReq));
             }
             Cancel();
         }
@@ -780,7 +780,7 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
             if (rReq.GetArgs())
             {
                 SetCurrentFunction(FuTemplate::Create(*this, GetActiveWindow(),
-                                                      mpNotesPanelView.get(), GetDoc(), rReq));
+                                                      mpNotesPanelView.get(), *GetDoc(), rReq));
                 Cancel();
             }
 
@@ -791,7 +791,7 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
         case SID_PRESENTATION_DLG:
         {
             SetCurrentFunction(FuSlideShowDlg::Create(*this, GetActiveWindow(),
-                                                      mpNotesPanelView.get(), GetDoc(), rReq));
+                                                      mpNotesPanelView.get(), *GetDoc(), rReq));
             Cancel();
         }
         break;
@@ -809,7 +809,7 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
         case SID_CUSTOMSHOW_DLG:
         {
             SetCurrentFunction(FuCustomShowDlg::Create(*this, GetActiveWindow(),
-                                                       mpNotesPanelView.get(), GetDoc(), rReq));
+                                                       mpNotesPanelView.get(), *GetDoc(), rReq));
             Cancel();
         }
         break;
@@ -831,7 +831,7 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
         case SID_PASTE_SPECIAL:
         {
             SetCurrentFunction(FuInsertClipboard::Create(*this, GetActiveWindow(),
-                                                         mpNotesPanelView.get(), GetDoc(), rReq));
+                                                         mpNotesPanelView.get(), *GetDoc(), rReq));
             Cancel();
             rReq.Ignore();
         }
@@ -891,8 +891,8 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         case SID_INSERT_ZWSP:
         case SID_CHARMAP:
         {
-            SetCurrentFunction(
-                FuBullet::Create(*this, GetActiveWindow(), mpNotesPanelView.get(), GetDoc(), rReq));
+            SetCurrentFunction(FuBullet::Create(*this, GetActiveWindow(), mpNotesPanelView.get(),
+                                                *GetDoc(), rReq));
             Cancel();
         }
         break;
@@ -919,8 +919,8 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         case FN_SVX_SET_BULLET:
         case FN_SVX_SET_NUMBER:
         {
-            SetCurrentFunction(FuBulletAndPosition::Create(*this, GetActiveWindow(),
-                                                           mpNotesPanelView.get(), GetDoc(), rReq));
+            SetCurrentFunction(FuBulletAndPosition::Create(
+                *this, GetActiveWindow(), mpNotesPanelView.get(), *GetDoc(), rReq));
             Cancel();
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
             rBindings.Invalidate(FN_NUM_BULLET_ON);
@@ -931,7 +931,7 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         case SID_THESAURUS:
         {
             SetCurrentFunction(FuThesaurus::Create(*this, GetActiveWindow(), mpNotesPanelView.get(),
-                                                   GetDoc(), rReq));
+                                                   *GetDoc(), rReq));
             Cancel();
             rReq.Ignore();
         }
@@ -941,7 +941,7 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         case SID_CHAR_DLG:
         {
             SetCurrentFunction(
-                FuChar::Create(*this, GetActiveWindow(), mpNotesPanelView.get(), GetDoc(), rReq));
+                FuChar::Create(*this, GetActiveWindow(), mpNotesPanelView.get(), *GetDoc(), rReq));
             Cancel();
         }
         break;
@@ -949,7 +949,7 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         case SID_INSERTFILE:
         {
             SetCurrentFunction(FuInsertFile::Create(*this, GetActiveWindow(),
-                                                    mpNotesPanelView.get(), GetDoc(), rReq));
+                                                    mpNotesPanelView.get(), *GetDoc(), rReq));
             Cancel();
         }
         break;
@@ -957,7 +957,7 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         case SID_PRESENTATIONOBJECT:
         {
             SetCurrentFunction(FuPresentationObjects::Create(
-                *this, GetActiveWindow(), mpNotesPanelView.get(), GetDoc(), rReq));
+                *this, GetActiveWindow(), mpNotesPanelView.get(), *GetDoc(), rReq));
             Cancel();
         }
         break;
@@ -973,7 +973,7 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         case SID_SUMMARY_PAGE:
         {
             SetCurrentFunction(FuSummaryPage::Create(*this, GetActiveWindow(),
-                                                     mpNotesPanelView.get(), GetDoc(), rReq));
+                                                     mpNotesPanelView.get(), *GetDoc(), rReq));
             Cancel();
         }
         break;
@@ -981,7 +981,7 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         case SID_EXPAND_PAGE:
         {
             SetCurrentFunction(FuExpandPage::Create(*this, GetActiveWindow(),
-                                                    mpNotesPanelView.get(), GetDoc(), rReq));
+                                                    mpNotesPanelView.get(), *GetDoc(), rReq));
             Cancel();
         }
         break;
@@ -1397,7 +1397,7 @@ void NotesPanelViewShell::Execute(SfxRequest& rReq)
                     if (!xFuSearch.is())
                     {
                         xFuSearch = rtl::Reference<FuSearch>(FuSearch::createPtr(
-                            *this, this->GetActiveWindow(), pView, GetDoc(), rReq));
+                            *this, this->GetActiveWindow(), pView, *GetDoc(), rReq));
 
                         pView->getSearchContext().setSearchFunction(xFuSearch);
                     }
@@ -1516,10 +1516,10 @@ bool NotesPanelViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
 // FuNotesPane
 rtl::Reference<FuPoor> FuNotesPane::Create(ViewShell& rViewSh, ::sd::Window* pWin,
-                                           ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc,
+                                           ::sd::SimpleOutlinerView* pView, SdDrawDocument& rDoc,
                                            SfxRequest& rReq)
 {
-    rtl::Reference<FuPoor> xFunc(new FuNotesPane(rViewSh, pWin, pView, pDoc, rReq));
+    rtl::Reference<FuPoor> xFunc(new FuNotesPane(rViewSh, pWin, pView, rDoc, rReq));
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -1544,8 +1544,8 @@ bool FuNotesPane::KeyInput(const KeyEvent& rKEvt)
 }
 
 FuNotesPane::FuNotesPane(ViewShell& rViewShell, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView,
-                         SdDrawDocument* pDoc, SfxRequest& rReq)
-    : sd::FuSimpleOutlinerText(rViewShell, pWin, pView, pDoc, rReq)
+                         SdDrawDocument& rDoc, SfxRequest& rReq)
+    : sd::FuSimpleOutlinerText(rViewShell, pWin, pView, rDoc, rReq)
 {
 }
 

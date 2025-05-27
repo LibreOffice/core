@@ -36,7 +36,7 @@ class StyleSheetUndoAction final : public SdUndoAction
     std::unique_ptr<SfxItemSet> mpOldSet;
 
 public:
-    StyleSheetUndoAction(SdDrawDocument* pTheDoc, SfxStyleSheet& rTheStyleSheet,
+    StyleSheetUndoAction(SdDrawDocument& rTheDoc, SfxStyleSheet& rTheStyleSheet,
                          const SfxItemSet* pTheNewItemSet);
 
     virtual void Undo() override;

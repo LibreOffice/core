@@ -49,14 +49,14 @@ namespace sd {
 
 
 FuThesaurus::FuThesaurus( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
-                  SdDrawDocument* pDoc, SfxRequest& rReq )
-       : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+                  SdDrawDocument& rDoc, SfxRequest& rReq )
+       : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuThesaurus::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuThesaurus::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuThesaurus( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuThesaurus( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -96,7 +96,7 @@ void FuThesaurus::DoExecute(SfxRequest& rReq)
                 if( xHyphenator.is() )
                     pOutliner->SetHyphenator( xHyphenator );
 
-                pOutliner->SetDefaultLanguage( mpDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
+                pOutliner->SetDefaultLanguage( mrDoc.GetLanguage( EE_CHAR_LANGUAGE ) );
             }
 
             EESpellState eState = const_cast<OutlinerView*>(pOutlView)->StartThesaurus(rReq.GetFrameWeld());
@@ -105,7 +105,7 @@ void FuThesaurus::DoExecute(SfxRequest& rReq)
     }
     else if (dynamic_cast< OutlineViewShell *>( &mrViewShell ))
     {
-        Outliner* pOutliner = mpDoc->GetOutliner();
+        Outliner* pOutliner = mrDoc.GetOutliner();
         OutlinerView* pOutlView = pOutliner->GetView(0);
 
         if ( !pOutliner->GetSpeller().is() )
@@ -118,7 +118,7 @@ void FuThesaurus::DoExecute(SfxRequest& rReq)
             if( xHyphenator.is() )
                 pOutliner->SetHyphenator( xHyphenator );
 
-            pOutliner->SetDefaultLanguage( mpDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
+            pOutliner->SetDefaultLanguage( mrDoc.GetLanguage( EE_CHAR_LANGUAGE ) );
         }
 
         EESpellState eState = pOutlView->StartThesaurus(rReq.GetFrameWeld());

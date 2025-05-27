@@ -55,21 +55,21 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDocument,
+    SdDrawDocument& rDocument,
     SfxRequest& rReq )
-       : FuPoor(rViewSh, pWin, pView, pDocument, rReq),
+       : FuPoor(rViewSh, pWin, pView, rDocument, rReq),
     pSdOutliner(nullptr),
     bOwnOutliner(false)
 {
     if ( dynamic_cast< const DrawViewShell *>( &mrViewShell ) !=  nullptr )
     {
         bOwnOutliner = true;
-        pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
+        pSdOutliner = new SdOutliner( mrDoc, OutlinerMode::TextObject );
     }
     else if ( dynamic_cast< const OutlineViewShell *>( &mrViewShell ) !=  nullptr )
     {
         bOwnOutliner = false;
-        pSdOutliner = mpDoc->GetOutliner();
+        pSdOutliner = mrDoc.GetOutliner();
     }
 
     if (pSdOutliner)
@@ -85,9 +85,9 @@ FuHangulHanjaConversion::~FuHangulHanjaConversion()
         delete pSdOutliner;
 }
 
-rtl::Reference<FuPoor> FuHangulHanjaConversion::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuHangulHanjaConversion::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuHangulHanjaConversion( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuHangulHanjaConversion( rViewSh, pWin, pView, rDoc, rReq ) );
     return xFunc;
 }
 
@@ -110,7 +110,7 @@ void FuHangulHanjaConversion::StartConversion( LanguageType nSourceLanguage, Lan
             pSdOutliner->EndConversion();
 
             bOwnOutliner = true;
-            pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
+            pSdOutliner = new SdOutliner( mrDoc, OutlinerMode::TextObject );
             pSdOutliner->BeginConversion();
         }
         else if ( pSdOutliner && dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr && bOwnOutliner )
@@ -119,7 +119,7 @@ void FuHangulHanjaConversion::StartConversion( LanguageType nSourceLanguage, Lan
             delete pSdOutliner;
 
             bOwnOutliner = false;
-            pSdOutliner = mpDoc->GetOutliner();
+            pSdOutliner = mrDoc.GetOutliner();
             pSdOutliner->BeginConversion();
         }
 
@@ -147,10 +147,7 @@ void FuHangulHanjaConversion::StartConversion( LanguageType nSourceLanguage, Lan
 
 void FuHangulHanjaConversion::ConvertStyles( LanguageType nTargetLanguage, const vcl::Font *pTargetFont )
 {
-    if( !mpDoc )
-        return;
-
-    SfxStyleSheetBasePool* pStyleSheetPool = mpDoc->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pStyleSheetPool = mrDoc.GetStyleSheetPool();
     if( !pStyleSheetPool )
         return;
 
@@ -180,7 +177,7 @@ void FuHangulHanjaConversion::ConvertStyles( LanguageType nTargetLanguage, const
         pStyle = pStyleSheetPool->Next();
     }
 
-    mpDoc->SetLanguage( nTargetLanguage, EE_CHAR_LANGUAGE_CJK );
+    mrDoc.SetLanguage( nTargetLanguage, EE_CHAR_LANGUAGE_CJK );
 }
 
 void FuHangulHanjaConversion::StartChineseConversion()

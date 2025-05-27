@@ -40,15 +40,15 @@ FuChar::FuChar (
     ViewShell& rViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument& rDoc,
     SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(rViewSh, pWin, pView, rDoc, rReq)
 {
 }
 
-rtl::Reference<FuPoor> FuChar::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuChar::Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq )
 {
-    rtl::Reference<FuPoor> xFunc( new FuChar( rViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuChar( rViewSh, pWin, pView, rDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -59,14 +59,14 @@ void FuChar::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aEditAttr( mpDoc->GetPool() );
+        SfxItemSet aEditAttr( mrDoc.GetPool() );
         mpView->GetAttributes( aEditAttr );
 
         SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END> aNewAttr(mrViewShell.GetPool());
         aNewAttr.Put( aEditAttr, false );
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabCharDialog(mrViewShell.GetFrameWeld(), &aNewAttr, mpDoc->GetDocSh() ) );
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabCharDialog(mrViewShell.GetFrameWeld(), &aNewAttr, mrDoc.GetDocSh() ) );
         if (rReq.GetSlot() == SID_CHAR_DLG_EFFECT)
         {
             pDlg->SetCurPageId(u"RID_SVXPAGE_CHAR_EFFECTS"_ustr);
@@ -114,14 +114,14 @@ void FuChar::DoExecute( SfxRequest& rReq )
 
     mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
 
-    if( mpDoc->GetOnlineSpell() )
+    if( mrDoc.GetOnlineSpell() )
     {
         if( SfxItemState::SET == pArgs->GetItemState(EE_CHAR_LANGUAGE, false ) ||
             SfxItemState::SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CJK, false ) ||
             SfxItemState::SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CTL, false ) )
         {
-            mpDoc->StopOnlineSpelling();
-            mpDoc->StartOnlineSpelling();
+            mrDoc.StopOnlineSpelling();
+            mrDoc.StartOnlineSpelling();
         }
     }
 }

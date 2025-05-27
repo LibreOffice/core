@@ -31,7 +31,7 @@ class FuConstructBezierPolygon final
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
+    static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument& rDoc, SfxRequest& rReq, bool bPermanent );
     void DoExecute( SfxRequest& rReq ) override;
 
     // Mouse- & Key-Events
@@ -58,7 +58,7 @@ private:
         ViewShell& rViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument& rDoc,
         SfxRequest& rReq);
 
     sal_uInt16    nEditMode;
