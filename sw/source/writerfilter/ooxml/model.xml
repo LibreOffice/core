@@ -13507,6 +13507,9 @@
           <element name="t">
             <ref name="CT_Text"/>
           </element>
+          <element name="r">
+            <ref name="CT_R"/>
+          </element>
           <element name="delText">
             <ref name="CT_delText"/>
           </element>
@@ -18197,6 +18200,7 @@
     <resource name="EG_RunInnerContent" resource="Stream">
       <element name="br" tokenid="ooxml:EG_RunInnerContent_br"/>
       <element name="t" tokenid="ooxml:EG_RunInnerContent_t"/>
+      <element name="r" tokenid="ooxml:EG_RunInnerContent_r"/>
       <element name="delText" tokenid="ooxml:EG_RunInnerContent_delText"/>
       <element name="instrText" tokenid="ooxml:EG_RunInnerContent_instrText"/>
       <element name="delInstrText" tokenid="ooxml:EG_RunInnerContent_delInstrText"/>

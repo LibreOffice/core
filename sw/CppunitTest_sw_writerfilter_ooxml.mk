@@ -13,6 +13,15 @@ $(eval $(call gb_CppunitTest_CppunitTest,sw_writerfilter_ooxml))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_writerfilter_ooxml,\
 	boost_headers \
+	libxml2 \
+))
+
+$(eval $(call gb_CppunitTest_set_include,sw_writerfilter_ooxml,\
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/uibase/inc \
+    -I$(SRCDIR)/sw/qa/inc \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_writerfilter_ooxml, \
@@ -27,6 +36,9 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_writerfilter_ooxml, \
     oox \
     sal \
     subsequenttest \
+    sw \
+    swqahelper \
+    svl \
     test \
     unotest \
     utl \
