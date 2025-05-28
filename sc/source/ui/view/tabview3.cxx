@@ -2468,7 +2468,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::getOver
             // create outline polygon. Shrink by 1px due to working
             // with pixel positions one cell right and below. We are
             // in discrete (pixel) coordinates with start/end here,
-            // so just substract '1' from x and y to do that
+            // so just subtract '1' from x and y to do that
             basegfx::B2DPolyPolygon aOutline(basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRange(
                     aStart.X(), aStart.Y(),
