@@ -1648,49 +1648,41 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     bool bIsWhatsNewShown = false; //suppress tipoftheday if whatsnew was shown
 
                     static const bool bRunningUnitTest = o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest();
-                    std::optional<bool> bShowWelcome = officecfg::Setup::Product::WhatsNewDialog::get(); // nil at first start = welcome dialog
-                    if (!bShowWelcome.has_value() && !IsInModalMode() && !bRunningUnitTest)
-                    {
-                        SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(
-                            pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld(), true));
-                        pDlg->Execute();
-
-                        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                        officecfg::Setup::Product::WhatsNewDialog::set(true, batch); // true after first start = whatsnew dialog
-                        batch->commit();
-
-                        bIsWhatsNewShown = true;
-                    }
-
                     //what's new dialog
-                    static bool wantsWhatsNew = utl::isProductVersionUpgraded() && !IsInModalMode() && bShowWelcome.has_value();
+                    static bool wantsWhatsNew = officecfg::Setup::Product::WhatsNew::get()
+                                                && !IsInModalMode() && !bRunningUnitTest
+                                                && utl::isProductVersionUpgraded(); //sets isProductVersionNew
                     if (wantsWhatsNew)
                     {
                         wantsWhatsNew = false;
-                        if (officecfg::Setup::Product::WhatsNew::get())
+
+                        if (utl::isProductVersionNew()) //welcome dialog
                         {
-                            if (bShowWelcome)
-                            {
-                                SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                                ScopedVclPtr<SfxAbstractTabDialog> pDlg(
-                                    pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld(), false));
-                                pDlg->Execute();
-                            }
-                            else
-                            {
-                                OUString sText(SfxResId(STR_WHATSNEW_TEXT));
-                                VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"whatsnew"_ustr, u""_ustr, sText.replaceAll("\n",""), InfobarType::INFO);
-                                if (pInfoBar)
-                                {
-                                    weld::Button& rWhatsNewButton = pInfoBar->addButton();
-                                    rWhatsNewButton.set_label(SfxResId(STR_WHATSNEW_BUTTON));
-                                    rWhatsNewButton.connect_clicked(LINK(this, SfxViewFrame, WhatsNewHandler));
-                                }
-                            }
-                            bIsInfobarShown = true;
-                            bIsWhatsNewShown = true;
+                            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                            ScopedVclPtr<SfxAbstractTabDialog> pDlg(
+                                pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld(), true));
+                            pDlg->Execute();
                         }
+                        else if (officecfg::Setup::Product::WhatsNewDialog::get()) //whatsnew dialog
+                        {
+                            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                            ScopedVclPtr<SfxAbstractTabDialog> pDlg(
+                                pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld(), false));
+                            pDlg->Execute();
+                        }
+                        else //whatsnew infobar
+                        {
+                            OUString sText(SfxResId(STR_WHATSNEW_TEXT));
+                            VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"whatsnew"_ustr, u""_ustr, sText.replaceAll("\n",""), InfobarType::INFO);
+                            if (pInfoBar)
+                            {
+                                weld::Button& rWhatsNewButton = pInfoBar->addButton();
+                                rWhatsNewButton.set_label(SfxResId(STR_WHATSNEW_BUTTON));
+                                rWhatsNewButton.connect_clicked(LINK(this, SfxViewFrame, WhatsNewHandler));
+                            }
+                        }
+                        bIsInfobarShown = true;
+                        bIsWhatsNewShown = true;
                     }
 
                     // show tip-of-the-day dialog if it due, but not if there is the impress modal template dialog

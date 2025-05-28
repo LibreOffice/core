@@ -19,4 +19,8 @@ namespace utl
  * current version of LibreOffice has been upgraded to a newer one.
  */
 bool UNOTOOLS_DLLPUBLIC isProductVersionUpgraded();
+/** This method is called to detect if the program is started the
+ *  very first time after a clean installation or a profile reset.
+ */
+bool UNOTOOLS_DLLPUBLIC isProductVersionNew();
 }

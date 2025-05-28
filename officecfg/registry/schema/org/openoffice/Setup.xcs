@@ -307,13 +307,11 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="WhatsNewDialog" oor:type="xs:boolean">
+      <prop oor:name="WhatsNewDialog" oor:type="xs:boolean" oor:nillable="false">
         <info>
-            <desc>Set to false to not show the WhatsNew dialog but the infobar.
-            Initial nil value is evaluated at the first start to show the
-            welcome dialog, and set to true in order to show the Whatsnew
-            information as a dialog rather than the simple infobar in case of false.</desc>
+            <desc>Set to false to not show the WhatsNew dialog but the infobar.</desc>
         </info>
+        <value>true</value>
       </prop>
     </group>
     <group oor:name="Office">

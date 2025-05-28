@@ -21,9 +21,16 @@
 
 namespace utl
 {
+bool isProductVersionNew()
+{
+    static const bool bIsNew = !officecfg::Setup::Product::ooSetupLastVersion::get().has_value();
+    return bIsNew;
+}
+
 bool isProductVersionUpgraded()
 {
     static const bool bUpgraded = []() {
+        (void)isProductVersionNew(); //set variable above
         OUString sSetupVersion = utl::ConfigManager::getProductVersion();
         sal_Int32 iCurrent = o3tl::toInt32(o3tl::getToken(sSetupVersion, 0, '.')) * 10
                              + o3tl::toInt32(o3tl::getToken(sSetupVersion, 1, '.'));
