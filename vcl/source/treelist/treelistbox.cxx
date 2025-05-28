@@ -2620,9 +2620,67 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
     const bool bHasButtonsAtRoot = nWindowStyle & WB_HASBUTTONSATROOT;
 
     const size_t nTabCount = aTabs.size();
+
+    // Get image information
+
+    sal_uInt16 nFirstDynTabPos(0);
+    SvLBoxTab* pFirstDynamicTab = GetFirstDynamicTab(nFirstDynTabPos);
+
+    const Image* pImg = nullptr;
+    Point aImagePos;
+    Size aImageSize;
+    bool bDefaultImage = false;
+    bool bExpanded = false;
+
+    const bool bNeedsImage = (!(rEntry.GetFlags() & SvTLEntryFlags::NO_NODEBMP))
+                             && (nWindowStyle & WB_HASBUTTONS) && pFirstDynamicTab
+                             && (rEntry.HasChildren() || rEntry.HasChildrenOnDemand());
+    if (bNeedsImage)
+    {
+        tools::Long nDynTabPos = GetTabPos(&rEntry, pFirstDynamicTab);
+        nDynTabPos += pImpl->m_nNodeBmpTabDistance;
+        nDynTabPos += pImpl->m_nNodeBmpWidth / 2;
+        nDynTabPos += 4; // 4 pixels of buffer, so the node bitmap is not too close to the next tab
+
+        // find first tab and check if the node bitmap extends into it
+        sal_uInt16 nNextTab = nFirstDynTabPos;
+        SvLBoxTab* pNextTab;
+        do
+        {
+            nNextTab++;
+            pNextTab = nNextTab < nTabCount ? aTabs[nNextTab].get() : nullptr;
+        } while (pNextTab && pNextTab->IsDynamic());
+
+        if (pNextTab && (GetTabPos(&rEntry, pNextTab) <= nDynTabPos))
+            return;
+
+        if (!((nWindowStyle & WB_HASBUTTONSATROOT) || pModel->GetDepth(&rEntry) > 0))
+            return;
+
+        aImagePos = Point(GetTabPos(&rEntry, pFirstDynamicTab), nLine);
+        aImagePos.AdjustX(pImpl->m_nNodeBmpTabDistance);
+
+        bExpanded = IsExpanded(&rEntry);
+        if (bExpanded)
+            pImg = &pImpl->GetExpandedNodeBmp();
+        else
+            pImg = &pImpl->GetCollapsedNodeBmp();
+        bDefaultImage = bExpanded ? *pImg == GetDefaultExpandedNodeImage()
+                                  : *pImg == GetDefaultCollapsedNodeImage();
+        aImageSize = pImg->GetSizePixel();
+        aImagePos.AdjustY((nTempEntryHeight - aImageSize.Height()) / 2);
+    }
+
+    // Draw items
+
     const size_t nItemCount = rEntry.ItemCount();
     size_t nCurTab = 0;
     size_t nCurItem = 0;
+
+    const bool bEntryHighlighted = pViewDataEntry->IsHighlighted();
+    // We need to track, if the area for the image area has selection background; otherwise,
+    // the symbol may be drawn using aHighlightTextColor (usually white) on white background
+    bool bImageHighlighted = false;
 
     while (nCurTab < nTabCount && nCurItem < nItemCount)
     {
@@ -2669,7 +2727,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
         bool bSelTab = bool(nFlags & SvLBoxTabFlags::SHOW_SELECTION);
 
-        if (pViewDataEntry->IsHighlighted() && bSelTab)
+        if (bEntryHighlighted && bSelTab)
         {
             Color aNewWallColor = rSettings.GetHighlightColor();
             // if the face color is bright then the deactivate color is also bright
@@ -2744,7 +2802,14 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
                 rRenderContext.SetFillColor(aBackgroundColor);
                 // this case may occur for smaller horizontal resizes
                 if (aRect.Left() < aRect.Right())
+                {
                     rRenderContext.DrawRect(aRect);
+                    if (!bImageHighlighted && bNeedsImage && bDefaultImage && bEntryHighlighted)
+                    {
+                        if (!aRect.GetIntersection({ aImagePos, aImageSize }).IsEmpty())
+                            bImageHighlighted = true;
+                    }
+                }
             }
         }
         // draw item
@@ -2794,47 +2859,8 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         rRenderContext.SetFont(aBackupFont);
     }
 
-    sal_uInt16 nFirstDynTabPos(0);
-    SvLBoxTab* pFirstDynamicTab = GetFirstDynamicTab(nFirstDynTabPos);
-    tools::Long nDynTabPos = GetTabPos(&rEntry, pFirstDynamicTab);
-    nDynTabPos += pImpl->m_nNodeBmpTabDistance;
-    nDynTabPos += pImpl->m_nNodeBmpWidth / 2;
-    nDynTabPos += 4; // 4 pixels of buffer, so the node bitmap is not too close
-                     // to the next tab
-
-    if( !((!(rEntry.GetFlags() & SvTLEntryFlags::NO_NODEBMP)) &&
-        (nWindowStyle & WB_HASBUTTONS) && pFirstDynamicTab &&
-        (rEntry.HasChildren() || rEntry.HasChildrenOnDemand())))
+    if (!bNeedsImage)
         return;
-
-    // find first tab and check if the node bitmap extends into it
-    sal_uInt16 nNextTab = nFirstDynTabPos;
-    SvLBoxTab* pNextTab;
-    do
-    {
-        nNextTab++;
-        pNextTab = nNextTab < nTabCount ? aTabs[nNextTab].get() : nullptr;
-    } while (pNextTab && pNextTab->IsDynamic());
-
-    if (pNextTab && (GetTabPos( &rEntry, pNextTab ) <= nDynTabPos))
-        return;
-
-    if (!((nWindowStyle & WB_HASBUTTONSATROOT) || pModel->GetDepth(&rEntry) > 0))
-        return;
-
-    Point aPos(GetTabPos(&rEntry, pFirstDynamicTab), nLine);
-    aPos.AdjustX(pImpl->m_nNodeBmpTabDistance );
-
-    const Image* pImg = nullptr;
-
-    const bool bExpanded = IsExpanded(&rEntry);
-    if (bExpanded)
-        pImg = &pImpl->GetExpandedNodeBmp();
-    else
-        pImg = &pImpl->GetCollapsedNodeBmp();
-    const bool bDefaultImage = bExpanded ? *pImg == GetDefaultExpandedNodeImage()
-                                         : *pImg == GetDefaultCollapsedNodeImage();
-    aPos.AdjustY((nTempEntryHeight - pImg->GetSizePixel().Height()) / 2 );
 
     if (!bDefaultImage)
     {
@@ -2842,7 +2868,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         DrawImageFlags nStyle = DrawImageFlags::NONE;
         if (!IsEnabled())
             nStyle |= DrawImageFlags::Disable;
-        rRenderContext.DrawImage(aPos, *pImg, nStyle);
+        rRenderContext.DrawImage(aImagePos, *pImg, nStyle);
     }
     else
     {
@@ -2851,7 +2877,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         if (rRenderContext.IsNativeControlSupported(ControlType::ListNode, ControlPart::Entire))
         {
             ImplControlValue aControlValue;
-            tools::Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
+            tools::Rectangle aCtrlRegion(aImagePos,  pImg->GetSizePixel());
             ControlState nState = ControlState::NONE;
 
             if (IsEnabled())
@@ -2882,11 +2908,11 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
                 nSymbolStyle |= DrawSymbolFlags::Disable;
 
             Color aCol = aBackupTextColor;
-            if (pViewDataEntry->IsHighlighted())
+            if (bImageHighlighted)
                 aCol = aHighlightTextColor;
 
             SymbolType eSymbol = bExpanded ? SymbolType::SPIN_DOWN : SymbolType::SPIN_RIGHT;
-            aDecoView.DrawSymbol(tools::Rectangle(aPos, pImg->GetSizePixel()), eSymbol, aCol, nSymbolStyle);
+            aDecoView.DrawSymbol(tools::Rectangle(aImagePos, pImg->GetSizePixel()), eSymbol, aCol, nSymbolStyle);
         }
     }
 }
