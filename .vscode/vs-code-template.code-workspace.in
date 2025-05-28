@@ -16,7 +16,7 @@
 			// BUILDDIR may be configured separate from SRCDIR
 			"name": "builddir",
 			"path": "@BUILDDIR@"
-		},
+		}
 	],
 	"settings": {
 		"search.exclude": {
@@ -123,6 +123,17 @@
 	},
 	"tasks": {
 		"version": "2.0.0",
+		"inputs": [
+			{
+				"type": "promptString",
+				"id": "makeTarget",
+				"description": "target to pass to the make command",
+				"default": "build"
+			}
+		],
+		"options": {
+			"cwd": "@BUILDDIR@"
+		},
 		"tasks": [
 			{
 				"label": "full make",
@@ -133,9 +144,9 @@
 					"kind": "build",
 					"isDefault": true
 				},
-				"options": {
-					"cwd": "@BUILDDIR@"
-				}
+				"args": [
+					"${input:makeTarget}"
+				]
 			},
 			{
 				"label": "create compile-commands.json",
@@ -152,9 +163,6 @@
 				"dependsOn": [
 					"full make"
 				],
-				"options": {
-					"cwd": "@BUILDDIR@"
-				},
 				"problemMatcher": [] // don't ask when manually running the task
 			},
 			{
@@ -170,9 +178,6 @@
 				"dependsOn": [
 					"full make"
 				],
-				"options": {
-					"cwd": "@BUILDDIR@"
-				},
 				"problemMatcher": []
 			}
 		]
@@ -215,7 +220,7 @@
 							"description": "Mark pretty-printers bootstrap (in instdir/program) safe",
 							"text": "add-auto-load-safe-path @INSTROOT@",
 							"ignoreFailures": true
-						},
+						}
 					]
 				},
 				"osx": {
@@ -273,7 +278,7 @@
 							"description": "Mark pretty-printers bootstrap (in instdir/program) safe",
 							"text": "add-auto-load-safe-path @INSTROOT@",
 							"ignoreFailures": true
-						},
+						}
 					]
 				},
 				"osx": {
