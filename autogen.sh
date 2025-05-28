@@ -333,6 +333,8 @@ if (defined $ENV{NOCONFIGURE}) {
     system (@args) && die "Error running configure";
 }
 
+# cspell:ignore Distros PROGRAMFILESX WSLENV emconfigure realpath wslsys
+
 # Local Variables:
 # mode: perl
 # cperl-indent-level: 4

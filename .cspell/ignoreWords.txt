@@ -1,0 +1,27 @@
+# helper file to collect words that should be accepted, but not used for suggestions
+bluez
+CERTIFICATENAME
+CERTIFICATEPATH
+cpan
+distros
+dpkg
+genbrk
+genccode
+gencmn
+instpath
+lcms
+libfuzzer
+libpq
+lldb
+lxml
+mdds
+midl
+nodeps
+ooenv
+oosplash
+rpmbuild
+soname
+spsupp
+xapian
+zstd
+zxing

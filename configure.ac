@@ -2,6 +2,15 @@ dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 100 -*
 dnl configure.ac serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
+dnl cspell:enableCompoundWords
+dnl cspell:includeRegExp ^\s*#.*$
+dnl cspell:includeRegExp ^\s*dnl.*$
+dnl cspell:includeRegExp /AC_MSG_[A-Z]*\([^)]*\)/
+dnl cspell:ignoreRegExp /[A-Z]{4,}/
+dnl cspell:ignoreRegExp /\${?[A-za-z]*/
+dnl cspell:ignoreRegExp /[ ']-[fglmBWXZ][a-z][^ ]*/
+dnl cspell:ignoreRegExp / -isystem /
+
 # The version number in the second argument to AC_INIT should be four numbers separated by
 # periods. Some parts of the code requires the first one to be less than 128 and the others to be less
 # than 256. The four numbers can optionally be followed by a period and a free-form string containing
@@ -16132,5 +16141,12 @@ fi
 
 # Remove unneeded emconfigure artifacts
 rm -f a.out a.wasm a.out.js a.out.wasm
+
+dnl cspell:ignore Randr Xext alignof altlinuxhyph appex bzlib ccached coreutils createmsi cxxabi
+dnl cspell:ignore cygdrive devel devenv dlsym dtrace emconfigure fpch frobozz gnucp gpgconf gpgme
+dnl cspell:ignore gpgmepp ifdef ifndef libc libdl libjpipe libstdc longjmp memcpy mscoree msicreator
+dnl cspell:ignore msiglobal mspdb msys nmake omindex optimised pagein pkgmk qconfig qtbase
+dnl cspell:ignore quadrigraph rbbi rpms sccache strbuf stringop tosvg ucrt ustring uuidgen vclplugs
+dnl cspell:ignore vswhere werror wilangid xcent xcrun
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:

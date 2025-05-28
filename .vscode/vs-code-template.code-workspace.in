@@ -119,7 +119,47 @@
 				}
 			}
 		},
-		"terminal.integrated.defaultProfile.windows": "Cygwin"
+		"terminal.integrated.defaultProfile.windows": "Cygwin",
+		"cSpell.customDictionaries": {
+			"libreoffice-terms": {
+				"name": "libreoffice",
+				"path": "${workspaceFolder:srcdir}/.cspell/libreoffice.txt",
+				"description": "spell check dictionary with terms related to LibreOffice",
+				"addWords": true,
+				"scope": "workspace"
+			},
+			// helper-dict to collect ignore words, otherwise they'd be added to the workspace file
+			// when using the quickfix entries
+			"ignore-words-collecting": {
+				"name": "ignoreWords",
+				"path": "${workspaceFolder:srcdir}/.cspell/ignoreWords.txt",
+				"description": "words not flagged, but also not used as suggestions",
+				"addWords": true,
+				"scope": "workspace"
+			}
+		},
+		"cSpell.noSuggestDictionaries": ["ignoreWords"],
+		"cSpell.languageSettings": [
+			{
+				// check all file types, but only in comments and strings (what the regexes consider
+				// a comment/string)
+				"languageId": "*",
+				// turn off compound words, because it is only checking strings.
+				"allowCompoundWords": false,
+				// Only check comments and strings
+				"includeRegExpList": [
+					"CStyleComment",
+					"string"
+				],
+				// Exclude includes, because they are also strings.
+				"ignoreRegExpList": [
+					"/#include.*/"
+				]
+			}
+		],
+		// hide from "Problems" tab, however also makes it less visible in the editor, but there are
+		// still too many false positives/words not added to the dictionary
+		"cSpell.diagnosticLevel": "Hint"
 	},
 	"tasks": {
 		"version": "2.0.0",
@@ -300,3 +340,4 @@
 		"compounds": []
 	}
 }
+// cspell:ignore CHERE autolinks cppdbg cpptools cppvsdbg
