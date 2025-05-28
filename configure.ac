@@ -6250,6 +6250,7 @@ if test "$cross_compiling" = "yes"; then
         LIBXML2
         LIBXSLT
         MDDS
+        MESON
         NATIVE
         OPENSSL
         ORCUS
