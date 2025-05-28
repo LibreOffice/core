@@ -1047,7 +1047,10 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(OutputDevice& rOutputDevice,
 
     // no target, nothing to initialize
     if (nullptr == pTarget)
+    {
+        mpTargetOutputDevice = nullptr;
         return;
+    }
 
     // get evtl. offsets if OutputDevice is e.g. a OUTDEV_WINDOW
     // to evaluate if initial clip is needed
@@ -1092,8 +1095,11 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(OutputDevice& rOutputDevice,
                                                             nWidthPixel, nHeightPixel);
 
         if (nullptr == mpOwnedSurface)
+        {
             // error, invalid
+            mpTargetOutputDevice = nullptr;
             return;
+        }
 
         mpRT = cairo_create(mpOwnedSurface);
     }
@@ -1104,8 +1110,11 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(OutputDevice& rOutputDevice,
     }
 
     if (nullptr == mpRT)
+    {
         // error, invalid
+        mpTargetOutputDevice = nullptr;
         return;
+    }
 
     // initialize some basic used values/settings
     cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
