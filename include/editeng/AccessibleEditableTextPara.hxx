@@ -87,8 +87,6 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent() override;
     virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
-    /// Maximal length of text returned by getAccessibleDescription()
-    enum { MaxDescriptionLen = 40 };
     virtual OUString SAL_CALL getAccessibleDescription() override;
     virtual OUString SAL_CALL getAccessibleName() override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
