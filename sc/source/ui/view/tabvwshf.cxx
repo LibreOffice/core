@@ -21,6 +21,7 @@
 
 #include <memory>
 
+#include <sfx2/dialogrequesthelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -878,19 +879,15 @@ void ScTabViewShell::ExecuteInsertTable(SfxRequest& rReq)
     }
     else                                // dialog
     {
-        auto xRequest = std::make_shared<SfxRequest>(rReq);
-        rReq.Ignore(); // the 'old' request is not relevant any more
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         VclPtr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetFrameWeld(), rViewData,
             nTabSelCount, nSlot == FID_INS_TABLE_EXT));
-        pDlg->StartExecuteAsync(
-            [this, pDlg, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
-            {
-                if (nResult == RET_OK)
-                    DoInsertTableFromDialog(*xRequest, pDlg);
-                pDlg->disposeOnce();
-            }
-        );
+        sfx2::ExecDialogPerRequestAndDispose(pDlg, rReq,
+                                             [this, pDlg](sal_Int32 nResult, SfxRequest& req)
+                                             {
+                                                 if (nResult == RET_OK)
+                                                     DoInsertTableFromDialog(req, pDlg);
+                                             });
     }
 }
 
