@@ -15,6 +15,8 @@
 #include <sfx2/objsh.hxx>
 #include <strings.hrc>
 #include <svtools/colorcfg.hxx>
+#include <svtools/imgdef.hxx>
+#include <svtools/miscopt.hxx>
 #include <svtools/restartdialog.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/svxids.hrc>
@@ -114,9 +116,16 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , m_xUseBmpForAppBack(m_xBuilder->weld_check_button(u"usebmpforappback"_ustr))
     , m_xBitmapDropDown(m_xBuilder->weld_combo_box(u"bitmapdropdown"_ustr))
     , m_xBitmapDrawTypeDropDown(m_xBuilder->weld_combo_box(u"bitmapdrawtypedropdown"_ustr))
+    , m_xIconsDropDown(m_xBuilder->weld_combo_box(u"iconsdropdown"_ustr))
+    , m_xMoreIconsBtn(m_xBuilder->weld_button(u"moreicons"_ustr))
+    , m_xToolbarIconSize(m_xBuilder->weld_combo_box(u"toolbariconsdropdown"_ustr))
+    , m_xSidebarIconSize(m_xBuilder->weld_combo_box(u"sidebariconsdropdown"_ustr))
+    , m_xNotebookbarIconSize(m_xBuilder->weld_combo_box(u"notebookbariconsdropdown"_ustr))
+    , m_sAutoStr(m_xIconsDropDown->get_text(0))
 {
     InitThemes();
     InitCustomization();
+    InitIcons();
 }
 
 void SvxAppearanceTabPage::LoadSchemeList()
@@ -201,6 +210,73 @@ void SvxAppearanceTabPage::Reset(const SfxItemSet* /* rSet */)
     pColorConfig->ClearModified();
     pColorConfig->DisableBroadcast();
     pColorConfig.reset(new EditableColorConfig);
+
+    bool bEnable = true;
+
+    nInitialToolbarIconSizeSel = 1;
+    if (SvtMiscOptions::GetSymbolsSize() == SFX_SYMBOLS_SIZE_AUTO)
+        nInitialToolbarIconSizeSel = 0;
+    else if (SvtMiscOptions::GetSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
+        nInitialToolbarIconSizeSel = 2;
+    else if (SvtMiscOptions::GetSymbolsSize() == SFX_SYMBOLS_SIZE_32)
+        nInitialToolbarIconSizeSel = 3;
+
+    bEnable = !officecfg::Office::Common::Misc::SymbolSet::isReadOnly();
+    m_xToolbarIconSize->set_active(nInitialToolbarIconSizeSel);
+    m_xToolbarIconSize->set_sensitive(bEnable);
+    m_xMoreIconsBtn->set_sensitive(bEnable);
+    m_xToolbarIconSize->save_value();
+
+    ToolBoxButtonSize eSidebarIconSize
+        = static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::SidebarIconSize::get());
+    if (eSidebarIconSize == ToolBoxButtonSize::DontCare)
+        nInitialSidebarIconSizeSel = 0;
+    else if (eSidebarIconSize == ToolBoxButtonSize::Small)
+        nInitialSidebarIconSizeSel = 1;
+    else if (eSidebarIconSize == ToolBoxButtonSize::Large)
+        nInitialSidebarIconSizeSel = 2;
+
+    bEnable = !officecfg::Office::Common::Misc::SidebarIconSize::isReadOnly();
+    m_xSidebarIconSize->set_active(nInitialSidebarIconSizeSel);
+    m_xSidebarIconSize->set_sensitive(bEnable);
+    m_xSidebarIconSize->save_value();
+
+    ToolBoxButtonSize eNotebookbarIconSize = static_cast<ToolBoxButtonSize>(
+        officecfg::Office::Common::Misc::NotebookbarIconSize::get());
+    if (eNotebookbarIconSize == ToolBoxButtonSize::DontCare)
+        nInitialNotebookbarIconSizeSel = 0;
+    else if (eNotebookbarIconSize == ToolBoxButtonSize::Small)
+        nInitialNotebookbarIconSizeSel = 1;
+    else if (eNotebookbarIconSize == ToolBoxButtonSize::Large)
+        nInitialNotebookbarIconSizeSel = 2;
+
+    bEnable = !officecfg::Office::Common::Misc::NotebookbarIconSize::isReadOnly();
+    m_xNotebookbarIconSize->set_active(nInitialNotebookbarIconSizeSel);
+    m_xNotebookbarIconSize->set_sensitive(bEnable);
+    m_xNotebookbarIconSize->save_value();
+
+    // tdf#153497 set name of automatic icon theme, it may have changed due to "Apply" while this page is visible
+    // TODO: the automatic icon theme changes based on the application appearance mode.
+    // this doesn't work properly because appearance changes need a restart to properly
+    // reflect. it would be fixed in a follow up patch which removes the restart dialog
+    // and implements hot reloading.
+    InitIcons();
+
+    SvtMiscOptions aMiscOptions;
+    if (aMiscOptions.IconThemeWasSetAutomatically())
+        nInitialIconThemeSel = 0;
+    else
+    {
+        const OUString selected = SvtMiscOptions::GetIconTheme();
+        const vcl::IconThemeInfo& selectedInfo
+            = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, selected);
+        nInitialIconThemeSel = m_xIconsDropDown->find_text(selectedInfo.GetDisplayName());
+    }
+
+    bEnable = !officecfg::Office::Common::Misc::SymbolStyle::isReadOnly();
+    m_xIconsDropDown->set_active(nInitialIconThemeSel);
+    m_xIconsDropDown->set_sensitive(bEnable);
+    m_xIconsDropDown->save_value();
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, ShowInDocumentHdl, weld::Toggleable&, void)
@@ -445,6 +521,161 @@ void SvxAppearanceTabPage::InitCustomization()
 
     m_xShowInDocumentChkBtn->set_active(pColorConfig->GetColorValue(DOCCOLOR).bIsVisible);
     m_xShowInDocumentChkBtn->hide();
+}
+
+static bool DisplayNameCompareLessThan(const vcl::IconThemeInfo& rInfo1,
+                                       const vcl::IconThemeInfo& rInfo2)
+{
+    return rInfo1.GetDisplayName().compareTo(rInfo2.GetDisplayName()) < 0;
+}
+
+void SvxAppearanceTabPage::InitIcons()
+{
+    // callbacks
+    m_xMoreIconsBtn->connect_clicked(LINK(this, SvxAppearanceTabPage, OnMoreIconsClick));
+    m_xIconsDropDown->connect_changed(LINK(this, SvxAppearanceTabPage, OnIconThemeChange));
+    m_xToolbarIconSize->connect_changed(LINK(this, SvxAppearanceTabPage, OnToolbarIconSizeChange));
+    m_xSidebarIconSize->connect_changed(LINK(this, SvxAppearanceTabPage, OnSidebarIconSizeChange));
+    m_xNotebookbarIconSize->connect_changed(
+        LINK(this, SvxAppearanceTabPage, OnNotebookbarIconSizeChange));
+
+    // Set known icon themes
+    m_xIconsDropDown->clear();
+    StyleSettings aStyleSettings = Application::GetSettings().GetStyleSettings();
+    mInstalledIconThemes = aStyleSettings.GetInstalledIconThemes();
+    std::sort(mInstalledIconThemes.begin(), mInstalledIconThemes.end(), DisplayNameCompareLessThan);
+
+    // Start with the automatically chosen icon theme
+    OUString autoThemeId = aStyleSettings.GetAutomaticallyChosenIconTheme();
+    const vcl::IconThemeInfo& autoIconTheme
+        = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, autoThemeId);
+
+    OUString entryForAuto = m_sAutoStr + " (" + autoIconTheme.GetDisplayName() + ")";
+    m_xIconsDropDown->append(u"auto"_ustr,
+                             entryForAuto); // index 0 means choose style automatically
+
+    // separate auto and other icon themes
+    m_xIconsDropDown->append_separator(u""_ustr);
+
+    for (auto const& installIconTheme : mInstalledIconThemes)
+        m_xIconsDropDown->append(installIconTheme.GetThemeId(), installIconTheme.GetDisplayName());
+}
+
+IMPL_LINK_NOARG(SvxAppearanceTabPage, OnIconThemeChange, weld::ComboBox&, void)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
+
+    SvtMiscOptions aMiscOptions;
+    const sal_Int32 nStyleLB_NewSelection = m_xIconsDropDown->get_active();
+    if (nInitialIconThemeSel != nStyleLB_NewSelection)
+    {
+        aMiscOptions.SetIconTheme(m_xIconsDropDown->get_active_id());
+        nInitialIconThemeSel = nStyleLB_NewSelection;
+    }
+
+    xChanges->commit();
+}
+
+IMPL_LINK_NOARG(SvxAppearanceTabPage, OnToolbarIconSizeChange, weld::ComboBox&, void)
+{
+    SvtMiscOptions aMiscOptions;
+    const sal_Int32 nToolbarIconSizeSel = m_xToolbarIconSize->get_active();
+    if (nInitialToolbarIconSizeSel != nToolbarIconSizeSel)
+    {
+        sal_Int16 eSet = SFX_SYMBOLS_SIZE_AUTO;
+        switch (nToolbarIconSizeSel)
+        {
+            case 0:
+                eSet = SFX_SYMBOLS_SIZE_AUTO;
+                break;
+            case 1:
+                eSet = SFX_SYMBOLS_SIZE_SMALL;
+                break;
+            case 2:
+                eSet = SFX_SYMBOLS_SIZE_LARGE;
+                break;
+            case 3:
+                eSet = SFX_SYMBOLS_SIZE_32;
+                break;
+            default:
+                SAL_WARN("cui.options",
+                         "SvxAppearanceTabPage::OnToolbarIconSizeChange(): This state of "
+                         "m_xToolbarIcons should not be possible!");
+        }
+        aMiscOptions.SetSymbolsSize(eSet);
+    }
+}
+
+IMPL_LINK_NOARG(SvxAppearanceTabPage, OnSidebarIconSizeChange, weld::ComboBox&, void)
+{
+    const sal_Int32 nSidebarIconSizeNewSel = m_xSidebarIconSize->get_active();
+    if (nInitialSidebarIconSizeSel != nSidebarIconSizeNewSel)
+    {
+        ToolBoxButtonSize eSet = ToolBoxButtonSize::DontCare;
+        switch (nSidebarIconSizeNewSel)
+        {
+            case 0:
+                eSet = ToolBoxButtonSize::DontCare;
+                break;
+            case 1:
+                eSet = ToolBoxButtonSize::Small;
+                break;
+            case 2:
+                eSet = ToolBoxButtonSize::Large;
+                break;
+            default:
+                SAL_WARN("cui.options",
+                         "SvxAppearanceTabPage::OnSidebarIconSizeChange(): This state of "
+                         "m_xSidebarIconSize should not be possible!");
+        }
+
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+
+        officecfg::Office::Common::Misc::SidebarIconSize::set(static_cast<sal_Int16>(eSet),
+                                                              xChanges);
+        xChanges->commit();
+    }
+}
+
+IMPL_LINK_NOARG(SvxAppearanceTabPage, OnNotebookbarIconSizeChange, weld::ComboBox&, void)
+{
+    const sal_Int32 nNotebookbarSizeLB_NewSelection = m_xNotebookbarIconSize->get_active();
+    if (nInitialNotebookbarIconSizeSel != nNotebookbarSizeLB_NewSelection)
+    {
+        ToolBoxButtonSize eSet = ToolBoxButtonSize::DontCare;
+        switch (nNotebookbarSizeLB_NewSelection)
+        {
+            case 0:
+                eSet = ToolBoxButtonSize::DontCare;
+                break;
+            case 1:
+                eSet = ToolBoxButtonSize::Small;
+                break;
+            case 2:
+                eSet = ToolBoxButtonSize::Large;
+                break;
+            default:
+                SAL_WARN("cui.options",
+                         "SvxAppearanceTabPage::OnNotebookbarIconSizeChange(): This state of "
+                         "m_xNotebookbarIconSizeLB should not be possible!");
+        }
+
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+
+        officecfg::Office::Common::Misc::NotebookbarIconSize::set(static_cast<sal_Int16>(eSet),
+                                                                  xChanges);
+        xChanges->commit();
+    }
+}
+
+IMPL_STATIC_LINK_NOARG(SvxAppearanceTabPage, OnMoreIconsClick, weld::Button&, void)
+{
+    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
+        u"AdditionsTag"_ustr, u"Icons"_ustr) };
+    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
 }
 
 void SvxAppearanceTabPage::UpdateColorDropdown()

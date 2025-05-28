@@ -19,10 +19,10 @@ class optionsDialog(UITestCase):
                 xPages = xDialog.getChild("pages")
                 xLOEntry = xPages.getChild('0')
                 xLOEntry.executeAction("EXPAND", tuple())
-                xViewEntry = xLOEntry.getChild('2')
+                xViewEntry = xLOEntry.getChild('7')
                 xViewEntry.executeAction("SELECT", tuple())
 
-                xMoreIconsBtn = xDialog.getChild("btnMoreIcons")
+                xMoreIconsBtn = xDialog.getChild("moreicons")
 
                 with self.ui_test.execute_blocking_action(xMoreIconsBtn.executeAction, args=('CLICK', ()), close_button="buttonClose") as dialog:
                     # Check it doesn't crash while opening it

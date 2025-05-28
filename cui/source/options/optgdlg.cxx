@@ -34,7 +34,6 @@
 #include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
-#include <svtools/miscopt.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -522,30 +521,9 @@ bool CanvasSettings::IsHardwareAccelerationAvailable() const
 
 // class OfaViewTabPage --------------------------------------------------
 
-static bool DisplayNameCompareLessThan(const vcl::IconThemeInfo& rInfo1, const vcl::IconThemeInfo& rInfo2)
-{
-    return rInfo1.GetDisplayName().compareTo(rInfo2.GetDisplayName()) < 0;
-}
-
 OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, u"cui/ui/optviewpage.ui"_ustr, u"OptViewPage"_ustr, &rSet)
-    , nSizeLB_InitialSelection(0)
-    , nSidebarSizeLB_InitialSelection(0)
-    , nNotebookbarSizeLB_InitialSelection(0)
-    , nStyleLB_InitialSelection(0)
     , pCanvasSettings(new CanvasSettings)
-    , m_xIconSizeLabel(m_xBuilder->weld_label(u"label14"_ustr))
-    , m_xIconSizeLB(m_xBuilder->weld_combo_box(u"iconsize"_ustr))
-    , m_xIconSizeImg(m_xBuilder->weld_widget(u"lockiconsize"_ustr))
-    , m_xSidebarIconSizeLabel(m_xBuilder->weld_label(u"label9"_ustr))
-    , m_xSidebarIconSizeLB(m_xBuilder->weld_combo_box(u"sidebariconsize"_ustr))
-    , m_xSidebarIconSizeImg(m_xBuilder->weld_widget(u"locksidebariconsize"_ustr))
-    , m_xNotebookbarIconSizeLabel(m_xBuilder->weld_label(u"label8"_ustr))
-    , m_xNotebookbarIconSizeLB(m_xBuilder->weld_combo_box(u"notebookbariconsize"_ustr))
-    , m_xNotebookbarIconSizeImg(m_xBuilder->weld_widget(u"locknotebookbariconsize"_ustr))
-    , m_xIconStyleLabel(m_xBuilder->weld_label(u"label6"_ustr))
-    , m_xIconStyleLB(m_xBuilder->weld_combo_box(u"iconstyle"_ustr))
-    , m_xIconStyleImg(m_xBuilder->weld_widget(u"lockiconstyle"_ustr))
     , m_xFontAntiAliasing(m_xBuilder->weld_check_button(u"aafont"_ustr))
     , m_xFontAntiAliasingImg(m_xBuilder->weld_widget(u"lockaafont"_ustr))
     , m_xAAPointLimitLabel(m_xBuilder->weld_label(u"aafrom"_ustr))
@@ -567,47 +545,18 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xMouseMiddleLabel(m_xBuilder->weld_label(u"label12"_ustr))
     , m_xMouseMiddleLB(m_xBuilder->weld_combo_box(u"mousemiddle"_ustr))
     , m_xMouseMiddleImg(m_xBuilder->weld_widget(u"lockmousemiddle"_ustr))
-    , m_xMoreIcons(m_xBuilder->weld_button(u"btnMoreIcons"_ustr))
     , m_xRunGPTests(m_xBuilder->weld_button(u"btn_rungptest"_ustr))
-    , m_sAutoStr(m_xIconStyleLB->get_text(0))
 {
     m_xFontAntiAliasing->connect_toggled( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 
     m_xUseSkia->connect_toggled(LINK(this, OfaViewTabPage, OnUseSkiaToggled));
     m_xSkiaLog->connect_clicked(LINK(this, OfaViewTabPage, OnCopySkiaLog));
 
-    UpdateIconThemes();
-
-    m_xIconStyleLB->set_active(0);
-
-    m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
     m_xRunGPTests->connect_clicked(LINK(this, OfaViewTabPage, OnRunGPTestClick));
 
     // Hide "Run Graphics Test" button if Experimental Mode is off
     if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
         m_xRunGPTests->hide();
-}
-
-void OfaViewTabPage::UpdateIconThemes()
-{
-    // Set known icon themes
-    m_xIconStyleLB->clear();
-    StyleSettings aStyleSettings = Application::GetSettings().GetStyleSettings();
-    mInstalledIconThemes = aStyleSettings.GetInstalledIconThemes();
-    std::sort(mInstalledIconThemes.begin(), mInstalledIconThemes.end(), DisplayNameCompareLessThan);
-
-    // Start with the automatically chosen icon theme
-    OUString autoThemeId = aStyleSettings.GetAutomaticallyChosenIconTheme();
-    const vcl::IconThemeInfo& autoIconTheme = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, autoThemeId);
-
-    OUString entryForAuto = m_sAutoStr + " (" + autoIconTheme.GetDisplayName() + ")";
-    m_xIconStyleLB->append(u"auto"_ustr, entryForAuto); // index 0 means choose style automatically
-
-    // separate auto and other icon themes
-    m_xIconStyleLB->append_separator(u""_ustr);
-
-    for (auto const& installIconTheme : mInstalledIconThemes)
-        m_xIconStyleLB->append(installIconTheme.GetThemeId(), installIconTheme.GetDisplayName());
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -618,13 +567,6 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnRunGPTestClick, weld::Button&, void)
 {
     GraphicsTestsDialog m_xGraphicsTestDialog(m_xContainer.get());
     m_xGraphicsTestDialog.run();
-}
-
-IMPL_STATIC_LINK_NOARG(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void)
-{
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-        u"AdditionsTag"_ustr, u"Icons"_ustr) };
-    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
 }
 
 IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::Toggleable&, void )
@@ -737,64 +679,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
     bool bRepaintWindows(false);
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
-
-    SvtMiscOptions aMiscOptions;
-    const sal_Int32 nSizeLB_NewSelection = m_xIconSizeLB->get_active();
-    if( nSizeLB_InitialSelection != nSizeLB_NewSelection )
-    {
-        // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
-        sal_Int16 eSet = SFX_SYMBOLS_SIZE_AUTO;
-        switch( nSizeLB_NewSelection )
-        {
-            case 0: eSet = SFX_SYMBOLS_SIZE_AUTO;  break;
-            case 1: eSet = SFX_SYMBOLS_SIZE_SMALL; break;
-            case 2: eSet = SFX_SYMBOLS_SIZE_LARGE; break;
-            case 3: eSet = SFX_SYMBOLS_SIZE_32; break;
-            default:
-                SAL_WARN("cui.options", "OfaViewTabPage::FillItemSet(): This state of m_xIconSizeLB should not be possible!");
-        }
-        aMiscOptions.SetSymbolsSize( eSet );
-    }
-
-    const sal_Int32 nSidebarSizeLB_NewSelection = m_xSidebarIconSizeLB->get_active();
-    if( nSidebarSizeLB_InitialSelection != nSidebarSizeLB_NewSelection )
-    {
-        // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
-        ToolBoxButtonSize eSet = ToolBoxButtonSize::DontCare;
-        switch( nSidebarSizeLB_NewSelection )
-        {
-            case 0: eSet = ToolBoxButtonSize::DontCare;  break;
-            case 1: eSet = ToolBoxButtonSize::Small; break;
-            case 2: eSet = ToolBoxButtonSize::Large; break;
-            default:
-                SAL_WARN("cui.options", "OfaViewTabPage::FillItemSet(): This state of m_xSidebarIconSizeLB should not be possible!");
-        }
-        officecfg::Office::Common::Misc::SidebarIconSize::set(static_cast<sal_Int16>(eSet), xChanges);
-    }
-
-    const sal_Int32 nNotebookbarSizeLB_NewSelection = m_xNotebookbarIconSizeLB->get_active();
-    if( nNotebookbarSizeLB_InitialSelection != nNotebookbarSizeLB_NewSelection )
-    {
-        // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
-        ToolBoxButtonSize eSet = ToolBoxButtonSize::DontCare;
-        switch( nNotebookbarSizeLB_NewSelection )
-        {
-            case 0: eSet = ToolBoxButtonSize::DontCare;  break;
-            case 1: eSet = ToolBoxButtonSize::Small; break;
-            case 2: eSet = ToolBoxButtonSize::Large; break;
-            default:
-                SAL_WARN("cui.options", "OfaViewTabPage::FillItemSet(): This state of m_xNotebookbarIconSizeLB should not be possible!");
-        }
-        officecfg::Office::Common::Misc::NotebookbarIconSize::set(static_cast<sal_Int16>(eSet), xChanges);
-    }
-
-    const sal_Int32 nStyleLB_NewSelection = m_xIconStyleLB->get_active();
-    if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
-    {
-        aMiscOptions.SetIconTheme(m_xIconStyleLB->get_active_id());
-        nStyleLB_InitialSelection = nStyleLB_NewSelection;
-    }
 
     bool bAppearanceChanged = false;
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -824,6 +708,8 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         officecfg::Office::Common::View::FontAntiAliasing::MinPixelHeight::set(i, batch);
         bAppearanceChanged = true;
     }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
 
     if (m_xFontShowCB->get_state_changed_from_saved())
     {
@@ -894,75 +780,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
 void OfaViewTabPage::Reset( const SfxItemSet* )
 {
-    SvtMiscOptions aMiscOptions;
     bool bEnable = true;
-
-    if (SvtMiscOptions::GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO)
-    {
-        nSizeLB_InitialSelection = 1;
-
-        if (SvtMiscOptions::GetSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
-            nSizeLB_InitialSelection = 2;
-        else if (SvtMiscOptions::GetSymbolsSize() == SFX_SYMBOLS_SIZE_32)
-            nSizeLB_InitialSelection = 3;
-    }
-    bEnable = !officecfg::Office::Common::Misc::SymbolSet::isReadOnly();
-    m_xIconSizeLB->set_active( nSizeLB_InitialSelection );
-    m_xIconSizeLabel->set_sensitive(bEnable);
-    m_xIconSizeLB->set_sensitive(bEnable);
-    m_xMoreIcons->set_sensitive(bEnable);
-    m_xIconSizeImg->set_visible(!bEnable);
-    m_xIconSizeLB->save_value();
-
-    ToolBoxButtonSize eSidebarIconSize = static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::SidebarIconSize::get());
-    if( eSidebarIconSize == ToolBoxButtonSize::DontCare )
-        ; // do nothing
-    else if( eSidebarIconSize == ToolBoxButtonSize::Small )
-        nSidebarSizeLB_InitialSelection = 1;
-    else if( eSidebarIconSize == ToolBoxButtonSize::Large )
-        nSidebarSizeLB_InitialSelection = 2;
-
-    bEnable = !officecfg::Office::Common::Misc::SidebarIconSize::isReadOnly();
-    m_xSidebarIconSizeLB->set_active( nSidebarSizeLB_InitialSelection );
-    m_xSidebarIconSizeLabel->set_sensitive(bEnable);
-    m_xSidebarIconSizeLB->set_sensitive(bEnable);
-    m_xSidebarIconSizeImg->set_visible(!bEnable);
-    m_xSidebarIconSizeLB->save_value();
-
-    ToolBoxButtonSize eNotebookbarIconSize = static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::NotebookbarIconSize::get());
-    if( eNotebookbarIconSize == ToolBoxButtonSize::DontCare )
-        ; // do nothing
-    else if( eNotebookbarIconSize == ToolBoxButtonSize::Small )
-        nNotebookbarSizeLB_InitialSelection = 1;
-    else if( eNotebookbarIconSize == ToolBoxButtonSize::Large )
-        nNotebookbarSizeLB_InitialSelection = 2;
-
-    bEnable = !officecfg::Office::Common::Misc::NotebookbarIconSize::isReadOnly();
-    m_xNotebookbarIconSizeLB->set_active(nNotebookbarSizeLB_InitialSelection);
-    m_xNotebookbarIconSizeLabel->set_sensitive(bEnable);
-    m_xNotebookbarIconSizeLB->set_sensitive(bEnable);
-    m_xNotebookbarIconSizeImg->set_visible(!bEnable);
-    m_xNotebookbarIconSizeLB->save_value();
-
-    // tdf#153497 set name of automatic icon theme, it may have changed due to "Apply" while this page is visible
-    UpdateIconThemes();
-
-    if (aMiscOptions.IconThemeWasSetAutomatically()) {
-        nStyleLB_InitialSelection = 0;
-    }
-    else {
-        const OUString selected = SvtMiscOptions::GetIconTheme();
-        const vcl::IconThemeInfo& selectedInfo =
-                vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, selected);
-        nStyleLB_InitialSelection = m_xIconStyleLB->find_text(selectedInfo.GetDisplayName());
-    }
-
-    bEnable = !officecfg::Office::Common::Misc::SymbolStyle::isReadOnly();
-    m_xIconStyleLB->set_active(nStyleLB_InitialSelection);
-    m_xIconStyleLabel->set_sensitive(bEnable);
-    m_xIconStyleLB->set_sensitive(bEnable);
-    m_xIconStyleImg->set_visible(!bEnable);
-    m_xIconStyleLB->save_value();
 
     // Middle Mouse Button
     bEnable = !officecfg::Office::Common::View::Dialog::MiddleMouseButton::isReadOnly();

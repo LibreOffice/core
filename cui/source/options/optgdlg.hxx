@@ -86,27 +86,7 @@ public:
 class OfaViewTabPage : public SfxTabPage
 {
 private:
-    sal_Int32      nSizeLB_InitialSelection;
-    sal_Int32      nSidebarSizeLB_InitialSelection;
-    sal_Int32      nNotebookbarSizeLB_InitialSelection;
-    sal_Int32      nStyleLB_InitialSelection;
-
     std::unique_ptr<CanvasSettings>         pCanvasSettings;
-
-    std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
-
-    std::unique_ptr<weld::Label> m_xIconSizeLabel;
-    std::unique_ptr<weld::ComboBox> m_xIconSizeLB;
-    std::unique_ptr<weld::Widget> m_xIconSizeImg;
-    std::unique_ptr<weld::Label> m_xSidebarIconSizeLabel;
-    std::unique_ptr<weld::ComboBox> m_xSidebarIconSizeLB;
-    std::unique_ptr<weld::Widget> m_xSidebarIconSizeImg;
-    std::unique_ptr<weld::Label> m_xNotebookbarIconSizeLabel;
-    std::unique_ptr<weld::ComboBox> m_xNotebookbarIconSizeLB;
-    std::unique_ptr<weld::Widget> m_xNotebookbarIconSizeImg;
-    std::unique_ptr<weld::Label> m_xIconStyleLabel;
-    std::unique_ptr<weld::ComboBox> m_xIconStyleLB;
-    std::unique_ptr<weld::Widget> m_xIconStyleImg;
 
     std::unique_ptr<weld::CheckButton> m_xFontAntiAliasing;
     std::unique_ptr<weld::Widget> m_xFontAntiAliasingImg;
@@ -133,15 +113,11 @@ private:
     std::unique_ptr<weld::Label> m_xMouseMiddleLabel;
     std::unique_ptr<weld::ComboBox> m_xMouseMiddleLB;
     std::unique_ptr<weld::Widget> m_xMouseMiddleImg;
-    std::unique_ptr<weld::Button> m_xMoreIcons;
     std::unique_ptr<weld::Button> m_xRunGPTests;
-
-    OUString m_sAutoStr;
 
     DECL_LINK(OnAntialiasingToggled, weld::Toggleable&, void);
     DECL_LINK(OnUseSkiaToggled, weld::Toggleable&, void);
     DECL_LINK(OnCopySkiaLog, weld::Button&, void);
-    DECL_STATIC_LINK(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void);
     DECL_LINK(OnRunGPTestClick, weld::Button&, void);
     void UpdateSkiaStatus();
     void HideSkiaWidgets();

@@ -15,6 +15,11 @@
 #include <svx/xflasit.hxx>
 #include <svx/svxdlg.hxx>
 #include <svtools/colorcfg.hxx>
+#include <sfx2/app.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/IconThemeInfo.hxx>
+#include <vcl/ptrstyle.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace svtools;
 class SvxAppearanceTabPage : public SfxTabPage
@@ -36,6 +41,20 @@ private:
     std::unique_ptr<weld::ComboBox> m_xBitmapDropDown;
     std::unique_ptr<weld::ComboBox> m_xBitmapDrawTypeDropDown;
 
+    std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
+
+    std::unique_ptr<weld::ComboBox> m_xIconsDropDown;
+    std::unique_ptr<weld::Button> m_xMoreIconsBtn;
+    std::unique_ptr<weld::ComboBox> m_xToolbarIconSize;
+    std::unique_ptr<weld::ComboBox> m_xSidebarIconSize;
+    std::unique_ptr<weld::ComboBox> m_xNotebookbarIconSize;
+    OUString m_sAutoStr;
+
+    sal_Int32 nInitialToolbarIconSizeSel;
+    sal_Int32 nInitialSidebarIconSizeSel;
+    sal_Int32 nInitialNotebookbarIconSizeSel;
+    sal_Int32 nInitialIconThemeSel;
+
     DECL_LINK(ColorEntryChgHdl, weld::ComboBox&, void);
     DECL_LINK(ColorValueChgHdl, ColorListBox&, void);
     DECL_LINK(ShowInDocumentHdl, weld::Toggleable&, void);
@@ -50,8 +69,15 @@ private:
     DECL_LINK(BitmapDrawTypeDropDownHdl, weld::ComboBox&, void);
     DECL_LINK(UseBmpForAppBackHdl, weld::Toggleable&, void);
 
+    DECL_LINK(OnIconThemeChange, weld::ComboBox&, void);
+    DECL_STATIC_LINK(SvxAppearanceTabPage, OnMoreIconsClick, weld::Button&, void);
+    DECL_LINK(OnToolbarIconSizeChange, weld::ComboBox&, void);
+    DECL_LINK(OnSidebarIconSizeChange, weld::ComboBox&, void);
+    DECL_LINK(OnNotebookbarIconSizeChange, weld::ComboBox&, void);
+
     void InitThemes();
     void InitCustomization();
+    void InitIcons();
     void LoadSchemeList();
 
     void UpdateBmpControlsState();
