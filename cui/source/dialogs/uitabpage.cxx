@@ -32,8 +32,6 @@ UITabPage::UITabPage(weld::Container* pPage, weld::DialogController* pController
                      const SfxItemSet& rAttr)
     : SfxTabPage(pPage, pController, u"cui/ui/uitabpage.ui"_ustr, u"UITabPage"_ustr, &rAttr)
     , m_pImage(m_xBuilder->weld_image(u"imImage"_ustr))
-    , m_pApply(m_xBuilder->weld_button(u"btnApply"_ustr))
-    , m_pApplyAll(m_xBuilder->weld_button(u"btnApplyAll"_ustr))
     , m_pRadioButtons{ (m_xBuilder->weld_radio_button(u"rbButton1"_ustr)),
                        (m_xBuilder->weld_radio_button(u"rbButton2"_ustr)),
                        (m_xBuilder->weld_radio_button(u"rbButton3"_ustr)),

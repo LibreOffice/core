@@ -53,7 +53,6 @@ class QtDropTarget final
           css::datatransfer::dnd::XDropTargetDropContext, css::lang::XServiceInfo>
 {
     osl::Mutex m_aMutex;
-    QtFrame* m_pFrame;
     sal_Int8 m_nDropAction;
     bool m_bActive;
     sal_Int8 m_nDefaultActions;

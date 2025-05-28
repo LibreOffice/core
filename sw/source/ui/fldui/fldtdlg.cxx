@@ -54,7 +54,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* /*pCW*/, weld::Window
     , m_bDataBaseMode(false)
     , m_bClosing(false)
 {
-    m_bHtmlMode = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
+    bool bHtmlMode = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
 
     GetCancelButton().connect_clicked(LINK(this, SwFieldDlg, CancelHdl));
     GetOKButton().connect_clicked(LINK(this, SwFieldDlg, OKHdl));
@@ -63,7 +63,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* /*pCW*/, weld::Window
     AddTabPage(u"variables"_ustr, SwFieldVarPage::Create, nullptr);
     AddTabPage(u"docinfo"_ustr, SwFieldDokInfPage::Create, nullptr);
 
-    if (!m_bHtmlMode)
+    if (!bHtmlMode)
     {
         AddTabPage(u"ref"_ustr, SwFieldRefPage::Create, nullptr);
         AddTabPage(u"functions"_ustr, SwFieldFuncPage::Create, nullptr);

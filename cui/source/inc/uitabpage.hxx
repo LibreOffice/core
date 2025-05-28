@@ -17,8 +17,6 @@ class UITabPage : public SfxTabPage
 {
 private:
     std::unique_ptr<weld::Image> m_pImage;
-    std::unique_ptr<weld::Button> m_pApply;
-    std::unique_ptr<weld::Button> m_pApplyAll;
     std::unique_ptr<weld::RadioButton> m_pRadioButtons[std::size(UIMODES_ARRAY)];
     std::unique_ptr<weld::Label> m_pInfoLabel;
 

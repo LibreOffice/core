@@ -32,7 +32,6 @@ struct SfxChildWinInfo;
 class SwFieldDlg final : public SfxTabDialogController
 {
     SfxBindings*        m_pBindings;
-    bool                m_bHtmlMode;
     bool                m_bDataBaseMode;
     bool                m_bClosing;
     std::unique_ptr<SfxItemSet> mxInputItemSet;

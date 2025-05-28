@@ -118,14 +118,13 @@ css::uno::Sequence<OUString> SAL_CALL QtDragSource::getSupportedServiceNames()
 
 QtDropTarget::QtDropTarget(QtFrame* pFrame)
     : WeakComponentImplHelper(m_aMutex)
-    , m_pFrame(pFrame)
     , m_nDropAction(datatransfer::dnd::DNDConstants::ACTION_NONE)
     , m_bActive(false)
     , m_nDefaultActions(0)
 {
-    assert(m_pFrame && "missing SalFrame");
+    assert(pFrame && "missing SalFrame");
 
-    m_pFrame->registerDropTarget(this);
+    pFrame->registerDropTarget(this);
     m_bActive = true;
 }
 
