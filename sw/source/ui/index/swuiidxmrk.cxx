@@ -58,7 +58,6 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 
-#include <strings.hrc>
 #include <vcl/abstdlg.hxx>
 
 #define POS_CONTENT 0
