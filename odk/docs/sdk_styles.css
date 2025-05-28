@@ -280,6 +280,24 @@ ul.translations li:not(:last-child):after {
 	content: ", ";
 }
 
+/* Installation guide */
+.guide_grid {
+  display: grid;
+  grid-template-columns: 158px 1fr;
+}
+.guide_heading {
+	padding-block-start: 1rem;
+	padding-inline-end: 1rem;
+  font-weight: bold;
+	word-break: break-word;
+	border-block-end: 2px solid #aaa;
+}
+.guide_entry {
+	padding-block-start: 1rem;
+	padding-inline-end: 1rem;
+	border-block-end: 2px solid #aaa;
+}
+
 /**
  * LibreOffice theme
  * initially based on SilverStripe Black Candy Theme
@@ -292,6 +310,10 @@ ul.translations li:not(:last-child):after {
 -------------------------------------------- */
 p, blockquote, .HalfBlockLeft, .HalfBlockRight {
 	margin-bottom: 1.2em;
+}
+
+.typography {
+	font-size: 1rem;
 }
 
 .typography ul {
@@ -307,6 +329,10 @@ p, blockquote, .HalfBlockLeft, .HalfBlockRight {
 	text-align: justify;
 	line-height: 175%;
 	color: #333;
+}
+
+.typography table p {
+	text-align: start;
 }
 
 .typography blockquote {
@@ -686,6 +712,11 @@ hr {
 	width: 100%;
 }
 
+hr.install {
+  border-block-end: 2px solid #aaa;
+	margin-block-end: 1rem;
+}
+
 .FloatLeft {
 	float: left;
 }
@@ -979,4 +1010,6 @@ hr {
 
 .centertext {align:center; text-align:center; font-size: 12;}
 
-
+.underline {
+    text-decoration: underline;
+}
