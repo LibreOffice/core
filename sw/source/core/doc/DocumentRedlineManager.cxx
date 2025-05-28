@@ -3676,6 +3676,23 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             }
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
+        else if (pTmp->GetType() == RedlineType::Insert
+                 && aOrigData.GetType() == RedlineType::Format && aOrigData.Next()
+                 && aOrigData.Next()->GetType() == RedlineType::Insert)
+        {
+            // The aOrigData has 2 types and for these types we want the underlying type to be
+            // combined with the type of the surrounding redlines, so reject pTmp, too.
+            if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+            {
+                std::unique_ptr<SwUndoRedline> pUndoRdl
+                    = std::make_unique<SwUndoRejectRedline>(*pTmp);
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndoRdl));
+            }
+            nPamEndtNI = pTmp->Start()->GetNodeIndex();
+            nPamEndCI = pTmp->Start()->GetContentIndex();
+            bRet |= lcl_RejectRedline(maRedlineTable, nRdlIdx, bCallDelete);
+            nRdlIdx++;
+        }
 
     } while (nRdlIdx > 0);
     return bRet;

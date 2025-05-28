@@ -32,8 +32,8 @@ comments show that Writer core dates back until at least November
 There is a good overview documentation of basic architecture of Writer core
 in the OOo wiki:
 
-- <https://wiki.openoffice.org/wiki/Writer/Core_And_Layout>
-- <https://wiki.openoffice.org/wiki/Writer/Text_Formatting>
+- <https://web.archive.org/web/20240703103909/https://wiki.openoffice.org/wiki/Writer/Core_And_Layout>
+- <https://web.archive.org/web/20240703234819/https://wiki.openoffice.org/wiki/Writer/Text_Formatting>
 
 Writer specific WhichIds are defined in `sw/inc/hintids.hxx`.
 
