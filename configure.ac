@@ -3381,7 +3381,7 @@ if test "$enable_database_connectivity" != no; then
     AC_DEFINE(HAVE_FEATURE_DBCONNECTIVITY)
 else
     if test "$_os" = iOS; then
-        AC_MSG_ERROR([Presumly can't disable DB connectivity on iOS.])
+        AC_MSG_ERROR([Presumably can't disable DB connectivity on iOS.])
     fi
     disable_database_connectivity_dependencies
 fi
@@ -7491,7 +7491,7 @@ fi
 AC_SUBST(BOOST_CXXFLAGS)
 
 #
-# prefx CXX with ccache if needed
+# prefix CXX with ccache if needed
 #
 if test "$CCACHE" != ""; then
     AC_MSG_CHECKING([whether $CXX_BASE is already ccached])
@@ -11957,7 +11957,7 @@ if test "$with_system_altlinuxhyph" = "yes"; then
     AC_CHECK_HEADER(hyphen.h, [],
        [ AC_MSG_ERROR(altlinuxhyph headers not found.)], [])
     AC_CHECK_MEMBER(struct _HyphenDict.cset, [],
-       [ AC_MSG_ERROR(no. You are sure you have altlinuyhyph headers?)],
+       [ AC_MSG_ERROR(no. You are sure you have altlinuxhyph headers?)],
        [#include <hyphen.h>])
     AC_CHECK_LIB(hyphen, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhyphen],
         [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
@@ -14954,7 +14954,7 @@ for lang in $WITH_LANG; do
         fi
     done
     if test "$vl" != "$lang"; then
-        # if you're reading this - you prolly quoted your languages remove the quotes ...
+        # if you're reading this - you probably quoted your languages remove the quotes ...
         AC_MSG_ERROR([invalid language: '$lang' (vs '$v1'); supported languages are: $ALL_LANGS])
     fi
 done
