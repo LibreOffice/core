@@ -173,6 +173,8 @@ public:
     void setFontColor(const Color& rFontColor);
     virtual void set_background(const Color& rBackColor) override;
 
+    virtual void set_background() override;
+
     virtual void draw(OutputDevice&, const Point&, const Size&) override;
 
     virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;

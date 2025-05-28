@@ -4243,6 +4243,11 @@ public:
         do_set_background(rColor);
     }
 
+    virtual void set_background() override
+    {
+        do_set_background(COL_AUTO); // reset to default
+    }
+
     virtual void set_toolbar_background() override
     {
         // no-op

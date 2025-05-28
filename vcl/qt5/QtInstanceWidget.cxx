@@ -751,6 +751,21 @@ void QtInstanceWidget::set_background(const Color& rBackColor)
     });
 }
 
+// reset to default
+void QtInstanceWidget::set_background()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        const QPalette::ColorRole eBgRole = getQWidget()->backgroundRole();
+        const QPalette aDefaultPalette = QApplication::palette(getQWidget());
+        QPalette aWidgetPalette = getQWidget()->palette();
+        aWidgetPalette.setColor(eBgRole, aDefaultPalette.color(eBgRole));
+        getQWidget()->setPalette(aWidgetPalette);
+        getQWidget()->setAutoFillBackground(false);
+    });
+}
+
 void QtInstanceWidget::draw(OutputDevice&, const Point&, const Size&)
 {
     assert(false && "Not implemented yet");

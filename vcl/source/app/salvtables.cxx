@@ -351,6 +351,12 @@ void SalInstanceWidget::set_background(const Color& rColor)
     }
 }
 
+void SalInstanceWidget::set_background()
+{
+    m_xWidget->SetControlBackground();
+    m_xWidget->SetBackground();
+}
+
 SalInstanceWidget::SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* pBuilder,
                                      bool bTakeOwnership)
     : m_xWidget(pWidget)

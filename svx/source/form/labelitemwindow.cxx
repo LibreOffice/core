@@ -47,7 +47,7 @@ void LabelItemWindow::set_label(const OUString& rLabel, const LabelItemWindowTyp
     {
         m_xImage->hide();
         m_xLabel->set_font_color(COL_AUTO);
-        m_xBox->set_background(COL_AUTO);
+        m_xBox->set_background(); // reset to default
     }
     else if (eType == LabelItemWindowType::Info)
     {
