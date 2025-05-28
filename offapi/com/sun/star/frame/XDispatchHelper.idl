@@ -28,7 +28,7 @@
  */
 published interface XDispatchHelper : com::sun::star::uno::XInterface
 {
-        /** executes the dispatch.
+        /** executes the dispatch synchronously.
 
         Listeners are not supported here!
 
