@@ -1593,29 +1593,29 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
     if ( rStr.isEmpty() )
         return;
 
-    std::vector<OUString>* pArr = _bSearch ? &aSearchStrings : &aReplaceStrings;
-    weld::ComboBox* pListBox = _bSearch ? m_xSearchLB.get() : m_xReplaceLB.get();
+    std::vector<OUString>& rArr = _bSearch ? aSearchStrings : aReplaceStrings;
+    weld::ComboBox& rListBox = _bSearch ? *m_xSearchLB : *m_xReplaceLB;
 
     // tdf#154818 - rearrange the search items
-    const auto nPos = pListBox->find_text(rStr);
-    if (nPos == 0 && !pArr->empty() && pArr->at(0) == rStr)
+    const auto nPos = rListBox.find_text(rStr);
+    if (nPos == 0 && !rArr.empty() && rArr.at(0) == rStr)
         // nothing to do, is already the first item
         return;
 
     if (nPos != -1)
     {
-        pListBox->remove(nPos);
-        pArr->erase(pArr->begin() + nPos);
+        rListBox.remove(nPos);
+        rArr.erase(rArr.begin() + nPos);
     }
-    else if (pListBox->get_count() >= nRememberSize)
+    else if (rListBox.get_count() >= nRememberSize)
     {
         // delete oldest entry at maximum occupancy (ListBox and Array)
-        pListBox->remove(nRememberSize - 1);
-        pArr->erase(pArr->begin() + nRememberSize - 1);
+        rListBox.remove(nRememberSize - 1);
+        rArr.erase(rArr.begin() + nRememberSize - 1);
     }
 
-    pArr->insert(pArr->begin(), rStr);
-    pListBox->insert_text(0, rStr);
+    rArr.insert(rArr.begin(), rStr);
+    rListBox.insert_text(0, rStr);
 }
 
 void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
