@@ -65,15 +65,14 @@ public:
     /** Specify how the gap between two page objects is associated with the
       page objects.
     */
-    enum GapMembership {
-        GM_NONE,       // Gap is not associated with any page object.
-        GM_PREVIOUS,   // The whole gap is associated with the previous page
-                       // object (left or above the gap.)
-        GM_BOTH,       // Half of the gap is associated with previous, half
-                       // with the next page object.
-        GM_NEXT,       // The whole gap is associated with the next page
-                       // object (right or below the gap.)
-        GM_PAGE_BORDER
+    enum class GapMembership {
+        None,       // Gap is not associated with any page object.
+        Previous,   // The whole gap is associated with the previous page
+                    // object (left or above the gap.)
+        Both,       // Half of the gap is associated with previous, half
+                    // with the next page object.
+        Next        // The whole gap is associated with the next page
+                    // object (right or below the gap.)
     };
 
     static Implementation* Create (
@@ -95,11 +94,11 @@ public:
             When this flag is <TRUE/> then the area of borders and gaps are
             interpreted as belonging to one of the rows.
         @param eGapMembership
-            Specifies to what row the gap areas belong.  Here GM_NONE
+            Specifies to what row the gap areas belong.  Here GapMembership::None
             corresponds to bIncludeBordersAndGaps being <FALSE/>.  When
-            GM_BOTH is given then the upper half is associated to the row
+            GapMembership::Both is given then the upper half is associated to the row
             above and the lower half to the row below.  Values of
-            GM_PREVIOUS and GM_NEXT associate the whole gap area with the
+            GapMembership::Previous and GapMembership::Next associate the whole gap area with the
             row above or below respectively.
     */
     sal_Int32 GetRowAtPosition (
@@ -407,12 +406,12 @@ sal_Int32 Layouter::GetIndexAtPoint(const Point& rPosition) const
         mpImplementation->GetRowAtPosition (
             rPosition.Y(),
             /*bIncludePageBorders*/false,
-            Implementation::GM_NONE));
+            Implementation::GapMembership::None));
     const sal_Int32 nColumn (
         mpImplementation->GetColumnAtPosition (
             rPosition.X(),
             /*bIncludePageBorders*/false,
-            Implementation::GM_NONE));
+            Implementation::GapMembership::None));
 
     return mpImplementation->GetIndex(nRow,nColumn, /*bClampToValidRange*/ false);
 }
@@ -623,12 +622,12 @@ sal_Int32 Layouter::Implementation::ResolvePositionInGap (
 {
     switch (eGapMembership)
     {
-        case GM_NONE:
+        case GapMembership::None:
             // The gap is no man's land.
             nIndex = -1;
             break;
 
-        case GM_BOTH:
+        case GapMembership::Both:
         {
             // The lower half of the gap belongs to the next row or column.
             sal_Int32 nFirstHalfGapWidth = nGap / 2;
@@ -637,30 +636,15 @@ sal_Int32 Layouter::Implementation::ResolvePositionInGap (
             break;
         }
 
-        case GM_PREVIOUS:
+        case GapMembership::Previous:
             // Row or column already at correct value.
             break;
 
-        case GM_NEXT:
+        case GapMembership::Next:
             // The complete gap belongs to the next row or column.
             nIndex ++;
             break;
 
-        case GM_PAGE_BORDER:
-            if (nDistanceIntoGap > 0)
-            {
-                if (nDistanceIntoGap > nGap)
-                {
-                    // Inside the border of the next row or column.
-                    nIndex ++;
-                }
-                else
-                {
-                    // Inside the gap between the page borders.
-                    nIndex = -1;
-                }
-            }
-            break;
 
         default:
             nIndex = -1;
@@ -824,10 +808,10 @@ Range Layouter::Implementation::GetRangeOfVisiblePageObjects (const ::tools::Rec
     if (aVisibleArea.IsEmpty())
         return Range(-1, -1);
 
-    const sal_Int32 nRow0 (GetRowAtPosition(aVisibleArea.Top(), true, GM_NEXT));
-    const sal_Int32 nCol0 (GetColumnAtPosition(aVisibleArea.Left(),true, GM_NEXT));
-    const sal_Int32 nRow1 (GetRowAtPosition(aVisibleArea.Bottom(), true, GM_PREVIOUS));
-    const sal_Int32 nCol1 (GetColumnAtPosition(aVisibleArea.Right(), true, GM_PREVIOUS));
+    const sal_Int32 nRow0 (GetRowAtPosition(aVisibleArea.Top(), true, GapMembership::Next));
+    const sal_Int32 nCol0 (GetColumnAtPosition(aVisibleArea.Left(),true, GapMembership::Next));
+    const sal_Int32 nRow1 (GetRowAtPosition(aVisibleArea.Bottom(), true, GapMembership::Previous));
+    const sal_Int32 nCol1 (GetColumnAtPosition(aVisibleArea.Right(), true, GapMembership::Previous));
 
     // When start and end lie in different rows then the range may include
     // slides outside (left or right of) the given area.
@@ -1144,7 +1128,7 @@ void GridImplementation::CalculateLogicalInsertPosition (
         // Handle the general case of more than one column.
         sal_Int32 nRow (::std::min(
             mnRowCount-1,
-            GetRowAtPosition (rModelPosition.Y(), true, GM_BOTH)));
+            GetRowAtPosition (rModelPosition.Y(), true, GapMembership::Both)));
         const sal_Int32 nX = rModelPosition.X() - mnLeftBorder + maPageObjectSize.Width()/2;
         const sal_Int32 nColumnWidth (maPageObjectSize.Width() + gnHorizontalGap);
         sal_Int32 nColumn (::std::min(mnColumnCount, nX / nColumnWidth));
