@@ -47,8 +47,6 @@ public:
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) override;
 
     virtual bool                IsValid() override;
-
-    virtual Palette*            Clone() const override;
 };
 
 // GPL - this is *not* GNU Public License, but is the Gimp PaLette
@@ -75,8 +73,6 @@ public:
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) override;
 
     virtual bool                IsValid() override;
-
-    virtual Palette*            Clone() const override;
 };
 
 // SOC - Star Office Color-table
@@ -97,8 +93,6 @@ public:
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) override;
 
     virtual bool                IsValid() override;
-
-    virtual Palette*            Clone() const override;
 };
 
 #endif // INCLUDED_SVX_INC_PALETTE_HXX

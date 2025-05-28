@@ -266,11 +266,6 @@ void PaletteASE::LoadPalette()
     mbValidPalette = true;
 }
 
-Palette* PaletteASE::Clone() const
-{
-    return new PaletteASE(*this);
-}
-
 // PaletteGPL ------------------------------------------------------------------
 
 static OString lcl_getToken(OStringBuffer& rStr, sal_Int32& index);
@@ -389,11 +384,6 @@ void PaletteGPL::LoadPalette()
     } while (aFile.ReadLine(aLine));
 }
 
-Palette* PaletteGPL::Clone() const
-{
-    return new PaletteGPL(*this);
-}
-
 // finds first token in rStr from index, separated by whitespace
 // returns position of next token in index
 static OString lcl_getToken(OStringBuffer& rStr, sal_Int32& index)
@@ -468,11 +458,6 @@ void PaletteSOC::LoadColorSet(SvxColorValueSet& rColorSet)
 bool PaletteSOC::IsValid()
 {
     return true;
-}
-
-Palette* PaletteSOC::Clone() const
-{
-    return new PaletteSOC(*this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

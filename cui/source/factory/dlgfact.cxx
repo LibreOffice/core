@@ -755,7 +755,6 @@ public:
     void SetCheckNameTooltipHdl(const Link<AbstractSvxNameDialog&, OUString>& rLink) override;
     void SetEditHelpId(const OUString& rHelpId) override { m_pDlg->SetEditHelpId(rHelpId); }
     //from class Window
-    void SetHelpId(const OUString& rHelpId) override { m_pDlg->set_help_id(rHelpId); }
     void SetText(const OUString& rStr) override { m_pDlg->set_title(rStr); }
 
 private:

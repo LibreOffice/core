@@ -158,7 +158,6 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartColorPaletteItem final : public 
     sal_uInt32 mnIndex;
 
 public:
-    static SfxPoolItem* CreateDefault();
     DECLARE_ITEM_TYPE_FUNCTION(SvxChartColorPaletteItem);
     SvxChartColorPaletteItem(ChartColorPaletteType eType, sal_uInt32 nIndex,
                              TypedWhichId<SvxChartColorPaletteItem> nId);
@@ -176,9 +175,6 @@ public:
 
     ChartColorPaletteType GetType() const { return meType; }
     sal_uInt32 GetIndex() const { return mnIndex; }
-
-    void SetType(const ChartColorPaletteType eType) { meType = eType; }
-    void SetIndex(const sal_uInt32 nIndex) { mnIndex = nIndex; }
 };
 
 #endif // INCLUDED_SVX_CHRTITEM_HXX

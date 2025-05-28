@@ -41,8 +41,6 @@ public:
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) = 0;
 
     virtual bool                IsValid() = 0;
-
-    virtual Palette*            Clone() const = 0;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

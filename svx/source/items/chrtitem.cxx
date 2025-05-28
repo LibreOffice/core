@@ -181,12 +181,6 @@ SvxChartRegressItem* SvxChartRegressItem::Clone(SfxItemPool* /*pPool*/) const
 
 // SvxChartColorPaletteItem implementation
 
-SfxPoolItem* SvxChartColorPaletteItem::CreateDefault()
-{
-    return new SvxChartColorPaletteItem(ChartColorPaletteType::Unknown, 0,
-                                        TypedWhichId<SvxChartColorPaletteItem>(0));
-}
-
 SvxChartColorPaletteItem::SvxChartColorPaletteItem(const ChartColorPaletteType eType,
                                                    const sal_uInt32 nIndex,
                                                    const TypedWhichId<SvxChartColorPaletteItem> nId)

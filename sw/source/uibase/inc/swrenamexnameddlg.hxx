@@ -48,14 +48,6 @@ public:
     {
         m_aTextFilter.SetForbiddenChars(rSet);
     }
-
-    void SetAlternativeAccess(
-            css::uno::Reference< css::container::XNameAccess > const & xSecond,
-            css::uno::Reference< css::container::XNameAccess > const & xThird )
-    {
-        m_xSecondAccess = xSecond;
-        m_xThirdAccess = xThird;
-    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

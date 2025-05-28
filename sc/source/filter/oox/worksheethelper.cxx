@@ -228,8 +228,6 @@ public:
 
     /** Returns the XCell interface for the passed cell address. */
     Reference< XCell >  getCell( const ScAddress& rAddress ) const;
-    /** Returns the XCellRange interface for the passed cell range address. */
-    Reference< XCellRange > getCellRange( const ScRange& rRange ) const;
     /** Returns the XSheetCellRanges interface for the passed cell range addresses. */
     rtl::Reference<ScCellRangesObj> getCellRangeList( const ScRangeList& rRanges ) const;
 
@@ -464,19 +462,6 @@ Reference< XCell > WorksheetGlobals::getCell( const ScAddress& rAddress ) const
     {
     }
     return xCell;
-}
-
-Reference< XCellRange > WorksheetGlobals::getCellRange( const ScRange& rRange ) const
-{
-    Reference< XCellRange > xRange;
-    if( mxSheet.is() ) try
-    {
-        xRange = mxSheet->getCellRangeByPosition( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row() );
-    }
-    catch( Exception& )
-    {
-    }
-    return xRange;
 }
 
 rtl::Reference<ScCellRangesObj> WorksheetGlobals::getCellRangeList( const ScRangeList& rRanges ) const
@@ -1444,11 +1429,6 @@ const Reference< XSpreadsheet >& WorksheetHelper::getSheet() const
 Reference< XCell > WorksheetHelper::getCell( const ScAddress& rAddress ) const
 {
     return mrSheetGlob.getCell( rAddress );
-}
-
-Reference< XCellRange > WorksheetHelper::getCellRange( const ScRange& rRange ) const
-{
-    return mrSheetGlob.getCellRange( rRange );
 }
 
 Reference< XDrawPage > WorksheetHelper::getDrawPage() const

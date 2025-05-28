@@ -28,7 +28,9 @@ cppuhelper/inc/interfacecontainer4.hxx:170
     int cppuhelper::OInterfaceContainerHelper4::addInterface(std::unique_lock<std::mutex> &,const Reference<type-parameter-?-?> &)
 cppuhelper/inc/interfacecontainer4.hxx:181
     int cppuhelper::OInterfaceContainerHelper4::removeInterface(std::unique_lock<std::mutex> &,const Reference<type-parameter-?-?> &)
-cui/source/inc/iconcdlg.hxx:56
+cui/source/inc/cfg.hxx:645
+    _Bool SvxIconSelectorDialog::ReplaceGraphicItem(const rtl::OUString &)
+cui/source/inc/iconcdlg.hxx:54
     _Bool IconChoicePage::FillItemSet(SfxItemSet *)
 dbaccess/source/ui/app/AppSwapWindow.hxx:84
     _Bool dbaui::OApplicationSwapWindow::onContainerSelected(enum dbaui::ElementType)
@@ -64,27 +66,723 @@ include/basic/sbstar.hxx:62
     _Bool StarBASIC::RTError(ErrCode,const rtl::OUString &,int,int,int)
 include/comphelper/backupfilehelper.hxx:204
     _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(std::basic_string_view<char16_t>)
-include/comphelper/crypto/Crypto.hxx:73
+include/comphelper/crypto/Crypto.hxx:75
     _Bool comphelper::ICryptoImplementation::cryptoHashFinalize(std::vector<unsigned char> &)
-include/comphelper/crypto/Crypto.hxx:125
+include/comphelper/crypto/Crypto.hxx:127
     _Bool comphelper::CryptoHash::update(std::vector<unsigned char> &,unsigned int)
+include/comphelper/interfacecontainer3.hxx:44
+    OInterfaceIteratorHelper3<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper3>(OInterfaceIteratorHelper3<ListenerT>)
+include/comphelper/interfacecontainer3.hxx:59
+    OInterfaceIteratorHelper3<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper3>(OInterfaceContainerHelper3<type-parameter-?-?> &)
+include/comphelper/interfacecontainer3.hxx:88
+    OInterfaceIteratorHelper3<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper3>(const OInterfaceIteratorHelper3<ListenerT> &)
+include/comphelper/interfacecontainer3.hxx:166
+    const Reference<type-parameter-?-?> & comphelper::OInterfaceContainerHelper3::getInterface(int) const
+include/comphelper/interfacecontainer4.hxx:46
+    OInterfaceIteratorHelper4<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper4>(OInterfaceIteratorHelper4<ListenerT>)
+include/comphelper/interfacecontainer4.hxx:63
+    OInterfaceIteratorHelper4<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper4>(std::unique_lock<std::mutex> &,OInterfaceContainerHelper4<type-parameter-?-?> &)
+include/comphelper/interfacecontainer4.hxx:97
+    OInterfaceIteratorHelper4<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper4>(const OInterfaceIteratorHelper4<ListenerT> &)
 include/comphelper/multicontainer2.hxx:88
     int comphelper::OMultiTypeInterfaceContainerHelper2::addInterface(const com::sun::star::uno::Type &,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
-include/editeng/editeng.hxx:229
+include/editeng/editeng.hxx:231
     EditView * EditEngine::RemoveView(EditView *)
-include/editeng/editview.hxx:279
+include/editeng/editview.hxx:288
     ErrCode EditView::Read(SvStream &,enum EETextFormat,SvKeyValueIterator *)
 include/editeng/outliner.hxx:287
     _Bool OutlinerView::Command(const CommandEvent &)
 include/editeng/outliner.hxx:320
     _Bool OutlinerView::IsBulletOrNumbering(_Bool &,_Bool &)
+include/editeng/outliner.hxx:880
+    _Bool Outliner::UpdateFields()
 include/editeng/svxacorr.hxx:294
     _Bool SvxAutoCorrectLanguageLists::MakeCombinedChanges(std::vector<SvxAutocorrWord> &,std::vector<SvxAutocorrWord> &)
-include/oox/crypto/AgileEngine.hxx:115
-    _Bool oox::crypto::AgileEngine::decryptHmacKey()
+include/formula/tokenarray.hxx:484
+    formula::FormulaToken * formula::FormulaTokenArray::AddStringName(const svl::SharedString &)
+include/o3tl/sorted_vector.hxx:47
+    sorted_vector<Value, Compare, Find> o3tl::<deduction guide for sorted_vector>(sorted_vector<Value, Compare, Find>)
+include/o3tl/sorted_vector.hxx:60
+    sorted_vector<Value, Compare, Find> o3tl::<deduction guide for sorted_vector>(initializer_list<type-parameter-?-?>)
+include/o3tl/sorted_vector.hxx:65
+    sorted_vector<Value, Compare, Find> o3tl::<deduction guide for sorted_vector>()
+include/o3tl/sorted_vector.hxx:66
+    sorted_vector<Value, Compare, Find> o3tl::<deduction guide for sorted_vector>(const sorted_vector<Value, Compare, Find> &)
+include/o3tl/sorted_vector.hxx:67
+    sorted_vector<Value, Compare, Find> o3tl::<deduction guide for sorted_vector>(sorted_vector<Value, Compare, Find> &&)
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<(anonymous namespace)::SwContent *const *, std::__cxx1998::vector<(anonymous namespace)::SwContent *> >, std::vector<(anonymous namespace)::SwContent *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpCellLayout *const *, std::__cxx1998::vector<LwpCellLayout *> >, std::vector<LwpCellLayout *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpCellList *const *, std::__cxx1998::vector<LwpCellList *> >, std::vector<LwpCellList *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpColumnLayout *const *, std::__cxx1998::vector<LwpColumnLayout *> >, std::vector<LwpColumnLayout *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpDocument *const *, std::__cxx1998::vector<LwpDocument *> >, std::vector<LwpDocument *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpObjectID *const *, std::__cxx1998::vector<LwpObjectID *> >, std::vector<LwpObjectID *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpPageHint *const *, std::__cxx1998::vector<LwpPageHint *> >, std::vector<LwpPageHint *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpPara *const *, std::__cxx1998::vector<LwpPara *> >, std::vector<LwpPara *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpRowLayout *const *, std::__cxx1998::vector<LwpRowLayout *> >, std::vector<LwpRowLayout *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpRowList *const *, std::__cxx1998::vector<LwpRowList *> >, std::vector<LwpRowList *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpSilverBullet *const *, std::__cxx1998::vector<LwpSilverBullet *> >, std::vector<LwpSilverBullet *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpStory *const *, std::__cxx1998::vector<LwpStory *> >, std::vector<LwpStory *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpTableRange *const *, std::__cxx1998::vector<LwpTableRange *> >, std::vector<LwpTableRange *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpVirtualLayout *const *, std::__cxx1998::vector<LwpVirtualLayout *> >, std::vector<LwpVirtualLayout *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SalFrame *const *, std::__cxx1998::vector<SalFrame *> >, std::vector<SalFrame *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<ScDPObject *const *, std::__cxx1998::vector<ScDPObject *> >, std::vector<ScDPObject *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<ScExternalRefManager::LinkListener *const *, std::__cxx1998::vector<ScExternalRefManager::LinkListener *> >, std::vector<ScExternalRefManager::LinkListener *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SdrObject *const *, std::__cxx1998::vector<SdrObject *> >, std::vector<SdrObject *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SdrOutliner *const *, std::__cxx1998::vector<SdrOutliner *> >, std::vector<SdrOutliner *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SdrView *const *, std::__cxx1998::vector<SdrView *> >, std::vector<SdrView *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SfxDispatcher *const *, std::__cxx1998::vector<SfxDispatcher *> >, std::vector<SfxDispatcher *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SfxStyleSheet *const *, std::__cxx1998::vector<SfxStyleSheet *> >, std::vector<SfxStyleSheet *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SvTreeListEntry *const *, std::__cxx1998::vector<SvTreeListEntry *> >, std::vector<SvTreeListEntry *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SvtBroadcaster *const *, std::__cxx1998::vector<SvtBroadcaster *> >, std::vector<SvtBroadcaster *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwAccessibleParagraph *const *, std::__cxx1998::vector<SwAccessibleParagraph *> >, std::vector<SwAccessibleParagraph *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwFlyFrame *const *, std::__cxx1998::vector<SwFlyFrame *> >, std::vector<SwFlyFrame *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwFormat *const *, std::__cxx1998::vector<SwFormat *> >, std::vector<SwFormat *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwList *const *, std::__cxx1998::vector<SwList *> >, std::vector<SwList *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwNode *const *, std::__cxx1998::vector<SwNode *> >, std::vector<SwNode *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwRangeRedline *const *, std::__cxx1998::vector<SwRangeRedline *> >, std::vector<SwRangeRedline *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwRootFrame *const *, std::__cxx1998::vector<SwRootFrame *> >, std::vector<SwRootFrame *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwSectionFormat *const *, std::__cxx1998::vector<SwSectionFormat *> >, std::vector<SwSectionFormat *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwSectionFrame *const *, std::__cxx1998::vector<SwSectionFrame *> >, std::vector<SwSectionFrame *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwTableBox *const *, std::__cxx1998::vector<SwTableBox *> >, std::vector<SwTableBox *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwTextFootnote *const *, std::__cxx1998::vector<SwTextFootnote *> >, std::vector<SwTextFootnote *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwTextFrame *const *, std::__cxx1998::vector<SwTextFrame *> >, std::vector<SwTextFrame *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwXMLTableColumn_Impl *const *, std::__cxx1998::vector<SwXMLTableColumn_Impl *> >, std::vector<SwXMLTableColumn_Impl *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<configmgr::RootAccess *const *, std::__cxx1998::vector<configmgr::RootAccess *> >, std::vector<configmgr::RootAccess *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const MathTypeFont *, std::__cxx1998::vector<MathTypeFont> >, std::vector<MathTypeFont> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const ScTokenArray *const *, std::__cxx1998::vector<const ScTokenArray *> >, std::vector<const ScTokenArray *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SdrObject *const *, std::__cxx1998::vector<const SdrObject *> >, std::vector<const SdrObject *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SvxTabStop *, std::__cxx1998::vector<SvxTabStop> >, std::vector<SvxTabStop> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwCharFormat *const *, std::__cxx1998::vector<const SwCharFormat *> >, std::vector<const SwCharFormat *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwFlyCache *const *, std::__cxx1998::vector<const SwFlyCache *> >, std::vector<const SwFlyCache *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwFrameFormat *const *, std::__cxx1998::vector<const SwFrameFormat *> >, std::vector<const SwFrameFormat *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwNode *const *, std::__cxx1998::vector<const SwNode *> >, std::vector<const SwNode *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwPageDesc *const *, std::__cxx1998::vector<const SwPageDesc *> >, std::vector<const SwPageDesc *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwRedlineData *const *, std::__cxx1998::vector<const SwRedlineData *> >, std::vector<const SwRedlineData *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTableBox *const *, std::__cxx1998::vector<const SwTableBox *> >, std::vector<const SwTableBox *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTextAttr *const *, std::__cxx1998::vector<const SwTextAttr *> >, std::vector<const SwTextAttr *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTextField *const *, std::__cxx1998::vector<const SwTextField *> >, std::vector<const SwTextField *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTextFormatColl *const *, std::__cxx1998::vector<const SwTextFormatColl *> >, std::vector<const SwTextFormatColl *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const basegfx::B2DPoint *, std::__cxx1998::vector<basegfx::B2DPoint> >, std::vector<basegfx::B2DPoint> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const basegfx::utils::PointIndex *, std::__cxx1998::vector<basegfx::utils::PointIndex> >, std::vector<basegfx::utils::PointIndex> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const char16_t *, std::__cxx1998::vector<char16_t> >, std::vector<char16_t> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const enum OpCode *, std::__cxx1998::vector<enum OpCode> >, std::vector<enum OpCode> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const fileaccess::TaskManager::MyProperty *, std::__cxx1998::vector<fileaccess::TaskManager::MyProperty> >, std::vector<fileaccess::TaskManager::MyProperty> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const int *, std::__cxx1998::vector<int> >, std::vector<int> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const rtl::OUString *, std::__cxx1998::vector<rtl::OUString> >, std::vector<rtl::OUString> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const short *, std::__cxx1998::vector<short> >, std::vector<short> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::basic_string_view<char16_t> *, std::__cxx1998::vector<std::basic_string_view<char16_t> > >, std::vector<std::basic_string_view<char16_t> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SetGetExpField> *, std::__cxx1998::vector<std::unique_ptr<SetGetExpField> > >, std::vector<std::unique_ptr<SetGetExpField> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwBlockName> *, std::__cxx1998::vector<std::unique_ptr<SwBlockName> > >, std::vector<std::unique_ptr<SwBlockName> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwContent> *, std::__cxx1998::vector<std::unique_ptr<SwContent> > >, std::vector<std::unique_ptr<SwContent> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwGlblDocContent> *, std::__cxx1998::vector<std::unique_ptr<SwGlblDocContent> > >, std::vector<std::unique_ptr<SwGlblDocContent> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwHTMLPosFlyFrame> *, std::__cxx1998::vector<std::unique_ptr<SwHTMLPosFlyFrame> > >, std::vector<std::unique_ptr<SwHTMLPosFlyFrame> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwWriteTableCol> *, std::__cxx1998::vector<std::unique_ptr<SwWriteTableCol> > >, std::vector<std::unique_ptr<SwWriteTableCol> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwWriteTableRow> *, std::__cxx1998::vector<std::unique_ptr<SwWriteTableRow> > >, std::vector<std::unique_ptr<SwWriteTableRow> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwXMLTableColumn_Impl> *, std::__cxx1998::vector<std::unique_ptr<SwXMLTableColumn_Impl> > >, std::vector<std::unique_ptr<SwXMLTableColumn_Impl> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> *, std::__cxx1998::vector<std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> > >, std::vector<std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> *, std::__cxx1998::vector<std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> > >, std::vector<std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<rtl::OUString> *, std::__cxx1998::vector<std::unique_ptr<rtl::OUString> > >, std::vector<std::unique_ptr<rtl::OUString> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<struct HTMLControl> *, std::__cxx1998::vector<std::unique_ptr<struct HTMLControl> > >, std::vector<std::unique_ptr<struct HTMLControl> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<struct SwInsDBColumn> *, std::__cxx1998::vector<std::unique_ptr<struct SwInsDBColumn> > >, std::vector<std::unique_ptr<struct SwInsDBColumn> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::CmpLPt *, std::__cxx1998::vector<struct (anonymous namespace)::CmpLPt> >, std::vector<struct (anonymous namespace)::CmpLPt> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::CpyTabFrame *, std::__cxx1998::vector<struct (anonymous namespace)::CpyTabFrame> >, std::vector<struct (anonymous namespace)::CpyTabFrame> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::FieldResult *, std::__cxx1998::vector<struct (anonymous namespace)::FieldResult> >, std::vector<struct (anonymous namespace)::FieldResult> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::XclExpTokenConvInfo *const *, std::__cxx1998::vector<const struct (anonymous namespace)::XclExpTokenConvInfo *> >, std::vector<const struct (anonymous namespace)::XclExpTokenConvInfo *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct EntryData *, std::__cxx1998::vector<struct EntryData> >, std::vector<struct EntryData> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct SfxItemPropertyMapEntry *, std::__cxx1998::vector<struct SfxItemPropertyMapEntry> >, std::vector<struct SfxItemPropertyMapEntry> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct SfxItemPropertyMapEntry *const *, std::__cxx1998::vector<const struct SfxItemPropertyMapEntry *> >, std::vector<const struct SfxItemPropertyMapEntry *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct SwPamRange *, std::__cxx1998::vector<struct SwPamRange> >, std::vector<struct SwPamRange> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct XMLPropertyState *, std::__cxx1998::vector<struct XMLPropertyState> >, std::vector<struct XMLPropertyState> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct oox::xls::SheetDataBuffer::RowRangeStyle *, std::__cxx1998::vector<struct oox::xls::SheetDataBuffer::RowRangeStyle> >, std::vector<struct oox::xls::SheetDataBuffer::RowRangeStyle> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct std::pair<std::basic_string_view<char16_t>, std::basic_string_view<char16_t> > *, std::__cxx1998::vector<struct std::pair<std::basic_string_view<char16_t>, std::basic_string_view<char16_t> > > >, std::vector<struct std::pair<std::basic_string_view<char16_t>, std::basic_string_view<char16_t> > > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const sw::mark::MarkBase *const *, std::__cxx1998::vector<const sw::mark::MarkBase *> >, std::vector<const sw::mark::MarkBase *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const unsigned int *, std::__cxx1998::vector<unsigned int> >, std::vector<unsigned int> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const unsigned long *, std::__cxx1998::vector<unsigned long> >, std::vector<unsigned long> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const unsigned short *, std::__cxx1998::vector<unsigned short> >, std::vector<unsigned short> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<editeng::IAutoCompleteString *const *, std::__cxx1998::vector<editeng::IAutoCompleteString *> >, std::vector<editeng::IAutoCompleteString *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<sfx2::SvLinkSource *const *, std::__cxx1998::vector<sfx2::SvLinkSource *> >, std::vector<sfx2::SvLinkSource *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<struct ScFormulaCellGroup *const *, std::__cxx1998::vector<struct ScFormulaCellGroup *> >, std::vector<struct ScFormulaCellGroup *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<struct SwRedlineDataParent *const *, std::__cxx1998::vector<struct SwRedlineDataParent *> >, std::vector<struct SwRedlineDataParent *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<struct _GtkTreePath *const *, std::__cxx1998::vector<struct _GtkTreePath *> >, std::vector<struct _GtkTreePath *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<sw::mark::MarkBase *const *, std::__cxx1998::vector<sw::mark::MarkBase *> >, std::vector<sw::mark::MarkBase *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<vcl::graphic::MemoryManaged *const *, std::__cxx1998::vector<vcl::graphic::MemoryManaged *> >, std::vector<vcl::graphic::MemoryManaged *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:203
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void *const *, std::__cxx1998::vector<void *> >, std::vector<void *> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<(anonymous namespace)::SwContent *const *, std::__cxx1998::vector<(anonymous namespace)::SwContent *> >, std::vector<(anonymous namespace)::SwContent *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpCellLayout *const *, std::__cxx1998::vector<LwpCellLayout *> >, std::vector<LwpCellLayout *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpCellList *const *, std::__cxx1998::vector<LwpCellList *> >, std::vector<LwpCellList *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpColumnLayout *const *, std::__cxx1998::vector<LwpColumnLayout *> >, std::vector<LwpColumnLayout *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpDocument *const *, std::__cxx1998::vector<LwpDocument *> >, std::vector<LwpDocument *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpObjectID *const *, std::__cxx1998::vector<LwpObjectID *> >, std::vector<LwpObjectID *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpPageHint *const *, std::__cxx1998::vector<LwpPageHint *> >, std::vector<LwpPageHint *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpPara *const *, std::__cxx1998::vector<LwpPara *> >, std::vector<LwpPara *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpRowLayout *const *, std::__cxx1998::vector<LwpRowLayout *> >, std::vector<LwpRowLayout *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpRowList *const *, std::__cxx1998::vector<LwpRowList *> >, std::vector<LwpRowList *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpSilverBullet *const *, std::__cxx1998::vector<LwpSilverBullet *> >, std::vector<LwpSilverBullet *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpStory *const *, std::__cxx1998::vector<LwpStory *> >, std::vector<LwpStory *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpTableRange *const *, std::__cxx1998::vector<LwpTableRange *> >, std::vector<LwpTableRange *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpVirtualLayout *const *, std::__cxx1998::vector<LwpVirtualLayout *> >, std::vector<LwpVirtualLayout *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SalFrame *const *, std::__cxx1998::vector<SalFrame *> >, std::vector<SalFrame *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<ScDPObject *const *, std::__cxx1998::vector<ScDPObject *> >, std::vector<ScDPObject *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<ScExternalRefManager::LinkListener *const *, std::__cxx1998::vector<ScExternalRefManager::LinkListener *> >, std::vector<ScExternalRefManager::LinkListener *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SdrObject *const *, std::__cxx1998::vector<SdrObject *> >, std::vector<SdrObject *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SdrOutliner *const *, std::__cxx1998::vector<SdrOutliner *> >, std::vector<SdrOutliner *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SdrView *const *, std::__cxx1998::vector<SdrView *> >, std::vector<SdrView *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SfxDispatcher *const *, std::__cxx1998::vector<SfxDispatcher *> >, std::vector<SfxDispatcher *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SfxStyleSheet *const *, std::__cxx1998::vector<SfxStyleSheet *> >, std::vector<SfxStyleSheet *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SvTreeListEntry *const *, std::__cxx1998::vector<SvTreeListEntry *> >, std::vector<SvTreeListEntry *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SvtBroadcaster *const *, std::__cxx1998::vector<SvtBroadcaster *> >, std::vector<SvtBroadcaster *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwAccessibleParagraph *const *, std::__cxx1998::vector<SwAccessibleParagraph *> >, std::vector<SwAccessibleParagraph *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwFlyFrame *const *, std::__cxx1998::vector<SwFlyFrame *> >, std::vector<SwFlyFrame *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwFormat *const *, std::__cxx1998::vector<SwFormat *> >, std::vector<SwFormat *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwList *const *, std::__cxx1998::vector<SwList *> >, std::vector<SwList *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwNode *const *, std::__cxx1998::vector<SwNode *> >, std::vector<SwNode *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwRangeRedline *const *, std::__cxx1998::vector<SwRangeRedline *> >, std::vector<SwRangeRedline *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwRootFrame *const *, std::__cxx1998::vector<SwRootFrame *> >, std::vector<SwRootFrame *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwSectionFormat *const *, std::__cxx1998::vector<SwSectionFormat *> >, std::vector<SwSectionFormat *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwSectionFrame *const *, std::__cxx1998::vector<SwSectionFrame *> >, std::vector<SwSectionFrame *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwTableBox *const *, std::__cxx1998::vector<SwTableBox *> >, std::vector<SwTableBox *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwTextFootnote *const *, std::__cxx1998::vector<SwTextFootnote *> >, std::vector<SwTextFootnote *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwTextFrame *const *, std::__cxx1998::vector<SwTextFrame *> >, std::vector<SwTextFrame *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwXMLTableColumn_Impl *const *, std::__cxx1998::vector<SwXMLTableColumn_Impl *> >, std::vector<SwXMLTableColumn_Impl *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<configmgr::RootAccess *const *, std::__cxx1998::vector<configmgr::RootAccess *> >, std::vector<configmgr::RootAccess *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const MathTypeFont *, std::__cxx1998::vector<MathTypeFont> >, std::vector<MathTypeFont> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const ScTokenArray *const *, std::__cxx1998::vector<const ScTokenArray *> >, std::vector<const ScTokenArray *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SdrObject *const *, std::__cxx1998::vector<const SdrObject *> >, std::vector<const SdrObject *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SvxTabStop *, std::__cxx1998::vector<SvxTabStop> >, std::vector<SvxTabStop> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwCharFormat *const *, std::__cxx1998::vector<const SwCharFormat *> >, std::vector<const SwCharFormat *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwFlyCache *const *, std::__cxx1998::vector<const SwFlyCache *> >, std::vector<const SwFlyCache *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwFrameFormat *const *, std::__cxx1998::vector<const SwFrameFormat *> >, std::vector<const SwFrameFormat *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwNode *const *, std::__cxx1998::vector<const SwNode *> >, std::vector<const SwNode *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwPageDesc *const *, std::__cxx1998::vector<const SwPageDesc *> >, std::vector<const SwPageDesc *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwRedlineData *const *, std::__cxx1998::vector<const SwRedlineData *> >, std::vector<const SwRedlineData *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTableBox *const *, std::__cxx1998::vector<const SwTableBox *> >, std::vector<const SwTableBox *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTextAttr *const *, std::__cxx1998::vector<const SwTextAttr *> >, std::vector<const SwTextAttr *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTextField *const *, std::__cxx1998::vector<const SwTextField *> >, std::vector<const SwTextField *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTextFormatColl *const *, std::__cxx1998::vector<const SwTextFormatColl *> >, std::vector<const SwTextFormatColl *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const basegfx::B2DPoint *, std::__cxx1998::vector<basegfx::B2DPoint> >, std::vector<basegfx::B2DPoint> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const basegfx::utils::PointIndex *, std::__cxx1998::vector<basegfx::utils::PointIndex> >, std::vector<basegfx::utils::PointIndex> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const char16_t *, std::__cxx1998::vector<char16_t> >, std::vector<char16_t> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const enum OpCode *, std::__cxx1998::vector<enum OpCode> >, std::vector<enum OpCode> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const fileaccess::TaskManager::MyProperty *, std::__cxx1998::vector<fileaccess::TaskManager::MyProperty> >, std::vector<fileaccess::TaskManager::MyProperty> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const int *, std::__cxx1998::vector<int> >, std::vector<int> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const rtl::OUString *, std::__cxx1998::vector<rtl::OUString> >, std::vector<rtl::OUString> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const short *, std::__cxx1998::vector<short> >, std::vector<short> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::basic_string_view<char16_t> *, std::__cxx1998::vector<std::basic_string_view<char16_t> > >, std::vector<std::basic_string_view<char16_t> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SetGetExpField> *, std::__cxx1998::vector<std::unique_ptr<SetGetExpField> > >, std::vector<std::unique_ptr<SetGetExpField> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwBlockName> *, std::__cxx1998::vector<std::unique_ptr<SwBlockName> > >, std::vector<std::unique_ptr<SwBlockName> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwContent> *, std::__cxx1998::vector<std::unique_ptr<SwContent> > >, std::vector<std::unique_ptr<SwContent> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwGlblDocContent> *, std::__cxx1998::vector<std::unique_ptr<SwGlblDocContent> > >, std::vector<std::unique_ptr<SwGlblDocContent> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwHTMLPosFlyFrame> *, std::__cxx1998::vector<std::unique_ptr<SwHTMLPosFlyFrame> > >, std::vector<std::unique_ptr<SwHTMLPosFlyFrame> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwWriteTableCol> *, std::__cxx1998::vector<std::unique_ptr<SwWriteTableCol> > >, std::vector<std::unique_ptr<SwWriteTableCol> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwWriteTableRow> *, std::__cxx1998::vector<std::unique_ptr<SwWriteTableRow> > >, std::vector<std::unique_ptr<SwWriteTableRow> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwXMLTableColumn_Impl> *, std::__cxx1998::vector<std::unique_ptr<SwXMLTableColumn_Impl> > >, std::vector<std::unique_ptr<SwXMLTableColumn_Impl> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> *, std::__cxx1998::vector<std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> > >, std::vector<std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> *, std::__cxx1998::vector<std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> > >, std::vector<std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<rtl::OUString> *, std::__cxx1998::vector<std::unique_ptr<rtl::OUString> > >, std::vector<std::unique_ptr<rtl::OUString> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<struct HTMLControl> *, std::__cxx1998::vector<std::unique_ptr<struct HTMLControl> > >, std::vector<std::unique_ptr<struct HTMLControl> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<struct SwInsDBColumn> *, std::__cxx1998::vector<std::unique_ptr<struct SwInsDBColumn> > >, std::vector<std::unique_ptr<struct SwInsDBColumn> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::CmpLPt *, std::__cxx1998::vector<struct (anonymous namespace)::CmpLPt> >, std::vector<struct (anonymous namespace)::CmpLPt> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::CpyTabFrame *, std::__cxx1998::vector<struct (anonymous namespace)::CpyTabFrame> >, std::vector<struct (anonymous namespace)::CpyTabFrame> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::FieldResult *, std::__cxx1998::vector<struct (anonymous namespace)::FieldResult> >, std::vector<struct (anonymous namespace)::FieldResult> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::XclExpTokenConvInfo *const *, std::__cxx1998::vector<const struct (anonymous namespace)::XclExpTokenConvInfo *> >, std::vector<const struct (anonymous namespace)::XclExpTokenConvInfo *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct EntryData *, std::__cxx1998::vector<struct EntryData> >, std::vector<struct EntryData> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct SfxItemPropertyMapEntry *, std::__cxx1998::vector<struct SfxItemPropertyMapEntry> >, std::vector<struct SfxItemPropertyMapEntry> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct SfxItemPropertyMapEntry *const *, std::__cxx1998::vector<const struct SfxItemPropertyMapEntry *> >, std::vector<const struct SfxItemPropertyMapEntry *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct SwPamRange *, std::__cxx1998::vector<struct SwPamRange> >, std::vector<struct SwPamRange> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct XMLPropertyState *, std::__cxx1998::vector<struct XMLPropertyState> >, std::vector<struct XMLPropertyState> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct oox::xls::SheetDataBuffer::RowRangeStyle *, std::__cxx1998::vector<struct oox::xls::SheetDataBuffer::RowRangeStyle> >, std::vector<struct oox::xls::SheetDataBuffer::RowRangeStyle> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct std::pair<std::basic_string_view<char16_t>, std::basic_string_view<char16_t> > *, std::__cxx1998::vector<struct std::pair<std::basic_string_view<char16_t>, std::basic_string_view<char16_t> > > >, std::vector<struct std::pair<std::basic_string_view<char16_t>, std::basic_string_view<char16_t> > > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const sw::mark::MarkBase *const *, std::__cxx1998::vector<const sw::mark::MarkBase *> >, std::vector<const sw::mark::MarkBase *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const unsigned int *, std::__cxx1998::vector<unsigned int> >, std::vector<unsigned int> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const unsigned long *, std::__cxx1998::vector<unsigned long> >, std::vector<unsigned long> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const unsigned short *, std::__cxx1998::vector<unsigned short> >, std::vector<unsigned short> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<editeng::IAutoCompleteString *const *, std::__cxx1998::vector<editeng::IAutoCompleteString *> >, std::vector<editeng::IAutoCompleteString *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<sfx2::SvLinkSource *const *, std::__cxx1998::vector<sfx2::SvLinkSource *> >, std::vector<sfx2::SvLinkSource *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<struct ScFormulaCellGroup *const *, std::__cxx1998::vector<struct ScFormulaCellGroup *> >, std::vector<struct ScFormulaCellGroup *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<struct SwRedlineDataParent *const *, std::__cxx1998::vector<struct SwRedlineDataParent *> >, std::vector<struct SwRedlineDataParent *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<struct _GtkTreePath *const *, std::__cxx1998::vector<struct _GtkTreePath *> >, std::vector<struct _GtkTreePath *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<sw::mark::MarkBase *const *, std::__cxx1998::vector<sw::mark::MarkBase *> >, std::vector<sw::mark::MarkBase *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<vcl::graphic::MemoryManaged *const *, std::__cxx1998::vector<vcl::graphic::MemoryManaged *> >, std::vector<vcl::graphic::MemoryManaged *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:208
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void *const *, std::__cxx1998::vector<void *> >, std::vector<void *> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<(anonymous namespace)::SwContent *const *, std::__cxx1998::vector<(anonymous namespace)::SwContent *> >, std::vector<(anonymous namespace)::SwContent *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpCellLayout *const *, std::__cxx1998::vector<LwpCellLayout *> >, std::vector<LwpCellLayout *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpCellList *const *, std::__cxx1998::vector<LwpCellList *> >, std::vector<LwpCellList *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpColumnLayout *const *, std::__cxx1998::vector<LwpColumnLayout *> >, std::vector<LwpColumnLayout *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpDocument *const *, std::__cxx1998::vector<LwpDocument *> >, std::vector<LwpDocument *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpObjectID *const *, std::__cxx1998::vector<LwpObjectID *> >, std::vector<LwpObjectID *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpPageHint *const *, std::__cxx1998::vector<LwpPageHint *> >, std::vector<LwpPageHint *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpPara *const *, std::__cxx1998::vector<LwpPara *> >, std::vector<LwpPara *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpRowLayout *const *, std::__cxx1998::vector<LwpRowLayout *> >, std::vector<LwpRowLayout *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpRowList *const *, std::__cxx1998::vector<LwpRowList *> >, std::vector<LwpRowList *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpSilverBullet *const *, std::__cxx1998::vector<LwpSilverBullet *> >, std::vector<LwpSilverBullet *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpStory *const *, std::__cxx1998::vector<LwpStory *> >, std::vector<LwpStory *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpTableRange *const *, std::__cxx1998::vector<LwpTableRange *> >, std::vector<LwpTableRange *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<LwpVirtualLayout *const *, std::__cxx1998::vector<LwpVirtualLayout *> >, std::vector<LwpVirtualLayout *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SalFrame *const *, std::__cxx1998::vector<SalFrame *> >, std::vector<SalFrame *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<ScDPObject *const *, std::__cxx1998::vector<ScDPObject *> >, std::vector<ScDPObject *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<ScExternalRefManager::LinkListener *const *, std::__cxx1998::vector<ScExternalRefManager::LinkListener *> >, std::vector<ScExternalRefManager::LinkListener *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SdrObject *const *, std::__cxx1998::vector<SdrObject *> >, std::vector<SdrObject *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SdrOutliner *const *, std::__cxx1998::vector<SdrOutliner *> >, std::vector<SdrOutliner *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SdrView *const *, std::__cxx1998::vector<SdrView *> >, std::vector<SdrView *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SfxDispatcher *const *, std::__cxx1998::vector<SfxDispatcher *> >, std::vector<SfxDispatcher *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SfxStyleSheet *const *, std::__cxx1998::vector<SfxStyleSheet *> >, std::vector<SfxStyleSheet *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SvTreeListEntry *const *, std::__cxx1998::vector<SvTreeListEntry *> >, std::vector<SvTreeListEntry *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SvtBroadcaster *const *, std::__cxx1998::vector<SvtBroadcaster *> >, std::vector<SvtBroadcaster *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwAccessibleParagraph *const *, std::__cxx1998::vector<SwAccessibleParagraph *> >, std::vector<SwAccessibleParagraph *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwFlyFrame *const *, std::__cxx1998::vector<SwFlyFrame *> >, std::vector<SwFlyFrame *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwFormat *const *, std::__cxx1998::vector<SwFormat *> >, std::vector<SwFormat *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwList *const *, std::__cxx1998::vector<SwList *> >, std::vector<SwList *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwNode *const *, std::__cxx1998::vector<SwNode *> >, std::vector<SwNode *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwRangeRedline *const *, std::__cxx1998::vector<SwRangeRedline *> >, std::vector<SwRangeRedline *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwRootFrame *const *, std::__cxx1998::vector<SwRootFrame *> >, std::vector<SwRootFrame *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwSectionFormat *const *, std::__cxx1998::vector<SwSectionFormat *> >, std::vector<SwSectionFormat *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwSectionFrame *const *, std::__cxx1998::vector<SwSectionFrame *> >, std::vector<SwSectionFrame *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwTableBox *const *, std::__cxx1998::vector<SwTableBox *> >, std::vector<SwTableBox *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwTextFootnote *const *, std::__cxx1998::vector<SwTextFootnote *> >, std::vector<SwTextFootnote *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwTextFrame *const *, std::__cxx1998::vector<SwTextFrame *> >, std::vector<SwTextFrame *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<SwXMLTableColumn_Impl *const *, std::__cxx1998::vector<SwXMLTableColumn_Impl *> >, std::vector<SwXMLTableColumn_Impl *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<configmgr::RootAccess *const *, std::__cxx1998::vector<configmgr::RootAccess *> >, std::vector<configmgr::RootAccess *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const MathTypeFont *, std::__cxx1998::vector<MathTypeFont> >, std::vector<MathTypeFont> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const ScTokenArray *const *, std::__cxx1998::vector<const ScTokenArray *> >, std::vector<const ScTokenArray *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SdrObject *const *, std::__cxx1998::vector<const SdrObject *> >, std::vector<const SdrObject *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SvxTabStop *, std::__cxx1998::vector<SvxTabStop> >, std::vector<SvxTabStop> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwCharFormat *const *, std::__cxx1998::vector<const SwCharFormat *> >, std::vector<const SwCharFormat *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwFlyCache *const *, std::__cxx1998::vector<const SwFlyCache *> >, std::vector<const SwFlyCache *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwFrameFormat *const *, std::__cxx1998::vector<const SwFrameFormat *> >, std::vector<const SwFrameFormat *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwNode *const *, std::__cxx1998::vector<const SwNode *> >, std::vector<const SwNode *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwPageDesc *const *, std::__cxx1998::vector<const SwPageDesc *> >, std::vector<const SwPageDesc *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwRedlineData *const *, std::__cxx1998::vector<const SwRedlineData *> >, std::vector<const SwRedlineData *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTableBox *const *, std::__cxx1998::vector<const SwTableBox *> >, std::vector<const SwTableBox *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTextAttr *const *, std::__cxx1998::vector<const SwTextAttr *> >, std::vector<const SwTextAttr *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTextField *const *, std::__cxx1998::vector<const SwTextField *> >, std::vector<const SwTextField *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const SwTextFormatColl *const *, std::__cxx1998::vector<const SwTextFormatColl *> >, std::vector<const SwTextFormatColl *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const basegfx::B2DPoint *, std::__cxx1998::vector<basegfx::B2DPoint> >, std::vector<basegfx::B2DPoint> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const basegfx::utils::PointIndex *, std::__cxx1998::vector<basegfx::utils::PointIndex> >, std::vector<basegfx::utils::PointIndex> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const char16_t *, std::__cxx1998::vector<char16_t> >, std::vector<char16_t> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const enum OpCode *, std::__cxx1998::vector<enum OpCode> >, std::vector<enum OpCode> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const fileaccess::TaskManager::MyProperty *, std::__cxx1998::vector<fileaccess::TaskManager::MyProperty> >, std::vector<fileaccess::TaskManager::MyProperty> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const int *, std::__cxx1998::vector<int> >, std::vector<int> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const rtl::OUString *, std::__cxx1998::vector<rtl::OUString> >, std::vector<rtl::OUString> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const short *, std::__cxx1998::vector<short> >, std::vector<short> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::basic_string_view<char16_t> *, std::__cxx1998::vector<std::basic_string_view<char16_t> > >, std::vector<std::basic_string_view<char16_t> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SetGetExpField> *, std::__cxx1998::vector<std::unique_ptr<SetGetExpField> > >, std::vector<std::unique_ptr<SetGetExpField> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwBlockName> *, std::__cxx1998::vector<std::unique_ptr<SwBlockName> > >, std::vector<std::unique_ptr<SwBlockName> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwContent> *, std::__cxx1998::vector<std::unique_ptr<SwContent> > >, std::vector<std::unique_ptr<SwContent> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwGlblDocContent> *, std::__cxx1998::vector<std::unique_ptr<SwGlblDocContent> > >, std::vector<std::unique_ptr<SwGlblDocContent> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwHTMLPosFlyFrame> *, std::__cxx1998::vector<std::unique_ptr<SwHTMLPosFlyFrame> > >, std::vector<std::unique_ptr<SwHTMLPosFlyFrame> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwWriteTableCol> *, std::__cxx1998::vector<std::unique_ptr<SwWriteTableCol> > >, std::vector<std::unique_ptr<SwWriteTableCol> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwWriteTableRow> *, std::__cxx1998::vector<std::unique_ptr<SwWriteTableRow> > >, std::vector<std::unique_ptr<SwWriteTableRow> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<SwXMLTableColumn_Impl> *, std::__cxx1998::vector<std::unique_ptr<SwXMLTableColumn_Impl> > >, std::vector<std::unique_ptr<SwXMLTableColumn_Impl> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> *, std::__cxx1998::vector<std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> > >, std::vector<std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> *, std::__cxx1998::vector<std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> > >, std::vector<std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<rtl::OUString> *, std::__cxx1998::vector<std::unique_ptr<rtl::OUString> > >, std::vector<std::unique_ptr<rtl::OUString> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<struct HTMLControl> *, std::__cxx1998::vector<std::unique_ptr<struct HTMLControl> > >, std::vector<std::unique_ptr<struct HTMLControl> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<struct SwInsDBColumn> *, std::__cxx1998::vector<std::unique_ptr<struct SwInsDBColumn> > >, std::vector<std::unique_ptr<struct SwInsDBColumn> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::CmpLPt *, std::__cxx1998::vector<struct (anonymous namespace)::CmpLPt> >, std::vector<struct (anonymous namespace)::CmpLPt> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::CpyTabFrame *, std::__cxx1998::vector<struct (anonymous namespace)::CpyTabFrame> >, std::vector<struct (anonymous namespace)::CpyTabFrame> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::FieldResult *, std::__cxx1998::vector<struct (anonymous namespace)::FieldResult> >, std::vector<struct (anonymous namespace)::FieldResult> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct (anonymous namespace)::XclExpTokenConvInfo *const *, std::__cxx1998::vector<const struct (anonymous namespace)::XclExpTokenConvInfo *> >, std::vector<const struct (anonymous namespace)::XclExpTokenConvInfo *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct EntryData *, std::__cxx1998::vector<struct EntryData> >, std::vector<struct EntryData> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct SfxItemPropertyMapEntry *, std::__cxx1998::vector<struct SfxItemPropertyMapEntry> >, std::vector<struct SfxItemPropertyMapEntry> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct SfxItemPropertyMapEntry *const *, std::__cxx1998::vector<const struct SfxItemPropertyMapEntry *> >, std::vector<const struct SfxItemPropertyMapEntry *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct SwPamRange *, std::__cxx1998::vector<struct SwPamRange> >, std::vector<struct SwPamRange> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct XMLPropertyState *, std::__cxx1998::vector<struct XMLPropertyState> >, std::vector<struct XMLPropertyState> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct oox::xls::SheetDataBuffer::RowRangeStyle *, std::__cxx1998::vector<struct oox::xls::SheetDataBuffer::RowRangeStyle> >, std::vector<struct oox::xls::SheetDataBuffer::RowRangeStyle> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct std::pair<std::basic_string_view<char16_t>, std::basic_string_view<char16_t> > *, std::__cxx1998::vector<struct std::pair<std::basic_string_view<char16_t>, std::basic_string_view<char16_t> > > >, std::vector<struct std::pair<std::basic_string_view<char16_t>, std::basic_string_view<char16_t> > > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const sw::mark::MarkBase *const *, std::__cxx1998::vector<const sw::mark::MarkBase *> >, std::vector<const sw::mark::MarkBase *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const unsigned int *, std::__cxx1998::vector<unsigned int> >, std::vector<unsigned int> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const unsigned long *, std::__cxx1998::vector<unsigned long> >, std::vector<unsigned long> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const unsigned short *, std::__cxx1998::vector<unsigned short> >, std::vector<unsigned short> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<editeng::IAutoCompleteString *const *, std::__cxx1998::vector<editeng::IAutoCompleteString *> >, std::vector<editeng::IAutoCompleteString *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<sfx2::SvLinkSource *const *, std::__cxx1998::vector<sfx2::SvLinkSource *> >, std::vector<sfx2::SvLinkSource *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<struct ScFormulaCellGroup *const *, std::__cxx1998::vector<struct ScFormulaCellGroup *> >, std::vector<struct ScFormulaCellGroup *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<struct SwRedlineDataParent *const *, std::__cxx1998::vector<struct SwRedlineDataParent *> >, std::vector<struct SwRedlineDataParent *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<struct _GtkTreePath *const *, std::__cxx1998::vector<struct _GtkTreePath *> >, std::vector<struct _GtkTreePath *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<sw::mark::MarkBase *const *, std::__cxx1998::vector<sw::mark::MarkBase *> >, std::vector<sw::mark::MarkBase *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<vcl::graphic::MemoryManaged *const *, std::__cxx1998::vector<vcl::graphic::MemoryManaged *> >, std::vector<vcl::graphic::MemoryManaged *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:219
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void *const *, std::__cxx1998::vector<void *> >, std::vector<void *> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+include/o3tl/sorted_vector.hxx:235
+    _Bool o3tl::sorted_vector::operator!=(const sorted_vector<Value, Compare, Find> &) const
+include/o3tl/strong_int.hxx:141
+    _Bool o3tl::strong_int::anyOf(struct o3tl::strong_int<int, struct FractionTag<100> >,type-parameter-?-?...) const
+include/o3tl/strong_int.hxx:141
+    _Bool o3tl::strong_int::anyOf(struct o3tl::strong_int<int, struct Tag_SwNodeOffset>,type-parameter-?-?...) const
+include/o3tl/strong_int.hxx:141
+    _Bool o3tl::strong_int::anyOf(struct o3tl::strong_int<int, struct Tag_TextFrameIndex>,type-parameter-?-?...) const
+include/o3tl/strong_int.hxx:141
+    _Bool o3tl::strong_int::anyOf(struct o3tl::strong_int<int, struct ViewShellDocIdTag>,type-parameter-?-?...) const
+include/o3tl/strong_int.hxx:141
+    _Bool o3tl::strong_int::anyOf(struct o3tl::strong_int<int, struct ViewShellIdTag>,type-parameter-?-?...) const
+include/o3tl/strong_int.hxx:141
+    _Bool o3tl::strong_int::anyOf(struct o3tl::strong_int<short, struct FractionTag<10> >,type-parameter-?-?...) const
+include/o3tl/strong_int.hxx:141
+    _Bool o3tl::strong_int::anyOf(struct o3tl::strong_int<short, struct SdrLayerIDTag>,type-parameter-?-?...) const
+include/o3tl/strong_int.hxx:141
+    _Bool o3tl::strong_int::anyOf(struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,type-parameter-?-?...) const
+include/o3tl/strong_int.hxx:141
+    _Bool o3tl::strong_int::anyOf(struct o3tl::strong_int<unsigned short, struct SfxInterfaceIdTag>,type-parameter-?-?...) const
+include/o3tl/strong_int.hxx:141
+    _Bool o3tl::strong_int::anyOf(struct o3tl::strong_int<unsigned short, struct ToolBoxItemIdTag>,type-parameter-?-?...) const
+include/o3tl/typed_flags_set.hxx:113
+    typed_flags<type-parameter-?-?>::Wrap operator~(typed_flags<type-parameter-?-?>::Wrap)
+include/o3tl/typed_flags_set.hxx:146
+    typed_flags<type-parameter-?-?>::Wrap operator^(typed_flags<type-parameter-?-?>::Wrap,type-parameter-?-?)
 include/oox/crypto/AgileEngine.hxx:116
+    _Bool oox::crypto::AgileEngine::decryptHmacKey()
+include/oox/crypto/AgileEngine.hxx:117
     _Bool oox::crypto::AgileEngine::decryptHmacValue()
-include/oox/crypto/AgileEngine.hxx:131
+include/oox/crypto/AgileEngine.hxx:132
     _Bool oox::crypto::AgileEngine::encryptHmacValue()
 include/oox/crypto/CryptoEngine.hxx:46
     _Bool oox::crypto::CryptoEngine::decrypt(oox::BinaryXInputStream &,oox::BinaryXOutputStream &)
@@ -136,9 +834,9 @@ include/oox/dump/oledumper.hxx:322
     unsigned int oox::dump::AxPropertyObjectBase::dumpColorProperty(unsigned int)
 include/oox/dump/oledumper.hxx:323
     char16_t oox::dump::AxPropertyObjectBase::dumpUnicodeProperty()
-include/oox/export/shapes.hxx:137
+include/oox/export/shapes.hxx:138
     oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualDrawingProperties(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,const char *)
-include/oox/export/shapes.hxx:185
+include/oox/export/shapes.hxx:186
     oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &,int,_Bool)
 include/oox/export/ThemeExport.hxx:48
     _Bool oox::ThemeExport::writeColorSet(const model::Theme &)
@@ -158,14 +856,14 @@ include/oox/ole/olehelper.hxx:176
     _Bool oox::ole::MSConvertOCXControls::importControlFromStream(oox::BinaryInputStream &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,std::basic_string_view<char16_t>)
 include/oox/ole/olehelper.hxx:187
     _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const rtl::Reference<SotStorageStream> &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,int,int)
-include/sax/fshelper.hxx:134
+include/sax/fshelper.hxx:133
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
-include/sax/fshelper.hxx:135
+include/sax/fshelper.hxx:134
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
-include/sax/fshelper.hxx:136
+include/sax/fshelper.hxx:135
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(double)
-include/sax/fshelper.hxx:138
-    sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
+include/sax/fshelper.hxx:137
+    sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(std::basic_string_view<char>)
 include/sfx2/linkmgr.hxx:64
     _Bool sfx2::LinkManager::InsertLink(sfx2::SvBaseLink *,enum sfx2::SvBaseLinkObjectType,enum SfxLinkUpdateMode,const rtl::OUString *)
 include/sfx2/lnkbase.hxx:111
@@ -184,7 +882,7 @@ include/svx/autoformathelper.hxx:216
     _Bool AutoFormatBase::SaveBlockB(SvStream &,unsigned short) const
 include/svx/dlgctrl.hxx:99
     Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
-include/svx/PaletteManager.hxx:86
+include/svx/PaletteManager.hxx:83
     _Bool PaletteManager::GetLumModOff(unsigned short,unsigned short,short &,short &)
 include/test/a11y/AccessibilityTools.hxx:60
     com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForId(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> &,std::basic_string_view<char16_t>)
@@ -206,6 +904,40 @@ include/test/sheet/xnamedrange.hxx:22
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> apitest::XNamedRange::init()
 include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
+include/tools/lazydelete.hxx:92
+    std::optional<(anonymous namespace)::SdrHdlBitmapSet> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<(anonymous namespace)::VDevBuffer> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<BitmapEx> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<EditDLL> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<SalLayoutGlyphsCache> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<VclPtr<OutputDevice> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<Wallpaper> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<com::sun::star::uno::Reference<com::sun::star::i18n::XBreakIterator> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<com::sun::star::uno::Reference<com::sun::star::i18n::XLocaleData4> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<drawinglayer::primitive2d::DiscreteShadow> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<filter::config::FilterCache> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<o3tl::lru_map<rtl::OUString, std::shared_ptr<const vcl::text::TextLayoutCache>, struct vcl::text::FirstCharsStringHash, struct vcl::text::FastStringCompareEqual, struct vcl::text::(anonymous namespace)::TextLayoutCacheCost> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<rtl::Reference<SfxItemPool> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<std::shared_ptr<weld::Window> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<std::unordered_map<int, rtl::Reference<LOKClipboard> > > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<std::vector<struct com::sun::star::datatransfer::DataFlavor> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+include/tools/lazydelete.hxx:92
+    std::optional<struct (anonymous namespace)::WavyLineCache> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
 include/tools/urlobj.hxx:428
@@ -214,7 +946,7 @@ include/tools/urlobj.hxx:735
     _Bool INetURLObject::SetParam(std::basic_string_view<char16_t>,enum INetURLObject::EncodeMechanism,unsigned short)
 include/unotools/lingucfg.hxx:191
     _Bool SvtLinguConfig::GetElementNamesFor(const rtl::OUString &,com::sun::star::uno::Sequence<rtl::OUString> &) const
-include/unotools/localedatawrapper.hxx:162
+include/unotools/localedatawrapper.hxx:169
     const com::sun::star::uno::Sequence<struct com::sun::star::lang::Locale> & LocaleDataWrapper::getAllInstalledLocaleNames() const
 include/vcl/abstdlg.hxx:116
     _Bool AbstractSecurityOptionsDialog::SetSecurityOptions()
@@ -238,9 +970,9 @@ include/vcl/filter/SvmReader.hxx:37
     SvStream & SvmReader::Read(GDIMetaFile &,struct ImplMetaReadData *)
 include/vcl/filter/SvmWriter.hxx:37
     SvStream & SvmWriter::Write(const GDIMetaFile &)
-include/vcl/formatter.hxx:225
+include/vcl/formatter.hxx:247
     _Bool Formatter::SetFormat(const rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>)
-include/vcl/graphicfilter.hxx:256
+include/vcl/graphicfilter.hxx:254
     ErrCode GraphicFilter::ExportGraphic(const Graphic &,const INetURLObject &,unsigned short,const com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
 include/vcl/GraphicNativeMetadata.hxx:34
     _Bool GraphicNativeMetadata::read(SvStream &)
@@ -252,7 +984,7 @@ include/vcl/menu.hxx:391
     _Bool Menu::HandleMenuActivateEvent(Menu *) const
 include/vcl/menu.hxx:392
     _Bool Menu::HandleMenuDeActivateEvent(Menu *) const
-include/vcl/outdev.hxx:1192
+include/vcl/outdev.hxx:1186
     _Bool OutputDevice::ForceFallbackFont(const vcl::Font &)
 include/vcl/texteng.hxx:271
     _Bool TextEngine::Read(SvStream &,const TextSelection *)
@@ -260,7 +992,7 @@ include/xmloff/unointerfacetouniqueidentifiermapper.hxx:65
     _Bool comphelper::UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(const rtl::OUString &,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
 include/xmloff/xmluconv.hxx:279
     _Bool SvXMLUnitConverter::convertNumFormat(short &,const rtl::OUString &,std::basic_string_view<char16_t>,_Bool) const
-linguistic/source/lngsvcmgr.hxx:118
+linguistic/source/lngsvcmgr.hxx:114
     _Bool LngSvcMgr::SaveCfgSvcs(std::basic_string_view<char16_t>)
 lotuswordpro/inc/lwpsvstream.hxx:80
     LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -268,11 +1000,11 @@ lotuswordpro/inc/lwpsvstream.hxx:81
     LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:82
     LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/inc/attarray.hxx:236
+sc/inc/attarray.hxx:235
     const ScPatternAttr * ScAttrArray::SetPatternAreaImpl(int,int,const CellAttributeHolder &,ScEditDataArray *)
-sc/inc/column.hxx:685
+sc/inc/column.hxx:675
     _Bool ScColumn::DeleteSparkline(int)
-sc/inc/document.hxx:956
+sc/inc/document.hxx:947
     _Bool ScDocument::SetTotalsRowBelow(short,_Bool)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(ScDocument &,rtl::OUString &) const
@@ -284,17 +1016,17 @@ sc/source/core/data/dpoutput.cxx:125
     _Bool ScDPOutputImpl::AddRow(int)
 sc/source/core/data/dpoutput.cxx:126
     _Bool ScDPOutputImpl::AddCol(short)
-sc/source/core/opencl/opbase.hxx:451
+sc/source/core/opencl/opbase.hxx:448
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(sc::opencl::outputstream &,_Bool &)
-sc/source/core/opencl/opbase.hxx:483
+sc/source/core/opencl/opbase.hxx:480
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(sc::opencl::outputstream &,int,_Bool &)
 sc/source/filter/inc/connectionsbuffer.hxx:145
     struct oox::xls::ExtensionListModel & oox::xls::ConnectionModel::createExtensionList()
-sc/source/filter/inc/workbookhelper.hxx:312
+sc/source/filter/inc/workbookhelper.hxx:311
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const rtl::Reference<oox::core::FragmentHandler> &,oox::core::FastParser &)
 sc/source/filter/xml/XMLStylesExportHelper.hxx:172
     _Bool ScFormatRangeStyles::AddStyleName(const rtl::OUString &,int &,const _Bool)
-sc/source/ui/inc/anyrefdg.hxx:95
+sc/source/ui/inc/anyrefdg.hxx:94
     _Bool ScRefHandler::DoClose(unsigned short)
 sc/source/ui/inc/docfunc.hxx:121
     _Bool ScDocFunc::SetFormulaCells(const ScAddress &,std::vector<ScFormulaCell *> &,_Bool)
@@ -302,9 +1034,9 @@ sc/source/ui/inc/docfunc.hxx:171
     _Bool ScDocFunc::Protect(short,const rtl::OUString &)
 sc/source/ui/inc/docfunc.hxx:252
     _Bool ScDocFunc::ChangeSparklineGroupAttributes(const std::shared_ptr<sc::SparklineGroup> &,const sc::SparklineAttributes &)
-sc/source/ui/inc/drawview.hxx:159
+sc/source/ui/inc/drawview.hxx:158
     _Bool ScDrawView::calculateGridOffsetForSdrObject(SdrObject &,basegfx::B2DVector &) const
-sc/source/ui/inc/drawview.hxx:162
+sc/source/ui/inc/drawview.hxx:161
     _Bool ScDrawView::calculateGridOffsetForB2DRange(const basegfx::B2DRange &,basegfx::B2DVector &) const
 sc/source/ui/inc/select.hxx:71
     _Bool ScViewFunctionSet::SetCursorAtCell(short,int,_Bool)
@@ -340,27 +1072,35 @@ sc/source/ui/vba/vbaformat.hxx:145
     com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:141
+sd/inc/drawdoc.hxx:698
+    _Bool SdDrawDocument::ResolvePageLinks(const std::vector<rtl::OUString> &,unsigned short,_Bool,_Bool,_Bool)
+sd/inc/drawdoc.hxx:719
+    _Bool SdDrawDocument::CopyOrMovePagesWithinDocument(const std::vector<rtl::OUString> &,std::vector<rtl::OUString> *,unsigned short,_Bool,_Bool)
+sd/inc/drawdoc.hxx:739
+    _Bool SdDrawDocument::ImportDocumentPages(const std::vector<rtl::OUString> &,unsigned short,sd::DrawDocShell *,_Bool)
+sd/inc/drawdoc.hxx:1037
+    SdPage * SdDrawDocument::AddNewMasterPageFromExisting(SdPage *,SdDrawDocument *,_Bool,const rtl::OUString &)
+sd/source/filter/eppt/pptx-epptooxml.cxx:171
     oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePlaceholderReferenceShape(enum oox::core::PlaceholderType,int,enum PageType,const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
-sd/source/filter/eppt/pptx-epptooxml.cxx:142
+sd/source/filter/eppt/pptx-epptooxml.cxx:172
     oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,enum PageType,_Bool)
-sd/source/filter/eppt/pptx-epptooxml.cxx:144
+sd/source/filter/eppt/pptx-epptooxml.cxx:174
     oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePlaceholderReferenceTextBody(enum oox::core::PlaceholderType,enum PageType,const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
-sd/source/filter/html/htmlex.hxx:74
+sd/source/filter/html/htmlex.hxx:67
     _Bool HtmlExport::WriteHtml(std::basic_string_view<char16_t>,std::basic_string_view<char16_t>)
-sd/source/ui/inc/DrawViewShell.hxx:263
+sd/source/ui/inc/DrawViewShell.hxx:264
     _Bool sd::DrawViewShell::SelectPage(unsigned short,unsigned short)
-sd/source/ui/inc/navigatr.hxx:122
+sd/source/ui/inc/navigatr.hxx:120
     _Bool SdNavigatorWin::InsertFile(const rtl::OUString &)
-sd/source/ui/inc/OutlineViewShell.hxx:114
+sd/source/ui/inc/OutlineViewShell.hxx:113
     ErrCode sd::OutlineViewShell::ReadRtf(SvStream &)
-sd/source/ui/inc/View.hxx:175
+sd/source/ui/inc/View.hxx:174
     SdrMediaObj * sd::View::InsertMediaObj(const rtl::OUString &,signed char &,const Point &,const Size &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:36
     int sd::IBluetoothSocket::write(const void *,unsigned int)
-sdext/source/pdfimport/tree/style.hxx:155
+sdext/source/pdfimport/tree/style.hxx:153
     int pdfi::StyleContainer::getStandardStyleId(std::basic_string_view<char>)
-sfx2/inc/autoredactdialog.hxx:139
+sfx2/inc/autoredactdialog.hxx:120
     _Bool SfxAutoRedactDialog::getTargets(std::vector<struct std::pair<struct RedactionTarget, rtl::OUString> > &)
 slideshow/source/engine/animationnodes/animationbasenode.hxx:62
     _Bool slideshow::internal::AnimationBaseNode::enqueueActivity() const
@@ -372,23 +1112,25 @@ svx/inc/galleryfilestorageentry.hxx:55
     std::unique_ptr<GalleryTheme> & GalleryFileStorageEntry::getCachedTheme(std::unique_ptr<GalleryTheme> &)
 sw/inc/calc.hxx:123
     SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/crsrsh.hxx:625
+sw/inc/crsrsh.hxx:640
     _Bool SwCursorShell::TrySelectOuterTable()
+sw/inc/doc.hxx:1513
+    _Bool SwDoc::ConvertFieldToText(const SwField &,const SwRootFrame &)
 sw/inc/docary.hxx:308
     _Bool SwExtraRedlineTable::DeleteAllTableRedlines(SwDoc &,const SwTable &,_Bool,enum RedlineType)
 sw/inc/docary.hxx:309
     _Bool SwExtraRedlineTable::DeleteTableRowRedline(SwDoc *,const SwTableLine &,_Bool,enum RedlineType)
 sw/inc/docary.hxx:310
     _Bool SwExtraRedlineTable::DeleteTableCellRedline(SwDoc *,const SwTableBox &,_Bool,enum RedlineType)
-sw/inc/editsh.hxx:177
+sw/inc/editsh.hxx:180
     _Bool SwEditShell::ReplaceKeepComments(const rtl::OUString &)
-sw/inc/editsh.hxx:499
+sw/inc/editsh.hxx:503
     _Bool SwEditShell::OutlineUpDown(short)
-sw/inc/editsh.hxx:660
+sw/inc/editsh.hxx:664
     const GraphicAttr * SwEditShell::GetGraphicAttr(GraphicAttr &) const
-sw/inc/editsh.hxx:673
+sw/inc/editsh.hxx:677
     _Bool SwEditShell::GetGrfSize(Size &) const
-sw/inc/editsh.hxx:837
+sw/inc/editsh.hxx:841
     unsigned short SwEditShell::GetRefMarks(std::vector<rtl::OUString> *) const
 sw/inc/IDocumentUndoRedo.hxx:99
     _Bool IDocumentUndoRedo::Undo()
@@ -396,36 +1138,34 @@ sw/inc/IDocumentUndoRedo.hxx:160
     _Bool IDocumentUndoRedo::Redo()
 sw/inc/IDocumentUndoRedo.hxx:180
     _Bool IDocumentUndoRedo::Repeat(sw::RepeatContext &,const unsigned short)
-sw/inc/ndarr.hxx:97
+sw/inc/ndarr.hxx:96
     _Bool SwOutlineNodesInline::Seek_Entry(const SwNode *,unsigned long *) const
 sw/inc/node.hxx:443
     _Bool SwContentNode::GoNext(struct SwPosition &,enum SwCursorSkipMode) const
-sw/inc/PostItMgr.hxx:202
+sw/inc/PostItMgr.hxx:204
     sw::annotation::SwAnnotationWin * SwPostItMgr::GetOrCreateAnnotationWindowForLatestPostItField()
-sw/inc/redline.hxx:267
+sw/inc/redline.hxx:268
     _Bool SwRangeRedline::PopAllDataAfter(int)
-sw/inc/tblafmt.hxx:272
+sw/inc/tblafmt.hxx:278
     _Bool SwTableAutoFormatTable::Load(SvStream &)
 sw/inc/unocrsrhelper.hxx:75
     _Bool SwUnoCursorHelper::SwAnyMapHelper::FillValue(unsigned short,unsigned short,const com::sun::star::uno::Any *&)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const SwDoc &) const
-sw/source/core/inc/scriptinfo.hxx:237
-    _Bool SwScriptInfo::GetBoundsOfHiddenRange(struct o3tl::strong_int<int, struct Tag_TextFrameIndex>,struct o3tl::strong_int<int, struct Tag_TextFrameIndex> &,struct o3tl::strong_int<int, struct Tag_TextFrameIndex> &) const
 sw/source/filter/ww8/ww8toolbar.hxx:337
     _Bool Tcg::ImportCustomToolBar(SfxObjectShell &)
-sw/source/uibase/inc/drawbase.hxx:54
+sw/source/uibase/inc/drawbase.hxx:53
     _Bool SwDrawBase::MouseMove(const MouseEvent &)
-sw/source/uibase/inc/fldmgr.hxx:117
+sw/source/uibase/inc/fldmgr.hxx:118
     const com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 sw/source/uibase/inc/mailmergewizard.hxx:78
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
-sw/source/uibase/inc/wrtsh.hxx:434
+sw/source/uibase/inc/wrtsh.hxx:439
     _Bool SwWrtShell::GotoFieldmark(const sw::mark::Fieldmark *const)
-sw/source/uibase/inc/wrtsh.hxx:442
+sw/source/uibase/inc/wrtsh.hxx:447
     _Bool SwWrtShell::GotoContentControl(const SwFormatContentControl &,_Bool)
 sw/source/writerfilter/dmapper/TagLogger.hxx:59
-    typename enable_if<std::is_integral_v<T>, void>::type writerfilter::TagLogger::attribute(const std::basic_string<char> &,type-parameter-?-?)
+    enable_if<std::is_integral_v<type-parameter-?-?>, void>::type writerfilter::TagLogger::attribute(const std::basic_string<char> &,type-parameter-?-?)
 ucb/source/core/ucbstore.hxx:97
     const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> & PropertySetRegistry::getConfigProvider(std::unique_lock<std::mutex> &)
 ucb/source/ucp/webdav-curl/ContentProperties.hxx:160
@@ -436,27 +1176,31 @@ vcl/inc/font/FeatureCollector.hxx:44
     _Bool vcl::font::FeatureCollector::collect()
 vcl/inc/graphic/MemoryManaged.hxx:136
     _Bool vcl::graphic::MemoryManaged::reduceMemory()
-vcl/inc/impgraph.hxx:188
+vcl/inc/impgraph.hxx:172
     _Bool ImpGraphic::swapOutGraphic(SvStream &)
 vcl/inc/pdf/IPDFEncryptor.hxx:71
     _Bool vcl::pdf::IPDFEncryptor::prepareEncryption(const com::sun::star::uno::Reference<com::sun::star::beans::XMaterialHolder> &,struct vcl::PDFEncryptionProperties &)
-vcl/inc/pdf/pdfwriter_impl.hxx:1308
+vcl/inc/pdf/pdfwriter_impl.hxx:1303
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/inc/pdf/pdfwriter_impl.hxx:1309
+vcl/inc/pdf/pdfwriter_impl.hxx:1304
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/inc/pdf/pdfwriter_impl.hxx:1310
+vcl/inc/pdf/pdfwriter_impl.hxx:1305
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)
 vcl/inc/ppdparser.hxx:195
     _Bool psp::PPDParser::getPaperDimension(std::basic_string_view<char16_t>,int &,int &) const
 vcl/inc/ppdparser.hxx:203
     _Bool psp::PPDParser::getMargins(std::basic_string_view<char16_t>,int &,int &,int &,int &) const
+vcl/inc/qt5/QtAccessibleWidget.hxx:58
+    QString QtAccessibleWidget::tr(const char *,const char *,int)
+vcl/inc/qt5/QtAccessibleWidget.hxx:58
+    QString QtAccessibleWidget::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtClipboard.hxx:36
     QString QtClipboard::tr(const char *,const char *,int)
 vcl/inc/qt5/QtClipboard.hxx:36
     QString QtClipboard::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtDoubleSpinBox.hxx:18
+vcl/inc/qt5/QtDoubleSpinBox.hxx:22
     QString QtDoubleSpinBox::tr(const char *,const char *,int)
-vcl/inc/qt5/QtDoubleSpinBox.hxx:18
+vcl/inc/qt5/QtDoubleSpinBox.hxx:22
     QString QtDoubleSpinBox::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtExpander.hxx:18
     QString QtExpander::tr(const char *,const char *,int)
@@ -470,10 +1214,18 @@ vcl/inc/qt5/QtFrame.hxx:72
     QString QtFrame::tr(const char *,const char *,int)
 vcl/inc/qt5/QtFrame.hxx:72
     QString QtFrame::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtInstance.hxx:56
+vcl/inc/qt5/QtHyperlinkLabel.hxx:21
+    QString QtHyperlinkLabel::tr(const char *,const char *,int)
+vcl/inc/qt5/QtHyperlinkLabel.hxx:21
+    QString QtHyperlinkLabel::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtInstance.hxx:68
     QString QtInstance::tr(const char *,const char *,int)
-vcl/inc/qt5/QtInstance.hxx:56
+vcl/inc/qt5/QtInstance.hxx:68
     QString QtInstance::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtInstanceAssistant.hxx:34
+    QString QtInstanceAssistant::tr(const char *,const char *,int)
+vcl/inc/qt5/QtInstanceAssistant.hxx:34
+    QString QtInstanceAssistant::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceBox.hxx:16
     QString QtInstanceBox::tr(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceBox.hxx:16
@@ -490,9 +1242,9 @@ vcl/inc/qt5/QtInstanceContainer.hxx:18
     QString QtInstanceContainer::tr(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceContainer.hxx:18
     QString QtInstanceContainer::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtInstanceDialog.hxx:18
+vcl/inc/qt5/QtInstanceDialog.hxx:20
     QString QtInstanceDialog::tr(const char *,const char *,int)
-vcl/inc/qt5/QtInstanceDialog.hxx:18
+vcl/inc/qt5/QtInstanceDialog.hxx:20
     QString QtInstanceDialog::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceDrawingArea.hxx:18
     QString QtInstanceDrawingArea::tr(const char *,const char *,int)
@@ -502,10 +1254,18 @@ vcl/inc/qt5/QtInstanceEntry.hxx:18
     QString QtInstanceEntry::tr(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceEntry.hxx:18
     QString QtInstanceEntry::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtInstanceEntryTreeView.hxx:21
+    QString QtInstanceEntryTreeView::tr(const char *,const char *,int)
+vcl/inc/qt5/QtInstanceEntryTreeView.hxx:21
+    QString QtInstanceEntryTreeView::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceExpander.hxx:17
     QString QtInstanceExpander::tr(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceExpander.hxx:17
     QString QtInstanceExpander::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtInstanceFormattedSpinButton.hxx:20
+    QString QtInstanceFormattedSpinButton::tr(const char *,const char *,int)
+vcl/inc/qt5/QtInstanceFormattedSpinButton.hxx:20
+    QString QtInstanceFormattedSpinButton::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceGrid.hxx:18
     QString QtInstanceGrid::tr(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceGrid.hxx:18
@@ -538,9 +1298,9 @@ vcl/inc/qt5/QtInstanceMenuButton.hxx:18
     QString QtInstanceMenuButton::tr(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceMenuButton.hxx:18
     QString QtInstanceMenuButton::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtInstanceMessageDialog.hxx:18
+vcl/inc/qt5/QtInstanceMessageDialog.hxx:17
     QString QtInstanceMessageDialog::tr(const char *,const char *,int)
-vcl/inc/qt5/QtInstanceMessageDialog.hxx:18
+vcl/inc/qt5/QtInstanceMessageDialog.hxx:17
     QString QtInstanceMessageDialog::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceNotebook.hxx:21
     QString QtInstanceNotebook::tr(const char *,const char *,int)
@@ -562,13 +1322,17 @@ vcl/inc/qt5/QtInstanceScale.hxx:18
     QString QtInstanceScale::tr(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceScale.hxx:18
     QString QtInstanceScale::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtInstanceScrollbar.hxx:18
+    QString QtInstanceScrollbar::tr(const char *,const char *,int)
+vcl/inc/qt5/QtInstanceScrollbar.hxx:18
+    QString QtInstanceScrollbar::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceScrolledWindow.hxx:18
     QString QtInstanceScrolledWindow::tr(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceScrolledWindow.hxx:18
     QString QtInstanceScrolledWindow::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtInstanceSpinButton.hxx:19
+vcl/inc/qt5/QtInstanceSpinButton.hxx:21
     QString QtInstanceSpinButton::tr(const char *,const char *,int)
-vcl/inc/qt5/QtInstanceSpinButton.hxx:19
+vcl/inc/qt5/QtInstanceSpinButton.hxx:21
     QString QtInstanceSpinButton::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceTextView.hxx:18
     QString QtInstanceTextView::tr(const char *,const char *,int)
@@ -582,17 +1346,17 @@ vcl/inc/qt5/QtInstanceToolbar.hxx:18
     QString QtInstanceToolbar::tr(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceToolbar.hxx:18
     QString QtInstanceToolbar::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtInstanceTreeView.hxx:19
+vcl/inc/qt5/QtInstanceTreeView.hxx:21
     QString QtInstanceTreeView::tr(const char *,const char *,int)
-vcl/inc/qt5/QtInstanceTreeView.hxx:19
+vcl/inc/qt5/QtInstanceTreeView.hxx:21
     QString QtInstanceTreeView::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceWidget.hxx:24
     QString QtInstanceWidget::tr(const char *,const char *,int)
 vcl/inc/qt5/QtInstanceWidget.hxx:24
     QString QtInstanceWidget::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtInstanceWindow.hxx:16
+vcl/inc/qt5/QtInstanceWindow.hxx:17
     QString QtInstanceWindow::tr(const char *,const char *,int)
-vcl/inc/qt5/QtInstanceWindow.hxx:16
+vcl/inc/qt5/QtInstanceWindow.hxx:17
     QString QtInstanceWindow::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtMainWindow.hxx:29
     QString QtMainWindow::tr(const char *,const char *,int)
@@ -622,21 +1386,21 @@ vcl/inc/qt5/QtXAccessible.hxx:27
     QString QtXAccessible::tr(const char *,const char *,int)
 vcl/inc/qt5/QtXAccessible.hxx:27
     QString QtXAccessible::trUtf8(const char *,const char *,int)
-vcl/inc/salgdi.hxx:357
+vcl/inc/salgdi.hxx:349
     _Bool SalGraphics::UpdateSettings(AllSettings &)
-vcl/inc/salgdi.hxx:359
+vcl/inc/salgdi.hxx:351
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const SalBitmap &,const OutputDevice &)
-vcl/inc/salgdi.hxx:479
+vcl/inc/salgdi.hxx:471
     _Bool SalGraphics::implDrawGradient(const basegfx::B2DPolyPolygon &,const struct SalGradient &)
-vcl/inc/salinst.hxx:185
+vcl/inc/salinst.hxx:187
     _Bool SalInstance::CallEventCallback(const void *,int)
-vcl/inc/salprn.hxx:121
+vcl/inc/salprn.hxx:119
     _Bool SalPrinter::EndJob()
 vcl/inc/unx/gtk/gtkdata.hxx:273
     int GtkSalDisplay::CaptureMouse(SalFrame *)
 vcl/inc/unx/salframe.h:166
     _Bool X11SalFrame::Dispatch(union _XEvent *)
-vcl/source/control/imivctl.hxx:242
+vcl/source/control/imivctl.hxx:240
     Size SvxIconChoiceCtrl_Impl::CalcBoundingSize() const
 vcl/source/fontsubset/ttcr.hxx:106
     int vcl::TrueTypeTable::GetRawData(struct vcl::TableEntry *)
