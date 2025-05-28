@@ -31,7 +31,7 @@ protected:
     PointerStyle aOldPointer;
 
 public:
-    FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView, SdrModel* pDoc,
+    FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView, SdrModel& rDoc,
            const SfxRequest& rReq);
     virtual ~FuDraw() override;
 

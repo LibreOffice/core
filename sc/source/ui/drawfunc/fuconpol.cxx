@@ -29,8 +29,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 
 FuConstPolygon::FuConstPolygon(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-                               SdrModel* pDoc, const SfxRequest& rReq)
-    : FuConstruct(rViewSh, pWin, pViewP, pDoc, rReq)
+                               SdrModel& rDoc, const SfxRequest& rReq)
+    : FuConstruct(rViewSh, pWin, pViewP, rDoc, rReq)
 {
 }
 
@@ -186,7 +186,7 @@ rtl::Reference<SdrObject> FuConstPolygon::CreateDefaultObject(const sal_uInt16 n
     // case SID_DRAW_FREELINE_NOFILL:
 
     rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
-        *pDrDoc,
+        rDrDoc,
         pView->GetCurrentObjInventor(),
         pView->GetCurrentObjIdentifier()));
 

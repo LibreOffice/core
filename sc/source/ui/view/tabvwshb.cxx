@@ -392,17 +392,17 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     switch ( nSlot )
     {
         case SID_INSERT_GRAPHIC:
-            FuInsertGraphic(*this, pWin, pView, &rModel, rReq);
+            FuInsertGraphic(*this, pWin, pView, rModel, rReq);
             // shell is set in MarkListHasChanged
             break;
 
         case SID_INSERT_AVMEDIA:
-            FuInsertMedia(*this, pWin, pView, &rModel, rReq);
+            FuInsertMedia(*this, pWin, pView, rModel, rReq);
             // shell is set in MarkListHasChanged
             break;
 
         case SID_INSERT_DIAGRAM:
-            FuInsertChart(*this, pWin, pView, &rModel, rReq, LINK( this, ScTabViewShell, DialogClosedHdl ));
+            FuInsertChart(*this, pWin, pView, rModel, rReq, LINK( this, ScTabViewShell, DialogClosedHdl ));
             if (comphelper::LibreOfficeKit::isActive())
                 rDocSh.SetModified();
             break;
@@ -410,7 +410,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_INSERT_OBJECT:
         case SID_INSERT_SMATH:
         case SID_INSERT_FLOATINGFRAME:
-            FuInsertOLE(*this, pWin, pView, &rModel, rReq);
+            FuInsertOLE(*this, pWin, pView, rModel, rReq);
             break;
 
         case SID_INSERT_SIGNATURELINE:

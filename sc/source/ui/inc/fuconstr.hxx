@@ -28,7 +28,7 @@ class SAL_DLLPUBLIC_RTTI FuConstruct : public FuDraw
 {
 public:
     FuConstruct(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
-                SdrModel* pDoc, const SfxRequest& rReq);
+                SdrModel& rDoc, const SfxRequest& rReq);
 
     virtual ~FuConstruct() override;
                                        // Mouse- & Key-Events

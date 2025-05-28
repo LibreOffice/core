@@ -27,7 +27,7 @@
 std::unique_ptr<SdrOutliner> FuText::MakeOutliner()
 {
     ScViewData& rViewData = rViewShell.GetViewData();
-    std::unique_ptr<SdrOutliner> pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *pDrDoc);
+    std::unique_ptr<SdrOutliner> pOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, rDrDoc);
 
     rViewData.UpdateOutlinerFlags(*pOutl);
 
@@ -36,7 +36,7 @@ std::unique_ptr<SdrOutliner> FuText::MakeOutliner()
 
     //  #i10426# The ref device isn't set to the EditEngine before SdrBeginTextEdit now,
     //  so the device must be taken from the model here.
-    OutputDevice* pRef = pDrDoc->GetRefDevice();
+    OutputDevice* pRef = rDrDoc.GetRefDevice();
     if (pRef && pRef != pWindow->GetOutDev())
         pRef->SetMapMode(MapMode(MapUnit::Map100thMM));
 

@@ -101,8 +101,8 @@ static void lcl_UpdateHyphenator( Outliner& rOutliner, const SdrObject* pObj )
 }
 
 FuText::FuText(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-               SdrModel* pDoc, const SfxRequest& rReq)
-    : FuConstruct(rViewSh, pWin, pViewP, pDoc, rReq)
+               SdrModel& rDoc, const SfxRequest& rReq)
+    : FuConstruct(rViewSh, pWin, pViewP, rDoc, rReq)
 {
 }
 
@@ -396,7 +396,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
                     // set needed attributes for scrolling
-                    SfxItemSetFixed<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST> aItemSet( pDrDoc->GetItemPool());
+                    SfxItemSetFixed<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST> aItemSet( rDrDoc.GetItemPool());
 
                     aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                     aItemSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
@@ -419,7 +419,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     if(auto pText = DynCastSdrTextObj( pObj))
                     {
-                        SfxItemSet aSet(pDrDoc->GetItemPool());
+                        SfxItemSet aSet(rDrDoc.GetItemPool());
 
                         pText->SetVerticalWriting(true);
 
@@ -628,7 +628,7 @@ rtl::Reference<SdrObject> FuText::CreateDefaultObject(const sal_uInt16 nID, cons
     // case SID_DRAW_NOTEEDIT:
 
     rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
-        *pDrDoc,
+        rDrDoc,
         pView->GetCurrentObjInventor(),
         pView->GetCurrentObjIdentifier()));
 
@@ -649,7 +649,7 @@ rtl::Reference<SdrObject> FuText::CreateDefaultObject(const sal_uInt16 nID, cons
 
             if(bVertical)
             {
-                SfxItemSet aSet(pDrDoc->GetItemPool());
+                SfxItemSet aSet(rDrDoc.GetItemPool());
 
                 aSet.Put(makeSdrTextAutoGrowWidthItem(true));
                 aSet.Put(makeSdrTextAutoGrowHeightItem(false));
@@ -661,7 +661,7 @@ rtl::Reference<SdrObject> FuText::CreateDefaultObject(const sal_uInt16 nID, cons
 
             if(bMarquee)
             {
-                SfxItemSetFixed<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST> aSet(pDrDoc->GetItemPool());
+                SfxItemSetFixed<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST> aSet(rDrDoc.GetItemPool());
 
                 aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                 aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );

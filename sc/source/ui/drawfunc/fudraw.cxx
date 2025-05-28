@@ -57,8 +57,8 @@ void collectUIInformation( const OUString& aevent )
 
 // base class for draw module specific functions
 FuDraw::FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-               SdrModel* pDoc, const SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
+               SdrModel& rDoc, const SfxRequest& rReq)
+    : FuPoor(rViewSh, pWin, pViewP, rDoc, rReq)
     , aNewPointer(PointerStyle::Arrow)
     , aOldPointer(PointerStyle::Arrow)
 {

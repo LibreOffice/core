@@ -42,7 +42,7 @@ protected:
     ScDrawView*     pView;
     ScTabViewShell& rViewShell;
     VclPtr<vcl::Window>     pWindow;
-    SdrModel*       pDrDoc;
+    SdrModel&       rDrDoc;
 
     SfxRequest      aSfxRequest;
 
@@ -63,7 +63,7 @@ private:
     bool            mbSelectionHasChanged;
 public:
     FuPoor(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, const SfxRequest& rReq);
+           SdrModel& rDoc, const SfxRequest& rReq);
     virtual ~FuPoor();
 
     // see member

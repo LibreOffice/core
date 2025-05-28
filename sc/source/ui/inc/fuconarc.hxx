@@ -26,7 +26,7 @@ class FuConstArc : public FuConstruct
 {
 public:
     FuConstArc(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
-               SdrModel* pDoc, const SfxRequest& rReq);
+               SdrModel& rDoc, const SfxRequest& rReq);
 
     virtual ~FuConstArc() override;
                                        // Mouse- & Key-Events

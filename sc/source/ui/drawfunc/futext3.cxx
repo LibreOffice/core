@@ -51,7 +51,7 @@ void FuText::StopEditMode()
     ScViewData& rViewData = rViewShell.GetViewData();
     ScDocument& rDoc = rViewData.GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    OSL_ENSURE( pDrawLayer && (pDrawLayer == pDrDoc), "FuText::StopEditMode - missing or different drawing layers" );
+    OSL_ENSURE( pDrawLayer && (pDrawLayer == &rDrDoc), "FuText::StopEditMode - missing or different drawing layers" );
 
     ScAddress aNotePos;
     ScPostIt* pNote = nullptr;

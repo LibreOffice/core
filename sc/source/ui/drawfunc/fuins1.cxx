@@ -267,9 +267,9 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
 FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
                                   vcl::Window*      pWin,
                                   ScDrawView*       pViewP,
-                                  SdrModel*         pDoc,
+                                  SdrModel&         rDoc,
                                   SfxRequest&       rReq )
-       : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
+       : FuPoor(rViewSh, pWin, pViewP, rDoc, rReq)
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     const SfxStringItem* pGraphicItem;
@@ -387,9 +387,9 @@ FuInsertGraphic::~FuInsertGraphic()
 FuInsertMedia::FuInsertMedia( ScTabViewShell&   rViewSh,
                               vcl::Window*      pWin,
                               ScDrawView*       pViewP,
-                              SdrModel*         pDoc,
+                              SdrModel&         rDoc,
                               const SfxRequest& rReq ) :
-    FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
+    FuPoor(rViewSh, pWin, pViewP, rDoc, rReq)
 {
 #if HAVE_FEATURE_AVMEDIA
     OUString     aURL;

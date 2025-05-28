@@ -27,7 +27,7 @@ class FuInsertGraphic : public FuPoor
 {
 public:
     FuInsertGraphic(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, SfxRequest& rReq);
+           SdrModel& rDoc, SfxRequest& rReq);
     virtual ~FuInsertGraphic() override;
 };
 
@@ -35,14 +35,14 @@ class FuInsertOLE : public FuPoor
 {
 public:
     FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, SfxRequest& rReq);
+           SdrModel& rDoc, SfxRequest& rReq);
 };
 
 class FuInsertChart : public FuPoor
 {
  public:
     FuInsertChart( ScTabViewShell& pViewSh, vcl::Window* pWin, ScDrawView* pView,
-                   SdrModel* pDoc, SfxRequest& rReq,
+                   SdrModel& rDoc, SfxRequest& rReq,
                    const Link<css::ui::dialogs::DialogClosedEvent*, void>& rLink);
 };
 
@@ -50,7 +50,7 @@ class FuInsertMedia : public FuPoor
 {
 public:
     FuInsertMedia(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, const SfxRequest& rReq);
+           SdrModel& rDoc, const SfxRequest& rReq);
     virtual ~FuInsertMedia() override;
 };
 

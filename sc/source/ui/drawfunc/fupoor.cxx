@@ -33,11 +33,11 @@
 #include <svx/sdrhittesthelper.hxx>
 
 FuPoor::FuPoor(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-               SdrModel* pDoc, const SfxRequest& rReq) :
+               SdrModel& rDoc, const SfxRequest& rReq) :
     pView(pViewP),
     rViewShell(rViewSh),
     pWindow(pWin),
-    pDrDoc(pDoc),
+    rDrDoc(rDoc),
     aSfxRequest(rReq),
     aScrollTimer("sc FuPoor aScrollTimer"),
     aDragTimer("sc FuPoor aDragTimer"),

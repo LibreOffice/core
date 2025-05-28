@@ -34,8 +34,8 @@
 
 using namespace com::sun::star;
 
-FuConstCustomShape::FuConstCustomShape(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP, SdrModel* pDoc, const SfxRequest& rReq )
-    : FuConstruct(rViewSh, pWin, pViewP, pDoc, rReq)
+FuConstCustomShape::FuConstCustomShape(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP, SdrModel& rDoc, const SfxRequest& rReq )
+    : FuConstruct(rViewSh, pWin, pViewP, rDoc, rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     if ( pArgs )
@@ -114,7 +114,7 @@ void FuConstCustomShape::Deactivate()
 rtl::Reference<SdrObject> FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, const tools::Rectangle& rRectangle)
 {
     rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
-        *pDrDoc,
+        rDrDoc,
         pView->GetCurrentObjInventor(),
         pView->GetCurrentObjIdentifier()));
 

@@ -216,8 +216,8 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
 }
 
 FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-           SdrModel* pDoc, SfxRequest& rReq)
-    : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
+           SdrModel& rDoc, SfxRequest& rReq)
+    : FuPoor(rViewSh, pWin, pViewP, rDoc, rReq)
 {
     if( ! rReq.IsAPI() )
         rReq.Done();
@@ -354,7 +354,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
                 aPnt.AdjustX( -(aSize.Width()) );      // move position to left edge
             tools::Rectangle aRect (aPnt, aSize);
             rtl::Reference<SdrOle2Obj> pObj = new SdrOle2Obj(
-                *pDoc, // TTTT should be reference
+                rDoc,
                 aObjRef,
                 aName,
                 aRect);
@@ -410,8 +410,8 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
 }
 
 FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-                             SdrModel* pDoc, SfxRequest& rReq, const Link<css::ui::dialogs::DialogClosedEvent*, void>& rLink)
-    : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
+                             SdrModel& rDoc, SfxRequest& rReq, const Link<css::ui::dialogs::DialogClosedEvent*, void>& rLink)
+    : FuPoor(rViewSh, pWin, pViewP, rDoc, rReq)
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -595,7 +595,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
 
     tools::Rectangle aRect (aStart, aSize);
     rtl::Reference<SdrOle2Obj> pObj = new SdrOle2Obj(
-        *pDoc, // TTTT should be reference
+        rDoc,
         svt::EmbeddedObjectRef(xObj, nAspect),
         aName,
         aRect);

@@ -29,7 +29,7 @@ class SAL_DLLPUBLIC_RTTI FuConstCustomShape : public FuConstruct
 
 public:
     FuConstCustomShape(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
-                       SdrModel* pDoc, const SfxRequest& rReq);
+                       SdrModel& rDoc, const SfxRequest& rReq);
 
     virtual ~FuConstCustomShape() override;
                                        // Mouse- & Key-Events

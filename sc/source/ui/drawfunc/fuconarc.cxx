@@ -28,8 +28,8 @@
 #include <osl/diagnose.h>
 
 FuConstArc::FuConstArc(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-                       SdrModel* pDoc, const SfxRequest& rReq)
-    : FuConstruct(rViewSh, pWin, pViewP, pDoc, rReq)
+                       SdrModel& rDoc, const SfxRequest& rReq)
+    : FuConstruct(rViewSh, pWin, pViewP, rDoc, rReq)
 {
 }
 
@@ -118,7 +118,7 @@ rtl::Reference<SdrObject> FuConstArc::CreateDefaultObject(const sal_uInt16 nID, 
     // case SID_DRAW_CIRCLECUT:
 
     rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
-        *pDrDoc,
+        rDrDoc,
         pView->GetCurrentObjInventor(),
         pView->GetCurrentObjIdentifier()));
 
@@ -136,7 +136,7 @@ rtl::Reference<SdrObject> FuConstArc::CreateDefaultObject(const sal_uInt16 nID, 
 
             pObj->SetLogicRect(aRect);
 
-            SfxItemSet aAttr(pDrDoc->GetItemPool());
+            SfxItemSet aAttr(rDrDoc.GetItemPool());
             aAttr.Put(makeSdrCircStartAngleItem(9000_deg100));
             aAttr.Put(makeSdrCircEndAngleItem(0_deg100));
 

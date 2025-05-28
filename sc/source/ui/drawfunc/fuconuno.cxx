@@ -24,8 +24,8 @@
 #include <svx/svxids.hrc>
 
 FuConstUnoControl::FuConstUnoControl(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-                                     SdrModel* pDoc, const SfxRequest& rReq)
-    : FuConstruct(rViewSh, pWin, pViewP, pDoc, rReq)
+                                     SdrModel& rDoc, const SfxRequest& rReq)
+    : FuConstruct(rViewSh, pWin, pViewP, rDoc, rReq)
     , nInventor(SdrInventor::Unknown)
     , nIdentifier(SdrObjKind::NONE)
 {
@@ -105,7 +105,7 @@ rtl::Reference<SdrObject> FuConstUnoControl::CreateDefaultObject(const sal_uInt1
     // case SID_FM_CREATE_CONTROL:
 
     rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
-        *pDrDoc,
+        rDrDoc,
         pView->GetCurrentObjInventor(),
         pView->GetCurrentObjIdentifier()));
 
