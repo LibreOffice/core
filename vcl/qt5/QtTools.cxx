@@ -357,6 +357,9 @@ QString vclToQtStringWithAccelerator(const OUString& rText)
 
 OUString qtToVclStringWithAccelerator(const QString& rText)
 {
+    if (rText.isEmpty())
+        return OUString();
+
     // find and replace single "&" used for accelerator
     qsizetype nIndex = 0;
     while (nIndex < rText.size())
