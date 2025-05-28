@@ -837,12 +837,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)
     CPPUNIT_ASSERT_LESS(rRedlines.size(), nRedline);
     pWrtShell->RejectRedline(nRedline);
 
-    // Then make sure the format-on-insert is rejected, i.e. BBB is not in the text anymore:
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: AAACCC
-    // - Actual  : AAABBBCCC
-    // i.e. only the format part of BBB was rejected, it wasn't removed from the document.
-    CPPUNIT_ASSERT_EQUAL(u"AAACCC"_ustr, pTextNode->GetText());
+    // Then make sure the format-on-insert is rejected, i.e. neither the format-on-insert BBB, nor
+    // the surrounding AAA and CCC inserts are in the text anymore:
+    // Without the accompanying fix in place, this test would have failed, the text was AAABBBCCC,
+    // just the format of BBB was dropped.
+    CPPUNIT_ASSERT(pTextNode->GetText().isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
