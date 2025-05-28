@@ -59,6 +59,8 @@
 
 using namespace ::com::sun::star;
 
+constexpr const char* PROPERTY_LOCALE = "locale";
+
 static GObjectClass *parent_class = nullptr;
 
 static AtkRelationType mapRelationType(accessibility::AccessibleRelationType eRelation)
@@ -429,7 +431,26 @@ wrapper_get_description( AtkObject *atk_obj )
 
 }
 
-/*****************************************************************************/
+static const char* wrapper_get_object_locale(AtkObject* pAtkObject)
+{
+    AtkObjectWrapper* pWrapper = ATK_OBJECT_WRAPPER(pAtkObject);
+
+    if (!pWrapper->mpContext.is())
+        return ATK_OBJECT_CLASS(parent_class)->get_object_locale(pAtkObject);
+
+    const css::lang::Locale aLocale = pWrapper->mpContext->getLocale();
+
+    const char* pCharset;
+    g_get_charset(&pCharset);
+
+    const OUString sLocale
+        = aLocale.Language + u"_" + aLocale.Country + u"." + OUString::fromUtf8(pCharset);
+    char* pLocale = g_strdup(sLocale.toUtf8().getStr());
+    // set pLocale as object data so it can be freed in atk_object_wrapper_finalize
+    g_free(g_object_get_data(G_OBJECT(pWrapper), PROPERTY_LOCALE));
+    g_object_set_data(G_OBJECT(pWrapper), PROPERTY_LOCALE, pLocale);
+    return pLocale;
+}
 
 static AtkAttributeSet *
 wrapper_get_attributes( AtkObject *atk_obj )
@@ -665,6 +686,9 @@ atk_object_wrapper_finalize (GObject *obj)
         pWrap->mpAccessible.clear();
     }
 
+    // free string if allocated in atk_wrapper_get_object_locale
+    g_free(g_object_get_data(obj, PROPERTY_LOCALE));
+
     atk_object_wrapper_dispose( pWrap );
 
     if (pWrap->mpOrig)
@@ -688,6 +712,7 @@ atk_object_wrapper_class_init (gpointer klass_, gpointer)
   // AtkObject methods
   atk_class->get_name = wrapper_get_name;
   atk_class->get_description = wrapper_get_description;
+  atk_class->get_object_locale = wrapper_get_object_locale;
   atk_class->get_attributes = wrapper_get_attributes;
   atk_class->get_n_children = wrapper_get_n_children;
   atk_class->ref_child = wrapper_ref_child;
