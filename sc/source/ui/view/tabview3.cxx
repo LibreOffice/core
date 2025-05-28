@@ -35,9 +35,7 @@
 #include <osl/diagnose.h>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
-#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
@@ -2467,28 +2465,25 @@ drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::getOver
 
         if (aStart != aEnd)
         {
+            // create outline polygon. Shrink by 1px due to working
+            // with pixel positions one cell right and below. We are
+            // in discrete (pixel) coordinates with start/end here,
+            // so just substract '1' from x and y to do that
             basegfx::B2DPolyPolygon aOutline(basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRange(
                     aStart.X(), aStart.Y(),
-                    aEnd.X(), aEnd.Y())));
+                    aEnd.X() - 1, aEnd.Y() - 1)));
 
             // transform from Pixels to LogicDrawCoordinates
             ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
             rOutDev.SetMapMode(pActiveWin->GetDrawMapMode());
             aOutline.transform(rOutDev.GetInverseViewTransformation());
 
-            // on overlay we can now design the look more freely, it
-            // uses the CellBackgroundColor combined with 50% transparence
-            // to not completely hide what may be behind.
-            // Also currently no need to shrink by 2px (?) right/bottom
-            // to not kill cell separation lines - may have to be re-added
-            // when transparency is not wanted
             aRetval.push_back(
-                rtl::Reference<drawinglayer::primitive2d::PolyPolygonRGBAPrimitive2D>(
-                    new drawinglayer::primitive2d::PolyPolygonRGBAPrimitive2D(
+                rtl::Reference<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                         aOutline,
-                        pEditView->GetBackgroundColor().getBColor(),
-                        0.5)));
+                        pEditView->GetBackgroundColor().getBColor())));
         }
     }
 
