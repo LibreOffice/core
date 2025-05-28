@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -15,16 +15,19 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
+#include <fmtcntnt.hxx>
+#include <ndtxt.hxx>
+
 using namespace ::com::sun::star;
 
 namespace
 {
 /// Tests for sw/source/writerfilter/ooxml/.
-class Test : public UnoApiTest
+class Test : public SwModelTestBase
 {
 public:
     Test()
-        : UnoApiTest(u"/sw/qa/writerfilter/ooxml/data/"_ustr)
+        : SwModelTestBase(u"/sw/qa/writerfilter/ooxml/data/"_ustr)
     {
     }
 };
@@ -84,6 +87,27 @@ CPPUNIT_TEST_FIXTURE(Test, testRecursiveHeaderRels)
     // the proportional line spacing defined as default for the entire document should be 108%
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default para style has 1.08 line-spacing", sal_Int16(108),
                                  aLineSpacing.Height);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNestedRuns)
+{
+    // Given a document with nested <w:r> in a shape text:
+    // When importing that document:
+    createSwDoc("nested-runs.docx");
+
+    // Then make sure the shape text is not lost:
+    SwDoc* pDoc = getSwDoc();
+    sw::FrameFormats<sw::SpzFrameFormat*>& rFlys = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(!rFlys.empty());
+    sw::SpzFrameFormat* pFly = rFlys[0];
+    const SwNodeIndex* pFlyStartIndex = pFly->GetContent().GetContentIdx();
+    CPPUNIT_ASSERT(pFlyStartIndex);
+    SwNodeIndex aNodeIndex(*pFlyStartIndex);
+    ++aNodeIndex;
+    SwTextNode* pTextNode = aNodeIndex.GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+    // Without the accompanying fix in place, this test would have failed, the shape was empty.
+    CPPUNIT_ASSERT_EQUAL(u"Test text box"_ustr, pTextNode->GetText());
 }
 }
 
