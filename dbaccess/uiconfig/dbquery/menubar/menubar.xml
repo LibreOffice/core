@@ -21,6 +21,7 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AddDirect"/>
       <menu:menuitem menu:id=".uno:Open"/>
+      <menu:menuitem menu:id=".uno:RecentFileList"/>
       <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:style="text"/>
