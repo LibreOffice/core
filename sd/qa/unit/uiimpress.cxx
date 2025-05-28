@@ -1813,6 +1813,38 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf163805)
+{
+    createSdImpressDoc();
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+
+    drawing::FillStyle eFillStyle;
+    Color aColor;
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle);
+    CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_NONE), static_cast<int>(eFillStyle));
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"FillColor"_ustr) >>= aColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), aColor);
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
+                                                         uno::UNO_QUERY);
+    xController->select(uno::Any(xShape));
+
+    uno::Sequence<beans::PropertyValue> aColorArgs
+        = { comphelper::makePropertyValue(u"FillColor.Color"_ustr, sal_Int32(0x800000)) };
+    dispatchCommand(mxComponent, u".uno:FillColor"_ustr, aColorArgs);
+
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_SOLID), static_cast<int>(eFillStyle));
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"FillColor"_ustr) >>= aColor);
+    CPPUNIT_ASSERT_EQUAL(COL_RED, aColor);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorNoColor)
 {
     // Given an empty Impress document:
