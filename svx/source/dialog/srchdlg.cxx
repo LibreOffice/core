@@ -1598,6 +1598,10 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
 
     // tdf#154818 - rearrange the search items
     const auto nPos = pListBox->find_text(rStr);
+    if (nPos == 0 && !pArr->empty() && pArr->at(0) == rStr)
+        // nothing to do, is already the first item
+        return;
+
     if (nPos != -1)
     {
         pListBox->remove(nPos);
