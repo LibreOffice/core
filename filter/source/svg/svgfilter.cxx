@@ -149,15 +149,28 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     return filterImpressOrDraw(rDescriptor);
 }
 
+css::uno::Reference<css::frame::XController> SVGFilter::getSourceController() const
+{
+    uno::Reference<frame::XController> xController;
+    // Current frame may be e.g. Basic. Try to get a controller from the source model first.
+    if (auto xModel = mxSrcDoc.query<frame::XModel>())
+        xController = xModel->getCurrentController();
+    // Try current frame as a fallback.
+    if (!xController)
+    {
+        uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
+        if (auto xFrame = xDesktop->getCurrentFrame()) // Manage headless case
+            xController = xFrame->getController();
+    }
+    return xController;
+}
+
 css::uno::Reference<css::frame::XController> SVGFilter::fillDrawImpressSelectedPages()
 {
-    uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
-    uno::Reference<frame::XFrame> xFrame = xDesktop->getCurrentFrame(); // Manage headless case
-    if (!xFrame)
+    uno::Reference<frame::XController> xController = getSourceController();
+    uno::Reference<drawing::framework::XControllerManager> xManager(xController, uno::UNO_QUERY);
+    if (!xManager)
         return {};
-    uno::Reference<frame::XController> xController(xFrame->getController(), uno::UNO_SET_THROW);
-    uno::Reference<drawing::framework::XControllerManager> xManager(xController,
-                                                                    uno::UNO_QUERY_THROW);
     uno::Reference<drawing::framework::XConfigurationController> xConfigController(
         xManager->getConfigurationController());
 
@@ -210,9 +223,9 @@ css::uno::Reference<css::frame::XController> SVGFilter::fillDrawImpressSelectedP
 
     if (mSelectedPages.empty())
     {
-        // apparently failed to clean selection - fallback to current page
-        uno::Reference<drawing::XDrawView> xDrawView(xController, uno::UNO_QUERY_THROW);
-        mSelectedPages.push_back(xDrawView->getCurrentPage());
+        // apparently failed to get a selection - fallback to current page
+        if (auto xDrawView = xController.query<drawing::XDrawView>())
+            mSelectedPages.push_back(xDrawView->getCurrentPage());
     }
     return xController;
 }
@@ -580,12 +593,7 @@ bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor
     if(!bSelectionOnly) // For Writer only the selection-only mode is supported
         return false;
 
-    uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
-    uno::Reference<frame::XController > xController;
-    if (uno::Reference<frame::XFrame> xFrame = xDesktop->getCurrentFrame())
-        xController.set(xFrame->getController(), uno::UNO_SET_THROW);
-
-    Reference< view::XSelectionSupplier > xSelection (xController, UNO_QUERY);
+    Reference<view::XSelectionSupplier> xSelection(getSourceController(), UNO_QUERY);
     if (!xSelection.is())
         return false;
 
