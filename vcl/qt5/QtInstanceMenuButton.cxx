@@ -176,9 +176,18 @@ void QtInstanceMenuButton::insertAction(QAction* pAction, int nPos)
 void QtInstanceMenuButton::handleButtonClicked()
 {
     if (m_pPopover)
+    {
+        // show popup horizontally centered below the button
+        m_pPopover->adjustSize();
+        QPoint aPos = m_pToolButton->mapToGlobal(QPoint(0, m_pToolButton->height()));
+        aPos.setX(aPos.x() + (m_pToolButton->width() - m_pPopover->width() / 2));
+        m_pPopover->move(aPos);
         m_pPopover->show();
+    }
     else
+    {
         m_pToolButton->showMenu();
+    }
 }
 
 void QtInstanceMenuButton::handleMenuItemTriggered(QAction* pAction)
