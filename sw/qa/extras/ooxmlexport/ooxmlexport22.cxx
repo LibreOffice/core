@@ -369,6 +369,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166511)
     CPPUNIT_ASSERT_EQUAL(aDiffIds.size(), nIds);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testLineBreakInRef)
+{
+    loadAndSave("line-break-in-ref.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    // Without the fix if fails with
+    // assertion failed
+    // - Expression: xmlXPathNodeSetGetLength(pXmlNodes) > 0
+    // - In <>, XPath '/w:document/w:body/w:p[1]/w:r[4]/w:t' not found
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[4]/w:t", u"Text1");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
