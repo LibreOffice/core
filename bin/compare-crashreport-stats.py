@@ -13,9 +13,10 @@ import requests
 from bs4 import BeautifulSoup
 import argparse
 
-def parse_url(url):
+def parse_url(version : str, session = requests):
     crashReports = {}
-    html_text = requests.get(url).text
+    url = "https://crashreport.libreoffice.org/stats/version/" + version + "?limit=1000&days=30"
+    html_text = session.get(url).text
     soup = BeautifulSoup(html_text, 'html.parser')
 
     table = soup.find("table", {"id": "data-table"}).tbody
@@ -35,10 +36,10 @@ if __name__ == '__main__':
 
     results = parser.parse_args()
 
-    oldVersion = parse_url(
-            "https://crashreport.libreoffice.org/stats/version/" + results.old + "?limit=1000&days=30")
-    newVersion = parse_url(
-            "https://crashreport.libreoffice.org/stats/version/" + results.new + "?limit=1000&days=30")
+    session = requests.Session()
+    session.headers.update({'Referer': 'https://crashreport.libreoffice.org'})
+    oldVersion = parse_url(results.old, session=session)
+    newVersion = parse_url(results.new, session=session)
 
     print(str(len(oldVersion)) + " crash reports in version " + results.old)
     print(str(len(newVersion)) + " crash reports in version " + results.new)
