@@ -81,6 +81,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/querydeletedictionarydialog.ui"_ustr,
         u"cui/ui/qrcodegen.ui"_ustr,
         u"cui/ui/querydialog.ui"_ustr,
+        u"cui/ui/searchattrdialog.ui"_ustr,
         u"cui/ui/securityoptionsdialog.ui"_ustr,
         u"cui/ui/selectpathdialog.ui"_ustr,
         u"cui/ui/similaritysearchdialog.ui"_ustr,
