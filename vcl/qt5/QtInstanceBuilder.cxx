@@ -162,12 +162,17 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"writerperfect/ui/exportepub.ui"_ustr,
     };
 
+    // These UI files are used in multiple places and only supported within
+    // native Qt dialogs/widgets
+    static std::unordered_set<OUString> aSupportedWithQtParent = {
+        u"cui/ui/appearance.ui"_ustr,
+    };
+
     if (aSupportedUIFiles.contains(rUIFile))
         return true;
 
-    // this tab page is currently only supported in the "Welcome" dialog, but
-    // not in the "Tools" -> "Options" dialog that's not using native Qt widgets yet
-    return rUIFile == u"cui/ui/appearance.ui" && dynamic_cast<const QtInstanceWidget*>(pParent);
+    return aSupportedWithQtParent.contains(rUIFile)
+           && dynamic_cast<const QtInstanceWidget*>(pParent);
 }
 
 std::unique_ptr<weld::MessageDialog> QtInstanceBuilder::weld_message_dialog(const OUString& id)
