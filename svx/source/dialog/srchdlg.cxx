@@ -1291,13 +1291,13 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
             pSearchItem->SetReplaceString( m_xReplaceLB->get_active_text() );
 
             if ( &rBtn == m_xReplaceBtn.get() )
-                Remember_Impl( m_xReplaceLB->get_active_text(), false );
+                Remember_Impl(false);
             else
             {
-                Remember_Impl( m_xSearchLB->get_active_text(), true );
+                Remember_Impl(true);
 
                 if ( &rBtn == m_xReplaceAllBtn.get() )
-                    Remember_Impl( m_xReplaceLB->get_active_text(), false );
+                    Remember_Impl(false);
             }
         }
 
@@ -1376,14 +1376,8 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
     {
         if ( !m_xLayoutBtn->get_active() || bInclusive )
         {
-            OUString aStr( m_xSearchLB->get_active_text() );
-
-            if ( !aStr.isEmpty() )
-                Remember_Impl( aStr, true );
-            aStr = m_xReplaceLB->get_active_text();
-
-            if ( !aStr.isEmpty() )
-                Remember_Impl( aStr, false );
+            Remember_Impl(true);
+            Remember_Impl(false);
         }
         SaveToModule_Impl();
         Close();
@@ -1588,17 +1582,18 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Toggleable&, void)
     pImpl->bSaveToModule = true;
 }
 
-void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
+void SvxSearchDialog::Remember_Impl(bool _bSearch)
 {
-    if ( rStr.isEmpty() )
-        return;
-
     std::vector<OUString>& rArr = _bSearch ? aSearchStrings : aReplaceStrings;
     weld::ComboBox& rListBox = _bSearch ? *m_xSearchLB : *m_xReplaceLB;
 
+    const OUString sText = rListBox.get_active_text();
+    if (sText.isEmpty())
+        return;
+
     // tdf#154818 - rearrange the search items
-    const auto nPos = rListBox.find_text(rStr);
-    if (nPos == 0 && !rArr.empty() && rArr.at(0) == rStr)
+    const int nPos = rListBox.find_text(sText);
+    if (nPos == 0 && !rArr.empty() && rArr.at(0) == sText)
         // nothing to do, is already the first item
         return;
 
@@ -1614,8 +1609,8 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
         rArr.erase(rArr.begin() + nRememberSize - 1);
     }
 
-    rArr.insert(rArr.begin(), rStr);
-    rListBox.insert_text(0, rStr);
+    rArr.insert(rArr.begin(), sText);
+    rListBox.insert_text(0, sText);
 }
 
 void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
@@ -2278,7 +2273,7 @@ void SvxSearchDialog::SaveToModule_Impl()
     {
         pSearchItem->SetSearchString ( m_xSearchLB->get_active_text() );
         pSearchItem->SetReplaceString( m_xReplaceLB->get_active_text() );
-        Remember_Impl( m_xSearchLB->get_active_text(), true );
+        Remember_Impl(true);
     }
 
     pSearchItem->SetRegExp( false );

@@ -256,7 +256,7 @@ private:
     SVX_DLLPRIVATE void Init_Impl( bool bHasItemSet );
     SVX_DLLPRIVATE void InitAttrList_Impl( const SfxItemSet* pSSet,
                                        const SfxItemSet* pRSet );
-    SVX_DLLPRIVATE void Remember_Impl( const OUString &rStr, bool bSearch );
+    SVX_DLLPRIVATE void Remember_Impl(bool bSearch);
     SVX_DLLPRIVATE void PaintAttrText_Impl();
     SVX_DLLPRIVATE OUString& BuildAttrText_Impl( OUString& rStr, bool bSrchFlag ) const;
 
