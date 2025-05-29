@@ -103,6 +103,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"filter/ui/xmlfiltersettings.ui"_ustr,
         u"filter/ui/xsltfilterdialog.ui"_ustr,
         u"modules/BasicIDE/ui/gotolinedialog.ui"_ustr,
+        u"modules/scalc/ui/groupbydate.ui"_ustr,
         u"modules/scalc/ui/inputstringdialog.ui"_ustr,
         u"modules/scalc/ui/insertcells.ui"_ustr,
         u"modules/scalc/ui/movecopysheet.ui"_ustr,
@@ -166,6 +167,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
     // native Qt dialogs/widgets
     static std::unordered_set<OUString> aSupportedWithQtParent = {
         u"cui/ui/appearance.ui"_ustr,
+        u"svt/ui/datewindow.ui"_ustr,
     };
 
     if (aSupportedUIFiles.contains(rUIFile))
