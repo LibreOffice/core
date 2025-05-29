@@ -131,10 +131,8 @@ public:
     // Window
     virtual void    Activate() override;
 
-    const SearchAttrItemList*   GetSearchItemList() const
-                                    { return pSearchList.get(); }
-    const SearchAttrItemList*   GetReplaceItemList() const
-                                    { return pReplaceList.get(); }
+    const SearchAttrItemList* GetSearchItemList() const { return m_pSearchList.get(); }
+    const SearchAttrItemList* GetReplaceItemList() const { return m_pReplaceList.get(); }
 
     TransliterationFlags        GetTransliterationFlags() const;
 
@@ -146,37 +144,36 @@ public:
     void Present();
 
 private:
-    SfxBindings&    rBindings;
+    SfxBindings& m_rBindings;
     Timer           m_aPresentIdle;
-    bool            bWriter;
-    bool            bSearch;
-    bool            bFormat;
-    bool            bReplaceBackwards;
-    SearchOptionFlags  nOptions;
-    bool            bSet;
-    bool            bConstruct;
-    ModifyFlags     nModifyFlag;
-    OUString        aStylesStr;
-    OUString        aLayoutStr;
-    OUString        aLayoutWriterStr;
-    OUString        aLayoutCalcStr;
-    OUString        aCalcStr;
-    sal_uInt16      nRememberSize;
+    bool m_bWriter;
+    bool m_bSearch;
+    bool m_bFormat;
+    bool m_bReplaceBackwards;
+    SearchOptionFlags m_nOptions;
+    bool m_bSet;
+    bool m_bConstruct;
+    ModifyFlags m_nModifyFlag;
+    OUString m_sStylesStr;
+    OUString m_sLayoutStr;
+    OUString m_sLayoutWriterStr;
+    OUString m_sLayoutCalcStr;
+    OUString m_sCalcStr;
+    sal_uInt16 m_nRememberSize;
 
-    std::vector<OUString> aSearchStrings;
-    std::vector<OUString> aReplaceStrings;
+    std::vector<OUString> m_aSearchStrings;
+    std::vector<OUString> m_aReplaceStrings;
 
-    std::unique_ptr<SearchDlg_Impl>      pImpl;
-    std::unique_ptr<SearchAttrItemList>  pSearchList;
-    std::unique_ptr<SearchAttrItemList>  pReplaceList;
-    std::unique_ptr<SvxSearchItem>       pSearchItem;
+    std::unique_ptr<SearchDlg_Impl> m_pImpl;
+    std::unique_ptr<SearchAttrItemList> m_pSearchList;
+    std::unique_ptr<SearchAttrItemList> m_pReplaceList;
+    std::unique_ptr<SvxSearchItem> m_pSearchItem;
 
-    std::unique_ptr<SvxSearchController> pSearchController;
-    std::unique_ptr<SvxSearchController> pOptionsController;
-    std::unique_ptr<SvxSearchController> pFamilyController;
+    std::unique_ptr<SvxSearchController> m_pSearchController;
+    std::unique_ptr<SvxSearchController> m_pOptionsController;
+    std::unique_ptr<SvxSearchController> m_pFamilyController;
 
-    mutable TransliterationFlags
-                            nTransliterationFlags;
+    mutable TransliterationFlags m_nTransliterationFlags;
 
     bool m_executingSubDialog = false;
 
