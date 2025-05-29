@@ -284,6 +284,7 @@ private:
     bool filterImpressOrDraw( const Sequence< PropertyValue >& rDescriptor );
     bool filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor );
 
+    css::uno::Reference<css::frame::XController> getSourceController() const;
     css::uno::Reference<css::frame::XController> fillDrawImpressSelectedPages();
 
 protected:
