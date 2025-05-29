@@ -15,6 +15,7 @@
 #include <QtBuilder.hxx>
 #include <QtInstanceAssistant.hxx>
 #include <QtInstanceBox.hxx>
+#include <QtInstanceCalendar.hxx>
 #include <QtInstanceCheckButton.hxx>
 #include <QtInstanceComboBox.hxx>
 #include <QtInstanceDrawingArea.hxx>
@@ -359,10 +360,12 @@ std::unique_ptr<weld::Image> QtInstanceBuilder::weld_image(const OUString& rId)
     return xRet;
 }
 
-std::unique_ptr<weld::Calendar> QtInstanceBuilder::weld_calendar(const OUString&)
+std::unique_ptr<weld::Calendar> QtInstanceBuilder::weld_calendar(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QCalendarWidget* pCalendarWidget = m_xBuilder->get<QCalendarWidget>(rId);
+    std::unique_ptr<weld::Calendar> xRet(
+        pCalendarWidget ? std::make_unique<QtInstanceCalendar>(pCalendarWidget) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Entry> QtInstanceBuilder::weld_entry(const OUString& rId)

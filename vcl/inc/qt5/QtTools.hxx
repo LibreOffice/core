@@ -21,6 +21,7 @@
 
 #include <config_vclplug.h>
 
+#include <QtCore/QDate>
 #include <QtCore/QPoint>
 #include <QtCore/QRect>
 #include <QtCore/QSize>
@@ -32,6 +33,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <tools/date.hxx>
 #include <tools/gen.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/event.hxx>
@@ -84,6 +86,13 @@ inline Color toColor(const QColor& rColor)
 {
     return Color(rColor.red(), rColor.green(), rColor.blue());
 }
+
+inline QDate toQDate(const Date& rDate)
+{
+    return QDate(rDate.GetYear(), rDate.GetMonth(), rDate.GetDay());
+}
+
+inline Date toDate(const QDate& rDate) { return Date(rDate.day(), rDate.month(), rDate.year()); }
 
 Qt::DropActions toQtDropActions(sal_Int8 dragOperation);
 sal_Int8 toVclDropActions(Qt::DropActions dragOperation);

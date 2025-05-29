@@ -29,6 +29,7 @@
 #include <QtWidgets/QActionGroup>
 #endif
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCalendarWidget>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
@@ -199,6 +200,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         QPushButton* pButton = new QPushButton(pParentWidget);
         setButtonProperties(*pButton, rMap, pParentWidget);
         pObject = pButton;
+    }
+    else if (sName == u"GtkCalendar")
+    {
+        pObject = new QCalendarWidget(pParentWidget);
     }
     else if (sName == u"GtkCheckButton")
     {
