@@ -3292,13 +3292,25 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             nPamEndtNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
 
-            if (pTmp->GetType() == RedlineType::Format && pTmp->GetStackCount() > 1
-                && pTmp->GetType(1) == RedlineType::Insert)
+            bool bHierarchicalFormat = pTmp->GetType() == RedlineType::Format && pTmp->GetStackCount() > 1;
+            bool bHandled = false;
+            if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
             {
                 // This combination of 2 redline types prefers accepting the inner one first.
                 bRet |= lcl_DeleteInnerRedline(maRedlineTable, nRdlIdx, 1);
+                bHandled = true;
             }
-            else
+            else if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Delete)
+            {
+                // Get rid of the format itself and then accept the delete by deleting the range.
+                SwPaM aPam(*pTmp->Start(), *pTmp->End());
+                bRet |= lcl_RejectRedline(maRedlineTable, nRdlIdx, bCallDelete);
+                // Handles undo/redo itself.
+                m_rDoc.getIDocumentContentOperations().DeleteRange(aPam);
+                bHandled = true;
+            }
+
+            if (!bHandled)
             {
                 bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
             }
