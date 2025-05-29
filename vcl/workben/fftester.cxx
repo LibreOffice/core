@@ -43,16 +43,11 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/configuration.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/event.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/filter/PngImageReader.hxx>
-#include <vcl/filter/SvmReader.hxx>
 #include <vcl/font/EOTConverter.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/wmf.hxx>
-#include <vcl/wrkwin.hxx>
-#include <fltcall.hxx>
 #include <filter/TiffReader.hxx>
 #include <filter/TgaReader.hxx>
 #include <filter/PictReader.hxx>

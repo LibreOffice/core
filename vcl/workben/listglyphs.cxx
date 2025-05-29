@@ -8,20 +8,15 @@
  */
 
 #include <osl/file.hxx>
-#include <osl/process.h>
-#include <rtl/textenc.h>
 #include <sal/main.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <tools/degree.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 
-#include <vcl/font/Feature.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vclmain.hxx>
 #include <vcl/wrkwin.hxx>
 
 #include <font/LogicalFontInstance.hxx>

@@ -10,23 +10,16 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <vcl/vclmain.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
-#include <tools/vcompat.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>

@@ -8,7 +8,6 @@
  */
 
 #include <osl/file.hxx>
-#include <osl/process.h>
 #include <rtl/textenc.h>
 #include <sal/main.h>
 #include <comphelper/processfactory.hxx>
@@ -21,7 +20,6 @@
 #include <vcl/font/Feature.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vclmain.hxx>
 #include <vcl/wrkwin.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>

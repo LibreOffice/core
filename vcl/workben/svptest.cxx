@@ -30,7 +30,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/gradient.hxx>
@@ -39,10 +38,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
-
-#include <rtl/ustrbuf.hxx>
-
-#include <math.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

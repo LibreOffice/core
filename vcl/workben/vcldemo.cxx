@@ -9,12 +9,8 @@
 
 #include <sal/config.h>
 
-#include <memory>
 #include <thread>
 
-#include <config_features.h>
-
-#include <math.h>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 
@@ -22,9 +18,6 @@
 #include <comphelper/random.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -37,14 +30,10 @@
 #include <salhelper/thread.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <vcl/toolkit/button.hxx>
-#include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/help.hxx>
@@ -54,7 +43,6 @@
 #include <vcl/bitmap/BitmapEmbossGreyFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <framework/desktop.hxx>

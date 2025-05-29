@@ -20,22 +20,16 @@
 
 #include <math.h>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/toolkit/button.hxx>
-#include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>
 #include <vcl/wrkwin.hxx>
