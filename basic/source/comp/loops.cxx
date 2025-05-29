@@ -58,7 +58,7 @@ void SbiParser::If()
             eTok = Peek();
             if( IsEof() )
             {
-                Error( ERRCODE_BASIC_BAD_BLOCK, IF ); bAbort = true; return;
+                Error( ERRCODE_BASIC_BAD_BLOCK, ENDIF ); bAbort = true; return;
             }
         }
         while( eTok == ELSEIF )
@@ -85,7 +85,7 @@ void SbiParser::If()
                 eTok = Peek();
                 if( IsEof() )
                 {
-                    Error( ERRCODE_BASIC_BAD_BLOCK, ELSEIF );  bAbort = true; return;
+                    Error( ERRCODE_BASIC_BAD_BLOCK, ENDIF );  bAbort = true; return;
                 }
             }
         }
@@ -101,7 +101,12 @@ void SbiParser::If()
         }
         else if( eTok == ENDIF )
             Next();
-
+        else
+        {
+            Error(ERRCODE_BASIC_BAD_BLOCK, ENDIF);
+            bAbort = true;
+            return;
+        }
 
         while( iJmp > 0 )
         {

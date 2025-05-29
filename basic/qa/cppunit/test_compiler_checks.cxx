@@ -258,4 +258,16 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf162986_property_let_end_functi
     CPPUNIT_ASSERT(aMacro.HasError());
 }
 
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testMissingEndIf)
+{
+    MacroSnippet aMacro(u"Sub doUnitTest(argName)\n"
+                        "  If False Then\n"
+                        "End Sub\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_BAD_BLOCK, aMacro.getError().GetCode());
+    // Without the fix, this was "End Sub"
+    CPPUNIT_ASSERT_EQUAL(u"End If"_ustr, aMacro.getError().GetArg1());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
