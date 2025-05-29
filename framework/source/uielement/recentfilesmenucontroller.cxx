@@ -202,10 +202,14 @@ void RecentFilesMenuController::fillPopupMenu(std::unique_lock<std::mutex>& /*rG
                     nItemPosModule++;
                 }
                 // tdf#56696 - insert documents of the current module
-                else if ((bShowCurrentModuleOnly
+                else if (const auto aDocServiceName
+                         = aConfigHelper.GetDocServiceNameFromFilter(rPickListEntry.sFilter);
+                         (bShowCurrentModuleOnly
                           || (nItemPosModule - nItemPosPinned) < MAX_MENU_ITEMS_PER_MODULE)
-                         && aConfigHelper.GetDocServiceNameFromFilter(rPickListEntry.sFilter)
-                                == m_aModuleName)
+                         && (m_aModuleName == aDocServiceName
+                             // tdf#166764 - show list of recent documents in Base subdialogs
+                             || (m_aModuleName.startsWith("com.sun.star.sdb")
+                                 && aDocServiceName.startsWith("com.sun.star.sdb"))))
                 {
                     insertHistoryItemAtPos(rPickListEntry, nItemPosModule);
                     nItemPosModule++;
