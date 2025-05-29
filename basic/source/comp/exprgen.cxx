@@ -58,7 +58,7 @@ const OpTable aOpTable [] = {
     { CAT,  SbiOpcode::CAT_ },
     { LIKE, SbiOpcode::LIKE_ },
     { IS,   SbiOpcode::IS_ },
-    { NIL,  SbiOpcode::NOP_ }};
+};
 
 // Output of an element
 void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
@@ -162,11 +162,12 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
         {
             pRight->Gen(rGen);
         }
-        for( const OpTable* p = aOpTable; p->eTok != NIL; p++ )
+        for (const OpTable& op : aOpTable)
         {
-            if( p->eTok == eTok )
+            if (op.eTok == eTok)
             {
-                rGen.Gen( p->eOp ); break;
+                rGen.Gen(op.eOp);
+                break;
             }
         }
     }

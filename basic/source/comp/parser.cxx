@@ -107,8 +107,6 @@ const SbiStatement StmntTable [] = {
 { WHILE,    &SbiParser::While,      N, Y, }, // WHILE
 { WITH,     &SbiParser::With,       N, Y, }, // WITH
 { WRITE,    &SbiParser::Write,      N, Y, }, // WRITE
-
-{ NIL, nullptr, N, N }
 };
 
 SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
@@ -408,11 +406,9 @@ bool SbiParser::Parse()
 
         // statement parsers
 
-        const SbiStatement* p;
-        for( p = StmntTable; p->eTok != NIL; p++ )
-            if( p->eTok == eCurTok )
-                break;
-        if( p->eTok != NIL )
+        const auto p = std::find_if(std::begin(StmntTable), std::end(StmntTable),
+                                    [this](auto element) { return element.eTok == eCurTok; });
+        if (p != std::end(StmntTable))
         {
             if( !pProc && !p->bMain )
                 Error( ERRCODE_BASIC_NOT_IN_MAIN, eCurTok );
