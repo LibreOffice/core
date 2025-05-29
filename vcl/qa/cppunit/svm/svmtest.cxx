@@ -25,14 +25,12 @@
 #include <vcl/metaact.hxx>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
-#include <salhelper/simplereferenceobject.hxx>
 #include <sal/log.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <config_features.h>
 #include <config_cairo_rgba.h>
 #include <config_fonts.h>
 #include <vcl/skia/SkiaHelper.hxx>

@@ -12,7 +12,6 @@
 #include <vcl/bitmapex.hxx>
 #include <tools/stream.hxx>
 #include <filter/BmpReader.hxx>
-#include <unotools/tempfile.hxx>
 
 class BmpFilterTest : public test::BootstrapFixture
 {

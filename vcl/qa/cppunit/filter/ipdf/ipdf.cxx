@@ -17,7 +17,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/tempfile.hxx>
 #include <sfx2/sfxbasemodel.hxx>
-#include <svx/svdview.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/signaturelinehelper.hxx>
 #include <sfx2/objsh.hxx>

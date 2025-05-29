@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
 #include <test/unoapi_test.hxx>
 
 #include <font/TTFStructure.hxx>

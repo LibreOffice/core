@@ -9,10 +9,8 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <tools/stream.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 

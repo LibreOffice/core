@@ -21,6 +21,12 @@ excludelist:
     vcl/inc/svsys.h:
     # Needed for nice system abstraction
     - unx/svsys.h
+    vcl/qa/cppunit/lifecycle.cxx:
+    # Needed for template
+    - com/sun/star/awt/XVclWindowPeer.hpp
+    vcl/qa/cppunit/mnemonic.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
     vcl/qa/cppunit/outdev.cxx:
     # Needed for direct member access
     - basegfx/matrix/b2dhommatrix.hxx

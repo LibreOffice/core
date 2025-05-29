@@ -17,8 +17,6 @@
 
 #include "fontmocks.hxx"
 
-#include <memory>
-
 constexpr int FONTID = 1;
 
 class VclPhysicalFontCollectionTest : public test::BootstrapFixture

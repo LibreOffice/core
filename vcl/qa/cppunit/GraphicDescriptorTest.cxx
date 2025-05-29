@@ -10,7 +10,6 @@
 #include <unotest/bootstrapfixturebase.hxx>
 
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <com/sun/star/uno/Sequence.hxx>

@@ -13,7 +13,6 @@
 
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
-#include <font/PhysicalFontFaceCollection.hxx>
 #include <fontattributes.hxx>
 #include <font/LogicalFontInstance.hxx>
 

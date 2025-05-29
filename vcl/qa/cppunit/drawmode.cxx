@@ -13,7 +13,6 @@
 #include <tools/color.hxx>
 
 #include <vcl/font.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>

@@ -17,8 +17,6 @@
 
 #include <font/LogicalFontInstance.hxx>
 
-#include <memory>
-
 class VclLogicalFontInstanceTest : public test::BootstrapFixture
 {
 public:

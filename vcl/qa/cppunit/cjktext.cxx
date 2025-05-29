@@ -16,12 +16,8 @@
 #include <vcl/BitmapReadAccess.hxx>
 #include <comphelper/errcode.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
-#include <ImplLayoutArgs.hxx>
-#include <TextLayoutCache.hxx>
 #include <salgdi.hxx>
 
 class VclCjkTextTest : public test::BootstrapFixture

@@ -14,9 +14,6 @@
 
 #include <tools/fontenum.hxx>
 #include <unotools/fontcfg.hxx>
-#include <o3tl/sorted_vector.hxx>
-
-#include <vcl/virdev.hxx>
 
 #include <font/PhysicalFontFamily.hxx>
 

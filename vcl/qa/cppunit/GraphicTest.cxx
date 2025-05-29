@@ -9,10 +9,8 @@
 
 #include <sal/config.h>
 #include <config_oox.h>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
@@ -24,11 +22,8 @@
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
 #include <unotest/directories.hxx>
-#include <comphelper/DirectoryHelper.hxx>
 #include <comphelper/hash.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
-#include <vcl/cvtgrf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/wmf.hxx>
 

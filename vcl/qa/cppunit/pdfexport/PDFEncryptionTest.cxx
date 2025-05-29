@@ -11,25 +11,20 @@
 #include <config_oox.h>
 
 #include <test/unoapi_test.hxx>
-#include <o3tl/string_view.hxx>
 #include <o3tl/numeric.hxx>
 
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/crypto/Crypto.hxx>
 #include <comphelper/hash.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/propertyvalue.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
-#include <vcl/pdfread.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <algorithm>
 #include <memory>
 #include <string_view>
-#include <cmath>
 
 #include <pdf/PDFEncryptorR6.hxx>
 

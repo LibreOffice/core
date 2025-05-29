@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
 #include <config_fonts.h>
 
 #include <ostream>
@@ -22,14 +21,10 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<double>
 #endif
 #include <test/bootstrapfixture.hxx>
 
-#include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 // workaround MSVC2015 issue with std::unique_ptr
 #include <sallayout.hxx>
-#include <salgdi.hxx>
 
-
-#include <ImplLayoutArgs.hxx>
 
 #if HAVE_MORE_FONTS
 static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int32>& rVec)

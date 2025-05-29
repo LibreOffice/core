@@ -10,14 +10,11 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <test/bootstrapfixture.hxx>
-#include <sal/log.hxx>
 #include <tools/stream.hxx>
 
 #include <vcl/BitmapReadAccess.hxx>
 #include <comphelper/errcode.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
 #include <ImplLayoutArgs.hxx>

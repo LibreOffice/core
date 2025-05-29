@@ -8,27 +8,10 @@
  */
 
 #include <test/bootstrapfixture.hxx>
-#include <test/outputdevice.hxx>
-
-#include <sal/log.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/vector/b2enums.hxx>
 
 #include <vcl/gradient.hxx>
-#include <vcl/lineinfo.hxx>
-#include <vcl/print.hxx>
-#include <vcl/rendercontext/RasterOp.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
-
-#include <vcl/BitmapWriteAccess.hxx>
-#include <bufferdevice.hxx>
-#include <window.h>
 
 class VclGradientTest : public test::BootstrapFixture
 {

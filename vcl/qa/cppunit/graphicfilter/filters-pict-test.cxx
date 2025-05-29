@@ -9,7 +9,6 @@
 
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
-#include <vcl/FilterConfigItem.hxx>
 #include <test/xmltesttools.hxx>
 #include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>

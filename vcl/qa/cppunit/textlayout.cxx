@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
 #include <config_fonts.h>
 
 #include <test/bootstrapfixture.hxx>

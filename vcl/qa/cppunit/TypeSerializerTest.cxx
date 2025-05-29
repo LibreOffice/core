@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 #include <config_oox.h>
-#include <config_features.h>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>

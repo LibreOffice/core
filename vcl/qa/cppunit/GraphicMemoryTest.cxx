@@ -11,13 +11,11 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
 
 #include <impgraph.hxx>
-#include <graphic/GraphicFormatDetector.hxx>
 #include <graphic/MemoryManaged.hxx>
 
 using namespace css;

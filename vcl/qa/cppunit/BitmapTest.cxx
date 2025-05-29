@@ -11,10 +11,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <config_features.h>
-
-#include <rtl/strbuf.hxx>
-
 #include <vcl/BitmapTools.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap/BitmapMonochromeFilter.hxx>

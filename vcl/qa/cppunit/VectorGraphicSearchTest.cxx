@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
-
 #include <string_view>
 
 #include <cppunit/TestAssert.h>

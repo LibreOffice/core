@@ -11,7 +11,6 @@
 #include <test/bootstrapfixture.hxx>
 #include <test/outputdevice.hxx>
 
-#include <sal/log.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

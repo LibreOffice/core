@@ -13,12 +13,8 @@
 #include <cppunit/TestAssert.h>
 
 #include <rtl/ref.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <vcl/fontcapabilities.hxx>
-#include <vcl/fontcharmap.hxx>
-#include <vcl/virdev.hxx>
-
+#include <font/PhysicalFontFaceCollection.hxx>
 #include "fontmocks.hxx"
 
 class VclPhysicalFontFaceCollectionTest : public test::BootstrapFixture

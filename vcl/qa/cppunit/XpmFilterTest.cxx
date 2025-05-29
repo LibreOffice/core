@@ -13,7 +13,6 @@
 #include <vcl/filter/ImportOutput.hxx>
 #include <tools/stream.hxx>
 #include <filter/XpmReader.hxx>
-#include <unotools/tempfile.hxx>
 
 class XpmFilterTest : public test::BootstrapFixture
 {

@@ -23,7 +23,6 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
 #include <o3tl/string_view.hxx>
-#include <officecfg/Office/Common.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 
