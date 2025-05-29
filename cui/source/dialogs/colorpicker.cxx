@@ -771,9 +771,18 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMFYellow;
     std::unique_ptr<weld::MetricSpinButton> m_xMFKey;
 
+    ColorMode meMode;
+
+    double mdRed, mdGreen, mdBlue;
+    double mdHue, mdSat, mdBri;
+    double mdCyan, mdMagenta, mdYellow, mdKey;
+
 public:
     ColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nMode);
 
+    Color GetColor() const;
+
+private:
     void update_color(UpdateFlags n = UpdateFlags::All);
 
     DECL_LINK(ColorFieldControlModifydl, ColorFieldControl&, void);
@@ -783,16 +792,7 @@ public:
     DECL_LINK(ColorModifyEditHdl, weld::Entry&, void);
     DECL_LINK(ModeModifyHdl, weld::Toggleable&, void);
 
-    Color GetColor() const;
-
     void setColorComponent(ColorComponent nComp, double dValue);
-
-private:
-    ColorMode meMode;
-
-    double mdRed, mdGreen, mdBlue;
-    double mdHue, mdSat, mdBri;
-    double mdCyan, mdMagenta, mdYellow, mdKey;
 };
 
 }
