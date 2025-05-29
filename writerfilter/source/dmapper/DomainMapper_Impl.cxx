@@ -2188,7 +2188,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
         if (pFieldContext && pFieldContext->IsCommandCompleted())
         {
-            if (pFieldContext->GetFieldId() == FIELD_IF)
+            if (pFieldContext->GetFieldId() == FIELD_IF || pFieldContext->GetFieldId() == FIELD_REF)
             {
                 // Conditional text fields can't contain newlines, finish the paragraph later.
                 FieldParagraph aFinish{pPropertyMap, bRemove};
