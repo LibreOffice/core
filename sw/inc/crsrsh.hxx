@@ -472,7 +472,7 @@ public:
     SW_DLLPUBLIC void SwapPam();
     SW_DLLPUBLIC bool TestCurrPam( const Point & rPt,
                       bool bTstHit = false);   // only exact matches
-    void KillPams();
+    SW_DLLPUBLIC void KillPams();
 
     /// store a copy of the current cursor on the cursor stack
     SW_DLLPUBLIC void Push();

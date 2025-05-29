@@ -884,6 +884,27 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
     CPPUNIT_ASSERT(!rRedlineData.Next());
     // This was AAACCC.
     CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, pTextNode->GetText());
+
+    // And when accepting the delete with the cursor inside BBB:
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, pTextNode->GetText());
+    pWrtShell->KillPams();
+    SwPaM* pCursor = pWrtShell->GetCursor();
+    pCursor->DeleteMark();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Move inside "BBB".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    SwRedlineTable::size_type nRedline{};
+    rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    CPPUNIT_ASSERT_LESS(rRedlines.size(), nRedline);
+    pWrtShell->AcceptRedline(nRedline);
+
+    // Then make sure BBB gets removed from the document:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: AAACCC
+    // - Actual  : AAABBBCCC
+    // i.e. BBB's formatting was removed, but not BBB itself.
+    CPPUNIT_ASSERT_EQUAL(u"AAACCC"_ustr, pTextNode->GetText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
