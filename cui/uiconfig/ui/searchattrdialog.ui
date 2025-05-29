@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -17,29 +17,29 @@
     </columns>
   </object>
   <object class="GtkDialog" id="SearchAttrDialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="searchattrdialog|SearchAttrDialog">Attributes</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -52,8 +52,8 @@
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -66,8 +66,8 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -81,27 +81,27 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="shadow_type">in</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTreeView" id="treeview">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="vexpand">True</property>
                 <property name="model">liststore1</property>
-                <property name="headers_visible">False</property>
-                <property name="search_column">0</property>
-                <property name="show_expanders">False</property>
+                <property name="headers-visible">False</property>
+                <property name="search-column">0</property>
+                <property name="show-expanders">False</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
                 </child>
@@ -147,9 +147,6 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="SearchAttrDialog-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="searchattrdialog|extended_tip|SearchAttrDialog">Choose the text attributes that you want to search for. For example, if you search for the Font attribute, all instances of text that do not use the default font are found. All text that has a directly coded font attribute, and all text where a style switches the font attribute, are found.</property>
