@@ -2391,6 +2391,28 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf158551)
     CPPUNIT_ASSERT_EQUAL(u"10"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf166767)
+{
+    createScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"Test");
+
+    goToCell(u"A1"_ustr);
+
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::BITMAP)) } });
+
+    // Without the fix in place, this test would have crashed
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf159174)
 {
     createScDoc();
