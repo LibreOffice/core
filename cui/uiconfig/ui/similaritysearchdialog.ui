@@ -117,6 +117,23 @@
               </packing>
             </child>
             <child>
+              <object class="GtkSpinButton" id="otherfld">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="otherfld-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="similaritysearchdialog|extended_tip|otherfld">Enter the number of characters in the search term that can be exchanged.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -131,6 +148,23 @@
               </packing>
             </child>
             <child>
+              <object class="GtkSpinButton" id="longerfld">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment2</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="longerfld-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="similaritysearchdialog|extended_tip|longerfld">Enter the maximum number of characters by which a word can exceed the number of characters in the search term.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -141,6 +175,23 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="shorterfld">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment3</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="shorterfld-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="similaritysearchdialog|extended_tip|shorterfld">Enter the number of characters by which a word can be shorter than the search term.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
                 <property name="top-attach">2</property>
               </packing>
             </child>
@@ -162,57 +213,6 @@
                 <property name="left-attach">0</property>
                 <property name="top-attach">3</property>
                 <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="otherfld">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="truncate-multiline">True</property>
-                <property name="adjustment">adjustment1</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="otherfld-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="similaritysearchdialog|extended_tip|otherfld">Enter the number of characters in the search term that can be exchanged.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="longerfld">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="truncate-multiline">True</property>
-                <property name="adjustment">adjustment2</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="longerfld-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="similaritysearchdialog|extended_tip|longerfld">Enter the maximum number of characters by which a word can exceed the number of characters in the search term.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="shorterfld">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="truncate-multiline">True</property>
-                <property name="adjustment">adjustment3</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="shorterfld-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="similaritysearchdialog|extended_tip|shorterfld">Enter the number of characters by which a word can be shorter than the search term.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
               </packing>
             </child>
           </object>
