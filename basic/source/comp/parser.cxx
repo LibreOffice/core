@@ -85,10 +85,8 @@ const SbiStatement StmntTable [] = {
 { LET,      &SbiParser::Assign,     N, Y, }, // LET
 { LINE,     &SbiParser::Line,       N, Y, }, // LINE, -> LINE INPUT (#i92642)
 { LINEINPUT,&SbiParser::LineInput,  N, Y, }, // LINE INPUT
-{ LOOP,     &SbiParser::BadBlock,   N, Y, }, // LOOP
 { LSET,     &SbiParser::LSet,       N, Y, }, // LSET
 { NAME,     &SbiParser::Name,       N, Y, }, // NAME
-{ NEXT,     &SbiParser::BadBlock,   N, Y, }, // NEXT
 { ON,       &SbiParser::On,         N, Y, }, // ON
 { OPEN,     &SbiParser::Open,       N, Y, }, // OPEN
 { OPTION,   &SbiParser::Option,     Y, N, }, // OPTION
@@ -106,9 +104,7 @@ const SbiStatement StmntTable [] = {
 { STOP,     &SbiParser::Stop,       N, Y, }, // STOP
 { SUB,      &SbiParser::SubFunc,    Y, N, }, // SUB
 { TYPE,     &SbiParser::Type,       Y, N, }, // TYPE
-{ UNTIL,    &SbiParser::BadBlock,   N, Y, }, // UNTIL
 { WHILE,    &SbiParser::While,      N, Y, }, // WHILE
-{ WEND,     &SbiParser::BadBlock,   N, Y, }, // WEND
 { WITH,     &SbiParser::With,       N, Y, }, // WITH
 { WRITE,    &SbiParser::Write,      N, Y, }, // WRITE
 

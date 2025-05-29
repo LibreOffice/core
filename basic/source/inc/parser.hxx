@@ -95,7 +95,6 @@ public:
 
     void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo );  // let or call
     void ErrorStmnt();              // ERROR n
-    void BadBlock();                // LOOP/WEND/NEXT
     void NoIf();                    // ELSE/ELSE IF without IF
     void Assign();                  // LET
     void Attribute();

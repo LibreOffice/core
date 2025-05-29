@@ -363,16 +363,6 @@ void SbiParser::With()
     CloseBlock();
 }
 
-// LOOP/NEXT/WEND without construct
-
-void SbiParser::BadBlock()
-{
-    if( eEndTok )
-        Error( ERRCODE_BASIC_BAD_BLOCK, eEndTok );
-    else
-        Error( ERRCODE_BASIC_BAD_BLOCK, u"Loop/Next/Wend"_ustr );
-}
-
 // On expr Goto/Gosub n,n,n...
 
 void SbiParser::OnGoto()
