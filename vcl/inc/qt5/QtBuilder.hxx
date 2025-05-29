@@ -45,13 +45,13 @@ public:
     template <typename T = QWidget> T* get(const OUString& rId);
 
     QObject* makeObject(QObject* pParent, std::u16string_view sName, std::string_view sType,
-                        const OUString& sID, stringmap& rMap);
+                        const OUString& rId, stringmap& rMap);
 
     virtual void applyAtkProperties(QObject* pObject, const stringmap& rProperties,
                                     bool bToolbarItem) override;
     virtual void applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
                                         const stringmap& rPackingProperties) override;
-    virtual void applyTabChildProperties(QObject* pParent, const std::vector<OUString>& rIDs,
+    virtual void applyTabChildProperties(QObject* pParent, const std::vector<OUString>& rIds,
                                          std::vector<vcl::EnumContext::Context>& rContext,
                                          stringmap& rProperties,
                                          stringmap& rAtkProperties) override;
@@ -59,7 +59,7 @@ public:
                                               const std::vector<ComboBoxTextItem>& rItems) override;
 
     virtual QObject* insertObject(QObject* pParent, const OUString& rClass, std::string_view sType,
-                                  const OUString& rID, stringmap& rProps,
+                                  const OUString& rId, stringmap& rProps,
                                   stringmap& rPangoAttributes, stringmap& rAtkProps) override;
 
     void tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std::string_view sType,
@@ -77,7 +77,7 @@ public:
 
     virtual QMenu* createMenu(const OUString& rId) override;
     virtual void insertMenuObject(QMenu* pParent, QMenu* pSubMenu, const OUString& rClass,
-                                  const OUString& rID, stringmap& rProps, stringmap& rAtkProps,
+                                  const OUString& rId, stringmap& rProps, stringmap& rAtkProps,
                                   accelmap& rAccels) override;
 
     virtual void set_response(const OUString& rId, int nResponse) override;

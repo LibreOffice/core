@@ -77,9 +77,9 @@ QtBuilder::QtBuilder(QWidget* pParent, std::u16string_view sUIRoot, const OUStri
 
 QtBuilder::~QtBuilder() {}
 
-QWidget* QtBuilder::get_by_name(const OUString& rID)
+QWidget* QtBuilder::get_by_name(const OUString& rId)
 {
-    auto aIt = m_aWidgets.find(rID);
+    auto aIt = m_aWidgets.find(rId);
     if (aIt != m_aWidgets.end())
         return aIt->second;
 
@@ -109,9 +109,9 @@ void QtBuilder::insertComboBoxOrListBoxItems(QObject* pObject, stringmap& rMap,
 }
 
 QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::string_view sType,
-                                 const OUString& rID, stringmap& rProps, stringmap&, stringmap&)
+                                 const OUString& rId, stringmap& rProps, stringmap&, stringmap&)
 {
-    QObject* pCurrentChild = makeObject(pParent, rClass, sType, rID, rProps);
+    QObject* pCurrentChild = makeObject(pParent, rClass, sType, rId, rProps);
 
     rProps.clear();
 
@@ -119,7 +119,7 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
 }
 
 QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std::string_view sType,
-                               const OUString& sID, stringmap& rMap)
+                               const OUString& rId, stringmap& rMap)
 {
     // ignore placeholders
     if (sName.empty())
@@ -278,7 +278,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     {
         QLabel* pLabel = new QLabel(pParentWidget);
         setLabelProperties(*pLabel, rMap);
-        extractMnemonicWidget(sID, rMap);
+        extractMnemonicWidget(rId, rMap);
         pObject = pLabel;
     }
     else if (sName == u"GtkLevelBar" || sName == u"GtkProgressBar")
@@ -323,7 +323,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         QRadioButton* pRadioButton = new QRadioButton(pParentWidget);
         // apply GtkCheckButton properties because GtkRadioButton subclasses GtkCheckButton in GTK 3
         setCheckButtonProperties(*pRadioButton, rMap);
-        extractRadioButtonGroup(sID, rMap);
+        extractRadioButtonGroup(rId, rMap);
         pObject = pRadioButton;
     }
     else if (sName == u"GtkScrollbar")
@@ -473,14 +473,14 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         if (pParentLayout)
             pParentLayout->addWidget(pWidget);
 
-        QtInstanceWidget::setHelpId(*pWidget, getHelpRoot() + sID);
+        QtInstanceWidget::setHelpId(*pWidget, getHelpRoot() + rId);
 
         pWidget->setToolTip(toQString(extractTooltipText(rMap)));
         pWidget->setVisible(extractVisible(rMap));
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
         // Set GtkBuilder ID as accessible ID
-        pWidget->setAccessibleIdentifier(toQString(sID));
+        pWidget->setAccessibleIdentifier(toQString(rId));
 #endif
     }
     else if (QLayout* pLayout = qobject_cast<QLayout*>(pObject))
@@ -493,10 +493,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
 
     if (pObject)
-        pObject->setObjectName(toQString(sID));
+        pObject->setObjectName(toQString(rId));
 
     if (pWidget)
-        m_aWidgets[sID] = pWidget;
+        m_aWidgets[rId] = pWidget;
 
     return pObject;
 }
@@ -675,14 +675,14 @@ void QtBuilder::setMenuActionGroup(QMenu* pMenu, QAction* pAction, const OUStrin
 }
 
 void QtBuilder::insertMenuObject(QMenu* pParent, QMenu* pSubMenu, const OUString& rClass,
-                                 const OUString& rID, stringmap& rProps, stringmap&, accelmap&)
+                                 const OUString& rId, stringmap& rProps, stringmap&, accelmap&)
 {
     assert(!pSubMenu && "Handling not implemented yet");
     (void)pSubMenu;
 
     const QString sLabel = convertAccelerator(extractLabel(rProps));
     QAction* pAction = pParent->addAction(sLabel);
-    pAction->setObjectName(toQString(rID));
+    pAction->setObjectName(toQString(rId));
 
     const OUString sActionName(extractActionName(rProps));
     QtInstanceMenu::setActionName(*pAction, sActionName);
@@ -775,7 +775,7 @@ void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
         SAL_WARN("vcl.qt", "QtBuilder::applyPackingProperties not yet implemented for this case");
 }
 
-void QtBuilder::applyTabChildProperties(QObject* pParent, const std::vector<OUString>& rIDs,
+void QtBuilder::applyTabChildProperties(QObject* pParent, const std::vector<OUString>& rIds,
                                         std::vector<vcl::EnumContext::Context>&,
                                         stringmap& rProperties, stringmap&)
 {
@@ -784,7 +784,7 @@ void QtBuilder::applyTabChildProperties(QObject* pParent, const std::vector<OUSt
 
     // set ID and label for the last inserted tab
     assert(rProperties.contains(u"label"_ustr) && "Tab has no label");
-    QtInstanceNotebook::setTabIdAndLabel(*pTabWidget, pTabWidget->count() - 1, rIDs.front(),
+    QtInstanceNotebook::setTabIdAndLabel(*pTabWidget, pTabWidget->count() - 1, rIds.front(),
                                          rProperties.at(u"label"_ustr));
 }
 
