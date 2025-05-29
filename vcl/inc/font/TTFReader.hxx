@@ -239,6 +239,17 @@ public:
     /** Gets the string from a name table */
     OUString getNameTableString(sal_uInt64 nOffset, sal_uInt16 nLength)
     {
+        size_t nSize = mrFontDataContainer.size();
+        if (nOffset > nSize)
+        {
+            SAL_WARN("vcl.fonts", "String offset beyond end of available data");
+            return OUString();
+        }
+        if (nLength > nSize - nOffset)
+        {
+            SAL_WARN("vcl.fonts", "Insufficient available data for string entry");
+            return OUString();
+        }
         const auto* pString = reinterpret_cast<const o3tl::sal_uInt16_BE*>(
             mrFontDataContainer.getPointer() + nOffset);
         OUStringBuffer aStringBuffer;
