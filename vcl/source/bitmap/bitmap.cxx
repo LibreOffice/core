@@ -1270,7 +1270,7 @@ bool Bitmap::ImplConvertDown8BPP(Color const * pExtColor)
     for (tools::Long nY = 0; nY < nHeight; nY++, nYTmp++)
     {
         // first pixel in the line
-        cIndex = static_cast<sal_uInt8>(aColorMap.GetBestPaletteIndex(pQLine1[0].ImplGetColor()));
+        cIndex = aColorMap.GetBestPaletteIndex(pQLine1[0].ImplGetColor());
         Scanline pScanline = pWriteAcc->GetScanline(nY);
         pWriteAcc->SetPixelOnData(pScanline, 0, BitmapColor(cIndex));
 
@@ -1278,7 +1278,7 @@ bool Bitmap::ImplConvertDown8BPP(Color const * pExtColor)
         for (nX = 1; nX < nWidth1; nX++)
         {
             aColor = pQLine1[nX].ImplGetColor();
-            cIndex = static_cast<sal_uInt8>(aColorMap.GetBestPaletteIndex(aColor));
+            cIndex = aColorMap.GetBestPaletteIndex(aColor);
             aErrQuad = (ImpErrorQuad(aColor) -= pWriteAcc->GetPaletteColor(cIndex));
             pQLine1[++nX].ImplAddColorError7(aErrQuad);
             pQLine2[nX--].ImplAddColorError1(aErrQuad);
@@ -1290,7 +1290,7 @@ bool Bitmap::ImplConvertDown8BPP(Color const * pExtColor)
         // Last RowPixel
         if (nX < nWidth)
         {
-            cIndex = static_cast<sal_uInt8>(aColorMap.GetBestPaletteIndex(pQLine1[nWidth1].ImplGetColor()));
+            cIndex = aColorMap.GetBestPaletteIndex(pQLine1[nWidth1].ImplGetColor());
             pWriteAcc->SetPixelOnData(pScanline, nX, BitmapColor(cIndex));
         }
 

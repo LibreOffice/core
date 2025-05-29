@@ -270,11 +270,11 @@ void InverseColorMap::ImplCreateBuffers()
     mpBuffer.resize(nSize, 0xff);
 }
 
-sal_uInt16 InverseColorMap::GetBestPaletteIndex(const BitmapColor& rColor)
+sal_uInt8 InverseColorMap::GetBestPaletteIndex(const BitmapColor& rColor)
 {
-    return mpMap[((static_cast<sal_uLong>(rColor.GetRed()) >> gnBits) << OCTREE_BITS_1)
-                 | ((static_cast<sal_uLong>(rColor.GetGreen()) >> gnBits) << OCTREE_BITS)
-                 | (static_cast<sal_uLong>(rColor.GetBlue()) >> gnBits)];
+    return mpMap[((static_cast<sal_uInt32>(rColor.GetRed()) >> gnBits) << OCTREE_BITS_1)
+                 | ((static_cast<sal_uInt32>(rColor.GetGreen()) >> gnBits) << OCTREE_BITS)
+                 | (static_cast<sal_uInt32>(rColor.GetBlue()) >> gnBits)];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

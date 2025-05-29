@@ -74,7 +74,7 @@ public:
     explicit InverseColorMap(const BitmapPalette& rPal);
     ~InverseColorMap();
 
-    sal_uInt16 GetBestPaletteIndex(const BitmapColor& rColor);
+    sal_uInt8 GetBestPaletteIndex(const BitmapColor& rColor);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
