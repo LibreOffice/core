@@ -136,7 +136,7 @@ void SvColorDialog::ExecuteAsync(weld::Window* pParent, const std::function<void
 
 IMPL_LINK( SvColorDialog, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvent, void )
 {
-    sal_Int32 nResult = 0;
+    sal_Int32 nResult = RET_CANCEL;
     sal_Int16 nDialogRet = pEvent->DialogResult;
     if( nDialogRet == ExecutableDialogResults::OK )
     {
