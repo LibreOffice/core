@@ -1012,6 +1012,24 @@ namespace
         return true;
     }
 
+    /// Given a redline that has two types and the underlying type is
+    /// delete, reject the redline based on that underlying type. Used
+    /// to accept a delete-then-format, i.e. this does change the text
+    /// node string.
+    bool lcl_AcceptInnerDelete(SwRangeRedline& rRedline, SwRedlineTable& rRedlines,
+                               SwRedlineTable::size_type& rRedlineIndex, bool bCallDelete)
+    {
+        bool bRet = false;
+
+        SwPaM aPam(*rRedline.Start(), *rRedline.End());
+        bRet |= lcl_RejectRedline(rRedlines, rRedlineIndex, bCallDelete);
+        // Handles undo/redo itself.
+        SwDoc& rDoc = rRedline.GetDoc();
+        rDoc.getIDocumentContentOperations().DeleteRange(aPam);
+
+        return bRet;
+    }
+
     typedef bool (*Fn_AcceptReject)( SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
                             bool bCallDelete,
                             const SwPosition* pSttRng,
@@ -1173,6 +1191,41 @@ bool CanCombineTypesForAcceptReject(SwRedlineData& rInnerData, SwRangeRedline& r
     }
 
     return true;
+}
+
+/// Decides if it's OK to combine this rInnerData having 2 types with an
+/// outer rOuterRedline for accept purposes. E.g. format-on-delete and
+/// delete can be combined if accepting a delete.
+bool CanReverseCombineTypesForAccept(SwRangeRedline& rOuterRedline, SwRedlineData& rInnerData)
+{
+    switch (rOuterRedline.GetType())
+    {
+        case RedlineType::Insert:
+        case RedlineType::Delete:
+            break;
+        default:
+            return false;
+    }
+
+    if (rInnerData.GetType() != RedlineType::Format)
+    {
+        return false;
+    }
+
+    const SwRedlineData* pInnerDataNext = rInnerData.Next();
+    if (!pInnerDataNext)
+    {
+        return false;
+    }
+
+    switch (pInnerDataNext->GetType())
+    {
+        case RedlineType::Insert:
+        case RedlineType::Delete:
+            return pInnerDataNext->GetType() == rOuterRedline.GetType();
+        default:
+            return false;
+    }
 }
 }
 
@@ -3303,10 +3356,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             else if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Delete)
             {
                 // Get rid of the format itself and then accept the delete by deleting the range.
-                SwPaM aPam(*pTmp->Start(), *pTmp->End());
-                bRet |= lcl_RejectRedline(maRedlineTable, nRdlIdx, bCallDelete);
-                // Handles undo/redo itself.
-                m_rDoc.getIDocumentContentOperations().DeleteRange(aPam);
+                bRet |= lcl_AcceptInnerDelete(*pTmp, maRedlineTable, nRdlIdx, bCallDelete);
                 bHandled = true;
             }
 
@@ -3331,9 +3381,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             if (aOrigData.GetType() == RedlineType::Delete)
             {
                 // We should delete the other type of redline when accepting the inner delete.
-                SwPaM aPam(*pTmp->Start(), *pTmp->End());
-                bRet |= lcl_RejectRedline(maRedlineTable, nRdlIdx, bCallDelete);
-                m_rDoc.getIDocumentContentOperations().DeleteRange(aPam);
+                bRet |= lcl_AcceptInnerDelete(*pTmp, maRedlineTable, nRdlIdx, bCallDelete);
             }
             else
             {
@@ -3342,9 +3390,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             }
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
-        else if (pTmp->GetType() == RedlineType::Insert
-                 && aOrigData.GetType() == RedlineType::Format && aOrigData.Next()
-                 && aOrigData.Next()->GetType() == RedlineType::Insert)
+        else if (CanReverseCombineTypesForAccept(*pTmp, aOrigData))
         {
             // The aOrigData has 2 types and for these types we want the underlying type to be
             // combined with the type of the surrounding redlines, so accept pTmp, too.
