@@ -2449,7 +2449,6 @@ void SwXTextTable::autoFormat(const OUString& sAutoFormatName)
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), this);
     SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFormat), this);
     SwTableAutoFormatTable aAutoFormatTable;
-    aAutoFormatTable.Load();
     for (size_t i = aAutoFormatTable.size(); i;)
         if( sAutoFormatName == aAutoFormatTable[ --i ].GetName() )
         {

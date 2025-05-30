@@ -1170,7 +1170,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     OUString sAutoFormat = static_cast< const SfxStringItem* >(pItem)->GetValue();
 
                     pAutoFormatTable.reset(new SwTableAutoFormatTable);
-                    pAutoFormatTable->Load();
 
                     for( sal_uInt16 i = 0, nCount = pAutoFormatTable->size(); i < nCount; i++ )
                     {
@@ -3170,7 +3169,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 if ( !aAutoNameIn.isEmpty() )
                 {
                     SwTableAutoFormatTable aTableTable;
-                    aTableTable.Load();
                     for ( size_t n=0; n<aTableTable.size(); n++ )
                     {
                         if ( aTableTable[n].GetName() == aAutoNameIn )

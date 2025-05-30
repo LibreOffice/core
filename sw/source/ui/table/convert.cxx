@@ -125,7 +125,6 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     , m_pShell(&rView.GetWrtShell())
 {
     m_aWndPreview.DetectRTL(&rView.GetWrtShell());
-    m_xTableTable->Load();
 
     const int nWidth = m_xLbFormat->get_approximate_digit_width() * 32;
     const int nHeight = m_xLbFormat->get_height_rows(8);

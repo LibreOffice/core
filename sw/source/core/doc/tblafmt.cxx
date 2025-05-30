@@ -1034,6 +1034,8 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
 
     pNew->SetUserDefined(false);
     m_pImpl->m_AutoFormats.push_back(std::move(pNew));
+
+    Load();
 }
 
 void SwTableAutoFormatTable::Load()

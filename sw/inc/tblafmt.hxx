@@ -278,6 +278,7 @@ class SW_DLLPUBLIC SwTableAutoFormatTable
     SAL_DLLPRIVATE bool Load( SvStream& rStream );
     SAL_DLLPRIVATE bool Save( SvStream& rStream ) const;
 
+    void Load();
 public:
     explicit SwTableAutoFormatTable();
     ~SwTableAutoFormatTable();
@@ -299,7 +300,6 @@ public:
     /// Find table style with the provided name, return nullptr when not found.
     SwTableAutoFormat* FindAutoFormat(std::u16string_view rName) const;
 
-    void Load();
     bool Save() const;
 };
 

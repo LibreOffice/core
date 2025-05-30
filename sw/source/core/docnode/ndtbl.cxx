@@ -3962,10 +3962,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
 SwTableAutoFormatTable& SwDoc::GetTableStyles()
 {
     if (!m_pTableStyles)
-    {
         m_pTableStyles.reset(new SwTableAutoFormatTable);
-        m_pTableStyles->Load();
-    }
     return *m_pTableStyles;
 }
 
