@@ -1707,11 +1707,11 @@ void SwInsertDBColAutoPilot::Load()
             if( !sTmp.isEmpty() )
             {
                 // then load the AutoFormat file and look for Autoformat first
-                SwTableAutoFormatTable aAutoFormatTable;
-                for( size_t nAutoFormat = aAutoFormatTable.size(); nAutoFormat; )
-                    if( sTmp == aAutoFormatTable[ --nAutoFormat ].GetName() )
+                const SwTableAutoFormatTable& rAutoFormatTable = SwModule::get()->GetAutoFormatTable();
+                for( size_t nAutoFormat = rAutoFormatTable.size(); nAutoFormat; )
+                    if( sTmp == rAutoFormatTable[ --nAutoFormat ].GetName() )
                     {
-                        m_xTAutoFormat.reset(new SwTableAutoFormat(aAutoFormatTable[nAutoFormat]));
+                        m_xTAutoFormat.reset(new SwTableAutoFormat(rAutoFormatTable[nAutoFormat]));
                         break;
                     }
             }
