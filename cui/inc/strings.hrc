@@ -452,7 +452,7 @@
 #define BMP_TIGER                                   NC_("BMP_TIGER", "Tiger")
 #define BMP_ZEBRA                                   NC_("BMP_ZEBRA", "Zebra")
 
-// Transalted bitmap draw types
+// Translated bitmap draw types
 #define BMP_DRAWTYPE_TILED                          NC_("BMP_DRAWTYPE_TILED", "Tiled")
 #define BMP_DRAWTYPE_STRETCHED                      NC_("BMP_DRAWTYPE_STRETCHED", "Stretched")
 
