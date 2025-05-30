@@ -253,7 +253,7 @@ public:
     SW_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
 
-    const SwTableAutoFormatTable& GetAutoFormatTable();
+    SW_DLLPUBLIC const SwTableAutoFormatTable& GetAutoFormatTable();
     void InvalidateAutoFormatTable();;
 
 //    Access to SwModule

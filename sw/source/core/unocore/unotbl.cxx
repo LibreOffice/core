@@ -30,6 +30,7 @@
 #include <tools/UnitConversion.hxx>
 #include <editeng/memberids.h>
 #include <float.h>
+#include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <unocoll.hxx>
@@ -2451,9 +2452,9 @@ void SwXTextTable::autoFormat(const OUString& sAutoFormatName)
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), this);
     SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFormat), this);
-    SwTableAutoFormatTable aAutoFormatTable;
-    for (size_t i = aAutoFormatTable.size(); i;)
-        if( sAutoFormatName == aAutoFormatTable[ --i ].GetName() )
+    const SwTableAutoFormatTable& rAutoFormatTable = SwModule::get()->GetAutoFormatTable();
+    for (size_t i = rAutoFormatTable.size(); i;)
+        if( sAutoFormatName == rAutoFormatTable[ --i ].GetName() )
         {
             SwSelBoxes aBoxes;
             const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
@@ -2463,7 +2464,7 @@ void SwXTextTable::autoFormat(const OUString& sAutoFormatName)
                 aBoxes.insert( pBox );
             }
             UnoActionContext aContext( pFormat->GetDoc() );
-            pFormat->GetDoc()->SetTableAutoFormat( aBoxes, aAutoFormatTable[i] );
+            pFormat->GetDoc()->SetTableAutoFormat( aBoxes, rAutoFormatTable[i] );
             break;
         }
 }

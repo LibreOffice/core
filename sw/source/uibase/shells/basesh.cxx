@@ -3208,12 +3208,12 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 aAutoNameIn = pAuto->GetValue();
                 if ( !aAutoNameIn.isEmpty() )
                 {
-                    SwTableAutoFormatTable aTableTable;
-                    for ( size_t n=0; n<aTableTable.size(); n++ )
+                    const SwTableAutoFormatTable& rTableTable = SwModule::get()->GetAutoFormatTable();
+                    for (size_t n = 0; n < rTableTable.size(); ++n)
                     {
-                        if ( aTableTable[n].GetName() == aAutoNameIn )
+                        if (rTableTable[n].GetName() == aAutoNameIn)
                         {
-                            pTAFormatIn.reset(new SwTableAutoFormat( aTableTable[n] ));
+                            pTAFormatIn.reset(new SwTableAutoFormat(rTableTable[n]));
                             break;
                         }
                     }
