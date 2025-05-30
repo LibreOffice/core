@@ -1021,10 +1021,10 @@ namespace
     {
         bool bRet = false;
 
+        SwDoc& rDoc = rRedline.GetDoc();
         SwPaM aPam(*rRedline.Start(), *rRedline.End());
         bRet |= lcl_RejectRedline(rRedlines, rRedlineIndex, bCallDelete);
         // Handles undo/redo itself.
-        SwDoc& rDoc = rRedline.GetDoc();
         rDoc.getIDocumentContentOperations().DeleteRange(aPam);
 
         return bRet;
