@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <o3tl/string_view.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/stream.hxx>
@@ -377,6 +378,21 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf91315)
     // Without the accompanying fix, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
+}
+
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf166789)
+{
+    // A fit-to-size text
+    loadFromFile(u"fit-to-size-text.fodg");
+
+    save(u"impress_svg_Export"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // Without the accompanying fix, the text wasn't adjusted to the given width
+    OUString length = getXPath(pXmlDoc, "//svg:text//svg:tspan[@lengthAdjust='spacingAndGlyphs']",
+                               "textLength");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7000, length.toInt32(), 70); // allow 1% for rounding errors
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
