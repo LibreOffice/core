@@ -216,9 +216,7 @@ void SwAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
     AutoFormatVersions::WriteBlockB(rStream, fileVersion);
 }
 
-
-
-SwBoxAutoFormat::SwBoxAutoFormat()
+SwAutoFormatProps::SwAutoFormatProps()
 :   m_aTextOrientation(std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR)),
     m_aVerticalAlignment(std::make_unique<SwFormatVertOrient>(0, css::text::VertOrientation::NONE, css::text::RelOrientation::FRAME)),
     m_eSysLanguage(::GetAppLanguage()),
@@ -264,7 +262,7 @@ SwBoxAutoFormat::SwBoxAutoFormat()
     m_aBox->SetAllDistances(55);
 }
 
-SwBoxAutoFormat::SwBoxAutoFormat( const SwBoxAutoFormat& rNew )
+SwAutoFormatProps::SwAutoFormatProps(const SwAutoFormatProps& rNew)
 :   AutoFormatBase(rNew),
     m_aTextOrientation(rNew.m_aTextOrientation->Clone()),
     m_aVerticalAlignment(rNew.m_aVerticalAlignment->Clone()),
@@ -274,11 +272,11 @@ SwBoxAutoFormat::SwBoxAutoFormat( const SwBoxAutoFormat& rNew )
 {
 }
 
-SwBoxAutoFormat::~SwBoxAutoFormat()
+SwAutoFormatProps::~SwAutoFormatProps()
 {
 }
 
-SwBoxAutoFormat& SwBoxAutoFormat::operator=(const SwBoxAutoFormat& rRef)
+SwAutoFormatProps& SwAutoFormatProps::operator=(const SwAutoFormatProps& rRef)
 {
     // check self-assignment
     if(this == &rRef)
@@ -296,19 +294,15 @@ SwBoxAutoFormat& SwBoxAutoFormat::operator=(const SwBoxAutoFormat& rRef)
     SetSysLanguage(rRef.GetSysLanguage());
     SetNumFormatLanguage(rRef.GetNumFormatLanguage());
 
-    // m_wXObject used to not be copied before 1e2682235cded9a7cd90e55f0bfc60a1285e9a46
-    // "WIP: Further preparations for deeper Item changes" by this operator, so do not do it now, too
-    // rRef.SetXObject(GetXObject());
-
     return *this;
 }
 
-bool SwBoxAutoFormat::operator==(const SwBoxAutoFormat& rRight) const
+bool SwAutoFormatProps::operator==(const SwAutoFormatProps& rRight) const
 {
     return GetBackground().GetColor() == rRight.GetBackground().GetColor();
 }
 
-bool SwBoxAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer )
+bool SwAutoFormatProps::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer )
 {
     LoadBlockA( rStream, rVersions, nVer );
 
@@ -341,7 +335,7 @@ bool SwBoxAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, sa
     return ERRCODE_NONE == rStream.GetError();
 }
 
-bool SwBoxAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
+bool SwAutoFormatProps::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     SaveBlockA( rStream, fileVersion );
 
@@ -487,7 +481,7 @@ SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos )
 const SwBoxAutoFormat& SwTableAutoFormat::GetDefaultBoxFormat()
 {
     if(!s_pDefaultBoxAutoFormat)
-        s_pDefaultBoxAutoFormat = new SwBoxAutoFormat();
+        s_pDefaultBoxAutoFormat = new SwBoxAutoFormat;
 
     return *s_pDefaultBoxAutoFormat;
 }
@@ -506,50 +500,52 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
         m_aBoxAutoFormat[ nPos ] = pFormat;
     }
 
+    SwAutoFormatProps& rBoxProps = pFormat->GetProps();
+
     if( SwTableAutoFormatUpdateFlags::Char & eFlags )
     {
-        pFormat->SetFont( rSet.Get( RES_CHRATR_FONT ) );
-        pFormat->SetHeight( rSet.Get( RES_CHRATR_FONTSIZE ) );
-        pFormat->SetWeight( rSet.Get( RES_CHRATR_WEIGHT ) );
-        pFormat->SetPosture( rSet.Get( RES_CHRATR_POSTURE ) );
-        pFormat->SetCJKFont( rSet.Get( RES_CHRATR_CJK_FONT ) );
-        pFormat->SetCJKHeight( rSet.Get( RES_CHRATR_CJK_FONTSIZE ) );
-        pFormat->SetCJKWeight( rSet.Get( RES_CHRATR_CJK_WEIGHT ) );
-        pFormat->SetCJKPosture( rSet.Get( RES_CHRATR_CJK_POSTURE ) );
-        pFormat->SetCTLFont( rSet.Get( RES_CHRATR_CTL_FONT ) );
-        pFormat->SetCTLHeight( rSet.Get( RES_CHRATR_CTL_FONTSIZE ) );
-        pFormat->SetCTLWeight( rSet.Get( RES_CHRATR_CTL_WEIGHT ) );
-        pFormat->SetCTLPosture( rSet.Get( RES_CHRATR_CTL_POSTURE ) );
-        pFormat->SetUnderline( rSet.Get( RES_CHRATR_UNDERLINE ) );
-        pFormat->SetOverline( rSet.Get( RES_CHRATR_OVERLINE ) );
-        pFormat->SetCrossedOut( rSet.Get( RES_CHRATR_CROSSEDOUT ) );
-        pFormat->SetContour( rSet.Get( RES_CHRATR_CONTOUR ) );
-        pFormat->SetShadowed( rSet.Get( RES_CHRATR_SHADOWED ) );
-        pFormat->SetColor( rSet.Get( RES_CHRATR_COLOR ) );
-        pFormat->SetAdjust( rSet.Get( RES_PARATR_ADJUST ) );
+        rBoxProps.SetFont( rSet.Get( RES_CHRATR_FONT ) );
+        rBoxProps.SetHeight( rSet.Get( RES_CHRATR_FONTSIZE ) );
+        rBoxProps.SetWeight( rSet.Get( RES_CHRATR_WEIGHT ) );
+        rBoxProps.SetPosture( rSet.Get( RES_CHRATR_POSTURE ) );
+        rBoxProps.SetCJKFont( rSet.Get( RES_CHRATR_CJK_FONT ) );
+        rBoxProps.SetCJKHeight( rSet.Get( RES_CHRATR_CJK_FONTSIZE ) );
+        rBoxProps.SetCJKWeight( rSet.Get( RES_CHRATR_CJK_WEIGHT ) );
+        rBoxProps.SetCJKPosture( rSet.Get( RES_CHRATR_CJK_POSTURE ) );
+        rBoxProps.SetCTLFont( rSet.Get( RES_CHRATR_CTL_FONT ) );
+        rBoxProps.SetCTLHeight( rSet.Get( RES_CHRATR_CTL_FONTSIZE ) );
+        rBoxProps.SetCTLWeight( rSet.Get( RES_CHRATR_CTL_WEIGHT ) );
+        rBoxProps.SetCTLPosture( rSet.Get( RES_CHRATR_CTL_POSTURE ) );
+        rBoxProps.SetUnderline( rSet.Get( RES_CHRATR_UNDERLINE ) );
+        rBoxProps.SetOverline( rSet.Get( RES_CHRATR_OVERLINE ) );
+        rBoxProps.SetCrossedOut( rSet.Get( RES_CHRATR_CROSSEDOUT ) );
+        rBoxProps.SetContour( rSet.Get( RES_CHRATR_CONTOUR ) );
+        rBoxProps.SetShadowed( rSet.Get( RES_CHRATR_SHADOWED ) );
+        rBoxProps.SetColor( rSet.Get( RES_CHRATR_COLOR ) );
+        rBoxProps.SetAdjust( rSet.Get( RES_PARATR_ADJUST ) );
     }
     if( !(SwTableAutoFormatUpdateFlags::Box & eFlags) )
         return;
 
-    pFormat->SetBox( rSet.Get( RES_BOX ) );
+    rBoxProps.SetBox( rSet.Get( RES_BOX ) );
 // FIXME - add attribute IDs for the diagonal line items
-//        pFormat->SetTLBR( (SvxLineItem&)rSet.Get( RES_... ) );
-//        pFormat->SetBLTR( (SvxLineItem&)rSet.Get( RES_... ) );
-    pFormat->SetBackground( rSet.Get( RES_BACKGROUND ) );
-    pFormat->SetTextOrientation(rSet.Get(RES_FRAMEDIR));
-    pFormat->SetVerticalAlignment(rSet.Get(RES_VERT_ORIENT));
+//        rBoxProps.SetTLBR( (SvxLineItem&)rSet.Get( RES_... ) );
+//        rBoxProps.SetBLTR( (SvxLineItem&)rSet.Get( RES_... ) );
+    rBoxProps.SetBackground( rSet.Get( RES_BACKGROUND ) );
+    rBoxProps.SetTextOrientation(rSet.Get(RES_FRAMEDIR));
+    rBoxProps.SetVerticalAlignment(rSet.Get(RES_VERT_ORIENT));
 
     const SwTableBoxNumFormat* pNumFormatItem;
     const SvNumberformat* pNumFormat = nullptr;
     if( pNFormatr && (pNumFormatItem = rSet.GetItemIfSet( RES_BOXATR_FORMAT )) &&
         nullptr != (pNumFormat = pNFormatr->GetEntry( pNumFormatItem->GetValue() )) )
-        pFormat->SetValueFormat( pNumFormat->GetFormatstring(),
+        rBoxProps.SetValueFormat( pNumFormat->GetFormatstring(),
                                 pNumFormat->GetLanguage(),
                                 ::GetAppLanguage());
     else
     {
         // default
-        pFormat->SetValueFormat( OUString(), LANGUAGE_SYSTEM,
+        rBoxProps.SetValueFormat( OUString(), LANGUAGE_SYSTEM,
                               ::GetAppLanguage() );
     }
 
@@ -559,7 +555,7 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
 void SwTableAutoFormat::UpdateToSet(const sal_uInt8 nPos, const bool bCellSpansToEndV, const bool bCellSpansToEndH, SfxItemSet& rSet,
                                  SwTableAutoFormatUpdateFlags eFlags, SvNumberFormatter* pNFormatr) const
 {
-    const SwBoxAutoFormat& rChg = GetBoxFormat( nPos );
+    const SwAutoFormatProps& rChg = GetBoxFormat(nPos).GetProps();
 
     if( SwTableAutoFormatUpdateFlags::Char & eFlags )
     {
@@ -628,7 +624,7 @@ void SwTableAutoFormat::UpdateToSet(const sal_uInt8 nPos, const bool bCellSpansT
                 nLastRowOrColumnId = (nPos % 4) + 12; //LAST ROW (12, 13, 14, 15)
 
             assert(nLastRowOrColumnId < 16);
-            const SvxBoxItem& aLastAutoFormatBox(GetBoxFormat(nLastRowOrColumnId).GetBox());
+            const SvxBoxItem& aLastAutoFormatBox(GetBoxFormat(nLastRowOrColumnId).GetProps().GetBox());
             if (bCellSpansToEndV)
                 aAutoFormatBox.SetLine( aLastAutoFormatBox.GetLine(SvxBoxItemLine::BOTTOM), SvxBoxItemLine::BOTTOM );
             if (bCellSpansToEndH)
@@ -647,7 +643,7 @@ void SwTableAutoFormat::UpdateToSet(const sal_uInt8 nPos, const bool bCellSpansT
 
     // Do not put a VertAlign when it has default value.
     // It prevents the export of default value by automatic cell-styles export.
-    if (rChg.GetVerticalAlignment().GetVertOrient() != GetDefaultBoxFormat().GetVerticalAlignment().GetVertOrient())
+    if (rChg.GetVerticalAlignment().GetVertOrient() != GetDefaultBoxFormat().GetProps().GetVerticalAlignment().GetVertOrient())
         rSet.Put(rChg.GetVerticalAlignment());
 
     if( !(IsValueFormat() && pNFormatr) )
@@ -725,26 +721,26 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
 
 bool SwTableAutoFormat::FirstRowEndColumnIsRow()
 {
-    return GetBoxFormat(3) == GetBoxFormat(2);
+    return GetBoxFormat(3).GetProps() == GetBoxFormat(2).GetProps();
 }
 bool SwTableAutoFormat::FirstRowStartColumnIsRow()
 {
-    return GetBoxFormat(0) == GetBoxFormat(1);
+    return GetBoxFormat(0).GetProps() == GetBoxFormat(1).GetProps();
 }
 bool SwTableAutoFormat::LastRowEndColumnIsRow()
 {
-    return GetBoxFormat(14) == GetBoxFormat(15);
+    return GetBoxFormat(14).GetProps() == GetBoxFormat(15).GetProps();
 }
 bool SwTableAutoFormat::LastRowStartColumnIsRow()
 {
-    return GetBoxFormat(12) == GetBoxFormat(13);
+    return GetBoxFormat(12).GetProps() == GetBoxFormat(13).GetProps();
 }
 bool SwTableAutoFormat::HasHeaderRow() const
 {   // Wild guessing for PDF export: is header different from odd or body?
     // It would be vastly better to do like SdrTableObj and have flags that
     // determine which "special" styles apply, instead of horrible guessing.
-    return !(GetBoxFormat(1) == GetBoxFormat(5))
-        || !(GetBoxFormat(1) == GetBoxFormat(10));
+    return !(GetBoxFormat(1).GetProps() == GetBoxFormat(5).GetProps())
+        || !(GetBoxFormat(1).GetProps() == GetBoxFormat(10).GetProps());
 }
 
 bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
@@ -795,7 +791,7 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
         for( sal_uInt8 i = 0; bRet && i < 16; ++i )
         {
             SwBoxAutoFormat* pFormat = new SwBoxAutoFormat;
-            bRet = pFormat->Load( rStream, rVersions, nVal );
+            bRet = pFormat->GetProps().Load( rStream, rVersions, nVal );
             if( bRet )
                 m_aBoxAutoFormat[ i ] = pFormat;
             else
@@ -840,7 +836,7 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
         const SwBoxAutoFormat* pFormat = m_aBoxAutoFormat[ i ];
         if (!pFormat)     // if not set -> write default
             pFormat = &SwTableAutoFormat::GetDefaultBoxFormat();
-        bRet = pFormat->Save( rStream, fileVersion );
+        bRet = pFormat->GetProps().Save( rStream, fileVersion );
     }
     return bRet;
 }
@@ -1044,7 +1040,7 @@ SwTableAutoFormatTable::Impl::Impl()
     {
         aBox.SetLine( i <= 3 ? &aLn : nullptr, SvxBoxItemLine::TOP );
         aBox.SetLine( (3 == ( i & 3 )) ? &aLn : nullptr, SvxBoxItemLine::RIGHT );
-        pNew->GetBoxFormat( i ).SetBox( aBox );
+        pNew->GetBoxFormat( i ).GetProps().SetBox( aBox );
     }
 
     pNew->SetUserDefined(false);

@@ -46,7 +46,7 @@ class SwTable;
 class SwXTextCellStyle;
 class SwXTextTableStyle;
 
-class SW_DLLPUBLIC SwBoxAutoFormat : public AutoFormatBase
+class SW_DLLPUBLIC SwAutoFormatProps : public AutoFormatBase
 {
 private:
     // Writer specific
@@ -58,19 +58,16 @@ private:
     LanguageType                            m_eSysLanguage;
     LanguageType                            m_eNumFormatLanguage;
 
-    // associated UNO object, if such exists
-    unotools::WeakReference<SwXTextCellStyle> m_xAutoFormatUnoObject;
-
 public:
-    SwBoxAutoFormat();
-    SwBoxAutoFormat( const SwBoxAutoFormat& rNew );
-    ~SwBoxAutoFormat();
+    SwAutoFormatProps();
+    SwAutoFormatProps(const SwAutoFormatProps& rNew);
+    ~SwAutoFormatProps();
 
     /// assignment-op (still used)
-    SwBoxAutoFormat& operator=(const SwBoxAutoFormat& rRef);
+    SwAutoFormatProps& operator=(const SwAutoFormatProps& rRef);
 
     /// Comparing based of boxes backgrounds.
-    bool operator==(const SwBoxAutoFormat& rRight) const;
+    bool operator==(const SwAutoFormatProps& rRight) const;
 
     // The get-methods.
     const SvxFrameDirectionItem& GetTextOrientation() const { return *m_aTextOrientation; }
@@ -94,12 +91,25 @@ public:
     void SetSysLanguage(const LanguageType& rNew) { m_eSysLanguage = rNew; }
     void SetNumFormatLanguage(const LanguageType& rNew) { m_eNumFormatLanguage = rNew; }
 
+    bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
+    bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
+};
+
+class SW_DLLPUBLIC SwBoxAutoFormat
+{
+private:
+    SwAutoFormatProps m_aAutoFormat;
+
+    // associated UNO object, if such exists
+    unotools::WeakReference<SwXTextCellStyle> m_xAutoFormatUnoObject;
+
+public:
     unotools::WeakReference<SwXTextCellStyle> const& GetXObject() const
         { return m_xAutoFormatUnoObject; }
     void SetXObject(rtl::Reference<SwXTextCellStyle> const& xObject);
 
-    bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
-    bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
+    const SwAutoFormatProps& GetProps() const { return m_aAutoFormat; }
+    SwAutoFormatProps& GetProps() { return m_aAutoFormat; }
 };
 
 enum class SwTableAutoFormatUpdateFlags { Char = 1, Box = 2 };
