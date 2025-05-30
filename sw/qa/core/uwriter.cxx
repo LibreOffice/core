@@ -1244,12 +1244,6 @@ void SwDocTest::testTableAutoFormats()
     //create new AutoFormatTable
     SwTableAutoFormatTable aLoadTAFT;
 
-    //check the style size
-    CPPUNIT_ASSERT_EQUAL( size_t(1),  aLoadTAFT.size() );
-
-    //load the saved styles
-    aLoadTAFT.Load();
-
     //check the style size after load
     CPPUNIT_ASSERT_EQUAL( size_t(2),  aLoadTAFT.size() );
 
