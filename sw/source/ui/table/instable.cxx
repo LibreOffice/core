@@ -131,7 +131,7 @@ void SwInsTableDlg::InitAutoTableFormat()
 
     m_xLbFormat->connect_selection_changed(LINK(this, SwInsTableDlg, SelFormatHdl));
 
-    m_xTableTable.reset(new SwTableAutoFormatTable);
+    m_xTableTable.reset(new SwTableAutoFormatTable(SwModule::get()->GetAutoFormatTable()));
 
     // Add "- none -" style autoformat table.
     m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone); // Insert to listbox
