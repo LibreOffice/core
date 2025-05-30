@@ -50,6 +50,7 @@
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
+#include <swmodule.hxx>
 #include <swtable.hxx>
 #include <swundo.hxx>
 #include <tblsel.hxx>
@@ -3962,7 +3963,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
 SwTableAutoFormatTable& SwDoc::GetTableStyles()
 {
     if (!m_pTableStyles)
-        m_pTableStyles.reset(new SwTableAutoFormatTable);
+        m_pTableStyles.reset(new SwTableAutoFormatTable(SwModule::get()->GetAutoFormatTable()));
     return *m_pTableStyles;
 }
 

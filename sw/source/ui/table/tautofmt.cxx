@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <strings.hrc>
 #include <shellres.hxx>
+#include <swmodule.hxx>
 #include <tautofmt.hxx>
 
 namespace
@@ -66,7 +67,7 @@ SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell, b
     , m_nDfltStylePos(0)
     , m_bCoreDataChanged(false)
     , m_bSetAutoFormat(bAutoFormat)
-    , m_xTableTable(new SwTableAutoFormatTable)
+    , m_xTableTable(new SwTableAutoFormatTable(SwModule::get()->GetAutoFormatTable()))
     , m_xLbFormat(m_xBuilder->weld_tree_view(u"formatlb"_ustr))
     , m_xBtnNumFormat(m_xBuilder->weld_check_button(u"numformatcb"_ustr))
     , m_xBtnBorder(m_xBuilder->weld_check_button(u"bordercb"_ustr))
