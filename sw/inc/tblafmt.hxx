@@ -273,10 +273,13 @@ public:
 class SW_DLLPUBLIC SwTableAutoFormatTable
 {
     struct Impl;
-    std::unique_ptr<Impl> m_pImpl;
+    typedef o3tl::cow_wrapper<Impl> ImplType;
+    ImplType m_pImpl;
 
 public:
     explicit SwTableAutoFormatTable();
+    SwTableAutoFormatTable(const SwTableAutoFormatTable&);
+    SwTableAutoFormatTable(SwTableAutoFormatTable&&);
     ~SwTableAutoFormatTable();
 
     size_t size() const;

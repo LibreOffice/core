@@ -929,6 +929,7 @@ struct SwTableAutoFormatTable::Impl
     std::vector<std::unique_ptr<SwTableAutoFormat>> m_AutoFormats;
 
     Impl();
+    Impl(const Impl& rOther);
 
     void Load();
     bool Save() const;
@@ -947,6 +948,7 @@ SwTableAutoFormat const& SwTableAutoFormatTable::operator[](size_t const i) cons
 {
     return *m_pImpl->m_AutoFormats[i];
 }
+
 SwTableAutoFormat      & SwTableAutoFormatTable::operator[](size_t const i)
 {
     return *m_pImpl->m_AutoFormats[i];
@@ -1015,14 +1017,13 @@ SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormat(const TableStyleName& 
     return nullptr;
 }
 
-SwTableAutoFormatTable::~SwTableAutoFormatTable()
-{
-}
+SwTableAutoFormatTable::~SwTableAutoFormatTable() = default;
 
-SwTableAutoFormatTable::SwTableAutoFormatTable()
-    : m_pImpl(new Impl)
-{
-}
+SwTableAutoFormatTable::SwTableAutoFormatTable(const SwTableAutoFormatTable&) = default;
+
+SwTableAutoFormatTable::SwTableAutoFormatTable(SwTableAutoFormatTable&&) = default;
+
+SwTableAutoFormatTable::SwTableAutoFormatTable() = default;
 
 SwTableAutoFormatTable::Impl::Impl()
 {
@@ -1050,6 +1051,13 @@ SwTableAutoFormatTable::Impl::Impl()
     m_AutoFormats.push_back(std::move(pNew));
 
     Load();
+}
+
+SwTableAutoFormatTable::Impl::Impl(const Impl& rOther)
+{
+    m_AutoFormats.reserve(rOther.m_AutoFormats.size());
+    for (const auto& format : rOther.m_AutoFormats)
+        m_AutoFormats.emplace_back(new SwTableAutoFormat(*format));
 }
 
 bool SwTableAutoFormatTable::Save() const
