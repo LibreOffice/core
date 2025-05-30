@@ -71,6 +71,7 @@ namespace com::sun::star::linguistic2 { class XLanguageGuessing; }
 namespace com::sun::star::linguistic2 { class XLinguServiceEventListener; }
 namespace ooo::vba { class XSinkCaller; }
 class SwLinguServiceEventListener;
+class SwTableAutoFormatTable;
 
 class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
@@ -93,6 +94,8 @@ class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, 
     std::unique_ptr<SvtUserOptions>      m_pUserOptions;
 
     std::unique_ptr<SfxErrorHandler> m_pErrorHandler;
+
+    std::unique_ptr<SwTableAutoFormatTable> m_xTableAutoFormatTable;
 
     rtl::Reference<SwAttrPool> m_pAttrPool;
 
@@ -251,6 +254,9 @@ public:
 
     SW_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
+
+    const SwTableAutoFormatTable& GetAutoFormatTable();
+    void InvalidateAutoFormatTable();;
 
 //    Access to SwModule
     static auto get() { return static_cast<SwModule*>(SfxApplication::GetModule(SfxToolsModule::Writer)); }
