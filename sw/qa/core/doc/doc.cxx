@@ -899,12 +899,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
     CPPUNIT_ASSERT_LESS(rRedlines.size(), nRedline);
     pWrtShell->AcceptRedline(nRedline);
 
-    // Then make sure BBB gets removed from the document:
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: AAACCC
-    // - Actual  : AAABBBCCC
-    // i.e. BBB's formatting was removed, but not BBB itself.
-    CPPUNIT_ASSERT_EQUAL(u"AAACCC"_ustr, pTextNode->GetText());
+    // Then make sure the format-on-delete is accepted, i.e. neither the format-on-delete BBB, nor
+    // the surrounding AAA and CCC deletes are in the text anymore:
+    // Without the accompanying fix in place, this test would have failed, the text was AAABBBCCC,
+    // just the format of BBB was dropped.
+    CPPUNIT_ASSERT(pTextNode->GetText().isEmpty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
