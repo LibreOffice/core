@@ -264,9 +264,9 @@ class SVGTextWriter final
     template< typename MetaBitmapActionType >
     void writeBitmapPlaceholder( const MetaBitmapActionType* pAction );
     void implWriteEmbeddedBitmaps();
-    void writeTextPortion( const Point& rPos, const OUString& rText );
+    void writeTextPortion(const Point& rPos, const OUString& rText, tools::Long nWidth = 0);
     void implWriteTextPortion( const Point& rPos, const OUString& rText,
-                               Color aTextColor );
+                               Color aTextColor, tools::Long nWidth );
 
     void setVirtualDevice( VirtualDevice* pVDev, MapMode& rTargetMapMode )
     {
