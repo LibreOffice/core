@@ -928,6 +928,8 @@ struct SwTableAutoFormatTable::Impl
 {
     std::vector<std::unique_ptr<SwTableAutoFormat>> m_AutoFormats;
 
+    Impl();
+
     void Load();
     bool Save() const;
 
@@ -1020,6 +1022,10 @@ SwTableAutoFormatTable::~SwTableAutoFormatTable()
 SwTableAutoFormatTable::SwTableAutoFormatTable()
     : m_pImpl(new Impl)
 {
+}
+
+SwTableAutoFormatTable::Impl::Impl()
+{
     std::unique_ptr<SwTableAutoFormat> pNew(new SwTableAutoFormat(
                 TableStyleName(SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_DEFAULT, ProgName()).toString())));
 
@@ -1041,9 +1047,9 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
     }
 
     pNew->SetUserDefined(false);
-    m_pImpl->m_AutoFormats.push_back(std::move(pNew));
+    m_AutoFormats.push_back(std::move(pNew));
 
-    m_pImpl->Load();
+    Load();
 }
 
 bool SwTableAutoFormatTable::Save() const
