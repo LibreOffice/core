@@ -396,7 +396,7 @@ void SvxAppearanceTabPage::InitThemes()
         LINK(this, SvxAppearanceTabPage, UseOnlyWhiteDocBackgroundHdl));
     m_xUseOnlyWhiteDocBackground->set_active(ThemeColors::UseOnlyWhiteDocBackground());
 
-    // connnect callbacks for bitmap controls
+    // connect callbacks for bitmap controls
     m_xUseBmpForAppBack->connect_toggled(LINK(this, SvxAppearanceTabPage, UseBmpForAppBackHdl));
     m_xBitmapDropDown->connect_changed(LINK(this, SvxAppearanceTabPage, BitmapDropDownHdl));
     m_xBitmapDrawTypeDropDown->connect_changed(
@@ -405,7 +405,7 @@ void SvxAppearanceTabPage::InitThemes()
     // initialize bitmap controls
     m_xUseBmpForAppBack->set_active(ThemeColors::UseBmpForAppBack());
 
-    // insert bitmap entrires
+    // insert bitmap entries
     for (size_t i = 0; i < getBitmapList().size(); ++i)
         m_xBitmapDropDown->append(getBitmapList()[i].aRawString,
                                   getBitmapList()[i].aTranslatedString);
