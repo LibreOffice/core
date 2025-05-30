@@ -44,6 +44,8 @@
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
 #include <docufld.hxx>
+#include <IDocumentFieldsAccess.hxx>
+#include <MarkManager.hxx>
 
 /// Covers sw/source/core/txtnode/ fixes.
 class SwCoreTxtnodeTest : public SwModelTestBase
@@ -610,6 +612,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testNodeSplitStyleListLevel)
     SwTextNode* pPrevious = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // Same happened for the old paragraph.
     CPPUNIT_ASSERT_EQUAL(4, pPrevious->GetAttrListLevel());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDOCXCommentImport)
+{
+    // Given a DOCX file with a comment in it:
+    // When loading that file:
+    createSwDoc("comment.docx");
+
+    // Then make sure that the postit field has a name that matches the name of an annotation mark:
+    SwDoc* pDoc = getSwDoc();
+    const SwFieldTypes* pFieldTypes = pDoc->getIDocumentFieldsAccess().GetFieldTypes();
+    const SwFieldType* pPostitFieldType = nullptr;
+    for (const auto& pFieldType : *pFieldTypes)
+    {
+        if (pFieldType->Which() == SwFieldIds::Postit)
+        {
+            pPostitFieldType = pFieldType.get();
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pPostitFieldType);
+    std::vector<SwFormatField*> aFormatPostits;
+    pPostitFieldType->GatherFields(aFormatPostits);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aFormatPostits.size());
+    const SwFormatField* pFormatPostit = aFormatPostits[0];
+    auto pPostit = static_cast<const SwPostItField*>(pFormatPostit->GetField());
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    auto it = pMarkAccess->findAnnotationMark(pPostit->GetName());
+    // Without the accompanying fix in place, this test would have failed, there were no annotation
+    // marks with the name of pPostit.
+    CPPUNIT_ASSERT(it != pMarkAccess->getAnnotationMarksEnd());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
