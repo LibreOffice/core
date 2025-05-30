@@ -103,7 +103,7 @@ static void lcl_SetFontProperties(vcl::Font& rFont, const SvxFontItem& rFontItem
 void AutoFormatPreview::MakeFonts(vcl::RenderContext const& rRenderContext, sal_uInt8 nIndex,
                                   vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont)
 {
-    const SwBoxAutoFormat& rBoxFormat = maCurrentData.GetBoxFormat(nIndex);
+    const SwAutoFormatProps& rBoxFormat = maCurrentData.GetBoxFormat(nIndex).GetProps();
 
     rFont = rCJKFont = rCTLFont = rRenderContext.GetFont();
     Size aFontSize(rFont.GetFontSize().Width(), 10 * rRenderContext.GetDPIScaleFactor());
@@ -216,7 +216,9 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
             {
                 OUString sFormat;
                 LanguageType eLng, eSys;
-                maCurrentData.GetBoxFormat(sal_uInt8(nNum)).GetValueFormat(sFormat, eLng, eSys);
+                maCurrentData.GetBoxFormat(sal_uInt8(nNum))
+                    .GetProps()
+                    .GetValueFormat(sFormat, eLng, eSys);
 
                 SvNumFormatType nType;
                 bool bNew;
@@ -284,7 +286,7 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
         aPos.AdjustX(nRightX);
     else if (maCurrentData.IsJustify())
     {
-        const SvxAdjustItem& rAdj = maCurrentData.GetBoxFormat(nFormatIndex).GetAdjust();
+        const SvxAdjustItem& rAdj = maCurrentData.GetBoxFormat(nFormatIndex).GetProps().GetAdjust();
         switch (rAdj.GetAdjust())
         {
             case SvxAdjust::Left:
@@ -323,7 +325,7 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
         for (size_t nCol = 0; nCol < 5; ++nCol)
         {
             SvxBrushItem aBrushItem(
-                maCurrentData.GetBoxFormat(GetFormatIndex(nCol, nRow)).GetBackground());
+                maCurrentData.GetBoxFormat(GetFormatIndex(nCol, nRow)).GetProps().GetBackground());
 
             rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
@@ -404,7 +406,7 @@ void AutoFormatPreview::CalcLineMap()
             svx::frame::Style aStyle;
 
             const SvxBoxItem& rItem
-                = maCurrentData.GetBoxFormat(GetFormatIndex(nCol, nRow)).GetBox();
+                = maCurrentData.GetBoxFormat(GetFormatIndex(nCol, nRow)).GetProps().GetBox();
             lclSetStyleFromBorder(aStyle, rItem.GetLeft());
             maArray.SetCellStyleLeft(nCol, nRow, aStyle);
             lclSetStyleFromBorder(aStyle, rItem.GetRight());

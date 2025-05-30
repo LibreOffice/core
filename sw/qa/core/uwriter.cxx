@@ -1077,122 +1077,123 @@ void SwDocTest::testTableAutoFormats()
 
     //create new AutoFormat
     SwBoxAutoFormat aBoxAF;
+    SwAutoFormatProps& rBoxFP = aBoxAF.GetProps();
 
     //SetFont
     SvxFontItem aFont( RES_CHRATR_FONT );
     aFont.SetFamily( FontFamily::FAMILY_DECORATIVE );
     aFont.SetPitch( FontPitch::PITCH_VARIABLE );
     aFont.SetCharSet( RTL_TEXTENCODING_MS_1251 );
-    aBoxAF.SetFont( aFont );
+    rBoxFP.SetFont( aFont );
     //SetHeight
     SvxFontHeightItem aHeight( 280, 120, RES_CHRATR_FONTSIZE );
-    aBoxAF.SetHeight( aHeight );
+    rBoxFP.SetHeight( aHeight );
     //SetWeight
     SvxWeightItem aWeight( FontWeight::WEIGHT_BOLD, RES_CHRATR_WEIGHT );
-    aBoxAF.SetWeight( aWeight );
+    rBoxFP.SetWeight( aWeight );
     //SetPosture
     SvxPostureItem aPosture( FontItalic::ITALIC_NORMAL, RES_CHRATR_POSTURE );
-    aBoxAF.SetPosture( aPosture );
+    rBoxFP.SetPosture( aPosture );
     //SetCJKFont
     SvxFontItem aCJKFont( RES_CHRATR_FONT );
     aCJKFont.SetFamily( FontFamily::FAMILY_MODERN );
     aCJKFont.SetPitch( FontPitch::PITCH_FIXED );
     aCJKFont.SetCharSet( RTL_TEXTENCODING_MS_1251 );
-    aBoxAF.SetCJKFont( aCJKFont );
+    rBoxFP.SetCJKFont( aCJKFont );
     //SetCJKHeight
     SvxFontHeightItem aCJKHeight( 230, 110, RES_CHRATR_FONTSIZE );
-    aBoxAF.SetCJKHeight( aCJKHeight );
+    rBoxFP.SetCJKHeight( aCJKHeight );
     //SetCJKWeight
     SvxWeightItem aCJKWeight( FontWeight::WEIGHT_SEMIBOLD, RES_CHRATR_WEIGHT );
-    aBoxAF.SetCJKWeight( aCJKWeight );
+    rBoxFP.SetCJKWeight( aCJKWeight );
     //SetCJKPosture
     SvxPostureItem aCJKPosture( FontItalic::ITALIC_OBLIQUE, RES_CHRATR_POSTURE );
-    aBoxAF.SetCJKPosture( aCJKPosture );
+    rBoxFP.SetCJKPosture( aCJKPosture );
     //SetCTLFont
     SvxFontItem aCTLFont( RES_CHRATR_FONT );
     aCTLFont.SetFamily( FontFamily::FAMILY_ROMAN );
     aCTLFont.SetPitch( FontPitch::PITCH_FIXED );
     aCTLFont.SetCharSet( RTL_TEXTENCODING_MS_1251 );
-    aBoxAF.SetCTLFont( aCTLFont );
+    rBoxFP.SetCTLFont( aCTLFont );
     //SetCTLHeight
     SvxFontHeightItem aCTLHeight( 215, 105, RES_CHRATR_FONTSIZE );
-    aBoxAF.SetCTLHeight( aCTLHeight );
+    rBoxFP.SetCTLHeight( aCTLHeight );
     //SetCTLWeight
     SvxWeightItem aCTLWeight( FontWeight::WEIGHT_ULTRABOLD, RES_CHRATR_WEIGHT );
-    aBoxAF.SetCTLWeight( aCTLWeight );
+    rBoxFP.SetCTLWeight( aCTLWeight );
     //SetCTLPosture
     SvxPostureItem aCTLPosture( FontItalic::ITALIC_OBLIQUE, RES_CHRATR_POSTURE );
-    aBoxAF.SetCTLPosture( aCTLPosture );
+    rBoxFP.SetCTLPosture( aCTLPosture );
     //SetUnderline
     SvxUnderlineItem aUnderline( FontLineStyle::LINESTYLE_DOTTED, RES_CHRATR_UNDERLINE );
-    aBoxAF.SetUnderline( aUnderline );
+    rBoxFP.SetUnderline( aUnderline );
     //SetOverline
     SvxOverlineItem aOverline( FontLineStyle::LINESTYLE_DASH, RES_CHRATR_OVERLINE );
-    aBoxAF.SetOverline( aOverline );
+    rBoxFP.SetOverline( aOverline );
     //SetCrossedOut
     SvxCrossedOutItem aCrossedOut( FontStrikeout::STRIKEOUT_BOLD, RES_CHRATR_CROSSEDOUT );
-    aBoxAF.SetCrossedOut( aCrossedOut );
+    rBoxFP.SetCrossedOut( aCrossedOut );
     //SetContour
     SvxContourItem aContour( true, RES_CHRATR_CONTOUR );
-    aBoxAF.SetContour( aContour );
+    rBoxFP.SetContour( aContour );
     //SetShadowed
     SvxShadowedItem aShadowed( false, RES_CHRATR_SHADOWED );
-    aBoxAF.SetShadowed( aShadowed );
+    rBoxFP.SetShadowed( aShadowed );
     //SetColor
     SvxColorItem aColor( Color(0xFF23FF), RES_CHRATR_COLOR );
-    aBoxAF.SetColor( aColor );
+    rBoxFP.SetColor( aColor );
     //SetAdjust
     SvxAdjustItem aAdjust( SvxAdjust::Center, RES_PARATR_ADJUST );
-    aBoxAF.SetAdjust( aAdjust );
+    rBoxFP.SetAdjust( aAdjust );
     //SetTextOrientation
     SvxFrameDirectionItem aTOrientation( SvxFrameDirection::Vertical_RL_TB, RES_FRAMEDIR );
-    aBoxAF.SetTextOrientation( aTOrientation );
+    rBoxFP.SetTextOrientation( aTOrientation );
     //SetVerticalAlignment
     SwFormatVertOrient aVAlignment( 3, css::text::VertOrientation::CENTER, css::text::RelOrientation::PAGE_LEFT );
-    aBoxAF.SetVerticalAlignment( aVAlignment );
+    rBoxFP.SetVerticalAlignment( aVAlignment );
     //SetBox
     SvxBoxItem aBox( RES_BOX );
     aBox.SetAllDistances( 5 );
-    aBoxAF.SetBox( aBox );
+    rBoxFP.SetBox( aBox );
     //SetBackground
     SvxBrushItem aBackground( Color(0xFF11FF), RES_BACKGROUND );
-    aBoxAF.SetBackground( aBackground );
+    rBoxFP.SetBackground( aBackground );
     //Set m_aTLBR
     SvxLineItem aTLBRLine(0); aTLBRLine.ScaleMetrics( 11,12 );
-    aBoxAF.SetTLBR(aTLBRLine);
+    rBoxFP.SetTLBR(aTLBRLine);
     //Set m_aBLTR
     SvxLineItem aBLTRLine(0); aBLTRLine.ScaleMetrics( 13,14 );
-    aBoxAF.SetBLTR(aBLTRLine);
+    rBoxFP.SetBLTR(aBLTRLine);
     //Set m_aHorJustify
     SvxHorJustifyItem aHJustify( SvxCellHorJustify::Center, 0 );
-    aBoxAF.SetHorJustify(aHJustify);
+    rBoxFP.SetHorJustify(aHJustify);
     //Set m_aVerJustify
     SvxVerJustifyItem aVJustify( SvxCellVerJustify::Center , 0 );
-    aBoxAF.SetVerJustify(aVJustify);
+    rBoxFP.SetVerJustify(aVJustify);
     //Set m_aStacked
     SfxBoolItem aStacked(0, true);
-    aBoxAF.SetStacked(aStacked);
+    rBoxFP.SetStacked(aStacked);
     //Set m_aMargin
     SvxMarginItem aSvxMarginItem(sal_Int16(4), sal_Int16(2), sal_Int16(3), sal_Int16(3), TypedWhichId<SvxMarginItem>(0));
-    aBoxAF.SetMargin(aSvxMarginItem);
+    rBoxFP.SetMargin(aSvxMarginItem);
     //Set m_aLinebreak
     SfxBoolItem aLBreak(0, true);
-    aBoxAF.SetLinebreak(aLBreak);
+    rBoxFP.SetLinebreak(aLBreak);
     //Set m_aRotateAngle
     SfxInt32Item aRAngle(sal_Int32(5));
-    aBoxAF.SetRotateAngle(aRAngle);
+    rBoxFP.SetRotateAngle(aRAngle);
     //Set m_aRotateMode
     SvxRotateModeItem aSvxRotateModeItem(SVX_ROTATE_MODE_CENTER, TypedWhichId<SvxRotateModeItem>(0));
-    aBoxAF.SetRotateMode(aSvxRotateModeItem);
+    rBoxFP.SetRotateMode(aSvxRotateModeItem);
     //Set m_sNumFormatString
     OUString aNFString = u"UnitTestFormat"_ustr;
-    aBoxAF.SetNumFormatString(aNFString);
+    rBoxFP.SetNumFormatString(aNFString);
     //Set m_eSysLanguage
     LanguageType aSLang( LANGUAGE_ENGLISH_INDIA );
-    aBoxAF.SetSysLanguage(aSLang);
+    rBoxFP.SetSysLanguage(aSLang);
     //Set m_eNumFormatLanguage
     LanguageType aNFLang( LANGUAGE_GERMAN );
-    aBoxAF.SetNumFormatLanguage(aNFLang);
+    rBoxFP.SetNumFormatLanguage(aNFLang);
     //Set m_aKeepWithNextPara
     SvxFormatKeepItem aKWNPara( true, 0 );
     aTableAF.SetKeepWithNextPara(aKWNPara);
@@ -1250,77 +1251,78 @@ void SwDocTest::testTableAutoFormats()
     //assert the values
     SwTableAutoFormat* pLoadAF = aLoadTAFT.FindAutoFormat( TableStyleName(u"TestItemStyle"_ustr) );
     CPPUNIT_ASSERT( pLoadAF );
+    const SwAutoFormatProps& rLoadFP = pLoadAF->GetBoxFormat(0).GetProps();
     //GetFont
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetFont() == aFont ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetFont() == aFont ) );
     //GetHeight
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetHeight() == aHeight ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetHeight() == aHeight ) );
     //GetWeight
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetWeight() == aWeight ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetWeight() == aWeight ) );
     //GetPosture
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetPosture() == aPosture ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetPosture() == aPosture ) );
     //GetCJKFont
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCJKFont() == aCJKFont ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetCJKFont() == aCJKFont ) );
     //GetCJKHeight
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCJKHeight() == aCJKHeight ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetCJKHeight() == aCJKHeight ) );
     //GetCJKWeight
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCJKWeight() == aCJKWeight ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetCJKWeight() == aCJKWeight ) );
     //GetCJKPosture
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCJKPosture() == aCJKPosture ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetCJKPosture() == aCJKPosture ) );
     //GetCTLFont
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCTLFont() == aCTLFont ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetCTLFont() == aCTLFont ) );
     //GetCTLHeight
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCTLHeight() == aCTLHeight ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetCTLHeight() == aCTLHeight ) );
     //GetCTLWeight
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCTLWeight() == aCTLWeight ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetCTLWeight() == aCTLWeight ) );
     //GetCTLPosture
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCTLPosture() == aCTLPosture ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetCTLPosture() == aCTLPosture ) );
     //GetUnderline
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetUnderline() == aUnderline ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetUnderline() == aUnderline ) );
     //GetOverline
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetOverline() == aOverline ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetOverline() == aOverline ) );
     //GetCrossedOut
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCrossedOut() == aCrossedOut ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetCrossedOut() == aCrossedOut ) );
     //GetContour
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetContour() == aContour ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetContour() == aContour ) );
     //GetShadowed
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetShadowed() == aShadowed ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetShadowed() == aShadowed ) );
     //GetColor
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetColor() == aColor) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetColor() == aColor) );
     //GetAdjust
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetAdjust() == aAdjust ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetAdjust() == aAdjust ) );
     //GetTextOrientation
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetTextOrientation() == aTOrientation ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetTextOrientation() == aTOrientation ) );
     //GetVerticalAlignment
-    CPPUNIT_ASSERT (bool( pLoadAF->GetBoxFormat(0).GetVerticalAlignment() == aVAlignment ) );
+    CPPUNIT_ASSERT (bool( rLoadFP.GetVerticalAlignment() == aVAlignment ) );
     //GetBox
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetBox() == aBox ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetBox() == aBox ) );
     //GetBackground
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetBackground() == aBackground ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetBackground() == aBackground ) );
     //Get m_aTLBR
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetTLBR() == aTLBRLine ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetTLBR() == aTLBRLine ) );
     //Get m_aBLTR
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetBLTR() == aBLTRLine ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetBLTR() == aBLTRLine ) );
     //Get m_aHorJustify
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetHorJustify() == aHJustify ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetHorJustify() == aHJustify ) );
     //Get m_aVerJustify
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetVerJustify() == aVJustify ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetVerJustify() == aVJustify ) );
     //Get m_aStacked
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetStacked() == aStacked ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetStacked() == aStacked ) );
     //Get m_aMargin
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetMargin() == aSvxMarginItem ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetMargin() == aSvxMarginItem ) );
     //Get m_aLinebreak
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetLinebreak() == aLBreak ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetLinebreak() == aLBreak ) );
     //Get m_aRotateAngle
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetRotateAngle() == aRAngle ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetRotateAngle() == aRAngle ) );
     //Get m_aRotateMode
-    //SvxRotateModeItem aRMode = aBoxAF.m_aRotateMode;GetRotateMode
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetRotateMode() == aSvxRotateModeItem ) );
+    //SvxRotateModeItem aRMode = rBoxFP.m_aRotateMode;GetRotateMode
+    CPPUNIT_ASSERT( bool( rLoadFP.GetRotateMode() == aSvxRotateModeItem ) );
     //Get m_sNumFormatString
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetNumFormatString() == aNFString ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetNumFormatString() == aNFString ) );
     //Get m_eSysLanguage
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetSysLanguage() == aSLang ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetSysLanguage() == aSLang ) );
     //Get m_eNumFormatLanguage
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetNumFormatLanguage() == aNFLang ) );
+    CPPUNIT_ASSERT( bool( rLoadFP.GetNumFormatLanguage() == aNFLang ) );
     //Get m_aKeepWithNextPara
     CPPUNIT_ASSERT( bool( pLoadAF->GetKeepWithNextPara() == aKWNPara ) );
     //Get m_aRepeatHeading

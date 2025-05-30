@@ -1261,8 +1261,8 @@ void SwDoc::ForEachOverlineItem( const std::function<bool(const SvxOverlineItem&
         const SwTableAutoFormat& rTableStyle = rTableStyles[i];
         for (const sal_uInt32 nBoxIndex : aTableTemplateMap)
         {
-            const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
-            const SvxOverlineItem rOverlineItem = rBoxFormat.GetOverline();
+            const SwAutoFormatProps& rBoxProps = rTableStyle.GetBoxFormat(nBoxIndex).GetProps();
+            const SvxOverlineItem rOverlineItem = rBoxProps.GetOverline();
             if (!rFunc(rOverlineItem))
                 return;
         }
@@ -1271,8 +1271,8 @@ void SwDoc::ForEachOverlineItem( const std::function<bool(const SvxOverlineItem&
     for (size_t i=0; i < rCellStyleTable.size(); ++i)
     {
         const SwCellStyleDescriptor aCellStyle = rCellStyleTable[i];
-        const SwBoxAutoFormat& rBoxFormat = aCellStyle.GetAutoFormat();
-        const SvxOverlineItem rOverlineItem = rBoxFormat.GetOverline();
+        const SwAutoFormatProps& rBoxProps = aCellStyle.GetAutoFormat().GetProps();
+        const SvxOverlineItem rOverlineItem = rBoxProps.GetOverline();
         if (!rFunc(rOverlineItem))
             return;
     }
