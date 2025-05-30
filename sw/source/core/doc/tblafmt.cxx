@@ -926,6 +926,13 @@ void SwTableAutoFormat::SetXObject(rtl::Reference<SwXTextTableStyle> const& xObj
 struct SwTableAutoFormatTable::Impl
 {
     std::vector<std::unique_ptr<SwTableAutoFormat>> m_AutoFormats;
+
+    void Load();
+    bool Save() const;
+
+private:
+    SAL_DLLPRIVATE bool Load(SvStream& rStream);
+    SAL_DLLPRIVATE bool Save(SvStream& rStream) const;
 };
 
 size_t SwTableAutoFormatTable::size() const
@@ -1035,10 +1042,15 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
     pNew->SetUserDefined(false);
     m_pImpl->m_AutoFormats.push_back(std::move(pNew));
 
-    Load();
+    m_pImpl->Load();
 }
 
-void SwTableAutoFormatTable::Load()
+bool SwTableAutoFormatTable::Save() const
+{
+    return m_pImpl->Save();
+}
+
+void SwTableAutoFormatTable::Impl::Load()
 {
     if (comphelper::IsFuzzing())
         return;
@@ -1051,7 +1063,7 @@ void SwTableAutoFormatTable::Load()
     }
 }
 
-bool SwTableAutoFormatTable::Save() const
+bool SwTableAutoFormatTable::Impl::Save() const
 {
     if (comphelper::IsFuzzing())
         return false;
@@ -1061,7 +1073,7 @@ bool SwTableAutoFormatTable::Save() const
     return Save( *aStream.GetOutStream() ) && aStream.Commit();
 }
 
-bool SwTableAutoFormatTable::Load( SvStream& rStream )
+bool SwTableAutoFormatTable::Impl::Load( SvStream& rStream )
 {
     bool bRet = ERRCODE_NONE == rStream.GetError();
     if (bRet)
@@ -1121,7 +1133,7 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
                         bRet = pNew->Load( rStream, aVersions );
                         if( bRet )
                         {
-                            m_pImpl->m_AutoFormats.push_back(std::move(pNew));
+                            m_AutoFormats.push_back(std::move(pNew));
                         }
                         else
                         {
@@ -1139,7 +1151,7 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
     return bRet;
 }
 
-bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
+bool SwTableAutoFormatTable::Impl::Save( SvStream& rStream ) const
 {
     bool bRet = ERRCODE_NONE == rStream.GetError();
     if (bRet)
@@ -1158,12 +1170,12 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
         // Write this version number for all attributes
         SwAfVersions::Write(rStream, AUTOFORMAT_FILE_VERSION);
 
-        rStream.WriteUInt16( m_pImpl->m_AutoFormats.size() - 1 );
+        rStream.WriteUInt16( m_AutoFormats.size() - 1 );
         bRet = ERRCODE_NONE == rStream.GetError();
 
-        for (size_t i = 1; bRet && i < m_pImpl->m_AutoFormats.size(); ++i)
+        for (size_t i = 1; bRet && i < m_AutoFormats.size(); ++i)
         {
-            SwTableAutoFormat const& rFormat = *m_pImpl->m_AutoFormats[i];
+            SwTableAutoFormat const& rFormat = *m_AutoFormats[i];
             bRet = rFormat.Save(rStream, AUTOFORMAT_FILE_VERSION);
         }
     }

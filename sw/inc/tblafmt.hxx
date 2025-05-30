@@ -275,10 +275,6 @@ class SW_DLLPUBLIC SwTableAutoFormatTable
     struct Impl;
     std::unique_ptr<Impl> m_pImpl;
 
-    SAL_DLLPRIVATE bool Load( SvStream& rStream );
-    SAL_DLLPRIVATE bool Save( SvStream& rStream ) const;
-
-    void Load();
 public:
     explicit SwTableAutoFormatTable();
     ~SwTableAutoFormatTable();
