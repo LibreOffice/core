@@ -67,17 +67,17 @@ public:
      */
     OInterfaceIteratorHelper4(std::unique_lock<std::mutex>& rGuard,
                               OInterfaceContainerHelper4<ListenerT>& rCont_)
-        : rCont(rCont_)
-        , maData(rCont.maData)
+        : m_rCont(rCont_)
+        , m_aData(m_rCont.maData)
         // const_cast so we don't trigger make_unique via o3tl::cow_wrapper::operator->
-        , nRemain(std::as_const(maData)->size())
+        , m_nRemain(std::as_const(m_aData)->size())
     {
         assert(rGuard.owns_lock());
         (void)rGuard;
     }
 
     /** Return true, if there are more elements in the iterator. */
-    bool hasMoreElements() const { return nRemain != 0; }
+    bool hasMoreElements() const { return m_nRemain != 0; }
     /** Return the next element of the iterator. Calling this method if
         hasMoreElements() has returned false, is an error.
      */
@@ -93,11 +93,11 @@ public:
     void remove(::std::unique_lock<::std::mutex>& rGuard);
 
 private:
-    OInterfaceContainerHelper4<ListenerT>& rCont;
+    OInterfaceContainerHelper4<ListenerT>& m_rCont;
     o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
                       o3tl::ThreadSafeRefCountingPolicy>
-        maData;
-    sal_Int32 nRemain;
+        m_aData;
+    sal_Int32 m_nRemain;
 
     OInterfaceIteratorHelper4(const OInterfaceIteratorHelper4&) = delete;
     OInterfaceIteratorHelper4& operator=(const OInterfaceIteratorHelper4&) = delete;
@@ -106,14 +106,14 @@ private:
 template <class ListenerT>
 const css::uno::Reference<ListenerT>& OInterfaceIteratorHelper4<ListenerT>::next()
 {
-    nRemain--;
-    return (*std::as_const(maData))[nRemain];
+    m_nRemain--;
+    return (*std::as_const(m_aData))[m_nRemain];
 }
 
 template <class ListenerT>
 void OInterfaceIteratorHelper4<ListenerT>::remove(::std::unique_lock<::std::mutex>& rGuard)
 {
-    rCont.removeInterface(rGuard, (*std::as_const(maData))[nRemain]);
+    m_rCont.removeInterface(rGuard, (*std::as_const(m_aData))[m_nRemain]);
 }
 
 /**
