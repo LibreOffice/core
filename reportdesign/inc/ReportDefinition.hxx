@@ -135,8 +135,6 @@ namespace reportdesign
             const OUString& rServiceName, /// service name of the component
             /// the argument (XInitialization)
             const css::uno::Sequence< css::uno::Any> & rArguments,
-            /// output descriptor
-            const css::uno::Sequence< css::beans::PropertyValue> & rMediaDesc,
             const css::uno::Reference< css::embed::XStorage >& _xStorageToSaveTo);
 
         /// write a single output stream
@@ -145,8 +143,7 @@ namespace reportdesign
             const css::uno::Reference< css::io::XOutputStream> & xOutputStream,
             const css::uno::Reference< css::lang::XComponent> & xComponent,
             const OUString& rServiceName,
-            const css::uno::Sequence< css::uno::Any> & rArguments,
-            const css::uno::Sequence< css::beans::PropertyValue> & rMediaDesc);
+            const css::uno::Sequence< css::uno::Any> & rArguments);
 
         void notifyEvent(const OUString& _sEventName);
         void init();

@@ -1293,9 +1293,6 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     bool AutoSaveEvent = false;
     aDescriptor[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= AutoSaveEvent;
 
-    // properties
-    uno::Sequence < beans::PropertyValue > aProps;
-
     // export sub streams for package, else full stream into a file
     uno::Reference< beans::XPropertySet> xProp(_xStorageToSaveTo,uno::UNO_QUERY);
     if ( xProp.is() )
@@ -1347,19 +1344,19 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     // write to content.xml (keeping logic of commit 94ccba3eebc83b58e74e18f0e028c6a995ce6aa6)
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"settings.xml"_ustr));
     WriteThroughComponent(xCom, u"settings.xml"_ustr, u"com.sun.star.comp.report.XMLSettingsExporter"_ustr,
-                          aDelegatorArguments, aProps, _xStorageToSaveTo);
+                          aDelegatorArguments, _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"meta.xml"_ustr));
     WriteThroughComponent(xCom, u"meta.xml"_ustr, u"com.sun.star.comp.report.XMLMetaExporter"_ustr,
-                          aDelegatorArguments, aProps, _xStorageToSaveTo);
+                          aDelegatorArguments, _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"styles.xml"_ustr));
     WriteThroughComponent(xCom, u"styles.xml"_ustr, u"com.sun.star.comp.report.XMLStylesExporter"_ustr,
-                          aDelegatorArguments, aProps, _xStorageToSaveTo);
+                          aDelegatorArguments, _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
     bool bOk = WriteThroughComponent(xCom, u"content.xml"_ustr, u"com.sun.star.comp.report.ExportFilter"_ustr,
-                                     aDelegatorArguments, aProps, _xStorageToSaveTo);
+                                     aDelegatorArguments, _xStorageToSaveTo);
 
     uno::Any aImage;
     uno::Reference< embed::XVisualObject > xCurrentController(getCurrentController(),uno::UNO_QUERY);
@@ -1451,7 +1448,6 @@ bool OReportDefinition::WriteThroughComponent(
     const OUString& rStreamName,
     const OUString& rServiceName,
     const uno::Sequence<uno::Any> & rArguments,
-    const uno::Sequence<beans::PropertyValue> & rMediaDesc,
     const uno::Reference<embed::XStorage>& _xStorageToSaveTo)
 {
     // open stream
@@ -1484,7 +1480,7 @@ bool OReportDefinition::WriteThroughComponent(
     // write the stuff
     bool bRet = WriteThroughComponent(
         xOutputStream, xComponent,
-        rServiceName, rArguments, rMediaDesc);
+        rServiceName, rArguments);
     // finally, commit stream.
     return bRet;
 }
@@ -1493,8 +1489,7 @@ bool OReportDefinition::WriteThroughComponent(
     const uno::Reference<io::XOutputStream> & xOutputStream,
     const uno::Reference<lang::XComponent> & xComponent,
     const OUString& rServiceName,
-    const uno::Sequence<uno::Any> & rArguments,
-    const uno::Sequence<beans::PropertyValue> & rMediaDesc)
+    const uno::Sequence<uno::Any> & rArguments)
 {
     OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );
     OSL_ENSURE( xComponent.is(), "Need component!" );
@@ -1525,8 +1520,9 @@ bool OReportDefinition::WriteThroughComponent(
     xExporter->setSourceDocument( xComponent );
 
     // filter!
+    uno::Sequence<beans::PropertyValue> aMediaDesc;
     uno::Reference<document::XFilter> xFilter( xExporter, uno::UNO_QUERY );
-    return xFilter->filter( rMediaDesc );
+    return xFilter->filter(aMediaDesc);
 }
 
 // XLoadable
