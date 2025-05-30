@@ -39,6 +39,7 @@
 #include <editsh.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
+#include <swmodule.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -1085,7 +1086,10 @@ bool SwTableAutoFormatTable::Impl::Save() const
     SvtPathOptions aPathOpt;
     const OUString sNm( aPathOpt.GetUserConfigPath() + "/" + AUTOTABLE_FORMAT_NAME );
     SfxMedium aStream(sNm, StreamMode::STD_WRITE );
-    return Save( *aStream.GetOutStream() ) && aStream.Commit();
+    bool bRes = Save( *aStream.GetOutStream() ) && aStream.Commit();
+    // Drop now out of date default auto format table instance
+    SwModule::get()->InvalidateAutoFormatTable();
+    return bRes;
 }
 
 bool SwTableAutoFormatTable::Impl::Load( SvStream& rStream )

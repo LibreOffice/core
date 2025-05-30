@@ -55,6 +55,7 @@
 #include <srcview.hxx>
 #include <glshell.hxx>
 #include <tabsh.hxx>
+#include <tblafmt.hxx>
 #include <listsh.hxx>
 #include <grfsh.hxx>
 #include <mediash.hxx>
@@ -396,6 +397,18 @@ void SwModule::CallAutomationApplicationEventSinks(const OUString& Method, css::
 {
     if (mxAutomationApplicationEventsCaller.is())
         mxAutomationApplicationEventsCaller->CallSinks(Method, Arguments);
+}
+
+const SwTableAutoFormatTable& SwModule::GetAutoFormatTable()
+{
+    if (!m_xTableAutoFormatTable)
+        m_xTableAutoFormatTable = std::make_unique<SwTableAutoFormatTable>();
+    return *m_xTableAutoFormatTable;
+}
+
+void SwModule::InvalidateAutoFormatTable()
+{
+    m_xTableAutoFormatTable.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
