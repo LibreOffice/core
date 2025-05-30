@@ -1623,8 +1623,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
 }
 
 
-void SVGTextWriter::writeTextPortion( const Point& rPos,
-                                      const OUString& rText )
+void SVGTextWriter::writeTextPortion(const Point& rPos, const OUString& rText, tools::Long nWidth)
 {
     if( rText.isEmpty() )
         return;
@@ -1703,7 +1702,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
         // to be implemented
     }
 #else
-    implWriteTextPortion( rPos, rText, mpVDev->GetTextColor() );
+    implWriteTextPortion( rPos, rText, mpVDev->GetTextColor(), nWidth );
 #endif
 
     if( bStandAloneTextPortion )
@@ -1713,9 +1712,8 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
 }
 
 
-void SVGTextWriter::implWriteTextPortion( const Point& rPos,
-                                          const OUString& rText,
-                                          Color aTextColor )
+void SVGTextWriter::implWriteTextPortion(const Point& rPos, const OUString& rText, Color aTextColor,
+                                         tools::Long nWidth)
 {
     Point                                   aPos;
     Point                                   aBaseLinePos( rPos );
@@ -1808,6 +1806,18 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
 
     addFontAttributes( /* isTexTContainer: */ false );
 
+    tools::Long nTextWidth;
+    if (nWidth)
+    {
+        Size size;
+        implMap(Size(nWidth, 0), size);
+        nTextWidth = size.Width();
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"lengthAdjust"_ustr, u"spacingAndGlyphs"_ustr);
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, u"textLength"_ustr, OUString::number(nTextWidth));
+    }
+    else
+        nTextWidth = mpVDev->GetTextWidth(rText);
+
     if (!maTextOpacity.isEmpty())
     {
         mrExport.AddAttribute(XML_NAMESPACE_NONE, u"fill-opacity"_ustr, maTextOpacity);
@@ -1843,7 +1853,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
         mrExport.GetDocHandler()->characters( rText );
     }
 
-    mnTextWidth += mpVDev->GetTextWidth( rText );
+    mnTextWidth += nTextWidth;
 }
 
 
@@ -4013,7 +4023,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         }
                         else
                         {
-                            maTextWriter.writeTextPortion( pA->GetPoint(), aText );
+                            tools::Long nWidth = 0;
+                            if (pA->GetDXArray().size() >= o3tl::make_unsigned(aText.getLength()))
+                                nWidth = std::round(pA->GetDXArray()[aText.getLength() - 1]);
+                            maTextWriter.writeTextPortion(pA->GetPoint(), aText, nWidth);
                         }
                     }
                 }
