@@ -98,7 +98,7 @@ public:
 class SW_DLLPUBLIC SwBoxAutoFormat
 {
 private:
-    SwAutoFormatProps m_aAutoFormat;
+    o3tl::cow_wrapper<SwAutoFormatProps> m_aAutoFormat;
 
     // associated UNO object, if such exists
     unotools::WeakReference<SwXTextCellStyle> m_xAutoFormatUnoObject;
@@ -108,8 +108,8 @@ public:
         { return m_xAutoFormatUnoObject; }
     void SetXObject(rtl::Reference<SwXTextCellStyle> const& xObject);
 
-    const SwAutoFormatProps& GetProps() const { return m_aAutoFormat; }
-    SwAutoFormatProps& GetProps() { return m_aAutoFormat; }
+    const SwAutoFormatProps& GetProps() const { return *m_aAutoFormat; }
+    SwAutoFormatProps& GetProps() { return *m_aAutoFormat; }
 };
 
 enum class SwTableAutoFormatUpdateFlags { Char = 1, Box = 2 };
