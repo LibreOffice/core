@@ -22,6 +22,7 @@
 #include <scitems.hxx>
 
 #include <editeng/editview.hxx>
+#include <editeng/StripPortionsHelper.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svdoole2.hxx>

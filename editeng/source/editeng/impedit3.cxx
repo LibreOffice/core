@@ -47,8 +47,10 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/StripPortionsHelper.hxx>
 #include <outleeng.hxx>
 #include <TextPortion.hxx>
+#include <tools/gen.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>

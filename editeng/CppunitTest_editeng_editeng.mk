@@ -23,6 +23,8 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_editeng, \
     cppu \
     cppuhelper \
     docmodel \
+	drawinglayercore \
+    drawinglayer \
     i18nlangtag \
     i18nutil \
     lng \

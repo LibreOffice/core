@@ -33,6 +33,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <editeng/StripPortionsHelper.hxx>
 
 // primitive decomposition helpers
 #include <drawinglayer/attribute/strokeattribute.hxx>

@@ -29,6 +29,8 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
     cppu \
     cppuhelper \
     docmodel \
+	drawinglayercore \
+    drawinglayer \
     i18nlangtag \
     i18nutil \
     lng \

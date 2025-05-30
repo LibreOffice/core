@@ -116,19 +116,6 @@ namespace sdr::properties
     class CellProperties;
 }
 
-class DrawPortionInfo;
-class DrawBulletInfo;
-void SVXCORE_DLLPUBLIC CreateTextPortionPrimitivesFromDrawPortionInfo(
-    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-    const basegfx::B2DHomMatrix& rNewTransformA,
-    const basegfx::B2DHomMatrix& rNewTransformB,
-    const DrawPortionInfo& rInfo);
-void SVXCORE_DLLPUBLIC CreateDrawBulletPrimitivesFromDrawBulletInfo(
-    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-    const basegfx::B2DHomMatrix& rNewTransformA,
-    const basegfx::B2DHomMatrix& rNewTransformB,
-    const DrawBulletInfo& rInfo);
-
 //   SdrTextObj
 class SVXCORE_DLLPUBLIC SdrTextObj : public SdrAttrObj, public svx::ITextProvider
 {

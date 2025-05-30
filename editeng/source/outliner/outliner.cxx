@@ -50,6 +50,7 @@
 #include <o3tl/string_view.hxx>
 #include <o3tl/temporary.hxx>
 #include <osl/diagnose.h>
+#include <editeng/StripPortionsHelper.hxx>
 
 #include <memory>
 using std::advance;

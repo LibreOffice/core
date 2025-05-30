@@ -80,6 +80,8 @@ enum class PointerStyle;
 class SvxNumRule;
 enum class TextRotation;
 enum class SdrCompatibilityFlag;
+class DrawPortionInfo;
+class DrawBulletInfo;
 
 namespace com::sun::star::linguistic2 {
     class XSpellChecker1;
@@ -398,84 +400,6 @@ bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( OUString &rStatus
 void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const OUString &rSynonmText );
 
 typedef ::std::vector< OutlinerView* > ViewList;
-
-class EDITENG_DLLPUBLIC DrawPortionInfo
-{
-public:
-    const Point&        mrStartPos;
-    const OUString      maText;
-    sal_Int32           mnTextStart;
-    sal_Int32           mnTextLen;
-    KernArraySpan       mpDXArray;
-    std::span<const sal_Bool> mpKashidaArray;
-    const SvxFont&      mrFont;
-    sal_Int32           mnPara;
-    sal_uInt8           mnBiDiLevel;
-    const EEngineData::WrongSpellVector*  mpWrongSpellVector;
-    const SvxFieldData* mpFieldData;
-    bool                mbEndOfLine : 1;
-    bool                mbEndOfParagraph : 1;
-    bool                mbEndOfBullet : 1;
-    const css::lang::Locale* mpLocale;
-    const Color         maOverlineColor;
-    const Color         maTextLineColor;
-
-    bool IsRTL() const { return mnBiDiLevel % 2 == 1; }
-
-    DrawPortionInfo(
-        const Point& rPos,
-        OUString aTxt,
-        sal_Int32 nTxtStart,
-        sal_Int32 nTxtLen,
-        KernArraySpan pDXArr,
-        std::span<const sal_Bool> pKashidaArr,
-        const SvxFont& rFnt,
-        sal_Int32 nPar,
-        sal_uInt8 nBiDiLevel,
-        const EEngineData::WrongSpellVector* pWrongSpellVector,
-        const SvxFieldData* pFieldData,
-        bool bEndOfLine,
-        bool bEndOfParagraph,
-        bool bEndOfBullet,
-        const css::lang::Locale* pLocale,
-        const Color& rOverlineColor,
-        const Color& rTextLineColor)
-    :   mrStartPos(rPos),
-        maText(std::move(aTxt)),
-        mnTextStart(nTxtStart),
-        mnTextLen(nTxtLen),
-        mpDXArray(pDXArr),
-        mpKashidaArray(pKashidaArr),
-        mrFont(rFnt),
-        mnPara(nPar),
-        mnBiDiLevel(nBiDiLevel),
-        mpWrongSpellVector(pWrongSpellVector),
-        mpFieldData(pFieldData),
-        mbEndOfLine(bEndOfLine),
-        mbEndOfParagraph(bEndOfParagraph),
-        mbEndOfBullet(bEndOfBullet),
-        mpLocale(pLocale),
-        maOverlineColor(rOverlineColor),
-        maTextLineColor(rTextLineColor)
-    {}
-};
-
-class EDITENG_DLLPUBLIC DrawBulletInfo
-{
-public:
-    const GraphicObject maBulletGraphicObject;
-    Point               maBulletPosition;
-    Size                maBulletSize;
-
-    DrawBulletInfo(
-        const GraphicObject& rBulletGraphicObject,
-        const Point& rBulletPosition,
-        const Size& rBulletSize)
-    :   maBulletGraphicObject(rBulletGraphicObject),
-        maBulletPosition(rBulletPosition),
-        maBulletSize(rBulletSize)
-    {}
-};
 
 struct EDITENG_DLLPUBLIC PaintFirstLineInfo
 {
