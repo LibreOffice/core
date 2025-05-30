@@ -999,7 +999,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
             // (#67720#)
             pManager->AddUndoAction(
                 std::make_unique<ModifyPageUndoAction>(
-                    pDocument, pUndoPage, rName, pUndoPage->GetAutoLayout(),
+                    *pDocument, pUndoPage, rName, pUndoPage->GetAutoLayout(),
                     aVisibleLayers.IsSet( nBackground ),
                     aVisibleLayers.IsSet( nBgObj )));
 
@@ -1019,7 +1019,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
         if (pPageToRename != nullptr)
         {
             const OUString aOldLayoutName( pPageToRename->GetLayoutName() );
-            pManager->AddUndoAction( std::make_unique<RenameLayoutTemplateUndoAction>( pDocument, aOldLayoutName, rName ) );
+            pManager->AddUndoAction( std::make_unique<RenameLayoutTemplateUndoAction>( *pDocument, aOldLayoutName, rName ) );
             pDocument->RenameLayoutTemplate( aOldLayoutName, rName );
         }
     }
@@ -1172,7 +1172,7 @@ void SlotManager::ChangeSlideExclusionState (
             model::PageDescriptor::ST_Excluded,
             bExcludeSlide);
         pManager->AddUndoAction(std::make_unique<ChangeSlideExclusionStateUndoAction>(
-            pDocument, rpDescriptor, model::PageDescriptor::ST_Excluded, !bExcludeSlide));
+            *pDocument, rpDescriptor, model::PageDescriptor::ST_Excluded, !bExcludeSlide));
     }
     else
     {
@@ -1180,7 +1180,7 @@ void SlotManager::ChangeSlideExclusionState (
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
         std::unique_ptr<ChangeSlideExclusionStateUndoAction> pChangeSlideExclusionStateUndoAction(
-            new ChangeSlideExclusionStateUndoAction(pDocument, model::PageDescriptor::ST_Excluded,
+            new ChangeSlideExclusionStateUndoAction(*pDocument, model::PageDescriptor::ST_Excluded,
                                                     !bExcludeSlide));
         while (aSelectedPages.HasMoreElements())
         {

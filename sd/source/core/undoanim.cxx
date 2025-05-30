@@ -210,8 +210,8 @@ struct UndoTransitionImpl
     bool mbOldStopSound;
 };
 
-UndoTransition::UndoTransition( SdDrawDocument* _pDoc, SdPage* pThePage )
-: SdUndoAction( _pDoc ), mpImpl( new UndoTransitionImpl )
+UndoTransition::UndoTransition( SdDrawDocument& rDoc, SdPage* pThePage )
+: SdUndoAction( rDoc ), mpImpl( new UndoTransitionImpl )
 {
     mpImpl->mpPage = pThePage;
 

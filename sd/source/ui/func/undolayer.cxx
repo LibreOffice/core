@@ -28,10 +28,10 @@
 
 
 SdLayerModifyUndoAction::SdLayerModifyUndoAction(
-    SdDrawDocument* _pDoc, SdrLayer* pLayer,
+    SdDrawDocument& rDoc, SdrLayer* pLayer,
     OUString aOldLayerName, OUString aOldLayerTitle, OUString aOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
     OUString aNewLayerName, OUString aNewLayerTitle, OUString aNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable )
-:   SdUndoAction( _pDoc ),
+:   SdUndoAction( rDoc ),
     mpLayer( pLayer ),
     maOldLayerName(std::move( aOldLayerName )),
     maOldLayerTitle(std::move( aOldLayerTitle )),
@@ -52,7 +52,7 @@ SdLayerModifyUndoAction::SdLayerModifyUndoAction(
 
 void SdLayerModifyUndoAction::Undo()
 {
-    ::sd::DrawDocShell* pDocSh = mpDoc->GetDocSh();
+    ::sd::DrawDocShell* pDocSh = mrDoc.GetDocSh();
     if( pDocSh )
     {
         ::sd::DrawViewShell* pDrViewSh = dynamic_cast< ::sd::DrawViewShell*> ( pDocSh->GetViewShell() );
@@ -65,7 +65,7 @@ void SdLayerModifyUndoAction::Undo()
 
 void SdLayerModifyUndoAction::Redo()
 {
-    ::sd::DrawDocShell* pDocSh = mpDoc->GetDocSh();
+    ::sd::DrawDocShell* pDocSh = mrDoc.GetDocSh();
     if( pDocSh )
     {
         ::sd::DrawViewShell* pDrViewSh = dynamic_cast< ::sd::DrawViewShell* >( pDocSh->GetViewShell() );

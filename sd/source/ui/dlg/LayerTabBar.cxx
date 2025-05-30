@@ -338,7 +338,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
                 {
                     SfxUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
                     std::unique_ptr<SdLayerModifyUndoAction> pAction(new SdLayerModifyUndoAction(
-                        &rDoc,
+                        rDoc,
                         pLayer,
                         aName,
                         pLayer->GetTitle(),
@@ -518,7 +518,7 @@ void LayerTabBar::EndRenaming()
     {
         SfxUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
         std::unique_ptr<SdLayerModifyUndoAction> pAction(new SdLayerModifyUndoAction(
-            &rDoc,
+            rDoc,
             pLayer,
             aLayerName,
             pLayer->GetTitle(),

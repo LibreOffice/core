@@ -530,7 +530,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     SfxViewShell* pViewShell(GetViewShell());
     if (pViewShell)
     {
-        pUndoGroup.reset(new SdUndoGroup(GetDoc()));
+        pUndoGroup.reset(new SdUndoGroup(*GetDoc()));
         pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
     }
     Broadcast (ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_START));

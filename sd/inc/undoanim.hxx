@@ -68,7 +68,7 @@ struct UndoTransitionImpl;
 class UndoTransition final : public SdUndoAction
 {
 public:
-    UndoTransition(SdDrawDocument* pDoc, SdPage* pThePage);
+    UndoTransition(SdDrawDocument& rDoc, SdPage* pThePage);
     virtual ~UndoTransition() override;
 
     virtual void Undo() override;

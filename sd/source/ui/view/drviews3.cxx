@@ -545,7 +545,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_LONG_LRSPACE:
             if (pArgs)
             {
-                std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(GetDoc()));
+                std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(*GetDoc()));
                 pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
 
                 const SvxLongLRSpaceItem& rLRSpace =
@@ -576,7 +576,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     for ( i = 0; i < nPageCnt; i++)
                     {
                         SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
-                        SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
+                        SdUndoAction* pUndo = new SdPageLRUndoAction(*GetDoc(),
                                                 pPage,
                                                 pPage->GetLeftBorder(),
                                                 pPage->GetRightBorder(),
@@ -590,7 +590,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     for (i = 0; i < nPageCnt; i++)
                     {
                         SdPage* pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
-                        SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
+                        SdUndoAction* pUndo = new SdPageLRUndoAction(*GetDoc(),
                                                 pPage,
                                                 pPage->GetLeftBorder(),
                                                 pPage->GetRightBorder(),
@@ -610,7 +610,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_LONG_ULSPACE:
             if (pArgs)
             {
-                std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(GetDoc()));
+                std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(*GetDoc()));
                 pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
 
                 const SvxLongULSpaceItem& rULSpace =
@@ -642,7 +642,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     for ( i = 0; i < nPageCnt; i++)
                     {
                         SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
-                        SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
+                        SdUndoAction* pUndo = new SdPageULUndoAction(*GetDoc(),
                                                 pPage,
                                                 pPage->GetUpperBorder(),
                                                 pPage->GetLowerBorder(),
@@ -656,7 +656,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     for (i = 0; i < nPageCnt; i++)
                     {
                         SdPage* pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
-                        SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
+                        SdUndoAction* pUndo = new SdPageULUndoAction(*GetDoc(),
                                                 pPage,
                                                 pPage->GetUpperBorder(),
                                                 pPage->GetLowerBorder(),

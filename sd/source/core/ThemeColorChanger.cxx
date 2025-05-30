@@ -58,7 +58,7 @@ void changeThemeColors(sd::DrawDocShell* pDocShell, SdrPage* pMasterPage,
     if (pUndoManager)
     {
         pUndoManager->AddUndoAction(std::make_unique<UndoThemeChange>(
-            pDocShell->GetDoc(), pMasterPage, pOldColorSet, pNewColorSet));
+            *pDocShell->GetDoc(), pMasterPage, pOldColorSet, pNewColorSet));
     }
 
     pTheme->setColorSet(pNewColorSet);

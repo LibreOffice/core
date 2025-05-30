@@ -36,7 +36,7 @@ SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     SdDrawDocument& rDoc,
     SdPage& rPage,
     const SfxItemSet& rItemSet)
-:   SdUndoAction(&rDoc),
+:   SdUndoAction(rDoc),
     mrPage(rPage),
     mpItemSet(std::make_unique<SfxItemSet>(rItemSet)),
     mbHasFillBitmap(false)
@@ -74,7 +74,7 @@ void SdBackgroundObjUndoAction::Redo()
 
 SdUndoAction* SdBackgroundObjUndoAction::Clone() const
 {
-    std::unique_ptr<SdBackgroundObjUndoAction> pCopy = std::make_unique<SdBackgroundObjUndoAction>(*mpDoc, mrPage, *mpItemSet);
+    std::unique_ptr<SdBackgroundObjUndoAction> pCopy = std::make_unique<SdBackgroundObjUndoAction>(mrDoc, mrPage, *mpItemSet);
     if (mpFillBitmapItem)
         pCopy->mpFillBitmapItem.reset(mpFillBitmapItem->Clone());
     pCopy->mbHasFillBitmap = mbHasFillBitmap;

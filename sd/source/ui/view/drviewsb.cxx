@@ -65,7 +65,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
         pManager->AddUndoAction(
             std::make_unique<ModifyPageUndoAction>(
-                GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),
+                *GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),
                 aVisibleLayers.IsSet( nBackground ),
                 aVisibleLayers.IsSet( nBgObj )));
 

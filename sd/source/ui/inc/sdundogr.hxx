@@ -29,8 +29,8 @@ class SD_DLLPUBLIC SdUndoGroup final : public SdUndoAction
 {
     std::vector<std::unique_ptr<SdUndoAction>> aCtn;
 public:
-                   SdUndoGroup(SdDrawDocument* pSdDrawDocument)
-                              : SdUndoAction(pSdDrawDocument)
+                   SdUndoGroup(SdDrawDocument& rSdDrawDocument)
+                              : SdUndoAction(rSdDrawDocument)
                               {}
     virtual       ~SdUndoGroup() override;
 

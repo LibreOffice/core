@@ -459,7 +459,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
         {
             SdUndoAction* pUndo(
                 new SdPageFormatUndoAction(
-                    this,
+                    *this,
                     pPage,
                     pPage->GetSize(),
                     pPage->GetLeftBorder(), pPage->GetRightBorder(),
@@ -514,7 +514,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
         {
             SdUndoAction* pUndo(
                 new SdPageFormatUndoAction(
-                    this,
+                    *this,
                     pPage,
                     pPage->GetSize(),
                     pPage->GetLeftBorder(), pPage->GetRightBorder(),

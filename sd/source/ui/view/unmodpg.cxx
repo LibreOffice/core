@@ -44,13 +44,13 @@
 #include <view/SlideSorterView.hxx>
 
 ModifyPageUndoAction::ModifyPageUndoAction(
-    SdDrawDocument* pTheDoc,
+    SdDrawDocument& rTheDoc,
     SdPage* pThePage,
     const OUString& aTheNewName,
     AutoLayout  eTheNewAutoLayout,
     bool bTheNewBckgrndVisible,
     bool bTheNewBckgrndObjsVisible)
-:   SdUndoAction(pTheDoc)
+:   SdUndoAction(rTheDoc)
 {
     DBG_ASSERT(pThePage, "Undo without a page???");
 
@@ -65,7 +65,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     if (!mpPage->IsMasterPage())
     {
         maOldName = mpPage->GetName();
-        SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mrDoc.GetLayerAdmin();
         SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
         SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
         SdrLayerIDSet aVisibleLayers = mpPage->TRG_GetMasterPageVisibleLayers();
@@ -79,7 +79,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
         mbOldBckgrndObjsVisible = false;
     }
 
-    if (pTheDoc && pTheDoc->GetDocumentType() == DocumentType::Draw)
+    if (rTheDoc.GetDocumentType() == DocumentType::Draw)
         SetComment( SdResId(STR_UNDO_MODIFY_PAGE_DRAW) );
     else
         SetComment( SdResId(STR_UNDO_MODIFY_PAGE) );
@@ -106,12 +106,12 @@ void ModifyPageUndoAction::Undo()
 
             if (mpPage->GetPageKind() == PageKind::Standard)
             {
-                SdPage* pNotesPage = static_cast<SdPage*>(mpDoc->GetPage(mpPage->GetPageNum() + 1));
+                SdPage* pNotesPage = static_cast<SdPage*>(mrDoc.GetPage(mpPage->GetPageNum() + 1));
                 pNotesPage->SetName(maOldName);
             }
         }
 
-        SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mrDoc.GetLayerAdmin();
         SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
         SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
         SdrLayerIDSet aVisibleLayers;
@@ -150,12 +150,12 @@ void ModifyPageUndoAction::Redo()
 
             if (mpPage->GetPageKind() == PageKind::Standard)
             {
-                SdPage* pNotesPage = static_cast<SdPage*>(mpDoc->GetPage(mpPage->GetPageNum() + 1));
+                SdPage* pNotesPage = static_cast<SdPage*>(mrDoc.GetPage(mpPage->GetPageNum() + 1));
                 pNotesPage->SetName(maNewName);
             }
         }
 
-        SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mrDoc.GetLayerAdmin();
         SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
         SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
         SdrLayerIDSet aVisibleLayers;
@@ -178,9 +178,9 @@ ModifyPageUndoAction::~ModifyPageUndoAction()
 }
 
 ChangeSlideExclusionStateUndoAction::ChangeSlideExclusionStateUndoAction(
-    SdDrawDocument* pDocument, const sd::slidesorter::model::PageDescriptor::State eState,
+    SdDrawDocument& rDocument, const sd::slidesorter::model::PageDescriptor::State eState,
     const bool bOldStateValue)
-    : SdUndoAction(pDocument)
+    : SdUndoAction(rDocument)
     , meState(eState)
     , mbOldStateValue(bOldStateValue)
     , maComment(bOldStateValue ? SdResId(STR_UNDO_SHOW_SLIDE) : SdResId(STR_UNDO_HIDE_SLIDE))
@@ -188,9 +188,9 @@ ChangeSlideExclusionStateUndoAction::ChangeSlideExclusionStateUndoAction(
 }
 
 ChangeSlideExclusionStateUndoAction::ChangeSlideExclusionStateUndoAction(
-    SdDrawDocument* pDocument, const sd::slidesorter::model::SharedPageDescriptor& rpDescriptor,
+    SdDrawDocument& rDocument, const sd::slidesorter::model::SharedPageDescriptor& rpDescriptor,
     const sd::slidesorter::model::PageDescriptor::State eState, const bool bOldStateValue)
-    : ChangeSlideExclusionStateUndoAction(pDocument, eState, bOldStateValue)
+    : ChangeSlideExclusionStateUndoAction(rDocument, eState, bOldStateValue)
 {
     mrpDescriptors.push_back(rpDescriptor);
 }
@@ -203,7 +203,7 @@ void ChangeSlideExclusionStateUndoAction::AddPageDescriptor(
 
 void ChangeSlideExclusionStateUndoAction::Undo()
 {
-    sd::DrawDocShell* pDocShell = mpDoc ? mpDoc->GetDocSh() : nullptr;
+    sd::DrawDocShell* pDocShell = mrDoc.GetDocSh();
     sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
     if (pViewShell)
     {
@@ -220,7 +220,7 @@ void ChangeSlideExclusionStateUndoAction::Undo()
 
 void ChangeSlideExclusionStateUndoAction::Redo()
 {
-    sd::DrawDocShell* pDocShell = mpDoc ? mpDoc->GetDocSh() : nullptr;
+    sd::DrawDocShell* pDocShell = mrDoc.GetDocSh();
     sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
     if (pViewShell)
     {
@@ -241,10 +241,10 @@ OUString ChangeSlideExclusionStateUndoAction::GetComment() const
 }
 
 RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(
-    SdDrawDocument* pDocument,
+    SdDrawDocument& rDocument,
     OUString aOldLayoutName,
     OUString aNewLayoutName)
-    : SdUndoAction(pDocument)
+    : SdUndoAction(rDocument)
     , maOldName(std::move(aOldLayoutName))
     , maNewName(std::move(aNewLayoutName))
     , maComment(SdResId(STR_TITLE_RENAMESLIDE))
@@ -257,13 +257,13 @@ RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(
 void RenameLayoutTemplateUndoAction::Undo()
 {
     OUString aLayoutName(maNewName + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE);
-    mpDoc->RenameLayoutTemplate( aLayoutName, maOldName );
+    mrDoc.RenameLayoutTemplate( aLayoutName, maOldName );
 }
 
 void RenameLayoutTemplateUndoAction::Redo()
 {
     OUString aLayoutName(maOldName + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE);
-    mpDoc->RenameLayoutTemplate( aLayoutName, maNewName );
+    mrDoc.RenameLayoutTemplate( aLayoutName, maNewName );
 }
 
 OUString RenameLayoutTemplateUndoAction::GetComment() const

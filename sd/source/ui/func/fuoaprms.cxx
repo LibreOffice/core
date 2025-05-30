@@ -667,7 +667,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
     pUndoMgr->EnterListAction(aComment, aComment, 0, mrViewShell.GetViewShellBase().GetViewShellId());
 
     // create undo group
-    std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(&mrDoc));
+    std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(mrDoc));
     pUndoGroup->SetComment(aComment);
 
     // for the path effect, remember some stuff
@@ -737,7 +737,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
         if (eEffect == presentation::AnimationEffect_PATH && pObject == pPath)
         {
             SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction
-                                            (&mrDoc, pObject, bCreated);
+                                            (mrDoc, pObject, bCreated);
             pAction->SetActive(pInfo->mbActive, pInfo->mbActive);
             pAction->SetEffect(pInfo->meEffect, pInfo->meEffect);
             pAction->SetTextEffect(pInfo->meTextEffect, pInfo->meTextEffect);
@@ -763,7 +763,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
 
             // create undo action with old and new sizes
             SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction
-                                            (&mrDoc, pObject, bCreated);
+                                            (mrDoc, pObject, bCreated);
             pAction->SetActive(pInfo->mbActive, bActive);
             pAction->SetEffect(pInfo->meEffect, eEffect);
             pAction->SetTextEffect(pInfo->meTextEffect, eTextEffect);

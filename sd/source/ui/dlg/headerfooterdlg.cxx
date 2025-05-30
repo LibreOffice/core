@@ -271,7 +271,7 @@ void HeaderFooterDialog::Apply()
 
 void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 {
-    std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(mpDoc));
+    std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(*mpDoc));
     OUString aComment( m_xDialog->get_title() );
     pUndoGroup->SetComment( aComment );
 
@@ -349,7 +349,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 
 void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings )
 {
-    pUndoGroup->AddAction(new SdHeaderFooterUndoAction(mpDoc, pPage, rNewSettings ));
+    pUndoGroup->AddAction(new SdHeaderFooterUndoAction(*mpDoc, pPage, rNewSettings ));
     pPage->setHeaderFooterSettings( rNewSettings );
 }
 

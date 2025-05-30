@@ -30,7 +30,7 @@ class SdLayerModifyUndoAction final : public SdUndoAction
 {
 
 public:
-    SdLayerModifyUndoAction( SdDrawDocument* _pDoc, SdrLayer* pLayer,
+    SdLayerModifyUndoAction( SdDrawDocument& rDoc, SdrLayer* pLayer,
     OUString aOldLayerName, OUString aOldLayerTitle, OUString aOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
     OUString aNewLayerName, OUString aNewLayerTitle, OUString aNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable );
 

@@ -29,11 +29,11 @@
 
 using namespace sd;
 
-SdUndoAction::SdUndoAction(SdDrawDocument* pSdDrawDocument)
-    : mpDoc(pSdDrawDocument),
+SdUndoAction::SdUndoAction(SdDrawDocument& rSdDrawDocument)
+    : mrDoc(rSdDrawDocument),
       mnViewShellId(-1)
 {
-    sd::DrawDocShell* pDocShell = pSdDrawDocument ? pSdDrawDocument->GetDocSh() : nullptr;
+    sd::DrawDocShell* pDocShell = rSdDrawDocument.GetDocSh();
     sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
     if (pViewShell)
         mnViewShellId = pViewShell->GetViewShellBase().GetViewShellId();

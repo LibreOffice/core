@@ -13,10 +13,10 @@
 
 namespace sd
 {
-UndoThemeChange::UndoThemeChange(SdDrawDocument* pDocument, SdrPage* pMasterPage,
+UndoThemeChange::UndoThemeChange(SdDrawDocument& rDocument, SdrPage* pMasterPage,
                                  std::shared_ptr<model::ColorSet> const& pOldColorSet,
                                  std::shared_ptr<model::ColorSet> const& pNewColorSet)
-    : SdUndoAction(pDocument)
+    : SdUndoAction(rDocument)
     , mpMasterPage(pMasterPage)
     , mpOldColorSet(pOldColorSet)
     , mpNewColorSet(pNewColorSet)

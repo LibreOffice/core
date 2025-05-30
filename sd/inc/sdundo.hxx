@@ -27,7 +27,7 @@ class SdDrawDocument;
 class SD_DLLPUBLIC SdUndoAction : public SfxUndoAction
 {
 public:
-                            SdUndoAction(SdDrawDocument* pSdDrawDocument);
+                            SdUndoAction(SdDrawDocument& rSdDrawDocument);
 
     void                    SetComment(const OUString& rStr) { maComment = rStr; }
     virtual OUString        GetComment() const override { return maComment; }
@@ -36,7 +36,7 @@ public:
     ViewShellId GetViewShellId() const override;
 
 protected:
-    SdDrawDocument* mpDoc;
+    SdDrawDocument& mrDoc;
     ViewShellId mnViewShellId;
 private:
     OUString maComment;

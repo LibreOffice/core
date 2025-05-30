@@ -53,7 +53,7 @@ class SdPageFormatUndoAction final : public SdUndoAction
     bool        mbNewFullSize;
 
 public:
-    SdPageFormatUndoAction( SdDrawDocument* pDoc,
+    SdPageFormatUndoAction( SdDrawDocument& rDoc,
                             SdPage*         pThePage,
                             const Size&     rOldSz,
                             sal_Int32           nOldLft,
@@ -74,7 +74,7 @@ public:
                             sal_uInt16          nNPaperBin,
                             bool            bNFullSize
                             ) :
-        SdUndoAction(pDoc),
+        SdUndoAction(rDoc),
         mpPage      (pThePage),
         maOldSize   (rOldSz),
         mnOldLeft   (nOldLft),
@@ -114,10 +114,10 @@ class SdPageLRUndoAction final : public SdUndoAction
     sal_Int32   mnNewRight;
 
 public:
-    SdPageLRUndoAction( SdDrawDocument* pDoc, SdPage* pThePage,
+    SdPageLRUndoAction( SdDrawDocument& rDoc, SdPage* pThePage,
                         sal_Int32 nOldLft, sal_Int32 nOldRgt,
                         sal_Int32 nNewLft, sal_Int32 nNewRgt ) :
-        SdUndoAction(pDoc),
+        SdUndoAction(rDoc),
         mpPage      (pThePage),
         mnOldLeft   (nOldLft),
         mnOldRight  (nOldRgt),
@@ -142,10 +142,10 @@ class SdPageULUndoAction final : public SdUndoAction
     sal_Int32   mnNewLower;
 
 public:
-    SdPageULUndoAction( SdDrawDocument* pDoc, SdPage* pThePage,
+    SdPageULUndoAction( SdDrawDocument& rDoc, SdPage* pThePage,
                         sal_Int32 nOldUpr, sal_Int32 nOldLwr,
                         sal_Int32 nNewUpr, sal_Int32 nNewLwr ) :
-        SdUndoAction(pDoc),
+        SdUndoAction(rDoc),
         mpPage      (pThePage),
         mnOldUpper  (nOldUpr),
         mnOldLower  (nOldLwr),

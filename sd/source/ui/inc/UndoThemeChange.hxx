@@ -26,7 +26,7 @@ private:
     std::shared_ptr<model::ColorSet> mpNewColorSet;
 
 public:
-    UndoThemeChange(SdDrawDocument* pDocument, SdrPage* pMasterPage,
+    UndoThemeChange(SdDrawDocument& rDocument, SdrPage* pMasterPage,
                     std::shared_ptr<model::ColorSet> const& pOldColorSet,
                     std::shared_ptr<model::ColorSet> const& pNewColorSet);
 

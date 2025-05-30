@@ -2779,7 +2779,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
             std::unique_ptr<SdLayerModifyUndoAction> pAction( new SdLayerModifyUndoAction(
-                GetDoc(),
+                *GetDoc(),
                 pLayer,
                 // old values
                 aOldLayerName,

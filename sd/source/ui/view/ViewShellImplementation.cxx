@@ -167,7 +167,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             pUndoManager->EnterListAction(aComment, aComment, 0, mrViewShell.GetViewShellBase().GetViewShellId());
             pUndoManager->AddUndoAction(
                 std::make_unique<ModifyPageUndoAction>(
-                    pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible));
+                    *pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible));
 
             // Clear the selection because the selected object may be removed as
             // a result of the assignment of the layout.

@@ -525,7 +525,7 @@ void SdDrawDocument::transferLayoutStyles(const SlideLayoutNameList& aLayoutsToT
         {
             if( pUndoMgr )
             {
-                pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aCreatedStyles, true));
+                pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(*this, aCreatedStyles, true));
             }
         }
 
@@ -1060,7 +1060,7 @@ void SdDrawDocument::cleanupStyles(SfxUndoManager* pUndoMgr,
 {
     lcl_removeUnusedStyles(GetStyleSheetPool(), rStyleContext.aGraphicStyles);
     if (!rStyleContext.aGraphicStyles.empty() && pUndoMgr)
-        pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, rStyleContext.aGraphicStyles, true));
+        pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(*this, rStyleContext.aGraphicStyles, true));
     lcl_removeUnusedTableStyles(static_cast<SdStyleSheetPool*>(GetStyleSheetPool()), rStyleContext.aTableStyles);
     lcl_removeUnusedStyles(GetStyleSheetPool(), rStyleContext.aCellStyles);
 }
@@ -1462,7 +1462,7 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
                             aUndoRemove.emplace_back(a.get(), true);
 
                         if (pUndoMgr)
-                            pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aUndoRemove, false));
+                            pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(*this, aUndoRemove, false));
                     }
 
                     for( const auto& a : aRemove )
@@ -1774,7 +1774,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             {
                 // Add UndoAction for creating and inserting the stylesheets to
                 // the top of the UndoManager
-                pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>( this, aCreatedStyles, true));
+                pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>( *this, aCreatedStyles, true));
             }
         }
 
@@ -1861,7 +1861,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             if( bUndo )
             {
                 pUndoMgr->AddUndoAction(std::make_unique<SdPresentationLayoutUndoAction>
-                        (this,
+                        (*this,
                         pPage->IsMasterPage() ? aLayoutName : aOldLayoutName,
                         aLayoutName,
                          eAutoLayout, eAutoLayout, false, pPage.get()));
@@ -1926,7 +1926,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             aUndoInsert.reserve(aCreatedStyles.size());
             for (const auto& a : aCreatedStyles)
                 aUndoInsert.emplace_back(a.get(), true);
-            pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aUndoInsert, true));
+            pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(*this, aUndoInsert, true));
             // Generate new master pages and register them with the document
             BegUndo();
         }
@@ -1994,7 +1994,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             if( bUndo )
             {
                 pUndoMgr->AddUndoAction(std::make_unique<SdPresentationLayoutUndoAction>
-                            (this, aOldLayoutName, aName,
+                            (*this, aOldLayoutName, aName,
                              eOldAutoLayout, eNewAutoLayout, true,
                              rpPage));
             }
@@ -2098,7 +2098,7 @@ SdPage* SdDrawDocument::AddNewMasterPageFromExisting(
 
     if(!aCreatedStyles.empty() && bUndo && pUndoMgr)
     {
-        pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aCreatedStyles, true));
+        pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(*this, aCreatedStyles, true));
     }
 
     if(bUndo && pUndoMgr)

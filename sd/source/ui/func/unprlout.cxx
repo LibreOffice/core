@@ -27,14 +27,14 @@
 
 
 SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
-                            SdDrawDocument* pTheDoc,
+                            SdDrawDocument& rTheDoc,
                             const OUString& aTheOldLayoutName,
                             const OUString& aTheNewLayoutName,
                             AutoLayout      eTheOldAutoLayout,
                             AutoLayout      eTheNewAutoLayout,
                             bool            bSet,
                             SdPage*         pThePage):
-                      SdUndoAction(pTheDoc)
+                      SdUndoAction(rTheDoc)
 {
     aOldLayoutName = aTheOldLayoutName;
     aNewLayoutName = aTheNewLayoutName;

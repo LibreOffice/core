@@ -69,9 +69,9 @@ class SdAnimationPrmsUndoAction final : public SdUndoAction
     bool            bInfoCreated;
 
 public:
-    SdAnimationPrmsUndoAction(SdDrawDocument* pTheDoc, SdrObject* pObj,
+    SdAnimationPrmsUndoAction(SdDrawDocument& rTheDoc, SdrObject* pObj,
                                   bool bCreated)
-        : SdUndoAction(pTheDoc)
+        : SdUndoAction(rTheDoc)
         , pObject(pObj)
         , bOldActive(false)
         , bNewActive(false)

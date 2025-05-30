@@ -37,7 +37,7 @@ class SdPresentationLayoutUndoAction final : public SdUndoAction
     OUString        aComment;
 
 public:
-    SdPresentationLayoutUndoAction(SdDrawDocument* pTheDoc,
+    SdPresentationLayoutUndoAction(SdDrawDocument& rTheDoc,
                          const OUString& aTheOldLayoutName,
                          const OUString& aTheNewLayoutName,
                          AutoLayout      eTheOldAutoLayout,

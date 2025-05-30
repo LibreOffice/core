@@ -22,8 +22,8 @@
 #include <stlsheet.hxx>
 #include <stlpool.hxx>
 
-SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDoc, StyleSheetCopyResultVector& rTheStyles, bool bInserted)
-: SdUndoAction(pTheDoc)
+SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument& rTheDoc, StyleSheetCopyResultVector& rTheStyles, bool bInserted)
+: SdUndoAction(rTheDoc)
 , mbMySheets( !bInserted )
 {
     maStyles.swap( rTheStyles );
@@ -39,7 +39,7 @@ SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDo
 
 void SdMoveStyleSheetsUndoAction::Undo()
 {
-    SfxStyleSheetBasePool* pPool  = mpDoc->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pPool  = mrDoc.GetStyleSheetPool();
 
     if (mbMySheets)
     {

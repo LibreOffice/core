@@ -25,8 +25,8 @@
 #include <utility>
 
 
-SdHeaderFooterUndoAction::SdHeaderFooterUndoAction( SdDrawDocument* pDoc, SdPage* pPage, sd::HeaderFooterSettings aNewSettings )
-:   SdUndoAction(pDoc),
+SdHeaderFooterUndoAction::SdHeaderFooterUndoAction( SdDrawDocument& rDoc, SdPage* pPage, sd::HeaderFooterSettings aNewSettings )
+:   SdUndoAction(rDoc),
     mpPage(pPage),
     maOldSettings(pPage->getHeaderFooterSettings()),
     maNewSettings(std::move(aNewSettings))

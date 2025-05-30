@@ -36,7 +36,7 @@
 StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument& rTheDoc,
                                            SfxStyleSheet& rTheStyleSheet,
                                            const SfxItemSet* pTheNewItemSet)
-    : SdUndoAction(&rTheDoc),
+    : SdUndoAction(rTheDoc),
       mrStyleSheet(rTheStyleSheet)
 {
     // Create ItemSets; Attention, it is possible that the new one is from a,
@@ -92,8 +92,8 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument& rTheDoc,
 
 void StyleSheetUndoAction::Undo()
 {
-    SfxItemSet aNewSet( mpDoc->GetItemPool(), mpOldSet->GetRanges() );
-    SdrModel::MigrateItemSet( mpOldSet.get(), &aNewSet, *mpDoc );
+    SfxItemSet aNewSet( mrDoc.GetItemPool(), mpOldSet->GetRanges() );
+    SdrModel::MigrateItemSet( mpOldSet.get(), &aNewSet, mrDoc );
 
     mrStyleSheet.GetItemSet().Set(aNewSet);
     if( mrStyleSheet.GetFamily() == SfxStyleFamily::Pseudo )
@@ -104,8 +104,8 @@ void StyleSheetUndoAction::Undo()
 
 void StyleSheetUndoAction::Redo()
 {
-    SfxItemSet aNewSet( mpDoc->GetItemPool(), mpOldSet->GetRanges() );
-    SdrModel::MigrateItemSet( mpNewSet.get(), &aNewSet, *mpDoc );
+    SfxItemSet aNewSet( mrDoc.GetItemPool(), mpOldSet->GetRanges() );
+    SdrModel::MigrateItemSet( mpNewSet.get(), &aNewSet, mrDoc );
 
     mrStyleSheet.GetItemSet().Set(aNewSet);
     if( mrStyleSheet.GetFamily() == SfxStyleFamily::Pseudo )

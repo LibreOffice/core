@@ -270,7 +270,7 @@ void DocumentHelper::ProvideStyles (
         {
             pUndoManager->AddUndoAction (
                std::make_unique<SdMoveStyleSheetsUndoAction>(
-                   &rTargetDocument,
+                   rTargetDocument,
                    aCreatedStyles,
                    true));
         }

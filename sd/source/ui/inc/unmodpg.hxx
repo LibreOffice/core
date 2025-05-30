@@ -43,7 +43,7 @@ class ModifyPageUndoAction final : public SdUndoAction
 
 public:
     ModifyPageUndoAction(
-        SdDrawDocument*         pTheDoc,
+        SdDrawDocument&         rTheDoc,
         SdPage*                 pThePage,
         const OUString&         aTheNewName,
         AutoLayout              eTheNewAutoLayout,
@@ -58,12 +58,12 @@ public:
 class ChangeSlideExclusionStateUndoAction final : public SdUndoAction
 {
 public:
-    ChangeSlideExclusionStateUndoAction(SdDrawDocument* pDocument,
+    ChangeSlideExclusionStateUndoAction(SdDrawDocument& rDocument,
                                         const sd::slidesorter::model::PageDescriptor::State eState,
                                         const bool bOldStateValue);
 
     ChangeSlideExclusionStateUndoAction(
-        SdDrawDocument* pDocument, const sd::slidesorter::model::SharedPageDescriptor& rpDescriptor,
+        SdDrawDocument& rDocument, const sd::slidesorter::model::SharedPageDescriptor& rpDescriptor,
         const sd::slidesorter::model::PageDescriptor::State eState, const bool bOldStateValue);
 
     virtual void Undo() override;
@@ -84,7 +84,7 @@ class RenameLayoutTemplateUndoAction final : public SdUndoAction
 {
 public:
     RenameLayoutTemplateUndoAction(
-        SdDrawDocument* pDocument,
+        SdDrawDocument& rDocument,
         OUString aOldLayoutName,
         OUString aNewLayoutName);
 
