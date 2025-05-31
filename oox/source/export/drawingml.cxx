@@ -4498,8 +4498,7 @@ static std::map< OString, std::vector<OString> > lcl_getAdjNames()
     if (aStream.GetError() != ERRCODE_NONE)
         SAL_WARN("oox.shape", "failed to open oox-drawingml-adj-names");
     OStringBuffer aLine;
-    bool bNotDone = aStream.ReadLine(aLine);
-    while (bNotDone)
+    while (aStream.ReadLine(aLine))
     {
         sal_Int32 nIndex = 0;
         // Each line is in a "key\tvalue" format: read the key, the rest is the value.
@@ -4513,7 +4512,6 @@ static std::map< OString, std::vector<OString> > lcl_getAdjNames()
         {
             SAL_WARN("oox.shape", "skipping invalid line: " << std::string_view(aLine));
         }
-        bNotDone = aStream.ReadLine(aLine);
     }
     return aRet;
 }
