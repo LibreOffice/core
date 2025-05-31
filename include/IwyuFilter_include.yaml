@@ -126,11 +126,6 @@ excludelist:
     include/comphelper/accessibletexthelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleText.hpp
-    include/comphelper/accessiblewrapper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleContext.hpp
-    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
-    - com/sun/star/accessibility/XAccessibleEventListener.hpp
     include/comphelper/attributelist.hxx:
     # base class has to be a complete type
     - com/sun/star/util/XCloneable.hpp

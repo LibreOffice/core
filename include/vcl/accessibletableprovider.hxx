@@ -22,7 +22,6 @@
 
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/window.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 namespace vcl

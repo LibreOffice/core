@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <cppuhelper/weakref.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
 #include <vcl/accessibletableprovider.hxx>
 

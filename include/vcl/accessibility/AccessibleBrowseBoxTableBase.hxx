@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
 

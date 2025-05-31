@@ -20,7 +20,6 @@
 
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <cppuhelper/implbase2.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 
 class VCL_DLLPUBLIC AccessibleCheckBoxCell final

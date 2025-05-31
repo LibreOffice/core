@@ -20,8 +20,6 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <com/sun/star/beans/PropertyValue.hdl>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>

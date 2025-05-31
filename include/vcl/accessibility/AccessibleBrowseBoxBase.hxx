@@ -25,18 +25,11 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <comphelper/accessibleeventnotifier.hxx>
-#include <comphelper/uno3.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
 
