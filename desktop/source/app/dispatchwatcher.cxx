@@ -725,10 +725,9 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 if (fileForCat && fileForCat->IsValid())
                                 {
                                     SvStream* aStream = fileForCat->GetStream(StreamMode::STD_READ);
-                                    while (aStream->good())
+                                    OStringBuffer aStr;
+                                    while (aStream->ReadLine(aStr, SAL_MAX_INT32))
                                     {
-                                        OString aStr;
-                                        aStream->ReadLine(aStr, SAL_MAX_INT32);
                                         for (sal_Int32 i = 0; i < aStr.getLength(); ++i)
                                         {
                                             std::cout << aStr[i];

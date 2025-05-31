@@ -378,7 +378,7 @@ void SvStream::ResetError()
 bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                        sal_Int32 nMaxBytesToRead )
 {
-    OString aStr;
+    OStringBuffer aStr;
     bool bRet = ReadLine( aStr, nMaxBytesToRead);
     rStr = OStringToOUString(aStr, eSrcCharSet);
     return bRet;

@@ -693,9 +693,9 @@ static bool detectHasAdditionalStreams(const OUString& rSysUPath)
     std::vector<OString> aTrailingLines;
     const sal_uInt64 nLen = aHybridDetect.remainingSize();
     aHybridDetect.Seek(nLen - std::min<sal_uInt64>(nLen, 4096));
-    OString aLine;
+    OStringBuffer aLine;
     while (aHybridDetect.ReadLine(aLine))
-        aTrailingLines.push_back(aLine);
+        aTrailingLines.push_back(aLine.toString()); // produces minimal string, and keeps buffer
     bool bAdditionalStreams(false);
     for (auto it = aTrailingLines.rbegin(); it != aTrailingLines.rend(); ++it)
     {

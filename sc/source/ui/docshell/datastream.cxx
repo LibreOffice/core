@@ -192,10 +192,12 @@ private:
             }
 
             // Read & store new lines from stream.
+            OStringBuffer aBuffer;
             for (DataStream::Line & rLine : *oLines)
             {
                 rLine.maCells.clear();
-                mpStream->ReadLine(rLine.maLine);
+                mpStream->ReadLine(aBuffer);
+                rLine.maLine = aBuffer.toString(); // produces minimal string, and keeps buffer
                 CSVHandler aHdl(rLine, mnColCount);
                 orcus::csv_parser<CSVHandler> parser(rLine.maLine, aHdl, maConfig);
                 parser.parse();

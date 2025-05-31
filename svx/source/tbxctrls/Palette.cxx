@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/string_view.hxx>
 #include <svx/Palette.hxx>
 #include <tools/stream.hxx>
 
@@ -313,17 +314,17 @@ bool PaletteGPL::IsValid()
 
 bool PaletteGPL::ReadPaletteHeader(SvFileStream& rFileStream)
 {
-    OString aLine;
-    std::string_view aPaletteName;
+    OStringBuffer aLine;
 
     rFileStream.ReadLine(aLine);
-    if( !aLine.startsWith("GIMP Palette") ) return false;
+    if (!std::string_view(aLine).starts_with("GIMP Palette"))
+        return false;
     rFileStream.ReadLine(aLine);
-    if( aLine.startsWith("Name: ", &aPaletteName) )
+    if (std::string_view aPaletteName; o3tl::starts_with(aLine, "Name: ", &aPaletteName))
     {
         maGPLPaletteName = OStringToOUString(aPaletteName, RTL_TEXTENCODING_ASCII_US);
         rFileStream.ReadLine(aLine);
-        if( aLine.startsWith("Columns: "))
+        if (std::string_view(aLine).starts_with("Columns: "))
             rFileStream.ReadLine(aLine); // we can ignore this
     }
     else

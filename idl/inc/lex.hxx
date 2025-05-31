@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include "hash.hxx"
+#include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <vector>
 #include <memory>
@@ -110,7 +111,7 @@ class SvTokenStream
     std::vector<std::unique_ptr<SvToken> > aTokList;
     std::vector<std::unique_ptr<SvToken> >::iterator pCurToken;
 
-    OString         aBufStr;
+    OStringBuffer aBufStr;
 
     void            InitCtor();
 

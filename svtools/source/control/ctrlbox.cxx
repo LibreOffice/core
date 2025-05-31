@@ -464,7 +464,7 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile )
         return;
     }
 
-    OString aLine;
+    OStringBuffer aLine;
     aStream.ReadLine( aLine );
     OUString aEntries = OStringToOUString(aLine,
         RTL_TEXTENCODING_UTF8);

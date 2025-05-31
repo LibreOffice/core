@@ -126,7 +126,7 @@ OUString readLog()
     SvFileStream logFile(getCacheFolder() + "/skia.log", StreamMode::READ);
 
     OUString sResult;
-    OString sLine;
+    OStringBuffer sLine;
     while (logFile.ReadLine(sLine))
         sResult += OStringToOUString(sLine, RTL_TEXTENCODING_UTF8) + "\n";
 

@@ -126,7 +126,6 @@ void SvTokenStream::FillTokenList()
 
 char SvTokenStream::GetNextChar()
 {
-    char nChar;
     while (aBufStr.getLength() <= nBufPos)
     {
         if (pInStream->ReadLine(aBufStr))
@@ -137,13 +136,13 @@ char SvTokenStream::GetNextChar()
         }
         else
         {
-            aBufStr.clear();
+            aBufStr.setLength(0);
             nColumn = 0;
             nBufPos = 0;
             return '\0';
         }
     }
-    nChar = aBufStr[nBufPos++];
+    char nChar = aBufStr[nBufPos++];
     nColumn += nChar == '\t' ? nTabSize : 1;
     return nChar;
 }
