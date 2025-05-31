@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg30"
+   width="16"
+   height="16"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs34" />
+  <linearGradient
+     id="a"
+     gradientTransform="matrix(0.2818,0,0,0.2801,0.18,2.022)"
+     gradientUnits="userSpaceOnUse"
+     x1="24.139"
+     x2="24.139"
+     xlink:href="#b"
+     y1="21.341999"
+     y2="24.912001" />
+  <linearGradient
+     id="b">
+    <stop
+       offset="0"
+       stop-color="#fff"
+       id="stop3" />
+    <stop
+       offset="0"
+       stop-color="#fff"
+       stop-opacity=".235"
+       id="stop5" />
+    <stop
+       offset="1"
+       stop-color="#fff"
+       stop-opacity=".157"
+       id="stop7" />
+    <stop
+       offset="1"
+       stop-color="#fff"
+       stop-opacity=".392"
+       id="stop9" />
+  </linearGradient>
+  <linearGradient
+     id="c"
+     gradientTransform="matrix(0.2818,0,0,0.2801,2.197,0.015)"
+     gradientUnits="userSpaceOnUse"
+     x1="24.139"
+     x2="24.141235"
+     xlink:href="#b"
+     y1="10.631"
+     y2="49.928596" />
+  <radialGradient
+     id="d"
+     cx="11.479612"
+     cy="1.852917"
+     gradientTransform="matrix(1.6e-7,4.2,-3.8000001,2e-7,15.041082,-48.214372)"
+     gradientUnits="userSpaceOnUse"
+     r="5">
+    <stop
+       offset="0"
+       stop-color="#d1ff82"
+       id="stop13" />
+    <stop
+       offset="0.35080567"
+       stop-color="#9bdb4d"
+       id="stop15" />
+    <stop
+       offset=".661"
+       stop-color="#68b723"
+       id="stop17" />
+    <stop
+       offset="1"
+       stop-color="#3a9104"
+       id="stop19" />
+  </radialGradient>
+  <path
+     d="M 1.5,6.4999999 V 10.5 c 11.16849,0 5.0237988,0 14,0 v -4 c -10.5136946,0 -5.023799,-1e-7 -14,-1e-7 z"
+     style="display:inline;fill:url(#d);stroke:#206b00;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3;stroke-opacity:0.501961"
+     id="path22" />
+  <g
+     fill="none"
+     id="g28"
+     style="display:inline">
+    <path
+       d="m 10,7.5 h 4.5 v 2 H 10 m 0.587414,0 H 2.5 v -2 h 8.092804"
+       opacity="0.5"
+       stroke="url(#a)"
+       id="path26"
+       style="display:inline;stroke:url(#a)" />
+  </g>
+</svg>

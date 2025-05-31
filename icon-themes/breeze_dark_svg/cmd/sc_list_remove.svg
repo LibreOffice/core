@@ -3,35 +3,15 @@
    viewBox="0 0 16 16"
    version="1.1"
    id="svg4"
-   sodipodi:docname="sc_list_remove.svg"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   width="16"
+   height="16"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg"><defs
    id="defs8" />
-<sodipodi:namedview
-   id="namedview6"
-   pagecolor="#ffffff"
-   bordercolor="#000000"
-   borderopacity="0.25"
-   inkscape:showpageshadow="2"
-   inkscape:pageopacity="0.0"
-   inkscape:pagecheckerboard="0"
-   inkscape:deskcolor="#d1d1d1"
-   showgrid="false"
-   inkscape:zoom="46.4375"
-   inkscape:cx="9.1628533"
-   inkscape:cy="9.0982503"
-   inkscape:window-width="1920"
-   inkscape:window-height="1008"
-   inkscape:window-x="0"
-   inkscape:window-y="0"
-   inkscape:window-maximized="1"
-   inkscape:current-layer="svg4" />
+
+
 /&gt;<path
    d="M 2,8 V 9 C 9.9997726,9 3.3815494,9 13,9 V 8 C 6.0159028,8 10.791304,8 2,8 Z"
    fill="#eff0f1"
-   id="path2"
-   sodipodi:nodetypes="ccccc" />
+   id="path2" />
 </svg>

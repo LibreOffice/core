@@ -2,15 +2,17 @@
 <svg
    viewBox="0 0 16 16"
    version="1.1"
-   id="svg1"
+   id="svg4"
    width="16"
    height="16"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg"><defs
-   id="defs1" />
+   id="defs8" />
+
+
 
 /&gt;<path
-   d="M 7,3 V 8 H 2 v 1 h 5 v 5 H 8 V 9 h 5 V 8 H 8 V 3 Z"
+   d="M 2,8 V 9 C 7.2217919,9 9.5734203,9 13,9 V 8 Z"
    fill="#232629"
-   id="path1" />
+   id="path2" />
 </svg>
