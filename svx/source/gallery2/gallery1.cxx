@@ -129,7 +129,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     SetModified( _bNewFile );
 
-    maName = mpGalleryStorageEngineEntry->ReadStrFromIni( u"name" );
+    maName = mpGalleryStorageEngineEntry->ReadStrFromIni("name");
 
     // This is awful - we shouldn't use these resources if we
     // possibly can avoid them

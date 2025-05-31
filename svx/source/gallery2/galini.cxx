@@ -24,67 +24,69 @@
 #include <o3tl/string_view.hxx>
 #include <memory>
 
-OUString GalleryFileStorageEntry::ReadStrFromIni(std::u16string_view aKeyName ) const
+OUString GalleryFileStorageEntry::ReadStrFromIni(std::string_view aKeyName) const
 {
     std::unique_ptr<SvStream> pStrm(::utl::UcbStreamHelper::CreateStream(
         GetStrURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                 StreamMode::READ ));
 
-    const LanguageTag &rLangTag = Application::GetSettings().GetUILanguageTag();
-
-    ::std::vector< OUString > aFallbacks = rLangTag.getFallbackStrings( true);
-
     OUString aResult;
-    sal_Int32 nRank = 42;
 
     if( pStrm )
     {
-        OString aLine;
-        while( pStrm->ReadLine( aLine ) )
+        const LanguageTag& rLangTag = Application::GetSettings().GetUILanguageTag();
+        const std::vector<OUString> aFallbacks = rLangTag.getFallbackStrings(true);
+        size_t nRank = aFallbacks.size();
+
+        // Suppose aKeyName is "a"
+        //         ini has " a [ en ] = Foo
+        //                   a [ en_US ] = Bar "
+        //         and aFallbacks is { "en-US", "en" }
+        // Then we must return "Bar", because its locale has higher fallback rank.
+
+        OStringBuffer aLineBuf;
+        while (pStrm->ReadLine(aLineBuf))
         {
-            OUString aKey;
-            OUString aLocale;
-            OUString aValue;
-            sal_Int32 n;
+            std::string_view aLine(aLineBuf);
 
             // comments
-            if( aLine.startsWith( "#" ) )
+            if (aLine.starts_with("#"))
                 continue;
 
-            // a[en_US] = Bob
-            if( ( n = aLine.indexOf( '=' ) ) >= 1)
-            {
-                aKey = OStringToOUString(
-                    o3tl::trim(aLine.subView( 0, n )), RTL_TEXTENCODING_ASCII_US );
-                aValue = OStringToOUString(
-                    o3tl::trim(aLine.subView( n + 1 )), RTL_TEXTENCODING_UTF8 );
+            size_t n = aLine.find('=');
+            if (n == std::string_view::npos)
+                continue;
 
-                if( ( n = aKey.indexOf( '[' ) ) >= 1 )
-                {
-                    aLocale = o3tl::trim(aKey.subView( n + 1 ));
-                    aKey = o3tl::trim(aKey.subView( 0, n ));
-                    if( (n = aLocale.indexOf( ']' ) ) >= 1 )
-                        aLocale = o3tl::trim(aLocale.subView( 0, n ));
-                }
-            }
+            std::string_view aKey(o3tl::trim(aLine.substr(0, n)));
+            std::string_view aValue(o3tl::trim(aLine.substr(n + 1)));
+
+            n = aKey.find('[');
+            if (n == std::string_view::npos || n < 1)
+                continue;
+
+            std::string_view aLocale = o3tl::trim(aKey.substr(n + 1, aKey.find(']', n + 2)));
+            aKey = o3tl::trim(aKey.substr(0, n));
+
             SAL_INFO("svx", "ini file has '" << aKey << "' [ '" << aLocale << "' ] = '" << aValue << "'");
 
+            if (aKey != aKeyName)
+                continue;
+
             // grisly language matching, is this not available somewhere else?
-            if( aKey == aKeyName )
+            OUString aLang
+                = OStringToOUString(aLocale, RTL_TEXTENCODING_ASCII_US).replace('_', '-');
+            for (n = 0; n < nRank; ++n)
             {
-                /* FIXME-BCP47: what is this supposed to do? */
-                n = 0;
-                OUString aLang = aLocale.replace('_','-');
-                for( const auto& rFallback : aFallbacks )
+                auto& rFallback = aFallbacks[n];
+                SAL_INFO( "svx", "compare '" << aLang << "' with '" << rFallback << "' rank " << nRank << " vs. " << n );
+                if (rFallback == aLang)
                 {
-                    SAL_INFO( "svx", "compare '" << aLang << "' with '" << rFallback << "' rank " << nRank << " vs. " << n );
-                    if( rFallback == aLang && n < nRank ) {
-                        nRank = n; // try to get the most accurate match
-                        aResult = aValue;
-                    }
-                    ++n;
+                    nRank = n; // try to get the most accurate match
+                    aResult = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
                 }
             }
+            if (nRank == 0)
+                break;
         }
     }
 
