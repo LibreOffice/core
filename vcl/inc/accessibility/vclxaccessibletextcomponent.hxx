@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>

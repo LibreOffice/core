@@ -29,10 +29,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/vclevent.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/types.hxx>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;

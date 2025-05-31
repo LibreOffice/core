@@ -21,7 +21,6 @@
 
 #include <accessibility/accessiblemenuitemcomponent.hxx>
 
-#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 

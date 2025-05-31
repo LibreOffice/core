@@ -20,7 +20,6 @@
 #pragma once
 
 #include <accessibility/vclxaccessibletextcomponent.hxx>
-#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 

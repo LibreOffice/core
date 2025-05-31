@@ -20,7 +20,6 @@
 #pragma once
 
 #include <accessibility/IComboListBoxHelper.hxx>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <tools/gen.hxx>
 
 

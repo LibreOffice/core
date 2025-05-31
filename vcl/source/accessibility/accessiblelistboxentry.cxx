@@ -20,7 +20,6 @@
 #include <accessibility/accessiblelistboxentry.hxx>
 #include <accessibility/accessiblelistbox.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
-#include <vcl/toolkit/svlbitm.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -35,7 +34,6 @@
 #include <vcl/unohelp2.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/accessibleeventnotifier.hxx>
 #include <svdata.hxx>
 #include <strings.hrc>
 

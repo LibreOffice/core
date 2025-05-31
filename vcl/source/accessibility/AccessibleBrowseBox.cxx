@@ -19,7 +19,6 @@
 
 #include <com/sun/star/awt/XVclWindowPeer.hdl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <utility>
 #include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxHeaderBar.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxTable.hxx>

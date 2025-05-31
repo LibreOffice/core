@@ -21,6 +21,8 @@
 
 #include <accessibility/vclxaccessiblebox.hxx>
 
+#include <vcl/toolkit/lstbox.hxx>
+
 /** The accessible drop down combobox has one children.  It is the list
     containing all items and is represented by an object of the
     VCLXAccessibleListBoxList class which does support

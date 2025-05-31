@@ -17,36 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_feature_desktop.h>
-
-#include <cppuhelper/supportsservice.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <accessibility/floatingwindowaccessible.hxx>
-#include <accessibility/svtaccessiblenumericfield.hxx>
-#include <accessibility/vclxaccessiblebutton.hxx>
-#include <accessibility/vclxaccessiblecheckbox.hxx>
-#include <accessibility/vclxaccessibledropdowncombobox.hxx>
-#include <accessibility/vclxaccessiblecombobox.hxx>
-#include <accessibility/vclxaccessibledropdownlistbox.hxx>
-#include <accessibility/vclxaccessibleedit.hxx>
-#include <accessibility/vclxaccessiblefixedhyperlink.hxx>
 #include <accessibility/vclxaccessiblefixedtext.hxx>
-#include <accessibility/vclxaccessibleheaderbar.hxx>
-#include <accessibility/vclxaccessiblelistbox.hxx>
-#include <accessibility/vclxaccessibleradiobutton.hxx>
-#include <accessibility/vclxaccessiblescrollbar.hxx>
-#include <accessibility/vclxaccessibletoolbox.hxx>
 #include <accessibility/vclxaccessiblestatusbar.hxx>
 #include <accessibility/vclxaccessibletabcontrol.hxx>
 #include <accessibility/vclxaccessibletabpagewindow.hxx>
-#include <accessibility/accessibletablistbox.hxx>
-#include <accessibility/AccessibleIconView.hxx>
-#include <accessibility/accessiblelistbox.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <vcl/toolkit/lstbox.hxx>
-#include <vcl/toolkit/combobox.hxx>
-#include <vcl/toolkit/fixed.hxx>
-#include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 
 using namespace ::com::sun::star::uno;

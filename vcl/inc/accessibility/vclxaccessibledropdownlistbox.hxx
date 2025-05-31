@@ -21,6 +21,8 @@
 
 #include <accessibility/vclxaccessiblebox.hxx>
 
+#include <vcl/toolkit/lstbox.hxx>
+
 /** The accessible drop down combobox has two children.  The first is the
     text field represented by an object of the
     VCLXAccessibleTextField class which can not be edited.  The

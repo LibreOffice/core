@@ -21,7 +21,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
-#include <vcl/vclevent.hxx>
 
 #include <accessibility/vclxaccessibleedit.hxx>
 

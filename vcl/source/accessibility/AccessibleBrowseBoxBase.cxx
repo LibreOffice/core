@@ -30,7 +30,6 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <sal/log.hxx>
 
 
 using ::com::sun::star::uno::Reference;

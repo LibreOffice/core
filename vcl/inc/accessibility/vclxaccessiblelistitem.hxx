@@ -19,14 +19,11 @@
 
 #pragma once
 
-#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/compbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <accessibility/vclxaccessiblelist.hxx>
-#include <tools/gen.hxx>
 
 class VCLXAccessibleListItem final
     : public cppu::ImplInheritanceHelper<

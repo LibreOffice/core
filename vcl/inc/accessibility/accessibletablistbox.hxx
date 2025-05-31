@@ -19,9 +19,7 @@
 
 #pragma once
 
-#include <cppuhelper/implbase1.hxx>
 #include <vcl/accessibility/AccessibleBrowseBox.hxx>
-#include <vcl/accessibletableprovider.hxx>
 
 class SvHeaderTabListBox;
 

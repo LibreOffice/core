@@ -30,7 +30,6 @@
 #include <vcl/unohelp2.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/accessibleeventnotifier.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 constexpr sal_Int32 ACCESSIBLE_ACTION_COUNT = 1;

@@ -30,6 +30,9 @@ excludelist:
     vcl/qa/cppunit/outdev.cxx:
     # Needed for direct member access
     - basegfx/matrix/b2dhommatrix.hxx
+    vcl/source/accessibility/AccessibleBrowseBox.cxx:
+    # Complete type is needed
+    - com/sun/star/awt/XVclWindowPeer.hdl
     vcl/source/app/salplug.cxx:
     # Needed on WIN32
     - salframe.hxx
