@@ -65,11 +65,11 @@ ErrCode XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 
     sal_uInt16 nPos = SvXMLNamespaceMap::GetIndexByKey( XML_NAMESPACE_DC );
 
-    AddAttribute( XML_NAMESPACE_NONE, GetNamespaceMap_().GetAttrNameByIndex( nPos ),
+    AddAttribute( GetNamespaceMap_().GetAttrNameByIndex( nPos ),
                              GetNamespaceMap_().GetNameByIndex ( nPos ) );
 
     nPos = SvXMLNamespaceMap::GetIndexByKey( XML_NAMESPACE_FRAMEWORK );
-    AddAttribute( XML_NAMESPACE_NONE, GetNamespaceMap_().GetAttrNameByIndex( nPos ),
+    AddAttribute( GetNamespaceMap_().GetAttrNameByIndex( nPos ),
                              GetNamespaceMap_().GetNameByIndex ( nPos ) );
 
     {
