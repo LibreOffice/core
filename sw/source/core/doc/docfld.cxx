@@ -825,40 +825,19 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     {
         // In order for the frames to be created the right way, they have to be expanded
         // from top to bottom
-        std::vector<sal_uLong> aTmpArr;
-        std::vector<sal_uLong>::size_type nArrStt = 0;
-        SwSectionFormats& rArr = rDoc.GetSections();
-        SwSectionNode* pSectNd = nullptr;
-        sal_uLong nSttContent = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
-        for (SwSectionFormats::size_type n = rArr.size(); n; )
+        std::vector<sal_uLong> aTmpArr;
+        SwSectionNode* pSectNd = nullptr;
+        for (const auto& rFormat : rDoc.GetSections())
         {
-            SwSection* pSect = rArr[ --n ]->GetSection();
+            SwSection* pSect = rFormat->GetSection();
             if( pSect && pSect->IsHidden() && !pSect->GetCondition().isEmpty() &&
-                nullptr != ( pSectNd = pSect->GetFormat()->GetSectionNode() ))
-            {
+                nullptr != ( pSectNd = pSect->GetFormat()->GetSectionNode() ))            {
                 sal_uLong nIdx = pSectNd->GetIndex();
                 aTmpArr.push_back( nIdx );
-                if( nIdx < nSttContent )
-                    ++nArrStt;
             }
         }
         std::sort(aTmpArr.begin(), aTmpArr.end());
-
-        // Display all first so that we have frames. The BodyAnchor is defined by that.
-        // First the ContentArea, then the special areas!
-        for (std::vector<sal_uLong>::size_type n = nArrStt; n < aTmpArr.size(); ++n)
-        {
-            pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
-            OSL_ENSURE( pSectNd, "Where is my SectionNode" );
-            pSectNd->GetSection().SetCondHidden( false );
-        }
-        for (std::vector<sal_uLong>::size_type n = 0; n < nArrStt; ++n)
-        {
-            pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
-            OSL_ENSURE( pSectNd, "Where is my SectionNode" );
-            pSectNd->GetSection().SetCondHidden( false );
-        }
 
         // add all to the list so that they are sorted
         for (const auto &nId : aTmpArr)

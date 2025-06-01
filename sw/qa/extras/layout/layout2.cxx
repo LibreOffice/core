@@ -985,6 +985,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf166210)
     discardDumpedLayout();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf166691)
+{
+    // Given a document with a table which disallows breaking across pages, and that has a cell
+    // with an inner section with hide condition (evaluated to true), such as to have the cell
+    // height enough to fit on page 1, when the section is hidden, but too tall when it's shown:
+    createDoc("table-with-hidden-section.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // Check that there is only a single page
+    assertXPath(pXmlDoc, "//page", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
