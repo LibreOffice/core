@@ -210,20 +210,15 @@ public:
     {
         GetDocHandler()->startDocument();
 
-        AddAttribute(XML_NAMESPACE_NONE,
-                      GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_OFFICE),
+        AddAttribute( GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_OFFICE),
                       GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_OFFICE));
-        AddAttribute(XML_NAMESPACE_NONE,
-                      GetNamespaceMap_().GetAttrNameByKey (XML_NAMESPACE_TEXT),
+        AddAttribute( GetNamespaceMap_().GetAttrNameByKey (XML_NAMESPACE_TEXT),
                       GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_TEXT));
-        AddAttribute(XML_NAMESPACE_NONE,
-                      GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_STYLE),
+        AddAttribute( GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_STYLE),
                       GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_STYLE));
-        AddAttribute(XML_NAMESPACE_NONE,
-                      GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_FO),
+        AddAttribute( GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_FO),
                       GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_FO));
-        AddAttribute(XML_NAMESPACE_NONE,
-                      GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_SVG),
+        AddAttribute( GetNamespaceMap_().GetAttrNameByKey(XML_NAMESPACE_SVG),
                       GetNamespaceMap_().GetNameByKey(XML_NAMESPACE_SVG));
 
         {

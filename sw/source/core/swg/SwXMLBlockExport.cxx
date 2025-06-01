@@ -48,8 +48,7 @@ ErrCode SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
 
     addChaffWhenEncryptedStorage();
 
-    AddAttribute ( XML_NAMESPACE_NONE,
-                   GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
+    AddAttribute ( GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
                    GetNamespaceMap_().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
     AddAttribute( XML_NAMESPACE_BLOCKLIST,
                   XML_LIST_NAME,
@@ -104,14 +103,11 @@ void SwXMLTextBlockExport::exportDoc(std::u16string_view rText)
 
     addChaffWhenEncryptedStorage();
 
-    AddAttribute ( XML_NAMESPACE_NONE,
-                   GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
+    AddAttribute ( GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
                    GetNamespaceMap_().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
-    AddAttribute ( XML_NAMESPACE_NONE,
-                   GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_TEXT ),
+    AddAttribute ( GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_TEXT ),
                    GetNamespaceMap_().GetNameByKey ( XML_NAMESPACE_TEXT ) );
-    AddAttribute ( XML_NAMESPACE_NONE,
-                   GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_OFFICE ),
+    AddAttribute ( GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_OFFICE ),
                    GetNamespaceMap_().GetNameByKey ( XML_NAMESPACE_OFFICE ) );
     AddAttribute( XML_NAMESPACE_BLOCKLIST,
                   XML_LIST_NAME,
