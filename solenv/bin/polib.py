@@ -2,7 +2,7 @@
 #
 # License: MIT (see LICENSE file provided)
 # vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4:
-8
+
 """
 **polib** allows you to manipulate, create, modify gettext files (pot, po and
 mo files).  You can load existing files, iterate through it's entries, add,
@@ -11,11 +11,6 @@ modify entries, comments or metadata, etc. or create new po files from scratch.
 **polib** provides a simple and pythonic API via the :func:`~polib.pofile` and
 :func:`~polib.mofile` convenience functions.
 """
-
-__author__ = 'David Jean Louis <izimobil@gmail.com>'
-__version__ = '1.0.8'
-__all__ = ['pofile', 'POFile', 'POEntry', 'mofile', 'MOFile', 'MOEntry',
-           'default_encoding', 'escape', 'unescape', 'detect_encoding', ]
 
 import array
 import codecs
@@ -36,6 +31,10 @@ except ImportError:
         def open(fpath, mode='r', encoding=None):
             return codecs.open(fpath, mode, encoding)
 
+__author__ = 'David Jean Louis <izimobil@gmail.com>'
+__version__ = '1.0.8'
+__all__ = ['pofile', 'POFile', 'POEntry', 'mofile', 'MOFile', 'MOEntry',
+           'default_encoding', 'escape', 'unescape', 'detect_encoding', ]
 
 # the default encoding to use when encoding cannot be detected
 default_encoding = 'utf-8'
