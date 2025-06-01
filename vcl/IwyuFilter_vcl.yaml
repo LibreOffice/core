@@ -100,13 +100,6 @@ excludelist:
     # Actually these are used
     - KWindowSystem
     - KFileWidget
-    - QtCore/QDebug
-    - QtCore/QUrl
-    - QtWidgets/QCheckBox
-    - QtWidgets/QFileDialog
-    - QtWidgets/QGridLayout
-    - QtWidgets/QWidget
-    - QtWidgets/QApplication
     vcl/unx/gtk3_kde5/kde5_lo_filepicker_main.cxx:
     # Actually these are used
     - QApplication
@@ -119,3 +112,15 @@ excludelist:
     vcl/qa/cppunit/filter/ipdf/ipdf.cxx:
     - prewin.h
     - postwin.h
+    vcl/qt5/QtAccessibleWidget.cxx:
+    # Needed for QT 6.9
+    - com/sun/star/accessibility/XAccessibleContext2.hpp
+    # Needed for QT 6.8
+    - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
+    # Actually used
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    vcl/qt5/QtInstance.cxx:
+    # Needed for EMSCRIPTEN build
+    - o3tl/temporary.hxx
+    - o3tl/unreachable.hxx
+    - comphelper/emscriptenthreading.hxx

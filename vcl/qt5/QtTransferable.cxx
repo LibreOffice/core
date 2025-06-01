@@ -11,7 +11,6 @@
 #include <QtTransferable.hxx>
 #include <QtTransferable.moc>
 
-#include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/debug.hxx>
@@ -20,7 +19,6 @@
 #include <QtWidgets/QApplication>
 
 #include <QtInstance.hxx>
-#include <QtTools.hxx>
 
 #include <cassert>
 

@@ -21,7 +21,6 @@
 #include <QtObject.moc>
 
 #include <QtFrame.hxx>
-#include <QtWidget.hxx>
 
 #include <QtCore/QLibraryInfo>
 #include <QtGui/QGuiApplication>

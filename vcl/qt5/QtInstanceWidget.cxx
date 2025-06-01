@@ -13,7 +13,6 @@
 #include <QtInstanceContainer.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/event.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/qt/QtUtils.hxx>
 

@@ -19,15 +19,11 @@
 
 #include <sal/config.h>
 
-#include <unotools/fontdefs.hxx>
-
 #include <QtFontFace.hxx>
 #include <QtFont.hxx>
 #include <QtTools.hxx>
 
 #include <font/LogicalFontInstance.hxx>
-#include <font/FontSelectPattern.hxx>
-#include <font/PhysicalFontCollection.hxx>
 
 #include <QtGui/QFont>
 #include <QtGui/QFontDatabase>

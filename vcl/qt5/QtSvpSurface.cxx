@@ -14,10 +14,7 @@
 #include <QtSvpGraphics.hxx>
 
 #include <vcl/sysdata.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
-#include <basegfx/vector/b2isize.hxx>
 
 namespace
 {

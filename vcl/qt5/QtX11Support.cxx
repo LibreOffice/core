@@ -9,11 +9,8 @@
 
 #include <QtX11Support.hxx>
 
-#include <config_vclplug.h>
-
 #include <QtCore/QVersionNumber>
 
-#include <QtInstance.hxx>
 #include <QtTools.hxx>
 
 #if CHECK_QT5_USING_X11

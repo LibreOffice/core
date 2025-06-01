@@ -11,7 +11,6 @@
 #include <QtClipboard.hxx>
 #include <QtClipboard.moc>
 
-#include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 
@@ -19,7 +18,6 @@
 
 #include <QtInstance.hxx>
 #include <QtTransferable.hxx>
-#include <QtTools.hxx>
 
 #include <cassert>
 #include <map>

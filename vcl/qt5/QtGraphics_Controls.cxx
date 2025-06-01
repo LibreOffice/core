@@ -28,7 +28,6 @@
 #include <QtInstance.hxx>
 #include <QtTools.hxx>
 #include <QtGraphicsBase.hxx>
-#include <vcl/decoview.hxx>
 #include <scrollbarvalue.hxx>
 
 /**

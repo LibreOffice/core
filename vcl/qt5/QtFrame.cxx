@@ -17,20 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <IconThemeSelector.hxx>
 #include <QtCustomStyle.hxx>
 #include <QtFrame.hxx>
 #include <QtFrame.moc>
 
 #include <QtData.hxx>
 #include <QtDragAndDrop.hxx>
-#include <QtFontFace.hxx>
 #include <QtGraphics.hxx>
 #include <QtInstance.hxx>
 #include <QtMainWindow.hxx>
-#include <QtMenu.hxx>
 #include <QtSvpGraphics.hxx>
-#include <QtSystem.hxx>
 #include <QtTransferable.hxx>
 #if CHECK_ANY_QT_USING_X11
 #include <QtX11Support.hxx>
@@ -60,7 +56,6 @@
 
 #include <window.h>
 #include <vcl/qt/QtUtils.hxx>
-#include <vcl/syswin.hxx>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 

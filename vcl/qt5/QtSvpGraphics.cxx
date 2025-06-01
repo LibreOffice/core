@@ -8,9 +8,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
-#include <salbmp.hxx>
-#include <o3tl/string_view.hxx>
 
 #include <config_cairo_canvas.h>
 

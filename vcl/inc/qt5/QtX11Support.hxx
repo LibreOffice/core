@@ -11,7 +11,7 @@
 
 #include <string_view>
 
-#include <xcb/xcb.h>
+#include <xcb/xproto.h>
 
 class QtX11Support final
 {

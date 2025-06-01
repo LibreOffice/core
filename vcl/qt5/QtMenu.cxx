@@ -35,7 +35,6 @@
 
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
-#include <sal/log.hxx>
 
 #include <strings.hrc>
 #include <bitmaps.hlst>

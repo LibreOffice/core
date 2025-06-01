@@ -9,9 +9,10 @@
 
 #include <IconThemeSelector.hxx>
 #include <QtCustomStyle.hxx>
-#include <QtFrame.hxx>
+#include <QtTools.hxx>
 #include <QtWidgets/qdrawutil.h>
 #include <QtWidgets/QApplication>
+#include <vcl/svapp.hxx>
 #include <vcl/themecolors.hxx>
 #include <vcl/qt/QtUtils.hxx>
 

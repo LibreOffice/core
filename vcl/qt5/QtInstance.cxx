@@ -53,10 +53,8 @@
 #include <vclpluginapi.h>
 #include <tools/debug.hxx>
 #include <comphelper/emscriptenthreading.hxx>
-#include <comphelper/flagguard.hxx>
 #include <config_emscripten.h>
 #include <config_vclplug.h>
-#include <dndhelper.hxx>
 #include <vcl/qt/QtUtils.hxx>
 #include <vcl/sysdata.hxx>
 #include <sal/log.hxx>

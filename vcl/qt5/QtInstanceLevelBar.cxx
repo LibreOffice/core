@@ -10,8 +10,6 @@
 #include <QtInstanceLevelBar.hxx>
 #include <QtInstanceLevelBar.moc>
 
-#include <vcl/qt/QtUtils.hxx>
-
 QtInstanceLevelBar::QtInstanceLevelBar(QProgressBar* pProgressBar)
     : QtInstanceWidget(pProgressBar)
     , m_pProgressBar(pProgressBar)

@@ -31,7 +31,6 @@
 
 #include <bitmaps.hlst>
 #include <cursor_hotspots.hxx>
-#include <unx/glyphcache.hxx>
 
 QtData::QtData()
     : GenericUnixSalData()

@@ -22,14 +22,11 @@
 #include <QtBitmap.hxx>
 #include <QtPainter.hxx>
 
-#include <sal/log.hxx>
-
 #include <QtGui/QPainter>
 
 #include <numeric>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <o3tl/string_view.hxx>
 
 QtGraphicsBackend::QtGraphicsBackend(QtFrame* pFrame, QImage* pQImage)
     : m_pFrame(pFrame)

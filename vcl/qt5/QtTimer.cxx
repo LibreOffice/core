@@ -28,7 +28,6 @@
 #include <config_emscripten.h>
 #include <config_vclplug.h>
 #include <vcl/svapp.hxx>
-#include <sal/log.hxx>
 
 #include <svdata.hxx>
 

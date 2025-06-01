@@ -10,8 +10,6 @@
 #include <QtInstanceEntryTreeView.hxx>
 #include <QtInstanceEntryTreeView.moc>
 
-#include <QtInstanceBuilder.hxx>
-
 #include <QtWidgets/QCompleter>
 
 QtInstanceEntryTreeView::QtInstanceEntryTreeView(QWidget* pContainer, QLineEdit* pLineEdit,

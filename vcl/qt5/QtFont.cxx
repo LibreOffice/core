@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <QtFont.hxx>
-#include <QtTools.hxx>
 
 #include <vcl/qt/QtUtils.hxx>
 

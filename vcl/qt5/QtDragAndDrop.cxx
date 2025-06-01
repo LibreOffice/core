@@ -8,16 +8,12 @@
  *
  */
 
-#include <com/sun/star/awt/MouseButton.hpp>
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <sal/log.hxx>
 
 #include <QtDragAndDrop.hxx>
 #include <QtFrame.hxx>
 #include <QtTransferable.hxx>
-#include <QtWidget.hxx>
 
 #include <QtGui/QDrag>
 

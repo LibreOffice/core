@@ -19,7 +19,6 @@
 
 #include <QtAccessibleEventListener.hxx>
 #include <QtAccessibleRegistry.hxx>
-#include <QtTools.hxx>
 
 #include <sal/log.hxx>
 

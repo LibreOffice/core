@@ -24,14 +24,9 @@
 #include <QtInstance.hxx>
 #include <QtPrinter.hxx>
 
-#include <vcl/svapp.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/QueueInfo.hxx>
 #include <printerinfomanager.hxx>
 
-#include <jobset.h>
 #include <print.h>
-#include <salptype.hxx>
 
 #include <unx/genpspgraphics.h>
 

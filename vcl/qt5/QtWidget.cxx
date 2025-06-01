@@ -21,10 +21,7 @@
 #include <QtWidget.moc>
 
 #include <QtFrame.hxx>
-#include <QtGraphics.hxx>
 #include <QtInstance.hxx>
-#include <QtMainWindow.hxx>
-#include <QtSvpGraphics.hxx>
 #include <QtTransferable.hxx>
 #include <QtTools.hxx>
 
@@ -45,7 +42,6 @@
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QWidget>
 
-#include <cairo.h>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/qt/QtUtils.hxx>
@@ -53,7 +49,7 @@
 #include <window.h>
 #include <comphelper/diagnose_ex.hxx>
 
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 
 #if CHECK_ANY_QT_USING_X11

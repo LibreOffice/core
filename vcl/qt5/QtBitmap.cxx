@@ -25,9 +25,6 @@
 #include <QtCore/QVector>
 #include <QtGui/QColor>
 
-#include <o3tl/safeint.hxx>
-#include <sal/log.hxx>
-#include <tools/helpers.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
 

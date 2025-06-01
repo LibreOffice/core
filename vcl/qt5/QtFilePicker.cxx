@@ -24,8 +24,6 @@
 #include <QtFilePicker.moc>
 
 #include <QtFrame.hxx>
-#include <QtTools.hxx>
-#include <QtWidget.hxx>
 #include <QtInstance.hxx>
 #include <QtXWindow.hxx>
 
@@ -33,18 +31,14 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
-#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/process.h>
 #include <sal/log.hxx>
 #include <vcl/qt/QtUtils.hxx>
 #include <vcl/toolkit/unowrap.hxx>
@@ -65,7 +59,6 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QWidget>
 
-#include <unx/geninst.h>
 #include <fpicker/strings.hrc>
 #include <utility>
 

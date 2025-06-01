@@ -10,8 +10,6 @@
 #include <QtInstanceLabel.hxx>
 #include <QtInstanceLabel.moc>
 
-#include <vcl/qt/QtUtils.hxx>
-
 QtInstanceLabel::QtInstanceLabel(QLabel* pLabel)
     : QtInstanceWidget(pLabel)
     , m_pLabel(pLabel)

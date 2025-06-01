@@ -105,6 +105,14 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
         if include == k and v in toAdd:
             return True
 
+    # Most Qt headers are used as <QtLib/QClass> and IWYU suggests
+    # them to be replaced with QtLib/qclass.h, these could be skipped
+    # BUT: Several Qt 6 minor versions are supported,
+    # making testing of false positives over-expensive
+    # so just skip all those headers for now
+    if include.startswith("Qt") and '/' in include:
+        return True
+
     # 3rd-party, non-self-contained headers.
     if include == "libepubgen/libepubgen.h" and "libepubgen/libepubgen-decls.h" in toAdd:
         return True

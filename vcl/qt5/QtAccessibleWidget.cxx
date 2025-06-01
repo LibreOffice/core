@@ -50,12 +50,10 @@
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/AccessibleImplementationHelper.hxx>
-#include <o3tl/any.hxx>
 #include <sal/log.hxx>
 #include <vcl/accessibility/AccessibleTextAttributeHelper.hxx>
 #include <vcl/qt/QtUtils.hxx>

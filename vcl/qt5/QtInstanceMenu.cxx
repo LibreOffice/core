@@ -11,7 +11,6 @@
 #include <QtInstanceMenu.moc>
 
 #include <QtInstance.hxx>
-#include <QtTools.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/qt/QtUtils.hxx>

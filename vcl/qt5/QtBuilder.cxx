@@ -11,13 +11,11 @@
 
 #include <QtDoubleSpinBox.hxx>
 #include <QtExpander.hxx>
-#include <QtInstanceLinkButton.hxx>
 #include <QtInstanceMenu.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceNotebook.hxx>
-#include <QtTools.hxx>
+#include <QtHyperlinkLabel.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtCore/QSortFilterProxyModel>
