@@ -21,15 +21,15 @@ class tdf152006(UITestCase):
                 xDisplayCB = xDialog.getChild('checkCB_DISPLAY')
 
                 # Document starts in state with no grid, not displayed
-                self.assertEqual('false', get_state_as_dict(xDisplayCB)['Selected']);
+                self.assertEqual('false', get_state_as_dict(xDisplayCB)['Selected'])
 
-                xLinesGridRB.executeAction('CLICK', tuple());
-                xDisplayCB.executeAction('CLICK', tuple());
+                xLinesGridRB.executeAction('CLICK', tuple())
+                xDisplayCB.executeAction('CLICK', tuple())
 
-                self.assertEqual('true', get_state_as_dict(xDisplayCB)['Selected']);
+                self.assertEqual('true', get_state_as_dict(xDisplayCB)['Selected'])
 
                 # First apply: enable grid and display
-                xApply.executeAction('CLICK', tuple());
+                xApply.executeAction('CLICK', tuple())
 
             with self.ui_test.execute_dialog_through_command('.uno:PageDialog') as xDialog:
                 xApply = xDialog.getChild('apply')
@@ -40,26 +40,26 @@ class tdf152006(UITestCase):
 
                 self.assertEqual('true', get_state_as_dict(xDisplayCB)['Selected']);
 
-                xNoGridRB.executeAction('CLICK', tuple());
+                xNoGridRB.executeAction('CLICK', tuple())
 
                 # Second apply: disable grid only
-                xApply.executeAction('CLICK', tuple());
+                xApply.executeAction('CLICK', tuple())
 
-                xLinesGridRB.executeAction('CLICK', tuple());
+                xLinesGridRB.executeAction('CLICK', tuple())
 
-                self.assertEqual('true', get_state_as_dict(xDisplayCB)['Selected']);
+                self.assertEqual('true', get_state_as_dict(xDisplayCB)['Selected'])
 
-                xDisplayCB.executeAction('CLICK', tuple());
+                xDisplayCB.executeAction('CLICK', tuple())
 
-                self.assertEqual('false', get_state_as_dict(xDisplayCB)['Selected']);
+                self.assertEqual('false', get_state_as_dict(xDisplayCB)['Selected'])
 
                 # Third apply: enable grid and disable display
-                xApply.executeAction('CLICK', tuple());
+                xApply.executeAction('CLICK', tuple())
 
-                xDisplayCB.executeAction('CLICK', tuple());
+                xDisplayCB.executeAction('CLICK', tuple())
 
                 # Fourth apply: enable display
-                xApply.executeAction('CLICK', tuple());
+                xApply.executeAction('CLICK', tuple())
 
             with self.ui_test.execute_dialog_through_command('.uno:PageDialog') as xDialog:
                 xLinesGridRB = xDialog.getChild('radioRB_LINESGRID')
