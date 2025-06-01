@@ -27,6 +27,7 @@
 #include <com/sun/star/java/JavaVMCreationFailureException.hpp>
 #include <com/sun/star/java/RestartRequiredException.hpp>
 #include <comphelper/processfactory.hxx>
+#include <osl/process.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <jvmfwk/framework.hxx>
@@ -206,6 +207,16 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             OUString sWarning(SvtResId(STR_ERROR_JVMCREATIONFAILED_MAC));
 #else
             OUString sWarning(SvtResId(STR_ERROR_JVMCREATIONFAILED));
+#endif
+#if !defined(_WIN32)
+            if (OUString javaldx_warn;
+                osl_getEnvironment(u"javaldx_warn"_ustr.pData, &javaldx_warn.pData)
+                    == osl_Process_E_None
+                && !javaldx_warn.isEmpty())
+            {
+                // Technical untranslated info
+                sWarning += "\njavaldx warning: " + javaldx_warn;
+            }
 #endif
             std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
                                                            VclMessageType::Warning, VclButtonsType::Ok, sWarning));

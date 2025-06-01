@@ -661,7 +661,7 @@ static void exec_javaldx(Args *args)
 
     if(err != osl_Process_E_None)
     {
-        fprintf (stderr, "Warning: failed to launch javaldx - java may not function correctly\n");
+        putenv("javaldx_warn=failed to launch javaldx - java may not function correctly");
 
         if (javaldx)
             osl_freeProcessHandle(javaldx);
@@ -679,7 +679,7 @@ static void exec_javaldx(Args *args)
 
         if (bytes_read <= 0)
         {
-            fprintf (stderr, "Warning: failed to read path from javaldx\n");
+            putenv("javaldx_warn=failed to read path from javaldx");
 
             if (javaldx)
                 osl_freeProcessHandle(javaldx);
