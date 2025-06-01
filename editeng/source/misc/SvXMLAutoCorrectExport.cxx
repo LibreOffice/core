@@ -48,8 +48,7 @@ ErrCode SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 
     addChaffWhenEncryptedStorage();
 
-    AddAttribute ( XML_NAMESPACE_NONE,
-                   GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
+    AddAttribute ( GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
                    GetNamespaceMap_().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
     {
         SvXMLElementExport aRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, true, true);
@@ -89,8 +88,7 @@ ErrCode SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 
     addChaffWhenEncryptedStorage();
 
-    AddAttribute ( XML_NAMESPACE_NONE,
-                   GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
+    AddAttribute ( GetNamespaceMap_().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
                    GetNamespaceMap_().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
     {
         SvXMLElementExport aRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, true, true);
