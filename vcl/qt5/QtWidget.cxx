@@ -490,10 +490,10 @@ bool QtWidget::handleEvent(QEvent* pEvent)
         const QtFrame* pPopupFrame = GetQtInstance().activePopup();
         if (!m_rFrame.m_aTooltipText.isEmpty() && (!pPopupFrame || pPopupFrame == &m_rFrame))
         {
-            // tdf#162297 Use a dummy style to ensure the tooltip is wrapped
-            QString sTooltipText("<font font-weight=normal>");
-            sTooltipText += toQString(m_rFrame.m_aTooltipText);
-            sTooltipText += "</font>";
+            // tdf#162297 and tdf#166805: Use an html tag to ensure the tooltip is wrapped
+            QString sTooltipText("<html>");
+            sTooltipText += toQString(m_rFrame.m_aTooltipText).toHtmlEscaped();
+            sTooltipText += "</html>";
             QToolTip::showText(QCursor::pos(), sTooltipText, this, m_rFrame.m_aTooltipArea);
         }
         else
