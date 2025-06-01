@@ -37,13 +37,13 @@ Specific documentation about Access2Base and Python:
 """
 
 import uno
-XSCRIPTCONTEXT = uno
-
 from platform import system as _opsys
 import datetime
 import os
 import sys
 import traceback
+
+XSCRIPTCONTEXT = uno
 
 _LIBRARY = ''               # Should be 'Access2Base' or 'Access2BaseDev'
 _VERSION = '7.4'            # Actual version number

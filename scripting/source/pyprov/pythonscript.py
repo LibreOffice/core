@@ -28,6 +28,21 @@ import platform
 from com.sun.star.uri.RelativeUriExcessParentSegments import RETAIN
 from urllib.parse import unquote
 
+from com.sun.star.uno import RuntimeException
+from com.sun.star.lang import IllegalArgumentException
+from com.sun.star.container import NoSuchElementException
+from com.sun.star.ucb import XCommandEnvironment, XProgressHandler, Command
+from com.sun.star.task import XInteractionHandler
+from com.sun.star.beans import XPropertySet, Property
+from com.sun.star.container import XNameContainer
+from com.sun.star.xml.sax import XDocumentHandler, InputSource
+from com.sun.star.uno import Exception as UnoException
+from com.sun.star.script import XInvocation
+from com.sun.star.awt import XActionListener
+
+from com.sun.star.script.provider import XScriptProvider, XScript, ScriptFrameworkErrorException
+from com.sun.star.script.browse import XBrowseNode
+from com.sun.star.script.browse.BrowseNodeTypes import SCRIPT, CONTAINER
 
 class LogLevel:
     NONE = 0  # production level
@@ -120,23 +135,6 @@ class Logger(LogLevel):
 log = Logger(getLogTarget())
 
 log.debug("pythonscript loading")
-
-# from com.sun.star.lang import typeOfXServiceInfo, typeOfXTypeProvider
-from com.sun.star.uno import RuntimeException
-from com.sun.star.lang import IllegalArgumentException
-from com.sun.star.container import NoSuchElementException
-from com.sun.star.ucb import XCommandEnvironment, XProgressHandler, Command
-from com.sun.star.task import XInteractionHandler
-from com.sun.star.beans import XPropertySet, Property
-from com.sun.star.container import XNameContainer
-from com.sun.star.xml.sax import XDocumentHandler, InputSource
-from com.sun.star.uno import Exception as UnoException
-from com.sun.star.script import XInvocation
-from com.sun.star.awt import XActionListener
-
-from com.sun.star.script.provider import XScriptProvider, XScript, ScriptFrameworkErrorException
-from com.sun.star.script.browse import XBrowseNode
-from com.sun.star.script.browse.BrowseNodeTypes import SCRIPT, CONTAINER
 
 LANGUAGENAME = "Python"
 GLOBAL_SCRIPTCONTEXT_NAME = "XSCRIPTCONTEXT"

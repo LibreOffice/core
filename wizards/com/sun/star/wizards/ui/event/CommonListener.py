@@ -18,6 +18,14 @@
 import unohelper
 
 from com.sun.star.awt import XActionListener
+from com.sun.star.awt import XItemListener
+from com.sun.star.awt import XTextListener
+from com.sun.star.frame import XTerminateListener
+from com.sun.star.awt import XWindowListener
+from com.sun.star.awt import XAdjustmentListener
+from com.sun.star.awt import XFocusListener
+from com.sun.star.awt import XKeyListener
+
 class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
     def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
@@ -30,7 +38,6 @@ class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
         # TODO: Implement ?
         pass
 
-from com.sun.star.awt import XItemListener
 class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
     def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
@@ -46,7 +53,6 @@ class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
         # TODO: Implement ?
         pass
 
-from com.sun.star.awt import XTextListener
 class TextListenerProcAdapter( unohelper.Base, XTextListener ):
     def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
@@ -59,7 +65,6 @@ class TextListenerProcAdapter( unohelper.Base, XTextListener ):
         # TODO: Implement ?
         pass
 
-from com.sun.star.frame import XTerminateListener
 class TerminateListenerProcAdapter( unohelper.Base, XTerminateListener ):
     def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
@@ -68,7 +73,6 @@ class TerminateListenerProcAdapter( unohelper.Base, XTerminateListener ):
         if callable( self.oProcToCall ):
             self.oProcToCall()
 
-from com.sun.star.awt import XWindowListener
 class WindowListenerProcAdapter( unohelper.Base, XWindowListener ):
     def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
@@ -93,7 +97,6 @@ class WindowListenerProcAdapter( unohelper.Base, XWindowListener ):
         # TODO: Implement ?
         pass
 
-from com.sun.star.awt import XAdjustmentListener
 class AdjustmentListenerProcAdapter( unohelper.Base, XAdjustmentListener ):
     def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
@@ -102,7 +105,6 @@ class AdjustmentListenerProcAdapter( unohelper.Base, XAdjustmentListener ):
         if callable( self.oProcToCall ):
             self.oProcToCall()
 
-from com.sun.star.awt import XFocusListener
 class FocusListenerProcAdapter( unohelper.Base, XFocusListener ):
     def __init__( self, oProcToCall):
         self.oProcToCall = oProcToCall
@@ -111,7 +113,6 @@ class FocusListenerProcAdapter( unohelper.Base, XFocusListener ):
         if callable( self.oProcToCall ):
             self.oProcToCall(FocusEvent)
 
-from com.sun.star.awt import XKeyListener
 class KeyListenerProcAdapter( unohelper.Base, XKeyListener ):
     def __init__(self, oProcToCall):
         self.oProcToCall = oProcToCall
