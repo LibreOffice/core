@@ -836,9 +836,6 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     // new version: walk all fields of the attribute pool
     m_pFieldSortList.reset(new SetGetExpFields);
 
-    // remember sections that were unhidden and need to be hidden again
-    std::vector<std::reference_wrapper<SwSection>> aUnhiddenSections;
-
     // consider and unhide sections
     //     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
     //     notes by OD:
@@ -858,55 +855,18 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
         // In order for the frames to be created the right way, they have to be expanded
         // from top to bottom
         std::vector<SwNodeOffset> aTmpArr;
-        std::vector<SwNodeOffset>::size_type nArrStt = 0;
-        SwSectionFormats& rArr = rDoc.GetSections();
-        SwSectionNode* pSectNd = nullptr;
-        SwNodeOffset nSttContent = rDoc.GetNodes().GetEndOfExtras().GetIndex();
-
-        for (SwSectionFormats::size_type n = rArr.size(); n; )
+        for (const auto& rFormat : rDoc.GetSections())
         {
-            SwSection* pSect = rArr[ --n ]->GetSection();
+            SwSection* pSect = rFormat->GetSection();
             if( !pSect || !pSect->IsHidden() || pSect->GetCondition().isEmpty() )
                 continue;
-            pSectNd = pSect->GetFormat()->GetSectionNode();
-            if( pSectNd )
+            if (SwSectionNode* pSectNd = pSect->GetFormat()->GetSectionNode())
             {
                 SwNodeOffset nIdx = pSectNd->GetIndex();
                 aTmpArr.push_back( nIdx );
-                if( nIdx < nSttContent )
-                    ++nArrStt;
             }
         }
         std::sort(aTmpArr.begin(), aTmpArr.end());
-
-        // Display all first so that we have frames. The BodyAnchor is defined by that.
-        // First the ContentArea, then the special areas!
-        for (std::vector<sal_uLong>::size_type n = nArrStt; n < aTmpArr.size(); ++n)
-        {
-            pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
-            OSL_ENSURE( pSectNd, "Where is my SectionNode" );
-
-            auto& rSection = pSectNd->GetSection();
-            // unhide and remember the conditionally hidden sections
-            if (rSection.IsHidden() && !rSection.GetCondition().isEmpty() && rSection.IsCondHidden())
-            {
-                aUnhiddenSections.push_back(std::ref(rSection)); // remember to later hide again
-                rSection.SetCondHidden(false);
-            }
-        }
-        for (std::vector<sal_uLong>::size_type n = 0; n < nArrStt; ++n)
-        {
-            pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
-            OSL_ENSURE( pSectNd, "Where is my SectionNode" );
-
-            auto& rSection = pSectNd->GetSection();
-            // unhide and remember the conditionally hidden sections
-            if (rSection.IsHidden() && !rSection.GetCondition().isEmpty() && rSection.IsCondHidden())
-            {
-                aUnhiddenSections.push_back(std::ref(rSection)); // remember to later hide again
-                rSection.SetCondHidden(false);
-            }
-        }
 
         // add all to the list so that they are sorted
         for (const auto &nId : aTmpArr)
@@ -1049,13 +1009,6 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     }
     m_nFieldListGetMode = eGetMode;
     m_nNodes = rDoc.GetNodes().Count();
-
-    // return the conditional hidden value back to the previous value
-    for (auto& rSectionWrapper : aUnhiddenSections)
-    {
-        auto& rSection = rSectionWrapper.get();
-        rSection.SetCondHidden(true);
-    }
 }
 
 void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFieldWhich )
