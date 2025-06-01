@@ -113,16 +113,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             break;
     }
 
-    css::java::JavaNotFoundException           e1;
-    css::java::InvalidJavaSettingsException    e2;
-    css::java::JavaDisabledException           e3;
-    css::java::JavaVMCreationFailureException  e4;
-    css::java::RestartRequiredException        e5;
     // Try to recover the Exception type in the any and
     // react accordingly.
     sal_uInt16      nResult = RET_CANCEL;
 
-    if ( anyExc >>= e1 )
+    if (css::java::JavaNotFoundException e1; anyExc >>= e1)
     {
         SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bNotFoundHandled )
@@ -155,7 +150,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             nResult = RET_OK;
         }
     }
-    else if ( anyExc >>= e2 )
+    else if (css::java::InvalidJavaSettingsException e2; anyExc >>= e2)
     {
         SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bInvalidSettingsHandled )
@@ -177,7 +172,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             nResult = RET_OK;
         }
     }
-    else if ( anyExc >>= e3 )
+    else if (css::java::JavaDisabledException e3; anyExc >>= e3)
     {
         SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bDisabledHandled )
@@ -200,7 +195,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             nResult = g_JavaEvents.nResult_JavaDisabled;
         }
     }
-    else if ( anyExc >>= e4 )
+    else if (css::java::JavaVMCreationFailureException e4; anyExc >>= e4)
     {
         SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bVMCreationFailureHandled )
@@ -222,7 +217,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             nResult = RET_OK;
         }
     }
-    else if ( anyExc >>= e5 )
+    else if (css::java::RestartRequiredException e5; anyExc >>= e5)
     {
         SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bRestartRequiredHandled )
