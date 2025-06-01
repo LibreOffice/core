@@ -1390,6 +1390,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             iState = GLPS_OPENED;
             break;
         case ButtonValue::Off:
+        case ButtonValue::DontKnow: // SvTLEntryFlags::CHILDREN_ON_DEMAND
             iState = GLPS_CLOSED;
             break;
         default:
