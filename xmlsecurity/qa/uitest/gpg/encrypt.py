@@ -76,7 +76,7 @@ class GpgEncryptTest(UITestCase):
         with self.ui_test.set_config('/org.openoffice.UserProfile/Data/signingkey', r"93F7584031D9B74A57BB89DFC468A04FCA526A9F"):
             with TemporaryDirectory() as tempdir:
                 xFilePath = os.path.join(tempdir, "testfile.odt")
-                with self.ui_test.create_doc_in_start_center("writer") as document:
+                with self.ui_test.create_doc_in_start_center("writer"):
                     with self.ui_test.execute_dialog_through_command(".uno:Save", close_button="") as xSaveDialog:
                         xFileName = xSaveDialog.getChild("file_name")
                         xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
