@@ -491,7 +491,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     SW_DLLPUBLIC virtual SwPostItMgr* GetPostItMgr() override;
 
-    bool TryRemoveIndent(); // #i23725#
+    SW_DLLPUBLIC bool TryRemoveIndent(); // #i23725#
 
     OUString GetSelDescr() const;
 
