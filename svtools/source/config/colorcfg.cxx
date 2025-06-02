@@ -122,8 +122,7 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
         // for dark color. and an optional visibility entry based on
         // cNames[nIndex].bCanBeVisible
         OUString sBaseName = sBase + "/" + cNames[i].cName;
-        pNames[nIndex++] = sBaseName + "/Light";
-        pNames[nIndex++] = sBaseName + "/Dark";
+        pNames[nIndex++] = sBaseName + "/Color";
 
         if(cNames[i].bCanBeVisible)
             pNames[nIndex++] = sBaseName + g_sIsVisible;
@@ -184,33 +183,14 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     sal_Int32 nIndex = 0;
     for(int i = 0; i < ColorConfigEntryCount && aColors.getLength() > nIndex; ++i)
     {
-        // light color value
+        // color
         Color nTmp;
         pColors[nIndex] >>= nTmp;
-        m_aConfigValues[i].nLightColor = nTmp;
+        m_aConfigValues[i].nColor = nTmp;
 
         if (!pColors[nIndex].hasValue())
-            m_aConfigValues[i].nLightColor = COL_AUTO;
+            m_aConfigValues[i].nColor = COL_AUTO;
         ++nIndex;
-
-        // dark color value
-        pColors[nIndex] >>= nTmp;
-        m_aConfigValues[i].nDarkColor = nTmp;
-
-        if (!pColors[nIndex].hasValue())
-            m_aConfigValues[i].nDarkColor = COL_AUTO;
-        ++nIndex;
-
-        bool bIsDarkMode
-            = MiscSettings::GetAppColorMode() == AppearanceMode::DARK
-              || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO && MiscSettings::GetUseDarkMode());
-
-        // based on the appearance (light/dark) cache the value of the appropriate color in nColor.
-        // this way we don't have to add hundreds of function calls in the codebase and it will be fast.
-        if (bIsDarkMode)
-            m_aConfigValues[i].nColor = m_aConfigValues[i].nDarkColor;
-        else
-            m_aConfigValues[i].nColor = m_aConfigValues[i].nLightColor;
 
         if(nIndex >= aColors.getLength())
             break;
@@ -288,16 +268,10 @@ void ColorConfig_Impl::ImplCommit()
     sal_Int32 nIndex = 0;
     for(int i = 0; i < ColorConfigEntryCount && nIndex < aColorNames.getLength(); ++i)
     {
-        // light color value
+        // color
         pPropValues[nIndex].Name = pColorNames[nIndex];
-        if(m_aConfigValues[i].nLightColor != COL_AUTO) //save automatic colors as void value
-            pPropValues[nIndex].Value <<= m_aConfigValues[i].nLightColor;
-        nIndex++;
-
-        // dark color value
-        pPropValues[nIndex].Name = pColorNames[nIndex];
-        if(m_aConfigValues[i].nDarkColor != COL_AUTO) //save automatic colors as void value
-            pPropValues[nIndex].Value <<= m_aConfigValues[i].nDarkColor;
+        if(m_aConfigValues[i].nColor != COL_AUTO) //save automatic colors as void value
+            pPropValues[nIndex].Value <<= m_aConfigValues[i].nColor;
         nIndex++;
 
         if(nIndex >= aColorNames.getLength())

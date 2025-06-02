@@ -16,19 +16,6 @@
 #include <svx/svxdlg.hxx>
 #include <svtools/colorcfg.hxx>
 
-/*
- * SYSTEM       ==> the application will use either light or dark colors from a theme based on
- *                  whether the system is in light mode or in dark mode
- *
- * LIGHT/DARK   ==> light/dark theme colors
- *
- * Note that Appearance settings have nothing to do with the themes, these just specify which one
- * of the theme colors (light/dark) should be used and whether the operating system should decide
- * that
- *
- * LibreOffice Themes will be enabled if some theme other than Automatic is selected.
- */
-
 using namespace svtools;
 class SvxAppearanceTabPage : public SfxTabPage
 {

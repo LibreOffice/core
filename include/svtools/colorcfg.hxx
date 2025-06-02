@@ -243,34 +243,17 @@ struct ColorConfigValue
 {
 
     bool        bIsVisible; // validity depends on the element type
-    ::Color     nColor; // used as a cache for the current color
-    Color       nLightColor;
-    Color       nDarkColor;
-
-    bool        bUseBitmapBackground;
-    bool        bIsBitmapStretched;
-    OUString    sBitmapFileName;
+    ::Color     nColor;
 
     ColorConfigValue()
         : bIsVisible(false)
         , nColor(0)
-        , nLightColor(0)
-        , nDarkColor(0)
-        , bUseBitmapBackground(false)
-        , bIsBitmapStretched(false)
     {
     }
 
     bool operator!=(const ColorConfigValue& rCmp) const
     {
-        return
-            nColor != rCmp.nColor
-            || nLightColor != rCmp.nLightColor
-            || nDarkColor != rCmp.nDarkColor
-            || bIsVisible != rCmp.bIsVisible
-            || bUseBitmapBackground != rCmp.bUseBitmapBackground
-            || bIsBitmapStretched != rCmp.bIsBitmapStretched
-            || sBitmapFileName != rCmp.sBitmapFileName;
+        return nColor != rCmp.nColor || bIsVisible != rCmp.bIsVisible;
     }
 };
 

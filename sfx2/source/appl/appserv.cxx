@@ -777,18 +777,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             svtools::ColorConfigValue aValue;
 
-            // aValue.nColor is just used as a cache variable for light/dark color values. It has the dark color if application is in
-            // dark mode or light color otherwise. see commit message of Change: I1a7f70dfe44b81f863814f87e8d46e146c0e3d5a
             if(aNewTheme == "Dark")
-            {
-                aValue.nLightColor = aDefDarkColor;
-                aValue.nDarkColor = aDefDarkColor;
-            }
+                aValue.nColor = aDefDarkColor;
             else
-            {
-                aValue.nLightColor = aDefLightColor;
-                aValue.nDarkColor = aDefLightColor;
-            }
+                aValue.nColor = aDefLightColor;
 
             aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
             break;

@@ -96,13 +96,6 @@ std::vector<StringPair> const& getBitmapDrawTypeList()
 }
 }
 
-static bool IsDarkModeEnabled()
-{
-    return MiscSettings::GetAppColorMode() == AppearanceMode::DARK
-           || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO
-               && MiscSettings::GetUseDarkMode());
-}
-
 SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
                                            weld::DialogController* pController,
                                            const SfxItemSet& rSet)
@@ -246,13 +239,8 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorEntryChgHdl, weld::ComboBox&, void)
 
     const ColorConfigValue& rCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
-    // set automatic colors
     m_xColorChangeBtn->SetAutoDisplayColor(ColorConfig::GetDefaultColor(nEntry));
-    // set values for the entry
-    if (IsDarkModeEnabled())
-        m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nDarkColor);
-    else
-        m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nLightColor);
+    m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nColor);
 
     m_xShowInDocumentChkBtn->set_active(rCurrentEntryColor.bIsVisible);
 
@@ -277,10 +265,7 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorValueChgHdl, ColorListBox&, void)
         m_bRestartRequired = true;
 
     // set the color in pColorConfig
-    if (IsDarkModeEnabled())
-        aCurrentEntryColor.nDarkColor = m_xColorChangeBtn->GetSelectEntryColor();
-    else
-        aCurrentEntryColor.nLightColor = m_xColorChangeBtn->GetSelectEntryColor();
+    aCurrentEntryColor.nColor = m_xColorChangeBtn->GetSelectEntryColor();
 
     // use nColor for caching the value of color in use. This avoids tedious refactoring which IMO
     // would use function calls to discriminate between colors. Those functions themself call some virtual functions
@@ -346,12 +331,11 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ResetAllBtnHdl, weld::Button&, void)
 {
     // load default document colors
     ColorConfigValue aValue;
+    aValue.nColor = COL_AUTO;
+
     for (size_t i = 0; i < ColorConfigEntryCount; ++i)
-    {
-        aValue.nDarkColor = COL_AUTO;
-        aValue.nLightColor = COL_AUTO;
         pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(i), aValue);
-    }
+
     pColorConfig->Commit();
 
     // RESET state for themes just prevents the theme colors from being used before
@@ -465,7 +449,6 @@ void SvxAppearanceTabPage::InitCustomization()
 
 void SvxAppearanceTabPage::UpdateColorDropdown()
 {
-    // update color to light/dark
     ColorConfigEntry nEntry = GetActiveEntry();
     if (nEntry == ColorConfigEntryCount)
         return;
@@ -475,10 +458,7 @@ void SvxAppearanceTabPage::UpdateColorDropdown()
     // set automatic colors
     m_xColorChangeBtn->SetAutoDisplayColor(ColorConfig::GetDefaultColor(nEntry));
     // set values for the entry
-    if (IsDarkModeEnabled())
-        m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nDarkColor);
-    else
-        m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nLightColor);
+    m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nColor);
 }
 
 void SvxAppearanceTabPage::UpdateBmpControlsState()

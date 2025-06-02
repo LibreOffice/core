@@ -2139,11 +2139,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
         svtools::EditableColorConfig aColorConfig;
         svtools::ColorConfigValue aValue;
         aValue.bIsVisible = true;
-        // aValue.nColor is just used for caching, so we need to set nDarkColor or nLightColor to specify the light/dark
-        // color values for an element. Which one will be used is decided based on the application's appearance setting.
-        // see commit message of Change-Id: I1a7f70dfe44b81f863814f87e8d46e146c0e3d5a
-        aValue.nDarkColor = aDarkColor;
-        aValue.nLightColor = aDarkColor;
+        aValue.nColor = aDarkColor;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
         aColorConfig.AddScheme(u"Dark"_ustr);
     }
@@ -2152,8 +2148,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
         svtools::EditableColorConfig aColorConfig;
         svtools::ColorConfigValue aValue;
         aValue.bIsVisible = true;
-        aValue.nLightColor = COL_WHITE;
-        aValue.nDarkColor = COL_WHITE;
+        aValue.nColor = COL_WHITE;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
         aColorConfig.AddScheme(u"Light"_ustr);
     }
