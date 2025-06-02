@@ -567,7 +567,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRemoveIndent)
     // first line margin:
     pWrtShell->TryRemoveIndent();
 
-    // Then make sure we we actually decrease the indent:
+    // Then make sure we actually decrease the indent:
     SwPaM* pCursor = pWrtShell->GetCursor();
     SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
     SwTwips nLeftMargin = pTextNode->GetSwAttrSet().GetTextLeftMargin().GetTextLeft().m_dValue;
