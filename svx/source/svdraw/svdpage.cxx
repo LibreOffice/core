@@ -1197,7 +1197,10 @@ void SdrPageProperties::ImpAddStyleSheet(SfxStyleSheet& rNewStyleSheet)
     }
 }
 
-static void ImpPageChange(SdrPage& rSdrPage)
+namespace
+{
+
+void ImpPageChange(SdrPage& rSdrPage)
 {
     rSdrPage.ActionChanged();
     rSdrPage.getSdrModelFromSdrPage().SetChanged();
@@ -1205,14 +1208,16 @@ static void ImpPageChange(SdrPage& rSdrPage)
     rSdrPage.getSdrModelFromSdrPage().Broadcast(aHint);
 }
 
+} // end anonymous namespace
+
 SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
-    : mpSdrPage(&rSdrPage)
+    : mrSdrPage(rSdrPage)
     , mpStyleSheet(nullptr)
     , maProperties(
-        mpSdrPage->getSdrModelFromSdrPage().GetItemPool(),
+        mrSdrPage.getSdrModelFromSdrPage().GetItemPool(),
         svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>)
 {
-    if (!rSdrPage.IsMasterPage())
+    if (!mrSdrPage.IsMasterPage())
     {
         maProperties.Put(XFillStyleItem(drawing::FillStyle_NONE));
     }
@@ -1230,7 +1235,7 @@ void SdrPageProperties::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         case SfxHintId::DataChanged :
             {
                 // notify change, broadcast
-                ImpPageChange(*mpSdrPage);
+                ImpPageChange(mrSdrPage);
                 break;
             }
         case SfxHintId::Dying :
@@ -1245,29 +1250,28 @@ void SdrPageProperties::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 
 bool SdrPageProperties::isUsedByModel() const
 {
-    assert(mpSdrPage);
-    return mpSdrPage->IsInserted();
+    return mrSdrPage.IsInserted();
 }
 
 
 void SdrPageProperties::PutItemSet(const SfxItemSet& rSet)
 {
-    OSL_ENSURE(!mpSdrPage->IsMasterPage(), "Item set at MasterPage Attributes (!)");
+    OSL_ENSURE(!mrSdrPage.IsMasterPage(), "Item set at MasterPage Attributes (!)");
     maProperties.Put(rSet);
-    ImpPageChange(*mpSdrPage);
+    ImpPageChange(mrSdrPage);
 }
 
 void SdrPageProperties::PutItem(const SfxPoolItem& rItem)
 {
-    OSL_ENSURE(!mpSdrPage->IsMasterPage(), "Item set at MasterPage Attributes (!)");
+    OSL_ENSURE(!mrSdrPage.IsMasterPage(), "Item set at MasterPage Attributes (!)");
     maProperties.Put(rItem);
-    ImpPageChange(*mpSdrPage);
+    ImpPageChange(mrSdrPage);
 }
 
 void SdrPageProperties::ClearItem(const sal_uInt16 nWhich)
 {
     maProperties.ClearItem(nWhich);
-    ImpPageChange(*mpSdrPage);
+    ImpPageChange(mrSdrPage);
 }
 
 void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
@@ -1281,37 +1285,31 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
         ImpRemoveStyleSheet();
     }
 
-    ImpPageChange(*mpSdrPage);
+    ImpPageChange(mrSdrPage);
 }
 
 void SdrPageProperties::setTheme(std::shared_ptr<model::Theme> const& pTheme)
 {
-    if (!mpSdrPage)
-        return;
-
     // Only set the theme on a master page, else set it on the model
 
-    if (mpSdrPage->IsMasterPage())
+    if (mrSdrPage.IsMasterPage())
     {
         if (mpTheme != pTheme)
             mpTheme = pTheme;
     }
     else
     {
-        mpSdrPage->getSdrModelFromSdrPage().setTheme(pTheme);
+        mrSdrPage.getSdrModelFromSdrPage().setTheme(pTheme);
     }
 }
 
 std::shared_ptr<model::Theme> const& SdrPageProperties::getTheme() const
 {
-    // if set - page theme has priority
+    // If the page theme is available use that, else get the theme from the model
     if (mpTheme)
         return mpTheme;
-    // else the model theme
-    else if (mpSdrPage)
-        return mpSdrPage->getSdrModelFromSdrPage().getTheme();
-    // else return empty shared_ptr
-    return mpTheme;
+    else
+        return mrSdrPage.getSdrModelFromSdrPage().getTheme();
 }
 
 void SdrPageProperties::dumpAsXml(xmlTextWriterPtr pWriter) const

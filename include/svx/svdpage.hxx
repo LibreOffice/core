@@ -321,10 +321,10 @@ class SVXCORE_DLLPUBLIC SdrPageProperties final : public SfxListener, public svl
 {
 private:
     // data
-    SdrPage*                mpSdrPage;
-    SfxStyleSheet*          mpStyleSheet;
+    SdrPage& mrSdrPage;
+    SfxStyleSheet* mpStyleSheet;
     std::shared_ptr<model::Theme> mpTheme;
-    SfxItemSet              maProperties;
+    SfxItemSet maProperties;
 
     // internal helpers
     void ImpRemoveStyleSheet();
