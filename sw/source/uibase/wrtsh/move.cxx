@@ -47,24 +47,24 @@ namespace {
 
 class ShellMoveCursor
 {
-    SwWrtShell* pSh;
-    bool bAct;
+    SwWrtShell* m_pSh;
+    bool m_bAct;
 public:
     ShellMoveCursor( SwWrtShell* pWrtSh, bool bSel )
     {
-        bAct = !pWrtSh->ActionPend() && (pWrtSh->GetFrameType(nullptr,false) & FrameTypeFlags::FLY_ANY);
-        pSh = pWrtSh;
-        pSh->MoveCursor( bSel );
+        m_bAct = !pWrtSh->ActionPend() && (pWrtSh->GetFrameType(nullptr,false) & FrameTypeFlags::FLY_ANY);
+        m_pSh = pWrtSh;
+        m_pSh->MoveCursor( bSel );
         pWrtSh->GetView().GetViewFrame().GetBindings().Invalidate(SID_HYPERLINK_GETLINK);
     }
     ~ShellMoveCursor() COVERITY_NOEXCEPT_FALSE
     {
-        if( bAct )
+        if( m_bAct )
         {
             // The action is used for scrolling in "single paragraph"
             // frames with fixed height.
-            pSh->StartAllAction();
-            pSh->EndAllAction();
+            m_pSh->StartAllAction();
+            m_pSh->EndAllAction();
         }
     }
 };
