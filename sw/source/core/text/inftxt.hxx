@@ -174,6 +174,7 @@ protected:
     bool m_bSnapToGrid : 1;   // paragraph snaps to grid
     sal_uInt8 m_nDirection : 2; // writing direction: 0/90/180/270 degree
     SwTwips m_nExtraSpace;    // extra space before shrinking = nSpacesInLine * (nSpaceWidth/0.8 - nSpaceWidth)
+    SwTwips m_nBreakWidth;    // break width to calculate space width at justification
 
 protected:
     void CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame,
@@ -302,6 +303,9 @@ public:
     // extra space before shrinking = nSpacesInLine * (nSpaceWidth/0.8 - nSpaceWidth)
     void SetExtraSpace(SwTwips nVal) { m_nExtraSpace = nVal; }
     SwTwips GetExtraSpace() const { return m_nExtraSpace; }
+    // set break width to calculate space width later
+    void SetBreakWidth(SwTwips nVal) { m_nBreakWidth = nVal; }
+    SwTwips GetBreakWidth() const { return m_nBreakWidth; }
 
     // If Kana Compression is enabled, a minimum and maximum portion width
     // is calculated. We format lines with minimal size and share remaining
@@ -711,6 +715,9 @@ public:
     void SetTabOverflow( bool bOverflow ) { m_bTabOverflow = bOverflow; }
     bool IsTabOverflow() const { return m_bTabOverflow; }
 
+    // get line space count between line start and break position
+    // by stripping also terminating spaces
+    sal_Int32 GetLineSpaceCount(TextFrameIndex nBreakPos);
 };
 
 /**

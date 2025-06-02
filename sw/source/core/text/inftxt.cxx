@@ -225,6 +225,7 @@ SwTextSizeInfo::SwTextSizeInfo()
 , m_bSnapToGrid(false)
 , m_nDirection(0)
 , m_nExtraSpace(0)
+, m_nBreakWidth(0)
 {}
 
 SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
@@ -256,7 +257,8 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
       m_bForbiddenChars( rNew.HasForbiddenChars() ),
       m_bSnapToGrid( rNew.SnapToGrid() ),
       m_nDirection( rNew.GetDirection() ),
-      m_nExtraSpace( rNew.GetExtraSpace() )
+      m_nExtraSpace( rNew.GetExtraSpace() ),
+      m_nBreakWidth( rNew.GetBreakWidth() )
 {
 #if OSL_DEBUG_LEVEL > 0
     ChkOutDev( *this );
@@ -269,6 +271,7 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     m_pKanaComp = nullptr;
     m_nKanaIdx = 0;
     m_nExtraSpace = 0;
+    m_nBreakWidth = 0;
     m_pFrame = pFrame;
     CtorInitTextInfo( m_pFrame );
     SwDoc const& rDoc(m_pFrame->GetDoc());
@@ -370,7 +373,8 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew, const OUString* pTex
       m_bForbiddenChars( rNew.HasForbiddenChars() ),
       m_bSnapToGrid( rNew.SnapToGrid() ),
       m_nDirection( rNew.GetDirection() ),
-      m_nExtraSpace( rNew.GetExtraSpace() )
+      m_nExtraSpace( rNew.GetExtraSpace() ),
+      m_nBreakWidth( rNew.GetBreakWidth() )
 {
 #if OSL_DEBUG_LEVEL > 0
     ChkOutDev( *this );
@@ -2281,6 +2285,32 @@ bool SwTextFormatInfo::CheckCurrentPosBookmark()
     {
         return false;
     }
+}
+
+sal_Int32 SwTextFormatInfo::GetLineSpaceCount(TextFrameIndex nBreakPos)
+{
+    if ( sal_Int32(nBreakPos) >= GetText().getLength() )
+        return 0;
+
+    sal_Int32 nSpaces = 0;
+    sal_Int32 nInlineSpaces = -1;
+    for (sal_Int32 i = sal_Int32(GetLineStart()); i < sal_Int32(nBreakPos); ++i)
+    {
+        sal_Unicode cChar = GetText()[i];
+        if ( cChar == CH_BLANK )
+            ++nSpaces;
+        else
+        {
+            if ( nInlineSpaces == -1 )
+            {
+                nInlineSpaces = 0;
+                nSpaces = 0;
+            }
+            else
+                nInlineSpaces = nSpaces;
+        }
+    }
+    return nInlineSpaces == -1 ? 0: nInlineSpaces;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

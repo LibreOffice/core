@@ -178,7 +178,7 @@
    <style:paragraph-properties fo:text-align="start" style:justify-single-word="false" text:number-lines="false" text:line-number="0" style:writing-mode="lr-tb"/>
   </style:style>
   <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" style:writing-mode="lr-tb"/>
+   <style:paragraph-properties fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" style:writing-mode="lr-tb" loext:word-spacing-minimum="75%" loext:word-spacing="75%"/>
    <style:text-properties fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="567" loext:hyphenation-compound-remain-char-count="2"/>
   </style:style>
   <style:page-layout style:name="pm1">

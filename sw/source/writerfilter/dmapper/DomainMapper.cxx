@@ -4887,6 +4887,12 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::to
     case NS_ooxml::LN_Value_ST_Jc_both:
         nAdjust = style::ParagraphAdjust_BLOCK;
         aStringValue = "both";
+        // set default smart justify
+        if ( GetSettingsTable()->GetWordCompatibilityMode() >= 15 )
+        {
+            rContext->Insert( PROP_PARA_WORD_SPACING_MINIMUM, uno::Any( sal_uInt16(75) ) );
+            rContext->Insert( PROP_PARA_WORD_SPACING_MAXIMUM, uno::Any( sal_uInt16(133) ) );
+        }
         break;
     case NS_ooxml::LN_Value_ST_Jc_lowKashida:
         nAdjust = style::ParagraphAdjust_BLOCK;
