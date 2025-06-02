@@ -3345,21 +3345,17 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             nPamEndCI = pTmp->Start()->GetContentIndex();
 
             bool bHierarchicalFormat = pTmp->GetType() == RedlineType::Format && pTmp->GetStackCount() > 1;
-            bool bHandled = false;
             if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
             {
                 // This combination of 2 redline types prefers accepting the inner one first.
                 bRet |= lcl_DeleteInnerRedline(maRedlineTable, nRdlIdx, 1);
-                bHandled = true;
             }
             else if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Delete)
             {
                 // Get rid of the format itself and then accept the delete by deleting the range.
                 bRet |= lcl_AcceptInnerDelete(*pTmp, maRedlineTable, nRdlIdx, bCallDelete);
-                bHandled = true;
             }
-
-            if (!bHandled)
+            else
             {
                 bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
             }
@@ -3652,16 +3648,15 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
         }
         else if (pTmp->GetRedlineData(0).CanCombineForAcceptReject(aOrigData))
         {
-            bool bFormatOnInsert = pTmp->GetType() == RedlineType::Format
-                                   && pTmp->GetStackCount() > 1
-                                   && pTmp->GetType(1) == RedlineType::Insert;
+            bool bHierarchicalFormat
+                = pTmp->GetType() == RedlineType::Format && pTmp->GetStackCount() > 1;
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 std::unique_ptr<SwUndoRedline> pUndoRdl;
-                if (bFormatOnInsert)
+                if (bHierarchicalFormat)
                 {
-                    // Format on insert: this is rejected by accepting the format + deleting the
-                    // range.
+                    // Format on an other type: just create an accept undo action, we'll deal with
+                    // insert or delete below separately.
                     pUndoRdl = std::make_unique<SwUndoAcceptRedline>(*pTmp);
                 }
                 else
@@ -3676,13 +3671,18 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             nPamEndtNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
 
-            if (bFormatOnInsert)
+            if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
             {
                 // Accept the format itself and then reject the insert by deleting the range.
                 SwPaM aPam(*pTmp->Start(), *pTmp->End());
                 bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
                 // Handles undo/redo itself.
                 m_rDoc.getIDocumentContentOperations().DeleteRange(aPam);
+            }
+            else if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Delete)
+            {
+                // Keep the format redline on top, just get rid of the delete at the bottom.
+                bRet |= lcl_DeleteInnerRedline(maRedlineTable, nRdlIdx, 1);
             }
             else
             {

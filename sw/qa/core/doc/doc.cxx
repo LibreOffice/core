@@ -904,6 +904,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
     // Without the accompanying fix in place, this test would have failed, the text was AAABBBCCC,
     // just the format of BBB was dropped.
     CPPUNIT_ASSERT(pTextNode->GetText().isEmpty());
+
+    // And when rejecting the delete with the cursor inside BBB:
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, pTextNode->GetText());
+    // Undo() creates a new cursor.
+    pCursor = pWrtShell->GetCursor();
+    pCursor->DeleteMark();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Move inside "BBB".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    nRedline = 0;
+    const SwRangeRedline* pRedline = rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    // A redline is found.
+    CPPUNIT_ASSERT_LESS(rRedlines.size(), nRedline);
+    pWrtShell->RejectRedline(nRedline);
+
+    // Then make sure the format-on-delete is rejected, i.e. the delete part is gone but the format
+    // part is kept:
+    nRedline = 0;
+    pRedline = rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    // Without the accompanying fix in place, this test would have failed, the redline over BBB was
+    // gone completely.
+    CPPUNIT_ASSERT(pRedline);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, pRedline->GetType());
+    CPPUNIT_ASSERT(!pRedline->GetRedlineData().Next());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
