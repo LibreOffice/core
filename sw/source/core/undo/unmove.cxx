@@ -27,7 +27,7 @@
 
 // MOVE
 SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
-    : SwUndo( SwUndoId::MOVE, &rRange.GetDoc() )
+    : SwUndo( SwUndoId::MOVE, rRange.GetDoc() )
     , SwUndRng( rRange )
     , m_nDestStartNode(0)
     , m_nDestEndNode(0)
@@ -93,7 +93,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
 
 SwUndoMove::SwUndoMove( SwDoc& rDoc, const SwNodeRange& rRg,
                         const SwNode& rMvPos )
-    : SwUndo(SwUndoId::MOVE, &rDoc)
+    : SwUndo(SwUndoId::MOVE, rDoc)
     , m_nDestStartNode(0)
     , m_nDestEndNode(0)
     , m_nInsPosNode(0)

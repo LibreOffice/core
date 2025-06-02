@@ -177,7 +177,7 @@ SwUndoDelete::SwUndoDelete(
     SwDeleteFlags const flags,
     bool bFullPara,
     bool bCalledByTableCpy )
-    : SwUndo(SwUndoId::DELETE, &rPam.GetDoc()),
+    : SwUndo(SwUndoId::DELETE, rPam.GetDoc()),
     SwUndRng( rPam ),
     m_nNode(0),
     m_nNdDiff(0),

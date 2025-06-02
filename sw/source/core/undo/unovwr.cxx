@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 
 SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
-    : SwUndo(SwUndoId::OVERWRITE, &rDoc),
+    : SwUndo(SwUndoId::OVERWRITE, rDoc),
       m_bGroup( false )
 {
     SwTextNode *const pTextNd = rPos.GetNode().GetTextNode();
@@ -340,7 +340,7 @@ struct UndoTransliterate_Data
 SwUndoTransliterate::SwUndoTransliterate(
     const SwPaM& rPam,
     const utl::TransliterationWrapper& rTrans )
-    : SwUndo( SwUndoId::TRANSLITERATE, &rPam.GetDoc() ), SwUndRng( rPam ), m_nType( rTrans.getType() )
+    : SwUndo( SwUndoId::TRANSLITERATE, rPam.GetDoc() ), SwUndRng( rPam ), m_nType( rTrans.getType() )
 {
 }
 

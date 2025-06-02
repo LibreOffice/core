@@ -180,7 +180,7 @@ class SW_DLLPUBLIC SwPageDesc final
 
     SAL_DLLPRIVATE void ResetAllAttr();
 
-    SAL_DLLPRIVATE SwPageDesc(const UIName&, SwFrameFormat*, SwDoc *pDc );
+    SAL_DLLPRIVATE SwPageDesc(const UIName&, SwFrameFormat*, SwDoc &rDc );
 
     struct change_name
     {
@@ -378,13 +378,13 @@ class SwPageDescExt
 public:
     SwPageDesc m_PageDesc;
 private:
-    SwDoc * m_pDoc;
+    SwDoc& m_rDoc;
     UIName m_sFollow;
 
     void SetPageDesc(const SwPageDesc & rPageDesc);
 
 public:
-    SwPageDescExt(const SwPageDesc & rPageDesc, SwDoc * pDoc);
+    SwPageDescExt(const SwPageDesc & rPageDesc, SwDoc& rDoc);
     SwPageDescExt(const SwPageDescExt & rSrc);
     ~SwPageDescExt();
 

@@ -974,7 +974,7 @@ SwDoc::InsertLabel(
     {
         pUndo.reset(new SwUndoInsertLabel(
                         eType, rText, rSeparator, rNumberingSeparator,
-                        bBefore, nId, rCharacterStyle, bCpyBrd, this ));
+                        bBefore, nId, rCharacterStyle, bCpyBrd, *this ));
     }
 
     SwFlyFrameFormat *const pNewFormat = lcl_InsertLabel(*this, mpTextFormatCollTable.get(), pUndo.get(),
@@ -1257,7 +1257,7 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
         GetIDocumentUndoRedo().ClearRedo();
         pUndo.reset(new SwUndoInsertLabel(
             SwLabelType::Draw, rText, rSeparator, rNumberSeparator, false,
-            nId, rCharacterStyle, false, this ));
+            nId, rCharacterStyle, false, *this ));
     }
 
     SwFlyFrameFormat *const pNewFormat = lcl_InsertDrawLabel(

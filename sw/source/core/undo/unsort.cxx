@@ -31,7 +31,7 @@
 #include <node2lay.hxx>
 
 SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
-    : SwUndo(SwUndoId::SORT_TXT, &rRg.GetDoc())
+    : SwUndo(SwUndoId::SORT_TXT, rRg.GetDoc())
     , SwUndRng(rRg)
     , m_nTableNode(0)
 {
@@ -40,7 +40,7 @@ SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
 
 SwUndoSort::SwUndoSort( SwNodeOffset nStt, SwNodeOffset nEnd, const SwTableNode& rTableNd,
                         const SwSortOptions& rOpt, bool bSaveTable )
-    : SwUndo(SwUndoId::SORT_TBL, &rTableNd.GetDoc())
+    : SwUndo(SwUndoId::SORT_TBL, rTableNd.GetDoc())
 {
     m_nSttNode = nStt;
     m_nEndNode = nEnd;

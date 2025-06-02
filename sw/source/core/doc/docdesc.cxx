@@ -428,7 +428,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
         if (bStashFirstLeftFoot && rFirstLeftFoot.GetRegisteredIn()  && !rDesc.HasStashedFormat(false, true, true))
             rDesc.StashFrameFormat(rChged.GetFirstLeft(), false, true, true);
 
-        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoPageDesc>(rDesc, rChged, this));
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoPageDesc>(rDesc, rChged, *this));
     }
     else
     {
@@ -767,7 +767,7 @@ void SwDoc::DelPageDesc( size_t i, bool bBroadcast )
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoPageDescDelete>(rDel, this));
+            std::make_unique<SwUndoPageDescDelete>(rDel, *this));
     }
 
     PreDelPageDesc(&rDel); // #i7983#
@@ -793,7 +793,7 @@ SwPageDesc* SwDoc::MakePageDesc(const UIName &rName, const SwPageDesc *pCpy,
     }
     else
     {
-        pNew = new SwPageDesc( rName, GetDfltFrameFormat(), this );
+        pNew = new SwPageDesc( rName, GetDfltFrameFormat(), *this );
         // Set the default page format.
         lcl_DefaultPageFormat( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(), pNew->GetFirstMaster(), pNew->GetFirstLeft() );
 
@@ -812,7 +812,7 @@ SwPageDesc* SwDoc::MakePageDesc(const UIName &rName, const SwPageDesc *pCpy,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoPageDescCreate>(pNew, this));
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoPageDescCreate>(pNew, *this));
     }
 
     getIDocumentState().SetModified();

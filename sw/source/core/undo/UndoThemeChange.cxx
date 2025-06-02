@@ -21,7 +21,7 @@ namespace sw
 UndoThemeChange::UndoThemeChange(SwDoc& rDocument,
                                  std::shared_ptr<model::ColorSet> const& pOldColorSet,
                                  std::shared_ptr<model::ColorSet> const& pNewColorSet)
-    : SwUndo(SwUndoId::CHANGE_THEME, &rDocument)
+    : SwUndo(SwUndoId::CHANGE_THEME, rDocument)
     , mrDocument(rDocument)
     , mpOldColorSet(pOldColorSet)
     , mpNewColorSet(pNewColorSet)

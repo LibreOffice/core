@@ -26,7 +26,7 @@ SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrameFormat& rFlyFrameFormat,
                                     const SwUndoId eUndoId,
                                     OUString sOldStr,
                                     OUString sNewStr )
-    : SwUndo( eUndoId, rFlyFrameFormat.GetDoc() ),
+    : SwUndo( eUndoId, *rFlyFrameFormat.GetDoc() ),
       mrFlyFrameFormat( rFlyFrameFormat ),
       msOldStr(std::move( sOldStr )),
       msNewStr(std::move( sNewStr ))
@@ -90,7 +90,7 @@ SwRewriter SwUndoFlyStrAttr::GetRewriter() const
 
 SwUndoFlyDecorative::SwUndoFlyDecorative(SwFlyFrameFormat& rFlyFrameFormat,
         bool const isDecorative)
-    : SwUndo(SwUndoId::FLYFRMFMT_DECORATIVE, rFlyFrameFormat.GetDoc())
+    : SwUndo(SwUndoId::FLYFRMFMT_DECORATIVE, *rFlyFrameFormat.GetDoc())
     , m_rFlyFrameFormat(rFlyFrameFormat)
     , m_IsDecorative(isDecorative)
 {

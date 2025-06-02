@@ -43,7 +43,7 @@
 #include <svx/svdobj.hxx>
 
 SwUndoFlyBase::SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId )
-    : SwUndo(nUndoId, pFormat->GetDoc())
+    : SwUndo(nUndoId, *pFormat->GetDoc())
     , m_pFrameFormat(pFormat)
     , m_nNodePagePos(0)
     , m_nContentPos(0)
@@ -482,7 +482,7 @@ void SwUndoDelLayFormat::RedoForRollback()
 }
 
 SwUndoSetFlyFormat::SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, const SwFrameFormat& rNewFrameFormat )
-    : SwUndo( SwUndoId::SETFLYFRMFMT, rFlyFormat.GetDoc() ), SwClient( &rFlyFormat ), m_pFrameFormat( &rFlyFormat ),
+    : SwUndo( SwUndoId::SETFLYFRMFMT, *rFlyFormat.GetDoc() ), SwClient( &rFlyFormat ), m_pFrameFormat( &rFlyFormat ),
     m_DerivedFromFormatName( rFlyFormat.IsDefault() ? UIName(u""_ustr) : rFlyFormat.DerivedFrom()->GetName() ),
     m_NewFormatName( rNewFrameFormat.GetName() ),
     m_oItemSet( std::in_place, *rFlyFormat.GetAttrSet().GetPool(),

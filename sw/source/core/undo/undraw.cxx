@@ -67,7 +67,7 @@ void SwDoc::AddDrawUndo( std::unique_ptr<SdrUndoAction> pUndo )
 }
 
 SwSdrUndo::SwSdrUndo( std::unique_ptr<SdrUndoAction> pUndo, const SdrMarkList* pMrkLst, const SwDoc& rDoc )
-    : SwUndo( SwUndoId::DRAWUNDO, &rDoc ), m_pSdrUndo( std::move(pUndo) )
+    : SwUndo( SwUndoId::DRAWUNDO, rDoc ), m_pSdrUndo( std::move(pUndo) )
 {
     if( pMrkLst && pMrkLst->GetMarkCount() )
         m_pMarkList.reset( new SdrMarkList( *pMrkLst ) );
@@ -169,7 +169,7 @@ static void lcl_RestoreAnchor( SwFrameFormat* pFormat, SwNodeOffset nNodePos )
 }
 
 SwUndoDrawGroup::SwUndoDrawGroup( sal_uInt16 nCnt, const SwDoc& rDoc )
-    : SwUndo( SwUndoId::DRAWGROUP, &rDoc ), m_nSize( nCnt + 1 ), m_bDeleteFormat( true )
+    : SwUndo( SwUndoId::DRAWGROUP, rDoc ), m_nSize( nCnt + 1 ), m_bDeleteFormat( true )
 {
     m_pObjArray.reset( new SwUndoGroupObjImpl[ m_nSize ] );
 }
@@ -347,7 +347,7 @@ void SwUndoDrawGroup::SetGroupFormat( SwDrawFrameFormat* pFormat )
 }
 
 SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj, const SwDoc& rDoc )
-    : SwUndo( SwUndoId::DRAWUNGROUP, &rDoc ), m_bDeleteFormat( false )
+    : SwUndo( SwUndoId::DRAWUNGROUP, rDoc ), m_bDeleteFormat( false )
 {
     m_nSize = o3tl::narrowing<sal_uInt16>(pObj->GetSubList()->GetObjCount()) + 1;
     m_pObjArray.reset( new SwUndoGroupObjImpl[ m_nSize ] );
@@ -523,7 +523,7 @@ void SwUndoDrawUnGroup::AddObj( sal_uInt16 nPos, SwDrawFrameFormat* pFormat )
 }
 
 SwUndoDrawUnGroupConnectToLayout::SwUndoDrawUnGroupConnectToLayout(const SwDoc& rDoc)
-    : SwUndo( SwUndoId::DRAWUNGROUP, &rDoc )
+    : SwUndo( SwUndoId::DRAWUNGROUP, rDoc )
 {
 }
 
@@ -570,7 +570,7 @@ void SwUndoDrawUnGroupConnectToLayout::AddFormatAndObj( SwDrawFrameFormat* pDraw
 }
 
 SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt, const SwDoc& rDoc )
-    : SwUndo( SwUndoId::DRAWDELETE, &rDoc ), m_bDeleteFormat( true )
+    : SwUndo( SwUndoId::DRAWDELETE, rDoc ), m_bDeleteFormat( true )
 {
     m_pObjArray.reset( new SwUndoGroupObjImpl[ nCnt ] );
     m_pMarkList.reset( new SdrMarkList() );

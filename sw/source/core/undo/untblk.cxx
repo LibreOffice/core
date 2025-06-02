@@ -65,7 +65,7 @@ GetFlysAnchoredAt(SwDoc & rDoc, SwNodeOffset const nSttNode, bool const isAtPage
 
 //note: parameter is SwPam just so we can init SwUndRng, the End is ignored!
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
-    : SwUndo( nUndoId, &rPam.GetDoc() )
+    : SwUndo( nUndoId, rPam.GetDoc() )
     , SwUndRng( rPam )
     , m_pTextFormatColl(nullptr)
     , m_pLastNodeColl(nullptr)

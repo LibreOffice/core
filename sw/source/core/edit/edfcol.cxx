@@ -1676,7 +1676,7 @@ SwUndoParagraphSigning::SwUndoParagraphSigning(SwDoc& rDoc,
                                                uno::Reference<text::XTextField> xField,
                                                uno::Reference<text::XTextContent> xParent,
                                                const bool bRemove)
-  : SwUndo(SwUndoId::PARA_SIGN_ADD, &rDoc),
+  : SwUndo(SwUndoId::PARA_SIGN_ADD, rDoc),
     m_rDoc(rDoc),
     m_xField(std::move(xField)),
     m_xParent(std::move(xParent)),

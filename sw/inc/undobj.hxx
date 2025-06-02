@@ -85,7 +85,7 @@ public: // should not be public, but ran into trouble in untbl.cxx
 
 private:
     /// Try to obtain the view shell ID of the current view.
-    static ViewShellId CreateViewShellId(const SwDoc* pDoc);
+    static ViewShellId CreateViewShellId(const SwDoc& rDoc);
     // SfxUndoAction
     virtual void Undo() override;
     virtual void Redo() override;
@@ -95,7 +95,7 @@ private:
     virtual bool CanRepeat(SfxRepeatTarget &) const override;
 
 public:
-    SwUndo(SwUndoId const nId, const SwDoc* pDoc);
+    SwUndo(SwUndoId const nId, const SwDoc& rDoc);
     virtual ~SwUndo() override;
 
     SwUndoId GetId() const { return m_nId; }

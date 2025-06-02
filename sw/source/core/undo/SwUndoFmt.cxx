@@ -31,7 +31,7 @@
 
 SwUndoFormatCreate::SwUndoFormatCreate
 (SwUndoId nUndoId, SwFormat * _pNew, SwFormat const * _pDerivedFrom, SwDoc& rDoc)
-    : SwUndo(nUndoId, &rDoc), m_pNew(_pNew),
+    : SwUndo(nUndoId, rDoc), m_pNew(_pNew),
       m_rDoc(rDoc), m_nId(0), m_bAuto(false)
 {
     if (_pDerivedFrom)
@@ -96,7 +96,7 @@ SwRewriter SwUndoFormatCreate::GetRewriter() const
 
 SwUndoFormatDelete::SwUndoFormatDelete
 (SwUndoId nUndoId, SwFormat const * _pOld, SwDoc& rDoc)
-    : SwUndo(nUndoId, &rDoc),
+    : SwUndo(nUndoId, rDoc),
       m_rDoc(rDoc), m_sOldName(_pOld->GetName()),
       m_aOldSet(_pOld->GetAttrSet())
 {
@@ -148,7 +148,7 @@ SwUndoRenameFormat::SwUndoRenameFormat(SwUndoId nUndoId,
                                  UIName _sOldName,
                                  UIName _sNewName,
                                  SwDoc& rDoc)
-    : SwUndo(nUndoId, &rDoc), m_sOldName(std::move(_sOldName)),
+    : SwUndo(nUndoId, rDoc), m_sOldName(std::move(_sOldName)),
       m_sNewName(std::move(_sNewName)), m_rDoc(rDoc)
 {
 }
@@ -374,7 +374,7 @@ SwFormat * SwUndoRenameFrameFormat::Find(const UIName & rName) const
 
 SwUndoNumruleCreate::SwUndoNumruleCreate(const SwNumRule * _pNew,
                                          SwDoc& rDoc)
-    : SwUndo(SwUndoId::NUMRULE_CREATE, &rDoc), m_pNew(_pNew), m_aNew(*_pNew), m_rDoc(rDoc),
+    : SwUndo(SwUndoId::NUMRULE_CREATE, rDoc), m_pNew(_pNew), m_aNew(*_pNew), m_rDoc(rDoc),
       m_bInitialized(false)
 {
 }
@@ -412,7 +412,7 @@ SwRewriter SwUndoNumruleCreate::GetRewriter() const
 
 SwUndoNumruleDelete::SwUndoNumruleDelete(const SwNumRule & rRule,
                                          SwDoc& rDoc)
-    : SwUndo(SwUndoId::NUMRULE_DELETE, &rDoc), m_aOld(rRule), m_rDoc(rDoc)
+    : SwUndo(SwUndoId::NUMRULE_DELETE, rDoc), m_aOld(rRule), m_rDoc(rDoc)
 {
 }
 
@@ -438,7 +438,7 @@ SwRewriter SwUndoNumruleDelete::GetRewriter() const
 SwUndoNumruleRename::SwUndoNumruleRename(UIName _aOldName,
                                          UIName _aNewName,
                                          SwDoc& rDoc)
-    : SwUndo(SwUndoId::NUMRULE_RENAME, &rDoc), m_aOldName(std::move(_aOldName)), m_aNewName(std::move(_aNewName)),
+    : SwUndo(SwUndoId::NUMRULE_RENAME, rDoc), m_aOldName(std::move(_aOldName)), m_aNewName(std::move(_aNewName)),
       m_rDoc(rDoc)
 {
 }

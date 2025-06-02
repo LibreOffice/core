@@ -28,7 +28,7 @@ class SwDoc;
 class SwUndoPageDesc final : public SwUndo
 {
     SwPageDescExt m_aOld, m_aNew;
-    SwDoc * m_pDoc;
+    SwDoc& m_rDoc;
     bool m_bExchange;
 
     // To avoid duplication of (header/footer)content nodes for simple page desc changes
@@ -38,7 +38,7 @@ class SwUndoPageDesc final : public SwUndo
     void ExitHeaderFooterEdit();
 public:
     SwUndoPageDesc(const SwPageDesc & aOld, const SwPageDesc & aNew,
-                   SwDoc * pDoc);
+                   SwDoc& rDoc);
     virtual ~SwUndoPageDesc() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
@@ -51,12 +51,12 @@ class SwUndoPageDescCreate final : public SwUndo
 {
     const SwPageDesc * m_pDesc;
     SwPageDescExt m_aNew;
-    SwDoc * m_pDoc;
+    SwDoc& m_rDoc;
 
     void DoImpl();
 
 public:
-    SwUndoPageDescCreate(const SwPageDesc * pNew, SwDoc * pDoc);
+    SwUndoPageDescCreate(const SwPageDesc * pNew, SwDoc& rDoc);
     virtual ~SwUndoPageDescCreate() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
@@ -69,12 +69,12 @@ public:
 class SwUndoPageDescDelete final : public SwUndo
 {
     SwPageDescExt m_aOld;
-    SwDoc * m_pDoc;
+    SwDoc& m_rDoc;
 
     void DoImpl();
 
 public:
-    SwUndoPageDescDelete(const SwPageDesc & aOld, SwDoc * pDoc);
+    SwUndoPageDescDelete(const SwPageDesc & aOld, SwDoc& rDoc);
     virtual ~SwUndoPageDescDelete() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;

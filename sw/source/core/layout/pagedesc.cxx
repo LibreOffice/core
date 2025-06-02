@@ -41,13 +41,13 @@
 #include <poolfmt.hxx>
 #include <calbck.hxx>
 
-SwPageDesc::SwPageDesc(const UIName& rName, SwFrameFormat *pFormat, SwDoc *const pDoc)
+SwPageDesc::SwPageDesc(const UIName& rName, SwFrameFormat *pFormat, SwDoc& rDoc)
     : sw::BroadcastingModify()
     , m_StyleName( rName )
-    , m_Master( pDoc->GetAttrPool(), rName, pFormat )
-    , m_Left( pDoc->GetAttrPool(), rName, pFormat )
-    , m_FirstMaster( pDoc->GetAttrPool(), rName, pFormat )
-    , m_FirstLeft( pDoc->GetAttrPool(), rName, pFormat )
+    , m_Master( rDoc.GetAttrPool(), rName, pFormat )
+    , m_Left( rDoc.GetAttrPool(), rName, pFormat )
+    , m_FirstMaster( rDoc.GetAttrPool(), rName, pFormat )
+    , m_FirstLeft( rDoc.GetAttrPool(), rName, pFormat )
     , m_aStashedHeader()
     , m_aStashedFooter()
     , m_aDepends(*this)
@@ -693,16 +693,16 @@ bool SwPageFootnoteInfo::operator==( const SwPageFootnoteInfo& rCmp ) const
         && m_nBottomDist== rCmp.GetBottomDist();
 }
 
-SwPageDescExt::SwPageDescExt(const SwPageDesc & rPageDesc, SwDoc *const pDoc)
+SwPageDescExt::SwPageDescExt(const SwPageDesc & rPageDesc, SwDoc& rDoc)
     : m_PageDesc(rPageDesc)
-    , m_pDoc(pDoc)
+    , m_rDoc(rDoc)
 {
     SetPageDesc(rPageDesc);
 }
 
 SwPageDescExt::SwPageDescExt(const SwPageDescExt & rSrc)
     : m_PageDesc(rSrc.m_PageDesc)
-    , m_pDoc(rSrc.m_pDoc)
+    , m_rDoc(rSrc.m_rDoc)
 {
     SetPageDesc(rSrc.m_PageDesc);
 }
@@ -741,7 +741,7 @@ SwPageDescExt::operator SwPageDesc() const
 {
     SwPageDesc aResult(m_PageDesc);
 
-    SwPageDesc * pPageDesc = m_pDoc->FindPageDesc(m_sFollow);
+    SwPageDesc * pPageDesc = m_rDoc.FindPageDesc(m_sFollow);
 
     if ( nullptr != pPageDesc )
         aResult.SetFollow(pPageDesc);

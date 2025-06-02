@@ -58,9 +58,9 @@ class SwUndoInsert final : public SwUndo, private SwUndoSaveContent
     bool CanGrouping( sal_Unicode cIns );
     bool CanGrouping( const SwPosition& rPos );
 
-    SwDoc * m_pDoc;
+    SwDoc& m_rDoc;
 
-    void Init(const SwNode & rNode);
+    void Init();
     std::optional<OUString> GetTextFromDoc() const;
 
 public:
@@ -193,7 +193,7 @@ public:
                         const bool bBefore, const sal_uInt16 nId,
                         UIName aCharacterStyle,
                         const bool bCpyBrd,
-                        const SwDoc* pDoc );
+                        const SwDoc& rDoc );
     virtual ~SwUndoInsertLabel() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;

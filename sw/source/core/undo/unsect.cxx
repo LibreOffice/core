@@ -78,7 +78,7 @@ SwUndoInsSection::SwUndoInsSection(
         SwPaM const& rPam, SwSectionData const& rNewData,
         SfxItemSet const*const pSet,
         std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode, sw::ParagraphBreakMode> const*const pTOXBase)
-    : SwUndo( SwUndoId::INSSECTION, &rPam.GetDoc() ), SwUndRng( rPam )
+    : SwUndo( SwUndoId::INSSECTION, rPam.GetDoc() ), SwUndRng( rPam )
     , m_pSectionData(new SwSectionData(rNewData))
     , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : nullptr )
     , m_nSectionNodePos(0)
@@ -345,7 +345,7 @@ std::unique_ptr<SwUndo> MakeUndoDelSection(SwSectionFormat const& rFormat)
 SwUndoDelSection::SwUndoDelSection(
             SwSectionFormat const& rSectionFormat, SwSection const& rSection,
             SwNodeIndex const*const pIndex)
-    : SwUndo( SwUndoId::DELSECTION, rSectionFormat.GetDoc() )
+    : SwUndo( SwUndoId::DELSECTION, *rSectionFormat.GetDoc() )
     , m_pSectionData( new SwSectionData(rSection) )
     , m_pTOXBase( dynamic_cast<const SwTOXBaseSection*>( &rSection) !=  nullptr
             ? new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSection))
@@ -453,7 +453,7 @@ MakeUndoUpdateSection(SwSectionFormat const& rFormat, bool const bOnlyAttr)
 SwUndoUpdateSection::SwUndoUpdateSection(
         SwSection const& rSection, SwNodeIndex const*const pIndex,
         bool const bOnlyAttr)
-    : SwUndo( SwUndoId::CHGSECTION, &pIndex->GetNode().GetDoc() )
+    : SwUndo( SwUndoId::CHGSECTION, pIndex->GetNode().GetDoc() )
     , m_pSectionData( new SwSectionData(rSection) )
     , m_oAttrSet( ::lcl_GetAttrSet(rSection) )
     , m_nStartNode( pIndex->GetIndex() )
@@ -526,7 +526,7 @@ void SwUndoUpdateSection::RedoImpl(::sw::UndoRedoContext & rContext)
 
 
 SwUndoUpdateIndex::SwUndoUpdateIndex(SwTOXBaseSection & rTOX)
-    : SwUndo(SwUndoId::INSSECTION, rTOX.GetFormat()->GetDoc())
+    : SwUndo(SwUndoId::INSSECTION, *rTOX.GetFormat()->GetDoc())
     , m_pSaveSectionOriginal(new SwUndoSaveSection)
     , m_pSaveSectionUpdated(new SwUndoSaveSection)
     , m_nStartIndex(rTOX.GetFormat()->GetSectionNode()->GetIndex() + 1)

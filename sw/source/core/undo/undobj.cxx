@@ -148,19 +148,19 @@ void SwUndo::RemoveIdxRel( SwNodeOffset nIdx, const SwPosition& rPos )
     ::PaMCorrRel( *rPos.GetNode().GetNodes()[nIdx], rPos );
 }
 
-SwUndo::SwUndo(SwUndoId const nId, const SwDoc* pDoc)
+SwUndo::SwUndo(SwUndoId const nId, const SwDoc& rDoc)
     : m_nId(nId), m_nOrigRedlineFlags(RedlineFlags::NONE)
-    , m_nViewShellId(CreateViewShellId(pDoc))
+    , m_nViewShellId(CreateViewShellId(rDoc))
     , m_isRepeatIgnored(false)
     , m_bCacheComment(true)
 {
 }
 
-ViewShellId SwUndo::CreateViewShellId(const SwDoc* pDoc)
+ViewShellId SwUndo::CreateViewShellId(const SwDoc& rDoc)
 {
     ViewShellId nRet(-1);
 
-    if (const SwDocShell* pDocShell = pDoc->GetDocShell())
+    if (const SwDocShell* pDocShell = rDoc.GetDocShell())
     {
         if (const SwView* pView = pDocShell->GetView())
             nRet = pView->GetViewShellId();

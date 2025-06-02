@@ -62,7 +62,7 @@ std::optional<OUString> SwUndoInsert::GetTextFromDoc() const
 {
     std::optional<OUString> aResult;
 
-    SwNodeIndex aNd( m_pDoc->GetNodes(), m_nNode);
+    SwNodeIndex aNd( m_rDoc.GetNodes(), m_nNode);
     SwContentNode* pCNd = aNd.GetNode().GetContentNode();
 
     if( pCNd->IsTextNode() )
@@ -84,15 +84,14 @@ std::optional<OUString> SwUndoInsert::GetTextFromDoc() const
     return aResult;
 }
 
-void SwUndoInsert::Init(const SwNode & rNd)
+void SwUndoInsert::Init()
 {
     // consider Redline
-    m_pDoc = const_cast<SwDoc*>(&rNd.GetDoc());
-    if( m_pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+    if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         m_pRedlData.reset( new SwRedlineData( RedlineType::Insert,
-                                       m_pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
-        SetRedlineFlags( m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
+                                       m_rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+        SetRedlineFlags( m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
     maUndoText = GetTextFromDoc();
@@ -104,23 +103,25 @@ SwUndoInsert::SwUndoInsert( const SwNode& rNd, sal_Int32 nCnt,
             sal_Int32 nL,
             const SwInsertFlags nInsertFlags,
             bool bWDelim )
-    : SwUndo(SwUndoId::TYPING, &rNd.GetDoc()),
+    : SwUndo(SwUndoId::TYPING, rNd.GetDoc()),
         m_nNode( rNd.GetIndex() ), m_nContent(nCnt), m_nLen(nL),
         m_bIsWordDelim( bWDelim ), m_bIsAppend( false )
     , m_bWithRsid(false)
     , m_nInsertFlags(nInsertFlags)
+    , m_rDoc(const_cast<SwDoc&>(rNd.GetDoc()))
 {
-    Init(rNd);
+    Init();
 }
 
 SwUndoInsert::SwUndoInsert( const SwNode& rNd )
-    : SwUndo(SwUndoId::SPLITNODE, &rNd.GetDoc()),
+    : SwUndo(SwUndoId::SPLITNODE, rNd.GetDoc()),
         m_nNode( rNd.GetIndex() ), m_nContent(0), m_nLen(1),
         m_bIsWordDelim( false ), m_bIsAppend( true )
     , m_bWithRsid(false)
     , m_nInsertFlags(SwInsertFlags::EMPTYEXPAND)
+    , m_rDoc(const_cast<SwDoc&>(rNd.GetDoc()))
 {
-    Init(rNd);
+    Init();
 }
 
 // Check if the next Insert can be combined with the current one. If so
@@ -268,7 +269,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
 
             if (!maText)
             {
-                m_oUndoNodeIndex.emplace(m_pDoc->GetNodes().GetEndOfContent());
+                m_oUndoNodeIndex.emplace(m_rDoc.GetNodes().GetEndOfContent());
                 MoveToUndoNds(aPaM, &*m_oUndoNodeIndex);
             }
             m_nNode = aPaM.GetPoint()->GetNodeIndex();
@@ -505,7 +506,7 @@ public:
 
 SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
         OUString const& rIns, bool const bRegExp)
-    : SwUndo( SwUndoId::REPLACE, &rPam.GetDoc() )
+    : SwUndo( SwUndoId::REPLACE, rPam.GetDoc() )
     , m_pImpl(std::make_unique<Impl>(rPam, rIns, bRegExp))
 {
 }
@@ -766,7 +767,7 @@ void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
 }
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
-    : SwUndo( SwUndoId::REREAD, &rPam.GetDoc() ), mnPosition( rPam.GetPoint()->GetNodeIndex() )
+    : SwUndo( SwUndoId::REREAD, rPam.GetDoc() ), mnPosition( rPam.GetPoint()->GetNodeIndex() )
 {
     SaveGraphicData( rGrfNd );
 }
@@ -841,8 +842,8 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
                                       const sal_uInt16 nInitId,
                                       UIName aCharacterStyle,
                                       const bool bCpyBorder,
-                                      const SwDoc* pDoc )
-    : SwUndo( SwUndoId::INSERTLABEL, pDoc ),
+                                      const SwDoc& rDoc )
+    : SwUndo( SwUndoId::INSERTLABEL, rDoc ),
       m_sText(std::move( aText )),
       m_sSeparator(std::move( aSeparator )),
       m_sNumberSeparator(std::move( aNumberSeparator )),//#i61007# order of captions

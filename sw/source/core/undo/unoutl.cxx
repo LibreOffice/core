@@ -25,7 +25,7 @@
 
 SwUndoOutlineLeftRight::SwUndoOutlineLeftRight( const SwPaM& rPam,
                                                 short nOff )
-    : SwUndo( SwUndoId::OUTLINE_LR, &rPam.GetDoc() ), SwUndRng( rPam ), m_nOffset( nOff )
+    : SwUndo( SwUndoId::OUTLINE_LR, rPam.GetDoc() ), SwUndRng( rPam ), m_nOffset( nOff )
 {
 }
 
@@ -49,7 +49,7 @@ void SwUndoOutlineLeftRight::RepeatImpl(::sw::RepeatContext & rContext)
 
 SwUndoOutlineEdit::SwUndoOutlineEdit(const SwNumRule& rOldRule, const SwNumRule& rNewRule,
                                      const SwDoc& rDoc)
-    : SwUndo(SwUndoId::OUTLINE_EDIT, &rDoc)
+    : SwUndo(SwUndoId::OUTLINE_EDIT, rDoc)
     , m_aNewNumRule(rNewRule)
     , m_aOldNumRule(rOldRule)
 {
