@@ -1054,7 +1054,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154)
         u",,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
 
     // also minimum word space: 80%, 100%, 100%
-    // only a single line is hyphenated from the previous ones
+    // only a single line was hyphenated from the previous ones
+    // TODO: fix possible interoperability issues, allow optional limitation of hyphenation again
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]", "portion",
         u",, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
@@ -1067,10 +1068,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154)
                 u"Vesti bulum ");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]", "portion",
                 u",,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                u"Vesti bulum ");
+                u"Vesti bu");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[1]", "portion",
                 u",,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                u"Vesti bulum ");
+                u"Vesti bu");
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]", "portion",
         u",,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bu");
@@ -1079,8 +1080,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154)
         u",,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
 
     // minimum, desired and maximum word spacing: 80%, 100%, 133%
-    // no hyphenation in the same text: hyphenation of all the short words are limited
+    // no hyphenation in the same text: hyphenation of all the short words were limited
     // by the minimum and maximum word spacing settings
+    // TODO: fix possible interoperability issues, allow optional limitation of hyphenation again
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[18]/SwParaPortion/SwLineLayout[1]", "portion",
         u",, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
@@ -1093,10 +1095,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154)
                 u"Vesti bulum ");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[21]/SwParaPortion/SwLineLayout[1]", "portion",
                 u",,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                u"Vesti bulum ");
+                u"Vesti bu");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[22]/SwParaPortion/SwLineLayout[1]", "portion",
                 u",,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                u"Vesti bulum ");
+                u"Vesti bu");
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[23]/SwParaPortion/SwLineLayout[1]", "portion",
         u",,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
@@ -1167,7 +1169,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154_minimum_shrinking)
         u",,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
 
     // also minimum word space: 80%, 100%, 100%
-    // only a single line is hyphenated from the previous ones
+    // only a single line was yphenated from the previous ones
+    // TODO: fix possible interoperability issues, allow optional limitation of hyphenation again
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]", "portion",
         u",, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
@@ -1179,10 +1182,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154_minimum_shrinking)
                 u"Vesti bulum ");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]", "portion",
                 u",,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                u"Vesti bulum ");
+                u"Vesti bu");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[1]", "portion",
                 u",,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                u"Vesti bulum ");
+                u"Vesti bu");
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]", "portion",
         u",,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bu");
@@ -1191,8 +1194,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154_minimum_shrinking)
         u",,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
 
     // minimum, desired and maximum word spacing: 80%, 100%, 133%
-    // no hyphenation in the same text: hyphenation of all the short words are limited
+    // no hyphenation in the same text: hyphenation of all the short words were limited
     // by the minimum and maximum word spacing settings
+    // TODO: fix possible interoperability issues, allow optional limitation of hyphenation again
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[18]/SwParaPortion/SwLineLayout[1]", "portion",
         u",, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti bulum ");
@@ -1204,10 +1208,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154_minimum_shrinking)
                 u"Vesti bulum ");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[21]/SwParaPortion/SwLineLayout[1]", "portion",
                 u",,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                u"Vesti bulum ");
+                u"Vesti bu");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[22]/SwParaPortion/SwLineLayout[1]", "portion",
                 u",,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                u"Vesti bulum ");
+                u"Vesti bu");
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[23]/SwParaPortion/SwLineLayout[1]", "portion",
         u",,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
@@ -1237,11 +1241,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154_portion)
                 u",,,,,,,,,,,,,,,,,,,,, , , , , , , , , , , , , , , , Lorem ipsum dolor sit amet, "
                 u"consectetur adipiscing elit. Vesti ");
 
-    // prefer minimum word spacing, not maximum word spacing to disable hyphenation, if it's possible
-    // between the minimum and maximum values. (minimum: 80%, desired: 100%, maximum word spacing: 133%)
+    // minimum: 80%, desired: 100%, maximum word spacing: 133%
+    // prefer maximum word spacing, not minimum word spacing, if the weighted word space
+    // is nearer to the desired word space
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
                 u",,,,,,,,,,,,,,,,,,,,, , , , , , , , , , , , , , , , Lorem ipsum dolor sit amet, "
-                u"consectetur adipiscing elit. Vesti bulum ");
+                u"consectetur adipiscing elit. Vesti ");
 
     // paragraph end zone
     // This was "... other celes" (not disabled hyphenation because of text portion)

@@ -158,7 +158,7 @@ bool SwTextGuess::maybeAdjustPositionsForBlockAdjust(tools::Long& rMaxSizeDiff,
 // otherwise possible break or hyphenation position is determined
 bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                             const sal_uInt16 nPorHeight, sal_Int32 nSpacesInLine,
-                            sal_uInt16 nPropWordSpacing )
+                            sal_uInt16 nPropWordSpacing, sal_Int16 nSpaceWidth )
 {
     m_nCutPos = rInf.GetIdx();
 
@@ -191,19 +191,13 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     if ( nSpacesInLine )
     {
-        static constexpr OUStringLiteral STR_BLANK = u" ";
-        sal_Int16 nSpaceWidth = rInf.GetTextSize(STR_BLANK).Width();
-        float fWordSpacing = nPropWordSpacing == SAL_MAX_UINT16
-                ? 0.75 // MSO interoperability value
-                       // allow up to 25% shrinking of the spaces
-                : nPropWordSpacing / 100.0;
-        SwTwips nExtraSpace = nSpacesInLine * nSpaceWidth * (1.0 - fWordSpacing);
+        SwTwips nExtraSpace = nSpacesInLine * nSpaceWidth/10.0 * (1.0 - nPropWordSpacing / 100.0);
         nLineWidth += nExtraSpace;
         // convert maximum word spacing to hyphenation zone, if defined
         if ( nPropWordSpacing == aAdjustItem.GetPropWordSpacing() )
         {
             SwTwips nMaxDif = aAdjustItem.GetPropWordSpacingMaximum() - nPropWordSpacing;
-            nWordSpacingMaximumZone = nSpacesInLine * nSpaceWidth * nMaxDif / 100.0;
+            nWordSpacingMaximumZone = nSpacesInLine * nSpaceWidth/10.0 * nMaxDif / 100.0;
         }
 
         rInf.SetExtraSpace(nExtraSpace);
@@ -845,6 +839,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         rInf.GetTextSize(&rSI, rInf.GetIdx(), nPorLen, std::nullopt, nMaxComp, m_nBreakWidth,
                          nMaxSizeDiff, nExtraAscent, nExtraDescent, rInf.GetCachedVclData().get());
 
+        rInf.SetBreakWidth(m_nBreakWidth);
         // save maximum width for later use
         if ( nMaxSizeDiff )
             rInf.SetMaxWidthDiff( &rPor, nMaxSizeDiff );

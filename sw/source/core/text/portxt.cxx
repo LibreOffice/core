@@ -367,19 +367,19 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     const SvxAdjust aAdjust = aAdjustItem.GetAdjust();
     bool bFullJustified = bFull && aAdjust == SvxAdjust::Block &&
          pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING);
-    bool bInteropSmartJustify = bFullJustified &&
+    bool bInteropSmartJustify =
             rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) &&
-                    // support different Kashida etc. values
-                    aAdjustItem.GetPropWordSpacing() == 100 &&
+                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING);
+    bool bNoWordSpacing = aAdjustItem.GetPropWordSpacing() == 100 &&
                     aAdjustItem.GetPropWordSpacingMinimum() == 100 &&
                     aAdjustItem.GetPropWordSpacingMaximum() == 100;
-    bool bWordSpacing = bFullJustified && !bInteropSmartJustify &&
-           aAdjustItem.GetPropWordSpacing() != 100;
-    bool bWordSpacingMaximum = bFullJustified && !bInteropSmartJustify &&
+    // support old ODT documents, where only JustifyLinesWithShrinking was set
+    bool bOldInterop = bInteropSmartJustify && bNoWordSpacing;
+    bool bWordSpacing = bFullJustified && (!bNoWordSpacing || bOldInterop);
+    bool bWordSpacingMaximum = bWordSpacing && !bOldInterop &&
            aAdjustItem.GetPropWordSpacingMaximum() > aAdjustItem.GetPropWordSpacing();
-    bool bWordSpacingMinimum = bFullJustified && !bInteropSmartJustify &&
-           aAdjustItem.GetPropWordSpacingMinimum() < aAdjustItem.GetPropWordSpacing();
+    bool bWordSpacingMinimum = bWordSpacing && ( bOldInterop ||
+           aAdjustItem.GetPropWordSpacingMinimum() < aAdjustItem.GetPropWordSpacing() );
 
     if ( ( bInteropSmartJustify || bWordSpacing || bWordSpacingMaximum || bWordSpacingMinimum ) &&
          // tdf#164499 no shrinking in tabulated line
@@ -388,13 +388,9 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
          // very short word resulted endless loop
          !rInf.IsUnderflow() )
     {
-        sal_Int32 nSpacesInLine(0);
-        for (sal_Int32 i = sal_Int32(rInf.GetLineStart()); i < sal_Int32(pGuess->BreakPos()); ++i)
-        {
-            sal_Unicode cChar = rInf.GetText()[i];
-            if ( cChar == CH_BLANK )
-                ++nSpacesInLine;
-        }
+        sal_Int32 nSpacesInLine = rInf.GetLineSpaceCount( pGuess->BreakPos() );
+        sal_Int32 nSpacesInLineOrig = nSpacesInLine;
+        SwTextSizeInfo aOrigInf( rInf );
 
         // call with an extra space: shrinking can result a new word in the line
         // and a new space before that, which is also a shrank space
@@ -410,70 +406,111 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             ++nSpacesInLine;
         }
 
-        if ( nSpacesInLine > 0 )
+        // there are spaces in the line, so it's possible to shrink them
+        if ( nSpacesInLineOrig > 0 )
         {
             SwTwips nOldWidth = pGuess->BreakWidth();
-            if ( bInteropSmartJustify )
+            bool bIsPortion = rInf.GetLineWidth() < rInf.GetBreakWidth();
+
+            // measure ten spaces for higher precision
+            static constexpr OUStringLiteral STR_BLANK = u"          ";
+            sal_Int16 nSpaceWidth = rInf.GetTextSize(STR_BLANK).Width();
+            sal_Int32 nRealSpaces = rInf.GetLineSpaceCount( pGuess->BreakPos() );
+            float fSpaceNormal = (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nRealSpaces * nSpaceWidth/10.0))/nRealSpaces;
+
+            bool bOrigHyphenated = pGuess->HyphWord().is() &&
+                        pGuess->BreakPos() > rInf.GetLineStart();
+            // calculate line breaking with desired word spacing, also
+            // if the desired word spacing is 100%, but there is a greater
+            // maximum word spacing, and the word is hyphenated at the desired
+            // word spacing: to skip hyphenation, if the maximum word spacing allows it
+            if ( bWordSpacing || ( bWordSpacingMaximum && bOrigHyphenated ) )
             {
                 pGuess.emplace();
-                bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine, SAL_MAX_UINT16 );
+                bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine, aAdjustItem.GetPropWordSpacing(), nSpaceWidth );
+                sal_Int32 nSpacesInLine2 = rInf.GetLineSpaceCount( pGuess->BreakPos() );
+
+                if ( rInf.GetBreakWidth() <= rInf.GetLineWidth() )
+                    fSpaceNormal = (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nSpacesInLine2 * nSpaceWidth/10.0))/nSpacesInLine2;
             }
-            else
+
+            sal_Int32 nSpacesInLineShrink = 0;
+            // TODO if both maximum word spacing or minimum word spacing can disable hyphenation, prefer the last one
+            if ( bWordSpacingMinimum )
             {
-                bool bOrigHyphenated = pGuess->HyphWord().is() &&
-                        pGuess->BreakPos() > rInf.GetLineStart();
-                if ( bWordSpacing || bWordSpacingMaximum )
+                std::optional<SwTextGuess> pGuess2(std::in_place);
+                SwTwips nOldExtraSpace = rInf.GetExtraSpace();
+                // break the line after the hyphenated word, if it's possible
+                // (hyphenation is disabled in Guess(), when called with GetPropWordSpacingMinimum())
+                sal_uInt16 nMinimum = bOldInterop ? 75 : aAdjustItem.GetPropWordSpacingMinimum();
+                bool bFull2 = !pGuess2->Guess( *this, rInf, Height(), nSpacesInLine, nMinimum, nSpaceWidth );
+                nSpacesInLineShrink = rInf.GetLineSpaceCount( pGuess2->BreakPos() );
+                if ( pGuess2->BreakWidth() > nOldWidth )
                 {
-                    pGuess.emplace();
-                    bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine, aAdjustItem.GetPropWordSpacing() );
-                }
-                // if both maximum word spacing or minimum word spacing can disable
-                // hyphenation, prefer the last one
-                if ( bWordSpacingMinimum && ( bWordSpacingMaximum ||
-                        ( pGuess->HyphWord().is() && pGuess->BreakPos() > rInf.GetLineStart() ) ) &&
-                        // if the desired word spacing is 100% (!bWordSpacing), and it was possible
-                        // to break the line without hyphenation in the first run (where maximum
-                        // word spacing was not used), no need to check minimum word spacing
-                        // FIXME: avoid too much shrinking, if desired word spacing is not 100%
-                        ( bWordSpacing || bOrigHyphenated )
-                   )
-                {
-                    std::optional<SwTextGuess> pGuess2(std::in_place);
-                    SwTwips nOldExtraSpace = rInf.GetExtraSpace();
-                    // break the line after the hyphenated word, if it's possible
-                    // (hyphenation is disabled in Guess(), when called with GetPropWordSpacingMinimum())
-                    bool bFull2 = !pGuess2->Guess( *this, rInf, Height(), nSpacesInLine, aAdjustItem.GetPropWordSpacingMinimum() );
-                    if ( pGuess2->BreakWidth() > nOldWidth )
+                    // instead of the maximum shrinking, break after the word which was hyphenated before
+                    sal_Int32 i = sal_Int32(pGuess->BreakPos());
+                    sal_Int32 j = sal_Int32(pGuess2->BreakPos());
+                    // skip terminal spaces
+                    for (; i < j && rInf.GetText()[i] == CH_BLANK; ++i);
+                    for (; j > i && rInf.GetText()[i] == CH_BLANK; --j);
+                    sal_Int32 nOldBreakTrim = i;
+                    sal_Int32 nOldBreak = j - i;
+                    for (; i < j; ++i)
                     {
-                        // instead of the maximum shrinking, break after the word which was hyphenated before
-                        for (sal_Int32 i = sal_Int32(pGuess->BreakPos()); i < sal_Int32(pGuess2->BreakPos()); ++i)
+                        sal_Unicode cChar = rInf.GetText()[i];
+                        // first space after the hyphenated word, and it's not the chosen one
+                        if ( cChar == CH_BLANK )
                         {
-                            sal_Unicode cChar = rInf.GetText()[i];
-                            // first space after the hyphenated word, and it's not the chosen one
-                            if ( cChar == CH_BLANK )
+                            // using a weighted word spacing, try to break the line after the hyphenated word
+                            sal_Int32 nNewBreak = i - nOldBreakTrim;
+                            SwTwips nWeightedSpacing = nMinimum * (1.0 * nNewBreak/nOldBreak) +
+                                   aAdjustItem.GetPropWordSpacing() * (1.0 * (nOldBreak - nNewBreak)/nOldBreak);
+                            std::optional<SwTextGuess> pGuess3(std::in_place);
+                            pGuess3->Guess( *this, rInf, Height(), nSpacesInLineShrink-1, nWeightedSpacing, nSpaceWidth );
+
+                            sal_Int32 nSpacesInLineShrink2 = rInf.GetLineSpaceCount( pGuess3->BreakPos() );
+                            if ( nSpacesInLineShrink2 == nSpacesInLineShrink )
                             {
-                                // using a weighted word spacing, try to break the line after the hyphenated word
-                                sal_Int32 nOldBreak = sal_Int32(pGuess2->BreakPos()) - sal_Int32(pGuess->BreakPos());
-                                sal_Int32 nNewBreak = i - sal_Int32(pGuess->BreakPos());
-                                SwTwips nWeightedSpacing = aAdjustItem.GetPropWordSpacingMinimum() * (1.0 * nNewBreak/nOldBreak) +
-                                        aAdjustItem.GetPropWordSpacing() * (1.0 * (nOldBreak - nNewBreak)/nOldBreak);
-                                std::optional<SwTextGuess> pGuess3(std::in_place);
-                                pGuess3->Guess( *this, rInf, Height(), nSpacesInLine, nWeightedSpacing );
-                                if ( pGuess3->BreakWidth() > nOldWidth )
-                                {
-                                    pGuess2.emplace();
-                                    pGuess2 = std::move(pGuess3);
-                                }
-                                break;
+                                nNewBreak = i - nOldBreakTrim - 1;
+                                nWeightedSpacing = nMinimum * (1.0 * nNewBreak/nOldBreak) +
+                                    aAdjustItem.GetPropWordSpacing() * (1.0 * (nOldBreak - nNewBreak)/nOldBreak);
+                                pGuess3->Guess( *this, rInf, Height(), nSpacesInLineShrink-1, nWeightedSpacing, nSpaceWidth );
                             }
+
+                            if ( pGuess3->BreakWidth() > nOldWidth )
+                            {
+                                pGuess2.emplace();
+                                pGuess2 = std::move(pGuess3);
+                            }
+                            break;
                         }
+                    }
+
+                    nSpacesInLineShrink = rInf.GetLineSpaceCount( pGuess2->BreakPos() );
+                    if ( rInf.GetBreakWidth() > rInf.GetLineWidth() || bIsPortion )
+                    {
+                        float fExpansionWeight = static_cast<float>(1/1.7);
+                        float fSpaceShrunk = nSpacesInLineShrink > 0
+                                ? (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nSpacesInLineShrink * nSpaceWidth/10.0))/nSpacesInLineShrink
+                                : 0;
+                        float z0 = (nSpaceWidth/10.0)/fSpaceShrunk;
+                        float z1 = (nSpaceWidth/10.0+((fSpaceNormal-nSpaceWidth/10.0)*fExpansionWeight))/(nSpaceWidth/10.0);
+                        // TODO shrink line portions only if needed
+                        if ( z1 >= z0 || bIsPortion )
+                        {
+                            pGuess = std::move(pGuess2);
+                            bFull = bFull2;
+                        }
+                    }
+                    else if ( bOldInterop )
+                    {
                         pGuess = std::move(pGuess2);
                         bFull = bFull2;
                     }
-                    else
-                        // minimum word spacing is not applicable
-                        rInf.SetExtraSpace(nOldExtraSpace);
                 }
+                else
+                    // minimum word spacing is not applicable
+                    rInf.SetExtraSpace(nOldExtraSpace);
             }
 
             if ( pGuess->BreakWidth() != nOldWidth )
