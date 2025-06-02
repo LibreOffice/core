@@ -75,6 +75,7 @@
 #include <comphelper/lok.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/intcmp.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <osl/diagnose.h>
@@ -2424,7 +2425,7 @@ void ImpEditEngine::ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_In
     for (size_t i = 0; i < aKashidaArray.size(); ++i)
     {
         auto nEmRequiredSize = aMinKashidaArray[i];
-        while (aKashidaArray.size() > i && std::cmp_less(nGapSize, nEmRequiredSize))
+        while (aKashidaArray.size() > i && o3tl::cmp_less(nGapSize, nEmRequiredSize))
         {
             aMinKashidaArray.pop_back();
             aKashidaArray.pop_back();
