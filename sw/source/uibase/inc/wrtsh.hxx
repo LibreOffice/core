@@ -480,7 +480,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
                 const SwViewOption *pViewOpt);
     virtual ~SwWrtShell() override;
 
-    bool TryRemoveIndent(); // #i23725#
+    SW_DLLPUBLIC bool TryRemoveIndent(); // #i23725#
 
     OUString GetSelDescr() const;
 

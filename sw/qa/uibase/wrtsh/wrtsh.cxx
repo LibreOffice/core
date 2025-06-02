@@ -19,6 +19,7 @@
 #include <sal/types.h>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 #include <swmodeltestbase.hxx>
 #include <doc.hxx>
@@ -31,12 +32,18 @@
 #include <itabenum.hxx>
 #include <frmmgr.hxx>
 #include <formatflysplit.hxx>
+#include <frmatr.hxx>
 
 namespace
 {
 /// Covers sw/source/uibase/wrtsh/ fixes.
 class Test : public SwModelTestBase
 {
+public:
+    Test()
+        : SwModelTestBase(u"/sw/qa/uibase/wrtsh/data/"_ustr)
+    {
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertLineBreak)
@@ -505,6 +512,31 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlysAnchorJoin)
     CPPUNIT_ASSERT_EQUAL(u"first para"_ustr, pCursor->GetPointNode().GetTextNode()->GetText());
     pWrtShell->SttEndDoc(/*bStt=*/false);
     CPPUNIT_ASSERT_EQUAL(u"second para"_ustr, pCursor->GetPointNode().GetTextNode()->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRemoveIndent)
+{
+    // Given a document with an empty, bulleted paragraph at the document end:
+    createSwDoc("remove-indent.docx");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    // Press backspace once to make it not numbered:
+    bool bOnlyBackspaceKey = true;
+    pWrtShell->NumOrNoNum(!bOnlyBackspaceKey);
+
+    // When pressing backspace again to try to decrease its indent to change from left margin to
+    // first line margin:
+    pWrtShell->TryRemoveIndent();
+
+    // Then make sure we we actually decrease the indent:
+    SwPaM* pCursor = pWrtShell->GetCursor();
+    SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
+    SwTwips nLeftMargin = pTextNode->GetSwAttrSet().GetTextLeftMargin().GetTextLeft().m_dValue;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1135
+    // - Actual  : 1418
+    // i.e. there was no decrease of the left text margin on pressing backspace.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(1135), nLeftMargin);
 }
 }
 
