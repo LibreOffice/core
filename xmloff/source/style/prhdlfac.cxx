@@ -122,6 +122,12 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_VertPos_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
+SvXMLEnumMapEntry<sal_uInt16> const pXML_ScriptType_Enum[] = { { XML_IGNORE, 1U },
+                                                               { XML_LATIN, 2U },
+                                                               { XML_ASIAN, 3U },
+                                                               { XML_COMPLEX, 4U },
+                                                               { XML_TOKEN_INVALID, 0U } };
+
 typedef std::map<sal_Int32, const XMLPropertyHandler*> CacheMap;
 
 struct XMLPropertyHandlerFactory::Impl
@@ -480,6 +486,10 @@ std::unique_ptr<XMLPropertyHandler> XMLPropertyHandlerFactory::CreatePropertyHan
             break;
         case XML_TYPE_COMPLEX_COLOR:
             pPropHdl.reset(new XMLComplexColorHandler);
+            break;
+        case XML_TYPE_TEXT_SCRIPT_TYPE:
+            pPropHdl = std::make_unique<XMLConstantsPropertyHandler>(pXML_ScriptType_Enum,
+                                                                     XML_TOKEN_INVALID);
             break;
     }
 

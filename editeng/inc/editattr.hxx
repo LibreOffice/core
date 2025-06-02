@@ -307,6 +307,14 @@ public:
     virtual void SetFont(SvxFont& rFont, OutputDevice* pOutDev) override;
 };
 
+class EditCharAttribScriptHint final : public EditCharAttrib
+{
+public:
+    EditCharAttribScriptHint(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd);
+
+    virtual void SetFont(SvxFont& rFont, OutputDevice* pOutDev) override;
+};
+
 class EditCharAttribTab final : public EditCharAttrib
 {
 public:

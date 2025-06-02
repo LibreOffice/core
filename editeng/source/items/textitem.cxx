@@ -72,12 +72,13 @@
 #include <editeng/blinkitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/twolinesitem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/rubyitem.hxx>
 #include <editeng/itemtype.hxx>
+#include <editeng/scripthintitem.hxx>
 #include <editeng/eerdll.hxx>
 #include <docmodel/color/ComplexColorJSON.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
@@ -91,6 +92,7 @@ using namespace ::com::sun::star::text;
 SfxPoolItem* SvxFontItem::CreateDefault() {return new SvxFontItem(0);}
 SfxPoolItem* SvxPostureItem::CreateDefault() { return new SvxPostureItem(ITALIC_NONE, 0);}
 SfxPoolItem* SvxWeightItem::CreateDefault() {return new SvxWeightItem(WEIGHT_NORMAL, 0);}
+SfxPoolItem* SvxScriptHintItem::CreateDefault() {return new SvxScriptHintItem(0);}
 SfxPoolItem* SvxFontHeightItem::CreateDefault() {return new SvxFontHeightItem(240, 100, 0);}
 SfxPoolItem* SvxUnderlineItem::CreateDefault() {return new SvxUnderlineItem(LINESTYLE_NONE, 0);}
 SfxPoolItem* SvxOverlineItem::CreateDefault() {return new SvxOverlineItem(LINESTYLE_NONE, 0);}
@@ -649,6 +651,90 @@ void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%d", GetValue());
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(GetValueTextByPos(GetValue()).toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
+// class SvxScriptHintItem ---------------------------------------------------
+
+ItemInstanceManager* SvxScriptHintItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
+    return &aInstanceManager;
+}
+
+SvxScriptHintItem::SvxScriptHintItem(const sal_uInt16 nId)
+    : SfxEnumItem(nId, i18nutil::ScriptHintType::Automatic)
+{
+}
+
+sal_uInt16 SvxScriptHintItem::GetValueCount() const { return 5; }
+
+SvxScriptHintItem* SvxScriptHintItem::Clone(SfxItemPool*) const
+{
+    return new SvxScriptHintItem(*this);
+}
+
+bool SvxScriptHintItem::GetPresentation(SfxItemPresentation /*ePres*/, MapUnit /*eCoreUnit*/,
+                                        MapUnit /*ePresUnit*/, OUString& rText,
+                                        const IntlWrapper& /*rIntl*/) const
+{
+    rText = GetValueText(GetValue());
+    return true;
+}
+
+OUString SvxScriptHintItem::GetValueText(i18nutil::ScriptHintType eValue)
+{
+    static const std::array<TranslateId, 5> RID_SVXITEMS_TYPES{
+        { RID_SVXITEMS_SCRIPTHINTVAL_AUTO, RID_SVXITEMS_SCRIPTHINTVAL_IGNORE,
+          RID_SVXITEMS_SCRIPTHINTVAL_LATIN, RID_SVXITEMS_SCRIPTHINTVAL_ASIAN,
+          RID_SVXITEMS_SCRIPTHINTVAL_COMPLEX }
+    };
+
+    return EditResId(RID_SVXITEMS_TYPES.at(static_cast<size_t>(eValue)));
+}
+
+bool SvxScriptHintItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
+{
+    nMemberId &= ~CONVERT_TWIPS;
+    switch (nMemberId)
+    {
+        case MID_SCRIPTHINT:
+            rVal <<= static_cast<sal_uInt16>(GetValue());
+            break;
+    }
+
+    return true;
+}
+
+bool SvxScriptHintItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
+{
+    sal_uInt16 nValue = 0;
+
+    nMemberId &= ~CONVERT_TWIPS;
+    switch (nMemberId)
+    {
+        case MID_SCRIPTHINT:
+            if (!(rVal >>= nValue))
+            {
+                return false;
+            }
+
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
+            SetValue(i18nutil::ScriptHintType{ nValue });
+            break;
+    }
+
+    return true;
+}
+
+void SvxScriptHintItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxScriptHintItem"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%d",
+                                            static_cast<int>(GetValue()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"),
+                                      BAD_CAST(GetValueText(GetValue()).toUtf8().getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 

@@ -42,6 +42,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/scripthintitem.hxx>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -1744,10 +1745,26 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         pField = pField->GetEnd() ? pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, pField->GetEnd() ) : nullptr;
     }
 
+    i18nutil::ScriptHintProvider stScriptHints;
+    const EditCharAttrib* pScriptHint
+        = pNode->GetCharAttribs().FindNextAttrib(EE_CHAR_SCRIPT_HINT, 0);
+    while (pScriptHint)
+    {
+        const auto* pScriptHintValue
+            = static_cast<const SvxScriptHintItem*>(pScriptHint->GetItem());
+        stScriptHints.AddHint(pScriptHintValue->GetValue(), pScriptHint->GetStart(),
+                              pScriptHint->GetEnd());
+
+        pScriptHint = pScriptHint->GetEnd() ? pNode->GetCharAttribs().FindNextAttrib(
+                                                  EE_CHAR_SCRIPT_HINT, pScriptHint->GetEnd())
+                                            : nullptr;
+    }
+
     const UBiDiLevel nInitialBidiLevel = IsRightToLeft(nPara) ? 1 /*RTL*/ : 0 /*LTR*/;
     auto pDirScanner = i18nutil::MakeDirectionChangeScanner(aText, nInitialBidiLevel);
     auto pScriptScanner = i18nutil::MakeScriptChangeScanner(
-        aText, SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetDefaultLanguage()), *pDirScanner);
+        aText, SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetDefaultLanguage()), *pDirScanner,
+        stScriptHints);
     while (!pScriptScanner->AtEnd() || rTypes.empty())
     {
         auto stChange = pScriptScanner->Peek();

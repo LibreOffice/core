@@ -1518,6 +1518,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf71583)
     assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[1]", "page-count-range");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf166011)
+{
+    // Verifies that style:script-type correctly round-trips
+    loadAndReload("tdf166011.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    assertXPath(pXmlDoc, "//style:style[@style:name='P1']/style:text-properties", "script-type",
+                u"complex");
+    assertXPath(pXmlDoc, "//style:style[@style:name='T1']/style:text-properties", "script-type",
+                u"latin");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf166011ee)
+{
+    // Verifies that style:script-type correctly round-trips with Edit Engine
+    loadAndReload("tdf166011ee.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    assertXPath(pXmlDoc, "//style:style[@style:name='T1']/style:text-properties", "script-type",
+                u"complex");
+    assertXPath(pXmlDoc, "//style:style[@style:name='T2']/style:text-properties", "script-type",
+                u"latin");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

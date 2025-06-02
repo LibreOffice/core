@@ -136,6 +136,7 @@ inline constexpr OUString UNO_NAME_CHAR_UNDERLINE_COMPLEX_COLOR = u"CharUnderlin
 inline constexpr OUString UNO_NAME_CHAR_UNDERLINE_HAS_COLOR = u"CharUnderlineHasColor"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_ESCAPEMENT = u"CharEscapement"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_CASE_MAP = u"CharCaseMap"_ustr;
+inline constexpr OUString UNO_NAME_CHAR_SCRIPT_HINT = u"CharScriptHint"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_STRIKEOUT = u"CharStrikeout"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_CROSSED_OUT = u"CharCrossedOut"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_NO_HYPHENATION = u"CharNoHyphenation"_ustr;

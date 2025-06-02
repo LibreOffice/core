@@ -172,6 +172,7 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "CharRotation", RID_CHAR_ROTATION },
         { "CharRotationIsFitToLine", RID_CHAR_ROTATION_IS_FIT_TO_LINE },
         { "CharScaleWidth", RID_CHAR_SCALE_WIDTH },
+        { "CharScriptHint", RID_CHAR_SCRIPT_HINT },
         { "CharShadingValue", RID_CHAR_SHADING_VALUE },
         { "CharShadowFormat", RID_CHAR_SHADOW_FORMAT },
         { "CharShadowed", RID_CHAR_SHADOWED },

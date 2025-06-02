@@ -44,7 +44,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/fhgtitem.hxx>

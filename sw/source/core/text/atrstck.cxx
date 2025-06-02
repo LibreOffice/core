@@ -61,9 +61,10 @@
  * stack, the top most attribute on the stack is valid. Because some
  * kinds of attributes have to be pushed to the same stacks we map their
  * ids to stack ids
- * Attention: The first NUM_DEFAULT_VALUES ( defined in swfntcch.hxx )
+ * Attention: Stacks for character attributes (RES_CHRATR_*)
  * are stored in the defaultitem-cache, if you add one, you have to increase
- * NUM_DEFAULT_VALUES.
+ * NUM_DEFAULT_VALUES (defined in swfntcch.hxx), and ensure your new stack id
+ * is below this number.
  * Also adjust NUM_ATTRIBUTE_STACKS in atrhndl.hxx.
  */
 const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
@@ -114,17 +115,18 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
      0, // RES_CHRATR_GRABBAG,                   // 43
      0, // RES_CHRATR_BIDIRTL,                   // 44
      0, // RES_CHRATR_IDCTHINT,                  // 45
-    39, // RES_TXTATR_REFMARK,                   // 46
-    40, // RES_TXTATR_TOXMARK,                   // 47
-    41, // RES_TXTATR_META,                      // 48
-    41, // RES_TXTATR_METAFIELD,                 // 49
-     0, // RES_TXTATR_AUTOFMT,                   // 50
-     0, // RES_TXTATR_INETFMT                    // 51
-     0, // RES_TXTATR_CHARFMT,                   // 52
-    42, // RES_TXTATR_CJK_RUBY,                  // 53
-     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 54
-    43, // RES_TXTATR_INPUTFIELD                 // 55
-    44, // RES_TXTATR_CONTENTCONTROL             // 56
+    39, // RES_CHRATR_SCRIPT_HINT,               // 46
+    40, // RES_TXTATR_REFMARK,                   // 47
+    41, // RES_TXTATR_TOXMARK,                   // 48
+    42, // RES_TXTATR_META,                      // 49
+    42, // RES_TXTATR_METAFIELD,                 // 50
+     0, // RES_TXTATR_AUTOFMT,                   // 51
+     0, // RES_TXTATR_INETFMT                    // 52
+     0, // RES_TXTATR_CHARFMT,                   // 53
+    43, // RES_TXTATR_CJK_RUBY,                  // 54
+     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 55
+    44, // RES_TXTATR_INPUTFIELD                 // 56
+    45, // RES_TXTATR_CONTENTCONTROL             // 57
 };
 
 namespace CharFormat

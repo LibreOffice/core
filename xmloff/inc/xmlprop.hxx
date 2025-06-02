@@ -112,6 +112,7 @@ inline constexpr OUString PROP_CharRightBorderDistance = u"CharRightBorderDistan
 inline constexpr OUString PROP_CharRotation = u"CharRotation"_ustr;
 inline constexpr OUString PROP_CharRotationIsFitToLine = u"CharRotationIsFitToLine"_ustr;
 inline constexpr OUString PROP_CharScaleWidth = u"CharScaleWidth"_ustr;
+inline constexpr OUString PROP_CharScriptHint = u"CharScriptHint"_ustr;
 inline constexpr OUString PROP_CharShadingValue = u"CharShadingValue"_ustr;
 inline constexpr OUString PROP_CharShadowFormat = u"CharShadowFormat"_ustr;
 inline constexpr OUString PROP_CharShadowed = u"CharShadowed"_ustr;

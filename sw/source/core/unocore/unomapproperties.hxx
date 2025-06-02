@@ -250,6 +250,7 @@
         { UNO_NAME_WRITING_MODE,                        RES_FRAMEDIR,                  cppu::UnoType<sal_Int16>::get(),         PROPERTY_NONE,                0                                      }, \
         { UNO_NAME_CHAR_SHADING_VALUE,                  RES_CHRATR_BACKGROUND,         cppu::UnoType<sal_Int32>::get(),         PROPERTY_NONE,                MID_SHADING_VALUE                      }, \
         { UNO_NAME_PARA_INTEROP_GRAB_BAG,               RES_PARATR_GRABBAG,            cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE,                0                                      }, \
+        { UNO_NAME_CHAR_SCRIPT_HINT,                    RES_CHRATR_SCRIPT_HINT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_SCRIPTHINT }, \
 
 #define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN \
         COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01 \

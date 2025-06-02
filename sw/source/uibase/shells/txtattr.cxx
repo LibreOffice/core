@@ -34,7 +34,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/pmdlitem.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/nhypitem.hxx>

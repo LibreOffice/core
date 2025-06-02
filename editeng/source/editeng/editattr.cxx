@@ -255,6 +255,15 @@ EditCharAttribRuby::EditCharAttribRuby(SfxItemPool& rPool, const SfxPoolItem& rI
 
 void EditCharAttribRuby::SetFont(SvxFont&, OutputDevice*) {}
 
+EditCharAttribScriptHint::EditCharAttribScriptHint(SfxItemPool& rPool, const SfxPoolItem& rItem,
+                                                   sal_Int32 nStartIn, sal_Int32 nEndIn)
+    : EditCharAttrib(rPool, rItem, nStartIn, nEndIn)
+{
+    assert(rItem.Which() == EE_CHAR_SCRIPT_HINT);
+}
+
+void EditCharAttribScriptHint::SetFont(SvxFont&, OutputDevice*) {}
+
 EditCharAttribShadow::EditCharAttribShadow(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
 : EditCharAttrib(rPool, rItem, _nStart, _nEnd)
 {

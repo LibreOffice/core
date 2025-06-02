@@ -33,7 +33,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 
 
 namespace frm

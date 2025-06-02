@@ -208,7 +208,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>

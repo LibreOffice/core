@@ -44,7 +44,7 @@
 #include <editeng/shdditem.hxx>
 #include <svx/svdpagv.hxx>
 #include <editeng/flstitem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/cmapitem.hxx>

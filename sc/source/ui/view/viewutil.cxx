@@ -23,7 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

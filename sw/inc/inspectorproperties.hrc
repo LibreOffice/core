@@ -109,6 +109,7 @@
 #define RID_CHAR_ROTATION                                   NC_("RID_ATTRIBUTE_NAMES_MAP", "Char Rotation")
 #define RID_CHAR_ROTATION_IS_FIT_TO_LINE                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Char Rotation is Fit To Line")
 #define RID_CHAR_SCALE_WIDTH                                NC_("RID_ATTRIBUTE_NAMES_MAP", "Char Scale Width")
+#define RID_CHAR_SCRIPT_HINT                                NC_("RID_ATTRIBUTE_NAMES_MAP", "Char Script Type Hint")
 #define RID_CHAR_SHADING_VALUE                              NC_("RID_ATTRIBUTE_NAMES_MAP", "Char Shading Value")
 #define RID_CHAR_SHADOW_FORMAT                              NC_("RID_ATTRIBUTE_NAMES_MAP", "Char Shadow Format")
 #define RID_CHAR_SHADOWED                                   NC_("RID_ATTRIBUTE_NAMES_MAP", "Char Shadowed")

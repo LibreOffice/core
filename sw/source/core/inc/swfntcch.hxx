@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWFNTCCH_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWFNTCCH_HXX
 
-#define NUM_DEFAULT_VALUES 39
+#define NUM_DEFAULT_VALUES 40
 
 #include "swcache.hxx"
 #include "swfont.hxx"

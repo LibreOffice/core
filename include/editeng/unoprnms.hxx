@@ -363,6 +363,8 @@ inline constexpr OUString UNO_NAME_EDIT_CHAR_RUBY_TEXT = u"RubyText"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_CHAR_RUBY_ADJUST = u"RubyAdjust"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_CHAR_RUBY_POSITION = u"RubyPosition"_ustr;
 
+inline constexpr OUString UNO_NAME_EDIT_CHAR_SCRIPT_HINT = u"CharScriptHint"_ustr;
+
 inline constexpr OUString UNO_NAME_BITMAP = u"Bitmap"_ustr;
 
 inline constexpr OUString UNO_NAME_LINKDISPLAYNAME = u"LinkDisplayName"_ustr;

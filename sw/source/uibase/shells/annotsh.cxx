@@ -63,7 +63,7 @@
 #include <svx/hlnkitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <swundo.hxx>
 #include <doc.hxx>
 #include <viewopt.hxx>

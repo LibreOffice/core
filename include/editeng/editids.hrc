@@ -66,6 +66,7 @@ class SvxULSpaceItem;
 class SvxWeightItem;
 class SvxWidowsItem;
 class SvxWordLineModeItem;
+class SvxScriptHintItem;
 
 /*
   These SID_SVX_START entries came from include/svx/svxids.hrc, avoid
@@ -88,7 +89,7 @@ class SvxWordLineModeItem;
 #define SID_ATTR_CHAR_STRIKEOUT                         TypedWhichId<SvxCrossedOutItem>( SID_SVX_START + 13 )
 #define SID_ATTR_CHAR_UNDERLINE                         TypedWhichId<SvxUnderlineItem>( SID_SVX_START + 14 )
 #define SID_ATTR_CHAR_FONTHEIGHT                        TypedWhichId<SvxFontHeightItem>( SID_SVX_START + 15 )
-  // free
+#define SID_ATTR_CHAR_SCRIPT_HINT                       TypedWhichId<SvxScriptHintItem>( SID_SVX_START + 16 )
 #define SID_ATTR_CHAR_COLOR                             TypedWhichId<SvxColorItem>( SID_SVX_START + 17 )
 #define SID_ATTR_CHAR_KERNING                           TypedWhichId<SvxKerningItem>( SID_SVX_START + 18 )
 #define SID_ATTR_CHAR_CASEMAP                           TypedWhichId<SvxCaseMapItem>( SID_SVX_START + 19 )

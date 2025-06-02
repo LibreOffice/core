@@ -44,7 +44,7 @@
 #include <sfx2/tplpitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <svx/svdoutl.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/fhgtitem.hxx>

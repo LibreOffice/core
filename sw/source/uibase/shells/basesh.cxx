@@ -52,7 +52,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/protitem.hxx>
 #include <svx/flagsdef.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <sfx2/objface.hxx>
 #include <fmturl.hxx>
 #include <fmthdft.hxx>
