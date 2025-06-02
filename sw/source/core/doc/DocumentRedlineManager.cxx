@@ -3655,7 +3655,7 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
                 std::unique_ptr<SwUndoRedline> pUndoRdl;
                 if (bHierarchicalFormat)
                 {
-                    // Format on an other type: just create an accept undo action, we'll deal with
+                    // Format on another type: just create an accept undo action, we'll deal with
                     // insert or delete below separately.
                     pUndoRdl = std::make_unique<SwUndoAcceptRedline>(*pTmp);
                 }
