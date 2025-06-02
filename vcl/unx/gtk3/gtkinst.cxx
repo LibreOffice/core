@@ -5231,6 +5231,11 @@ private:
 
     static void signalActivate(GtkMenuItem* pItem, gpointer widget)
     {
+        // ignore "activate" signal for non-leaf items resulting in the submenu to be
+        // shown, contrary to a "normal" menu item getting activated to trigger its action
+        if (gtk_menu_item_get_submenu(pItem))
+            return;
+
         MenuHelper* pThis = static_cast<MenuHelper*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_item_activate(::get_buildable_id(GTK_BUILDABLE(pItem)));
