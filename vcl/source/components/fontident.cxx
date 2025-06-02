@@ -122,7 +122,7 @@ css::uno::Any SAL_CALL FontIdentificator::getMaterial()
     case WEIGHT_ULTRALIGHT: aFD.Weight = css::awt::FontWeight::ULTRALIGHT;break;
     case WEIGHT_LIGHT: aFD.Weight = css::awt::FontWeight::LIGHT;break;
     case WEIGHT_SEMILIGHT: aFD.Weight = css::awt::FontWeight::SEMILIGHT;break;
-    case WEIGHT_MEDIUM:
+    case WEIGHT_MEDIUM: aFD.Weight = css::awt::FontWeight::MEDIUM;break;
     case WEIGHT_NORMAL: aFD.Weight = css::awt::FontWeight::NORMAL;break;
     case WEIGHT_SEMIBOLD: aFD.Weight = css::awt::FontWeight::SEMIBOLD;break;
     case WEIGHT_BOLD: aFD.Weight = css::awt::FontWeight::BOLD;break;

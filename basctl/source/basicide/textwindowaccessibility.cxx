@@ -2084,7 +2084,7 @@ css::uno::Any Document::mapFontWeight(::FontWeight nWeight)
             css::awt::FontWeight::LIGHT, // WEIGHT_LIGHT
             css::awt::FontWeight::SEMILIGHT, // WEIGHT_SEMILIGHT
             css::awt::FontWeight::NORMAL, // WEIGHT_NORMAL
-            css::awt::FontWeight::NORMAL, // WEIGHT_MEDIUM
+            css::awt::FontWeight::MEDIUM, // WEIGHT_MEDIUM
             css::awt::FontWeight::SEMIBOLD, // WEIGHT_SEMIBOLD
             css::awt::FontWeight::BOLD, // WEIGHT_BOLD
             css::awt::FontWeight::ULTRABOLD, // WEIGHT_ULTRABOLD
@@ -2103,6 +2103,7 @@ css::uno::Any Document::mapFontWeight(::FontWeight nWeight)
         : nWeight <= css::awt::FontWeight::LIGHT ? WEIGHT_LIGHT
         : nWeight <= css::awt::FontWeight::SEMILIGHT ? WEIGHT_SEMILIGHT
         : nWeight <= css::awt::FontWeight::NORMAL ? WEIGHT_NORMAL
+        : nWeight <= css::awt::FontWeight::MEDIUM ? WEIGHT_MEDIUM
         : nWeight <= css::awt::FontWeight::SEMIBOLD ? WEIGHT_SEMIBOLD
         : nWeight <= css::awt::FontWeight::BOLD ? WEIGHT_BOLD
         : nWeight <= css::awt::FontWeight::ULTRABOLD ? WEIGHT_ULTRABOLD

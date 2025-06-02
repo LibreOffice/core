@@ -59,6 +59,13 @@ published constants FontWeight
     const float NORMAL = 100.000000;
 
 
+    /** specifies a 105% font weight.
+
+        @since LibreOffice 26.2
+     */
+    const float MEDIUM = 105.000000;
+
+
     /** specifies a 110% font weight.
      */
     const float SEMIBOLD = 110.000000;

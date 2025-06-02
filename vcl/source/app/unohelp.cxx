@@ -109,8 +109,10 @@ float vcl::unohelper::ConvertFontWeight( FontWeight eWeight )
         return css::awt::FontWeight::LIGHT;
     else if( eWeight == WEIGHT_SEMILIGHT )
         return css::awt::FontWeight::SEMILIGHT;
-    else if( ( eWeight == WEIGHT_NORMAL ) || ( eWeight == WEIGHT_MEDIUM ) )
+    else if( eWeight == WEIGHT_NORMAL )
         return css::awt::FontWeight::NORMAL;
+    else if( eWeight == WEIGHT_MEDIUM )
+        return css::awt::FontWeight::MEDIUM;
     else if( eWeight == WEIGHT_SEMIBOLD )
         return css::awt::FontWeight::SEMIBOLD;
     else if( eWeight == WEIGHT_BOLD )
@@ -138,6 +140,8 @@ FontWeight vcl::unohelper::ConvertFontWeight( float f )
         return WEIGHT_SEMILIGHT;
     else if( f <= css::awt::FontWeight::NORMAL )
         return WEIGHT_NORMAL;
+    else if( f <= css::awt::FontWeight::MEDIUM )
+        return WEIGHT_MEDIUM;
     else if( f <= css::awt::FontWeight::SEMIBOLD )
         return WEIGHT_SEMIBOLD;
     else if( f <= css::awt::FontWeight::BOLD )

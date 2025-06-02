@@ -41,15 +41,21 @@ struct FontWeightMapper
 
 }
 
+// ODF specifies the valid fo:font-weight values, but does not provide mapping
+// between weight names to numeric values:
+// https://docs.oasis-open.org/office/v1.2/cd05/OpenDocument-v1.2-cd05-part1.html#a_20_184_fo_font-weight
+//
+// The mapping here is the same as OpenType/windows.h:
+// https://learn.microsoft.com/en-us/typography/opentype/spec/os2#usweightclass
 FontWeightMapper const aFontWeightMap[] =
 {
     { css::awt::FontWeight::DONTKNOW,              0 },
     { css::awt::FontWeight::THIN,                  100 },
-    { css::awt::FontWeight::ULTRALIGHT,            150 },
-    { css::awt::FontWeight::LIGHT,                 250 },
+    { css::awt::FontWeight::ULTRALIGHT,            200 },
+    { css::awt::FontWeight::LIGHT,                 300 },
     { css::awt::FontWeight::SEMILIGHT,             350 },
     { css::awt::FontWeight::NORMAL,                400 },
-    { css::awt::FontWeight::NORMAL,                450 },
+    { css::awt::FontWeight::MEDIUM,                500 },
     { css::awt::FontWeight::SEMIBOLD,              600 },
     { css::awt::FontWeight::BOLD,                  700 },
     { css::awt::FontWeight::ULTRABOLD,             800 },
