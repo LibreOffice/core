@@ -1719,6 +1719,7 @@ namespace xmloff::token {
         TOKEN( "script",                          XML_SCRIPT ),
         TOKEN( "script-asian",                    XML_SCRIPT_ASIAN ),
         TOKEN( "script-complex",                  XML_SCRIPT_COMPLEX ),
+        TOKEN( "script-type",                     XML_SCRIPT_TYPE ),
         TOKEN( "scroll",                          XML_SCROLL ),
         TOKEN( "sdev",                            XML_SDEV ),
         TOKEN( "search-criteria-must-apply-to-whole-cell",        XML_SEARCH_CRITERIA_MUST_APPLY_TO_WHOLE_CELL ),
@@ -3583,6 +3584,10 @@ namespace xmloff::token {
         TOKEN("opacity-stop", XML_OPACITY_STOP),
         TOKEN("color-value", XML_COLOR_VALUE),
         TOKEN("color-type", XML_COLOR_TYPE),
+
+        TOKEN("latin", XML_LATIN),
+        TOKEN("asian", XML_ASIAN),
+        TOKEN("complex", XML_COMPLEX),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }

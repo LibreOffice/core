@@ -125,6 +125,13 @@
 #define RID_SVXITEMS_STRIKEOUT_SLASH            NC_("RID_SVXITEMS_STRIKEOUT_SLASH", "Strike through with slash")
 #define RID_SVXITEMS_STRIKEOUT_X                NC_("RID_SVXITEMS_STRIKEOUT_X", "Strike through with Xes")
 
+// enum ScriptTypeValue -------------------------------------------------------
+#define RID_SVXITEMS_SCRIPTHINTVAL_AUTO         NC_("RID_SVXITEMS_SCRIPTHINTVAL_AUTO", "Automatic")
+#define RID_SVXITEMS_SCRIPTHINTVAL_IGNORE       NC_("RID_SVXITEMS_SCRIPTHINTVAL_IGNORE", "Ignore")
+#define RID_SVXITEMS_SCRIPTHINTVAL_LATIN        NC_("RID_SVXITEMS_SCRIPTHINTVAL_LATIN", "Latin")
+#define RID_SVXITEMS_SCRIPTHINTVAL_ASIAN        NC_("RID_SVXITEMS_SCRIPTHINTVAL_ASIAN", "Asian")
+#define RID_SVXITEMS_SCRIPTHINTVAL_COMPLEX      NC_("RID_SVXITEMS_SCRIPTHINTVAL_COMPLEX", "Complex")
+
 // enum CASEMAP ----------------------------------------------------------
 #define RID_SVXITEMS_CASEMAP_NONE               NC_("RID_SVXITEMS_CASEMAP_NONE", "None")
 #define RID_SVXITEMS_CASEMAP_UPPERCASE          NC_("RID_SVXITEMS_CASEMAP_VERSALIEN", "Caps")

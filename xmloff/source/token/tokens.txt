@@ -1619,6 +1619,7 @@ score-spaces
 script
 script-asian
 script-complex
+script-type
 scroll
 sdev
 search-criteria-must-apply-to-whole-cell
@@ -3324,4 +3325,7 @@ gradient-stop
 opacity-stop
 color-value
 color-type
+latin
+asian
+complex
 TOKEN_END_DUMMY

@@ -425,6 +425,7 @@ enum class SfxItemType : sal_uInt16
     SvxWritingModeItemType,
     SvxZoomItemType,
     SvxZoomSliderItemType,
+    SvxScriptHintItemType,
     SwAddPrinterItemType,
     SwChannelBGrfType,
     SwChannelGGrfType,

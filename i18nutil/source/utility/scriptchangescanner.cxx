@@ -21,6 +21,44 @@ namespace css = ::com::sun::star;
 
 namespace i18nutil
 {
+void ScriptHintProvider::SetParagraphLevelHint(ScriptHintType eType) { m_eParaHint = eType; }
+
+void ScriptHintProvider::AddHint(ScriptHintType eType, sal_Int32 nStartIndex, sal_Int32 nEndIndex)
+{
+    m_aHints.emplace_back(eType, nStartIndex, nEndIndex);
+}
+
+void ScriptHintProvider::Start()
+{
+    m_pCurrIt = m_aHints.begin();
+    m_nCurrIdx = 0;
+
+    m_eCurrHint = m_eParaHint;
+    if (m_pCurrIt != m_aHints.end() && m_pCurrIt->m_nStartIndex == 0 && m_pCurrIt->m_nEndIndex > 0)
+    {
+        m_eCurrHint = m_pCurrIt->m_eType;
+    }
+}
+
+void ScriptHintProvider::AdvanceTo(sal_Int32 nNextIdx)
+{
+    m_nCurrIdx = nNextIdx;
+
+    while (m_pCurrIt != m_aHints.end() && m_nCurrIdx >= m_pCurrIt->m_nEndIndex)
+    {
+        ++m_pCurrIt;
+    }
+
+    m_eCurrHint = m_eParaHint;
+    if (m_pCurrIt != m_aHints.end() && m_nCurrIdx >= m_pCurrIt->m_nStartIndex
+        && m_nCurrIdx < m_pCurrIt->m_nEndIndex)
+    {
+        m_eCurrHint = m_pCurrIt->m_eType;
+    }
+}
+
+i18nutil::ScriptHintType ScriptHintProvider::Peek() const { return m_eCurrHint; }
+
 namespace
 {
 constexpr sal_uInt32 CHAR_NNBSP = 0x202f;
@@ -131,6 +169,7 @@ class GreedyScriptChangeScanner : public ScriptChangeScanner
 private:
     ScriptChange m_stCurr;
     DirectionChangeScanner* m_pDirScanner;
+    ScriptHintProvider* m_pHints;
     const OUString& m_rText;
     sal_Int32 m_nIndex = 0;
     sal_Int32 m_nNextStart = 0;
@@ -174,15 +213,46 @@ private:
                 m_pDirScanner->Advance();
             }
 
+            m_pHints->AdvanceTo(m_nIndex);
+            auto eCurrHint = m_pHints->Peek();
+
             auto nChar = m_rText.iterateCodePoints(&m_nIndex);
             nScript = GetScriptClass(nChar);
+
+            // tdf#166011 Apply style:script-type rules per ODF standard:
+            if (eCurrHint == ScriptHintType::Ignore)
+            {
+                // The generic/latin font attributes are always used if the hint is ignore.
+                nScript = css::i18n::ScriptType::LATIN;
+            }
+            else if (nScript == css::i18n::ScriptType::WEAK)
+            {
+                switch (eCurrHint)
+                {
+                    case ScriptHintType::Latin:
+                        nScript = css::i18n::ScriptType::LATIN;
+                        break;
+
+                    case ScriptHintType::Asian:
+                        nScript = css::i18n::ScriptType::ASIAN;
+                        break;
+
+                    case ScriptHintType::Complex:
+                        nScript = css::i18n::ScriptType::COMPLEX;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
 
             // #i16354# Change script type for RTL text to CTL:
             // 1. All text in RTL runs will use the CTL font
             // #i89825# change the script type also to CTL (hennerdrewes)
             // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
             // tdf#163660 Asian-script characters inside RTL runs should still use Asian font
-            if (bCharIsRtl || (bCharIsRtlOrEmbedded && !bRunHasStrongEmbeddedLTR))
+            if (eCurrHint == ScriptHintType::Automatic
+                && (bCharIsRtl || (bCharIsRtlOrEmbedded && !bRunHasStrongEmbeddedLTR)))
             {
                 if (nScript != css::i18n::ScriptType::ASIAN)
                 {
@@ -233,8 +303,9 @@ private:
 
 public:
     GreedyScriptChangeScanner(const OUString& rText, sal_Int16 nDefaultScriptType,
-                              DirectionChangeScanner* pDirScanner)
+                              DirectionChangeScanner* pDirScanner, ScriptHintProvider* pHints)
         : m_pDirScanner(pDirScanner)
+        , m_pHints(pHints)
         , m_rText(rText)
     {
         // tdf#66791: For compatibility with other programs, the Asian script is
@@ -261,6 +332,7 @@ public:
             m_nPrevScript = nDefaultScriptType;
         }
 
+        m_pHints->Start();
         Advance();
     }
 
@@ -287,9 +359,10 @@ i18nutil::MakeDirectionChangeScanner(const OUString& rText, sal_uInt8 nInitialDi
 
 std::unique_ptr<i18nutil::ScriptChangeScanner>
 i18nutil::MakeScriptChangeScanner(const OUString& rText, sal_Int16 nDefaultScriptType,
-                                  DirectionChangeScanner& rDirScanner)
+                                  DirectionChangeScanner& rDirScanner, ScriptHintProvider& rHints)
 {
-    return std::make_unique<GreedyScriptChangeScanner>(rText, nDefaultScriptType, &rDirScanner);
+    return std::make_unique<GreedyScriptChangeScanner>(rText, nDefaultScriptType, &rDirScanner,
+                                                       &rHints);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

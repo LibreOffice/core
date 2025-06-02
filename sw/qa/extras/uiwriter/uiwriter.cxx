@@ -39,7 +39,7 @@
 #include <svx/svxids.hrc>
 
 #include <editeng/eeitem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>

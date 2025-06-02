@@ -117,6 +117,9 @@
 #define MID_BOLD            0
 #define MID_WEIGHT          1
 
+//SvxScriptHintItem
+#define MID_SCRIPTHINT 0
+
 //SvxLanguageItem
 #define MID_LANG_INT            0
 #define MID_LANG_LOCALE         1

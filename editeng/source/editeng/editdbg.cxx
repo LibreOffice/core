@@ -48,6 +48,7 @@
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/scripthintitem.hxx>
 
 #include "impedit.hxx"
 #include <editeng/editeng.hxx>
@@ -183,6 +184,12 @@ struct DebOutBuffer
         str.append(OString::Concat(descr)
                    + OUStringToOString(rItem.GetText(), RTL_TEXTENCODING_UTF8));
     }
+    void append(std::string_view descr, const SvxScriptHintItem& rItem)
+    {
+        str.append(OString::Concat(descr)
+                   + OUStringToOString(SvxScriptHintItem::GetValueText(rItem.GetValue()),
+                                       RTL_TEXTENCODING_ASCII_US));
+    }
 };
 }
 
@@ -316,6 +323,9 @@ static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         break;
         case EE_CHAR_RUBY:
             buffer.append("Ruby=", rItem.StaticWhichCast(EE_CHAR_RUBY));
+        break;
+        case EE_CHAR_SCRIPT_HINT:
+            buffer.append("ScriptHint=", rItem.StaticWhichCast(EE_CHAR_SCRIPT_HINT));
         break;
     }
     return buffer.str.makeStringAndClear();

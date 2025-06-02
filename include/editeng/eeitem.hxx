@@ -61,6 +61,7 @@ class SvxNumBulletItem;
 class SvxJustifyMethodItem;
 class SvxVerJustifyItem;
 class SvxRubyItem;
+class SvxScriptHintItem;
 
 /*
  * NOTE: Changes in this file will probably require
@@ -129,8 +130,9 @@ inline constexpr TypedWhichId<SvxCaseMapItem>         EE_CHAR_CASEMAP        (EE
 inline constexpr TypedWhichId<SfxGrabBagItem>         EE_CHAR_GRABBAG        (EE_CHAR_START+30);
 inline constexpr TypedWhichId<SvxColorItem>           EE_CHAR_BKGCOLOR       (EE_CHAR_START+31);
 inline constexpr TypedWhichId<SvxRubyItem>            EE_CHAR_RUBY           (EE_CHAR_START+32);
+inline constexpr TypedWhichId<SvxScriptHintItem>      EE_CHAR_SCRIPT_HINT    (EE_CHAR_START+33);
 
-inline constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 32);
+inline constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 33);
 
 inline constexpr sal_uInt16 EE_FEATURE_START   (EE_CHAR_END + 1);
 inline constexpr sal_uInt16 EE_FEATURE_TAB     (EE_FEATURE_START + 0);

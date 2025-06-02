@@ -313,6 +313,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
             return new EditCharAttribRuby(rPool, rAttr, nS, nE);
         }
         break;
+        case EE_CHAR_SCRIPT_HINT:
+        {
+            return new EditCharAttribScriptHint(rPool, rAttr, nS, nE);
+        }
+        break;
         default:
         break;
     }

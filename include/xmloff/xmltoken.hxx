@@ -1706,6 +1706,7 @@ namespace xmloff::token {
         XML_SCRIPT,
         XML_SCRIPT_ASIAN,
         XML_SCRIPT_COMPLEX,
+        XML_SCRIPT_TYPE,
         XML_SCROLL,
         XML_SDEV,
         XML_SEARCH_CRITERIA_MUST_APPLY_TO_WHOLE_CELL,
@@ -3581,6 +3582,10 @@ namespace xmloff::token {
         XML_OPACITY_STOP,
         XML_COLOR_VALUE,
         XML_COLOR_TYPE,
+
+        XML_LATIN,
+        XML_ASIAN,
+        XML_COMPLEX,
 
         XML_TOKEN_END
     };

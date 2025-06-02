@@ -26,7 +26,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

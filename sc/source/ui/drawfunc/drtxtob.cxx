@@ -43,7 +43,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/sdooitm.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>

@@ -56,7 +56,7 @@
 #include <svx/svxdlg.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <editeng/scriptsetitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>

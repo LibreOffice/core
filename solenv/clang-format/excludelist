@@ -5064,7 +5064,7 @@ include/editeng/prntitem.hxx
 include/editeng/protitem.hxx
 include/editeng/rsiditem.hxx
 include/editeng/scriptspaceitem.hxx
-include/editeng/scripttypeitem.hxx
+include/editeng/scriptsetitem.hxx
 include/editeng/shaditem.hxx
 include/editeng/shdditem.hxx
 include/editeng/sizeitem.hxx

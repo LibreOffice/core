@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_SCRIPTTYPEITEM_HXX
-#define INCLUDED_EDITENG_SCRIPTTYPEITEM_HXX
+#pragma once
 
 #include <svl/languageoptions.hxx>
 #include <svl/setitem.hxx>
@@ -47,7 +46,5 @@ public:
     static void GetSlotIds( sal_uInt16 nSlotId, sal_uInt16& rLatin, sal_uInt16& rAsian,
                                             sal_uInt16& rComplex );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
