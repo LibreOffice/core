@@ -706,9 +706,8 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, weld::MetricSpinButton&, void )
         //them to avoid the listbox selection resetting
         if (nLineWidth != m_xLineTypeDLB->GetWidth())
             m_xLineTypeDLB->SetWidth(nLineWidth);
-        Color aColor(m_xLineColorDLB->GetSelectEntryColor());
-        if (aColor != m_xLineTypeDLB->GetColor())
-            m_xLineTypeDLB->SetColor(aColor);
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        m_xLineTypeDLB->SetColor(rStyleSettings.GetDialogTextColor());
     }
     else
     {
