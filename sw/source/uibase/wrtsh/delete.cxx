@@ -65,7 +65,7 @@ bool SwWrtShell::TryRemoveIndent()
 {
     bool bResult = false;
 
-    SfxItemSetFixed<RES_MARGIN_FIRSTLINE, RES_MARGIN_FIRSTLINE> aAttrSet(GetAttrPool());
+    SfxItemSetFixed<RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT> aAttrSet(GetAttrPool());
     GetCurAttr(aAttrSet);
 
     SvxFirstLineIndentItem firstLine(aAttrSet.Get(RES_MARGIN_FIRSTLINE));
