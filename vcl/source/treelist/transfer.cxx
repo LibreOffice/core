@@ -285,6 +285,7 @@ void SAL_CALL TransferableHelper::TerminateListener::queryTermination( const Eve
 void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const EventObject& )
 {
     mrParent.ImplFlush();
+    mrParent.mxTerminateListener.clear();
 }
 
 OUString SAL_CALL TransferableHelper::TerminateListener::getImplementationName()
