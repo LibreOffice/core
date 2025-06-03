@@ -675,11 +675,17 @@ void QtBuilder::setMenuActionGroup(QMenu* pMenu, QAction* pAction, const OUStrin
 void QtBuilder::insertMenuObject(QMenu* pParent, QMenu* pSubMenu, const OUString& rClass,
                                  const OUString& rId, stringmap& rProps, stringmap&, accelmap&)
 {
-    assert(!pSubMenu && "Handling not implemented yet");
-    (void)pSubMenu;
-
     const QString sLabel = convertAccelerator(extractLabel(rProps));
-    QAction* pAction = pParent->addAction(sLabel);
+    QAction* pAction = nullptr;
+    if (pSubMenu)
+    {
+        pAction = pParent->addMenu(pSubMenu);
+        pAction->setText(sLabel);
+    }
+    else
+    {
+        pAction = pParent->addAction(sLabel);
+    }
     pAction->setObjectName(toQString(rId));
 
     const OUString sActionName(extractActionName(rProps));
