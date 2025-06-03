@@ -57,6 +57,7 @@ class ImageMap;
 class INetBookmark;
 class INetImage;
 class FileList;
+class TransferableClipboardNotifier;
 namespace vcl { class Window; }
 
 // Drag&Drop defines
@@ -263,8 +264,6 @@ public:
     static void         ClearPrimarySelection();
 };
 
-struct TransferableDataHelper_Impl;
-
 class VCL_DLLPUBLIC TransferableDataHelper final
 {
     friend class DropTargetHelper;
@@ -273,7 +272,7 @@ class VCL_DLLPUBLIC TransferableDataHelper final
     css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
     DataFlavorExVector                                                maFormats;
     std::unique_ptr<TransferableObjectDescriptor>                     mxObjDesc;
-    std::unique_ptr<TransferableDataHelper_Impl>                      mxImpl;
+    rtl::Reference<TransferableClipboardNotifier> mxClipboardListener;
 
     void                        InitFormats();
 

@@ -1060,8 +1060,6 @@ void TransferableHelper::ClearPrimarySelection()
         xSelection->setContents( nullptr, nullptr );
 }
 
-namespace {
-
 class TransferableClipboardNotifier : public ::cppu::WeakImplHelper< XClipboardListener >
 {
 private:
@@ -1085,7 +1083,6 @@ public:
     void    dispose();
 };
 
-}
 
 TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener )
     :mxNotifier( _rxClipboard, UNO_QUERY )
@@ -1131,25 +1128,14 @@ void TransferableClipboardNotifier::dispose()
     mpListener = nullptr;
 }
 
-struct TransferableDataHelper_Impl
-{
-    rtl::Reference<TransferableClipboardNotifier>  mxClipboardListener;
-
-    TransferableDataHelper_Impl()
-    {
-    }
-};
-
 TransferableDataHelper::TransferableDataHelper()
     : mxObjDesc(new TransferableObjectDescriptor)
-    , mxImpl(new TransferableDataHelper_Impl)
 {
 }
 
 TransferableDataHelper::TransferableDataHelper(const Reference< css::datatransfer::XTransferable >& rxTransferable)
     : mxTransfer(rxTransferable)
     , mxObjDesc(new TransferableObjectDescriptor)
-    , mxImpl(new TransferableDataHelper_Impl)
 {
     InitFormats();
 }
@@ -1159,7 +1145,6 @@ TransferableDataHelper::TransferableDataHelper(const TransferableDataHelper& rDa
     , mxClipboard(rDataHelper.mxClipboard)
     , maFormats(rDataHelper.maFormats)
     , mxObjDesc(new TransferableObjectDescriptor(*rDataHelper.mxObjDesc))
-    , mxImpl(new TransferableDataHelper_Impl)
 {
 }
 
@@ -1168,7 +1153,6 @@ TransferableDataHelper::TransferableDataHelper(TransferableDataHelper&& rDataHel
     , mxClipboard(std::move(rDataHelper.mxClipboard))
     , maFormats(std::move(rDataHelper.maFormats))
     , mxObjDesc(std::move(rDataHelper.mxObjDesc))
-    , mxImpl(new TransferableDataHelper_Impl)
 {
 }
 
@@ -1178,7 +1162,7 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
     {
         SolarMutexGuard g;
 
-        const bool bWasClipboardListening = mxImpl->mxClipboardListener.is();
+        const bool bWasClipboardListening = mxClipboardListener.is();
 
         if (bWasClipboardListening)
             StopClipboardListening();
@@ -1199,7 +1183,7 @@ TransferableDataHelper& TransferableDataHelper::operator=(TransferableDataHelper
 {
     SolarMutexGuard g;
 
-    const bool bWasClipboardListening = mxImpl->mxClipboardListener.is();
+    const bool bWasClipboardListening = mxClipboardListener.is();
 
     if (bWasClipboardListening)
         StopClipboardListening();
@@ -2133,19 +2117,19 @@ bool TransferableDataHelper::StartClipboardListening( )
 
     StopClipboardListening( );
 
-    mxImpl->mxClipboardListener = new TransferableClipboardNotifier(mxClipboard, *this);
+    mxClipboardListener = new TransferableClipboardNotifier(mxClipboard, *this);
 
-    return mxImpl->mxClipboardListener->isListening();
+    return mxClipboardListener->isListening();
 }
 
 void TransferableDataHelper::StopClipboardListening( )
 {
     SolarMutexGuard g;
 
-    if (mxImpl->mxClipboardListener.is())
+    if (mxClipboardListener.is())
     {
-        mxImpl->mxClipboardListener->dispose();
-        mxImpl->mxClipboardListener.clear();
+        mxClipboardListener->dispose();
+        mxClipboardListener.clear();
     }
 }
 
