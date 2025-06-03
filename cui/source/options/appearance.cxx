@@ -380,8 +380,6 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, SchemeChangeHdl, weld::ComboBox&, void)
         eMode = AppearanceMode::AUTO;
     }
 
-    // NOTE: LoadScheme must be called after updating the AppearanceMode as LoadScheme calls Lode
-    // which loads colors based on the current application appearance.
     MiscSettings::SetAppColorMode(eMode);
     pColorConfig->LoadScheme(sNewScheme);
 
