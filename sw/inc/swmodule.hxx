@@ -51,7 +51,6 @@ class SwStdFontConfig;
 class SwNavigationConfig;
 class SwTransferable;
 class SwToolbarConfigItem;
-class SwAttrPool;
 namespace svtools{ class ColorConfig;}
 class SvtUserOptions;
 enum class SwCompareMode;
@@ -95,7 +94,6 @@ class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, 
 
     std::unique_ptr<SwTableAutoFormatTable> m_xTableAutoFormatTable;
 
-    rtl::Reference<SwAttrPool> m_pAttrPool;
 
     // Current view is held here in order to avoid one's being forced
     // to work via GetActiveView.
@@ -234,11 +232,6 @@ public:
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) override;
     virtual std::unique_ptr<SfxTabPage> CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet ) override;
     SW_DLLPUBLIC virtual SfxStyleFamilies CreateStyleFamilies() override;
-
-    // Pool is created here and set at SfxShell.
-    void    InitAttrPool();
-    // Delete pool before it is too late.
-    void    RemoveAttrPool();
 
     // Invalidates online spell-wrong-lists if necessary.
     static void  CheckSpellChanges( bool bOnlineSpelling,

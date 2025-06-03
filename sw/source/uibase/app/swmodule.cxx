@@ -337,20 +337,6 @@ void SwDLL::RegisterControls()
     SwJumpToSpecificPageControl::RegisterControl(SID_JUMP_TO_SPECIFIC_PAGE, pMod);
 }
 
-// Load Module (only dummy for linking of the DLL)
-void    SwModule::InitAttrPool()
-{
-    OSL_ENSURE(!m_pAttrPool, "Pool already exists!");
-    m_pAttrPool = new SwAttrPool(nullptr);
-    SetPool(m_pAttrPool.get());
-}
-
-void    SwModule::RemoveAttrPool()
-{
-    SetPool(nullptr);
-    m_pAttrPool.clear();
-}
-
 SfxStyleFamilies SwModule::CreateStyleFamilies()
 {
     SfxStyleFamilies aStyleFamilies;

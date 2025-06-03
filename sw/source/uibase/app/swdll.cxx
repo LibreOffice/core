@@ -95,7 +95,6 @@ SwDLL::SwDLL()
     SfxObjectFactory* pWDocFact = &SwWebDocShell::Factory();
 
     auto pUniqueModule = std::make_unique<SwModule>(pWDocFact, pDocFact, pGlobDocFact);
-    SwModule* pModule = pUniqueModule.get();
     SfxApplication::SetModule(SfxToolsModule::Writer, std::move(pUniqueModule));
 
     pWDocFact->SetDocumentServiceName(u"com.sun.star.text.WebDocument"_ustr);
@@ -119,9 +118,6 @@ SwDLL::SwDLL()
     ::InitCore();
     m_pFilters.reset(new sw::Filters);
     ::InitUI();
-
-    pModule->InitAttrPool();
-    // now SWModule can create its Pool
 
     // register your view-factories here
     RegisterFactories();
@@ -149,9 +145,6 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
         // fdo#86494 SwAutoCorrect must be deleted before FinitCore
         m_pAutoCorrCfg->SetAutoCorrect(nullptr); // delete SwAutoCorrect before exit handlers
     }
-
-    // Pool has to be deleted before statics are
-    SwModule::get()->RemoveAttrPool();
 
     ::FinitUI();
     m_pFilters.reset();
