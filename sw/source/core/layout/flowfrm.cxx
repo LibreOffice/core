@@ -2692,36 +2692,31 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
 
     // i#21478 - don't move backward, if flow frame wants to
     // keep with next frame and next frame is locked.
-    // i#38232 - If next frame is a table, do *not* check,
-    // if it's locked.
     if ( pNewUpper && !IsFollow() && !m_rThis.IsHiddenNow() &&
          m_rThis.GetAttrSet()->GetKeep().GetValue() && m_rThis.GetIndNext() )
     {
         SwFrame* pIndNext = m_rThis.GetIndNext();
-        // i#38232
-        if ( !pIndNext->IsTabFrame() )
+        // get first content of section, while empty sections are skipped
+        while ( pIndNext && pIndNext->IsSctFrame() )
         {
-            // get first content of section, while empty sections are skipped
-            while ( pIndNext && pIndNext->IsSctFrame() )
+            if( static_cast<SwSectionFrame*>(pIndNext)->GetSection() )
             {
-                if( static_cast<SwSectionFrame*>(pIndNext)->GetSection() )
+                SwFrame* pTmp = static_cast<SwSectionFrame*>(pIndNext)->ContainsAny();
+                if ( pTmp )
                 {
-                    SwFrame* pTmp = static_cast<SwSectionFrame*>(pIndNext)->ContainsAny();
-                    if ( pTmp )
-                    {
-                        pIndNext = pTmp;
-                        break;
-                    }
+                    pIndNext = pTmp;
+                    break;
                 }
-                pIndNext = pIndNext->GetIndNext();
             }
-            OSL_ENSURE( !pIndNext || dynamic_cast<const SwTextFrame*>( pIndNext) !=  nullptr,
-                    "<SwFlowFrame::MovedBwd(..)> - incorrect next found." );
-            if ( pIndNext && pIndNext->IsFlowFrame() &&
-                 SwFlowFrame::CastFlowFrame(pIndNext)->IsJoinLocked() )
-            {
-                pNewUpper = nullptr;
-            }
+            pIndNext = pIndNext->GetIndNext();
+        }
+        OSL_ENSURE(!pIndNext || dynamic_cast<const SwTextFrame*>(pIndNext)
+                       || dynamic_cast<const SwTabFrame*>(pIndNext),
+                "<SwFlowFrame::MovedBwd(..)> - incorrect next found." );
+        if ( pIndNext && pIndNext->IsFlowFrame() &&
+             SwFlowFrame::CastFlowFrame(pIndNext)->IsJoinLocked() )
+        {
+            pNewUpper = nullptr;
         }
     }
 
