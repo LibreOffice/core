@@ -157,6 +157,11 @@ void SbxDecimal::setLong( sal_Int32 val )
     VarDecFromI4(static_cast<LONG>(val), &maDec);
 }
 
+bool SbxDecimal::setHyper( sal_Int64 val )
+{
+    return SUCCEEDED(VarDecFromI8(static_cast<LONG64>(val), &maDec));
+}
+
 void SbxDecimal::setUShort( sal_uInt16 val )
 {
     VarDecFromUI2( val, &maDec );
@@ -165,6 +170,11 @@ void SbxDecimal::setUShort( sal_uInt16 val )
 void SbxDecimal::setULong( sal_uInt32 val )
 {
     VarDecFromUI4( static_cast<ULONG>(val), &maDec );
+}
+
+bool SbxDecimal::setUHyper( sal_uInt64 val )
+{
+    return SUCCEEDED(VarDecFromUI8( static_cast<ULONG64>(val), &maDec ));
 }
 
 bool SbxDecimal::setSingle( float val )
@@ -241,6 +251,12 @@ bool SbxDecimal::getChar( sal_Unicode& rVal )
     return bRet;
 }
 
+bool SbxDecimal::getByte( sal_uInt8& rVal )
+{
+    bool bRet = ( VarUI1FromDec( &maDec, &rVal ) == S_OK );
+    return bRet;
+}
+
 bool SbxDecimal::getShort( sal_Int16& rVal )
 {
     bool bRet = ( VarI2FromDec( &maDec, &rVal ) == S_OK );
@@ -253,6 +269,12 @@ bool SbxDecimal::getLong( sal_Int32& rVal )
     return bRet;
 }
 
+bool SbxDecimal::getHyper( sal_Int64& rVal )
+{
+    bool bRet = ( VarI8FromDec( &maDec, &rVal ) == S_OK );
+    return bRet;
+}
+
 bool SbxDecimal::getUShort( sal_uInt16& rVal )
 {
     bool bRet = ( VarUI2FromDec( &maDec, &rVal ) == S_OK );
@@ -262,6 +284,12 @@ bool SbxDecimal::getUShort( sal_uInt16& rVal )
 bool SbxDecimal::getULong( sal_uInt32& rVal )
 {
     bool bRet = ( VarUI4FromDec( &maDec, &rVal ) == S_OK );
+    return bRet;
+}
+
+bool SbxDecimal::getUHyper( sal_uInt64& rVal )
+{
+    bool bRet = ( VarUI8FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
 }
 
@@ -319,8 +347,10 @@ void SbxDecimal::setChar( SAL_UNUSED_PARAMETER sal_Unicode ) {}
 void SbxDecimal::setByte( SAL_UNUSED_PARAMETER sal_uInt8 ) {}
 void SbxDecimal::setShort( SAL_UNUSED_PARAMETER sal_Int16 ) {}
 void SbxDecimal::setLong( SAL_UNUSED_PARAMETER sal_Int32 ) {}
+bool SbxDecimal::setHyper( SAL_UNUSED_PARAMETER sal_Int64 ) { return false; }
 void SbxDecimal::setUShort( SAL_UNUSED_PARAMETER sal_uInt16 ) {}
 void SbxDecimal::setULong( SAL_UNUSED_PARAMETER sal_uInt32 ) {}
+bool SbxDecimal::setUHyper( SAL_UNUSED_PARAMETER sal_uInt64 ) { return false; }
 bool SbxDecimal::setSingle( SAL_UNUSED_PARAMETER float ) { return false; }
 bool SbxDecimal::setDouble( SAL_UNUSED_PARAMETER double ) { return false; }
 void SbxDecimal::setInt( SAL_UNUSED_PARAMETER int ) {}
@@ -328,10 +358,13 @@ void SbxDecimal::setUInt( SAL_UNUSED_PARAMETER unsigned int ) {}
 bool SbxDecimal::setString( SAL_UNUSED_PARAMETER OUString* ) { return false; }
 
 bool SbxDecimal::getChar( SAL_UNUSED_PARAMETER sal_Unicode& ) { return false; }
+bool SbxDecimal::getByte( SAL_UNUSED_PARAMETER sal_uInt8& ) { return false; }
 bool SbxDecimal::getShort( SAL_UNUSED_PARAMETER sal_Int16& ) { return false; }
 bool SbxDecimal::getLong( SAL_UNUSED_PARAMETER sal_Int32& ) { return false; }
+bool SbxDecimal::getHyper( SAL_UNUSED_PARAMETER sal_Int64& ) { return false; }
 bool SbxDecimal::getUShort( SAL_UNUSED_PARAMETER sal_uInt16& ) { return false; }
 bool SbxDecimal::getULong( SAL_UNUSED_PARAMETER sal_uInt32& ) { return false; }
+bool SbxDecimal::getUHyper( SAL_UNUSED_PARAMETER sal_uInt64& ) { return false; }
 bool SbxDecimal::getSingle( SAL_UNUSED_PARAMETER float& ) { return false; }
 bool SbxDecimal::getDouble( SAL_UNUSED_PARAMETER double& ) { return false; }
 
@@ -373,6 +406,12 @@ void SbxDecimal::getString( OUString& rString )
 #endif
 }
 
+void SbxDecimal::HandleFailure(bool isSuccess)
+{
+    if (!isSuccess)
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+}
+
 SbxDecimal* ImpCreateDecimal( SbxValues* p )
 {
     if( !p )
@@ -389,25 +428,18 @@ SbxDecimal* ImpCreateDecimal( SbxValues* p )
 
 SbxDecimal* ImpGetDecimal( const SbxValues* p )
 {
-    SbxValues aTmp;
-    SbxDecimal* pnDecRes;
-
     SbxDataType eType = p->eType;
     if( eType == SbxDECIMAL && p->pDecimal )
     {
-        pnDecRes = new SbxDecimal( *p->pDecimal );
+        SbxDecimal* pnDecRes = new SbxDecimal( *p->pDecimal );
         pnDecRes->addRef();
         return pnDecRes;
     }
-    pnDecRes = new SbxDecimal();
+    SbxDecimal* pnDecRes = new SbxDecimal();
     pnDecRes->addRef();
 
-start:
     switch( +eType )
     {
-        case SbxNULL:
-            SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
-            [[fallthrough]];
         case SbxEMPTY:
             pnDecRes->setShort( 0 ); break;
         case SbxCHAR:
@@ -425,35 +457,37 @@ start:
         case SbxULONG:
             pnDecRes->setULong( p->nULong ); break;
         case SbxSINGLE:
-            if( !pnDecRes->setSingle( p->nSingle ) )
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+            pnDecRes->setWithOverflow(p->nSingle);
+            break;
+        case SbxBYREF | SbxSINGLE:
+            pnDecRes->setWithOverflow(*p->pSingle);
             break;
         case SbxCURRENCY:
-            {
-                if( !pnDecRes->setDouble( ImpCurrencyToDouble( p->nInt64 ) ) )
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                break;
-            }
+            pnDecRes->setWithOverflow(CurTo<double>(p->nInt64));
+            break;
+        case SbxBYREF | SbxCURRENCY:
+            pnDecRes->setWithOverflow(CurTo<double>(*p->pnInt64));
+            break;
         case SbxSALINT64:
-            {
-                if( !pnDecRes->setDouble( static_cast<double>(p->nInt64) ) )
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                break;
-            }
+            pnDecRes->setWithOverflow(p->nInt64);
+            break;
+        case SbxBYREF | SbxSALINT64:
+            pnDecRes->setWithOverflow(*p->pnInt64);
+            break;
         case SbxSALUINT64:
-            {
-                if( !pnDecRes->setDouble( static_cast<double>(p->uInt64) ) )
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                break;
-            }
+            pnDecRes->setWithOverflow(p->uInt64);
+            break;
+        case SbxBYREF | SbxSALUINT64:
+            pnDecRes->setWithOverflow(*p->puInt64);
+            break;
         case SbxDATE:
         case SbxDOUBLE:
-        {
-            double dVal = p->nDouble;
-            if( !pnDecRes->setDouble( dVal ) )
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+            pnDecRes->setWithOverflow(p->nDouble);
             break;
-        }
+        case SbxBYREF | SbxDATE:
+        case SbxBYREF | SbxDOUBLE:
+            pnDecRes->setWithOverflow(*p->pDouble);
+            break;
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
@@ -461,9 +495,7 @@ start:
                 pnDecRes->setString( p->pOUString );
             break;
         case SbxOBJECT:
-        {
-            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
-            if( pVal )
+            if (SbxValue* pVal = dynamic_cast<SbxValue*>(p->pObj))
                 pnDecRes->setDecimal( pVal->GetDecimal() );
             else
             {
@@ -471,7 +503,6 @@ start:
                 pnDecRes->setShort( 0 );
             }
             break;
-        }
 
         case SbxBYREF | SbxCHAR:
             pnDecRes->setChar( *p->pChar ); break;
@@ -488,21 +519,6 @@ start:
         case SbxBYREF | SbxUSHORT:
             pnDecRes->setUShort( *p->pUShort ); break;
 
-        // from here on had to be tested
-        case SbxBYREF | SbxSINGLE:
-            aTmp.nSingle = *p->pSingle; goto ref;
-        case SbxBYREF | SbxDATE:
-        case SbxBYREF | SbxDOUBLE:
-            aTmp.nDouble = *p->pDouble; goto ref;
-        case SbxBYREF | SbxCURRENCY:
-        case SbxBYREF | SbxSALINT64:
-            aTmp.nInt64 = *p->pnInt64; goto ref;
-        case SbxBYREF | SbxSALUINT64:
-            aTmp.uInt64 = *p->puInt64; goto ref;
-        ref:
-            aTmp.eType = SbxDataType( p->eType & 0x0FFF );
-            p = &aTmp; goto start;
-
         default:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION ); pnDecRes->setShort( 0 );
     }
@@ -514,39 +530,69 @@ void ImpPutDecimal( SbxValues* p, SbxDecimal* pDec )
     if( !pDec )
         return;
 
-    SbxValues aTmp;
-start:
     switch( +p->eType )
     {
-        // here had to be tested
         case SbxCHAR:
-            aTmp.pChar = &p->nChar; goto direct;
+            assignWithOverflowTo(p->nChar, *pDec);
+            break;
+        case SbxBYREF | SbxCHAR:
+            assignWithOverflowTo(*p->pChar, *pDec);
+            break;
         case SbxBYTE:
-            aTmp.pByte = &p->nByte; goto direct;
-        case SbxULONG:
-            aTmp.pULong = &p->nULong; goto direct;
-        case SbxERROR:
-        case SbxUSHORT:
-            aTmp.pUShort = &p->nUShort; goto direct;
+            assignWithOverflowTo(p->nByte, *pDec);
+            break;
+        case SbxBYREF | SbxBYTE:
+            assignWithOverflowTo(*p->pByte, *pDec);
+            break;
         case SbxINTEGER:
         case SbxBOOL:
-            aTmp.pInteger = &p->nInteger; goto direct;
+            assignWithOverflowTo(p->nInteger, *pDec);
+            break;
+        case SbxBYREF | SbxINTEGER:
+        case SbxBYREF | SbxBOOL:
+            assignWithOverflowTo(*p->pInteger, *pDec);
+            break;
+        case SbxERROR:
+        case SbxUSHORT:
+            assignWithOverflowTo(p->nUShort, *pDec);
+            break;
+        case SbxBYREF | SbxERROR:
+        case SbxBYREF | SbxUSHORT:
+            assignWithOverflowTo(*p->pUShort, *pDec);
+            break;
         case SbxLONG:
-            aTmp.pLong = &p->nLong; goto direct;
+            assignWithOverflowTo(p->nLong, *pDec);
+            break;
+        case SbxBYREF | SbxLONG:
+            assignWithOverflowTo(*p->pLong, *pDec);
+            break;
+        case SbxULONG:
+            assignWithOverflowTo(p->nULong, *pDec);
+            break;
+        case SbxBYREF | SbxULONG:
+            assignWithOverflowTo(*p->pULong, *pDec);
+            break;
         case SbxCURRENCY:
+            p->nInt64 = CurFrom(pDec->getWithOverflow<double>());
+            break;
+        case SbxBYREF | SbxCURRENCY:
+            *p->pnInt64 = CurFrom(pDec->getWithOverflow<double>());
+            break;
         case SbxSALINT64:
-            aTmp.pnInt64 = &p->nInt64; goto direct;
+            assignWithOverflowTo(p->nInt64, *pDec);
+            break;
+        case SbxBYREF | SbxSALINT64:
+            assignWithOverflowTo(*p->pnInt64, *pDec);
+            break;
         case SbxSALUINT64:
-            aTmp.puInt64 = &p->uInt64; goto direct;
+            assignWithOverflowTo(p->uInt64, *pDec);
+            break;
+        case SbxBYREF | SbxSALUINT64:
+            assignWithOverflowTo(*p->puInt64, *pDec);
+            break;
 
-        direct:
-            aTmp.eType = SbxDataType( p->eType | SbxBYREF );
-            p = &aTmp; goto start;
-
-        // from here on no longer
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
-        {
             if( pDec != p->pDecimal )
             {
                 releaseDecimalPtr( p->pDecimal );
@@ -555,22 +601,20 @@ start:
                     pDec->addRef();
             }
             break;
-        }
         case SbxSINGLE:
-        {
-            float f(0.0);
-            pDec->getSingle( f );
-            p->nSingle = f;
+            assignWithOverflowTo(p->nSingle, *pDec);
             break;
-        }
+        case SbxBYREF | SbxSINGLE:
+            assignWithOverflowTo(*p->pSingle, *pDec);
+            break;
         case SbxDATE:
         case SbxDOUBLE:
-        {
-            double d(0.0);
-            pDec->getDouble( d );
-            p->nDouble = d;
+            assignWithOverflowTo(p->nDouble, *pDec);
             break;
-        }
+        case SbxBYREF | SbxDATE:
+        case SbxBYREF | SbxDOUBLE:
+            assignWithOverflowTo(*p->pDouble, *pDec);
+            break;
 
         case SbxLPSTR:
         case SbxSTRING:
@@ -580,100 +624,12 @@ start:
             pDec->getString( *p->pOUString );
             break;
         case SbxOBJECT:
-        {
-            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
-            if( pVal )
+            if (SbxValue* pVal = dynamic_cast<SbxValue*>(p->pObj))
                 pVal->PutDecimal( pDec );
             else
                 SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT );
             break;
-        }
 
-        case SbxBYREF | SbxCHAR:
-            if( !pDec->getChar( *p->pChar ) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                *p->pChar = 0;
-            }
-            break;
-        case SbxBYREF | SbxBYTE:
-            if( !pDec->getChar( *p->pChar ) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                *p->pByte = 0;
-            }
-            break;
-        case SbxBYREF | SbxINTEGER:
-        case SbxBYREF | SbxBOOL:
-            if( !pDec->getShort( *p->pInteger ) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                *p->pInteger = 0;
-            }
-            break;
-        case SbxBYREF | SbxERROR:
-        case SbxBYREF | SbxUSHORT:
-            if( !pDec->getUShort( *p->pUShort ) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                *p->pUShort = 0;
-            }
-            break;
-        case SbxBYREF | SbxLONG:
-            if( !pDec->getLong( *p->pLong ) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                *p->pLong = 0;
-            }
-            break;
-        case SbxBYREF | SbxULONG:
-            if( !pDec->getULong( *p->pULong ) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                *p->pULong = 0;
-            }
-            break;
-        case SbxBYREF | SbxCURRENCY:
-            {
-            double d(0.0);
-            if( !pDec->getDouble( d ) )
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-            *p->pnInt64 = ImpDoubleToCurrency( d );
-            }
-            break;
-        case SbxBYREF | SbxSALINT64:
-            {
-            double d(0.0);
-            if( !pDec->getDouble( d ) )
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-            else
-                *p->pnInt64 = ImpDoubleToSalInt64( d );
-            }
-            break;
-        case SbxBYREF | SbxSALUINT64:
-            {
-            double d(0.0);
-            if( !pDec->getDouble( d ) )
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-            else
-                *p->puInt64 = ImpDoubleToSalUInt64( d );
-            }
-            break;
-        case SbxBYREF | SbxSINGLE:
-            if( !pDec->getSingle( *p->pSingle ) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                *p->pSingle = 0;
-            }
-            break;
-        case SbxBYREF | SbxDATE:
-        case SbxBYREF | SbxDOUBLE:
-            if( !pDec->getDouble( *p->pDouble ) )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                *p->pDouble = 0;
-            }
-            break;
         default:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
     }

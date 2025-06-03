@@ -104,129 +104,98 @@ static sal_Int64 ImpStringToCurrency(const rtl::OUString& rStr)
         SbxBase::SetError(ERRCODE_BASIC_CONVERSION);
     }
 
-    return ImpDoubleToCurrency(fResult);
+    return CurFrom(fResult);
 }
 
 sal_Int64 ImpGetCurrency( const SbxValues* p )
 {
-    SbxValues   aTmp;
-    sal_Int64  nRes;
-start:
     switch( +p->eType )
     {
         case SbxERROR:
         case SbxNULL:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
-            nRes = 0; break;
+            return 0;
         case SbxEMPTY:
-            nRes = 0; break;
+            return 0;
         case SbxCURRENCY:
-            nRes = p->nInt64; break;
+            return p->nInt64;
         case SbxBYTE:
-            nRes = CurFrom(p->nByte);
-            break;
+            return CurFrom(p->nByte);
         case SbxCHAR:
-            nRes = CurFrom(p->nChar);
-            break;
+            return CurFrom(p->nChar);
         case SbxBOOL:
         case SbxINTEGER:
-            nRes = CurFrom(p->nInteger);
-            break;
+            return CurFrom(p->nInteger);
         case SbxUSHORT:
-            nRes = CurFrom(p->nUShort);
-            break;
+            return CurFrom(p->nUShort);
         case SbxLONG:
-            nRes = CurFrom(p->nLong);
-            break;
+            return CurFrom(p->nLong);
         case SbxULONG:
-            nRes = CurFrom(p->nULong);
-            break;
+            return CurFrom(p->nULong);
         case SbxSALINT64:
-            nRes = CurFrom(p->nInt64);
-            break;
+            return CurFrom(p->nInt64);
         case SbxSALUINT64:
-            nRes = CurFrom(p->uInt64);
-            break;
+            return CurFrom(p->uInt64);
         case SbxSINGLE:
-            nRes = ImpDoubleToCurrency(p->nSingle);
-            break;
+            return CurFrom(p->nSingle);
 
         case SbxDATE:
         case SbxDOUBLE:
-            nRes = ImpDoubleToCurrency( p->nDouble );
-            break;
+            return CurFrom(p->nDouble);
 
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
-            {
-            double d = 0.0;
             if( p->pDecimal )
+            {
+                double d = 0.0;
                 p->pDecimal->getDouble( d );
-            nRes = ImpDoubleToCurrency( d );
-            break;
+                return CurFrom(d);
             }
-
+            return 0;
 
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pOUString )
-                nRes=0;
-            else
-                nRes = ImpStringToCurrency( *p->pOUString );
-            break;
+            if (p->pOUString)
+                return ImpStringToCurrency( *p->pOUString );
+            return 0;
         case SbxOBJECT:
-        {
-            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
-            if( pVal )
-                nRes = pVal->GetCurrency();
-            else
-            {
-                SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT );
-                nRes=0;
-            }
-            break;
-        }
+            if (SbxValue* pVal = dynamic_cast<SbxValue*>(p->pObj))
+                return pVal->GetCurrency();
+            SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT );
+            return 0;
 
         case SbxBYREF | SbxCHAR:
-            nRes = CurFrom(*p->pChar);
-            break;
+            return CurFrom(*p->pChar);
         case SbxBYREF | SbxBYTE:
-            nRes = CurFrom(*p->pByte);
-            break;
+            return CurFrom(*p->pByte);
         case SbxBYREF | SbxBOOL:
         case SbxBYREF | SbxINTEGER:
-            nRes = CurFrom(*p->pInteger);
-            break;
+            return CurFrom(*p->pInteger);
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
-            nRes = CurFrom(*p->pUShort);
-            break;
+            return CurFrom(*p->pUShort);
 
-        // from here on had to be tested
         case SbxBYREF | SbxLONG:
-            aTmp.nLong = *p->pLong; goto ref;
+            return CurFrom(*p->pLong);
         case SbxBYREF | SbxULONG:
-            aTmp.nULong = *p->pULong; goto ref;
+            return CurFrom(*p->pULong);
         case SbxBYREF | SbxSINGLE:
-            aTmp.nSingle = *p->pSingle; goto ref;
+            return CurFrom(*p->pSingle);
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
-            aTmp.nDouble = *p->pDouble; goto ref;
+            return CurFrom(*p->pDouble);
         case SbxBYREF | SbxCURRENCY:
+            return *p->pnInt64;
         case SbxBYREF | SbxSALINT64:
-            aTmp.nInt64 = *p->pnInt64; goto ref;
+            return CurFrom(*p->pnInt64);
         case SbxBYREF | SbxSALUINT64:
-            aTmp.uInt64 = *p->puInt64; goto ref;
-        ref:
-            aTmp.eType = SbxDataType( p->eType & ~SbxBYREF );
-            p = &aTmp; goto start;
+            return CurFrom(*p->puInt64);
 
         default:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
-            nRes=0;
+            return 0;
     }
-    return nRes;
 }
 
 void ImpPutCurrency( SbxValues* p, const sal_Int64 r )
@@ -235,7 +204,7 @@ void ImpPutCurrency( SbxValues* p, const sal_Int64 r )
     {
         case SbxDATE:
         case SbxDOUBLE:
-            p->nDouble =  ImpCurrencyToDouble( r ); break;
+            p->nDouble =  CurTo<double>( r ); break;
         case SbxSALUINT64:
             p->uInt64 = CurTo<sal_uInt64>(r); break;
         case SbxSALINT64:
@@ -246,12 +215,9 @@ void ImpPutCurrency( SbxValues* p, const sal_Int64 r )
 
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
-            {
-            SbxDecimal* pDec = ImpCreateDecimal( p );
-            if( !pDec->setDouble( ImpCurrencyToDouble( r ) ) )
+            if (!ImpCreateDecimal(p)->setDouble(CurTo<double>(r)))
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
             break;
-            }
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
@@ -261,14 +227,11 @@ void ImpPutCurrency( SbxValues* p, const sal_Int64 r )
             *p->pOUString = ImpCurrencyToString( r );
             break;
         case SbxOBJECT:
-        {
-            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
-            if( pVal )
+            if (SbxValue* pVal = dynamic_cast<SbxValue*>(p->pObj))
                 pVal->PutCurrency( r );
             else
                 SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT );
             break;
-        }
         case SbxCHAR:
             p->nChar = CurTo<sal_Unicode>(r); break;
         case SbxBYREF | SbxCHAR:
@@ -304,11 +267,12 @@ void ImpPutCurrency( SbxValues* p, const sal_Int64 r )
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = CurTo<sal_uInt64>(r); break;
         case SbxSINGLE:
+            p->nSingle = CurTo<float>( r ); break;
         case SbxBYREF | SbxSINGLE:
-            p->nSingle = r / float(CURRENCY_FACTOR); break;
+            *p->pSingle = CurTo<float>( r ); break;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
-            *p->pDouble = ImpCurrencyToDouble( r ); break;
+            *p->pDouble = CurTo<double>( r ); break;
         default:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
     }

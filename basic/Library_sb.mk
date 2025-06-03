@@ -113,25 +113,18 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/runtime \
 	basic/source/sbx/sbxarray \
 	basic/source/sbx/sbxbool \
-	basic/source/sbx/sbxbyte \
-	basic/source/sbx/sbxchar \
 	basic/source/sbx/sbxcoll \
 	basic/source/sbx/sbxcurr \
 	basic/source/sbx/sbxbase \
 	basic/source/sbx/sbxdate \
-	basic/source/sbx/sbxdbl \
 	basic/source/sbx/sbxdec \
 	basic/source/sbx/sbxexec \
 	basic/source/sbx/sbxform \
 	basic/source/sbx/sbxint \
-	basic/source/sbx/sbxlng \
 	basic/source/sbx/sbxobj \
 	basic/source/sbx/sbxres \
 	basic/source/sbx/sbxscan \
-	basic/source/sbx/sbxsng \
 	basic/source/sbx/sbxstr \
-	basic/source/sbx/sbxuint \
-	basic/source/sbx/sbxulng \
 	basic/source/sbx/sbxvalue \
 	basic/source/sbx/sbxvar \
 ))
