@@ -128,7 +128,7 @@ private:
 
     void applyDefaults(bool bParaProperties);
 
-    void ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::vector<StyleSheetEntryPtr> const& rEntries);
+    std::vector<OUString> ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::vector<StyleSheetEntryPtr> const& rEntries);
 };
 
 
