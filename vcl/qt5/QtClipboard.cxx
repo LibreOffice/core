@@ -24,6 +24,7 @@
 #include <utility>
 
 #if defined EMSCRIPTEN && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <comphelper/diagnose_ex.hxx>
 #include <emscripten.h>
 #endif
 
