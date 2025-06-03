@@ -6,7 +6,7 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <child>
-      <object class="GtkMenuItem">
+      <object class="GtkMenuItem" id="sortmenuitem">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="sortmenu|macrosort">_Sorting</property>
