@@ -957,7 +957,7 @@ void TransferableHelper::PrepareOLE( const TransferableObjectDescriptor& rObjDes
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
 }
 
-void TransferableHelper::CopyToClipboard(const Reference<XClipboard>& rClipboard) const
+void TransferableHelper::CopyToClipboard(const Reference<XClipboard>& rClipboard)
 {
     if( rClipboard.is() )
         mxClipboard = rClipboard;
@@ -967,19 +967,18 @@ void TransferableHelper::CopyToClipboard(const Reference<XClipboard>& rClipboard
 
     try
     {
-        TransferableHelper* pThis = const_cast< TransferableHelper* >( this );
-        pThis->mxTerminateListener = new TerminateListener( *pThis );
+        mxTerminateListener = new TerminateListener(*this);
         Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-        xDesktop->addTerminateListener( pThis->mxTerminateListener );
+        xDesktop->addTerminateListener(mxTerminateListener);
 
-        mxClipboard->setContents( pThis, pThis );
+        mxClipboard->setContents(this, this);
     }
     catch( const css::uno::Exception& )
     {
     }
 }
 
-void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
+void TransferableHelper::CopyToClipboard(vcl::Window* pWindow)
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
     Reference< XClipboard > xClipboard;
@@ -990,26 +989,25 @@ void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
     CopyToClipboard(xClipboard);
 }
 
-void TransferableHelper::CopyToSelection(const Reference<XClipboard>& rSelection) const
+void TransferableHelper::CopyToSelection(const Reference<XClipboard>& rSelection)
 {
     if( !rSelection.is() || mxTerminateListener.is() )
         return;
 
     try
     {
-        TransferableHelper* pThis = const_cast< TransferableHelper* >( this );
-        pThis->mxTerminateListener = new TerminateListener( *pThis );
+        mxTerminateListener = new TerminateListener(*this);
         Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-        xDesktop->addTerminateListener( pThis->mxTerminateListener );
+        xDesktop->addTerminateListener(mxTerminateListener);
 
-        rSelection->setContents( pThis, pThis );
+        rSelection->setContents(this, this);
     }
     catch( const css::uno::Exception& )
     {
     }
 }
 
-void TransferableHelper::CopyToPrimarySelection() const
+void TransferableHelper::CopyToPrimarySelection()
 {
     CopyToSelection(GetSystemPrimarySelection());
 }
