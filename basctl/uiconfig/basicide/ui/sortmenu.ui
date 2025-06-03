@@ -22,7 +22,6 @@
                 <property name="label" translatable="yes" context="sortmenu|alphabetically">_Alphabetically</property>
                 <property name="use-underline">True</property>
                 <property name="draw-as-radio">True</property>
-                <property name="group">properorder</property>
               </object>
             </child>
             <child>
@@ -32,6 +31,7 @@
                 <property name="label" translatable="yes" context="sortmenu|properorder">_Proper order</property>
                 <property name="use-underline">True</property>
                 <property name="draw-as-radio">True</property>
+                <property name="group">alphabetically</property>
               </object>
             </child>
           </object>
