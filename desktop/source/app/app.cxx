@@ -1380,8 +1380,6 @@ int Desktop::Main()
 
     Reference< XRestartManager > xRestartManager( OfficeRestartManager::get(xContext) );
 
-    Reference< XDesktop2 > xDesktop;
-
     RegisterServices();
 
     SetSplashScreenProgress(25);
@@ -1434,7 +1432,7 @@ int Desktop::Main()
     SetSplashScreenProgress(40);
     recordTime(startT, "SetSplashScreenProgress(40): time = ");
 
-    xDesktop = css::frame::Desktop::create( xContext );
+    Reference<XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
 
 #if HAVE_FEATURE_UPDATE_MAR
     const char* pUpdaterTestEnable = std::getenv("LIBO_UPDATER_TEST_ENABLE");
