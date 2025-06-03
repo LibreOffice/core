@@ -3319,7 +3319,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
 
     SwNodeOffset nPamStartNI = maRedlineTable[nPosStart]->Start()->GetNodeIndex();
     sal_Int32 nPamStartCI = maRedlineTable[nPosStart]->Start()->GetContentIndex();
-    SwNodeOffset nPamEndtNI = maRedlineTable[nPosEnd]->End()->GetNodeIndex();
+    SwNodeOffset nPamEndNI = maRedlineTable[nPosEnd]->End()->GetNodeIndex();
     sal_Int32 nPamEndCI = maRedlineTable[nPosEnd]->End()->GetContentIndex();
     do
     {
@@ -3330,8 +3330,8 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
                 && pTmp->Start()->GetContentIndex() < nPamStartCI))
             break;
 
-        if (pTmp->End()->GetNodeIndex() > nPamEndtNI
-            || (pTmp->End()->GetNodeIndex() == nPamEndtNI
+        if (pTmp->End()->GetNodeIndex() > nPamEndNI
+            || (pTmp->End()->GetNodeIndex() == nPamEndNI
                 && pTmp->End()->GetContentIndex() > nPamEndCI))
         {
         }
@@ -3342,7 +3342,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
                     std::make_unique<SwUndoAcceptRedline>(*pTmp));
             }
-            nPamEndtNI = pTmp->Start()->GetNodeIndex();
+            nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
 
             bool bHierarchicalFormat = pTmp->GetType() == RedlineType::Format && pTmp->GetStackCount() > 1;
@@ -3372,7 +3372,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
                     std::make_unique<SwUndoAcceptRedline>(*pTmp, 1));
             }
-            nPamEndtNI = pTmp->Start()->GetNodeIndex();
+            nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
             if (aOrigData.GetType() == RedlineType::Delete)
             {
@@ -3395,7 +3395,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
                     std::make_unique<SwUndoAcceptRedline>(*pTmp));
             }
-            nPamEndtNI = pTmp->Start()->GetNodeIndex();
+            nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
             bRet |= lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete);
             nRdlIdx++;
@@ -3631,7 +3631,7 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
 
     SwNodeOffset nPamStartNI = maRedlineTable[nPosStart]->Start()->GetNodeIndex();
     sal_Int32 nPamStartCI = maRedlineTable[nPosStart]->Start()->GetContentIndex();
-    SwNodeOffset nPamEndtNI = maRedlineTable[nPosEnd]->End()->GetNodeIndex();
+    SwNodeOffset nPamEndNI = maRedlineTable[nPosEnd]->End()->GetNodeIndex();
     sal_Int32 nPamEndCI = maRedlineTable[nPosEnd]->End()->GetContentIndex();
     do
     {
@@ -3642,8 +3642,8 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
                 && pTmp->Start()->GetContentIndex() < nPamStartCI))
             break;
 
-        if (pTmp->End()->GetNodeIndex() > nPamEndtNI
-            || (pTmp->End()->GetNodeIndex() == nPamEndtNI
+        if (pTmp->End()->GetNodeIndex() > nPamEndNI
+            || (pTmp->End()->GetNodeIndex() == nPamEndNI
                 && pTmp->End()->GetContentIndex() > nPamEndCI))
         {
         }
@@ -3669,7 +3669,7 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
 #endif
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndoRdl));
             }
-            nPamEndtNI = pTmp->Start()->GetNodeIndex();
+            nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
 
             if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
@@ -3705,7 +3705,7 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
 #endif
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndoRdl));
             }
-            nPamEndtNI = pTmp->Start()->GetNodeIndex();
+            nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
             std::optional<SwPaM> oPam;
             RedlineType eInnerType = aOrigData.GetType();
@@ -3746,7 +3746,7 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
                     = std::make_unique<SwUndoRejectRedline>(*pTmp);
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndoRdl));
             }
-            nPamEndtNI = pTmp->Start()->GetNodeIndex();
+            nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
             bRet |= lcl_RejectRedline(maRedlineTable, nRdlIdx, bCallDelete);
             nRdlIdx++;
