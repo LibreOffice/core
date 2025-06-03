@@ -210,18 +210,6 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
     rRenderContext.DrawRect(aRect);
 
     const tools::Rectangle aDefineRect(aRect);
-    const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes = getPageFillAttributes();
-
-    if (!rFillAttributes || !rFillAttributes->isUsed())
-    {
-        // If there is no fill, use fallback color
-        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-        const Color& rFieldColor = rStyleSettings.GetFieldColor();
-
-        setPageFillAttributes(
-            std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
-                rFieldColor));
-    }
 
     // #97495# make sure that the automatic column width's are always equal
     bool bAutoWidth = m_pColMgr->IsAutoWidth();
@@ -326,6 +314,7 @@ SwColumnOnlyExample::SwColumnOnlyExample()
 void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     rRenderContext.Push(vcl::PushFlags::MAPMODE);
+    rRenderContext.Erase();
 
     Fraction aScale(m_aWinSize.Height(), m_aFrameSize.Height());
     MapMode aMapMode(MapUnit::MapTwip);
@@ -334,12 +323,9 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
     rRenderContext.SetMapMode(aMapMode);
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    const Color& rFieldColor = rStyleSettings.GetFieldColor();
     const Color& rDlgColor = rStyleSettings.GetDialogColor();
     const Color& rFieldTextColor = SwViewOption::GetCurrentViewOptions().GetFontColor();
-    Color aGrayColor(COL_LIGHTGRAY);
-    if (rFieldColor == aGrayColor)
-        aGrayColor.Invert();
+    const Color& rDocColor = SwViewOption::GetCurrentViewOptions().GetDocColor();
 
     Size aLogSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
     tools::Rectangle aCompleteRect(Point(0,0), aLogSize);
@@ -358,10 +344,9 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
     aShadowRect.Move(aTL.Y(), aTL.Y());
     rRenderContext.DrawRect(aShadowRect);
 
-    rRenderContext.SetFillColor(rFieldColor);
+    rRenderContext.SetFillColor(rDocColor);
+    rRenderContext.SetLineColor(m_aLineColor);
     rRenderContext.DrawRect(aRect);
-
-    rRenderContext.SetFillColor(aGrayColor);
 
     //column separator?
     tools::Long nLength = aLogSize.Height() - 2 * aTL.Y();
@@ -394,8 +379,6 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
     sal_uInt16 nColCount = rCols.size();
     if (nColCount)
     {
-        rRenderContext.DrawRect(aRect);
-        rRenderContext.SetFillColor(rFieldColor);
         tools::Rectangle aFrameRect(aTL, m_aFrameSize);
         tools::Long nSum = aTL.X();
         for (sal_uInt16 i = 0; i < nColCount; i++)

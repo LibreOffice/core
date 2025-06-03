@@ -725,6 +725,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, weld::MetricSpinButton&, void )
         if(m_bFrame)
         {
             m_aFrameExampleWN.SetColumns(m_xColMgr->GetColumns());
+            m_aFrameExampleWN.SetLineColor(m_xColMgr->GetLineColor());
             m_aFrameExampleWN.Invalidate();
         }
         else

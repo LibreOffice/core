@@ -88,6 +88,7 @@ private:
 
     Size        m_aFrameSize;
     SwFormatCol    m_aCols;
+    Color m_aLineColor;
 
     virtual void Resize() override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -95,7 +96,8 @@ private:
 public:
     SwColumnOnlyExample();
 
-    void        SetColumns(const SwFormatCol& rCol);
+    void SetColumns(const SwFormatCol& rCol);
+    void SetLineColor(const Color& rColor) { m_aLineColor = rColor; };
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 };
