@@ -81,7 +81,7 @@ constexpr OUString CSVIO_RemoveSpace = u"RemoveSpace"_ustr;
 constexpr OUString CSVIO_EvaluateFormulas = u"EvaluateFormulas"_ustr;
 constexpr OUString CSVIO_SeparatorType = u"SeparatorType"_ustr;
 constexpr OUString CSVIO_FromRow = u"FromRow"_ustr;
-constexpr OUString CSVIO_CharSet = u"CharSet"_ustr;
+constexpr OUString CSVIO_Encoding = u"Encoding"_ustr;
 constexpr OUString CSVIO_QuotedAsText = u"QuotedFieldAsText"_ustr;
 constexpr OUString CSVIO_DetectSpecialNum = u"DetectSpecialNumbers"_ustr;
 constexpr OUString CSVIO_DetectScientificNum = u"DetectScientificNumbers"_ustr;
@@ -160,13 +160,15 @@ static OUString lcl_GetConfigPath(ScImportAsciiCall eCall)
 
 static void lcl_LoadSeparators(ScImportAsciiCall eCall, OUString& rFieldSeparators, OUString& rTextSeparators,
                              bool& rMergeDelimiters, bool& rQuotedAsText, bool& rDetectSpecialNum, bool& rDetectScientificNum,
-                             SeparatorType& rSepType, sal_Int32& rFromRow, sal_Int32& rCharSet,
+                             SeparatorType& rSepType, sal_Int32& rFromRow, rtl_TextEncoding& rEncoding,
                              sal_Int32& rLanguage, bool& rSkipEmptyCells, bool& rRemoveSpace,
                              bool& rEvaluateFormulas)
 {
     ScLinkConfigItem aItem(lcl_GetConfigPath(eCall));
     const Sequence<OUString> aNames = aItem.GetNodeNames({});
     const Sequence<Any> aValues = aItem.GetProperties(aNames);
+
+    rEncoding = RTL_TEXTENCODING_DONTKNOW;
 
     for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
     {
@@ -188,8 +190,8 @@ static void lcl_LoadSeparators(ScImportAsciiCall eCall, OUString& rFieldSeparato
             rEvaluateFormulas = ScUnoHelpFunctions::GetBoolFromAny(value);
         else if (name == CSVIO_FromRow)
             value >>= rFromRow;
-        else if (name == CSVIO_CharSet)
-            value >>= rCharSet;
+        else if (name == CSVIO_Encoding)
+            value >>= rEncoding;
         else if (name == CSVIO_QuotedAsText)
             value >>= rQuotedAsText;
         else if (name == CSVIO_DetectSpecialNum)
@@ -206,7 +208,7 @@ static void lcl_LoadSeparators(ScImportAsciiCall eCall, OUString& rFieldSeparato
 static void lcl_SaveSeparators(ScImportAsciiCall eCall,
     const OUString& sFieldSeparators, const OUString& sTextSeparators, bool bMergeDelimiters, bool bQuotedAsText,
     bool bDetectSpecialNum, bool bDetectScientificNum, SeparatorType rSepType, sal_Int32 nFromRow,
-    sal_Int32 nCharSet, sal_Int32 nLanguage, bool bSkipEmptyCells, bool bRemoveSpace, bool bEvaluateFormulas)
+    rtl_TextEncoding eEncoding, sal_Int32 nLanguage, bool bSkipEmptyCells, bool bRemoveSpace, bool bEvaluateFormulas)
 {
     ScLinkConfigItem aItem(lcl_GetConfigPath(eCall));
     std::unordered_map<OUString, Any> properties;
@@ -227,8 +229,8 @@ static void lcl_SaveSeparators(ScImportAsciiCall eCall,
             properties[name] <<= static_cast<sal_Int16>(rSepType);
         else if (name == CSVIO_FromRow)
             properties[name] <<= nFromRow;
-        else if (name == CSVIO_CharSet)
-            properties[name] <<= nCharSet;
+        else if (name == CSVIO_Encoding)
+            properties[name] <<= eEncoding;
         else if (name == CSVIO_QuotedAsText)
             properties[name] <<= bQuotedAsText;
         else if (name == CSVIO_DetectSpecialNum)
@@ -325,12 +327,12 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     bool bSkipEmptyCells = true;
     bool bRemoveSpace = false;
     sal_Int32 nFromRow = 1;
-    sal_Int32 nCharSet = -1;
+    rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
     sal_Int32 nLanguage = 0;
 
     lcl_LoadSeparators ( meCall, sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bDetectScientificNum, eSepType, nFromRow,
-                         nCharSet, nLanguage, bSkipEmptyCells, bRemoveSpace, bEvaluateFormulas);
+                         eEncoding, nLanguage, bSkipEmptyCells, bRemoveSpace, bEvaluateFormulas);
 
     maFieldSeparators = sFieldSeparators;
 
@@ -366,10 +368,6 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
         mxRbSeparated->set_active(true);
     else
         mxRbDetectSep->set_active(true);
-
-    // Clipboard is always Unicode, else rely on default/config.
-    rtl_TextEncoding ePreselectUnicode = (meCall == SC_IMPORTFILE ?
-            RTL_TEXTENCODING_DONTKNOW : RTL_TEXTENCODING_UNICODE);
 
     // Detect character set only once and then use it for "Detect" option.
     SvStreamEndian eEndian;
@@ -425,12 +423,13 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     // Insert one for detecting charset.
     mxLbCharSet->InsertTextEncoding( RTL_TEXTENCODING_USER_DETECTED, "- " + ScResId( SCSTR_AUTOMATIC ) + " -" );
 
-    if (ePreselectUnicode != RTL_TEXTENCODING_DONTKNOW)
-        mxLbCharSet->SelectTextEncoding( ePreselectUnicode );
-    else if (nCharSet >= 0)
-        mxLbCharSet->set_active(nCharSet);
-    else
-        mxLbCharSet->SelectTextEncoding(RTL_TEXTENCODING_USER_DETECTED);
+    // Clipboard is always Unicode, and TextToColumns doesn't use encoding.
+    if (meCall != SC_IMPORTFILE)
+        eEncoding = RTL_TEXTENCODING_UNICODE;
+    else if (eEncoding == RTL_TEXTENCODING_DONTKNOW)
+        eEncoding = RTL_TEXTENCODING_USER_DETECTED;
+
+    mxLbCharSet->SelectTextEncoding(eEncoding);
 
     SetSelectedCharSet();
     mxLbCharSet->connect_changed( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
@@ -476,6 +475,8 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
 
     if (meCall == SC_TEXTTOCOLUMNS)
     {
+        m_xBuilder->weld_frame(u"frame1"_ustr)->hide(); // the whole "Import" section
+
         mxFtCharSet->set_sensitive(false);
         mxLbCharSet->set_sensitive(false);
         mxFtCustomLang->set_sensitive(false);
@@ -622,7 +623,7 @@ void ScImportAsciiDlg::SaveParameters()
                      mxCkbQuotedAsText->get_active(), mxCkbDetectNumber->get_active(), mxCkbDetectScientificNumber->get_active(),
                      mxRbFixed->get_active() ? FIXED : (mxRbDetectSep->get_active() ? DETECT_SEPARATOR : SEPARATOR),
                      mxNfRow->get_value(),
-                     mxLbCharSet->get_active(),
+                     mxLbCharSet->GetSelectTextEncoding(),
                      static_cast<sal_uInt16>(mxLbCustomLang->get_active_id()),
                      mxCkbSkipEmptyCells->get_active(), mxCkbRemoveSpace->get_active(),
                      mxCkbEvaluateFormulas->get_active());
