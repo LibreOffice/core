@@ -75,7 +75,6 @@ enum SeparatorType
 constexpr OUString CSVIO_MergeDelimiters = u"MergeDelimiters"_ustr;
 constexpr OUString CSVIO_Separators = u"Separators"_ustr;
 constexpr OUString CSVIO_TextSeparators = u"TextSeparators"_ustr;
-constexpr OUString CSVIO_FixedWidth = u"FixedWidth"_ustr;
 constexpr OUString CSVIO_RemoveSpace = u"RemoveSpace"_ustr;
 constexpr OUString CSVIO_EvaluateFormulas = u"EvaluateFormulas"_ustr;
 constexpr OUString CSVIO_SeparatorType = u"SeparatorType"_ustr;
@@ -161,13 +160,11 @@ static void lcl_LoadSeparators(ScImportAsciiCall eCall, OUString& rFieldSeparato
                              bool& rMergeDelimiters, bool& rQuotedAsText, bool& rDetectSpecialNum, bool& rDetectScientificNum,
                              SeparatorType& rSepType, sal_Int32& rFromRow, sal_Int32& rCharSet,
                              sal_Int32& rLanguage, bool& rSkipEmptyCells, bool& rRemoveSpace,
-                             bool& rEvaluateFormulas, bool& rBeforeDetection)
+                             bool& rEvaluateFormulas)
 {
     ScLinkConfigItem aItem(lcl_GetConfigPath(eCall));
     const Sequence<OUString> aNames = aItem.GetNodeNames({});
     const Sequence<Any> aValues = aItem.GetProperties(aNames);
-
-    rBeforeDetection = true;
 
     for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
     {
@@ -184,15 +181,7 @@ static void lcl_LoadSeparators(ScImportAsciiCall eCall, OUString& rFieldSeparato
         else if (name == CSVIO_TextSeparators)
             value >>= rTextSeparators;
         else if (name == CSVIO_SeparatorType)
-        {
-            rBeforeDetection = false;
             rSepType = static_cast<SeparatorType>(ScUnoHelpFunctions::GetInt16FromAny(value));
-        }
-        else if (name == CSVIO_FixedWidth)
-        {
-            if (rBeforeDetection && ScUnoHelpFunctions::GetBoolFromAny(value))
-                rSepType = SeparatorType::FIXED;
-        }
         else if (name == CSVIO_EvaluateFormulas)
             rEvaluateFormulas = ScUnoHelpFunctions::GetBoolFromAny(value);
         else if (name == CSVIO_FromRow)
@@ -325,15 +314,13 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     bool bEvaluateFormulas = (meCall != SC_IMPORTFILE);
     bool bSkipEmptyCells = true;
     bool bRemoveSpace = false;
-    bool bBeforeDetection = false;
     sal_Int32 nFromRow = 1;
     sal_Int32 nCharSet = -1;
     sal_Int32 nLanguage = 0;
 
     lcl_LoadSeparators ( meCall, sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bDetectScientificNum, eSepType, nFromRow,
-                         nCharSet, nLanguage, bSkipEmptyCells, bRemoveSpace, bEvaluateFormulas,
-                         bBeforeDetection);
+                         nCharSet, nLanguage, bSkipEmptyCells, bRemoveSpace, bEvaluateFormulas);
 
     maFieldSeparators = sFieldSeparators;
 
@@ -434,7 +421,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
 
     if (ePreselectUnicode != RTL_TEXTENCODING_DONTKNOW)
         mxLbCharSet->SelectTextEncoding( ePreselectUnicode );
-    else if (nCharSet >= 0 && !bBeforeDetection)
+    else if (nCharSet >= 0)
         mxLbCharSet->set_active(nCharSet);
     else
         mxLbCharSet->SelectTextEncoding(RTL_TEXTENCODING_USER_DETECTED);
