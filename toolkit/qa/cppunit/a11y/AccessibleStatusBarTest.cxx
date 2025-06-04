@@ -31,6 +31,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <test/a11y/accessibletestbase.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <test/a11y/AccessibilityTools.hxx>
@@ -108,7 +109,8 @@ void AccessibleStatusBarTest::runAllTests()
 
     uno::Reference<accessibility::XAccessibleEventBroadcaster> xAccessibleEventBroadcaster(
         xContext, uno::UNO_QUERY_THROW);
-    XAccessibleEventBroadcasterTester eventBroadcasterTester(xAccessibleEventBroadcaster, mxWindow);
+    XAccessibleEventBroadcasterTester eventBroadcasterTester(xAccessibleEventBroadcaster,
+                                                             VCLUnoHelper::GetWindow(mxWindow));
     eventBroadcasterTester.testAll();
 }
 

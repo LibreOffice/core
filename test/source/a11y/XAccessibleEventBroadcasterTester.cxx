@@ -75,9 +75,9 @@ public:
 
 XAccessibleEventBroadcasterTester::XAccessibleEventBroadcasterTester(
     const uno::Reference<accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
-    const uno::Reference<awt::XWindow>& xWindow)
+    vcl::Window* pWindow)
     : mxBroadcaster(xBroadcaster)
-    , mxWindow(xWindow)
+    , mpWindow(pWindow)
 {
 }
 
@@ -105,13 +105,14 @@ bool XAccessibleEventBroadcasterTester::isTransient(
  */
 void XAccessibleEventBroadcasterTester::fireEvent()
 {
-    awt::Rectangle newPosSize = mxWindow->getPosSize();
-    newPosSize.Width = newPosSize.Width - 20;
-    newPosSize.Height = newPosSize.Height - 20;
-    newPosSize.X = newPosSize.X + 20;
-    newPosSize.Y = newPosSize.Y + 20;
-    mxWindow->setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width, newPosSize.Height,
-                         awt::PosSize::POSSIZE);
+    Point aPos = mpWindow->GetPosPixel();
+    aPos.Move(20, 20);
+
+    Size aSize = mpWindow->GetSizePixel();
+    aSize.AdjustWidth(-20);
+    aSize.AdjustHeight(-20);
+
+    mpWindow->SetPosSizePixel(aPos, aSize);
 }
 
 /**

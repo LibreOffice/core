@@ -24,13 +24,13 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
+#include <vcl/window.hxx>
 
 class OOO_DLLPUBLIC_TEST XAccessibleEventBroadcasterTester
 {
 private:
     const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster> mxBroadcaster;
-    const css::uno::Reference<css::awt::XWindow> mxWindow;
+    const VclPtr<vcl::Window> mpWindow;
 
     static bool isTransient(
         const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster);
@@ -42,7 +42,7 @@ private:
 public:
     XAccessibleEventBroadcasterTester(
         const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
-        const css::uno::Reference<css::awt::XWindow>& xWindow);
+        vcl::Window* pWindow);
 
     void testAddEventListener();
     void testRemoveEventListener();
