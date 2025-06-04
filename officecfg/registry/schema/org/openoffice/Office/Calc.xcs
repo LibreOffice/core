@@ -1084,10 +1084,17 @@
         </prop>
         <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
           <info>
-            <desc>Char Set</desc>
+            <desc>Char Set (index of selected item in the dialog's list box; obsoleted by Encoding)</desc>
             <label>CharSet</label>
           </info>
           <value>-1</value>
+        </prop>
+        <prop oor:name="Encoding" oor:type="xs:short" oor:nillable="false">
+          <info>
+            <desc>Encoding (an rtl_TextEncoding value; default is "don't know")</desc>
+            <label>Encoding</label>
+          </info>
+          <value>0</value>
         </prop>
         <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
           <info>
@@ -1187,10 +1194,17 @@
         </prop>
         <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
           <info>
-            <desc>Char Set</desc>
+            <desc>Char Set (index of selected item in the dialog's list box; obsoleted by Encoding)</desc>
             <label>CharSet</label>
           </info>
           <value>-1</value>
+        </prop>
+        <prop oor:name="Encoding" oor:type="xs:short" oor:nillable="false">
+          <info>
+            <desc>Encoding (an rtl_TextEncoding value; default is "don't know")</desc>
+            <label>Encoding</label>
+          </info>
+          <value>0</value>
         </prop>
         <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
           <info>
