@@ -20,11 +20,9 @@ import unittest
 import uno
 import unohelper
 import os
-import sys
 
-from com.sun.star.io import XOutputStream, XInputStream, typeOfXOutputStream, typeOfXInputStream
-from com.sun.star.lang import XTypeProvider, typeOfXTypeProvider, XEventListener
-from com.sun.star.uno import XCurrentContext
+from com.sun.star.io import XOutputStream, XInputStream
+from com.sun.star.lang import XEventListener
 
 class SequenceOutputStream( unohelper.Base, XOutputStream ):
       def __init__( self ):
