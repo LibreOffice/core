@@ -253,7 +253,7 @@ public:
     /** Sends a table model changed event for a removed column to the accessibility object. */
     void                        AccSendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn );
 
-    ScAccessibleCsvControl*     GetAccessible() { return mxAccessible.get(); }
+    rtl::Reference<ScAccessibleCsvControl> GetAccessible() { return mxAccessible; }
 
     // repaint helpers --------------------------------------------------------
 

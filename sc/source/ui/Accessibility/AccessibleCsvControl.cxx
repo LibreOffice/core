@@ -297,7 +297,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvRuler::getAccessible
     ScCsvTableBox* pTableBox = rRuler.GetTableBox();
     ScCsvGrid& rGrid = pTableBox->GetGrid();
 
-    css::uno::Reference<css::accessibility::XAccessible> xAccObj(static_cast<ScAccessibleCsvGrid*>(rGrid.GetAccessible()));
+    css::uno::Reference<css::accessibility::XAccessible> xAccObj = rGrid.GetAccessible();
     if( xAccObj.is() )
     {
         Sequence<Reference<css::accessibility::XAccessible>> aSeq{ xAccObj };
@@ -839,7 +839,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleR
 
     if (rRuler.IsVisible())
     {
-        css::uno::Reference<css::accessibility::XAccessible> xAccObj(static_cast<ScAccessibleCsvGrid*>(rRuler.GetAccessible()));
+        css::uno::Reference<css::accessibility::XAccessible> xAccObj = rRuler.GetAccessible();
         if( xAccObj.is() )
         {
             Sequence<Reference<css::accessibility::XAccessible>> aSeq{ xAccObj };
@@ -1399,10 +1399,7 @@ css::awt::Rectangle ScAccessibleCsvCell::implGetBounds()
 css::uno::Reference<css::accessibility::XAccessible> SAL_CALL ScAccessibleCsvCell::getAccessibleParent()
 {
     ScCsvGrid& rGrid = implGetGrid();
-
-    ScAccessibleCsvGrid* pAcc = static_cast<ScAccessibleCsvGrid*>(rGrid.GetAccessible());
-
-    return pAcc;
+    return rGrid.GetAccessible();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
