@@ -69,7 +69,7 @@ class ScImportAsciiDlg : public weld::GenericDialogController
     std::unique_ptr<weld::CheckButton> mxCkbSpace;
     std::unique_ptr<weld::CheckButton> mxCkbOther;
     std::unique_ptr<weld::Entry> mxEdOther;
-    std::unique_ptr<weld::CheckButton> mxCkbAsOnce;
+    std::unique_ptr<weld::CheckButton> mxCkbMergeDelimiters;
 
     std::unique_ptr<weld::Label> mxFtTextSep;
     std::unique_ptr<weld::ComboBox> mxCbTextSep;

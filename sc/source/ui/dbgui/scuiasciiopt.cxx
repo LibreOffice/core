@@ -275,7 +275,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     , mxCkbSpace(m_xBuilder->weld_check_button(u"space"_ustr))
     , mxCkbOther(m_xBuilder->weld_check_button(u"other"_ustr))
     , mxEdOther(m_xBuilder->weld_entry(u"inputother"_ustr))
-    , mxCkbAsOnce(m_xBuilder->weld_check_button(u"mergedelimiters"_ustr))
+    , mxCkbMergeDelimiters(m_xBuilder->weld_check_button(u"mergedelimiters"_ustr))
     , mxFtTextSep(m_xBuilder->weld_label(u"texttextdelimiter"_ustr))
     , mxCbTextSep(m_xBuilder->weld_combo_box(u"textdelimiter"_ustr))
     , mxCkbQuotedAsText(m_xBuilder->weld_check_button(u"quotedfieldastext"_ustr))
@@ -337,7 +337,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     maFieldSeparators = sFieldSeparators;
 
     if( bMergeDelimiters && !bIsTSV )
-        mxCkbAsOnce->set_active(true);
+        mxCkbMergeDelimiters->set_active(true);
     if (bQuotedFieldAsText)
         mxCkbQuotedAsText->set_active(true);
     if (bRemoveSpace)
@@ -403,7 +403,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     mxCkbTab->connect_toggled( aSeparatorClickHdl );
     mxCkbSemicolon->connect_toggled( aSeparatorClickHdl );
     mxCkbComma->connect_toggled( aSeparatorClickHdl );
-    mxCkbAsOnce->connect_toggled( aSeparatorClickHdl );
+    mxCkbMergeDelimiters->connect_toggled( aSeparatorClickHdl );
     mxCkbSpace->connect_toggled( aSeparatorClickHdl );
     mxCkbRemoveSpace->connect_toggled( aSeparatorClickHdl );
     mxCkbOther->connect_toggled( aSeparatorClickHdl );
@@ -593,7 +593,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
     if( mxRbSeparated->get_active() || mxRbDetectSep->get_active())
     {
         rOpt.SetFieldSeps( GetActiveSeparators() );
-        rOpt.SetMergeSeps( mxCkbAsOnce->get_active() );
+        rOpt.SetMergeSeps( mxCkbMergeDelimiters->get_active() );
         rOpt.SetRemoveSpace( mxCkbRemoveSpace->get_active() );
         rOpt.SetTextSep( lcl_CharFromCombo( *mxCbTextSep, SCSTR_TEXTSEP ) );
     }
@@ -619,7 +619,7 @@ void ScImportAsciiDlg::SaveParameters()
             pChange->commit();
         }
     }
-    lcl_SaveSeparators(meCall, GetSeparators(), mxCbTextSep->get_active_text(), mxCkbAsOnce->get_active(),
+    lcl_SaveSeparators(meCall, GetSeparators(), mxCbTextSep->get_active_text(), mxCkbMergeDelimiters->get_active(),
                      mxCkbQuotedAsText->get_active(), mxCkbDetectNumber->get_active(), mxCkbDetectScientificNumber->get_active(),
                      mxRbFixed->get_active() ? FIXED : (mxRbDetectSep->get_active() ? DETECT_SEPARATOR : SEPARATOR),
                      mxNfRow->get_value(),
@@ -737,7 +737,7 @@ void ScImportAsciiDlg::SetupSeparatorCtrls()
 
     bEnable = bEnable || mxRbDetectSep->get_active();
     mxCkbRemoveSpace->set_sensitive( bEnable );
-    mxCkbAsOnce->set_sensitive( bEnable );
+    mxCkbMergeDelimiters->set_sensitive( bEnable );
     mxFtTextSep->set_sensitive( bEnable );
     mxCbTextSep->set_sensitive( bEnable );
 
@@ -917,7 +917,7 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
 
 
     mxTableBox->GetGrid().Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
-    bool bMergeSep = mxCkbAsOnce->get_active();
+    bool bMergeSep = mxCkbMergeDelimiters->get_active();
     bool bRemoveSpace = mxCkbRemoveSpace->get_active();
     mxTableBox->SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep, bRemoveSpace );
 }
