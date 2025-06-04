@@ -341,7 +341,7 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
 +++ poppler/poppler/Annot.cc	2025-01-09 17:40:14.021036519 +0100
 @@ -7499,7 +7499,11 @@
  
- bool Annots::removeAnnot(Annot *annot)
+ bool Annots::removeAnnot(const std::shared_ptr<Annot> &annot)
  {
 +#if 0//ndef __clang__
      auto idx = std::ranges::find(annots, annot);
