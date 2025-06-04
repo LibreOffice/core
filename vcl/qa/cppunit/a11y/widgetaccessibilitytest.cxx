@@ -20,6 +20,7 @@
 #define VCL_INTERNALS
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
@@ -28,6 +29,7 @@
 #include <test/a11y/XAccessibleActionTester.hxx>
 #include <test/a11y/XAccessibleComponentTester.hxx>
 #include <test/a11y/XAccessibleContextTester.hxx>
+#include <test/a11y/XAccessibleEventBroadcasterTester.hxx>
 #include <test/a11y/XAccessibleExtendedComponentTester.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/lstbox.hxx>
@@ -74,6 +76,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, AccessibleDropDownListBox)
                            xAccessibleAction->getAccessibleActionCount() > 0);
     XAccessibleActionTester aActionTester(xAccessibleAction);
     aActionTester.testAll();
+
+    css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster> xEventBroadcaster(
+        xContext, css::uno::UNO_QUERY_THROW);
+    XAccessibleEventBroadcasterTester aEventBroadcasterTester(xEventBroadcaster, pListBox);
+    aEventBroadcasterTester.testAll();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
