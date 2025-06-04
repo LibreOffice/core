@@ -605,6 +605,14 @@ def enforce_no_productname_in_accessible_description(current, adjustments):
         if "%PRODUCTNAME" in child.text:
           raise Exception(sys.argv[1] + ': %PRODUCTNAME used in accessible-description:' , child.text)
 
+def enforce_menuitem_id(current):
+  # gtk4 VCL plugin requires "id" attribute for menu items
+  for child in current:
+    enforce_menuitem_id(child)
+    if child.get('class') in ("GtkMenuItem", "GtkRadioMenuItem"):
+      if not child.attrib.get("id"):
+        raise Exception(sys.argv[1] + ': menu item does not have an id set' , child.text)
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
@@ -636,6 +644,7 @@ remove_label_angle(root)
 remove_expander_label_fill(root)
 remove_expander_spacing(root)
 enforce_menubutton_indicator_consistency(root)
+enforce_menuitem_id(root)
 enforce_active_in_group_consistency(root)
 enforce_entry_text_column_id_column_for_gtkcombobox(root)
 remove_entry_shadow_type(root)
