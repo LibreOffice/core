@@ -431,7 +431,7 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextRange( sal_Int32 nStartIndex, sal
     SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidRange( nStartIndex, nEndIndex );
-    return OUString( maBuffer.getStr() + nStartIndex, nEndIndex - nStartIndex );
+    return OUString(std::u16string_view(maBuffer).substr(nStartIndex, nEndIndex - nStartIndex ));
 }
 
 TextSegment SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType )
@@ -664,7 +664,8 @@ void ScAccessibleCsvRuler::ensureValidRange( sal_Int32& rnStartIndex, sal_Int32&
 {
     if( rnStartIndex > rnEndIndex )
         ::std::swap( rnStartIndex, rnEndIndex );
-    if( (rnStartIndex < 0) || (rnEndIndex > implGetTextLength()) )
+    if ((rnStartIndex < 0) || (rnStartIndex > maBuffer.getLength())
+        || (rnEndIndex > implGetTextLength()) || (rnEndIndex > maBuffer.getLength()))
         throw IndexOutOfBoundsException();
 }
 
