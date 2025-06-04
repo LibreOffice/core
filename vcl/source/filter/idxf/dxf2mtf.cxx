@@ -159,7 +159,7 @@ bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
 
     if (aActFillColor!=COL_TRANSPARENT) {
         aActFillColor = COL_TRANSPARENT;
-        pVirDev->SetFillColor(aActFillColor);
+        pVirDev->SetFillColor();
     }
     return true;
 }

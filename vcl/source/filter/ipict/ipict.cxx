@@ -643,7 +643,7 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
               SetLineColor( aActForeColor );
             else
               SetLineColor(eActPenPattern.getColor(aActBackColor, aActForeColor));
-            SetFillColor( COL_TRANSPARENT );
+            pVirDev->SetFillColor();
             pVirDev->SetRasterOp(eActROP);
             break;
         case PictDrawingMethod::PAINT:

@@ -98,10 +98,12 @@ namespace PictReaderShape {
     // HACK: here we use the line coloring when drawing the shape
     //       must be changed if other parameter are changed to draw
     //       a line/fill shape
-    Color oldFColor = dev->GetFillColor(), oldLColor = dev->GetLineColor();
-    dev->SetFillColor(oldLColor); dev->SetLineColor(COL_TRANSPARENT);
+    dev->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    Color oldLColor = dev->GetLineColor();
+    dev->SetFillColor(oldLColor);
+    dev->SetLineColor();
     dev->DrawPolygon(poly);
-    dev->SetLineColor(oldLColor); dev->SetFillColor(oldFColor);
+    dev->Pop();
     return true;
   }
 

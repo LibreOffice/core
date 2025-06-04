@@ -731,15 +731,10 @@ void OS2METReader::PopAttr()
 
 void OS2METReader::ChangeBrush(const Color& rPatColor, bool bFill )
 {
-    Color aColor;
-
     if( bFill )
-        aColor = rPatColor;
+        pVirDev->SetFillColor( rPatColor );
     else
-        aColor = COL_TRANSPARENT;
-
-    if( pVirDev->GetFillColor() != aColor )
-        pVirDev->SetFillColor( aColor );
+        pVirDev->SetFillColor();
 }
 
 void OS2METReader::SetPen( const Color& rColor, sal_uInt16 nLineWidth, PenStyle ePenStyle )

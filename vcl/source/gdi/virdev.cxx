@@ -203,6 +203,21 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     if ( mpNext )
         mpNext->mpPrev = this;
     pSVData->maGDIData.mpFirstVirDev = this;
+
+    // initialise alpha layer
+    if (meFormatAndAlpha != DeviceFormat::WITHOUT_ALPHA)
+    {
+        mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, DeviceFormat::WITHOUT_ALPHA);
+        mpAlphaVDev->InnerImplSetOutputSizePixel(Size(nDX, nDY), bErase);
+        mpAlphaVDev->SetBackground( Wallpaper(COL_ALPHA_OPAQUE) );
+        mpAlphaVDev->Erase();
+        if( GetLineColor() != COL_TRANSPARENT )
+            mpAlphaVDev->SetLineColor( COL_ALPHA_OPAQUE );
+        if( GetFillColor() != COL_TRANSPARENT )
+            mpAlphaVDev->SetFillColor( COL_ALPHA_OPAQUE );
+        mpAlphaVDev->SetMapMode( GetMapMode() );
+        mpAlphaVDev->SetAntialiasing( GetAntialiasing() );
+    }
 }
 
 VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormatAndAlpha,
@@ -365,7 +380,7 @@ bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase, bool 
 
             if( !mpAlphaVDev )
             {
-                mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, meFormatAndAlpha);
+                mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, DeviceFormat::WITHOUT_ALPHA);
                 mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase);
                 mpAlphaVDev->SetBackground( Wallpaper(bAlphaMaskTransparent ? COL_ALPHA_TRANSPARENT : COL_ALPHA_OPAQUE) );
                 mpAlphaVDev->Erase();

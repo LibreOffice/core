@@ -4405,7 +4405,7 @@ public:
     {
         // create with no separate alpha layer like everything sane does
         auto xRet = VclPtr<VirtualDevice>::Create();
-        xRet->SetBackground(COL_TRANSPARENT);
+        xRet->SetBackground();
         return xRet;
     }
 
