@@ -61,12 +61,12 @@ constexpr sal_uInt32 kMaxEmbeddedLinefeeds = 500;
 using namespace com::sun::star::uno;
 
 namespace {
-
+// The values of this enum are stored in config's "SeparatorType" node
 enum SeparatorType
 {
-    FIXED,
-    SEPARATOR,
-    DETECT_SEPARATOR
+    FIXED = 0,
+    SEPARATOR = 1,
+    DETECT_SEPARATOR = 2,
 };
 
 }
