@@ -1669,7 +1669,7 @@ public:
         assert(count >= 0);
         assert(beginIndex <= getLength());
         assert(count <= getLength() - beginIndex);
-        return std::u16string_view(pData->buffer, sal_uInt32(pData->length)).substr(beginIndex, count);
+        return std::u16string_view(*this).substr(beginIndex, count);
     }
 #endif
 
