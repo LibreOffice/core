@@ -421,7 +421,9 @@ OUString SAL_CALL ScAccessibleCsvRuler::getText()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return OUString(maBuffer.subView( 0, implGetTextLength() ));
+    // OUStringBuffer.subView asserts on count being not more than available characters;
+    // better use u16string_view::substr, which allows count greater than available
+    return OUString(std::u16string_view(maBuffer).substr(0, implGetTextLength()));
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
