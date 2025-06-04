@@ -196,7 +196,7 @@ AbsoluteScreenPixelRectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen()
     tools::Rectangle aCellRect;
     if (mpViewShell)
     {
-        mpViewShell->GetLocationData().GetCellPosition( maCellAddress, aCellRect );
+        aCellRect = mpViewShell->GetLocationData().GetCellPosition(maCellAddress);
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
@@ -212,7 +212,7 @@ tools::Rectangle ScAccessiblePreviewCell::GetBoundingBox()
     tools::Rectangle aCellRect;
     if (mpViewShell)
     {
-        mpViewShell->GetLocationData().GetCellPosition( maCellAddress, aCellRect );
+        aCellRect = mpViewShell->GetLocationData().GetCellPosition(maCellAddress);
         uno::Reference<XAccessible> xAccParent = getAccessibleParent();
         if (xAccParent.is())
         {

@@ -418,24 +418,26 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             mvRight.resize(aPageArea.aEnd.Col()+1);
             if( !bLayoutRTL )
             {
-                pLocationData->GetCellPosition( aPageArea.aStart, aRectPosition );
+                aRectPosition = pLocationData->GetCellPosition(aPageArea.aStart);
                 nLeftPosition = aRectPosition.Left();
                 for( SCCOL i = aPageArea.aStart.Col(); i <= aPageArea.aEnd.Col(); i++ )
                 {
-                    pLocationData->GetCellPosition( ScAddress( i,aPageArea.aStart.Row(),aPageArea.aStart.Tab()),aRectCellPosition );
+                    aRectCellPosition = pLocationData->GetCellPosition(
+                        ScAddress(i, aPageArea.aStart.Row(), aPageArea.aStart.Tab()));
                     mvRight[i] = aRectCellPosition.Right();
                 }
             }
             else
             {
-                pLocationData->GetCellPosition( aPageArea.aEnd, aRectPosition );
+                aRectPosition = pLocationData->GetCellPosition(aPageArea.aEnd);
                 nLeftPosition = aRectPosition.Right()+1;
 
-                pLocationData->GetCellPosition( aPageArea.aStart,aRectCellPosition );
+                aRectCellPosition = pLocationData->GetCellPosition(aPageArea.aStart);
                 mvRight[ aPageArea.aEnd.Col() ] = aRectCellPosition.Left();
                 for( SCCOL i = aPageArea.aEnd.Col(); i > aPageArea.aStart.Col(); i-- )
                 {
-                    pLocationData->GetCellPosition( ScAddress( i,aPageArea.aEnd.Row(),aPageArea.aEnd.Tab()),aRectCellPosition );
+                    aRectCellPosition = pLocationData->GetCellPosition(
+                        ScAddress(i, aPageArea.aEnd.Row(), aPageArea.aEnd.Tab()));
                     mvRight[ i-1 ] = mvRight[ i ] + aRectCellPosition.Right() - aRectCellPosition.Left() + 1;
                 }
             }

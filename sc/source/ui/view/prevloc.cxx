@@ -306,17 +306,17 @@ tools::Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPo
     return tools::Rectangle( Point( aOffsetPixel.Width(), aOffsetPixel.Height() ), aSizePixel );
 }
 
-void ScPreviewLocationData::GetCellPosition( const ScAddress& rCellPos, tools::Rectangle& rCellRect ) const
+tools::Rectangle ScPreviewLocationData::GetCellPosition(const ScAddress& rCellPos) const
 {
     ScPreviewLocationEntry* pEntry = lcl_GetEntryByAddress( m_Entries, rCellPos, SC_PLOC_CELLRANGE );
-    if ( pEntry )
-    {
-        tools::Rectangle aOffsetRect = GetOffsetPixel( rCellPos, pEntry->aCellRange );
-        rCellRect = tools::Rectangle( aOffsetRect.Left() + pEntry->aPixelRect.Left(),
-                               aOffsetRect.Top() + pEntry->aPixelRect.Top(),
-                               aOffsetRect.Right() + pEntry->aPixelRect.Left(),
-                               aOffsetRect.Bottom() + pEntry->aPixelRect.Top() );
-    }
+    if (!pEntry)
+        return tools::Rectangle();
+
+    tools::Rectangle aOffsetRect = GetOffsetPixel(rCellPos, pEntry->aCellRange);
+    return tools::Rectangle(aOffsetRect.Left() + pEntry->aPixelRect.Left(),
+                            aOffsetRect.Top() + pEntry->aPixelRect.Top(),
+                            aOffsetRect.Right() + pEntry->aPixelRect.Left(),
+                            aOffsetRect.Bottom() + pEntry->aPixelRect.Top());
 }
 
 bool ScPreviewLocationData::HasCellsInRange( const tools::Rectangle& rVisiblePixel ) const
@@ -693,9 +693,7 @@ tools::Rectangle ScPreviewLocationData::GetCellOutputRect(const ScAddress& rCell
 {
     // first a stupid implementation
     // NN says here should be done more
-    tools::Rectangle aRect;
-    GetCellPosition(rCellPos, aRect);
-    return aRect;
+    return GetCellPosition(rCellPos);
 }
 
 // GetMainCellRange is used for links in PDF export
