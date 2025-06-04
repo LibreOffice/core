@@ -80,7 +80,7 @@ void SwLayAction::CheckWaitCursor()
     if ( !m_pWait && IsWaitAllowed() && IsPaint() &&
          ((std::clock() - m_nStartTicks) * 1000 / CLOCKS_PER_SEC >= CLOCKS_PER_SEC/2) )
     {
-        m_pWait.reset( new SwWait( *m_pRoot->GetFormat()->GetDoc()->GetDocShell(), true ) );
+        m_pWait.reset( new SwWait( *m_pRoot->GetFormat()->GetDoc().GetDocShell(), true ) );
     }
 }
 
@@ -264,7 +264,7 @@ SwLayAction::SwLayAction( SwRootFrame *pRt, SwViewShellImp *pI ) :
     m_nEndPage( USHRT_MAX ),
     m_nCheckPageNum( USHRT_MAX )
 {
-    m_bPaintExtraData = ::IsExtraData( m_pImp->GetShell().GetDoc() );
+    m_bPaintExtraData = ::IsExtraData( *m_pImp->GetShell().GetDoc() );
     m_bPaint = m_bComplete = m_bWaitAllowed = m_bCheckPages = true;
     m_bInterrupt = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
     m_bUpdateExpFields = m_bBrowseActionStop = m_bActionInProgress = false;
@@ -431,7 +431,7 @@ SwPageFrame* SwLayAction::CheckFirstVisPage( SwPageFrame *pPage )
         pPage = pCnt->FindPageFrame();
     }
 
-    if ( !pPage->GetFormat()->GetDoc()->GetFootnoteIdxs().empty() )
+    if ( !pPage->GetFormat()->GetDoc().GetFootnoteIdxs().empty() )
     {
         SwFootnoteContFrame *pCont = pPage->FindFootnoteCont();
         if ( pCont )

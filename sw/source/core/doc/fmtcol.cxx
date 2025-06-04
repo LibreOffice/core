@@ -64,7 +64,7 @@ namespace TextFormatCollFunc
         {
             const UIName sNumRuleName = pNewNumRuleItem->GetValue();
             if ( sNumRuleName.isEmpty() ||
-                 sNumRuleName != pTextFormatColl->GetDoc()->GetOutlineNumRule()->GetName() )
+                 sNumRuleName != pTextFormatColl->GetDoc().GetOutlineNumRule()->GetName() )
             {
                 // delete assignment of paragraph style to list level of outline style.
                 pTextFormatColl->DeleteAssignmentToListLevelOfOutlineStyle();
@@ -82,7 +82,7 @@ namespace TextFormatCollFunc
             const UIName sNumRuleName = pNumRuleItem->GetValue();
             if ( !sNumRuleName.isEmpty() )
             {
-                pNumRule = rTextFormatColl.GetDoc()->FindNumRulePtr( sNumRuleName );
+                pNumRule = rTextFormatColl.GetDoc().FindNumRulePtr( sNumRuleName );
             }
         }
 
@@ -113,12 +113,12 @@ SwTextFormatColl::~SwTextFormatColl()
     if(m_bInSwFntCache)
         pSwFontCache->Delete( this );
 
-    if (GetDoc()->IsInDtor())
+    if (GetDoc().IsInDtor())
     {
         return;
     }
 
-    for (const auto& pCharFormat : *GetDoc()->GetCharFormats())
+    for (const auto& pCharFormat : *GetDoc().GetCharFormats())
     {
         if (pCharFormat->GetLinkedParaFormat() == this)
         {
@@ -144,7 +144,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
              && rHint.GetId() != SfxHintId::SwObjectDying
              && rHint.GetId() != SfxHintId::SwUpdateAttr)
         return;
-    if(GetDoc()->IsInDtor())
+    if(GetDoc().IsInDtor())
     {
         SwFormatColl::SwClientNotify(rModify, rHint);
         return;
@@ -393,7 +393,7 @@ const SwCharFormat* SwTextFormatColl::GetLinkedCharFormat() const { return mpLin
 bool SwTextFormatColl::IsAtDocNodeSet() const
 {
     SwIterator<SwContentNode,SwFormatColl> aIter( *this );
-    const SwNodes& rNds = GetDoc()->GetNodes();
+    const SwNodes& rNds = GetDoc().GetNodes();
     for( SwContentNode* pNode = aIter.First(); pNode; pNode = aIter.Next() )
         if( &(pNode->GetNodes()) == &rNds )
             return true;
@@ -658,7 +658,7 @@ void SwConditionTextFormatColl::SetConditions( const SwFormatCollConditions& rCn
 {
     // Copy the Conditions, but first delete the old ones
     m_CondColls.clear();
-    SwDoc& rDoc = *GetDoc();
+    SwDoc& rDoc = GetDoc();
     for (const auto &rpFnd : rCndClls)
     {
         SwTextFormatColl *const pTmpColl = rpFnd->GetTextFormatColl()

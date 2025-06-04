@@ -159,14 +159,14 @@ public:
 private:
     // @@@ public copy ctor, but no copy assignment?
     SwTable & operator= (const SwTable &) = delete;
-    bool OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTableMerge* );
+    bool OldMerge( SwDoc&, const SwSelBoxes&, SwTableBox*, SwUndoTableMerge* );
     bool OldSplitRow( SwDoc&, const SwSelBoxes&, sal_uInt16, bool );
-    bool NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
+    bool NewMerge( SwDoc&, const SwSelBoxes&, const SwSelBoxes& rMerged,
                    SwUndoTableMerge* );
     bool NewSplitRow( SwDoc&, const SwSelBoxes&, sal_uInt16, bool );
     std::optional<SwBoxSelection> CollectBoxSelection( const SwPaM& rPam ) const;
     void InsertSpannedRow( SwDoc& rDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
-    bool InsertRow_( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind, bool bInsertDummy );
+    bool InsertRow_( SwDoc&, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind, bool bInsertDummy );
     bool NewInsertCol( SwDoc&, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool, bool bInsertDummy );
     void FindSuperfluousRows_( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
     void AdjustWidths( const tools::Long nOld, const tools::Long nNew );
@@ -233,11 +233,11 @@ public:
 // The following functions are "pseudo-virtual", i.e. they are different for old and new table model
 // It's not allowed to change the table model after the first call of one of these functions.
 
-    bool Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
+    bool Merge( SwDoc& rDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
                 SwTableBox* pMergeBox, SwUndoTableMerge* pUndo )
     {
-        return m_bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pUndo ) :
-                             OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
+        return m_bNewModel ? NewMerge( rDoc, rBoxes, rMerged, pUndo ) :
+                             OldMerge( rDoc, rBoxes, pMergeBox, pUndo );
     }
     bool SplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
                    bool bSameHeight )
@@ -252,10 +252,10 @@ public:
 
     bool InsertCol( SwDoc&, const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt, bool bBehind, bool bInsertDummy );
-    bool InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
+    bool InsertRow( SwDoc&, const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt, bool bBehind, bool bInsertDummy = true );
     void PrepareDelBoxes( const SwSelBoxes& rBoxes );
-    bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
+    bool DeleteSel( SwDoc&, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
         SwUndo* pUndo, const bool bDelMakeFrames, const bool bCorrBorder );
     bool SplitCol( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );
 

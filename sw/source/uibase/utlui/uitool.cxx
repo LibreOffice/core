@@ -416,7 +416,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
                             SID_SWREGISTER_COLLECTION, false))
     {
         const OUString& rColl = pCollectionItem->GetValue();
-        SwDoc& rDoc = *rMaster.GetDoc();
+        SwDoc& rDoc = rMaster.GetDoc();
         SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( UIName(rColl) );
         if( !pColl )
         {
@@ -523,7 +523,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>  aHeaderSet(*rSet.GetPool());
 
         // set correct parent to get the XFILL_NONE FillStyle as needed
-        aHeaderSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
+        aHeaderSet.SetParent(&rMaster.GetDoc().GetDfltFrameFormat()->GetAttrSet());
 
         // Dynamic or fixed height
         SfxBoolItem aOn(SID_ATTR_PAGE_ON, true);
@@ -572,7 +572,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>  aFooterSet(*rSet.GetPool());
 
         // set correct parent to get the XFILL_NONE FillStyle as needed
-        aFooterSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
+        aFooterSet.SetParent(&rMaster.GetDoc().GetDfltFrameFormat()->GetAttrSet());
 
         // Dynamic or fixed height
         SfxBoolItem aOn(SID_ATTR_PAGE_ON, true);
@@ -621,7 +621,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     aGrabBagMap[u"BackgroundFullSize"_ustr] <<=
         rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_BACKGROUND_FULL_SIZE)->GetValue();
 
-    if (IsOwnFormat(*rMaster.GetDoc()))
+    if (IsOwnFormat(rMaster.GetDoc()))
     {
         aGrabBagMap[u"RtlGutter"_ustr]
             <<= rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_RTL_GUTTER)->GetValue();

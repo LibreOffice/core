@@ -650,7 +650,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                     pHandleAnchorNodeChg.reset(
                         new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch ));
                 }
-                pFormat->GetDoc()->SetAttr( aAnch, *pFormat );
+                pFormat->GetDoc().SetAttr( aAnch, *pFormat );
             }
             // #i28701# - no call of method
             // <CheckCharRectAndTopOfLine()> for to-character anchored
@@ -1019,7 +1019,7 @@ void SwFEShell::SelectionToTop( bool bTop )
                     continue;
                 // If it has a textframe so it is a textbox, get its page
                 if (auto pDrwModel
-                    = pFormat->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel())
+                    = pFormat->GetDoc().getIDocumentDrawModelAccess().GetDrawModel())
                     // Not really understood why everything is on page 0...
                     // but it is easier to handle sdrobjects, that's true
                     if (auto pPage = pDrwModel->GetPage(0))
@@ -1088,7 +1088,7 @@ void SwFEShell::SelectionToBottom( bool bBottom )
                     continue;
                 // If has, move the shape to correct level with...
                 if (auto pDrwModel
-                    = pFormat->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel())
+                    = pFormat->GetDoc().getIDocumentDrawModelAccess().GetDrawModel())
                     if (auto pPage = pDrwModel->GetPage(0))
                     {
                         sal_uInt32 nOrdNum = pObj->GetOrdNum();

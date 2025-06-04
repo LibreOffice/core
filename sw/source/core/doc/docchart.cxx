@@ -33,7 +33,7 @@
 
 void SwTable::UpdateCharts() const
 {
-    GetFrameFormat()->GetDoc()->UpdateCharts( GetFrameFormat()->GetName() );
+    GetFrameFormat()->GetDoc().UpdateCharts( GetFrameFormat()->GetName() );
 }
 
 bool SwTable::IsTableComplexForChart( std::u16string_view aSelection ) const

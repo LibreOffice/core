@@ -1056,7 +1056,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( m_pHistory )
         {
-            m_pHistory->TmpRollback(&rDoc, m_nSetPos, false);
+            m_pHistory->TmpRollback(rDoc, m_nSetPos, false);
             if( m_nSetPos )       // there were Footnodes/FlyFrames
             {
                 // are there others than these ones?
@@ -1065,12 +1065,12 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                     // if so save the attributes of the others
                     SwHistory aHstr;
                     aHstr.Move( 0, m_pHistory.get(), m_nSetPos );
-                    m_pHistory->Rollback(&rDoc);
+                    m_pHistory->Rollback(rDoc);
                     m_pHistory->Move( 0, &aHstr );
                 }
                 else
                 {
-                    m_pHistory->Rollback(&rDoc);
+                    m_pHistory->Rollback(rDoc);
                     m_pHistory.reset();
                 }
             }
@@ -1155,7 +1155,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             // there's a hack in InsertCnt_() to move it below new section frame
             SwNode& start(*rDoc.GetNodes()[m_nSttNode - m_nReplaceDummy]);
             SwNode& end(*rDoc.GetNodes()[m_nSttNode]); // exclude m_nSttNode
-            ::MakeFrames(&rDoc, start, end);
+            ::MakeFrames(rDoc, start, end);
         }
         // tdf#121031 if the start node is a text node, it already has a frame;
         // if it's a table, it does not
@@ -1181,7 +1181,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 ? delFullParaEndNode
                 // tdf#147310 SwDoc::DeleteRowCol() may delete whole table - end must be node following table!
                 : (m_nEndNode + (rDoc.GetNodes()[m_nSttNode]->IsTableNode() && rDoc.GetNodes()[m_nEndNode]->IsEndNode() ? 1 : 0))]);
-            ::MakeFrames(&rDoc, start, end);
+            ::MakeFrames(rDoc, start, end);
         }
     }
 

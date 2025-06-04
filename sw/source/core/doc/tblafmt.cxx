@@ -674,11 +674,9 @@ void SwTableAutoFormat::RestoreTableProperties(SwTable &table) const
     if (!pFormat)
         return;
 
-    SwDoc *pDoc = pFormat->GetDoc();
-    if (!pDoc)
-        return;
+    SwDoc& rDoc = pFormat->GetDoc();
 
-    SfxItemSet rSet(pDoc->GetAttrPool(), aTableSetRange);
+    SfxItemSet rSet(rDoc.GetAttrPool(), aTableSetRange);
 
     rSet.Put(SwFormatLayoutSplit(m_bLayoutSplit));
     rSet.Put(SfxBoolItem(RES_COLLAPSING_BORDERS, m_bCollapsingBorders));
@@ -688,8 +686,8 @@ void SwTableAutoFormat::RestoreTableProperties(SwTable &table) const
 
     pFormat->SetFormatAttr(rSet);
 
-    if (SwEditShell *pShell = pDoc->GetEditShell())
-        pDoc->SetRowSplit(*pShell->getShellCursor(false), SwFormatRowSplit(m_bRowSplit));
+    if (SwEditShell *pShell = rDoc.GetEditShell())
+        rDoc.SetRowSplit(*pShell->getShellCursor(false), SwFormatRowSplit(m_bRowSplit));
 
     table.SetRowsToRepeat(m_aRepeatHeading);
 }
@@ -700,11 +698,9 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
     if (!pFormat)
         return;
 
-    SwDoc *pDoc = pFormat->GetDoc();
-    if (!pDoc)
-        return;
+    SwDoc& rDoc = pFormat->GetDoc();
 
-    SwEditShell *pShell = pDoc->GetEditShell();
+    SwEditShell *pShell = rDoc.GetEditShell();
     std::unique_ptr<SwFormatRowSplit> pRowSplit(pShell ? SwDoc::GetRowSplit(*pShell->getShellCursor(false)) : nullptr);
     m_bRowSplit = pRowSplit && pRowSplit->GetValue();
     pRowSplit.reset();

@@ -720,14 +720,14 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         GetFlyFrame()->ChgRelPos( aTmp );
     }
 
-    SwAttrSet aSet( pFormat->GetDoc()->GetAttrPool(),
+    SwAttrSet aSet( pFormat->GetDoc().GetAttrPool(),
                                             RES_VERT_ORIENT, RES_HORI_ORIENT );
     SwFormatHoriOrient aHori( pFormat->GetHoriOrient() );
     SwFormatVertOrient aVert( pFormat->GetVertOrient() );
     bool bPut = false;
 
     if( !GetFlyFrame()->IsFlyLayFrame() &&
-        ::GetHtmlMode(pFormat->GetDoc()->GetDocShell()) )
+        ::GetHtmlMode(pFormat->GetDoc().GetDocShell()) )
     {
         //In HTML-Mode only automatic aligns are allowed.
         //Only we can try a snap to left/right respectively left-/right border
@@ -922,7 +922,7 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     const tools::Long aNewHeight(aNewRect.GetHeight() + (getOutRectangle().GetHeight() - aOldRect.GetHeight()));
     aSz.SetWidth(aNewWidth);
     aSz.SetHeight(aNewHeight);
-    pFormat->GetDoc()->SetAttr( aSz, *pFormat );
+    pFormat->GetDoc().SetAttr( aSz, *pFormat );
 
     // add move - to make result look better. Fill with defaults
     // for the untransformed case
@@ -1113,7 +1113,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
                 aFrameSz.SetHeightPercent( sal_uInt8(aSz.Height() * 100.0 / nRelHeight + 0.5) );
             }
 
-            pFormat->GetDoc()->SetAttr( aFrameSz, *pFormat );
+            pFormat->GetDoc().SetAttr( aFrameSz, *pFormat );
         }
     }
 
@@ -1154,7 +1154,7 @@ void SwVirtFlyDrawObj::Move(const Size& rSiz)
 {
     NbcMove( rSiz );
     SetChanged();
-    GetFormat()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+    GetFormat()->GetDoc().GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
 void SwVirtFlyDrawObj::Resize(const Point& rRef,
@@ -1162,14 +1162,14 @@ void SwVirtFlyDrawObj::Resize(const Point& rRef,
 {
     NbcResize( rRef, xFact, yFact );
     SetChanged();
-    GetFormat()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+    GetFormat()->GetDoc().GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
 void SwVirtFlyDrawObj::Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact)
 {
     NbcCrop( rRef, fxFact, fyFact );
     SetChanged();
-    GetFormat()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+    GetFormat()->GetDoc().GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
 // RotGrfFlyFrame: Helper to access possible rotation of Graphic contained in FlyFrame

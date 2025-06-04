@@ -220,7 +220,7 @@ void SwAnchoredDrawObject::UpdateLayoutDir()
 
     if ( !NotYetPositioned() &&
          GetFrameFormat()->GetLayoutDir() != nOldLayoutDir &&
-         GetFrameFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
+         GetFrameFormat()->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
          !IsOutsidePage() )
     {
         mbCaptureAfterLayoutDirChange = true;
@@ -521,9 +521,9 @@ void SwAnchoredDrawObject::SetDrawObjAnchor()
         DrawObj()->Move( aMove );
         // Sync textbox if it wasn't done at move
         SwFrameFormat* pObjFormat = GetFrameFormat();
-        if ( SwTextBoxHelper::isTextBox(pObjFormat, RES_DRAWFRMFMT) && pObjFormat->GetDoc() &&
-            pObjFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() &&
-            pObjFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->IsInConstructor())
+        if ( SwTextBoxHelper::isTextBox(pObjFormat, RES_DRAWFRMFMT) &&
+            pObjFormat->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell() &&
+            pObjFormat->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell()->IsInConstructor())
         {
             SwTextBoxHelper::changeAnchor(pObjFormat, pObjFormat->FindRealSdrObject());
         }
@@ -538,7 +538,7 @@ void SwAnchoredDrawObject::SetDrawObjAnchor()
 */
 void SwAnchoredDrawObject::InvalidatePage_( SwPageFrame* _pPageFrame )
 {
-    if ( !_pPageFrame || _pPageFrame->GetFormat()->GetDoc()->IsInDtor() )
+    if ( !_pPageFrame || _pPageFrame->GetFormat()->GetDoc().IsInDtor() )
         return;
 
     if ( !_pPageFrame->GetUpper() )
@@ -739,10 +739,10 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 
         if ( nTargetWidth != aCurrObjRect.GetWidth( ) || nTargetHeight != aCurrObjRect.GetHeight( ) )
         {
-            SwDoc* pDoc = const_cast<SwDoc*>(GetPageFrame()->GetFormat()->GetDoc());
+            SwDoc& rDoc = const_cast<SwDoc&>(GetPageFrame()->GetFormat()->GetDoc());
 
-            bool bEnableSetModified = pDoc->getIDocumentState().IsEnableSetModified();
-            pDoc->getIDocumentState().SetEnableSetModified(false);
+            bool bEnableSetModified = rDoc.getIDocumentState().IsEnableSetModified();
+            rDoc.getIDocumentState().SetEnableSetModified(false);
             auto pObject = const_cast<SdrObject*>(GetDrawObj());
             pObject->Resize( aCurrObjRect.TopLeft(),
                     Fraction( nTargetWidth, aCurrObjRect.GetWidth() ),
@@ -759,7 +759,7 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                 }
             }
 
-            pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
+            rDoc.getIDocumentState().SetEnableSetModified(bEnableSetModified);
         }
     }
     return SwRect(GetDrawObj()->GetCurrentBoundRect());
@@ -814,10 +814,10 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrame* _pNewAnchorFram
     SwFormatHoriOrient hori(nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME);
     SwFormatVertOrient vert(nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME);
     SwFrameFormat* pObjFormat = GetFrameFormat();
-    SfxItemSet items(SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_HORI_ORIENT>(pObjFormat->GetDoc()->GetAttrPool()));
+    SfxItemSet items(SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_HORI_ORIENT>(pObjFormat->GetDoc().GetAttrPool()));
     items.Put(hori);
     items.Put(vert);
-    pObjFormat->GetDoc()->SetAttr(items, *pObjFormat);
+    pObjFormat->GetDoc().SetAttr(items, *pObjFormat);
 }
 
 // --> #i34748# - change return type.

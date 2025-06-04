@@ -156,7 +156,7 @@ void SwSectionFrame::Init()
 
 void SwSectionFrame::DestroyImpl()
 {
-    if( GetFormat() && !GetFormat()->GetDoc()->IsInDtor() )
+    if( GetFormat() && !GetFormat()->GetDoc().IsInDtor() )
     {
         SwRootFrame *pRootFrame = getRootFrame();
         if( pRootFrame )

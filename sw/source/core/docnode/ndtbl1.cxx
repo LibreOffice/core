@@ -555,8 +555,8 @@ bool SwDoc::HasRowNotTracked( const SwCursor& rCursor )
         return false;
 
     SwRedlineTable::size_type nRedlinePos = 0;
-    SwDoc* pDoc = aRowArr[0]->GetFrameFormat()->GetDoc();
-    const IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwDoc& rDoc = aRowArr[0]->GetFrameFormat()->GetDoc();
+    const IDocumentRedlineAccess& rIDRA = rDoc.getIDocumentRedlineAccess();
 
     for( auto pLn : aRowArr )
     {
@@ -620,8 +620,8 @@ void SwDoc::SetRowNotTracked( const SwCursor& rCursor,
             SwRedlineTable::size_type nPos = pLn->UpdateTextChangesOnly(nRedlinePos);
             if ( nPos != SwRedlineTable::npos )
             {
-                SwDoc* pDoc = pLn->GetFrameFormat()->GetDoc();
-                IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+                SwDoc& rDoc = pLn->GetFrameFormat()->GetDoc();
+                IDocumentRedlineAccess& rIDRA = rDoc.getIDocumentRedlineAccess();
                 const SwRedlineTable& aRedlineTable = rIDRA.GetRedlineTable();
                 SwRangeRedline* pTmp = aRedlineTable[ nPos ];
                 if ( RedlineType::Insert == pTmp->GetType() &&

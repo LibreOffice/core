@@ -67,7 +67,7 @@ public:
      * process @p numberOfEntriesToProcess entries.
      */
     std::optional<std::pair<SwTextNode *, SvxTabStopItem>>
-    GenerateText(SwDoc *doc,
+    GenerateText(SwDoc& rDoc,
         std::unordered_map<OUString, int> & rMarkURLs,
         const std::vector<std::unique_ptr<SwTOXSortTabBase>>& entries,
         sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess,

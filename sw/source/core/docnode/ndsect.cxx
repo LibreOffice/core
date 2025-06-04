@@ -496,7 +496,7 @@ SwSection* SwDoc::GetCurrSection( const SwPosition& rPos )
 
 SwSectionFormat* SwDoc::MakeSectionFormat()
 {
-    SwSectionFormat* pNew = new SwSectionFormat( mpDfltFrameFormat.get(), this );
+    SwSectionFormat* pNew = new SwSectionFormat( mpDfltFrameFormat.get(), *this );
     mpSectionFormatTable->push_back( pNew );
     return pNew;
 }
@@ -1164,9 +1164,9 @@ void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, const SwNodeIndex* pE
     if( rNds.IsDocNodes() )
     {
         if( pEndIdx )
-            ::MakeFrames( &rDoc, pIdxBehind->GetNode(), pEndIdx->GetNode() );
+            ::MakeFrames( rDoc, pIdxBehind->GetNode(), pEndIdx->GetNode() );
         else
-            ::MakeFrames( &rDoc, pIdxBehind->GetNode(), SwNodeIndex( *EndOfSectionNode(), 1 ).GetNode() );
+            ::MakeFrames( rDoc, pIdxBehind->GetNode(), SwNodeIndex( *EndOfSectionNode(), 1 ).GetNode() );
     }
 }
 
@@ -1334,7 +1334,7 @@ void SwSectionNode::NodesArrChgd()
         return;
 
     SwNodes& rNds = GetNodes();
-    SwDoc* pDoc = pFormat->GetDoc();
+    SwDoc& rDoc = pFormat->GetDoc();
 
     if( !rNds.IsDocNodes() )
     {
@@ -1348,7 +1348,7 @@ void SwSectionNode::NodesArrChgd()
     SwSectionNode* pSectNd = StartOfSectionNode()->FindSectionNode();
     // set the correct parent from the new section
     pFormat->SetDerivedFrom( pSectNd ? pSectNd->GetSection().GetFormat()
-                                  : pDoc->GetDfltFrameFormat() );
+                                  : rDoc.GetDfltFrameFormat() );
 
     // Set the right StartNode for all in this Area
     SwNodeOffset nStart = GetIndex()+1, nEnd = EndOfSectionIndex();
@@ -1366,23 +1366,23 @@ void SwSectionNode::NodesArrChgd()
     // Moving Nodes to the UndoNodes array?
     if( rNds.IsDocNodes() )
     {
-        OSL_ENSURE( pDoc == &GetDoc(),
+        OSL_ENSURE( &rDoc == &GetDoc(),
                 "Moving to different Documents?" );
         if( m_pSection->IsLinkType() ) // Remove the Link
-            m_pSection->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? LinkCreateType::Connect : LinkCreateType::NONE );
+            m_pSection->CreateLink( rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() ? LinkCreateType::Connect : LinkCreateType::NONE );
 
         if (m_pSection->IsServer())
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertServer( m_pSection->GetObject() );
+            rDoc.getIDocumentLinksAdministration().GetLinkManager().InsertServer( m_pSection->GetObject() );
     }
     else
     {
         if (SectionType::Content != m_pSection->GetType()
             && m_pSection->IsConnected())
         {
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( &m_pSection->GetBaseLink() );
+            rDoc.getIDocumentLinksAdministration().GetLinkManager().Remove( &m_pSection->GetBaseLink() );
         }
         if (m_pSection->IsServer())
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( m_pSection->GetObject() );
+            rDoc.getIDocumentLinksAdministration().GetLinkManager().RemoveServer( m_pSection->GetObject() );
     }
 
 }

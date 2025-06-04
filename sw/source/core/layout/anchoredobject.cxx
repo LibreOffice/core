@@ -773,7 +773,7 @@ SwTextFrame* SwAnchoredObject::FindAnchorCharFrame()
 bool SwAnchoredObject::IsFormatPossible() const
 {
     if (const SwFrameFormat* pFormat = GetFrameFormat())
-        return pFormat->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetDrawObj()->GetLayer() );
+        return pFormat->GetDoc().getIDocumentDrawModelAccess().IsVisibleLayerId( GetDrawObj()->GetLayer() );
     return false;
 }
 
@@ -797,7 +797,7 @@ void SwAnchoredObject::SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrap
     // --> #i35911#
     if ( mbTmpConsiderWrapInfluence )
     {
-        SwLayouter::InsertObjForTmpConsiderWrapInfluence( *(GetFrameFormat()->GetDoc()),
+        SwLayouter::InsertObjForTmpConsiderWrapInfluence( GetFrameFormat()->GetDoc(),
                                                           *this );
     }
 }
@@ -807,7 +807,7 @@ void SwAnchoredObject::ClearTmpConsiderWrapInfluence()
     mbTmpConsiderWrapInfluence = false;
     mbClearedEnvironment = false;
     SetClearedEnvironment( false );
-    SwLayouter::RemoveObjForTmpConsiderWrapInfluence( *(GetFrameFormat()->GetDoc()),
+    SwLayouter::RemoveObjForTmpConsiderWrapInfluence( GetFrameFormat()->GetDoc(),
                                                       *this );
 }
 void SwAnchoredObject::SetTmpConsiderWrapInfluenceOfOtherObjs()

@@ -2812,7 +2812,7 @@ sal_Int32 SwEscherEx::WriteFlyFrame(const DrawObj &rObj, sal_uInt32 &rShapeId,
             //object is in the hidden header/footer. We save the fmt directly
             //in such cases; we copy most of the logic from the block above
             const bool bBrowseMode = rFormat.getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE);
-            if( bBrowseMode && rFormat.GetDoc())
+            if( bBrowseMode)
             {
                 if( !rFormat.GetChain().GetPrev() )//obj in header/footer?
                 {

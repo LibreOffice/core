@@ -387,7 +387,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
             SwPosition aPos(*pSttNd);
 
             // set cursor to top left box of range
-            auto pUnoCursor = pTableFormat->GetDoc()->CreateUnoCursor(aPos, true);
+            auto pUnoCursor = pTableFormat->GetDoc().CreateUnoCursor(aPos, true);
             pUnoCursor->Move( fnMoveForward, GoInNode );
             pUnoCursor->SetRemainInSection( false );
 
@@ -1434,7 +1434,7 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable, bool bImmediat
         return;
 
     if (!m_bDisposed)
-       pTable->GetFrameFormat()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
+       pTable->GetFrameFormat()->GetDoc().getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
     const Vec_DataSequenceRef_t &rVec = m_aDataSequences[ pTable ];
     for (const unotools::WeakReference<SwChartDataSequence>& rItem : rVec)
@@ -1449,7 +1449,7 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable, bool bImmediat
 
     // tdf#122995 added Immediate-mode to allow non-timer-delayed Chart invalidation
     if (bImmediate && !m_bDisposed)
-       pTable->GetFrameFormat()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().Disconnect();
+       pTable->GetFrameFormat()->GetDoc().getIDocumentChartDataProviderAccess().GetChartControllerHelper().Disconnect();
 }
 
 void SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rBox )
@@ -1459,7 +1459,7 @@ void SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rB
         return;
 
     if (!m_bDisposed)
-        pTable->GetFrameFormat()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
+        pTable->GetFrameFormat()->GetDoc().getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
     Vec_DataSequenceRef_t &rVec = m_aDataSequences[ pTable ];
 
@@ -1504,7 +1504,7 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
         return;
 
     if (!m_bDisposed)
-        pTable->GetFrameFormat()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
+        pTable->GetFrameFormat()->GetDoc().getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
     //! make a copy of the STL container!
     //! This is necessary since calling 'dispose' will implicitly remove an element

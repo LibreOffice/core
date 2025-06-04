@@ -687,7 +687,7 @@ void SwFrame::InvalidatePage( const SwPageFrame *pPage ) const
     if ( !(pPage && pPage->GetUpper()) )
         return;
 
-    if ( pPage->GetFormat()->GetDoc()->IsInDtor() )
+    if ( pPage->GetFormat()->GetDoc().IsInDtor() )
         return;
 
     SwRootFrame *pRoot = const_cast<SwRootFrame*>(static_cast<const SwRootFrame*>(pPage->GetUpper()));
@@ -2234,7 +2234,7 @@ SwTwips SwContentFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bo
         SwTabFrame *pTab = (nOld && IsInTab()) ? FindTabFrame() : nullptr;
         if (pTab)
         {
-            SwDocShell* pShell = pTab->GetFormat()->GetDoc()->GetDocShell();
+            SwDocShell* pShell = pTab->GetFormat()->GetDoc().GetDocShell();
             if ( pTab->GetTable()->GetHTMLTableLayout() &&
                  !pTab->IsJoinLocked() &&
                  pShell && !pShell->IsReadOnly() )
@@ -2334,7 +2334,7 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         SwTabFrame *pTab = IsInTab() ? FindTabFrame() : nullptr;
         if (pTab)
         {
-            SwDocShell* pShell = pTab->GetFormat()->GetDoc()->GetDocShell();
+            SwDocShell* pShell = pTab->GetFormat()->GetDoc().GetDocShell();
             if ( pTab->GetTable()->GetHTMLTableLayout() &&
                  !pTab->IsJoinLocked() &&
                  pShell && !pShell->IsReadOnly() )
@@ -2514,7 +2514,7 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                     CheckPageDescs( pPage );
                 if (GetPageDescItem().GetNumOffset())
                     static_cast<SwRootFrame*>(pPage->GetUpper())->SetVirtPageNum( true );
-                pPage->GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields(pPage->getFrameArea().Top());
+                pPage->GetFormat()->GetDoc().getIDocumentFieldsAccess().UpdatePageFields(pPage->getFrameArea().Top());
             }
             break;
 
@@ -2670,7 +2670,7 @@ void SwContentFrame::UpdateAttrForFormatChange( SwFormat* pOldFormat, SwFormat* 
             CheckPageDescs( pPage );
         if (GetPageDescItem().GetNumOffset())
             static_cast<SwRootFrame*>(pPage->GetUpper())->SetVirtPageNum( true );
-        pPage->GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields(pPage->getFrameArea().Top());
+        pPage->GetFormat()->GetDoc().getIDocumentFieldsAccess().UpdatePageFields(pPage->getFrameArea().Top());
     }
 
     SwModify aMod;
@@ -3156,7 +3156,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
         SwContentFrame *pCnt;
         if( IsFootnoteFrame() && !static_cast<SwFootnoteFrame*>(this)->GetAttr()->GetFootnote().IsEndNote() &&
-            ( GetFormat()->GetDoc()->GetFootnoteInfo().m_ePos != FTNPOS_CHAPTER ||
+            ( GetFormat()->GetDoc().GetFootnoteInfo().m_ePos != FTNPOS_CHAPTER ||
               ( IsInSct() && FindSctFrame()->IsFootnoteAtEnd() ) ) &&
               nullptr != (pCnt = static_cast<SwFootnoteFrame*>(this)->GetRefFromAttr() ) )
         {
@@ -4460,7 +4460,7 @@ static void AddRemoveFlysForNode(
     {
         // pNode's frame has been deleted by CheckParaRedlineMerge()
         AppendObjsOfNode(&rTable,
-            pNode->GetIndex(), &rFrame, pPage, &rTextNode.GetDoc(),
+            pNode->GetIndex(), &rFrame, pPage, rTextNode.GetDoc(),
             &rIterFirst, &rIterEnd, pFirstNode, pLastNode);
         if (pSkipped)
         {
@@ -4667,7 +4667,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             SwTableNode * pTableNd = rNode.GetTableNode();
             SwPosition const tmp(rNode);
             SwRangeRedline const*const pRedline(
-                rLayout.GetFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedline(tmp, nullptr));
+                rLayout.GetFormat()->GetDoc().getIDocumentRedlineAccess().GetRedline(tmp, nullptr));
             // pathology: redline that starts on a TableNode; cannot
             // be created in UI but by import filters...
             if (pRedline
@@ -4780,7 +4780,7 @@ static void UnHideRedlinesExtras(SwRootFrame & rLayout,
 static void UnHide(SwRootFrame & rLayout)
 {
     assert(rLayout.GetCurrShell()->ActionPend()); // tdf#125754 avoid recursive layout
-    SwDoc & rDoc(*rLayout.GetFormat()->GetDoc());
+    SwDoc & rDoc(rLayout.GetFormat()->GetDoc());
     // don't do early return if there are no redlines:
     // Show->Hide must init hidden number trees
     // Hide->Show may be called after all redlines have been deleted but there

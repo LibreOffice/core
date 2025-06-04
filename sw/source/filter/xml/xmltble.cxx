@@ -1237,7 +1237,7 @@ void SwXMLTextParagraphExport::exportTable(
                 // ALL flags are set at the same time.
                 const bool bExportStyles = bool( GetExport().getExportFlags() & SvXMLExportFlags::STYLES );
                 if (!isAutoStylesCollected()
-                    && (bExportStyles || !pFormat->GetDoc()->IsInHeaderFooter(*pTableNd)))
+                    && (bExportStyles || !pFormat->GetDoc().IsInHeaderFooter(*pTableNd)))
                 {
                     maTableNodes.push_back(pTableNd);
                     m_TableFormats.try_emplace(pTableNd);

@@ -1402,7 +1402,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     {
         sal_uInt32 nToPageNum = 0;
         const bool bMoveFwdByObjPos = SwLayouter::FrameMovedFwdByObjPos(
-                                                    *(GetAttrSet()->GetDoc()),
+                                                    GetAttrSet()->GetDoc(),
                                                     *static_cast<SwTextFrame*>(this),
                                                     nToPageNum );
         // #i58182#

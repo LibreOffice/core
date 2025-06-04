@@ -1343,34 +1343,34 @@ void SwUndoSaveSection::SaveSection(
     m_nMoveLen = nEnd - m_oMovedStart->GetIndex() + 1;
 }
 
-void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
+void SwUndoSaveSection::RestoreSection( SwDoc& rDoc, SwNodeIndex* pIdx,
                                         sal_uInt16 nSectType )
 {
     if( NODE_OFFSET_MAX == m_nStartPos )        // was there any content?
         return;
 
     // check if the content is at the old position
-    SwNodeIndex aSttIdx( pDoc->GetNodes(), m_nStartPos );
+    SwNodeIndex aSttIdx( rDoc.GetNodes(), m_nStartPos );
 
     // move the content from UndoNodes array into Fly
     SwStartNode* pSttNd = SwNodes::MakeEmptySection( aSttIdx.GetNode(),
                                             static_cast<SwStartNodeType>(nSectType) );
 
-    RestoreSection( pDoc, *pSttNd->EndOfSectionNode() );
+    RestoreSection( rDoc, *pSttNd->EndOfSectionNode() );
 
     if( pIdx )
         *pIdx = *pSttNd;
 }
 
 void SwUndoSaveSection::RestoreSection(
-        SwDoc *const pDoc, const SwNode& rInsPos, bool bForceCreateFrames)
+        SwDoc& rDoc, const SwNode& rInsPos, bool bForceCreateFrames)
 {
     if( NODE_OFFSET_MAX == m_nStartPos )        // was there any content?
         return;
 
     SwPosition aInsPos( rInsPos );
     SwNodeOffset nEnd = m_oMovedStart->GetIndex() + m_nMoveLen - 1;
-    MoveFromUndoNds(*pDoc, m_oMovedStart->GetIndex(), aInsPos, &nEnd, bForceCreateFrames);
+    MoveFromUndoNds(rDoc, m_oMovedStart->GetIndex(), aInsPos, &nEnd, bForceCreateFrames);
 
     // destroy indices again, content was deleted from UndoNodes array
     m_oMovedStart.reset();
@@ -1378,7 +1378,7 @@ void SwUndoSaveSection::RestoreSection(
 
     if( m_pRedlineSaveData )
     {
-        SwUndo::SetSaveData( *pDoc, *m_pRedlineSaveData );
+        SwUndo::SetSaveData( rDoc, *m_pRedlineSaveData );
         m_pRedlineSaveData.reset();
     }
 }
@@ -1455,9 +1455,9 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM const & rPam )
     if( GetMvSttIdx() )
     {
         SwNodeIndex aIdx( rDoc.GetNodes() );
-        RestoreSection( &rDoc, &aIdx, SwNormalStartNode );
+        RestoreSection( rDoc, &aIdx, SwNormalStartNode );
         if( GetHistory() )
-            GetHistory()->Rollback( &rDoc );
+            GetHistory()->Rollback( rDoc );
         pRedl->SetContentIdx( aIdx );
     }
     SetPaM( *pRedl );

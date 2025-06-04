@@ -64,8 +64,8 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, bool bUpdate 
 
 SwDDETable::~SwDDETable()
 {
-    SwDoc* pDoc = GetFrameFormat()->GetDoc();
-    if (!pDoc->IsInDtor() && !m_aLines.empty())
+    SwDoc& rDoc = GetFrameFormat()->GetDoc();
+    if (!rDoc.IsInDtor() && !m_aLines.empty())
     {
         assert(m_pTableNode);
         if (m_pTableNode->GetNodes().IsDocNodes())
@@ -176,9 +176,9 @@ void SwDDETable::ChangeContent()
     }
 
     const IDocumentSettingAccess& rIDSA = GetFrameFormat()->getIDocumentSettingAccess();
-    SwDoc* pDoc = GetFrameFormat()->GetDoc();
+    SwDoc& rDoc = GetFrameFormat()->GetDoc();
     if( AUTOUPD_FIELD_AND_CHARTS == rIDSA.getFieldUpdateFlags(true) )
-        pDoc->getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
+        rDoc.getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
 }
 
 SwDDEFieldType* SwDDETable::GetDDEFieldType()
@@ -190,7 +190,7 @@ void SwDDETable::NoDDETable()
 {
     // search table node
     OSL_ENSURE( GetFrameFormat(), "No FrameFormat" );
-    SwDoc* pDoc = GetFrameFormat()->GetDoc();
+    SwDoc& rDoc = GetFrameFormat()->GetDoc();
 
     // Is this the correct NodesArray? (because of UNDO)
     if( m_aLines.empty() )
@@ -213,7 +213,7 @@ void SwDDETable::NoDDETable()
                                    GetTabLines().begin(), GetTabLines().end() ); // move lines
     GetTabLines().clear();
 
-    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
         m_pDDEType->DecRefCnt();
 
     pTableNd->SetNewTable( std::move(pNewTable) );       // replace table

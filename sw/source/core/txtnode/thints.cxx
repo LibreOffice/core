@@ -1392,7 +1392,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     {
                         // do not record deletion of Format!
                         ::sw::UndoGuard const ug(
-                                pFormat->GetDoc()->GetIDocumentUndoRedo());
+                                pFormat->GetDoc().GetIDocumentUndoRedo());
                         DestroyAttr(pAttr);
                         return false; // text node full :(
                     }
@@ -1412,12 +1412,12 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 // format pointer could have changed in SetAnchor,
                 // when copying to other docs!
                 pFormat = pAttr->GetFlyCnt().GetFrameFormat();
-                SwDoc *pDoc = pFormat->GetDoc();
+                SwDoc& rDoc = pFormat->GetDoc();
 
                 // OD 26.06.2003 - allow drawing objects in header/footer.
                 // But don't allow control objects in header/footer
                 if( RES_DRAWFRMFMT == pFormat->Which() &&
-                    pDoc->IsInHeaderFooter( *pFormat->GetAnchor().GetAnchorNode() ) )
+                    rDoc.IsInHeaderFooter( *pFormat->GetAnchor().GetAnchorNode() ) )
                 {
                     bool bCheckControlLayer = false;
                     pFormat->CallSwClientNotify(sw::CheckDrawFrameFormatLayerHint(&bCheckControlLayer));
@@ -1437,7 +1437,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                             Update(aTmpIdx, 1, UpdateMode::Negative);
                         }
                         // do not record deletion of Format!
-                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
+                        ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
                         DestroyAttr( pAttr );
                         return false;
                     }

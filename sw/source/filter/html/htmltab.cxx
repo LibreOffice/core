@@ -1422,7 +1422,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             // Only set format if there's a value or the box is empty
             if( bHasNumFormat && (bHasValue || pBox->IsEmpty()) )
             {
-                bool bLock = pFrameFormat->GetDoc()->GetNumberFormatter()
+                bool bLock = pFrameFormat->GetDoc().GetNumberFormatter()
                                      ->IsTextFormat( nNumFormat );
                 SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>
                     aItemSet( *pFrameFormat->GetAttrSet().GetPool() );
@@ -1499,7 +1499,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 pTableFormat->UpdateToSet(nPos, bSpansToEndV, bSpansToEndH,
                                           const_cast<SfxItemSet&>(rAttrSet),
                                           SwTableAutoFormatUpdateFlags::Box,
-                                          pFrameFormat->GetDoc()->GetNumberFormatter());
+                                          pFrameFormat->GetDoc().GetNumberFormatter());
                 if (pOldBoxItem)
                 {
                     // There was an old item, so it's guaranteed that there's a new item

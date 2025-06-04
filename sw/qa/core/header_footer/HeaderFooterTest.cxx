@@ -79,10 +79,10 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testStashedHeaderFooter)
 
     // Check document instance
     auto pSourceStashedFormat = pSourcePageDesc->GetStashedFrameFormat(true, false, true);
-    CPPUNIT_ASSERT_EQUAL(true, pSourceStashedFormat->GetDoc() == pSourceDocument);
+    CPPUNIT_ASSERT_EQUAL(true, &pSourceStashedFormat->GetDoc() == pSourceDocument);
 
     auto pTargetStashedFormat = pTargetPageDesc->GetStashedFrameFormat(true, false, true);
-    CPPUNIT_ASSERT_EQUAL(true, pTargetStashedFormat->GetDoc() == pTargetDocument);
+    CPPUNIT_ASSERT_EQUAL(true, &pTargetStashedFormat->GetDoc() == pTargetDocument);
 
     xSourceDocument->dispose();
     xTargetDocument->dispose();

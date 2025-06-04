@@ -145,16 +145,16 @@ private:
     friend void InitCore();            // For creating/deleting of version maps.
     friend void FinitCore();
 
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
 
 public:
-    SwAttrPool( SwDoc* pDoc );
+    SwAttrPool( SwDoc& rDoc );
 private:
     virtual ~SwAttrPool() override;
 public:
 
-          SwDoc* GetDoc()           { return m_pDoc; }
-    const SwDoc* GetDoc() const     { return m_pDoc; }
+          SwDoc& GetDoc()           { return m_rDoc; }
+    const SwDoc& GetDoc() const     { return m_rDoc; }
 
 };
 
@@ -202,8 +202,8 @@ public:
     bool SetModifyAtAttr( const sw::BroadcastingModify* pModify );
 
     // Document is set at SwAttrPool. Therefore it is always accessible.
-    const SwDoc *GetDoc() const { return GetPool()->GetDoc(); }
-          SwDoc *GetDoc()       { return GetPool()->GetDoc(); }
+    const SwDoc &GetDoc() const { return GetPool()->GetDoc(); }
+          SwDoc &GetDoc()       { return GetPool()->GetDoc(); }
 
     // Get methods: bool indicates whether to search only in Set (when false)
     // or also in parents. If nothing is found then default attribute is returned.

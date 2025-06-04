@@ -1031,7 +1031,7 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
         SwCharFormat* pCharFormat = rFormat.GetCharFormat();
         if(pCharFormat)
         {
-            m_pDoc = pCharFormat->GetDoc();
+            m_pDoc = &pCharFormat->GetDoc();
             break;
         }
     }

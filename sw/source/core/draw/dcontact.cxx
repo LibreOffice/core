@@ -965,9 +965,9 @@ void SwDrawContact::Changed( const SdrObject& rObj,
 {
     // #i26791# - no event handling, if existing <SwViewShell>
     // is in construction
-    SwDoc* pDoc = GetFormat()->GetDoc();
-    if ( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
-         pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->IsInConstructor() )
+    SwDoc& rDoc = GetFormat()->GetDoc();
+    if ( rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
+         rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->IsInConstructor() )
     {
         return;
     }
@@ -975,17 +975,17 @@ void SwDrawContact::Changed( const SdrObject& rObj,
     // #i44339#
     // no event handling, if document is in destruction.
     // Exception: It's the SdrUserCallType::Delete event
-    if ( pDoc->IsInDtor() && eType != SdrUserCallType::Delete )
+    if ( rDoc.IsInDtor() && eType != SdrUserCallType::Delete )
     {
         return;
     }
 
     //Put on Action, but not if presently anywhere an action runs.
     bool bHasActions(true);
-    SwRootFrame *pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame *pTmpRoot = rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if ( pTmpRoot && pTmpRoot->IsCallbackActionEnabled() )
     {
-        SwViewShell* const pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+        SwViewShell* const pSh = rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
         if ( pSh )
         {
             for(SwViewShell& rShell : pSh->GetRingContainer() )
@@ -1085,7 +1085,7 @@ static void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
     if (SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
     {
         // Just notify the textbox that the size has changed, the actual object size is not interesting.
-        SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE> aResizeSet(pFormat->GetDoc()->GetAttrPool());
+        SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE> aResizeSet(pFormat->GetDoc().GetAttrPool());
         SwFormatFrameSize aSize;
         aResizeSet.Put(aSize);
         SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet, pFormat->FindRealSdrObject());
@@ -1111,7 +1111,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
     // #i35007#
     // improvement: determine as-character anchored object flag only once.
     const bool bAnchoredAsChar = ObjAnchoredAsChar();
-    const bool bNotify = !(GetFormat()->GetDoc()->IsInDtor()) &&
+    const bool bNotify = !(GetFormat()->GetDoc().IsInDtor()) &&
                          ( css::text::WrapTextMode_THROUGH != GetFormat()->GetSurround().GetSurround() ) &&
                          !bAnchoredAsChar;
     switch( eType )
@@ -1278,7 +1278,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                         assert(!"<SwDrawContact::Changed_(..)> - unsupported layout direction");
                     }
                 }
-                SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT> aSet( GetFormat()->GetDoc()->GetAttrPool() );
+                SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT> aSet( GetFormat()->GetDoc().GetAttrPool() );
                 const SwFormatVertOrient& rVert = GetFormat()->GetVertOrient();
                 if ( nYPosDiff != 0 )
                 {
@@ -1303,7 +1303,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 if ( nYPosDiff ||
                      ( !bAnchoredAsChar && nXPosDiff != 0 ) )
                 {
-                    GetFormat()->GetDoc()->SetFlyFrameAttr( *(GetFormat()), aSet );
+                    GetFormat()->GetDoc().SetFlyFrameAttr( *(GetFormat()), aSet );
                     // keep new object rectangle, to avoid multiple
                     // changes of the attributes by multiple event from
                     // the drawing layer - e.g. group objects and its members
@@ -1340,17 +1340,17 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
             if (rPageFrame && rPageFrame->isFrameAreaPositionValid() && GetFormat()
                 && GetFormat()->GetOtherTextBoxFormats())
             {
-                SwDoc* const pDoc = GetFormat()->GetDoc();
+                SwDoc& rDoc = GetFormat()->GetDoc();
 
                 // avoid Undo creation
-                ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
+                ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
 
                 // hide any artificial "changes" made by synchronizing the textbox position
-                const bool bEnableSetModified = pDoc->getIDocumentState().IsEnableSetModified();
-                pDoc->getIDocumentState().SetEnableSetModified(false);
+                const bool bEnableSetModified = rDoc.getIDocumentState().IsEnableSetModified();
+                rDoc.getIDocumentState().SetEnableSetModified(false);
 
                 SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT, RES_ANCHOR, RES_ANCHOR>
-                    aSyncSet( pDoc->GetAttrPool() );
+                    aSyncSet( rDoc.GetAttrPool() );
                 aSyncSet.Put(GetFormat()->GetHoriOrient());
                 bool bRelToTableCell(false);
                 aSyncSet.Put(SwFormatVertOrient(pAnchoredDrawObj->GetRelPosToPageFrame(false, bRelToTableCell).getY(),
@@ -1361,7 +1361,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 auto pSdrObj = const_cast<SdrObject*>(&rObj);
                 if (pSdrObj != GetFormat()->FindRealSdrObject())
                 {
-                    SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE>  aSet( pDoc->GetAttrPool() );
+                    SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE>  aSet( rDoc.GetAttrPool() );
 
                     aSet.Put(aSyncSet);
                     aSet.Put(pSdrObj->GetMergedItem(RES_FRM_SIZE));
@@ -1377,7 +1377,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 else
                     SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet, GetFormat()->FindRealSdrObject());
 
-                pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
+                rDoc.getIDocumentState().SetEnableSetModified(bEnableSetModified);
             }
         }
         break;
@@ -1597,7 +1597,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         rtl::Reference<SdrObject> xNewObj =
                 pDrawFormatLayoutCopyHint->m_rDestDoc.CloneSdrObj(
                         *GetMaster(),
-                        pDrawFormatLayoutCopyHint->m_rDestDoc.IsCopyIsMove() && &pDrawFormatLayoutCopyHint->m_rDestDoc == rFormat.GetDoc());
+                        pDrawFormatLayoutCopyHint->m_rDestDoc.IsCopyIsMove() && &pDrawFormatLayoutCopyHint->m_rDestDoc == &rFormat.GetDoc());
         new SwDrawContact(
                 &pDrawFormatLayoutCopyHint->m_rDestFormat, xNewObj.get() );
         // #i49730# - notify draw frame format that position attributes are
@@ -1612,7 +1612,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         SdrObject* pObj = GetMaster();
         if(GetAnchorFrame() && !pObj->IsInserted())
         {
-            auto pDrawModel = const_cast<SwDrawFrameFormat&>(static_cast<const SwDrawFrameFormat&>(rMod)).GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+            auto pDrawModel = const_cast<SwDrawFrameFormat&>(static_cast<const SwDrawFrameFormat&>(rMod)).GetDoc().getIDocumentDrawModelAccess().GetDrawModel();
             assert(pDrawModel);
             pDrawModel->GetPage(0)->InsertObject(pObj);
         }
@@ -1706,7 +1706,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 
     // --> #i36181# - notify background of drawing object
     if ( _bMoveMasterToInvisibleLayer &&
-         !(GetFormat()->GetDoc()->IsInDtor()) &&
+         !(GetFormat()->GetDoc().IsInDtor()) &&
          GetAnchorFrame() && !GetAnchorFrame()->IsInDtor() )
     {
         const tools::Rectangle aOldRect( maAnchoredDrawObj.GetObjRectWithSpaces().SVRect() );
@@ -1904,7 +1904,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                         else
                         {
                             const SwNode& rIdx = *pAnch->GetAnchorNode();
-                            for(sw::SpzFrameFormat* pFlyFormat :*(pDrawFrameFormat->GetDoc()->GetSpzFrameFormats()))
+                            for(sw::SpzFrameFormat* pFlyFormat :*(pDrawFrameFormat->GetDoc().GetSpzFrameFormats()))
                             {
                                 if( pFlyFormat->GetContent().GetContentIdx() &&
                                     rIdx == pFlyFormat->GetContent().GetContentIdx()->GetNode() )

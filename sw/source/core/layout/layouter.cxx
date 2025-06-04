@@ -276,19 +276,18 @@ void SwLayouter::EndLoopControl()
     mpLooping.reset();
 }
 
-void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrame* pSect )
+void SwLayouter::CollectEndnotes( SwDoc& rDoc, SwSectionFrame* pSect )
 {
-    assert(pDoc && "No doc, no fun");
-    if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
-        pDoc->getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
-    pDoc->getIDocumentLayoutAccess().GetLayouter()->CollectEndnotes_( pSect );
+    if( !rDoc.getIDocumentLayoutAccess().GetLayouter() )
+        rDoc.getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
+    rDoc.getIDocumentLayoutAccess().GetLayouter()->CollectEndnotes_( pSect );
 }
 
-bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrame const * pSect, SwFootnoteFrame* pFootnote )
+bool SwLayouter::Collecting( SwDoc& rDoc, SwSectionFrame const * pSect, SwFootnoteFrame* pFootnote )
 {
-    if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
+    if( !rDoc.getIDocumentLayoutAccess().GetLayouter() )
         return false;
-    SwLayouter *pLayouter = pDoc->getIDocumentLayoutAccess().GetLayouter();
+    SwLayouter *pLayouter = rDoc.getIDocumentLayoutAccess().GetLayouter();
     if( pLayouter->mpEndnoter && pLayouter->mpEndnoter->GetSect() && pSect &&
         ( pLayouter->mpEndnoter->GetSect()->IsAnFollow( pSect ) ||
           pSect->IsAnFollow( pLayouter->mpEndnoter->GetSect() ) ) )
@@ -300,13 +299,12 @@ bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrame const * pSect, SwFootno
     return false;
 }
 
-bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrame const *pPage )
+bool SwLayouter::StartLoopControl( SwDoc& rDoc, SwPageFrame const *pPage )
 {
-    assert(pDoc);
-    if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
-        pDoc->getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
-    return !pDoc->getIDocumentLayoutAccess().GetLayouter()->mpLooping &&
-            pDoc->getIDocumentLayoutAccess().GetLayouter()->StartLooping( pPage );
+    if( !rDoc.getIDocumentLayoutAccess().GetLayouter() )
+        rDoc.getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
+    return !rDoc.getIDocumentLayoutAccess().GetLayouter()->mpLooping &&
+            rDoc.getIDocumentLayoutAccess().GetLayouter()->StartLooping( pPage );
 }
 
 // #i28701#
@@ -437,7 +435,7 @@ void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTextFrame& rTextFrame )
 {
     if ( bCondition )
     {
-        const SwDoc& rDoc = *rTextFrame.GetAttrSet()->GetDoc();
+        const SwDoc& rDoc = rTextFrame.GetAttrSet()->GetDoc();
         if ( rDoc.getIDocumentLayoutAccess().GetLayouter() )
         {
             const_cast<SwDoc&>(rDoc).getIDocumentLayoutAccess().GetLayouter()->LoopingLouieLight( rDoc, rTextFrame );

@@ -518,7 +518,7 @@ bool sanityCheckLayoutCache(SwLayCacheImpl const& rCache,
  * If there's no layout cache, the distribution to the pages is more
  * a guess, but a guess with statistical background.
  */
-SwLayHelper::SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,
+SwLayHelper::SwLayHelper( SwDoc& rDoc, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,
                           SwLayoutFrame* &rpL, std::unique_ptr<SwActualSection> &rpA,
                           SwNodeOffset nNodeIndex, bool bCache )
     : mrpFrame( rpF )
@@ -527,16 +527,16 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* 
     , mrpLay( rpL )
     , mrpActualSection( rpA )
     , mbBreakAfter(false)
-    , mpDoc(pD)
+    , mrDoc(rDoc)
     , mnMaxParaPerPage( 25 )
     , mnParagraphCnt( bCache ? 0 : USHRT_MAX )
     , mnFlyIdx( 0 )
     , mbFirst( bCache )
 {
-    mpImpl = mpDoc->GetLayoutCache() ? mpDoc->GetLayoutCache()->LockImpl() : nullptr;
+    mpImpl = mrDoc.GetLayoutCache() ? mrDoc.GetLayoutCache()->LockImpl() : nullptr;
     if( mpImpl )
     {
-        SwNodes const& rNodes(mpDoc->GetNodes());
+        SwNodes const& rNodes(mrDoc.GetNodes());
         if (sanityCheckLayoutCache(*mpImpl, rNodes, nNodeIndex))
         {
             mnIndex = 0;
@@ -545,7 +545,7 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* 
         }
         else
         {
-            mpDoc->GetLayoutCache()->UnlockImpl();
+            mrDoc.GetLayoutCache()->UnlockImpl();
             mpImpl = nullptr;
             mnIndex = std::numeric_limits<size_t>::max();
             mnStartOfContent = SwNodeOffset(USHRT_MAX);
@@ -562,8 +562,8 @@ SwLayHelper::~SwLayHelper()
 {
     if( mpImpl )
     {
-        assert(mpDoc && mpDoc->GetLayoutCache() && "Missing layoutcache");
-        mpDoc->GetLayoutCache()->UnlockImpl();
+        assert(mrDoc.GetLayoutCache() && "Missing layoutcache");
+        mrDoc.GetLayoutCache()->UnlockImpl();
     }
 }
 
@@ -574,29 +574,29 @@ SwLayHelper::~SwLayHelper()
 sal_uLong SwLayHelper::CalcPageCount()
 {
     sal_uLong nPgCount;
-    SwLayCacheImpl *pCache = mpDoc->GetLayoutCache() ?
-                             mpDoc->GetLayoutCache()->LockImpl() : nullptr;
+    SwLayCacheImpl *pCache = mrDoc.GetLayoutCache() ?
+                             mrDoc.GetLayoutCache()->LockImpl() : nullptr;
     if( pCache )
     {
         nPgCount = pCache->size() + 1;
-        mpDoc->GetLayoutCache()->UnlockImpl();
+        mrDoc.GetLayoutCache()->UnlockImpl();
     }
     else
     {
-        nPgCount = mpDoc->getIDocumentStatistics().GetDocStat().nPage;
+        nPgCount = mrDoc.getIDocumentStatistics().GetDocStat().nPage;
         if ( nPgCount <= 10 ) // no page insertion for less than 10 pages
             nPgCount = 0;
-        sal_Int32 nNdCount = mpDoc->getIDocumentStatistics().GetDocStat().nPara;
+        sal_Int32 nNdCount = mrDoc.getIDocumentStatistics().GetDocStat().nPara;
         if ( nNdCount <= 1 )
         {
             //Estimates the number of paragraphs.
-            SwNodeOffset nTmp = mpDoc->GetNodes().GetEndOfContent().GetIndex() -
-                        mpDoc->GetNodes().GetEndOfExtras().GetIndex();
+            SwNodeOffset nTmp = mrDoc.GetNodes().GetEndOfContent().GetIndex() -
+                        mrDoc.GetNodes().GetEndOfExtras().GetIndex();
             //Tables have a little overhead...
-            nTmp -= SwNodeOffset(mpDoc->GetTableFrameFormats()->size() * 25);
+            nTmp -= SwNodeOffset(mrDoc.GetTableFrameFormats()->size() * 25);
             //Fly frames, too ..
-            nTmp -= (mpDoc->GetNodes().GetEndOfAutotext().GetIndex() -
-                       mpDoc->GetNodes().GetEndOfInserts().GetIndex()) / SwNodeOffset(3 * 5);
+            nTmp -= (mrDoc.GetNodes().GetEndOfAutotext().GetIndex() -
+                       mrDoc.GetNodes().GetEndOfInserts().GetIndex()) / SwNodeOffset(3 * 5);
             if ( nTmp > SwNodeOffset(0) )
                 nNdCount = sal_Int32(nTmp);
         }

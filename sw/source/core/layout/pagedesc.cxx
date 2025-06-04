@@ -241,12 +241,12 @@ void SwPageDesc::RegisterChange()
     // #117072# - During destruction of the document <SwDoc>
     // the page description is modified. Thus, do nothing, if the document
     // is in destruction respectively if no viewshell exists.
-    SwDoc* pDoc = GetMaster().GetDoc();
-    if ( !pDoc || pDoc->IsInDtor() )
+    SwDoc& rDoc = GetMaster().GetDoc();
+    if ( rDoc.IsInDtor() )
     {
         return;
     }
-    SwViewShell* pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pSh = rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
     if ( !pSh )
     {
         return;

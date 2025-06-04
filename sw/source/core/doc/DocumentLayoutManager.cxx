@@ -252,7 +252,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
                 pContentIdx = pFormat->GetContent().GetContentIdx();
             if (pContentIdx)
             {
-                sw::SpzFrameFormats* pSpzs = pFormat->GetDoc()->GetSpzFrameFormats();
+                sw::SpzFrameFormats* pSpzs = pFormat->GetDoc().GetSpzFrameFormats();
                 if ( pSpzs )
                 {
                     std::vector<SwFrameFormat*> aToDeleteFrameFormats;
@@ -272,7 +272,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
                     while ( !aToDeleteFrameFormats.empty() )
                     {
                         SwFrameFormat* pTmpFormat = aToDeleteFrameFormats.back();
-                        pFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat( pTmpFormat );
+                        pFormat->GetDoc().getIDocumentLayoutAccess().DelLayoutFormat( pTmpFormat );
 
                         aToDeleteFrameFormats.pop_back();
                     }
@@ -330,7 +330,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     const bool bDraw = RES_DRAWFRMFMT == rSource.Which();
     OSL_ENSURE( bFly || bDraw, "this method only works for fly or draw" );
 
-    SwDoc* pSrcDoc = const_cast<SwDoc*>(rSource.GetDoc());
+    SwDoc& rSrcDoc = const_cast<SwDoc&>(rSource.GetDoc());
 
     // May we copy this object?
     // We may, unless it's 1) it's a control (and therefore a draw)
@@ -354,7 +354,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         return nullptr;
 
     SwFrameFormat* pDest = m_rDoc.GetDfltFrameFormat();
-    if( rSource.GetRegisteredIn() != pSrcDoc->GetDfltFrameFormat() )
+    if( rSource.GetRegisteredIn() != rSrcDoc.GetDfltFrameFormat() )
         pDest = m_rDoc.CopyFrameFormat( *static_cast<const SwFrameFormat*>(rSource.GetRegisteredIn()) );
     if( bFly )
     {
@@ -394,7 +394,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         pDest->SetFormatAttr( aAttr );
         pDest->SetFormatAttr( rNewAnchor );
 
-        if( !m_rDoc.IsCopyIsMove() || &m_rDoc != pSrcDoc )
+        if( !m_rDoc.IsCopyIsMove() || &m_rDoc != &rSrcDoc )
         {
             if( (m_rDoc.IsInReading() && !bInHeaderFooter) || m_rDoc.IsInMailMerge() )
                 pDest->SetFormatName( UIName() );
@@ -429,7 +429,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         //contact object itself. They should be managed by SwUndoInsLayFormat.
         const ::sw::DrawUndoGuard drawUndoGuard(m_rDoc.GetIDocumentUndoRedo());
 
-        pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aIdx.GetNode(), nullptr, false, true, true);
+        rSrcDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aIdx.GetNode(), nullptr, false, true, true);
     }
     else
     {

@@ -117,7 +117,7 @@ void SwTextFlyCnt::CopyFlyFormat( SwDoc& rDoc )
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     SwFormatAnchor aAnchor( pFormat->GetAnchor() );
     if ((RndStdIds::FLY_AT_PAGE != aAnchor.GetAnchorId()) &&
-        (&rDoc != pFormat->GetDoc()))   // different documents?
+        (&rDoc != &pFormat->GetDoc()))   // different documents?
     {
         // JP 03.06.96: ensure that the copied anchor points to valid content!
         //              setting it to the correct position is done later.
@@ -171,15 +171,15 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
         pFormat->DelFrames();
 
     // copy into a different document?
-    if( &rDoc != pFormat->GetDoc() )
+    if( &rDoc != &pFormat->GetDoc() )
     {
         // disable undo while copying attribute
         ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
         SwFrameFormat* pNew = rDoc.getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, false, false );
 
         ::sw::UndoGuard const undoGuardFormat(
-            pFormat->GetDoc()->GetIDocumentUndoRedo());
-        pFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
+            pFormat->GetDoc().GetIDocumentUndoRedo());
+        pFormat->GetDoc().getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
         const_cast<SwFormatFlyCnt&>(GetFlyCnt()).SetFlyFormat( pNew );
     }
     else if( pNode->GetpSwpHints() &&

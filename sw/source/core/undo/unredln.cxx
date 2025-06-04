@@ -294,7 +294,7 @@ void SwUndoRedlineDelete::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
     if (m_pHistory)
     {
-        m_pHistory->TmpRollback(&rDoc, 0);
+        m_pHistory->TmpRollback(rDoc, 0);
     }
 }
 

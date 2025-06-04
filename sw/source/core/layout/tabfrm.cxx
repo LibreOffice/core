@@ -98,7 +98,7 @@ SwTabFrame::SwTabFrame( SwTable &rTab, SwFrame* pSib )
     const SwTableLines &rLines = rTab.GetTabLines();
     SwFrame *pTmpPrev = nullptr;
     bool bHiddenRedlines = getRootFrame()->IsHideRedlines() &&
-        !GetFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty();
+        !GetFormat()->GetDoc().getIDocumentRedlineAccess().GetRedlineTable().empty();
     SwRedlineTable::size_type nRedlinePos = 0;
     for ( size_t i = 0; i < rLines.size(); ++i )
     {
@@ -149,7 +149,7 @@ void SwTabFrame::DestroyImpl()
 {
     // There is some terrible code in fetab.cxx, that
     // caches pointers to SwTabFrames.
-    ::ClearFEShellTabCols(*GetFormat()->GetDoc(), this);
+    ::ClearFEShellTabCols(GetFormat()->GetDoc(), this);
 
     SwLayoutFrame::DestroyImpl();
 }
@@ -518,7 +518,7 @@ static void lcl_MoveRowContent( SwRowFrame& rSourceLine, SwRowFrame& rDestLine )
 // the footnote boss of rSource to the footnote boss of rDest.
 static void lcl_MoveFootnotes( SwTabFrame& rSource, SwTabFrame& rDest, SwLayoutFrame& rRowFrame )
 {
-    if ( !rSource.GetFormat()->GetDoc()->GetFootnoteIdxs().empty() )
+    if ( !rSource.GetFormat()->GetDoc().GetFootnoteIdxs().empty() )
     {
         SwFootnoteBossFrame* pOldBoss = rSource.FindFootnoteBossFrame( true );
         SwFootnoteBossFrame* pNewBoss = rDest.FindFootnoteBossFrame( true );
@@ -1379,7 +1379,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
             pHeadline->InsertBefore( pFoll, nullptr );
 
             SwPageFrame *pPage = pHeadline->FindPageFrame();
-            const sw::SpzFrameFormats* pSpzs = GetFormat()->GetDoc()->GetSpzFrameFormats();
+            const sw::SpzFrameFormats* pSpzs = GetFormat()->GetDoc().GetSpzFrameFormats();
             if( !pSpzs->empty() )
             {
                 SwNodeOffset nIndex;
@@ -2267,7 +2267,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     bool bMovedFwd  = false;
     // gets set to true when the Frame is split
     bool bSplit = false;
-    const bool bFootnotesInDoc = !GetFormat()->GetDoc()->GetFootnoteIdxs().empty();
+    const bool bFootnotesInDoc = !GetFormat()->GetDoc().GetFootnoteIdxs().empty();
     const bool bFly     = IsInFly();
 
     std::optional<SwBorderAttrAccess> oAccess(std::in_place, SwFrame::GetCache(), this);
@@ -2287,7 +2287,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
     // Indicates that two individual rows may keep together, based on the keep
     // attribute set at the first paragraph in the first cell.
-    bool bTableRowKeep = !bDontSplit && GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP);
+    bool bTableRowKeep = !bDontSplit && GetFormat()->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP);
     if (SwFlyFrame* pFly = FindFlyFrame())
     {
         if (pFly->IsFlySplitAllowed())
@@ -4132,7 +4132,7 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                         CheckPageDescs( pPage );
                     if (GetFormat()->GetPageDesc().GetNumOffset())
                         static_cast<SwRootFrame*>(pPage->GetUpper())->SetVirtPageNum( true );
-                    GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields(pPage->getFrameArea().Top());
+                    GetFormat()->GetDoc().getIDocumentFieldsAccess().UpdatePageFields(pPage->getFrameArea().Top());
                 }
             }
             break;
@@ -4364,7 +4364,7 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
             const SwRowFrame* pFirstRow = GetFirstNonHeadlineRow();
             if ( pFirstRow && pFirstRow->IsInFollowFlowRow() &&
                  SwLayouter::DoesRowContainMovedFwdFrame(
-                                            *(pFirstRow->GetFormat()->GetDoc()),
+                                            pFirstRow->GetFormat()->GetDoc(),
                                             *pFirstRow ) )
             {
                 return false;
@@ -4571,7 +4571,7 @@ void SwTabFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
     {
         const SwPageDesc *pDesc = GetFormat()->GetPageDesc().GetPageDesc();
         if ( (pDesc && pDesc != pPage->GetPageDesc()) ||
-             (!pDesc && pPage->GetPageDesc() != &GetFormat()->GetDoc()->GetPageDesc(0)) )
+             (!pDesc && pPage->GetPageDesc() != &GetFormat()->GetDoc().GetPageDesc(0)) )
             CheckPageDescs( pPage );
     }
 }
@@ -4606,7 +4606,7 @@ SwRowFrame::SwRowFrame(const SwTableLine &rLine, SwFrame* pSib, bool bInsertCont
     SwFrame *pTmpPrev = nullptr;
 
     bool bHiddenRedlines = getRootFrame()->IsHideRedlines() &&
-        !GetFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty();
+        !GetFormat()->GetDoc().getIDocumentRedlineAccess().GetRedlineTable().empty();
     for ( size_t i = 0; i < rBoxes.size(); ++i )
     {
         // skip cells deleted with track changes
@@ -4964,7 +4964,7 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrame *_pCell,
 
 static SwTwips lcl_GetFixedRowHeight(const SwRowFrame& rRow, SwTwips nHeight)
 {
-    auto& rIDSA = rRow.GetFormat()->GetDoc()->GetDocumentSettingManager();
+    auto& rIDSA = rRow.GetFormat()->GetDoc().GetDocumentSettingManager();
     if (rIDSA.get(DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER)) // MS Word 'exact' oddities
     {
         nHeight += lcl_GetBottomLineDist(rRow);
@@ -4979,7 +4979,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
 {
     //calc min height including width of horizontal border
     const bool bMinRowHeightInclBorder =
-        _pRow->GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER);
+        _pRow->GetFormat()->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER);
     SwTwips nHeight = 0;
     if ( !_pRow->IsRowSpanLine() )
     {
@@ -6847,7 +6847,7 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
 
     // Check how many rows want to keep together
     sal_uInt16 nKeepRows = 0;
-    if ( GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP) )
+    if ( GetFormat()->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP) )
     {
         while ( pFirstRow && pFirstRow->ShouldRowKeepWithNext() )
         {

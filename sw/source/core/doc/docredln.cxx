@@ -70,10 +70,10 @@ using namespace com::sun::star;
 
 #ifdef DBG_UTIL
 
-    void sw_DebugRedline( const SwDoc* pDoc )
+    void sw_DebugRedline( const SwDoc& rDoc )
     {
         static SwRedlineTable::size_type nWatch = 0; // loplugin:constvars:ignore
-        const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+        const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
         for( SwRedlineTable::size_type n = 0; n < rTable.size(); ++n )
         {
             volatile SwRedlineTable::size_type nDummy = 0;
@@ -189,11 +189,11 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc& rDoc, const SwTable& rT
     return bChg;
 }
 
-bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine& rTableLine, bool bSaveInUndo, RedlineType nRedlineTypeToDelete )
+bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc& rDoc, const SwTableLine& rTableLine, bool bSaveInUndo, RedlineType nRedlineTypeToDelete )
 {
     bool bChg = false;
 
-    if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
+    if (bSaveInUndo && rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         // #TODO - Add 'Undo' support for deleting 'Table Cell' redlines
         /*
@@ -230,16 +230,16 @@ bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine&
     }
 
     if( bChg )
-        pDoc->getIDocumentState().SetModified();
+        rDoc.getIDocumentState().SetModified();
 
     return bChg;
 }
 
-bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& rTableBox, bool bSaveInUndo, RedlineType nRedlineTypeToDelete )
+bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc& rDoc, const SwTableBox& rTableBox, bool bSaveInUndo, RedlineType nRedlineTypeToDelete )
 {
     bool bChg = false;
 
-    if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
+    if (bSaveInUndo && rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         // #TODO - Add 'Undo' support for deleting 'Table Cell' redlines
         /*
@@ -276,7 +276,7 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
     }
 
     if( bChg )
-        pDoc->getIDocumentState().SetModified();
+        rDoc.getIDocumentState().SetModified();
 
     return bChg;
 }

@@ -66,7 +66,7 @@ void SwFlyFreeFrame::DestroyImpl()
     // #i28701# - use new method <GetPageFrame()>
     if( GetPageFrame() )
     {
-        if( GetFormat()->GetDoc()->IsInDtor() )
+        if( GetFormat()->GetDoc().IsInDtor() )
         {
             // #i29879# - remove also to-frame anchored Writer
             // fly frame from page.
@@ -112,7 +112,7 @@ void SwFlyFreeFrame::NotifyBackground( SwPageFrame *pPageFrame,
 
 void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
-    if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    if ( !GetFormat()->GetDoc().getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
         return;
     }

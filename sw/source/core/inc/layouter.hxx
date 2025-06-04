@@ -104,9 +104,9 @@ public:
     SW_DLLPUBLIC static int GetLastLoopControlStage();
     void LoopingLouieLight( const SwDoc& rDoc, const SwTextFrame& rFrame );
 
-    static void CollectEndnotes( SwDoc* pDoc, SwSectionFrame* pSect );
-    static bool Collecting( SwDoc* pDoc, SwSectionFrame const * pSect, SwFootnoteFrame* pFootnote );
-    static bool StartLoopControl( SwDoc* pDoc, SwPageFrame const *pPage );
+    static void CollectEndnotes( SwDoc& rDoc, SwSectionFrame* pSect );
+    static bool Collecting( SwDoc& rDoc, SwSectionFrame const * pSect, SwFootnoteFrame* pFootnote );
+    static bool StartLoopControl( SwDoc& rDoc, SwPageFrame const *pPage );
 
     // --> #i28701#
     static void ClearMovedFwdFrames( const SwDoc& _rDoc );

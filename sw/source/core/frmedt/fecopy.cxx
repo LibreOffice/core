@@ -695,7 +695,7 @@ namespace {
             return false;
         }
 
-        for(const sw::SpzFrameFormat* pSpzFormat: *pFormat->GetDoc()->GetSpzFrameFormats())
+        for(const sw::SpzFrameFormat* pSpzFormat: *pFormat->GetDoc().GetSpzFrameFormats())
         {
             if (pSpzFormat->Which() != RES_FLYFRMFMT)
             {

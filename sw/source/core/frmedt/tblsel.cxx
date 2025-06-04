@@ -871,22 +871,22 @@ CmpLPt::CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVertical )
     : aPos( rPt ), pSelBox( pBox ), bVert( bVertical )
 {}
 
-static void lcl_InsTableBox( SwTableNode* pTableNd, SwDoc* pDoc, SwTableBox* pBox,
+static void lcl_InsTableBox( SwTableNode* pTableNd, SwDoc& rDoc, SwTableBox* pBox,
                         sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 )
 {
     OSL_ENSURE( pBox->GetSttNd(), "Box without Start-Node" );
-    SwContentNode* pCNd = pDoc->GetNodes()[ pBox->GetSttIdx() + 1 ]
+    SwContentNode* pCNd = rDoc.GetNodes()[ pBox->GetSttIdx() + 1 ]
                                 ->GetContentNode();
     if( pCNd && pCNd->IsTextNode() )
-        pDoc->GetNodes().InsBoxen( pTableNd, pBox->GetUpper(),
+        rDoc.GetNodes().InsBoxen( pTableNd, pBox->GetUpper(),
                 pBox->GetFrameFormat(),
                 static_cast<SwTextNode*>(pCNd)->GetTextColl(),
                 pCNd->GetpSwAttrSet(),
                 nInsPos, nCnt );
     else
-        pDoc->GetNodes().InsBoxen( pTableNd, pBox->GetUpper(),
+        rDoc.GetNodes().InsBoxen( pTableNd, pBox->GetUpper(),
                 pBox->GetFrameFormat(),
-                pDoc->GetDfltTextFormatColl(), nullptr,
+                rDoc.GetDfltTextFormatColl(), nullptr,
                 nInsPos, nCnt );
 }
 
@@ -956,7 +956,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         return;
 
     const SwTable *pTable = aUnions.front().GetTable()->GetTable();
-    SwDoc* pDoc = const_cast<SwDoc*>(pStart->GetFormat()->GetDoc());
+    SwDoc& rDoc = const_cast<SwDoc&>(pStart->GetFormat()->GetDoc());
     SwTableNode* pTableNd = const_cast<SwTableNode*>(pTable->GetTabSortBoxes()[ 0 ]->
                                         GetSttNd()->FindTableNode());
 
@@ -999,7 +999,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             if( ( rUnion.Right() + COLFUZZY ) < pCell->getFrameArea().Right() )
                             {
                                 sal_uInt16 nInsPos = pBox->GetUpper()->GetBoxPos( pBox )+1;
-                                lcl_InsTableBox( pTableNd, pDoc, pBox, nInsPos );
+                                lcl_InsTableBox( pTableNd, rDoc, pBox, nInsPos );
                                 pBox->ClaimFrameFormat();
                                 SwFormatFrameSize aNew(
                                         pBox->GetFrameFormat()->GetFrameSize() );
@@ -1039,7 +1039,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 ( rUnion.Right() + COLFUZZY ) < pCell->getFrameArea().Right() )
                         {
                             sal_uInt16 nInsPos = pBox->GetUpper()->GetBoxPos( pBox )+1;
-                            lcl_InsTableBox( pTableNd, pDoc, pBox, nInsPos, 2 );
+                            lcl_InsTableBox( pTableNd, rDoc, pBox, nInsPos, 2 );
                             pBox->ClaimFrameFormat();
                             SwFormatFrameSize aNew(
                                         pBox->GetFrameFormat()->GetFrameSize() );
@@ -1092,7 +1092,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                         {
                             // then we should insert a new box and adjust the widths
                             sal_uInt16 nInsPos = pBox->GetUpper()->GetBoxPos( pBox )+1;
-                            lcl_InsTableBox( pTableNd, pDoc, pBox, nInsPos );
+                            lcl_InsTableBox( pTableNd, rDoc, pBox, nInsPos );
 
                             SwFormatFrameSize aNew(pBox->GetFrameFormat()->GetFrameSize() );
                             tools::Long nLeft = rUnion.Left() - pCell->getFrameArea().Left(),
@@ -1154,7 +1154,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     //              then do not insert blanks or carriage returns
     //Block to assure SwPaM, SwPosition are deleted from stack
     {
-        SwPaM aPam( pDoc->GetNodes() );
+        SwPaM aPam( rDoc.GetNodes() );
 
 #if defined( DEL_ONLY_EMPTY_LINES )
         nWidth = pFirstBox->GetFrameFormat()->GetFrameSize().GetWidth();
@@ -1327,7 +1327,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         SwTableLine* pInsLine = pTmpBox->GetUpper();
         sal_uInt16 nInsPos = pInsLine->GetBoxPos( pTmpBox );
 
-        lcl_InsTableBox( pTableNd, pDoc, pTmpBox, nInsPos );
+        lcl_InsTableBox( pTableNd, rDoc, pTmpBox, nInsPos );
         (*ppMergeBox) = pInsLine->GetTabBoxes()[ nInsPos ];
         pInsLine->GetTabBoxes().erase( pInsLine->GetTabBoxes().begin() + nInsPos );  // remove again
         (*ppMergeBox)->SetUpper( nullptr );
@@ -1365,23 +1365,23 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             SwNodeIndex aSttNdIdx( *rPt.pSelBox->GetSttNd(), 1 );
             // one node should be kept in the box (otherwise the
             // section would be deleted during a move)
-            bool const bUndo(pDoc->GetIDocumentUndoRedo().DoesUndo());
+            bool const bUndo(rDoc.GetIDocumentUndoRedo().DoesUndo());
             if( pUndo )
             {
-                pDoc->GetIDocumentUndoRedo().DoUndo(false);
+                rDoc.GetIDocumentUndoRedo().DoUndo(false);
             }
-            pDoc->getIDocumentContentOperations().AppendTextNode( *aPam.GetPoint() );
+            rDoc.getIDocumentContentOperations().AppendTextNode( *aPam.GetPoint() );
             if( pUndo )
             {
-                pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
+                rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
             }
             SwNodeRange aRg( aSttNdIdx.GetNode(), aPam.GetPoint()->GetNode() );
             aInsPos.Adjust(SwNodeOffset(1));
             if( pUndo )
-                pUndo->MoveBoxContent( *pDoc, aRg, aInsPos.GetNode() );
+                pUndo->MoveBoxContent( rDoc, aRg, aInsPos.GetNode() );
             else
             {
-                pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, aInsPos.GetNode(),
+                rDoc.getIDocumentContentOperations().MoveNodeRange( aRg, aInsPos.GetNode(),
                     SwMoveFlags::DEFAULT );
             }
             // where is now aInsPos ??
@@ -1390,7 +1390,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 bCalcWidth = false;     // one line is ready
 
             // skip the first TextNode
-            aInsPos.Assign( *pDoc->GetNodes()[ aInsPos.GetNode().EndOfSectionIndex() - 2] );
+            aInsPos.Assign( *rDoc.GetNodes()[ aInsPos.GetNode().EndOfSectionIndex() - 2] );
             SwTextNode* pTextNd = aInsPos.GetNode().GetTextNode();
             if( pTextNd )
                 aInsPos.SetContent( pTextNd->GetText().getLength());
@@ -1402,7 +1402,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 (*ppMergeBox)->GetSttNd()->EndOfSectionIndex(),
                     "empty box" );
         SwNodeIndex aIdx( *(*ppMergeBox)->GetSttNd()->EndOfSectionNode(), -1 );
-        pDoc->GetNodes().Delete( aIdx );
+        rDoc.GetNodes().Delete( aIdx );
     }
 
     // set width of the box
@@ -2336,7 +2336,7 @@ void FndBox_::MakeFrames( SwTable &rTable )
     sal_uInt16 nStPos = 0;
     sal_uInt16 nEndPos= rTable.GetTabLines().size() - 1;
     SwRootFrame* pLayout =
-        rTable.GetFrameFormat()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+        rTable.GetFrameFormat()->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout();
     bool bHideChanges = pLayout && pLayout->IsHideRedlines();
 
     if ( m_pLineBefore )

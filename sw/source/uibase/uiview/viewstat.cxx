@@ -221,7 +221,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 {
                     const SwFrameFormat& rMaster = rDesc.GetMaster();
 
-                    rSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
+                    rSet.SetParent(&rMaster.GetDoc().GetDfltFrameFormat()->GetAttrSet());
                 }
 
                 ::PageDescToItemSet( rDesc, rSet);

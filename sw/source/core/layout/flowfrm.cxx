@@ -1268,7 +1268,7 @@ bool SwFlowFrame::IsPrevObjMove() const
             // Do not consider hidden objects
             // i#26945 - do not consider object, which
             // doesn't follow the text flow.
-            if ( pObjFormat->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
+            if ( pObjFormat->GetDoc().getIDocumentDrawModelAccess().IsVisibleLayerId(
                                             pObj->GetDrawObj()->GetLayer() ) &&
                  pObjFormat->GetFollowTextFlow().GetValue() )
             {
@@ -1764,7 +1764,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     // and use new method <GetUpperSpaceAmountConsideredForPageGrid(..)>
 
     //consider grid in square page mode
-    if ( _bConsiderGrid && m_rThis.GetUpper()->GetFormat()->GetDoc()->IsSquaredPageMode() )
+    if ( _bConsiderGrid && m_rThis.GetUpper()->GetFormat()->GetDoc().IsSquaredPageMode() )
     {
         nUpper += GetUpperSpaceAmountConsideredForPageGrid_( nUpper );
     }
@@ -1880,7 +1880,7 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid() cons
     {
         nUpperSpaceAmountConsideredForPrevFrameAndPageGrid =
             GetUpperSpaceAmountConsideredForPrevFrame() +
-            ( m_rThis.GetUpper()->GetFormat()->GetDoc()->IsSquaredPageMode()
+            ( m_rThis.GetUpper()->GetFormat()->GetDoc().IsSquaredPageMode()
               ? GetUpperSpaceAmountConsideredForPageGrid_( CalcUpperSpace( nullptr, nullptr, false ) )
               : 0 );
     }
@@ -2351,7 +2351,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         SwFrame* pRef = nullptr;
         const bool bEndnote = pFootnote->GetAttr()->GetFootnote().IsEndNote();
         const IDocumentSettingAccess& rSettings
-            = pFootnote->GetAttrSet()->GetDoc()->getIDocumentSettingAccess();
+            = pFootnote->GetAttrSet()->GetDoc().getIDocumentSettingAccess();
         bool bContEndnotes = rSettings.get(DocumentSettingId::CONTINUOUS_ENDNOTES);
         if( bEndnote && pFootnote->IsInSct() && !bContEndnotes)
         {
@@ -2599,7 +2599,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
     {
         sal_uInt32 nToPageNum( 0 );
         const bool bMoveFwdByObjPos = SwLayouter::FrameMovedFwdByObjPos(
-                                                *(pOldPage->GetFormat()->GetDoc()),
+                                                pOldPage->GetFormat()->GetDoc(),
                                                 static_cast<SwTextFrame&>(m_rThis),
                                                 nToPageNum );
         if ( bMoveFwdByObjPos &&
@@ -2730,7 +2730,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
     // backward under the same layout condition.
     if ( pNewUpper && !IsFollow() &&
          pNewUpper != m_rThis.GetUpper() &&
-         SwLayouter::MoveBwdSuppressed( *(pOldPage->GetFormat()->GetDoc()),
+         SwLayouter::MoveBwdSuppressed( pOldPage->GetFormat()->GetDoc(),
                                         *this, *pNewUpper ) )
     {
         SwLayoutFrame* pNextNewUpper = pNewUpper->GetLeaf(

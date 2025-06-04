@@ -4418,7 +4418,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
             if (aData.begin()->get()->nFlags & ShapeFlag::Background)
             {
                 SfxItemSetFixed<RES_BACKGROUND, RES_BACKGROUND,XATTR_START, XATTR_END>
-                    aSet(rFormat.GetDoc()->GetAttrPool());
+                    aSet(rFormat.GetDoc().GetAttrPool());
                 mrReader.MatchSdrItemsIntoFlySet(pObject.get(), aSet, mso_lineSimple,
                                                  mso_lineSolid, mso_sptRectangle, aRect);
                 if ( aSet.HasItem(RES_BACKGROUND) )

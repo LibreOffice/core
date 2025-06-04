@@ -577,7 +577,7 @@ SwXDocumentIndex::setPropertyValue(
             {
                 if (rTOXBase.GetTOXType()->GetTypeName() != sNewName)
                 {
-                    lcl_ReAssignTOXType(*pSectionFormat->GetDoc(),
+                    lcl_ReAssignTOXType(pSectionFormat->GetDoc(),
                             rTOXBase, sNewName);
                 }
             }
@@ -1380,7 +1380,7 @@ SwXDocumentIndex::getAnchor()
         aPaM.SetMark();
         aPaM.GetPoint()->Assign( *pIdx->GetNode().EndOfSectionNode() );
         aPaM.Move( fnMoveBackward, GoInContent );
-        xRet = SwXTextRange::CreateXTextRange(*pSectionFormat->GetDoc(),
+        xRet = SwXTextRange::CreateXTextRange(pSectionFormat->GetDoc(),
             *aPaM.GetMark(), aPaM.GetPoint());
     }
     return xRet;
@@ -1393,7 +1393,7 @@ void SAL_CALL SwXDocumentIndex::dispose()
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (pSectionFormat)
     {
-        pSectionFormat->GetDoc()->DeleteTOX(
+        pSectionFormat->GetDoc().DeleteTOX(
             *static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection()),
             true);
     }
@@ -1452,7 +1452,7 @@ SwXDocumentIndex::setName(const OUString& rName)
     }
     else if (pSectionFormat)
     {
-        const bool bSuccess = pSectionFormat->GetDoc()->SetTOXBaseName(
+        const bool bSuccess = pSectionFormat->GetDoc().SetTOXBaseName(
             *static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection()), UIName(rName));
         if (!bSuccess)
         {
@@ -1477,7 +1477,7 @@ uno::Reference<frame::XModel> SwXDocumentIndex::GetModel()
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (pSectionFormat)
     {
-        SwDocShell const*const pShell( pSectionFormat->GetDoc()->GetDocShell() );
+        SwDocShell const*const pShell( pSectionFormat->GetDoc().GetDocShell() );
         return pShell ? pShell->GetModel() : nullptr;
     }
     return nullptr;

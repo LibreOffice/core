@@ -339,7 +339,7 @@ bool SwOszControl::ChkOsz()
 |*/
 void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
-    const SwDoc& rDoc = *(GetFormat()->GetDoc());
+    const SwDoc& rDoc = GetFormat()->GetDoc();
     if (!rDoc.getIDocumentDrawModelAccess().IsVisibleLayerId(GetVirtDrawObj()->GetLayer()))
     {
         return;
@@ -1397,7 +1397,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
                 nX = rNew.X() - pFrame->getFrameArea().Left();
         }
     }
-    GetFormat()->GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+    GetFormat()->GetDoc().GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
 
     if( pCnt != GetAnchorFrame() || ( IsAutoPos() && pCnt->IsTextFrame() &&
                                   GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE)) )
@@ -1448,7 +1448,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
         // anchor attribute is change and re-create them afterwards.
         {
             SwHandleAnchorNodeChg aHandleAnchorNodeChg( *pFormat, aAnch, this );
-            pFormat->GetDoc()->SetAttr( aAnch, *pFormat );
+            pFormat->GetDoc().SetAttr( aAnch, *pFormat );
         }
     }
     else if ( pTmpPage && pTmpPage != GetPageFrame() )
@@ -1456,7 +1456,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
 
     const Point aRelPos = bVert ? Point( -nY, nX ) : Point( nX, nY );
     ChgRelPos( aRelPos );
-    GetFormat()->GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
+    GetFormat()->GetDoc().GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
 
     if ( pOldPage != FindPageFrame() )
         ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PrepareHint::FlyFrameLeave, false );

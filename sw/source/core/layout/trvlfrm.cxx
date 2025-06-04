@@ -1804,8 +1804,8 @@ bool SwFrame::WannaRightPage() const
             pDesc = pPrv->GetPageDesc()->GetFollow();
         else
         {
-            const SwDoc* pDoc = pPage->GetFormat()->GetDoc();
-            pDesc = &pDoc->GetPageDesc( 0 );
+            const SwDoc& rDoc = pPage->GetFormat()->GetDoc();
+            pDesc = &rDoc.GetPageDesc( 0 );
         }
     }
     OSL_ENSURE( pDesc, "No pagedescriptor" );

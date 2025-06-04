@@ -306,8 +306,8 @@ public:
     SwExtraRedline* GetRedline( sal_uInt16 uIndex ) const   {     return m_aExtraRedlines.operator[]( uIndex );  }
 
     SW_DLLPUBLIC bool DeleteAllTableRedlines( SwDoc& rDoc, const SwTable& rTable, bool bSaveInUndo, RedlineType nRedlineTypeToDelete );
-    bool DeleteTableRowRedline ( SwDoc* pDoc, const SwTableLine& rTableLine, bool bSaveInUndo, RedlineType nRedlineTypeToDelete );
-    bool DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& rTableBox, bool bSaveInUndo, RedlineType nRedlineTypeToDelete );
+    bool DeleteTableRowRedline ( SwDoc& rDoc, const SwTableLine& rTableLine, bool bSaveInUndo, RedlineType nRedlineTypeToDelete );
+    bool DeleteTableCellRedline( SwDoc& rDoc, const SwTableBox& rTableBox, bool bSaveInUndo, RedlineType nRedlineTypeToDelete );
 };
 
 typedef std::vector<SwOLENode*> SwOLENodes;

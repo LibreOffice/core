@@ -163,7 +163,7 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if (m_pHistory)
     {
-        m_pHistory->TmpRollback( &rDoc, 0, false );
+        m_pHistory->TmpRollback( rDoc, 0, false );
     }
 
     if (m_bUpdateFootnote)
@@ -345,7 +345,7 @@ std::unique_ptr<SwUndo> MakeUndoDelSection(SwSectionFormat const& rFormat)
 SwUndoDelSection::SwUndoDelSection(
             SwSectionFormat const& rSectionFormat, SwSection const& rSection,
             SwNodeIndex const*const pIndex)
-    : SwUndo( SwUndoId::DELSECTION, *rSectionFormat.GetDoc() )
+    : SwUndo( SwUndoId::DELSECTION, rSectionFormat.GetDoc() )
     , m_pSectionData( new SwSectionData(rSection) )
     , m_pTOXBase( dynamic_cast<const SwTOXBaseSection*>( &rSection) !=  nullptr
             ? new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSection))
@@ -526,12 +526,12 @@ void SwUndoUpdateSection::RedoImpl(::sw::UndoRedoContext & rContext)
 
 
 SwUndoUpdateIndex::SwUndoUpdateIndex(SwTOXBaseSection & rTOX)
-    : SwUndo(SwUndoId::INSSECTION, *rTOX.GetFormat()->GetDoc())
+    : SwUndo(SwUndoId::INSSECTION, rTOX.GetFormat()->GetDoc())
     , m_pSaveSectionOriginal(new SwUndoSaveSection)
     , m_pSaveSectionUpdated(new SwUndoSaveSection)
     , m_nStartIndex(rTOX.GetFormat()->GetSectionNode()->GetIndex() + 1)
 {
-    SwDoc & rDoc(*rTOX.GetFormat()->GetDoc());
+    SwDoc & rDoc(rTOX.GetFormat()->GetDoc());
     assert(rDoc.GetNodes()[m_nStartIndex-1]->IsSectionNode());
     assert(rDoc.GetNodes()[rDoc.GetNodes()[m_nStartIndex]->EndOfSectionIndex()-1]->IsTextNode()); // -1 for extra empty node
     // note: title is optional
@@ -555,7 +555,7 @@ SwUndoUpdateIndex::~SwUndoUpdateIndex() = default;
 void SwUndoUpdateIndex::TitleSectionInserted(SwSectionFormat & rFormat)
 {
 #ifndef NDEBUG
-    SwNodeIndex const tmp(rFormat.GetDoc()->GetNodes(), m_nStartIndex); // title inserted before empty node
+    SwNodeIndex const tmp(rFormat.GetDoc().GetNodes(), m_nStartIndex); // title inserted before empty node
     assert(tmp.GetNode().IsSectionNode());
     assert(tmp.GetNode().GetSectionNode()->GetSection().GetFormat() == &rFormat);
 #endif
@@ -578,7 +578,7 @@ void SwUndoUpdateIndex::UndoImpl(::sw::UndoRedoContext & rContext)
         *rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode(),
         rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT));
     m_pSaveSectionUpdated->SaveSection(SwNodeRange(first, last), false);
-    m_pSaveSectionOriginal->RestoreSection(&rDoc, first.GetNode(), true);
+    m_pSaveSectionOriginal->RestoreSection(rDoc, first.GetNode(), true);
     // delete before restoring nested undo, so its node indexes match
     SwNodeIndex const del(*pDeletionPrevention);
     SwDoc::CorrAbs(del, del, SwPosition(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode(), SwNodeOffset(0)), true);
@@ -599,7 +599,7 @@ void SwUndoUpdateIndex::RedoImpl(::sw::UndoRedoContext & rContext)
         *rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode(),
         rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT));
     m_pSaveSectionOriginal->SaveSection(SwNodeRange(first, last), false);
-    m_pSaveSectionUpdated->RestoreSection(&rDoc, first.GetNode(), true);
+    m_pSaveSectionUpdated->RestoreSection(rDoc, first.GetNode(), true);
     // delete before restoring nested undo, so its node indexes match
     SwNodeIndex const del(*pDeletionPrevention);
     SwDoc::CorrAbs(del, del, SwPosition(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode(), SwNodeOffset(0)), true);

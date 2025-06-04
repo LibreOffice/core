@@ -194,7 +194,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 {
                     bool bInsert( true );
                     sal_uInt32 nToPageNum( 0 );
-                    const SwDoc& rDoc = *(GetPageFrame().GetFormat()->GetDoc());
+                    const SwDoc& rDoc = GetPageFrame().GetFormat()->GetDoc();
                     if ( SwLayouter::FrameMovedFwdByObjPos(
                                             rDoc, mrAnchorTextFrame, nToPageNum ) )
                     {
@@ -245,7 +245,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                     // could already been marked to move forward.
                     bool bInsert( true );
                     sal_uInt32 nMovedFwdToPageNum( 0 );
-                    const SwDoc& rDoc = *(GetPageFrame().GetFormat()->GetDoc());
+                    const SwDoc& rDoc = GetPageFrame().GetFormat()->GetDoc();
                     if ( SwLayouter::FrameMovedFwdByObjPos(
                                             rDoc, mrAnchorTextFrame, nMovedFwdToPageNum ) )
                     {
@@ -294,7 +294,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                       mrAnchorTextFrame.GetFollow()->GetOffset() == TextFrameIndex(0))
             {
                 SwLayouter::RemoveMovedFwdFrame(
-                                *(mrAnchorTextFrame.FindPageFrame()->GetFormat()->GetDoc()),
+                                mrAnchorTextFrame.FindPageFrame()->GetFormat()->GetDoc(),
                                 mrAnchorTextFrame );
             }
         }
@@ -392,7 +392,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
             {
                 bool bInsert( true );
                 sal_uInt32 nTmpToPageNum( 0 );
-                const SwDoc& rDoc = *(GetPageFrame().GetFormat()->GetDoc());
+                const SwDoc& rDoc = GetPageFrame().GetFormat()->GetDoc();
                 if ( SwLayouter::FrameMovedFwdByObjPos(
                                         rDoc, mrAnchorTextFrame, nTmpToPageNum ) )
                 {
@@ -432,7 +432,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
             // could already been marked to move forward.
             bool bInsert( true );
             sal_uInt32 nMovedFwdToPageNum( 0 );
-            const SwDoc& rDoc = *(GetPageFrame().GetFormat()->GetDoc());
+            const SwDoc& rDoc = GetPageFrame().GetFormat()->GetDoc();
             if ( SwLayouter::FrameMovedFwdByObjPos(
                                     rDoc, mrAnchorTextFrame, nMovedFwdToPageNum ) )
             {
@@ -471,7 +471,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
                   mrAnchorTextFrame.GetFollow()->GetOffset() == TextFrameIndex(0))
         {
             SwLayouter::RemoveMovedFwdFrame(
-                            *(mrAnchorTextFrame.FindPageFrame()->GetFormat()->GetDoc()),
+                            mrAnchorTextFrame.FindPageFrame()->GetFormat()->GetDoc(),
                             mrAnchorTextFrame );
         }
     }

@@ -4686,7 +4686,7 @@ static void impl_borders( FSHelperPtr const & pSerializer,
             // because a compat setting ignores left/right paragraph spacing on layout.
             const SwFrameFormat& rFormat = pFramePr->GetFrameFormat();
             const SvxBoxItem& rFramePrBox = rFormat.GetBox();
-            const IDocumentSettingAccess& rIDSA = rFormat.GetDoc()->getIDocumentSettingAccess();
+            const IDocumentSettingAccess& rIDSA = rFormat.GetDoc().getIDocumentSettingAccess();
             if (rIDSA.get(DocumentSettingId::INVERT_BORDER_SPACING)
                 && (*pBrd == SvxBoxItemLine::LEFT || *pBrd == SvxBoxItemLine::RIGHT))
             {
@@ -7294,7 +7294,7 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrameFormat* pFormat, cons
     if (aGlue.HasFooter())
         aMargins.nBottom = aGlue.m_DyaHdrBottom;
 
-    if (pFormat->GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP))
+    if (pFormat->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP))
     {
         aMargins.nTop += pFormat->GetLRSpace().GetGutterMargin();
     }
@@ -10002,7 +10002,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         SwFrameFormat & rFormat(
                 const_cast<SwFrameFormat&>(m_rExport.m_pParentFrame->GetFrameFormat()));
         rtl::Reference<SwXTextFrame> const xPropertySet =
-            SwXTextFrame::CreateXTextFrame(*rFormat.GetDoc(), &rFormat);
+            SwXTextFrame::CreateXTextFrame(rFormat.GetDoc(), &rFormat);
         m_rDrawingML.SetFS(m_pSerializer);
         m_rDrawingML.WriteGradientFill(uno::Reference<beans::XPropertySet>(static_cast<SwXFrame*>(xPropertySet.get())));
     }

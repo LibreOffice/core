@@ -153,9 +153,9 @@ static void lcl_DelHFFormat( sw::FrameFormatClient *pToRemove, SwFrameFormat *pF
 {
     //If the client is the last one who uses this format, then we have to delete
     //it - before this is done, we may need to delete the content-section.
-    SwDoc* pDoc = pFormat->GetDoc();
+    SwDoc& rDoc = pFormat->GetDoc();
     pFormat->Remove(*pToRemove);
-    if( pDoc->IsInDtor() )
+    if( rDoc.IsInDtor() )
     {
         delete pFormat;
         return;
@@ -201,10 +201,10 @@ static void lcl_DelHFFormat( sw::FrameFormatClient *pToRemove, SwFrameFormat *pF
 
         // When deleting a header/footer-format, we ALWAYS need to disable
         // the undo function (Bug 31069)
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+        ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
         OSL_ENSURE( pNode, "A big problem." );
-        pDoc->getIDocumentContentOperations().DeleteSection( pNode );
+        rDoc.getIDocumentContentOperations().DeleteSection( pNode );
     }
     delete pFormat;
 }
@@ -1804,7 +1804,7 @@ bool SwFormatAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 if(pFormat)
                 {
                     rtl::Reference<SwXTextFrame> const xRet(
-                        SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat));
+                        SwXTextFrame::CreateXTextFrame(pFormat->GetDoc(), pFormat));
                     rVal <<= uno::Reference<text::XTextFrame>(xRet);
                 }
             }
@@ -2666,7 +2666,7 @@ SwFrameFormat::SwFrameFormat(
 
 SwFrameFormat::~SwFrameFormat()
 {
-    if( !GetDoc()->IsInDtor())
+    if( !GetDoc().IsInDtor())
     {
         const SwFormatAnchor& rAnchor = GetAnchor();
         if (SwNode* pAnchorNode = rAnchor.GetAnchorNode())
@@ -2827,12 +2827,12 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 
     if(pH && pH->IsActive() && !pH->GetHeaderFormat())
     {   //If he doesn't have one, I'll add one
-        SwFrameFormat* pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat(RndStdIds::HEADER, nullptr);
+        SwFrameFormat* pFormat = GetDoc().getIDocumentLayoutAccess().MakeLayoutFormat(RndStdIds::HEADER, nullptr);
         const_cast<SwFormatHeader*>(pH)->RegisterToFormat(*pFormat);
     }
     if(pF && pF->IsActive() && !pF->GetFooterFormat())
     {   //If he doesn't have one, I'll add one
-        SwFrameFormat* pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat(RndStdIds::FOOTER, nullptr);
+        SwFrameFormat* pFormat = GetDoc().getIDocumentLayoutAccess().MakeLayoutFormat(RndStdIds::FOOTER, nullptr);
         const_cast<SwFormatFooter*>(pF)->RegisterToFormat(*pFormat);
     }
     SwFormat::SwClientNotify(rMod, rHint);
@@ -2928,11 +2928,9 @@ SdrObject* SwFrameFormat::FindRealSdrObject()
         if( pFly )
             return pFly->GetVirtDrawObj();
 
-        SwDoc* pDoc = GetDoc();
-        if (!pDoc)
-            return nullptr;
+        SwDoc& rDoc = GetDoc();
 
-        SwDocShell* pShell = pDoc->GetDocShell();
+        SwDocShell* pShell = rDoc.GetDocShell();
         if (!pShell)
             return nullptr;
 
@@ -2964,7 +2962,7 @@ bool SwFrameFormat::IsLowerOf( const SwFrameFormat& rFormat ) const
         while( pFlyNd )
         {
             // then we walk up using the anchor
-            for(const sw::SpzFrameFormat* pFormat: *GetDoc()->GetSpzFrameFormats())
+            for(const sw::SpzFrameFormat* pFormat: *GetDoc().GetSpzFrameFormats())
             {
                 const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
                 if( pIdx && pFlyNd == &pIdx->GetNode() )
@@ -3062,7 +3060,7 @@ SwFlyDrawContact* SwFlyFrameFormat::GetOrCreateContact()
 {
     if(!m_pContact)
     {
-        SwDrawModel& rDrawModel(GetDoc()->getIDocumentDrawModelAccess().GetOrCreateDrawModel());
+        SwDrawModel& rDrawModel(GetDoc().getIDocumentDrawModelAccess().GetOrCreateDrawModel());
         m_pContact.reset(new SwFlyDrawContact(this, rDrawModel));
     }
 
@@ -3074,7 +3072,7 @@ SwFlyDrawContact* SwFlyFrameFormat::GetOrCreateContact()
 void SwFlyFrameFormat::MakeFrames()
 {
     // is there a layout?
-    if( !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( !GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell() )
         return;
 
     sw::BroadcastingModify *pModify = nullptr;
@@ -3117,7 +3115,7 @@ void SwFlyFrameFormat::MakeFrames()
             if ( pModify == nullptr )
             {
                 const SwNode & rNd = *aAnchorAttr.GetAnchorNode();
-                for(sw::SpzFrameFormat* pFlyFormat: *GetDoc()->GetSpzFrameFormats())
+                for(sw::SpzFrameFormat* pFlyFormat: *GetDoc().GetSpzFrameFormats())
                 {
                     if( pFlyFormat->GetContent().GetContentIdx() &&
                         rNd == pFlyFormat->GetContent().GetContentIdx()->GetNode() )
@@ -3133,7 +3131,7 @@ void SwFlyFrameFormat::MakeFrames()
     case RndStdIds::FLY_AT_PAGE:
         {
             sal_uInt16 nPgNum = aAnchorAttr.GetPageNum();
-            SwPageFrame *pPage = static_cast<SwPageFrame*>(GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->Lower());
+            SwPageFrame *pPage = static_cast<SwPageFrame*>(GetDoc().getIDocumentLayoutAccess().GetCurrentLayout()->Lower());
             if( nPgNum == 0 && aAnchorAttr.GetAnchorNode() )
             {
                 SwContentNode *pCNd = aAnchorAttr.GetAnchorNode()->GetContentNode();

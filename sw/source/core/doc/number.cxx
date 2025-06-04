@@ -319,8 +319,8 @@ void SwNumFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         // Look for the NumRules object in the Doc where this NumFormat is set.
         // The format does not need to exist!
         const SwCharFormat* pFormat = GetCharFormat();
-        if(pFormat && !pFormat->GetDoc()->IsInDtor())
-            UpdateNumNodes(*const_cast<SwDoc*>(pFormat->GetDoc()));
+        if(pFormat && !pFormat->GetDoc().IsInDtor())
+            UpdateNumNodes(const_cast<SwDoc&>(pFormat->GetDoc()));
     }
     else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
@@ -328,8 +328,8 @@ void SwNumFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         // The format does not need to exist!
         const SwCharFormat* pFormat = GetCharFormat();
 
-        if(pFormat && !pFormat->GetDoc()->IsInDtor())
-            UpdateNumNodes(*const_cast<SwDoc*>(pFormat->GetDoc()));
+        if(pFormat && !pFormat->GetDoc().IsInDtor())
+            UpdateNumNodes(const_cast<SwDoc&>(pFormat->GetDoc()));
     }
     else if (rHint.GetId() == SfxHintId::SwObjectDying)
     {
@@ -561,7 +561,7 @@ void SwNumRule::CheckCharFormats( SwDoc& rDoc )
         if( rpNumFormat )
         {
             SwCharFormat* pFormat = rpNumFormat->GetCharFormat();
-            if( pFormat && pFormat->GetDoc() != &rDoc )
+            if( pFormat && &pFormat->GetDoc() != &rDoc )
             {
                 // copy
                 SwNumFormat* pNew = new SwNumFormat( *rpNumFormat );

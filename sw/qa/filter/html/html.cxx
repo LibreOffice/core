@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCellFloatValueType)
     SwAttrSet aSet(pBoxFormat->GetAttrSet());
     SwTableBoxValue aBoxValue(42.0);
     aSet.Put(aBoxValue);
-    pBoxFormat->GetDoc()->SetAttr(aSet, *pBoxFormat);
+    pBoxFormat->GetDoc().SetAttr(aSet, *pBoxFormat);
 
     // When exporting to XHTML:
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);

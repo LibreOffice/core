@@ -173,18 +173,16 @@ namespace
 {
     void lcl_ResetPoolIdForDocAndSync(const sal_uInt16 nId, SwCharFormat* pFormat, const SwEndNoteInfo& rInfo)
     {
-        auto pDoc = pFormat->GetDoc();
-        if(!pDoc)
-            return;
-        for(auto pDocFormat : *pDoc->GetCharFormats())
+        SwDoc& rDoc = pFormat->GetDoc();
+        for(auto pDocFormat : *rDoc.GetCharFormats())
         {
             if(pDocFormat == pFormat)
                 pDocFormat->SetPoolFormatId(nId);
             else if(pDocFormat->GetPoolFormatId() == nId)
                 pDocFormat->SetPoolFormatId(0);
         }
-        rInfo.GetCharFormat(*pDoc);
-        rInfo.GetAnchorCharFormat(*pDoc);
+        rInfo.GetCharFormat(rDoc);
+        rInfo.GetAnchorCharFormat(rDoc);
     }
 }
 
@@ -233,8 +231,8 @@ void SwEndNoteInfo::UpdateFormatOrAttr()
     auto pFormat = GetCurrentCharFormat(m_pCharFormat == nullptr);
     if (!pFormat || !m_aDepends.IsListeningTo(pFormat) || pFormat->IsFormatInDTOR())
         return;
-    SwDoc* pDoc = pFormat->GetDoc();
-    SwFootnoteIdxs& rFootnoteIdxs = pDoc->GetFootnoteIdxs();
+    SwDoc& rDoc = pFormat->GetDoc();
+    SwFootnoteIdxs& rFootnoteIdxs = rDoc.GetFootnoteIdxs();
     for(auto pTextFootnote : rFootnoteIdxs)
     {
         const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();

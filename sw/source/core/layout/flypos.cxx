@@ -43,11 +43,11 @@ SwPosFlyFrame::SwPosFlyFrame(const SwNode& rNd, const SwFrameFormat* pFormat, sa
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
     if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
         ;
-    else if (pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell())
+    else if (pFormat->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell())
         pFormat->CallSwClientNotify(sw::GetZOrderHint(m_nOrdNum));
     if (m_nOrdNum == SAL_MAX_UINT32)
     {
-        m_nOrdNum = pFormat->GetDoc()->GetSpzFrameFormats()->size();
+        m_nOrdNum = pFormat->GetDoc().GetSpzFrameFormats()->size();
         m_nOrdNum += nArrPos;
     }
 }

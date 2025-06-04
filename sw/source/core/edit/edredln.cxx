@@ -88,7 +88,7 @@ bool SwEditShell::AcceptRedline( SwRedlineTable::size_type nPos )
     CurrShell aCurr( this );
     StartAllAction();
     bool bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( nPos, true, true );
-    if( !nPos && !::IsExtraData( GetDoc() ) )
+    if( !nPos && !::IsExtraData( *GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
     return bRet;
@@ -169,7 +169,7 @@ bool SwEditShell::RejectRedline( SwRedlineTable::size_type nPos )
     CurrShell aCurr( this );
     StartAllAction();
     bool bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( nPos, true, true );
-    if( !nPos && !::IsExtraData( GetDoc() ) )
+    if( !nPos && !::IsExtraData( *GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
     return bRet;

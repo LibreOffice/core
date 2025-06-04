@@ -213,8 +213,8 @@ public:
 
     void SaveSection( const SwNodeIndex& rSttIdx );
     void SaveSection(const SwNodeRange& rRange, bool bExpandNodes = true);
-    void RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx, sal_uInt16 nSectType );
-    void RestoreSection(SwDoc* pDoc, const SwNode& rInsPos, bool bForceCreateFrames = false);
+    void RestoreSection( SwDoc& rDoc, SwNodeIndex* pIdx, sal_uInt16 nSectType );
+    void RestoreSection(SwDoc& rDoc, const SwNode& rInsPos, bool bForceCreateFrames = false);
 
     const SwHistory* GetHistory() const { return m_pHistory.get(); }
           SwHistory* GetHistory()       { return m_pHistory.get(); }
@@ -305,7 +305,7 @@ protected:
     bool m_bDelFormat;           // Delete saved format.
 
     void InsFly(::sw::UndoRedoContext & rContext, bool bShowSel = true);
-    void DelFly( SwDoc* );
+    void DelFly( SwDoc& );
 
     SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId );
 

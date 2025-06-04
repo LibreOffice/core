@@ -223,8 +223,8 @@ void SwFrame::CheckDirChange()
                     aNew.SetHeightSizeType( SwFrameSize::Minimum );
                 if ( aNew.GetHeight() < MIN_VERT_CELL_HEIGHT )
                     aNew.SetHeight( MIN_VERT_CELL_HEIGHT );
-                SwDoc* pDoc = pFrameFormat->GetDoc();
-                pDoc->SetAttr( aNew, *pLine->ClaimFrameFormat() );
+                SwDoc& rDoc = pFrameFormat->GetDoc();
+                rDoc.SetAttr( aNew, *pLine->ClaimFrameFormat() );
             }
         }
 
@@ -338,7 +338,7 @@ void SwFrame::DestroyImpl()
         && (GetDep() || IsTextFrame())) // sw_redlinehide: text frame may not have Dep!
     {
         assert(!IsTextFrame() || GetDep() || static_cast<SwTextFrame*>(this)->GetMergedPara());
-        const bool bInDocDtor = IsTabFrame() && static_cast<SwTabFrame*>(this)->GetFormat()->GetDoc()->IsInDtor();
+        const bool bInDocDtor = IsTabFrame() && static_cast<SwTabFrame*>(this)->GetFormat()->GetDoc().IsInDtor();
         SwRootFrame *pRootFrame = getRootFrame();
         if( !bInDocDtor && pRootFrame && pRootFrame->IsAnyShellAccessible() )
         {
@@ -496,7 +496,7 @@ void SwLayoutFrame::DestroyImpl()
 
     SwFrame *pFrame = m_pLower;
 
-    if( GetFormat() && !GetFormat()->GetDoc()->IsInDtor() )
+    if( GetFormat() && !GetFormat()->GetDoc().IsInDtor() )
     {
         while ( pFrame )
         {

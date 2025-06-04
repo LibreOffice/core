@@ -89,12 +89,12 @@ the undo object to notify, maybe empty
 @return true for compatibility reasons with OldMerge(..)
 */
 
-bool SwTable::NewMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+bool SwTable::NewMerge( SwDoc& rDoc, const SwSelBoxes& rBoxes,
      const SwSelBoxes& rMerged, SwUndoTableMerge* pUndo )
 {
     if( pUndo )
         pUndo->SetSelBoxes( rBoxes );
-    DeleteSel( pDoc, rBoxes, &rMerged, nullptr, true, true );
+    DeleteSel( rDoc, rBoxes, &rMerged, nullptr, true, true );
 
     CHECK_TABLE( *this )
     return true;
@@ -636,7 +636,7 @@ static tools::Long lcl_InsertPosition( SwTable &rTable, std::vector<sal_uInt16>&
 
 /** SwTable::NewInsertCol(..) insert new column(s) into a table
 
-@param pDoc
+@param rDoc
 the document
 
 @param rBoxes
@@ -857,7 +857,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     // bottom box of the selection. If this is an overlapped cell,
     // the appropriate master box.
     SwTableBox* pLastBox = nullptr; // the right-bottom (master) cell
-    SwDoc* pDoc = GetFrameFormat()->GetDoc();
+    SwDoc& rDoc = GetFrameFormat()->GetDoc();
     SwPosition aInsPos( *pMergeBox->GetSttNd()->EndOfSectionNode() );
     SwPaM aChkPam( aInsPos );
     // The number of lines in the selection rectangle: nLineCount
@@ -911,22 +911,22 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     if( pCNd )
                         aPam.GetPoint()->SetContent( pCNd->Len() );
                     SwNodeIndex aSttNdIdx( *pBox->GetSttNd(), 1 );
-                    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+                    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
                     if( pUndo )
                     {
-                        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+                        rDoc.GetIDocumentUndoRedo().DoUndo(false);
                     }
-                    pDoc->getIDocumentContentOperations().AppendTextNode( *aPam.GetPoint() );
+                    rDoc.getIDocumentContentOperations().AppendTextNode( *aPam.GetPoint() );
                     if( pUndo )
                     {
-                        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
+                        rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
                     }
                     SwNodeRange aRg( aSttNdIdx.GetNode(), aPam.GetPoint()->GetNode() );
                     if( pUndo )
-                        pUndo->MoveBoxContent( *pDoc, aRg, rInsPosNd );
+                        pUndo->MoveBoxContent( rDoc, aRg, rInsPosNd );
                     else
                     {
-                        pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd,
+                        rDoc.getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd,
                             SwMoveFlags::NO_DELFRMS );
                     }
                 }
@@ -1205,7 +1205,7 @@ void SwTable::InsertSpannedRow( SwDoc& rDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
         aFSz.SetHeight( nNewHeight );
         pFrameFormat->SetFormatAttr( aFSz );
     }
-    InsertRow_( &rDoc, aBoxes, nCnt, true, true );
+    InsertRow_( rDoc, aBoxes, nCnt, true, true );
     const size_t nBoxCount = rLine.GetTabBoxes().size();
     for( sal_uInt16 n = 0; n < nCnt; ++n )
     {
@@ -1509,7 +1509,7 @@ bool SwTable::NewSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
     boxes.
 */
 
-bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+bool SwTable::InsertRow( SwDoc& rDoc, const SwSelBoxes& rBoxes,
                         sal_uInt16 nCnt, bool bBehind, bool bInsertDummy )
 {
     bool bRet = false;
@@ -1527,7 +1527,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             SwTableLine *pLine = GetTabLines()[ nRowIdx ];
             SwSelBoxes aLineBoxes;
             lcl_FillSelBoxes( aLineBoxes, *pLine );
-            InsertRow_( pDoc, aLineBoxes, nCnt, bBehind, bInsertDummy );
+            InsertRow_( rDoc, aLineBoxes, nCnt, bBehind, bInsertDummy );
             const size_t nBoxCount = pLine->GetTabBoxes().size();
             sal_uInt16 nOfs = bBehind ? 0 : 1;
             for( sal_uInt16 n = 0; n < nCnt; ++n )
@@ -1553,7 +1553,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                             if( pCNd && pCNd->IsTextNode() && pCNd->GetTextNode()->GetNumRule() )
                             {
                                 SwPaM aPam( *pCNd->GetTextNode(), *pCNd->GetTextNode() );
-                                pDoc->DelNumRules( aPam );
+                                rDoc.DelNumRules( aPam );
                             }
                         }
                     }
@@ -1577,7 +1577,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         CHECK_TABLE( *this )
     }
     else
-        bRet = InsertRow_( pDoc, rBoxes, nCnt, bBehind, bInsertDummy );
+        bRet = InsertRow_( rDoc, rBoxes, nCnt, bBehind, bInsertDummy );
     return bRet;
 }
 
@@ -2154,7 +2154,7 @@ void SwTable::CleanUpBottomRowSpan( sal_uInt16 nDelLines )
  */
 void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
 {
-    SwDoc *const pDoc(GetFrameFormat()->GetDoc());
+    SwDoc& rDoc(GetFrameFormat()->GetDoc());
     SwTableLine *const pSourceLine(GetTabLines()[nRow]);
     SwTableBox *const pSubTableBox(pSourceLine->GetTabBoxes()[nBox]);
     assert(!pSubTableBox->GetTabLines().empty());
@@ -2226,13 +2226,13 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                     assert(pSourceBox->getRowSpan() == 1);
                     // import filter (xmltbli.cxx) converts all box widths to absolute
                     assert(pSourceBox->GetFrameFormat()->GetFrameSize().GetWidthPercent() == 0);
-                    ::InsTableBox(*pDoc, GetTableNode(), pNewLine,
+                    ::InsTableBox(rDoc, GetTableNode(), pNewLine,
                         pSourceBox->GetFrameFormat(),
                         pSourceBox, j+k, 1);
                     // insert dummy text node...
-                    pDoc->GetNodes().MakeTextNode(
+                    rDoc.GetNodes().MakeTextNode(
                             SwNodeIndex(*pSourceBox->GetSttNd(), +1).GetNode(),
-                            pDoc->GetDfltTextFormatColl());
+                            rDoc.GetDfltTextFormatColl());
                     SwNodeRange content(*pSourceBox->GetSttNd(), SwNodeOffset(+2),
                             *pSourceBox->GetSttNd()->EndOfSectionNode());
                     SwTableBox *const pNewBox(pNewLine->GetTabBoxes()[j+k]);
@@ -2240,12 +2240,12 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                     // MoveNodes would delete the box SwStartNode/SwEndNode
                     // without the dummy node
 #if 0
-                    pDoc->GetNodes().MoveNodes(content, pDoc->GetNodes(), insPos, false);
+                    rDoc.GetNodes().MoveNodes(content, rDoc.GetNodes(), insPos, false);
 #else
-                    pDoc->getIDocumentContentOperations().MoveNodeRange(content, insPos.GetNode(), SwMoveFlags::NO_DELFRMS|SwMoveFlags::REDLINES);
+                    rDoc.getIDocumentContentOperations().MoveNodeRange(content, insPos.GetNode(), SwMoveFlags::NO_DELFRMS|SwMoveFlags::REDLINES);
 #endif
                     // delete the empty node that was bundled in the new box
-                    pDoc->GetNodes().Delete(insPos);
+                    rDoc.GetNodes().Delete(insPos);
                     if (pRowBrush)
                     {
                         if (pNewBox->GetFrameFormat()->GetItemState(RES_BACKGROUND, true) != SfxItemState::SET)
@@ -2264,7 +2264,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                 SwTableBox *const pSourceBox(pSourceLine->GetTabBoxes()[j]);
                 assert(pSourceBox->GetTabLines().empty()); // checked for that
                 sal_uInt16 const nInsPos(j < nBox ? j : j + pSubLine->GetTabBoxes().size() - 1);
-                ::InsTableBox(*pDoc, GetTableNode(), pNewLine,
+                ::InsTableBox(rDoc, GetTableNode(), pNewLine,
                     pSourceBox->GetFrameFormat(),
                     pSourceBox, nInsPos, 1);
                 // adjust row span:
@@ -2381,9 +2381,9 @@ bool SwTable::CanConvertSubtables() const
     // note: fields that refer to table cells may be *outside* the table,
     // so the entire document needs to be imported before checking here
     // (same for table box formulas and charts)
-    SwDoc *const pDoc(GetFrameFormat()->GetDoc());
+    SwDoc& rDoc(GetFrameFormat()->GetDoc());
     SwFieldType const*const pTableFields(
-        pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Table, u""_ustr, false));
+        rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Table, u""_ustr, false));
     std::vector<SwFormatField*> vFields;
     pTableFields->GatherFields(vFields);
     if (!vFields.empty())
@@ -2391,13 +2391,13 @@ bool SwTable::CanConvertSubtables() const
         return false; // no formulas in fields yet
     }
     std::vector<SwTableBoxFormula*> aTableBoxFormulas;
-    SwTable::GatherFormulas(*pDoc, aTableBoxFormulas);
+    SwTable::GatherFormulas(rDoc, aTableBoxFormulas);
     if (!aTableBoxFormulas.empty())
     {
         return false; // no table box formulas yet
     }
     UIName const tableName(GetFrameFormat()->GetName());
-    SwNodeIndex temp(*pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), +1);
+    SwNodeIndex temp(*rDoc.GetNodes().GetEndOfAutotext().StartOfSectionNode(), +1);
     while (SwStartNode const*const pStartNode = temp.GetNode().GetStartNode())
     {
         ++temp;
@@ -2438,9 +2438,9 @@ void SwTable::ConvertSubtables()
     //       really esoteric use-case)
     // nodes were moved - sort marks, redlines, footnotes
     SwDoc *const pDoc(GetFrameFormat()->GetDoc());
-    pDoc->getIDocumentMarkAccess()->assureSortedMarkContainers();
-    pDoc->getIDocumentRedlineAccess().GetRedlineTable().Resort();
-    pDoc->GetFootnoteIdxs().UpdateAllFootnote();
+    rDoc.getIDocumentMarkAccess()->assureSortedMarkContainers();
+    rDoc.getIDocumentRedlineAccess().GetRedlineTable().Resort();
+    rDoc.GetFootnoteIdxs().UpdateAllFootnote();
 #endif
     // assume that there aren't any node indexes to the deleted box start/end nodes
     CHECK_TABLE( *this )

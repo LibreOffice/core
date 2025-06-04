@@ -38,7 +38,7 @@ class SwUndoBookmark : public SwUndo
 protected:
     SwUndoBookmark(SwUndoId nUndoId, const ::sw::mark::MarkBase&);
 
-    void SetInDoc(SwDoc*);
+    void SetInDoc(SwDoc&);
     void ResetInDoc(SwDoc&);
 
 public:

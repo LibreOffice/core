@@ -538,10 +538,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
     // Need to check for unique item for DrawingLayer items of type NameOrIndex
     // and evtl. correct that item to ensure unique names for that type. This call may
     // modify/correct entries inside of the given SfxItemSet
-    if(GetDoc())
-    {
-        GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aTempSet);
-    }
+    GetDoc().CheckForUniqueItemForLineFillNameOrIndex(aTempSet);
 
     if (supportsFullDrawingLayerFillAttributeSet())
     {
@@ -707,14 +704,14 @@ bool SwFormat::IsBackgroundTransparent() const
 /*
  * Document Interface Access
  */
-const IDocumentSettingAccess& SwFormat::getIDocumentSettingAccess() const { return GetDoc()->GetDocumentSettingManager(); }
-const IDocumentDrawModelAccess& SwFormat::getIDocumentDrawModelAccess() const { return GetDoc()->getIDocumentDrawModelAccess(); }
-IDocumentDrawModelAccess& SwFormat::getIDocumentDrawModelAccess() { return GetDoc()->getIDocumentDrawModelAccess(); }
-const IDocumentLayoutAccess& SwFormat::getIDocumentLayoutAccess() const { return GetDoc()->getIDocumentLayoutAccess(); }
-IDocumentLayoutAccess& SwFormat::getIDocumentLayoutAccess() { return GetDoc()->getIDocumentLayoutAccess(); }
-IDocumentTimerAccess& SwFormat::getIDocumentTimerAccess() { return GetDoc()->getIDocumentTimerAccess(); }
-IDocumentFieldsAccess& SwFormat::getIDocumentFieldsAccess() { return GetDoc()->getIDocumentFieldsAccess(); }
-IDocumentChartDataProviderAccess& SwFormat::getIDocumentChartDataProviderAccess() { return GetDoc()->getIDocumentChartDataProviderAccess(); }
+const IDocumentSettingAccess& SwFormat::getIDocumentSettingAccess() const { return GetDoc().GetDocumentSettingManager(); }
+const IDocumentDrawModelAccess& SwFormat::getIDocumentDrawModelAccess() const { return GetDoc().getIDocumentDrawModelAccess(); }
+IDocumentDrawModelAccess& SwFormat::getIDocumentDrawModelAccess() { return GetDoc().getIDocumentDrawModelAccess(); }
+const IDocumentLayoutAccess& SwFormat::getIDocumentLayoutAccess() const { return GetDoc().getIDocumentLayoutAccess(); }
+IDocumentLayoutAccess& SwFormat::getIDocumentLayoutAccess() { return GetDoc().getIDocumentLayoutAccess(); }
+IDocumentTimerAccess& SwFormat::getIDocumentTimerAccess() { return GetDoc().getIDocumentTimerAccess(); }
+IDocumentFieldsAccess& SwFormat::getIDocumentFieldsAccess() { return GetDoc().getIDocumentFieldsAccess(); }
+IDocumentChartDataProviderAccess& SwFormat::getIDocumentChartDataProviderAccess() { return GetDoc().getIDocumentChartDataProviderAccess(); }
 
 void SwFormat::GetGrabBagItem(uno::Any& rVal) const
 {
@@ -761,11 +758,8 @@ void SwFormat::RemoveAllUnos()
 
 bool SwFormat::IsUsed() const
 {
-    auto pDoc = GetDoc();
-    if(!pDoc)
-        return false;
     bool isUsed = false;
-    sw::AutoFormatUsedHint aHint(isUsed, pDoc->GetNodes());
+    sw::AutoFormatUsedHint aHint(isUsed, GetDoc().GetNodes());
     CallSwClientNotify(aHint);
     return isUsed;
 }

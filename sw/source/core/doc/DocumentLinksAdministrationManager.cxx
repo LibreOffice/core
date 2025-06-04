@@ -112,7 +112,7 @@ namespace
                 {
                     // found, so get the data
                     const SwNodeIndex* pIdx = pSectFormat->GetContent().GetContentIdx();
-                    if (pIdx && &pSectFormat->GetDoc()->GetNodes() == &pIdx->GetNodes())
+                    if (pIdx && &pSectFormat->GetDoc().GetNodes() == &pIdx->GetNodes())
                     {
                         // a table in the normal NodesArr
                         return pIdx->GetNode().GetSectionNode();
@@ -138,7 +138,7 @@ namespace
                 {
                     SwTableBox* pFBox = pTmpTable->GetTabSortBoxes()[0];
                     if (pFBox && pFBox->GetSttNd()
-                        && &pTableFormat->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes())
+                        && &pTableFormat->GetDoc().GetNodes() == &pFBox->GetSttNd()->GetNodes())
                     {
                         // a table in the normal NodesArr
                         return const_cast<SwTableNode*>(pFBox->GetSttNd()->FindTableNode());

@@ -206,7 +206,7 @@ static void lcl_DelFormatIndices( SwFormat const * pFormat )
  */
 SwDoc::SwDoc()
     : m_pNodes(new SwNodes(*this)),
-    mpAttrPool(new SwAttrPool(this)),
+    mpAttrPool(new SwAttrPool(*this)),
     maOLEModifiedIdle( "sw::SwDoc maOLEModifiedIdle" ),
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),

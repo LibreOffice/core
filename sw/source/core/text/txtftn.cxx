@@ -538,7 +538,7 @@ void SwTextFrame::RemoveFootnote(TextFrameIndex const nStart, TextFrameIndex con
                 else
                 {
                     if (!bEndDoc || ( bEndn && pEndBoss->IsInSct() &&
-                        !SwLayouter::Collecting( &GetDoc(),
+                        !SwLayouter::Collecting( GetDoc(),
                         pEndBoss->FindSctFrame(), nullptr ) ))
                     {
                         if( bEndn )
@@ -651,15 +651,15 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
         SwFootnoteFrame *pFootnoteFrame = pSrcFrame ? SwFootnoteBossFrame::FindFootnote( pSrcFrame, pFootnote ) : nullptr;
         if( pFootnoteFrame && !pFootnoteFrame->GetUpper() )
             pFootnoteFrame = nullptr;
-        SwDoc *const pDoc = &GetDoc();
-        if( SwLayouter::Collecting( pDoc, pSect, pFootnoteFrame ) )
+        SwDoc& rDoc = GetDoc();
+        if( SwLayouter::Collecting( rDoc, pSect, pFootnoteFrame ) )
         {
             if( !pSrcFrame )
             {
-                SwFootnoteFrame *pNew = new SwFootnoteFrame(pDoc->GetDfltFrameFormat(),this,this,pFootnote);
+                SwFootnoteFrame *pNew = new SwFootnoteFrame(rDoc.GetDfltFrameFormat(),this,this,pFootnote);
                 SwNodeIndex aIdx( *pFootnote->GetStartNode(), 1 );
-                ::InsertCnt_( pNew, pDoc, aIdx.GetIndex() );
-                pDoc->getIDocumentLayoutAccess().GetLayouter()->CollectEndnote( pNew );
+                ::InsertCnt_( pNew, rDoc, aIdx.GetIndex() );
+                rDoc.getIDocumentLayoutAccess().GetLayouter()->CollectEndnote( pNew );
             }
             else if( pSrcFrame != this )
                 SwFootnoteBossFrame::ChangeFootnoteRef( pSrcFrame, pFootnote, this );

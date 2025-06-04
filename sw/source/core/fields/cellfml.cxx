@@ -109,7 +109,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
     rCalcPara.m_pBoxStack->insert( pBox );      // add
     do {        // Middle-Check-Loop, so that we can jump from here. Used so that the box pointer
                 // will be removed from stack at the end.
-        SwDoc* pDoc = GetFrameFormat()->GetDoc();
+        SwDoc& rDoc = GetFrameFormat()->GetDoc();
 
         if( const SwTableBoxFormula* pFormulaItem = GetFrameFormat()->GetItemIfSet(
                                 RES_BOXATR_FORMULA, false ) )
@@ -125,7 +125,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                 if( !rCalcPara.IsStackOverflow() )
                 {
                     SwFrameFormat* pFormat = pBox->ClaimFrameFormat();
-                    SfxItemSetFixed<RES_BOXATR_BEGIN,RES_BOXATR_END-1> aTmp( pDoc->GetAttrPool() );
+                    SfxItemSetFixed<RES_BOXATR_BEGIN,RES_BOXATR_END-1> aTmp( rDoc.GetAttrPool() );
                     aTmp.Put( SwTableBoxValue( nRet ) );
                     if( SfxItemState::SET != pFormat->GetItemState( RES_BOXATR_FORMAT ))
                         aTmp.Put( SwTableBoxNumFormat( 0 ));
@@ -145,7 +145,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
             break;
         }
 
-        SwTextNode* pTextNd = pDoc->GetNodes()[ m_pStartNode->GetIndex() + 1 ]->GetTextNode();
+        SwTextNode* pTextNd = rDoc.GetNodes()[ m_pStartNode->GetIndex() + 1 ]->GetTextNode();
         if( !pTextNd )
             break;
 
@@ -230,7 +230,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
             sText = bOK ? sText.copy( nSttPos ) : OUString();
             sal_uInt32 nFormatIndex = GetFrameFormat()->GetTableBoxNumFormat().GetValue();
 
-            SvNumberFormatter* pNumFormatr = pDoc->GetNumberFormatter();
+            SvNumberFormatter* pNumFormatr = rDoc.GetNumberFormatter();
 
             const SvNumFormatType nFormatType = pNumFormatr->GetType( nFormatIndex );
             if( nFormatType == SvNumFormatType::TEXT )
@@ -240,12 +240,12 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                     SvNumFormatType::PERCENT == nFormatType)
             {
                 sal_uInt32 nTmpFormat = 0;
-                if( pDoc->IsNumberFormat( sText, nTmpFormat, aNum ) &&
+                if( rDoc.IsNumberFormat( sText, nTmpFormat, aNum ) &&
                     SvNumFormatType::NUMBER == pNumFormatr->GetType( nTmpFormat ))
                     sText += "%";
             }
 
-            if( pDoc->IsNumberFormat( sText, nFormatIndex, aNum ))
+            if( rDoc.IsNumberFormat( sText, nFormatIndex, aNum ))
                 nRet = aNum;
             else
                 rCalcPara.m_rCalc.SetCalcError( SwCalcError::NaN ); // set for interoperability functions
@@ -721,7 +721,7 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
                     {
                         // then search for table
                         const SwTable* pFnd = FindTable(
-                                                *rTable.GetFrameFormat()->GetDoc(),
+                                                rTable.GetFrameFormat()->GetDoc(),
                                                 sTableNm );
                         if( pFnd )
                             pTable = pFnd;
@@ -1116,7 +1116,7 @@ void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rN
     {
         sTableNm = pTableNmBox->copy( 0, nSeparator );
         *pTableNmBox = pTableNmBox->copy( nSeparator + 1); // remove dot
-        const SwTable* pFnd = FindTable( *rTable.GetFrameFormat()->GetDoc(), sTableNm );
+        const SwTable* pFnd = FindTable( rTable.GetFrameFormat()->GetDoc(), sTableNm );
         if( pFnd )
             pTable = pFnd;
 

@@ -166,7 +166,7 @@ ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, c
 }
 
 std::optional<std::pair<SwTextNode *, SvxTabStopItem>>
-ToxTextGenerator::GenerateText(SwDoc* pDoc,
+ToxTextGenerator::GenerateText(SwDoc& rDoc,
         std::unordered_map<OUString, int> & rMarkURLs,
         const std::vector<std::unique_ptr<SwTOXSortTabBase>> &entries,
         sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess,
@@ -211,7 +211,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                 break;
 
             case TOKEN_ENTRY_TEXT: {
-                HandledTextToken htt = HandleTextToken(rBase, pDoc->GetAttrPool(), pLayout);
+                HandledTextToken htt = HandleTextToken(rBase, rDoc.GetAttrPool(), pLayout);
                 ApplyHandledTextToken(htt, *pTOXNd);
             }
                 break;
@@ -220,7 +220,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                 {
                     // for TOC numbering
                     rText += GetNumStringOfFirstNode(rBase, true, MAXLEVEL, pLayout);
-                    HandledTextToken htt = HandleTextToken(rBase, pDoc->GetAttrPool(), pLayout);
+                    HandledTextToken htt = HandleTextToken(rBase, rDoc.GetAttrPool(), pLayout);
                     ApplyHandledTextToken(htt, *pTOXNd);
                 }
                 break;
@@ -291,9 +291,9 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
             {
                 SwCharFormat* pCharFormat;
                 if( USHRT_MAX != aToken.nPoolId )
-                    pCharFormat = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( aToken.nPoolId );
+                    pCharFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( aToken.nPoolId );
                 else
-                    pCharFormat = pDoc->FindCharFormatByName(aCharStyleName);
+                    pCharFormat = rDoc.FindCharFormatByName(aCharStyleName);
 
                 if (pCharFormat)
                 {

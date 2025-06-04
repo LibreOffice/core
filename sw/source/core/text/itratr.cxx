@@ -1076,7 +1076,7 @@ static void lcl_MinMaxNode(SwFrameFormat* pNd, SwMinMaxNodeArgs& rIn)
     if( !bIsDrawFrameFormat )
     {
         // Does the frame contain a table at the start or the end?
-        const SwNodes& rNodes = pNd->GetDoc()->GetNodes();
+        const SwNodes& rNodes = pNd->GetDoc().GetNodes();
         const SwFormatContent& rFlyContent = pNd->GetContent();
         SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex();
         SwTableNode* pTableNd = rNodes[nStt+1]->GetTableNode();

@@ -293,7 +293,7 @@ uno::Any SwXTextView::getSelection()
                 if (pFormat)
                 {
                     aRef = cppu::getXWeak(SwXTextFrame::CreateXTextFrame(
-                            *pFormat->GetDoc(), pFormat).get());
+                            pFormat->GetDoc(), pFormat).get());
                 }
             }
             break;
@@ -303,7 +303,7 @@ uno::Any SwXTextView::getSelection()
                 if (pFormat)
                 {
                     aRef = cppu::getXWeak(SwXTextGraphicObject::CreateXTextGraphicObject(
-                            *pFormat->GetDoc(), pFormat).get());
+                            pFormat->GetDoc(), pFormat).get());
                 }
             }
             break;
@@ -313,7 +313,7 @@ uno::Any SwXTextView::getSelection()
                 if (pFormat)
                 {
                     aRef = cppu::getXWeak(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                            *pFormat->GetDoc(), pFormat).get());
+                            pFormat->GetDoc(), pFormat).get());
                 }
             }
             break;

@@ -53,10 +53,10 @@ constexpr tools::Long BROWSE_HEIGHT = 56700 * 10; // 10 Meters
 #define GRFNUM_YES 1
 #define GRFNUM_REPLACE 2
 
-void AppendObjs(const sw::FrameFormats<sw::SpzFrameFormat*>* pSpz, SwNodeOffset nIndex, SwFrame* pFrame, SwPageFrame* pPage, SwDoc* doc);
+void AppendObjs(const sw::FrameFormats<sw::SpzFrameFormat*>* pSpz, SwNodeOffset nIndex, SwFrame* pFrame, SwPageFrame* pPage, SwDoc& rDoc);
 
 void AppendObjsOfNode(sw::FrameFormats<sw::SpzFrameFormat*> const* pTable, SwNodeOffset nIndex,
-        SwFrame * pFrame, SwPageFrame * pPage, SwDoc * pDoc,
+        SwFrame * pFrame, SwPageFrame * pPage, SwDoc & rDoc,
         std::vector<sw::Extent>::const_iterator const* pIter,
         std::vector<sw::Extent>::const_iterator const* pEnd,
         SwTextNode const* pFirstNode, SwTextNode const* pLastNode);
@@ -136,12 +136,12 @@ SwFrame *SaveContent( SwLayoutFrame *pLay, SwFrame *pStart = nullptr );
 void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling );
 
 // Get ContentNodes, create ContentFrames, and add them to LayFrame.
-void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc, SwNodeOffset nIndex,
+void InsertCnt_( SwLayoutFrame *pLay, SwDoc& rDoc, SwNodeOffset nIndex,
                  bool bPages = false, SwNodeOffset nEndIndex = SwNodeOffset(0),
                  SwFrame *pPrv = nullptr, sw::FrameMode eMode = sw::FrameMode::New);
 
 // Creation of frames for a specific section (uses InsertCnt_)
-void MakeFrames( SwDoc *pDoc, const SwNode &rSttIdx, const SwNode &rEndIdx );
+void MakeFrames( SwDoc &rDoc, const SwNode &rSttIdx, const SwNode &rEndIdx );
 
 extern bool bObjsDirect;
 
@@ -211,7 +211,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout,
                        std::pair<Point, bool> const* pViewPosAndCalcFrame = nullptr);
 
 // Should extra data (redline stroke, line numbers) be painted?
-bool IsExtraData( const SwDoc *pDoc );
+bool IsExtraData( const SwDoc &rDoc );
 
 // #i11760# - method declaration <CalcContent(..)>
 void CalcContent( SwLayoutFrame *pLay, bool bNoColl = false );

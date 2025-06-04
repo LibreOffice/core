@@ -112,7 +112,7 @@ class SwLayHelper
     SwLayoutFrame* &mrpLay;
     std::unique_ptr<SwActualSection> &mrpActualSection;
     bool mbBreakAfter;
-    SwDoc* mpDoc;
+    SwDoc& mrDoc;
     SwLayCacheImpl* mpImpl;
     sal_uLong mnMaxParaPerPage;
     sal_uLong mnParagraphCnt;
@@ -122,7 +122,7 @@ class SwLayHelper
     bool mbFirst : 1;
     void CheckFlyCache_( SwPageFrame* pPage );
 public:
-    SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,
+    SwLayHelper( SwDoc& rDoc, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,
             SwLayoutFrame* &rpL, std::unique_ptr<SwActualSection> &rpA,
             SwNodeOffset nNodeIndex, bool bCache );
     ~SwLayHelper();

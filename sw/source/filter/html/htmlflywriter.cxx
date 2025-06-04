@@ -1225,7 +1225,7 @@ OUString getFrameFormatText(const SwFrameFormat& rFrameFormat)
         return {};
 
     const SwNodeOffset nStt = pSttIx->GetIndex();
-    const auto& nodes = rFrameFormat.GetDoc()->GetNodes();
+    const auto& nodes = rFrameFormat.GetDoc().GetNodes();
     const SwNodeOffset nEnd = nodes[nStt]->EndOfSectionIndex();
 
     OUStringBuffer result;

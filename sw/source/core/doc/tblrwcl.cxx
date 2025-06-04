@@ -257,7 +257,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
                 aFrameSz.SetWidth( nSz / ( pCpyPara->nCpyCnt + 1 ) );
 
                 // Create a new Format for the new Box, specifying its size.
-                aFindFrame.pNewFrameFormat = reinterpret_cast<SwTableBoxFormat*>(pNewFormat->GetDoc()->
+                aFindFrame.pNewFrameFormat = reinterpret_cast<SwTableBoxFormat*>(pNewFormat->GetDoc().
                                             MakeTableLineFormat());
                 *aFindFrame.pNewFrameFormat = *pNewFormat;
                 aFindFrame.pNewFrameFormat->SetFormatAttr( aFrameSz );
@@ -488,10 +488,10 @@ bool SwTable::InsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
     return bRes;
 }
 
-bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+bool SwTable::InsertRow_( SwDoc& rDoc, const SwSelBoxes& rBoxes,
                         sal_uInt16 nCnt, bool bBehind, bool bInsertDummy )
 {
-    OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid Box List" );
+    OSL_ENSURE( !rBoxes.empty() && nCnt, "No valid Box List" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTableNd )
         return false;
@@ -558,8 +558,6 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     else
         aCpyPara.nDelBorderFlag = 2;
 
-    assert(pDoc);
-
     for( sal_uInt16 nCpyCnt = 0; nCpyCnt < nCnt; ++nCpyCnt )
     {
         if( bBehind )
@@ -569,7 +567,7 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             SwTableLine* pNewTableLine = lcl_CopyRow( *rpFndLine, &aCpyPara );
 
             // tracked insertion of empty table line
-            if ( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+            if ( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
             {
                 SvxPrintItem aSetTracking(RES_PRINT, false);
                 SwPosition aPos(*pNewTableLine->GetTabBoxes()[0]->GetSttNd());
@@ -577,16 +575,16 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 if ( bInsertDummy )
                 {
                     SwPaM aPaM(*pNewTableLine->GetTabBoxes()[0]->GetSttNd(), SwNodeOffset(1));
-                    pDoc->getIDocumentContentOperations().InsertString( aPaM,
+                    rDoc.getIDocumentContentOperations().InsertString( aPaM,
                         OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
                 }
-                pDoc->SetRowNotTracked( aCursor, aSetTracking, /*bAll=*/false, /*bIns=*/true );
+                rDoc.SetRowNotTracked( aCursor, aSetTracking, /*bAll=*/false, /*bIns=*/true );
             }
         }
     }
 
     // clean up this Line's structure once again, generally all of them
-    if( !pDoc->IsInReading() )
+    if( !rDoc.IsInReading() )
         GCLines();
 
     // Update Layout
@@ -603,12 +601,12 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     CheckTableLayout(GetTabLines());
 #endif
 
-    SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
+    SwChartDataProvider *pPCD = rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider();
     if (pPCD && nCnt)
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
-    pDoc->UpdateCharts( GetFrameFormat()->GetName() );
+    rDoc.UpdateCharts( GetFrameFormat()->GetName() );
 
-    if (SwFEShell* pFEShell = pDoc->GetDocShell()->GetFEShell())
+    if (SwFEShell* pFEShell = rDoc.GetDocShell()->GetFEShell())
     {
         if (officecfg::Office::Writer::Table::Change::ApplyTableAutoFormat::get())
         {
@@ -730,7 +728,7 @@ void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
             pShareFormats->RemoveFormat( *rTableBoxes[ nDelPos ]->GetFrameFormat() );
 
         // Before deleting the 'Table Box' from memory - delete any redlines attached to it
-        rTable.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteTableCellRedline( rTable.GetFrameFormat()->GetDoc(), *(rTableBoxes[nDelPos]), true, RedlineType::Any );
+        rTable.GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteTableCellRedline( rTable.GetFrameFormat()->GetDoc(), *(rTableBoxes[nDelPos]), true, RedlineType::Any );
         delete rTableBoxes[nDelPos];
         rTableBoxes.erase( rTableBoxes.begin() + nDelPos );
 
@@ -782,7 +780,7 @@ void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
 
             SwTableLine* pTabLineToDelete = rTable.GetTabLines()[ nDelPos ];
             // Before deleting the 'Table Line' from memory - delete any redlines attached to it
-            rTable.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteTableRowRedline( rTable.GetFrameFormat()->GetDoc(), *pTabLineToDelete, true, RedlineType::Any );
+            rTable.GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteTableRowRedline( rTable.GetFrameFormat()->GetDoc(), *pTabLineToDelete, true, RedlineType::Any );
             delete pTabLineToDelete;
             rTable.GetTabLines().erase( rTable.GetTabLines().begin() + nDelPos );
             break;      // we cannot delete more
@@ -796,7 +794,7 @@ void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
 
         SwTableLine* pTabLineToDelete = pBox->GetTabLines()[ nDelPos ];
         // Before deleting the 'Table Line' from memory - delete any redlines attached to it
-        rTable.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteTableRowRedline( rTable.GetFrameFormat()->GetDoc(), *pTabLineToDelete, true, RedlineType::Any );
+        rTable.GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteTableRowRedline( rTable.GetFrameFormat()->GetDoc(), *pTabLineToDelete, true, RedlineType::Any );
         delete pTabLineToDelete;
         pBox->GetTabLines().erase( pBox->GetTabLines().begin() + nDelPos );
     } while( pBox->GetTabLines().empty() );
@@ -936,13 +934,12 @@ lcl_SaveUpperLowerBorder( SwTable& rTable, const SwTableBox& rBox,
 }
 
 bool SwTable::DeleteSel(
-    SwDoc*     pDoc
+    SwDoc&     rDoc
     ,
     const SwSelBoxes& rBoxes,
     const SwSelBoxes* pMerged, SwUndo* pUndo,
     const bool bDelMakeFrames, const bool bCorrBorder )
 {
-    OSL_ENSURE( pDoc, "No doc?" );
     SwTableNode* pTableNd = nullptr;
     if( !rBoxes.empty() )
     {
@@ -979,7 +976,7 @@ bool SwTable::DeleteSel(
 
     PrepareDelBoxes( rBoxes );
 
-    SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
+    SwChartDataProvider *pPCD = rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider();
     // Delete boxes from last to first
     for (size_t n = 0; n < rBoxes.size(); ++n)
     {
@@ -1002,7 +999,7 @@ bool SwTable::DeleteSel(
         aFndBox.MakeFrames( *this );
 
     // TL_CHART2: now inform chart that sth has changed
-    pDoc->UpdateCharts( GetFrameFormat()->GetName() );
+    rDoc.UpdateCharts( GetFrameFormat()->GetName() );
 
 #if defined DBG_UTIL
     CheckTableLayout(GetTabLines());
@@ -1527,7 +1524,7 @@ static void lcl_Merge_MoveLine(FndLine_& rFndLine, InsULPara *const pULPara)
 
 static void lcl_BoxSetHeadCondColl( const SwTableBox* pBox );
 
-bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+bool SwTable::OldMerge( SwDoc& rDoc, const SwSelBoxes& rBoxes,
                         SwTableBox* pMergeBox, SwUndoTableMerge* pUndo )
 {
     OSL_ENSURE( !rBoxes.empty() && pMergeBox, "no valid values" );
@@ -1547,7 +1544,7 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
     // the table too complex to be handled with chart.
     // Thus we tell the charts to use their own data provider and forget about this table
-    pDoc->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
+    rDoc.getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
 
     SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
 
@@ -1633,7 +1630,7 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             pUndo->AddNewBox( pRightBox->GetSttIdx() );
     }
 
-    DeleteSel( pDoc, rBoxes, nullptr, nullptr, false, false );
+    DeleteSel( rDoc, rBoxes, nullptr, nullptr, false, false );
 
     // Clean up this Line's structure once again, generally all of them
     GCLines();
@@ -1918,12 +1915,12 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
                         pBox->ClaimFrameFormat()->SetFormatAttr( aBoxAttrSet );
                     }
                 }
-                SwDoc* pFromDoc = rFndBox.GetBox()->GetFrameFormat()->GetDoc();
+                SwDoc& rFromDoc = rFndBox.GetBox()->GetFrameFormat()->GetDoc();
                 SwNodeRange aCpyRg( *rFndBox.GetBox()->GetSttNd(), SwNodeOffset(1),
                         *rFndBox.GetBox()->GetSttNd()->EndOfSectionNode() );
                 SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
 
-                pFromDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(aCpyRg, aInsIdx.GetNode(), nullptr, false);
+                rFromDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly(aCpyRg, aInsIdx.GetNode(), nullptr, false);
                 // Delete the initial TextNode
                 pCpyPara->rDoc.GetNodes().Delete( aInsIdx );
             }
@@ -2064,11 +2061,11 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
 
     // First copy the PoolTemplates for the Table, so that the Tables are
     // actually copied and have valid values.
-    SwDoc* pSrcDoc = GetFrameFormat()->GetDoc();
-    if( pSrcDoc != &rInsDoc )
+    SwDoc& rSrcDoc = GetFrameFormat()->GetDoc();
+    if( &rSrcDoc != &rInsDoc )
     {
-        rInsDoc.CopyTextColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE ) );
-        rInsDoc.CopyTextColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
+        rInsDoc.CopyTextColl( *rSrcDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE ) );
+        rInsDoc.CopyTextColl( *rSrcDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
     }
 
     SwTable* pNewTable = const_cast<SwTable*>(rInsDoc.InsertTable(
@@ -2110,7 +2107,7 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
 
     const_cast<SwTable*>(this)->SwitchFormulasToRelativeRepresentation();
 
-    SwTableNumFormatMerge aTNFM(*pSrcDoc, rInsDoc);
+    SwTableNumFormatMerge aTNFM(rSrcDoc, rInsDoc);
 
     // Also copy Names or enforce a new unique one
     if( bCpyName )

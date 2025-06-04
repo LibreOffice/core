@@ -228,7 +228,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         if( pTextNd->GetpSwpHints() )
             pTextNd->ClearSwpHintsArr( false );
-        m_pHistory->TmpRollback( &rDoc, 0, false );
+        m_pHistory->TmpRollback( rDoc, 0, false );
     }
 
     if( rCurrentPam.GetMark()->GetContentIndex() != m_nStartContent )
@@ -466,7 +466,7 @@ void UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
     {
         if( pTNd->GetpSwpHints() )
             pTNd->ClearSwpHintsArr( false );
-        pHistory->TmpRollback( &rDoc, 0, false );
+        pHistory->TmpRollback( rDoc, 0, false );
         pHistory->SetTmpEnd( pHistory->Count() );
     }
 }

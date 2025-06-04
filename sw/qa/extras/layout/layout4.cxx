@@ -690,7 +690,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf137185)
 
     // Check if the text moved from the shape to the frame
     auto pFormat = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
-    auto xTextFrame = SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat);
+    auto xTextFrame = SwXTextFrame::CreateXTextFrame(pFormat->GetDoc(), pFormat);
 
     CPPUNIT_ASSERT_EQUAL(u"Align me!"_ustr, xTextFrame->getText()->getString());
     SdrTextObj* pTextObj = DynCastSdrTextObj(pObj);

@@ -93,11 +93,11 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
         }
 
         aAnchor.SetAnchor( &aPos );
-        pFormat->GetDoc()->GetSpzFrameFormats()->push_back(static_cast<sw::SpzFrameFormat*>(pFormat));
+        pFormat->GetDoc().GetSpzFrameFormats()->push_back(static_cast<sw::SpzFrameFormat*>(pFormat));
         // SetFormatAttr should call Modify() and add it to the node
         pFormat->SetFormatAttr( aAnchor );
         SwContentNode* pCNd = aPos.GetNode().GetContentNode();
-        if (pCNd && pCNd->getLayoutFrame(pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr))
+        if (pCNd && pCNd->getLayoutFrame(pFormat->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr))
             pFormat->MakeFrames();
     }
     sw::CheckAnchoredFlyConsistency(rStartPos.GetNode().GetDoc());

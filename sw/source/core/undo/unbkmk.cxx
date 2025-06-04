@@ -46,9 +46,9 @@ SwUndoBookmark::~SwUndoBookmark()
 {
 }
 
-void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
+void SwUndoBookmark::SetInDoc( SwDoc& rDoc )
 {
-    m_pHistoryBookmark->SetInDoc( pDoc, false );
+    m_pHistoryBookmark->SetInDoc( rDoc, false );
 }
 
 void SwUndoBookmark::ResetInDoc( SwDoc& rDoc )
@@ -87,7 +87,7 @@ void SwUndoInsBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SetInDoc( &rContext.GetDoc() );
+    SetInDoc( rContext.GetDoc() );
 }
 
 SwUndoDeleteBookmark::SwUndoDeleteBookmark( const ::sw::mark::MarkBase& rBkmk )
@@ -97,7 +97,7 @@ SwUndoDeleteBookmark::SwUndoDeleteBookmark( const ::sw::mark::MarkBase& rBkmk )
 
 void SwUndoDeleteBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SetInDoc( &rContext.GetDoc() );
+    SetInDoc( rContext.GetDoc() );
 }
 
 void SwUndoDeleteBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -165,7 +165,7 @@ void SwUndoInsNoTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoInsNoTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    m_pHistoryNoTextFieldmark->SetInDoc(&rContext.GetDoc(), false);
+    m_pHistoryNoTextFieldmark->SetInDoc(rContext.GetDoc(), false);
 }
 
 SwUndoDelNoTextFieldmark::SwUndoDelNoTextFieldmark(const ::sw::mark::Fieldmark& rFieldmark)
@@ -178,7 +178,7 @@ SwUndoDelNoTextFieldmark::~SwUndoDelNoTextFieldmark() = default;
 
 void SwUndoDelNoTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    m_pHistoryNoTextFieldmark->SetInDoc(&rContext.GetDoc(), false);
+    m_pHistoryNoTextFieldmark->SetInDoc(rContext.GetDoc(), false);
 }
 
 void SwUndoDelNoTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -199,7 +199,7 @@ void SwUndoInsTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoInsTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    m_pHistoryTextFieldmark->SetInDoc(&rContext.GetDoc(), false);
+    m_pHistoryTextFieldmark->SetInDoc(rContext.GetDoc(), false);
 }
 
 SwUndoDelTextFieldmark::SwUndoDelTextFieldmark(const ::sw::mark::Fieldmark& rFieldmark)
@@ -212,7 +212,7 @@ SwUndoDelTextFieldmark::~SwUndoDelTextFieldmark() = default;
 
 void SwUndoDelTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    m_pHistoryTextFieldmark->SetInDoc(&rContext.GetDoc(), false);
+    m_pHistoryTextFieldmark->SetInDoc(rContext.GetDoc(), false);
 }
 
 void SwUndoDelTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)

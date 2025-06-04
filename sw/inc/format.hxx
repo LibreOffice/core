@@ -137,8 +137,8 @@ public:
     const SwAttrSet& GetAttrSet() const { return m_aSet; }
 
     /** The document is set in SwAttrPool now, therefore you always can access it. */
-    const SwDoc *GetDoc() const         { return m_aSet.GetDoc(); }
-          SwDoc *GetDoc()               { return m_aSet.GetDoc(); }
+    const SwDoc &GetDoc() const         { return m_aSet.GetDoc(); }
+          SwDoc &GetDoc()               { return m_aSet.GetDoc(); }
 
     /// Provides access to the document settings interface.
     const IDocumentSettingAccess& getIDocumentSettingAccess() const;

@@ -640,14 +640,14 @@ SwUndoReplace::Impl::Impl(
 
 void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
+    SwDoc& rDoc = rContext.GetDoc();
     SwCursor & rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
     rPam.DeleteMark();
 
-    SwTextNode* pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
+    SwTextNode* pNd = rDoc.GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
     OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
 
-    SwAutoCorrExceptWord* pACEWord = pDoc->GetAutoCorrExceptWord();
+    SwAutoCorrExceptWord* pACEWord = rDoc.GetAutoCorrExceptWord();
     if( pACEWord )
     {
         if ((1 == m_sIns.getLength()) && (1 == m_sOld.getLength()))
@@ -655,7 +655,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
             SwPosition aPos( *pNd, m_nSttCnt );
             pACEWord->CheckChar( aPos, m_sOld[ 0 ] );
         }
-        pDoc->SetAutoCorrExceptWord( nullptr );
+        rDoc.SetAutoCorrExceptWord( nullptr );
     }
 
     // don't look at m_sIns for deletion, maybe it was not completely inserted
@@ -665,19 +665,19 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         rPam.GetPoint()->Assign( m_nSttNd - m_nOffset, m_nSttNd == m_nEndNd ? m_nEndCnt : pNd->Len());
 
         // replace only in start node, without regex
-        bool const ret = pDoc->getIDocumentContentOperations().ReplaceRange(rPam, m_sOld, false);
+        bool const ret = rDoc.getIDocumentContentOperations().ReplaceRange(rPam, m_sOld, false);
         assert(ret); (void)ret;
         if (m_nSttNd != m_nEndNd)
         {   // in case of regex inserting paragraph breaks, join nodes...
             assert(rPam.GetMark()->GetContentIndex() == rPam.GetMark()->GetNode().GetTextNode()->Len());
             rPam.GetPoint()->Assign( m_nEndNd - m_nOffset, m_nEndCnt );
-            pDoc->getIDocumentContentOperations().DeleteAndJoin(rPam);
+            rDoc.getIDocumentContentOperations().DeleteAndJoin(rPam);
         }
         if (*rPam.GetMark() == *rPam.GetPoint())
             rPam.DeleteMark();
         else
             rPam.Normalize(false);
-        pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
+        pNd = rDoc.GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
         OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
     }
 
@@ -685,9 +685,9 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         assert(pNd && m_nSttCnt + m_sOld.getLength() <= pNd->Len());
         SwPosition aPos(*pNd, m_nSttCnt + m_sOld.getLength());
-        pDoc->getIDocumentContentOperations().SplitNode( aPos, false );
+        rDoc.getIDocumentContentOperations().SplitNode( aPos, false );
         pNd->RestoreMetadata(m_pMetadataUndoEnd);
-        pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
+        pNd = rDoc.GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
         // METADATA: restore
         pNd->RestoreMetadata(m_pMetadataUndoStart);
     }
@@ -697,7 +697,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pNd->GetpSwpHints() )
             pNd->ClearSwpHintsArr( true );
 
-        m_pHistory->TmpRollback( pDoc, m_nSetPos, false );
+        m_pHistory->TmpRollback( rDoc, m_nSetPos, false );
         if ( m_nSetPos ) // there were footnotes/FlyFrames
         {
             // are there others than these?
@@ -706,12 +706,12 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
                 // than save those attributes as well
                 SwHistory aHstr;
                 aHstr.Move( 0, m_pHistory.get(), m_nSetPos );
-                m_pHistory->Rollback( pDoc );
+                m_pHistory->Rollback( rDoc );
                 m_pHistory->Move( 0, &aHstr );
             }
             else
             {
-                m_pHistory->Rollback( pDoc );
+                m_pHistory->Rollback( rDoc );
                 m_pHistory.reset();
             }
         }

@@ -103,7 +103,7 @@ static void GetNewAutoStyle( std::shared_ptr<const SwAttrSet>& rpAttrSet,
 {
     if( rNode.GetModifyAtAttr() )
         const_cast<SwAttrSet*>(rpAttrSet.get())->SetModifyAtAttr( nullptr );
-    IStyleAccess& rSA = rpAttrSet->GetPool()->GetDoc()->GetIStyleAccess();
+    IStyleAccess& rSA = rpAttrSet->GetPool()->GetDoc().GetIStyleAccess();
     rpAttrSet = rSA.getAutomaticStyle( rNewAttrSet, rNode.IsTextNode() ?
                                                      IStyleAccess::AUTO_STYLE_PARA :
                                                      IStyleAccess::AUTO_STYLE_NOTXT );

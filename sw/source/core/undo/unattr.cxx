@@ -75,7 +75,7 @@ void SwUndoFormatAttrHelper::SwClientNotify(const SwModify&, const SfxHint& rHin
             return;
         if(!pChangeHint->m_pNew)
             return;
-        const SwDoc& rDoc = *m_rFormat.GetDoc();
+        const SwDoc& rDoc = m_rFormat.GetDoc();
         auto pOld = pChangeHint->m_pOld;
         auto& rChgSet = *pOld->GetChgSet();
         if(!GetUndo())
@@ -98,7 +98,7 @@ void SwUndoFormatAttrHelper::SwClientNotify(const SwModify&, const SfxHint& rHin
         return;
     if(!pLegacy->m_pNew)
         return;
-    const SwDoc& rDoc = *m_rFormat.GetDoc();
+    const SwDoc& rDoc = m_rFormat.GetDoc();
     auto pOld = pLegacy->m_pOld;
     if(POOLATTR_END >= pLegacy->m_pOld->Which())
     {
@@ -110,7 +110,7 @@ void SwUndoFormatAttrHelper::SwClientNotify(const SwModify&, const SfxHint& rHin
 }
 
 SwDocModifyAndUndoGuard::SwDocModifyAndUndoGuard(SwFormat& format)
-    : doc(format.GetName().isEmpty() ? nullptr : format.GetDoc())
+    : doc(format.GetName().isEmpty() ? nullptr : &format.GetDoc())
     , helper(doc ? new SwUndoFormatAttrHelper(format) : nullptr)
 {
 }
@@ -130,7 +130,7 @@ SwDocModifyAndUndoGuard::~SwDocModifyAndUndoGuard()
 SwUndoFormatAttr::SwUndoFormatAttr( SfxItemSet&& rOldSet,
                               SwFormat& rChgFormat,
                               bool bSaveDrawPt )
-    : SwUndo( SwUndoId::INSFMTATTR, *rChgFormat.GetDoc() )
+    : SwUndo( SwUndoId::INSFMTATTR, rChgFormat.GetDoc() )
     , m_sFormatName ( rChgFormat.GetName() )
     // #i56253#
     , m_oOldSet( std::move( rOldSet ) )
@@ -146,7 +146,7 @@ SwUndoFormatAttr::SwUndoFormatAttr( SfxItemSet&& rOldSet,
 
 SwUndoFormatAttr::SwUndoFormatAttr( const SfxPoolItem& rItem, SwFormat& rChgFormat,
                               bool bSaveDrawPt )
-    : SwUndo( SwUndoId::INSFMTATTR, *rChgFormat.GetDoc() )
+    : SwUndo( SwUndoId::INSFMTATTR, rChgFormat.GetDoc() )
     , m_sFormatName(rChgFormat.GetName())
     , m_oOldSet( rChgFormat.GetAttrSet().CloneAsValue( false ) )
     , m_nAnchorContentOffset( 0 )
@@ -168,9 +168,9 @@ void SwUndoFormatAttr::Init( const SwFormat & rFormat )
     if ( SfxItemState::SET == m_oOldSet->GetItemState( RES_ANCHOR, false )) {
         SaveFlyAnchor( &rFormat, m_bSaveDrawPt );
     } else if ( RES_FRMFMT == m_nFormatWhich ) {
-        const SwDoc* pDoc = rFormat.GetDoc();
+        const SwDoc& rDoc = rFormat.GetDoc();
         auto pTableFormat = dynamic_cast<const SwTableFormat*>(&rFormat);
-        if (pTableFormat && pDoc->GetTableFrameFormats()->ContainsFormat(const_cast<SwTableFormat*>(pTableFormat)))
+        if (pTableFormat && rDoc.GetTableFrameFormats()->ContainsFormat(const_cast<SwTableFormat*>(pTableFormat)))
         {
             // Table Format: save table position, table formats are volatile!
             SwTable * pTable = SwIterator<SwTable,SwFormat>( rFormat ).First();
@@ -564,7 +564,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 
 SwUndoFormatResetAttr::SwUndoFormatResetAttr( SwFormat& rChangedFormat,
                                               const std::vector<sal_uInt16>& rIds )
-    : SwUndo( SwUndoId::RESETATTR, *rChangedFormat.GetDoc() )
+    : SwUndo( SwUndoId::RESETATTR, rChangedFormat.GetDoc() )
     , m_pChangedFormat( &rChangedFormat )
     , m_aSet(*rChangedFormat.GetAttrSet().GetPool())
 {
@@ -605,7 +605,7 @@ void SwUndoFormatResetAttr::BroadcastStyleChange()
         nFamily = SfxStyleFamily::Char;
 
     if (nFamily != SfxStyleFamily::None)
-        m_pChangedFormat->GetDoc()->BroadcastStyleOperation(m_pChangedFormat->GetName(), nFamily, SfxHintId::StyleSheetModified);
+        m_pChangedFormat->GetDoc().BroadcastStyleOperation(m_pChangedFormat->GetName(), nFamily, SfxHintId::StyleSheetModified);
 }
 
 SwUndoResetAttr::SwUndoResetAttr( const SwPaM& rRange, sal_uInt16 nFormatId )
@@ -632,7 +632,7 @@ void SwUndoResetAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     // reset old values
     SwDoc & rDoc = rContext.GetDoc();
-    m_pHistory->TmpRollback( &rDoc, 0 );
+    m_pHistory->TmpRollback( rDoc, 0 );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
     if ((RES_CONDTXTFMTCOLL == m_nFormatId) &&
@@ -824,25 +824,25 @@ void SwUndoAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
+    SwDoc& rDoc = rContext.GetDoc();
 
-    RemoveIdx( *pDoc );
+    RemoveIdx( rDoc );
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ) {
-        SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
+        SwPaM aPam(rDoc.GetNodes().GetEndOfContent());
         if ( NODE_OFFSET_MAX != m_nNodeIndex ) {
             aPam.DeleteMark();
             aPam.GetPoint()->Assign( m_nNodeIndex, m_nSttContent );
             aPam.SetMark();
             aPam.GetPoint()->AdjustContent(+1);
-            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Any);
+            rDoc.getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Any);
         } else {
             // remove all format redlines, will be recreated if needed
             SetPaM(aPam);
-            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Format);
+            rDoc.getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Format);
             if (m_pRedlineSaveData)
             {
-                SetSaveData( *pDoc, *m_pRedlineSaveData );
+                SetSaveData( rDoc, *m_pRedlineSaveData );
             }
         }
     }
@@ -852,7 +852,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
                           && (m_AttrSet.GetRanges()[0].first <= RES_TXTATR_ANNOTATION);
 
     // restore old values
-    m_pHistory->TmpRollback( pDoc, 0, !bToLast );
+    m_pHistory->TmpRollback( rDoc, 0, !bToLast );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
     // set cursor onto Undo area
@@ -1034,7 +1034,7 @@ void SwUndoMoveLeftMargin::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // restore old values
-    m_pHistory->TmpRollback( & rDoc, 0 );
+    m_pHistory->TmpRollback( rDoc, 0 );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
     AddUndoRedoPaM(rContext);
@@ -1075,7 +1075,7 @@ void SwUndoChangeFootNote::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    m_pHistory->TmpRollback( &rDoc, 0 );
+    m_pHistory->TmpRollback( rDoc, 0 );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
     rDoc.GetFootnoteIdxs().UpdateAllFootnote();

@@ -1978,9 +1978,8 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 // the cell gets the default text format.
                 if( const SwTableBoxNumFormat* pNumFormat = m_pBoxFormat->GetItemIfSet( RES_BOXATR_FORMAT, false ) )
                 {
-                    const SwDoc* pDoc = m_pBoxFormat->GetDoc();
-                    const SvNumberFormatter* pNumberFormatter = pDoc ?
-                        pDoc->GetNumberFormatter() : nullptr;
+                    const SwDoc& rDoc = m_pBoxFormat->GetDoc();
+                    const SvNumberFormatter* pNumberFormatter = rDoc.GetNumberFormatter();
                     if( pNumberFormatter && !pNumberFormatter->GetEntry( pNumFormat->GetValue() )->IsTextFormat() )
                         m_pBoxFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
                 }

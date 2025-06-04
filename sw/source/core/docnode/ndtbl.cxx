@@ -164,16 +164,16 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
     }
     else
     {
-        SwDoc* pDoc = pBoxFrameFormat->GetDoc();
+        SwDoc& rDoc = pBoxFrameFormat->GetDoc();
         // format does not exist, so create it
-        pNewTableBoxFormat = pDoc->MakeTableBoxFormat();
+        pNewTableBoxFormat = rDoc.MakeTableBoxFormat();
         pNewTableBoxFormat->SetFormatAttr( pBoxFrameFormat->GetAttrSet().Get( RES_FRM_SIZE ) );
 
         if( pAutoFormat )
             pAutoFormat->UpdateToSet( nId, false, false,
                                     const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pNewTableBoxFormat->GetAttrSet())),
                                     SwTableAutoFormatUpdateFlags::Box,
-                                    pDoc->GetNumberFormatter() );
+                                    rDoc.GetNumberFormatter() );
         else
             ::lcl_SetDfltBoxAttr( *pNewTableBoxFormat, nId );
 
@@ -1831,7 +1831,7 @@ bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind, 
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
         rTable.SwitchFormulasToInternalRepresentation();
 
-        bRet = rTable.InsertRow( this, rBoxes, nCnt, bBehind, bInsertDummy );
+        bRet = rTable.InsertRow( *this, rBoxes, nCnt, bBehind, bInsertDummy );
         if (bRet)
         {
             getIDocumentState().SetModified();
@@ -2199,7 +2199,7 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
             if (pUndo)
                 pUndo->ReNewBoxes( aSelBoxes );
         }
-        bRet = rTable.DeleteSel( this, aSelBoxes, nullptr, pUndo.get(), true, true );
+        bRet = rTable.DeleteSel( *this, aSelBoxes, nullptr, pUndo.get(), true, true );
         if (bRet)
         {
             if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
@@ -2383,7 +2383,7 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
         // Merge them
         pTableNd->GetTable().SwitchFormulasToInternalRepresentation();
 
-        if( pTableNd->GetTable().Merge( this, aBoxes, aMerged, pMergeBox, pUndo.get() ))
+        if( pTableNd->GetTable().Merge( *this, aBoxes, aMerged, pMergeBox, pUndo.get() ))
         {
             nRet = TableMergeErr::Ok;
 
@@ -3143,7 +3143,7 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
             SfxItemSet aTmpSet(SfxItemSet::makeFixedSfxItemSet<
                         RES_LR_SPACE, RES_UL_SPACE, RES_PROTECT, RES_PROTECT,
                         RES_VERT_ORIENT, RES_VERT_ORIENT, RES_BACKGROUND,
-                        RES_SHADOW>(pFormat->GetDoc()->GetAttrPool()));
+                        RES_SHADOW>(pFormat->GetDoc().GetAttrPool()));
             aTmpSet.Put( pFormat->GetAttrSet() );
             if( aTmpSet.Count() )
                 pBox->ClaimFrameFormat()->SetFormatAttr( aTmpSet );
@@ -3507,9 +3507,9 @@ SwTableNode* SwNodes::SplitTable( SwNode& rPos, bool bAfter,
     {
         // Copy the Table FrameFormat
         SwFrameFormat* pOldTableFormat = rTable.GetFrameFormat();
-        SwFrameFormat* pNewTableFormat = pOldTableFormat->GetDoc()->MakeTableFrameFormat(
-                                pOldTableFormat->GetDoc()->GetUniqueTableName(),
-                                pOldTableFormat->GetDoc()->GetDfltFrameFormat() );
+        SwFrameFormat* pNewTableFormat = pOldTableFormat->GetDoc().MakeTableFrameFormat(
+                                pOldTableFormat->GetDoc().GetUniqueTableName(),
+                                pOldTableFormat->GetDoc().GetDfltFrameFormat() );
 
         *pNewTableFormat = *pOldTableFormat;
         pNewTableNd->GetTable().RegisterToFormat( *pNewTableFormat );
@@ -3745,14 +3745,14 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
             if (bResetDirect)
                 pSetBox->SetDirectFormatting(false);
 
-            SwDoc* pDoc = pSetBox->GetFrameFormat()->GetDoc();
-            SfxItemSet aCharSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1>(pDoc->GetAttrPool()));
-            SfxItemSet aBoxSet(pDoc->GetAttrPool(), aTableBoxSetRange);
+            SwDoc& rDoc = pSetBox->GetFrameFormat()->GetDoc();
+            SfxItemSet aCharSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1>(rDoc.GetAttrPool()));
+            SfxItemSet aBoxSet(rDoc.GetAttrPool(), aTableBoxSetRange);
             sal_uInt8 nPos = pSetPara->nAFormatLine * 4 + pSetPara->nAFormatBox;
             const bool bSingleRowTable = pSetPara->bSingleRowTable;
             const bool bSingleColTable = pSetPara->nEndBox == 0;
             pSetPara->rTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aCharSet, SwTableAutoFormatUpdateFlags::Char, nullptr);
-            pSetPara->rTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aBoxSet, SwTableAutoFormatUpdateFlags::Box, pDoc->GetNumberFormatter());
+            pSetPara->rTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aBoxSet, SwTableAutoFormatUpdateFlags::Box, rDoc.GetNumberFormatter());
 
             if (aCharSet.Count())
             {
@@ -3760,7 +3760,7 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
                 SwNodeOffset nEndNd = pSetBox->GetSttNd()->EndOfSectionIndex();
                 for (; nSttNd < nEndNd; ++nSttNd)
                 {
-                    SwContentNode* pNd = pDoc->GetNodes()[ nSttNd ]->GetContentNode();
+                    SwContentNode* pNd = rDoc.GetNodes()[ nSttNd ]->GetContentNode();
                     if (pNd)
                         pNd->SetAttr(aCharSet);
                 }

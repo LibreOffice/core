@@ -293,7 +293,7 @@ class SW_DLLPUBLIC SwSectionFormat final
 
     SAL_DLLPRIVATE void UpdateParent();      // Parent has been changed.
 
-    SwSectionFormat( SwFrameFormat* pDrvdFrame, SwDoc *pDoc );
+    SwSectionFormat( SwFrameFormat* pDrvdFrame, SwDoc& rDoc );
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:

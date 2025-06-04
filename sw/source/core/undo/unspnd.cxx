@@ -73,7 +73,7 @@ SwUndoSplitNode::~SwUndoSplitNode()
 
 void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
+    SwDoc& rDoc = rContext.GetDoc();
     SwCursor & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
     rPam.DeleteMark();
     if( m_bTableFlag )
@@ -82,10 +82,10 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
         SwPosition& rPos = *rPam.GetPoint();
         rPos.Assign(m_nNode);
         SwTextNode* pTNd;
-        SwNode* pCurrNd = pDoc->GetNodes()[ m_nNode + 1 ];
+        SwNode* pCurrNd = rDoc.GetNodes()[ m_nNode + 1 ];
         SwTableNode* pTableNd = pCurrNd->FindTableNode();
         if( pCurrNd->IsContentNode() && pTableNd &&
-            nullptr != ( pTNd = pDoc->GetNodes()[ pTableNd->GetIndex()-1 ]->GetTextNode() ))
+            nullptr != ( pTNd = rDoc.GetNodes()[ pTableNd->GetIndex()-1 ]->GetTextNode() ))
         {
             // move break attributes
             SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
@@ -102,12 +102,12 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             // than delete it again
             SwNodeIndex aDelNd( *pTableNd, -1 );
             RemoveIdxRel( aDelNd.GetIndex(), *rPam.GetPoint() );
-            pDoc->GetNodes().Delete( aDelNd );
+            rDoc.GetNodes().Delete( aDelNd );
         }
     }
     else
     {
-        SwTextNode * pTNd = pDoc->GetNodes()[ m_nNode ]->GetTextNode();
+        SwTextNode * pTNd = rDoc.GetNodes()[ m_nNode ]->GetTextNode();
         if( pTNd )
         {
             rPam.GetPoint()->Assign(*pTNd, pTNd->GetText().getLength());
@@ -116,7 +116,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 rPam.SetMark();
                 rPam.GetMark()->Adjust(SwNodeOffset(1));
-                pDoc->getIDocumentRedlineAccess().DeleteRedline( rPam, true, RedlineType::Any );
+                rDoc.getIDocumentRedlineAccess().DeleteRedline( rPam, true, RedlineType::Any );
                 rPam.DeleteMark();
             }
 
@@ -129,11 +129,11 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
                 rPam.SetMark();
                 rPam.GetPoint()->SetContent(pTNd->GetText().getLength());
 
-                pDoc->RstTextAttrs( rPam, true );
-                m_pHistory->TmpRollback( pDoc, 0, false );
+                rDoc.RstTextAttrs( rPam, true );
+                m_pHistory->TmpRollback( rDoc, 0, false );
             }
 
-            pDoc->UpdateParRsid( pTNd, m_nParRsid );
+            rDoc.UpdateParRsid( pTNd, m_nParRsid );
         }
     }
 

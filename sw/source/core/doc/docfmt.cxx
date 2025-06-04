@@ -1216,7 +1216,7 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
         pNewColl->SetNextTextFormatColl( *CopyTextColl( rColl.GetNextTextFormatColl() ));
 
     // create the NumRule if necessary
-    if( this != rColl.GetDoc() )
+    if( this != &rColl.GetDoc() )
     {
         const SwNumRuleItem* pItem = pNewColl->GetItemIfSet( RES_PARATR_NUMRULE,
             false );
@@ -1225,7 +1225,7 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
             UIName aName( pItem->GetValue() );
             if( !aName.isEmpty() )
             {
-                const SwNumRule* pRule = rColl.GetDoc()->FindNumRulePtr( aName );
+                const SwNumRule* pRule = rColl.GetDoc().FindNumRulePtr( aName );
                 if( pRule && !pRule->IsAutoRule() )
                 {
                     SwNumRule* pDestRule = FindNumRulePtr( aName );
@@ -1394,7 +1394,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
     {
         if( pContent->GetContentIdx() )
         {
-            const SwNodes& rSrcNds = rSrcFormat.GetDoc()->GetNodes();
+            const SwNodes& rSrcNds = rSrcFormat.GetDoc().GetNodes();
             SwStartNode* pSttNd = SwNodes::MakeEmptySection( GetNodes().GetEndOfAutotext(),
                                             bCpyHeader
                                                 ? SwHeaderStartNode
@@ -1402,7 +1402,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
             const SwNode& rCSttNd = pContent->GetContentIdx()->GetNode();
             SwNodeRange aRg( rCSttNd, SwNodeOffset(0), *rCSttNd.EndOfSectionNode() );
             rSrcNds.Copy_( aRg, *pSttNd->EndOfSectionNode() );
-            rSrcFormat.GetDoc()->GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, *pSttNd);
+            rSrcFormat.GetDoc().GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, *pSttNd);
             // TODO: investigate calling CopyWithFlyInFly?
             SwPaM const source(aRg.aStart, aRg.aEnd);
             SwPosition dest(*pSttNd);
@@ -1552,7 +1552,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                 // Copy format only if it exists
                 if (auto pStashedFormatSrc = rSrcDesc.GetStashedFrameFormat(bHeader, bLeft, bFirst))
                 {
-                    if (pStashedFormatSrc->GetDoc() != this)
+                    if (&pStashedFormatSrc->GetDoc() != this)
                     {
                         SwFrameFormat newFormat(GetAttrPool(), UIName(u"CopyDesc"_ustr), GetDfltFrameFormat());
 

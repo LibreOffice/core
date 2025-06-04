@@ -41,7 +41,7 @@ SwColumnFrame::SwColumnFrame( SwFrameFormat *pFormat, SwFrame* pSib ):
     SwFootnoteBossFrame( pFormat, pSib )
 {
     mnFrameType = SwFrameType::Column;
-    SwBodyFrame* pColBody = new SwBodyFrame( pFormat->GetDoc()->GetDfltFrameFormat(), pSib );
+    SwBodyFrame* pColBody = new SwBodyFrame( pFormat->GetDoc().GetDfltFrameFormat(), pSib );
     pColBody->InsertBehind( this, nullptr ); // ColumnFrames now with BodyFrame
     SetMaxFootnoteHeight( LONG_MAX );
 }
@@ -49,16 +49,16 @@ SwColumnFrame::SwColumnFrame( SwFrameFormat *pFormat, SwFrame* pSib ):
 void SwColumnFrame::DestroyImpl()
 {
     SwFrameFormat *pFormat = GetFormat();
-    SwDoc *pDoc;
-    if ( !(pDoc = pFormat->GetDoc())->IsInDtor() && pFormat->HasOnlyOneListener() )
+    SwDoc& rDoc = pFormat->GetDoc();
+    if ( !rDoc.IsInDtor() && pFormat->HasOnlyOneListener() )
     {
         //I'm the only one, delete the format.
         //Get default format before, so the base class can cope with it.
-        pDoc->GetDfltFrameFormat()->Add(*this);
+        rDoc.GetDfltFrameFormat()->Add(*this);
         // tdf#134009, like #i32968# avoid SwUndoFrameFormatDelete creation,
         // the format is owned by the SwColumnFrame, see lcl_AddColumns()
-        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-        pDoc->DelFrameFormat( pFormat );
+        ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
+        rDoc.DelFrameFormat( pFormat );
     }
 
     SwFootnoteBossFrame::DestroyImpl();
@@ -124,8 +124,8 @@ static SwLayoutFrame * lcl_FindColumns( SwLayoutFrame *pLay, sal_uInt16 nCount )
 
 static bool lcl_AddColumns( SwLayoutFrame *pCont, sal_uInt16 nCount )
 {
-    SwDoc *pDoc = pCont->GetFormat()->GetDoc();
-    const bool bMod = pDoc->getIDocumentState().IsModified();
+    SwDoc& rDoc = pCont->GetFormat()->GetDoc();
+    const bool bMod = rDoc.getIDocumentState().IsModified();
 
     //Formats should be shared whenever possible. If a neighbour already has
     //the same column settings we can add them to the same format.
@@ -177,10 +177,10 @@ static bool lcl_AddColumns( SwLayoutFrame *pCont, sal_uInt16 nCount )
         bRet = true;
         // tdf#103359, like #i32968# Inserting columns in the section causes MakeFrameFormat to put
         // nCount objects of type SwUndoFrameFormat on the undo stack. We don't want them.
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+        ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
-            SwFrameFormat *pFormat = pDoc->MakeFrameFormat(UIName(), pDoc->GetDfltFrameFormat());
+            SwFrameFormat *pFormat = rDoc.MakeFrameFormat(UIName(), rDoc.GetDfltFrameFormat());
             SwColumnFrame *pTmp = new SwColumnFrame( pFormat, pCont );
             pTmp->SetMaxFootnoteHeight( nMax );
             pTmp->Paste( pCont );
@@ -188,7 +188,7 @@ static bool lcl_AddColumns( SwLayoutFrame *pCont, sal_uInt16 nCount )
     }
 
     if ( !bMod )
-        pDoc->getIDocumentState().ResetModified();
+        rDoc.getIDocumentState().ResetModified();
     return bRet;
 }
 
@@ -238,12 +238,11 @@ void SwLayoutFrame::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew
     SwFrame *pSave = nullptr;
     if( nOldNum != nNewNum || bChgFootnote )
     {
-        SwDoc *pDoc = GetFormat()->GetDoc();
-        OSL_ENSURE( pDoc, "FrameFormat doesn't return a document." );
+        SwDoc& rDoc = GetFormat()->GetDoc();
         // SaveContent would also suck up the content of the footnote container
         // and store it within the normal text flow.
         if( IsPageBodyFrame() )
-            pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->RemoveFootnotes( static_cast<SwPageFrame*>(GetUpper()) );
+            rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->RemoveFootnotes( static_cast<SwPageFrame*>(GetUpper()) );
         pSave = ::SaveContent( this );
 
         //If columns exist, they get deleted if a column count of 0 or 1 is requested.
@@ -251,7 +250,7 @@ void SwLayoutFrame::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew
         {
             ::lcl_RemoveColumns( *this, nOldNum );
             if ( IsBodyFrame() )
-                SetFrameFormat( pDoc->GetDfltFrameFormat() );
+                SetFrameFormat( rDoc.GetDfltFrameFormat() );
             else
                 GetFormat()->SetFormatAttr( SwFormatFillOrder() );
             if ( pSave )
@@ -261,7 +260,7 @@ void SwLayoutFrame::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew
         if ( nOldNum == 1 )
         {
             if ( IsBodyFrame() )
-                SetFrameFormat( pDoc->GetColumnContFormat() );
+                SetFrameFormat( rDoc.GetColumnContFormat() );
             else
                 GetFormat()->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ) );
             if( !Lower() || !Lower()->IsColumnFrame() )

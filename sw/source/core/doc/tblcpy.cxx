@@ -495,8 +495,8 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
     OSL_ENSURE( ( !pCpyBox || pCpyBox->GetSttNd() ) && pDstBox->GetSttNd(),
             "No content in this Box" );
 
-    SwDoc* pCpyDoc = rCpyTable.GetFrameFormat()->GetDoc();
-    SwDoc* pDoc = rDstTable.GetFrameFormat()->GetDoc();
+    SwDoc& rCpyDoc = rCpyTable.GetFrameFormat()->GetDoc();
+    SwDoc& rDoc = rDstTable.GetFrameFormat()->GetDoc();
 
     // First copy the new content and then delete the old one.
     // Do not create empty Sections, otherwise they will be deleted!
@@ -511,14 +511,14 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
     if( pUndo )
         pUndo->AddBoxBefore( *pDstBox, bDelContent );
 
-    bool bUndoRedline = pUndo && pDoc->getIDocumentRedlineAccess().IsRedlineOn();
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+    bool bUndoRedline = pUndo && rDoc.getIDocumentRedlineAccess().IsRedlineOn();
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
     if (pRg)
-        pCpyDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(*pRg, aInsIdx.GetNode(), nullptr, false);
+        rCpyDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly(*pRg, aInsIdx.GetNode(), nullptr, false);
     else
-        pDoc->GetNodes().MakeTextNode( aInsIdx.GetNode(), pDoc->GetDfltTextFormatColl() );
+        rDoc.GetNodes().MakeTextNode( aInsIdx.GetNode(), rDoc.GetDfltTextFormatColl() );
     ++aSavePos;
 
     SwTableLine* pLine = pDstBox->GetUpper();
@@ -541,7 +541,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
         }
 
         // If we still have FlyFrames hanging around, delete them too
-        for(sw::SpzFrameFormat* pFly: *pDoc->GetSpzFrameFormats())
+        for(sw::SpzFrameFormat* pFly: *rDoc.GetSpzFrameFormats())
         {
             SwFormatAnchor const*const pAnchor = &pFly->GetAnchor();
             SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
@@ -550,7 +550,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
                  (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                 aInsIdx <= *pAnchorNode && *pAnchorNode <= aEndNdIdx.GetNode() )
             {
-                pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFly );
+                rDoc.getIDocumentLayoutAccess().DelLayoutFormat( pFly );
             }
         }
 
@@ -572,7 +572,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
                 bReplaceColl = false;
         }
 
-        pDoc->GetNodes().Delete( aInsIdx, aEndNdIdx.GetIndex() - aInsIdx.GetIndex() );
+        rDoc.GetNodes().Delete( aInsIdx, aEndNdIdx.GetIndex() - aInsIdx.GetIndex() );
     }
 
     //b6341295: Table copy redlining will be managed by AddBoxAfter()
@@ -592,7 +592,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
             ? RES_POOLCOLL_TABLE == nPoolId
             : RES_POOLCOLL_TABLE_HDLN == nPoolId ) )
     {
-        SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
+        SwTextFormatColl* pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(
             o3tl::narrowing<sal_uInt16>(
                                 RES_POOLCOLL_TABLE == nPoolId
                                     ? RES_POOLCOLL_TABLE_HDLN
@@ -602,7 +602,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
             SwPaM aPam( aSavePos );
             aPam.SetMark();
             aPam.Move( fnMoveForward, GoInSection );
-            pDoc->SetTextFormatColl( aPam, pColl );
+            rDoc.SetTextFormatColl( aPam, pColl );
         }
     }
 
@@ -619,13 +619,13 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
     if( !pCpyBox )
         return;
 
-    SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aBoxAttrSet( pCpyDoc->GetAttrPool() );
+    SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aBoxAttrSet( rCpyDoc.GetAttrPool() );
     aBoxAttrSet.Put( pCpyBox->GetFrameFormat()->GetAttrSet() );
     if( !aBoxAttrSet.Count() )
         return;
 
     const SwTableBoxNumFormat* pItem;
-    SvNumberFormatter* pN = pDoc->GetNumberFormatter( false );
+    SvNumberFormatter* pN = rDoc.GetNumberFormatter( false );
     if( pN && pN->HasMergeFormatTable() &&
         (pItem = aBoxAttrSet.GetItemIfSet( RES_BOXATR_FORMAT, false )) )
     {
@@ -640,10 +640,10 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
 bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                         SwUndoTableCpyTable* pUndo )
 {
-    SwDoc* pDoc = GetFrameFormat()->GetDoc();
-    SwDoc* pCpyDoc = rCpyTable.GetFrameFormat()->GetDoc();
+    SwDoc& rDoc = GetFrameFormat()->GetDoc();
+    SwDoc& rCpyDoc = rCpyTable.GetFrameFormat()->GetDoc();
 
-    SwTableNumFormatMerge aTNFM( *pCpyDoc, *pDoc );
+    SwTableNumFormatMerge aTNFM( rCpyDoc, rDoc );
 
     // Analyze source structure
     TableStructure aCopyStruct( rCpyTable );
@@ -664,7 +664,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes
         if( pUndo )
             pUndo->InsertRow( *this, aBoxes, aTarget.mnAddLine );
         else
-            InsertRow( pDoc, aBoxes, aTarget.mnAddLine, /*bBehind*/true );
+            InsertRow( rDoc, aBoxes, aTarget.mnAddLine, /*bBehind*/true );
 
         aTarget.moreLines( *this );
         bClear = true;
@@ -704,7 +704,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
 {
     SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
 
-    SwDoc* pDoc = GetFrameFormat()->GetDoc();
+    SwDoc& rDoc = GetFrameFormat()->GetDoc();
 
     SwTableNode* pTableNd = SwDoc::IsIdxInTable( rSttBox );
 
@@ -718,11 +718,11 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
     FndBox_ aFndBox( nullptr, nullptr );
     aFndBox.DelFrames( pTableNd->GetTable() );
 
-    SwDoc* pCpyDoc = rCpyTable.GetFrameFormat()->GetDoc();
+    SwDoc& rCpyDoc = rCpyTable.GetFrameFormat()->GetDoc();
 
     const_cast<SwTable*>(&rCpyTable)->SwitchFormulasToRelativeRepresentation();
 
-    SwTableNumFormatMerge aTNFM( *pCpyDoc, *pDoc );
+    SwTableNumFormatMerge aTNFM( rCpyDoc, rDoc );
 
     bool bDelContent = true;
     const SwTableBox* pTmp;
@@ -787,10 +787,10 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
 
     OSL_ENSURE( !rCpyTable.IsTableComplex(), "Table too complex" );
 
-    SwDoc* pDoc = GetFrameFormat()->GetDoc();
-    SwDoc* pCpyDoc = rCpyTable.GetFrameFormat()->GetDoc();
+    SwDoc& rDoc = GetFrameFormat()->GetDoc();
+    SwDoc& rCpyDoc = rCpyTable.GetFrameFormat()->GetDoc();
 
-    SwTableNumFormatMerge aTNFM( *pCpyDoc, *pDoc );
+    SwTableNumFormatMerge aTNFM( rCpyDoc, rDoc );
 
     FndLine_ *pFLine;
     FndBox_ aFndBox( nullptr, nullptr );
@@ -860,7 +860,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                 if( pUndo
                     ? !pUndo->InsertRow( *this, SelLineFromBox( pInsBox,
                                 aBoxes ), nNewLns )
-                    : !InsertRow( pDoc, SelLineFromBox( pInsBox,
+                    : !InsertRow( rDoc, SelLineFromBox( pInsBox,
                                 aBoxes ), nNewLns, /*bBehind*/true ) )
                     return false;
             }

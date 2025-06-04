@@ -381,13 +381,13 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
         {
             // TODO: Improve security with moving this sync call to other place,
             // where it works for typing but not during layout calc.
-            const bool bModified = pFormat->GetDoc()->getIDocumentState().IsEnableSetModified();
-            pFormat->GetDoc()->getIDocumentState().SetEnableSetModified(false);
+            const bool bModified = pFormat->GetDoc().getIDocumentState().IsEnableSetModified();
+            pFormat->GetDoc().getIDocumentState().SetEnableSetModified(false);
             SwTextBoxHelper::synchronizeGroupTextBoxProperty(SwTextBoxHelper::changeAnchor, pFormat,
                                                              pFormat->FindRealSdrObject());
             SwTextBoxHelper::synchronizeGroupTextBoxProperty(SwTextBoxHelper::syncTextBoxSize,
                                                              pFormat, pFormat->FindRealSdrObject());
-            pFormat->GetDoc()->getIDocumentState().SetEnableSetModified(bModified);
+            pFormat->GetDoc().getIDocumentState().SetEnableSetModified(bModified);
         }
     }
 

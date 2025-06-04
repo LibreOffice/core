@@ -568,7 +568,7 @@ SwXText::insertTextContentBefore(
     SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xSuccessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     SwTextNode * pTextNode = nullptr;
-    if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
+    if(pTableFormat && &pTableFormat->GetDoc() == GetDoc())
     {
         SwTable *const pTable = SwTable::FindTable( pTableFormat );
         SwTableNode *const pTableNode = pTable->GetTableNode();
@@ -579,7 +579,7 @@ SwXText::insertTextContentBefore(
         pTextNode = aBefore.GetNode().GetTextNode();
     }
     else if (pXSection && pXSection->GetFormat() &&
-            pXSection->GetFormat()->GetDoc() == GetDoc())
+            &pXSection->GetFormat()->GetDoc() == GetDoc())
     {
         SwSectionFormat *const pSectFormat = pXSection->GetFormat();
         SwSectionNode *const pSectNode = pSectFormat->GetSectionNode();
@@ -619,7 +619,7 @@ SwXText::insertTextContentAfter(
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     bool bRet = false;
     SwTextNode * pTextNode = nullptr;
-    if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
+    if(pTableFormat && &pTableFormat->GetDoc() == GetDoc())
     {
         SwTable *const pTable = SwTable::FindTable( pTableFormat );
         SwTableNode *const pTableNode = pTable->GetTableNode();
@@ -630,7 +630,7 @@ SwXText::insertTextContentAfter(
         pTextNode = aTableEnd.GetNode().GetTextNode();
     }
     else if (pXSection && pXSection->GetFormat() &&
-            pXSection->GetFormat()->GetDoc() == GetDoc())
+            &pXSection->GetFormat()->GetDoc() == GetDoc())
     {
         SwSectionFormat *const pSectFormat = pXSection->GetFormat();
         SwSectionNode *const pSectNode = pSectFormat->GetSectionNode();
@@ -659,7 +659,7 @@ SwXText::removeTextContentBefore(
     SwXTextSection *const pXSection = dynamic_cast<SwXTextSection*>(xSuccessor.get());
     SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xSuccessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
-    if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
+    if(pTableFormat && &pTableFormat->GetDoc() == GetDoc())
     {
         SwTable *const pTable = SwTable::FindTable( pTableFormat );
         SwTableNode *const pTableNode = pTable->GetTableNode();
@@ -672,7 +672,7 @@ SwXText::removeTextContentBefore(
         }
     }
     else if (pXSection && pXSection->GetFormat() &&
-            pXSection->GetFormat()->GetDoc() == GetDoc())
+            &pXSection->GetFormat()->GetDoc() == GetDoc())
     {
         SwSectionFormat *const pSectFormat = pXSection->GetFormat();
         SwSectionNode *const pSectNode = pSectFormat->GetSectionNode();
@@ -703,7 +703,7 @@ SwXText::removeTextContentAfter(
     SwXTextSection *const pXSection = dynamic_cast<SwXTextSection*>(xPredecessor.get());
     SwXTextTable *const pXTable = dynamic_cast<SwXTextTable*>(xPredecessor.get());
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
-    if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
+    if(pTableFormat && &pTableFormat->GetDoc() == GetDoc())
     {
         SwTable *const pTable = SwTable::FindTable( pTableFormat );
         SwTableNode *const pTableNode = pTable->GetTableNode();
@@ -717,7 +717,7 @@ SwXText::removeTextContentAfter(
         }
     }
     else if (pXSection && pXSection->GetFormat() &&
-            pXSection->GetFormat()->GetDoc() == GetDoc())
+            &pXSection->GetFormat()->GetDoc() == GetDoc())
     {
         SwSectionFormat *const pSectFormat = pXSection->GetFormat();
         SwSectionNode *const pSectNode = pSectFormat->GetSectionNode();
@@ -2585,7 +2585,7 @@ rtl::Reference<SwXHeadFootText> SwXHeadFootText::CreateXHeadFootText(
 
 SwXHeadFootText::SwXHeadFootText(SwFrameFormat& rHeadFootFormat, const bool bIsHeader)
     : SwXText(
-            rHeadFootFormat.GetDoc(),
+            &rHeadFootFormat.GetDoc(),
             bIsHeader ? CursorType::Header : CursorType::Footer)
     , m_pImpl(new SwXHeadFootText::Impl(rHeadFootFormat, bIsHeader))
 {

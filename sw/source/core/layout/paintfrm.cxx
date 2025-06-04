@@ -1370,7 +1370,7 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
         const SdrObject* pSdrObj = pAnchoredObj->GetDrawObj();
 
         // Do not consider invisible objects
-        if (!pPage->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(pSdrObj->GetLayer()))
+        if (!pPage->GetFormat()->GetDoc().getIDocumentDrawModelAccess().IsVisibleLayerId(pSdrObj->GetLayer()))
             continue;
 
         const SwFlyFrame *pFly = pAnchoredObj->DynCastFlyFrame();
@@ -4331,7 +4331,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
         const IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
 
         if (bIsGraphicTransparent &&
-            GetFormat()->GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::SUBTRACT_FLYS) &&
+            GetFormat()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::SUBTRACT_FLYS) &&
             GetVirtDrawObj()->GetLayer() == rIDDMA.GetHellId() &&
             GetAnchorFrame()->FindFlyFrame() )
         {
@@ -4961,7 +4961,7 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
     }
 
     if (pPage->GetSortedObjs() &&
-        pPage->GetFormat()->GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::SUBTRACT_FLYS))
+        pPage->GetFormat()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::SUBTRACT_FLYS))
     {
         SwRegionRects aRegion( aOut, 4 );
         basegfx::utils::B2DClipState aClipState;
@@ -5921,8 +5921,8 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
     bool bGrid = pGrid->GetRubyTextBelow();
     bool bCell = SwTextGrid::LinesAndChars == pGrid->GetGridType();
     tools::Long nGrid = pGrid->GetBaseHeight();
-    const SwDoc* pDoc = GetFormat()->GetDoc();
-    tools::Long nGridWidth = GetGridWidth(*pGrid, *pDoc);
+    const SwDoc& rDoc = GetFormat()->GetDoc();
+    tools::Long nGridWidth = GetGridWidth(*pGrid, rDoc);
     tools::Long nRuby = pGrid->GetRubyHeight();
     tools::Long nSum = nGrid + nRuby;
     const Color *pCol = &pGrid->GetColor();
@@ -7084,7 +7084,7 @@ void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
                 const SwSortedObjs& rObjs = *(pLow->GetDrawObjs());
                 for (SwAnchoredObject* pAnchoredObj : rObjs)
                 {
-                    if ( pPage->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
+                    if ( pPage->GetFormat()->GetDoc().getIDocumentDrawModelAccess().IsVisibleLayerId(
                                     pAnchoredObj->GetDrawObj()->GetLayer() ) )
                         if (auto pFly = pAnchoredObj->DynCastFlyFrame() )
                         {
@@ -7176,7 +7176,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
             // do *not* consider fly frames with a transparent background.
             // do *not* consider fly frame, which belongs to an invisible layer
             if ( pFly->IsBackgroundTransparent() ||
-                 !pFly->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() ) )
+                 !pFly->GetFormat()->GetDoc().getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() ) )
             {
                 aIter.Next();
                 continue;
@@ -7651,7 +7651,7 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
  */
 void SwPageFrame::RefreshExtraData( const SwRect &rRect ) const
 {
-    const SwLineNumberInfo &rInfo = GetFormat()->GetDoc()->GetLineNumberInfo();
+    const SwLineNumberInfo &rInfo = GetFormat()->GetDoc().GetLineNumberInfo();
     bool bLineInFly = (rInfo.IsPaintLineNumbers() && rInfo.IsCountInFlys())
         || static_cast<sal_Int16>(SwModule::get()->GetRedlineMarkPos()) != text::HoriOrientation::NONE;
 
@@ -7677,7 +7677,7 @@ void SwPageFrame::RefreshExtraData( const SwRect &rRect ) const
 void SwLayoutFrame::RefreshExtraData( const SwRect &rRect ) const
 {
 
-    const SwLineNumberInfo &rInfo = GetFormat()->GetDoc()->GetLineNumberInfo();
+    const SwLineNumberInfo &rInfo = GetFormat()->GetDoc().GetLineNumberInfo();
     bool bLineInBody = rInfo.IsPaintLineNumbers(),
              bLineInFly  = bLineInBody && rInfo.IsCountInFlys(),
              bRedLine = static_cast<sal_Int16>(SwModule::get()->GetRedlineMarkPos())!=text::HoriOrientation::NONE;

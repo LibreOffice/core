@@ -1510,7 +1510,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
 
     // TODO: modify shape distance via UNO with text frame synchronization
     // Check the textbox as well:
-    auto xTxFrm = SwXTextFrame::CreateXTextFrame(*pFrameFormat->GetDoc(), pFrameFormat);
+    auto xTxFrm = SwXTextFrame::CreateXTextFrame(pFrameFormat->GetDoc(), pFrameFormat);
     CPPUNIT_ASSERT(xTxFrm);
 
     const tools::Long nFrameLeftPaddng

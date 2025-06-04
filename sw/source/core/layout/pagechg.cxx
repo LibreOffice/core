@@ -134,8 +134,8 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             if( SwTextGrid::LinesAndChars == pGrid->GetGridType() )
             {
                 //for textgrid refactor
-                SwDoc *pDoc = GetFormat()->GetDoc();
-                nBorder = nSize % (GetGridWidth(*pGrid, *pDoc));
+                SwDoc& rDoc = GetFormat()->GetDoc();
+                nBorder = nSize % (GetGridWidth(*pGrid, rDoc));
                 nSize -= nBorder;
                 nBorder /= 2;
             }
@@ -158,7 +158,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             nBorder /= 2;
 
             // #i21774# Footnotes and centering the grid does not work together:
-            const bool bAdjust = static_cast<SwPageFrame*>(GetUpper())->GetFormat()->GetDoc()->
+            const bool bAdjust = static_cast<SwPageFrame*>(GetUpper())->GetFormat()->GetDoc().
                                         GetFootnoteIdxs().empty();
 
             aRectFnSet.SetPosY( aPrt, bAdjust ? nBorder : 0 );
@@ -237,8 +237,8 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     }
 
     // create and insert body area if it is not a blank page
-    SwDoc* pDoc(pFormat->GetDoc());
-    m_bEmptyPage = (pFormat == pDoc->GetEmptyPageFormat());
+    SwDoc& rDoc(pFormat->GetDoc());
+    m_bEmptyPage = (pFormat == rDoc.GetEmptyPageFormat());
 
     if(m_bEmptyPage)
     {
@@ -246,7 +246,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     }
 
     Calc(pRenderContext); // so that the PrtArea is correct
-    SwBodyFrame *pBodyFrame = new SwBodyFrame( pDoc->GetDfltFrameFormat(), this );
+    SwBodyFrame *pBodyFrame = new SwBodyFrame( rDoc.GetDfltFrameFormat(), this );
     pBodyFrame->ChgSize( getFramePrintArea().SSize() );
     pBodyFrame->Paste( this );
     pBodyFrame->Calc(pRenderContext); // so that the columns can be inserted correctly
@@ -300,8 +300,7 @@ void SwPageFrame::DestroyImpl()
     }
 
     // prevent access to destroyed pages
-    SwDoc *pDoc = GetFormat() ? GetFormat()->GetDoc() : nullptr;
-    if( pDoc && !pDoc->IsInDtor() )
+    if( GetFormat() && !GetFormat()->GetDoc().IsInDtor() )
     {
         if ( pSh )
         {
@@ -443,7 +442,7 @@ static void lcl_MakeObjs(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwP
             if ( bSdrObj  && nullptr == (pSdrObj = pSpz->FindSdrObject()) )
             {
                 OSL_FAIL( "DrawObject not found." );
-                pSpz->GetDoc()->DelFrameFormat( pSpz );
+                pSpz->GetDoc().DelFrameFormat( pSpz );
                 continue;
             }
             // The object might be anchored to another page, e.g. when inserting
@@ -515,11 +514,11 @@ void SwPageFrame::PreparePage( bool bFootnote )
     // pages take care of them.
     if ( !bFootnote && !IsEmptyPage() )
     {
-        SwDoc *pDoc = GetFormat()->GetDoc();
+        SwDoc& rDoc = GetFormat()->GetDoc();
 
         if ( GetPrev() && static_cast<SwPageFrame*>(GetPrev())->IsEmptyPage() )
-            lcl_MakeObjs( *pDoc->GetSpzFrameFormats(), static_cast<SwPageFrame*>(GetPrev()) );
-        lcl_MakeObjs( *pDoc->GetSpzFrameFormats(), this );
+            lcl_MakeObjs( *rDoc.GetSpzFrameFormats(), static_cast<SwPageFrame*>(GetPrev()) );
+        lcl_MakeObjs( *rDoc.GetSpzFrameFormats(), this );
     }
 }
 
@@ -702,7 +701,7 @@ void SwPageFrame::UpdateAttrForFormatChange( SwFormat* pOldFormat, SwFormat* pNe
                              SwPageFrameInvFlags &rInvFlags )
 {
     // state of m_bEmptyPage needs to be determined newly
-    const bool bNewState(GetFormat() == GetFormat()->GetDoc()->GetEmptyPageFormat());
+    const bool bNewState(GetFormat() == GetFormat()->GetDoc().GetEmptyPageFormat());
 
     if(m_bEmptyPage != bNewState)
     {
@@ -819,11 +818,11 @@ SwPageDesc *SwPageFrame::FindPageDesc()
     // 0.
     if ( IsFootnotePage() )
     {
-        SwDoc *pDoc = GetFormat()->GetDoc();
+        SwDoc& rDoc = GetFormat()->GetDoc();
         if ( IsEndNotePage() )
-            return pDoc->GetEndNoteInfo().GetPageDesc( *pDoc );
+            return rDoc.GetEndNoteInfo().GetPageDesc( rDoc );
         else
-            return pDoc->GetFootnoteInfo().GetPageDesc( *pDoc );
+            return rDoc.GetFootnoteInfo().GetPageDesc( rDoc );
     }
 
     SwPageDesc *pRet = nullptr;
@@ -843,7 +842,7 @@ SwPageDesc *SwPageFrame::FindPageDesc()
             pRet = const_cast<SwPageDesc*>(pFlow->GetPageDescItem().GetPageDesc());
         }
         if ( !pRet )
-            pRet = &GetFormat()->GetDoc()->GetPageDesc( 0 );
+            pRet = &GetFormat()->GetDoc().GetPageDesc( 0 );
         return pRet;
     }
 
@@ -880,7 +879,7 @@ SwPageDesc *SwPageFrame::FindPageDesc()
 
     //4.
     if ( !pRet )
-        pRet = &GetFormat()->GetDoc()->GetPageDesc( 0 );
+        pRet = &GetFormat()->GetDoc().GetPageDesc( 0 );
 
     OSL_ENSURE( pRet, "could not find page descriptor." );
     return pRet;
@@ -1084,7 +1083,7 @@ bool IsPageFrameEmpty(SwPageFrame const& rPage)
             // #i28701#
             SwAnchoredObject* pAnchoredObj = rObjs[i];
             // do not consider hidden objects
-            if ( rPage.GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
+            if ( rPage.GetFormat()->GetDoc().getIDocumentDrawModelAccess().IsVisibleLayerId(
                                 pAnchoredObj->GetDrawObj()->GetLayer() ) &&
                  !pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() )
             {
@@ -1155,8 +1154,8 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
     SwTwips nDocPos  = LONG_MAX;
 
     SwRootFrame *pRoot = static_cast<SwRootFrame*>(pStart->GetUpper());
-    SwDoc* pDoc      = pStart->GetFormat()->GetDoc();
-    const bool bFootnotes = !pDoc->GetFootnoteIdxs().empty();
+    SwDoc& rDoc      = pStart->GetFormat()->GetDoc();
+    const bool bFootnotes = !rDoc.GetFootnoteIdxs().empty();
 
     SwPageFrame *pPage = pStart;
     if( pPage->GetPrev() && static_cast<SwPageFrame*>(pPage->GetPrev())->IsEmptyPage() )
@@ -1261,7 +1260,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
             {
                 if ( pPrevPage )
                     pDesc = pPrevPage->GetPageDesc();
-                SwPageFrame *pTmp = new SwPageFrame( pDoc->GetEmptyPageFormat(), pRoot, pDesc );
+                SwPageFrame *pTmp = new SwPageFrame( rDoc.GetEmptyPageFormat(), pRoot, pDesc );
                 SAL_INFO( "sw.pageframe", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
                           << " c: 3 - insert empty p: " << pTmp << " d: " << pDesc );
                 pTmp->Paste( pRoot, pPage );
@@ -1349,7 +1348,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
 
     if ( bNotifyFields && (!pImp || !pImp->IsUpdateExpFields()) )
     {
-        pDoc->getIDocumentFieldsAccess().UpdatePageFields(nDocPos);
+        rDoc.getIDocumentFieldsAccess().UpdatePageFields(nDocPos);
     }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1467,12 +1466,12 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
         bWishedRightPage = !bWishedRightPage;
     bool const bWishedFirst = pDesc != pPrevPage->GetPageDesc();
 
-    SwDoc *pDoc = pPrevPage->GetFormat()->GetDoc();
+    SwDoc& rDoc = pPrevPage->GetFormat()->GetDoc();
     bool bCheckPages = false;
     // If there is no FrameFormat for this page, create an empty page.
     if (bWishedRightPage != bNextRightPage)
     {
-        if( doInsertPage( pRoot, &pSibling, pDoc->GetEmptyPageFormat(),
+        if( doInsertPage( pRoot, &pSibling, rDoc.GetEmptyPageFormat(),
                           pPrevPage->GetPageDesc(), bFootnote, nullptr ) )
             bCheckPages = true;
     }
@@ -1513,7 +1512,7 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     if ( !pSh || !pSh->Imp()->IsUpdateExpFields() )
     {
-        pDoc->getIDocumentFieldsAccess().UpdatePageFields(pPrevPage->getFrameArea().Top());
+        rDoc.getIDocumentFieldsAccess().UpdatePageFields(pPrevPage->getFrameArea().Top());
     }
     return pPage;
 }
@@ -1567,7 +1566,7 @@ void SwRootFrame::RemovePage( SwPageFrame **pDelRef, SwRemoveResult eResult )
     SwPageFrame *pDel = *pDelRef;
     (*pDelRef) = static_cast<SwPageFrame*>(
         eResult == SwRemoveResult::Next ? pDel->GetNext() : pDel->GetPrev() );
-    if ( !GetFormat()->GetDoc()->GetFootnoteIdxs().empty() )
+    if ( !GetFormat()->GetDoc().GetFootnoteIdxs().empty() )
         RemoveFootnotes( pDel, true );
     pDel->Cut();
     SwFrame::DestroyFrame( pDel );
@@ -1617,7 +1616,7 @@ void SwRootFrame::RemoveSuperfluous()
     if ( nDocPos != LONG_MAX &&
          (!pSh || !pSh->Imp()->IsUpdateExpFields()) )
     {
-        GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields(nDocPos);
+        GetFormat()->GetDoc().getIDocumentFieldsAccess().UpdatePageFields(nDocPos);
     }
 }
 
@@ -1628,8 +1627,8 @@ void SwRootFrame::AssertFlyPages()
         return;
     mbAssertFlyPages = false;
 
-    SwDoc *pDoc = GetFormat()->GetDoc();
-    const sw::SpzFrameFormats* pSpzs = pDoc->GetSpzFrameFormats();
+    SwDoc& rDoc = GetFormat()->GetDoc();
+    const sw::SpzFrameFormats* pSpzs = rDoc.GetSpzFrameFormats();
 
     // what page targets the "last" Fly?
     // note the needed pages in a set
@@ -1719,7 +1718,7 @@ void SwRootFrame::AssertFlyPages()
             pPage = InsertPage( pPage, false );
 
         // If the endnote pages are now corrupt, destroy them.
-        if ( !pDoc->GetFootnoteIdxs().empty() )
+        if ( !rDoc.GetFootnoteIdxs().empty() )
         {
             pPage = static_cast<SwPageFrame*>(Lower());
             while ( pPage && !pPage->IsFootnotePage() )

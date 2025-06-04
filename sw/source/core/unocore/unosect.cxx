@@ -455,12 +455,12 @@ SwXTextSection::getAnchor()
             if (isMoveIntoTable)
             {
                 css::uno::Reference<SwXText> const xParentText =
-                    ::sw::CreateParentXText(*pSectFormat->GetDoc(), SwPosition(*pIdx));
+                    ::sw::CreateParentXText(pSectFormat->GetDoc(), SwPosition(*pIdx));
                 xRet = new SwXTextRange(*pSectFormat);
             }
             else // for compatibility, keep the old way in this case
             {
-                xRet = SwXTextRange::CreateXTextRange(*pSectFormat->GetDoc(),
+                xRet = SwXTextRange::CreateXTextRange(pSectFormat->GetDoc(),
                     *aPaM.Start(), aEnd.Start());
             }
         }
@@ -475,7 +475,7 @@ void SAL_CALL SwXTextSection::dispose()
     SwSectionFormat *const pSectFormat = m_pImpl->GetSectionFormat();
     if (pSectFormat)
     {
-        pSectFormat->GetDoc()->DelSectionFormat( pSectFormat );
+        pSectFormat->GetDoc().DelSectionFormat( pSectFormat );
     }
 }
 
@@ -527,20 +527,20 @@ lcl_UpdateSection(SwSectionFormat *const pFormat,
         return;
 
     SwSection & rSection = *pFormat->GetSection();
-    SwDoc *const pDoc = pFormat->GetDoc();
-    SwSectionFormats const& rFormats = pDoc->GetSections();
-    UnoActionContext aContext(pDoc);
+    SwDoc& rDoc = pFormat->GetDoc();
+    SwSectionFormats const& rFormats = rDoc.GetSections();
+    UnoActionContext aContext(&rDoc);
     for (size_t i = 0; i < rFormats.size(); ++i)
     {
         if (rFormats[i]->GetSection()->GetSectionName()
                 == rSection.GetSectionName())
         {
-            pDoc->UpdateSection(i, *pSectionData, oItemSet ? &*oItemSet : nullptr,
-                    pDoc->IsInReading());
+            rDoc.UpdateSection(i, *pSectionData, oItemSet ? &*oItemSet : nullptr,
+                    rDoc.IsInReading());
             {
                 // temporarily remove actions to allow cursor update
                 // TODO: why? no table cursor here!
-                UnoActionRemoveContext aRemoveContext( pDoc );
+                UnoActionRemoveContext aRemoveContext( &rDoc );
             }
 
             if (bLinkModeChanged)
@@ -681,7 +681,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                         pSectionData->SetType(SectionType::FileLink);
                     }
                     OUString sTmp;
-                    SwDocShell* pShell = pFormat->GetDoc()->GetDocShell();
+                    SwDocShell* pShell = pFormat->GetDoc().GetDocShell();
                     if (pShell && !aLink.FileURL.isEmpty())
                     {
                         sTmp = URIHelper::SmartRel2Abs(
@@ -1101,7 +1101,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                     // convert section to TOXBase and get SwXDocumentIndex
                     const rtl::Reference<SwXDocumentIndex> xIndex =
                         SwXDocumentIndex::CreateXDocumentIndex(
-                            *pTOXBaseSect->GetFormat()->GetDoc(), pTOXBaseSect);
+                            pTOXBaseSect->GetFormat()->GetDoc(), pTOXBaseSect);
                     pRet[nProperty] <<= uno::Reference<text::XDocumentIndex>(xIndex);
                 }
                 // else: no enclosing index found -> empty return value
@@ -1129,7 +1129,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                     pSectNode = pSectNode->EndOfSectionNode();
                 }
                 const SwRedlineTable& rRedTable =
-                    pFormat->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+                    pFormat->GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
                 for (SwRangeRedline* pRedline : rRedTable)
                 {
                     const SwNode& rRedPointNode = pRedline->GetPointNode();
@@ -1616,9 +1616,9 @@ SwXTextSection::getPropertyDefault(const OUString& rPropertyName)
         default:
         if(pFormat && SfxItemPool::IsWhich(pEntry->nWID))
         {
-            SwDoc *const pDoc = pFormat->GetDoc();
+            SwDoc& rDoc = pFormat->GetDoc();
             const SfxPoolItem& rDefItem =
-                pDoc->GetAttrPool().GetUserOrPoolDefaultItem(pEntry->nWID);
+                rDoc.GetAttrPool().GetUserOrPoolDefaultItem(pEntry->nWID);
             rDefItem.QueryValue(aRet, pEntry->nMemberId);
         }
     }
@@ -1657,7 +1657,7 @@ void SAL_CALL SwXTextSection::setName(const OUString& rName)
         SwSectionData aSection(*pSect);
         aSection.SetSectionName(UIName(rName));
 
-        const SwSectionFormats& rFormats = pFormat->GetDoc()->GetSections();
+        const SwSectionFormats& rFormats = pFormat->GetDoc().GetSections();
         size_t nApplyPos = SIZE_MAX;
         for( size_t i = 0; i < rFormats.size(); ++i )
         {
@@ -1673,13 +1673,13 @@ void SAL_CALL SwXTextSection::setName(const OUString& rName)
         if (nApplyPos != SIZE_MAX)
         {
             {
-                UnoActionContext aContext(pFormat->GetDoc());
-                pFormat->GetDoc()->UpdateSection(nApplyPos, aSection);
+                UnoActionContext aContext(&pFormat->GetDoc());
+                pFormat->GetDoc().UpdateSection(nApplyPos, aSection);
             }
             {
                 // temporarily remove actions to allow cursor update
                 // TODO: why? no table cursor here!
-                UnoActionRemoveContext aRemoveContext( pFormat->GetDoc() );
+                UnoActionRemoveContext aRemoveContext( &pFormat->GetDoc() );
             }
         }
     }
@@ -1726,7 +1726,7 @@ uno::Reference<frame::XModel> SwXTextSection::GetModel()
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (pSectionFormat)
     {
-        SwDocShell const*const pShell( pSectionFormat->GetDoc()->GetDocShell() );
+        SwDocShell const*const pShell( pSectionFormat->GetDoc().GetDocShell() );
         return pShell ? pShell->GetModel() : nullptr;
     }
     return nullptr;

@@ -45,12 +45,12 @@ const SwTextFormatColl* SwCharFormat::GetLinkedParaFormat() const { return mpLin
 
 SwCharFormat::~SwCharFormat()
 {
-    if (GetDoc()->IsInDtor())
+    if (GetDoc().IsInDtor())
     {
         return;
     }
 
-    for (const auto& pTextFormat : *GetDoc()->GetTextFormatColls())
+    for (const auto& pTextFormat : *GetDoc().GetTextFormatColls())
     {
         if (pTextFormat->GetLinkedCharFormat() == this)
         {

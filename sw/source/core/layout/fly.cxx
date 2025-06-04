@@ -350,7 +350,7 @@ void SwFlyFrame::DestroyImpl()
     }
 #endif
 
-    if( GetFormat() && !GetFormat()->GetDoc()->IsInDtor() )
+    if( GetFormat() && !GetFormat()->GetDoc().IsInDtor() )
     {
         ClearTmpConsiderWrapInfluence(); // remove this from SwLayouter
 
@@ -452,7 +452,7 @@ static SwPosition ResolveFlyAnchor(SwFrameFormat const& rFlyFrame)
     SwFormatAnchor const& rAnch(rFlyFrame.GetAnchor());
     if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
     {   // arbitrarily pick last node
-        return SwPosition(rFlyFrame.GetDoc()->GetNodes().GetEndOfContent(), SwNodeOffset(-1));
+        return SwPosition(rFlyFrame.GetDoc().GetNodes().GetEndOfContent(), SwNodeOffset(-1));
     }
     else
     {
@@ -479,7 +479,7 @@ void SwFlyFrame::FinitDrawObj()
         return;
     SwFormat* pFormat = GetFormat();
     // Deregister from SdrPageViews if the Objects is still selected there.
-    if(!pFormat->GetDoc()->IsInDtor())
+    if(!pFormat->GetDoc().IsInDtor())
     {
         SwViewShell* p1St = getRootFrame()->GetCurrShell();
         if(p1St)
@@ -1376,7 +1376,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
     SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
     if( bVert )
         nTmpY = -nTmpY;
-    SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT> aSet( pFormat->GetDoc()->GetAttrPool() );
+    SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT> aSet( pFormat->GetDoc().GetAttrPool() );
 
     SwFormatVertOrient aVert( pFormat->GetVertOrient() );
     const SwTextFrame *pAutoFrame = nullptr;
@@ -1475,7 +1475,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
         aSet.Put( aHori );
     }
     SetCurrRelPos( rNewPos );
-    pFormat->GetDoc()->SetAttr( aSet, *pFormat );
+    pFormat->GetDoc().SetAttr( aSet, *pFormat );
 
 }
 
@@ -1716,7 +1716,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                 if( pSect->IsEndnAtEnd() )
                 {
                     if( bCollect )
-                        pLay->GetFormat()->GetDoc()->getIDocumentLayoutAccess().GetLayouter()->
+                        pLay->GetFormat()->GetDoc().getIDocumentLayoutAccess().GetLayouter()->
                             InsertEndnotes( pSect );
                     bool bLock = pSect->IsFootnoteLock();
                     pSect->SetFootnoteLock( true );
@@ -2020,7 +2020,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
         {
             if( bCollect )
             {
-                pLay->GetFormat()->GetDoc()->getIDocumentLayoutAccess().GetLayouter()->InsertEndnotes(pSect);
+                pLay->GetFormat()->GetDoc().getIDocumentLayoutAccess().GetLayouter()->InsertEndnotes(pSect);
                 pSect->CalcFootnoteContent();
             }
             if( pSect->HasFollow() )
@@ -2649,7 +2649,7 @@ Size SwFlyFrame::ChgSize( const Size& aNewSize )
         aSz.SetWidth( aAdjustedNewSize.Width() );
         aSz.SetHeight( aAdjustedNewSize.Height() );
         // go via the Doc for UNDO
-        pFormat->GetDoc()->SetAttr( aSz, *pFormat );
+        pFormat->GetDoc().SetAttr( aSz, *pFormat );
         return aSz.GetSize();
     }
     else

@@ -721,7 +721,7 @@ SwXTextRange::SwXTextRange(SwTableFormat& rTableFormat)
     : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
     , m_eRangePosition(RANGE_IS_TABLE)
     , m_isRangeInCell(false)
-    , m_rDoc(*rTableFormat.GetDoc())
+    , m_rDoc(rTableFormat.GetDoc())
     , m_pTableOrSectionFormat(&rTableFormat)
     , m_pMark(nullptr)
     , moSvtListener(std::in_place, *this)
@@ -738,7 +738,7 @@ SwXTextRange::SwXTextRange(SwSectionFormat& rSectionFormat)
     : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
     , m_eRangePosition(RANGE_IS_SECTION)
     , m_isRangeInCell(false)
-    , m_rDoc(*rSectionFormat.GetDoc())
+    , m_rDoc(rSectionFormat.GetDoc())
     , m_pTableOrSectionFormat(&rSectionFormat)
     , m_pMark(nullptr)
     , moSvtListener(std::in_place, *this)
@@ -1857,18 +1857,18 @@ uno::Reference<text::XTextContent> FrameClientToXTextContent(sw::FrameClient* pC
         if (!pNd->IsNoTextNode())
         {
             xRet = static_cast<SwXFrame*>(SwXTextFrame::CreateXTextFrame(
-                        *pFormat->GetDoc(), pFormat).get());
+                        pFormat->GetDoc(), pFormat).get());
         }
         else if (pNd->IsGrfNode())
         {
             xRet.set(SwXTextGraphicObject::CreateXTextGraphicObject(
-                        *pFormat->GetDoc(), pFormat));
+                        pFormat->GetDoc(), pFormat));
         }
         else
         {
             assert(pNd->IsOLENode());
             xRet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                        *pFormat->GetDoc(), pFormat));
+                        pFormat->GetDoc(), pFormat));
         }
     }
     return xRet;

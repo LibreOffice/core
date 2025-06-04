@@ -45,7 +45,7 @@ SwFlyInContentFrame::SwFlyInContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pS
 
 void SwFlyInContentFrame::DestroyImpl()
 {
-    if ( !GetFormat()->GetDoc()->IsInDtor() && GetAnchorFrame() )
+    if ( !GetFormat()->GetDoc().IsInDtor() && GetAnchorFrame() )
     {
         SwRect aTmp( GetObjRectWithSpaces() );
         SwFlyInContentFrame::NotifyBackground( FindPageFrame(), aTmp, PrepareHint::FlyFrameLeave );
@@ -243,7 +243,7 @@ void SwFlyInContentFrame::RegistFlys()
 void SwFlyInContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     // OD 2004-01-19 #110582#
-    if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    if ( !GetFormat()->GetDoc().getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
         return;
     }

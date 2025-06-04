@@ -444,7 +444,7 @@ void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, SwNodeOffset nStt, SwNod
                     static_cast<SwSectionFrame*>(pNxt)->UnlockJoin();
                 pUp = static_cast<SwLayoutFrame*>(mvUpperFrames[x++]);
                 OSL_ENSURE( pUp->GetUpper() || pUp->IsFlyFrame(), "Lost Upper" );
-                ::InsertCnt_( pUp, &rDoc, pNd->GetIndex(), false, nStt+1, pNxt );
+                ::InsertCnt_( pUp, rDoc, pNd->GetIndex(), false, nStt+1, pNxt );
                 pNxt = pUp->GetLastLower();
                 mvUpperFrames[x-2] = pNxt;
             }

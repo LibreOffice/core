@@ -505,7 +505,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
         {
             SwFrameFormat *pFrameFormat = pSwShape->GetFrameFormat();
 
-            const SwDoc *pDoc = pFrameFormat->GetDoc();
+            const SwDoc& rDoc = pFrameFormat->GetDoc();
             SwNode* pAnchorNode = pFrameFormat->GetAnchor().GetAnchorNode();
             SwTableNode *pTableNd;
             if (pAnchorNode && nullptr != (pTableNd = pAnchorNode->FindTableNode()))
@@ -516,7 +516,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
                 if( pLayout )
                 {
                     const sal_uInt16 nBrowseWidth =
-                        pLayout->GetBrowseWidthByTable( *pDoc );
+                        pLayout->GetBrowseWidthByTable( rDoc );
 
                     if ( nBrowseWidth )
                     {

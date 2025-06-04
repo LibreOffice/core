@@ -224,16 +224,16 @@ bool sw_ChkAndSetNewAnchor(
     if( nOld == nNew )
         return false;
 
-    SwDoc* pDoc = const_cast<SwDoc*>(rFormat.GetDoc());
+    SwDoc& rDoc = const_cast<SwDoc&>(rFormat.GetDoc());
 
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( !(nNew == RndStdIds::FLY_AT_PAGE &&
         (RndStdIds::FLY_AT_PARA==nOld || RndStdIds::FLY_AT_CHAR==nOld || RndStdIds::FLY_AS_CHAR==nOld ) &&
-        pDoc->IsInHeaderFooter( *rOldAnch.GetAnchorNode() )),
+        rDoc.IsInHeaderFooter( *rOldAnch.GetAnchorNode() )),
             "forbidden anchor change in Head/Foot." );
 #endif
 
-    return ::lcl_FindAnchorPos( *pDoc, rFly.getFrameArea().Pos(), rFly, rSet );
+    return ::lcl_FindAnchorPos( rDoc, rFly.getFrameArea().Pos(), rFly, rSet );
 }
 
 void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame )
@@ -676,7 +676,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                             pHandleAnchorNodeChg.reset(
                                 new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch ));
                         }
-                        pFormat->GetDoc()->SetAttr( aAnch, *pFormat );
+                        pFormat->GetDoc().SetAttr( aAnch, *pFormat );
                         if (SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT,
                             pObj))
                         {
@@ -1485,7 +1485,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
                             aFrameSz.SetHeight( aNewSz.Height() );
                     }
                     // via Doc for the Undo!
-                    pFormat->GetDoc()->SetAttr( aFrameSz, *pFormat );
+                    pFormat->GetDoc().SetAttr( aFrameSz, *pFormat );
                     break;
                 }
             }

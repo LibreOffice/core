@@ -152,12 +152,12 @@ void SwUndoMove::SetDestRange( const SwNode& rStt,
 
 void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
+    SwDoc& rDoc = rContext.GetDoc();
 
     // Block so that we can jump out of it
     do {
         // create index position and section based on the existing values
-        SwNodeIndex aIdx( pDoc->GetNodes(), m_nDestStartNode );
+        SwNodeIndex aIdx( rDoc.GetNodes(), m_nDestStartNode );
 
         if( m_bMoveRange )
         {
@@ -165,7 +165,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
             SwNodeRange aRg( aIdx, aIdx );
             aRg.aEnd = m_nDestEndNode;
             aIdx = m_nInsPosNode;
-            bool bSuccess = pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, aIdx.GetNode(),
+            bool bSuccess = rDoc.getIDocumentContentOperations().MoveNodeRange( aRg, aIdx.GetNode(),
                     SwMoveFlags::DEFAULT );
             if (!bSuccess)
                 break;
@@ -173,14 +173,14 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
         else
         {
             SwPaM aPam( aIdx.GetNode(), m_nDestStartContent,
-                        *pDoc->GetNodes()[ m_nDestEndNode ], m_nDestEndContent );
+                        *rDoc.GetNodes()[ m_nDestEndNode ], m_nDestEndContent );
 
             // #i17764# if redlines are to be moved, we may not remove them
-            // before pDoc->Move gets a chance to handle them
+            // before rDoc.Move gets a chance to handle them
             if( ! m_bMoveRedlines )
                 RemoveIdxFromRange( aPam, false );
 
-            SwPosition aPos( *pDoc->GetNodes()[ m_nInsPosNode] );
+            SwPosition aPos( *rDoc.GetNodes()[ m_nInsPosNode] );
             SwContentNode* pCNd = aPos.GetNode().GetContentNode();
             aPos.SetContent( m_nInsPosContent );
 
@@ -191,7 +191,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
                 static_cast<SwTextNode*>(pCNd)->ClearSwpHintsArr( false );
 
             // first delete all attributes at InsertPos
-            const bool bSuccess = pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos, m_bMoveRedlines
+            const bool bSuccess = rDoc.getIDocumentContentOperations().MoveRange( aPam, aPos, m_bMoveRedlines
                         ? SwMoveFlags::REDLINES
                         : SwMoveFlags::DEFAULT );
             if (!bSuccess)
@@ -220,8 +220,8 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
     if( m_pHistory )
     {
         if( m_nFootnoteStart != m_pHistory->Count() )
-            m_pHistory->Rollback( pDoc, m_nFootnoteStart );
-        m_pHistory->TmpRollback( pDoc, 0 );
+            m_pHistory->Rollback( rDoc, m_nFootnoteStart );
+        m_pHistory->TmpRollback( rDoc, 0 );
         m_pHistory->SetTmpEnd( m_pHistory->Count() );
     }
 

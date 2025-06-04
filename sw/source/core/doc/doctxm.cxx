@@ -1217,12 +1217,12 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
 void SwTOXBaseSection::InsertAlphaDelimiter( const SwTOXInternational& rIntl )
 {
-    SwDoc* pDoc = GetFormat()->GetDoc();
+    SwDoc& rDoc = GetFormat()->GetDoc();
     OUString sLastDeli;
     size_t i = 0;
     while( i < m_aSortArr.size() )
     {
-        ::SetProgressState( 0, pDoc->GetDocShell() );
+        ::SetProgressState( 0, rDoc.GetDocShell() );
 
         sal_uInt16 nLevel = m_aSortArr[i]->GetLevel();
 
@@ -1260,9 +1260,9 @@ void SwTOXBaseSection::InsertAlphaDelimiter( const SwTOXInternational& rIntl )
 /// Evaluate Template
 SwTextFormatColl* SwTOXBaseSection::GetTextFormatColl( sal_uInt16 nLevel )
 {
-    SwDoc* pDoc = GetFormat()->GetDoc();
+    SwDoc& rDoc = GetFormat()->GetDoc();
     const UIName& rName = GetTOXForm().GetTemplate( nLevel );
-    SwTextFormatColl* pColl = !rName.isEmpty() ? pDoc->FindTextFormatCollByName(rName) :nullptr;
+    SwTextFormatColl* pColl = !rName.isEmpty() ? rDoc.FindTextFormatCollByName(rName) :nullptr;
     if( !pColl )
     {
         sal_uInt16 nPoolFormat = 0;
@@ -1302,7 +1302,7 @@ SwTextFormatColl* SwTOXBaseSection::GetTextFormatColl( sal_uInt16 nLevel )
         }
         else
             nPoolFormat = nPoolFormat + nLevel;
-        pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nPoolFormat );
+        pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nPoolFormat );
     }
     return pColl;
 }
@@ -1339,7 +1339,7 @@ void SwTOXBaseSection::UpdateMarks(const SwTOXInternational& rIntl,
         SwRootFrame const*const pLayout)
 {
     const auto pType = static_cast<SwTOXType*>(SwTOXBase::GetRegisteredIn());
-    auto pShell = GetFormat()->GetDoc()->GetDocShell();
+    auto pShell = GetFormat()->GetDoc().GetDocShell();
     const TOXTypes eTOXTyp = GetTOXType()->GetType();
     std::vector<std::reference_wrapper<SwTextTOXMark>> vMarks;
     pType->CollectTextTOXMarksForLayout(vMarks, pLayout);
@@ -1418,13 +1418,13 @@ static bool useTextNodeForIndex(const SwTextNode* node, int maxLevel, bool fromC
 void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode,
         SwRootFrame const*const pLayout)
 {
-    SwDoc* pDoc = GetFormat()->GetDoc();
-    SwNodes& rNds = pDoc->GetNodes();
+    SwDoc& rDoc = GetFormat()->GetDoc();
+    SwNodes& rNds = rDoc.GetNodes();
 
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
     for( auto pOutlineNode : rOutlNds )
     {
-        ::SetProgressState( 0, pDoc->GetDocShell() );
+        ::SetProgressState( 0, rDoc.GetDocShell() );
         SwTextNode* pTextNd = pOutlineNode->GetTextNode();
         if (useTextNodeForIndex(pTextNd, GetLevel(), IsFromChapter(), pOwnChapterNode, pLayout))
         {
@@ -1438,7 +1438,7 @@ void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
         SwRootFrame const*const pLayout)
 {
     int nMaxLevel = SwTOXBase::GetType() == TOX_CONTENT ? GetLevel() : -1;
-    SwDoc* pDoc = GetFormat()->GetDoc();
+    SwDoc& rDoc = GetFormat()->GetDoc();
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         const UIName sTmpStyleNames = GetStyleNames(i);
@@ -1448,7 +1448,7 @@ void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
         sal_Int32 nIndex = 0;
         while (nIndex >= 0)
         {
-            SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName(
+            SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName(
                                     UIName(sTmpStyleNames.toString().getToken( 0, TOX_STYLE_DELIMITER, nIndex )));
             //TODO: no outline Collections in content indexes if OutlineLevels are already included
             if( !pColl ||
@@ -1460,7 +1460,7 @@ void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
             SwIterator<SwTextNode,SwFormatColl> aIter( *pColl );
             for( SwTextNode* pTextNd = aIter.First(); pTextNd; pTextNd = aIter.Next() )
             {
-                ::SetProgressState( 0, pDoc->GetDocShell() );
+                ::SetProgressState( 0, rDoc.GetDocShell() );
 
                 if (useTextNodeForIndex(pTextNd, nMaxLevel, IsFromChapter(), pOwnChapterNode, pLayout))
                 {
@@ -1475,8 +1475,8 @@ void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
 void SwTOXBaseSection::UpdateSequence(const SwTextNode* pOwnChapterNode,
         SwRootFrame const*const pLayout)
 {
-    SwDoc* pDoc = GetFormat()->GetDoc();
-    SwFieldType* pSeqField = pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, GetSequenceName(), false);
+    SwDoc& rDoc = GetFormat()->GetDoc();
+    SwFieldType* pSeqField = rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, GetSequenceName(), false);
     if(!pSeqField)
         return;
 
@@ -1486,11 +1486,11 @@ void SwTOXBaseSection::UpdateSequence(const SwTextNode* pOwnChapterNode,
     {
         const SwTextField* pTextField = pFormatField->GetTextField();
         SwTextNode& rTextNode = pTextField->GetTextNode();
-        ::SetProgressState( 0, pDoc->GetDocShell() );
+        ::SetProgressState( 0, rDoc.GetDocShell() );
 
         if (useTextNodeForIndex(&rTextNode, -1, IsFromChapter(), pOwnChapterNode, pLayout)
             && (!pLayout || !pLayout->IsHideRedlines()
-                || !sw::IsFieldDeletedInModel(pDoc->getIDocumentRedlineAccess(), *pTextField)))
+                || !sw::IsFieldDeletedInModel(rDoc.getIDocumentRedlineAccess(), *pTextField)))
         {
             const SwSetExpField& rSeqField = dynamic_cast<const SwSetExpField&>(*(pFormatField->GetField()));
             const OUString sName = GetSequenceName().toString()
@@ -1501,7 +1501,7 @@ void SwTOXBaseSection::UpdateSequence(const SwTextNode* pOwnChapterNode,
             if( GetCaptionDisplay() == CAPTION_TEXT )
             {
                 pNew->SetStartIndex(
-                    SwGetExpField::GetReferenceTextPos( *pFormatField, *pDoc ));
+                    SwGetExpField::GetReferenceTextPos( *pFormatField, rDoc ));
             }
             else if(GetCaptionDisplay() == CAPTION_NUMBER)
             {
@@ -1516,8 +1516,8 @@ void SwTOXBaseSection::UpdateSequence(const SwTextNode* pOwnChapterNode,
 void SwTOXBaseSection::UpdateAuthorities(const SwTOXInternational& rIntl,
         SwRootFrame const*const pLayout)
 {
-    SwDoc* pDoc = GetFormat()->GetDoc();
-    SwFieldType* pAuthField = pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::TableOfAuthorities, OUString(), false);
+    SwDoc& rDoc = GetFormat()->GetDoc();
+    SwFieldType* pAuthField = rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::TableOfAuthorities, OUString(), false);
     if(!pAuthField)
         return;
 
@@ -1527,18 +1527,18 @@ void SwTOXBaseSection::UpdateAuthorities(const SwTOXInternational& rIntl,
     {
         const auto pTextField = pFormatField->GetTextField();
         const SwTextNode& rTextNode = pFormatField->GetTextField()->GetTextNode();
-        ::SetProgressState( 0, pDoc->GetDocShell() );
+        ::SetProgressState( 0, rDoc.GetDocShell() );
 
         if (useTextNodeForIndex(&rTextNode, -1, false, nullptr, pLayout) &&
             (!pLayout || !pLayout->IsHideRedlines()
-                || !sw::IsFieldDeletedInModel(pDoc->getIDocumentRedlineAccess(), *pTextField)))
+                || !sw::IsFieldDeletedInModel(rDoc.getIDocumentRedlineAccess(), *pTextField)))
         {
             //#106485# the body node has to be used!
             SwContentFrame *const pFrame = rTextNode.getLayoutFrame(pLayout);
             SwPosition aFieldPos(rTextNode);
             const SwTextNode* pTextNode = nullptr;
             if(pFrame && !pFrame->IsInDocBody())
-                pTextNode = GetBodyTextNode( *pDoc, aFieldPos, *pFrame );
+                pTextNode = GetBodyTextNode( rDoc, aFieldPos, *pFrame );
             if(!pTextNode)
                 pTextNode = &rTextNode;
 
@@ -1595,15 +1595,15 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
         const SwTextNode* pOwnChapterNode,
         SwRootFrame const*const pLayout)
 {
-    SwDoc* pDoc = GetFormat()->GetDoc();
-    SwNodes& rNds = pDoc->GetNodes();
+    SwDoc& rDoc = GetFormat()->GetDoc();
+    SwNodes& rNds = rDoc.GetNodes();
     // on the 1st Node of the 1st Section
     SwNodeOffset nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + SwNodeOffset(2),
          nEndIdx = rNds.GetEndOfAutotext().GetIndex();
 
     while( nIdx < nEndIdx )
     {
-        ::SetProgressState( 0, pDoc->GetDocShell() );
+        ::SetProgressState( 0, rDoc.GetDocShell() );
 
         SwNode* pNd = rNds[ nIdx ];
         SwContentNode* pCNd = nullptr;
@@ -1696,11 +1696,11 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
 void SwTOXBaseSection::UpdateTable(const SwTextNode* pOwnChapterNode,
         SwRootFrame const*const pLayout)
 {
-    SwDoc* pDoc = GetFormat()->GetDoc();
+    SwDoc& rDoc = GetFormat()->GetDoc();
 
-    for(SwTableFormat* pFrameFormat: *pDoc->GetTableFrameFormats())
+    for(SwTableFormat* pFrameFormat: *rDoc.GetTableFrameFormats())
     {
-        ::SetProgressState( 0, pDoc->GetDocShell() );
+        ::SetProgressState( 0, rDoc.GetDocShell() );
 
         SwTable* pTmpTable = SwTable::FindTable( pFrameFormat );
         SwTableBox* pFBox;
@@ -1748,7 +1748,7 @@ void SwTOXBaseSection::UpdatePageNum()
     // Insert the current PageNumber into the TOC
     SwPageFrame*  pCurrentPage    = nullptr;
     sal_uInt16      nPage       = 0;
-    SwDoc* pDoc = GetFormat()->GetDoc();
+    SwDoc& rDoc = GetFormat()->GetDoc();
 
     SwTOXInternational aIntl( GetLanguage(),
                               TOX_INDEX == GetTOXType()->GetType() ?
@@ -1787,13 +1787,13 @@ void SwTOXBaseSection::UpdatePageNum()
             size_t nSize = pSortBase->aTOXSources.size();
             for (size_t j = 0; j < nSize; ++j)
             {
-                ::SetProgressState( 0, pDoc->GetDocShell() );
+                ::SetProgressState( 0, rDoc.GetDocShell() );
 
                 SwTOXSource& rTOXSource = pSortBase->aTOXSources[j];
                 if( rTOXSource.pNd )
                 {
-                    SwContentFrame* pFrame = rTOXSource.pNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
-                    OSL_ENSURE( pFrame || pDoc->IsUpdateTOX(), "TOX, no Frame found");
+                    SwContentFrame* pFrame = rTOXSource.pNd->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
+                    OSL_ENSURE( pFrame || rDoc.IsUpdateTOX(), "TOX, no Frame found");
                     if( !pFrame )
                         continue;
                     if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->HasFollow() )

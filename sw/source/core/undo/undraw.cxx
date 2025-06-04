@@ -113,7 +113,7 @@ static void lcl_SaveAnchor( SwFrameFormat* pFormat, SwNodeOffset& rNodePos )
         nContentPos = rAnchor.GetAnchorContentOffset();
 
         // destroy TextAttribute
-        SwTextNode *pTextNd = pFormat->GetDoc()->GetNodes()[ rNodePos ]->GetTextNode();
+        SwTextNode *pTextNd = pFormat->GetDoc().GetNodes()[ rNodePos ]->GetTextNode();
         assert(pTextNd && "No text node found!");
         SwTextFlyCnt* pAttr = static_cast<SwTextFlyCnt*>(
             pTextNd->GetTextAttrForCharAt( nContentPos, RES_TXTATR_FLYCNT ));
@@ -144,7 +144,7 @@ static void lcl_RestoreAnchor( SwFrameFormat* pFormat, SwNodeOffset nNodePos )
         return;
 
     const sal_Int32 nContentPos = rAnchor.GetPageNum();
-    SwNodes& rNds = pFormat->GetDoc()->GetNodes();
+    SwNodes& rNds = pFormat->GetDoc().GetNodes();
 
     SwNodeIndex aIdx( rNds, nNodePos );
     SwPosition aPos( aIdx );
@@ -216,8 +216,8 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
     pFormat->RemoveAllUnos();
 
     // remove from array
-    SwDoc* pDoc = pFormat->GetDoc();
-    sw::SpzFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
+    SwDoc& rDoc = pFormat->GetDoc();
+    sw::SpzFrameFormats& rFlyFormats = *rDoc.GetSpzFrameFormats();
     rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFormat ));
 
     for( sal_uInt16 n = 1; n < m_nSize; ++n )
@@ -261,8 +261,8 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     m_bDeleteFormat = true;
 
     // remove from array
-    SwDoc* pDoc = m_pObjArray[0].pFormat->GetDoc();
-    sw::SpzFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
+    SwDoc& rDoc = m_pObjArray[0].pFormat->GetDoc();
+    sw::SpzFrameFormats& rFlyFormats = *rDoc.GetSpzFrameFormats();
 
     // This will store the textboxes from the ex-group-shapes
     std::vector<std::pair<SdrObject*, SwFrameFormat*>> vTextBoxes;
@@ -336,7 +336,7 @@ void SwUndoDrawGroup::AddObj( sal_uInt16 nPos, SwDrawFrameFormat* pFormat, SdrOb
     pFormat->RemoveAllUnos();
 
     // remove from array
-    sw::SpzFrameFormats& rFlyFormats = *pFormat->GetDoc()->GetSpzFrameFormats();
+    sw::SpzFrameFormats& rFlyFormats = *pFormat->GetDoc().GetSpzFrameFormats();
     rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFormat ));
 }
 
@@ -368,7 +368,7 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj, const SwDoc& rDoc )
         pFormat->RemoveAllUnos();
 
         // remove from array
-        sw::SpzFrameFormats& rFlyFormats = *pFormat->GetDoc()->GetSpzFrameFormats();
+        sw::SpzFrameFormats& rFlyFormats = *pFormat->GetDoc().GetSpzFrameFormats();
         rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFormat ));
     }
 }
@@ -389,8 +389,8 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     m_bDeleteFormat = true;
 
-    SwDoc *const pDoc = & rContext.GetDoc();
-    sw::SpzFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
+    SwDoc& rDoc = rContext.GetDoc();
+    sw::SpzFrameFormats& rFlyFormats = *rDoc.GetSpzFrameFormats();
 
     // This will store the textboxes what were owned by this group
     std::vector<std::pair<SdrObject*, SwFrameFormat*>> vTextBoxes;
@@ -481,8 +481,8 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
     pFormat->RemoveAllUnos();
 
     // remove from array
-    SwDoc* pDoc = pFormat->GetDoc();
-    sw::SpzFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
+    SwDoc& rDoc = pFormat->GetDoc();
+    sw::SpzFrameFormats& rFlyFormats = *rDoc.GetSpzFrameFormats();
     rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFormat ));
 
     for( sal_uInt16 n = 1; n < m_nSize; ++n )
@@ -653,8 +653,8 @@ void SwUndoDrawDelete::AddObj( SwDrawFrameFormat* pFormat,
     pFormat->RemoveAllUnos();
 
     // remove from array
-    SwDoc* pDoc = pFormat->GetDoc();
-    sw::SpzFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
+    SwDoc& rDoc = pFormat->GetDoc();
+    sw::SpzFrameFormats& rFlyFormats = *rDoc.GetSpzFrameFormats();
     rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFormat ));
 
     m_pMarkList->InsertEntry( rMark );

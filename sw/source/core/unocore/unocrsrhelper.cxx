@@ -188,7 +188,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     if (pFrame)
     {
         const SwFrameFormat *const pFrameFormat(pFrame->GetFrameFormat());
-        if (pFrameFormat && pFrameFormat->GetDoc() == &rTargetDoc)
+        if (pFrameFormat && &pFrameFormat->GetDoc() == &rTargetDoc)
         {
             o_rFrame = std::make_pair(pFrameFormat->GetName(), pFrame->GetFlyCntType());
         }
@@ -199,7 +199,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     if (pTextTable)
     {
         SwFrameFormat *const pFrameFormat(pTextTable->GetFrameFormat());
-        if (pFrameFormat && pFrameFormat->GetDoc() == &rTargetDoc)
+        if (pFrameFormat && &pFrameFormat->GetDoc() == &rTargetDoc)
         {
             o_rTableName = pFrameFormat->GetName();
         }
@@ -210,7 +210,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     if (pCell)
     {
         SwFrameFormat *const pFrameFormat(pCell->GetFrameFormat());
-        if (pFrameFormat && pFrameFormat->GetDoc() == &rTargetDoc)
+        if (pFrameFormat && &pFrameFormat->GetDoc() == &rTargetDoc)
         {
             SwTableBox * pBox = pCell->GetTableBox();
             SwTable *const pTable = SwTable::FindTable(pFrameFormat);
@@ -622,7 +622,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 if (pAny && !rPam.GetPointNode().IsNoTextNode())
                 {
                     rtl::Reference<SwXTextFrame> const xFrame(
-                        SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat));
+                        SwXTextFrame::CreateXTextFrame(pFormat->GetDoc(), pFormat));
                     (*pAny) <<= uno::Reference<XTextFrame>(xFrame);
                 }
             }
@@ -1424,8 +1424,8 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     std::u16string_view rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
-    SwDoc* pDoc = rTableLine.GetFrameFormat()->GetDoc();
-    IDocumentRedlineAccess* pRedlineAccess = &pDoc->getIDocumentRedlineAccess();
+    SwDoc& rDoc = rTableLine.GetFrameFormat()->GetDoc();
+    IDocumentRedlineAccess* pRedlineAccess = &rDoc.getIDocumentRedlineAccess();
 
     RedlineType eType;
     if ( rRedlineType == u"TableRowInsert" )
@@ -1454,7 +1454,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
         if ( rTableLine.IsEmpty() )
         {
             SwPaM aPaM(aInsPos);
-            pDoc->getIDocumentContentOperations().InsertString( aPaM,
+            rDoc.getIDocumentContentOperations().InsertString( aPaM,
                     OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
             aPaM.SetMark();
             aPaM.GetMark()->SetContent(0);
@@ -1463,7 +1463,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
                     : u"Delete", rRedlineProperties);
         }
         SwCursor aCursor( SwPosition(aInsPos), nullptr );
-        pDoc->SetRowNotTracked( aCursor, aSetTracking );
+        rDoc.SetRowNotTracked( aCursor, aSetTracking );
     }
 
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
@@ -1499,8 +1499,8 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     std::u16string_view rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
-    SwDoc* pDoc = rTableBox.GetFrameFormat()->GetDoc();
-    IDocumentRedlineAccess* pRedlineAccess = &pDoc->getIDocumentRedlineAccess();
+    SwDoc& rDoc = rTableBox.GetFrameFormat()->GetDoc();
+    IDocumentRedlineAccess* pRedlineAccess = &rDoc.getIDocumentRedlineAccess();
 
     RedlineType eType;
     if ( rRedlineType == u"TableCellInsert" )
@@ -1529,7 +1529,7 @@ void makeTableCellRedline( SwTableBox& rTableBox,
         if ( rTableBox.IsEmpty() )
         {
             SwPaM aPaM(aInsPos);
-            pDoc->getIDocumentContentOperations().InsertString( aPaM,
+            rDoc.getIDocumentContentOperations().InsertString( aPaM,
                     OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
             aPaM.SetMark();
             aPaM.GetMark()->SetContent(0);
@@ -1538,7 +1538,7 @@ void makeTableCellRedline( SwTableBox& rTableBox,
                     : u"Delete", rRedlineProperties);
         }
         SwCursor aCursor( SwPosition(aInsPos), nullptr );
-        pDoc->SetBoxAttr( aCursor, aSetTracking );
+        rDoc.SetBoxAttr( aCursor, aSetTracking );
     }
 
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );

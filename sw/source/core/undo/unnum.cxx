@@ -83,10 +83,10 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
         if( m_nLRSavePos )
         {
             // Update immediately so that potential "old" LRSpaces will be valid again.
-            m_pHistory->TmpRollback( &rDoc, m_nLRSavePos );
+            m_pHistory->TmpRollback( rDoc, m_nLRSavePos );
 
         }
-        m_pHistory->TmpRollback( &rDoc, 0 );
+        m_pHistory->TmpRollback( rDoc, 0 );
         m_pHistory->SetTmpEnd( m_pHistory->Count() );
     }
 
@@ -169,7 +169,7 @@ void SwUndoDelNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    m_pHistory->TmpRollback( &rDoc, 0 );
+    m_pHistory->TmpRollback( rDoc, 0 );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
     for( const auto& rNode : m_aNodes )

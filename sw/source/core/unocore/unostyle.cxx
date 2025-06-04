@@ -2763,9 +2763,8 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aP
         pTargetFormat->ResetFormatAttr(pEntry->nWID);
         if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
         {
-            //
-            SwDoc* pDoc = pTargetFormat->GetDoc();
-            SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet(pDoc->GetAttrPool());
+            SwDoc& rDoc = pTargetFormat->GetDoc();
+            SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet(rDoc.GetAttrPool());
             aSet.SetParent(&pTargetFormat->GetAttrSet());
 
             aSet.ClearItem(XATTR_FILLBMP_STRETCH);

@@ -124,12 +124,12 @@ void SwLineNumberInfo::SwClientNotify(const SwModify&, const SfxHint& rHint)
         auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
         CheckRegistration( *pDyingHint );
     }
-    SwDoc *pDoc = static_cast<SwCharFormat*>(GetRegisteredIn())->GetDoc();
-    SwRootFrame* pRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwDoc& rDoc = static_cast<SwCharFormat*>(GetRegisteredIn())->GetDoc();
+    SwRootFrame* pRoot = rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRoot )
     {
         pRoot->StartAllAction();
-        for( auto aLayout : pDoc->GetAllLayouts() )
+        for( auto aLayout : rDoc.GetAllLayouts() )
             aLayout->AllAddPaintRect();
         pRoot->EndAllAction();
     }

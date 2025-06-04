@@ -280,7 +280,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
         {
             // note: this will also create frames for all currently hidden flys
             // because it calls AppendAllObjs
-            ::MakeFrames(&rDoc, currentStart.GetNode(), *pTableOrSectionNode->EndOfSectionNode());
+            ::MakeFrames(rDoc, currentStart.GetNode(), *pTableOrSectionNode->EndOfSectionNode());
             isAppendObjsCalled = true;
         }
         currentStart.Assign( pTableOrSectionNode->EndOfSectionIndex() + 1 );
@@ -358,7 +358,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                 SwNodeIndex const end(*pLast, +1); // end is exclusive
                 // note: this will also create frames for all currently hidden flys
                 // both on first and non-first nodes because it calls AppendAllObjs
-                ::MakeFrames(&rDoc, start.GetNode(), end.GetNode());
+                ::MakeFrames(rDoc, start.GetNode(), end.GetNode());
                 isAppendObjsCalled = true;
                 // re-use this to move flys that are now on the wrong frame, with end
                 // of redline as "second" node; the nodes between start and end should

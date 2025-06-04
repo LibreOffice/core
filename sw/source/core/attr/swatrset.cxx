@@ -45,9 +45,9 @@
 
 
 
-SwAttrPool::SwAttrPool(SwDoc* pD)
+SwAttrPool::SwAttrPool(SwDoc& rDoc)
 : SfxItemPool(u"SWG"_ustr)
-, m_pDoc(pD)
+, m_rDoc(rDoc)
 {
     registerItemInfoPackage(getItemInfoPackageSwAttributes());
 
@@ -308,7 +308,7 @@ bool SwAttrSet::SetModifyAtAttr( const sw::BroadcastingModify* pModify )
         SwCharFormat* pCharFormat = pFormatDrop->GetCharFormat();
         if(pCharFormat && GetPool() != pCharFormat->GetAttrSet().GetPool())
         {
-           pCharFormat = GetDoc()->CopyCharFormat(*pCharFormat);
+           pCharFormat = GetDoc().CopyCharFormat(*pCharFormat);
            pFormatDrop->SetCharFormat(pCharFormat);
         }
         pFormatDrop->ChgDefinedIn(pDropDefiner);
@@ -338,52 +338,52 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
             // #i92811#
             std::unique_ptr<SfxStringItem> pNewListIdItem;
 
-            const SwDoc *pSrcDoc = GetDoc();
-            SwDoc *pDstDoc = pCNd ? &pCNd->GetDoc() : pFormat->GetDoc();
+            const SwDoc& rSrcDoc = GetDoc();
+            SwDoc& rDstDoc = pCNd ? pCNd->GetDoc() : pFormat->GetDoc();
 
             // Does the NumRule has to be copied?
             const SwNumRuleItem* pNumRuleItem;
-            if( pSrcDoc != pDstDoc &&
+            if( &rSrcDoc != &rDstDoc &&
                 (pNumRuleItem = GetItemIfSet( RES_PARATR_NUMRULE, false )) )
             {
                 UIName aNm(pNumRuleItem->GetValue());
                 if( !aNm.isEmpty() )
                 {
-                    SwNumRule* pDestRule = pDstDoc->FindNumRulePtr( aNm );
+                    SwNumRule* pDestRule = rDstDoc.FindNumRulePtr( aNm );
                     if( pDestRule )
                         pDestRule->Invalidate();
                     else
-                        pDstDoc->MakeNumRule( aNm, pSrcDoc->FindNumRulePtr( aNm ) );
+                        rDstDoc.MakeNumRule( aNm, rSrcDoc.FindNumRulePtr( aNm ) );
                 }
             }
 
             // copy list and if needed also the corresponding list style
             // for text nodes
             const SfxStringItem* pStrItem;
-            if ( pSrcDoc != pDstDoc &&
+            if ( &rSrcDoc != &rDstDoc &&
                  pCNd && pCNd->IsTextNode() &&
                  (pStrItem = GetItemIfSet( RES_PARATR_LIST_ID, false )) )
             {
                 const OUString& sListId = pStrItem->GetValue();
                 if ( !sListId.isEmpty() &&
-                     !pDstDoc->getIDocumentListsAccess().getListByName( sListId ) )
+                     !rDstDoc.getIDocumentListsAccess().getListByName( sListId ) )
                 {
-                    const SwList* pList = pSrcDoc->getIDocumentListsAccess().getListByName( sListId );
+                    const SwList* pList = rSrcDoc.getIDocumentListsAccess().getListByName( sListId );
                     // copy list style, if needed
                     const UIName& sDefaultListStyleName =
                                             pList->GetDefaultListStyleName();
                     // #i92811#
                     const SwNumRule* pDstDocNumRule =
-                                pDstDoc->FindNumRulePtr( sDefaultListStyleName );
+                                rDstDoc.FindNumRulePtr( sDefaultListStyleName );
                     if ( !pDstDocNumRule )
                     {
-                        pDstDoc->MakeNumRule( sDefaultListStyleName,
-                                              pSrcDoc->FindNumRulePtr( sDefaultListStyleName ) );
+                        rDstDoc.MakeNumRule( sDefaultListStyleName,
+                                              rSrcDoc.FindNumRulePtr( sDefaultListStyleName ) );
                     }
                     else
                     {
                         const SwNumRule* pSrcDocNumRule =
-                                pSrcDoc->FindNumRulePtr( sDefaultListStyleName );
+                                rSrcDoc.FindNumRulePtr( sDefaultListStyleName );
                         // If list id of text node equals the list style's
                         // default list id in the source document, the same
                         // should be hold in the destination document.
@@ -398,17 +398,17 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                     // check again, if list exist, because <SwDoc::MakeNumRule(..)>
                     // could have also created it.
                     if ( pNewListIdItem == nullptr &&
-                         !pDstDoc->getIDocumentListsAccess().getListByName( sListId ) )
+                         !rDstDoc.getIDocumentListsAccess().getListByName( sListId ) )
                     {
                         // copy list
-                        pDstDoc->getIDocumentListsAccess().createList( sListId, sDefaultListStyleName );
+                        rDstDoc.getIDocumentListsAccess().createList( sListId, sDefaultListStyleName );
                     }
                 }
             }
 
             std::optional< SfxItemSet > tmpSet;
             const SwFormatPageDesc* pPageDescItem;
-            if( pSrcDoc != pDstDoc && (pPageDescItem = GetItemIfSet(
+            if( &rSrcDoc != &rDstDoc && (pPageDescItem = GetItemIfSet(
                                             RES_PAGEDESC, false )))
             {
                 const SwPageDesc* pPgDesc = pPageDescItem->GetPageDesc();
@@ -416,11 +416,11 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                 {
                     tmpSet.emplace(*this);
 
-                    SwPageDesc* pDstPgDesc = pDstDoc->FindPageDesc(pPgDesc->GetName());
+                    SwPageDesc* pDstPgDesc = rDstDoc.FindPageDesc(pPgDesc->GetName());
                     if( !pDstPgDesc )
                     {
-                        pDstPgDesc = pDstDoc->MakePageDesc(pPgDesc->GetName());
-                        pDstDoc->CopyPageDesc( *pPgDesc, *pDstPgDesc );
+                        pDstPgDesc = rDstDoc.MakePageDesc(pPgDesc->GetName());
+                        rDstDoc.CopyPageDesc( *pPgDesc, *pDstPgDesc );
                     }
                     SwFormatPageDesc aDesc( pDstPgDesc );
                     aDesc.SetNumOffset( pPageDescItem->GetNumOffset() );
@@ -429,7 +429,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
             }
 
             const SwFormatAnchor* pAnchorItem;
-            if( pSrcDoc != pDstDoc && (pAnchorItem = GetItemIfSet( RES_ANCHOR, false ))
+            if( &rSrcDoc != &rDstDoc && (pAnchorItem = GetItemIfSet( RES_ANCHOR, false ))
                 && pAnchorItem->GetAnchorNode() != nullptr )
             {
                 if( !tmpSet )
@@ -440,18 +440,18 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
             }
 
             const SwFormatAutoFormat* pAutoFormatItem;
-            if (pSrcDoc != pDstDoc &&
+            if (&rSrcDoc != &rDstDoc &&
                 (pAutoFormatItem = GetItemIfSet(RES_PARATR_LIST_AUTOFMT, false)) &&
                 pAutoFormatItem->GetStyleHandle())
             {
                 SfxItemSet const& rAutoStyle(*pAutoFormatItem->GetStyleHandle());
                 std::shared_ptr<SfxItemSet> const pNewSet(
-                    rAutoStyle.SfxItemSet::Clone(true, &pDstDoc->GetAttrPool()));
+                    rAutoStyle.SfxItemSet::Clone(true, &rDstDoc.GetAttrPool()));
 
-                // fix up character style, it contains pointers to pSrcDoc
+                // fix up character style, it contains pointers to rSrcDoc
                 if (const SwFormatCharFormat* pCharFormatItem = pNewSet->GetItemIfSet(RES_TXTATR_CHARFMT, false))
                 {
-                    SwCharFormat *const pCopy(pDstDoc->CopyCharFormat(*pCharFormatItem->GetCharFormat()));
+                    SwCharFormat *const pCopy(rDstDoc.CopyCharFormat(*pCharFormatItem->GetCharFormat()));
                     const_cast<SwFormatCharFormat&>(*pCharFormatItem).SetCharFormat(pCopy);
                 }
 

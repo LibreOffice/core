@@ -363,7 +363,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
             m_pTextFormatColl = static_cast<SwTextFormatColl*>(pTextNode->ChgFormatColl( m_pTextFormatColl )) ;
 
         m_pHistory->SetTmpEnd( m_nSetPos );
-        m_pHistory->TmpRollback(&rDoc, 0, false);
+        m_pHistory->TmpRollback(rDoc, 0, false);
     }
 }
 
@@ -442,7 +442,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 
     // tdf#108124 the SwHistoryChangeFlyAnchor/SwHistoryFlyCnt must run before
     // m_FlyUndos as they were created by DelContentIndex()
-    m_pHistory->Rollback( &rDoc, m_nSetPos );
+    m_pHistory->Rollback( rDoc, m_nSetPos );
 
     // tdf#108124 (10/25/2017)
     // During UNDO we call SwUndoInsLayFormat::UndoImpl in reverse order,

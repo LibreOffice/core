@@ -166,7 +166,7 @@ void SwFrameNotify::ImplDestroy()
                         if ( !bInvalidPrePos && pPre->IsTabFrame() )
                         {
                             SwTabFrame* pPreTab = static_cast<SwTabFrame*>(pPre);
-                            if ( pPreTab->GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP) )
+                            if ( pPreTab->GetFormat()->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP) )
                             {
                                 SwRowFrame* pLastRow = static_cast<SwRowFrame*>(pPreTab->GetLastLower());
                                 if ( pLastRow && pLastRow->ShouldRowKeepWithNext() )
@@ -1061,7 +1061,7 @@ void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *c
             if ( bSdrObj && nullptr == (pSdrObj = pFormat->FindSdrObject()) )
             {
                 OSL_ENSURE( !bSdrObj, "DrawObject not found." );
-                pFormat->GetDoc()->DelFrameFormat( pFormat );
+                pFormat->GetDoc().DelFrameFormat( pFormat );
                 return;
             }
             if ( pSdrObj )
@@ -1240,7 +1240,7 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
 }
 
 void AppendObjsOfNode(sw::FrameFormats<sw::SpzFrameFormat*> const*const pTable, SwNodeOffset const nIndex,
-    SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc,
+    SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc& rDoc,
     std::vector<sw::Extent>::const_iterator const*const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd,
     SwTextNode const*const pFirstNode, SwTextNode const*const pLastNode)
@@ -1260,7 +1260,7 @@ void AppendObjsOfNode(sw::FrameFormats<sw::SpzFrameFormat*> const*const pTable, 
     (void)pTable;
 #endif
 
-    SwNode const& rNode(*pDoc->GetNodes()[nIndex]);
+    SwNode const& rNode(*rDoc.GetNodes()[nIndex]);
     std::vector<SwFrameFormat*> const & rFlys(rNode.GetAnchoredFlys());
     for (size_t it = 0; it != rFlys.size(); )
     {
@@ -1286,7 +1286,7 @@ void AppendObjsOfNode(sw::FrameFormats<sw::SpzFrameFormat*> const*const pTable, 
 
 
 void AppendObjs(const sw::FrameFormats<sw::SpzFrameFormat*> *const pTable, SwNodeOffset const nIndex,
-        SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc)
+        SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc& rDoc)
 {
     if (pFrame->IsTextFrame())
     {
@@ -1301,7 +1301,7 @@ void AppendObjs(const sw::FrameFormats<sw::SpzFrameFormat*> *const pTable, SwNod
                 if (iter == pMerged->extents.end()
                     || iter->pNode != pNode)
                 {
-                    AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc,
+                    AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, rDoc,
                         &iterFirst, &iter, pMerged->pFirstNode, pMerged->pLastNode);
                     SwNodeOffset const until = iter == pMerged->extents.end()
                         ? pMerged->pLastNode->GetIndex() + 1
@@ -1313,7 +1313,7 @@ void AppendObjs(const sw::FrameFormats<sw::SpzFrameFormat*> *const pTable, SwNod
                         SwNode const*const pTmp(pNode->GetNodes()[i]);
                         if (pTmp->GetRedlineMergeFlag() == SwNode::Merge::NonFirst)
                         {
-                            AppendObjsOfNode(pTable, pTmp->GetIndex(), pFrame, pPage, pDoc, &iter, &iter, pMerged->pFirstNode, pMerged->pLastNode);
+                            AppendObjsOfNode(pTable, pTmp->GetIndex(), pFrame, pPage, rDoc, &iter, &iter, pMerged->pFirstNode, pMerged->pLastNode);
                         }
                     }
                     if (iter == pMerged->extents.end())
@@ -1327,12 +1327,12 @@ void AppendObjs(const sw::FrameFormats<sw::SpzFrameFormat*> *const pTable, SwNod
         }
         else
         {
-            return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, pDoc, nullptr, nullptr, nullptr, nullptr);
+            return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, rDoc, nullptr, nullptr, nullptr, nullptr);
         }
     }
     else
     {
-        return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, pDoc, nullptr, nullptr, nullptr, nullptr);
+        return AppendObjsOfNode(pTable, nIndex, pFrame, pPage, rDoc, nullptr, nullptr, nullptr, nullptr);
     }
 }
 
@@ -1403,7 +1403,7 @@ void AppendAllObjs(const sw::FrameFormats<sw::SpzFrameFormat*>* pTable, const Sw
         {
             const SwNode* pAnchorNode = rAnch.GetAnchorNode();
             // formats in header/footer have no dependencies
-            if(pAnchorNode && pFormat->GetDoc()->IsInHeaderFooter(*pAnchorNode))
+            if(pAnchorNode && pFormat->GetDoc().IsInHeaderFooter(*pAnchorNode))
                 pFormat->MakeFrames();
             else
                 vFormatsToConnect.push_back(pFormat);
@@ -1497,11 +1497,11 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
     }
 }
 
-void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
+void InsertCnt_( SwLayoutFrame *pLay, SwDoc& rDoc,
                              SwNodeOffset nIndex, bool bPages, SwNodeOffset nEndIndex,
                              SwFrame *pPrv, sw::FrameMode const eMode )
 {
-    pDoc->getIDocumentTimerAccess().BlockIdling();
+    rDoc.getIDocumentTimerAccess().BlockIdling();
     SwRootFrame* pLayout = pLay->getRootFrame();
     const bool bOldCallbackActionEnabled = pLayout && pLayout->IsCallbackActionEnabled();
     if( bOldCallbackActionEnabled )
@@ -1524,7 +1524,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     const bool bStartPercent = bPages && !nEndIndex;
 
     SwPageFrame *pPage = pLay->FindPageFrame();
-    sw::SpzFrameFormats* pTable = pDoc->GetSpzFrameFormats();
+    sw::SpzFrameFormats* pTable = rDoc.GetSpzFrameFormats();
     SwFrame       *pFrame = nullptr;
     std::unique_ptr<SwActualSection> pActualSection;
     std::unique_ptr<SwLayHelper> pPageMaker;
@@ -1536,7 +1536,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     {
         // Attention: the SwLayHelper class uses references to the content-,
         // page-, layout-frame etc. and may change them!
-        pPageMaker.reset(new SwLayHelper( pDoc, pFrame, pPrv, pPage, pLay,
+        pPageMaker.reset(new SwLayHelper( rDoc, pFrame, pPrv, pPage, pLay,
                 pActualSection, nIndex, SwNodeOffset(0) == nEndIndex ));
         if( bStartPercent )
         {
@@ -1597,7 +1597,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     for ( ; nEndIndex == SwNodeOffset(0) || nIndex < nEndIndex; ++nIndex)
     {
         assert(pLayout);
-        SwNode *pNd = pDoc->GetNodes()[nIndex];
+        SwNode *pNd = rDoc.GetNodes()[nIndex];
         if ( pNd->IsContentNode() )
         {
             SwContentNode* pNode = static_cast<SwContentNode*>(pNd);
@@ -1664,7 +1664,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
 
             if ( !pTable->empty() && bObjsDirect && !isFlyCreationSuppressed )
             {
-                AppendObjs( pTable, nIndex, pFrame, pPage, pDoc );
+                AppendObjs( pTable, nIndex, pFrame, pPage, rDoc );
                 // tdf#165351 from SwCellFrame ctor, this may set inf flags
                 // before the SwCellFrame has an upper, so reset here
                 pFrame->InvalidateInfFlags();
@@ -1678,7 +1678,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 // in the problematic case, there can be only 1 redline...
                 SwPosition const tmp(*pNd);
                 SwRangeRedline const*const pRedline(
-                    pDoc->getIDocumentRedlineAccess().GetRedline(tmp, nullptr));
+                    rDoc.getIDocumentRedlineAccess().GetRedline(tmp, nullptr));
                 // pathology: redline that starts on a TableNode; cannot
                 // be created in UI but by import filters...
                 if (pRedline
@@ -1831,7 +1831,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                         : pFrame->GetNext());
                     if (pNext
                         && pNext->IsTextFrame()
-                        && static_cast<SwTextFrame*>(pNext)->GetTextNodeFirst() == pDoc->GetNodes()[nEndIndex]
+                        && static_cast<SwTextFrame*>(pNext)->GetTextNodeFirst() == rDoc.GetNodes()[nEndIndex]
                         && (pNext->GetUpper() == pFrame->GetUpper()
                             || pFrame->GetNext()->IsSctFrame())) // checked above
                     {
@@ -2001,7 +2001,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             {
                 SwFlyFrame* pFly = pLay->FindFlyFrame();
                 if( pFly )
-                    AppendObjs( pTable, nIndex, pFly, pPage, pDoc );
+                    AppendObjs( pTable, nIndex, pFly, pPage, rDoc );
             }
         }
         else
@@ -2044,29 +2044,29 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     {
         pPageMaker->CheckFlyCache( pPage );
         pPageMaker.reset();
-        if( pDoc->GetLayoutCache() )
+        if( rDoc.GetLayoutCache() )
         {
 #ifdef DBG_UTIL
-            pDoc->GetLayoutCache()->CompareLayout( *pDoc );
+            rDoc.GetLayoutCache()->CompareLayout( rDoc );
 #endif
-            pDoc->GetLayoutCache()->ClearImpl();
+            rDoc.GetLayoutCache()->ClearImpl();
         }
     }
 
-    pDoc->getIDocumentTimerAccess().UnblockIdling();
+    rDoc.getIDocumentTimerAccess().UnblockIdling();
     if( bOldCallbackActionEnabled )
         pLayout->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }
 
-void MakeFrames( SwDoc *pDoc, const SwNode &rSttIdx, const SwNode &rEndIdx )
+void MakeFrames( SwDoc& rDoc, const SwNode &rSttIdx, const SwNode &rEndIdx )
 {
     bObjsDirect = false;
 
     SwNodeOffset nEndIdx = rEndIdx.GetIndex();
     // TODO for multiple layouts there should be a loop here
-    SwNode* pNd = pDoc->GetNodes().FindPrvNxtFrameNode( rSttIdx,
-                    pDoc->GetNodes()[ nEndIdx-1 ],
-                    pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    SwNode* pNd = rDoc.GetNodes().FindPrvNxtFrameNode( rSttIdx,
+                    rDoc.GetNodes()[ nEndIdx-1 ],
+                    rDoc.getIDocumentLayoutAccess().GetCurrentLayout());
     if ( pNd )
     {
         bool bAfter = *pNd < rSttIdx;
@@ -2204,20 +2204,20 @@ void MakeFrames( SwDoc *pDoc, const SwNode &rSttIdx, const SwNode &rEndIdx )
                     if( !bTmpOldLock )
                         pTmp->UnlockJoin();
                 }
-                ::InsertCnt_( pUpper, pDoc, rSttIdx.GetIndex(),
+                ::InsertCnt_( pUpper, rDoc, rSttIdx.GetIndex(),
                               pFrame->IsInDocBody(), nEndIdx, pPrev, eMode );
             }
             else
             {
                 SwFrame* pPrv = bAfter ? pFrame : pFrame->GetPrev();
 
-                ::InsertCnt_( pUpper, pDoc, rSttIdx.GetIndex(), false,
+                ::InsertCnt_( pUpper, rDoc, rSttIdx.GetIndex(), false,
                               nEndIdx, pPrv, eMode );
                 // OD 23.06.2003 #108784# - correction: append objects doesn't
                 // depend on value of <bAllowMove>
                 if( !isFlyCreationSuppressed )
                 {
-                    const sw::SpzFrameFormats* pTable = pDoc->GetSpzFrameFormats();
+                    const sw::SpzFrameFormats* pTable = rDoc.GetSpzFrameFormats();
                     if( !pTable->empty() )
                         AppendAllObjs( pTable, pUpper );
                 }
@@ -2326,7 +2326,7 @@ void SwBorderAttrs::CalcTop_()
 {
     m_nTop = CalcTopLine() + m_rUL.GetUpper();
 
-    bool bGutterAtTop = m_rAttrSet.GetDoc()->getIDocumentSettingAccess().get(
+    bool bGutterAtTop = m_rAttrSet.GetDoc().getIDocumentSettingAccess().get(
         DocumentSettingId::GUTTER_AT_TOP);
     if (bGutterAtTop && m_xLR)
     {
@@ -3152,7 +3152,7 @@ SwPageFrame * InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
     assert(pUpper->IsRootFrame());
     assert(!pSibling || static_cast<SwLayoutFrame const*>(pUpper)->Lower() != pSibling); // currently no insert before 1st page
     SwPageFrame *pRet;
-    SwDoc *pDoc = static_cast<SwLayoutFrame*>(pUpper)->GetFormat()->GetDoc();
+    SwDoc& rDoc = static_cast<SwLayoutFrame*>(pUpper)->GetFormat()->GetDoc();
     if (bFirst)
     {
         if (rDesc.IsFirstShared())
@@ -3186,7 +3186,7 @@ SwPageFrame * InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
     {
         SwPageDesc *pTmpDesc = pSibling && pSibling->GetPrev() ?
                 static_cast<SwPageFrame*>(pSibling->GetPrev())->GetPageDesc() : &rDesc;
-        pRet = new SwPageFrame( pDoc->GetEmptyPageFormat(), pUpper, pTmpDesc );
+        pRet = new SwPageFrame( rDoc.GetEmptyPageFormat(), pUpper, pTmpDesc );
         SAL_INFO( "sw.pageframe", "InsertNewPage - insert empty p: " << pRet << " d: " << pTmpDesc );
         pRet->Paste( pUpper, pSibling );
         pRet->PreparePage( bFootnote );
@@ -3974,18 +3974,18 @@ SwFrame* GetFrameOfModify(SwRootFrame const*const pLayout, sw::BroadcastingModif
     return pMinFrame;
 }
 
-bool IsExtraData( const SwDoc *pDoc )
+bool IsExtraData( const SwDoc& rDoc )
 {
-    const SwLineNumberInfo &rInf = pDoc->GetLineNumberInfo();
+    const SwLineNumberInfo &rInf = rDoc.GetLineNumberInfo();
     if (rInf.IsPaintLineNumbers() ||
            rInf.IsCountInFlys() ||
            (static_cast<sal_Int16>(SwModule::get()->GetRedlineMarkPos()) != text::HoriOrientation::NONE &&
-            !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty()))
+            !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty()))
     {
         return true;
     }
 
-    const SwEditShell* pSh = pDoc->GetEditShell();
+    const SwEditShell* pSh = rDoc.GetEditShell();
     const SwViewOption* pViewOptions = pSh ? pSh->GetViewOptions() : nullptr;
     return pViewOptions && pViewOptions->IsShowOutlineContentVisibilityButton();
 }

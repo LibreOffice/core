@@ -842,7 +842,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         {
             // SdrObjects know their layer, consider that instead of the frame format.
             const IDocumentDrawModelAccess& iDocumentDrawModelAccess
-                = pFrameFormat->GetDoc()->getIDocumentDrawModelAccess();
+                = pFrameFormat->GetDoc().getIDocumentDrawModelAccess();
             bOpaque = pObj->GetLayer() != iDocumentDrawModelAccess.GetHellId()
                       && pObj->GetLayer() != iDocumentDrawModelAccess.GetHeaderFooterHellId()
                       && pObj->GetLayer() != iDocumentDrawModelAccess.GetInvisibleHellId();
@@ -1479,13 +1479,13 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
                 sValue = "margin";
                 break;
             case text::RelOrientation::PAGE_LEFT:
-                if (pFrameFormat->GetDoc()->GetPageDesc(0).GetUseOn() == UseOnPage::Mirror)
+                if (pFrameFormat->GetDoc().GetPageDesc(0).GetUseOn() == UseOnPage::Mirror)
                     sValue = "outsideMargin";
                 else
                     sValue = "leftMargin";
                 break;
             case text::RelOrientation::PAGE_RIGHT:
-                if (pFrameFormat->GetDoc()->GetPageDesc(0).GetUseOn() == UseOnPage::Mirror)
+                if (pFrameFormat->GetDoc().GetPageDesc(0).GetUseOn() == UseOnPage::Mirror)
                     sValue = "insideMargin";
                 else
                     sValue = "rightMargin";

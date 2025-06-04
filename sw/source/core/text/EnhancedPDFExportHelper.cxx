@@ -249,7 +249,7 @@ bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
         if (!rStyleName.isEmpty())
         {
             if (SwTableAutoFormat const*const pTableAF =
-                pTable->GetFrameFormat()->GetDoc()->GetTableStyles().FindAutoFormat(rStyleName))
+                pTable->GetFrameFormat()->GetDoc().GetTableStyles().FindAutoFormat(rStyleName))
             {
                 bRet |= pTableAF->HasHeaderRow();
             }

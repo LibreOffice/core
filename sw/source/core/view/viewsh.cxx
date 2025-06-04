@@ -336,7 +336,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
     if ( Imp()->HasPaintRegion() && Imp()->GetPaintRegion()->GetOrigin() != VisArea() )
         Imp()->DeletePaintRegion();
 
-    const bool bExtraData = ::IsExtraData( GetDoc() );
+    const bool bExtraData = ::IsExtraData( *GetDoc() );
 
     if ( !bIdleEnd )
     {

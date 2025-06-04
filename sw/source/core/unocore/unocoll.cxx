@@ -1001,7 +1001,7 @@ namespace
         static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
             rtl::Reference<SwXTextFrame> const xRet(
-                SwXTextFrame::CreateXTextFrame(*rFrameFormat.GetDoc(), &rFrameFormat));
+                SwXTextFrame::CreateXTextFrame(rFrameFormat.GetDoc(), &rFrameFormat));
             return uno::Any(uno::Reference<text::XTextFrame>(xRet));
         }
         static bool filter(const SwNode* const pNode) { return !pNode->IsNoTextNode(); };
@@ -1013,7 +1013,7 @@ namespace
         static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
             rtl::Reference<SwXTextGraphicObject> const xRet(
-                SwXTextGraphicObject::CreateXTextGraphicObject(*rFrameFormat.GetDoc(), &rFrameFormat));
+                SwXTextGraphicObject::CreateXTextGraphicObject(rFrameFormat.GetDoc(), &rFrameFormat));
             return uno::Any(uno::Reference<text::XTextContent>(xRet));
         }
         static bool filter(const SwNode* const pNode) { return pNode->IsGrfNode(); };
@@ -1025,7 +1025,7 @@ namespace
         static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
             rtl::Reference<SwXTextEmbeddedObject> const xRet(
-                SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rFrameFormat.GetDoc(), &rFrameFormat));
+                SwXTextEmbeddedObject::CreateXTextEmbeddedObject(rFrameFormat.GetDoc(), &rFrameFormat));
             return uno::Any(uno::Reference<text::XTextContent>(xRet));
         }
         static bool filter(const SwNode* const pNode) { return pNode->IsOLENode(); };

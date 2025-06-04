@@ -218,9 +218,9 @@ SwTable::~SwTable()
 {
     if( m_xRefObj.is() )
     {
-        SwDoc* pDoc = GetFrameFormat()->GetDoc();
-        if( !pDoc->IsInDtor() )         // then remove from the list
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( m_xRefObj.get() );
+        SwDoc& rDoc = GetFrameFormat()->GetDoc();
+        if( !rDoc.IsInDtor() )         // then remove from the list
+            rDoc.getIDocumentLinksAdministration().GetLinkManager().RemoveServer( m_xRefObj.get() );
 
         m_xRefObj->Closed();
     }
@@ -230,7 +230,7 @@ SwTable::~SwTable()
     pFormat->Remove(*this);               // remove
 
     if( !pFormat->HasWriterListeners() )
-        pFormat->GetDoc()->DelTableFrameFormat( pFormat );   // and delete
+        pFormat->GetDoc().DelTableFrameFormat( pFormat );   // and delete
 
     // Delete the pointers from the SortArray of the boxes. The objects
     // are preserved and are deleted by the lines/boxes arrays dtor.
@@ -1395,7 +1395,7 @@ SwTableBox* SwTable::GetTableBox( SwNodeOffset nSttIdx )
     if(!GetFrameFormat())
         return nullptr;
     SwTableBox* pRet = nullptr;
-    SwNodes& rNds = GetFrameFormat()->GetDoc()->GetNodes();
+    SwNodes& rNds = GetFrameFormat()->GetDoc().GetNodes();
     SwNodeOffset nIndex = nSttIdx + 1;
     SwContentNode* pCNd = nullptr;
     SwTableNode* pTableNd = nullptr;
@@ -1492,7 +1492,7 @@ SwTableLineFormat* SwTableLine::ClaimFrameFormat()
         {
             // found another SwTableLine that is a client of the current Format
             // create a new Format as a copy and use it for this object
-            SwTableLineFormat *pNewFormat = pRet->GetDoc()->MakeTableLineFormat();
+            SwTableLineFormat *pNewFormat = pRet->GetDoc().MakeTableLineFormat();
             *pNewFormat = *pRet;
 
             // register SwRowFrames that know me as clients at the new Format
@@ -1585,7 +1585,7 @@ bool SwTable::IsEmpty() const
 
 bool SwTable::HasDeletedRowOrCell() const
 {
-    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     if ( aRedlineTable.empty() )
         return false;
 
@@ -1609,7 +1609,7 @@ bool SwTable::HasDeletedRowOrCell() const
 
 bool SwTable::IsDeleted() const
 {
-    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     if ( aRedlineTable.empty() )
         return false;
 
@@ -1624,7 +1624,7 @@ bool SwTable::IsDeleted() const
 
 void SwTable::GatherFormulas(std::vector<SwTableBoxFormula*>& rvFormulas)
 {
-    GatherFormulas(*GetFrameFormat()->GetDoc(), rvFormulas);
+    GatherFormulas(GetFrameFormat()->GetDoc(), rvFormulas);
 }
 
 void SwTable::GatherFormulas(SwDoc& rDoc, std::vector<SwTableBoxFormula*>& rvFormulas)
@@ -1694,8 +1694,8 @@ void SwTable::Merge(const SwTable& rTable, SwHistory* pHistory)
 
 void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
 {
-    auto pDoc = GetFrameFormat()->GetDoc();
-    auto pFieldType = pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Table, OUString(), false);
+    SwDoc& rDoc = GetFrameFormat()->GetDoc();
+    auto pFieldType = rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Table, OUString(), false);
     if(!pFieldType)
         return;
     std::vector<SwFormatField*> vFields;
@@ -1778,7 +1778,7 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
     SwRedlineTable::size_type& rRedlinePos, bool bUpdateProperty ) const
 {
     SwRedlineTable::size_type nRet = SwRedlineTable::npos;
-    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
 
     // check table row property "HasTextChangesOnly", if it's defined and its
     // value is false, and all text content is in delete redlines, the row is deleted
@@ -1927,7 +1927,7 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
 
 SwRedlineTable::size_type SwTableLine::GetTableRedline() const
 {
-    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     const SwStartNode* pFirstBox = GetTabBoxes().front()->GetSttNd();
     const SwStartNode* pLastBox = GetTabBoxes().back()->GetSttNd();
 
@@ -1952,7 +1952,7 @@ bool SwTableLine::IsTracked(SwRedlineTable::size_type& rRedlinePos, bool bOnlyDe
    if ( nPos != SwRedlineTable::npos )
    {
        const SwRedlineTable& aRedlineTable =
-           GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+           GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
        if ( RedlineType::Delete == aRedlineTable[nPos]->GetType() ||
             ( !bOnlyDeleted && RedlineType::Insert == aRedlineTable[nPos]->GetType() ) )
            return true;
@@ -1979,7 +1979,7 @@ bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
 
 RedlineType SwTableLine::GetRedlineType() const
 {
-    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     if ( aRedlineTable.empty() )
         return RedlineType::None;
 
@@ -2098,7 +2098,7 @@ void SwTableBox::RemoveFromTable()
 
 SwTableBox::~SwTableBox()
 {
-    if (!GetFrameFormat()->GetDoc()->IsInDtor())
+    if (!GetFrameFormat()->GetDoc().IsInDtor())
     {
         RemoveFromTable();
     }
@@ -2120,7 +2120,7 @@ SwTableBoxFormat* SwTableBox::CheckBoxFormat( SwTableBoxFormat* pFormat )
         SwTableBox* pOther = SwIterator<SwTableBox,SwFormat>( *pFormat ).First();
         if( pOther )
         {
-            SwTableBoxFormat* pNewFormat = pFormat->GetDoc()->MakeTableBoxFormat();
+            SwTableBoxFormat* pNewFormat = pFormat->GetDoc().MakeTableBoxFormat();
             pNewFormat->LockModify();
             *pNewFormat = *pFormat;
 
@@ -2149,7 +2149,7 @@ SwTableBoxFormat* SwTableBox::ClaimFrameFormat()
             // Found another SwTableBox object
             // create a new Format as a copy and assign me to it
             // don't copy values and formulas
-            SwTableBoxFormat* pNewFormat = pRet->GetDoc()->MakeTableBoxFormat();
+            SwTableBoxFormat* pNewFormat = pRet->GetDoc().MakeTableBoxFormat();
             pNewFormat->LockModify();
             *pNewFormat = *pRet;
             pNewFormat->ResetFormatAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
@@ -2378,8 +2378,8 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
     if( NODE_OFFSET_MAX == nNdPos )
         return;
 
-    SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
-    SwTextNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTextNode();
+    SwDoc& rDoc = rBox.GetFrameFormat()->GetDoc();
+    SwTextNode* pTNd = rDoc.GetNodes()[ nNdPos ]->GetTextNode();
 
     // assign adjustment
     if( bChgAlign )
@@ -2456,10 +2456,10 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
             pTNd->DontExpandFormat( aResetIdx.GetIndex(), false, false );
         }
 
-        if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
+        if( !rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
         {
             SwPaM aTemp(*pTNd, 0, *pTNd, rOrig.getLength());
-            pDoc->getIDocumentRedlineAccess().DeleteRedline(aTemp, true, RedlineType::Any);
+            rDoc.getIDocumentRedlineAccess().DeleteRedline(aTemp, true, RedlineType::Any);
         }
 
         // preserve comments inside of the number by deleting number portions starting from the back
@@ -2481,10 +2481,10 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
         pTNd->EraseText( aIdx, n, SwInsertFlags::EMPTYEXPAND );
         pTNd->InsertText( rText, aIdx, SwInsertFlags::EMPTYEXPAND );
 
-        if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+        if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
         {
             SwPaM aTemp(*pTNd, 0, *pTNd, rText.getLength());
-            pDoc->getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(RedlineType::Insert, aTemp), true);
+            rDoc.getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(RedlineType::Insert, aTemp), true);
         }
     }
 
@@ -2505,9 +2505,9 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
     if( NODE_OFFSET_MAX == nNdPos )
         return;
 
-    SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
-    SwTextNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTextNode();
-    bool bChgAlign = pDoc->IsInsTableAlignNum();
+    SwDoc& rDoc = rBox.GetFrameFormat()->GetDoc();
+    SwTextNode* pTNd = rDoc.GetNodes()[ nNdPos ]->GetTextNode();
+    bool bChgAlign = rDoc.IsInsTableAlignNum();
 
     const Color * pCol = nullptr;
     if( getSwDefaultTextFormat() != nFormat )
@@ -2515,7 +2515,7 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
         // special text format:
         OUString sTmp;
         const OUString sText( pTNd->GetText() );
-        pDoc->GetNumberFormatter()->GetOutputString( sText, nFormat, sTmp, &pCol );
+        rDoc.GetNumberFormatter()->GetOutputString( sText, nFormat, sTmp, &pCol );
         if( sText != sTmp )
         {
             // exchange text
@@ -2609,7 +2609,7 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
     // is it newer or has the current been removed?
     if(pNewValue)
     {
-        if(GetDoc()->GetNumberFormatter()->IsTextFormat(nNewFormat))
+        if(GetDoc().GetNumberFormatter()->IsTextFormat(nNewFormat))
             nOldFormat = 0;
         else
         {
@@ -2630,7 +2630,7 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
     // !Text -> Text:
     //          - align left for horizontal alignment, if RIGHT
     //          - align top for vertical alignment, if BOTTOM is set
-    SvNumberFormatter* pNumFormatr = GetDoc()->GetNumberFormatter();
+    SvNumberFormatter* pNumFormatr = GetDoc().GetNumberFormatter();
     bool bNewIsTextFormat = pNumFormatr->IsTextFormat(nNewFormat);
 
     if((!bNewIsTextFormat && nOldFormat != nNewFormat) || pNewFormula)
@@ -2648,7 +2648,7 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
             if(NODE_OFFSET_MAX != nNdPos)
             {
                 sal_uInt32 nTmpFormatIdx = nNewFormat;
-                OUString aText(GetDoc()->GetNodes()[nNdPos] ->GetTextNode()->GetRedlineText());
+                OUString aText(GetDoc().GetNodes()[nNdPos] ->GetTextNode()->GetRedlineText());
                 aOrigText = aText;
                 if(aText.isEmpty())
                     bChgText = false;
@@ -2662,16 +2662,16 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
                     if(SvNumFormatType::PERCENT == pNumFormatr->GetType(nNewFormat))
                     {
                         sal_uInt32 nTmpFormat = 0;
-                        if(GetDoc()->IsNumberFormat(aText, nTmpFormat, fVal))
+                        if(GetDoc().IsNumberFormat(aText, nTmpFormat, fVal))
                         {
                             if(SvNumFormatType::NUMBER == pNumFormatr->GetType( nTmpFormat))
                                 aText += "%";
 
-                            bIsNumFormat = GetDoc()->IsNumberFormat(aText, nTmpFormatIdx, fVal);
+                            bIsNumFormat = GetDoc().IsNumberFormat(aText, nTmpFormatIdx, fVal);
                         }
                     }
                     else
-                        bIsNumFormat = GetDoc()->IsNumberFormat(aText, nTmpFormatIdx, fVal);
+                        bIsNumFormat = GetDoc().IsNumberFormat(aText, nTmpFormatIdx, fVal);
 
                     if(bIsNumFormat)
                     {
@@ -2735,7 +2735,7 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
 
         // across all boxes
         if (bChangeFormat)
-            ChgTextToNum(rBox, sNewText, pCol, GetDoc()->IsInsTableAlignNum());
+            ChgTextToNum(rBox, sNewText, pCol, GetDoc().IsInsTableAlignNum());
 
     }
     else if(bNewIsTextFormat && nOldFormat != nNewFormat)
@@ -2763,7 +2763,7 @@ void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
     }
     if(rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwAttrSetChange)
         return;
-    if(IsModifyLocked() || !GetDoc() || GetDoc()->IsInDtor())
+    if(IsModifyLocked() || GetDoc().IsInDtor())
     {
         SwFrameFormat::SwClientNotify(rMod, rHint);
         return;
@@ -2804,7 +2804,7 @@ void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
     // something changed and some BoxAttribute remained in the set!
     if( pNewFormat || pNewFormula || pNewVal )
     {
-        GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty(true, nullptr, SwNodeOffset(0));
+        GetDoc().getIDocumentFieldsAccess().SetFieldsDirty(true, nullptr, SwNodeOffset(0));
 
         if(SfxItemState::SET == GetItemState(RES_BOXATR_FORMAT, false) ||
            SfxItemState::SET == GetItemState(RES_BOXATR_VALUE, false) ||
@@ -2844,7 +2844,7 @@ bool SwTableBox::HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
         // Keep Tabs
         lcl_TabToBlankAtSttEnd( aText );
         rIsEmptyTextNd = aText.isEmpty();
-        SvNumberFormatter* pNumFormatr = GetFrameFormat()->GetDoc()->GetNumberFormatter();
+        SvNumberFormatter* pNumFormatr = GetFrameFormat()->GetDoc().GetNumberFormatter();
 
         if( const SwTableBoxNumFormat* pItem = GetFrameFormat()->GetItemIfSet( RES_BOXATR_FORMAT, false) )
         {
@@ -2853,7 +2853,7 @@ bool SwTableBox::HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
             if( !rIsEmptyTextNd && SvNumFormatType::PERCENT == pNumFormatr->GetType( rFormatIndex ))
             {
                 sal_uInt32 nTmpFormat = 0;
-                if( GetFrameFormat()->GetDoc()->IsNumberFormat( aText, nTmpFormat, rNum ) &&
+                if( GetFrameFormat()->GetDoc().IsNumberFormat( aText, nTmpFormat, rNum ) &&
                     SvNumFormatType::NUMBER == pNumFormatr->GetType( nTmpFormat ))
                     aText += "%";
             }
@@ -2861,7 +2861,7 @@ bool SwTableBox::HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
         else
             rFormatIndex = 0;
 
-        bRet = GetFrameFormat()->GetDoc()->IsNumberFormat( aText, rFormatIndex, rNum );
+        bRet = GetFrameFormat()->GetDoc().IsNumberFormat( aText, rFormatIndex, rNum );
     }
     else
         rIsEmptyTextNd = false;
@@ -2885,7 +2885,7 @@ bool SwTableBox::IsNumberChanged() const
             lcl_DelTabsAtSttEnd( sOldText );
 
             const Color* pCol = nullptr;
-            GetFrameFormat()->GetDoc()->GetNumberFormatter()->GetOutputString(
+            GetFrameFormat()->GetDoc().GetNumberFormatter()->GetOutputString(
                 pValue->GetValue(), pNumFormat->GetValue(), sNewText, &pCol );
 
             bRet = sNewText != sOldText ||
@@ -2988,7 +2988,7 @@ sal_uInt16 SwTableBox::IsFormulaOrValueBox() const
     if( SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_FORMULA, false ))
         nWhich = RES_BOXATR_FORMULA;
     else if( SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE, false ) &&
-            !pFormat->GetDoc()->GetNumberFormatter()->IsTextFormat(
+            !pFormat->GetDoc().GetNumberFormatter()->IsTextFormat(
                 pFormat->GetTableBoxNumFormat().GetValue() ))
         nWhich = RES_BOXATR_VALUE;
     else if( m_pStartNode && m_pStartNode->GetIndex() + 2 == m_pStartNode->EndOfSectionIndex()
@@ -3011,7 +3011,7 @@ void SwTableBox::ActualiseValueBox()
 
     const sal_uLong nFormatId = pFormatItem->GetValue();
     SwNodeOffset nNdPos = NODE_OFFSET_MAX;
-    SvNumberFormatter* pNumFormatr = pFormat->GetDoc()->GetNumberFormatter();
+    SvNumberFormatter* pNumFormatr = pFormat->GetDoc().GetNumberFormatter();
 
     if( !pNumFormatr->IsTextFormat( nFormatId ) &&
         NODE_OFFSET_MAX != (nNdPos = IsValidNumTextNd()) )
@@ -3029,7 +3029,7 @@ void SwTableBox::ActualiseValueBox()
 
 SwRedlineTable::size_type SwTableBox::GetRedline() const
 {
-    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     const SwStartNode *pSttNd = GetSttNd();
 
     if ( aRedlineTable.empty() || !pSttNd )
@@ -3070,7 +3070,7 @@ RedlineType SwTableBox::GetRedlineType() const
     SwRedlineTable::size_type nPos = GetRedline();
     if ( nPos != SwRedlineTable::npos )
     {
-        const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+        const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
         const SwRangeRedline* pRedline = aRedlineTable[ nPos ];
         if ( RedlineType::Delete == pRedline->GetType() ||
              RedlineType::Insert == pRedline->GetType() )

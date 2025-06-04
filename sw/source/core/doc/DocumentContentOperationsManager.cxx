@@ -3987,7 +3987,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             SwNodeIndex const end(rInsPos,
                 SwNodeOffset((!isRecreateEndNode || isAtStartOfSection)
                     ? 0 : +1));
-            ::MakeFrames(&rDest, aSavePos.GetNode(), end.GetNode());
+            ::MakeFrames(rDest, aSavePos.GetNode(), end.GetNode());
         }
     }
 }
