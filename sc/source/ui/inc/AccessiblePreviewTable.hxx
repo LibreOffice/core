@@ -21,17 +21,13 @@
 
 #include "AccessibleContextBase.hxx"
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
-#include <cppuhelper/implbase1.hxx>
 
 class ScPreviewShell;
 class ScPreviewTableInfo;
 
-typedef cppu::ImplHelper1< css::accessibility::XAccessibleTable>
-                    ScAccessiblePreviewTableImpl;
-
-class ScAccessiblePreviewTable :
-        public ScAccessibleContextBase,
-        public ScAccessiblePreviewTableImpl
+class ScAccessiblePreviewTable
+    : public cppu::ImplInheritanceHelper<ScAccessibleContextBase,
+                                         css::accessibility::XAccessibleTable>
 {
 public:
     ScAccessiblePreviewTable( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
@@ -49,15 +45,6 @@ public:
     //=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-    ///=====  XInterface  =====================================================
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType ) override;
-
-    virtual void SAL_CALL acquire() noexcept override;
-
-    virtual void SAL_CALL release() noexcept override;
 
     //=====  XAccessibleTable  ================================================
 
@@ -104,13 +91,6 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    //=====  XTypeProvider  ===================================================
-
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-        getTypes() override;
-
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 protected:
     virtual OUString createAccessibleDescription() override;

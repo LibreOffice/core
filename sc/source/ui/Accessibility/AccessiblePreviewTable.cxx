@@ -44,11 +44,12 @@ using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
-ScAccessiblePreviewTable::ScAccessiblePreviewTable( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-                            ScPreviewShell* pViewShell, sal_Int32 nIndex ) :
-    ScAccessibleContextBase( rxParent, AccessibleRole::TABLE ),
-    mpViewShell( pViewShell ),
-    mnIndex( nIndex )
+ScAccessiblePreviewTable::ScAccessiblePreviewTable(
+    const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+    ScPreviewShell* pViewShell, sal_Int32 nIndex)
+    : ImplInheritanceHelper(rxParent, AccessibleRole::TABLE)
+    , mpViewShell(pViewShell)
+    , mnIndex(nIndex)
 {
     if (mpViewShell)
         mpViewShell->AddAccessibilityObject(*this);
@@ -95,26 +96,6 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
     }
 
     ScAccessibleContextBase::Notify(rBC, rHint);
-}
-
-//=====  XInterface  =====================================================
-
-uno::Any SAL_CALL ScAccessiblePreviewTable::queryInterface( uno::Type const & rType )
-{
-    uno::Any aAny (ScAccessiblePreviewTableImpl::queryInterface(rType));
-    return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
-}
-
-void SAL_CALL ScAccessiblePreviewTable::acquire()
-    noexcept
-{
-    ScAccessibleContextBase::acquire();
-}
-
-void SAL_CALL ScAccessiblePreviewTable::release()
-    noexcept
-{
-    ScAccessibleContextBase::release();
 }
 
 //=====  XAccessibleTable  ================================================
@@ -534,18 +515,6 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServiceNa
     aSequence.getArray()[nOldSize] = "com.sun.star.table.AccessibleTableView";
 
     return aSequence;
-}
-
-//=====  XTypeProvider  ===================================================
-
-uno::Sequence< uno::Type > SAL_CALL ScAccessiblePreviewTable::getTypes()
-{
-    return comphelper::concatSequences(ScAccessiblePreviewTableImpl::getTypes(), ScAccessibleContextBase::getTypes());
-}
-
-uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 //====  internal  =========================================================
