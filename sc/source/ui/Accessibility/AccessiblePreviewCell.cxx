@@ -181,14 +181,6 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServiceNam
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
-//=====  XTypeProvider  =======================================================
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessiblePreviewCell::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 //====  internal  =========================================================
 
 AbsoluteScreenPixelRectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen()
