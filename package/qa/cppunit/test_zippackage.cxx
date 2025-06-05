@@ -483,6 +483,24 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDirectory)
     CPPUNIT_ASSERT_EQUAL(sal_Int64(899), xStream->getPropertyValue(u"Size"_ustr).get<sal_Int64>());
 }
 
+CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf166862)
+{
+    // This package is broken; but the actual issue was incorrect CRC calculation for an image
+    OUString aURL = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf166862.odt");
+    uno::Sequence<uno::Any> args{ uno::Any(aURL), uno::Any(beans::NamedValue{ u"RepairPackage"_ustr,
+                                                                              uno::Any(true) }) };
+
+    auto xMgr = m_xContext->getServiceManager();
+
+    auto xZip(xMgr->createInstanceWithArgumentsAndContext(ZipPackage, args, m_xContext)
+                  .queryThrow<container::XHierarchicalNameAccess>());
+    static constexpr OUString picURL = u"Pictures/1000000000000596000000AE0BDDB537.jpg"_ustr;
+    CPPUNIT_ASSERT(xZip->hasByHierarchicalName(picURL));
+    auto aPic = xZip->getByHierarchicalName(picURL).queryThrow<beans::XPropertySet>();
+    // Before the fix, this was 0: the size was reset because of unmatched CRC
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(43886), aPic->getPropertyValue(u"Size"_ustr).get<sal_Int64>());
+}
+
 //CPPUNIT_TEST_SUITE_REGISTRATION(...);
 //CPPUNIT_PLUGIN_IMPLEMENT();
 
