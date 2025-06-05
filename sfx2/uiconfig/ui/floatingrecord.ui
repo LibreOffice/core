@@ -39,7 +39,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:StopRecording">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="use-underline">True</property>

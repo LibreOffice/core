@@ -183,7 +183,6 @@
                 <child>
                   <object class="GtkToolButton" id="datarange">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="navigatorpanel|datarange|tooltip_text">Data Range</property>
                     <property name="icon-name">sc/res/na03.png</property>
                     <child internal-child="accessible">
@@ -200,7 +199,6 @@
                 <child>
                   <object class="GtkToolButton" id="start">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="navigatorpanel|start|tooltip_text">Start</property>
                     <property name="icon-name">sc/res/na05.png</property>
                     <child internal-child="accessible">
@@ -217,7 +215,6 @@
                 <child>
                   <object class="GtkToolButton" id="end">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="navigatorpanel|end|tooltip_text">End</property>
                     <property name="icon-name">sc/res/na06.png</property>
                     <child internal-child="accessible">
@@ -234,7 +231,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="contents">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="navigatorpanel|contents|tooltip_text">Contents</property>
                     <property name="icon-name">sc/res/na011.png</property>
                   </object>
@@ -259,7 +255,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="toggle">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="navigatorpanel|toggle|tooltip_text">Toggle</property>
                     <property name="icon-name">sc/res/na010.png</property>
                     <child internal-child="accessible">
@@ -276,7 +271,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="scenarios">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="navigatorpanel|scenarios|tooltip_text">Scenarios</property>
                     <property name="icon-name">sc/res/na07.png</property>
                     <child internal-child="accessible">
@@ -293,7 +287,6 @@
                 <child>
                   <object class="GtkMenuToolButton" id="dragmode">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
                     <property name="icon-name">sc/res/na09.png</property>
                     <child internal-child="accessible">

@@ -527,7 +527,7 @@
                 </items>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="odfversion-atkobject">
-                      <property name="AtkObject::accessible-description" translatable="yes" context="odfversion">Some companies or organizations may require ODF documents in the ODF 1.0/1.1/1.2 or ODF 1.3 format. You can select these format to save in the listbox. These older formats cannot store all new features, so the new format ODF 1.4 (Extended) is recommended where possible.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="odfversion">Some companies or organizations may require ODF documents in the ODF 1.0/1.1/1.2 or ODF 1.3 format. You can select these format to save in the listbox. These older formats cannot store all new features, so the new format ODF 1.4 (Extended) is recommended where possible.</property>
                   </object>
                 </child>
               </object>

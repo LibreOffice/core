@@ -51,7 +51,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="off">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|off|tooltip_text">Baseline Off</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw01.png</property>
@@ -80,7 +79,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="rotate">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|rotate|tooltip_text">Rotate</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw02.png</property>
@@ -99,7 +97,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="upright">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|upright|tooltip_text">Upright</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw03.png</property>
@@ -118,7 +115,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="hori">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|hori|tooltip_text">Slant Horizontal</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw04.png</property>
@@ -137,7 +133,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="vert">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|vert|tooltip_text">Slant Vertical</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw05.png</property>
@@ -186,7 +181,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="orientation">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|orientation|tooltip_text">Orientation</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw06.png</property>
@@ -214,7 +208,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="left">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|left|tooltip_text">Align Left</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw07.png</property>
@@ -233,7 +226,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="center">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|center|tooltip_text">Align Center</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw08.png</property>
@@ -252,7 +244,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="right">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|right|tooltip_text">Align Right</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw09.png</property>
@@ -271,7 +262,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="autosize">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|autosize|tooltip_text">AutoSize Text</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw010.png</property>
@@ -320,7 +310,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="contour">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|contour|tooltip_text">Contour</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw011.png</property>
@@ -338,7 +327,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="textcontour">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|textcontour|tooltip_text">Text Contour</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw012.png</property>
@@ -366,7 +354,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="noshadow">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|noshadow|tooltip_text">No Text Shadow</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw013.png</property>
@@ -385,7 +372,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="vertical">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|vertical|tooltip_text">Add Text Shadow</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw014.png</property>
@@ -404,7 +390,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id="slant">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="dockingfontwork|slant|tooltip_text">Slant Text Shadow</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">svx/res/fw015.png</property>

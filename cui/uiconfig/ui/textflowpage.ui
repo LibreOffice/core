@@ -393,226 +393,226 @@
         <property name="events">GDK_EXPOSURE_MASK</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
-          <!-- n-columns=2 n-rows=8 -->
+        <!-- n-columns=2 n-rows=8 -->
+        <child>
+          <!-- n-columns=2 n-rows=1 -->
+          <object class="GtkGrid" id="gridHyphenAcross">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
             <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="gridHyphenAcross">
+              <object class="GtkCheckButton" id="checkAcrossParagraph">
+                <property name="label" translatable="yes" context="textflowpage|checkAcrossParagraph">Last full line of paragraph</property>
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkCheckButton" id="checkAcrossParagraph">
-                    <property name="label" translatable="yes" context="textflowpage|checkAcrossParagraph">Last full line of paragraph</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="inconsistent">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="checkAcrossParagraph-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkAcrossParagraph">Deselect this check box, if you don't want to hyphenate across the last full line of paragraph, column, page and spread.</property>
-                      </object>
-                    </child>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="inconsistent">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkAcrossParagraph-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkAcrossParagraph">Deselect this check box, if you don't want to hyphenate across the last full line of paragraph, column, page and spread.</property>
                   </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="checkAcrossColumn">
-                    <property name="label" translatable="yes" context="textflowpage|checkAcrossColumn">Column</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="inconsistent">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="checkAcrossColumn-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkAcrossColumn">Deselect this check box, if you don't want to hyphenate across column, page and spread.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="checkAcrossPage">
-                    <property name="label" translatable="yes" context="textflowpage|checkAcrossPage">Page</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="inconsistent">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="checkAcrossPage-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkAcrossPage">Deselect this check box, if you don't want to hyphenate across page and spread.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="checkAcrossSpread">
-                    <property name="label" translatable="yes" context="textflowpage|checkAcrossSpread">Spread</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="inconsistent">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="checkAcrossSpread-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkAcrossSpread">Deselect this check box, if you don't want to hyphenate across spread.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="spinParagraphEndZone">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="activates-default">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustment10</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="labelParagraphEndZone">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="textflowpage|labelParagraphEndZone">Paragraph end _zone:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">spinParagraphEndZone</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="spinColumnEndZone">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="activates-default">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustment11</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="labelColumnEndZone">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="textflowpage|labelColumnEndZone">Column end _zone:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">spinColumnEndZone</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="spinPageEndZone">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="activates-default">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustment12</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="labelPageEndZone">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="textflowpage|labelPageEndZone">Page end _zone:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">spinPageEndZone</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="spinSpreadEndZone">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="activates-default">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustment13</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="labelSpreadEndZone">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="textflowpage|labelSpreadEndZone">Spread end _zone:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">spinSpreadEndZone</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="checkMoveLine">
-                    <property name="label" translatable="yes" context="textflowpage|checkMoveLine">Move Line</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="inconsistent">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="checkMoveLine-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkMoveLine">Deselect this check box, if you don't want to move the entire hyphenated line to the next text block.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">3</property>
-                    <property name="top-attach">3</property>
-                  </packing>
                 </child>
               </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
+            <child>
+              <object class="GtkCheckButton" id="checkAcrossColumn">
+                <property name="label" translatable="yes" context="textflowpage|checkAcrossColumn">Column</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="inconsistent">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkAcrossColumn-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkAcrossColumn">Deselect this check box, if you don't want to hyphenate across column, page and spread.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="checkAcrossPage">
+                <property name="label" translatable="yes" context="textflowpage|checkAcrossPage">Page</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="inconsistent">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkAcrossPage-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkAcrossPage">Deselect this check box, if you don't want to hyphenate across page and spread.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="checkAcrossSpread">
+                <property name="label" translatable="yes" context="textflowpage|checkAcrossSpread">Spread</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="inconsistent">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkAcrossSpread-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkAcrossSpread">Deselect this check box, if you don't want to hyphenate across spread.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="spinParagraphEndZone">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment10</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelParagraphEndZone">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="textflowpage|labelParagraphEndZone">Paragraph end _zone:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">spinParagraphEndZone</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="spinColumnEndZone">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment11</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelColumnEndZone">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="textflowpage|labelColumnEndZone">Column end _zone:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">spinColumnEndZone</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="spinPageEndZone">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment12</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelPageEndZone">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="textflowpage|labelPageEndZone">Page end _zone:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">spinPageEndZone</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="spinSpreadEndZone">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment13</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelSpreadEndZone">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="textflowpage|labelSpreadEndZone">Spread end _zone:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">spinSpreadEndZone</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="checkMoveLine">
+                <property name="label" translatable="yes" context="textflowpage|checkMoveLine">Move Line</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="inconsistent">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkMoveLine-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkMoveLine">Deselect this check box, if you don't want to move the entire hyphenated line to the next text block.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+          </object>
+        </child>
         <child type="label">
           <object class="GtkLabel" id="labelHyphenAcross">
             <property name="visible">True</property>
@@ -736,9 +736,9 @@
                   <relation type="label-for" target="spinPageNumber"/>
                 </accessibility>
                 <child internal-child="accessible">
-                    <object class="AtkObject" id="pagenumcb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumcb-atkobject">Assigns the page number that you specify to the page that follows the manual page break. This option is only available if you assign an arbitrary page style to the page that follows manual page break.</property>
-                    </object>
+                  <object class="AtkObject" id="pagenumcb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumcb-atkobject">Assigns the page number that you specify to the page that follows the manual page break. This option is only available if you assign an arbitrary page style to the page that follows manual page break.</property>
+                  </object>
                 </child>
               </object>
               <packing>

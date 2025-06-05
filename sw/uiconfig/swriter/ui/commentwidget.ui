@@ -21,7 +21,6 @@
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="expanded">True</property>
-        <property name="label-fill">True</property>
         <property name="resize-toplevel">True</property>
         <child>
           <!-- n-columns=1 n-rows=2 -->

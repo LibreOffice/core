@@ -220,7 +220,6 @@
                     <property name="receives-default">False</property>
                     <property name="tooltip-text" translatable="yes" context="duplicaterecordsdialog|column">Compare columns.</property>
                     <property name="use-underline">True</property>
-                    <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">row</property>
                   </object>
@@ -265,7 +264,6 @@
                     <property name="receives-default">False</property>
                     <property name="tooltip-text" translatable="yes" context="duplicaterecordsdialog|remove">Remove duplicate records.</property>
                     <property name="use-underline">True</property>
-                    <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">select</property>
                   </object>

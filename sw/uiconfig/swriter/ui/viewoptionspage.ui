@@ -916,7 +916,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">zoomlatest</property>
                         <child internal-child="accessible">
@@ -940,6 +939,7 @@
                         <property name="margin-start">12</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <property name="active">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="zoomoptimal-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomoptimal">Resizes the display to fit the width of the text in the document at the moment the command is started.</property>
@@ -1051,6 +1051,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="zoomcustom"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="zoomvalue-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|zoomvalue">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>

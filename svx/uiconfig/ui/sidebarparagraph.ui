@@ -95,7 +95,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:LeftPara">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -106,7 +105,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CenterPara">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -117,7 +115,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:RightPara">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -128,7 +125,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:JustifyPara">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -155,7 +151,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaLeftToRight">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -166,7 +161,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaRightToLeft">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -192,7 +186,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CellVertTop">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -203,7 +196,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CellVertCenter">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -214,7 +206,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CellVertBottom">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -270,7 +261,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaspaceIncrease">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -281,7 +271,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaspaceDecrease">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -405,7 +394,6 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:LineSpacing">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|setlinespacing|tooltip_text">Line Spacing</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -460,7 +448,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:IncrementIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|increaseindent|tooltip_text">Increase Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -472,7 +459,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:DecrementIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|decreaseindent|tooltip_text">Decrease Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -484,7 +470,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:HangingIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|hangingindent|tooltip_text">Switch to Hanging Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -844,7 +829,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -855,7 +839,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:DefaultNumbering">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -866,7 +849,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:SetOutline">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -893,7 +875,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:BackgroundColor">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -936,7 +917,7 @@
                 <child>
                   <object class="GtkToolbar" id="hyphenation">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|hyphenation|tooltip_text">Hyphenation</property>
                     <property name="hexpand">True</property>
                     <property name="toolbar-style">icons</property>
@@ -945,7 +926,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="HyphenateCaps">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="margin-start">1</property>
                         <property name="margin-end">1</property>
                         <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|caps">Hyphenate CAPS</property>
@@ -960,7 +940,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="HyphenateLastWord">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="margin-start">1</property>
                         <property name="margin-end">1</property>
                         <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|lastword">Hyphenate Last Paragraph Word</property>
@@ -975,7 +954,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="HyphenateLastFullLine">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="margin-start">1</property>
                         <property name="margin-end">1</property>
                         <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|lastfullline">Hyphenate Last Full Paragraph Line</property>
@@ -990,7 +968,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="HyphenateColumn">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="margin-start">1</property>
                         <property name="margin-end">1</property>
                         <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|column">Hyphenate Across Column</property>
@@ -1004,7 +981,6 @@
                     </child>
                     <child>
                       <object class="GtkToggleToolButton" id="HyphenatePage">
-                        <property name="can-focus">False</property>
                         <property name="margin-start">1</property>
                         <property name="margin-end">1</property>
                         <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|page">Hyphenate Across Page</property>
@@ -1018,7 +994,6 @@
                     </child>
                     <child>
                       <object class="GtkToggleToolButton" id="HyphenateSpread">
-                        <property name="can-focus">False</property>
                         <property name="margin-start">1</property>
                         <property name="margin-end">1</property>
                         <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|spread">Hyphenate Across Spread</property>
@@ -1033,7 +1008,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="Hyphenate">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="margin-start">1</property>
                         <property name="margin-end">1</property>
                         <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|hyphenation">Hyphenation</property>

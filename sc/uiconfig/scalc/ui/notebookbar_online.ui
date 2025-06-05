@@ -79,6 +79,7 @@
             <property name="top_attach">0</property>
           </packing>
           <object class="GtkToolbar" id="WeldedToolbar">
+            <property name="can-focus">True</property>
             <child>
               <object class="GtkMenuToolButton" id="NumberFormatCurrency">
                 <property name="visible">True</property>

@@ -48,13 +48,12 @@
             <child>
               <object class="GtkToolbar" id="searchoptionstoolbar">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <property name="can-focus">True</property>
                 <property name="toolbar-style">icons</property>
                 <property name="show-arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="searchoptions">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="quickfindpanel|moresearchoptions|tooltip_text">Search Options</property>
                     <property name="icon-name">sw/res/sr20006.png</property>
                     <child internal-child="accessible">
@@ -79,13 +78,12 @@
             <child>
               <object class="GtkToolbar" id="findandreplacetoolbar">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <property name="can-focus">True</property>
                 <property name="toolbar-style">icons</property>
                 <property name="show-arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id=".uno:SearchDialog">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

@@ -1197,6 +1197,7 @@
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="editable">False</property>
+                <property name="truncate-multiline">True</property>
                 <property name="placeholder-text" translatable="yes" context="optuserpage|signingkey">No key</property>
               </object>
               <packing>
@@ -1210,6 +1211,7 @@
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="editable">False</property>
+                <property name="truncate-multiline">True</property>
                 <property name="placeholder-text" translatable="yes" context="optuserpage|encryptionkey">No key</property>
               </object>
               <packing>

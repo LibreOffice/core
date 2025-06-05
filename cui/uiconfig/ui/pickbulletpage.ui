@@ -55,10 +55,10 @@
         <property name="receives-default">False</property>
         <property name="halign">end</property>
       </object>
-        <packing>
-          <property name="left-attach">1</property>
-          <property name="top-attach">2</property>
-        </packing>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
+      </packing>
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="PickBulletPage-atkobject">

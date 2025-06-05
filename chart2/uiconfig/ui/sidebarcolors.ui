@@ -18,7 +18,7 @@
         <child>
           <object class="GtkToolbar" id="colorpalettetype">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="valign">start</property>
             <property name="toolbar-style">icons</property>
             <property name="show-arrow">False</property>
@@ -26,7 +26,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:ChartColorPalette">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarcellappearance|bordertype|tooltip_text">Allow to select a color palette to apply to current chart data series.</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>

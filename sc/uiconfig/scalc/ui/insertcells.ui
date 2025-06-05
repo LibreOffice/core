@@ -189,6 +189,7 @@
                     <property name="secondary-icon-tooltip-text" translatable="yes" context="insertcells|number_of_rows">Number of rows</property>
                     <property name="adjustment">number_of_rows_adjustment</property>
                     <property name="numeric">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="number_of_rows-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="insertcells|extended_tip|number_of_rows">Specify the number of rows to insert.</property>
@@ -209,6 +210,7 @@
                     <property name="secondary-icon-tooltip-text" translatable="yes" context="insertcells|number_of_columns">Number of columns</property>
                     <property name="adjustment">number_of_columns_adjustment</property>
                     <property name="numeric">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="number_of_columns-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="insertcells|extended_tip|number_of_columns">Specify the number of columns to insert.</property>

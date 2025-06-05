@@ -7277,7 +7277,6 @@
                                 <child>
                                   <object class="GtkToolButton" id="Data-Calculate">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
                                     <property name="action_name">.uno:Calculate</property>
                                   </object>
                                   <packing>
@@ -7300,7 +7299,6 @@
                                 <child>
                                   <object class="GtkToolButton" id="Data-HandleDuplicateRecords">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
                                     <property name="action_name">.uno:HandleDuplicateRecords</property>
                                   </object>
                                   <packing>

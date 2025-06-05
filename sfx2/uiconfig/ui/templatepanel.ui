@@ -43,7 +43,6 @@
             <property name="icon_size">2</property>
             <child>
               <object class="GtkToggleToolButton" id="2">
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -53,7 +52,6 @@
             </child>
             <child>
               <object class="GtkToggleToolButton" id="1">
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -63,7 +61,6 @@
             </child>
             <child>
               <object class="GtkToggleToolButton" id="3">
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -73,7 +70,6 @@
             </child>
             <child>
               <object class="GtkToggleToolButton" id="4">
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -83,7 +79,6 @@
             </child>
             <child>
               <object class="GtkToggleToolButton" id="5">
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -93,7 +88,6 @@
             </child>
             <child>
               <object class="GtkToggleToolButton" id="6">
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -103,7 +97,6 @@
             </child>
             <child>
               <object class="GtkToggleToolButton" id="65535">
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -128,7 +121,6 @@
             <child>
               <object class="GtkToggleToolButton" id="watercan">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_FILL_FORMAT_MODE">Fill Format Mode</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">res/sc05554.png</property>
@@ -147,7 +139,6 @@
             <child>
               <object class="GtkToolButton" id="new">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_NEW_STYLE_FROM_SELECTION">New Style from Selection</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">res/sc05555.png</property>
@@ -164,7 +155,6 @@
             </child>
             <child>
               <object class="GtkMenuToolButton" id="newmenu">
-                <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
                 <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_NEW_STYLE_ACTION">Styles actions</property>
                 <property name="use-underline">True</property>
@@ -183,7 +173,6 @@
             <child>
               <object class="GtkToolButton" id="update">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_UPDATE_STYLE">Update Style</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">res/sc05556.png</property>

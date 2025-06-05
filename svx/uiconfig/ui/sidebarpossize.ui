@@ -213,7 +213,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:BringToFront">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -224,7 +223,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ObjectForwardOne">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -235,7 +233,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ObjectBackOne">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -246,7 +243,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:SendToBack">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -272,7 +268,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:SetObjectToBackground">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -283,7 +278,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:SetObjectToForeground">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -398,7 +392,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:FlipVertical">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarpossize|flipvertical|tooltip_text">Flip the selected object vertically.</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -410,7 +403,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:FlipHorizontal">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarpossize|fliphorizontal|tooltip_text">Flip the selected object horizontally.</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -490,7 +482,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:ObjectAlignLeft">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -501,7 +492,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:AlignCenter">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -512,7 +502,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:ObjectAlignRight">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -538,7 +527,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:AlignUp">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -549,7 +537,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:AlignMiddle">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -560,7 +547,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:AlignDown">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>

@@ -237,6 +237,7 @@
                         <property name="can-focus">True</property>
                         <property name="focus-on-click">False</property>
                         <property name="receives-default">True</property>
+                        <property name="draw-indicator">True</property>
                         <child>
                           <placeholder/>
                         </child>

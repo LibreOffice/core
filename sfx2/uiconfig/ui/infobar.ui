@@ -62,7 +62,6 @@
                         <child>
                           <object class="GtkToolButton" id="close">
                             <property name="visible">True</property>
-                            <property name="can-focus">False</property>
                             <property name="tooltip-text" translatable="yes" context="infobar|close|tooltip_text">Close Infobar</property>
                             <property name="icon-name">window-close-symbolic</property>
                           </object>

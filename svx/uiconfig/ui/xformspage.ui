@@ -31,7 +31,6 @@
         <child>
           <object class="GtkToolButton" id="additem">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="valign">start</property>
             <property name="label" translatable="yes" context="xformspage|TBI_ITEM_ADD">Add Item</property>
             <property name="use-underline">True</property>
@@ -45,7 +44,6 @@
         <child>
           <object class="GtkToolButton" id="addelement">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="valign">start</property>
             <property name="label" translatable="yes" context="xformspage|TBI_ITEM_ADD_ELEMENT">Add Element</property>
             <property name="use-underline">True</property>
@@ -59,7 +57,6 @@
         <child>
           <object class="GtkToolButton" id="addattribute">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="valign">start</property>
             <property name="label" translatable="yes" context="xformspage|TBI_ITEM_ADD_ATTRIBUTE">Add Attribute</property>
             <property name="use-underline">True</property>
@@ -73,7 +70,6 @@
         <child>
           <object class="GtkToolButton" id="edit">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="valign">start</property>
             <property name="label" translatable="yes" context="xformspage|TBI_ITEM_EDIT">Edit</property>
             <property name="use-underline">True</property>
@@ -97,7 +93,6 @@
         <child>
           <object class="GtkToolButton" id="delete">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="valign">start</property>
             <property name="label" translatable="yes" context="xformspage|TBI_ITEM_REMOVE">Delete</property>
             <property name="use-underline">True</property>

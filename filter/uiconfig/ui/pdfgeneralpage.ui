@@ -698,7 +698,6 @@
               <object class="GtkGrid" id="forms_grid">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="double-buffered">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
                 <property name="row-spacing">3</property>
@@ -707,7 +706,6 @@
                   <object class="GtkGrid" id="forms_options_grid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="double-buffered">False</property>
                     <property name="margin-start">18</property>
                     <property name="hexpand">True</property>
                     <property name="row-spacing">6</property>

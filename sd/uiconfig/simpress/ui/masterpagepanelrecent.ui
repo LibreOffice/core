@@ -10,7 +10,7 @@
       <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
-    </object>
+  </object>
   <object class="GtkBox" id="MasterPagePanel">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -41,7 +41,7 @@
                 <property name="AtkObject::accessible-description" translatable="yes" context="masterpagerecentpanel|extended_tip|masterpagerecent_icons">Select recently used master slide.</property>
               </object>
             </child>
-        </object>
+          </object>
         </child>
       </object>
       <packing>

@@ -111,12 +111,11 @@
         <child>
           <object class="GtkToolbar" id="toolbar">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="toolbar-style">icons</property>
             <child>
               <object class="GtkToggleToolButton" id="paragraphstyles">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="paragraph_style_toggle_btn|tooltip_text">Paragraph Styles</property>
                 <property name="use-underline">True</property>
               </object>
@@ -128,7 +127,6 @@
             <child>
               <object class="GtkToggleToolButton" id="characterstyles">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="character_style_toggle_btn|tooltip_text">Character Styles</property>
                 <property name="use-underline">True</property>
               </object>
@@ -140,7 +138,6 @@
             <child>
               <object class="GtkToggleToolButton" id="directformatting">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="direct_formatting_toggle_btn|tooltip_text">Direct Formatting</property>
                 <property name="use-underline">True</property>
               </object>

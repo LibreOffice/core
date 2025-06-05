@@ -229,7 +229,6 @@
                         <child>
                           <object class="GtkToolButton" id="contenttoggle">
                             <property name="visible">True</property>
-                            <property name="can-focus">False</property>
                             <property name="tooltip-text" translatable="yes" context="navigatorpanel|contenttoggle|tooltip_text">Toggle Master View</property>
                             <property name="icon-name">sw/res/sc20244.png</property>
                             <child internal-child="accessible">
@@ -309,7 +308,6 @@
                         <child>
                           <object class="GtkToolButton" id=".uno:ScrollToPrevious">
                             <property name="visible">True</property>
-                            <property name="can-focus">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -319,7 +317,6 @@
                         <child>
                           <object class="GtkToolButton" id=".uno:ScrollToNext">
                             <property name="visible">True</property>
-                            <property name="can-focus">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -348,9 +345,9 @@
                                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|gotopage|tooltip_text">Go to page</property>
                                 <property name="width-chars">3</property>
                                 <property name="max-width-chars">3</property>
-                                <property name="input-purpose">number</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="numeric">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="gotopage-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|gotopage|accessible_name">Go to page</property>
@@ -386,7 +383,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="root">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="navigatorpanel|root|tooltip_text">Content Navigation View</property>
                         <property name="icon-name">sw/res/sc20234.png</property>
                         <child internal-child="accessible">
@@ -414,7 +410,6 @@
                     <child>
                       <object class="GtkToolButton" id="header">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="navigatorpanel|header|tooltip_text">Header</property>
                         <property name="icon-name">sw/res/sc20179.png</property>
                         <child internal-child="accessible">
@@ -432,7 +427,6 @@
                     <child>
                       <object class="GtkToolButton" id="footer">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="navigatorpanel|footer|tooltip_text">Footer</property>
                         <property name="icon-name">sw/res/sc20177.png</property>
                         <child internal-child="accessible">
@@ -450,7 +444,6 @@
                     <child>
                       <object class="GtkToolButton" id="anchor">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="navigatorpanel|anchor|tooltip_text">Anchor&lt;-&gt;Text</property>
                         <property name="icon-name">sw/res/sc20182.png</property>
                         <child internal-child="accessible">
@@ -468,7 +461,6 @@
                     <child>
                       <object class="GtkToolButton" id="reminder">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="navigatorpanel|reminder|tooltip_text">Set Reminder</property>
                         <property name="icon-name">sw/res/sc20183.png</property>
                         <child internal-child="accessible">
@@ -496,7 +488,6 @@
                     <child>
                       <object class="GtkMenuToolButton" id="headings">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="navigatorpanel|headings|tooltip_text">Show Up to Outline Level</property>
                         <property name="icon-name">sw/res/sc20236.png</property>
                         <child internal-child="accessible">
@@ -532,7 +523,6 @@
                         <child>
                           <object class="GtkToggleToolButton" id="listbox">
                             <property name="visible">True</property>
-                            <property name="can-focus">False</property>
                             <property name="tooltip-text" translatable="yes" context="navigatorpanel|listbox|tooltip_text">List Box On/Off</property>
                             <property name="icon-name">sw/res/sc20233.png</property>
                             <child internal-child="accessible">
@@ -579,7 +569,6 @@
                             <child>
                               <object class="GtkToolButton" id="promote">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|HeadingsContentFunctionButtonsToolbar|promote|tooltip_text">Promote Outline Level</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
@@ -593,7 +582,6 @@
                             <child>
                               <object class="GtkToolButton" id="demote">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|HeadingsContentFunctionButtonsToolbar|demote|tooltip_text">Demote Outline Level</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
@@ -607,7 +595,6 @@
                             <child>
                               <object class="GtkToolButton" id="chapterup">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|HeadingsContentFunctionButtonsToolbar|chaptermoveup|tooltip_text">Move Heading Up</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
@@ -621,7 +608,6 @@
                             <child>
                               <object class="GtkToolButton" id="chapterdown">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|HeadingsContentFunctionButtonsToolbar|chaptermovedown|tooltip_text">Move Heading Down</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
@@ -665,7 +651,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:TableDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -677,7 +662,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:AutoFormat">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -689,7 +673,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:DeleteTable">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -731,7 +714,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:FrameDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -773,7 +755,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:GraphicDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -815,7 +796,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:FrameDialog-more">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -857,7 +837,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:EditBookmark">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -899,7 +878,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:EditRegion">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -941,7 +919,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:OpenHyperlinkOnCursor">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -953,7 +930,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:EditHyperlink">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1010,7 +986,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:UpdateAllIndexes">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1037,7 +1012,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:InsertMultiIndex">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1049,7 +1023,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:RemoveTableOf">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1076,7 +1049,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:DeleteAllNotes">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1133,7 +1105,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:InsertCaptionDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1160,7 +1131,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:UpdateFields">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1187,7 +1157,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:FieldDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1214,7 +1183,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:FootnoteDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1256,7 +1224,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:EndnoteDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1298,7 +1265,6 @@
                             <child>
                               <object class="GtkToolButton" id="delete">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|DeleteFunctionButtonToolbar|delete|tooltip_text">Delete</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
@@ -1434,7 +1400,6 @@
             <child>
               <object class="GtkToggleToolButton" id="globaltoggle">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|globaltoggle|tooltip_text">Toggle Master View</property>
                 <property name="icon-name">sw/res/sc20244.png</property>
                 <child internal-child="accessible">
@@ -1461,7 +1426,6 @@
             <child>
               <object class="GtkToolButton" id="edit">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|edit|tooltip_text">Edit</property>
                 <property name="icon-name">sw/res/sc20245.png</property>
                 <child internal-child="accessible">
@@ -1479,7 +1443,6 @@
             <child>
               <object class="GtkMenuToolButton" id="update">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|update|tooltip_text">Update</property>
                 <property name="icon-name">sw/res/sc20246.png</property>
                 <child internal-child="accessible">
@@ -1497,7 +1460,6 @@
             <child>
               <object class="GtkMenuToolButton" id="insert">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|insert|tooltip_text">Insert</property>
                 <property name="icon-name">sw/res/sc20247.png</property>
                 <child internal-child="accessible">
@@ -1525,7 +1487,6 @@
             <child>
               <object class="GtkToggleToolButton" id="save">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|save|tooltip_text">Save Contents as well</property>
                 <property name="icon-name">sw/res/sc20248.png</property>
                 <child internal-child="accessible">
@@ -1553,7 +1514,6 @@
             <child>
               <object class="GtkToolButton" id="moveup">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|moveup|tooltip_text">Move Up</property>
                 <property name="icon-name">sw/res/sc20174.png</property>
                 <child internal-child="accessible">
@@ -1571,7 +1531,6 @@
             <child>
               <object class="GtkToolButton" id="movedown">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="navigatorpanel|movedown|tooltip_text">Move Down</property>
                 <property name="icon-name">sw/res/sc20171.png</property>
                 <child internal-child="accessible">

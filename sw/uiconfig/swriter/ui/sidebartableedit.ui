@@ -78,7 +78,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:InsertRowsBefore">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -89,7 +88,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:InsertRowsAfter">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -100,7 +98,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:InsertColumnsBefore">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -111,7 +108,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:InsertColumnsAfter">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -149,7 +145,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:EntireCell">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -160,7 +155,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:EntireRow">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -171,7 +165,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:EntireColumn">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -182,7 +175,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:SelectTable">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -262,7 +254,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:SetMinimalRowHeight">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -273,7 +264,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:SetOptimalRowHeight">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -284,7 +274,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:DistributeRows">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -308,7 +297,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:SetMinimalColumnWidth">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -319,7 +307,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:SetOptimalColumnWidth">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -330,7 +317,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:DistributeColumns">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -368,7 +354,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:DeleteRows">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -379,7 +364,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:DeleteColumns">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -390,7 +374,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:DeleteTable">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -428,7 +411,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:MergeCells">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -439,7 +421,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:SplitCell">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -450,7 +431,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:SplitTable">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -564,7 +544,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:TableCellBackgroundColor">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -575,7 +554,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:SetBorderStyle">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -586,7 +564,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:InsertFormula">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>

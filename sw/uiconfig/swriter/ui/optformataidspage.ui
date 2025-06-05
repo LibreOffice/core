@@ -949,7 +949,6 @@
                     <property name="halign">start</property>
                     <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
-                    <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">rbTextBoundariesCrop</property>
                     <child internal-child="accessible">
