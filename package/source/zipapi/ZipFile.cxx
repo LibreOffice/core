@@ -1943,12 +1943,13 @@ sal_Int32 ZipFile::getCRC( sal_Int64 nOffset, sal_Int64 nSize )
     std::vector<sal_Int8> aBuffer(nBlockSize);
 
     aGrabber.seek( nOffset );
-    sal_Int32 nRead;
-    for (sal_Int64 ind = 0;
-         (nRead = aGrabber.readBytes( aBuffer.data(), nBlockSize )) && ind * nBlockSize < nSize;
-         ++ind)
+    sal_Int64 nRead = 0;
+    while (nRead < nSize)
     {
-        aCRC.updateSegment(aBuffer.data(), nRead);
+        sal_Int64 nToRead = std::min(nSize - nRead, nBlockSize);
+        sal_Int64 nReadThisTime = aGrabber.readBytes(aBuffer.data(), nToRead);
+        aCRC.updateSegment(aBuffer.data(), nReadThisTime);
+        nRead += nReadThisTime;
     }
 
     return aCRC.getValue();
