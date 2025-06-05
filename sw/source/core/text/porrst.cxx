@@ -654,15 +654,14 @@ void SwHiddenTextPortion::Paint( const SwTextPaintInfo & rInf) const
 {
 #ifdef DBG_UTIL
     OutputDevice* pOut = const_cast<OutputDevice*>(rInf.GetOut());
-    Color aCol( rInf.GetOpt().GetFieldShadingsColor() );
-    Color aOldColor( pOut->GetFillColor() );
-    pOut->SetFillColor( aCol );
+    pOut->Push(vcl::PushFlags::FILLCOLOR);
+    pOut->SetFillColor( rInf.GetOpt().GetFieldShadingsColor() );
     Point aPos( rInf.GetPos() );
     aPos.AdjustY( -150 );
     aPos.AdjustX( -25 );
     SwRect aRect( aPos, Size( 100, 200 ) );
     pOut->DrawRect( aRect.SVRect() );
-    pOut->SetFillColor( aOldColor );
+    pOut->Pop();
 #else
     (void)rInf;
 #endif

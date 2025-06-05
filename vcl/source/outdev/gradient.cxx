@@ -146,10 +146,10 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 
     if( mpAlphaVDev )
     {
-        const Color aFillCol( mpAlphaVDev->GetFillColor() );
+        mpAlphaVDev->Push(vcl::PushFlags::FILLCOLOR);
         mpAlphaVDev->SetFillColor( COL_ALPHA_OPAQUE );
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
-        mpAlphaVDev->SetFillColor( aFillCol );
+        mpAlphaVDev->Pop();
     }
 }
 

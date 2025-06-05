@@ -1214,11 +1214,8 @@ void SwPagePreviewLayout::PaintSelectMarkAtPage(vcl::RenderContext& rRenderConte
 {
     OutputDevice* pOutputDev = &rRenderContext;
     MapMode aMapMode( pOutputDev->GetMapMode() );
-    // save mapping mode of output device
-    MapMode aSavedMapMode = aMapMode;
-    // save fill and line color of output device
-    Color aFill( pOutputDev->GetFillColor() );
-    Color aLine( pOutputDev->GetLineColor() );
+    // save fill and line color and mapping mode of output device
+    pOutputDev->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR | vcl::PushFlags::MAPMODE);
 
     // determine selection mark color
     Color aSelPgLineColor(117, 114, 106);
@@ -1253,12 +1250,8 @@ void SwPagePreviewLayout::PaintSelectMarkAtPage(vcl::RenderContext& rRenderConte
     aRect = pOutputDev->PixelToLogic( aRect );
     pOutputDev->DrawRect( aRect );
 
-    // reset fill and line color of output device
-    pOutputDev->SetFillColor( aFill );
-    pOutputDev->SetLineColor( aLine );
-
-    // reset mapping mode of output device
-    pOutputDev->SetMapMode( aSavedMapMode );
+    // reset fill and line color and mapping mode of output device
+    pOutputDev->Pop();
 }
 
 /** paint to mark new selected page
