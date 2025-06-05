@@ -20,6 +20,7 @@
 #pragma once
 
 #include "AccessibleCellBase.hxx"
+#include "AccessiblePreviewTable.hxx"
 
 class ScPreviewShell;
 
@@ -31,10 +32,9 @@ namespace accessibility
 class ScAccessiblePreviewCell : public ScAccessibleCellBase
 {
 public:
-    //=====  internal  ========================================================
-    ScAccessiblePreviewCell(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        ScPreviewShell* pViewShell, const ScAddress& rCellAddress, sal_Int32 nIndex );
+    ScAccessiblePreviewCell(const rtl::Reference<ScAccessiblePreviewTable>& rParent,
+                            ScPreviewShell* pViewShell, const ScAddress& rCellAddress,
+                            sal_Int32 nIndex);
 
 protected:
     virtual ~ScAccessiblePreviewCell() override;
