@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 #include <o3tl/string_view.hxx>
 
 class Test : public SwModelTestBase
@@ -468,6 +469,7 @@ CPPUNIT_TEST_FIXTURE(Test, testObjectCrossReference)
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(
         xTextFieldsSupplier->getTextFields());
+    xFieldsAccess.queryThrow<util::XRefreshable>()->refresh();
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     CPPUNIT_ASSERT(xFields->hasMoreElements());
 

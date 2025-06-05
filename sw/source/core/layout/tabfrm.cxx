@@ -1119,6 +1119,10 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     // and compare with the available height
     SwTwips nRemainingSpaceForLastRow = aRectFnSet.YDiff(nCutPos, aRectFnSet.GetPrtTop(*this));
     nRemainingSpaceForLastRow -= aRectFnSet.GetBottomMargin(*this);
+
+    if (nRemainingSpaceForLastRow <= 0)
+        return false; // upper has no space for this table at all
+
     auto getRemainingAfter = [aRectFnSet, nAvailable = nRemainingSpaceForLastRow,
                               nFirstRowTop = aRectFnSet.GetTop(pRow->getFrameArea())](SwFrame* p)
     { return nAvailable + (p ? aRectFnSet.BottomDist(p->getFrameArea(), nFirstRowTop) : 0); };
