@@ -319,8 +319,7 @@ void AquaSalGraphics::UpdateWindow( NSRect& rRect )
     CGImageRef img = nullptr;
     CGPoint aImageOrigin = CGPointMake(0, 0);
     bool bImageFlipped = false;
-#if HAVE_FEATURE_SKIA
-    if (SkiaHelper::isVCLSkiaEnabled())
+    assert(SkiaHelper::isVCLSkiaEnabled() && "macos requires skia");
     {
         // tdf#159175 no CGLayer is needed for an NSWindow when using Skia
         // Get a CGImageRef directly from the Skia/Raster surface and draw
@@ -331,10 +330,6 @@ void AquaSalGraphics::UpdateWindow( NSRect& rRect )
         if (pBackend)
             img = pBackend->createCGImageFromRasterSurface(rRect, aImageOrigin, bImageFlipped);
     }
-    else
-#else
-    (void)rRect;
-#endif
     if (maShared.maLayer.isSet())
     {
         maShared.applyXorContext();

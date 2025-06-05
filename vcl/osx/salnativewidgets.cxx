@@ -723,11 +723,10 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
 
                 [pBox release];
 
-#if HAVE_FEATURE_SKIA
                 // tdf#164428 Skia/Metal needs flush after drawing progress bar
-                if (SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
+                assert(SkiaHelper::isVCLSkiaEnabled() && "macos requires skia");
+                if (SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
                     mpFrame->mbForceFlushProgressBar = true;
-#endif
 
                 bOK = true;
             }

@@ -776,7 +776,6 @@ static NSString* getCurrentSelection()
 
         updateMenuBarVisibility( mpFrame );
 
-#if HAVE_FEATURE_SKIA
         // Related: tdf#128186 Let vcl use the CAMetalLayer's hidden property
         // to skip the fix for tdf#152703 in external/skia/macosmetal.patch.1
         // and create a new CAMetalLayer when the window resizes. When using
@@ -784,7 +783,8 @@ static NSString* getCurrentSelection()
         // of native full screen mode causes the Skia/Metal surface to be
         // drawn at the wrong window position which results in a noticeable
         // flicker.
-        if( SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster )
+        assert( SkiaHelper::isVCLSkiaEnabled() && "macos requires skia" );
+        if( SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster )
         {
             if( [mpFrame->getNSView() wantsLayer] )
             {
@@ -793,7 +793,6 @@ static NSString* getCurrentSelection()
                     [pLayer setHidden: YES];
             }
         }
-#endif
     }
 }
 
@@ -817,7 +816,6 @@ static NSString* getCurrentSelection()
     (void)pNotification;
     SolarMutexGuard aGuard;
 
-#if HAVE_FEATURE_SKIA
     // Related: tdf#128186 Let vcl use the CAMetalLayer's hidden property
     // to skip the fix for tdf#152703 in external/skia/macosmetal.patch.1
     // and create a new CAMetalLayer when the window resizes. When using
@@ -825,7 +823,8 @@ static NSString* getCurrentSelection()
     // of native full screen mode causes the Skia/Metal surface to be
     // drawn at the wrong window position which results in a noticeable
     // flicker.
-    if( AquaSalFrame::isAlive( mpFrame ) && SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster )
+    assert( SkiaHelper::isVCLSkiaEnabled() && "macos requires skia" );
+    if( AquaSalFrame::isAlive( mpFrame ) && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster )
     {
         if( [mpFrame->getNSView() wantsLayer] )
         {
@@ -834,7 +833,6 @@ static NSString* getCurrentSelection()
                 [pLayer setHidden: YES];
         }
     }
-#endif
 }
 
 -(void)windowDidExitFullScreen: (NSNotification*)pNotification

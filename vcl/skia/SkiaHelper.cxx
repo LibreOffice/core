@@ -424,8 +424,17 @@ static bool initVCLSkiaEnabled()
      *  * SAL_DISABLESKIA avoids the use of Skia regardless of any option
      */
 
+    bool bSalDisableSkia = getenv("SAL_DISABLESKIA") != nullptr;
+#ifdef MACOSX
+    if (bSalDisableSkia)
+    {
+        SAL_WARN("vcl", "macOS requires Skia, so ignoring SAL_DISABLESKIA");
+        bSalDisableSkia = false;
+    }
+#endif
+
     bool bRet = false;
-    if (supportsVCLSkia() && getenv("SAL_DISABLESKIA") == nullptr)
+    if (supportsVCLSkia() && !bSalDisableSkia)
     {
         const bool bForceSkia = getenv("SAL_FORCESKIA") != nullptr
                                 || officecfg::Office::Common::VCL::ForceSkia::get();
@@ -434,8 +443,12 @@ static bool initVCLSkiaEnabled()
         // If not forced, don't enable in safe mode
         if (!bRet && !Application::IsSafeModeEnabled())
         {
+#ifdef MACOSX
+            bRet = true; // macOS can __only__ render via skia
+#else
             bRet = getenv("SAL_ENABLESKIA") != nullptr
                    || officecfg::Office::Common::VCL::UseSkia::get();
+#endif
         }
 
         if (bRet)
