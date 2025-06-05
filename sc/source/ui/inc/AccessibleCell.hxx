@@ -24,6 +24,7 @@
 #include "viewdata.hxx"
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>

@@ -46,16 +46,13 @@ using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
-ScAccessibleCellBase::ScAccessibleCellBase(
-        const uno::Reference<XAccessible>& rxParent,
-        ScDocument* pDoc,
-        const ScAddress& rCellAddress,
-        sal_Int64 nIndex)
-    :
-    ScAccessibleContextBase(rxParent, AccessibleRole::TABLE_CELL),
-    maCellAddress(rCellAddress),
-    mpDoc(pDoc),
-    mnIndex(nIndex)
+ScAccessibleCellBase::ScAccessibleCellBase(const uno::Reference<XAccessible>& rxParent,
+                                           ScDocument* pDoc, const ScAddress& rCellAddress,
+                                           sal_Int64 nIndex)
+    : ImplInheritanceHelper(rxParent, AccessibleRole::TABLE_CELL)
+    , maCellAddress(rCellAddress)
+    , mpDoc(pDoc)
+    , mnIndex(nIndex)
 {
 }
 
@@ -164,26 +161,6 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
     return nColor;
 }
 
-    //=====  XInterface  =====================================================
-
-uno::Any SAL_CALL ScAccessibleCellBase::queryInterface( uno::Type const & rType )
-{
-    uno::Any aAny (ScAccessibleCellBaseImpl::queryInterface(rType));
-    return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
-}
-
-void SAL_CALL ScAccessibleCellBase::acquire()
-    noexcept
-{
-    ScAccessibleContextBase::acquire();
-}
-
-void SAL_CALL ScAccessibleCellBase::release()
-    noexcept
-{
-    ScAccessibleContextBase::release();
-}
-
     //=====  XAccessibleContext  ==============================================
 
 sal_Int64
@@ -270,19 +247,6 @@ uno::Any SAL_CALL
 OUString SAL_CALL ScAccessibleCellBase::getImplementationName()
 {
     return u"ScAccessibleCellBase"_ustr;
-}
-
-    //=====  XTypeProvider  ===================================================
-
-uno::Sequence< uno::Type > SAL_CALL ScAccessibleCellBase::getTypes()
-{
-    return comphelper::concatSequences(ScAccessibleCellBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
-}
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleCellBase::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 bool ScAccessibleCellBase::IsEditable(sal_Int64 nParentStates)
