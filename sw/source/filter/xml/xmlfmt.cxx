@@ -995,6 +995,14 @@ void SwXMLMasterStylesContext_Impl::endFastElement(sal_Int32 )
 SvXMLImportContext *SwXMLImport::CreateStylesContext(
         bool bAuto )
 {
+    // tdf#166850 this only worked in 24.2.4..24.2.7 and broke in 24.8.0
+    // anyway but must *not* be applied to fixed 25.2.x or later
+    if (isGeneratorVersionOlderThan(SvXMLImport::AOO_4x, SvXMLImport::LO_248)
+        && !isGeneratorVersionOlderThan(SvXMLImport::AOO_4x, SvXMLImport::LO_242))
+    {
+        getDoc()->SetInXMLImport242(true);
+    }
+
     SvXMLStylesContext *pContext = new SwXMLStylesContext_Impl( *this, bAuto );
     if( bAuto )
         SetAutoStyles( pContext );

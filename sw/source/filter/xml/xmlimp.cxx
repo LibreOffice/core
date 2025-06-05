@@ -668,6 +668,7 @@ void SwXMLImport::endDocument()
         assert(pDoc->IsInXMLImport());
         pDoc->SetInReading(false);
         pDoc->SetInXMLImport(false);
+        pDoc->SetInXMLImport242(false);
     }
 
     SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();

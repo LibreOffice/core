@@ -319,6 +319,7 @@ private:
     bool mbInWriting : 1; //< TRUE: Document is in the process of being written.
     bool mbInMailMerge           : 1;    //< TRUE: Document is in the process of being written by mail merge.
     bool mbInXMLImport           : 1;    //< TRUE: During xml import, attribute portion building is not necessary.
+    bool mbInXMLImport242        : 1 = false; //< TRUE: During xml import, apply workaround for style-ref field
     bool mbInWriterfilterImport  : 1;    //< TRUE: writerfilter import (DOCX,RTF)
     bool mbUpdateTOX             : 1;    //< TRUE: After loading document, update TOX.
     bool mbInLoadAsynchron       : 1;    //< TRUE: Document is in the process of being loaded asynchronously.
@@ -989,6 +990,8 @@ public:
 
     bool IsInXMLImport() const { return mbInXMLImport; }
     void SetInXMLImport( bool bNew ) { mbInXMLImport = bNew; }
+    bool IsInXMLImport242() const { return mbInXMLImport242; }
+    void SetInXMLImport242(bool const bNew) { mbInXMLImport242 = bNew; }
     bool IsInWriterfilterImport() const { return mbInWriterfilterImport; }
     void SetInWriterfilterImport(bool const b) { mbInWriterfilterImport = b; }
 

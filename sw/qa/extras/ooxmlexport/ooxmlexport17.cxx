@@ -739,16 +739,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153082_comma, "custom-styles-TOC-comma.docx")
     CPPUNIT_ASSERT(tocContent.indexOf("Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.") != -1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf160402, "StyleRef-DE.docx")
-{
-    xmlDocUniquePtr pLayout = parseLayoutDump();
-    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"Heading 1");
-    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.");
-    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"Cras faucibus condimentum odio. Sed ac ligula. Aliquam at eros.");
-    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.");
-    assertXPath(pLayout, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.");
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
 {
     uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);

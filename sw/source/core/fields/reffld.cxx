@@ -962,6 +962,17 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
                 break;
             }
         }
+        else if (REF_STYLE == m_nSubType)
+        {
+            ProgName name;
+            SwStyleNameMapper::FillProgName(UIName{sTmp}, name, SwGetPoolIdFromName::TxtColl);
+            if (name == sTmp)
+            {
+                SwStyleNameMapper::FillProgName(UIName{sTmp}, name, SwGetPoolIdFromName::ChrFmt);
+            }
+            sTmp = name.toString();
+
+        }
         rAny <<= sTmp;
     }
     break;
@@ -1025,7 +1036,13 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             case ReferenceFieldSource::BOOKMARK       : m_nSubType = REF_BOOKMARK   ; break;
             case ReferenceFieldSource::FOOTNOTE       : m_nSubType = REF_FOOTNOTE   ; break;
             case ReferenceFieldSource::ENDNOTE        : m_nSubType = REF_ENDNOTE    ; break;
-            case ReferenceFieldSource::STYLE          : m_nSubType = REF_STYLE      ; break;
+            case ReferenceFieldSource::STYLE          :
+                if (REF_STYLE != m_nSubType)
+                {
+                    m_nSubType = REF_STYLE;
+                    ConvertProgrammaticToUIName();
+                }
+                break;
             }
         }
         break;
@@ -1070,6 +1087,29 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 void SwGetRefField::ConvertProgrammaticToUIName()
 {
+    if (GetTyp() && REF_STYLE == m_nSubType)
+    {
+        // this is super ugly, but there isn't a sensible way to check in xmloff
+        SwDoc & rDoc{static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc()};
+        if (rDoc.IsInXMLImport242())
+        {
+            SAL_INFO("sw.xml", "Potentially accepting erroneously produced UIName for style-ref field");
+            return;
+        }
+        ProgName const par1{GetPar1()};
+        UIName name;
+        SwStyleNameMapper::FillUIName(par1, name, SwGetPoolIdFromName::TxtColl);
+        if (name.toString() == par1.toString())
+        {
+            SwStyleNameMapper::FillUIName(par1, name, SwGetPoolIdFromName::ChrFmt);
+        }
+        if (name.toString() != par1.toString())
+        {
+            SetPar1(name.toString());
+        }
+        return;
+    }
+
     if(!(GetTyp() && REF_SEQUENCEFLD == m_nSubType))
         return;
 
