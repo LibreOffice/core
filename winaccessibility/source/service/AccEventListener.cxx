@@ -244,47 +244,36 @@ short AccEventListener::GetParentRole()
 /**
  *  remove the listener from accessible object
  */
-void AccEventListener::RemoveMeFromBroadcaster(bool const isNotifyDestroy)
+void AccEventListener::RemoveMeFromBroadcaster()
 {
+    if (!m_xAccessible.is())
+        return;
+
     try
     {
-        if (!m_xAccessible.is())
+        css::uno::Reference<XAccessibleEventBroadcaster> const xBroadcaster(
+            m_xAccessible->getAccessibleContext(), UNO_QUERY);
+        if (xBroadcaster.is())
         {
-            return;
+            //remove the lister from accessible object
+            xBroadcaster->removeAccessibleEventListener(this);
         }
-        try
-        {
-            css::uno::Reference<XAccessibleEventBroadcaster> const xBroadcaster(
-                m_xAccessible->getAccessibleContext(), UNO_QUERY);
-            if (xBroadcaster.is())
-            {
-                //remove the lister from accessible object
-                xBroadcaster->removeAccessibleEventListener(this);
-            }
-        }
-        catch (Exception const&)
-        { // may throw if it's already disposed - ignore that
-        }
-        if (isNotifyDestroy)
-        {
-            m_rObjManager.NotifyDestroy(m_xAccessible.get());
-        }
-        m_xAccessible.clear(); // release cyclic reference
     }
-    catch (...)
-    {
-        return;
+    catch (Exception const&)
+    { // may throw if it's already disposed - ignore that
     }
+
+    m_xAccessible.clear(); // release cyclic reference
 }
 
 /**
- *  this method is invoked before listener is disposed
+ *  this method is invoked before broadcaster is disposed
  */
 void AccEventListener::disposing(const css::lang::EventObject& /*Source*/)
 {
     SolarMutexGuard g;
-
-    RemoveMeFromBroadcaster(true);
+    // No method should be invoked anymore on broadcaster!
+    m_xAccessible.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

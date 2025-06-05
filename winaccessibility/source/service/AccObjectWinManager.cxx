@@ -474,7 +474,7 @@ void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
     }
     if (pListener)
     {
-        pListener->RemoveMeFromBroadcaster(false);
+        pListener->RemoveMeFromBroadcaster();
     }
 }
 

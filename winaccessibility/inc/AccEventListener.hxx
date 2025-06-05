@@ -72,7 +72,7 @@ public:
     //get the accessible parent's role
     virtual short GetParentRole();
 
-    void RemoveMeFromBroadcaster(bool isNotifyDestroy);
+    void RemoveMeFromBroadcaster();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
