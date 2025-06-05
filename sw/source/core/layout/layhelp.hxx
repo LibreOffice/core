@@ -114,8 +114,6 @@ class SwLayHelper
     bool mbBreakAfter;
     SwDoc* mpDoc;
     SwLayCacheImpl* mpImpl;
-    sal_uLong mnMaxParaPerPage;
-    sal_uLong mnParagraphCnt;
     SwNodeOffset mnStartOfContent;
     size_t mnIndex;                          ///< the index in the page break array
     size_t mnFlyIdx;                         ///< the index in the fly cache array

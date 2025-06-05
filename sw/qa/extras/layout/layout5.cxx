@@ -1740,6 +1740,40 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166691)
     assertXPath(pXmlDoc, "//page", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166871)
+{
+    // Given a document with 6-column-layout pages, having hundreds of small paragraphs per page
+    // (normal and headings); its metadata has the number of pages, paragraphs, etc.:
+    createSwDoc("many-paragraphs-per-page-in-6-columns.odt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // Check the layout - i.e., the count of paragraphs per column per page.
+    // The metadata in the document must not prevent the correct layout.
+
+    assertXPath(pXmlDoc, "//page", 12);
+
+    // The first 11 pages have the same paragraph count in each column
+    for (int page = 1; page <= 11; ++page)
+    {
+        OString Xpath1 = "//page[" + OString::number(page) + "]/body/column";
+        assertXPath(pXmlDoc, Xpath1, 6);
+        for (int column = 1; column <= 6; ++column)
+        {
+            OString Xpath2 = Xpath1 + "[" + OString::number(column) + "]/body/txt";
+            assertXPath(pXmlDoc, Xpath2, 47);
+        }
+    }
+
+    // Check the last page
+    assertXPath(pXmlDoc, "//page[12]/body/column", 6);
+    assertXPath(pXmlDoc, "//page[12]/body/column[1]/body/txt", 14);
+    assertXPath(pXmlDoc, "//page[12]/body/column[2]/body/txt", 0);
+    assertXPath(pXmlDoc, "//page[12]/body/column[3]/body/txt", 0);
+    assertXPath(pXmlDoc, "//page[12]/body/column[4]/body/txt", 0);
+    assertXPath(pXmlDoc, "//page[12]/body/column[5]/body/txt", 0);
+    assertXPath(pXmlDoc, "//page[12]/body/column[6]/body/txt", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
