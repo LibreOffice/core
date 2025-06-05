@@ -711,6 +711,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib2to3,\
+	Lib/lib2to3/Grammar.txt \
+	Lib/lib2to3/PatternGrammar.txt \
 	Lib/lib2to3/__init__.py \
 	Lib/lib2to3/__main__.py \
 	Lib/lib2to3/btm_matcher.py \
@@ -1050,6 +1052,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_vendor/__init__.py \
 	Lib/pip/_vendor/six.py \
 	Lib/pip/_vendor/typing_extensions.py \
+	Lib/pip/_vendor/vendor.txt \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/cachecontrol,\
@@ -1826,6 +1829,10 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/setuptools/extern,\
 	Lib/setuptools/extern/__init__.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/site-packages,\
+	Lib/site-packages/README.txt \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/tomllib,\

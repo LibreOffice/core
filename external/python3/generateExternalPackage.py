@@ -33,8 +33,12 @@ if __name__ == '__main__':
         if "/test" in relLibDir:
             continue
 
+        # ignore setuptools.dist-info and pip.dist-info folders
+        if ".dist-info" in relLibDir:
+            continue
+
         for fileName in sorted(files):
-            if not fileName.endswith((".py", ".pem", ".exe")):
+            if not fileName.endswith((".py", ".pem", ".exe", ".txt")):
                 continue
             filesList.append(path.join(relPythonDir, fileName))
         if filesList:
