@@ -11,6 +11,9 @@
 
 $(eval $(call sw_ooxmlexport_test,26))
 
+# this test requires "de" translations and if missing tests will be skipped
+$(call gb_CppunitTest_get_target,sw_ooxmlexport26) : $(call gb_AllLangMoTarget_get_target,sw)
+
 $(call gb_CppunitTest_get_target,sw_ooxmlexport26) : export LO_TEST_LOCALE=de
 
 # vim: set noet sw=4 ts=4:

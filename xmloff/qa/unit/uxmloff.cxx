@@ -199,7 +199,9 @@ void Test::testMetaGenerator()
         { "LibreOffice_powered_by_CIBDev/6.4.0.0.0$Linux_X86_64 LibreOffice_project/e29e100174c133d27e953934311d68602c4515b7", ";6.4.0.0.0", SvXMLImport::LO_63x },
         { "LibreOfficeDev/7.0.6.0.0$Linux_X86_64 LibreOffice_project/dfc40e2292c6e19e285c10ed8c8044d9454107d0", ";7.0.6.0.0", SvXMLImport::LO_7x },
         { "CIB_OfficeDev/6.4.0.19$Linux_X86_64 LibreOffice_project/2e04f804b5f82770435f250873f07b3384d95504", ";6.4.0.19", SvXMLImport::LO_63x },
-        { "LibreOfficeDev/24.2.0.0.alpha0$Linux_X86_64 LibreOffice_project/b81e7b6f3c71fb3ade1cb665444ac730dac0a9a9", ";24.2.0.0.", SvXMLImport::LO_New },
+        { "LibreOfficeDev/24.2.0.0.alpha0$Linux_X86_64 LibreOffice_project/b81e7b6f3c71fb3ade1cb665444ac730dac0a9a9", ";24.2.0.0.", SvXMLImport::LO_242 },
+        { "LibreOfficeDev/24.8.6.2$Linux_X86_64 LibreOffice_project/dc6216c3d2b4ec3bcdba950f1e6ee1d013adb2d6", ";24.8.6.2", SvXMLImport::LO_248 },
+        { "LibreOfficeDev/25.8.0.0.alpha0$Linux_X86_64 LibreOffice_project/308705574842e0c36f7385f73fc47da9a4542367", ";25.8.0.0.", SvXMLImport::LO_New }
     };
 
     for (auto const[pGenerator, pBuildId, nResult] : tests)

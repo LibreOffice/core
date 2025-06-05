@@ -1103,22 +1103,19 @@ OUString StyleSheetTable::CloneTOCStyle(FontTablePtr const& rFontTable, StyleShe
     // the old converted name is what is applied to paragraphs
     m_pImpl->m_ClonedTOCStylesMap.emplace(pStyle->m_sConvertedStyleName, pClone->m_sConvertedStyleName);
     std::vector<StyleSheetEntryPtr> const styles{ pClone };
-    std::vector<OUString> aRetStyleNames = ApplyStyleSheetsImpl(rFontTable, styles);
-    pClone->m_sConvertedStyleName = aRetStyleNames[0];
+    ApplyStyleSheetsImpl(rFontTable, styles);
     return pClone->m_sConvertedStyleName;
 }
 
 void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 {
-    ApplyStyleSheetsImpl(rFontTable, m_pImpl->m_aStyleSheetEntries);
+    return ApplyStyleSheetsImpl(rFontTable, m_pImpl->m_aStyleSheetEntries);
 }
 
-std::vector<OUString> StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::vector<StyleSheetEntryPtr> const& rEntries)
+void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::vector<StyleSheetEntryPtr> const& rEntries)
 {
-    std::vector<OUString> aStyleUINames(rEntries.size());
-    std::vector<OUString>::iterator aStyleUINamesIt = aStyleUINames.begin();
     if (!m_pImpl->m_xTextDocument)
-        return aStyleUINames;
+        return;
     try
     {
         rtl::Reference< SwXStyleFamilies > xStyleFamilies = m_pImpl->m_xTextDocument->getSwStyleFamilies();
@@ -1134,7 +1131,6 @@ std::vector<OUString> StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& 
             std::vector<beans::PropertyValue> aTableStylesVec;
             for (auto& pEntry : rEntries)
             {
-                *aStyleUINamesIt = pEntry->m_sStyleName;
                 if( pEntry->m_nStyleTypeCode == STYLE_TYPE_UNKNOWN && !pEntry->m_sStyleName.isEmpty() )
                     pEntry->m_nStyleTypeCode = STYLE_TYPE_PARA; // unspecified style types are considered paragraph styles
 
@@ -1418,7 +1414,7 @@ std::vector<OUString> StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& 
                             aMissingParent.emplace_back( sParentStyle, xStyle );
 
                         xStyles->insertStyleByName( sConvertedStyleName, static_cast<SwXStyle*>(xStyle.get()) );
-                        *aStyleUINamesIt = static_cast<SwXStyle*>(xStyle.get())->GetStyleUIName().toString();
+
                         if (!m_pImpl->m_bIsNewDoc && bParaStyle)
                         {
                             // Remember the inserted style, which may or may not be referred during
@@ -1447,7 +1443,6 @@ std::vector<OUString> StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& 
                     pEntry->m_pProperties->InsertProps( m_pImpl->m_pDefaultCharProps, /*bOverwrite=*/false );
                     pEntry->m_pProperties->InsertProps( m_pImpl->m_pDefaultParaProps, /*bOverwrite=*/false );
                 }
-                ++aStyleUINamesIt;
             }
 
             // Update the styles that were created before their parents or next-styles
@@ -1497,7 +1492,6 @@ std::vector<OUString> StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& 
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter", "Styles could not be imported completely");
     }
-    return aStyleUINames;
 }
 
 

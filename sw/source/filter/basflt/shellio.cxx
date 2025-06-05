@@ -346,6 +346,7 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
 
     mxDoc->SetInReading( false );
     mxDoc->SetInXMLImport( false );
+    mxDoc->SetInXMLImport242(false);
     mxDoc->SetInWriterfilterImport(false);
 
     if (!mbSkipInvalidateNumRules)

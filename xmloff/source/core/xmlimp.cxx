@@ -234,8 +234,16 @@ public:
                     {
                         OUString const nMajor(loVersion.subView(0, firstDot));
                         auto const year(nMajor.toInt32());
-                        //auto const month(loVersion.copy(firstDot+1).toInt32());
-                        if (0 < year)
+                        auto const month(o3tl::toInt32(loVersion.subView(firstDot+1)));
+                        if (24 == year && month == 2)
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_242;
+                        }
+                        else if (24 == year && month == 8)
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_248;
+                        }
+                        else if (0 < year)
                         {
                             mnGeneratorVersion = SvXMLImport::LO_New;
                         }
