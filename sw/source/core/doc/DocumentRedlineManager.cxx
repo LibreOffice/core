@@ -1192,10 +1192,10 @@ bool CanCombineTypesForAcceptReject(SwRedlineData& rInnerData, SwRangeRedline& r
     return true;
 }
 
-/// Decides if it's OK to combine this rInnerData having 2 types with an
-/// outer rOuterRedline for accept purposes. E.g. format-on-delete and
-/// delete can be combined if accepting a delete.
-bool CanReverseCombineTypesForAccept(SwRangeRedline& rOuterRedline, SwRedlineData& rInnerData)
+/// Decides if it's OK to combine this rInnerData having 2 types with an outer rOuterRedline for
+/// accept or reject purposes. E.g. format-on-delete and delete can be combined if accepting a
+/// delete.
+bool CanReverseCombineTypesForAcceptReject(SwRangeRedline& rOuterRedline, SwRedlineData& rInnerData)
 {
     switch (rOuterRedline.GetType())
     {
@@ -3385,7 +3385,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             }
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
-        else if (CanReverseCombineTypesForAccept(*pTmp, aOrigData))
+        else if (CanReverseCombineTypesForAcceptReject(*pTmp, aOrigData))
         {
             // The aOrigData has 2 types and for these types we want the underlying type to be
             // combined with the type of the surrounding redlines, so accept pTmp, too.
@@ -3733,9 +3733,7 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             }
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
-        else if (pTmp->GetType() == RedlineType::Insert
-                 && aOrigData.GetType() == RedlineType::Format && aOrigData.Next()
-                 && aOrigData.Next()->GetType() == RedlineType::Insert)
+        else if (CanReverseCombineTypesForAcceptReject(*pTmp, aOrigData))
         {
             // The aOrigData has 2 types and for these types we want the underlying type to be
             // combined with the type of the surrounding redlines, so reject pTmp, too.
