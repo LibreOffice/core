@@ -656,7 +656,7 @@ calc_constructor_list = [
     ("ooo_vba_VBAToOOEventDesc_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
     ("ooo_vba_EventListener_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # sc/util/scui.component
-    "com_sun_star_sheet_CreateDialogFactoryService_get_implementation",
+    ("com_sun_star_sheet_CreateDialogFactoryService_get_implementation", "#if !ENABLE_FUZZERS"),
     ]
 
 draw_factory_list = [
@@ -715,7 +715,7 @@ draw_constructor_list = [
     ("sdext_PDFIRawAdaptor_Impress_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
     ("sdext_PDFDetector_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
 # sd/source/console/presenter.component
-    "com_sun_star_presentation_CreateDialogFactoryService_get_implementation",
+    ("com_sun_star_presentation_CreateDialogFactoryService_get_implementation", "#if !ENABLE_FUZZERS"),
     ]
 
 writer_factory_list = [
@@ -743,7 +743,7 @@ writer_constructor_list = [
 # writerperfect/source/writer/wpftwriter.component
     "com_sun_star_comp_Writer_EPUBExportFilter_get_implementation",
 # sw/util/swui.component
-    "com_sun_star_text_DialogFactoryService_get_implementation",
+    ("com_sun_star_text_DialogFactoryService_get_implementation", "#if !ENABLE_FUZZERS"),
     ]
 
 factory_map = {
