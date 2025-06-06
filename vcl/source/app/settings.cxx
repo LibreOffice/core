@@ -2306,18 +2306,6 @@ bool MiscSettings::GetEnableLocalizedDecimalSep() const
     return mxData->mbEnableLocalizedDecimalSep;
 }
 
-AppearanceMode MiscSettings::GetDarkMode()
-{
-    // MiscSettings::GetAppColorMode() replaces MiscSettings::GetDarkMode()
-    return MiscSettings::GetAppColorMode();
-}
-
-void MiscSettings::SetDarkMode(AppearanceMode eMode)
-{
-    // MiscSettings::SetAppColorMode() replaces MiscSettings::SetDarkMode()
-    MiscSettings::SetAppColorMode(eMode);
-}
-
 bool MiscSettings::GetUseDarkMode()
 {
     vcl::Window* pDefWindow = ImplGetDefaultWindow();

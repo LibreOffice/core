@@ -716,14 +716,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 // Set the UI theme. It would be nicest to use automatic whenever possible
                 AppearanceMode eUseMode = AppearanceMode::AUTO;
-                if (MiscSettings::GetDarkMode() != AppearanceMode::AUTO)
-                    MiscSettings::SetDarkMode(eUseMode);
+                if (MiscSettings::GetAppColorMode() != AppearanceMode::AUTO)
+                    MiscSettings::SetAppColorMode(eUseMode);
 
                 if (MiscSettings::GetUseDarkMode() == bWasInDarkMode)
                 {
                     // automatic didn't toggle, so force the desired theme
                     eUseMode = bWasInDarkMode ? AppearanceMode::LIGHT : AppearanceMode::DARK;
-                    MiscSettings::SetDarkMode(eUseMode);
+                    MiscSettings::SetAppColorMode(eUseMode);
                 }
 
                 // Now set the document theme

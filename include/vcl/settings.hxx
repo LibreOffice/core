@@ -668,9 +668,6 @@ public:
     bool                            GetDisablePrinting() const;
     void                            SetEnableLocalizedDecimalSep( bool bEnable );
     bool                            GetEnableLocalizedDecimalSep() const;
-
-    static void                     SetDarkMode(AppearanceMode nMode);
-    static AppearanceMode           GetDarkMode();
     // return if dark mode is active, resolving 'auto' to dark (true) or light (false)
     static bool                     GetUseDarkMode();
     static void                     SetAppColorMode(AppearanceMode nMode);

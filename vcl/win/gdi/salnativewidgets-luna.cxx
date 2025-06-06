@@ -414,7 +414,7 @@ bool UseDarkMode()
         return false;
 
     bool bRet(false);
-    switch (MiscSettings::GetDarkMode())
+    switch (MiscSettings::GetAppColorMode())
     {
         case AppearanceMode::AUTO:
         default:

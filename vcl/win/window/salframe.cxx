@@ -268,7 +268,7 @@ static void UpdateDarkMode(HWND hWnd)
     auto SetPreferredAppMode = reinterpret_cast<SetPreferredAppMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(135)));
     if (SetPreferredAppMode)
     {
-        switch (MiscSettings::GetDarkMode())
+        switch (MiscSettings::GetAppColorMode())
         {
             case AppearanceMode::AUTO:
                 SetPreferredAppMode(AllowDark);
