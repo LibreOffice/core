@@ -65,18 +65,19 @@ namespace drawinglayer::texture
             maTopLeft(rRange.getMinimum()),
             maSize(rRange.getRange()),
             mfMulX(0.0),
-            mfMulY(0.0),
-            mbIsAlpha(maBitmapEx.IsAlpha())
+            mfMulY(0.0)
         {
+            bool bIsAlpha(maBitmapEx.IsAlpha());
             if(vcl::bitmap::convertBitmap32To24Plus8(maBitmapEx,maBitmapEx))
-                mbIsAlpha = maBitmapEx.IsAlpha();
+                bIsAlpha = maBitmapEx.IsAlpha();
             // #121194# Todo: use alpha channel, too (for 3d)
             maBitmap = maBitmapEx.GetBitmap();
 
-            if(mbIsAlpha)
+            if (bIsAlpha)
             {
                 maTransparence = rBitmapEx.GetAlphaMask().GetBitmap();
                 mpReadTransparence = maTransparence;
+                OSL_ENSURE(mpReadTransparence, "OOps, transparence type Bitmap, but no read access created in the constructor (?)");
             }
 
             if (!maBitmap.IsEmpty())
@@ -103,15 +104,11 @@ namespace drawinglayer::texture
         {
         }
 
-        sal_uInt8 GeoTexSvxBitmapEx::impGetAlpha(sal_Int32 rX, sal_Int32 rY) const
+        //static
+        sal_uInt8 GeoTexSvxBitmapEx::impGetAlpha(const BitmapReadAccess& readTransparence, sal_Int32 rX, sal_Int32 rY)
         {
-            if(mbIsAlpha)
-            {
-                OSL_ENSURE(mpReadTransparence, "OOps, transparence type Bitmap, but no read access created in the constructor (?)");
-                const BitmapColor aBitmapColor(mpReadTransparence->GetPixel(rY, rX));
-                return aBitmapColor.GetIndex();
-            }
-            return 0;
+            const BitmapColor aBitmapColor(readTransparence.GetPixel(rY, rX));
+            return aBitmapColor.GetIndex();
         }
 
         bool GeoTexSvxBitmapEx::impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const
@@ -146,10 +143,10 @@ namespace drawinglayer::texture
 
                 rBColor = aBSource;
 
-                if(mbIsAlpha)
+                if (mpReadTransparence)
                 {
                     // when we have alpha, make use of it
-                    const sal_uInt8 aAlpha(impGetAlpha(nX, nY));
+                    const sal_uInt8 aAlpha(impGetAlpha(*mpReadTransparence, nX, nY));
 
                     rfOpacity = (static_cast<double>(aAlpha) * (1.0 / 255.0));
                 }
@@ -170,10 +167,10 @@ namespace drawinglayer::texture
 
             if(impIsValid(rUV, nX, nY))
             {
-                if(mbIsAlpha)
+                if (mpReadTransparence)
                 {
                     // this texture has an alpha part, use it
-                    const sal_uInt8 aAlpha(impGetAlpha(nX, nY));
+                    const sal_uInt8 aAlpha(impGetAlpha(*mpReadTransparence, nX, nY));
                     const double fNewOpacity(static_cast<double>(aAlpha) * (1.0 / 255.0));
 
                     rfOpacity = 1.0 - ((1.0 - fNewOpacity) * (1.0 - rfOpacity));
