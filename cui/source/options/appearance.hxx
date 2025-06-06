@@ -48,6 +48,8 @@ private:
     std::unique_ptr<weld::ComboBox> m_xToolbarIconSize;
     std::unique_ptr<weld::ComboBox> m_xSidebarIconSize;
     std::unique_ptr<weld::ComboBox> m_xNotebookbarIconSize;
+    std::unique_ptr<weld::Widget> m_xSizeGrid;
+    std::unique_ptr<weld::Widget> m_xCustomizationFrame;
     OUString m_sAutoStr;
 
     sal_Int32 nInitialToolbarIconSizeSel;
@@ -84,6 +86,8 @@ private:
     void UpdateColorDropdown();
     void FillItemsList();
     ColorConfigEntry GetActiveEntry();
+
+    virtual void ActivatePage(const SfxItemSet&) override;
 
 public:
     SvxAppearanceTabPage(weld::Container* pPage, weld::DialogController* pController,

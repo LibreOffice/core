@@ -121,6 +121,8 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , m_xToolbarIconSize(m_xBuilder->weld_combo_box(u"toolbariconsdropdown"_ustr))
     , m_xSidebarIconSize(m_xBuilder->weld_combo_box(u"sidebariconsdropdown"_ustr))
     , m_xNotebookbarIconSize(m_xBuilder->weld_combo_box(u"notebookbariconsdropdown"_ustr))
+    , m_xSizeGrid(m_xBuilder->weld_widget(u"grdIconSize"_ustr))
+    , m_xCustomizationFrame(m_xBuilder->weld_widget(u"items"_ustr))
     , m_sAutoStr(m_xIconsDropDown->get_text(0))
 {
     InitThemes();
@@ -173,6 +175,17 @@ std::unique_ptr<SfxTabPage> SvxAppearanceTabPage::Create(weld::Container* pPage,
     return std::make_unique<SvxAppearanceTabPage>(pPage, pController, *rSet);
 }
 
+void SvxAppearanceTabPage::ActivatePage(const SfxItemSet& /* rSet */)
+{
+    auto& aProperties = getAdditionalProperties();
+    auto aIterator = aProperties.find(u"HideAdvancedControls"_ustr);
+    if (aIterator != aProperties.end())
+    {
+        m_xSizeGrid->set_visible(false);
+        m_xCustomizationFrame->set_visible(false);
+    }
+}
+
 OUString SvxAppearanceTabPage::GetAllStrings()
 {
     OUString sAllStrings;
@@ -197,8 +210,11 @@ bool SvxAppearanceTabPage::FillItemSet(SfxItemSet* /* rSet */)
     return true;
 }
 
-void SvxAppearanceTabPage::Reset(const SfxItemSet* /* rSet */)
+void SvxAppearanceTabPage::Reset(const SfxItemSet* rSet)
 {
+    // hide advanced controls
+    ActivatePage(*rSet);
+
     // reset scheme list
     LoadSchemeList();
 

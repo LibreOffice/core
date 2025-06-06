@@ -12,7 +12,8 @@
     <property name="can-focus">False</property>
     <property name="icon-name">cmd/sc_additionsdialog.png</property>
   </object>
-  <object class="GtkBox" id="AppearanceTabPage">
+  <!-- n-columns=1 n-rows=3 -->
+  <object class="GtkGrid" id="AppearanceTabPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="margin-start">6</property>
@@ -20,338 +21,12 @@
     <property name="margin-top">6</property>
     <property name="margin-bottom">6</property>
     <property name="border-width">6</property>
-    <property name="spacing">24</property>
-    <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkFrame" id="libreofficethemes">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label-xalign">0</property>
-            <property name="shadow-type">none</property>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">3</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="spacing">3</property>
-                    <child>
-                      <object class="GtkComboBoxText" id="scheme">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="scheme-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|scheme">Select an available theme scheme in the list.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="morethemesbtn">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes" context="optappearancepage|morethemes">Add more themes.</property>
-                        <property name="image">morethemes_image</property>
-                        <property name="always-show-image">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="morethemesbtn-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|morethemesbtn">Click to select and download more themes from the extensions website.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="enableapptheming">
-                    <property name="label" translatable="yes" context="appearance|enableapptheming">Enable application theming</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="enableapptheming-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|enableapptheming">Check to enable application theming with extension themes.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="useonlywhitedocbackground">
-                    <property name="label" translatable="yes" context="appearance|enableapptheming">Use white document background</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="useonlywhitedocbackground-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|useonlywhitedocbackground">Check to disable document color customizations and only use white document colors.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="usebmpforappback">
-                    <property name="label" translatable="yes" context="appearance|enableapptheming">Use bitmap for application background</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="usebmpforappback-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|useonlywhitedocbackground">Check to disable document color customizations and only use white document colors.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="spacing">3</property>
-                    <child>
-                      <object class="GtkComboBoxText" id="bitmapdropdown">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="hexpand">False</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="bitmapdropdown-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|bitmapdropdown">Select bitmap for application background from the dropdown.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="bitmapdrawtypedropdown">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="hexpand">False</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="bitmapdrawtypedropdown-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|bitmapdrawtypedropdown">Select application background bitmap draw type from the dropdown.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="libreofficethemeslb">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="appearancetabpage|libreofficethemeslb">%PRODUCTNAME Themes</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="items">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label-xalign">0</property>
-            <property name="shadow-type">none</property>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">3</property>
-                <child>
-                  <!-- n-columns=2 n-rows=3 -->
-                  <object class="GtkGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="row-spacing">3</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkComboBoxText" id="registrydropdown">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="hexpand">False</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="registrydropdown-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|registrycolorslist">Items</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|registrydropdown">Select the item to color customize.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkMenuButton" id="colorsdropdownbtn">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="focus-on-click">False</property>
-                        <property name="receives-default">True</property>
-                        <property name="halign">start</property>
-                        <property name="draw-indicator">True</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="colorsdropdownbtn-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|colorsdropdownbtn">Color</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|colorsdropdownbtn">Select the color for the selected item.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="showindocumentchkbtn">
-                        <property name="label" translatable="yes" context="appearancetabpage|showindocumentchkbtn">Show in Document</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="showindocumentchkbtn-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|showindocumentchkbtn">Immediately display the color choice in the document.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="resetallbtn">
-                        <property name="label" translatable="yes" context="appearancetabpage|resetallbtn">Reset All</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="halign">start</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="customizationslb">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="appearancetabpage|customizationslb">Customizations</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
+    <property name="row-spacing">12</property>
+    <property name="column-spacing">24</property>
     <child>
       <object class="GtkFrame">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="hexpand">True</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
@@ -369,6 +44,7 @@
                 <property name="spacing">3</property>
                 <child>
                   <object class="GtkComboBoxText" id="iconsdropdown">
+                    <property name="width-request">200</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <items>
@@ -384,6 +60,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -404,22 +81,24 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
               <!-- n-columns=2 n-rows=3 -->
-              <object class="GtkGrid">
+              <object class="GtkGrid" id="grdIconSize">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="vexpand">False</property>
                 <property name="row-spacing">3</property>
                 <property name="column-spacing">3</property>
                 <child>
@@ -545,9 +224,305 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="libreofficethemes">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkComboBoxText" id="scheme">
+                    <property name="width-request">200</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="scheme-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|scheme">Select an available theme scheme in the list.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="morethemesbtn">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="optappearancepage|morethemes">Add more themes.</property>
+                    <property name="image">morethemes_image</property>
+                    <property name="always-show-image">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="morethemesbtn-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|morethemesbtn">Click to select and download more themes from the extensions website.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="enableapptheming">
+                <property name="label" translatable="yes" context="appearance|enableapptheming">Enable application theming</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="enableapptheming-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|enableapptheming">Check to enable application theming with extension themes.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="useonlywhitedocbackground">
+                <property name="label" translatable="yes" context="appearance|enableapptheming">Use white document background</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="useonlywhitedocbackground-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|useonlywhitedocbackground">Check to disable document color customizations and only use white document colors.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="usebmpforappback">
+                <property name="label" translatable="yes" context="appearance|enableapptheming">Use bitmap for application background</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="usebmpforappback-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|useonlywhitedocbackground">Check to disable document color customizations and only use white document colors.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkComboBoxText" id="bitmapdropdown">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="hexpand">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="bitmapdropdown-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|bitmapdropdown">Select bitmap for application background from the dropdown.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="bitmapdrawtypedropdown">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="hexpand">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="bitmapdrawtypedropdown-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|bitmapdrawtypedropdown">Select application background bitmap draw type from the dropdown.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="libreofficethemeslb">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="appearancetabpage|libreofficethemeslb">%PRODUCTNAME Themes</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="items">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-start">6</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <!-- n-columns=2 n-rows=3 -->
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
+            <child>
+              <object class="GtkComboBoxText" id="registrydropdown">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="registrydropdown-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|registrycolorslist">Items</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|registrydropdown">Select the item to color customize.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="colorsdropdownbtn">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="focus-on-click">False</property>
+                <property name="receives-default">True</property>
+                <property name="halign">start</property>
+                <property name="draw-indicator">True</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="colorsdropdownbtn-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|colorsdropdownbtn">Color</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|colorsdropdownbtn">Select the color for the selected item.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="showindocumentchkbtn">
+                <property name="label" translatable="yes" context="appearancetabpage|showindocumentchkbtn">Show in Document</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="margin-start">6</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="showindocumentchkbtn-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|showindocumentchkbtn">Immediately display the color choice in the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="resetallbtn">
+                <property name="label" translatable="yes" context="appearancetabpage|resetallbtn">Reset All</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="halign">start</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="customizationslb">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="appearancetabpage|customizationslb">Customizations</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
   </object>

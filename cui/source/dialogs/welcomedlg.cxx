@@ -77,6 +77,10 @@ void WelcomeDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
     {
         rPage.getAdditionalProperties().emplace(u"IsFirstRun"_ustr, css::uno::Any(m_bFirstStart));
     }
+    else if (rId == sAppearanceTab)
+    {
+        rPage.getAdditionalProperties().emplace(u"HideAdvancedControls"_ustr, css::uno::Any(true));
+    }
 }
 
 IMPL_LINK(WelcomeDialog, OnActivatePage, const OUString&, rPage, void)
