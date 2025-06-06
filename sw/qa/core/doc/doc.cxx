@@ -929,6 +929,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
     CPPUNIT_ASSERT(pRedline);
     CPPUNIT_ASSERT_EQUAL(RedlineType::Format, pRedline->GetType());
     CPPUNIT_ASSERT(!pRedline->GetRedlineData().Next());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 3
+    // i.e. the surrounding delete redlines were not combined on reject.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
