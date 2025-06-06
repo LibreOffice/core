@@ -491,6 +491,7 @@ void SfxDocTplService::init_Impl()
             SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl H");
             // the UI should be shown only on the first update
             doUpdate();
+        }
     }
     else
     {
