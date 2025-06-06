@@ -1139,6 +1139,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
             {
                 OUString sId(weld::toId(pDocData));
                 m_xSaveInListBox->append(sId, aTitle);
+                nPos = m_xSaveInListBox->get_count() - 1;
             }
         }
 
