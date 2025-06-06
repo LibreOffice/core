@@ -41,6 +41,10 @@
 #include <dlgname.hxx>
 #include <comphelper/processfactory.hxx>
 
+static OUString GetDefaultToolbar() { return ITEM_TOOLBAR_URL + "standardbar"; }
+
+static OUString GetBaseDefaultToolbar() { return ITEM_TOOLBAR_URL + "toolbar"; }
+
 SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
                                            weld::DialogController* pController,
                                            const SfxItemSet& rSet)
@@ -102,8 +106,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
-    m_aURLToSelect = ITEM_TOOLBAR_URL;
-    m_aURLToSelect += "standardbar";
+    m_aURLToSelect = GetDefaultToolbar();
 
     const SfxPoolItem* pItem = rSet.GetItem(SID_CONFIG);
 
@@ -245,6 +248,12 @@ void SvxToolbarConfigPage::Init()
     sal_Int32 nCount = m_xTopLevelListBox->get_count();
     sal_Int32 nPos = nCount > 0 ? 0 : -1;
 
+    if (m_aURLToSelect == GetDefaultToolbar()
+        && m_aModuleId == "com.sun.star.sdb.OfficeDatabaseDocument")
+    {
+        m_aURLToSelect = GetBaseDefaultToolbar();
+    }
+
     if (!m_aURLToSelect.isEmpty())
     {
         for (sal_Int32 i = 0; i < nCount; ++i)
@@ -259,8 +268,10 @@ void SvxToolbarConfigPage::Init()
         }
 
         // in future select the default toolbar: Standard
-        m_aURLToSelect = ITEM_TOOLBAR_URL;
-        m_aURLToSelect += "standardbar";
+        if (m_aModuleId != "com.sun.star.sdb.OfficeDatabaseDocument")
+            m_aURLToSelect = GetDefaultToolbar();
+        else
+            m_aURLToSelect = GetBaseDefaultToolbar();
     }
 
     m_xTopLevelListBox->set_active(nPos);
