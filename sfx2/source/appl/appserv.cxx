@@ -698,45 +698,39 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case FN_CHANGE_THEME:
         {
             const SfxStringItem* pNewThemeArg = rReq.GetArg<SfxStringItem>(FN_PARAM_NEW_THEME);
-            OUString sSchemeName
-                = pNewThemeArg ? pNewThemeArg->GetValue() : u"COLOR_SCHEME_LIBREOFFICE_AUTOMATIC"_ustr;
+            OUString sSchemeName = ThemeColors::GetThemeColors().GetThemeName();
+            AppearanceMode eAppearnceMode = MiscSettings::GetAppColorMode();
+
             if (!pNewThemeArg)
             {
-                // toggle between light and dark mode
-
-                // There are two separate things that can be dark mode themed: UI and document
-                // The modes can be 0 (automatic - what the OS/VCL asks for), 1 (light), or 2 (dark)
-
-                // Since only gtk/osx/win support UI theme, toggle based on document colors
-                // Automatic in this case means "whatever GetUseDarkMode() says"
-                const bool bWasInDarkMode
-                    = MiscSettings::GetAppColorMode() == AppearanceMode::DARK
-                      || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO
-                          && MiscSettings::GetUseDarkMode());
-
-                // Set the UI theme. It would be nicest to use automatic whenever possible
-                AppearanceMode eUseMode = AppearanceMode::AUTO;
-                if (MiscSettings::GetAppColorMode() != AppearanceMode::AUTO)
-                    MiscSettings::SetAppColorMode(eUseMode);
-
-                if (MiscSettings::GetUseDarkMode() == bWasInDarkMode)
+                // we do not override custom themes if the unocommand was triggered from the UI
+                // by clicking on a toolbar/notebookbar button for example.
+                if (!ThemeColors::IsCustomTheme(sSchemeName))
                 {
-                    // automatic didn't toggle, so force the desired theme
-                    eUseMode = bWasInDarkMode ? AppearanceMode::LIGHT : AppearanceMode::DARK;
-                    MiscSettings::SetAppColorMode(eUseMode);
-                }
+                    bool bChangeToLightTheme = eAppearnceMode == AppearanceMode::DARK
+                                               || (eAppearnceMode == AppearanceMode::AUTO
+                                                   && MiscSettings::GetUseDarkMode());
 
-                // Now set the document theme
-                // If the UI can be themed, then the document theme can always remain on automatic.
-                eUseMode = AppearanceMode::AUTO;
-                // NOTE: since SetDarkMode has run, GetUseDarkMode might return a different result.
-                if (MiscSettings::GetUseDarkMode() == bWasInDarkMode)
-                {
-                    eUseMode = bWasInDarkMode ? AppearanceMode::LIGHT : AppearanceMode::DARK;
-                    sSchemeName = bWasInDarkMode ? u"Light" : u"Dark";
+                    // note that a theme and an appearance mode are not orthogonal anymore, for
+                    // "Custom Themes", appearance mode is AUTO, for the "Automatic", "Light" and
+                    // "Dark" default themes, it's AUTO, LIGHT & DARK respectively.
+                    if (bChangeToLightTheme)
+                    {
+                        sSchemeName = svtools::LIGHT_COLOR_SCHEME;
+                        eAppearnceMode = AppearanceMode::LIGHT;
+                    }
+                    else
+                    {
+                        sSchemeName = svtools::DARK_COLOR_SCHEME;
+                        eAppearnceMode = AppearanceMode::DARK;
+                    }
                 }
-                MiscSettings::SetAppColorMode(eUseMode);
             }
+            else
+                sSchemeName = pNewThemeArg->GetValue();
+
+            aEditableConfig.LoadScheme(sSchemeName);
+            MiscSettings::SetAppColorMode(eAppearnceMode);
 
             // kit explicitly ignores changes to the global color scheme, except for the current ViewShell,
             // so an attempted change to the same global color scheme when the now current ViewShell ignored
