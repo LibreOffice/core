@@ -108,10 +108,10 @@ public:
     TYPE getHeight() const { return maRangeY.getRange(); }
 
     /// return center X value of set. returns 0 for empty sets.
-    double getCenterX() const { return maRangeX.getCenter(); }
+    TRAITS::CenterType getCenterX() const { return maRangeX.getCenter(); }
 
     /// return center Y value of set. returns 0 for empty sets.
-    double getCenterY() const { return maRangeY.getCenter(); }
+    TRAITS::CenterType getCenterY() const { return maRangeY.getCenter(); }
 
     /// yields true if given point is contained in set
     bool isInside(const Tuple2D<TYPE>& rTuple) const

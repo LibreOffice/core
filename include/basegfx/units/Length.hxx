@@ -33,6 +33,7 @@ struct LengthTraits
     static constexpr Length neutral() { return Length(); }
 
     typedef Length DifferenceType;
+    typedef Length CenterType;
 };
 
 } // end namespace gfx
