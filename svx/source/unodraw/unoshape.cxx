@@ -1870,8 +1870,9 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
                                 && !(pMap->nWID == XATTR_FILLBITMAP && pMap->nMemberId == MID_BITMAP
                                      && aAny.getValueType() == cppu::UnoType<css::awt::XBitmap>::get()),
                             "svx",
-                            "SvxShape::GetAnyForItem() Return value has wrong Type, "
-                                << pMap->aType << " != " << aAny.getValueType());
+                            "SvxShape::GetAnyForItem() Return value for property "
+                                << pMap->aName << " has wrong Type, " << pMap->aType
+                                << " != " << aAny.getValueType());
             }
         }
 
