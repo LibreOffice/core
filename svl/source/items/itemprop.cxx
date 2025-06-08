@@ -134,11 +134,11 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry& rEntry
     }
 
     // convert general SfxEnumItem values to specific values
-    if( rEntry.aType.getTypeClass() == TypeClass_ENUM &&
-         rAny.getValueTypeClass() == TypeClass_LONG )
+    if (rEntry.aType.getTypeClass() == TypeClass_ENUM
+        && rEntry.aType.getTypeClass() != rAny.getValueTypeClass())
     {
-        sal_Int32 nTmp = *o3tl::forceAccess<sal_Int32>(rAny);
-        rAny.setValue( &nTmp, rEntry.aType );
+        if (sal_Int32 nTmp; rAny >>= nTmp)
+            rAny.setValue(&nTmp, rEntry.aType);
     }
 }
 

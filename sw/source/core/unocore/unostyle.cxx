@@ -2335,9 +2335,6 @@ uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertyMapEntry& r
     uno::Any aResult;
     SfxItemPropertySet::getPropertyValue(rEntry, rSet, aResult);
     //
-    // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-    if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && aResult.getValueType() == cppu::UnoType<sal_Int32>::get())
-        aResult <<= static_cast<sal_Int16>(aResult.get<sal_Int32>());
     // check for needed metric translation
     if(rEntry.nMoreFlags & PropertyMoreFlags::METRIC_ITEM && GetDoc())
     {
@@ -4166,16 +4163,6 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
 
         if(bTakeCareOfDrawingLayerFillStyle)
         {
-            if(pEntry->aType == cppu::UnoType<sal_Int16>::get() && pEntry->aType != aTarget.getValueType())
-            {
-                // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-                sal_Int32 nValue = 0;
-                if (aTarget >>= nValue)
-                {
-                    aTarget <<= static_cast<sal_Int16>(nValue);
-                }
-            }
-
             // check for needed metric translation
             if(pEntry->nMoreFlags & PropertyMoreFlags::METRIC_ITEM)
             {

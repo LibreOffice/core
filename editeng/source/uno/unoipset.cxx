@@ -81,13 +81,12 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
                     SvxUnoConvertToMM( eMapUnit, aVal );
             }
         }
-        else if ( pMap->aType.getTypeClass() == uno::TypeClass_ENUM &&
-              aVal.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
+        else if (pMap->aType.getTypeClass() == uno::TypeClass_ENUM
+                 && pMap->aType.getTypeClass() != aVal.getValueTypeClass())
         {
             // convert typeless SfxEnumItem to enum type
-            sal_Int32 nEnum;
-            aVal >>= nEnum;
-            aVal.setValue( &nEnum, pMap->aType );
+            if (sal_Int32 nEnum; aVal >>= nEnum)
+                aVal.setValue( &nEnum, pMap->aType );
         }
     }
     else
