@@ -259,7 +259,7 @@ OUString OLEHandler::getCLSID() const
             aRet = "078B7ABA-54FC-457F-8551-6147E776A997";
     }
     else
-        SAL_WARN("writerfilter", "OLEHandler::getCLSID: unhandled m_sProgId: " << m_sProgId);
+        SAL_INFO("writerfilter", "OLEHandler::getCLSID: unhandled m_sProgId: " << m_sProgId);
 
     return aRet;
 }
