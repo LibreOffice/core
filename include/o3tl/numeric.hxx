@@ -8,6 +8,7 @@
  */
 
 #pragma once
+#include <bit>
 #include <stdexcept>
 #include <o3tl/concepts.hxx>
 
@@ -38,6 +39,12 @@ template <o3tl::integral T, o3tl::integral U>
 constexpr T convertToHex(U cHigh, U cLow)
 {
     return (o3tl::convertToHex<T>(cHigh) << 4) | o3tl::convertToHex<T>(cLow);
+}
+
+template <o3tl::integral T>
+constexpr unsigned int number_of_bits(T x)
+{
+    return sizeof(T) * 8 - std::countl_zero(x);
 }
 
 }

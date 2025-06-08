@@ -8,11 +8,14 @@
  *
  */
 
-#ifndef INCLUDED_O3TL_LRU_MAP_HXX
-#define INCLUDED_O3TL_LRU_MAP_HXX
+#pragma once
 
 #include <cassert>
 #include <list>
+#include <version>
+#if defined __cpp_lib_memory_resource
+#include <memory_resource>
+#endif
 #include <unordered_map>
 #include <cstddef>
 
@@ -67,11 +70,19 @@ public:
     typedef typename std::pair<Key, Value> key_value_pair_t;
 
 private:
+#if defined __cpp_lib_memory_resource
+    typedef std::pmr::list<key_value_pair_t> list_t;
+#else
     typedef std::list<key_value_pair_t> list_t;
+#endif
     typedef typename list_t::iterator list_iterator_t;
     typedef typename list_t::const_iterator list_const_iterator_t;
 
+#if defined __cpp_lib_memory_resource
+    typedef std::pmr::unordered_map<Key, list_iterator_t, KeyHash, KeyEqual> map_t;
+#else
     typedef std::unordered_map<Key, list_iterator_t, KeyHash, KeyEqual> map_t;
+#endif
     typedef typename map_t::iterator map_iterator_t;
     typedef typename map_t::const_iterator map_const_iterator_t;
 
@@ -169,13 +180,22 @@ public:
     {
         assert(mMaxSize > 0);
     }
+#if defined __cpp_lib_memory_resource
+    lru_map(size_t nMaxSize, std::pmr::memory_resource* r)
+        : mLruList(r)
+        , mLruMap(r)
+        , mMaxSize(nMaxSize)
+    {
+        assert(mMaxSize > 0);
+    }
+#endif
     ~lru_map()
     {
         clearSize();
         // Some code .e.g. SalBitmap likes to remove itself from a cache during it's destructor, which means we
         // get calls into lru_map while we are in destruction, so use the swap-and-clear idiom to avoid those problems.
         mLruMap.clear();
-        list_t().swap(mLruList);
+        list_t(mLruList.get_allocator()).swap(mLruList);
     }
 
     void setMaxSize(size_t nMaxSize)
@@ -286,12 +306,10 @@ public:
     void clear()
     {
         clearSize();
-        mLruMap.clear();
-        mLruList.clear();
+        map_t(mLruMap.get_allocator()).swap(mLruMap);
+        list_t(mLruList.get_allocator()).swap(mLruList);
     }
 };
 }
-
-#endif /* INCLUDED_O3TL_LRU_MAP_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

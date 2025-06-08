@@ -58,7 +58,7 @@
 #include <svx/unopage.hxx>
 #include <comphelper/threadpool.hxx>
 #include <atomic>
-#include <deque>
+#include <vector>
 #include <libxml/xmlwriter.h>
 #include <osl/diagnose.h>
 #include <flyfrm.hxx>
@@ -74,7 +74,12 @@ class SwOLELRUCache
     , public CacheOwner
 {
 private:
-    std::deque<SwOLEObj *> m_OleObjects;
+#if defined __cpp_lib_memory_resource
+    typedef std::pmr::vector<SwOLEObj*> vector_t;
+#else
+    typedef std::vector<SwOLEObj*> vector_t;
+#endif
+    vector_t m_OleObjects;
     sal_Int32 m_nLRU_InitSize;
     static uno::Sequence< OUString > GetPropertyNames();
 
@@ -82,9 +87,15 @@ private:
 
     void tryShrinkCacheTo(sal_Int32 nVal);
 
-    virtual void dropCaches() override
+    virtual OUString getCacheName() const override
+    {
+        return "SwOLELRUCache";
+    }
+
+    virtual bool dropCaches() override
     {
         tryShrinkCacheTo(0);
+        return m_OleObjects.empty();
     }
 
     virtual void dumpState(rtl::OStringBuffer& rState) override
@@ -1299,6 +1310,9 @@ void SwOLEObj::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SwOLELRUCache::SwOLELRUCache()
     : utl::ConfigItem(u"Office.Common/Cache"_ustr)
+#if defined __cpp_lib_memory_resource
+    , m_OleObjects(&GetMemoryResource())
+#endif
     , m_nLRU_InitSize( 20 )
 {
     EnableNotification( GetPropertyNames() );
@@ -1378,7 +1392,7 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
         if ( pObj->UnloadObject() )
             nCount--;
     }
-    m_OleObjects.push_front(&rObj);
+    m_OleObjects.insert(m_OleObjects.begin(), &rObj);
 }
 
 void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )

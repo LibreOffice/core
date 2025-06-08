@@ -43,7 +43,14 @@
 namespace {
     struct WavyLineCache final : public CacheOwner
     {
-        WavyLineCache () : m_aItems( 10 ) {}
+        WavyLineCache()
+#if defined __cpp_lib_memory_resource
+            : m_aItems(10, &GetMemoryResource())
+#else
+            : m_aItems(10)
+#endif
+        {
+        }
 
         bool find( Color aLineColor, size_t nLineWidth, size_t nWaveHeight, size_t nWordWidth, BitmapEx& rOutput )
         {
@@ -67,9 +74,12 @@ namespace {
             rOutput = aBitmap;
         }
 
-        virtual void dropCaches() override
+        virtual OUString getCacheName() const override { return "WavyLineCache"; }
+
+        virtual bool dropCaches() override
         {
             m_aItems.clear();
+            return true;
         }
 
         virtual void dumpState(rtl::OStringBuffer& rState) override

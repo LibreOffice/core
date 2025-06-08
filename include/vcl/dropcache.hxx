@@ -10,6 +10,11 @@
 #pragma once
 
 #include <vcl/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <version>
+#if defined __cpp_lib_memory_resource
+#include <memory_resource>
+#endif
 
 #if defined(__COVERITY__)
 #define THREAD_UNSAFE_DUMP_BEGIN                                                                   \
@@ -33,8 +38,13 @@ protected:
     virtual ~CacheOwner();
 
 public:
-    virtual void dropCaches() = 0;
+    // returns true if cache no longer uses GetMemoryResource
+    virtual bool dropCaches() = 0;
     virtual void dumpState(rtl::OStringBuffer& rState) = 0;
+    virtual OUString getCacheName() const = 0;
+#if defined __cpp_lib_memory_resource
+    static std::pmr::memory_resource& GetMemoryResource();
+#endif
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

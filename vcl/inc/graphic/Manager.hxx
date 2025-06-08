@@ -56,7 +56,8 @@ public:
     void checkStartReduceTimer();
     void reduceMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll = false);
     void loopAndReduceMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll = false);
-    virtual void dropCaches() override;
+    virtual OUString getCacheName() const override;
+    virtual bool dropCaches() override;
     virtual void dumpState(rtl::OStringBuffer& rState) override;
 };
 
