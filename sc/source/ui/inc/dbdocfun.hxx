@@ -72,7 +72,7 @@ public:
     SC_DLLPUBLIC bool AddDBRange( const OUString& rName, const ScRange& rRange );
     bool DeleteDBRange( const OUString& rName );
     bool RenameDBRange( const OUString& rOld, const OUString& rNew );
-    void ModifyDBData( const ScDBData& rNewData );  // Name unveraendert
+    void ModifyDBData( const ScDBData& rNewData );  // Name unchanged
 
     void ModifyAllDBData( const ScDBCollection& rNewColl, const std::vector<ScRange>& rDelAreaList );
 
