@@ -29,9 +29,6 @@ static css::uno::Reference<css::accessibility::XAccessibleTable>
 getTableParent(AtkTableCell* pTableCell)
 {
     AtkObject* pParent = atk_object_get_parent(ATK_OBJECT(pTableCell));
-    if (!pParent)
-        return css::uno::Reference<css::accessibility::XAccessibleTable>();
-
     AtkObjectWrapper* pWrap = ATK_OBJECT_WRAPPER(pParent);
     if (pWrap)
     {
