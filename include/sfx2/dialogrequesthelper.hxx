@@ -27,7 +27,7 @@ namespace sfx2
 // for use in request handlers.
 template <class Fn>
 requires(std::is_invocable_v<Fn, sal_Int32, SfxRequest&>) void ExecDialogPerRequestAndDispose(
-    VclPtr<VclAbstractDialog> dlg, SfxRequest& req, Fn endDialogFn)
+    const VclPtr<VclAbstractDialog>& dlg, SfxRequest& req, const Fn& endDialogFn)
 {
     if (req.GetCallMode() & SfxCallMode::SYNCHRON)
     {
