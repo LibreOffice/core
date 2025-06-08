@@ -50,6 +50,11 @@ gb_COMPILERDEFS := \
 	-DCPPU_ENV=$(CPPU_ENV) \
 	$(if $(filter EMSCRIPTEN,$(OS)),-U_FORTIFY_SOURCE) \
 
+# FIXME: better to change the code to use explicit types in cour code
+ifeq ($(PLATFORMID),linux_aarch64)
+gb_COMPILERDEFS += -fsigned-char
+endif
+
 # enable debug STL
 ifeq ($(ENABLE_DBGUTIL),TRUE)
 ifneq ($(HAVE_LIBSTDCPP),)
