@@ -505,7 +505,7 @@ void SvxAppearanceTabPage::InitThemes()
 
     // check if the registry setting is valid or not
     bFound = false;
-    for (size_t i = 0; i < getBitmapList().size(); ++i)
+    for (size_t i = 0; i < getBitmapDrawTypeList().size(); ++i)
     {
         if (ThemeColors::GetAppBackBmpDrawType() == getBitmapDrawTypeList()[i].aRawString)
         {
