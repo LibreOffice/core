@@ -41,7 +41,8 @@ void lclMapShapesById( RefMap< OUString, ShapeType >& orMap, const RefVector< Sh
         OSL_ENSURE( !rShapeId.isEmpty(), "lclMapShapesById - missing shape identifier" );
         if( !rShapeId.isEmpty() )
         {
-            OSL_ENSURE( orMap.find( rShapeId ) == orMap.end(), "lclMapShapesById - shape identifier already used " );
+            OSL_ENSURE(orMap.find(rShapeId) == orMap.end() || orMap[rShapeId] == elem,
+                       "lclMapShapesById - shape identifier already used");
             orMap[ rShapeId ] = elem;
         }
     }
