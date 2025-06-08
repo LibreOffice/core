@@ -2483,7 +2483,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::getOver
             aRetval.push_back(
                 rtl::Reference<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
                     new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                        aOutline,
+                        std::move(aOutline),
                         pEditView->GetBackgroundColor().getBColor())));
         }
     }
