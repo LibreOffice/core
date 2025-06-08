@@ -62,12 +62,22 @@ public:
     };
 
 private:
-    typedef std::deque< std::pair<cairo_font_face_t*, CacheId> > LRUFonts;
+#if defined __cpp_lib_memory_resource
+    typedef std::pmr::vector< std::pair<cairo_font_face_t*, CacheId> > LRUFonts;
+#else
+    typedef std::vector< std::pair<cairo_font_face_t*, CacheId> > LRUFonts;
+#endif
     LRUFonts maLRUFonts;
 
-    virtual void dropCaches() override
+    virtual OUString getCacheName() const override
     {
-        maLRUFonts.clear();
+        return "CairoFontsCache";
+    }
+
+    virtual bool dropCaches() override
+    {
+        LRUFonts(maLRUFonts.get_allocator()).swap(maLRUFonts);
+        return true;
     }
 
     virtual void dumpState(rtl::OStringBuffer& rState) override
@@ -77,6 +87,15 @@ private:
     }
 
 public:
+    CairoFontsCache()
+#if defined __cpp_lib_memory_resource
+        : maLRUFonts(&CacheOwner::GetMemoryResource())
+#else
+        : maLRUFonts()
+#endif
+    {
+    }
+
     void               CacheFont(cairo_font_face_t* pFont, const CacheId &rId);
     cairo_font_face_t* FindCachedFont(const CacheId &rId);
 };
@@ -89,19 +108,19 @@ CairoFontsCache& getCairoFontsCache()
 
 void CairoFontsCache::CacheFont(cairo_font_face_t* pFont, const CairoFontsCache::CacheId &rId)
 {
-    maLRUFonts.push_front( std::pair<cairo_font_face_t*, CairoFontsCache::CacheId>(pFont, rId) );
+    maLRUFonts.push_back( std::pair<cairo_font_face_t*, CairoFontsCache::CacheId>(pFont, rId) );
     if (maLRUFonts.size() > 8)
     {
-        cairo_font_face_destroy(maLRUFonts.back().first);
-        maLRUFonts.pop_back();
+        cairo_font_face_destroy(maLRUFonts.front().first);
+        maLRUFonts.erase(maLRUFonts.begin());
     }
 }
 
 cairo_font_face_t* CairoFontsCache::FindCachedFont(const CairoFontsCache::CacheId &rId)
 {
-    auto aI = std::find_if(maLRUFonts.begin(), maLRUFonts.end(),
+    auto aI = std::find_if(maLRUFonts.rbegin(), maLRUFonts.rend(),
         [&rId](const LRUFonts::value_type& rFont) { return rFont.second == rId; });
-    if (aI != maLRUFonts.end())
+    if (aI != maLRUFonts.rend())
         return aI->first;
     return nullptr;
 }

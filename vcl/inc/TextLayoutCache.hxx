@@ -24,9 +24,11 @@
 #include <o3tl/hash_combine.hxx>
 
 #include <vcl/dllapi.h>
+#include <vcl/dropcache.hxx>
 
 #include <unicode/uscript.h>
 
+#include <new>
 #include <vector>
 
 namespace vcl::text
@@ -47,7 +49,11 @@ struct Run
 class VCL_DLLPUBLIC TextLayoutCache
 {
 public:
+#if defined __cpp_lib_memory_resource
+    std::pmr::vector<vcl::text::Run> runs;
+#else
     std::vector<vcl::text::Run> runs;
+#endif
     TextLayoutCache(sal_Unicode const* pStr, sal_Int32 const nEnd);
     // Creates a cached instance.
     static std::shared_ptr<const vcl::text::TextLayoutCache> Create(OUString const&);

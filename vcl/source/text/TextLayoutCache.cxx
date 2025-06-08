@@ -29,9 +29,14 @@
 #include <officecfg/Office/Common.hxx>
 #include <vcl/dropcache.hxx>
 
+#include <memory>
+
 namespace vcl::text
 {
 TextLayoutCache::TextLayoutCache(sal_Unicode const* pStr, sal_Int32 const nEnd)
+#if defined __cpp_lib_memory_resource
+    : runs(&CacheOwner::GetMemoryResource())
+#endif
 {
     vcl::ScriptRun aScriptRun(reinterpret_cast<const UChar*>(pStr), nEnd);
     while (aScriptRun.next())
@@ -57,10 +62,18 @@ struct TextLayoutCacheMap : public CacheOwner
                           FastStringCompareEqual, TextLayoutCacheCost>
         Cache;
 
+#if defined __cpp_lib_memory_resource
+    std::pmr::polymorphic_allocator<TextLayoutCache> allocator;
+#endif
     Cache cache;
 
     TextLayoutCacheMap(int capacity)
+#if defined __cpp_lib_memory_resource
+        : allocator(&CacheOwner::GetMemoryResource())
+        , cache(capacity, &CacheOwner::GetMemoryResource())
+#else
         : cache(capacity)
+#endif
     {
     }
 
@@ -69,12 +82,23 @@ struct TextLayoutCacheMap : public CacheOwner
         auto it = cache.find(rString);
         if (it != cache.end())
             return it->second;
-        auto ret = std::make_shared<const TextLayoutCache>(rString.getStr(), rString.getLength());
+#if defined __cpp_lib_memory_resource
+        auto ret = std::allocate_shared<TextLayoutCache>(allocator, rString.getStr(),
+                                                         rString.getLength());
+#else
+        auto ret = std::make_shared<TextLayoutCache>(rString.getStr(), rString.getLength());
+#endif
         cache.insert({ rString, ret });
         return ret;
     }
 
-    virtual void dropCaches() override { cache.clear(); }
+    virtual OUString getCacheName() const override { return "TextLayoutCache"; }
+
+    virtual bool dropCaches() override
+    {
+        cache.clear();
+        return true;
+    }
 
     virtual void dumpState(rtl::OStringBuffer& rState) override
     {
@@ -100,7 +124,7 @@ std::shared_ptr<const TextLayoutCache> TextLayoutCache::Create(OUString const& r
                                  : 100);
     if (TextLayoutCacheMap* map = cache.get())
         return map->Create(rString);
-    return std::make_shared<const TextLayoutCache>(rString.getStr(), rString.getLength());
+    return std::make_shared<TextLayoutCache>(rString.getStr(), rString.getLength());
 }
 }
 

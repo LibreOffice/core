@@ -418,6 +418,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/sound \
     vcl/source/app/stdtext \
     vcl/source/app/svapp \
+    vcl/source/app/svcache \
     vcl/source/app/svdata \
     vcl/source/app/svmain \
     vcl/source/app/timer \

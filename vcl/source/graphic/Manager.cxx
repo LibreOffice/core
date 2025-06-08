@@ -119,10 +119,13 @@ void MemoryManager::swappedOut(MemoryManaged* pMemoryManaged, sal_Int64 nNewSize
     changeExisting(pMemoryManaged, nNewSize);
 }
 
-void MemoryManager::dropCaches()
+OUString MemoryManager::getCacheName() const { return "MemoryManager"; }
+
+bool MemoryManager::dropCaches()
 {
     std::unique_lock aGuard(maMutex);
     reduceMemory(aGuard, true);
+    return true;
 }
 
 void MemoryManager::dumpState(rtl::OStringBuffer& rState)

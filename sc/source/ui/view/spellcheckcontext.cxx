@@ -85,15 +85,26 @@ class SpellCheckContext::SpellCheckCache : public CacheOwner
         }
     };
 
+#if defined __cpp_lib_memory_resource
+    typedef std::pmr::unordered_map<CellPos, std::unique_ptr<MisspellRangesVec>, CellPos::Hash> CellMapType;
+    typedef std::pmr::unordered_map<LangSharedString, std::unique_ptr<MisspellRangesVec>, LangSharedString::Hash> SharedStringMapType;
+#else
     typedef std::unordered_map<CellPos, std::unique_ptr<MisspellRangesVec>, CellPos::Hash> CellMapType;
     typedef std::unordered_map<LangSharedString, std::unique_ptr<MisspellRangesVec>, LangSharedString::Hash> SharedStringMapType;
+#endif
 
     SharedStringMapType  maStringMisspells;
     CellMapType          maEditTextMisspells;
 
-    virtual void dropCaches() override
+    virtual OUString getCacheName() const override
+    {
+        return "SpellCheckCache";
+    }
+
+    virtual bool dropCaches() override
     {
         clear();
+        return true;
     }
 
     virtual void dumpState(rtl::OStringBuffer& rState) override
@@ -108,6 +119,10 @@ class SpellCheckContext::SpellCheckCache : public CacheOwner
 public:
 
     SpellCheckCache()
+#if defined __cpp_lib_memory_resource
+        : maStringMisspells(&CacheOwner::GetMemoryResource())
+        , maEditTextMisspells(&CacheOwner::GetMemoryResource())
+#endif
     {
     }
 
@@ -153,8 +168,8 @@ public:
 
     void clear()
     {
-        maStringMisspells.clear();
-        maEditTextMisspells.clear();
+        SharedStringMapType(maStringMisspells.get_allocator()).swap(maStringMisspells);
+        CellMapType(maEditTextMisspells.get_allocator()).swap(maEditTextMisspells);
     }
 
     void clearEditTextMap()

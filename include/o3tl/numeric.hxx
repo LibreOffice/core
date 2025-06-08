@@ -10,6 +10,7 @@
 #ifndef INCLUDED_O3TL_NUMERIC_HXX
 #define INCLUDED_O3TL_NUMERIC_HXX
 
+#include <bit>
 #include <stdexcept>
 
 namespace o3tl
@@ -21,6 +22,11 @@ namespace o3tl
         {
         }
     };
+
+    template<class T> constexpr unsigned int number_of_bits(T x)
+    {
+        return sizeof(T) * 8 - std::countl_zero(x);
+    }
 }
 
 #endif

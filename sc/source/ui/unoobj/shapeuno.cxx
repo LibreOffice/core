@@ -232,10 +232,16 @@ struct PropertySetInfoCache : public CacheOwner
     }
 
 private:
-    virtual void dropCaches() override
+    virtual OUString getCacheName() const override
+    {
+        return "PropertySetInfoCache";
+    }
+
+    virtual bool dropCaches() override
     {
         std::unique_lock l(gCacheMutex);
-        gCacheMap.clear();
+        map_t(gCacheMap.get_allocator()).swap(gCacheMap);
+        return true;
     }
 
     virtual void dumpState(rtl::OStringBuffer& rState) override
@@ -245,7 +251,8 @@ private:
     }
 
     std::mutex gCacheMutex;
-    std::unordered_map<uno::Reference<beans::XPropertySetInfo>, uno::Reference<beans::XPropertySetInfo>> gCacheMap;
+    typedef std::unordered_map<uno::Reference<beans::XPropertySetInfo>, uno::Reference<beans::XPropertySetInfo>> map_t;
+    map_t gCacheMap;
 };
 
 }

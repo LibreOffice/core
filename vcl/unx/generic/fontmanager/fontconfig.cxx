@@ -121,7 +121,12 @@ private:
 
 public:
     CachedFontConfigFontOptions()
-        : lru_options_cache(10) // arbitrary cache size of 10
+        // arbitrary cache size of 10
+#if defined __cpp_lib_memory_resource
+        : lru_options_cache(10, &CacheOwner::GetMemoryResource())
+#else
+        : lru_options_cache(10)
+#endif
     {
     }
 
@@ -139,9 +144,15 @@ public:
     }
 
 private:
-    virtual void dropCaches() override
+    virtual OUString getCacheName() const override
+    {
+        return "CachedFontConfigFontOptions";
+    }
+
+    virtual bool dropCaches() override
     {
         lru_options_cache.clear();
+        return true;
     }
 
     virtual void dumpState(rtl::OStringBuffer& rState) override

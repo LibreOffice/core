@@ -69,7 +69,11 @@ public:
 
     static SalLayoutGlyphsCache* self();
     SalLayoutGlyphsCache(int size) // needs to be public for tools::DeleteOnDeinit
+#if defined __cpp_lib_memory_resource
+        : mCachedGlyphs(size, &GetMemoryResource())
+#else
         : mCachedGlyphs(size)
+#endif
     {
     }
 
@@ -96,7 +100,8 @@ public:
     };
 
 private:
-    virtual void dropCaches() override;
+    virtual OUString getCacheName() const override;
+    virtual bool dropCaches() override;
     virtual void dumpState(rtl::OStringBuffer& rState) override;
 
     struct CachedGlyphsHash

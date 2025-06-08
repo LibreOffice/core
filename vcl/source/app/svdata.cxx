@@ -44,6 +44,7 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
+#include <svcache.hxx>
 #include <svdata.hxx>
 #include <salsys.hxx>
 #include <windowdev.hxx>
@@ -448,24 +449,18 @@ void ImplSVData::dropCaches()
 
     // copy, some caches self-delete on emptying, e.g. SwOLELRUCache
     auto aCacheOwners = maCacheOwners;
+    bool bAllCachesDropped = true;
     for (CacheOwner* pCacheOwner : aCacheOwners)
-        pCacheOwner->dropCaches();
-}
-
-CacheOwner::CacheOwner()
-{
-    if (ImplSVData* pSVData = ImplGetSVData())
     {
-        pSVData->registerCacheOwner(*this);
-        return;
+        bool bCacheDropped = pCacheOwner->dropCaches();
+        SAL_WARN_IF(!bCacheDropped, "vcl", "Cache " << pCacheOwner->getCacheName() << " drop failed");
+        bAllCachesDropped &= bCacheDropped;
     }
-    SAL_WARN("vcl.app", "Cache owner ctor before ImplSVData created. This is useless.");
-}
 
-CacheOwner::~CacheOwner()
-{
-    if (ImplSVData* pSVData = ImplGetSVData())
-        pSVData->deregisterCacheOwner(*this);
+#if defined __cpp_lib_memory_resource
+    assert(!bAllCachesDropped || CacheMemory::GetMemoryResource().GetAllocatedPages() == 0);
+#endif
+    (void)bAllCachesDropped;
 }
 
 void ImplSVData::dumpState(rtl::OStringBuffer &rState)
