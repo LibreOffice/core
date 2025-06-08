@@ -22,7 +22,7 @@
 #include <sal/types.h>
 #include <float.h>
 #include <basegfx/numeric/ftools.hxx>
-
+#include <o3tl/concepts.hxx>
 
 namespace basegfx
 {
@@ -62,16 +62,12 @@ namespace basegfx
         T getMinimum() const { return mnMinimum; }
         T getMaximum() const { return mnMaximum; }
 
-        double getCenter() const
+        Traits::CenterType getCenter() const
         {
-            if(isEmpty())
-            {
-                return 0.0;
-            }
-            else
-            {
-                return ((mnMaximum + mnMinimum) / 2.0);
-            }
+            if (isEmpty())
+                return Traits::neutral();
+
+            return (mnMaximum + mnMinimum) / 2.0;
         }
 
         bool isInside(T nValue) const
@@ -334,6 +330,7 @@ namespace basegfx
         static constexpr double neutral() { return 0.0; };
 
         typedef double DifferenceType;
+        typedef double CenterType;
     };
 
     struct Int32Traits
@@ -343,6 +340,7 @@ namespace basegfx
         static constexpr sal_Int32 neutral() { return 0; };
 
         typedef sal_Int64 DifferenceType;
+        typedef double CenterType;
     };
 
 } // end of namespace basegfx

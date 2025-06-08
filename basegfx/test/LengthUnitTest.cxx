@@ -498,8 +498,28 @@ class Range2DLTest : public CppUnit::TestFixture
         CPPUNIT_ASSERT_EQUAL(2_cm, aRange.getMaxY());
     }
 
+    void testCenter()
+    {
+        {
+            gfx::Range2DL aRange(1_cm, 2_cm, 1_cm, 2_cm);
+            CPPUNIT_ASSERT_EQUAL(1_cm, aRange.getCenterX());
+            CPPUNIT_ASSERT_EQUAL(2_cm, aRange.getCenterY());
+        }
+        {
+            gfx::Range2DL aRange(-1_cm, -2_cm, 1_cm, 2_cm);
+            CPPUNIT_ASSERT_EQUAL(0_cm, aRange.getCenterX());
+            CPPUNIT_ASSERT_EQUAL(0_cm, aRange.getCenterY());
+        }
+        {
+            gfx::Range2DL aRange(1_cm, 1_cm, 2_cm, 5_cm);
+            CPPUNIT_ASSERT_EQUAL(15_mm, aRange.getCenterX()); // center between 1cm and 2cm
+            CPPUNIT_ASSERT_EQUAL(3_cm, aRange.getCenterY()); // center between 1cm and 5cm
+        }
+    }
+
     CPPUNIT_TEST_SUITE(Range2DLTest);
     CPPUNIT_TEST(testInRange);
+    CPPUNIT_TEST(testCenter);
     CPPUNIT_TEST_SUITE_END();
 };
 
