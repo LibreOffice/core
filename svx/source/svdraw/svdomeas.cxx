@@ -603,12 +603,13 @@ void SdrMeasureObj::UndirtyText() const
 
     rOutliner.SetUpdateLayout(true);
     rOutliner.UpdateFields();
-    Size aSiz(rOutliner.CalcTextSize());
+    Size aSize = rOutliner.CalcTextSize();
     rOutliner.Clear();
     // cast to nonconst three times
-    const_cast<SdrMeasureObj*>(this)->maTextSize = aSiz;
-    const_cast<SdrMeasureObj*>(this)->mbTextSizeDirty = false;
-    const_cast<SdrMeasureObj*>(this)->m_bTextDirty = false;
+    auto* pThis = const_cast<SdrMeasureObj*>(this);
+    pThis->setTextSize(aSize);
+    pThis->mbTextSizeDirty = false;
+    pThis->m_bTextDirty = false;
 }
 
 void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
@@ -1266,9 +1267,10 @@ bool SdrMeasureObj::BegTextEdit(SdrOutliner& rOutl)
     return SdrTextObj::BegTextEdit(rOutl);
 }
 
-const Size& SdrMeasureObj::GetTextSize() const
+Size SdrMeasureObj::GetTextSize() const
 {
-    if (m_bTextDirty) UndirtyText();
+    if (m_bTextDirty)
+        UndirtyText();
     return SdrTextObj::GetTextSize();
 }
 

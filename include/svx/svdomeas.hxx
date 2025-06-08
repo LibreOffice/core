@@ -131,7 +131,7 @@ public:
     SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     SAL_DLLPRIVATE virtual bool BegTextEdit(SdrOutliner& rOutl) override;
-    SAL_DLLPRIVATE virtual const Size& GetTextSize() const override;
+    SAL_DLLPRIVATE virtual Size GetTextSize() const override;
     SAL_DLLPRIVATE virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
         tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
     SAL_DLLPRIVATE virtual void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const override;

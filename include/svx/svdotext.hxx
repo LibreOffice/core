@@ -34,6 +34,7 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <memory>
 #include <vector>
+#include <basegfx/units/Size2DLWrap.hxx>
 
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 
@@ -212,7 +213,12 @@ protected:
     rtl::Reference<SdrText> mxText;
 
     // This contains the dimensions of the text
-    Size maTextSize;
+    gfx::Size2DLWrap maTextSize;
+    void setTextSize(Size const& rSize)
+    {
+        auto eUnit = getSdrModelFromSdrObject().getUnit();
+        maTextSize = gfx::Size2DLWrap::create(rSize, eUnit);
+    }
 
     // an Outliner*, so that
     // 1. the TextObj won't be edited simultaneously by multiple views, and
@@ -405,7 +411,7 @@ public:
     void SetText(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat);
 
     // FitToSize and Fontwork are not taken into account in GetTextSize()!
-    virtual const Size& GetTextSize() const;
+    virtual Size GetTextSize() const;
     void FitFrameToTextSize();
 
     double GetFontScale() const;

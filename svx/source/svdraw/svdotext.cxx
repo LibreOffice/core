@@ -206,7 +206,7 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, EETextFo
     Size aSize(rOutliner.CalcTextSize());
     rOutliner.Clear();
     NbcSetOutlinerParaObject(std::move(pNewText));
-    maTextSize=aSize;
+    setTextSize(aSize);
     mbTextSizeDirty=false;
 }
 
@@ -219,25 +219,26 @@ void SdrTextObj::SetText(SvStream& rInput, const OUString& rBaseURL, EETextForma
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-const Size& SdrTextObj::GetTextSize() const
+Size SdrTextObj::GetTextSize() const
 {
     if (mbTextSizeDirty)
     {
-        Size aSiz;
+        Size aSize;
         SdrText* pText = getActiveText();
         if( pText && pText->GetOutlinerParaObject ())
         {
             SdrOutliner& rOutliner=ImpGetDrawOutliner();
             rOutliner.SetText(*pText->GetOutlinerParaObject());
             rOutliner.SetUpdateLayout(true);
-            aSiz=rOutliner.CalcTextSize();
+            aSize = rOutliner.CalcTextSize();
             rOutliner.Clear();
         }
         // casting to nonconst twice
-        const_cast<SdrTextObj*>(this)->maTextSize = aSiz;
-        const_cast<SdrTextObj*>(this)->mbTextSizeDirty = false;
+        auto pThis = const_cast<SdrTextObj*>(this);
+        pThis->setTextSize(aSize);
+        pThis->mbTextSizeDirty = false;
     }
-    return maTextSize;
+    return maTextSize.toToolsSize();
 }
 
 bool SdrTextObj::IsAutoGrowHeight() const
