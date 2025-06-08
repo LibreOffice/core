@@ -22,6 +22,9 @@ class tdf145158(UITestCase):
 
             xFontsize = xMainWindow.getChild("fontsizecombobox")
 
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.waitUntilAllIdlesDispatched()
+
             self.assertEqual("12 pt", get_state_as_dict(xFontsize)['Text'])
 
             select_by_text(xFontsize, "10.5 pt")
