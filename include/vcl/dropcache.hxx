@@ -11,6 +11,16 @@
 
 #include <vcl/dllapi.h>
 
+#if defined(__COVERITY__)
+#define THREAD_UNSAFE_DUMP_BEGIN                                                                   \
+    _Pragma(                                                                                       \
+        "coverity compliance block deviate MISSING_LOCK \"Intentionally thread-unsafe dumping\"")
+#define THREAD_UNSAFE_DUMP_END _Pragma("coverity compliance end_block MISSING_LOCK")
+#else
+#define THREAD_UNSAFE_DUMP_BEGIN
+#define THREAD_UNSAFE_DUMP_END
+#endif
+
 namespace rtl
 {
 class OStringBuffer;

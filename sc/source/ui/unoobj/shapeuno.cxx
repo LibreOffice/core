@@ -240,8 +240,10 @@ private:
 
     virtual void dumpState(rtl::OStringBuffer& rState) override
     {
+        THREAD_UNSAFE_DUMP_BEGIN
         rState.append("\nPropertySetInfoCache:\t");
         rState.append(static_cast<sal_Int32>(gCacheMap.size()));
+        THREAD_UNSAFE_DUMP_END
     }
 
     std::mutex gCacheMutex;
