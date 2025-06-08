@@ -76,7 +76,7 @@ public:
         { return GetObjectItemSet().Get(SDRATTR_3DOBJ_BACKSCALE).GetValue(); }
 
     // EndAngle: 0..10000
-    sal_uInt32 GetEndAngle() const
+    sal_uInt16 GetEndAngle() const
         { return GetObjectItemSet().Get(SDRATTR_3DOBJ_END_ANGLE).GetValue(); }
 
     // #107245# GetSmoothNormals() for bLatheSmoothed

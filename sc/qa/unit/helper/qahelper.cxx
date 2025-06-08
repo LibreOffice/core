@@ -337,10 +337,10 @@ void ScModelTestBase::insertArrayToCell(const OUString& rCell, std::u16string_vi
 
 void ScModelTestBase::insertNewSheet(ScDocument& rDoc)
 {
-    sal_Int32 nTabs = static_cast<sal_Int32>(rDoc.GetTableCount());
+    sal_Int16 nTabs = rDoc.GetTableCount();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Name", uno::Any(u"NewTab"_ustr) }, { "Index", uno::Any(nTabs + 1) } }));
+        { { "Name", uno::Any(u"NewTab"_ustr) }, { "Index", uno::Any(sal_Int16(nTabs + 1)) } }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(nTabs + 1), rDoc.GetTableCount());

@@ -343,7 +343,7 @@ inline constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_BACKSCA
 inline constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_DEPTH                  (SDRATTR_3DOBJ_FIRST + 2);   // 1179
 inline constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_HORZ_SEGS              (SDRATTR_3DOBJ_FIRST + 3);   // 1180
 inline constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_VERT_SEGS              (SDRATTR_3DOBJ_FIRST + 4);   // 1181
-inline constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_END_ANGLE              (SDRATTR_3DOBJ_FIRST + 5);   // 1182
+inline constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_END_ANGLE              (SDRATTR_3DOBJ_FIRST + 5);   // 1182
 inline constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_DOUBLE_SIDED           (SDRATTR_3DOBJ_FIRST + 6);   // 1183
 inline constexpr TypedWhichId<Svx3DNormalsKindItem>        SDRATTR_3DOBJ_NORMALS_KIND           (SDRATTR_3DOBJ_FIRST + 7);   // 1184
 inline constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_NORMALS_INVERT         (SDRATTR_3DOBJ_FIRST + 8);   // 1185

@@ -731,7 +731,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_END_ANGLE);
         if( eState != SfxItemState::INVALID )
         {
-            sal_Int32 nValue = rAttrs.Get(SDRATTR_3DOBJ_END_ANGLE).GetValue();
+            sal_uInt16 nValue = rAttrs.Get(SDRATTR_3DOBJ_END_ANGLE).GetValue();
             if( nValue != m_xMtrEndAngle->get_value(FieldUnit::DEGREE) )
             {
                 m_xMtrEndAngle->set_value(nValue, FieldUnit::DEGREE);

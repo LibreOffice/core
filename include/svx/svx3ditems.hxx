@@ -51,8 +51,8 @@ inline SfxUInt32Item makeSvx3DVerticalSegmentsItem(sal_uInt32 nVal) {
     return SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nVal);
 }
 
-inline SfxUInt32Item makeSvx3DEndAngleItem(sal_uInt32 nVal) {
-    return SfxUInt32Item(SDRATTR_3DOBJ_END_ANGLE, nVal);
+inline SfxUInt16Item makeSvx3DEndAngleItem(sal_uInt16 nVal) {
+    return SfxUInt16Item(SDRATTR_3DOBJ_END_ANGLE, nVal);
 }
 
 inline SfxBoolItem makeSvx3DDoubleSidedItem(bool bVal) {

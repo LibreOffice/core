@@ -118,22 +118,25 @@ bool CntUInt16Item::GetPresentation(SfxItemPresentation,
 // virtual
 bool CntUInt16Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
-    sal_Int32 nValue = m_nValue;
-    rVal <<= nValue;
+    rVal <<= m_nValue;
     return true;
 }
 
 // virtual
 bool CntUInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 {
-    sal_Int32 nValue = 0;
-    if (rVal >>= nValue)
+    if (rVal >>= m_nValue)
+        return true;
+    // Legacy: for a long time, CntUInt16Item::PutValue accepted sal_Int32; play safe and accept
+    // if someone passes that
+    if (sal_Int32 nValue; rVal >>= nValue)
     {
-        SAL_WARN_IF(nValue < 0 || nValue > SAL_MAX_UINT16, "svl.items", "Overflow in UInt16 value!");
+        SAL_WARN("svl.items", "Passing sal_uInt16 in sal_Int32!");
+        SAL_WARN_IF(nValue < 0 || nValue > SAL_MAX_UINT16, "svl.items",
+                    "Overflow in UInt16 value!");
         m_nValue = static_cast<sal_uInt16>(nValue);
         return true;
     }
-
     SAL_WARN("svl.items", "CntUInt16Item::PutValue - Wrong type!");
     return false;
 }

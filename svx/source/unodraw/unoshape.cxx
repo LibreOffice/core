@@ -1854,28 +1854,14 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
         // get value from ItemSet
         aAny = SvxItemPropertySet_getPropertyValue( pMap, aSet );
 
-        if( pMap->aType != aAny.getValueType() )
-        {
-            // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-            if( ( pMap->aType == ::cppu::UnoType<sal_Int16>::get()) && aAny.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
-            {
-                sal_Int32 nValue = 0;
-                aAny >>= nValue;
-                aAny <<= static_cast<sal_Int16>(nValue);
-            }
-            else
-            {
-                SAL_WARN_IF(!pMap->aType.isAssignableFrom(aAny.getValueType())
-                                && aAny.getValueType() != cppu::UnoType<void>::get()
-                                && !(pMap->nWID == XATTR_FILLBITMAP && pMap->nMemberId == MID_BITMAP
-                                     && aAny.getValueType() == cppu::UnoType<css::awt::XBitmap>::get()),
-                            "svx",
-                            "SvxShape::GetAnyForItem() Return value for property "
-                                << pMap->aName << " has wrong Type, " << pMap->aType
-                                << " != " << aAny.getValueType());
-            }
-        }
-
+        SAL_WARN_IF(!pMap->aType.isAssignableFrom(aAny.getValueType())
+                        && aAny.getValueType() != cppu::UnoType<void>::get()
+                        && !(pMap->nWID == XATTR_FILLBITMAP && pMap->nMemberId == MID_BITMAP
+                             && aAny.getValueType() == cppu::UnoType<css::awt::XBitmap>::get()),
+                    "svx",
+                    "SvxShape::GetAnyForItem() Return value for property "
+                        << pMap->aName << " has wrong Type, " << pMap->aType
+                        << " != " << aAny.getValueType());
     }
     }
 

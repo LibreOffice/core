@@ -48,7 +48,7 @@ bool SfxEnumItemInterface::GetPresentation(SfxItemPresentation, MapUnit,
 bool SfxEnumItemInterface::QueryValue(css::uno::Any& rVal, sal_uInt8)
     const
 {
-    rVal <<= sal_Int32(GetEnumValue());
+    rVal <<= GetEnumValue();
     return true;
 }
 
