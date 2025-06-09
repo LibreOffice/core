@@ -115,6 +115,10 @@ struct DebOutBuffer
         str.append("SB=" + OString::number(rItem.GetUpper())
                    + ", SA=" + OString::number(rItem.GetLower()));
     }
+    void append(const SvxAdjustItem& rItem)
+    {
+        str.append("SvxAdust=" + OString::number(static_cast<sal_uInt16>(rItem.GetAdjust())));
+    }
     void append(std::string_view descr, const SvxLineSpacingItem& rItem)
     {
         str.append(descr);
@@ -215,7 +219,7 @@ static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
             buffer.append("SBL=", rItem.StaticWhichCast(EE_PARA_SBL));
         break;
         case EE_PARA_JUST:
-            buffer.append("SvxAdust=", rItem.StaticWhichCast(EE_PARA_JUST));
+            buffer.append(rItem.StaticWhichCast(EE_PARA_JUST));
         break;
         case EE_PARA_TABS:
             buffer.append(rItem.StaticWhichCast(EE_PARA_TABS));

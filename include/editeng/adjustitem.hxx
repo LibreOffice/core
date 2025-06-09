@@ -32,7 +32,7 @@ This item describes the row orientation.
 */
 constexpr sal_uInt16 ADJUST_LASTBLOCK_VERSION = 0x0001;
 
-class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxEnumItemInterface
+class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxPoolItem
 {
     bool    bLeft      : 1;
     bool    bRight     : 1;
@@ -72,10 +72,7 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-    virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueTextByPos( sal_uInt16 nPos );
-    virtual sal_uInt16       GetEnumValue() const override;
-    virtual void             SetEnumValue( sal_uInt16 nNewVal ) override;
     virtual SvxAdjustItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
 
     void SetOneWord( const SvxAdjust eType )
