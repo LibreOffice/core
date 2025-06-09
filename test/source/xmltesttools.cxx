@@ -453,6 +453,8 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.microsoft.com/office/drawing/2010/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"),
                        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("cx"),
+                       BAD_CAST("http://schemas.microsoft.com/office/drawing/2014/chartex"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("x"),
                        BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("r"),

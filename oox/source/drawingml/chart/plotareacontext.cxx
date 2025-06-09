@@ -116,7 +116,7 @@ PlotAreaContext::~PlotAreaContext()
 {
 }
 
-ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs)
+ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_unused]]const AttributeList& rAttribs)
 {
     bool bMSO2007Doc = getFilter().isMSO2007Document();
     switch( getCurrentElement() )
@@ -170,7 +170,7 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
         case CX_TOKEN(plotArea) :
             switch (nElement) {
                 case CX_TOKEN(plotAreaRegion) :
-                    return this;
+                    return new ChartexTypeGroupContext(*this, mrModel.maTypeGroups.create(nElement, false));
                 case CX_TOKEN(axis) :
                     // TODO
                     return nullptr;
@@ -179,69 +179,6 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
                 case CX_TOKEN(extLst) :
                     // TODO
                     return nullptr;
-            }
-            break;
-        case CX_TOKEN(plotAreaRegion) :
-            switch (nElement) {
-                case CX_TOKEN(plotSurface) :
-                    // TODO
-                    return nullptr;
-                case CX_TOKEN(series) :
-                    if (rAttribs.hasAttribute(XML_layoutId)) {
-                        sal_Int32 nChartType = 0;
-                        OUString sChartId = rAttribs.getStringDefaulted(XML_layoutId);
-                        assert(!sChartId.isEmpty());
-
-                        if (sChartId == "boxWhisker") {
-                            nChartType = CX_TOKEN(boxWhisker);
-                        } else if (sChartId == "clusteredColumn") {
-                            nChartType = CX_TOKEN(clusteredColumn);
-                        } else if (sChartId == "funnel") {
-                            nChartType = CX_TOKEN(funnel);
-                        } else if (sChartId == "paretoLine") {
-                            nChartType = CX_TOKEN(paretoLine);
-                        } else if (sChartId == "regionMap") {
-                            nChartType = CX_TOKEN(regionMap);
-                        } else if (sChartId == "sunburst") {
-                            nChartType = CX_TOKEN(sunburst);
-                        } else if (sChartId == "treemap") {
-                            nChartType = CX_TOKEN(treemap);
-                        } else if (sChartId == "waterfall") {
-                            nChartType = CX_TOKEN(waterfall);
-                        }
-                        assert(nChartType != 0);
-
-                        // This is a little awkward. The existing parsing
-                        // structures are set up for the ECMA-376 charts, which
-                        // are structured in the XML as
-                        // ...
-                        //   <c:plotArea>
-                        //     <c:barChart> (or whatever)
-                        //       <c:series ... />
-                        //     <c:barChart/>
-                        //   <c:plotArea/>
-                        //
-                        // By contrast, chartex is like this:
-                        // ...
-                        //   <cx:plotArea>
-                        //     <cx:plotAreaRegion>
-                        //       <cx:series layoutId="funnel" ... /> (or other chart type)
-                        //     <cx:plotAreaRegion/>
-                        //   <cx:plotArea/>
-                        //
-                        // The best way I've figured out to bridge this
-                        // difference is via the explicit CreateSeries() call
-                        // below, since the structure wants a TypeGroup but
-                        // we're already in the series handling. There may well
-                        // be a better solution.
-                        rtl::Reference<ChartexTypeGroupContext> rTGCtx = new ChartexTypeGroupContext( *this,
-                                mrModel.maTypeGroups.create( nChartType, false ) );
-                        rTGCtx->CreateSeries();
-
-                        return rTGCtx;
-                    }
-                    break;
-
             }
             break;
     }
