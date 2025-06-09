@@ -2565,7 +2565,7 @@ void SvxProtectItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 SvxShadowItem::SvxShadowItem( const sal_uInt16 nId,
                  const Color *pColor, const sal_uInt16 nW,
                  const SvxShadowLocation eLoc ) :
-    SfxEnumItemInterface( nId ),
+    SfxPoolItem( nId ),
     aShadowColor(COL_GRAY),
     nWidth      ( nW ),
     eLocation   ( eLoc )
@@ -2802,22 +2802,6 @@ bool SvxShadowItem::HasMetrics() const
     return true;
 }
 
-
-sal_uInt16 SvxShadowItem::GetValueCount() const
-{
-    return sal_uInt16(SvxShadowLocation::End);  // SvxShadowLocation::BottomRight + 1
-}
-
-sal_uInt16 SvxShadowItem::GetEnumValue() const
-{
-    return static_cast<sal_uInt16>(GetLocation());
-}
-
-
-void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
-{
-    SetLocation( static_cast<SvxShadowLocation>(nVal) );
-}
 
 void SvxShadowItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {

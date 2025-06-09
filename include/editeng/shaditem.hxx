@@ -35,7 +35,7 @@
 */
 enum class SvxShadowItemSide { TOP, BOTTOM, LEFT, RIGHT };
 
-class EDITENG_DLLPUBLIC SvxShadowItem final : public SfxEnumItemInterface
+class EDITENG_DLLPUBLIC SvxShadowItem final : public SfxPoolItem
 {
     Color               aShadowColor;
     sal_uInt16              nWidth;
@@ -76,9 +76,6 @@ public:
     // Calculate width of the shadow on the page.
     sal_uInt16 CalcShadowSpace( SvxShadowItemSide nShadow ) const;
 
-    virtual sal_uInt16      GetValueCount() const override;
-    virtual sal_uInt16      GetEnumValue() const override;
-    virtual void            SetEnumValue( sal_uInt16 nNewVal ) override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
