@@ -38,6 +38,7 @@
 #include <tools/time.hxx>
 
 #include <algorithm>
+#include <climits>
 #include <string_view>
 
 using namespace com::sun::star;
