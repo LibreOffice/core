@@ -22,6 +22,7 @@ class tdf145158(UITestCase):
 
             xFontsize = xMainWindow.getChild("fontsizecombobox")
 
+            self.ui_test.wait_until_property_is_updated(xFontsize, "Text", "12 pt")
             self.assertEqual("12 pt", get_state_as_dict(xFontsize)['Text'])
 
             select_by_text(xFontsize, "10.5 pt")
