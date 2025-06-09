@@ -160,7 +160,7 @@ void xforms_minFunction(xmlXPathParserContextPtr ctxt, int nargs)
         double nNumber = xmlXPathCastNodeToNumber(xmlXPathNodeSetItem(pNodeSet, i));
         if (xmlXPathIsNaN(nNumber))
         {
-            xmlXPathReturnNumber(ctxt, xmlXPathNAN);
+            xmlXPathReturnNumber(ctxt, std::numeric_limits<double>::quiet_NaN());
             return;
         }
         if (i == 0)
@@ -182,7 +182,7 @@ void xforms_maxFunction(xmlXPathParserContextPtr ctxt, int nargs)
         double nNumber = xmlXPathCastNodeToNumber(xmlXPathNodeSetItem(pNodeSet, i));
         if (xmlXPathIsNaN(nNumber))
         {
-            xmlXPathReturnNumber(ctxt, xmlXPathNAN);
+            xmlXPathReturnNumber(ctxt, std::numeric_limits<double>::quiet_NaN());
             return;
         }
         if (i == 0)
@@ -336,7 +336,7 @@ void xforms_daysFromDateFunction(xmlXPathParserContextPtr ctxt, int nargs)
         xmlXPathReturnNumber(ctxt, nDays);
     }
     else
-        xmlXPathReturnNumber(ctxt, xmlXPathNAN);
+        xmlXPathReturnNumber(ctxt, std::numeric_limits<double>::quiet_NaN());
 
 
 }
@@ -364,7 +364,7 @@ void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs
         xmlXPathReturnNumber(ctxt, nSeconds);
     }
     else
-        xmlXPathReturnNumber(ctxt, xmlXPathNAN);
+        xmlXPathReturnNumber(ctxt, std::numeric_limits<double>::quiet_NaN());
 
 }
 
@@ -450,7 +450,7 @@ void xforms_secondsFunction(xmlXPathParserContextPtr ctxt, int nargs)
         xmlXPathReturnNumber(ctxt, nSeconds);
     }
     else
-        xmlXPathReturnNumber(ctxt, xmlXPathNAN);
+        xmlXPathReturnNumber(ctxt, std::numeric_limits<double>::quiet_NaN());
 }
 
 void xforms_monthsFunction(xmlXPathParserContextPtr ctxt, int nargs)
@@ -478,7 +478,7 @@ void xforms_monthsFunction(xmlXPathParserContextPtr ctxt, int nargs)
         xmlXPathReturnNumber(ctxt, nMonths);
     }
     else
-        xmlXPathReturnNumber(ctxt, xmlXPathNAN);
+        xmlXPathReturnNumber(ctxt, std::numeric_limits<double>::quiet_NaN());
 
 }
 
