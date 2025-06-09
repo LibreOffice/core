@@ -1267,8 +1267,11 @@ void DocxExport::WriteSettings()
      * 2.) Many years later, change the TargetCompatilityMode for new documents, when we no longer care
      *     about working with perfect compatibility with older versions of MS Word.
      */
+    // in 24.04, let's keep original compatibility mode, if one exists
     sal_Int32 nTargetCompatibilityMode =
-        (GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION)
+        getWordCompatibilityModeFromGrabBag();
+    if (nTargetCompatibilityMode < 12)
+        nTargetCompatibilityMode = (GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION)
         ? 12 : 15; //older versions might not open our files well
     bool bHasCompatibilityMode = false;
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
