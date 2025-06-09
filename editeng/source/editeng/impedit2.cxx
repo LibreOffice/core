@@ -2070,13 +2070,13 @@ SvxAdjust ImpEditEngine::GetJustification( sal_Int32 nPara ) const
 SvxCellJustifyMethod ImpEditEngine::GetJustifyMethod( sal_Int32 nPara ) const
 {
     const SvxJustifyMethodItem& rItem = GetParaAttrib(nPara, EE_PARA_JUST_METHOD);
-    return static_cast<SvxCellJustifyMethod>(rItem.GetEnumValue());
+    return rItem.GetValue();
 }
 
 SvxCellVerJustify ImpEditEngine::GetVerJustification( sal_Int32 nPara ) const
 {
     const SvxVerJustifyItem& rItem = GetParaAttrib(nPara, EE_PARA_VER_JUST);
-    return static_cast<SvxCellVerJustify>(rItem.GetEnumValue());
+    return rItem.GetValue();
 }
 
 SvxFontUnitMetrics ImpEditEngine::GetFontUnitMetrics(ContentNode* pNode)

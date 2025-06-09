@@ -5552,10 +5552,10 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     else
         m_pSerializer->startElementNS(XML_a, XML_blip, FSNS(XML_r, nImageType), aRelId);
 
-    const SfxEnumItemInterface* pGrafModeItem = nullptr;
+    const SwDrawModeGrf* pGrafModeItem = nullptr;
     if ( pGrfNode && (pGrafModeItem = pGrfNode->GetSwAttrSet().GetItemIfSet(RES_GRFATR_DRAWMODE)))
     {
-        GraphicDrawMode nMode = static_cast<GraphicDrawMode>(pGrafModeItem->GetEnumValue());
+        GraphicDrawMode nMode = pGrafModeItem->GetValue();
         if (nMode == GraphicDrawMode::Greys)
             m_pSerializer->singleElementNS (XML_a, XML_grayscl);
         else if (nMode == GraphicDrawMode::Mono) //black/white has a 0,5 threshold in LibreOffice

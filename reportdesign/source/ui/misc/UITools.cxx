@@ -465,7 +465,11 @@ namespace
             lcl_pushBack( _out_rProperties, PROPERTY_VERTICALALIGN, aValue );
         }
         if ( const SvxCharReliefItem* pReliefItem = _rItemSet.GetItemIfSet( ITEMID_CHARRELIEF ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARRELIEF, uno::Any( static_cast< sal_Int16 >( pReliefItem->GetEnumValue() ) ) );
+        {
+            uno::Any aValue;
+            pReliefItem->QueryValue(aValue, MID_RELIEF);
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARRELIEF, aValue );
+        }
         if ( const SvxCharHiddenItem* pHiddenItem = _rItemSet.GetItemIfSet( ITEMID_CHARHIDDEN ) )
             lcl_pushBack( _out_rProperties, PROPERTY_CHARHIDDEN, uno::Any( pHiddenItem->GetValue() ) );
         if ( const SvxAutoKernItem* pKernItem = _rItemSet.GetItemIfSet( ITEMID_AUTOKERN ) )
@@ -487,7 +491,11 @@ namespace
         if ( const SvxKerningItem* pKernItem = _rItemSet.GetItemIfSet( ITEMID_KERNING ) )
             lcl_pushBack( _out_rProperties, PROPERTY_CHARKERNING, uno::Any( pKernItem->GetValue() ) );
         if ( const SvxCaseMapItem* pCaseMapItem = _rItemSet.GetItemIfSet( ITEMID_CASEMAP ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::Any( pCaseMapItem->GetEnumValue() ) );
+        {
+            uno::Any aValue;
+            pCaseMapItem->QueryValue(aValue);
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, aValue );
+        }
         struct Items {
                 TypedWhichId<SvxLanguageItem> nWhich;
                 OUString sPropertyName;

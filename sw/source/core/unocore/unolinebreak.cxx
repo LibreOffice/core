@@ -247,7 +247,7 @@ uno::Any SAL_CALL SwXLineBreak::getPropertyValue(const OUString& rPropertyName)
     }
     else
     {
-        aRet <<= m_pImpl->m_pFormatLineBreak->GetEnumValue();
+        m_pImpl->m_pFormatLineBreak->QueryValue(aRet);
     }
     return aRet;
 }

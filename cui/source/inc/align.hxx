@@ -44,7 +44,7 @@ enum VerticalAlign {
 #include <svx/frmdirlbox.hxx>
 #include <vcl/weld.hxx>
 
-class SfxEnumItemInterface;
+class SvxJustifyMethodItem;
 
 namespace svx {
 
@@ -68,7 +68,7 @@ private:
     void                InitVsRefEgde();
     void                UpdateEnableControls();
 
-    bool                HasAlignmentChanged( const SfxItemSet& rNew, TypedWhichId<SfxEnumItemInterface> nWhich ) const;
+    bool                HasAlignmentChanged( const SfxItemSet& rNew, TypedWhichId<SvxJustifyMethodItem> nWhich ) const;
 
     DECL_LINK(UpdateEnableHdl, weld::ComboBox&, void);
     DECL_LINK(StackedClickHdl, weld::Toggleable&, void);
