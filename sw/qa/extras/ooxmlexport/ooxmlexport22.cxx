@@ -381,6 +381,17 @@ CPPUNIT_TEST_FIXTURE(Test, testLineBreakInRef)
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[4]/w:t", u"Text1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFieldMarkFormat, "fontsize-field-separator.docx")
+{
+    uno::Reference<text::XTextRange> xRun(getRun(getParagraph(1), 1));
+
+    // Without the fix it fails with
+    // - Expected: 12
+    // - Actual  : 42
+    // i.e. the field content has the properties fo the field marks
+    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xRun, u"CharHeight"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
