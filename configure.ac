@@ -7161,7 +7161,7 @@ find_msms()
     local version="$1"
 
     AC_MSG_CHECKING([for MSVC $version merge modules directory])
-    local my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/${version}/MergeModules"
+    local my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/v${version}/MergeModules"
     local my_msm_file="$my_msm_dir/Microsoft_VC${version}_CRT_x86.msm"
     echo "$as_me:$LINENO: looking for ${my_msm_file}" >&5
     if test -e "${my_msm_file}"; then
@@ -8988,7 +8988,7 @@ if test $_os = "WINNT"; then
     for i in $PKGFORMAT; do
         if test "$i" = msi; then
             dnl strip initial v from the version label found by find_msvc
-            with_vcredis=${VCTOOLSET:1}
+            with_redist=${VCTOOLSET:1}
             find_msms "$with_redist"
             if test -n "$msmdir"; then
                 MSM_PATH=`win_short_path_for_make "$msmdir"`/
