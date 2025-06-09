@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_INC_HELPIDS_H
-#define INCLUDED_DBACCESS_INC_HELPIDS_H
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -107,7 +106,5 @@ inline constexpr OUString HID_DBWIZ_FINISH = u"DBACCESS_HID_DBWIZ_FINISH"_ustr;
 inline constexpr OUString HID_DBWIZ_HELP = u"DBACCESS_HID_DBWIZ_HELP"_ustr;
 
 inline constexpr OUString HID_DBWIZ_ROADMAP = u"DBACCESS_HID_DBWIZ_ROADMAP"_ustr;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
