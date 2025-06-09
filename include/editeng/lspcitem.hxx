@@ -31,7 +31,7 @@
 */
 
 #define LINE_SPACE_DEFAULT_HEIGHT 200
-class EDITENG_DLLPUBLIC SvxLineSpacingItem final : public SfxEnumItemInterface
+class EDITENG_DLLPUBLIC SvxLineSpacingItem final : public SfxPoolItem
 {
     short                 nInterLineSpace;
     sal_uInt16            nLineHeight;
@@ -96,10 +96,6 @@ public:
 
     void SetInterLineSpaceRule(SvxInterLineSpaceRule e) { ASSERT_CHANGE_REFCOUNTED_ITEM; eInterLineSpaceRule = e; }
     SvxInterLineSpaceRule GetInterLineSpaceRule() const { return eInterLineSpaceRule; }
-
-    virtual sal_uInt16      GetValueCount() const override;
-    virtual sal_uInt16      GetEnumValue() const override;
-    virtual void            SetEnumValue( sal_uInt16 nNewVal ) override;
 };
 
 #endif

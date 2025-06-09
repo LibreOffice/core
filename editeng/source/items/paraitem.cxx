@@ -79,7 +79,7 @@ enum class SvxSpecialLineSpace
 }
 
 SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId )
-    : SfxEnumItemInterface( nId )
+    : SfxPoolItem(nId)
 {
     nPropLineSpace = 100;
     nInterLineSpace = 0;
@@ -317,38 +317,6 @@ bool SvxLineSpacingItem::GetPresentation
         }
     }
     return true;
-}
-
-sal_uInt16 SvxLineSpacingItem::GetValueCount() const
-{
-    return sal_uInt16(SvxSpecialLineSpace::End);   // SvxSpecialLineSpace::TwoLines + 1
-}
-
-
-sal_uInt16 SvxLineSpacingItem::GetEnumValue() const
-{
-    SvxSpecialLineSpace nVal;
-    switch ( nPropLineSpace )
-    {
-        case 100:   nVal = SvxSpecialLineSpace::OneLine;            break;
-        case 150:   nVal = SvxSpecialLineSpace::OnePointFiveLines;  break;
-        case 200:   nVal = SvxSpecialLineSpace::TwoLines;           break;
-        default:    nVal = SvxSpecialLineSpace::User;               break;
-    }
-    return static_cast<sal_uInt16>(nVal);
-}
-
-
-void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
-{
-    ASSERT_CHANGE_REFCOUNTED_ITEM;
-    switch ( static_cast<SvxSpecialLineSpace>(nVal) )
-    {
-        case SvxSpecialLineSpace::OneLine:           nPropLineSpace = 100; break;
-        case SvxSpecialLineSpace::OnePointFiveLines: nPropLineSpace = 150; break;
-        case SvxSpecialLineSpace::TwoLines:          nPropLineSpace = 200; break;
-        default: break;
-    }
 }
 
 // class SvxAdjustItem ---------------------------------------------------
