@@ -156,12 +156,13 @@ namespace DOM
 
     static OUString make_error_message(xmlParserCtxtPtr ctxt)
     {
+        const xmlError* lastError = xmlCtxtGetLastError(ctxt);
         OUStringBuffer buf;
-        buf.appendAscii(ctxt->lastError.message);
+        buf.appendAscii(lastError->message);
         buf.append("Line: ");
-        buf.append(static_cast<sal_Int32>(ctxt->lastError.line));
+        buf.append(static_cast<sal_Int32>(lastError->line));
         buf.append("\nColumn: ");
-        buf.append(static_cast<sal_Int32>(ctxt->lastError.int2));
+        buf.append(static_cast<sal_Int32>(lastError->int2));
         OUString msg = buf.makeStringAndClear();
         return msg;
     }
@@ -275,10 +276,11 @@ namespace DOM
             if (pDocBuilder->getErrorHandler().is())   // if custom error handler is set (using setErrorHandler ())
             {
                 // Prepare SAXParseException to be passed to custom XErrorHandler::warning function
+                const xmlError* lastError = xmlCtxtGetLastError(pctx);
                 css::xml::sax::SAXParseException saxex;
                 saxex.Message = make_error_message(pctx);
-                saxex.LineNumber = static_cast<sal_Int32>(pctx->lastError.line);
-                saxex.ColumnNumber = static_cast<sal_Int32>(pctx->lastError.int2);
+                saxex.LineNumber = static_cast<sal_Int32>(lastError->line);
+                saxex.ColumnNumber = static_cast<sal_Int32>(lastError->int2);
 
                 // Call custom warning function
                 pDocBuilder->getErrorHandler()->warning(::css::uno::Any(saxex));
@@ -307,10 +309,11 @@ namespace DOM
             if (pDocBuilder->getErrorHandler().is())   // if custom error handler is set (using setErrorHandler ())
             {
                 // Prepare SAXParseException to be passed to custom XErrorHandler::error function
+                const xmlError* lastError = xmlCtxtGetLastError(pctx);
                 css::xml::sax::SAXParseException saxex;
                 saxex.Message = make_error_message(pctx);
-                saxex.LineNumber = static_cast<sal_Int32>(pctx->lastError.line);
-                saxex.ColumnNumber = static_cast<sal_Int32>(pctx->lastError.int2);
+                saxex.LineNumber = static_cast<sal_Int32>(lastError->line);
+                saxex.ColumnNumber = static_cast<sal_Int32>(lastError->int2);
 
                 // Call custom warning function
                 pDocBuilder->getErrorHandler()->error(::css::uno::Any(saxex));
@@ -326,10 +329,11 @@ namespace DOM
 
     static void throwEx(xmlParserCtxtPtr ctxt)
     {
+        const xmlError* lastError = xmlCtxtGetLastError(ctxt);
         css::xml::sax::SAXParseException saxex;
         saxex.Message = make_error_message(ctxt);
-        saxex.LineNumber = static_cast<sal_Int32>(ctxt->lastError.line);
-        saxex.ColumnNumber = static_cast<sal_Int32>(ctxt->lastError.int2);
+        saxex.LineNumber = static_cast<sal_Int32>(lastError->line);
+        saxex.ColumnNumber = static_cast<sal_Int32>(lastError->int2);
         throw saxex;
     }
 
