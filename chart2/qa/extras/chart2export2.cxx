@@ -153,6 +153,21 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenODS)
                 u"between");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
+{
+    loadFromFile(u"xlsx/funnel1.xlsx");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"funnel");
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:spPr/"
+                "a:solidFill/a:srgbClr",
+                "val", u"c55a11");
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitleRotationXLSX)
 {
     loadFromFile(u"xlsx/axis_title_rotation.xlsx");
