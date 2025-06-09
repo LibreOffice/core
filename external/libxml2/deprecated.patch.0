@@ -1,13 +1,3 @@
---- include/libxml/xpath.h	2025-05-13 16:42:31.000000000 +0200
-+++ include/libxml/xpath.h	2025-06-03 14:10:14.539373167 +0200
-@@ -401,7 +401,6 @@
-  * Objects and Nodesets handling
-  */
-
--XML_DEPRECATED
- XMLPUBVAR double xmlXPathNAN;
- XML_DEPRECATED
- XMLPUBVAR double xmlXPathPINF;
 --- include/libxml/parser.h	2025-05-13 16:42:31.000000000 +0200
 +++ include/libxml/parser.h	2025-06-03 14:00:37.833979131 +0200
 @@ -268,20 +268,20 @@
