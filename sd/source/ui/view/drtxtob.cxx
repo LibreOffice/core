@@ -676,7 +676,7 @@ void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, S
     }
 
     // justification (superscript, subscript) is also needed in outline-mode
-    SvxEscapement eEsc = static_cast<SvxEscapement>(aAttrSet.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue());
+    SvxEscapement eEsc = aAttrSet.Get(EE_CHAR_ESCAPEMENT).GetEscapement();
     rSet.Put(SfxBoolItem(SID_SET_SUPER_SCRIPT, eEsc == SvxEscapement::Superscript));
     rSet.Put(SfxBoolItem(SID_SET_SUB_SCRIPT, eEsc == SvxEscapement::Subscript));
 

@@ -1270,7 +1270,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_ESCAPEMENT:
-        switch( static_cast<SvxEscapement>(rItem.StaticWhichCast(RES_CHRATR_ESCAPEMENT).GetEnumValue()) )
+        switch (rItem.StaticWhichCast(RES_CHRATR_ESCAPEMENT).GetEscapement())
         {
         case SvxEscapement::Superscript:
         case SvxEscapement::Subscript:
@@ -2938,8 +2938,7 @@ static SwHTMLWriter& OutHTML_SvxEscapement( SwHTMLWriter& rWrt, const SfxPoolIte
     if( rWrt.m_bOutOpts )
         return rWrt;
 
-    const SvxEscapement eEscape =
-        static_cast<SvxEscapement>(static_cast<const SvxEscapementItem&>(rHt).GetEnumValue());
+    const SvxEscapement eEscape = static_cast<const SvxEscapementItem&>(rHt).GetEscapement();
     OString aTag;
     switch( eEscape )
     {

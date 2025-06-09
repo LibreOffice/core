@@ -1904,7 +1904,7 @@ bool SvxCaseMapItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 // class SvxEscapementItem -----------------------------------------------
 
 SvxEscapementItem::SvxEscapementItem( const sal_uInt16 nId ) :
-    SfxEnumItemInterface( nId ),
+    SfxPoolItem( nId ),
 
     nEsc    ( 0 ),
     nProp   ( 100 )
@@ -1914,7 +1914,7 @@ SvxEscapementItem::SvxEscapementItem( const sal_uInt16 nId ) :
 
 SvxEscapementItem::SvxEscapementItem( const SvxEscapement eEscape,
                                       const sal_uInt16 nId ) :
-    SfxEnumItemInterface( nId ),
+    SfxPoolItem( nId ),
     nProp( 100 )
 {
     SetEscapement( eEscape );
@@ -1926,7 +1926,7 @@ SvxEscapementItem::SvxEscapementItem( const SvxEscapement eEscape,
 SvxEscapementItem::SvxEscapementItem( const short _nEsc,
                                       const sal_uInt8 _nProp,
                                       const sal_uInt16 nId ) :
-    SfxEnumItemInterface( nId ),
+    SfxPoolItem( nId ),
     nEsc    ( _nEsc ),
     nProp   ( _nProp )
 {
@@ -1945,12 +1945,6 @@ SvxEscapementItem* SvxEscapementItem::Clone( SfxItemPool * ) const
     return new SvxEscapementItem( *this );
 }
 
-sal_uInt16 SvxEscapementItem::GetValueCount() const
-{
-    return sal_uInt16(SvxEscapement::End);  // SvxEscapement::Subscript + 1
-}
-
-
 bool SvxEscapementItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
@@ -1959,7 +1953,17 @@ bool SvxEscapementItem::GetPresentation
     OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
-    rText = GetValueTextByPos( GetEnumValue() );
+    static constexpr TranslateId RID_SVXITEMS_ESCAPEMENT[] =
+    {
+        RID_SVXITEMS_ESCAPEMENT_OFF,
+        RID_SVXITEMS_ESCAPEMENT_SUPER,
+        RID_SVXITEMS_ESCAPEMENT_SUB
+    };
+
+    SvxEscapement pos = GetEscapement();
+    static_assert(std::size(RID_SVXITEMS_ESCAPEMENT) == size_t(SvxEscapement::End), "must match");
+    assert(pos < SvxEscapement::End && "enum overflow!");
+    rText = EditResId(RID_SVXITEMS_ESCAPEMENT[static_cast<size_t>(pos)]);
 
     if ( nEsc != 0 )
     {
@@ -1971,33 +1975,13 @@ bool SvxEscapementItem::GetPresentation
     return true;
 }
 
-OUString SvxEscapementItem::GetValueTextByPos( sal_uInt16 nPos )
-{
-    static TranslateId RID_SVXITEMS_ESCAPEMENT[] =
-    {
-        RID_SVXITEMS_ESCAPEMENT_OFF,
-        RID_SVXITEMS_ESCAPEMENT_SUPER,
-        RID_SVXITEMS_ESCAPEMENT_SUB
-    };
-
-    static_assert(std::size(RID_SVXITEMS_ESCAPEMENT) == size_t(SvxEscapement::End), "must match");
-    assert(nPos < sal_uInt16(SvxEscapement::End) && "enum overflow!");
-    return EditResId(RID_SVXITEMS_ESCAPEMENT[nPos]);
-}
-
-sal_uInt16 SvxEscapementItem::GetEnumValue() const
+SvxEscapement SvxEscapementItem::GetEscapement() const
 {
     if ( nEsc < 0 )
-        return sal_uInt16(SvxEscapement::Subscript);
+        return SvxEscapement::Subscript;
     else if ( nEsc > 0 )
-        return sal_uInt16(SvxEscapement::Superscript);
-    return sal_uInt16(SvxEscapement::Off);
-}
-
-
-void SvxEscapementItem::SetEnumValue( sal_uInt16 nVal )
-{
-    SetEscapement( static_cast<SvxEscapement>(nVal) );
+        return SvxEscapement::Superscript;
+    return SvxEscapement::Off;
 }
 
 bool SvxEscapementItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const

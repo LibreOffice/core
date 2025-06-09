@@ -189,7 +189,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 {
                     if ( nId == EE_CHAR_ESCAPEMENT ) // Super-/Subscript always via EE
                     {
-                        if ( static_cast<SvxEscapement>(static_cast<const SvxEscapementItem*>(pItem)->GetEnumValue())
+                        if ( pItem->StaticWhichCast(EE_CHAR_ESCAPEMENT).GetEscapement()
                                 != SvxEscapement::Off )
                             bSimple = false;
                     }
