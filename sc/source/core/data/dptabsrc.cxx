@@ -20,6 +20,7 @@
 #include <dptabsrc.hxx>
 
 #include <algorithm>
+#include <climits>
 #include <vector>
 
 #include <comphelper/sequence.hxx>
