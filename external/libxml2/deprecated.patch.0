@@ -44,13 +44,3 @@
      /* unused */
      int progressive XML_DEPRECATED_MEMBER;
      /* dictionary for the parser */
-@@ -436,7 +436,7 @@
-     /*
-      * the complete error information for the last error.
-      */
--    xmlError lastError XML_DEPRECATED_MEMBER;
-+    xmlError lastError;
-     /* the parser mode */
-     xmlParserMode parseMode XML_DEPRECATED_MEMBER;
-     /* unused */
-
