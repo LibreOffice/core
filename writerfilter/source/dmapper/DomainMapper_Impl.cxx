@@ -6139,6 +6139,10 @@ void DomainMapper_Impl::AppendFieldCommand(OUString const & rPartOfCommand)
     {
         // Set command line type: normal or deleted
         pContext->SetCommandType(m_bTextDeleted);
+        if (pContext->GetCommand().isEmpty())
+        {
+            pContext->getProperties()->InsertProps(GetTopContextOfType(CONTEXT_CHARACTER));
+        }
         pContext->AppendCommand( rPartOfCommand );
     }
 }
@@ -8788,7 +8792,7 @@ void DomainMapper_Impl::PopFieldContext()
                         // properties from there.
                         // Also merge in the properties from the field context,
                         // e.g. SdtEndBefore.
-                        if (m_pLastCharacterContext)
+                        if (m_pLastCharacterContext && IsRTFImport())
                             aMap.InsertProps(m_pLastCharacterContext);
                         aMap.InsertProps(m_aFieldStack.back()->getProperties());
                         appendTextContent(xToInsert, aMap.GetPropertyValues());
