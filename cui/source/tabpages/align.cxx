@@ -54,7 +54,7 @@ const WhichRangesContainer AlignmentTabPage::s_pRanges(
 
 namespace {
 
-template<typename JustContainerType, typename JustEnumType>
+template<typename JustEnumType>
 void lcl_MaybeResetAlignToDistro(
     weld::ComboBox& rLB, sal_uInt16 nListId, const SfxItemSet& rCoreAttrs, TypedWhichId<SfxEnumItemInterface> nWhichAlign, TypedWhichId<SfxEnumItemInterface> nWhichJM, JustEnumType eBlock)
 {
@@ -63,7 +63,7 @@ void lcl_MaybeResetAlignToDistro(
         // alignment not set.
         return;
 
-    JustContainerType eVal = static_cast<JustContainerType>(p->GetEnumValue());
+    JustEnumType eVal = static_cast<JustEnumType>(p->GetEnumValue());
     if (eVal != eBlock)
         // alignment is not 'justify'.  No need to go further.
         return;
@@ -632,7 +632,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     else
     {
         // feature known, e.g. calc
-        lcl_MaybeResetAlignToDistro<SvxCellHorJustify, SvxCellHorJustify>(
+        lcl_MaybeResetAlignToDistro(
             *m_xLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED, *pCoreAttrs,
             TypedWhichId<SfxEnumItemInterface>(GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY)), nHorJustifyMethodWhich,
             SvxCellHorJustify::Block);
@@ -650,7 +650,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     else
     {
         // feature known, e.g. calc
-        lcl_MaybeResetAlignToDistro<SvxCellVerJustify, SvxCellVerJustify>(
+        lcl_MaybeResetAlignToDistro(
             *m_xLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED, *pCoreAttrs,
             TypedWhichId<SfxEnumItemInterface>(GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY)), nVerJustifyMethodWhich,
             SvxCellVerJustify::Block);
