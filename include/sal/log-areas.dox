@@ -245,6 +245,7 @@ certain functionality.
 @li @c filter.xmlfa
 @li @c filter.xmlfd
 @li @c filter.xslt - xslt import/export
+@li @c filter.graphic
 
 @section oox
 

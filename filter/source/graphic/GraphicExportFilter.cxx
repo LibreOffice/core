@@ -29,6 +29,10 @@
 #include <vcl/graphicfilter.hxx>
 #include <svl/outstrm.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
+#include <boost/property_tree/json_parser/error.hpp>
+#include <vcl/glyphitemcache.hxx>
 
 using namespace css;
 
@@ -80,6 +84,10 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
         {
             rProperty.Value >>= maFilterDataSequence;
         }
+        else if ( rProperty.Name == "FilterOptions" )
+        {
+            rProperty.Value >>= maFilterOptions;
+        }
         else if ( rProperty.Name == "OutputStream" )
         {
             rProperty.Value >>= mxOutputStream;
@@ -87,6 +95,22 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
         else if ( rProperty.Name == "SelectionOnly" )
         {
             rProperty.Value >>= mbSelectionOnly;
+        }
+    }
+
+    if (!maFilterDataSequence.hasElements() && maFilterOptions.startsWith("{"))
+    {
+        try
+        {
+            // Allow setting filter data keys from the cmdline.
+            std::vector<beans::PropertyValue> aData
+                = comphelper::JsonToPropertyValues(maFilterOptions.toUtf8());
+            maFilterDataSequence = comphelper::containerToSequence(aData);
+        }
+        catch (const boost::property_tree::json_parser::json_parser_error& e)
+        {
+            // This wasn't a valid json; maybe came from import filter
+            SAL_WARN("filter.graphic", "error parsing FilterOptions: " << e.message());
         }
     }
 

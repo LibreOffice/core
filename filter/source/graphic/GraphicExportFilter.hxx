@@ -45,6 +45,7 @@ class GraphicExportFilter :
     css::uno::Sequence< css::beans::PropertyValue >     maFilterDataSequence;
 
     OUString    maFilterExtension;
+    OUString    maFilterOptions;
     sal_Int32   mnTargetWidth;
     sal_Int32   mnTargetHeight;
     bool        mbSelectionOnly;
