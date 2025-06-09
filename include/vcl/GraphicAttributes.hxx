@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 
+// Represents css::drawing::ColorMode
 enum class GraphicDrawMode
 {
     Standard = 0,

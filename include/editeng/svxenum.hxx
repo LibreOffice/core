@@ -84,6 +84,7 @@ enum class SvxAdjust
     LAST = End
 };
 
+// The values are stored to e.g. autoformat table
 enum class SvxBreak
 {
     NONE,

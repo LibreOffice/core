@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 
+// Corresponds to css::text::FontRelief
 enum class FontRelief { NONE, Embossed, Engraved, FontRelief_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
 
 enum class FontKerning

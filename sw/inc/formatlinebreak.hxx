@@ -31,7 +31,7 @@ class SwTextLineBreak;
 class SwXLineBreak;
 class SwXTextRange;
 
-/// Defines the location of a line break text wrapping restart.
+/// Defines the location of a line break text wrapping restart; corresponds to RTF's \lbrN.
 enum class SwLineBreakClear
 {
     NONE,
