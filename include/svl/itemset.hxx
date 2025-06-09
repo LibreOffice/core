@@ -193,8 +193,7 @@ public:
 
     template <class T> SfxItemState GetItemState(TypedWhichId<T> nWhich, bool bSrchInParent = true, const T **ppItem = nullptr ) const
     {
-        // use local helper, start value for looped-through SfxItemState value is SfxItemState::UNKNOWN
-        return GetItemState_ForWhichID(SfxItemState::UNKNOWN, sal_uInt16(nWhich), bSrchInParent, reinterpret_cast<SfxPoolItem const**>(ppItem));
+        return GetItemState(sal_uInt16(nWhich), bSrchInParent, reinterpret_cast<SfxPoolItem const**>(ppItem));
     }
 
     /// Templatized version of GetItemState() to directly return the correct type.
@@ -202,9 +201,9 @@ public:
     const T *                   GetItemIfSet(   TypedWhichId<T> nWhich,
                                                 bool bSrchInParent = true ) const
     {
-        const SfxPoolItem * pItem = nullptr;
-        if (SfxItemState::SET == GetItemState_ForWhichID(SfxItemState::UNKNOWN, sal_uInt16(nWhich), bSrchInParent, &pItem))
-            return static_cast<const T*>(pItem);
+        const T * pItem = nullptr;
+        if (SfxItemState::SET == GetItemState(nWhich, bSrchInParent, &pItem))
+            return pItem;
         return nullptr;
     }
 
