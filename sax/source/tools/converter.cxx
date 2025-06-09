@@ -39,6 +39,7 @@
 #include <tools/time.hxx>
 
 #include <algorithm>
+#include <climits>
 #include <map>
 #include <string_view>
 
