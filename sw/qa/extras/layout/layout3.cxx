@@ -1169,7 +1169,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf126154_minimum_shrinking)
         u",,,,,,,, , , , , , , , Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vesti ");
 
     // also minimum word space: 80%, 100%, 100%
-    // only a single line was yphenated from the previous ones
+    // only a single line was hyphenated from the previous ones
     // TODO: fix possible interoperability issues, allow optional limitation of hyphenation again
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]", "portion",
