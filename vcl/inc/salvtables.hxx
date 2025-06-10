@@ -1942,8 +1942,8 @@ public:
     virtual void insert(int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, weld::TreeIter* pRet) override;
 
-    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
-                        const VirtualDevice* pIcon, weld::TreeIter* pRet) override;
+    virtual void insert(int pos, const OUString* pStr, const OUString* pId, const BitmapEx* pIcon,
+                        weld::TreeIter* pRet) override;
 
     virtual void insert_separator(int pos, const OUString* pId) override;
 

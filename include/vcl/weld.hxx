@@ -60,6 +60,7 @@ class TransferDataContainer;
 class OutputDevice;
 class VirtualDevice;
 struct SystemEnvData;
+class BitmapEx;
 
 namespace vcl
 {
@@ -1461,8 +1462,8 @@ public:
                         const OUString* pIconName, TreeIter* pRet)
         = 0;
 
-    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
-                        const VirtualDevice* pIcon, TreeIter* pRet)
+    virtual void insert(int pos, const OUString* pStr, const OUString* pId, const BitmapEx* pIcon,
+                        TreeIter* pRet)
         = 0;
 
     virtual void insert_separator(int pos, const OUString* pId) = 0;
@@ -1472,7 +1473,7 @@ public:
         insert(-1, &rStr, &rId, &rImage, nullptr);
     }
 
-    void append(const OUString& rId, const OUString& rStr, const VirtualDevice* pImage)
+    void append(const OUString& rId, const OUString& rStr, const BitmapEx* pImage)
     {
         insert(-1, &rStr, &rId, pImage, nullptr);
     }

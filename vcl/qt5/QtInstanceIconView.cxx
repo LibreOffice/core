@@ -55,7 +55,7 @@ void QtInstanceIconView::insert(int, const OUString*, const OUString*, const OUS
 }
 
 void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* pId,
-                                const VirtualDevice* pIcon, weld::TreeIter* pRet)
+                                const BitmapEx* pIcon, weld::TreeIter* pRet)
 {
     assert(!pRet && "Support for pRet param not implemented yet");
     (void)pRet;
@@ -76,7 +76,7 @@ void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* 
             pItem->setIcon(QIcon(toQPixmap(*pIcon)));
             // set list view icon size to avoid downscaling
             const QSize aIconSize
-                = m_pListView->iconSize().expandedTo(toQSize(pIcon->GetOutputSizePixel()));
+                = m_pListView->iconSize().expandedTo(toQSize(pIcon->GetSizePixel()));
             m_pListView->setIconSize(aIconSize);
         }
 

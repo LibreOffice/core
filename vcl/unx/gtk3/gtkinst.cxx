@@ -4937,6 +4937,14 @@ namespace
         return pRet;
     }
 
+    GdkPixbuf* getPixbuf(const BitmapEx& rBitmap)
+    {
+        ScopedVclPtr<VirtualDevice> pVDevice(VclPtr<VirtualDevice>::Create());
+        pVDevice->SetOutputSizePixel(rBitmap.GetSizePixel());
+        pVDevice->DrawBitmapEx(Point(0,0), rBitmap);
+        return getPixbuf(*pVDevice);
+    }
+
 #if GTK_CHECK_VERSION(4, 0, 0)
     cairo_surface_t* render_paintable_to_surface(GdkPaintable *paintable, int nWidth, int nHeight)
     {
@@ -17122,7 +17130,7 @@ private:
         }
     }
 
-    void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const VirtualDevice* pIcon)
+    void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const BitmapEx* pIcon)
     {
         // m_nTextCol may be -1, so pass it last, to not terminate the sequence before the Id value
         gtk_tree_store_insert_with_values(m_pTreeStore, &iter, nullptr, pos,
@@ -17324,7 +17332,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void insert(int pos, const OUString* pText, const OUString* pId, const VirtualDevice* pIcon, weld::TreeIter* pRet) override
+    virtual void insert(int pos, const OUString* pText, const OUString* pId, const BitmapEx* pIcon, weld::TreeIter* pRet) override
     {
         disable_notify_events();
         GtkTreeIter iter;

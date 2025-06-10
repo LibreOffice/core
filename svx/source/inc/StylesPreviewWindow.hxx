@@ -123,7 +123,7 @@ public:
 
     void Select(const OUString& rStyleName);
     void RequestStylesListUpdate();
-    static VclPtr<VirtualDevice> GetCachedPreview(const std::pair<OUString, OUString>& rStyle);
+    static BitmapEx GetCachedPreview(const std::pair<OUString, OUString>& rStyle);
     static OString GetCachedPreviewJson(const std::pair<OUString, OUString>& rStyle);
 
 private:
