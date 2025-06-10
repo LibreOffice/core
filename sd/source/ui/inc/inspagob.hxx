@@ -29,7 +29,7 @@ class SdInsertPagesObjsDlg : public weld::GenericDialogController
 {
 private:
     SfxMedium*              m_pMedium;
-    const SdDrawDocument*   m_pDoc;
+    const SdDrawDocument&   m_rDoc;
     const OUString&         m_rName;
 
     std::unique_ptr<SdPageObjsTLV> m_xLbTree;
@@ -40,7 +40,7 @@ private:
     DECL_LINK(SelectObjectHdl, weld::TreeView&, void);
 
 public:
-    SdInsertPagesObjsDlg(weld::Window* pParent, const SdDrawDocument* pDoc,
+    SdInsertPagesObjsDlg(weld::Window* pParent, const SdDrawDocument& rDoc,
                          SfxMedium* pSfxMedium, const OUString& rFileName);
     virtual ~SdInsertPagesObjsDlg() override;
 

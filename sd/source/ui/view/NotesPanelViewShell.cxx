@@ -819,7 +819,7 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             vcl::Window* pWin = GetActiveWindow();
             ScopedVclPtr<VclAbstractDialog> pDlg(
-                pFact->CreateSdPhotoAlbumDialog(pWin ? pWin->GetFrameWeld() : nullptr, GetDoc()));
+                pFact->CreateSdPhotoAlbumDialog(pWin ? pWin->GetFrameWeld() : nullptr, *GetDoc()));
 
             pDlg->Execute();
 

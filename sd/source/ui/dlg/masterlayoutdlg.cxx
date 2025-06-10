@@ -24,9 +24,9 @@
 
 using namespace ::sd;
 
-MasterLayoutDialog::MasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
+MasterLayoutDialog::MasterLayoutDialog(weld::Window* pParent, SdDrawDocument& rDoc, SdPage* pCurrentPage)
     : GenericDialogController(pParent, u"modules/simpress/ui/masterlayoutdlg.ui"_ustr, u"MasterLayoutDialog"_ustr)
-    , mpDoc(pDoc)
+    , mrDoc(rDoc)
     , mpCurrentPage(pCurrentPage)
     , mxCBDate(m_xBuilder->weld_check_button(u"datetime"_ustr))
     , mxCBPageNumber(m_xBuilder->weld_check_button(u"pagenumber"_ustr))
@@ -41,7 +41,7 @@ MasterLayoutDialog::MasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pD
 
     if( mpCurrentPage == nullptr )
     {
-        mpCurrentPage = pDoc->GetMasterSdPage( 0, PageKind::Standard );
+        mpCurrentPage = rDoc.GetMasterSdPage( 0, PageKind::Standard );
         OSL_FAIL( "MasterLayoutDialog::MasterLayoutDialog() - no current page?" );
     }
 
@@ -83,7 +83,7 @@ short MasterLayoutDialog::run()
 
 void MasterLayoutDialog::applyChanges()
 {
-    mpDoc->BegUndo(m_xDialog->get_title());
+    mrDoc.BegUndo(m_xDialog->get_title());
 
     if( (mpCurrentPage->GetPageKind() != PageKind::Standard) && (mbOldHeader != mxCBHeader->get_active() ) )
     {
@@ -117,7 +117,7 @@ void MasterLayoutDialog::applyChanges()
             create( PresObjKind::SlideNumber );
     }
 
-    mpDoc->EndUndo();
+    mrDoc.EndUndo();
 }
 
 void MasterLayoutDialog::create(PresObjKind eKind)

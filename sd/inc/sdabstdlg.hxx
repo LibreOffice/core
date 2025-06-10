@@ -167,7 +167,7 @@ public:
     virtual VclPtr<AbstractSdModifyFieldDlg>   CreateSdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet) = 0;
     virtual VclPtr<AbstractSdSnapLineDlg>      CreateSdSnapLineDlg(weld::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) = 0;
     virtual VclPtr<AbstractSdInsertLayerDlg>   CreateSdInsertLayerDlg(weld::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& rStr) = 0;
-    virtual VclPtr<AbstractSdInsertPagesObjsDlg> CreateSdInsertPagesObjsDlg(weld::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName) = 0;
+    virtual VclPtr<AbstractSdInsertPagesObjsDlg> CreateSdInsertPagesObjsDlg(weld::Window* pParent, const SdDrawDocument& rDoc, SfxMedium* pSfxMedium, const OUString& rFileName) = 0;
     virtual VclPtr<AbstractMorphDlg>           CreateMorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdOutlineBulletTabDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdParagraphTabDlg(weld::Window* pWindow, const SfxItemSet* pAttr) = 0;
@@ -180,11 +180,11 @@ public:
     virtual VclPtr<SfxAbstractDialog>          CreatSdActionDialog(weld::Window* pParent, const SfxItemSet& rAttr, ::sd::View* pView) = 0;
     virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) = 0;
 
-    virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage*) = 0;
+    virtual VclPtr<VclAbstractDialog>          CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument& rDoc, SdPage*) = 0;
 
     virtual VclPtr<AbstractHeaderFooterDialog> CreateHeaderFooterDialog(sd::ViewShell& rViewShell,
                                                                         weld::Window* pParent,
-                                                                        SdDrawDocument* pDoc,
+                                                                        SdDrawDocument& rDoc,
                                                                         SdPage* pCurrentPage) = 0;
 
     virtual CreateTabPage               GetSdOptionsContentsTabPageCreatorFunc() = 0;
@@ -192,7 +192,7 @@ public:
     virtual CreateTabPage               GetSdOptionsMiscTabPageCreatorFunc() = 0;
     virtual CreateTabPage               GetSdOptionsSnapTabPageCreatorFunc() = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateSdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pDoc) = 0;
+    virtual VclPtr<VclAbstractDialog> CreateSdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument& rDoc) = 0;
 
 protected:
     ~SdAbstractDialogFactory() {}

@@ -33,11 +33,11 @@ namespace sd
 class SdPhotoAlbumDialog : public weld::GenericDialogController
 {
 public:
-    SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pActDoc);
+    SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument& rDoc);
     virtual ~SdPhotoAlbumDialog() override;
 
 private:
-    SdDrawDocument* m_pDoc;
+    SdDrawDocument& m_rDoc;
     std::unique_ptr<GraphicFilter> m_pGraphicFilter;
 
     GraphCtrl m_aImg;

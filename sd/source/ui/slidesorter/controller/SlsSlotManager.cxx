@@ -279,7 +279,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             vcl::Window* pWin = mrSlideSorter.GetContentWindow();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSdPhotoAlbumDialog(
                 pWin ? pWin->GetFrameWeld() : nullptr,
-                pDocument));
+                *pDocument));
             pDlg->Execute();
             rRequest.Done ();
         }

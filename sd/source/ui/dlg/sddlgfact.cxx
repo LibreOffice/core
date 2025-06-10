@@ -249,9 +249,9 @@ public:
 };
 }
 
-VclPtr<AbstractSdInsertPagesObjsDlg> SdAbstractDialogFactory_Impl::CreateSdInsertPagesObjsDlg(weld::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName)
+VclPtr<AbstractSdInsertPagesObjsDlg> SdAbstractDialogFactory_Impl::CreateSdInsertPagesObjsDlg(weld::Window* pParent, const SdDrawDocument& rDoc, SfxMedium* pSfxMedium, const OUString& rFileName)
 {
-    return VclPtr<AbstractSdInsertPagesObjsDlg_Impl>::Create(pParent, pDoc, pSfxMedium, rFileName);
+    return VclPtr<AbstractSdInsertPagesObjsDlg_Impl>::Create(pParent, rDoc, pSfxMedium, rFileName);
 }
 
 namespace
@@ -420,22 +420,22 @@ CreateTabPage SdAbstractDialogFactory_Impl::GetSdOptionsSnapTabPageCreatorFunc()
     return SdTpOptionsSnap::Create;
 }
 
-VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
+VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument& rDoc, SdPage* pCurrentPage)
 {
-    return VclPtr<SdAbstractGenericDialog_Impl<sd::MasterLayoutDialog>>::Create(pParent, pDoc, pCurrentPage);
+    return VclPtr<SdAbstractGenericDialog_Impl<sd::MasterLayoutDialog>>::Create(pParent, rDoc, pCurrentPage);
 }
 
 VclPtr<AbstractHeaderFooterDialog> SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog(sd::ViewShell& rViewShell,
-    weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
+    weld::Window* pParent, SdDrawDocument& rDoc, SdPage* pCurrentPage)
 {
     using AbstractHeaderFooterDialog_Impl
         = ScreenshottedDialog_Impl_Async<AbstractHeaderFooterDialog, sd::HeaderFooterDialog>;
-    return VclPtr<AbstractHeaderFooterDialog_Impl>::Create(rViewShell, pParent, pDoc, pCurrentPage);
+    return VclPtr<AbstractHeaderFooterDialog_Impl>::Create(rViewShell, pParent, rDoc, pCurrentPage);
 }
 
-VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog(weld::Window* pParent, SdDrawDocument* pDoc)
+VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog(weld::Window* pParent, SdDrawDocument& rDoc)
 {
-    return VclPtr<SdAbstractGenericDialog_Impl<sd::SdPhotoAlbumDialog>>::Create(pParent, pDoc);
+    return VclPtr<SdAbstractGenericDialog_Impl<sd::SdPhotoAlbumDialog>>::Create(pParent, rDoc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

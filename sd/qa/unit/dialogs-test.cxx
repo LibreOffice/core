@@ -349,7 +349,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             CPPUNIT_ASSERT(pDrawDoc);
             pRetval = getSdAbstractDialogFactory()->CreateSdInsertPagesObjsDlg(
                 getViewShell()->GetFrameWeld(),
-                pDrawDoc,
+                *pDrawDoc,
                 nullptr,
                 u"foo"_ustr);
             break;
@@ -517,7 +517,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             CPPUNIT_ASSERT(pDrawDoc);
             pRetval = getSdAbstractDialogFactory()->CreateSdPhotoAlbumDialog(
                 Application::GetDefDialogParent(),
-                pDrawDoc);
+                *pDrawDoc);
             break;
         }
         case 20:
@@ -529,7 +529,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             CPPUNIT_ASSERT(pSdPage);
             pRetval = getSdAbstractDialogFactory()->CreateMasterLayoutDialog(
                 Application::GetDefDialogParent(),
-                pDrawDoc,
+                *pDrawDoc,
                 pSdPage);
             break;
         }
@@ -549,7 +549,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             pRetval = getSdAbstractDialogFactory()->CreateHeaderFooterDialog(
                 *getViewShell(),
                 Application::GetDefDialogParent(),
-                pDrawDoc,
+                *pDrawDoc,
                 pSdPage);
             break;
         }

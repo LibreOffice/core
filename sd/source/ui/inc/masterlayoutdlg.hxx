@@ -31,7 +31,7 @@ namespace sd
 class MasterLayoutDialog : public weld::GenericDialogController
 {
 private:
-    SdDrawDocument* mpDoc;
+    SdDrawDocument& mrDoc;
     SdPage*         mpCurrentPage;
 
     std::unique_ptr<weld::CheckButton> mxCBDate;
@@ -50,7 +50,7 @@ private:
     void create( PresObjKind eKind );
 
 public:
-    MasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage);
+    MasterLayoutDialog(weld::Window* pParent, SdDrawDocument& rDoc, SdPage* pCurrentPage);
     virtual ~MasterLayoutDialog() override;
 
     virtual short run() override;

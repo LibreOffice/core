@@ -38,9 +38,9 @@
 namespace sd
 {
 
-SdPhotoAlbumDialog::SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pActDoc)
+SdPhotoAlbumDialog::SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument& rDoc)
     : GenericDialogController(pWindow, u"modules/simpress/ui/photoalbum.ui"_ustr, u"PhotoAlbumCreatorDialog"_ustr)
-    , m_pDoc(pActDoc)
+    , m_rDoc(rDoc)
     , m_aImg(m_xDialog.get())
     , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr))
     , m_xCreateBtn(m_xBuilder->weld_button(u"ok"_ustr))
@@ -93,9 +93,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
     }
     else
     {
-        rtl::Reference< SdXImpressDocument > xDPS( m_pDoc->getUnoModel() );
+        rtl::Reference< SdXImpressDocument > xDPS( m_rDoc.getUnoModel() );
         Reference< drawing::XDrawPages > xDrawPages = xDPS->getDrawPages();
-        rtl::Reference< SdXImpressDocument > xShapeFactory( m_pDoc->getUnoModel() );
+        rtl::Reference< SdXImpressDocument > xShapeFactory( m_rDoc.getUnoModel() );
 
         const Reference< XComponentContext >& xContext(::comphelper::getProcessComponentContext());
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
@@ -639,7 +639,7 @@ Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aL
 {
     // Create the slide
     Reference< drawing::XDrawPage > xSlide = xDrawPages->insertNewByIndex( xDrawPages->getCount() );
-    SdPage* pSlide = m_pDoc->GetSdPage( m_pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard);
+    SdPage* pSlide = m_rDoc.GetSdPage( m_rDoc.GetSdPageCount(PageKind::Standard)-1, PageKind::Standard);
     pSlide->SetAutoLayout(aLayout, true); // Set the layout here
     return xSlide;
 }
@@ -714,7 +714,7 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
     CapSize.setHeight( aPageSize.Height/6 );
     CapPos.setX( 0 );
     CapPos.setY( aPageSize.Height - CapSize.Height() );
-    SdPage* pSlide = m_pDoc->GetSdPage( m_pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard );
+    SdPage* pSlide = m_rDoc.GetSdPage( m_rDoc.GetSdPageCount(PageKind::Standard)-1, PageKind::Standard );
 
     // try to get existing PresObj
     const ::tools::Rectangle rRect(CapPos,CapSize);
@@ -741,7 +741,7 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
     if(pSdrObj)
     {
         // set color, style and some transparency
-        SfxItemSet aSet(m_pDoc->GetItemPool() );
+        SfxItemSet aSet(m_rDoc.GetItemPool() );
 
         aSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
         aSet.Put( XFillColorItem( u""_ustr, COL_BLACK ) );

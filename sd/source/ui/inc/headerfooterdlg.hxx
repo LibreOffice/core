@@ -41,7 +41,7 @@ private:
     HeaderFooterSettings    maSlideSettings;
     HeaderFooterSettings    maNotesHandoutSettings;
 
-    SdDrawDocument*         mpDoc;
+    SdDrawDocument&         mrDoc;
     SdPage*                 mpCurrentPage;
     ViewShell&              mrViewShell;
 
@@ -56,7 +56,7 @@ private:
     void change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings );
 
 public:
-    HeaderFooterDialog(ViewShell& rViewShell, weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage);
+    HeaderFooterDialog(ViewShell& rViewShell, weld::Window* pParent, SdDrawDocument& rDoc, SdPage* pCurrentPage);
     virtual ~HeaderFooterDialog() override;
 
     void ApplyToAll();

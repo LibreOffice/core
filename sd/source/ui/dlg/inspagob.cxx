@@ -29,11 +29,11 @@
 #include <ViewShell.hxx>
 
 SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
-    weld::Window* pWindow, const SdDrawDocument* pInDoc,
+    weld::Window* pWindow, const SdDrawDocument& rDoc,
     SfxMedium* pSfxMedium, const OUString& rFileName )
     : GenericDialogController(pWindow, u"modules/sdraw/ui/insertslidesdialog.ui"_ustr, u"InsertSlidesDialog"_ustr)
     , m_pMedium(pSfxMedium)
-    , m_pDoc(pInDoc)
+    , m_rDoc(rDoc)
     , m_rName(rFileName)
     , m_xLbTree(new SdPageObjsTLV(m_xBuilder->weld_tree_view(u"tree"_ustr)))
     , m_xCbxLink(m_xBuilder->weld_check_button(u"links"_ustr))
@@ -42,14 +42,14 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     m_xLbTree->set_size_request(m_xLbTree->get_approximate_digit_width() * 48,
                                 m_xLbTree->get_height_rows(12));
 
-    m_xLbTree->SetViewFrame( pInDoc->GetDocSh()->GetViewShell()->GetViewFrame() );
+    m_xLbTree->SetViewFrame( rDoc.GetDocSh()->GetViewShell()->GetViewFrame() );
 
     m_xLbTree->connect_changed(LINK(this, SdInsertPagesObjsDlg, SelectObjectHdl));
 
     // insert text
     if (!m_pMedium)
         m_xDialog->set_title(SdResId(STR_INSERT_TEXT));
-    else if (m_pDoc && m_pDoc->GetDocumentType() == DocumentType::Draw)
+    else if (m_rDoc.GetDocumentType() == DocumentType::Draw)
         m_xDialog->set_title(SdResId(STR_INSERT_PAGES));
 
     Reset();
@@ -70,7 +70,7 @@ void SdInsertPagesObjsDlg::Reset()
         m_xLbTree->set_selection_mode(SelectionMode::Multiple);
 
         // transfer ownership of Medium
-        m_xLbTree->Fill( m_pDoc, m_pMedium, m_rName );
+        m_xLbTree->Fill( &m_rDoc, m_pMedium, m_rName );
     }
     else
     {
