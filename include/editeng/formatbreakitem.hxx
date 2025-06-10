@@ -55,7 +55,6 @@ public:
     static OUString          GetValueTextByPos( sal_uInt16 nPos );
 
     virtual SvxFormatBreakItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual sal_uInt16       GetValueCount() const override;
 
     SvxBreak                 GetBreak() const { return GetValue(); }
 };

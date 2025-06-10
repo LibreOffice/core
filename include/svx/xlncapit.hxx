@@ -43,7 +43,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     css::drawing::LineCap   GetValue() const;
-    virtual sal_uInt16      GetValueCount() const override;
 };
 
 #endif // INCLUDED_SVX_XLNCAPIT_HXX

@@ -36,7 +36,6 @@ public:
     SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SdrCaptionEscDir::Horizontal)
         : SfxEnumItem(SDRATTR_CAPTIONESCDIR, eDir) {}
     SAL_DLLPRIVATE virtual SdrCaptionEscDirItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    SAL_DLLPRIVATE virtual sal_uInt16       GetValueCount() const override; // { return 3; }
 
     SAL_DLLPRIVATE static OUString GetValueTextByPos(sal_uInt16 nPos);
 

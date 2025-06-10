@@ -420,11 +420,6 @@ SvxPostureItem* SvxPostureItem::Clone( SfxItemPool * ) const
     return new SvxPostureItem( *this );
 }
 
-sal_uInt16 SvxPostureItem::GetValueCount() const
-{
-    return ITALIC_NORMAL + 1;   // ITALIC_NONE also belongs here
-}
-
 
 bool SvxPostureItem::GetPresentation
 (
@@ -557,11 +552,6 @@ void SvxWeightItem::SetBoolValue( bool bVal )
 }
 
 
-sal_uInt16 SvxWeightItem::GetValueCount() const
-{
-    return WEIGHT_BLACK;    // WEIGHT_DONTKNOW does not belong
-}
-
 SvxWeightItem* SvxWeightItem::Clone( SfxItemPool * ) const
 {
     return new SvxWeightItem( *this );
@@ -666,8 +656,6 @@ SvxScriptHintItem::SvxScriptHintItem(const sal_uInt16 nId)
     : SfxEnumItem(nId, i18nutil::ScriptHintType::Automatic)
 {
 }
-
-sal_uInt16 SvxScriptHintItem::GetValueCount() const { return 5; }
 
 SvxScriptHintItem* SvxScriptHintItem::Clone(SfxItemPool*) const
 {
@@ -1124,11 +1112,6 @@ SvxTextLineItem* SvxTextLineItem::Clone( SfxItemPool * ) const
     return new SvxTextLineItem( *this );
 }
 
-sal_uInt16 SvxTextLineItem::GetValueCount() const
-{
-    return LINESTYLE_DOTTED + 1;    // LINESTYLE_NONE also belongs here
-}
-
 
 bool SvxTextLineItem::GetPresentation
 (
@@ -1370,11 +1353,6 @@ void SvxCrossedOutItem::SetBoolValue( bool bVal )
     SetValue( bVal ? STRIKEOUT_SINGLE : STRIKEOUT_NONE );
 }
 
-
-sal_uInt16 SvxCrossedOutItem::GetValueCount() const
-{
-    return STRIKEOUT_DOUBLE + 1;    // STRIKEOUT_NONE belongs also here
-}
 
 SvxCrossedOutItem* SvxCrossedOutItem::Clone( SfxItemPool * ) const
 {
@@ -1914,11 +1892,6 @@ SvxCaseMapItem::SvxCaseMapItem( const SvxCaseMap eMap, const sal_uInt16 nId ) :
 {
 }
 
-sal_uInt16 SvxCaseMapItem::GetValueCount() const
-{
-    return sal_uInt16(SvxCaseMap::End); // SvxCaseMap::SmallCaps + 1
-}
-
 SvxCaseMapItem* SvxCaseMapItem::Clone( SfxItemPool * ) const
 {
     return new SvxCaseMapItem( *this );
@@ -2146,15 +2119,6 @@ SvxLanguageItem::SvxLanguageItem( const LanguageType eLang, const sal_uInt16 nId
 {
 }
 
-
-sal_uInt16 SvxLanguageItem::GetValueCount() const
-{
-    // #i50205# got rid of class International
-    SAL_WARN( "editeng.items", "SvxLanguageItem::GetValueCount: supposed to return a count of what?");
-    // Could be SvtLanguageTable::GetEntryCount() (all locales with resource string)?
-    // Could be LocaleDataWrapper::getInstalledLanguageTypes() (all locales with locale data)?
-    return 0;
-}
 
 SvxLanguageItem* SvxLanguageItem::Clone( SfxItemPool * ) const
 {
@@ -2752,11 +2716,6 @@ OUString SvxCharReliefItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     assert(nPos < std::size(RID_SVXITEMS_RELIEF) && "enum overflow");
     return EditResId(RID_SVXITEMS_RELIEF[nPos]);
-}
-
-sal_uInt16 SvxCharReliefItem::GetValueCount() const
-{
-    return std::size(RID_SVXITEMS_RELIEF) - 1;
 }
 
 bool SvxCharReliefItem::GetPresentation

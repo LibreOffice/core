@@ -120,11 +120,6 @@ SvxOrientationItem* SvxOrientationItem::Clone( SfxItemPool* ) const
     return new SvxOrientationItem( *this );
 }
 
-sal_uInt16 SvxOrientationItem::GetValueCount() const
-{
-    return static_cast<sal_uInt16>(SvxCellOrientation::Stacked) + 1; // last enum value + 1
-}
-
 bool SvxOrientationItem::IsStacked() const
 {
     return GetValue() == SvxCellOrientation::Stacked;

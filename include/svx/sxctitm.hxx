@@ -33,7 +33,6 @@ public:
     SdrCaptionTypeItem(SdrCaptionType eStyle=SdrCaptionType::Type3)
         : SfxEnumItem(SDRATTR_CAPTIONTYPE, eStyle) {}
     SAL_DLLPRIVATE virtual SdrCaptionTypeItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    SAL_DLLPRIVATE virtual sal_uInt16      GetValueCount() const override; // { return 4; }
     SAL_DLLPRIVATE static OUString         GetValueTextByPos(sal_uInt16 nPos);
     SAL_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
 };

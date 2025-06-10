@@ -57,11 +57,6 @@ SwFormatLineBreak* SwFormatLineBreak::Clone(SfxItemPool*) const
     return new SwFormatLineBreak(GetValue());
 }
 
-sal_uInt16 SwFormatLineBreak::GetValueCount() const
-{
-    return static_cast<sal_uInt16>(SwLineBreakClear::LAST) + 1;
-}
-
 rtl::Reference<SwXTextRange> SwFormatLineBreak::GetAnchor() const
 {
     SolarMutexGuard aGuard;

@@ -32,7 +32,6 @@ public:
     SdrMeasureUnitItem(FieldUnit eUnit=FieldUnit::NONE)
         : SfxEnumItem(SDRATTR_MEASUREUNIT, eUnit) {}
     SAL_DLLPRIVATE virtual SdrMeasureUnitItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    SAL_DLLPRIVATE virtual sal_uInt16   GetValueCount() const override; // { return 14; }
 
     SAL_DLLPRIVATE virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SAL_DLLPRIVATE virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

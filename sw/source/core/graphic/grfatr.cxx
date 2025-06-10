@@ -34,11 +34,6 @@ SwMirrorGrf* SwMirrorGrf::Clone( SfxItemPool* ) const
     return new SwMirrorGrf( *this );
 }
 
-sal_uInt16 SwMirrorGrf::GetValueCount() const
-{
-    return 4;
-}
-
 bool SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
 {
     return SfxEnumItem::operator==(rItem) &&
@@ -308,11 +303,6 @@ SwDrawModeGrf* SwDrawModeGrf::Clone( SfxItemPool * ) const
 }
 
 // SwDrawModeGrf
-
-sal_uInt16 SwDrawModeGrf::GetValueCount() const
-{
-    return sal_uInt16(GraphicDrawMode::Watermark) + 1;
-}
 
 bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
                                 sal_uInt8 ) const

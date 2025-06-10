@@ -23,9 +23,4 @@ SvxRectangleAlignmentItem* SvxRectangleAlignmentItem::Clone(SfxItemPool*) const
     return new SvxRectangleAlignmentItem(*this);
 }
 
-sal_uInt16 SvxRectangleAlignmentItem::GetValueCount() const
-{
-    return model::RECTANGLE_ALIGNMENT_COUNT;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

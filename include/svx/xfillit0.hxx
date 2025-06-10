@@ -45,7 +45,6 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-    virtual sal_uInt16          GetValueCount() const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     virtual boost::property_tree::ptree dumpAsJSON() const override;

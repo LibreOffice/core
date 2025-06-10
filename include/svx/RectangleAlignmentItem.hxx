@@ -37,8 +37,6 @@ public:
     SvxRectangleAlignmentItem& operator=(SvxRectangleAlignmentItem&&) = delete;
 
     virtual SvxRectangleAlignmentItem* Clone(SfxItemPool* pPool = nullptr) const override;
-
-    virtual sal_uInt16 GetValueCount() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

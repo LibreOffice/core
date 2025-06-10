@@ -85,8 +85,6 @@ public:
                         TypedWhichId<SvxChartRegressItem> nId );
 
     virtual SvxChartRegressItem* Clone(SfxItemPool* pPool = nullptr) const override;
-
-    sal_uInt16 GetValueCount() const override { return CHREGRESS_COUNT; }
 };
 
 class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartTextOrderItem final : public SfxEnumItem<SvxChartTextOrder>
@@ -100,8 +98,6 @@ public:
 
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-
-    sal_uInt16 GetValueCount() const override { return CHTXTORDER_COUNT; }
 };
 
 class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartKindErrorItem final : public SfxEnumItem<SvxChartKindError>
@@ -112,8 +108,6 @@ public:
                            TypedWhichId<SvxChartKindErrorItem> nId );
 
     virtual SvxChartKindErrorItem* Clone(SfxItemPool* pPool = nullptr) const override;
-
-    sal_uInt16 GetValueCount() const override { return CHERROR_COUNT; }
 };
 
 class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartIndicateItem final : public SfxEnumItem<SvxChartIndicate>
@@ -124,8 +118,6 @@ public:
                            TypedWhichId<SvxChartIndicateItem> nId );
 
     virtual SvxChartIndicateItem* Clone(SfxItemPool* pPool = nullptr) const override;
-
-    sal_uInt16 GetValueCount() const override { return CHINDICATE_COUNT; }
 };
 
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxDoubleItem final : public SfxPoolItem

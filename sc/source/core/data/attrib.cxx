@@ -575,11 +575,6 @@ bool ScViewObjectModeItem::GetPresentation
     return false;
 }
 
-sal_uInt16 ScViewObjectModeItem::GetValueCount() const
-{
-    return 2;
-}
-
 ScViewObjectModeItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
 {
     return new ScViewObjectModeItem( *this );

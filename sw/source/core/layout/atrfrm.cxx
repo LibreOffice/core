@@ -494,11 +494,6 @@ SwFormatFillOrder* SwFormatFillOrder::Clone( SfxItemPool* ) const
     return new SwFormatFillOrder( GetValue() );
 }
 
-sal_uInt16  SwFormatFillOrder::GetValueCount() const
-{
-    return SW_FILL_ORDER_END - SW_FILL_ORDER_BEGIN;
-}
-
 // Partially implemented inline in hxx
 SwFormatHeader::SwFormatHeader( SwFrameFormat *pHeaderFormat )
     : SfxPoolItem( RES_HEADER ),
@@ -1340,11 +1335,6 @@ SwFormatSurround* SwFormatSurround::Clone( SfxItemPool* ) const
     return new SwFormatSurround( *this );
 }
 
-sal_uInt16  SwFormatSurround::GetValueCount() const
-{
-    return 6;
-}
-
 bool SwFormatSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
@@ -2105,11 +2095,6 @@ void SwFormatNoBalancedColumns::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 // class SwFormatFootnoteEndAtTextEnd
-
-sal_uInt16 SwFormatFootnoteEndAtTextEnd::GetValueCount() const
-{
-    return sal_uInt16( FTNEND_ATTXTEND_END );
-}
 
 SwFormatFootnoteEndAtTextEnd& SwFormatFootnoteEndAtTextEnd::operator=(
                         const SwFormatFootnoteEndAtTextEnd& rAttr )

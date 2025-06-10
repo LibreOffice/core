@@ -1074,8 +1074,6 @@ void SdrMetricItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SdrCaptionTypeItem* SdrCaptionTypeItem::Clone(SfxItemPool* /*pPool*/) const                { return new SdrCaptionTypeItem(*this); }
 
-sal_uInt16 SdrCaptionTypeItem::GetValueCount() const { return 4; }
-
 OUString SdrCaptionTypeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static TranslateId ITEMVALCAPTIONTYPES[] =
@@ -1101,8 +1099,6 @@ bool SdrCaptionTypeItem::GetPresentation(SfxItemPresentation ePres,
 
 
 SdrCaptionEscDirItem* SdrCaptionEscDirItem::Clone(SfxItemPool* /*pPool*/) const              { return new SdrCaptionEscDirItem(*this); }
-
-sal_uInt16 SdrCaptionEscDirItem::GetValueCount() const { return 3; }
 
 OUString SdrCaptionEscDirItem::GetValueTextByPos(sal_uInt16 nPos)
 {
@@ -1146,8 +1142,6 @@ bool SdrTextFitToSizeTypeItem::operator==(const SfxPoolItem& rItem) const
     return mfFontScale == rTextFitToSizeTypeItem.mfFontScale
         && mfSpacingScale == rTextFitToSizeTypeItem.mfSpacingScale;
 }
-
-sal_uInt16 SdrTextFitToSizeTypeItem::GetValueCount() const { return 4; }
 
 OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
@@ -1209,8 +1203,6 @@ bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
 
 SdrTextVertAdjustItem* SdrTextVertAdjustItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextVertAdjustItem(*this); }
 
-sal_uInt16 SdrTextVertAdjustItem::GetValueCount() const { return 5; }
-
 OUString SdrTextVertAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static TranslateId ITEMVALTEXTVADJTYPES[] =
@@ -1268,8 +1260,6 @@ void SdrTextVertAdjustItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SdrTextHorzAdjustItem* SdrTextHorzAdjustItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextHorzAdjustItem(*this); }
 
-sal_uInt16 SdrTextHorzAdjustItem::GetValueCount() const { return 5; }
-
 OUString SdrTextHorzAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static TranslateId ITEMVALTEXTHADJTYPES[] =
@@ -1320,8 +1310,6 @@ bool SdrTextHorzAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
 
 SdrTextAniKindItem* SdrTextAniKindItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextAniKindItem(*this); }
 
-sal_uInt16 SdrTextAniKindItem::GetValueCount() const { return 5; }
-
 OUString SdrTextAniKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static TranslateId ITEMVALTEXTANITYPES[] =
@@ -1370,8 +1358,6 @@ bool SdrTextAniKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 
 
 SdrTextAniDirectionItem* SdrTextAniDirectionItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextAniDirectionItem(*this); }
-
-sal_uInt16 SdrTextAniDirectionItem::GetValueCount() const { return 4; }
 
 OUString SdrTextAniDirectionItem::GetValueTextByPos(sal_uInt16 nPos)
 {
@@ -1524,7 +1510,7 @@ bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMe
 
 SdrEdgeKindItem* SdrEdgeKindItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrEdgeKindItem(*this); }
 
-sal_uInt16 SdrEdgeKindItem::GetValueCount() const { return 4; }
+sal_uInt16 SdrEdgeKindItem::GetValueCount() { return 4; }
 
 OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
@@ -1692,8 +1678,6 @@ SdrEdgeNode2GlueDistItem* SdrEdgeNode2GlueDistItem::Clone(SfxItemPool* /*pPool*/
 
 SdrMeasureKindItem* SdrMeasureKindItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrMeasureKindItem(*this); }
 
-sal_uInt16 SdrMeasureKindItem::GetValueCount() const { return 2; }
-
 OUString SdrMeasureKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static TranslateId ITEMVALMEASURETYPES[] =
@@ -1739,8 +1723,6 @@ bool SdrMeasureKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 
 
 SdrMeasureTextHPosItem* SdrMeasureTextHPosItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrMeasureTextHPosItem(*this); }
-
-sal_uInt16 SdrMeasureTextHPosItem::GetValueCount() const { return 4; }
 
 const OUString & SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
@@ -1788,8 +1770,6 @@ bool SdrMeasureTextHPosItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMember
 }
 
 SdrMeasureTextVPosItem* SdrMeasureTextVPosItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrMeasureTextVPosItem(*this); }
-
-sal_uInt16 SdrMeasureTextVPosItem::GetValueCount() const { return 5; }
 
 OUString SdrMeasureTextVPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
@@ -1839,8 +1819,6 @@ bool SdrMeasureTextVPosItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMember
 
 SdrMeasureUnitItem* SdrMeasureUnitItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrMeasureUnitItem(*this); }
 
-sal_uInt16 SdrMeasureUnitItem::GetValueCount() const { return 14; }
-
 OUString SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     if(static_cast<FieldUnit>(nPos) == FieldUnit::NONE)
@@ -1877,8 +1855,6 @@ bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 
 
 SdrCircKindItem* SdrCircKindItem::Clone(SfxItemPool* /*pPool*/) const          { return new SdrCircKindItem(*this); }
-
-sal_uInt16 SdrCircKindItem::GetValueCount() const { return 4; }
 
 OUString SdrCircKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
@@ -2004,11 +1980,6 @@ SdrGrafTransparenceItem* SdrGrafTransparenceItem::Clone( SfxItemPool* /*pPool*/)
 SdrGrafModeItem* SdrGrafModeItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SdrGrafModeItem( *this );
-}
-
-sal_uInt16 SdrGrafModeItem::GetValueCount() const
-{
-    return 4;
 }
 
 OUString SdrGrafModeItem::GetValueTextByPos(sal_uInt16 nPos)
