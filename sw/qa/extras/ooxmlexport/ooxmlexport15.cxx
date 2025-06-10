@@ -329,7 +329,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123354)
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    // Tests new cell formula SIGN
+    // Tests new cell formula ABS
     uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"ABS(<A1>)"_ustr, xEnumerationAccess1->getPresentation(true).trim());
     CPPUNIT_ASSERT_EQUAL(u"10"_ustr, xEnumerationAccess1->getPresentation(false).trim());
