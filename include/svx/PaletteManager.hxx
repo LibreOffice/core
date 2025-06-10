@@ -43,7 +43,7 @@ class SVXCORE_DLLPUBLIC PaletteManager : public std::enable_shared_from_this<Pal
     tools::Long                    mnColorCount;
     svx::ToolboxButtonColorUpdaterBase* mpBtnUpdater;
 
-    XColorListRef           pColorList;
+    XColorListRef           mpColorList;
     std::deque<NamedColor>  maRecentColors;
     std::vector<std::unique_ptr<Palette>> m_Palettes;
 
