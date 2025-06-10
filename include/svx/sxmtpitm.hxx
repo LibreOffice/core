@@ -33,7 +33,6 @@ public:
     {
     }
     SAL_DLLPRIVATE virtual SdrMeasureTextHPosItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    SAL_DLLPRIVATE virtual sal_uInt16     GetValueCount() const override; // { return 4; }
 
     SAL_DLLPRIVATE virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SAL_DLLPRIVATE virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -50,7 +49,6 @@ public:
     {
     }
     SAL_DLLPRIVATE virtual SdrMeasureTextVPosItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    SAL_DLLPRIVATE virtual sal_uInt16     GetValueCount() const override; // { return 5; }
 
     SAL_DLLPRIVATE virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SAL_DLLPRIVATE virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

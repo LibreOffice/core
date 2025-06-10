@@ -54,11 +54,6 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual sal_uInt16      GetValueCount() const override
-    {
-        return sal_uInt16(SvxFrameDirection::Vertical_RL_TB90) + 1;
-    }
-
         // SfxPoolItem copy function dichotomy
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

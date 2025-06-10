@@ -166,10 +166,6 @@ SvxHorJustifyItem* SvxHorJustifyItem::Clone( SfxItemPool* ) const
     return new SvxHorJustifyItem( *this );
 }
 
-sal_uInt16 SvxHorJustifyItem::GetValueCount() const
-{
-    return sal_uInt16(SvxCellHorJustify::Repeat) + 1;  // Last Enum value + 1
-}
 
 
 SvxVerJustifyItem::SvxVerJustifyItem( const sal_uInt16 nId ) :
@@ -291,11 +287,6 @@ SvxVerJustifyItem* SvxVerJustifyItem::Clone( SfxItemPool* ) const
     return new SvxVerJustifyItem( *this );
 }
 
-sal_uInt16 SvxVerJustifyItem::GetValueCount() const
-{
-    return static_cast<sal_uInt16>(SvxCellVerJustify::Bottom) + 1;  // Last Enum value + 1
-}
-
 SvxJustifyMethodItem::SvxJustifyMethodItem( const SvxCellJustifyMethod eJustify,
                                       const sal_uInt16 nId ) :
     SfxEnumItem( nId, eJustify )
@@ -358,11 +349,6 @@ OUString SvxJustifyMethodItem::GetValueText( SvxCellJustifyMethod nVal )
 SvxJustifyMethodItem* SvxJustifyMethodItem::Clone( SfxItemPool* ) const
 {
     return new SvxJustifyMethodItem( *this );
-}
-
-sal_uInt16 SvxJustifyMethodItem::GetValueCount() const
-{
-    return static_cast<sal_uInt16>(SvxCellJustifyMethod::Distribute) + 1;   // Last Enum value + 1
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

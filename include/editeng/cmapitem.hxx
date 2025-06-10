@@ -47,7 +47,6 @@ public:
 
     virtual SvxCaseMapItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     static OUString         GetValueTextByPos( sal_uInt16 nPos );
-    virtual sal_uInt16      GetValueCount() const override;
 
     // enum cast
     SvxCaseMap              GetCaseMap() const { return GetValue(); }

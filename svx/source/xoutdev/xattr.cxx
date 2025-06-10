@@ -483,11 +483,6 @@ bool XLineStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
     return true;
 }
 
-sal_uInt16 XLineStyleItem::GetValueCount() const
-{
-    return 3;
-}
-
 XDash::XDash(css::drawing::DashStyle eTheDash, sal_uInt16 nTheDots, double nTheDotLen,
              sal_uInt16 nTheDashes, double nTheDashLen, double nTheDistance) :
     m_eDash(eTheDash),
@@ -1742,11 +1737,6 @@ bool XFillStyleItem::GetPresentation
     return true;
 }
 
-sal_uInt16 XFillStyleItem::GetValueCount() const
-{
-    return 5;
-}
-
 bool XFillStyleItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     css::drawing::FillStyle eFS = GetValue();
@@ -2705,11 +2695,6 @@ XFormTextStyleItem* XFormTextStyleItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextStyleItem( *this );
 }
 
-sal_uInt16 XFormTextStyleItem::GetValueCount() const
-{
-    return 5;
-}
-
 bool XFormTextStyleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<sal_Int32>(GetValue());
@@ -2736,11 +2721,6 @@ XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
 XFormTextAdjustItem* XFormTextAdjustItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextAdjustItem( *this );
-}
-
-sal_uInt16 XFormTextAdjustItem::GetValueCount() const
-{
-    return 4;
 }
 
 bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -2817,11 +2797,6 @@ XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
 XFormTextShadowItem* XFormTextShadowItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextShadowItem( *this );
-}
-
-sal_uInt16 XFormTextShadowItem::GetValueCount() const
-{
-    return 3;
 }
 
 bool XFormTextShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const

@@ -4349,11 +4349,6 @@ SvxFormatBreakItem* SvxFormatBreakItem::Clone( SfxItemPool* ) const
     return new SvxFormatBreakItem( *this );
 }
 
-sal_uInt16 SvxFormatBreakItem::GetValueCount() const
-{
-    return sal_uInt16(SvxBreak::End);   // SvxBreak::PageBoth + 1
-}
-
 SvxFormatKeepItem* SvxFormatKeepItem::Clone( SfxItemPool* ) const
 {
     return new SvxFormatKeepItem( *this );

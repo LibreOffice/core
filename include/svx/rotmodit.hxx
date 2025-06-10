@@ -44,7 +44,6 @@ public:
                 SvxRotateModeItem( const SvxRotateModeItem& rItem );
                 virtual ~SvxRotateModeItem() override;
 
-    virtual sal_uInt16          GetValueCount() const override;
     virtual SvxRotateModeItem*  Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

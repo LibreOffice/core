@@ -370,13 +370,7 @@ IMPL_LINK(SvxConnectionPage, ChangeAttrEditHdl_Impl, weld::MetricSpinButton&, r,
 void SvxConnectionPage::FillTypeLB()
 {
     // fill ListBox with connector names
-    const SfxPoolItem* pItem = GetItem( rOutAttrs, SDRATTR_EDGEKIND );
-    const SfxItemPool* pPool = rOutAttrs.GetPool();
-
-    if( !pItem )
-        pItem = &pPool->GetUserOrPoolDefaultItem( SDRATTR_EDGEKIND );
-    const SdrEdgeKindItem* pEdgeKindItem = &pItem->StaticWhichCast(SDRATTR_EDGEKIND);
-    const sal_uInt16 nCount = pEdgeKindItem->GetValueCount();
+    const sal_uInt16 nCount = SdrEdgeKindItem::GetValueCount();
     for (sal_uInt16 i = 0; i < nCount; i++)
     {
         OUString aStr = SdrEdgeKindItem::GetValueTextByPos(i);

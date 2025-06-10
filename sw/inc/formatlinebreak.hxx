@@ -65,8 +65,6 @@ public:
     /// See SfxPoolItem::Clone().
     SwFormatLineBreak* Clone(SfxItemPool* pPool = nullptr) const override;
 
-    sal_uInt16 GetValueCount() const override;
-
     rtl::Reference<SwXTextRange> GetAnchor() const;
 
     void SetTextLineBreak(SwTextLineBreak* pTextAttr) { m_pTextAttr = pTextAttr; }

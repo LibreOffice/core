@@ -29,7 +29,6 @@ public:
     SdrCircKindItem(SdrCircKind eKind=SdrCircKind::Full)
         : SfxEnumItem(SDRATTR_CIRCKIND, eKind) {}
     virtual SdrCircKindItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    virtual sal_uInt16   GetValueCount() const override; // { return 4; }
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

@@ -45,7 +45,6 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( SvxCellHorJustify nVal );
     virtual SvxHorJustifyItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
@@ -73,7 +72,6 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( SvxCellVerJustify nVal );
     virtual SvxVerJustifyItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
@@ -97,7 +95,6 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( SvxCellJustifyMethod nVal );
     virtual SvxJustifyMethodItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };

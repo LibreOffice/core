@@ -74,11 +74,6 @@ bool SvxRotateModeItem::GetPresentation(
     return false;
 }
 
-sal_uInt16 SvxRotateModeItem::GetValueCount() const
-{
-    return 4;       // STANDARD, TOP, CENTER, BOTTOM
-}
-
 SvxRotateModeItem* SvxRotateModeItem::Clone( SfxItemPool* ) const
 {
     return new SvxRotateModeItem( *this );

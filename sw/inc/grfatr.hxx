@@ -50,7 +50,6 @@ public:
     virtual SwMirrorGrf* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     // pure virtual methods of SfxEnumItem
-    virtual sal_uInt16      GetValueCount() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -283,7 +282,6 @@ public:
     virtual SwDrawModeGrf*  Clone( SfxItemPool *pPool = nullptr ) const override;
 
     // pure virtual methods of SfxEnumItem
-    virtual sal_uInt16      GetValueCount() const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

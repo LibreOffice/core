@@ -50,7 +50,6 @@ public:
 
     virtual SdrTextFitToSizeTypeItem* Clone(SfxItemPool* pPool=nullptr) const override;
     bool operator==(const SfxPoolItem& rItem) const override;
-    virtual sal_uInt16       GetValueCount() const override;
 
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

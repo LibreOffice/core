@@ -43,8 +43,6 @@ public:
 
     virtual bool PutValue(const css::uno::Any & rVal, sal_uInt8 ) override;
 
-    virtual sal_uInt16 GetValueCount() const = 0;
-
     virtual sal_uInt16 GetEnumValue() const = 0;
 
     virtual void SetEnumValue(sal_uInt16 nValue) = 0;

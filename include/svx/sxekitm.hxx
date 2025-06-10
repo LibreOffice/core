@@ -34,7 +34,7 @@ public:
     SdrEdgeKindItem(SdrEdgeKind eStyle=SdrEdgeKind::OrthoLines)
        : SfxEnumItem(SDRATTR_EDGEKIND, eStyle) {}
     SAL_DLLPRIVATE virtual SdrEdgeKindItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    virtual sal_uInt16   GetValueCount() const override; // { return 5; }
+    static sal_uInt16 GetValueCount();
     SAL_DLLPRIVATE virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SAL_DLLPRIVATE virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     static OUString      GetValueTextByPos(sal_uInt16 nPos);
