@@ -100,7 +100,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
         if (GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb) && !aThumb.IsEmpty())
         {
-            VclPtr< VirtualDevice > pVDev = VclPtr<VirtualDevice>::Create();
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             const Point aNull(0, 0);
 
             if (pVDev->GetDPIScaleFactor() > 1)
@@ -117,7 +117,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
             pVDev->DrawCheckered(aNull, aSize, nLen, aW, aG);
 
             pVDev->DrawBitmapEx(aNull, aThumb);
-            maFavoritesHorizontal.emplace_back(pVDev);
+            maFavoritesHorizontal.emplace_back(pVDev->GetBitmapEx(Point(0,0), aSize));
         }
     }
 
@@ -142,7 +142,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
     {
         OUString sId = OUString::number(static_cast<sal_uInt16>(nFavorite));
         maIdToTitleMap.emplace(sId, aTitles.at(nFavorite - 1));
-        maCtlFavorites->insert(-1, nullptr, &sId, maFavoritesHorizontal[nFavorite - 1], nullptr);
+        maCtlFavorites->insert(-1, nullptr, &sId, &maFavoritesHorizontal[nFavorite - 1], nullptr);
         maCtlFavorites->set_item_accessible_name(maCtlFavorites->n_children() - 1, aTitles.at(nFavorite -1));
     }
 

@@ -5494,7 +5494,7 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
 }
 
 void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* pId,
-                                 const VirtualDevice* pIcon, weld::TreeIter* pRet)
+                                 const BitmapEx* pIcon, weld::TreeIter* pRet)
 {
     disable_notify_events();
     auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
@@ -5510,9 +5510,7 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     if (pIcon)
     {
-        const Point aNull(0, 0);
-        const Size aSize = pIcon->GetOutputSize();
-        Image aImage(pIcon->GetBitmapEx(aNull, aSize));
+        Image aImage(*pIcon);
         pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
     }
     else

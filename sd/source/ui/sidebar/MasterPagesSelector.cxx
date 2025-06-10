@@ -391,16 +391,18 @@ void MasterPagesSelector::SetItem (
 
         if (aPreview.GetSizePixel().Width() > 0)
         {
-            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aPreview);
             if (!mxPreviewIconView->get_id(nIndex).isEmpty())
             {
+                VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aPreview);
                 mxPreviewIconView->set_image(nIndex, *pVDev);
                 mxPreviewIconView->set_id(nIndex, OUString::number(aToken));
+                pVDev.disposeAndClear();
             }
             else
             {
+                BitmapEx aPreviewBitmap = GetPreviewAsBitmap(aPreview);
                 OUString sId = OUString::number(aToken);
-                mxPreviewIconView->insert(nIndex, nullptr, &sId, pVDev, nullptr);
+                mxPreviewIconView->insert(nIndex, nullptr, &sId, &aPreviewBitmap, nullptr);
                 mxPreviewIconView->set_item_accessible_name(
                     nIndex, mpContainer->GetPageNameForToken(aToken));
             }
@@ -479,6 +481,16 @@ VclPtr<VirtualDevice> MasterPagesSelector::GetVirtualDevice(const Image& rImage)
     pVDev->DrawBitmapEx(aNull, aPreviewBitmap);
 
     return pVDev;
+}
+
+BitmapEx MasterPagesSelector::GetPreviewAsBitmap(const Image& rImage)
+{
+    BitmapEx aPreviewBitmap = rImage.GetBitmapEx();
+    ScopedVclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    if (pVDev->GetDPIScaleFactor() > 1)
+        aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
+
+    return aPreviewBitmap;
 }
 
 void MasterPagesSelector::UpdateAllPreviews()

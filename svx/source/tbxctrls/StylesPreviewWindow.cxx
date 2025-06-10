@@ -80,20 +80,17 @@ private:
         virtual void Invoke() override { StylePreviewCache::gJsonStylePreviewCache.clear(); }
     };
 
-    static std::map<OUString, VclPtr<VirtualDevice>> gStylePreviewCache;
+    static std::map<OUString, BitmapEx> gStylePreviewCache;
     static std::map<OUString, OString> gJsonStylePreviewCache;
     static int gStylePreviewCacheClients;
     static JsonStylePreviewCacheClear gJsonIdleClear;
 
 public:
-    static std::map<OUString, VclPtr<VirtualDevice>>& Get() { return gStylePreviewCache; }
+    static std::map<OUString, BitmapEx>& Get() { return gStylePreviewCache; }
     static std::map<OUString, OString>& GetJson() { return gJsonStylePreviewCache; }
 
     static void ClearCache(bool bHard)
     {
-        for (auto& aPreview : gStylePreviewCache)
-            aPreview.second.disposeAndClear();
-
         gStylePreviewCache.clear();
         if (bHard)
         {
@@ -122,7 +119,7 @@ public:
     }
 };
 
-std::map<OUString, VclPtr<VirtualDevice>> StylePreviewCache::gStylePreviewCache;
+std::map<OUString, BitmapEx> StylePreviewCache::gStylePreviewCache;
 std::map<OUString, OString> StylePreviewCache::gJsonStylePreviewCache;
 int StylePreviewCache::gStylePreviewCacheClients;
 StylePreviewCache::JsonStylePreviewCacheClear StylePreviewCache::gJsonIdleClear;
@@ -580,23 +577,23 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
     return true;
 }
 
-VclPtr<VirtualDevice>
-StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle)
+BitmapEx StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle)
 {
     auto aFound = StylePreviewCache::Get().find(rStyle.second);
     if (aFound != StylePreviewCache::Get().end())
         return StylePreviewCache::Get()[rStyle.second];
     else
     {
-        VclPtr<VirtualDevice> pImg = VclPtr<VirtualDevice>::Create();
+        ScopedVclPtrInstance<VirtualDevice> pImg;
         const Size aSize(100, 30);
         pImg->SetOutputSizePixel(aSize);
 
         StyleItemController aStyleController(rStyle);
         aStyleController.Paint(*pImg);
-        StylePreviewCache::Get()[rStyle.second] = pImg;
+        BitmapEx aBitmap = pImg->GetBitmapEx(Point(0, 0), aSize);
+        StylePreviewCache::Get()[rStyle.second] = aBitmap;
 
-        return pImg;
+        return aBitmap;
     }
 }
 
@@ -606,8 +603,7 @@ OString StylesPreviewWindow_Base::GetCachedPreviewJson(const std::pair<OUString,
     if (aJsonFound != StylePreviewCache::GetJson().end())
         return StylePreviewCache::GetJson()[rStyle.second];
 
-    VclPtr<VirtualDevice> xDev = GetCachedPreview(rStyle);
-    BitmapEx aBitmap(xDev->GetBitmapEx(Point(0, 0), xDev->GetOutputSize()));
+    BitmapEx aBitmap = GetCachedPreview(rStyle);
     OString sResult = extractPngString(aBitmap);
     StylePreviewCache::GetJson()[rStyle.second] = sResult;
     return sResult;
@@ -645,8 +641,13 @@ void StylesPreviewWindow_Base::UpdateStylesList()
     const bool bNeedInsertPreview = !comphelper::LibreOfficeKit::isActive();
     for (const auto& rStyle : m_aAllStyles)
     {
-        VclPtr<VirtualDevice> pImg = bNeedInsertPreview ? GetCachedPreview(rStyle) : nullptr;
-        m_xStylesView->append(rStyle.first, rStyle.second, pImg);
+        if (bNeedInsertPreview)
+        {
+            BitmapEx aPreview = GetCachedPreview(rStyle);
+            m_xStylesView->append(rStyle.first, rStyle.second, &aPreview);
+        }
+        else
+            m_xStylesView->append(rStyle.first, rStyle.second, nullptr);
     }
     m_xStylesView->thaw();
 }

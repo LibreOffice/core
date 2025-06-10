@@ -594,7 +594,8 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
 
     maItemDatas.push_back(std::make_unique<ElementData>(aElementSource, aHelpText, maItemDatas.size()));
     const OUString aId(weld::toId(maItemDatas.back().get()));
-    mpIconView->insert(-1, nullptr, &aId, pDevice, nullptr);
+    BitmapEx aBitmap = pDevice->GetBitmapEx(Point(0,0), pDevice->GetOutputSizePixel());
+    mpIconView->insert(-1, nullptr, &aId, &aBitmap, nullptr);
     mpIconView->set_item_accessible_name(mpIconView->n_children() - 1, GetElementHelpText(aId));
     if (mpIconView->get_item_width() < aSize.Width())
         mpIconView->set_item_width(aSize.Width());
