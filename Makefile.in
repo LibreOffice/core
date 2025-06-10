@@ -237,6 +237,7 @@ distclean : clean compilerplugins-clean mac-app-store-package.clean
         $(BUILDDIR)/solenv/lockfile/autoconf.h \
         $(BUILDDIR)/lo.xcent \
         $(BUILDDIR)/sysui/desktop/macosx/Info.plist \
+        $(BUILDDIR)/sysui/desktop/macosx/LaunchConstraint.plist \
         $(BUILDDIR)/vs-code*.code-workspace* \
         $(BUILDDIR)/extensions/source/macosx/quicklookpreview/appex/Info.plist \
         $(BUILDDIR)/extensions/source/macosx/quicklookthumbnail/appex/Info.plist
