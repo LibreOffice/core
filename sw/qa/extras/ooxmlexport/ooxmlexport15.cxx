@@ -343,6 +343,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123354)
     CPPUNIT_ASSERT_EQUAL(u"0"_ustr, xEnumerationAccess3->getPresentation(false).trim());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf123384)
+{
+    loadAndReload("tdf123384.fodt");
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Tests new cell formula MOD
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"MOD((<A1>)|(<B1>))"_ustr, xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"MOD((<B1>)|(<C1>))"_ustr, xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, xEnumerationAccess2->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"MOD((<A1>)|(<C1>))"_ustr, xEnumerationAccess3->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xEnumerationAccess3->getPresentation(false).trim());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf123355)
 {
     auto verify = [this]() {
