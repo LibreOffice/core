@@ -1074,11 +1074,13 @@ OUString unicode::formatPercent(double dNumber,
 
 bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
 {
+    assert(!mbInputEnded);
+
+    if (uChar == 0)
+        return false;
+
     //arbitrarily chosen maximum length allowed - normal max usage would be around 30.
     if( maInput.getLength() > 255 )
-        mbAllowMoreChars = false;
-
-    if( !mbAllowMoreChars )
         return false;
 
     bool bPreventNonHex = false;
@@ -1090,7 +1092,6 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
         case css::i18n::UnicodeType::SURROGATE:
             if (bPreventNonHex || mbIsHexString)
             {
-                mbAllowMoreChars = false;
                 return false;
             }
 
@@ -1114,14 +1115,12 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
                 maInput.append(maUtf16);
             if( !maCombining.isEmpty() )
                 maInput.append(maCombining);
-            mbAllowMoreChars = false;
-            break;
+            return false;
 
         case css::i18n::UnicodeType::NON_SPACING_MARK:
         case css::i18n::UnicodeType::COMBINING_SPACING_MARK:
             if (bPreventNonHex || mbIsHexString)
             {
-                mbAllowMoreChars = false;
                 return false;
             }
 
@@ -1131,7 +1130,6 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
                 maInput = maUtf16;
                 if( !maCombining.isEmpty() )
                     maInput.append(maCombining);
-                mbAllowMoreChars = false;
                 return false;
             }
             maCombining.insertUtf32(0, uChar);
@@ -1144,7 +1142,6 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
                 maInput = maUtf16;
                 if( !maCombining.isEmpty() )
                     maInput.append(maCombining);
-                mbAllowMoreChars = false;
                 return false;
             }
 
@@ -1152,14 +1149,12 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
             {
                 maCombining.insertUtf32(0, uChar);
                 maInput = maCombining;
-                mbAllowMoreChars = false;
                 return false;
             }
 
             // 0 - 1f are control characters.  Do not process those.
             if( uChar < 0x20 )
             {
-                mbAllowMoreChars = false;
                 return false;
             }
 
@@ -1176,36 +1171,36 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
                     // treat as a normal character
                     else
                     {
-                        mbAllowMoreChars = false;
                         if( !bPreventNonHex )
                             maInput.insertUtf32(0, uChar);
+                        return false;
                     }
                     break;
                 case '+':
                     // + already found: skip when not U, or edge case of +U+xxxx
                     if( mbRequiresU || (maInput.indexOf("U+") == 0) )
-                        mbAllowMoreChars = false;
+                        return false;
                     // hex chars followed by '+' - now require a 'U'
                     else if ( !maInput.isEmpty() )
                         mbRequiresU = true;
                     // treat as a normal character
                     else
                     {
-                        mbAllowMoreChars = false;
                         if( !bPreventNonHex )
                             maInput.insertUtf32(0, uChar);
+                        return false;
                     }
                     break;
                 default:
                     // + already found. Since not U, cancel further input
                     if( mbRequiresU )
-                        mbAllowMoreChars = false;
+                        return false;
                     // maximum digits per notation is 8: only one notation
                     else if( maInput.indexOf("U+") == -1 && maInput.getLength() == 8 )
-                        mbAllowMoreChars = false;
+                        return false;
                     // maximum digits per notation is 8: previous notation found
                     else if( maInput.indexOf("U+") == 8 )
-                        mbAllowMoreChars = false;
+                        return false;
                     // a hex character. Add to string.
                     else if( rtl::isAsciiHexDigit(uChar) )
                     {
@@ -1215,35 +1210,34 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
                     // not a hex character: stop input. keep if it is the first input provided
                     else
                     {
-                        mbAllowMoreChars = false;
                         if( maInput.isEmpty() )
                             maInput.insertUtf32(0, uChar);
+                        return false;
                     }
             }
     }
-    return mbAllowMoreChars;
+    return true;
 }
 
 OUString ToggleUnicodeCodepoint::StringToReplace()
 {
+    // this function potentially modifies the input string. No more addition of characters
+#ifndef NDEBUG
+    mbInputEnded = true;
+#endif
+
     if( maInput.isEmpty() )
     {
         //edge case - input finished with incomplete low surrogate or combining characters without a base
-        if( mbAllowMoreChars )
-        {
-            if( !maUtf16.isEmpty() )
-                maInput = maUtf16;
-            if( !maCombining.isEmpty() )
-                maInput.append(maCombining);
-        }
+        if (!maUtf16.isEmpty())
+            maInput = maUtf16;
+        if (!maCombining.isEmpty())
+            maInput.append(maCombining);
         return maInput.toString();
     }
 
     if( !mbIsHexString )
         return maInput.toString();
-
-    //this function potentially modifies the input string.  Prevent addition of further characters
-    mbAllowMoreChars = false;
 
     //validate unicode notation.
     OUString sIn;
