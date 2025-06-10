@@ -1060,7 +1060,17 @@ bool RtfExport::DisallowInheritingOutlineNumbering(const SwFormat& rFormat)
 
 void RtfExport::OutputEndNode(const SwEndNode& rEndNode)
 {
-    if (TXT_MAINTEXT == m_nTextTyp && rEndNode.StartOfSectionNode()->IsTableNode())
+    if (TXT_MAINTEXT == m_nTextTyp && rEndNode.StartOfSectionNode()->IsSectionNode())
+    {
+        // Only consider the end of toplevel sections.
+        SwPosition aNodePosition(rEndNode);
+        SwSection* pSect = SwDoc::GetCurrSection(aNodePosition);
+        if (pSect && pSect->GetParent())
+            return;
+
+        AttrOutput().SectionBreaks(rEndNode);
+    }
+    else if (TXT_MAINTEXT == m_nTextTyp && rEndNode.StartOfSectionNode()->IsTableNode())
         // End node of a table: see if a section break should be written after the table.
         AttrOutput().SectionBreaks(rEndNode);
 }

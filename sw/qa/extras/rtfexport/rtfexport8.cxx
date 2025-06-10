@@ -416,6 +416,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter3)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSectionBreakAfterSection)
+{
+    // Given a document that is modeled with a Writer section, followed by a paragraph with a new
+    // page style ("section break"):
+    createSwDoc("section-break-after-section.rtf");
+
+    // When saving that document to RTF:
+    saveAndReload(mpFilter);
+
+    // Then make sure the 2nd paragraph starts on a new page after export, too:
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(2);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - the property is of unexpected type or void: PageDescName
+    // i.e. the 2nd paragraph was on the same page as the 1st one.
+    auto aPageDescName = getProperty<OUString>(xParagraph, "PageDescName");
+    CPPUNIT_ASSERT(!aPageDescName.isEmpty());
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

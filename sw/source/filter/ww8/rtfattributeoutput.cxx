@@ -365,11 +365,12 @@ void RtfAttributeOutput::SectionBreaks(const SwNode& rNode)
     }
     else if (rNode.IsEndNode())
     {
-        // End of something: make sure that it's the end of a table.
-        assert(rNode.StartOfSectionNode()->IsTableNode());
+        // End of something: make sure that it's the end of a table or section.
+        assert(rNode.StartOfSectionNode()->IsTableNode()
+               || rNode.StartOfSectionNode()->IsSectionNode());
         if (aNextIndex.GetNode().IsTextNode())
         {
-            // Handle section break between a table and a text node following it.
+            // Handle section break between the end node and a text node following it.
             const SwTextNode* pTextNode = aNextIndex.GetNode().GetTextNode();
             m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode);
         }
