@@ -908,27 +908,17 @@ sal_Int32 ScColumnRowStylesBase::AddStyleName(const OUString & rString)
 
 sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(std::u16string_view rString, std::u16string_view rPrefix)
 {
-    sal_Int32 nPrefixLength(rPrefix.size());
-    std::u16string_view sTemp(rString.substr(nPrefixLength));
-    sal_Int32 nIndex(o3tl::toInt32(sTemp));
-    if (nIndex > 0 && o3tl::make_unsigned(nIndex-1) < aStyleNames.size() && aStyleNames.at(nIndex - 1) == rString)
-        return nIndex - 1;
-    else
+    if (std::u16string_view rest; o3tl::starts_with(rString, rPrefix, &rest))
     {
-        sal_Int32 i(0);
-        bool bFound(false);
-        while (!bFound && o3tl::make_unsigned(i) < aStyleNames.size())
-        {
-            if (aStyleNames.at(i) == rString)
-                bFound = true;
-            else
-                ++i;
-        }
-        if (bFound)
-            return i;
-        else
-            return -1;
+        sal_Int32 nIndex(o3tl::toInt32(rest));
+        if (nIndex > 0 && o3tl::make_unsigned(nIndex - 1) < aStyleNames.size() && aStyleNames[nIndex - 1] == rString)
+            return nIndex - 1;
     }
+
+    if (auto i = std::find(aStyleNames.begin(), aStyleNames.end(), rString); i != aStyleNames.end())
+        return std::distance(i, aStyleNames.begin());
+
+    return -1;
 }
 
 OUString& ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
