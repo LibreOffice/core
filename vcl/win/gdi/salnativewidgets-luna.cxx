@@ -1114,7 +1114,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 case TILES_HOT:
                     aColor = Application::GetSettings().GetStyleSettings().GetMenuBarRolloverColor();
                     break;
-                case TTILES_FOCUSED:
+                case TILES_FOCUSED:
                     aColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
                     break;
             }
