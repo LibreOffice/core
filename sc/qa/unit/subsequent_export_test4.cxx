@@ -35,6 +35,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <formula/grammar.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/UnitConversion.hxx>
@@ -2289,6 +2290,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166712)
     assertXPath(pConn, "/x:connections/x:connection/x:dbPr", 0);
 
     assertXPath(pConn, "/x:connections/x:connection/x:olapPr", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166939)
+{
+    // Given a document with a column autostyle name equal to "a" (it could be any single-character
+    // name). Load it as template, to keep streams valid (see ScDocShell::SaveAs) to reuse existing
+    // autostyle names (see ScXMLExport::collectAutoStyles).
+    loadWithParams(createFileURL(u"ods/autostyle-name-is-single-char.ods"),
+                   { comphelper::makePropertyValue(u"AsTemplate"_ustr, true) });
+    // Saving it must not crash / fail an assertion!
+    save(u"calc8"_ustr);
+    // Check that we tested the codepath preserving existing names - otherwise test makes no sense
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "//office:automatic-styles/style:style[@style:name='a']", 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
