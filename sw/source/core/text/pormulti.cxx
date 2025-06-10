@@ -374,7 +374,7 @@ void SwDoubleLinePortion::PaintBracket( SwTextPaintInfo &rInf,
         return;
     if( !bOpen )
         rInf.X( rInf.X() + Width() - PostWidth() +
-            ( nSpaceAdd > 0 ? CalcSpacing( nSpaceAdd, rInf ) : 0 ) );
+            ( nSpaceAdd > 0 ? CalcSpacing( nSpaceAdd, rInf ) : SwTwips(0)));
 
     SwBlankPortion aBlank( cCh, true );
     aBlank.SetAscent( m_pBracket->nAscent );
@@ -1689,9 +1689,9 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
                 const sal_uInt16 nAdjustment = ( pLay->Height() - pPor->Height() ) / 2 +
                                             pPor->GetAscent();
                 if( rMulti.IsRevers() )
-                    GetInfo().X( nOfst - nAdjustment );
+                    GetInfo().X(nOfst - SwTwips(nAdjustment));
                 else
-                    GetInfo().X( nOfst + nAdjustment );
+                    GetInfo().X(nOfst + SwTwips(nAdjustment));
             }
             else
             {
@@ -1720,7 +1720,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         }
         else if ( rMulti.IsRuby() && rMulti.OnRight() && GetInfo().IsRuby() )
         {
-            SwTwips nLineDiff = std::max(( rMulti.GetRoot().Height() - pPor->Width() ) / 2, static_cast<SwTwips>(0) );
+            SwTwips nLineDiff = std::max(SwTwips((rMulti.GetRoot().Height() - pPor->Width()) / 2), SwTwips(0));
             GetInfo().Y( nOfst + nLineDiff );
             // Draw the ruby text on top of the preserved space.
             GetInfo().X( GetInfo().X() - pPor->Height() );
@@ -2080,7 +2080,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             pUpperFrame = pPage->FindBodyCont();
 
         nMaxWidth = pUpperFrame ?
-                    ( rInf.GetTextFrame()->IsVertical() ?
+                    SwTwips( rInf.GetTextFrame()->IsVertical() ?
                       pUpperFrame->getFramePrintArea().Width() :
                       pUpperFrame->getFramePrintArea().Height() ) :
                     std::numeric_limits<SwTwips>::max();
@@ -2095,7 +2095,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     m_pMulti = &rMulti;
     SwLineLayout *pOldCurr = m_pCurr;
     TextFrameIndex const nOldStart = GetStart();
-    SwTwips nMinWidth = nTmpX + 1;
+    SwTwips nMinWidth = nTmpX + 1_twip;
     SwTwips nActWidth = nMaxWidth;
     const TextFrameIndex nStartIdx = rInf.GetIdx();
     TextFrameIndex nMultiLen = rMulti.GetLen();
@@ -2296,7 +2296,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             // our guess for multiportion width was too small,
             // we set min to act
             nMinWidth = nActWidth;
-            nActWidth = ( 3 * nMaxWidth + nMinWidth + 3 ) / 4;
+            nActWidth = ( 3 * nMaxWidth + nMinWidth + 3_twip ) / 4;
             if ( nActWidth == nMaxWidth && rInf.GetLineStart() == rInf.GetIdx() )
             // we have too less space, we must allow break cuts
             // ( the first multi flag is considered during TextPortion::Format_() )
@@ -2310,8 +2310,8 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             // Setting this to the portion width ( = rMulti.Width() )
             // can make GetTextBreak inside SwTextGuess::Guess return too small
             // values. Therefore we add some extra twips.
-            if( nActWidth > nTmpX + rMulti.Width() + 6 )
-                nActWidth = nTmpX + rMulti.Width() + 6;
+            if (nActWidth > nTmpX + rMulti.Width() + 6_twip)
+                nActWidth = nTmpX + rMulti.Width() + 6_twip;
             nMaxWidth = nActWidth;
             nActWidth = ( 3 * nMaxWidth + nMinWidth + 3 ) / 4;
             if( nActWidth >= nMaxWidth )

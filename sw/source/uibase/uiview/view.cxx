@@ -1351,7 +1351,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
          nRight = o3tl::toInt32(o3tl::getToken(rUserData, 0, ';', nPos )),
          nBottom= o3tl::toInt32(o3tl::getToken(rUserData, 0, ';', nPos ));
 
-    const tools::Long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+    const tools::Long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : SwTwips(DOCUMENTBORDER * 2);
     if ( nBottom > (m_pWrtShell->GetDocSize().Height()+nAdd) )
         return;
 
@@ -1642,7 +1642,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         {
             Point aTopLeft(nLeft, nTop);
             // make sure the document is still centered
-            const SwTwips lBorder = IsDocumentBorder() ? DOCUMENTBORDER : 2 * DOCUMENTBORDER;
+            const SwTwips lBorder = IsDocumentBorder() ? DOCUMENTBORDER : SwTwips(2 * DOCUMENTBORDER);
             SwTwips nEditWidth = GetEditWin().GetOutDev()->GetOutputSize().Width();
             if(nEditWidth > (m_aDocSz.Width() + lBorder ))
                 aTopLeft.setX( ( m_aDocSz.Width() + lBorder - nEditWidth  ) / 2 );

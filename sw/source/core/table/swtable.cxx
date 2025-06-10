@@ -1006,7 +1006,7 @@ static void lcl_AdjustWidthsInLine( SwTableLine* pLine, ChangeList& rOldNew,
         SwTwips nNewWidth = nWidth - nRest;
         nRest = 0;
         nBorder += nWidth;
-        if( pCurr != rOldNew.end() && nBorder + nColFuzzy >= pCurr->first )
+        if( pCurr != rOldNew.end() && nBorder + SwTwips(nColFuzzy) >= pCurr->first )
         {
             nBorder -= nColFuzzy;
             while( pCurr != rOldNew.end() && nBorder > pCurr->first )
@@ -1014,7 +1014,7 @@ static void lcl_AdjustWidthsInLine( SwTableLine* pLine, ChangeList& rOldNew,
             if( pCurr != rOldNew.end() )
             {
                 nBorder += nColFuzzy;
-                if( nBorder + nColFuzzy >= pCurr->first )
+                if( nBorder + SwTwips(nColFuzzy) >= pCurr->first )
                 {
                     if( pCurr->second == pCurr->first )
                         nRest = 0;
@@ -1029,8 +1029,8 @@ static void lcl_AdjustWidthsInLine( SwTableLine* pLine, ChangeList& rOldNew,
         {
             if( nNewWidth < 0 )
             {
-                nRest += 1 - nNewWidth;
-                nNewWidth = 1;
+                nRest += SwTwips(1_twip) - nNewWidth;
+                nNewWidth = SwTwips(1_twip);
             }
             SwFormatFrameSize aFormatFrameSize( pBox->GetFrameFormat()->GetFrameSize() );
             aFormatFrameSize.SetWidth( nNewWidth );

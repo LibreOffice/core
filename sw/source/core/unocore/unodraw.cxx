@@ -683,7 +683,7 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         }
         {
             if(pDesc->GetHOrient()->GetHoriOrient() == text::HoriOrientation::NONE)
-                aMM100Pos.X = convertTwipToMm100(pDesc->GetHOrient()->GetPos());
+                aMM100Pos.X = pDesc->GetHOrient()->GetPos().data().as_hmm();
             aSet.Put( *pDesc->GetHOrient() );
         }
         // #i32349# - if no vertical position exists, create one
@@ -695,7 +695,7 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         }
         {
             if(pDesc->GetVOrient()->GetVertOrient() == text::VertOrientation::NONE)
-                aMM100Pos.Y = convertTwipToMm100(pDesc->GetVOrient()->GetPos());
+                aMM100Pos.Y = pDesc->GetVOrient()->GetPos().data().as_hmm();
             aSet.Put( *pDesc->GetVOrient() );
         }
 

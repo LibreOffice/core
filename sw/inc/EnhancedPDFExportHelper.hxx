@@ -127,7 +127,7 @@ struct lt_TableColumn
 {
     bool operator()( tools::Long nVal1, tools::Long nVal2 ) const
     {
-        return nVal1 + ( MINLAY - 1 ) < nVal2;
+        return nVal1 + ( MINLAY - 1_twip ) < nVal2;
     }
 };
 

@@ -188,7 +188,7 @@ public:
     bool IsLastBlock() const { return m_bLastBlock; }
     bool IsLastCenter() const { return m_bLastCenter; }
     SvxAdjust GetAdjust() const { return mnAdjust; }
-    SwTwips GetLineWidth() const { return Right() - GetLeftMargin() + 1; }
+    SwTwips GetLineWidth() const { return Right() - GetLeftMargin() + 1_twip; }
     SwTwips GetLeftMin() const { return std::min(mnFirst, mnLeft); }
     bool HasNegFirst() const { return mnFirst < mnLeft; }
 
@@ -332,7 +332,7 @@ inline SwTwips SwTextMargin::GetLeftMargin() const
 
 inline SwTwips SwTextMargin::Left() const
 {
-    return (mnDropLines >= m_nLineNr && 1 != m_nLineNr) ? mnFirst + mnDropLeft : mnLeft;
+    return (mnDropLines >= m_nLineNr && 1 != m_nLineNr) ? SwTwips(mnFirst + mnDropLeft) : mnLeft;
 }
 
 

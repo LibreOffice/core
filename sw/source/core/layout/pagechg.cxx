@@ -205,8 +205,9 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     }
     else
         m_bHasGrid = false;
-    SetMaxFootnoteHeight( pPgDsc->GetFootnoteInfo().GetHeight() ?
-                     pPgDsc->GetFootnoteInfo().GetHeight() : LONG_MAX );
+    SetMaxFootnoteHeight(
+        pPgDsc->GetFootnoteInfo().GetHeight() ?
+        pPgDsc->GetFootnoteInfo().GetHeight() : SwTwips(TWIPS_MAX));
     mnFrameType = SwFrameType::Page;
     m_bInvalidLayout = m_bInvalidContent = m_bInvalidSpelling = m_bInvalidSmartTags = m_bInvalidAutoCmplWrds = m_bInvalidWordCount = true;
     m_bInvalidFlyLayout = m_bInvalidFlyContent = m_bInvalidFlyInCnt = m_bFootnotePage = m_bEndNotePage = false;
@@ -1878,7 +1879,8 @@ void SwRootFrame::ImplCalcBrowseWidth()
 
     mbBrowseWidthValid = true;
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
-    mnBrowseWidth = (!comphelper::LibreOfficeKit::isActive() && pSh)? MINLAY + 2 * pSh->GetOut()-> PixelToLogic( pSh->GetBrowseBorder() ).Width(): MIN_BROWSE_WIDTH;
+    mnBrowseWidth = (!comphelper::LibreOfficeKit::isActive() && pSh) ?
+                        MINLAY + 2 * pSh->GetOut()-> PixelToLogic( pSh->GetBrowseBorder() ).Width() : SwTwips(MIN_BROWSE_WIDTH);
 
     do
     {
@@ -2394,12 +2396,10 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
                 if ( mbBookMode )
                     pFormatPage = &pPageToAdjust->GetFormatPage();
 
-                const SwTwips nCurrentPageWidth = pFormatPage->getFrameArea().Width() + (pFormatPage->IsEmptyPage() ? 0 : nSidebarWidth);
+                const SwTwips nCurrentPageWidth = pFormatPage->getFrameArea().Width() + (pFormatPage->IsEmptyPage() ? SwTwips(0) : nSidebarWidth);
                 const Point aOldPagePos = pPageToAdjust->getFrameArea().Pos();
                 const bool bLeftSidebar = pPageToAdjust->SidebarPosition() == sw::sidebarwindows::SidebarPosition::LEFT;
-                const SwTwips nLeftPageAddOffset = bLeftSidebar ?
-                                                   nSidebarWidth :
-                                                   0;
+                const SwTwips nLeftPageAddOffset = bLeftSidebar ? nSidebarWidth : SwTwips(0);
 
                 Point aNewPagePos( nBorder + nX, nBorder + nSumRowHeight );
                 Point aNewPagePosWithLeftOffset( nBorder + nX + nLeftPageAddOffset, nBorder + nSumRowHeight );

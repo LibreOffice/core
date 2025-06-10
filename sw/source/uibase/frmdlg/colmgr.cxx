@@ -78,7 +78,7 @@ sal_uInt16 SwColMgr::GetGutterWidth(sal_uInt16 nPos) const
 {
     sal_uInt16 nRet;
     if (nPos == USHRT_MAX)
-        nRet = GetCount() > 1 ? m_aFormatCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
+        nRet = GetCount() > 1 ? SwTwips(m_aFormatCol.GetGutterWidth()) : DEF_GUTTER_WIDTH;
     else
     {
         OSL_ENSURE(nPos < GetCount() - 1, "column overindexed");

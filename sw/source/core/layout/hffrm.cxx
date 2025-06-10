@@ -166,9 +166,9 @@ void SwHeadFootFrame::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
 
         /* calculate real vertical space between frame and print area */
         if (IsHeaderFrame())
-            nUL = pAttrs->CalcTop() + nSpace;
+            nUL = SwTwips(pAttrs->CalcTop()) + nSpace;
         else
-            nUL = pAttrs->CalcBottom() + nSpace;
+            nUL = SwTwips(pAttrs->CalcBottom()) + nSpace;
 
         /* set print area */
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
@@ -185,13 +185,13 @@ void SwHeadFootFrame::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
             aPrt.Top(nSpace);
         }
 
-        aPrt.Width(getFrameArea().Width() - nLR);
+        aPrt.Width(SwTwips(getFrameArea().Width()) - nLR);
 
         SwTwips nNewHeight;
 
         if (nUL < getFrameArea().Height())
         {
-            nNewHeight = getFrameArea().Height() - nUL;
+            nNewHeight = SwTwips(getFrameArea().Height()) - nUL;
         }
         else
         {
@@ -210,8 +210,8 @@ void SwHeadFootFrame::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
         // Set sizes - the sizes are given by the surrounding Frame, just
         // subtract the borders.
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
-        aPrt.Width ( getFrameArea().Width() - nLR );
-        aPrt.Height( getFrameArea().Height()- nUL );
+        aPrt.Width (SwTwips(getFrameArea().Width())  - nLR);
+        aPrt.Height(SwTwips(getFrameArea().Height()) - nUL);
     }
 
     setFramePrintAreaValid(true);
@@ -314,7 +314,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     nMaxHeight = nOldHeight;
 
                     if( nRemaining <= nMinHeight )
-                        nRemaining = ( nMaxHeight + nMinHeight + 1 ) / 2;
+                        nRemaining = (nMaxHeight + nMinHeight + 1_twip) / 2;
                 }
                 else
                 {
@@ -322,7 +322,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                         nMinHeight = nOldHeight;
 
                     if( nRemaining >= nMaxHeight )
-                        nRemaining = ( nMaxHeight + nMinHeight + 1 ) / 2;
+                        nRemaining = (nMaxHeight + nMinHeight + 1_twip) / 2;
                 }
 
                 nDiff = nRemaining - nOldHeight;
@@ -384,7 +384,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                         aFrm.Bottom( nDeadLine );
 
                         SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                        aPrt.Height( getFrameArea().Height() - nBorder );
+                        aPrt.Height(SwTwips(getFrameArea().Height()) - nBorder );
                     }
                 }
 
@@ -591,8 +591,8 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
             /* minimal height of print area */
             SwTwips nMinPrtHeight = nMinHeight
-                - pAttrs->CalcTop()
-                - pAttrs->CalcBottom();
+                - SwTwips(pAttrs->CalcTop())
+                - SwTwips(pAttrs->CalcBottom());
 
             if (nMinPrtHeight < 0)
                 nMinPrtHeight = 0;

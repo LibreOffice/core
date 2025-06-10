@@ -345,9 +345,9 @@ void  SwFormatTablePage::ModifyHdl(const weld::MetricSpinButton& rEdit, bool bAl
                 nRight = nLeft;
             if(nRight + nLeft > m_pTableData->GetSpace() - MINLAY )
             {
-                nLeft  = bCenter ?  (m_pTableData->GetSpace() - MINLAY) /2 :
+                nLeft  = bCenter ?  SwTwips((m_pTableData->GetSpace() - MINLAY) / 2) :
                                     (m_pTableData->GetSpace() - MINLAY) - nRight;
-                nRight = bCenter ?  (m_pTableData->GetSpace() - MINLAY) /2 : nRight;
+                nRight = bCenter ?  SwTwips((m_pTableData->GetSpace() - MINLAY) / 2) : nRight;
             }
             nCurWidth = m_pTableData->GetSpace() - nLeft - nRight;
         }
@@ -1054,7 +1054,7 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
         SwTwips nNewTableSize = 0;
         for( sal_uInt16 i = 0; i < m_nNoOfVisibleCols; i++ )
         {
-            SwTwips nNewColWidth = round( fPercentChange * (i == nCurrentPos ? fOrigColWidth : GetVisibleWidth(i)) );
+            SwTwips nNewColWidth = round( fPercentChange * (i == nCurrentPos ? SwTwips(std::lround(fOrigColWidth)) : GetVisibleWidth(i)) );
             if ( nNewColWidth < MINLAY )
                 nNewColWidth = MINLAY;
             SetVisibleWidth(i, nNewColWidth);

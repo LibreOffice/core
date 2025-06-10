@@ -68,7 +68,7 @@ static tools::Long GetLeftMargin( SwView const &rView )
     SvxZoomType eType = rView.GetWrtShell().GetViewOptions()->GetZoomType();
     tools::Long lRet = rView.GetWrtShell().GetAnyCurRect(CurRectType::PagePrt).Left();
     return eType == SvxZoomType::PERCENT   ? lRet + DOCUMENTBORDER :
-           eType == SvxZoomType::PAGEWIDTH || eType == SvxZoomType::PAGEWIDTH_NOBORDER ? 0 :
+           eType == SvxZoomType::PAGEWIDTH || eType == SvxZoomType::PAGEWIDTH_NOBORDER ? SwTwips(0) :
                                          lRet + DOCUMENTBORDER + nLeftOfst;
 }
 
@@ -81,9 +81,9 @@ static void lcl_GetPos(SwView const * pView,
     SwWrtShell &rSh = pView->GetWrtShell();
     const Size aDocSz( rSh.GetDocSize() );
 
-    const tools::Long lBorder = bBorder ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
+    const tools::Long lBorder = bBorder ? DOCUMENTBORDER : SwTwips(DOCUMENTBORDER * 2);
 
-    const tools::Long lPos = rScrollbar.adjustment_get_value() + (bBorder ? DOCUMENTBORDER : 0);
+    const tools::Long lPos = rScrollbar.adjustment_get_value() + (bBorder ? DOCUMENTBORDER : SwTwips(0));
 
     tools::Long lDelta = lPos - (bHori ? rSh.VisArea().Pos().X() : rSh.VisArea().Pos().Y());
 
@@ -129,7 +129,7 @@ void SwView::InvalidateRulerPos()
 
 tools::Long SwView::SetHScrollMax( tools::Long lMax )
 {
-    const tools::Long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
+    const tools::Long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : SwTwips(DOCUMENTBORDER * 2);
     const tools::Long lSize = GetDocSz().Width() + lBorder - m_aVisArea.GetWidth();
 
     // At negative values the document is completely visible.
@@ -139,7 +139,7 @@ tools::Long SwView::SetHScrollMax( tools::Long lMax )
 
 tools::Long SwView::SetVScrollMax( tools::Long lMax )
 {
-    const tools::Long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
+    const tools::Long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : SwTwips(DOCUMENTBORDER * 2);
     tools::Long lSize = GetDocSz().Height() + lBorder - m_aVisArea.GetHeight();
     return std::clamp( lSize, tools::Long(0), lMax );        // see horizontal
 }
@@ -164,7 +164,7 @@ void SwView::DocSzChgd(const Size &rSz)
     //If text has been deleted, it may be that the VisArea points behind the visible range.
     tools::Rectangle aNewVisArea( m_aVisArea );
     bool bModified = false;
-    SwTwips lGreenOffset = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
+    SwTwips lGreenOffset = IsDocumentBorder() ? DOCUMENTBORDER : SwTwips(DOCUMENTBORDER * 2);
     SwTwips lTmp = m_aDocSz.Width() + lGreenOffset;
 
     if ( aNewVisArea.Right() >= lTmp  )
@@ -205,7 +205,7 @@ void SwView::SetVisArea( const tools::Rectangle &rRect, bool bUpdateScrollbar )
     if( rRect == m_aVisArea )
         return;
 
-    const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : 0;
+    const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : SwTwips(0);
 
     // No negative position, no negative size
     tools::Rectangle aLR = rRect;
@@ -346,7 +346,7 @@ void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect, sal_uInt16 nRang
                     sal_uInt16 nRangeY, ScrollSizeMode eScrollSizeMode)
 {
 
-    const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : 0;
+    const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : SwTwips(0);
 
     const tools::Long nDefaultYScroll = GetYScroll();
     tools::Long nYScroll;
@@ -485,7 +485,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
 
         if( m_bTopCursor )
         {
-            const tools::Long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
+            const tools::Long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : SwTwips(0);
             aPt.setY( std::min( std::max( nBorder, rRect.Top() ),
                                 m_aDocSz.Height() + nBorder -
                                     m_aVisArea.GetHeight() ) );
@@ -502,7 +502,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
 
         if( m_bTopCursor )
         {
-            const tools::Long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
+            const tools::Long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : SwTwips(0);
             aPt.setY( std::min( std::max( nBorder, rRect.Top() ),
                                 m_aDocSz.Height() + nBorder -
                                     m_aVisArea.GetHeight() ) );
@@ -525,8 +525,8 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
         aPnt.AdjustX(( rRect.Left() + rRect.Right()
                   - m_aVisArea.Left() - m_aVisArea.Right() ) / 2 );
         aPnt.setX( SetHScrollMax( aPnt.X() ) );
-        const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : 0;
-        aPnt.setX( std::max( (GetLeftMargin( *this ) - lMin) + nLeftOfst, aPnt.X() ) );
+        const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : SwTwips(0);
+        aPnt.setX( std::max((GetLeftMargin( *this ) - lMin) + nLeftOfst, SwTwips(aPnt.X())));
     }
     m_aVisArea = aOldVisArea;
     if (pCareDialog)
@@ -794,7 +794,7 @@ void SwView::CalcVisArea( const Size &rOutPixel )
 
     // The shifts to the right and/or below can now be incorrect
     // (e.g. change zoom level, change view size).
-    const tools::Long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+    const tools::Long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : SwTwips(DOCUMENTBORDER * 2);
     if ( aRect.Left() )
     {
         const tools::Long lWidth = GetWrtShell().GetDocSize().Width() + lBorder;

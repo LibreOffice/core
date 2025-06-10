@@ -8888,7 +8888,7 @@ static void WriteFootnoteSeparatorHeight(
         pSerializer->startElementNS(XML_w, XML_pPr);
         pSerializer->startElementNS(XML_w, XML_rPr);
         pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val),
-            OString::number((nHeight + 5) / 10));
+            OString::number((nHeight + 5_twip) / 10));
         pSerializer->endElementNS(XML_w, XML_rPr);
         pSerializer->endElementNS(XML_w, XML_pPr);
     }

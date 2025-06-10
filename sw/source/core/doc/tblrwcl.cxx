@@ -62,8 +62,8 @@
 
 using namespace com::sun::star;
 
-#define COLFUZZY 20
-#define ROWFUZZY 10
+constexpr SwTwips COLFUZZY(20);
+constexpr SwTwips ROWFUZZY(10);
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
@@ -754,7 +754,7 @@ void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
             if( bCalcNewSize )
             {
                 SwFormatFrameSize aNew( pBox->GetFrameFormat()->GetFrameSize() );
-                aNew.SetWidth( aNew.GetWidth() + nBoxSz );
+                aNew.SetWidth(SwTwips(aNew.GetWidth()) + nBoxSz);
                 if( pShareFormats )
                     pShareFormats->SetSize( *pBox, aNew );
                 else
@@ -2382,16 +2382,16 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
             // Collect all "ContentBoxes"
             bGreaterBox = (TableChgMode::FixedWidthChangeAbs != rParam.nMode)
-                       && ((nDist + (rParam.bLeft ? 0 : nWidth)) >= rParam.nSide);
+                       && ((nDist + (rParam.bLeft ? SwTwips(0) : nWidth)) >= rParam.nSide);
             if (bGreaterBox
                 || (!rParam.bBigger
-                    && (std::abs(nDist + ((rParam.nMode != TableChgMode::FixedWidthChangeAbs && rParam.bLeft) ? 0 : nWidth) - rParam.nSide) < COLFUZZY)))
+                    && (std::abs(nDist + ((rParam.nMode != TableChgMode::FixedWidthChangeAbs && rParam.bLeft) ? SwTwips(0) : nWidth) - rParam.nSide) < COLFUZZY)))
             {
                 SwTwips nLowerDiff;
                 if( bGreaterBox && TableChgMode::FixedWidthChangeProp == rParam.nMode )
                 {
                     // The "other Boxes" have been adapted, so change by this value
-                    nLowerDiff = (nDist + ( rParam.bLeft ? 0 : nWidth ) ) - rParam.nSide;
+                    nLowerDiff = (nDist + ( rParam.bLeft ? SwTwips(0) : nWidth ) ) - rParam.nSide;
                     nLowerDiff *= rParam.nDiff;
                     nLowerDiff /= rParam.nMaxSize;
                     nLowerDiff = rParam.nDiff - nLowerDiff;
@@ -2418,8 +2418,8 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
             if( nLowerDiff ||
                  (bGreaterBox = !nOldLower && TableChgMode::FixedWidthChangeAbs != rParam.nMode &&
-                    ( nDist + ( rParam.bLeft ? 0 : nWidth ) ) >= rParam.nSide) ||
-                ( std::abs( nDist + ( (rParam.nMode != TableChgMode::FixedWidthChangeAbs && rParam.bLeft) ? 0 : nWidth )
+                    ( nDist + ( rParam.bLeft ? SwTwips(0) : nWidth ) ) >= rParam.nSide) ||
+                ( std::abs( nDist + ( (rParam.nMode != TableChgMode::FixedWidthChangeAbs && rParam.bLeft) ? SwTwips(0) : nWidth )
                             - rParam.nSide ) < COLFUZZY ))
             {
                 // This column contains the Cursor - so decrease/increase
@@ -2430,7 +2430,7 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     if( bGreaterBox && TableChgMode::FixedWidthChangeProp == rParam.nMode )
                     {
                         // The "other Boxes" have been adapted, so change by this value
-                        nLowerDiff = (nDist + ( rParam.bLeft ? 0 : nWidth ) ) - rParam.nSide;
+                        nLowerDiff = (nDist + ( rParam.bLeft ? SwTwips(0) : nWidth ) ) - rParam.nSide;
                         nLowerDiff *= rParam.nDiff;
                         nLowerDiff /= rParam.nMaxSize;
                         nLowerDiff = rParam.nDiff - nLowerDiff;
@@ -2630,9 +2630,9 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
     // Only needed for manipulating the width
     const SwTwips nDist = ::lcl_GetDistance( &rCurrentBox, bLeft );
     SwTwips nDistStt = 0;
-    CR_SetBoxWidth aParam( eType, nRelDiff, nDist,
-                            bLeft ? nDist : rSz.GetWidth() - nDist,
-                            const_cast<SwTableNode*>(rCurrentBox.GetSttNd()->FindTableNode()) );
+    SwTwips nMax = bLeft ? nDist : SwTwips(rSz.GetWidth()) - nDist;
+    CR_SetBoxWidth aParam(eType, nRelDiff, nDist, nMax,
+                            const_cast<SwTableNode*>(rCurrentBox.GetSttNd()->FindTableNode()));
     bBigger = aParam.bBigger;
 
     FN_lcl_SetBoxWidth fnSelBox, fnOtherBox;
@@ -2653,7 +2653,7 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
                     !rSz.GetWidthPercent() )
                 {
                     // silence -Wsign-compare on Android with the static cast
-                    bRet = rSz.GetWidth() < static_cast<unsigned short>(USHRT_MAX) - nRelDiff;
+                    bRet = rSz.GetWidth() < static_cast<sal_uInt16>(USHRT_MAX) - sal_uInt16(nRelDiff);
                     bChgLRSpace = bLeft ? rLR.ResolveLeft({}) >= nAbsDiff
                                         : rLR.ResolveRight({}) >= nAbsDiff;
                 }
@@ -2700,7 +2700,7 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
                 {
                     // If the Table does not have any room to grow, we need to create some!
                     // silence -Wsign-compare on Android with the static cast
-                    if( aSz.GetWidth() + nRelDiff > static_cast<unsigned short>(USHRT_MAX) )
+                    if (SwTwips(aSz.GetWidth()) + nRelDiff > static_cast<unsigned short>(USHRT_MAX) )
                     {
                         // Break down to USHRT_MAX / 2
                         CR_SetBoxWidth aTmpPara( TableChgWidthHeightType::ColLeft, aSz.GetWidth() / 2,
@@ -2715,16 +2715,16 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
 
                     if( bLeft )
                         aLR.SetLeft(
-                            SvxIndentValue::twips(sal_uInt16(aLR.ResolveLeft({}) - nAbsDiff)));
+                            SvxIndentValue::twips(SwTwips(aLR.ResolveLeft({})) - nAbsDiff));
                     else
                         aLR.SetRight(
-                            SvxIndentValue::twips(sal_uInt16(aLR.ResolveRight({}) - nAbsDiff)));
+                            SvxIndentValue::twips(SwTwips(aLR.ResolveRight({})) - nAbsDiff));
                 }
                 else if( bLeft )
-                    aLR.SetLeft(SvxIndentValue::twips(sal_uInt16(aLR.ResolveLeft({}) + nAbsDiff)));
+                    aLR.SetLeft(SvxIndentValue::twips(SwTwips(aLR.ResolveLeft({})) + nAbsDiff));
                 else
                     aLR.SetRight(
-                        SvxIndentValue::twips(sal_uInt16(aLR.ResolveRight({}) + nAbsDiff)));
+                        SvxIndentValue::twips(SwTwips(aLR.ResolveRight({})) + nAbsDiff));
 
                 if( bChgLRSpace )
                     GetFrameFormat()->SetFormatAttr( aLR );
@@ -2758,9 +2758,9 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
                 }
 
                 if( bBigger )
-                    aSz.SetWidth( aSz.GetWidth() + nRelDiff );
+                    aSz.SetWidth(SwTwips(aSz.GetWidth()) + nRelDiff);
                 else
-                    aSz.SetWidth( aSz.GetWidth() - nRelDiff );
+                    aSz.SetWidth(SwTwips(aSz.GetWidth()) - nRelDiff);
 
                 if (rSz.GetWidthPercent())
                     aSz.SetWidthPercent(static_cast<sal_uInt8>(
@@ -2789,7 +2789,7 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
                 }
             }
         }
-        else if( bLeft ? nDist != 0 : std::abs( rSz.GetWidth() - nDist ) > COLFUZZY )
+        else if( bLeft ? nDist != 0 : std::abs(SwTwips(rSz.GetWidth()) - nDist) > COLFUZZY )
         {
             bRet = true;
             if( bLeft && TableChgMode::FixedWidthChangeAbs == m_eTableChgMode )
@@ -2867,7 +2867,7 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
             m_eTableChgMode = eOld;
             return bRet;
         }
-        else if( bLeft ? nDist != 0 : (rSz.GetWidth() - nDist) > COLFUZZY )
+        else if( bLeft ? nDist != 0 : (SwTwips(rSz.GetWidth()) - nDist) > COLFUZZY )
         {
             if( bLeft && TableChgMode::FixedWidthChangeAbs == m_eTableChgMode )
                 aParam.bBigger = !bBigger;
@@ -2893,8 +2893,7 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
                 if( bLeft )
                     aParam.nMaxSize = aParam.nSide;
                 else
-                    aParam.nMaxSize = pLine->GetUpper()->GetFrameFormat()->
-                                    GetFrameSize().GetWidth() - aParam.nSide;
+                    aParam.nMaxSize = SwTwips(pLine->GetUpper()->GetFrameFormat()->GetFrameSize().GetWidth()) - aParam.nSide;
             }
 
             // First, see if there is enough room at all

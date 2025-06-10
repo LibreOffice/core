@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_SW_INC_SWTYPES_HXX
 #define INCLUDED_SW_INC_SWTYPES_HXX
+
 #include <rtl/ustring.hxx>
 
 #include <limits.h>
@@ -29,6 +31,7 @@
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
 #include <unotools/resmgr.hxx>
+#include "SwTwips.hxx"
 
 namespace com::sun::star {
     namespace linguistic2{
@@ -48,33 +51,32 @@ class CharClass;
 class CollatorWrapper;
 class LanguageTag;
 
-typedef tools::Long SwTwips;
+//typedef tools::Long SwTwips;
 #define INVALID_TWIPS   LONG_MAX
 #define TWIPS_MAX       (LONG_MAX - 1)
 
 constexpr sal_Int32 COMPLETE_STRING = SAL_MAX_INT32;
 
-constexpr SwTwips cMinHdFtHeight = 56; // ~1mm
+constexpr SwTwips cMinHdFtHeight(1_mm); // ~1mm
 
-#define MINFLY 23   // Minimal size for FlyFrames.
-#define MINLAY 23   // Minimal size for other Frames.
+constexpr SwTwips MINFLY(23_twip);   // Minimal size for FlyFrames.
+constexpr SwTwips MINLAY(23_twip);   // Minimal size for other Frames.
 
 // Default column distance of two text columns corresponds to 0.3 cm.
-constexpr SwTwips DEF_GUTTER_WIDTH = o3tl::toTwips(3, o3tl::Length::mm);
+constexpr SwTwips DEF_GUTTER_WIDTH(3_mm);
 
 // Minimal distance (distance to text) for border attribute
 // in order not to crock up aligned lines.
 // 28 Twips == 0,5mm
-constexpr SwTwips MIN_BORDER_DIST = 28; // ~0.5mm
+constexpr SwTwips MIN_BORDER_DIST(50_hmm); // ~0.5mm
 
 // Minimal document border: 20mm.
-constexpr tools::Long lMinBorderInMm(20);
-constexpr SwTwips lMinBorder = o3tl::toTwips(lMinBorderInMm, o3tl::Length::mm);
+constexpr SwTwips lMinBorder(20_mm);
 
 // Margin left and above document.
 // Half of it is gap between the pages.
 //TODO: Replace with SwViewOption::defDocumentBorder
-constexpr SwTwips DOCUMENTBORDER = 284; // ~5mm
+constexpr SwTwips DOCUMENTBORDER(5_mm); // ~5mm
 
 // For inserting of captions (what and where to insert).
 // It's here because it is not big enough to justify its own hxx
@@ -93,8 +95,8 @@ constexpr sal_uInt8 MAXLEVEL = 10;
 //  (For more levels the values have to be multiplied with the levels+1;
 //  levels 0 ..4!)
 
-constexpr short lBulletIndent = o3tl::toTwips(25, o3tl::Length::in100); // 0.25 inch
-constexpr short lBulletFirstLineOffset = -lBulletIndent;
+constexpr SwTwips lBulletIndent(0.25_in); // 0.25 inch
+constexpr short lBulletFirstLineOffset(std::round(-lBulletIndent.data().as_twip()));
 constexpr sal_uInt16 lNumberIndent = o3tl::toTwips(25, o3tl::Length::in100); // 0.25 inch
 constexpr short lNumberFirstLineOffset = -lNumberIndent;
 constexpr short lOutlineMinTextDistance = o3tl::toTwips(15, o3tl::Length::in100); // 0.15 inch = 0.38 cm

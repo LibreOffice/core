@@ -516,7 +516,7 @@ bool SwTextFrame::GetTopOfLine( SwTwips& _onTopOfLine,
 }
 
 // Minimum distance of non-empty lines is a little less than 2 cm
-#define FILL_MIN_DIST 1100
+constexpr SwTwips FILL_MIN_DIST(1100);
 
 struct SwFillData
 {
@@ -1460,7 +1460,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
         if( nDiff > 0 )
         {
             nDiff /= nDist;
-            rFill.Fill().nParaCnt = o3tl::narrowing<sal_uInt16>(nDiff + 1);
+            rFill.Fill().nParaCnt = o3tl::narrowing<sal_uInt16>(nDiff + 1_twip);
             rFill.nLineWidth = 0;
             rFill.bInner = false;
             rFill.bEmpty = true;
@@ -1478,7 +1478,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
             const SvxRightMarginItem& rRightMargin(pSet->GetRightMargin());
 
             SwRect &rRect = rFill.Fill().aCursor;
-            rRect.Top( rFill.Bottom() + (nDiff+1) * nDist - nLineHeight );
+            rRect.Top( rFill.Bottom() + (nDiff + 1_twip) * nDist - nLineHeight );
             if( nFirst && nDiff > -1 )
                 rRect.Top( rRect.Top() + nFirst );
             rRect.Height( nLineHeight );

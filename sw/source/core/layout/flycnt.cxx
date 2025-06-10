@@ -67,11 +67,11 @@ SwTwips lcl_GetTopForObjPos(const SwContentFrame* pCnt, const bool bVert, const 
         if ( bVertL2R )
             aResult += pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
         else
-            aResult += pCnt->getFrameArea().Width() - pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
+            aResult += SwTwips(pCnt->getFrameArea().Width()) - pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
         return aResult;
     }
     else
-        return pCnt->getFrameArea().Top() + pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
+        return SwTwips(pCnt->getFrameArea().Top()) + pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
 }
 
 }
@@ -662,12 +662,12 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
             if( bVert )
             {
                 if ( bVertL2R )
-                    rRet.m_nMain = rPt.X() - nTopForObjPos;
+                    rRet.m_nMain = SwTwips(rPt.X()) - nTopForObjPos;
                 else
                     rRet.m_nMain = nTopForObjPos - rPt.X();
             }
             else
-                rRet.m_nMain = rPt.Y() - nTopForObjPos;
+                rRet.m_nMain = SwTwips(rPt.Y()) - nTopForObjPos;
             return pCnt;
         }
         else if ( rPt.Y() <= pUp->getFrameArea().Top() )
@@ -691,7 +691,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                 if( bVert )
                 {
                     if ( bVertL2R )
-                        rRet.m_nMain = rPt.X() - nTopForObjPos;
+                        rRet.m_nMain = SwTwips(rPt.X()) - nTopForObjPos;
                     else
                         rRet.m_nMain = nTopForObjPos - rPt.X();
                 }
@@ -906,7 +906,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                 if ( pLay->getFrameArea().Contains( rPt ) )
                 {
                     SwTwips nDiff = pLay->IsVertical() ? ( pLay->IsVertLR() ? ( rPt.X() - nFrameTop ) : ( nFrameTop - rPt.X() ) )
-                                                       : ( rPt.Y() - nFrameTop );
+                                                       : ( SwTwips(rPt.Y()) - nFrameTop );
                     if( bSct || pSect )
                         rRet.m_nSub += nDiff;
                     else
@@ -1300,7 +1300,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
             nY -= pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
         }
         else
-            nY = rNew.Y() - pCnt->getFrameArea().Top() - pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
+            nY = SwTwips(rNew.Y() - pCnt->getFrameArea().Top()) - pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
     }
     else
     {
@@ -1361,13 +1361,13 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
         if( bVert )
         {
             if ( bVertL2R )
-                nY = rNew.X() - nTopForObjPos;
+                nY = SwTwips(rNew.X()) - nTopForObjPos;
             else
                 nY = nTopForObjPos - rNew.X();
         }
         else
         {
-            nY = rNew.Y() - nTopForObjPos;
+            nY = SwTwips(rNew.Y()) - nTopForObjPos;
         }
     }
 

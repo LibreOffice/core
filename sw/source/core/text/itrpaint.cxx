@@ -388,13 +388,13 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
 
         // We calculate a separate font for underlining.
-        CheckSpecialUnderline( pPor, bAdjustBaseLine ? nOldY : 0 );
+        CheckSpecialUnderline( pPor, bAdjustBaseLine ? nOldY : SwTwips(0));
         SwUnderlineFont* pUnderLineFnt = GetInfo().GetUnderFnt();
         if ( pUnderLineFnt )
         {
             const Point aTmpPoint( GetInfo().X(),
                                    bAdjustBaseLine ?
-                                   pUnderLineFnt->GetPos().Y() :
+                                   SwTwips(pUnderLineFnt->GetPos().Y()) :
                                    nLineBaseLine );
             pUnderLineFnt->SetPos( aTmpPoint );
         }
@@ -569,8 +569,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 // to show the terminating pilcrow at the correct position, and not before that
                 ( ( !( pEndTempl->GetNextPortion() && pEndTempl->GetNextPortion()->IsHolePortion() ) &&
                     std::abs( m_pCurr->Width() - m_pCurr->GetFirstPortion()->Width() ) <= 1 && m_pCurr->ExtraShrunkWidth() > 0 )
-                        ? m_pCurr->ExtraShrunkWidth() - m_pCurr->Width() : 0 ) +
-                    ( GetCurr()->IsHanging() ? GetCurr()->GetHangingMargin() : 0 ) );
+                        ? m_pCurr->ExtraShrunkWidth() - m_pCurr->Width() : SwTwips(0) ) +
+                    ( GetCurr()->IsHanging() ? GetCurr()->GetHangingMargin() : SwTwips(0) ) );
             aEnd.Paint( GetInfo() );
             GetInfo().Y( nOldY );
         }

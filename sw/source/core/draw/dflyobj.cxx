@@ -1066,9 +1066,9 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
             {
                 for ( const auto &rC : rCol.GetColumns() )
                 {
-                    nMin += rC.GetLeft() + rC.GetRight() + MINFLY;
+                    nMin += rC.GetLeft() + rC.GetRight() + tools::Long(MINFLY);
                 }
-                nMin -= MINFLY;
+                nMin -= tools::Long(MINFLY);
             }
             aSz.setWidth( std::max( aSz.Width(), nMin ) );
         }

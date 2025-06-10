@@ -1408,7 +1408,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
 
                     // right
                     aSpaceToNextPage = aPageRect;
-                    aSpaceToNextPage.Right( aSpaceToNextPage.Right() + nHalfDocBorder );
+                    aSpaceToNextPage.Right(SwTwips(aSpaceToNextPage.Right()) + nHalfDocBorder );
                     aSpaceToNextPage.Left( pLay->getFrameArea().Right() );
                     if(!aSpaceToNextPage.IsEmpty())
                         m_pImp->GetShell().AddPaintRect( aSpaceToNextPage );

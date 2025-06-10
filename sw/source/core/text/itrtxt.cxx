@@ -249,11 +249,11 @@ SwTwips SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
                 // centered inside the whole line.
 
                 //for text refactor
-                const sal_uInt16 nLineNet =  rLine.Height() - nRubyHeight;
+                const sal_uInt16 nLineNet =  rLine.Height() - SwTwips(nRubyHeight);
                 //const sal_uInt16 nLineNet = ( nPorHeight > nGridWidth ) ?
                  //                           rLine.Height() - nRubyHeight :
                  //                           nGridWidth;
-                nOfst += ( nLineNet - nPorHeight ) / 2;
+                nOfst += (SwTwips(nLineNet) - nPorHeight) / 2;
                 if ( bRubyTop )
                     nOfst += nRubyHeight;
             }

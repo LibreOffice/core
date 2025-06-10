@@ -35,7 +35,7 @@
 #include "portab.hxx"
 #include <memory>
 
-#define MIN_TAB_WIDTH 60
+constexpr SwTwips MIN_TAB_WIDTH(60);
 
 using namespace ::com::sun::star;
 
@@ -478,7 +478,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
                 nRest = ! bNoCompression &&
                         ( pPos->Width() > MIN_TAB_WIDTH ) ?
                         pPos->Width() - MIN_TAB_WIDTH :
-                        0;
+                        SwTwips(0);
 
                 // for simplifying the handling of left, right ... tabs,
                 // we do expand portions, which are lying behind
@@ -586,7 +586,7 @@ SwMarginPortion *SwTextAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
             pLast = pFly;
             if( pFly->GetFix() > nPrtWidth )
                 pFly->Width( ( pFly->GetFix() - nPrtWidth) + pFly->Width() + 1);
-            nPrtWidth += pFly->Width() + 1;
+            nPrtWidth += pFly->Width() + 1_twip;
             aCurrRect.Left( nLeftMar + nPrtWidth );
             pFly = CalcFlyPortion( nRealWidth, aCurrRect );
         }
@@ -851,7 +851,7 @@ void SwTextAdjuster::CalcDropRepaint()
         rRepaint.Top( Y() );
     for( sal_Int32 i = 1; i < GetDropLines(); ++i )
         NextLine();
-    const SwTwips nBottom = Y() + GetLineHeight() - 1;
+    const SwTwips nBottom = Y() + GetLineHeight() - 1_twip;
     if( rRepaint.Bottom() < nBottom )
         rRepaint.Bottom( nBottom );
 }

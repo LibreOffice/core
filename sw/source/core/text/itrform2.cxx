@@ -257,7 +257,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
 
     // line width is adjusted, so that pPor does not fit to current
     // line anymore
-    rInf.Width( rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0) );
+    rInf.Width( rInf.X() + (pPor->Width() ? pPor->Width() - 1_twip : SwTwips(0)) );
     rInf.SetLen( pPor->GetLen() );
     rInf.SetFull( false );
     if( pFly )
@@ -592,7 +592,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             if ( nOfst )
             {
                 const sal_uLong i = ( nOfst > 0 ) ?
-                                ( ( nOfst - 1 ) / nGridWidth + 1 ) :
+                                ( (nOfst - 1_twip) / nGridWidth + 1 ) :
                                 0;
                 const SwTwips nKernWidth = i * nGridWidth - nOfst;
                 const SwTwips nRestWidth = rInf.Width() - rInf.X();
@@ -736,7 +736,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 }
 
                 const SwTwips i = nSumWidth ?
-                                 ( nSumWidth - 1 ) / nGridWidth + 1 :
+                                 ( nSumWidth - 1_twip ) / nGridWidth + 1 :
                                  0;
                 const SwTwips nTmpWidth = i * nGridWidth;
                 const SwTwips nKernWidth = std::min(nTmpWidth - nSumWidth, nRestWidth);
@@ -912,7 +912,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
     if( pPor->InTextGrp() && bCalc )
     {
         pPor->SetAscent(pPor->GetAscent() +
-            rInf.GetFont()->GetTopBorderSpace());
+            SwTwips(rInf.GetFont()->GetTopBorderSpace()));
         pPor->Height(pPor->Height() +
             rInf.GetFont()->GetTopBorderSpace() +
             rInf.GetFont()->GetBottomBorderSpace() );
@@ -1430,7 +1430,7 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     CalcAscent( rInf, pPor );
 
     const SwFont* pTmpFnt = rInf.GetFont();
-    auto nCharWidthGuess = std::min(pTmpFnt->GetHeight(), pPor->GetAscent()) / 8;
+    auto nCharWidthGuess = std::min(SwTwips(pTmpFnt->GetHeight()), pPor->GetAscent()) / 8;
     if (!nCharWidthGuess)
         nCharWidthGuess = 1;
     auto nExpect = rInf.GetIdx() + TextFrameIndex(rInf.GetLineWidth() / nCharWidthGuess);
@@ -2080,8 +2080,8 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
         if( GetInfo().IsStop() )
         {
             m_pCurr->SetLen(TextFrameIndex(0));
-            m_pCurr->Height( GetFrameRstHeight() + 1, false );
-            m_pCurr->SetRealHeight( GetFrameRstHeight() + 1 );
+            m_pCurr->Height(GetFrameRstHeight() + 1_twip, false);
+            m_pCurr->SetRealHeight(GetFrameRstHeight() + 1_twip);
 
             // Don't oversize the line in case of split flys, so we don't try to move the anchor
             // of a precede fly forward, next to its follow.
@@ -2274,7 +2274,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                     // require this and it seems harmless to emulate.
                     if (pSpace->GetLineHeight() == 0)
                     {
-                        nLineHeight = m_pCurr->Height() + nRubyHeight;
+                        nLineHeight = m_pCurr->Height() + SwTwips(nRubyHeight);
                     }
 
                     if (nLineHeight < pSpace->GetLineHeight())
@@ -2293,9 +2293,9 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         }
 
         const SwTwips nAsc = m_pCurr->GetAscent() +
-                      ( bRubyTop ?
-                       ( nLineHeight - m_pCurr->Height() + nRubyHeight ) / 2 :
-                       ( nLineHeight - m_pCurr->Height() - nRubyHeight ) / 2 );
+                      (bRubyTop ?
+                       (nLineHeight - m_pCurr->Height() + SwTwips(nRubyHeight)) / 2 :
+                       (nLineHeight - m_pCurr->Height() - SwTwips(nRubyHeight)) / 2);
 
         m_pCurr->Height( nLineHeight, false );
         m_pCurr->SetAscent( nAsc );
@@ -2512,7 +2512,7 @@ SwTwips SwTextFormatter::CalcBottomLine() const
             if( bRepaint )
             {
                 const_cast<SwRepaint&>(GetInfo().GetParaPortion()
-                    ->GetRepaint()).Bottom( nRet-1 );
+                    ->GetRepaint()).Bottom(nRet - 1_twip);
                 const_cast<SwTextFormatInfo&>(GetInfo()).SetPaintOfst( 0 );
             }
         }
@@ -2893,7 +2893,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     }
 
     const tools::Long nLeftMar = GetLeftMargin();
-    const tools::Long nLeftMin = (rInf.X() || GetDropLeft()) ? nLeftMar : GetLeftMin();
+    const tools::Long nLeftMin = (rInf.X() || GetDropLeft()) ? SwTwips(nLeftMar) : GetLeftMin();
 
     SwRect aLine( rInf.X() + nLeftMin, nTop, rInf.RealWidth() - rInf.X()
                   + nLeftMar - nLeftMin , nHeight );
@@ -3133,7 +3133,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 
     const SwTwips i = nTmpWidth / nGridWidth + 1;
 
-    const SwTwips nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
+    const SwTwips nNewWidth = ( i - 1_twip ) * nGridWidth - nOfst;
     if ( nNewWidth > 0 )
         rInf.Width( nNewWidth );
     else

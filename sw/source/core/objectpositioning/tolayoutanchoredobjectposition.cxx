@@ -175,7 +175,8 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         else if (text::HoriOrientation::RIGHT == eHoriOrient)
             nRelPosX
                 = nWidth
-                  - (nObjWidth + (aRectFnSet.IsVert() ? rUL.GetLower() : rLR.ResolveRight({})));
+                  - (nObjWidth + (aRectFnSet.IsVert() ?
+                                    SwTwips(rUL.GetLower()) : SwTwips(rLR.ResolveRight({}))));
         else
             nRelPosX = aRectFnSet.IsVert() ? rUL.GetUpper() : rLR.ResolveLeft({});
         nRelPosX += nOffset;

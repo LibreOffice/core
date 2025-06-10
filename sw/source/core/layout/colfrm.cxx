@@ -154,7 +154,7 @@ static bool lcl_AddColumns( SwLayoutFrame *pCont, sal_uInt16 nCount )
 
     bool bRet;
     SwTwips nMax = pCont->IsPageBodyFrame() ?
-                   pCont->FindPageFrame()->GetMaxFootnoteHeight() : LONG_MAX;
+                   pCont->FindPageFrame()->GetMaxFootnoteHeight() : SwTwips(TWIPS_MAX);
     if ( pNeighbourCol )
     {
         bRet = false;
@@ -364,7 +364,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         {
             const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ?
                                    nAvail :
-                                   pAttr->CalcColWidth( i, sal_uInt16( fnRect.GetWidth(getFramePrintArea()) ) );
+                                   SwTwips(pAttr->CalcColWidth(i, sal_uInt16(fnRect.GetWidth(getFramePrintArea()))));
 
             const Size aColSz = fnRect.IsVert() ?
                                 Size( getFramePrintArea().Width(), nWidth ) :

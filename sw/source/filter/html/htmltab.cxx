@@ -1406,7 +1406,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                                                       : (nInnerFrameWidth / 2) );
                 // We only set the item if there's a border or a border distance
                 // If the latter is missing, there's gonna be a border and we'll have to set the distance
-                aBoxItem.SetAllDistances(nBDist ? nBDist : MIN_BORDER_DIST);
+                aBoxItem.SetAllDistances(nBDist ? SwTwips(nBDist) : MIN_BORDER_DIST);
                 pFrameFormat->SetFormatAttr( aBoxItem );
             }
             else

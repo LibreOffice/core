@@ -100,7 +100,7 @@ static void lcl_GetCharRectInsideField( SwTextSizeInfo& rInf, SwRect& rOrig,
             const_cast<SwLinePortion*>(pPor)->SetLen(TextFrameIndex(nLen - 1));
             const SwTwips nX1 = pPor->GetLen() ?
                                 pPor->GetTextSize( rInf ).Width() :
-                                0;
+                                SwTwips(0);
 
             SwTwips nX2 = 0;
             if ( rCMS.m_bRealWidth )
@@ -112,16 +112,14 @@ static void lcl_GetCharRectInsideField( SwTextSizeInfo& rInf, SwRect& rOrig,
             const_cast<SwLinePortion*>(pPor)->SetLen( nOldLen );
 
             rOrig.Pos().AdjustX(nX1 );
-            rOrig.Width( ( nX2 > nX1 ) ?
-                         ( nX2 - nX1 ) :
-                           1 );
+            rOrig.Width((nX2 > nX1) ? nX2 - nX1 : SwTwips(1));
         }
     }
     else
     {
         // special cases: no common fields, e.g., graphic number portion,
         // FlyInCntPortions, Notes
-        rOrig.Width( rCMS.m_bRealWidth && rPor.Width() ? rPor.Width() : 1 );
+        rOrig.Width(rCMS.m_bRealWidth && rPor.Width() ? rPor.Width() : SwTwips(1));
     }
 }
 
@@ -239,7 +237,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     {
         mnLeft = m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left();
         if( mnLeft >= mnRight )   // e.g. with large paragraph indentations in slim table columns
-            mnRight = mnLeft + 1; // einen goennen wir uns immer
+            mnRight = mnLeft + 1_twip; // einen goennen wir uns immer
     }
 
     if( m_pFrame->IsFollow() && m_pFrame->GetOffset() )
@@ -495,7 +493,7 @@ void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
     pOrig->Pos( GetTopLeft() );
     pOrig->SSize( aCharSize );
     pOrig->Pos().AdjustX(nLast );
-    const SwTwips nTmpRight = Right() - 1;
+    const SwTwips nTmpRight = Right() - 1_twip;
     if( pOrig->Left() > nTmpRight )
         pOrig->Pos().setX( nTmpRight );
 
@@ -809,9 +807,8 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
 
                         if ( bChgHeight )
                         {
-                            m_pCurr->Height( pOldCurr->Height() - nRubyHeight );
-                            m_pCurr->SetRealHeight( pOldCurr->GetRealHeight() -
-                                                  nRubyHeight );
+                            m_pCurr->Height(pOldCurr->Height() - SwTwips(nRubyHeight));
+                            m_pCurr->SetRealHeight(pOldCurr->GetRealHeight() - SwTwips(nRubyHeight));
                         }
 
                         SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
@@ -1399,7 +1396,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
     SwTwips x = rPoint.X();
     const SwTwips nLeftMargin  = GetLineStart();
     SwTwips nRightMargin = GetLineEnd() +
-        ( GetCurr()->IsHanging() ? GetCurr()->GetHangingMargin() : 0 );
+        (GetCurr()->IsHanging() ? GetCurr()->GetHangingMargin() : SwTwips(0));
     if( nRightMargin == nLeftMargin )
         nRightMargin += 30;
 
@@ -1469,7 +1466,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
         nWidth30 = 0;
     else
         nWidth30 = ! nWidth && pPor->GetLen() && pPor->InToxRefOrFieldGrp() ?
-                     30 :
+                     SwTwips(30) :
                      nWidth;
 
     while (ConsiderNextPortionForCursorOffset(pPor, nWidth30, nX))
@@ -1512,8 +1509,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
             nWidth30 = 0;
         else
             nWidth30 = ! nWidth && pPor->GetLen() && pPor->InToxRefOrFieldGrp() ?
-                         30 :
-                         nWidth;
+                         SwTwips(30) : nWidth;
         if( !pPor->IsFlyPortion() && !pPor->IsMarginPortion() )
             bLastHyph = pPor->InHyphGrp();
     }
@@ -1541,7 +1537,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
 
     if( bFieldInfo && ( nWidth30 < nX || bRightOver || bLeftOver ||
         ( pPor->InNumberGrp() && !pPor->IsFootnoteNumPortion() ) ||
-        ( pPor->IsMarginPortion() && nWidth > nX + 30 ) ) )
+        ( pPor->IsMarginPortion() && nWidth > nX + 30_twip ) ) )
         pCMS->m_bPosCorr = true;
 
     // #i27615#

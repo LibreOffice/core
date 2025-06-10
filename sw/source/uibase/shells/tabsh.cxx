@@ -1271,7 +1271,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     case text::HoriOrientation::LEFT_AND_WIDTH:
                         // width doesn't change
                         nRight = 0;
-                        nLeft = std::min(nLeft, nSpace);
+                        nLeft = std::min(nLeft, SwTwips(nSpace));
                         break;
                     case text::HoriOrientation::FULL:
                         nLeft = nRight = 0;

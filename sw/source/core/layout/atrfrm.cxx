@@ -306,11 +306,14 @@ bool SwFormatFrameSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= static_cast<sal_Int32>(convertTwipToMm100(GetWidth()));
         break;
         case MID_FRMSIZE_HEIGHT:
+        {
             // #95848# returned size should never be zero.
             // (there was a bug that allowed for setting height to 0.
             // Thus there some documents existing with that not allowed
             // attribute value which may cause problems on import.)
-            rVal <<= static_cast<sal_Int32>(convertTwipToMm100(GetHeight() < MINLAY ? MINLAY : GetHeight() ));
+            SwTwips aValue = GetHeight() < MINLAY ? MINLAY : SwTwips(GetHeight());
+            rVal <<= sal_Int32(aValue.data().as_hmm());
+        }
         break;
         case MID_FRMSIZE_SIZE_TYPE:
             rVal <<= static_cast<sal_Int16>(GetHeightSizeType());
@@ -1148,7 +1151,7 @@ bool SwFormatCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             xCols->setColumnCount(GetNumCols());
             const sal_uInt16 nItemGutterWidth = GetGutterWidth();
             sal_Int32 nAutoDistance = IsOrtho() ? USHRT_MAX == nItemGutterWidth
-                                                      ? DEF_GUTTER_WIDTH
+                                                      ? sal_Int32(DEF_GUTTER_WIDTH)
                                                       : static_cast<sal_Int32>(nItemGutterWidth)
                                                 : 0;
             nAutoDistance = convertTwipToMm100(nAutoDistance);
@@ -1477,7 +1480,7 @@ bool SwFormatVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 rVal <<= m_eRelation;
         break;
         case MID_VERTORIENT_POSITION:
-                rVal <<= static_cast<sal_Int32>(convertTwipToMm100(GetPos()));
+                rVal <<= sal_Int32(GetPos().data().as_hmm());
                 break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -1587,7 +1590,7 @@ bool SwFormatHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= m_eRelation;
         break;
         case MID_HORIORIENT_POSITION:
-                rVal <<= static_cast<sal_Int32>(convertTwipToMm100(GetPos()));
+                rVal <<= sal_Int32(GetPos().data().as_hmm());
                 break;
         case MID_HORIORIENT_PAGETOGGLE:
             rVal <<= IsPosToggle();

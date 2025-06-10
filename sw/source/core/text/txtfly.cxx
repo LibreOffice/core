@@ -976,8 +976,8 @@ SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
                     const SwFormatVertOrient &rTmpFormat = pObjFormat->GetVertOrient();
                     if( text::VertOrientation::BOTTOM != rTmpFormat.GetVertOrient() )
                         m_nMinBottom = ( aRectFnSet.IsVert() && m_nMinBottom ) ?
-                                     std::min( m_nMinBottom, aBound.Left() ) :
-                                     std::max( m_nMinBottom, aRectFnSet.GetBottom(aBound) );
+                                     std::min( m_nMinBottom, SwTwips(aBound.Left())) :
+                                     std::max( m_nMinBottom, SwTwips(aRectFnSet.GetBottom(aBound)));
                 }
 
                 m_bOn = true;

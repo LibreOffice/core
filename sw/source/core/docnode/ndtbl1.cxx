@@ -1428,9 +1428,9 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
         // pFrame does not necessarily have to be a SwTextFrame!
         const SwTwips nCalcFitToContent = pFrame->IsTextFrame() ?
                                           const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->CalcFitToContent() :
-                                          aRectFnSet.GetWidth(pFrame->getFramePrintArea());
+                                          SwTwips(aRectFnSet.GetWidth(pFrame->getFramePrintArea()));
 
-        nRet = std::max( nRet, nCalcFitToContent + nAdd );
+        nRet = std::max( nRet, SwTwips(nCalcFitToContent + nAdd));
         pFrame = pFrame->GetNext();
     }
     // Surrounding border as well as left and Right Border also need to be respected
@@ -1462,7 +1462,7 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
 {
     const sal_uInt16 nWish = bWishValues ?
                     ::lcl_CalcCellFit( pCell ) :
-                    MINLAY + sal_uInt16(pCell->getFrameArea().Width() - pCell->getFramePrintArea().Width());
+                    sal_uInt16(MINLAY) + sal_uInt16(pCell->getFrameArea().Width() - pCell->getFramePrintArea().Width());
 
     SwRectFnSet aRectFnSet(pTab);
 
@@ -1584,7 +1584,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
                                 nFit = nWish;
                         }
                         else
-                        {   const sal_uInt16 nMin = MINLAY + sal_uInt16(pCell->getFrameArea().Width() -
+                        {   const sal_uInt16 nMin = sal_uInt16(MINLAY) + sal_uInt16(pCell->getFrameArea().Width() -
                                                                 pCell->getFramePrintArea().Width());
                             if ( !nFit || nMin < nFit )
                                 nFit = nMin;

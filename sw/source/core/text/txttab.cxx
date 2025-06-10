@@ -93,9 +93,9 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         // #i91133#
         const SwTwips nTabLeft = bRTL
                                  ? m_pFrame->getFrameArea().Right() -
-                                   ( bTabsRelativeToIndent ? GetTabLeft() : 0 )
+                                   (bTabsRelativeToIndent ? GetTabLeft() : SwTwips(0))
                                  : m_pFrame->getFrameArea().Left() +
-                                   ( bTabsRelativeToIndent ? GetTabLeft() : 0 );
+                                   (bTabsRelativeToIndent ? GetTabLeft() : SwTwips(0));
 
         // The absolute position, where we started the line formatting
         SwTwips nLinePos = GetLeftMargin();
@@ -107,7 +107,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         }
 
         // The current position, relative to the line start
-        SwTwips nTabPos = rInf.GetLastTab() ? rInf.GetLastTab()->GetTabPos() : 0;
+        SwTwips nTabPos = rInf.GetLastTab() ? rInf.GetLastTab()->GetTabPos() : SwTwips(0);
         if( nTabPos < rInf.X() )
         {
             nTabPos = rInf.X();
@@ -508,7 +508,7 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
         = bTabOverMargin
               ? GetTabPos()
               : bTabOverSpacing
-                    ? std::min(GetTabPos(), rInf.GetTextFrame()->getFrameArea().Right())
+                    ? std::min(GetTabPos(), SwTwips(rInf.GetTextFrame()->getFrameArea().Right()))
                     : std::min(GetTabPos(), rInf.Width());
     const SwLinePortion *pPor = GetNextPortion();
 

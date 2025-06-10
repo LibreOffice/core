@@ -80,7 +80,7 @@ bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
     bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
     {
-        case MID_FTN_HEIGHT        :     rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_aFootnoteInfo.GetHeight()));break;
+        case MID_FTN_HEIGHT        :     rVal <<= sal_Int32(m_aFootnoteInfo.GetHeight().data().as_hmm()); break;
         case MID_LINE_WEIGHT       :     rVal <<= static_cast<sal_Int16>(convertTwipToMm100(m_aFootnoteInfo.GetLineWidth()));break;
         case MID_LINE_COLOR        :     rVal <<= m_aFootnoteInfo.GetLineColor();break;
         case MID_LINE_RELWIDTH     :
@@ -91,8 +91,8 @@ bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_LINE_ADJUST       :     rVal <<= static_cast<sal_Int16>(m_aFootnoteInfo.GetAdj());break;//text::HorizontalAdjust
-        case MID_LINE_TEXT_DIST    :     rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_aFootnoteInfo.GetTopDist()));break;
-        case MID_LINE_FOOTNOTE_DIST:     rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_aFootnoteInfo.GetBottomDist()));break;
+        case MID_LINE_TEXT_DIST    :     rVal <<= sal_Int32(m_aFootnoteInfo.GetTopDist().data().as_hmm()); break;
+        case MID_LINE_FOOTNOTE_DIST:     rVal <<= sal_Int32(m_aFootnoteInfo.GetBottomDist().data().as_hmm()); break;
         case MID_FTN_LINE_STYLE    :
         {
             switch ( m_aFootnoteInfo.GetLineStyle( ) )

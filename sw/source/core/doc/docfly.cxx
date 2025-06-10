@@ -383,7 +383,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
                 && text::HoriOrientation::NONE == pHoriOrientItem->GetHoriOrient()
                 && aOldH.GetPos() == pHoriOrientItem->GetPos())
             {
-                SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldH.GetPos();
+                SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? SwTwips(0) : aOldH.GetPos();
                 nPos += aOldAnchorPos.getX() - aNewAnchorPos.getX();
 
                 assert(aOldH.GetRelationOrient() != pHoriOrientItem->GetRelationOrient());
@@ -416,7 +416,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
                 && text::VertOrientation::NONE == pVertOrientItem->GetVertOrient()
                 && aOldV.GetPos() == pVertOrientItem->GetPos())
             {
-                SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldV.GetPos();
+                SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? SwTwips(0) : aOldV.GetPos();
                 nPos += aOldAnchorPos.getY() - aNewAnchorPos.getY();
 
                 assert(aOldV.GetRelationOrient() != pVertOrientItem->GetRelationOrient());

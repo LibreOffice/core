@@ -123,7 +123,7 @@ bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
                                     ( pLastPor->IsKernPortion() ||
                                       pLastPor->IsErgoSumPortion() ) ) ?
                                pLastPor->Width() :
-                               0;
+                               SwTwips(0);
 
         if( nLeft == rInf.X() && ! rInf.GetFly() )
         {

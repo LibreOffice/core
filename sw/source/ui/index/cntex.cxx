@@ -323,9 +323,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                             pPropValArr[3].Value <<= OUString(aToken.cTabFillChar);
                             pPropValArr[4].Name = "TabStopPosition";
                             SwTwips nTempPos = aToken.nTabStopPosition >= 0 ?
-                                                            aToken.nTabStopPosition : 0;
-                            nTempPos = convertTwipToMm100(nTempPos);
-                            pPropValArr[4].Value <<= static_cast<sal_Int32>(nTempPos);
+                                                            aToken.nTabStopPosition : SwTwips(0);
+                            pPropValArr[4].Value <<= sal_Int32(nTempPos.data().as_hmm());
                         }
                         else if(TOKEN_TEXT == aToken.eTokenType)
                         {

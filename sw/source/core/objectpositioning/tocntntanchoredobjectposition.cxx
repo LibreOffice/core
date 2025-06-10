@@ -1307,7 +1307,7 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
 
         // Already formatted, overlaps: resolve the conflict by shifting ourselves down.
         SwTwips nYDiff = pAnchoredObj->GetObjRect().Bottom() - GetAnchoredObj().GetObjRect().Top();
-        rRelPos.setY(rRelPos.getY() + nYDiff + 1);
+        rRelPos.setY(rRelPos.getY() + nYDiff + 1_twip);
         GetAnchoredObj().SetObjTop(nTopOfAnch + rRelPos.Y());
 
         // Store our offset that avoids the overlap. If this is a shape of a textbox, then the frame

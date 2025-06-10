@@ -2304,7 +2304,7 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             // i#94666 if WIDOW_MAGIC was set as height, nDist is wrong, need
             // to take into account all the frames in the section.
             if (GetUpper()->IsSctFrame()
-                && sw::WIDOW_MAGIC - 20000 - getFrameArea().Top() < nDist)
+                && sw::WIDOW_MAGIC - 20000_twip - getFrameArea().Top() < nDist)
             {
                 SwFrame *pNxt = GetNext();
                 while( pNxt )
@@ -2817,7 +2817,7 @@ SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, boo
                             }
                         }
                     }
-                    nGrow = pToGrow ? pToGrow->Grow(nReal, reason, bTst, bInfo) : 0;
+                    nGrow = pToGrow ? pToGrow->Grow(nReal, reason, bTst, bInfo) : SwTwips(0);
                 }
 
                 if( SwNeighbourAdjust::GrowAdjust == nAdjust && nGrow < nReal )
@@ -2826,7 +2826,7 @@ SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, boo
                 if ( IsFootnoteFrame() && (nGrow != nReal) && GetNext() )
                 {
                     //Footnotes can replace their successor.
-                    SwTwips nSpace = bTst ? 0 : -nDist;
+                    SwTwips nSpace = bTst ? SwTwips(0) : -nDist;
                     if (const SwFrame *pFrame = GetUpper()->Lower())
                     {
                         do
@@ -3089,7 +3089,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 }
             }
         }
-        nReal = pToShrink ? pToShrink->Shrink( nShrink, bTst, bInfo ) : 0;
+        nReal = pToShrink ? pToShrink->Shrink( nShrink, bTst, bInfo ) : SwTwips(0);
         if( ( SwNeighbourAdjust::GrowAdjust == nAdjust || SwNeighbourAdjust::AdjustGrow == nAdjust )
             && nReal < nShrink )
             AdjustNeighbourhood( nReal - nShrink );
@@ -4114,7 +4114,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         if ( nFrameHeight > nMinHeight || nPrtHeight >= nMinDiff )
                             nDiff = std::max( nDiff, nMinDiff );
                         else if( nDiff < nMinDiff )
-                            nDiff = nMinDiff - nPrtHeight + 1;
+                            nDiff = nMinDiff - nPrtHeight + 1_twip;
                     }
                     // nMaximum is a size in which the content fit or the
                     // requested value from the environment, therefore we don't

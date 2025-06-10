@@ -3409,7 +3409,7 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
         {
             aRectFnSet.SetPosY(
                 aFrm,
-                aRectFnSet.GetBottom(pFrame->GetPrev()->getFrameArea()) - ( aRectFnSet.IsVert() ? nMaxHeight + 1 : 0 ) );
+                aRectFnSet.GetBottom(pFrame->GetPrev()->getFrameArea()) - ( aRectFnSet.IsVert() ? nMaxHeight + 1 : SwTwips(0)));
         }
     }
 
@@ -3430,7 +3430,7 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
 
     {
         SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*pFrame);
-        aRectFnSet.SetHeight( aPrt, std::max( tools::Long(0) , aRectFnSet.GetHeight(pFrame->getFrameArea()) - aRectFnSet.GetTop(aPrt) - nLower ) );
+        aRectFnSet.SetHeight( aPrt, std::max(SwTwips(0) , aRectFnSet.GetHeight(pFrame->getFrameArea()) - aRectFnSet.GetTop(aPrt) - nLower) );
         aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(pFrame->getFrameArea()) - ( rAttrs.CalcLeft( pFrame ) + rAttrs.CalcRight( pFrame ) ) );
     }
 
@@ -3532,7 +3532,7 @@ bool SwTextFrame::WouldFit(SwTwips &rMaxHeight, bool &bSplit, bool bTst, bool bM
     // force a MoveFwd
     if (IsWidow() || (aRectFnSet.IsVert()
                         ? (0 == getFrameArea().Left())
-                        : (sw::WIDOW_MAGIC - 20000 < getFrameArea().Bottom())))
+                        : (sw::WIDOW_MAGIC - 20000_twip < getFrameArea().Bottom())))
     {
         SetWidow(false);
         if ( GetFollow() )
@@ -3609,7 +3609,7 @@ SwTwips SwTextFrame::GetParHeight() const
 
     // TODO: Refactor and improve code
     const SwLineLayout* pLineLayout = GetPara();
-    SwTwips nHeight = pLineLayout ? pLineLayout->GetRealHeight() : 0;
+    SwTwips nHeight = pLineLayout ? pLineLayout->GetRealHeight() : SwTwips(0);
 
     // Is this paragraph scrolled? Our height until now is at least
     // one line height too low then
@@ -3698,7 +3698,7 @@ SwTwips SwTextFrame::CalcFitToContent()
     SwHookOut aHook( aInf );
 
     // i#54031 - assure minimum of MINLAY twips.
-    const SwTwips nMax = std::max( SwTwips(MINLAY), aLine.CalcFitToContent_() + 1 );
+    const SwTwips nMax = std::max(SwTwips(MINLAY), aLine.CalcFitToContent_() + 1_twip);
 
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -4312,7 +4312,7 @@ void SwTextFrame::CalcBaseOfstForFly()
 
 SwTwips SwTextFrame::GetBaseVertOffsetForFly(bool bIgnoreFlysAnchoredAtThisFrame) const
 {
-    return bIgnoreFlysAnchoredAtThisFrame ? 0 : mnFlyAnchorVertOfstNoWrap;
+    return bIgnoreFlysAnchoredAtThisFrame ? SwTwips(0) : mnFlyAnchorVertOfstNoWrap;
 }
 
 /**

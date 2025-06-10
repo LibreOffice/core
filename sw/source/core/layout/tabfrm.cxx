@@ -735,7 +735,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
     // Shrink the table to account for the shrunk last row, as well as lower rows
     // that had been moved to follow table in SwTabFrame::Split.
     // It will grow later when last line will recalc its height.
-    rTab.Shrink(nAlreadyFree + nCurLastLineHeight - nRemainingSpaceForLastRow + 1);
+    rTab.Shrink(nAlreadyFree + nCurLastLineHeight - nRemainingSpaceForLastRow + 1_twip);
 
     // Lock this tab frame and its follow
     bool bUnlockMaster = false;
@@ -3745,7 +3745,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                         //      otherwise non negative wished right indent is hold.
                         nRightSpacing = nRightLine +
                                         ( ( (nWishRight+nLeftOffset) < 0 ) ?
-                                            (nWishRight+nLeftOffset) :
+                                            SwTwips(nWishRight+nLeftOffset) :
                                             std::max( SwTwips(0), nWishRight ) );
                     }
                 }
@@ -3776,7 +3776,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                         //      otherwise non negative wished left indent is hold.
                         nLeftSpacing = nLeftLine +
                                        ( ( (nWishLeft+nRightOffset) < 0 ) ?
-                                           (nWishLeft+nRightOffset) :
+                                           SwTwips(nWishLeft+nRightOffset) :
                                            std::max( SwTwips(0), nWishLeft ) );
                     }
                 }
@@ -3844,7 +3844,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                     }
                     // OD 10.03.2003 #i9040# - consider right and left line attribute.
                     const SwTwips nWishRight =
-                            nMax - (nLeftSpacing-pAttrs->CalcLeftLine()) - nWishedTableWidth;
+                            nMax - (nLeftSpacing - SwTwips(pAttrs->CalcLeftLine())) - nWishedTableWidth;
                     nRightSpacing = nRightLine +
                                     ( (nRightOffset > 0) ?
                                       std::max( nWishRight, SwTwips(nRightOffset) ) :
@@ -3941,7 +3941,7 @@ SwTwips SwTabFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool b
 
             if ( IsRestrictTableGrowth() )
             {
-                nTmp = std::min( tools::Long(nDist), nReal + nTmp );
+                nTmp = std::min(SwTwips(nDist), nReal + nTmp);
                 nDist = nTmp < 0 ? 0 : nTmp;
             }
         }
@@ -4851,7 +4851,7 @@ tools::Long CalcHeightWithFlys( const SwFrame *pFrame )
                                     aRectFnSet.GetTop(pTmp->getFrameArea()),
                                     aRectFnSet.GetTop(pFrame->getFrameArea()) );
 
-                            nHeight = std::max( nHeight, nDistOfFlyBottomToAnchorTop + nFrameDiff -
+                            nHeight = std::max(SwTwips(nHeight), nDistOfFlyBottomToAnchorTop + nFrameDiff -
                                             aRectFnSet.GetHeight(pFrame->getFrameArea()) );
 
                             // #i56115# The first height calculation
@@ -5450,7 +5450,7 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
                 // Use new height for the current row:
                 nSumRowHeight += pToAdjustRow == this ?
                                  nHeight :
-                                 aRectFnSet.GetHeight(pToAdjustRow->getFrameArea());
+                                 SwTwips(aRectFnSet.GetHeight(pToAdjustRow->getFrameArea()));
 
                 if ( nRowSpan-- == 1 )
                     break;
@@ -5597,8 +5597,8 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         const SwFormatFrameSize &rSz = pMod->GetFrameSize();
         SwTwips nMinHeight = 0;
         if (rSz.GetHeightSizeType() == SwFrameSize::Minimum)
-            nMinHeight = std::max(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*this),
-                                  tools::Long(0));
+            nMinHeight = std::max(SwTwips(rSz.GetHeight()) - lcl_calcHeightOfRowBeforeThisFrame(*this),
+                                  SwTwips(0));
 
         // Only necessary to calculate minimal row height if height
         // of pRow is at least nMinHeight. Otherwise nMinHeight is the
@@ -5633,7 +5633,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         }
 
         SwLayoutFrame* pFrame = GetUpper();
-        SwTwips nTmp = pFrame ? pFrame->Shrink(nReal, bTst) : 0;
+        SwTwips nTmp = pFrame ? pFrame->Shrink(nReal, bTst) : SwTwips(0);
         if ( !bShrinkAnyway && !GetNext() && nTmp != nReal )
         {
             //The last one gets the leftover in the upper and therefore takes
@@ -6032,7 +6032,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
     // #i26945#
     tools::Long nRemaining = GetTabBox()->getRowSpan() >= 1 ?
                       ::lcl_CalcMinCellHeight( this, pTab->IsConsiderObjsForMinCellHeight(), pAttrs ) :
-                      0;
+                      SwTwips(0);
     if ( !isFrameAreaSizeValid() )
     {
         setFrameAreaSizeValid(true);
@@ -6812,7 +6812,7 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
         pCurrSourceCell = static_cast<const SwCellFrame*>(pCurrSourceCell->GetNext());
     }
 
-    return ( LONG_MAX == nHeight ) ? 0 : nHeight;
+    return ( LONG_MAX == nHeight ) ? SwTwips(0) : nHeight;
 }
 
 /// Function to calculate height of first text row
@@ -6921,8 +6921,8 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
             SwTwips nMinRowHeight = 0;
             if (rSz.GetHeightSizeType() == SwFrameSize::Minimum)
             {
-                nMinRowHeight = std::max(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*pFirstRow),
-                                         tools::Long(0));
+                nMinRowHeight = std::max(SwTwips(rSz.GetHeight()) - lcl_calcHeightOfRowBeforeThisFrame(*pFirstRow),
+                                         SwTwips(0));
             }
 
             nTmpHeight += std::max( nHeightOfFirstContentLine, nMinRowHeight );

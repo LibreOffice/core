@@ -1501,7 +1501,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
                 rRepaint.Top( nOldTop );
             if( !rLine.IsUnclipped() || nOldBottom > rRepaint.Bottom() )
             {
-                rRepaint.Bottom( nOldBottom - 1 );
+                rRepaint.Bottom(nOldBottom - 1_twip);
                 rLine.SetUnclipped( true );
             }
         }
@@ -1513,7 +1513,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
                 rRepaint.Top( nTmpTop );
             if( !rLine.IsUnclipped() || nTmpBottom > rRepaint.Bottom() )
             {
-                rRepaint.Bottom( nTmpBottom - 1 );
+                rRepaint.Bottom(nTmpBottom - 1_twip);
                 rLine.SetUnclipped( true );
             }
         }
@@ -1521,7 +1521,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
         {
             if( !rLine.IsUnclipped() || nBottom > rRepaint.Bottom() )
             {
-                rRepaint.Bottom( nBottom - 1 );
+                rRepaint.Bottom(nBottom - 1_twip);
                 rLine.SetUnclipped( false );
             }
         }

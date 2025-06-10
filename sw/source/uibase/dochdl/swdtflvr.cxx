@@ -136,18 +136,14 @@
 #include <sfx2/sfxdlg.hxx>
 #include <comphelper/classids.hxx>
 #include <osl/diagnose.h>
+#include <basegfx/units/LengthTypes.hxx>
 
 #include <memory>
 
 /* default (A4 format) width of 210mm - 2 * border size (border on both sides) */
-constexpr tools::Long constOleWidthInMm = 210 - 2 * lMinBorderInMm;
+constexpr gfx::Length constOleWidth = 210_mm - lMinBorder.data() * 2;
 
-constexpr Size constOleSize100mm(
-    constOleWidthInMm * 100, // convert from mm to 100mm
-    3000 // 3 cm
-);
-
-constexpr Size constOleSizeTwip = o3tl::convert(constOleSize100mm, o3tl::Length::mm100, o3tl::Length::twip);
+gfx::Size2DL constOleSize(constOleWidth, 3_cm);
 
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_DRAWMODEL = 0x00000001;
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_HTML      = 0x00000002;
@@ -343,7 +339,7 @@ void SwTransferable::InitOle( SfxObjectShell* pDoc )
 {
     //set OleVisArea. Upper left corner of the page and size of
     //RealSize in Twips.
-    const Size aSz(constOleSizeTwip);
+    const Size aSz = gfx::Size2DLWrap::convertToToolsSize(constOleSize, gfx::LengthUnit::twip);
     SwRect aVis( Point( DOCUMENTBORDER, DOCUMENTBORDER ), aSz );
     pDoc->SetVisArea( aVis.SVRect() );
 }
@@ -1166,7 +1162,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut, bool bDeleteRedlines )
         //ObjectDescriptor was already filly from the old DocShell.
         //Now adjust it. Thus in GetData the first query can still
         //be answered with delayed rendering.
-        m_aObjDesc.maSize = constOleSize100mm;
+        m_aObjDesc.maSize = gfx::Size2DLWrap::convertToToolsSize(constOleSize, gfx::LengthUnit::hmm);
 
         PrepareOLE( m_aObjDesc );
 #if HAVE_FEATURE_DESKTOP
@@ -1268,7 +1264,7 @@ bool SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr
     //ObjectDescriptor was already filled from the old DocShell.
     //Now adjust it. Thus in GetData the first query can still
     //be answered with delayed rendering.
-    m_aObjDesc.maSize = constOleSize100mm;
+    m_aObjDesc.maSize = gfx::Size2DLWrap::convertToToolsSize(constOleSize, gfx::LengthUnit::hmm);
 
     PrepareOLE( m_aObjDesc );
     AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
@@ -3707,7 +3703,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         //Now adjust it. Thus in GetData the first query can still
         //be answered with delayed rendering.
         m_aObjDesc.maDragStartPos = rSttPos;
-        m_aObjDesc.maSize = constOleSize100mm;
+        m_aObjDesc.maSize = gfx::Size2DLWrap::convertToToolsSize(constOleSize, gfx::LengthUnit::hmm);
 
         PrepareOLE( m_aObjDesc );
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );

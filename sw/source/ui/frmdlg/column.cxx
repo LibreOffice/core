@@ -364,7 +364,7 @@ void SwColumnPage::ResetColWidth()
 
 }
 
-constexpr sal_uInt16 g_nMinWidth(MINLAY);
+constexpr sal_uInt16 g_nMinWidth(MINLAY.data().as_twip());
 
 // Now as TabPage
 SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)

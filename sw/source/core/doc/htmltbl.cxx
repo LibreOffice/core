@@ -620,11 +620,11 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                 }
 
                 // Respect minimum width for content
-                if( nMinNoAlignCell < MINLAY )
+                if (nMinNoAlignCell < sal_uLong(MINLAY))
                     nMinNoAlignCell = MINLAY;
-                if( nMaxNoAlignCell < MINLAY )
+                if (nMaxNoAlignCell < sal_uLong(MINLAY))
                     nMaxNoAlignCell = MINLAY;
-                if( nAbsMinNoAlignCell < MINLAY )
+                if (nAbsMinNoAlignCell < sal_uLong(MINLAY))
                     nAbsMinNoAlignCell = MINLAY;
 
                 // Respect the border and distance to the content
@@ -1504,7 +1504,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
     // to the border width.
     // In the last case we probably exported the table ourselves.
     if( m_nRelLeftFill &&
-        ( m_nWidthSet>0 || nAbsLeftFill<MINLAY+m_nInhLeftBorderWidth ||
+        ( m_nWidthSet>0 || nAbsLeftFill < sal_uInt16(MINLAY) + m_nInhLeftBorderWidth ||
           (HasColTags() && nAbsLeftFill < nAbsLeftSpace+nParentInhAbsLeftSpace+20) ) )
     {
         SwHTMLTableLayoutColumn *pColumn = GetColumn( 0 );
@@ -1514,7 +1514,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
         m_nInhAbsLeftSpace = nAbsLeftSpace + nParentInhAbsLeftSpace;
     }
     if( m_nRelRightFill &&
-        ( m_nWidthSet>0 || nAbsRightFill<MINLAY+m_nInhRightBorderWidth ||
+        ( m_nWidthSet>0 || nAbsRightFill < sal_uInt16(MINLAY) + m_nInhRightBorderWidth ||
           (HasColTags() && nAbsRightFill < nAbsRightSpace+nParentInhAbsRightSpace+20) ) )
     {
         SwHTMLTableLayoutColumn *pColumn = GetColumn( m_nCols-1 );
@@ -1621,7 +1621,7 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
     SwTwips nCalcTabWidth = 0;
     for( const SwTableLine *pLine : m_pSwTable->GetTabLines() )
         lcl_ResizeLine( pLine, &nCalcTabWidth );
-    SAL_WARN_IF( std::abs( m_nRelTabWidth-nCalcTabWidth ) >= COLFUZZY, "sw.core",
+    SAL_WARN_IF( std::abs(SwTwips(m_nRelTabWidth) - nCalcTabWidth) >= COLFUZZY, "sw.core",
                  "Table width is not equal to the row width" );
 
     // Lock the table format when altering it, or else the box formats

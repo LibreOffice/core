@@ -2227,7 +2227,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                                  bCommonBorder &&
                                  !static_cast<const SwTextFrame*>(this)->IsEmpty() ) ?
                                  nUpper :
-                                 0;
+                                 SwTwips(0);
 
                 nUpper += bCommonBorder ?
                           rAttrs.GetBottomLine( *pFrame ) :

@@ -606,11 +606,11 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
                  rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER)))
             {
                 nDiff = rInf.Left()
-                        + rInf.GetTextFrame()
+                        + SwTwips(rInf.GetTextFrame()
                               ->GetTextNodeForParaProps()
                               ->GetSwAttrSet()
                               .GetFirstLineIndent()
-                              .ResolveTextFirstLineOffset({})
+                              .ResolveTextFirstLineOffset({}))
                         - rInf.First() + rInf.ForcedLeftMargin();
             }
             else
@@ -780,7 +780,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
                 rInf.GetUnderFnt()->SetPos( aNewPos );
             }
 
-            pThis->Width( nOldWidth - nSpaceOffs + 12 );
+            pThis->Width(nOldWidth - nSpaceOffs + 12_twip);
             {
                 SwTextSlot aDiffText( &aInf, this, true, false, u"  "_ustr );
                 aInf.DrawText( *this, aInf.GetLen(), true );
@@ -804,7 +804,7 @@ SwBulletPortion::SwBulletPortion( const sal_UCS4 cBullet,
     SetWhichPor( PortionType::Bullet );
 }
 
-#define GRFNUM_SECURE 10
+constexpr SwTwips GRFNUM_SECURE(10);
 
 SwGrfNumPortion::SwGrfNumPortion(
         const OUString& rGraphicFollowedBy,
@@ -886,7 +886,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
     const bool bFull = rInf.Width() < rInf.X() + Width();
     const bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
-    SetAscent( GetRelPos() > 0 ? GetRelPos() : 0 );
+    SetAscent(GetRelPos() > 0 ? GetRelPos() : SwTwips(0));
     if( GetAscent() > Height() )
         Height( GetAscent() );
 
@@ -904,7 +904,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
     rInf.SetNumDone( true );
 //    long nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
     tools::Long nDiff = mbLabelAlignmentPosAndSpaceModeActive
-                 ? 0
+                 ? SwTwips(0)
                  : rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
     // The TextPortion should at least always start on the
     // left margin
@@ -977,7 +977,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     if( m_bReplace )
     {
-        const tools::Long nTmpH = GetNextPortion() ? GetNextPortion()->GetAscent() : 120;
+        const tools::Long nTmpH = GetNextPortion() ? GetNextPortion()->GetAscent() : SwTwips(120);
         aSize = Size( nTmpH, nTmpH );
         aPos.setY( rInf.Y() - nTmpH );
     }
@@ -1313,7 +1313,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
     // the portion grows. This looks better, if there's a character background.
     if( GetAscent() < nMainAscent )
     {
-        Height( Height() + nMainAscent - GetAscent() );
+        Height( Height() + SwTwips(nMainAscent) - GetAscent() );
         SetAscent( nMainAscent );
     }
     if( Height() < nMainAscent + nMainDescent )

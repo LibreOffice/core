@@ -216,7 +216,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.Width( rFrameSize.GetWidth() );
-        aFrm.Height( rFrameSize.GetHeightSizeType() == SwFrameSize::Variable ? MINFLY : rFrameSize.GetHeight() );
+        aFrm.Height( rFrameSize.GetHeightSizeType() == SwFrameSize::Variable ? MINFLY : SwTwips(rFrameSize.GetHeight()));
     }
 
     // Fixed or variable Height?
@@ -761,8 +761,8 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                aFrm.Height( aFrm.Height() - nDiffHeight );
-                aFrm.Width ( aFrm.Width()  - nDiffWidth  );
+                aFrm.Height(SwTwips(aFrm.Height()) - nDiffHeight);
+                aFrm.Width(SwTwips(aFrm.Width())  - nDiffWidth);
             }
 
             // #i68520#
@@ -770,8 +770,8 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 
             {
                 SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aPrt.Height( aPrt.Height() - nDiffHeight );
-                aPrt.Width ( aPrt.Width()  - nDiffWidth  );
+                aPrt.Height(SwTwips(aPrt.Height()) - nDiffHeight);
+                aPrt.Width(SwTwips(aPrt.Width())  - nDiffWidth);
             }
 
             ChgLowersProp( aOldSz );
@@ -1373,7 +1373,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
     SwFrameFormat *pFormat = GetFormat();
     const bool bVert = GetAnchorFrame()->IsVertical();
     const SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
-    SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
+    SwTwips nTmpY = nNewY == LONG_MAX ? SwTwips(0) : nNewY;
     if( bVert )
         nTmpY = -nTmpY;
     SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT> aSet( pFormat->GetDoc()->GetAttrPool() );
@@ -1431,7 +1431,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
     if ( !IsFlyInContentFrame() )
     {
         const SwTwips nNewX = bVert ? rNewPos.Y() : rNewPos.X();
-        SwTwips nTmpX = nNewX == LONG_MAX ? 0 : nNewX;
+        SwTwips nTmpX = nNewX == LONG_MAX ? SwTwips(0) : nNewX;
         SwFormatHoriOrient aHori( pFormat->GetHoriOrient() );
         // #i34948# - handle also at-page and at-fly anchored
         // Writer fly frames
@@ -1528,7 +1528,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
             SwTwips nRemaining = CalcContentHeight(pAttrs, nMinHeight, nUL);
             if( IsMinHeight() && (nRemaining + nUL) < nMinHeight )
-                nRemaining = nMinHeight - nUL;
+                nRemaining = SwTwips(nMinHeight) - nUL;
             // Because the Grow/Shrink of the Flys does not directly
             // set the size - only indirectly by triggering a Format()
             // via Invalidate() - the sizes need to be set here.
@@ -1552,7 +1552,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 // anchor.
                 SwTwips nDeadline = GetFlyAnchorBottom(this, *pAnchor);
                 SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
-                SwTwips nBottom = aRectFnSet.GetTop(getFrameArea()) + nRemaining;
+                SwTwips nBottom = SwTwips(aRectFnSet.GetTop(getFrameArea())) + nRemaining;
                 if (nBottom > nDeadline)
                 {
                     if (nDeadline > nTop)
@@ -1645,7 +1645,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 if ( nAutoWidth )
                 {
                     if( SwFrameSize::Minimum == rFrameSz.GetWidthSizeType() )
-                        nNewSize = std::max( nNewSize - nLR, nAutoWidth );
+                        nNewSize = std::max(SwTwips(nNewSize - nLR), nAutoWidth);
                     else
                         nNewSize = nAutoWidth;
                 }
@@ -2143,20 +2143,20 @@ void SwFlyFrame::MakeContentPos( const SwBorderAttrs &rAttrs )
             if( nAdjust == SDRTEXTVERTADJUST_CENTER )
             {
                 if( aRectFnSet.IsVertL2R() )
-                    aNewContentPos.setX(aNewContentPos.getX() + nDiff/2);
+                    aNewContentPos.setX(SwTwips(aNewContentPos.getX()) + nDiff / 2);
                 else if( aRectFnSet.IsVert() )
-                    aNewContentPos.setX(aNewContentPos.getX() - nDiff/2);
+                    aNewContentPos.setX(SwTwips(aNewContentPos.getX()) - nDiff / 2);
                 else
-                    aNewContentPos.setY(aNewContentPos.getY() + nDiff/2);
+                    aNewContentPos.setY(SwTwips(aNewContentPos.getY()) + nDiff / 2);
             }
             else if( nAdjust == SDRTEXTVERTADJUST_BOTTOM )
             {
                 if( aRectFnSet.IsVertL2R() )
-                    aNewContentPos.setX(aNewContentPos.getX() + nDiff);
+                    aNewContentPos.setX(SwTwips(aNewContentPos.getX()) + nDiff);
                 else if( aRectFnSet.IsVert() )
-                    aNewContentPos.setX(aNewContentPos.getX() - nDiff);
+                    aNewContentPos.setX(SwTwips(aNewContentPos.getX()) - nDiff);
                 else
-                    aNewContentPos.setY(aNewContentPos.getY() + nDiff);
+                    aNewContentPos.setY(SwTwips(aNewContentPos.getY()) + nDiff);
             }
         }
     }
@@ -2299,8 +2299,8 @@ SwTwips SwFlyFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool bTst)
 
     SwRectFnSet aRectFnSet(this);
     SwTwips nSize = aRectFnSet.GetHeight(getFrameArea());
-    if( nSize > 0 && nDist > ( LONG_MAX - nSize ) )
-        nDist = LONG_MAX - nSize;
+    if( nSize > 0 && nDist > (SwTwips(LONG_MAX) - nSize) )
+        nDist = SwTwips(LONG_MAX) - nSize;
 
     if ( nDist <= 0 )
     {
@@ -2451,7 +2451,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
             const SwFormatFrameSize& rFormatSize = GetFormat()->GetFrameSize();
             SwTwips nFormatHeight = aRectFnSet.IsVert() ? rFormatSize.GetWidth() : rFormatSize.GetHeight();
 
-            nVal = std::min( nDist, nHeight - nFormatHeight );
+            nVal = std::min(nDist, SwTwips(nHeight - nFormatHeight));
         }
 
         if ( nVal <= 0 )
