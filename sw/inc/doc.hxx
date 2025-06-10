@@ -1369,7 +1369,7 @@ public:
             SfxItemSet const*const pAttr, bool const bUpdate = true);
     static sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
                                 const SwNode** ppSttNd = nullptr );
-    static SwSection* GetCurrSection( const SwPosition& rPos );
+    SW_DLLPUBLIC static SwSection* GetCurrSection( const SwPosition& rPos );
     SwSectionFormats& GetSections() { return *mpSectionFormatTable; }
     const SwSectionFormats& GetSections() const { return *mpSectionFormatTable; }
     SwSectionFormat *MakeSectionFormat();
