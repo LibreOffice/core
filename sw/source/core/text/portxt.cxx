@@ -492,7 +492,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                         float fExpansionWeight = static_cast<float>(1/1.7);
                         float fSpaceShrunk = nSpacesInLineShrink > 0
                                 ? (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nSpacesInLineShrink * nSpaceWidth/10.0))/nSpacesInLineShrink
-                                : 0;
+                                : 1;
                         float z0 = (nSpaceWidth/10.0)/fSpaceShrunk;
                         float z1 = (nSpaceWidth/10.0+((fSpaceNormal-nSpaceWidth/10.0)*fExpansionWeight))/(nSpaceWidth/10.0);
                         // TODO shrink line portions only if needed
