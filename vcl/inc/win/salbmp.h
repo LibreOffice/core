@@ -36,7 +36,8 @@ class WinSalBitmap final: public SalBitmap
 {
 private:
     Size                maSize;
-    HGLOBAL             mhDIB;
+    void*               mpDIB;
+    sal_Int32           mnDIBSize { 0 };
     HBITMAP             mhDDB;
 
     sal_uInt16          mnBitCount;
@@ -46,14 +47,16 @@ private:
 
 public:
 
-    HGLOBAL             ImplGethDIB() const { return mhDIB; }
+    void*               ImplGethDIB() const { return mpDIB; }
     HBITMAP             ImplGethDDB() const { return mhDDB; }
 
     std::shared_ptr< Gdiplus::Bitmap > ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource = nullptr) const;
 
-    static HGLOBAL      ImplCreateDIB( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal );
-    static HANDLE       ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB );
-    static sal_uInt16   ImplGetDIBColorCount( HGLOBAL hDIB );
+    static void         ImplCreateDIB( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal,
+                                       void*& rpDIB, sal_Int32 &rnDIBSize );
+    static HBITMAP      ImplCopyDDB( HBITMAP hHdl );
+    static void*        ImplCopyDIB( void* pDIB, sal_Int32 nDIBSize );
+    static sal_uInt16   ImplGetDIBColorCount( void* pDIB );
 
 public:
 

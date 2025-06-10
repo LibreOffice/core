@@ -63,11 +63,11 @@ namespace dxcanvas::tools
 
             /// Draw DI bits to given Graphics
             bool drawDIBits( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
-                             const void*                                     hDIB )
+                             void*                                       pDIB )
             {
                 bool            bRet( false );
 
-                const BITMAPINFO* pBI = static_cast<BITMAPINFO*>(GlobalLock( const_cast<void *>(hDIB) ));
+                const BITMAPINFO* pBI = static_cast<BITMAPINFO*>(pDIB);
 
                 if( pBI )
                 {
@@ -77,8 +77,6 @@ namespace dxcanvas::tools
                     // forward to outsourced GDI+ rendering method
                     // (header clashes)
                     bRet = tools::drawDIBits( rGraphics, *pBI, pBits );
-
-                    GlobalUnlock( const_cast<void *>(hDIB) );
                 }
 
                 return bRet;
