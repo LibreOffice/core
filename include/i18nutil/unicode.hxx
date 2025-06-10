@@ -96,9 +96,11 @@ private:
     OUStringBuffer maInput;
     OUStringBuffer maUtf16;
     OUStringBuffer maCombining;
-    bool mbAllowMoreChars = true;
     bool mbRequiresU = false;
     bool mbIsHexString = false;
+#ifndef NDEBUG
+    bool mbInputEnded = false;
+#endif
 
 public:
     /**

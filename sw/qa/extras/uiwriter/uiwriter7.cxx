@@ -2424,6 +2424,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUnicodeNotationToggle)
     // i.e., it converted the last combined character *before* the HEX code *to HEX*, replacing
     // the last character of the HEX; not the expected conversion of the code itself *from HEX*.
     CPPUNIT_ASSERT_EQUAL(u"\u0065\u0300n"_ustr, sDocString);
+
+    // When a combining character stands alone in the beginning of a line, toggle must not treat
+    // incoming "zero" indicating "there is no more input" as a character to combine with the
+    // combining character. Before tdf#166943 fix, it treated zero as such character, got input
+    // length of 2, tried to select and replace two characters to the left of cursor, and crashed
+    pWrtShell->SelAll();
+    pWrtShell->DelLeft();
+    pWrtShell->Insert2(u"U+0300"_ustr); // A combining diacritic code in the beginning of the text
+    dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);
+    sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
+    CPPUNIT_ASSERT_EQUAL(u"\u0300"_ustr, sDocString); // A lone combining diacritic
+
+    // Toggle must not crash, and must produce the correct result
+    dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);
+    sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
+    CPPUNIT_ASSERT_EQUAL(u"U+0300"_ustr, sDocString);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf34957)
