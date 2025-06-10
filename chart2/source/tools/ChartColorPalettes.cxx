@@ -9,6 +9,10 @@
 
 #include <ChartColorPalettes.hxx>
 #include <ChartColorPaletteHelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
+#include <tools/json_writer.hxx>
 #include <vcl/event.hxx>
 
 namespace chart
@@ -34,9 +38,11 @@ const ChartColorPalette* ChartColorPalettes::getPalette(const sal_uInt32 nItem) 
 void ChartColorPalettes::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     ValueSet::SetDrawingArea(pDrawingArea);
+    msDrawingAreaId = pDrawingArea->get_buildable_name();
+
     SetStyle(WB_TABSTOP | WB_DOUBLEBORDER | WB_FLATVALUESET);
     SetItemWidth(BORDER * 6 + SIZE * ChartColorPaletteSize / 2);
-    SetItemHeight(BORDER * 5 + SIZE * 2);
+    SetItemHeight(BORDER * 4 + SIZE * 2);
 }
 
 void ChartColorPalettes::UserDraw(const UserDrawEvent& rUserDrawEvent)
@@ -55,6 +61,25 @@ void ChartColorPalettes::StyleUpdated()
     ValueSet::StyleUpdated();
 }
 
+void ChartColorPalettes::sendItemInfo() const
+{
+    if (!comphelper::LibreOfficeKit::isActive() || msDrawingAreaId.isEmpty())
+        return;
+
+    tools::JsonWriter aJsonWriter;
+    aJsonWriter.put("jsontype", "valueset");
+    aJsonWriter.put("action", "update");
+    aJsonWriter.put("drawingarea", msDrawingAreaId);
+    aJsonWriter.put("itemwidth", BORDER * 6 + SIZE * ChartColorPaletteSize / 2);
+    aJsonWriter.put("itemheight", BORDER * 4 + SIZE * 2);
+
+    if (const SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG,
+                                               aJsonWriter.finishAndGetAsOString());
+    }
+}
+
 bool ChartColorPalettes::MouseMove(const MouseEvent& rMEvt)
 {
     bool bRes = ValueSet::MouseMove(rMEvt);
@@ -62,7 +87,11 @@ bool ChartColorPalettes::MouseMove(const MouseEvent& rMEvt)
     return bRes;
 }
 
-void ChartColorPalettes::setMouseMoveHdl(const MouseEventHandler& rLink) { maMouseMoveHdl = rLink; }
+void ChartColorPalettes::setMouseMoveHdl(const MouseEventHandler& rLink)
+{
+    sendItemInfo();
+    maMouseMoveHdl = rLink;
+}
 
 } // end namespace chart
 
