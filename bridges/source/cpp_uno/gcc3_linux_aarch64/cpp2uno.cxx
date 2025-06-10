@@ -584,10 +584,10 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
     unsigned char const * begin, unsigned char const * end)
 {
 #if !defined ANDROID && !defined MACOSX
-   static void (*clear_cache)(unsigned char const *, unsigned char const *)
-       = (void (*)(unsigned char const *, unsigned char const *)) dlsym(
-           RTLD_DEFAULT, "__clear_cache");
-   (*clear_cache)(begin, end);
+    static void (*clear_cache)(unsigned char const *, unsigned char const *)
+        = reinterpret_cast<void (*)(unsigned char const *, unsigned char const *)>
+            (dlsym(RTLD_DEFAULT, "__clear_cache"));
+    (*clear_cache)(begin, end);
 #elif defined __clang_major__ && __clang_major__ < 21
     // GCC clarified with
     // <http://gcc.gnu.org/git/?p=gcc.git;a=commit;h=a90b0cdd444f6dde1084a439862cf507f6d3b2ae>
