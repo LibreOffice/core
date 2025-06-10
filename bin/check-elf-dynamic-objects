@@ -88,7 +88,7 @@ programfiles=$(echo ${files} | grep -o '/program/[^/]* ' | xargs -n 1 basename)
 # of maintaining ABI stability
 # allow extending the allowlist using the environment variable to be able to work
 # on the installer stuff without the need for a baseline setup
-globalallowlist="ld-linux-x86-64.so.2 ld-linux.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.1 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml2.so.2 libxslt.so.1 libexslt.so.0 libnspr4.so libnss3.so libnssutil3.so libplc4.so libplds4.so libsmime3.so libssl3.so ${LO_ELFCHECK_ALLOWLIST-}"
+globalallowlist="ld-linux-x86-64.so.2 ld-linux-aarch64.so.1 ld-linux.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.1 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml2.so.2 libxslt.so.1 libexslt.so.0 libnspr4.so libnss3.so libnssutil3.so libplc4.so libplds4.so libsmime3.so libssl3.so ${LO_ELFCHECK_ALLOWLIST-}"
 x11allowlist="libX11.so.6 libX11-xcb.so.1 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 libXrender.so.1 libXrandr.so.2 libcairo.so.2"
 openglallowlist="libGL.so.1"
 gobjectallowlist="libgobject-2.0.so.0 libglib-2.0.so.0"
