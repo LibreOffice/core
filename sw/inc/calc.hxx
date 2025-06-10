@@ -57,7 +57,7 @@ enum SwCalcOper
     CALC_ROUND=281,         CALC_DATE=282,          CALC_MONTH=283,
     CALC_DAY=284,           CALC_PRODUCT=285,       CALC_AVERAGE=286,
     CALC_COUNT=287,         CALC_SIGN=288,          CALC_ABS=289,
-    CALC_INT=290
+    CALC_INT=290,           CALC_MOD=291,           CALC_MOD_IN=292
 };
 
 // Calculate Operations Strings
@@ -82,6 +82,7 @@ inline constexpr OUString sCalc_Sum  = u"sum"_ustr;
 inline constexpr OUString sCalc_Mean = u"mean"_ustr;
 inline constexpr OUString sCalc_Min  = u"min"_ustr;
 inline constexpr OUString sCalc_Max  = u"max"_ustr;
+inline constexpr OUString sCalc_Mod  = u"mod"_ustr;
 inline constexpr OUString sCalc_Sin  = u"sin"_ustr;
 inline constexpr OUString sCalc_Cos  = u"cos"_ustr;
 inline constexpr OUString sCalc_Tan  = u"tan"_ustr;

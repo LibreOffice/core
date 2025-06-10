@@ -84,6 +84,7 @@ CalcOp constexpr aOpTable[] = {
 /* MAX */     {{sCalc_Max},        CALC_MAX},   // Maximum value
 /* MEAN */    {{sCalc_Mean},       CALC_MEAN},  // Mean
 /* MIN */     {{sCalc_Min},        CALC_MIN},   // Minimum value
+/* MOD */     {{sCalc_Mod},        CALC_MOD},   // Modulo value
 /* MUL */     {{sCalc_Mul},        CALC_MUL},   // Multiplication
 /* NEQ */     {{sCalc_Neq},        CALC_NEQ},   // Not equal
 /* NOT */     {{sCalc_Not},        CALC_NOT},   // log. NOT
@@ -620,6 +621,9 @@ SwCalcOper SwCalc::GetToken()
                 case CALC_MAX:
                     m_eCurrListOper = CALC_MAX_IN;
                     break;
+                case CALC_MOD:
+                    m_eCurrListOper = CALC_MOD_IN;
+                    break;
                 case CALC_DATE:
                     m_eCurrListOper = CALC_MONTH;
                     break;
@@ -843,6 +847,16 @@ SwSbxValue SwCalc::Term()
                 GetToken();
                 SwSbxValue e = Prim();
                 left = left.GetDouble() > e.GetDouble() ? left : e;
+            }
+            break;
+        case CALC_MOD_IN:
+            {
+                GetToken();
+                SwSbxValue e = Prim();
+                if ( e.GetDouble() == 0.0)
+                    m_eError = SwCalcError::DivByZero;
+                else
+                    left.PutLong(left.GetLong() % e.GetLong());
             }
             break;
         case CALC_MONTH:
@@ -1171,8 +1185,9 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         case CALC_DATE:
         case CALC_MIN:
         case CALC_MAX:
+        case CALC_MOD:
         {
-            SAL_INFO("sw.calc", "sum/product/date/min/max");
+            SAL_INFO("sw.calc", "sum/product/date/min/max/mod");
             GetToken();
             SwSbxValue nErg = Expr();
             return nErg;
