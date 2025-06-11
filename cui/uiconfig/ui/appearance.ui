@@ -41,6 +41,7 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">start</property>
                 <property name="spacing">3</property>
                 <child>
                   <object class="GtkComboBoxText" id="iconsdropdown">
@@ -247,6 +248,7 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">start</property>
                 <property name="hexpand">True</property>
                 <property name="spacing">3</property>
                 <child>
@@ -421,7 +423,6 @@
       <object class="GtkFrame" id="items">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="margin-start">6</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
@@ -429,6 +430,7 @@
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="halign">start</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <property name="row-spacing">3</property>
