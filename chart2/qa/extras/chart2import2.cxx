@@ -934,6 +934,30 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testAngleUnits)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf166428)
+{
+    // The file was generated in ODF 1.3 by LO 24.8
+    loadFromFile(u"ods/tdf166428_Low_High_StockChart_LO248.ods");
+
+    // The attribute table:cell-range-address does not exist in ODF 1.4. and therefore may not be
+    // be written.
+    saveAndReload(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc,
+                           "/office:document-content/office:body/office:chart/chart:chart/"
+                           "chart:plot-area",
+                           "table:cell-range-address");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    // Without applied fix, the series were not merged to one stock chart serie and therefore
+    // only role "values-y" existed.
+    Reference<chart2::data::XDataSequence> xDataSeq
+        = getDataSequenceFromDocByRole(xChartDoc, u"values-min");
+    CPPUNIT_ASSERT(xDataSeq.is());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

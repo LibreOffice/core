@@ -814,13 +814,12 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
         msChartAddress = "all";
 
     bool bSwitchRangesFromOuterToInternalIfNecessary = false;
-    if( !bHasOwnData && mbAllRangeAddressesAvailable )
+    if(!bHasOwnData && mbIsStockChart)
     {
         // special handling for stock chart (merge series together)
-        if( mbIsStockChart )
-            MergeSeriesForStockChart();
+        MergeSeriesForStockChart();
     }
-    else if( !msChartAddress.isEmpty() )
+    else if((bHasOwnData || !mbAllRangeAddressesAvailable) && !msChartAddress.isEmpty())
     {
         //own data or only rectangular range available
 
