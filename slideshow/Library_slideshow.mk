@@ -12,13 +12,22 @@ $(eval $(call gb_Library_Library,slideshow))
 $(eval $(call gb_Library_set_include,slideshow,\
     $$(INCLUDE) \
     -I$(SRCDIR)/slideshow/source/inc \
+    -I$(SRCDIR)/slideshow/source/engine/shapes \
+    -I$(SRCDIR)/sd/inc \
+    -I$(SRCDIR)/sd/source/ui/inc \
+    -I$(SRCDIR)/sd/source/ui/slideshow \
+    -I$(SRCDIR)/canvas/source/cairo \
+    -I$(SRCDIR)/canvas/inc \
+    -I$(SRCDIR)/svx/inc \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,slideshow,slideshow/inc/pch/precompiled_slideshow))
 
 $(eval $(call gb_Library_use_externals,slideshow,\
+	libxml2 \
 	boost_headers \
 	box2d \
+	cairo \
 ))
 
 $(eval $(call gb_Library_add_defs,slideshow,\
@@ -30,11 +39,14 @@ $(eval $(call gb_Library_use_sdk_api,slideshow))
 $(eval $(call gb_Library_use_libraries,slideshow,\
     $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
+	cairocanvas \
     canvastools \
     comphelper \
     cppcanvas \
     cppu \
     cppuhelper \
+	drawinglayer \
+	drawinglayercore \
     sal \
     salhelper \
     svl \

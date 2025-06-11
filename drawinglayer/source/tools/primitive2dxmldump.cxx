@@ -540,6 +540,13 @@ void Primitive2dXmlDump::dump(
     pStream->Seek(STREAM_SEEK_TO_BEGIN);
 }
 
+void Primitive2DContainer::dumpAsXml(const char* pFileLocation) const
+{
+    Primitive2dXmlDump aDumper;
+    aDumper.dump(*this, pFileLocation ? OUString::fromUtf8(pFileLocation)
+                                      : u"file:///tmp/primitive_dump.xml"_ustr);
+}
+
 namespace
 {
 class Primitive3DXmlDump

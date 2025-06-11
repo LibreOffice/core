@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cairo.h>
+#include <cairo_spritecanvas.hxx>
 #include <sal/config.h>
 
 #include <comphelper/diagnose_ex.hxx>
@@ -38,6 +40,16 @@
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include "viewshape.hxx"
+#include "basegfx/point/b2dpoint.hxx"
+#include "cairo_canvasbitmap.hxx"
+#include "cairo_canvascustomsprite.hxx"
+#include "cairo_spritecanvas.hxx"
+#include "com/sun/star/uno/Reference.h"
+#include "drawinglayer/geometry/viewinformation2d.hxx"
+#include "drawinglayer/primitive2d/Primitive2DContainer.hxx"
+#include "drawinglayer/processor2d/cairopixelprocessor2d.hxx"
+#include "sal/types.h"
+#include "vcl/outdev.hxx"
 #include <tools.hxx>
 #include <utility>
 
@@ -275,6 +287,7 @@ namespace slideshow::internal
         }
 
         bool ViewShape::renderSprite( const ViewLayerSharedPtr&             rViewLayer,
+                                      drawinglayer::primitive2d::Primitive2DContainer& rContainer,
                                       const GDIMetaFileSharedPtr&           rMtf,
                                       const ::basegfx::B2DRectangle&        rOrigBounds,
                                       const ::basegfx::B2DRectangle&        rBounds,
@@ -481,14 +494,35 @@ namespace slideshow::internal
             // sprite needs repaint - output to sprite canvas
             // ==============================================
 
-            ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
+            ::cppcanvas::CanvasSharedPtr pContentCanvas(mpSprite->getContentCanvas());
+            cairocanvas::CanvasCustomSprite* pCanvasCustomSprite
+                = static_cast<cairocanvas::CanvasCustomSprite*>(
+                    pContentCanvas->getUNOCanvas().get());
+            cairo::SurfaceSharedPtr pSurface = pCanvasCustomSprite->getSurface();
+            pSurface = pCanvasCustomSprite->getSurface();
 
-            return draw( pContentCanvas,
+            /* return draw( pContentCanvas,
                          rMtf,
                          pAttr,
                          aShapeTransformation,
                          nullptr, // clipping is done via Sprite::clip()
-                         rSubsets );
+                         rSubsets ); */
+
+            drawinglayer::geometry::ViewInformation2D aViewInformation;
+            basegfx::B2DHomMatrix aMatrix(rViewLayer->getTransformation());
+            // Position of shape wrt origin
+            basegfx::B2DPoint aOrigPos(rOrigBounds.getMinimum());
+            const ::basegfx::B2DPoint aAAGap(::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE,
+                                             ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE);
+            aOrigPos *= rViewLayer->getSpriteTransformation();
+            // Bring the shape back to the origin
+            aMatrix.translate(-aOrigPos + aAAGap);
+            aViewInformation.setViewTransformation(aMatrix);
+            drawinglayer::processor2d::CairoPixelProcessor2D aProcessor(
+                aViewInformation, pSurface->getCairoSurface().get());
+            aProcessor.process(rContainer);
+
+            return true;
         }
 
         bool ViewShape::render( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
@@ -820,6 +854,7 @@ namespace slideshow::internal
         }
 
         bool ViewShape::update( const GDIMetaFileSharedPtr& rMtf,
+                                drawinglayer::primitive2d::Primitive2DContainer& rContainer,
                                 const RenderArgs&           rArgs,
                                 UpdateFlags                 nUpdateFlags,
                                 bool                        bIsVisible ) const
@@ -828,7 +863,9 @@ namespace slideshow::internal
 
             // Shall we render to a sprite, or to a plain canvas?
             if( mbAnimationMode )
+            {
                 return renderSprite( mpViewLayer,
+                                     rContainer,
                                      rMtf,
                                      rArgs.maOrigBounds,
                                      rArgs.maBounds,
@@ -838,15 +875,81 @@ namespace slideshow::internal
                                      rArgs.mrSubsets,
                                      rArgs.mnShapePriority,
                                      bIsVisible );
+            }
             else
-                return render( mpViewLayer->getCanvas(),
+            {
+                // The call below can be uncommented to check
+                // if the shape rendered using primitives
+                // perfectly overlaps the shape rendered
+                // using metafile
+                /* render( mpViewLayer->getCanvas(),
                                rMtf,
                                rArgs.maBounds,
                                rArgs.maUpdateBounds,
                                nUpdateFlags,
                                rArgs.mrAttr,
                                rArgs.mrSubsets,
-                               bIsVisible );
+                               bIsVisible ); */
+                if (!bIsVisible)
+                    return true;
+                uno::Reference<css::lang::XServiceInfo> xInfo(
+                    mpViewLayer->getCanvas()->getUNOCanvas(), uno::UNO_QUERY);
+                cairo::SurfaceSharedPtr pSurface;
+                if (!xInfo.is() || xInfo->getImplementationName().indexOf("VCLCanvas") != -1)
+                {
+                    /* return render( mpViewLayer->getCanvas(),
+                                   rMtf,
+                                   rArgs.maBounds,
+                                   rArgs.maUpdateBounds,
+                                   nUpdateFlags,
+                                   rArgs.mrAttr,
+                                   rArgs.mrSubsets,
+                                   bIsVisible ); */
+                    return true;
+                }
+                if (xInfo->getImplementationName().indexOf("SpriteCanvas") != -1)
+                {
+                    // SpriteCanvas
+                    cairocanvas::SpriteCanvas* pSpriteCanvas
+                        = static_cast<cairocanvas::SpriteCanvas*>(
+                            mpViewLayer->getCanvas()->getUNOCanvas().get());
+                    pSurface = pSpriteCanvas->getSurface();
+                }
+                else if (xInfo->getImplementationName().indexOf("CanvasCustomSprite") != -1)
+                {
+                    // CanvasCustomSprite
+                    cairocanvas::CanvasCustomSprite* pCanvasCustomSprite
+                        = static_cast<cairocanvas::CanvasCustomSprite*>(
+                            mpViewLayer->getCanvas()->getUNOCanvas().get());
+                    pSurface = pCanvasCustomSprite->getSurface();
+                }
+                else
+                {
+                    // Bitmap Canvas
+                    cairocanvas::CanvasBitmap* pCanvasBitmap
+                        = static_cast<cairocanvas::CanvasBitmap*>(
+                            mpViewLayer->getCanvas()->getUNOCanvas().get());
+                    pSurface = pCanvasBitmap->getSurface();
+                }
+
+                drawinglayer::geometry::ViewInformation2D aViewInormation;
+                aViewInormation.setViewTime(rArgs.mnElapsedTime*1000);
+                basegfx::B2DHomMatrix aMatrix(mpViewLayer->getTransformation());
+                // Original Position of center of shape wrt origin
+                basegfx::B2DPoint aOrigCenterPos(rArgs.maOrigBounds.getCenter());
+                aOrigCenterPos *= mpViewLayer->getSpriteTransformation();
+                // Current Position of center of shape wrt origin
+                basegfx::B2DPoint aCurrCenterPos(rArgs.maBounds.getCenter());
+                aCurrCenterPos *= mpViewLayer->getSpriteTransformation();
+                // Bring the shape to the current Position
+                aMatrix.translate(-aOrigCenterPos + aCurrCenterPos);
+                aViewInormation.setViewTransformation(aMatrix);
+                drawinglayer::processor2d::CairoPixelProcessor2D aProcessor(
+                    aViewInormation, pSurface->getCairoSurface().get());
+                aProcessor.process(rContainer);
+
+                return true;
+            }
         }
 
 }

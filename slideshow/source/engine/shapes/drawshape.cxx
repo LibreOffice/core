@@ -38,6 +38,11 @@
 #include <iterator>
 #include <functional>
 
+#include "com/sun/star/beans/PropertyValue.hdl"
+#include "com/sun/star/graphic/PrimitiveFactory2D.hpp"
+#include "com/sun/star/graphic/XPrimitiveFactory2D.hdl"
+#include "com/sun/star/uno/Reference.h"
+#include "com/sun/star/uno/Sequence.h"
 #include "drawshapesubsetting.hxx"
 #include "drawshape.hxx"
 #include <eventqueue.hxx>
@@ -122,7 +127,8 @@ namespace slideshow::internal
                 getActualUnitShapeBounds(),
                 mpAttributeLayer,
                 maSubsetting.getActiveSubsets(),
-                mnPriority);
+                mnPriority,
+                maTimer.getElapsedTime() );
         }
 
         bool DrawShape::implRender( UpdateFlags nUpdateFlags ) const
@@ -153,6 +159,7 @@ namespace slideshow::internal
                                  [this, &bVisible, &renderArgs, &nUpdateFlags]
                                  ( const ViewShapeSharedPtr& pShape )
                                  { return pShape->update( this->mpCurrMtf,
+                                                          mxPrimitive2DContainer,
                                                           renderArgs,
                                                           nUpdateFlags,
                                                           bVisible ); } ))
@@ -414,6 +421,11 @@ namespace slideshow::internal
                         maBounds.getMinY() + mpCurrMtf->GetPrefSize().Height());
                 }
             }
+            uno::Reference<graphic::XPrimitiveFactory2D> xPrimitiveFactory(
+                graphic::PrimitiveFactory2D::create(mxComponentContext));
+            const uno::Sequence<beans::PropertyValue> aParams;
+            mxPrimitive2DContainer
+                = xPrimitiveFactory->createPrimitivesFromXShape(mxShape, aParams);
         }
 
         DrawShape::DrawShape( const uno::Reference< drawing::XShape >&      xShape,
@@ -480,6 +492,12 @@ namespace slideshow::internal
             ENSURE_OR_THROW( mxShape.is(), "DrawShape::DrawShape(): Invalid XShape" );
             ENSURE_OR_THROW( mxPage.is(), "DrawShape::DrawShape(): Invalid containing page" );
             ENSURE_OR_THROW( mpCurrMtf, "DrawShape::DrawShape(): Invalid metafile" );
+            uno::Reference<graphic::XPrimitiveFactory2D> xPrimitiveFactory(
+                graphic::PrimitiveFactory2D::create(mxComponentContext));
+            const uno::Sequence<beans::PropertyValue> aParams;
+            mxPrimitive2DContainer
+                = xPrimitiveFactory->createPrimitivesFromXShape(mxShape, aParams);
+            maTimer.reset();
         }
 
         DrawShape::DrawShape( const DrawShape&      rSrc,
@@ -515,7 +533,8 @@ namespace slideshow::internal
             mbForceUpdate( false ),
             mbAttributeLayerRevoked( false ),
             mbDrawingLayerAnim( false ),
-            mbContainsPageField( false )
+            mbContainsPageField( false ),
+            mxPrimitive2DContainer( rSrc.mxPrimitive2DContainer )
         {
             ENSURE_OR_THROW( mxShape.is(), "DrawShape::DrawShape(): Invalid XShape" );
             ENSURE_OR_THROW( mpCurrMtf, "DrawShape::DrawShape(): Invalid metafile" );
@@ -658,6 +677,7 @@ namespace slideshow::internal
             if( bRedrawLayer )
             {
                 pNewShape->update( mpCurrMtf,
+                                   mxPrimitive2DContainer,
                                    getViewRenderArgs(),
                                    UpdateFlags::Force,
                                    isVisible() );

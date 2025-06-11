@@ -25,6 +25,8 @@
 
 #include <attributableshape.hxx>
 #include <doctreenodesupplier.hxx>
+#include "canvas/elapsedtime.hxx"
+#include "drawinglayer/primitive2d/Primitive2DContainer.hxx"
 #include "drawshapesubsetting.hxx"
 #include "gdimtftools.hxx"
 #include "viewshape.hxx"
@@ -383,8 +385,13 @@ namespace slideshow::internal
 
             /// tdf#150402 whether mpCurrMtf contains any Text with a PageField ("FIELD_SEQ_BEGIN;PageField")
             mutable bool                                                            mbContainsPageField;
-        };
 
+            mutable drawinglayer::primitive2d::Primitive2DContainer                 mxPrimitive2DContainer;
+
+            canvas::tools::ElapsedTime                                              maTimer;
+        public:
+            drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DContainer(){ return mxPrimitive2DContainer; }
+    };
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPE_HXX

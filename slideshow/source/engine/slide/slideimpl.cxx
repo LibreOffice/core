@@ -264,6 +264,9 @@ private:
 
     /// When true, final state attributes are already applied to shapes
     bool                                                mbFinalStateApplied;
+
+public:
+    LayerManagerSharedPtr getLayerManager() const { return mpLayerManager; }
 };
 
 

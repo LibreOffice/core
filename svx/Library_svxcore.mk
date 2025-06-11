@@ -91,6 +91,7 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	icuuc \
 	icu_headers \
 	libxml2 \
+	cairo \
 ))
 
 ifeq ($(OS),MACOSX)

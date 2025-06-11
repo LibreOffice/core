@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "rtl/ustring.hxx"
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -89,6 +90,7 @@ public:
     Primitive2DContainer maybeInvert(bool bInvert = false);
 
     css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> toSequence() const;
+    void dumpAsXml(const char* pFileLocation = nullptr) const;
 };
 
 } // end of namespace drawinglayer::primitive2d

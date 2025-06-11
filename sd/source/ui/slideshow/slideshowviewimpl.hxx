@@ -173,6 +173,8 @@ private:
     bool                                    mbFirstPaint;
     bool                                    mbMousePressedEaten;
     css::geometry::IntegerSize2D            mTranslationOffset;
+public:
+    ShowWindow& getOutWin() { return mrOutputWindow; }
 };
 
 } // namespace ::sd

@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWSHAPE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWSHAPE_HXX
 
+#include "canvas/elapsedtime.hxx"
+#include "drawinglayer/primitive2d/Primitive2DContainer.hxx"
+#include "svx/sdr/animation/objectanimator.hxx"
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/bitmap.hxx>
 
@@ -142,14 +145,16 @@ namespace slideshow::internal
                             const ::basegfx::B2DRectangle&      rUnitBounds,
                             const ShapeAttributeLayerSharedPtr& rAttr,
                             const VectorOfDocTreeNodes&         rSubsets,
-                            double                              nPrio ) :
+                            double                              nPrio,
+                            double                              nElapsedTime ) :
                     maOrigBounds( rOrigBounds ),
                     maUpdateBounds( rUpdateBounds ),
                     maBounds( rBounds ),
                     maUnitBounds( rUnitBounds ),
                     mrAttr( rAttr ),
                     mrSubsets( rSubsets ),
-                    mnShapePriority( nPrio )
+                    mnShapePriority( nPrio ),
+                    mnElapsedTime( nElapsedTime )
                 {
                 }
 
@@ -160,6 +165,7 @@ namespace slideshow::internal
                 const ShapeAttributeLayerSharedPtr& mrAttr;
                 const VectorOfDocTreeNodes&         mrSubsets;
                 const double                        mnShapePriority;
+                const double                        mnElapsedTime;
             };
 
             /** Update the ViewShape
@@ -186,6 +192,7 @@ namespace slideshow::internal
                 @return whether the rendering finished successfully.
             */
             bool update( const GDIMetaFileSharedPtr&    rMtf,
+                         drawinglayer::primitive2d::Primitive2DContainer& rContainer,
                          const RenderArgs&              rArgs,
                          UpdateFlags                    nUpdateFlags,
                          bool                           bIsVisible ) const;
@@ -252,6 +259,7 @@ namespace slideshow::internal
             /** Render shape to an active sprite
              */
             bool renderSprite( const ViewLayerSharedPtr&            rViewLayer,
+                               drawinglayer::primitive2d::Primitive2DContainer& rContainer,
                                const GDIMetaFileSharedPtr&          rMtf,
                                const ::basegfx::B2DRectangle&       rOrigBounds,
                                const ::basegfx::B2DRectangle&       rBounds,

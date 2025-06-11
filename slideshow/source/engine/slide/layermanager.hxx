@@ -348,6 +348,9 @@ namespace slideshow::internal
                 potentially faster.
              */
             bool                     mbDisableAnimationZOrder;
+
+        public:
+            LayerShapeMap getAllShapes() { return maAllShapes; }
         };
 
         typedef ::std::shared_ptr< LayerManager > LayerManagerSharedPtr;

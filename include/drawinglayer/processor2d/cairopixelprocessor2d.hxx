@@ -194,6 +194,7 @@ protected:
     bool hasError() const { return cairo_status(mpRT) != CAIRO_STATUS_SUCCESS; }
     bool hasRenderTarget() const { return nullptr != mpRT; }
 
+public:
     // constructor to create a CairoPixelProcessor2D for
     // the given cairo_surface_t pTarget. pTarget will not
     // be owned and not destroyed, but be used as render
