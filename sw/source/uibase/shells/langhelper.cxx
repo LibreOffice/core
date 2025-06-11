@@ -34,6 +34,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/scripthintitem.hxx>
 
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
@@ -206,15 +207,29 @@ namespace SwLangHelper
         //get ScriptType
         TypedWhichId<SvxLanguageItem> nLangWhichId(0);
         bool bIsSingleScriptType = true;
-        switch (SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ))
+
+        auto nHintWhichId = pEditEngine ? EE_CHAR_SCRIPT_HINT : RES_CHRATR_SCRIPT_HINT;
+        auto eHintType = i18nutil::ScriptHintType::Automatic;
+
+        switch (SvtLanguageOptions::GetScriptTypeOfLanguage(nLang))
         {
-            case SvtScriptType::LATIN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE : RES_CHRATR_LANGUAGE; break;
-            case SvtScriptType::ASIAN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CJK : RES_CHRATR_CJK_LANGUAGE; break;
-            case SvtScriptType::COMPLEX :  nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CTL : RES_CHRATR_CTL_LANGUAGE; break;
+            case SvtScriptType::LATIN:
+                nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE : RES_CHRATR_LANGUAGE;
+                eHintType = i18nutil::ScriptHintType::Latin;
+                break;
+            case SvtScriptType::ASIAN:
+                nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CJK : RES_CHRATR_CJK_LANGUAGE;
+                eHintType = i18nutil::ScriptHintType::Asian;
+                break;
+            case SvtScriptType::COMPLEX:
+                nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CTL : RES_CHRATR_CTL_LANGUAGE;
+                eHintType = i18nutil::ScriptHintType::Complex;
+                break;
             default:
                 bIsSingleScriptType = false;
-                OSL_FAIL("unexpected case" );
+                OSL_FAIL("unexpected case");
         }
+
         if (!bIsSingleScriptType)
             return;
 
@@ -227,12 +242,14 @@ namespace SwLangHelper
             if (pEditEngine)
             {
                 rCoreSet.Put( SvxLanguageItem( nLang, nLangWhichId ));
+                rCoreSet.Put(SvxScriptHintItem(eHintType, nHintWhichId));
                 pEditEngine->QuickSetAttribs(rCoreSet, rSelection);
             }
             else
             {
                 rWrtSh.GetCurAttr( rCoreSet );
                 rCoreSet.Put( SvxLanguageItem( nLang, nLangWhichId ));
+                rCoreSet.Put(SvxScriptHintItem(eHintType, nHintWhichId));
                 rWrtSh.SetAttrSet( rCoreSet );
             }
         }

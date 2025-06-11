@@ -477,6 +477,14 @@ published service CharacterProperties
      *  @since LibreOffice 7.3
      **/
     [optional, property] short CharColorTintOrShade;
+
+    /** This optional property suggests that the text should be interpreted as a
+     *  specific script type.
+     *  @see com::sun::star::text::ScriptHintType
+     *
+     * @since LibreOffice 25.8
+     **/
+    [optional, property] short CharScriptHint;
 };
 
 }; }; }; };

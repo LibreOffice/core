@@ -33,6 +33,7 @@
 #include <unotxdoc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <redline.hxx>
+#include <svx/svxids.hrc>
 
 /// Second set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest5 : public SwModelTestBase
@@ -2071,6 +2072,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf126735)
     CPPUNIT_ASSERT(xTextRange);
     // This was empty (collapsing at the start of the last tracked change)
     CPPUNIT_ASSERT_EQUAL(u"or "_ustr, xTextRange->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf166012)
+{
+    createSwDoc("tdf166012.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Verify that the test document initially doesn't have a script hint set
+    CPPUNIT_ASSERT_EQUAL(short(0),
+                         getProperty<short>(getRun(getParagraph(1), 1), u"CharScriptHint"_ustr));
+
+    // Setting the language to Hindi should also set the complex script hint
+    pWrtShell->EndPara(/*bSelect=*/true);
+
+    SwView* pView = getSwDocShell()->GetView();
+    SfxStringItem aLangString(SID_LANGUAGE_STATUS, u"Hindi"_ustr);
+    pView->GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON,
+                                                       { &aLangString });
+
+    CPPUNIT_ASSERT_EQUAL(short(4),
+                         getProperty<short>(getRun(getParagraph(1), 1), u"CharScriptHint"_ustr));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

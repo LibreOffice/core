@@ -34,6 +34,7 @@ public:
 
     DECLARE_ITEM_TYPE_FUNCTION(SvxScriptHintItem)
     SvxScriptHintItem(const sal_uInt16 nId);
+    SvxScriptHintItem(i18nutil::ScriptHintType eType, const sal_uInt16 nId);
 
     // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric,

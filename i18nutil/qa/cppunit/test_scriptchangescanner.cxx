@@ -38,6 +38,8 @@ public:
     void testRtlRunEmbeddedComplex();
     void testRtlRunEmbeddedLtrStrong();
     void testRtlRunEmbeddedLtrWeakComplex();
+    void testRtlRunEmbeddedLtrWeakComplexHintLatin();
+    void testRtlRunEmbeddedLtrWeakComplexHintComplex();
     void testRtlRunOverrideCJKAsian();
     void testTdf164493InfiniteLoop();
     void testHintsDefault();
@@ -68,6 +70,8 @@ public:
     CPPUNIT_TEST(testRtlRunEmbeddedComplex);
     CPPUNIT_TEST(testRtlRunEmbeddedLtrStrong);
     CPPUNIT_TEST(testRtlRunEmbeddedLtrWeakComplex);
+    CPPUNIT_TEST(testRtlRunEmbeddedLtrWeakComplexHintLatin);
+    CPPUNIT_TEST(testRtlRunEmbeddedLtrWeakComplexHintComplex);
     CPPUNIT_TEST(testRtlRunOverrideCJKAsian);
     CPPUNIT_TEST(testTdf164493InfiniteLoop);
     CPPUNIT_TEST(testHintsDefault);
@@ -579,6 +583,58 @@ void ScriptChangeScannerTest::testRtlRunEmbeddedLtrWeakComplex()
 
     pDirScanner->Reset();
 
+    auto pScanner
+        = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner, stHints);
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(pScanner->AtEnd());
+}
+
+void ScriptChangeScannerTest::testRtlRunEmbeddedLtrWeakComplexHintLatin()
+{
+    auto aText = u"אאא 123 אאא"_ustr;
+    ScriptHintProvider stHints;
+    stHints.SetParagraphLevelHint(ScriptHintType::Latin);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 1);
+    auto pScanner
+        = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner, stHints);
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(pScanner->AtEnd());
+}
+
+void ScriptChangeScannerTest::testRtlRunEmbeddedLtrWeakComplexHintComplex()
+{
+    auto aText = u"אאא 123 אאא"_ustr;
+    ScriptHintProvider stHints;
+    stHints.SetParagraphLevelHint(ScriptHintType::Complex);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 1);
     auto pScanner
         = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner, stHints);
 
