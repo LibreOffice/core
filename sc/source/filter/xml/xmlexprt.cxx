@@ -1477,7 +1477,6 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                     ++nEqualRows;
                 else
                 {
-                    assert(nPrevIndex >= 0 && "coverity#1438402");
                     ScRowFormatRanges* pTempRowFormatRanges = new ScRowFormatRanges(pRowFormatRanges.get());
                     OpenAndCloseRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
                     pRowFormatRanges.reset(pTempRowFormatRanges);
@@ -1488,7 +1487,6 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                 }
             }
         }
-        assert(nPrevIndex >= 0 && "coverity#1438402");
         OpenNewRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
     }
     else
@@ -1500,7 +1498,6 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
         sal_Int32 nEndRowFiltered;
         bHidden = rRowAttr.rowHidden(nTable, nStartRow, nEndRowHidden);
         bFiltered = rRowAttr.rowFiltered(nTable, nStartRow, nEndRowFiltered);
-        assert(nIndex >= 0 && "coverity#1438402");
         OpenNewRow(nIndex, nStartRow, 1, bHidden, bFiltered);
     }
     nOpenRow = nStartRow + nRepeatRow - 1;
