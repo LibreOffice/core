@@ -1039,10 +1039,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
         aPos.AdjustY( -nTextHeight );
 
     tools::Rectangle aTextRect( aPos, aSize );
-    rtl::Reference<SdrRectObj> pText = new SdrRectObj(
-        *mpModel,
-        SdrObjKind::Text,
-        aTextRect);
+    rtl::Reference<SdrRectObj> pText = new SdrRectObj(*mpModel, aTextRect, SdrObjKind::Text);
 
     pText->SetMergedItem ( makeSdrTextUpperDistItem (0));
     pText->SetMergedItem ( makeSdrTextLowerDistItem (0));
@@ -1417,7 +1414,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction const & rAct)
             floor(aRange.getMinX()),
             floor(aRange.getMinY()),
             ceil(aRange.getMaxX()),
-            ceil(aRange.getMaxY())));
+            ceil(aRange.getMaxY())),
+        SdrObjKind::Text);
     // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
     SfxItemSet aGradientAttr(mpModel->GetItemPool(), pRect->GetMergedItemSet().GetRanges());
     const XFillGradientItem aXFillGradientItem(

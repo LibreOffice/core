@@ -49,54 +49,24 @@ std::unique_ptr<sdr::contact::ViewContact> SdrRectObj::CreateObjectSpecificViewC
     return std::make_unique<sdr::contact::ViewContactOfSdrRectObj>(*this);
 }
 
-
-SdrRectObj::SdrRectObj(SdrModel& rSdrModel)
-:   SdrTextObj(rSdrModel)
+SdrRectObj::SdrRectObj(SdrModel& rSdrModel, const tools::Rectangle& rRectangle, std::optional<SdrObjKind> oeTextKind)
+    : SdrTextObj(rSdrModel, rRectangle, oeTextKind)
 {
-    m_bClosedObj=true;
+    DBG_ASSERT(meTextKind == SdrObjKind::Text ||
+               meTextKind == SdrObjKind::OutlineText || meTextKind == SdrObjKind::TitleText,
+               "SdrRectObj::SdrRectObj(SdrObjKind,...) can only be applied to text frames.");
+
+    m_bClosedObj = true;
 }
 
 SdrRectObj::SdrRectObj(SdrModel& rSdrModel, SdrRectObj const & rSource)
 :   SdrTextObj(rSdrModel, rSource)
 {
-    m_bClosedObj=true;
+    m_bClosedObj = true;
     mpXPoly = rSource.mpXPoly;
 }
 
-SdrRectObj::SdrRectObj(
-    SdrModel& rSdrModel,
-    const tools::Rectangle& rRect)
-:   SdrTextObj(rSdrModel, rRect)
-{
-    m_bClosedObj=true;
-}
-
-SdrRectObj::SdrRectObj(
-    SdrModel& rSdrModel,
-    SdrObjKind eNewTextKind)
-:   SdrTextObj(rSdrModel, eNewTextKind)
-{
-    DBG_ASSERT(meTextKind == SdrObjKind::Text ||
-               meTextKind == SdrObjKind::OutlineText || meTextKind == SdrObjKind::TitleText,
-               "SdrRectObj::SdrRectObj(SdrObjKind) can only be applied to text frames.");
-    m_bClosedObj=true;
-}
-
-SdrRectObj::SdrRectObj(
-    SdrModel& rSdrModel,
-    SdrObjKind eNewTextKind,
-    const tools::Rectangle& rRect)
-:   SdrTextObj(rSdrModel, eNewTextKind, rRect)
-{
-    DBG_ASSERT(meTextKind == SdrObjKind::Text ||
-               meTextKind == SdrObjKind::OutlineText || meTextKind == SdrObjKind::TitleText,
-               "SdrRectObj::SdrRectObj(SdrObjKind,...) can only be applied to text frames.");
-    m_bClosedObj=true;
-}
-
-SdrRectObj::~SdrRectObj()
-{
-}
+SdrRectObj::~SdrRectObj() = default;
 
 void SdrRectObj::SetXPolyDirty()
 {
@@ -525,6 +495,7 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
     if (maGeo.m_nRotationAngle)
         RotatePoint(aPt, rRectangle.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
+
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
     return aGP;

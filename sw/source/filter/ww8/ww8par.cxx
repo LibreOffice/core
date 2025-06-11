@@ -800,9 +800,7 @@ rtl::Reference<SdrObject> SwMSDffManager::ProcessObj(SvStream& rSt,
             if (bIsSimpleDrawingTextBox)
             {
                 pObj = new SdrRectObj(
-                    *pSdrModel,
-                    SdrObjKind::Text,
-                    rTextRect);
+                    *pSdrModel, rTextRect,SdrObjKind::Text );
             }
 
             // The vertical paragraph justification are contained within the

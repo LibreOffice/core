@@ -298,7 +298,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
     {
         case PresObjKind::Title:
         {
-            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), SdrObjKind::TitleText);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::TitleText);
 
             if (mbMaster)
             {
@@ -309,7 +309,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PresObjKind::Outline:
         {
-            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), SdrObjKind::OutlineText);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::OutlineText);
 
             if (mbMaster)
             {
@@ -320,7 +320,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PresObjKind::Notes:
         {
-            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), SdrObjKind::Text);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::Text);
 
             if (mbMaster)
             {
@@ -331,7 +331,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PresObjKind::Text:
         {
-            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), SdrObjKind::Text);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::Text);
         }
         break;
 
@@ -433,7 +433,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PresObjKind::DateTime:
         case PresObjKind::SlideNumber:
         {
-            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), SdrObjKind::Text);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::Text);
             bEmptyPresObj = false;
             bForceText = true;
         }

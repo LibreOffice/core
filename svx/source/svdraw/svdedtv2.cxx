@@ -1279,7 +1279,7 @@ void SdrEditView::CombineMarkedTextObjects()
 
     if ( rMarkList.GetMarkCount() > 1 )
     {
-        rtl::Reference<SdrRectObj> pReplacement = new SdrRectObj( getSdrModelFromSdrView(), SdrObjKind::Text );
+        rtl::Reference<SdrRectObj> pReplacement = new SdrRectObj( getSdrModelFromSdrView(), tools::Rectangle(), SdrObjKind::Text );
         pReplacement->SetOutlinerParaObject( rDrawOutliner.CreateParaObject() );
         pReplacement->SetSnapRect( GetMarkedObjRect() );
 

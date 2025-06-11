@@ -246,7 +246,7 @@ namespace sdr::contact
                 // needed and can be deleted.
 
                 // create temp RectObj as TextObj and set needed attributes
-                rtl::Reference<SdrRectObj> pRectObj(new SdrRectObj(GetGrafObject().getSdrModelFromSdrObject(), SdrObjKind::Text));
+                rtl::Reference<SdrRectObj> pRectObj(new SdrRectObj(GetGrafObject().getSdrModelFromSdrObject(), tools::Rectangle(), SdrObjKind::Text));
                 pRectObj->NbcSetText(aDraftText);
                 pRectObj->SetMergedItem(SvxColorItem(COL_LIGHTRED, EE_CHAR_COLOR));
 

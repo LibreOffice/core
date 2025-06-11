@@ -1076,7 +1076,7 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
         }
         else if (rInfo.meType == sdr::annotation::AnnotationType::FreeText)
         {
-            rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(rModel, SdrObjKind::Text, aRectangle);
+            rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(rModel, aRectangle, SdrObjKind::Text);
             pNewObject = pRectangleObject;
 
             applyAnnotationCommon(*pNewObject, xAnnotation);

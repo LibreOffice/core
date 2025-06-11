@@ -1068,7 +1068,7 @@ rtl::Reference<SdrObject> SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData
                         pRet = nullptr;
                     }
                     pTObj = new SdrRectObj(
-                        *pSdrModel,
+                        *pSdrModel, tools::Rectangle(),
                         eTextKind != SdrObjKind::Rectangle ? eTextKind : SdrObjKind::Text);
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     if ( !pRet )

@@ -71,11 +71,11 @@ std::unique_ptr<sdr::contact::ViewContact> SdrTextObj::CreateObjectSpecificViewC
     return std::make_unique<sdr::contact::ViewContactOfTextObj>(*this);
 }
 
-SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
+SdrTextObj::SdrTextObj(SdrModel& rSdrModel, const tools::Rectangle& rRectangle, std::optional<SdrObjKind> oeTextKind)
     : SdrAttrObj(rSdrModel)
     , mpEditingOutliner(nullptr)
-    , meTextKind(SdrObjKind::Text)
-    , maTextEditOffset(Point(0, 0))
+    , meTextKind(oeTextKind ? *oeTextKind : SdrObjKind::Text)
+    , maTextEditOffset(Point())
     , mbTextFrame(false)
     , mbNoShear(false)
     , mbTextSizeDirty(false)
@@ -84,7 +84,19 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
     , mbTextAnimationAllowed(true)
     , mbInDownScale(false)
 {
-    // #i25616#
+    if (!rRectangle.IsEmpty())
+    {
+        tools::Rectangle aRectangle(rRectangle);
+        ImpJustifyRect(aRectangle);
+        setRectangle(aRectangle);
+    }
+
+    if (oeTextKind)
+    {
+        mbTextFrame = true;
+        mbNoShear = true;
+    }
+
     mbSupportTextIndentingOnLineWidthChange = true;
 }
 
@@ -134,66 +146,6 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
     }
 
     ImpSetTextStyleSheetListeners();
-}
-
-SdrTextObj::SdrTextObj(SdrModel& rSdrModel, const tools::Rectangle& rNewRect)
-    : SdrAttrObj(rSdrModel)
-    , mpEditingOutliner(nullptr)
-    , meTextKind(SdrObjKind::Text)
-    , maTextEditOffset(Point(0, 0))
-    , mbTextFrame(false)
-    , mbNoShear(false)
-    , mbTextSizeDirty(false)
-    , mbInEditMode(false)
-    , mbDisableAutoWidthOnDragging(false)
-    , mbTextAnimationAllowed(true)
-    , mbInDownScale(false)
-{
-    tools::Rectangle aRectangle(rNewRect);
-    ImpJustifyRect(aRectangle);
-    setRectangle(aRectangle);
-
-    // #i25616#
-    mbSupportTextIndentingOnLineWidthChange = true;
-}
-
-SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrObjKind eNewTextKind)
-    : SdrAttrObj(rSdrModel)
-    , mpEditingOutliner(nullptr)
-    , meTextKind(eNewTextKind)
-    , maTextEditOffset(Point(0, 0))
-    , mbTextFrame(true)
-    , mbNoShear(true)
-    , mbTextSizeDirty(false)
-    , mbInEditMode(false)
-    , mbDisableAutoWidthOnDragging(false)
-    , mbTextAnimationAllowed(true)
-    , mbInDownScale(false)
-{
-    // #i25616#
-    mbSupportTextIndentingOnLineWidthChange = true;
-}
-
-SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrObjKind eNewTextKind,
-                       const tools::Rectangle& rNewRect)
-    : SdrAttrObj(rSdrModel)
-    , mpEditingOutliner(nullptr)
-    , meTextKind(eNewTextKind)
-    , maTextEditOffset(Point(0, 0))
-    , mbTextFrame(true)
-    , mbNoShear(true)
-    , mbTextSizeDirty(false)
-    , mbInEditMode(false)
-    , mbDisableAutoWidthOnDragging(false)
-    , mbTextAnimationAllowed(true)
-    , mbInDownScale(false)
-{
-    tools::Rectangle aRectangle(rNewRect);
-    ImpJustifyRect(aRectangle);
-    setRectangle(aRectangle);
-
-    // #i25616#
-    mbSupportTextIndentingOnLineWidthChange = true;
 }
 
 SdrTextObj::~SdrTextObj()

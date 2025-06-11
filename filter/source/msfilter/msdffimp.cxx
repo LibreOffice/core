@@ -5370,10 +5370,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ProcessObj(SvStream& rSt,
                 }
             }
 
-            pTextObj = new SdrRectObj(
-                *pSdrModel,
-                SdrObjKind::Text,
-                rTextRect);
+            pTextObj = new SdrRectObj(*pSdrModel, rTextRect, SdrObjKind::Text);
             pTextImpRec = new SvxMSDffImportRec(*pImpRec);
             bDeleteTextImpRec = true;
 

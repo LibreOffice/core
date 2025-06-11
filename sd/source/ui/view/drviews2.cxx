@@ -605,7 +605,7 @@ public:
 
             rtl::Reference<SdrRectObj> pObject = new SdrRectObj(
                 *m_rDrawViewShell.GetDoc(), // TTTT should be reference
-                SdrObjKind::Text);
+                ::tools::Rectangle(), SdrObjKind::Text);
             pObject->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
             pObject->SetOutlinerParaObject(pOutliner->CreateParaObject());
             pMasterPage->InsertObject(pObject.get());
@@ -3132,8 +3132,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 std::optional<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
 
                 rtl::Reference<SdrRectObj> pRectObj = new SdrRectObj(
-                    *GetDoc(),
-                    SdrObjKind::Text);
+                    *GetDoc(), ::tools::Rectangle(), SdrObjKind::Text);
                 pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
 
                 pOutl->UpdateFields();

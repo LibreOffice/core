@@ -1593,8 +1593,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         std::optional<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
 
         rtl::Reference<SdrRectObj> pRectObj = new SdrRectObj(
-            GetView()->getSdrModelFromSdrView(),
-            SdrObjKind::Text);
+            GetView()->getSdrModelFromSdrView(), ::tools::Rectangle(), SdrObjKind::Text);
 
         pOutl->UpdateFields();
         pOutl->SetUpdateLayout( true );

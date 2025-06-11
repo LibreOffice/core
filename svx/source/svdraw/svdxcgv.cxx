@@ -144,9 +144,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
         aTextRect.SetSize(pPage->GetSize());
     }
     rtl::Reference<SdrRectObj> pObj = new SdrRectObj(
-        getSdrModelFromSdrView(),
-        SdrObjKind::Text,
-        aTextRect);
+        getSdrModelFromSdrView(), aTextRect, SdrObjKind::Text);
 
     pObj->SetLayer(nLayer);
     pObj->NbcSetText(rStr); // SetText before SetAttr, else SetAttr doesn't work!
@@ -183,9 +181,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
         aTextRect.SetSize(pPage->GetSize());
     }
     rtl::Reference<SdrRectObj> pObj = new SdrRectObj(
-        getSdrModelFromSdrView(),
-        SdrObjKind::Text,
-        aTextRect);
+        getSdrModelFromSdrView(), aTextRect, SdrObjKind::Text);
 
     pObj->SetLayer(nLayer);
     if (mpDefaultStyleSheet!=nullptr) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);

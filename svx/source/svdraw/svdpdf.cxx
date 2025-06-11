@@ -796,7 +796,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
         aPosition.AdjustY(-nTextHeight);
 
     tools::Rectangle aTextRect(aPosition, aSize);
-    rtl::Reference<SdrRectObj> pText = new SdrRectObj(*mpModel, SdrObjKind::Text, aTextRect);
+    rtl::Reference<SdrRectObj> pText = new SdrRectObj(*mpModel, aTextRect, SdrObjKind::Text);
 
     pText->SetMergedItem(makeSdrTextUpperDistItem(0));
     pText->SetMergedItem(makeSdrTextLowerDistItem(0));

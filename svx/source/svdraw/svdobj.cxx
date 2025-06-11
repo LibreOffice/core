@@ -3385,16 +3385,13 @@ rtl::Reference<SdrObject> SdrObjFactory::MakeNewObject(
                 if(nullptr != pSnapRect)
                 {
                     pObj = new SdrRectObj(
-                        rSdrModel,
-                        nIdentifier,
-                        *pSnapRect);
+                        rSdrModel, *pSnapRect, nIdentifier);
                     bSetSnapRect = false;
                 }
                 else
                 {
                     pObj = new SdrRectObj(
-                        rSdrModel,
-                        nIdentifier);
+                        rSdrModel, tools::Rectangle(), nIdentifier);
                 }
             }
             break;

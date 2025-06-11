@@ -312,23 +312,12 @@ protected:
     // and object sizes
     virtual void AdaptTextMinSize();
 
-    // constructors for labeled graphical objects
-    SdrTextObj(SdrModel& rSdrModel);
-    SdrTextObj(
-        SdrModel& rSdrModel,
-        const tools::Rectangle& rNewRect);
-
-    // constructors for text frames
-    SdrTextObj(
-        SdrModel& rSdrModel,
-        SdrObjKind eNewTextKind);
-    SdrTextObj(
-        SdrModel& rSdrModel,
-        SdrObjKind eNewTextKind,
-        const tools::Rectangle& rNewRect);
-
+    // constructor
+    SdrTextObj(SdrModel& rSdrModel,
+               const tools::Rectangle& rNewRect = tools::Rectangle(),
+               std::optional<SdrObjKind> oeTextKind = std::nullopt);
     // copy constructor
-    SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource);
+    SdrTextObj(SdrModel& rSdrModel, SdrTextObj const& rSource);
 
     // protected destructor
     virtual ~SdrTextObj() override;

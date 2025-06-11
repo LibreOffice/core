@@ -180,12 +180,22 @@ std::unique_ptr<sdr::contact::ViewContact> SdrCaptionObj::CreateObjectSpecificVi
 
 
 SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel)
-:   SdrRectObj(rSdrModel, SdrObjKind::Text),
-    maTailPoly(3),  // default size: 3 points = 2 lines
-    mbSpecialTextBoxShadow(false),
-    mbFixedTail(false),
-    mbSuppressGetBitmap(false)
+    : SdrRectObj(rSdrModel, tools::Rectangle(), SdrObjKind::Text)
+    , maTailPoly(3)  // default size: 3 points = 2 lines
+    , mbSpecialTextBoxShadow(false)
+    , mbFixedTail(false)
+    , mbSuppressGetBitmap(false)
 {
+}
+
+SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel, const tools::Rectangle& rRect, const Point& rTail)
+    : SdrRectObj(rSdrModel, rRect, SdrObjKind::Text)
+    , maTailPoly(3)  // default size: 3 points = 2 lines
+    , mbSpecialTextBoxShadow(false)
+    , mbFixedTail(false)
+    , mbSuppressGetBitmap(false)
+{
+    maTailPoly[0] = maFixedTailPos = rTail;
 }
 
 SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel, SdrCaptionObj const & rSource)
@@ -198,22 +208,7 @@ SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel, SdrCaptionObj const & rSource)
     maFixedTailPos = rSource.maFixedTailPos;
 }
 
-SdrCaptionObj::SdrCaptionObj(
-    SdrModel& rSdrModel,
-    const tools::Rectangle& rRect,
-    const Point& rTail)
-:   SdrRectObj(rSdrModel, SdrObjKind::Text,rRect),
-    maTailPoly(3),  // default size: 3 points = 2 lines
-    mbSpecialTextBoxShadow(false),
-    mbFixedTail(false),
-    mbSuppressGetBitmap(false)
-{
-    maTailPoly[0]=maFixedTailPos=rTail;
-}
-
-SdrCaptionObj::~SdrCaptionObj()
-{
-}
+SdrCaptionObj::~SdrCaptionObj() = default;
 
 void SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {

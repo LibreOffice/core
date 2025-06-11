@@ -73,12 +73,11 @@ private:
 
 public:
     SAL_DLLPRIVATE SdrCaptionObj(SdrModel& rSdrModel);
+
     // Copy constructor
     SAL_DLLPRIVATE SdrCaptionObj(SdrModel& rSdrModel, SdrCaptionObj const & rSource);
-    SdrCaptionObj(
-        SdrModel& rSdrModel,
-        const tools::Rectangle& rRect,
-        const Point& rTail);
+
+    SdrCaptionObj(SdrModel& rSdrModel, const tools::Rectangle& rRect, const Point& rTail);
 
     // tdf#118662 getter for SuppressGetBitmap
     bool isSuppressGetBitmap() const { return mbSuppressGetBitmap; }

@@ -1306,9 +1306,7 @@ rtl::Reference<SdrObject> SwWW8ImplReader::ReadTextBox(WW8_DPHEAD const * pHd, S
     aP1.AdjustY(SVBT16ToInt16(pHd->dya));
 
     rtl::Reference<SdrRectObj> pObj = new SdrRectObj(
-        *m_pDrawModel,
-        SdrObjKind::Text,
-        tools::Rectangle(aP0, aP1));
+        *m_pDrawModel, tools::Rectangle(aP0, aP1), SdrObjKind::Text);
 
     pObj->NbcSetSnapRect(tools::Rectangle(aP0, aP1));
     Size aSize(SVBT16ToInt16(pHd->dxa), SVBT16ToInt16(pHd->dya));
@@ -2966,9 +2964,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec& rRecord,
         // Group objects don't have text. Insert a text object into
         // the group for holding the text.
         pSdrTextObj = new SdrRectObj(
-            *m_pDrawModel,
-            SdrObjKind::Text,
-            pThisGroup->GetCurrentBoundRect());
+            *m_pDrawModel, pThisGroup->GetCurrentBoundRect(), SdrObjKind::Text);
 
         SfxItemSet aSet(m_pDrawModel->GetItemPool());
         aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
