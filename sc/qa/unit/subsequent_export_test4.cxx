@@ -2307,6 +2307,29 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166939)
     assertXPath(pXmlDoc, "//office:automatic-styles/style:style[@style:name='a']", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166939_1)
+{
+    // Check that the autostyles are stored correctly, when autostyle names are not standard (are
+    // not like "ro1"; the chosen names are "r_1", "r_2"). A mistake had made a function return
+    // existing style's index negative, and that wasn't caught in tests...
+    loadWithParams(createFileURL(u"fods/lostRowStyle.fods"),
+                   { comphelper::makePropertyValue(u"AsTemplate"_ustr, true) });
+    // Saving it must keep the autostyles
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(
+        pXmlDoc,
+        "//office:automatic-styles/style:style[@style:family='table-row'][@style:name='r_1']", 1);
+    assertXPath(
+        pXmlDoc,
+        "//office:automatic-styles/style:style[@style:family='table-row'][@style:name='r_2']", 1);
+    assertXPath(pXmlDoc, "//table:table/table:table-row[1]", "style-name", u"r_1");
+    // When the bug was introduced, this failed with
+    // - In <>, XPath '//table:table/table:table-row[2]' no attribute 'style-name' exist
+    assertXPath(pXmlDoc, "//table:table/table:table-row[2]", "style-name", u"r_2");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
