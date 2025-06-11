@@ -37,11 +37,12 @@
 #include <sortopt.hxx>
 #include <docedt.hxx>
 
-SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange, sal_Int8 nDepth )
+SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange, sal_Int8 nDepth, bool bHierarchical )
     : SwUndo( SwUndoId::REDLINE, rRange.GetDoc() ), SwUndRng( rRange ),
     mnUserId( nUsrId ),
     mbHiddenRedlines( false ),
-    mnDepth( nDepth )
+    mnDepth( nDepth ),
+    mbHierarchical(bHierarchical)
 {
     // consider Redline
     SwDoc& rDoc = rRange.GetDoc();
@@ -62,7 +63,12 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange, sal_Int8 nDe
     SwNodeOffset nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
     mpRedlSaveData.reset( new SwRedlineSaveDatas );
-    if( !FillSaveData( rRange, *mpRedlSaveData, false, SwUndoId::REJECT_REDLINE != mnUserId ))
+    bool bCopyNext = SwUndoId::REJECT_REDLINE != mnUserId;
+    if (mbHierarchical)
+    {
+        bCopyNext = true;
+    }
+    if( !FillSaveData( rRange, *mpRedlSaveData, false, bCopyNext ))
     {
         mpRedlSaveData.reset();
     }
@@ -114,6 +120,11 @@ void SwUndoRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
         mpRedlSaveData->dumpAsXml(pWriter);
     }
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("hierarchical"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbHierarchical).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
 }
@@ -462,8 +473,8 @@ void SwUndoAcceptRedline::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().getIDocumentRedlineAccess().AcceptRedline(rContext.GetRepeatPaM(), true);
 }
 
-SwUndoRejectRedline::SwUndoRejectRedline( const SwPaM& rRange, sal_Int8 nDepth /* = 0 */ )
-    : SwUndoRedline( SwUndoId::REJECT_REDLINE, rRange, nDepth )
+SwUndoRejectRedline::SwUndoRejectRedline( const SwPaM& rRange, sal_Int8 nDepth /* = 0 */, bool bHierarchical /*= false*/ )
+    : SwUndoRedline( SwUndoId::REJECT_REDLINE, rRange, nDepth, bHierarchical )
 {
 }
 

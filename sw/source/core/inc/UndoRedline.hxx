@@ -37,12 +37,14 @@ protected:
     SwUndoId mnUserId;
     bool mbHiddenRedlines;
     sal_Int8 mnDepth;       // index of the SwRedlineData in SwRangeRedline
+    /// If the redline has multiple SwRedlineData instances associated that we want to track.
+    bool mbHierarchical;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
 
 public:
-    SwUndoRedline( SwUndoId nUserId, const SwPaM& rRange, sal_Int8 nDepth = 0 );
+    SwUndoRedline( SwUndoId nUserId, const SwPaM& rRange, sal_Int8 nDepth = 0, bool bHierarchical = false );
 
     virtual ~SwUndoRedline() override;
 
@@ -123,7 +125,7 @@ private:
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
-    SwUndoRejectRedline( const SwPaM& rRange, sal_Int8 nDepth = 0 );
+    SwUndoRejectRedline( const SwPaM& rRange, sal_Int8 nDepth = 0, bool bHierarchical = false );
 
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
