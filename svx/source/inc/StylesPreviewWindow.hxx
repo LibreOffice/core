@@ -64,10 +64,10 @@ class StyleItemController
 public:
     StyleItemController(std::pair<OUString, OUString> aStyleName);
 
-    void Paint(vcl::RenderContext& rRenderContext);
+    void Paint(vcl::RenderContext& rRenderContext, SfxStyleSheetBase* pStyleHint = nullptr);
 
 private:
-    void DrawEntry(vcl::RenderContext& rRenderContext);
+    void DrawEntry(vcl::RenderContext& rRenderContext, SfxStyleSheetBase* pStyleHint);
     void DrawText(vcl::RenderContext& rRenderContext);
     void DrawHighlight(vcl::RenderContext& rRenderContext, Color aFontBack);
     static void DrawContentBackground(vcl::RenderContext& rRenderContext,
@@ -123,7 +123,8 @@ public:
 
     void Select(const OUString& rStyleName);
     void RequestStylesListUpdate();
-    static BitmapEx GetCachedPreview(const std::pair<OUString, OUString>& rStyle);
+    static BitmapEx GetCachedPreview(const std::pair<OUString, OUString>& rStyle,
+                                     SfxStyleSheetBase* pStyleHint = nullptr);
     static OString GetCachedPreviewJson(const std::pair<OUString, OUString>& rStyle);
 
 private:
