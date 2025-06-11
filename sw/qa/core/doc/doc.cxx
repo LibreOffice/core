@@ -764,7 +764,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenDelRejectUndo)
     pWrtShell->RejectRedline(nRedline);
     pWrtShell->Undo();
 
-    // Then make sure that the restored redline has 2 redlines datas: delete and insert:
+    // Then make sure that the restored redline has 2 redlines data: delete and insert:
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[0]->GetType());
     const SwRedlineData& rRedlineData1 = rRedlines[1]->GetRedlineData(0);
