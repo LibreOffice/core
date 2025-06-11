@@ -1351,11 +1351,20 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
             aSz.SetHeightSizeType(SwFrameSize::Minimum);
 
         bRet |= nullptr != rSet->Put( aSz );
+        // and now set the size for "external" - e.g.:Crop - tabpages
         if (bRet)
         {
-            SvxSizeItem aGSz(SID_ATTR_GRAF_FRMSIZE);
-            aGSz.SetSize(aSz.GetSize());
-            bRet |= nullptr != rSet->Put(aGSz);
+            SwFormatFrameSize aSizeCopy = rSet->Get(RES_FRM_SIZE);
+            SvxSizeItem aSzItm( SID_ATTR_GRAF_FRMSIZE, aSizeCopy.GetSize() );
+            rSet->Put( aSzItm );
+
+            Size aGrpSz( aSizeCopy.GetWidthPercent(), aSizeCopy.GetHeightPercent() );
+            if( SwFormatFrameSize::SYNCED == aGrpSz.Width() )   aGrpSz.setWidth( 0 );
+            if( SwFormatFrameSize::SYNCED == aGrpSz.Height() )  aGrpSz.setHeight( 0 );
+
+            aSzItm.SetSize( aGrpSz );
+            aSzItm.SetWhich( SID_ATTR_GRAF_FRMSIZE_PERCENT );
+            bRet |= nullptr != rSet->Put( aSzItm );
         }
     }
     if (m_xFollowTextFlowCB->get_state_changed_from_saved())
@@ -2307,7 +2316,19 @@ void SwFramePage::Init(const SfxItemSet& rSet)
     if (const SvxSizeItem* pSizeItem = rSet.GetItemIfSet(SID_ATTR_GRAF_FRMSIZE, false))
     {
         if (pSizeItem->GetSize() != rSize.GetSize())
-            rSize.SetSize(pSizeItem->GetSize());
+        {
+            const Size& rSz = pSizeItem->GetSize();
+            rSize.SetWidth(rSz.Width());
+            rSize.SetHeight(rSz.Height());
+
+            pSizeItem = rSet.GetItemIfSet(SID_ATTR_GRAF_FRMSIZE_PERCENT, false);
+            if (pSizeItem)
+            {
+                const Size& rRelativeSize = pSizeItem->GetSize();
+                rSize.SetWidthPercent(static_cast<sal_uInt8>(rRelativeSize.Width()));
+                rSize.SetHeightPercent(static_cast<sal_uInt8>(rRelativeSize.Height()));
+            }
+        }
     }
 
     sal_Int64 nWidth  = m_xWidthED->NormalizePercent(rSize.GetWidth());
