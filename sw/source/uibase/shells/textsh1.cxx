@@ -1036,10 +1036,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     static constexpr OUString aParagraphLangPrefix(u"Paragraph_"_ustr);
                     static constexpr OUString aDocumentLangPrefix(u"Default_"_ustr);
 
-                    SfxItemSetFixed
-                            <RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
-                            RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
-                            RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE>  aCoreSet( GetPool() );
+                    SfxItemSetFixed<RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
+                                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+                                    RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+                                    RES_CHRATR_SCRIPT_HINT, RES_CHRATR_SCRIPT_HINT>
+                        aCoreSet(GetPool());
 
                     sal_Int32 nPos = 0;
                     bool bForSelection = true;

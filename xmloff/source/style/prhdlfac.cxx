@@ -23,7 +23,7 @@
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-
+#include <com/sun/star/text/ScriptHintType.hpp>
 
 #include <sal/log.hxx>
 #include <xmloff/xmlement.hxx>
@@ -122,11 +122,12 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_VertPos_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry<sal_uInt16> const pXML_ScriptType_Enum[] = { { XML_IGNORE, 1U },
-                                                               { XML_LATIN, 2U },
-                                                               { XML_ASIAN, 3U },
-                                                               { XML_COMPLEX, 4U },
-                                                               { XML_TOKEN_INVALID, 0U } };
+SvXMLEnumMapEntry<sal_uInt16> const pXML_ScriptType_Enum[]
+    = { { XML_IGNORE, text::ScriptHintType::IGNORE },
+        { XML_LATIN, text::ScriptHintType::LATIN },
+        { XML_ASIAN, text::ScriptHintType::ASIAN },
+        { XML_COMPLEX, text::ScriptHintType::COMPLEX },
+        { XML_TOKEN_INVALID, text::ScriptHintType::AUTOMATIC } };
 
 typedef std::map<sal_Int32, const XMLPropertyHandler*> CacheMap;
 

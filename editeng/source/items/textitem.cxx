@@ -657,6 +657,11 @@ SvxScriptHintItem::SvxScriptHintItem(const sal_uInt16 nId)
 {
 }
 
+SvxScriptHintItem::SvxScriptHintItem(i18nutil::ScriptHintType eType, const sal_uInt16 nId)
+    : SfxEnumItem(nId, eType)
+{
+}
+
 SvxScriptHintItem* SvxScriptHintItem::Clone(SfxItemPool*) const
 {
     return new SvxScriptHintItem(*this);

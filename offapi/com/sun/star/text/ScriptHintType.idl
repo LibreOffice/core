@@ -1,0 +1,31 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module text {
+
+/**
+ * Script type hint values.
+ *
+ * These values are used to influence how script types are assigned to characters.
+ *
+ * @since LibreOffice 25.8
+ */
+constants ScriptHintType
+{
+    const short AUTOMATIC   = 0;
+
+    const short IGNORE      = 1;
+    const short LATIN       = 2;
+    const short ASIAN       = 3;
+    const short COMPLEX     = 4;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

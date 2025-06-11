@@ -1381,6 +1381,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/text,\
 	RedlinePortion \
 	ReferenceMark \
 	ReferenceMarks \
+	ScriptHintType \
 	Shape \
 	TableColumns \
 	TableIndex \

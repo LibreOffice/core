@@ -251,7 +251,7 @@ private:
             // #i89825# change the script type also to CTL (hennerdrewes)
             // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
             // tdf#163660 Asian-script characters inside RTL runs should still use Asian font
-            if (eCurrHint == ScriptHintType::Automatic
+            if ((eCurrHint == ScriptHintType::Automatic || eCurrHint == ScriptHintType::Complex)
                 && (bCharIsRtl || (bCharIsRtlOrEmbedded && !bRunHasStrongEmbeddedLTR)))
             {
                 if (nScript != css::i18n::ScriptType::ASIAN)

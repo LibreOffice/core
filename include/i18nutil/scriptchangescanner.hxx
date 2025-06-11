@@ -9,6 +9,7 @@
 #pragma once
 
 #include <i18nutil/i18nutildllapi.h>
+#include <com/sun/star/text/ScriptHintType.hpp>
 #include <rtl/ustring.hxx>
 #include <optional>
 #include <memory>
@@ -33,11 +34,11 @@ struct ScriptChange
 
 enum class ScriptHintType : sal_uInt16
 {
-    Automatic = 0,
-    Ignore = 1,
-    Latin = 2,
-    Asian = 3,
-    Complex = 4
+    Automatic = css::text::ScriptHintType::AUTOMATIC,
+    Ignore = css::text::ScriptHintType::IGNORE,
+    Latin = css::text::ScriptHintType::LATIN,
+    Asian = css::text::ScriptHintType::ASIAN,
+    Complex = css::text::ScriptHintType::COMPLEX
 };
 
 struct ScriptHint
