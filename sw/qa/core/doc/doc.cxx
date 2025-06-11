@@ -738,6 +738,42 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenDelRejectUndo)
     // i.e. initially the doc had no redlines after insert, but undo + doing it again resulted in
     // redlines, which is inconsistent.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rRedlines.size());
+
+    // And given a reset state, matching the one after import:
+    pWrtShell->Undo();
+    {
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[0]->GetType());
+        const SwRedlineData& rRedlineData1 = rRedlines[1]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData1.GetType());
+        CPPUNIT_ASSERT(rRedlineData1.Next());
+        const SwRedlineData& rInnerRedlineData = *rRedlineData1.Next();
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData.GetType());
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[2]->GetType());
+    }
+
+    // When rejecting the insert-then-delete + undo:
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    pCursor->DeleteMark();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    SwRedlineTable::size_type nRedline{};
+    rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    // A redline is found.
+    CPPUNIT_ASSERT_LESS(rRedlines.size(), nRedline);
+    pWrtShell->RejectRedline(nRedline);
+    pWrtShell->Undo();
+
+    // Then make sure that the restored redline has 2 redlines datas: delete and insert:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[0]->GetType());
+    const SwRedlineData& rRedlineData1 = rRedlines[1]->GetRedlineData(0);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData1.GetType());
+    // The insert "under" the delete was lost.
+    CPPUNIT_ASSERT(rRedlineData1.Next());
+    const SwRedlineData& rInnerRedlineData = *rRedlineData1.Next();
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData.GetType());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[2]->GetType());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)

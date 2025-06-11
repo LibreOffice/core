@@ -3649,21 +3649,11 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
         }
         else if (pTmp->GetRedlineData(0).CanCombineForAcceptReject(aOrigData))
         {
-            bool bHierarchicalFormat
-                = pTmp->GetType() == RedlineType::Format && pTmp->GetStackCount() > 1;
+            bool bHierarchical = pTmp->GetStackCount() > 1;
+            bool bHierarchicalFormat = bHierarchical && pTmp->GetType() == RedlineType::Format;
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                std::unique_ptr<SwUndoRedline> pUndoRdl;
-                if (bHierarchicalFormat)
-                {
-                    // Format on an other type: just create an accept undo action, we'll deal with
-                    // insert or delete below separately.
-                    pUndoRdl = std::make_unique<SwUndoAcceptRedline>(*pTmp);
-                }
-                else
-                {
-                    pUndoRdl = std::make_unique<SwUndoRejectRedline>(*pTmp);
-                }
+                auto pUndoRdl = std::make_unique<SwUndoRejectRedline>(*pTmp, 0, bHierarchical);
 #if OSL_DEBUG_LEVEL > 0
                 pUndoRdl->SetRedlineCountDontCheck(true);
 #endif
