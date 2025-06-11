@@ -22,9 +22,12 @@
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 
-#include <svtools/valueset.hxx>
 #include <sfx2/request.hxx>
 #include <xmloff/autolayout.hxx>
+#include <vcl/image.hxx>
+#include <map>
+
+#include <unotools/resmgr.hxx>
 
 namespace com::sun::star::frame
 {
@@ -49,8 +52,6 @@ class SlotStateListener;
 
 namespace sd::sidebar
 {
-class LayoutValueSet;
-
 class LayoutMenu : public PanelLayout, public sfx2::sidebar::ILayoutableWindow
 {
 public:
@@ -84,7 +85,7 @@ public:
 
     /** The context menu is requested over this ShowContextMenu() method.
     */
-    void ShowContextMenu(const Point* pPos);
+    void ShowContextMenu(const Point& pPos);
 
     /** Call Fill() when switching to or from high contrast mode so that the
         correct set of icons is displayed.
@@ -94,9 +95,7 @@ public:
 private:
     ViewShellBase& mrBase;
 
-    std::unique_ptr<LayoutValueSet> mxLayoutValueSet;
-    std::unique_ptr<weld::CustomWeld> mxLayoutValueSetWin;
-
+    std::unique_ptr<weld::IconView> mxLayoutIconView;
     /** If we are asked for the preferred window size, then use this
         many columns for the calculation.
     */
@@ -104,8 +103,25 @@ private:
     bool mbIsMainViewChangePending;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
     bool mbIsDisposed;
+    std::map<AutoLayout, TranslateId> maLayoutToStringMap;
 
-    /** Fill the value set with the layouts that are applicable to the
+    std::unique_ptr<weld::Builder> mxMenuBuilder;
+    std::unique_ptr<weld::Menu> mxMenu;
+
+    // Store the size of preview image
+    Size maPreviewSize;
+
+    /**
+     * Prevents StateChangeHandler from rebuilding layouts during context menu operations.
+     * Without this flag, the first context menu operation would trigger a layout rebuild that
+     * disrupts the selection state, causing the selected item to not appear highlighted.
+     * Subsequent operations work correctly.
+     */
+    bool bInContextMenuOperation;
+
+    OUString sLastItemIdent;
+
+    /** Fill the icon view with the layouts that are applicable to the
         current main view shell.
     */
     void Fill();
@@ -145,12 +161,22 @@ private:
     // internal ctor
     void implConstruct(DrawDocShell& rDocumentShell);
 
+    void MenuSelect(const OUString& rIdent);
+
     /** When clicked then set the current page of the view in the center pane.
     */
-    DECL_LINK(ClickHandler, ValueSet*, void);
+    DECL_LINK(LayoutSelected, weld::IconView&, bool);
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(StateChangeHandler, const OUString&, void);
     DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
-    void OnMenuItemSelected(std::u16string_view ident);
+    DECL_LINK(MenuSelectAsyncHdl, void*, void);
+    DECL_LINK(OnPopupEnd, const OUString&, void);
+
+    static VclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
+    void HandleMenuSelect(std::u16string_view rIdent);
+
+    TranslateId GetStringResourceIdForLayout(AutoLayout aLayout) const;
 };
 
 } // end of namespace ::sd::toolpanel
