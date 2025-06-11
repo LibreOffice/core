@@ -33,6 +33,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/units/Range2DLWrap.hxx>
+#include <basegfx/units/Tuple2DLWrap.hxx>
 #include <basegfx/units/LengthTypes.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
@@ -2348,16 +2349,40 @@ SdrGluePoint SdrObject::GetVertexGluePoint(sal_uInt16 nPosNum) const
 
 SdrGluePoint SdrObject::GetCornerGluePoint(sal_uInt16 nPosNum) const
 {
-    tools::Rectangle aR(GetCurrentBoundRect());
-    Point aPt;
-    switch (nPosNum) {
-        case 0 : aPt=aR.TopLeft();     break;
-        case 1 : aPt=aR.TopRight();    break;
-        case 2 : aPt=aR.BottomRight(); break;
-        case 3 : aPt=aR.BottomLeft();  break;
+    auto const& rCurrentBoundRange = getCurrentBoundRange();
+
+    gfx::Length x;
+    gfx::Length y;
+
+    switch (nPosNum)
+    {
+        case 0:
+            x = rCurrentBoundRange.getMinX();
+            y = rCurrentBoundRange.getMinY();
+        break;
+
+        case 1:
+            x = rCurrentBoundRange.getMaxX();
+            y = rCurrentBoundRange.getMinY();
+        break;
+        case 2:
+            x = rCurrentBoundRange.getMaxX();
+            y = rCurrentBoundRange.getMaxY();
+        break;
+        case 3:
+            x = rCurrentBoundRange.getMinX();
+            y = rCurrentBoundRange.getMaxY();
+        break;
     }
-    aPt-=GetSnapRect().Center();
-    SdrGluePoint aGP(aPt);
+
+    x -= getSnapRange().getCenterX();
+    y -= getSnapRange().getCenterY();
+
+    auto eUnit = getSdrModelFromSdrObject().getUnit();
+    gfx::Tuple2DLWrap aTuple2D(x, y, eUnit);
+
+    // TODO
+    SdrGluePoint aGP(aTuple2D.toPoint());
     aGP.SetPercent(false);
     return aGP;
 }

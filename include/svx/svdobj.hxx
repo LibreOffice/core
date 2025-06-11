@@ -551,6 +551,12 @@ public:
     /// SetSnapRect() tries to size the Object so that it fits into the
     /// passed Rect (without stroke width, ...)
     virtual void RecalcSnapRect();
+
+    virtual const gfx::Range2DL& getSnapRange() const
+    {
+        return m_aOutterRange;
+    }
+
     virtual const tools::Rectangle& GetSnapRect() const;
     virtual void SetSnapRect(const tools::Rectangle& rRect);
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect);
