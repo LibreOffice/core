@@ -80,8 +80,11 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVisRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( true );
-    // TODO: gridSize and aImageSize depending on the actual image size
-    Size gridSize(140, (nWinStyle & WB_SMALLICON) ? 32 : 70);
+    Size gridSize;
+    if (nWinStyle & WB_SMALLICON)
+       gridSize = Size(-1, 32);
+    else
+       gridSize = Size(140, 70);
     if(pView->GetDPIScaleFactor() > 1)
     {
       gridSize.setHeight( gridSize.Height() * ( pView->GetDPIScaleFactor()) );
@@ -174,6 +177,13 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( std::unique_ptr<SvxIconChoiceCtrlEntry
     // Thus, don't call InvalidateBoundingRect!
     pEntry->aRect.SetRight( LONG_MAX );
     FindBoundingRect(pEntry);
+    // initial calculation w/o icon yet to ensure the background is filled
+    if (nWinBits & WB_SMALLICON)
+    {
+        tools::Rectangle aTextRect = pView->GetTextRect( CalcMaxTextRect( pEntry ), pEntry->GetText(), nCurTextDrawFlags );
+        pView->AdjustWidth(32 + aTextRect.GetSize().Width() + 2 * HOR_DIST_BMP_STRING );
+    }
+
     tools::Rectangle aOutputArea(GetOutputRect());
     pGridMap->OccupyGrids(pEntry);
     if (!aOutputArea.Overlaps(pEntry->aRect))
@@ -1132,6 +1142,10 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* p
             aPos.AdjustX(aImageSize.Width() );
             aPos.AdjustX(HOR_DIST_BMP_STRING );
             aPos.AdjustY((nBoundHeight - aTextSize.Height()) / 2 );
+            // final calculation of width after initially done on insert
+            long nNewWidth = aImageSize.Width() + aTextSize.Width() + 2*HOR_DIST_BMP_STRING;
+            nNewWidth = pView->AdjustWidth(nNewWidth);
+            pEntry->aRect.setWidth(nNewWidth);
             break;
     }
     return tools::Rectangle( aPos, aTextSize );
@@ -1563,6 +1577,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtr
         nHeight /= 2;
         aBoundRect.AdjustTop(nHeight );
         aBoundRect.AdjustBottom( -nHeight );
+        aBoundRect.setWidth(INT_MAX); // effective width calculated in CalcTextRect()
     }
     return aBoundRect;
 }

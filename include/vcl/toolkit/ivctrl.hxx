@@ -128,6 +128,7 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvtIconChoiceCtrl final : public Cont
     virtual void        FillLayoutData() const override;
 
     void                CallImplEventListeners(VclEventId nEvent, void* pData);
+    long                m_nWidth;
 
 public:
 
@@ -144,6 +145,7 @@ public:
     void                SetBackground( const Wallpaper& rWallpaper );
 
     void                ArrangeIcons();
+    long                AdjustWidth(const long nWidth); // returns the effective width
 
 
     SvxIconChoiceCtrlEntry* InsertEntry( const OUString& rText,
