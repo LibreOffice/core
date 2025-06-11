@@ -916,7 +916,7 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(std::u16string_view rString
     }
 
     if (auto i = std::find(aStyleNames.begin(), aStyleNames.end(), rString); i != aStyleNames.end())
-        return std::distance(i, aStyleNames.begin());
+        return std::distance(aStyleNames.begin(), i);
 
     return -1;
 }
