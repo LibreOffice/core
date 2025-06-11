@@ -31,6 +31,8 @@ class BufferedDecompositionFlusher final : public osl::Thread
 public:
     static void update(const BufferedDecompositionPrimitive2D*);
     static void update(const BufferedDecompositionGroupPrimitive2D*);
+    static void remove(const BufferedDecompositionPrimitive2D*);
+    static void remove(const BufferedDecompositionGroupPrimitive2D*);
 
     BufferedDecompositionFlusher();
 
@@ -43,9 +45,12 @@ private:
     virtual void SAL_CALL run() override;
     void updateImpl(const BufferedDecompositionPrimitive2D*);
     void updateImpl(const BufferedDecompositionGroupPrimitive2D*);
+    void removeImpl(const BufferedDecompositionPrimitive2D*);
+    void removeImpl(const BufferedDecompositionGroupPrimitive2D*);
 
-    std::unordered_set<rtl::Reference<BufferedDecompositionPrimitive2D>> maRegistered1;
-    std::unordered_set<rtl::Reference<BufferedDecompositionGroupPrimitive2D>> maRegistered2;
+    // Explicitly not using rtl::Reference because they are removed from here when they destruct.
+    std::unordered_set<BufferedDecompositionPrimitive2D*> maRegistered1;
+    std::unordered_set<BufferedDecompositionGroupPrimitive2D*> maRegistered2;
     std::mutex maMutex;
     bool mbShutdown{ false };
 };

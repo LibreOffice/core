@@ -63,7 +63,11 @@ BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
 {
 }
 
-BufferedDecompositionPrimitive2D::~BufferedDecompositionPrimitive2D() {}
+BufferedDecompositionPrimitive2D::~BufferedDecompositionPrimitive2D()
+{
+    if (mbFlushOnTimer)
+        BufferedDecompositionFlusher::remove(this);
+}
 
 void BufferedDecompositionPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,

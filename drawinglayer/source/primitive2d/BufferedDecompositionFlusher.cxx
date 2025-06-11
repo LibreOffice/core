@@ -73,6 +73,18 @@ void BufferedDecompositionFlusher::update(const BufferedDecompositionGroupPrimit
     getInstance()->updateImpl(p);
 }
 
+// static
+void BufferedDecompositionFlusher::remove(const BufferedDecompositionPrimitive2D* p)
+{
+    getInstance()->removeImpl(p);
+}
+
+// static
+void BufferedDecompositionFlusher::remove(const BufferedDecompositionGroupPrimitive2D* p)
+{
+    getInstance()->removeImpl(p);
+}
+
 BufferedDecompositionFlusher::BufferedDecompositionFlusher() { create(); }
 
 void BufferedDecompositionFlusher::updateImpl(const BufferedDecompositionPrimitive2D* p)
@@ -87,6 +99,20 @@ void BufferedDecompositionFlusher::updateImpl(const BufferedDecompositionGroupPr
     std::unique_lock l(maMutex);
     if (!mbShutdown)
         maRegistered2.insert(const_cast<BufferedDecompositionGroupPrimitive2D*>(p));
+}
+
+void BufferedDecompositionFlusher::removeImpl(const BufferedDecompositionPrimitive2D* p)
+{
+    std::unique_lock l(maMutex);
+    if (!mbShutdown)
+        maRegistered1.erase(const_cast<BufferedDecompositionPrimitive2D*>(p));
+}
+
+void BufferedDecompositionFlusher::removeImpl(const BufferedDecompositionGroupPrimitive2D* p)
+{
+    std::unique_lock l(maMutex);
+    if (!mbShutdown)
+        maRegistered2.erase(const_cast<BufferedDecompositionGroupPrimitive2D*>(p));
 }
 
 void SAL_CALL BufferedDecompositionFlusher::run()
@@ -141,15 +167,10 @@ void SAL_CALL BufferedDecompositionFlusher::run()
 /// Only called by FlusherDeinit
 void BufferedDecompositionFlusher::onTeardown()
 {
-    std::unordered_set<rtl::Reference<BufferedDecompositionPrimitive2D>> aRemoved1;
-    std::unordered_set<rtl::Reference<BufferedDecompositionGroupPrimitive2D>> aRemoved2;
-    {
-        std::unique_lock l2(maMutex);
-        mbShutdown = true;
-        aRemoved1 = std::move(maRegistered1);
-        aRemoved2 = std::move(maRegistered2);
-    }
-    // let the destruction happen outside the lock
+    std::unique_lock l2(maMutex);
+    mbShutdown = true;
+    maRegistered1.clear();
+    maRegistered2.clear();
 }
 
 } // end of namespace drawinglayer::primitive2d
