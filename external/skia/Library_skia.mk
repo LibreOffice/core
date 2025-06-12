@@ -502,6 +502,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkReadBuffer \
     UnpackedTarball/skia/src/core/SkReadPixelsRec \
     UnpackedTarball/skia/src/core/SkRecord \
+    UnpackedTarball/skia/src/core/SkRecordCanvas \
     UnpackedTarball/skia/src/core/SkRecordDraw \
     UnpackedTarball/skia/src/core/SkRecordOpts \
     UnpackedTarball/skia/src/core/SkRecords \
@@ -533,6 +534,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkStrokerPriv \
     UnpackedTarball/skia/src/core/SkSwizzle \
     UnpackedTarball/skia/src/core/SkSwizzler_opts \
+    UnpackedTarball/skia/src/core/SkSynchronizedResourceCache \
     UnpackedTarball/skia/src/core/SkTaskGroup \
     UnpackedTarball/skia/src/core/SkTextBlob \
     UnpackedTarball/skia/src/core/SkTypeface \
@@ -631,7 +633,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkPictureRecord \
     UnpackedTarball/skia/src/core/SkPictureRecorder \
     UnpackedTarball/skia/src/core/SkRecordedDrawable \
-    UnpackedTarball/skia/src/core/SkRecorder \
     UnpackedTarball/skia/src/shaders/SkPictureShader \
 ))
 
@@ -1110,6 +1111,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/tessellate/GrTessellationShader \
     UnpackedTarball/skia/src/gpu/ganesh/tessellate/PathTessellator \
     UnpackedTarball/skia/src/gpu/ganesh/tessellate/StrokeTessellator \
+    UnpackedTarball/skia/src/gpu/ganesh/text/GaneshVertexFiller \
     UnpackedTarball/skia/src/gpu/ganesh/text/GrAtlasManager \
 ))
 endif
