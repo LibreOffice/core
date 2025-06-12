@@ -19,6 +19,7 @@ $(eval $(call gb_Executable_add_defs,soffice_bin,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,soffice_bin,\
+    $(if $(ENABLE_RUST_UNO),rust_uno-cpp) \
     sal \
     sofficeapp \
 ))

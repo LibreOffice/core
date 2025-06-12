@@ -779,6 +779,7 @@ $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
 	active_native \
 	passive_native \
 	crashextension \
+	rust_uno-example \
 ))
 
 ifneq ($(ENABLE_JAVA),)

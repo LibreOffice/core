@@ -126,6 +126,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	reportbuilder \
 	$(call gb_Helper_optional,DBCONNECTIVITY,reportdesign) \
 	ridljar \
+	rust_uno \
 	sal \
 	salhelper \
 	sax \
