@@ -2793,7 +2793,7 @@ cmd/32/tabletransformdialog.png cmd/32/transformdialog.png
 cmd/lc_tabletransformdialog.png cmd/lc_transformdialog.png
 cmd/sc_tabletransformdialog.png cmd/sc_transformdialog.png
 
-# templatedialog8
+# templatedialog8, *1
 res/organizer.png cmd/lc_browseview.png
 res/page.png cmd/lc_attributepagesize.png
 res/area.png cmd/lc_backgroundcolor.png
@@ -2804,3 +2804,8 @@ res/borders.png cmd/lc_borderdialog.png
 res/columns.png cmd/lc_pagecolumntype.png
 res/footnotes.png cmd/lc_footnotedialog.png
 res/textgrid.png cmd/lc_gridvisible.png
+res/font.png cmd/lc_fontdialog.png
+res/fonteffect.png cmd/lc_text_marquee.png
+res/position.png cmd/lc_fontwork.png
+res/asianlayout.png cmd/lc_textdirectiontoptobottom.png
+res/background.png cmd/lc_color.png
