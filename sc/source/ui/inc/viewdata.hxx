@@ -243,7 +243,7 @@ private:
 
     bool            bShowGrid;                  // per sheet show grid lines option.
     bool            mbOldCursorValid;           // "virtual" Cursor position when combined
-                    ScViewDataTable(const ScDocument *pDoc = nullptr);
+                    ScViewDataTable(const ScDocument *pDoc);
 
     void            InitData(const ScDocument& rDoc);
     void            WriteUserDataSequence(
