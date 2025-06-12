@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testTableSplitMergeAndAltText)
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
-    CPPUNIT_ASSERT_EQUAL(size_t(6), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(7), aIssues.size());
 
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::NO_ALT_GRAPHIC, aIssues[0]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueLevel::ERRORLEV, aIssues[0]->m_eIssueLvl);
@@ -58,6 +58,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testTableSplitMergeAndAltText)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueLevel::WARNLEV, aIssues[4]->m_eIssueLvl);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::NO_ALT_SHAPE, aIssues[5]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueLevel::ERRORLEV, aIssues[5]->m_eIssueLvl);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::NO_ALT_SHAPE, aIssues[6]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueLevel::ERRORLEV, aIssues[6]->m_eIssueLvl);
 }
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckParagraphIssues)
@@ -249,17 +251,19 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTabsFormatting)
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
-    CPPUNIT_ASSERT_EQUAL(size_t(10), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(20), aIssues.size());
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[2]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[3]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[4]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[5]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[6]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::NO_ALT_SHAPE, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::NO_ALT_SHAPE, aIssues[2]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[7]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[8]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[9]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[10]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[11]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[13]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[14]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[17]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[18]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[19]->m_eIssueID);
 }
 
 //tdf#156550 - Accessibility sidebar complains about TOC hyperlinks

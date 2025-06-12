@@ -2740,12 +2740,8 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SwFrameFormat const& rFra
             pIssue->setNode(pCurrent);
     }
 
-    const SdrObjKind nObjId = pObject->GetObjIdentifier();
-    const SdrInventor nInv = pObject->GetObjInventor();
-
-    if (nObjId == SdrObjKind::CustomShape || nObjId == SdrObjKind::Text
-        || nObjId == SdrObjKind::Media || nObjId == SdrObjKind::Group
-        || nObjId == SdrObjKind::Graphic || nInv == SdrInventor::FmForm)
+    // Graphic, OLE for alt (title) text already checked in NoTextNodeAltTextCheck
+    if (pObject->GetObjIdentifier() != SdrObjKind::SwFlyDrawObjIdentifier)
     {
         if (!pObject->IsDecorative() && pObject->GetTitle().isEmpty()
             && pObject->GetDescription().isEmpty())
@@ -2756,7 +2752,7 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SwFrameFormat const& rFra
                                       sfx::AccessibilityIssueID::NO_ALT_SHAPE,
                                       sfx::AccessibilityIssueLevel::ERRORLEV);
             // Set FORM Issue for Form objects because of the design mode
-            if (nInv == SdrInventor::FmForm)
+            if (pObject->GetObjInventor() == SdrInventor::FmForm)
                 pIssue->setIssueObject(IssueObject::FORM);
             else
                 pIssue->setIssueObject(IssueObject::SHAPE);
