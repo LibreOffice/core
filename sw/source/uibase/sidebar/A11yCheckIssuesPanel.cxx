@@ -148,12 +148,6 @@ void AccessibilityCheckLevel::addEntryForGroup(
     std::shared_ptr<sfx::AccessibilityIssue> const& pIssue)
 {
     auto nGroupIndex = size_t(eGroup);
-    // prevent the UI locking up forever, this is effectively an O(n^2) situation, given the way the UI additions work
-    if (m_aEntries[nGroupIndex].size() > 500)
-    {
-        SAL_WARN("sw", "too many a11y issues, not adding to panel");
-        return;
-    }
     auto xEntry = std::make_unique<AccessibilityCheckEntry>(m_xBoxes[nGroupIndex].get(), pIssue);
     m_xBoxes[nGroupIndex]->reorder_child(xEntry->get_widget(), rIndices[nGroupIndex]++);
     m_aEntries[nGroupIndex].push_back(std::move(xEntry));
@@ -291,13 +285,6 @@ void A11yCheckIssuesPanel::addEntryForGroup(AccessibilityCheckGroups eGroup,
                                             std::vector<std::vector<sal_Int32>>& rIndices,
                                             std::shared_ptr<sfx::AccessibilityIssue> const& pIssue)
 {
-    // prevent the UI locking up forever, this is effectively an O(n^2) situation, given the way the UI additions work
-    if (m_aLevelEntries[0]->getEntrySize(eGroup) + m_aLevelEntries[1]->getEntrySize(eGroup) > 500)
-    {
-        SAL_WARN("sw", "too many a11y issues, not adding to panel");
-        return;
-    }
-
     size_t nLevel = static_cast<size_t>(pIssue->m_eIssueLvl);
     m_aLevelEntries[nLevel]->addEntryForGroup(eGroup, rIndices[nLevel], pIssue);
 }
