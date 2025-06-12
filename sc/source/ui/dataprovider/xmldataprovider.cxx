@@ -103,10 +103,9 @@ void XMLDataProvider::Import()
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, SCTAB(0));
-    mxXMLFetchThread = new XMLFetchThread(*mpDoc, mrDataSource.getURL(),
-                                          mrDataSource.getXMLImportParam(), mrDataSource.getID(),
-                                          std::bind(&XMLDataProvider::ImportFinished, this),
-                                          std::vector(mrDataSource.getDataTransformation()));
+    mxXMLFetchThread = new XMLFetchThread(
+        *mpDoc, mrDataSource.getURL(), mrDataSource.getXMLImportParam(), mrDataSource.getID(),
+        [this]() { this->ImportFinished(); }, std::vector(mrDataSource.getDataTransformation()));
     mxXMLFetchThread->launch();
 
     if (mbDeterministic)
