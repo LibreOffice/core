@@ -569,7 +569,7 @@
 #define STR_AVOID_ENDNOTES                          NC_("STR_AVOID_ENDNOTES", "Check if the document contains endnotes.")
 #define STR_AVOID_BACKGROUND_IMAGES                 NC_("STR_AVOID_BACKGROUND_IMAGES", "Check if the document contains background images.")
 #define STR_AVOID_NEWLINES_SPACE                    NC_("STR_AVOID_NEWLINES_SPACE", "Check if document contains new lines to create space.")
-#define STR_AVOID_SPACES_SPACE                      NC_("STR_AVOID_SPACES_SPACE", "Check if document contains extra spaces to create space.")
+#define STR_AVOID_SPACES_SPACE                      NC_("STR_AVOID_SPACES_SPACE", "Check if document contains repeated spaces.")
 #define STR_AVOID_TABS_FORMATTING                   NC_("STR_AVOID_TABS_FORMATTING", "Check if document contains tabs for formatting.")
 #define STR_AVOID_EMPTY_NUM_PARA                    NC_("STR_AVOID_EMPTY_NUM_PARA", "Check if document contains new empty lines between numbered paragraphs.")
 #define STR_HEADINGS_NOT_IN_ORDER                   NC_("STR_HEADINGS_NOT_IN_ORDER", "Check if the outline levels of all headings are in sequential order.")
