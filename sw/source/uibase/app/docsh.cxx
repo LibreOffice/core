@@ -893,7 +893,9 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
 
 rtl::Reference<SwXTextDocument> SwDocShell::GetBaseModel() const
 {
-    return dynamic_cast<SwXTextDocument*>(SfxObjectShell::GetBaseModel().get());
+    const auto xModel = SfxObjectShell::GetBaseModel();
+    assert(!xModel || dynamic_cast<SwXTextDocument*>(xModel.get()));
+    return static_cast<SwXTextDocument*>(xModel.get());
 }
 
 void SwDocShell::SetVisArea( const tools::Rectangle &rRect )
