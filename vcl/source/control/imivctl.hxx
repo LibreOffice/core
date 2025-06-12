@@ -84,6 +84,15 @@ enum class IcnViewFieldType
 };
 
 
+// Data about the focus of entries
+
+struct LocalFocus
+{
+    tools::Rectangle   aRect;
+    Color              aPenColor;
+};
+
+
 typedef sal_uLong GridId;
 
 // Implementation-class of IconChoiceCtrl
@@ -118,6 +127,7 @@ class SvxIconChoiceCtrl_Impl
     ImplSVEvent *           nUserEventAdjustScrBars;
     SvxIconChoiceCtrlEntry* pCurHighlightFrame;
     SvxIconChoiceCtrlEntry* pCursor;
+    LocalFocus              aFocus;                             // Data for focusrect
 
     bool                    bBoundRectsDirty;
 
@@ -169,6 +179,7 @@ class SvxIconChoiceCtrl_Impl
     void                VisRectChanged() { aVisRectChangedIdle.Start(); }
     void                SetOrigin( const Point& );
 
+    void                ShowFocus ( tools::Rectangle const & rRect );
     void                DrawFocusRect(vcl::RenderContext& rRenderContext, SvxIconChoiceCtrlEntry* pEntry);
 
     bool                IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const;

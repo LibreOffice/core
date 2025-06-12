@@ -80,8 +80,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVisRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( true );
-    // TODO: gridSize and aImageSize depending on the actual image size
-    Size gridSize(140, (nWinStyle & WB_SMALLICON) ? 32 : 70);
+    Size gridSize((nWinStyle & WB_DETAILS) ? 150 : 140, (nWinStyle & WB_DETAILS) ?  26 : 70);
     if(pView->GetDPIScaleFactor() > 1)
     {
       gridSize.setHeight( gridSize.Height() * ( pView->GetDPIScaleFactor()) );
@@ -934,18 +933,10 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
     {
         Point aPos(rRect.TopLeft());
         if (nPaintFlags & PAINTFLAG_HOR_CENTERED)
-        {
             aPos.AdjustX((rRect.GetWidth() - aImageSize.Width()) / 2 );
-            aPos.AdjustY( VER_DIST_BMP_STRING );
-        }
         if (nPaintFlags & PAINTFLAG_VER_CENTERED)
-        {
-            aPos.AdjustX( HOR_DIST_BMP_STRING );
-            Size aSize = pEntry->GetImage().GetSizePixel();
-            aPos.AdjustY((rRect.GetHeight() - aSize.Height()) / 2 );
-        }
+            aPos.AdjustY((rRect.GetHeight() - aImageSize.Height()) / 2 );
         rRenderContext.DrawImage(aPos, pEntry->GetImage());
-
     }
 }
 
@@ -990,10 +981,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 
     bool bNativeOK
         = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire);
-#ifdef MACOSX
-    // tabs don't size to the focusrect and are drawn with an obtrusive blue rectangle
-    bNativeOK = false;
-#endif
     if (bNativeOK)
     {
         ControlState nState = ControlState::ENABLED;
@@ -1005,12 +992,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
             nState |= ControlState::ROLLOVER;
 
         TabitemValue tiValue(aFocusRect, TabBarPosition::Left);
-        ControlPart nPart(ControlPart::Entire);
-#ifdef _WIN32
-        // ControlPart::MenuItem prevents drawing line around tabs under win
-        nPart = ControlPart::MenuItem;
-#endif
-        bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, nPart,
+        bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, ControlPart::Entire,
                                                      aFocusRect, nState, tiValue, OUString());
     }
 
@@ -1266,6 +1248,8 @@ void SvxIconChoiceCtrl_Impl::ShowCursor( bool bShow )
         pView->HideFocus();
         return;
     }
+    tools::Rectangle aRect ( CalcFocusRect( pCursor ) );
+    /*pView->*/ShowFocus( aRect );
 }
 
 bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
@@ -1635,13 +1619,41 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Timer *, void)
     aDocRectChangedIdle.Stop();
 }
 
+// Draw my own focusrect, because the focusrect of the outputdevice has got the inverted color
+// of the background. But what will we see, if the backgroundcolor is gray ? - We will see
+// a gray focusrect on a gray background !!!
+
+void SvxIconChoiceCtrl_Impl::ShowFocus ( tools::Rectangle const & rRect )
+{
+    Color aBkgColor(pView->GetBackground().GetColor());
+    Color aPenColor;
+    sal_uInt16 nColor = ( aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue() ) / 3;
+    if (nColor > 128)
+        aPenColor = COL_BLACK;
+    else
+        aPenColor = COL_WHITE;
+
+    aFocus.aPenColor = aPenColor;
+    aFocus.aRect = rRect;
+}
+
 void SvxIconChoiceCtrl_Impl::DrawFocusRect(vcl::RenderContext& rRenderContext,  SvxIconChoiceCtrlEntry* pEntry)
 {
-    const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
-    tools::Rectangle aRect(CalcFocusRect(pEntry));
-    rRenderContext.SetFillColor(rSettings.GetMenuHighlightColor());
-    rRenderContext.SetTextColor(rSettings.GetMenuHighlightTextColor());
-    rRenderContext.DrawRect(aRect);
+    tools::Rectangle aRect (CalcFocusRect(pEntry));
+    ShowFocus(aRect);
+
+    rRenderContext.SetLineColor(aFocus.aPenColor);
+    rRenderContext.SetFillColor();
+    tools::Polygon aPolygon (aFocus.aRect);
+
+    LineInfo aLineInfo(LineStyle::Dash);
+
+    aLineInfo.SetDashLen(1);
+    aLineInfo.SetDotLen(1);
+    aLineInfo.SetDistance(1);
+    aLineInfo.SetDotCount(1);
+
+    rRenderContext.DrawPolyLine(aPolygon, aLineInfo);
 }
 
 bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const
@@ -1788,12 +1800,6 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
 void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderContext,
                                                 const tools::Rectangle& rRect)
 {
-    const StyleSettings& rStyles = rRenderContext.GetSettings().GetStyleSettings();
-    Color aCol(rStyles.GetHighlightColor());
-    aCol.Merge(rStyles.GetFieldColor(), 50);
-    rRenderContext.SetFillColor(aCol);
-    rRenderContext.DrawRect(rRect);
-
     DecorationView aDecoView(&rRenderContext);
     aDecoView.DrawHighlightFrame(rRect);
 }

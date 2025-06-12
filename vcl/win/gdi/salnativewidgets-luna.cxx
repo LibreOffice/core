@@ -1071,12 +1071,16 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == ControlType::TabItem )
     {
         iPart = TABP_TABITEMLEFTEDGE;
+        rc.bottom--;
 
         OSL_ASSERT( aValue.getType() == ControlType::TabItem );
 
         const TabitemValue& rValue = static_cast<const TabitemValue&>(aValue);
         if (rValue.isBothAligned())
+        {
             iPart = TABP_TABITEMLEFTEDGE;
+            rc.right--;
+        }
         else if (rValue.isLeftAligned())
             iPart = TABP_TABITEMLEFTEDGE;
         else if (rValue.isRightAligned())
@@ -1087,7 +1091,20 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( !(nState & ControlState::ENABLED) )
             iState = TILES_DISABLED;
         else if( nState & ControlState::SELECTED )
+        {
             iState = TILES_SELECTED;
+            // increase the selected tab
+            rc.left-=2;
+            if (rValue.isBothAligned())
+            {
+                if (rValue.isLeftAligned() || rValue.isNotAligned())
+                    rc.right+=2;
+                if (rValue.isRightAligned())
+                    rc.right+=1;
+            }
+            rc.top-=2;
+            rc.bottom+=2;
+        }
         else if( nState & ControlState::ROLLOVER )
             iState = TILES_HOT;
         else if( nState & ControlState::FOCUSED )
@@ -1100,25 +1117,10 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if (bCanUseThemeColors || bUseDarkMode)
         {
             Color aColor;
-            switch (iState)
-            {
-                case TILES_NORMAL:
-                    aColor = Application::GetSettings().GetStyleSettings().GetActiveTabColor();
-                    break;
-                case TILES_DISABLED:
-                    aColor = Application::GetSettings().GetStyleSettings().GetInactiveTabColor();
-                    break;
-                case TILES_SELECTED:
-                    aColor = Application::GetSettings().GetStyleSettings().GetAccentColor();
-                    break;
-                case TILES_HOT:
-                    aColor = Application::GetSettings().GetStyleSettings().GetMenuBarRolloverColor();
-                    break;
-                case TTILES_FOCUSED:
-                    aColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
-                    break;
-            }
-
+            if (iState == TILES_SELECTED)
+                aColor = Application::GetSettings().GetStyleSettings().GetActiveTabColor();
+            else
+                aColor = Application::GetSettings().GetStyleSettings().GetInactiveTabColor();
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
                                                      aColor.GetGreen(),
                                                      aColor.GetBlue())));
@@ -1137,8 +1139,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             apt[2].y = rc.top;
             apt[3].x = rc.right;
             apt[3].y = rc.bottom - 1;
-            if (nPart == ControlPart::Entire) //only for horizontal tabs
-                Polyline(hDC, apt, SAL_N_ELEMENTS(apt));
+            Polyline(hDC, apt, SAL_N_ELEMENTS(apt));
             return true;
         }
 
@@ -1584,6 +1585,8 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             }
             break;
         case ControlType::TabBody:
+            hTheme = getThemeHandle(mhWnd, L"Tab", mWinSalGraphicsImplBase);
+            break;
         case ControlType::TabPane:
         case ControlType::TabItem:
             hTheme = getThemeHandle(mhWnd, L"Tab", mWinSalGraphicsImplBase);
