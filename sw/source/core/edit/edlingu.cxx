@@ -982,7 +982,6 @@ bool SwEditShell::GetGrammarCorrection(
                 SwDocShell* pShell = mxDoc->GetDocShell();
                 if (!pShell)
                     return bRes;
-                rtl::Reference< SwXTextDocument > xDoc = pShell->GetBaseModel();
 
                 // Expand the string:
                 const ModelToViewHelper aConversionMap(*pNode, GetLayout());
@@ -997,7 +996,7 @@ bool SwEditShell::GetGrammarCorrection(
                 const sal_Int32 nEndOfSentence = aConversionMap.ConvertToViewPosition( pWrong->getSentenceEnd( nBegin ) );
 
                 rResult = xGCIterator->checkSentenceAtPosition(
-                        cppu::getXWeak(xDoc.get()), xFlatPara, aExpandText, lang::Locale(), nStartOfSentence,
+                        pShell->GetModel(), xFlatPara, aExpandText, lang::Locale(), nStartOfSentence,
                         nEndOfSentence == COMPLETE_STRING ? aExpandText.getLength() : nEndOfSentence,
                         rErrorPosInText );
                 bRes = true;

@@ -1576,8 +1576,7 @@ void SwHTMLParser::NotifyMacroEventRead()
     SwDocShell *pDocSh = m_xDoc->GetDocShell();
     if (!pDocSh)
         return;
-    rtl::Reference<SwXTextDocument> const xModel(pDocSh->GetBaseModel());
-    comphelper::DocumentInfo::notifyMacroEventRead(static_cast<SfxBaseModel*>(xModel.get()));
+    comphelper::DocumentInfo::notifyMacroEventRead(pDocSh->GetModel());
     m_bNotifyMacroEventRead = true;
 }
 

@@ -628,7 +628,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             {
                                 if (const SwDocShell* pShell = GetDocShell())
                                 {
-                                    rtl::Reference< SwXTextDocument > xDoc = pShell->GetBaseModel();
+                                    uno::Reference<uno::XInterface> xDoc = pShell->GetModel();
                                     // Expand the string:
                                     const ModelToViewHelper aConversionMap(*pNd->GetTextNode(), pLayout);
                                     const OUString& aExpandText = aConversionMap.getViewText();
@@ -643,7 +643,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     {
                                         aConversionMap.ConvertToViewPosition( nBeginGrammarCheck );
                                         aResult = xGCIterator->checkSentenceAtPosition(
-                                                cppu::getXWeak(xDoc.get()), xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
+                                                xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 
                                         lcl_syncGrammarError( *pNd->GetTextNode(), aResult, aConversionMap );
 

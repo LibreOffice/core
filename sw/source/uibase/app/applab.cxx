@@ -359,10 +359,9 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         //fill the user fields
         if(!bLabel)
         {
-            rtl::Reference< SwXTextDocument > xModel = pSh->GetView().GetDocShell()->GetBaseModel();
             OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
             SwLabDlgMethod SwLabDlgUpdateFieldInformation = pDialogFactory->GetSwLabDlgStaticMethod ();
-            SwLabDlgUpdateFieldInformation(static_cast<SfxBaseModel*>(xModel.get()), rItem);
+            SwLabDlgUpdateFieldInformation(pSh->GetView().GetDocShell()->GetModel(), rItem);
         }
 
         pFieldMgr->SetEvalExpFields(true);

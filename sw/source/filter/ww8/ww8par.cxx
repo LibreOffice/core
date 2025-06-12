@@ -6780,8 +6780,7 @@ void SwWW8ImplReader::NotifyMacroEventRead()
         return;
     if (SwDocShell* pShell = m_rDoc.GetDocShell())
     {
-        uno::Reference<frame::XModel> const xModel(static_cast<SfxBaseModel*>(pShell->GetBaseModel().get()));
-        comphelper::DocumentInfo::notifyMacroEventRead(xModel);
+        comphelper::DocumentInfo::notifyMacroEventRead(pShell->GetModel());
         m_bNotifyMacroEventRead = true;
     }
 }

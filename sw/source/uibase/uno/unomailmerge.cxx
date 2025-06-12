@@ -806,7 +806,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     if (DBMGR_MERGE_SHELL == nMergeType)
     {
-        return Any( Reference<XModel>(static_cast<SfxBaseModel*>(aMergeDesc.pMailMergeConfigItem->GetTargetView()->GetDocShell()->GetBaseModel().get())) );
+        return Any(aMergeDesc.pMailMergeConfigItem->GetTargetView()->GetDocShell()->GetModel());
     }
     else
         return Any( true );
