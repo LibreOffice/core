@@ -951,7 +951,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf166428)
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    // Without applied fix, the series were not merged to one stock chart serie and therefore
+    // Without applied fix, the series were not merged to one stock chart series and therefore
     // only role "values-y" existed.
     Reference<chart2::data::XDataSequence> xDataSeq
         = getDataSequenceFromDocByRole(xChartDoc, u"values-min");
