@@ -2793,7 +2793,7 @@ cmd/32/tabletransformdialog.png cmd/32/transformdialog.png
 cmd/lc_tabletransformdialog.png cmd/lc_transformdialog.png
 cmd/sc_tabletransformdialog.png cmd/sc_transformdialog.png
 
-# templatedialog8, *1
+### templatedialog8 / Page Style
 res/organizer.png cmd/lc_browseview.png
 res/page.png cmd/lc_attributepagesize.png
 res/area.png cmd/lc_backgroundcolor.png
@@ -2804,8 +2804,31 @@ res/borders.png cmd/lc_borderdialog.png
 res/columns.png cmd/lc_pagecolumntype.png
 res/footnotes.png cmd/lc_footnotedialog.png
 res/textgrid.png cmd/lc_gridvisible.png
+
+### templatedialog1 / Character Style
+# res/organizer.png cmd/lc_browseview.png
 res/font.png cmd/lc_fontdialog.png
 res/fonteffect.png cmd/lc_text_marquee.png
 res/position.png cmd/lc_fontwork.png
 res/asianlayout.png cmd/lc_textdirectiontoptobottom.png
 res/background.png cmd/lc_color.png
+# res/borders.png cmd/lc_borderdialog.png
+
+### templatedialog2 / Paragraph Style
+# res/organizer.png cmd/lc_browseview.png
+# res/font.png cmd/lc_fontdialog.png
+# res/fonteffect.png cmd/lc_text_marquee.png
+res/textflow.png cmd/lc_hyphenate.png
+res/alignment.png cmd/lc_alignblock.png
+res/indents.png cmd/lc_incrementindent.png
+# res/position.png cmd/lc_fontwork.png
+res/dropcaps.png cmd/lc_smallcaps.png
+res/highlighting.png cmd/lc_backcolor.png
+# res/area.png cmd/lc_backgroundcolor.png
+# res/transparence.png cmd/lc_graftransparence.png
+# res/borders.png cmd/lc_borderdialog.png
+res/tabs.png cmd/lc_hangingindent.png
+res/outline.png cmd/lc_setoutline.png
+res/condition.png cmd/lc_developmenttoolsdockingwindow.png
+res/asiantypo.png cmd/lc_defaultcharstyle.png
+# res/asianlayout.png cmd/lc_textdirectiontoptobottom.png

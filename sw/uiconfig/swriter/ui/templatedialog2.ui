@@ -124,10 +124,8 @@
             <property name="vexpand">True</property>
             <property name="tab-pos">left</property>
             <property name="scrollable">True</property>
-            <property name="enable-popup">True</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -136,18 +134,47 @@
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="organizer">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="organizer">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|organizer">General</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imOrganizer">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/organizer.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbOrganizer"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbOrganizer">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|organizer">General</property>
+                    <property name="mnemonic-widget">organizer</property>
+                    <accessibility>
+                      <relation type="label-for" target="imOrganizer"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="tab-fill">False</property>
               </packing>
             </child>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -159,10 +186,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="font">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="font">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|font">Font</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imFont">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/font.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbFont"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbFont">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|font">Font</property>
+                    <property name="mnemonic-widget">font</property>
+                    <accessibility>
+                      <relation type="label-for" target="imFont"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -171,7 +228,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -183,10 +240,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="fonteffect">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="fonteffect">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|fonteffect">Font Effects</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imFontEffect">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/fonteffect.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbFontEffect"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbFontEffect">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|fonteffect">Font Effects</property>
+                    <property name="mnemonic-widget">fonteffect</property>
+                    <accessibility>
+                      <relation type="label-for" target="imFontEffect"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -195,7 +282,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -207,10 +294,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="textflow">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="textflow">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|textflow">Text Flow</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imTextflow">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/textflow.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbTextflow"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbTextflow">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|textflow">Text Flow</property>
+                    <property name="mnemonic-widget">textflow</property>
+                    <accessibility>
+                      <relation type="label-for" target="imTextflow"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -219,7 +336,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -231,10 +348,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="alignment">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="alignment">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|alignment">Alignment</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imAlignment">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/alignment.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbAlignment"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbAlignment">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|alignment">Alignment</property>
+                    <property name="mnemonic-widget">alignment</property>
+                    <accessibility>
+                      <relation type="label-for" target="imAlignment"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -243,7 +390,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -255,10 +402,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="indents">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="indents">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|indents">Indents &amp; Spacing</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imIndents">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/indents.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbIndents"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbIndents">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|indents">Indents &amp; Spacing</property>
+                    <property name="mnemonic-widget">indents</property>
+                    <accessibility>
+                      <relation type="label-for" target="imIndents"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -267,7 +444,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -279,10 +456,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="position">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="position">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|position">Position</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imPosition">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/position.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbPosition"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbPosition">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|position">Position</property>
+                    <property name="mnemonic-widget">position</property>
+                    <accessibility>
+                      <relation type="label-for" target="imPosition"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">6</property>
@@ -291,7 +498,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -303,10 +510,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="dropcaps">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="dropcaps">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|dropcaps">Drop Caps</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imDropcaps">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/dropcaps.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbDropcaps"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbDropcaps">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|dropcaps">Drop Caps</property>
+                    <property name="mnemonic-widget">dropcaps</property>
+                    <accessibility>
+                      <relation type="label-for" target="imDropcaps"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">7</property>
@@ -315,7 +552,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -327,10 +564,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="highlighting">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="highlighting">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|highlighting">Highlighting</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imHighlighting">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/highlighting.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbHighlighting"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbHighlighting">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|highlighting">Highlighting</property>
+                    <property name="mnemonic-widget">highlighting</property>
+                    <accessibility>
+                      <relation type="label-for" target="imHighlighting"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">8</property>
@@ -339,7 +606,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -351,10 +618,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="area">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="area">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|area">Area</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imArea">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/area.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbArea"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbArea">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|area">Area</property>
+                    <property name="mnemonic-widget">area</property>
+                    <accessibility>
+                      <relation type="label-for" target="imArea"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">9</property>
@@ -363,7 +660,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -375,10 +672,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="transparence">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="transparence">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|transparence">Transparency</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imTransparence">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/transparence.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbTransparence"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbTransparence">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|transparence">Transparency</property>
+                    <property name="mnemonic-widget">transparence</property>
+                    <accessibility>
+                      <relation type="label-for" target="imTransparence"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">10</property>
@@ -387,7 +714,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -399,10 +726,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="borders">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="borders">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|borders">Borders</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imBorders">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/borders.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbBorders"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbBorders">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|borders">Borders</property>
+                    <property name="mnemonic-widget">borders</property>
+                    <accessibility>
+                      <relation type="label-for" target="imBorders"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">11</property>
@@ -411,7 +768,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -423,10 +780,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="tabs">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="tabs">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|tabs">Tabs</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imTabs">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/tabs.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbTabs"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbTabs">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|tabs">Tabs</property>
+                    <property name="mnemonic-widget">tabs</property>
+                    <accessibility>
+                      <relation type="label-for" target="imTabs"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">12</property>
@@ -435,7 +822,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -447,11 +834,41 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="outline">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="outline">
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="templatedialog2|outline">Set outline level, list style and line numbering for paragraph style.</property>
-                <property name="label" translatable="yes" context="templatedialog2|outline">Outline &amp; List</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imOutline">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/outline.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbOutline"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbOutline">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes" context="templatedialog2|outline">Set outline level, list style and line numbering for paragraph style.</property>
+                    <property name="label" translatable="yes" context="templatedialog2|outline">Outline &amp; List</property>
+                    <property name="mnemonic-widget">outline</property>
+                    <accessibility>
+                      <relation type="label-for" target="imOutline"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">13</property>
@@ -460,7 +877,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -472,10 +889,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="condition">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="condition">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|condition">Condition</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imCondition">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/condition.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbCondition"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbCondition">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|condition">Condition</property>
+                    <property name="mnemonic-widget">condition</property>
+                    <accessibility>
+                      <relation type="label-for" target="imCondition"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">14</property>
@@ -484,7 +931,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -496,10 +943,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="asiantypo">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="asiantypo">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|asiantypo">Asian Typography</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imAsiantypo">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/asiantypo.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbAsiantypo"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbAsiantypo">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|asiantypo">Asian Typography</property>
+                    <property name="mnemonic-widget">asiantypo</property>
+                    <accessibility>
+                      <relation type="label-for" target="imAsiantypo"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">15</property>
@@ -508,7 +985,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -520,10 +997,40 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="asianlayout">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="asianlayout">
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="templatedialog2|asianlayout">Asian Layout</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imAsianLayout">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">res/asianlayout.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbAsianLayout"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbAsianLayout">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="templatedialog2|asianlayout">Asian Layout</property>
+                    <property name="mnemonic-widget">asianlayout</property>
+                    <accessibility>
+                      <relation type="label-for" target="imAsianLayout"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">16</property>
