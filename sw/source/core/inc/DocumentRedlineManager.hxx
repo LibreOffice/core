@@ -168,6 +168,8 @@ private:
     void PreAppendInsertRedline(AppendRedlineContext& rCtx);
     void PreAppendDeleteRedline(AppendRedlineContext& rCtx);
     void PreAppendFormatRedline(AppendRedlineContext& rCtx);
+    /// Append a next redline partially on top of another existing redline.
+    void PreAppendForeignRedline(AppendRedlineContext& rCtx);
 
     DocumentRedlineManager(DocumentRedlineManager const&) = delete;
     DocumentRedlineManager& operator=(DocumentRedlineManager const&) = delete;
