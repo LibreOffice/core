@@ -2006,12 +2006,16 @@ OUString JSMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rR
                                weld::Placement /*ePlace*/)
 {
     // Do not block with SalInstanceMenu::popup_at_rect(pParent, rRect, ePlace);
-
-    // we find position based on parent widget id and row text inside TreeView for context menu
     OUString sCancelId;
-    weld::TreeView* pTree = dynamic_cast<weld::TreeView*>(pParent);
-    if (pTree)
+    if (weld::IconView* pIconView = dynamic_cast<weld::IconView*>(pParent); pIconView)
     {
+        sCancelId = pIconView->get_selected_text();
+        if (sCancelId.isEmpty())
+            SAL_WARN("vcl", "No entry detected in JSMenu::popup_at_rect");
+    }
+    else if (weld::TreeView* pTree = dynamic_cast<weld::TreeView*>(pParent); pTree)
+    {
+        // we find position based on parent widget id and row text inside TreeView for context menu
         std::unique_ptr<weld::TreeIter> itEntry(pTree->make_iterator());
         if (pTree->get_dest_row_at_pos(rRect.Center(), itEntry.get(), false, false))
             sCancelId = pTree->get_text(*itEntry);
