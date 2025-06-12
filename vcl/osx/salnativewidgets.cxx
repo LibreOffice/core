@@ -561,7 +561,7 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
         case ControlType::Pushbutton:
             {
                 NSControlSize eSizeKind = NSControlSizeRegular;
-                NSBezelStyle eBezelStyle = NSBezelStylePush;
+                NSBezelStyle eBezelStyle = NSBezelStyleRounded;
 
                 PushButtonValue const *pPBVal = aValue.getType() == ControlType::Pushbutton ?
                                                 static_cast<PushButtonValue const *>(&aValue) : nullptr;
@@ -575,12 +575,6 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                 else if ((pPBVal && pPBVal->mbSingleLine) || rc.size.height < PUSH_BUTTON_NORMAL_HEIGHT * 3 / 2)
                 {
                     GetThemeMetric(kThemeMetricPushButtonHeight, &nPaintHeight);
-                }
-                else if (pPBVal && !pPBVal->mbSingleLine)
-                {
-                    // If not a single line button, allow the button to expand
-                    // its height
-                    eBezelStyle = NSBezelStyleFlexiblePush;
                 }
                 else
                 {
@@ -608,7 +602,7 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                 else
                     [pBtn setKeyEquivalent: @""];
 
-                if (eBezelStyle == NSBezelStylePush || eBezelStyle == NSBezelStyleFlexiblePush)
+                if (eBezelStyle == NSBezelStyleRounded)
                 {
                     int nMargin = RoundedMargin[eSizeKind];
                     rc.origin.x -= nMargin;

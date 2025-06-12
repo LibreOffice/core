@@ -339,12 +339,7 @@ struct VerticalTabPageData
 
 VerticalTabControl::VerticalTabControl(vcl::Window* pParent, bool bWithIcons)
     : VclHBox(pParent)
-    , m_xChooser(VclPtr<SvtIconChoiceCtrl>::Create(this, WB_3DLOOK | (bWithIcons ?  WB_ICON : WB_SMALLICON) |
-#ifdef MACOSX
-                                                         WB_NOBORDER |
-#else
-                                                         WB_BORDER |
-#endif
+    , m_xChooser(VclPtr<SvtIconChoiceCtrl>::Create(this, WB_3DLOOK | (bWithIcons ?  WB_ICON : WB_SMALLICON) | WB_BORDER |
                                                          WB_NOCOLUMNHEADER |
                                                          WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN |
                                                          WB_NOHSCROLL))

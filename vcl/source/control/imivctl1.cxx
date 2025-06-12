@@ -962,12 +962,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     vcl::Font aNewFont(rRenderContext.GetFont());
     if (bSelected)
-#ifdef MACOSX
-        // On macOS, selected tabs are drawn as default push buttons
-        aNewFont.SetColor(rSettings.GetDefaultActionButtonPressedRolloverTextColor());
-#else
         aNewFont.SetColor(rSettings.GetTabHighlightTextColor());
-#endif
     else if (bMouseHovered)
         aNewFont.SetColor(rSettings.GetTabRolloverTextColor());
     else
@@ -994,48 +989,14 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     tools::Rectangle aFocusRect(CalcFocusRect(pEntry));
 
     bool bNativeOK
-#ifdef MACOSX
-        = rRenderContext.IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire);
-#else
         = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire);
+#ifdef MACOSX
+    // tabs don't size to the focusrect and are drawn with an obtrusive blue rectangle
+    bNativeOK = false;
 #endif
     if (bNativeOK)
     {
         ControlState nState = ControlState::ENABLED;
-        ControlPart nPart(ControlPart::Entire);
-
-#ifdef MACOSX
-        if (bSelected)
-        {
-            // Related: tdf#163008 draw the selected tab using a push button
-            // On macOS, more closely match the vertical tab style of the
-            // sidebar in the System Settings application. As of macOS Sequoia,
-            // the sidebar only shows the default style push button for the
-            // selected tab. The unselected tabs are only text and images so
-            // no native control needs to be drawn for unselected tabs.
-            nState |= ControlState::DEFAULT;
-
-            // Allow the native push button to expand its height to match
-            // the focus rectangle's height.
-            PushButtonValue aControlValue;
-            aControlValue.mbSingleLine = false;
-            aControlValue.m_bFlatButton = true;
-
-            // Eliminate artifacts when this entry becomes unselected by
-            // making the push button slightly narrower than the focus
-            // rectangle so that there is no antialiased pixels drawn
-            // outside the focus rectangle.
-            tools::Rectangle aButtonRect(aFocusRect);
-            if (aButtonRect.GetWidth() > 2)
-            {
-                aButtonRect.SetLeft(aButtonRect.Left() + 1);
-                aButtonRect.SetRight(aButtonRect.Right() - 1);
-            }
-
-            bNativeOK = rRenderContext.DrawNativeControl(ControlType::Pushbutton, nPart,
-                                                         aButtonRect, nState, aControlValue, OUString());
-        }
-#else
         if (bSelected)
             nState |= ControlState::SELECTED;
         if (pEntry->IsFocused())
@@ -1044,13 +1005,13 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
             nState |= ControlState::ROLLOVER;
 
         TabitemValue tiValue(aFocusRect, TabBarPosition::Left);
+        ControlPart nPart(ControlPart::Entire);
 #ifdef _WIN32
         // ControlPart::MenuItem prevents drawing line around tabs under win
         nPart = ControlPart::MenuItem;
 #endif
         bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, nPart,
                                                      aFocusRect, nState, tiValue, OUString());
-#endif
     }
 
     if (!bNativeOK)
