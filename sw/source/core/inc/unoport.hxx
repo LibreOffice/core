@@ -295,9 +295,6 @@ public:
         bool const bIsStart);
 
     /// @throws std::exception
-    static css::uno::Any  GetPropertyValue(
-            std::u16string_view PropertyName, SwRangeRedline const& rRedline);
-    /// @throws std::exception
     static css::uno::Sequence< css::beans::PropertyValue > CreateRedlineProperties(
                 SwRangeRedline const& rRedline, bool const bIsStart);
 
