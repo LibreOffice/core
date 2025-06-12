@@ -443,11 +443,11 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
     // under the tree node "Metadata Reference"
     if (SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current()))
     {
-        rtl::Reference<SwXTextDocument> xDocumentMetadataAccess(pDocSh->GetBaseModel());
-        const uno::Reference<rdf::XRepository> xRepo = xDocumentMetadataAccess->getRDFRepository();
+        rtl::Reference<SwXTextDocument> pSwXTextDocument(pDocSh->GetBaseModel());
+        const uno::Reference<rdf::XRepository> xRepo = pSwXTextDocument->getRDFRepository();
         const css::uno::Reference<css::rdf::XResource> xSubject(rSource, uno::UNO_QUERY);
         std::map<OUString, OUString> xStatements
-            = SwRDFHelper::getStatements(pDocSh->GetBaseModel(), xRepo->getGraphNames(), xSubject);
+            = SwRDFHelper::getStatements(pSwXTextDocument, xRepo->getGraphNames(), xSubject);
         for (const auto& pair : xStatements)
             aCurNode.children.push_back(SimplePropToTreeNode(pair.first, uno::Any(pair.second)));
     }
@@ -594,9 +594,8 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
     InsertValues(static_cast<cppu::OWeakObject*>(xRange.get()), aIsDefined, aCharDFNode, false,
                  aHiddenProperties, aFieldsNode);
 
-    rtl::Reference<SwXTextDocument> xStyleFamiliesSupplier(rDocSh.GetBaseModel());
-    uno::Reference<container::XNameAccess> xStyleFamilies
-        = xStyleFamiliesSupplier->getStyleFamilies();
+    rtl::Reference<SwXTextDocument> pSwTextDocument(rDocSh.GetBaseModel());
+    uno::Reference<container::XNameAccess> xStyleFamilies = pSwTextDocument->getStyleFamilies();
     OUString sCurrentCharStyle, sCurrentParaStyle, sDisplayName;
 
     uno::Reference<container::XNameAccess> xStyleFamily(
@@ -655,9 +654,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                  aParaNode.children.end()); // Parent style should be first then children
 
     // Collect bookmarks at character position
-    rtl::Reference<SwXTextDocument> xBookmarksSupplier(rDocSh.GetBaseModel());
-
-    uno::Reference<container::XIndexAccess> xBookmarks(xBookmarksSupplier->getBookmarks(),
+    uno::Reference<container::XIndexAccess> xBookmarks(pSwTextDocument->getBookmarks(),
                                                        uno::UNO_QUERY);
     for (sal_Int32 i = 0; i < xBookmarks->getCount(); ++i)
     {
@@ -690,9 +687,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
     }
 
     // Collect sections at character position
-    rtl::Reference<SwXTextDocument> xTextSectionsSupplier(rDocSh.GetBaseModel());
-
-    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(),
+    uno::Reference<container::XIndexAccess> xTextSections(pSwTextDocument->getTextSections(),
                                                           uno::UNO_QUERY);
     for (sal_Int32 i = 0; i < xTextSections->getCount(); ++i)
     {

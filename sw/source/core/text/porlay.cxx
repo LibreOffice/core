@@ -919,8 +919,6 @@ static OUString getBookmarkType(const SwTextNode& rNode, sw::mark::Bookmark* pBo
         const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc, pBookmark);
         if (const SwDocShell* pShell = rDoc.GetDocShell())
         {
-            rtl::Reference<SwXTextDocument> xModel = pShell->GetBaseModel();
-
             static uno::Reference< uno::XComponentContext > xContext(
                 ::comphelper::getProcessComponentContext());
 
