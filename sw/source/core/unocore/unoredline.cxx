@@ -274,7 +274,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( std::u16string_view rPropertyName
     else if (rPropertyName == UNO_NAME_REDLINE_COMMENT)
         aRet <<= rRedline.GetComment();
     else if(rPropertyName == UNO_NAME_REDLINE_DESCRIPTION)
-        aRet <<= const_cast<SwRangeRedline&>(rRedline).GetDescr();
+        aRet <<= rRedline.GetDescr();
     else if(rPropertyName == UNO_NAME_REDLINE_TYPE)
     {
         aRet <<= SwRedlineTypeToOUString(rRedline.GetType());
@@ -315,7 +315,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_COMMENT;
     pRet[nPropIdx++].Value <<= rRedline.GetComment();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_DESCRIPTION;
-    pRet[nPropIdx++].Value <<= const_cast<SwRangeRedline&>(rRedline).GetDescr();
+    pRet[nPropIdx++].Value <<= rRedline.GetDescr();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_TYPE;
     pRet[nPropIdx++].Value <<= SwRedlineTypeToOUString(rRedline.GetType());
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_IDENTIFIER;

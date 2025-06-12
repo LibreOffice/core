@@ -278,7 +278,7 @@ public:
 
        bSimplified = simplified shortened text to show deletions on margin
      */
-    SW_DLLPUBLIC OUString GetDescr(bool bSimplified = false);
+    SW_DLLPUBLIC OUString GetDescr(bool bSimplified = false) const;
 
     bool operator<( const SwRangeRedline& ) const;
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

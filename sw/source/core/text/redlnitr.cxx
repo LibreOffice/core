@@ -1144,7 +1144,7 @@ bool SwRedlineItr::CheckLine(
                 // start to collect text of invisible redlines for ChangesInMargin layout
                 if (rRedlineText.isEmpty() && !pRedline->IsVisible())
                 {
-                    rRedlineText = const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true);
+                    rRedlineText = pRedline->GetDescr(/*bSimplified=*/true);
                     pPrevRedline = pRedline;
                     isExtendText = true;
                 }
@@ -1153,7 +1153,7 @@ bool SwRedlineItr::CheckLine(
                 else if (pPrevRedline && !pRedline->IsVisible() &&
                     *pRedline->Start() == *pPrevRedline->Start() && *pRedline->End() == *pPrevRedline->End() )
                 {
-                    OUString sExtendText(const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true));
+                    OUString sExtendText(pRedline->GetDescr(/*bSimplified=*/true));
                     if (!sExtendText.isEmpty())
                     {
                         if (rRedlineText.getLength() < 12)
@@ -1161,7 +1161,7 @@ bool SwRedlineItr::CheckLine(
                             // TODO: remove extra space from GetDescr(true),
                             // but show deletion of paragraph or line break
                             rRedlineText = rRedlineText +
-                                    const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true).subView(1);
+                                    pRedline->GetDescr(/*bSimplified=*/true).subView(1);
                         }
                         else
                             rRedlineText = OUString::Concat(rRedlineText.subView(0, rRedlineText.getLength() - 3)) + "...";
