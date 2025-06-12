@@ -414,23 +414,13 @@ void GetField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     rJsonWriter.put("name", rRefmark.GetRefName().toString());
 }
 
-/// Implements getCommandValues(".uno:ExtractDocumentStructures").
-///
-/// Parameters:
-///
-/// - filter: To filter what document structure types to extract
-///   now, only contentcontrol is supported.
-void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
-                     const std::map<OUString, OUString>& rArguments,
-                     const uno::Reference<container::XIndexAccess>& xContentControls)
+/// Implements getCommandValues(".uno:ExtractDocumentStructures") for content controls
+void GetDocStructureContentControls(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell)
 {
-    auto it = rArguments.find(u"filter"_ustr);
-    if (it != rArguments.end())
-    {
-        // If filter is present but we are filtering not to contentcontrols
-        if (!it->second.equals(u"contentcontrol"_ustr))
-            return;
-    }
+    uno::Reference<container::XIndexAccess> xContentControls
+        = pDocShell->GetBaseModel()->getContentControls();
+    if (!xContentControls)
+        return;
 
     int iCCcount = xContentControls->getCount();
 
@@ -530,17 +520,13 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
     }
 }
 
-void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
-                           const std::map<OUString, OUString>& rArguments,
-                           const uno::Reference<container::XIndexAccess>& xEmbeddeds)
+/// Implements getCommandValues(".uno:ExtractDocumentStructures") for charts
+void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell)
 {
-    auto it = rArguments.find(u"filter"_ustr);
-    if (it != rArguments.end())
-    {
-        // If filter is present but we are filtering not to charts
-        if (!it->second.equals(u"charts"_ustr))
-            return;
-    }
+    uno::Reference<container::XIndexAccess> xEmbeddeds(
+        pDocShell->GetBaseModel()->getEmbeddedObjects(), uno::UNO_QUERY);
+    if (!xEmbeddeds)
+        return;
 
     sal_Int32 nEOcount = xEmbeddeds->getCount();
 
@@ -648,25 +634,11 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShe
     }
 }
 
-void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell,
-                             const std::map<OUString, OUString>& rArguments)
+/// Implements getCommandValues(".uno:ExtractDocumentStructures") for document properties
+void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell)
 {
-    auto it = rArguments.find(u"filter"_ustr);
-    if (it != rArguments.end())
-    {
-        // If filter is present but we are filtering not to document properties
-        if (!it->second.equals(u"docprops"_ustr))
-            return;
-    }
-
-    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropsSupplier(
-        pDocShell->GetModel(), uno::UNO_QUERY);
-    if (!xDocumentPropsSupplier.is())
-        return;
-
-    //uno::Reference<document::XDocumentProperties> xDocProps();
     uno::Reference<document::XDocumentProperties2> xDocProps(
-        xDocumentPropsSupplier->getDocumentProperties(), uno::UNO_QUERY);
+        pDocShell->GetBaseModel()->getDocumentProperties(), uno::UNO_QUERY);
     if (!xDocProps.is())
         return;
 
@@ -850,6 +822,30 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
     }
 }
 
+/// Implements getCommandValues(".uno:ExtractDocumentStructures").
+///
+/// Parameters:
+///
+/// - filter: To filter what document structure types to extract
+void GetDocStructure(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell,
+                     const std::map<OUString, OUString>& rArguments)
+{
+    auto commentsNode = rJsonWriter.startNode("DocStructure");
+
+    OUString filter;
+    if (auto it = rArguments.find(u"filter"_ustr); it != rArguments.end())
+        filter = it->second;
+
+    if (filter.isEmpty() || filter == "charts")
+        GetDocStructureCharts(rJsonWriter, pDocShell);
+
+    if (filter.isEmpty() || filter == "contentcontrol")
+        GetDocStructureContentControls(rJsonWriter, pDocShell);
+
+    if (filter.isEmpty() || filter == "docprops")
+        GetDocStructureDocProps(rJsonWriter, pDocShell);
+}
+
 /// Implements getCommandValues(".uno:Sections").
 ///
 /// Parameters:
@@ -942,17 +938,7 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     }
     else if (o3tl::starts_with(rCommand, aExtractDocStructure))
     {
-        auto commentsNode = rJsonWriter.startNode("DocStructure");
-
-        uno::Reference<container::XIndexAccess> xEmbeddeds(getEmbeddedObjects(), uno::UNO_QUERY);
-        if (xEmbeddeds.is())
-        {
-            GetDocStructureCharts(rJsonWriter, m_pDocShell, aMap, xEmbeddeds);
-        }
-
-        uno::Reference<container::XIndexAccess> xContentControls = getContentControls();
-        GetDocStructure(rJsonWriter, m_pDocShell, aMap, xContentControls);
-        GetDocStructureDocProps(rJsonWriter, m_pDocShell, aMap);
+        GetDocStructure(rJsonWriter, m_pDocShell, aMap);
     }
     else if (o3tl::starts_with(rCommand, aLayout))
     {
