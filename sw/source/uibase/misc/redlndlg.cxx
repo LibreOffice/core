@@ -562,7 +562,7 @@ void SwRedlineAcceptDlg::Activate()
             bool bShowDeletedTextAsComment = bIsShowChangesInMargin &&
                 RedlineType::Delete == rRedln.GetType() && rRedln.GetComment().isEmpty();
             const OUString sComment = bShowDeletedTextAsComment
-                    ? const_cast<SwRangeRedline&>(rRedln).GetDescr()
+                    ? rRedln.GetDescr()
                     : rRedln.GetComment();
             if (pParent->xTLBParent)
             {
@@ -1011,7 +1011,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         bool bShowDeletedTextAsComment = bIsShowChangesInMargin &&
                 RedlineType::Delete == rRedln.GetType() && rRedln.GetComment().isEmpty();
         const OUString sComment = bShowDeletedTextAsComment
-                    ? const_cast<SwRangeRedline&>(rRedln).GetDescr()
+                    ? rRedln.GetDescr()
                     : rRedln.GetComment();
         pRedlineParent->sComment = sComment.replace('\n', ' ');
         m_RedlineParents.insert(m_RedlineParents.begin() + i,

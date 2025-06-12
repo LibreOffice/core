@@ -2390,34 +2390,36 @@ const SwRedlineData & SwRangeRedline::GetRedlineData(const sal_uInt16 nPos) cons
     return *pCur;
 }
 
-OUString SwRangeRedline::GetDescr(bool bSimplified)
+static OUString getRedlineDescrFromPaM(const SwPaM& rPaM, bool bSimplified)
+{
+    if (const SwTextNode* pTextNode = rPaM.GetPointNode().GetTextNode())
+    {
+        if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(
+                rPaM.GetPoint()->GetContentIndex() - 1, ::sw::GetTextAttrMode::Default))
+        {
+            OUString result = pTextAttr->GetFormatField().GetField()->GetFieldName();
+            return bSimplified ? result
+                               : SwResId(STR_START_QUOTE) + result + SwResId(STR_END_QUOTE);
+        }
+    }
+    return DenoteSpecialCharacters(rPaM.GetText().replace('\n', ' '), /*bQuoted=*/!bSimplified);
+}
+
+OUString SwRangeRedline::GetDescr(bool bSimplified) const
 {
     // get description of redline data (e.g.: "insert $1")
     OUString aResult = GetRedlineData().GetDescr();
 
-    SwPaM * pPaM = nullptr;
-    bool bDeletePaM = false;
-
+    OUString sDescr;
     // if this redline is visible the content is in this PaM
     if (!m_oContentSect.has_value())
     {
-        pPaM = this;
+        sDescr = getRedlineDescrFromPaM(*this, bSimplified);
     }
     else // otherwise it is saved in pContentSect
     {
-        pPaM = new SwPaM( m_oContentSect->GetNode(), *m_oContentSect->GetNode().EndOfSectionNode() );
-        bDeletePaM = true;
-    }
-
-    OUString sDescr = DenoteSpecialCharacters(pPaM->GetText().replace('\n', ' '), /*bQuoted=*/!bSimplified);
-    if (const SwTextNode *pTextNode = pPaM->GetPointNode().GetTextNode())
-    {
-        if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->GetContentIndex() - 1, ::sw::GetTextAttrMode::Default))
-        {
-            sDescr = ( bSimplified ? u""_ustr : SwResId(STR_START_QUOTE) )
-                + pTextAttr->GetFormatField().GetField()->GetFieldName()
-                + ( bSimplified ? u""_ustr : SwResId(STR_END_QUOTE) );
-        }
+        const SwNode& rNode = m_oContentSect->GetNode();
+        sDescr = getRedlineDescrFromPaM(SwPaM(rNode, *rNode.EndOfSectionNode()), bSimplified);
     }
 
     // replace $1 in description by description of the redlines text
@@ -2438,9 +2440,6 @@ OUString SwRangeRedline::GetDescr(bool bSimplified)
         if (nPos > 5)
             aResult = aTmpStr.copy(0, nPos + SwResId(STR_LDOTS).getLength());
     }
-
-    if (bDeletePaM)
-        delete pPaM;
 
     return aResult;
 }
