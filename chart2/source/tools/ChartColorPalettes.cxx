@@ -68,7 +68,7 @@ void ChartColorPalettes::sendItemInfo() const
 
     tools::JsonWriter aJsonWriter;
     aJsonWriter.put("jsontype", "valueset");
-    aJsonWriter.put("action", "update");
+    aJsonWriter.put("action", "action");
     aJsonWriter.put("drawingarea", msDrawingAreaId);
     aJsonWriter.put("itemwidth", BORDER * 6 + SIZE * ChartColorPaletteSize / 2);
     aJsonWriter.put("itemheight", BORDER * 4 + SIZE * 2);
