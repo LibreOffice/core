@@ -674,20 +674,6 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
 
                     return true;
                 }
-                else if (sAction == "contextmenu")
-                {
-                    sal_Int32 nPos = o3tl::toInt32(rData.at(u"data"_ustr));
-
-                    tools::Rectangle aRect = pIconView->get_rect(nPos);
-                    Point aPoint = aRect.Center();
-                    assert(aPoint.getX() >= 0 && aPoint.getY() >= 0);
-
-                    MouseEvent aMouseEvent(aPoint, 1, MouseEventModifiers::NONE, MOUSE_RIGHT, 0);
-
-                    LOKTrigger::trigger_mouse_press(*pIconView, aMouseEvent);
-
-                    return true;
-                }
             }
         }
         else if (sControlType == "expander")

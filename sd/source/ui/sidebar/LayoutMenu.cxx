@@ -53,7 +53,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <xmloff/autolayout.hxx>
-#include <comphelper/lok.hxx>
 
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
@@ -127,22 +126,49 @@ constexpr snew_slide_value_info standard[] =
     {BMP_LAYOUT_HEAD02A, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_2VTEXT},
 };
 
+class LayoutValueSet : public ValueSet
+{
+private:
+    LayoutMenu& mrMenu;
+
+    /** Calculate the number of displayed rows.  This depends on the given
+        item size, the given number of columns, and the size of the
+        control.  Note that this is not the number of rows managed by the
+        valueset.  This number may be larger.  In that case a vertical
+        scroll bar is displayed.
+    */
+    int CalculateRowCount(const Size& rItemSize, int nColumnCount);
+
+public:
+    LayoutValueSet(LayoutMenu& rMenu)
+        : ValueSet(nullptr)
+        , mrMenu(rMenu)
+    {
+    }
+
+    virtual void Resize() override;
+
+    virtual bool Command(const CommandEvent& rEvent) override;
+};
+
 LayoutMenu::LayoutMenu (
     weld::Widget* pParent,
     ViewShellBase& rViewShellBase,
     css::uno::Reference<css::ui::XSidebar> xSidebar)
     : PanelLayout( pParent, u"LayoutPanel"_ustr, u"modules/simpress/ui/layoutpanel.ui"_ustr ),
       mrBase(rViewShellBase),
-      mxLayoutIconView(m_xBuilder->weld_icon_view(u"layoutpanel_icons"_ustr)),
+      mxLayoutValueSet(new LayoutValueSet(*this)),
+      mxLayoutValueSetWin(new weld::CustomWeld(*m_xBuilder, u"layoutvalueset"_ustr, *mxLayoutValueSet)),
       mbIsMainViewChangePending(false),
       mxSidebar(std::move(xSidebar)),
-      mbIsDisposed(false),
-      maPreviewSize(0, 0),
-      bInContextMenuOperation(false)
+      mbIsDisposed(false)
 {
     implConstruct( *mrBase.GetDocument()->GetDocSh() );
     SAL_INFO("sd.ui", "created LayoutMenu at " << this);
 
+    mxLayoutValueSet->SetStyle(mxLayoutValueSet->GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_TABSTOP);
+
+    mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
 }
 
 void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
@@ -152,16 +178,21 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     // if this fires, then my assumption that the rDocumentShell parameter to our first ctor is superfluous ...
     (void) rDocumentShell;
 
-    mxLayoutIconView->connect_item_activated(LINK(this, LayoutMenu, LayoutSelected));
-    mxLayoutIconView->connect_mouse_press(LINK(this, LayoutMenu, MousePressHdl));
-    mxLayoutIconView->connect_query_tooltip(LINK(this, LayoutMenu, QueryTooltipHdl));
+    mxLayoutValueSet->SetStyle (
+        ( mxLayoutValueSet->GetStyle()  & ~(WB_ITEMBORDER) )
+        | WB_TABSTOP
+        | WB_MENUSTYLEVALUESET
+        | WB_NO_DIRECTSELECT
+        );
+    mxLayoutValueSet->SetExtraSpacing(2);
+    mxLayoutValueSet->SetSelectHdl (LINK(this, LayoutMenu, ClickHandler));
     InvalidateContent();
 
     Link<::sd::tools::EventMultiplexerEvent&,void> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->AddEventListener(aEventListenerLink);
 
-    mxLayoutIconView->set_help_id(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
-    mxLayoutIconView->set_accessible_name(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
+    mxLayoutValueSet->SetHelpId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
+    mxLayoutValueSet->SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
 
     Link<const OUString&,void> aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
     mxListener = new ::sd::tools::SlotStateListener(
@@ -174,7 +205,8 @@ LayoutMenu::~LayoutMenu()
 {
     SAL_INFO("sd.ui", "destroying LayoutMenu at " << this);
     Dispose();
-    mxLayoutIconView.reset();
+    mxLayoutValueSetWin.reset();
+    mxLayoutValueSet.reset();
 }
 
 void LayoutMenu::Dispose()
@@ -196,80 +228,86 @@ void LayoutMenu::Dispose()
 
 AutoLayout LayoutMenu::GetSelectedAutoLayout() const
 {
-    OUString sId = mxLayoutIconView->get_selected_id();
+    AutoLayout aResult = AUTOLAYOUT_NONE;
 
-    if (!sId.isEmpty())
-        return static_cast<AutoLayout>(sId.toInt32());
+    if (!mxLayoutValueSet->IsNoSelection() && mxLayoutValueSet->GetSelectedItemId()!=0)
+    {
+        AutoLayout* pLayout = static_cast<AutoLayout*>(mxLayoutValueSet->GetItemData(mxLayoutValueSet->GetSelectedItemId()));
+        if (pLayout != nullptr)
+            aResult = *pLayout;
+    }
 
-    return AUTOLAYOUT_NONE; // default layout
+    return aResult;
 }
 
 ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
 {
-    // there is no way to get margin of item programmatically, we use value provided in ui file.
-    const int nMargin = 6;
-    Size aPreviewSize = maPreviewSize;
-    if (aPreviewSize.Width() == 0 && mxLayoutIconView->n_children() > 0)
+    sal_Int32 nPreferredHeight = 200;
+    if (mxLayoutValueSet->GetItemCount()>0)
     {
-        aPreviewSize.setWidth(mxLayoutIconView->get_item_width());
-        aPreviewSize.setHeight(mxLayoutIconView->get_preferred_size().getHeight());
-    }
-
-    sal_Int32 nColumnCount = nWidth / (aPreviewSize.Width() + (2 * nMargin));
-    if (nColumnCount < 1)
-        nColumnCount = 1;
-
-    sal_Int32 nTotalItems = mxLayoutIconView->n_children();
-    sal_Int32 nRowCount = (nTotalItems + nColumnCount - 1) / nColumnCount;
-    if (nRowCount < 1)
-        nRowCount = 1;
-
-    sal_Int32 nPreferredHeight = nRowCount * (aPreviewSize.Height() + (2 * nMargin));
-    return css::ui::LayoutSize(nPreferredHeight, nPreferredHeight, nPreferredHeight);
-}
-
-IMPL_LINK(LayoutMenu, MousePressHdl, const MouseEvent&, rMEvet, bool)
-{
-    if (!rMEvet.IsRight())
-        return false;
-
-    const Point& pPos = rMEvet.GetPosPixel();
-    for (int i = 0; i < mxLayoutIconView->n_children(); i++)
-    {
-        const ::tools::Rectangle aRect = mxLayoutIconView->get_rect(i);
-        if (aRect.Contains(pPos))
+        Image aImage = mxLayoutValueSet->GetItemImage(mxLayoutValueSet->GetItemId(0));
+        Size aItemSize = mxLayoutValueSet->CalcItemSizePixel(aImage.GetSizePixel());
+        if (nWidth>0 && aItemSize.Width()>0)
         {
-            bInContextMenuOperation = true;
-            mxLayoutIconView->select(i);
-            ShowContextMenu(pPos);
-            bInContextMenuOperation = false;
-            break;
+            aItemSize.AdjustWidth(8 );
+            aItemSize.AdjustHeight(8 );
+            int nColumnCount = nWidth / aItemSize.Width();
+            if (nColumnCount <= 0)
+                nColumnCount = 1;
+            else if (nColumnCount > 4)
+                nColumnCount = 4;
+            int nRowCount = (mxLayoutValueSet->GetItemCount() + nColumnCount-1) / nColumnCount;
+            nPreferredHeight = nRowCount * aItemSize.Height();
         }
     }
-    return false;
+    return ui::LayoutSize(nPreferredHeight,nPreferredHeight,nPreferredHeight);
 }
 
-IMPL_LINK(LayoutMenu, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
+void LayoutValueSet::Resize()
 {
-    const OUString sId = mxLayoutIconView->get_id(iter);
-
-    if (!sId.isEmpty())
+    Size aWindowSize = GetOutputSizePixel();
+    if (IsVisible() && aWindowSize.Width() > 0)
     {
-        AutoLayout aLayout = static_cast<AutoLayout>(sId.toInt32());
-        auto aResId = GetStringResourceIdForLayout(aLayout);
-        return aResId ? SdResId(aResId) : OUString();
+        // Calculate the number of rows and columns.
+        if (GetItemCount() > 0)
+        {
+            Image aImage = GetItemImage(GetItemId(0));
+            Size aItemSize = CalcItemSizePixel (
+                aImage.GetSizePixel());
+            aItemSize.AdjustWidth(8 );
+            aItemSize.AdjustHeight(8 );
+            int nColumnCount = aWindowSize.Width() / aItemSize.Width();
+            if (nColumnCount < 1)
+                nColumnCount = 1;
+            else if (nColumnCount > 4)
+                nColumnCount = 4;
+
+            int nRowCount = CalculateRowCount (aItemSize, nColumnCount);
+
+            SetColCount(nColumnCount);
+            SetLineCount(nRowCount);
+        }
     }
 
-    return OUString();
+    ValueSet::Resize();
 }
 
-TranslateId LayoutMenu::GetStringResourceIdForLayout(AutoLayout aLayout) const
+bool LayoutValueSet::Command(const CommandEvent& rEvent)
 {
-    auto it = maLayoutToStringMap.find(aLayout);
-    if (it != maLayoutToStringMap.end())
-        return it->second;
+    if (rEvent.GetCommand() != CommandEventId::ContextMenu)
+        return false;
 
-    return TranslateId();
+    // As a preparation for the context menu the item under the mouse is
+    // selected.
+    if (rEvent.IsMouseEvent())
+    {
+        sal_uInt16 nIndex = GetItemId(rEvent.GetMousePosPixel());
+        if (nIndex > 0)
+            SelectItem(nIndex);
+    }
+
+    mrMenu.ShowContextMenu(rEvent.IsMouseEvent() ? &rEvent.GetMousePosPixel() : nullptr);
+    return true;
 }
 
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
@@ -309,11 +347,23 @@ void LayoutMenu::InvalidateContent()
     UpdateSelection();
 }
 
+int LayoutValueSet::CalculateRowCount (const Size&, int nColumnCount)
+{
+    int nRowCount = 0;
 
-IMPL_LINK_NOARG(LayoutMenu, LayoutSelected, weld::IconView&, bool)
+    if (GetItemCount() > 0 && nColumnCount > 0)
+    {
+        nRowCount = (GetItemCount() + nColumnCount - 1) / nColumnCount;
+        if (nRowCount < 1)
+            nRowCount = 1;
+    }
+
+    return nRowCount;
+}
+
+IMPL_LINK_NOARG(LayoutMenu, ClickHandler, ValueSet*, void)
 {
     AssignLayoutToSelectedSlides( GetSelectedAutoLayout() );
-    return true;
 }
 
 /** The specified layout is assigned to the current page of the view shell
@@ -438,20 +488,6 @@ SfxRequest LayoutMenu::CreateRequest (
     return aRequest;
 }
 
-VclPtr<VirtualDevice> LayoutMenu::GetVirtualDevice(Image pImage)
-{
-    BitmapEx aPreviewBitmap = pImage.GetBitmapEx();
-    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
-    const Point aNull(0, 0);
-    if (pVDev->GetDPIScaleFactor() > 1)
-        aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
-    const Size aSize(aPreviewBitmap.GetSizePixel());
-    pVDev->SetOutputSizePixel(aSize);
-    pVDev->DrawBitmapEx(aNull, aPreviewBitmap);
-
-    return pVDev;
-}
-
 void LayoutMenu::Fill()
 {
     bool bVertical = SvtCJKOptions::IsVerticalTextEnabled();
@@ -492,14 +528,12 @@ void LayoutMenu::Fill()
     }
 
     Clear();
-    sal_uInt16 id = 0;
-
-    mxLayoutIconView->freeze();
+    sal_uInt16 id = 1;
     for (const auto& elem : pInfo)
     {
         if ((WritingMode_TB_RL != elem.meWritingMode) || bVertical)
         {
-            Image aImg(StockImage::Yes, elem.msBmpResId);
+            Image aImg(OUString::Concat("private:graphicrepository/") + elem.msBmpResId);
 
             if (bRightToLeft && (WritingMode_TB_RL != elem.meWritingMode))
             { // FIXME: avoid interpolating RTL layouts.
@@ -508,54 +542,48 @@ void LayoutMenu::Fill()
                 aImg = Image(aRTL);
             }
 
-            if (aImg.GetSizePixel().Width() > 0)
-            {
-                OUString sId = OUString::number(static_cast<int>(elem.maAutoLayout));
-                VclPtr<VirtualDevice> aVDev = GetVirtualDevice(aImg);
-                OUString sLayoutName = SdResId(elem.mpStrResId);
-                if (!mxLayoutIconView->get_id(id).isEmpty())
-                {
-                    mxLayoutIconView->set_image(id, aVDev);
-                    mxLayoutIconView->set_id(id, sId);
-                    mxLayoutIconView->set_text(id, sLayoutName);
-                }
-                else
-                {
-                    mxLayoutIconView->insert(id, &sLayoutName, &sId, aVDev, nullptr);
-                }
-                maLayoutToStringMap[elem.maAutoLayout] = elem.mpStrResId;
-
-                if (maPreviewSize.Width() == 0)
-                    maPreviewSize = aImg.GetSizePixel();
-            }
+            mxLayoutValueSet->InsertItem(id, aImg, SdResId(elem.mpStrResId));
+            mxLayoutValueSet->SetItemData(id, new AutoLayout(elem.maAutoLayout));
             ++id;
         }
     }
-
-    mxLayoutIconView->thaw();
 }
 
 void LayoutMenu::Clear()
 {
-    mxLayoutIconView->clear();
-    maLayoutToStringMap.clear();
+    for (size_t nId=1; nId<=mxLayoutValueSet->GetItemCount(); nId++)
+        delete static_cast<AutoLayout*>(mxLayoutValueSet->GetItemData(nId));
+    mxLayoutValueSet->Clear();
 }
 
-IMPL_LINK(LayoutMenu, OnPopupEnd, const OUString&, sCommand, void)
-{
-    MenuSelect(sCommand);
-}
-
-void LayoutMenu::ShowContextMenu(const Point& pPos)
+void LayoutMenu::ShowContextMenu(const Point* pPos)
 {
     if (SdModule::get()->GetWaterCan())
         return;
 
+    // Determine the position where to show the menu.
+    Point aMenuPosition;
+    if (pPos)
+    {
+        auto nItemId = mxLayoutValueSet->GetItemId(*pPos);
+        if (nItemId <= 0)
+            return;
+        mxLayoutValueSet->SelectItem(nItemId);
+        aMenuPosition = *pPos;
+    }
+    else
+    {
+        if (mxLayoutValueSet->GetSelectedItemId() == sal_uInt16(-1))
+            return;
+        ::tools::Rectangle aBBox(mxLayoutValueSet->GetItemRect(mxLayoutValueSet->GetSelectedItemId()));
+        aMenuPosition = aBBox.Center();
+    }
+
     // Setup the menu.
-    ::tools::Rectangle aRect(pPos, Size(1, 1));
-    mxMenu.reset();
-    mxMenuBuilder = Application::CreateBuilder(mxLayoutIconView.get(), u"modules/simpress/ui/layoutmenu.ui"_ustr);
-    mxMenu = mxMenuBuilder->weld_menu(u"menu"_ustr);
+    ::tools::Rectangle aRect(aMenuPosition, Size(1, 1));
+    weld::Widget* pPopupParent = mxLayoutValueSet->GetDrawingArea();
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"modules/simpress/ui/layoutmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
 
     // Disable the SID_INSERTPAGE_LAYOUT_MENU item when
     // the document is read-only.
@@ -563,50 +591,32 @@ void LayoutMenu::ShowContextMenu(const Point& pPos)
     const SfxItemState aState (
         mrBase.GetViewFrame().GetDispatcher()->QueryState(SID_INSERTPAGE, aResult));
     if (aState == SfxItemState::DISABLED)
-        mxMenu->set_sensitive(u"insert"_ustr, false);
+        xMenu->set_sensitive(u"insert"_ustr, false);
 
-    mxMenu->connect_activate(LINK(this, LayoutMenu, OnPopupEnd));
-    mxMenu->popup_at_rect(mxLayoutIconView.get(), aRect);
-}
-
-void LayoutMenu::MenuSelect(const OUString& rIdent)
-{
-    sLastItemIdent = rIdent;
-    if (sLastItemIdent.isEmpty())
-        return;
-
-    if (comphelper::LibreOfficeKit::isActive())
-        HandleMenuSelect(sLastItemIdent);
-    else
-        Application::PostUserEvent(LINK(this, LayoutMenu, MenuSelectAsyncHdl));
+    // Show the menu.
+    OnMenuItemSelected(xMenu->popup_at_rect(pPopupParent, aRect));
 }
 
 IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler, const OUString&, void)
 {
-    if (bInContextMenuOperation)
-        return;
     InvalidateContent();
 }
 
-IMPL_LINK_NOARG(LayoutMenu, MenuSelectAsyncHdl, void*, void)
+void LayoutMenu::OnMenuItemSelected(std::u16string_view ident)
 {
-    HandleMenuSelect(sLastItemIdent);
-}
+    if (ident.empty())
+        return;
 
-void LayoutMenu::HandleMenuSelect(std::u16string_view rIdent)
-{
-    if (rIdent == u"apply")
+    if (ident == u"apply")
     {
         AssignLayoutToSelectedSlides(GetSelectedAutoLayout());
     }
-    else if (rIdent == u"insert")
+    else if (ident == u"insert")
     {
         // Add arguments to this slot and forward it to the main view
         // shell.
         InsertPageWithLayout(GetSelectedAutoLayout());
     }
-    mxMenu.reset();
-    mxMenuBuilder.reset();
 }
 
 // Selects an appropriate layout of the slide inside control.
@@ -635,20 +645,19 @@ void LayoutMenu::UpdateSelection()
             break;
 
         // Find the entry of the menu for to the layout.
-        const sal_uInt16 nItemCount = mxLayoutIconView->n_children();
-        for (sal_uInt16 nId=0; nId<nItemCount; nId++)
+        const sal_uInt16 nItemCount = mxLayoutValueSet->GetItemCount();
+        for (sal_uInt16 nId=1; nId<=nItemCount; nId++)
         {
-            OUString sItemId = mxLayoutIconView->get_id(nId);
-            if (!sItemId.isEmpty() && static_cast<AutoLayout>(sItemId.toInt32()) == aLayout)
+            if (*static_cast<AutoLayout*>(mxLayoutValueSet->GetItemData(nId)) == aLayout)
             {
-                OUString sCurrentSelectedId = mxLayoutIconView->get_selected_id();
-                if (sCurrentSelectedId != sItemId)
+                // do not set selection twice to the same item
+                if (mxLayoutValueSet->GetSelectedItemId() != nId)
                 {
-                    mxLayoutIconView->unselect_all();
-                    mxLayoutIconView->select(nId);
+                    mxLayoutValueSet->SetNoSelection();
+                    mxLayoutValueSet->SelectItem(nId);
                 }
 
-                bItemSelected = true; // no need to call unselect_all()
+                bItemSelected = true; // no need to call SetNoSelection()
                 break;
             }
         }
@@ -656,7 +665,7 @@ void LayoutMenu::UpdateSelection()
     while (false);
 
     if (!bItemSelected)
-        mxLayoutIconView->unselect_all();
+        mxLayoutValueSet->SetNoSelection();
 }
 
 IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
@@ -671,12 +680,15 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
         case EventMultiplexerEventId::ShapeRemoved:
         case EventMultiplexerEventId::CurrentPageChanged:
         case EventMultiplexerEventId::SlideSortedSelection:
-        case EventMultiplexerEventId::MainViewRemoved:
             UpdateSelection();
             break;
 
         case EventMultiplexerEventId::MainViewAdded:
             mbIsMainViewChangePending = true;
+            break;
+
+        case EventMultiplexerEventId::MainViewRemoved:
+            mxLayoutValueSet->Invalidate(); // redraw without focus
             break;
 
         case EventMultiplexerEventId::ConfigurationUpdated:
@@ -696,6 +708,8 @@ void LayoutMenu::DataChanged(const DataChangedEvent& rEvent)
 {
     PanelLayout::DataChanged(rEvent);
     Fill();
+    mxLayoutValueSet->StyleUpdated();
+    mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
 }
 
 } // end of namespace ::sd::sidebar

@@ -91,11 +91,6 @@ public:
         rDrawingArea.mouse_move(rPos);
     }
 
-    static void trigger_mouse_press(weld::IconView& rIconView, const MouseEvent& rEvent)
-    {
-        rIconView.signal_mouse_press(rEvent);
-    }
-
     static void trigger_selected(weld::MenuButton& rButton, const OUString& rIdent)
     {
         rButton.signal_selected(rIdent);

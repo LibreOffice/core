@@ -270,8 +270,6 @@ public:
         m_aMousePressHdl = rLink;
     }
 
-    void signal_mouse_press(const MouseEvent& rEvent) { m_aMousePressHdl.Call(rEvent); }
-
     virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink)
     {
         assert(!m_aMouseMotionHdl.IsSet() || !rLink.IsSet());
