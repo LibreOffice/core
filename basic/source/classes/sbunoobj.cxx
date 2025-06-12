@@ -2100,9 +2100,6 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         aRetAny = mxInvocation->getValue( pProp->GetName() );
                     // take over the value from Uno to Sbx
                     unoToSbxValue( pVar, aRetAny );
-                    if( pParams && bCanBeConsideredAMethod )
-                        pVar->SetParameters( nullptr );
-
                 }
                 catch( const Exception& )
                 {
