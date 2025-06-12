@@ -79,7 +79,7 @@ namespace dbaui
         FeatureSet() { }
 
         void put( const ItemID _id )         { m_aContent.insert( _id ); }
-        bool has( const ItemID _id ) const   { return m_aContent.find( _id ) != m_aContent.end(); }
+        bool has( const ItemID _id ) const   { return m_aContent.contains( _id ); }
 
         inline  bool    supportsAnySpecialSetting() const;
         inline  bool    supportsGeneratedValues() const;
