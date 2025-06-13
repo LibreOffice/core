@@ -164,6 +164,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     rReq.SetSlot(SID_ATTR_CHAR_COLOR);
                 }
             }
+            else
+            {
+                nEEWhich = EE_CHAR_COLOR;
+            }
         }
         break;
         case SID_ATTR_CHAR_BACK_COLOR:
