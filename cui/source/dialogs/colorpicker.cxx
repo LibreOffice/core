@@ -778,7 +778,7 @@ private:
     double mdCyan, mdMagenta, mdYellow, mdKey;
 
 public:
-    ColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nMode);
+    ColorPickerDialog(weld::Window* pParent, const Color& rColor, sal_Int16 nMode);
 
     Color GetColor() const;
 
@@ -797,7 +797,7 @@ private:
 
 }
 
-ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nDialogMode)
+ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, const Color& rColor, sal_Int16 nDialogMode)
     : SfxDialogController(pParent, u"cui/ui/colorpickerdialog.ui"_ustr, u"ColorPicker"_ustr)
     , m_xColorField(new weld::CustomWeld(*m_xBuilder, u"colorField"_ustr, m_aColorField))
     , m_xColorSlider(new weld::CustomWeld(*m_xBuilder, u"colorSlider"_ustr, m_aColorSlider))
@@ -856,18 +856,16 @@ ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_In
     m_xRBSaturation->connect_toggled( aLink2 );
     m_xRBBrightness->connect_toggled( aLink2 );
 
-    Color aColor(nColor);
-
     // modify
     if (nDialogMode == 2)
     {
-        m_aColorPrevious.SetColor(aColor);
+        m_aColorPrevious.SetColor(rColor);
         m_xColorPrevious->show();
     }
 
-    mdRed = static_cast<double>(aColor.GetRed()) / 255.0;
-    mdGreen = static_cast<double>(aColor.GetGreen()) / 255.0;
-    mdBlue = static_cast<double>(aColor.GetBlue()) / 255.0;
+    mdRed = static_cast<double>(rColor.GetRed()) / 255.0;
+    mdGreen = static_cast<double>(rColor.GetGreen()) / 255.0;
+    mdBlue = static_cast<double>(rColor.GetBlue()) / 255.0;
 
     RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
     RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
