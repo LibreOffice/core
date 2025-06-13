@@ -7,7 +7,7 @@
  *
 -->
     <node oor:name="Markdown" oor:op="replace">
-        <prop oor:name="Flags"><value>EXPORT ALIEN</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value>Markdown</value></prop>

@@ -275,6 +275,7 @@ int getFlatTypeRank(std::u16string_view rType)
         "writer_Rich_Text_Format",
         "writer_web_HTML_help",
         "generic_HTML",
+        "generic_Markdown",
 
         "generic_Text", // Plain text (catch all)
 

@@ -24,6 +24,8 @@
 constexpr OUString WRITER_TEXT_FILTER = u"Text"_ustr;
 constexpr OUString CALC_TEXT_FILTER = u"Text - txt - csv (StarCalc)"_ustr;
 
+constexpr OUString WRITER_MARKDOWN_FILTER = u"Markdown"_ustr;
+
 constexpr OUStringLiteral WEB_HTML_FILTER = u"HTML";
 constexpr OUStringLiteral WRITER_HTML_FILTER = u"HTML (StarWriter)";
 constexpr OUStringLiteral CALC_HTML_FILTER = u"calc_HTML_WebQuery";
@@ -152,6 +154,22 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_HTML_FILTER);
         else
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WEB_HTML_FILTER);
+    }
+
+    else if(aType == "generic_Markdown")
+    {
+        uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY);
+        if (!xInStream.is())
+            return OUString();
+        INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString() ) );
+        OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
+        aExt = aExt.toAsciiLowerCase();
+        if(aDocService == WRITER_DOCSERVICE)
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= WRITER_MARKDOWN_FILTER;
+        else if(aExt == "md" || aExt == "markdown")
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= WRITER_MARKDOWN_FILTER;
+        else
+            return OUString();
     }
 
     else if (aType == "generic_Text")
