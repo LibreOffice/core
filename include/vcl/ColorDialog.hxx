@@ -28,19 +28,18 @@
 
 namespace weld { class Window; }
 
-namespace svtools
+namespace vcl
 {
     // Select is the default.
     // These values must match the constants used in ColorPickerDialog in cui/source/dialogs/colorpicker.cxx
     enum class ColorPickerMode { Select = 0, Modify = 2 };
 }
 
-class VCL_DLLPUBLIC SvColorDialog final
+class VCL_DLLPUBLIC ColorDialog final
 {
 public:
-    SvColorDialog(weld::Window* pParent,
-                  svtools::ColorPickerMode eMode = svtools::ColorPickerMode::Select);
-    ~SvColorDialog();
+    ColorDialog(weld::Window* pParent, vcl::ColorPickerMode eMode = vcl::ColorPickerMode::Select);
+    ~ColorDialog();
 
     void            SetColor( const Color& rColor );
     Color           GetColor() const;

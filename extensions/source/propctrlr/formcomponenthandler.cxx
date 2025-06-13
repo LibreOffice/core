@@ -2899,7 +2899,7 @@ namespace pcr
 
         _rClearBeforeDialog.clear();
         weld::Window* pParent = impl_getDefaultDialogFrame_nothrow();
-        SvColorDialog aColorDlg(pParent);
+        ColorDialog aColorDlg(pParent);
         aColorDlg.SetColor(aColor);
         if (!aColorDlg.Execute())
             return false;

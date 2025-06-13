@@ -20,7 +20,7 @@
 #include <vcl/ColorDialog.hxx>
 #include <vcl/weld.hxx>
 
-SvColorDialog::SvColorDialog(weld::Window* pParent, svtools::ColorPickerMode eMode)
+ColorDialog::ColorDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
 {
     VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
     assert(pFact);
@@ -28,15 +28,15 @@ SvColorDialog::SvColorDialog(weld::Window* pParent, svtools::ColorPickerMode eMo
     assert(m_pDialog);
 }
 
-SvColorDialog::~SvColorDialog() {}
+ColorDialog::~ColorDialog() {}
 
-void SvColorDialog::SetColor(const Color& rColor) { m_pDialog->SetColor(rColor); }
+void ColorDialog::SetColor(const Color& rColor) { m_pDialog->SetColor(rColor); }
 
-Color SvColorDialog::GetColor() const { return m_pDialog->GetColor(); }
+Color ColorDialog::GetColor() const { return m_pDialog->GetColor(); }
 
-short SvColorDialog::Execute() { return m_pDialog->Execute(); }
+short ColorDialog::Execute() { return m_pDialog->Execute(); }
 
-void SvColorDialog::ExecuteAsync(const std::function<void(sal_Int32)>& func)
+void ColorDialog::ExecuteAsync(const std::function<void(sal_Int32)>& func)
 {
     m_aResultFunc = func;
     m_pDialog->StartExecuteAsync(m_aResultFunc);

@@ -2387,7 +2387,7 @@ void SlideshowImpl::ContextMenuSelectHdl(std::u16string_view rMenuId)
     {
         //Open a color picker based on SvColorDialog
         ::Color aColor( ColorTransparency, mnUserPaintColor );
-        SvColorDialog aColorDlg(mpShowWindow->GetFrameWeld());
+        ColorDialog aColorDlg(mpShowWindow->GetFrameWeld());
         aColorDlg.SetColor( aColor );
 
         if (aColorDlg.Execute())

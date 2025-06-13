@@ -49,7 +49,7 @@ class SVXCORE_DLLPUBLIC PaletteManager : public std::enable_shared_from_this<Pal
 
     ColorSelectFunction maColorSelectFunction;
 
-    std::unique_ptr<SvColorDialog> m_pColorDlg;
+    std::unique_ptr<ColorDialog> m_pColorDlg;
     std::optional<svx::ThemePaletteCollection> moThemePaletteCollection;
 
 public:

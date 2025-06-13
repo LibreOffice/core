@@ -395,7 +395,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, weld::Button&, void)
 {
-    SvColorDialog aColorDlg(GetFrameWeld(), svtools::ColorPickerMode::Modify);
+    ColorDialog aColorDlg(GetFrameWeld(), vcl::ColorPickerMode::Modify);
     aColorDlg.SetColor (m_aCurrentColor.m_aColor);
 
     if (aColorDlg.Execute() == RET_OK)

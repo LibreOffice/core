@@ -356,7 +356,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, weld::Button&, rBut
     bool bIsAmbientLight = (&rButton == m_xBtn_AmbientLight_Color.get());
     ColorListBox* pListBox = bIsAmbientLight ? m_xLB_AmbientLight.get() : m_xLB_LightSource.get();
 
-    SvColorDialog aColorDlg(m_pTopLevel);
+    ColorDialog aColorDlg(m_pTopLevel);
     aColorDlg.SetColor( pListBox->GetSelectEntryColor() );
     if (aColorDlg.Execute() != RET_OK)
         return;

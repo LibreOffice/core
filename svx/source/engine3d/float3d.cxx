@@ -2492,7 +2492,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, weld::Button&, rBtn, void )
 
 IMPL_LINK( Svx3DWin, ClickColorHdl, weld::Button&, rBtn, void)
 {
-    SvColorDialog aColorDlg(GetFrameWeld());
+    ColorDialog aColorDlg(GetFrameWeld());
     ColorListBox* pLb;
 
     if( &rBtn == m_xBtnLightColor.get() )
