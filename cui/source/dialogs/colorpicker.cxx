@@ -781,6 +781,7 @@ public:
     ColorPickerDialog(weld::Window* pParent, const Color& rColor, sal_Int16 nMode);
 
     Color GetColor() const;
+    void SetColor(const Color& rColor);
 
 private:
     void update_color(UpdateFlags n = UpdateFlags::All);
@@ -858,19 +859,9 @@ ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, const Color& rColor,
 
     // modify
     if (nDialogMode == 2)
-    {
-        m_aColorPrevious.SetColor(rColor);
         m_xColorPrevious->show();
-    }
 
-    mdRed = static_cast<double>(rColor.GetRed()) / 255.0;
-    mdGreen = static_cast<double>(rColor.GetGreen()) / 255.0;
-    mdBlue = static_cast<double>(rColor.GetBlue()) / 255.0;
-
-    RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
-    RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
-
-    update_color();
+    SetColor(rColor);
 }
 
 static int toInt( double dValue, double dRange )
@@ -881,6 +872,21 @@ static int toInt( double dValue, double dRange )
 Color ColorPickerDialog::GetColor() const
 {
     return Color( toInt(mdRed,255.0), toInt(mdGreen,255.0), toInt(mdBlue,255.0) );
+}
+
+void ColorPickerDialog::SetColor(const Color& rColor)
+{
+    if (m_xColorPrevious->get_visible())
+        m_aColorPrevious.SetColor(rColor);
+
+    mdRed = static_cast<double>(rColor.GetRed()) / 255.0;
+    mdGreen = static_cast<double>(rColor.GetGreen()) / 255.0;
+    mdBlue = static_cast<double>(rColor.GetBlue()) / 255.0;
+
+    RGBtoHSV(mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri);
+    RGBtoCMYK(mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey);
+
+    update_color();
 }
 
 void ColorPickerDialog::update_color( UpdateFlags n )
