@@ -366,7 +366,7 @@ public:
 
     virtual void SetParent( ScConditionalFormat* pNew ) override;
 
-    bool IsCellValid( const ScRefCellValue& rCell, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC bool IsCellValid( const ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
     ScConditionMode GetOperation() const        { return eOp; }
     void SetOperation(ScConditionMode eMode);
