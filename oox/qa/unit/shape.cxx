@@ -15,6 +15,7 @@
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Gradient2.hpp>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -40,6 +41,8 @@
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <editeng/unoprnms.hxx>
+#include <sfx2/viewsh.hxx>
+#include <svx/svdview.hxx>
 
 using namespace ::com::sun::star;
 
@@ -959,6 +962,82 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGlowOnGroup)
                                                  uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroup->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_funnel)
+{
+    // OOXMl allows that a guide name starts with a digit. LO had interpreted this a number.
+    loadFromFile(u"tdf144742_funnel.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pSdrView = pViewShell->GetDrawView();
+
+    // Test idea: Convert the shape to a Bézier curve. Test the end coordinate of the first half
+    // ellipse. Without fix the curve ended earlier in (9951|2152) instead of point (10000|2500).
+
+    // Test prstGeom object. Error was in oox-drawingml-cs-presets.
+    // Mark object and convert it to Bézier curve. Ungroup result of conversion gives two shapes.
+    uno::Reference<drawing::XShape> xShapePrst(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    SdrObject* pSdrShapePrst(SdrObject::getSdrObjectFromXShape(xShapePrst));
+    pSdrView->MarkObj(pSdrShapePrst, pSdrView->GetSdrPageView());
+    dispatchCommand(mxComponent, u".uno:ChangeBezier"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:FormatUngroup"_ustr, {});
+    pSdrView->UnmarkAll();
+
+    // Examine the geometry. The test compares relative values.
+    uno::Reference<beans::XPropertySet> xPropsPrst(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    css::drawing::PolyPolygonBezierCoords aCurveGeometryPrst;
+    xPropsPrst->getPropertyValue(u"Geometry"_ustr) >>= aCurveGeometryPrst;
+    // PolyPolygonBezierCoords has Coordinates and Flags.
+    // [0] is for the outer outline, [1] for the inner ellipse of the funnel.
+    css::awt::Point aPointPrst = aCurveGeometryPrst.Coordinates[0][22];
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2500), aPointPrst.Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10000), aPointPrst.X);
+
+    // Test custGeom object. Error was in customshapegeometry.cxx
+    uno::Reference<drawing::XShape> xShapeCust(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    SdrObject* pSdrShapeCust(SdrObject::getSdrObjectFromXShape(xShapeCust));
+    pSdrView->MarkObj(pSdrShapeCust, pSdrView->GetSdrPageView());
+    dispatchCommand(mxComponent, u".uno:ChangeBezier"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:FormatUngroup"_ustr, {});
+    pSdrView->UnmarkAll();
+
+    uno::Reference<beans::XPropertySet> xPropsCust(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    css::drawing::PolyPolygonBezierCoords aCurveGeometryCust;
+    xPropsCust->getPropertyValue(u"Geometry"_ustr) >>= aCurveGeometryCust;
+    css::awt::Point aPointCust = aCurveGeometryCust.Coordinates[0][22];
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2500), aPointCust.Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10000), aPointCust.X);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_mathEqual)
+{
+    // OOXMl allows that a guide name starts with a digit. LO had interpreted this a number.
+    // This test is about the preset types mathEqual and mathNotEqual
+    // Error was, that the handle values were not clamped correctly and thus parts of the drawing
+    // were outside the frame rect. The test shapes have handles that need to be clamped.
+    loadFromFile(u"tdf144742_mathEqual_mathNotEqual.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // Verify that drawing height is clamped to frame height, here 10cm = 10000 of 1/100mm.
+    // The values of the bounding rectangle vary slightly depending on the device.
+    // Thus test with tolerance.
+    {
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        SdrObject* pSdrShape(SdrObject::getSdrObjectFromXShape(xShape));
+        double fBoundRectHeight = pSdrShape->GetCurrentBoundRect().GetHeight();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(10000.0, fBoundRectHeight, 5);
+    }
+    {
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+        SdrObject* pSdrShape(SdrObject::getSdrObjectFromXShape(xShape));
+        double fBoundRectHeight = pSdrShape->GetCurrentBoundRect().GetHeight();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(10000.0, fBoundRectHeight, 5);
+    }
 }
 CPPUNIT_PLUGIN_IMPLEMENT();
 

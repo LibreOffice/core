@@ -388,13 +388,20 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
         }
         else
         {
+            // Check if rValue is a number
             sal_Unicode n = rValue[ 0 ];
-            if ( ( n == '+' ) || ( n == '-' ) )
+            bool bHasSign =  ( n == '+' ) || ( n == '-' );
+            // "+" or "-" is formally allowed as guide name and works in app 'SoftMaker Office NX'.
+            bool bIsNumber = !(bHasSign && (rValue.getLength() == 1));
+            for (sal_Int32 i = bHasSign ? 1 : 0; i < rValue.getLength(); ++i)
             {
-                if ( rValue.getLength() > 1 )
-                    n = rValue[ 1 ];
+                if (!isdigit(rValue[i]))
+                {
+                    bIsNumber = false;
+                    break;
+                }
             }
-            if ( ( n >= '0' ) && ( n <= '9' ) )
+            if (bIsNumber)
             {   // seems to be a ST_Coordinate
                 aRet.Value <<= rValue.toInt32();
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
