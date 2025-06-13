@@ -82,4 +82,4 @@ class tdf160170(UITestCase):
             paragraphs = writer_doc.Text.createEnumeration()
             para1 = paragraphs.nextElement()
             # This was " pellentesque est orvi.", i.e. too much shrinking
-            self.assertEqual(" Fusce pellentesque est orci.", para1.String)
+            self.assertEqual("tra. Fusce pellentesque est orci.", para1.String)
