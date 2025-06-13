@@ -14,6 +14,7 @@
 #include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/resmgr.hxx>
+#include <cstdint>
 #include <vector>
 
 namespace vcl::font
