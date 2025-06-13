@@ -22,6 +22,24 @@
             <property name="hexpand">True</property>
             <property name="layout-style">end</property>
             <child>
+              <object class="GtkCheckButton" id="cbShowAgain">
+                <property name="label" translatable="yes" context="welcomedialog|showagain">Do Show Again</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="active">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="pack-type">end</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="action">
                 <property name="label">_Apply</property>
                 <property name="visible">True</property>
@@ -32,7 +50,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -46,7 +64,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -59,7 +77,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -75,7 +93,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child>
@@ -89,25 +107,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="cbShowAgain">
-                <property name="label" translatable="yes" context="welcomedialog|showagain">Do Show Again</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="active">True</property>
-                <property name="draw-indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="pack-type">end</property>
                 <property name="position">5</property>
-                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
