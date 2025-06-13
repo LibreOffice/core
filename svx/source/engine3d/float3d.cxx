@@ -2492,7 +2492,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, weld::Button&, rBtn, void )
 
 IMPL_LINK( Svx3DWin, ClickColorHdl, weld::Button&, rBtn, void)
 {
-    SvColorDialog aColorDlg;
+    SvColorDialog aColorDlg(GetFrameWeld());
     ColorListBox* pLb;
 
     if( &rBtn == m_xBtnLightColor.get() )
@@ -2509,7 +2509,7 @@ IMPL_LINK( Svx3DWin, ClickColorHdl, weld::Button&, rBtn, void)
     Color aColor = pLb->GetSelectEntryColor();
 
     aColorDlg.SetColor( aColor );
-    if( aColorDlg.Execute(GetFrameWeld()) == RET_OK )
+    if (aColorDlg.Execute() == RET_OK)
     {
         aColor = aColorDlg.GetColor();
         LBSelectColor(pLb, aColor);

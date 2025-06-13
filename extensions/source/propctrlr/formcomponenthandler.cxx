@@ -2896,12 +2896,12 @@ namespace pcr
         ::Color aColor;
         if( ! (impl_getPropertyValue_throw( impl_getPropertyNameFromId_nothrow( _nColorPropertyId )) >>= aColor) )
             SAL_WARN("extensions.propctrlr", "impl_dialogColorChooser_throw: unable to get property " << _nColorPropertyId);
-        SvColorDialog aColorDlg;
-        aColorDlg.SetColor( aColor );
 
         _rClearBeforeDialog.clear();
         weld::Window* pParent = impl_getDefaultDialogFrame_nothrow();
-        if (!aColorDlg.Execute(pParent))
+        SvColorDialog aColorDlg(pParent);
+        aColorDlg.SetColor(aColor);
+        if (!aColorDlg.Execute())
             return false;
 
         _out_rNewValue <<= aColorDlg.GetColor();

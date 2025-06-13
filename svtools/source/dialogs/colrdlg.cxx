@@ -40,8 +40,9 @@ using namespace ::com::sun::star::ui::dialogs;
 
 constexpr OUString sColor = u"Color"_ustr;
 
-SvColorDialog::SvColorDialog()
-    : meMode(svtools::ColorPickerMode::Select)
+SvColorDialog::SvColorDialog(weld::Window* pParent)
+    : m_pParent(pParent)
+    , meMode(svtools::ColorPickerMode::Select)
 {
 }
 
@@ -58,7 +59,7 @@ void SvColorDialog::SetMode( svtools::ColorPickerMode eMode )
     meMode = eMode;
 }
 
-short SvColorDialog::Execute(weld::Window* pParent)
+short SvColorDialog::Execute()
 {
     short ret = 0;
     try
@@ -66,8 +67,8 @@ short SvColorDialog::Execute(weld::Window* pParent)
         const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
         Reference<css::awt::XWindow> xParent;
-        if (pParent)
-            xParent = pParent->GetXWindow();
+        if (m_pParent)
+            xParent = m_pParent->GetXWindow();
 
         Reference< XExecutableDialog > xDialog = css::cui::ColorPicker::createWithParent(xContext, xParent);
         Reference< XPropertyAccess > xPropertyAccess( xDialog, UNO_QUERY_THROW );
@@ -101,7 +102,7 @@ short SvColorDialog::Execute(weld::Window* pParent)
     return ret;
 }
 
-void SvColorDialog::ExecuteAsync(weld::Window* pParent, const std::function<void(sal_Int32)>& func)
+void SvColorDialog::ExecuteAsync(const std::function<void(sal_Int32)>& func)
 {
     m_aResultFunc = func;
 
@@ -110,8 +111,8 @@ void SvColorDialog::ExecuteAsync(weld::Window* pParent, const std::function<void
         const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
         Reference<css::awt::XWindow> xParent;
-        if (pParent)
-            xParent = pParent->GetXWindow();
+        if (m_pParent)
+            xParent = m_pParent->GetXWindow();
 
         mxDialog = css::cui::AsynchronousColorPicker::createWithParent(xContext, xParent);
         Reference< XPropertyAccess > xPropertyAccess( mxDialog, UNO_QUERY_THROW );

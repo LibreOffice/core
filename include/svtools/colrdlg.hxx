@@ -38,7 +38,7 @@ namespace svtools
 class SVT_DLLPUBLIC SvColorDialog final
 {
 public:
-    SvColorDialog();
+    SvColorDialog(weld::Window* pParent);
     ~SvColorDialog();
 
     void            SetColor( const Color& rColor );
@@ -46,10 +46,11 @@ public:
 
     void            SetMode( svtools::ColorPickerMode eMode );
 
-    short           Execute(weld::Window* pParent);
-    void            ExecuteAsync(weld::Window* pParent, const std::function<void(sal_Int32)>& func);
+    short           Execute();
+    void            ExecuteAsync(const std::function<void(sal_Int32)>& func);
 
 private:
+    weld::Window* m_pParent;
     Color               maColor;
     svtools::ColorPickerMode meMode;
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XAsynchronousExecutableDialog > mxDialog;

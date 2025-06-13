@@ -150,11 +150,11 @@ bool MaskSet::KeyInput( const KeyEvent& rKEvt )
 
 void MaskSet::onEditColor()
 {
-    SvColorDialog aColorDlg;
+    SvColorDialog aColorDlg(pSvxBmpMask->GetFrameWeld());
 
     aColorDlg.SetColor(GetItemColor(1));
 
-    if (aColorDlg.Execute(pSvxBmpMask->GetFrameWeld()))
+    if (aColorDlg.Execute())
         SetItemColor(1, aColorDlg.GetColor());
 }
 
