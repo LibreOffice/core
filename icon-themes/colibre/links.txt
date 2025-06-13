@@ -2841,3 +2841,14 @@ res/numbering.png cmd/lc_defaultnumbering.png
 res/graphics.png cmd/lc_imagebutton.png
 res/listposition.png cmd/lc_hangingindent.png
 res/customize.png cmd/lc_developmenttoolsdockingwindow.png
+
+### templatedialog4 / Frame Style
+# res/organizer.png cmd/lc_browseview.png
+res/type.png cmd/lc_toggleanchortype.png
+res/options.png cmd/lc_inserthyperlink.png
+res/wrap.png cmd/lc_wrapcontour.png
+# res/area.png cmd/lc_backgroundcolor.png
+# res/transparence.png cmd/lc_graftransparence.png
+# res/borders.png cmd/lc_borderdialog.png
+# res/columns.png cmd/lc_pagecolumntype.png
+res/macros.png cmd/lc_choosemacro.png
