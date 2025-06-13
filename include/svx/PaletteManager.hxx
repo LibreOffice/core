@@ -21,8 +21,8 @@
 #include <svx/Palette.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/xtable.hxx>
-#include <svtools/colrdlg.hxx>
 #include <svx/theme/ThemeColorPaletteManager.hxx>
+#include <vcl/ColorDialog.hxx>
 
 #include <deque>
 #include <vector>

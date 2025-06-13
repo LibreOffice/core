@@ -25,7 +25,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
-#include <svtools/colrdlg.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/f3dchild.hxx>
 #include <svx/xfillit0.hxx>
@@ -50,6 +49,7 @@
 #include <svtools/unitconv.hxx>
 
 #include <svx/float3d.hxx>
+#include <vcl/ColorDialog.hxx>
 #include <com/sun/star/drawing/TextureKind2.hpp>
 
 #include <bitmaps.hlst>

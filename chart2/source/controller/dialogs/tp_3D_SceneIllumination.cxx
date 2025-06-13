@@ -26,10 +26,10 @@
 #include <svx/float3d.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include <svtools/colrdlg.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
 #include <utility>
+#include <vcl/ColorDialog.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

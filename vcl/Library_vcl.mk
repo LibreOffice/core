@@ -447,6 +447,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/helper/strhelper \
     vcl/source/helper/threadex \
     vcl/source/app/brand \
+    vcl/source/app/ColorDialog \
     vcl/source/app/customweld \
     vcl/source/app/dbggui \
     vcl/source/app/dndhelp \

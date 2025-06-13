@@ -72,6 +72,7 @@
 #include <strings.hrc>
 #include <sdresid.hxx>
 #include <utility>
+#include <vcl/ColorDialog.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/weldutils.hxx>
@@ -85,7 +86,6 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <svtools/colrdlg.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
 #include <PresentationViewShell.hxx>

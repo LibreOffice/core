@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/valueacc \
     svtools/source/control/valueset \
     svtools/source/dialogs/addresstemplate \
-    svtools/source/dialogs/colrdlg \
     svtools/source/dialogs/insdlg \
     svtools/source/dialogs/PlaceEditDialog \
     svtools/source/dialogs/prnsetup \

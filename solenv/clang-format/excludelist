@@ -5550,7 +5550,6 @@ include/svtools/brwbox.hxx
 include/svtools/brwhead.hxx
 include/svtools/cliplistener.hxx
 include/svtools/colorcfg.hxx
-include/svtools/colrdlg.hxx
 include/svtools/ctrlbox.hxx
 include/svtools/ctrltool.hxx
 include/svtools/dialogclosedlistener.hxx
@@ -6115,6 +6114,7 @@ include/vcl/BitmapBuffer.hxx
 include/vcl/BitmapColor.hxx
 include/vcl/BitmapPalette.hxx
 include/vcl/BitmapTools.hxx
+include/vcl/ColorDialog.hxx
 include/vcl/ColorMask.hxx
 include/vcl/EnumContext.hxx
 include/vcl/FilterConfigItem.hxx
@@ -10980,7 +10980,6 @@ svtools/source/dialogs/PlaceEditDialog.cxx
 svtools/source/dialogs/ServerDetailsControls.cxx
 svtools/source/dialogs/ServerDetailsControls.hxx
 svtools/source/dialogs/addresstemplate.cxx
-svtools/source/dialogs/colrdlg.cxx
 svtools/source/dialogs/insdlg.cxx
 svtools/source/dialogs/prnsetup.cxx
 svtools/source/dialogs/restartdialog.cxx

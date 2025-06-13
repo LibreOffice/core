@@ -86,7 +86,6 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svl/ctloptions.hxx>
-#include <svtools/colrdlg.hxx>
 #include <svl/filenotation.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
@@ -98,6 +97,7 @@
 #include <svx/numinf.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
+#include <vcl/ColorDialog.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/unohelp.hxx>
 #include <comphelper/diagnose_ex.hxx>

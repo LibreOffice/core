@@ -17,31 +17,40 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/colrdlg.hxx>
-#include <vcl/weld.hxx>
+#pragma once
 
-SvColorDialog::SvColorDialog(weld::Window* pParent, svtools::ColorPickerMode eMode)
+#include <tools/color.hxx>
+#include <tools/link.hxx>
+#include <vcl/abstdlg.hxx>
+#include <vcl/dllapi.h>
+
+#include <functional>
+
+namespace weld { class Window; }
+
+namespace svtools
 {
-    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-    assert(pFact);
-    m_pDialog = pFact->CreateColorPickerDialog(pParent, COL_BLACK, static_cast<sal_Int16>(eMode));
-    assert(m_pDialog);
+    // Select is the default.
+    // These values must match the constants used in ColorPickerDialog in cui/source/dialogs/colorpicker.cxx
+    enum class ColorPickerMode { Select = 0, Modify = 2 };
 }
 
-SvColorDialog::~SvColorDialog()
+class VCL_DLLPUBLIC SvColorDialog final
 {
-}
+public:
+    SvColorDialog(weld::Window* pParent,
+                  svtools::ColorPickerMode eMode = svtools::ColorPickerMode::Select);
+    ~SvColorDialog();
 
-void SvColorDialog::SetColor(const Color& rColor) { m_pDialog->SetColor(rColor); }
+    void            SetColor( const Color& rColor );
+    Color           GetColor() const;
 
-Color SvColorDialog::GetColor() const { return m_pDialog->GetColor(); }
+    short           Execute();
+    void            ExecuteAsync(const std::function<void(sal_Int32)>& func);
 
-short SvColorDialog::Execute() { return m_pDialog->Execute(); }
-
-void SvColorDialog::ExecuteAsync(const std::function<void(sal_Int32)>& func)
-{
-    m_aResultFunc = func;
-    m_pDialog->StartExecuteAsync(m_aResultFunc);
-}
+private:
+    ScopedVclPtr<AbstractColorPickerDialog> m_pDialog;
+    std::function<void(sal_Int32)> m_aResultFunc;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

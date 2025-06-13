@@ -19,7 +19,7 @@
 
 #include <memory>
 #include <i18nutil/unicode.hxx>
-#include <svtools/colrdlg.hxx>
+#include <vcl/ColorDialog.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

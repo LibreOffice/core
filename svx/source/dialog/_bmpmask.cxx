@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/ColorDialog.hxx>
 #include <vcl/event.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
@@ -24,7 +25,6 @@
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/colrdlg.hxx>
 
 #include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
