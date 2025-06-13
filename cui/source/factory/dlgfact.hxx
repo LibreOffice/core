@@ -59,6 +59,9 @@ public:
     virtual VclPtr<SfxAbstractPasteDialog> CreatePasteDialog(weld::Window* pParent) override;
     virtual VclPtr<SfxAbstractLinksDialog> CreateLinksDialog(weld::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML = false, sfx2::SvBaseLink* p=nullptr) override;
 
+    virtual VclPtr<AbstractColorPickerDialog>
+    CreateColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nMode) override;
+
     virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog(weld::Widget* pParent) override;
     virtual VclPtr<AbstractThesaurusDialog>  CreateThesaurusDialog(weld::Widget*,
                                                 css::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
