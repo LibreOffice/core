@@ -66,6 +66,18 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineIns)
         CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData.GetType());
         CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[2]->GetType());
     }
+
+    // And when undoing:
+    pWrtShell->Undo();
+
+    // Then make sure we again have a single insert that covers all text:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the insert redline of BBB was lost on undo.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[0]->GetType());
+    CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, rRedlines[0]->GetText());
 }
 }
 
