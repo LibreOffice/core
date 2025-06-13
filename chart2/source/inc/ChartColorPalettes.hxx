@@ -22,7 +22,6 @@ public:
     typedef Link<const MouseEvent&, void> MouseEventHandler;
 
 private:
-    OUString msDrawingAreaId;
     std::vector<ChartColorPalette> maColorSets;
     MouseEventHandler maMouseMoveHdl;
 
@@ -40,9 +39,6 @@ public:
     void insert(ChartColorPalette const& rColorSet);
     const ChartColorPalette* getPalette(sal_uInt32 nItem) const;
     void setMouseMoveHdl(const MouseEventHandler& rLink);
-
-private:
-    void sendItemInfo() const;
 };
 } // end namespace chart
 
