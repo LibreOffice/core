@@ -22,6 +22,7 @@
 #include <svl/hint.hxx>
 #include <o3tl/safeint.hxx>
 #include <cassert>
+#include <cstdint>
 #include <algorithm>
 
 /**
