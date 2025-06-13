@@ -215,6 +215,34 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165383)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166669)
+{
+    auto verify = [this]() {
+        ScDocument* pDoc = getScDoc();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetCondFormList(0)->size());
+
+        ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0);
+        CPPUNIT_ASSERT(pFormat);
+
+        const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+        CPPUNIT_ASSERT(pEntry);
+        CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Condition, pEntry->GetType());
+        const ScConditionEntry* pConditionEntry = static_cast<const ScConditionEntry*>(pEntry);
+        CPPUNIT_ASSERT_EQUAL(ScConditionMode::Duplicate, pConditionEntry->GetOperation());
+        for (SCROW row = 0; row < 5; ++row)
+        {
+            ScRefCellValue aCell(*pDoc, ScAddress(0, row, 0));
+            CPPUNIT_ASSERT_EQUAL(row == 4 ? false : true,
+                                 pConditionEntry->IsCellValid(aCell, ScAddress(0, row, 0)));
+        }
+    };
+
+    createScDoc("ods/tdf166669.ods");
+    verify();
+    saveAndReload(u"Calc Office Open XML"_ustr);
+    verify();
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testCommentTextHAlignment)
 {
     // Testing comment text alignments.

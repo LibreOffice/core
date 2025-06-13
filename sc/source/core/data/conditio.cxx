@@ -831,7 +831,7 @@ void ScConditionEntry::FillCache() const
                 if (!lcl_GetCellContent(aCell, false, nVal, aStr, mrDoc))
                 {
                     std::pair<ScConditionEntryCache::StringCacheType::iterator, bool> aResult =
-                        mpCache->maStrings.emplace(aStr, 1);
+                        mpCache->maStrings.emplace(ScGlobal::getCharClass().lowercase(aStr), 1);
 
                     if(!aResult.second)
                         aResult.first->second++;
@@ -866,7 +866,7 @@ bool ScConditionEntry::IsDuplicate( double nArg, const OUString& rStr ) const
     }
     else
     {
-        ScConditionEntryCache::StringCacheType::iterator itr = mpCache->maStrings.find(rStr);
+        ScConditionEntryCache::StringCacheType::iterator itr = mpCache->maStrings.find(ScGlobal::getCharClass().lowercase(rStr));
         if(itr == mpCache->maStrings.end())
             return false;
         else
