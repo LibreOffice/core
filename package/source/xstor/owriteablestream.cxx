@@ -1898,6 +1898,25 @@ sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData
     return m_xInStream->readSomeBytes( aData, nMaxBytesToRead );
 }
 
+sal_Int32 OWriteStream::readSomeBytes(sal_Int8* pData, sal_Int32 nBytesToRead)
+{
+    osl::MutexGuard aGuard(m_xSharedMutex->GetMutex());
+
+    CheckInitOnDemand();
+
+    if (!m_xInStream.is())
+        throw io::NotConnectedException();
+
+    if (auto pByteReader = dynamic_cast<comphelper::ByteReader*>(m_xInStream.get()))
+        return pByteReader->readSomeBytes(pData, nBytesToRead);
+
+    uno::Sequence<sal_Int8> aData;
+    sal_Int32 nRead = m_xInStream->readSomeBytes(aData, nBytesToRead);
+    std::copy_n(aData.getConstArray(), nRead, pData);
+
+    return nRead;
+}
+
 void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );

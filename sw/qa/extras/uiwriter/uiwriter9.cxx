@@ -1064,6 +1064,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf164140)
     CPPUNIT_ASSERT_EQUAL(size_t(0), stAfterKashida.size());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167006)
+{
+    createSwDoc("embeddedPPTX.docx");
+    selectShape(1);
+    // attempt to edit the OLE object. This must not crash.
+    getSwDocShell()->GetWrtShell()->LaunchOLEObj();
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
