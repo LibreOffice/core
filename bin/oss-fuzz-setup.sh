@@ -38,6 +38,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/$EBOOK_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$ETONYEK_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$FREEHAND_TARBALL \
+    -C - -O https://dev-www.libreoffice.org/src/$MD4C_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$MSPUB_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$MWAW_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$ODFGEN_TARBALL \
