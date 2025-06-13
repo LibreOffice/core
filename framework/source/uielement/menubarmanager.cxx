@@ -773,11 +773,29 @@ IMPL_LINK_NOARG( MenuBarManager, AsyncSettingsHdl, Timer*, void)
     }
 }
 
+namespace
+{
+struct MenuExecData
+{
+    URL aTargetURL;
+    std::vector<beans::PropertyValue> aArgs;
+    Reference<XDispatch> xDispatch;
+};
+
+void AsyncMenuExecute(void* /*instance*/, void* data)
+{
+    std::unique_ptr<MenuExecData> pData(static_cast<MenuExecData*>(data));
+    {
+        SolarMutexReleaser aReleaser;
+        pData->xDispatch->dispatch(pData->aTargetURL,
+                                   comphelper::containerToSequence(pData->aArgs));
+    }
+}
+}
+
 IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
 {
-    URL                     aTargetURL;
-    std::vector<beans::PropertyValue> aArgs;
-    Reference< XDispatch >  xDispatch;
+    auto pData = std::make_unique<MenuExecData>();
 
     {
         SolarMutexGuard g;
@@ -790,13 +808,13 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
             MenuItemHandler* pMenuItemHandler = GetMenuItemHandler( nCurItemId );
             if ( pMenuItemHandler && pMenuItemHandler->xMenuItemDispatch.is() )
             {
-                aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
-                m_xURLTransformer->parseStrict( aTargetURL );
+                pData->aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
+                m_xURLTransformer->parseStrict( pData->aTargetURL );
 
                 if ( pMenu->GetUserValue( nCurItemId ) )
                 {
                     // addon menu item selected
-                    aArgs.push_back(
+                    pData->aArgs.push_back(
                         comphelper::makePropertyValue(u"Referer"_ustr, u"private:user"_ustr));
                 }
 
@@ -806,19 +824,16 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
                 const sal_Int16 nKeys
                     = pWindow ? pWindow->GetPointerState().mnState & KEY_MODIFIERS_MASK : 0;
                 if (nKeys)
-                    aArgs.push_back(comphelper::makePropertyValue(u"KeyModifier"_ustr, nKeys));
+                    pData->aArgs.push_back(comphelper::makePropertyValue(u"KeyModifier"_ustr, nKeys));
 
-                xDispatch = pMenuItemHandler->xMenuItemDispatch;
+                pData->xDispatch = pMenuItemHandler->xMenuItemDispatch;
             }
         }
     }
 
-    // tdf#126054 don't let dispatch destroy this until after function completes
-    rtl::Reference<MenuBarManager> xKeepAlive(this);
-    if (xDispatch.is())
+    if (pData->xDispatch.is())
     {
-        SolarMutexReleaser aReleaser;
-        xDispatch->dispatch(aTargetURL, comphelper::containerToSequence(aArgs));
+        Application::PostUserEvent(LINK_NONMEMBER(nullptr, AsyncMenuExecute), pData.release());
     }
 
     if ( !m_bHasMenuBar )
