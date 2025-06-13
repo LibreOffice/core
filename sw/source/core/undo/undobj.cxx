@@ -1519,7 +1519,21 @@ bool SwUndo::FillSaveDataForFormat(
     for ( ; n < rTable.size(); ++n )
     {
         SwRangeRedline* pRedl = rTable[n];
-        if ( RedlineType::Format == pRedl->GetType() )
+        bool bSaveRedline = false;
+        switch (pRedl->GetType())
+        {
+            case RedlineType::Insert:
+            case RedlineType::Delete:
+                // These are allowed "under" a format redline.
+            case RedlineType::Format:
+                // This is a previous format: will be removed from the document, so save it in the
+                // undo action.
+                bSaveRedline = true;
+                break;
+            default:
+                break;
+        }
+        if (bSaveRedline)
         {
             const SwComparePosition eCmpPos = ComparePosition( *pStart, *pEnd, *pRedl->Start(), *pRedl->End() );
             if ( eCmpPos != SwComparePosition::Before

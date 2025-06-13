@@ -800,6 +800,16 @@ void SwUndoAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
         m_pHistory->dumpAsXml(pWriter);
     }
 
+    if (m_pRedlineData)
+    {
+        m_pRedlineData->dumpAsXml(pWriter);
+    }
+
+    if (m_pRedlineSaveData)
+    {
+        m_pRedlineSaveData->dumpAsXml(pWriter);
+    }
+
     (void)xmlTextWriterEndElement(pWriter);
 }
 
