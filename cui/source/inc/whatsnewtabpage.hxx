@@ -17,13 +17,13 @@ class AnimatedBrand : public weld::CustomWidgetController
 {
 private:
     bool m_bIsFirstStart;
-    Graphic m_pGraphic;
-    Size m_pGraphicSize;
+    Graphic m_aGraphic;
+    Size m_aGraphicSize;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
 
 public:
     AnimatedBrand();
-    const Size& GetGraphicSize() const { return m_pGraphicSize; };
+    const Size& GetGraphicSize() const { return m_aGraphicSize; };
     void SetIsFirstStart(const bool bIsFirstStart) { m_bIsFirstStart = bIsFirstStart; };
 };
 

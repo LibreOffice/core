@@ -52,8 +52,8 @@ AnimatedBrand::AnimatedBrand()
 {
     OUString aURL(u"$BRAND_BASE_DIR/" LIBO_SHARE_SHELL_FOLDER "/animatedbrand.gif"_ustr);
     rtl::Bootstrap::expandMacros(aURL);
-    GraphicFilter::LoadGraphic(aURL, OUString(), m_pGraphic);
-    m_pGraphicSize = m_pGraphic.GetSizePixel();
+    GraphicFilter::LoadGraphic(aURL, OUString(), m_aGraphic);
+    m_aGraphicSize = m_aGraphic.GetSizePixel();
 }
 
 void AnimatedBrand::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
@@ -62,20 +62,20 @@ void AnimatedBrand::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     rRenderContext.SetBackground(COL_WHITE);
     rRenderContext.Erase();
 
-    const Point aGraphicPosition((rRect.GetWidth() - m_pGraphicSize.Width()),
-                                 (rRect.GetHeight() - m_pGraphicSize.Height()) >> 1);
+    const Point aGraphicPosition((rRect.GetWidth() - m_aGraphicSize.Width()),
+                                 (rRect.GetHeight() - m_aGraphicSize.Height()) >> 1);
 #ifndef MACOSX
-    if (m_pGraphic.IsAnimated() && MiscSettings::IsAnimatedOthersAllowed())
-        m_pGraphic.StartAnimation(rRenderContext, aGraphicPosition, m_pGraphicSize);
+    if (m_aGraphic.IsAnimated() && MiscSettings::IsAnimatedOthersAllowed())
+        m_aGraphic.StartAnimation(rRenderContext, aGraphicPosition, m_aGraphicSize);
     else
 #endif
-        m_pGraphic.Draw(rRenderContext, aGraphicPosition, m_pGraphicSize);
+        m_aGraphic.Draw(rRenderContext, aGraphicPosition, m_aGraphicSize);
 
     tools::Rectangle aTextRect;
-    if (m_pGraphic.isAvailable())
+    if (m_aGraphic.isAvailable())
     {
         aTextRect.SetPos(Point(8, 8));
-        aTextRect.SetSize(Size(aGraphicPosition.getX(), m_pGraphicSize.Height() - 20));
+        aTextRect.SetSize(Size(aGraphicPosition.getX(), m_aGraphicSize.Height() - 20));
     }
     else
         aTextRect = rRect;
