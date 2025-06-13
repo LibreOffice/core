@@ -40,9 +40,9 @@ using namespace ::com::sun::star::ui::dialogs;
 
 constexpr OUString sColor = u"Color"_ustr;
 
-SvColorDialog::SvColorDialog(weld::Window* pParent)
+SvColorDialog::SvColorDialog(weld::Window* pParent, svtools::ColorPickerMode eMode)
     : m_pParent(pParent)
-    , meMode(svtools::ColorPickerMode::Select)
+    , meMode(eMode)
 {
 }
 
@@ -52,11 +52,6 @@ SvColorDialog::~SvColorDialog()
 void SvColorDialog::SetColor( const Color& rColor )
 {
     maColor = rColor;
-}
-
-void SvColorDialog::SetMode( svtools::ColorPickerMode eMode )
-{
-    meMode = eMode;
 }
 
 short SvColorDialog::Execute()

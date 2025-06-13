@@ -399,9 +399,8 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
 {
     // The calling object goes away during aColorDlg.Execute(), so we must copy this
     OUString aCommandCopy = aCommand;
-    m_pColorDlg = std::make_unique<SvColorDialog>(pParent);
+    m_pColorDlg = std::make_unique<SvColorDialog>(pParent, svtools::ColorPickerMode::Modify);
     m_pColorDlg->SetColor(rInitialColor);
-    m_pColorDlg->SetMode(svtools::ColorPickerMode::Modify);
     std::shared_ptr<PaletteManager> xSelf(shared_from_this());
     m_pColorDlg->ExecuteAsync([xSelf=std::move(xSelf),
                                aCommandCopy=std::move(aCommandCopy)] (sal_Int32 nResult) {
