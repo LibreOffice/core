@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_shape, \
     docmodel \
     oox \
     sal \
+    sfx \
     subsequenttest \
     svx \
     svxcore \
