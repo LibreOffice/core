@@ -5360,32 +5360,26 @@ void LibLibreOffice_Impl::dumpState(rtl::OStringBuffer &rState)
 }
 
 // We have special handling for some uno commands and it seems we need to check for readonly state.
-static bool isCommandAllowed(OUString& command) {
-    static constexpr OUString nonAllowedList[] = { u".uno:Save"_ustr, u".uno:TransformDialog"_ustr, u".uno:SidebarShow"_ustr, u".uno:SidebarHide"_ustr };
+static bool isCommandAllowed(std::u16string_view command)
+{
+    static constexpr std::u16string_view denyList[] = { u".uno:SidebarShow", u".uno:SidebarHide" };
 
-    if (!SfxViewShell::IsCurrentLokViewReadOnly())
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (!pViewShell || !pViewShell->IsLokReadOnlyView())
         return true;
-    else
+
+    if (command == u".uno:Save")
     {
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (command == u".uno:Save"_ustr && pViewShell && pViewShell->IsAllowChangeComments())
-            return true;
-
-        for (size_t i = 0; i < std::size(nonAllowedList); i++)
-        {
-            if (nonAllowedList[i] == command)
-            {
-                bool bRet = false;
-                if (pViewShell && command == u".uno:TransformDialog"_ustr)
-                {
-                    // If the just added signature line shape is selected, allow moving it.
-                    bRet = pViewShell->GetSignPDFCertificate().Is();
-                }
-                return bRet;
-            }
-        }
-        return true;
+        return pViewShell->IsAllowChangeComments();
     }
+
+    if (command == u".uno:TransformDialog")
+    {
+        // If the just added signature line shape is selected, allow moving it.
+        return pViewShell->GetSignPDFCertificate().Is();
+    }
+
+    return std::find(std::begin(denyList), std::end(denyList), command) == std::end(denyList);
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
