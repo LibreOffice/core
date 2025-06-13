@@ -23,6 +23,7 @@
 #include <comphelper/string.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/namedcolor.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdview.hxx>
 #include <editeng/spltitem.hxx>
@@ -147,8 +148,29 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         break;
 
         case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
-        case SID_ATTR_CHAR_BACK_COLOR: nEEWhich = EE_CHAR_BKGCOLOR; break;
+        case SID_ATTR_CHAR_COLOR2:
+        {
+            if (!rReq.GetArgs())
+            {
+                std::optional<NamedColor> oColor
+                    = GetView().GetDocShell()->GetRecentColor(SID_ATTR_CHAR_COLOR);
+                if (oColor.has_value())
+                {
+                    nEEWhich = GetPool().GetWhich(SID_ATTR_CHAR_COLOR);
+                    const model::ComplexColor& rCol = (*oColor).getComplexColor();
+                    aNewAttr.Put(SvxColorItem(rCol.getFinalColor(), rCol, nEEWhich));
+                    rReq.SetArgs(aNewAttr);
+                    rReq.SetSlot(SID_ATTR_CHAR_COLOR);
+                }
+            }
+            else
+            {
+                nEEWhich = EE_CHAR_COLOR;
+            }
+        }
+        break;
 
+        case SID_ATTR_CHAR_BACK_COLOR: nEEWhich = EE_CHAR_BKGCOLOR; break;
         case SID_ATTR_CHAR_UNDERLINE:
         {
             if ( pNewAttrs )
