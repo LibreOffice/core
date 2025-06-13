@@ -1241,9 +1241,11 @@ rtl::Reference<SdrPage> SdrModel::RemovePage(sal_uInt16 nPgNum)
 void SdrModel::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
     rtl::Reference<SdrPage> pPg = std::move(maPages[nPgNum]);
-    if (pPg) {
+    if (pPg)
+    {
         maPages.erase(maPages.begin()+nPgNum); // shortcut to avoid two broadcasts
         PageListChanged();
+        m_nPageNumsDirtyFrom = std::min(m_nPageNumsDirtyFrom, nPgNum);
         pPg->SetInserted(false);
         InsertPage(pPg.get(), nNewPos);
     }
