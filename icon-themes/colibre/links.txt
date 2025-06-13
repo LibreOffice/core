@@ -2832,3 +2832,12 @@ res/outline.png cmd/lc_setoutline.png
 res/condition.png cmd/lc_developmenttoolsdockingwindow.png
 res/asiantypo.png cmd/lc_defaultcharstyle.png
 # res/asianlayout.png cmd/lc_textdirectiontoptobottom.png
+
+### templatedialog16 / List Style
+# res/organizer.png cmd/lc_browseview.png
+res/bullets.png cmd/lc_defaultbullet.png
+res/numbering.png cmd/lc_defaultnumbering.png
+# res/outline.png cmd/lc_setoutline.png
+res/graphics.png cmd/lc_imagebutton.png
+res/listposition.png cmd/lc_hangingindent.png
+res/customize.png cmd/lc_developmenttoolsdockingwindow.png
