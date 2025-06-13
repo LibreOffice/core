@@ -69,6 +69,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,LIBTOMMATH,libtommath) \
 	$(call gb_Helper_optional,LXML,lxml) \
 	$(call gb_Helper_optional,MARIADB_CONNECTOR_C,mariadb-connector-c) \
+	$(call gb_Helper_optional,MD4C,md4c) \
 	$(call gb_Helper_optional,MDDS,mdds) \
 	$(call gb_Helper_optional,MDNSRESPONDER,mdnsresponder) \
 	$(call gb_Helper_optional,MESON,meson) \

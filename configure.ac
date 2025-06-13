@@ -2470,6 +2470,11 @@ AC_ARG_WITH(system-zstd,
         [Use zstd already on system [default=auto].]),,
     [with_system_zstd=auto])
 
+AC_ARG_WITH(system-md4c,
+    AS_HELP_STRING([--with-system-md4c=@<:@yes|no|auto@:>@],
+        [Use md4c already on system [default=auto].]),,
+    [with_system_md4c=auto])
+
 AC_ARG_WITH(system-jpeg,
     AS_HELP_STRING([--with-system-jpeg],
         [Use jpeg already on system.]),,
@@ -9865,6 +9870,57 @@ esac
 AC_SUBST(SYSTEM_ZSTD)
 AC_SUBST(ZSTD_LIBS)
 AC_SUBST(ZSTD_CFLAGS)
+AC_SUBST(BUILD_TYPE)
+
+dnl ===================================================================
+dnl Check for system md4c
+dnl ===================================================================
+
+if test "x$with_system_md4c" = "xauto"; then
+  case "$_os" in
+    WINNT) with_system_md4c="$with_system_libs" ;;  # follow system-libs on Windows
+    *)     with_system_md4c="$with_system_libs" ;;  # follow system-libs on Unix
+  esac
+fi
+
+AC_MSG_CHECKING([which md4c to use])
+case "$with_system_md4c" in
+  yes)
+    AC_MSG_RESULT([system])
+    SYSTEM_MD4C=TRUE
+
+    AC_CHECK_HEADER([md4c.h], [],
+      [AC_MSG_ERROR([md4c.h not found. Install system md4c.])])
+
+    AC_CHECK_HEADER([md4c-html.h], [],
+      [AC_MSG_ERROR([md4c-html.h not found. Install system md4c.])])
+
+    AC_CHECK_LIB([md4c], [md_parse],
+      [ MD4C_LIBS="-lmd4c"
+        MD4C_CFLAGS="" ],
+      [ AC_MSG_ERROR([system md4c library not found or broken.]) ])
+
+    AC_CHECK_LIB([md4c-html], [md_html],
+      [ MD4C_LIBS="$MD4C_LIBS -lmd4c-html" ],
+      [ AC_MSG_ERROR([system md4c-html library not found or broken.]) ])
+    ;;
+
+  ""|no)
+    AC_MSG_RESULT([bundled])
+    SYSTEM_MD4C=
+    MD4C_LIBS=""
+    MD4C_CFLAGS="-I\${WORKDIR}/UnpackedTarball/md4c/src"
+    BUILD_TYPE="$BUILD_TYPE MD4C"
+    ;;
+
+  *)
+    AC_MSG_ERROR([Invalid value for --with-system-md4c: $with_system_md4c])
+    ;;
+esac
+
+AC_SUBST(SYSTEM_MD4C)
+AC_SUBST(MD4C_LIBS)
+AC_SUBST(MD4C_CFLAGS)
 AC_SUBST(BUILD_TYPE)
 
 dnl ===================================================================

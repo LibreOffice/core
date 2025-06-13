@@ -416,6 +416,23 @@ else
   endef
 endif
 
+ifneq ($(SYSTEM_MD4C),)
+  define gb_LinkTarget__use_md4c
+    $(call gb_LinkTarget_add_libs,$(1),$(MD4C_LIBS))
+  endef
+
+  gb_ExternalProject__use_md4c :=
+else
+  define gb_LinkTarget__use_md4c
+    $(call gb_LinkTarget_set_include,$(1),$(MD4C_CFLAGS) $$(INCLUDE))
+    $(call gb_LinkTarget_use_static_libraries,$(1),md4c)
+  endef
+
+  define gb_ExternalProject__use_md4c
+    $(call gb_ExternalProject_use_static_libraries,$(1),md4c)
+  endef
+endif
+
 
 ifneq ($(SYSTEM_LIBJPEG),)
 
