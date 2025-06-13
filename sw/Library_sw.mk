@@ -96,6 +96,7 @@ $(eval $(call gb_Library_use_externals,sw,\
 	icu_headers \
 	libxml2 \
 	yrs \
+        md4c \
 ))
 
 ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
@@ -568,6 +569,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/html/svxcss1 \
     sw/source/filter/html/swhtml \
     sw/source/filter/html/wrthtml \
+    sw/source/filter/md/swmd \
     sw/source/filter/md/wrtmd \
     sw/source/filter/writer/writer \
     sw/source/filter/writer/wrt_fn \

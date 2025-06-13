@@ -303,6 +303,14 @@ public:
     AsciiReader(): Reader() {}
 };
 
+class MarkdownReader final : public Reader
+{
+    friend class SwReader;
+    virtual ErrCodeMsg Read( SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
+public:
+    MarkdownReader(): Reader() {}
+};
+
 class SW_DLLPUBLIC StgReader : public Reader
 {
     OUString m_aFltName;
@@ -372,7 +380,7 @@ public:
 
 // BEGIN source/filter/basflt/fltini.cxx
 
-extern Reader *ReadAscii, *ReadHTML, *ReadXML;
+extern Reader *ReadAscii, *ReadHTML, *ReadXML, *ReadMarkdown;
 
 SW_DLLPUBLIC Reader* SwGetReaderXML();
 

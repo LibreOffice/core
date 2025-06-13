@@ -43,7 +43,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-Reader *ReadAscii = nullptr, *ReadHTML = nullptr, *ReadXML = nullptr;
+Reader *ReadAscii = nullptr, *ReadHTML = nullptr, *ReadXML = nullptr, *ReadMarkdown = nullptr;
 
 static Reader* GetRTFReader();
 static Reader* GetWW8Reader();
@@ -99,11 +99,13 @@ Filters::Filters()
     ReadAscii = new AsciiReader;
     ReadHTML = new HTMLReader;
     ReadXML = new XMLReader;
+    ReadMarkdown = new MarkdownReader;
     SetFltPtr( READER_WRITER_BAS, ReadAscii );
     SetFltPtr( READER_WRITER_HTML, ReadHTML );
     SetFltPtr( READER_WRITER_XML, ReadXML );
     SetFltPtr( READER_WRITER_TEXT_DLG, ReadAscii );
     SetFltPtr( READER_WRITER_TEXT, ReadAscii );
+    SetFltPtr( READER_WRITER_MD, ReadMarkdown);
 }
 
 Filters::~Filters()
