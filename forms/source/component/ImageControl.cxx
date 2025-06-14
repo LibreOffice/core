@@ -27,8 +27,6 @@
 
 #include <svtools/imageresourceaccess.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <com/sun/star/awt/PopupMenu.hpp>
-#include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -55,6 +53,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 
 #include <memory>
 
@@ -867,8 +866,7 @@ void OImageControlControl::mousePressed(const css::awt::MouseEvent& e)
     // is this a request for a context menu?
     if ( e.PopupTrigger )
     {
-        Reference< XPopupMenu > xMenu( awt::PopupMenu::create( m_xContext ) );
-        DBG_ASSERT( xMenu.is(), "OImageControlControl::mousePressed: could not create a popup menu!" );
+        rtl::Reference< VCLXPopupMenu > xMenu( new VCLXPopupMenu() );
 
         Reference< XWindowPeer > xWindowPeer = getPeer();
         DBG_ASSERT( xWindowPeer.is(), "OImageControlControl::mousePressed: no window!" );

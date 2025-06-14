@@ -826,10 +826,9 @@ void SwView::ExecSmartTagPopup( const Point& rPt )
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.comp.svx.SmartTagMenuController"_ustr, aArgs, xContext ), css::uno::UNO_QUERY );
 
-    css::uno::Reference< css::awt::XPopupMenu > xPopupMenu( xContext->getServiceManager()->createInstanceWithContext(
-        u"com.sun.star.awt.PopupMenu"_ustr, xContext ), css::uno::UNO_QUERY );
+    rtl::Reference< VCLXPopupMenu > xPopupMenu( new VCLXPopupMenu() );
 
-    if ( xPopupController.is() && xPopupMenu.is() )
+    if ( xPopupController.is() )
     {
         xPopupController->setPopupMenu( xPopupMenu );
 

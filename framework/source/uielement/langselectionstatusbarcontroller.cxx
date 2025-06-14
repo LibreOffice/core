@@ -23,7 +23,6 @@
 #include <vcl/svapp.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/awt/PopupMenu.hpp>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <svtools/langtab.hxx>
 #include <svtools/statusbarcontroller.hxx>
@@ -42,6 +41,7 @@
 #include <helper/mischelper.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 
 #include <map>
 #include <set>
@@ -121,9 +121,9 @@ void LangSelectionStatusbarController::LangMenu(
     bool bCalc   = xService.is() && xService->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
     bool bWriter = xService.is() && xService->supportsService(u"com.sun.star.text.GenericTextDocument"_ustr);
     //add context menu
-    Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( m_xContext ) );
+    rtl::Reference< VCLXPopupMenu > xPopupMenu( new VCLXPopupMenu() );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
-    Reference< awt::XPopupMenu > subPopupMenu( awt::PopupMenu::create( m_xContext ) );
+    rtl::Reference< VCLXPopupMenu > subPopupMenu( new VCLXPopupMenu() );
 
     // get languages to be displayed in the menu
     std::set< OUString > aLangItems;

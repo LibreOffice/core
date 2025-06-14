@@ -21,7 +21,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tabletree.hxx>
 #include <dbtreelistbox.hxx>
-#include <com/sun/star/awt/PopupMenu.hpp>
 #include <com/sun/star/awt/XTabController.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -53,6 +52,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <tools/stream.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include "AppController.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -1110,7 +1110,7 @@ IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, weld::Toggleable&, voi
     if (!xPopupController.is())
         return;
 
-    css::uno::Reference<css::awt::XPopupMenu> xPopupMenu(css::awt::PopupMenu::create(xContext));
+    rtl::Reference<VCLXPopupMenu> xPopupMenu(new VCLXPopupMenu());
     xPopupController->setPopupMenu(xPopupMenu);
 
     css::util::URL aTargetURL;
