@@ -83,6 +83,7 @@
 #include <com/sun/star/text/XText.hpp>
 
 #include <comphelper/classids.hxx>
+#include <comphelper/memorystream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -3435,7 +3436,7 @@ void ExportGraphicPreview(const uno::Reference<graphic::XGraphic>& xGraphic, SvX
         OUString sPictureName;
         if( bExportEmbedded )
         {
-            xPictureStream.set( xContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.comp.MemoryStream"_ustr, xContext), uno::UNO_QUERY_THROW );
+            xPictureStream = new comphelper::UNOMemoryStream();
         }
         else
         {

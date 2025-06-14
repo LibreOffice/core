@@ -42,6 +42,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 
+#include <comphelper/memorystream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -210,14 +211,6 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
     }
 
     return true;
-}
-
-uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< uno::XComponentContext >& rContext )
-{
-    static constexpr OUStringLiteral sName(u"com.sun.star.comp.MemoryStream");
-    return uno::Reference< io::XStream >(
-        rContext->getServiceManager()->createInstanceWithContext(sName, rContext),
-        uno::UNO_QUERY_THROW);
 }
 
 const beans::StringPair* lcl_findPairByName(const uno::Sequence<beans::StringPair>& rSeq, const OUString& rName)
@@ -497,9 +490,8 @@ void OWriteStream_Impl::FillTempGetFileName()
         if ( !xOrigStream.is() )
         {
             // in case of new inserted package stream it is possible that input stream still was not set
-            uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( m_xContext );
-            SAL_WARN_IF( !xCacheStream.is(), "package.xstor", "If the stream can not be created an exception must be thrown!" );
-            m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
+            rtl::Reference< comphelper::UNOMemoryStream > xCacheStream = new comphelper::UNOMemoryStream();
+            m_xCacheSeek = xCacheStream;
             m_xCacheStream = std::move(xCacheStream);
         }
         else
@@ -512,15 +504,14 @@ void OWriteStream_Impl::FillTempGetFileName()
 
             if ( nRead <= MAX_STORCACHE_SIZE )
             {
-                uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( m_xContext );
-                SAL_WARN_IF( !xCacheStream.is(), "package.xstor", "If the stream can not be created an exception must be thrown!" );
+                rtl::Reference< comphelper::UNOMemoryStream > xCacheStream = new comphelper::UNOMemoryStream();
 
                 if ( nRead )
                 {
                     uno::Reference< io::XOutputStream > xOutStream( xCacheStream->getOutputStream(), uno::UNO_SET_THROW );
                     xOutStream->writeBytes( aData );
                 }
-                m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
+                m_xCacheSeek = xCacheStream;
                 m_xCacheStream = std::move(xCacheStream);
                 m_xCacheSeek->seek( 0 );
             }
@@ -1215,8 +1206,9 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             if ( m_pParent )
                 m_pParent->m_bIsModified = true;
 
-            xStream = CreateMemoryStream( m_xContext );
-            m_xCacheSeek.set( xStream, uno::UNO_QUERY_THROW );
+            rtl::Reference<comphelper::UNOMemoryStream> xMemStream = new comphelper::UNOMemoryStream();
+            xStream = xMemStream;
+            m_xCacheSeek = xMemStream;
             m_xCacheStream = xStream;
         }
         else if ( !m_bHasInsertedStreamOptimization )

@@ -30,6 +30,10 @@ $(eval $(call gb_Library_use_libraries,xstor,\
 	utl \
 ))
 
+$(eval $(call gb_Library_use_externals,xstor,\
+    boost_headers \
+))
+
 $(eval $(call gb_Library_add_exception_objects,xstor,\
 	package/source/xstor/disposelistener \
 	package/source/xstor/ocompinstream \

@@ -78,6 +78,7 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/fileurl.hxx>
+#include <comphelper/memorystream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/interaction.hxx>
@@ -447,7 +448,7 @@ public:
     uno::Reference<io::XStream> xStream;
     uno::Reference<io::XStream> m_xLockingStream;
     uno::Reference<task::XInteractionHandler> xInteraction;
-    uno::Reference<io::XStream> m_xODFDecryptedInnerPackageStream;
+    rtl::Reference< comphelper::UNOMemoryStream > m_xODFDecryptedInnerPackageStream;
     uno::Reference<embed::XStorage> m_xODFEncryptedOuterStorage;
     uno::Reference<embed::XStorage> m_xODFDecryptedInnerZipStorage;
 
@@ -1758,10 +1759,7 @@ SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const & xSto
         assert(xDecryptedInnerPackage.is());
         // need a seekable stream => copy
         Reference<uno::XComponentContext> const& xContext(::comphelper::getProcessComponentContext());
-        uno::Reference<io::XStream> const xDecryptedInnerPackageStream(
-            xContext->getServiceManager()->createInstanceWithContext(
-                u"com.sun.star.comp.MemoryStream"_ustr, xContext),
-            UNO_QUERY_THROW);
+        rtl::Reference< comphelper::UNOMemoryStream > xDecryptedInnerPackageStream = new comphelper::UNOMemoryStream();
         comphelper::OStorageHelper::CopyInputToOutput(xDecryptedInnerPackage->getInputStream(), xDecryptedInnerPackageStream->getOutputStream());
         xDecryptedInnerPackageStream->getOutputStream()->closeOutput();
 #if 0
@@ -4429,7 +4427,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
 
                 if (pImpl->m_bODFWholesomeEncryption)
                 {   // manually copy the inner package to the outer one
-                    uno::Reference<io::XSeekable>(pImpl->m_xODFDecryptedInnerPackageStream, uno::UNO_QUERY_THROW)->seek(0);
+                    pImpl->m_xODFDecryptedInnerPackageStream->seek(0);
                     uno::Reference<io::XStream> const xEncryptedPackage =
                         pImpl->m_xODFEncryptedOuterStorage->openStreamElement(
                             u"encrypted-package"_ustr,

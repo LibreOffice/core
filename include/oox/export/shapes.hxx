@@ -66,7 +66,6 @@ class Graphic;
 namespace oox {
 
 OOX_DLLPUBLIC css::uno::Reference<css::io::XInputStream> GetOLEObjectStream(
-    css::uno::Reference<css::uno::XComponentContext> const& xContext,
     css::uno::Reference<css::embed::XEmbeddedObject> const& xObj,
     std::u16string_view i_rProgID,
     OUString & o_rMediaType,

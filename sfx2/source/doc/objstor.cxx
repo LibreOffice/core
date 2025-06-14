@@ -74,6 +74,7 @@
 #include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/memorystream.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/docinfohelper.hxx>
@@ -1548,7 +1549,7 @@ bool SfxObjectShell::SaveTo_Impl
         }
     }
 
-    uno::Reference<io::XStream> xODFDecryptedInnerPackageStream;
+    rtl::Reference< comphelper::UNOMemoryStream > xODFDecryptedInnerPackageStream;
     uno::Reference<embed::XStorage> xODFDecryptedInnerPackage;
     uno::Sequence<beans::NamedValue> aEncryptionData;
     if (GetEncryptionData_Impl(&rMedium.GetItemSet(), aEncryptionData))
@@ -1562,10 +1563,7 @@ bool SfxObjectShell::SaveTo_Impl
             // clear now to store inner package (+ embedded objects) unencrypted
             rMedium.GetItemSet().ClearItem(SID_ENCRYPTIONDATA);
             rMedium.GetItemSet().ClearItem(SID_PASSWORD);
-            xODFDecryptedInnerPackageStream.set(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.MemoryStream"_ustr, xContext),
-                UNO_QUERY_THROW);
+            xODFDecryptedInnerPackageStream = new comphelper::UNOMemoryStream();
             xODFDecryptedInnerPackage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
                 PACKAGE_STORAGE_FORMAT_STRING, xODFDecryptedInnerPackageStream,
                 css::embed::ElementModes::WRITE, xContext, false);
@@ -2089,7 +2087,7 @@ bool SfxObjectShell::SaveTo_Impl
             xEncryptedPackageProps->setPropertyValue(u"MediaType"_ustr, mediaType);
 
             // encryption: just copy into package stream
-            uno::Reference<io::XSeekable>(xODFDecryptedInnerPackageStream, uno::UNO_QUERY_THROW)->seek(0);
+            xODFDecryptedInnerPackageStream->seek(0);
             comphelper::OStorageHelper::CopyInputToOutput(
                 xODFDecryptedInnerPackageStream->getInputStream(),
                 xEncryptedInnerPackage->getOutputStream());

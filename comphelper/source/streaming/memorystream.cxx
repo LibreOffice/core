@@ -21,24 +21,17 @@
 #include <cassert>
 #include <memory>
 
-#include <boost/core/noinit_adaptor.hpp>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/io/XSeekableInputStream.hpp>
-#include <com/sun/star/io/XTruncate.hpp>
 //#include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/bytereader.hxx>
-#include <cppuhelper/implbase.hxx>
+#include <comphelper/memorystream.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <string.h>
-#include <vector>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -51,56 +44,6 @@ using namespace ::com::sun::star::lang;
 namespace comphelper
 {
 
-namespace {
-
-class UNOMemoryStream :
-    public WeakImplHelper<XServiceInfo, XStream, XSeekableInputStream, XOutputStream, XTruncate>,
-    public comphelper::ByteWriter, public comphelper::ByteReader
-{
-public:
-    UNOMemoryStream();
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-    // XStream
-    virtual Reference< XInputStream > SAL_CALL getInputStream(  ) override;
-    virtual Reference< XOutputStream > SAL_CALL getOutputStream(  ) override;
-
-    // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
-    virtual sal_Int32 SAL_CALL available() override;
-    virtual void SAL_CALL closeInput() override;
-
-    // XSeekable
-    virtual void SAL_CALL seek( sal_Int64 location ) override;
-    virtual sal_Int64 SAL_CALL getPosition() override;
-    virtual sal_Int64 SAL_CALL getLength() override;
-
-    // XOutputStream
-    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& aData ) override;
-    virtual void SAL_CALL flush() override;
-    virtual void SAL_CALL closeOutput() override;
-
-    // XTruncate
-    virtual void SAL_CALL truncate() override;
-
-    // comphelper::ByteWriter
-    virtual void writeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
-
-    // comphelper::ByteReader
-    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
-
-private:
-    std::vector< sal_Int8, boost::noinit_adaptor<std::allocator<sal_Int8>> > maData;
-    sal_Int32 mnCursor;
-};
-
-}
 
 UNOMemoryStream::UNOMemoryStream()
 : mnCursor(0)

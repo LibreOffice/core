@@ -72,6 +72,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/memorystream.hxx>
 #include <sot/exchange.hxx>
 #include <utility>
 #include <vcl/graph.hxx>
@@ -208,7 +209,6 @@ static void lcl_ConvertProgID(std::u16string_view rProgID,
 }
 
 static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
-    uno::Reference<uno::XComponentContext> const& xContext,
     uno::Reference<embed::XEmbeddedObject> const& xObj,
     char const*& o_rpProgID,
     OUString & o_rMediaType, OUString & o_rRelationType, OUString & o_rSuffix)
@@ -264,10 +264,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
     }
     // use a temp stream - while it would work to store directly to a
     // fragment stream, an error during export means we'd have to delete it
-    uno::Reference<io::XStream> const xTempStream(
-        xContext->getServiceManager()->createInstanceWithContext(
-            u"com.sun.star.comp.MemoryStream"_ustr, xContext),
-        uno::UNO_QUERY_THROW);
+    rtl::Reference< comphelper::UNOMemoryStream > xTempStream = new comphelper::UNOMemoryStream();
     uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
             { "OutputStream", Any(xTempStream->getOutputStream()) },
             { "FilterName", Any(OUString::createFromAscii(pFilterName)) }
@@ -287,7 +284,6 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
 }
 
 uno::Reference<io::XInputStream> GetOLEObjectStream(
-        uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<embed::XEmbeddedObject> const& xObj,
         std::u16string_view i_rProgID,
         OUString & o_rMediaType,
@@ -313,7 +309,7 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
         }
         else // the object is ODF - either the whole document is
         {    // ODF, or the OLE was edited so it was converted to ODF
-            xInStream = lcl_StoreOwnAsOOXML(xContext, xObj,
+            xInStream = lcl_StoreOwnAsOOXML(xObj,
                     o_rpProgID, o_rMediaType, o_rRelationType, o_rSuffix);
         }
     }
@@ -2882,7 +2878,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
     uno::Reference<io::XInputStream> const xInStream =
         oox::GetOLEObjectStream(
-            mpFB->getComponentContext(), xObj, progID,
+            xObj, progID,
             sMediaType, sRelationType, sSuffix, pProgID);
 
     OUString sURL;

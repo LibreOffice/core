@@ -21,6 +21,7 @@
 
 #include <com/sun/star/io/XStream.hpp>
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/memorystream.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -386,10 +387,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 else
                 {
                     // create MemoryStream for unencrypted package - rather not put this in a tempfile
-                    Reference<XStream> const xTempStream(
-                        mxContext->getServiceManager()->createInstanceWithContext(
-                            u"com.sun.star.comp.MemoryStream"_ustr, mxContext),
-                        UNO_QUERY_THROW);
+                    rtl::Reference< comphelper::UNOMemoryStream > xTempStream = new comphelper::UNOMemoryStream();
 
                     // if decryption was unsuccessful (corrupted file or any other reason)
                     if (!aDecryptor.decrypt(xTempStream))
@@ -399,7 +397,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     else
                     {
                         // store temp file in media descriptor to keep it alive
-                        rMediaDescriptor.setComponentDataEntry( u"DecryptedPackage"_ustr, Any( xTempStream ) );
+                        rMediaDescriptor.setComponentDataEntry( u"DecryptedPackage"_ustr, Any( Reference<XStream>(xTempStream) ) );
 
                         Reference<XInputStream> xDecryptedInputStream = xTempStream->getInputStream();
                         if (lclIsZipPackage(mxContext, xDecryptedInputStream, bRepairPackage))

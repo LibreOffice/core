@@ -57,6 +57,7 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/memorystream.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -1016,10 +1017,7 @@ Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDe
     }
     else // We need to encrypt the stream so create a memory stream
     {
-        Reference< XComponentContext > xContext = getComponentContext();
-        return Reference< XStream > (
-                    xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.MemoryStream"_ustr, xContext),
-                    uno::UNO_QUERY_THROW );
+        return new comphelper::UNOMemoryStream();
     }
 }
 

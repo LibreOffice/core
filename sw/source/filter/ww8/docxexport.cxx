@@ -93,6 +93,7 @@
 
 #include "ww8scan.hxx"
 #include <oox/token/properties.hxx>
+#include <comphelper/memorystream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -425,7 +426,7 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
     const char * pProgID(nullptr);
 
     uno::Reference<io::XInputStream> const xInStream =
-        oox::GetOLEObjectStream(xContext, xObj, io_rProgID,
+        oox::GetOLEObjectStream(xObj, io_rProgID,
             sMediaType, sRelationType, sSuffix, pProgID);
 
     if (!xInStream.is())
@@ -1711,17 +1712,14 @@ void DocxExport::WriteCustomXml()
             if (m_SdtData.size())
             {
                 // There are some SDT blocks data with data bindings which can update some custom xml values
-                uno::Reference< io::XStream > xMemStream(
-                    comphelper::getProcessComponentContext()->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.MemoryStream"_ustr,
-                        comphelper::getProcessComponentContext()),
-                    uno::UNO_QUERY_THROW);
+                rtl::Reference< comphelper::UNOMemoryStream > xMemStream = new comphelper::UNOMemoryStream();
 
                 writer->setOutputStream(xMemStream->getOutputStream());
 
                 serializer->serialize(writer, uno::Sequence< beans::StringPair >());
 
                 uno::Reference< io::XStream > xXSLTInStream = xMemStream;
-                uno::Reference< io::XStream > xXSLTOutStream;
+                rtl::Reference< comphelper::UNOMemoryStream > xXSLTOutStream;
                 // Apply XSLT transformations for each SDT data binding
                 // Seems it is not possible to do this as one transformation: each data binding
                 // can have different namespaces, but with conflicting names (ns0, ns1, etc..)
@@ -1734,10 +1732,7 @@ void DocxExport::WriteCustomXml()
                     }
                     else
                     {
-                        xXSLTOutStream.set(
-                            comphelper::getProcessComponentContext()->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.MemoryStream"_ustr,
-                                comphelper::getProcessComponentContext()),
-                            uno::UNO_QUERY_THROW);
+                        xXSLTOutStream = new comphelper::UNOMemoryStream();
                         lcl_UpdateXmlValues(m_SdtData[i], xXSLTInStream->getInputStream(), xXSLTOutStream->getOutputStream());
                         // Use previous output as an input for next run
                         xXSLTInStream.set( xXSLTOutStream );
