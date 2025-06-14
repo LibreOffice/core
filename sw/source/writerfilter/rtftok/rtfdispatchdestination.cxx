@@ -266,19 +266,15 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 {
                     Id nId = NS_ooxml::LN_footnote;
 
-                    // Check if this is an endnote.
-                    OStringBuffer aBuf;
-                    char ch;
-                    sal_uInt64 const nCurrent = Strm().Tell();
-                    for (int i = 0; i < 7; ++i)
                     {
-                        Strm().ReadChar(ch);
-                        aBuf.append(ch);
+                        // Check if this is an endnote.
+                        sal_uInt64 const nCurrent = Strm().Tell();
+                        char buf[7];
+                        std::string_view aKeyword(buf, Strm().ReadBytes(buf, std::size(buf)));
+                        Strm().Seek(nCurrent);
+                        if (aKeyword == "\\ftnalt")
+                            nId = NS_ooxml::LN_endnote;
                     }
-                    Strm().Seek(nCurrent);
-                    OString aKeyword = aBuf.makeStringAndClear();
-                    if (aKeyword == "\\ftnalt")
-                        nId = NS_ooxml::LN_endnote;
 
                     if (m_aStates.top().getCurrentBuffer() == &m_aSuperBuffer)
                         m_aStates.top().setCurrentBuffer(nullptr);
