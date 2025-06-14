@@ -488,7 +488,7 @@ static bool lcl_isPropertyReadOnly(const SwCapObjType eType, const CapConfigProp
 
 sal_uInt32 SwFieldUnitTable::Count()
 {
-    return SAL_N_ELEMENTS(STR_ARR_METRIC);
+    return std::size(STR_ARR_METRIC);
 }
 
 OUString SwFieldUnitTable::GetString(sal_uInt32 nPos)
