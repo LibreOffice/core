@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <services/taskcreatorsrv.hxx>
+#include <framework/taskcreatorsrv.hxx>
 #include <helper/persistentwindowstate.hxx>
 #include <helper/tagwindowasmodified.hxx>
 #include <helper/titlebarupdate.hxx>
@@ -282,14 +282,6 @@ OUString TaskCreatorService::impl_filterNames( const OUString& sName )
     if (TargetHelper::isValidNameForFrame(sName))
         sFiltered = sName;
     return sFiltered;
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_framework_TaskCreator_get_implementation(
-    css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new TaskCreatorService(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

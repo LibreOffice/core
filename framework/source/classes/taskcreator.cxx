@@ -18,12 +18,11 @@
  */
 
 #include <classes/taskcreator.hxx>
-#include <services/taskcreatorsrv.hxx>
+#include <framework/taskcreatorsrv.hxx>
 #include <services.h>
 #include <taskcreatordefs.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <utility>

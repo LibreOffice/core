@@ -19,18 +19,16 @@
 
 #pragma once
 
+#include "fwkdllapi.h"
 #include <comphelper/compbase.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/supportsservice.hxx>
 
-typedef comphelper::WeakComponentImplHelper<css::lang::XServiceInfo,
-                                            css::lang::XSingleServiceFactory>
+typedef comphelper::WeakComponentImplHelper<css::lang::XSingleServiceFactory>
     TaskCreatorService_BASE;
 
-class TaskCreatorService : public TaskCreatorService_BASE
+class FWK_DLLPUBLIC TaskCreatorService : public TaskCreatorService_BASE
 {
 private:
     /** @short  the global uno service manager.
@@ -40,21 +38,6 @@ private:
 
 public:
     explicit TaskCreatorService(css::uno::Reference<css::uno::XComponentContext> xContext);
-
-    virtual OUString SAL_CALL getImplementationName() override
-    {
-        return u"com.sun.star.comp.framework.TaskCreator"_ustr;
-    }
-
-    virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override
-    {
-        return cppu::supportsService(this, ServiceName);
-    }
-
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-    {
-        return { u"com.sun.star.frame.TaskCreator"_ustr };
-    }
 
     // XSingleServiceFactory
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance() override;

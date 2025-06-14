@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -64,6 +63,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <framework/taskcreatorsrv.hxx>
 
 #include <docholder.hxx>
 #include <commonembobj.hxx>
@@ -433,7 +433,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         uno::Reference< frame::XFrame > xContFrame( xContDisp, uno::UNO_QUERY );
 
         // create a frame based on the specified window
-        uno::Reference< lang::XSingleServiceFactory > xFrameFact = frame::TaskCreator::create(m_xContext);
+        rtl::Reference< TaskCreatorService > xFrameFact = new TaskCreatorService(m_xContext);
 
         uno::Sequence< uno::Any > aArgs( xContFrame.is() ? 2 : 1 );
         auto pArgs = aArgs.getArray();
@@ -812,7 +812,7 @@ uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
     // the frame for outplace activation
     if ( !m_xFrame.is() )
     {
-        uno::Reference< lang::XSingleServiceFactory > xFrameFact = frame::TaskCreator::create(m_xContext);
+        rtl::Reference< TaskCreatorService > xFrameFact = new TaskCreatorService(m_xContext);
 
         m_xFrame.set(xFrameFact->createInstanceWithArguments( m_aOutplaceFrameProps ), uno::UNO_QUERY_THROW);
 

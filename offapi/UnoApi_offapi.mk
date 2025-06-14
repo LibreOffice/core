@@ -199,7 +199,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/frame,\
 	OfficeFrameLoader \
     SessionListener \
     StartModule \
-    TaskCreator \
 	UICommandDescription \
 	theAutoRecovery \
 	theDesktop \

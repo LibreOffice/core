@@ -22,6 +22,7 @@ $(eval $(call gb_Library_use_libraries,dbahsql,\
     comphelper \
     cppu \
     cppuhelper \
+    fwk \
     sal \
     salhelper \
     dbtools \

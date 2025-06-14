@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_libraries,embobj,\
 	comphelper \
 	cppu \
 	cppuhelper \
+	fwk \
 	sal \
 	svt \
 	utl \
