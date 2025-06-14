@@ -37,8 +37,6 @@ using namespace css::uno;
 using namespace ::svxform;
 using namespace css::sdbc;
 
-#define MAX_HISTORY_ENTRIES     50
-
 void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 {
     // init the engine
@@ -273,6 +271,7 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain, weld::Button&, void)
         m_pcmbSearchText->insert_text(0, strThisRoundText);
         // the remove/insert makes sure that a) the OUString does not appear twice and
         // that b) the last searched strings are at the beginning and limit the list length
+        constexpr int MAX_HISTORY_ENTRIES = 50;
         while (m_pcmbSearchText->get_count() > MAX_HISTORY_ENTRIES)
             m_pcmbSearchText->remove(m_pcmbSearchText->get_count()-1);
 
