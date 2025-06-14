@@ -25,6 +25,7 @@
 
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
+#include <vcl/svapp.hxx>
 
 #include <algorithm>
 #include <atomic>
@@ -448,14 +449,6 @@ PresenterClockTimer::PresenterClockTimer (const Reference<XComponentContext>& rx
       m_xContext(rxContext)
 {
     assert(m_xContext.is());
-    Reference<lang::XMultiComponentFactory> xFactory =
-        rxContext->getServiceManager();
-    if (xFactory.is())
-        mxRequestCallback.set(
-            xFactory->createInstanceWithContext(
-                u"com.sun.star.awt.AsyncCallback"_ustr,
-                rxContext),
-            UNO_QUERY_THROW);
 }
 
 PresenterClockTimer::~PresenterClockTimer()
@@ -466,10 +459,8 @@ PresenterClockTimer::~PresenterClockTimer()
         mnTimerTaskId = PresenterTimer::NotAValidTaskId;
     }
 
-    Reference<lang::XComponent> xComponent (mxRequestCallback, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
-    mxRequestCallback = nullptr;
+    if (mpRequestCallbackId)
+        Application::RemoveUserEvent(mpRequestCallbackId);
 }
 
 void PresenterClockTimer::AddListener (const SharedListener& rListener)
@@ -522,8 +513,7 @@ oslDateTime PresenterClockTimer::GetCurrentTime()
 
 void PresenterClockTimer::CheckCurrentTime (const TimeValue& rCurrentTime)
 {
-    css::uno::Reference<css::awt::XRequestCallback> xRequestCallback;
-    css::uno::Reference<css::awt::XCallback> xCallback;
+    bool bAddCallback = false;
     {
         std::unique_lock aGuard (maMutex);
 
@@ -540,23 +530,23 @@ void PresenterClockTimer::CheckCurrentTime (const TimeValue& rCurrentTime)
                 maDateTime = aDateTime;
 
                 // Schedule notification of listeners.
-                if (mxRequestCallback.is() && ! mbIsCallbackPending)
+                if (! mbIsCallbackPending)
                 {
                     mbIsCallbackPending = true;
-                    xRequestCallback = mxRequestCallback;
-                    xCallback = this;
+                    bAddCallback = true;
                 }
             }
         }
     }
-    if (xRequestCallback.is() && xCallback.is())
-        xRequestCallback->addCallback(xCallback, Any());
+    if (bAddCallback)
+        mpRequestCallbackId = Application::PostUserEvent(LINK(this, PresenterClockTimer, HandleCall_PostUserEvent));
 }
 
-//----- XCallback -------------------------------------------------------------
 
-void SAL_CALL PresenterClockTimer::notify (const css::uno::Any&)
+IMPL_LINK_NOARG( PresenterClockTimer, HandleCall_PostUserEvent, void*, void )
 {
+    mpRequestCallbackId = nullptr;
+
     ListenerContainer aListenerCopy;
 
     {

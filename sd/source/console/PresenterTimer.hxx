@@ -20,13 +20,12 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERTIMER_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERTIMER_HXX
 
-#include <com/sun/star/awt/XCallback.hpp>
-#include <com/sun/star/awt/XRequestCallback.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <osl/time.h>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
+#include <tools/link.hxx>
 
 #include <functional>
 #include <memory>
@@ -34,6 +33,7 @@
 #include <vector>
 
 namespace com::sun::star::uno { class XComponentContext; }
+struct ImplSVEvent;
 
 namespace sdext::presenter {
 
@@ -63,9 +63,7 @@ public:
     static void CancelTask (const sal_Int32 nTaskId);
 };
 
-typedef cppu::WeakComponentImplHelper<
-    css::awt::XCallback
-    > PresenterClockTimerInterfaceBase;
+typedef cppu::WeakComponentImplHelper<> PresenterClockTimerInterfaceBase;
 
 /** A timer that calls its listeners, typically clocks, every second to
     update their current time value.
@@ -92,12 +90,10 @@ public:
 
     static oslDateTime GetCurrentTime();
 
-    // XCallback
-
-    virtual void SAL_CALL notify (const css::uno::Any& rUserData) override;
-
 private:
     static ::rtl::Reference<PresenterClockTimer> mpInstance;
+
+    DECL_LINK( HandleCall_PostUserEvent, void*, void );
 
     std::mutex maMutex;
     typedef ::std::vector<SharedListener> ListenerContainer;
@@ -105,7 +101,7 @@ private:
     oslDateTime maDateTime;
     sal_Int32 mnTimerTaskId;
     bool mbIsCallbackPending;
-    css::uno::Reference<css::awt::XRequestCallback> mxRequestCallback;
+    ImplSVEvent* mpRequestCallbackId { nullptr };
     const css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
     PresenterClockTimer (
