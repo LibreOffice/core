@@ -9,6 +9,7 @@
  */
 
 #include <docmodel/theme/Theme.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
 
 #include <utility>
 #include <libxml/xmlwriter.h>
@@ -19,6 +20,8 @@
 #include <o3tl/enumrange.hxx>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/util/XTheme.hpp>
 
 using namespace com::sun::star;
 
@@ -81,10 +84,18 @@ void Theme::ToAny(uno::Any& rVal) const
     rVal <<= aMap.getAsConstPropertyValueList();
 }
 
-std::unique_ptr<Theme> Theme::FromAny(const uno::Any& rVal)
+std::shared_ptr<Theme> Theme::FromAny(const uno::Any& rVal)
 {
+    if (css::uno::Reference<css::util::XTheme> xTheme; rVal >>= xTheme)
+    {
+        if (auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get()))
+            return pUnoTheme->getTheme();
+        else
+            throw css::lang::IllegalArgumentException();
+    }
+
     comphelper::SequenceAsHashMap aMap(rVal);
-    std::unique_ptr<Theme> pTheme;
+    std::shared_ptr<Theme> pTheme;
     std::shared_ptr<model::ColorSet> pColorSet;
 
     auto it = aMap.find(u"Name"_ustr);
@@ -92,7 +103,7 @@ std::unique_ptr<Theme> Theme::FromAny(const uno::Any& rVal)
     {
         OUString aName;
         it->second >>= aName;
-        pTheme = std::make_unique<Theme>(aName);
+        pTheme = std::make_shared<Theme>(aName);
     }
 
     it = aMap.find(u"ColorSchemeName"_ustr);
