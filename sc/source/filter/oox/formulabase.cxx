@@ -45,6 +45,7 @@
 #include <oox/token/properties.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/string_view.hxx>
+#include <formula/FormulaCompiler.hxx>
 
 namespace {
 
@@ -1188,9 +1189,9 @@ private:
     typedef ::std::map< OUString, ApiToken >    ApiTokenMap;
     typedef Sequence< FormulaOpCodeMapEntry >   OpCodeEntrySequence;
 
-    static bool         fillEntrySeq( OpCodeEntrySequence& orEntrySeq, const Reference< XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
-    static bool         fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySequence& orEntrySeq, const Reference< XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
-    bool                fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiTokenMap& orExtFuncTokenMap, OpCodeEntrySequence& orEntrySeq, const Reference< XFormulaOpCodeMapper >& rxMapper ) const;
+    static bool         fillEntrySeq( OpCodeEntrySequence& orEntrySeq, const formula::FormulaCompiler& rMapper, sal_Int32 nMapGroup );
+    static bool         fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySequence& orEntrySeq, const formula::FormulaCompiler& rMapper, sal_Int32 nMapGroup );
+    bool                fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiTokenMap& orExtFuncTokenMap, OpCodeEntrySequence& orEntrySeq, const formula::FormulaCompiler& rMapper ) const;
 
     static bool         initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequence& rEntrySeq, sal_Int32 nSpecialId );
     bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const OUString& rOdfName, const OUString& rOoxName );
@@ -1209,12 +1210,11 @@ OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
 
     try
     {
-        Reference< XFormulaOpCodeMapper > xMapper( rxModelFactory->createInstance(
-            u"com.sun.star.sheet.FormulaOpCodeMapper"_ustr ), UNO_QUERY_THROW );
+        formula::FormulaCompiler xMapper;
 
         // op-codes provided as attributes
-        OPCODE_UNKNOWN = xMapper->getOpCodeUnknown();
-        OPCODE_EXTERNAL = xMapper->getOpCodeExternal();
+        OPCODE_UNKNOWN = formula::FormulaCompiler::OpCodeMap::getOpCodeUnknown();
+        OPCODE_EXTERNAL = ocExternal;
 
         using namespace ::com::sun::star::sheet::FormulaMapGroup;
         using namespace ::com::sun::star::sheet::FormulaMapGroupSpecialOffset;
@@ -1283,24 +1283,22 @@ OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
 }
 
 bool OpCodeProviderImpl::fillEntrySeq( OpCodeEntrySequence& orEntrySeq,
-        const Reference< XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup )
+        const formula::FormulaCompiler& rMapper, sal_Int32 nMapGroup )
 {
-    try
+    formula::FormulaCompiler::OpCodeMapPtr xMap = rMapper.GetOpCodeMap(css::sheet::FormulaLanguage::ODFF);
+    if (xMap)
     {
-        orEntrySeq = rxMapper->getAvailableMappings( css::sheet::FormulaLanguage::ODFF, nMapGroup );
+        orEntrySeq = xMap->createSequenceOfAvailableMappings( rMapper, nMapGroup);
         return orEntrySeq.hasElements();
-    }
-    catch( Exception& )
-    {
     }
     return false;
 }
 
 bool OpCodeProviderImpl::fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySequence& orEntrySeq,
-        const Reference< XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup )
+        const formula::FormulaCompiler& rMapper, sal_Int32 nMapGroup )
 {
     orTokenMap.clear();
-    if( fillEntrySeq( orEntrySeq, rxMapper, nMapGroup ) )
+    if( fillEntrySeq( orEntrySeq, rMapper, nMapGroup ) )
     {
         for (const FormulaOpCodeMapEntry& rEntry : orEntrySeq)
             orTokenMap[ rEntry.Name ] = rEntry.Token;
@@ -1308,11 +1306,11 @@ bool OpCodeProviderImpl::fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySeque
     return orEntrySeq.hasElements();
 }
 
-bool OpCodeProviderImpl::fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiTokenMap& orExtFuncTokenMap, OpCodeEntrySequence& orEntrySeq, const Reference< XFormulaOpCodeMapper >& rxMapper ) const
+bool OpCodeProviderImpl::fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiTokenMap& orExtFuncTokenMap, OpCodeEntrySequence& orEntrySeq, const formula::FormulaCompiler& rMapper ) const
 {
     orIntFuncTokenMap.clear();
     orExtFuncTokenMap.clear();
-    if( fillEntrySeq( orEntrySeq, rxMapper, css::sheet::FormulaMapGroup::FUNCTIONS ) )
+    if( fillEntrySeq( orEntrySeq, rMapper, css::sheet::FormulaMapGroup::FUNCTIONS ) )
     {
         for (const FormulaOpCodeMapEntry& rEntry : orEntrySeq)
             ((rEntry.Token.OpCode == OPCODE_EXTERNAL) ? orExtFuncTokenMap : orIntFuncTokenMap)[ rEntry.Name ] = rEntry.Token;
