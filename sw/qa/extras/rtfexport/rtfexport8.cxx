@@ -678,6 +678,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf155835)
+{
+    // Given a document with an encoding defined for a specific font that is defined for a main
+    // text run, which has a footnote substream; but the substream doesn't specify own font, and
+    // therefore depends on the parent current state:
+    createSwDoc("substream-reusing-parent-encoding.rtf");
+    {
+        auto xSupplier = mxComponent.queryThrow<text::XFootnotesSupplier>();
+        auto xFootnotes = xSupplier->getFootnotes();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
+        auto xEndnoteText = xFootnotes->getByIndex(0).queryThrow<text::XText>();
+        // Check that the footnote encoding was correct; without the fix, this would fail with
+        // - Expected: Текст сноски
+        // - Actual  : Òåêñò ñíîñêè
+        CPPUNIT_ASSERT_EQUAL(u"Текст сноски"_ustr, xEndnoteText->getString());
+    }
+    // Check export, too
+    saveAndReload(mpFilter);
+    {
+        auto xSupplier = mxComponent.queryThrow<text::XFootnotesSupplier>();
+        auto xFootnotes = xSupplier->getFootnotes();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
+        auto xEndnoteText = xFootnotes->getByIndex(0).queryThrow<text::XText>();
+        CPPUNIT_ASSERT_EQUAL(u"Текст сноски"_ustr, xEndnoteText->getString());
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
