@@ -400,6 +400,9 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString const&
         pImpl->m_aAuthorInitials = m_aAuthorInitials;
         m_aAuthorInitials.clear();
     }
+    // Copy current encoding. Do we need to copy more state?
+    pImpl->m_aDefaultState.setCurrentEncoding(
+        (m_aStates.empty() ? m_aDefaultState : m_aStates.top()).getCurrentEncoding());
     pImpl->m_nDefaultFontIndex = m_nDefaultFontIndex;
     pImpl->m_pStyleTableEntries = m_pStyleTableEntries;
     pImpl->Strm().Seek(nPos);
