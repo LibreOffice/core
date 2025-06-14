@@ -61,7 +61,7 @@ namespace dbaui
 
         bool operator()(const OUString& _sColumnName) const override
         {
-            return m_pColumns->find(_sColumnName) != m_pColumns->end();
+            return m_pColumns->contains(_sColumnName);
         }
     };
 
