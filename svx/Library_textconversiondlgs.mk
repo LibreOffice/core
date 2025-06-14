@@ -19,8 +19,6 @@
 
 $(eval $(call gb_Library_Library,textconversiondlgs))
 
-$(eval $(call gb_Library_set_componentfile,textconversiondlgs,svx/util/textconversiondlgs,services))
-
 $(eval $(call gb_Library_set_include,textconversiondlgs,\
     -I$(SRCDIR)/svx/inc \
     $$(INCLUDE) \
@@ -29,6 +27,10 @@ $(eval $(call gb_Library_set_include,textconversiondlgs,\
 $(eval $(call gb_Library_use_external,textconversiondlgs,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,textconversiondlgs))
+
+$(eval $(call gb_Library_add_defs,textconversiondlgs,\
+    -DTEXTCONVERSIONDLGS_DLLIMPLEMENTATION \
+))
 
 $(eval $(call gb_Library_use_libraries,textconversiondlgs,\
     comphelper \

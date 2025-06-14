@@ -5630,6 +5630,7 @@ include/svx/autoformathelper.hxx
 include/svx/bmpmask.hxx
 include/svx/charmap.hxx
 include/svx/charthelper.hxx
+include/svx/chinese_translation_unodialog.hxx
 include/svx/chrtitem.hxx
 include/svx/clipboardctl.hxx
 include/svx/colorwindow.hxx
@@ -11687,7 +11688,6 @@ svx/source/uitest/uiobject.cxx
 svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.cxx
 svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx
 svx/source/unodialogs/textconversiondlgs/chinese_translation_unodialog.cxx
-svx/source/unodialogs/textconversiondlgs/chinese_translation_unodialog.hxx
 svx/source/unodialogs/textconversiondlgs/chinese_translationdialog.cxx
 svx/source/unodraw/UnoGraphicExporter.cxx
 svx/source/unodraw/UnoNameItemTable.cxx

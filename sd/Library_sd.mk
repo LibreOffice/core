@@ -94,6 +94,7 @@ $(eval $(call gb_Library_use_libraries,sd,\
 	svt \
 	svxcore \
 	svx \
+	textconversiondlgs \
 	tk \
 	tl \
 	ucbhelper \

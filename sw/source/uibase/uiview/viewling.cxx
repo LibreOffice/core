@@ -38,6 +38,7 @@
 #include <svx/ehdl.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/chinese_translation_unodialog.hxx>
 #include <osl/diagnose.h>
 #include <swwait.hxx>
 #include <uitool.hxx>
@@ -106,101 +107,64 @@ void SwView::ExecLingu(SfxRequest &rReq)
         case SID_CHINESE_CONVERSION:
         {
             //open ChineseTranslationDialog
-            uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-            if(xContext.is())
+            Reference<awt::XWindow> xParentWindow;
+            if (weld::Window* pParentWindow = rReq.GetFrameWeld())
+                xParentWindow = pParentWindow->GetXWindow();
+            rtl::Reference< textconversiondlgs::ChineseTranslation_UnoDialog > xDialog(new textconversiondlgs::ChineseTranslation_UnoDialog(xParentWindow));
+
+            //execute dialog
+            sal_Int16 nDialogRet = xDialog->execute();
+            if( RET_OK == nDialogRet )
             {
-                Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
-                if(xMCF.is())
+                //get some parameters from the dialog
+                bool bToSimplified = xDialog->getIsDirectionToSimplified();
+                bool bUseVariants = false;
+                bool bCommonTerms = xDialog->getIsTranslateCommonTerms();
+
+                //execute translation
+                LanguageType nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                LanguageType nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                sal_Int32 nOptions       = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                if( !bCommonTerms )
+                    nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
+
+                vcl::Font aTargetFont = OutputDevice::GetDefaultFont( DefaultFontType::CJK_TEXT,
+                                        nTargetLang, GetDefaultFontFlags::OnlyOne );
+
+                // disallow formatting, updating the view, ... while
+                // converting the document. (saves time)
+                // Also remember the current view and cursor position for later
+                m_pWrtShell->StartAction();
+
+                // remember cursor position data for later restoration of the cursor
+                const SwPosition *pPoint = m_pWrtShell->GetCursor()->GetPoint();
+                bool bRestoreCursor = pPoint->GetNode().IsTextNode();
+                const SwNodeIndex aPointNodeIndex( pPoint->GetNode() );
+                sal_Int32 nPointIndex = pPoint->GetContentIndex();
+
+                // since this conversion is not interactive the whole converted
+                // document should be undone in a single undo step.
+                m_pWrtShell->StartUndo( SwUndoId::OVERWRITE );
+
+                StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, false );
+
+                m_pWrtShell->EndUndo( SwUndoId::OVERWRITE );
+
+                if (bRestoreCursor)
                 {
-                    Reference< ui::dialogs::XExecutableDialog > xDialog(
-                            xMCF->createInstanceWithContext(
-                                u"com.sun.star.linguistic2.ChineseTranslationDialog"_ustr, xContext),
-                            UNO_QUERY);
-                    Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
-                    if( xInit.is() )
-                    {
-                        Reference<awt::XWindow> xParentWindow;
-                        if (weld::Window* pParentWindow = rReq.GetFrameWeld())
-                            xParentWindow = pParentWindow->GetXWindow();
-                        //  initialize dialog
-                        uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
-                        {
-                            {"ParentWindow", uno::Any(xParentWindow)}
-                        }));
-                        xInit->initialize( aSeq );
-
-                        //execute dialog
-                        sal_Int16 nDialogRet = xDialog->execute();
-                        if( RET_OK == nDialogRet )
-                        {
-                            //get some parameters from the dialog
-                            bool bToSimplified = true;
-                            bool bUseVariants = true;
-                            bool bCommonTerms = true;
-                            Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
-                            if( xProp.is() )
-                            {
-                                try
-                                {
-                                    xProp->getPropertyValue( u"IsDirectionToSimplified"_ustr ) >>= bToSimplified;
-                                    xProp->getPropertyValue( u"IsUseCharacterVariants"_ustr ) >>= bUseVariants;
-                                    xProp->getPropertyValue( u"IsTranslateCommonTerms"_ustr ) >>= bCommonTerms;
-                                }
-                                catch (const Exception&)
-                                {
-                                }
-                            }
-
-                            //execute translation
-                            LanguageType nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
-                            LanguageType nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
-                            sal_Int32 nOptions       = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
-                            if( !bCommonTerms )
-                                nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
-
-                            vcl::Font aTargetFont = OutputDevice::GetDefaultFont( DefaultFontType::CJK_TEXT,
-                                                    nTargetLang, GetDefaultFontFlags::OnlyOne );
-
-                            // disallow formatting, updating the view, ... while
-                            // converting the document. (saves time)
-                            // Also remember the current view and cursor position for later
-                            m_pWrtShell->StartAction();
-
-                            // remember cursor position data for later restoration of the cursor
-                            const SwPosition *pPoint = m_pWrtShell->GetCursor()->GetPoint();
-                            bool bRestoreCursor = pPoint->GetNode().IsTextNode();
-                            const SwNodeIndex aPointNodeIndex( pPoint->GetNode() );
-                            sal_Int32 nPointIndex = pPoint->GetContentIndex();
-
-                            // since this conversion is not interactive the whole converted
-                            // document should be undone in a single undo step.
-                            m_pWrtShell->StartUndo( SwUndoId::OVERWRITE );
-
-                            StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, false );
-
-                            m_pWrtShell->EndUndo( SwUndoId::OVERWRITE );
-
-                            if (bRestoreCursor)
-                            {
-                                SwTextNode *pTextNode = aPointNodeIndex.GetNode().GetTextNode();
-                                // check for unexpected error case
-                                OSL_ENSURE(pTextNode && pTextNode->GetText().getLength() >= nPointIndex,
-                                    "text missing: corrupted node?" );
-                                // restore cursor to its original position
-                                if (!pTextNode || pTextNode->GetText().getLength() < nPointIndex)
-                                    m_pWrtShell->GetCursor()->GetPoint()->Assign( aPointNodeIndex );
-                                else
-                                    m_pWrtShell->GetCursor()->GetPoint()->Assign( *pTextNode, nPointIndex );
-                            }
-
-                            // enable all, restore view and cursor position
-                            m_pWrtShell->EndAction();
-                        }
-                    }
-                    Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );
-                    if( xComponent.is() )
-                        xComponent->dispose();
+                    SwTextNode *pTextNode = aPointNodeIndex.GetNode().GetTextNode();
+                    // check for unexpected error case
+                    OSL_ENSURE(pTextNode && pTextNode->GetText().getLength() >= nPointIndex,
+                        "text missing: corrupted node?" );
+                    // restore cursor to its original position
+                    if (!pTextNode || pTextNode->GetText().getLength() < nPointIndex)
+                        m_pWrtShell->GetCursor()->GetPoint()->Assign( aPointNodeIndex );
+                    else
+                        m_pWrtShell->GetCursor()->GetPoint()->Assign( *pTextNode, nPointIndex );
                 }
+
+                // enable all, restore view and cursor position
+                m_pWrtShell->EndAction();
             }
             break;
         }

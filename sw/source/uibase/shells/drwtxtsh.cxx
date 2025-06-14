@@ -30,6 +30,7 @@
 #include <sfx2/objface.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/sdooitm.hxx>
+#include <svx/chinese_translation_unodialog.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
@@ -284,50 +285,16 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
     case SID_CHINESE_CONVERSION:
         {
             //open ChineseTranslationDialog
-            const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
-            if (!xContext.is())
-                return;
-
-            Reference<lang::XMultiComponentFactory> xMCF(xContext->getServiceManager());
-            if (!xMCF.is())
-                return;
-
-            Reference<ui::dialogs::XExecutableDialog> xDialog(
-                    xMCF->createInstanceWithContext(u"com.sun.star.linguistic2.ChineseTranslationDialog"_ustr, xContext), UNO_QUERY);
-
-            Reference<lang::XInitialization> xInit(xDialog, UNO_QUERY);
-
-            if (!xInit.is())
-                return;
-
-            //  initialize dialog
-            uno::Sequence<uno::Any> aSequence(comphelper::InitAnyPropertySequence(
-            {
-                {"ParentWindow", uno::Any(Reference<awt::XWindow>())}
-            }));
-            xInit->initialize( aSequence );
+            rtl::Reference<textconversiondlgs::ChineseTranslation_UnoDialog> xDialog(new textconversiondlgs::ChineseTranslation_UnoDialog({}));
 
             //execute dialog
             sal_Int16 nDialogRet = xDialog->execute();
             if(RET_OK == nDialogRet)
             {
                 //get some parameters from the dialog
-                bool bToSimplified = true;
-                bool bUseVariants = true;
-                bool bCommonTerms = true;
-                Reference<beans::XPropertySet> xPropertySet(xDialog, UNO_QUERY);
-                if (xPropertySet.is())
-                {
-                    try
-                    {
-                        xPropertySet->getPropertyValue(u"IsDirectionToSimplified"_ustr) >>= bToSimplified;
-                        xPropertySet->getPropertyValue(u"IsUseCharacterVariants"_ustr) >>= bUseVariants;
-                        xPropertySet->getPropertyValue(u"IsTranslateCommonTerms"_ustr) >>= bCommonTerms;
-                    }
-                    catch (const Exception&)
-                    {
-                    }
-                }
+                bool bToSimplified = xDialog->getIsDirectionToSimplified();
+                bool bUseVariants = false;
+                bool bCommonTerms = xDialog->getIsTranslateCommonTerms();
 
                 //execute translation
                 LanguageType nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
@@ -340,10 +307,6 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
 
                 pOutlinerView->StartTextConversion(rReq.GetFrameWeld(), nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false);
             }
-
-            Reference<lang::XComponent> xComponent(xDialog, UNO_QUERY);
-            if (xComponent.is())
-                xComponent->dispose();
         }
         break;
 

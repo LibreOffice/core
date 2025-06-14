@@ -46,6 +46,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     svxcore \
     svx \
 	test \
+	textconversiondlgs \
     tk \
     tl \
     ucbhelper \

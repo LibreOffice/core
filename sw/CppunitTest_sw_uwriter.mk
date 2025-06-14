@@ -56,6 +56,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
     svxcore \
     swd \
 	test \
+	textconversiondlgs \
     tk \
     tl \
     ucbhelper \
