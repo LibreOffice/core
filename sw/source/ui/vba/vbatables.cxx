@@ -180,18 +180,16 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& N
     rtl::Reference< SwXTextDocument > xModel( pVbaRange->getDocument() );
     uno::Reference< text::XTextRange > xTextRange = pVbaRange->getXTextRange();
 
-    uno::Reference< text::XTextTable > xTable;
-    xTable.set( xModel->createInstance(u"com.sun.star.text.TextTable"_ustr), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXTextTable > xTable(SwXTextTable::CreateXTextTable(nullptr));
 
     xTable->initialize( nRows, nCols );
     uno::Reference< text::XText > xText = xTextRange->getText();
-    uno::Reference< text::XTextContent > xContext( xTable, uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextContent > xContext( xTable );
 
     xText->insertTextContent( xTextRange, xContext, true );
 
     // move the current cursor to the first table cell
-    uno::Reference< table::XCellRange > xCellRange( xTable, uno::UNO_QUERY_THROW );
-    uno::Reference< text::XText> xFirstCellText( xCellRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XText> xFirstCellText( xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
     word::getXTextViewCursor( mxDocument )->gotoRange( xFirstCellText->getStart(), false );
 
     uno::Reference< word::XTable > xVBATable( new SwVbaTable( mxParent, mxContext,  pVbaRange->getDocument(), xTable ) );

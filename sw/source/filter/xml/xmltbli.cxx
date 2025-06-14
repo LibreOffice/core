@@ -1191,25 +1191,19 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
             ->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_TABLE, aName, sTableName );
     }
 
-    Reference< XTextTable > xTable;
-    SwXTextTable *pXTable = nullptr;
-    Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(),
-                                              UNO_QUERY );
+    rtl::Reference< SwXTextTable > xTable;
+    Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(), UNO_QUERY );
     OSL_ENSURE( xFactory.is(), "factory missing" );
     if( xFactory.is() )
     {
-        Reference<XInterface> xIfc = xFactory->createInstance( u"com.sun.star.text.TextTable"_ustr );
-        OSL_ENSURE( xIfc.is(), "Couldn't create a table" );
-
-        if( xIfc.is() )
-            xTable.set( xIfc, UNO_QUERY );
+        xTable = SwXTextTable::CreateXTextTable(nullptr);
+        OSL_ENSURE( xTable.is(), "Couldn't create a table" );
     }
 
     if( xTable.is() )
     {
         xTable->initialize( 1, 1 );
-        if (auto xPropSet = xTable.query<css::beans::XPropertySet>())
-            xPropSet->setPropertyValue(UNO_NAME_TABLE_NAME, css::uno::Any(sTableName));
+        xTable->setPropertyValue(UNO_NAME_TABLE_NAME, css::uno::Any(sTableName));
 
         try
         {
@@ -1222,27 +1216,22 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         }
     }
 
-    if( xTable.is() )
-    {
-        //FIXME
-        // xml:id for RDF metadata
-        GetImport().SetXmlId(xTable, sXmlId);
-
-        pXTable = dynamic_cast<SwXTextTable*>(xTable.get());
-
-        Reference < XCellRange > xCellRange( xTable, UNO_QUERY );
-        Reference < XCell > xCell = xCellRange->getCellByPosition( 0, 0 );
-        Reference < XText> xText( xCell, UNO_QUERY );
-        m_xOldCursor = GetImport().GetTextImport()->GetCursor();
-        GetImport().GetTextImport()->SetCursor( xText->createTextCursor() );
-
-        // take care of open redlines for tables
-        GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
-    }
-    if( !pXTable )
+    if( !xTable )
         return;
 
-    SwFrameFormat *const pTableFrameFormat = pXTable->GetFrameFormat();
+    //FIXME
+    // xml:id for RDF metadata
+    GetImport().SetXmlId(uno::Reference<XTextTable>(xTable), sXmlId);
+
+    Reference < XCell > xCell = xTable->getCellByPosition( 0, 0 );
+    Reference < XText> xText( xCell, UNO_QUERY );
+    m_xOldCursor = GetImport().GetTextImport()->GetCursor();
+    GetImport().GetTextImport()->SetCursor( xText->createTextCursor() );
+
+    // take care of open redlines for tables
+    GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
+
+    SwFrameFormat *const pTableFrameFormat = xTable->GetFrameFormat();
     OSL_ENSURE( pTableFrameFormat, "table format missing" );
     SwTable *pTable = SwTable::FindTable( pTableFrameFormat );
     assert(pTable && "table missing");
