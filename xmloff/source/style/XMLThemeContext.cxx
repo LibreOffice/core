@@ -17,6 +17,7 @@
 
 #include <sax/tools/converter.hxx>
 
+#include <comphelper/diagnose_ex.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
 
@@ -51,7 +52,14 @@ XMLThemeContext::~XMLThemeContext()
         uno::Reference<beans::XPropertySet> xPropertySet(m_xObjectWithThemeProperty,
                                                          uno::UNO_QUERY);
         auto xTheme = model::theme::createXTheme(mpTheme);
-        xPropertySet->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
+        try
+        {
+            xPropertySet->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
+        }
+        catch (uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("xmloff");
+        }
     }
 }
 
