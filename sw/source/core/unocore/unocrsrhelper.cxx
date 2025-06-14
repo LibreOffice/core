@@ -595,7 +595,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                     //SwTable& rTable = static_cast<SwTableNode*>(pSttNode)->GetTable();
                     if(FN_UNO_TEXT_TABLE == rEntry.nWID)
                     {
-                        rtl::Reference< SwXTextTable >  xTable = SwXTextTables::GetObject(*pTableFormat);
+                        rtl::Reference< SwXTextTable >  xTable = SwXTextTable::CreateXTextTable(pTableFormat);
                         *pAny <<= uno::Reference< XTextTable >(xTable);
                     }
                     else

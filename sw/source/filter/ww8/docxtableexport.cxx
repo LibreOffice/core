@@ -200,7 +200,8 @@ void DocxAttributeOutput::TableDefinition(
         nWidthPercent = rFrameSize.GetWidthPercent();
     }
 
-    rtl::Reference<SwXTextTable> xPropertySet = SwXTextTables::GetObject(*pTable->GetFrameFormat());
+    rtl::Reference<SwXTextTable> xPropertySet
+        = SwXTextTable::CreateXTextTable(pTable->GetFrameFormat());
     bool isWidthRelative = false;
     xPropertySet->getPropertyValue(u"IsWidthRelative"_ustr) >>= isWidthRelative;
     if (!isWidthRelative && !nWidthPercent)

@@ -292,8 +292,6 @@ public:
 
     rtl::Reference<SwXTextTable> getTextTableByName(std::u16string_view Name);
     rtl::Reference<SwXTextTable> getTextTableByIndex(sal_Int32 nIndex);
-
-    static rtl::Reference<SwXTextTable> GetObject(SwFrameFormat& rFormat);
 };
 
 typedef

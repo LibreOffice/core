@@ -891,7 +891,7 @@ rtl::Reference<SwXTextTable> SwXTextTables::getTextTableByIndex(sal_Int32 nInput
             --nIndex;
         else
         {
-            return SwXTextTables::GetObject(*pFormat);
+            return SwXTextTable::CreateXTextTable(pFormat);
         }
     }
     throw IndexOutOfBoundsException();
@@ -913,7 +913,7 @@ rtl::Reference<SwXTextTable> SwXTextTables::getTextTableByName(std::u16string_vi
         SwFrameFormat& rFormat = GetDoc().GetTableFrameFormat(i, true);
         if (rItemName == rFormat.GetName())
         {
-            xTable = SwXTextTables::GetObject(rFormat);
+            xTable = SwXTextTable::CreateXTextTable(&rFormat);
             break;
         }
     }
@@ -984,11 +984,6 @@ sal_Bool SwXTextTables::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.TextTables"_ustr };
-}
-
-rtl::Reference<SwXTextTable> SwXTextTables::GetObject(SwFrameFormat& rFormat)
-{
-    return SwXTextTable::CreateXTextTable(& rFormat);
 }
 
 namespace
