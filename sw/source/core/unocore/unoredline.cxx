@@ -443,38 +443,28 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
         rPropertyName == UNO_NAME_REDLINE_END)
     {
         uno::Reference<XInterface> xRet;
-        SwNode* pNode = &m_pRedline->GetPointNode();
-        if(!bStart && m_pRedline->HasMark())
-            pNode = &m_pRedline->GetMarkNode();
-        switch(pNode->GetNodeType())
+        SwPosition* pPoint = bStart ? m_pRedline->GetPoint() : m_pRedline->GetMark();
+        switch (pPoint->GetNode().GetNodeType())
         {
             case SwNodeType::Section:
             {
-                SwSectionNode* pSectNode = pNode->GetSectionNode();
-                OSL_ENSURE(pSectNode, "No section node!");
-                rtl::Reference< SwXTextSection > xSect = SwXTextSections::GetObject( *pSectNode->GetSection().GetFormat() );
-                xRet = uno::Reference< text::XTextSection >(xSect);
+                SwSectionNode* pSectNode = pPoint->GetNode().GetSectionNode();
+                assert(pSectNode);
+                SwSectionFormat* pSectionFormat = pSectNode->GetSection().GetFormat();
+                xRet = cppu::getXWeak(SwXTextSections::GetObject(*pSectionFormat).get());
             }
             break;
             case SwNodeType::Table :
             {
-                SwTableNode* pTableNode = pNode->GetTableNode();
-                OSL_ENSURE(pTableNode, "No table node!");
-                SwTable& rTable = pTableNode->GetTable();
-                SwFrameFormat* pTableFormat = rTable.GetFrameFormat();
+                SwTableNode* pTableNode = pPoint->GetNode().GetTableNode();
+                assert(pTableNode);
+                SwFrameFormat* pTableFormat = pTableNode->GetTable().GetFrameFormat();
                 xRet = cppu::getXWeak(SwXTextTables::GetObject( *pTableFormat ).get());
             }
             break;
             case SwNodeType::Text :
             {
-                SwPosition* pPoint = nullptr;
-                if(bStart || !m_pRedline->HasMark())
-                    pPoint = m_pRedline->GetPoint();
-                else
-                    pPoint = m_pRedline->GetMark();
-                const rtl::Reference<SwXTextRange> xRange =
-                    SwXTextRange::CreateXTextRange(*m_pDoc, *pPoint, nullptr);
-                xRet = uno::Reference<text::XTextRange>(xRange);
+                xRet = cppu::getXWeak(SwXTextRange::CreateXTextRange(*m_pDoc, *pPoint, nullptr).get());
             }
             break;
             default:
