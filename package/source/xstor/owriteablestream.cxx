@@ -1868,12 +1868,6 @@ sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sa
 
     CheckInitOnDemand();
 
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
-
     if ( !m_xInStream.is() )
         throw io::NotConnectedException();
 
@@ -1885,12 +1879,6 @@ sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     CheckInitOnDemand();
-
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
 
     if ( !m_xInStream.is() )
         throw io::NotConnectedException();
@@ -1923,12 +1911,6 @@ void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip )
 
     CheckInitOnDemand();
 
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
-
     if ( !m_xInStream.is() )
         throw io::NotConnectedException();
 
@@ -1941,12 +1923,6 @@ sal_Int32 SAL_CALL OWriteStream::available(  )
 
     CheckInitOnDemand();
 
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
-
     if ( !m_xInStream.is() )
         throw io::NotConnectedException();
 
@@ -1957,12 +1933,6 @@ sal_Int32 SAL_CALL OWriteStream::available(  )
 void SAL_CALL OWriteStream::closeInput(  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
-
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
 
     if ( !m_bInitOnDemand && ( m_bInStreamDisconnected || !m_xInStream.is() ) )
         throw io::NotConnectedException();
@@ -1980,12 +1950,6 @@ void SAL_CALL OWriteStream::closeInput(  )
 uno::Reference< io::XInputStream > SAL_CALL OWriteStream::getInputStream()
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
-
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
 
     if ( !m_bInitOnDemand && ( m_bInStreamDisconnected || !m_xInStream.is() ) )
         return uno::Reference< io::XInputStream >();
@@ -2005,12 +1969,6 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
     {
         throw lang::WrappedTargetRuntimeException(u"OWriteStream::getOutputStream: Could not create backing temp file"_ustr,
                 getXWeak(), css::uno::Any ( r ) );
-    }
-
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
     }
 
     if ( !m_xOutStream.is() )
@@ -2208,12 +2166,6 @@ void SAL_CALL OWriteStream::closeOutput()
 
     CheckInitOnDemand();
 
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
-
     if ( !m_xOutStream.is() )
         throw io::NotConnectedException();
 
@@ -2229,12 +2181,6 @@ void SAL_CALL OWriteStream::seek( sal_Int64 location )
 
     CheckInitOnDemand();
 
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
-
     if ( !m_xSeekable.is() )
         throw uno::RuntimeException();
 
@@ -2246,12 +2192,6 @@ sal_Int64 SAL_CALL OWriteStream::getPosition()
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     CheckInitOnDemand();
-
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
 
     if ( !m_xSeekable.is() )
         throw uno::RuntimeException();
@@ -2265,12 +2205,6 @@ sal_Int64 SAL_CALL OWriteStream::getLength()
 
     CheckInitOnDemand();
 
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
-
     if ( !m_xSeekable.is() )
         throw uno::RuntimeException();
 
@@ -2282,12 +2216,6 @@ void SAL_CALL OWriteStream::truncate()
     osl::ClearableMutexGuard aGuard(m_xSharedMutex->GetMutex());
 
     CheckInitOnDemand();
-
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
 
     if ( !m_xOutStream.is() )
         throw uno::RuntimeException();
@@ -2396,12 +2324,6 @@ void SAL_CALL OWriteStream::setEncryptionPassword( const OUString& aPass )
 
     CheckInitOnDemand();
 
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
-
     OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!" );
 
     m_pImpl->SetEncrypted( ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
@@ -2415,12 +2337,6 @@ void SAL_CALL OWriteStream::removeEncryption()
 
     CheckInitOnDemand();
 
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
-
     OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!" );
 
     m_pImpl->SetDecrypted();
@@ -2433,12 +2349,6 @@ void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::Named
     osl::ClearableMutexGuard aGuard(m_xSharedMutex->GetMutex());
 
     CheckInitOnDemand();
-
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
 
     OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!" );
 
