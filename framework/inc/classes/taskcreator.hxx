@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -51,7 +51,7 @@ class TaskCreator final
                  TaskCreator( css::uno::Reference< css::uno::XComponentContext > xContext );
                  ~TaskCreator(                                                                     );
 
-        css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor );
+        css::uno::Reference< css::frame::XFrame2 > createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor );
 
 }; // class TaskCreator
 

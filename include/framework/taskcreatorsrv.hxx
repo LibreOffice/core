@@ -21,12 +21,10 @@
 
 #include "fwkdllapi.h"
 #include <comphelper/compbase.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-typedef comphelper::WeakComponentImplHelper<css::lang::XSingleServiceFactory>
-    TaskCreatorService_BASE;
+typedef comphelper::WeakComponentImplHelper<> TaskCreatorService_BASE;
 
 class FWK_DLLPUBLIC TaskCreatorService : public TaskCreatorService_BASE
 {
@@ -39,11 +37,8 @@ private:
 public:
     explicit TaskCreatorService(css::uno::Reference<css::uno::XComponentContext> xContext);
 
-    // XSingleServiceFactory
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance() override;
-
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL
-    createInstanceWithArguments(const css::uno::Sequence<css::uno::Any>& lArguments) override;
+    css::uno::Reference<css::frame::XFrame2>
+    createInstance(const css::uno::Sequence<css::uno::Any>& lArguments);
 
 private:
     css::uno::Reference<css::awt::XWindow>

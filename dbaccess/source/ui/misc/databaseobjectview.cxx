@@ -109,7 +109,7 @@ namespace dbaui
                                            Any(NamedValue(u"SupportPersistentWindowState"_ustr,
                                                           Any(true))) };
 
-                    m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
+                    m_xFrameLoader.set(xFact->createInstance(lArgs), UNO_QUERY_THROW);
 
                     // everything we load can be considered a "top level document", so set the respective bit at the window.
                     // This, amongst other things, triggers that the component in this task participates in the

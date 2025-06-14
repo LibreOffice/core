@@ -53,7 +53,7 @@ TaskCreator::~TaskCreator()
 /*-****************************************************************************************************
     TODO document me
 *//*-*****************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor )
+css::uno::Reference< css::frame::XFrame2 > TaskCreator::createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor )
 {
     rtl::Reference< TaskCreatorService > xCreator = new TaskCreatorService(m_xContext);
 
@@ -66,8 +66,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
         css::uno::Any(css::beans::NamedValue(ARGUMENT_FRAMENAME, css::uno::Any(sName))),
         css::uno::Any(css::beans::NamedValue(ARGUMENT_HIDDENFORCONVERSION, css::uno::Any(rDescriptor.getUnpackedValueOrDefault(ARGUMENT_HIDDENFORCONVERSION, false))))
     };
-    css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
-    return xTask;
+    return xCreator->createInstance(lArgs);
 }
 
 } // namespace framework

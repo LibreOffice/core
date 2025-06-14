@@ -451,7 +451,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         }
 
         // the call will create, initialize the frame, and register it in the parent
-        m_xFrame.set( xFrameFact->createInstanceWithArguments( aArgs ), uno::UNO_QUERY_THROW );
+        m_xFrame = xFrameFact->createInstance( aArgs );
 
         m_xHatchWindow = std::move(xHWindow);
         m_xOwnWindow = std::move(xOwnWindow);
@@ -807,17 +807,16 @@ bool DocumentHolder::HideUI( const uno::Reference< css::frame::XLayoutManager >&
 }
 
 
-uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
+uno::Reference< frame::XFrame2 > const & DocumentHolder::GetDocFrame()
 {
     // the frame for outplace activation
     if ( !m_xFrame.is() )
     {
         rtl::Reference< TaskCreatorService > xFrameFact = new TaskCreatorService(m_xContext);
 
-        m_xFrame.set(xFrameFact->createInstanceWithArguments( m_aOutplaceFrameProps ), uno::UNO_QUERY_THROW);
+        m_xFrame = xFrameFact->createInstance( m_aOutplaceFrameProps );
 
-        uno::Reference< frame::XDispatchProviderInterception > xInterception( m_xFrame, uno::UNO_QUERY );
-        if ( xInterception.is() )
+        if ( m_xFrame.is() )
         {
             if ( m_xInterceptor.is() )
             {
@@ -827,11 +826,11 @@ uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
 
             m_xInterceptor = new Interceptor( this );
 
-            xInterception->registerDispatchProviderInterceptor( m_xInterceptor );
+            m_xFrame->registerDispatchProviderInterceptor( m_xInterceptor );
 
             // register interceptor from outside
             if ( m_xOutplaceInterceptor.is() )
-                xInterception->registerDispatchProviderInterceptor( m_xOutplaceInterceptor );
+                m_xFrame->registerDispatchProviderInterceptor( m_xOutplaceInterceptor );
         }
 
         uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xFrame, uno::UNO_QUERY );

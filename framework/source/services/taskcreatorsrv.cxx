@@ -46,12 +46,7 @@ TaskCreatorService::TaskCreatorService(css::uno::Reference< css::uno::XComponent
 {
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstance()
-{
-    return createInstanceWithArguments(css::uno::Sequence< css::uno::Any >());
-}
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstanceWithArguments(const css::uno::Sequence< css::uno::Any >& lArguments)
+css::uno::Reference< css::frame::XFrame2 > TaskCreatorService::createInstance(const css::uno::Sequence< css::uno::Any >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
@@ -137,7 +132,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     if (bVisible)
         xContainerWindow->setVisible(bVisible);
 
-    return css::uno::Reference< css::uno::XInterface >(xFrame, css::uno::UNO_QUERY_THROW);
+    return xFrame;
 }
 
 // static
