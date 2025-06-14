@@ -10,6 +10,7 @@
 #pragma once
 
 #include <tools/color.hxx>
+#include <cstdint>
 
 /* All possible data needed to do the job outside mathml limits */
 // Ml prefix means it is part of mathml standard
