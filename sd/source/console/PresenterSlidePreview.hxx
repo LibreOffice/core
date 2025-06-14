@@ -22,6 +22,7 @@
 
 #include "PresenterController.hxx"
 
+#include <SlideRenderer.hxx>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -99,7 +100,7 @@ protected:
 
 private:
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
-    css::uno::Reference<css::drawing::XSlideRenderer> mxPreviewRenderer;
+    rtl::Reference<sd::presenter::SlideRenderer> mxPreviewRenderer;
 
     /** This Image holds the preview of the current slide.  After resize
         requests the image may be empty.  This results eventually in a call

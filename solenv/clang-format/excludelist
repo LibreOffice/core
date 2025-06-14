@@ -9209,6 +9209,7 @@ sd/inc/EffectMigration.hxx
 sd/inc/FactoryIds.hxx
 sd/inc/OutlinerIterator.hxx
 sd/inc/PresenterHelper.hxx
+sd/inc/SlideRenderer.hxx
 sd/inc/TransitionPreset.hxx
 sd/inc/animations.hxx
 sd/inc/anminfo.hxx
@@ -9712,7 +9713,6 @@ sd/source/ui/presenter/PresenterPreviewCache.hxx
 sd/source/ui/presenter/PresenterTextView.cxx
 sd/source/ui/presenter/PresenterTextView.hxx
 sd/source/ui/presenter/SlideRenderer.cxx
-sd/source/ui/presenter/SlideRenderer.hxx
 sd/source/ui/remotecontrol/AvahiNetworkService.cxx
 sd/source/ui/remotecontrol/AvahiNetworkService.hxx
 sd/source/ui/remotecontrol/BluetoothServer.cxx

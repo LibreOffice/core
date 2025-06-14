@@ -19,10 +19,10 @@
 
 #pragma once
 
+#include "sddllapi.h"
 #include <PreviewRenderer.hxx>
 #include <com/sun/star/drawing/XSlideRenderer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/compbase.hxx>
 
@@ -32,13 +32,12 @@ namespace sd::presenter {
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::XSlideRenderer,
-    css::lang::XInitialization,
-    css::lang::XServiceInfo
+    css::lang::XInitialization
 > SlideRendererInterfaceBase;
 
 /** Render single slides into bitmaps.
 */
-class SlideRenderer final
+class SD_DLLPUBLIC SlideRenderer final
     : public SlideRendererInterfaceBase
 {
 public:
@@ -50,12 +49,6 @@ public:
     // XInitialization
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
-
-    OUString SAL_CALL getImplementationName() override;
-
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
-
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XSlideRenderer
 

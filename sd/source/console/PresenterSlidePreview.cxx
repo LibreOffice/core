@@ -80,11 +80,7 @@ PresenterSlidePreview::PresenterSlidePreview (
 
     Reference<lang::XMultiComponentFactory> xFactory = rxContext->getServiceManager();
     if (xFactory.is())
-        mxPreviewRenderer.set(
-            xFactory->createInstanceWithContext(
-                u"com.sun.star.drawing.SlideRenderer"_ustr,
-                rxContext),
-            UNO_QUERY);
+        mxPreviewRenderer = new sd::presenter::SlideRenderer();
     mpBitmaps = std::make_shared<PresenterBitmapContainer>(
             "PresenterScreenSettings/ScrollBar/Bitmaps",
             std::shared_ptr<PresenterBitmapContainer>(),
@@ -107,9 +103,8 @@ void SAL_CALL PresenterSlidePreview::disposing()
         mxCanvas = nullptr;
     }
 
-    Reference<lang::XComponent> xComponent (mxPreviewRenderer, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
+    if (mxPreviewRenderer.is())
+        mxPreviewRenderer->dispose();
 }
 
 //----- XResourceId -----------------------------------------------------------

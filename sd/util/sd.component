@@ -37,10 +37,6 @@
       constructor="com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation">
     <service name="com.sun.star.drawing.PresenterPreviewCache"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.SlideRenderer"
-      constructor="com_sun_star_comp_Draw_SlideRenderer_get_implementation">
-    <service name="com.sun.star.drawing.SlideRenderer"/>
-  </implementation>
   <implementation name="com.sun.star.comp.Draw.framework.ResourceId"
       constructor="com_sun_star_comp_Draw_framework_ResourceID_get_implementation">
     <service name="com.sun.star.drawing.framework.ResourceId"/>
