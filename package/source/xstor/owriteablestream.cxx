@@ -1977,12 +1977,9 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
     return this;
 }
 
-void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
+void OWriteStream::CheckInitOnWriteDemand(sal_Int32 dataSize)
 {
-    osl::ClearableMutexGuard aGuard(m_xSharedMutex->GetMutex());
-
-    // the write method makes initialization itself, since it depends from the aData length
-    // NO CheckInitOnDemand()!
+    // write methods need a different initialization, since they depend on data length
 
     if ( !m_pImpl )
     {
@@ -1999,7 +1996,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
         {
             // check whether the cache should be turned off
             sal_Int64 nPos = m_xSeekable->getPosition();
-            if ( nPos + aData.getLength() > MAX_STORCACHE_SIZE )
+            if (nPos + dataSize > MAX_STORCACHE_SIZE)
             {
                 // disconnect the cache and copy the data to the temporary file
                 m_xSeekable->seek( 0 );
@@ -2018,7 +2015,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 
     if ( m_bInitOnDemand )
     {
-        SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
+        SAL_INFO("package.xstor", "OWriteStream::CheckInitOnWriteDemand: initializing");
         uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
         if ( xStream.is() )
         {
@@ -2031,6 +2028,13 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
             m_bInitOnDemand = false;
         }
     }
+}
+
+void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
+{
+    osl::ClearableMutexGuard aGuard(m_xSharedMutex->GetMutex());
+
+    CheckInitOnWriteDemand(aData.getLength());
 
     if ( !m_xOutStream.is() )
         throw io::NotConnectedException();
@@ -2047,56 +2051,7 @@ void OWriteStream::writeBytes( const sal_Int8* pData, sal_Int32 nBytesToWrite )
 
     osl::ClearableMutexGuard aGuard(m_xSharedMutex->GetMutex());
 
-    // the write method makes initialization itself, since it depends from the aData length
-    // NO CheckInitOnDemand()!
-
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
-
-    if ( !m_bInitOnDemand )
-    {
-        if ( !m_xOutStream.is() || !m_xSeekable.is())
-            throw io::NotConnectedException();
-
-        if ( m_pImpl->m_xCacheStream.is() )
-        {
-            // check whether the cache should be turned off
-            sal_Int64 nPos = m_xSeekable->getPosition();
-            if ( nPos + nBytesToWrite > MAX_STORCACHE_SIZE )
-            {
-                // disconnect the cache and copy the data to the temporary file
-                m_xSeekable->seek( 0 );
-
-                // it is enough to copy the cached stream, the cache should already contain everything
-                m_pImpl->GetFilledTempFileIfNo( m_xInStream );
-                if ( m_pImpl->m_oTempFile.has_value() )
-                {
-                    DeInit();
-                    // the last position is known and it is differs from the current stream position
-                    m_nInitPosition = nPos;
-                }
-            }
-        }
-    }
-
-    if ( m_bInitOnDemand )
-    {
-        SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
-        uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
-        if ( xStream.is() )
-        {
-            m_xInStream.set( xStream->getInputStream(), uno::UNO_SET_THROW );
-            m_xOutStream.set( xStream->getOutputStream(), uno::UNO_SET_THROW );
-            m_xSeekable.set( xStream, uno::UNO_QUERY_THROW );
-            m_xSeekable->seek( m_nInitPosition );
-
-            m_nInitPosition = 0;
-            m_bInitOnDemand = false;
-        }
-    }
+    CheckInitOnWriteDemand(nBytesToWrite);
 
     if ( !m_xOutStream.is() )
         throw io::NotConnectedException();

@@ -269,9 +269,6 @@ public:
 
     virtual ~OWriteStream() override;
 
-    void CheckInitOnDemand();
-    void DeInit();
-
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
@@ -354,6 +351,11 @@ public:
 
     // comphelper::ByteWriter
     virtual void writeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
+
+private:
+    void CheckInitOnDemand();
+    void CheckInitOnWriteDemand(sal_Int32 dataSize);
+    void DeInit();
 };
 
 #endif
