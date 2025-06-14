@@ -187,7 +187,7 @@ private:
     rtl::Reference< UnoFixedTextControl >   m_xText_Bottom;
 
     rtl::Reference<ProgressBar>                   m_xProgressBar;
-    css::uno::Reference< css::awt::XButton >      m_xButton;
+    rtl::Reference< UnoButtonControl >            m_xButton;
     css::awt::Rectangle                           m_a3DLine;
 };
 
