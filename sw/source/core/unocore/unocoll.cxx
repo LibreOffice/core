@@ -1737,11 +1737,6 @@ sal_Bool SwXFootnotes::hasElements()
     return !GetDoc().GetFootnoteIdxs().empty();
 }
 
-rtl::Reference<SwXFootnote> SwXFootnotes::GetObject( SwDoc& rDoc, const SwFormatFootnote& rFormat )
-{
-    return SwXFootnote::CreateXFootnote(rDoc, &const_cast<SwFormatFootnote&>(rFormat));
-}
-
 OUString SwXReferenceMarks::getImplementationName()
 {
     return u"SwXReferenceMarks"_ustr;

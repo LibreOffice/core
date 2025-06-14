@@ -948,7 +948,7 @@ lcl_ExportHints(
                             pPortion = new SwXTextPortion(
                                 pUnoCursor, xParent, PORTION_FOOTNOTE);
                             rtl::Reference<SwXFootnote> xContent =
-                                SwXFootnotes::GetObject(rDoc, pAttr->GetFootnote());
+                                SwXFootnote::CreateXFootnote(rDoc, &const_cast<SwFormatFootnote&>(pAttr->GetFootnote()));
                             pPortion->SetFootnote(xContent);
                         }
                     }

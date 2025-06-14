@@ -477,8 +477,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     rtl::Reference<SwXFootnote> getFootnoteByIndex(sal_Int32 nIndex) ;
-
-    static rtl::Reference<SwXFootnote> GetObject( SwDoc& rDoc, const SwFormatFootnote& rFormat );
 };
 
 class SwXReferenceMarks final : public SwCollectionBaseClass,
