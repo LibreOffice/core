@@ -397,8 +397,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    static rtl::Reference<SwXTextSection> GetObject( SwSectionFormat& rFormat );
 };
 
 class SwXBookmarks final : public SwCollectionBaseClass,

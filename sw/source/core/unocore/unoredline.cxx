@@ -451,7 +451,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                 SwSectionNode* pSectNode = pPoint->GetNode().GetSectionNode();
                 assert(pSectNode);
                 SwSectionFormat* pSectionFormat = pSectNode->GetSection().GetFormat();
-                xRet = cppu::getXWeak(SwXTextSections::GetObject(*pSectionFormat).get());
+                xRet = cppu::getXWeak(SwXTextSection::CreateXTextSection(pSectionFormat).get());
             }
             break;
             case SwNodeType::Table :

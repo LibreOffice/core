@@ -637,7 +637,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             {
                 if( pAny )
                 {
-                    rtl::Reference< SwXTextSection > xSect = SwXTextSections::GetObject( *pSect->GetFormat() );
+                    rtl::Reference<SwXTextSection> xSect = SwXTextSection::CreateXTextSection(pSect->GetFormat());
                     *pAny <<= uno::Reference< XTextSection >(xSect);
                 }
             }

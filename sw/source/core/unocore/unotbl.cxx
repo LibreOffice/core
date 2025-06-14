@@ -1040,7 +1040,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
             if(!pSectionNode)
                 return uno::Any();
             SwSection& rSect = pSectionNode->GetSection();
-            rtl::Reference< SwXTextSection > xSect = SwXTextSections::GetObject(*rSect.GetFormat());
+            rtl::Reference<SwXTextSection> xSect = SwXTextSection::CreateXTextSection(rSect.GetFormat());
             return uno::Any(uno::Reference< text::XTextSection >(xSect));
         }
         break;
@@ -2942,7 +2942,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     {
                         SwSection& rSect = pSectionNode->GetSection();
                         rtl::Reference< SwXTextSection > xSect =
-                                        SwXTextSections::GetObject( *rSect.GetFormat() );
+                                        SwXTextSection::CreateXTextSection(rSect.GetFormat());
                         aRet <<= uno::Reference< text::XTextSection >(xSect);
                     }
                 }

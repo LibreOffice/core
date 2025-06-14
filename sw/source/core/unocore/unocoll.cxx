@@ -1383,7 +1383,8 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
         if( !rSectFormats[i]->IsInNodesArr())
             nIndex2++;
         else if (nIndex2 == i)
-            return Any(css::uno::Reference< css::text::XTextSection>(GetObject(*rSectFormats[i])));
+            return Any(css::uno::Reference<css::text::XTextSection>(
+                SwXTextSection::CreateXTextSection(rSectFormats[i])));
     }
     throw IndexOutOfBoundsException();
 }
@@ -1401,7 +1402,7 @@ uno::Any SwXTextSections::getByName(const OUString& rName)
         if (pFormat->IsInNodesArr()
             && (rName == pFormat->GetSection()->GetSectionName()))
         {
-            xSect = GetObject(*pFormat);
+            xSect = SwXTextSection::CreateXTextSection(pFormat);
             aRet <<= xSect;
             break;
         }
@@ -1481,11 +1482,6 @@ sal_Bool SwXTextSections::hasElements()
     nCount = rFormats.size();
 
     return nCount > 0;
-}
-
-rtl::Reference< SwXTextSection >  SwXTextSections::GetObject( SwSectionFormat& rFormat )
-{
-    return SwXTextSection::CreateXTextSection(&rFormat);
 }
 
 OUString SwXBookmarks::getImplementationName()
