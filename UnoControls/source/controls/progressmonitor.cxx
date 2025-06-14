@@ -39,7 +39,6 @@ using namespace ::com::sun::star::awt;
 
 using ::std::vector;
 
-constexpr OUString FIXEDTEXT_MODELNAME = u"com.sun.star.awt.UnoControlFixedTextModel"_ustr;
 constexpr OUString CONTROLNAME_TEXT = u"Text"_ustr;   // identifier the control in container
 constexpr OUStringLiteral CONTROLNAME_PROGRESSBAR = u"ProgressBar";
 constexpr OUStringLiteral BUTTON_SERVICENAME = u"com.sun.star.awt.UnoControlButton";
@@ -69,10 +68,10 @@ ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >
     css::uno::Reference< XControl >   xRef_Button         ( m_xButton       , UNO_QUERY );
 
     // ... set models ...
-    m_xTopic_Top->setModel    ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
-    m_xText_Top->setModel     ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
-    m_xTopic_Bottom->setModel ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
-    m_xText_Bottom->setModel  ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
+    m_xTopic_Top->setModel    ( new UnoControlFixedTextModel(rxContext) );
+    m_xText_Top->setModel     ( new UnoControlFixedTextModel(rxContext) );
+    m_xTopic_Bottom->setModel ( new UnoControlFixedTextModel(rxContext) );
+    m_xText_Bottom->setModel  (  new UnoControlFixedTextModel(rxContext) );
     xRef_Button->setModel       ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_MODELNAME, rxContext ), UNO_QUERY ) );
     // ProgressBar has no model !!!
 

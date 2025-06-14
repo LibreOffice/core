@@ -34,7 +34,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::task;
 
-constexpr OUStringLiteral FIXEDTEXT_MODELNAME = u"com.sun.star.awt.UnoControlFixedTextModel";
 constexpr OUStringLiteral CONTROLNAME_TEXT = u"Text"; // identifier the control in container
 constexpr OUStringLiteral CONTROLNAME_PROGRESSBAR = u"ProgressBar"; //              -||-
 
@@ -54,7 +53,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
     m_xProgressBar = new ProgressBar(rxContext);
     // ... cast controls to css::uno::Reference< XControl > and set model ...
     // ( ProgressBar has no model !!! )
-    m_xText->setModel( css::uno::Reference< XControlModel >( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
+    m_xText->setModel( new UnoControlFixedTextModel(rxContext) );
     // ... and add controls to basecontainercontrol!
     addControl( CONTROLNAME_TEXT, m_xText    );
     addControl( CONTROLNAME_PROGRESSBAR, m_xProgressBar );

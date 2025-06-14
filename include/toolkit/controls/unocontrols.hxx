@@ -612,7 +612,7 @@ public:
 
 
 
-class UnoControlFixedTextModel final : public UnoControlModel
+class TOOLKIT_DLLPUBLIC UnoControlFixedTextModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;

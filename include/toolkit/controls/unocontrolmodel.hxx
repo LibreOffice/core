@@ -20,6 +20,7 @@
 #ifndef INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
 #define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
 
+#include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -50,7 +51,7 @@ typedef ::cppu::WeakAggImplHelper6  <   css::awt::XControlModel
                                     ,   css::util::XCloneable
                                     >   UnoControlModel_Base;
 
-class UnoControlModel : public UnoControlModel_Base
+class TOOLKIT_DLLPUBLIC UnoControlModel : public UnoControlModel_Base
                        ,public ::comphelper::OPropertySetHelper
 {
 private:
