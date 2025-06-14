@@ -32,6 +32,7 @@
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <basegfx/range/b2irectangle.hxx>
@@ -140,9 +141,9 @@ void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
         maPageWindows.erase(it);
 }
 
-css::uno::Reference< css::awt::XControlContainer > SdrPageView::GetControlContainer( const OutputDevice& _rDevice ) const
+rtl::Reference< UnoControlContainer > SdrPageView::GetControlContainer( const OutputDevice& _rDevice ) const
 {
-    css::uno::Reference< css::awt::XControlContainer > xReturn;
+    rtl::Reference< UnoControlContainer > xReturn;
     const SdrPageWindow* pCandidate = FindPatchedPageWindow( _rDevice );
 
     if ( pCandidate )

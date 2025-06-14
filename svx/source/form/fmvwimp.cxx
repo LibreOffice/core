@@ -529,7 +529,7 @@ void FmXFormView::addWindow(const SdrPageWindow& rWindow)
     if ( !pFormPage )
         return;
 
-    const Reference< XControlContainer >& xCC = rWindow.GetControlContainer();
+    const rtl::Reference< UnoControlContainer > & xCC = rWindow.GetControlContainer();
     if  (   xCC.is()
         &&  ( !findWindow( xCC ).is() )
         )
@@ -538,9 +538,7 @@ void FmXFormView::addWindow(const SdrPageWindow& rWindow)
         m_aPageWindowAdapters.push_back( pAdapter );
 
         // listen at the ControlContainer to notice changes
-        Reference< XContainer >  xContainer( xCC, UNO_QUERY );
-        if ( xContainer.is() )
-            xContainer->addContainerListener( this );
+        xCC->addContainerListener( this );
     }
 }
 

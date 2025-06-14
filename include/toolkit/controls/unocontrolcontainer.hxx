@@ -19,7 +19,7 @@
 
 #pragma once
 
-
+#include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XUnoControlContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -41,7 +41,7 @@ typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   css::container::XIdentifierContainer
                                             >   UnoControlContainer_Base;
 
-class UnoControlContainer : public UnoControlContainer_Base
+class TOOLKIT_DLLPUBLIC UnoControlContainer : public UnoControlContainer_Base
 {
 private:
     std::unique_ptr<UnoControlHolderList>   mpControls;

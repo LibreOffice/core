@@ -32,7 +32,8 @@
 #include <tools/mapunit.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/poly.hxx>
-
+#include <toolkit/controls/unocontrolcontainer.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::uno { template <typename > class Sequence; }
 
@@ -102,7 +103,7 @@ public:
     // Rectangle
     static bool                                     IsZero(const css::awt::Rectangle& rRect);
 
-    static css::uno::Reference< css::awt::XControlContainer>  CreateControlContainer( vcl::Window* pWindow );
+    static rtl::Reference< UnoControlContainer>  CreateControlContainer( vcl::Window* pWindow );
 
     // MapUnits
     static MapUnit                                  UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit );

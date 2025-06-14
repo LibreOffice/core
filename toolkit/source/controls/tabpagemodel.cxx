@@ -30,7 +30,7 @@
 #include <vcl/outdev.hxx>
 
 #include <controls/controlmodelcontainerbase.hxx>
-#include <controls/unocontrolcontainer.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 

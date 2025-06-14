@@ -411,7 +411,7 @@ void FmFormView::InsertControlContainer(const Reference< css::awt::XControlConta
     {
         const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
 
-        if( rPageWindow.GetControlContainer( false ) == xCC )
+        if( uno::Reference<css::awt::XControlContainer>(rPageWindow.GetControlContainer( false )) == xCC )
         {
             m_pImpl->addWindow(rPageWindow);
             break;

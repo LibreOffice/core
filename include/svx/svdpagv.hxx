@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <svx/svdhlpln.hxx>
@@ -38,6 +39,7 @@ class SdrObject;
 class SdrPage;
 class SdrPaintWindow;
 class SdrView;
+class UnoControlContainer;
 
 namespace sdr::contact
 {
@@ -133,7 +135,7 @@ public:
      *      SdrPageView instance, the XControlContainer for this output device is returned, <NULL/>
      *      otherwise.
      */
-    css::uno::Reference< css::awt::XControlContainer >
+    rtl::Reference< UnoControlContainer >
         GetControlContainer( const OutputDevice& _rDevice ) const;
 
     /// Sets all elements in the view which support a design and an alive mode into the given mode

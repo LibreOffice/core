@@ -48,6 +48,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 
 using namespace ::accessibility;
 using namespace ::com::sun::star::accessibility;
@@ -125,13 +126,13 @@ AccessibleControlShape::~AccessibleControlShape()
 }
 
 namespace {
-    Reference< XContainer > lcl_getControlContainer( const OutputDevice* _pWin, const SdrView* _pView )
+    rtl::Reference< UnoControlContainer > lcl_getControlContainer( const OutputDevice* _pWin, const SdrView* _pView )
     {
-        Reference< XContainer > xReturn;
+        rtl::Reference< UnoControlContainer > xReturn;
         DBG_ASSERT( _pView, "lcl_getControlContainer: invalid view!" );
         if ( _pView  && _pView->GetSdrPageView())
         {
-            xReturn.set(_pView->GetSdrPageView()->GetControlContainer( *_pWin ), css::uno::UNO_QUERY);
+            xReturn = _pView->GetSdrPageView()->GetControlContainer( *_pWin );
         }
         return xReturn;
     }
@@ -189,7 +190,7 @@ void AccessibleControlShape::Init()
             // Okay, we will add as listener to the control container where we expect our control to appear.
             OSL_ENSURE( !m_bWaitingForControl, "AccessibleControlShape::Init: already waiting for the control!" );
 
-            Reference< XContainer > xControlContainer = lcl_getControlContainer( pViewWindow->GetOutDev(), maShapeTreeInfo.GetSdrView() );
+            rtl::Reference< UnoControlContainer > xControlContainer = lcl_getControlContainer( pViewWindow->GetOutDev(), maShapeTreeInfo.GetSdrView() );
             OSL_ENSURE( xControlContainer.is(), "AccessibleControlShape::Init: unable to find my ControlContainer!" );
             if ( xControlContainer.is() )
             {

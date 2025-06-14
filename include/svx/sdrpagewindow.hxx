@@ -42,6 +42,7 @@ namespace basegfx { class B2DRange; }
 
 class SdrPaintWindow;
 class SdrPageView;
+class UnoControlContainer;
 
 class SVXCORE_DLLPUBLIC SdrPageWindow
 {
@@ -60,7 +61,7 @@ public:
     SdrPageView& GetPageView() const;
     SdrPaintWindow& GetPaintWindow() const;
     const SdrPaintWindow* GetOriginalPaintWindow() const;
-    css::uno::Reference<css::awt::XControlContainer> const & GetControlContainer( bool _bCreateIfNecessary = true ) const;
+    rtl::Reference<UnoControlContainer> const & GetControlContainer( bool _bCreateIfNecessary = true ) const;
 
     // OVERLAYMANAGER
     rtl::Reference< sdr::overlay::OverlayManager > const & GetOverlayManager() const;

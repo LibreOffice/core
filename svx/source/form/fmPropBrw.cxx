@@ -63,6 +63,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -421,7 +422,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         xDocument = _pFormShell->GetObjectShell()->GetModel();
 
     // the context of the controls in our document
-    Reference< awt::XControlContainer > xControlContext;
+    rtl::Reference< UnoControlContainer > xControlContext;
     if ( _pFormShell && _pFormShell->GetFormView() )
     {
         SdrPageView* pPageView = _pFormShell->GetFormView()->GetSdrPageView();
@@ -453,7 +454,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     {
         ::cppu::ContextEntry_Init( u"ContextDocument"_ustr, Any( xDocument ) ),
         ::cppu::ContextEntry_Init( u"DialogParentWindow"_ustr, Any( xParentWindow ) ),
-        ::cppu::ContextEntry_Init( u"ControlContext"_ustr, Any( xControlContext ) ),
+        ::cppu::ContextEntry_Init( u"ControlContext"_ustr, Any( Reference<awt::XControlContainer>(xControlContext) ) ),
         ::cppu::ContextEntry_Init( u"ControlShapeAccess"_ustr, Any( xControlMap ) )
     };
     m_xInspectorContext.set(

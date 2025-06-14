@@ -25,7 +25,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <controls/unocontrolcontainer.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <tools/debug.hxx>
