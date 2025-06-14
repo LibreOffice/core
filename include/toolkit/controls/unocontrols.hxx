@@ -637,7 +637,7 @@ public:
 
 
 
-class UnoFixedTextControl final : public UnoControlBase,
+class TOOLKIT_DLLPUBLIC UnoFixedTextControl final : public UnoControlBase,
                             public css::awt::XFixedText,
                             public css::awt::XLayoutConstrains
 {

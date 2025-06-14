@@ -24,6 +24,7 @@
 #include <rtl/ref.hxx>
 #include <tools/color.hxx>
 #include <basecontainercontrol.hxx>
+#include <toolkit/controls/unocontrols.hxx>
 
 namespace com::sun::star::awt { class XFixedText; }
 
@@ -107,7 +108,7 @@ private:
 
     virtual void impl_recalcLayout( const css::awt::WindowEvent& aEvent ) override;
 
-    css::uno::Reference< css::awt::XFixedText >   m_xText;
+    rtl::Reference< UnoFixedTextControl >         m_xText;
     rtl::Reference<ProgressBar>                   m_xProgressBar;
 
 };

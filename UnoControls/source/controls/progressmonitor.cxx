@@ -39,7 +39,6 @@ using namespace ::com::sun::star::awt;
 
 using ::std::vector;
 
-constexpr OUString FIXEDTEXT_SERVICENAME = u"com.sun.star.awt.UnoControlFixedText"_ustr;
 constexpr OUString FIXEDTEXT_MODELNAME = u"com.sun.star.awt.UnoControlFixedTextModel"_ustr;
 constexpr OUString CONTROLNAME_TEXT = u"Text"_ustr;   // identifier the control in container
 constexpr OUStringLiteral CONTROLNAME_PROGRESSBAR = u"ProgressBar";
@@ -59,33 +58,29 @@ ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >
 
     // Create instances for fixedtext, button and progress ...
 
-    m_xTopic_Top.set   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
-    m_xText_Top.set    ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
-    m_xTopic_Bottom.set( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
-    m_xText_Bottom.set ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
+    m_xTopic_Top = new UnoFixedTextControl();
+    m_xText_Top = new UnoFixedTextControl();
+    m_xTopic_Bottom = new UnoFixedTextControl();
+    m_xText_Bottom = new UnoFixedTextControl();
     m_xButton.set      ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_SERVICENAME, rxContext ), UNO_QUERY );
     m_xProgressBar = new ProgressBar(rxContext);
 
     // ... cast controls to Reference< XControl >  (for "setModel"!) ...
-    css::uno::Reference< XControl >   xRef_Topic_Top      ( m_xTopic_Top    , UNO_QUERY );
-    css::uno::Reference< XControl >   xRef_Text_Top       ( m_xText_Top     , UNO_QUERY );
-    css::uno::Reference< XControl >   xRef_Topic_Bottom   ( m_xTopic_Bottom , UNO_QUERY );
-    css::uno::Reference< XControl >   xRef_Text_Bottom    ( m_xText_Bottom  , UNO_QUERY );
     css::uno::Reference< XControl >   xRef_Button         ( m_xButton       , UNO_QUERY );
 
     // ... set models ...
-    xRef_Topic_Top->setModel    ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
-    xRef_Text_Top->setModel     ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
-    xRef_Topic_Bottom->setModel ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
-    xRef_Text_Bottom->setModel  ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
+    m_xTopic_Top->setModel    ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
+    m_xText_Top->setModel     ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
+    m_xTopic_Bottom->setModel ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
+    m_xText_Bottom->setModel  ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
     xRef_Button->setModel       ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_MODELNAME, rxContext ), UNO_QUERY ) );
     // ProgressBar has no model !!!
 
     // ... and add controls to basecontainercontrol!
-    addControl ( CONTROLNAME_TEXT, xRef_Topic_Top           );
-    addControl ( CONTROLNAME_TEXT, xRef_Text_Top            );
-    addControl ( CONTROLNAME_TEXT, xRef_Topic_Bottom        );
-    addControl ( CONTROLNAME_TEXT, xRef_Text_Bottom         );
+    addControl ( CONTROLNAME_TEXT, m_xTopic_Top           );
+    addControl ( CONTROLNAME_TEXT, m_xText_Top            );
+    addControl ( CONTROLNAME_TEXT, m_xTopic_Bottom        );
+    addControl ( CONTROLNAME_TEXT, m_xText_Bottom         );
     addControl ( CONTROLNAME_BUTTON, xRef_Button            );
     addControl ( CONTROLNAME_PROGRESSBAR, m_xProgressBar );
 
@@ -313,27 +308,25 @@ void SAL_CALL ProgressMonitor::setActionCommand ( const OUString& rCommand )
 }
 
 //  XLayoutConstrains
-Size SAL_CALL ProgressMonitor::getMinimumSize ()
+css::awt::Size SAL_CALL ProgressMonitor::getMinimumSize ()
 {
-    return Size (PROGRESSMONITOR_DEFAULT_WIDTH, PROGRESSMONITOR_DEFAULT_HEIGHT);
+    return css::awt::Size (PROGRESSMONITOR_DEFAULT_WIDTH, PROGRESSMONITOR_DEFAULT_HEIGHT);
 }
 
 //  XLayoutConstrains
-Size SAL_CALL ProgressMonitor::getPreferredSize ()
+css::awt::Size SAL_CALL ProgressMonitor::getPreferredSize ()
 {
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex );
 
     // get information about required place of child controls
-    css::uno::Reference< XLayoutConstrains >  xTopicLayout_Top        ( m_xTopic_Top      , UNO_QUERY );
-    css::uno::Reference< XLayoutConstrains >  xTopicLayout_Bottom     ( m_xTopic_Bottom   , UNO_QUERY );
     css::uno::Reference< XLayoutConstrains >  xButtonLayout           ( m_xButton         , UNO_QUERY );
 
-    Size        aTopicSize_Top      =   xTopicLayout_Top->getPreferredSize          ();
-    Size        aTopicSize_Bottom   =   xTopicLayout_Bottom->getPreferredSize       ();
-    Size        aButtonSize         =   xButtonLayout->getPreferredSize             ();
+    css::awt::Size        aTopicSize_Top      =   m_xTopic_Top->getPreferredSize          ();
+    css::awt::Size        aTopicSize_Bottom   =   m_xTopic_Bottom->getPreferredSize       ();
+    css::awt::Size        aButtonSize         =   xButtonLayout->getPreferredSize             ();
     Rectangle   aTempRectangle      = m_xProgressBar->getPosSize();
-    Size        aProgressBarSize( aTempRectangle.Width, aTempRectangle.Height );
+    css::awt::Size        aProgressBarSize( aTempRectangle.Width, aTempRectangle.Height );
 
     aGuard.clear ();
 
@@ -359,11 +352,11 @@ Size SAL_CALL ProgressMonitor::getPreferredSize ()
     }
 
     // return to caller
-    return Size ( nWidth, nHeight );
+    return css::awt::Size ( nWidth, nHeight );
 }
 
 //  XLayoutConstrains
-Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const Size& /*rNewSize*/ )
+css::awt::Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const css::awt::Size& /*rNewSize*/ )
 {
     return getPreferredSize ();
 }
@@ -378,7 +371,7 @@ void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit 
         // If user forget to call "setPosSize()", we have still a correct size.
         // And a "MinimumSize" IS A "MinimumSize"!
         // We change not the position of control at this point.
-        Size aDefaultSize = getMinimumSize ();
+        css::awt::Size aDefaultSize = getMinimumSize ();
         setPosSize ( 0, 0, aDefaultSize.Width, aDefaultSize.Height, PosSize::SIZE );
     }
 }
@@ -405,25 +398,21 @@ void SAL_CALL ProgressMonitor::dispose ()
     MutexGuard aGuard ( m_aMutex );
 
     // "removeControl()" control the state of a reference
-    css::uno::Reference< XControl >  xRef_Topic_Top       ( m_xTopic_Top      , UNO_QUERY );
-    css::uno::Reference< XControl >  xRef_Text_Top        ( m_xText_Top       , UNO_QUERY );
-    css::uno::Reference< XControl >  xRef_Topic_Bottom    ( m_xTopic_Bottom   , UNO_QUERY );
-    css::uno::Reference< XControl >  xRef_Text_Bottom     ( m_xText_Bottom    , UNO_QUERY );
     css::uno::Reference< XControl >  xRef_Button          ( m_xButton         , UNO_QUERY );
 
-    removeControl ( xRef_Topic_Top      );
-    removeControl ( xRef_Text_Top       );
-    removeControl ( xRef_Topic_Bottom   );
-    removeControl ( xRef_Text_Bottom    );
+    removeControl ( m_xTopic_Top      );
+    removeControl ( m_xText_Top       );
+    removeControl ( m_xTopic_Bottom   );
+    removeControl ( m_xText_Bottom    );
     removeControl ( xRef_Button         );
     removeControl ( m_xProgressBar );
 
     // don't use "...->clear ()" or "... = XFixedText ()"
     // when other hold a reference at this object !!!
-    xRef_Topic_Top->dispose     ();
-    xRef_Text_Top->dispose      ();
-    xRef_Topic_Bottom->dispose  ();
-    xRef_Text_Bottom->dispose   ();
+    m_xTopic_Top->dispose     ();
+    m_xText_Top->dispose      ();
+    m_xTopic_Bottom->dispose  ();
+    m_xText_Bottom->dispose   ();
     xRef_Button->dispose        ();
     m_xProgressBar->dispose();
 
@@ -515,17 +504,13 @@ void ProgressMonitor::impl_recalcLayout ()
     MutexGuard aGuard ( m_aMutex );
 
     // get information about required place of child controls
-    css::uno::Reference< XLayoutConstrains >  xTopicLayout_Top    ( m_xTopic_Top      , UNO_QUERY );
-    css::uno::Reference< XLayoutConstrains >  xTextLayout_Top     ( m_xText_Top       , UNO_QUERY );
-    css::uno::Reference< XLayoutConstrains >  xTopicLayout_Bottom ( m_xTopic_Bottom   , UNO_QUERY );
-    css::uno::Reference< XLayoutConstrains >  xTextLayout_Bottom  ( m_xText_Bottom    , UNO_QUERY );
     css::uno::Reference< XLayoutConstrains >  xButtonLayout       ( m_xButton         , UNO_QUERY );
 
-    Size    aTopicSize_Top      =   xTopicLayout_Top->getPreferredSize      ();
-    Size    aTextSize_Top       =   xTextLayout_Top->getPreferredSize       ();
-    Size    aTopicSize_Bottom   =   xTopicLayout_Bottom->getPreferredSize   ();
-    Size    aTextSize_Bottom    =   xTextLayout_Bottom->getPreferredSize    ();
-    Size    aButtonSize         =   xButtonLayout->getPreferredSize         ();
+    css::awt::Size    aTopicSize_Top      =   m_xTopic_Top->getPreferredSize      ();
+    css::awt::Size    aTextSize_Top       =   m_xText_Top->getPreferredSize       ();
+    css::awt::Size    aTopicSize_Bottom   =   m_xTopic_Bottom->getPreferredSize   ();
+    css::awt::Size    aTextSize_Bottom    =   m_xText_Bottom->getPreferredSize    ();
+    css::awt::Size    aButtonSize         =   xButtonLayout->getPreferredSize         ();
 
     // calc position and size of child controls
     // Button has preferred size!
@@ -598,16 +583,12 @@ void ProgressMonitor::impl_recalcLayout ()
     }
 
     // Set new position and size on all controls
-    css::uno::Reference< XWindow >  xRef_Topic_Top        ( m_xTopic_Top      , UNO_QUERY );
-    css::uno::Reference< XWindow >  xRef_Text_Top         ( m_xText_Top       , UNO_QUERY );
-    css::uno::Reference< XWindow >  xRef_Topic_Bottom     ( m_xTopic_Bottom   , UNO_QUERY );
-    css::uno::Reference< XWindow >  xRef_Text_Bottom      ( m_xText_Bottom    , UNO_QUERY );
     css::uno::Reference< XWindow >  xRef_Button           ( m_xButton         , UNO_QUERY );
 
-    xRef_Topic_Top->setPosSize    ( nDx+nX_Topic_Top    , nDy+nY_Topic_Top    , nWidth_Topic_Top    , nHeight_Topic_Top    , PosSize::POSSIZE );
-    xRef_Text_Top->setPosSize     ( nDx+nX_Text_Top     , nDy+nY_Text_Top     , nWidth_Text_Top     , nHeight_Text_Top     , PosSize::POSSIZE );
-    xRef_Topic_Bottom->setPosSize ( nDx+nX_Topic_Bottom , nDy+nY_Topic_Bottom , nWidth_Topic_Bottom , nHeight_Topic_Bottom , PosSize::POSSIZE );
-    xRef_Text_Bottom->setPosSize  ( nDx+nX_Text_Bottom  , nDy+nY_Text_Bottom  , nWidth_Text_Bottom  , nHeight_Text_Bottom  , PosSize::POSSIZE );
+    m_xTopic_Top->setPosSize    ( nDx+nX_Topic_Top    , nDy+nY_Topic_Top    , nWidth_Topic_Top    , nHeight_Topic_Top    , PosSize::POSSIZE );
+    m_xText_Top->setPosSize     ( nDx+nX_Text_Top     , nDy+nY_Text_Top     , nWidth_Text_Top     , nHeight_Text_Top     , PosSize::POSSIZE );
+    m_xTopic_Bottom->setPosSize ( nDx+nX_Topic_Bottom , nDy+nY_Topic_Bottom , nWidth_Topic_Bottom , nHeight_Topic_Bottom , PosSize::POSSIZE );
+    m_xText_Bottom->setPosSize  ( nDx+nX_Text_Bottom  , nDy+nY_Text_Bottom  , nWidth_Text_Bottom  , nHeight_Text_Bottom  , PosSize::POSSIZE );
     xRef_Button->setPosSize       ( nDx+nX_Button       , nDy+nY_Button       , nWidth_Button       , nHeight_Button       , PosSize::POSSIZE );
     m_xProgressBar->setPosSize    ( nDx+nX_ProgressBar  , nDy+nY_ProgressBar  , nWidth_ProgressBar  , nHeight_ProgressBar  , PosSize::POSSIZE );
 

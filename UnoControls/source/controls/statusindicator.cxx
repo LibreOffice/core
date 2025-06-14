@@ -34,7 +34,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::task;
 
-constexpr OUStringLiteral FIXEDTEXT_SERVICENAME = u"com.sun.star.awt.UnoControlFixedText";
 constexpr OUStringLiteral FIXEDTEXT_MODELNAME = u"com.sun.star.awt.UnoControlFixedTextModel";
 constexpr OUStringLiteral CONTROLNAME_TEXT = u"Text"; // identifier the control in container
 constexpr OUStringLiteral CONTROLNAME_PROGRESSBAR = u"ProgressBar"; //              -||-
@@ -51,14 +50,13 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
     osl_atomic_increment(&m_refCount);
 
     // Create instances for fixedtext and progress ...
-    m_xText.set( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
+    m_xText = new UnoFixedTextControl();
     m_xProgressBar = new ProgressBar(rxContext);
     // ... cast controls to css::uno::Reference< XControl > and set model ...
     // ( ProgressBar has no model !!! )
-    css::uno::Reference< XControl > xTextControl      ( m_xText       , UNO_QUERY );
-    xTextControl->setModel( css::uno::Reference< XControlModel >( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
+    m_xText->setModel( css::uno::Reference< XControlModel >( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
     // ... and add controls to basecontainercontrol!
-    addControl( CONTROLNAME_TEXT, xTextControl    );
+    addControl( CONTROLNAME_TEXT, m_xText    );
     addControl( CONTROLNAME_PROGRESSBAR, m_xProgressBar );
     // FixedText make it automatically visible by himself ... but not the progressbar !!!
     // it must be set explicitly
@@ -136,21 +134,20 @@ void SAL_CALL StatusIndicator::reset()
 
 //  XLayoutConstrains
 
-Size SAL_CALL StatusIndicator::getMinimumSize ()
+css::awt::Size SAL_CALL StatusIndicator::getMinimumSize ()
 {
-    return Size (STATUSINDICATOR_DEFAULT_WIDTH, STATUSINDICATOR_DEFAULT_HEIGHT);
+    return css::awt::Size(STATUSINDICATOR_DEFAULT_WIDTH, STATUSINDICATOR_DEFAULT_HEIGHT);
 }
 
 //  XLayoutConstrains
 
-Size SAL_CALL StatusIndicator::getPreferredSize ()
+css::awt::Size SAL_CALL StatusIndicator::getPreferredSize ()
 {
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex );
 
     // get information about required place of child controls
-    css::uno::Reference< XLayoutConstrains >  xTextLayout ( m_xText, UNO_QUERY );
-    Size                            aTextSize   = xTextLayout->getPreferredSize();
+    css::awt::Size                            aTextSize   = m_xText->getPreferredSize();
 
     aGuard.clear ();
 
@@ -169,12 +166,12 @@ Size SAL_CALL StatusIndicator::getPreferredSize ()
     }
 
     // return to caller
-    return Size ( nWidth, nHeight );
+    return css::awt::Size ( nWidth, nHeight );
 }
 
 //  XLayoutConstrains
 
-Size SAL_CALL StatusIndicator::calcAdjustedSize ( const Size& /*rNewSize*/ )
+css::awt::Size SAL_CALL StatusIndicator::calcAdjustedSize ( const css::awt::Size& /*rNewSize*/ )
 {
     return getPreferredSize ();
 }
@@ -193,7 +190,7 @@ void SAL_CALL StatusIndicator::createPeer (
         // If user forget to call "setPosSize()", we have still a correct size.
         // And a "MinimumSize" IS A "MinimumSize"!
         // We change not the position of control at this point.
-        Size aDefaultSize = getMinimumSize ();
+        css::awt::Size aDefaultSize = getMinimumSize ();
         setPosSize ( 0, 0, aDefaultSize.Width, aDefaultSize.Height, PosSize::SIZE );
     }
 }
@@ -223,14 +220,13 @@ void SAL_CALL StatusIndicator::dispose ()
     MutexGuard aGuard ( m_aMutex );
 
     // "removeControl()" control the state of a reference
-    css::uno::Reference< XControl >  xTextControl     ( m_xText       , UNO_QUERY );
 
-    removeControl( xTextControl     );
+    removeControl( m_xText     );
     removeControl( m_xProgressBar );
 
     // don't use "...->clear ()" or "... = XFixedText ()"
     // when other hold a reference at this object !!!
-    xTextControl->dispose();
+    m_xText->dispose();
     m_xProgressBar->dispose();
     m_xProgressBar.clear();
     m_xText.clear();
@@ -298,8 +294,7 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::R
         xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
     // FixedText background = gray
-    css::uno::Reference< XControl > xTextControl( m_xText, UNO_QUERY );
-    xPeer = xTextControl->getPeer();
+    xPeer = m_xText->getPeer();
     if( xPeer.is() )
         xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
@@ -335,9 +330,8 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
     MutexGuard aGuard ( m_aMutex );
 
     // get information about required place of child controls
-    Size                            aWindowSize     ( aEvent.Width, aEvent.Height );
-    css::uno::Reference< XLayoutConstrains >  xTextLayout     ( m_xText, UNO_QUERY );
-    Size                            aTextSize       = xTextLayout->getPreferredSize();
+    css::awt::Size                            aWindowSize     ( aEvent.Width, aEvent.Height );
+    css::awt::Size                            aTextSize       = m_xText->getPreferredSize();
 
     if( aWindowSize.Width < STATUSINDICATOR_DEFAULT_WIDTH )
     {
@@ -360,9 +354,7 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
     nHeight_ProgressBar = nHeight_Text;
 
     // Set new position and size on all controls
-    css::uno::Reference< XWindow >  xTextWindow       ( m_xText       , UNO_QUERY );
-
-    xTextWindow->setPosSize     ( nX_Text       , nY_Text       , nWidth_Text       , nHeight_Text          , 15 );
+    m_xText->setPosSize     ( nX_Text       , nY_Text       , nWidth_Text       , nHeight_Text          , 15 );
     m_xProgressBar->setPosSize( nX_ProgressBar, nY_ProgressBar, nWidth_ProgressBar, nHeight_ProgressBar, 15 );
 }
 
