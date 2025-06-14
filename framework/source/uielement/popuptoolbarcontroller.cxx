@@ -19,14 +19,12 @@
 
 #include <bitmaps.hlst>
 
-#include <cppuhelper/implbase.hxx>
+#include <uielement/popuptoolbarcontroller.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <helper/persistentwindowstate.hxx>
 #include <menuconfiguration.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/toolboxcontroller.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
@@ -40,53 +38,18 @@
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
-#include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
 using namespace framework;
 
-namespace
+namespace framework
 {
 
-typedef cppu::ImplInheritanceHelper< svt::ToolboxController,
-                                    css::lang::XServiceInfo >
-                ToolBarBase;
-
-class PopupMenuToolbarController : public ToolBarBase
-{
-public:
-    // XComponent
-    virtual void SAL_CALL dispose() override;
-    // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
-    // XToolbarController
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
-    // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
-
-protected:
-    PopupMenuToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                OUString aPopupCommand = OUString() );
-    virtual void functionExecuted( const OUString &rCommand );
-    virtual ToolBoxItemBits getDropDownStyle() const;
-    void createPopupMenuController();
-
-    bool                                                    m_bHasController;
-    bool                                                    m_bResourceURL;
-    OUString                                                m_aPopupCommand;
-    rtl::Reference< VCLXPopupMenu >                         m_xPopupMenu;
-
-private:
-    css::uno::Reference< css::frame::XUIControllerFactory > m_xPopupMenuFactory;
-    css::uno::Reference< css::frame::XPopupMenuController > m_xPopupMenuController;
-};
 
 PopupMenuToolbarController::PopupMenuToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -276,30 +239,6 @@ void PopupMenuToolbarController::createPopupMenuController()
     }
 }
 
-class GenericPopupToolbarController : public PopupMenuToolbarController
-{
-public:
-    GenericPopupToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                   const css::uno::Sequence< css::uno::Any >& rxArgs );
-
-    // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rxArgs ) override;
-
-    // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-
-    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) override;
-
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-private:
-    bool m_bSplitButton, m_bReplaceWithLast;
-    void functionExecuted(const OUString &rCommand) override;
-    ToolBoxItemBits getDropDownStyle() const override;
-};
 
 GenericPopupToolbarController::GenericPopupToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -407,6 +346,8 @@ ToolBoxItemBits GenericPopupToolbarController::getDropDownStyle() const
     return m_bSplitButton ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY;
 }
 
+namespace {
+
 class SaveToolbarController : public cppu::ImplInheritanceHelper< PopupMenuToolbarController,
                                                                   css::frame::XSubToolbarController,
                                                                   css::util::XModifyListener >
@@ -447,6 +388,8 @@ private:
     css::uno::Reference< css::frame::XStorable > m_xStorable;
     css::uno::Reference< css::util::XModifiable > m_xModifiable;
 };
+
+} // namespace
 
 SaveToolbarController::SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : ImplInheritanceHelper( rxContext, ".uno:SaveAsMenu" )
@@ -605,6 +548,8 @@ css::uno::Sequence< OUString > SaveToolbarController::getSupportedServiceNames()
     return {u"com.sun.star.frame.ToolbarController"_ustr};
 }
 
+namespace {
+
 class NewToolbarController : public cppu::ImplInheritanceHelper<PopupMenuToolbarController, css::frame::XSubToolbarController>
 {
 public:
@@ -634,6 +579,8 @@ private:
 
     sal_uInt16 m_nMenuId;
 };
+
+} // namespace
 
 NewToolbarController::NewToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext )

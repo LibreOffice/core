@@ -22,6 +22,7 @@
 #include <cassert>
 
 #include <uielement/toolbarmanager.hxx>
+#include <uielement/popuptoolbarcontroller.hxx>
 
 #include <framework/generictoolbarcontroller.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -1095,8 +1096,7 @@ void ToolBarManager::CreateControllers()
                 }
                 else if ( aCommandURL.startsWith( "private:resource/" ) )
                 {
-                    xController.set( m_xContext->getServiceManager()->createInstanceWithContext(
-                        u"com.sun.star.comp.framework.GenericPopupToolbarController"_ustr, m_xContext ), UNO_QUERY );
+                    xController.set( new framework::GenericPopupToolbarController(m_xContext, {}) );
                 }
                 else if ( m_pToolBar && m_pToolBar->GetItemData( nId ) != nullptr )
                 {
