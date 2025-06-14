@@ -185,7 +185,7 @@ public:
 
     void ToAny(css::uno::Any& rVal) const;
 
-    static std::unique_ptr<Theme> FromAny(const css::uno::Any& rVal);
+    static std::shared_ptr<Theme> FromAny(const css::uno::Any& rVal);
 
     std::vector<Color> GetColors() const;
 
