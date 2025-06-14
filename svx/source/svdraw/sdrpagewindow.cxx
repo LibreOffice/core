@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
+#include <toolkit/controls/unocontrolcontainermodel.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -96,9 +97,8 @@ rtl::Reference<UnoControlContainer> const & SdrPageWindow::GetControlContainer( 
         else
         {
             // Printer and VirtualDevice, or rather: no OutDev
-            uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
             const_cast< SdrPageWindow* >( this )->mpImpl->mxControlContainer = new UnoControlContainer();
-            uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(u"com.sun.star.awt.UnoControlContainerModel"_ustr), uno::UNO_QUERY);
+            rtl::Reference< UnoControlContainerModel > xModel(new UnoControlContainerModel(comphelper::getProcessComponentContext()));
             mpImpl->mxControlContainer->setModel(xModel);
 
             OutputDevice& rOutDev = rPaintWindow.GetOutputDevice();

@@ -19,12 +19,10 @@
 
 #pragma once
 
-
+#include <toolkit/dllapi.h>
 #include <toolkit/controls/unocontrolmodel.hxx>
 
-
-
-class UnoControlContainerModel final : public UnoControlModel
+class TOOLKIT_DLLPUBLIC UnoControlContainerModel final : public UnoControlModel
 {
     css::uno::Any                                                      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&                                      getInfoHelper() override;

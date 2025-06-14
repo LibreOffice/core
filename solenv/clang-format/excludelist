@@ -5952,6 +5952,7 @@ include/toolkit/awt/vclxwindows.hxx
 include/toolkit/controls/unocontrol.hxx
 include/toolkit/controls/unocontrolbase.hxx
 include/toolkit/controls/unocontrolcontainer.hxx
+include/toolkit/controls/unocontrolcontainermodel.hxx
 include/toolkit/controls/unocontrolmodel.hxx
 include/toolkit/controls/unocontrols.hxx
 include/toolkit/helper/accessiblefactory.hxx
@@ -13442,7 +13443,6 @@ toolkit/inc/controls/tabpagecontainer.hxx
 toolkit/inc/controls/tabpagemodel.hxx
 toolkit/inc/controls/tkscrollbar.hxx
 toolkit/inc/controls/treecontrolpeer.hxx
-toolkit/inc/controls/unocontrolcontainermodel.hxx
 toolkit/inc/helper/accessibilityclient.hxx
 toolkit/inc/helper/btndlg.hxx
 toolkit/inc/helper/imagealign.hxx

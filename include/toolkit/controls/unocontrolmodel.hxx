@@ -21,6 +21,7 @@
 #define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
 
 #include <toolkit/dllapi.h>
+
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
