@@ -57,7 +57,7 @@ CreationWizardUnoDlg::~CreationWizardUnoDlg()
 // lang::XServiceInfo
 OUString SAL_CALL CreationWizardUnoDlg::getImplementationName()
 {
-    return CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME;
+    return u"com.sun.star.comp.chart2.WizardDialog"_ustr;
 }
 
 sal_Bool SAL_CALL CreationWizardUnoDlg::supportsService( const OUString& rServiceName )
@@ -67,7 +67,7 @@ sal_Bool SAL_CALL CreationWizardUnoDlg::supportsService( const OUString& rServic
 
 css::uno::Sequence< OUString > SAL_CALL CreationWizardUnoDlg::getSupportedServiceNames()
 {
-    return { CHART_WIZARD_DIALOG_SERVICE_NAME };
+    return { u"com.sun.star.chart2.WizardDialog"_ustr };
 }
 
 // XInterface

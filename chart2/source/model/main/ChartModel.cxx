@@ -332,7 +332,7 @@ void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aV
 
 OUString SAL_CALL ChartModel::getImplementationName()
 {
-    return CHART_MODEL_SERVICE_IMPLEMENTATION_NAME;
+    return u"com.sun.star.comp.chart2.ChartModel"_ustr;
 }
 
 sal_Bool SAL_CALL ChartModel::supportsService( const OUString& rServiceName )
@@ -343,7 +343,7 @@ sal_Bool SAL_CALL ChartModel::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SAL_CALL ChartModel::getSupportedServiceNames()
 {
     return {
-        CHART_MODEL_SERVICE_NAME,
+        u"com.sun.star.chart2.ChartDocument"_ustr,
         u"com.sun.star.document.OfficeDocument"_ustr,
         u"com.sun.star.chart.ChartDocument"_ustr
     };

@@ -60,7 +60,7 @@ bool ChartFrameLoader::impl_checkCancel()
 
 OUString SAL_CALL ChartFrameLoader::getImplementationName()
 {
-    return CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME;
+    return u"com.sun.star.comp.chart2.ChartFrameLoader"_ustr;
 }
 
 sal_Bool SAL_CALL ChartFrameLoader::supportsService( const OUString& rServiceName )
@@ -70,7 +70,7 @@ sal_Bool SAL_CALL ChartFrameLoader::supportsService( const OUString& rServiceNam
 
 css::uno::Sequence< OUString > SAL_CALL ChartFrameLoader::getSupportedServiceNames()
 {
-    return { CHART_FRAMELOADER_SERVICE_NAME };
+    return { u"com.sun.star.frame.SynchronousFrameLoader"_ustr };
 }
 
 // frame::XFrameLoader

@@ -45,12 +45,12 @@ ChartTypeUnoDlg::~ChartTypeUnoDlg()
 // lang::XServiceInfo
 OUString SAL_CALL ChartTypeUnoDlg::getImplementationName()
 {
-    return CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME;
+    return u"com.sun.star.comp.chart2.ChartTypeDialog"_ustr;
 }
 
 css::uno::Sequence<OUString> SAL_CALL ChartTypeUnoDlg::getSupportedServiceNames()
 {
-    return { CHART_TYPE_DIALOG_SERVICE_NAME };
+    return { u"com.sun.star.chart2.ChartTypeDialog"_ustr };
 }
 uno::Sequence< sal_Int8 > SAL_CALL ChartTypeUnoDlg::getImplementationId()
 {
