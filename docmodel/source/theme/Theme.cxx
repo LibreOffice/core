@@ -71,11 +71,8 @@ void Theme::ToAny(uno::Any& rVal) const
         std::vector<util::Color> aColorScheme;
         for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
         {
-            if (eThemeColorType != model::ThemeColorType::Unknown)
-            {
-                Color aColor = mpColorSet->getColor(eThemeColorType);
-                aColorScheme.push_back(sal_Int32(aColor));
-            }
+            Color aColor = mpColorSet->getColor(eThemeColorType);
+            aColorScheme.push_back(sal_Int32(aColor));
         }
 
         aMap[u"ColorSchemeName"_ustr] <<= mpColorSet->getName();
@@ -146,8 +143,7 @@ std::vector<Color> Theme::GetColors() const
     std::vector<Color> aColors;
     for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
     {
-        if (eThemeColorType != model::ThemeColorType::Unknown)
-            aColors.push_back(mpColorSet->getColor(eThemeColorType));
+        aColors.push_back(mpColorSet->getColor(eThemeColorType));
     }
     return aColors;
 }
