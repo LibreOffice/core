@@ -21,19 +21,15 @@
 
 #include "sddllapi.h"
 #include <PreviewRenderer.hxx>
-#include <com/sun/star/drawing/XSlideRenderer.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-
 #include <comphelper/compbase.hxx>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
 
 namespace com::sun::star::drawing { class XDrawPage; }
 
 namespace sd::presenter {
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::XSlideRenderer,
-    css::lang::XInitialization
-> SlideRendererInterfaceBase;
+typedef comphelper::WeakComponentImplHelper<> SlideRendererInterfaceBase;
 
 /** Render single slides into bitmaps.
 */
@@ -46,26 +42,20 @@ public:
     SlideRenderer(const SlideRenderer&) = delete;
     SlideRenderer& operator=(const SlideRenderer&) = delete;
 
-    // XInitialization
-
-    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
-
-    // XSlideRenderer
-
-    virtual css::uno::Reference<css::awt::XBitmap> SAL_CALL createPreview (
+    css::uno::Reference<css::awt::XBitmap> createPreview (
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
-        sal_Int16 nSuperSampleFactor) override;
+        sal_Int16 nSuperSampleFactor);
 
-    virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL createPreviewForCanvas (
+    css::uno::Reference<css::rendering::XBitmap> createPreviewForCanvas (
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
         sal_Int16 nSuperSampleFactor,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas) override;
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 
-    virtual css::awt::Size SAL_CALL calculatePreviewSize (
+    static css::awt::Size calculatePreviewSize (
         double nSlideAspectRatio,
-        const css::awt::Size& rMaximumPreviewPixelSize) override;
+        const css::awt::Size& rMaximumPreviewPixelSize);
 
 private:
     PreviewRenderer maPreviewRenderer;

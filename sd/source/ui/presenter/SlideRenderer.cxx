@@ -39,21 +39,6 @@ SlideRenderer::~SlideRenderer()
 {
 }
 
-//----- XInitialization -------------------------------------------------------
-
-void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
-{
-    ThrowIfDisposed();
-
-    if (rArguments.hasElements())
-    {
-        throw RuntimeException(u"SlideRenderer: invalid number of arguments"_ustr,
-                static_cast<XWeak*>(this));
-    }
-}
-
-//----- XSlideRenderer --------------------------------------------------------
-
 Reference<awt::XBitmap> SlideRenderer::createPreview (
     const Reference<drawing::XDrawPage>& rxSlide,
     const awt::Size& rMaximalSize,
@@ -85,7 +70,8 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
         return nullptr;
 }
 
-awt::Size SAL_CALL SlideRenderer::calculatePreviewSize (
+// static
+awt::Size SlideRenderer::calculatePreviewSize (
     double nSlideAspectRatio,
     const awt::Size& rMaximalSize)
 {

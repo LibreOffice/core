@@ -27,7 +27,6 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/drawing/XSlideRenderer.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

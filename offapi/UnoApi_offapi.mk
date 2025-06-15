@@ -141,7 +141,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/drawing,\
 	GraphicExportFilter \
 	ModuleDispatcher \
 	ShapeCollection \
-	SlideRenderer \
 	SlideSorter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/drawing/framework,\
@@ -2390,7 +2389,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	XShapes2 \
 	XShapes3 \
 	XSlidePreviewCacheListener \
-	XSlideRenderer \
 	XSlideSorterBase \
 	XUniversalShapeDescriptor \
 ))

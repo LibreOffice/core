@@ -237,7 +237,7 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
     {
         if (mnSlideAspectRatio > 0)
         {
-            const awt::Size aPreviewSize (mxPreviewRenderer->calculatePreviewSize(
+            const awt::Size aPreviewSize (sd::presenter::SlideRenderer::calculatePreviewSize(
                 mnSlideAspectRatio,awt::Size(aWindowBox.Width, aWindowBox.Height)));
             aPreviewBox = awt::Rectangle(
                 (aWindowBox.Width - aPreviewSize.Width)/2,
@@ -316,7 +316,7 @@ void PresenterSlidePreview::Resize()
     if (mxPreviewRenderer.is() && mxPreview.is())
     {
         const awt::Rectangle aWindowBox (mxWindow->getPosSize());
-        const awt::Size aNewPreviewSize (mxPreviewRenderer->calculatePreviewSize(
+        const awt::Size aNewPreviewSize (sd::presenter::SlideRenderer::calculatePreviewSize(
             mnSlideAspectRatio,
                 awt::Size(aWindowBox.Width, aWindowBox.Height)));
         const geometry::IntegerSize2D aPreviewSize (mxPreview->getSize());
