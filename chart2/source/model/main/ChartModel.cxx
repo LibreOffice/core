@@ -40,6 +40,7 @@
 #include <ModifyListenerHelper.hxx>
 #include <RangeHighlighter.hxx>
 #include <Diagram.hxx>
+#include <ChartDocumentWrapper.hxx>
 #include <comphelper/dumpxmltostring.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -131,10 +132,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
 {
     osl_atomic_increment(&m_refCount);
     {
-        m_xOldModelAgg.set(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-            CHART_CHARTAPIWRAPPER_SERVICE_NAME,
-            m_xContext ), uno::UNO_QUERY_THROW );
+        m_xOldModelAgg = new wrapper::ChartDocumentWrapper(m_xContext);
         m_xOldModelAgg->setDelegator( *this );
     }
 
@@ -175,10 +173,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
 {
     osl_atomic_increment(&m_refCount);
     {
-        m_xOldModelAgg.set(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-            CHART_CHARTAPIWRAPPER_SERVICE_NAME,
-            m_xContext ), uno::UNO_QUERY_THROW );
+        m_xOldModelAgg = new wrapper::ChartDocumentWrapper(m_xContext);
         m_xOldModelAgg->setDelegator( *this );
 
         Reference< util::XModifyListener > xListener;

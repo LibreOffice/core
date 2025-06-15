@@ -78,8 +78,6 @@ public:
     /// @throws css::uno::RuntimeException
     rtl::Reference<SvxDrawPage> impl_getDrawPage() const;
 
-protected:
-
     // ____ chart::XChartDocument ____
     virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getTitle() override;
     virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getSubTitle() override;

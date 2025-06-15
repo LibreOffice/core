@@ -1410,7 +1410,7 @@ std::vector< std::unique_ptr<WrappedProperty> > ChartDocumentWrapper::createWrap
 
 OUString SAL_CALL ChartDocumentWrapper::getImplementationName()
 {
-    return CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME;
+    return u"com.sun.star.comp.chart2.ChartDocumentWrapper"_ustr;
 }
 
 sal_Bool SAL_CALL ChartDocumentWrapper::supportsService( const OUString& rServiceName )
@@ -1422,7 +1422,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getSupportedServic
 {
     return {
         u"com.sun.star.chart.ChartDocument"_ustr,
-        CHART_CHARTAPIWRAPPER_SERVICE_NAME,
+        u"com.sun.star.chart2.ChartDocumentWrapper"_ustr,
         u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,
         u"com.sun.star.beans.PropertySet"_ustr
     };

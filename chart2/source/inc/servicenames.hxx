@@ -44,10 +44,4 @@ inline constexpr OUString CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME
 inline constexpr OUString CHART_TYPE_DIALOG_SERVICE_NAME
     = u"com.sun.star.chart2.ChartTypeDialog"_ustr;
 
-// wrapper for old UNO API (com.sun.star.chart)
-inline constexpr OUString CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME
-    = u"com.sun.star.comp.chart2.ChartDocumentWrapper"_ustr;
-inline constexpr OUString CHART_CHARTAPIWRAPPER_SERVICE_NAME
-    = u"com.sun.star.chart2.ChartDocumentWrapper"_ustr;
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
