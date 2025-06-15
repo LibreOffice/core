@@ -222,12 +222,6 @@ excludelist:
     sd/source/ui/inc/framework/PresentationModule.hxx:
     # Needed for css shortcut
     - sal/types.h
-    sd/source/ui/inc/framework/PresentationFactory.hxx:
-    sd/source/ui/inc/framework/ResourceId.hxx:
-    # base class has to be a complete type
-    - com/sun/star/drawing/framework/XResourceId.hpp
-    - com/sun/star/lang/XInitialization.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     sd/source/ui/inc/framework/ViewShellWrapper.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XWindowListener.hpp

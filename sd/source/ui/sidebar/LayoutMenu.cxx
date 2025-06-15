@@ -26,6 +26,7 @@
 #include <helpids.h>
 #include <pres.hxx>
 #include <sdmod.hxx>
+#include <ResourceId.hxx>
 
 #include <sdpage.hxx>
 #include <sdresid.hxx>
@@ -56,7 +57,6 @@
 #include <comphelper/lok.hxx>
 
 #include <com/sun/star/drawing/framework/XView.hpp>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
 
 #include <string_view>
 #include <vector>
@@ -474,8 +474,7 @@ void LayoutMenu::Fill()
     {
         if (mrBase.GetDrawController())
         {
-            Reference<XResourceId> xPaneId (ResourceId::create(
-                ::comphelper::getProcessComponentContext(),
+            Reference<XResourceId> xPaneId (new sd::framework::ResourceId(
                 FrameworkHelper::msCenterPaneURL));
             Reference<XView> xView (FrameworkHelper::Instance(mrBase)->GetView(xPaneId));
             if (xView.is())

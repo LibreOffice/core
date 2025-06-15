@@ -195,7 +195,6 @@ private:
     */
     void ProcessComponent (
         const ::std::vector<css::uno::Any>& rValues,
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId);
 
     /** Read the view descriptions from the configuration.
@@ -209,7 +208,6 @@ private:
         const ::std::vector<css::uno::Any>& rValues);
 
     void SetupView (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId,
         const OUString& rsPaneURL,
         const OUString& rsViewURL,

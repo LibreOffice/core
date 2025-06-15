@@ -36,6 +36,7 @@
 #include <framework/ConfigurationController.hxx>
 #include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/Pane.hxx>
+#include <ResourceId.hxx>
 
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -43,7 +44,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -462,8 +462,7 @@ void PresenterController::ShowView (const OUString& rsViewURL)
         pDescriptor->mxPaneId,
         sd::framework::ResourceActivationMode::ADD);
     mxConfigurationController->requestResourceActivation(
-        ResourceId::createWithAnchor(
-            mxComponentContext,
+        new sd::framework::ResourceId(
             rsViewURL,
             pDescriptor->mxPaneId),
         sd::framework::ResourceActivationMode::REPLACE);
@@ -476,8 +475,7 @@ void PresenterController::HideView (const OUString& rsViewURL)
     if (pDescriptor)
     {
         mxConfigurationController->requestResourceDeactivation(
-            ResourceId::createWithAnchor(
-                mxComponentContext,
+            new sd::framework::ResourceId(
                 rsViewURL,
                 pDescriptor->mxPaneId));
     }

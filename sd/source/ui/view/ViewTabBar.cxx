@@ -25,6 +25,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include <framework/Pane.hxx>
 #include <DrawController.hxx>
+#include <ResourceId.hxx>
 
 #include <Client.hxx>
 #include <utility>
@@ -32,8 +33,8 @@
 #include <vcl/svapp.hxx>
 
 #include <sfx2/viewfrm.hxx>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -261,8 +262,7 @@ bool ViewTabBar::ActivatePage(size_t nIndex)
         try
         {
             xView.set(xConfigurationController->getResource(
-                          ResourceId::create(
-                              ::comphelper::getProcessComponentContext(),
+                          new sd::framework::ResourceId(
                               FrameworkHelper::msCenterPaneURL)),
                       UNO_QUERY);
         }

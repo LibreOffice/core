@@ -34,6 +34,7 @@
 #include <DrawController.hxx>
 #include <FrameView.hxx>
 #include <ViewTabBar.hxx>
+#include <ResourceId.hxx>
 #include <sfx2/event.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
@@ -54,7 +55,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include <framework/FrameworkHelper.hxx>
 
 #include <sal/log.hxx>
@@ -1310,12 +1311,10 @@ void ViewShellBase::Implementation::SetPaneVisibility (
         if (!pDrawController)
             return;
 
-        const Reference< XComponentContext >& xContext(
-            ::comphelper::getProcessComponentContext() );
-        Reference<XResourceId> xPaneId (ResourceId::create(
-            xContext, rsPaneURL));
-        Reference<XResourceId> xViewId (ResourceId::createWithAnchorURL(
-            xContext, rsViewURL, rsPaneURL));
+        Reference<XResourceId> xPaneId (new sd::framework::ResourceId(
+            rsPaneURL));
+        Reference<XResourceId> xViewId (new sd::framework::ResourceId(
+            rsViewURL, rsPaneURL));
 
         // Determine the new visibility state.
         const SfxItemSet* pArguments = rRequest.GetArgs();
@@ -1380,8 +1379,6 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
         if ( ! xConfiguration.is())
             throw RuntimeException();
 
-        const Reference< XComponentContext >& xContext(
-            ::comphelper::getProcessComponentContext() );
         SfxWhichIter aSetIterator (rSet);
         sal_uInt16 nItemId (aSetIterator.FirstWhich());
 
@@ -1397,60 +1394,58 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                 switch (nItemId)
                 {
                     case SID_LEFT_PANE_IMPRESS:
-                        xResourceId = ResourceId::create(
-                            xContext, FrameworkHelper::msLeftImpressPaneURL);
+                        xResourceId = new sd::framework::ResourceId(
+                            FrameworkHelper::msLeftImpressPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_LEFT_PANE_DRAW:
-                        xResourceId = ResourceId::create(
-                            xContext, FrameworkHelper::msLeftDrawPaneURL);
+                        xResourceId = new sd::framework::ResourceId(
+                            FrameworkHelper::msLeftDrawPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_BOTTOM_PANE_IMPRESS:
-                        xResourceId = ResourceId::create(
-                            xContext, FrameworkHelper::msBottomImpressPaneURL);
+                        xResourceId = new sd::framework::ResourceId(
+                            FrameworkHelper::msBottomImpressPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_DRAWINGMODE:
                     case SID_NORMAL_MULTI_PANE_GUI:
                     case SID_SLIDE_MASTER_MODE:
-                        xResourceId = ResourceId::createWithAnchorURL(
-                            xContext, FrameworkHelper::msImpressViewURL,
+                        xResourceId = new sd::framework::ResourceId(
+                            FrameworkHelper::msImpressViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_SLIDE_SORTER_MULTI_PANE_GUI:
                     case SID_SLIDE_SORTER_MODE:
-                        xResourceId = ResourceId::createWithAnchorURL(
-                            xContext,
+                        xResourceId = new sd::framework::ResourceId(
                             FrameworkHelper::msSlideSorterURL,
                             FrameworkHelper::msCenterPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_OUTLINE_MODE:
-                        xResourceId = ResourceId::createWithAnchorURL(
-                            xContext,
+                        xResourceId = new sd::framework::ResourceId(
                             FrameworkHelper::msOutlineViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_HANDOUT_MASTER_MODE:
-                        xResourceId = ResourceId::createWithAnchorURL(
-                            xContext, FrameworkHelper::msHandoutViewURL,
+                        xResourceId = new sd::framework::ResourceId(
+                            FrameworkHelper::msHandoutViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_NOTES_MODE:
                     case SID_NOTES_MASTER_MODE:
-                        xResourceId = ResourceId::createWithAnchorURL(
-                            xContext, FrameworkHelper::msNotesViewURL,
+                        xResourceId = new sd::framework::ResourceId(
+                            FrameworkHelper::msNotesViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;

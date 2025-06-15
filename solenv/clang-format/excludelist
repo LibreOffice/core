@@ -9210,6 +9210,7 @@ sd/inc/FactoryIds.hxx
 sd/inc/OutlinerIterator.hxx
 sd/inc/PresenterHelper.hxx
 sd/inc/PresenterPreviewCache.hxx
+sd/inc/ResourceId.hxx
 sd/inc/SlideRenderer.hxx
 sd/inc/TransitionPreset.hxx
 sd/inc/animations.hxx
@@ -9614,7 +9615,6 @@ sd/source/ui/inc/framework/FrameworkHelper.hxx
 sd/source/ui/inc/framework/ModuleController.hxx
 sd/source/ui/inc/framework/Pane.hxx
 sd/source/ui/inc/framework/PresentationFactory.hxx
-sd/source/ui/inc/framework/ResourceId.hxx
 sd/source/ui/inc/framework/ViewShellWrapper.hxx
 sd/source/ui/inc/framework/factories/BasicPaneFactory.hxx
 sd/source/ui/inc/framework/factories/BasicToolBarFactory.hxx

@@ -20,12 +20,11 @@
 #pragma once
 
 #include <sal/config.h>
+#include "sddllapi.h"
 
 #include <vector>
 
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <memory>
@@ -36,16 +35,12 @@ namespace com::sun::star::uno { template <class interface_type> class WeakRefere
 namespace sd::framework {
 
 typedef ::cppu::WeakImplHelper <
-    css::drawing::framework::XResourceId,
-    css::lang::XInitialization,
-    css::lang::XServiceInfo
+    css::drawing::framework::XResourceId
     > ResourceIdInterfaceBase;
 
-/** Implementation of the css::drawing::framework::ResourceId
-    service and the css::drawing::framework::XResourceId
-    interface.
+/** Implementation of css::drawing::framework::XResourceId interface.
 */
-class ResourceId final
+class SD_DLLPUBLIC ResourceId final
     : public ResourceIdInterfaceBase
 {
 public:
@@ -70,6 +65,12 @@ public:
     */
     ResourceId (
         const OUString& rsResourceURL);
+
+    /** Create a resource id for an anchor that is given as
+        XResourceId object.  This is the most general of the
+        constructor variants.
+    */
+    ResourceId(const OUString& sResourceURL, const css::uno::Reference<XResourceId>& xAnchor);
 
     /** Create a new resource id for the given resource type and an anchor
         that is specified by a single URL.  This constructor can be used for
@@ -138,17 +139,6 @@ public:
     virtual css::uno::Reference<
         css::drawing::framework::XResourceId> SAL_CALL
         clone() override;
-
-    //===== XInitialization ===================================================
-
-    void SAL_CALL initialize (
-        const css::uno::Sequence<css::uno::Any>& aArguments) override;
-
-    OUString SAL_CALL getImplementationName() override;
-
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
-
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     /** The set of URLs that consist of the resource URL at index 0 and the

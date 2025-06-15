@@ -23,7 +23,7 @@
 
 #include <framework/ConfigurationController.hxx>
 #include <framework/ConfigurationChangeEvent.hxx>
-#include <framework/ResourceId.hxx>
+#include <ResourceId.hxx>
 #include <framework/ViewShellWrapper.hxx>
 #include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>

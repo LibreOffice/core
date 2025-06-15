@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <framework/ResourceId.hxx>
+#include <ResourceId.hxx>
 #include <tools/SdGlobalResourceContainer.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
@@ -67,6 +67,19 @@ ResourceId::ResourceId (
     // Handle the special case of an empty resource URL.
     if (rsResourceURL.isEmpty())
         maResourceURLs.clear();
+    ParseResourceURL();
+}
+
+ResourceId::ResourceId (
+    const OUString& rsResourceURL, const css::uno::Reference<XResourceId>& xAnchor)
+{
+    maResourceURLs.push_back(rsResourceURL);
+    if (xAnchor.is())
+    {
+        maResourceURLs.push_back(xAnchor->getResourceURL());
+        const Sequence<OUString> aAnchorURLs (xAnchor->getAnchorURLs());
+        maResourceURLs.insert( maResourceURLs.end(), aAnchorURLs.begin(), aAnchorURLs.end() );
+    }
     ParseResourceURL();
 }
 
@@ -346,47 +359,6 @@ Reference<XResourceId> SAL_CALL
     return new ResourceId(std::vector(maResourceURLs));
 }
 
-//----- XInitialization -------------------------------------------------------
-
-void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
-{
-    for (const auto& rArgument : aArguments)
-    {
-        OUString sResourceURL;
-        if (rArgument >>= sResourceURL)
-            maResourceURLs.push_back(sResourceURL);
-        else
-        {
-            Reference<XResourceId> xAnchor;
-            if (rArgument >>= xAnchor)
-            {
-                if (xAnchor.is())
-                {
-                    maResourceURLs.push_back(xAnchor->getResourceURL());
-                    const Sequence<OUString> aAnchorURLs (xAnchor->getAnchorURLs());
-                    maResourceURLs.insert( maResourceURLs.end(), aAnchorURLs.begin(), aAnchorURLs.end() );
-                }
-            }
-        }
-    }
-    ParseResourceURL();
-}
-
-OUString ResourceId::getImplementationName()
-{
-    return u"com.sun.star.comp.Draw.framework.ResourceId"_ustr;
-}
-
-sal_Bool ResourceId::supportsService(OUString const & ServiceName)
-{
-    return cppu::supportsService(this, ServiceName);
-}
-
-css::uno::Sequence<OUString> ResourceId::getSupportedServiceNames()
-{
-    return {u"com.sun.star.drawing.framework.ResourceId"_ustr};
-}
-
 /** When eMode is DIRECTLY then the anchor of the called object and the
     anchor represented by the given sequence of anchor URLs have to be
     identical.   When eMode is RECURSIVE then the anchor of the called
@@ -489,14 +461,5 @@ void ResourceId::ParseResourceURL()
 }
 
 } // end of namespace sd::framework
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Draw_framework_ResourceID_get_implementation(css::uno::XComponentContext*,
-                                                               css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new sd::framework::ResourceId());
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,10 +26,10 @@
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
 #include <DrawController.hxx>
+#include <ResourceId.hxx>
 #include <framework/ConfigurationController.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -570,8 +570,7 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
         ? u"true"_ustr
         : u"false"_ustr;
 
-    return ResourceId::create(
-        Reference<XComponentContext>(mxContextWeak),
+    return new sd::framework::ResourceId(
         FULL_SCREEN_PANE_URL
                 + "?FullScreen="
                 + fullScreenStr
@@ -728,9 +727,9 @@ void PresenterScreen::ProcessLayout (
         PresenterConfigurationAccess::ForAll(
             xList,
             aProperties,
-            [this, rxContext, rxAnchorId](std::vector<uno::Any> const& rArgs)
+            [this, rxAnchorId](std::vector<uno::Any> const& rArgs)
             {
-                this->ProcessComponent(rArgs, rxContext, rxAnchorId);
+                this->ProcessComponent(rArgs, rxAnchorId);
             });
     }
     catch (const RuntimeException&)
@@ -770,7 +769,6 @@ void PresenterScreen::ProcessViewDescriptions (
 
 void PresenterScreen::ProcessComponent (
     const ::std::vector<Any>& rValues,
-    const Reference<XComponentContext>& rxContext,
     const Reference<XResourceId>& rxAnchorId)
 {
     if (rValues.size() != 6)
@@ -794,7 +792,6 @@ void PresenterScreen::ProcessComponent (
         if (nX>=0 && nY>=0 && nWidth>0 && nHeight>0)
         {
             SetupView(
-                rxContext,
                 rxAnchorId,
                 sPaneURL,
                 sViewURL,
@@ -832,7 +829,6 @@ void PresenterScreen::ProcessViewDescription (
 }
 
 void PresenterScreen::SetupView(
-    const Reference<XComponentContext>& rxContext,
     const Reference<XResourceId>& rxAnchorId,
     const OUString& rsPaneURL,
     const OUString& rsViewURL,
@@ -842,7 +838,7 @@ void PresenterScreen::SetupView(
     if (!xCC.is())
         return;
 
-    Reference<XResourceId> xPaneId (ResourceId::createWithAnchor(rxContext,rsPaneURL,rxAnchorId));
+    Reference<XResourceId> xPaneId (new sd::framework::ResourceId(rsPaneURL,rxAnchorId));
     // Look up the view descriptor.
     ViewDescriptor aViewDescriptor;
     ViewDescriptorContainer::const_iterator iDescriptor (maViewDescriptors.find(rsViewURL));

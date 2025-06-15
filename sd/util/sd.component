@@ -33,10 +33,6 @@
     <service name="com.sun.star.drawing.DrawingDocumentFactory"/>
     <service name="com.sun.star.presentation.PresentationDocument"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.ResourceId"
-      constructor="com_sun_star_comp_Draw_framework_ResourceID_get_implementation">
-    <service name="com.sun.star.drawing.framework.ResourceId"/>
-  </implementation>
   <implementation name="org.openoffice.comp.Draw.framework.PanelFactory"
       constructor="org_openoffice_comp_Draw_framework_PanelFactory_get_implementation">
     <service name="com.sun.star.drawing.framework.PanelFactory"/>

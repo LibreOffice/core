@@ -142,9 +142,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/drawing,\
 	ModuleDispatcher \
 	ShapeCollection \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/drawing/framework,\
-	ResourceId \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/embed,\
 	DocumentCloser \
 	EmbeddedObjectCreator \

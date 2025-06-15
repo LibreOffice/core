@@ -698,7 +698,6 @@ draw_constructor_list = [
     "com_sun_star_comp_sd_SlideLayoutController_get_implementation",
     "com_sun_star_comp_sd_DisplayModeController_get_implementation",
     "RandomAnimationNode_get_implementation",
-    "com_sun_star_comp_Draw_framework_ResourceID_get_implementation",
     "org_openoffice_comp_Draw_framework_PanelFactory_get_implementation",
     "css_comp_Impress_oox_PowerPointExport",
 # sd/util/sdd.component
