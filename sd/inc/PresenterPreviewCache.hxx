@@ -19,26 +19,25 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/XSlidePreviewCache.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include "sddllapi.h"
 #include <tools/gen.hxx>
 #include <comphelper/compbase.hxx>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/drawing/XSlidePreviewCacheListener.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 #include <memory>
 
 namespace sd::slidesorter::cache { class PageCache; }
 
 namespace sd::presenter {
 
-typedef comphelper::WeakComponentImplHelper<
-    css::lang::XInitialization,
-    css::lang::XServiceInfo,
-    css::drawing::XSlidePreviewCache
-> PresenterPreviewCacheInterfaceBase;
+typedef comphelper::WeakComponentImplHelper<> PresenterPreviewCacheInterfaceBase;
 
-/** Uno API wrapper around the slide preview cache.
+/** wrapper around the slide preview cache.
 */
-class PresenterPreviewCache final
+class SD_DLLPUBLIC PresenterPreviewCache final
     : public PresenterPreviewCacheInterfaceBase
 {
 public:
@@ -47,44 +46,31 @@ public:
     PresenterPreviewCache(const PresenterPreviewCache&) = delete;
     PresenterPreviewCache& operator=(const PresenterPreviewCache&) = delete;
 
-    // XInitialize
-
-    /** Accepts no arguments.  All values that are necessary to set up a
-        preview cache can be provided via methods.
-    */
-    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
-
-    OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-    // XSlidePreviewCache
-
-    virtual void SAL_CALL setDocumentSlides (
+    void setDocumentSlides (
         const css::uno::Reference<css::container::XIndexAccess>& rxSlides,
-        const css::uno::Reference<css::uno::XInterface>& rxDocument) override;
+        const css::uno::Reference<css::uno::XInterface>& rxDocument);
 
-    virtual void SAL_CALL setVisibleRange (
+    void setVisibleRange (
         sal_Int32 nFirstVisibleSlideIndex,
-        sal_Int32 nLastVisibleSlideIndex) override;
+        sal_Int32 nLastVisibleSlideIndex);
 
-    virtual void SAL_CALL setPreviewSize (
-        const css::geometry::IntegerSize2D& rSize) override;
+    void setPreviewSize (
+        const css::geometry::IntegerSize2D& rSize);
 
-    virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL
+    css::uno::Reference<css::rendering::XBitmap>
         getSlidePreview (
             sal_Int32 nSlideIndex,
-            const css::uno::Reference<css::rendering::XCanvas>& rxCanvas) override;
+            const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 
-    virtual void SAL_CALL addPreviewCreationNotifyListener (
-        const css::uno::Reference<css::drawing::XSlidePreviewCacheListener>& rxListener) override;
+    void addPreviewCreationNotifyListener (
+        const css::uno::Reference<css::drawing::XSlidePreviewCacheListener>& rxListener);
 
-    virtual void SAL_CALL removePreviewCreationNotifyListener (
-        const css::uno::Reference<css::drawing::XSlidePreviewCacheListener>& rxListener) override;
+    void removePreviewCreationNotifyListener (
+        const css::uno::Reference<css::drawing::XSlidePreviewCacheListener>& rxListener) ;
 
-    virtual void SAL_CALL pause() override;
+    void pause();
 
-    virtual void SAL_CALL resume() override;
+    void resume();
 
 private:
     class PresenterCacheContext;

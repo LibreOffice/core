@@ -301,11 +301,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         mpLayout = std::make_shared<Layout>(mpVerticalScrollBar);
 
         // Create the preview cache.
-        mxPreviewCache.set(
-            xFactory->createInstanceWithContext(
-                u"com.sun.star.drawing.PresenterPreviewCache"_ustr,
-                mxComponentContext),
-            UNO_QUERY_THROW);
+        mxPreviewCache = new sd::presenter::PresenterPreviewCache();
         Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY);
         mxPreviewCache->setDocumentSlides(xSlides, rxController->getModel());
         mxPreviewCache->addPreviewCreationNotifyListener(this);
@@ -376,11 +372,9 @@ void SAL_CALL PresenterSlideSorter::disposing()
     if (mxPreviewCache.is())
     {
         mxPreviewCache->removePreviewCreationNotifyListener(this);
-
-        Reference<XComponent> xComponent (mxPreviewCache, UNO_QUERY);
+        if (mxPreviewCache.is())
+            mxPreviewCache->dispose();
         mxPreviewCache = nullptr;
-        if (xComponent.is())
-            xComponent->dispose();
     }
 
     if (mxWindow.is())
@@ -401,7 +395,7 @@ void SAL_CALL PresenterSlideSorter::disposing (const lang::EventObject& rEventOb
         mxWindow = nullptr;
         dispose();
     }
-    else if (rEventObject.Source == mxPreviewCache)
+    else if (rEventObject.Source == cppu::getXWeak(mxPreviewCache.get()))
     {
         mxPreviewCache = nullptr;
         dispose();

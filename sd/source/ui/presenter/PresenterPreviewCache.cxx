@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PresenterPreviewCache.hxx"
+#include <PresenterPreviewCache.hxx>
 
 #include <cache/SlsPageCache.hxx>
 #include <cache/SlsCacheContext.hxx>
@@ -85,29 +85,7 @@ PresenterPreviewCache::~PresenterPreviewCache()
 {
 }
 
-//----- XInitialize -----------------------------------------------------------
-
-void SAL_CALL PresenterPreviewCache::initialize (const Sequence<Any>& rArguments)
-{
-    if (rArguments.hasElements())
-        throw RuntimeException();
-}
-
-OUString PresenterPreviewCache::getImplementationName() {
-    return u"com.sun.star.comp.Draw.PresenterPreviewCache"_ustr;
-}
-
-sal_Bool PresenterPreviewCache::supportsService(OUString const & ServiceName) {
-    return cppu::supportsService(this, ServiceName);
-}
-
-css::uno::Sequence<OUString> PresenterPreviewCache::getSupportedServiceNames() {
-    return {u"com.sun.star.drawing.PresenterPreviewCache"_ustr};
-}
-
-//----- XSlidePreviewCache ----------------------------------------------------
-
-void SAL_CALL PresenterPreviewCache::setDocumentSlides (
+void PresenterPreviewCache::setDocumentSlides (
     const Reference<container::XIndexAccess>& rxSlides,
     const Reference<XInterface>& rxDocument)
 {
@@ -119,7 +97,7 @@ void SAL_CALL PresenterPreviewCache::setDocumentSlides (
     mpCacheContext->SetDocumentSlides(rxSlides, pImpressDoc);
 }
 
-void SAL_CALL PresenterPreviewCache::setVisibleRange (
+void PresenterPreviewCache::setVisibleRange (
     sal_Int32 nFirstVisibleSlideIndex,
     sal_Int32 nLastVisibleSlideIndex)
 {
@@ -129,7 +107,7 @@ void SAL_CALL PresenterPreviewCache::setVisibleRange (
     mpCacheContext->SetVisibleSlideRange (nFirstVisibleSlideIndex, nLastVisibleSlideIndex);
 }
 
-void SAL_CALL PresenterPreviewCache::setPreviewSize (
+void PresenterPreviewCache::setPreviewSize (
     const css::geometry::IntegerSize2D& rSize)
 {
     ThrowIfDisposed();
@@ -139,7 +117,7 @@ void SAL_CALL PresenterPreviewCache::setPreviewSize (
     mpCache->ChangeSize(maPreviewSize, Bitmap::HasFastScale());
 }
 
-Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
+Reference<rendering::XBitmap> PresenterPreviewCache::getSlidePreview (
     sal_Int32 nSlideIndex,
     const Reference<rendering::XCanvas>& rxCanvas)
 {
@@ -162,7 +140,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
             aPreview)->getUNOBitmap();
 }
 
-void SAL_CALL PresenterPreviewCache::addPreviewCreationNotifyListener (
+void PresenterPreviewCache::addPreviewCreationNotifyListener (
     const Reference<drawing::XSlidePreviewCacheListener>& rxListener)
 {
     if (m_bDisposed)
@@ -171,21 +149,21 @@ void SAL_CALL PresenterPreviewCache::addPreviewCreationNotifyListener (
         mpCacheContext->AddPreviewCreationNotifyListener(rxListener);
 }
 
-void SAL_CALL PresenterPreviewCache::removePreviewCreationNotifyListener (
+void PresenterPreviewCache::removePreviewCreationNotifyListener (
     const css::uno::Reference<css::drawing::XSlidePreviewCacheListener>& rxListener)
 {
     ThrowIfDisposed();
     mpCacheContext->RemovePreviewCreationNotifyListener(rxListener);
 }
 
-void SAL_CALL PresenterPreviewCache::pause()
+void PresenterPreviewCache::pause()
 {
     ThrowIfDisposed();
     OSL_ASSERT(mpCache != nullptr);
     mpCache->Pause();
 }
 
-void SAL_CALL PresenterPreviewCache::resume()
+void PresenterPreviewCache::resume()
 {
     ThrowIfDisposed();
     OSL_ASSERT(mpCache != nullptr);
@@ -363,14 +341,5 @@ void PresenterPreviewCache::PresenterCacheContext::CallListeners (
 }
 
 } // end of namespace ::sd::presenter
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation(css::uno::XComponentContext*,
-                                                                css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new sd::presenter::PresenterPreviewCache);
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

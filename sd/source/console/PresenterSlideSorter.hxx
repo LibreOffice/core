@@ -24,13 +24,13 @@
 #include "PresenterController.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterViewFactory.hxx"
+#include <PresenterPreviewCache.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/drawing/XSlidePreviewCache.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -137,7 +137,7 @@ private:
     css::uno::Reference<css::awt::XWindow> mxWindow;
     ::rtl::Reference<PresenterController> mpPresenterController;
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
-    css::uno::Reference<css::drawing::XSlidePreviewCache> mxPreviewCache;
+    rtl::Reference<sd::presenter::PresenterPreviewCache> mxPreviewCache;
     bool mbIsLayoutPending;
     class Layout;
     std::shared_ptr<Layout> mpLayout;
