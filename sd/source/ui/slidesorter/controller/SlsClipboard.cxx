@@ -73,6 +73,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
 
+#include <comphelper/classids.hxx>
 #include <comphelper/storagehelper.hxx>
 
 using namespace ::com::sun::star;
@@ -949,6 +950,20 @@ bool Clipboard::PasteSlidesFromSystemClipboard()
         return false;
     TransferableDataHelper aDataHelper(
         TransferableDataHelper::CreateFromSystemClipboard(pDrawViewShell->GetActiveWindow()));
+
+    {
+        // Only attempt to load EMBED_SOURCE, if its descriptor is correct
+        if (!aDataHelper.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR))
+            return false;
+
+        TransferableObjectDescriptor aObjDesc;
+        if (!aDataHelper.GetTransferableObjectDescriptor(SotClipboardFormatId::OBJECTDESCRIPTOR,
+                                                         aObjDesc))
+            return false;
+
+        if (aObjDesc.maClassName != SvGlobalName(SO3_SIMPRESS_CLASSID))
+            return false;
+    }
 
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
     assert(pDocument);
