@@ -2402,7 +2402,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
 	XModuleController \
 	XPane \
 	XPane2 \
-	XRelocatableResource \
 	XResource \
 	XResourceFactory \
 	XResourceFactoryManager \

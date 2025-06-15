@@ -171,7 +171,7 @@ void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Refere
 
 //----- XRelocatableResource --------------------------------------------------
 
-sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
+bool ViewShellWrapper::relocateToAnchor (
     const Reference<XResource>& xResource)
 {
     bool bResult (false);

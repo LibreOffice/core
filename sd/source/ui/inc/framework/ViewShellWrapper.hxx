@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/drawing/framework/XView.hpp>
-#include <com/sun/star/drawing/framework/XRelocatableResource.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <comphelper/compbase.hxx>
@@ -35,7 +34,6 @@ namespace sd::framework {
 
 typedef comphelper::WeakComponentImplHelper    <   css::awt::XWindowListener
                                             ,   css::view::XSelectionSupplier
-                                            ,   css::drawing::framework::XRelocatableResource
                                             ,   css::drawing::framework::XView
                                             >   ViewShellWrapperInterfaceBase;
 
@@ -88,9 +86,16 @@ public:
 
     // XRelocatableResource
 
-    virtual sal_Bool SAL_CALL relocateToAnchor (
+    /** Replace the current anchor of the called resource with the given
+        one.
+        @param xNewAnchor
+            The new anchor.
+        @return
+            Returns `TRUE` when the relocation was successful.
+    */
+    bool relocateToAnchor (
         const css::uno::Reference<
-            css::drawing::framework::XResource>& xResource) override;
+            css::drawing::framework::XResource>& xResource);
 
     // XWindowListener
 
