@@ -143,9 +143,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/drawing,\
 	ShapeCollection \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/drawing/framework,\
-	BasicPaneFactory \
-	BasicToolBarFactory \
-	BasicViewFactory \
 	ResourceId \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/embed,\
