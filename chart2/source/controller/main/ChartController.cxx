@@ -569,7 +569,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     rtl::Reference< ChartModel > xFact = getChartModel();
     if( xFact.is())
     {
-        m_xChartView = dynamic_cast<::chart::ChartView*>(xFact->createInstance( CHART_VIEW_SERVICE_NAME ).get());
+        m_xChartView = xFact->createChartView();
         GetDrawModelWrapper();
         m_xChartView->addModeChangeListener(this);
     }

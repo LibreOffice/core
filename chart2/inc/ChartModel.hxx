@@ -474,6 +474,8 @@ public:
     css::uno::Reference< css::util::XNumberFormatsSupplier > const &
         getNumberFormatsSupplier();
 
+    const rtl::Reference<ChartView> & createChartView();
+
     ChartView* getChartView() const;
 
     const rtl::Reference< ::chart::Diagram > & getFirstChartDiagram() { return m_xDiagram; }

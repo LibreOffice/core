@@ -19,6 +19,7 @@
 
 #include <ChartViewHelper.hxx>
 #include <ChartModel.hxx>
+#include <ChartView.hxx>
 #include <servicenames.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -36,8 +37,7 @@ void ChartViewHelper::setViewToDirtyState(const rtl::Reference<::chart::ChartMod
     {
         if (xChartModel.is())
         {
-            Reference<util::XModifyListener> xModifyListener(
-                xChartModel->createInstance(CHART_VIEW_SERVICE_NAME), uno::UNO_QUERY);
+            Reference<util::XModifyListener> xModifyListener(xChartModel->createChartView());
             if (xModifyListener.is())
             {
                 lang::EventObject aEvent(static_cast<cppu::OWeakObject*>(xChartModel.get()));

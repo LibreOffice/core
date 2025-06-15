@@ -1078,8 +1078,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
         Sequence< sal_Int8 > aMetafile;
 
         //get view from old api wrapper
-        Reference< datatransfer::XTransferable > xTransferable(
-            createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+        Reference< datatransfer::XTransferable > xTransferable( createChartView() );
         if( xTransferable.is() )
         {
             datatransfer::DataFlavor aDataFlavor( lcl_aGDIMetaFileMIMEType,
@@ -1121,8 +1120,7 @@ uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlavor& a
     try
     {
         //get view from old api wrapper
-        Reference< datatransfer::XTransferable > xTransferable(
-            createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+        Reference< datatransfer::XTransferable > xTransferable( createChartView() );
         if( xTransferable.is() &&
             xTransferable->isDataFlavorSupported( aFlavor ))
         {
@@ -1207,12 +1205,7 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
     }
     else if(rServiceSpecifier == CHART_VIEW_SERVICE_NAME)
     {
-        if(!mxChartView.is())
-        {
-            mxChartView = new ChartView( m_xContext, *this);
-        }
-
-        return static_cast< ::cppu::OWeakObject* >( mxChartView.get() );
+        return static_cast< ::cppu::OWeakObject* >( createChartView().get() );
     }
     else
     {
@@ -1227,6 +1220,13 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
         }
     }
     return nullptr;
+}
+
+const rtl::Reference<ChartView>& ChartModel::createChartView()
+{
+    if(!mxChartView.is())
+        mxChartView = new ChartView( m_xContext, *this);
+    return mxChartView;
 }
 
 Reference< uno::XInterface > SAL_CALL ChartModel::createInstanceWithArguments(
@@ -1332,8 +1332,7 @@ OUString SAL_CALL ChartModel::dump(OUString const & kind)
     }
 
     // kind == "shapes":
-    uno::Reference< qa::XDumper > xDumper(
-            createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+    uno::Reference< qa::XDumper > xDumper( createChartView() );
     if (xDumper.is())
         return xDumper->dump(kind);
 

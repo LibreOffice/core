@@ -27,6 +27,7 @@
 #include <ObjectIdentifier.hxx>
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
+#include <ChartView.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
@@ -115,10 +116,10 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
         if ( eType == OBJECTTYPE_DATA_POINT || eType == OBJECTTYPE_DATA_LABEL || eType == OBJECTTYPE_SHAPE )
             bAddSelectionToList = true;
 
-        Reference< uno::XInterface > xChartView;
+        rtl::Reference< ChartView > xChartView;
         rtl::Reference< ChartModel > xFact = xChartController->getChartModel();
         if( xFact.is() )
-            xChartView = xFact->createInstance( CHART_VIEW_SERVICE_NAME );
+            xChartView = xFact->createChartView();
         ChartView* pExplicitValueProvider = nullptr; //ExplicitValueProvider::getExplicitValueProvider(xChartView); this creates all visible data points, that's too much
         ObjectHierarchy aHierarchy( xChartDoc, pExplicitValueProvider, true /*bFlattenDiagram*/, true /*bOrderingForElementSelector*/ );
         lcl_addObjectsToList( aHierarchy, ::chart::ObjectHierarchy::getRootNodeOID(), m_aEntries, 0, xChartDoc );
