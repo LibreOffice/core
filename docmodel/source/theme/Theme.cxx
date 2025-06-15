@@ -99,6 +99,9 @@ static std::shared_ptr<model::ColorSet> makeColorSet(const OUString& name,
 
 std::shared_ptr<Theme> Theme::FromAny(const uno::Any& rVal)
 {
+    if (!rVal.hasValue())
+        return {};
+
     if (css::uno::Reference<css::util::XTheme> xTheme; rVal >>= xTheme)
     {
         if (!xTheme)

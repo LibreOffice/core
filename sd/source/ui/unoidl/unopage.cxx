@@ -987,24 +987,16 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
 
         case WID_PAGE_THEME:
-        {
-            SdrPage* pPage = GetPage();
-            uno::Reference<util::XTheme> xTheme;
-            if (aValue >>= xTheme)
+            if (uno::Reference<util::XTheme> xTheme; aValue >>= xTheme)
             {
                 auto& rUnoTheme = dynamic_cast<UnoTheme&>(*xTheme);
-                pPage->getSdrPageProperties().setTheme(rUnoTheme.getTheme());
+                GetPage()->getSdrPageProperties().setTheme(rUnoTheme.getTheme());
             }
             break;
-        }
 
         case WID_PAGE_THEME_UNO_REPRESENTATION:
-        {
-            SdrPage* pPage = GetPage();
-            std::shared_ptr<model::Theme> pTheme = model::Theme::FromAny(aValue);
-            pPage->getSdrPageProperties().setTheme(pTheme);
+            GetPage()->getSdrPageProperties().setTheme(model::Theme::FromAny(aValue));
             break;
-        }
 
         default:
             throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -1324,29 +1316,14 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         break;
 
     case WID_PAGE_THEME:
-    {
-        SdrPage* pPage = GetPage();
-        css::uno::Reference<css::util::XTheme> xTheme;
-        auto pTheme = pPage->getSdrPageProperties().getTheme();
-        if (pTheme)
-            xTheme = model::theme::createXTheme(pTheme);
-        aAny <<= xTheme;
+        if (auto pTheme = GetPage()->getSdrPageProperties().getTheme())
+            aAny <<= model::theme::createXTheme(pTheme);
         break;
-    }
 
     case WID_PAGE_THEME_UNO_REPRESENTATION:
-    {
-        SdrPage* pPage = GetPage();
-        auto pTheme = pPage->getSdrPageProperties().getTheme();
-        if (pTheme)
+        if (auto pTheme = GetPage()->getSdrPageProperties().getTheme())
             pTheme->ToAny(aAny);
-        else
-        {
-            beans::PropertyValues aValues;
-            aAny <<= aValues;
-        }
         break;
-    }
 
     default:
         throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
