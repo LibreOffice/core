@@ -1923,11 +1923,8 @@ bool ImpEditEngine::HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const
         if (rTypes.empty())
             const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
 
-        for ( size_t n = rTypes.size(); n && !bTypeFound; )
-        {
-            if ( rTypes[--n].nScriptType == nType )
-                bTypeFound = true;
-        }
+        bTypeFound = std::any_of(rTypes.begin(), rTypes.end(),
+            [nType](const ScriptTypePosInfo& rType){ return rType.nScriptType == nType; });
     }
     return bTypeFound;
 }
