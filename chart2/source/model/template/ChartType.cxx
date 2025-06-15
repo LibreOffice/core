@@ -651,6 +651,7 @@ void ChartType::deleteSeries( const rtl::Reference< ::chart::DataSeries > & xSer
             return;
 
         ModifyListenerHelper::removeListener( *it, m_xModifyEventForwarder );
+        m_aDataSeries.erase(it);
         fireModifyEvent();
 
         createCalculatedDataSeries();
