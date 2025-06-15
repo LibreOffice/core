@@ -35,6 +35,7 @@
 #include <unobookmark.hxx>
 #include <unocontentcontrol.hxx>
 #include <unoport.hxx>
+#include <unofield.hxx>
 
 namespace writerfilter::dmapper
 {
@@ -287,10 +288,8 @@ void SdtHelper::createDropDownControl()
     if (bDropDown)
     {
         // create field
-        uno::Reference<css::text::XTextField> xControlModel(
-            m_rDM_Impl.GetTextDocument()->createInstance(
-                u"com.sun.star.text.TextField.DropDown"_ustr),
-            uno::UNO_QUERY);
+        rtl::Reference<SwXTextField> xControlModel
+            = SwXTextField::CreateXTextField(nullptr, nullptr, SwServiceType::FieldTypeDropdown);
 
         const auto it = std::find_if(
             m_aDropDownItems.begin(), m_aDropDownItems.end(),
@@ -302,10 +301,9 @@ void SdtHelper::createDropDownControl()
         }
 
         // set properties
-        uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"SelectedItem"_ustr, uno::Any(aDefaultText));
-        xPropertySet->setPropertyValue(u"Items"_ustr,
-                                       uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
+        xControlModel->setPropertyValue(u"SelectedItem"_ustr, uno::Any(aDefaultText));
+        xControlModel->setPropertyValue(
+            u"Items"_ustr, uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
 
         // add it into document
         m_rDM_Impl.appendTextContent(xControlModel, uno::Sequence<beans::PropertyValue>());

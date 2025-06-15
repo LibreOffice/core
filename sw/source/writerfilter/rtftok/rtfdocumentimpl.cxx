@@ -58,6 +58,7 @@
 #include "rtfcharsets.hxx"
 #include <unotxdoc.hxx>
 #include <unodraw.hxx>
+#include <unofield.hxx>
 
 using namespace com::sun::star;
 
@@ -3584,9 +3585,8 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
                         uno::UNO_QUERY_THROW);
                     xMaster->setPropertyValue(u"Name"_ustr,
                                               uno::Any(m_aStates.top().getDocVarName()));
-                    uno::Reference<text::XDependentTextField> xField(
-                        m_xDstDoc->createInstance(u"com.sun.star.text.TextField.User"_ustr),
-                        uno::UNO_QUERY);
+                    rtl::Reference<SwXTextField> xField = SwXTextField::CreateXTextField(
+                        nullptr, nullptr, SwServiceType::FieldTypeUser);
                     xField->attachTextFieldMaster(xMaster);
                     xField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr,
                                                                    uno::Any(docvar));

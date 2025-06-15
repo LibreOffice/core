@@ -98,6 +98,7 @@
 #include <unotxdoc.hxx>
 #include <unotextbodyhf.hxx>
 #include <unoport.hxx>
+#include <unofield.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -707,13 +708,12 @@ SwTextFormatColl& SwEditShell::GetTextFormatColl(sal_uInt16 nFormatColl) const
     return *((*(GetDoc()->GetTextFormatColls()))[nFormatColl]);
 }
 
-static void insertFieldToDocument(rtl::Reference<SwXTextDocument> const & rxMultiServiceFactory,
-                           uno::Reference<text::XText> const & rxText, uno::Reference<text::XParagraphCursor> const & rxParagraphCursor,
+static void insertFieldToDocument(uno::Reference<text::XText> const & rxText, uno::Reference<text::XParagraphCursor> const & rxParagraphCursor,
                            OUString const & rsKey)
 {
-    uno::Reference<beans::XPropertySet> xField(rxMultiServiceFactory->createInstance(DocInfoServiceName), uno::UNO_QUERY);
+    rtl::Reference<SwXTextField> xField = SwXTextField::CreateXTextField(nullptr, nullptr, SwServiceType::FieldTypeDocInfoCustom);
     xField->setPropertyValue(UNO_NAME_NAME, uno::Any(rsKey));
-    uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xTextContent(xField);
 
     rxText->insertTextContent(rxParagraphCursor, xTextContent, false);
 }
@@ -885,16 +885,16 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                     OUString sKey = aCreator.makeNumberedTextKey();
 
                     svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
-                    insertFieldToDocument(xModel, xHeaderText, xHeaderParagraphCursor, sKey);
-                    insertFieldToDocument(xModel, xFooterText, xFooterParagraphCursor, sKey);
+                    insertFieldToDocument(xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
                 case svx::ClassificationType::CATEGORY:
                 {
                     OUString sKey = aCreator.makeCategoryNameKey();
-                    insertFieldToDocument(xModel, xHeaderText, xHeaderParagraphCursor, sKey);
-                    insertFieldToDocument(xModel, xFooterText, xFooterParagraphCursor, sKey);
+                    insertFieldToDocument(xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
@@ -902,8 +902,8 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 {
                     OUString sKey = aCreator.makeNumberedMarkingKey();
                     svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
-                    insertFieldToDocument(xModel, xHeaderText, xHeaderParagraphCursor, sKey);
-                    insertFieldToDocument(xModel, xFooterText, xFooterParagraphCursor, sKey);
+                    insertFieldToDocument(xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
@@ -911,8 +911,8 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 {
                     OUString sKey = aCreator.makeNumberedIntellectualPropertyPartKey();
                     svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
-                    insertFieldToDocument(xModel, xHeaderText, xHeaderParagraphCursor, sKey);
-                    insertFieldToDocument(xModel, xFooterText, xFooterParagraphCursor, sKey);
+                    insertFieldToDocument(xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
@@ -1127,9 +1127,9 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
                 if (!lcl_hasField(xHeaderText, DocInfoServiceName, Concat2View(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER())))
                 {
                     // Append a field to the end of the header text.
-                    uno::Reference<beans::XPropertySet> xField(xModel->createInstance(DocInfoServiceName), uno::UNO_QUERY);
+                    rtl::Reference<SwXTextField> xField = SwXTextField::CreateXTextField(nullptr, nullptr, SwServiceType::FieldTypeDocInfoCustom);
                     xField->setPropertyValue(UNO_NAME_NAME, uno::Any(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER()));
-                    uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
+                    uno::Reference<text::XTextContent> xTextContent(xField);
                     xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
                 }
             }
@@ -1154,9 +1154,9 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
             if (!lcl_hasField(xFooterText, DocInfoServiceName, sFooter))
             {
                 // Append a field to the end of the footer text.
-                uno::Reference<beans::XPropertySet> xField(xModel->createInstance(DocInfoServiceName), uno::UNO_QUERY);
+                rtl::Reference<SwXTextField> xField = SwXTextField::CreateXTextField(nullptr, nullptr, SwServiceType::FieldTypeDocInfoCustom);
                 xField->setPropertyValue(UNO_NAME_NAME, uno::Any(sFooter));
-                uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
+                uno::Reference<text::XTextContent> xTextContent(xField);
                 xFooterText->insertTextContent(xFooterText->getEnd(), xTextContent, /*bAbsorb=*/false);
             }
         }
