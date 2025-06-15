@@ -765,7 +765,7 @@ geometry::RealRectangle2D PresenterWindowManager::LayoutToolBar()
                         0,
                         PresenterGeometryHelper::Round(aSize.Width),
                         PresenterGeometryHelper::Round(aSize.Height)),
-                    css::drawing::framework::BorderType_TOTAL_BORDER));
+                    BorderType::TOTAL));
 
                 nToolBarWidth = aBox.Width;
                 nToolBarHeight = aBox.Height;
@@ -804,7 +804,7 @@ awt::Size PresenterWindowManager::CalculatePaneSize (
         rsPaneURL,
         awt::Rectangle(0,0,
             sal_Int32(nOuterWidth+0.5),sal_Int32(nOuterWidth)),
-        drawing::framework::BorderType_TOTAL_BORDER));
+        BorderType::TOTAL));
 
     // Calculate the inner height with the help of the slide aspect ratio.
     const double nCurrentSlideInnerHeight (
@@ -815,7 +815,7 @@ awt::Size PresenterWindowManager::CalculatePaneSize (
         rsPaneURL,
         awt::Rectangle(0,0,
             aInnerBox.Width,sal_Int32(nCurrentSlideInnerHeight+0.5)),
-        drawing::framework::BorderType_TOTAL_BORDER));
+        BorderType::TOTAL));
 
     return awt::Size(aOuterBox.Width, aOuterBox.Height);
 }

@@ -236,7 +236,7 @@ void PresenterPaneBase::LayoutContextWindow()
     const awt::Rectangle aInnerBox (mxBorderPainter->removeBorder(
         mxPaneId->getResourceURL(),
         aBorderBox,
-        drawing::framework::BorderType_TOTAL_BORDER));
+        sdext::presenter::BorderType::TOTAL));
     mxContentWindow->setPosSize(
         aInnerBox.X - aBorderBox.X,
         aInnerBox.Y - aBorderBox.Y,

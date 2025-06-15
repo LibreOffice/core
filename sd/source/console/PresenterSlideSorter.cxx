@@ -632,7 +632,7 @@ void PresenterSlideSorter::UpdateLayout()
         xBorderPainter->addBorder (
             mxViewId->getAnchor()->getResourceURL(),
             awt::Rectangle(0, 0, aWindowBox.Width, aWindowBox.Height),
-            drawing::framework::BorderType_INNER_BORDER);
+            BorderType::INNER);
     }
     while(false);
 

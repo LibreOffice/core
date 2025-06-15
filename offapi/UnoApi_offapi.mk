@@ -2389,7 +2389,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
 	AnchorBindingMode \
-	BorderType \
 	ConfigurationChangeEvent \
 	ResourceActivationMode \
 	TabBarButton \
@@ -2403,7 +2402,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
 	XModuleController \
 	XPane \
 	XPane2 \
-	XPaneBorderPainter \
 	XRelocatableResource \
 	XResource \
 	XResourceFactory \

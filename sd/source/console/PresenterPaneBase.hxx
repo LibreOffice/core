@@ -28,7 +28,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
-#include <com/sun/star/drawing/framework/XPaneBorderPainter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <rtl/ref.hxx>
