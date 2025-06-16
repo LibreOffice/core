@@ -865,7 +865,7 @@ class Test
         value11 = u'Ö';
         value12 = u"hä"_ustr;
         value13 = cppu::UnoType<sal_Int32>::get();
-        value14 = css::uno::Any(sal_Int32(-123456));
+        value14 <<= sal_Int32(-123456);
         value15 = { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr };
         value16 = org::libreoffice::embindtest::Enum_E_2;
         value17
@@ -913,9 +913,9 @@ class Test
     {
         if (newThread)
         {
-            JobExecutorThread t(object);
-            t.launch();
-            t.join();
+            rtl::Reference<JobExecutorThread> t(new JobExecutorThread(object));
+            t->launch();
+            t->join();
         }
         else
         {
@@ -938,7 +938,7 @@ class Test
         verify(ok1);
         auto const ok2 = object->getStringAttribute() == u"foo"_ustr;
         verify(ok2);
-        auto const ok3 = object->getReadOnlyAttribute();
+        bool const ok3 = object->getReadOnlyAttribute();
         verify(ok3);
         return ok1 && ok2 && ok3;
     }
@@ -1009,87 +1009,87 @@ private:
             throw css::uno::RuntimeException(u"cannot map from UNO to C++"_ustr);
         }
         {
-            auto const val = ifcCpp->getBoolean();
+            bool const val = ifcCpp->getBoolean();
             verify(val);
-            auto const ok = ifcCpp->isBoolean(val);
+            bool const ok = ifcCpp->isBoolean(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getByte();
             verify(val == -12);
-            auto const ok = ifcCpp->isByte(val);
+            bool const ok = ifcCpp->isByte(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getShort();
             verify(val == -1234);
-            auto const ok = ifcCpp->isShort(val);
+            bool const ok = ifcCpp->isShort(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getUnsignedShort();
             verify(val == 54321);
-            auto const ok = ifcCpp->isUnsignedShort(val);
+            bool const ok = ifcCpp->isUnsignedShort(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getLong();
             verify(val == -123456);
-            auto const ok = ifcCpp->isLong(val);
+            bool const ok = ifcCpp->isLong(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getUnsignedLong();
             verify(val == 3456789012);
-            auto const ok = ifcCpp->isUnsignedLong(val);
+            bool const ok = ifcCpp->isUnsignedLong(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getHyper();
             verify(val == -123456789);
-            auto const ok = ifcCpp->isHyper(val);
+            bool const ok = ifcCpp->isHyper(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getUnsignedHyper();
             verify(val == 9876543210);
-            auto const ok = ifcCpp->isUnsignedHyper(val);
+            bool const ok = ifcCpp->isUnsignedHyper(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getFloat();
             verify(val == -10.25);
-            auto const ok = ifcCpp->isFloat(val);
+            bool const ok = ifcCpp->isFloat(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getDouble();
             verify(val == 100.5);
-            auto const ok = ifcCpp->isDouble(val);
+            bool const ok = ifcCpp->isDouble(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getChar();
             verify(val == u'Ö');
-            auto const ok = ifcCpp->isChar(val);
+            bool const ok = ifcCpp->isChar(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getString();
             verify(val == u"hä"_ustr);
-            auto const ok = ifcCpp->isString(val);
+            bool const ok = ifcCpp->isString(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getType();
             verify(val == cppu::UnoType<sal_Int32>::get());
-            auto const ok = ifcCpp->isType(val);
+            bool const ok = ifcCpp->isType(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getEnum();
             verify(val == org::libreoffice::embindtest::Enum_E_2);
-            auto const ok = ifcCpp->isEnum(val);
+            bool const ok = ifcCpp->isEnum(val);
             verify(ok);
         }
         {
@@ -1118,37 +1118,37 @@ private:
                             css::uno::Any(sal_Int32(-123456)),
                             { u"barr"_ustr } },
                           ifcCpp });
-            auto const ok = ifcCpp->isStruct(val);
+            bool const ok = ifcCpp->isStruct(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getStructLong();
             verify(val == org::libreoffice::embindtest::StructLong{ -123456 });
-            auto const ok = ifcCpp->isStructLong(val);
+            bool const ok = ifcCpp->isStructLong(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getStructString();
             verify(val == org::libreoffice::embindtest::StructString{ u"hä"_ustr });
-            auto const ok = ifcCpp->isStructString(val);
+            bool const ok = ifcCpp->isStructString(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getAnyVoid();
             verify(val == css::uno::Any());
-            auto const ok = ifcCpp->isAnyVoid(val);
+            bool const ok = ifcCpp->isAnyVoid(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getSequenceBoolean();
             verify(val == css::uno::Sequence<sal_Bool>{ true, true, false });
-            auto const ok = ifcCpp->isSequenceBoolean(val);
+            bool const ok = ifcCpp->isSequenceBoolean(val);
             verify(ok);
         }
         {
             auto const val = ifcCpp->getNull();
             verify(val == css::uno::Reference<org::libreoffice::embindtest::XTest>());
-            auto const ok = ifcCpp->isNull(val);
+            bool const ok = ifcCpp->isNull(val);
             verify(ok);
         }
         {
