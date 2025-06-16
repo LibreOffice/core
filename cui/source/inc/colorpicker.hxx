@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/ColorDialog.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -204,7 +205,7 @@ private:
     double mdCyan, mdMagenta, mdYellow, mdKey;
 
 public:
-    ColorPickerDialog(weld::Window* pParent, const Color& rColor, sal_Int16 nDialogMode);
+    ColorPickerDialog(weld::Window* pParent, const Color& rColor, vcl::ColorPickerMode eDialogMode);
 
     Color GetColor() const;
     void SetColor(const Color& rColor);

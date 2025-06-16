@@ -21,18 +21,19 @@
 
 #include <tools/color.hxx>
 #include <tools/link.hxx>
-#include <vcl/abstdlg.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/vclptr.hxx>
 
 #include <functional>
+
+class AbstractColorPickerDialog;
 
 namespace weld { class Window; }
 
 namespace vcl
 {
     // Select is the default.
-    // These values must match the constants used in ColorPickerDialog in cui/source/dialogs/colorpicker.cxx
-    enum class ColorPickerMode { Select = 0, Modify = 2 };
+    enum class ColorPickerMode { Select, Modify };
 }
 
 class VCL_DLLPUBLIC ColorDialog final

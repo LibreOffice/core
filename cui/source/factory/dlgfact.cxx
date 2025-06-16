@@ -1440,10 +1440,10 @@ public:
 
 VclPtr<AbstractColorPickerDialog>
 AbstractDialogFactory_Impl::CreateColorPickerDialog(weld::Window* pParent, Color nColor,
-                                                    sal_Int16 nMode)
+                                                    vcl::ColorPickerMode eMode)
 {
     std::unique_ptr<ColorPickerDialog> pColorPickerDialog(
-        std::make_unique<ColorPickerDialog>(pParent, nColor, nMode));
+        std::make_unique<ColorPickerDialog>(pParent, nColor, eMode));
     return VclPtr<AbstractColorPickerDialog_Impl>::Create(std::move(pColorPickerDialog));
 }
 

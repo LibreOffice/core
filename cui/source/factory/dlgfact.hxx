@@ -60,7 +60,7 @@ public:
     virtual VclPtr<SfxAbstractLinksDialog> CreateLinksDialog(weld::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML = false, sfx2::SvBaseLink* p=nullptr) override;
 
     virtual VclPtr<AbstractColorPickerDialog>
-    CreateColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nMode) override;
+    CreateColorPickerDialog(weld::Window* pParent, Color nColor, vcl::ColorPickerMode eMode) override;
 
     virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog(weld::Widget* pParent) override;
     virtual VclPtr<AbstractThesaurusDialog>  CreateThesaurusDialog(weld::Widget*,

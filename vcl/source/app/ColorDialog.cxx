@@ -18,13 +18,14 @@
  */
 
 #include <vcl/ColorDialog.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/weld.hxx>
 
 ColorDialog::ColorDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
 {
     VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
     assert(pFact);
-    m_pDialog = pFact->CreateColorPickerDialog(pParent, COL_BLACK, static_cast<sal_Int16>(eMode));
+    m_pDialog = pFact->CreateColorPickerDialog(pParent, COL_BLACK, eMode);
     assert(m_pDialog);
 }
 

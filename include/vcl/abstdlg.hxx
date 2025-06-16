@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <vcl/ColorDialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
@@ -187,7 +188,7 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateVclDialog(weld::Window* pParent, sal_uInt32 nId) = 0;
 
     virtual VclPtr<AbstractColorPickerDialog>
-    CreateColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nMode) = 0;
+    CreateColorPickerDialog(weld::Window* pParent, Color nColor, vcl::ColorPickerMode eMode) = 0;
 
     // creates instance of PasswordToOpenModifyDialog from cui
     virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) = 0;

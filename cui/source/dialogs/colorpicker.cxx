@@ -30,6 +30,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <vcl/ColorDialog.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <cmath>
@@ -586,7 +587,7 @@ void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double d
     }
 }
 
-ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, const Color& rColor, sal_Int16 nDialogMode)
+ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, const Color& rColor, vcl::ColorPickerMode eDialogMode)
     : SfxDialogController(pParent, u"cui/ui/colorpickerdialog.ui"_ustr, u"ColorPicker"_ustr)
     , m_xColorField(new weld::CustomWeld(*m_xBuilder, u"colorField"_ustr, m_aColorField))
     , m_xColorSlider(new weld::CustomWeld(*m_xBuilder, u"colorSlider"_ustr, m_aColorSlider))
@@ -645,8 +646,7 @@ ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, const Color& rColor,
     m_xRBSaturation->connect_toggled( aLink2 );
     m_xRBBrightness->connect_toggled( aLink2 );
 
-    // modify
-    if (nDialogMode == 2)
+    if (eDialogMode == vcl::ColorPickerMode::Modify)
         m_xColorPrevious->show();
 
     SetColor(rColor);
