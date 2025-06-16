@@ -2852,3 +2852,15 @@ res/wrap.png cmd/lc_wrapcontour.png
 # res/borders.png cmd/lc_borderdialog.png
 # res/columns.png cmd/lc_pagecolumntype.png
 res/macros.png cmd/lc_choosemacro.png
+
+### paradialog.ui / Paragraph Formatting
+# res/indents.png cmd/lc_incrementindent.png
+# res/alignment.png cmd/lc_alignblock.png
+# res/textflow.png cmd/lc_hyphenate.png
+# res/asiantypo.png cmd/lc_defaultcharstyle.png
+# res/outline.png cmd/lc_setoutline.png
+# res/tabs.png cmd/lc_hangingindent.png
+# res/dropcaps.png cmd/lc_smallcaps.png
+# res/borders.png cmd/lc_borderdialog.png
+# res/area.png cmd/lc_backgroundcolor.png
+# res/transparence.png cmd/lc_graftransparence.png

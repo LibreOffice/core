@@ -700,10 +700,10 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )
     {
         case RulerType::DontKnow:
         case RulerType::Outside:
-            sDefPage="labelTP_BORDER";
+            sDefPage="borders";
             break;
         case RulerType::Indent:
-            sDefPage="labelTP_PARA_STD";
+            sDefPage="indents";
             break;
         case RulerType::Margin1:
         case RulerType::Margin2:
@@ -711,7 +711,7 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )
             sDefPage = "page";
             break;
         default:
-            sDefPage = "labelTP_TABULATOR";
+            sDefPage = "tabs";
 
     }
 
