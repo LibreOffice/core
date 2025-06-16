@@ -29,6 +29,8 @@
 #include "LoggedResources.hxx"
 
 class SwXTextDocument;
+class SwXBaseStyle;
+class SwXTextDefaults;
 namespace com::sun::star::text { class XTextDocument; }
 
 
@@ -47,7 +49,6 @@ enum StyleType
 class StyleSheetTable;
 typedef tools::SvRef<StyleSheetTable> StyleSheetTablePtr;
 
-struct StyleSheetTable_Impl;
 class StyleSheetEntry : public virtual SvRefBase
 {
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
@@ -82,12 +83,22 @@ public:
 
 typedef tools::SvRef<StyleSheetEntry> StyleSheetEntryPtr;
 
+struct ListCharStylePropertyMap_t
+{
+    OUString         sCharStyleName;
+    PropertyValueVector_t   aPropertyValues;
+
+    ListCharStylePropertyMap_t(OUString _sCharStyleName, PropertyValueVector_t&& rPropertyValues):
+        sCharStyleName(std::move( _sCharStyleName )),
+        aPropertyValues( std::move(rPropertyValues) )
+        {}
+};
+
 class DomainMapper;
 class StyleSheetTable :
         public LoggedProperties,
         public LoggedTable
 {
-    std::unique_ptr<StyleSheetTable_Impl> m_pImpl;
 
 public:
     StyleSheetTable(DomainMapper& rDMapper, rtl::Reference<SwXTextDocument> const& xTextDocument, bool bIsNewDoc);
@@ -129,6 +140,29 @@ private:
     void applyDefaults(bool bParaProperties);
 
     void ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::vector<StyleSheetEntryPtr> const& rEntries);
+
+    OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
+
+    /// Appends the given key-value pair to the list of latent style properties of the current entry.
+    void AppendLatentStyleProperty(const OUString& aName, Value const & rValue);
+    /// Sets all properties of xStyle back to default.
+    static void SetPropertiesToDefault(const rtl::Reference<SwXBaseStyle>& xStyle);
+    void ApplyClonedTOCStylesToXText(css::uno::Reference<css::text::XText> const& xText);
+
+    DomainMapper&                           m_rDMapper;
+    rtl::Reference<SwXTextDocument>         m_xTextDocument;
+    rtl::Reference<SwXTextDefaults>         m_xTextDefaults;
+    std::vector< StyleSheetEntryPtr >       m_aStyleSheetEntries;
+    std::unordered_map< OUString, StyleSheetEntryPtr > m_aStyleSheetEntriesMap;
+    std::map<OUString, OUString>            m_ClonedTOCStylesMap;
+    StyleSheetEntryPtr                      m_pCurrentEntry;
+    PropertyMapPtr                          m_pDefaultParaProps, m_pDefaultCharProps;
+    OUString                                m_sDefaultParaStyleName; //WW8 name
+    std::vector< ListCharStylePropertyMap_t > m_aListCharStylePropertyVector;
+    bool                                    m_bHasImportedDefaultParaProps;
+    bool                                    m_bIsNewDoc;
+    std::set<OUString> m_aInsertedParagraphStyles;
+    std::set<OUString> m_aUsedParagraphStyles;
 };
 
 
