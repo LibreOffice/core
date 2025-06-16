@@ -18,6 +18,8 @@
 #include <tools/link.hxx>
 #include <vcl/weld.hxx>
 
+#include <com/sun/star/ui/XSidebar.hpp>
+
 #include <doc.hxx>
 
 namespace sw::sidebar
@@ -64,12 +66,15 @@ class AccessibilityCheckLevel
 private:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Box> m_xContainer; ///< this is required for gtk3 even if unused
+    css::uno::Reference<css::ui::XSidebar> m_xSidebar;
     std::array<std::vector<std::unique_ptr<AccessibilityCheckEntry>>, 11> m_aEntries;
     std::array<std::unique_ptr<weld::Expander>, 11> m_xExpanders;
     std::array<std::unique_ptr<weld::Box>, 11> m_xBoxes;
 
+    DECL_LINK(ExpandHdl, weld::Expander&, void);
+
 public:
-    AccessibilityCheckLevel(weld::Box* pParent);
+    AccessibilityCheckLevel(weld::Box* pParent, css::uno::Reference<css::ui::XSidebar> xSidebar);
 
     void removeAllEntries();
 
@@ -85,7 +90,8 @@ class A11yCheckIssuesPanel : public PanelLayout,
                              public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent, SfxBindings* pBindings);
+    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent, SfxBindings* pBindings,
+                                               css::uno::Reference<css::ui::XSidebar> xSidebar);
 
     virtual void NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
                                   const SfxPoolItem* pState) override;
@@ -93,7 +99,8 @@ public:
     virtual void GetControlState(const sal_uInt16 /*nSId*/,
                                  boost::property_tree::ptree& /*rState*/) override{};
 
-    A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* pBindings);
+    A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* pBindings,
+                         css::uno::Reference<css::ui::XSidebar> xSidebar);
     void ImplDestroy();
     virtual ~A11yCheckIssuesPanel() override;
 
@@ -111,6 +118,7 @@ private:
     void populateIssues();
 
     DECL_LINK(OptionsButtonClicked, weld::Button&, void);
+    DECL_LINK(ExpandHdl, weld::Expander&, void);
     DECL_LINK(UpdateLinkButtonClicked, weld::LinkButton&, bool);
     DECL_LINK(PopulateIssuesHdl, void*, void);
 
@@ -122,6 +130,7 @@ private:
 
     SfxBindings* mpBindings;
     SwDoc* mpDoc;
+    css::uno::Reference<css::ui::XSidebar> mxSidebar;
     ::sfx2::sidebar::ControllerItem maA11yCheckController;
     sal_Int32 mnIssueCount;
     bool mbAutomaticCheckEnabled;

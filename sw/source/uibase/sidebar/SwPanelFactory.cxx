@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/ui/XUIElementFactory.hpp>
+#include <com/sun/star/ui/XSidebar.hpp>
 
 #include "A11yCheckIssuesPanel.hxx"
 #include "CommentsPanel.hxx"
@@ -90,6 +91,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     const ::comphelper::NamedValueCollection aArguments (rArguments);
     Reference<frame::XFrame> xFrame (aArguments.getOrDefault(u"Frame"_ustr, Reference<frame::XFrame>()));
     Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault(u"ParentWindow"_ustr, Reference<awt::XWindow>()));
+    Reference<ui::XSidebar> xSidebar(aArguments.getOrDefault(u"Sidebar"_ustr, Reference<ui::XSidebar>()));
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault(u"SfxBindings"_ustr, sal_uInt64(0)));
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
@@ -211,7 +213,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/A11yCheckIssuesPanel"))
     {
-        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::A11yCheckIssuesPanel::Create(pParent, pBindings);
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::A11yCheckIssuesPanel::Create(pParent, pBindings, xSidebar);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
                         rsResourceURL, xFrame, std::move(xPanel), ui::LayoutSize(-1,-1,-1));
     }
