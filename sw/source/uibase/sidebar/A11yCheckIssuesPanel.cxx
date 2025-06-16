@@ -137,16 +137,10 @@ void AccessibilityCheckLevel::removeAllEntries()
         auto nGroupIndex = size_t(eGroup);
         for (auto const& xEntry : m_aEntries[nGroupIndex])
             m_xBoxes[nGroupIndex]->move(xEntry->get_widget(), nullptr);
+        // remove the entries from the vector
+        if (!m_aEntries[nGroupIndex].empty())
+            m_aEntries[nGroupIndex].clear();
     }
-}
-
-void AccessibilityCheckLevel::reset()
-{
-    for (auto& xExpander : m_xExpanders)
-        xExpander.reset();
-
-    for (auto& xBox : m_xBoxes)
-        xBox.reset();
 }
 
 void AccessibilityCheckLevel::addEntryForGroup(
@@ -280,10 +274,7 @@ void A11yCheckIssuesPanel::ImplDestroy()
     }
 
     for (auto& aLevelEntry : m_aLevelEntries)
-    {
-        aLevelEntry->reset();
         aLevelEntry.reset();
-    }
 }
 
 A11yCheckIssuesPanel::~A11yCheckIssuesPanel() { suppress_fun_call_w_exception(ImplDestroy()); }
