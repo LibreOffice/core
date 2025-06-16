@@ -116,7 +116,6 @@ core_constructor_list = [
 # cppcanvas/source/uno/mtfrenderer.component
     "com_sun_star_comp_rendering_MtfRenderer_get_implementation",
 # cui/util/cui.component
-    ("com_sun_star_cui_ColorPicker_get_implementation", "#if !ENABLE_FUZZERS"),
     ("com_sun_star_cui_GetCreateDialogFactoryService", "#if !ENABLE_FUZZERS"),
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_DataAccessDescriptorFactory",

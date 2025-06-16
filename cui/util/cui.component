@@ -19,12 +19,6 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.cui.ColorPicker"
-    constructor="com_sun_star_cui_ColorPicker_get_implementation">
-    <service name="com.sun.star.cui.AsynchronousColorPicker"/>
-    <service name="com.sun.star.ui.dialogs.ColorPicker"/>
-    <service name="com.sun.star.ui.dialogs.AsynchronousColorPicker"/>
-  </implementation>
   <implementation name="com.sun.star.cui.GetCreateDialogFactoryService"
     constructor="com_sun_star_cui_GetCreateDialogFactoryService">
     <service name="com.sun.star.cui.GetCreateDialogFactoryService"/>
