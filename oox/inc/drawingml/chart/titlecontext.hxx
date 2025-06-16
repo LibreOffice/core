@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
 
+#include <oox/token/tokens.hxx>
 #include <drawingml/chart/chartcontextbase.hxx>
 
 namespace oox::drawingml::chart {
@@ -73,7 +74,8 @@ struct LegendModel;
 class LegendContext final : public ContextBase< LegendModel >
 {
 public:
-    explicit            LegendContext( ::oox::core::ContextHandler2Helper& rParent, LegendModel& rModel );
+    explicit            LegendContext( ::oox::core::ContextHandler2Helper& rParent,
+            LegendModel& rModel, bool bOverlay = false, sal_Int32 nPos = XML_r);
     virtual             ~LegendContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;

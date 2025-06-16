@@ -101,6 +101,17 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
+/** Handler for a chartex axis context (<cx:axis> element).
+ */
+class CxAxisContext final : public AxisContextBase
+{
+public:
+    explicit            CxAxisContext( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel, sal_Int32 nId );
+    virtual             ~CxAxisContext() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+};
+
 
 } // namespace oox::drawingml::chart
 
