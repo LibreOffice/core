@@ -3339,6 +3339,13 @@ uno::Reference<container::XNameReplace > SAL_CALL SwXTextFrame::getEvents()
         if(!IsDescriptor())
             aRet = SwXText::getPropertyValue(rPropertyName);
     }
+#ifndef NDEBUG
+    else if (rPropertyName == "DbgIsShapesTextFrame")
+    {
+        aRet <<= SwTextBoxHelper::isTextBox(GetFrameFormat(), RES_FLYFRMFMT)
+                 || SwTextBoxHelper::isTextBox(GetFrameFormat(), RES_DRAWFRMFMT);
+    }
+#endif
     else
         aRet = SwXFrame::getPropertyValue(rPropertyName);
     return aRet;

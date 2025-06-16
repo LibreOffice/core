@@ -1772,6 +1772,30 @@ bool XMLTextParagraphExport::ExportListId() const
            && GetExport().getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012;
 }
 
+#ifndef NDEBUG
+static bool isInShapesTextFrame(const css::uno::Reference<css::text::XTextContent>& xTextContent)
+{
+    auto xTextRange = xTextContent.query<css::text::XTextRange>();
+    if (!xTextRange)
+        return false;
+    auto xParentTextProps = xTextRange->getText().query<css::beans::XPropertySet>();
+    if (!xParentTextProps)
+        return false;
+    try
+    {
+        // see SwXTextFrame::getEvents
+        css::uno::Any ret = xParentTextProps->getPropertyValue(u"DbgIsShapesTextFrame"_ustr);
+        if (bool result; ret >>= result)
+            return result;
+        return false;
+    }
+    catch (css::beans::UnknownPropertyException&)
+    {
+        return false;
+    }
+}
+#endif
+
 void XMLTextParagraphExport::RecordNodeIndex(const css::uno::Reference<css::text::XTextContent>& xTextContent)
 {
     if (!bInDocumentNodeOrderCollection)
@@ -1783,9 +1807,10 @@ void XMLTextParagraphExport::RecordNodeIndex(const css::uno::Reference<css::text
             sal_Int32 index = 0;
             // See SwXParagraph::Impl::GetPropertyValues_Impl
             xPropSet->getPropertyValue(u"ODFExport_NodeIndex"_ustr) >>= index;
-            assert(std::find(maDocumentNodeOrder.begin(), maDocumentNodeOrder.end(), index)
-                   == maDocumentNodeOrder.end());
-            maDocumentNodeOrder.push_back(index);
+            auto it = std::find(maDocumentNodeOrder.begin(), maDocumentNodeOrder.end(), index);
+            assert(it == maDocumentNodeOrder.end() || isInShapesTextFrame(xTextContent));
+            if (it == maDocumentNodeOrder.end())
+                maDocumentNodeOrder.push_back(index);
         }
         catch (css::beans::UnknownPropertyException&)
         {
