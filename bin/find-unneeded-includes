@@ -253,7 +253,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                 # and ooo::vba namespaces
                 # plus a few popular ones about other modules
                 ns = re.compile(
-                                '.*for\ ('
+                                '.*for\\ ('
                                     # URE namespaces
                                     'beans|'
                                     'bridge|oleautomation|'
