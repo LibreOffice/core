@@ -265,6 +265,8 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_PAR1:
         rAny <<= m_sUserStr;
         break;
+    case FIELD_PROP_TITLE:
+        break;
 
     default:
         assert(false);
