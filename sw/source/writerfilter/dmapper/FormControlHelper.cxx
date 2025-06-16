@@ -21,12 +21,10 @@
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -50,21 +48,7 @@ namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 
-struct FormControlHelper::FormControlHelper_Impl : public virtual SvRefBase
-{
-    FieldId m_eFieldId;
-    awt::Size aSize;
-    rtl::Reference<SwFmDrawPage> mxDrawPage;
-    uno::Reference<form::XForm> rForm;
-    uno::Reference<form::XFormComponent> rFormComponent;
-    rtl::Reference<SwXTextDocument> mxTextDocument;
-
-    rtl::Reference<SwFmDrawPage> const & getDrawPage();
-    uno::Reference<form::XForm> const & getForm();
-    uno::Reference<container::XIndexContainer> getFormComps();
-};
-
-rtl::Reference<SwFmDrawPage> const & FormControlHelper::FormControlHelper_Impl::getDrawPage()
+rtl::Reference<SwFmDrawPage> const & FormControlHelper::getDrawPage()
 {
     if (! mxDrawPage.is())
     {
@@ -75,9 +59,9 @@ rtl::Reference<SwFmDrawPage> const & FormControlHelper::FormControlHelper_Impl::
     return mxDrawPage;
 }
 
-uno::Reference<form::XForm> const & FormControlHelper::FormControlHelper_Impl::getForm()
+uno::Reference<form::XForm> const & FormControlHelper::getForm()
 {
-    if (! rForm.is())
+    if (! mxForm.is())
     {
         rtl::Reference<SwFmDrawPage> xFormsSupplier(getDrawPage());
 
@@ -104,7 +88,7 @@ uno::Reference<form::XForm> const & FormControlHelper::FormControlHelper_Impl::g
                 xFormProperties->setPropertyValue(u"Name"_ustr, aAny);
             }
 
-            rForm.set(xForm, uno::UNO_QUERY);
+            mxForm.set(xForm, uno::UNO_QUERY);
 
             uno::Reference<container::XIndexContainer> xForms(xFormsNamedContainer, uno::UNO_QUERY);
             uno::Any aAny(xForm);
@@ -112,10 +96,10 @@ uno::Reference<form::XForm> const & FormControlHelper::FormControlHelper_Impl::g
         }
     }
 
-    return rForm;
+    return mxForm;
 }
 
-uno::Reference<container::XIndexContainer> FormControlHelper::FormControlHelper_Impl::getFormComps()
+uno::Reference<container::XIndexContainer> FormControlHelper::getFormComps()
 {
     uno::Reference<container::XIndexContainer> xIndexContainer(getForm(), uno::UNO_QUERY);
 
@@ -125,10 +109,10 @@ uno::Reference<container::XIndexContainer> FormControlHelper::FormControlHelper_
 FormControlHelper::FormControlHelper(FieldId eFieldId,
                                      rtl::Reference<SwXTextDocument> const& xTextDocument,
                                      FFDataHandler::Pointer_t pFFData)
-    : m_pFFData(std::move(pFFData)), m_pImpl(new FormControlHelper_Impl)
+    : m_pFFData(std::move(pFFData))
 {
-    m_pImpl->m_eFieldId = eFieldId;
-    m_pImpl->mxTextDocument = xTextDocument;
+    m_eFieldId = eFieldId;
+    mxTextDocument = xTextDocument;
 }
 
 FormControlHelper::~FormControlHelper()
@@ -140,16 +124,16 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& x
 {
     if ( !m_pFFData )
         return false;
-    if (! m_pImpl->mxTextDocument)
+    if (! mxTextDocument)
         return false;
 
-    uno::Reference<uno::XInterface> xInterface = m_pImpl->mxTextDocument->createInstance(u"com.sun.star.form.component.CheckBox"_ustr);
+    uno::Reference<uno::XInterface> xInterface = mxTextDocument->createInstance(u"com.sun.star.form.component.CheckBox"_ustr);
 
     if (!xInterface.is())
         return false;
 
-    m_pImpl->rFormComponent.set(xInterface, uno::UNO_QUERY);
-    if (!m_pImpl->rFormComponent.is())
+    mxFormComponent.set(xInterface, uno::UNO_QUERY);
+    if (!mxFormComponent.is())
         return false;
 
     uno::Reference<beans::XPropertySet> xPropSet(xInterface, uno::UNO_QUERY);
@@ -171,8 +155,8 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& x
         }
     }
 
-    m_pImpl->aSize.Width = nCheckBoxHeight;
-    m_pImpl->aSize.Height = m_pImpl->aSize.Width;
+    maSize.Width = nCheckBoxHeight;
+    maSize.Height = maSize.Width;
 
     if (!m_pFFData->getStatusText().isEmpty())
     {
@@ -194,15 +178,15 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& x
 void FormControlHelper::processField(rtl::Reference<SwXFieldmark> const& xFormField)
 {
     // Set field type first before adding parameters.
-    if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
+    if (m_eFieldId == FIELD_FORMTEXT )
     {
         xFormField->setFieldType(ODF_FORMTEXT);
     }
-    else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
+    else if (m_eFieldId == FIELD_FORMCHECKBOX )
     {
         xFormField->setFieldType(ODF_FORMCHECKBOX);
     }
-    else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
+    else if (m_eFieldId == FIELD_FORMDROPDOWN )
     {
         xFormField->setFieldType(ODF_FORMDROPDOWN);
     }
@@ -226,7 +210,7 @@ void FormControlHelper::processField(rtl::Reference<SwXFieldmark> const& xFormFi
     if ( !sTmp.isEmpty() )
         xNameCont->insertByName( u"Hint"_ustr, uno::Any(sTmp) );
 
-    if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
+    if (m_eFieldId == FIELD_FORMTEXT )
     {
         sTmp = m_pFFData->getName();
         try
@@ -257,13 +241,13 @@ void FormControlHelper::processField(rtl::Reference<SwXFieldmark> const& xFormFi
         if ( !sTmp.isEmpty() )
             xNameCont->insertByName( u"Format"_ustr, uno::Any(sTmp) );
     }
-    else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
+    else if (m_eFieldId == FIELD_FORMCHECKBOX )
     {
         uno::Any aAny;
         aAny <<= m_pFFData->getCheckboxChecked();
         xFormField->setPropertyValue(u"Checked"_ustr, aAny);
     }
-    else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
+    else if (m_eFieldId == FIELD_FORMDROPDOWN )
     {
         const FFDataHandler::DropDownEntries_t& rEntries = m_pFFData->getDropDownEntries();
         if (!rEntries.empty())
@@ -291,8 +275,8 @@ void FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     bool bCreated = false;
     if ( !m_pFFData )
         return;
-    uno::Reference<container::XNameContainer> xFormCompsByName(m_pImpl->getForm(), uno::UNO_QUERY);
-    uno::Reference<container::XIndexContainer> xFormComps(m_pImpl->getFormComps());
+    uno::Reference<container::XNameContainer> xFormCompsByName(getForm(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexContainer> xFormComps(getFormComps());
     if (! xFormComps.is())
         return;
 
@@ -313,7 +297,7 @@ void FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     }
     while (! bDone);
 
-    switch (m_pImpl->m_eFieldId)
+    switch (m_eFieldId)
     {
     case FIELD_FORMCHECKBOX:
         bCreated = createCheckbox(xTextRange, sControlName);
@@ -325,13 +309,13 @@ void FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     if (!bCreated)
         return;
 
-    uno::Any aAny(m_pImpl->rFormComponent);
+    uno::Any aAny(mxFormComponent);
     xFormComps->insertByIndex(xFormComps->getCount(), aAny);
 
-    if (! m_pImpl->mxTextDocument )
+    if (! mxTextDocument )
         return;
 
-    uno::Reference<uno::XInterface> xInterface = m_pImpl->mxTextDocument->createInstance(u"com.sun.star.drawing.ControlShape"_ustr);
+    uno::Reference<uno::XInterface> xInterface = mxTextDocument->createInstance(u"com.sun.star.drawing.ControlShape"_ustr);
 
     if (! xInterface.is())
         return;
@@ -341,7 +325,7 @@ void FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     if (! xShape.is())
         return;
 
-    xShape->setSize(m_pImpl->aSize);
+    xShape->setSize(maSize);
 
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
 
@@ -354,10 +338,10 @@ void FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     xShapeProps->setPropertyValue(u"TextRange"_ustr, uno::Any(xTextRange));
 
     uno::Reference<drawing::XControlShape> xControlShape(xShape, uno::UNO_QUERY);
-    uno::Reference<awt::XControlModel> xControlModel(m_pImpl->rFormComponent, uno::UNO_QUERY);
+    uno::Reference<awt::XControlModel> xControlModel(mxFormComponent, uno::UNO_QUERY);
     xControlShape->setControl(xControlModel);
 
-    m_pImpl->getDrawPage()->add(xShape);
+    getDrawPage()->add(xShape);
 }
 
 }

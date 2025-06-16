@@ -19,6 +19,8 @@
 #pragma once
 
 #include "FFDataHandler.hxx"
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -27,6 +29,7 @@
 
 class SwXTextDocument;
 class SwXFieldmark;
+class SwFmDrawPage;
 
 namespace writerfilter::dmapper
 {
@@ -44,9 +47,16 @@ public:
 
 private:
     FFDataHandler::Pointer_t m_pFFData;
-    struct FormControlHelper_Impl;
-    tools::SvRef<FormControlHelper_Impl> m_pImpl;
+    FieldId m_eFieldId;
+    css::awt::Size maSize;
+    rtl::Reference<SwFmDrawPage> mxDrawPage;
+    css::uno::Reference<css::form::XForm> mxForm;
+    css::uno::Reference<css::form::XFormComponent> mxFormComponent;
+    rtl::Reference<SwXTextDocument> mxTextDocument;
 
+    rtl::Reference<SwFmDrawPage> const& getDrawPage();
+    css::uno::Reference<css::form::XForm> const& getForm();
+    css::uno::Reference<css::container::XIndexContainer> getFormComps();
     bool createCheckbox(css::uno::Reference<css::text::XTextRange> const& xTextRange,
                         const OUString& rControlName);
 };
