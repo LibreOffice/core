@@ -15,6 +15,7 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -25,6 +26,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <o3tl/any.hxx>
 #include <org/libreoffice/embindtest/Enum.hpp>
@@ -96,8 +98,24 @@ private:
     css::uno::Reference<css::task::XJobExecutor> object_;
 };
 
-class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
+class Test
+    : public cppu::WeakImplHelper<css::lang::XServiceInfo, org::libreoffice::embindtest::XTest>
 {
+    OUString SAL_CALL getImplementationName() override
+    {
+        return u"org.libreoffice.comp.embindtest.Test"_ustr;
+    }
+
+    sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    {
+        return { u"org.libreoffice.embindtest.Test"_ustr };
+    }
+
     sal_Bool SAL_CALL getBoolean() override { return true; }
 
     sal_Bool SAL_CALL isBoolean(sal_Bool value) override { return value; }
