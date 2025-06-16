@@ -293,6 +293,75 @@ ContextHandlerRef ValAxisContext::onCreateContext( sal_Int32 nElement, const Att
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
 
+CxAxisContext::CxAxisContext( ContextHandler2Helper& rParent, AxisModel& rModel,
+        sal_Int32 nId) :
+    AxisContextBase( rParent, rModel )
+{
+    mrModel.mnAxisId = nId;
+}
+
+CxAxisContext::~CxAxisContext()
+{
+}
+
+ContextHandlerRef CxAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if( isRootElement() ) switch( nElement )
+    {
+        case CX_TOKEN(catScaling) :
+            // TODO: figure out how to get gapWidth attribute to the right place
+            return nullptr;
+        case CX_TOKEN(valScaling) :
+            if (rAttribs.hasAttribute(XML_max)) {
+                mrModel.mofMax = rAttribs.getDouble(XML_max);
+            }
+            if (rAttribs.hasAttribute(XML_min)) {
+                mrModel.mofMin = rAttribs.getDouble(XML_min);
+            }
+            /* TODO: need to implement AttributeList method
+            if (rAttribs.hasAttribute(XML_majorUnit)) {
+                mrModel.mofMajorUnit = rAttribs.getValAxisUnit(XML_majorUnit);
+            }
+            if (rAttribs.hasAttribute(XML_minorUnit)) {
+                mrModel.mofMinorUnit = rAttribs.getValAxisUnit(XML_minorUnit);
+            }
+            */
+            return nullptr;
+        case CX_TOKEN(title):
+        {
+            bool bVerticalDefault = mrModel.mnAxisPos == XML_l || mrModel.mnAxisPos == XML_r;
+            sal_Int32 nDefaultRotation = bVerticalDefault ? -5400000 : 0;
+            return new TitleContext( *this, mrModel.mxTitle.create(nDefaultRotation) );
+        }
+        case CX_TOKEN(units) :
+            // TODO
+            return nullptr;
+        case CX_TOKEN(majorGridlines):
+            return new ShapePrWrapperContext( *this, mrModel.mxMajorGridLines.create() );
+        case CX_TOKEN(minorGridlines):
+            return new ShapePrWrapperContext( *this, mrModel.mxMinorGridLines.create() );
+        case CX_TOKEN(majorTickMarks):
+            mrModel.mnMajorTickMark = rAttribs.getToken( XML_type, XML_cross );
+            return nullptr;
+        case CX_TOKEN(minorTickMarks):
+            mrModel.mnMinorTickMark = rAttribs.getToken( XML_type, XML_cross );
+            return nullptr;
+        case CX_TOKEN(tickLabels) :
+            // TODO (contents is only an extLst)
+            return nullptr;
+        case CX_TOKEN(numFmt):
+            mrModel.maNumberFormat.setAttributes( rAttribs );
+            return nullptr;
+        case CX_TOKEN(spPr):
+            return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+        case CX_TOKEN(txPr):
+            return new TextBodyContext( *this, mrModel.mxTextProp.create() );
+        default:
+            assert(false);
+    }
+    return nullptr;
+}
+
 } // namespace oox::drawingml::chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

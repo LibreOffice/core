@@ -1395,8 +1395,9 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
     // plot area
     exportPlotArea( xChartDoc, bIsChartex );
     // legend
-    if( bHasLegend )
+    if( bHasLegend ) {
         exportLegend( xChartDoc, bIsChartex );
+    }
 
     if (!bIsChartex) {
         uno::Reference<beans::XPropertySet> xDiagramPropSet(xChartDoc->getDiagram(), uno::UNO_QUERY);
@@ -1636,7 +1637,9 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
         // draw-chart:txPr text properties
         exportTextProps( xProp, bIsChartex );
 
-        if (!bIsChartex) {
+        if (bIsChartex) {
+            pFS->endElement( FSNS( XML_cx, XML_legend ) );
+        } else {
             pFS->endElement( FSNS( XML_c, XML_legend ) );
         }
     }
