@@ -1219,6 +1219,37 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsDOCX)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testShapePropsDefaultStrokeWidthXLSX)
+{
+    // Bar chart, for which rendering code is implemented
+    loadFromFile(u"xlsx/bartest-stroke.xlsx");
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0);
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+        Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+        uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xPropertySet.is());
+        sal_Int32 nWidth = xPropertySet->getPropertyValue(u"BorderWidth"_ustr).get<sal_Int32>();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Default bar stroke width should be 12700 emu (0.35mm)", sal_Int32(35), nWidth);
+    }
+
+    // Funnel chart, for which rendering code is not yet implemented
+    loadFromFile(u"xlsx/color_funnel.xlsx");
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0);
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+        Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+        uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xPropertySet.is());
+        sal_Int32 nWidth = xPropertySet->getPropertyValue(u"BorderWidth"_ustr).get<sal_Int32>();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Default bar stroke width should be 12700 emu (0.35mm)", sal_Int32(35), nWidth);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPercentageNumberFormatsDOCX)
 {
     loadFromFile(u"docx/tdf133632.docx");
