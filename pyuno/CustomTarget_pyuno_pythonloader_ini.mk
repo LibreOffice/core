@@ -28,10 +28,10 @@ $(gb_CustomTarget_workdir)/pyuno/pythonloader_ini/$(call gb_Helper_get_rcfile,py
                 $(if $(SYSTEM_PYTHON), \
                     '', \
                     $(if $(filter MACOSX,$(OS)), \
-                        '$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(dir))) ', \
+                        '$(foreach dir,/ /lib-dynload /site-packages,$(patsubst %/,%,$$ORIGIN/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(dir))) ', \
                     $(if $(filter WNT,$(OS)), \
                         '$(foreach dir,/ /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) ', \
-                        '$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) '))) \
+                        '$(foreach dir,/ /lib-dynload /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) '))) \
         ) > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
