@@ -32,6 +32,6 @@ class tdf167023(UITestCase):
             # tdf#167018: Without the fix in place, this test would have crashed here
             self.xUITest.executeCommand(".uno:Paste")
 
-            self.assertEqual(1, len(document.DrawPages))
+            self.assertEqual(3, len(document.DrawPages[0]))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
