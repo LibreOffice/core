@@ -5030,6 +5030,7 @@ stored
 stp
 str
 strCache
+strDim
 strLit
 strRef
 strVal

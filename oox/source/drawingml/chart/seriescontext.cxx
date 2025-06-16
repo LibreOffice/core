@@ -413,7 +413,8 @@ ContextHandlerRef SeriesContextBase::onCreateContext( sal_Int32 nElement, const 
                     return nullptr;
                 case C_TOKEN( spPr ):
                 case CX_TOKEN( spPr ):
-                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+                    return new ShapePropertiesContext( *this,
+                            mrModel.mxShapeProp.create(), true );
                 case C_TOKEN( tx ):
                 case CX_TOKEN( tx ):
                     return new TextContext( *this, mrModel.mxText.create() );
