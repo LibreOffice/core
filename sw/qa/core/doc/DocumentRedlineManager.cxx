@@ -78,6 +78,23 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineIns)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[0]->GetType());
     CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, rRedlines[0]->GetText());
+
+    // And when redoing:
+    pWrtShell->Redo();
+
+    // Then make sure we get <ins>AAA<format>BBB</format>CCC</ins>:
+    {
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[0]->GetType());
+        const SwRedlineData& rRedlineData1 = rRedlines[1]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData1.GetType());
+        // Without the accompanying fix in place, this test would have failed, the "format" redline
+        // has no underlying "insert" redline.
+        CPPUNIT_ASSERT(rRedlineData1.Next());
+        const SwRedlineData& rInnerRedlineData = *rRedlineData1.Next();
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData.GetType());
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[2]->GetType());
+    }
 }
 }
 

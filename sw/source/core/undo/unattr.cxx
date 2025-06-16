@@ -795,6 +795,8 @@ void SwUndoAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoAttr"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
+    m_AttrSet.dumpAsXml(pWriter);
+
     if (m_pHistory)
     {
         m_pHistory->dumpAsXml(pWriter);
@@ -895,6 +897,12 @@ void SwUndoAttr::redoAttribute(SwPaM& rPam, sw::UndoRedoContext & rContext)
             }
             rPam.DeleteMark();
         } else {
+            if (m_pRedlineSaveData)
+            {
+                // We saved some (typically non-format) redline before our action. First set that on
+                // the document, so AppendRedline() can create a hierarchical redline.
+                SetSaveData(rDoc, *m_pRedlineSaveData);
+            }
             rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlineData, rPam ), true);
         }
 
