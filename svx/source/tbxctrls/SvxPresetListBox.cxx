@@ -25,7 +25,7 @@
 
 SvxPresetListBox::SvxPresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow)
     : ValueSet(std::move(pWindow))
-    , aIconSize(60, 64)
+    , m_aIconSize(60, 64)
     , mnContextMenuItemId(0)
 {
     SetEdgeBlending(true);
@@ -67,7 +67,7 @@ bool SvxPresetListBox::Command(const CommandEvent& rEvent)
 
 void SvxPresetListBox::DrawLayout()
 {
-    SetColCount(nColCount);
+    SetColCount(s_nColCount);
     SetLineCount(5);
 }
 

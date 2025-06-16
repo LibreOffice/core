@@ -26,8 +26,8 @@
 class SVXCORE_DLLPUBLIC SvxPresetListBox : public ValueSet
 {
 private:
-    static constexpr sal_uInt32  nColCount = 3;
-    Size                         aIconSize;
+    static constexpr sal_uInt32  s_nColCount = 3;
+    Size                         m_aIconSize;
     sal_uInt16 mnContextMenuItemId;
     Link<SvxPresetListBox*,void> maRenameHdl;
     Link<SvxPresetListBox*,void> maDeleteHdl;
@@ -43,7 +43,7 @@ public:
     virtual void Resize() override;
     virtual bool Command(const CommandEvent& rEvent) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    Size const & GetIconSize() const { return aIconSize; }
+    Size const & GetIconSize() const { return m_aIconSize; }
     sal_uInt16 GetContextMenuItemId() const { return mnContextMenuItemId; }
 
     void SetRenameHdl( const Link<SvxPresetListBox*,void>& rLink )
