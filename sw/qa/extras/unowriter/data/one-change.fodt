@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:tracked-changes text:track-changes="false">
+    <text:changed-region xml:id="ct2378399014640" text:id="ct2378399014640">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>Mike</dc:creator>
+       <dc:date>2025-06-16T14:08:27</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+   </text:tracked-changes>
+   <text:p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis cursus egestas. <text:change-start text:change-id="ct2378399014640"/>Donec<text:change-end text:change-id="ct2378399014640"/> blandit auctor arcu, nec pellentesque eros molestie eget. In consectetur aliquam hendrerit. Sed cursus mauris vitae ligula pellentesque, non pellentesque urna aliquet. Fusce placerat mauris enim, nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce pellentesque est orci.</text:p>
+  </office:text>
+ </office:body>
+</office:document>
