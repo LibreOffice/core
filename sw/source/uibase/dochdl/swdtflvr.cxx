@@ -735,10 +735,11 @@ bool SwTransferable::WriteObject( SvStream& rOStream,
 
             {
                 uno::Reference<io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( rOStream ) );
-                SvxDrawingLayerExport( pModel, xDocOut );
+                bRet = SvxDrawingLayerExport( pModel, xDocOut );
             }
 
-            bRet = ERRCODE_NONE == rOStream.GetError();
+            if (bRet)
+                bRet = ERRCODE_NONE == rOStream.GetError();
         }
         break;
 
