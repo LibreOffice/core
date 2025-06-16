@@ -74,113 +74,51 @@ sal_Int16 lcl_GetZoomType(Id nType)
 namespace dmapper
 {
 
-struct SettingsTable_Impl
-{
-    int                 m_nDefaultTabStop;
-
-    bool                m_bRecordChanges;
-    bool                m_bShowInsDelChanges;
-    bool                m_bShowFormattingChanges;
-    bool                m_bShowMarkupChanges;
-    bool                m_bLinkStyles;
-    sal_Int16           m_nZoomFactor;
-    sal_Int16 m_nZoomType = 0;
-    sal_Int32           m_nWordCompatibilityMode;
-    Id                  m_nView;
-    bool                m_bEvenAndOddHeaders;
-    bool                m_bUsePrinterMetrics;
-    bool                embedTrueTypeFonts;
-    bool                embedSystemFonts;
-    bool                m_bDoNotUseHTMLParagraphAutoSpacing;
-    bool                m_bNoColumnBalance;
-    bool                m_bAutoHyphenation;
-    bool                m_bNoHyphenateCaps;
-    bool                m_bMsWordUlTrailSpace = false;
-    sal_Int16           m_nHyphenationZone;
-    sal_Int16           m_nConsecutiveHyphenLimit;
-    sal_Int16           m_nUseWord2013TrackBottomHyphenation;
-    sal_Int16           m_nAllowHyphenationAtTrackBottom;
-    bool                m_bWidowControl;
-    bool                m_bLongerSpaceSequence;
-    bool                m_bSplitPgBreakAndParaMark;
-    bool                m_bMirrorMargin;
-    bool                m_bDoNotExpandShiftReturn;
-    bool                m_bBalanceSingleByteDoubleByteWidth = false;
-    bool                m_bDisplayBackgroundShape;
-    bool                m_bNoLeading = false;
-    OUString            m_sDecimalSymbol;
-    OUString            m_sListSeparator;
-    std::vector<std::pair<OUString, OUString>> m_aDocVars;
-
-    uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
-
-    std::vector<beans::PropertyValue> m_aCompatSettings;
-    uno::Sequence<beans::PropertyValue> m_pCurrentCompatSetting;
-    OUString m_aCurrentCompatSettingName;
-    OUString m_aCurrentCompatSettingUri;
-    OUString m_aCurrentCompatSettingValue;
-    OUString            m_sCurrentDatabaseDataSource;
-
-    std::shared_ptr<DocumentProtection> m_pDocumentProtection;
-    std::shared_ptr<WriteProtection> m_pWriteProtection;
-    bool m_bGutterAtTop = false;
-    bool m_bDoNotBreakWrappedTables = false;
-    bool m_bAllowTextAfterFloatingTableBreak = false;
-    /// Endnotes at section end, not at document end.
-    bool m_bEndnoteIsCollectAtSectionEnd = false;
-    /// Don't vertically align table cells containing shapes
-    bool m_bDoNotVertAlignCellWithSp = false; // tdf#37153
-
-    SettingsTable_Impl() :
-      m_nDefaultTabStop( 720 ) //default is 1/2 in
-    , m_bRecordChanges(false)
-    , m_bShowInsDelChanges(true)
-    , m_bShowFormattingChanges(false)
-    , m_bShowMarkupChanges(true)
-    , m_bLinkStyles(false)
-    , m_nZoomFactor(0)
-    , m_nWordCompatibilityMode(-1)
-    , m_nView(0)
-    , m_bEvenAndOddHeaders(false)
-    , m_bUsePrinterMetrics(false)
-    , embedTrueTypeFonts(false)
-    , embedSystemFonts(false)
-    , m_bDoNotUseHTMLParagraphAutoSpacing(false)
-    , m_bNoColumnBalance(false)
-    , m_bAutoHyphenation(false)
-    , m_bNoHyphenateCaps(false)
-    , m_nHyphenationZone( 360 ) // default is 1/4 in
-    , m_nConsecutiveHyphenLimit(0)
-    , m_nUseWord2013TrackBottomHyphenation(-1)
-    , m_nAllowHyphenationAtTrackBottom(-1)
-    , m_bWidowControl(false)
-    , m_bLongerSpaceSequence(false)
-    , m_bSplitPgBreakAndParaMark(false)
-    , m_bMirrorMargin(false)
-    , m_bDoNotExpandShiftReturn(false)
-    , m_bDisplayBackgroundShape(false)
-    , m_sDecimalSymbol(u"."_ustr)
-    , m_sListSeparator(u","_ustr)
-    , m_pThemeFontLangProps(3)
-    , m_pCurrentCompatSetting(3)
-    {}
-};
-
 SettingsTable::SettingsTable(const DomainMapper& rDomainMapper)
 : LoggedProperties("SettingsTable")
 , LoggedTable("SettingsTable")
-, m_pImpl( new SettingsTable_Impl )
+, m_nDefaultTabStop( 720 ) //default is 1/2 in
+, m_bRecordChanges(false)
+, m_bShowInsDelChanges(true)
+, m_bShowFormattingChanges(false)
+, m_bShowMarkupChanges(true)
+, m_bLinkStyles(false)
+, m_nZoomFactor(0)
+, m_nWordCompatibilityMode(-1)
+, m_nView(0)
+, m_bEvenAndOddHeaders(false)
+, m_bUsePrinterMetrics(false)
+, embedTrueTypeFonts(false)
+, embedSystemFonts(false)
+, m_bDoNotUseHTMLParagraphAutoSpacing(false)
+, m_bNoColumnBalance(false)
+, m_bAutoHyphenation(false)
+, m_bNoHyphenateCaps(false)
+, m_nHyphenationZone( 360 ) // default is 1/4 in
+, m_nConsecutiveHyphenLimit(0)
+, m_nUseWord2013TrackBottomHyphenation(-1)
+, m_nAllowHyphenationAtTrackBottom(-1)
+, m_bWidowControl(false)
+, m_bLongerSpaceSequence(false)
+, m_bSplitPgBreakAndParaMark(false)
+, m_bMirrorMargin(false)
+, m_bDoNotExpandShiftReturn(false)
+, m_bDisplayBackgroundShape(false)
+, m_sDecimalSymbol(u"."_ustr)
+, m_sListSeparator(u","_ustr)
+, m_pThemeFontLangProps(3)
+, m_pCurrentCompatSetting(3)
 {
     if (rDomainMapper.IsRTFImport())
     {
         // HTML paragraph auto-spacing is opt-in for RTF, opt-out for OOXML.
-        m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing = true;
+        m_bDoNotUseHTMLParagraphAutoSpacing = true;
         // Longer space sequence is opt-in for RTF, and not in OOXML.
-        m_pImpl->m_bLongerSpaceSequence = true;
-        m_pImpl->m_bDoNotBreakWrappedTables = true;
+        m_bLongerSpaceSequence = true;
+        m_bDoNotBreakWrappedTables = true;
     }
-    m_pImpl->m_pDocumentProtection = std::make_shared<DocumentProtection>();
-    m_pImpl->m_pWriteProtection = std::make_shared<WriteProtection>();
+    m_pDocumentProtection = std::make_shared<DocumentProtection>();
+    m_pWriteProtection = std::make_shared<WriteProtection>();
 }
 
 SettingsTable::~SettingsTable()
@@ -195,57 +133,57 @@ void SettingsTable::lcl_attribute(Id nName, const Value & val)
     switch(nName)
     {
     case NS_ooxml::LN_CT_Zoom_percent:
-        m_pImpl->m_nZoomFactor = nIntValue;
+        m_nZoomFactor = nIntValue;
     break;
     case NS_ooxml::LN_CT_Zoom_val:
-        m_pImpl->m_nZoomType = lcl_GetZoomType(nIntValue);
+        m_nZoomType = lcl_GetZoomType(nIntValue);
         break;
     case NS_ooxml::LN_CT_Language_val:
-        m_pImpl->m_pThemeFontLangProps.getArray()[0]
+        m_pThemeFontLangProps.getArray()[0]
             = comphelper::makePropertyValue(u"val"_ustr, sStringValue);
         break;
     case NS_ooxml::LN_CT_Language_eastAsia:
-        m_pImpl->m_pThemeFontLangProps.getArray()[1]
+        m_pThemeFontLangProps.getArray()[1]
             = comphelper::makePropertyValue(u"eastAsia"_ustr, sStringValue);
         break;
     case NS_ooxml::LN_CT_Language_bidi:
-        m_pImpl->m_pThemeFontLangProps.getArray()[2]
+        m_pThemeFontLangProps.getArray()[2]
             = comphelper::makePropertyValue(u"bidi"_ustr, sStringValue);
         break;
     case NS_ooxml::LN_CT_View_val:
-        m_pImpl->m_nView = nIntValue;
+        m_nView = nIntValue;
         break;
     case NS_ooxml::LN_CT_DocVar_name:
-        m_pImpl->m_aDocVars.back().first = sStringValue;
+        m_aDocVars.back().first = sStringValue;
         break;
     case NS_ooxml::LN_CT_DocVar_val:
-        m_pImpl->m_aDocVars.back().second =
+        m_aDocVars.back().second =
             sStringValue.replaceAll("_x000d__x000a_", "\n")
             .replaceAll("_x000d_", "\n");
         break;
     case NS_ooxml::LN_CT_CompatSetting_name:
-        m_pImpl->m_aCurrentCompatSettingName = sStringValue;
-        m_pImpl->m_pCurrentCompatSetting.getArray()[0]
+        m_aCurrentCompatSettingName = sStringValue;
+        m_pCurrentCompatSetting.getArray()[0]
             = comphelper::makePropertyValue(u"name"_ustr, sStringValue);
         break;
     case NS_ooxml::LN_CT_CompatSetting_uri:
-        m_pImpl->m_aCurrentCompatSettingUri = sStringValue;
-        m_pImpl->m_pCurrentCompatSetting.getArray()[1]
+        m_aCurrentCompatSettingUri = sStringValue;
+        m_pCurrentCompatSetting.getArray()[1]
             = comphelper::makePropertyValue(u"uri"_ustr, sStringValue);
         break;
     case NS_ooxml::LN_CT_CompatSetting_val:
-        m_pImpl->m_aCurrentCompatSettingValue = sStringValue;
-        m_pImpl->m_pCurrentCompatSetting.getArray()[2]
+        m_aCurrentCompatSettingValue = sStringValue;
+        m_pCurrentCompatSetting.getArray()[2]
             = comphelper::makePropertyValue(u"val"_ustr, sStringValue);
         break;
     case NS_ooxml::LN_CT_TrackChangesView_insDel:
-        m_pImpl->m_bShowInsDelChanges = (nIntValue != 0);
+        m_bShowInsDelChanges = (nIntValue != 0);
         break;
     case NS_ooxml::LN_CT_TrackChangesView_formatting:
-        m_pImpl->m_bShowFormattingChanges = (nIntValue != 0);
+        m_bShowFormattingChanges = (nIntValue != 0);
         break;
     case NS_ooxml::LN_CT_TrackChangesView_markup:
-        m_pImpl->m_bShowMarkupChanges = (nIntValue != 0);
+        m_bShowMarkupChanges = (nIntValue != 0);
         break;
     default:
     {
@@ -284,13 +222,13 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_stylePaneFormatFilter: // 92493;
     break;
     case NS_ooxml::LN_CT_Settings_defaultTabStop: //  92505;
-    m_pImpl->m_nDefaultTabStop = nIntValue;
+    m_nDefaultTabStop = nIntValue;
     break;
     case NS_ooxml::LN_CT_Settings_linkStyles: // 92663;
-    m_pImpl->m_bLinkStyles = nIntValue;
+    m_bLinkStyles = nIntValue;
     break;
     case NS_ooxml::LN_CT_Settings_evenAndOddHeaders:
-    m_pImpl->m_bEvenAndOddHeaders = nIntValue;
+    m_bEvenAndOddHeaders = nIntValue;
     break;
     case NS_ooxml::LN_CT_Settings_noPunctuationKerning: //  92526;
     break;
@@ -300,53 +238,53 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: //  92554; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
     break;
     case NS_ooxml::LN_CT_Settings_decimalSymbol: //  92562;
-        m_pImpl->m_sDecimalSymbol = sStringValue;
+        m_sDecimalSymbol = sStringValue;
     break;
     case NS_ooxml::LN_CT_Settings_listSeparator: //  92563;
-        m_pImpl->m_sListSeparator = sStringValue;
+        m_sListSeparator = sStringValue;
     break;
     case NS_ooxml::LN_CT_Settings_rsids: //  92549; revision save Ids - probably not necessary
     break;
     case NS_ooxml::LN_CT_Settings_hyphenationZone: // 92508;
-        m_pImpl->m_nHyphenationZone = nIntValue;
+        m_nHyphenationZone = nIntValue;
     break;
     case NS_ooxml::LN_CT_Settings_consecutiveHyphenLimit:
-        m_pImpl->m_nConsecutiveHyphenLimit = nIntValue;
+        m_nConsecutiveHyphenLimit = nIntValue;
     break;
     case NS_ooxml::LN_CT_Compat_useFELayout: // 92422;
     // useFELayout (Do Not Bypass East Asian/Complex Script Layout Code - support of old versions of Word - ignored)
     break;
     case NS_ooxml::LN_CT_Settings_trackRevisions:
     {
-        m_pImpl->m_bRecordChanges = bool(nIntValue);
+        m_bRecordChanges = bool(nIntValue);
     }
     break;
     case NS_ooxml::LN_CT_Settings_revisionView:
         resolveSprmProps(*this, rSprm);
         break;
     case NS_ooxml::LN_CT_Settings_documentProtection:
-        resolveSprmProps(*(m_pImpl->m_pDocumentProtection), rSprm);
+        resolveSprmProps(*m_pDocumentProtection, rSprm);
         break;
     case NS_ooxml::LN_CT_Settings_writeProtection:
-        resolveSprmProps(*(m_pImpl->m_pWriteProtection), rSprm);
+        resolveSprmProps(*m_pWriteProtection, rSprm);
         break;
     case NS_ooxml::LN_CT_Compat_usePrinterMetrics:
-        m_pImpl->m_bUsePrinterMetrics = nIntValue;
+        m_bUsePrinterMetrics = nIntValue;
         break;
     case NS_ooxml::LN_CT_Settings_embedTrueTypeFonts:
-        m_pImpl->embedTrueTypeFonts = nIntValue != 0;
+        embedTrueTypeFonts = nIntValue != 0;
         break;
     case NS_ooxml::LN_CT_Settings_embedSystemFonts:
-        m_pImpl->embedSystemFonts = nIntValue != 0;
+        embedSystemFonts = nIntValue != 0;
         break;
     case NS_ooxml::LN_CT_Compat_doNotUseHTMLParagraphAutoSpacing:
-        m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing = nIntValue;
+        m_bDoNotUseHTMLParagraphAutoSpacing = nIntValue;
         break;
     case NS_ooxml::LN_CT_Compat_splitPgBreakAndParaMark:
-        m_pImpl->m_bSplitPgBreakAndParaMark = nIntValue;
+        m_bSplitPgBreakAndParaMark = nIntValue;
         break;
     case NS_ooxml::LN_CT_Settings_mirrorMargins:
-        m_pImpl->m_bMirrorMargin = nIntValue;
+        m_bMirrorMargin = nIntValue;
         break;
     case NS_ooxml::LN_CT_Settings_mailMerge:
     {
@@ -365,7 +303,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
             sal_Int32 nDbo = sVal.lastIndexOf(".dbo.");
             if ( nSpace > 0 && nSpace < nDbo - 1 )
             {
-                m_pImpl->m_sCurrentDatabaseDataSource = OUString::Concat(sVal.subView(nSpace + 1, nDbo - nSpace - 1)) +
+                m_sCurrentDatabaseDataSource = OUString::Concat(sVal.subView(nSpace + 1, nDbo - nSpace - 1)) +
                             sVal.subView(nDbo + 4, sVal.getLength() - nDbo - 5);
             }
         }
@@ -380,27 +318,27 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
 
             beans::PropertyValue aValue;
             aValue.Name = "compatSetting";
-            aValue.Value <<= m_pImpl->m_pCurrentCompatSetting;
-            m_pImpl->m_aCompatSettings.push_back(aValue);
+            aValue.Value <<= m_pCurrentCompatSetting;
+            m_aCompatSettings.push_back(aValue);
 
             OString aCompatSettingValue = rtl::OUStringToOString(
-                m_pImpl->m_aCurrentCompatSettingValue, RTL_TEXTENCODING_UTF8);
-            if (m_pImpl->m_aCurrentCompatSettingName == "allowTextAfterFloatingTableBreak"
-                && m_pImpl->m_aCurrentCompatSettingUri == "http://schemas.microsoft.com/office/word"
+                m_aCurrentCompatSettingValue, RTL_TEXTENCODING_UTF8);
+            if (m_aCurrentCompatSettingName == "allowTextAfterFloatingTableBreak"
+                && m_aCurrentCompatSettingUri == "http://schemas.microsoft.com/office/word"
                 && ooxml::GetBooleanValue(aCompatSettingValue))
             {
-                m_pImpl->m_bAllowTextAfterFloatingTableBreak = true;
+                m_bAllowTextAfterFloatingTableBreak = true;
             }
-            else if (m_pImpl->m_aCurrentCompatSettingName == "useWord2013TrackBottomHyphenation" &&
-                m_pImpl->m_aCurrentCompatSettingUri == "http://schemas.microsoft.com/office/word")
+            else if (m_aCurrentCompatSettingName == "useWord2013TrackBottomHyphenation" &&
+                m_aCurrentCompatSettingUri == "http://schemas.microsoft.com/office/word")
             {
-                m_pImpl->m_nUseWord2013TrackBottomHyphenation =
+                m_nUseWord2013TrackBottomHyphenation =
                         static_cast<int>(ooxml::GetBooleanValue(aCompatSettingValue));
             }
-            else if (m_pImpl->m_aCurrentCompatSettingName == "allowHyphenationAtTrackBottom" &&
-                m_pImpl->m_aCurrentCompatSettingUri == "http://schemas.microsoft.com/office/word")
+            else if (m_aCurrentCompatSettingName == "allowHyphenationAtTrackBottom" &&
+                m_aCurrentCompatSettingUri == "http://schemas.microsoft.com/office/word")
             {
-                m_pImpl->m_nAllowHyphenationAtTrackBottom =
+                m_nAllowHyphenationAtTrackBottom =
                         static_cast<int>(ooxml::GetBooleanValue(aCompatSettingValue));
             }
         }
@@ -420,55 +358,55 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if (pProperties)
         {
-            m_pImpl->m_aDocVars.push_back(std::make_pair(OUString(), OUString()));
+            m_aDocVars.push_back(std::make_pair(OUString(), OUString()));
             pProperties->resolve(*this);
         }
     }
     break;
     case NS_ooxml::LN_CT_Compat_noColumnBalance:
-        m_pImpl->m_bNoColumnBalance = nIntValue;
+        m_bNoColumnBalance = nIntValue;
         break;
     case NS_ooxml::LN_CT_Settings_autoHyphenation:
-        m_pImpl->m_bAutoHyphenation = nIntValue;
+        m_bAutoHyphenation = nIntValue;
         break;
     case NS_ooxml::LN_CT_Settings_doNotHyphenateCaps:
-        m_pImpl->m_bNoHyphenateCaps = nIntValue;
+        m_bNoHyphenateCaps = nIntValue;
         break;
     case NS_ooxml::LN_CT_Settings_widowControl:
-        m_pImpl->m_bWidowControl = nIntValue;
+        m_bWidowControl = nIntValue;
         break;
     case NS_ooxml::LN_CT_Settings_longerSpaceSequence:
-        m_pImpl->m_bLongerSpaceSequence = nIntValue;
+        m_bLongerSpaceSequence = nIntValue;
         break;
     case NS_ooxml::LN_CT_Compat_doNotExpandShiftReturn:
-        m_pImpl->m_bDoNotExpandShiftReturn = true;
+        m_bDoNotExpandShiftReturn = true;
         break;
     case NS_ooxml::LN_CT_Compat_balanceSingleByteDoubleByteWidth:
-        m_pImpl->m_bBalanceSingleByteDoubleByteWidth = true;
+        m_bBalanceSingleByteDoubleByteWidth = true;
         break;
     case NS_ooxml::LN_CT_Settings_displayBackgroundShape:
-        m_pImpl->m_bDisplayBackgroundShape = nIntValue;
+        m_bDisplayBackgroundShape = nIntValue;
         break;
     case NS_ooxml::LN_CT_Compat_noLeading:
-        m_pImpl->m_bNoLeading = nIntValue != 0;
+        m_bNoLeading = nIntValue != 0;
         break;
     case NS_ooxml::LN_CT_Settings_gutterAtTop:
-        m_pImpl->m_bGutterAtTop = nIntValue != 0;
+        m_bGutterAtTop = nIntValue != 0;
         break;
     case NS_ooxml::LN_CT_Compat_doNotBreakWrappedTables:
-        m_pImpl->m_bDoNotBreakWrappedTables = nIntValue != 0;
+        m_bDoNotBreakWrappedTables = nIntValue != 0;
         break;
     case NS_ooxml::LN_CT_EdnProps_pos:
         if (nIntValue == NS_ooxml::LN_Value_ST_EdnPos_sectEnd)
         {
-            m_pImpl->m_bEndnoteIsCollectAtSectionEnd = true;
+            m_bEndnoteIsCollectAtSectionEnd = true;
         }
         break;
     case NS_ooxml::LN_CT_Compat_ulTrailSpace:
-        m_pImpl->m_bMsWordUlTrailSpace = true;
+        m_bMsWordUlTrailSpace = true;
         break;
     case NS_ooxml::LN_CT_Compat_doNotVertAlignCellWithSp:
-        m_pImpl->m_bDoNotVertAlignCellWithSp = nIntValue != 0;
+        m_bDoNotVertAlignCellWithSp = nIntValue != 0;
         break;
     default:
     {
@@ -487,112 +425,112 @@ void SettingsTable::lcl_entry(const writerfilter::Reference<Properties>::Pointer
 //returns default TabStop in 1/100th mm
 int SettingsTable::GetDefaultTabStop() const
 {
-    return ConversionHelper::convertTwipToMm100_Limited(m_pImpl->m_nDefaultTabStop);
+    return ConversionHelper::convertTwipToMm100_Limited(m_nDefaultTabStop);
 }
 
 bool SettingsTable::GetLinkStyles() const
 {
-    return m_pImpl->m_bLinkStyles;
+    return m_bLinkStyles;
 }
 
 sal_Int16 SettingsTable::GetZoomFactor() const
 {
-    return m_pImpl->m_nZoomFactor;
+    return m_nZoomFactor;
 }
 
-sal_Int16 SettingsTable::GetZoomType() const { return m_pImpl->m_nZoomType; }
+sal_Int16 SettingsTable::GetZoomType() const { return m_nZoomType; }
 
 Id SettingsTable::GetView() const
 {
-    return m_pImpl->m_nView;
+    return m_nView;
 }
 
 bool SettingsTable::GetUsePrinterMetrics() const
 {
-    return m_pImpl->m_bUsePrinterMetrics;
+    return m_bUsePrinterMetrics;
 }
 
 bool SettingsTable::GetEvenAndOddHeaders() const
 {
-    return m_pImpl->m_bEvenAndOddHeaders;
+    return m_bEvenAndOddHeaders;
 }
 
 bool SettingsTable::GetEmbedTrueTypeFonts() const
 {
-    return m_pImpl->embedTrueTypeFonts;
+    return embedTrueTypeFonts;
 }
 
 bool SettingsTable::GetEmbedSystemFonts() const
 {
-    return m_pImpl->embedSystemFonts;
+    return embedSystemFonts;
 }
 
 bool SettingsTable::GetDoNotUseHTMLParagraphAutoSpacing() const
 {
-    return m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing;
+    return m_bDoNotUseHTMLParagraphAutoSpacing;
 }
 
 bool SettingsTable::GetNoColumnBalance() const
 {
-    return m_pImpl->m_bNoColumnBalance;
+    return m_bNoColumnBalance;
 }
 
 bool SettingsTable::GetSplitPgBreakAndParaMark() const
 {
-    return m_pImpl->m_bSplitPgBreakAndParaMark;
+    return m_bSplitPgBreakAndParaMark;
 }
 
 bool SettingsTable::GetMirrorMarginSettings() const
 {
-    return m_pImpl->m_bMirrorMargin;
+    return m_bMirrorMargin;
 }
 
 bool SettingsTable::GetDisplayBackgroundShape() const
 {
-    return m_pImpl->m_bDisplayBackgroundShape;
+    return m_bDisplayBackgroundShape;
 }
 
 bool SettingsTable::GetDoNotExpandShiftReturn() const
 {
-    return m_pImpl->m_bDoNotExpandShiftReturn;
+    return m_bDoNotExpandShiftReturn;
 }
 
 bool SettingsTable::GetBalanceSingleByteDoubleByteWidth() const
 {
-    return m_pImpl->m_bBalanceSingleByteDoubleByteWidth;
+    return m_bBalanceSingleByteDoubleByteWidth;
 }
 
 bool SettingsTable::GetProtectForm() const
 {
-    return m_pImpl->m_pDocumentProtection->getProtectForm()
-           && m_pImpl->m_pDocumentProtection->getEnforcement();
+    return m_pDocumentProtection->getProtectForm()
+           && m_pDocumentProtection->getEnforcement();
 }
 
 bool SettingsTable::GetReadOnly() const
 {
-    return m_pImpl->m_pWriteProtection->getRecommended()
-           || (m_pImpl->m_pDocumentProtection->getReadOnly()
-               && m_pImpl->m_pDocumentProtection->getEnforcement());
+    return m_pWriteProtection->getRecommended()
+           || (m_pDocumentProtection->getReadOnly()
+               && m_pDocumentProtection->getEnforcement());
 }
 
 bool SettingsTable::GetNoHyphenateCaps() const
 {
-    return m_pImpl->m_bNoHyphenateCaps;
+    return m_bNoHyphenateCaps;
 }
 
 bool SettingsTable::GetMsWordUlTrailSpace() const
 {
-    return m_pImpl->m_bMsWordUlTrailSpace;
+    return m_bMsWordUlTrailSpace;
 }
 
 sal_Int16 SettingsTable::GetHyphenationZone() const
 {
-    return m_pImpl->m_nHyphenationZone;
+    return m_nHyphenationZone;
 }
 
 sal_Int16 SettingsTable::GetConsecutiveHyphenLimit() const
 {
-    return m_pImpl->m_nConsecutiveHyphenLimit;
+    return m_nConsecutiveHyphenLimit;
 }
 
 bool SettingsTable::GetHyphenationKeep() const
@@ -600,7 +538,7 @@ bool SettingsTable::GetHyphenationKeep() const
     // if allowHyphenationAtTrackBottom is false, also if it is not defined
     // (which means the same) hyphenation is not allowed in the last line, so
     // set ParaHyphenationKeep to TRUE, and set ParaHyphenationKeepType to COLUMN
-    return m_pImpl->m_nAllowHyphenationAtTrackBottom != 1;
+    return m_nAllowHyphenationAtTrackBottom != 1;
 }
 
 bool SettingsTable::GetHyphenationKeepLine() const
@@ -609,26 +547,26 @@ bool SettingsTable::GetHyphenationKeepLine() const
     // not present or it is false, shift only the hyphenated word to the next column or page,
     // not the full line, so set ParaHyphenationKeepLine to TRUE
     return GetHyphenationKeep() &&
-                m_pImpl->m_nUseWord2013TrackBottomHyphenation != 1;
+                m_nUseWord2013TrackBottomHyphenation != 1;
 }
 
 const OUString & SettingsTable::GetDecimalSymbol() const
 {
-    return m_pImpl->m_sDecimalSymbol;
+    return m_sDecimalSymbol;
 }
 
 const OUString & SettingsTable::GetListSeparator() const
 {
-    return m_pImpl->m_sListSeparator;
+    return m_sListSeparator;
 }
 
 
 uno::Sequence<beans::PropertyValue> const & SettingsTable::GetThemeFontLangProperties() const
 {
-    return m_pImpl->m_pThemeFontLangProps;
+    return m_pThemeFontLangProps;
 }
 
-uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings() const
+uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings()
 {
     if ( GetWordCompatibilityMode() == -1 )
     {
@@ -643,25 +581,25 @@ uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings() const
         aValue.Name = "compatSetting";
         aValue.Value <<= aCompatSetting;
 
-        m_pImpl->m_aCompatSettings.push_back(aValue);
+        m_aCompatSettings.push_back(aValue);
     }
 
-    return comphelper::containerToSequence(m_pImpl->m_aCompatSettings);
+    return comphelper::containerToSequence(m_aCompatSettings);
 }
 
 uno::Sequence<beans::PropertyValue> SettingsTable::GetDocumentProtectionSettings() const
 {
-    return m_pImpl->m_pDocumentProtection->toSequence();
+    return m_pDocumentProtection->toSequence();
 }
 
 uno::Sequence<beans::PropertyValue> SettingsTable::GetWriteProtectionSettings() const
 {
-    return m_pImpl->m_pWriteProtection->toSequence();
+    return m_pWriteProtection->toSequence();
 }
 
 const OUString & SettingsTable::GetCurrentDatabaseDataSource() const
 {
-    return m_pImpl->m_sCurrentDatabaseDataSource;
+    return m_sCurrentDatabaseDataSource;
 }
 
 static bool lcl_isDefault(const uno::Reference<beans::XPropertyState>& xPropertyState, const OUString& rPropertyName)
@@ -690,14 +628,14 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     }
 
     // Show changes value
-    bool bHideChanges = !m_pImpl->m_bShowInsDelChanges || !m_pImpl->m_bShowMarkupChanges;
-    xDoc->setPropertyValue(u"ShowChanges"_ustr, uno::Any( !bHideChanges || m_pImpl->m_bShowFormattingChanges ) );
+    bool bHideChanges = !m_bShowInsDelChanges || !m_bShowMarkupChanges;
+    xDoc->setPropertyValue(u"ShowChanges"_ustr, uno::Any( !bHideChanges || m_bShowFormattingChanges ) );
 
     // Record changes value
-    xDoc->setPropertyValue(u"RecordChanges"_ustr, uno::Any( m_pImpl->m_bRecordChanges ) );
+    xDoc->setPropertyValue(u"RecordChanges"_ustr, uno::Any( m_bRecordChanges ) );
     // Password protected Record changes
-    if (m_pImpl->m_bRecordChanges && m_pImpl->m_pDocumentProtection->getRedlineProtection()
-        && m_pImpl->m_pDocumentProtection->getEnforcement())
+    if (m_bRecordChanges && m_pDocumentProtection->getRedlineProtection()
+        && m_pDocumentProtection->getEnforcement())
     {
         // use dummy protection key to forbid disabling of Record changes without a notice
         // (extending the recent GrabBag support)    TODO support password verification...
@@ -706,10 +644,10 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     }
 
     // Create or overwrite DocVars based on found in settings
-    if (m_pImpl->m_aDocVars.size())
+    if (m_aDocVars.size())
     {
         rtl::Reference< SwXTextFieldMasters > xFieldMasterAccess = xDoc->getSwXTextFieldMasters();
-        for (const auto& docVar : m_pImpl->m_aDocVars)
+        for (const auto& docVar : m_aDocVars)
         {
             rtl::Reference< SwXFieldMaster > xMaster;
             OUString sFieldMasterService("com.sun.star.text.FieldMaster.User." + docVar.first);
@@ -733,43 +671,43 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
         }
     }
 
-    if (m_pImpl->m_bDoNotBreakWrappedTables)
+    if (m_bDoNotBreakWrappedTables)
     {
         // Map <w:doNotBreakWrappedTables> to the DoNotBreakWrappedTables compat flag.
         xDocumentSettings->setPropertyValue(u"DoNotBreakWrappedTables"_ustr, uno::Any(true));
     }
 
-    if (m_pImpl->m_bAllowTextAfterFloatingTableBreak)
+    if (m_bAllowTextAfterFloatingTableBreak)
     {
         xDocumentSettings->setPropertyValue(u"AllowTextAfterFloatingTableBreak"_ustr, uno::Any(true));
     }
 
     // Auto hyphenation: turns on hyphenation by default, <w:suppressAutoHyphens/> may still disable it at a paragraph level.
     // Situation is similar for RTF_WIDOWCTRL, which turns on widow / orphan control by default.
-    if (!(m_pImpl->m_bAutoHyphenation || m_pImpl->m_bNoHyphenateCaps || m_pImpl->m_bWidowControl))
+    if (!(m_bAutoHyphenation || m_bNoHyphenateCaps || m_bWidowControl))
         return;
 
     rtl::Reference<SwXStyleFamilies> xStyleFamilies = xDoc->getSwStyleFamilies();
     rtl::Reference<SwXStyleFamily> xParagraphStyles = xStyleFamilies->GetParagraphStyles();
     rtl::Reference<SwXBaseStyle> xDefault = xParagraphStyles->getStyleByName(u"Standard"_ustr);
     uno::Reference<beans::XPropertyState> xPropertyState(static_cast<cppu::OWeakObject*>(xDefault.get()), uno::UNO_QUERY);
-    if (m_pImpl->m_bAutoHyphenation && lcl_isDefault(xPropertyState, u"ParaIsHyphenation"_ustr))
+    if (m_bAutoHyphenation && lcl_isDefault(xPropertyState, u"ParaIsHyphenation"_ustr))
     {
         xDefault->setPropertyValue(u"ParaIsHyphenation"_ustr, uno::Any(true));
     }
-    if (m_pImpl->m_bNoHyphenateCaps)
+    if (m_bNoHyphenateCaps)
     {
         xDefault->setPropertyValue(u"ParaHyphenationNoCaps"_ustr, uno::Any(true));
     }
-    if (m_pImpl->m_nHyphenationZone)
+    if (m_nHyphenationZone)
     {
         xDefault->setPropertyValue(u"ParaHyphenationZone"_ustr, uno::Any(GetHyphenationZone()));
     }
-    if (m_pImpl->m_nConsecutiveHyphenLimit)
+    if (m_nConsecutiveHyphenLimit)
     {
         xDefault->setPropertyValue(u"ParaHyphenationMaxHyphens"_ustr, uno::Any(GetConsecutiveHyphenLimit()));
     }
-    if (m_pImpl->m_bWidowControl && lcl_isDefault(xPropertyState, u"ParaWidows"_ustr) && lcl_isDefault(xPropertyState, u"ParaOrphans"_ustr))
+    if (m_bWidowControl && lcl_isDefault(xPropertyState, u"ParaWidows"_ustr) && lcl_isDefault(xPropertyState, u"ParaOrphans"_ustr))
     {
         uno::Any aAny(static_cast<sal_Int8>(2));
         xDefault->setPropertyValue(u"ParaWidows"_ustr, aAny);
@@ -787,7 +725,7 @@ std::pair<bool, bool> SettingsTable::GetCompatSettingHasAndValue( std::u16string
 {
     bool bHas = false;
     bool bRet = false;
-    for (const auto& rProp : m_pImpl->m_aCompatSettings)
+    for (const auto& rProp : m_aCompatSettings)
     {
         if (rProp.Name == "compatSetting") //always true
         {
@@ -816,12 +754,12 @@ std::pair<bool, bool> SettingsTable::GetCompatSettingHasAndValue( std::u16string
 }
 
 //Keep this function in-sync with the one in sw/.../docxattributeoutput.cxx
-sal_Int32 SettingsTable::GetWordCompatibilityMode() const
+sal_Int32 SettingsTable::GetWordCompatibilityMode()
 {
-    if ( m_pImpl->m_nWordCompatibilityMode != -1 )
-        return m_pImpl->m_nWordCompatibilityMode;
+    if ( m_nWordCompatibilityMode != -1 )
+        return m_nWordCompatibilityMode;
 
-    for (const auto& rProp : m_pImpl->m_aCompatSettings)
+    for (const auto& rProp : m_aCompatSettings)
     {
         if (rProp.Name == "compatSetting") //always true
         {
@@ -842,36 +780,36 @@ sal_Int32 SettingsTable::GetWordCompatibilityMode() const
             aCurrentCompatSettings[2].Value >>= sVal;
             const sal_Int32 nValidMode = sVal.toInt32();
             // if repeated, highest mode wins in MS Word. 11 is the first valid mode.
-            if ( nValidMode > 10 && nValidMode > m_pImpl->m_nWordCompatibilityMode )
-                m_pImpl->m_nWordCompatibilityMode = nValidMode;
+            if ( nValidMode > 10 && nValidMode > m_nWordCompatibilityMode )
+                m_nWordCompatibilityMode = nValidMode;
         }
     }
 
-    return m_pImpl->m_nWordCompatibilityMode;
+    return m_nWordCompatibilityMode;
 }
 
 bool SettingsTable::GetLongerSpaceSequence() const
 {
-    return m_pImpl->m_bLongerSpaceSequence;
+    return m_bLongerSpaceSequence;
 }
 
 bool SettingsTable::GetNoLeading() const
 {
-    return m_pImpl->m_bNoLeading;
+    return m_bNoLeading;
 }
 
-bool SettingsTable::GetGutterAtTop() const { return m_pImpl->m_bGutterAtTop; }
+bool SettingsTable::GetGutterAtTop() const { return m_bGutterAtTop; }
 
-bool SettingsTable::GetRecordChanges() const { return m_pImpl->m_bRecordChanges; }
+bool SettingsTable::GetRecordChanges() const { return m_bRecordChanges; }
 
 bool SettingsTable::GetEndnoteIsCollectAtSectionEnd() const
 {
-    return m_pImpl->m_bEndnoteIsCollectAtSectionEnd;
+    return m_bEndnoteIsCollectAtSectionEnd;
 }
 
 bool SettingsTable::GetDoNotVertAlignCellWithSp() const
 {
-    return m_pImpl->m_bDoNotVertAlignCellWithSp;
+    return m_bDoNotVertAlignCellWithSp;
 }
 
 }//namespace dmapper

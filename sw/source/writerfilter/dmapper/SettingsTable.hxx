@@ -34,13 +34,11 @@ struct Locale;
 namespace writerfilter::dmapper
 {
 class DomainMapper;
-
-struct SettingsTable_Impl;
+class DocumentProtection;
+class WriteProtection;
 
 class SettingsTable : public LoggedProperties, public LoggedTable
 {
-    std::unique_ptr<SettingsTable_Impl> m_pImpl;
-
 public:
     SettingsTable(const DomainMapper& rDomainMapper);
     virtual ~SettingsTable() override;
@@ -90,7 +88,7 @@ public:
 
     css::uno::Sequence<css::beans::PropertyValue> const& GetThemeFontLangProperties() const;
 
-    css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings() const;
+    css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings();
 
     css::uno::Sequence<css::beans::PropertyValue> GetDocumentProtectionSettings() const;
 
@@ -99,7 +97,7 @@ public:
     void ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc);
 
     std::pair<bool, bool> GetCompatSettingHasAndValue(std::u16string_view sCompatName) const;
-    sal_Int32 GetWordCompatibilityMode() const;
+    sal_Int32 GetWordCompatibilityMode();
 
     const OUString& GetCurrentDatabaseDataSource() const;
     bool GetGutterAtTop() const;
@@ -117,6 +115,61 @@ private:
 
     // Table
     virtual void lcl_entry(const writerfilter::Reference<Properties>::Pointer_t& ref) override;
+
+    int m_nDefaultTabStop;
+
+    bool m_bRecordChanges;
+    bool m_bShowInsDelChanges;
+    bool m_bShowFormattingChanges;
+    bool m_bShowMarkupChanges;
+    bool m_bLinkStyles;
+    sal_Int16 m_nZoomFactor;
+    sal_Int16 m_nZoomType = 0;
+    sal_Int32 m_nWordCompatibilityMode;
+    Id m_nView;
+    bool m_bEvenAndOddHeaders;
+    bool m_bUsePrinterMetrics;
+    bool embedTrueTypeFonts;
+    bool embedSystemFonts;
+    bool m_bDoNotUseHTMLParagraphAutoSpacing;
+    bool m_bNoColumnBalance;
+    bool m_bAutoHyphenation;
+    bool m_bNoHyphenateCaps;
+    bool m_bMsWordUlTrailSpace = false;
+    sal_Int16 m_nHyphenationZone;
+    sal_Int16 m_nConsecutiveHyphenLimit;
+    sal_Int16 m_nUseWord2013TrackBottomHyphenation;
+    sal_Int16 m_nAllowHyphenationAtTrackBottom;
+    bool m_bWidowControl;
+    bool m_bLongerSpaceSequence;
+    bool m_bSplitPgBreakAndParaMark;
+    bool m_bMirrorMargin;
+    bool m_bDoNotExpandShiftReturn;
+    bool m_bBalanceSingleByteDoubleByteWidth = false;
+    bool m_bDisplayBackgroundShape;
+    bool m_bNoLeading = false;
+    OUString m_sDecimalSymbol;
+    OUString m_sListSeparator;
+    std::vector<std::pair<OUString, OUString>> m_aDocVars;
+
+    css::uno::Sequence<css::beans::PropertyValue> m_pThemeFontLangProps;
+
+    std::vector<css::beans::PropertyValue> m_aCompatSettings;
+    css::uno::Sequence<css::beans::PropertyValue> m_pCurrentCompatSetting;
+    OUString m_aCurrentCompatSettingName;
+    OUString m_aCurrentCompatSettingUri;
+    OUString m_aCurrentCompatSettingValue;
+    OUString m_sCurrentDatabaseDataSource;
+
+    std::shared_ptr<DocumentProtection> m_pDocumentProtection;
+    std::shared_ptr<WriteProtection> m_pWriteProtection;
+    bool m_bGutterAtTop = false;
+    bool m_bDoNotBreakWrappedTables = false;
+    bool m_bAllowTextAfterFloatingTableBreak = false;
+    /// Endnotes at section end, not at document end.
+    bool m_bEndnoteIsCollectAtSectionEnd = false;
+    /// Don't vertically align table cells containing shapes
+    bool m_bDoNotVertAlignCellWithSp = false; // tdf#37153
 };
 typedef tools::SvRef<SettingsTable> SettingsTablePtr;
 }
