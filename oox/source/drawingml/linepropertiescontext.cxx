@@ -32,12 +32,19 @@ using namespace ::oox::core;
 namespace oox::drawingml {
 
 LinePropertiesContext::LinePropertiesContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs,
-        LineProperties& rLineProperties, model::LineStyle* pLineStyle) noexcept
+        LineProperties& rLineProperties, model::LineStyle* pLineStyle,
+        bool bForChart) noexcept
     : ContextHandler2(rParent)
     , mpLineStyle(pLineStyle)
     , mrLineProperties(rLineProperties)
 {
-    mrLineProperties.moLineWidth = rAttribs.getInteger( XML_w );
+    if (bForChart) {
+        // If width is not specified, then charts seem to assume a default line
+        // width of 12700 emu
+        mrLineProperties.moLineWidth = rAttribs.getInteger( XML_w, 12700 );
+    } else {
+        mrLineProperties.moLineWidth = rAttribs.getInteger( XML_w );
+    }
     mrLineProperties.moLineCompound = rAttribs.getToken( XML_cmpd );
     mrLineProperties.moLineCap = rAttribs.getToken( XML_cap );
 
