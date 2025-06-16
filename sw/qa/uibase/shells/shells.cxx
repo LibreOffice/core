@@ -47,6 +47,10 @@
 #include <unotxdoc.hxx>
 #include <tools/json_writer.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
+using namespace std::string_literals;
+
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase
 {
@@ -882,6 +886,86 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureDocProperties)
           "\"NewPropName float\": { \"type\": \"float\", \"value\": 12.45}}}}}"_ostr;
 
     CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
+{
+    createSwDoc("three-changes.fodt");
+
+    // extract
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:ExtractDocumentStructure?filter=trackchanges");
+    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+
+    boost::property_tree::ptree tree;
+    std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
+    boost::property_tree::read_json(aStream, tree);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), tree.size());
+    boost::property_tree::ptree docStructure = tree.get_child("DocStructure");
+    CPPUNIT_ASSERT_EQUAL(size_t(3), docStructure.size());
+    auto it = docStructure.begin();
+
+    {
+        // First change
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.0"s, name);
+        CPPUNIT_ASSERT_EQUAL(size_t(7), change.size());
+        CPPUNIT_ASSERT_EQUAL("Delete"s, change.get<std::string>("type"));
+        CPPUNIT_ASSERT_EQUAL("2025-06-16T14:08:27"s, change.get<std::string>("datetime"));
+        CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL("Delete “Donec”"s, change.get<std::string>("description"));
+        CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("comment"));
+        auto text_before = change.get<std::string>("text-before");
+        CPPUNIT_ASSERT_EQUAL(size_t(200), text_before.size());
+        CPPUNIT_ASSERT(text_before.ends_with(" egestas. "));
+        auto text_after = change.get<std::string>("text-after");
+        CPPUNIT_ASSERT_EQUAL(size_t(200), text_after.size());
+        CPPUNIT_ASSERT(text_after.starts_with(" blandit "));
+        ++it;
+    }
+
+    {
+        // Second change
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.1"s, name);
+        CPPUNIT_ASSERT_EQUAL(size_t(7), change.size());
+        CPPUNIT_ASSERT_EQUAL("Format"s, change.get<std::string>("type"));
+        CPPUNIT_ASSERT_EQUAL("2025-06-17T12:41:00"s, change.get<std::string>("datetime"));
+        CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL("Attributes changed"s, change.get<std::string>("description"));
+        CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("comment"));
+        auto text_before = change.get<std::string>("text-before");
+        CPPUNIT_ASSERT_EQUAL(size_t(200), text_before.size());
+        CPPUNIT_ASSERT(text_before.ends_with(" arcu, nec "));
+        auto text_after = change.get<std::string>("text-after");
+        CPPUNIT_ASSERT_EQUAL(size_t(200), text_after.size());
+        CPPUNIT_ASSERT(text_after.starts_with(" eros "));
+        ++it;
+    }
+
+    {
+        // Third change
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.2"s, name);
+        CPPUNIT_ASSERT_EQUAL(size_t(7), change.size());
+        CPPUNIT_ASSERT_EQUAL("Insert"s, change.get<std::string>("type"));
+        CPPUNIT_ASSERT_EQUAL("2025-06-17T12:41:19"s, change.get<std::string>("datetime"));
+        CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL("Insert “ Sapienti sat.”"s, change.get<std::string>("description"));
+        CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("comment"));
+        auto text_before = change.get<std::string>("text-before");
+        CPPUNIT_ASSERT_EQUAL(size_t(200), text_before.size());
+        CPPUNIT_ASSERT(text_before.ends_with(" est orci."));
+        auto text_after = change.get<std::string>("text-after");
+        CPPUNIT_ASSERT(text_after.empty());
+        ++it;
+    }
+
+    CPPUNIT_ASSERT(bool(it == docStructure.end()));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
