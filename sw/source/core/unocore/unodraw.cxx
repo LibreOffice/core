@@ -417,7 +417,11 @@ void SwFmDrawPage::setPropertyValue(const OUString& rPropertyName, const uno::An
         case WID_PAGE_USERATTRIBS:
         case WID_PAGE_ISDARK:
         case WID_NAVORDER:
+            break;
+
         case WID_PAGE_BACKFULL:
+            if (bool bVal; aValue >>= bVal)
+                GetSdrPage()->SetBackgroundFullSize(bVal);
             break;
 
         default:
@@ -462,7 +466,10 @@ uno::Any SwFmDrawPage::getPropertyValue(const OUString& rPropertyName)
         case WID_PAGE_USERATTRIBS:
         case WID_PAGE_ISDARK:
         case WID_NAVORDER:
+            break;
+
         case WID_PAGE_BACKFULL:
+            aAny <<= GetSdrPage()->IsBackgroundFullSize();
             break;
 
         default:
