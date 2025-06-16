@@ -55,12 +55,12 @@
 #include "FormControlHelper.hxx"
 #include <unoidx.hxx>
 #include <unobookmark.hxx>
+#include <unofield.hxx>
 #include <map>
 
 class SwXTextDocument;
 class SwXDocumentSettings;
 class SwXTextSection;
-class SwXTextField;
 class SwXTextFrame;
 class SwXTextEmbeddedObject;
 class SwXText;
@@ -312,11 +312,11 @@ public:
     bool m_bSetDateValue = false;
 private:
 
-    css::uno::Reference<css::text::XTextField> m_xTextField;
+    rtl::Reference<SwXTextField> m_xTextField;
     rtl::Reference<SwXFieldmark> m_xFormField;
     rtl::Reference<SwXSection> m_xTOC;
     css::uno::Reference<css::beans::XPropertySet> m_xTC; // TOX entry
-    css::uno::Reference<css::beans::XPropertySet> m_xCustomField;
+    rtl::Reference<SwXTextField> m_xCustomField;
 
     OUString m_sHyperlinkURL;
     /// A frame for the hyperlink when one exists.
@@ -357,10 +357,10 @@ public:
     void                    SetFieldLocked() { m_bFieldLocked = true; }
     bool                    IsFieldLocked() const { return m_bFieldLocked; }
 
-    const css::uno::Reference<css::beans::XPropertySet>& GetCustomField() const { return m_xCustomField; }
-    void SetCustomField(css::uno::Reference<css::beans::XPropertySet> const& xCustomField) { m_xCustomField = xCustomField; }
-    const css::uno::Reference<css::text::XTextField>& GetTextField() const { return m_xTextField;}
-    void SetTextField(css::uno::Reference<css::text::XTextField> const& xTextField);
+    const rtl::Reference<SwXTextField>& GetCustomField() const { return m_xCustomField; }
+    void SetCustomField(rtl::Reference<SwXTextField> const& xCustomField) { m_xCustomField = xCustomField; }
+    const rtl::Reference<SwXTextField>& GetTextField() const { return m_xTextField;}
+    void SetTextField(rtl::Reference<SwXTextField> const& xTextField);
     const rtl::Reference<SwXFieldmark>& GetFormField() const { return m_xFormField;}
     void SetFormField(rtl::Reference<SwXFieldmark> const& xFormField) { m_xFormField = xFormField;}
 

@@ -6334,16 +6334,14 @@ FieldContext::~FieldContext()
 {
 }
 
-void FieldContext::SetTextField(uno::Reference<text::XTextField> const& xTextField)
+void FieldContext::SetTextField(rtl::Reference<SwXTextField> const& xTextField)
 {
 #ifndef NDEBUG
     if (xTextField.is())
     {
-        uno::Reference<lang::XServiceInfo> const xServiceInfo(xTextField, uno::UNO_QUERY);
-        assert(xServiceInfo.is());
         // those must be set by SetFormField()
-        assert(!xServiceInfo->supportsService(u"com.sun.star.text.Fieldmark"_ustr)
-            && !xServiceInfo->supportsService(u"com.sun.star.text.FormFieldmark"_ustr));
+        assert(!xTextField->supportsService(u"com.sun.star.text.Fieldmark"_ustr)
+            && !xTextField->supportsService(u"com.sun.star.text.FormFieldmark"_ustr));
     }
 #endif
     m_xTextField = xTextField;
