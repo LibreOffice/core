@@ -22,10 +22,13 @@
 #include <memory>
 
 #include "LoggedResources.hxx"
+#include "WrapPolygonHandler.hxx"
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/ColorMode.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 
 class SwXTextGraphicObject;
 namespace com::sun::star {
@@ -62,17 +65,108 @@ enum GraphicImportType
     IMPORT_AS_DETECTED_ANCHOR
 };
 
+struct GraphicBorderLine
+{
+    sal_Int32   nLineWidth;
+    bool        bHasShadow;
+
+    GraphicBorderLine() :
+        nLineWidth(0)
+        ,bHasShadow(false)
+        {}
+
+    bool isEmpty() const
+    {
+        return nLineWidth == 0 && !bHasShadow;
+    }
+};
+
 class GraphicImport : public LoggedProperties, public LoggedTable
                     ,public BinaryObj, public LoggedStream
 {
-    std::unique_ptr<GraphicImport_Impl> m_pImpl;
+    sal_Int32 m_nXSize;
+    bool      m_bXSizeValid;
+    sal_Int32 m_nYSize;
+    bool      m_bYSizeValid;
+    GraphicImportType & m_rGraphicImportType;
+    DomainMapper&   m_rDomainMapper;
+
+    sal_Int32 m_nLeftPosition;
+    sal_Int32 m_nTopPosition;
+
+    bool      m_bUseSimplePos;
+    std::optional<sal_Int64> m_oZOrder;
+
+    sal_Int16 m_nHoriOrient;
+    sal_Int16 m_nHoriRelation;
+    bool m_bPageToggle = false;
+    sal_Int16 m_nVertOrient;
+    sal_Int16 m_nVertRelation;
+    css::text::WrapTextMode m_nWrap;
+    bool      m_bLayoutInCell;
+    bool      m_bCompatForcedLayoutInCell;
+    bool m_bAllowOverlap = true;
+
+    // Opaque means not in the background (but instead, the graphic will be over top of the text)
+    // This flag holds where LO will ACTUALLY put the graphic
+    bool      m_bOpaque;
+    // BehindDoc means in the background. This flag says the graphic REQUESTED to be behind the text
+    bool      m_bBehindDoc;
+
+    bool      m_bContour;
+    bool      m_bContourOutside;
+    WrapPolygon::Pointer_t mpWrapPolygon;
+
+    sal_Int32 m_nLeftMargin;
+    sal_Int32 m_nLeftMarginOrig = 0;
+    sal_Int32 m_nRightMargin;
+    sal_Int32 m_nTopMargin;
+    sal_Int32 m_nBottomMargin;
+
+    bool m_bShadow;
+    sal_Int32 m_nShadowXDistance;
+    sal_Int32 m_nShadowYDistance;
+    sal_Int32 m_nShadowColor;
+    sal_Int32 m_nShadowTransparence;
+
+    sal_Int32 m_nContrast;
+    sal_Int32 m_nBrightness;
+
+    static constexpr sal_Int32 nFillColor = 0xffffffff;
+
+    css::drawing::ColorMode m_eColorMode;
+
+    GraphicBorderLine   m_aBorders[4];
+
+    bool            m_bIsGraphic;
+
+    bool            m_bSizeProtected;
+    bool            m_bPositionProtected;
+    bool            m_bHidden;
+    bool            m_bDecorative = false;
+
+    sal_Int32       m_nShapeOptionType;
+
+    OUString m_sName;
+    OUString m_sAlternativeText;
+    OUString m_title;
+    OUString m_sHyperlinkURL;
+    std::pair<OUString, OUString>& m_rPositionOffsets;
+    std::pair<OUString, OUString>& m_rAligns;
+    std::queue<OUString>& m_rPositivePercentages;
+    OUString m_sAnchorId;
+    comphelper::SequenceAsHashMap m_aInteropGrabBag;
+    std::optional<sal_Int32> m_oEffectExtentLeft;
+    std::optional<sal_Int32> m_oEffectExtentTop;
+    std::optional<sal_Int32> m_oEffectExtentRight;
+    std::optional<sal_Int32> m_oEffectExtentBottom;
+    std::optional<css::text::GraphicCrop> m_oCrop;
 
     css::uno::Reference<css::uno::XComponentContext>     m_xComponentContext;
     rtl::Reference<SwXTextDocument> m_xTextDoc;
-
     rtl::Reference<SwXTextGraphicObject> m_xGraphicObject;
-
     css::uno::Reference<css::drawing::XShape> m_xShape;
+
     void ProcessShapeOptions(Value const & val);
 
     rtl::Reference<SwXTextGraphicObject>
@@ -132,6 +226,21 @@ public:
     void handleWrapTextValue(sal_uInt32 nVal);
     void lcl_expandRectangleByEffectExtent(css::awt::Point& rLeftTop, css::awt::Size& rSize);
     void lcl_correctWord2007EffectExtent(const sal_Int32 nMSOAngle);
+
+    void setXSize(sal_Int32 _nXSize);
+    sal_uInt32 getXSize() const;
+    bool isXSizeValid() const;
+    void setYSize(sal_Int32 _nYSize);
+    sal_uInt32 getYSize() const;
+    bool isYSizeValid() const;
+    void applyMargins(const css::uno::Reference< css::beans::XPropertySet >& xGraphicObjectProperties) const;
+    void applyPosition(const css::uno::Reference< css::beans::XPropertySet >& xGraphicObjectProperties) const;
+    void applyRelativePosition(const css::uno::Reference< css::beans::XPropertySet >& xGraphicObjectProperties, bool bRelativeOnly = false) const;
+    void applyZOrder(css::uno::Reference<css::beans::XPropertySet> const & xGraphicObjectProperties) const;
+    void applyName(css::uno::Reference<css::beans::XPropertySet> const & xGraphicObjectProperties) const;
+    void applyHyperlink(css::uno::Reference<css::beans::XPropertySet> const & xShapeProps, bool bIsShape);
+    /// Getter for m_aInteropGrabBag, but also merges in the values from other members if they are set.
+    comphelper::SequenceAsHashMap const & getInteropGrabBag();
 };
 
 typedef tools::SvRef<GraphicImport> GraphicImportPtr;
