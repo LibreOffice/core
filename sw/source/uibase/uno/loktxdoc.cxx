@@ -39,6 +39,7 @@
 #include <wrtsh.hxx>
 #include <txtrfmrk.hxx>
 #include <ndtxt.hxx>
+#include <unoredlines.hxx>
 
 #include <unoport.hxx>
 #include <unoprnms.hxx>
@@ -63,6 +64,37 @@ using namespace ::com::sun::star;
 
 namespace
 {
+// A helper class to make it easier to put UNO property values to JSON with a given name.
+// Removes noise from code.
+class PropertyExtractor
+{
+public:
+    PropertyExtractor(uno::Reference<beans::XPropertySet>& xProperties, tools::JsonWriter& rWriter)
+        : m_xProperties(xProperties)
+        , m_rWriter(rWriter)
+    {
+    }
+
+    template <typename T> void extract(const OUString& unoName, std::string_view jsonName)
+    {
+        if (T val; m_xProperties->getPropertyValue(unoName) >>= val)
+        {
+            if constexpr (std::is_same_v<T, util::DateTime>)
+            {
+                OUStringBuffer buf(32);
+                sax::Converter::convertDateTime(buf, val, nullptr, true);
+                m_rWriter.put(jsonName, buf.makeStringAndClear());
+            }
+            else
+                m_rWriter.put(jsonName, val);
+        }
+    }
+
+private:
+    uno::Reference<beans::XPropertySet>& m_xProperties;
+    tools::JsonWriter& m_rWriter;
+};
+
 /// Implements getCommandValues(".uno:TextFormFields").
 ///
 /// Parameters:
@@ -822,6 +854,48 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
     }
 }
 
+/// Implements getCommandValues(".uno:ExtractDocumentStructures") for redlines
+void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell)
+{
+    auto xRedlinesEnum = pDocShell->GetBaseModel()->getRedlines()->createEnumeration();
+    for (sal_Int32 i = 0; xRedlinesEnum->hasMoreElements(); ++i)
+    {
+        auto xRedlineProperties = xRedlinesEnum->nextElement().query<beans::XPropertySet>();
+        assert(xRedlineProperties);
+
+        auto TrackChangesNode
+            = rJsonWriter.startNode(Concat2View("TrackChanges.ByIndex." + OString::number(i)));
+
+        PropertyExtractor extractor{ xRedlineProperties, rJsonWriter };
+
+        extractor.extract<OUString>(UNO_NAME_REDLINE_TYPE, "type");
+        extractor.extract<css::util::DateTime>(UNO_NAME_REDLINE_DATE_TIME, "datetime");
+        extractor.extract<OUString>(UNO_NAME_REDLINE_AUTHOR, "author");
+        extractor.extract<OUString>(UNO_NAME_REDLINE_DESCRIPTION, "description");
+        extractor.extract<OUString>(UNO_NAME_REDLINE_COMMENT, "comment");
+        if (auto xStart = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_START)
+                              .query<css::text::XTextRange>())
+        {
+            auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
+            xCursor->goLeft(200, /*bExpand*/ true);
+            rJsonWriter.put("text-before", xCursor->getString());
+        }
+        if (auto xEnd = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_END)
+                            .query<css::text::XTextRange>())
+        {
+            auto xCursor = xEnd->getText()->createTextCursorByRange(xEnd);
+            xCursor->goRight(200, /*bExpand*/ true);
+            rJsonWriter.put("text-after", xCursor->getString());
+        }
+        // UNO_NAME_REDLINE_IDENTIFIER: OUString (the value of a pointer, not persistent)
+        // UNO_NAME_REDLINE_MOVED_ID: sal_uInt32; 0 == not moved, 1 == moved, but don't have its pair, 2+ == unique ID
+        // UNO_NAME_REDLINE_SUCCESSOR_DATA: uno::Sequence<beans::PropertyValue>
+        // UNO_NAME_IS_IN_HEADER_FOOTER: bool
+        // UNO_NAME_MERGE_LAST_PARA: bool
+        // UNO_NAME_REDLINE_TEXT: uno::Reference<text::XText>
+    }
+}
+
 /// Implements getCommandValues(".uno:ExtractDocumentStructures").
 ///
 /// Parameters:
@@ -844,6 +918,9 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell
 
     if (filter.isEmpty() || filter == "docprops")
         GetDocStructureDocProps(rJsonWriter, pDocShell);
+
+    if (filter.isEmpty() || filter == "trackchanges")
+        GetDocStructureTrackChanges(rJsonWriter, pDocShell);
 }
 
 /// Implements getCommandValues(".uno:Sections").
