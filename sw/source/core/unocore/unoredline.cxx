@@ -421,7 +421,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
         rPropertyName == UNO_NAME_REDLINE_END)
     {
         uno::Reference<XInterface> xRet;
-        SwPosition* pPoint = bStart ? m_pRedline->GetPoint() : m_pRedline->GetMark();
+        SwPosition* pPoint = bStart ? m_pRedline->Start() : m_pRedline->End();
         switch (pPoint->GetNode().GetNodeType())
         {
             case SwNodeType::Section:

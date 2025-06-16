@@ -1560,6 +1560,47 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164921)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRedlineStartEnd)
+{
+    // Given a document with a single tracked change, a removal of the word "Donec":
+    createSwDoc("one-change.fodt");
+
+    auto xRedlinesSupplier = mxComponent.queryThrow<document::XRedlinesSupplier>();
+    auto xRedlines = xRedlinesSupplier->getRedlines();
+    CPPUNIT_ASSERT(xRedlines);
+    auto xEnumeration = xRedlines->createEnumeration();
+    CPPUNIT_ASSERT(xEnumeration);
+    CPPUNIT_ASSERT(xEnumeration->hasMoreElements());
+    auto xRedline = xEnumeration->nextElement().query<beans::XPropertySet>();
+    CPPUNIT_ASSERT(xRedline);
+
+    // Check that "RedlineStart" and "RedlineEnd" point to start resp. end of the redline range:
+    {
+        auto xTextRange
+            = xRedline->getPropertyValue(u"RedlineStart"_ustr).queryThrow<text::XTextRange>();
+        auto xCursor = xTextRange->getText()->createTextCursorByRange(xTextRange);
+        CPPUNIT_ASSERT(xCursor);
+        xCursor->goLeft(10, /*bExpand*/ true);
+        // Without the fix, this failed with
+        // - Expected:  egestas.
+        // - Actual  : tas. Donec
+        CPPUNIT_ASSERT_EQUAL(u" egestas. "_ustr, xCursor->getString());
+    }
+    {
+        auto xTextRange
+            = xRedline->getPropertyValue(u"RedlineEnd"_ustr).queryThrow<text::XTextRange>();
+        auto xCursor = xTextRange->getText()->createTextCursorByRange(xTextRange);
+        CPPUNIT_ASSERT(xCursor);
+        xCursor->goRight(9, /*bExpand*/ true);
+        // Without the fix, this failed with
+        // - Expected:  blandit
+        // - Actual  : Donec bla
+        CPPUNIT_ASSERT_EQUAL(u" blandit "_ustr, xCursor->getString());
+    }
+
+    CPPUNIT_ASSERT(!xEnumeration->hasMoreElements());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
