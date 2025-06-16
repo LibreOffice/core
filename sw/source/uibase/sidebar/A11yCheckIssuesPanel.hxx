@@ -72,7 +72,6 @@ public:
     AccessibilityCheckLevel(weld::Box* pParent);
 
     void removeAllEntries();
-    void reset();
 
     void addEntryForGroup(AccessibilityCheckGroups eGroup, std::vector<sal_Int32>& rIndices,
                           std::shared_ptr<sfx::AccessibilityIssue> const& pIssue);
