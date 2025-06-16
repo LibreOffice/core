@@ -24,6 +24,8 @@
 #include "LoggedResources.hxx"
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
+#include <vcl/embeddedfontshelper.hxx>
+#include <o3tl/deleter.hxx>
 
 namespace writerfilter::dmapper
 {
@@ -44,7 +46,10 @@ struct FontEntry : public virtual SvRefBase
 class FontTable : public LoggedProperties, public LoggedTable
     /*,public BinaryObj*/, public LoggedStream
 {
-    std::unique_ptr<FontTable_Impl> m_pImpl;
+    std::unique_ptr<EmbeddedFontsHelper, o3tl::default_delete<EmbeddedFontsHelper>> m_xEmbeddedFontHelper;
+    std::vector< FontEntry::Pointer_t > m_aFontEntries;
+    FontEntry::Pointer_t m_pCurrentEntry;
+    bool m_bReadOnly;
 
  public:
     FontTable(bool bReadOnly);

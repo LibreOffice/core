@@ -18,13 +18,11 @@
  */
 
 #include "FontTable.hxx"
-#include <o3tl/deleter.hxx>
 #include <ooxml/resourceids.hxx>
 #include <utility>
 #include <vector>
 #include <sal/log.hxx>
 #include <rtl/tencinfo.h>
-#include <vcl/embeddedfontshelper.hxx>
 #include <unotools/fontdefs.hxx>
 
 using namespace com::sun::star;
@@ -32,23 +30,11 @@ using namespace com::sun::star;
 namespace writerfilter::dmapper
 {
 
-struct FontTable_Impl
-{
-    std::unique_ptr<EmbeddedFontsHelper, o3tl::default_delete<EmbeddedFontsHelper>> xEmbeddedFontHelper;
-    std::vector< FontEntry::Pointer_t > aFontEntries;
-    FontEntry::Pointer_t pCurrentEntry;
-    bool m_bReadOnly;
-    FontTable_Impl(bool bReadOnly)
-        : m_bReadOnly(bReadOnly)
-    {
-    }
-};
-
 FontTable::FontTable(bool bReadOnly)
 : LoggedProperties("FontTable")
 , LoggedTable("FontTable")
 , LoggedStream("FontTable")
-, m_pImpl( new FontTable_Impl(bReadOnly) )
+, m_bReadOnly(bReadOnly)
 {
 }
 
@@ -58,8 +44,8 @@ FontTable::~FontTable()
 
 void FontTable::lcl_attribute(Id Name, const Value & val)
 {
-    SAL_WARN_IF( !m_pImpl->pCurrentEntry, "writerfilter.dmapper", "current entry has to be set here" );
-    if(!m_pImpl->pCurrentEntry)
+    SAL_WARN_IF( !m_pCurrentEntry, "writerfilter.dmapper", "current entry has to be set here" );
+    if(!m_pCurrentEntry)
         return ;
     int nIntValue = val.getInt();
     OUString sValue = val.getString();
@@ -76,25 +62,25 @@ void FontTable::lcl_attribute(Id Name, const Value & val)
                 SAL_WARN("writerfilter.dmapper", "FontTable::lcl_attribute: unhandled NS_ooxml::CT_Pitch_val: " << nIntValue);
             break;
         case NS_ooxml::LN_CT_Font_name:
-            m_pImpl->pCurrentEntry->sFontName = sValue;
+            m_pCurrentEntry->sFontName = sValue;
             break;
         case NS_ooxml::LN_CT_Charset_val:
             // w:characterSet has higher priority, set only if that one is not set
-            if( m_pImpl->pCurrentEntry->nTextEncoding == RTL_TEXTENCODING_DONTKNOW )
+            if( m_pCurrentEntry->nTextEncoding == RTL_TEXTENCODING_DONTKNOW )
             {
-                m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromWindowsCharset( nIntValue );
-                if( IsOpenSymbol( m_pImpl->pCurrentEntry->sFontName ))
-                    m_pImpl->pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
+                m_pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromWindowsCharset( nIntValue );
+                if( IsOpenSymbol( m_pCurrentEntry->sFontName ))
+                    m_pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
             }
             break;
         case NS_ooxml::LN_CT_Charset_characterSet:
         {
             OString tmp;
             sValue.convertToString( &tmp, RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-            m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromMimeCharset( tmp.getStr() );
+            m_pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromMimeCharset( tmp.getStr() );
             // Older LO versions used to write incorrect character set for OpenSymbol, fix.
-            if( IsOpenSymbol( m_pImpl->pCurrentEntry->sFontName ))
-                m_pImpl->pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
+            if( IsOpenSymbol( m_pCurrentEntry->sFontName ))
+                m_pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
             break;
         }
         default: ;
@@ -103,8 +89,8 @@ void FontTable::lcl_attribute(Id Name, const Value & val)
 
 void FontTable::lcl_sprm(Sprm& rSprm)
 {
-    SAL_WARN_IF( !m_pImpl->pCurrentEntry, "writerfilter.dmapper", "current entry has to be set here" );
-    if(!m_pImpl->pCurrentEntry)
+    SAL_WARN_IF( !m_pCurrentEntry, "writerfilter.dmapper", "current entry has to be set here" );
+    if(!m_pCurrentEntry)
         return ;
     sal_uInt32 nSprmId = rSprm.getId();
 
@@ -122,7 +108,7 @@ void FontTable::lcl_sprm(Sprm& rSprm)
             writerfilter::Reference< Properties >::Pointer_t pProperties = rSprm.getProps();
             if( pProperties )
             {
-                EmbeddedFontHandler handler(*this, m_pImpl->pCurrentEntry->sFontName,
+                EmbeddedFontHandler handler(*this, m_pCurrentEntry->sFontName,
                     nSprmId == NS_ooxml::LN_CT_Font_embedRegular ? u""
                     : nSprmId == NS_ooxml::LN_CT_Font_embedBold ? u"b"
                     : nSprmId == NS_ooxml::LN_CT_Font_embedItalic ? u"i"
@@ -143,10 +129,10 @@ void FontTable::lcl_sprm(Sprm& rSprm)
             switch (nIntValue)
             {
                 case NS_ooxml::LN_Value_ST_FontFamily_roman:
-                    m_pImpl->pCurrentEntry->m_nFontFamily = awt::FontFamily::ROMAN;
+                    m_pCurrentEntry->m_nFontFamily = awt::FontFamily::ROMAN;
                     break;
                 case NS_ooxml::LN_Value_ST_FontFamily_swiss:
-                    m_pImpl->pCurrentEntry->m_nFontFamily = awt::FontFamily::SWISS;
+                    m_pCurrentEntry->m_nFontFamily = awt::FontFamily::SWISS;
                     break;
             }
             break;
@@ -171,12 +157,12 @@ void FontTable::resolveSprm(Sprm & r_Sprm)
 void FontTable::lcl_entry(const writerfilter::Reference<Properties>::Pointer_t& ref)
 {
     //create a new font entry
-    SAL_WARN_IF( m_pImpl->pCurrentEntry, "writerfilter.dmapper", "current entry has to be NULL here" );
-    m_pImpl->pCurrentEntry = new FontEntry;
+    SAL_WARN_IF( m_pCurrentEntry, "writerfilter.dmapper", "current entry has to be NULL here" );
+    m_pCurrentEntry = new FontEntry;
     ref->resolve(*this);
     //append it to the table
-    m_pImpl->aFontEntries.push_back( m_pImpl->pCurrentEntry );
-    m_pImpl->pCurrentEntry.clear();
+    m_aFontEntries.push_back( m_pCurrentEntry );
+    m_pCurrentEntry.clear();
 }
 
 void FontTable::lcl_startSectionGroup()
@@ -233,19 +219,19 @@ void FontTable::lcl_endShape( )
 
 FontEntry::Pointer_t FontTable::getFontEntry(sal_uInt32 nIndex)
 {
-    return (m_pImpl->aFontEntries.size() > nIndex)
-        ?   m_pImpl->aFontEntries[nIndex]
+    return (m_aFontEntries.size() > nIndex)
+        ?   m_aFontEntries[nIndex]
         :   FontEntry::Pointer_t();
 }
 
 sal_uInt32 FontTable::size()
 {
-    return m_pImpl->aFontEntries.size();
+    return m_aFontEntries.size();
 }
 
 FontEntry::Pointer_t FontTable::getFontEntryByName(std::u16string_view rName)
 {
-    for (const auto& pEntry : m_pImpl->aFontEntries)
+    for (const auto& pEntry : m_aFontEntries)
     {
         if (pEntry->sFontName == rName)
         {
@@ -258,7 +244,7 @@ FontEntry::Pointer_t FontTable::getFontEntryByName(std::u16string_view rName)
 
 bool FontTable::IsReadOnly() const
 {
-    return m_pImpl->m_bReadOnly;
+    return m_bReadOnly;
 }
 
 void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
@@ -266,9 +252,9 @@ void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>
                                 std::vector<unsigned char> const & key,
                                 bool bSubsetted)
 {
-    if (!m_pImpl->xEmbeddedFontHelper)
-        m_pImpl->xEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
-    m_pImpl->xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key,
+    if (!m_xEmbeddedFontHelper)
+        m_xEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
+    m_xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key,
             /*eot=*/false, bSubsetted);
 }
 
