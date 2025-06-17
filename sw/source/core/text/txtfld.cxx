@@ -634,38 +634,40 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                 // (SwListRedlineType::SHOW, which counts removed and inserted numbered paragraphs
                 // in a single list)
                 bool bHasHiddenNum = false;
-                OUString aText( pTextNd->GetNumString(true, MAXLEVEL, m_pFrame->getRootFrame(), SwListRedlineType::HIDDEN) );
+                OUString aTextNow( pTextNd->GetNumString(true, MAXLEVEL, m_pFrame->getRootFrame(), SwListRedlineType::HIDDEN) );
                 const SwDoc& rDoc = pTextNd->GetDoc();
                 const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
                 if ( rTable.size() && !rInf.GetVsh()->GetLayout()->IsHideRedlines() )
                 {
-                    OUString aHiddenText( pTextNd->GetNumString(true, MAXLEVEL, m_pFrame->getRootFrame(), SwListRedlineType::ORIGTEXT) );
+                    // previous (outdated) text
+                    OUString aOriginalText( pTextNd->GetNumString(true, MAXLEVEL, m_pFrame->getRootFrame(), SwListRedlineType::ORIGTEXT) );
 
-                    if ( !aText.isEmpty() || !aHiddenText.isEmpty() )
+                    if ( !aTextNow.isEmpty() || !aOriginalText.isEmpty() )
                     {
+
                         bool bDisplayChangedParagraphNumbering = officecfg::Office::Writer::Comparison::DisplayChangedParagraphNumbering::get();
-                        if (bDisplayChangedParagraphNumbering && aText != aHiddenText && !aHiddenText.isEmpty())
+                        if (bDisplayChangedParagraphNumbering && aTextNow != aOriginalText && !aOriginalText.isEmpty())
                         {
                             bHasHiddenNum = true;
                             // show also original number after the actual one enclosed in [ and ],
                             // and replace tabulator with space to avoid messy indentation
                             // resulted by the longer numbering, e.g. "1.[2.]" instead of "1.".
-                            aText = aText +  "[" + aHiddenText + "]"
+                            aTextNow = aTextNow +  "[" + aOriginalText + "]"
                                      + pTextNd->GetLabelFollowedBy().replaceAll("\t", " ");
                         }
-                        else if (!aText.isEmpty())
-                            aText += pTextNd->GetLabelFollowedBy();
+                        else if (!aTextNow.isEmpty())
+                            aTextNow += pTextNd->GetLabelFollowedBy();
                     }
                 }
                 else if (pTextNd->getIDocumentSettingAccess()->get(DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY)
-                    || !aText.isEmpty())
-                    aText += pTextNd->GetLabelFollowedBy();
+                    || !aTextNow.isEmpty())
+                    aTextNow += pTextNd->GetLabelFollowedBy();
 
                 // Not just an optimization ...
                 // A number portion without text will be assigned a width of 0.
                 // The succeeding text portion will flow into the BreakCut in the BreakLine,
                 // although  we have rInf.GetLast()->GetFlyPortion()!
-                if( !aText.isEmpty() )
+                if( !aTextNow.isEmpty() )
                 {
 
                     // Build a new numbering font basing on the current paragraph font:
@@ -694,7 +696,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
 
-                    pRet = new SwNumberPortion( aText, std::move(pNumFnt),
+                    pRet = new SwNumberPortion( aTextNow, std::move(pNumFnt),
                                                 bLeft, bCenter, nMinDist,
                                                 bLabelAlignmentPosAndSpaceModeActive );
                 }

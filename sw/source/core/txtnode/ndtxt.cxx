@@ -4627,6 +4627,17 @@ void SwTextNode::AddToList()
             SwRedlineTable::size_type nRedlPosDel = GetDoc().getIDocumentRedlineAccess().GetRedlinePos(*this, RedlineType::Delete);
             if ( SwRedlineTable::npos == nRedlPosDel )
                 AddToListRLHidden();
+            else
+            {
+                const SwNodeOffset nNdIdx = GetIndex();
+                const SwRangeRedline* pTmp = rRedTable[nRedlPosDel];
+                const SwPosition* pRStt = pTmp->Start();
+                if (pRStt->GetNodeIndex() >= nNdIdx)
+                {
+                    // paragraph is partly deleted, add to the "hidden" list, too
+                    AddToListRLHidden();
+                }
+            }
         }
         // inserted paragraph, e.g. during file load, add to the "hidden" list
         else if ( SwRedlineTable::npos != nRedlPos )
