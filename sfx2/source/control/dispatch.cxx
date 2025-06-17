@@ -1635,6 +1635,21 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
             bCheckForCommentCommands = true;
     }
 
+    const bool bIsInPlace = xImp->pFrame && xImp->pFrame->GetObjectShell()->IsInPlaceActive();
+    // Shell belongs to Server?
+    // AppDispatcher or IPFrame-Dispatcher
+    bool bIsServerShell = !xImp->pFrame || bIsInPlace;
+    // Of course ShellServer-Slots are also executable even when it is
+    // executed on a container dispatcher without an IPClient.
+    if (!bIsServerShell)
+    {
+        SfxViewShell* pViewSh = xImp->pFrame->GetViewShell();
+        bIsServerShell = !pViewSh || !pViewSh->GetUIActiveClient();
+    }
+    // Shell belongs to Container?
+    // AppDispatcher or no IPFrameDispatcher
+    const bool bIsContainerShell = !bIsInPlace;
+
     // search through all the shells of the chained dispatchers
     // from top to bottom
     sal_uInt16 nFirstShell = 0;
@@ -1649,11 +1664,13 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
         if (!pSlot)
             continue;
 
-        bool bLocalReadOnly = bReadOnly;
+        // Slot belongs to Container?
+        bool bIsContainerSlot = pSlot->IsMode(SfxSlotMode::CONTAINER);
 
-        // This check can be true only if Lokit is active and view is readonly.
-        if (bCheckForCommentCommands)
-            bLocalReadOnly = !IsCommandAllowedInLokReadOnlyViewMode(pSlot->GetCommand());
+        // Shell and Slot match
+        if ( !( ( bIsContainerSlot && bIsContainerShell ) ||
+                ( !bIsContainerSlot && bIsServerShell ) ) )
+            continue;
 
         if ( pSlot->nDisableFlags != SfxDisableFlags::NONE &&
              ( static_cast<int>(pSlot->nDisableFlags) & static_cast<int>(pObjShell->GetDisableFlags()) ) != 0 )
@@ -1662,45 +1679,30 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
         if (!(pSlot->nFlags & SfxSlotMode::VIEWERAPP) && isViewerAppMode)
             return false;
 
-        // Enable insert new annotation in Writer in read-only mode
-        if (bLocalReadOnly && getenv("EDIT_COMMENT_IN_READONLY_MODE") != nullptr)
+        if (!(pSlot->nFlags & SfxSlotMode::READONLYDOC) && bReadOnly)
         {
-            OUString sCommand = pSlot->GetCommand();
-            if (sCommand == u".uno:InsertAnnotation"_ustr
-                || ((sCommand == u".uno:FontDialog"_ustr
-                     || sCommand == u".uno:ParagraphDialog"_ustr)
-                    && pIFace->GetClassName() == "SwAnnotationShell"_ostr))
+            bool bAllowThis = false;
+
+            // This check can be true only if Lokit is active and view is readonly.
+            if (bCheckForCommentCommands)
+                bAllowThis = IsCommandAllowedInLokReadOnlyViewMode(pSlot->GetCommand());
+
+            // Enable insert new annotation in Writer in read-only mode
+            if (!bAllowThis && getenv("EDIT_COMMENT_IN_READONLY_MODE") != nullptr)
             {
-                bLocalReadOnly = false;
+                OUString sCommand = pSlot->GetCommand();
+                if (sCommand == u".uno:InsertAnnotation"_ustr
+                    || ((sCommand == u".uno:FontDialog"_ustr
+                         || sCommand == u".uno:ParagraphDialog"_ustr)
+                        && pIFace->GetClassName() == "SwAnnotationShell"_ostr))
+                {
+                    bAllowThis = true;
+                }
             }
+
+            if (!bAllowThis)
+                return false;
         }
-
-        if (!(pSlot->nFlags & SfxSlotMode::READONLYDOC) && bLocalReadOnly)
-            return false;
-
-        // Slot belongs to Container?
-        bool bIsContainerSlot = pSlot->IsMode(SfxSlotMode::CONTAINER);
-        bool bIsInPlace = xImp->pFrame && xImp->pFrame->GetObjectShell()->IsInPlaceActive();
-
-        // Shell belongs to Server?
-        // AppDispatcher or IPFrame-Dispatcher
-        bool bIsServerShell = !xImp->pFrame || bIsInPlace;
-
-        // Of course ShellServer-Slots are also executable even when it is
-        // executed on a container dispatcher without an IPClient.
-        if ( !bIsServerShell )
-        {
-            SfxViewShell *pViewSh = xImp->pFrame->GetViewShell();
-            bIsServerShell = !pViewSh || !pViewSh->GetUIActiveClient();
-        }
-
-        // Shell belongs to Container?
-        // AppDispatcher or no IPFrameDispatcher
-        bool bIsContainerShell = !xImp->pFrame || !bIsInPlace;
-        // Shell and Slot match
-        if ( !( ( bIsContainerSlot && bIsContainerShell ) ||
-                ( !bIsContainerSlot && bIsServerShell ) ) )
-            continue;
 
         rServer.SetSlot(pSlot);
         rServer.SetShellLevel(i);
