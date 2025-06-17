@@ -198,59 +198,6 @@ css::uno::Reference<css::frame::XController> SVGFilter::fillDrawImpressSelectedP
         }
     }
 
-    uno::Reference<drawing::framework::XControllerManager> xManager(xController, uno::UNO_QUERY);
-    if (!xManager)
-        return {};
-    uno::Reference<drawing::framework::XConfigurationController> xConfigController(
-        xManager->getConfigurationController());
-
-    // which view configuration are we in?
-    //
-    // * traverse Impress resources to find slide preview pane, grab selection from there
-    // * otherwise, fallback to current slide
-    //
-    const uno::Sequence<uno::Reference<drawing::framework::XResourceId>> aResIds(
-        xConfigController->getCurrentConfiguration()->getResources(
-            {}, u""_ustr, drawing::framework::AnchorBindingMode_INDIRECT));
-
-    for (const uno::Reference<drawing::framework::XResourceId>& rResId : aResIds)
-    {
-        // can we somehow obtain the slidesorter from the Impress framework?
-        if (rResId->getResourceURL() == "private:resource/view/SlideSorter")
-        {
-            // got it, grab current selection from there
-            uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
-                xConfigController->getResource(rResId), uno::UNO_QUERY);
-            if (!xSelectionSupplier)
-                continue;
-
-            Sequence<Reference<XInterface>> aSelectedPageSequence;
-            if (xSelectionSupplier->getSelection() >>= aSelectedPageSequence)
-            {
-                for (auto& xInterface : aSelectedPageSequence)
-                {
-                    uno::Reference<drawing::XDrawPage> xDrawPage(xInterface, uno::UNO_QUERY);
-
-                    if (Reference<XPropertySet> xPropSet{ xDrawPage, UNO_QUERY })
-                    {
-                        Reference<XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
-                        if (xPropSetInfo && xPropSetInfo->hasPropertyByName(u"Visible"_ustr))
-                        {
-                            bool bIsSlideVisible = true; // default: true
-                            xPropSet->getPropertyValue(u"Visible"_ustr) >>= bIsSlideVisible;
-                            if (!bIsSlideVisible)
-                                continue;
-                        }
-                    }
-                    mSelectedPages.push_back(xDrawPage);
-                }
-
-                // and stop looping. It is likely not getting better
-                break;
-            }
-        }
-    }
-
     if (mSelectedPages.empty())
     {
         // apparently failed to get a selection - fallback to current page
