@@ -1,0 +1,83 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/* Doxygen 1.8 */
+#top:not(:has(#nav-path .el:first-child[href^="dir_"])) ~ .header .title:not(:has(> .mlabels))::after {
+    content: "unpublished";
+    margin-left: 8px;
+    background-color: #f63d96;
+    border-top: 1px solid #ff087b;
+    border-left: 1px solid #ff087b;
+    border-right: 1px solid #ffaad1;
+    border-bottom: 1px solid #ffaad1;
+    text-shadow: none;
+    color: white;
+    margin-right: 4px;
+    padding: 2px 3px;
+    border-radius: 3px;
+    font-size: 7pt;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* Doxygen 1.11 */
+#top:not(:has(#nav-path .el:first-child[href^="dir_"])) ~ #doc-content .title:not(:has(> .mlabels))::after {
+    content: "unpublished";
+    margin-left: 8px;
+    background-color: #f63d96;
+    border-top: 1px solid #ff087b;
+    border-left: 1px solid #ff087b;
+    border-right: 1px solid #ffaad1;
+    border-bottom: 1px solid #ffaad1;
+    text-shadow: none;
+    color: white;
+    margin-right: 4px;
+    padding: 2px 3px;
+    border-radius: 3px;
+    font-size: 7pt;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* Doxygen 1.13 */
+#side-nav:not(:has(#selected a[class*="idl.html"])) ~ #doc-content .title:not(:has(> .mlabels))::after {
+    content: "unpublished";
+    margin-left: 8px;
+    background-color: #f63d96;
+    border-top: 1px solid #ff087b;
+    border-left: 1px solid #ff087b;
+    border-right: 1px solid #ffaad1;
+    border-bottom: 1px solid #ffaad1;
+    text-shadow: none;
+    color: white;
+    margin-right: 4px;
+    padding: 2px 3px;
+    border-radius: 3px;
+    font-size: 7pt;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* Doxygen 1.14 */
+#side-nav:not(:has(#selected a[class*="idl.html"])) ~ #container .title:not(:has(> .mlabels))::after {
+    content: "unpublished";
+    margin-left: 8px;
+    background-color: #f63d96;
+    border-top: 1px solid #ff087b;
+    border-left: 1px solid #ff087b;
+    border-right: 1px solid #ffaad1;
+    border-bottom: 1px solid #ffaad1;
+    text-shadow: none;
+    color: white;
+    margin-right: 4px;
+    padding: 2px 3px;
+    border-radius: 3px;
+    font-size: 7pt;
+    white-space: nowrap;
+    vertical-align: middle;
+}
