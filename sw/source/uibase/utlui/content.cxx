@@ -298,6 +298,13 @@ bool SwTextFieldContent::IsProtect() const
     return m_pFormatField->IsProtect();
 }
 
+SwPostItField const* SwPostItContent::GetPostItField() const
+{
+    return m_pField
+        ? static_cast<SwPostItField const*>(m_pField->GetField())
+        : nullptr;
+}
+
 bool SwPostItContent::IsProtect() const
 {
     return m_pField->IsProtect();
@@ -2545,15 +2552,13 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                 OUString sEntry = pCnt->GetName();
                 OUString sId(weld::toId(pCnt));
 
-                const SwPostItField* pPostItField =
-                        static_cast<const SwPostItField*>(pCnt->GetPostIt()->GetField());
+                const SwPostItField* pPostItField = pCnt->GetPostItField();
                 auto lambda = [&pPostItField, this](const std::unique_ptr<weld::TreeIter>& xEntry)
                 {
                     SwPostItContent* pParentCandidateCnt =
                             weld::fromId<SwPostItContent*>(m_xTreeView->get_id(*xEntry));
                     return pPostItField->GetParentPostItId() ==
-                            static_cast<const SwPostItField*>(pParentCandidateCnt->GetPostIt()
-                                                              ->GetField())->GetPostItId();
+                            pParentCandidateCnt->GetPostItField()->GetPostItId();
                 };
 
                 // if a parent candidate is not found use the passed root node
@@ -4522,7 +4527,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
             {
                 assert(dynamic_cast<SwPostItContent*>(static_cast<SwTypeNumber*>(pUserData)));
                 SwPostItContent* pCnt = static_cast<SwPostItContent*>(pUserData);
-                p = pCnt->GetPostIt()->GetField();
+                p = pCnt->GetPostItField();
                 break;
             }
             default:
@@ -5084,7 +5089,7 @@ static bool lcl_IsSelectedCompareByContentTypeAndAddress(const weld::TreeIter& r
             {
                 assert(dynamic_cast<SwPostItContent*>(static_cast<SwTypeNumber*>(pContent)));
                 SwPostItContent* pCnt = static_cast<SwPostItContent*>(pContent);
-                p = pCnt->GetPostIt()->GetField();
+                p = pCnt->GetPostItField();
                 break;
             }
             case ContentTypeId::INDEX:
@@ -6708,7 +6713,10 @@ void SwContentTree::DeleteAllContentOfEntryContentType(const weld::TreeIter& rEn
         {
             const SwPostItContent* pPostItContent
                     = static_cast<const SwPostItContent*>(pContentType->GetMember(i));
-            m_pActiveShell->GotoFormatField(*pPostItContent->GetPostIt());
+            if (pPostItContent->GetPostIt())
+            {
+                m_pActiveShell->GotoFormatField(*pPostItContent->GetPostIt());
+            }
             m_pActiveShell->DelRight();
         }
         m_pActiveShell->EndUndo();
@@ -6930,7 +6938,10 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         }
         break;
         case ContentTypeId::POSTIT:
-            m_pActiveShell->GotoFormatField(*static_cast<const SwPostItContent*>(pCnt)->GetPostIt());
+            if (SwFormatField const*const pField{static_cast<const SwPostItContent*>(pCnt)->GetPostIt()})
+            {
+                m_pActiveShell->GotoFormatField(*pField);
+            }
         break;
         case ContentTypeId::DRAWOBJECT:
         {
@@ -7186,11 +7197,13 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             }
             else if (nType == ContentTypeId::POSTIT)
             {
-                if (const SwTextAttr* pTextAttr =
-                        static_cast<SwPostItContent*>(pCnt)->GetPostIt()->GetTextField())
+                if (SwFormatField const*const pField{static_cast<SwPostItContent*>(pCnt)->GetPostIt()})
                 {
-                    std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
-                    BringPostItFieldsToAttention(aTextAttrArr);
+                    if (const SwTextAttr* pTextAttr = pField->GetTextField())
+                    {
+                        std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
+                        BringPostItFieldsToAttention(aTextAttrArr);
+                    }
                 }
             }
             else if (nType == ContentTypeId::DRAWOBJECT)
