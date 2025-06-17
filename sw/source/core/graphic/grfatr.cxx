@@ -307,7 +307,7 @@ SwDrawModeGrf* SwDrawModeGrf::Clone( SfxItemPool * ) const
 bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
                                 sal_uInt8 ) const
 {
-    drawing::ColorMode eRet = static_cast<drawing::ColorMode>(GetEnumValue());
+    drawing::ColorMode eRet = static_cast<drawing::ColorMode>(GetValue());
     rVal <<= eRet;
     return true;
 }
