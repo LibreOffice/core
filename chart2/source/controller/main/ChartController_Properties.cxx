@@ -234,7 +234,6 @@ wrapper::ItemConverter* createItemConverter(
 
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,
                                         xObjectProperties, xSeries, rDrawModel.GetItemPool(), rDrawModel,
-                                        xChartModel,
                                         eMapTo, pRefSize, bDataSeries, bUseSpecialFillColor, nSpecialFillColor, true,
                                         nNumberFormat, nPercentNumberFormat, nPointIndex );
                 break;
@@ -253,7 +252,7 @@ wrapper::ItemConverter* createItemConverter(
             case OBJECTTYPE_DATA_ERRORS_Z:
                 pItemConverter =  new wrapper::ErrorBarItemConverter(
                     xChartModel, xObjectProperties, rDrawModel.GetItemPool(),
-                    rDrawModel, xChartModel);
+                    rDrawModel );
                 break;
 
             case OBJECTTYPE_DATA_CURVE:
@@ -295,7 +294,7 @@ wrapper::ItemConverter* createItemConverter(
         {
             case OBJECTTYPE_TITLE:
                 pItemConverter =  new wrapper::AllTitleItemConverter( xChartModel, rDrawModel.GetItemPool(),
-                                                                     rDrawModel, xChartModel);
+                                                                     rDrawModel );
                 break;
             case OBJECTTYPE_AXIS:
             {
@@ -311,7 +310,7 @@ wrapper::ItemConverter* createItemConverter(
             case OBJECTTYPE_GRID:
             case OBJECTTYPE_SUBGRID:
                 pItemConverter =  new wrapper::AllGridItemConverter( xChartModel, rDrawModel.GetItemPool(),
-                                                                     rDrawModel, xChartModel);
+                                                                     rDrawModel );
                 break;
             default: //for this type it is not supported to change all elements at once
                 break;
@@ -760,7 +759,6 @@ void ChartController::executeDlg_ObjectProperties_withUndoGuard(
                                         , xObjectProperties, ObjectIdentifier::getDataSeriesForCID( rObjectCID, xChartDoc )
                                         , m_pDrawModelWrapper->getSdrModel().GetItemPool()
                                         , m_pDrawModelWrapper->getSdrModel()
-                                        , xChartDoc
                                         , wrapper::GraphicObjectType::FilledDataPoint );
 
             SfxItemSet aSymbolShapeProperties(aSymbolItemConverter.CreateEmptyItemSet() );

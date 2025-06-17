@@ -47,7 +47,6 @@ public:
         const rtl::Reference<::chart::DataSeries>& xSeries,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
         GraphicObjectType eMapTo,
         const std::optional<css::awt::Size>& pRefSize = std::nullopt,
         bool bDataSeries = false,

@@ -382,8 +382,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         wrapper::AllDataLabelItemConverter aItemConverter(
             getChartModel(),
             m_pDrawModelWrapper->GetItemPool(),
-            m_pDrawModelWrapper->getSdrModel(),
-            getChartModel() );
+            m_pDrawModelWrapper->getSdrModel() );
         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
         aItemConverter.FillItemSet( aItemSet );
 
@@ -543,8 +542,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         // get an appropriate item converter
         auto aItemConverter = std::make_shared<wrapper::ErrorBarItemConverter> (
             getChartModel(), xErrorBarProp, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
-            m_pDrawModelWrapper->getSdrModel(),
-            getChartModel() );
+            m_pDrawModelWrapper->getSdrModel() );
 
         // open dialog
         SfxItemSet aItemSet = aItemConverter->CreateEmptyItemSet();

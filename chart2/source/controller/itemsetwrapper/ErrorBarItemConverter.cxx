@@ -22,6 +22,7 @@
 #include <StatisticsHelper.hxx>
 
 #include <GraphicPropertyItemConverter.hxx>
+#include <ChartModel.hxx>
 
 #include <svl/stritem.hxx>
 #include <svx/chrtitem.hxx>
@@ -79,17 +80,16 @@ namespace chart::wrapper
 {
 
 ErrorBarItemConverter::ErrorBarItemConverter(
-    uno::Reference< frame::XModel > xModel,
+    const rtl::Reference< ChartModel > & xChartModel,
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
-    SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory ) :
+    SdrModel& rDrawModel ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_spGraphicConverter( std::make_shared<GraphicPropertyItemConverter>(
                                   rPropertySet, rItemPool, rDrawModel,
-                                  xNamedPropertyContainerFactory,
+                                  xChartModel,
                                   GraphicObjectType::LineProperties )),
-        m_xModel(std::move( xModel ))
+        m_xModel(xChartModel)
 {}
 
 ErrorBarItemConverter::~ErrorBarItemConverter()

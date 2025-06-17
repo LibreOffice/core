@@ -36,7 +36,7 @@ public:
         rtl::Reference< ::chart::DataSeries > xRegCurveCnt,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory );
+        const rtl::Reference< ChartModel > & xChartModel );
     virtual ~RegressionCurveItemConverter() override;
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const override;

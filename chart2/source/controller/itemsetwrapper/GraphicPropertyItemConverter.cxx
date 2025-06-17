@@ -140,16 +140,13 @@ GraphicPropertyItemConverter::GraphicPropertyItemConverter(
     beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    uno::Reference< lang::XMultiServiceFactory > xNamedPropertyContainerFactory,
+    rtl::Reference< ChartModel > xChartModel,
     GraphicObjectType eObjectType /* = FILL_PROPERTIES */ ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_GraphicObjectType( eObjectType ),
         m_rDrawModel( rDrawModel ),
-        m_xNamedPropertyTableFactory(std::move( xNamedPropertyContainerFactory ))
+        m_xChartModel(std::move( xChartModel ))
 {
-    m_xChartModel = dynamic_cast<ChartModel*>(m_xNamedPropertyTableFactory.get());
-    DBG_ASSERT(m_xChartModel.is(),
-        "GraphicPropertyItemConverter ctor: passed XMultiServiceFactory parameter is not a ChartModel instance.");
 }
 
 GraphicPropertyItemConverter::~GraphicPropertyItemConverter()
@@ -253,7 +250,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                         aItem.PutValue( aValue, MID_NAME );
 
                         lcl_SetContentForNamedProperty(
-                            m_xNamedPropertyTableFactory, u"com.sun.star.drawing.TransparencyGradientTable"_ustr ,
+                            m_xChartModel, u"com.sun.star.drawing.TransparencyGradientTable"_ustr ,
                             aItem, MID_FILLGRADIENT );
 
                         // this is important to enable the item
@@ -301,7 +298,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
             aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ), MID_NAME );
 
             lcl_SetContentForNamedProperty(
-                m_xNamedPropertyTableFactory, u"com.sun.star.drawing.DashTable"_ustr ,
+                m_xChartModel, u"com.sun.star.drawing.DashTable"_ustr ,
                 aItem, MID_LINEDASH );
 
             // translate model name to UI-name for predefined entries, so
@@ -327,7 +324,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                 aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ), MID_NAME );
 
                 lcl_SetContentForNamedProperty(
-                    m_xNamedPropertyTableFactory, u"com.sun.star.drawing.GradientTable"_ustr ,
+                    m_xChartModel, u"com.sun.star.drawing.GradientTable"_ustr ,
                     aItem, MID_FILLGRADIENT );
 
                 // translate model name to UI-name for predefined entries, so
@@ -353,7 +350,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                 aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ), MID_NAME );
 
                 lcl_SetContentForNamedProperty(
-                    m_xNamedPropertyTableFactory, u"com.sun.star.drawing.HatchTable"_ustr ,
+                    m_xChartModel, u"com.sun.star.drawing.HatchTable"_ustr ,
                     aItem, MID_FILLHATCH );
 
                 // translate model name to UI-name for predefined entries, so
@@ -374,7 +371,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                 aItem.PutValue( GetPropertySet()->getPropertyValue( u"FillBitmapName"_ustr ), MID_NAME );
 
                 lcl_SetContentForNamedProperty(
-                    m_xNamedPropertyTableFactory, u"com.sun.star.drawing.BitmapTable"_ustr ,
+                    m_xChartModel, u"com.sun.star.drawing.BitmapTable"_ustr ,
                     aItem, MID_BITMAP );
 
                 // translate model name to UI-name for predefined entries, so
@@ -497,7 +494,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                         OUString aPreferredName;
                         aValue >>= aPreferredName;
                         aValue <<= PropertyHelper::addTransparencyGradientUniqueNameToTable(
-                            aGradient, m_xNamedPropertyTableFactory, aPreferredName );
+                            aGradient, m_xChartModel, aPreferredName );
 
                         if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                         {
@@ -568,7 +565,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     OUString aPreferredName;
                     aValue >>= aPreferredName;
                     aValue <<= PropertyHelper::addLineDashUniqueNameToTable(
-                        aLineDash, m_xNamedPropertyTableFactory, aPreferredName );
+                        aLineDash, m_xChartModel, aPreferredName );
 
                     GetPropertySet()->setPropertyValue( aPropName, aValue );
                     bChanged = true;
@@ -600,7 +597,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                         OUString aPreferredName;
                         aValue >>= aPreferredName;
                         aValue <<= PropertyHelper::addGradientUniqueNameToTable(
-                            aGradient, m_xNamedPropertyTableFactory, aPreferredName );
+                            aGradient, m_xChartModel, aPreferredName );
 
                         GetPropertySet()->setPropertyValue( aPropName, aValue );
                         bChanged = true;
@@ -633,7 +630,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                         OUString aPreferredName;
                         aValue >>= aPreferredName;
                         aValue <<= PropertyHelper::addHatchUniqueNameToTable(
-                            aHatch, m_xNamedPropertyTableFactory, aPreferredName );
+                            aHatch, m_xChartModel, aPreferredName );
 
                         GetPropertySet()->setPropertyValue( aPropName, aValue );
                         bChanged = true;
@@ -661,7 +658,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                         OUString aPreferredName;
                         aValue >>= aPreferredName;
                         aValue <<= PropertyHelper::addBitmapUniqueNameToTable(
-                            aBitmap, m_xNamedPropertyTableFactory, aPreferredName );
+                            aBitmap, m_xChartModel, aPreferredName );
 
                         GetPropertySet()->setPropertyValue( u"FillBitmapName"_ustr , aValue );
                         bChanged = true;

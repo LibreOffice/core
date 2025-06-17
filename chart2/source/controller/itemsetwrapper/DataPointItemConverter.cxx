@@ -206,7 +206,6 @@ DataPointItemConverter::DataPointItemConverter(
     const rtl::Reference< DataSeries > & xSeries,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference<lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
     GraphicObjectType eMapTo,
     const std::optional<awt::Size>& pRefSize,
     bool bDataSeries,
@@ -229,7 +228,7 @@ DataPointItemConverter::DataPointItemConverter(
         m_xSeries(xSeries)
 {
     m_aConverters.emplace_back( new GraphicPropertyItemConverter(
-                                 rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory, eMapTo ));
+                                 rPropertySet, rItemPool, rDrawModel, xChartModel, eMapTo ));
     m_aConverters.emplace_back( new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, u"ReferencePageSize"_ustr));
     if( bDataSeries )
     {

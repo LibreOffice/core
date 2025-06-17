@@ -23,6 +23,7 @@
 #include <GraphicPropertyItemConverter.hxx>
 #include <CharacterPropertyItemConverter.hxx>
 #include <MultipleItemConverter.hxx>
+#include <ChartModel.hxx>
 #include <svx/sdangitm.hxx>
 #include <rtl/math.hxx>
 
@@ -91,13 +92,13 @@ TitleItemConverter::TitleItemConverter(
     const uno::Reference<beans::XPropertySet> & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
+    const rtl::Reference< ChartModel > & xChartModel,
     const std::optional<awt::Size>& pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.emplace_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
-                                 xNamedPropertyContainerFactory,
+                                 xChartModel,
                                  GraphicObjectType::LineAndFillProperties ));
 
     // CharacterProperties are not at the title but at its contained XFormattedString objects

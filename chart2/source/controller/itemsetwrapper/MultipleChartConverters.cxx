@@ -72,8 +72,7 @@ const WhichRangesContainer& AllAxisItemConverter::GetWhichPairs() const
 AllGridItemConverter::AllGridItemConverter(
     const rtl::Reference<::chart::ChartModel> & xChartModel,
     SfxItemPool& rItemPool,
-    SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
+    SdrModel& rDrawModel )
         : MultipleItemConverter( rItemPool )
 {
     rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
@@ -81,7 +80,7 @@ AllGridItemConverter::AllGridItemConverter(
     for( rtl::Reference< GridProperties > const & xObjectProperties : aElementList )
     {
         m_aConverters.emplace_back( new ::chart::wrapper::GraphicPropertyItemConverter(
-                                        xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory,
+                                        xObjectProperties, rItemPool, rDrawModel, xChartModel,
                                         ::chart::wrapper::GraphicObjectType::LineProperties ) );
     }
 }
@@ -99,8 +98,7 @@ const WhichRangesContainer& AllGridItemConverter::GetWhichPairs() const
 AllDataLabelItemConverter::AllDataLabelItemConverter(
     const rtl::Reference<::chart::ChartModel> & xChartModel,
     SfxItemPool& rItemPool,
-    SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
+    SdrModel& rDrawModel )
         : MultipleItemConverter( rItemPool )
 {
     std::vector< rtl::Reference< DataSeries > > aSeriesList =
@@ -117,7 +115,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
         m_aConverters.emplace_back(
             new ::chart::wrapper::DataPointItemConverter(
                 xChartModel, xContext, series, series, rItemPool, rDrawModel,
-                xNamedPropertyContainerFactory, GraphicObjectType::FilledDataPoint,
+                GraphicObjectType::FilledDataPoint,
                 std::nullopt, true, false, 0, true, nNumberFormat, nPercentNumberFormat));
     }
 }
@@ -135,8 +133,7 @@ const WhichRangesContainer& AllDataLabelItemConverter::GetWhichPairs() const
 AllTitleItemConverter::AllTitleItemConverter(
     const rtl::Reference<::chart::ChartModel> & xChartModel,
     SfxItemPool& rItemPool,
-    SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
+    SdrModel& rDrawModel )
         : MultipleItemConverter( rItemPool )
 {
     for(sal_Int32 nTitle = TitleHelper::TITLE_BEGIN; nTitle < TitleHelper::NORMAL_TITLE_END; nTitle++ )
@@ -147,7 +144,7 @@ AllTitleItemConverter::AllTitleItemConverter(
         m_aConverters.emplace_back(
             new ::chart::wrapper::TitleItemConverter(
                 uno::Reference< beans::XPropertySet >( xTitle ),
-                rItemPool, rDrawModel, xNamedPropertyContainerFactory, std::nullopt));
+                rItemPool, rDrawModel, xChartModel, std::nullopt));
     }
 }
 

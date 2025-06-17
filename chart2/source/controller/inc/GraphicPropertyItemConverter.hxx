@@ -46,7 +46,7 @@ public:
         const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        css::uno::Reference< css::lang::XMultiServiceFactory > xNamedPropertyContainerFactory,
+        rtl::Reference< ChartModel > xChartModel,
         GraphicObjectType eObjectType );
     virtual ~GraphicPropertyItemConverter() override;
 
@@ -60,7 +60,6 @@ protected:
 private:
     GraphicObjectType              m_GraphicObjectType;
     SdrModel &                      m_rDrawModel;
-    css::uno::Reference< css::lang::XMultiServiceFactory >  m_xNamedPropertyTableFactory;
     rtl::Reference<ChartModel> m_xChartModel;
 };
 

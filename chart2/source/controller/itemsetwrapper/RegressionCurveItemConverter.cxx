@@ -23,6 +23,7 @@
 #include "SchWhichPairs.hxx"
 #include <GraphicPropertyItemConverter.hxx>
 #include <DataSeries.hxx>
+#include <ChartModel.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <osl/diagnose.h>
@@ -91,11 +92,11 @@ RegressionCurveItemConverter::RegressionCurveItemConverter(
     rtl::Reference< DataSeries > xContainer,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory ) :
+    const rtl::Reference< ChartModel > & xChartModel ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_spGraphicConverter( std::make_shared<GraphicPropertyItemConverter>(
                                   rPropertySet, rItemPool, rDrawModel,
-                                  xNamedPropertyContainerFactory,
+                                  xChartModel,
                                   GraphicObjectType::LineProperties )),
         m_xCurveContainer(std::move( xContainer ))
 {}

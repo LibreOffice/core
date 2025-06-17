@@ -21,6 +21,7 @@
 #include "SchWhichPairs.hxx"
 #include <GraphicPropertyItemConverter.hxx>
 #include <CharacterPropertyItemConverter.hxx>
+#include <ChartModel.hxx>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -40,12 +41,12 @@ LegendItemConverter::LegendItemConverter(
     const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
+    const rtl::Reference< ChartModel > & xChartModel,
     const std::optional<awt::Size>& pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.emplace_back( new GraphicPropertyItemConverter(
-                                 rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory,
+                                 rPropertySet, rItemPool, rDrawModel, xChartModel,
                                  GraphicObjectType::LineAndFillProperties ));
     m_aConverters.emplace_back( new CharacterPropertyItemConverter(
                                  rPropertySet, rItemPool, pRefSize,

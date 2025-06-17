@@ -22,6 +22,7 @@
 #include <ItemPropertyMap.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 #include <CharacterPropertyItemConverter.hxx>
+#include <ChartModel.hxx>
 #include <unonames.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -48,13 +49,13 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
     const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
+    const rtl::Reference< ChartModel > & xChartModel,
     const std::optional<awt::Size>& pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.emplace_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
-                                 xNamedPropertyContainerFactory,
+                                 xChartModel,
                                  GraphicObjectType::LineAndFillProperties ));
 
     m_aConverters.emplace_back(

@@ -20,11 +20,13 @@
 #pragma once
 
 #include "ItemConverter.hxx"
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 class SdrModel;
+namespace chart { class ChartModel; }
 
 namespace chart::wrapper
 {
@@ -33,11 +35,10 @@ class ErrorBarItemConverter final : public ItemConverter
 {
 public:
     ErrorBarItemConverter(
-        css::uno::Reference< css::frame::XModel > xChartModel,
+        const rtl::Reference< ChartModel > & xChartModel,
         const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
-        SdrModel& rDrawModel,
-        const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory );
+        SdrModel& rDrawModel );
     virtual ~ErrorBarItemConverter() override;
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const override;

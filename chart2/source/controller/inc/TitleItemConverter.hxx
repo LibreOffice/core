@@ -21,12 +21,14 @@
 #include "ItemConverter.hxx"
 
 #include <com/sun/star/awt/Size.hpp>
+#include <rtl/ref.hxx>
 #include <optional>
 #include <vector>
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 class SdrModel;
+namespace chart { class ChartModel; }
 
 namespace chart::wrapper {
 
@@ -36,7 +38,7 @@ public:
     TitleItemConverter(
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool, SdrModel& rDrawModel,
-        const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
+        const rtl::Reference<ChartModel>& xChartModel,
         const std::optional<css::awt::Size>& pRefSize );
 
     virtual ~TitleItemConverter() override;
