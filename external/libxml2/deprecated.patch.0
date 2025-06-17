@@ -1,6 +1,6 @@
 --- include/libxml/parser.h	2025-05-13 16:42:31.000000000 +0200
 +++ include/libxml/parser.h	2025-06-03 14:00:37.833979131 +0200
-@@ -268,20 +268,20 @@
+@@ -268,7 +268,7 @@
      /* Number of current input streams */
      int inputNr;
      /* Max number of input streams */
@@ -8,12 +8,10 @@
 +    int inputMax;
      /* stack of inputs */
      xmlParserInputPtr *inputTab;
-
-     /* Node analysis stack only used for DOM building */
-
+ 
+@@ -277,11 +277,11 @@
      /* Current parsed Node */
--    xmlNodePtr node XML_DEPRECATED_MEMBER;
-+    xmlNodePtr node;
+     xmlNodePtr node;
      /* Depth of the parsing stack */
 -    int nodeNr XML_DEPRECATED_MEMBER;
 +    int nodeNr;
@@ -22,7 +20,7 @@
      /* array of nodes */
 -    xmlNodePtr *nodeTab XML_DEPRECATED_MEMBER;
 +    xmlNodePtr *nodeTab;
-
+ 
      /* Whether node info should be kept */
      int record_info;
 @@ -374,7 +374,7 @@
