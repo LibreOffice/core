@@ -359,6 +359,34 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandle)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandleTextBox)
+{
+    ScModelObj* pModelObj = createDoc("shape-textbox.ods");
+    ScTestViewCallback aView1;
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
+    {
+        sal_uInt32 id, x, y;
+        lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
+        sal_uInt32 oldX = x;
+        sal_uInt32 oldY = y;
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        {
+            {"HandleNum", uno::Any(id)},
+            {"NewPosX", uno::Any(x+1)},
+            {"NewPosY", uno::Any(y+1)}
+        }));
+        dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr, aPropertyValues);
+        CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
+        lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
+        CPPUNIT_ASSERT_EQUAL(x-1, oldX);
+        CPPUNIT_ASSERT_EQUAL(y-1, oldY);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
 {
     ScModelObj* pModelObj = createDoc("sort-range.ods");
