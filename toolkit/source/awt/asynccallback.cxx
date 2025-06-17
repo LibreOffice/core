@@ -59,15 +59,9 @@ private:
         css::uno::Any                              aData;
     };
 
-    DECL_LINK( Notify_Impl, void*, void );
+    DECL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, void );
 
-    virtual ~AsyncCallback() override
-    {
-        if (mpCallbackId)
-            Application::RemoveUserEvent(mpCallbackId);
-    }
-
-    ImplSVEvent* mpCallbackId { nullptr };
+    virtual ~AsyncCallback() override {}
 };
 
 // com.sun.star.uno.XServiceInfo:
@@ -93,17 +87,13 @@ void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XC
     {
         // NOTE: We don't need SolarMutexGuard here as Application::PostUserEvent is thread-safe
         CallbackData* pCallbackData = new CallbackData( xCallback, aData );
-        mpCallbackId = Application::PostUserEvent( LINK( this, AsyncCallback, Notify_Impl ), pCallbackData );
+        Application::PostUserEvent( LINK( this, AsyncCallback, Notify_Impl ), pCallbackData );
     }
-    else
-        assert(false && "addCallback will not succeed");
 }
 
 // private asynchronous link to call reference to the callback object
-IMPL_LINK( AsyncCallback, Notify_Impl, void*, p, void )
+IMPL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, p, void )
 {
-    mpCallbackId = nullptr;
-
     CallbackData* pCallbackData = static_cast<CallbackData*>(p);
     try
     {
