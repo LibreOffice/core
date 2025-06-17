@@ -77,65 +77,56 @@ public class AccessibleFixedText extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) throws Exception {
         XMultiServiceFactory xMSF = Param.getMSF();
-        XControlModel dlgModel = null;
 
-        XControl txtControl = null;
-        XControlModel txtModel = null;
+        XControlModel dlgModel = UnoRuntime.queryInterface(
+                           XControlModel.class,
+                           xMSF.createInstance(
+                                   "com.sun.star.awt.UnoControlDialogModel"));
 
-        try {
-            dlgModel = UnoRuntime.queryInterface(
-                               XControlModel.class,
-                               xMSF.createInstance(
-                                       "com.sun.star.awt.UnoControlDialogModel"));
+        XControl dlgControl = UnoRuntime.queryInterface(
+                                      XControl.class,
+                                      xMSF.createInstance(
+                                              "com.sun.star.awt.UnoControlDialog"));
 
-            XControl dlgControl = UnoRuntime.queryInterface(
-                                          XControl.class,
-                                          xMSF.createInstance(
-                                                  "com.sun.star.awt.UnoControlDialog"));
+        dlgControl.setModel(dlgModel);
 
-            dlgControl.setModel(dlgModel);
+        XControlModel txtModel = UnoRuntime.queryInterface(
+                           XControlModel.class,
+                           xMSF.createInstance(
+                                   "com.sun.star.awt.UnoControlFixedTextModel"));
 
-            txtModel = UnoRuntime.queryInterface(
-                               XControlModel.class,
-                               xMSF.createInstance(
-                                       "com.sun.star.awt.UnoControlFixedTextModel"));
+        XControl txtControl = UnoRuntime.queryInterface(XControl.class,
+                                                          xMSF.createInstance(
+                                                                  "com.sun.star.awt.UnoControlFixedText"));
 
-            txtControl = UnoRuntime.queryInterface(XControl.class,
-                                                              xMSF.createInstance(
-                                                                      "com.sun.star.awt.UnoControlFixedText"));
+        txtControl.setModel(txtModel);
 
-            txtControl.setModel(txtModel);
+        XFixedText xFT = UnoRuntime.queryInterface(
+                                 XFixedText.class, txtControl);
+        xFT.setText("FxedText");
 
-            XFixedText xFT = UnoRuntime.queryInterface(
-                                     XFixedText.class, txtControl);
-            xFT.setText("FxedText");
+        /* Set the text control to its preferred size, otherwise it
+         * defaults to the size hard coded in its constructor (100 x 12) */
+        XLayoutConstrains xLCTxt = UnoRuntime.queryInterface(
+            XLayoutConstrains.class, txtControl);
+        Size textSize = xLCTxt.getPreferredSize();
+        XWindow xWinTxt = UnoRuntime.queryInterface(
+            XWindow.class, txtControl);
+        xWinTxt.setPosSize(0, 0, textSize.Width, textSize.Height,
+                           PosSize.SIZE);
 
-            /* Set the text control to its preferred size, otherwise it
-             * defaults to the size hard coded in its constructor (100 x 12) */
-            XLayoutConstrains xLCTxt = UnoRuntime.queryInterface(
-                XLayoutConstrains.class, txtControl);
-            Size textSize = xLCTxt.getPreferredSize();
-            XWindow xWinTxt = UnoRuntime.queryInterface(
-                XWindow.class, txtControl);
-            xWinTxt.setPosSize(0, 0, textSize.Width, textSize.Height,
-                               PosSize.SIZE);
+        XControlContainer ctrlCont = UnoRuntime.queryInterface(
+                                             XControlContainer.class,
+                                             dlgControl);
 
-            XControlContainer ctrlCont = UnoRuntime.queryInterface(
-                                                 XControlContainer.class,
-                                                 dlgControl);
+        ctrlCont.addControl("Text", txtControl);
 
-            ctrlCont.addControl("Text", txtControl);
+        xWinDlg = UnoRuntime.queryInterface(XWindow.class,
+                                                      dlgControl);
 
-            xWinDlg = UnoRuntime.queryInterface(XWindow.class,
-                                                          dlgControl);
+        xWinDlg.setVisible(true);
 
-            xWinDlg.setVisible(true);
-
-            xWinDlg.setPosSize(0, 0, 200, 100, PosSize.SIZE);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Error creating dialog :");
-            e.printStackTrace(log);
-        }
+        xWinDlg.setPosSize(0, 0, 200, 100, PosSize.SIZE);
 
         util.utils.waitForEventIdle(Param.getMSF());
 
