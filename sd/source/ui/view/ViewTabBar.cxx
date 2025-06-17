@@ -210,9 +210,7 @@ void SAL_CALL ViewTabBar::disposing(
     }
 }
 
-//----- XTabBar ---------------------------------------------------------------
-
-void SAL_CALL ViewTabBar::addTabBarButtonAfter (
+void ViewTabBar::addTabBarButtonAfter (
     const TabBarButton& rButton,
     const TabBarButton& rAnchor)
 {
@@ -220,25 +218,25 @@ void SAL_CALL ViewTabBar::addTabBarButtonAfter (
     AddTabBarButton(rButton, rAnchor);
 }
 
-void SAL_CALL ViewTabBar::appendTabBarButton (const TabBarButton& rButton)
+void ViewTabBar::appendTabBarButton (const TabBarButton& rButton)
 {
     const SolarMutexGuard aSolarGuard;
     AddTabBarButton(rButton);
 }
 
-void SAL_CALL ViewTabBar::removeTabBarButton (const TabBarButton& rButton)
+void ViewTabBar::removeTabBarButton (const TabBarButton& rButton)
 {
     const SolarMutexGuard aSolarGuard;
     RemoveTabBarButton(rButton);
 }
 
-sal_Bool SAL_CALL ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
+bool ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
 {
     const SolarMutexGuard aSolarGuard;
     return HasTabBarButton(rButton);
 }
 
-Sequence<TabBarButton> SAL_CALL ViewTabBar::getTabBarButtons()
+Sequence<TabBarButton> ViewTabBar::getTabBarButtons()
 {
     const SolarMutexGuard aSolarGuard;
     return GetTabBarButtons();

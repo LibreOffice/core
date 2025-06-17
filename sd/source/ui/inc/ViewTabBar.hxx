@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
-#include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/drawing/framework/XToolBar.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <comphelper/compbase.hxx>
@@ -59,11 +58,27 @@ private:
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XToolBar,
-    css::drawing::framework::XTabBar,
     css::drawing::framework::XConfigurationChangeListener
     > ViewTabBarInterfaceBase;
 
 /** Tab control for switching between views in the center pane.
+
+    UI control for the selection of views in a pane.
+    <p>Every tab of a tab bar has, besides its localized title and help
+    text, the URL of a view.  A possible alternative would be to use a
+    command URL instead of the view URL.</p>
+    <p>In the current Impress implementation a tab bar is only used for the
+    center pane to switch between views in the center pane.  Tab bars can
+    make sense for other panes as well, i.e. for showing either the slide
+    sorter or the outline view in the left pane.</p>
+    <p>Tab bar buttons are identified by their resource id.  Note that
+    because the resource anchors are all the same (the tab bar), it is the
+    resource URL that really identifies a button. There can not be two
+    buttons with the same resource id.</p>
+    </p>
+    <p>A better place for this interface (in an extended version) would be
+    <code>com::sun::star::awt</code></p>
+    @see TabBarButton
 */
 class ViewTabBar final
     : public ViewTabBarInterfaceBase
@@ -91,27 +106,56 @@ public:
     virtual void SAL_CALL disposing(
         const css::lang::EventObject& rEvent) override;
 
-    //----- XTabBar -----------------------------------------------------------
-
-    virtual void
-        SAL_CALL addTabBarButtonAfter (
+    /** Add a tab bar button to the right of another one.
+        @param aButton
+            The new tab bar button that is to be inserted.  If a button with
+            the same resource id is already present than that is removed before the
+            new button is inserted.
+        @param aAnchor
+            The new button is inserted to the right of this button.  When
+            its ResourceId is empty then the new button is inserted at the left
+            most position.
+    */
+    void
+        addTabBarButtonAfter (
             const css::drawing::framework::TabBarButton& rButton,
-            const css::drawing::framework::TabBarButton& rAnchor) override;
+            const css::drawing::framework::TabBarButton& rAnchor);
 
-    virtual void
-        SAL_CALL appendTabBarButton (
-            const css::drawing::framework::TabBarButton& rButton) override;
+    /** Add a tab bar button at the right most position.
+        @param aButton
+            The new tab bar button that is to be inserted.
+    */
+    void
+        appendTabBarButton (
+            const css::drawing::framework::TabBarButton& rButton);
 
-    virtual void
-        SAL_CALL removeTabBarButton (
-            const css::drawing::framework::TabBarButton& rButton) override;
+    /** Remove a tab bar button.
+        @param aButton
+            The tab bar button to remove.  When there is no button with the
+            specified resource id then this call is silently ignored.
+    */
+    void
+        removeTabBarButton (
+            const css::drawing::framework::TabBarButton& rButton);
 
-    virtual sal_Bool
-        SAL_CALL hasTabBarButton (
-            const css::drawing::framework::TabBarButton& rButton) override;
+    /** Test whether the specified button exists in the tab bar.
+        @param aButton
+            The tab bar button whose existence is tested.
+        @return
+            Returns `TRUE` when the button exists.
+    */
+    bool
+        hasTabBarButton (
+            const css::drawing::framework::TabBarButton& rButton);
 
-    virtual css::uno::Sequence<css::drawing::framework::TabBarButton>
-        SAL_CALL getTabBarButtons() override;
+    /** Return a sequence of all the tab bar buttons.
+        <p>Their order reflects the visible order in the tab bar.</p>
+        <p>This method can be used when
+        addTabBarButtonAfter() does not provide enough
+        control as to where to insert a new button.</p>
+    */
+    css::uno::Sequence<css::drawing::framework::TabBarButton>
+        getTabBarButtons();
 
     //----- XResource ---------------------------------------------------------
 

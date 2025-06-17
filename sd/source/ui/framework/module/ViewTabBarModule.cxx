@@ -21,8 +21,8 @@
 
 #include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <ViewTabBar.hxx>
 #include <DrawController.hxx>
-#include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
 #include <strings.hrc>
@@ -116,7 +116,7 @@ void SAL_CALL ViewTabBarModule::notifyConfigurationChange (
         case ResourceActivationEvent:
             if (rEvent.ResourceId->compareTo(mxViewTabBarId) == 0)
             {
-                UpdateViewTabBar(Reference<XTabBar>(rEvent.ResourceObject,UNO_QUERY));
+                UpdateViewTabBar(dynamic_cast<sd::ViewTabBar*>(rEvent.ResourceObject.get()));
             }
     }
 }
@@ -133,14 +133,14 @@ void SAL_CALL ViewTabBarModule::disposing (
     }
 }
 
-void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
+void ViewTabBarModule::UpdateViewTabBar (const rtl::Reference<sd::ViewTabBar>& rxTabBar)
 {
     if (!mxConfigurationController.is())
         return;
 
-    Reference<XTabBar> xBar (rxTabBar);
+    rtl::Reference<ViewTabBar> xBar (rxTabBar);
     if ( ! xBar.is())
-        xBar.set( mxConfigurationController->getResource(mxViewTabBarId), UNO_QUERY);
+        xBar = dynamic_cast<ViewTabBar*>(mxConfigurationController->getResource(mxViewTabBarId).get());
 
     if (!xBar.is())
         return;

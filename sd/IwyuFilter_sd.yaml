@@ -212,7 +212,6 @@ excludelist:
     sd/source/ui/inc/ViewTabBar.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
-    - com/sun/star/drawing/framework/XTabBar.hpp
     - com/sun/star/drawing/framework/XToolBar.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     sd/source/ui/inc/framework/Configuration.hxx:

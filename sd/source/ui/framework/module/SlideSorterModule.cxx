@@ -25,7 +25,7 @@
 #include <o3tl/test_info.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <DrawController.hxx>
-#include <com/sun/star/drawing/framework/XTabBar.hpp>
+#include <ViewTabBar.hxx>
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
@@ -125,7 +125,7 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
         {
             // Update the view tab bar because the view tab bar has just
             // become active.
-            UpdateViewTabBar(Reference<XTabBar>(rEvent.ResourceObject,UNO_QUERY));
+            UpdateViewTabBar(dynamic_cast<sd::ViewTabBar*>(rEvent.ResourceObject.get()));
         }
         else if (rEvent.ResourceId->getResourceTypePrefix() ==
                      FrameworkHelper::msViewURLPrefix
@@ -189,18 +189,18 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
     }
 }
 
-void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
+void SlideSorterModule::UpdateViewTabBar (const rtl::Reference<ViewTabBar>& rxTabBar)
 {
     if ( ! mxControllerManager.is())
         return;
 
-    Reference<XTabBar> xBar (rxTabBar);
+    rtl::Reference<ViewTabBar> xBar (rxTabBar);
     if ( ! xBar.is())
     {
         rtl::Reference<ConfigurationController> xCC (
             mxControllerManager->getConfigurationController());
         if (xCC.is())
-            xBar.set(xCC->getResource(mxViewTabBarId), UNO_QUERY);
+            xBar = dynamic_cast<ViewTabBar*>(xCC->getResource(mxViewTabBarId).get());
     }
 
     if (!xBar.is())

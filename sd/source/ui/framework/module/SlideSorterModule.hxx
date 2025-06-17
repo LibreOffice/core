@@ -25,8 +25,8 @@
 #include <memory>
 #include <set>
 
-namespace com::sun::star::drawing::framework { class XTabBar; }
 namespace sd { class DrawController; }
+namespace sd { class ViewTabBar; }
 
 namespace sd::framework
 {
@@ -89,7 +89,7 @@ private:
         bool bActivation,
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
     void UpdateViewTabBar (
-        const css::uno::Reference<css::drawing::framework::XTabBar>& rxViewTabBar);
+        const rtl::Reference<sd::ViewTabBar>& rxViewTabBar);
 };
 
 } // end of namespace sd::framework

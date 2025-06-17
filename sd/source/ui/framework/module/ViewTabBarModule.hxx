@@ -23,8 +23,8 @@
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::drawing::framework { class XTabBar; }
 namespace sd { class DrawController; }
+namespace sd { class ViewTabBar; }
 
 namespace sd::framework
 {
@@ -76,7 +76,7 @@ private:
         times.
     */
     void UpdateViewTabBar (
-        const css::uno::Reference<css::drawing::framework::XTabBar>& rxTabBar);
+        const rtl::Reference<sd::ViewTabBar>& rxTabBar);
 };
 
 } // end of namespace sd::framework

@@ -2401,7 +2401,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
 	XResource \
 	XResourceFactory \
 	XResourceId \
-	XTabBar \
 	XToolBar \
 	XView \
 ))
