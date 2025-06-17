@@ -100,7 +100,7 @@ ConfigurationController::Lock::~Lock()
 //===== ConfigurationController ===============================================
 
 ConfigurationController::ConfigurationController(const rtl::Reference<::sd::DrawController>& rxController)
-    : ConfigurationControllerInterfaceBase(m_aMutex)
+    : cppu::WeakComponentImplHelperBase(m_aMutex)
     , mbIsDisposed(false)
 {
     const SolarMutexGuard aSolarGuard;
@@ -438,9 +438,7 @@ void ConfigurationController::restoreConfiguration (
     pLock.reset();
 }
 
-//----- XResourceFactoryManager -----------------------------------------------
-
-void SAL_CALL ConfigurationController::addResourceFactory(
+void ConfigurationController::addResourceFactory(
     const OUString& sResourceURL,
     const Reference<XResourceFactory>& rxResourceFactory)
 {
@@ -449,7 +447,7 @@ void SAL_CALL ConfigurationController::addResourceFactory(
     mpImplementation->mpResourceFactoryContainer->AddFactory(sResourceURL, rxResourceFactory);
 }
 
-void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
+void ConfigurationController::removeResourceFactoryForURL(
     const OUString& sResourceURL)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -457,7 +455,7 @@ void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
     mpImplementation->mpResourceFactoryContainer->RemoveFactoryForURL(sResourceURL);
 }
 
-void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
+void ConfigurationController::removeResourceFactoryForReference(
     const Reference<XResourceFactory>& rxResourceFactory)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -465,7 +463,7 @@ void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
     mpImplementation->mpResourceFactoryContainer->RemoveFactoryForReference(rxResourceFactory);
 }
 
-Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory (
+Reference<XResourceFactory> ConfigurationController::getResourceFactory (
     const OUString& sResourceURL)
 {
     ::osl::MutexGuard aGuard (m_aMutex);

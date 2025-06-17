@@ -21,9 +21,9 @@
 
 #include <sddllapi.h>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
-#include <com/sun/star/drawing/framework/XResourceFactoryManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
+#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <cppuhelper/basemutex.hxx>
@@ -36,10 +36,6 @@ namespace sd { class DrawController; }
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper<
-    css::drawing::framework::XResourceFactoryManager
-> ConfigurationControllerInterfaceBase;
-
 /** The configuration controller is responsible for maintaining the current
     configuration.
 
@@ -48,7 +44,7 @@ typedef ::cppu::WeakComponentImplHelper<
 */
 class SD_DLLPUBLIC ConfigurationController final
     : private cppu::BaseMutex,
-      public ConfigurationControllerInterfaceBase
+      public  cppu::WeakComponentImplHelperBase
 {
 public:
     ConfigurationController(const rtl::Reference<::sd::DrawController>& rxController);
@@ -136,21 +132,19 @@ public:
         const css::uno::Reference<
             css::drawing::framework::XConfigurationChangeRequest>& rxRequest);
 
-    // XResourceFactoryManager
-
-    virtual void SAL_CALL addResourceFactory(
+    void addResourceFactory(
         const OUString& sResourceURL,
-        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxResourceFactory) override;
+        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxResourceFactory);
 
-    virtual void SAL_CALL removeResourceFactoryForURL(
-        const OUString& sResourceURL) override;
+    void removeResourceFactoryForURL(
+        const OUString& sResourceURL);
 
-    virtual void SAL_CALL removeResourceFactoryForReference(
-        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxResourceFactory) override;
+    void removeResourceFactoryForReference(
+        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxResourceFactory);
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceFactory>
-        SAL_CALL getResourceFactory (
-        const OUString& sResourceURL) override;
+    css::uno::Reference<css::drawing::framework::XResourceFactory>
+        getResourceFactory (
+        const OUString& sResourceURL);
 
     /** Use this class instead of calling lock() and unlock() directly in
         order to be exception safe.

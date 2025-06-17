@@ -2402,7 +2402,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
 	XPane2 \
 	XResource \
 	XResourceFactory \
-	XResourceFactoryManager \
 	XResourceId \
 	XTabBar \
 	XToolBar \
