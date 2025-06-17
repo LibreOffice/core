@@ -59,11 +59,9 @@ public:
 
     virtual void SAL_CALL disposing() override;
 
-    //----- XPane -------------------------------------------------------------
+    virtual bool isVisible() override;
 
-    virtual sal_Bool SAL_CALL isVisible() override;
-
-    virtual void SAL_CALL setVisible (sal_Bool bIsVisible) override;
+    virtual void setVisible (bool bIsVisible) override;
 
     DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
 

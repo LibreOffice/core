@@ -34,6 +34,7 @@
 #include "PresenterWindowManager.hxx"
 #include <DrawController.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <framework/Pane.hxx>
 
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -43,7 +44,6 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
-#include <com/sun/star/drawing/framework/XPane2.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -679,7 +679,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
         case ResourceActivationEventType:
             if (rEvent.ResourceId->compareTo(mxMainPaneId) == 0)
             {
-                InitializeMainPane(Reference<XPane>(rEvent.ResourceObject,UNO_QUERY));
+                InitializeMainPane(dynamic_cast<sd::framework::Pane*>(rEvent.ResourceObject.get()));
             }
             else if (rEvent.ResourceId->isBoundTo(mxMainPaneId,AnchorBindingMode_DIRECT))
             {
@@ -1018,7 +1018,7 @@ void SAL_CALL PresenterController::mouseEntered (const css::awt::MouseEvent&) {}
 
 void SAL_CALL PresenterController::mouseExited (const css::awt::MouseEvent&) {}
 
-void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
+void PresenterController::InitializeMainPane (const rtl::Reference<sd::framework::Pane>& rxPane)
 {
     if ( ! rxPane.is())
         return;
@@ -1042,9 +1042,7 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
         mxMainWindow->addKeyListener(this);
         mxMainWindow->addMouseListener(this);
     }
-    Reference<XPane2> xPane2 (rxPane, UNO_QUERY);
-    if (xPane2.is())
-        xPane2->setVisible(true);
+    rxPane->setVisible(true);
 
     mpPaintManager = std::make_shared<PresenterPaintManager>(mxMainWindow, mpPaneContainer);
 

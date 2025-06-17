@@ -43,6 +43,7 @@
 
 namespace sd { class DrawController; }
 namespace sd::framework { class ConfigurationController; }
+namespace sd::framework { class Pane; }
 
 namespace sdext::presenter {
 
@@ -196,7 +197,7 @@ private:
 
     void GetSlides (const sal_Int32 nOffset);
     void UpdateViews();
-    void InitializeMainPane (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
+    void InitializeMainPane (const rtl::Reference<sd::framework::Pane>& rxPane);
     void LoadTheme (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
     void UpdatePendingSlideNumber (const sal_Int32 nPendingSlideNumber);
 

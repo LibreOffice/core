@@ -81,9 +81,7 @@ Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas()
     return mxCanvas;
 }
 
-//----- XPane2 ----------------------------------------------------------------
-
-sal_Bool SAL_CALL Pane::isVisible()
+bool Pane::isVisible()
 {
     ThrowIfDisposed();
 
@@ -94,7 +92,7 @@ sal_Bool SAL_CALL Pane::isVisible()
         return false;
 }
 
-void SAL_CALL Pane::setVisible (sal_Bool bIsVisible)
+void Pane::setVisible (bool bIsVisible)
 {
     ThrowIfDisposed();
 

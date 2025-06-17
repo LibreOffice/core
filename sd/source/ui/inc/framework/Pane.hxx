@@ -19,8 +19,8 @@
 
 #pragma once
 
+#include <sddllapi.h>
 #include <com/sun/star/drawing/framework/XPane.hpp>
-#include <com/sun/star/drawing/framework/XPane2.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
@@ -29,8 +29,7 @@
 namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
-      css::drawing::framework::XPane,
-      css::drawing::framework::XPane2
+      css::drawing::framework::XPane
     > PaneInterfaceBase;
 
 /** A pane is a wrapper for a window and possibly for a tab bar (for view
@@ -45,7 +44,7 @@ typedef ::cppu::WeakComponentImplHelper <
     foreseeable future because many parts of the Draw and Impress views rely
     on direct access on the Window class.
 */
-class Pane
+class SD_DLLPUBLIC Pane
     : protected cppu::BaseMutex,
       public PaneInterfaceBase
 {
@@ -84,11 +83,20 @@ public:
     virtual css::uno::Reference<css::rendering::XCanvas>
         SAL_CALL getCanvas() override;
 
-    //----- XPane2 -------------------------------------------------------------
+    /** Return whether all windows that are used to implement the pane are
+        visible.
+        @return `TRUE` when all windows of the pane are visible.
+    */
+    virtual bool isVisible();
 
-    virtual sal_Bool SAL_CALL isVisible() override;
-
-    virtual void SAL_CALL setVisible (sal_Bool bIsVisible) override;
+    /** Hide or show the pane.  If there is more than one window used to
+        implement the pane then it is left to the implementation if one,
+        some, or all windows are hidden or shown as long as the pane becomes
+        hidden or visible.
+        @param bIsVisible
+            When `TRUE` then show the pane.  Hide it otherwise.
+    */
+    virtual void setVisible (bool bIsVisible);
 
     //----- XResource ---------------------------------------------------------
 

@@ -118,9 +118,7 @@ void SAL_CALL FullScreenPane::disposing()
     FrameWindowPane::disposing();
 }
 
-//----- XPane -----------------------------------------------------------------
-
-sal_Bool SAL_CALL FullScreenPane::isVisible()
+bool FullScreenPane::isVisible()
 {
     ThrowIfDisposed();
 
@@ -130,7 +128,7 @@ sal_Bool SAL_CALL FullScreenPane::isVisible()
         return false;
 }
 
-void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
+void FullScreenPane::setVisible (const bool bIsVisible)
 {
     ThrowIfDisposed();
 
