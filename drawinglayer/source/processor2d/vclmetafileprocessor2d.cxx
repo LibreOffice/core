@@ -64,6 +64,7 @@
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx> // for Title/Description metadata
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/vcompat.hxx>
@@ -899,6 +900,12 @@ void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimi
                 static_cast<const primitive2d::ObjectInfoPrimitive2D&>(rCandidate));
             break;
         }
+        case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D:
+        {
+            processFillGraphicPrimitive2D(
+                static_cast<const primitive2d::FillGraphicPrimitive2D&>(rCandidate));
+            break;
+        }
         case PRIMITIVE2D_ID_TEXTHIERARCHYEMPHASISMARKPRIMITIVE2D:
         {
             // EmphasisMarks are traditionally not added to Metafiles, see
@@ -958,6 +965,98 @@ void VclMetafileProcessor2D::processObjectInfoPrimitive2D(
             }
         }
     }
+}
+
+void VclMetafileProcessor2D::processFillGraphicPrimitive2D(
+    primitive2d::FillGraphicPrimitive2D const& rFillGraphicPrimitive2D)
+{
+    // tdf#166709 check if we have to make an exception handling this
+    // FillGraphicPrimitive2D. If it
+    // - has transparency
+    // - is tiled
+    // - is a Bitmap
+    // - is not animated
+    // - is no embedded SVG
+    // we have to, see below
+    if (!basegfx::fTools::equalZero(rFillGraphicPrimitive2D.getTransparency(), 0.0))
+    {
+        // we have transparency
+        const attribute::FillGraphicAttribute& rAttribute(rFillGraphicPrimitive2D.getFillGraphic());
+
+        if (rAttribute.getTiling())
+        {
+            // we have tiling
+            const Graphic& rGraphic(rAttribute.getGraphic());
+
+            if (GraphicType::Bitmap == rGraphic.GetType() && !rGraphic.IsAnimated()
+                && !rGraphic.getVectorGraphicData())
+            {
+                // tdf#166709 it is a Bitmap, not animated & not
+                // embedded SVG.
+
+                // conditions are met. Unfortunately for metafile
+                // and for PDF export we *need* all tiles which are
+                // potentially created by the decomposition of the
+                // FillGraphicPrimitive2D to be embedded to a single
+                // UnifiedTransparencePrimitive2D that holds that
+                // transparency - as it was before adding more
+                // possibilities for direct unified transparency.
+
+                // Despite the decomposition being correct and creating
+                // now BitmapAlphaPrimitive2D with every one holding the
+                // correct alpha, the 'old' way with encapsulating to
+                // a UnifiedTransparencePrimitive2D is needed here
+                // to create a single bitmap representation that then
+                // gets used. When not doing this a potentially high
+                // number of BitmapAlphaPrimitive2D will be exported,
+                // which is not an error but needs too much ressources,
+                // prevents loading of the created PDF for some viewers
+                // and bloats the PDF file.
+
+                // NOTE: I thought if only doing this for the PDF export
+                // case would make sense, but all exports still based
+                // on metafile potentially have this problem, so better
+                // do it in general at metafile creation already.
+
+                // NOTE: This shows how urgent it would be to create a
+                // PDF export using a PrimitiveRenderer instead of
+                // Metafile - that could do the right thing and use
+                // a representation in the PDF that is capable of
+                // tiling. No chance to do that with the existing
+                // metafile stuff we have.
+
+                // NOTE: The creation of the possible MetafileAction
+                // for this is done here locally in method
+                // processUnifiedTransparencePrimitive2D. Use that
+                // directly if necessary.
+
+                // So: create a FillGraphicPrimitive2D without transparency
+                // embedded to a UnifiedTransparencePrimitive2D representing
+                // the transparency and process it directly
+                rtl::Reference<primitive2d::BasePrimitive2D> aPrimitive(
+                    new primitive2d::UnifiedTransparencePrimitive2D(
+                        primitive2d::Primitive2DContainer{
+                            rtl::Reference<primitive2d::FillGraphicPrimitive2D>(
+                                new primitive2d::FillGraphicPrimitive2D(
+                                    rFillGraphicPrimitive2D.getTransformation(),
+                                    attribute::FillGraphicAttribute(
+                                        rGraphic, rAttribute.getGraphicRange(),
+                                        rAttribute.getTiling(), rAttribute.getOffsetX(),
+                                        rAttribute.getOffsetY()))) },
+                        rFillGraphicPrimitive2D.getTransparency()));
+
+                // process UnifiedTransparencePrimitive2D primitive directly
+                processUnifiedTransparencePrimitive2D(
+                    static_cast<const primitive2d::UnifiedTransparencePrimitive2D&>(*aPrimitive));
+
+                // we are done, return
+                return;
+            }
+        }
+    }
+
+    // all other cases: process recursively with original primitive
+    process(rFillGraphicPrimitive2D);
 }
 
 void VclMetafileProcessor2D::processGraphicPrimitive2D(
