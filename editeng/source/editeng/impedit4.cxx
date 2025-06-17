@@ -716,6 +716,12 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ) ) );
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ) ) );
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType ) ) );
+
+                    // tdf#119192: Write these font attributes at paragraph scope, so they can be
+                    // reused across multiple runs.
+                    WriteItemListAsRTF(aAttribItems, rOutput, nNode, nIndex, aFontTable,
+                                       aColorList);
+                    aAttribItems.Clear();
                 }
                 // Insert hard attribs AFTER CJK attribs...
                 lcl_FindValidAttribs( aAttribItems, pNode, nIndex, nScriptTypeI18N );
