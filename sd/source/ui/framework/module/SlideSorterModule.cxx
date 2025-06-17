@@ -26,7 +26,6 @@
 #include <officecfg/Office/Impress.hxx>
 #include <DrawController.hxx>
 #include <ViewTabBar.hxx>
-#include <com/sun/star/drawing/framework/TabBarButton.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
 #include <strings.hrc>

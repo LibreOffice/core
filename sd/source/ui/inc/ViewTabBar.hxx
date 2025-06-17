@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/TabBarButton.hpp>
 #include <com/sun/star/drawing/framework/XToolBar.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <comphelper/compbase.hxx>
@@ -54,6 +53,33 @@ private:
 
     DECL_LINK(ActivatePageHdl, const OUString&, void);
     DECL_LINK(NotebookSizeAllocHdl, const Size&, void);
+};
+
+/** Descriptor of a tab bar button.  Tab bar buttons are typically used to
+    offer the user the choice between different views to be displayed in
+    one pane.
+    <p>For identification only the #ResourceId is used, so for
+    some methods of the XTabBar interface only the
+    #ResourceId member is evaluated.</p>
+*/
+struct TabBarButton
+{
+    /** This label is displayed on the UI as button text.
+        <p>The label is expected to be localized.</p>
+    */
+    OUString ButtonLabel;
+
+    /** The localized help text that may be displayed in a tool tip.
+    */
+    OUString HelpText;
+
+    /** XResourceId object of the resource that is requested to be
+        displayed when the tab bar button is activated.
+        <p>For some methods of the XTabBar interface only this
+        member is evaluated.  That is because only this member is used to
+        identify a tab bar button.</p>
+    */
+    css::uno::Reference<css::drawing::framework::XResourceId> ResourceId;
 };
 
 typedef comphelper::WeakComponentImplHelper <
@@ -118,8 +144,8 @@ public:
     */
     void
         addTabBarButtonAfter (
-            const css::drawing::framework::TabBarButton& rButton,
-            const css::drawing::framework::TabBarButton& rAnchor);
+            const TabBarButton& rButton,
+            const TabBarButton& rAnchor);
 
     /** Add a tab bar button at the right most position.
         @param aButton
@@ -127,7 +153,7 @@ public:
     */
     void
         appendTabBarButton (
-            const css::drawing::framework::TabBarButton& rButton);
+            const TabBarButton& rButton);
 
     /** Remove a tab bar button.
         @param aButton
@@ -136,7 +162,7 @@ public:
     */
     void
         removeTabBarButton (
-            const css::drawing::framework::TabBarButton& rButton);
+            const TabBarButton& rButton);
 
     /** Test whether the specified button exists in the tab bar.
         @param aButton
@@ -146,7 +172,7 @@ public:
     */
     bool
         hasTabBarButton (
-            const css::drawing::framework::TabBarButton& rButton);
+            const TabBarButton& rButton);
 
     /** Return a sequence of all the tab bar buttons.
         <p>Their order reflects the visible order in the tab bar.</p>
@@ -154,8 +180,7 @@ public:
         addTabBarButtonAfter() does not provide enough
         control as to where to insert a new button.</p>
     */
-    css::uno::Sequence<css::drawing::framework::TabBarButton>
-        getTabBarButtons();
+    const std::vector<TabBarButton>& getTabBarButtons() const;
 
     //----- XResource ---------------------------------------------------------
 
@@ -178,29 +203,27 @@ public:
     void UpdateActiveButton();
 
     void AddTabBarButton (
-        const css::drawing::framework::TabBarButton& rButton,
-        const css::drawing::framework::TabBarButton& rAnchor);
+        const TabBarButton& rButton,
+        const TabBarButton& rAnchor);
     void AddTabBarButton (
-        const css::drawing::framework::TabBarButton& rButton);
+        const TabBarButton& rButton);
     void RemoveTabBarButton (
-        const css::drawing::framework::TabBarButton& rButton);
+        const TabBarButton& rButton);
     bool HasTabBarButton (
-        const css::drawing::framework::TabBarButton& rButton);
-    css::uno::Sequence<css::drawing::framework::TabBarButton>
-        GetTabBarButtons();
+        const TabBarButton& rButton);
 
 private:
     VclPtr<TabBarControl> mpTabControl;
     rtl::Reference<::sd::DrawController> mxController;
     rtl::Reference<::sd::framework::ConfigurationController> mxConfigurationController;
-    typedef ::std::vector<css::drawing::framework::TabBarButton> TabBarButtonList;
+    typedef ::std::vector<TabBarButton> TabBarButtonList;
     TabBarButtonList maTabBarButtons;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
     ViewShellBase* mpViewShellBase;
     int mnNoteBookWidthPadding;
 
     void AddTabBarButton (
-        const css::drawing::framework::TabBarButton& rButton,
+        const TabBarButton& rButton,
         sal_Int32 nPosition);
     void UpdateTabBarButtons();
 

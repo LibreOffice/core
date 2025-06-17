@@ -236,12 +236,6 @@ bool ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
     return HasTabBarButton(rButton);
 }
 
-Sequence<TabBarButton> ViewTabBar::getTabBarButtons()
-{
-    const SolarMutexGuard aSolarGuard;
-    return GetTabBarButtons();
-}
-
 //----- XResource -------------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL ViewTabBar::getResourceId()
@@ -335,8 +329,8 @@ int ViewTabBar::GetHeight() const
 }
 
 void ViewTabBar::AddTabBarButton (
-    const css::drawing::framework::TabBarButton& rButton,
-    const css::drawing::framework::TabBarButton& rAnchor)
+    const TabBarButton& rButton,
+    const TabBarButton& rAnchor)
 {
     TabBarButtonList::size_type nIndex;
 
@@ -362,13 +356,13 @@ void ViewTabBar::AddTabBarButton (
 }
 
 void ViewTabBar::AddTabBarButton (
-    const css::drawing::framework::TabBarButton& rButton)
+    const TabBarButton& rButton)
 {
     AddTabBarButton(rButton, maTabBarButtons.size());
 }
 
 void ViewTabBar::AddTabBarButton (
-    const css::drawing::framework::TabBarButton& rButton,
+    const TabBarButton& rButton,
     sal_Int32 nPosition)
 {
     if (nPosition >= 0 &&
@@ -382,7 +376,7 @@ void ViewTabBar::AddTabBarButton (
 }
 
 void ViewTabBar::RemoveTabBarButton (
-    const css::drawing::framework::TabBarButton& rButton)
+    const TabBarButton& rButton)
 {
     for (TabBarButtonList::size_type nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
     {
@@ -397,11 +391,11 @@ void ViewTabBar::RemoveTabBarButton (
 }
 
 bool ViewTabBar::HasTabBarButton (
-    const css::drawing::framework::TabBarButton& rButton)
+    const TabBarButton& rButton)
 {
     bool bResult (false);
 
-    for (const css::drawing::framework::TabBarButton & r : maTabBarButtons)
+    for (const TabBarButton & r : maTabBarButtons)
     {
         if (IsEqual(r, rButton))
         {
@@ -413,10 +407,9 @@ bool ViewTabBar::HasTabBarButton (
     return bResult;
 }
 
-css::uno::Sequence<css::drawing::framework::TabBarButton>
-    ViewTabBar::GetTabBarButtons()
+const std::vector<TabBarButton>& ViewTabBar::getTabBarButtons() const
 {
-    return comphelper::containerToSequence(maTabBarButtons);
+    return maTabBarButtons;
 }
 
 void ViewTabBar::UpdateActiveButton()
