@@ -34,6 +34,7 @@
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <utility>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 #include <comphelper/threadpool.hxx>
 #include <comphelper/lok.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -422,7 +423,10 @@ namespace drawinglayer::primitive2d
                 nOversampleValue ? nRasterHeight * nOversampleValue : nRasterHeight);
 
             // check for parallel execution possibilities
-            static bool bMultithreadAllowed = true; // loplugin:constvars:ignore
+            // Skia does not like being touched from multiple threads
+            // at the same time, and methods like DefaultProcessor3D::impRenderBitmapTexturePrimitive3D
+            // are going to do that.
+            static bool bMultithreadAllowed = !SkiaHelper::isVCLSkiaEnabled(); // loplugin:constvars:ignore
             sal_Int32 nThreadCount(0);
             comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
 
