@@ -21,9 +21,9 @@
 
 #include <sddllapi.h>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationControllerRequestQueue.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactoryManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <cppuhelper/basemutex.hxx>
@@ -37,7 +37,6 @@ namespace sd { class DrawController; }
 namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper<
-    css::drawing::framework::XConfigurationControllerRequestQueue,
     css::drawing::framework::XResourceFactoryManager
 > ConfigurationControllerInterfaceBase;
 
@@ -113,13 +112,29 @@ public:
     void notifyEvent (
         const css::drawing::framework::ConfigurationChangeEvent& rEvent);
 
-    // XConfigurationRequestQueue
+    /** Return whether there are pending requests for configuration changes.
+        @return
+            Returns `TRUE` when there is at least one request object in the
+            queue that has not yet been processed.  It returns `FALSE` when
+            the queue is empty.
+    */
+    bool hasPendingRequests();
 
-    virtual sal_Bool SAL_CALL hasPendingRequests() override;
-
-    virtual void SAL_CALL postChangeRequest (
+    /** Add a request for a configuration change to the request queue.
+        <p>This method should not be called from outside the drawing
+        framework.  Other sub controllers of the drawing framework are typical
+        callers.  They can add change requests that can not be made with the
+        requestResourceActivation() and
+        requestResourceDeactivation() methods.</p>
+        @param xRequest
+            The configuration change represented by this request object must only
+            be committed to the configuration when the
+            com::sun::star::drawing::framework::XConfigurationChangeRequest::execute()
+            method of the xRequest object is called.
+    */
+    void postChangeRequest (
         const css::uno::Reference<
-            css::drawing::framework::XConfigurationChangeRequest>& rxRequest) override;
+            css::drawing::framework::XConfigurationChangeRequest>& rxRequest);
 
     // XResourceFactoryManager
 

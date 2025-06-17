@@ -342,7 +342,7 @@ void ConfigurationController::update()
     }
 }
 
-sal_Bool SAL_CALL ConfigurationController::hasPendingRequests()
+bool ConfigurationController::hasPendingRequests()
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -350,7 +350,7 @@ sal_Bool SAL_CALL ConfigurationController::hasPendingRequests()
     return ! mpImplementation->mpQueueProcessor->IsEmpty();
 }
 
-void SAL_CALL ConfigurationController::postChangeRequest (
+void ConfigurationController::postChangeRequest (
     const Reference<XConfigurationChangeRequest>& rxRequest)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
