@@ -22,8 +22,8 @@
 #include <sddllapi.h>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationControllerRequestQueue.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactoryManager.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <cppuhelper/basemutex.hxx>
@@ -38,7 +38,6 @@ namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper<
     css::drawing::framework::XConfigurationControllerRequestQueue,
-    css::drawing::framework::XConfigurationControllerBroadcaster,
     css::drawing::framework::XResourceFactoryManager
 > ConfigurationControllerInterfaceBase;
 
@@ -101,20 +100,18 @@ public:
         const css::uno::Reference<css::drawing::framework::XConfiguration>&
         rxConfiguration);
 
-    // XConfigurationControllerBroadcaster
-
-    virtual void SAL_CALL addConfigurationChangeListener (
+    void addConfigurationChangeListener (
         const css::uno::Reference<
             css::drawing::framework::XConfigurationChangeListener>& rxListener,
         const OUString& rsEventType,
-        const css::uno::Any& rUserData) override;
+        const css::uno::Any& rUserData);
 
-    virtual void SAL_CALL removeConfigurationChangeListener (
+    void removeConfigurationChangeListener (
         const css::uno::Reference<
-            css::drawing::framework::XConfigurationChangeListener>& rxListener) override;
+            css::drawing::framework::XConfigurationChangeListener>& rxListener);
 
-    virtual void SAL_CALL notifyEvent (
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
+    void notifyEvent (
+        const css::drawing::framework::ConfigurationChangeEvent& rEvent);
 
     // XConfigurationRequestQueue
 

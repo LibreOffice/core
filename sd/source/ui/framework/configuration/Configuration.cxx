@@ -20,9 +20,9 @@
 #include <framework/Configuration.hxx>
 
 #include <framework/FrameworkHelper.hxx>
+#include <framework/ConfigurationController.hxx>
 
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -60,7 +60,7 @@ public:
 //===== Configuration =========================================================
 
 Configuration::Configuration (
-    const Reference<XConfigurationControllerBroadcaster>& rxBroadcaster,
+    const rtl::Reference<ConfigurationController>& rxBroadcaster,
     bool bBroadcastRequestEvents)
     : mpResourceContainer(new ResourceContainer()),
       mxBroadcaster(rxBroadcaster),
@@ -69,7 +69,7 @@ Configuration::Configuration (
 }
 
 Configuration::Configuration (
-    const Reference<XConfigurationControllerBroadcaster>& rxBroadcaster,
+    const rtl::Reference<ConfigurationController>& rxBroadcaster,
     bool bBroadcastRequestEvents,
     const ResourceContainer& rResourceContainer)
     : mpResourceContainer(new ResourceContainer(rResourceContainer)),

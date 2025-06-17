@@ -23,12 +23,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/compbase.hxx>
-
+#include <rtl/ref.hxx>
 #include <memory>
 
-namespace com::sun::star::drawing::framework { class XConfigurationControllerBroadcaster; }
-
 namespace sd::framework {
+class ConfigurationController;
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XConfiguration,
@@ -70,7 +69,7 @@ public:
             then events with type "ResourceActivationEvent" and
             "ResourceDeactivationEvent" are broadcasted.
     */
-    Configuration (const css::uno::Reference<css::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster,
+    Configuration (const rtl::Reference<ConfigurationController>& rxBroadcaster,
         bool bBroadcastRequestEvents);
     virtual ~Configuration() override;
 
@@ -123,8 +122,7 @@ private:
     /** The broadcaster used for notifying listeners of requests for
         configuration changes.
     */
-    css::uno::Reference<css::drawing::framework::XConfigurationControllerBroadcaster>
-        mxBroadcaster;
+    rtl::Reference<ConfigurationController> mxBroadcaster;
 
     bool mbBroadcastRequestEvents;
 
@@ -134,7 +132,7 @@ private:
             The new Configuration is created with a copy of the elements in
             this container.
     */
-    Configuration (const css::uno::Reference<css::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster,
+    Configuration (const rtl::Reference<ConfigurationController>& rxBroadcaster,
         bool bBroadcastRequestEvents,
         const ResourceContainer& rResourceContainer);
 

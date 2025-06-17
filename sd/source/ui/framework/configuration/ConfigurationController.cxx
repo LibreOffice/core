@@ -165,9 +165,7 @@ void ConfigurationController::RequestSynchronousUpdate()
     mpImplementation->mpQueueProcessor->ProcessUntilEmpty();
 }
 
-//----- XConfigurationControllerBroadcaster -----------------------------------
-
-void SAL_CALL ConfigurationController::addConfigurationChangeListener (
+void ConfigurationController::addConfigurationChangeListener (
     const Reference<XConfigurationChangeListener>& rxListener,
     const OUString& rsEventType,
     const Any& rUserData)
@@ -179,7 +177,7 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
     mpImplementation->mpBroadcaster->AddListener(rxListener, rsEventType, rUserData);
 }
 
-void SAL_CALL ConfigurationController::removeConfigurationChangeListener (
+void ConfigurationController::removeConfigurationChangeListener (
     const Reference<XConfigurationChangeListener>& rxListener)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -188,7 +186,7 @@ void SAL_CALL ConfigurationController::removeConfigurationChangeListener (
     mpImplementation->mpBroadcaster->RemoveListener(rxListener);
 }
 
-void SAL_CALL ConfigurationController::notifyEvent (
+void ConfigurationController::notifyEvent (
     const ConfigurationChangeEvent& rEvent)
 {
     ThrowIfDisposed();
