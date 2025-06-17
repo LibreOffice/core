@@ -24,6 +24,7 @@
 #include "PresenterPaneContainer.hxx"
 #include <PresenterHelper.hxx>
 #include <DrawController.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/Pointer.hpp>
@@ -31,7 +32,6 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -108,7 +108,7 @@ void PresenterSlideShowView::LateInit()
 
     // Use view id and controller to retrieve window and canvas from
     // configuration controller.
-    Reference<XConfigurationController> xCC (mxController->getConfigurationController());
+    rtl::Reference<sd::framework::ConfigurationController> xCC (mxController->getConfigurationController());
 
     if (xCC.is())
     {

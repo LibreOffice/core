@@ -20,6 +20,7 @@
 #include "ResourceFactoryManager.hxx"
 #include <DrawController.hxx>
 #include <tools/wldcrd.hxx>
+#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>

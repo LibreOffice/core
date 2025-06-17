@@ -18,6 +18,7 @@
  */
 
 #include <framework/factories/BasicToolBarFactory.hxx>
+#include <framework/ConfigurationController.hxx>
 
 #include <ViewTabBar.hxx>
 #include <framework/FrameworkHelper.hxx>
@@ -25,7 +26,6 @@
 #include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
 using namespace ::com::sun::star;
@@ -54,11 +54,8 @@ BasicToolBarFactory::BasicToolBarFactory(const rtl::Reference<::sd::DrawControll
             {
                 mxConfigurationController->addResourceFactory(
                     FrameworkHelper::msViewTabBarURL, this);
+                mxConfigurationController->addEventListener(static_cast<lang::XEventListener*>(this));
             }
-
-            Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
-            if (xComponent.is())
-                xComponent->addEventListener(static_cast<lang::XEventListener*>(this));
         }
         else
         {
@@ -86,11 +83,9 @@ void BasicToolBarFactory::disposing(std::unique_lock<std::mutex>&)
 
 void BasicToolBarFactory::Shutdown()
 {
-    Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->removeEventListener(static_cast<lang::XEventListener*>(this));
     if (mxConfigurationController.is())
     {
+        mxConfigurationController->removeEventListener(static_cast<lang::XEventListener*>(this));
         mxConfigurationController->removeResourceFactoryForReference(this);
         mxConfigurationController = nullptr;
     }
@@ -101,7 +96,7 @@ void BasicToolBarFactory::Shutdown()
 void SAL_CALL BasicToolBarFactory::disposing (
     const lang::EventObject& rEventObject)
 {
-    if (rEventObject.Source == mxConfigurationController)
+    if (rEventObject.Source == cppu::getXWeak(mxConfigurationController.get()))
         mxConfigurationController = nullptr;
 }
 

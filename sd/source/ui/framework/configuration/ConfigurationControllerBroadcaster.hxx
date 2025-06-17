@@ -20,17 +20,17 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-
+#include <rtl/ref.hxx>
 #include <unordered_map>
 #include <vector>
 
 namespace com::sun::star::drawing::framework { class XConfigurationChangeListener; }
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XResource; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
 namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
 
 namespace sd::framework {
+class ConfigurationController;
 
 /** This class manages the set of XConfigurationChangeListeners and
     calls them when the ConfigurationController wants to broadcast an
@@ -47,8 +47,7 @@ public:
     /** The given controller is used as origin of thrown exceptions.
     */
     explicit ConfigurationControllerBroadcaster (
-        const css::uno::Reference<
-            css::drawing::framework::XConfigurationController>& rxController);
+        const rtl::Reference<ConfigurationController>& rxController);
 
     /** Add a listener for one type of event.  When one listener is
         interested in more than one event type this method has to be called
@@ -110,7 +109,7 @@ public:
     void DisposeAndClear();
 
 private:
-    css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
+    rtl::Reference<ConfigurationController> mxConfigurationController;
     class ListenerDescriptor
     {
     public:

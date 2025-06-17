@@ -19,6 +19,7 @@
 
 #include <framework/factories/BasicViewFactory.hxx>
 
+#include <framework/ConfigurationController.hxx>
 #include <framework/ViewShellWrapper.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

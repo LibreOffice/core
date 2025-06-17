@@ -22,7 +22,6 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 
@@ -44,7 +43,7 @@ namespace sd::colortoolpanel
     public:
         SingleColorPanel(
             const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
-            const css::uno::Reference< css::drawing::framework::XConfigurationController >& i_rConfigController,
+            const rtl::Reference< ConfigurationController >& i_rConfigController,
             const css::uno::Reference< css::drawing::framework::XResourceId >& i_rResourceId
         );
 

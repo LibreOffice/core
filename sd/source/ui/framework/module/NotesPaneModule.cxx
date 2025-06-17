@@ -186,7 +186,8 @@ void SAL_CALL NotesPaneModule::notifyConfigurationChange(const ConfigurationChan
 
 void SAL_CALL NotesPaneModule::disposing(const lang::EventObject& rEvent)
 {
-    if (mxConfigurationController.is() && rEvent.Source == mxConfigurationController)
+    if (mxConfigurationController.is()
+        && rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
     {
         SaveResourceState();
         // Without the configuration controller this class can do nothing.

@@ -26,11 +26,11 @@
 #include "PresenterScrollBar.hxx"
 #include "PresenterTextView.hxx"
 #include <DrawController.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
@@ -64,7 +64,7 @@ PresenterNotesView::PresenterNotesView (
 {
     try
     {
-        Reference<XConfigurationController> xCC (rxController->getConfigurationController(), UNO_SET_THROW);
+        rtl::Reference<sd::framework::ConfigurationController> xCC (rxController->getConfigurationController());
         Reference<XPane> xPane (xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
 
         mxParentWindow = xPane->getWindow();

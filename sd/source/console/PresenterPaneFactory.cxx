@@ -63,7 +63,7 @@ void PresenterPaneFactory::Register (const rtl::Reference<::sd::DrawController>&
     try
     {
         // Get the configuration controller.
-        xCC = rxController->getConfigurationControllerImpl();
+        xCC = rxController->getConfigurationController();
         mxConfigurationControllerWeak = xCC.get();
         if ( ! xCC.is())
         {

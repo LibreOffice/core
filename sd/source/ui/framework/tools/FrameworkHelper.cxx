@@ -55,7 +55,7 @@ typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
     > CallbackCallerInterfaceBase;
 
-/** A CallbackCaller registers as listener at an XConfigurationController
+/** A CallbackCaller registers as listener at the ConfigurationController
     object and waits for the notification of one type of event.  When that
     event is received, or when the CallbackCaller detects at its
     construction that the event will not be sent in the near future, the
@@ -74,7 +74,7 @@ public:
         the constructor.)
         @param rBase
             This ViewShellBase object is used to determine the
-            XConfigurationController at which to register.
+            ConfigurationController at which to register.
         @param rsEventType
             The event type which the callback is waiting for.
         @param pCallback
@@ -97,7 +97,7 @@ public:
 
 private:
     OUString msEventType;
-    Reference<XConfigurationController> mxConfigurationController;
+    rtl::Reference<::sd::framework::ConfigurationController> mxConfigurationController;
     ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter maFilter;
     ::sd::framework::FrameworkHelper::Callback maCallback;
 };
@@ -210,7 +210,7 @@ namespace
         }
         return pViewShell;
     }
-    Reference< XResource > lcl_getFirstViewInPane( const Reference< XConfigurationController >& i_rConfigController,
+    Reference< XResource > lcl_getFirstViewInPane( const rtl::Reference< ConfigurationController >& i_rConfigController,
         const Reference< XResourceId >& i_rPaneId )
     {
         try
@@ -637,10 +637,8 @@ private:
 
 void FrameworkHelper::RequestSynchronousUpdate()
 {
-    rtl::Reference<ConfigurationController> pCC (
-        dynamic_cast<ConfigurationController*>(mxConfigurationController.get()));
-    if (pCC.is())
-        pCC->RequestSynchronousUpdate();
+    if (mxConfigurationController)
+        mxConfigurationController->RequestSynchronousUpdate();
 }
 
 void FrameworkHelper::WaitForEvent (const OUString& rsEventType) const
@@ -680,7 +678,7 @@ void FrameworkHelper::RunOnEvent(
 
 void FrameworkHelper::disposing (const lang::EventObject& rEventObject)
 {
-    if (rEventObject.Source == mxConfigurationController)
+    if (rEventObject.Source == cppu::getXWeak(mxConfigurationController.get()))
         mxConfigurationController = nullptr;
 }
 
@@ -753,16 +751,14 @@ FrameworkHelper::DisposeListener::DisposeListener (
     ::std::shared_ptr<FrameworkHelper> pHelper)
     : mpHelper(std::move(pHelper))
 {
-    Reference<XComponent> xComponent (mpHelper->mxConfigurationController, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->addEventListener(this);
+    if (mpHelper->mxConfigurationController.is())
+        mpHelper->mxConfigurationController->addEventListener(this);
 }
 
 void FrameworkHelper::DisposeListener::disposing(std::unique_lock<std::mutex>&)
 {
-    Reference<XComponent> xComponent (mpHelper->mxConfigurationController, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->removeEventListener(this);
+    if (mpHelper->mxConfigurationController.is())
+        mpHelper->mxConfigurationController->removeEventListener(this);
 
     mpHelper.reset();
 }
@@ -831,7 +827,7 @@ void CallbackCaller::disposing(std::unique_lock<std::mutex>&)
     {
         if (mxConfigurationController.is())
         {
-            Reference<XConfigurationController> xCC (mxConfigurationController);
+            rtl::Reference<sd::framework::ConfigurationController> xCC (mxConfigurationController);
             mxConfigurationController = nullptr;
             xCC->removeConfigurationChangeListener(this);
         }
@@ -844,7 +840,7 @@ void CallbackCaller::disposing(std::unique_lock<std::mutex>&)
 
 void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
 {
-    if (rEvent.Source == mxConfigurationController)
+    if (rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
     {
         mxConfigurationController = nullptr;
         maCallback(false);
@@ -862,7 +858,7 @@ void SAL_CALL CallbackCaller::notifyConfigurationChange (
     {
         // Reset the reference to the configuration controller so that
         // dispose() will not try to remove the listener a second time.
-        Reference<XConfigurationController> xCC (mxConfigurationController);
+        rtl::Reference<sd::framework::ConfigurationController> xCC (mxConfigurationController);
         mxConfigurationController = nullptr;
 
         // Removing this object from the controller may very likely lead

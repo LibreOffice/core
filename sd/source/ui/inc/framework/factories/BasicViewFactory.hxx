@@ -28,7 +28,6 @@
 #include <vcl/vclptr.hxx>
 #include <memory>
 
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XPane; }
 
 namespace sd {
@@ -41,6 +40,7 @@ class SfxViewFrame;
 namespace vcl { class Window; }
 
 namespace sd::framework {
+class ConfigurationController;
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory
@@ -77,8 +77,7 @@ public:
         const css::uno::Reference<css::drawing::framework::XResource>& xView) override;
 
 private:
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
-        mxConfigurationController;
+    rtl::Reference<ConfigurationController> mxConfigurationController;
     class ViewDescriptor;
     using ViewShellContainer = std::vector<std::shared_ptr<ViewDescriptor>>;
     ViewShellContainer maViewShellContainer;

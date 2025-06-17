@@ -19,6 +19,7 @@
 
 #include "ViewTabBarModule.hxx"
 
+#include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <DrawController.hxx>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
@@ -124,7 +125,7 @@ void SAL_CALL ViewTabBarModule::disposing (
     const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is()
-        && rEvent.Source == mxConfigurationController)
+        && rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
     {
         // Without the configuration controller this class can do nothing.
         mxConfigurationController = nullptr;

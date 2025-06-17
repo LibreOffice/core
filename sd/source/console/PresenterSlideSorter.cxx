@@ -30,7 +30,7 @@
 #include "PresenterUIPainter.hxx"
 #include "PresenterWindowManager.hxx"
 #include <DrawController.hxx>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <framework/ConfigurationController.hxx>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
@@ -255,8 +255,7 @@ PresenterSlideSorter::PresenterSlideSorter (
     try
     {
         // Get pane and window.
-        Reference<XConfigurationController> xCC (
-            rxController->getConfigurationController(), UNO_SET_THROW);
+        rtl::Reference<sd::framework::ConfigurationController> xCC (rxController->getConfigurationController());
         Reference<lang::XMultiComponentFactory> xFactory (
             mxComponentContext->getServiceManager(), UNO_SET_THROW);
 

@@ -19,6 +19,7 @@
 
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ViewShellWrapper.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <memory>
 #include <ViewShell.hxx>
 #include <ViewShellImplementation.hxx>
@@ -93,7 +94,6 @@
 #include <sdmod.hxx>
 #include <AccessibleDocumentViewBase.hxx>
 
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -411,7 +411,7 @@ void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
         if (!pDrawController)
             return {};
 
-        Reference<::css::drawing::framework::XConfigurationController> xConfigurationController
+        rtl::Reference<sd::framework::ConfigurationController> xConfigurationController
             = pDrawController->getConfigurationController();
         if (!xConfigurationController.is())
             return {};

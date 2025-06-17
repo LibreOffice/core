@@ -23,8 +23,10 @@
 #include "ConfigurationControllerBroadcaster.hxx"
 #include "ConfigurationControllerResourceManager.hxx"
 #include <framework/Configuration.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <DrawController.hxx>
+#include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -197,7 +199,7 @@ void ConfigurationUpdater::CleanRequestedConfiguration()
     CheckPureAnchors(mxRequestedConfiguration, aResourcesToDeactivate);
     if (!aResourcesToDeactivate.empty())
     {
-        Reference<XConfigurationController> xCC (
+        rtl::Reference<ConfigurationController> xCC (
             mxControllerManager->getConfigurationController());
         for (const auto& rxId : aResourcesToDeactivate)
             if (rxId.is())

@@ -54,7 +54,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <framework/FrameworkHelper.hxx>
 
@@ -315,7 +314,7 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
     try
     {
         rtl::Reference<::sd::DrawController> xControllerManager (GetDrawController());
-        Reference<XConfigurationController> xConfigurationController;
+        rtl::Reference<::sd::framework::ConfigurationController> xConfigurationController;
         if (xControllerManager)
             xConfigurationController = xControllerManager->getConfigurationController();
         if (xConfigurationController.is())
@@ -338,16 +337,10 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
 
             // Process configuration events synchronously until the center view
             // has been created.
-            sd::framework::ConfigurationController* pConfigurationController
-                = dynamic_cast<sd::framework::ConfigurationController*>(xConfigurationController.get());
-            if (pConfigurationController != nullptr)
+            while ( !xConfigurationController->getResource(xCenterViewId).is()
+                    && xConfigurationController->hasPendingRequests())
             {
-                while (
-                    ! pConfigurationController->getResource(xCenterViewId).is()
-                        && pConfigurationController->hasPendingRequests())
-                {
-                    pConfigurationController->ProcessEvent();
-                }
+                xConfigurationController->ProcessEvent();
             }
         }
     }
@@ -618,7 +611,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
             DrawController* pDrawController(GetDrawController());
             if (pDrawController)
             {
-                Reference<XConfigurationController> xConfigurationController (
+                rtl::Reference<framework::ConfigurationController> xConfigurationController (
                     pDrawController->getConfigurationController());
                 if (xConfigurationController.is())
                     xConfigurationController->update();
@@ -775,7 +768,7 @@ void ViewShellBase::Activate (bool bIsMDIActivate)
     DrawController* pDrawController(GetDrawController());
     if (pDrawController)
     {
-        Reference<XConfigurationController> xConfigurationController (
+        rtl::Reference<framework::ConfigurationController> xConfigurationController (
             pDrawController->getConfigurationController());
         if (xConfigurationController.is())
             xConfigurationController->update();
@@ -1333,7 +1326,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
                 pArguments->Get(nSlotId)).GetValue();
         else
         {
-            Reference<XConfigurationController> xConfigurationController (
+            rtl::Reference<sd::framework::ConfigurationController> xConfigurationController (
                 pDrawController->getConfigurationController());
             if ( ! xConfigurationController.is())
                 throw RuntimeException();
@@ -1347,7 +1340,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
 
         // Set the desired visibility state at the current configuration
         // and update it accordingly.
-        Reference<XConfigurationController> xConfigurationController (
+        rtl::Reference<sd::framework::ConfigurationController> xConfigurationController (
             pDrawController->getConfigurationController());
         if ( ! xConfigurationController.is())
             throw RuntimeException();
@@ -1378,7 +1371,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
         DrawController* pDrawController(mrBase.GetDrawController());
         if (!pDrawController)
             return;
-        Reference<XConfigurationController> xConfigurationController (
+        rtl::Reference<sd::framework::ConfigurationController> xConfigurationController (
             pDrawController->getConfigurationController());
         if ( ! xConfigurationController.is())
             throw RuntimeException();

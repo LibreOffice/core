@@ -28,10 +28,10 @@
 #include "PresenterTimer.hxx"
 #include "PresenterWindowManager.hxx"
 #include <DrawController.hxx>
+#include <framework/ConfigurationController.hxx>
 
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -932,7 +932,7 @@ PresenterToolBarView::PresenterToolBarView (
 {
     try
     {
-        Reference<XConfigurationController> xCC(rxController->getConfigurationController(),UNO_SET_THROW);
+        rtl::Reference<sd::framework::ConfigurationController> xCC(rxController->getConfigurationController());
         mxPane.set(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
 
         mxWindow = mxPane->getWindow();

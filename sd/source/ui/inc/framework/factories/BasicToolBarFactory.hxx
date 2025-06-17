@@ -24,10 +24,11 @@
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace sd { class DrawController; }
 
-namespace sd::framework {
+namespace sd::framework
+{
+class ConfigurationController;
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
@@ -64,7 +65,7 @@ public:
         const css::lang::EventObject& rEventObject) override;
 
 private:
-    css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
+    rtl::Reference<ConfigurationController> mxConfigurationController;
     rtl::Reference<::sd::DrawController> mxController;
 
     void Shutdown();

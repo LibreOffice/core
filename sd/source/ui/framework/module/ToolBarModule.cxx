@@ -24,6 +24,7 @@
 #include <DrawController.hxx>
 #include <EventMultiplexer.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <vcl/EnumContext.hxx>
 
@@ -244,7 +245,7 @@ void ToolBarModule::UpdateToolbars(const ViewShell* pViewShell)
 void SAL_CALL ToolBarModule::disposing (const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is()
-        && rEvent.Source == mxConfigurationController)
+        && rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
     {
         // Without the configuration controller this class can do nothing.
         mxConfigurationController = nullptr;

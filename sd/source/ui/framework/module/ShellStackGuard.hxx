@@ -28,11 +28,6 @@
 #include <comphelper/compbase.hxx>
 #include <memory>
 
-namespace com::sun::star::drawing::framework
-{
-class XConfigurationController;
-}
-
 namespace sd
 {
 class DrawController;
@@ -41,6 +36,8 @@ class ViewShellBase;
 
 namespace sd::framework
 {
+class ConfigurationController;
+
 typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XConfigurationChangeListener>
     ShellStackGuardInterfaceBase;
 
@@ -72,8 +69,7 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
 
 private:
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
-        mxConfigurationController;
+    rtl::Reference<ConfigurationController> mxConfigurationController;
     ViewShellBase* mpBase;
     std::unique_ptr<ConfigurationController::Lock> mpUpdateLock;
     Idle maPrinterPollingIdle;

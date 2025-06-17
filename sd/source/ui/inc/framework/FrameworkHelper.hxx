@@ -28,7 +28,6 @@
 #include <memory>
 #include <mutex>
 
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
 namespace com::sun::star::drawing::framework { class XView; }
 namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
@@ -39,6 +38,7 @@ class ViewShellBase;
 
 
 namespace sd::framework {
+class ConfigurationController;
 
 /** The FrameworkHelper is a convenience class that simplifies the
     access to the drawing framework.
@@ -283,7 +283,7 @@ public:
                 const css::uno::Reference<
                     css::drawing::framework::XResourceId>& rxAnchor);
 
-    const css::uno::Reference<css::drawing::framework::XConfigurationController>&
+    const rtl::Reference<ConfigurationController>&
         GetConfigurationController() const { return mxConfigurationController;}
 
 private:
@@ -299,8 +299,7 @@ private:
     static std::mutex maInstanceMapMutex;
 
     ViewShellBase& mrBase;
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
-        mxConfigurationController;
+    rtl::Reference<ConfigurationController> mxConfigurationController;
 
     class DisposeListener;
     friend class DisposeListener;

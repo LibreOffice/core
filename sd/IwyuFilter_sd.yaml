@@ -222,7 +222,6 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     sd/source/ui/inc/framework/ConfigurationController.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/framework/XConfigurationController.hpp
     - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/inc/framework/DrawModule.hxx:
     # Needed for css shortcut

@@ -23,7 +23,6 @@
 #include "PresenterController.hxx"
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -114,8 +113,7 @@ public:
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
-        mxConfigurationController;
+    rtl::Reference<sd::framework::ConfigurationController> mxConfigurationController;
     unotools::WeakReference<::sd::DrawController> mxControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
     typedef ::std::pair<css::uno::Reference<css::drawing::framework::XView>,

@@ -19,10 +19,10 @@
 
 #include "ConfigurationControllerBroadcaster.hxx"
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XResource.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <framework/ConfigurationController.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
@@ -32,7 +32,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sd::framework {
 
 ConfigurationControllerBroadcaster::ConfigurationControllerBroadcaster (
-    const Reference<XConfigurationController>& rxController)
+    const rtl::Reference<ConfigurationController>& rxController)
     : mxConfigurationController(rxController)
 {
 }
@@ -44,7 +44,7 @@ void ConfigurationControllerBroadcaster::AddListener(
 {
     if ( ! rxListener.is())
         throw lang::IllegalArgumentException(u"invalid listener"_ustr,
-            mxConfigurationController,
+            cppu::getXWeak(mxConfigurationController.get()),
             0);
 
     maListenerMap.try_emplace(rsEventType);
@@ -60,7 +60,7 @@ void ConfigurationControllerBroadcaster::RemoveListener(
 {
     if ( ! rxListener.is())
         throw lang::IllegalArgumentException(u"invalid listener"_ustr,
-            mxConfigurationController,
+            cppu::getXWeak(mxConfigurationController.get()),
             0);
 
     ListenerList::iterator iList;
@@ -146,7 +146,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
 void ConfigurationControllerBroadcaster::DisposeAndClear()
 {
     lang::EventObject aEvent;
-    aEvent.Source = mxConfigurationController;
+    aEvent.Source = cppu::getXWeak(mxConfigurationController.get());
     while (!maListenerMap.empty())
     {
         ListenerMap::iterator iMap (maListenerMap.begin());

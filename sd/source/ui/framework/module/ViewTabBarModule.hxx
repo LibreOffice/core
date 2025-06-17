@@ -23,11 +23,12 @@
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XTabBar; }
 namespace sd { class DrawController; }
 
-namespace sd::framework {
+namespace sd::framework
+{
+class ConfigurationController;
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
@@ -67,8 +68,7 @@ public:
         const css::lang::EventObject& rEvent) override;
 
 private:
-    css::uno::Reference<
-        css::drawing::framework::XConfigurationController> mxConfigurationController;
+    rtl::Reference<ConfigurationController> mxConfigurationController;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
 
     /** This is the place where the view tab bar is filled.  Only missing

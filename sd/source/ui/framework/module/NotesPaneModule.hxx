@@ -16,7 +16,6 @@
 
 namespace com::sun::star::drawing::framework
 {
-class XConfigurationController;
 class XView;
 }
 namespace sd
@@ -31,6 +30,8 @@ class EventMultiplexerEvent;
 
 namespace sd::framework
 {
+class ConfigurationController;
+
 /** This module is responsible for handling visibility of NotesPane across modes
 */
 class NotesPaneModule : public comphelper::WeakComponentImplHelper<
@@ -61,8 +62,7 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
 
 private:
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
-        mxConfigurationController;
+    rtl::Reference<ConfigurationController> mxConfigurationController;
 
     css::uno::Reference<css::drawing::framework::XResourceId> mxBottomImpressPaneId;
     css::uno::Reference<css::drawing::framework::XResourceId> mxMainViewAnchorId;

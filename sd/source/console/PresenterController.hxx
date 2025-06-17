@@ -33,7 +33,6 @@
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -43,6 +42,7 @@
 #include <memory>
 
 namespace sd { class DrawController; }
+namespace sd::framework { class ConfigurationController; }
 
 namespace sdext::presenter {
 
@@ -176,8 +176,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
     rtl::Reference<::sd::DrawController> mxController;
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
-        mxConfigurationController;
+    rtl::Reference<::sd::framework::ConfigurationController> mxConfigurationController;
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
     css::uno::Reference<css::drawing::framework::XResourceId> mxMainPaneId;
     rtl::Reference<PresenterPaneContainer> mpPaneContainer;

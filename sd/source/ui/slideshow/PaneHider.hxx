@@ -20,14 +20,15 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::drawing::framework
 {
 class XConfiguration;
 }
-namespace com::sun::star::drawing::framework
+namespace sd::framework
 {
-class XConfigurationController;
+class ConfigurationController;
 }
 
 namespace sd
@@ -56,8 +57,7 @@ private:
         has been modified and have to be restored.
     */
 
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
-        mxConfigurationController;
+    rtl::Reference<sd::framework::ConfigurationController> mxConfigurationController;
     css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration;
 };
 

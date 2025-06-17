@@ -550,16 +550,8 @@ void DrawController::ReleaseViewShellBase()
     mpBase = nullptr;
 }
 
-Reference<XConfigurationController>
+const rtl::Reference<framework::ConfigurationController> &
     DrawController::getConfigurationController()
-{
-    ThrowIfDisposed();
-
-    return mxConfigurationController;
-}
-
-const rtl::Reference<sd::framework::ConfigurationController> &
-    DrawController::getConfigurationControllerImpl()
 {
     ThrowIfDisposed();
 

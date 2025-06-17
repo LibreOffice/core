@@ -23,11 +23,6 @@
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::drawing::framework
-{
-class XConfigurationController;
-}
-
 namespace sd
 {
 class DrawController;
@@ -36,6 +31,8 @@ class ViewShellBase;
 
 namespace sd::framework
 {
+class ConfigurationController;
+
 typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XConfigurationChangeListener>
     CenterViewFocusModuleInterfaceBase;
 
@@ -65,8 +62,7 @@ private:
     class ViewShellContainer;
 
     bool mbValid;
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
-        mxConfigurationController;
+    rtl::Reference<ConfigurationController> mxConfigurationController;
     ViewShellBase* mpBase;
     /** This flag indicates whether in the last configuration change cycle a
         new view has been created and thus the center view has to be moved

@@ -87,7 +87,7 @@ BasicPaneFactory::BasicPaneFactory(
         // Tunnel through the controller to obtain access to the ViewShellBase.
         mpViewShellBase = rxController->GetViewShellBase();
 
-        rtl::Reference<sd::framework::ConfigurationController> xCC (rxController->getConfigurationControllerImpl());
+        rtl::Reference<sd::framework::ConfigurationController> xCC (rxController->getConfigurationController());
         mxConfigurationControllerWeak = xCC.get();
 
         // Add pane factories for the two left panes (one for Impress and one for

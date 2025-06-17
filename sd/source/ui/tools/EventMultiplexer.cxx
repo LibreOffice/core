@@ -216,7 +216,7 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     DrawController& rDrawController = *mrBase.GetDrawController();
 
     rtl::Reference<sd::framework::ConfigurationController> xConfigurationController (
-        rDrawController.getConfigurationControllerImpl());
+        rDrawController.getConfigurationController());
     mxConfigurationControllerWeak = xConfigurationController.get();
     if (!xConfigurationController.is())
         return;

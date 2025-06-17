@@ -25,11 +25,12 @@
 #include <memory>
 #include <set>
 
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XTabBar; }
 namespace sd { class DrawController; }
 
-namespace sd::framework {
+namespace sd::framework
+{
+class ConfigurationController;
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
@@ -71,8 +72,7 @@ public:
         const css::lang::EventObject& rEvent) override;
 
 private:
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
-        mxConfigurationController;
+    rtl::Reference<ConfigurationController> mxConfigurationController;
     ::std::set<OUString> maActiveMainViewContainer;
     /// The resource managed by this class.
     css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;

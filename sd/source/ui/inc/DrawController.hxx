@@ -26,7 +26,6 @@
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XSlideSorterSelectionSupplier.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XModuleController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/uno3.hxx>
@@ -212,16 +211,13 @@ public:
     virtual void  SAL_CALL
         selectionChanged (const css::lang::EventObject& rEvent) override;
 
-    SD_DLLPUBLIC css::uno::Reference<css::drawing::framework::XConfigurationController>
-        getConfigurationController();
+    SD_DLLPUBLIC const rtl::Reference<sd::framework::ConfigurationController> & getConfigurationController();
 
     css::uno::Reference<css::drawing::framework::XModuleController>
         getModuleController();
 
     // XSlideSorterSelectionSupplier
     virtual css::uno::Any SAL_CALL getSlideSorterSelection(  ) override;
-
-    SD_DLLPUBLIC const rtl::Reference<sd::framework::ConfigurationController> & getConfigurationControllerImpl();
 
 private:
     /** This method must return the name to index table. This table

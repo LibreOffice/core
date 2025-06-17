@@ -20,6 +20,7 @@
 #include <ViewTabBar.hxx>
 
 #include <ViewShellBase.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/Pane.hxx>
 #include <DrawController.hxx>
@@ -73,7 +74,7 @@ ViewTabBar::ViewTabBar (
     if (mxController)
         mpViewShellBase = mxController->GetViewShellBase();
 
-    // Register as listener at XConfigurationController.
+    // Register as listener at ConfigurationController.
     if (mxController.is())
     {
         mxConfigurationController = mxController->getConfigurationController();
@@ -113,7 +114,7 @@ void ViewTabBar::disposing(std::unique_lock<std::mutex>&)
 
     if (mxConfigurationController.is())
     {
-        // Unregister listener from XConfigurationController.
+        // Unregister listener from ConfigurationController.
         try
         {
             mxConfigurationController->removeConfigurationChangeListener(this);
@@ -161,7 +162,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
         Reference<XPane> xPane;
         try
         {
-            Reference<XConfigurationController> xCC (
+            rtl::Reference<framework::ConfigurationController> xCC (
                 rxController->getConfigurationController());
             if (xCC.is())
                 xPane.set(xCC->getResource(rxViewTabBarId->getAnchor()), UNO_QUERY);
@@ -202,7 +203,7 @@ void SAL_CALL  ViewTabBar::notifyConfigurationChange (
 void SAL_CALL ViewTabBar::disposing(
     const lang::EventObject& rEvent)
 {
-    if (rEvent.Source == mxConfigurationController)
+    if (rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
     {
         mxConfigurationController = nullptr;
         mxController = nullptr;
@@ -259,7 +260,7 @@ bool ViewTabBar::ActivatePage(size_t nIndex)
 {
     try
     {
-        Reference<XConfigurationController> xConfigurationController (
+        rtl::Reference<framework::ConfigurationController> xConfigurationController (
             mxController->getConfigurationController());
         if ( ! xConfigurationController.is())
             throw RuntimeException();

@@ -206,7 +206,6 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

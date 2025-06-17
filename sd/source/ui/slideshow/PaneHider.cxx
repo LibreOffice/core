@@ -23,9 +23,9 @@
 #include <ViewShellBase.hxx>
 #include <DrawController.hxx>
 #include "slideshowimpl.hxx"
+#include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

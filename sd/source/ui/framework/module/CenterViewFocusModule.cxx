@@ -19,13 +19,13 @@
 
 #include "CenterViewFocusModule.hxx"
 
+#include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ViewShellWrapper.hxx>
 
 #include <DrawController.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
@@ -135,7 +135,7 @@ void SAL_CALL CenterViewFocusModule::disposing (
     const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is())
-        if (rEvent.Source == mxConfigurationController)
+        if (rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
         {
             mbValid = false;
             mxConfigurationController = nullptr;

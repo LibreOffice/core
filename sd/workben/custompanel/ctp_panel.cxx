@@ -40,7 +40,6 @@ namespace sd::colortoolpanel
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Type;
-    using ::com::sun::star::drawing::framework::XConfigurationController;
     using ::com::sun::star::drawing::framework::XResourceId;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::drawing::framework::XPane;
@@ -93,7 +92,7 @@ namespace sd::colortoolpanel
     //= class SingleColorPanel
 
     SingleColorPanel::SingleColorPanel( const Reference< XComponentContext >& i_rContext,
-            const Reference< XConfigurationController >& i_rConfigController, const Reference< XResourceId >& i_rResourceId )
+            const rtl::Reference< ConfigurationController >& i_rConfigController, const Reference< XResourceId >& i_rResourceId )
         :SingleColorPanel_Base( m_aMutex )
         ,m_xContext( i_rContext )
         ,m_xResourceId( i_rResourceId )

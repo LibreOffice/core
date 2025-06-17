@@ -82,7 +82,7 @@ public:
 
 //===== ConfigurationController::Lock =========================================
 
-ConfigurationController::Lock::Lock (const Reference<XConfigurationController>& rxController)
+ConfigurationController::Lock::Lock (const rtl::Reference<ConfigurationController>& rxController)
     : mxController(rxController)
 {
     OSL_ASSERT(mxController.is());
@@ -195,9 +195,7 @@ void SAL_CALL ConfigurationController::notifyEvent (
     mpImplementation->mpBroadcaster->NotifyListeners(rEvent);
 }
 
-//----- XConfigurationController ----------------------------------------------
-
-void SAL_CALL ConfigurationController::lock()
+void ConfigurationController::lock()
 {
     OSL_ASSERT(mpImplementation != nullptr);
     OSL_ASSERT(mpImplementation->mpConfigurationUpdater != nullptr);
@@ -211,7 +209,7 @@ void SAL_CALL ConfigurationController::lock()
             = mpImplementation->mpConfigurationUpdater->GetLock();
 }
 
-void SAL_CALL ConfigurationController::unlock()
+void ConfigurationController::unlock()
 {
     ::osl::MutexGuard aGuard (m_aMutex);
 
@@ -226,7 +224,7 @@ void SAL_CALL ConfigurationController::unlock()
         mpImplementation->mpConfigurationUpdaterLock.reset();
 }
 
-void SAL_CALL ConfigurationController::requestResourceActivation (
+void ConfigurationController::requestResourceActivation (
     const Reference<XResourceId>& rxResourceId,
     ResourceActivationMode eMode)
 {
@@ -282,7 +280,7 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     postChangeRequest(xRequest);
 }
 
-void SAL_CALL ConfigurationController::requestResourceDeactivation (
+void ConfigurationController::requestResourceDeactivation (
     const Reference<XResourceId>& rxResourceId)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -317,7 +315,7 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
     postChangeRequest(xRequest);
 }
 
-Reference<XResource> SAL_CALL ConfigurationController::getResource (
+Reference<XResource> ConfigurationController::getResource (
     const Reference<XResourceId>& rxResourceId)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -328,7 +326,7 @@ Reference<XResource> SAL_CALL ConfigurationController::getResource (
     return aDescriptor.mxResource;
 }
 
-void SAL_CALL ConfigurationController::update()
+void ConfigurationController::update()
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -363,7 +361,7 @@ void SAL_CALL ConfigurationController::postChangeRequest (
     mpImplementation->mpQueueProcessor->AddRequest(rxRequest);
 }
 
-Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfiguration()
+Reference<XConfiguration> ConfigurationController::getRequestedConfiguration()
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -375,7 +373,7 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfigur
         return Reference<XConfiguration>();
 }
 
-Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfiguration()
+Reference<XConfiguration> ConfigurationController::getCurrentConfiguration()
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -391,7 +389,7 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfigurat
 /** The given configuration is restored by generating the appropriate set of
     activation and deactivation requests.
 */
-void SAL_CALL ConfigurationController::restoreConfiguration (
+void ConfigurationController::restoreConfiguration (
     const Reference<XConfiguration>& rxNewConfiguration)
 {
     ::osl::MutexGuard aGuard (m_aMutex);

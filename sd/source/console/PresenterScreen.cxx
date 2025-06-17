@@ -359,7 +359,7 @@ void PresenterScreen::InitializePresenterScreen()
         }
         // Get the XController from the first argument.
 
-        rtl::Reference<::sd::framework::ConfigurationController> xCC( mxController->getConfigurationControllerImpl());
+        rtl::Reference<::sd::framework::ConfigurationController> xCC( mxController->getConfigurationController());
         mxConfigurationControllerWeak = xCC.get();
 
         Reference<XComponentContext> xContext(mxContextWeak);

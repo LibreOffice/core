@@ -24,9 +24,9 @@
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include <DrawController.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/util/Color.hpp>
@@ -133,8 +133,8 @@ PresenterHelpView::PresenterHelpView (
     try
     {
         // Get the content window via the pane anchor.
-        Reference<XConfigurationController> xCC (
-            rxController->getConfigurationController(), UNO_SET_THROW);
+        rtl::Reference<sd::framework::ConfigurationController> xCC (
+            rxController->getConfigurationController());
         mxPane.set(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
 
         mxWindow = mxPane->getWindow();

@@ -45,7 +45,7 @@ class ConfigurationUpdater;
     processes the configuration change requests.
 
     When after processing one entry the queue is empty then the
-    XConfigurationController::update() method is called so that the changes
+    ConfigurationController::update() method is called so that the changes
     made to the local XConfiguration reference are reflected by the UI.
 
     Queue entries are processed asynchronously by calling PostUserEvent().

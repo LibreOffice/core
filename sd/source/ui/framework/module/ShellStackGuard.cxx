@@ -97,7 +97,7 @@ void SAL_CALL ShellStackGuard::disposing (
     const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is())
-        if (rEvent.Source == mxConfigurationController)
+        if (rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
         {
             mxConfigurationController = nullptr;
             mpBase = nullptr;

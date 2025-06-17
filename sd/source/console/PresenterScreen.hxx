@@ -28,8 +28,9 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
+#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 

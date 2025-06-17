@@ -72,7 +72,7 @@
 #include <ViewShellBase.hxx>
 #include <FormShellManager.hxx>
 #include <LayerTabBar.hxx>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <framework/ConfigurationController.hxx>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -384,8 +384,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 DrawController* pDrawController = GetViewShellBase().GetDrawController();
                 if (pDrawController)
                 {
-                    Reference<XConfigurationController> xConfigurationController (
-                        pDrawController->getConfigurationController(), UNO_SET_THROW );
+                    rtl::Reference<sd::framework::ConfigurationController> xConfigurationController (
+                        pDrawController->getConfigurationController() );
                     Reference<XConfiguration> xConfiguration (
                         xConfigurationController->getRequestedConfiguration(), UNO_SET_THROW );
 
@@ -407,7 +407,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     // Restore the configuration.
                     if (auto pDrawController2 = dynamic_cast<DrawController*>( xController.get() ))
                     {
-                        xConfigurationController.set( pDrawController2->getConfigurationController() );
+                        xConfigurationController = pDrawController2->getConfigurationController();
                         if ( ! xConfigurationController.is())
                             throw RuntimeException();
                         xConfigurationController->restoreConfiguration(xConfiguration);

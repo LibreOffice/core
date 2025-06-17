@@ -26,6 +26,7 @@
 #include "PresenterSlideSorter.hxx"
 #include "PresenterToolBar.hxx"
 #include <DrawController.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;

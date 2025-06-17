@@ -28,7 +28,6 @@
 
 #include <vector>
 
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
 namespace vcl { class Window; }
 
@@ -37,6 +36,7 @@ namespace sd {
     class ViewShellBase;
     class ViewTabBar;
 }
+namespace sd::framework { class ConfigurationController; }
 
 namespace sd {
 
@@ -148,7 +148,7 @@ public:
 private:
     VclPtr<TabBarControl> mpTabControl;
     rtl::Reference<::sd::DrawController> mxController;
-    css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
+    rtl::Reference<::sd::framework::ConfigurationController> mxConfigurationController;
     typedef ::std::vector<css::drawing::framework::TabBarButton> TabBarButtonList;
     TabBarButtonList maTabBarButtons;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;

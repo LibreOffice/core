@@ -30,7 +30,6 @@
 
 namespace com::sun::star::drawing::framework
 {
-class XConfigurationController;
 class XResourceId;
 }
 
@@ -44,7 +43,9 @@ namespace sd::tools
 class EventMultiplexerEvent;
 }
 
-namespace sd::framework {
+namespace sd::framework
+{
+class ConfigurationController;
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
@@ -78,8 +79,7 @@ public:
         const css::lang::EventObject& rEvent) override;
 
 private:
-    css::uno::Reference<
-        css::drawing::framework::XConfigurationController> mxConfigurationController;
+    rtl::Reference<ConfigurationController> mxConfigurationController;
     ViewShellBase* mpBase;
     std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock>> mpToolBarManagerLock;
     bool mbMainViewSwitchUpdatePending;

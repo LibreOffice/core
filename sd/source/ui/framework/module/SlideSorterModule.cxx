@@ -63,9 +63,7 @@ SlideSorterModule::SlideSorterModule (
 
         if (mxConfigurationController.is())
         {
-            uno::Reference<lang::XComponent> const xComppnent(
-                    mxConfigurationController, UNO_QUERY_THROW);
-            xComppnent->addEventListener(this);
+            mxConfigurationController->addEventListener(this);
             mxConfigurationController->addConfigurationChangeListener(
                 this,
                 FrameworkHelper::msResourceActivationRequestEvent,
@@ -199,7 +197,7 @@ void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
     Reference<XTabBar> xBar (rxTabBar);
     if ( ! xBar.is())
     {
-        Reference<XConfigurationController> xCC (
+        rtl::Reference<ConfigurationController> xCC (
             mxControllerManager->getConfigurationController());
         if (xCC.is())
             xBar.set(xCC->getResource(mxViewTabBarId), UNO_QUERY);
@@ -239,10 +237,7 @@ void SlideSorterModule::disposing(std::unique_lock<std::mutex>&)
 {
     if (mxConfigurationController.is())
     {
-        uno::Reference<lang::XComponent> const xComponent(mxConfigurationController, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->removeEventListener(this);
-
+        mxConfigurationController->removeEventListener(this);
         mxConfigurationController->removeConfigurationChangeListener(this);
         mxConfigurationController = nullptr;
     }
@@ -304,7 +299,7 @@ void SAL_CALL SlideSorterModule::disposing (
     const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is()
-        && rEvent.Source == mxConfigurationController)
+        && rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
     {
         SaveResourceState();
         // Without the configuration controller this class can do nothing.

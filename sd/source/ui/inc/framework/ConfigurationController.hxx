@@ -20,7 +20,10 @@
 #pragma once
 
 #include <sddllapi.h>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationControllerRequestQueue.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.hpp>
+#include <com/sun/star/drawing/framework/XResourceFactoryManager.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <cppuhelper/basemutex.hxx>
@@ -33,14 +36,16 @@ namespace sd { class DrawController; }
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationController
-    > ConfigurationControllerInterfaceBase;
+typedef ::cppu::WeakComponentImplHelper<
+    css::drawing::framework::XConfigurationControllerRequestQueue,
+    css::drawing::framework::XConfigurationControllerBroadcaster,
+    css::drawing::framework::XResourceFactoryManager
+> ConfigurationControllerInterfaceBase;
 
 /** The configuration controller is responsible for maintaining the current
     configuration.
 
-    @see css::drawing::framework::XConfigurationController
+    @see ConfigurationController
         for an extended documentation.
 */
 class SD_DLLPUBLIC ConfigurationController final
@@ -68,37 +73,33 @@ public:
     */
     void RequestSynchronousUpdate();
 
-    // XConfigurationController
+    void lock();
 
-    virtual void SAL_CALL lock() override;
+    void unlock();
 
-    virtual void SAL_CALL unlock() override;
-
-    virtual void SAL_CALL requestResourceActivation (
+    void requestResourceActivation (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
-        css::drawing::framework::ResourceActivationMode eMode) override;
+        css::drawing::framework::ResourceActivationMode eMode);
 
-    virtual void SAL_CALL requestResourceDeactivation (
+    void requestResourceDeactivation (
         const css::uno::Reference<css::drawing::framework::XResourceId>&
-            rxResourceId) override;
+            rxResourceId);
 
-    virtual css::uno::Reference<css::drawing::framework::XResource>
-        SAL_CALL getResource (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId) override;
+    css::uno::Reference<css::drawing::framework::XResource>
+        getResource (
+            const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
 
-    virtual void SAL_CALL update() override;
+    void update();
 
-    virtual  css::uno::Reference<
-        css::drawing::framework::XConfiguration>
-        SAL_CALL getRequestedConfiguration() override;
+    css::uno::Reference<css::drawing::framework::XConfiguration>
+        getRequestedConfiguration();
 
-    virtual  css::uno::Reference<
-        css::drawing::framework::XConfiguration>
-        SAL_CALL getCurrentConfiguration() override;
+    css::uno::Reference<css::drawing::framework::XConfiguration>
+        getCurrentConfiguration();
 
-    virtual void SAL_CALL restoreConfiguration (
+    void restoreConfiguration (
         const css::uno::Reference<css::drawing::framework::XConfiguration>&
-        rxConfiguration) override;
+        rxConfiguration);
 
     // XConfigurationControllerBroadcaster
 
@@ -145,12 +146,10 @@ public:
     class Lock
     {
     public:
-        Lock (const css::uno::Reference<
-            css::drawing::framework::XConfigurationController>& rxController);
+        Lock (const rtl::Reference<ConfigurationController>& rxController);
         ~Lock();
     private:
-        css::uno::Reference<
-            css::drawing::framework::XConfigurationController> mxController;
+        rtl::Reference<ConfigurationController> mxController;
     };
 
 private:

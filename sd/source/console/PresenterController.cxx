@@ -33,6 +33,7 @@
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
 #include <DrawController.hxx>
+#include <framework/ConfigurationController.hxx>
 
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -743,7 +744,7 @@ void SAL_CALL PresenterController::disposing (
 
     if (rEvent.Source.get() == static_cast<cppu::OWeakObject*>(mxController.get()))
         mxController = nullptr;
-    else if (rEvent.Source == mxConfigurationController)
+    else if (rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
         mxConfigurationController = nullptr;
     else if (rEvent.Source == mxSlideShowController)
         mxSlideShowController = nullptr;

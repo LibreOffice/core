@@ -18,6 +18,7 @@
  */
 
 #include <framework/PresentationFactory.hxx>
+#include <framework/ConfigurationController.hxx>
 
 #include <DrawController.hxx>
 #include <com/sun/star/drawing/framework/XView.hpp>
@@ -131,7 +132,7 @@ void PresentationFactory::install(const rtl::Reference<::sd::DrawController>& rx
 {
     try
     {
-        Reference<XConfigurationController> xCC (rxController->getConfigurationController());
+        rtl::Reference<ConfigurationController> xCC (rxController->getConfigurationController());
         if (xCC.is())
             xCC->addResourceFactory(
                 gsPresentationViewURL,
