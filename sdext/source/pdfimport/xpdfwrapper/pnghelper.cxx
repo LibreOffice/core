@@ -214,8 +214,12 @@ void PngHelper::createPng( OutputBuffer&     o_rOutputBuf,
     int nLineSize = (width + 7)/8;
     aScanlines.reserve( nLineSize * height + height );
 
+#if POPPLER_CHECK_VERSION(25, 2, 0)
     if (!str->reset())
         return;
+#else
+    str->reset();
+#endif
     for( int y = 0; y < height; y++ )
     {
         // determine filter type (none) for this scanline
@@ -253,8 +257,12 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
                         width,
                         colorMap->getNumPixelComps(),
                         colorMap->getBits()));
+#if POPPLER_CHECK_VERSION(25, 2, 0)
     if (!imgStr->reset())
         return;
+#else
+    imgStr->reset();
+#endif
 
     // create scan line data buffer
     OutputBuffer aScanlines;
@@ -291,8 +299,12 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
                         maskColorMap->getNumPixelComps(),
                         maskColorMap->getBits()));
 
+#if POPPLER_CHECK_VERSION(25, 2, 0)
     if (!imgStrMask->reset())
         return;
+#else
+    imgStrMask->reset();
+#endif
 
     for( int y = 0; y < maskHeight; ++y )
     {
@@ -341,8 +353,12 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
                         width,
                         colorMap->getNumPixelComps(),
                         colorMap->getBits()));
+#if POPPLER_CHECK_VERSION(25, 2, 0)
     if (!imgStr->reset())
         return;
+#else
+    imgStr->reset();
+#endif
 
     // create scan line data buffer
     OutputBuffer aScanlines;
@@ -376,8 +392,12 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     std::unique_ptr<ImageStream> imgStrMask(
         new ImageStream(maskStr, maskWidth, 1, 1));
 
+#if POPPLER_CHECK_VERSION(25, 2, 0)
     if (!imgStrMask->reset())
         return;
+#else
+    imgStrMask->reset();
+#endif
 
     for( int y = 0; y < maskHeight; ++y )
     {
