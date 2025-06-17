@@ -31,6 +31,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/drawing/XSlideSorterSelectionSupplier.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
@@ -168,6 +169,35 @@ css::uno::Reference<css::frame::XController> SVGFilter::getSourceController() co
 css::uno::Reference<css::frame::XController> SVGFilter::fillDrawImpressSelectedPages()
 {
     uno::Reference<frame::XController> xController = getSourceController();
+
+    uno::Reference<drawing::XSlideSorterSelectionSupplier> xSlideSorterSelection(xController, uno::UNO_QUERY);
+    if (xSlideSorterSelection)
+    {
+        Sequence<Reference<XInterface>> aSelectedPageSequence;
+        if (xSlideSorterSelection->getSlideSorterSelection() >>= aSelectedPageSequence)
+        {
+            for (auto& xInterface : aSelectedPageSequence)
+            {
+                uno::Reference<drawing::XDrawPage> xDrawPage(xInterface, uno::UNO_QUERY);
+
+                if (Reference<XPropertySet> xPropSet{ xDrawPage, UNO_QUERY })
+                {
+                    Reference<XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
+                    if (xPropSetInfo && xPropSetInfo->hasPropertyByName(u"Visible"_ustr))
+                    {
+                        bool bIsSlideVisible = true; // default: true
+                        xPropSet->getPropertyValue(u"Visible"_ustr) >>= bIsSlideVisible;
+                        if (!bIsSlideVisible)
+                            continue;
+                    }
+                }
+                mSelectedPages.push_back(xDrawPage);
+            }
+            if (!mSelectedPages.empty())
+                return xController;
+        }
+    }
+
     uno::Reference<drawing::framework::XControllerManager> xManager(xController, uno::UNO_QUERY);
     if (!xManager)
         return {};

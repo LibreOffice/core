@@ -575,6 +575,33 @@ Reference<XModuleController> SAL_CALL
 
     return mxModuleController;
 }
+//===== XSlideSorterSelectionSupplier ==============================================================
+
+Any SAL_CALL DrawController::getSlideSorterSelection()
+{
+    ThrowIfDisposed();
+
+    // * traverse Impress resources to find slide preview pane, grab selection from there
+    const uno::Sequence<uno::Reference<drawing::framework::XResourceId>> aResIds(
+        mxConfigurationController->getCurrentConfiguration()->getResources(
+            {}, u""_ustr, drawing::framework::AnchorBindingMode_INDIRECT));
+
+    for (const uno::Reference<drawing::framework::XResourceId>& rResId : aResIds)
+    {
+        // can we somehow obtain the slidesorter from the Impress framework?
+        if (rResId->getResourceURL() == "private:resource/view/SlideSorter")
+        {
+            // got it, grab current selection from there
+            uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
+                mxConfigurationController->getResource(rResId), uno::UNO_QUERY);
+            if (!xSelectionSupplier)
+                continue;
+
+            return xSelectionSupplier->getSelection();
+        }
+    }
+    return {};
+}
 
 //===== Properties ============================================================
 

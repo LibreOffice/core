@@ -25,6 +25,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/drawing/XSlideSorterSelectionSupplier.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/uno3.hxx>
@@ -51,7 +52,8 @@ typedef ::cppu::ImplInheritanceHelper <
     css::drawing::XDrawView,
     css::view::XSelectionChangeListener,
     css::view::XFormLayerAccess,
-    css::drawing::framework::XControllerManager
+    css::drawing::framework::XControllerManager,
+    css::drawing::XSlideSorterSelectionSupplier
     > DrawControllerInterfaceBase;
 
 class BroadcastHelperOwner
@@ -220,6 +222,9 @@ public:
 
     virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
         getModuleController() override;
+
+    // XSlideSorterSelectionSupplier
+    virtual css::uno::Any SAL_CALL getSlideSorterSelection(  ) override;
 
     SD_DLLPUBLIC const rtl::Reference<sd::framework::ConfigurationController> & getConfigurationControllerImpl();
 
