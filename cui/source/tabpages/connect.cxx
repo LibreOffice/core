@@ -61,7 +61,6 @@ SvxConnectionDialog::SvxConnectionDialog(weld::Window* pParent, const SfxItemSet
 
 SvxConnectionPage::SvxConnectionPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/connectortabpage.ui"_ustr, u"ConnectorTabPage"_ustr, &rInAttrs)
-    , rOutAttrs(rInAttrs)
     , aAttrSet(*rInAttrs.GetPool())
     , pView(nullptr)
     , m_xLbType(m_xBuilder->weld_combo_box(u"LB_TYPE"_ustr))
@@ -77,7 +76,7 @@ SvxConnectionPage::SvxConnectionPage(weld::Container* pPage, weld::DialogControl
     , m_xMtrFldVert2(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_VERT_2"_ustr, FieldUnit::MM))
     , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, u"CTL_PREVIEW"_ustr, m_aCtlPreview))
 {
-    SfxItemPool* pPool = rOutAttrs.GetPool();
+    SfxItemPool* pPool = rInAttrs.GetPool();
     assert(pPool && "Where is the pool");
     eUnit = pPool->GetMetric( SDRATTR_EDGENODE1HORZDIST );
 

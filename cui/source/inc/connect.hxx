@@ -31,7 +31,6 @@ class SvxConnectionPage : public SfxTabPage
 {
 private:
     static const WhichRangesContainer pRanges;
-    const SfxItemSet&   rOutAttrs;
     SfxItemSet          aAttrSet;
     const SdrView*      pView;
     MapUnit             eUnit;

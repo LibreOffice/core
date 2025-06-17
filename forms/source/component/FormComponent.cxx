@@ -117,7 +117,6 @@ private:
 // base class for form layer controls
 OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUString& _rAggregateService, const bool _bSetDelegator )
             :OComponentHelper(m_aMutex)
-            ,m_xContext( _rxContext )
 {
     // Aggregate VCL Control
     // Increment the RefCount for aggregates, because the aggregate by itself increments the RefCount in the setDelegator

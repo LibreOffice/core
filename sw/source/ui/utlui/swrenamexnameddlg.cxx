@@ -70,8 +70,6 @@ IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, weld::Entry&, rEdit, void)
 
     m_xOk->set_sensitive(!sTmp.isEmpty()
                   && !m_xNameAccess->hasByName(sTmp)
-                  && (!m_xSecondAccess.is() || !m_xSecondAccess->hasByName(sTmp))
-                  && (!m_xThirdAccess.is() || !m_xThirdAccess->hasByName(sTmp))
                  );
 }
 

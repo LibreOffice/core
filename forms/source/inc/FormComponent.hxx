@@ -144,8 +144,6 @@ protected:
     css::uno::Reference< css::uno::XAggregation>
                                                 m_xAggregate;
 
-    css::uno::Reference< css::uno::XComponentContext >
-                                                m_xContext;
     WindowStateGuard                            m_aWindowStateGuard;
 
 public:
