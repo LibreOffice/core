@@ -212,46 +212,6 @@ canvas/inc/rendering/irendermodule.hxx:60
     void canvas::IRenderModule::~IRenderModule()
 canvas/inc/rendering/isurface.hxx:34
     void canvas::ISurface::~ISurface()
-chart2/source/inc/ChartType.hxx:122
-    _Bool chart::ChartType::isSupportingMainAxis(int,int,)
-chart2/source/inc/ChartType.hxx:123
-    _Bool chart::ChartType::isSupportingStatisticProperties(int,)
-chart2/source/inc/ChartType.hxx:124
-    _Bool chart::ChartType::isSupportingRegressionProperties(int,)
-chart2/source/inc/ChartType.hxx:125
-    _Bool chart::ChartType::isSupportingGeometryProperties(int,)
-chart2/source/inc/ChartType.hxx:126
-    _Bool chart::ChartType::isSupportingAreaProperties(int,)
-chart2/source/inc/ChartType.hxx:127
-    _Bool chart::ChartType::isSupportingSymbolProperties(int,)
-chart2/source/inc/ChartType.hxx:128
-    _Bool chart::ChartType::isSupportingSecondaryAxis(int,)
-chart2/source/inc/ChartType.hxx:129
-    _Bool chart::ChartType::isSupportingRightAngledAxes()
-chart2/source/inc/ChartType.hxx:130
-    _Bool chart::ChartType::isSupportingOverlapAndGapWidthProperties(int,)
-chart2/source/inc/ChartType.hxx:131
-    _Bool chart::ChartType::isSupportingBarConnectors(int,)
-chart2/source/inc/ChartType.hxx:132
-    _Bool chart::ChartType::isSupportingAxisSideBySide(int,)
-chart2/source/inc/ChartType.hxx:133
-    _Bool chart::ChartType::isSupportingBaseValue()
-chart2/source/inc/ChartType.hxx:134
-    _Bool chart::ChartType::isSupportingAxisPositioning(int,int,)
-chart2/source/inc/ChartType.hxx:135
-    _Bool chart::ChartType::isSupportingStartingAngle()
-chart2/source/inc/ChartType.hxx:136
-    _Bool chart::ChartType::isSupportingDateAxis(int,)
-chart2/source/inc/ChartType.hxx:137
-    _Bool chart::ChartType::isSupportingComplexCategory()
-chart2/source/inc/ChartType.hxx:138
-    _Bool chart::ChartType::isSupportingCategoryPositioning(int,)
-chart2/source/inc/ChartType.hxx:139
-    _Bool chart::ChartType::isSupportingOnlyDeepStackingFor3D()
-chart2/source/inc/ChartType.hxx:140
-    _Bool chart::ChartType::isSeriesInFrontOfAxisLine()
-chart2/source/inc/ChartType.hxx:142
-    int chart::ChartType::getAxisType(int,)
 extensions/source/dbpilots/unoautopilot.hxx:81
     class cppu::IPropertyArrayHelper * dbp::OUnoAutoPilot::createArrayHelper()const
 extensions/source/propctrlr/commoncontrol.hxx:128
@@ -310,10 +270,10 @@ include/svl/svdde.hxx:243
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
-include/svx/sdr/overlay/overlaymanager.hxx:94
-    void sdr::overlay::OverlayManager::flush()
 include/svx/svdundo.hxx:765
     class std::unique_ptr<class SdrUndoAction> SdrUndoFactory::CreateUndoDiagramModelData(class SdrObject &,class std::shared_ptr<class svx::diagram::DiagramDataState> &,)
+include/toolkit/awt/vclxwindow.hxx:80
+    class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessibleContext> VCLXWindow::CreateAccessibleContext()
 include/vbahelper/vbacollectionimpl.hxx:289
     int ScVbaCollectionBase::getCount()
 include/vbahelper/vbacollectionimpl.hxx:294
@@ -342,7 +302,7 @@ include/vcl/customweld.hxx:46
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
 include/vcl/menu.hxx:404
     void Menu::DumpAsPropertyTree(class tools::JsonWriter &,)const
-include/vcl/weld.hxx:128
+include/vcl/weld.hxx:129
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/opbase.hxx:443
     _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction()const
@@ -650,23 +610,23 @@ ux-gnu/qt5/QtGui/qpaintdevice.h:74
     int QPaintDevice::devType()const
 ux-gnu/qt5/QtGui/qtextdocument.h:86
     void QAbstractUndoItem::~QAbstractUndoItem()
-vcl/inc/font/LogicalFontInstance.hxx:127
+vcl/inc/font/LogicalFontInstance.hxx:131
     void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:297
+vcl/inc/jsdialog/jsdialogbuilder.hxx:296
     void JSWidget::show()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:310
+vcl/inc/jsdialog/jsdialogbuilder.hxx:309
     void JSWidget::hide()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:324
+vcl/inc/jsdialog/jsdialogbuilder.hxx:323
     void JSWidget::set_sensitive(_Bool,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:337
+vcl/inc/jsdialog/jsdialogbuilder.hxx:336
     class com::sun::star::uno::Reference<class com::sun::star::datatransfer::dnd::XDropTarget> JSWidget::get_drop_target()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:345
+vcl/inc/jsdialog/jsdialogbuilder.hxx:344
     void JSWidget::freeze()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:351
+vcl/inc/jsdialog/jsdialogbuilder.hxx:350
     void JSWidget::thaw()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:358
+vcl/inc/jsdialog/jsdialogbuilder.hxx:359
     void JSWidget::grab_focus()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:403
+vcl/inc/jsdialog/jsdialogbuilder.hxx:404
     void JSWidget::set_buildable_name(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:146
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
@@ -678,7 +638,7 @@ vcl/inc/salframe.hxx:318
     void SalFrame::SetTaskBarProgress(int,)
 vcl/inc/salframe.hxx:319
     void SalFrame::SetTaskBarState(enum VclTaskBarStates,)
-vcl/inc/salgdiimpl.hxx:180
+vcl/inc/salgdiimpl.hxx:178
     _Bool SalGraphicsImpl::drawEPS(long,long,long,long,void *,unsigned int,)
 vcl/inc/salinst.hxx:97
     _Bool SalInstance::SVMainHook(int *,)
@@ -690,7 +650,7 @@ vcl/inc/salmenu.hxx:76
     void SalMenu::GetSystemMenuData(struct SystemMenuData &,)
 vcl/inc/salobj.hxx:48
     void SalObject::Enable(_Bool,)
-vcl/inc/salprn.hxx:123
+vcl/inc/salprn.hxx:122
     enum SalPrinterError SalPrinter::GetErrorCode()
 vcl/inc/skia/gdiimpl.hxx:225
     void SkiaSalGraphicsImpl::createSurface()

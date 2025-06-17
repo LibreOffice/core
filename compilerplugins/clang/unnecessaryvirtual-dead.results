@@ -8,8 +8,6 @@ canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
 include/basegfx/utils/unopolypolygon.hxx:93
     void basegfx::unotools::UnoPolyPolygon::modifying()const
-include/svx/sdr/overlay/overlaymanager.hxx:94
-    void sdr::overlay::OverlayManager::flush()
 sc/source/core/opencl/opbase.hxx:444
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
 slideshow/source/engine/animationfactory.cxx:617
@@ -18,7 +16,7 @@ ux-gnu/../../../include/c++/14/bits/locale_facets_nonio.h:2002
     void std::messages::do_close(int,)const
 ux-gnu/../../../include/c++/14/streambuf:583
     void std::basic_streambuf::imbue(const class std::locale &,)
-vcl/inc/font/LogicalFontInstance.hxx:127
+vcl/inc/font/LogicalFontInstance.hxx:131
     void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
 vcl/inc/salframe.hxx:146
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
