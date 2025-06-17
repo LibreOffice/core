@@ -1648,9 +1648,11 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
         if (!pSlot)
             continue;
 
+        bool bLocalReadOnly = bReadOnly;
+
         // This check can be true only if Lokit is active and view is readonly.
         if (bCheckForCommentCommands)
-            bReadOnly = !IsCommandAllowedInLokReadOnlyViewMode(pSlot->GetCommand());
+            bLocalReadOnly = !IsCommandAllowedInLokReadOnlyViewMode(pSlot->GetCommand());
 
         if ( pSlot->nDisableFlags != SfxDisableFlags::NONE &&
              ( static_cast<int>(pSlot->nDisableFlags) & static_cast<int>(pObjShell->GetDisableFlags()) ) != 0 )
@@ -1659,7 +1661,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
         if (!(pSlot->nFlags & SfxSlotMode::VIEWERAPP) && isViewerAppMode)
             return false;
 
-        if ( !( pSlot->nFlags & SfxSlotMode::READONLYDOC ) && bReadOnly )
+        if (!(pSlot->nFlags & SfxSlotMode::READONLYDOC) && bLocalReadOnly)
             return false;
 
         // Slot belongs to Container?
