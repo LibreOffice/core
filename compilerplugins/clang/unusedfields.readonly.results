@@ -296,6 +296,26 @@ include/basic/sbstar.hxx:50
     StarBASIC aErrorHdl Link<StarBASIC *, _Bool>
 include/basic/sbstar.hxx:51
     StarBASIC aBreakHdl Link<StarBASIC *, BasicDebugFlags>
+include/basic/sbxvar.hxx:62
+    SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:42:5) pByte sal_uInt8 *
+include/basic/sbxvar.hxx:63
+    SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:42:5) pUShort sal_uInt16 *
+include/basic/sbxvar.hxx:64
+    SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:42:5) pChar sal_Unicode *
+include/basic/sbxvar.hxx:65
+    SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:42:5) pInteger sal_Int16 *
+include/basic/sbxvar.hxx:66
+    SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:42:5) pULong sal_uInt32 *
+include/basic/sbxvar.hxx:67
+    SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:42:5) pLong sal_Int32 *
+include/basic/sbxvar.hxx:68
+    SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:42:5) puInt64 sal_uInt64 *
+include/basic/sbxvar.hxx:69
+    SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:42:5) pnInt64 sal_Int64 *
+include/basic/sbxvar.hxx:71
+    SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:42:5) pSingle float *
+include/basic/sbxvar.hxx:72
+    SbxValues::(anonymous union at /home/noel/libo-plugin/include/basic/sbxvar.hxx:42:5) pDouble double *
 include/comphelper/parallelsort.hxx:164
     comphelper::(anonymous namespace)::Binner maLabels uint8_t[51200]
 include/connectivity/DriversConfig.hxx:77
@@ -710,7 +730,7 @@ sw/source/core/inc/swblocks.hxx:69
     SwImpBlocks m_bInPutMuchBlocks _Bool
 sw/source/core/text/atrhndl.hxx:47
     SwAttrHandler m_oFnt std::optional<SwFont>
-sw/source/core/text/inftxt.cxx:564
+sw/source/core/text/inftxt.cxx:568
     (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<VirtualDevice>
 sw/source/core/text/redlnitr.hxx:75
     SwRedlineItr m_pSet std::unique_ptr<SfxItemSet>
@@ -732,6 +752,10 @@ sw/source/uibase/dbui/mmconfigitem.cxx:117
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:75
     SwInsertField_Data m_aDBDataSource css::uno::Any
+sw/source/uibase/inc/swrenamexnameddlg.hxx:30
+    SwRenameXNamedDlg m_xSecondAccess css::uno::Reference<css::container::XNameAccess>
+sw/source/uibase/inc/swrenamexnameddlg.hxx:31
+    SwRenameXNamedDlg m_xThirdAccess css::uno::Reference<css::container::XNameAccess>
 sw/source/writerfilter/ooxml/OOXMLFactory.hxx:60
     writerfilter::ooxml::AttributeInfo m_nToken Token_t
 sw/source/writerfilter/ooxml/OOXMLFactory.hxx:61
@@ -884,13 +908,13 @@ vcl/inc/salwtype.hxx:170
     SalWheelMouseEvent mbDeltaIsPixel _Bool
 vcl/inc/salwtype.hxx:223
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:277
+vcl/inc/svdata.hxx:279
     ImplSVWinData mbIsLiveResize _Bool
-vcl/inc/svdata.hxx:278
+vcl/inc/svdata.hxx:280
     ImplSVWinData mbIsWaitingForNativeEvent _Bool
-vcl/inc/svdata.hxx:330
+vcl/inc/svdata.hxx:332
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/svdata.hxx:337
+vcl/inc/svdata.hxx:339
     ImplSVNWFData mbNoFrameJunctionForPopups _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<ToolBoxItemId>

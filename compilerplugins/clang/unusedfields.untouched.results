@@ -42,10 +42,6 @@ cui/source/inc/fileextcheckdlg.hxx:30
     FileExtCheckDialog m_pOk std::unique_ptr<weld::Button>
 cui/source/inc/paragrph.hxx:73
     SvxStdParagraphTabPage m_xAbsDist std::unique_ptr<weld::Label>
-cui/source/inc/uitabpage.hxx:20
-    UITabPage m_pApply std::unique_ptr<weld::Button>
-cui/source/inc/uitabpage.hxx:21
-    UITabPage m_pApplyAll std::unique_ptr<weld::Button>
 cui/source/options/optinet2.hxx:108
     SvxSecurityTabPage m_xCertPathImg std::unique_ptr<weld::Widget>
 cui/source/options/optinet2.hxx:109
@@ -86,6 +82,8 @@ filter/source/xsltdialog/xmlfiltertabpagebasic.hxx:35
     XMLFilterTabPageBasic m_xContainer std::unique_ptr<weld::Widget>
 filter/source/xsltdialog/xmlfiltertabpagexslt.hxx:45
     XMLFilterTabPageXSLT m_xContainer std::unique_ptr<weld::Widget>
+forms/source/inc/FormComponent.hxx:148
+    frm::OControl m_xContext css::uno::Reference<css::uno::XComponentContext>
 framework/inc/dispatch/dispatchprovider.hxx:76
     framework::DispatchProvider m_aProtocolHandlerCache HandlerCache
 helpcompiler/inc/HelpCompiler.hxx:200
@@ -100,7 +98,7 @@ include/docmodel/theme/FormatScheme.hxx:374
     model::DashStop mnStopLength sal_Int32
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:77
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard SolarMutexGuard
-include/editeng/unotext.hxx:627
+include/editeng/unotext.hxx:628
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/filter/msfilter/svdfppt.hxx:541
     ProcessData aBackgroundColoredObjects ::std::vector<rtl::Reference<SdrObject> >
@@ -442,7 +440,7 @@ svx/source/svdraw/svdmodel.cxx:93
     SdrModelImpl mpThemeColorChanger std::shared_ptr<svx::IThemeColorChanger>
 svx/source/tbxctrls/layctrl.cxx:431
     (anonymous namespace)::ColumnsWindow mxControl rtl::Reference<SvxColumnsToolBoxControl>
-sw/qa/extras/uiwriter/uiwriter10.cxx:47
+sw/qa/extras/uiwriter/uiwriter10.cxx:48
     SwUiWriterTest5 m_aSavedSettings AllSettings
 sw/source/core/crsr/crbm.cxx:62
     (anonymous namespace)::CursorStateHelper m_aSaveState SwCursorSaveState

@@ -142,8 +142,6 @@ cppu/source/uno/check.cxx:137
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:267
     (anonymous namespace)::Char4 chars Char3
-cui/source/dialogs/colorpicker.cxx:744
-    cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious ColorPreviewControl
 cui/source/factory/dlgfact.cxx:1177
     (anonymous namespace)::SvxMacroAssignDialog_Impl m_aItems SfxItemSet
 cui/source/inc/AdditionsDialog.hxx:46
@@ -152,6 +150,8 @@ cui/source/inc/AdditionsDialog.hxx:82
     AdditionsDialog m_sTag OUString
 cui/source/inc/cfgutil.hxx:244
     SvxScriptSelectorDialog m_aStylesInfo SfxStylesInfo_Impl
+cui/source/inc/connect.hxx:34
+    SvxConnectionPage rOutAttrs const SfxItemSet &
 cui/source/inc/cuitabarea.hxx:232
     SvxAreaTabPage maFixed_ChangeType ChangeType
 cui/source/inc/cuitabarea.hxx:236
@@ -254,7 +254,7 @@ include/LibreOfficeKit/LibreOfficeKitGtk.h:41
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:46
     _LOKDocViewClass parent_class GtkDrawingAreaClass
-include/oox/export/shapes.hxx:104
+include/oox/export/shapes.hxx:103
     oox::drawingml::ShapeExport maShapeMap ShapeHashMap
 include/registry/registry.hxx:34
     Registry_Api acquire void (*)(RegHandle)
@@ -520,7 +520,7 @@ sc/source/filter/inc/xistream.hxx:171
     XclImpBiff8StdDecrypter maCodec ::msfilter::MSCodec_Std97
 sc/source/filter/inc/xistream.hxx:193
     XclImpBiff8CryptoAPIDecrypter maCodec ::msfilter::MSCodec_CryptoAPI
-sc/source/filter/oox/worksheethelper.cxx:398
+sc/source/filter/oox/worksheethelper.cxx:396
     oox::xls::WorksheetGlobals mxProgressBar ISegmentProgressBarRef
 sc/source/filter/xml/xmldrani.hxx:71
     ScXMLDatabaseRangeContext bIsSelection _Bool
@@ -550,7 +550,7 @@ sd/inc/anminfo.hxx:51
     SdAnimationInfo maSecondSoundFile OUString
 sd/qa/inc/sdtiledrenderingtest.hxx:79
     SdTestViewCallback m_callbackWrapper TestLokCallbackWrapper
-sd/qa/unit/tiledrendering/tiledrendering.cxx:2835
+sd/qa/unit/tiledrendering/tiledrendering.cxx:2830
     (anonymous namespace)::SlideRendererChecker mnSlideNumber sal_Int32
 sd/source/filter/eppt/epptbase.hxx:348
     PPTWriterBase maFraction Fraction
@@ -752,7 +752,7 @@ sw/inc/unosett.hxx:143
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:145
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter10.cxx:47
+sw/qa/extras/uiwriter/uiwriter10.cxx:48
     SwUiWriterTest5 m_aSavedSettings AllSettings
 sw/qa/inc/swtestviewcallback.hxx:56
     SwTestViewCallback m_callbackWrapper TestLokCallbackWrapper
@@ -764,9 +764,9 @@ sw/source/core/inc/swfont.hxx:999
     SvStatistics nGetStretchTextSize sal_uInt16
 sw/source/core/layout/dbg_lay.cxx:181
     SwImplEnterLeave m_nAction DbgAction
-sw/source/core/text/inftxt.cxx:564
+sw/source/core/text/inftxt.cxx:568
     (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<VirtualDevice>
-sw/source/core/text/inftxt.hxx:725
+sw/source/core/text/inftxt.hxx:732
     SwTextSlot aText OUString
 sw/source/core/text/porfld.cxx:146
     (anonymous namespace)::SwFieldSlot aText OUString
@@ -784,8 +784,6 @@ sw/source/uibase/docvw/romenu.hxx:49
     SwReadOnlyPopup m_nReadonlyBackgroundtogallery sal_uInt16
 sw/source/uibase/inc/conttree.hxx:343
     SwGlobalTree m_aDropTargetHelper SwGlobalTreeDropTarget
-sw/source/uibase/inc/fldtdlg.hxx:35
-    SwFieldDlg m_bHtmlMode _Bool
 sw/source/uibase/inc/olmenu.hxx:78
     SwSpellPopup m_aBuilder VclBuilder
 sw/source/uibase/inc/swuicnttab.hxx:244
@@ -910,7 +908,7 @@ vcl/inc/font/TTFStructure.hxx:114
     font::HeadTable nGlyphDataFormat o3tl::sal_uInt16_BE
 vcl/inc/font/TTFStructure.hxx:126
     font::NameTable nVersion o3tl::sal_uInt16_BE
-vcl/inc/graphic/Manager.hxx:37
+vcl/inc/graphic/Manager.hxx:38
     vcl::graphic::MemoryManager mnTimeout sal_Int32
 vcl/inc/headless/BitmapHelper.hxx:32
     BitmapHelper aTmpBmp SvpSalBitmap
@@ -926,15 +924,13 @@ vcl/inc/pdf/pdfbuildin_fonts.hxx:42
     vcl::pdf::BuildinFont m_aWidths const int[256]
 vcl/inc/pdf/pdfwriter_impl.hxx:1077
     vcl::PDFWriterImpl m_bIsPDF_A4 _Bool
-vcl/inc/qt5/QtDragAndDrop.hxx:56
-    QtDropTarget m_pFrame QtFrame *
 vcl/inc/qt5/QtInstanceToolbar.hxx:20
     QtInstanceToolbar m_pToolBar QToolBar *
 vcl/inc/salprn.hxx:46
     SalPrinterQueueInfo moPortName std::optional<OUString>
-vcl/inc/salvtables.hxx:613
+vcl/inc/salvtables.hxx:615
     SalInstanceEntry m_aTextFilter WeldTextFilter
-vcl/inc/salvtables.hxx:1004
+vcl/inc/salvtables.hxx:1006
     SalInstanceComboBoxWithEdit m_aTextFilter WeldTextFilter
 vcl/inc/sft.hxx:178
     vcl::TTGlobalFontInfo_ fsSelection sal_uInt16
@@ -988,15 +984,15 @@ vcl/unx/gtk3/gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:7428
+vcl/unx/gtk3/gtkinst.cxx:7446
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtkinst.cxx:11134
+vcl/unx/gtk3/gtkinst.cxx:11152
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pContainer GtkBox *
-vcl/unx/gtk3/gtkinst.cxx:11136
+vcl/unx/gtk3/gtkinst.cxx:11154
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pMenuButton GtkMenuButton *
-vcl/unx/gtk3/gtkinst.cxx:21286
+vcl/unx/gtk3/gtkinst.cxx:21304
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtkinst.cxx:21292
+vcl/unx/gtk3/gtkinst.cxx:21310
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 xmloff/inc/XMLThemeContext.hxx:45
     XMLThemeColorsContext m_aColorScheme std::vector<css::util::Color>

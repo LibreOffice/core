@@ -2,7 +2,7 @@ basctl/source/basicide/moduldlg.hxx:140
     basctl::ObjectPage m_xDropTarget std::unique_ptr<SbTreeListBoxDropTarget>
 basctl/source/inc/basidesh.hxx:95
     basctl::Shell m_aNotifier DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:181
+basctl/source/inc/bastype2.hxx:186
     basctl::SbTreeListBox m_aNotifier DocumentEventNotifier
 basctl/source/inc/colorscheme.hxx:29
     basctl::ColorScheme m_sSchemeName OUString
@@ -82,11 +82,11 @@ canvas/source/cairo/cairo_spritedevicehelper.hxx:73
     cairocanvas::SpriteDeviceHelper mbFullScreen _Bool
 canvas/source/cairo/cairo_spritehelper.hxx:98
     cairocanvas::SpriteHelper mbTextureDirty _Bool
-chart2/inc/ChartModel.hxx:160
+chart2/inc/ChartModel.hxx:161
     chart::ChartModel m_aGraphicObjectVector std::vector<GraphicObject>
-chart2/inc/ChartModel.hxx:523
-    chart::ChartModel mnStart sal_Int32
 chart2/inc/ChartModel.hxx:524
+    chart::ChartModel mnStart sal_Int32
+chart2/inc/ChartModel.hxx:525
     chart::ChartModel mnEnd sal_Int32
 chart2/source/controller/dialogs/DialogModel.cxx:178
     (anonymous namespace)::lcl_RolesWithRangeAppend m_rDestCnt tContainerType *
@@ -534,9 +534,9 @@ include/editeng/outlobj.hxx:44
     OutlinerParaObjData mbIsEditDoc _Bool
 include/editeng/splwrap.hxx:52
     SvxSpellWrapper xWait std::unique_ptr<weld::WaitObject>
-include/editeng/unotext.hxx:439
+include/editeng/unotext.hxx:440
     SvxUnoTextBase xParentText css::uno::Reference<css::text::XText>
-include/editeng/unotext.hxx:608
+include/editeng/unotext.hxx:609
     SvxUnoTextContentEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/filter/msfilter/dffpropset.hxx:35
     DffPropFlags bBlip _Bool
@@ -656,7 +656,7 @@ include/sfx2/minfitem.hxx:38
     SfxMacroInfoItem aCommentText OUString
 include/sfx2/viewsh.hxx:186
     SfxViewShell m_xHelper std::shared_ptr<SfxStoringHelper>
-include/svl/poolitem.hxx:623
+include/svl/poolitem.hxx:624
     SfxPoolItem m_bDeleted _Bool
 include/svl/sigstruct.hxx:125
     SignatureInformation hasInconsistentSigningTime _Bool
@@ -756,10 +756,10 @@ include/svx/sidebar/InspectorTextPanel.hxx:70
     svx::sidebar::InspectorTextPanel mDFController sfx2::sidebar::ControllerItem
 include/svx/sidebar/LinePropertyPanelBase.hxx:94
     svx::sidebar::LinePropertyPanelBase mxArrowHeadStyleDispatch std::unique_ptr<ToolbarUnoDispatcher>
-include/svx/srchdlg.hxx:174
-    SvxSearchDialog pSearchController std::unique_ptr<SvxSearchController>
-include/svx/srchdlg.hxx:175
-    SvxSearchDialog pOptionsController std::unique_ptr<SvxSearchController>
+include/svx/srchdlg.hxx:172
+    SvxSearchDialog m_pSearchController std::unique_ptr<SvxSearchController>
+include/svx/srchdlg.hxx:173
+    SvxSearchDialog m_pOptionsController std::unique_ptr<SvxSearchController>
 include/svx/svdmrkv.hxx:100
     SdrMarkView mpMarkingSelectionOverlay std::unique_ptr<MarkingSelectionOverlay>
 include/svx/svdmrkv.hxx:101
@@ -1210,7 +1210,7 @@ sd/inc/drawdoc.hxx:184
     InsertBookmarkOptions bIsFileDocument _Bool
 sd/inc/sdmod.hxx:139
     SdModule mpErrorHdl std::unique_ptr<SfxErrorHandler>
-sd/source/console/PresenterTimer.cxx:110
+sd/source/console/PresenterTimer.cxx:111
     sdext::presenter::(anonymous namespace)::TimerScheduler mpLateDestroy std::shared_ptr<TimerScheduler>
 sd/source/ui/dlg/RemoteDialogClientBox.hxx:66
     sd::ClientBox m_vEntries std::vector<TClientBoxEntry>
@@ -1484,7 +1484,7 @@ sw/inc/accmap.hxx:95
     SwAccessibleMap mvShapes std::vector<css::uno::Reference<css::drawing::XShape> >
 sw/inc/swmodule.hxx:93
     SwModule m_pErrorHandler std::unique_ptr<SfxErrorHandler>
-sw/inc/swmodule.hxx:106
+sw/inc/swmodule.hxx:107
     SwModule m_xLinguServiceEventListener rtl::Reference<SwLinguServiceEventListener>
 sw/inc/swwait.hxx:45
     SwWait mpLockedDispatchers o3tl::sorted_vector<SfxDispatcher *>
@@ -1510,15 +1510,15 @@ sw/source/core/inc/swfont.hxx:1001
     SvStatistics nChangeFont sal_uInt16
 sw/source/core/layout/dbg_lay.cxx:135
     SwImplProtocol m_aVars std::vector<tools::Long>
-sw/source/core/layout/tabfrm.cxx:2127
-    (anonymous namespace)::PosSizeOscillationControl::FrameData frameArea SwRect
-sw/source/core/layout/tabfrm.cxx:2128
-    (anonymous namespace)::PosSizeOscillationControl::FrameData framePrintArea SwRect
-sw/source/core/layout/tabfrm.cxx:2129
-    (anonymous namespace)::PosSizeOscillationControl::FrameData frameAreaPositionValid _Bool
-sw/source/core/layout/tabfrm.cxx:2130
-    (anonymous namespace)::PosSizeOscillationControl::FrameData frameAreaSizeValid _Bool
 sw/source/core/layout/tabfrm.cxx:2131
+    (anonymous namespace)::PosSizeOscillationControl::FrameData frameArea SwRect
+sw/source/core/layout/tabfrm.cxx:2132
+    (anonymous namespace)::PosSizeOscillationControl::FrameData framePrintArea SwRect
+sw/source/core/layout/tabfrm.cxx:2133
+    (anonymous namespace)::PosSizeOscillationControl::FrameData frameAreaPositionValid _Bool
+sw/source/core/layout/tabfrm.cxx:2134
+    (anonymous namespace)::PosSizeOscillationControl::FrameData frameAreaSizeValid _Bool
+sw/source/core/layout/tabfrm.cxx:2135
     (anonymous namespace)::PosSizeOscillationControl::FrameData framePrintAreaValid _Bool
 sw/source/core/table/swtable.cxx:3100
     SwTableCellInfo::Impl m_HandledTableBoxes TableBoxes_t
@@ -1654,7 +1654,7 @@ vcl/inc/sft.hxx:168
     vcl::TTGlobalFontInfo_ linegap int
 vcl/inc/sft.hxx:172
     vcl::TTGlobalFontInfo_ typoLineGap int
-vcl/inc/svdata.hxx:451
+vcl/inc/svdata.hxx:456
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>
 vcl/inc/toolbarvalue.hxx:46
     ToolbarValue mbIsTopDockingArea _Bool
@@ -1978,13 +1978,13 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:80
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:21297
+vcl/unx/gtk3/gtkinst.cxx:21315
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection gpointer
 vcl/unx/gtk3/hudawareness.cxx:21
     (anonymous namespace)::HudAwarenessHandle notify GDestroyNotify
-vcl/workben/vcldemo.cxx:1723
+vcl/workben/vcldemo.cxx:1711
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
 xmlhelp/source/cxxhelp/provider/databases.hxx:256
     chelp::Databases m_aDatabases DatabasesTable
