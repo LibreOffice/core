@@ -65,6 +65,7 @@ class MaskPrimitive2D;
 class UnifiedTransparencePrimitive2D;
 class TransparencePrimitive2D;
 class ObjectInfoPrimitive2D;
+class FillGraphicPrimitive2D;
 class StructureTagPrimitive2D;
 }
 
@@ -146,6 +147,8 @@ private:
         const primitive2d::TransparencePrimitive2D& rTransparenceCandidate);
     void
     processObjectInfoPrimitive2D(const primitive2d::ObjectInfoPrimitive2D& rObjectInfoPrimitive2D);
+    void processFillGraphicPrimitive2D(
+        primitive2d::FillGraphicPrimitive2D const& rFillGraphicPrimitive2D);
     void processStructureTagPrimitive2D(
         const primitive2d::StructureTagPrimitive2D& rStructureTagCandidate);
 
