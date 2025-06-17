@@ -19,6 +19,7 @@ package mod._toolkit;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.XControl;
@@ -30,7 +31,6 @@ import com.sun.star.awt.XLayoutConstrains;
 import com.sun.star.awt.Size;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
@@ -76,7 +76,6 @@ public class AccessibleFixedText extends TestCase {
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) throws Exception {
-        XInterface oObj = null;
         XMultiServiceFactory xMSF = Param.getMSF();
         XControlModel dlgModel = null;
 
@@ -138,20 +137,17 @@ public class AccessibleFixedText extends TestCase {
             e.printStackTrace(log);
         }
 
-        oObj = (XInterface) Param.getMSF().createInstance(
-                       "com.sun.star.awt.Toolkit");
-
         util.utils.waitForEventIdle(Param.getMSF());
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWinDlg);
 
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.LABEL);
+        XAccessibleContext xLabel = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.LABEL);
 
-        log.println("ImplementationName " + utils.getImplName(oObj));
+        log.println("ImplementationName " + utils.getImplName(xLabel));
 
-        TestEnvironment tEnv = new TestEnvironment(oObj);
+        TestEnvironment tEnv = new TestEnvironment(xLabel);
 
         final XWindow xWin = UnoRuntime.queryInterface(XWindow.class,
                                                                  txtControl);
@@ -165,7 +161,7 @@ public class AccessibleFixedText extends TestCase {
         });
 
         XAccessibleText text = UnoRuntime.queryInterface(
-                                       XAccessibleText.class, oObj);
+                                       XAccessibleText.class, xLabel);
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
