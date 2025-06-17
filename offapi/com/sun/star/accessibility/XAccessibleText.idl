@@ -300,7 +300,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
 
         <p>Returns the complete text.  This is equivalent to a call to
         XAccessibleText::getTextRange() with the arguments
-        zero and <code>getCharacterCount()-1</code>.</p>
+        0 and <code>getCharacterCount()</code>.</p>
 
         @return
             Returns a string that contains the complete text.
