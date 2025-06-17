@@ -25,7 +25,6 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
@@ -36,8 +35,8 @@ public class AccessibilityTools {
 
     private AccessibilityTools() {}
 
-    public static XAccessible getAccessibleObject(XInterface xObject) {
-        return UnoRuntime.queryInterface(XAccessible.class, xObject);
+    public static XAccessible getAccessibleObject(XWindow xWindow) {
+        return UnoRuntime.queryInterface(XAccessible.class, xWindow);
     }
 
     public static XWindow getCurrentContainerWindow(XModel xModel) {
