@@ -1031,7 +1031,14 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     }
 
     uno::Reference<drawing::XShape> xShape(rShape);
-    if (m_aStates.top().getInShape() && xShape.is())
+
+    // \pict may be inside a shape property value, in which case the current destination is
+    // SHAPEINSTRUCTION. Or we may be inside shape text, when \pict is processed immediately.
+    bool bInShapeText = m_aStates.top().getDestination() == Destination::PICT;
+
+    // Only ignore the inner size for a shape property value, not for an inline shape inside shape
+    // text:
+    if (m_aStates.top().getInShape() && xShape.is() && !bInShapeText)
     {
         awt::Size aSize = xShape->getSize();
         if (aSize.Width || aSize.Height)

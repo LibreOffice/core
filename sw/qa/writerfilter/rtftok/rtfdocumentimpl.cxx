@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -18,16 +18,18 @@
 
 #include <vcl/graph.hxx>
 
+#include <fmtfsize.hxx>
+
 using namespace ::com::sun::star;
 
 namespace
 {
 /// Tests for sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx.
-class Test : public UnoApiTest
+class Test : public SwModelTestBase
 {
 public:
     Test()
-        : UnoApiTest(u"/sw/qa/writerfilter/rtftok/data/"_ustr)
+        : SwModelTestBase(u"/sw/qa/writerfilter/rtftok/data/"_ustr)
     {
     }
 };
@@ -110,6 +112,27 @@ CPPUNIT_TEST_FIXTURE(Test, testOldParaNumLeftMargin)
     // - Actual  : 0
     // i.e. the left indent was 0, not 1191 twips (from the file) in mm100.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2101), nParaLeftMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testImageSizeInShapeText)
+{
+    // Given an RTF document with a shape and an icon image inside that:
+    // When loading this document:
+    createSwDoc("image-size-in-shape-text.rtf");
+
+    // Then make sure that the icon image has the correct (small) size:
+    SwDoc* pDoc = getSwDoc();
+    const sw::FrameFormats<sw::SpzFrameFormat*>& rFlyFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFlyFormats.size());
+    const sw::SpzFrameFormat& rImageFlyFormat = *rFlyFormats[1];
+    const SwFormatFrameSize& rImageSize = rImageFlyFormat.GetFrameSize();
+    // 255 * 0.82 in the RTF file.
+    SwTwips nExpected = 209;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 209
+    // - Actual  : 8808
+    // i.e. the size of the icon was inherited from the containing shape, losing the own size.
+    CPPUNIT_ASSERT_EQUAL(nExpected, rImageSize.GetWidth());
 }
 }
 
