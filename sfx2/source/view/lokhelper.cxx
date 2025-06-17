@@ -153,23 +153,12 @@ void SfxLokHelper::setEditMode(int nMode, vcl::ITiledRenderable* pDoc)
 
 void SfxLokHelper::destroyView(int nId)
 {
-    const SfxApplication* pApp = SfxApplication::Get();
-    if (pApp == nullptr)
-        return;
-
-    const ViewShellId nViewShellId(nId);
-    std::vector<SfxViewShell*>& rViewArr = pApp->GetViewShells_Impl();
-
-    for (SfxViewShell* pViewShell : rViewArr)
+    if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        if (pViewShell->GetViewShellId() == nViewShellId)
-        {
-            pViewShell->SetLOKAccessibilityState(false);
-            SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
-            SfxRequest aRequest(rViewFrame, SID_CLOSEWIN);
-            rViewFrame.Exec_Impl(aRequest);
-            break;
-        }
+        pViewShell->SetLOKAccessibilityState(false);
+        SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+        SfxRequest aRequest(rViewFrame, SID_CLOSEWIN);
+        rViewFrame.Exec_Impl(aRequest);
     }
 }
 
@@ -183,19 +172,10 @@ void SfxLokHelper::setView(int nId)
     g_bSettingView = true;
     comphelper::ScopeGuard g([] { g_bSettingView = false; });
 
-    SfxApplication* pApp = SfxApplication::Get();
-    if (pApp == nullptr)
+    const SfxViewShell* pViewShell = getViewOfId(nId);
+    if (!pViewShell)
         return;
 
-    const ViewShellId nViewShellId(nId);
-    std::vector<SfxViewShell*>& rViewArr = pApp->GetViewShells_Impl();
-
-    const auto itViewShell = std::find_if(rViewArr.begin(), rViewArr.end(), [nViewShellId](SfxViewShell* pViewShell){ return pViewShell->GetViewShellId() == nViewShellId; });
-    if (itViewShell == rViewArr.end())
-        return;
-
-    const SfxViewShell* pViewShell = *itViewShell;
-    assert(pViewShell);
     DisableCallbacks dc;
 
     bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
@@ -336,78 +316,48 @@ void SfxLokHelper::setLoadLanguage(const OUString& rBcp47LanguageTag)
 
 void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
 {
-    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-
-    for (SfxViewShell* pViewShell : rViewArr)
+    if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        if (pViewShell->GetViewShellId() == ViewShellId(nId))
-        {
-            pViewShell->SetLOKLanguageTag(rBcp47LanguageTag);
-            // sync also global getter if we are the current view
-            bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
-            if (bIsCurrShell)
-                comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
-            return;
-        }
+        pViewShell->SetLOKLanguageTag(rBcp47LanguageTag);
+        // sync also global getter if we are the current view
+        bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
+        if (bIsCurrShell)
+            comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
     }
 }
 
 void SfxLokHelper::setViewReadOnly(int nId, bool readOnly)
 {
-    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-
-    for (SfxViewShell* pViewShell : rViewArr)
+    if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        if (pViewShell && pViewShell->GetViewShellId() == ViewShellId(nId))
-        {
-            LOK_INFO("lok.readonlyview", "SfxLokHelper::setViewReadOnly: view id: " << nId << ", readOnly: " << readOnly);
-            pViewShell->SetLokReadOnlyView(readOnly);
-            return;
-        }
+        LOK_INFO("lok.readonlyview", "SfxLokHelper::setViewReadOnly: view id: " << nId << ", readOnly: " << readOnly);
+        pViewShell->SetLokReadOnlyView(readOnly);
     }
 }
 
 void SfxLokHelper::setAllowChangeComments(int nId, bool allow)
 {
-    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-
-    for (SfxViewShell* pViewShell : rViewArr)
+    if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        if (pViewShell && pViewShell->GetViewShellId() == ViewShellId(nId))
-        {
-            LOK_INFO("lok.readonlyview", "SfxLokHelper::setAllowChangeComments: view id: " << nId << ", allow: " << allow);
-            pViewShell->SetAllowChangeComments(allow);
-            return;
-        }
+        LOK_INFO("lok.readonlyview", "SfxLokHelper::setAllowChangeComments: view id: " << nId << ", allow: " << allow);
+        pViewShell->SetAllowChangeComments(allow);
     }
 }
 
 void SfxLokHelper::setAccessibilityState(int nId, bool nEnabled)
 {
-    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-
-    for (SfxViewShell* pViewShell : rViewArr)
+    if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        if (pViewShell && pViewShell->GetViewShellId() == ViewShellId(nId))
-        {
-            LOK_INFO("lok.a11y", "SfxLokHelper::setAccessibilityState: view id: " << nId << ", nEnabled: " << nEnabled);
-            pViewShell->SetLOKAccessibilityState(nEnabled);
-            return;
-        }
+        LOK_INFO("lok.a11y", "SfxLokHelper::setAccessibilityState: view id: " << nId << ", nEnabled: " << nEnabled);
+        pViewShell->SetLOKAccessibilityState(nEnabled);
     }
 }
 
 void SfxLokHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
 {
-    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-
-    for (SfxViewShell* pViewShell : rViewArr)
+    if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        if (pViewShell->GetViewShellId() == ViewShellId(nId))
-        {
-            pViewShell->SetLOKLocale(rBcp47LanguageTag);
-            return;
-        }
+        pViewShell->SetLOKLocale(rBcp47LanguageTag);
     }
 }
 
@@ -441,28 +391,17 @@ std::pair<bool, OUString> SfxLokHelper::getDefaultTimezone()
 
 void SfxLokHelper::setViewTimezone(int nId, bool isSet, const OUString& rTimezone)
 {
-    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-
-    for (SfxViewShell* pViewShell : rViewArr)
+    if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        if (pViewShell->GetViewShellId() == ViewShellId(nId))
-        {
-            pViewShell->SetLOKTimezone(isSet, rTimezone);
-            return;
-        }
+        pViewShell->SetLOKTimezone(isSet, rTimezone);
     }
 }
 
 std::pair<bool, OUString> SfxLokHelper::getViewTimezone(int nId)
 {
-    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-
-    for (SfxViewShell* pViewShell : rViewArr)
+    if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        if (pViewShell->GetViewShellId() == ViewShellId(nId))
-        {
-            return pViewShell->GetLOKTimezone();
-        }
+        return pViewShell->GetLOKTimezone();
     }
 
     return {};
