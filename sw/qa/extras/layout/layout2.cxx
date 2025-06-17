@@ -629,6 +629,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering2)
     assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[7]/text", u"4.[3.] ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, tdf157596_paragraph_numbering)
+{
+    createSwDoc("tdf157596_paragraph_numbering.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // show correct numbering during fileload.
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", u"1.");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", u"2.");
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", u"3.");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
 {
     createSwDoc("tdf149710.fodt");
