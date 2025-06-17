@@ -20,12 +20,12 @@ package mod._toolkit;
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
@@ -112,8 +112,6 @@ public class AccessibleToolBox extends TestCase {
         log.println("creating a text document");
         xTextDoc = SOF.createTextDoc(null);
 
-        XInterface oObj = null;
-
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();
 
@@ -121,19 +119,18 @@ public class AccessibleToolBox extends TestCase {
 
         AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TOOL_BAR);
+        XAccessibleContext xAccContext = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TOOL_BAR);
 
-        log.println("ImplementationName: " + util.utils.getImplName(oObj));
+        log.println("ImplementationName: " + util.utils.getImplName(xAccContext));
 
-        TestEnvironment tEnv = new TestEnvironment(oObj);
+        TestEnvironment tEnv = new TestEnvironment(xAccContext);
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
-        XAccessible acc = AccessibilityTools.getAccessibleObject(oObj);
         XAccessible child = null;
 
         try {
-            child = acc.getAccessibleContext().getAccessibleChild(0);
+            child = xAccContext.getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
         }
 
