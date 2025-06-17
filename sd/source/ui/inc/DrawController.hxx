@@ -26,7 +26,8 @@
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XSlideSorterSelectionSupplier.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/drawing/framework/XModuleController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -52,7 +53,6 @@ typedef ::cppu::ImplInheritanceHelper <
     css::drawing::XDrawView,
     css::view::XSelectionChangeListener,
     css::view::XFormLayerAccess,
-    css::drawing::framework::XControllerManager,
     css::drawing::XSlideSorterSelectionSupplier
     > DrawControllerInterfaceBase;
 
@@ -70,9 +70,6 @@ class ViewShellBase;
     specific behaviour.  The life time of the DrawController is roughly that
     of ViewShellBase but note that the DrawController can (in the case of a
     reload) outlive the ViewShellBase.
-
-    The implementation of the XControllerManager interface is not yet in its
-    final form.
 */
 class SAL_DLLPUBLIC_RTTI DrawController final
     : public DrawControllerInterfaceBase,
@@ -215,13 +212,11 @@ public:
     virtual void  SAL_CALL
         selectionChanged (const css::lang::EventObject& rEvent) override;
 
-    // XControllerManager
+    SD_DLLPUBLIC css::uno::Reference<css::drawing::framework::XConfigurationController>
+        getConfigurationController();
 
-    SD_DLLPUBLIC virtual css::uno::Reference<css::drawing::framework::XConfigurationController> SAL_CALL
-        getConfigurationController() override;
-
-    virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
-        getModuleController() override;
+    css::uno::Reference<css::drawing::framework::XModuleController>
+        getModuleController();
 
     // XSlideSorterSelectionSupplier
     virtual css::uno::Any SAL_CALL getSlideSorterSelection(  ) override;

@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
 

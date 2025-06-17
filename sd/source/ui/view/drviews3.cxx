@@ -72,7 +72,6 @@
 #include <ViewShellBase.hxx>
 #include <FormShellManager.hxx>
 #include <LayerTabBar.hxx>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -406,11 +405,13 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     Reference<XController> xController( xFrame->getController(), UNO_SET_THROW );
 
                     // Restore the configuration.
-                    Reference<XControllerManager> xControllerManager( xController, UNO_QUERY_THROW );
-                    xConfigurationController.set( xControllerManager->getConfigurationController() );
-                    if ( ! xConfigurationController.is())
-                        throw RuntimeException();
-                    xConfigurationController->restoreConfiguration(xConfiguration);
+                    if (auto pDrawController2 = dynamic_cast<DrawController*>( xController.get() ))
+                    {
+                        xConfigurationController.set( pDrawController2->getConfigurationController() );
+                        if ( ! xConfigurationController.is())
+                            throw RuntimeException();
+                        xConfigurationController->restoreConfiguration(xConfiguration);
+                    }
                 }
             }
             catch (RuntimeException&)

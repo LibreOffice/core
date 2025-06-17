@@ -25,7 +25,6 @@
 #include <DrawController.hxx>
 #include <ViewShellBase.hxx>
 #include <sfx2/printer.hxx>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;

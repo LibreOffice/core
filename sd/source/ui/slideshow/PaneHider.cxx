@@ -25,7 +25,6 @@
 #include "slideshowimpl.hxx"
 #include <framework/FrameworkHelper.hxx>
 
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/frame/XController.hpp>

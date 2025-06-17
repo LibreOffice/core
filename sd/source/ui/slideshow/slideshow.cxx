@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 

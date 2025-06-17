@@ -27,7 +27,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

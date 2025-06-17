@@ -30,7 +30,6 @@
 #include "UpdateRequest.hxx"
 #include "ChangeRequestQueueProcessor.hxx"
 #include "ConfigurationClassifier.hxx"
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
 #include <sal/log.hxx>

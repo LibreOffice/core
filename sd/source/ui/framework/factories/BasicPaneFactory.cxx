@@ -34,7 +34,6 @@
 #include <ViewShellBase.hxx>
 #include <PaneChildWindows.hxx>
 #include <DrawController.hxx>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -88,7 +88,7 @@ public:
     std::shared_ptr<ConfigurationUpdaterLock> GetLock();
 
 private:
-    /** A reference to the XControllerManager is kept so that
+    /** A reference to the DrawController is kept so that
         UpdateConfiguration() has access to the other sub controllers.
     */
     rtl::Reference<::sd::DrawController> mxControllerManager;

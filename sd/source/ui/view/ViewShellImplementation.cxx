@@ -48,8 +48,6 @@
 
 #include <undo/undoobjects.hxx>
 
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
-
 namespace sd {
 
 ViewShell::Implementation::Implementation (ViewShell& rViewShell)

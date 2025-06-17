@@ -550,9 +550,7 @@ void DrawController::ReleaseViewShellBase()
     mpBase = nullptr;
 }
 
-//===== XControllerManager ==============================================================
-
-Reference<XConfigurationController> SAL_CALL
+Reference<XConfigurationController>
     DrawController::getConfigurationController()
 {
     ThrowIfDisposed();
@@ -568,8 +566,7 @@ const rtl::Reference<sd::framework::ConfigurationController> &
     return mxConfigurationController;
 }
 
-Reference<XModuleController> SAL_CALL
-    DrawController::getModuleController()
+Reference<XModuleController> DrawController::getModuleController()
 {
     ThrowIfDisposed();
 

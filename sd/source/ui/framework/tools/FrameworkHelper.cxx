@@ -29,7 +29,6 @@
 #include <ViewShellHint.hxx>
 #include <DrawController.hxx>
 #include <app.hrc>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/compbase.hxx>

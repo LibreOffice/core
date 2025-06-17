@@ -21,7 +21,6 @@
 
 #include <officecfg/Office/Impress.hxx>
 
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
 using namespace ::com::sun::star;

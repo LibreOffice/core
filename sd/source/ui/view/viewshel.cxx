@@ -93,7 +93,6 @@
 #include <sdmod.hxx>
 #include <AccessibleDocumentViewBase.hxx>
 
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>

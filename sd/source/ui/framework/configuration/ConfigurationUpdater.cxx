@@ -26,7 +26,6 @@
 #include <framework/FrameworkHelper.hxx>
 #include <DrawController.hxx>
 
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>

@@ -20,7 +20,6 @@
 #include <framework/PresentationFactory.hxx>
 
 #include <DrawController.hxx>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/compbase.hxx>

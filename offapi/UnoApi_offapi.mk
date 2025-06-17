@@ -2400,7 +2400,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
 	XConfigurationController \
 	XConfigurationControllerBroadcaster \
 	XConfigurationControllerRequestQueue \
-	XControllerManager \
 	XModuleController \
 	XPane \
 	XPane2 \
