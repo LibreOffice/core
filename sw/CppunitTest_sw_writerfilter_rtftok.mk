@@ -31,14 +31,26 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_writerfilter_rtftok, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     oox \
     sal \
     subsequenttest \
+    svl \
+    sw \
+    swqahelper \
     test \
     unotest \
     utl \
     tl \
     vcl \
+))
+
+$(eval $(call gb_CppunitTest_set_include,sw_writerfilter_rtftok,\
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/uibase/inc \
+    -I$(SRCDIR)/sw/qa/inc \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sw_writerfilter_rtftok))
