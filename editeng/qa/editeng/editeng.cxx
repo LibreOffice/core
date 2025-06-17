@@ -190,6 +190,28 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFStyleExportFollowRecursive)
     SvMemoryStream& rStream = pData->GetRTFStream();
     CPPUNIT_ASSERT_GREATER(static_cast<sal_uInt64>(0), rStream.remainingSize());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf119192)
+{
+    // Tests that font changes due to a script type change are placed in paragraph scope
+    EditEngine aEditEngine(mpItemPool.get());
+
+    OUString aText = u"mytest"_ustr;
+    aEditEngine.SetText(aText);
+
+    uno::Reference<datatransfer::XTransferable> xData
+        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, aText.getLength()));
+
+    auto pData = dynamic_cast<EditDataObject*>(xData.get());
+    SvMemoryStream& rStream = pData->GetRTFStream();
+
+    std::string aCnt{ static_cast<const char*>(rStream.GetData()),
+                      static_cast<size_t>(rStream.GetSize()) };
+
+    // Without the fix, the RTF text will include font attributes inside the curly braces.
+    bool bContains = (aCnt.find("{mytest}") != std::string::npos);
+    CPPUNIT_ASSERT(bContains);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
