@@ -30,7 +30,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
-#include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -387,7 +386,7 @@ void PresenterScreen::InitializePresenterScreen()
                 // panes and does not replace them.
                 xCC->requestResourceActivation(
                     xMainPaneId,
-                    ResourceActivationMode_ADD);
+                    sd::framework::ResourceActivationMode::ADD);
                 SetupConfiguration(xContext, xMainPaneId);
 
                 mpPresenterController = new PresenterController(

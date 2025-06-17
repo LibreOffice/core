@@ -332,8 +332,8 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
                 FrameworkHelper::CreateResourceId(sView, xCenterPaneId));
 
             // Request center pane and view.
-            xConfigurationController->requestResourceActivation(xCenterPaneId, ResourceActivationMode_ADD);
-            xConfigurationController->requestResourceActivation(xCenterViewId, ResourceActivationMode_REPLACE);
+            xConfigurationController->requestResourceActivation(xCenterPaneId, framework::ResourceActivationMode::ADD);
+            xConfigurationController->requestResourceActivation(xCenterViewId, framework::ResourceActivationMode::REPLACE);
 
             // Process configuration events synchronously until the center view
             // has been created.
@@ -1348,10 +1348,10 @@ void ViewShellBase::Implementation::SetPaneVisibility (
         {
             xConfigurationController->requestResourceActivation(
                 xPaneId,
-                ResourceActivationMode_ADD);
+                framework::ResourceActivationMode::ADD);
             xConfigurationController->requestResourceActivation(
                 xViewId,
-                ResourceActivationMode_REPLACE);
+                framework::ResourceActivationMode::REPLACE);
         }
         else
             xConfigurationController->requestResourceDeactivation(

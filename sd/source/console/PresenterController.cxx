@@ -42,7 +42,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -461,13 +460,13 @@ void PresenterController::ShowView (const OUString& rsViewURL)
     pDescriptor->mbIsActive = true;
     mxConfigurationController->requestResourceActivation(
         pDescriptor->mxPaneId,
-        ResourceActivationMode_ADD);
+        sd::framework::ResourceActivationMode::ADD);
     mxConfigurationController->requestResourceActivation(
         ResourceId::createWithAnchor(
             mxComponentContext,
             rsViewURL,
             pDescriptor->mxPaneId),
-        ResourceActivationMode_REPLACE);
+        sd::framework::ResourceActivationMode::REPLACE);
 }
 
 void PresenterController::HideView (const OUString& rsViewURL)

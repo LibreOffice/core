@@ -20,7 +20,6 @@
 #pragma once
 
 #include <sddllapi.h>
-#include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
@@ -35,6 +34,24 @@
 namespace sd { class DrawController; }
 
 namespace sd::framework {
+
+/** The ResourceActivationMode specifies, for example for the
+    com::sun::star::drawing::framework::XConfigurationController::requestResourceActivation(),
+    whether a requested resource is to replace an existing resource of the
+    same class or is to be activated additionally.
+*/
+enum class ResourceActivationMode
+{
+    /** A resource is requested in addition to already existing ones.  This
+        is used for example for panes.
+    */
+    ADD,
+
+    /** A resource is requested to replace an already existing one of the
+        same class.  This is used for example for views.
+    */
+    REPLACE
+};
 
 /** The configuration controller is responsible for maintaining the current
     configuration.
@@ -73,7 +90,7 @@ public:
 
     void requestResourceActivation (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
-        css::drawing::framework::ResourceActivationMode eMode);
+        ResourceActivationMode eMode);
 
     void requestResourceDeactivation (
         const css::uno::Reference<css::drawing::framework::XResourceId>&

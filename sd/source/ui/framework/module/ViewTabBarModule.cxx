@@ -102,7 +102,7 @@ void SAL_CALL ViewTabBarModule::notifyConfigurationChange (
             {
                 mxConfigurationController->requestResourceActivation(
                     mxViewTabBarId,
-                    ResourceActivationMode_ADD);
+                    ResourceActivationMode::ADD);
             }
             break;
 

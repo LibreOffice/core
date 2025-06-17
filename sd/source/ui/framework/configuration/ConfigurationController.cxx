@@ -247,7 +247,7 @@ void ConfigurationController::requestResourceActivation (
     if (!rxResourceId.is())
         return;
 
-    if (eMode == ResourceActivationMode_REPLACE)
+    if (eMode == ResourceActivationMode::REPLACE)
     {
         // Get a list of the matching resources and create deactivation
         // requests for them.
@@ -432,7 +432,7 @@ void ConfigurationController::restoreConfiguration (
         aClassifier.GetC1minusC2());
     for (const auto& rxResource : rResourcesToActivate)
     {
-        requestResourceActivation(rxResource, ResourceActivationMode_ADD);
+        requestResourceActivation(rxResource, ResourceActivationMode::ADD);
     }
 
     pLock.reset();

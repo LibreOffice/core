@@ -284,7 +284,7 @@ bool ViewTabBar::ActivatePage(size_t nIndex)
             {
                 xConfigurationController->requestResourceActivation(
                     maTabBarButtons[nIndex].ResourceId,
-                    ResourceActivationMode_REPLACE);
+                    sd::framework::ResourceActivationMode::REPLACE);
             }
 
             return true;

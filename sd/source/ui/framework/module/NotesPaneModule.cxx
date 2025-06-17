@@ -118,9 +118,9 @@ IMPL_LINK(NotesPaneModule, EventMultiplexerListener, sd::tools::EventMultiplexer
             if (IsResourceActive(msCurrentMainViewURL))
             {
                 mxConfigurationController->requestResourceActivation(
-                    mxBottomImpressPaneId->getAnchor(), ResourceActivationMode_ADD);
+                    mxBottomImpressPaneId->getAnchor(), ResourceActivationMode::ADD);
                 mxConfigurationController->requestResourceActivation(
-                    mxBottomImpressPaneId, ResourceActivationMode_REPLACE);
+                    mxBottomImpressPaneId, ResourceActivationMode::REPLACE);
             }
             else
             {
@@ -211,9 +211,9 @@ void NotesPaneModule::onMainViewSwitch(const OUString& rsViewURL, const bool bIs
     if (IsResourceActive(msCurrentMainViewURL) && !mbInMasterEditMode)
     {
         mxConfigurationController->requestResourceActivation(mxBottomImpressPaneId->getAnchor(),
-                                                             ResourceActivationMode_ADD);
+                                                             ResourceActivationMode::ADD);
         mxConfigurationController->requestResourceActivation(mxBottomImpressPaneId,
-                                                             ResourceActivationMode_REPLACE);
+                                                             ResourceActivationMode::REPLACE);
     }
     else
     {

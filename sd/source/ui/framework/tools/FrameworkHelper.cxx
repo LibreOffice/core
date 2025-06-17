@@ -404,11 +404,11 @@ Reference<XResourceId> FrameworkHelper::RequestView (
         {
             mxConfigurationController->requestResourceActivation(
                 CreateResourceId(rsAnchorURL),
-                ResourceActivationMode_ADD);
+                ResourceActivationMode::ADD);
             xViewId = CreateResourceId(rsResourceURL, rsAnchorURL);
             mxConfigurationController->requestResourceActivation(
                 xViewId,
-                ResourceActivationMode_REPLACE);
+                ResourceActivationMode::REPLACE);
         }
     }
     catch (lang::DisposedException&)
@@ -577,7 +577,7 @@ void FrameworkHelper::HandleModeChangeSlot (
             const auto xId = CreateResourceId(sRequestedView, msCenterPaneURL);
             mxConfigurationController->requestResourceActivation(
                 xId,
-                ResourceActivationMode_REPLACE);
+                ResourceActivationMode::REPLACE);
             RunOnResourceActivation(xId, std::bind(&asyncUpdateEditMode, this, eEMode));
         }
         else

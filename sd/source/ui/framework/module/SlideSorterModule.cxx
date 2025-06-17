@@ -263,10 +263,10 @@ void SlideSorterModule::HandleMainViewSwitch (
         // Activate resource.
         mxConfigurationController->requestResourceActivation(
             mxResourceId->getAnchor(),
-            ResourceActivationMode_ADD);
+            ResourceActivationMode::ADD);
         mxConfigurationController->requestResourceActivation(
             mxResourceId,
-            ResourceActivationMode_REPLACE);
+            ResourceActivationMode::REPLACE);
     }
     else
     {
