@@ -19,6 +19,7 @@
 
 #include "ResourceFactoryManager.hxx"
 #include <DrawController.hxx>
+#include <framework/ModuleController.hxx>
 #include <tools/wldcrd.hxx>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -155,7 +156,7 @@ Reference<XResourceFactory> ResourceFactoryManager::GetFactory (
 
     if ( ! xFactory.is() && mxControllerManager.is())
     {
-        Reference<XModuleController> xModuleController(mxControllerManager->getModuleController());
+        rtl::Reference<ModuleController> xModuleController(mxControllerManager->getModuleController());
         if (xModuleController.is())
         {
             // Ask the module controller to provide a factory of the

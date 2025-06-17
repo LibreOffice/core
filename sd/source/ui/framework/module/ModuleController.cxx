@@ -121,9 +121,7 @@ void ModuleController::InstantiateStartupServices()
     }
 }
 
-//----- XModuleController -----------------------------------------------------
-
-void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
+void ModuleController::requestResource (const OUString& rsResourceURL)
 {
     auto iFactory = maResourceToFactoryMap.find(rsResourceURL);
     if (iFactory == maResourceToFactoryMap.end())

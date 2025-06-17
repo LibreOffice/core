@@ -231,7 +231,6 @@ excludelist:
     - sal/types.h
     sd/source/ui/inc/framework/ModuleController.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/framework/XModuleController.hpp
     - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/inc/framework/Pane.hxx:
     # base class has to be a complete type

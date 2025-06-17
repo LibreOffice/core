@@ -2397,7 +2397,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
 	XConfiguration \
 	XConfigurationChangeListener \
 	XConfigurationChangeRequest \
-	XModuleController \
 	XPane \
 	XPane2 \
 	XResource \

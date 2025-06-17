@@ -26,7 +26,6 @@
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XSlideSorterSelectionSupplier.hpp>
-#include <com/sun/star/drawing/framework/XModuleController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -213,8 +212,7 @@ public:
 
     SD_DLLPUBLIC const rtl::Reference<sd::framework::ConfigurationController> & getConfigurationController();
 
-    css::uno::Reference<css::drawing::framework::XModuleController>
-        getModuleController();
+    rtl::Reference<sd::framework::ModuleController> getModuleController();
 
     // XSlideSorterSelectionSupplier
     virtual css::uno::Any SAL_CALL getSlideSorterSelection(  ) override;

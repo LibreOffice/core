@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XModuleController.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -31,9 +30,7 @@ namespace sd { class DrawController; }
 
 namespace sd::framework {
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XModuleController
-    > ModuleControllerInterfaceBase;
+typedef comphelper::WeakComponentImplHelper <> ModuleControllerInterfaceBase;
 
 /** The ModuleController has two tasks:
 
@@ -61,9 +58,10 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // XModuleController
-
-    virtual void SAL_CALL requestResource(const OUString& rsResourceURL) override;
+    /** When the specified resource is requested for the first time then
+        create a new instance of the associated factory service.
+    */
+    void requestResource(const OUString& rsResourceURL);
 
 private:
     rtl::Reference<::sd::DrawController> mxController;
