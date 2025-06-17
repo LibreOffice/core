@@ -147,7 +147,7 @@
                   <object class="GtkImage" id="imOrganizer">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/organizer.png</property>
+                    <property name="icon-name">cmd/lc_browseview.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbOrganizer"/>
                     </accessibility>
@@ -201,7 +201,7 @@
                   <object class="GtkImage" id="imFont">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/font.png</property>
+                    <property name="icon-name">cmd/lc_fontdialog.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbFont"/>
                     </accessibility>
@@ -255,7 +255,7 @@
                   <object class="GtkImage" id="imFontEffect">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/fonteffect.png</property>
+                    <property name="icon-name">cmd/lc_color.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbFontEffect"/>
                     </accessibility>
@@ -309,7 +309,7 @@
                   <object class="GtkImage" id="imPosition">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/position.png</property>
+                    <property name="icon-name">cmd/lc_fontwork.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbPosition"/>
                     </accessibility>
@@ -363,7 +363,7 @@
                   <object class="GtkImage" id="imAsianLayout">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/asianlayout.png</property>
+                    <property name="icon-name">cmd/lc_textdirectiontoptobottom.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbAsianLayout"/>
                     </accessibility>
@@ -417,7 +417,7 @@
                   <object class="GtkImage" id="imBackground">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/background.png</property>
+                    <property name="icon-name">cmd/lc_backcolor.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbBackground"/>
                     </accessibility>
@@ -471,7 +471,7 @@
                   <object class="GtkImage" id="imBorders">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/borders.png</property>
+                    <property name="icon-name">cmd/lc_borderdialog.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbBorders"/>
                     </accessibility>

@@ -142,7 +142,7 @@
                   <object class="GtkImage" id="imOrganizer">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/organizer.png</property>
+                    <property name="icon-name">cmd/lc_browseview.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbOrganizer"/>
                     </accessibility>
@@ -192,7 +192,7 @@
                   <object class="GtkImage" id="imType">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/type.png</property>
+                    <property name="icon-name">cmd/lc_toggleanchortype.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbType"/>
                     </accessibility>
@@ -246,7 +246,7 @@
                   <object class="GtkImage" id="imOptions">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/options.png</property>
+                    <property name="icon-name">cmd/lc_inserthyperlink.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbOptions"/>
                     </accessibility>
@@ -300,7 +300,7 @@
                   <object class="GtkImage" id="imWrap">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/wrap.png</property>
+                    <property name="icon-name">cmd/lc_wrapcontour.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbWrap"/>
                     </accessibility>
@@ -354,7 +354,7 @@
                   <object class="GtkImage" id="imArea">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/area.png</property>
+                    <property name="icon-name">cmd/lc_backgroundcolor.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbArea"/>
                     </accessibility>
@@ -408,7 +408,7 @@
                   <object class="GtkImage" id="imTransparence">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/transparence.png</property>
+                    <property name="icon-name">cmd/lc_graftransparence.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbTransparence"/>
                     </accessibility>
@@ -462,7 +462,7 @@
                   <object class="GtkImage" id="imBorders">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/borders.png</property>
+                    <property name="icon-name">cmd/lc_borderdialog.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbBorders"/>
                     </accessibility>
@@ -516,7 +516,7 @@
                   <object class="GtkImage" id="imColumns">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/columns.png</property>
+                    <property name="icon-name">cmd/lc_pagecolumntype.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbColumns"/>
                     </accessibility>
@@ -570,7 +570,7 @@
                   <object class="GtkImage" id="imMacros">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/macros.png</property>
+                    <property name="icon-name">cmd/lc_choosemacro.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbMacros"/>
                     </accessibility>

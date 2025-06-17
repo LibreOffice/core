@@ -142,7 +142,7 @@
                   <object class="GtkImage" id="imOrganizer">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/organizer.png</property>
+                    <property name="icon-name">cmd/lc_browseview.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbOrganizer"/>
                     </accessibility>
@@ -197,7 +197,7 @@
                   <object class="GtkImage" id="imBullets">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/bullets.png</property>
+                    <property name="icon-name">cmd/lc_defaultbullet.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbBullets"/>
                     </accessibility>
@@ -252,7 +252,7 @@
                   <object class="GtkImage" id="imNumbering">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/numbering.png</property>
+                    <property name="icon-name">cmd/lc_defaultnumbering.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbNumbering"/>
                     </accessibility>
@@ -307,7 +307,7 @@
                   <object class="GtkImage" id="imOutline">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/outline.png</property>
+                    <property name="icon-name">cmd/lc_setoutline.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbOutline"/>
                     </accessibility>
@@ -362,7 +362,7 @@
                   <object class="GtkImage" id="imGraphics">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/graphics.png</property>
+                    <property name="icon-name">cmd/lc_imagebutton.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbGraphics"/>
                     </accessibility>
@@ -417,7 +417,7 @@
                   <object class="GtkImage" id="imPosition">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/listposition.png</property>
+                    <property name="icon-name">cmd/lc_hangingindent.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbPosition"/>
                     </accessibility>
@@ -472,7 +472,7 @@
                   <object class="GtkImage" id="imCustomize">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/customize.png</property>
+                    <property name="icon-name">cmd/lc_developmenttoolsdockingwindow.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbCustomize"/>
                     </accessibility>

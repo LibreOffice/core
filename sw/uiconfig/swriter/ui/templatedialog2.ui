@@ -141,7 +141,7 @@
                   <object class="GtkImage" id="imOrganizer">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/organizer.png</property>
+                    <property name="icon-name">cmd/lc_browseview.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbOrganizer"/>
                     </accessibility>
@@ -193,7 +193,7 @@
                   <object class="GtkImage" id="imFont">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/font.png</property>
+                    <property name="icon-name">cmd/lc_fontdialog.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbFont"/>
                     </accessibility>
@@ -247,7 +247,7 @@
                   <object class="GtkImage" id="imFontEffect">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/fonteffect.png</property>
+                    <property name="icon-name">cmd/lc_color.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbFontEffect"/>
                     </accessibility>
@@ -301,7 +301,7 @@
                   <object class="GtkImage" id="imTextflow">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/textflow.png</property>
+                    <property name="icon-name">cmd/lc_hyphenate.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbTextflow"/>
                     </accessibility>
@@ -355,7 +355,7 @@
                   <object class="GtkImage" id="imAlignment">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/alignment.png</property>
+                    <property name="icon-name">cmd/lc_alignblock.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbAlignment"/>
                     </accessibility>
@@ -409,7 +409,7 @@
                   <object class="GtkImage" id="imIndents">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/indents.png</property>
+                    <property name="icon-name">cmd/lc_incrementindent.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbIndents"/>
                     </accessibility>
@@ -463,7 +463,7 @@
                   <object class="GtkImage" id="imPosition">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/position.png</property>
+                    <property name="icon-name">cmd/lc_fontwork.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbPosition"/>
                     </accessibility>
@@ -517,7 +517,7 @@
                   <object class="GtkImage" id="imDropcaps">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/dropcaps.png</property>
+                    <property name="icon-name">cmd/lc_smallcaps.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbDropcaps"/>
                     </accessibility>
@@ -571,7 +571,7 @@
                   <object class="GtkImage" id="imHighlighting">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/highlighting.png</property>
+                    <property name="icon-name">cmd/lc_backcolor.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbHighlighting"/>
                     </accessibility>
@@ -625,7 +625,7 @@
                   <object class="GtkImage" id="imArea">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/area.png</property>
+                    <property name="icon-name">cmd/lc_backgroundcolor.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbArea"/>
                     </accessibility>
@@ -679,7 +679,7 @@
                   <object class="GtkImage" id="imTransparence">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/transparence.png</property>
+                    <property name="icon-name">cmd/lc_graftransparence.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbTransparence"/>
                     </accessibility>
@@ -733,7 +733,7 @@
                   <object class="GtkImage" id="imBorders">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/borders.png</property>
+                    <property name="icon-name">cmd/lc_borderdialog.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbBorders"/>
                     </accessibility>
@@ -787,7 +787,7 @@
                   <object class="GtkImage" id="imTabs">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/tabs.png</property>
+                    <property name="icon-name">cmd/lc_hangingindent.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbTabs"/>
                     </accessibility>
@@ -841,7 +841,7 @@
                   <object class="GtkImage" id="imOutline">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/outline.png</property>
+                    <property name="icon-name">cmd/lc_setoutline.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbOutline"/>
                     </accessibility>
@@ -896,7 +896,7 @@
                   <object class="GtkImage" id="imCondition">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/condition.png</property>
+                    <property name="icon-name">cmd/lc_developmenttoolsdockingwindow.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbCondition"/>
                     </accessibility>
@@ -950,7 +950,7 @@
                   <object class="GtkImage" id="imAsiantypo">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/asiantypo.png</property>
+                    <property name="icon-name">cmd/lc_defaultcharstyle.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbAsiantypo"/>
                     </accessibility>
@@ -1004,7 +1004,7 @@
                   <object class="GtkImage" id="imAsianLayout">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/asianlayout.png</property>
+                    <property name="icon-name">cmd/lc_textdirectiontoptobottom.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbAsianLayout"/>
                     </accessibility>

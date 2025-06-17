@@ -142,7 +142,7 @@
                   <object class="GtkImage" id="imOrganizer">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/organizer.png</property>
+                    <property name="icon-name">cmd/lc_browseview.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbOrganizer"/>
                     </accessibility>
@@ -196,7 +196,7 @@
                   <object class="GtkImage" id="imPage">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/page.png</property>
+                    <property name="icon-name">cmd/lc_attributepagesize.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbPage"/>
                     </accessibility>
@@ -251,7 +251,7 @@
                   <object class="GtkImage" id="imArea">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/area.png</property>
+                    <property name="icon-name">cmd/lc_backgroundcolor.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbArea"/>
                     </accessibility>
@@ -306,7 +306,7 @@
                   <object class="GtkImage" id="imTransparence">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/transparence.png</property>
+                    <property name="icon-name">cmd/lc_graftransparence.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbTransparence"/>
                     </accessibility>
@@ -361,7 +361,7 @@
                   <object class="GtkImage" id="imHeader">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/header.png</property>
+                    <property name="icon-name">cmd/lc_insertheader.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbHeader"/>
                     </accessibility>
@@ -416,7 +416,7 @@
                   <object class="GtkImage" id="imFooter">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/footer.png</property>
+                    <property name="icon-name">cmd/lc_insertfooter.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbFooter"/>
                     </accessibility>
@@ -471,7 +471,7 @@
                   <object class="GtkImage" id="imBorders">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/borders.png</property>
+                    <property name="icon-name">cmd/lc_borderdialog.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbBorders"/>
                     </accessibility>
@@ -526,7 +526,7 @@
                   <object class="GtkImage" id="imColumns">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/columns.png</property>
+                    <property name="icon-name">cmd/lc_pagecolumntype.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbColumns"/>
                     </accessibility>
@@ -581,7 +581,7 @@
                   <object class="GtkImage" id="imFootnotes">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/footnotes.png</property>
+                    <property name="icon-name">cmd/lc_footnotedialog.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbFootnotes"/>
                     </accessibility>
@@ -635,7 +635,7 @@
                   <object class="GtkImage" id="imTextGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">res/textgrid.png</property>
+                    <property name="icon-name">cmd/lc_gridvisible.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbTextGrid"/>
                     </accessibility>
