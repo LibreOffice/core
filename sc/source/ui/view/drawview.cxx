@@ -427,7 +427,7 @@ void ScDrawView::MarkListHasChanged()
             if (!pViewSh->IsDrawTextShell()) // when creating a text object @#70206#
                 pViewSh->SetDrawShell(true);
         }
-        else if (nSdrObjKind != SdrObjKind::Text && !pViewSh->IsDrawTextShell())
+        else if (!pViewSh->IsDrawTextShell())
         {
             // tdf#166481: we only need to switch to draw shell if we have not
             // already created a text shell for text edit mode
