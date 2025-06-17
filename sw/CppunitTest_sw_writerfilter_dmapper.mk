@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_writerfilter_dmapper, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     oox \
     sal \
     subsequenttest \

@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_writerfilter_rtftok, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     oox \
     sal \
     subsequenttest \
