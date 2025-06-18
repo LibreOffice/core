@@ -672,7 +672,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_UNFILTER:
             {
                 ScQueryParam aParam;
-                ScDBData*    pDBData = pTabViewShell->GetDBData();
+                // tdf#117346 - show current data range of the filter with selection
+                ScDBData* pDBData = pTabViewShell->GetDBData(true, SC_DB_OLD);
 
                 pDBData->GetQueryParam( aParam );
                 SCSIZE nEC = aParam.GetEntryCount();
