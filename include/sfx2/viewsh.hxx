@@ -248,7 +248,7 @@ public:
     void                        SetLokReadOnlyView(bool readOnlyView) { lokReadOnlyView = readOnlyView; };
     bool                        IsLokReadOnlyView() const { return lokReadOnlyView; };
     void                        SetAllowChangeComments(bool allow) { allowChangeComments = allow; }
-    bool                        IsAllowChangeComments() { return allowChangeComments; }
+    bool                        IsAllowChangeComments() const { return allowChangeComments; }
 
     // Misc
 
