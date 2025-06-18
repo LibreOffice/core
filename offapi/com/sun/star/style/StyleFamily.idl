@@ -31,6 +31,12 @@ published service StyleFamily
 
                 <p>The elements in this container support the service
                 Style and are accessed via an XStyle.
+
+                <p>Note that for built-in styles, only the built-in
+                programmatic names can be used; the localized names of
+                built-in styles (available via "DisplayName" property on
+                the style) are not supported (and are unstable across
+                releases anyway).
      */
     interface com::sun::star::container::XNameAccess;
 
@@ -39,6 +45,12 @@ published service StyleFamily
 
                 <p>The elements in this container support the service
                 Style and are accessed via an XStyle.
+
+                <p>Note that for built-in styles, only the built-in
+                programmatic names can be used; the localized names of
+                built-in styles (available via "DisplayName" property on
+                the style) are not supported (and are unstable across
+                releases anyway).
      */
     [optional] interface com::sun::star::container::XNameContainer;
     /** This optional interface makes it possible to access the style sheets
