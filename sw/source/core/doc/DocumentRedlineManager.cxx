@@ -3705,11 +3705,21 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
         else if (CanCombineTypesForAcceptReject(aOrigData, *pTmp)
                  && pTmp->GetRedlineData(1).CanCombineForAcceptReject(aOrigData))
         {
-            // The Insert/Delete redline we want to reject has another type of redline too
+            RedlineType eInnerType = aOrigData.GetType();
+            RedlineType eOuterType = pTmp->GetType();
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                std::unique_ptr<SwUndoAcceptRedline> pUndoRdl
-                    = std::make_unique<SwUndoAcceptRedline>(*pTmp);
+                std::unique_ptr<SwUndoRedline> pUndoRdl;
+                if (eInnerType == RedlineType::Delete && eOuterType == RedlineType::Format)
+                {
+                    // Format on insert: record rejection of the underlying insert.
+                    pUndoRdl = std::make_unique<SwUndoRejectRedline>(*pTmp, /*nDepth=*/1, /*bHierarchical=*/true);
+                }
+                else
+                {
+                    // The Insert/Delete redline we want to reject has another type of redline too
+                    pUndoRdl = std::make_unique<SwUndoAcceptRedline>(*pTmp);
+                }
 #if OSL_DEBUG_LEVEL > 0
                 pUndoRdl->SetRedlineCountDontCheck(true);
 #endif
@@ -3718,8 +3728,6 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
             std::optional<SwPaM> oPam;
-            RedlineType eInnerType = aOrigData.GetType();
-            RedlineType eOuterType = pTmp->GetType();
             if (eInnerType == RedlineType::Insert && eOuterType == RedlineType::Format)
             {
                 // The accept won't implicitly delete the range, so track its boundaries.
@@ -3921,11 +3929,23 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete,
     }
     else
     {
-        // For now it is called only if it is an Insert redline in a delete redline.
         SwRedlineTable::size_type nRdlIdx = 0;
-        maRedlineTable.FindAtPosition(*rPam.Start(), nRdlIdx);
-        if (lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete))
-            nRet = 1;
+        const SwRangeRedline* pRedline = maRedlineTable.FindAtPosition(*rPam.Start(), nRdlIdx);
+        if (nDepth == 1 && pRedline && pRedline->GetType(0) == RedlineType::Format
+            && pRedline->GetType(1) == RedlineType::Delete)
+        {
+            // Reject a format-on-delete by getting rid of the underlying delete.
+            if (lcl_DeleteInnerRedline(maRedlineTable, nRdlIdx, nDepth))
+            {
+                nRet = 1;
+            }
+        }
+        else
+        {
+            // For now it is called only if it is an Insert redline in a delete redline.
+            if (lcl_AcceptRedline(maRedlineTable, nRdlIdx, bCallDelete))
+                nRet = 1;
+        }
     }
 
     if( nRet > 0 )
