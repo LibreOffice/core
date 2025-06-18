@@ -13,7 +13,6 @@
 #include <vcl/weld.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/dialog/ThemeColorEditDialog.hxx>
-#include <svx/dialog/ThemeColorValueSet.hxx>
 
 namespace model
 {
@@ -30,21 +29,21 @@ private:
     std::shared_ptr<svx::ThemeColorEditDialog> mxSubDialog;
     std::vector<model::ColorSet> maColorSets;
 
-    std::unique_ptr<svx::ThemeColorValueSet> mxValueSetThemeColors;
-    std::unique_ptr<weld::CustomWeld> mxValueSetThemeColorsWindow;
+    std::unique_ptr<weld::IconView> mxIconViewThemeColors;
     std::unique_ptr<weld::Button> mxAdd;
 
     std::shared_ptr<model::ColorSet> mpCurrentColorSet;
 
     void runThemeColorEditDialog();
     void initColorSets();
+    static VclPtr<VirtualDevice> CreateColorSetPreview(const model::ColorSet& rColorSet);
 
 public:
     ThemeDialog(weld::Window* pParent, model::Theme* pTheme);
     virtual ~ThemeDialog() override;
 
-    DECL_LINK(DoubleClickValueSetHdl, ValueSet*, void);
-    DECL_LINK(SelectItem, ValueSet*, void);
+    DECL_LINK(ItemActivatedHdl, weld::IconView&, bool);
+    DECL_LINK(SelectionChangedHdl, weld::IconView&, void);
     DECL_LINK(ButtonClicked, weld::Button&, void);
 
     std::shared_ptr<model::ColorSet> const& getCurrentColorSet() { return mpCurrentColorSet; }
