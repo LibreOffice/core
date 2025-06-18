@@ -1959,6 +1959,15 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
         aProp <<= bParentIs100thmm;
         return aProp;
     }
+
+    if (PropertyName == u"XAccessible")
+    {
+        // This is a special "property" needed by the Java a11y tests to get the underlying
+        // vcl::Window's XAccessible, see AccessibilityTools.getAccessibleObject.
+        // Once those tests have been ported to C++, this can be dropped.
+        return uno::Any(GetWindow()->GetAccessible());
+    }
+
     WindowType eWinType = GetWindow()->GetType();
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )

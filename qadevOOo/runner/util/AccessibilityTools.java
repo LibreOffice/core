@@ -20,6 +20,7 @@ package util;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.awt.XVclWindowPeer;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
@@ -36,7 +37,9 @@ public class AccessibilityTools {
     private AccessibilityTools() {}
 
     public static XAccessible getAccessibleObject(XWindow xWindow) {
-        return UnoRuntime.queryInterface(XAccessible.class, xWindow);
+        XVclWindowPeer xPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, xWindow);
+        // see VCLXWindow::getProperty
+        return UnoRuntime.queryInterface(XAccessible.class, xPeer.getProperty("XAccessible"));
     }
 
     public static XWindow getCurrentContainerWindow(XModel xModel) {
