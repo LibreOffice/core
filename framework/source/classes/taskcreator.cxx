@@ -18,11 +18,12 @@
  */
 
 #include <classes/taskcreator.hxx>
-#include <framework/taskcreatorsrv.hxx>
+#include <services/taskcreatorsrv.hxx>
 #include <services.h>
 #include <taskcreatordefs.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <utility>
@@ -53,7 +54,7 @@ TaskCreator::~TaskCreator()
 /*-****************************************************************************************************
     TODO document me
 *//*-*****************************************************************************************************/
-css::uno::Reference< css::frame::XFrame2 > TaskCreator::createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor )
+css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor )
 {
     rtl::Reference< TaskCreatorService > xCreator = new TaskCreatorService(m_xContext);
 
@@ -66,7 +67,8 @@ css::uno::Reference< css::frame::XFrame2 > TaskCreator::createTask( const OUStri
         css::uno::Any(css::beans::NamedValue(ARGUMENT_FRAMENAME, css::uno::Any(sName))),
         css::uno::Any(css::beans::NamedValue(ARGUMENT_HIDDENFORCONVERSION, css::uno::Any(rDescriptor.getUnpackedValueOrDefault(ARGUMENT_HIDDENFORCONVERSION, false))))
     };
-    return xCreator->createInstance(lArgs);
+    css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
+    return xTask;
 }
 
 } // namespace framework

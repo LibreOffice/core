@@ -22,6 +22,7 @@
 #include <asyncmodaldialog.hxx>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
@@ -33,7 +34,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <utility>
 #include <vcl/window.hxx>
-#include <framework/taskcreatorsrv.hxx>
 
 namespace dbaui
 {
@@ -103,13 +103,13 @@ namespace dbaui
                 // if we have no externally provided frame, create one
                 if ( !m_xFrameLoader.is() )
                 {
-                    rtl::Reference< TaskCreatorService > xFact = new TaskCreatorService(m_xORB);
+                    Reference< XSingleServiceFactory > xFact = TaskCreator::create(m_xORB);
                     Sequence< Any > lArgs{ Any(NamedValue(u"ParentFrame"_ustr, Any(m_xParentFrame))),
                                            Any(NamedValue(u"TopWindow"_ustr, Any(true))),
                                            Any(NamedValue(u"SupportPersistentWindowState"_ustr,
                                                           Any(true))) };
 
-                    m_xFrameLoader.set(xFact->createInstance(lArgs), UNO_QUERY_THROW);
+                    m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
 
                     // everything we load can be considered a "top level document", so set the respective bit at the window.
                     // This, amongst other things, triggers that the component in this task participates in the

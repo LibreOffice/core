@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -63,7 +64,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <framework/taskcreatorsrv.hxx>
 
 #include <docholder.hxx>
 #include <commonembobj.hxx>
@@ -433,7 +433,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         uno::Reference< frame::XFrame > xContFrame( xContDisp, uno::UNO_QUERY );
 
         // create a frame based on the specified window
-        rtl::Reference< TaskCreatorService > xFrameFact = new TaskCreatorService(m_xContext);
+        uno::Reference< lang::XSingleServiceFactory > xFrameFact = frame::TaskCreator::create(m_xContext);
 
         uno::Sequence< uno::Any > aArgs( xContFrame.is() ? 2 : 1 );
         auto pArgs = aArgs.getArray();
@@ -451,7 +451,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         }
 
         // the call will create, initialize the frame, and register it in the parent
-        m_xFrame = xFrameFact->createInstance( aArgs );
+        m_xFrame.set( xFrameFact->createInstanceWithArguments( aArgs ), uno::UNO_QUERY_THROW );
 
         m_xHatchWindow = std::move(xHWindow);
         m_xOwnWindow = std::move(xOwnWindow);
@@ -807,16 +807,17 @@ bool DocumentHolder::HideUI( const uno::Reference< css::frame::XLayoutManager >&
 }
 
 
-uno::Reference< frame::XFrame2 > const & DocumentHolder::GetDocFrame()
+uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
 {
     // the frame for outplace activation
     if ( !m_xFrame.is() )
     {
-        rtl::Reference< TaskCreatorService > xFrameFact = new TaskCreatorService(m_xContext);
+        uno::Reference< lang::XSingleServiceFactory > xFrameFact = frame::TaskCreator::create(m_xContext);
 
-        m_xFrame = xFrameFact->createInstance( m_aOutplaceFrameProps );
+        m_xFrame.set(xFrameFact->createInstanceWithArguments( m_aOutplaceFrameProps ), uno::UNO_QUERY_THROW);
 
-        if ( m_xFrame.is() )
+        uno::Reference< frame::XDispatchProviderInterception > xInterception( m_xFrame, uno::UNO_QUERY );
+        if ( xInterception.is() )
         {
             if ( m_xInterceptor.is() )
             {
@@ -826,11 +827,11 @@ uno::Reference< frame::XFrame2 > const & DocumentHolder::GetDocFrame()
 
             m_xInterceptor = new Interceptor( this );
 
-            m_xFrame->registerDispatchProviderInterceptor( m_xInterceptor );
+            xInterception->registerDispatchProviderInterceptor( m_xInterceptor );
 
             // register interceptor from outside
             if ( m_xOutplaceInterceptor.is() )
-                m_xFrame->registerDispatchProviderInterceptor( m_xOutplaceInterceptor );
+                xInterception->registerDispatchProviderInterceptor( m_xOutplaceInterceptor );
         }
 
         uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xFrame, uno::UNO_QUERY );

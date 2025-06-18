@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <framework/taskcreatorsrv.hxx>
+#include <services/taskcreatorsrv.hxx>
 #include <helper/persistentwindowstate.hxx>
 #include <helper/tagwindowasmodified.hxx>
 #include <helper/titlebarupdate.hxx>
@@ -46,7 +46,12 @@ TaskCreatorService::TaskCreatorService(css::uno::Reference< css::uno::XComponent
 {
 }
 
-css::uno::Reference< css::frame::XFrame2 > TaskCreatorService::createInstance(const css::uno::Sequence< css::uno::Any >& lArguments)
+css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstance()
+{
+    return createInstanceWithArguments(css::uno::Sequence< css::uno::Any >());
+}
+
+css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstanceWithArguments(const css::uno::Sequence< css::uno::Any >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
@@ -132,7 +137,7 @@ css::uno::Reference< css::frame::XFrame2 > TaskCreatorService::createInstance(co
     if (bVisible)
         xContainerWindow->setVisible(bVisible);
 
-    return xFrame;
+    return css::uno::Reference< css::uno::XInterface >(xFrame, css::uno::UNO_QUERY_THROW);
 }
 
 // static
@@ -277,6 +282,14 @@ OUString TaskCreatorService::impl_filterNames( const OUString& sName )
     if (TargetHelper::isValidNameForFrame(sName))
         sFiltered = sName;
     return sFiltered;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_framework_TaskCreator_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new TaskCreatorService(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

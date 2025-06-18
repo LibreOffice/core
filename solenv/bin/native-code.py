@@ -214,6 +214,7 @@ core_constructor_list = [
     "com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation",
     "com_sun_star_comp_framework_ResourceMenuController_get_implementation",
     "com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation",
+    "com_sun_star_comp_framework_TaskCreator_get_implementation",
     "com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation",
     "com_sun_star_comp_framework_UIConfigurationManager_get_implementation",
     "com_sun_star_comp_framework_UIElementFactoryManager_get_implementation",

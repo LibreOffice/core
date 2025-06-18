@@ -24,7 +24,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/frame/XFrame2.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XBorderResizeListener.hpp>
 #include <com/sun/star/frame/BorderWidths.hpp>
@@ -63,7 +63,7 @@ private:
 
     css::uno::Reference< css::util::XCloseable > m_xComponent;
 
-    css::uno::Reference< css::frame::XFrame2 > m_xFrame;
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
     css::uno::Reference< css::awt::XWindow > m_xOwnWindow; // set for inplace objects
     css::uno::Reference< css::awt::XWindow > m_xHatchWindow; // set for inplace objects
 
@@ -85,7 +85,7 @@ private:
     css::uno::Sequence< css::uno::Any > m_aOutplaceFrameProps;
 
 
-    css::uno::Reference< css::frame::XFrame2 > const & GetDocFrame();
+    css::uno::Reference< css::frame::XFrame > const & GetDocFrame();
     bool LoadDocToFrame( bool );
 
     css::awt::Rectangle CalculateBorderedArea( const css::awt::Rectangle& aRect );
