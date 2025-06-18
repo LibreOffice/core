@@ -869,7 +869,7 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShel
         PropertyExtractor extractor{ xRedlineProperties, rJsonWriter };
 
         extractor.extract<OUString>(UNO_NAME_REDLINE_TYPE, "type");
-        extractor.extract<css::util::DateTime>(UNO_NAME_REDLINE_DATE_TIME, "datetime");
+        extractor.extract<css::util::DateTime>(UNO_NAME_REDLINE_DATE_TIME, "dateTime");
         extractor.extract<OUString>(UNO_NAME_REDLINE_AUTHOR, "author");
         extractor.extract<OUString>(UNO_NAME_REDLINE_DESCRIPTION, "description");
         extractor.extract<OUString>(UNO_NAME_REDLINE_COMMENT, "comment");
