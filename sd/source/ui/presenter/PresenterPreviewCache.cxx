@@ -156,20 +156,6 @@ void PresenterPreviewCache::removePreviewCreationNotifyListener (
     mpCacheContext->RemovePreviewCreationNotifyListener(rxListener);
 }
 
-void PresenterPreviewCache::pause()
-{
-    ThrowIfDisposed();
-    OSL_ASSERT(mpCache != nullptr);
-    mpCache->Pause();
-}
-
-void PresenterPreviewCache::resume()
-{
-    ThrowIfDisposed();
-    OSL_ASSERT(mpCache != nullptr);
-    mpCache->Resume();
-}
-
 void PresenterPreviewCache::ThrowIfDisposed()
 {
     if (m_bDisposed)

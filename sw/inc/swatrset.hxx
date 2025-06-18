@@ -242,7 +242,6 @@ public:
     inline const SvxCharRotateItem        &GetCharRotate( bool = true ) const;
     inline const SvxCharReliefItem        &GetCharRelief( bool = true ) const;
     inline const SvxCharHiddenItem      &GetCharHidden( bool = true ) const;
-    inline const SvxScriptHintItem& GetCharScriptTypeHint(bool = true) const;
 
     // Frame attributes. Implementation in frmatr.hxx.
     inline const SwFormatFillOrder       &GetFillOrder( bool = true ) const;

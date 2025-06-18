@@ -30,8 +30,6 @@ protected:
     virtual ItemInstanceManager* getItemInstanceManager() const override;
 
 public:
-    static SfxPoolItem* CreateDefault();
-
     DECLARE_ITEM_TYPE_FUNCTION(SvxScriptHintItem)
     SvxScriptHintItem(const sal_uInt16 nId);
     SvxScriptHintItem(i18nutil::ScriptHintType eType, const sal_uInt16 nId);
@@ -46,9 +44,6 @@ public:
 
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
-
-    // enum cast
-    i18nutil::ScriptHintType GetScriptHintValue() const { return GetValue(); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

@@ -68,10 +68,6 @@ public:
     void removePreviewCreationNotifyListener (
         const css::uno::Reference<css::drawing::XSlidePreviewCacheListener>& rxListener) ;
 
-    void pause();
-
-    void resume();
-
 private:
     class PresenterCacheContext;
     Size maPreviewSize;

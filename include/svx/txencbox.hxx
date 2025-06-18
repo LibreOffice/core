@@ -80,7 +80,6 @@ public:
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     void grab_focus() { m_xControl->grab_focus(); }
     int get_active() const { return m_xControl->get_active(); }
-    void set_active(int nActive) { m_xControl->set_active(nActive); }
     void show() { m_xControl->show(); }
     void hide() { m_xControl->hide(); }
 };

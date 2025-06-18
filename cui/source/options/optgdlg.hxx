@@ -122,7 +122,6 @@ private:
     void UpdateSkiaStatus();
     void HideSkiaWidgets();
     void UpdateHardwareAccelStatus();
-    void UpdateIconThemes();
 
 public:
     OfaViewTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

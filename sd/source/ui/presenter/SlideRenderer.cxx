@@ -39,18 +39,6 @@ SlideRenderer::~SlideRenderer()
 {
 }
 
-Reference<awt::XBitmap> SlideRenderer::createPreview (
-    const Reference<drawing::XDrawPage>& rxSlide,
-    const awt::Size& rMaximalSize,
-    sal_Int16 nSuperSampleFactor)
-{
-    ThrowIfDisposed();
-    SolarMutexGuard aGuard;
-
-    return VCLUnoHelper::CreateBitmap(
-        CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor));
-}
-
 Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     const Reference<drawing::XDrawPage>& rxSlide,
     const awt::Size& rMaximalSize,

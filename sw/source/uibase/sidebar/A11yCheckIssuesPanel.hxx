@@ -80,7 +80,6 @@ public:
 
     void addEntryForGroup(AccessibilityCheckGroups eGroup, std::vector<sal_Int32>& rIndices,
                           std::shared_ptr<sfx::AccessibilityIssue> const& pIssue);
-    size_t getEntrySize(AccessibilityCheckGroups eGroup) const;
 
     void show(size_t nGroupIndex);
     void hide(size_t nGroupIndex);

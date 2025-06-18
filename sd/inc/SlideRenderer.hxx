@@ -42,11 +42,6 @@ public:
     SlideRenderer(const SlideRenderer&) = delete;
     SlideRenderer& operator=(const SlideRenderer&) = delete;
 
-    css::uno::Reference<css::awt::XBitmap> createPreview (
-        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
-        const css::awt::Size& rMaximumPreviewPixelSize,
-        sal_Int16 nSuperSampleFactor);
-
     css::uno::Reference<css::rendering::XBitmap> createPreviewForCanvas (
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,

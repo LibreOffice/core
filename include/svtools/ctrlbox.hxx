@@ -238,8 +238,6 @@ public:
         UpdatePreview();
     }
 
-    const Color&    GetColor() const { return aColor; }
-
     void            SetSelectHdl(const Link<SvtLineListBox&,void>& rLink) { maSelectHdl = rLink; }
 
     void            set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }

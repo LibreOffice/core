@@ -164,12 +164,6 @@ void AccessibilityCheckLevel::addEntryForGroup(
     m_aEntries[nGroupIndex].push_back(std::move(xEntry));
 }
 
-size_t AccessibilityCheckLevel::getEntrySize(AccessibilityCheckGroups eGroup) const
-{
-    auto nGroupIndex = size_t(eGroup);
-    return m_aEntries[nGroupIndex].size();
-}
-
 void AccessibilityCheckLevel::show(size_t nGroupIndex) { m_xExpanders[nGroupIndex]->show(); }
 
 void AccessibilityCheckLevel::hide(size_t nGroupIndex) { m_xExpanders[nGroupIndex]->hide(); }
