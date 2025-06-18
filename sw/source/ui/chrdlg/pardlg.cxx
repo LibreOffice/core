@@ -140,8 +140,6 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
 
     if (!sDefPage.isEmpty())
         SetCurPageId(sDefPage);
-    else
-        SetCurPageId("indents");
 }
 
 SwParaDlg::~SwParaDlg()
