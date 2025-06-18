@@ -1017,6 +1017,8 @@ void SfxTabDialogController::Start_Impl()
         SvtViewOptions aDlgOpt(EViewType::TabDialog, m_xDialog->get_help_id());
         if (aDlgOpt.Exists())
             m_xTabCtrl->set_current_page(aDlgOpt.GetPageID());
+        else
+            m_xTabCtrl->set_current_page(0);
     }
 
     ActivatePage(m_xTabCtrl->get_current_page_ident());
