@@ -225,6 +225,7 @@ constexpr auto SwriterDialogList
         { u"modules/swriter/ui/indentpage.ui" },
         { u"modules/swriter/ui/indexentry.ui" },
         { u"modules/swriter/ui/inforeadonlydialog.ui" },
+        { u"modules/swriter/ui/insertbookmark.ui" },
         { u"modules/swriter/ui/insertbreak.ui" },
         { u"modules/swriter/ui/insertcaption.ui" },
         { u"modules/swriter/ui/insertsectiondialog.ui" },

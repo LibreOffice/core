@@ -1330,10 +1330,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg(GetView().GetFrameWeld(), rWrtSh, oName ? &*oName : nullptr));
-                VclAbstractDialog::AsyncContext aContext;
-                aContext.maEndDialogFn = [](sal_Int32){};
-                pDlg->StartExecuteAsync(aContext);
+                VclPtr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg(GetView().GetFrameWeld(), rWrtSh, oName ? &*oName : nullptr));
+                pDlg->StartExecuteAsync([pDlg](sal_Int32){
+                                            pDlg->disposeOnce();
+                                        });
             }
 
             break;
