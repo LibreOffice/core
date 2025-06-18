@@ -140,14 +140,11 @@ public class AccessibleFixedText extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(xLabel);
 
-        final XWindow xWin = UnoRuntime.queryInterface(XWindow.class,
-                                                                 txtControl);
-
         tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
-                xWin.setEnable(false);
-                xWin.setEnable(true);
+                xWinTxt.setEnable(false);
+                xWinTxt.setEnable(true);
             }
         });
 
