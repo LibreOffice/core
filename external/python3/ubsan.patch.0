@@ -32,3 +32,17 @@
      for (i = 0; i < Py_SIZE(b); i++) {
          PyObject *v = src[i];
          dest[i] = Py_NewRef(v);
+--- Parser/tokenizer.c
++++ Parser/tokenizer.c
+@@ -373,9 +373,9 @@
+ 
+   for (index = tok->tok_mode_stack_index; index >= 0; --index) {
+     mode = &(tok->tok_mode_stack[index]);
+-    mode->f_string_start = tok->buf + mode->f_string_start_offset;
++    mode->f_string_start = (char *) (((intptr_t) tok->buf) + mode->f_string_start_offset);
+     mode->f_string_multi_line_start =
+-        tok->buf + mode->f_string_multi_line_start_offset;
++        (char *) (((intptr_t) tok->buf) + mode->f_string_multi_line_start_offset);
+   }
+ }
+ 
