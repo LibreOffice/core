@@ -74,6 +74,9 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+
 using namespace com::sun::star;
 
 // Migrate Marking of Objects, Points and GluePoints
@@ -732,6 +735,30 @@ std::u16string_view lcl_getDragParameterString( std::u16string_view rCID )
     }
     return aRet;
 }
+
+bool lcl_isStarMath(SdrObject* pO)
+{
+    auto xUnoShape = pO->getUnoShape();
+
+    if (xUnoShape.is())
+    {
+        auto xServiceInfo = xUnoShape.query<lang::XServiceInfo>();
+
+        if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"))
+        {
+            auto xUnoShapeProperties =  xUnoShape.query<beans::XPropertySet>();
+            if (xUnoShapeProperties.is())
+            {
+                auto xModelInfo = xUnoShapeProperties->getPropertyValue("Model").query<lang::XServiceInfo>();
+                if (xModelInfo.is())
+                    return xModelInfo->supportsService("com.sun.star.formula.FormulaProperties");
+            }
+        }
+    }
+
+    return false;
+}
+
 } // anonymous namespace
 
 bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
@@ -957,6 +984,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 + OString::number(static_cast<sal_Int32>(pO->GetObjIdentifier()))
                 + ",\"OrdNum\":" + OString::number(pO->GetOrdNum())
                 );
+
+            aExtraInfo.append(", \"isMathObject\": " + OString::boolean(lcl_isStarMath(pO)));
 
             if (mpMarkedObj && !pOtherShell)
             {
