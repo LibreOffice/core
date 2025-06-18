@@ -237,6 +237,7 @@ constexpr auto SwriterDialogList
         { u"modules/swriter/ui/paradialog.ui" },
         { u"modules/swriter/ui/picturedialog.ui" },
         { u"modules/swriter/ui/picturepage.ui" },
+        { u"modules/swriter/ui/renameobjectdialog.ui" },
         { u"modules/swriter/ui/sectionpage.ui" },
         { u"modules/swriter/ui/sortdialog.ui" },
         { u"modules/swriter/ui/splittable.ui" },
