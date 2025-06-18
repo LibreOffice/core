@@ -559,6 +559,9 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setViewOption
     void (*setViewOption)(LibreOfficeKitDocument* pThis, const char* pOption, const char* pValue);
 
+    /// @see lok::Document::setAllowManageRedlines().
+    void (*setAllowManageRedlines)(LibreOfficeKitDocument* pThis, int nId, bool allow);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

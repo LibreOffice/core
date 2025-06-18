@@ -220,8 +220,9 @@ private:
 
     LOKDocumentFocusListener& GetLOKDocumentFocusListener();
     const LOKDocumentFocusListener& GetLOKDocumentFocusListener() const;
-    bool                        lokReadOnlyView = false; // When true, this is a LOK readonly view.
-    bool                        allowChangeComments = false; // When true, user can edit comments in readonly view mode.
+    bool lokReadOnlyView : 1 = false; // When true, this is a LOK readonly view
+    bool allowChangeComments : 1 = false; // Allow editing comments in readonly view mode
+    bool allowManageRedlines : 1 = false; // Allow accepting/rejecting changes in readonly view mode
 
 public:
 
@@ -249,6 +250,8 @@ public:
     bool                        IsLokReadOnlyView() const { return lokReadOnlyView; };
     void                        SetAllowChangeComments(bool allow) { allowChangeComments = allow; }
     bool                        IsAllowChangeComments() const { return allowChangeComments; }
+    void                        SetAllowManageRedlines(bool allow) { allowManageRedlines = allow; }
+    bool                        IsAllowManageRedlines() const { return allowManageRedlines; }
 
     // Misc
 

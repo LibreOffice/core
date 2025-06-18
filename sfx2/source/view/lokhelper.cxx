@@ -344,6 +344,15 @@ void SfxLokHelper::setAllowChangeComments(int nId, bool allow)
     }
 }
 
+void SfxLokHelper::setAllowManageRedlines(int nId, bool allow)
+{
+    if (SfxViewShell* pViewShell = getViewOfId(nId))
+    {
+        LOK_INFO("lok.readonlyview", "SfxLokHelper::setAllowManageRedlines: view id: " << nId << ", allow: " << allow);
+        pViewShell->SetAllowManageRedlines(allow);
+    }
+}
+
 void SfxLokHelper::setAccessibilityState(int nId, bool nEnabled)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))

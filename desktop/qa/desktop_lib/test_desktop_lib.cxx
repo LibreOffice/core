@@ -190,6 +190,7 @@ public:
     void testCommentsCallbacksWriter();
     void testCommentsAddEditDeleteDraw();
     void testCommentsInReadOnlyMode();
+    void testRedlinesInReadOnlyMode();
     void testCalcValidityDropdown();
     void testCalcValidityDropdownInReadonlyMode();
     void testRunMacro();
@@ -266,6 +267,7 @@ public:
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testCommentsAddEditDeleteDraw);
     CPPUNIT_TEST(testCommentsInReadOnlyMode);
+    CPPUNIT_TEST(testRedlinesInReadOnlyMode);
     CPPUNIT_TEST(testCalcValidityDropdown);
     CPPUNIT_TEST(testCalcValidityDropdownInReadonlyMode);
     CPPUNIT_TEST(testRunMacro);
@@ -2201,6 +2203,49 @@ void DesktopLOKTest::testRedlineCalc()
 
 namespace {
 
+struct RedlineInfo
+{
+    std::string action;
+    std::string index;
+    std::string author;
+    std::string type;
+    std::string comment;
+    std::string description;
+    std::string dateTime;
+};
+
+std::vector<RedlineInfo> getRedlineInfo(const boost::property_tree::ptree& redlineNode)
+{
+    std::vector<RedlineInfo> result;
+    result.reserve(redlineNode.size());
+    for (const auto& redline : redlineNode)
+    {
+        result.emplace_back();
+        result.back().index = redline.second.get<std::string>("index");
+        result.back().author = redline.second.get<std::string>("author");
+        result.back().type = redline.second.get<std::string>("type");
+        result.back().comment = redline.second.get<std::string>("comment");
+        result.back().description = redline.second.get<std::string>("description");
+        result.back().dateTime = redline.second.get<std::string>("dateTime");
+        if (auto oAction = redline.second.get_optional<std::string>("action"))
+            result.back().action = *oAction;
+    }
+
+    return result;
+}
+
+std::vector<RedlineInfo> getRedlineInfo(LibLODocument_Impl* pDocument)
+{
+    char* json
+        = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
+    std::stringstream stream(json);
+    free(json);
+    CPPUNIT_ASSERT(!stream.str().empty());
+    boost::property_tree::ptree tree;
+    boost::property_tree::read_json(stream, tree);
+    return getRedlineInfo(tree.get_child("redlines"));
+}
+
 class ViewCallback
 {
     LibLODocument_Impl* mpDocument;
@@ -2216,6 +2261,7 @@ public:
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
+    RedlineInfo m_aLastRedlineInfo;
 
     ViewCallback(LibLODocument_Impl* pDocument)
         : mpDocument(pDocument),
@@ -2297,6 +2343,17 @@ public:
             m_JSONDialog.clear();
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_JSONDialog);
+        }
+        break;
+        case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+        case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree tree;
+            boost::property_tree::read_json(aStream, tree);
+            auto redlines = getRedlineInfo(tree);
+            CPPUNIT_ASSERT_EQUAL(size_t(1), redlines.size());
+            m_aLastRedlineInfo = redlines[0];
         }
         break;
         }
@@ -2891,6 +2948,108 @@ void DesktopLOKTest::testCommentsInReadOnlyMode()
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
     //CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView.m_aCommentCallbackResult.get<std::string>("action"));
     //CPPUNIT_ASSERT_EQUAL(nCommentId, aView.m_aCommentCallbackResult.get<int>("id"));
+}
+
+void DesktopLOKTest::testRedlinesInReadOnlyMode()
+{
+    // In AllowManageRedlines mode, it must be possible to perform redline editing commands,
+    // even in read-only mode.
+
+    using namespace std::string_literals;
+
+    LibLODocument_Impl* pDocument = loadDoc("three-changes.fodt");
+
+    int viewId = pDocument->m_pDocumentClass->createView(pDocument);
+    pDocument->m_pDocumentClass->setView(pDocument, viewId);
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aCallback(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), getRedlineInfo(pDocument).size());
+
+    // Activate read-only mode
+    SfxLokHelper::setViewReadOnly(viewId, true);
+
+    // Go to the 1st tracked change: "Delete “Donec”"
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:NextTrackedChange", {}, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Check that redline management commands don't work in pure read-only
+    // Try to reject current redline
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:RejectTrackedChange", {}, false);
+    Scheduler::ProcessEventsToIdle();
+    // Nothing happened
+    CPPUNIT_ASSERT_EQUAL(size_t(3), getRedlineInfo(pDocument).size());
+    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.action);
+    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.author);
+    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.type);
+    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.comment);
+    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.description);
+    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.dateTime);
+
+    // Activate the AllowManageRedlines mode
+    SfxLokHelper::setAllowManageRedlines(viewId, true);
+
+    // Try to reject current redline
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:RejectTrackedChange", {}, false);
+    Scheduler::ProcessEventsToIdle();
+    // One change gone; it is recorded "Remove"d in aCallback.m_aLastRedlineInfo
+    CPPUNIT_ASSERT_EQUAL(size_t(2), getRedlineInfo(pDocument).size());
+    CPPUNIT_ASSERT_EQUAL("Remove"s, aCallback.m_aLastRedlineInfo.action);
+    CPPUNIT_ASSERT_EQUAL("Mike"s, aCallback.m_aLastRedlineInfo.author);
+    CPPUNIT_ASSERT_EQUAL("Delete"s, aCallback.m_aLastRedlineInfo.type);
+    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.comment);
+    CPPUNIT_ASSERT_EQUAL("Delete “Donec”"s, aCallback.m_aLastRedlineInfo.description);
+    CPPUNIT_ASSERT_EQUAL("2025-06-16T14:08:27"s, aCallback.m_aLastRedlineInfo.dateTime);
+
+    // Go to the 2nd tracked change: "Attributes changed"
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:NextTrackedChange", {}, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Comment on it
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:CommentChangeTracking",
+                                      R"({"Text":{"type":"string","value":"Some comment"}})",
+                                      false);
+    Scheduler::ProcessEventsToIdle();
+    // One change got a comment; it is recorded "Modify"ed in aCallback.m_aLastRedlineInfo
+    CPPUNIT_ASSERT_EQUAL(size_t(2), getRedlineInfo(pDocument).size());
+    CPPUNIT_ASSERT_EQUAL("Modify"s, aCallback.m_aLastRedlineInfo.action);
+    CPPUNIT_ASSERT_EQUAL("Mike"s, aCallback.m_aLastRedlineInfo.author);
+    CPPUNIT_ASSERT_EQUAL("Format"s, aCallback.m_aLastRedlineInfo.type);
+    CPPUNIT_ASSERT_EQUAL("Some comment"s, aCallback.m_aLastRedlineInfo.comment);
+    CPPUNIT_ASSERT_EQUAL("Attributes changed"s, aCallback.m_aLastRedlineInfo.description);
+    CPPUNIT_ASSERT_EQUAL("2025-06-17T12:41:00"s, aCallback.m_aLastRedlineInfo.dateTime);
+
+    // Go to the 3rd tracked change: "Insert “ Sapienti sat.”"
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:NextTrackedChange", {}, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Accept it
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:AcceptTrackedChange", {}, false);
+    Scheduler::ProcessEventsToIdle();
+    // One change gone; it is recorded "Remove"d in aCallback.m_aLastRedlineInfo
+    CPPUNIT_ASSERT_EQUAL(size_t(1), getRedlineInfo(pDocument).size());
+    CPPUNIT_ASSERT_EQUAL("Remove"s, aCallback.m_aLastRedlineInfo.action);
+    CPPUNIT_ASSERT_EQUAL("Mike"s, aCallback.m_aLastRedlineInfo.author);
+    CPPUNIT_ASSERT_EQUAL("Insert"s, aCallback.m_aLastRedlineInfo.type);
+    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.comment);
+    CPPUNIT_ASSERT_EQUAL("Insert “ Sapienti sat.”"s, aCallback.m_aLastRedlineInfo.description);
+    CPPUNIT_ASSERT_EQUAL("2025-06-17T12:41:19"s, aCallback.m_aLastRedlineInfo.dateTime);
+
+    // Make sure that another (unrelated to redline management) editing command is not working
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation",
+                                      R"({"Text":{"type":"string","value":"Comment"}})",
+                                      false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aCallback.m_aCommentCallbackResult.empty());
+
+    // Check that the same command would succeed in AllowChangeComments mode
+    SfxLokHelper::setAllowChangeComments(viewId, true);
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation",
+                                      R"({"Text":{"type":"string","value":"Comment"}})",
+                                      false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aCallback.m_aCommentCallbackResult.empty());
 }
 
 void DesktopLOKTest::testCalcValidityDropdown()
@@ -3972,9 +4131,10 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(76), offsetof(struct _LibreOfficeKitDocumentClass, postSlideshowCleanup));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(77), offsetof(struct _LibreOfficeKitDocumentClass, renderNextSlideLayer));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(78), offsetof(struct _LibreOfficeKitDocumentClass, setViewOption));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(79), offsetof(struct _LibreOfficeKitDocumentClass, setAllowManageRedlines));
 
     // As above
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(79), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(80), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
