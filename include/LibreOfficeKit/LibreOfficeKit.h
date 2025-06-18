@@ -562,6 +562,9 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setColorPreviewState().
     void (*setColorPreviewState) (LibreOfficeKitDocument* pThis, int nId, bool nEnabled);
 
+    /// @see lok::Document::setAllowManageRedlines().
+    void (*setAllowManageRedlines)(LibreOfficeKitDocument* pThis, int nId, bool allow);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

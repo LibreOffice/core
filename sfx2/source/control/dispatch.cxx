@@ -1554,6 +1554,22 @@ static bool IsCommandAllowedInLokReadOnlyViewMode(std::u16string_view commandNam
         if (std::find(std::begin(allowed), std::end(allowed), commandName) != std::end(allowed))
             return true;
     }
+    if (viewShell.IsAllowManageRedlines())
+    {
+        static constexpr std::u16string_view allowed[] = {
+            u".uno:AcceptTrackedChange",
+            u".uno:RejectTrackedChange",
+            u".uno:AcceptAllTrackedChanges",
+            u".uno:RejectAllTrackedChanges",
+            u".uno:AcceptTrackedChangeToNext",
+            u".uno:RejectTrackedChangeToNext",
+            u".uno:CommentChangeTracking",
+            u".uno:Save",
+        };
+
+        if (std::find(std::begin(allowed), std::end(allowed), commandName) != std::end(allowed))
+            return true;
+    }
     return false;
 }
 
