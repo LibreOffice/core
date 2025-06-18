@@ -21,7 +21,6 @@
 #i86008 -o toolkit.AccessibleComboBox
 -o toolkit.AccessibleDropDownComboBox
 #i86110 -o toolkit.AccessibleEdit
--o toolkit.AccessibleFixedText
 #i86110 -o toolkit.AccessibleList
 #i86110 -o toolkit.AccessibleListBox
 #i86110 -o toolkit.AccessibleListItem

@@ -10,6 +10,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,toolkit_a11y))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,toolkit_a11y, \
+	toolkit/qa/cppunit/a11y/AccessibleFixedTextTest \
 	toolkit/qa/cppunit/a11y/AccessibleStatusBarTest \
 ))
 

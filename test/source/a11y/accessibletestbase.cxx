@@ -322,6 +322,13 @@ void test::AccessibleTestBase::dumpA11YTree(
     }
 }
 
+void test::AccessibleTestBase::dumpA11YTree(
+    const uno::Reference<accessibility::XAccessible>& xAccessible, const int depth)
+{
+    assert(xAccessible.is());
+    dumpA11YTree(xAccessible->getAccessibleContext(), depth);
+}
+
 /** Gets a child by name (usually in a menu) */
 uno::Reference<accessibility::XAccessibleContext> test::AccessibleTestBase::getItemFromName(
     const uno::Reference<accessibility::XAccessibleContext>& xMenuCtx, std::u16string_view name)

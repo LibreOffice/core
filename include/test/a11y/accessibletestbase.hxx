@@ -98,6 +98,8 @@ protected:
 
     void dumpA11YTree(const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext,
                       const int depth = 0);
+    void dumpA11YTree(const css::uno::Reference<css::accessibility::XAccessible>& xAccessible,
+                      const int depth = 0);
 
     css::uno::Reference<css::accessibility::XAccessibleContext>
     getItemFromName(const css::uno::Reference<css::accessibility::XAccessibleContext>& xMenuCtx,
