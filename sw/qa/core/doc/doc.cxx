@@ -970,6 +970,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
     // - Actual  : 3
     // i.e. the surrounding delete redlines were not combined on reject.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+
+    // Reset to the state after file load:
+    pWrtShell->Undo();
+    // And when we do a reject for the first "delete" part, undo, redo:
+    pWrtShell->RejectRedline(0);
+    pWrtShell->Undo();
+    pWrtShell->Redo();
+
+    // Then make sure get a single format redline, matching the state right after reject:
+    {
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 1
+        // - Actual  : 0
+        // i.e. the format redline was lost on redo.
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+        const SwRedlineData& rRedlineData1 = rRedlines[0]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData1.GetType());
+        CPPUNIT_ASSERT(!rRedlineData1.Next());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
