@@ -74,10 +74,10 @@ public:
 }
 
 XAccessibleEventBroadcasterTester::XAccessibleEventBroadcasterTester(
-    const uno::Reference<accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
-    vcl::Window* pWindow)
+    const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
+    const std::function<void()>& rFireEventFunc)
     : mxBroadcaster(xBroadcaster)
-    , mpWindow(pWindow)
+    , m_aFireEventFunc(rFireEventFunc)
 {
 }
 
@@ -96,24 +96,7 @@ bool XAccessibleEventBroadcasterTester::isTransient(
                 & accessibility::AccessibleStateType::MANAGES_DESCENDANTS));
 }
 
-/**
- * @brief Generates an event on @c mxBroadcaster.
- *
- * This method indirectly alters the state of @c mxBroadcaster so that an
- * accessible event will be fired for it.  It can be called as many times as
- * needed and triggers an event each time.
- */
-void XAccessibleEventBroadcasterTester::fireEvent()
-{
-    Point aPos = mpWindow->GetPosPixel();
-    aPos.Move(20, 20);
-
-    Size aSize = mpWindow->GetSizePixel();
-    aSize.AdjustWidth(-20);
-    aSize.AdjustHeight(-20);
-
-    mpWindow->SetPosSizePixel(aPos, aSize);
-}
+void XAccessibleEventBroadcasterTester::fireEvent() { m_aFireEventFunc(); }
 
 /**
  * @brief Adds a listener and fires events by mean of object relation.
@@ -180,6 +163,32 @@ void XAccessibleEventBroadcasterTester::testRemoveEventListener()
     AccessibilityTools::Wait(500);
 
     CPPUNIT_ASSERT_MESSAGE("removed listener was called", !xListener->mbGotEvent);
+}
+
+WindowXAccessibleEventBroadcasterTester::WindowXAccessibleEventBroadcasterTester(
+    const uno::Reference<accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
+    vcl::Window* pWindow)
+    : XAccessibleEventBroadcasterTester(xBroadcaster, [pWindow]() { triggerWindowEvent(pWindow); })
+{
+}
+
+/**
+ * @brief Generates an event on @c pWindow.
+ *
+ * This method alters the state of @c pWindow so that an
+ * accessible event will be fired for it.  It can be called as many times as
+ * needed and triggers an event each time.
+ */
+void WindowXAccessibleEventBroadcasterTester::triggerWindowEvent(vcl::Window* pWindow)
+{
+    Point aPos = pWindow->GetPosPixel();
+    aPos.Move(20, 20);
+
+    Size aSize = pWindow->GetSizePixel();
+    aSize.AdjustWidth(-20);
+    aSize.AdjustHeight(-20);
+
+    pWindow->SetPosSizePixel(aPos, aSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

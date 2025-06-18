@@ -109,8 +109,8 @@ void AccessibleStatusBarTest::runAllTests()
 
     uno::Reference<accessibility::XAccessibleEventBroadcaster> xAccessibleEventBroadcaster(
         xContext, uno::UNO_QUERY_THROW);
-    XAccessibleEventBroadcasterTester eventBroadcasterTester(xAccessibleEventBroadcaster,
-                                                             VCLUnoHelper::GetWindow(mxWindow));
+    WindowXAccessibleEventBroadcasterTester eventBroadcasterTester(
+        xAccessibleEventBroadcaster, VCLUnoHelper::GetWindow(mxWindow));
     eventBroadcasterTester.testAll();
 }
 

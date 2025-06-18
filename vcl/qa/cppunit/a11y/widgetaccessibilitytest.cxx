@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, AccessibleDropDownListBox)
 
     css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster> xEventBroadcaster(
         xContext, css::uno::UNO_QUERY_THROW);
-    XAccessibleEventBroadcasterTester aEventBroadcasterTester(xEventBroadcaster, pListBox);
+    WindowXAccessibleEventBroadcasterTester aEventBroadcasterTester(xEventBroadcaster, pListBox);
     aEventBroadcasterTester.testAll();
 }
 

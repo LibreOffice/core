@@ -30,7 +30,7 @@ class OOO_DLLPUBLIC_TEST XAccessibleEventBroadcasterTester
 {
 private:
     const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster> mxBroadcaster;
-    const VclPtr<vcl::Window> mpWindow;
+    std::function<void()> m_aFireEventFunc;
 
     static bool isTransient(
         const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster);
@@ -40,9 +40,15 @@ private:
     void fireEvent();
 
 public:
+    /**
+     * Creates an XAccessibleEventBroadcasterTester that will call @c rFireEventFunc to generate
+     * an event.
+     * @param xBroadcaster The XAccessibleEventBroadcaster implementation to test.
+     * @param rFireEventFunc Function that triggers an accessible event for @c xBroadcaster.
+     */
     XAccessibleEventBroadcasterTester(
         const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
-        vcl::Window* pWindow);
+        const std::function<void()>& rFireEventFunc);
 
     void testAddEventListener();
     void testRemoveEventListener();
@@ -52,6 +58,28 @@ public:
         testAddEventListener();
         testRemoveEventListener();
     }
+};
+
+/**
+ * Specialized XAccessibleEventBroadcaster subclass that modifies the
+ * passed vcl::Window so that accessible events are generated for it.
+ */
+class OOO_DLLPUBLIC_TEST WindowXAccessibleEventBroadcasterTester
+    : public XAccessibleEventBroadcasterTester
+{
+public:
+    /**
+     * Creates an WindowXAccessibleEventBroadcasterTester that will modify @c pWindow to generate
+     * at least one accessible event for it.
+     * @param xBroadcaster The XAccessibleEventBroadcaster implementation to test.
+     * @param pWindow Window for whose accessible events @c xBroadcaster is responsible.
+     */
+    WindowXAccessibleEventBroadcasterTester(
+        const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
+        vcl::Window* pWindow);
+
+private:
+    static void triggerWindowEvent(vcl::Window* pWindow);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
