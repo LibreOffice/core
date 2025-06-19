@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XToolBar.hpp>
+#include <com/sun/star/drawing/framework/XResource.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <comphelper/compbase.hxx>
 #include <vcl/InterimItemWindow.hxx>
@@ -83,7 +83,7 @@ struct TabBarButton
 };
 
 typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XToolBar,
+    css::drawing::framework::XResource,
     css::drawing::framework::XConfigurationChangeListener
     > ViewTabBarInterfaceBase;
 

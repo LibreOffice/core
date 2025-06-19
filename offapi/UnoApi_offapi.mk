@@ -2399,7 +2399,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
 	XResource \
 	XResourceFactory \
 	XResourceId \
-	XToolBar \
 	XView \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/embed,\
