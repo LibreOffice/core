@@ -117,10 +117,10 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="scrollable">True</property>
-            <property name="enable-popup">True</property>
+            <property name="tab-pos">left</property>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -129,19 +129,46 @@
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="bullets">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="bullets">
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|bullets">Select a bullet type for an unordered list.</property>
-                <property name="label" translatable="yes" context="bulletsandnumbering|bullets">Unordered</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imBullets">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">cmd/lc_defaultbullet.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbBullets"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbBullets">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|bullets">Select a bullet type for an unordered list.</property>
+                    <property name="label" translatable="yes" context="bulletsandnumbering|bullets">Unordered</property>
+                    <property name="mnemonic-widget">bullets</property>
+                    <accessibility>
+                      <relation type="label-for" target="imBullets"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
-              <packing>
-                <property name="tab-fill">False</property>
-              </packing>
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -153,11 +180,41 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="singlenum">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="singlenum">
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|singlenum">Select a numbering scheme for an ordered list.</property>
-                <property name="label" translatable="yes" context="bulletsandnumbering|singlenum">Ordered</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imSinglenum">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">cmd/lc_defaultnumbering.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbSinglenum"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbSinglenum">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|singlenum">Select a numbering scheme for an ordered list.</property>
+                    <property name="label" translatable="yes" context="bulletsandnumbering|singlenum">Ordered</property>
+                    <property name="mnemonic-widget">singlenum</property>
+                    <accessibility>
+                      <relation type="label-for" target="imSinglenum"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -166,7 +223,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -178,11 +235,41 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="outlinenum">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="outlinenum">
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|outlinenum">Select an outline format for an ordered list.</property>
-                <property name="label" translatable="yes" context="bulletsandnumbering|outlinenum">Outline</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imOutlinenum">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">cmd/lc_setoutline.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbOutlinenum"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbOutlinenum">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|outlinenum">Select an outline format for an ordered list.</property>
+                    <property name="label" translatable="yes" context="bulletsandnumbering|outlinenum">Outline</property>
+                    <property name="mnemonic-widget">outlinenum</property>
+                    <accessibility>
+                      <relation type="label-for" target="imOutlinenum"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -191,7 +278,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -203,11 +290,41 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="graphics">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="graphics">
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|graphics">Select a graphic bullet symbol for an unordered list.</property>
-                <property name="label" translatable="yes" context="bulletsandnumbering|graphics">Image</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imGraphics">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">cmd/lc_imagebutton.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbGraphics"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbGraphics">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|graphics">Select a graphic bullet symbol for an unordered list.</property>
+                    <property name="label" translatable="yes" context="bulletsandnumbering|graphics">Image</property>
+                    <property name="mnemonic-widget">graphics</property>
+                    <accessibility>
+                      <relation type="label-for" target="imGraphics"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -216,7 +333,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -228,11 +345,41 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="position">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="position">
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|position">Modify indent, spacing, and alignment options for ordered and unordered lists.</property>
-                <property name="label" translatable="yes" context="bulletsandnumbering|position">Position</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imPosition">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">cmd/lc_hangingindent.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbPosition"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbPosition">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|position">Modify indent, spacing, and alignment options for ordered and unordered lists.</property>
+                    <property name="label" translatable="yes" context="bulletsandnumbering|position">Position</property>
+                    <property name="mnemonic-widget">position</property>
+                    <accessibility>
+                      <relation type="label-for" target="imPosition"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -241,7 +388,7 @@
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -253,11 +400,41 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="customize">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="customize">
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|customize">Design your own bullet or numbering scheme.</property>
-                <property name="label" translatable="yes" context="bulletsandnumbering|customize">Customize</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkImage" id="imCustomize">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">cmd/lc_developmenttoolsdockingwindow.png</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbCustomize"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbCustomize">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|customize">Design your own bullet or numbering scheme.</property>
+                    <property name="label" translatable="yes" context="bulletsandnumbering|customize">Customize</property>
+                    <property name="mnemonic-widget">customize</property>
+                    <accessibility>
+                      <relation type="label-for" target="imCustomize"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">5</property>
