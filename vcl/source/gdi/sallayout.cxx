@@ -886,10 +886,13 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
         if( n > 0 )
         {
             // drop the NotDef glyphs in the base layout run if a fallback run exists
-            while (
-                    (maFallbackRuns[n-1].PosIsInAnyRun(pGlyphs[nFirstValid]->charPos())) &&
-                    (!maFallbackRuns[n].PosIsInAnyRun(pGlyphs[nFirstValid]->charPos()))
-                  )
+            //
+            // tdf#163761: The whole algorithm in this outer loop works by advancing through
+            // all of the glyphs and runs in lock-step. The current glyph in the base layout
+            // must not outpace the fallback runs. The following loop does this by breaking
+            // at the end of the current fallback run (which comes from the previous level).
+            while ((maFallbackRuns[n - 1].PosIsInRun(pGlyphs[nFirstValid]->charPos()))
+                   && (!maFallbackRuns[n].PosIsInAnyRun(pGlyphs[nFirstValid]->charPos())))
             {
                 mpLayouts[0]->DropGlyph( nStartOld[0] );
                 nStartOld[0] = nStartNew[0];
