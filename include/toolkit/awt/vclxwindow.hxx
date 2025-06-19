@@ -76,8 +76,7 @@ protected:
     DECL_DLLPRIVATE_LINK(WindowEventListener, VclWindowEvent&, void );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    css::uno::Reference< css::accessibility::XAccessibleContext >
-                    CreateAccessibleContext();
+    static css::uno::Reference<css::accessibility::XAccessibleContext> CreateAccessibleContext();
 
     void            SetSynthesizingVCLEvent( bool b );
     bool            IsSynthesizingVCLEvent() const;
