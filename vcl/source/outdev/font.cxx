@@ -129,6 +129,63 @@ int OutputDevice::GetFontFaceCollectionCount() const
     return mpFontFaceCollection->Count();
 }
 
+namespace {
+    rtl::OUString StripWeightSuffix(const rtl::OUString& name)
+    {
+        static const char* const suffixes[] = {
+            " thin", " ultralight", " light", " semilight",
+            " normal", " medium", " semibold", " bold",
+            " ultrabold", " black"
+        };
+
+        rtl::OUString lower = name.toAsciiLowerCase();
+
+        for (const char* suffix : suffixes)
+        {
+            rtl::OUString pattern = rtl::OUString::createFromAscii(suffix);
+            sal_Int32 pos = lower.lastIndexOf(pattern);
+            if (pos >= 0 && (pos + pattern.getLength() == lower.getLength()))
+            {
+                return name.copy(0, pos);
+            }
+        }
+
+        return name;
+    }
+}
+
+
+OUString OutputDevice::FindBestMatchingFont(const OUString& fontFamily) const
+{
+    if(!mpFontFaceCollection)
+    {
+        if (!mxFontCollection)
+        {
+            return fontFamily;
+        }
+
+        mpFontFaceCollection = mxFontCollection->GetFontFaceCollection();
+
+        if (!mpFontFaceCollection->Count())
+        {
+            mpFontFaceCollection.reset();
+            return fontFamily;
+        }
+    }
+    OUString fontName = StripWeightSuffix(fontFamily);
+    if (fontName != fontFamily) {
+        int size = mpFontFaceCollection->Count();
+        for (int i = 0; i < size; ++i) {
+            auto fontFace = mpFontFaceCollection->Get(i);
+            if (fontFace->GetFamilyName() == fontName) {
+                // We might want to check fontFace->GetWeight() as well
+                return fontName;
+            }
+        }
+    }
+    return fontFamily;
+}
+
 bool OutputDevice::IsFontAvailable( std::u16string_view rFontName ) const
 {
     ImplInitFontList();

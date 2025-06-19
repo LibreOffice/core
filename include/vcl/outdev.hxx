@@ -1132,6 +1132,7 @@ public:
 
     FontMetric                  GetFontMetricFromCollection( int nDevFontIndex ) const;
     int                         GetFontFaceCollectionCount() const;
+    OUString                    FindBestMatchingFont(const OUString& fontFamily) const;
 
     bool                        IsFontAvailable( std::u16string_view rFontName ) const;
 

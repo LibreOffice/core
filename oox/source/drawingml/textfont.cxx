@@ -25,6 +25,8 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/outdev.hxx>
 
 using ::oox::core::XmlFilterBase;
 
@@ -56,7 +58,12 @@ TextFont::TextFont() :
 
 void TextFont::setAttributes( const AttributeList& rAttribs )
 {
+    auto device = Application::GetDefaultDevice();
     maTypeface = rAttribs.getStringDefaulted( XML_typeface);
+    if (!device->IsFontAvailable(maTypeface)) {
+        // If the font is not available, try to find the best match
+        maTypeface = device->FindBestMatchingFont(maTypeface);
+    }
     maPanose = rAttribs.getStringDefaulted( XML_panose);
     mnPitchFamily = rAttribs.getInteger( XML_pitchFamily, 0 );
     mnCharset = rAttribs.getInteger( XML_charset, WINDOWS_CHARSET_DEFAULT );
@@ -64,7 +71,12 @@ void TextFont::setAttributes( const AttributeList& rAttribs )
 
 void TextFont::setAttributes( const OUString& sFontName )
 {
+    auto device = Application::GetDefaultDevice();
     maTypeface = sFontName;
+    if (!device->IsFontAvailable(maTypeface)) {
+        // If the font is not available, try to find the best match
+        maTypeface = device->FindBestMatchingFont(maTypeface);
+    }
     maPanose.clear();
     mnPitchFamily = 0;
     mnCharset = WINDOWS_CHARSET_DEFAULT;
