@@ -1045,9 +1045,31 @@ void VclMetafileProcessor2D::processFillGraphicPrimitive2D(
                                         rAttribute.getOffsetY()))) },
                         rFillGraphicPrimitive2D.getTransparency()));
 
-                // process UnifiedTransparencePrimitive2D primitive directly
-                processUnifiedTransparencePrimitive2D(
-                    static_cast<const primitive2d::UnifiedTransparencePrimitive2D&>(*aPrimitive));
+                // tdf#166709 see comments 21-23, we have two possibilities here:
+                // (a) use UnifiedTransparencePrimitive2D: test PDF is 47.5kb
+                // (b) use TransparencePrimitive2D: test PDF is 30.8 kb
+                // differences are described in the task. Due to (b) being smaller
+                // and is better re-loadable I opt for that. To be able to change
+                // this easily I let both versions stand here
+                static bool bTransparencePrimitive2DUse(true);
+
+                if (bTransparencePrimitive2DUse)
+                {
+                    // process recursively. Since this first gets the decomposition
+                    // (else a primitive processor would loop recursively) this will
+                    // use TransparencePrimitive2D, created by
+                    // UnifiedTransparencePrimitive2D::get2DDecomposition. This could
+                    // also be done here, but that decompose already has needed stuff
+                    // and we keep it in one place
+                    process(*aPrimitive);
+                }
+                else
+                {
+                    // process UnifiedTransparencePrimitive2D primitive directly
+                    processUnifiedTransparencePrimitive2D(
+                        static_cast<const primitive2d::UnifiedTransparencePrimitive2D&>(
+                            *aPrimitive));
+                }
 
                 // we are done, return
                 return;
