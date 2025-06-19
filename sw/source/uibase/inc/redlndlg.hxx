@@ -50,6 +50,7 @@ struct SwRedlineDataParent
 };
 
 class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to > {};
+class SwView;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg final : public SfxListener
 {
@@ -101,6 +102,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final : public SfxListener
     SAL_DLLPRIVATE void          InsertParents(SwRedlineTable::size_type nStart, SwRedlineTable::size_type nEnd = SwRedlineTable::npos);
     SAL_DLLPRIVATE void          RemoveParents(SwRedlineTable::size_type nStart, SwRedlineTable::size_type nEnd);
     SAL_DLLPRIVATE void          InitAuthors();
+    SAL_DLLPRIVATE void          EnableControls(const SwView* pView);
 
     SAL_DLLPRIVATE static const OUString & GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0,
                                                   bool bTableChanges = false, bool bRowChanges = false);

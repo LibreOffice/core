@@ -310,6 +310,7 @@ void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
     InitAuthors();
 
     lcl_reselect(rTreeView, pSelectedEntryRedlineData);
+    EnableControls(pView);
 }
 
 static bool isAcceptRejectCommandsEnabled(const SwView& rView)
@@ -340,7 +341,6 @@ void SwRedlineAcceptDlg::InitAuthors()
     SwRedlineTable::size_type nCount = pSh ? pSh->GetRedlineCount() : 0;
 
     m_bOnlyFormatedRedlines = true;
-    bool bIsNotFormated = false;
 
     // determine authors
     for ( SwRedlineTable::size_type i = 0; i < nCount; i++)
@@ -366,6 +366,15 @@ void SwRedlineAcceptDlg::InitAuthors()
 
     if (pFilterPage->SelectAuthor(sOldAuthor) == -1 && !aStrings.empty())
         pFilterPage->SelectAuthor(aStrings[0]);
+}
+
+void SwRedlineAcceptDlg::EnableControls(const SwView* pView)
+{
+    if (!pView)
+        return;
+    SwWrtShell* pSh = pView->GetWrtShellPtr();
+    if (!pSh)
+        return;
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();
     bool const bEnable = isAcceptRejectCommandsEnabled(*pView)
@@ -373,6 +382,7 @@ void SwRedlineAcceptDlg::InitAuthors()
         && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
     bool bSel = rTreeView.get_selected(nullptr);
 
+    bool bIsNotFormated = false;
     rTreeView.selected_foreach([this, pSh, &bIsNotFormated](weld::TreeIter& rEntry){
         // find the selected redline
         // (fdo#57874: ignore, if the redline is already gone)
@@ -473,7 +483,7 @@ void SwRedlineAcceptDlg::Activate()
         m_pTPView->EnableAcceptAll(false);
         m_pTPView->EnableRejectAll(false);
         m_pTPView->EnableClearFormatAll(false);
-        // note: enabling is done in InitAuthors below
+        // note: enabling is done in EnableControls below
     }
 
     m_aUsedSeqNo.clear();
@@ -585,6 +595,7 @@ void SwRedlineAcceptDlg::Activate()
     InitAuthors();
 
     lcl_reselect(rTreeView, pSelectedEntryRedlineData);
+    EnableControls(pView);
 }
 
 void SwRedlineAcceptDlg::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
@@ -1315,9 +1326,6 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     if (!pSh)
         return;
 
-    bool bIsNotFormated = false;
-    bool bSel = false;
-
     //#98883# don't select redlines while the dialog is not focused
     //#107938# But not only ask pTable if it has the focus. To move
     //         the selection to the selected redline any child of pParentDlg
@@ -1332,7 +1340,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
             pSh->EnterStdMode();
             SwViewShell::SetCareDialog(m_xParentDlg);
 
-            rTreeView.selected_foreach([this, pSh, &rTreeView, &xActEntry, &bIsNotFormated, &bSel](weld::TreeIter& rEntry){
+            rTreeView.selected_foreach([this, pSh, &rTreeView, &xActEntry](weld::TreeIter& rEntry){
                 rTreeView.copy_iterator(rEntry, *xActEntry);
                 if (rTreeView.get_iter_depth(rEntry))
                 {
@@ -1340,17 +1348,11 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
                     if (rTreeView.is_selected(*xActEntry))
                         return false;   // don't select twice
                 }
-                else
-                    bSel = true;
 
                 // #98864# find the selected redline (ignore, if the redline is already gone)
                 SwRedlineTable::size_type nPos = GetRedlinePos(*xActEntry);
                 if (nPos != SwRedlineTable::npos)
                 {
-
-                    const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
-                    bIsNotFormated |= RedlineType::Format != rRedln.GetType();
-
                     if (pSh->GotoRedline(nPos, true))
                     {
                         pSh->SetInSelect();
@@ -1371,9 +1373,6 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
                             nPos = GetRedlinePos(*xChild);
                             if (nPos != SwRedlineTable::npos)
                             {
-                                const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
-                                bIsNotFormated |= RedlineType::Format != rRedln.GetType();
-
                                 if (pSh->GotoRedline(nPos, true))
                                 {
                                     pSh->SetInSelect();
@@ -1393,14 +1392,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
         }
     }
 
-    bool const bEnable = isAcceptRejectCommandsEnabled(*pView)
-        && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
-    m_pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
-    m_pTPView->EnableReject( bEnable && bSel /*&& !bReadonlySel*/ );
-    m_pTPView->EnableClearFormat( bEnable && bSel && !bIsNotFormated /*&& !bReadonlySel*/ );
-    m_pTPView->EnableAcceptAll( bEnable );
-    m_pTPView->EnableRejectAll( bEnable );
-    m_pTPView->EnableClearFormatAll( bEnable && m_bOnlyFormatedRedlines );
+    EnableControls(pView);
 }
 
 IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
