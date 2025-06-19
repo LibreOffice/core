@@ -917,10 +917,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL("Delete “Donec”"s, change.get<std::string>("description"));
         CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("comment"));
-        auto text_before = change.get<std::string>("text-before");
+        auto text_before = change.get<std::string>("textBefore");
         CPPUNIT_ASSERT_EQUAL(size_t(200), text_before.size());
         CPPUNIT_ASSERT(text_before.ends_with(" egestas. "));
-        auto text_after = change.get<std::string>("text-after");
+        auto text_after = change.get<std::string>("textAfter");
         CPPUNIT_ASSERT_EQUAL(size_t(200), text_after.size());
         CPPUNIT_ASSERT(text_after.starts_with(" blandit "));
         ++it;
@@ -937,10 +937,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL("Attributes changed"s, change.get<std::string>("description"));
         CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("comment"));
-        auto text_before = change.get<std::string>("text-before");
+        auto text_before = change.get<std::string>("textBefore");
         CPPUNIT_ASSERT_EQUAL(size_t(200), text_before.size());
         CPPUNIT_ASSERT(text_before.ends_with(" arcu, nec "));
-        auto text_after = change.get<std::string>("text-after");
+        auto text_after = change.get<std::string>("textAfter");
         CPPUNIT_ASSERT_EQUAL(size_t(200), text_after.size());
         CPPUNIT_ASSERT(text_after.starts_with(" eros "));
         ++it;
@@ -957,10 +957,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL("Insert “ Sapienti sat.”"s, change.get<std::string>("description"));
         CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("comment"));
-        auto text_before = change.get<std::string>("text-before");
+        auto text_before = change.get<std::string>("textBefore");
         CPPUNIT_ASSERT_EQUAL(size_t(200), text_before.size());
         CPPUNIT_ASSERT(text_before.ends_with(" est orci."));
-        auto text_after = change.get<std::string>("text-after");
+        auto text_after = change.get<std::string>("textAfter");
         CPPUNIT_ASSERT(text_after.empty());
         ++it;
     }
