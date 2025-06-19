@@ -71,26 +71,20 @@
 using namespace com::sun::star;
 using namespace desktop;
 
-static LibreOfficeKitDocumentType getDocumentTypeFromName(const char* pName)
+static LibreOfficeKitDocumentType getDocumentTypeFromName(std::string_view name)
 {
-    CPPUNIT_ASSERT_MESSAGE("Document name must be valid.", pName != nullptr);
-
-    const std::string name(pName);
     CPPUNIT_ASSERT_MESSAGE("Document name must include extension.", name.size() > 4);
 
     const auto it = name.rfind('.');
-    if (it != std::string::npos)
-    {
-        const std::string ext = name.substr(it);
-
-        if (ext == ".ods")
-            return LOK_DOCTYPE_SPREADSHEET;
-
-        if (ext == ".odp")
-            return LOK_DOCTYPE_PRESENTATION;
-    }
-
     CPPUNIT_ASSERT_MESSAGE("Document name must include extension.", it != std::string::npos);
+    const std::string_view ext = name.substr(it);
+
+    if (ext == ".ods")
+        return LOK_DOCTYPE_SPREADSHEET;
+
+    if (ext == ".odp")
+        return LOK_DOCTYPE_PRESENTATION;
+
     return LOK_DOCTYPE_TEXT;
 }
 
