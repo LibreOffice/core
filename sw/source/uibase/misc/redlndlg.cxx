@@ -35,6 +35,7 @@
 #include <swwait.hxx>
 #include <uitool.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/temporary.hxx>
 
 #include <cmdid.h>
 #include <strings.hrc>
@@ -311,6 +312,15 @@ void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
     lcl_reselect(rTreeView, pSelectedEntryRedlineData);
 }
 
+static bool isAcceptRejectCommandsEnabled(const SwView& rView)
+{
+    // Check the state of the command, including read-only mode and special cases
+    // like LOK AllowChangeComments mode
+    return rView.GetViewFrame().GetDispatcher()->QueryState(FN_REDLINE_ACCEPT_ALL,
+                                                            o3tl::temporary(SfxPoolItemHolder()))
+           != SfxItemState::DISABLED;
+}
+
 void SwRedlineAcceptDlg::InitAuthors()
 {
     if (!m_xTabPagesCTRL)
@@ -358,8 +368,7 @@ void SwRedlineAcceptDlg::InitAuthors()
         pFilterPage->SelectAuthor(aStrings[0]);
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();
-    SwDocShell* pShell = pSh ? pSh->GetDoc()->GetDocShell() : nullptr;
-    bool const bEnable = pShell && !pShell->IsReadOnly()
+    bool const bEnable = isAcceptRejectCommandsEnabled(*pView)
         && rTreeView.n_children() != 0
         && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
     bool bSel = rTreeView.get_selected(nullptr);
@@ -1384,8 +1393,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
         }
     }
 
-    SwDocShell* pShell = pSh->GetDoc()->GetDocShell();
-    bool const bEnable = pShell && !pShell->IsReadOnly()
+    bool const bEnable = isAcceptRejectCommandsEnabled(*pView)
         && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
     m_pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
     m_pTPView->EnableReject( bEnable && bSel /*&& !bReadonlySel*/ );
