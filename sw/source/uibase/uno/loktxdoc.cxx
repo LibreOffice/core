@@ -878,14 +878,14 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShel
         {
             auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
             xCursor->goLeft(200, /*bExpand*/ true);
-            rJsonWriter.put("text-before", xCursor->getString());
+            rJsonWriter.put("textBefore", xCursor->getString());
         }
         if (auto xEnd = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_END)
                             .query<css::text::XTextRange>())
         {
             auto xCursor = xEnd->getText()->createTextCursorByRange(xEnd);
             xCursor->goRight(200, /*bExpand*/ true);
-            rJsonWriter.put("text-after", xCursor->getString());
+            rJsonWriter.put("textAfter", xCursor->getString());
         }
         // UNO_NAME_REDLINE_IDENTIFIER: OUString (the value of a pointer, not persistent)
         // UNO_NAME_REDLINE_MOVED_ID: sal_uInt32; 0 == not moved, 1 == moved, but don't have its pair, 2+ == unique ID
