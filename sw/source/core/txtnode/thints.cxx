@@ -1105,7 +1105,7 @@ SwTextAttr* MakeTextAttr(
 
                 if (!rDoc.IsInWriterfilterImport())
                 {
-                    // We set the name here to make the object referencable.
+                    // We set the name here to make the object referenceable.
                     pField.SetName(sw::mark::MarkBase::GenerateNewName(u"__Annotation__"));
                 }
                 else // Keep the previous behaviour while loading the file.
