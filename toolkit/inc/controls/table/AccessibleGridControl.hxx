@@ -49,7 +49,6 @@ namespace accessibility {
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int64 nChildIndex ) override;
 
-    /** @return  The role of this object (a table). */
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
     // XAccessibleComponent ---------------------------------------------------
