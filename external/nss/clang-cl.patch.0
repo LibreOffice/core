@@ -72,17 +72,6 @@
  /* make GCC warn when we use these #defines */
  typedef int __BLAPI_DEPRECATED __attribute__((deprecated));
  #define DSA_SUBPRIME_LEN ((__BLAPI_DEPRECATED)DSA1_SUBPRIME_LEN)
---- nss/lib/util/pkcs11n.h
-+++ nss/lib/util/pkcs11n.h
-@@ -563,7 +563,7 @@
- /* keep the old value for compatibility reasons*/
- #define CKT_NSS_MUST_VERIFY ((__CKT_NSS_MUST_VERIFY)(CKT_NSS + 4))
- #else
--#ifdef _WIN32
-+#if defined _WIN32 && !defined __clang__
- /* This magic gets the windows compiler to give us a deprecation
-  * warning */
- #pragma deprecated(CKT_NSS_UNTRUSTED, CKT_NSS_MUST_VERIFY, CKT_NSS_VALID)
 
 # While MSVC uses
 #  #pragma warning(disable : 4103)
