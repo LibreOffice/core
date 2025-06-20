@@ -114,8 +114,8 @@ class AutofilterTest(UITestCase):
             xTreeList = xCheckListMenu.getChild("check_tree_box")
 
             self.assertEqual(2, len(xTreeList.getChildren()))
-            self.assertTrue(get_state_as_dict(xTreeList.getChild('0'))['IsSelected'])
-            self.assertTrue(get_state_as_dict(xTreeList.getChild('1'))['IsSelected'])
+            self.assertEqual('true', get_state_as_dict(xTreeList.getChild('0'))['IsSelected'])
+            self.assertEqual('false', get_state_as_dict(xTreeList.getChild('1'))['IsSelected'])
 
             xOkBtn = xFloatWindow.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())

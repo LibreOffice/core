@@ -75,7 +75,7 @@ frog, dogg, catt"""
                 checkgrammar = xDialog.getChild('checkgrammar')
                 if get_state_as_dict(checkgrammar)['Selected'] == 'true':
                     checkgrammar.executeAction('CLICK', ())
-                self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
+                self.assertEqual('false', get_state_as_dict(checkgrammar)['Selected'])
 
                 # Step 4: Repetitively click on "Correct all" for each misspelling
                 #         prompt until end of document is reached.
@@ -126,7 +126,7 @@ frog, dogg, catt"""
                 checkgrammar = xDialog.getChild('checkgrammar')
                 if get_state_as_dict(checkgrammar)['Selected'] == 'true':
                     checkgrammar.executeAction('CLICK', ())
-                self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
+                self.assertEqual('false', get_state_as_dict(checkgrammar)['Selected'])
 
                 # Step 2: Click on "Correct all" for each misspelling
                 #         prompt until end of document is reached.
@@ -163,7 +163,7 @@ frog, dogg, catt"""
                 checkgrammar = xDialog.getChild('checkgrammar')
                 if get_state_as_dict(checkgrammar)['Selected'] == 'true':
                     checkgrammar.executeAction('CLICK', ())
-                self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
+                self.assertEqual('false', get_state_as_dict(checkgrammar)['Selected'])
 
                 change = xDialog.getChild('change')
                 change.executeAction("CLICK", ())
