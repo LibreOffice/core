@@ -872,7 +872,7 @@ bool WMAdaptor::getWMshouldSwitchWorkspace() const
         WMAdaptor * pWMA = const_cast<WMAdaptor*>(this);
 
         pWMA->m_bWMshouldSwitchWorkspace = true;
-        bool aSetting = officecfg::VCL::VCLSettings::DesktopManagement::DisablePrinting::get();
+        bool aSetting = officecfg::VCL::VCLSettings::WM::ShouldSwitchWorkspace::get();
 
         if( aSetting )
         {
