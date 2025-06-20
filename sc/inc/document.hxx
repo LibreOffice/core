@@ -58,6 +58,8 @@
 #include "markdata.hxx"
 #include "drwlayer.hxx"
 
+#include "SheetViewTypes.hxx"
+
 #include <oox/helper/refvector.hxx>
 
 namespace com::sun::star::chart2 { class XChartDocument; }
@@ -2392,6 +2394,16 @@ public:
      * Feel free to add more checks as needed.
      */
     void CheckIntegrity( SCTAB nTab ) const;
+
+    /* Sheet View */
+
+    /** Creates a new sheet view for the table, using the sheet view table */
+    sal_Int32 CreateNewSheetView(SCTAB nMainTable, SCTAB nSheetViewTable);
+
+    /** Return the sheet view table for the ID */
+    SCTAB GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID);
+    bool IsSheetView(SCTAB nTab) const;
+    void SetSheetView(SCTAB nTab, bool bSheetView);
 
 private:
     ScDocument(const ScDocument& r) = delete;

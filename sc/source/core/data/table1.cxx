@@ -53,6 +53,7 @@
 #include <rowheightcontext.hxx>
 #include <compressedarray.hxx>
 #include <tabvwsh.hxx>
+#include <SheetView.hxx>
 #include <vcl/svapp.hxx>
 
 #include <formula/vectortoken.hxx>
@@ -277,7 +278,8 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     mbPageBreaksValid(false),
     mbForceBreaks(false),
     mbTotalsRowBelow(true),
-    bStreamValid(false)
+    bStreamValid(false),
+    mpSheetViewManager(new sc::SheetViewManager())
 {
     aDefaultColData.InitAttrArray(new ScAttrArray(static_cast<SCCOL>(-1), nNewTab, rDoc, nullptr));
     if (bColInfo)

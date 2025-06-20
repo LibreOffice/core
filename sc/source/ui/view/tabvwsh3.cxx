@@ -1046,6 +1046,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             }
             break;
 
+        case FID_NEW_SHEET_VIEW:
+            MakeNewSheetView();
+        break;
+
         case SID_ATTR_ZOOM: // status row
         case FID_SCALE:
             {

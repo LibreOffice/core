@@ -352,6 +352,8 @@ public:
     void            DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                         bool bAttrChanged );
 
+    void MakeNewSheetView();
+
                                                 // Internal helper functions
 protected:
     static void     UpdateLineAttrs( ::editeng::SvxBorderLine&        rLine,

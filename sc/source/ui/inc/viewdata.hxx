@@ -242,7 +242,10 @@ private:
 
     bool            bShowGrid;                  // per sheet show grid lines option.
     bool            mbOldCursorValid;           // "virtual" Cursor position when combined
-                    ScViewDataTable(const ScDocument& rDoc);
+
+    sc::SheetViewID mnSheetViewID = sc::DefaultSheetViewID;
+
+    ScViewDataTable(const ScDocument& rDoc);
 
     void            WriteUserDataSequence(
                         css::uno::Sequence <css::beans::PropertyValue>& rSettings,
@@ -392,7 +395,13 @@ public:
     SCTAB           GetRefTabNo() const                     { return nRefTabNo; }
     void            SetRefTabNo( SCTAB nNewTab )            { nRefTabNo = nNewTab; }
 
-    SCTAB GetTabNo() const { return mnTabNumber; }
+    SCTAB GetTab() const { return mnTabNumber; }
+    SC_DLLPUBLIC SCTAB GetTabNo() const;
+    void SetSheetViewID(sc::SheetViewID nID)
+    {
+        pThisTab->mnSheetViewID = nID;
+    }
+
     SCCOL           MaxCol() const                          { return mrDoc.MaxCol(); }
     SCROW           MaxRow() const                          { return mrDoc.MaxRow(); }
     ScSplitPos      GetActivePart() const                   { return pThisTab->eWhichActive; }

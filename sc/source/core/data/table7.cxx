@@ -666,4 +666,10 @@ const std::shared_ptr<sc::SolverSettings> & ScTable::GetSolverSettings()
     return m_pSolverSettings;
 }
 
+std::shared_ptr<sc::SheetViewManager> const& ScTable::GetSheetViewManager()
+{
+    return mpSheetViewManager;
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

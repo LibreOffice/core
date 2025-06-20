@@ -82,6 +82,7 @@ class RowHeightContext;
 class CompileFormulaContext;
 struct SetFormulaDirtyContext;
 class ColumnIterator;
+class SheetViewManager;
 }
 
 class SfxItemSet;
@@ -251,6 +252,9 @@ private:
     bool            mbPageBreaksValid:1;
     bool            mbForceBreaks:1;
     bool            mbTotalsRowBelow:1;
+
+    bool mbIsSheetView : 1 = false;
+
     /** this is touched from formula group threading context */
     std::atomic<bool> bStreamValid;
 
@@ -259,6 +263,8 @@ private:
 
     // Default attributes for the unallocated columns.
     ScColumnData    aDefaultColData;
+
+    std::shared_ptr<sc::SheetViewManager> mpSheetViewManager;
 
 friend class ScDocument;                    // for FillInfo
 friend class ScColumn;
@@ -1180,6 +1186,15 @@ public:
     void CheckIntegrity() const;
 
     void CollectBroadcasterState(sc::BroadcasterState& rState) const;
+
+    std::shared_ptr<sc::SheetViewManager> const& GetSheetViewManager();
+
+    bool IsSheetView() const { return mbIsSheetView; }
+
+    void SetSheetView(bool bValue)
+    {
+        mbIsSheetView = bValue;
+    }
 
 private:
 
