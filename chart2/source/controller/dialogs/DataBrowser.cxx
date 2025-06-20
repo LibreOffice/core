@@ -88,7 +88,7 @@ namespace impl
 class SeriesHeaderEdit
 {
 public:
-    explicit SeriesHeaderEdit(std::unique_ptr<weld::Entry> xControl);
+    explicit SeriesHeaderEdit(std::unique_ptr<weld::Entry> xControl, sal_Int32 nHeader);
 
     void setStartColumn( sal_Int32 nStartColumn );
     sal_Int32 getStartColumn() const { return m_nStartColumn;}
@@ -117,7 +117,7 @@ private:
     bool m_bShowWarningBox;
 };
 
-SeriesHeaderEdit::SeriesHeaderEdit(std::unique_ptr<weld::Entry> xControl)
+SeriesHeaderEdit::SeriesHeaderEdit(std::unique_ptr<weld::Entry> xControl, sal_Int32 nHeader)
     : m_xControl(std::move(xControl))
     , m_nStartColumn(0)
     , m_bShowWarningBox(false)
@@ -126,6 +126,8 @@ SeriesHeaderEdit::SeriesHeaderEdit(std::unique_ptr<weld::Entry> xControl)
     m_xControl->connect_changed(LINK(this, SeriesHeaderEdit, NameEdited));
     m_xControl->connect_focus_in(LINK(this, SeriesHeaderEdit, NameFocusIn));
     m_xControl->connect_mouse_press(LINK(this, SeriesHeaderEdit, MousePressHdl));
+
+    m_xControl->set_buildable_name(m_xControl->get_buildable_name() + OUString::number(nHeader));
 }
 
 IMPL_LINK_NOARG(SeriesHeaderEdit, NameEdited, weld::Entry&, void)
@@ -164,7 +166,7 @@ IMPL_LINK_NOARG(SeriesHeaderEdit, MousePressHdl, const MouseEvent&, bool)
 class SeriesHeader
 {
 public:
-    explicit SeriesHeader(weld::Container* pParent, weld::Container* pColorParent);
+    explicit SeriesHeader(weld::Container* pParent, weld::Container* pColorParent, sal_Int32 nHeader);
             ~SeriesHeader();
 
     void SetColor( const Color & rCol );
@@ -231,7 +233,7 @@ private:
     bool      m_bSeriesNameChangePending;
 };
 
-SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorParent)
+SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorParent, sal_Int32 nHeader)
     : m_aUpdateDataTimer( "SeriesHeader UpdateDataTimer" )
     , m_xBuilder1(Application::CreateBuilder(pParent, u"modules/schart/ui/columnfragment.ui"_ustr))
     , m_xBuilder2(Application::CreateBuilder(pColorParent, u"modules/schart/ui/imagefragment.ui"_ustr))
@@ -240,7 +242,7 @@ SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorPare
     , m_xContainer1(m_xBuilder1->weld_container(u"container"_ustr))
     , m_xContainer2(m_xBuilder2->weld_container(u"container"_ustr))
     , m_spSymbol(m_xBuilder1->weld_image(u"image"_ustr))
-    , m_spSeriesName(new SeriesHeaderEdit(m_xBuilder1->weld_entry(u"entry"_ustr)))
+    , m_spSeriesName(new SeriesHeaderEdit(m_xBuilder1->weld_entry(u"entry"_ustr), nHeader))
     , m_spColorBar(m_xBuilder2->weld_image(u"image"_ustr))
     , m_xDevice(Application::GetDefaultDevice())
     , m_nStartCol( 0 )
@@ -636,9 +638,10 @@ void DataBrowser::RenewTable()
     Link<impl::SeriesHeaderEdit&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link<impl::SeriesHeaderEdit&,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
 
-    for (auto const& elemHeader : aHeaders)
+    for (size_t i = 0; i < aHeaders.size(); ++i)
     {
-        auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin );
+        auto const& elemHeader = aHeaders[i];
+        auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin, i);
         Color nColor;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
         if( elemHeader.m_xDataSeries.is() &&
@@ -1261,9 +1264,11 @@ void DataBrowser::RenewSeriesHeaders()
     Link<impl::SeriesHeaderEdit&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link<impl::SeriesHeaderEdit&,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
 
-    for (auto const& elemHeader : aHeaders)
+
+    for (size_t i = 0; i < aHeaders.size(); ++i)
     {
-        auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin );
+        auto const& elemHeader = aHeaders[i];
+        auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin, i );
         Color nColor;
         if( elemHeader.m_xDataSeries.is() &&
             ( elemHeader.m_xDataSeries->getPropertyValue( u"Color"_ustr ) >>= nColor ))
