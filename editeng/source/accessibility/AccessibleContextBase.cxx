@@ -332,17 +332,6 @@ uno::Sequence< OUString > SAL_CALL
         u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 
-
-// XTypeProvider
-
-uno::Sequence<sal_Int8> SAL_CALL
-    AccessibleContextBase::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-// internal
-
 void SAL_CALL AccessibleContextBase::disposing()
 {
     SetState (AccessibleStateType::DEFUNC);
