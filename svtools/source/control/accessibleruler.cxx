@@ -200,12 +200,6 @@ Sequence< OUString > SAL_CALL SvtRulerAccessible::getSupportedServiceNames()
     return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
 }
 
-//=====  XTypeProvider  =======================================================
-Sequence< sal_Int8 > SAL_CALL SvtRulerAccessible::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 void SAL_CALL SvtRulerAccessible::disposing()
 {
     mpRepr = nullptr;      // object dies with representation
