@@ -111,10 +111,6 @@ public:
     */
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
 
-    /** Returns an implementation id.
-    */
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
-
 private:
     /// Mutex guarding this object.
     mutable std::mutex maMutex;
