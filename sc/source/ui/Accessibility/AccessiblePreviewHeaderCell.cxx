@@ -49,8 +49,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
-
 ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell,
                             const ScAddress& rCellPos, bool bIsColHdr, bool bIsRowHdr,
@@ -280,8 +278,6 @@ uno::Sequence<sal_Int8> SAL_CALL
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
-//====  internal  =========================================================
 
 AbsoluteScreenPixelRectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen()
 {

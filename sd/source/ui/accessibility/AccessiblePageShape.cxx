@@ -36,8 +36,6 @@ using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
-//=====  internal  ============================================================
-
 AccessiblePageShape::AccessiblePageShape (
     uno::Reference<drawing::XDrawPage> xPage,
     const uno::Reference<XAccessible>& rxParent,

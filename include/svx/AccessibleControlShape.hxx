@@ -65,7 +65,6 @@ class SAL_DLLPUBLIC_RTTI AccessibleControlShape final
         ,public AccessibleControlShape_Base
 {
 public:
-    //=====  internal  ========================================================
     AccessibleControlShape(
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);

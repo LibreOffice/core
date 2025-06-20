@@ -33,7 +33,6 @@ class ScAccessiblePageHeaderArea
     :   public ScAccessibleContextBase
 {
 public:
-    //=====  internal  ========================================================
     ScAccessiblePageHeaderArea(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScPreviewShell* pViewShell,

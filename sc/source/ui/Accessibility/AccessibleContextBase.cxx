@@ -255,8 +255,6 @@ uno::Sequence< OUString> SAL_CALL
             u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 
-//=====  internal  ============================================================
-
 OUString
     ScAccessibleContextBase::createAccessibleDescription()
 {

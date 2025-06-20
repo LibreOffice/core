@@ -82,8 +82,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-    //=====  internal  ========================================================
-
 namespace {
 
 struct ScAccessibleShapeData
@@ -1980,8 +1978,6 @@ Size ScAccessibleDocument::LogicToPixel (const Size& rSize) const
         aSize = pWin->LogicToPixel(rSize, pWin->GetDrawMapMode());
     return aSize;
 }
-
-    //=====  internal  ========================================================
 
 rtl::Reference<utl::AccessibleRelationSetHelper> ScAccessibleDocument::GetRelationSet(const ScAddress* pAddress) const
 {

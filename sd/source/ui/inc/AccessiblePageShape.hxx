@@ -33,7 +33,6 @@ class AccessiblePageShape final
     :   public AccessibleShape
 {
 public:
-    //=====  internal  ========================================================
 
     /** Create a new accessible object that makes the given shape accessible.
         @param rxParent

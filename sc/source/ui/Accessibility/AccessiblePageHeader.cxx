@@ -276,8 +276,6 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceName
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
-//====  internal  =========================================================
-
 OUString ScAccessiblePageHeader::createAccessibleDescription()
 {
     OUString sDesc(mbHeader ? STR_ACC_HEADER_DESCR : STR_ACC_FOOTER_DESCR);

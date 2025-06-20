@@ -57,7 +57,6 @@ using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
-//=====  internal  ============================================================
 AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     ::sd::Window* pSdWindow,
     ::sd::ViewShell* pViewShell,

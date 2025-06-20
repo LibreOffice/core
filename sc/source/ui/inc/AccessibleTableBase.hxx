@@ -41,7 +41,6 @@ class ScAccessibleTableBase :
             public ScAccessibleTableBaseImpl
 {
 public:
-    //=====  internal  ========================================================
     ScAccessibleTableBase(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,

@@ -42,8 +42,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
-
 ScAccessiblePreviewTable::ScAccessiblePreviewTable(
     const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
     ScPreviewShell* pViewShell, sal_Int32 nIndex)
@@ -516,8 +514,6 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServiceNa
 
     return aSequence;
 }
-
-//====  internal  =========================================================
 
 OUString ScAccessiblePreviewTable::createAccessibleDescription()
 {

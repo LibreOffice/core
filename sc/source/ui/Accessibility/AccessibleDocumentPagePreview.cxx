@@ -1109,8 +1109,6 @@ ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rDa
         nNoteParagraphs = pNotesChildren->GetChildrenCount();
 }
 
-//=====  internal  ========================================================
-
 ScAccessibleDocumentPagePreview::ScAccessibleDocumentPagePreview(
         const uno::Reference<XAccessible>& rxParent, ScPreviewShell* pViewShell ) :
     ScAccessibleDocumentBase(rxParent),
@@ -1434,8 +1432,6 @@ uno::Sequence< OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedS
     const css::uno::Sequence<OUString> vals { u"com.sun.star.AccessibleSpreadsheetPageView"_ustr };
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
-
-//=====  internal  ========================================================
 
 OUString ScAccessibleDocumentPagePreview::createAccessibleDescription()
 {

@@ -45,7 +45,6 @@ class SVX_DLLPUBLIC AccessibleOLEShape
         public css::accessibility::XAccessibleAction
 {
 public:
-    //=====  internal  ========================================================
     AccessibleOLEShape (
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);

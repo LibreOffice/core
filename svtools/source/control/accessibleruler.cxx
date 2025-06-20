@@ -38,8 +38,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 
-//=====  internal  ============================================================
-
 SvtRulerAccessible::SvtRulerAccessible(uno::Reference<XAccessible> xParent, Ruler& rRepr,
                                        OUString aName)
     : msName(std::move(aName))

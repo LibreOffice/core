@@ -41,7 +41,6 @@ class AccessibleDrawDocumentView final :
     ,public css::accessibility::XAccessibleGroupPosition
 {
 public:
-    //=====  internal  ========================================================
 
     AccessibleDrawDocumentView (::sd::Window* pSdWindow,
         ::sd::ViewShell* pViewShell,

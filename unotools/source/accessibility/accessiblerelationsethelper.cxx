@@ -40,7 +40,6 @@ namespace
         return AccessibleRelation();
     }
 }
-//=====  internal  ============================================================
 
 AccessibleRelationSetHelper::AccessibleRelationSetHelper ()
 {

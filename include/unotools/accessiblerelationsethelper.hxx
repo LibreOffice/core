@@ -43,7 +43,6 @@ class UNOTOOLS_DLLPUBLIC AccessibleRelationSetHelper final
     : public cppu::WeakImplHelper<css::accessibility::XAccessibleRelationSet>
 {
 public:
-    //=====  internal  ========================================================
     AccessibleRelationSetHelper();
 
     css::uno::Reference<css::accessibility::XAccessibleRelationSet> Clone() const;

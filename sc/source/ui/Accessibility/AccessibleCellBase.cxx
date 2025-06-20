@@ -44,8 +44,6 @@ using namespace ::com::sun::star::accessibility;
 
 #define DEFAULT_LINE_WIDTH 2
 
-//=====  internal  ============================================================
-
 ScAccessibleCellBase::ScAccessibleCellBase(const uno::Reference<XAccessible>& rxParent,
                                            ScDocument* pDoc, const ScAddress& rCellAddress,
                                            sal_Int64 nIndex)

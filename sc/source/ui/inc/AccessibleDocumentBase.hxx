@@ -24,7 +24,6 @@
 class ScAccessibleDocumentBase : public ScAccessibleContextBase
 {
 public:
-    //=====  internal  ========================================================
     ScAccessibleDocumentBase(const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
 
 protected:

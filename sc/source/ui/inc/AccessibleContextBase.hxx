@@ -42,7 +42,6 @@ class ScAccessibleContextBase
 {
 
 public:
-    //=====  internal  ========================================================
     ScAccessibleContextBase(
         css::uno::Reference<css::accessibility::XAccessible> xParent,
         const sal_Int16 aRole);

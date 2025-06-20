@@ -34,8 +34,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
-
 ScAccessibleTableBase::ScAccessibleTableBase(
         const uno::Reference<XAccessible>& rxParent,
         ScDocument* pDoc,

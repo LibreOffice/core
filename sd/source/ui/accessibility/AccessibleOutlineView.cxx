@@ -39,8 +39,6 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
-//=====  internal  ============================================================
-
 AccessibleOutlineView::AccessibleOutlineView (
     ::sd::Window* pSdWindow,
     ::sd::OutlineViewShell* pViewShell,

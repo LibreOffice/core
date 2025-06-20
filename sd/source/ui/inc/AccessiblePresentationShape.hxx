@@ -29,7 +29,6 @@ class AccessiblePresentationShape final
     :   public AccessibleShape
 {
 public:
-    //=====  internal  ========================================================
     AccessiblePresentationShape (
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
@@ -41,8 +40,6 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName() override;
-
-    //=====  internal  ========================================================
 
     /// Create a name string that contains the accessible name.
     virtual OUString

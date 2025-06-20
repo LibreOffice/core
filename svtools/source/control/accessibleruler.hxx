@@ -38,7 +38,6 @@ class SvtRulerAccessible final
                                          css::accessibility::XAccessible, css::lang::XServiceInfo>
 {
 public:
-    //=====  internal  ========================================================
     SvtRulerAccessible(
         css::uno::Reference< css::accessibility::XAccessible> xParent, Ruler& rRepresentation, OUString aName );
 

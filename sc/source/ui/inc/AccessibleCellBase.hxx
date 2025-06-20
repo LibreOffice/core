@@ -28,7 +28,6 @@ class ScAccessibleCellBase
                                          css::accessibility::XAccessibleValue>
 {
 public:
-    //=====  internal  ========================================================
     ScAccessibleCellBase(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,

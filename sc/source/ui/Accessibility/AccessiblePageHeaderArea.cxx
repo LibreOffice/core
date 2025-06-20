@@ -40,8 +40,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-    //=====  internal  ========================================================
-
 ScAccessiblePageHeaderArea::ScAccessiblePageHeaderArea(
         const uno::Reference<XAccessible>& rxParent,
         ScPreviewShell* pViewShell,

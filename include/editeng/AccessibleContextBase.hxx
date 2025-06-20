@@ -37,9 +37,6 @@ class EDITENG_DLLPUBLIC AccessibleContextBase
                                          css::lang::XServiceInfo, css::accessibility::XAccessible>
 {
 public:
-
-    //=====  internal  ========================================================
-
     /** The origin of the accessible name or description.
     */
     enum StringOrigin {

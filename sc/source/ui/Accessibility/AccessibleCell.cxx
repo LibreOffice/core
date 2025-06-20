@@ -303,8 +303,6 @@ uno::Sequence< OUString> SAL_CALL
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
-    //====  internal  =========================================================
-
 bool ScAccessibleCell::IsDefunc(sal_Int64 nParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || (mpDoc == nullptr) || (mpViewShell == nullptr) || !getAccessibleParent().is() ||

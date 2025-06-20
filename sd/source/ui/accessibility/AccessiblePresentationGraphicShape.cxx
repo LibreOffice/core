@@ -30,8 +30,6 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
-//=====  internal  ============================================================
-
 AccessiblePresentationGraphicShape::AccessiblePresentationGraphicShape(
     const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo)
     : AccessibleGraphicShape(rShapeInfo, rShapeTreeInfo)

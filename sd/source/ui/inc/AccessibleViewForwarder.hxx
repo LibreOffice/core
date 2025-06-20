@@ -40,8 +40,6 @@ namespace accessibility
 class AccessibleViewForwarder final : public IAccessibleViewForwarder
 {
 public:
-    //=====  internal  ========================================================
-
     AccessibleViewForwarder(SdrPaintView* pView, const OutputDevice& rDevice);
 
     virtual ~AccessibleViewForwarder() override;

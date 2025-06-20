@@ -237,8 +237,6 @@ bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc, Sc
     return false;
 }
 
-//=====  internal  ============================================================
-
 // FIXME: really unclear why we have an ScAccessibleTableBase with
 // only this single sub-class
 ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
@@ -1315,8 +1313,6 @@ uno::Sequence<sal_Int8> SAL_CALL
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
-//====  internal  =========================================================
 
 AbsoluteScreenPixelRectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen()
 {

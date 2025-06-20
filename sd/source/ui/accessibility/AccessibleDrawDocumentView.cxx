@@ -78,8 +78,6 @@ struct XShapePosCompareHelper
 
 }
 
-//=====  internal  ============================================================
-
 AccessibleDrawDocumentView::AccessibleDrawDocumentView (
     ::sd::Window* pSdWindow,
     ::sd::ViewShell* pViewShell,

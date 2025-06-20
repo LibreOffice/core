@@ -87,8 +87,6 @@ class AccessibleDocumentViewBase
         public css::accessibility::XAccessibleExtendedAttributes
 {
 public:
-    //=====  internal  ========================================================
-
     /** Create a new object.  Note that the caller has to call the
         Init method directly after this constructor has finished.
     @param pSdWindow

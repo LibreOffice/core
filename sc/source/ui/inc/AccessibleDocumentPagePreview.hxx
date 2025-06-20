@@ -35,7 +35,6 @@ class ScAccessibleDocumentPagePreview
     :   public ScAccessibleDocumentBase
 {
 public:
-    //=====  internal  ========================================================
     ScAccessibleDocumentPagePreview(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScPreviewShell* pViewShell );
@@ -85,8 +84,6 @@ public:
     */
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
-
-    ///=====  internal  ========================================================
 
 protected:
     /// Return this object's description.

@@ -54,7 +54,6 @@ class ScAccessibleDocument
         public accessibility::IAccessibleViewForwarder
 {
 public:
-    //=====  internal  ========================================================
     ScAccessibleDocument(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,

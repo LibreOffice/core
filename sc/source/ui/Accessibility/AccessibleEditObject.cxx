@@ -54,8 +54,6 @@ using ::com::sun::star::lang::IndexOutOfBoundsException;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
-
 ScAccessibleEditObject::ScAccessibleEditObject(
         const uno::Reference<XAccessible>& rxParent,
         EditView* pEditView, vcl::Window* pWin, const OUString& rName,
@@ -338,8 +336,6 @@ uno::Sequence<sal_Int8> SAL_CALL
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
-    //====  internal  =========================================================
 
 bool ScAccessibleEditObject::IsDefunc(sal_Int64 nParentStates)
 {

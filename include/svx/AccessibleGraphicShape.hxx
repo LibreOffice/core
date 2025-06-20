@@ -44,7 +44,6 @@ class SVX_DLLPUBLIC AccessibleGraphicShape
         public css::accessibility::XAccessibleImage
 {
 public:
-    //=====  internal  ========================================================
     AccessibleGraphicShape (
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
