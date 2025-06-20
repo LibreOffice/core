@@ -110,11 +110,6 @@ uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
         ).getTypes();
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 sal_Int8 SAL_CALL Graphic::getType()
 {
     sal_Int8 cRet = graphic::GraphicType::EMPTY;

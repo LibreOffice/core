@@ -55,7 +55,6 @@ private:
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XGraphic
     virtual ::sal_Int8 SAL_CALL getType(  ) override;
