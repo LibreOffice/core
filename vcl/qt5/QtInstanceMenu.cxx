@@ -109,10 +109,34 @@ void QtInstanceMenu::set_visible(const OUString& rIdent, bool bVisible)
     });
 }
 
-void QtInstanceMenu::insert(int, const OUString&, const OUString&, const OUString*, VirtualDevice*,
-                            const css::uno::Reference<css::graphic::XGraphic>&, TriState)
+void QtInstanceMenu::insert(int nPos, const OUString& rId, const OUString& rStr,
+                            const OUString* pIconName, VirtualDevice* pImageSurface,
+                            const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                            TriState eCheckRadioFalse)
 {
-    assert(false && "Not implemented yet");
+    assert(eCheckRadioFalse == TRISTATE_INDET && "Not implemented yet");
+    (void)eCheckRadioFalse;
+
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        const int nCount = m_pMenu->actions().size();
+        if (nPos == -1)
+            nPos = nCount;
+
+        QAction* pAction = new QAction(toQString(rStr));
+        QAction* pInsertBefore = nPos < nCount ? m_pMenu->actions().at(nPos) : nullptr;
+        m_pMenu->insertAction(pInsertBefore, pAction);
+
+        pAction->setObjectName(toQString(rId));
+
+        if (pIconName && !pIconName->isEmpty())
+            pAction->setIcon(loadQPixmapIcon(*pIconName));
+        else if (pImageSurface)
+            pAction->setIcon(toQPixmap(*pImageSurface));
+        else if (rImage.is())
+            pAction->setIcon(toQPixmap(rImage));
+    });
 }
 
 void QtInstanceMenu::set_item_help_id(const OUString&, const OUString&)

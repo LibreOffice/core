@@ -33,7 +33,7 @@ public:
     virtual bool get_active(const OUString& rIdent) const override;
     virtual void set_visible(const OUString& rIdent, bool bVisible) override;
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+    virtual void insert(int nPos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
                         const css::uno::Reference<css::graphic::XGraphic>& rImage,
                         TriState eCheckRadioFalse) override;
