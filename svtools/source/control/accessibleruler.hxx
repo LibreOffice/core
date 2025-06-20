@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/compbase.hxx>
@@ -35,7 +34,7 @@ class Ruler;
 
 class SvtRulerAccessible final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
+                                         css::accessibility::XAccessible>
 {
 public:
     SvtRulerAccessible(
@@ -87,17 +86,6 @@ public:
 
     virtual css::lang::Locale SAL_CALL
         getLocale() override;
-
-    //=====  XServiceInfo  ====================================================
-
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
-    virtual sal_Bool SAL_CALL
-        supportsService( const OUString& sServiceName ) override;
-
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
 
 protected:
     virtual css::awt::Rectangle implGetBounds() override;

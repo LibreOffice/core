@@ -182,22 +182,6 @@ sal_Int32 SvtRulerAccessible::getBackground(  )
     return sal_Int32(mpRepr->GetControlBackground());
 }
 
-// XServiceInfo
-OUString SAL_CALL SvtRulerAccessible::getImplementationName()
-{
-    return u"com.sun.star.comp.ui.SvtRulerAccessible"_ustr;
-}
-
-sal_Bool SAL_CALL SvtRulerAccessible::supportsService( const OUString& sServiceName )
-{
-    return cppu::supportsService( this, sServiceName );
-}
-
-Sequence< OUString > SAL_CALL SvtRulerAccessible::getSupportedServiceNames()
-{
-    return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
-}
-
 void SAL_CALL SvtRulerAccessible::disposing()
 {
     mpRepr = nullptr;      // object dies with representation
