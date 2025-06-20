@@ -173,7 +173,7 @@ ChartColorPaletteTabPage::SelectValueSetHdl(const std::unique_ptr<ChartColorPale
     const sal_uInt32 nItemId = xValueSet->GetSelectedItemId();
 
     if (!nItemId)
-        return -1;
+        return static_cast<sal_uInt32>(-1);
 
     const sal_uInt32 nIndex = nItemId - 1;
 
@@ -181,7 +181,7 @@ ChartColorPaletteTabPage::SelectValueSetHdl(const std::unique_ptr<ChartColorPale
     {
         return nIndex;
     }
-    return -1;
+    return static_cast<sal_uInt32>(-1);
 }
 } //namespace chart
 

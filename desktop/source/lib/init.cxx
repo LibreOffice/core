@@ -7635,7 +7635,7 @@ static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocumen
     SfxLokHelper::setAccessibilityState(nId, nEnabled);
 }
 
-static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId,
+static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId,
                                      bool bEnabled)
 {
     SolarMutexGuard aGuard;

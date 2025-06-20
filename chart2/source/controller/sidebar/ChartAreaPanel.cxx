@@ -543,7 +543,7 @@ void ChartAreaPanel::selectionChanged(bool bCorrectType)
                     {
                         if (xInfo->hasPropertyByName(u"FillColor"_ustr))
                         {
-                            sal_uInt32 nFillColor = -1;
+                            sal_uInt32 nFillColor = sal_uInt32(-1);
                             xPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
                             if (nFillColor != static_cast<sal_uInt32>(-1))
                             {

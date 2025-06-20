@@ -360,7 +360,7 @@ ChartColorPalettePopup::SelectValueSetHdl(const std::unique_ptr<ChartColorPalett
     const sal_uInt32 nItemId = xValueSet->GetSelectedItemId();
 
     if (!nItemId)
-        return -1;
+        return sal_uInt32(-1);
 
     const sal_uInt32 nIndex = nItemId - 1;
 
@@ -370,7 +370,7 @@ ChartColorPalettePopup::SelectValueSetHdl(const std::unique_ptr<ChartColorPalett
         mbItemSelected = true;
         return nIndex;
     }
-    return -1;
+    return sal_uInt32(-1);
 }
 
 IMPL_LINK_NOARG(ChartColorPalettePopup, ColorfulMouseMoveHdl, const MouseEvent&, void)
