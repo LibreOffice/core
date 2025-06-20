@@ -1435,14 +1435,6 @@ uno::Sequence< OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedS
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
-//=====  XTypeProvider  =======================================================
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleDocumentPagePreview::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 //=====  internal  ========================================================
 
 OUString ScAccessibleDocumentPagePreview::createAccessibleDescription()
