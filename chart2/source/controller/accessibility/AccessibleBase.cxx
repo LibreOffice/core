@@ -684,25 +684,6 @@ Color AccessibleBase::getColor( eColorType eColType )
     return nResult;
 }
 
-// ________ AccessibleBase::XServiceInfo ________
-OUString SAL_CALL AccessibleBase::getImplementationName()
-{
-    return u"AccessibleBase"_ustr;
-}
-
-sal_Bool SAL_CALL AccessibleBase::supportsService( const OUString& ServiceName )
-{
-    return cppu::supportsService( this, ServiceName );
-}
-
-uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()
-{
-    return {
-        u"com.sun.star.accessibility.Accessible"_ustr,
-        u"com.sun.star.accessibility.AccessibleContext"_ustr
-    };
-}
-
 } // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

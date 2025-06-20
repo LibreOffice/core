@@ -60,9 +60,6 @@ public:
     // ________ XAccessibleExtendedComponent ________
     virtual OUString SAL_CALL getToolTipText() override;
 
-    // ________ XServiceInfo ________
-    virtual OUString SAL_CALL getImplementationName() override;
-
 private:
     bool                m_bHasText;
     rtl::Reference< ::chart::AccessibleTextHelper >

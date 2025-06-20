@@ -71,12 +71,6 @@ AccessibleChartShape::~AccessibleChartShape()
     }
 }
 
-// ________ XServiceInfo ________
-OUString AccessibleChartShape::getImplementationName()
-{
-    return u"AccessibleChartShape"_ustr;
-}
-
 // ________ XAccessibleContext ________
 sal_Int64 AccessibleChartShape::getAccessibleChildCount()
 {

@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -75,7 +74,7 @@ struct AccessibleElementInfo
  */
 class AccessibleBase
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
+                                         css::accessibility::XAccessible>
 {
 public:
     enum class EventType
@@ -223,12 +222,6 @@ protected:
     virtual void SAL_CALL grabFocus() override;
     virtual sal_Int32 SAL_CALL getForeground() override;
     virtual sal_Int32 SAL_CALL getBackground() override;
-
-    // ________ XServiceInfo ________
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
-        const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     enum eColorType

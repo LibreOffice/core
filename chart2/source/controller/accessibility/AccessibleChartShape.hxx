@@ -37,9 +37,6 @@ public:
     explicit AccessibleChartShape( const AccessibleElementInfo& rAccInfo );
     virtual ~AccessibleChartShape() override;
 
-    // ________ XServiceInfo ________
-    virtual OUString SAL_CALL getImplementationName() override;
-
     // ________ XAccessibleContext ________
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL

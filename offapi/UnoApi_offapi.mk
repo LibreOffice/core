@@ -589,7 +589,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/awt/tree,\
 	TreeControlModel \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart,\
-	AccessibleChartElement \
 	AreaDiagram \
 	BarDiagram \
 	BubbleDiagram \
