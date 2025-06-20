@@ -139,7 +139,6 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     m_xBulletPB->connect_clicked(LINK(this, SvxBulletAndPositionDlg, BulletHdl_Impl));
     m_xFmtLB->connect_changed(LINK(this, SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl));
     m_xBitmapMB->connect_selected(LINK(this, SvxBulletAndPositionDlg, GraphicHdl_Impl));
-    m_xBitmapMB->connect_toggled(LINK(this, SvxBulletAndPositionDlg, PopupActivateHdl_Impl));
     m_xLevelLB->set_selection_mode(SelectionMode::Multiple);
     m_xLevelLB->connect_changed(LINK(this, SvxBulletAndPositionDlg, LevelHdl_Impl));
     m_xWidthMF->connect_value_changed(LINK(this, SvxBulletAndPositionDlg, SizeHdl_Impl));
@@ -204,6 +203,8 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
 
     Size aSize(m_xGrid->get_preferred_size());
     m_xGrid->set_size_request(aSize.Width(), -1);
+
+    PopulateGalleryMenu();
 
     // PageCreated
     FieldUnit eMetric = pView->GetDoc().GetUIUnit();
@@ -885,7 +886,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, GraphicHdl_Impl, const OUString&, rIdent, voi
     aInvalidateTimer.Start();
 }
 
-IMPL_LINK_NOARG(SvxBulletAndPositionDlg, PopupActivateHdl_Impl, weld::Toggleable&, void)
+void SvxBulletAndPositionDlg::PopulateGalleryMenu()
 {
     if (m_xGalleryMenu)
         return;
