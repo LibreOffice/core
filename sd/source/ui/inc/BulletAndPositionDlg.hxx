@@ -110,6 +110,7 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xReset;
 
     void InitControls();
+    void PopulateGalleryMenu();
     /** To switch between the numbering type
         0 - Number;
         1 - Bullet;
@@ -119,7 +120,6 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
 
     DECL_LINK(NumberTypeSelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(LevelHdl_Impl, weld::TreeView&, void);
-    DECL_LINK(PopupActivateHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(GraphicHdl_Impl, const OUString&, void);
     DECL_LINK(BulletHdl_Impl, weld::Button&, void);
     DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
