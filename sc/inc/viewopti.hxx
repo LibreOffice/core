@@ -75,7 +75,6 @@ public:
 
     void                    SetDefaults();
     bool                    operator== ( const ScGridOptions& rOpt ) const;
-    bool                    operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
 };
 
 class SC_DLLPUBLIC ScViewRenderingOptions
@@ -83,19 +82,19 @@ class SC_DLLPUBLIC ScViewRenderingOptions
 public:
     ScViewRenderingOptions();
 
-    const OUString& GetColorSchemeName() const { return sColorSchemeName; }
-    void SetColorSchemeName( const OUString& rName ) { sColorSchemeName = rName; }
+    const OUString& GetColorSchemeName() const { return msColorSchemeName; }
+    void SetColorSchemeName( const OUString& rName ) { msColorSchemeName = rName; }
 
-    const Color& GetDocColor() const { return aDocCol; }
-    void SetDocColor(const Color& rDocColor) { aDocCol = rDocColor; }
+    const Color& GetDocColor() const { return maDocumentColor; }
+    void SetDocColor(const Color& rDocColor) { maDocumentColor = rDocColor; }
 
     bool operator==(const ScViewRenderingOptions& rOther) const;
 
 private:
     // The name of the color scheme
-    OUString sColorSchemeName;
+    OUString msColorSchemeName;
     // The background color of the document
-    Color aDocCol;
+    Color maDocumentColor;
 };
 
 // Options - View
@@ -136,7 +135,6 @@ public:
 
     ScViewOptions&          operator=  ( const ScViewOptions& rCpy );
     bool                    operator== ( const ScViewOptions& rOpt ) const;
-    bool                    operator!= ( const ScViewOptions& rOpt ) const { return !(operator==(rOpt)); }
 
 private:
     bool            aOptArr     [MAX_OPT];

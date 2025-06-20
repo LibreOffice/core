@@ -69,15 +69,15 @@ bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 }
 
 ScViewRenderingOptions::ScViewRenderingOptions()
-    : sColorSchemeName(u"Default"_ustr)
-    , aDocCol(ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor)
+    : msColorSchemeName(u"Default"_ustr)
+    , maDocumentColor(ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor)
 {
 }
 
 bool ScViewRenderingOptions::operator==(const ScViewRenderingOptions& rOther) const
 {
-    return sColorSchemeName == rOther.sColorSchemeName &&
-           aDocCol == rOther.aDocCol;
+    return msColorSchemeName == rOther.msColorSchemeName &&
+           maDocumentColor == rOther.maDocumentColor;
 }
 
 ScViewOptions::ScViewOptions()
