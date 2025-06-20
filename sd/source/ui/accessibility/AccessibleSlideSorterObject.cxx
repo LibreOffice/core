@@ -247,29 +247,6 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground()
     return sal_Int32(nColor);
 }
 
-// XServiceInfo
-OUString SAL_CALL
-       AccessibleSlideSorterObject::getImplementationName()
-{
-    return u"AccessibleSlideSorterObject"_ustr;
-}
-
-sal_Bool SAL_CALL AccessibleSlideSorterObject::supportsService (const OUString& sServiceName)
-{
-    return cppu::supportsService(this, sServiceName);
-}
-
-uno::Sequence< OUString> SAL_CALL
-       AccessibleSlideSorterObject::getSupportedServiceNames()
-{
-    ensureAlive();
-
-    return uno::Sequence<OUString> {
-        u"com.sun.star.accessibility.Accessible"_ustr,
-        u"com.sun.star.accessibility.AccessibleContext"_ustr
-    };
-}
-
 SdPage* AccessibleSlideSorterObject::GetPage() const
 {
     ::sd::slidesorter::model::SharedPageDescriptor pDescriptor(

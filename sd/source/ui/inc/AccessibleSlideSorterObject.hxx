@@ -23,7 +23,6 @@
 
 #include <comphelper/compbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <rtl/ref.hxx>
 
 class SdPage;
@@ -35,7 +34,7 @@ namespace accessibility {
 */
 class AccessibleSlideSorterObject final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
+                                         css::accessibility::XAccessible>
 {
 public:
     /** Create a new object that represents a page object in the slide
@@ -116,23 +115,6 @@ public:
     virtual sal_Int32 SAL_CALL getForeground() override;
 
     virtual sal_Int32 SAL_CALL getBackground() override;
-
-    //=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
-    /** Return whether the specified service is supported by this class.
-    */
-    virtual sal_Bool SAL_CALL
-        supportsService (const OUString& sServiceName) override;
-
-    /** Returns a list of all supported services.
-    */
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
 
 private:
     rtl::Reference<AccessibleSlideSorterView> mxParent;
