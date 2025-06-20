@@ -1009,7 +1009,7 @@ void VclMetafileProcessor2D::processFillGraphicPrimitive2D(
                 // to create a single bitmap representation that then
                 // gets used. When not doing this a potentially high
                 // number of BitmapAlphaPrimitive2D will be exported,
-                // which is not an error but needs too much ressources,
+                // which is not an error but needs too much resources,
                 // prevents loading of the created PDF for some viewers
                 // and bloats the PDF file.
 
