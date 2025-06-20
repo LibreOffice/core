@@ -390,7 +390,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case FID_TOGGLEFORMULA:
                 {
                     const ScViewOptions& rOpts = rViewData.GetOptions();
-                    bool bFormulaMode = rOpts.GetOption( VOPT_FORMULAS );
+                    bool bFormulaMode = rOpts.GetOption(sc::ViewOption::FORMULAS);
                     rSet.Put(SfxBoolItem(nWhich, bFormulaMode ));
                 }
                 break;
@@ -905,7 +905,7 @@ void ScTabViewShell::ExecDrawOpt( const SfxRequest& rReq )
         case SID_HELPLINES_MOVE:
             if ( pArgs && pArgs->GetItemState(nSlotId,true,&pItem) == SfxItemState::SET )
             {
-                aViewOptions.SetOption( VOPT_HELPLINES, static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+                aViewOptions.SetOption(sc::ViewOption::HELPLINES, static_cast<const SfxBoolItem*>(pItem)->GetValue() );
                 rBindings.Invalidate(SID_HELPLINES_MOVE);
             }
             break;
@@ -929,7 +929,7 @@ void ScTabViewShell::GetDrawOptState( SfxItemSet& rSet )
     aBool.SetWhich( SID_GRID_USE );
     rSet.Put( aBool );
 
-    aBool.SetValue(rViewOptions.GetOption( VOPT_HELPLINES ));
+    aBool.SetValue(rViewOptions.GetOption(sc::ViewOption::HELPLINES));
     aBool.SetWhich( SID_HELPLINES_MOVE );
     rSet.Put( aBool );
 }

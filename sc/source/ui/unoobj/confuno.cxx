@@ -151,15 +151,15 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
     /*Stampit enable/disable print cancel */
 
     else if ( aPropertyName == SC_UNO_SHOWZERO )
-        aViewOpt.SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aViewOpt.SetOption(sc::ViewOption::NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWNOTES )
-        aViewOpt.SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aViewOpt.SetOption(sc::ViewOption::NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWNOTEAUTHOR )
-        aViewOpt.SetOption(VOPT_NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aViewOpt.SetOption(sc::ViewOption::NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWFORMULASMARKS )
-        aViewOpt.SetOption(VOPT_FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aViewOpt.SetOption(sc::ViewOption::FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWGRID )
-        aViewOpt.SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aViewOpt.SetOption(sc::ViewOption::GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_GRIDCOLOR )
     {
         Color aColor;
@@ -167,7 +167,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             aViewOpt.SetGridColor(aColor, OUString());
     }
     else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
-        aViewOpt.SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aViewOpt.SetOption(sc::ViewOption::PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNONAME_LINKUPD )
     {
         // XXX NOTE: this is the css::document::Settings property
@@ -202,11 +202,11 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         rDoc.SetLinkMode( eMode );
     }
     else if ( aPropertyName == SC_UNO_COLROWHDR )
-        aViewOpt.SetOption(VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aViewOpt.SetOption(sc::ViewOption::HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHEETTABS )
-        aViewOpt.SetOption(VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aViewOpt.SetOption(sc::ViewOption::TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_OUTLSYMB )
-        aViewOpt.SetOption(VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aViewOpt.SetOption(sc::ViewOption::OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_AUTOCALC )
         rDoc.SetAutoCalc( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_PRINTERNAME )
@@ -461,15 +461,15 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
     /*Stampit enable/disable print cancel */
 
     else if ( aPropertyName == SC_UNO_SHOWZERO )
-        aRet <<= aViewOpt.GetOption( VOPT_NULLVALS );
+        aRet <<= aViewOpt.GetOption(sc::ViewOption::NULLVALS);
     else if ( aPropertyName == SC_UNO_SHOWNOTES )
-        aRet <<= aViewOpt.GetOption( VOPT_NOTES );
+        aRet <<= aViewOpt.GetOption(sc::ViewOption::NOTES);
     else if ( aPropertyName == SC_UNO_SHOWNOTEAUTHOR )
-        aRet <<= aViewOpt.GetOption( VOPT_NOTEAUTHOR );
+        aRet <<= aViewOpt.GetOption(sc::ViewOption::NOTEAUTHOR);
     else if ( aPropertyName == SC_UNO_SHOWFORMULASMARKS )
-        aRet <<= aViewOpt.GetOption( VOPT_FORMULAS_MARKS );
+        aRet <<= aViewOpt.GetOption(sc::ViewOption::FORMULAS_MARKS);
     else if ( aPropertyName == SC_UNO_SHOWGRID )
-        aRet <<= aViewOpt.GetOption( VOPT_GRID );
+        aRet <<= aViewOpt.GetOption(sc::ViewOption::GRID);
     else if ( aPropertyName == SC_UNO_GRIDCOLOR )
     {
         OUString aColorName;
@@ -477,7 +477,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         aRet <<= aColor;
     }
     else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
-        aRet <<= aViewOpt.GetOption( VOPT_PAGEBREAKS );
+        aRet <<= aViewOpt.GetOption(sc::ViewOption::PAGEBREAKS);
     else if ( aPropertyName == SC_UNONAME_LINKUPD )
     {
         sal_Int16 nLUM;
@@ -500,11 +500,11 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         aRet <<= nLUM;
     }
     else if ( aPropertyName == SC_UNO_COLROWHDR )
-        aRet <<= aViewOpt.GetOption( VOPT_HEADER );
+        aRet <<= aViewOpt.GetOption(sc::ViewOption::HEADER);
     else if ( aPropertyName == SC_UNO_SHEETTABS )
-        aRet <<= aViewOpt.GetOption( VOPT_TABCONTROLS );
+        aRet <<= aViewOpt.GetOption(sc::ViewOption::TABCONTROLS);
     else if ( aPropertyName == SC_UNO_OUTLSYMB )
-        aRet <<= aViewOpt.GetOption( VOPT_OUTLINER );
+        aRet <<= aViewOpt.GetOption(sc::ViewOption::OUTLINER);
     else if ( aPropertyName == SC_UNO_AUTOCALC )
         aRet <<= rDoc.GetAutoCalc();
     else if ( aPropertyName == SC_UNO_PRINTERNAME )

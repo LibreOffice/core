@@ -96,29 +96,29 @@ ScViewOptions::~ScViewOptions()
 
 void ScViewOptions::SetDefaults()
 {
-    aOptArr[ VOPT_FORMULAS     ] = false;
-    aOptArr[ VOPT_SYNTAX       ] = false;
-    aOptArr[ VOPT_HELPLINES    ] = false;
-    aOptArr[ VOPT_GRID_ONTOP   ] = false;
-    aOptArr[ VOPT_NOTES        ] = true;
-    aOptArr[ VOPT_NOTEAUTHOR   ] = true;
-    aOptArr[ VOPT_FORMULAS_MARKS ] = false;
-    aOptArr[ VOPT_NULLVALS     ] = true;
-    aOptArr[ VOPT_VSCROLL      ] = true;
-    aOptArr[ VOPT_HSCROLL      ] = true;
-    aOptArr[ VOPT_TABCONTROLS  ] = true;
-    aOptArr[ VOPT_OUTLINER     ] = true;
-    aOptArr[ VOPT_HEADER       ] = true;
-    aOptArr[ VOPT_GRID         ] = true;
-    aOptArr[ VOPT_ANCHOR       ] = true;
-    aOptArr[ VOPT_PAGEBREAKS   ] = true;
-    aOptArr[ VOPT_SUMMARY      ] = true;
-    aOptArr[ VOPT_COPY_SHEET   ] = false;
-    aOptArr[ VOPT_THEMEDCURSOR ] = false;
+    aOptArr[sal_Int32(sc::ViewOption::FORMULAS)] = false;
+    aOptArr[sal_Int32(sc::ViewOption::SYNTAX)] = false;
+    aOptArr[sal_Int32(sc::ViewOption::HELPLINES)] = false;
+    aOptArr[sal_Int32(sc::ViewOption::GRID_ONTOP)] = false;
+    aOptArr[sal_Int32(sc::ViewOption::NOTES)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::NOTEAUTHOR)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::FORMULAS_MARKS)] = false;
+    aOptArr[sal_Int32(sc::ViewOption::NULLVALS)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::VSCROLL)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::HSCROLL)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::TABCONTROLS)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::OUTLINER)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::HEADER)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::GRID)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::ANCHOR)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::PAGEBREAKS)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::SUMMARY)] = true;
+    aOptArr[sal_Int32(sc::ViewOption::COPY_SHEET)] = false;
+    aOptArr[sal_Int32(sc::ViewOption::THEMEDCURSOR)] = false;
 
-    aModeArr[VOBJ_TYPE_OLE ]  = VOBJ_MODE_SHOW;
-    aModeArr[VOBJ_TYPE_CHART] = VOBJ_MODE_SHOW;
-    aModeArr[VOBJ_TYPE_DRAW ] = VOBJ_MODE_SHOW;
+    aModeArr[sal_Int32(sc::ViewObjectType::OLE)]  = VOBJ_MODE_SHOW;
+    aModeArr[sal_Int32(sc::ViewObjectType::CHART)] = VOBJ_MODE_SHOW;
+    aModeArr[sal_Int32(sc::ViewObjectType::DRAW)] = VOBJ_MODE_SHOW;
 
     aGridCol = svtools::ColorConfig().GetColorValue( svtools::CALCGRID ).nColor;
 
@@ -306,37 +306,37 @@ ScViewCfg::ScViewCfg() :
                         break;
                     }
                     case SCLAYOUTOPT_GRIDLINES:
-                        SetOption( VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::GRID, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_GRID_ONCOLOR:
-                        SetOption( VOPT_GRID_ONTOP, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::GRID_ONTOP, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_PAGEBREAK:
-                        SetOption( VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_GUIDE:
-                        SetOption( VOPT_HELPLINES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::HELPLINES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_COLROWHDR:
-                        SetOption( VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::HEADER, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_HORISCROLL:
-                        SetOption( VOPT_HSCROLL, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::HSCROLL, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_VERTSCROLL:
-                        SetOption( VOPT_VSCROLL, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::VSCROLL, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_SHEETTAB:
-                        SetOption( VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_OUTLINE:
-                        SetOption( VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_SUMMARY:
-                        SetOption( VOPT_SUMMARY, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::SUMMARY, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_THEMEDCURSOR:
-                        SetOption( VOPT_THEMEDCURSOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        SetOption( sc::ViewOption::THEMEDCURSOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                 }
             }
@@ -369,37 +369,37 @@ IMPL_LINK_NOARG(ScViewCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
                 pValues[nProp] <<= GetGridColor();
                 break;
             case SCLAYOUTOPT_GRIDLINES:
-                pValues[nProp] <<= GetOption( VOPT_GRID );
+                pValues[nProp] <<= GetOption( sc::ViewOption::GRID );
                 break;
             case SCLAYOUTOPT_GRID_ONCOLOR:
-                pValues[nProp] <<= GetOption( VOPT_GRID_ONTOP );
+                pValues[nProp] <<= GetOption( sc::ViewOption::GRID_ONTOP );
                 break;
             case SCLAYOUTOPT_PAGEBREAK:
-                pValues[nProp] <<= GetOption( VOPT_PAGEBREAKS );
+                pValues[nProp] <<= GetOption( sc::ViewOption::PAGEBREAKS );
                 break;
             case SCLAYOUTOPT_GUIDE:
-                pValues[nProp] <<= GetOption( VOPT_HELPLINES );
+                pValues[nProp] <<= GetOption( sc::ViewOption::HELPLINES );
                 break;
             case SCLAYOUTOPT_COLROWHDR:
-                pValues[nProp] <<= GetOption( VOPT_HEADER );
+                pValues[nProp] <<= GetOption( sc::ViewOption::HEADER );
                 break;
             case SCLAYOUTOPT_HORISCROLL:
-                pValues[nProp] <<= GetOption( VOPT_HSCROLL );
+                pValues[nProp] <<= GetOption( sc::ViewOption::HSCROLL );
                 break;
             case SCLAYOUTOPT_VERTSCROLL:
-                pValues[nProp] <<= GetOption( VOPT_VSCROLL );
+                pValues[nProp] <<= GetOption( sc::ViewOption::VSCROLL );
                 break;
             case SCLAYOUTOPT_SHEETTAB:
-                pValues[nProp] <<= GetOption( VOPT_TABCONTROLS );
+                pValues[nProp] <<= GetOption( sc::ViewOption::TABCONTROLS );
                 break;
             case SCLAYOUTOPT_OUTLINE:
-                pValues[nProp] <<= GetOption( VOPT_OUTLINER );
+                pValues[nProp] <<= GetOption( sc::ViewOption::OUTLINER );
                 break;
             case SCLAYOUTOPT_SUMMARY:
-                pValues[nProp] <<= GetOption( VOPT_SUMMARY );
+                pValues[nProp] <<= GetOption( sc::ViewOption::SUMMARY );
                 break;
             case SCLAYOUTOPT_THEMEDCURSOR:
-                pValues[nProp] <<= GetOption( VOPT_THEMEDCURSOR );
+                pValues[nProp] <<= GetOption( sc::ViewOption::THEMEDCURSOR );
                 break;
         }
     }
@@ -425,25 +425,25 @@ void ScViewCfg::ReadDisplayCfg()
             switch(nProp)
             {
                 case SCDISPLAYOPT_FORMULA:
-                    SetOption( VOPT_FORMULAS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    SetOption(sc::ViewOption::FORMULAS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                     break;
                 case SCDISPLAYOPT_ZEROVALUE:
-                    SetOption( VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    SetOption(sc::ViewOption::NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                     break;
                 case SCDISPLAYOPT_NOTETAG:
-                    SetOption( VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    SetOption(sc::ViewOption::NOTES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                     break;
                 case SCDISPLAYOPT_NOTEAUTHOR:
-                    SetOption( VOPT_NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    SetOption(sc::ViewOption::NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                     break;
                 case SCDISPLAYOPT_FORMULAMARK:
-                    SetOption( VOPT_FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    SetOption(sc::ViewOption::FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                     break;
                 case SCDISPLAYOPT_VALUEHI:
-                    SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    SetOption(sc::ViewOption::SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                     break;
                 case SCDISPLAYOPT_ANCHOR:
-                    SetOption( VOPT_ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    SetOption(sc::ViewOption::ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                     break;
                 case SCDISPLAYOPT_OBJECTGRA:
                     if ( pValues[nProp] >>= nIntVal )
@@ -451,7 +451,7 @@ void ScViewCfg::ReadDisplayCfg()
                         //#i80528# adapt to new range eventually
                         if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
 
-                        SetObjMode( VOBJ_TYPE_OLE, static_cast<ScVObjMode>(nIntVal));
+                        SetObjMode(sc::ViewObjectType::OLE, static_cast<ScVObjMode>(nIntVal));
                     }
                     break;
                 case SCDISPLAYOPT_CHART:
@@ -460,7 +460,7 @@ void ScViewCfg::ReadDisplayCfg()
                         //#i80528# adapt to new range eventually
                         if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
 
-                        SetObjMode( VOBJ_TYPE_CHART, static_cast<ScVObjMode>(nIntVal));
+                        SetObjMode(sc::ViewObjectType::CHART, static_cast<ScVObjMode>(nIntVal));
                     }
                     break;
                 case SCDISPLAYOPT_DRAWING:
@@ -469,7 +469,7 @@ void ScViewCfg::ReadDisplayCfg()
                         //#i80528# adapt to new range eventually
                         if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
 
-                        SetObjMode( VOBJ_TYPE_DRAW, static_cast<ScVObjMode>(nIntVal));
+                        SetObjMode(sc::ViewObjectType::DRAW, static_cast<ScVObjMode>(nIntVal));
                     }
                     break;
             }
@@ -493,34 +493,34 @@ IMPL_LINK_NOARG(ScViewCfg, DisplayCommitHdl, ScLinkConfigItem&, void)
         switch(nProp)
         {
             case SCDISPLAYOPT_FORMULA:
-                pValues[nProp] <<= GetOption( VOPT_FORMULAS );
+                pValues[nProp] <<= GetOption(sc::ViewOption::FORMULAS);
                 break;
             case SCDISPLAYOPT_ZEROVALUE:
-                pValues[nProp] <<= GetOption( VOPT_NULLVALS );
+                pValues[nProp] <<= GetOption(sc::ViewOption::NULLVALS);
                 break;
             case SCDISPLAYOPT_NOTETAG:
-                pValues[nProp] <<= GetOption( VOPT_NOTES );
+                pValues[nProp] <<= GetOption(sc::ViewOption::NOTES);
                 break;
             case SCDISPLAYOPT_NOTEAUTHOR:
-                pValues[nProp] <<= GetOption( VOPT_NOTEAUTHOR );
+                pValues[nProp] <<= GetOption(sc::ViewOption::NOTEAUTHOR);
                 break;
             case SCDISPLAYOPT_FORMULAMARK:
-                pValues[nProp] <<= GetOption( VOPT_FORMULAS_MARKS );
+                pValues[nProp] <<= GetOption(sc::ViewOption::FORMULAS_MARKS);
                 break;
             case SCDISPLAYOPT_VALUEHI:
-                pValues[nProp] <<= GetOption( VOPT_SYNTAX );
+                pValues[nProp] <<= GetOption(sc::ViewOption::SYNTAX);
                 break;
             case SCDISPLAYOPT_ANCHOR:
-                pValues[nProp] <<= GetOption( VOPT_ANCHOR );
+                pValues[nProp] <<= GetOption(sc::ViewOption::ANCHOR);
                 break;
             case SCDISPLAYOPT_OBJECTGRA:
-                pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode( VOBJ_TYPE_OLE ));
+                pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode(sc::ViewObjectType::OLE));
                 break;
             case SCDISPLAYOPT_CHART:
-                pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode( VOBJ_TYPE_CHART ));
+                pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode(sc::ViewObjectType::CHART));
                 break;
             case SCDISPLAYOPT_DRAWING:
-                pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode( VOBJ_TYPE_DRAW ));
+                pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode(sc::ViewObjectType::DRAW));
                 break;
         }
     }

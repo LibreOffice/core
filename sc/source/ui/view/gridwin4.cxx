@@ -537,7 +537,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     ScTableInfo aTabInfo(nY1, nY2, true);
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
-                   nPPTX, nPPTY, false, rOpts.GetOption(VOPT_FORMULAS),
+                   nPPTX, nPPTY, false, rOpts.GetOption(sc::ViewOption::FORMULAS),
                    &mrViewData.GetMarkData() );
 
     Fraction aZoomX = mrViewData.GetZoomX();
@@ -697,8 +697,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     aOutputData.SetSyntaxMode       ( mrViewData.IsSyntaxMode() );
     aOutputData.SetGridColor        ( aGridColor );
-    aOutputData.SetShowNullValues   ( rOpts.GetOption( VOPT_NULLVALS ) );
-    aOutputData.SetShowFormulas     ( rOpts.GetOption( VOPT_FORMULAS ) );
+    aOutputData.SetShowNullValues   ( rOpts.GetOption(sc::ViewOption::NULLVALS) );
+    aOutputData.SetShowFormulas     ( rOpts.GetOption(sc::ViewOption::FORMULAS) );
     aOutputData.SetShowSpellErrors  ( pCurTabViewShell && pCurTabViewShell->IsAutoSpell() );
     aOutputData.SetMarkClipped      ( pScMod->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).bIsVisible );
 
@@ -706,10 +706,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     aOutputData.SetViewShell(pCurTabViewShell);
 
-    bool bGrid = rOpts.GetOption( VOPT_GRID ) && mrViewData.GetShowGrid();
-    bool bGridFirst = !rOpts.GetOption( VOPT_GRID_ONTOP );
+    bool bGrid = rOpts.GetOption(sc::ViewOption::GRID) && mrViewData.GetShowGrid();
+    bool bGridFirst = !rOpts.GetOption(sc::ViewOption::GRID_ONTOP);
 
-    bool bPage = rOpts.GetOption( VOPT_PAGEBREAKS ) && !bIsTiledRendering;
+    bool bPage = rOpts.GetOption(sc::ViewOption::PAGEBREAKS) && !bIsTiledRendering;
 
     bool bPageMode = mrViewData.IsPagebreakMode();
     if (bPageMode)                                      // after FindChanged
@@ -937,10 +937,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     aOutputData.DrawSparklines(*pContentDev);
 
     // Show Note Mark
-    if ( rOpts.GetOption( VOPT_NOTES ) )
+    if ( rOpts.GetOption(sc::ViewOption::NOTES) )
         aOutputData.DrawNoteMarks(*pContentDev);
 
-    if ( rOpts.GetOption( VOPT_FORMULAS_MARKS ) )
+    if ( rOpts.GetOption(sc::ViewOption::FORMULAS_MARKS) )
         aOutputData.DrawFormulaMarks(*pContentDev);
 
     if ( !bLogicText )
@@ -2594,7 +2594,7 @@ IMPL_LINK(ScGridWindow, InitiatePageBreaksTimer, Timer*, pTimer, void)
         return;
 
     const ScViewOptions& rOpts = mrViewData.GetOptions();
-    const bool bPage = rOpts.GetOption(VOPT_PAGEBREAKS);
+    const bool bPage = rOpts.GetOption(sc::ViewOption::PAGEBREAKS);
     // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page
     // breaks is enabled, breaks should be visible. If the document is
     // opened the first time or a tab is activated the first time, the

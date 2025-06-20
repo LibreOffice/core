@@ -240,7 +240,7 @@ IMPL_STATIC_LINK( SearchResultsDlg, OnShowToggled, weld::Toggleable&, rButton, v
     if (ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell())
     {
         ScViewOptions aViewOpt( pScViewShell->GetViewData().GetOptions() );
-        aViewOpt.SetOption( VOPT_SUMMARY, rButton.get_active() );
+        aViewOpt.SetOption(sc::ViewOption::SUMMARY, rButton.get_active());
         pScViewShell->GetViewData().SetOptions( aViewOpt );
     }
 }

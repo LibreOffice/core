@@ -3799,29 +3799,29 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     pSettings[SC_PAGE_BREAK_PREVIEW].Value <<= bPagebreak;
 
     pSettings[SC_SHOWZERO].Name = SC_UNO_SHOWZERO;
-    pSettings[SC_SHOWZERO].Value <<= maOptions.GetOption(VOPT_NULLVALS);
+    pSettings[SC_SHOWZERO].Value <<= maOptions.GetOption(sc::ViewOption::NULLVALS);
     pSettings[SC_SHOWNOTES].Name = SC_UNO_SHOWNOTES;
-    pSettings[SC_SHOWNOTES].Value <<= maOptions.GetOption(VOPT_NOTES);
+    pSettings[SC_SHOWNOTES].Value <<= maOptions.GetOption(sc::ViewOption::NOTES);
     pSettings[SC_SHOWNOTEAUTHOR].Name = SC_UNO_SHOWNOTEAUTHOR;
-    pSettings[SC_SHOWNOTEAUTHOR].Value <<= maOptions.GetOption(VOPT_NOTEAUTHOR);
+    pSettings[SC_SHOWNOTEAUTHOR].Value <<= maOptions.GetOption(sc::ViewOption::NOTEAUTHOR);
     pSettings[SC_SHOWFORMULASMARKS].Name = SC_UNO_SHOWFORMULASMARKS;
-    pSettings[SC_SHOWFORMULASMARKS].Value <<= maOptions.GetOption(VOPT_FORMULAS_MARKS);
+    pSettings[SC_SHOWFORMULASMARKS].Value <<= maOptions.GetOption(sc::ViewOption::FORMULAS_MARKS);
     pSettings[SC_SHOWGRID].Name = SC_UNO_SHOWGRID;
-    pSettings[SC_SHOWGRID].Value <<= maOptions.GetOption(VOPT_GRID);
+    pSettings[SC_SHOWGRID].Value <<= maOptions.GetOption(sc::ViewOption::GRID);
     pSettings[SC_GRIDCOLOR].Name = SC_UNO_GRIDCOLOR;
     OUString aColorName;
     Color aColor = maOptions.GetGridColor(&aColorName);
     pSettings[SC_GRIDCOLOR].Value <<= aColor;
     pSettings[SC_SHOWPAGEBR].Name = SC_UNO_SHOWPAGEBR;
-    pSettings[SC_SHOWPAGEBR].Value <<= maOptions.GetOption(VOPT_PAGEBREAKS);
+    pSettings[SC_SHOWPAGEBR].Value <<= maOptions.GetOption(sc::ViewOption::PAGEBREAKS);
     pSettings[SC_COLROWHDR].Name = SC_UNO_COLROWHDR;
-    pSettings[SC_COLROWHDR].Value <<= maOptions.GetOption(VOPT_HEADER);
+    pSettings[SC_COLROWHDR].Value <<= maOptions.GetOption(sc::ViewOption::HEADER);
     pSettings[SC_SHEETTABS].Name = SC_UNO_SHEETTABS;
-    pSettings[SC_SHEETTABS].Value <<= maOptions.GetOption(VOPT_TABCONTROLS);
+    pSettings[SC_SHEETTABS].Value <<= maOptions.GetOption(sc::ViewOption::TABCONTROLS);
     pSettings[SC_OUTLSYMB].Name = SC_UNO_OUTLSYMB;
-    pSettings[SC_OUTLSYMB].Value <<= maOptions.GetOption(VOPT_OUTLINER);
+    pSettings[SC_OUTLSYMB].Value <<= maOptions.GetOption(sc::ViewOption::OUTLINER);
     pSettings[SC_VALUE_HIGHLIGHTING].Name = SC_UNO_VALUEHIGH;
-    pSettings[SC_VALUE_HIGHLIGHTING].Value <<= maOptions.GetOption(VOPT_SYNTAX);
+    pSettings[SC_VALUE_HIGHLIGHTING].Value <<= maOptions.GetOption(sc::ViewOption::SYNTAX);
     pSettings[SC_FORMULA_BAR_HEIGHT].Name = SC_FORMULABARHEIGHT;
     pSettings[SC_FORMULA_BAR_HEIGHT].Value <<= GetFormulaBarLines();;
 
@@ -3947,15 +3947,15 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         else if (sName == SC_SHOWPAGEBREAKPREVIEW)
             bPageMode = ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value );
         else if ( sName == SC_UNO_SHOWZERO )
-            maOptions.SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+            maOptions.SetOption(sc::ViewOption::NULLVALS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_SHOWNOTES )
-            maOptions.SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+            maOptions.SetOption(sc::ViewOption::NOTES, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_SHOWNOTEAUTHOR )
-            maOptions.SetOption(VOPT_NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+            maOptions.SetOption(sc::ViewOption::NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_SHOWFORMULASMARKS )
-            maOptions.SetOption(VOPT_FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+            maOptions.SetOption(sc::ViewOption::FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_SHOWGRID )
-            maOptions.SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+            maOptions.SetOption(sc::ViewOption::GRID, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_GRIDCOLOR )
         {
             Color aColor;
@@ -3963,33 +3963,33 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                 maOptions.SetGridColor(aColor, OUString());
         }
         else if ( sName == SC_UNO_SHOWPAGEBR )
-            maOptions.SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+            maOptions.SetOption(sc::ViewOption::PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_COLROWHDR )
-            maOptions.SetOption(VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+            maOptions.SetOption(sc::ViewOption::HEADER, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_SHEETTABS )
-            maOptions.SetOption(VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+            maOptions.SetOption(sc::ViewOption::TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_OUTLSYMB )
-            maOptions.SetOption(VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+            maOptions.SetOption(sc::ViewOption::OUTLINER, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if ( sName == SC_UNO_SHOWOBJ )
         {
             // #i80528# placeholders not supported anymore
             if ( rSetting.Value >>= nTemp16 )
-                maOptions.SetObjMode(VOBJ_TYPE_OLE, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW);
+                maOptions.SetObjMode(sc::ViewObjectType::OLE, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW);
         }
         else if ( sName == SC_UNO_SHOWCHARTS )
         {
             // #i80528# placeholders not supported anymore
             if ( rSetting.Value >>= nTemp16 )
-                maOptions.SetObjMode(VOBJ_TYPE_CHART, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW);
+                maOptions.SetObjMode(sc::ViewObjectType::CHART, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW);
         }
         else if ( sName == SC_UNO_SHOWDRAW )
         {
             // #i80528# placeholders not supported anymore
             if ( rSetting.Value >>= nTemp16 )
-                maOptions.SetObjMode(VOBJ_TYPE_DRAW, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW);
+                maOptions.SetObjMode(sc::ViewObjectType::DRAW, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW);
         }
         else if ( sName == SC_UNO_VALUEHIGH && !comphelper::LibreOfficeKit::isActive() )
-            maOptions.SetOption(VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
+            maOptions.SetOption(sc::ViewOption::SYNTAX, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else
         {
             ScGridOptions aGridOpt(maOptions.GetGridOptions());
@@ -4038,12 +4038,11 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
 void ScViewData::SetOptions( const ScViewOptions& rOpt )
 {
     //  if visibility of horizontal ScrollBar is changed, TabBar may have to be resized...
-    bool bHScrollChanged = (rOpt.GetOption(VOPT_HSCROLL) != maOptions.GetOption(VOPT_HSCROLL));
+    bool bHScrollChanged = (rOpt.GetOption(sc::ViewOption::HSCROLL) != maOptions.GetOption(sc::ViewOption::HSCROLL));
 
     //  if graphics are turned on or off, animation has to be started or stopped
-    //  graphics are controlled by VOBJ_TYPE_OLE
-    bool bGraphicsChanged = (maOptions.GetObjMode(VOBJ_TYPE_OLE) !=
-                                   rOpt.GetObjMode(VOBJ_TYPE_OLE) );
+    //  graphics are controlled by sc::ViewObjectType::OLE
+    bool bGraphicsChanged = maOptions.GetObjMode(sc::ViewObjectType::OLE) != rOpt.GetObjMode(sc::ViewObjectType::OLE);
 
     maOptions = rOpt;
     OSL_ENSURE( pView, "No View" );

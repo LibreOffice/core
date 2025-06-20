@@ -951,13 +951,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 ScViewData& rViewData = GetViewData();
                 const ScViewOptions& rOpts = rViewData.GetOptions();
-                bool bFormulaMode = !rOpts.GetOption( VOPT_FORMULAS );
+                bool bFormulaMode = !rOpts.GetOption(sc::ViewOption::FORMULAS);
                 const SfxPoolItem *pItem;
                 if( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     bFormulaMode = static_cast<const SfxBoolItem *>(pItem)->GetValue();
 
                 ScViewOptions aSetOpts = rOpts;
-                aSetOpts.SetOption( VOPT_FORMULAS, bFormulaMode );
+                aSetOpts.SetOption(sc::ViewOption::FORMULAS, bFormulaMode);
                 rViewData.SetOptions( aSetOpts );
                 ScDocument& rDoc = rViewData.GetDocument();
                 rDoc.SetViewOptions(aSetOpts);

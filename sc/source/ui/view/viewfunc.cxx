@@ -2339,7 +2339,7 @@ void ScViewFunc::SetWidthOrHeight(
     if ( eMode == SC_SIZE_OPTIMAL )
     {
         const ScViewOptions& rOpts = GetViewData().GetOptions();
-        bFormula = rOpts.GetOption( VOPT_FORMULAS );
+        bFormula = rOpts.GetOption(sc::ViewOption::FORMULAS);
     }
 
     ScDocumentUniquePtr pUndoDoc;

@@ -38,9 +38,9 @@ XclExpWindow1::XclExpWindow1( const XclExpRoot& rRoot )
     , mnTabBarSize(600)
 {
     const ScViewOptions& rViewOpt = rRoot.GetDoc().GetViewOptions();
-    ::set_flag( mnFlags, EXC_WIN1_HOR_SCROLLBAR,    rViewOpt.GetOption( VOPT_HSCROLL ) );
-    ::set_flag( mnFlags, EXC_WIN1_VER_SCROLLBAR,    rViewOpt.GetOption( VOPT_VSCROLL ) );
-    ::set_flag( mnFlags, EXC_WIN1_TABBAR,           rViewOpt.GetOption( VOPT_TABCONTROLS ) );
+    ::set_flag( mnFlags, EXC_WIN1_HOR_SCROLLBAR,    rViewOpt.GetOption(sc::ViewOption::HSCROLL) );
+    ::set_flag( mnFlags, EXC_WIN1_VER_SCROLLBAR,    rViewOpt.GetOption(sc::ViewOption::VSCROLL) );
+    ::set_flag( mnFlags, EXC_WIN1_TABBAR,           rViewOpt.GetOption(sc::ViewOption::TABCONTROLS) );
 
     double fTabBarWidth = rRoot.GetExtDocOptions().GetDocSettings().mfTabBarWidth;
     if( (0.0 <= fTabBarWidth) && (fTabBarWidth <= 1.0) )
@@ -296,10 +296,10 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
     maData.mbMirrored       = rTabInfo.IsMirroredTab( nScTab );
 
     const ScViewOptions& rViewOpt = GetDoc().GetViewOptions();
-    maData.mbShowFormulas   = rViewOpt.GetOption( VOPT_FORMULAS );
-    maData.mbShowHeadings   = rViewOpt.GetOption( VOPT_HEADER );
-    maData.mbShowZeros      = rViewOpt.GetOption( VOPT_NULLVALS );
-    maData.mbShowOutline    = rViewOpt.GetOption( VOPT_OUTLINER );
+    maData.mbShowFormulas   = rViewOpt.GetOption(sc::ViewOption::FORMULAS);
+    maData.mbShowHeadings   = rViewOpt.GetOption(sc::ViewOption::HEADER);
+    maData.mbShowZeros      = rViewOpt.GetOption(sc::ViewOption::NULLVALS);
+    maData.mbShowOutline    = rViewOpt.GetOption(sc::ViewOption::OUTLINER);
 
     // *** sheet options: cursor, selection, splits, grid color, zoom ***
 

@@ -260,9 +260,9 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, SdrLayerID nLayer )
     const ScViewOptions& rOpts = mrViewData.GetOptions();
 
     // use new flags at SdrPaintView for hiding objects
-    const bool bDrawOle(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_OLE));
-    const bool bDrawChart(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_CHART));
-    const bool bDrawDraw(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_DRAW));
+    const bool bDrawOle(VOBJ_MODE_SHOW == rOpts.GetObjMode(sc::ViewObjectType::OLE));
+    const bool bDrawChart(VOBJ_MODE_SHOW == rOpts.GetObjMode(sc::ViewObjectType::CHART));
+    const bool bDrawDraw(VOBJ_MODE_SHOW == rOpts.GetObjMode(sc::ViewObjectType::DRAW));
 
     if(!(bDrawOle || bDrawChart || bDrawDraw))
         return;
@@ -369,7 +369,7 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
     if (pDrView)
     {
         const ScViewOptions& rOpts = mrViewData.GetOptions();
-        if(rOpts.GetOption( VOPT_ANCHOR ))
+        if(rOpts.GetOption(sc::ViewOption::ANCHOR))
         {
             bool bNegativePage = mrViewData.GetDocument().IsNegativePage( mrViewData.GetTabNo() );
             Point aPos = mrViewData.GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, true );

@@ -538,8 +538,8 @@ void ScTabView::DrawEnableAnim(bool bSet)
         return;
 
     //  don't start animations if display of graphics is disabled
-    //  graphics are controlled by VOBJ_TYPE_OLE
-    if ( bSet && aViewData.GetOptions().GetObjMode(VOBJ_TYPE_OLE) == VOBJ_MODE_SHOW )
+    //  graphics are controlled by sc::ViewObjectType::OLE
+    if ( bSet && aViewData.GetOptions().GetObjMode(sc::ViewObjectType::OLE) == VOBJ_MODE_SHOW )
     {
         if ( !pDrawView->IsAnimationEnabled() )
         {

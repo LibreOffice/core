@@ -1084,8 +1084,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             ScViewData&             rViewData = pViewSh->GetViewData();
             const ScViewOptions&    rOldOpt   = rViewData.GetOptions();
 
-            bool bAnchorList = ( rOldOpt.GetOption( VOPT_ANCHOR ) !=
-                                 rNewOpt.GetOption( VOPT_ANCHOR ) );
+            bool bAnchorList = rOldOpt.GetOption(sc::ViewOption::ANCHOR) !=
+                               rNewOpt.GetOption(sc::ViewOption::ANCHOR);
 
             if ( rOldOpt != rNewOpt )
             {

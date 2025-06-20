@@ -204,7 +204,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             bDone = true;
         }
 
-        if ( rOpts.GetOption( VOPT_FORMULAS_MARKS ) )
+        if ( rOpts.GetOption(sc::ViewOption::FORMULAS_MARKS) )
         {
             aFormulaText = rDoc.GetFormula( nPosX, nPosY, nTab );
             if ( !aFormulaText.isEmpty() ) {

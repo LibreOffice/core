@@ -213,35 +213,35 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
         m_xLocalOptions.reset( new ScViewOptions( pViewItem->GetViewOptions() ) );
     else
         m_xLocalOptions.reset( new ScViewOptions );
-    m_xFormulaCB ->set_active(m_xLocalOptions->GetOption(VOPT_FORMULAS));
-    m_xNilCB     ->set_active(m_xLocalOptions->GetOption(VOPT_NULLVALS));
-    m_xAnnotCB   ->set_active(m_xLocalOptions->GetOption(VOPT_NOTES));
-    m_xNoteAuthorCB->set_active(m_xLocalOptions->GetOption(VOPT_NOTEAUTHOR));
-    m_xFormulaMarkCB->set_active(m_xLocalOptions->GetOption(VOPT_FORMULAS_MARKS));
-    m_xValueCB   ->set_active(m_xLocalOptions->GetOption(VOPT_SYNTAX));
+    m_xFormulaCB ->set_active(m_xLocalOptions->GetOption(sc::ViewOption::FORMULAS));
+    m_xNilCB     ->set_active(m_xLocalOptions->GetOption(sc::ViewOption::NULLVALS));
+    m_xAnnotCB   ->set_active(m_xLocalOptions->GetOption(sc::ViewOption::NOTES));
+    m_xNoteAuthorCB->set_active(m_xLocalOptions->GetOption(sc::ViewOption::NOTEAUTHOR));
+    m_xFormulaMarkCB->set_active(m_xLocalOptions->GetOption(sc::ViewOption::FORMULAS_MARKS));
+    m_xValueCB   ->set_active(m_xLocalOptions->GetOption(sc::ViewOption::SYNTAX));
     m_xColRowHighCB->set_active(officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::get());
     m_xEditCellBgHighCB->set_active(officecfg::Office::Calc::Content::Display::EditCellBackgroundHighlighting::get());
-    m_xAnchorCB  ->set_active(m_xLocalOptions->GetOption(VOPT_ANCHOR));
+    m_xAnchorCB  ->set_active(m_xLocalOptions->GetOption(sc::ViewOption::ANCHOR));
 
-    m_xObjGrfLB  ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(VOBJ_TYPE_OLE)) );
-    m_xDiagramLB ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(VOBJ_TYPE_CHART)) );
-    m_xDrawLB    ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(VOBJ_TYPE_DRAW)) );
+    m_xObjGrfLB  ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(sc::ViewObjectType::OLE)) );
+    m_xDiagramLB ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(sc::ViewObjectType::CHART)) );
+    m_xDrawLB    ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(sc::ViewObjectType::DRAW)) );
 
-    m_xRowColHeaderCB->set_active( m_xLocalOptions->GetOption(VOPT_HEADER) );
-    m_xHScrollCB->set_active( m_xLocalOptions->GetOption(VOPT_HSCROLL) );
-    m_xVScrollCB->set_active( m_xLocalOptions->GetOption(VOPT_VSCROLL) );
-    m_xTblRegCB ->set_active( m_xLocalOptions->GetOption(VOPT_TABCONTROLS) );
-    m_xOutlineCB->set_active( m_xLocalOptions->GetOption(VOPT_OUTLINER) );
-    m_xSummaryCB->set_active( m_xLocalOptions->GetOption(VOPT_SUMMARY) );
-    if ( m_xLocalOptions->GetOption(VOPT_THEMEDCURSOR) )
+    m_xRowColHeaderCB->set_active( m_xLocalOptions->GetOption(sc::ViewOption::HEADER) );
+    m_xHScrollCB->set_active( m_xLocalOptions->GetOption(sc::ViewOption::HSCROLL) );
+    m_xVScrollCB->set_active( m_xLocalOptions->GetOption(sc::ViewOption::VSCROLL) );
+    m_xTblRegCB ->set_active( m_xLocalOptions->GetOption(sc::ViewOption::TABCONTROLS) );
+    m_xOutlineCB->set_active( m_xLocalOptions->GetOption(sc::ViewOption::OUTLINER) );
+    m_xSummaryCB->set_active( m_xLocalOptions->GetOption(sc::ViewOption::SUMMARY) );
+    if ( m_xLocalOptions->GetOption(sc::ViewOption::THEMEDCURSOR) )
         m_xThemedCursorRB->set_active( true );
     else
         m_xSystemCursorRB->set_active( true );
 
     InitGridOpt();
 
-    m_xBreakCB->set_active( m_xLocalOptions->GetOption(VOPT_PAGEBREAKS) );
-    m_xGuideLineCB->set_active( m_xLocalOptions->GetOption(VOPT_HELPLINES) );
+    m_xBreakCB->set_active( m_xLocalOptions->GetOption(sc::ViewOption::PAGEBREAKS) );
+    m_xGuideLineCB->set_active( m_xLocalOptions->GetOption(sc::ViewOption::HELPLINES) );
 
     if(const SfxBoolItem* pFinderItem = rCoreSet->GetItemIfSet(SID_SC_INPUT_RANGEFINDER, false))
         m_xRangeFindCB->set_active(pFinderItem->GetValue());
@@ -389,46 +389,62 @@ DeactivateRC ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
 IMPL_LINK( ScTpContentOptions, SelLbObjHdl, weld::ComboBox&, rLb, void )
 {
     const sal_Int32 nSelPos = rLb.get_active();
-    ScVObjMode  eMode   = ScVObjMode(nSelPos);
-    ScVObjType  eType   = VOBJ_TYPE_OLE;
+    ScVObjMode  eMode = ScVObjMode(nSelPos);
+    sc::ViewObjectType eType = sc::ViewObjectType::OLE;
 
     if ( &rLb == m_xDiagramLB.get() )
-        eType = VOBJ_TYPE_CHART;
+        eType = sc::ViewObjectType::CHART;
     else if ( &rLb == m_xDrawLB.get() )
-        eType = VOBJ_TYPE_DRAW;
+        eType = sc::ViewObjectType::DRAW;
 
     m_xLocalOptions->SetObjMode( eType, eMode );
 }
 
 IMPL_LINK( ScTpContentOptions, CBHdl, weld::Toggleable&, rBtn, void )
 {
-    ScViewOption eOption = VOPT_FORMULAS;
+    sc::ViewOption eOption =sc::ViewOption::FORMULAS;
     bool         bChecked = rBtn.get_active();
 
-    if (m_xFormulaCB.get() == &rBtn )   eOption = VOPT_FORMULAS;
-    else if ( m_xNilCB.get() == &rBtn )   eOption = VOPT_NULLVALS;
-    else if ( m_xAnnotCB.get() == &rBtn )   eOption = VOPT_NOTES;
-    else if ( m_xNoteAuthorCB.get() == &rBtn )   eOption = VOPT_NOTEAUTHOR;
-    else if ( m_xFormulaMarkCB.get() == &rBtn )   eOption = VOPT_FORMULAS_MARKS;
-    else if ( m_xValueCB.get() == &rBtn )   eOption = VOPT_SYNTAX;
-    else if ( m_xAnchorCB.get() == &rBtn )   eOption = VOPT_ANCHOR;
-    else if ( m_xVScrollCB.get()  == &rBtn )   eOption = VOPT_VSCROLL;
-    else if ( m_xHScrollCB.get() == &rBtn )   eOption = VOPT_HSCROLL;
-    else if ( m_xTblRegCB.get() == &rBtn )   eOption = VOPT_TABCONTROLS;
-    else if ( m_xOutlineCB.get() == &rBtn )   eOption = VOPT_OUTLINER;
-    else if ( m_xBreakCB.get() == &rBtn )   eOption = VOPT_PAGEBREAKS;
-    else if ( m_xGuideLineCB.get() == &rBtn )   eOption = VOPT_HELPLINES;
-    else if ( m_xRowColHeaderCB.get() == &rBtn )   eOption = VOPT_HEADER;
-    else if ( m_xSummaryCB.get()  == &rBtn )   eOption = VOPT_SUMMARY;
-    else if ( m_xThemedCursorRB.get() == &rBtn )   eOption = VOPT_THEMEDCURSOR;
+    if (m_xFormulaCB.get() == &rBtn )
+        eOption = sc::ViewOption::FORMULAS;
+    else if ( m_xNilCB.get() == &rBtn )
+        eOption = sc::ViewOption::NULLVALS;
+    else if ( m_xAnnotCB.get() == &rBtn )
+        eOption = sc::ViewOption::NOTES;
+    else if ( m_xNoteAuthorCB.get() == &rBtn )
+        eOption = sc::ViewOption::NOTEAUTHOR;
+    else if ( m_xFormulaMarkCB.get() == &rBtn )
+        eOption = sc::ViewOption::FORMULAS_MARKS;
+    else if ( m_xValueCB.get() == &rBtn )
+        eOption = sc::ViewOption::SYNTAX;
+    else if ( m_xAnchorCB.get() == &rBtn )
+        eOption = sc::ViewOption::ANCHOR;
+    else if ( m_xVScrollCB.get()  == &rBtn )
+        eOption = sc::ViewOption::VSCROLL;
+    else if ( m_xHScrollCB.get() == &rBtn )
+        eOption = sc::ViewOption::HSCROLL;
+    else if ( m_xTblRegCB.get() == &rBtn )
+        eOption = sc::ViewOption::TABCONTROLS;
+    else if ( m_xOutlineCB.get() == &rBtn )
+        eOption = sc::ViewOption::OUTLINER;
+    else if ( m_xBreakCB.get() == &rBtn )
+        eOption = sc::ViewOption::PAGEBREAKS;
+    else if ( m_xGuideLineCB.get() == &rBtn )
+        eOption = sc::ViewOption::HELPLINES;
+    else if ( m_xRowColHeaderCB.get() == &rBtn )
+        eOption = sc::ViewOption::HEADER;
+    else if ( m_xSummaryCB.get()  == &rBtn )
+        eOption = sc::ViewOption::SUMMARY;
+    else if ( m_xThemedCursorRB.get() == &rBtn )
+        eOption = sc::ViewOption::THEMEDCURSOR;
 
     m_xLocalOptions->SetOption( eOption, bChecked );
 }
 
 void ScTpContentOptions::InitGridOpt()
 {
-    bool    bGrid = m_xLocalOptions->GetOption( VOPT_GRID );
-    bool    bGridOnTop = m_xLocalOptions->GetOption( VOPT_GRID_ONTOP );
+    bool    bGrid = m_xLocalOptions->GetOption(sc::ViewOption::GRID);
+    bool    bGridOnTop = m_xLocalOptions->GetOption(sc::ViewOption::GRID_ONTOP);
     sal_Int32   nSelPos = 0;
 
     if ( bGrid || bGridOnTop )
@@ -450,8 +466,8 @@ IMPL_LINK( ScTpContentOptions, GridHdl, weld::ComboBox&, rLb, void )
     bool    bGrid = ( nSelPos <= 1 );
     bool    bGridOnTop = ( nSelPos == 1 );
 
-    m_xLocalOptions->SetOption( VOPT_GRID, bGrid );
-    m_xLocalOptions->SetOption( VOPT_GRID_ONTOP, bGridOnTop );
+    m_xLocalOptions->SetOption(sc::ViewOption::GRID, bGrid);
+    m_xLocalOptions->SetOption(sc::ViewOption::GRID_ONTOP, bGridOnTop);
 }
 
 ScTpLayoutOptions::ScTpLayoutOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)

@@ -1765,35 +1765,35 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
     ScViewOptions aNewOpt(rOldOpt);
 
     if ( aPropertyName == SC_UNO_COLROWHDR || aPropertyName == OLD_UNO_COLROWHDR )
-        aNewOpt.SetOption( VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_HORSCROLL || aPropertyName == OLD_UNO_HORSCROLL )
-        aNewOpt.SetOption( VOPT_HSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::HSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_OUTLSYMB || aPropertyName == OLD_UNO_OUTLSYMB )
-        aNewOpt.SetOption( VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHEETTABS || aPropertyName == OLD_UNO_SHEETTABS )
-        aNewOpt.SetOption( VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWANCHOR )
-        aNewOpt.SetOption( VOPT_ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWFORM )
-        aNewOpt.SetOption( VOPT_FORMULAS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::FORMULAS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWGRID )
-        aNewOpt.SetOption( VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWHELP )
-        aNewOpt.SetOption( VOPT_HELPLINES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::HELPLINES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWNOTES )
-        aNewOpt.SetOption( VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWNOTEAUTHOR )
-        aNewOpt.SetOption( VOPT_NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWFORMULASMARKS )
-        aNewOpt.SetOption( VOPT_FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
-        aNewOpt.SetOption( VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWZERO )
-        aNewOpt.SetOption( VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_VALUEHIGH || aPropertyName == OLD_UNO_VALUEHIGH )
-        aNewOpt.SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_VERTSCROLL || aPropertyName == OLD_UNO_VERTSCROLL )
-        aNewOpt.SetOption( VOPT_VSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        aNewOpt.SetOption(sc::ViewOption::VSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_SHOWOBJ )
     {
         sal_Int16 nIntVal = 0;
@@ -1802,7 +1802,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             //#i80528# adapt to new range eventually
             if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
 
-            aNewOpt.SetObjMode( VOBJ_TYPE_OLE, static_cast<ScVObjMode>(nIntVal));
+            aNewOpt.SetObjMode(sc::ViewObjectType::OLE, static_cast<ScVObjMode>(nIntVal));
         }
     }
     else if ( aPropertyName == SC_UNO_SHOWCHARTS )
@@ -1813,7 +1813,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             //#i80528# adapt to new range eventually
             if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
 
-            aNewOpt.SetObjMode( VOBJ_TYPE_CHART, static_cast<ScVObjMode>(nIntVal));
+            aNewOpt.SetObjMode(sc::ViewObjectType::CHART, static_cast<ScVObjMode>(nIntVal));
         }
     }
     else if ( aPropertyName == SC_UNO_SHOWDRAW )
@@ -1824,7 +1824,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             //#i80528# adapt to new range eventually
             if(sal_Int16(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int16(VOBJ_MODE_SHOW);
 
-            aNewOpt.SetObjMode( VOBJ_TYPE_DRAW, static_cast<ScVObjMode>(nIntVal));
+            aNewOpt.SetObjMode(sc::ViewObjectType::DRAW, static_cast<ScVObjMode>(nIntVal));
         }
     }
     else if ( aPropertyName == SC_UNO_GRIDCOLOR )
@@ -1904,29 +1904,29 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
         const ScViewOptions& rOpt = rViewData.GetOptions();
 
         if ( aPropertyName == SC_UNO_COLROWHDR || aPropertyName == OLD_UNO_COLROWHDR )
-            aRet <<= rOpt.GetOption( VOPT_HEADER );
+            aRet <<= rOpt.GetOption(sc::ViewOption::HEADER);
         else if ( aPropertyName == SC_UNO_HORSCROLL || aPropertyName == OLD_UNO_HORSCROLL )
-            aRet <<= rOpt.GetOption( VOPT_HSCROLL );
+            aRet <<= rOpt.GetOption(sc::ViewOption::HSCROLL);
         else if ( aPropertyName == SC_UNO_OUTLSYMB || aPropertyName == OLD_UNO_OUTLSYMB )
-            aRet <<= rOpt.GetOption( VOPT_OUTLINER );
+            aRet <<= rOpt.GetOption(sc::ViewOption::OUTLINER);
         else if ( aPropertyName == SC_UNO_SHEETTABS || aPropertyName == OLD_UNO_SHEETTABS )
-            aRet <<= rOpt.GetOption( VOPT_TABCONTROLS );
-        else if ( aPropertyName == SC_UNO_SHOWANCHOR ) aRet <<= rOpt.GetOption( VOPT_ANCHOR );
-        else if ( aPropertyName == SC_UNO_SHOWFORM )   aRet <<= rOpt.GetOption( VOPT_FORMULAS );
-        else if ( aPropertyName == SC_UNO_SHOWGRID )   aRet <<= rOpt.GetOption( VOPT_GRID );
-        else if ( aPropertyName == SC_UNO_SHOWHELP )   aRet <<= rOpt.GetOption( VOPT_HELPLINES );
-        else if ( aPropertyName == SC_UNO_SHOWNOTES )  aRet <<= rOpt.GetOption( VOPT_NOTES );
-        else if ( aPropertyName == SC_UNO_SHOWNOTEAUTHOR )  aRet <<= rOpt.GetOption( VOPT_NOTEAUTHOR );
-        else if ( aPropertyName == SC_UNO_SHOWFORMULASMARKS )  aRet <<= rOpt.GetOption( VOPT_FORMULAS_MARKS );
-        else if ( aPropertyName == SC_UNO_SHOWPAGEBR ) aRet <<= rOpt.GetOption( VOPT_PAGEBREAKS );
-        else if ( aPropertyName == SC_UNO_SHOWZERO )   aRet <<= rOpt.GetOption( VOPT_NULLVALS );
+            aRet <<= rOpt.GetOption(sc::ViewOption::TABCONTROLS);
+        else if ( aPropertyName == SC_UNO_SHOWANCHOR ) aRet <<= rOpt.GetOption(sc::ViewOption::ANCHOR);
+        else if ( aPropertyName == SC_UNO_SHOWFORM )   aRet <<= rOpt.GetOption(sc::ViewOption::FORMULAS);
+        else if ( aPropertyName == SC_UNO_SHOWGRID )   aRet <<= rOpt.GetOption(sc::ViewOption::GRID);
+        else if ( aPropertyName == SC_UNO_SHOWHELP )   aRet <<= rOpt.GetOption(sc::ViewOption::HELPLINES);
+        else if ( aPropertyName == SC_UNO_SHOWNOTES )  aRet <<= rOpt.GetOption(sc::ViewOption::NOTES);
+        else if ( aPropertyName == SC_UNO_SHOWNOTEAUTHOR )  aRet <<= rOpt.GetOption(sc::ViewOption::NOTEAUTHOR);
+        else if ( aPropertyName == SC_UNO_SHOWFORMULASMARKS )  aRet <<= rOpt.GetOption(sc::ViewOption::FORMULAS_MARKS);
+        else if ( aPropertyName == SC_UNO_SHOWPAGEBR ) aRet <<= rOpt.GetOption(sc::ViewOption::PAGEBREAKS);
+        else if ( aPropertyName == SC_UNO_SHOWZERO )   aRet <<= rOpt.GetOption(sc::ViewOption::NULLVALS);
         else if ( aPropertyName == SC_UNO_VALUEHIGH || aPropertyName == OLD_UNO_VALUEHIGH )
-            aRet <<= rOpt.GetOption( VOPT_SYNTAX );
+            aRet <<= rOpt.GetOption(sc::ViewOption::SYNTAX);
         else if ( aPropertyName == SC_UNO_VERTSCROLL || aPropertyName == OLD_UNO_VERTSCROLL )
-            aRet <<= rOpt.GetOption( VOPT_VSCROLL );
-        else if ( aPropertyName == SC_UNO_SHOWOBJ )    aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode( VOBJ_TYPE_OLE ) );
-        else if ( aPropertyName == SC_UNO_SHOWCHARTS ) aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode( VOBJ_TYPE_CHART ) );
-        else if ( aPropertyName == SC_UNO_SHOWDRAW )   aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode( VOBJ_TYPE_DRAW ) );
+            aRet <<= rOpt.GetOption(sc::ViewOption::VSCROLL);
+        else if ( aPropertyName == SC_UNO_SHOWOBJ )    aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode(sc::ViewObjectType::OLE) );
+        else if ( aPropertyName == SC_UNO_SHOWCHARTS ) aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode(sc::ViewObjectType::CHART) );
+        else if ( aPropertyName == SC_UNO_SHOWDRAW )   aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode(sc::ViewObjectType::DRAW) );
         else if ( aPropertyName == SC_UNO_GRIDCOLOR )  aRet <<= rOpt.GetGridColor();
         else if ( aPropertyName == SC_UNO_VISAREA ) aRet <<= GetVisArea();
         else if ( aPropertyName == SC_UNO_ZOOMTYPE ) aRet <<= GetZoomType();

@@ -715,7 +715,7 @@ void ScDrawTransferObj::InitDocShell()
     m_aDocShellRef->SetVisArea(aDestArea);
 
     ScViewOptions aViewOpt( rDestDoc.GetViewOptions() );
-    aViewOpt.SetOption( VOPT_GRID, false );
+    aViewOpt.SetOption(sc::ViewOption::GRID, false);
     rDestDoc.SetViewOptions( aViewOpt );
 
     ScViewData aViewData(*m_aDocShellRef, nullptr);

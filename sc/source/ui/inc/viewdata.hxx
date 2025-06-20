@@ -554,16 +554,16 @@ public:
     const ScViewOptions&    GetOptions() const { return maOptions; }
     SC_DLLPUBLIC void       SetOptions( const ScViewOptions& rOpt );
 
-    bool    IsGridMode      () const            { return maOptions.GetOption(VOPT_GRID); }
-    bool    IsSyntaxMode    () const            { return maOptions.GetOption(VOPT_SYNTAX); }
-    void    SetSyntaxMode   ( bool bNewMode )   { maOptions.SetOption(VOPT_SYNTAX, bNewMode); }
-    bool    IsHeaderMode    () const            { return maOptions.GetOption(VOPT_HEADER); }
-    void    SetHeaderMode   ( bool bNewMode )   { maOptions.SetOption(VOPT_HEADER, bNewMode); }
-    bool    IsTabMode       () const            { return maOptions.GetOption(VOPT_TABCONTROLS); }
-    bool    IsVScrollMode   () const            { return maOptions.GetOption(VOPT_VSCROLL); }
-    bool    IsHScrollMode   () const            { return maOptions.GetOption(VOPT_HSCROLL); }
-    bool    IsOutlineMode   () const            { return maOptions.GetOption(VOPT_OUTLINER); }
-    bool    IsThemedCursor  () const            { return maOptions.GetOption(VOPT_THEMEDCURSOR); }
+    bool    IsGridMode      () const            { return maOptions.GetOption(sc::ViewOption::GRID); }
+    bool    IsSyntaxMode    () const            { return maOptions.GetOption(sc::ViewOption::SYNTAX); }
+    void    SetSyntaxMode   ( bool bNewMode )   { maOptions.SetOption(sc::ViewOption::SYNTAX, bNewMode); }
+    bool    IsHeaderMode    () const            { return maOptions.GetOption(sc::ViewOption::HEADER); }
+    void    SetHeaderMode   ( bool bNewMode )   { maOptions.SetOption(sc::ViewOption::HEADER, bNewMode); }
+    bool    IsTabMode       () const            { return maOptions.GetOption(sc::ViewOption::TABCONTROLS); }
+    bool    IsVScrollMode   () const            { return maOptions.GetOption(sc::ViewOption::VSCROLL); }
+    bool    IsHScrollMode   () const            { return maOptions.GetOption(sc::ViewOption::HSCROLL); }
+    bool    IsOutlineMode   () const            { return maOptions.GetOption(sc::ViewOption::OUTLINER); }
+    bool    IsThemedCursor  () const            { return maOptions.GetOption(sc::ViewOption::THEMEDCURSOR); }
 
     bool    GetEditHighlight() const            { return bEditHighlight; }
     void    SetEditHighlight(bool bNewHighlight) { bEditHighlight = bNewHighlight; }

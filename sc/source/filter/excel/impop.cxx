@@ -785,9 +785,9 @@ void ImportExcel::Hideobj()
             break;
     }
 
-    aOpts.SetObjMode( VOBJ_TYPE_OLE,   eOle );
-    aOpts.SetObjMode( VOBJ_TYPE_CHART, eChart );
-    aOpts.SetObjMode( VOBJ_TYPE_DRAW,  eDraw );
+    aOpts.SetObjMode(sc::ViewObjectType::OLE,   eOle );
+    aOpts.SetObjMode(sc::ViewObjectType::CHART, eChart );
+    aOpts.SetObjMode(sc::ViewObjectType::DRAW,  eDraw );
 
     rD.SetViewOptions( aOpts );
 }

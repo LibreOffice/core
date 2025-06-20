@@ -2071,7 +2071,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             if (nCommand == SvxSearchCmd::FIND_ALL || nCommand == SvxSearchCmd::REPLACE_ALL)
             {
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                bool bShow = GetViewData().GetViewShell()->GetViewData().GetOptions().GetOption( VOPT_SUMMARY );
+                bool bShow = GetViewData().GetViewShell()->GetViewData().GetOptions().GetOption(sc::ViewOption::SUMMARY);
 
                 if (bShow && pViewFrm && !comphelper::LibreOfficeKit::isActive())
                 {

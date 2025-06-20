@@ -381,7 +381,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 aTextOptions.mbAddQuotes = false;
             }
             aObj.SetExportTextOptions(aTextOptions);
-            aObj.SetFormulas( m_pDoc->GetViewOptions().GetOption( VOPT_FORMULAS ) );
+            aObj.SetFormulas(m_pDoc->GetViewOptions().GetOption(sc::ViewOption::FORMULAS));
             aObj.SetIncludeFiltered( bIncludeFiltered );
 
             //  DataType depends on format type:

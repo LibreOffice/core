@@ -63,9 +63,9 @@ SCTAB XclImpDocViewSettings::GetDisplScTab() const
 void XclImpDocViewSettings::Finalize()
 {
     ScViewOptions aViewOpt( GetDoc().GetViewOptions() );
-    aViewOpt.SetOption( VOPT_HSCROLL,       ::get_flag( maData.mnFlags, EXC_WIN1_HOR_SCROLLBAR ) );
-    aViewOpt.SetOption( VOPT_VSCROLL,       ::get_flag( maData.mnFlags, EXC_WIN1_VER_SCROLLBAR ) );
-    aViewOpt.SetOption( VOPT_TABCONTROLS,   ::get_flag( maData.mnFlags, EXC_WIN1_TABBAR ) );
+    aViewOpt.SetOption(sc::ViewOption::HSCROLL, ::get_flag( maData.mnFlags, EXC_WIN1_HOR_SCROLLBAR ) );
+    aViewOpt.SetOption(sc::ViewOption::VSCROLL, ::get_flag( maData.mnFlags, EXC_WIN1_VER_SCROLLBAR ) );
+    aViewOpt.SetOption(sc::ViewOption::TABCONTROLS, ::get_flag( maData.mnFlags, EXC_WIN1_TABBAR ) );
     GetDoc().SetViewOptions( aViewOpt );
 
     // displayed sheet
@@ -285,10 +285,10 @@ void XclImpTabViewSettings::Finalize()
     {
         // set Excel sheet settings globally at Calc document, take settings from displayed sheet
         ScViewOptions aViewOpt( rDoc.GetViewOptions() );
-        aViewOpt.SetOption( VOPT_FORMULAS, maData.mbShowFormulas );
-        aViewOpt.SetOption( VOPT_HEADER,   maData.mbShowHeadings );
-        aViewOpt.SetOption( VOPT_NULLVALS, maData.mbShowZeros );
-        aViewOpt.SetOption( VOPT_OUTLINER, maData.mbShowOutline );
+        aViewOpt.SetOption(sc::ViewOption::FORMULAS, maData.mbShowFormulas );
+        aViewOpt.SetOption(sc::ViewOption::HEADER,   maData.mbShowHeadings );
+        aViewOpt.SetOption(sc::ViewOption::NULLVALS, maData.mbShowZeros );
+        aViewOpt.SetOption(sc::ViewOption::OUTLINER, maData.mbShowOutline );
         rDoc.SetViewOptions( aViewOpt );
     }
 

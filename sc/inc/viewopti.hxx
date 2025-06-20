@@ -27,39 +27,43 @@
 
 // View options
 
-enum ScViewOption
+namespace sc
 {
-    VOPT_FORMULAS = 0,
-    VOPT_NULLVALS,
-    VOPT_SYNTAX,
-    VOPT_NOTES,
-    VOPT_NOTEAUTHOR,
-    VOPT_FORMULAS_MARKS,
-    VOPT_VSCROLL,
-    VOPT_HSCROLL,
-    VOPT_TABCONTROLS,
-    VOPT_OUTLINER,
-    VOPT_HEADER,
-    VOPT_GRID,
-    VOPT_GRID_ONTOP,
-    VOPT_HELPLINES,
-    VOPT_ANCHOR,
-    VOPT_PAGEBREAKS,
-    VOPT_SUMMARY,
+enum class ViewOption : sal_Int32
+{
+    FORMULAS = 0,
+    NULLVALS,
+    SYNTAX,
+    NOTES,
+    NOTEAUTHOR,
+    FORMULAS_MARKS,
+    VSCROLL,
+    HSCROLL,
+    TABCONTROLS,
+    OUTLINER,
+    HEADER,
+    GRID,
+    GRID_ONTOP,
+    HELPLINES,
+    ANCHOR,
+    PAGEBREAKS,
+    SUMMARY,
     // tdf#96854 - move/copy sheet dialog: last used option for action (true: copy, false: move)
-    VOPT_COPY_SHEET,
-    VOPT_THEMEDCURSOR,
+    COPY_SHEET,
+    THEMEDCURSOR,
 };
 
-enum ScVObjType
+enum class ViewObjectType : sal_Int32
 {
-    VOBJ_TYPE_OLE = 0,
-    VOBJ_TYPE_CHART,
-    VOBJ_TYPE_DRAW
+    OLE = 0,
+    CHART,
+    DRAW,
 };
 
-#define MAX_OPT             sal_uInt16(VOPT_THEMEDCURSOR)+1
-#define MAX_TYPE            sal_uInt16(VOBJ_TYPE_DRAW)+1
+} // end sc
+
+constexpr sal_uInt16 MAX_OPT = sal_uInt16(sc::ViewOption::THEMEDCURSOR) + 1;
+constexpr sal_uInt16 MAX_TYPE = sal_uInt16(sc::ViewObjectType::DRAW) + 1;
 
 // SvxGrid options with standard operators
 
@@ -105,11 +109,23 @@ public:
 
     void                    SetDefaults();
 
-    void                    SetOption( ScViewOption eOpt, bool bNew )    { aOptArr[eOpt] = bNew; }
-    bool                    GetOption( ScViewOption eOpt ) const         { return aOptArr[eOpt]; }
+    void SetOption(sc::ViewOption eOption, bool bNew)
+    {
+        aOptArr[sal_Int32(eOption)] = bNew;
+    }
+    bool GetOption(sc::ViewOption eOption) const
+    {
+        return aOptArr[sal_Int32(eOption)];
+    }
 
-    void                    SetObjMode( ScVObjType eObj, ScVObjMode eMode ) { aModeArr[eObj] = eMode; }
-    ScVObjMode              GetObjMode( ScVObjType eObj ) const             { return aModeArr[eObj]; }
+    void SetObjMode(sc::ViewObjectType eObject, ScVObjMode eMode)
+    {
+        aModeArr[sal_Int32(eObject)] = eMode;
+    }
+    ScVObjMode GetObjMode(sc::ViewObjectType eObject) const
+    {
+        return aModeArr[sal_Int32(eObject)];
+    }
 
     void                    SetGridColor( const Color& rCol, const OUString& rName ) { aGridCol = rCol; aGridColName = rName;}
     Color const &           GetGridColor( OUString* pStrName = nullptr ) const;

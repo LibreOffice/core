@@ -608,7 +608,7 @@ void ScDrawView::UpdateUserViewOptions()
     const ScViewOptions&    rOpt = rViewData.GetOptions();
     const ScGridOptions&    rGrid = rOpt.GetGridOptions();
 
-    SetDragStripes( rOpt.GetOption( VOPT_HELPLINES ) );
+    SetDragStripes( rOpt.GetOption(sc::ViewOption::HELPLINES) );
     SetMarkHdlSizePixel( SC_HANDLESIZE_BIG );
 
     SetGridVisible( rGrid.GetGridVisible() );
