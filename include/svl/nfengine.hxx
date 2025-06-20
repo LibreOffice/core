@@ -159,9 +159,9 @@ class SVL_DLLPUBLIC SvNFFormatData
 {
 public:
     typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
+    typedef std::map<sal_uInt32, std::unique_ptr<SvNumberformat>> FormatEntryMap;
 
 private:
-    typedef std::map<sal_uInt32, std::unique_ptr<SvNumberformat>> FormatEntryMap;
     FormatEntryMap aFTable; // Table of format keys to format entries
     DefaultFormatKeysMap aDefaultFormatKeys; // Table of default standard to format keys
     sal_uInt32 MaxCLOffset; // Max language/country offset used
@@ -176,6 +176,8 @@ public:
     const SvNumberformat* GetFormatEntry(sal_uInt32 nKey) const;
 
     SvNumFormatType GetType(sal_uInt32 nFIndex) const;
+
+    const FormatEntryMap& GetFormatEntryMap() const { return aFTable; }
 
     /// Whether format index nFIndex is of type text or not
     bool IsTextFormat(sal_uInt32 nFIndex) const;
