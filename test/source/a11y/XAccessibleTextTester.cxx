@@ -124,7 +124,7 @@ void XAccessibleTextTester::testGetCharacterAttributes()
     const sal_Int32 nCharCount = m_xText->getCharacterCount();
     const css::uno::Sequence<OUString> aAttrs;
 
-    // check that trying to get character attribtes at invalid index results in IndexOutOfBoundsException
+    // check that trying to get character attributes at invalid index results in IndexOutOfBoundsException
     for (sal_Int32 nPos : { sal_Int32(-1), nCharCount })
     {
         try
@@ -148,7 +148,7 @@ void XAccessibleTextTester::testGetCharacterAttributes()
 
 /**
  * Calls the method with wrong indices and with a correct index,
- * checks whether character bounds are within compontent bounds.
+ * checks whether character bounds are within component bounds.
  */
 void XAccessibleTextTester::testGetCharacterBounds()
 {
@@ -338,7 +338,7 @@ void XAccessibleTextTester::testSetSelection()
         // OK; this is expected
     }
 
-    // check that setting selection using valid indeces does not trigger exception
+    // check that setting selection using valid indices does not trigger exception
     if (nCharCount > 2)
     {
         m_xText->setSelection(1, nCharCount - 1);
