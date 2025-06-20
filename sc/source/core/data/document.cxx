@@ -5187,36 +5187,9 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
     rLineInner.SetValid( SvxBoxInfoItemValidFlags::VERT,   ( aFlags.nVert != SC_LINE_DONTCARE ) );
 }
 
-static HasAttrFlags OptimizeHasAttrib( HasAttrFlags nMask, const ScDocumentPool* pPool )
-{
-    if ( nMask & HasAttrFlags::Rotate )
-    {
-        //  Is attribute used in document?
-        //  (as in fillinfo)
-
-        bool bAnyItem = false;
-        for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_ROTATE_VALUE))
-        {
-            // 90 or 270 degrees is former SvxOrientationItem - only look for other values
-            // (see ScPatternAttr::GetCellOrientation)
-            Degree100 nAngle = static_cast<const ScRotateValueItem*>(pItem)->GetValue();
-            if ( nAngle && nAngle != 9000_deg100 && nAngle != 27000_deg100 )
-            {
-                bAnyItem = true;
-                break;
-            }
-        }
-        if (!bAnyItem)
-            nMask &= ~HasAttrFlags::Rotate;
-    }
-    return nMask;
-}
-
 bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, HasAttrFlags nMask ) const
 {
-    nMask = OptimizeHasAttrib( nMask, mxPoolHelper->GetDocPool());
-
     if (nMask == HasAttrFlags::NONE)
         return false;
 
@@ -5242,8 +5215,6 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 bool ScDocument::HasAttrib( SCCOL nCol, SCROW nRow, SCTAB nTab, HasAttrFlags nMask, SCROW* nStartRow, SCROW* nEndRow ) const
 {
-    nMask = OptimizeHasAttrib( nMask, mxPoolHelper->GetDocPool());
-
     if (nMask == HasAttrFlags::NONE || nTab >= GetTableCount())
     {
         if( nStartRow )

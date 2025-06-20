@@ -184,11 +184,6 @@ public:
     }
 };
 
-bool isRotateItemUsed(const ScDocumentPool *pPool)
-{
-    return pPool->GetItemSurrogates(ATTR_ROTATE_VALUE).size() > 0;
-}
-
 void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
         double fRowScale, SCROW nRow1, SCTAB nTab, SCROW& rYExtra, SCSIZE& rArrRow, SCROW& rRow2)
 {
@@ -386,11 +381,8 @@ void ScDocument::FillInfo(
 
     // Rotated text...
 
-    // Is Attribute really used in document?
-    bool bAnyItem = isRotateItemUsed(pPool);
-
     SCCOL nRotMax = nCol2;
-    if ( bAnyItem && HasAttrib( 0, nRow1, nTab, MaxCol(), nRow2+1, nTab,
+    if ( HasAttrib( 0, nRow1, nTab, MaxCol(), nRow2+1, nTab,
                                 HasAttrFlags::Rotate | HasAttrFlags::Conditional ) )
     {
         //TODO: check Conditionals also for HasAttrFlags::Rotate ????
