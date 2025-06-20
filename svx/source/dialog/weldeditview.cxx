@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
@@ -510,7 +509,7 @@ public:
 
 class WeldEditAccessible
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
+                                         css::accessibility::XAccessible>
 {
     weld::CustomWidgetController* m_pController;
     EditEngine* m_pEditEngine;
@@ -807,23 +806,6 @@ public:
         if (!m_xTextHelper) // not disposing (about to destroy view shell)
             return;
         m_xTextHelper->RemoveEventListener(rListener);
-    }
-
-    virtual OUString SAL_CALL getImplementationName() override
-    {
-        return u"WeldEditAccessible"_ustr;
-    }
-
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
-    {
-        return cppu::supportsService(this, rServiceName);
-    }
-
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-    {
-        return { u"css::accessibility::Accessible"_ustr,
-                 u"css::accessibility::AccessibleComponent"_ustr,
-                 u"css::accessibility::AccessibleContext"_ustr };
     }
 };
 
