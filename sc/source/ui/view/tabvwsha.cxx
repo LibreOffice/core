@@ -396,6 +396,12 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 }
                 break;
 
+            case FID_NEW_SHEET_VIEW:
+                {
+                    // TODO
+                }
+                break;
+
             case FID_NORMALVIEWMODE:
             case FID_PAGEBREAKMODE:
                 // always handle both slots - they exclude each other

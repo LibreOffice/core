@@ -76,7 +76,7 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
         }
     }
 
-    SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTabNo()) + 1 );
+    SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTab()) + 1 );
 
     SetSizePixel( Size(SC_TABBAR_DEFWIDTH, 0) );
 
@@ -264,7 +264,7 @@ void ScTabControl::Select()
 
         for (i=0; i<nCount; i++)
             SelectPage( static_cast<sal_uInt16>(i)+1, rMark.GetTableSelect(i) );
-        SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTabNo()) + 1 );
+        SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTab()) + 1 );
 
         return;
     }
@@ -274,7 +274,7 @@ void ScTabControl::Select()
     sal_uInt16 nPage = nCurId - 1;
 
     // OLE-inplace deactivate
-    if ( nPage != static_cast<sal_uInt16>(pViewData->GetTabNo()) )
+    if ( nPage != static_cast<sal_uInt16>(pViewData->GetTab()) )
         pViewData->GetView()->DrawMarkListHasChanged();
 
     //  InputEnterHandler onlw when not reference input
@@ -395,7 +395,7 @@ void ScTabControl::UpdateStatus()
             }
         }
     }
-    SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTabNo()) + 1 );
+    SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTab()) + 1 );
 
     if (bActive)
     {
@@ -488,7 +488,7 @@ void ScTabControl::DoDrag()
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    SCTAB nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->GetTab();
     ScRange aTabRange( 0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab );
     ScMarkData aTabMark = pViewData->GetMarkData();
     aTabMark.ResetMark();   // doesn't change marked table information

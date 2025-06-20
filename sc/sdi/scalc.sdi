@@ -6015,7 +6015,6 @@ SfxBoolItem ViewRowColumnHeaders FID_TOGGLEHEADERS
 
 
 SfxBoolItem ToggleFormula   FID_TOGGLEFORMULA
-
 [
     /* flags */
     AutoUpdate = FALSE,
@@ -6026,13 +6025,29 @@ SfxBoolItem ToggleFormula   FID_TOGGLEFORMULA
     RecordAbsolute = FALSE,
     RecordPerSet;
 
+    /* config */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::View
+]
+
+SfxBoolItem NewSheetView FID_NEW_SHEET_VIEW
+[
+    /* flags */
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
 
     /* config */
     AccelConfig = TRUE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::View
-
 ]
 
 

@@ -934,7 +934,7 @@ void ScViewData::DeleteTab( SCTAB nTab )
     assert(nTab < static_cast<SCTAB>(maTabData.size()));
     maTabData.erase(maTabData.begin() + nTab);
 
-    if (o3tl::make_unsigned(GetTabNo()) >= maTabData.size())
+    if (o3tl::make_unsigned(GetTab()) >= maTabData.size())
     {
         EnsureTabDataSize(1);
         mnTabNumber = maTabData.size() - 1;
@@ -950,7 +950,7 @@ void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
         maMarkData.DeleteTab(nTab + i);
     }
     maTabData.erase(maTabData.begin() + nTab, maTabData.begin()+ nTab+nSheets);
-    if (o3tl::make_unsigned(GetTabNo()) >= maTabData.size())
+    if (o3tl::make_unsigned(GetTab()) >= maTabData.size())
     {
         EnsureTabDataSize(1);
         mnTabNumber = maTabData.size() - 1;
@@ -4478,6 +4478,19 @@ void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& 
         if (bConvertToScrPosY)
             nExVSplitPos = aExSplitPos.Y();
     }
+}
+
+SCTAB ScViewData::GetTabNo() const
+{
+    if (!pThisTab)
+        return GetTab();
+    auto nSheetViewID = pThisTab->mnSheetViewID;
+    if (nSheetViewID != sc::DefaultSheetViewID)
+    {
+        SCTAB nTab = mrDoc.GetSheetViewNumber(GetTab(), nSheetViewID);
+        return nTab;
+    }
+    return GetTab();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

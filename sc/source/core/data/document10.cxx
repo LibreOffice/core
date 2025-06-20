@@ -28,6 +28,7 @@
 #include <docsh.hxx>
 #include <bcaslot.hxx>
 #include <broadcast.hxx>
+#include <SheetView.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -1112,6 +1113,56 @@ sc::BroadcasterState ScDocument::GetBroadcasterState() const
         pBASM->CollectBroadcasterState(aState);
 
     return aState;
+}
+
+bool ScDocument::IsSheetView(SCTAB nTab) const
+{
+    if (ScTable const* pTable = FetchTable(nTab))
+    {
+        return pTable->IsSheetView();
+    }
+    return false;
+}
+
+void ScDocument::SetSheetView(SCTAB nTab, bool bSheetView)
+{
+    if (ScTable* pTable = FetchTable(nTab))
+    {
+        pTable->SetSheetView(bSheetView);
+    }
+}
+
+sc::SheetViewID ScDocument::CreateNewSheetView(SCTAB nMainTable, SCTAB nSheetViewTable)
+{
+    if (ScTable* pTable = FetchTable(nMainTable))
+    {
+        if (pTable->IsSheetView())
+            return -1;
+
+        if (ScTable* pSheetViewTable = FetchTable(nSheetViewTable))
+        {
+            auto nSheetViewID = pTable->GetSheetViewManager()->create(pSheetViewTable);
+            return nSheetViewID;
+        }
+    }
+    return -1;
+}
+
+SCTAB ScDocument::GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID)
+{
+    if (ScTable* pMainSheet = FetchTable(nTab))
+    {
+        if (pMainSheet->IsSheetView())
+            return nTab;
+
+        sc::SheetView aView = pMainSheet->GetSheetViewManager()->get(nID);
+        if (aView.isValid())
+        {
+            return aView.getTablePointer()->GetTab();
+        }
+        assert(false && "a non valid sheet view is unexpected...");
+    }
+    return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

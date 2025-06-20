@@ -2061,4 +2061,19 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
     pDocSh->UpdateOle(GetViewData());
 }
 
+void ScViewFunc::MakeNewSheetView()
+{
+    SCTAB nTab = GetViewData().GetTab();
+    ScDocument& rDoc = GetViewData().GetDocument();
+
+    SCTAB nSheetViewTab = nTab + 1;
+    if (rDoc.CopyTab(nTab, nSheetViewTab))
+    {
+        SetTabNo(nSheetViewTab);
+        rDoc.SetSheetView(nSheetViewTab, true);
+        sc::SheetViewID nSheetViewID = rDoc.CreateNewSheetView(nTab, nSheetViewTab);
+        GetViewData().SetSheetViewID(nSheetViewID);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
