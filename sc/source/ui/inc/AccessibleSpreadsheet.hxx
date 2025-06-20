@@ -191,13 +191,6 @@ private:
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
-    ///=====  XTypeProvider  ===================================================
-
-    /** Returns an implementation id.
-    */
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId() override;
-
     //=====  XAccessibleTableSelection  ============================================
 
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row ) override;

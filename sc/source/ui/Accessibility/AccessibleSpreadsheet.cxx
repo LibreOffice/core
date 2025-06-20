@@ -1306,14 +1306,6 @@ uno::Sequence< OUString> SAL_CALL
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
-//=====  XTypeProvider  =======================================================
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleSpreadsheet::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 AbsoluteScreenPixelRectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aRect;
