@@ -168,10 +168,5 @@
       <action-widget response="-11">help</action-widget>
       <action-widget response="102">apply</action-widget>
     </action-widgets>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="UIPickerDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="uipickerdialog|extended_tip|UIPickerDialog">Sets the fill properties of the selected drawing object.</property>
-      </object>
-    </child>
   </object>
 </interface>
