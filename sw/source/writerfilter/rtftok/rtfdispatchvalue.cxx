@@ -386,6 +386,32 @@ bool RTFDocumentImpl::dispatchFrameValue(RTFKeyword nKeyword, int nParam)
     return false;
 }
 
+static int GetCellWidth(int thisCellX, int prevCellX, RTFSprms& tableRowSprms)
+{
+    thisCellX -= prevCellX;
+    if (thisCellX == 0 && prevCellX > 0)
+    {
+        // If width of cell is 0, BUT there is a value for \cellxN use minimal
+        // possible width. But if \cellxN has no value leave 0 so autofit will
+        // try to resolve this.
+
+        // sw/source/filter/inc/wrtswtbl.hxx, minimal possible width of cells.
+        const int COL_DFLT_WIDTH = 41;
+        thisCellX = COL_DFLT_WIDTH;
+    }
+    // If there is a negative left margin, then the first cellx is relative to that.
+    if (prevCellX == 0)
+    {
+        if (RTFValue::Pointer_t pTblInd = tableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblInd))
+        {
+            RTFValue::Pointer_t pWidth = pTblInd->getAttributes().find(NS_ooxml::LN_CT_TblWidth_w);
+            if (pWidth && pWidth->getInt() < 0)
+                thisCellX = -1 * (pWidth->getInt() - prevCellX);
+        }
+    }
+    return thisCellX;
+}
+
 bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
 {
     int nSprm = 0;
@@ -399,30 +425,7 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                 (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
                     ? m_nNestedCurrentCellX
                     : m_nTopLevelCurrentCellX);
-            int nCellX = nParam - rCurrentCellX;
-
-            if (!nCellX && nParam > 0)
-            {
-                // If width of cell is 0, BUT there is a value for \cellxN use minimal
-                // possible width. But if \cellxN has no value leave 0 so autofit will
-                // try to resolve this.
-
-                // sw/source/filter/inc/wrtswtbl.hxx, minimal possible width of cells.
-                const int COL_DFLT_WIDTH = 41;
-                nCellX = COL_DFLT_WIDTH;
-            }
-
-            // If there is a negative left margin, then the first cellx is relative to that.
-            RTFValue::Pointer_t pTblInd
-                = m_aStates.top().getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblInd);
-            if (rCurrentCellX == 0 && pTblInd)
-            {
-                RTFValue::Pointer_t pWidth
-                    = pTblInd->getAttributes().find(NS_ooxml::LN_CT_TblWidth_w);
-                if (pWidth && pWidth->getInt() < 0)
-                    nCellX = -1 * (pWidth->getInt() - nParam);
-            }
-
+            int nCellX = GetCellWidth(nParam, rCurrentCellX, m_aStates.top().getTableRowSprms());
             rCurrentCellX = nParam;
             auto pXValue = new RTFValue(nCellX);
             m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
@@ -512,11 +515,31 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                                       .find(NS_ooxml::LN_CT_TblWidth_w)
                                       ->getInt();
                 }
-                rCurrentTRLeft = nParam;
             }
-            else
-                rCurrentTRLeft = rCurrentCellX = nParam;
-
+            rCurrentTRLeft = nParam;
+            // Correct the first cellX, if already pushed before these.
+            // FIXME: this whole convoluted processing of CELLX, TRLEFT, TBLIND should be replaced
+            // with simple pushing of the respective values as is; and all that should eventually
+            // be processed in RTFKeyword::ROW handler (RTFDocumentImpl::dispatchSymbol), where all
+            // information would already be available. There we could know the table indent, row
+            // left offset, all right cell boundaries; and could calculate correct widths (likely
+            // in prepareProperties call).
+            bool hadCellX = false;
+            for (auto & [ id, pValue ] : m_aStates.top().getTableRowSprms())
+            {
+                if (id == NS_ooxml::LN_CT_TblGridBase_gridCol)
+                {
+                    if (int val = pValue->getInt(); val != -1)
+                    {
+                        val = GetCellWidth(val, nParam, m_aStates.top().getTableRowSprms());
+                        pValue = new RTFValue(val);
+                        hadCellX = true;
+                        break;
+                    }
+                }
+            }
+            if (!hadCellX)
+                rCurrentCellX = rCurrentTRLeft;
             putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblInd,
                                +NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
             return true;
