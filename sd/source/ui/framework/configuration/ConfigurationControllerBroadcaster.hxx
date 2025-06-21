@@ -24,15 +24,15 @@
 #include <unordered_map>
 #include <vector>
 
-namespace com::sun::star::drawing::framework { class XConfigurationChangeListener; }
+namespace sd::framework { class ConfigurationChangeListener; }
 namespace com::sun::star::drawing::framework { class XResource; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
-namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
+namespace sd::framework { struct ConfigurationChangeEvent; }
 
 namespace sd::framework {
 class ConfigurationController;
 
-/** This class manages the set of XConfigurationChangeListeners and
+/** This class manages the set of ConfigurationChangeListeners and
     calls them when the ConfigurationController wants to broadcast an
     event.
 
@@ -67,8 +67,8 @@ public:
             when an empty listener reference is given.
     */
     void AddListener(
-        const css::uno::Reference<
-            css::drawing::framework::XConfigurationChangeListener>& rxListener,
+        const rtl::Reference<
+            sd::framework::ConfigurationChangeListener>& rxListener,
         const OUString& rsEventType,
         const css::uno::Any& rUserData);
 
@@ -81,8 +81,8 @@ public:
             when an empty listener reference is given.
     */
     void RemoveListener(
-        const css::uno::Reference<
-            css::drawing::framework::XConfigurationChangeListener>& rxListener);
+        const rtl::Reference<
+            sd::framework::ConfigurationChangeListener>& rxListener);
 
     /** Broadcast the given event to all listeners that have been registered
         for its type of event as well as all universal listeners.
@@ -91,7 +91,7 @@ public:
         the listener is unregistered automatically.
     */
     void NotifyListeners (
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent);
+        const sd::framework::ConfigurationChangeEvent& rEvent);
 
     /** This convenience variant of NotifyListeners create the event from
         the given arguments.
@@ -113,7 +113,7 @@ private:
     class ListenerDescriptor
     {
     public:
-        css::uno::Reference<css::drawing::framework::XConfigurationChangeListener> mxListener;
+        rtl::Reference<sd::framework::ConfigurationChangeListener> mxListener;
         css::uno::Any maUserData;
     };
     typedef std::vector<ListenerDescriptor> ListenerList;
@@ -129,7 +129,7 @@ private:
     */
     void NotifyListeners (
         const ListenerList& rList,
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent);
+        const sd::framework::ConfigurationChangeEvent& rEvent);
 };
 
 } // end of namespace sd::framework

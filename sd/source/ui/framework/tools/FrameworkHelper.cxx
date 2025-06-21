@@ -22,6 +22,7 @@
 #include <framework/FrameworkHelper.hxx>
 
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/ResourceId.hxx>
 #include <framework/ViewShellWrapper.hxx>
 #include <ViewShellBase.hxx>
@@ -51,18 +52,13 @@ namespace {
 
 //----- CallbackCaller --------------------------------------------------------
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationChangeListener
-    > CallbackCallerInterfaceBase;
-
 /** A CallbackCaller registers as listener at the ConfigurationController
     object and waits for the notification of one type of event.  When that
     event is received, or when the CallbackCaller detects at its
     construction that the event will not be sent in the near future, the
     actual callback object is called and the CallbackCaller destroys itself.
 */
-class CallbackCaller
-    : public CallbackCallerInterfaceBase
+class CallbackCaller : public sd::framework::ConfigurationChangeListener
 {
 public:
     /** Create a new CallbackCaller object.  This object controls its own
@@ -92,8 +88,8 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
     // XEventListener
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent) override;
-    // XConfigurationChangeListener
-    virtual void SAL_CALL notifyConfigurationChange (const ConfigurationChangeEvent& rEvent) override;
+    // ConfigurationChangeListener
+    virtual void notifyConfigurationChange (const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
 private:
     OUString msEventType;
@@ -152,7 +148,7 @@ namespace {
     class FrameworkHelperAllPassFilter
     {
     public:
-        bool operator() (const css::drawing::framework::ConfigurationChangeEvent&) { return true; }
+        bool operator() (const sd::framework::ConfigurationChangeEvent&) { return true; }
     };
 
     class FrameworkHelperResourceIdFilter
@@ -160,7 +156,7 @@ namespace {
     public:
         explicit FrameworkHelperResourceIdFilter (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
-        bool operator() (const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+        bool operator() (const sd::framework::ConfigurationChangeEvent& rEvent)
         { return mxResourceId.is() && rEvent.ResourceId.is()
                 && mxResourceId->compareTo(rEvent.ResourceId) == 0; }
     private:
@@ -215,7 +211,7 @@ namespace
     {
         try
         {
-            Reference< XConfiguration > xConfiguration( i_rConfigController->getRequestedConfiguration(), UNO_SET_THROW );
+            rtl::Reference< sd::framework::Configuration > xConfiguration( i_rConfigController->getRequestedConfiguration() );
             Sequence< Reference< XResourceId > > aViewIds( xConfiguration->getResources(
                 i_rPaneId, FrameworkHelper::msViewURLPrefix, AnchorBindingMode_DIRECT ) );
             if ( aViewIds.hasElements() )
@@ -847,8 +843,8 @@ void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
     }
 }
 
-void SAL_CALL CallbackCaller::notifyConfigurationChange (
-    const ConfigurationChangeEvent& rEvent)
+void CallbackCaller::notifyConfigurationChange (
+    const sd::framework::ConfigurationChangeEvent& rEvent)
 {
     if (!(rEvent.Type == msEventType && maFilter(rEvent)))
         return;

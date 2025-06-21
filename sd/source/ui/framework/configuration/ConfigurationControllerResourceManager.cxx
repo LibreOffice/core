@@ -22,7 +22,7 @@
 #include "ResourceFactoryManager.hxx"
 #include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <framework/Configuration.hxx>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
@@ -64,7 +64,7 @@ ConfigurationControllerResourceManager::ResourceDescriptor
 
 void ConfigurationControllerResourceManager::ActivateResources (
     const ::std::vector<Reference<XResourceId> >& rResources,
-    const Reference<XConfiguration>& rxConfiguration)
+    const rtl::Reference<Configuration>& rxConfiguration)
 {
     ::osl::MutexGuard aGuard (maMutex);
     // Iterate in normal order over the resources that are to be
@@ -76,7 +76,7 @@ void ConfigurationControllerResourceManager::ActivateResources (
 
 void ConfigurationControllerResourceManager::DeactivateResources (
     const ::std::vector<Reference<XResourceId> >& rResources,
-    const Reference<XConfiguration>& rxConfiguration)
+    const rtl::Reference<Configuration>& rxConfiguration)
 {
     ::osl::MutexGuard aGuard (maMutex);
     // Iterate in reverse order over the resources that are to be
@@ -100,7 +100,7 @@ void ConfigurationControllerResourceManager::DeactivateResources (
 */
 void ConfigurationControllerResourceManager::ActivateResource (
     const Reference<XResourceId>& rxResourceId,
-    const Reference<XConfiguration>& rxConfiguration)
+    const rtl::Reference<Configuration>& rxConfiguration)
 {
     if ( ! rxResourceId.is())
     {
@@ -172,7 +172,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
 */
 void ConfigurationControllerResourceManager::DeactivateResource (
     const Reference<XResourceId>& rxResourceId,
-    const Reference<XConfiguration>& rxConfiguration)
+    const rtl::Reference<Configuration>& rxConfiguration)
 {
     if ( ! rxResourceId.is())
         return;

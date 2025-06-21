@@ -21,7 +21,7 @@
 
 #include <ToolBarManager.hxx>
 #include <tools/link.hxx>
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <framework/ConfigurationChangeListener.hxx>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <comphelper/compbase.hxx>
 #include <o3tl/deleter.hxx>
@@ -47,15 +47,11 @@ namespace sd::framework
 {
 class ConfigurationController;
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationChangeListener
-    > ToolBarModuleInterfaceBase;
-
 /** This module is responsible for locking the ToolBarManager during
     configuration updates and for triggering ToolBarManager updates.
 */
 class ToolBarModule final
-    : public ToolBarModuleInterfaceBase
+    : public sd::framework::ConfigurationChangeListener
 {
 public:
     /** Create a new module.
@@ -68,10 +64,10 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // XConfigurationChangeListener
+    // ConfigurationChangeListener
 
-    virtual void SAL_CALL notifyConfigurationChange (
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
+    virtual void notifyConfigurationChange (
+        const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
     // XEventListener
 

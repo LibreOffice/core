@@ -19,7 +19,7 @@
 
 #include "ConfigurationTracer.hxx"
 
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <framework/Configuration.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -28,7 +28,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sd::framework {
 
 void ConfigurationTracer::TraceConfiguration (
-    const Reference<XConfiguration>& rxConfiguration,
+    const rtl::Reference<Configuration>& rxConfiguration,
     const char* pMessage)
 {
 #if OSL_DEBUG_LEVEL >=1
@@ -50,12 +50,12 @@ void ConfigurationTracer::TraceConfiguration (
 
 #if OSL_DEBUG_LEVEL >=1
 void ConfigurationTracer::TraceBoundResources (
-    const Reference<XConfiguration>& rxConfiguration,
+    const rtl::Reference<Configuration>& rxConfiguration,
     const Reference<XResourceId>& rxResourceId,
     const int nIndentation)
 {
     const Sequence<Reference<XResourceId> > aResourceList (
-        rxConfiguration->getResources(rxResourceId, OUString(), AnchorBindingMode_DIRECT));
+        rxConfiguration->getResources(rxResourceId, u"", AnchorBindingMode_DIRECT));
     static constexpr OUStringLiteral sIndentation (u"    ");
     for (Reference<XResourceId> const & resourceId : aResourceList)
     {

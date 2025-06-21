@@ -16,6 +16,7 @@
 #include <ViewShellManager.hxx>
 
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ViewShellWrapper.hxx>
 
@@ -136,7 +137,7 @@ IMPL_LINK(NotesPaneModule, EventMultiplexerListener, sd::tools::EventMultiplexer
     }
 }
 
-void SAL_CALL NotesPaneModule::notifyConfigurationChange(const ConfigurationChangeEvent& rEvent)
+void NotesPaneModule::notifyConfigurationChange(const ConfigurationChangeEvent& rEvent)
 {
     if (!mxConfigurationController.is())
         return;
@@ -239,8 +240,7 @@ bool NotesPaneModule::IsMasterView(const Reference<XView>& xView)
 }
 
 void NotesPaneModule::onResourceRequest(
-    bool bActivation,
-    const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration)
+    bool bActivation, const rtl::Reference<sd::framework::Configuration>& rxConfiguration)
 {
     Sequence<Reference<XResourceId>> aCenterViews = rxConfiguration->getResources(
         FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),

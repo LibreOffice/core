@@ -19,14 +19,14 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
+#include <framework/ConfigurationChangeRequest.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/compbase.hxx>
 
 namespace sd::framework {
 
-typedef comphelper::WeakComponentImplHelper <
-      css::drawing::framework::XConfigurationChangeRequest,
+typedef cppu::ImplInheritanceHelper <
+      sd::framework::ConfigurationChangeRequest,
       css::container::XNamed
     > UpdateRequestInterfaceBase;
 
@@ -47,8 +47,8 @@ public:
 
     // XConfigurationChangeOperation
 
-    virtual void SAL_CALL execute (
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration) override;
+    virtual void execute (
+        const rtl::Reference<sd::framework::Configuration>& rxConfiguration) override;
 
     // XNamed
 

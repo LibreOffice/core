@@ -20,8 +20,8 @@
 #pragma once
 
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <framework/ConfigurationChangeListener.hxx>
 #include <comphelper/compbase.hxx>
 #include <unotools/weakref.hxx>
 #include <rtl/ref.hxx>
@@ -38,9 +38,9 @@ class ViewShellBase;
 namespace sd::framework {
 class ConfigurationController;
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XResourceFactory,
-    css::drawing::framework::XConfigurationChangeListener
+typedef cppu::ImplInheritanceHelper <
+    sd::framework::ConfigurationChangeListener,
+    css::drawing::framework::XResourceFactory
     > BasicPaneFactoryInterfaceBase;
 
 /** This factory provides the frequently used standard panes
@@ -72,10 +72,10 @@ public:
         releaseResource (
             const css::uno::Reference<css::drawing::framework::XResource>& rxPane) override;
 
-    // XConfigurationChangeListener
+    // ConfigurationChangeListener
 
-    virtual void SAL_CALL notifyConfigurationChange (
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
+    virtual void notifyConfigurationChange (
+        const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
     // lang::XEventListener
 

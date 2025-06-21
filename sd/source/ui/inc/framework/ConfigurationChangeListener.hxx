@@ -17,23 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module com { module sun { module star { module drawing { module framework {
+#pragma once
+
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <comphelper/compbase.hxx>
+#include <sddllapi.h>
+
+namespace sd::framework
+{
+struct ConfigurationChangeEvent;
 
 /** A listener for configuration changes is called when it has been
     registered at the configuration controller and a configuration change
     occurs.
 */
-interface XConfigurationChangeListener
-    : ::com::sun::star::lang::XEventListener
+class SD_DLLPUBLIC ConfigurationChangeListener
+    : public comphelper::WeakComponentImplHelper<::css::lang::XEventListener>
 {
+public:
+    using XEventListener::disposing;
+    using WeakComponentImplHelperBase::disposing;
+
     /** The exact time of when a listener is called (before the change takes
         place, during the change, or when the change has been made) depends
         on the change event.  The order in which listeners are called is the
         order in which they are registered (First registered, first called.)
     */
-    void notifyConfigurationChange ([in] ConfigurationChangeEvent aEvent);
+    virtual void notifyConfigurationChange(const sd::framework::ConfigurationChangeEvent& aEvent)
+        = 0;
+
+protected:
+    virtual ~ConfigurationChangeListener() override;
 };
 
-}; }; }; }; }; // ::com::sun::star::drawing::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

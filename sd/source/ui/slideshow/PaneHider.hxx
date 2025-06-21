@@ -22,9 +22,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::drawing::framework
+namespace sd::framework
 {
-class XConfiguration;
+class Configuration;
 }
 namespace sd::framework
 {
@@ -58,7 +58,7 @@ private:
     */
 
     rtl::Reference<sd::framework::ConfigurationController> mxConfigurationController;
-    css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration;
+    rtl::Reference<sd::framework::Configuration> mxConfiguration;
 };
 
 } // end of namespace sd

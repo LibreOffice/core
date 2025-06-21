@@ -29,7 +29,7 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <framework/Configuration.hxx>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
@@ -139,7 +139,7 @@ private:
         mxConfigurationControllerWeak;
     css::uno::WeakReference<css::uno::XComponentContext> mxContextWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    css::uno::Reference<css::drawing::framework::XConfiguration> mxSavedConfiguration;
+    rtl::Reference<sd::framework::Configuration> mxSavedConfiguration;
     ::rtl::Reference<PresenterPaneContainer> mpPaneContainer;
     css::uno::Reference<css::drawing::framework::XResourceFactory> mxPaneFactory;
     css::uno::Reference<css::drawing::framework::XResourceFactory> mxViewFactory;

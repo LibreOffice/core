@@ -288,9 +288,9 @@ void SAL_CALL BasicPaneFactory::releaseResource (
 
 }
 
-//===== XConfigurationChangeListener ==========================================
+//===== ConfigurationChangeListener ==========================================
 
-void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
+void BasicPaneFactory::notifyConfigurationChange (
     const ConfigurationChangeEvent& /* rEvent */ )
 {
     // FIXME: nothing to do

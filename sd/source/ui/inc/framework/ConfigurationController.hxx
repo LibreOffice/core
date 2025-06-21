@@ -20,8 +20,8 @@
 #pragma once
 
 #include <sddllapi.h>
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
+#include <framework/ConfigurationChangeListener.hxx>
+#include <framework/ConfigurationChangeRequest.hxx>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -102,28 +102,28 @@ public:
 
     void update();
 
-    css::uno::Reference<css::drawing::framework::XConfiguration>
+    rtl::Reference<sd::framework::Configuration>
         getRequestedConfiguration();
 
-    css::uno::Reference<css::drawing::framework::XConfiguration>
+    rtl::Reference<sd::framework::Configuration>
         getCurrentConfiguration();
 
     void restoreConfiguration (
-        const css::uno::Reference<css::drawing::framework::XConfiguration>&
+        const rtl::Reference<sd::framework::Configuration>&
         rxConfiguration);
 
     void addConfigurationChangeListener (
-        const css::uno::Reference<
-            css::drawing::framework::XConfigurationChangeListener>& rxListener,
+        const rtl::Reference<
+            sd::framework::ConfigurationChangeListener>& rxListener,
         const OUString& rsEventType,
         const css::uno::Any& rUserData);
 
     void removeConfigurationChangeListener (
-        const css::uno::Reference<
-            css::drawing::framework::XConfigurationChangeListener>& rxListener);
+        const rtl::Reference<
+            sd::framework::ConfigurationChangeListener>& rxListener);
 
     void notifyEvent (
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent);
+        const sd::framework::ConfigurationChangeEvent& rEvent);
 
     /** Return whether there are pending requests for configuration changes.
         @return
@@ -142,12 +142,12 @@ public:
         @param xRequest
             The configuration change represented by this request object must only
             be committed to the configuration when the
-            com::sun::star::drawing::framework::XConfigurationChangeRequest::execute()
+            sd::framework::ConfigurationChangeRequest::execute()
             method of the xRequest object is called.
     */
     void postChangeRequest (
-        const css::uno::Reference<
-            css::drawing::framework::XConfigurationChangeRequest>& rxRequest);
+        const rtl::Reference<
+            sd::framework::ConfigurationChangeRequest>& rxRequest);
 
     void addResourceFactory(
         const OUString& sResourceURL,

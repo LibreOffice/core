@@ -20,6 +20,7 @@
 #include "ViewTabBarModule.hxx"
 
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <ViewTabBar.hxx>
 #include <DrawController.hxx>
@@ -87,7 +88,7 @@ void ViewTabBarModule::disposing(std::unique_lock<std::mutex>&)
     }
 }
 
-void SAL_CALL ViewTabBarModule::notifyConfigurationChange (
+void ViewTabBarModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
     if (!mxConfigurationController.is())

@@ -21,6 +21,7 @@
 
 #include <ViewShellBase.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/Pane.hxx>
 #include <DrawController.hxx>
@@ -185,10 +186,10 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
     return pWindow;
 }
 
-//----- XConfigurationChangeListener ------------------------------------------
+//----- ConfigurationChangeListener ------------------------------------------
 
-void SAL_CALL  ViewTabBar::notifyConfigurationChange (
-    const ConfigurationChangeEvent& rEvent)
+void ViewTabBar::notifyConfigurationChange (
+    const sd::framework::ConfigurationChangeEvent& rEvent)
 {
     if (rEvent.Type == FrameworkHelper::msResourceActivationEvent
         && rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix)

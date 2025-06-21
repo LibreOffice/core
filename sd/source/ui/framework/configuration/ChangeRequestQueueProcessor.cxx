@@ -27,7 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
+#include <framework/ConfigurationChangeRequest.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -37,7 +37,7 @@ namespace {
 
 #if DEBUG_SD_CONFIGURATION_TRACE
 
-void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
+void TraceRequest (const rtl::Reference<ConfigurationChangeRequest>& rxRequest)
 {
     Reference<container::XNamed> xNamed (rxRequest, UNO_QUERY);
     if (xNamed.is())
@@ -64,7 +64,7 @@ ChangeRequestQueueProcessor::~ChangeRequestQueueProcessor()
 }
 
 void ChangeRequestQueueProcessor::SetConfiguration (
-    const Reference<XConfiguration>& rxConfiguration)
+    const rtl::Reference<Configuration>& rxConfiguration)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -73,7 +73,7 @@ void ChangeRequestQueueProcessor::SetConfiguration (
 }
 
 void ChangeRequestQueueProcessor::AddRequest (
-    const Reference<XConfigurationChangeRequest>& rxRequest)
+    const rtl::Reference<ConfigurationChangeRequest>& rxRequest)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -131,7 +131,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
         return;
 
     // Get and remove the first entry from the queue.
-    Reference<XConfigurationChangeRequest> xRequest (maQueue.front());
+    rtl::Reference<ConfigurationChangeRequest> xRequest (maQueue.front());
     maQueue.pop();
 
     // Execute the change request.

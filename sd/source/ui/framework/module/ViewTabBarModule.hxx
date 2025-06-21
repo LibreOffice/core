@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <framework/ConfigurationChangeListener.hxx>
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -30,15 +31,11 @@ namespace sd::framework
 {
 class ConfigurationController;
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationChangeListener
-    > ViewTabBarModuleInterfaceBase;
-
 /** This module is responsible for showing the ViewTabBar above the view in
     the center pane.
 */
 class ViewTabBarModule
-    : public ViewTabBarModuleInterfaceBase
+    : public sd::framework::ConfigurationChangeListener
 {
 public:
     /** Create a new module that controls the view tab bar above the view
@@ -57,10 +54,10 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // XConfigurationChangeListener
+    // ConfigurationChangeListener
 
-    virtual void SAL_CALL notifyConfigurationChange (
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
+    virtual void notifyConfigurationChange (
+        const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
     // XEventListener
 

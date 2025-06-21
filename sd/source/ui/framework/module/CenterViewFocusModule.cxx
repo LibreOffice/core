@@ -20,6 +20,7 @@
 #include "CenterViewFocusModule.hxx"
 
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ViewShellWrapper.hxx>
 
@@ -85,7 +86,7 @@ void CenterViewFocusModule::disposing(std::unique_lock<std::mutex>&)
     mpBase = nullptr;
 }
 
-void SAL_CALL CenterViewFocusModule::notifyConfigurationChange (
+void CenterViewFocusModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
     if (mbValid)
@@ -103,7 +104,7 @@ void SAL_CALL CenterViewFocusModule::notifyConfigurationChange (
 }
 
 void CenterViewFocusModule::HandleNewView (
-    const Reference<XConfiguration>& rxConfiguration)
+    const rtl::Reference<Configuration>& rxConfiguration)
 {
     if (!mbNewViewCreated)
         return;

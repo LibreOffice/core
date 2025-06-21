@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <framework/ConfigurationChangeListener.hxx>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -54,8 +54,8 @@ class PresenterPaneBorderPainter;
 class PresenterScreen;
 class PresenterWindowManager;
 
-typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationChangeListener,
+typedef ::cppu::ImplInheritanceHelper <
+    sd::framework::ConfigurationChangeListener,
     css::frame::XFrameActionListener,
     css::awt::XKeyListener,
     css::awt::XMouseListener
@@ -76,8 +76,7 @@ public:
     to frequently used values of the current theme.
 */
 class PresenterController
-    : protected ::cppu::BaseMutex,
-      public PresenterControllerInterfaceBase
+    : public PresenterControllerInterfaceBase
 {
 public:
     static ::rtl::Reference<PresenterController> Instance (
@@ -92,7 +91,7 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxMainPaneId);
     virtual ~PresenterController() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     void UpdateCurrentSlide (const sal_Int32 nOffset);
 
@@ -139,10 +138,10 @@ public:
     void SetPresentationTime(IPresentationTime* pPresentationTime);
     IPresentationTime* GetPresentationTime();
 
-    // XConfigurationChangeListener
+    // ConfigurationChangeListener
 
-    virtual void SAL_CALL notifyConfigurationChange (
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
+    virtual void notifyConfigurationChange (
+        const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
     // XEventListener
 

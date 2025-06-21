@@ -25,6 +25,7 @@
 #include <EventMultiplexer.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <vcl/EnumContext.hxx>
 
@@ -98,7 +99,7 @@ void ToolBarModule::disposing(std::unique_lock<std::mutex>&)
     }
 }
 
-void SAL_CALL ToolBarModule::notifyConfigurationChange (
+void ToolBarModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
     if (!mxConfigurationController.is())

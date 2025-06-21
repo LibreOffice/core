@@ -107,9 +107,9 @@ void SAL_CALL PresentationFactory::releaseResource (
     }
 }
 
-//===== XConfigurationChangeListener ==========================================
+//===== ConfigurationChangeListener ==========================================
 
-void SAL_CALL PresentationFactory::notifyConfigurationChange (
+void PresentationFactory::notifyConfigurationChange (
     const ConfigurationChangeEvent&)
 {}
 

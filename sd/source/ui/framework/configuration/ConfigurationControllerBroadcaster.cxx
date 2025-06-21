@@ -18,7 +18,8 @@
  */
 
 #include "ConfigurationControllerBroadcaster.hxx"
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <framework/ConfigurationChangeListener.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <com/sun/star/drawing/framework/XResource.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -38,7 +39,7 @@ ConfigurationControllerBroadcaster::ConfigurationControllerBroadcaster (
 }
 
 void ConfigurationControllerBroadcaster::AddListener(
-    const Reference<XConfigurationChangeListener>& rxListener,
+    const rtl::Reference<ConfigurationChangeListener>& rxListener,
     const OUString& rsEventType,
     const Any& rUserData)
 {
@@ -56,7 +57,7 @@ void ConfigurationControllerBroadcaster::AddListener(
 }
 
 void ConfigurationControllerBroadcaster::RemoveListener(
-    const Reference<XConfigurationChangeListener>& rxListener)
+    const rtl::Reference<ConfigurationChangeListener>& rxListener)
 {
     if ( ! rxListener.is())
         throw lang::IllegalArgumentException(u"invalid listener"_ustr,
@@ -92,7 +93,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
         {
             // When the exception comes from the listener itself then
             // unregister it.
-            if (rException.Context == rListener.mxListener)
+            if (rException.Context == cppu::getXWeak(rListener.mxListener.get()))
                 RemoveListener(rListener.mxListener);
         }
         catch (const RuntimeException&)
@@ -161,7 +162,7 @@ void ConfigurationControllerBroadcaster::DisposeAndClear()
         }
         else
         {
-            Reference<XConfigurationChangeListener> xListener (
+            rtl::Reference<ConfigurationChangeListener> xListener (
                 iMap->second.front().mxListener );
             if (xListener.is())
             {

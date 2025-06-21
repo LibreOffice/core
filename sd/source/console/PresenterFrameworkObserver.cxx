@@ -32,8 +32,7 @@ namespace sdext::presenter {
 PresenterFrameworkObserver::PresenterFrameworkObserver (
     rtl::Reference<sd::framework::ConfigurationController> xController,
     const Action& rAction)
-    : PresenterFrameworkObserverInterfaceBase(m_aMutex),
-      mxConfigurationController(std::move(xController)),
+    : mxConfigurationController(std::move(xController)),
       maAction(rAction)
 {
     if ( ! mxConfigurationController.is())
@@ -65,7 +64,7 @@ void PresenterFrameworkObserver::RunOnUpdateEnd (
         rAction);
 }
 
-void SAL_CALL PresenterFrameworkObserver::disposing()
+void PresenterFrameworkObserver::disposing(std::unique_lock<std::mutex>&)
 {
     if (maAction)
         maAction(false);
@@ -95,8 +94,8 @@ void SAL_CALL PresenterFrameworkObserver::disposing (const lang::EventObject& rE
     }
 }
 
-void SAL_CALL PresenterFrameworkObserver::notifyConfigurationChange (
-    const ConfigurationChangeEvent& /*rEvent*/)
+void PresenterFrameworkObserver::notifyConfigurationChange (
+    const sd::framework::ConfigurationChangeEvent& /*rEvent*/)
 {
     Action aAction(maAction);
     Shutdown();

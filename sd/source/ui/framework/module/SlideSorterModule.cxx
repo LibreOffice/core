@@ -22,6 +22,7 @@
 #include <comphelper/lok.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <o3tl/test_info.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <DrawController.hxx>
@@ -115,7 +116,7 @@ void SlideSorterModule::SaveResourceState()
     xChanges->commit();
 }
 
-void SAL_CALL SlideSorterModule::notifyConfigurationChange (
+void SlideSorterModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
     if (rEvent.Type == FrameworkHelper::msResourceActivationEvent)
@@ -275,7 +276,7 @@ void SlideSorterModule::HandleMainViewSwitch (
 
 void SlideSorterModule::HandleResourceRequest(
     bool bActivation,
-    const Reference<XConfiguration>& rxConfiguration)
+    const rtl::Reference<Configuration>& rxConfiguration)
 {
     Sequence<Reference<XResourceId> > aCenterViews = rxConfiguration->getResources(
         FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),

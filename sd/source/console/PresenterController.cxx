@@ -34,6 +34,7 @@
 #include "PresenterWindowManager.hxx"
 #include <DrawController.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/Pane.hxx>
 
 #include <com/sun/star/awt/Key.hpp>
@@ -91,8 +92,7 @@ PresenterController::PresenterController (
     const Reference<presentation::XSlideShowController>& rxSlideShowController,
     rtl::Reference<PresenterPaneContainer> xPaneContainer,
     const Reference<XResourceId>& rxMainPaneId)
-    : PresenterControllerInterfaceBase(m_aMutex),
-      mxScreen(std::move(xScreen)),
+    : mxScreen(std::move(xScreen)),
       mxComponentContext(rxContext),
       mxController(rxController),
       mxSlideShowController(rxSlideShowController),
@@ -162,7 +162,7 @@ PresenterController::~PresenterController()
 {
 }
 
-void PresenterController::disposing()
+void PresenterController::disposing(std::unique_lock<std::mutex>&)
 {
     maInstances.erase(mxController->getFrame());
 
@@ -657,16 +657,14 @@ IPresentationTime* PresenterController::GetPresentationTime()
     return mpPresentationTime;
 }
 
-//----- XConfigurationChangeListener ------------------------------------------
+//----- ConfigurationChangeListener ------------------------------------------
 
-void SAL_CALL PresenterController::notifyConfigurationChange (
-    const ConfigurationChangeEvent& rEvent)
+void PresenterController::notifyConfigurationChange (
+    const sd::framework::ConfigurationChangeEvent& rEvent)
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        throw lang::DisposedException (
-            u"PresenterController object has already been disposed"_ustr,
-            static_cast<uno::XWeak*>(this));
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
     }
 
     sal_Int32 nType (0);

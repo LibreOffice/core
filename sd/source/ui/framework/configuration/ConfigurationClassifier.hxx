@@ -21,12 +21,12 @@
 
 #include "debugtrace.hxx"
 #include <com/sun/star/uno/Reference.hxx>
-
+#include <rtl/ref.hxx>
 #include <vector>
 
-namespace com::sun::star::drawing::framework
+namespace sd::framework
 {
-class XConfiguration;
+class Configuration;
 }
 namespace com::sun::star::drawing::framework
 {
@@ -47,9 +47,8 @@ public:
     /** Create a new ConfigurationClassifier object that will compare the
         two given configurations.
     */
-    ConfigurationClassifier(
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration1,
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration2);
+    ConfigurationClassifier(const rtl::Reference<sd::framework::Configuration>& rxConfiguration1,
+                            const rtl::Reference<sd::framework::Configuration>& rxConfiguration2);
 
     /** Calculate three lists of resource ids.  These contain the resources
         that belong to one configuration but not the other, or that belong
@@ -99,8 +98,8 @@ public:
 #endif
 
 private:
-    css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration1;
-    css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration2;
+    rtl::Reference<sd::framework::Configuration> mxConfiguration1;
+    rtl::Reference<sd::framework::Configuration> mxConfiguration2;
 
     /** After the call to Classify() this vector holds all elements from
         mxConfiguration1 that are not in mxConfiguration2.
@@ -154,10 +153,9 @@ private:
             This list is filled with resources from rSource and the ones
             bound to them.
     */
-    static void CopyResources(
-        const ResourceIdVector& rSource,
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
-        ResourceIdVector& rTarget);
+    static void CopyResources(const ResourceIdVector& rSource,
+                              const rtl::Reference<sd::framework::Configuration>& rxConfiguration,
+                              ResourceIdVector& rTarget);
 };
 
 } // end of namespace sd::framework

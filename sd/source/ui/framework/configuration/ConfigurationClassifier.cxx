@@ -20,7 +20,7 @@
 #include "ConfigurationClassifier.hxx"
 
 #include <framework/FrameworkHelper.hxx>
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <framework/Configuration.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
@@ -30,8 +30,8 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sd::framework {
 
 ConfigurationClassifier::ConfigurationClassifier (
-    const Reference<XConfiguration>& rxConfiguration1,
-    const Reference<XConfiguration>& rxConfiguration2)
+    const rtl::Reference<Configuration>& rxConfiguration1,
+    const rtl::Reference<Configuration>& rxConfiguration2)
     : mxConfiguration1(rxConfiguration1),
       mxConfiguration2(rxConfiguration2)
 {
@@ -43,8 +43,8 @@ bool ConfigurationClassifier::Partition()
     maC2minusC1.clear();
 
     PartitionResources(
-        mxConfiguration1->getResources(nullptr, OUString(), AnchorBindingMode_DIRECT),
-        mxConfiguration2->getResources(nullptr, OUString(), AnchorBindingMode_DIRECT));
+        mxConfiguration1->getResources(nullptr, u"", AnchorBindingMode_DIRECT),
+        mxConfiguration2->getResources(nullptr, u"", AnchorBindingMode_DIRECT));
 
     return !maC1minusC2.empty() || !maC2minusC1.empty();
 }
@@ -75,8 +75,8 @@ void ConfigurationClassifier::PartitionResources (
     for (const auto& rxResource : aC1andC2)
     {
         PartitionResources(
-            mxConfiguration1->getResources(rxResource, OUString(), AnchorBindingMode_DIRECT),
-            mxConfiguration2->getResources(rxResource, OUString(), AnchorBindingMode_DIRECT));
+            mxConfiguration1->getResources(rxResource, u"", AnchorBindingMode_DIRECT),
+            mxConfiguration2->getResources(rxResource, u"", AnchorBindingMode_DIRECT));
     }
 }
 
@@ -117,7 +117,7 @@ void ConfigurationClassifier::ClassifyResources (
 
 void ConfigurationClassifier::CopyResources (
     const ResourceIdVector& rSource,
-    const Reference<XConfiguration>& rxConfiguration,
+    const rtl::Reference<Configuration>& rxConfiguration,
     ResourceIdVector& rTarget)
 {
     // Copy all resources bound to the ones in aC1minusC2Unique to rC1minusC2.
@@ -126,7 +126,7 @@ void ConfigurationClassifier::CopyResources (
         const Sequence<Reference<XResourceId> > aBoundResources (
             rxConfiguration->getResources(
                 rxResource,
-                OUString(),
+                u"",
                 AnchorBindingMode_INDIRECT));
         const sal_Int32 nL (aBoundResources.getLength());
 

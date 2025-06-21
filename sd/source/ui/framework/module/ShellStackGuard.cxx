@@ -20,6 +20,7 @@
 #include "ShellStackGuard.hxx"
 
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/FrameworkHelper.hxx>
 
 #include <DrawController.hxx>
@@ -77,7 +78,7 @@ void ShellStackGuard::disposing(std::unique_lock<std::mutex>&)
     mpBase = nullptr;
 }
 
-void SAL_CALL ShellStackGuard::notifyConfigurationChange (
+void ShellStackGuard::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
     if (rEvent.Type == FrameworkHelper::msConfigurationUpdateStartEvent)

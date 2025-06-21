@@ -45,8 +45,8 @@ GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest() noexcept
 {
 }
 
-void SAL_CALL GenericConfigurationChangeRequest::execute (
-    const Reference<XConfiguration>& rxConfiguration)
+void GenericConfigurationChangeRequest::execute (
+    const rtl::Reference<Configuration>& rxConfiguration)
 {
     if (!rxConfiguration.is())
         return;

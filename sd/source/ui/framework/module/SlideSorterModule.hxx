@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <framework/ConfigurationChangeListener.hxx>
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
@@ -31,10 +32,8 @@ namespace sd { class ViewTabBar; }
 namespace sd::framework
 {
 class ConfigurationController;
+class Configuration;
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationChangeListener
-    > SlideSorterModuleBase;
 
 /** This module is responsible for showing the slide sorter bar and the
     slide sorter view in the center pane.
@@ -46,7 +45,7 @@ typedef comphelper::WeakComponentImplHelper <
     detects this and remembers it for the future.
 */
 class SlideSorterModule final
-    : public SlideSorterModuleBase
+    : public sd::framework::ConfigurationChangeListener
 {
 public:
     SlideSorterModule (
@@ -63,9 +62,9 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // XConfigurationChangeListener
-    virtual void SAL_CALL notifyConfigurationChange (
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
+    // ConfigurationChangeListener
+    virtual void notifyConfigurationChange (
+        const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
     // XEventListener
     virtual void SAL_CALL disposing (
@@ -87,7 +86,7 @@ private:
         const bool bIsActivated);
     void HandleResourceRequest(
         bool bActivation,
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
+        const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
     void UpdateViewTabBar (
         const rtl::Reference<sd::ViewTabBar>& rxViewTabBar);
 };

@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module com { module sun { module star { module drawing { module framework {
+#pragma once
 
-interface XConfiguration;
+#include <framework/Configuration.hxx>
+#include <rtl/ref.hxx>
 
+namespace sd::framework
+{
 /** A single explicit request for a configuration change.
 
     <p>The requested change is committed to a configuration only when the
@@ -35,16 +38,20 @@ interface XConfiguration;
     <p>This interface is typically used internally by the
     XConfigurationController</p> @see XConfigurationController
 */
-interface XConfigurationChangeRequest
+class ConfigurationChangeRequest : public comphelper::WeakComponentImplHelper<>
 {
+public:
     /** Commit the configuration change request represented by the called
         object to the given configuration.
         @param xConfiguration
             This is the configuration to commit the requested change to.
     */
-    void execute ([in] XConfiguration xConfiguration);
+    virtual void execute(const rtl::Reference<sd::framework::Configuration>& xConfiguration) = 0;
+
+protected:
+    virtual ~ConfigurationChangeRequest() override;
 };
 
-}; }; }; }; }; // ::com::sun::star::drawing::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

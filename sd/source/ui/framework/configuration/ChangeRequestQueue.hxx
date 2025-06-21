@@ -19,14 +19,9 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
-
+#include <rtl/ref.hxx>
+#include <framework/ConfigurationChangeRequest.hxx>
 #include <queue>
-
-namespace com::sun::star::drawing::framework
-{
-class XConfigurationChangeRequest;
-}
 
 namespace sd::framework
 {
@@ -35,7 +30,7 @@ namespace sd::framework
     ChangeRequestQueueProcessor to process these requests.
 */
 class ChangeRequestQueue
-    : public ::std::queue<css::uno::Reference<css::drawing::framework::XConfigurationChangeRequest>>
+    : public ::std::queue<rtl::Reference<sd::framework::ConfigurationChangeRequest>>
 {
 public:
     /** Create an empty queue.

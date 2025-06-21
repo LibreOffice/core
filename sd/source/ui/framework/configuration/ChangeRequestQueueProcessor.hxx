@@ -26,13 +26,13 @@
 
 #include <memory>
 
-namespace com::sun::star::drawing::framework
+namespace sd::framework
 {
-class XConfiguration;
+class Configuration;
 }
-namespace com::sun::star::drawing::framework
+namespace sd::framework
 {
-class XConfigurationChangeRequest;
+class ConfigurationChangeRequest;
 }
 
 struct ImplSVEvent;
@@ -46,7 +46,7 @@ class ConfigurationUpdater;
 
     When after processing one entry the queue is empty then the
     ConfigurationController::update() method is called so that the changes
-    made to the local XConfiguration reference are reflected by the UI.
+    made to the local Configuration reference are reflected by the UI.
 
     Queue entries are processed asynchronously by calling PostUserEvent().
 */
@@ -64,15 +64,13 @@ public:
         requests.  This method should be called only by the configuration
         controller who owns the configuration.
     */
-    void SetConfiguration(
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
+    void SetConfiguration(const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
 
     /** The given request is appended to the end of the queue and will
         eventually be processed when all other entries in front of it have
         been processed.
     */
-    void AddRequest(
-        const css::uno::Reference<css::drawing::framework::XConfigurationChangeRequest>& rxRequest);
+    void AddRequest(const rtl::Reference<sd::framework::ConfigurationChangeRequest>& rxRequest);
 
     /** Returns </sal_True> when the queue is empty.
     */
@@ -107,7 +105,7 @@ private:
     */
     ImplSVEvent* mnUserEventId;
 
-    css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration;
+    rtl::Reference<sd::framework::Configuration> mxConfiguration;
 
     std::shared_ptr<ConfigurationUpdater> mpConfigurationUpdater;
 

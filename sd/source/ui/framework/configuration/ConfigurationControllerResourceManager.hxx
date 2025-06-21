@@ -22,12 +22,12 @@
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-
+#include <rtl/ref.hxx>
 #include <map>
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::drawing::framework { class XConfiguration; }
+namespace sd::framework { class Configuration; }
 namespace com::sun::star::drawing::framework { class XResourceFactory; }
 namespace com::sun::star::drawing::framework { class XResource; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
@@ -75,7 +75,7 @@ public:
     void ActivateResources (
         const ::std::vector<
             css::uno::Reference<css::drawing::framework::XResourceId> >& rResources,
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
+        const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
 
     /** Deactivate all the resources that are specified by resource ids in
         rResources.  The resource ids of deactivated resources are removed
@@ -85,7 +85,7 @@ public:
     void DeactivateResources (
         const ::std::vector<
             css::uno::Reference<css::drawing::framework::XResourceId> >& rResources,
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
+        const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
 
     /** Return the descriptor for the specified resource.
         @return
@@ -121,11 +121,11 @@ private:
 
     void ActivateResource (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
+        const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
 
     void DeactivateResource (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
+        const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
 
     void AddResource (
         const css::uno::Reference<css::drawing::framework::XResource>& rxResource,

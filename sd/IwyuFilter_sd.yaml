@@ -117,18 +117,15 @@ excludelist:
     sd/source/ui/framework/configuration/GenericConfigurationChangeRequest.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
-    - com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp
     sd/source/ui/framework/configuration/UpdateRequest.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
-    - com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp
     sd/source/ui/inc/framework/factories/BasicToolBarFactory.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XResourceFactory.hpp
     - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/inc/framework/factories/BasicPaneFactory.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
     - com/sun/star/drawing/framework/XResourceFactory.hpp
     - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/inc/framework/factories/BasicViewFactory.hxx:
@@ -141,19 +138,14 @@ excludelist:
     - framework/Pane.hxx
     sd/source/ui/framework/module/CenterViewFocusModule.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
     sd/source/ui/framework/module/ShellStackGuard.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
     sd/source/ui/framework/module/ToolBarModule.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
     sd/source/ui/framework/module/SlideSorterModule.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
     sd/source/ui/framework/module/ViewTabBarModule.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
     sd/source/ui/inc/AccessibleDocumentViewBase.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
@@ -211,13 +203,11 @@ excludelist:
     - com/sun/star/util/XReplaceDescriptor.hpp
     sd/source/ui/inc/ViewTabBar.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
     - com/sun/star/drawing/framework/XToolBar.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     sd/source/ui/inc/framework/Configuration.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
-    - com/sun/star/drawing/framework/XConfiguration.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     sd/source/ui/inc/framework/ConfigurationController.hxx:
     # base class has to be a complete type
@@ -241,7 +231,6 @@ excludelist:
     sd/source/ui/inc/framework/PresentationFactory.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XResourceFactory.hpp
-    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
     sd/source/ui/inc/framework/ResourceId.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XResourceId.hpp

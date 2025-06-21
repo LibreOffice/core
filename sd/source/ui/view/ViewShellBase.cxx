@@ -1330,7 +1330,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
                 pDrawController->getConfigurationController());
             if ( ! xConfigurationController.is())
                 throw RuntimeException();
-            Reference<XConfiguration> xConfiguration (
+            rtl::Reference<framework::Configuration> xConfiguration (
                 xConfigurationController->getRequestedConfiguration());
             if ( ! xConfiguration.is())
                 throw RuntimeException();
@@ -1375,7 +1375,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
             pDrawController->getConfigurationController());
         if ( ! xConfigurationController.is())
             throw RuntimeException();
-        Reference<XConfiguration> xConfiguration (
+        rtl::Reference<sd::framework::Configuration> xConfiguration (
             xConfigurationController->getRequestedConfiguration());
         if ( ! xConfiguration.is())
             throw RuntimeException();

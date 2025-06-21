@@ -30,7 +30,7 @@
 
 namespace com::sun::star::drawing::framework { class XResourceId; }
 namespace com::sun::star::drawing::framework { class XView; }
-namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
+namespace sd::framework { struct ConfigurationChangeEvent; }
 
 namespace sd {
 class ViewShellBase;
@@ -133,7 +133,7 @@ public:
     static ::std::shared_ptr<ViewShell> GetViewShell (
         const css::uno::Reference<css::drawing::framework::XView>& rxView);
 
-    typedef ::std::function<bool (const css::drawing::framework::ConfigurationChangeEvent&)>
+    typedef ::std::function<bool (const sd::framework::ConfigurationChangeEvent&)>
         ConfigurationChangeEventFilter;
     typedef ::std::function<void (bool bEventSeen)> Callback;
     typedef ::std::function<

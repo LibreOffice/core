@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <framework/ConfigurationChangeListener.hxx>
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -32,16 +32,14 @@ class ViewShellBase;
 namespace sd::framework
 {
 class ConfigurationController;
-
-typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XConfigurationChangeListener>
-    CenterViewFocusModuleInterfaceBase;
+class Configuration;
 
 /** This module waits for new views to be created for the center pane and
     then moves the center view to the top most place on the shell stack.  As
     we are moving away from the shell stack this module may become obsolete
     or has to be modified.
 */
-class CenterViewFocusModule final : public CenterViewFocusModuleInterfaceBase
+class CenterViewFocusModule final : public sd::framework::ConfigurationChangeListener
 {
 public:
     explicit CenterViewFocusModule(rtl::Reference<sd::DrawController> const& rxController);
@@ -49,10 +47,10 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // XConfigurationChangeListener
+    // ConfigurationChangeListener
 
-    virtual void SAL_CALL notifyConfigurationChange(
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
+    virtual void
+    notifyConfigurationChange(const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
     // XEventListener
 
@@ -74,8 +72,7 @@ private:
         handles a new view in the center pane by moving the associated view
         shell to the top of the shell stack.
     */
-    void HandleNewView(
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
+    void HandleNewView(const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
 };
 
 } // end of namespace sd::framework

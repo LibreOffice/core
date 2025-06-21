@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/drawing/framework/XResource.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include "framework/ConfigurationChangeListener.hxx"
 #include <comphelper/compbase.hxx>
 #include <vcl/InterimItemWindow.hxx>
 
@@ -82,9 +82,9 @@ struct TabBarButton
     css::uno::Reference<css::drawing::framework::XResourceId> ResourceId;
 };
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XResource,
-    css::drawing::framework::XConfigurationChangeListener
+typedef cppu::ImplInheritanceHelper <
+    sd::framework::ConfigurationChangeListener,
+    css::drawing::framework::XResource
     > ViewTabBarInterfaceBase;
 
 /** Tab control for switching between views in the center pane.
@@ -121,11 +121,11 @@ public:
 
     bool ActivatePage(size_t nIndex);
 
-    //----- drawing::framework::XConfigurationChangeListener ------------------
+    //----- sd::framework::ConfigurationChangeListener ------------------
 
-    virtual void SAL_CALL
+    virtual void
         notifyConfigurationChange (
-            const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
+            const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
     //----- XEventListener ----------------------------------------------------
 

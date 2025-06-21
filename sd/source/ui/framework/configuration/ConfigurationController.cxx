@@ -62,7 +62,7 @@ public:
         requestResourceDeactivation().  The mpConfigurationUpdater makes the
         current configuration reflect the content of this one.
     */
-    css::uno::Reference<css::drawing::framework::XConfiguration> mxRequestedConfiguration;
+    rtl::Reference<sd::framework::Configuration> mxRequestedConfiguration;
 
     std::shared_ptr<ResourceFactoryManager> mpResourceFactoryContainer;
 
@@ -166,7 +166,7 @@ void ConfigurationController::RequestSynchronousUpdate()
 }
 
 void ConfigurationController::addConfigurationChangeListener (
-    const Reference<XConfigurationChangeListener>& rxListener,
+    const rtl::Reference<ConfigurationChangeListener>& rxListener,
     const OUString& rsEventType,
     const Any& rUserData)
 {
@@ -178,7 +178,7 @@ void ConfigurationController::addConfigurationChangeListener (
 }
 
 void ConfigurationController::removeConfigurationChangeListener (
-    const Reference<XConfigurationChangeListener>& rxListener)
+    const rtl::Reference<ConfigurationChangeListener>& rxListener)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
 
@@ -271,7 +271,7 @@ void ConfigurationController::requestResourceActivation (
         }
     }
 
-    Reference<XConfigurationChangeRequest> xRequest(
+    rtl::Reference<ConfigurationChangeRequest> xRequest(
         new GenericConfigurationChangeRequest(
             rxResourceId,
             GenericConfigurationChangeRequest::Activation));
@@ -295,7 +295,7 @@ void ConfigurationController::requestResourceDeactivation (
     const Sequence<Reference<XResourceId> > aLinkedResources (
         mpImplementation->mxRequestedConfiguration->getResources(
             rxResourceId,
-            OUString(),
+            u"",
             AnchorBindingMode_DIRECT));
     for (const auto& rLinkedResource : aLinkedResources)
     {
@@ -306,7 +306,7 @@ void ConfigurationController::requestResourceDeactivation (
     }
 
     // Add a deactivation request for the specified resource.
-    Reference<XConfigurationChangeRequest> xRequest(
+    rtl::Reference<ConfigurationChangeRequest> xRequest(
         new GenericConfigurationChangeRequest(
             rxResourceId,
             GenericConfigurationChangeRequest::Deactivation));
@@ -351,7 +351,7 @@ bool ConfigurationController::hasPendingRequests()
 }
 
 void ConfigurationController::postChangeRequest (
-    const Reference<XConfigurationChangeRequest>& rxRequest)
+    const rtl::Reference<ConfigurationChangeRequest>& rxRequest)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -359,36 +359,35 @@ void ConfigurationController::postChangeRequest (
     mpImplementation->mpQueueProcessor->AddRequest(rxRequest);
 }
 
-Reference<XConfiguration> ConfigurationController::getRequestedConfiguration()
+rtl::Reference<Configuration> ConfigurationController::getRequestedConfiguration()
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
     if (mpImplementation->mxRequestedConfiguration.is())
-        return Reference<XConfiguration>(
-            mpImplementation->mxRequestedConfiguration->createClone(), UNO_QUERY);
+        return mpImplementation->mxRequestedConfiguration->createClone();
     else
-        return Reference<XConfiguration>();
+        return rtl::Reference<Configuration>();
 }
 
-Reference<XConfiguration> ConfigurationController::getCurrentConfiguration()
+rtl::Reference<Configuration> ConfigurationController::getCurrentConfiguration()
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
 
-    Reference<XConfiguration> xCurrentConfiguration(
+    rtl::Reference<Configuration> xCurrentConfiguration(
         mpImplementation->mpConfigurationUpdater->GetCurrentConfiguration());
     if (xCurrentConfiguration.is())
-        return Reference<XConfiguration>(xCurrentConfiguration->createClone(), UNO_QUERY);
+        return xCurrentConfiguration->createClone();
     else
-        return Reference<XConfiguration>();
+        return rtl::Reference<Configuration>();
 }
 
 /** The given configuration is restored by generating the appropriate set of
     activation and deactivation requests.
 */
 void ConfigurationController::restoreConfiguration (
-    const Reference<XConfiguration>& rxNewConfiguration)
+    const rtl::Reference<Configuration>& rxNewConfiguration)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -400,7 +399,7 @@ void ConfigurationController::restoreConfiguration (
         mpImplementation->mpConfigurationUpdater->GetLock());
 
     // Get lists of resources that are to be activated or deactivated.
-    Reference<XConfiguration> xCurrentConfiguration (mpImplementation->mxRequestedConfiguration);
+    rtl::Reference<Configuration> xCurrentConfiguration (mpImplementation->mxRequestedConfiguration);
 #if OSL_DEBUG_LEVEL >=1
     SAL_INFO("sd.fwk", __func__ << ": ConfigurationController::restoreConfiguration(");
     ConfigurationTracer::TraceConfiguration(rxNewConfiguration, "requested configuration");

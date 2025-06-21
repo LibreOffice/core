@@ -73,7 +73,7 @@
 #include <FormShellManager.hxx>
 #include <LayerTabBar.hxx>
 #include <framework/ConfigurationController.hxx>
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <framework/Configuration.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <editeng/lspcitem.hxx>
@@ -386,8 +386,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 {
                     rtl::Reference<sd::framework::ConfigurationController> xConfigurationController (
                         pDrawController->getConfigurationController() );
-                    Reference<XConfiguration> xConfiguration (
-                        xConfigurationController->getRequestedConfiguration(), UNO_SET_THROW );
+                    rtl::Reference<sd::framework::Configuration> xConfiguration (
+                        xConfigurationController->getRequestedConfiguration() );
 
                     SfxChildWindow* pWindow = pFrame->GetChildWindow(nId);
                     if(pWindow)

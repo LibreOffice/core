@@ -25,9 +25,9 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::drawing::framework
+namespace sd::framework
 {
-class XConfiguration;
+class Configuration;
 }
 namespace com::sun::star::drawing::framework
 {
@@ -71,11 +71,10 @@ public:
         if that is the case.  Otherwise it schedules a later call to
         UpdateConfiguration().
     */
-    void RequestUpdate(const css::uno::Reference<css::drawing::framework::XConfiguration>&
-                           rxRequestedConfiguration);
+    void
+    RequestUpdate(const rtl::Reference<sd::framework::Configuration>& rxRequestedConfiguration);
 
-    const css::uno::Reference<css::drawing::framework::XConfiguration>&
-    GetCurrentConfiguration() const
+    const rtl::Reference<sd::framework::Configuration>& GetCurrentConfiguration() const
     {
         return mxCurrentConfiguration;
     }
@@ -98,7 +97,7 @@ private:
     /** The current configuration holds the resources that are currently
         active.  It is modified during an update.
     */
-    css::uno::Reference<css::drawing::framework::XConfiguration> mxCurrentConfiguration;
+    rtl::Reference<sd::framework::Configuration> mxCurrentConfiguration;
 
     /** The requested configuration holds the resources that have been
         requested to activate or to deactivate since the last update.  It is
@@ -106,7 +105,7 @@ private:
         maintained by the ConfigurationController and given to the
         ConfigurationUpdater in the RequestUpdate() method.
     */
-    css::uno::Reference<css::drawing::framework::XConfiguration> mxRequestedConfiguration;
+    rtl::Reference<sd::framework::Configuration> mxRequestedConfiguration;
 
     /** This flag is set to </sal_True> when an update of the current
         configuration was requested (because the last request in the queue
@@ -160,10 +159,9 @@ private:
         Childless pure anchors are deactivated.
         This affects only the current configuration.
     */
-    void CheckPureAnchors(
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
-        ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId>>&
-            rResourcesToDeactivate);
+    void CheckPureAnchors(const rtl::Reference<sd::framework::Configuration>& rxConfiguration,
+                          ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId>>&
+                              rResourcesToDeactivate);
 
     /** Remove from the requested configuration all pure anchors that have no
         child.  Requested but not yet activated anchors can not be removed

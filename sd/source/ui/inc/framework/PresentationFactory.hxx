@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <framework/ConfigurationChangeListener.hxx>
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -28,9 +28,9 @@ namespace sd { class DrawController; }
 
 namespace sd::framework {
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XResourceFactory,
-    css::drawing::framework::XConfigurationChangeListener
+typedef cppu::ImplInheritanceHelper <
+    sd::framework::ConfigurationChangeListener,
+    css::drawing::framework::XResourceFactory
     > PresentationFactoryInterfaceBase;
 
 /** This factory creates a marker view whose existence in a configuration
@@ -57,10 +57,10 @@ public:
     virtual void SAL_CALL releaseResource (
         const css::uno::Reference<css::drawing::framework::XResource>& xView) override;
 
-    // XConfigurationChangeListener
+    // ConfigurationChangeListener
 
-    virtual void SAL_CALL notifyConfigurationChange (
-        const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
+    virtual void notifyConfigurationChange (
+        const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
     // lang::XEventListener
 

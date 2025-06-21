@@ -18,11 +18,10 @@
  */
 
 #include <framework/Configuration.hxx>
-
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ConfigurationController.hxx>
 
-#include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -88,9 +87,9 @@ void Configuration::disposing(std::unique_lock<std::mutex>&)
     mxBroadcaster = nullptr;
 }
 
-//----- XConfiguration --------------------------------------------------------
+//----- Configuration --------------------------------------------------------
 
-void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResourceId)
+void Configuration::addResource (const Reference<XResourceId>& rxResourceId)
 {
     ThrowIfDisposed();
 
@@ -105,7 +104,7 @@ void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResour
     }
 }
 
-void SAL_CALL Configuration::removeResource (const Reference<XResourceId>& rxResourceId)
+void Configuration::removeResource (const Reference<XResourceId>& rxResourceId)
 {
     ThrowIfDisposed();
 
@@ -122,15 +121,15 @@ void SAL_CALL Configuration::removeResource (const Reference<XResourceId>& rxRes
     }
 }
 
-Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
+Sequence<Reference<XResourceId> > Configuration::getResources (
     const Reference<XResourceId>& rxAnchorId,
-    const OUString& rsResourceURLPrefix,
+    std::u16string_view rsResourceURLPrefix,
     AnchorBindingMode eMode)
 {
     std::unique_lock aGuard (m_aMutex);
     ThrowIfDisposed();
 
-    const bool bFilterResources (!rsResourceURLPrefix.isEmpty());
+    const bool bFilterResources (!rsResourceURLPrefix.empty());
 
     // Collect the matching resources in a vector.
     ::std::vector<Reference<XResourceId> > aResources;
@@ -163,7 +162,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     return comphelper::containerToSequence(aResources);
 }
 
-sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxResourceId)
+bool Configuration::hasResource (const Reference<XResourceId>& rxResourceId)
 {
     std::unique_lock aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -172,9 +171,7 @@ sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxRe
         && mpResourceContainer->find(rxResourceId) != mpResourceContainer->end();
 }
 
-//----- XCloneable ------------------------------------------------------------
-
-Reference<util::XCloneable> SAL_CALL Configuration::createClone()
+rtl::Reference<Configuration> Configuration::createClone()
 {
     std::unique_lock aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -251,8 +248,8 @@ void Configuration::ThrowIfDisposed() const
 }
 
 bool AreConfigurationsEquivalent (
-    const Reference<XConfiguration>& rxConfiguration1,
-    const Reference<XConfiguration>& rxConfiguration2)
+    const rtl::Reference<Configuration>& rxConfiguration1,
+    const rtl::Reference<Configuration>& rxConfiguration2)
 {
     if (rxConfiguration1.is() != rxConfiguration2.is())
         return false;
@@ -262,10 +259,10 @@ bool AreConfigurationsEquivalent (
     // Get the lists of resources from the two given configurations.
     const Sequence<Reference<XResourceId> > aResources1(
         rxConfiguration1->getResources(
-            nullptr, OUString(), AnchorBindingMode_INDIRECT));
+            nullptr, u"", AnchorBindingMode_INDIRECT));
     const Sequence<Reference<XResourceId> > aResources2(
         rxConfiguration2->getResources(
-            nullptr, OUString(), AnchorBindingMode_INDIRECT));
+            nullptr, u"", AnchorBindingMode_INDIRECT));
 
     // When the number of resources differ then the configurations can not
     // be equivalent.
@@ -278,6 +275,10 @@ bool AreConfigurationsEquivalent (
             return a.is() == b.is();
         });
 }
+
+ConfigurationChangeListener::~ConfigurationChangeListener() {}
+
+ConfigurationChangeRequest::~ConfigurationChangeRequest() {}
 
 } // end of namespace sd::framework
 

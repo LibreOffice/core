@@ -26,7 +26,7 @@
 #include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <framework/Configuration.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 

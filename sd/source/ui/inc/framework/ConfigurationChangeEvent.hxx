@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module com { module sun { module star { module uno { interface XInterface; }; }; }; };
+#pragma once
 
-module com { module sun { module star { module drawing { module framework {
+#include <com/sun/star/lang/EventObject.hpp>
+#include <rtl/ref.hxx>
 
-interface XConfiguration;
-interface XResourceId;
+namespace sd::framework
+{
+class Configuration;
 
 /** Objects of this class are used for notifying changes of the
     configuration.
@@ -37,35 +39,30 @@ interface XResourceId;
     general guidelines.   See XConfigurationController for a
     list of event types used by the basic drawing framework.</p>
 */
-struct ConfigurationChangeEvent
-     : ::com::sun::star::lang::EventObject
+struct ConfigurationChangeEvent final : public ::css::lang::EventObject
 {
     /** The type of configuration change is a free-form string.  This is the
         only member that is always set.  The values of the other members
         depend on the configuration change type and may or may not be set.
     */
-    string Type;
-
+    ::rtl::OUString Type;
     /** The current configuration, depending on the event type, either
         before or after the change.  May be an empty reference.
     */
-    XConfiguration Configuration;
-
+    rtl::Reference<::sd::framework::Configuration> Configuration;
     /** The resource id that is part of the configuration change.
     */
-    XResourceId ResourceId;
-
+    ::css::uno::Reference<::css::drawing::framework::XResourceId> ResourceId;
     /** The resource object that corresponds to the ResourceId.  May
         be an empty reference.
     */
-    com::sun::star::uno::XInterface ResourceObject;
-
+    ::css::uno::Reference<::css::uno::XInterface> ResourceObject;
     /** Each listener is called with exactly the #UserData
         that was given when the listener was registered.
     */
-    any UserData;
+    ::css::uno::Any UserData;
 };
 
-}; }; }; }; }; // ::com::sun::star::drawing::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

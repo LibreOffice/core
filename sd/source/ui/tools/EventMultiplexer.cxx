@@ -25,13 +25,14 @@
 #include <SlideSorterViewShell.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <framework/ConfigurationChangeListener.hxx>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <comphelper/compbase.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -53,11 +54,11 @@ const sal_Int32 ConfigurationUpdateEvent = 2;
 
 namespace sd::tools {
 
-typedef comphelper::WeakComponentImplHelper<
+typedef cppu::ImplInheritanceHelper<
+      sd::framework::ConfigurationChangeListener,
       css::beans::XPropertyChangeListener,
       css::frame::XFrameActionListener,
-      css::view::XSelectionChangeListener,
-      css::drawing::framework::XConfigurationChangeListener
+      css::view::XSelectionChangeListener
     > EventMultiplexerImplementationInterfaceBase;
 
 class EventMultiplexer::Implementation
@@ -98,10 +99,10 @@ public:
     virtual void SAL_CALL
         frameAction (const css::frame::FrameActionEvent& rEvent) override;
 
-    //===== drawing::framework::XConfigurationChangeListener ==================
-    virtual void SAL_CALL
+    //===== sd::framework::ConfigurationChangeListener ==================
+    virtual void
         notifyConfigurationChange (
-            const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
+            const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
@@ -491,10 +492,10 @@ void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
     CallListeners (EventMultiplexerEventId::EditViewSelection);
 }
 
-//===== drawing::framework::XConfigurationChangeListener ==================
+//===== sd::framework::ConfigurationChangeListener ==================
 
-void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
-    const ConfigurationChangeEvent& rEvent)
+void EventMultiplexer::Implementation::notifyConfigurationChange (
+    const sd::framework::ConfigurationChangeEvent& rEvent)
 {
     sal_Int32 nEventType = 0;
     rEvent.UserData >>= nEventType;

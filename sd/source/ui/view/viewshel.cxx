@@ -94,7 +94,7 @@
 #include <sdmod.hxx>
 #include <AccessibleDocumentViewBase.hxx>
 
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <framework/Configuration.hxx>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -416,13 +416,13 @@ void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
         if (!xConfigurationController.is())
             return {};
 
-        Reference<::css::drawing::framework::XConfiguration> xConfiguration
+        rtl::Reference<framework::Configuration> xConfiguration
             = xConfigurationController->getCurrentConfiguration();
         if (!xConfiguration.is())
             return {};
 
         auto aResIdsIndirect
-            = xConfiguration->getResources({}, "", drawing::framework::AnchorBindingMode_INDIRECT);
+            = xConfiguration->getResources({}, u"", drawing::framework::AnchorBindingMode_INDIRECT);
 
         for (const uno::Reference<drawing::framework::XResourceId>& rResId : aResIdsIndirect)
         {

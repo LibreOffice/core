@@ -23,10 +23,11 @@
 #include "ConfigurationControllerBroadcaster.hxx"
 #include "ConfigurationControllerResourceManager.hxx"
 #include <framework/Configuration.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <DrawController.hxx>
-#include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
+#include <framework/ConfigurationChangeEvent.hxx>
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -69,7 +70,7 @@ ConfigurationUpdater::ConfigurationUpdater (
     std::shared_ptr<ConfigurationControllerResourceManager> pResourceManager,
     const rtl::Reference<::sd::DrawController>& rxControllerManager)
     : mpBroadcaster(std::move(pBroadcaster)),
-      mxCurrentConfiguration(Reference<XConfiguration>(new Configuration(nullptr, false))),
+      mxCurrentConfiguration(new Configuration(nullptr, false)),
       mbUpdatePending(false),
       mbUpdateBeingProcessed(false),
       mnLockCount(0),
@@ -91,7 +92,7 @@ ConfigurationUpdater::~ConfigurationUpdater()
 }
 
 void ConfigurationUpdater::RequestUpdate (
-    const Reference<XConfiguration>& rxRequestedConfiguration)
+    const rtl::Reference<Configuration>& rxRequestedConfiguration)
 {
     mxRequestedConfiguration = rxRequestedConfiguration;
 
@@ -270,7 +271,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
 }
 
 void ConfigurationUpdater::CheckPureAnchors (
-    const Reference<XConfiguration>& rxConfiguration,
+    const rtl::Reference<Configuration>& rxConfiguration,
     vector<Reference<XResourceId> >& rResourcesToDeactivate)
 {
     if ( ! rxConfiguration.is())
@@ -279,7 +280,7 @@ void ConfigurationUpdater::CheckPureAnchors (
     // Get a list of all resources in the configuration.
     Sequence<Reference<XResourceId> > aResources(
         rxConfiguration->getResources(
-            nullptr, OUString(), AnchorBindingMode_INDIRECT));
+            nullptr, u"", AnchorBindingMode_INDIRECT));
     auto aResourcesRange = asNonConstRange(aResources);
     sal_Int32 nCount (aResources.getLength());
 

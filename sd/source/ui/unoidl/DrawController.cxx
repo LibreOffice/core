@@ -573,7 +573,7 @@ Any SAL_CALL DrawController::getSlideSorterSelection()
     // * traverse Impress resources to find slide preview pane, grab selection from there
     const uno::Sequence<uno::Reference<drawing::framework::XResourceId>> aResIds(
         mxConfigurationController->getCurrentConfiguration()->getResources(
-            {}, u""_ustr, drawing::framework::AnchorBindingMode_INDIRECT));
+            {}, u"", drawing::framework::AnchorBindingMode_INDIRECT));
 
     for (const uno::Reference<drawing::framework::XResourceId>& rResId : aResIds)
     {
