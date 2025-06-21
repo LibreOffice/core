@@ -167,6 +167,11 @@ css::uno::Reference<css::frame::XController> SVGFilter::getSourceController() co
 
 css::uno::Reference<css::frame::XController> SVGFilter::fillDrawImpressSelectedPages()
 {
+    uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
+    if (xDesktop->getCurrentFrame() == nullptr) {
+        return {};
+    }
+
     uno::Reference<frame::XController> xController = getSourceController();
     uno::Reference<drawing::framework::XControllerManager> xManager(xController, uno::UNO_QUERY);
     if (!xManager)
