@@ -70,16 +70,16 @@ const ConditionMap g_ConditionMap[] =
 
 OUString GetParaStyleCondExternal( std::u16string_view internal)
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(g_ConditionMap); ++i)
+    for (const auto& rCondition : g_ConditionMap)
     {
-        if (o3tl::equalsAscii(internal, g_ConditionMap[i].aInternal ))
+        if (o3tl::equalsAscii(internal, rCondition.aInternal ))
         {
-            OUString aResult = GetXMLToken( g_ConditionMap[i].nExternal ) +
+            OUString aResult = GetXMLToken( rCondition.nExternal ) +
                     "()";
-            if (g_ConditionMap[i].aValue != -1)
+            if (rCondition.aValue != -1)
             {
                 aResult += "=" +
-                    OUString::number( g_ConditionMap[i].aValue );
+                    OUString::number( rCondition.aValue );
             }
             return aResult;
         }
