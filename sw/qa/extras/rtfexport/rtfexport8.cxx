@@ -12,6 +12,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/table/XTableColumns.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
@@ -645,6 +646,51 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168533)
     // - Actual  : Frame 2
     CPPUNIT_ASSERT_EQUAL(u"Frame 2" SAL_NEWLINE_STRING "Still frame 2"_ustr,
                          getShape(2).queryThrow<text::XText>()->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf121493)
+{
+    // Given a document with three tables, having different order of a row's cellxN and trleftN:
+    createSwDoc("tdf121493.rtf");
+    {
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        // 1st table, having \cellx8000\cellx9000\trleft1000
+        assertXPath(pLayout, "//tab[1]['pass 1']/infos/prtBounds", "left", u"1000"_ustr);
+        assertXPath(pLayout, "//tab[1]['pass 1']/row/cell[1]/infos/bounds", "width", u"7000"_ustr);
+        assertXPath(pLayout, "//tab[1]['pass 1']/row/cell[2]/infos/bounds", "width", u"1000"_ustr);
+        // 2nd table, having \trleft1000\cellx8000\cellx9000
+        assertXPath(pLayout, "//tab[2]['pass 1']/infos/prtBounds", "left", u"1000"_ustr);
+        assertXPath(pLayout, "//tab[2]['pass 1']/row/cell[1]/infos/bounds", "width", u"7000"_ustr);
+        assertXPath(pLayout, "//tab[2]['pass 1']/row/cell[2]/infos/bounds", "width", u"1000"_ustr);
+        // 3rd table, having \trleft0\cellx8000\cellx9000
+        assertXPath(pLayout, "//tab[3]['pass 1']/infos/prtBounds", "left", u"0"_ustr);
+        assertXPath(pLayout, "//tab[3]['pass 1']/row/cell[1]/infos/bounds", "width", u"8000"_ustr);
+        assertXPath(pLayout, "//tab[3]['pass 1']/row/cell[2]/infos/bounds", "width", u"1000"_ustr);
+    }
+    // Check export, too
+    saveAndReload(mpFilter);
+    {
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        // Rounding (or maybe off-by-one?) errors sadly hit the test
+        // 1st table
+        assertXPath(pLayout, "//tab[1]['pass 2']/infos/prtBounds", "left", u"1000"_ustr);
+        OUString width = getXPath(pLayout, "//tab[1]['pass 2']/row/cell[1]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7000, width.toInt32(), 1);
+        width = getXPath(pLayout, "//tab[1]['pass 2']/row/cell[2]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1000, width.toInt32(), 1);
+        // 2nd table
+        assertXPath(pLayout, "//tab[2]['pass 2']/infos/prtBounds", "left", u"1000"_ustr);
+        width = getXPath(pLayout, "//tab[2]['pass 2']/row/cell[1]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7000, width.toInt32(), 1);
+        width = getXPath(pLayout, "//tab[2]['pass 2']/row/cell[2]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1000, width.toInt32(), 1);
+        // 3rd table
+        assertXPath(pLayout, "//tab[3]['pass 2']/infos/prtBounds", "left", u"0"_ustr);
+        width = getXPath(pLayout, "//tab[3]['pass 2']/row/cell[1]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8000, width.toInt32(), 1);
+        width = getXPath(pLayout, "//tab[3]['pass 2']/row/cell[2]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1000, width.toInt32(), 1);
+    }
 }
 
 } // end of anonymous namespace
