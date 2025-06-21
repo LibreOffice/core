@@ -145,10 +145,9 @@ private:
 
     sal_uInt32 mnFrameId;
 
-    // bitfield
-    bool mbFrameAreaPositionValid   : 1;
-    bool mbFrameAreaSizeValid       : 1;
-    bool mbFramePrintAreaValid      : 1;
+    bool mbFrameAreaPositionValid;
+    bool mbFrameAreaSizeValid;
+    bool mbFramePrintAreaValid;
 
     // #i65250#
     // frame ID is now in general available - used for layout loop control
