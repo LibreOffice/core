@@ -1774,6 +1774,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166871)
     assertXPath(pXmlDoc, "//page[12]/body/column[6]/body/txt", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166978)
+{
+    // Given a document with a table, which cell has a section:
+    createSwDoc("hideSection.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Hide the section
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages()); // must not split the second row of the table to page 2
+    // Check the layout dump; the whole table must be still on the first page
+    auto pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row", 2);
+    assertXPathContent(pXmlDoc, "//page[1]/body/tab/row[2]/cell[1]",
+                       u"A2: this row suddenly jumps to the next page");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

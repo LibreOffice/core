@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="Table1" style:family="table">
+   <style:table-properties table:align="margins"/>
+  </style:style>
+  <style:style style:name="Table1.A1" style:family="table-cell">
+   <style:table-cell-properties fo:border="0.05pt solid #000000"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <table:table table:name="Table1" table:style-name="Table1">
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+      <text:p>A1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+      <text:section text:name="Section1">
+       <text:p>Section1: hide me</text:p>
+      </text:section>
+      <text:p>B1</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+      <text:p>A2: this row suddenly jumps to the next page</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+      <text:p>B2</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>
