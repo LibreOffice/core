@@ -2293,7 +2293,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
                         SetCompletePaint();
                         InvalidatePage();
                     }
-                    if( GetUpper() && GetUpper()->IsHeaderFrame() )
+                    if (GetUpper() && (GetUpper()->IsHeaderFrame() || GetUpper()->IsCellFrame()))
                         GetUpper()->InvalidateSize();
                 }
 
@@ -2686,13 +2686,6 @@ void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     {
         InvalidateAll();
         InvalidateObjs(false);
-        {
-            // Set it to a huge positive value, to make sure a recalculation fires
-            constexpr SwTwips HUGE_POSITIVE = 10000 * 1440 / 2.54; // 100m
-            SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
-            SwRectFnSet(this).SetHeight(area, HUGE_POSITIVE);
-        }
-        GetUpper()->InvalidateSize();
 
         InvalidateFramesInSection(Lower());
         if (Lower())
