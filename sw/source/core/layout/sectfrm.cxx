@@ -2329,7 +2329,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
                         SetCompletePaint();
                         InvalidatePage();
                     }
-                    if( GetUpper() && GetUpper()->IsHeaderFrame() )
+                    if (GetUpper() && (GetUpper()->IsHeaderFrame() || GetUpper()->IsCellFrame()))
                         GetUpper()->InvalidateSize();
                 }
 
@@ -2748,13 +2748,6 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     {
         InvalidateAll();
         InvalidateObjs(false);
-        {
-            // Set it to a huge positive value, to make sure a recalculation fires
-            constexpr SwTwips HUGE_POSITIVE = o3tl::toTwips(100, o3tl::Length::m);
-            SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
-            SwRectFnSet(this).SetHeight(area, HUGE_POSITIVE);
-        }
-        GetUpper()->InvalidateSize();
 
         InvalidateFramesInSection(Lower());
         Lower()->HideAndShowObjects(); // recursive

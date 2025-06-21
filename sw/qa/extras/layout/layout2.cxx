@@ -19,6 +19,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <editeng/unolingu.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
@@ -3041,6 +3042,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf166691)
 
     // Check that there is only a single page
     assertXPath(pXmlDoc, "//page", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf166978)
+{
+    // Given a document with a table, which cell has a section:
+    createSwDoc("hideSection.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Hide the section
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages()); // must not split the second row of the table to page 2
+    // Check the layout dump; the whole table must be still on the first page
+    auto pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row", 2);
+    assertXPathContent(pXmlDoc, "//page[1]/body/tab/row[2]/cell[1]/txt",
+                       u"A2: this row suddenly jumps to the next page"_ustr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
