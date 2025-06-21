@@ -995,6 +995,15 @@ CPPUNIT_TEST_FIXTURE(Test, testNoneColor)
     assertXPath(pDocument, "/primitive2D/transform/mask/polypolygonstroke/line", "width", u"3");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTransparentColor)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/transparentColor.svg");
+
+    //No polypolygoncolor exists
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor", 0);
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygonstroke/line", "color", u"#000000");
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygonstroke/line", "width", u"3");
+}
 CPPUNIT_TEST_FIXTURE(Test, testTdf117920)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf117920.svg");
