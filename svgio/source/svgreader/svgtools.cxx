@@ -1148,7 +1148,8 @@ namespace svgio::svgreader
                 }
                 else
                 {
-                    if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(rCandidate), u"none"))
+                    if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(rCandidate), u"none") ||
+                        o3tl::equalsIgnoreAsciiCase(o3tl::trim(rCandidate), u"transparent"))
                     {
                         rSvgPaint = SvgPaint(aColor, true, false, false);
                         return true;
