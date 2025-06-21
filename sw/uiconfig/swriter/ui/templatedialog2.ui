@@ -409,7 +409,7 @@
                   <object class="GtkImage" id="imIndents">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="icon-name">cmd/lc_incrementindent.png</property>
+                    <property name="icon-name">cmd/lc_paraspaceincrease.png</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbIndents"/>
                     </accessibility>
