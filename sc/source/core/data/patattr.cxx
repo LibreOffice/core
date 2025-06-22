@@ -1649,7 +1649,7 @@ LanguageType getLanguageType(const SfxItemSet& rSet)
 
 }
 
-bool ScPatternAttr::HasNumberFormat() const
+bool ScPatternAttr::HasValidNumberFormat() const
 {
     // If either ATTR_VALUE_FORMAT or ATTR_LANGUAGE_FORMAT are invalid in the pattern,
     // it means a multiselection with different formats

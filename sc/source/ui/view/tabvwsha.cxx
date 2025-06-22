@@ -598,7 +598,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
     xOldSet->Put( *aLineInner );
 
     // Generate NumberFormat Value from Value and Language and box it.
-    if (pOldAttrs->HasNumberFormat()) // tdf#42989: don't set it for multi-format selection
+    if (pOldAttrs->HasValidNumberFormat()) // tdf#42989: don't set it for multi-format selection
         xOldSet->Put(
             SfxUInt32Item(ATTR_VALUE_FORMAT, pOldAttrs->GetNumberFormat(rDoc.GetFormatTable())));
     else // Make sure it's invalid, when ATTR_LANGUAGE_FORMAT is invalid
