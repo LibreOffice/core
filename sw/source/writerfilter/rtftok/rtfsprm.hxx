@@ -26,12 +26,12 @@ class RTFSprmsImpl : public RTFSprmsImplBase, public virtual SvRefBase
 {
 };
 
-enum class RTFOverwrite
+enum class RTFConflictPolicy
 {
-    YES, ///< Yes, if an existing key is found, overwrite it.
-    NO_APPEND, ///< No, always append the value to the end of the list.
-    NO_IGNORE, ///< No, if the key is already in the list, then ignore, otherwise append.
-    YES_PREPEND ///< Yes, always prepend the value to the start of the list and remove existing entries.
+    Overwrite, ///< If an existing key is found, overwrite it in place.
+    Append, ///< Always append the value to the end of the list.
+    Ignore, ///< If the key is already in the list, then ignore, otherwise append.
+    ReplaceAtStart, ///< Always prepend the value to the start of the list and remove existing entries.
 };
 
 /// A list of RTFSprm with a copy constructor that performs a deep copy.
@@ -53,7 +53,7 @@ public:
     RTFValue::Pointer_t find(Id nKeyword, bool bFirst = true, bool bForWrite = false);
     /// Does the same as ->push_back(), except that it can overwrite or ignore existing entries.
     void set(Id nKeyword, const RTFValue::Pointer_t& pValue,
-             RTFOverwrite eOverwrite = RTFOverwrite::YES);
+             RTFConflictPolicy ePolicy = RTFConflictPolicy::Overwrite);
     bool erase(Id nKeyword);
     void eraseLast(Id nKeyword);
     /// Removes elements which are already in the reference set.
