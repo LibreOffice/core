@@ -797,7 +797,7 @@ void ScTabView::GetPageMoveEndPosition(SCCOL nMovX, SCROW nMovY, SCCOL& rPageX, 
     ScHSplitPos eWhichX = WhichH( eWhich );
     ScVSplitPos eWhichY = WhichV( eWhich );
 
-    sal_uInt16 nScrSizeY = SC_SIZE_NONE;
+    auto nScrSizeY = SC_SIZE_NONE;
     if (comphelper::LibreOfficeKit::isActive() && aViewData.GetPageUpDownOffset() > 0) {
         nScrSizeY = ScViewData::ToPixel( aViewData.GetPageUpDownOffset(), aViewData.GetPPTX() );
     }

@@ -1776,8 +1776,8 @@ void ScTabView::DoHSplit(tools::Long nSplitPos)
         SCCOL nOldDelta = aViewData.GetPosX( SC_SPLIT_LEFT );
         tools::Long nLeftWidth = nSplitPos - pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
         if ( nLeftWidth < 0 ) nLeftWidth = 0;
-        SCCOL nNewDelta = nOldDelta + aViewData.CellsAtX( nOldDelta, 1, SC_SPLIT_LEFT,
-                        static_cast<sal_uInt16>(nLeftWidth) );
+        SCCOL nNewDelta = nOldDelta + aViewData.CellsAtX( nOldDelta, 1, SC_SPLIT_LEFT, nLeftWidth );
+
         ScDocument& rDoc = aViewData.GetDocument();
         if ( nNewDelta > rDoc.MaxCol() )
             nNewDelta = rDoc.MaxCol();
@@ -1849,8 +1849,8 @@ void ScTabView::DoVSplit(tools::Long nSplitPos)
         aViewData.SetPosY( SC_SPLIT_TOP, nOldDelta );
         tools::Long nTopHeight = nSplitPos - pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height();
         if ( nTopHeight < 0 ) nTopHeight = 0;
-        SCROW nNewDelta = nOldDelta + aViewData.CellsAtY( nOldDelta, 1, SC_SPLIT_TOP,
-                        static_cast<sal_uInt16>(nTopHeight) );
+        SCROW nNewDelta = nOldDelta + aViewData.CellsAtY( nOldDelta, 1, SC_SPLIT_TOP, nTopHeight );
+
         ScDocument& rDoc = aViewData.GetDocument();
         if ( nNewDelta > rDoc.MaxRow() )
             nNewDelta = rDoc.MaxRow();

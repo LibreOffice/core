@@ -2677,16 +2677,17 @@ OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY, bool bPixelAligned)
 }
 
 //      Number of cells on a screen
-SCCOL ScViewData::CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeX ) const
+SCCOL ScViewData::CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, tools::Long nScrSizeX ) const
 {
     OSL_ENSURE( nDir==1 || nDir==-1, "wrong CellsAt call" );
+    OSL_ENSURE(nScrSizeX >= 0, "ScViewData::CellsAtX: negative screen width");
 
     if (pView)
         const_cast<ScViewData*>(this)->aScrSize.setWidth( pView->GetGridWidth(eWhichX) );
 
     SCCOL  nX;
-    sal_uInt16  nScrPosX = 0;
-    if (nScrSizeX == SC_SIZE_NONE) nScrSizeX = static_cast<sal_uInt16>(aScrSize.Width());
+    tools::Long  nScrPosX = 0;
+    if (nScrSizeX == SC_SIZE_NONE) nScrSizeX = aScrSize.Width();
 
     if (nDir==1)
         nX = nPosX;             // forwards
@@ -2705,7 +2706,7 @@ SCCOL ScViewData::CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uI
             if (nTSize)
             {
                 tools::Long nSizeXPix = ToPixel( nTSize, nPPTX );
-                nScrPosX = sal::static_int_cast<sal_uInt16>( nScrPosX + static_cast<sal_uInt16>(nSizeXPix) );
+                nScrPosX = nScrPosX + nSizeXPix;
             }
         }
     }
@@ -2719,14 +2720,15 @@ SCCOL ScViewData::CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uI
     return nX;
 }
 
-SCROW ScViewData::CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeY ) const
+SCROW ScViewData::CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, tools::Long nScrSizeY ) const
 {
     OSL_ENSURE( nDir==1 || nDir==-1, "wrong CellsAt call" );
+    OSL_ENSURE(nScrSizeY >= 0, "ScViewData::CellsAtY: negative screen height");
 
     if (pView)
         const_cast<ScViewData*>(this)->aScrSize.setHeight( pView->GetGridHeight(eWhichY) );
 
-    if (nScrSizeY == SC_SIZE_NONE) nScrSizeY = static_cast<sal_uInt16>(aScrSize.Height());
+    if (nScrSizeY == SC_SIZE_NONE) nScrSizeY = aScrSize.Height();
 
     SCROW nY;
 
