@@ -451,7 +451,7 @@ static OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequenc
     return aResult.makeStringAndClear();
 }
 
-static void lcl_writeChartexString(FSHelperPtr pFS, std::u16string_view sOut)
+static void lcl_writeChartexString(const FSHelperPtr& pFS, std::u16string_view sOut)
 {
     pFS->startElement(FSNS(XML_cx, XML_tx));
     // cell range doesn't seem to be supported in chartex?

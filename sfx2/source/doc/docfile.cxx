@@ -1788,7 +1788,7 @@ SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const & xSto
         }
         // success:
         pImpl->m_bODFWholesomeEncryption = true;
-        pImpl->m_xODFDecryptedInnerPackageStream = xDecryptedInnerPackageStream;
+        pImpl->m_xODFDecryptedInnerPackageStream = std::move(xDecryptedInnerPackageStream);
         pImpl->m_xODFEncryptedOuterStorage = xStorage;
         pImpl->xStorage = xRet;
     }
