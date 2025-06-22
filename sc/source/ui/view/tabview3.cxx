@@ -1085,14 +1085,14 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
             case SC_FOLLOW_JUMP_END:
                 if ( nCurX < nDeltaX || nCurX >= nDeltaX+nSizeX )
                 {
-                    nNewDeltaX = nCurX - aViewData.CellsAtX( nCurX, -1, eAlignX, static_cast<sal_uInt16>(nSpaceX) );
+                    nNewDeltaX = nCurX - aViewData.CellsAtX( nCurX, -1, eAlignX, nSpaceX );
                     if (nNewDeltaX < 0)
                         nNewDeltaX = 0;
                     nSizeX = aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
                 }
                 if ( nCurY < nDeltaY || nCurY >= nDeltaY+nSizeY || bForceNew )
                 {
-                    nNewDeltaY = nCurY - aViewData.CellsAtY( nCurY, -1, eAlignY, static_cast<sal_uInt16>(nSpaceY) );
+                    nNewDeltaY = nCurY - aViewData.CellsAtY( nCurY, -1, eAlignY, nSpaceY );
                     if (nNewDeltaY < 0)
                         nNewDeltaY = 0;
                     nSizeY = aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );

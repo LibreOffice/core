@@ -28,7 +28,7 @@
 #include <memory>
 #include <o3tl/typed_flags_set.hxx>
 
-#define SC_SIZE_NONE        65535
+constexpr auto SC_SIZE_NONE = std::numeric_limits<tools::Long>::max();
 
 enum class ScFillMode
 {
@@ -634,8 +634,10 @@ public:
     OString         describeCellCursorInPrintTwips() const { return describeCellCursorAt(GetCurX(), GetCurY(), false); }
     OString         describeCellCursorAt( SCCOL nCol, SCROW nRow, bool bPixelAligned = true ) const;
 
-    SCCOL           CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeY = SC_SIZE_NONE ) const;
-    SCROW           CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeX = SC_SIZE_NONE ) const;
+    SCCOL           CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX,
+                              tools::Long nScrSizeY = SC_SIZE_NONE ) const;
+    SCROW           CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY,
+                              tools::Long nScrSizeX = SC_SIZE_NONE ) const;
 
     SCCOL           VisibleCellsX( ScHSplitPos eWhichX ) const;     // Completely visible cell
     SCROW           VisibleCellsY( ScVSplitPos eWhichY ) const;
