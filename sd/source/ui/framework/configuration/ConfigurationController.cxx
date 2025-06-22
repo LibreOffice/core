@@ -94,7 +94,7 @@ ConfigurationController::Lock::Lock (const rtl::Reference<ConfigurationControlle
 ConfigurationController::Lock::~Lock()
 {
     if (mxController.is())
-        mxController->unlock();
+        suppress_fun_call_w_exception(mxController->unlock());
 }
 
 //===== ConfigurationController ===============================================
