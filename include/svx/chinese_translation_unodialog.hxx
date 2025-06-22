@@ -48,8 +48,7 @@ It can be executed via the ui::dialogs::XExecutableDialog interface.
 Made settings can be retrieved via beans::XPropertySet interface.
 Following properties are available (read only and not bound):
 1) Name="IsDirectionToSimplified" Type="sal_Bool"
-2) Name="IsUseCharacterVariants" Type="sal_Bool"
-3) Name="IsTranslateCommonTerms" Type="sal_Bool"
+2) Name="IsTranslateCommonTerms" Type="sal_Bool"
 
 The dialog gets this information from the registry on execute and writes it back to the registry if ended with OK.
 */

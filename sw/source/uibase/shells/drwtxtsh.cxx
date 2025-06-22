@@ -293,15 +293,12 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
             {
                 //get some parameters from the dialog
                 bool bToSimplified = xDialog->getIsDirectionToSimplified();
-                bool bUseVariants = false;
                 bool bCommonTerms = xDialog->getIsTranslateCommonTerms();
 
                 //execute translation
                 LanguageType nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
                 LanguageType nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
-                sal_Int32 nOptions       = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
-                if(!bCommonTerms)
-                    nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
+                sal_Int32 nOptions       = !bCommonTerms ? i18n::TextConversionOption::CHARACTER_BY_CHARACTER : 0;
 
                 vcl::Font aTargetFont = OutputDevice::GetDefaultFont(DefaultFontType::CJK_TEXT, nTargetLang, GetDefaultFontFlags::OnlyOne);
 
