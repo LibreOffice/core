@@ -605,7 +605,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="languageframe">
+          <object class="GtkFrame" id="localeframe">
             <property name="height_request">0</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -621,13 +621,13 @@
                 <property name="row_spacing">6</property>
                 <property name="margin-top">6</property>
                 <child>
-                  <object class="GtkComboBoxText" id="languagelb">
+                  <object class="GtkComboBoxText" id="localelb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="languagelb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|languagelb">Specifies the language setting for the selected field.</property>
+                      <object class="AtkObject" id="localelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|localelb">Specifies the locale setting for the selected field.</property>
                       </object>
                     </child>
                   </object>
@@ -684,12 +684,12 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="languageft">
+              <object class="GtkLabel" id="localeft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="numberingformatpage|languageft">_Language</property>
+                <property name="label" translatable="yes" context="numberingformatpage|localeft">_Locale</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">languagelb</property>
+                <property name="mnemonic_widget">localelb</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

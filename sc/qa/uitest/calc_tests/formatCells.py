@@ -29,10 +29,10 @@ class formatCell(UITestCase):
                 xleadzerosed = xDialog.getChild("leadzerosed")
                 xnegnumred = xDialog.getChild("negnumred")
                 xthousands = xDialog.getChild("thousands")
-                xlanguagelb = xDialog.getChild("languagelb")
+                xlocalelb = xDialog.getChild("localelb")
                 xformatted = xDialog.getChild("formatted")
                 #language
-                select_by_text(xlanguagelb, "English (USA)")
+                select_by_text(xlocalelb, "English (USA)")
                 #other properties
                 xdecimalsed.executeAction("UP", tuple())
                 xleadzerosed.executeAction("UP", tuple())
@@ -52,11 +52,11 @@ class formatCell(UITestCase):
                 xleadzerosed = xDialog.getChild("leadzerosed")
                 xnegnumred = xDialog.getChild("negnumred")
                 xthousands = xDialog.getChild("thousands")
-                xlanguagelb = xDialog.getChild("languagelb")
+                xlocalelb = xDialog.getChild("localelb")
                 xformatted = xDialog.getChild("formatted")
 
                 self.assertEqual(get_state_as_dict(xliststore1)["SelectEntryText"], "Number")
-                self.assertEqual(get_state_as_dict(xlanguagelb)["SelectEntryText"], "English (USA)")
+                self.assertEqual(get_state_as_dict(xlocalelb)["SelectEntryText"], "English (USA)")
                 self.assertEqual(get_state_as_dict(xdecimalsed)["Text"], "1")
                 self.assertEqual(get_state_as_dict(xleadzerosed)["Text"], "2")
                 self.assertEqual(get_state_as_dict(xnegnumred)["Selected"], "true")

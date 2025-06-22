@@ -190,11 +190,11 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 // class SvxNumberFormatTabPage ------------------------------------------
 
 #define REMOVE_DONTKNOW() \
-    if (!m_xFtLanguage->get_sensitive())                              \
+    if (!m_xFtLocale->get_sensitive())                              \
     {                                                                 \
-        m_xFtLanguage->set_sensitive(true);                           \
-        m_xLbLanguage->set_sensitive(true);                           \
-        m_xLbLanguage->set_active_id(pNumFmtShell->GetCurLanguage()); \
+        m_xFtLocale->set_sensitive(true);                           \
+        m_xLbLocale->set_sensitive(true);                           \
+        m_xLbLocale->set_active_id(pNumFmtShell->GetCurLanguage()); \
     }
 
 SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::DialogController* pController,
@@ -209,7 +209,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     , m_xFtFormat(m_xBuilder->weld_label(u"formatft"_ustr))
     , m_xLbCurrency(m_xBuilder->weld_combo_box(u"currencylb"_ustr))
     , m_xLbFormat(m_xBuilder->weld_tree_view(u"formatlb"_ustr))
-    , m_xFtLanguage(m_xBuilder->weld_label(u"languageft"_ustr))
+    , m_xFtLocale(m_xBuilder->weld_label(u"localeft"_ustr))
     , m_xCbSourceFormat(m_xBuilder->weld_check_button(u"sourceformat"_ustr))
     , m_xFtOptions(m_xBuilder->weld_label(u"optionsft"_ustr))
     , m_xFtDecimals(m_xBuilder->weld_label(u"decimalsft"_ustr))
@@ -228,7 +228,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     , m_xIbRemove(m_xBuilder->weld_button(u"delete"_ustr))
     , m_xFtComment(m_xBuilder->weld_label(u"commentft"_ustr))
     , m_xEdComment(m_xBuilder->weld_entry(u"commented"_ustr))
-    , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"languagelb"_ustr)))
+    , m_xLbLocale(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"localelb"_ustr)))
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aWndPreview))
 {
     for (size_t i = 0; i < std::size(NUM_CATEGORIES); ++i)
@@ -254,7 +254,7 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
     pNumFmtShell.reset();
     pNumItem.reset();
     m_xWndPreview.reset();
-    m_xLbLanguage.reset();
+    m_xLbLocale.reset();
 }
 
 void SvxNumberFormatTabPage::Init_Impl()
@@ -280,8 +280,8 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_xLbCategory->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
     m_xLbFormat->connect_selection_changed(aLink2);
     m_xLbFormat->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
-    m_xLbLanguage->connect_changed(aLink3);
-    m_xLbLanguage->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
+    m_xLbLocale->connect_changed(aLink3);
+    m_xLbLocale->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
     m_xLbCurrency->connect_changed(aLink3);
     m_xLbCurrency->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
     m_xCbSourceFormat->connect_toggled(LINK(this, SvxNumberFormatTabPage, SelFormatClickHdl_Impl));
@@ -315,7 +315,7 @@ void SvxNumberFormatTabPage::Init_Impl()
 
     // initialize language ListBox
 
-    m_xLbLanguage->SetLanguageList(SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN,
+    m_xLbLocale->SetLanguageList(SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN,
                                    false, false, false, true, LANGUAGE_SYSTEM,
                                    css::i18n::ScriptType::WEAK);
 }
@@ -500,10 +500,10 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     // LanguageType no_NO.
     if ( eLangType == LANGUAGE_NORWEGIAN )
     {
-        m_xLbLanguage->remove_id(eLangType);    // in case we're already called
-        m_xLbLanguage->InsertLanguage( eLangType );
+        m_xLbLocale->remove_id(eLangType);    // in case we're already called
+        m_xLbLocale->InsertLanguage( eLangType );
     }
-    m_xLbLanguage->set_active_id(eLangType);
+    m_xLbLocale->set_active_id(eLangType);
     if(pAutoEntryAttr)
         AddAutomaticLanguage_Impl(eLangType, pAutoEntryAttr->GetValue());
     UpdateFormatListBox_Impl(false,true);
@@ -544,9 +544,9 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 void SvxNumberFormatTabPage::Obstructing()
 {
     m_xLbFormat->select(-1);
-    m_xLbLanguage->set_active(-1);
-    m_xFtLanguage->set_sensitive(false);
-    m_xLbLanguage->set_sensitive(false);
+    m_xLbLocale->set_active(-1);
+    m_xFtLocale->set_sensitive(false);
+    m_xLbLocale->set_sensitive(false);
 
     m_xIbAdd->set_sensitive(false );
     m_xIbRemove->set_sensitive(false );
@@ -592,8 +592,8 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_xFtFormat->set_sensitive( bEnable );
     m_xLbCurrency->set_sensitive( bEnable );
     m_xLbFormat->set_sensitive( bEnable );
-    m_xFtLanguage->set_sensitive( bEnable );
-    m_xLbLanguage->set_sensitive( bEnable );
+    m_xFtLocale->set_sensitive( bEnable );
+    m_xLbLocale->set_sensitive( bEnable );
     m_xFtDecimals->set_sensitive( bEnable );
     m_xEdDecimals->set_sensitive( bEnable );
     m_xFtDenominator->set_sensitive( bEnable );
@@ -621,8 +621,8 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 
 void SvxNumberFormatTabPage::HideLanguage(bool bFlag)
 {
-    m_xFtLanguage->set_visible(!bFlag);
-    m_xLbLanguage->set_visible(!bFlag);
+    m_xFtLocale->set_visible(!bFlag);
+    m_xLbLocale->set_visible(!bFlag);
 }
 
 /*************************************************************************
@@ -640,7 +640,7 @@ void SvxNumberFormatTabPage::HideLanguage(bool bFlag)
 
 bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 {
-    bool bDataChanged   = m_xFtLanguage->get_sensitive() || m_xCbSourceFormat->get_sensitive();
+    bool bDataChanged   = m_xFtLocale->get_sensitive() || m_xCbSourceFormat->get_sensitive();
     if ( bDataChanged )
     {
         const SfxItemSet& rMyItemSet = GetItemSet();
@@ -723,10 +723,10 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         // FillItemSet is only called on OK, here we can notify the
         // NumberFormatShell that all new user defined formats are valid.
         pNumFmtShell->ValidateNewEntries();
-        if(m_xLbLanguage->get_visible() &&
-                m_xLbLanguage->find_text(sAutomaticLangEntry) != -1)
+        if(m_xLbLocale->get_visible() &&
+                m_xLbLocale->find_text(sAutomaticLangEntry) != -1)
                 rCoreAttrs->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO,
-                    m_xLbLanguage->get_active_text() == sAutomaticLangEntry));
+                    m_xLbLocale->get_active_text() == sAutomaticLangEntry));
     }
 
     return bDataChanged;
@@ -987,7 +987,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         pNumFmtShell->CategoryChanged(nTmpCatPos,nFmtLbSelPos, aEntryList);
     }
     else
-        pNumFmtShell->LanguageChanged(m_xLbLanguage->get_active_id(),
+        pNumFmtShell->LanguageChanged(m_xLbLocale->get_active_id(),
                                       nFmtLbSelPos,aEntryList);
 
     REMOVE_DONTKNOW() // possibly UI-Enable
@@ -1235,7 +1235,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(weld::Widget* pLb)
 
 
     // language/country-ListBox ----------------------------------------------
-    if (pLb == m_xLbLanguage->get_widget())
+    if (pLb == m_xLbLocale->get_widget())
     {
         UpdateFormatListBox_Impl( false, true );
         EditHdl_Impl(m_xEdFormat.get());
@@ -1298,7 +1298,7 @@ bool SvxNumberFormatTabPage::Click_Impl(const weld::Button& rIB)
         {
             // May be sorted under a different locale if LCID was parsed.
             if (bAdded)
-                m_xLbLanguage->set_active_id(pNumFmtShell->GetCurLanguage());
+                m_xLbLocale->set_active_id(pNumFmtShell->GetCurLanguage());
 
             if (nCatLbSelPos==CAT_CURRENCY)
                 set_active_currency(pNumFmtShell->GetCurrencySymbol());
@@ -1727,10 +1727,10 @@ void SvxNumberFormatTabPage::SetCategory(sal_uInt16 nPos)
 */
 void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect)
 {
-    m_xLbLanguage->remove_id(LANGUAGE_SYSTEM);
-    m_xLbLanguage->append(eAutoLang, sAutomaticLangEntry);
+    m_xLbLocale->remove_id(LANGUAGE_SYSTEM);
+    m_xLbLocale->append(eAutoLang, sAutomaticLangEntry);
     if (bSelect)
-        m_xLbLanguage->set_active_id(eAutoLang);
+        m_xLbLocale->set_active_id(eAutoLang);
 }
 
 void SvxNumberFormatTabPage::PageCreated(const SfxAllItemSet& aSet)
