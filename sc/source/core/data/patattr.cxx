@@ -1651,9 +1651,10 @@ LanguageType getLanguageType(const SfxItemSet& rSet)
 
 bool ScPatternAttr::HasNumberFormat() const
 {
-    // If ATTR_VALUE_FORMAT is invalid in the pattern,
+    // If either ATTR_VALUE_FORMAT or ATTR_LANGUAGE_FORMAT are invalid in the pattern,
     // it means a multiselection with different formats
-    return GetItemSet().GetItemState(ATTR_VALUE_FORMAT) != SfxItemState::INVALID;
+    return GetItemSet().GetItemState(ATTR_VALUE_FORMAT) != SfxItemState::INVALID
+           && GetItemSet().GetItemState(ATTR_LANGUAGE_FORMAT) != SfxItemState::INVALID;
 }
 
 sal_uInt32 ScPatternAttr::GetNumberFormatKey() const
