@@ -229,7 +229,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     if (GetToUnicodePoolData(r, nLen, nNext))
                     {
                         OUString s = read_uInt16s_ToOUString(r, nLen);
-                        memcpy(pStrings.get(), s.getStr(), s.getLength() * sizeof(sal_Unicode));
+                        std::copy_n(s.getStr(), s.getLength(), pStrings.get());
                     }
                     else
                     {
@@ -239,7 +239,8 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                         {
                             sal_uInt16 nOff2 = static_cast<sal_uInt16>(mvStringOffsets[j]);
                             OUString aStr(pByteStrings.get() + nOff2, strlen(pByteStrings.get() + nOff2), eCharSet);
-                            memcpy(pStrings.get() + nOff2, aStr.getStr(), (aStr.getLength() + 1) * sizeof(sal_Unicode));
+                            std::copy_n(aStr.getStr(), aStr.getLength() + 1,
+                                        pStrings.get() + nOff2);
                         }
                     }
                 }
@@ -431,7 +432,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         {
             sal_uInt16 nOff = static_cast<sal_uInt16>(mvStringOffsets[ i ]);
             OString aStr(OUStringToOString(std::u16string_view(pStrings.get() + nOff), eCharSet));
-            memcpy( pByteStrings.get() + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
+            std::copy_n(aStr.getStr(), aStr.getLength() + 1, pByteStrings.get() + nOff);
         }
         r.WriteUInt32( nStringSize );
         r.WriteBytes(pByteStrings.get(), nStringSize);
@@ -570,14 +571,14 @@ void SbiImage::AddString( const OUString& r )
         sal_uInt32 nNewLen = needed + 1024;
         nNewLen &= 0xFFFFFC00;  // trim to 1K border
         std::unique_ptr<sal_Unicode[]> p(new sal_Unicode[nNewLen]);
-        memcpy( p.get(), pStrings.get(), nStringSize * sizeof( sal_Unicode ) );
+        std::copy_n(pStrings.get(), nStringSize, p.get());
         pStrings = std::move(p);
         nStringSize = sal::static_int_cast< sal_uInt16 >(nNewLen);
     }
     if( !bError )
     {
         mvStringOffsets[ nStringIdx++ ] = nStringOff;
-        std::copy(r.getStr(), r.getStr() + len, pStrings.get() + nStringOff);
+        std::copy_n(r.getStr(), len, pStrings.get() + nStringOff);
         nStringOff = nStringOff + len;
         // Last String? The update the size of the buffer
         if( nStringIdx >= mvStringOffsets.size() )
