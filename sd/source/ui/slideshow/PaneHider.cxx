@@ -87,7 +87,7 @@ PaneHider::~PaneHider()
         {
             mxConfigurationController->restoreConfiguration(mxConfiguration);
         }
-        catch (DisposedException&)
+        catch (RuntimeException&)
         {
             // When the configuration controller is already disposed then
             // there is no point in restoring the configuration.
