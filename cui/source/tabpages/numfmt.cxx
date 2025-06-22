@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/temporary.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
@@ -363,18 +364,6 @@ sal_uInt32 SvxNumberFormatTabPage::get_active_currency() const
 
 void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 {
-    const SfxUInt32Item*        pValFmtAttr     = nullptr;
-    const SfxPoolItem*          pItem           = nullptr;
-    const SfxBoolItem*          pAutoEntryAttr = nullptr;
-
-    sal_uInt16                  nCatLbSelPos    = 0;
-    sal_uInt16                  nFmtLbSelPos    = 0;
-    LanguageType                eLangType       = LANGUAGE_DONTKNOW;
-    std::vector<OUString>       aFmtEntryList;
-    SvxNumberValueType          eValType        = SvxNumberValueType::Undefined;
-    double                      nValDouble      = 0;
-    OUString                    aValString;
-
     if(const SfxBoolItem* pBoolLangItem = rSet->GetItemIfSet( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ))
     {
         if(pBoolLangItem->GetValue())
@@ -388,14 +377,12 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     }
 
-    SfxItemState eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_INFO ),true,&pItem);
-
-    if(eState==SfxItemState::SET)
+    if (const SvxNumberInfoItem* pItem = rSet->GetItemIfSet(GetWhich(SID_ATTR_NUMBERFORMAT_INFO)))
     {
         if(pNumItem==nullptr)
         {
             bNumItemFlag=true;
-            pNumItem.reset( static_cast<SvxNumberInfoItem *>(pItem->Clone()) );
+            pNumItem.reset(pItem->Clone());
         }
         else
         {
@@ -407,17 +394,9 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         bNumItemFlag=false;
     }
 
-
-    eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_ONE_AREA ));
-
-    if(eState==SfxItemState::SET)
+    if (const SfxBoolItem* pBoolItem = rSet->GetItemIfSet(GetWhich(SID_ATTR_NUMBERFORMAT_ONE_AREA)))
     {
-        const SfxBoolItem* pBoolItem = GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ONE_AREA);
-
-        if(pBoolItem!=nullptr)
-        {
-            bOneAreaFlag= pBoolItem->GetValue();
-        }
+        bOneAreaFlag= pBoolItem->GetValue();
     }
 
     if ( const SfxBoolItem* pBoolItem = rSet->GetItemIfSet( SID_ATTR_NUMBERFORMAT_SOURCE ))
@@ -437,12 +416,13 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     // pNumItem must have been set from outside!
     DBG_ASSERT( pNumItem, "No NumberInfo, no NumberFormatter, goodbye. CRASH. :-(" );
 
-    eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_VALUE ) );
-
-    if ( SfxItemState::INVALID != eState )
+    const SfxUInt32Item* pValFmtAttr = nullptr;
+    if (rSet->GetItemState(GetWhich(SID_ATTR_NUMBERFORMAT_VALUE)) != SfxItemState::INVALID)
         pValFmtAttr = GetItem( *rSet, SID_ATTR_NUMBERFORMAT_VALUE );
 
-    eValType = pNumItem->GetValueType();
+    SvxNumberValueType eValType = pNumItem->GetValueType();
+    OUString aValString;
+    double nValDouble = 0;
 
     switch ( eValType )
     {
@@ -493,10 +473,11 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     FillCurrencyBox();
 
-    OUString aPrevString;
-    const Color* pDummy = nullptr;
-    pNumFmtShell->GetInitSettings( nCatLbSelPos, eLangType, nFmtLbSelPos,
-                                   aFmtEntryList, aPrevString, pDummy );
+    sal_uInt16 nCatLbSelPos = 0;
+    LanguageType eLangType = LANGUAGE_DONTKNOW;
+    pNumFmtShell->GetInitSettings(nCatLbSelPos, eLangType, o3tl::temporary(sal_uInt16{}),
+                                  o3tl::temporary(std::vector<OUString>{}),
+                                  o3tl::temporary(OUString{}), o3tl::temporary<const Color*>({}));
 
     if (nCatLbSelPos==CAT_CURRENCY)
         set_active_currency(pNumFmtShell->GetCurrencySymbol());
@@ -513,7 +494,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     {
         SetCategory(nCatLbSelPos );
     }
-    pAutoEntryAttr = rSet->GetItemIfSet( SID_ATTR_NUMBERFORMAT_ADD_AUTO );
+    const SfxBoolItem* pAutoEntryAttr = rSet->GetItemIfSet(SID_ATTR_NUMBERFORMAT_ADD_AUTO);
     // no_NO is an alias for nb_NO and normally isn't listed, we need it for
     // backwards compatibility, but only if the format passed is of
     // LanguageType no_NO.
