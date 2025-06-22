@@ -59,7 +59,7 @@ public:
     std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -271,9 +271,9 @@ VclPtr<vcl::Window> NumberingToolBoxControl::createVclPopupWindow( vcl::Window* 
     return mxInterimPopover;
 }
 
-void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
 {
-    svt::PopupWindowController::initialize( aArguments );
+    svt::PopupWindowController::initialize( rArguments );
 
     if ( m_aCommandURL == ".uno:DefaultBullet" )
         mePageType = NumberingPageType::BULLET;

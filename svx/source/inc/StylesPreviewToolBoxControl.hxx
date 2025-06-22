@@ -45,7 +45,7 @@ public:
         SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     // XComponent
     virtual void SAL_CALL dispose() override;

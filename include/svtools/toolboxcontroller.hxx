@@ -80,17 +80,17 @@ class SVT_DLLPUBLIC ToolboxController :
         const css::uno::Reference< css::uno::XComponentContext >& getContext() const;
         css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() const;
 
-        void updateStatus( const OUString& aCommandURL );
+        void updateStatus( const OUString& rCommandURL );
         void updateStatus();
 
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 
         // XUpdatable
         virtual void SAL_CALL update() override;
@@ -98,7 +98,7 @@ class SVT_DLLPUBLIC ToolboxController :
         // XComponent
         virtual void SAL_CALL dispose() override;
         virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rListener ) override;
 
         // XEventListener
         using cppu::OPropertySetHelper::disposing;
@@ -164,8 +164,8 @@ class SVT_DLLPUBLIC ToolboxController :
                                     css::uno::Reference< css::frame::XDispatch > > URLToDispatchMap;
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
-        void addStatusListener( const OUString& aCommandURL );
-        void removeStatusListener( const OUString& aCommandURL );
+        void addStatusListener( const OUString& rCommandURL );
+        void removeStatusListener( const OUString& rCommandURL );
         void bindListener();
         void unbindListener();
 

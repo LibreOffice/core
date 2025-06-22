@@ -67,16 +67,16 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                 u"Heading 3"_ustr,  u"Heading 4"_ustr,        u"Title"_ustr,     u"Subtitle"_ustr,
                 u"Quotations"_ustr, u"Preformatted Text"_ustr
             };
-            for (const OUString& aStyle : aWriterStyles)
+            for (const OUString& rStyle : aWriterStyles)
             {
                 try
                 {
                     css::uno::Reference<css::beans::XPropertySet> xStyle;
-                    xParaStyles->getByName(aStyle) >>= xStyle;
+                    xParaStyles->getByName(rStyle) >>= xStyle;
                     OUString sName;
                     xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
                     if (!sName.isEmpty())
-                        m_aDefaultStyles.push_back(std::pair<OUString, OUString>(aStyle, sName));
+                        m_aDefaultStyles.push_back(std::pair<OUString, OUString>(rStyle, sName));
                 }
                 catch (const css::container::NoSuchElementException&)
                 {

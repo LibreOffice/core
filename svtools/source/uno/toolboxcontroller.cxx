@@ -161,7 +161,7 @@ css::uno::Sequence<css::uno::Type> ToolboxController::getTypes()
                 getBaseTypes());
 }
 
-void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL ToolboxController::initialize( const Sequence< Any >& rArguments )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -174,7 +174,7 @@ void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
     m_bInitialized = true;
     m_bSupportVisible = false;
     PropertyValue aPropValue;
-    for ( const auto& rArgument : aArguments )
+    for ( const auto& rArgument : rArguments )
     {
         if ( rArgument >>= aPropValue )
         {
@@ -279,9 +279,9 @@ void SAL_CALL ToolboxController::addEventListener( const Reference< XEventListen
     m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
-void SAL_CALL ToolboxController::removeEventListener( const Reference< XEventListener >& aListener )
+void SAL_CALL ToolboxController::removeEventListener( const Reference< XEventListener >& rListener )
 {
-    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), aListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), rListener );
 }
 
 // XEventListener
@@ -374,7 +374,7 @@ Reference< XWindow > SAL_CALL ToolboxController::createItemWindow( const Referen
     return Reference< XWindow >();
 }
 
-void ToolboxController::addStatusListener( const OUString& aCommandURL )
+void ToolboxController::addStatusListener( const OUString& rCommandURL )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XStatusListener > xStatusListener;
@@ -382,7 +382,7 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
 
     {
         SolarMutexGuard aSolarMutexGuard;
-        URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
+        URLToDispatchMap::iterator pIter = m_aListenerMap.find( rCommandURL );
 
         // Already in the list of status listener. Do nothing.
         if ( pIter != m_aListenerMap.end() )
@@ -393,7 +393,7 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
         if ( !m_bInitialized )
         {
             // Put into the unordered_map of status listener. Will be activated when initialized is called
-            m_aListenerMap.emplace( aCommandURL, Reference< XDispatch >() );
+            m_aListenerMap.emplace( rCommandURL, Reference< XDispatch >() );
             return;
         }
         else
@@ -402,13 +402,13 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( m_xContext.is() && xDispatchProvider.is() )
             {
-                aTargetURL.Complete = aCommandURL;
+                aTargetURL.Complete = rCommandURL;
                 if ( m_xUrlTransformer.is() )
                     m_xUrlTransformer->parseStrict( aTargetURL );
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
                 xStatusListener = this;
-                URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
+                URLToDispatchMap::iterator aIter = m_aListenerMap.find( rCommandURL );
                 if ( aIter != m_aListenerMap.end() )
                 {
                     Reference< XDispatch > xOldDispatch( aIter->second );
@@ -424,7 +424,7 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
                     }
                 }
                 else
-                    m_aListenerMap.emplace( aCommandURL, xDispatch );
+                    m_aListenerMap.emplace( rCommandURL, xDispatch );
             }
         }
     }
@@ -440,11 +440,11 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
     }
 }
 
-void ToolboxController::removeStatusListener( const OUString& aCommandURL )
+void ToolboxController::removeStatusListener( const OUString& rCommandURL )
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
+    URLToDispatchMap::iterator pIter = m_aListenerMap.find( rCommandURL );
     if ( pIter == m_aListenerMap.end() )
         return;
 
@@ -455,7 +455,7 @@ void ToolboxController::removeStatusListener( const OUString& aCommandURL )
     try
     {
         css::util::URL aTargetURL;
-        aTargetURL.Complete = aCommandURL;
+        aTargetURL.Complete = rCommandURL;
         if ( m_xUrlTransformer.is() )
             m_xUrlTransformer->parseStrict( aTargetURL );
 
@@ -622,7 +622,7 @@ void ToolboxController::updateStatus()
     bindListener();
 }
 
-void ToolboxController::updateStatus( const OUString& aCommandURL )
+void ToolboxController::updateStatus( const OUString& rCommandURL )
 {
     Reference< XDispatch > xDispatch;
     Reference< XStatusListener > xStatusListener;
@@ -639,7 +639,7 @@ void ToolboxController::updateStatus( const OUString& aCommandURL )
         xStatusListener = this;
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
-            aTargetURL.Complete = aCommandURL;
+            aTargetURL.Complete = rCommandURL;
             if ( m_xUrlTransformer.is() )
                 m_xUrlTransformer->parseStrict( aTargetURL );
             xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
@@ -706,17 +706,17 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ToolboxController:
         return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( css::uno::Any&    aConvertedValue ,
-                                             css::uno::Any&        aOldValue       ,
-                                             sal_Int32                        nHandle         ,
-                                             const css::uno::Any&  aValue          )
+sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue(css::uno::Any& aConvertedValue,
+                                                              css::uno::Any& aOldValue,
+                                                              sal_Int32 nHandle,
+                                                              const css::uno::Any& rValue)
 {
     switch (nHandle)
     {
         case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE:
         {
             bool aNewValue(false);
-            aValue >>= aNewValue;
+            rValue >>= aNewValue;
             if (aNewValue != m_bSupportVisible)
             {
                 aConvertedValue <<= aNewValue;
@@ -726,19 +726,19 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( css::uno::Any&   
             return false;
         }
     }
-    return OPropertyContainer::convertFastPropertyValue(aConvertedValue, aOldValue, nHandle, aValue);
+    return OPropertyContainer::convertFastPropertyValue(aConvertedValue, aOldValue, nHandle, rValue);
 }
 
 void SAL_CALL ToolboxController::setFastPropertyValue_NoBroadcast(
     sal_Int32                       nHandle,
-    const css::uno::Any& aValue )
+    const css::uno::Any& rValue )
 {
-    OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, aValue);
+    OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, rValue);
     if (TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE == nHandle)
     {
-        bool rValue(false);
-        if (( aValue >>= rValue ) && m_bInitialized)
-            m_bSupportVisible = rValue;
+        bool bValue(false);
+        if (( rValue >>= bValue ) && m_bInitialized)
+            m_bSupportVisible = bValue;
     }
 }
 

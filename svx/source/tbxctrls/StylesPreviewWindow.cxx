@@ -397,12 +397,12 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext,
 }
 
 void StyleItemController::DrawContentBackground(vcl::RenderContext& rRenderContext,
-                                                const tools::Rectangle& aContentRect,
-                                                const Color& aColor)
+                                                const tools::Rectangle& rContentRect,
+                                                const Color& rColor)
 {
-    rRenderContext.SetLineColor(aColor);
-    rRenderContext.SetFillColor(aColor);
-    rRenderContext.DrawRect(aContentRect);
+    rRenderContext.SetLineColor(rColor);
+    rRenderContext.SetFillColor(rColor);
+    rRenderContext.DrawRect(rContentRect);
 }
 
 void StyleItemController::DrawHighlight(vcl::RenderContext& rRenderContext, Color aFontBack)
@@ -441,12 +441,12 @@ void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 }
 
 StylesPreviewWindow_Base::StylesPreviewWindow_Base(
-    weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>&& aDefaultStyles,
+    weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>&& rDefaultStyles,
     const css::uno::Reference<css::frame::XFrame>& xFrame)
     : m_xFrame(xFrame)
     , m_xStylesView(xBuilder.weld_icon_view(u"stylesview"_ustr))
     , m_aUpdateTask(*this)
-    , m_aDefaultStyles(std::move(aDefaultStyles))
+    , m_aDefaultStyles(std::move(rDefaultStyles))
 {
     StylePreviewCache::RegisterClient();
 
@@ -666,11 +666,11 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 }
 
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
-    vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>&& aDefaultStyles,
+    vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>&& rDefaultStyles,
     const css::uno::Reference<css::frame::XFrame>& xFrame)
     : InterimItemWindow(pParent, u"svx/ui/stylespreview.ui"_ustr, u"ApplyStyleBox"_ustr, true,
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
-    , StylesPreviewWindow_Base(*m_xBuilder, std::move(aDefaultStyles), xFrame)
+    , StylesPreviewWindow_Base(*m_xBuilder, std::move(rDefaultStyles), xFrame)
 {
     SetOptimalSize();
 }
