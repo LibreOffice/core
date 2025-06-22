@@ -52,6 +52,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/lok.hxx>
 #include <authfld.hxx>
 
@@ -452,20 +453,27 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     rtl::Reference<SwXTextRange> xRange(SwXTextRange::CreateXTextRange(
                         *(m_rView.GetDocShell()->GetDoc()), aPos, &aPos));
 
-                    OUString sName;
-                    xRange->getPropertyValue(u"HyperLinkName"_ustr) >>= sName;
-                    if (!sName.isEmpty())
+                    try
                     {
-                        bScreenTip = true;
-                        OUStringBuffer sStrBuffer(sName);
-                        sal_Int32 nTextLen = sText.getLength();
-                        sal_Int32 nNameLen = sName.getLength();
-                        if (nTextLen > 0 && nNameLen > nTextLen)
+                        OUString sName;
+                        xRange->getPropertyValue(u"HyperLinkName"_ustr) >>= sName;
+                        if (!sName.isEmpty())
                         {
-                            for (sal_Int32 i = nTextLen - 1; i < nNameLen; i += nTextLen)
-                                sStrBuffer.insert(i + 1, std::u16string_view(u"\n"));
+                            bScreenTip = true;
+                            OUStringBuffer sStrBuffer(sName);
+                            sal_Int32 nTextLen = sText.getLength();
+                            sal_Int32 nNameLen = sName.getLength();
+                            if (nTextLen > 0 && nNameLen > nTextLen)
+                            {
+                                for (sal_Int32 i = nTextLen - 1; i < nNameLen; i += nTextLen)
+                                    sStrBuffer.insert(i + 1, std::u16string_view(u"\n"));
+                            }
+                            sText = sStrBuffer.makeStringAndClear() + "\n" + sText;
                         }
-                        sText = sStrBuffer.makeStringAndClear() + "\n" + sText;
+                    }
+                    catch (uno::RuntimeException&)
+                    {
+                        DBG_UNHANDLED_EXCEPTION("sw.ui", "failed to retrieve hyperlink name");
                     }
                 }
                 break;
