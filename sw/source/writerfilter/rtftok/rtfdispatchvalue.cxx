@@ -429,7 +429,7 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
             rCurrentCellX = nParam;
             auto pXValue = new RTFValue(nCellX);
             m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
-                                                   RTFOverwrite::NO_APPEND);
+                                                   RTFConflictPolicy::Append);
             if (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
             {
                 m_nNestedCells++;
@@ -846,7 +846,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 aRunPropsSprms.set(NS_ooxml::LN_EG_RPrBase_rFonts, new RTFValue(aFontAttributes));
                 m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Lvl_rPr,
                                                     new RTFValue(RTFSprms(), aRunPropsSprms),
-                                                    RTFOverwrite::NO_APPEND);
+                                                    RTFConflictPolicy::Append);
             }
             else
             {
@@ -1168,7 +1168,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 // case when old-style paragraph numbering is already
                 // tokenized.
                 putNestedSprm(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_numPr,
-                              NS_ooxml::LN_CT_NumPr_numId, pIntValue, RTFOverwrite::YES_PREPEND);
+                              NS_ooxml::LN_CT_NumPr_numId, pIntValue,
+                              RTFConflictPolicy::ReplaceAtStart);
             }
         }
         break;
@@ -1753,7 +1754,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // So set the direct formatting to zero, if we don't have such direct formatting yet.
             putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_ind,
                                NS_ooxml::LN_CT_Ind_firstLine, new RTFValue(0),
-                               RTFOverwrite::NO_IGNORE);
+                               RTFConflictPolicy::Ignore);
         }
         break;
         case RTFKeyword::RI:

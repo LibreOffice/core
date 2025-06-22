@@ -859,7 +859,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     aPathAttributes.set(NS_ooxml::LN_CT_Point2D_x, new RTFValue(nX));
                     aPathAttributes.set(NS_ooxml::LN_CT_Point2D_y, new RTFValue(nY));
                     aPolygonSprms.set(NS_ooxml::LN_CT_WrapPath_lineTo,
-                                      new RTFValue(aPathAttributes), RTFOverwrite::NO_APPEND);
+                                      new RTFValue(aPathAttributes), RTFConflictPolicy::Append);
                 }
             } while (nCharIndex >= 0);
             rShape.getWrapPolygonSprms() = std::move(aPolygonSprms);

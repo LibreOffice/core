@@ -93,19 +93,19 @@ RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst, bool bForWrite)
     return RTFValue::Pointer_t{};
 }
 
-void RTFSprms::set(Id nKeyword, const RTFValue::Pointer_t& pValue, RTFOverwrite eOverwrite)
+void RTFSprms::set(Id nKeyword, const RTFValue::Pointer_t& pValue, RTFConflictPolicy ePolicy)
 {
     ensureCopyBeforeWrite();
 
-    switch (eOverwrite)
+    switch (ePolicy)
     {
-        case RTFOverwrite::YES_PREPEND:
+        case RTFConflictPolicy::ReplaceAtStart:
         {
             std::erase_if(*m_pSprms, RTFSprms_compare{ nKeyword });
             m_pSprms->emplace(m_pSprms->cbegin(), nKeyword, pValue);
             break;
         }
-        case RTFOverwrite::YES:
+        case RTFConflictPolicy::Overwrite:
         {
             auto it
                 = std::find_if(m_pSprms->begin(), m_pSprms->end(), RTFSprms_compare{ nKeyword });
@@ -115,13 +115,13 @@ void RTFSprms::set(Id nKeyword, const RTFValue::Pointer_t& pValue, RTFOverwrite 
                 m_pSprms->emplace_back(nKeyword, pValue);
             break;
         }
-        case RTFOverwrite::NO_IGNORE:
+        case RTFConflictPolicy::Ignore:
         {
             if (std::none_of(m_pSprms->cbegin(), m_pSprms->cend(), RTFSprms_compare{ nKeyword }))
                 m_pSprms->emplace_back(nKeyword, pValue);
             break;
         }
-        case RTFOverwrite::NO_APPEND:
+        case RTFConflictPolicy::Append:
         {
             m_pSprms->emplace_back(nKeyword, pValue);
             break;
