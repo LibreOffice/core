@@ -601,6 +601,8 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
     if (pOldAttrs->HasNumberFormat()) // tdf#42989: don't set it for multi-format selection
         xOldSet->Put(
             SfxUInt32Item(ATTR_VALUE_FORMAT, pOldAttrs->GetNumberFormat(rDoc.GetFormatTable())));
+    else // Make sure it's invalid, when ATTR_LANGUAGE_FORMAT is invalid
+        xOldSet->InvalidateItem(ATTR_VALUE_FORMAT);
 
     std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem = MakeNumberInfoItem(rDoc, GetViewData());
     xOldSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );
