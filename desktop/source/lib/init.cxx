@@ -3353,12 +3353,12 @@ static int joinThreads(JoinThreads eCategory);
 
 static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
 {
+    SolarMutexGuard aGuard;
+
     vcl::lok::trimMemory(nTarget);
 
     if (nTarget > 2000)
     {
-        SolarMutexGuard aGuard;
-
         // Flush all buffered VOC primitives from the pages.
         SfxViewShell* pViewShell = SfxViewShell::Current();
         if (pViewShell)
