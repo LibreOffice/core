@@ -76,11 +76,6 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServi
     return { u"com.sun.star.text.AccessibleTextEmbeddedObject"_ustr, sAccessibleServiceName };
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // XAccessibleExtendedAttributes
 OUString SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
 {

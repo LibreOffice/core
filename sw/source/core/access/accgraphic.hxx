@@ -40,8 +40,6 @@ public:
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 };

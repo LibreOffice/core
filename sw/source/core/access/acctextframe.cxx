@@ -236,11 +236,6 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNam
     return { u"com.sun.star.text.AccessibleTextFrameView"_ustr, sAccessibleServiceName };
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // XAccessibleRelationSet
 
 SwFlyFrame* SwAccessibleTextFrame::getFlyFrame() const

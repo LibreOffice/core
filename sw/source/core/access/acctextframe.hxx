@@ -83,9 +83,6 @@ public:
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
-
     // XAccessibleContext::getAccessibleRelationSet
 
     // text frame may have accessible relations to their

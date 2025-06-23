@@ -137,11 +137,6 @@ Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
     return { sAccessibleServiceName };
 }
 
-Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 OUString SwAccessiblePage::getAccessibleDescription( )
 {
     ThrowIfDisposed();

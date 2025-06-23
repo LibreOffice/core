@@ -95,11 +95,6 @@ Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
              sAccessibleServiceName };
 }
 
-Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 bool SwAccessibleFootnote::IsEndnote( const SwFootnoteFrame *pFootnoteFrame )
 {
     const SwTextFootnote *pTextFootnote = pFootnoteFrame ->GetAttr();

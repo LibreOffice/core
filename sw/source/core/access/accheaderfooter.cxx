@@ -84,11 +84,6 @@ Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames
              sAccessibleServiceName };
 }
 
-Sequence< sal_Int8 > SAL_CALL SwAccessibleHeaderFooter::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 sal_Int32 SAL_CALL SwAccessibleHeaderFooter::getBackground()
 {
     Reference< XAccessible > xParent =  getAccessibleParent();

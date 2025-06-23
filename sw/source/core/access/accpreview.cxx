@@ -46,11 +46,6 @@ Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
     return { sAccessibleServiceName };
 }
 
-Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription()
 {
     return GetResource( STR_ACCESS_PREVIEW_DOC_NAME );

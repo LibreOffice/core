@@ -64,9 +64,6 @@ public:
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
-
     virtual bool HasCursor() override;   // required by map to remember that object
 };
 

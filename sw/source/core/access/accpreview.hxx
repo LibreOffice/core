@@ -47,9 +47,6 @@ public:
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
-
     OUString SAL_CALL getAccessibleDescription() override;
     OUString SAL_CALL getAccessibleName() override;
     virtual void InvalidateFocus_() override;
