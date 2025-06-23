@@ -29,7 +29,7 @@ class SwRangeRedline;
 class SwRedlineSaveDatas;
 class SwUndoDelete;
 
-class SwUndoRedline : public SwUndo, public SwUndRng
+class SW_DLLPUBLIC SwUndoRedline : public SwUndo, public SwUndRng
 {
 protected:
     std::unique_ptr<SwRedlineData> mpRedlData;
@@ -55,6 +55,7 @@ public:
 #if OSL_DEBUG_LEVEL > 0
     void SetRedlineCountDontCheck(bool bCheck);
 #endif
+    SwUndoId GetUserId() const { return mnUserId; }
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
