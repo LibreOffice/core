@@ -1306,6 +1306,8 @@ ImpEditView::ImplGetCursorRectAndMaybeScroll(EditPaM const& rPos,
             Size aOldSz( aCursorSz );
             aCursorSz.setWidth( aOldSz.Height() );
             aCursorSz.setHeight( aOldSz.Width() );
+            // tdf#166602 the size is relative to the top right
+            aCursorRect.AdjustLeft(aCursorRect.GetWidth() - aCursorSz.Width());
         }
         aCursorRect.SetSize(aCursorSz);
         return {{aCursorRect, aEditCursor, aShowCursorFlags, nTextPortionStart}};
