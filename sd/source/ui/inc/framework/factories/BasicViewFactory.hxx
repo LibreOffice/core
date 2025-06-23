@@ -19,12 +19,8 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-
-#include <comphelper/compbase.hxx>
+#include <framework/ResourceFactory.hxx>
 #include <rtl/ref.hxx>
-
 #include <vcl/vclptr.hxx>
 #include <memory>
 
@@ -42,10 +38,6 @@ namespace vcl { class Window; }
 namespace sd::framework {
 class ConfigurationController;
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XResourceFactory
-    > BasicViewFactoryInterfaceBase;
-
 /** Factory for the frequently used standard views of the drawing framework:
         private:resource/view/
         private:resource/view/ImpressView
@@ -59,7 +51,7 @@ typedef comphelper::WeakComponentImplHelper <
     For some views in some panes this class also acts as a cache.
 */
 class BasicViewFactory final
-    : public BasicViewFactoryInterfaceBase
+    : public sd::framework::ResourceFactory
 {
 public:
     BasicViewFactory(const rtl::Reference<::sd::DrawController>& rxController);
@@ -70,10 +62,10 @@ public:
     // XViewFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
-        SAL_CALL createResource (
+        createResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) override;
 
-    virtual void SAL_CALL releaseResource (
+    virtual void releaseResource (
         const css::uno::Reference<css::drawing::framework::XResource>& xView) override;
 
 private:

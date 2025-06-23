@@ -26,6 +26,7 @@
 #include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <framework/ResourceFactory.hxx>
 #include <DrawController.hxx>
 #include <framework/ConfigurationChangeEvent.hxx>
 

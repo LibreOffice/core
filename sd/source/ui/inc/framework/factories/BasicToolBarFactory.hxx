@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
+#include <framework/ResourceFactory.hxx>
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -30,8 +30,8 @@ namespace sd::framework
 {
 class ConfigurationController;
 
-typedef comphelper::WeakComponentImplHelper <
-    css::drawing::framework::XResourceFactory,
+typedef cppu::ImplInheritanceHelper <
+    sd::framework::ResourceFactory,
     css::lang::XEventListener
     > BasicToolBarFactoryInterfaceBase;
 
@@ -49,12 +49,12 @@ public:
 
     // ToolBarFactory
 
-    virtual css::uno::Reference<css::drawing::framework::XResource> SAL_CALL
+    virtual css::uno::Reference<css::drawing::framework::XResource>
         createResource (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxToolBarId) override;
 
-    virtual void SAL_CALL
+    virtual void
         releaseResource (
             const css::uno::Reference<css::drawing::framework::XResource>&
                 rxToolBar) override;

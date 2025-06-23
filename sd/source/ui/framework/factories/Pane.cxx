@@ -18,6 +18,7 @@
  */
 
 #include <framework/Pane.hxx>
+#include <framework/ResourceFactory.hxx>
 
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -138,6 +139,8 @@ void Pane::ThrowIfDisposed() const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
+
+ResourceFactory::~ResourceFactory() {}
 
 } // end of namespace sd::framework
 

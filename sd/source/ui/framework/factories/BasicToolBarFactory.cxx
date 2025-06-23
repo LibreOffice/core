@@ -102,7 +102,7 @@ void SAL_CALL BasicToolBarFactory::disposing (
 
 //===== XPaneFactory ==========================================================
 
-Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
+Reference<XResource> BasicToolBarFactory::createResource (
     const Reference<XResourceId>& rxToolBarId)
 {
     ThrowIfDisposed();
@@ -114,7 +114,7 @@ Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
     return xToolBar;
 }
 
-void SAL_CALL BasicToolBarFactory::releaseResource (
+void BasicToolBarFactory::releaseResource (
     const Reference<XResource>& rxToolBar)
 {
     ThrowIfDisposed();

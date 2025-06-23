@@ -28,7 +28,6 @@
 #include <vector>
 
 namespace sd::framework { class Configuration; }
-namespace com::sun::star::drawing::framework { class XResourceFactory; }
 namespace com::sun::star::drawing::framework { class XResource; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
 
@@ -36,6 +35,7 @@ namespace sd::framework {
 
 class ConfigurationControllerBroadcaster;
 class ResourceFactoryManager;
+class ResourceFactory;
 
 /** Manage the set of active resources.  Activate and deactivate resources.
 */
@@ -49,7 +49,7 @@ public:
     struct ResourceDescriptor
     {
         css::uno::Reference<css::drawing::framework::XResource> mxResource;
-        css::uno::Reference<css::drawing::framework::XResourceFactory> mxResourceFactory;
+        rtl::Reference<framework::ResourceFactory> mxResourceFactory;
     };
 
     /** A new ResourceManager object is created with the resource factory
@@ -129,7 +129,7 @@ private:
 
     void AddResource (
         const css::uno::Reference<css::drawing::framework::XResource>& rxResource,
-        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxFactory);
+        const rtl::Reference<framework::ResourceFactory>& rxFactory);
 
     ResourceDescriptor RemoveResource (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);

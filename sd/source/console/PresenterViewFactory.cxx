@@ -97,14 +97,13 @@ PresenterViewFactory::PresenterViewFactory (
     const Reference<uno::XComponentContext>& rxContext,
     const rtl::Reference<::sd::DrawController>& rxController,
     ::rtl::Reference<PresenterController> pPresenterController)
-    : PresenterViewFactoryInterfaceBase(m_aMutex),
-      mxComponentContext(rxContext),
+    : mxComponentContext(rxContext),
       mxControllerWeak(rxController),
       mpPresenterController(std::move(pPresenterController))
 {
 }
 
-Reference<drawing::framework::XResourceFactory> PresenterViewFactory::Create (
+rtl::Reference<sd::framework::ResourceFactory> PresenterViewFactory::Create (
     const Reference<uno::XComponentContext>& rxContext,
     const rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
@@ -112,7 +111,7 @@ Reference<drawing::framework::XResourceFactory> PresenterViewFactory::Create (
     rtl::Reference<PresenterViewFactory> pFactory (
         new PresenterViewFactory(rxContext,rxController,rpPresenterController));
     pFactory->Register(rxController);
-    return Reference<drawing::framework::XResourceFactory>(pFactory);
+    return pFactory;
 }
 
 void PresenterViewFactory::Register (const rtl::Reference<::sd::DrawController>& rxController)
@@ -147,7 +146,7 @@ PresenterViewFactory::~PresenterViewFactory()
 {
 }
 
-void SAL_CALL PresenterViewFactory::disposing()
+void PresenterViewFactory::disposing(std::unique_lock<std::mutex>&)
 {
     if (mxConfigurationController.is())
         mxConfigurationController->removeResourceFactoryForReference(this);
@@ -174,10 +173,13 @@ void SAL_CALL PresenterViewFactory::disposing()
 
 //----- XViewFactory ----------------------------------------------------------
 
-Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
+Reference<XResource> PresenterViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     Reference<XResource> xView;
 
@@ -200,9 +202,12 @@ Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
     return xView;
 }
 
-void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
+void PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     if ( ! rxView.is())
         return;
@@ -463,16 +468,6 @@ Reference<XView> PresenterViewFactory::CreateHelpView(
         rxViewId,
         mxControllerWeak.get(),
         mpPresenterController));
-}
-
-void PresenterViewFactory::ThrowIfDisposed() const
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            u"PresenterViewFactory object has already been disposed"_ustr,
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
 }
 
 //===== CachablePresenterView =================================================

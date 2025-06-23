@@ -30,11 +30,11 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::drawing::framework { class XResourceFactory; }
 namespace com::sun::star::util { class XURLTransformer; }
 namespace sd { class DrawController; }
 
 namespace sd::framework {
+class ResourceFactory;
 
 /** Container of resource factories of the drawing framework.
 */
@@ -54,7 +54,7 @@ public:
     */
     void AddFactory (
         const OUString& rsURL,
-        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxFactory);
+        const rtl::Reference<sd::framework::ResourceFactory>& rxFactory);
 
     /** Unregister the specified factory.
         @param rsURL
@@ -72,7 +72,7 @@ public:
         @throws css::uno::RuntimeException
     */
     void RemoveFactoryForReference(
-        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxFactory);
+        const rtl::Reference<sd::framework::ResourceFactory>& rxFactory);
 
     /** Return a factory that can create resources specified by the given URL.
         @param rsCompleteURL
@@ -83,20 +83,20 @@ public:
             is returned.  Otherwise an empty reference is returned.
         @throws css::uno::RuntimeException
     */
-    css::uno::Reference<css::drawing::framework::XResourceFactory> GetFactory (
+    rtl::Reference<sd::framework::ResourceFactory> GetFactory (
         const OUString& rsURL);
 
 private:
     std::mutex maMutex;
     typedef std::unordered_map<
         OUString,
-        css::uno::Reference<css::drawing::framework::XResourceFactory> > FactoryMap;
+        rtl::Reference<sd::framework::ResourceFactory> > FactoryMap;
     FactoryMap maFactoryMap;
 
     typedef ::std::vector<
         ::std::pair<
             OUString,
-            css::uno::Reference<css::drawing::framework::XResourceFactory> > >
+            rtl::Reference<sd::framework::ResourceFactory> > >
         FactoryPatternList;
     FactoryPatternList maFactoryPatternList;
 
@@ -111,7 +111,7 @@ private:
             When the factory has not yet been added then return NULL.
         @throws css::uno::RuntimeException
     */
-    css::uno::Reference<css::drawing::framework::XResourceFactory> FindFactory (
+    rtl::Reference<sd::framework::ResourceFactory> FindFactory (
         const OUString& rsURLBase);
 };
 

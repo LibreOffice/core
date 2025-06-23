@@ -132,7 +132,7 @@ void BasicViewFactory::disposing(std::unique_lock<std::mutex>&)
     maViewShellContainer.clear();
 }
 
-Reference<XResource> SAL_CALL BasicViewFactory::createResource (
+Reference<XResource> BasicViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
 {
     const bool bIsCenterPane (
@@ -179,7 +179,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     return xView;
 }
 
-void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxView)
+void BasicViewFactory::releaseResource (const Reference<XResource>& rxView)
 {
     if ( ! rxView.is())
         throw lang::IllegalArgumentException();

@@ -305,12 +305,10 @@ void SAL_CALL PresenterScreen::disposing()
     }
     mxConfigurationControllerWeak.clear();
 
-    Reference<lang::XComponent> xViewFactoryComponent (mxViewFactory, UNO_QUERY);
-    if (xViewFactoryComponent.is())
-       xViewFactoryComponent->dispose();
-    Reference<lang::XComponent> xPaneFactoryComponent (mxPaneFactory, UNO_QUERY);
-    if (xPaneFactoryComponent.is())
-        xPaneFactoryComponent->dispose();
+    if (mxViewFactory.is())
+       mxViewFactory->dispose();
+    if (mxPaneFactory.is())
+        mxPaneFactory->dispose();
 
     mxModel = nullptr;
 }
@@ -616,14 +614,12 @@ void PresenterScreen::RequestShutdownPresenterScreen()
 
 void PresenterScreen::ShutdownPresenterScreen()
 {
-    Reference<lang::XComponent> xViewFactoryComponent (mxViewFactory, UNO_QUERY);
-    if (xViewFactoryComponent.is())
-        xViewFactoryComponent->dispose();
+    if (mxViewFactory.is())
+        mxViewFactory->dispose();
     mxViewFactory = nullptr;
 
-    Reference<lang::XComponent> xPaneFactoryComponent (mxPaneFactory, UNO_QUERY);
-    if (xPaneFactoryComponent.is())
-        xPaneFactoryComponent->dispose();
+    if (mxPaneFactory.is())
+        mxPaneFactory->dispose();
     mxPaneFactory = nullptr;
 
     if (mpPresenterController)

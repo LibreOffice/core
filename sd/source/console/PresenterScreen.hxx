@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <framework/Configuration.hxx>
-#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
+#include <framework/ResourceFactory.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 
@@ -141,8 +141,8 @@ private:
     ::rtl::Reference<PresenterController> mpPresenterController;
     rtl::Reference<sd::framework::Configuration> mxSavedConfiguration;
     ::rtl::Reference<PresenterPaneContainer> mpPaneContainer;
-    css::uno::Reference<css::drawing::framework::XResourceFactory> mxPaneFactory;
-    css::uno::Reference<css::drawing::framework::XResourceFactory> mxViewFactory;
+    rtl::Reference<sd::framework::ResourceFactory> mxPaneFactory;
+    rtl::Reference<sd::framework::ResourceFactory> mxViewFactory;
 
     // IASS: Flag to note if InitializePresenterScreen() was executed
     bool mbIsInitialized;

@@ -80,7 +80,7 @@ public:
 
 BasicPaneFactory::BasicPaneFactory(
     const rtl::Reference<::sd::DrawController>& rxController)
-    : mpViewShellBase(nullptr)
+    : mxListener(new Listener(*this)), mpViewShellBase(nullptr)
 {
     try
     {
@@ -126,11 +126,11 @@ BasicPaneFactory::BasicPaneFactory(
         if (xCC.is())
         {
             xCC->addConfigurationChangeListener(
-                this,
+                mxListener,
                 FrameworkHelper::msConfigurationUpdateStartEvent,
                 Any(gnConfigurationUpdateStartEvent));
             xCC->addConfigurationChangeListener(
-                this,
+                mxListener,
                 FrameworkHelper::msConfigurationUpdateEndEvent,
                 Any(gnConfigurationUpdateEndEvent));
         }
@@ -153,7 +153,7 @@ void BasicPaneFactory::disposing(std::unique_lock<std::mutex>&)
     if (xCC.is())
     {
         xCC->removeResourceFactoryForReference(this);
-        xCC->removeConfigurationChangeListener(this);
+        xCC->removeConfigurationChangeListener(mxListener);
         mxConfigurationControllerWeak.clear();
     }
 
@@ -164,7 +164,7 @@ void BasicPaneFactory::disposing(std::unique_lock<std::mutex>&)
             Reference<XComponent> xComponent (rDescriptor.mxPane, UNO_QUERY);
             if (xComponent.is())
             {
-                xComponent->removeEventListener(this);
+                xComponent->removeEventListener(mxListener);
                 xComponent->dispose();
             }
         }
@@ -173,7 +173,7 @@ void BasicPaneFactory::disposing(std::unique_lock<std::mutex>&)
 
 //===== XPaneFactory ==========================================================
 
-Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
+Reference<XResource> BasicPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
 {
     ThrowIfDisposed();
@@ -231,7 +231,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
         // Listen for the pane being disposed.
         Reference<lang::XComponent> xComponent (xPane, UNO_QUERY);
         if (xComponent.is())
-            xComponent->addEventListener(this);
+            xComponent->addEventListener(mxListener);
     }
     iDescriptor->mbIsReleased = false;
 
@@ -239,7 +239,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
     return xPane;
 }
 
-void SAL_CALL BasicPaneFactory::releaseResource (
+void BasicPaneFactory::releaseResource (
     const Reference<XResource>& rxPane)
 {
     ThrowIfDisposed();
@@ -281,7 +281,7 @@ void SAL_CALL BasicPaneFactory::releaseResource (
         {
             // We are disposing the pane and do not have to be informed of
             // that.
-            xComponent->removeEventListener(this);
+            xComponent->removeEventListener(mxListener);
             xComponent->dispose();
         }
     }
@@ -290,7 +290,7 @@ void SAL_CALL BasicPaneFactory::releaseResource (
 
 //===== ConfigurationChangeListener ==========================================
 
-void BasicPaneFactory::notifyConfigurationChange (
+void BasicPaneFactory::Listener::notifyConfigurationChange (
     const ConfigurationChangeEvent& /* rEvent */ )
 {
     // FIXME: nothing to do
@@ -298,12 +298,12 @@ void BasicPaneFactory::notifyConfigurationChange (
 
 //===== lang::XEventListener ==================================================
 
-void SAL_CALL BasicPaneFactory::disposing (
+void SAL_CALL BasicPaneFactory::Listener::disposing (
     const lang::EventObject& rEventObject)
 {
-    if (uno::Reference<XInterface>(cppu::getXWeak(mxConfigurationControllerWeak.get().get())) == rEventObject.Source)
+    if (uno::Reference<XInterface>(cppu::getXWeak(mrParent.mxConfigurationControllerWeak.get().get())) == rEventObject.Source)
     {
-        mxConfigurationControllerWeak.clear();
+        mrParent.mxConfigurationControllerWeak.clear();
     }
     else
     {
@@ -312,10 +312,10 @@ void SAL_CALL BasicPaneFactory::disposing (
         Reference<XResource> xPane (rEventObject.Source, UNO_QUERY);
         PaneContainer::iterator iDescriptor (
             ::std::find_if(
-                maPaneContainer.begin(),
-                maPaneContainer.end(),
+                mrParent.maPaneContainer.begin(),
+                mrParent.maPaneContainer.end(),
                 [&] (PaneDescriptor const& rPane) { return rPane.ComparePane(xPane); } ));
-        if (iDescriptor != maPaneContainer.end())
+        if (iDescriptor != mrParent.maPaneContainer.end())
         {
             iDescriptor->mxPane = nullptr;
         }

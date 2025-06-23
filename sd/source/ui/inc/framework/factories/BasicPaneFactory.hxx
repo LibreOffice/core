@@ -19,10 +19,8 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
+#include <framework/ResourceFactory.hxx>
 #include <framework/ConfigurationChangeListener.hxx>
-#include <comphelper/compbase.hxx>
 #include <unotools/weakref.hxx>
 #include <rtl/ref.hxx>
 
@@ -38,10 +36,6 @@ class ViewShellBase;
 namespace sd::framework {
 class ConfigurationController;
 
-typedef cppu::ImplInheritanceHelper <
-    sd::framework::ConfigurationChangeListener,
-    css::drawing::framework::XResourceFactory
-    > BasicPaneFactoryInterfaceBase;
 
 /** This factory provides the frequently used standard panes
         private:resource/pane/CenterPane
@@ -53,7 +47,7 @@ typedef cppu::ImplInheritanceHelper <
     show different titles for the left pane in Draw and Impress.
 */
 class BasicPaneFactory final
-    : public BasicPaneFactoryInterfaceBase
+    : public sd::framework::ResourceFactory
 {
 public:
     explicit BasicPaneFactory(
@@ -62,27 +56,36 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // XResourceFactory
+    // ResourceFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
-        SAL_CALL createResource (
+        createResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId) override;
 
-    virtual void SAL_CALL
+    virtual void
         releaseResource (
             const css::uno::Reference<css::drawing::framework::XResource>& rxPane) override;
 
-    // ConfigurationChangeListener
-
-    virtual void notifyConfigurationChange (
-        const sd::framework::ConfigurationChangeEvent& rEvent) override;
-
-    // lang::XEventListener
-
-    virtual void SAL_CALL disposing (
-        const css::lang::EventObject& rEventObject) override;
-
 private:
+    class Listener : public sd::framework::ConfigurationChangeListener
+    {
+    public:
+        Listener(BasicPaneFactory& rParent) : mrParent(rParent) {}
+
+        using WeakComponentImplHelperBase::disposing;
+
+        // ConfigurationChangeListener
+        virtual void notifyConfigurationChange (
+            const sd::framework::ConfigurationChangeEvent& rEvent) override;
+
+        // lang::XEventListener
+        virtual void SAL_CALL disposing (
+            const css::lang::EventObject& rEventObject) override;
+
+        BasicPaneFactory& mrParent;
+    };
+
+    rtl::Reference<Listener> mxListener;
     unotools::WeakReference<sd::framework::ConfigurationController>
         mxConfigurationControllerWeak;
     ViewShellBase* mpViewShellBase;

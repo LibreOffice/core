@@ -22,7 +22,7 @@
 #include <sddllapi.h>
 #include <framework/ConfigurationChangeListener.hxx>
 #include <framework/ConfigurationChangeRequest.hxx>
-#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
+#include <com/sun/star/drawing/framework/XResource.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <cppuhelper/basemutex.hxx>
@@ -34,6 +34,7 @@
 namespace sd { class DrawController; }
 
 namespace sd::framework {
+class ResourceFactory;
 
 /** The ResourceActivationMode specifies, for example for the
     com::sun::star::drawing::framework::XConfigurationController::requestResourceActivation(),
@@ -151,15 +152,15 @@ public:
 
     void addResourceFactory(
         const OUString& sResourceURL,
-        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxResourceFactory);
+        const rtl::Reference<sd::framework::ResourceFactory>& rxResourceFactory);
 
     void removeResourceFactoryForURL(
         const OUString& sResourceURL);
 
     void removeResourceFactoryForReference(
-        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxResourceFactory);
+        const rtl::Reference<sd::framework::ResourceFactory>& rxResourceFactory);
 
-    css::uno::Reference<css::drawing::framework::XResourceFactory>
+    rtl::Reference<sd::framework::ResourceFactory>
         getResourceFactory (
         const OUString& sResourceURL);
 

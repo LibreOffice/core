@@ -37,7 +37,7 @@ namespace sdext::presenter {
 
 //===== PresenterPaneFactory ==================================================
 
-Reference<drawing::framework::XResourceFactory> PresenterPaneFactory::Create (
+rtl::Reference<sd::framework::ResourceFactory> PresenterPaneFactory::Create (
     const Reference<uno::XComponentContext>& rxContext,
     const rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
@@ -45,14 +45,13 @@ Reference<drawing::framework::XResourceFactory> PresenterPaneFactory::Create (
     rtl::Reference<PresenterPaneFactory> pFactory (
         new PresenterPaneFactory(rxContext,rpPresenterController));
     pFactory->Register(rxController);
-    return Reference<drawing::framework::XResourceFactory>(pFactory);
+    return pFactory;
 }
 
 PresenterPaneFactory::PresenterPaneFactory (
     const Reference<uno::XComponentContext>& rxContext,
     ::rtl::Reference<PresenterController> xPresenterController)
-    : PresenterPaneFactoryInterfaceBase(m_aMutex),
-      mxComponentContextWeak(rxContext),
+    : mxComponentContextWeak(rxContext),
       mpPresenterController(std::move(xPresenterController))
 {
 }
@@ -88,7 +87,7 @@ PresenterPaneFactory::~PresenterPaneFactory()
 {
 }
 
-void SAL_CALL PresenterPaneFactory::disposing()
+void PresenterPaneFactory::disposing(std::unique_lock<std::mutex>&)
 {
     rtl::Reference<::sd::framework::ConfigurationController> xCC (mxConfigurationControllerWeak);
     if (xCC.is())
@@ -110,10 +109,13 @@ void SAL_CALL PresenterPaneFactory::disposing()
 
 //----- XPaneFactory ----------------------------------------------------------
 
-Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
+Reference<XResource> PresenterPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     if ( ! rxPaneId.is())
         return nullptr;
@@ -150,9 +152,12 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     return xResource;
 }
 
-void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>& rxResource)
+void PresenterPaneFactory::releaseResource (const Reference<XResource>& rxResource)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     if ( ! rxResource.is())
         throw lang::IllegalArgumentException();
@@ -262,15 +267,6 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     return xPane;
 }
 
-void PresenterPaneFactory::ThrowIfDisposed() const
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            u"PresenterPaneFactory object has already been disposed"_ustr,
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
-}
 
 } // end of namespace sdext::presenter
 

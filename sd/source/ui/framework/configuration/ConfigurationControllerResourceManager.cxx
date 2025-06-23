@@ -23,7 +23,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <framework/Configuration.hxx>
-#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
+#include <framework/ResourceFactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <algorithm>
@@ -113,7 +113,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
 
     // 1. Get the factory.
     const OUString sResourceURL (rxResourceId->getResourceURL());
-    Reference<XResourceFactory> xFactory (mpResourceFactoryContainer->GetFactory(sResourceURL));
+    rtl::Reference<ResourceFactory> xFactory (mpResourceFactoryContainer->GetFactory(sResourceURL));
     if ( ! xFactory.is())
     {
         SAL_INFO("sd.fwk", __func__ << ":    no factory found for " << sResourceURL);
@@ -204,7 +204,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
             catch (const lang::DisposedException& rException)
             {
                 if ( ! rException.Context.is()
-                    || rException.Context == aDescriptor.mxResourceFactory)
+                    || rException.Context == cppu::getXWeak(aDescriptor.mxResourceFactory.get()))
                 {
                     // The factory is disposed and can be removed from the
                     // list of registered factories.
@@ -242,7 +242,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
 
 void ConfigurationControllerResourceManager::AddResource (
     const Reference<XResource>& rxResource,
-    const Reference<XResourceFactory>& rxFactory)
+    const rtl::Reference<ResourceFactory>& rxFactory)
 {
     if ( ! rxResource.is())
     {

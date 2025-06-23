@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/compbase.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 #include <rtl/ref.hxx>
 
 #include <unordered_map>
@@ -29,6 +29,7 @@
 namespace sd { class DrawController; }
 
 namespace sd::framework {
+class ResourceFactory;
 
 typedef comphelper::WeakComponentImplHelper <> ModuleControllerInterfaceBase;
 
@@ -67,7 +68,7 @@ private:
     rtl::Reference<::sd::DrawController> mxController;
 
     std::unordered_map<OUString, OUString> maResourceToFactoryMap;
-    std::unordered_map<OUString, css::uno::WeakReference<css::uno::XInterface>> maLoadedFactories;
+    std::unordered_map<OUString, unotools::WeakReference<sd::framework::ResourceFactory>> maLoadedFactories;
 
     ModuleController (const ModuleController&) = delete;
     virtual ~ModuleController() noexcept override;

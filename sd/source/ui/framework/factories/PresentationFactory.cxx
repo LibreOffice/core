@@ -72,7 +72,8 @@ constexpr OUString gsPresentationViewURL = u"private:resource/view/Presentation"
 
 PresentationFactory::PresentationFactory (
     const rtl::Reference<::sd::DrawController>& rxController)
-    : mxController(rxController)
+    : mxController(rxController),
+      mxListener(new Listener)
 {
 }
 
@@ -82,10 +83,13 @@ PresentationFactory::~PresentationFactory()
 
 //----- XViewFactory ----------------------------------------------------------
 
-Reference<XResource> SAL_CALL PresentationFactory::createResource (
+Reference<XResource> PresentationFactory::createResource (
     const Reference<XResourceId>& rxViewId)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     if (rxViewId.is())
         if ( ! rxViewId->hasAnchor() && rxViewId->getResourceURL() == gsPresentationViewURL)
@@ -94,10 +98,13 @@ Reference<XResource> SAL_CALL PresentationFactory::createResource (
     return Reference<XResource>();
 }
 
-void SAL_CALL PresentationFactory::releaseResource (
+void PresentationFactory::releaseResource (
     const Reference<XResource>&)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     if (mxController)
     {
@@ -109,24 +116,15 @@ void SAL_CALL PresentationFactory::releaseResource (
 
 //===== ConfigurationChangeListener ==========================================
 
-void PresentationFactory::notifyConfigurationChange (
+void PresentationFactory::Listener::notifyConfigurationChange (
     const ConfigurationChangeEvent&)
 {}
 
 //===== lang::XEventListener ==================================================
 
-void SAL_CALL PresentationFactory::disposing (
+void SAL_CALL PresentationFactory::Listener::disposing (
     const lang::EventObject&)
 {}
-
-void PresentationFactory::ThrowIfDisposed() const
-{
-    if (m_bDisposed)
-    {
-        throw lang::DisposedException (u"PresentationFactory object has already been disposed"_ustr,
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
-}
 
 void PresentationFactory::install(const rtl::Reference<::sd::DrawController>& rxController)
 {

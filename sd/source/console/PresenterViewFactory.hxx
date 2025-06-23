@@ -21,9 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERVIEWFACTORY_HXX
 
 #include "PresenterController.hxx"
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
+#include <framework/ResourceFactory.hxx>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/weakref.hxx>
@@ -33,10 +31,6 @@
 namespace sd { class DrawController; }
 
 namespace sdext::presenter {
-
-typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XResourceFactory
-> PresenterViewFactoryInterfaceBase;
 
 /** Base class for presenter views that allows the view factory to store
     them in a cache and reuse deactivated views.
@@ -72,9 +66,7 @@ protected:
         the notes of the current slide,
         a tool bar
 */
-class PresenterViewFactory
-    : public ::cppu::BaseMutex,
-      public PresenterViewFactoryInterfaceBase
+class PresenterViewFactory : public sd::framework::ResourceFactory
 {
 public:
     static constexpr OUString msCurrentSlidePreviewViewURL
@@ -93,21 +85,21 @@ public:
         shut down and releases its reference to the factory then the factory
         is destroyed.
     */
-    static css::uno::Reference<css::drawing::framework::XResourceFactory> Create (
+    static rtl::Reference<sd::framework::ResourceFactory> Create (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<::sd::DrawController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterViewFactory() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XResourceFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
-        SAL_CALL createResource (
+        createResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) override;
 
-    virtual void SAL_CALL
+    virtual void
         releaseResource (
             const css::uno::Reference<css::drawing::framework::XResource>& rxPane) override;
 
@@ -153,9 +145,6 @@ private:
     css::uno::Reference<css::drawing::framework::XResource> CreateView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane);
-
-    /// @throws css::lang::DisposedException
-    void ThrowIfDisposed() const;
 };
 
 }

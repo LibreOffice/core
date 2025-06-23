@@ -121,16 +121,10 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
     sd/source/ui/inc/framework/factories/BasicToolBarFactory.hxx:
-    # base class has to be a complete type
-    - com/sun/star/drawing/framework/XResourceFactory.hpp
     - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/inc/framework/factories/BasicPaneFactory.hxx:
-    # base class has to be a complete type
-    - com/sun/star/drawing/framework/XResourceFactory.hpp
     - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/inc/framework/factories/BasicViewFactory.hxx:
-    # base class has to be a complete type
-    - com/sun/star/drawing/framework/XResourceFactory.hpp
     - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/framework/factories/ChildWindowPane.hxx:
     # base class has to be a complete type
@@ -229,8 +223,6 @@ excludelist:
     # Needed for css shortcut
     - sal/types.h
     sd/source/ui/inc/framework/PresentationFactory.hxx:
-    # base class has to be a complete type
-    - com/sun/star/drawing/framework/XResourceFactory.hpp
     sd/source/ui/inc/framework/ResourceId.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XResourceId.hpp

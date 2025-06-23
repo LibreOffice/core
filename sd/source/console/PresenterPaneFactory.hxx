@@ -20,11 +20,9 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEFACTORY_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEFACTORY_HXX
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
-#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
+#include <framework/ResourceFactory.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
@@ -38,18 +36,12 @@ namespace sdext::presenter {
 
 class PresenterController;
 
-typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XResourceFactory
-> PresenterPaneFactoryInterfaceBase;
-
 /** The PresenterPaneFactory provides a fixed set of panes.
 
     In order to make the presenter screen more easily extendable in the
     future the set of supported panes could be made extendable on demand.
 */
-class PresenterPaneFactory
-    : public ::cppu::BaseMutex,
-      public PresenterPaneFactoryInterfaceBase
+class PresenterPaneFactory : public sd::framework::ResourceFactory
 {
 public:
     static constexpr OUString msCurrentSlidePreviewPaneURL
@@ -67,22 +59,22 @@ public:
         shut down and releases its reference to the factory then the factory
         is destroyed.
     */
-    static css::uno::Reference<css::drawing::framework::XResourceFactory> Create (
+    static rtl::Reference<sd::framework::ResourceFactory> Create (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const rtl::Reference<::sd::DrawController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPaneFactory() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // XResourceFactory
+    // ResourceFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
-        SAL_CALL createResource (
+        createResource (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxPaneId) override;
 
-    virtual void SAL_CALL
+    virtual void
         releaseResource (
             const css::uno::Reference<css::drawing::framework::XResource>&
                 rxPane) override;
@@ -108,9 +100,6 @@ private:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         const css::uno::Reference<css::drawing::framework::XPane>& rxParentPane,
         const bool bIsSpritePane);
-
-    /// @throws css::lang::DisposedException
-    void ThrowIfDisposed() const;
 };
 
 }

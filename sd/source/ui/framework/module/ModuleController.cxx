@@ -129,25 +129,25 @@ void ModuleController::requestResource (const OUString& rsResourceURL)
 
     // Check that the factory has already been loaded and not been
     // destroyed in the meantime.
-    Reference<XInterface> xFactory;
+    rtl::Reference<ResourceFactory> xFactory;
     auto iLoadedFactory = maLoadedFactories.find(iFactory->second);
     if (iLoadedFactory != maLoadedFactories.end())
-        xFactory.set(iLoadedFactory->second, UNO_QUERY);
+        xFactory = iLoadedFactory->second;
     if (  xFactory.is())
         return;
 
     // Create the factory service.
     if (iFactory->second == "com.sun.star.drawing.framework.BasicPaneFactory")
-        xFactory = uno::Reference<css::drawing::framework::XResourceFactory>(new BasicPaneFactory(mxController));
+        xFactory = new BasicPaneFactory(mxController);
     else if (iFactory->second == "com.sun.star.drawing.framework.BasicViewFactory")
-        xFactory = uno::Reference<css::drawing::framework::XResourceFactory>(new BasicViewFactory(mxController));
+        xFactory = new BasicViewFactory(mxController);
     else if (iFactory->second == "com.sun.star.drawing.framework.BasicToolBarFactory")
-        xFactory = uno::Reference<css::drawing::framework::XResourceFactory>(new BasicToolBarFactory(mxController));
+        xFactory = new BasicToolBarFactory(mxController);
     else
         throw RuntimeException(u"unknown factory"_ustr);
 
     // Remember that this factory has been instanced.
-    maLoadedFactories[iFactory->second] = xFactory;
+    maLoadedFactories[iFactory->second] = xFactory.get();
 }
 
 } // end of namespace sd::framework

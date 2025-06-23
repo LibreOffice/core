@@ -19,26 +19,20 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
+#include <framework/ResourceFactory.hxx>
 #include <framework/ConfigurationChangeListener.hxx>
-#include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
 namespace sd { class DrawController; }
 
 namespace sd::framework {
 
-typedef cppu::ImplInheritanceHelper <
-    sd::framework::ConfigurationChangeListener,
-    css::drawing::framework::XResourceFactory
-    > PresentationFactoryInterfaceBase;
-
 /** This factory creates a marker view whose existence in a configuration
     indicates that a slideshow is running (in another but associated
     application window).
 */
 class PresentationFactory final
-    : public PresentationFactoryInterfaceBase
+    : public sd::framework::ResourceFactory
 {
 public:
     PresentationFactory (
@@ -50,29 +44,29 @@ public:
     // XResourceFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
-        SAL_CALL createResource (
+        createResource (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxViewId) override;
 
-    virtual void SAL_CALL releaseResource (
+    virtual void releaseResource (
         const css::uno::Reference<css::drawing::framework::XResource>& xView) override;
 
-    // ConfigurationChangeListener
-
-    virtual void notifyConfigurationChange (
-        const sd::framework::ConfigurationChangeEvent& rEvent) override;
-
-    // lang::XEventListener
-
-    using WeakComponentImplHelperBase::disposing;
-    virtual void SAL_CALL disposing (
-        const css::lang::EventObject& rEventObject) override;
-
 private:
-    rtl::Reference<::sd::DrawController> mxController;
+    class Listener : public sd::framework::ConfigurationChangeListener
+    {
+        using WeakComponentImplHelperBase::disposing;
 
-    /// @throws css::lang::DisposedException
-    void ThrowIfDisposed() const;
+        // ConfigurationChangeListener
+        virtual void notifyConfigurationChange (
+            const sd::framework::ConfigurationChangeEvent& rEvent) override;
+
+        // lang::XEventListener
+        virtual void SAL_CALL disposing (
+            const css::lang::EventObject& rEventObject) override;
+    };
+
+    rtl::Reference<::sd::DrawController> mxController;
+    rtl::Reference<Listener> mxListener;
 };
 
 } // end of namespace sd::framework

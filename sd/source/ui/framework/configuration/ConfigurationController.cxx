@@ -20,6 +20,7 @@
 #include <framework/ConfigurationController.hxx>
 #include <framework/Configuration.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <framework/ResourceFactory.hxx>
 #include <DrawController.hxx>
 #include "ConfigurationUpdater.hxx"
 #include "ConfigurationControllerBroadcaster.hxx"
@@ -439,7 +440,7 @@ void ConfigurationController::restoreConfiguration (
 
 void ConfigurationController::addResourceFactory(
     const OUString& sResourceURL,
-    const Reference<XResourceFactory>& rxResourceFactory)
+    const rtl::Reference<ResourceFactory>& rxResourceFactory)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -455,14 +456,14 @@ void ConfigurationController::removeResourceFactoryForURL(
 }
 
 void ConfigurationController::removeResourceFactoryForReference(
-    const Reference<XResourceFactory>& rxResourceFactory)
+    const rtl::Reference<ResourceFactory>& rxResourceFactory)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
     mpImplementation->mpResourceFactoryContainer->RemoveFactoryForReference(rxResourceFactory);
 }
 
-Reference<XResourceFactory> ConfigurationController::getResourceFactory (
+rtl::Reference<ResourceFactory> ConfigurationController::getResourceFactory (
     const OUString& sResourceURL)
 {
     ::osl::MutexGuard aGuard (m_aMutex);

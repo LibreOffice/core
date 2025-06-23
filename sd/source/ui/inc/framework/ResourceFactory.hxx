@@ -17,19 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module com { module sun { module star { module drawing { module framework {
+#pragma once
 
-interface XResource;
-interface XResourceId;
+#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <comphelper/compbase.hxx>
+#include <sddllapi.h>
 
+namespace sd::framework
+{
 /** Factory and possibly cache for creating and releasing resources.
     <p>A resource factory is created and used by the
     XConfigurationController object.</p>
     <p>A factory may want to implement a cache to reuse previously released
     resources.</p>
 */
-interface XResourceFactory
+class SD_DLLPUBLIC ResourceFactory : public comphelper::WeakComponentImplHelper<>
 {
+public:
     /** Create a resource for the given XResourceId object.
         @param xResourceId
             The resource URL of this id specifies the type of resource to
@@ -49,11 +53,9 @@ interface XResourceFactory
         @throws InvalidArgumentException
             when the given URL is not supported by the factory.
     */
-    XResource createResource (
-            [in] XResourceId xResourceId)
-        raises  (   ::com::sun::star::lang::IllegalArgumentException,
-                    ::com::sun::star::lang::WrappedTargetException
-                );
+    virtual ::css::uno::Reference<::css::drawing::framework::XResource>
+    createResource(const ::css::uno::Reference<::css::drawing::framework::XResourceId>& xResourceId)
+        = 0;
 
     /** Call this method to tell a factory that the given resource is no
         longer in use.  The factory can decide whether to destroy the
@@ -63,9 +65,14 @@ interface XResourceFactory
         @throws InvalidArgumentException
             when the given pane was not created by the same factory.
     */
-    void releaseResource ([in] XResource xResource);
+    virtual void
+    releaseResource(const ::css::uno::Reference<::css::drawing::framework::XResource>& xResource)
+        = 0;
+
+protected:
+    virtual ~ResourceFactory() override;
 };
 
-}; }; }; }; }; // ::com::sun::star::drawing::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
