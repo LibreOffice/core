@@ -80,8 +80,12 @@ void QtInstanceButton::set_custom_button(VirtualDevice* /*pDevice*/)
 
 void QtInstanceButton::connect_clicked(const Link<Button&, void>& rLink)
 {
-    weld::Button::connect_clicked(rLink);
-    m_pButton->setProperty(PROPERTY_CLICK_HANDLER_SET, QVariant::fromValue(rLink.IsSet()));
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        weld::Button::connect_clicked(rLink);
+        m_pButton->setProperty(PROPERTY_CLICK_HANDLER_SET, QVariant::fromValue(rLink.IsSet()));
+    });
 }
 
 bool QtInstanceButton::hasCustomClickHandler(const QAbstractButton& rButton)
