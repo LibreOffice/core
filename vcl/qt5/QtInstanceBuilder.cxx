@@ -181,25 +181,37 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
 
 std::unique_ptr<weld::MessageDialog> QtInstanceBuilder::weld_message_dialog(const OUString& id)
 {
-    QMessageBox* pMessageBox = m_xBuilder->get<QMessageBox>(id);
-    std::unique_ptr<weld::MessageDialog> xRet(
-        pMessageBox ? std::make_unique<QtInstanceMessageDialog>(pMessageBox) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::MessageDialog> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QMessageBox* pMessageBox = m_xBuilder->get<QMessageBox>(id))
+            xRet = std::make_unique<QtInstanceMessageDialog>(pMessageBox);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Dialog> QtInstanceBuilder::weld_dialog(const OUString& rId)
 {
-    QDialog* pDialog = m_xBuilder->get<QDialog>(rId);
-    std::unique_ptr<weld::Dialog> xRet(pDialog ? std::make_unique<QtInstanceDialog>(pDialog)
-                                               : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Dialog> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QDialog* pDialog = m_xBuilder->get<QDialog>(rId))
+            xRet = std::make_unique<QtInstanceDialog>(pDialog);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Assistant> QtInstanceBuilder::weld_assistant(const OUString& rId)
 {
-    QWizard* pWizard = m_xBuilder->get<QWizard>(rId);
-    std::unique_ptr<weld::Assistant> xRet(pWizard ? std::make_unique<QtInstanceAssistant>(pWizard)
-                                                  : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Assistant> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QWizard* pWizard = m_xBuilder->get<QWizard>(rId))
+            xRet = std::make_unique<QtInstanceAssistant>(pWizard);
+    });
     return xRet;
 }
 
@@ -211,40 +223,62 @@ std::unique_ptr<weld::Window> QtInstanceBuilder::create_screenshot_window()
 
 std::unique_ptr<weld::Widget> QtInstanceBuilder::weld_widget(const OUString& rId)
 {
-    QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
-    std::unique_ptr<weld::Widget> xRet(pWidget ? std::make_unique<QtInstanceWidget>(pWidget)
-                                               : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Widget> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QWidget* pWidget = m_xBuilder->get<QWidget>(rId))
+            xRet = std::make_unique<QtInstanceWidget>(pWidget);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Container> QtInstanceBuilder::weld_container(const OUString& rId)
 {
-    QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
-    if (!pWidget)
-        return nullptr;
+    SolarMutexGuard g;
 
-    assert(pWidget->layout() && "no layout");
-    return std::make_unique<QtInstanceContainer>(pWidget);
+    std::unique_ptr<QtInstanceContainer> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
+        if (!pWidget)
+            return;
+
+        assert(pWidget->layout() && "no layout");
+        xRet = std::make_unique<QtInstanceContainer>(pWidget);
+    });
+    return xRet;
 }
 
 std::unique_ptr<weld::Box> QtInstanceBuilder::weld_box(const OUString& rId)
 {
-    QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
-    if (!pWidget)
-        return nullptr;
+    SolarMutexGuard g;
 
-    assert(qobject_cast<QBoxLayout*>(pWidget->layout()) && "widget doesn't have a box layout");
-    return std::make_unique<QtInstanceBox>(pWidget);
+    std::unique_ptr<weld::Box> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
+        if (!pWidget)
+            return;
+
+        assert(qobject_cast<QBoxLayout*>(pWidget->layout()) && "widget doesn't have a box layout");
+        xRet = std::make_unique<QtInstanceBox>(pWidget);
+    });
+    return xRet;
 }
 
 std::unique_ptr<weld::Grid> QtInstanceBuilder::weld_grid(const OUString& rId)
 {
-    QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
-    if (!pWidget)
-        return nullptr;
+    SolarMutexGuard g;
 
-    assert(qobject_cast<QGridLayout*>(pWidget->layout()) && "no grid layout");
-    return std::make_unique<QtInstanceGrid>(pWidget);
+    std::unique_ptr<weld::Grid> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
+        if (!pWidget)
+            return;
+
+        assert(qobject_cast<QGridLayout*>(pWidget->layout()) && "no grid layout");
+        xRet = std::make_unique<QtInstanceGrid>(pWidget);
+    });
+    return xRet;
 }
 
 std::unique_ptr<weld::Paned> QtInstanceBuilder::weld_paned(const OUString&)
@@ -255,42 +289,62 @@ std::unique_ptr<weld::Paned> QtInstanceBuilder::weld_paned(const OUString&)
 
 std::unique_ptr<weld::Frame> QtInstanceBuilder::weld_frame(const OUString& rId)
 {
-    QGroupBox* pGroupBox = m_xBuilder->get<QGroupBox>(rId);
-    std::unique_ptr<weld::Frame> xRet(pGroupBox ? std::make_unique<QtInstanceFrame>(pGroupBox)
-                                                : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Frame> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QGroupBox* pGroupBox = m_xBuilder->get<QGroupBox>(rId))
+            xRet = std::make_unique<QtInstanceFrame>(pGroupBox);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::ScrolledWindow> QtInstanceBuilder::weld_scrolled_window(const OUString& rId,
                                                                               bool)
 {
-    QScrollArea* pScrollArea = m_xBuilder->get<QScrollArea>(rId);
-    std::unique_ptr<weld::ScrolledWindow> xRet(
-        pScrollArea ? std::make_unique<QtInstanceScrolledWindow>(pScrollArea) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::ScrolledWindow> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollArea* pScrollArea = m_xBuilder->get<QScrollArea>(rId))
+            xRet = std::make_unique<QtInstanceScrolledWindow>(pScrollArea);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Notebook> QtInstanceBuilder::weld_notebook(const OUString& rId)
 {
-    QTabWidget* pTabWidget = m_xBuilder->get<QTabWidget>(rId);
-    std::unique_ptr<weld::Notebook> xRet(
-        pTabWidget ? std::make_unique<QtInstanceNotebook>(pTabWidget) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Notebook> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QTabWidget* pTabWidget = m_xBuilder->get<QTabWidget>(rId))
+            xRet = std::make_unique<QtInstanceNotebook>(pTabWidget);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Button> QtInstanceBuilder::weld_button(const OUString& rId)
 {
-    QPushButton* pButton = m_xBuilder->get<QPushButton>(rId);
-    std::unique_ptr<weld::Button> xRet(pButton ? std::make_unique<QtInstanceButton>(pButton)
-                                               : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Button> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QPushButton* pButton = m_xBuilder->get<QPushButton>(rId))
+            xRet = std::make_unique<QtInstanceButton>(pButton);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::MenuButton> QtInstanceBuilder::weld_menu_button(const OUString& rId)
 {
-    QToolButton* pButton = m_xBuilder->get<QToolButton>(rId);
-    std::unique_ptr<weld::MenuButton> xRet(pButton ? std::make_unique<QtInstanceMenuButton>(pButton)
-                                                   : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::MenuButton> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QToolButton* pButton = m_xBuilder->get<QToolButton>(rId))
+            xRet = std::make_unique<QtInstanceMenuButton>(pButton);
+    });
     return xRet;
 }
 
@@ -302,57 +356,85 @@ std::unique_ptr<weld::MenuToggleButton> QtInstanceBuilder::weld_menu_toggle_butt
 
 std::unique_ptr<weld::LinkButton> QtInstanceBuilder::weld_link_button(const OUString& rId)
 {
-    QtHyperlinkLabel* pLabel = m_xBuilder->get<QtHyperlinkLabel>(rId);
-    std::unique_ptr<weld::LinkButton> xRet(pLabel ? std::make_unique<QtInstanceLinkButton>(pLabel)
-                                                  : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::LinkButton> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QtHyperlinkLabel* pLabel = m_xBuilder->get<QtHyperlinkLabel>(rId))
+            xRet = std::make_unique<QtInstanceLinkButton>(pLabel);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::ToggleButton> QtInstanceBuilder::weld_toggle_button(const OUString& rId)
 {
-    QAbstractButton* pButton = m_xBuilder->get<QAbstractButton>(rId);
-    std::unique_ptr<weld::ToggleButton> xRet(
-        pButton ? std::make_unique<QtInstanceToggleButton>(pButton) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::ToggleButton> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QAbstractButton* pButton = m_xBuilder->get<QAbstractButton>(rId))
+            xRet = std::make_unique<QtInstanceToggleButton>(pButton);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::RadioButton> QtInstanceBuilder::weld_radio_button(const OUString& rId)
 {
-    QRadioButton* pRadioButton = m_xBuilder->get<QRadioButton>(rId);
-    std::unique_ptr<weld::RadioButton> xRet(
-        pRadioButton ? std::make_unique<QtInstanceRadioButton>(pRadioButton) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::RadioButton> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QRadioButton* pRadioButton = m_xBuilder->get<QRadioButton>(rId))
+            xRet = std::make_unique<QtInstanceRadioButton>(pRadioButton);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::CheckButton> QtInstanceBuilder::weld_check_button(const OUString& rId)
 {
-    QCheckBox* pCheckBox = m_xBuilder->get<QCheckBox>(rId);
-    std::unique_ptr<weld::CheckButton> xRet(
-        pCheckBox ? std::make_unique<QtInstanceCheckButton>(pCheckBox) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::CheckButton> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QCheckBox* pCheckBox = m_xBuilder->get<QCheckBox>(rId))
+            xRet = std::make_unique<QtInstanceCheckButton>(pCheckBox);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Scale> QtInstanceBuilder::weld_scale(const OUString& rId)
 {
-    QSlider* pSlider = m_xBuilder->get<QSlider>(rId);
-    std::unique_ptr<weld::Scale> xRet(pSlider ? std::make_unique<QtInstanceScale>(pSlider)
-                                              : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Scale> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QSlider* pSlider = m_xBuilder->get<QSlider>(rId))
+            xRet = std::make_unique<QtInstanceScale>(pSlider);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::ProgressBar> QtInstanceBuilder::weld_progress_bar(const OUString& rId)
 {
-    QProgressBar* pProgressBar = m_xBuilder->get<QProgressBar>(rId);
-    std::unique_ptr<weld::ProgressBar> xRet(
-        pProgressBar ? std::make_unique<QtInstanceProgressBar>(pProgressBar) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::ProgressBar> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QProgressBar* pProgressBar = m_xBuilder->get<QProgressBar>(rId))
+            xRet = std::make_unique<QtInstanceProgressBar>(pProgressBar);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::LevelBar> QtInstanceBuilder::weld_level_bar(const OUString& rId)
 {
-    QProgressBar* pProgressBar = m_xBuilder->get<QProgressBar>(rId);
-    std::unique_ptr<weld::LevelBar> xRet(
-        pProgressBar ? std::make_unique<QtInstanceLevelBar>(pProgressBar) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::LevelBar> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QProgressBar* pProgressBar = m_xBuilder->get<QProgressBar>(rId))
+            xRet = std::make_unique<QtInstanceLevelBar>(pProgressBar);
+    });
     return xRet;
 }
 
@@ -364,32 +446,49 @@ std::unique_ptr<weld::Spinner> QtInstanceBuilder::weld_spinner(const OUString&)
 
 std::unique_ptr<weld::Image> QtInstanceBuilder::weld_image(const OUString& rId)
 {
-    QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
-    std::unique_ptr<weld::Image> xRet(pLabel ? std::make_unique<QtInstanceImage>(pLabel) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Image> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QLabel* pLabel = m_xBuilder->get<QLabel>(rId))
+            xRet = std::make_unique<QtInstanceImage>(pLabel);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Calendar> QtInstanceBuilder::weld_calendar(const OUString& rId)
 {
-    QCalendarWidget* pCalendarWidget = m_xBuilder->get<QCalendarWidget>(rId);
-    std::unique_ptr<weld::Calendar> xRet(
-        pCalendarWidget ? std::make_unique<QtInstanceCalendar>(pCalendarWidget) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Calendar> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QCalendarWidget* pCalendarWidget = m_xBuilder->get<QCalendarWidget>(rId))
+            xRet = std::make_unique<QtInstanceCalendar>(pCalendarWidget);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Entry> QtInstanceBuilder::weld_entry(const OUString& rId)
 {
-    QLineEdit* pLineEdit = m_xBuilder->get<QLineEdit>(rId);
-    std::unique_ptr<weld::Entry> xRet(pLineEdit ? std::make_unique<QtInstanceEntry>(pLineEdit)
-                                                : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Entry> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QLineEdit* pLineEdit = m_xBuilder->get<QLineEdit>(rId))
+            xRet = std::make_unique<QtInstanceEntry>(pLineEdit);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::SpinButton> QtInstanceBuilder::weld_spin_button(const OUString& rId)
 {
-    QtDoubleSpinBox* pSpinBox = m_xBuilder->get<QtDoubleSpinBox>(rId);
-    std::unique_ptr<weld::SpinButton> xRet(
-        pSpinBox ? std::make_unique<QtInstanceSpinButton>(pSpinBox) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::SpinButton> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QtDoubleSpinBox* pSpinBox = m_xBuilder->get<QtDoubleSpinBox>(rId))
+            xRet = std::make_unique<QtInstanceSpinButton>(pSpinBox);
+    });
     return xRet;
 }
 
@@ -402,17 +501,25 @@ QtInstanceBuilder::weld_metric_spin_button(const OUString& rId, FieldUnit eUnit)
 std::unique_ptr<weld::FormattedSpinButton>
 QtInstanceBuilder::weld_formatted_spin_button(const OUString& rId)
 {
-    QtDoubleSpinBox* pSpinBox = m_xBuilder->get<QtDoubleSpinBox>(rId);
-    std::unique_ptr<weld::FormattedSpinButton> xRet(
-        pSpinBox ? std::make_unique<QtInstanceFormattedSpinButton>(pSpinBox) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::FormattedSpinButton> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QtDoubleSpinBox* pSpinBox = m_xBuilder->get<QtDoubleSpinBox>(rId))
+            xRet = std::make_unique<QtInstanceFormattedSpinButton>(pSpinBox);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::ComboBox> QtInstanceBuilder::weld_combo_box(const OUString& rId)
 {
-    QComboBox* pComboBox = m_xBuilder->get<QComboBox>(rId);
-    std::unique_ptr<weld::ComboBox> xRet(pComboBox ? std::make_unique<QtInstanceComboBox>(pComboBox)
-                                                   : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::ComboBox> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QComboBox* pComboBox = m_xBuilder->get<QComboBox>(rId))
+            xRet = std::make_unique<QtInstanceComboBox>(pComboBox);
+    });
     return xRet;
 }
 
@@ -420,53 +527,79 @@ std::unique_ptr<weld::EntryTreeView>
 QtInstanceBuilder::weld_entry_tree_view(const OUString& rContainerId, const OUString& rEntryId,
                                         const OUString& rTreeViewId)
 {
-    QWidget* pWidget = m_xBuilder->get<QWidget>(rContainerId);
-    QLineEdit* pLineEdit = m_xBuilder->get<QLineEdit>(rEntryId);
-    QTreeView* pTreeView = m_xBuilder->get<QTreeView>(rTreeViewId);
-    assert(pWidget && pLineEdit && pTreeView);
+    SolarMutexGuard g;
 
-    std::unique_ptr<weld::EntryTreeView> xRet(std::make_unique<QtInstanceEntryTreeView>(
-        pWidget, pLineEdit, pTreeView, weld_entry(rEntryId), weld_tree_view(rTreeViewId)));
+    std::unique_ptr<weld::EntryTreeView> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        QWidget* pWidget = m_xBuilder->get<QWidget>(rContainerId);
+        QLineEdit* pLineEdit = m_xBuilder->get<QLineEdit>(rEntryId);
+        QTreeView* pTreeView = m_xBuilder->get<QTreeView>(rTreeViewId);
+        assert(pWidget && pLineEdit && pTreeView);
+
+        xRet = std::make_unique<QtInstanceEntryTreeView>(
+            pWidget, pLineEdit, pTreeView, weld_entry(rEntryId), weld_tree_view(rTreeViewId));
+    });
 
     return xRet;
 }
 
 std::unique_ptr<weld::TreeView> QtInstanceBuilder::weld_tree_view(const OUString& rId)
 {
-    QTreeView* pTreeView = m_xBuilder->get<QTreeView>(rId);
-    std::unique_ptr<weld::TreeView> xRet(pTreeView ? std::make_unique<QtInstanceTreeView>(pTreeView)
-                                                   : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::TreeView> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QTreeView* pTreeView = m_xBuilder->get<QTreeView>(rId))
+            xRet = std::make_unique<QtInstanceTreeView>(pTreeView);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::IconView> QtInstanceBuilder::weld_icon_view(const OUString& rId)
 {
-    QListView* pListView = m_xBuilder->get<QListView>(rId);
-    std::unique_ptr<weld::IconView> xRet(pListView ? std::make_unique<QtInstanceIconView>(pListView)
-                                                   : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::IconView> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QListView* pListView = m_xBuilder->get<QListView>(rId))
+            xRet = std::make_unique<QtInstanceIconView>(pListView);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Label> QtInstanceBuilder::weld_label(const OUString& rId)
 {
-    QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
-    std::unique_ptr<weld::Label> xRet(pLabel ? std::make_unique<QtInstanceLabel>(pLabel) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Label> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QLabel* pLabel = m_xBuilder->get<QLabel>(rId))
+            xRet = std::make_unique<QtInstanceLabel>(pLabel);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::TextView> QtInstanceBuilder::weld_text_view(const OUString& rId)
 {
-    QPlainTextEdit* pTextEdit = m_xBuilder->get<QPlainTextEdit>(rId);
-    std::unique_ptr<weld::TextView> xRet(pTextEdit ? std::make_unique<QtInstanceTextView>(pTextEdit)
-                                                   : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::TextView> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QPlainTextEdit* pTextEdit = m_xBuilder->get<QPlainTextEdit>(rId))
+            xRet = std::make_unique<QtInstanceTextView>(pTextEdit);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Expander> QtInstanceBuilder::weld_expander(const OUString& rId)
 {
-    QtExpander* pExpander = m_xBuilder->get<QtExpander>(rId);
-    std::unique_ptr<weld::Expander> xRet(pExpander ? std::make_unique<QtInstanceExpander>(pExpander)
-                                                   : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Expander> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QtExpander* pExpander = m_xBuilder->get<QtExpander>(rId))
+            xRet = std::make_unique<QtInstanceExpander>(pExpander);
+    });
     return xRet;
 }
 
@@ -474,44 +607,67 @@ std::unique_ptr<weld::DrawingArea> QtInstanceBuilder::weld_drawing_area(const OU
                                                                         const a11yref& rA11yImpl,
                                                                         FactoryFunction, void*)
 {
-    QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
-    if (!pLabel)
-        return nullptr;
+    SolarMutexGuard g;
 
-    if (rA11yImpl.is())
-        QtAccessibleWidget::setCustomAccessible(*pLabel, rA11yImpl);
+    std::unique_ptr<weld::DrawingArea> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
+        if (!pLabel)
+            return;
 
-    return std::make_unique<QtInstanceDrawingArea>(pLabel);
+        if (rA11yImpl.is())
+            QtAccessibleWidget::setCustomAccessible(*pLabel, rA11yImpl);
+
+        xRet = std::make_unique<QtInstanceDrawingArea>(pLabel);
+    });
+    return xRet;
 }
 
 std::unique_ptr<weld::Menu> QtInstanceBuilder::weld_menu(const OUString& rId)
 {
-    QMenu* pMenu = m_xBuilder->get_menu(rId);
-    std::unique_ptr<weld::Menu> xRet(pMenu ? std::make_unique<QtInstanceMenu>(pMenu) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Menu> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QMenu* pMenu = m_xBuilder->get_menu(rId))
+            xRet = std::make_unique<QtInstanceMenu>(pMenu);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Popover> QtInstanceBuilder::weld_popover(const OUString& rId)
 {
-    QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
-    std::unique_ptr<weld::Popover> xRet(pWidget ? std::make_unique<QtInstancePopover>(pWidget)
-                                                : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Popover> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QWidget* pWidget = m_xBuilder->get<QWidget>(rId))
+            xRet = std::make_unique<QtInstancePopover>(pWidget);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Toolbar> QtInstanceBuilder::weld_toolbar(const OUString& rId)
 {
-    QToolBar* pToolBar = m_xBuilder->get<QToolBar>(rId);
-    std::unique_ptr<weld::Toolbar> xRet(pToolBar ? std::make_unique<QtInstanceToolbar>(pToolBar)
-                                                 : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Toolbar> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QToolBar* pToolBar = m_xBuilder->get<QToolBar>(rId))
+            xRet = std::make_unique<QtInstanceToolbar>(pToolBar);
+    });
     return xRet;
 }
 
 std::unique_ptr<weld::Scrollbar> QtInstanceBuilder::weld_scrollbar(const OUString& rId)
 {
-    QScrollBar* pScrollBar = m_xBuilder->get<QScrollBar>(rId);
-    std::unique_ptr<weld::Scrollbar> xRet(
-        pScrollBar ? std::make_unique<QtInstanceScrollbar>(pScrollBar) : nullptr);
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Scrollbar> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_xBuilder->get<QScrollBar>(rId))
+            xRet = std::make_unique<QtInstanceScrollbar>(pScrollBar);
+    });
     return xRet;
 }
 
