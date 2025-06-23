@@ -2062,7 +2062,7 @@ ColorWindow::ColorWindow(OUString  rCommand,
                          TopLevelParentFunction  aTopLevelParentFunction,
                          ColorSelectFunction  aColorSelectFunction)
     : WeldToolbarPopup(rFrame, rMenuButton.get_widget(), u"svx/ui/colorwindow.ui"_ustr, u"palette_popup_window"_ustr)
-    , theSlotId(nSlotId)
+    , mnSlotId(nSlotId)
     , maCommand(std::move(rCommand))
     , maMenuButton(rMenuButton)
     , mxPaletteManager(std::move(xPaletteManager))
@@ -2083,7 +2083,7 @@ ColorWindow::ColorWindow(OUString  rCommand,
     mxColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
     mxRecentColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
 
-    switch ( theSlotId )
+    switch ( mnSlotId )
     {
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
         case SID_BACKGROUND_COLOR:
@@ -2299,7 +2299,7 @@ IMPL_LINK_NOARG(ColorWindow, SelectPaletteHdl, weld::ComboBox&, void)
 
 NamedColor ColorWindow::GetAutoColor() const
 {
-    return ::GetAutoColor(theSlotId);
+    return ::GetAutoColor(mnSlotId);
 }
 
 IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)

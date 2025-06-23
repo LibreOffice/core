@@ -78,7 +78,7 @@ public:
 class SVXCORE_DLLPUBLIC ColorWindow final : public WeldToolbarPopup
 {
 private:
-    const sal_uInt16    theSlotId;
+    const sal_uInt16    mnSlotId;
     OUString            maCommand;
     MenuOrToolMenuButton maMenuButton;
     std::shared_ptr<PaletteManager> mxPaletteManager;
