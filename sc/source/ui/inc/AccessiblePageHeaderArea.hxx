@@ -79,9 +79,6 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    /** Returns a list of all supported services.  In this case that is just
-        the AccessibleContext and Accessible service.
-    */
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 

@@ -221,9 +221,6 @@ public:
     virtual sal_Bool SAL_CALL
         supportsService (const OUString& sServiceName) override final;
 
-    /** Returns a list of all supported services.  In this case that is just
-        the AccessibleContext service.
-    */
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
