@@ -1148,7 +1148,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sheet,\
 	AccessibleCsvCell \
 	AccessibleCsvRuler \
 	AccessibleCsvTable \
-	AccessibleSpreadsheet \
 	AddIn \
 	CellAnnotation \
 	CellAnnotationShape \

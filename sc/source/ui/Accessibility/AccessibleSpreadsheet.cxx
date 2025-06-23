@@ -1299,13 +1299,6 @@ OUString SAL_CALL ScAccessibleSpreadsheet::getImplementationName()
     return u"ScAccessibleSpreadsheet"_ustr;
 }
 
-uno::Sequence< OUString> SAL_CALL
-    ScAccessibleSpreadsheet::getSupportedServiceNames()
-{
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.AccessibleSpreadsheet"_ustr };
-    return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
-}
-
 AbsoluteScreenPixelRectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aRect;

@@ -186,11 +186,6 @@ private:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    /** Returns a list of all supported services.
-    */
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
     //=====  XAccessibleTableSelection  ============================================
 
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row ) override;
