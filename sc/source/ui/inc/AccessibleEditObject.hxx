@@ -41,8 +41,8 @@ namespace vcl { class Window; }
         <code>AccessibleCell</code> service.
 */
 class ScAccessibleEditObject
-    :   public  ScAccessibleContextBase,
-        public css::accessibility::XAccessibleSelection
+    : public cppu::ImplInheritanceHelper<ScAccessibleContextBase,
+                                         css::accessibility::XAccessibleSelection>
 {
 public:
     enum EditObjectType
@@ -76,14 +76,7 @@ public:
     void LostFocus();
 
     void GotFocus();
-///=====  XInterface  =====================================================
 
-    virtual css::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType ) override;
-
-    virtual void SAL_CALL acquire() noexcept override;
-
-    virtual void SAL_CALL release() noexcept override;
     ///=====  XAccessibleComponent  ============================================
 
     virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -159,13 +152,6 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName() override;
-
-    ///=====  XTypeProvider  ===================================================
-
-    /** Returns an implementation id.
-    */
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId() override;
 
 private:
     std::unique_ptr<accessibility::AccessibleTextHelper> mpTextHelper;

@@ -54,11 +54,11 @@ using ::com::sun::star::lang::IndexOutOfBoundsException;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-ScAccessibleEditObject::ScAccessibleEditObject(
-        const uno::Reference<XAccessible>& rxParent,
-        EditView* pEditView, vcl::Window* pWin, const OUString& rName,
-        const OUString& rDescription, EditObjectType eObjectType)
-    : ScAccessibleContextBase(rxParent, AccessibleRole::TEXT_FRAME)
+ScAccessibleEditObject::ScAccessibleEditObject(const uno::Reference<XAccessible>& rxParent,
+                                               EditView* pEditView, vcl::Window* pWin,
+                                               const OUString& rName, const OUString& rDescription,
+                                               EditObjectType eObjectType)
+    : ImplInheritanceHelper(rxParent, AccessibleRole::TEXT_FRAME)
     , mpEditView(pEditView)
     , mpWindow(pWin)
     , mpTextWnd(nullptr)
@@ -70,7 +70,7 @@ ScAccessibleEditObject::ScAccessibleEditObject(
 }
 
 ScAccessibleEditObject::ScAccessibleEditObject(EditObjectType eObjectType)
-    : ScAccessibleContextBase(nullptr, AccessibleRole::TEXT_FRAME)
+    : ImplInheritanceHelper(nullptr, AccessibleRole::TEXT_FRAME)
     , mpEditView(nullptr)
     , mpWindow(nullptr)
     , mpTextWnd(nullptr)
@@ -138,30 +138,6 @@ void ScAccessibleEditObject::GotFocus()
         mpTextHelper->SetFocus();
 }
 
-//=====  XInterface  ==========================================================
-
-css::uno::Any SAL_CALL
-    ScAccessibleEditObject::queryInterface (const css::uno::Type & rType)
-{
-    css::uno::Any aReturn = ScAccessibleContextBase::queryInterface (rType);
-    if ( ! aReturn.hasValue())
-        aReturn = ::cppu::queryInterface (rType,
-            static_cast< css::accessibility::XAccessibleSelection* >(this)
-            );
-    return aReturn;
-}
-void SAL_CALL
-    ScAccessibleEditObject::acquire()
-    noexcept
-{
-    ScAccessibleContextBase::acquire ();
-}
-void SAL_CALL
-    ScAccessibleEditObject::release()
-    noexcept
-{
-    ScAccessibleContextBase::release ();
-}
     //=====  XAccessibleComponent  ============================================
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPoint(
@@ -327,14 +303,6 @@ void SAL_CALL
 OUString SAL_CALL ScAccessibleEditObject::getImplementationName()
 {
     return u"ScAccessibleEditObject"_ustr;
-}
-
-//=====  XTypeProvider  =======================================================
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleEditObject::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 bool ScAccessibleEditObject::IsDefunc(sal_Int64 nParentStates)
