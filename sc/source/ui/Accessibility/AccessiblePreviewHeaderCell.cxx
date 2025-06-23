@@ -49,16 +49,16 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-                            ScPreviewShell* pViewShell,
-                            const ScAddress& rCellPos, bool bIsColHdr, bool bIsRowHdr,
-                            sal_Int32 nIndex ) :
-    ScAccessibleContextBase( rxParent, AccessibleRole::TABLE_CELL ),
-    mpViewShell( pViewShell ),
-    mnIndex( nIndex ),
-    maCellPos( rCellPos ),
-    mbColumnHeader( bIsColHdr ),
-    mbRowHeader( bIsRowHdr )
+ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell(
+    const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+    ScPreviewShell* pViewShell, const ScAddress& rCellPos, bool bIsColHdr, bool bIsRowHdr,
+    sal_Int32 nIndex)
+    : ImplInheritanceHelper(rxParent, AccessibleRole::TABLE_CELL)
+    , mpViewShell(pViewShell)
+    , mnIndex(nIndex)
+    , maCellPos(rCellPos)
+    , mbColumnHeader(bIsColHdr)
+    , mbRowHeader(bIsRowHdr)
 {
     if (mpViewShell)
         mpViewShell->AddAccessibilityObject(*this);
@@ -102,26 +102,6 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
     }
 
     ScAccessibleContextBase::Notify(rBC, rHint);
-}
-
-//=====  XInterface  =====================================================
-
-uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::queryInterface( uno::Type const & rType )
-{
-    uno::Any aAny (ScAccessiblePreviewHeaderCellImpl::queryInterface(rType));
-    return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
-}
-
-void SAL_CALL ScAccessiblePreviewHeaderCell::acquire()
-    noexcept
-{
-    ScAccessibleContextBase::acquire();
-}
-
-void SAL_CALL ScAccessiblePreviewHeaderCell::release()
-    noexcept
-{
-    ScAccessibleContextBase::release();
 }
 
 //=====  XAccessibleValue  ================================================
@@ -264,19 +244,6 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewHeaderCell::getSupportedServ
 {
     const css::uno::Sequence<OUString> vals { u"com.sun.star.table.AccessibleCellView"_ustr };
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
-}
-
-//=====  XTypeProvider  =======================================================
-
-uno::Sequence< uno::Type > SAL_CALL ScAccessiblePreviewHeaderCell::getTypes()
-{
-    return comphelper::concatSequences(ScAccessiblePreviewHeaderCellImpl::getTypes(), ScAccessibleContextBase::getTypes());
-}
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessiblePreviewHeaderCell::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 AbsoluteScreenPixelRectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen()
