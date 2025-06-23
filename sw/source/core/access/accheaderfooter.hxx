@@ -46,9 +46,6 @@ public:
     /** Returns an identifier for the implementation of this object. */
     virtual OUString SAL_CALL getImplementationName() override;
 
-    /** Return whether the specified service is supported by this class. */
-    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
-
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider

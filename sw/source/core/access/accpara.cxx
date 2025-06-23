@@ -85,7 +85,6 @@
 #include "textmarkuphelper.hxx"
 #include "parachangetrackinginfo.hxx"
 #include <com/sun/star/text/TextMarkupType.hpp>
-#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <svx/colorwindow.hxx>
 #include <o3tl/string_view.hxx>

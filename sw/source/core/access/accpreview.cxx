@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <cppuhelper/supportsservice.hxx>
 #include <strings.hrc>
 #include "accpreview.hxx"
 

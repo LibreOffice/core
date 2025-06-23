@@ -21,7 +21,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <cellfrm.hxx>
@@ -232,11 +231,6 @@ OUString SAL_CALL SwAccessibleCell::getAccessibleDescription()
 OUString SAL_CALL SwAccessibleCell::getImplementationName()
 {
     return u"com.sun.star.comp.Writer.SwAccessibleCellView"_ustr;
-}
-
-sal_Bool SAL_CALL SwAccessibleCell::supportsService(const OUString& sTestServiceName)
-{
-    return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()

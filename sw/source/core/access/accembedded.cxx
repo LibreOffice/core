@@ -20,7 +20,6 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <flyfrm.hxx>
 #include "accembedded.hxx"
 #include <cntfrm.hxx>
@@ -70,11 +69,6 @@ void SAL_CALL
 OUString SAL_CALL SwAccessibleEmbeddedObject::getImplementationName()
 {
     return u"com.sun.star.comp.Writer.SwAccessibleEmbeddedObject"_ustr;
-}
-
-sal_Bool SAL_CALL SwAccessibleEmbeddedObject::supportsService(const OUString& sTestServiceName)
-{
-    return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServiceNames()

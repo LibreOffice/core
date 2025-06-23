@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <hffrm.hxx>
 #include "accheaderfooter.hxx"
@@ -77,11 +76,6 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
         return sImplementationNameHeader;
     else
         return sImplementationNameFooter;
-}
-
-sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(const OUString& sTestServiceName)
-{
-    return cppu::supportsService(this, sTestServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames()

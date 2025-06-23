@@ -46,7 +46,6 @@
 #include <swatrset.hxx>
 #include <frmatr.hxx>
 
-#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 using namespace ::com::sun::star;
@@ -1063,12 +1062,6 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
 OUString SAL_CALL SwAccessibleTable::getImplementationName()
 {
     return u"com.sun.star.comp.Writer.SwAccessibleTableView"_ustr;
-}
-
-sal_Bool SAL_CALL SwAccessibleTable::supportsService(
-        const OUString& sTestServiceName)
-{
-    return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()

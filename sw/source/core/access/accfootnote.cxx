@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <ftnfrm.hxx>
 #include <fmtftn.hxx>
@@ -88,11 +87,6 @@ OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
         return u"com.sun.star.comp.Writer.SwAccessibleEndnoteView"_ustr;
     else
         return u"com.sun.star.comp.Writer.SwAccessibleFootnoteView"_ustr;
-}
-
-sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(const OUString& sTestServiceName)
-{
-    return cppu::supportsService(this, sTestServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()

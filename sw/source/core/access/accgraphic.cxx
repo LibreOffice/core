@@ -19,7 +19,6 @@
 
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <cppuhelper/supportsservice.hxx>
 #include <flyfrm.hxx>
 #include <fmturl.hxx>
 #include "accgraphic.hxx"
@@ -43,11 +42,6 @@ SwAccessibleGraphic::~SwAccessibleGraphic()
 OUString SAL_CALL SwAccessibleGraphic::getImplementationName()
 {
     return u"com.sun.star.comp.Writer.SwAccessibleGraphic"_ustr;
-}
-
-sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(const OUString& sTestServiceName)
-{
-    return cppu::supportsService(this, sTestServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()

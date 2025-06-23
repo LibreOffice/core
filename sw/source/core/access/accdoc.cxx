@@ -27,7 +27,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <accmap.hxx>
@@ -363,11 +362,6 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEve
 OUString SAL_CALL SwAccessibleDocument::getImplementationName()
 {
     return u"com.sun.star.comp.Writer.SwAccessibleDocumentView"_ustr;
-}
-
-sal_Bool SAL_CALL SwAccessibleDocument::supportsService(const OUString& sTestServiceName)
-{
-    return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceNames()
