@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="chart">
+  <requires lib="gtk+" version="3.20"/>
+  <!-- n-columns=2 n-rows=1 -->
+  <object class="GtkGrid" id="ChartThemePanel">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="border-width">6</property>
+    <property name="row-spacing">3</property>
+    <property name="column-spacing">6</property>
+    <child>
+      <object class="GtkToolbar" id="themetype">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="valign">start</property>
+        <property name="toolbar-style">icons</property>
+        <property name="show-arrow">False</property>
+        <property name="icon_size">2</property>
+        <child>
+          <object class="GtkMenuToolButton" id=".uno:ChartTheme">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="tooltip-text" translatable="yes" context="sidebartheme|themelist|tooltip_text">Allow to select a theme to apply to the current chart.</property>
+            <property name="halign">start</property>
+            <property name="valign">start</property>
+            <property name="use-underline">True</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="themetype-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="sidebartheme|themetype-atkobject">Themes</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="savetonew">
+        <property name="label" translatable="yes" context="sidebartheme|savetonew">_Save to new theme</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="halign">start</property>
+        <property name="valign">start</property>
+        <property name="use-underline">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+  </object>
+</interface>

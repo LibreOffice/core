@@ -75,6 +75,7 @@
 #include <com/sun/star/util/XTheme.hpp>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <svx/ChartThemeType.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;

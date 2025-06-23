@@ -38,6 +38,7 @@
 #include <comphelper/lok.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <svx/ChartThemeType.hxx>
 
 using namespace com::sun::star;
 
@@ -246,7 +247,13 @@ namespace drawinglayer::primitive2d
             double fViewSizeX(aVisibleDiscreteRange.getWidth());
             double fViewSizeY(aVisibleDiscreteRange.getHeight());
             const double fViewVisibleArea(fViewSizeX * fViewSizeY);
-            const double fMaximumVisibleArea(officecfg::Office::Common::Drawinglayer::Quadratic3DRenderLimit::get());
+            double fMaximumVisibleArea(officecfg::Office::Common::Drawinglayer::Quadratic3DRenderLimit::get());
+            // Todo: find a better way, to render lower resolution chart thumbnails.
+            if (chart::bChartThumbnailRendered)
+            {
+                fMaximumVisibleArea = fMaximumVisibleArea / 100;
+            }
+
             double fReduceFactor(1.0);
 
             if(fViewVisibleArea > fMaximumVisibleArea)

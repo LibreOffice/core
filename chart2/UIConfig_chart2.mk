@@ -38,6 +38,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/3dviewdialog \
 	chart2/uiconfig/ui/attributedialog \
 	chart2/uiconfig/ui/chartcolorpalettepopup \
+	chart2/uiconfig/ui/chartthemepopup \
 	chart2/uiconfig/ui/chardialog \
 	chart2/uiconfig/ui/chartdatadialog \
 	chart2/uiconfig/ui/charttypedialog \
@@ -48,6 +49,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/dlg_InsertDataTable \
 	chart2/uiconfig/ui/dlg_InsertErrorBars \
 	chart2/uiconfig/ui/dlg_InsertLegend \
+	chart2/uiconfig/ui/dlg_Theme \
 	chart2/uiconfig/ui/imagefragment \
 	chart2/uiconfig/ui/insertaxisdlg \
 	chart2/uiconfig/ui/insertgriddlg \
@@ -55,6 +57,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/paradialog \
 	chart2/uiconfig/ui/sidebaraxis \
 	chart2/uiconfig/ui/sidebarcolors \
+	chart2/uiconfig/ui/sidebartheme \
 	chart2/uiconfig/ui/sidebarelements \
 	chart2/uiconfig/ui/sidebarerrorbar \
 	chart2/uiconfig/ui/sidebarseries \

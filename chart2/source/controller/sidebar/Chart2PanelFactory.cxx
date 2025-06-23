@@ -35,6 +35,8 @@
 #include "ChartAreaPanel.hxx"
 #include "ChartLinePanel.hxx"
 #include "ChartColorsPanel.hxx"
+#include "ChartThemePanel.hxx"
+#include <officecfg/Office/Common.hxx>
 
 using namespace css::uno;
 
@@ -101,6 +103,9 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
             xPanel = ChartLinePanel::Create(pParent, xFrame, pController);
         else if (rsResourceURL.endsWith("/ColorsPanel"))
             xPanel = ChartColorsPanel::Create(pParent, xFrame, pController);
+        else if (rsResourceURL.endsWith("/ThemePanel")
+                 && officecfg::Office::Common::Misc::ExperimentalMode::get())
+            xPanel = ChartThemePanel::Create(pParent, xFrame, pController);
 
         if (xPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(

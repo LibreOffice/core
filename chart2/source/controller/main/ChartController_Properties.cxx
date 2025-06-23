@@ -689,6 +689,7 @@ OUString lcl_getFormatCIDforSelectedCID( const OUString& rSelectedCID )
 
 void ChartController::executeDlg_ObjectProperties( const OUString& rSelectedObjectCID )
 {
+    SolarMutexGuard aSolarGuard;
     OUString aObjectCID = lcl_getFormatCIDforSelectedCID( rSelectedObjectCID );
 
     auto xUndoGuard = std::make_shared<UndoGuard>(

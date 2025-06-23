@@ -274,6 +274,7 @@ void ChartController::executeDispatch_DeleteDataTable()
 
 void ChartController::executeDispatch_InsertTitles()
 {
+    SolarMutexGuard aSolarGuard;
     auto xUndoGuard = std::make_shared<UndoGuard>(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_TITLES )),

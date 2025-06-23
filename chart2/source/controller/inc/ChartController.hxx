@@ -343,6 +343,9 @@ public:
 
     const Selection& getSelectionMember() const { return m_aSelection; }
 
+    void setTheme(sal_uInt32 nIndex);
+    void saveTheme(sal_uInt32 nIndex);
+
 private:
     class TheModel : public salhelper::SimpleReferenceObject
     {
@@ -436,6 +439,7 @@ private:
     void executeDlg_ObjectProperties_withUndoGuard( std::shared_ptr<UndoGuard> aUndoGuard, const OUString& rObjectCID, bool bSuccessOnUnchanged );
 
     void executeDispatch_ChartType();
+    void executeDispatch_ManageThemes();
 
     void executeDispatch_InsertTitles();
     void executeDispatch_InsertLegend();

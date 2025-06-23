@@ -91,6 +91,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <sfx2/dispatch.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <officecfg/Office/Common.hxx>
 
 #define DRGPIX    2     // Drag MinMove in Pixel
 
@@ -1265,6 +1266,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, u".uno:DataRanges"_ustr );
             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, u".uno:DiagramData"_ustr );
             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, u".uno:View3D"_ustr );
+            if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, u".uno:ManageThemes"_ustr);
         }
 
         css::uno::Sequence< css::uno::Any > aArgs{

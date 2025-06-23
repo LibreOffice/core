@@ -597,6 +597,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ u".uno:ArrangeRow"_ustr ] =
         bShapeContext || ( bIsWritable && bControllerStateIsValid && ( m_apControllerState->bMayMoveSeriesForward || m_apControllerState->bMayMoveSeriesBackward ) );
 
+    m_aCommandAvailability[ u".uno:ManageThemes"_ustr] = true;
+
     // insert objects
     m_aCommandAvailability[ u".uno:InsertTitles"_ustr ] = m_aCommandAvailability[ u".uno:InsertMenuTitles"_ustr ] = bIsWritable;
     m_aCommandAvailability[ u".uno:InsertLegend"_ustr ] = m_aCommandAvailability[ u".uno:InsertMenuLegend"_ustr ] = bIsWritable;

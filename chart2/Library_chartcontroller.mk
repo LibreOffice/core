@@ -116,6 +116,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/dlg_ObjectProperties \
     chart2/source/controller/dialogs/dlg_ShapeFont \
     chart2/source/controller/dialogs/dlg_ShapeParagraph \
+    chart2/source/controller/dialogs/dlg_Theme \
     chart2/source/controller/dialogs/dlg_View3D \
     chart2/source/controller/dialogs/ObjectNameProvider \
     chart2/source/controller/dialogs/res_BarGeometry \
@@ -209,6 +210,8 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/sidebar/ChartSeriesPanel \
     chart2/source/controller/sidebar/ChartSidebarModifyListener \
     chart2/source/controller/sidebar/ChartSidebarSelectionListener \
+    chart2/source/controller/sidebar/ChartThemePanel \
+    chart2/source/controller/sidebar/ChartThemeControl \
     chart2/source/controller/sidebar/ChartTypePanel \
     chart2/source/controller/uitest/uiobject \
 ))

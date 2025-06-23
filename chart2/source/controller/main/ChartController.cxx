@@ -101,6 +101,10 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/flstitem.hxx>
 
+#include <dlg_Theme.hxx>
+#include <ObjectHierarchy.hxx>
+#include <svx/ChartThemeType.hxx>
+
 // enable the following define to let the controller listen to model changes and
 // react on this by rebuilding the view
 #define TEST_ENABLE_MODIFY_LISTENER
@@ -1144,6 +1148,8 @@ void SAL_CALL ChartController::dispatch(
     }
     else if(aCommand == "DiagramData" )
         this->executeDispatch_EditData();
+    else if( aCommand == "ManageThemes")
+        this->executeDispatch_ManageThemes();
     //insert objects
     else if( aCommand == "InsertTitles"
         || aCommand == "InsertMenuTitles")
@@ -1467,6 +1473,7 @@ void SAL_CALL ChartController::dispatch(
                 }
                 if (bAllPropertiesExist)
                 {
+                    SolarMutexGuard aSolarGuard;
                     UndoGuard aUndoGuard(EditResId(RID_OUTLUNDO_ATTR), m_xUndoManager);
                     if (aCommand == "Bold")
                     {
@@ -1582,6 +1589,33 @@ void ChartController::executeDispatch_ChartType()
         }
     });
 }
+
+void ChartController::executeDispatch_ManageThemes()
+{
+    SolarMutexGuard aSolarGuard;
+    auto xUndoGuard = std::make_shared<UndoGuard>(
+        ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Insert,
+                                                     SchResId(STR_OBJECT_TITLES)),
+        m_xUndoManager);
+
+    try
+    {
+        auto aDlg = std::make_shared<SchThemeDlg>(GetChartFrame(), this);
+        weld::DialogController::runAsync(
+            aDlg,
+            [aDlg, xUndoGuard = std::move(xUndoGuard)](int nResult) {
+                if (nResult == RET_OK)
+                {
+                    xUndoGuard->commit();
+                }
+            });
+    }
+    catch (const uno::RuntimeException&)
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "");
+    }
+}
+
 
 void ChartController::executeDispatch_SourceData()
 {
@@ -1814,6 +1848,7 @@ const o3tl::sorted_vector< std::u16string_view >& ChartController::impl_getAvail
     static const o3tl::sorted_vector< std::u16string_view > s_AvailableCommands {
         // toolbar commands
         u"ChartElementSelector",
+        u"ManageThemes",
 
         // LOK commands
         u"LOKSetTextSelection", u"LOKTransform",
@@ -1824,6 +1859,542 @@ const o3tl::sorted_vector< std::u16string_view >& ChartController::impl_getAvail
 ViewElementListProvider ChartController::getViewElementListProvider()
 {
     return ViewElementListProvider(m_pDrawModelWrapper.get());
+}
+
+static std::set<OUString>& lcl_GetPropertyNameVec()
+{
+    static std::set<OUString> aFontPropertyNameVec
+    {
+        "CharFontName",
+        "CharFontFamily",
+        "CharFontStyleName",
+        "CharFontCharSet",
+        "CharFontPitch",
+        "CharPosture",
+        "CharWeight",
+        "CharHeight",
+
+        "CharFontNameAsian",
+        "CharFontFamilyAsian",
+        "CharFontStyleNameAsian",
+        "CharFontCharSetAsian",
+        "CharFontPitchAsian",
+        "CharPostureAsian",
+        "CharWeightAsian",
+        "CharHeightAsian",
+
+        "CharFontNameComplex",
+        "CharFontFamilyComplex",
+        "CharFontStyleNameComplex",
+        "CharFontCharSetComplex",
+        "CharFontPitchComplex",
+        "CharPostureComplex",
+        "CharWeightComplex",
+        "CharHeightComplex",
+
+        "CharUnderline",
+        "CharUnderlineColor",
+        "CharUnderlineHasColor",
+        "CharStrikeout",
+        "CharOverline",
+        "CharOverlineColor",
+        "CharOverlineHasColor",
+
+        "CharColor",
+        "CharKerning",
+        "CharShadowed",
+        "CharRelief",
+        "CharContoured",
+        "CharEmphasis",
+        //some non font related but needed property
+        "AnchorPosition"
+    };
+    return aFontPropertyNameVec;
+}
+
+static void lcl_SetOrGetThemeToOrFromElement(bool bSet, ChartThemeType& aTheme,
+                                             ObjectHierarchy& aHierarchy,
+                                             ObjectIdentifier& aElement,
+                                             rtl::Reference<::chart::ChartModel>& xCModel)
+{
+    const OUString& aCID = aElement.getObjectCID();
+    ObjectType aElementType = aElement.getObjectType();
+
+    ChartThemeElementID nElementID = ChartThemeElementID::Nothing;
+    switch (aElementType)
+    {
+        case OBJECTTYPE_TITLE:
+        {
+            size_t nLastSign = aCID.lastIndexOf(u":Title=");
+            if (nLastSign != std::u16string_view::npos)
+                nElementID = ChartThemeElementID::SubTitle;
+            else
+                nElementID = ChartThemeElementID::Title;
+        }
+        break;
+        case OBJECTTYPE_LEGEND:
+            nElementID = ChartThemeElementID::Legend;
+            break;
+        case OBJECTTYPE_AXIS:
+        {
+            nElementID = ChartThemeElementID::Axis;
+            size_t nLastSign = aCID.lastIndexOf(u":Axis=");
+            if (nLastSign != std::u16string_view::npos)
+            {
+                auto nIndex = aCID[nLastSign + 6];
+                switch (nIndex)
+                {
+                    case '1':
+                        nElementID = ChartThemeElementID::AxisY;
+                        break;
+                    case '2':
+                        nElementID = ChartThemeElementID::AxisZ;
+                        break;
+                }
+            }
+        }
+        break;
+        case OBJECTTYPE_DATA_LABEL:
+        case OBJECTTYPE_DATA_LABELS:
+        case OBJECTTYPE_DATA_SERIES:
+            nElementID = ChartThemeElementID::Label;
+            break;
+        // Todo: we may want to save other element types too
+        default:
+            nElementID = ChartThemeElementID::Nothing;
+            break;
+    }
+
+    if (nElementID != ChartThemeElementID::Nothing)
+    {
+        // Get the actual chart element properties.
+        // We want to save it, or overwrite it later.
+        std::vector<Reference<beans::XPropertySet>> xProperties;
+        xProperties.emplace(xProperties.end(),
+                            ObjectIdentifier::getObjectPropertySet(aCID, xCModel));
+
+        if (aElementType == OBJECTTYPE_TITLE)
+        {
+            Reference<chart2::XTitle> xTitle(xProperties[0], uno::UNO_QUERY);
+            if (xTitle.is())
+            {
+                const Sequence<Reference<chart2::XFormattedString>> aStrings(xTitle->getText());
+                xProperties.pop_back();
+                for (int i = 0; i < aStrings.getLength(); i++)
+                {
+                    Reference<beans::XPropertySet> xTitlePropSet(aStrings[i], uno::UNO_QUERY);
+                    xProperties.push_back(xTitlePropSet);
+                }
+            }
+        }
+
+        // If we set the style of the chart .. we clear the customized data point properties
+        if (bSet && nElementID == ChartThemeElementID::Label)
+        {
+            rtl::Reference<DataSeries> xSeries(
+                ObjectIdentifier::getDataSeriesForCID(aCID, xCModel));
+            if (xSeries.is())
+            {
+                xSeries->resetAllDataPoints();
+            }
+        }
+
+        // Get the properties of the Theme
+        // we may want to set it to the chart, or overwrite it with the chart element properties.
+        std::vector<std::pair<OUString, uno::Any>>& aProperties
+            = aTheme.m_aElements[static_cast<int>(nElementID)].m_aProperties;
+
+        for (size_t i = 0; i < xProperties.size(); i++)
+        {
+            if (bSet)
+            {
+                // set properties of chart from the stored in theme
+                for (auto& aProperty : aProperties)
+                {
+                    try
+                    {
+                        if (aProperty.second != xProperties[i]->getPropertyValue(aProperty.first))
+                        {
+                            xProperties[i]->setPropertyValue(aProperty.first, aProperty.second);
+                        }
+                    }
+                    catch (const beans::UnknownPropertyException&)
+                    {
+                        TOOLS_WARN_EXCEPTION("chart2", "unknown Property: " << aProperty.first);
+                    }
+                    catch (const uno::Exception&)
+                    {
+                        TOOLS_WARN_EXCEPTION("chart2", "");
+                    }
+                }
+            }
+            else
+            {
+                // get style from chart and save to theme
+                // TODO: we should save not all the properties
+                Reference<beans::XPropertySetInfo> xInfo = xProperties[0]->getPropertySetInfo();
+                if (xInfo.is())
+                {
+                    auto aPropSeq = xInfo->getProperties();
+                    uno::Any aValue;
+                    if (aPropSeq.getLength() > 0)
+                    {
+                        // clear the theme properties, and reserve enought for the current style
+                        // TODO: we may want to keep some that cannot be overwritten?
+                        aProperties.clear();
+                        aProperties.reserve(aPropSeq.getLength());
+
+                        std::set<OUString>& rPropSet = lcl_GetPropertyNameVec();
+                        for (auto& aProp : aPropSeq)
+                        {
+                            std::set<OUString>::const_iterator aIt(rPropSet.find(aProp.Name));
+                            if (aIt != rPropSet.end())
+                            {
+                                aValue = xProperties[0]->getPropertyValue(aProp.Name);
+                                if (aValue.hasValue())
+                                {
+                                    aProperties.push_back(std::make_pair(aProp.Name, aValue));
+                                }
+                            }
+                        }
+                    }
+                }
+                // if there is more element in xProperties, then it is a Title with multiple styles ..
+                // we can save only 1 so we are finished here
+                break;
+            }
+        }
+    }
+
+    auto aChild = aHierarchy.getChildren(aElement);
+    if (aChild.size() > 0)
+    {
+        for (auto& aCElement : aChild)
+        {
+            lcl_SetOrGetThemeToOrFromElement(bSet, aTheme, aHierarchy, aCElement, xCModel);
+        }
+    }
+}
+
+void ChartController::setTheme(sal_uInt32 nIndex)
+{
+    if (nIndex >= ChartThemesType::getInstance().getThemesCount())
+        return;
+
+    ChartThemeType& aTheme = ChartThemesType::getInstance().m_aThemes[nIndex];
+
+    rtl::Reference<::chart::ChartModel> xCModel = getChartModel();
+
+    xCModel->lockControllers();
+    ExplicitValueProvider* pExplicitValueProvider = nullptr;
+    ObjectHierarchy aHierarchy(xCModel, pExplicitValueProvider, true, true);
+    auto aTop = aHierarchy.getTopLevelChildren();
+    for (auto& aElement : aTop)
+    {
+        lcl_SetOrGetThemeToOrFromElement(true, aTheme, aHierarchy, aElement, xCModel);
+    }
+    xCModel->unlockControllers();
+}
+
+void ChartController::saveTheme(sal_uInt32 nIndex)
+{
+    ChartThemesType& aChartTypes = ChartThemesType::getInstance();
+    if (nIndex >= aChartTypes.getThemesCount())
+    {
+        nIndex = aChartTypes.getThemesCount();
+        // maximum 256 chart styles
+        // Todo: maybe we could figure out some other way to limit this.
+        if (nIndex >= 256)
+            return;
+        aChartTypes.m_aThemes.resize(nIndex + 1);
+    }
+
+    ChartThemeType& aTheme = aChartTypes.m_aThemes[nIndex];
+
+    rtl::Reference<::chart::ChartModel> xCModel = getChartModel();
+
+    ExplicitValueProvider* pExplicitValueProvider = nullptr;
+    ObjectHierarchy aHierarchy(xCModel, pExplicitValueProvider, true, true);
+    auto aTop = aHierarchy.getTopLevelChildren();
+    for (auto& aElement : aTop)
+    {
+        lcl_SetOrGetThemeToOrFromElement(false, aTheme, aHierarchy, aElement, xCModel);
+    }
+}
+
+ChartThemesType* ChartThemesType::m_aInstance = nullptr;
+ChartThemesType& ChartThemesType::getInstance()
+{
+    if (!m_aInstance) {
+        m_aInstance = new ChartThemesType;
+    }
+    return *m_aInstance;
+}
+
+typedef std::pair<OUString, sal_uInt8> tPropertyNameWithMemberId;
+typedef std::map<sal_uInt16, tPropertyNameWithMemberId> ItemPropertyMapType;
+
+static ItemPropertyMapType& lcl_GetPropertyMap()
+{
+    static ItemPropertyMapType aCharacterPropertyMap{
+        { EE_CHAR_COLOR, { "CharColor", 0 } },
+        { EE_CHAR_KERNING, { "CharKerning", 0 } },
+        { EE_CHAR_SHADOW, { "CharShadowed", 0 } },
+        { EE_CHAR_RELIEF, { "CharRelief", 0 } },
+        { EE_CHAR_OUTLINE, { "CharContoured", 0 } },
+        { EE_CHAR_EMPHASISMARK, { "CharEmphasis", 0 } },
+    };
+    return aCharacterPropertyMap;
+}
+
+void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem*> aPoolItems)
+{
+    uno::Any aValue;
+
+    for (SfxPoolItem* pPoolItem : aPoolItems)
+    {
+        sal_uInt16 nWhichId = pPoolItem->Which();
+
+        switch (nWhichId)
+        {
+            case EE_CHAR_FONTINFO:
+            case EE_CHAR_FONTINFO_CJK:
+            case EE_CHAR_FONTINFO_CTL:
+            {
+                OUString aPostfix;
+                if (nWhichId == EE_CHAR_FONTINFO_CJK)
+                    aPostfix = "Asian";
+                else if (nWhichId == EE_CHAR_FONTINFO_CTL)
+                    aPostfix = "Complex";
+
+                const SvxFontItem& rItem = static_cast<const SvxFontItem&>(*pPoolItem);
+
+                if (rItem.QueryValue(aValue, MID_FONT_FAMILY_NAME))
+                {
+                    m_aProperties.push_back(
+                        std::pair<OUString, uno::Any>("CharFontName" + aPostfix, aValue));
+                }
+                if (rItem.QueryValue(aValue, MID_FONT_FAMILY))
+                {
+                    m_aProperties.push_back(
+                        std::pair<OUString, uno::Any>("CharFontFamily" + aPostfix, aValue));
+                }
+                if (rItem.QueryValue(aValue, MID_FONT_STYLE_NAME))
+                {
+                    m_aProperties.push_back(
+                        std::pair<OUString, uno::Any>("CharFontStyleName" + aPostfix, aValue));
+                }
+                if (rItem.QueryValue(aValue, MID_FONT_CHAR_SET))
+                {
+                    m_aProperties.push_back(
+                        std::pair<OUString, uno::Any>("CharFontCharSet" + aPostfix, aValue));
+                }
+                if (rItem.QueryValue(aValue, MID_FONT_PITCH))
+                {
+                    m_aProperties.push_back(
+                        std::pair<OUString, uno::Any>("CharFontPitch" + aPostfix, aValue));
+                }
+            }
+            break;
+
+            case EE_CHAR_UNDERLINE:
+            {
+                const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>(*pPoolItem);
+
+                if (rItem.QueryValue(aValue, MID_TL_STYLE))
+                {
+                    m_aProperties.push_back(std::make_pair(u"CharUnderline"_ustr, aValue));
+                }
+
+                if (rItem.QueryValue(aValue, MID_TL_COLOR))
+                {
+                    m_aProperties.push_back(std::make_pair(u"CharUnderlineColor"_ustr, aValue));
+                }
+
+                if (rItem.QueryValue(aValue, MID_TL_HASCOLOR))
+                {
+                    m_aProperties.push_back(std::make_pair(u"CharUnderlineHasColor"_ustr, aValue));
+                }
+            }
+            break;
+
+            case EE_CHAR_STRIKEOUT:
+            {
+                const SvxCrossedOutItem& rItem = static_cast<const SvxCrossedOutItem&>(*pPoolItem);
+
+                if (rItem.QueryValue(aValue, MID_TL_STYLE))
+                {
+                    m_aProperties.push_back(std::make_pair(u"CharStrikeout"_ustr, aValue));
+                }
+            }
+            break;
+
+            case EE_CHAR_OVERLINE:
+            {
+                const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>(*pPoolItem);
+
+                if (rItem.QueryValue(aValue, MID_TL_STYLE))
+                {
+                    m_aProperties.push_back(std::make_pair(u"CharOverline"_ustr, aValue));
+                }
+
+                if (rItem.QueryValue(aValue, MID_TL_COLOR))
+                {
+                    m_aProperties.push_back(std::make_pair(u"CharOverlineColor"_ustr, aValue));
+                }
+
+                if (rItem.QueryValue(aValue, MID_TL_HASCOLOR))
+                {
+                    m_aProperties.push_back(std::make_pair(u"CharOverlineHasColor"_ustr, aValue));
+                }
+            }
+            break;
+
+            case EE_CHAR_ITALIC:
+            case EE_CHAR_ITALIC_CJK:
+            case EE_CHAR_ITALIC_CTL:
+            {
+                OUString aPostfix;
+                if (nWhichId == EE_CHAR_ITALIC_CJK)
+                    aPostfix = "Asian";
+                else if (nWhichId == EE_CHAR_ITALIC_CTL)
+                    aPostfix = "Complex";
+
+                const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>(*pPoolItem);
+
+                if (rItem.QueryValue(aValue, MID_POSTURE))
+                {
+                    m_aProperties.push_back(
+                        std::pair<OUString, uno::Any>("CharPosture" + aPostfix, aValue));
+                }
+            }
+            break;
+
+            case EE_CHAR_WEIGHT:
+            case EE_CHAR_WEIGHT_CJK:
+            case EE_CHAR_WEIGHT_CTL:
+            {
+                OUString aPostfix;
+                if (nWhichId == EE_CHAR_WEIGHT_CJK)
+                    aPostfix = "Asian";
+                else if (nWhichId == EE_CHAR_WEIGHT_CTL)
+                    aPostfix = "Complex";
+
+                const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>(*pPoolItem);
+
+                if (rItem.QueryValue(aValue, MID_WEIGHT))
+                {
+                    m_aProperties.push_back(
+                        std::pair<OUString, uno::Any>("CharWeight" + aPostfix, aValue));
+                }
+            }
+            break;
+
+            case EE_CHAR_FONTHEIGHT:
+            case EE_CHAR_FONTHEIGHT_CJK:
+            case EE_CHAR_FONTHEIGHT_CTL:
+            {
+                OUString aPostfix;
+                if (nWhichId == EE_CHAR_FONTHEIGHT_CJK)
+                    aPostfix = "Asian";
+                else if (nWhichId == EE_CHAR_FONTHEIGHT_CTL)
+                    aPostfix = "Complex";
+
+                const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(*pPoolItem);
+
+                if (rItem.QueryValue(aValue, MID_FONTHEIGHT))
+                {
+                    m_aProperties.push_back(
+                        std::pair<OUString, uno::Any>("CharHeight" + aPostfix, aValue));
+                }
+            }
+            break;
+            default:
+            {
+                ItemPropertyMapType& rMap(lcl_GetPropertyMap());
+                ItemPropertyMapType::const_iterator aIt(rMap.find(nWhichId));
+
+                if (aIt != rMap.end())
+                {
+                    tPropertyNameWithMemberId aProperty = (*aIt).second;
+
+                    pPoolItem->QueryValue(aValue, aProperty.second /* nMemberId */);
+                    m_aProperties.push_back(std::make_pair(aProperty.first, aValue));
+                }
+            }
+            break;
+        }
+    }
+}
+
+ChartThemesType::ChartThemesType()
+{
+    // TODO: find a better place/way to store the pre-defined chart themes
+    // Now it is just some placeholder test cases.
+    // by default there is now 4 pre-defined chart style
+    // and 7 chart elements
+    size_t ElementCount = ChartThemeType::ElementCount;
+    m_aThemes.resize(FixedCount);
+    for (size_t i = 0; i < FixedCount * ElementCount; i++)
+    {
+        std::vector<SfxPoolItem*> aSet;
+
+        ChartThemeElementID nElementType = ChartThemeElementID(i % ElementCount);
+
+        sal_uInt32 nHeight = 240 + i * 10;
+        sal_uInt32 nColor = 170 << (i % 15);
+        const Color aColor(ColorAlpha, nColor);
+        short nKerning = 0;
+        FontWeight nBold = WEIGHT_NORMAL;
+        FontItalic nItalic = ITALIC_NONE;
+
+        if (nElementType == ChartThemeElementID::Title)
+        {
+            nHeight *= 2;
+            nKerning = 100 * (i / ElementCount + 1);
+            nBold = WEIGHT_BOLD;
+        }
+        if (nElementType == ChartThemeElementID::SubTitle)
+        {
+            nHeight = nHeight * 3 / 2;
+            nKerning = -50 * (i / ElementCount + 1);
+            nItalic = ITALIC_NORMAL;
+        }
+
+        aSet.push_back(new SvxFontItem(FAMILY_DONTKNOW, u"Kristen ITC"_ustr, u""_ustr,
+                                       PITCH_VARIABLE,
+                             RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO));
+        aSet.push_back(new SvxFontItem(FAMILY_DONTKNOW, u"Mistral"_ustr, u""_ustr, PITCH_VARIABLE,
+                             RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO_CJK));
+        aSet.push_back(new SvxFontItem(FAMILY_DONTKNOW, u"Maiandra GD"_ustr, u""_ustr,
+                                       PITCH_VARIABLE,
+                             RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO_CTL));
+
+        aSet.push_back(new SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT));
+        aSet.push_back(new SvxFontHeightItem(nHeight + 1, 100, EE_CHAR_FONTHEIGHT_CJK));
+        aSet.push_back(new SvxFontHeightItem(nHeight + 2, 100, EE_CHAR_FONTHEIGHT_CTL));
+
+        aSet.push_back(new SvxWeightItem(nBold, EE_CHAR_WEIGHT));
+        aSet.push_back(new SvxWeightItem(nBold, EE_CHAR_WEIGHT_CJK));
+        aSet.push_back(new SvxWeightItem(nBold, EE_CHAR_WEIGHT_CTL));
+
+        aSet.push_back(new SvxPostureItem(nItalic, EE_CHAR_ITALIC));
+        aSet.push_back(new SvxPostureItem(nItalic, EE_CHAR_ITALIC_CJK));
+        aSet.push_back(new SvxPostureItem(nItalic, EE_CHAR_ITALIC_CTL));
+
+        aSet.push_back(new SvxUnderlineItem(LINESTYLE_LONGDASH, EE_CHAR_UNDERLINE));
+
+        aSet.push_back(new SvxCrossedOutItem(STRIKEOUT_BOLD, EE_CHAR_STRIKEOUT));
+        aSet.push_back(new SvxColorItem(aColor, EE_CHAR_COLOR));
+        aSet.push_back(new SvxShadowedItem(true, EE_CHAR_SHADOW));
+        if (nKerning != 0)
+        {
+            aSet.push_back(new SvxKerningItem(nKerning, EE_CHAR_KERNING));
+        }
+        //convert them to properties
+        m_aThemes[i / ElementCount].m_aElements[i % ElementCount].convertPoolItemsToProperties(
+            aSet);
+    }
 }
 
 } //namespace chart
