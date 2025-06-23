@@ -91,8 +91,10 @@ OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
 
 Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
 {
-    return { (AccessibleRole::END_NOTE == GetRole())?u"com.sun.star.text.AccessibleEndnoteView"_ustr:u"com.sun.star.text.AccessibleFootnoteView"_ustr,
-             sAccessibleServiceName };
+    if (GetRole() == AccessibleRole::END_NOTE)
+        return { u"com.sun.star.text.AccessibleEndnoteView"_ustr, sAccessibleServiceName };
+
+    return { sAccessibleServiceName };
 }
 
 bool SwAccessibleFootnote::IsEndnote( const SwFootnoteFrame *pFootnoteFrame )
