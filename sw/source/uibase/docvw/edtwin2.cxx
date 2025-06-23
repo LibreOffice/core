@@ -450,6 +450,10 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                     SwPosition aPos(rSh.GetDoc()->GetNodes());
                     rSh.GetLayout()->GetModelPositionForViewPoint(&aPos, aPt);
+                    // Do not try to create a range for non-text and non-startnode;
+                    // see MarkManager::makeMark
+                    if (!aPos.GetNode().IsTextNode() && !aPos.GetNode().IsStartNode())
+                        break;
                     rtl::Reference<SwXTextRange> xRange(SwXTextRange::CreateXTextRange(
                         *(m_rView.GetDocShell()->GetDoc()), aPos, &aPos));
 
