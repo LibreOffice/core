@@ -23,6 +23,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <rtl/ref.hxx>
 #include <memory>
+#include <optional>
 
 class SwXTextDocument;
 namespace com::sun::star::lang
@@ -122,7 +123,7 @@ private:
     bool m_bShowInsDelChanges;
     bool m_bShowFormattingChanges;
     bool m_bShowMarkupChanges;
-    bool m_bLinkStyles;
+    std::optional<bool> m_oLinkStyles;
     sal_Int16 m_nZoomFactor;
     sal_Int16 m_nZoomType = 0;
     sal_Int32 m_nWordCompatibilityMode;

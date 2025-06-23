@@ -44,6 +44,32 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166544_noTopMargin_fields, "tdf166544_noTopMargi
     CPPUNIT_ASSERT_EQUAL(sal_Int32(269), nHeight);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf166141_linkedStyles, "tdf166141_linkedStyles.docx")
+{
+    // Given a document with settings.xml containing both linkStyles and attachedTemplate
+
+    // The problem was that there should not be any spacing between the two paragraphs,
+    // but there was 200 twips of below spacing.
+
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    // Since the "template" to update the styles from doesn't exist, make no changes
+    // This was being forced to 200 twips by linkedStyles...
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, u"ParaBottomMargin"_ustr));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf166141_linkedStyles2, "tdf166141_linkedStyles2.docx")
+{
+    // Given a document with settings.xml containing only linkStyles - no attachedTemplate
+
+    // Since no "template" was provided to update the styles from,
+    // the styles must be updated using the application defaults.
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    // This must be 200 twips / 0.35cm.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(xStyle, u"ParaBottomMargin"_ustr));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf166510_sectPr_bottomSpacing, "tdf166510_sectPr_bottomSpacing.docx")
 {
     // given with a sectPr with different bottom spacing (undefined in this case - i.e. zero)

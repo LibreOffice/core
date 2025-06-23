@@ -82,7 +82,6 @@ SettingsTable::SettingsTable(const DomainMapper& rDomainMapper)
 , m_bShowInsDelChanges(true)
 , m_bShowFormattingChanges(false)
 , m_bShowMarkupChanges(true)
-, m_bLinkStyles(false)
 , m_nZoomFactor(0)
 , m_nWordCompatibilityMode(-1)
 , m_nView(0)
@@ -217,6 +216,11 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     //PropertySetValues - need to be resolved
     {
         resolveSprmProps(*this, rSprm);
+
+        // If attached template cannot be located or is not a valid file, silently ignore linkStyles
+        // and since LO doesn't know how to update styles anyway, just always ignore linkStyles
+        if (nSprmId == NS_ooxml::LN_CT_Settings_attachedTemplate)
+            m_oLinkStyles = false;
     }
     break;
     case NS_ooxml::LN_CT_Settings_stylePaneFormatFilter: // 92493;
@@ -225,7 +229,10 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     m_nDefaultTabStop = nIntValue;
     break;
     case NS_ooxml::LN_CT_Settings_linkStyles: // 92663;
-    m_bLinkStyles = nIntValue;
+    {
+        if (!m_oLinkStyles.has_value())
+            m_oLinkStyles = bool(nIntValue);
+    }
     break;
     case NS_ooxml::LN_CT_Settings_evenAndOddHeaders:
     m_bEvenAndOddHeaders = nIntValue;
@@ -430,7 +437,7 @@ int SettingsTable::GetDefaultTabStop() const
 
 bool SettingsTable::GetLinkStyles() const
 {
-    return m_bLinkStyles;
+    return m_oLinkStyles.has_value() && *m_oLinkStyles;
 }
 
 sal_Int16 SettingsTable::GetZoomFactor() const
