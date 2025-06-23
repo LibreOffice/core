@@ -233,7 +233,7 @@ OUString SAL_CALL SwAccessibleTextFrame::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
 {
-    return { u"com.sun.star.text.AccessibleTextFrameView"_ustr, sAccessibleServiceName };
+    return { sAccessibleServiceName };
 }
 
 // XAccessibleRelationSet
