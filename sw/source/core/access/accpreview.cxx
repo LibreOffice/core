@@ -44,8 +44,7 @@ OUString SwAccessiblePreview::getImplementationName( )
 
 Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
 {
-    return {u"com.sun.star.text.AccessibleTextDocumentPageView"_ustr,
-            sAccessibleServiceName};
+    return { sAccessibleServiceName };
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
