@@ -200,7 +200,7 @@ SystemEnvData QtInstanceWindow::get_system_data() const
     return *pEnvData;
 }
 
-void QtInstanceWindow::resize_to_request() { assert(false && "Not implemented yet"); }
+void QtInstanceWindow::resize_to_request() { queue_resize(); }
 
 weld::ScreenShotCollection QtInstanceWindow::collect_screenshot_data()
 {
