@@ -38,8 +38,8 @@ SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemS
     , mpBitmapList(rModel.GetBitmapList())
     , mpPatternList(rModel.GetPatternList())
 {
-    AddTabPage(u"name"_ustr, RID_SVXPAGE_CHAR_NAME);
-    AddTabPage(u"effects"_ustr, RID_SVXPAGE_CHAR_EFFECTS);
+    AddTabPage(u"font"_ustr, RID_SVXPAGE_CHAR_NAME);
+    AddTabPage(u"fonteffects"_ustr, RID_SVXPAGE_CHAR_EFFECTS);
     AddTabPage(u"border"_ustr, RID_SVXPAGE_BORDER );
     AddTabPage(u"area"_ustr, RID_SVXPAGE_AREA);
 
