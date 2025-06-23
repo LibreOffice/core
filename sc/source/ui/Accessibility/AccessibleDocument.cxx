@@ -1286,7 +1286,7 @@ ScAccessibleDocument::ScAccessibleDocument(
         const uno::Reference<XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScSplitPos eSplitPos)
-    : ScAccessibleDocumentBase(rxParent),
+    : ImplInheritanceHelper(rxParent),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
     mbCompleteSheetSelected(false)
@@ -1552,26 +1552,6 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
 
     if (bSelectionChanged)
         CommitChange(AccessibleEventId::SELECTION_CHANGED, uno::Any(), uno::Any());
-}
-
-    //=====  XInterface  =====================================================
-
-uno::Any SAL_CALL ScAccessibleDocument::queryInterface( uno::Type const & rType )
-{
-    uno::Any aAny (ScAccessibleDocumentImpl::queryInterface(rType));
-    return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
-}
-
-void SAL_CALL ScAccessibleDocument::acquire()
-    noexcept
-{
-    ScAccessibleContextBase::acquire();
-}
-
-void SAL_CALL ScAccessibleDocument::release()
-    noexcept
-{
-    ScAccessibleContextBase::release();
 }
 
     //=====  XAccessibleComponent  ============================================
@@ -1911,19 +1891,6 @@ uno::Sequence< OUString> SAL_CALL
 {
     const css::uno::Sequence<OUString> vals { u"com.sun.star.AccessibleSpreadsheetDocumentView"_ustr };
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
-}
-
-//=====  XTypeProvider  =======================================================
-
-uno::Sequence< uno::Type > SAL_CALL ScAccessibleDocument::getTypes()
-{
-    return comphelper::concatSequences(ScAccessibleDocumentImpl::getTypes(), ScAccessibleContextBase::getTypes());
-}
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleDocument::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 ///=====  IAccessibleViewForwarder  ========================================
