@@ -158,7 +158,10 @@ private:
     SvXMLDateElementAttributes  m_eDateSecs;
     bool                        m_bDateNoDefault;
 
-    SAL_DLLPRIVATE sal_Int32 PrivateGetKey();
+    SAL_DLLPRIVATE sal_Int32 PrivateGetKey(std::vector<SvXMLNumFormatContext*>& rCreateStack);
+
+    SAL_DLLPRIVATE sal_Int32 CreateAndInsert(SvNumberFormatter* pFormatter, std::vector<SvXMLNumFormatContext*>& rCreateStack);
+    SAL_DLLPRIVATE void CreateAndInsert(bool bOverwrite, std::vector<SvXMLNumFormatContext*>& rCreateStack);
 
 public:
                 SvXMLNumFormatContext( SvXMLImport& rImport,
@@ -180,7 +183,6 @@ public:
     virtual void CreateAndInsert(bool bOverwrite) override final;
 
     sal_Int32 GetKey();
-    sal_Int32 CreateAndInsert( SvNumberFormatter* pFormatter );
     sal_Int32 CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier > const & xFormatsSupplier );
     SvXMLStylesTokens GetType() const           { return m_nType; }   // SvXMLStylesTokens
 

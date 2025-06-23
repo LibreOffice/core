@@ -1523,7 +1523,7 @@ sal_Int32 SvXMLNumFormatContext::GetKey()
     }
 }
 
-sal_Int32 SvXMLNumFormatContext::PrivateGetKey()
+sal_Int32 SvXMLNumFormatContext::PrivateGetKey(std::vector<SvXMLNumFormatContext*>& rCreateStack)
 {
     //  used for map elements in CreateAndInsert - don't reset bRemoveAfterUse flag
 
@@ -1531,7 +1531,7 @@ sal_Int32 SvXMLNumFormatContext::PrivateGetKey()
         return m_nKey;
     else
     {
-        CreateAndInsert(true);
+        CreateAndInsert(true, rCreateStack);
         return m_nKey;
     }
 }
@@ -1547,7 +1547,10 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert( css::uno::Reference< css::util
             pFormatter = pObj->GetNumberFormatter();
 
         if ( pFormatter )
-            return CreateAndInsert( pFormatter );
+        {
+            std::vector<SvXMLNumFormatContext*> aCreateStack;
+            return CreateAndInsert(pFormatter, aCreateStack);
+        }
         else
             return -1;
     }
@@ -1555,13 +1558,19 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert( css::uno::Reference< css::util
         return m_nKey;
 }
 
-void SvXMLNumFormatContext::CreateAndInsert(bool /*bOverwrite*/)
+void SvXMLNumFormatContext::CreateAndInsert(bool bOverwrite)
 {
-    if (m_nKey <= -1)
-        CreateAndInsert(m_pData->GetNumberFormatter());
+    std::vector<SvXMLNumFormatContext*> aCreateStack;
+    return CreateAndInsert(bOverwrite, aCreateStack);
 }
 
-sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
+void SvXMLNumFormatContext::CreateAndInsert(bool /*bOverwrite*/, std::vector<SvXMLNumFormatContext*>& rCreateStack)
+{
+    if (m_nKey <= -1)
+        CreateAndInsert(m_pData->GetNumberFormatter(), rCreateStack);
+}
+
+sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter, std::vector<SvXMLNumFormatContext*>& rCreateStack)
 {
     if (!pFormatter)
     {
@@ -1569,20 +1578,22 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         return -1;
     }
 
+    rCreateStack.push_back(this);
+
     sal_uInt32 nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
     for (size_t i = 0; i < m_aMyConditions.size(); i++)
     {
         SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>( static_cast<const SvXMLNumFormatContext *>(m_pStyles->FindStyleChildContext(
             XmlStyleFamily::DATA_STYLE, m_aMyConditions[i].sMapName)));
-        if (this == pStyle)
+        if (std::find(rCreateStack.begin(), rCreateStack.end(), pStyle) != rCreateStack.end())
         {
             SAL_INFO("xmloff.style", "invalid style:map references containing style");
             pStyle = nullptr;
         }
         if (pStyle)
         {
-            if (pStyle->PrivateGetKey() > -1)     // don't reset pStyle's bRemoveAfterUse flag
+            if (pStyle->PrivateGetKey(rCreateStack) > -1)     // don't reset pStyle's bRemoveAfterUse flag
                 AddCondition(i);
         }
     }
@@ -1723,6 +1734,8 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
 
     if (!m_bRemoveAfterUse)
         GetImport().AddNumberStyle( m_nKey, GetName() );
+
+    rCreateStack.pop_back();
 
     return m_nKey;
 }
