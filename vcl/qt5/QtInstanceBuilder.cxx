@@ -68,6 +68,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
     static std::unordered_set<OUString> aSupportedUIFiles = {
         u"cui/ui/aboutdialog.ui"_ustr,
         u"cui/ui/breaknumberoption.ui"_ustr,
+        u"cui/ui/editdictionarydialog.ui"_ustr,
         u"cui/ui/fontfeaturesdialog.ui"_ustr,
         u"cui/ui/fontfragment.ui"_ustr,
         u"cui/ui/insertrowcolumn.ui"_ustr,
