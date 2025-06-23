@@ -691,7 +691,11 @@ void QtBuilder::insertMenuObject(QMenu* pParent, QMenu* pSubMenu, const OUString
     const OUString sActionName(extractActionName(rProps));
     QtInstanceMenu::setActionName(*pAction, sActionName);
 
-    if (rClass == u"GtkMenuItem")
+    if (rClass == u"GtkCheckMenuItem")
+    {
+        pAction->setCheckable(true);
+    }
+    else if (rClass == u"GtkMenuItem")
     {
         // nothing else to do
     }
