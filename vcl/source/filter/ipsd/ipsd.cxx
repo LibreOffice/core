@@ -727,7 +727,7 @@ bool PSDReader::ImplReadBody()
                     m_rPSD.ReadUChar( nDummy );
                 for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                 {
-                    mpBitmap->SetAlpha(nY, nX, nDat ? 255 : 0);
+                    mpBitmap->SetAlpha(nY, nX, nDat ? 0 : 255);
                     if ( ++nX == mpFileHeader->nColumns )
                     {
                         nX = 0;
@@ -748,7 +748,7 @@ bool PSDReader::ImplReadBody()
                         nDat = 1;
                     if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
                         m_rPSD.ReadUChar( nDummy );
-                    mpBitmap->SetAlpha(nY, nX, nDat ? 255 : 0);
+                    mpBitmap->SetAlpha(nY, nX, nDat ? 0 : 255);
                     if ( ++nX == mpFileHeader->nColumns )
                     {
                         nX = 0;
