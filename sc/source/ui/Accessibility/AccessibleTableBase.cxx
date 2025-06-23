@@ -34,14 +34,11 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-ScAccessibleTableBase::ScAccessibleTableBase(
-        const uno::Reference<XAccessible>& rxParent,
-        ScDocument* pDoc,
-        const ScRange& rRange)
-    :
-    ScAccessibleContextBase (rxParent, AccessibleRole::TABLE),
-    maRange(rRange),
-    mpDoc(pDoc)
+ScAccessibleTableBase::ScAccessibleTableBase(const uno::Reference<XAccessible>& rxParent,
+                                             ScDocument* pDoc, const ScRange& rRange)
+    : ImplInheritanceHelper(rxParent, AccessibleRole::TABLE)
+    , maRange(rRange)
+    , mpDoc(pDoc)
 {
 }
 
@@ -55,33 +52,6 @@ void SAL_CALL ScAccessibleTableBase::disposing()
     mpDoc = nullptr;
 
     ScAccessibleContextBase::disposing();
-}
-
-    //=====  XInterface  =====================================================
-
-uno::Any SAL_CALL ScAccessibleTableBase::queryInterface( uno::Type const & rType )
-{
-    if ( rType == cppu::UnoType<XAccessibleTableSelection>::get())
-    {
-        return uno::Any(uno::Reference<XAccessibleTableSelection>(this));
-    }
-    else
-    {
-        uno::Any aAny (ScAccessibleTableBaseImpl::queryInterface(rType));
-        return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
-    }
-}
-
-void SAL_CALL ScAccessibleTableBase::acquire()
-    noexcept
-{
-    ScAccessibleContextBase::acquire();
-}
-
-void SAL_CALL ScAccessibleTableBase::release()
-    noexcept
-{
-    ScAccessibleContextBase::release();
 }
 
     //=====  XAccessibleTable  ================================================
@@ -409,19 +379,6 @@ void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int64 /* nSele
 OUString SAL_CALL ScAccessibleTableBase::getImplementationName()
 {
     return u"ScAccessibleTableBase"_ustr;
-}
-
-    //=====  XTypeProvider  ===================================================
-
-uno::Sequence< uno::Type > SAL_CALL ScAccessibleTableBase::getTypes()
-{
-    return comphelper::concatSequences(ScAccessibleTableBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
-}
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleTableBase::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int32 nStartCol, sal_Int32 nEndRow, sal_Int32 nEndCol, sal_uInt16 nId)

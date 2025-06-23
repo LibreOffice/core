@@ -24,21 +24,12 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
-/** @descr
-        This base class provides an implementation of the
-        <code>AccessibleTable</code> service.
-*/
-
-typedef cppu::ImplHelper2< css::accessibility::XAccessibleTable,
-                    css::accessibility::XAccessibleSelection>
-                    ScAccessibleTableBaseImpl;
-
-class ScAccessibleTableBase :
-            public ScAccessibleContextBase,
-            public   css::accessibility::XAccessibleTableSelection,
-            public ScAccessibleTableBaseImpl
+class ScAccessibleTableBase
+    : public cppu::ImplInheritanceHelper<
+          ScAccessibleContextBase, css::accessibility::XAccessibleTableSelection,
+          css::accessibility::XAccessibleTable, css::accessibility::XAccessibleSelection>
 {
 public:
     ScAccessibleTableBase(
@@ -51,15 +42,6 @@ public:
 
     using ScAccessibleContextBase::disposing;
      virtual void SAL_CALL disposing() override;
-
-    ///=====  XInterface  =====================================================
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType ) override;
-
-    virtual void SAL_CALL acquire() noexcept override;
-
-    virtual void SAL_CALL release() noexcept override;
 
     ///=====  XAccessibleTable  ================================================
 
@@ -209,17 +191,6 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName() override;
-
-    ///=====  XTypeProvider  ===================================================
-
-    /// returns the possible types
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-        getTypes() override;
-
-    /** Returns an implementation id.
-    */
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId() override;
 
 protected:
     /// contains the range of the table, because it could be a subrange of the complete table
