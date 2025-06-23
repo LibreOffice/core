@@ -79,6 +79,7 @@
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/uno/UnoChartStyle.hxx>
 #include <docmodel/uno/UnoChartColorStyle.hxx>
+#include <svx/ChartThemeType.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;

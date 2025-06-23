@@ -306,6 +306,12 @@
           <value xml:lang="en-US">Format Title...</value>
         </prop>
       </node>
+      <!-- theme -->
+      <node oor:name=".uno:ManageThemes" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Manage Themes...</value>
+        </prop>
+      </node>
       <!-- legend -->
       <node oor:name=".uno:InsertLegend" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
