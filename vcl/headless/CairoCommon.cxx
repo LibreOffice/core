@@ -1346,40 +1346,45 @@ bool CairoCommon::drawGradient(const tools::PolyPolygon& rPolyPolygon, const Gra
 
     aGradient.SetAngle(aGradient.GetAngle() + 2700_deg10);
     aGradient.GetBoundRect(aInputRect, aBoundRect, aCenter);
-    Color aStartColor = aGradient.GetStartColor();
-    Color aEndColor = aGradient.GetEndColor();
-
-    cairo_pattern_t* pattern;
-    if (rGradient.GetStyle() == css::awt::GradientStyle_LINEAR)
-    {
-        tools::Polygon aPoly(aBoundRect);
-        aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);
-        pattern
-            = cairo_pattern_create_linear(aPoly[0].X(), aPoly[0].Y(), aPoly[1].X(), aPoly[1].Y());
-    }
+    if (aBoundRect.IsEmpty())
+        SAL_WARN("vcl.gdi", "empty gradient bounding rectangle");
     else
     {
-        double radius = std::max(aBoundRect.GetWidth() / 2.0, aBoundRect.GetHeight() / 2.0);
-        // Move the center a bit to the top-left (the default VCL algorithm is a bit off-center that way,
-        // cairo is the opposite way).
-        pattern = cairo_pattern_create_radial(aCenter.X() - 0.5, aCenter.Y() - 0.5, 0,
-                                              aCenter.X() - 0.5, aCenter.Y() - 0.5, radius);
-        std::swap(aStartColor, aEndColor);
+        Color aStartColor = aGradient.GetStartColor();
+        Color aEndColor = aGradient.GetEndColor();
+
+        cairo_pattern_t* pattern;
+        if (rGradient.GetStyle() == css::awt::GradientStyle_LINEAR)
+        {
+            tools::Polygon aPoly(aBoundRect);
+            aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);
+            pattern = cairo_pattern_create_linear(aPoly[0].X(), aPoly[0].Y(), aPoly[1].X(),
+                                                  aPoly[1].Y());
+        }
+        else
+        {
+            double radius = std::max(aBoundRect.GetWidth() / 2.0, aBoundRect.GetHeight() / 2.0);
+            // Move the center a bit to the top-left (the default VCL algorithm is a bit off-center that way,
+            // cairo is the opposite way).
+            pattern = cairo_pattern_create_radial(aCenter.X() - 0.5, aCenter.Y() - 0.5, 0,
+                                                  aCenter.X() - 0.5, aCenter.Y() - 0.5, radius);
+            std::swap(aStartColor, aEndColor);
+        }
+
+        cairo_pattern_add_color_stop_rgba(
+            pattern, aGradient.GetBorder() / 100.0,
+            aStartColor.GetRed() * aGradient.GetStartIntensity() / 25500.0,
+            aStartColor.GetGreen() * aGradient.GetStartIntensity() / 25500.0,
+            aStartColor.GetBlue() * aGradient.GetStartIntensity() / 25500.0, 1.0);
+
+        cairo_pattern_add_color_stop_rgba(
+            pattern, 1.0, aEndColor.GetRed() * aGradient.GetEndIntensity() / 25500.0,
+            aEndColor.GetGreen() * aGradient.GetEndIntensity() / 25500.0,
+            aEndColor.GetBlue() * aGradient.GetEndIntensity() / 25500.0, 1.0);
+
+        cairo_set_source(cr, pattern);
+        cairo_pattern_destroy(pattern);
     }
-
-    cairo_pattern_add_color_stop_rgba(
-        pattern, aGradient.GetBorder() / 100.0,
-        aStartColor.GetRed() * aGradient.GetStartIntensity() / 25500.0,
-        aStartColor.GetGreen() * aGradient.GetStartIntensity() / 25500.0,
-        aStartColor.GetBlue() * aGradient.GetStartIntensity() / 25500.0, 1.0);
-
-    cairo_pattern_add_color_stop_rgba(
-        pattern, 1.0, aEndColor.GetRed() * aGradient.GetEndIntensity() / 25500.0,
-        aEndColor.GetGreen() * aGradient.GetEndIntensity() / 25500.0,
-        aEndColor.GetBlue() * aGradient.GetEndIntensity() / 25500.0, 1.0);
-
-    cairo_set_source(cr, pattern);
-    cairo_pattern_destroy(pattern);
 
     basegfx::B2DRange extents = getClippedFillDamage(cr);
     cairo_fill_preserve(cr);
