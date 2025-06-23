@@ -1886,13 +1886,6 @@ OUString SAL_CALL
     return u"ScAccessibleDocument"_ustr;
 }
 
-uno::Sequence< OUString> SAL_CALL
-    ScAccessibleDocument::getSupportedServiceNames()
-{
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.AccessibleSpreadsheetDocumentView"_ustr };
-    return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
-}
-
 ///=====  IAccessibleViewForwarder  ========================================
 
 tools::Rectangle ScAccessibleDocument::GetVisibleArea_Impl()

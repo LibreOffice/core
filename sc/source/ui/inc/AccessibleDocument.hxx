@@ -131,11 +131,6 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    /** Returns a list of all supported services.
-    */
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
     ///=====  IAccessibleViewForwarder  ========================================
 
     /** Returns the area of the underlying document that is visible in the
