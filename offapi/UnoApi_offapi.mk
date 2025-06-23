@@ -1151,7 +1151,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sheet,\
 	AccessiblePageHeaderFooterAreasView \
 	AccessibleSpreadsheet \
 	AccessibleSpreadsheetDocumentView \
-	AccessibleSpreadsheetPageView \
 	AddIn \
 	CellAnnotation \
 	CellAnnotationShape \

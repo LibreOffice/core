@@ -1427,12 +1427,6 @@ OUString SAL_CALL ScAccessibleDocumentPagePreview::getImplementationName()
     return u"ScAccessibleDocumentPagePreview"_ustr;
 }
 
-uno::Sequence< OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedServiceNames()
-{
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.AccessibleSpreadsheetPageView"_ustr };
-    return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
-}
-
 OUString ScAccessibleDocumentPagePreview::createAccessibleDescription()
 {
     return STR_ACC_PREVIEWDOC_DESCR;
