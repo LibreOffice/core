@@ -91,9 +91,6 @@ OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
 
 Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
 {
-    if (GetRole() == AccessibleRole::END_NOTE)
-        return { u"com.sun.star.text.AccessibleEndnoteView"_ustr, sAccessibleServiceName };
-
     return { sAccessibleServiceName };
 }
 
