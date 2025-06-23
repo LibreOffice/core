@@ -89,17 +89,20 @@ bool lcl_isStatusBarVisible( const Reference< frame::XController > & xController
 }
 
 bool lcl_arePropertiesSame(std::vector<Reference<beans::XPropertySet>>& xProperties,
-                           OUString& aPropName)
+                           const OUString& aPropName)
 {
     if (xProperties.size() == 1)
         return true;
     if (xProperties.size() < 1)
         return false;
 
+    if (!xProperties[0])
+        return false;
+
     uno::Any aValue = xProperties[0]->getPropertyValue(aPropName);
     for (std::size_t i = 1; i < xProperties.size(); i++)
     {
-        if (aValue != xProperties[i]->getPropertyValue(aPropName))
+        if (xProperties[i] && aValue != xProperties[i]->getPropertyValue(aPropName))
             return false;
     }
     return true;
