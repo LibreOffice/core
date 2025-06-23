@@ -119,10 +119,11 @@ gb_CXXFLAGS_Wundef = -Wno-undef
 
 gb_CXXFLAGS_include := -include$(gb_SPACE)
 
-ifeq ($(strip $(gb_GCOV)),YES)
+ifeq ($(ENABLE_GCOV),TRUE)
+gb_GCOV_LDFLAGS := -fprofile-arcs -lgcov
 gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage
 gb_CXXFLAGS_COMMON += -fprofile-arcs -ftest-coverage
-gb_LinkTarget_LDFLAGS += -fprofile-arcs -lgcov
+gb_LinkTarget_LDFLAGS += $(gb_GCOV_LDFLAGS)
 gb_COMPILEROPTFLAGS := -O0
 endif
 

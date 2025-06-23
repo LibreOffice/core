@@ -116,7 +116,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
 		$(if $(filter -fsanitize=%,$(CC)),LINKCC="$(CXX) -pthread") \
-		LDFLAGS="$(strip $(LDFLAGS) \
+		LDFLAGS="$(strip $(call gb_ExternalProject_get_link_flags,python3) \
 			$(if $(filter LINUX,$(OS)),-L$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/.libs) \
 			$(if $(SYSTEM_BZIP2),,-L$(gb_UnpackedTarball_workdir)/bzip2) \
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \

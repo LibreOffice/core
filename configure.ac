@@ -736,6 +736,20 @@ else
 fi
 AC_SUBST(ENABLE_LTO)
 
+AC_MSG_CHECKING([whether to enable gcov])
+if test -n "$enable_gcov" -a "$enable_gcov" != "no"; then
+    ENABLE_GCOV="TRUE"
+    AC_MSG_RESULT([yes])
+    if test -n "$ENABLE_LTO"; then
+        AC_MSG_WARN([using --enable-gcov together with --enable-lto will likely fail to link])
+        add_warning "using --enable-gcov together with --enable-lto will likely fail to link"
+    fi
+else
+    ENABLE_GCOV=""
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_GCOV)
+
 AC_ARG_ENABLE(fuzz-options,
     AS_HELP_STRING([--enable-fuzz-options],
         [Randomly enable or disable each of those configurable options
@@ -1795,6 +1809,11 @@ AC_ARG_ENABLE(lto,
         [Enable link-time optimization. Suitable for (optimised) product builds. Building might take
          longer but libraries and executables are optimized for speed. For GCC, best to use the 'gold'
          linker.)]))
+
+AC_ARG_ENABLE(gcov,
+    AS_HELP_STRING([--enable-gcov],
+        [Enable compiler/linker flags to enable code coverage analysis via GCC's gcov.
+         Avoid also using --enable-lto, that'll likely fail to link]))
 
 AC_ARG_ENABLE(python,
     AS_HELP_STRING([--enable-python=<no/auto/system/internal/fully-internal>],

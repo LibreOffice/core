@@ -212,7 +212,7 @@ gb_ExternalProject_get_build_flags = $(call gb_LinkTarget__get_debugflags,Extern
 
 # Returns flags to include in LDFLAGS to enable optimizations and/or debugging.
 # gb_ExternalProject_get_link_flags project
-gb_ExternalProject_get_link_flags = $(LDFLAGS) $(USE_LD) $(call gb_LinkTarget__get_debugldflags,ExternalProject_$(1))
+gb_ExternalProject_get_link_flags = $(LDFLAGS) $(USE_LD) $(gb_GCOV_LDFLAGS) $(call gb_LinkTarget__get_debugldflags,ExternalProject_$(1))
 
 # Run a target command
 #
