@@ -42,11 +42,6 @@ OUString SwAccessiblePreview::getImplementationName( )
     return sImplementationName;
 }
 
-sal_Bool SwAccessiblePreview::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
 Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
 {
     return {u"com.sun.star.text.AccessibleTextDocumentPageView"_ustr,
