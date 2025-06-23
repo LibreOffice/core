@@ -33,7 +33,6 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="menuassignpage|gear_textOnly">Voting</property>
                 <property name="draw-as-radio">True</property>
-                <property name="group">gear_sort_downloads</property>
               </object>
             </child>
             <child>
@@ -72,7 +71,6 @@
         <property name="use-underline">True</property>
         <property name="active">True</property>
         <property name="draw-as-radio">True</property>
-        <property name="group">gear_condensedList</property>
       </object>
     </child>
     <child>
