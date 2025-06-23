@@ -327,12 +327,6 @@ Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedService
              u"com.sun.star.drawing.AccessibleGraphControl"_ustr };
 }
 
-// XTypeProvider
-Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // XServiceName
 OUString SvxGraphCtrlAccessibleContext::getServiceName()
 {
