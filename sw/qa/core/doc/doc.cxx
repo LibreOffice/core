@@ -43,6 +43,7 @@
 #include <sortedobjs.hxx>
 #include <itabenum.hxx>
 #include <redline.hxx>
+#include <UndoRedline.hxx>
 
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase
@@ -774,6 +775,35 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenDelRejectUndo)
     const SwRedlineData& rInnerRedlineData = *rRedlineData1.Next();
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData.GetType());
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[2]->GetType());
+
+    // And when rejecting the "ins" part of ins-then-del:
+    pWrtShell->RejectRedline(0);
+
+    // Then make sure "reject" (and no accept) was created on the undo stack:
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    int nAccepts = 0;
+    auto pListUndoAction = dynamic_cast<SfxListUndoAction*>(rUndoManager.GetUndoAction());
+    if (pListUndoAction)
+    {
+        for (const auto& rMarkedAction : pListUndoAction->maUndoActions)
+        {
+            auto pUndo = dynamic_cast<SwUndoRedline*>(rMarkedAction.pAction.get());
+            if (!pUndo)
+            {
+                continue;
+            }
+
+            if (pUndo->GetUserId() == SwUndoId::ACCEPT_REDLINE)
+            {
+                ++nAccepts;
+            }
+        }
+    }
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. an "accept" undo action was created by RejectRedline().
+    CPPUNIT_ASSERT_EQUAL(0, nAccepts);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)

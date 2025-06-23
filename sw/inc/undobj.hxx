@@ -49,7 +49,7 @@ namespace sw {
     class RepeatContext;
 }
 
-class SwUndo
+class SW_DLLPUBLIC SwUndo
     : public SfxUndoAction
 {
     SwUndoId const m_nId;

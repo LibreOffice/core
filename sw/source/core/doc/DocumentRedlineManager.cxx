@@ -3712,13 +3712,13 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
                 std::unique_ptr<SwUndoRedline> pUndoRdl;
                 if (eInnerType == RedlineType::Delete && eOuterType == RedlineType::Format)
                 {
-                    // Format on insert: record rejection of the underlying insert.
+                    // Format on delete: record rejection of the underlying delete.
                     pUndoRdl = std::make_unique<SwUndoRejectRedline>(*pTmp, /*nDepth=*/1, /*bHierarchical=*/true);
                 }
                 else
                 {
                     // The Insert/Delete redline we want to reject has another type of redline too
-                    pUndoRdl = std::make_unique<SwUndoAcceptRedline>(*pTmp);
+                    pUndoRdl = std::make_unique<SwUndoRejectRedline>(*pTmp, /*nDepth=*/0, /*bHierarchical=*/true);
                 }
 #if OSL_DEBUG_LEVEL > 0
                 pUndoRdl->SetRedlineCountDontCheck(true);
