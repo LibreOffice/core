@@ -1714,11 +1714,30 @@ void RTFDocumentImpl::text(OUString& rString)
     }
 }
 
+void RTFDocumentImpl::set_tblInd(RTFSprms& tableRowSprms, int val)
+{
+    // the value is in twips
+    putNestedAttribute(tableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblInd,
+                       NS_ooxml::LN_CT_TblWidth_type,
+                       new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
+
+    RTFValue::Pointer_t pCellMargin = tableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblCellMar);
+    if (pCellMargin)
+    {
+        RTFValue::Pointer_t pMarginLeft = pCellMargin->getSprms().find(NS_ooxml::LN_CT_TcMar_left);
+        if (pMarginLeft)
+            val -= pMarginLeft->getAttributes().find(NS_ooxml::LN_CT_TblWidth_w)->getInt();
+    }
+
+    putNestedAttribute(tableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblInd, +NS_ooxml::LN_CT_TblWidth_w,
+                       new RTFValue(val));
+}
+
 void RTFDocumentImpl::prepareProperties(
     RTFParserState& rState, writerfilter::Reference<Properties>::Pointer_t& o_rpParagraphProperties,
     writerfilter::Reference<Properties>::Pointer_t& o_rpFrameProperties,
     writerfilter::Reference<Properties>::Pointer_t& o_rpTableRowProperties, int const nCells,
-    int const nCurrentCellX)
+    int const nCurrentCellX, int nTRLeft)
 {
     o_rpParagraphProperties
         = getProperties(rState.getParagraphAttributes(), rState.getParagraphSprms(),
@@ -1737,9 +1756,65 @@ void RTFDocumentImpl::prepareProperties(
         auto pUnitValue = new RTFValue(3);
         putNestedAttribute(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
                            NS_ooxml::LN_CT_TblWidth_type, pUnitValue);
-        auto pWValue = new RTFValue(nCurrentCellX);
+        auto pWValue = new RTFValue(nCurrentCellX - nTRLeft);
         putNestedAttribute(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
                            NS_ooxml::LN_CT_TblWidth_w, pWValue);
+    }
+
+    // Correct cells' widths.
+    bool checkedMinusOne = false;
+    bool seenFirstColumn = false;
+    bool seenPositiveWidth = false;
+    for (auto & [ id, pValue ] : rState.getTableRowSprms())
+    {
+        if (id == NS_ooxml::LN_CT_TblGridBase_gridCol)
+        {
+            int val = pValue->getInt();
+            if (!checkedMinusOne)
+            {
+                // -1 is the special value set in RTFDocumentImpl::resetTableRowProperties
+                // and used in DomainMapperTableManager::sprm; skip it
+                checkedMinusOne = true;
+                if (val == -1)
+                    continue;
+            }
+            if (!seenFirstColumn)
+            {
+                if (nTRLeft != 0)
+                {
+                    // First cell: it was calculated against the initial value of *CurrentCellX,
+                    // which is 0; now subtract nTRLeft from it
+                    val -= nTRLeft;
+                    pValue = new RTFValue(val);
+                }
+                seenFirstColumn = true;
+                if (val > 0)
+                    seenPositiveWidth = true;
+                continue;
+            }
+            if (val > 0)
+            {
+                seenPositiveWidth = true;
+                continue;
+            }
+            // If width of this cell, and all previous cells, is 0, leave 0 so autofit will try
+            // to resolve this. But when there were proper widths before, use minimal width.
+            if (!seenPositiveWidth)
+                continue;
+
+            // sw/source/filter/inc/wrtswtbl.hxx, minimal possible width of cells.
+            const int COL_DFLT_WIDTH = 41;
+            pValue = new RTFValue(COL_DFLT_WIDTH);
+        }
+    }
+
+    if (nTRLeft != 0)
+    {
+        // If there was no tblind, use trleft to set up LN_CT_TblPrBase_tblInd
+        if (!rState.getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblInd))
+        {
+            set_tblInd(rState.getTableRowSprms(), nTRLeft);
+        }
     }
 
     if (nCells > 0)

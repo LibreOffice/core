@@ -795,6 +795,63 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121493)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167169)
+{
+    // Given a document with four tables, having different values for tblindN and trleftN:
+    createSwDoc("tdf167169.rtf");
+    {
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPath(pLayout, "//tab", 4);
+        // 1st table, having \tblind1000\tblindtype3\cellx8000\cellx9000
+        assertXPath(pLayout, "//tab[1]['pass 1']/infos/prtBounds", "left", u"1000");
+        assertXPath(pLayout, "//tab[1]['pass 1']/row/cell[1]/infos/bounds", "width", u"8000");
+        assertXPath(pLayout, "//tab[1]['pass 1']/row/cell[2]/infos/bounds", "width", u"1000");
+        // 2nd table, having \trleft500\tblind1000\tblindtype3\cellx8000\cellx9000
+        assertXPath(pLayout, "//tab[2]['pass 1']/infos/prtBounds", "left", u"1000");
+        assertXPath(pLayout, "//tab[2]['pass 1']/row/cell[1]/infos/bounds", "width", u"7500");
+        assertXPath(pLayout, "//tab[2]['pass 1']/row/cell[2]/infos/bounds", "width", u"1000");
+        // 3rd table, having \trleft1000\tblind1000\tblindtype3\cellx8000\cellx9000
+        assertXPath(pLayout, "//tab[3]['pass 1']/infos/prtBounds", "left", u"1000");
+        assertXPath(pLayout, "//tab[3]['pass 1']/row/cell[1]/infos/bounds", "width", u"7000");
+        assertXPath(pLayout, "//tab[3]['pass 1']/row/cell[2]/infos/bounds", "width", u"1000");
+        // 4th table, having \trleft1500\tblind1000\tblindtype3\cellx8000\cellx9000
+        assertXPath(pLayout, "//tab[4]['pass 1']/infos/prtBounds", "left", u"1000");
+        assertXPath(pLayout, "//tab[4]['pass 1']/row/cell[1]/infos/bounds", "width", u"6500");
+        assertXPath(pLayout, "//tab[4]['pass 1']/row/cell[2]/infos/bounds", "width", u"1000");
+    }
+    // Check export, too
+    saveAndReload(mpFilter);
+    {
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPath(pLayout, "//tab", 4);
+        // Rounding (or maybe off-by-one?) errors sadly hit the test
+        // 1st table
+        assertXPath(pLayout, "//tab[1]['pass 2']/infos/prtBounds", "left", u"1000");
+        OUString width = getXPath(pLayout, "//tab[1]['pass 2']/row/cell[1]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8000, width.toInt32(), 1);
+        width = getXPath(pLayout, "//tab[1]['pass 2']/row/cell[2]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1000, width.toInt32(), 1);
+        // 2nd table
+        assertXPath(pLayout, "//tab[2]['pass 2']/infos/prtBounds", "left", u"1000");
+        width = getXPath(pLayout, "//tab[2]['pass 2']/row/cell[1]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7500, width.toInt32(), 1);
+        width = getXPath(pLayout, "//tab[2]['pass 2']/row/cell[2]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1000, width.toInt32(), 1);
+        // 3rd table
+        assertXPath(pLayout, "//tab[3]['pass 2']/infos/prtBounds", "left", u"1000");
+        width = getXPath(pLayout, "//tab[3]['pass 2']/row/cell[1]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7000, width.toInt32(), 1);
+        width = getXPath(pLayout, "//tab[3]['pass 2']/row/cell[2]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1000, width.toInt32(), 1);
+        // 4th table
+        assertXPath(pLayout, "//tab[4]['pass 2']/infos/prtBounds", "left", u"1000");
+        width = getXPath(pLayout, "//tab[4]['pass 2']/row/cell[1]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6500, width.toInt32(), 1);
+        width = getXPath(pLayout, "//tab[4]['pass 2']/row/cell[2]/infos/bounds", "width");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1000, width.toInt32(), 1);
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
