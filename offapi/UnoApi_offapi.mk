@@ -1309,7 +1309,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/text,\
 	AccessibleFootnoteView \
 	AccessibleHeaderFooterView \
 	AccessibleParagraphView \
-	AccessibleTextDocumentView \
 	AccessibleTextEmbeddedObject \
 	AccessibleTextFrameView \
 	AccessibleTextGraphicObject \

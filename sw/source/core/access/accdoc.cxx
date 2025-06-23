@@ -51,7 +51,6 @@
 #include <dview.hxx>
 #include <dcontact.hxx>
 #include <svx/svdmark.hxx>
-constexpr OUString sServiceName = u"com.sun.star.text.AccessibleTextDocumentView"_ustr;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -366,7 +365,7 @@ OUString SAL_CALL SwAccessibleDocument::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceNames()
 {
-    return { sServiceName, sAccessibleServiceName };
+    return { sAccessibleServiceName };
 }
 
 // XAccessibleSelection
