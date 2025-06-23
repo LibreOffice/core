@@ -625,6 +625,7 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     {
         xDocumentSettings->setPropertyValue(u"MsWordCompMinLineHeightByFly"_ustr, uno::Any(true));
         xDocumentSettings->setPropertyValue(u"TabOverMargin"_ustr, uno::Any(true));
+        xDocumentSettings->setPropertyValue(u"AddFrameOffsets"_ustr, uno::Any(true)); // tdf#138782
     }
 
     // Show changes value

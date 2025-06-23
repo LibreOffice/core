@@ -225,7 +225,11 @@ DomainMapper::~DomainMapper()
     {
         // Remove temporary footnotes and endnotes
         m_pImpl->RemoveTemporaryFootOrEndnotes();
+    }
+    catch( const uno::Exception& ) {}
 
+    try
+    {
         sal_Int32 nIndexes = 0;
         if ( m_pImpl->GetTextDocument() )
             nIndexes = m_pImpl->GetTextDocument()->getDocumentIndexes()->getCount();
@@ -275,12 +279,11 @@ DomainMapper::~DomainMapper()
             aGrabBag.update(aProperties);
             m_pImpl->GetTextDocument()->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag.getAsConstPropertyValueList()));
         }
-        // tdf#138782: for docs created in MS Word 2010 and older (compatibilityMode <= 14)
-        m_pImpl->SetDocumentSettingsProperty(
-            u"AddFrameOffsets"_ustr,
-            uno::Any(14 >= m_pImpl->GetSettingsTable()->GetWordCompatibilityMode()));
     }
-    catch( const uno::Exception& ) {}
+    catch(const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("writerfilter", "failed to set critical document settings");
+    }
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endDocument();
