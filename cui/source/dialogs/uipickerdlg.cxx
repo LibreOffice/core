@@ -30,7 +30,6 @@ UIPickerDialog::UIPickerDialog(weld::Window* pParent)
     AddTabPage("toolbars", ToolbarTabPage::Create, nullptr);
 
     m_xOKBtn->set_visible(false);
-    m_xHelpBtn->set_visible(false);
     m_xCancelBtn->set_label(CuiResId(RID_CUISTR_HYPDLG_CLOSEBUT)); // "close"
 
     m_xApplyBtn->set_label(
