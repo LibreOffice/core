@@ -159,13 +159,6 @@ OUString SAL_CALL
     return u"ScAccessiblePageHeaderArea"_ustr;
 }
 
-uno::Sequence< OUString> SAL_CALL
-       ScAccessiblePageHeaderArea::getSupportedServiceNames()
-{
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.sheet.AccessiblePageHeaderFooterAreasView"_ustr };
-    return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
-}
-
 OUString ScAccessiblePageHeaderArea::createAccessibleDescription()
 {
     OUString sDesc;
