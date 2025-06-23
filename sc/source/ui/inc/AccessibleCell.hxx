@@ -118,18 +118,6 @@ public:
         css::accessibility::XAccessibleRelationSet> SAL_CALL
            getAccessibleRelationSet() override;
 
-    ///=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
-    /** Returns a list of all supported services.
-    */
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
     virtual OUString SAL_CALL getExtendedAttributes() override;
 
     // Override this method to handle cell's ParaIndent attribute specially.

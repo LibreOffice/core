@@ -289,20 +289,6 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     return pRelationSet;
 }
 
-    //=====  XServiceInfo  ====================================================
-
-OUString SAL_CALL ScAccessibleCell::getImplementationName()
-{
-    return u"ScAccessibleCell"_ustr;
-}
-
-uno::Sequence< OUString> SAL_CALL
-    ScAccessibleCell::getSupportedServiceNames()
-{
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.sheet.AccessibleCell"_ustr };
-    return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
-}
-
 bool ScAccessibleCell::IsDefunc(sal_Int64 nParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || (mpDoc == nullptr) || (mpViewShell == nullptr) || !getAccessibleParent().is() ||
