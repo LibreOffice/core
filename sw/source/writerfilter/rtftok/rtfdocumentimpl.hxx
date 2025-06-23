@@ -791,11 +791,12 @@ private:
     void checkNeedPap();
     void handleFontTableEntry();
     void sectBreak(bool bFinal = false);
+    static void set_tblInd(RTFSprms& tableRowSprms, int val);
     void prepareProperties(RTFParserState& rState,
                            writerfilter::Reference<Properties>::Pointer_t& o_rpParagraphProperties,
                            writerfilter::Reference<Properties>::Pointer_t& o_rpFrameProperties,
                            writerfilter::Reference<Properties>::Pointer_t& o_rpTableRowProperties,
-                           int nCells, int nCurrentCellX);
+                           int nCells, int nCurrentCellX, int nTRLeft);
     /// Send the passed properties to dmapper.
     void sendProperties(writerfilter::Reference<Properties>::Pointer_t const& pParagraphProperties,
                         writerfilter::Reference<Properties>::Pointer_t const& pFrameProperties,
