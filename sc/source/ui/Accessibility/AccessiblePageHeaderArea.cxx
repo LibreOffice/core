@@ -166,15 +166,6 @@ uno::Sequence< OUString> SAL_CALL
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
-//=====  XTypeProvider  =======================================================
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessiblePageHeaderArea::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-//===== internal ==============================================================
 OUString ScAccessiblePageHeaderArea::createAccessibleDescription()
 {
     OUString sDesc;
