@@ -235,7 +235,7 @@ OUString SAL_CALL SwAccessibleCell::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
 {
-    return { u"com.sun.star.table.AccessibleCellView"_ustr, sAccessibleServiceName };
+    return { sAccessibleServiceName };
 }
 
 void SwAccessibleCell::Dispose(bool bRecursive, bool bCanSkipInvisible)

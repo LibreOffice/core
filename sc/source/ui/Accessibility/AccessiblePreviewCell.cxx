@@ -173,12 +173,6 @@ OUString SAL_CALL ScAccessiblePreviewCell::getImplementationName()
     return u"ScAccessiblePreviewCell"_ustr;
 }
 
-uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServiceNames()
-{
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.table.AccessibleCellView"_ustr };
-    return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
-}
-
 AbsoluteScreenPixelRectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen()
 {
     tools::Rectangle aCellRect;

@@ -1277,7 +1277,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/style,\
 	StyleFamily \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/table,\
-	AccessibleCellView \
 	Cell \
 	CellCursor \
 	CellProperties \
