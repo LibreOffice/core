@@ -23,7 +23,6 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** The accessible object of a cell in the CSV import dialog.
-    @see ::com::sun::star::sheet::AccessibleCsvTable
 
      @since OOo 1.1.2
  */
