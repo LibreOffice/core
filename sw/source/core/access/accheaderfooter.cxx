@@ -80,8 +80,7 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
 
 Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames()
 {
-    return { (AccessibleRole::HEADER == GetRole())?u"com.sun.star.text.AccessibleHeaderView"_ustr:u"com.sun.star.text.AccessibleFooterView"_ustr,
-             sAccessibleServiceName };
+    return { sAccessibleServiceName };
 }
 
 sal_Int32 SAL_CALL SwAccessibleHeaderFooter::getBackground()
