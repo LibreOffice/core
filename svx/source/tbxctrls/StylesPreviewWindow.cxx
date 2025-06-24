@@ -318,6 +318,7 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext,
     SfxStyleSheetBase* pStyle = nullptr;
     if (pStyleHint)
         pStyle = pStyleHint;
+    else
     {
         pStyle = pPool->First(m_eStyleFamily);
         while (pStyle && pStyle->GetName() != m_aStyleName.first
