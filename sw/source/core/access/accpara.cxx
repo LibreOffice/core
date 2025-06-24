@@ -106,7 +106,6 @@ namespace com::sun::star::text {
     class XText;
 }
 
-constexpr OUString sServiceName = u"com.sun.star.text.AccessibleParagraphView"_ustr;
 constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleParagraphView";
 
 const SwTextFrame* SwAccessibleParagraph::GetTextFrame() const
@@ -794,7 +793,7 @@ OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()
 {
-    return { sServiceName, sAccessibleServiceName };
+    return { sAccessibleServiceName };
 }
 
 static uno::Sequence< OUString > const & getAttributeNames()

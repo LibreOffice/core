@@ -2426,26 +2426,6 @@ sal_Int32 SAL_CALL AccessibleEditableTextPara::getNumberOfLineWithCaret(  )
     return nRes;
 }
 
-
-// XServiceInfo
-OUString SAL_CALL AccessibleEditableTextPara::getImplementationName()
-{
-
-    return u"AccessibleEditableTextPara"_ustr;
-}
-
-sal_Bool SAL_CALL AccessibleEditableTextPara::supportsService (const OUString& sServiceName)
-{
-
-    return cppu::supportsService(this, sServiceName);
-}
-
-uno::Sequence< OUString> SAL_CALL AccessibleEditableTextPara::getSupportedServiceNames()
-{
-    // #105185# Using correct service now
-    return { u"com.sun.star.text.AccessibleParagraphView"_ustr };
-}
-
 }  // end of namespace accessibility
 
 

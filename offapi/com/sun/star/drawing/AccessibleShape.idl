@@ -72,8 +72,7 @@ service AccessibleShape
             shapes or accessible text paragraphs.  Only group shapes, 3D scene
             shapes, and OLE shapes may contain other shapes as children.
             Some of the shapes may have text paragraphs as (additional)
-            children.  See ::com::sun::star::text::AccessibleParagraphView for
-            details of how this text is represented.</li>
+            children.</li>
         <li>Parent: The parent is either the document view as represented by
             AccessibleDrawDocumentView or a group shape, 3D
             scene shape, or OLE shape.</li>
