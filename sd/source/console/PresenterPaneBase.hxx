@@ -63,7 +63,7 @@ public:
     void SetTitle (const OUString& rsTitle);
     const rtl::Reference<PresenterPaneBorderPainter>& GetPaneBorderPainter() const;
 
-    void initialize(const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+    void initialize(const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
                     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
                     const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
                     const rtl::Reference<PresenterPaneBorderPainter>& rxBorderPainter,
@@ -71,7 +71,7 @@ public:
 
     // AbstractResourceI
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() override;
+    virtual rtl::Reference<sd::framework::ResourceId> getResourceId() override;
 
     virtual bool isAnchorOnly() override;
 
@@ -96,7 +96,7 @@ protected:
     css::uno::Reference<css::rendering::XCanvas> mxBorderCanvas;
     css::uno::Reference<css::awt::XWindow> mxContentWindow;
     css::uno::Reference<css::rendering::XCanvas> mxContentCanvas;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
+    rtl::Reference<sd::framework::ResourceId> mxPaneId;
     rtl::Reference<PresenterPaneBorderPainter> mxBorderPainter;
     OUString msTitle;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

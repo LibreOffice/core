@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <framework/AbstractView.hxx>
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <ResourceId.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <memory>
 
@@ -47,7 +47,7 @@ class PresenterHelpView
 public:
     explicit PresenterHelpView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const rtl::Reference<::sd::DrawController>& rxController,
         ::rtl::Reference<PresenterController> xPresenterController);
     virtual ~PresenterHelpView() override;
@@ -76,7 +76,7 @@ public:
 
     // AbstractResource
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() override;
+    virtual rtl::Reference<sd::framework::ResourceId> getResourceId() override;
 
     virtual bool isAnchorOnly() override;
 
@@ -84,7 +84,7 @@ private:
     class TextContainer;
 
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
+    rtl::Reference<sd::framework::ResourceId> mxViewId;
     rtl::Reference<sd::framework::AbstractPane> mxPane;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;

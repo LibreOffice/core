@@ -120,7 +120,7 @@ class PresenterHelpView::TextContainer : public vector<std::shared_ptr<Block> >
 
 PresenterHelpView::PresenterHelpView (
     const Reference<uno::XComponentContext>& rxContext,
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId,
     const rtl::Reference<::sd::DrawController>& rxController,
     ::rtl::Reference<PresenterController> xPresenterController)
     : mxComponentContext(rxContext),
@@ -434,7 +434,7 @@ void PresenterHelpView::CheckFontSize()
 
 //----- AbstractResource -----------------------------------------------------------
 
-Reference<XResourceId> PresenterHelpView::getResourceId()
+rtl::Reference<sd::framework::ResourceId> PresenterHelpView::getResourceId()
 {
     {
         std::unique_lock l(m_aMutex);

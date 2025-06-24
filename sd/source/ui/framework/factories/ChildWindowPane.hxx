@@ -29,7 +29,6 @@
 class SfxShell;
 
 namespace sd { class ViewShellBase; }
-namespace com::sun::star::drawing::framework { class XResourceId; }
 
 namespace sd::framework {
 
@@ -47,7 +46,7 @@ class ChildWindowPane
 {
 public:
     ChildWindowPane (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+        const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
         sal_uInt16 nChildWindowId,
         ViewShellBase& rViewShellBase,
         ::std::unique_ptr<SfxShell> && pShell);

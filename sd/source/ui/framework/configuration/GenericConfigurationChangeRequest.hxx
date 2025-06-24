@@ -23,9 +23,8 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/compbase.hxx>
 
-namespace com::sun::star::drawing::framework { class XResourceId; }
-
 namespace sd::framework {
+class ResourceId;
 
 typedef cppu::ImplInheritanceHelper <
       sd::framework::ConfigurationChangeRequest,
@@ -57,7 +56,7 @@ public:
         @throws css::css::lang::IllegalArgumentException
     */
     GenericConfigurationChangeRequest (
-        const css::uno::Reference<css::drawing::framework::XResourceId>&
+        const rtl::Reference<sd::framework::ResourceId>&
             rxResourceId,
         const Mode eMode);
 
@@ -88,7 +87,7 @@ public:
     virtual void SAL_CALL setName (const OUString& rName) override;
 
 private:
-    const css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;
+    const rtl::Reference<sd::framework::ResourceId> mxResourceId;
     const Mode meMode;
 };
 

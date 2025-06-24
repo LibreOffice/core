@@ -97,7 +97,7 @@ public:
 
     virtual rtl::Reference<sd::framework::AbstractResource>
         createResource (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) override;
+            const rtl::Reference<sd::framework::ResourceId>& rxViewId) override;
 
     virtual void
         releaseResource (
@@ -121,29 +121,29 @@ private:
     void Register (const ::rtl::Reference<::sd::DrawController>& rxController);
 
     rtl::Reference<sd::framework::AbstractView> CreateSlideShowView(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId) const;
 
     rtl::Reference<sd::framework::AbstractView> CreateSlidePreviewView(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const rtl::Reference<sd::framework::AbstractPane>& rxPane) const;
 
     rtl::Reference<sd::framework::AbstractView> CreateToolBarView(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId) const;
 
     rtl::Reference<sd::framework::AbstractView> CreateNotesView(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId) const;
 
     rtl::Reference<sd::framework::AbstractView> CreateSlideSorterView(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId) const;
 
     rtl::Reference<sd::framework::AbstractView> CreateHelpView(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId) const;
 
     rtl::Reference<sd::framework::AbstractResource> GetViewFromCache (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane) const;
     rtl::Reference<sd::framework::AbstractResource> CreateView(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane);
 };
 

@@ -54,6 +54,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <optional>
 #include <sdmod.hxx>
+#include <ResourceId.hxx>
 
 namespace {
 const sal_uInt32 SINGLE_CLICK             (0x00000001);

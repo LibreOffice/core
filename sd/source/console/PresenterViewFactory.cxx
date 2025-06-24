@@ -46,7 +46,7 @@ class NextSlidePreview : public PresenterSlidePreview
 public:
     NextSlidePreview (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane,
         const ::rtl::Reference<PresenterController>& rpPresenterController)
         : PresenterSlidePreview(rxContext, rxViewId, rxAnchorPane, rpPresenterController)
@@ -173,7 +173,7 @@ void PresenterViewFactory::disposing(std::unique_lock<std::mutex>&)
 //----- XViewFactory ----------------------------------------------------------
 
 rtl::Reference<sd::framework::AbstractResource> PresenterViewFactory::createResource (
-    const Reference<XResourceId>& rxViewId)
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId)
 {
     {
         std::unique_lock l(m_aMutex);
@@ -238,7 +238,7 @@ void PresenterViewFactory::releaseResource (const rtl::Reference<sd::framework::
     else
     {
         // Put cacheable views in the cache.
-        Reference<XResourceId> xViewId (rxView->getResourceId());
+        rtl::Reference<sd::framework::ResourceId> xViewId (rxView->getResourceId());
         if (xViewId.is())
         {
             rtl::Reference<sd::framework::AbstractPane> xAnchorPane = dynamic_cast<sd::framework::AbstractPane*>(
@@ -252,7 +252,7 @@ void PresenterViewFactory::releaseResource (const rtl::Reference<sd::framework::
 
 
 rtl::Reference<sd::framework::AbstractResource> PresenterViewFactory::GetViewFromCache(
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId,
     const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane) const
 {
     if (mpResourceCache == nullptr)
@@ -288,7 +288,7 @@ rtl::Reference<sd::framework::AbstractResource> PresenterViewFactory::GetViewFro
 }
 
 rtl::Reference<sd::framework::AbstractResource> PresenterViewFactory::CreateView(
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId,
     const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane)
 {
     rtl::Reference<sd::framework::AbstractView> xView;
@@ -336,7 +336,7 @@ rtl::Reference<sd::framework::AbstractResource> PresenterViewFactory::CreateView
 }
 
 rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateSlideShowView(
-    const Reference<XResourceId>& rxViewId) const
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId) const
 {
     if ( ! mxConfigurationController.is())
         return nullptr;
@@ -362,7 +362,7 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateSlideSho
 }
 
 rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateSlidePreviewView(
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId,
     const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane) const
 {
     rtl::Reference<sd::framework::AbstractView> xView;
@@ -390,7 +390,7 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateSlidePre
 }
 
 rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateToolBarView(
-    const Reference<XResourceId>& rxViewId) const
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId) const
 {
     return new PresenterToolBarView(
         mxComponentContext,
@@ -400,7 +400,7 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateToolBarV
 }
 
 rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateNotesView(
-    const Reference<XResourceId>& rxViewId) const
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId) const
 {
     rtl::Reference<sd::framework::AbstractView> xView;
 
@@ -427,7 +427,7 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateNotesVie
 }
 
 rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateSlideSorterView(
-    const Reference<XResourceId>& rxViewId) const
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId) const
 {
     rtl::Reference<sd::framework::AbstractView> xView;
 
@@ -455,7 +455,7 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateSlideSor
 }
 
 rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateHelpView(
-    const Reference<XResourceId>& rxViewId) const
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId) const
 {
     return new PresenterHelpView(
         mxComponentContext,

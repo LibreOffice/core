@@ -42,7 +42,7 @@ namespace sdext::presenter {
 
 PresenterSlidePreview::PresenterSlidePreview (
     const Reference<XComponentContext>& rxContext,
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId,
     const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : mpPresenterController(rpPresenterController),
@@ -108,7 +108,7 @@ void PresenterSlidePreview::disposing(std::unique_lock<std::mutex>&)
 
 //----- AbstractResource -----------------------------------------------------------
 
-Reference<XResourceId> PresenterSlidePreview::getResourceId()
+rtl::Reference<sd::framework::ResourceId> PresenterSlidePreview::getResourceId()
 {
     return mxViewId;
 }

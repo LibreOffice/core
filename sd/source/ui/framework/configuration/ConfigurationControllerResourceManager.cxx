@@ -20,6 +20,7 @@
 #include "ConfigurationControllerResourceManager.hxx"
 #include "ConfigurationControllerBroadcaster.hxx"
 #include "ResourceFactoryManager.hxx"
+#include <ResourceId.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <framework/Configuration.hxx>
@@ -52,7 +53,7 @@ ConfigurationControllerResourceManager::~ConfigurationControllerResourceManager(
 
 ConfigurationControllerResourceManager::ResourceDescriptor
     ConfigurationControllerResourceManager::GetResource (
-        const Reference<XResourceId>& rxResourceId)
+        const rtl::Reference<ResourceId>& rxResourceId)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ResourceMap::const_iterator iResource (maResourceMap.find(rxResourceId));
@@ -63,19 +64,19 @@ ConfigurationControllerResourceManager::ResourceDescriptor
 }
 
 void ConfigurationControllerResourceManager::ActivateResources (
-    const ::std::vector<Reference<XResourceId> >& rResources,
+    const ::std::vector<rtl::Reference<ResourceId> >& rResources,
     const rtl::Reference<Configuration>& rxConfiguration)
 {
     ::osl::MutexGuard aGuard (maMutex);
     // Iterate in normal order over the resources that are to be
     // activated so that resources on which others depend are activated
     // before the depending resources are activated.
-    for (const Reference<XResourceId>& xResource : rResources)
+    for (const rtl::Reference<ResourceId>& xResource : rResources)
         ActivateResource(xResource, rxConfiguration);
 }
 
 void ConfigurationControllerResourceManager::DeactivateResources (
-    const ::std::vector<Reference<XResourceId> >& rResources,
+    const ::std::vector<rtl::Reference<ResourceId> >& rResources,
     const rtl::Reference<Configuration>& rxConfiguration)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -85,7 +86,7 @@ void ConfigurationControllerResourceManager::DeactivateResources (
     ::std::for_each(
         rResources.rbegin(),
         rResources.rend(),
-        [&] (Reference<XResourceId> const& xResource) {
+        [&] (rtl::Reference<ResourceId> const& xResource) {
             return DeactivateResource(xResource, rxConfiguration);
         } );
 }
@@ -99,7 +100,7 @@ void ConfigurationControllerResourceManager::DeactivateResources (
     5. Notify listeners.
 */
 void ConfigurationControllerResourceManager::ActivateResource (
-    const Reference<XResourceId>& rxResourceId,
+    const rtl::Reference<ResourceId>& rxResourceId,
     const rtl::Reference<Configuration>& rxConfiguration)
 {
     if ( ! rxResourceId.is())
@@ -171,7 +172,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
     5. Notify listeners about that deactivation is completed.
 */
 void ConfigurationControllerResourceManager::DeactivateResource (
-    const Reference<XResourceId>& rxResourceId,
+    const rtl::Reference<ResourceId>& rxResourceId,
     const rtl::Reference<Configuration>& rxConfiguration)
 {
     if ( ! rxResourceId.is())
@@ -262,7 +263,7 @@ void ConfigurationControllerResourceManager::AddResource (
 
 ConfigurationControllerResourceManager::ResourceDescriptor
     ConfigurationControllerResourceManager::RemoveResource (
-        const Reference<XResourceId>& rxResourceId)
+        const rtl::Reference<ResourceId>& rxResourceId)
 {
     ResourceDescriptor aDescriptor;
 
@@ -285,8 +286,8 @@ ConfigurationControllerResourceManager::ResourceDescriptor
 //===== ConfigurationControllerResourceManager::ResourceComparator ============
 
 bool ConfigurationControllerResourceManager::ResourceComparator::operator() (
-    const Reference<XResourceId>& rxId1,
-    const Reference<XResourceId>& rxId2) const
+    const rtl::Reference<ResourceId>& rxId1,
+    const rtl::Reference<ResourceId>& rxId2) const
 {
     if (rxId1.is() && rxId2.is())
         return rxId1->compareTo(rxId2)<0;

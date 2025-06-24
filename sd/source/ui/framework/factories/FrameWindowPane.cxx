@@ -21,11 +21,10 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework
 {
-FrameWindowPane::FrameWindowPane(const Reference<XResourceId>& rxPaneId, vcl::Window* pWindow)
+FrameWindowPane::FrameWindowPane(const rtl::Reference<ResourceId>& rxPaneId, vcl::Window* pWindow)
     : Pane(rxPaneId, pWindow)
 {
 }

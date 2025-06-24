@@ -59,7 +59,7 @@ public:
     */
     ViewShellWrapper (
         const ::std::shared_ptr<ViewShell>& pViewShell,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const css::uno::Reference<css::awt::XWindow>& rxWindow);
     virtual ~ViewShellWrapper() override;
 
@@ -74,7 +74,7 @@ public:
 
     // AbstractResource
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId>
+    virtual rtl::Reference<sd::framework::ResourceId>
         getResourceId() override;
 
     virtual bool isAnchorOnly() override;
@@ -120,7 +120,7 @@ public:
 private:
     ::std::shared_ptr< ViewShell >                                      mpViewShell;
     ::std::shared_ptr< ::sd::slidesorter::SlideSorterViewShell >        mpSlideSorterViewShell;
-    const css::uno::Reference< css::drawing::framework::XResourceId >   mxViewId;
+    const rtl::Reference< sd::framework::ResourceId >                   mxViewId;
     css::uno::Reference<css::awt::XWindow >                             mxWindow;
 };
 

@@ -26,10 +26,6 @@ namespace sd::framework
 {
 class Configuration;
 }
-namespace com::sun::star::drawing::framework
-{
-class XResourceId;
-}
 namespace com::sun::star::uno
 {
 template <typename> class Reference;
@@ -37,6 +33,8 @@ template <typename> class Reference;
 
 namespace sd::framework
 {
+class ResourceId;
+
 /** Print debug information about configurations to the standard error
     output channel.
 */
@@ -47,10 +45,10 @@ public:
     TraceConfiguration(const rtl::Reference<sd::framework::Configuration>& rxConfiguration,
                        const char* pMessage);
 #if OSL_DEBUG_LEVEL >= 1
-    static void TraceBoundResources(
-        const rtl::Reference<sd::framework::Configuration>& rxConfiguration,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
-        const int nIndentation);
+    static void
+    TraceBoundResources(const rtl::Reference<sd::framework::Configuration>& rxConfiguration,
+                        const rtl::Reference<sd::framework::ResourceId>& rxResourceId,
+                        const int nIndentation);
 #endif
 };
 

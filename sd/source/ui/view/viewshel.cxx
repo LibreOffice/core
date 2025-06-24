@@ -30,6 +30,7 @@
 #include <DrawController.hxx>
 #include <LayerTabBar.hxx>
 #include <Outliner.hxx>
+#include <ResourceId.hxx>
 
 #include <sal/log.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -405,7 +406,7 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
 void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
 {
     auto getFrameworkResourceIdForShell
-        = [&]() -> uno::Reference<drawing::framework::XResourceId> const
+        = [&]() -> rtl::Reference<framework::ResourceId> const
     {
         DrawController* pDrawController = GetViewShellBase().GetDrawController();
         if (!pDrawController)
@@ -424,7 +425,7 @@ void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
         auto aResIdsIndirect
             = xConfiguration->getResources({}, u"", drawing::framework::AnchorBindingMode_INDIRECT);
 
-        for (const uno::Reference<drawing::framework::XResourceId>& rResId : aResIdsIndirect)
+        for (const rtl::Reference<framework::ResourceId>& rResId : aResIdsIndirect)
         {
             auto pFrameworkHelper = framework::FrameworkHelper::Instance(GetViewShellBase());
 

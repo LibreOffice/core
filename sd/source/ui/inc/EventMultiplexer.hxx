@@ -23,6 +23,7 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <ResourceId.hxx>
 
 template <typename Arg, typename Ret> class Link;
 
@@ -126,10 +127,10 @@ class EventMultiplexerEvent
 public:
     EventMultiplexerEventId meEventId;
     const void* mpUserData;
-    css::uno::Reference<css::uno::XInterface> mxUserData;
+    rtl::Reference<sd::framework::ResourceId> mxUserData;
 
     EventMultiplexerEvent(EventMultiplexerEventId eEventId, const void* pUserData,
-                          const css::uno::Reference<css::uno::XInterface>& xUserData = {});
+                          const rtl::Reference<sd::framework::ResourceId>& xUserData = {});
 };
 
 /** This convenience class makes it easy to listen to various events that
@@ -168,7 +169,7 @@ public:
             Some data sent to the listeners along with the event.
     */
     void MultiplexEvent(EventMultiplexerEventId eEventId, void const* pUserData,
-                        const css::uno::Reference<css::uno::XInterface>& xUserData = {});
+                        const rtl::Reference<sd::framework::ResourceId>& xUserData = {});
 
 private:
     class Implementation;

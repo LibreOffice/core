@@ -21,20 +21,17 @@
 
 #include <framework/Pane.hxx>
 
-namespace com::sun::star::drawing::framework
-{
-class XResourceId;
-}
-
 namespace sd::framework
 {
+class ResourceId;
+
 /** This subclass is not necessary anymore.  We can remove it if that
     remains so.
 */
 class FrameWindowPane : public Pane
 {
 public:
-    FrameWindowPane(const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+    FrameWindowPane(const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
                     vcl::Window* pWindow);
     virtual ~FrameWindowPane() noexcept override;
 

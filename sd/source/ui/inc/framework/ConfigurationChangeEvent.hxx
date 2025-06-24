@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/lang/EventObject.hpp>
+#include <ResourceId.hxx>
 #include <rtl/ref.hxx>
 
 namespace sd::framework
@@ -53,7 +54,7 @@ struct ConfigurationChangeEvent final : public ::css::lang::EventObject
     rtl::Reference<::sd::framework::Configuration> Configuration;
     /** The resource id that is part of the configuration change.
     */
-    ::css::uno::Reference<::css::drawing::framework::XResourceId> ResourceId;
+    rtl::Reference<sd::framework::ResourceId> ResourceId;
     /** The resource object that corresponds to the ResourceId.  May
         be an empty reference.
     */

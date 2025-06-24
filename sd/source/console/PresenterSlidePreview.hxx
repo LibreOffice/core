@@ -54,7 +54,7 @@ class PresenterSlidePreview
 public:
     PresenterSlidePreview (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSlidePreview() override;
@@ -66,7 +66,7 @@ public:
 
     // AbstractResource
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() override;
+    virtual rtl::Reference<sd::framework::ResourceId> getResourceId() override;
 
     virtual bool isAnchorOnly() override;
 
@@ -98,7 +98,7 @@ protected:
     ::rtl::Reference<PresenterController> mpPresenterController;
 
 private:
-    css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
+    rtl::Reference<sd::framework::ResourceId> mxViewId;
     rtl::Reference<sd::presenter::SlideRenderer> mxPreviewRenderer;
 
     /** This Image holds the preview of the current slide.  After resize

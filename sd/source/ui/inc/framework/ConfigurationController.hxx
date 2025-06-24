@@ -90,16 +90,16 @@ public:
     void unlock();
 
     void requestResourceActivation (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        const rtl::Reference<sd::framework::ResourceId>& rxResourceId,
         ResourceActivationMode eMode);
 
     void requestResourceDeactivation (
-        const css::uno::Reference<css::drawing::framework::XResourceId>&
+        const rtl::Reference<sd::framework::ResourceId>&
             rxResourceId);
 
     rtl::Reference<sd::framework::AbstractResource>
         getResource (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
+            const rtl::Reference<sd::framework::ResourceId>& rxResourceId);
 
     void update();
 

@@ -33,12 +33,11 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework {
 
 ChildWindowPane::ChildWindowPane (
-    const Reference<XResourceId>& rxPaneId,
+    const rtl::Reference<ResourceId>& rxPaneId,
     sal_uInt16 nChildWindowId,
     ViewShellBase& rViewShellBase,
     ::std::unique_ptr<SfxShell> && pShell)

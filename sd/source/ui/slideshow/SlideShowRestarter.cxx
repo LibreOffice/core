@@ -20,6 +20,7 @@
 #include <DrawController.hxx>
 #include <ViewShellBase.hxx>
 #include <slideshow.hxx>
+#include <ResourceId.hxx>
 #include "SlideShowRestarter.hxx"
 
 #include <comphelper/propertyvalue.hxx>

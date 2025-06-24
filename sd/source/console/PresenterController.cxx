@@ -91,7 +91,7 @@ PresenterController::PresenterController (
     const rtl::Reference<::sd::DrawController>& rxController,
     const Reference<presentation::XSlideShowController>& rxSlideShowController,
     rtl::Reference<PresenterPaneContainer> xPaneContainer,
-    const Reference<XResourceId>& rxMainPaneId)
+    const rtl::Reference<sd::framework::ResourceId>& rxMainPaneId)
     : mxScreen(std::move(xScreen)),
       mxComponentContext(rxContext),
       mxController(rxController),

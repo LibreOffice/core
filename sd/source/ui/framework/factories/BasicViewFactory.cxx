@@ -36,6 +36,7 @@
 #include <SlideSorterViewShell.hxx>
 #include <FrameView.hxx>
 #include <Window.hxx>
+#include <ResourceId.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -59,7 +60,7 @@ class BasicViewFactory::ViewDescriptor
 public:
     rtl::Reference<ViewShellWrapper> mxView;
     std::shared_ptr<sd::ViewShell> mpViewShell;
-    Reference<XResourceId> mxViewId;
+    rtl::Reference<ResourceId> mxViewId;
     static bool CompareView (const std::shared_ptr<ViewDescriptor>& rpDescriptor,
         const rtl::Reference<AbstractResource>& rxView)
     { return rpDescriptor->mxView.get() == rxView.get(); }
@@ -72,7 +73,7 @@ BasicViewFactory::BasicViewFactory (const rtl::Reference<::sd::DrawController>& 
       mpFrameView(nullptr),
       mpWindow(VclPtr<WorkWindow>::Create(nullptr,WB_STDWORK)),
       mpViewCache(std::make_shared<ViewCache>()),
-      mxLocalPane(new Pane(Reference<XResourceId>(), mpWindow.get()))
+      mxLocalPane(new Pane(rtl::Reference<ResourceId>(), mpWindow.get()))
 {
     try
     {
@@ -133,7 +134,7 @@ void BasicViewFactory::disposing(std::unique_lock<std::mutex>&)
 }
 
 rtl::Reference<AbstractResource> BasicViewFactory::createResource (
-    const Reference<XResourceId>& rxViewId)
+    const rtl::Reference<ResourceId>& rxViewId)
 {
     const bool bIsCenterPane (
         rxViewId->isBoundToURL(FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT));
@@ -230,7 +231,7 @@ void BasicViewFactory::releaseResource (const rtl::Reference<AbstractResource>& 
 }
 
 std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<ResourceId>& rxViewId,
     vcl::Window& rWindow,
     const rtl::Reference<AbstractPane>& rxPane,
     FrameView* pFrameView,
@@ -272,7 +273,7 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
 }
 
 std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<ResourceId>& rxViewId,
     vcl::Window& rWindow,
     FrameView* pFrameView)
 {
@@ -392,9 +393,9 @@ bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDes
 
     if (rpDescriptor->mxView)
     {
-        static ::std::vector<Reference<XResourceId> > s_aCacheableResources = [&]()
+        static ::std::vector<rtl::Reference<ResourceId> > s_aCacheableResources = [&]()
         {
-            ::std::vector<Reference<XResourceId> > tmp;
+            ::std::vector<rtl::Reference<ResourceId> > tmp;
             FrameworkHelper::Instance(*mpBase);
 
             // The slide sorter and the task panel are cacheable and relocatable.
@@ -406,14 +407,14 @@ bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDes
         }();
 
         bIsCacheable = std::any_of(s_aCacheableResources.begin(), s_aCacheableResources.end(),
-            [&rpDescriptor](const Reference<XResourceId>& rxId) { return rxId->compareTo(rpDescriptor->mxViewId) == 0; });
+            [&rpDescriptor](const rtl::Reference<ResourceId>& rxId) { return rxId->compareTo(rpDescriptor->mxViewId) == 0; });
     }
 
     return bIsCacheable;
 }
 
 std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromCache (
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<ResourceId>& rxViewId,
     const rtl::Reference<AbstractPane>& rxPane)
 {
     std::shared_ptr<ViewDescriptor> pDescriptor;

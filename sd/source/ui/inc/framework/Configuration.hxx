@@ -22,13 +22,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/framework/AnchorBindingMode.hpp>
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
 
 namespace sd::framework {
 class ConfigurationController;
+class ResourceId;
 
 typedef comphelper::WeakComponentImplHelper <
     css::container::XNamed
@@ -89,7 +89,7 @@ public:
             IllegalArgumentException is thrown.
     */
     void addResource (
-        const css::uno::Reference<css::drawing::framework::XResourceId>&
+        const rtl::Reference<sd::framework::ResourceId>&
             rxResourceId);
 
     /** Remove a resource from the configuration.
@@ -105,7 +105,7 @@ public:
             IllegalArgumentException is thrown.
     */
     void removeResource(
-        const css::uno::Reference<css::drawing::framework::XResourceId>&
+        const rtl::Reference<sd::framework::ResourceId>&
             rxResourceId);
 
     /** Returns the list of resources that are bound directly and/or
@@ -113,8 +113,8 @@ public:
         returned resource ids.
         @param xAnchorId
             This anchor typically is either a pane or an empty
-            XResourceId object.  An
-            empty reference is treated like an XResourceId object.
+            ResourceId object.  An
+            empty reference is treated like an ResourceId object.
         @param sTargetURLPrefix
             When a non-empty string is given then resource ids are returned
             only when their resource URL matches this prefix, i.e. when it
@@ -134,11 +134,10 @@ public:
             The set of returned resource ids may be empty when there are no
             resource ids that match all conditions.  The resources in the
             sequence are ordered with respect to the
-            XResourceId::compareTo() method.
+            ResourceId::compareTo() method.
     */
-    css::uno::Sequence< css::uno::Reference<
-        css::drawing::framework::XResourceId> > getResources (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId,
+    std::vector< rtl::Reference<sd::framework::ResourceId> > getResources (
+        const rtl::Reference<sd::framework::ResourceId>& rxAnchorId,
         std::u16string_view rsResourceURLPrefix,
         css::drawing::framework::AnchorBindingMode eMode);
 
@@ -148,14 +147,14 @@ public:
         active, i.e. has a visible representation in the GUI.
         @param xResourceId
             The id of a resource.  May be empty (empty reference or empty
-            XResourceId object) in which case `FALSE` is
+            ResourceId object) in which case `FALSE` is
             returned.
         @return
             Returns `TRUE` when the resource is part of the configuration
             and `FALSE` when it is not.
     */
     bool hasResource (
-        const css::uno::Reference<css::drawing::framework::XResourceId>&
+        const rtl::Reference<sd::framework::ResourceId>&
             rxResourceId);
 
     rtl::Reference<Configuration> createClone();
@@ -207,7 +206,7 @@ private:
             into account when the actual event type field is determined.
     */
     void PostEvent (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        const rtl::Reference<sd::framework::ResourceId>& rxResourceId,
         const bool bActivation);
 
     /** When the called object has already been disposed this method throws

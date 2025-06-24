@@ -196,7 +196,7 @@ void ConfigurationUpdater::CleanRequestedConfiguration()
         return;
 
     // Request the deactivation of pure anchors that have no child.
-    vector<Reference<XResourceId> > aResourcesToDeactivate;
+    vector<rtl::Reference<ResourceId> > aResourcesToDeactivate;
     CheckPureAnchors(mxRequestedConfiguration, aResourcesToDeactivate);
     if (!aResourcesToDeactivate.empty())
     {
@@ -259,7 +259,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
 #endif
 
         // Deactivate pure anchors that have no child.
-        vector<Reference<XResourceId> > aResourcesToDeactivate;
+        vector<rtl::Reference<ResourceId> > aResourcesToDeactivate;
         CheckPureAnchors(mxCurrentConfiguration, aResourcesToDeactivate);
         if (!aResourcesToDeactivate.empty())
             mpResourceManager->DeactivateResources(aResourcesToDeactivate, mxCurrentConfiguration);
@@ -272,17 +272,16 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
 
 void ConfigurationUpdater::CheckPureAnchors (
     const rtl::Reference<Configuration>& rxConfiguration,
-    vector<Reference<XResourceId> >& rResourcesToDeactivate)
+    vector<rtl::Reference<ResourceId> >& rResourcesToDeactivate)
 {
     if ( ! rxConfiguration.is())
         return;
 
     // Get a list of all resources in the configuration.
-    Sequence<Reference<XResourceId> > aResources(
+    std::vector<rtl::Reference<ResourceId> > aResources(
         rxConfiguration->getResources(
             nullptr, u"", AnchorBindingMode_INDIRECT));
-    auto aResourcesRange = asNonConstRange(aResources);
-    sal_Int32 nCount (aResources.getLength());
+    sal_Int32 nCount (aResources.size());
 
     // Prepare the list of pure anchors that have to be deactivated.
     rResourcesToDeactivate.clear();
@@ -293,7 +292,7 @@ void ConfigurationUpdater::CheckPureAnchors (
     sal_Int32 nIndex (nCount-1);
     while (nIndex >= 0)
     {
-        const Reference<XResourceId>& xResourceId (aResources[nIndex]);
+        const rtl::Reference<ResourceId>& xResourceId (aResources[nIndex]);
         const rtl::Reference<AbstractResource> xResource (
             mpResourceManager->GetResource(xResourceId).mxResource);
         bool bDeactiveCurrentResource (false);
@@ -311,7 +310,7 @@ void ConfigurationUpdater::CheckPureAnchors (
             }
             else
             {
-                const Reference<XResourceId>& xPrevResourceId (aResources[nIndex+1]);
+                const rtl::Reference<ResourceId>& xPrevResourceId (aResources[nIndex+1]);
                 if ( ! xPrevResourceId.is()
                     || ! xPrevResourceId->isBoundTo(xResourceId, AnchorBindingMode_DIRECT))
                 {
@@ -330,7 +329,7 @@ void ConfigurationUpdater::CheckPureAnchors (
             rResourcesToDeactivate.push_back(xResourceId);
             // Erase element from current configuration.
             for (sal_Int32 nI=nIndex; nI<nCount-2; ++nI)
-                aResourcesRange[nI] = aResources[nI+1];
+                aResources[nI] = aResources[nI+1];
             nCount -= 1;
         }
         nIndex -= 1;

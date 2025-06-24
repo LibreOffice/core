@@ -25,14 +25,6 @@
 #include <memory>
 #include <vector>
 
-namespace sd::framework
-{
-class Configuration;
-}
-namespace com::sun::star::drawing::framework
-{
-class XResourceId;
-}
 namespace sd
 {
 class DrawController;
@@ -40,10 +32,12 @@ class DrawController;
 
 namespace sd::framework
 {
+class Configuration;
 class ConfigurationClassifier;
 class ConfigurationUpdaterLock;
 class ConfigurationControllerResourceManager;
 class ConfigurationControllerBroadcaster;
+class ResourceId;
 
 /** This is a helper class for the ConfigurationController.  It handles the
     update of the current configuration so that it looks like a requested
@@ -159,9 +153,9 @@ private:
         Childless pure anchors are deactivated.
         This affects only the current configuration.
     */
-    void CheckPureAnchors(const rtl::Reference<sd::framework::Configuration>& rxConfiguration,
-                          ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId>>&
-                              rResourcesToDeactivate);
+    void CheckPureAnchors(
+        const rtl::Reference<sd::framework::Configuration>& rxConfiguration,
+        ::std::vector<rtl::Reference<sd::framework::ResourceId>>& rResourcesToDeactivate);
 
     /** Remove from the requested configuration all pure anchors that have no
         child.  Requested but not yet activated anchors can not be removed

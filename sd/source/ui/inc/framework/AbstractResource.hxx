@@ -19,12 +19,14 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <comphelper/compbase.hxx>
+#include <rtl/ref.hxx>
 #include <sddllapi.h>
 
 namespace sd::framework
 {
+class ResourceId;
+
 /** Base interface that provides functionality shared by all resource types
     of the drawing framework.
 */
@@ -33,10 +35,10 @@ class SD_DLLPUBLIC AbstractResource : public comphelper::WeakComponentImplHelper
 public:
     virtual ~AbstractResource() override;
 
-    /** Return an XResourceId object for the called resource.
+    /** Return an ResourceId object for the called resource.
         The returned id unambiguously identifies the resource.
     */
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() = 0;
+    virtual rtl::Reference<sd::framework::ResourceId> getResourceId() = 0;
 
     /** Some resources must not be leafs, i.e. have to be anchor to at least
         one other resource.  Most panes are examples for this.  Views on the

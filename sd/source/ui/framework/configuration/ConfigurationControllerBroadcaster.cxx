@@ -128,7 +128,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (const ConfigurationCha
 
 void ConfigurationControllerBroadcaster::NotifyListeners (
     const OUString& rsEventType,
-    const Reference<XResourceId>& rxResourceId,
+    const rtl::Reference<ResourceId>& rxResourceId,
     const rtl::Reference<AbstractResource>& rxResourceObject)
 {
     ConfigurationChangeEvent aEvent;

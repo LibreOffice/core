@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <ResourceId.hxx>
 #include <framework/ConfigurationChangeListener.hxx>
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
@@ -74,11 +74,11 @@ private:
     rtl::Reference<ConfigurationController> mxConfigurationController;
     ::std::set<OUString> maActiveMainViewContainer;
     /// The resource managed by this class.
-    css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;
+    rtl::Reference<sd::framework::ResourceId> mxResourceId;
     /// The anchor of the main view.
-    css::uno::Reference<css::drawing::framework::XResourceId> mxMainViewAnchorId;
+    rtl::Reference<sd::framework::ResourceId> mxMainViewAnchorId;
     OUString msCurrentMainViewURL;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
+    rtl::Reference<sd::framework::ResourceId> mxViewTabBarId;
     rtl::Reference<::sd::DrawController> mxControllerManager;
 
     void HandleMainViewSwitch (

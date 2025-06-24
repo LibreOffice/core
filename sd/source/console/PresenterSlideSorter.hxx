@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <framework/AbstractView.hxx>
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <ResourceId.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
@@ -62,7 +62,7 @@ class PresenterSlideSorter
 public:
     PresenterSlideSorter (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const rtl::Reference<::sd::DrawController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSlideSorter() override;
@@ -107,7 +107,7 @@ public:
 
     // AbstractResource
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() override;
+    virtual rtl::Reference<sd::framework::ResourceId> getResourceId() override;
 
     virtual bool isAnchorOnly() override;
 
@@ -130,7 +130,7 @@ public:
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
+    rtl::Reference<sd::framework::ResourceId> mxViewId;
     rtl::Reference<sd::framework::AbstractPane> mxPane;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     css::uno::Reference<css::awt::XWindow> mxWindow;

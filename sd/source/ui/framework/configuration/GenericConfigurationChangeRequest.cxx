@@ -24,6 +24,7 @@
 #include "GenericConfigurationChangeRequest.hxx"
 
 #include <framework/FrameworkHelper.hxx>
+#include <ResourceId.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -32,7 +33,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sd::framework {
 
 GenericConfigurationChangeRequest::GenericConfigurationChangeRequest (
-    const Reference<XResourceId>& rxResourceId,
+    const rtl::Reference<ResourceId>& rxResourceId,
     const Mode eMode)
     : mxResourceId(rxResourceId),
       meMode(eMode)

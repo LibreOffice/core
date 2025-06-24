@@ -26,6 +26,8 @@
 
 namespace sd::framework
 {
+class ResourceId;
+
 /** Factory and possibly cache for creating and releasing resources.
     <p>A resource factory is created and used by the
     XConfigurationController object.</p>
@@ -35,7 +37,7 @@ namespace sd::framework
 class SD_DLLPUBLIC ResourceFactory : public comphelper::WeakComponentImplHelper<>
 {
 public:
-    /** Create a resource for the given XResourceId object.
+    /** Create a resource for the given ResourceId object.
         @param xResourceId
             The resource URL of this id specifies the type of resource to
             create.  The anchor can be used to obtain the associated object
@@ -55,8 +57,7 @@ public:
             when the given URL is not supported by the factory.
     */
     virtual rtl::Reference<sd::framework::AbstractResource>
-    createResource(const ::css::uno::Reference<::css::drawing::framework::XResourceId>& xResourceId)
-        = 0;
+    createResource(const rtl::Reference<sd::framework::ResourceId>& xResourceId) = 0;
 
     /** Call this method to tell a factory that the given resource is no
         longer in use.  The factory can decide whether to destroy the

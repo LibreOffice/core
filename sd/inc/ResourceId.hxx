@@ -21,12 +21,11 @@
 
 #include <sal/config.h>
 #include "sddllapi.h"
-
-#include <vector>
-
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/drawing/framework/AnchorBindingMode.hpp>
 #include <cppuhelper/implbase.hxx>
-
+#include <rtl/ref.hxx>
+#include <vector>
 #include <memory>
 
 namespace com::sun::star::util { class XURLTransformer; }
@@ -34,14 +33,22 @@ namespace com::sun::star::uno { template <class interface_type> class WeakRefere
 
 namespace sd::framework {
 
-typedef ::cppu::WeakImplHelper <
-    css::drawing::framework::XResourceId
-    > ResourceIdInterfaceBase;
-
-/** Implementation of css::drawing::framework::XResourceId interface.
+/** A resource id uses a set of URLs to unambiguously specify a resource of
+    the drawing framework.
+    <p>Resources of the drawing framework are panes, views, tool bars, and
+    command groups.  One URL describes the type of the actual resource.  A
+    sequence of URLs (typically one, sometimes two) specifies its anchor,
+    the resource it is bound to.  The anchor typically is a pane (for
+    views), or it is empty (for panes).</p>
+    <p>The resource URL may be empty.  In this case the anchor is empty,
+    too.  Such an empty resource id does not describe a resource but rather
+    the absence of one.  Instead of an empty ResourceId object
+    an empty reference can be used in many places.</p>
+    <p>The resource URL may have arguments that are passed to the factory
+    method on its creation.  Arguments are only available through the
+    getFullResourceURL().  The getResourceURL() method strips them away.</p>
 */
-class SD_DLLPUBLIC ResourceId final
-    : public ResourceIdInterfaceBase
+class SD_DLLPUBLIC ResourceId final : public ::cppu::WeakImplHelper<>
 {
 public:
     /** Create a new, empty resource id.
@@ -67,10 +74,10 @@ public:
         const OUString& rsResourceURL);
 
     /** Create a resource id for an anchor that is given as
-        XResourceId object.  This is the most general of the
+        ResourceId object.  This is the most general of the
         constructor variants.
     */
-    ResourceId(const OUString& sResourceURL, const css::uno::Reference<XResourceId>& xAnchor);
+    ResourceId(const OUString& sResourceURL, const rtl::Reference<ResourceId>& xAnchor);
 
     /** Create a new resource id for the given resource type and an anchor
         that is specified by a single URL.  This constructor can be used for
@@ -91,54 +98,109 @@ public:
         @param rsFirstAnchorURL
             This URL extends the anchor given by rAnchorURLs.
         @param rAnchorURLs
-            An anchor as it is returned by XResourceId::getAnchorURLs().
+            An anchor as it is returned by ResourceId::getAnchorURLs().
     */
     ResourceId (
         const OUString& rsResourceURL,
         const OUString& rsFirstAnchorURL,
-        const css::uno::Sequence<OUString>& rAnchorURLs);
+        const std::vector<OUString>& rAnchorURLs);
 
     virtual ~ResourceId() override;
 
-    //===== XResourceId =======================================================
+    /** Return the URL of the resource.  Arguments supplied on creation are
+        stripped away.  Use getFullResourceURL() to access them.
+    */
+    OUString getResourceURL() const;
 
-    virtual OUString SAL_CALL
-        getResourceURL() override;
+    /** Return a URL object of the resource URL that may contain arguments.
+    */
+    css::util::URL getFullResourceURL();
 
-    virtual css::util::URL SAL_CALL
-        getFullResourceURL() override;
+    /** Return whether there is a non-empty anchor URL.  When this method
+        returns `FALSE` then getAnchorURLs() will return an empty list.
+    */
+    bool hasAnchor() const;
 
-    virtual sal_Bool SAL_CALL
-        hasAnchor() override;
+    /** Return a new ResourceId that represents the anchor resource.
+    */
+    rtl::Reference<ResourceId> getAnchor() const;
 
-    virtual css::uno::Reference<
-        css::drawing::framework::XResourceId> SAL_CALL
-        getAnchor() override;
+    /** Return the, possibly empty, list of anchor URLs.  The URLs are
+        ordered so that the one in position 0 is the direct anchor of the
+        resource, while the one in position i+1 is the direct anchor of the
+        one in position i.
+    */
+    std::vector<OUString> getAnchorURLs() const;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL
-        getAnchorURLs() override;
+    /** Return the type prefix of the resource URL.  This includes all up to
+        and including the second slash.
+    */
+    OUString getResourceTypePrefix() const;
 
-    virtual OUString SAL_CALL
-        getResourceTypePrefix() override;
+    /** Compare the called ResourceId object with the given
+        one.
+        <p>The two resource ids A and B are compared so that if A<B (return
+        value is -1) then either A and B are unrelated or A is a direct or
+        indirect anchor of B.</p>
+        <p>The algorithm for this comparison is quite simple. It uses a
+        double lexicographic ordering.  On the lower level individual URLs
+        are compared via the lexicographic order defined on strings.  On the
+        higher level two resource ids are compared via a lexicographic order
+        defined on the URLS.  So when there are two resource ids A1.A2
+        (A1 being the anchor of A2) and B1.B2 then A1.A2<B1.B2 when A1<B1 or
+        A1==B1 and A2<B2.  Resource ids may have different lengths: A1 <
+        B1.B2 when A1<B1 or A1==B1 (anchors first then resources linked to them.</p>
+        @param xId
+            The resource id to which the called resource id is compared.
+        @return
+            Returns 0 when the called resource id is
+            equivalent to the given resource id. Returns <code>-1</code> or
+            <code>+1</code> when the two compared resource ids differ.
+    */
+    sal_Int16 compareTo(const rtl::Reference<ResourceId>& rxResourceId) const;
 
-    virtual sal_Int16 SAL_CALL
-        compareTo (const css::uno::Reference<
-            css::drawing::framework::XResourceId>& rxResourceId) override;
-
-    virtual sal_Bool SAL_CALL
+    /** Return whether the anchor of the called resource id object
+        represents the same resource as the given object.
+        <p>Note that not only the anchor of the given object is taken into
+        account. The whole object, including the resource URL, is
+        interpreted as anchor resource.</p>
+        @param xAnchorId
+            The resource id of the anchor.
+        @param eMode
+            This mode specifies how the called resource has to be bound to
+            the given anchor in order to have this function return `TRUE`.
+            <p>If eMode is DIRECT then the anchor of the called resource id
+            has to be identical to the given anchor. If eMode is
+            INDIRECT then the given anchor has to be a part
+            of the anchor of the called resource.
+    */
+    bool
         isBoundTo (
-            const css::uno::Reference<
-                css::drawing::framework::XResourceId>& rxResourceId,
-            css::drawing::framework::AnchorBindingMode eMode) override;
+            const rtl::Reference<ResourceId>& rxResourceId,
+            css::drawing::framework::AnchorBindingMode eMode) const;
 
-    virtual sal_Bool SAL_CALL
+    /** Return whether the anchor of the called resource id object
+        represents the same resource as the given anchor URL. This is a
+        convenience variant of the isBoundTo() function
+        that can also be seen as an optimization for the case that the
+        anchor consists of exactly one URL.
+        @param AnchorURL
+            The resource URL of the anchor.
+        @param eMode
+            This mode specifies how the called resource has to be bound to
+            the given anchor in order to have this function return. See the
+            description of isBoundTo() for more
+            information.
+    */
+    bool
         isBoundToURL (
             const OUString& rsAnchorURL,
-            css::drawing::framework::AnchorBindingMode eMode) override;
+            css::drawing::framework::AnchorBindingMode eMode) const;
 
-    virtual css::uno::Reference<
-        css::drawing::framework::XResourceId> SAL_CALL
-        clone() override;
+    /** Return a copy of the called resource id.  The caller becomes the
+        owner of the new object.
+    */
+    rtl::Reference<ResourceId> clone() const;
 
 private:
     /** The set of URLs that consist of the resource URL at index 0 and the
@@ -171,7 +233,7 @@ private:
     */
     bool IsBoundToAnchor (
         const OUString* psFirstAnchorURL,
-        const css::uno::Sequence<OUString>* paAnchorURLs,
+        const std::vector<OUString>* paAnchorURLs,
         css::drawing::framework::AnchorBindingMode eMode) const;
 
     /** Return whether the called ResourceId object is bound to the anchor

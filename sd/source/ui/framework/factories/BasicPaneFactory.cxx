@@ -34,6 +34,7 @@
 #include <ViewShellBase.hxx>
 #include <PaneChildWindows.hxx>
 #include <DrawController.hxx>
+#include <ResourceId.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -173,7 +174,7 @@ void BasicPaneFactory::disposing(std::unique_lock<std::mutex>&)
 //===== AbstractPaneFactory ==========================================================
 
 rtl::Reference<AbstractResource> BasicPaneFactory::createResource (
-    const Reference<XResourceId>& rxPaneId)
+    const rtl::Reference<ResourceId>& rxPaneId)
 {
     ThrowIfDisposed();
 
@@ -320,7 +321,7 @@ void SAL_CALL BasicPaneFactory::Listener::disposing (
 }
 
 rtl::Reference<AbstractResource> BasicPaneFactory::CreateFrameWindowPane (
-    const Reference<XResourceId>& rxPaneId)
+    const rtl::Reference<ResourceId>& rxPaneId)
 {
     if (!mpViewShellBase)
         return nullptr;
@@ -329,7 +330,7 @@ rtl::Reference<AbstractResource> BasicPaneFactory::CreateFrameWindowPane (
 }
 
 rtl::Reference<AbstractResource> BasicPaneFactory::CreateFullScreenPane(
-    const Reference<XResourceId>& rxPaneId)
+    const rtl::Reference<ResourceId>& rxPaneId)
 {
     const Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
 
@@ -344,7 +345,7 @@ rtl::Reference<AbstractResource> BasicPaneFactory::CreateFullScreenPane(
 }
 
 rtl::Reference<AbstractResource> BasicPaneFactory::CreateChildWindowPane (
-    const Reference<XResourceId>& rxPaneId,
+    const rtl::Reference<ResourceId>& rxPaneId,
     const PaneDescriptor& rDescriptor)
 {
     if (!mpViewShellBase)

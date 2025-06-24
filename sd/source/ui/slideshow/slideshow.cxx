@@ -59,6 +59,7 @@
 #include <optsitem.hxx>
 #include <strings.hrc>
 #include <sdresid.hxx>
+#include <ResourceId.hxx>
 
 using ::com::sun::star::presentation::XSlideShowController;
 using ::sd::framework::FrameworkHelper;

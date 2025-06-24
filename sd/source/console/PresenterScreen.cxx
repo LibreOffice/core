@@ -360,7 +360,7 @@ void PresenterScreen::InitializePresenterScreen()
         mxConfigurationControllerWeak = xCC.get();
 
         Reference<XComponentContext> xContext(mxContextWeak);
-        Reference<drawing::framework::XResourceId> xMainPaneId(
+        rtl::Reference<sd::framework::ResourceId> xMainPaneId(
             GetMainPaneId(xPresentation, xContext));
         // An empty reference means that the presenter screen can
         // not or must not be displayed.
@@ -556,7 +556,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenFromScreen( sal_Int32 nPresentation
     return nPresenterScreenNumber;
 }
 
-Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
+rtl::Reference<sd::framework::ResourceId> PresenterScreen::GetMainPaneId (
     const Reference<presentation::XPresentation2>& rxPresentation,
     const Reference<XComponentContext>& xContext) const
 {
@@ -663,7 +663,7 @@ void PresenterScreen::SetupViewFactory (const Reference<XComponentContext>& rxCo
 
 void PresenterScreen::SetupConfiguration (
     const Reference<XComponentContext>& rxContext,
-    const Reference<XResourceId>& rxAnchorId)
+    const rtl::Reference<sd::framework::ResourceId>& rxAnchorId)
 {
     try
     {
@@ -687,7 +687,7 @@ void PresenterScreen::ProcessLayout (
     PresenterConfigurationAccess& rConfiguration,
     std::u16string_view rsLayoutName,
     const Reference<XComponentContext>& rxContext,
-    const Reference<XResourceId>& rxAnchorId)
+    const rtl::Reference<sd::framework::ResourceId>& rxAnchorId)
 {
     try
     {
@@ -769,7 +769,7 @@ void PresenterScreen::ProcessViewDescriptions (
 
 void PresenterScreen::ProcessComponent (
     const ::std::vector<Any>& rValues,
-    const Reference<XResourceId>& rxAnchorId)
+    const rtl::Reference<sd::framework::ResourceId>& rxAnchorId)
 {
     if (rValues.size() != 6)
         return;
@@ -829,7 +829,7 @@ void PresenterScreen::ProcessViewDescription (
 }
 
 void PresenterScreen::SetupView(
-    const Reference<XResourceId>& rxAnchorId,
+    const rtl::Reference<sd::framework::ResourceId>& rxAnchorId,
     const OUString& rsPaneURL,
     const OUString& rsViewURL,
     const PresenterPaneContainer::ViewInitializationFunction& rViewInitialization)
@@ -838,7 +838,7 @@ void PresenterScreen::SetupView(
     if (!xCC.is())
         return;
 
-    Reference<XResourceId> xPaneId (new sd::framework::ResourceId(rsPaneURL,rxAnchorId));
+    rtl::Reference<sd::framework::ResourceId> xPaneId (new sd::framework::ResourceId(rsPaneURL,rxAnchorId));
     // Look up the view descriptor.
     ViewDescriptor aViewDescriptor;
     ViewDescriptorContainer::const_iterator iDescriptor (maViewDescriptors.find(rsViewURL));

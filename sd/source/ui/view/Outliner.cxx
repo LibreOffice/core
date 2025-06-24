@@ -65,6 +65,7 @@
 #include <VectorGraphicSearchContext.hxx>
 #include <fusearch.hxx>
 #include <sdpage.hxx>
+#include <ResourceId.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

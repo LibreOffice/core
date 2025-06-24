@@ -100,7 +100,7 @@ const rtl::Reference<PresenterPaneBorderPainter>&
 }
 
 void PresenterPaneBase::initialize(
-    const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+    const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
     const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
     const rtl::Reference<PresenterPaneBorderPainter>& rxBorderPainter,
@@ -140,7 +140,7 @@ void PresenterPaneBase::initialize(
 
 //----- AbstractResource -----------------------------------------------------------
 
-Reference<XResourceId> PresenterPaneBase::getResourceId()
+rtl::Reference<sd::framework::ResourceId> PresenterPaneBase::getResourceId()
 {
     {
         std::unique_lock l(m_aMutex);

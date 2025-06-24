@@ -21,6 +21,7 @@
 
 #include <framework/FrameworkHelper.hxx>
 #include <framework/Configuration.hxx>
+#include <ResourceId.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
@@ -50,8 +51,8 @@ bool ConfigurationClassifier::Partition()
 }
 
 void ConfigurationClassifier::PartitionResources (
-    const css::uno::Sequence<Reference<XResourceId> >& rS1,
-    const css::uno::Sequence<Reference<XResourceId> >& rS2)
+    const std::vector<rtl::Reference<ResourceId> >& rS1,
+    const std::vector<rtl::Reference<ResourceId> >& rS2)
 {
     ResourceIdVector aC1minusC2;
     ResourceIdVector aC2minusC1;
@@ -81,18 +82,18 @@ void ConfigurationClassifier::PartitionResources (
 }
 
 void ConfigurationClassifier::ClassifyResources (
-    const css::uno::Sequence<Reference<XResourceId> >& rS1,
-    const css::uno::Sequence<Reference<XResourceId> >& rS2,
+    const std::vector<rtl::Reference<ResourceId> >& rS1,
+    const std::vector<rtl::Reference<ResourceId> >& rS2,
     ResourceIdVector& rS1minusS2,
     ResourceIdVector& rS2minusS1,
     ResourceIdVector& rS1andS2)
 {
     // Find all elements in rS1 and place them in rS1minusS2 or rS1andS2
     // depending on whether they are in rS2 or not.
-    for (const Reference<XResourceId>& rA1 : rS1)
+    for (const rtl::Reference<ResourceId>& rA1 : rS1)
     {
         bool bFound = std::any_of(rS2.begin(), rS2.end(),
-            [&rA1](const Reference<XResourceId>& rA2) {
+            [&rA1](const rtl::Reference<ResourceId>& rA2) {
                 return rA1->getResourceURL() == rA2->getResourceURL(); });
 
         if (bFound)
@@ -104,10 +105,10 @@ void ConfigurationClassifier::ClassifyResources (
     // Find all elements in rS2 that are not in rS1.  The elements that are
     // in both rS1 and rS2 have been handled above and are therefore ignored
     // here.
-    for (const Reference<XResourceId>& rA2 : rS2)
+    for (const rtl::Reference<ResourceId>& rA2 : rS2)
     {
         bool bFound = std::any_of(rS1.begin(), rS1.end(),
-            [&rA2](const Reference<XResourceId>& rA1) {
+            [&rA2](const rtl::Reference<ResourceId>& rA1) {
                 return rA2->getResourceURL() == rA1->getResourceURL(); });
 
         if ( ! bFound)
@@ -123,12 +124,12 @@ void ConfigurationClassifier::CopyResources (
     // Copy all resources bound to the ones in aC1minusC2Unique to rC1minusC2.
     for (const auto& rxResource : rSource)
     {
-        const Sequence<Reference<XResourceId> > aBoundResources (
+        const std::vector<rtl::Reference<ResourceId> > aBoundResources (
             rxConfiguration->getResources(
                 rxResource,
                 u"",
                 AnchorBindingMode_INDIRECT));
-        const sal_Int32 nL (aBoundResources.getLength());
+        const sal_Int32 nL (aBoundResources.size());
 
         rTarget.reserve(rTarget.size() + 1 + nL);
         rTarget.push_back(rxResource);
@@ -136,7 +137,7 @@ void ConfigurationClassifier::CopyResources (
         SAL_INFO("sd.fwk", __func__ << ":    copying " <<
             FrameworkHelper::ResourceIdToString(rxResource));
 
-        for (const Reference<XResourceId>& rBoundResource : aBoundResources)
+        for (const rtl::Reference<ResourceId>& rBoundResource : aBoundResources)
         {
             rTarget.push_back(rBoundResource);
             SAL_INFO("sd.fwk", __func__ << ":    copying " <<

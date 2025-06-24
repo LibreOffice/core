@@ -22,6 +22,7 @@
 
 #include <ViewTabBar.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <ResourceId.hxx>
 #include <DrawController.hxx>
 #include <unotools/mediadescriptor.hxx>
 
@@ -103,7 +104,7 @@ void SAL_CALL BasicToolBarFactory::disposing (
 //===== AbstractPaneFactory ==========================================================
 
 rtl::Reference<AbstractResource> BasicToolBarFactory::createResource (
-    const Reference<XResourceId>& rxToolBarId)
+    const rtl::Reference<ResourceId>& rxToolBarId)
 {
     ThrowIfDisposed();
 

@@ -923,7 +923,7 @@ void PresenterToolBar::ThrowIfDisposed() const
 
 PresenterToolBarView::PresenterToolBarView (
     const Reference<XComponentContext>& rxContext,
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId,
     const rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : mxViewId(rxViewId),
@@ -1010,9 +1010,9 @@ void SAL_CALL PresenterToolBarView::disposing (const lang::EventObject& rEventOb
         mxWindow = nullptr;
 }
 
-//----- XResourceId -----------------------------------------------------------
+//----- ResourceId -----------------------------------------------------------
 
-Reference<XResourceId> PresenterToolBarView::getResourceId()
+rtl::Reference<sd::framework::ResourceId> PresenterToolBarView::getResourceId()
 {
     return mxViewId;
 }

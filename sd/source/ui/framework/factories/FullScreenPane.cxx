@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <ResourceId.hxx>
 #include <strings.hrc>
 #include <sdresid.hxx>
 #include <DrawDocShell.hxx>
@@ -39,7 +40,7 @@ namespace sd::framework {
 
 FullScreenPane::FullScreenPane (
     const Reference<XComponentContext>& rxComponentContext,
-    const Reference<XResourceId>& rxPaneId,
+    const rtl::Reference<ResourceId>& rxPaneId,
     const vcl::Window* pViewShellWindow,
     const DrawDocShell* pDrawDocShell)
     : FrameWindowPane(rxPaneId,nullptr),
@@ -173,7 +174,7 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()
 }
 
 void FullScreenPane::ExtractArguments (
-    const Reference<XResourceId>& rxPaneId,
+    const rtl::Reference<ResourceId>& rxPaneId,
     sal_Int32& rnScreenNumberReturnValue,
     bool& rbFullScreen)
 {

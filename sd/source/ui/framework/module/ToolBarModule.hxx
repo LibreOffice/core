@@ -28,11 +28,6 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace com::sun::star::drawing::framework
-{
-class XResourceId;
-}
-
 namespace sd {
 class DrawController;
 class ViewShellBase;
@@ -46,6 +41,7 @@ class EventMultiplexerEvent;
 namespace sd::framework
 {
 class ConfigurationController;
+class ResourceId;
 
 /** This module is responsible for locking the ToolBarManager during
     configuration updates and for triggering ToolBarManager updates.
@@ -90,7 +86,7 @@ private:
     void HandleUpdateStart();
     void HandleUpdateEnd();
     void HandlePaneViewShellFocused(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
+        const rtl::Reference<sd::framework::ResourceId>& rxResourceId);
 
     DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
 };

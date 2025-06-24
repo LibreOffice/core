@@ -52,7 +52,7 @@ namespace sdext::presenter {
 
 PresenterNotesView::PresenterNotesView (
     const Reference<XComponentContext>& rxComponentContext,
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId,
     const ::rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : mxViewId(rxViewId),
@@ -286,7 +286,7 @@ void SAL_CALL PresenterNotesView::windowPaint (const awt::PaintEvent& rEvent)
 
 //----- AbstractResource -----------------------------------------------------------
 
-Reference<XResourceId> PresenterNotesView::getResourceId()
+rtl::Reference<sd::framework::ResourceId> PresenterNotesView::getResourceId()
 {
     return mxViewId;
 }

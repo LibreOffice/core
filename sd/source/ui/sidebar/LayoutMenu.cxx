@@ -474,7 +474,7 @@ void LayoutMenu::Fill()
     {
         if (mrBase.GetDrawController())
         {
-            Reference<XResourceId> xPaneId (new sd::framework::ResourceId(
+            rtl::Reference<sd::framework::ResourceId> xPaneId (new sd::framework::ResourceId(
                 FrameworkHelper::msCenterPaneURL));
             rtl::Reference<framework::AbstractView> xView (FrameworkHelper::Instance(mrBase)->GetView(xPaneId));
             if (xView.is())

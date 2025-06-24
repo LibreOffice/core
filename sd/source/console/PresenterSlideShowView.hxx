@@ -29,7 +29,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <framework/AbstractPane.hxx>
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <ResourceId.hxx>
 #include <framework/AbstractView.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
@@ -59,7 +59,7 @@ class PresenterSlideShowView
 public:
     PresenterSlideShowView (
         css::uno::Reference<css::uno::XComponentContext> xContext,
-        css::uno::Reference<css::drawing::framework::XResourceId> xViewId,
+        rtl::Reference<sd::framework::ResourceId> xViewId,
         const rtl::Reference<::sd::DrawController>& rxController,
         ::rtl::Reference<PresenterController> xPresenterController);
     virtual ~PresenterSlideShowView() override;
@@ -153,7 +153,7 @@ public:
 
     // XView
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId>
+    virtual rtl::Reference<sd::framework::ResourceId>
         getResourceId() override;
 
     virtual bool isAnchorOnly() override;
@@ -174,7 +174,7 @@ public:
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
+    rtl::Reference<sd::framework::ResourceId> mxViewId;
     rtl::Reference<::sd::DrawController> mxController;
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
     css::uno::Reference<css::presentation::XSlideShow> mxSlideShow;

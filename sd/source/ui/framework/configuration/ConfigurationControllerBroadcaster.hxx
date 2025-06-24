@@ -24,13 +24,12 @@
 #include <unordered_map>
 #include <vector>
 
-namespace com::sun::star::drawing::framework { class XResourceId; }
-
 namespace sd::framework {
 class ConfigurationChangeListener;
 struct ConfigurationChangeEvent;
 class ConfigurationController;
 class AbstractResource;
+class ResourceId;
 
 /** This class manages the set of ConfigurationChangeListeners and
     calls them when the ConfigurationController wants to broadcast an
@@ -98,7 +97,7 @@ public:
     */
     void NotifyListeners (
         const OUString& rsEventType,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        const rtl::Reference<sd::framework::ResourceId>& rxResourceId,
         const rtl::Reference<sd::framework::AbstractResource>& rxResourceObject);
 
     /** Call all listeners and inform them that the

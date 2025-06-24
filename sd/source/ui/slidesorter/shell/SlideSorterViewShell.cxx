@@ -65,7 +65,6 @@ using namespace ::sd::slidesorter;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 using ::vcl::EnumContext;

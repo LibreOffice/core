@@ -29,7 +29,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <framework/AbstractView.hxx>
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <ResourceId.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <rtl/ref.hxx>
 #include <memory>
@@ -61,7 +61,7 @@ class PresenterNotesView
 public:
     explicit PresenterNotesView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const ::rtl::Reference<::sd::DrawController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterNotesView() override;
@@ -103,7 +103,7 @@ public:
 
     // AbstractResource
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() override;
+    virtual rtl::Reference<sd::framework::ResourceId> getResourceId() override;
 
     virtual bool isAnchorOnly() override;
 
@@ -120,7 +120,7 @@ public:
     virtual void SAL_CALL keyReleased (const css::awt::KeyEvent& rEvent) override;
 
 private:
-    css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
+    rtl::Reference<sd::framework::ResourceId> mxViewId;
     ::rtl::Reference<PresenterController> mpPresenterController;
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;

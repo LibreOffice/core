@@ -80,6 +80,7 @@
 #include <Window.hxx>
 #include <svl/intitem.hxx>
 #include <DrawController.hxx>
+#include <ResourceId.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

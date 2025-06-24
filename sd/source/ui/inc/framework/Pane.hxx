@@ -52,7 +52,7 @@ public:
             NULL.
     */
     Pane (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+        const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
         vcl::Window* pWindow)
         noexcept;
     virtual ~Pane() override;
@@ -85,7 +85,7 @@ public:
 
     //----- XResource ---------------------------------------------------------
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() override;
+    virtual rtl::Reference<sd::framework::ResourceId> getResourceId() override;
 
     /** For the typical pane it makes no sense to be displayed without a
         view.  Therefore this default implementation returns always <TRUE/>.
@@ -93,7 +93,7 @@ public:
     virtual bool isAnchorOnly() override;
 
 protected:
-    css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
+    rtl::Reference<sd::framework::ResourceId> mxPaneId;
     VclPtr<vcl::Window> mpWindow;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;

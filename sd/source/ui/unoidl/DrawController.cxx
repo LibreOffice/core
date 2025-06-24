@@ -25,6 +25,7 @@
 #include <ViewShellManager.hxx>
 #include <FormShellManager.hxx>
 #include <Window.hxx>
+#include <ResourceId.hxx>
 #include <framework/ConfigurationController.hxx>
 #include <framework/ModuleController.hxx>
 
@@ -571,11 +572,11 @@ Any SAL_CALL DrawController::getSlideSorterSelection()
     ThrowIfDisposed();
 
     // * traverse Impress resources to find slide preview pane, grab selection from there
-    const uno::Sequence<uno::Reference<drawing::framework::XResourceId>> aResIds(
+    const std::vector<rtl::Reference<framework::ResourceId>> aResIds(
         mxConfigurationController->getCurrentConfiguration()->getResources(
             {}, u"", drawing::framework::AnchorBindingMode_INDIRECT));
 
-    for (const uno::Reference<drawing::framework::XResourceId>& rResId : aResIds)
+    for (const rtl::Reference<framework::ResourceId>& rResId : aResIds)
     {
         // can we somehow obtain the slidesorter from the Impress framework?
         if (rResId->getResourceURL() == "private:resource/view/SlideSorter")

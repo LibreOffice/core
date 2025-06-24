@@ -227,7 +227,7 @@ private:
 
 PresenterSlideSorter::PresenterSlideSorter (
     const Reference<uno::XComponentContext>& rxContext,
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId,
     const rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : mxComponentContext(rxContext),
@@ -545,7 +545,7 @@ void SAL_CALL PresenterSlideSorter::mouseDragged (const css::awt::MouseEvent&) {
 
 //----- AbstractResource -----------------------------------------------------------
 
-Reference<XResourceId> PresenterSlideSorter::getResourceId()
+rtl::Reference<sd::framework::ResourceId> PresenterSlideSorter::getResourceId()
 {
     {
         std::unique_lock l(m_aMutex);

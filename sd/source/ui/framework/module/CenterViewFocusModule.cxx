@@ -113,12 +113,12 @@ void CenterViewFocusModule::HandleNewView (
     // Make the center pane the active one.  Tunnel through the
     // controller to obtain a ViewShell pointer.
 
-    Sequence<Reference<XResourceId> > xViewIds (rxConfiguration->getResources(
+    std::vector<rtl::Reference<ResourceId> > xViewIds (rxConfiguration->getResources(
         FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
         FrameworkHelper::msViewURLPrefix,
         AnchorBindingMode_DIRECT));
     rtl::Reference<AbstractView> xView;
-    if (xViewIds.hasElements())
+    if (!xViewIds.empty())
         xView = dynamic_cast<AbstractView*>( mxConfigurationController->getResource(xViewIds[0]).get() );
     if (mpBase!=nullptr)
     {

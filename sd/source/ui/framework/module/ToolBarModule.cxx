@@ -146,7 +146,7 @@ void ToolBarModule::notifyConfigurationChange (
     }
 }
 
-void ToolBarModule::HandlePaneViewShellFocused(const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId)
+void ToolBarModule::HandlePaneViewShellFocused(const rtl::Reference<sd::framework::ResourceId>& rxResourceId)
 {
     if(!mpBase)
         return;
@@ -265,10 +265,8 @@ IMPL_LINK(ToolBarModule, EventMultiplexerListener, sd::tools::EventMultiplexerEv
     {
         case EventMultiplexerEventId::FocusShifted:
             {
-                uno::Reference<drawing::framework::XResourceId> xResourceId{ rEvent.mxUserData,
-                                                                             UNO_QUERY };
-                if (xResourceId.is())
-                    HandlePaneViewShellFocused(xResourceId);
+                if (rEvent.mxUserData)
+                    HandlePaneViewShellFocused(rEvent.mxUserData);
                 break;
             }
         default:

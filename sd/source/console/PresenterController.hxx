@@ -88,7 +88,7 @@ public:
         const rtl::Reference<::sd::DrawController>& rxController,
         const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController,
         rtl::Reference<PresenterPaneContainer> xPaneContainer,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxMainPaneId);
+        const rtl::Reference<sd::framework::ResourceId>& rxMainPaneId);
     virtual ~PresenterController() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -178,7 +178,7 @@ private:
     rtl::Reference<::sd::DrawController> mxController;
     rtl::Reference<::sd::framework::ConfigurationController> mxConfigurationController;
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxMainPaneId;
+    rtl::Reference<sd::framework::ResourceId> mxMainPaneId;
     rtl::Reference<PresenterPaneContainer> mpPaneContainer;
     sal_Int32 mnCurrentSlideIndex;
     css::uno::Reference<css::drawing::XDrawPage> mxCurrentSlide;

@@ -77,7 +77,7 @@ namespace sdext::presenter {
 
 PresenterSlideShowView::PresenterSlideShowView (
     css::uno::Reference<css::uno::XComponentContext> xContext,
-    css::uno::Reference<css::drawing::framework::XResourceId> xViewId,
+    rtl::Reference<sd::framework::ResourceId> xViewId,
     const rtl::Reference<::sd::DrawController>& rxController,
     ::rtl::Reference<PresenterController> xPresenterController)
     : mxComponentContext(std::move(xContext)),
@@ -619,7 +619,7 @@ void SAL_CALL PresenterSlideShowView::windowHidden (const lang::EventObject&) {}
 
 //----- XView -----------------------------------------------------------------
 
-Reference<XResourceId> PresenterSlideShowView::getResourceId()
+rtl::Reference<sd::framework::ResourceId> PresenterSlideShowView::getResourceId()
 {
     return mxViewId;
 }

@@ -26,7 +26,6 @@
 
 #include <vector>
 
-namespace com::sun::star::drawing::framework { class XResourceId; }
 namespace vcl { class Window; }
 
 namespace sd {
@@ -35,6 +34,7 @@ namespace sd {
     class ViewTabBar;
 }
 namespace sd::framework { class ConfigurationController; }
+namespace sd::framework { class ResourceId; }
 
 namespace sd {
 
@@ -69,13 +69,13 @@ struct TabBarButton
     */
     OUString ButtonLabel;
 
-    /** XResourceId object of the resource that is requested to be
+    /** ResourceId object of the resource that is requested to be
         displayed when the tab bar button is activated.
         <p>For some methods of the XTabBar interface only this
         member is evaluated.  That is because only this member is used to
         identify a tab bar button.</p>
     */
-    css::uno::Reference<css::drawing::framework::XResourceId> ResourceId;
+    rtl::Reference<sd::framework::ResourceId> ResourceId;
 };
 
 
@@ -103,7 +103,7 @@ class ViewTabBar final
 {
 public:
     ViewTabBar (
-        const css::uno::Reference< css::drawing::framework::XResourceId>& rxViewTabBarId,
+        const rtl::Reference<framework::ResourceId>& rxViewTabBarId,
         const rtl::Reference< ::sd::DrawController>& rxController);
     virtual ~ViewTabBar() override;
 
@@ -140,8 +140,7 @@ public:
 
     //----- AbstractResource ---------------------------------------------------------
 
-    virtual css::uno::Reference<
-        css::drawing::framework::XResourceId> getResourceId() override;
+    virtual rtl::Reference<framework::ResourceId> getResourceId() override;
 
     virtual bool isAnchorOnly() override;
 
@@ -188,7 +187,7 @@ private:
     rtl::Reference<::sd::framework::ConfigurationController> mxConfigurationController;
     typedef ::std::vector<TabBarButton> TabBarButtonList;
     TabBarButtonList maTabBarButtons;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
+    rtl::Reference<sd::framework::ResourceId> mxViewTabBarId;
     ViewShellBase* mpViewShellBase;
     int mnNoteBookWidthPadding;
 
@@ -203,7 +202,7 @@ private:
         members.
     */
     static vcl::Window* GetAnchorWindow(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewTabBarId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewTabBarId,
         const rtl::Reference<::sd::DrawController>& rxController);
 };
 

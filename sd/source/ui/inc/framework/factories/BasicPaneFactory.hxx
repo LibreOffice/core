@@ -60,7 +60,7 @@ public:
 
     virtual rtl::Reference<sd::framework::AbstractResource>
         createResource (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId) override;
+            const rtl::Reference<sd::framework::ResourceId>& rxPaneId) override;
 
     virtual void
         releaseResource (
@@ -101,14 +101,14 @@ private:
     */
     rtl::Reference<sd::framework::AbstractResource>
         CreateFrameWindowPane (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
+            const rtl::Reference<sd::framework::ResourceId>& rxPaneId);
 
     /** Create a new pane that represents the center pane in full screen
         mode.
     */
     rtl::Reference<sd::framework::AbstractResource>
         CreateFullScreenPane (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
+            const rtl::Reference<sd::framework::ResourceId>& rxPaneId);
 
     /** Create a new instance of ChildWindowPane.
         @param rPaneId
@@ -116,8 +116,7 @@ private:
     */
     rtl::Reference<sd::framework::AbstractResource>
         CreateChildWindowPane (
-            const css::uno::Reference<
-                css::drawing::framework::XResourceId>& rxPaneId,
+            const rtl::Reference<ResourceId>& rxPaneId,
             const PaneDescriptor& rDescriptor);
 
     /// @throws css::lang::DisposedException

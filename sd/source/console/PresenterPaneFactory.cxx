@@ -109,7 +109,7 @@ void PresenterPaneFactory::disposing(std::unique_lock<std::mutex>&)
 //----- AbstractPaneFactory ----------------------------------------------------------
 
 rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::createResource (
-    const Reference<XResourceId>& rxPaneId)
+    const rtl::Reference<sd::framework::ResourceId>& rxPaneId)
 {
     {
         std::unique_lock l(m_aMutex);
@@ -189,7 +189,7 @@ void PresenterPaneFactory::releaseResource (const rtl::Reference<sd::framework::
 
 
 rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::CreatePane (
-    const Reference<XResourceId>& rxPaneId)
+    const rtl::Reference<sd::framework::ResourceId>& rxPaneId)
 {
     if ( ! rxPaneId.is())
         return nullptr;
@@ -222,7 +222,7 @@ rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::CreatePane
 }
 
 rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::CreatePane (
-    const Reference<XResourceId>& rxPaneId,
+    const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
     const rtl::Reference<sd::framework::AbstractPane>& rxParentPane,
     const bool bIsSpritePane)
 {

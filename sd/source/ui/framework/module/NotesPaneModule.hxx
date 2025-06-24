@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <ResourceId.hxx>
 #include <framework/ConfigurationChangeListener.hxx>
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
@@ -62,8 +62,8 @@ public:
 private:
     rtl::Reference<ConfigurationController> mxConfigurationController;
 
-    css::uno::Reference<css::drawing::framework::XResourceId> mxBottomImpressPaneId;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxMainViewAnchorId;
+    rtl::Reference<sd::framework::ResourceId> mxBottomImpressPaneId;
+    rtl::Reference<sd::framework::ResourceId> mxMainViewAnchorId;
 
     std::set<OUString> maActiveMainViewContainer;
     OUString msCurrentMainViewURL;

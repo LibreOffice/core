@@ -327,9 +327,9 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
             FrameworkHelper::Instance(*this);
 
             // Create the resource ids for the center pane and view.
-            const Reference<drawing::framework::XResourceId> xCenterPaneId (
+            const rtl::Reference<framework::ResourceId> xCenterPaneId (
                 FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL));
-            const Reference<drawing::framework::XResourceId> xCenterViewId (
+            const rtl::Reference<framework::ResourceId> xCenterViewId (
                 FrameworkHelper::CreateResourceId(sView, xCenterPaneId));
 
             // Request center pane and view.
@@ -1311,9 +1311,9 @@ void ViewShellBase::Implementation::SetPaneVisibility (
         if (!pDrawController)
             return;
 
-        Reference<XResourceId> xPaneId (new sd::framework::ResourceId(
+        rtl::Reference<framework::ResourceId> xPaneId (new sd::framework::ResourceId(
             rsPaneURL));
-        Reference<XResourceId> xViewId (new sd::framework::ResourceId(
+        rtl::Reference<framework::ResourceId> xViewId (new sd::framework::ResourceId(
             rsViewURL, rsPaneURL));
 
         // Determine the new visibility state.
@@ -1386,7 +1386,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
         {
             bool bState (false);
             bool bEnabled;
-            Reference<XResourceId> xResourceId;
+            rtl::Reference<framework::ResourceId> xResourceId;
             try
             {
                 bEnabled = true;

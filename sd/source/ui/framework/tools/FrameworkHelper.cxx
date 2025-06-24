@@ -155,12 +155,12 @@ namespace {
     {
     public:
         explicit FrameworkHelperResourceIdFilter (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
+            const rtl::Reference<sd::framework::ResourceId>& rxResourceId);
         bool operator() (const sd::framework::ConfigurationChangeEvent& rEvent)
         { return mxResourceId.is() && rEvent.ResourceId.is()
                 && mxResourceId->compareTo(rEvent.ResourceId) == 0; }
     private:
-        css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;
+        rtl::Reference<sd::framework::ResourceId> mxResourceId;
     };
 
 } // end of anonymous namespace
@@ -207,14 +207,14 @@ namespace
         return pViewShell;
     }
     rtl::Reference< AbstractResource > lcl_getFirstViewInPane( const rtl::Reference< ConfigurationController >& i_rConfigController,
-        const Reference< XResourceId >& i_rPaneId )
+        const rtl::Reference< ResourceId >& i_rPaneId )
     {
         try
         {
             rtl::Reference< sd::framework::Configuration > xConfiguration( i_rConfigController->getRequestedConfiguration() );
-            Sequence< Reference< XResourceId > > aViewIds( xConfiguration->getResources(
+            std::vector< rtl::Reference< ResourceId > > aViewIds( xConfiguration->getResources(
                 i_rPaneId, FrameworkHelper::msViewURLPrefix, AnchorBindingMode_DIRECT ) );
-            if ( aViewIds.hasElements() )
+            if ( !aViewIds.empty() )
                 return i_rConfigController->getResource( aViewIds[0] );
         }
         catch( const Exception& )
@@ -350,7 +350,7 @@ bool FrameworkHelper::IsValid() const
     if ( !mxConfigurationController.is() )
         return ::std::shared_ptr<ViewShell>();
 
-    Reference<XResourceId> xPaneId( CreateResourceId( rsPaneURL ) );
+    rtl::Reference<ResourceId> xPaneId( CreateResourceId( rsPaneURL ) );
     return lcl_getViewShell( lcl_getFirstViewInPane( mxConfigurationController, xPaneId ) );
 }
 
@@ -359,7 +359,7 @@ bool FrameworkHelper::IsValid() const
     return lcl_getViewShell( rxView );
 }
 
-rtl::Reference<AbstractView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneOrViewId)
+rtl::Reference<AbstractView> FrameworkHelper::GetView (const rtl::Reference<ResourceId>& rxPaneOrViewId)
 {
     rtl::Reference<AbstractView> xView;
 
@@ -388,11 +388,11 @@ rtl::Reference<AbstractView> FrameworkHelper::GetView (const Reference<XResource
     return xView;
 }
 
-Reference<XResourceId> FrameworkHelper::RequestView (
+rtl::Reference<ResourceId> FrameworkHelper::RequestView (
     const OUString& rsResourceURL,
     const OUString& rsAnchorURL)
 {
-    Reference<XResourceId> xViewId;
+    rtl::Reference<ResourceId> xViewId;
 
     try
     {
@@ -486,7 +486,7 @@ void updateEditMode(const rtl::Reference<AbstractView> &xView, const EditMode eE
 
 void asyncUpdateEditMode(FrameworkHelper* const pHelper, const EditMode eEMode)
 {
-    Reference<XResourceId> xPaneId (
+    rtl::Reference<ResourceId> xPaneId (
         FrameworkHelper::CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
     rtl::Reference<AbstractView> xView (pHelper->GetView(xPaneId));
     updateEditMode(xView, eEMode, true);
@@ -525,7 +525,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         if ( ! mxConfigurationController.is())
             throw RuntimeException();
 
-        Reference<XResourceId> xPaneId (
+        rtl::Reference<ResourceId> xPaneId (
             CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
         rtl::Reference<AbstractView> xView (GetView(xPaneId));
 
@@ -598,7 +598,7 @@ void FrameworkHelper::RunOnConfigurationEvent(
 }
 
 void FrameworkHelper::RunOnResourceActivation(
-    const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+    const rtl::Reference<sd::framework::ResourceId>& rxResourceId,
     const Callback& rCallback)
 {
     if (mxConfigurationController.is()
@@ -698,7 +698,7 @@ void FrameworkHelper::UpdateConfiguration()
     }
 }
 
-OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxResourceId)
+OUString FrameworkHelper::ResourceIdToString (const rtl::Reference<ResourceId>& rxResourceId)
 {
     OUStringBuffer sString;
     if (rxResourceId.is())
@@ -706,7 +706,7 @@ OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxRe
         sString.append(rxResourceId->getResourceURL());
         if (rxResourceId->hasAnchor())
         {
-            const Sequence<OUString> aAnchorURLs (rxResourceId->getAnchorURLs());
+            std::vector<OUString> aAnchorURLs (rxResourceId->getAnchorURLs());
             for (const auto& rAnchorURL : aAnchorURLs)
             {
                 sString.append(" | " + rAnchorURL);
@@ -716,21 +716,21 @@ OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxRe
     return sString.makeStringAndClear();
 }
 
-Reference<XResourceId> FrameworkHelper::CreateResourceId (const OUString& rsResourceURL)
+rtl::Reference<ResourceId> FrameworkHelper::CreateResourceId (const OUString& rsResourceURL)
 {
     return new ::sd::framework::ResourceId(rsResourceURL);
 }
 
-Reference<XResourceId> FrameworkHelper::CreateResourceId (
+rtl::Reference<ResourceId> FrameworkHelper::CreateResourceId (
     const OUString& rsResourceURL,
     const OUString& rsAnchorURL)
 {
     return new ::sd::framework::ResourceId(rsResourceURL, rsAnchorURL);
 }
 
-Reference<XResourceId> FrameworkHelper::CreateResourceId (
+rtl::Reference<ResourceId> FrameworkHelper::CreateResourceId (
     const OUString& rsResourceURL,
-    const Reference<XResourceId>& rxAnchorId)
+    const rtl::Reference<ResourceId>& rxAnchorId)
 {
     if (rxAnchorId.is())
         return new ::sd::framework::ResourceId(
@@ -768,7 +768,7 @@ void SAL_CALL FrameworkHelper::DisposeListener::disposing (const lang::EventObje
 //===== FrameworkHelperResourceIdFilter =======================================
 
 FrameworkHelperResourceIdFilter::FrameworkHelperResourceIdFilter (
-    const Reference<XResourceId>& rxResourceId)
+    const rtl::Reference<ResourceId>& rxResourceId)
     : mxResourceId(rxResourceId)
 {
 }

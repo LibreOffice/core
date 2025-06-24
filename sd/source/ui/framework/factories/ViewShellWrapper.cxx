@@ -29,6 +29,7 @@
 #include <model/SlsPageDescriptor.hxx>
 
 #include <framework/AbstractPane.hxx>
+#include <ResourceId.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -37,7 +38,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 using ::com::sun::star::awt::XWindow;
 
@@ -45,7 +45,7 @@ namespace sd::framework {
 
 ViewShellWrapper::ViewShellWrapper (
     const std::shared_ptr<ViewShell>& pViewShell,
-    const Reference<XResourceId>& rxViewId,
+    const rtl::Reference<ResourceId>& rxViewId,
     const Reference<awt::XWindow>& rxWindow)
     : mpViewShell(pViewShell),
       mpSlideSorterViewShell(
@@ -90,7 +90,7 @@ uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType )
 
 //----- AbstractResource -------------------------------------------------------------
 
-Reference<XResourceId> ViewShellWrapper::getResourceId()
+rtl::Reference<ResourceId> ViewShellWrapper::getResourceId()
 {
     return mxViewId;
 }

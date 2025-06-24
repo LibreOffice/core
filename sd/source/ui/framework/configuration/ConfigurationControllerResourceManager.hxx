@@ -28,10 +28,9 @@
 #include <vector>
 
 namespace sd::framework { class Configuration; }
-namespace com::sun::star::drawing::framework { class XResourceId; }
 
 namespace sd::framework {
-
+class ResourceId;
 class ConfigurationControllerBroadcaster;
 class ResourceFactoryManager;
 class ResourceFactory;
@@ -74,7 +73,7 @@ public:
     */
     void ActivateResources (
         const ::std::vector<
-            css::uno::Reference<css::drawing::framework::XResourceId> >& rResources,
+            rtl::Reference<sd::framework::ResourceId> >& rResources,
         const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
 
     /** Deactivate all the resources that are specified by resource ids in
@@ -84,7 +83,7 @@ public:
     */
     void DeactivateResources (
         const ::std::vector<
-            css::uno::Reference<css::drawing::framework::XResourceId> >& rResources,
+            rtl::Reference<sd::framework::ResourceId> >& rResources,
         const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
 
     /** Return the descriptor for the specified resource.
@@ -93,7 +92,7 @@ public:
             an empty descriptor is returned.
     */
     ResourceDescriptor GetResource (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
+        const rtl::Reference<sd::framework::ResourceId>& rxResourceId);
 
 private:
     osl::Mutex maMutex;
@@ -102,12 +101,12 @@ private:
     {
     public:
         bool operator() (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxId1,
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxId2) const;
+            const rtl::Reference<sd::framework::ResourceId>& rxId1,
+            const rtl::Reference<sd::framework::ResourceId>& rxId2) const;
     };
 
     typedef ::std::map<
-        css::uno::Reference<css::drawing::framework::XResourceId>,
+        rtl::Reference<sd::framework::ResourceId>,
         ResourceDescriptor,
         ResourceComparator> ResourceMap;
     ResourceMap maResourceMap;
@@ -120,11 +119,11 @@ private:
     std::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
 
     void ActivateResource (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        const rtl::Reference<sd::framework::ResourceId>& rxResourceId,
         const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
 
     void DeactivateResource (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        const rtl::Reference<sd::framework::ResourceId>& rxResourceId,
         const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
 
     void AddResource (
@@ -132,7 +131,7 @@ private:
         const rtl::Reference<framework::ResourceFactory>& rxFactory);
 
     ResourceDescriptor RemoveResource (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
+        const rtl::Reference<sd::framework::ResourceId>& rxResourceId);
 };
 
 } // end of namespace sd::framework

@@ -71,8 +71,7 @@ public:
 
     virtual rtl::Reference<sd::framework::AbstractResource>
         createResource (
-            const css::uno::Reference<
-                css::drawing::framework::XResourceId>& rxPaneId) override;
+            const rtl::Reference<sd::framework::ResourceId>& rxPaneId) override;
 
     virtual void
         releaseResource (
@@ -95,9 +94,9 @@ private:
     void Register (const rtl::Reference<::sd::DrawController>& rxController);
 
     rtl::Reference<sd::framework::AbstractResource> CreatePane (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
+        const rtl::Reference<sd::framework::ResourceId>& rxPaneId);
     rtl::Reference<sd::framework::AbstractResource> CreatePane (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+        const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
         const rtl::Reference<sd::framework::AbstractPane>& rxParentPane,
         const bool bIsSpritePane);
 };

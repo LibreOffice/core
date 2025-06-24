@@ -60,7 +60,7 @@ bool IsEqual (const TabBarButton& rButton1, const TabBarButton& rButton2)
 } // end of anonymous namespace
 
 ViewTabBar::ViewTabBar (
-    const Reference<XResourceId>& rxViewTabBarId,
+    const rtl::Reference<framework::ResourceId>& rxViewTabBarId,
     const rtl::Reference<::sd::DrawController>& rxController)
     : mxListener(new Listener(*this)),
       mpTabControl(VclPtr<TabBarControl>::Create(GetAnchorWindow(rxViewTabBarId,rxController), this)),
@@ -139,7 +139,7 @@ void ViewTabBar::disposing(std::unique_lock<std::mutex>&)
 }
 
 vcl::Window* ViewTabBar::GetAnchorWindow(
-    const Reference<XResourceId>& rxViewTabBarId,
+    const rtl::Reference<framework::ResourceId>& rxViewTabBarId,
     const rtl::Reference<::sd::DrawController>& rxController)
 {
     vcl::Window* pWindow = nullptr;
@@ -229,7 +229,7 @@ bool ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
 
 //----- AbstractResource -------------------------------------------------------------
 
-Reference<XResourceId> ViewTabBar::getResourceId()
+rtl::Reference<framework::ResourceId> ViewTabBar::getResourceId()
 {
     return mxViewTabBarId;
 }
@@ -384,7 +384,7 @@ void ViewTabBar::UpdateActiveButton()
     if (!xView.is())
         return;
 
-    Reference<XResourceId> xViewId (xView->getResourceId());
+    rtl::Reference<framework::ResourceId> xViewId (xView->getResourceId());
     for (size_t nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
     {
         if (maTabBarButtons[nIndex].ResourceId->compareTo(xViewId) == 0)

@@ -31,6 +31,7 @@
 #include "UpdateRequest.hxx"
 #include "ChangeRequestQueueProcessor.hxx"
 #include "ConfigurationClassifier.hxx"
+#include <ResourceId.hxx>
 #include <com/sun/star/frame/XController.hpp>
 
 #include <sal/log.hxx>
@@ -224,7 +225,7 @@ void ConfigurationController::unlock()
 }
 
 void ConfigurationController::requestResourceActivation (
-    const Reference<XResourceId>& rxResourceId,
+    const rtl::Reference<ResourceId>& rxResourceId,
     ResourceActivationMode eMode)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -252,7 +253,7 @@ void ConfigurationController::requestResourceActivation (
     {
         // Get a list of the matching resources and create deactivation
         // requests for them.
-        const Sequence<Reference<XResourceId> > aResourceList (
+        const std::vector<rtl::Reference<ResourceId> > aResourceList (
             mpImplementation->mxRequestedConfiguration->getResources(
                 rxResourceId->getAnchor(),
                 rxResourceId->getResourceTypePrefix(),
@@ -280,7 +281,7 @@ void ConfigurationController::requestResourceActivation (
 }
 
 void ConfigurationController::requestResourceDeactivation (
-    const Reference<XResourceId>& rxResourceId)
+    const rtl::Reference<ResourceId>& rxResourceId)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -293,7 +294,7 @@ void ConfigurationController::requestResourceDeactivation (
 
     // Request deactivation of all resources linked to the specified one
     // as well.
-    const Sequence<Reference<XResourceId> > aLinkedResources (
+    const std::vector<rtl::Reference<ResourceId> > aLinkedResources (
         mpImplementation->mxRequestedConfiguration->getResources(
             rxResourceId,
             u"",
@@ -315,7 +316,7 @@ void ConfigurationController::requestResourceDeactivation (
 }
 
 rtl::Reference<AbstractResource> ConfigurationController::getResource (
-    const Reference<XResourceId>& rxResourceId)
+    const rtl::Reference<ResourceId>& rxResourceId)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();

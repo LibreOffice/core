@@ -19,6 +19,7 @@
 
 #include <framework/Pane.hxx>
 #include <framework/ResourceFactory.hxx>
+#include <ResourceId.hxx>
 
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -29,12 +30,11 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework {
 
 Pane::Pane (
-    const Reference<XResourceId>& rxPaneId,
+    const rtl::Reference<ResourceId>& rxPaneId,
     vcl::Window* pWindow)
     noexcept
     : mxPaneId(rxPaneId),
@@ -96,7 +96,7 @@ void Pane::setVisible (bool bIsVisible)
 
 //----- XResource -------------------------------------------------------------
 
-Reference<XResourceId> Pane::getResourceId()
+rtl::Reference<ResourceId> Pane::getResourceId()
 {
     {
         std::unique_lock aGuard (m_aMutex);

@@ -45,8 +45,7 @@ public:
 
     virtual rtl::Reference<sd::framework::AbstractResource>
         createResource (
-            const css::uno::Reference<
-                css::drawing::framework::XResourceId>& rxViewId) override;
+            const rtl::Reference<ResourceId>& rxViewId) override;
 
     virtual void releaseResource (
         const rtl::Reference<sd::framework::AbstractResource>& xView) override;

@@ -23,7 +23,7 @@
 #include "PresenterPaneBase.hxx"
 #include <PresenterHelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <ResourceId.hxx>
 #include <framework/AbstractView.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
@@ -70,7 +70,7 @@ public:
     class PaneDescriptor
     {
     public:
-        css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
+        rtl::Reference<sd::framework::ResourceId> mxPaneId;
         OUString msViewURL;
         ::rtl::Reference<PresenterPaneBase> mxPane;
         rtl::Reference<sd::framework::AbstractView> mxView;
@@ -92,7 +92,7 @@ public:
     PaneList maPanes;
 
     void PreparePane (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+        const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
         const OUString& rsViewURL,
         const OUString& rsTitle,
         const OUString& rsAccessibleTitle,
@@ -103,14 +103,14 @@ public:
         const rtl::Reference<PresenterPaneBase>& rxPane);
 
     SharedPaneDescriptor StoreBorderWindow(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+        const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
         const css::uno::Reference<css::awt::XWindow>& rxBorderWindow);
 
     SharedPaneDescriptor StoreView (
         const rtl::Reference<sd::framework::AbstractView>& rxView);
 
     SharedPaneDescriptor RemovePane (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
+        const rtl::Reference<sd::framework::ResourceId>& rxPaneId);
 
     SharedPaneDescriptor RemoveView (
         const rtl::Reference<sd::framework::AbstractView>& rxView);
@@ -133,8 +133,7 @@ public:
 
     /** Find the pane whose resource id is identical to the given one.
     */
-    SharedPaneDescriptor FindPaneId (const css::uno::Reference<
-        css::drawing::framework::XResourceId>& rxPaneId);
+    SharedPaneDescriptor FindPaneId (const rtl::Reference<sd::framework::ResourceId>& rxPaneId);
 
     SharedPaneDescriptor FindViewURL (const OUString& rsViewURL);
 

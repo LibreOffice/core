@@ -28,17 +28,16 @@
 #include <memory>
 #include <mutex>
 
-namespace com::sun::star::drawing::framework { class XResourceId; }
-namespace sd::framework { struct ConfigurationChangeEvent; }
-
 namespace sd {
 class ViewShellBase;
 }
 
 
 namespace sd::framework {
+struct ConfigurationChangeEvent;
 class ConfigurationController;
 class AbstractView;
+class ResourceId;
 
 /** The FrameworkHelper is a convenience class that simplifies the
     access to the drawing framework.
@@ -138,8 +137,7 @@ public:
     typedef ::std::function<void (bool bEventSeen)> Callback;
     typedef ::std::function<
         void (
-            const css::uno::Reference<
-                css::drawing::framework::XResourceId>&)
+            const rtl::Reference<ResourceId>&)
         > ResourceFunctor;
 
     /** Test whether the called FrameworkHelper object is valid.
@@ -173,7 +171,7 @@ public:
             necessary).
     */
     rtl::Reference<sd::framework::AbstractView> GetView (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneOrViewId);
+        const rtl::Reference<sd::framework::ResourceId>& rxPaneOrViewId);
 
     /** Request the specified view to be displayed in the specified pane.
         When the pane is not visible its creation is also requested.  The
@@ -187,7 +185,7 @@ public:
             the caller can, for example, call RunOnResourceActivation() to
             do some initialization after the requested view becomes active.
     */
-    css::uno::Reference<css::drawing::framework::XResourceId> RequestView (
+    rtl::Reference<sd::framework::ResourceId> RequestView (
         const OUString& rsResourceURL,
         const OUString& rsAnchorURL);
 
@@ -219,7 +217,7 @@ public:
 
     */
     void RunOnResourceActivation(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        const rtl::Reference<sd::framework::ResourceId>& rxResourceId,
         const Callback& rCallback);
 
     /** Normally the requested changes of the configuration are executed
@@ -252,36 +250,31 @@ public:
     */
     void UpdateConfiguration();
 
-    /** Return a string representation of the given XResourceId object.
+    /** Return a string representation of the given ResourceId object.
     */
     static OUString ResourceIdToString (
-        const css::uno::Reference<
-            css::drawing::framework::XResourceId>& rxResourceId);
+        const rtl::Reference<ResourceId>& rxResourceId);
 
-    /** Create a new XResourceId object for the given resource URL.
+    /** Create a new ResourceId object for the given resource URL.
     */
-    static css::uno::Reference<
-        css::drawing::framework::XResourceId>
+    static rtl::Reference<ResourceId>
             CreateResourceId (
                 const OUString& rsResourceURL);
 
-    /** Create a new XResourceId object for the given resource URL and a
+    /** Create a new ResourceId object for the given resource URL and a
         single anchor URL.
     */
-    static css::uno::Reference<
-        css::drawing::framework::XResourceId>
+    static rtl::Reference<ResourceId>
             CreateResourceId (
                 const OUString& rsResourceURL,
                 const OUString& rsAnchorURL);
 
-    /** Create a new XResourceId object for the given resource URL.
+    /** Create a new ResourceId object for the given resource URL.
     */
-    static css::uno::Reference<
-        css::drawing::framework::XResourceId>
+    static rtl::Reference<ResourceId>
             CreateResourceId (
                 const OUString& rsResourceURL,
-                const css::uno::Reference<
-                    css::drawing::framework::XResourceId>& rxAnchor);
+                const rtl::Reference<ResourceId>& rxAnchor);
 
     const rtl::Reference<ConfigurationController>&
         GetConfigurationController() const { return mxConfigurationController;}

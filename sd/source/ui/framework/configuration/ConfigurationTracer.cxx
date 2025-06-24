@@ -20,6 +20,7 @@
 #include "ConfigurationTracer.hxx"
 
 #include <framework/Configuration.hxx>
+#include <ResourceId.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -51,13 +52,13 @@ void ConfigurationTracer::TraceConfiguration (
 #if OSL_DEBUG_LEVEL >=1
 void ConfigurationTracer::TraceBoundResources (
     const rtl::Reference<Configuration>& rxConfiguration,
-    const Reference<XResourceId>& rxResourceId,
+    const rtl::Reference<ResourceId>& rxResourceId,
     const int nIndentation)
 {
-    const Sequence<Reference<XResourceId> > aResourceList (
+    const std::vector<rtl::Reference<ResourceId> > aResourceList (
         rxConfiguration->getResources(rxResourceId, u"", AnchorBindingMode_DIRECT));
     static constexpr OUStringLiteral sIndentation (u"    ");
-    for (Reference<XResourceId> const & resourceId : aResourceList)
+    for (rtl::Reference<ResourceId> const & resourceId : aResourceList)
     {
         OUString sLine (resourceId->getResourceURL());
         for (int i=0; i<nIndentation; ++i)

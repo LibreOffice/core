@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <ResourceId.hxx>
 #include <framework/ConfigurationChangeListener.hxx>
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
@@ -48,8 +48,7 @@ public:
     */
     ViewTabBarModule (
         const rtl::Reference<::sd::DrawController>& rxController,
-        const css::uno::Reference<
-            css::drawing::framework::XResourceId>& rxViewTabBarId);
+        const rtl::Reference<ResourceId>& rxViewTabBarId);
     virtual ~ViewTabBarModule() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -66,7 +65,7 @@ public:
 
 private:
     rtl::Reference<ConfigurationController> mxConfigurationController;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
+    rtl::Reference<sd::framework::ResourceId> mxViewTabBarId;
 
     /** This is the place where the view tab bar is filled.  Only missing
         buttons are added, so it is safe to call this method multiple

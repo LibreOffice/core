@@ -35,13 +35,13 @@ using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
 
 namespace {
-/** Use the XResourceId::compareTo() method to implement a compare operator
+/** Use the ResourceId::compareTo() method to implement a compare operator
     for STL containers.
 */
 class XResourceIdLess
 {
 public:
-    bool operator () (const Reference<XResourceId>& rId1, const Reference<XResourceId>& rId2) const
+    bool operator () (const rtl::Reference<sd::framework::ResourceId>& rId1, const rtl::Reference<sd::framework::ResourceId>& rId2) const
     {
         return rId1->compareTo(rId2) == -1;
     }
@@ -52,7 +52,7 @@ public:
 namespace sd::framework {
 
 class Configuration::ResourceContainer
-    : public ::std::set<Reference<XResourceId>, XResourceIdLess>
+    : public ::std::set<rtl::Reference<ResourceId>, XResourceIdLess>
 {
 public:
     ResourceContainer() {}
@@ -91,7 +91,7 @@ void Configuration::disposing(std::unique_lock<std::mutex>&)
 
 //----- Configuration --------------------------------------------------------
 
-void Configuration::addResource (const Reference<XResourceId>& rxResourceId)
+void Configuration::addResource (const rtl::Reference<ResourceId>& rxResourceId)
 {
     ThrowIfDisposed();
 
@@ -106,7 +106,7 @@ void Configuration::addResource (const Reference<XResourceId>& rxResourceId)
     }
 }
 
-void Configuration::removeResource (const Reference<XResourceId>& rxResourceId)
+void Configuration::removeResource (const rtl::Reference<ResourceId>& rxResourceId)
 {
     ThrowIfDisposed();
 
@@ -123,8 +123,8 @@ void Configuration::removeResource (const Reference<XResourceId>& rxResourceId)
     }
 }
 
-Sequence<Reference<XResourceId> > Configuration::getResources (
-    const Reference<XResourceId>& rxAnchorId,
+std::vector<rtl::Reference<ResourceId> > Configuration::getResources (
+    const rtl::Reference<ResourceId>& rxAnchorId,
     std::u16string_view rsResourceURLPrefix,
     AnchorBindingMode eMode)
 {
@@ -134,7 +134,7 @@ Sequence<Reference<XResourceId> > Configuration::getResources (
     const bool bFilterResources (!rsResourceURLPrefix.empty());
 
     // Collect the matching resources in a vector.
-    ::std::vector<Reference<XResourceId> > aResources;
+    ::std::vector<rtl::Reference<ResourceId> > aResources;
     for (const auto& rxResource : *mpResourceContainer)
     {
         if ( ! rxResource->isBoundTo(rxAnchorId,eMode))
@@ -161,10 +161,10 @@ Sequence<Reference<XResourceId> > Configuration::getResources (
         aResources.push_back(rxResource);
     }
 
-    return comphelper::containerToSequence(aResources);
+    return aResources;
 }
 
-bool Configuration::hasResource (const Reference<XResourceId>& rxResourceId)
+bool Configuration::hasResource (const rtl::Reference<ResourceId>& rxResourceId)
 {
     std::unique_lock aGuard (m_aMutex);
     ThrowIfDisposed();
@@ -215,7 +215,7 @@ void SAL_CALL Configuration::setName (const OUString&)
 }
 
 void Configuration::PostEvent (
-    const Reference<XResourceId>& rxResourceId,
+    const rtl::Reference<ResourceId>& rxResourceId,
     const bool bActivation)
 {
     OSL_ASSERT(rxResourceId.is());
@@ -259,10 +259,10 @@ bool AreConfigurationsEquivalent (
         return true;
 
     // Get the lists of resources from the two given configurations.
-    const Sequence<Reference<XResourceId> > aResources1(
+    const std::vector<rtl::Reference<ResourceId> > aResources1(
         rxConfiguration1->getResources(
             nullptr, u"", AnchorBindingMode_INDIRECT));
-    const Sequence<Reference<XResourceId> > aResources2(
+    const std::vector<rtl::Reference<ResourceId> > aResources2(
         rxConfiguration2->getResources(
             nullptr, u"", AnchorBindingMode_INDIRECT));
 
@@ -271,7 +271,7 @@ bool AreConfigurationsEquivalent (
     // Comparison of the two lists of resource ids relies on their
     // ordering.
     return std::equal(aResources1.begin(), aResources1.end(), aResources2.begin(), aResources2.end(),
-        [](const Reference<XResourceId>& a, const Reference<XResourceId>& b) {
+        [](const rtl::Reference<ResourceId>& a, const rtl::Reference<ResourceId>& b) {
             if (a.is() && b.is())
                 return a->compareTo(b) == 0;
             return a.is() == b.is();

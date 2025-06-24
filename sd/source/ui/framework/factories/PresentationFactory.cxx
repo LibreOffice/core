@@ -22,6 +22,7 @@
 
 #include <DrawController.hxx>
 #include <framework/AbstractView.hxx>
+#include <ResourceId.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <slideshow.hxx>
@@ -45,19 +46,19 @@ namespace {
 class PresentationView : public AbstractView
 {
 public:
-    explicit PresentationView (const Reference<XResourceId>& rxViewId)
+    explicit PresentationView (const rtl::Reference<ResourceId>& rxViewId)
         : mxResourceId(rxViewId) {};
 
     // XView
 
-    virtual Reference<XResourceId> getResourceId() override
+    virtual rtl::Reference<ResourceId> getResourceId() override
     { return mxResourceId; };
 
     virtual bool isAnchorOnly() override
     { return false; }
 
 private:
-    Reference<XResourceId> mxResourceId;
+    rtl::Reference<ResourceId> mxResourceId;
 };
 
 } // end of anonymous namespace.
@@ -80,7 +81,7 @@ PresentationFactory::~PresentationFactory()
 //----- XViewFactory ----------------------------------------------------------
 
 rtl::Reference<AbstractResource> PresentationFactory::createResource (
-    const Reference<XResourceId>& rxViewId)
+    const rtl::Reference<ResourceId>& rxViewId)
 {
     {
         std::unique_lock l(m_aMutex);

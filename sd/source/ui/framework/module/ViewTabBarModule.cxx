@@ -49,7 +49,7 @@ namespace sd::framework {
 
 ViewTabBarModule::ViewTabBarModule (
     const rtl::Reference<::sd::DrawController>& rxController,
-    const Reference<XResourceId>& rxViewTabBarId)
+    const rtl::Reference<ResourceId>& rxViewTabBarId)
     : mxViewTabBarId(rxViewTabBarId)
 {
     if (!rxController.is())
@@ -148,7 +148,7 @@ void ViewTabBarModule::UpdateViewTabBar (const rtl::Reference<sd::ViewTabBar>& r
 
     TabBarButton aEmptyButton;
 
-    Reference<XResourceId> xAnchor (mxViewTabBarId->getAnchor());
+    rtl::Reference<ResourceId> xAnchor (mxViewTabBarId->getAnchor());
 
     TabBarButton aImpressViewButton;
     aImpressViewButton.ResourceId = FrameworkHelper::CreateResourceId(

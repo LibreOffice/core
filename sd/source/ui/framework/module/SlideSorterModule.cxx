@@ -278,11 +278,11 @@ void SlideSorterModule::HandleResourceRequest(
     bool bActivation,
     const rtl::Reference<Configuration>& rxConfiguration)
 {
-    Sequence<Reference<XResourceId> > aCenterViews = rxConfiguration->getResources(
+    std::vector<rtl::Reference<ResourceId> > aCenterViews = rxConfiguration->getResources(
         FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
         FrameworkHelper::msViewURLPrefix,
         AnchorBindingMode_DIRECT);
-    if (aCenterViews.getLength() == 1)
+    if (aCenterViews.size() == 1)
     {
         if (bActivation)
         {

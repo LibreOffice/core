@@ -62,7 +62,7 @@ public:
 
     virtual rtl::Reference<sd::framework::AbstractResource>
         createResource (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) override;
+            const rtl::Reference<sd::framework::ResourceId>& rxViewId) override;
 
     virtual void releaseResource (
         const rtl::Reference<sd::framework::AbstractResource>& xView) override;
@@ -82,14 +82,14 @@ private:
     rtl::Reference<framework::AbstractPane> mxLocalPane;
 
     std::shared_ptr<ViewDescriptor> CreateView (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         vcl::Window& rWindow,
         const rtl::Reference<framework::AbstractPane>& rxPane,
         FrameView* pFrameView,
         const bool bIsCenterView);
 
     std::shared_ptr<ViewShell> CreateViewShell (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         vcl::Window& rWindow,
         FrameView* pFrameView);
 
@@ -104,7 +104,7 @@ private:
         const std::shared_ptr<ViewDescriptor>& rpDescriptor);
 
     std::shared_ptr<ViewDescriptor> GetViewFromCache (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const rtl::Reference<AbstractPane>& rxPane);
 };
 

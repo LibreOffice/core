@@ -54,6 +54,7 @@
 #include <FactoryIds.hxx>
 #include <memory>
 #include <slideshow.hxx>
+#include <ResourceId.hxx>
 
 #include <officecfg/Office/Draw.hxx>
 #include <officecfg/Office/Impress.hxx>

@@ -2363,7 +2363,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
 	AnchorBindingMode \
-	XResourceId \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/embed,\
 	Actions \

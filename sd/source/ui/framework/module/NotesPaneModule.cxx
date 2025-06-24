@@ -242,11 +242,11 @@ bool NotesPaneModule::IsMasterView(const rtl::Reference<AbstractView>& xView)
 void NotesPaneModule::onResourceRequest(
     bool bActivation, const rtl::Reference<sd::framework::Configuration>& rxConfiguration)
 {
-    Sequence<Reference<XResourceId>> aCenterViews = rxConfiguration->getResources(
+    std::vector<rtl::Reference<ResourceId>> aCenterViews = rxConfiguration->getResources(
         FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
         FrameworkHelper::msViewURLPrefix, AnchorBindingMode_DIRECT);
 
-    if (aCenterViews.getLength() != 1)
+    if (aCenterViews.size() != 1)
         return;
 
     // do not record the state of bottom pane when in master edit modes
