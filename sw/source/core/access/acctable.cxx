@@ -1066,7 +1066,7 @@ OUString SAL_CALL SwAccessibleTable::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()
 {
-    return { u"com.sun.star.table.AccessibleTableView"_ustr, sAccessibleServiceName };
+    return { sAccessibleServiceName };
 }
 
 void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )

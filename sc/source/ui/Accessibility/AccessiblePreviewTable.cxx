@@ -504,17 +504,6 @@ OUString SAL_CALL ScAccessiblePreviewTable::getImplementationName()
     return u"ScAccessiblePreviewTable"_ustr;
 }
 
-uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServiceNames()
-{
-    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nOldSize(aSequence.getLength());
-    aSequence.realloc(nOldSize + 1);
-
-    aSequence.getArray()[nOldSize] = "com.sun.star.table.AccessibleTableView";
-
-    return aSequence;
-}
-
 OUString ScAccessiblePreviewTable::createAccessibleDescription()
 {
     return STR_ACC_TABLE_DESCR;
