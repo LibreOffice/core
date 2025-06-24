@@ -5873,16 +5873,38 @@ public:
     }
 };
 
+bool isPositioningAllowed(GtkWidget* pWidget)
+{
+    // no X/Y positioning under Wayland
+    GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
+    return !DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay);
+}
+
+// This allow sidebar extensions (and similar cases, e.g.  extension provided
+// options dialog pages) to work within an otherwise native gtk UI by embedding
+// a SalGtkFrame within which vcl windows can then exist inside the gtk widget
+// hierarchy.
 class ChildFrame : public WorkWindow
 {
 private:
-    Idle  maLayoutIdle;
+    Idle maLayoutIdle;
+    Link<VclWindowEvent&, void> maWindowEventHdl;
+    gulong mnSizeAllocateSignalId;
 
     DECL_LINK(ImplHandleLayoutTimerHdl, Timer*, void);
+    DECL_LINK(WindowEventHdl, VclWindowEvent&, void);
+
+    GtkWidget* getWindow()
+    {
+        GtkSalFrame* pGtkFrame = dynamic_cast<GtkSalFrame*>(ImplGetFrame());
+        assert(pGtkFrame);
+        return pGtkFrame->getWindow();
+    }
 public:
     ChildFrame(vcl::Window* pParent, WinBits nStyle)
         : WorkWindow(pParent, nStyle)
         , maLayoutIdle( "ChildFrame maLayoutIdle" )
+        , mnSizeAllocateSignalId(0)
     {
         maLayoutIdle.SetPriority(TaskPriority::RESIZE);
         maLayoutIdle.SetInvokeHandler( LINK( this, ChildFrame, ImplHandleLayoutTimerHdl ) );
@@ -5891,6 +5913,26 @@ public:
     virtual void dispose() override
     {
         maLayoutIdle.Stop();
+
+        GtkWidget* pEmbeddedWidget = getWindow();
+
+        if (mnSizeAllocateSignalId)
+        {
+            g_signal_handler_disconnect(G_OBJECT(pEmbeddedWidget), mnSizeAllocateSignalId);
+            mnSizeAllocateSignalId = 0;
+        }
+
+        if (maWindowEventHdl.IsSet())
+        {
+            GtkWidget* pTopLevel = widget_get_toplevel(pEmbeddedWidget);
+            GtkSalFrame* pParentFrame = GtkSalFrame::getFromWindow(pTopLevel);
+            if (pParentFrame)
+                pParentFrame->GetWindow()->RemoveEventListener(maWindowEventHdl);
+            else
+                SAL_WARN( "vcl.gtk", "cannot get parent frame\n");
+            maWindowEventHdl = Link<VclWindowEvent&, void>();
+        }
+
         WorkWindow::dispose();
     }
 
@@ -5914,11 +5956,97 @@ public:
         Layout();
         WorkWindow::Resize();
     }
+
+    // See tdf#152155 and tdf#160415. Under x11 gtk3 update the embedded
+    // GtkSalFrame child position when its parent GtkSalFrame position changes
+    // (and when the intermediate GtkContainer sets a relative position). Under
+    // x11 vcl depends on knowing that position in order to calculate where to
+    // position vcl popups. (We use a different approach under wayland so that
+    // case isn't relevant here.)
+    static void updateFrameGeom(GtkWidget* pWidget)
+    {
+        GtkSalFrame* pEmbededFrame = GtkSalFrame::getFromWindow(pWidget);
+        if (!pEmbededFrame)
+        {
+            SAL_WARN( "vcl.gtk", "cannot get embedded frame\n");
+            return;
+        }
+
+        GtkWidget* pTopLevel = widget_get_toplevel(pWidget);
+        GtkSalFrame* pParentFrame = GtkSalFrame::getFromWindow(pTopLevel);
+        if (!pParentFrame)
+        {
+            SAL_WARN( "vcl.gtk", "cannot get parent frame\n");
+            return;
+        }
+
+        gtk_coord x, y;
+        if (!gtk_widget_translate_coordinates(pWidget, pTopLevel, 0, 0, &x, &y))
+        {
+            SAL_WARN( "vcl.gtk", "cannot translate coordinates\n");
+            return;
+        }
+
+        SalFrameGeometry aParentGeom = pParentFrame->GetGeometry();
+
+        pEmbededFrame->SetPosSize(aParentGeom.x() + x - aParentGeom.leftDecoration(),
+                                  aParentGeom.y() + y - aParentGeom.topDecoration(),
+                                  0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
+    }
+
+    static void frameSizeAllocated(GtkWidget* pWidget, GdkRectangle*, gpointer)
+    {
+        updateFrameGeom(pWidget);
+    }
+
+    // Move the associated GtkWidget of the GtkSalFrame of this window into pContainer so
+    // it's embedded in that destination widget.
+    void Relocate(GtkWidget* pContainer)
+    {
+        GtkWidget* pWindow = getWindow();
+
+        GtkWidget* pOrigParent = gtk_widget_get_parent(pWindow);
+
+        g_object_ref(pWindow);
+        container_remove(pOrigParent, pWindow);
+
+        container_add(pContainer, pWindow);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        gtk_container_child_set(GTK_CONTAINER(pContainer), pWindow, "expand", true, "fill", true, nullptr);
+#endif
+        gtk_widget_set_hexpand(pWindow, true);
+        gtk_widget_set_vexpand(pWindow, true);
+        gtk_widget_realize(pWindow);
+        gtk_widget_set_can_focus(pWindow, true);
+        g_object_unref(pWindow);
+
+        // for x11 we have to keep the relative geometry of the embedded GtkSalFrame up to date when
+        // the parent geometry changes (and when the GtkContainer positions the embedded GtkSalFrame)
+        if (isPositioningAllowed(pWindow))
+        {
+            GtkWidget* pTopLevel = widget_get_toplevel(pWindow);
+            if (GtkSalFrame* pParentFrame = GtkSalFrame::getFromWindow(pTopLevel))
+            {
+                maWindowEventHdl = LINK(this, ChildFrame, WindowEventHdl);
+                pParentFrame->GetWindow()->AddEventListener(maWindowEventHdl);
+            }
+            else
+                SAL_WARN("vcl.gtk", "missing parent frame");
+            mnSizeAllocateSignalId = g_signal_connect_after(G_OBJECT(pWindow), "size-allocate", G_CALLBACK(frameSizeAllocated), nullptr);
+        }
+    }
 };
 
 IMPL_LINK_NOARG(ChildFrame, ImplHandleLayoutTimerHdl, Timer*, void)
 {
     Layout();
+}
+
+IMPL_LINK(ChildFrame, WindowEventHdl, VclWindowEvent&, rEvent, void)
+{
+    VclEventId nEventID = rEvent.GetId();
+    if (nEventID == VclEventId::WindowMove)
+        updateFrameGeom(getWindow());
 }
 
 class GtkInstanceContainer : public GtkInstanceWidget, public virtual weld::Container
@@ -6040,26 +6168,7 @@ public:
         // This will cause a GtkSalFrame to be created. With WB_SYSTEMCHILDWINDOW set it
         // will create a toplevel GtkEventBox window
         auto xEmbedWindow = VclPtr<ChildFrame>::Create(ImplGetDefaultWindow(), WB_SYSTEMCHILDWINDOW | WB_DIALOGCONTROL | WB_CHILDDLGCTRL);
-        SalFrame* pFrame = xEmbedWindow->ImplGetFrame();
-        GtkSalFrame* pGtkFrame = dynamic_cast<GtkSalFrame*>(pFrame);
-        assert(pGtkFrame);
-
-        // relocate that toplevel GtkEventBox into this widget
-        GtkWidget* pWindow = pGtkFrame->getWindow();
-
-        GtkWidget* pParent = gtk_widget_get_parent(pWindow);
-
-        g_object_ref(pWindow);
-        container_remove(pParent, pWindow);
-        container_add(GTK_WIDGET(m_pContainer), pWindow);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_container_child_set(m_pContainer, pWindow, "expand", true, "fill", true, nullptr);
-#endif
-        gtk_widget_set_hexpand(pWindow, true);
-        gtk_widget_set_vexpand(pWindow, true);
-        gtk_widget_realize(pWindow);
-        gtk_widget_set_can_focus(pWindow, true);
-        g_object_unref(pWindow);
+        xEmbedWindow->Relocate(GTK_WIDGET(m_pContainer));
 
         // NoActivate otherwise Show grab focus to this widget
         xEmbedWindow->Show(true, ShowFlags::NoActivate);
@@ -6290,9 +6399,7 @@ protected:
 
     bool isPositioningAllowed() const
     {
-        // no X/Y positioning under Wayland
-        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
-        return !DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay);
+        return ::isPositioningAllowed(m_pWidget);
     }
 
 protected:
