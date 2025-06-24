@@ -1747,16 +1747,20 @@ void RTFDocumentImpl::prepareProperties(
         o_rpFrameProperties = new RTFReferenceProperties(RTFSprms(), rState.getFrame().getSprms());
     }
 
+    // prepareProperties may be called several times for the same rState (once per row); to avoid
+    // applying the same cell width correction several times, copy TableRowSprms for modification
+    RTFSprms localTableRowSprms(rState.getTableRowSprms(), RTFSprms::CopyForWrite());
+
     // Table width.
     RTFValue::Pointer_t const pTableWidthProps
-        = rState.getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblW);
+        = localTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblW);
     if (!pTableWidthProps)
     {
         auto pUnitValue = new RTFValue(3);
-        putNestedAttribute(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
+        putNestedAttribute(localTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW,
                            NS_ooxml::LN_CT_TblWidth_type, pUnitValue);
         auto pWValue = new RTFValue(nCurrentCellX - nTRLeft);
-        putNestedAttribute(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
+        putNestedAttribute(localTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW,
                            NS_ooxml::LN_CT_TblWidth_w, pWValue);
     }
 
@@ -1764,7 +1768,7 @@ void RTFDocumentImpl::prepareProperties(
     bool checkedMinusOne = false;
     bool seenFirstColumn = false;
     bool seenPositiveWidth = false;
-    for (auto & [ id, pValue ] : rState.getTableRowSprms())
+    for (auto & [ id, pValue ] : localTableRowSprms)
     {
         if (id == NS_ooxml::LN_CT_TblGridBase_gridCol)
         {
@@ -1810,17 +1814,17 @@ void RTFDocumentImpl::prepareProperties(
     if (nTRLeft != 0)
     {
         // If there was no tblind, use trleft to set up LN_CT_TblPrBase_tblInd
-        if (!rState.getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblInd))
+        if (!localTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblInd))
         {
-            set_tblInd(rState.getTableRowSprms(), nTRLeft);
+            set_tblInd(localTableRowSprms, nTRLeft);
         }
     }
 
     if (nCells > 0)
-        rState.getTableRowSprms().set(NS_ooxml::LN_tblRow, new RTFValue(1));
+        localTableRowSprms.set(NS_ooxml::LN_tblRow, new RTFValue(1));
 
     RTFValue::Pointer_t const pCellMar
-        = rState.getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblCellMar);
+        = localTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblCellMar);
     if (!pCellMar)
     {
         // If no cell margins are defined, the default left/right margin is 0 in Word, but not in Writer.
@@ -1828,14 +1832,14 @@ void RTFDocumentImpl::prepareProperties(
         aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
                         new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
         aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, new RTFValue(0));
-        putNestedSprm(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblCellMar,
+        putNestedSprm(localTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar,
                       NS_ooxml::LN_CT_TblCellMar_left, new RTFValue(aAttributes));
-        putNestedSprm(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblCellMar,
+        putNestedSprm(localTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar,
                       NS_ooxml::LN_CT_TblCellMar_right, new RTFValue(aAttributes));
     }
 
     o_rpTableRowProperties
-        = new RTFReferenceProperties(rState.getTableRowAttributes(), rState.getTableRowSprms());
+        = new RTFReferenceProperties(rState.getTableRowAttributes(), localTableRowSprms);
 }
 
 void RTFDocumentImpl::sendProperties(
