@@ -46,7 +46,7 @@ OUString SAL_CALL SwAccessibleGraphic::getImplementationName()
 
 Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
 {
-    return { u"com.sun.star.text.AccessibleTextGraphicObject"_ustr, sAccessibleServiceName };
+    return { sAccessibleServiceName };
 }
 
 //  Return this object's role.
