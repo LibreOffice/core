@@ -172,11 +172,6 @@ OUString SAL_CALL AccessibleGridControlHeader::getImplementationName()
     return u"com.sun.star.accessibility.AccessibleGridControlHeader"_ustr;
 }
 
-Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // internal virtual methods ---------------------------------------------------
 
 AbsoluteScreenPixelRectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()

@@ -124,13 +124,6 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
     throw IllegalAccessibleComponentStateException();
 }
 
-// XTypeProvider
-
-Sequence< sal_Int8 > SAL_CALL AccessibleGridControlBase::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // XServiceInfo
 
 sal_Bool SAL_CALL AccessibleGridControlBase::supportsService(
