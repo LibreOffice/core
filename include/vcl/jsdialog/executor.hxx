@@ -25,6 +25,12 @@ public:
 
     static void trigger_changed(weld::TreeView& rTreeView) { rTreeView.signal_changed(); }
 
+    static void trigger_editing_done(weld::TreeView& rTreeView,
+                                     const weld::TreeView::iter_string& rIterText)
+    {
+        rTreeView.signal_editing_done(rIterText);
+    }
+
     static void trigger_changed(weld::IconView& rIconView) { rIconView.signal_selection_changed(); }
 
     static void trigger_scrollv(weld::ScrolledWindow& rScrolledWindow)

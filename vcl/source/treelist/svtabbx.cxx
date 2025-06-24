@@ -23,6 +23,7 @@
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -97,6 +98,11 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                     {
                         auto aColumn = rJsonWriter.startStruct();
                         rJsonWriter.put("text", pStringItem->GetText());
+
+                        SvLBoxTab* pTab = pTabListBox->GetTab( pEntry, &rItem );
+                        if ( pTab ) {
+                            rJsonWriter.put("editable", pTab->IsEditable());
+                        }
                     }
                 }
                 else if (rItem.GetType() == SvLBoxItemType::ContextBmp)
