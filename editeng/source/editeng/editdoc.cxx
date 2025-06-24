@@ -2770,7 +2770,7 @@ bool EditDoc::YrsWriteEECursor(YTransaction *const pTxn, Branch const& rArray,
         }
     }
 
-    Weak const*const pWeak{ytext_quote(yw.pText, pTxn, start, end, Y_FALSE, Y_TRUE)};
+    Weak const*const pWeak{ytext_quote(yw.pText, pTxn, &start, &end, Y_FALSE, Y_TRUE)};
     ::std::vector<YInput> positions;
     positions.push_back(yinput_string(m_CommentId.getStr()));
     positions.push_back(yinput_weak(pWeak));

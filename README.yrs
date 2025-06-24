@@ -8,7 +8,7 @@ First, build yrs C FFI bindings:
 ```
  git clone https://github.com/y-crdt/y-crdt.git
  cd y-crdt
- git checkout v0.23.1
+ git checkout v0.23.5
  cargo build -p yffi
 ```
 
