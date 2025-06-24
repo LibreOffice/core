@@ -1,0 +1,47 @@
+[package]
+name = "yrs"
+version = "0.23.5"
+description = "High performance implementation of the Yjs CRDT"
+license = "MIT"
+authors = ["Kevin Jahns <kevin.jahns@pm.me>", "Bartosz Sypytkowski <b.sypytkowski@gmail.com>"]
+keywords = ["crdt", "yrs"]
+edition = "2018"
+homepage = "https://github.com/y-crdt/y-crdt/"
+repository = "https://github.com/y-crdt/y-crdt/"
+readme = "./README.md"
+
+[features]
+default = []
+weak = []
+sync = []
+
+[dependencies]
+thiserror = "2"
+fastrand = { version = "2", features = ["js"] }
+smallstr = { version = "0.3", features = ["union"] }
+smallvec = { version = "1.13", features = ["union", "const_generics", "const_new"] }
+async-lock = "3.4"
+async-trait = "0.1"
+arc-swap = "1.7"
+serde = { version = "1.0", features = ["derive", "rc"] }
+serde_json = "1.0"
+dashmap = "6.0"
+
+[dev-dependencies]
+criterion = "0.5"
+flate2 = { version = "1", features = ["zlib-ng-compat"], default-features = false }
+ropey = "1.6.0"
+proptest = "1.2"
+proptest-derive = "0.4.0"
+rand = "0.8.5"
+assert_matches2 = "0.1"
+uuid = "1.16.0"
+
+[[bench]]
+name = "benches"
+harness = false
+
+[lib]
+doctest = true
+bench = true
+doc = true

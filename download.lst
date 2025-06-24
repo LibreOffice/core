@@ -686,6 +686,11 @@ XSLTML_TARBALL := a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+YRS_SHA256SUM := 67c02f1b74fda33bcc824a310028c100ce2a84b6e63ade46ae1a3258e867a225
+YRS_TARBALL := y-crdt-0.23.5.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 ZLIB_SHA256SUM := 38ef96b8dfe510d42707d9c781877914792541133e1870841463bfa73f883e32
 ZLIB_TARBALL := zlib-1.3.1.tar.xz
 # three static lines

@@ -4466,11 +4466,12 @@ endif
 ifneq ($(WITH_YRS),)
 
 define gb_LinkTarget__use_yrs
+$(call gb_LinkTarget_use_external_project,$(1),y-crdt)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(WITH_YRS)/tests-ffi/include \
+	-I$(gb_UnpackedTarball_workdir)/y-crdt/tests-ffi/include \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(WITH_YRS)/target/debug/libyrs.a)
+$(call gb_LinkTarget_add_libs,$(1),$(gb_UnpackedTarball_workdir)/y-crdt/target/debug/libyrs.a)
 endef
 
 else

@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+  "yrs",
+  "ywasm",
+  "yffi"
+]

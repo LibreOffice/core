@@ -2874,12 +2874,17 @@ AC_ARG_WITH(hamcrest,
 ,with_hamcrest=yes)
 
 AC_ARG_WITH(yrs,
-    AS_HELP_STRING([--with-yrs=<absolute path to yrs build>],
-        [Specifies the built yrs git repo for very experimental experiments.]),
+    AS_HELP_STRING([--with-yrs],
+        [Enables very experimental experiments.]),[
     WITH_YRS=$withval
     if test "x$withval" != "xno"; then
+        AC_PATH_PROG([CARGO], [cargo])
+        if test -z "${CARGO}"; then
+            AC_MSG_ERROR([install cargo to build yrs])
+        fi
+        BUILD_TYPE="${BUILD_TYPE} YRS"
         AC_DEFINE(ENABLE_YRS)
-    fi)
+    fi])
 AC_SUBST(WITH_YRS)
 
 AC_ARG_WITH(perl-home,

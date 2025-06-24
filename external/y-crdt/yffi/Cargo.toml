@@ -1,0 +1,20 @@
+[package]
+name = "yffi"
+version = "0.23.5"
+authors = ["Kevin Jahns <kevin.jahns@protonmail.com>", "Bartosz Sypytkowski <b.sypytkowski@gmail.com>"]
+keywords = ["crdt", "c-ffi", "yrs"]
+edition = "2018"
+license = "MIT"
+description = "Bindings for the Yrs native C foreign function interface"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dev-dependencies]
+
+[dependencies]
+yrs = { path = "../yrs", version = "0.23.5", features = ["weak"] }
+serde_json = { version = "1.0" }
+
+[lib]
+crate-type = ["staticlib", "cdylib"]
+name = "yrs"
