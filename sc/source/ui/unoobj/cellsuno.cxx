@@ -6591,10 +6591,17 @@ void ScTableSheetObj::AdjustUpdatedRanges(UpdateRefMode mode)
 {
     if (mode == URM_INSDEL)
     {
+        ScRange restore = GetRange();
         ScRangeList& rRanges = AccessRanges();
-        // #101755#, tdf#47479: the range of a sheet does not change
-        rRanges.RemoveAll();
-        rRanges.push_back(GetRange());
+        if (!rRanges.empty())
+        {
+            // The tab could get changed because of the edit
+            restore.aStart.SetTab(rRanges[0].aStart.Tab());
+            restore.aEnd.SetTab(rRanges[0].aStart.Tab());
+            // #101755#, tdf#47479: the cell range of a sheet does not change
+            rRanges.RemoveAll();
+        }
+        rRanges.push_back(restore);
     }
 }
 
@@ -8437,10 +8444,17 @@ void ScTableColumnObj::AdjustUpdatedRanges(UpdateRefMode mode)
 {
     if (mode == URM_INSDEL)
     {
+        ScRange restore = GetRange();
         ScRangeList& rRanges = AccessRanges();
-        // tdf#47479: the range of a column does not change
-        rRanges.RemoveAll();
-        rRanges.push_back(GetRange());
+        if (!rRanges.empty())
+        {
+            // The tab could get changed because of the edit
+            restore.aStart.SetTab(rRanges[0].aStart.Tab());
+            restore.aEnd.SetTab(rRanges[0].aStart.Tab());
+            // tdf#47479: the cell range of a column does not change
+            rRanges.RemoveAll();
+        }
+        rRanges.push_back(restore);
     }
 }
 
@@ -8597,10 +8611,17 @@ void ScTableRowObj::AdjustUpdatedRanges(UpdateRefMode mode)
 {
     if (mode == URM_INSDEL)
     {
+        ScRange restore = GetRange();
         ScRangeList& rRanges = AccessRanges();
-        // tdf#47479: the range of a row does not change
-        rRanges.RemoveAll();
-        rRanges.push_back(GetRange());
+        if (!rRanges.empty())
+        {
+            // The tab could get changed because of the edit
+            restore.aStart.SetTab(rRanges[0].aStart.Tab());
+            restore.aEnd.SetTab(rRanges[0].aStart.Tab());
+            // tdf#47479: the cell range of a row does not change
+            rRanges.RemoveAll();
+        }
+        rRanges.push_back(restore);
     }
 }
 
