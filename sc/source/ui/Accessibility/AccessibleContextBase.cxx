@@ -251,8 +251,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::supportsService(const OUString& sServ
 uno::Sequence< OUString> SAL_CALL
        ScAccessibleContextBase::getSupportedServiceNames()
 {
-    return {u"com.sun.star.accessibility.Accessible"_ustr,
-            u"com.sun.star.accessibility.AccessibleContext"_ustr};
+    return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 
 OUString

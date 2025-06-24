@@ -59,8 +59,7 @@ namespace dbaui
     }
     Sequence< OUString > SAL_CALL OTableWindowAccess::getSupportedServiceNames()
     {
-        return { u"com.sun.star.accessibility.Accessible"_ustr,
-                 u"com.sun.star.accessibility.AccessibleContext"_ustr };
+        return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
     }
     // XAccessibleContext
     sal_Int64 SAL_CALL OTableWindowAccess::getAccessibleChildCount(  )

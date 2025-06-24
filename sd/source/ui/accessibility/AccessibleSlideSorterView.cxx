@@ -470,7 +470,6 @@ uno::Sequence< OUString> SAL_CALL
     ThrowIfDisposed ();
 
     return uno::Sequence<OUString> {
-            u"com.sun.star.accessibility.Accessible"_ustr,
             u"com.sun.star.accessibility.AccessibleContext"_ustr,
             u"com.sun.star.drawing.AccessibleSlideSorterView"_ustr
     };

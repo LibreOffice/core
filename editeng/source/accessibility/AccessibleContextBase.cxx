@@ -328,7 +328,6 @@ uno::Sequence< OUString > SAL_CALL
        AccessibleContextBase::getSupportedServiceNames()
 {
     return {
-        u"com.sun.star.accessibility.Accessible"_ustr,
         u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 

@@ -479,7 +479,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/xslt,\
 
 
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/accessibility,\
-	Accessible \
 	AccessibleContext \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/awt,\

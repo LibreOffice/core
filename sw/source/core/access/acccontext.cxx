@@ -976,7 +976,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
 
 uno::Sequence<OUString> SAL_CALL SwAccessibleContext::getSupportedServiceNames()
 {
-    return { u"com.sun.star.accessibility.Accessible"_ustr };
+    return {};
 }
 
 sal_Bool SAL_CALL SwAccessibleContext::supportsService (const OUString& ServiceName)

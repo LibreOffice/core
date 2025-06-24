@@ -322,8 +322,7 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString
 
 Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedServiceNames()
 {
-    return { u"com.sun.star.accessibility.Accessible"_ustr,
-             u"com.sun.star.accessibility.AccessibleContext"_ustr,
+    return { u"com.sun.star.accessibility.AccessibleContext"_ustr,
              u"com.sun.star.drawing.AccessibleGraphControl"_ustr };
 }
 
