@@ -80,15 +80,13 @@ PresenterSlideShowView::PresenterSlideShowView (
     css::uno::Reference<css::drawing::framework::XResourceId> xViewId,
     const rtl::Reference<::sd::DrawController>& rxController,
     ::rtl::Reference<PresenterController> xPresenterController)
-    : PresenterSlideShowViewInterfaceBase(m_aMutex),
-      mxComponentContext(std::move(xContext)),
+    : mxComponentContext(std::move(xContext)),
       mpPresenterController(std::move(xPresenterController)),
       mxViewId(std::move(xViewId)),
       mxController(rxController),
       mxSlideShowController(lcl_GetSlideShowController(rxController)),
       mbIsViewAdded(false),
       mnPageAspectRatio(28.0/21.0),
-      maBroadcaster(m_aMutex),
       mbIsForcedPaintPending(false),
       mbIsPaintPending(true),
       mbIsEndSlideVisible(false)
@@ -178,16 +176,19 @@ PresenterSlideShowView::~PresenterSlideShowView()
 {
 }
 
-void PresenterSlideShowView::disposing()
+void PresenterSlideShowView::disposing(std::unique_lock<std::mutex>&)
 {
     // Tell all listeners that we are disposed.
     lang::EventObject aEvent;
     aEvent.Source = static_cast<XWeak*>(this);
 
-    ::cppu::OInterfaceContainerHelper* pIterator
-          = maBroadcaster.getContainer(cppu::UnoType<lang::XEventListener>::get());
-    if (pIterator != nullptr)
-        pIterator->disposeAndClear(aEvent);
+    {
+        std::unique_lock l(m_aMutex);
+        maMouseListeners.disposeAndClear(l, aEvent);
+        maMouseMotionListeners.disposeAndClear(l, aEvent);
+        maPaintListeners.disposeAndClear(l, aEvent);
+        maModifyListeners.disposeAndClear(l, aEvent);
+    }
 
     // Do this for
     // XPaintListener, XModifyListener,XMouseListener,XMouseMotionListener,XWindowListener?
@@ -314,14 +315,20 @@ void PresenterSlideShowView::ReleaseView()
 
 Reference<rendering::XSpriteCanvas> SAL_CALL PresenterSlideShowView::getCanvas()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     return Reference<rendering::XSpriteCanvas>(mxViewCanvas, UNO_QUERY);
 }
 
 void SAL_CALL PresenterSlideShowView::clear()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     mbIsForcedPaintPending = false;
     mbIsPaintPending = false;
 
@@ -348,7 +355,10 @@ void SAL_CALL PresenterSlideShowView::clear()
 
 geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     if (mxViewWindow.is())
     {
@@ -374,85 +384,83 @@ geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation()
 
 geometry::IntegerSize2D SAL_CALL PresenterSlideShowView::getTranslationOffset()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     return geometry::IntegerSize2D(0,0);
 }
 
 void SAL_CALL PresenterSlideShowView::addTransformationChangedListener(
     const Reference<util::XModifyListener>& rxListener)
 {
-    ThrowIfDisposed();
-    maBroadcaster.addListener(
-        cppu::UnoType<util::XModifyListener>::get(),
-        rxListener);
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
+    maModifyListeners.addInterface(l, rxListener);
 }
 
 void SAL_CALL PresenterSlideShowView::removeTransformationChangedListener(
     const Reference<util::XModifyListener>& rxListener)
 {
-    ThrowIfDisposed();
-    maBroadcaster.removeListener(
-        cppu::UnoType<util::XModifyListener>::get(),
-        rxListener);
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
+    maModifyListeners.removeInterface(l, rxListener);
 }
 
 void SAL_CALL PresenterSlideShowView::addPaintListener(
     const Reference<awt::XPaintListener>& rxListener)
 {
-    ThrowIfDisposed();
-    maBroadcaster.addListener(
-        cppu::UnoType<awt::XPaintListener>::get(),
-        rxListener);
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
+    maPaintListeners.addInterface(l, rxListener);
 }
 
 void SAL_CALL PresenterSlideShowView::removePaintListener(
     const Reference<awt::XPaintListener>& rxListener)
 {
-    ThrowIfDisposed();
-    maBroadcaster.removeListener(
-        cppu::UnoType<awt::XPaintListener>::get(),
-        rxListener);
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
+    maPaintListeners.removeInterface(l, rxListener);
 }
 
 void SAL_CALL PresenterSlideShowView::addMouseListener(
     const Reference<awt::XMouseListener>& rxListener)
 {
-    ThrowIfDisposed();
-    maBroadcaster.addListener(
-        cppu::UnoType<awt::XMouseListener>::get(),
-        rxListener);
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
+    maMouseListeners.addInterface(l, rxListener);
 }
 
 void SAL_CALL PresenterSlideShowView::removeMouseListener(
     const Reference<awt::XMouseListener>& rxListener)
 {
-    ThrowIfDisposed();
-    maBroadcaster.removeListener(
-        cppu::UnoType<awt::XMouseListener>::get(),
-        rxListener);
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
+    maMouseListeners.removeInterface(l, rxListener);
 }
 
 void SAL_CALL PresenterSlideShowView::addMouseMotionListener(
     const Reference<awt::XMouseMotionListener>& rxListener)
 {
-    ThrowIfDisposed();
-    maBroadcaster.addListener(
-        cppu::UnoType<awt::XMouseMotionListener>::get(),
-        rxListener);
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
+    maMouseMotionListeners.addInterface(l, rxListener);
 }
 
 void SAL_CALL PresenterSlideShowView::removeMouseMotionListener(
     const Reference<awt::XMouseMotionListener>& rxListener)
 {
-    ThrowIfDisposed();
-    maBroadcaster.removeListener(
-        cppu::UnoType<awt::XMouseMotionListener>::get(),
-        rxListener);
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
+    maMouseMotionListeners.removeInterface(l, rxListener);
 }
 
 void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     // Create a pointer when it does not yet exist.
     if ( ! mxPointer.is())
@@ -518,11 +526,9 @@ void SAL_CALL PresenterSlideShowView::mousePressed (const awt::MouseEvent& rEven
 {
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
-    ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseListener>::get());
-    if (pIterator != nullptr)
     {
-        pIterator->notifyEach(&awt::XMouseListener::mousePressed, aEvent);
+        std::unique_lock l(m_aMutex);
+        maMouseListeners.notifyEach(l, &awt::XMouseListener::mousePressed, aEvent);
     }
 
     // Only when the end slide is displayed we forward the mouse event to
@@ -537,11 +543,9 @@ void SAL_CALL PresenterSlideShowView::mouseReleased (const awt::MouseEvent& rEve
 {
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
-    ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseListener>::get());
-    if (pIterator != nullptr)
     {
-        pIterator->notifyEach(&awt::XMouseListener::mouseReleased, aEvent);
+        std::unique_lock l(m_aMutex);
+        maMouseListeners.notifyEach(l, &awt::XMouseListener::mouseReleased, aEvent);
     }
 }
 
@@ -549,11 +553,9 @@ void SAL_CALL PresenterSlideShowView::mouseEntered (const awt::MouseEvent& rEven
 {
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
-    ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseListener>::get());
-    if (pIterator != nullptr)
     {
-        pIterator->notifyEach(&awt::XMouseListener::mouseEntered, aEvent);
+        std::unique_lock l(m_aMutex);
+        maMouseListeners.notifyEach(l, &awt::XMouseListener::mouseEntered, aEvent);
     }
 }
 
@@ -561,11 +563,9 @@ void SAL_CALL PresenterSlideShowView::mouseExited (const awt::MouseEvent& rEvent
 {
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
-    ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseListener>::get());
-    if (pIterator != nullptr)
     {
-        pIterator->notifyEach(&awt::XMouseListener::mouseExited, aEvent);
+        std::unique_lock l(m_aMutex);
+        maMouseListeners.notifyEach(l, &awt::XMouseListener::mouseExited, aEvent);
     }
 }
 
@@ -575,11 +575,9 @@ void SAL_CALL PresenterSlideShowView::mouseDragged (const awt::MouseEvent& rEven
 {
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
-    ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseMotionListener>::get());
-    if (pIterator != nullptr)
     {
-        pIterator->notifyEach(&awt::XMouseMotionListener::mouseDragged, aEvent);
+        std::unique_lock l(m_aMutex);
+        maMouseMotionListeners.notifyEach(l, &awt::XMouseMotionListener::mouseDragged, aEvent);
     }
 }
 
@@ -587,11 +585,9 @@ void SAL_CALL PresenterSlideShowView::mouseMoved (const awt::MouseEvent& rEvent)
 {
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
-    ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseMotionListener>::get());
-    if (pIterator != nullptr)
     {
-        pIterator->notifyEach(&awt::XMouseMotionListener::mouseMoved, aEvent);
+        std::unique_lock l(m_aMutex);
+        maMouseMotionListeners.notifyEach(l, &awt::XMouseMotionListener::mouseMoved, aEvent);
     }
 }
 
@@ -599,7 +595,10 @@ void SAL_CALL PresenterSlideShowView::mouseMoved (const awt::MouseEvent& rEvent)
 
 void SAL_CALL PresenterSlideShowView::windowResized (const awt::WindowEvent&)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     Resize();
@@ -773,11 +772,9 @@ void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
     // Forward window paint to listeners.
     awt::PaintEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
-    ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(cppu::UnoType<awt::XPaintListener>::get());
-    if (pIterator != nullptr)
     {
-        pIterator->notifyEach(&awt::XPaintListener::windowPaint, aEvent);
+        std::unique_lock l(m_aMutex);
+        maPaintListeners.notifyEach(l, &awt::XPaintListener::windowPaint, aEvent);
     }
 
     /** The slide show relies on the back buffer of the canvas not being
@@ -885,11 +882,9 @@ void PresenterSlideShowView::Resize()
     // Notify listeners that the transformation that maps the view into the
     // window has changed.
     lang::EventObject aEvent (static_cast<XWeak*>(this));
-    ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(cppu::UnoType<util::XModifyListener>::get());
-    if (pIterator != nullptr)
     {
-        pIterator->notifyEach(&util::XModifyListener::modified, aEvent);
+        std::unique_lock l(m_aMutex);
+        maModifyListeners.notifyEach(l, &util::XModifyListener::modified, aEvent);
     }
 
     // Due to constant aspect ratio resizing may lead a preview that changes
@@ -943,16 +938,6 @@ void PresenterSlideShowView::CreateBackgroundPolygons()
                 aWindowBox.Width,
                 aWindowBox.Height - aViewWindowBox.Y - aViewWindowBox.Height),
             mxCanvas->getDevice());
-    }
-}
-
-void PresenterSlideShowView::ThrowIfDisposed()
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            u"PresenterSlideShowView object has already been disposed"_ustr,
-            static_cast<uno::XWeak*>(this));
     }
 }
 

@@ -21,9 +21,8 @@
 #include <framework/ConfigurationController.hxx>
 
 #include <DrawController.hxx>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/compbase.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <slideshow.hxx>
 
@@ -39,14 +38,11 @@ namespace sd::framework {
 
 namespace {
 
-typedef comphelper::WeakComponentImplHelper<XView> PresentationViewInterfaceBase;
-
 /** The PresentationView is not an actual view, it is a marker whose
     existence in a configuration indicates that a slideshow is running
     (in another application window).
 */
-class PresentationView
-    : public PresentationViewInterfaceBase
+class PresentationView : public AbstractView
 {
 public:
     explicit PresentationView (const Reference<XResourceId>& rxViewId)

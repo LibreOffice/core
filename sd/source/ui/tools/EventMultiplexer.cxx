@@ -33,7 +33,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <framework/ConfigurationChangeListener.hxx>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <comphelper/compbase.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -515,10 +515,10 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
                 // Add selection change listener at slide sorter.
                 if (rEvent.ResourceId->getResourceURL() == FrameworkHelper::msSlideSorterURL)
                 {
+                    auto pView = dynamic_cast<sd::framework::AbstractView*>(rEvent.ResourceObject.get());
                     slidesorter::SlideSorterViewShell* pViewShell
                         = dynamic_cast<slidesorter::SlideSorterViewShell*>(
-                            FrameworkHelper::GetViewShell(
-                                Reference<XView>(rEvent.ResourceObject,UNO_QUERY)).get());
+                            FrameworkHelper::GetViewShell(pView).get());
                     if (pViewShell != nullptr)
                         pViewShell->AddSelectionChangeListener (
                             LINK(this,
@@ -541,10 +541,10 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
                 // selection change listener at slide sorter.
                 if (rEvent.ResourceId->getResourceURL() == FrameworkHelper::msSlideSorterURL)
                 {
+                    auto pView = dynamic_cast<framework::AbstractView*>(rEvent.ResourceObject.get());
                     slidesorter::SlideSorterViewShell* pViewShell
                         = dynamic_cast<slidesorter::SlideSorterViewShell*>(
-                            FrameworkHelper::GetViewShell(
-                                Reference<XView>(rEvent.ResourceObject, UNO_QUERY)).get());
+                            FrameworkHelper::GetViewShell(pView).get());
                     if (pViewShell != nullptr)
                         pViewShell->RemoveSelectionChangeListener (
                             LINK(this,

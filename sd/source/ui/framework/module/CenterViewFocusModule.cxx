@@ -117,9 +117,9 @@ void CenterViewFocusModule::HandleNewView (
         FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
         FrameworkHelper::msViewURLPrefix,
         AnchorBindingMode_DIRECT));
-    Reference<XView> xView;
+    rtl::Reference<AbstractView> xView;
     if (xViewIds.hasElements())
-        xView.set( mxConfigurationController->getResource(xViewIds[0]),UNO_QUERY);
+        xView = dynamic_cast<AbstractView*>( mxConfigurationController->getResource(xViewIds[0]).get() );
     if (mpBase!=nullptr)
     {
         auto pViewShellWrapper = dynamic_cast<ViewShellWrapper*>(xView.get());

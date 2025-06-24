@@ -160,9 +160,8 @@ void PresenterViewFactory::disposing(std::unique_lock<std::mutex>&)
     {
         try
         {
-            Reference<lang::XComponent> xComponent (rView.second.first, UNO_QUERY);
-            if (xComponent.is())
-                xComponent->dispose();
+            if (rView.second.first.is())
+                rView.second.first->dispose();
         }
         catch (lang::DisposedException&)
         {
@@ -246,7 +245,7 @@ void PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
             rtl::Reference<sd::framework::AbstractPane> xAnchorPane = dynamic_cast<sd::framework::AbstractPane*>(
                 mxConfigurationController->getResource(xViewId->getAnchor()).get());
             (*mpResourceCache)[xViewId->getResourceURL()]
-                = ViewResourceDescriptor(Reference<XView>(rxView, UNO_QUERY), xAnchorPane);
+                = ViewResourceDescriptor(dynamic_cast<sd::framework::AbstractView*>(rxView.get()), xAnchorPane);
             pView->DeactivatePresenterView();
         }
     }
@@ -293,7 +292,7 @@ Reference<XResource> PresenterViewFactory::CreateView(
     const Reference<XResourceId>& rxViewId,
     const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane)
 {
-    Reference<XView> xView;
+    rtl::Reference<sd::framework::AbstractView> xView;
 
     try
     {
@@ -337,7 +336,7 @@ Reference<XResource> PresenterViewFactory::CreateView(
     return xView;
 }
 
-Reference<XView> PresenterViewFactory::CreateSlideShowView(
+rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateSlideShowView(
     const Reference<XResourceId>& rxViewId) const
 {
     if ( ! mxConfigurationController.is())
@@ -363,11 +362,11 @@ Reference<XView> PresenterViewFactory::CreateSlideShowView(
     }
 }
 
-Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
+rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateSlidePreviewView(
     const Reference<XResourceId>& rxViewId,
     const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane) const
 {
-    Reference<XView> xView;
+    rtl::Reference<sd::framework::AbstractView> xView;
 
     if ( ! mxConfigurationController.is())
         return xView;
@@ -376,13 +375,12 @@ Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
 
     try
     {
-        xView.set(
-            static_cast<XWeak*>(new NextSlidePreview(
+        xView =
+            new NextSlidePreview(
                 mxComponentContext,
                 rxViewId,
                 rxAnchorPane,
-                mpPresenterController)),
-            UNO_QUERY_THROW);
+                mpPresenterController);
     }
     catch (RuntimeException&)
     {
@@ -392,7 +390,7 @@ Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
     return xView;
 }
 
-Reference<XView> PresenterViewFactory::CreateToolBarView(
+rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateToolBarView(
     const Reference<XResourceId>& rxViewId) const
 {
     return new PresenterToolBarView(
@@ -402,10 +400,10 @@ Reference<XView> PresenterViewFactory::CreateToolBarView(
         mpPresenterController);
 }
 
-Reference<XView> PresenterViewFactory::CreateNotesView(
+rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateNotesView(
     const Reference<XResourceId>& rxViewId) const
 {
-    Reference<XView> xView;
+    rtl::Reference<sd::framework::AbstractView> xView;
 
     if ( ! mxConfigurationController.is())
         return xView;
@@ -414,13 +412,12 @@ Reference<XView> PresenterViewFactory::CreateNotesView(
 
     try
     {
-        xView.set(static_cast<XWeak*>(
+        xView =
             new PresenterNotesView(
                 mxComponentContext,
                 rxViewId,
                 mxControllerWeak.get(),
-                mpPresenterController)),
-            UNO_QUERY_THROW);
+                mpPresenterController);
     }
     catch (RuntimeException&)
     {
@@ -430,10 +427,10 @@ Reference<XView> PresenterViewFactory::CreateNotesView(
     return xView;
 }
 
-Reference<XView> PresenterViewFactory::CreateSlideSorterView(
+rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateSlideSorterView(
     const Reference<XResourceId>& rxViewId) const
 {
-    Reference<XView> xView;
+    rtl::Reference<sd::framework::AbstractView> xView;
 
     if ( ! mxConfigurationController.is())
         return xView;
@@ -458,14 +455,14 @@ Reference<XView> PresenterViewFactory::CreateSlideSorterView(
     return xView;
 }
 
-Reference<XView> PresenterViewFactory::CreateHelpView(
+rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateHelpView(
     const Reference<XResourceId>& rxViewId) const
 {
-    return Reference<XView>(new PresenterHelpView(
+    return new PresenterHelpView(
         mxComponentContext,
         rxViewId,
         mxControllerWeak.get(),
-        mpPresenterController));
+        mpPresenterController);
 }
 
 //===== CachablePresenterView =================================================

@@ -56,7 +56,7 @@
 #include <xmloff/autolayout.hxx>
 #include <comphelper/lok.hxx>
 
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 
 #include <string_view>
 #include <vector>
@@ -476,7 +476,7 @@ void LayoutMenu::Fill()
         {
             Reference<XResourceId> xPaneId (new sd::framework::ResourceId(
                 FrameworkHelper::msCenterPaneURL));
-            Reference<XView> xView (FrameworkHelper::Instance(mrBase)->GetView(xPaneId));
+            rtl::Reference<framework::AbstractView> xView (FrameworkHelper::Instance(mrBase)->GetView(xPaneId));
             if (xView.is())
                 sCenterPaneViewName = xView->getResourceId()->getResourceURL();
         }

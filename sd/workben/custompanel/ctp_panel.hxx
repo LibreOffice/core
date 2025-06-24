@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <AbstractView.hxx>
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>

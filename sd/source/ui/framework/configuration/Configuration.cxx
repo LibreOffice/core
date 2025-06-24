@@ -22,6 +22,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ConfigurationController.hxx>
 #include <framework/AbstractPane.hxx>
+#include <framework/AbstractView.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -282,6 +283,8 @@ ConfigurationChangeListener::~ConfigurationChangeListener() {}
 ConfigurationChangeRequest::~ConfigurationChangeRequest() {}
 
 AbstractPane::~AbstractPane() {}
+
+AbstractView::~AbstractView() {}
 
 } // end of namespace sd::framework
 

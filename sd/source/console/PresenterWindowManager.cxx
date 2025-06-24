@@ -141,7 +141,7 @@ void PresenterWindowManager::SetTheme (const std::shared_ptr<PresenterTheme>& rp
     }
 }
 
-void PresenterWindowManager::NotifyViewCreation (const Reference<XView>& rxView)
+void PresenterWindowManager::NotifyViewCreation (const rtl::Reference<sd::framework::AbstractView>& rxView)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindPaneId(rxView->getResourceId()->getAnchor()));

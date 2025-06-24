@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <comphelper/compbase.hxx>
@@ -32,10 +32,11 @@ namespace com::sun::star::awt { class XWindow; }
 
 namespace sd::framework {
 
-typedef comphelper::WeakComponentImplHelper    <   css::awt::XWindowListener
-                                            ,   css::view::XSelectionSupplier
-                                            ,   css::drawing::framework::XView
-                                            >   ViewShellWrapperInterfaceBase;
+typedef cppu::ImplInheritanceHelper<
+                                        sd::framework::AbstractView
+                                    ,   css::awt::XWindowListener
+                                    ,   css::view::XSelectionSupplier
+                                    >   ViewShellWrapperInterfaceBase;
 
 /** This class wraps ViewShell objects and makes them look like an XView.
     Most importantly it provides access to the ViewShell implementation.

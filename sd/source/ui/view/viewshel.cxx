@@ -95,7 +95,7 @@
 #include <AccessibleDocumentViewBase.hxx>
 
 #include <framework/Configuration.hxx>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 using namespace ::com::sun::star;
@@ -428,10 +428,10 @@ void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
         {
             auto pFrameworkHelper = framework::FrameworkHelper::Instance(GetViewShellBase());
 
-            uno::Reference<drawing::framework::XView> xView;
+            rtl::Reference<sd::framework::AbstractView> xView;
             if (rResId->getResourceURL().match(framework::FrameworkHelper::msViewURLPrefix))
             {
-                xView.set(xConfigurationController->getResource(rResId), UNO_QUERY);
+                xView = dynamic_cast<sd::framework::AbstractView*>(xConfigurationController->getResource(rResId).get());
 
                 if (xView.is())
                 {

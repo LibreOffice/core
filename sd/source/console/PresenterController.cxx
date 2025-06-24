@@ -376,7 +376,7 @@ void PresenterController::UpdateViews()
     // Tell all views about the slides they should display.
     for (const auto& rxPane : mpPaneContainer->maPanes)
     {
-        Reference<drawing::XDrawView> xDrawView (rxPane->mxView, UNO_QUERY);
+        Reference<drawing::XDrawView> xDrawView (cppu::getXWeak(rxPane->mxView.get()), UNO_QUERY);
         if (xDrawView.is())
             xDrawView->setCurrentPage(mxCurrentSlide);
     }
@@ -690,7 +690,7 @@ void PresenterController::notifyConfigurationChange (
             {
                 // A view bound to one of the panes has been created and is
                 // stored in the pane container along with its pane.
-                Reference<XView> xView (rEvent.ResourceObject,UNO_QUERY);
+                rtl::Reference<sd::framework::AbstractView> xView = dynamic_cast<sd::framework::AbstractView*>(rEvent.ResourceObject.get());
                 if (xView.is())
                 {
                     mpPaneContainer->StoreView(xView);
@@ -704,7 +704,7 @@ void PresenterController::notifyConfigurationChange (
             if (rEvent.ResourceId->isBoundTo(mxMainPaneId,AnchorBindingMode_INDIRECT))
             {
                 // If this is a view then remove it from the pane container.
-                Reference<XView> xView (rEvent.ResourceObject,UNO_QUERY);
+                rtl::Reference<sd::framework::AbstractView> xView = dynamic_cast<sd::framework::AbstractView*>(rEvent.ResourceObject.get());
                 if (xView.is())
                 {
                     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
@@ -769,7 +769,7 @@ void SAL_CALL PresenterController::keyPressed (const awt::KeyEvent& rEvent)
         if ( ! rxPane->mbIsActive)
             continue;
 
-        Reference<awt::XKeyListener> xKeyListener (rxPane->mxView, UNO_QUERY);
+        Reference<awt::XKeyListener> xKeyListener (cppu::getXWeak(rxPane->mxView.get()), UNO_QUERY);
         if (xKeyListener.is())
             xKeyListener->keyPressed(rEvent);
     }
@@ -947,7 +947,7 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
                 if ( ! rxPane->mbIsActive)
                     continue;
 
-                Reference<awt::XKeyListener> xKeyListener (rxPane->mxView, UNO_QUERY);
+                Reference<awt::XKeyListener> xKeyListener (cppu::getXWeak(rxPane->mxView.get()), UNO_QUERY);
                 if (xKeyListener.is())
                     xKeyListener->keyReleased(rEvent);
             }

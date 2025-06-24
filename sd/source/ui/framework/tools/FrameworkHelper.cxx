@@ -354,14 +354,14 @@ bool FrameworkHelper::IsValid() const
     return lcl_getViewShell( lcl_getFirstViewInPane( mxConfigurationController, xPaneId ) );
 }
 
-::std::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const Reference<XView>& rxView)
+::std::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const rtl::Reference<AbstractView>& rxView)
 {
     return lcl_getViewShell( rxView );
 }
 
-Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneOrViewId)
+rtl::Reference<AbstractView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneOrViewId)
 {
-    Reference<XView> xView;
+    rtl::Reference<AbstractView> xView;
 
     if ( ! rxPaneOrViewId.is() || ! mxConfigurationController.is())
         return nullptr;
@@ -370,11 +370,11 @@ Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneO
     {
         if (rxPaneOrViewId->getResourceURL().match(msViewURLPrefix))
         {
-            xView.set( mxConfigurationController->getResource( rxPaneOrViewId ), UNO_QUERY );
+            xView = dynamic_cast<AbstractView*>(mxConfigurationController->getResource( rxPaneOrViewId ).get());
         }
         else
         {
-            xView.set( lcl_getFirstViewInPane( mxConfigurationController, rxPaneOrViewId ), UNO_QUERY );
+            xView = dynamic_cast<AbstractView*>(lcl_getFirstViewInPane( mxConfigurationController, rxPaneOrViewId ).get());
         }
     }
     catch (lang::DisposedException&)
@@ -462,7 +462,7 @@ const OUString & FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
 namespace
 {
 
-void updateEditMode(const Reference<XView> &xView, const EditMode eEMode, bool updateFrameView)
+void updateEditMode(const rtl::Reference<AbstractView> &xView, const EditMode eEMode, bool updateFrameView)
 {
     // Ensure we have the expected edit mode
     // The check is only for DrawViewShell as OutlineViewShell
@@ -488,7 +488,7 @@ void asyncUpdateEditMode(FrameworkHelper* const pHelper, const EditMode eEMode)
 {
     Reference<XResourceId> xPaneId (
         FrameworkHelper::CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
-    Reference<XView> xView (pHelper->GetView(xPaneId));
+    rtl::Reference<AbstractView> xView (pHelper->GetView(xPaneId));
     updateEditMode(xView, eEMode, true);
 }
 
@@ -527,7 +527,7 @@ void FrameworkHelper::HandleModeChangeSlot (
 
         Reference<XResourceId> xPaneId (
             CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
-        Reference<XView> xView (GetView(xPaneId));
+        rtl::Reference<AbstractView> xView (GetView(xPaneId));
 
         // Compute requested view
         OUString sRequestedView;

@@ -70,7 +70,7 @@ public:
 
     void SetParentPane (const rtl::Reference<sd::framework::AbstractPane>& rxPane);
     void SetTheme (const std::shared_ptr<PresenterTheme>& rpTheme);
-    void NotifyViewCreation (const css::uno::Reference<css::drawing::framework::XView>& rxView);
+    void NotifyViewCreation (const rtl::Reference<sd::framework::AbstractView>& rxView);
     void SetPanePosSizeAbsolute (
         const OUString& rsPaneURL,
         const double nX,

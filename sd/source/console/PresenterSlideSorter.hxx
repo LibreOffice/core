@@ -25,13 +25,12 @@
 #include "PresenterPaneContainer.hxx"
 #include "PresenterViewFactory.hxx"
 #include <PresenterPreviewCache.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
@@ -42,8 +41,8 @@ namespace sdext::presenter {
 class PresenterButton;
 class PresenterScrollBar;
 
-typedef cppu::WeakComponentImplHelper<
-    css::drawing::framework::XView,
+typedef cppu::ImplInheritanceHelper<
+    sd::framework::AbstractView,
     css::awt::XWindowListener,
     css::awt::XPaintListener,
     css::beans::XPropertyChangeListener,
@@ -57,8 +56,7 @@ typedef cppu::WeakComponentImplHelper<
     to create the slide previews.  Painting is done via a canvas.
 */
 class PresenterSlideSorter
-    : private ::cppu::BaseMutex,
-      public PresenterSlideSorterInterfaceBase,
+    : public PresenterSlideSorterInterfaceBase,
       public CachablePresenterView
 {
 public:
@@ -69,10 +67,11 @@ public:
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSlideSorter() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // lang::XEventListener
 
+    using WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL
         disposing (const css::lang::EventObject& rEventObject) override;
 
@@ -176,11 +175,6 @@ private:
     void GotoSlide (const sal_Int32 nSlideIndex);
     void ScrollSlideIntoView(sal_Int32 nSlideIndex);
     bool ProvideCanvas();
-
-    /** @throws css::lang::DisposedException when the object has already been
-        disposed.
-    */
-    void ThrowIfDisposed();
 };
 
 } // end of namespace ::sdext::presenter

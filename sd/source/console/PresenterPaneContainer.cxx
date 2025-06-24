@@ -137,7 +137,7 @@ PresenterPaneContainer::SharedPaneDescriptor
 
 PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::StoreView (
-        const Reference<XView>& rxView)
+        const rtl::Reference<sd::framework::AbstractView>& rxView)
 {
     SharedPaneDescriptor pDescriptor;
 
@@ -189,7 +189,7 @@ PresenterPaneContainer::SharedPaneDescriptor
 }
 
 PresenterPaneContainer::SharedPaneDescriptor
-    PresenterPaneContainer::RemoveView (const Reference<XView>& rxView)
+    PresenterPaneContainer::RemoveView (const rtl::Reference<sd::framework::AbstractView>& rxView)
 {
     SharedPaneDescriptor pDescriptor;
 

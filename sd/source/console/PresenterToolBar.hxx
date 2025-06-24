@@ -31,7 +31,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
@@ -47,9 +47,9 @@ typedef cppu::WeakComponentImplHelper<
     css::drawing::XDrawView
     > PresenterToolBarInterfaceBase;
 
-typedef cppu::WeakComponentImplHelper<
+typedef cppu::ImplInheritanceHelper<
+    sd::framework::AbstractView,
     css::awt::XPaintListener,
-    css::drawing::framework::XView,
     css::drawing::XDrawView
     > PresenterToolBarViewInterfaceBase;
 
@@ -188,8 +188,7 @@ private:
 /** View for the PresenterToolBar.
 */
 class PresenterToolBarView
-    : private ::cppu::BaseMutex,
-      public PresenterToolBarViewInterfaceBase
+    : public PresenterToolBarViewInterfaceBase
 {
 public:
     explicit PresenterToolBarView (
@@ -201,7 +200,7 @@ public:
     PresenterToolBarView(const PresenterToolBarView&) = delete;
     PresenterToolBarView& operator=(const PresenterToolBarView&) = delete;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     const ::rtl::Reference<PresenterToolBar>& GetPresenterToolBar() const;
 
@@ -211,6 +210,7 @@ public:
 
     // lang::XEventListener
 
+    using WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL
         disposing (const css::lang::EventObject& rEventObject) override;
 

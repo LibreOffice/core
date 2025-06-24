@@ -55,8 +55,7 @@ PresenterNotesView::PresenterNotesView (
     const Reference<XResourceId>& rxViewId,
     const ::rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
-    : PresenterNotesViewInterfaceBase(m_aMutex),
-      mxViewId(rxViewId),
+    : mxViewId(rxViewId),
       mpPresenterController(rpPresenterController),
       maSeparatorColor(0xffffff),
       mnSeparatorYLocation(0),
@@ -112,7 +111,10 @@ PresenterNotesView::PresenterNotesView (
     }
     catch (RuntimeException&)
     {
-        PresenterNotesView::disposing();
+        {
+            std::unique_lock l(m_aMutex);
+            PresenterNotesView::disposing(l);
+        }
         throw;
     }
 }
@@ -121,7 +123,7 @@ PresenterNotesView::~PresenterNotesView()
 {
 }
 
-void SAL_CALL PresenterNotesView::disposing()
+void PresenterNotesView::disposing(std::unique_lock<std::mutex>&)
 {
     if (mxParentWindow.is())
     {
@@ -270,11 +272,9 @@ void SAL_CALL PresenterNotesView::windowHidden (const lang::EventObject&) {}
 
 void SAL_CALL PresenterNotesView::windowPaint (const awt::PaintEvent& rEvent)
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        throw lang::DisposedException (
-            u"PresenterNotesView object has already been disposed"_ustr,
-            static_cast<uno::XWeak*>(this));
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
     }
 
     if ( ! mbIsPresenterViewActive)

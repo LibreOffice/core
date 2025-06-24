@@ -22,7 +22,7 @@
 
 #include "PresenterController.hxx"
 #include <framework/ResourceFactory.hxx>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/weakref.hxx>
 #include <rtl/ref.hxx>
@@ -108,7 +108,7 @@ private:
     rtl::Reference<sd::framework::ConfigurationController> mxConfigurationController;
     unotools::WeakReference<::sd::DrawController> mxControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    typedef ::std::pair<css::uno::Reference<css::drawing::framework::XView>,
+    typedef ::std::pair<rtl::Reference<sd::framework::AbstractView>,
         rtl::Reference<sd::framework::AbstractPane> > ViewResourceDescriptor;
     typedef ::std::map<OUString, ViewResourceDescriptor> ResourceContainer;
     std::unique_ptr<ResourceContainer> mpResourceCache;
@@ -120,23 +120,23 @@ private:
 
     void Register (const ::rtl::Reference<::sd::DrawController>& rxController);
 
-    css::uno::Reference<css::drawing::framework::XView> CreateSlideShowView(
+    rtl::Reference<sd::framework::AbstractView> CreateSlideShowView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
-    css::uno::Reference<css::drawing::framework::XView> CreateSlidePreviewView(
+    rtl::Reference<sd::framework::AbstractView> CreateSlidePreviewView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const rtl::Reference<sd::framework::AbstractPane>& rxPane) const;
 
-    css::uno::Reference<css::drawing::framework::XView> CreateToolBarView(
+    rtl::Reference<sd::framework::AbstractView> CreateToolBarView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
-    css::uno::Reference<css::drawing::framework::XView> CreateNotesView(
+    rtl::Reference<sd::framework::AbstractView> CreateNotesView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
-    css::uno::Reference<css::drawing::framework::XView> CreateSlideSorterView(
+    rtl::Reference<sd::framework::AbstractView> CreateSlideSorterView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
-    css::uno::Reference<css::drawing::framework::XView> CreateHelpView(
+    rtl::Reference<sd::framework::AbstractView> CreateHelpView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
     css::uno::Reference<css::drawing::framework::XResource> GetViewFromCache (

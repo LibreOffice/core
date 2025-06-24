@@ -222,7 +222,7 @@ void NotesPaneModule::onMainViewSwitch(const OUString& rsViewURL, const bool bIs
     }
 }
 
-bool NotesPaneModule::IsMasterView(const Reference<XView>& xView)
+bool NotesPaneModule::IsMasterView(const rtl::Reference<AbstractView>& xView)
 {
     if (mpViewShellBase != nullptr)
     {
@@ -250,7 +250,8 @@ void NotesPaneModule::onResourceRequest(
         return;
 
     // do not record the state of bottom pane when in master edit modes
-    if (!IsMasterView({ mxConfigurationController->getResource(aCenterViews[0]), UNO_QUERY }))
+    if (!IsMasterView(dynamic_cast<AbstractView*>(
+            mxConfigurationController->getResource(aCenterViews[0]).get())))
     {
         if (bActivation)
         {

@@ -24,7 +24,7 @@
 #include <PresenterHelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -56,7 +56,7 @@ public:
 
     virtual void SAL_CALL disposing() override;
 
-    typedef ::std::function<void (const css::uno::Reference<css::drawing::framework::XView>&)>
+    typedef ::std::function<void (const rtl::Reference<sd::framework::AbstractView>&)>
         ViewInitializationFunction;
 
     /** Each pane descriptor holds references to one pane and the view
@@ -73,7 +73,7 @@ public:
         css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
         OUString msViewURL;
         ::rtl::Reference<PresenterPaneBase> mxPane;
-        css::uno::Reference<css::drawing::framework::XView> mxView;
+        rtl::Reference<sd::framework::AbstractView> mxView;
         css::uno::Reference<css::awt::XWindow> mxContentWindow;
         css::uno::Reference<css::awt::XWindow> mxBorderWindow;
         OUString msTitleTemplate;
@@ -107,13 +107,13 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxBorderWindow);
 
     SharedPaneDescriptor StoreView (
-        const css::uno::Reference<css::drawing::framework::XView>& rxView);
+        const rtl::Reference<sd::framework::AbstractView>& rxView);
 
     SharedPaneDescriptor RemovePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
 
     SharedPaneDescriptor RemoveView (
-        const css::uno::Reference<css::drawing::framework::XView>& rxView);
+        const rtl::Reference<sd::framework::AbstractView>& rxView);
 
     /** Find the pane whose border window is identical to the given border
         window.

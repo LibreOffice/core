@@ -39,7 +39,7 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <framework/AbstractPane.hxx>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -146,7 +146,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy()
         pPaneContainer->FindPaneURL(PresenterPaneFactory::msNotesPaneURL));
 
     // Get the notes view.
-    Reference<drawing::framework::XView> xNotesView;
+    rtl::Reference<sd::framework::AbstractView> xNotesView;
     if (pNotesPane)
         xNotesView = pNotesPane->mxView;
     rtl::Reference<PresenterNotesView> pNotesView (

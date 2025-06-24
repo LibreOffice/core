@@ -21,11 +21,10 @@
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERHELPVIEW_HXX
 
 #include "PresenterController.hxx"
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <memory>
@@ -34,8 +33,8 @@ namespace sdext::presenter {
 
 class PresenterButton;
 
-typedef cppu::WeakComponentImplHelper<
-    css::drawing::framework::XView,
+typedef cppu::ImplInheritanceHelper<
+    sd::framework::AbstractView,
     css::awt::XWindowListener,
     css::awt::XPaintListener
     > PresenterHelpViewInterfaceBase;
@@ -43,8 +42,7 @@ typedef cppu::WeakComponentImplHelper<
 /** Show help text that describes the defined keys.
 */
 class PresenterHelpView
-    : private ::cppu::BaseMutex,
-      public PresenterHelpViewInterfaceBase
+    : public PresenterHelpViewInterfaceBase
 {
 public:
     explicit PresenterHelpView (
@@ -54,10 +52,11 @@ public:
         ::rtl::Reference<PresenterController> xPresenterController);
     virtual ~PresenterHelpView() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // lang::XEventListener
 
+    using WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL
         disposing (const css::lang::EventObject& rEventObject) override;
 
@@ -107,11 +106,6 @@ private:
         time.
     */
     void CheckFontSize();
-
-    /** @throws css::lang::DisposedException when the object has already been
-        disposed.
-    */
-    void ThrowIfDisposed();
 };
 
 } // end of namespace ::sdext::presenter

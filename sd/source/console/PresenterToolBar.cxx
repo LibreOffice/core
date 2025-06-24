@@ -926,8 +926,7 @@ PresenterToolBarView::PresenterToolBarView (
     const Reference<XResourceId>& rxViewId,
     const rtl::Reference<::sd::DrawController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
-    : PresenterToolBarViewInterfaceBase(m_aMutex),
-      mxViewId(rxViewId),
+    : mxViewId(rxViewId),
       mpPresenterController(rpPresenterController)
 {
     try
@@ -968,7 +967,7 @@ PresenterToolBarView::~PresenterToolBarView()
 {
 }
 
-void SAL_CALL PresenterToolBarView::disposing()
+void PresenterToolBarView::disposing(std::unique_lock<std::mutex>&)
 {
     rtl::Reference<PresenterToolBar> xComponent = std::move(mpToolBar);
     if (xComponent.is())

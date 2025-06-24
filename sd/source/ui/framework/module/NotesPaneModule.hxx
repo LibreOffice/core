@@ -15,10 +15,6 @@
 #include <tools/link.hxx>
 #include <set>
 
-namespace com::sun::star::drawing::framework
-{
-class XView;
-}
 namespace sd
 {
 class DrawController;
@@ -33,6 +29,7 @@ namespace sd::framework
 {
 class ConfigurationController;
 class Configuration;
+class AbstractView;
 
 /** This module is responsible for handling visibility of NotesPane across modes
 */
@@ -77,7 +74,7 @@ private:
     void onMainViewSwitch(const OUString& rsViewURL, const bool bIsActivated);
     void onResourceRequest(bool bActivation,
                            const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
-    bool IsMasterView(const css::uno::Reference<css::drawing::framework::XView>& xView);
+    bool IsMasterView(const rtl::Reference<sd::framework::AbstractView>& xView);
 
     DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
 };

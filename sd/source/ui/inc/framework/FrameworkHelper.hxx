@@ -29,7 +29,6 @@
 #include <mutex>
 
 namespace com::sun::star::drawing::framework { class XResourceId; }
-namespace com::sun::star::drawing::framework { class XView; }
 namespace sd::framework { struct ConfigurationChangeEvent; }
 
 namespace sd {
@@ -39,6 +38,7 @@ class ViewShellBase;
 
 namespace sd::framework {
 class ConfigurationController;
+class AbstractView;
 
 /** The FrameworkHelper is a convenience class that simplifies the
     access to the drawing framework.
@@ -131,7 +131,7 @@ public:
             reference then an empty pointer is returned.
     */
     static ::std::shared_ptr<ViewShell> GetViewShell (
-        const css::uno::Reference<css::drawing::framework::XView>& rxView);
+        const rtl::Reference<sd::framework::AbstractView>& rxView);
 
     typedef ::std::function<bool (const sd::framework::ConfigurationChangeEvent&)>
         ConfigurationChangeEventFilter;
@@ -172,7 +172,7 @@ public:
             of the involved objects does not support XTunnel (where
             necessary).
     */
-    css::uno::Reference<css::drawing::framework::XView> GetView (
+    rtl::Reference<sd::framework::AbstractView> GetView (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneOrViewId);
 
     /** Request the specified view to be displayed in the specified pane.

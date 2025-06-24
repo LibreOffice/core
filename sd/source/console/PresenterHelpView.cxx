@@ -123,8 +123,7 @@ PresenterHelpView::PresenterHelpView (
     const Reference<XResourceId>& rxViewId,
     const rtl::Reference<::sd::DrawController>& rxController,
     ::rtl::Reference<PresenterController> xPresenterController)
-    : PresenterHelpViewInterfaceBase(m_aMutex),
-      mxComponentContext(rxContext),
+    : mxComponentContext(rxContext),
       mxViewId(rxViewId),
       mpPresenterController(std::move(xPresenterController)),
       mnSeparatorY(0),
@@ -180,7 +179,7 @@ PresenterHelpView::~PresenterHelpView()
 {
 }
 
-void SAL_CALL PresenterHelpView::disposing()
+void PresenterHelpView::disposing(std::unique_lock<std::mutex>&)
 {
     mxViewId = nullptr;
 
@@ -217,24 +216,32 @@ void SAL_CALL PresenterHelpView::disposing (const lang::EventObject& rEventObjec
 
 void SAL_CALL PresenterHelpView::windowResized (const awt::WindowEvent&)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     Resize();
 }
 
 void SAL_CALL PresenterHelpView::windowMoved (const awt::WindowEvent&)
 {
-    ThrowIfDisposed();
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
 }
 
 void SAL_CALL PresenterHelpView::windowShown (const lang::EventObject&)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     Resize();
 }
 
 void SAL_CALL PresenterHelpView::windowHidden (const lang::EventObject&)
 {
-    ThrowIfDisposed();
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
 }
 
 //----- XPaintListener --------------------------------------------------------
@@ -429,7 +436,10 @@ void PresenterHelpView::CheckFontSize()
 
 Reference<XResourceId> SAL_CALL PresenterHelpView::getResourceId()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     return mxViewId;
 }
 
@@ -472,16 +482,6 @@ void PresenterHelpView::Resize()
         aWindowBox.Height - mpCloseButton->GetSize().Height/2.0));
 
     CheckFontSize();
-}
-
-void PresenterHelpView::ThrowIfDisposed()
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            u"PresenterHelpView has been already disposed"_ustr,
-            static_cast<uno::XWeak*>(this));
-    }
 }
 
 //===== LineDescriptor =========================================================

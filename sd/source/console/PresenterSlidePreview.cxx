@@ -45,8 +45,7 @@ PresenterSlidePreview::PresenterSlidePreview (
     const Reference<XResourceId>& rxViewId,
     const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
-    : PresenterSlidePreviewInterfaceBase(m_aMutex),
-      mpPresenterController(rpPresenterController),
+    : mpPresenterController(rpPresenterController),
       mxViewId(rxViewId),
       mnSlideAspectRatio(28.0 / 21.0)
 {
@@ -93,7 +92,7 @@ PresenterSlidePreview::~PresenterSlidePreview()
 {
 }
 
-void SAL_CALL PresenterSlidePreview::disposing()
+void PresenterSlidePreview::disposing(std::unique_lock<std::mutex>&)
 {
     if (mxWindow.is())
     {
@@ -123,7 +122,10 @@ sal_Bool SAL_CALL PresenterSlidePreview::isAnchorOnly()
 
 void SAL_CALL PresenterSlidePreview::windowResized (const awt::WindowEvent&)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
     Resize();
 }
@@ -132,7 +134,10 @@ void SAL_CALL PresenterSlidePreview::windowMoved (const awt::WindowEvent&) {}
 
 void SAL_CALL PresenterSlidePreview::windowShown (const lang::EventObject&)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
     Resize();
 }
@@ -143,7 +148,10 @@ void SAL_CALL PresenterSlidePreview::windowHidden (const lang::EventObject&) {}
 
 void SAL_CALL PresenterSlidePreview::windowPaint (const awt::PaintEvent& rEvent)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
     if (mxWindow.is())
@@ -170,14 +178,20 @@ void SAL_CALL PresenterSlidePreview::disposing (const lang::EventObject& rEvent)
 
 void SAL_CALL PresenterSlidePreview::setCurrentPage (const Reference<drawing::XDrawPage>& rxSlide)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
     SetSlide(rxSlide);
 }
 
 Reference<drawing::XDrawPage> SAL_CALL PresenterSlidePreview::getCurrentPage()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     return nullptr;
 }
 
@@ -330,16 +344,6 @@ void PresenterSlidePreview::Resize()
         }
     }
     SetSlide(mxCurrentSlide);
-}
-
-void PresenterSlidePreview::ThrowIfDisposed()
-{
-    if (PresenterSlidePreviewInterfaceBase::rBHelper.bDisposed || PresenterSlidePreviewInterfaceBase::rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            u"PresenterSlidePreview object has already been disposed"_ustr,
-            static_cast<uno::XWeak*>(this));
-    }
 }
 
 } // end of namespace ::sdext::presenter

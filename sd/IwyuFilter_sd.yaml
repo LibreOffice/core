@@ -225,7 +225,7 @@ excludelist:
     sd/source/ui/inc/framework/ViewShellWrapper.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XWindowListener.hpp
-    - com/sun/star/drawing/framework/XView.hpp
+    - framework/XView.hxx
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/view/XSelectionSupplier.hpp
     sd/source/ui/inc/tools/SlotStateListener.hxx:

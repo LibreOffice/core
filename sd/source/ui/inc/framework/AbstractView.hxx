@@ -17,7 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module com { module sun { module star { module drawing { module framework {
+#pragma once
+
+#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <comphelper/compbase.hxx>
+#include <sddllapi.h>
+
+namespace sd::framework
+{
+typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XResource>
+    AbstractViewInterfaceBase;
 
 /** A view in the drawing framework is any object that paints into a pane.
     <p>Typical examples are the Impress views that show a graphical
@@ -28,11 +39,12 @@ module com { module sun { module star { module drawing { module framework {
     reference them.</p>
     <p>The URL prefix of views is <code>private:resource/view</code></p>
 */
-interface XView
+class SD_DLLPUBLIC AbstractView : public AbstractViewInterfaceBase
 {
-    interface XResource;
+public:
+    virtual ~AbstractView() override;
 };
 
-}; }; }; }; }; // ::com::sun::star::drawing::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

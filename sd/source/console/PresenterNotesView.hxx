@@ -28,7 +28,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <rtl/ref.hxx>
@@ -42,10 +42,10 @@ class PresenterButton;
 class PresenterScrollBar;
 class PresenterTextView;
 
-typedef cppu::WeakComponentImplHelper<
+typedef cppu::ImplInheritanceHelper<
+    sd::framework::AbstractView,
     css::awt::XWindowListener,
     css::awt::XPaintListener,
-    css::drawing::framework::XView,
     css::drawing::XDrawView,
     css::awt::XKeyListener
     > PresenterNotesViewInterfaceBase;
@@ -55,8 +55,7 @@ typedef cppu::WeakComponentImplHelper<
     notes text.
 */
 class PresenterNotesView
-    : private ::cppu::BaseMutex,
-      public PresenterNotesViewInterfaceBase,
+    : public PresenterNotesViewInterfaceBase,
       public CachablePresenterView
 {
 public:
@@ -67,7 +66,7 @@ public:
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterNotesView() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     /** Typically called from setCurrentSlide() with the notes page that is
         associated with the slide given to setCurrentSlide().
@@ -84,6 +83,7 @@ public:
 
     // lang::XEventListener
 
+    using WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL
         disposing (const css::lang::EventObject& rEventObject) override;
 

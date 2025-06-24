@@ -27,6 +27,7 @@
 #include <framework/ConfigurationController.hxx>
 #include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <framework/AbstractView.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <com/sun/star/frame/XController.hpp>

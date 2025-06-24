@@ -28,16 +28,15 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <framework/AbstractPane.hxx>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
 namespace sdext::presenter {
 
-typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XView,
+typedef ::cppu::ImplInheritanceHelper <
+    sd::framework::AbstractView,
     css::drawing::XDrawView,
     css::awt::XPaintListener,
     css::awt::XWindowListener
@@ -50,8 +49,7 @@ typedef ::cppu::WeakComponentImplHelper <
     uses a derived class that overrides the setCurrentSlide() method.
 */
 class PresenterSlidePreview
-    : private ::cppu::BaseMutex,
-      public PresenterSlidePreviewInterfaceBase
+    : public PresenterSlidePreviewInterfaceBase
 {
 public:
     PresenterSlidePreview (
@@ -60,9 +58,11 @@ public:
         const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSlidePreview() override;
+
     PresenterSlidePreview(const PresenterSlidePreview&) = delete;
     PresenterSlidePreview& operator=(const PresenterSlidePreview&) = delete;
-    virtual void SAL_CALL disposing() override;
+
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XResourceId
 
@@ -131,11 +131,6 @@ private:
     /** React to a resize of the anchor pane.
     */
     void Resize();
-
-    /** @throws css::lang::DisposedException when the object has already been
-        disposed.
-    */
-    void ThrowIfDisposed();
 };
 
 } // end of namespace ::sd::presenter

@@ -20,7 +20,7 @@
 #include <FrameView.hxx>
 
 #include <svx/svxids.hrc>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <framework/AbstractView.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unokywds.hxx>
 #include <vcl/settings.hxx>
@@ -89,7 +89,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
                     nSdViewShellCount++;
 
                     OUString sViewURL;
-                    Reference<drawing::framework::XView> xView (
+                    rtl::Reference<sd::framework::AbstractView> xView (
                         framework::FrameworkHelper::Instance(*pBase)->GetView(
                             new sd::framework::ResourceId(
                                 framework::FrameworkHelper::msCenterPaneURL)));
