@@ -298,13 +298,6 @@ void SAL_CALL
     ScAccessibleContextBase::removeAccessibleEventListener(xListener);
 }
 
-    //=====  XServiceInfo  ====================================================
-
-OUString SAL_CALL ScAccessibleEditObject::getImplementationName()
-{
-    return u"ScAccessibleEditObject"_ustr;
-}
-
 bool ScAccessibleEditObject::IsDefunc(sal_Int64 nParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || !getAccessibleParent().is() ||

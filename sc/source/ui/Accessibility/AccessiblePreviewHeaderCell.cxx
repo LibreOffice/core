@@ -233,13 +233,6 @@ sal_Int64 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleStateSet()
     return nStateSet;
 }
 
-//=====  XServiceInfo  ====================================================
-
-OUString SAL_CALL ScAccessiblePreviewHeaderCell::getImplementationName()
-{
-    return u"ScAccessiblePreviewHeaderCell"_ustr;
-}
-
 AbsoluteScreenPixelRectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen()
 {
     tools::Rectangle aCellRect;

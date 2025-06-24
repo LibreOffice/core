@@ -124,13 +124,6 @@ public:
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-    ///=====  XServiceInfo  ===================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
     ///=====  IAccessibleViewForwarder  ========================================
 
     /** Returns the area of the underlying document that is visible in the

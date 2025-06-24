@@ -240,13 +240,6 @@ uno::Any SAL_CALL
     return uno::Any();
 }
 
-    //=====  XServiceInfo  ====================================================
-
-OUString SAL_CALL ScAccessibleCellBase::getImplementationName()
-{
-    return u"ScAccessibleCellBase"_ustr;
-}
-
 bool ScAccessibleCellBase::IsEditable(sal_Int64 nParentStates)
 {
     bool bEditable = nParentStates & AccessibleStateType::EDITABLE;

@@ -374,13 +374,6 @@ void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int64 /* nSele
 {
 }
 
-    //=====  XServiceInfo  ====================================================
-
-OUString SAL_CALL ScAccessibleTableBase::getImplementationName()
-{
-    return u"ScAccessibleTableBase"_ustr;
-}
-
 void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int32 nStartCol, sal_Int32 nEndRow, sal_Int32 nEndCol, sal_uInt16 nId)
 {
     AccessibleTableModelChange aModelChange;

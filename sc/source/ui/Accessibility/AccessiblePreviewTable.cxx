@@ -497,13 +497,6 @@ sal_Int64 SAL_CALL ScAccessiblePreviewTable::getAccessibleStateSet()
     return nStateSet;
 }
 
-//=====  XServiceInfo  ====================================================
-
-OUString SAL_CALL ScAccessiblePreviewTable::getImplementationName()
-{
-    return u"ScAccessiblePreviewTable"_ustr;
-}
-
 OUString ScAccessiblePreviewTable::createAccessibleDescription()
 {
     return STR_ACC_TABLE_DESCR;

@@ -64,10 +64,6 @@ public:
 
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 
-    //=====  XServiceInfo  ====================================================
-
-    virtual OUString SAL_CALL getImplementationName() override;
-
 protected:
     virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() override;
     virtual tools::Rectangle GetBoundingBox() override;

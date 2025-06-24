@@ -146,13 +146,6 @@ public:
         removeAccessibleEventListener(
             const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
 
-    ///=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
 private:
     std::unique_ptr<accessibility::AccessibleTextHelper> mpTextHelper;
     EditView*      mpEditView;

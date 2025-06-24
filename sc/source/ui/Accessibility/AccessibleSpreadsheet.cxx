@@ -1292,13 +1292,6 @@ void ScAccessibleSpreadsheet::AddMarkedRange(const ScRange& rRange)
     }
 }*/
 
-    //=====  XServiceInfo  ====================================================
-
-OUString SAL_CALL ScAccessibleSpreadsheet::getImplementationName()
-{
-    return u"ScAccessibleSpreadsheet"_ustr;
-}
-
 AbsoluteScreenPixelRectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aRect;

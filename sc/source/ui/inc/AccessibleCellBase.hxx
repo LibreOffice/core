@@ -78,13 +78,6 @@ public:
     virtual css::uno::Any SAL_CALL
         getMinimumIncrement(  ) override;
 
-    ///=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
 protected:
     ScAddress maCellAddress;
 

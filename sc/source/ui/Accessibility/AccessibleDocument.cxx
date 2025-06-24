@@ -1878,14 +1878,6 @@ void SAL_CALL
         mpViewShell->Unmark();
 }
 
-    //=====  XServiceInfo  ====================================================
-
-OUString SAL_CALL
-    ScAccessibleDocument::getImplementationName()
-{
-    return u"ScAccessibleDocument"_ustr;
-}
-
 ///=====  IAccessibleViewForwarder  ========================================
 
 tools::Rectangle ScAccessibleDocument::GetVisibleArea_Impl()

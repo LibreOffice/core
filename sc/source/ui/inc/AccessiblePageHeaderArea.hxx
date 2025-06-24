@@ -72,13 +72,6 @@ public:
     virtual sal_Int64 SAL_CALL
         getAccessibleStateSet() override;
 
-    ///=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
 protected:
     virtual OUString createAccessibleDescription() override;
     virtual OUString createAccessibleName() override;

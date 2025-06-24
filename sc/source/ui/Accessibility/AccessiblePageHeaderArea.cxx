@@ -151,14 +151,6 @@ sal_Int64 SAL_CALL ScAccessiblePageHeaderArea::getAccessibleStateSet()
     return nStateSet;
 }
 
-// XServiceInfo
-
-OUString SAL_CALL
-       ScAccessiblePageHeaderArea::getImplementationName()
-{
-    return u"ScAccessiblePageHeaderArea"_ustr;
-}
-
 OUString ScAccessiblePageHeaderArea::createAccessibleDescription()
 {
     OUString sDesc;

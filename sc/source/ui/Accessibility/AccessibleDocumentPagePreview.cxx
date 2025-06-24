@@ -1420,13 +1420,6 @@ sal_Int64 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleStateSet()
     return nStateSet;
 }
 
-    //=====  XServiceInfo  ====================================================
-
-OUString SAL_CALL ScAccessibleDocumentPagePreview::getImplementationName()
-{
-    return u"ScAccessibleDocumentPagePreview"_ustr;
-}
-
 OUString ScAccessibleDocumentPagePreview::createAccessibleDescription()
 {
     return STR_ACC_PREVIEWDOC_DESCR;

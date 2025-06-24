@@ -237,23 +237,6 @@ lang::Locale SAL_CALL
     throw IllegalAccessibleComponentStateException ();
 }
 
-// XServiceInfo
-OUString SAL_CALL ScAccessibleContextBase::getImplementationName()
-{
-    return u"ScAccessibleContextBase"_ustr;
-}
-
-sal_Bool SAL_CALL ScAccessibleContextBase::supportsService(const OUString& sServiceName)
-{
-    return cppu::supportsService(this, sServiceName);
-}
-
-uno::Sequence< OUString> SAL_CALL
-       ScAccessibleContextBase::getSupportedServiceNames()
-{
-    return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
-}
-
 OUString
     ScAccessibleContextBase::createAccessibleDescription()
 {

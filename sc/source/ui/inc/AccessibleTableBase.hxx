@@ -185,13 +185,6 @@ public:
     virtual void SAL_CALL
         deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
-    ///=====  XServiceInfo  ===================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
 protected:
     /// contains the range of the table, because it could be a subrange of the complete table
     ScRange maRange;
