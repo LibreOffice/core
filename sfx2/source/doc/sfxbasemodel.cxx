@@ -732,7 +732,7 @@ void SAL_CALL SfxBaseModel::setParent(const Reference< XInterface >& Parent)
 }
 
 
-//  XChild
+//  XComponent
 
 
 void SAL_CALL SfxBaseModel::dispose()
@@ -800,7 +800,7 @@ void SAL_CALL SfxBaseModel::dispose()
 }
 
 
-//  XChild
+//  XComponent
 
 
 void SAL_CALL SfxBaseModel::addEventListener( const Reference< lang::XEventListener >& aListener )
@@ -810,7 +810,7 @@ void SAL_CALL SfxBaseModel::addEventListener( const Reference< lang::XEventListe
 }
 
 
-//  XChild
+//  XComponent
 
 
 void SAL_CALL SfxBaseModel::removeEventListener( const Reference< lang::XEventListener >& aListener )
