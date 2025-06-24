@@ -31,12 +31,6 @@ public:
     SwAccessibleGraphic(std::shared_ptr<SwAccessibleMap> const& pInitMap,
                          const SwFlyFrame *pFlyFrame );
 
-    // XServiceInfo
-
-    /** Returns an identifier for the implementation of this object. */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 };

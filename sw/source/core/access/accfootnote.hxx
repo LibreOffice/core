@@ -41,12 +41,6 @@ public:
     virtual OUString SAL_CALL
         getAccessibleDescription() override;
 
-    // XServiceInfo
-
-    /** Returns an identifier for the implementation of this object. */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
     static bool IsEndnote( const SwFootnoteFrame *pFrame );
 };
 

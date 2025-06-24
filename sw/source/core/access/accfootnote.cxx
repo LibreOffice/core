@@ -81,14 +81,6 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
     return GetResource(pResId, &sArg);
 }
 
-OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
-{
-    if( AccessibleRole::END_NOTE == GetRole() )
-        return u"com.sun.star.comp.Writer.SwAccessibleEndnoteView"_ustr;
-    else
-        return u"com.sun.star.comp.Writer.SwAccessibleFootnoteView"_ustr;
-}
-
 bool SwAccessibleFootnote::IsEndnote( const SwFootnoteFrame *pFootnoteFrame )
 {
     const SwTextFootnote *pTextFootnote = pFootnoteFrame ->GetAttr();

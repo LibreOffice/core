@@ -21,9 +21,6 @@
 #include <strings.hrc>
 #include "accpreview.hxx"
 
-constexpr OUStringLiteral sImplementationName
-    = u"com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
-
 using ::com::sun::star::uno::Sequence;
 
 SwAccessiblePreview::SwAccessiblePreview(std::shared_ptr<SwAccessibleMap> const& pMap)
@@ -34,11 +31,6 @@ SwAccessiblePreview::SwAccessiblePreview(std::shared_ptr<SwAccessibleMap> const&
 
 SwAccessiblePreview::~SwAccessiblePreview()
 {
-}
-
-OUString SwAccessiblePreview::getImplementationName( )
-{
-    return sImplementationName;
 }
 
 OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription()

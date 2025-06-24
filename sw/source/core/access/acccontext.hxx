@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext3.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/resmgr.hxx>
 
@@ -45,9 +44,7 @@ class SwAccessibleContext :
                 css::accessibility::XAccessibleContext,
                 css::accessibility::XAccessibleContext3,
                 css::accessibility::XAccessibleComponent,
-                css::accessibility::XAccessibleEventBroadcaster,
-                css::lang::XServiceInfo
-                >,
+                css::accessibility::XAccessibleEventBroadcaster>,
     public SwAccessibleFrame
 {
     // The implements for the XAccessibleSelection interface has been
@@ -274,16 +271,6 @@ public:
 
     virtual sal_Int32 SAL_CALL getForeground() override;
     virtual sal_Int32 SAL_CALL getBackground() override;
-
-    // XServiceInfo
-
-    // getImplementationName() is abstract
-
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-    /** Return whether the specified service is supported by this class. */
-    virtual sal_Bool SAL_CALL
-        supportsService (const OUString& sServiceName) override;
 
     // thread safe C++ interface
 

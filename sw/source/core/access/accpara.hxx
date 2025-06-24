@@ -258,12 +258,6 @@ public:
     virtual sal_Int32 SAL_CALL getForeground() override;
     virtual sal_Int32 SAL_CALL getBackground() override;
 
-    // XServiceInfo
-
-    // Returns an identifier for the implementation of this object.
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
     // XAccessibleText
     virtual sal_Int32 SAL_CALL getCaretPosition() override;
     virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;

@@ -974,16 +974,6 @@ sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
     return sal_Int32(COL_WHITE);
 }
 
-uno::Sequence<OUString> SAL_CALL SwAccessibleContext::getSupportedServiceNames()
-{
-    return {};
-}
-
-sal_Bool SAL_CALL SwAccessibleContext::supportsService (const OUString& ServiceName)
-{
-    return cppu::supportsService(this, ServiceName);
-}
-
 void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
                                 ::accessibility::AccessibleShape *pAccImpl )
 {

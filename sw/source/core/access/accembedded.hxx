@@ -47,12 +47,6 @@ public:
         release()
         noexcept override;
 
-    // XServiceInfo
-
-    // Returns an identifier for the implementation of this object.
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
     // XAccessibleExtendedAttributes
     virtual OUString SAL_CALL getExtendedAttributes() override;
 };

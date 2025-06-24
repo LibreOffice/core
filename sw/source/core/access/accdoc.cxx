@@ -358,11 +358,6 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEve
     }
 }
 
-OUString SAL_CALL SwAccessibleDocument::getImplementationName()
-{
-    return u"com.sun.star.comp.Writer.SwAccessibleDocumentView"_ustr;
-}
-
 // XAccessibleSelection
 
 void SwAccessibleDocument::selectAccessibleChild(

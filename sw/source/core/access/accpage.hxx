@@ -58,10 +58,6 @@ public:
 
     virtual OUString SAL_CALL getAccessibleDescription() override;
 
-    // XServiceInfo
-
-    virtual OUString SAL_CALL getImplementationName() override;
-
     virtual bool HasCursor() override;   // required by map to remember that object
 };
 

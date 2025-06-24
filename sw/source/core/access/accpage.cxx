@@ -31,8 +31,6 @@ using namespace ::com::sun::star::accessibility;
 
 using uno::Sequence;
 
-constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessiblePageView";
-
 bool SwAccessiblePage::IsSelected()
 {
     return GetMap()->IsPageSelected( static_cast < const SwPageFrame * >( GetFrame() ) );
@@ -125,11 +123,6 @@ bool SwAccessiblePage::HasCursor()
 {
     std::scoped_lock aGuard( m_Mutex );
     return m_bIsSelected;
-}
-
-OUString SwAccessiblePage::getImplementationName( )
-{
-    return sImplementationName;
 }
 
 OUString SwAccessiblePage::getAccessibleDescription( )

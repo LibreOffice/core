@@ -65,12 +65,6 @@ public:
     virtual OUString SAL_CALL
         getAccessibleDescription() override;
 
-    // XServiceInfo
-
-    // Returns an identifier for the implementation of this object.
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
     virtual void InvalidatePosOrSize( const SwRect& rFrame ) override;

@@ -66,11 +66,6 @@ void SAL_CALL
     SwAccessibleNoTextFrame::release ();
 }
 
-OUString SAL_CALL SwAccessibleEmbeddedObject::getImplementationName()
-{
-    return u"com.sun.star.comp.Writer.SwAccessibleEmbeddedObject"_ustr;
-}
-
 // XAccessibleExtendedAttributes
 OUString SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
 {

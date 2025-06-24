@@ -1059,11 +1059,6 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
     return nRet;
 }
 
-OUString SAL_CALL SwAccessibleTable::getImplementationName()
-{
-    return u"com.sun.star.comp.Writer.SwAccessibleTableView"_ustr;
-}
-
 void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
 {
     SolarMutexGuard aGuard;
@@ -1599,15 +1594,6 @@ uno::Reference< XAccessibleTable >
         SAL_CALL SwAccessibleTableColHeaders::getAccessibleColumnHeaders()
 {
     return uno::Reference< XAccessibleTable >();
-}
-
-// XServiceInfo
-
-OUString SAL_CALL SwAccessibleTableColHeaders::getImplementationName()
-{
-    static constexpr OUStringLiteral sImplName
-        = u"com.sun.star.comp.Writer.SwAccessibleTableColumnHeadersView";
-    return sImplName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -142,12 +142,6 @@ public:
     virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column ) override ;
     virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row ) override;
     virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column ) override;
-    // XServiceInfo
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
 
     // C++ interface
 
@@ -228,14 +222,6 @@ public:
     virtual css::uno::Reference<
                 css::accessibility::XAccessibleTable >
         SAL_CALL getAccessibleColumnHeaders(  ) override;
-
-    // XServiceInfo
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

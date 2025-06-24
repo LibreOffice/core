@@ -41,11 +41,6 @@ public:
     /// Return this object's description.
     virtual OUString SAL_CALL getAccessibleDescription() override;
 
-    // XServiceInfo
-
-    /** Returns an identifier for the implementation of this object. */
-    virtual OUString SAL_CALL getImplementationName() override;
-
     // XAccessibleComponent
     sal_Int32 SAL_CALL getBackground() override;
 };

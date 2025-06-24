@@ -28,11 +28,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-constexpr OUStringLiteral sImplementationNameHeader
-    = u"com.sun.star.comp.Writer.SwAccessibleHeaderView";
-constexpr OUStringLiteral sImplementationNameFooter
-    = u"com.sun.star.comp.Writer.SwAccessibleFooterView";
-
 SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwHeaderFrame* pHdFrame    ) :
@@ -68,14 +63,6 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription()
     OUString sArg( GetFormattedPageNumber() );
 
     return GetResource(pResId, &sArg);
-}
-
-OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
-{
-    if( AccessibleRole::HEADER == GetRole() )
-        return sImplementationNameHeader;
-    else
-        return sImplementationNameFooter;
 }
 
 sal_Int32 SAL_CALL SwAccessibleHeaderFooter::getBackground()

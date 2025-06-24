@@ -98,12 +98,6 @@ public:
 
     DECL_LINK( WindowChildEventListener, VclWindowEvent&, void );
 
-    // XServiceInfo
-
-    // Returns an identifier for the implementation of this object.
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
     // XAccessibleSelection
 
     virtual void SAL_CALL selectAccessibleChild(

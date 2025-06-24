@@ -228,11 +228,6 @@ OUString SAL_CALL SwAccessibleCell::getAccessibleDescription()
     return GetName();
 }
 
-OUString SAL_CALL SwAccessibleCell::getImplementationName()
-{
-    return u"com.sun.star.comp.Writer.SwAccessibleCellView"_ustr;
-}
-
 void SwAccessibleCell::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     const SwFrame *pParent = GetParent( SwAccessibleChild(GetFrame()), IsInPagePreview() );

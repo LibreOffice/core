@@ -37,13 +37,6 @@ class SwAccessiblePreview : public  SwAccessibleDocumentBase
 public:
     SwAccessiblePreview(std::shared_ptr<SwAccessibleMap> const& pMap);
 
-    // XServiceInfo
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
     OUString SAL_CALL getAccessibleDescription() override;
     OUString SAL_CALL getAccessibleName() override;
     virtual void InvalidateFocus_() override;
