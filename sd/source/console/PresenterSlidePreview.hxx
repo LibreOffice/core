@@ -64,11 +64,11 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // XResourceId
+    // AbstractResource
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId() override;
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() override;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly() override;
+    virtual bool isAnchorOnly() override;
 
     // XWindowListener
 

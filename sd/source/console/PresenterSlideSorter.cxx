@@ -543,9 +543,9 @@ void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEve
 
 void SAL_CALL PresenterSlideSorter::mouseDragged (const css::awt::MouseEvent&) {}
 
-//----- XResourceId -----------------------------------------------------------
+//----- AbstractResource -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterSlideSorter::getResourceId()
+Reference<XResourceId> PresenterSlideSorter::getResourceId()
 {
     {
         std::unique_lock l(m_aMutex);
@@ -554,7 +554,7 @@ Reference<XResourceId> SAL_CALL PresenterSlideSorter::getResourceId()
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterSlideSorter::isAnchorOnly()
+bool PresenterSlideSorter::isAnchorOnly()
 {
     return false;
 }

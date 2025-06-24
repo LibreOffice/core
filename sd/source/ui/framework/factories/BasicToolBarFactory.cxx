@@ -102,7 +102,7 @@ void SAL_CALL BasicToolBarFactory::disposing (
 
 //===== AbstractPaneFactory ==========================================================
 
-Reference<XResource> BasicToolBarFactory::createResource (
+rtl::Reference<AbstractResource> BasicToolBarFactory::createResource (
     const Reference<XResourceId>& rxToolBarId)
 {
     ThrowIfDisposed();
@@ -110,18 +110,17 @@ Reference<XResource> BasicToolBarFactory::createResource (
     if (rxToolBarId->getResourceURL() != FrameworkHelper::msViewTabBarURL)
         throw lang::IllegalArgumentException();
 
-    Reference<XResource> xToolBar = new ViewTabBar(rxToolBarId, mxController);
+    rtl::Reference<AbstractResource> xToolBar = new ViewTabBar(rxToolBarId, mxController);
     return xToolBar;
 }
 
 void BasicToolBarFactory::releaseResource (
-    const Reference<XResource>& rxToolBar)
+    const rtl::Reference<AbstractResource>& rxToolBar)
 {
     ThrowIfDisposed();
 
-    Reference<XComponent> xComponent (rxToolBar, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
+    if (rxToolBar.is())
+        rxToolBar->dispose();
 }
 
 void BasicToolBarFactory::ThrowIfDisposed() const

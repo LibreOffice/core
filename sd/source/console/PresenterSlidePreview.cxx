@@ -106,14 +106,14 @@ void PresenterSlidePreview::disposing(std::unique_lock<std::mutex>&)
         mxPreviewRenderer->dispose();
 }
 
-//----- XResourceId -----------------------------------------------------------
+//----- AbstractResource -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterSlidePreview::getResourceId()
+Reference<XResourceId> PresenterSlidePreview::getResourceId()
 {
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterSlidePreview::isAnchorOnly()
+bool PresenterSlidePreview::isAnchorOnly()
 {
     return false;
 }

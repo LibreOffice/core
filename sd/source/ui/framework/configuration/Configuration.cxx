@@ -286,6 +286,8 @@ AbstractPane::~AbstractPane() {}
 
 AbstractView::~AbstractView() {}
 
+AbstractResource::~AbstractResource() {}
+
 } // end of namespace sd::framework
 
 

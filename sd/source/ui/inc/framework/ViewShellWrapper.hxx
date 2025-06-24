@@ -23,6 +23,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <comphelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 
@@ -71,12 +72,12 @@ public:
     */
     const ::std::shared_ptr<ViewShell>& GetViewShell() const { return mpViewShell;}
 
-    // XResource
+    // AbstractResource
 
     virtual css::uno::Reference<css::drawing::framework::XResourceId>
-        SAL_CALL getResourceId() override;
+        getResourceId() override;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly() override;
+    virtual bool isAnchorOnly() override;
 
     // XSelectionSupplier
 
@@ -95,8 +96,7 @@ public:
             Returns `TRUE` when the relocation was successful.
     */
     bool relocateToAnchor (
-        const css::uno::Reference<
-            css::drawing::framework::XResource>& xResource);
+        const rtl::Reference<sd::framework::AbstractResource>& xResource);
 
     // XWindowListener
 

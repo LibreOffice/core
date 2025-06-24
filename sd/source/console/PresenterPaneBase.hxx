@@ -69,11 +69,11 @@ public:
                     const rtl::Reference<PresenterPaneBorderPainter>& rxBorderPainter,
                     bool bIsWindowVisibleOnCreation);
 
-    // XResourceId
+    // AbstractResourceI
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId() override;
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() override;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly() override;
+    virtual bool isAnchorOnly() override;
 
     // XWindowListener
 

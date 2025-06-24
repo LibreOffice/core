@@ -619,12 +619,12 @@ void SAL_CALL PresenterSlideShowView::windowHidden (const lang::EventObject&) {}
 
 //----- XView -----------------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterSlideShowView::getResourceId()
+Reference<XResourceId> PresenterSlideShowView::getResourceId()
 {
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterSlideShowView::isAnchorOnly()
+bool PresenterSlideShowView::isAnchorOnly()
 {
     return false;
 }

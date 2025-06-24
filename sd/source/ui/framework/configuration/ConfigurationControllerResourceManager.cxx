@@ -123,7 +123,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
     try
     {
         // 2. Create the resource.
-        Reference<XResource> xResource;
+        rtl::Reference<AbstractResource> xResource;
         try
         {
             xResource = xFactory->createResource(rxResourceId);
@@ -241,7 +241,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
 }
 
 void ConfigurationControllerResourceManager::AddResource (
-    const Reference<XResource>& rxResource,
+    const rtl::Reference<AbstractResource>& rxResource,
     const rtl::Reference<ResourceFactory>& rxFactory)
 {
     if ( ! rxResource.is())

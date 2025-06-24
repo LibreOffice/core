@@ -17,19 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module com { module sun { module star { module drawing { module framework {
+#pragma once
 
-interface XResourceId;
+#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#include <comphelper/compbase.hxx>
+#include <sddllapi.h>
 
+namespace sd::framework
+{
 /** Base interface that provides functionality shared by all resource types
     of the drawing framework.
 */
-interface XResource
+class SD_DLLPUBLIC AbstractResource : public comphelper::WeakComponentImplHelper<>
 {
+public:
+    virtual ~AbstractResource() override;
+
     /** Return an XResourceId object for the called resource.
         The returned id unambiguously identifies the resource.
     */
-    XResourceId getResourceId ();
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() = 0;
 
     /** Some resources must not be leafs, i.e. have to be anchor to at least
         one other resource.  Most panes are examples for this.  Views on the
@@ -40,9 +47,9 @@ interface XResource
         deactivated when it has no children, either because none is
         requested or because none can be created.
     */
-    boolean isAnchorOnly ();
+    virtual bool isAnchorOnly() = 0;
 };
 
-}; }; }; }; }; // ::com::sun::star::drawing::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

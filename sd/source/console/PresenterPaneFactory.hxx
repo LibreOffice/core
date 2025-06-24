@@ -69,14 +69,14 @@ public:
 
     // ResourceFactory
 
-    virtual css::uno::Reference<css::drawing::framework::XResource>
+    virtual rtl::Reference<sd::framework::AbstractResource>
         createResource (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxPaneId) override;
 
     virtual void
         releaseResource (
-            const css::uno::Reference<css::drawing::framework::XResource>&
+            const rtl::Reference<sd::framework::AbstractResource>&
                 rxPane) override;
 
 private:
@@ -84,7 +84,7 @@ private:
     unotools::WeakReference<sd::framework::ConfigurationController>
         mxConfigurationControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    typedef ::std::map<OUString, css::uno::Reference<css::drawing::framework::XResource> >
+    typedef ::std::map<OUString, rtl::Reference<sd::framework::AbstractResource> >
         ResourceContainer;
     std::unique_ptr<ResourceContainer> mpResourceCache;
 
@@ -94,9 +94,9 @@ private:
 
     void Register (const rtl::Reference<::sd::DrawController>& rxController);
 
-    css::uno::Reference<css::drawing::framework::XResource> CreatePane (
+    rtl::Reference<sd::framework::AbstractResource> CreatePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
-    css::uno::Reference<css::drawing::framework::XResource> CreatePane (
+    rtl::Reference<sd::framework::AbstractResource> CreatePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         const rtl::Reference<sd::framework::AbstractPane>& rxParentPane,
         const bool bIsSpritePane);

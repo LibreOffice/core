@@ -582,7 +582,7 @@ Any SAL_CALL DrawController::getSlideSorterSelection()
         {
             // got it, grab current selection from there
             uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
-                mxConfigurationController->getResource(rResId), uno::UNO_QUERY);
+                cppu::getXWeak(mxConfigurationController->getResource(rResId).get()), uno::UNO_QUERY);
             if (!xSelectionSupplier)
                 continue;
 

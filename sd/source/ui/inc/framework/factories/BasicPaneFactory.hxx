@@ -58,13 +58,13 @@ public:
 
     // ResourceFactory
 
-    virtual css::uno::Reference<css::drawing::framework::XResource>
+    virtual rtl::Reference<sd::framework::AbstractResource>
         createResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId) override;
 
     virtual void
         releaseResource (
-            const css::uno::Reference<css::drawing::framework::XResource>& rxPane) override;
+            const rtl::Reference<sd::framework::AbstractResource>& rxPane) override;
 
 private:
     class Listener : public sd::framework::ConfigurationChangeListener
@@ -99,14 +99,14 @@ private:
             There is only one frame window so this id is just checked to
             have the correct value.
     */
-    css::uno::Reference<css::drawing::framework::XResource>
+    rtl::Reference<sd::framework::AbstractResource>
         CreateFrameWindowPane (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
 
     /** Create a new pane that represents the center pane in full screen
         mode.
     */
-    css::uno::Reference<css::drawing::framework::XResource>
+    rtl::Reference<sd::framework::AbstractResource>
         CreateFullScreenPane (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
 
@@ -114,7 +114,7 @@ private:
         @param rPaneId
             The ResourceURL member defines which side pane to create.
     */
-    css::uno::Reference<css::drawing::framework::XResource>
+    rtl::Reference<sd::framework::AbstractResource>
         CreateChildWindowPane (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxPaneId,

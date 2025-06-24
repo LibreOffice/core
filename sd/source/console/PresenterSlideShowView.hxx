@@ -153,10 +153,10 @@ public:
 
     // XView
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL
+    virtual css::uno::Reference<css::drawing::framework::XResourceId>
         getResourceId() override;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly() override;
+    virtual bool isAnchorOnly() override;
 
     // XDrawView
 

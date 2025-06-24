@@ -1012,12 +1012,12 @@ void SAL_CALL PresenterToolBarView::disposing (const lang::EventObject& rEventOb
 
 //----- XResourceId -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterToolBarView::getResourceId()
+Reference<XResourceId> PresenterToolBarView::getResourceId()
 {
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterToolBarView::isAnchorOnly()
+bool PresenterToolBarView::isAnchorOnly()
 {
     return false;
 }

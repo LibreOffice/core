@@ -432,9 +432,9 @@ void PresenterHelpView::CheckFontSize()
     }
 }
 
-//----- XResourceId -----------------------------------------------------------
+//----- AbstractResource -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterHelpView::getResourceId()
+Reference<XResourceId> PresenterHelpView::getResourceId()
 {
     {
         std::unique_lock l(m_aMutex);
@@ -443,7 +443,7 @@ Reference<XResourceId> SAL_CALL PresenterHelpView::getResourceId()
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterHelpView::isAnchorOnly()
+bool PresenterHelpView::isAnchorOnly()
 {
     return false;
 }

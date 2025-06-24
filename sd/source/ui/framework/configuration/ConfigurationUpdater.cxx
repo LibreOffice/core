@@ -295,7 +295,7 @@ void ConfigurationUpdater::CheckPureAnchors (
     while (nIndex >= 0)
     {
         const Reference<XResourceId>& xResourceId (aResources[nIndex]);
-        const Reference<XResource> xResource (
+        const rtl::Reference<AbstractResource> xResource (
             mpResourceManager->GetResource(xResourceId).mxResource);
         bool bDeactiveCurrentResource (false);
 

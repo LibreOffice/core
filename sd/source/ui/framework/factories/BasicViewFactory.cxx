@@ -61,7 +61,7 @@ public:
     std::shared_ptr<sd::ViewShell> mpViewShell;
     Reference<XResourceId> mxViewId;
     static bool CompareView (const std::shared_ptr<ViewDescriptor>& rpDescriptor,
-        const Reference<XResource>& rxView)
+        const rtl::Reference<AbstractResource>& rxView)
     { return rpDescriptor->mxView.get() == rxView.get(); }
 };
 
@@ -132,7 +132,7 @@ void BasicViewFactory::disposing(std::unique_lock<std::mutex>&)
     maViewShellContainer.clear();
 }
 
-Reference<XResource> BasicViewFactory::createResource (
+rtl::Reference<AbstractResource> BasicViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
 {
     const bool bIsCenterPane (
@@ -179,7 +179,7 @@ Reference<XResource> BasicViewFactory::createResource (
     return xView;
 }
 
-void BasicViewFactory::releaseResource (const Reference<XResource>& rxView)
+void BasicViewFactory::releaseResource (const rtl::Reference<AbstractResource>& rxView)
 {
     if ( ! rxView.is())
         throw lang::IllegalArgumentException();

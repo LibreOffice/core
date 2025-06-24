@@ -99,9 +99,8 @@ void PresenterPaneFactory::disposing(std::unique_lock<std::mutex>&)
     {
         for (const auto& rxPane : *mpResourceCache)
         {
-            Reference<lang::XComponent> xPaneComponent (rxPane.second, UNO_QUERY);
-            if (xPaneComponent.is())
-                xPaneComponent->dispose();
+            if (rxPane.second.is())
+                rxPane.second->dispose();
         }
         mpResourceCache.reset();
     }
@@ -109,7 +108,7 @@ void PresenterPaneFactory::disposing(std::unique_lock<std::mutex>&)
 
 //----- AbstractPaneFactory ----------------------------------------------------------
 
-Reference<XResource> PresenterPaneFactory::createResource (
+rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
 {
     {
@@ -148,11 +147,11 @@ Reference<XResource> PresenterPaneFactory::createResource (
     }
 
     // No.  Create a new one.
-    Reference<XResource> xResource = CreatePane(rxPaneId);
+    rtl::Reference<sd::framework::AbstractResource> xResource = CreatePane(rxPaneId);
     return xResource;
 }
 
-void PresenterPaneFactory::releaseResource (const Reference<XResource>& rxResource)
+void PresenterPaneFactory::releaseResource (const rtl::Reference<sd::framework::AbstractResource>& rxResource)
 {
     {
         std::unique_lock l(m_aMutex);
@@ -183,14 +182,13 @@ void PresenterPaneFactory::releaseResource (const Reference<XResource>& rxResour
     else
     {
         // Dispose the pane.
-        Reference<lang::XComponent> xPaneComponent (rxResource, UNO_QUERY);
-        if (xPaneComponent.is())
-            xPaneComponent->dispose();
+        if (rxResource.is())
+            rxResource->dispose();
     }
 }
 
 
-Reference<XResource> PresenterPaneFactory::CreatePane (
+rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::CreatePane (
     const Reference<XResourceId>& rxPaneId)
 {
     if ( ! rxPaneId.is())
@@ -223,7 +221,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     return nullptr;
 }
 
-Reference<XResource> PresenterPaneFactory::CreatePane (
+rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::CreatePane (
     const Reference<XResourceId>& rxPaneId,
     const rtl::Reference<sd::framework::AbstractPane>& rxParentPane,
     const bool bIsSpritePane)

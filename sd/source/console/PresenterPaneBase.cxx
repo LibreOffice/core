@@ -138,9 +138,9 @@ void PresenterPaneBase::initialize(
     ToTop();
 }
 
-//----- XResourceId -----------------------------------------------------------
+//----- AbstractResource -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterPaneBase::getResourceId()
+Reference<XResourceId> PresenterPaneBase::getResourceId()
 {
     {
         std::unique_lock l(m_aMutex);
@@ -149,7 +149,7 @@ Reference<XResourceId> SAL_CALL PresenterPaneBase::getResourceId()
     return mxPaneId;
 }
 
-sal_Bool SAL_CALL PresenterPaneBase::isAnchorOnly()
+bool PresenterPaneBase::isAnchorOnly()
 {
     return true;
 }

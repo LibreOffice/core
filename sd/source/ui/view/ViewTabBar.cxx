@@ -62,7 +62,8 @@ bool IsEqual (const TabBarButton& rButton1, const TabBarButton& rButton2)
 ViewTabBar::ViewTabBar (
     const Reference<XResourceId>& rxViewTabBarId,
     const rtl::Reference<::sd::DrawController>& rxController)
-    : mpTabControl(VclPtr<TabBarControl>::Create(GetAnchorWindow(rxViewTabBarId,rxController), this)),
+    : mxListener(new Listener(*this)),
+      mpTabControl(VclPtr<TabBarControl>::Create(GetAnchorWindow(rxViewTabBarId,rxController), this)),
       mxController(rxController),
       mxViewTabBarId(rxViewTabBarId),
       mpViewShellBase(nullptr),
@@ -83,7 +84,7 @@ ViewTabBar::ViewTabBar (
         if (mxConfigurationController.is())
         {
             mxConfigurationController->addConfigurationChangeListener(
-                this,
+                mxListener,
                     FrameworkHelper::msResourceActivationEvent,
                 Any());
         }
@@ -119,7 +120,7 @@ void ViewTabBar::disposing(std::unique_lock<std::mutex>&)
         // Unregister listener from ConfigurationController.
         try
         {
-            mxConfigurationController->removeConfigurationChangeListener(this);
+            mxConfigurationController->removeConfigurationChangeListener(mxListener);
         }
         catch (const lang::DisposedException&)
         {
@@ -189,26 +190,26 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
 
 //----- ConfigurationChangeListener ------------------------------------------
 
-void ViewTabBar::notifyConfigurationChange (
+void ViewTabBar::Listener::notifyConfigurationChange (
     const sd::framework::ConfigurationChangeEvent& rEvent)
 {
     if (rEvent.Type == FrameworkHelper::msResourceActivationEvent
         && rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix)
-        && rEvent.ResourceId->isBoundTo(mxViewTabBarId->getAnchor(), AnchorBindingMode_DIRECT))
+        && rEvent.ResourceId->isBoundTo(mrParent.mxViewTabBarId->getAnchor(), AnchorBindingMode_DIRECT))
     {
-        UpdateActiveButton();
+        mrParent.UpdateActiveButton();
     }
 }
 
 //----- XEventListener --------------------------------------------------------
 
-void SAL_CALL ViewTabBar::disposing(
+void SAL_CALL ViewTabBar::Listener::disposing(
     const lang::EventObject& rEvent)
 {
-    if (rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
+    if (rEvent.Source == cppu::getXWeak(mrParent.mxConfigurationController.get()))
     {
-        mxConfigurationController = nullptr;
-        mxController = nullptr;
+        mrParent.mxConfigurationController = nullptr;
+        mrParent.mxController = nullptr;
     }
 }
 
@@ -238,14 +239,14 @@ bool ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
     return HasTabBarButton(rButton);
 }
 
-//----- XResource -------------------------------------------------------------
+//----- AbstractResource -------------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL ViewTabBar::getResourceId()
+Reference<XResourceId> ViewTabBar::getResourceId()
 {
     return mxViewTabBarId;
 }
 
-sal_Bool SAL_CALL ViewTabBar::isAnchorOnly()
+bool ViewTabBar::isAnchorOnly()
 {
     return false;
 }

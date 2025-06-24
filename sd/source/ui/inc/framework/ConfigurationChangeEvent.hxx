@@ -25,6 +25,7 @@
 namespace sd::framework
 {
 class Configuration;
+class AbstractResource;
 
 /** Objects of this class are used for notifying changes of the
     configuration.
@@ -56,7 +57,7 @@ struct ConfigurationChangeEvent final : public ::css::lang::EventObject
     /** The resource object that corresponds to the ResourceId.  May
         be an empty reference.
     */
-    ::css::uno::Reference<::css::uno::XInterface> ResourceObject;
+    rtl::Reference<sd::framework::AbstractResource> ResourceObject;
     /** Each listener is called with exactly the #UserData
         that was given when the listener was registered.
     */

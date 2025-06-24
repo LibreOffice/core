@@ -192,7 +192,7 @@ const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBa
 //----- helper ----------------------------------------------------------------
 namespace
 {
-    ::std::shared_ptr< ViewShell > lcl_getViewShell( const Reference< XResource >& i_rViewShellWrapper )
+    ::std::shared_ptr< ViewShell > lcl_getViewShell( const rtl::Reference< AbstractResource >& i_rViewShellWrapper )
     {
         ::std::shared_ptr< ViewShell > pViewShell;
         try
@@ -206,7 +206,7 @@ namespace
         }
         return pViewShell;
     }
-    Reference< XResource > lcl_getFirstViewInPane( const rtl::Reference< ConfigurationController >& i_rConfigController,
+    rtl::Reference< AbstractResource > lcl_getFirstViewInPane( const rtl::Reference< ConfigurationController >& i_rConfigController,
         const Reference< XResourceId >& i_rPaneId )
     {
         try

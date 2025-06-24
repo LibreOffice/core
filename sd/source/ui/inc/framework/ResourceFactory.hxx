@@ -19,8 +19,9 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <framework/AbstractResource.hxx>
 #include <comphelper/compbase.hxx>
+#include <rtl/ref.hxx>
 #include <sddllapi.h>
 
 namespace sd::framework
@@ -53,7 +54,7 @@ public:
         @throws InvalidArgumentException
             when the given URL is not supported by the factory.
     */
-    virtual ::css::uno::Reference<::css::drawing::framework::XResource>
+    virtual rtl::Reference<sd::framework::AbstractResource>
     createResource(const ::css::uno::Reference<::css::drawing::framework::XResourceId>& xResourceId)
         = 0;
 
@@ -65,8 +66,7 @@ public:
         @throws InvalidArgumentException
             when the given pane was not created by the same factory.
     */
-    virtual void
-    releaseResource(const ::css::uno::Reference<::css::drawing::framework::XResource>& xResource)
+    virtual void releaseResource(const rtl::Reference<sd::framework::AbstractResource>& xResource)
         = 0;
 
 protected:

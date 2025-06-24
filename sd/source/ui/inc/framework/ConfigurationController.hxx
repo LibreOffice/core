@@ -22,7 +22,7 @@
 #include <sddllapi.h>
 #include <framework/ConfigurationChangeListener.hxx>
 #include <framework/ConfigurationChangeRequest.hxx>
-#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <framework/AbstractResource.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <cppuhelper/basemutex.hxx>
@@ -97,7 +97,7 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>&
             rxResourceId);
 
-    css::uno::Reference<css::drawing::framework::XResource>
+    rtl::Reference<sd::framework::AbstractResource>
         getResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
 

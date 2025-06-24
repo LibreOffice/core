@@ -20,7 +20,7 @@
 #include "ConfigurationControllerBroadcaster.hxx"
 #include <framework/ConfigurationChangeListener.hxx>
 #include <framework/ConfigurationChangeEvent.hxx>
-#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <framework/AbstractResource.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <framework/ConfigurationController.hxx>
@@ -129,7 +129,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (const ConfigurationCha
 void ConfigurationControllerBroadcaster::NotifyListeners (
     const OUString& rsEventType,
     const Reference<XResourceId>& rxResourceId,
-    const Reference<XResource>& rxResourceObject)
+    const rtl::Reference<AbstractResource>& rxResourceObject)
 {
     ConfigurationChangeEvent aEvent;
     aEvent.Type = rsEventType;

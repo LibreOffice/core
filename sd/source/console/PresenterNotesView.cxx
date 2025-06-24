@@ -284,14 +284,14 @@ void SAL_CALL PresenterNotesView::windowPaint (const awt::PaintEvent& rEvent)
     Paint(rEvent.UpdateRect);
 }
 
-//----- XResourceId -----------------------------------------------------------
+//----- AbstractResource -----------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL PresenterNotesView::getResourceId()
+Reference<XResourceId> PresenterNotesView::getResourceId()
 {
     return mxViewId;
 }
 
-sal_Bool SAL_CALL PresenterNotesView::isAnchorOnly()
+bool PresenterNotesView::isAnchorOnly()
 {
     return false;
 }

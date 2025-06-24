@@ -88,14 +88,14 @@ uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType )
         return ViewShellWrapperInterfaceBase::queryInterface( rType );
 }
 
-//----- XResource -------------------------------------------------------------
+//----- AbstractResource -------------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL ViewShellWrapper::getResourceId()
+Reference<XResourceId> ViewShellWrapper::getResourceId()
 {
     return mxViewId;
 }
 
-sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly()
+bool ViewShellWrapper::isAnchorOnly()
 {
     return false;
 }
@@ -172,7 +172,7 @@ void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Refere
 //----- XRelocatableResource --------------------------------------------------
 
 bool ViewShellWrapper::relocateToAnchor (
-    const Reference<XResource>& xResource)
+    const rtl::Reference<AbstractResource>& xResource)
 {
     bool bResult (false);
 

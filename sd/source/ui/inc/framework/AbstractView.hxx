@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <framework/AbstractResource.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <comphelper/compbase.hxx>
@@ -27,9 +27,6 @@
 
 namespace sd::framework
 {
-typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XResource>
-    AbstractViewInterfaceBase;
-
 /** A view in the drawing framework is any object that paints into a pane.
     <p>Typical examples are the Impress views that show a graphical
     representation of a document.  But the task pane, which is primarily a
@@ -39,7 +36,7 @@ typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XResource>
     reference them.</p>
     <p>The URL prefix of views is <code>private:resource/view</code></p>
 */
-class SD_DLLPUBLIC AbstractView : public AbstractViewInterfaceBase
+class SD_DLLPUBLIC AbstractView : public AbstractResource
 {
 public:
     virtual ~AbstractView() override;

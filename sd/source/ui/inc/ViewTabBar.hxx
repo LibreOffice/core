@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResource.hpp>
+#include "framework/AbstractResource.hxx"
 #include "framework/ConfigurationChangeListener.hxx"
 #include <comphelper/compbase.hxx>
 #include <vcl/InterimItemWindow.hxx>
@@ -82,10 +82,6 @@ struct TabBarButton
     css::uno::Reference<css::drawing::framework::XResourceId> ResourceId;
 };
 
-typedef cppu::ImplInheritanceHelper <
-    sd::framework::ConfigurationChangeListener,
-    css::drawing::framework::XResource
-    > ViewTabBarInterfaceBase;
 
 /** Tab control for switching between views in the center pane.
 
@@ -107,7 +103,7 @@ typedef cppu::ImplInheritanceHelper <
     @see TabBarButton
 */
 class ViewTabBar final
-    : public ViewTabBarInterfaceBase
+    : public sd::framework::AbstractResource
 {
 public:
     ViewTabBar (
@@ -120,17 +116,6 @@ public:
     const VclPtr<TabBarControl>& GetTabControl() const { return mpTabControl; }
 
     bool ActivatePage(size_t nIndex);
-
-    //----- sd::framework::ConfigurationChangeListener ------------------
-
-    virtual void
-        notifyConfigurationChange (
-            const sd::framework::ConfigurationChangeEvent& rEvent) override;
-
-    //----- XEventListener ----------------------------------------------------
-
-    virtual void SAL_CALL disposing(
-        const css::lang::EventObject& rEvent) override;
 
     /** Add a tab bar button to the right of another one.
         @param aButton
@@ -182,12 +167,12 @@ public:
     */
     const std::vector<TabBarButton>& getTabBarButtons() const;
 
-    //----- XResource ---------------------------------------------------------
+    //----- AbstractResource ---------------------------------------------------------
 
     virtual css::uno::Reference<
-        css::drawing::framework::XResourceId> SAL_CALL getResourceId() override;
+        css::drawing::framework::XResourceId> getResourceId() override;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly() override;
+    virtual bool isAnchorOnly() override;
 
     /** The returned value is calculated as the difference between the
         total height of the control and the height of its first tab page.
@@ -213,6 +198,24 @@ public:
         const TabBarButton& rButton);
 
 private:
+    class Listener : public sd::framework::ConfigurationChangeListener
+    {
+    public:
+        Listener(ViewTabBar& rParent) : mrParent(rParent) {}
+
+        //----- sd::framework::ConfigurationChangeListener ------------------
+        virtual void
+            notifyConfigurationChange (
+                const sd::framework::ConfigurationChangeEvent& rEvent) override;
+
+        //----- XEventListener ----------------------------------------------------
+        using WeakComponentImplHelperBase::disposing;
+        virtual void SAL_CALL disposing(
+            const css::lang::EventObject& rEvent) override;
+    private:
+        ViewTabBar& mrParent;
+    };
+    rtl::Reference<Listener> mxListener;
     VclPtr<TabBarControl> mpTabControl;
     rtl::Reference<::sd::DrawController> mxController;
     rtl::Reference<::sd::framework::ConfigurationController> mxConfigurationController;

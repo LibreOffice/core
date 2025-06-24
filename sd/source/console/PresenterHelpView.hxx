@@ -74,11 +74,11 @@ public:
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent) override;
 
-    // XResourceId
+    // AbstractResource
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId() override;
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() override;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly() override;
+    virtual bool isAnchorOnly() override;
 
 private:
     class TextContainer;

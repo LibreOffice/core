@@ -32,9 +32,6 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/XSlideSorterSelectionSupplier.hpp>
-#include <com/sun/star/drawing/framework/AnchorBindingMode.hpp>
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
-#include <com/sun/star/drawing/framework/XResource.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>

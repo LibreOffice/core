@@ -42,7 +42,7 @@ public:
         children, if only to visualize that something (a view) is missing.
         Therefore this method always returns <FALSE/>.
     */
-    virtual sal_Bool SAL_CALL isAnchorOnly() override;
+    virtual bool isAnchorOnly() override;
 };
 
 } // end of namespace sd::framework

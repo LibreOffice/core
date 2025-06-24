@@ -91,13 +91,12 @@ public:
 
     //----- XResource ---------------------------------------------------------
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId>
-        SAL_CALL getResourceId() override;
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> getResourceId() override;
 
     /** For the typical pane it makes no sense to be displayed without a
         view.  Therefore this default implementation returns always <TRUE/>.
     */
-    virtual sal_Bool SAL_CALL isAnchorOnly() override;
+    virtual bool isAnchorOnly() override;
 
 protected:
     css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;

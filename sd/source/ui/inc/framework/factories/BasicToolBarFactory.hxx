@@ -49,14 +49,14 @@ public:
 
     // ToolBarFactory
 
-    virtual css::uno::Reference<css::drawing::framework::XResource>
+    virtual rtl::Reference<sd::framework::AbstractResource>
         createResource (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxToolBarId) override;
 
     virtual void
         releaseResource (
-            const css::uno::Reference<css::drawing::framework::XResource>&
+            const rtl::Reference<sd::framework::AbstractResource>&
                 rxToolBar) override;
 
     // lang::XEventListener

@@ -60,12 +60,12 @@ public:
 
     // XViewFactory
 
-    virtual css::uno::Reference<css::drawing::framework::XResource>
+    virtual rtl::Reference<sd::framework::AbstractResource>
         createResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) override;
 
     virtual void releaseResource (
-        const css::uno::Reference<css::drawing::framework::XResource>& xView) override;
+        const rtl::Reference<sd::framework::AbstractResource>& xView) override;
 
 private:
     rtl::Reference<ConfigurationController> mxConfigurationController;

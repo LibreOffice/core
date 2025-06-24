@@ -50,10 +50,10 @@ public:
 
     // XView
 
-    virtual Reference<XResourceId> SAL_CALL getResourceId() override
+    virtual Reference<XResourceId> getResourceId() override
     { return mxResourceId; };
 
-    virtual sal_Bool SAL_CALL isAnchorOnly() override
+    virtual bool isAnchorOnly() override
     { return false; }
 
 private:
@@ -79,7 +79,7 @@ PresentationFactory::~PresentationFactory()
 
 //----- XViewFactory ----------------------------------------------------------
 
-Reference<XResource> PresentationFactory::createResource (
+rtl::Reference<AbstractResource> PresentationFactory::createResource (
     const Reference<XResourceId>& rxViewId)
 {
     {
@@ -91,11 +91,11 @@ Reference<XResource> PresentationFactory::createResource (
         if ( ! rxViewId->hasAnchor() && rxViewId->getResourceURL() == gsPresentationViewURL)
             return new PresentationView(rxViewId);
 
-    return Reference<XResource>();
+    return rtl::Reference<AbstractResource>();
 }
 
 void PresentationFactory::releaseResource (
-    const Reference<XResource>&)
+    const rtl::Reference<AbstractResource>&)
 {
     {
         std::unique_lock l(m_aMutex);

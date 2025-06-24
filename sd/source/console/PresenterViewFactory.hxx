@@ -95,13 +95,13 @@ public:
 
     // XResourceFactory
 
-    virtual css::uno::Reference<css::drawing::framework::XResource>
+    virtual rtl::Reference<sd::framework::AbstractResource>
         createResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) override;
 
     virtual void
         releaseResource (
-            const css::uno::Reference<css::drawing::framework::XResource>& rxPane) override;
+            const rtl::Reference<sd::framework::AbstractResource>& rxPane) override;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
@@ -139,10 +139,10 @@ private:
     rtl::Reference<sd::framework::AbstractView> CreateHelpView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
-    css::uno::Reference<css::drawing::framework::XResource> GetViewFromCache (
+    rtl::Reference<sd::framework::AbstractResource> GetViewFromCache (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane) const;
-    css::uno::Reference<css::drawing::framework::XResource> CreateView(
+    rtl::Reference<sd::framework::AbstractResource> CreateView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane);
 };

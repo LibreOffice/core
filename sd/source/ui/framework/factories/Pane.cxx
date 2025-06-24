@@ -110,7 +110,7 @@ void Pane::setVisible (bool bIsVisible)
 
 //----- XResource -------------------------------------------------------------
 
-Reference<XResourceId> SAL_CALL Pane::getResourceId()
+Reference<XResourceId> Pane::getResourceId()
 {
     {
         std::unique_lock aGuard (m_aMutex);
@@ -120,7 +120,7 @@ Reference<XResourceId> SAL_CALL Pane::getResourceId()
     return mxPaneId;
 }
 
-sal_Bool SAL_CALL Pane::isAnchorOnly()
+bool Pane::isAnchorOnly()
 {
     return true;
 }

@@ -172,7 +172,7 @@ void PresenterViewFactory::disposing(std::unique_lock<std::mutex>&)
 
 //----- XViewFactory ----------------------------------------------------------
 
-Reference<XResource> PresenterViewFactory::createResource (
+rtl::Reference<sd::framework::AbstractResource> PresenterViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
 {
     {
@@ -180,7 +180,7 @@ Reference<XResource> PresenterViewFactory::createResource (
         throwIfDisposed(l);
     }
 
-    Reference<XResource> xView;
+    rtl::Reference<sd::framework::AbstractResource> xView;
 
     if (rxViewId.is())
     {
@@ -200,7 +200,7 @@ Reference<XResource> PresenterViewFactory::createResource (
     return xView;
 }
 
-void PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
+void PresenterViewFactory::releaseResource (const rtl::Reference<sd::framework::AbstractResource>& rxView)
 {
     {
         std::unique_lock l(m_aMutex);
@@ -225,9 +225,8 @@ void PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
         {
             if (pView != nullptr)
                 pView->ReleaseView();
-            Reference<lang::XComponent> xComponent (rxView, UNO_QUERY);
-            if (xComponent.is())
-                xComponent->dispose();
+            if (rxView.is())
+                rxView->dispose();
         }
         catch (lang::DisposedException&)
         {
@@ -252,7 +251,7 @@ void PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
 }
 
 
-Reference<XResource> PresenterViewFactory::GetViewFromCache(
+rtl::Reference<sd::framework::AbstractResource> PresenterViewFactory::GetViewFromCache(
     const Reference<XResourceId>& rxViewId,
     const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane) const
 {
@@ -288,7 +287,7 @@ Reference<XResource> PresenterViewFactory::GetViewFromCache(
     return nullptr;
 }
 
-Reference<XResource> PresenterViewFactory::CreateView(
+rtl::Reference<sd::framework::AbstractResource> PresenterViewFactory::CreateView(
     const Reference<XResourceId>& rxViewId,
     const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane)
 {

@@ -314,7 +314,7 @@ void ConfigurationController::requestResourceDeactivation (
     postChangeRequest(xRequest);
 }
 
-Reference<XResource> ConfigurationController::getResource (
+rtl::Reference<AbstractResource> ConfigurationController::getResource (
     const Reference<XResourceId>& rxResourceId)
 {
     ::osl::MutexGuard aGuard (m_aMutex);

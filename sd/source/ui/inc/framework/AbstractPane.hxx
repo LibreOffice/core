@@ -19,24 +19,20 @@
 
 #pragma once
 
-#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <framework/AbstractResource.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <comphelper/compbase.hxx>
 #include <sddllapi.h>
 
 namespace sd::framework
 {
-typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XResource>
-    AbstractPaneInterfaceBase;
-
 /** A pane is an abstraction of a window and is one of the resources managed
     by the drawing framework.
     <p>Apart from the area that displays a view a pane may contain other
     parts like title, menu, close button.</p>
     <p>The URL prefix of panes is <code>private:resource/floater</code></p>
 */
-class SD_DLLPUBLIC AbstractPane : public AbstractPaneInterfaceBase
+class SD_DLLPUBLIC AbstractPane : public AbstractResource
 {
 public:
     virtual ~AbstractPane() override;

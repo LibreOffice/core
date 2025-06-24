@@ -32,7 +32,7 @@ FrameWindowPane::FrameWindowPane(const Reference<XResourceId>& rxPaneId, vcl::Wi
 
 FrameWindowPane::~FrameWindowPane() noexcept {}
 
-sal_Bool SAL_CALL FrameWindowPane::isAnchorOnly() { return false; }
+bool FrameWindowPane::isAnchorOnly() { return false; }
 
 } // end of namespace sd::framework
 
