@@ -737,7 +737,9 @@ void SAL_CALL SfxBaseModel::setParent(const Reference< XInterface >& Parent)
 
 void SAL_CALL SfxBaseModel::dispose()
 {
-    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
+    SolarMutexGuard aGuard;
+    if (impl_isDisposed())
+        return;
 
     if  ( !m_pData->m_bClosed )
     {
