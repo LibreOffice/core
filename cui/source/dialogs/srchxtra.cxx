@@ -42,17 +42,17 @@ SvxSearchFormatDialog::SvxSearchFormatDialog(weld::Window* pParent, const SfxIte
     AddTabPage(u"fonteffects"_ustr, SvxCharEffectsPage::Create, nullptr);
     AddTabPage(u"position"_ustr, SvxCharPositionPage::Create, nullptr);
     AddTabPage(u"asianlayout"_ustr, SvxCharTwoLinesPage::Create, nullptr);
-    AddTabPage(u"labelTP_PARA_STD"_ustr, SvxStdParagraphTabPage::Create, nullptr);
-    AddTabPage(u"labelTP_PARA_ALIGN"_ustr, SvxParaAlignTabPage::Create, nullptr);
-    AddTabPage(u"labelTP_PARA_EXT"_ustr, SvxExtParagraphTabPage::Create, nullptr);
-    AddTabPage(u"labelTP_PARA_ASIAN"_ustr, SvxAsianTabPage::Create, nullptr );
+    AddTabPage(u"indents"_ustr, SvxStdParagraphTabPage::Create, nullptr);
+    AddTabPage(u"alignment"_ustr, SvxParaAlignTabPage::Create, nullptr);
+    AddTabPage(u"textflow"_ustr, SvxExtParagraphTabPage::Create, nullptr);
+    AddTabPage(u"asiantypo"_ustr, SvxAsianTabPage::Create, nullptr );
     AddTabPage(u"background"_ustr, SvxBkgTabPage::Create, nullptr);
 
     // remove asian tabpages if necessary
     if ( !SvtCJKOptions::IsDoubleLinesEnabled() )
         RemoveTabPage(u"asianlayout"_ustr);
     if ( !SvtCJKOptions::IsAsianTypographyEnabled() )
-        RemoveTabPage(u"labelTP_PARA_ASIAN"_ustr);
+        RemoveTabPage(u"asiantypo"_ustr);
 }
 
 SvxSearchFormatDialog::~SvxSearchFormatDialog()
@@ -85,11 +85,11 @@ void SvxSearchFormatDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
                 SetFontList( SvxFontListItem( pList, SID_ATTR_CHAR_FONTLIST ) );
         static_cast<SvxCharNamePage&>(rPage).EnableSearchMode();
     }
-    else if (rId == "labelTP_PARA_STD")
+    else if (rId == "indents")
     {
         static_cast<SvxStdParagraphTabPage&>(rPage).EnableAutoFirstLine();
     }
-    else if (rId == "labelTP_PARA_ALIGN")
+    else if (rId == "alignment")
     {
         static_cast<SvxParaAlignTabPage&>(rPage).EnableJustifyExt();
     }
