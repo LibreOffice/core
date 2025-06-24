@@ -37,8 +37,7 @@ Pane::Pane (
     const Reference<XResourceId>& rxPaneId,
     vcl::Window* pWindow)
     noexcept
-    : PaneInterfaceBase(m_aMutex),
-      mxPaneId(rxPaneId),
+    : mxPaneId(rxPaneId),
       mpWindow(pWindow),
       mxWindow(VCLUnoHelper::GetInterface(pWindow))
 {
@@ -48,7 +47,7 @@ Pane::~Pane()
 {
 }
 
-void Pane::disposing()
+void Pane::disposing(std::unique_lock<std::mutex>&)
 {
     mxWindow = nullptr;
     mpWindow = nullptr;
@@ -62,19 +61,20 @@ vcl::Window* Pane::GetWindow()
         return nullptr;
 }
 
-//----- XPane -----------------------------------------------------------------
+//----- AbstractPane -----------------------------------------------------------------
 
-Reference<awt::XWindow> SAL_CALL Pane::getWindow()
+Reference<awt::XWindow> Pane::getWindow()
 {
-    ThrowIfDisposed();
+    std::unique_lock aGuard (m_aMutex);
+    throwIfDisposed(aGuard);
 
     return mxWindow;
 }
 
-Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas()
+Reference<rendering::XCanvas> Pane::getCanvas()
 {
-    ::osl::MutexGuard aGuard (m_aMutex);
-    ThrowIfDisposed();
+    std::unique_lock aGuard (m_aMutex);
+    throwIfDisposed(aGuard);
 
     if ( ! mxCanvas.is())
         mxCanvas = CreateCanvas();
@@ -84,7 +84,10 @@ Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas()
 
 bool Pane::isVisible()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock aGuard (m_aMutex);
+        throwIfDisposed(aGuard);
+    }
 
     const vcl::Window* pWindow = GetWindow();
     if (pWindow != nullptr)
@@ -95,7 +98,10 @@ bool Pane::isVisible()
 
 void Pane::setVisible (bool bIsVisible)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock aGuard (m_aMutex);
+        throwIfDisposed(aGuard);
+    }
 
     vcl::Window* pWindow = GetWindow();
     if (pWindow != nullptr)
@@ -106,7 +112,10 @@ void Pane::setVisible (bool bIsVisible)
 
 Reference<XResourceId> SAL_CALL Pane::getResourceId()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock aGuard (m_aMutex);
+        throwIfDisposed(aGuard);
+    }
 
     return mxPaneId;
 }
@@ -129,15 +138,6 @@ Reference<rendering::XCanvas> Pane::CreateCanvas()
     }
 
     return xCanvas;
-}
-
-void Pane::ThrowIfDisposed() const
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (u"Pane object has already been disposed"_ustr,
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
 }
 
 ResourceFactory::~ResourceFactory() {}

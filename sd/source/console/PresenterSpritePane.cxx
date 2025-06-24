@@ -40,24 +40,30 @@ PresenterSpritePane::~PresenterSpritePane()
 {
 }
 
-void PresenterSpritePane::disposing()
+void PresenterSpritePane::disposing(std::unique_lock<std::mutex>& l)
 {
     mpSprite->SetFactory(nullptr);
     mxParentCanvas = nullptr;
-    PresenterPaneBase::disposing();
+    PresenterPaneBase::disposing(l);
 }
 
-//----- XPane -----------------------------------------------------------------
+//----- AbstractPane -----------------------------------------------------------------
 
-Reference<awt::XWindow> SAL_CALL PresenterSpritePane::getWindow()
+Reference<awt::XWindow> PresenterSpritePane::getWindow()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     return mxContentWindow;
 }
 
-Reference<rendering::XCanvas> SAL_CALL PresenterSpritePane::getCanvas()
+Reference<rendering::XCanvas> PresenterSpritePane::getCanvas()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     if ( ! mxContentCanvas.is())
         UpdateCanvases();
@@ -113,7 +119,8 @@ void SAL_CALL PresenterSpritePane::windowHidden (const lang::EventObject& rEvent
 
 void SAL_CALL PresenterSpritePane::windowPaint (const awt::PaintEvent&)
 {
-    ThrowIfDisposed();
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
 
     /*
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxParentCanvas, UNO_QUERY);

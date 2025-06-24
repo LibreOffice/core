@@ -217,7 +217,7 @@ excludelist:
     - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/inc/framework/Pane.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/framework/XPane.hpp
+    - com/sun/star/drawing/framework/AbstractPane.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     sd/source/ui/inc/framework/PresentationModule.hxx:
     # Needed for css shortcut

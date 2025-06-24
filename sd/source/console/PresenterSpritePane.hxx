@@ -41,15 +41,15 @@ public:
                         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSpritePane() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     using PresenterPaneBase::disposing;
 
-    // XPane
+    // AbstractPane
 
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow() override;
+    virtual css::uno::Reference<css::awt::XWindow> getWindow() override;
 
-    virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas() override;
+    virtual css::uno::Reference<css::rendering::XCanvas> getCanvas() override;
 
     // XWindowListener
 

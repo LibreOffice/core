@@ -25,7 +25,7 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
-#include <com/sun/star/drawing/framework/XPane.hpp>
+#include <framework/AbstractPane.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
@@ -41,12 +41,12 @@ class PresenterAccessible
     : public cppu::ImplInheritanceHelper<AccessibleObject, css::awt::XFocusListener>
 {
     PresenterAccessible(const rtl::Reference<PresenterController>& xPresenterController,
-                        const css::uno::Reference<css::drawing::framework::XPane>& rxMainPane);
+                        const rtl::Reference<sd::framework::AbstractPane>& rxMainPane);
 
 public:
     static rtl::Reference<PresenterAccessible>
     Create(const rtl::Reference<PresenterController>& xPresenterController,
-           const css::uno::Reference<css::drawing::framework::XPane>& rxMainPane);
+           const rtl::Reference<sd::framework::AbstractPane>& rxMainPane);
 
     virtual ~PresenterAccessible() override;
 
@@ -68,7 +68,7 @@ public:
 
 private:
     ::rtl::Reference<PresenterController> mpPresenterController;
-    css::uno::Reference<css::drawing::framework::XPane> mxMainPane;
+    rtl::Reference<sd::framework::AbstractPane> mxMainPane;
     css::uno::Reference<css::awt::XWindow> mxMainWindow;
     css::uno::Reference<css::awt::XWindow> mxPreviewContentWindow;
     css::uno::Reference<css::awt::XWindow> mxPreviewBorderWindow;

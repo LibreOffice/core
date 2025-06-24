@@ -27,7 +27,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/drawing/framework/XPane.hpp>
+#include <framework/AbstractPane.hxx>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
@@ -57,7 +57,7 @@ public:
     PresenterSlidePreview (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane,
+        const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSlidePreview() override;
     PresenterSlidePreview(const PresenterSlidePreview&) = delete;

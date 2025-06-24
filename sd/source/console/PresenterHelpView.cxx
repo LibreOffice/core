@@ -135,7 +135,7 @@ PresenterHelpView::PresenterHelpView (
         // Get the content window via the pane anchor.
         rtl::Reference<sd::framework::ConfigurationController> xCC (
             rxController->getConfigurationController());
-        mxPane.set(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
+        mxPane = dynamic_cast<sd::framework::AbstractPane*>(xCC->getResource(rxViewId->getAnchor()).get());
 
         mxWindow = mxPane->getWindow();
         ProvideCanvas();

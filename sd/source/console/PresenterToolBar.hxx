@@ -229,7 +229,7 @@ public:
 
 private:
     //    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
-    css::uno::Reference<css::drawing::framework::XPane> mxPane;
+    rtl::Reference<sd::framework::AbstractPane> mxPane;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;

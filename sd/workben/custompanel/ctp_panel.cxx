@@ -19,7 +19,7 @@
 
 #include "ctp_panel.hxx"
 
-#include <com/sun/star/drawing/framework/XPane.hpp>
+#include <com/sun/star/drawing/framework/AbstractPane.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -42,7 +42,7 @@ namespace sd::colortoolpanel
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::drawing::framework::XResourceId;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::drawing::framework::XPane;
+    using ::com::sun::star::drawing::framework::AbstractPane;
     using ::com::sun::star::awt::XWindow;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::awt::XWindowPeer;
@@ -107,7 +107,7 @@ namespace sd::colortoolpanel
         try
         {
             Reference< XResource > xAnchor( i_rConfigController->getResource( m_xResourceId->getAnchor() ), UNO_SET_THROW );
-            Reference< XPane > xAnchorPane( xAnchor, UNO_QUERY_THROW );
+            Reference< AbstractPane > xAnchorPane( xAnchor, UNO_QUERY_THROW );
             xParentWindow.set( xAnchorPane->getWindow(), UNO_SET_THROW );
             xParentPeer.set( xParentWindow, UNO_QUERY_THROW );
         }

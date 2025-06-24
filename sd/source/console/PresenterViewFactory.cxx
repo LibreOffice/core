@@ -47,7 +47,7 @@ public:
     NextSlidePreview (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane,
+        const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane,
         const ::rtl::Reference<PresenterController>& rpPresenterController)
         : PresenterSlidePreview(rxContext, rxViewId, rxAnchorPane, rpPresenterController)
     {
@@ -185,9 +185,8 @@ Reference<XResource> PresenterViewFactory::createResource (
 
     if (rxViewId.is())
     {
-        Reference<XPane> xAnchorPane (
-            mxConfigurationController->getResource(rxViewId->getAnchor()),
-            UNO_QUERY_THROW);
+        rtl::Reference<sd::framework::AbstractPane> xAnchorPane = dynamic_cast<sd::framework::AbstractPane*>(
+            mxConfigurationController->getResource(rxViewId->getAnchor()).get());
         xView = GetViewFromCache(rxViewId, xAnchorPane);
         if (xView == nullptr)
             xView = CreateView(rxViewId, xAnchorPane);
@@ -244,9 +243,8 @@ void PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
         Reference<XResourceId> xViewId (rxView->getResourceId());
         if (xViewId.is())
         {
-            Reference<XPane> xAnchorPane (
-                mxConfigurationController->getResource(xViewId->getAnchor()),
-                UNO_QUERY_THROW);
+            rtl::Reference<sd::framework::AbstractPane> xAnchorPane = dynamic_cast<sd::framework::AbstractPane*>(
+                mxConfigurationController->getResource(xViewId->getAnchor()).get());
             (*mpResourceCache)[xViewId->getResourceURL()]
                 = ViewResourceDescriptor(Reference<XView>(rxView, UNO_QUERY), xAnchorPane);
             pView->DeactivatePresenterView();
@@ -257,7 +255,7 @@ void PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
 
 Reference<XResource> PresenterViewFactory::GetViewFromCache(
     const Reference<XResourceId>& rxViewId,
-    const Reference<XPane>& rxAnchorPane) const
+    const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane) const
 {
     if (mpResourceCache == nullptr)
         return nullptr;
@@ -293,7 +291,7 @@ Reference<XResource> PresenterViewFactory::GetViewFromCache(
 
 Reference<XResource> PresenterViewFactory::CreateView(
     const Reference<XResourceId>& rxViewId,
-    const Reference<XPane>& rxAnchorPane)
+    const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane)
 {
     Reference<XView> xView;
 
@@ -367,7 +365,7 @@ Reference<XView> PresenterViewFactory::CreateSlideShowView(
 
 Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
     const Reference<XResourceId>& rxViewId,
-    const Reference<XPane>& rxAnchorPane) const
+    const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane) const
 {
     Reference<XView> xView;
 

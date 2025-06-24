@@ -680,7 +680,7 @@ void PresenterController::notifyConfigurationChange (
             {
                 // A pane bound to the main pane has been created and is
                 // stored in the pane container.
-                Reference<XPane> xPane (rEvent.ResourceObject,UNO_QUERY);
+                rtl::Reference<sd::framework::AbstractPane> xPane = dynamic_cast<sd::framework::AbstractPane*>(rEvent.ResourceObject.get());
                 if (xPane.is())
                 {
                     mpPaneContainer->FindPaneId(xPane->getResourceId());
@@ -1049,7 +1049,7 @@ void PresenterController::InitializeMainPane (const rtl::Reference<sd::framework
     UpdateCurrentSlide(0);
 }
 
-void PresenterController::LoadTheme (const Reference<XPane>& rxPane)
+void PresenterController::LoadTheme (const rtl::Reference<sd::framework::AbstractPane>& rxPane)
 {
     // Create (load) the current theme.
     if (rxPane.is())

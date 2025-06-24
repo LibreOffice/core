@@ -24,6 +24,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <strings.hrc>
@@ -104,7 +105,7 @@ FullScreenPane::~FullScreenPane() noexcept
 {
 }
 
-void SAL_CALL FullScreenPane::disposing()
+void FullScreenPane::disposing(std::unique_lock<std::mutex>& l)
 {
     mpWindow.disposeAndClear();
 
@@ -115,12 +116,15 @@ void SAL_CALL FullScreenPane::disposing()
         mpWorkWindow.disposeAndClear();
     }
 
-    FrameWindowPane::disposing();
+    FrameWindowPane::disposing(l);
 }
 
 bool FullScreenPane::isVisible()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock aGuard (m_aMutex);
+        throwIfDisposed(aGuard);
+    }
 
     if (mpWindow != nullptr)
         return mpWindow->IsReallyVisible();
@@ -130,7 +134,10 @@ bool FullScreenPane::isVisible()
 
 void FullScreenPane::setVisible (const bool bIsVisible)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock aGuard (m_aMutex);
+        throwIfDisposed(aGuard);
+    }
 
     if (mpWindow != nullptr)
         mpWindow->Show(bIsVisible);

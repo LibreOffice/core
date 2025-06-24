@@ -259,7 +259,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         Reference<lang::XMultiComponentFactory> xFactory (
             mxComponentContext->getServiceManager(), UNO_SET_THROW);
 
-        mxPane.set(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
+        mxPane = dynamic_cast<sd::framework::AbstractPane*>(xCC->getResource(rxViewId->getAnchor()).get());
         mxWindow = mxPane->getWindow();
 
         // Add window listener.

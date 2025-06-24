@@ -93,7 +93,7 @@ void SAL_CALL PresenterWindowManager::disposing()
 }
 
 void PresenterWindowManager::SetParentPane (
-    const Reference<drawing::framework::XPane>& rxPane)
+    const rtl::Reference<sd::framework::AbstractPane>& rxPane)
 {
     if (mxParentWindow.is())
     {

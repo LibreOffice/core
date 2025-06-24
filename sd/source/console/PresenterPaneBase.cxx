@@ -35,8 +35,7 @@ namespace sdext::presenter {
 PresenterPaneBase::PresenterPaneBase (
     const Reference<XComponentContext>& rxContext,
     ::rtl::Reference<PresenterController> xPresenterController)
-    : PresenterPaneBaseInterfaceBase(m_aMutex),
-      mpPresenterController(std::move(xPresenterController)),
+    : mpPresenterController(std::move(xPresenterController)),
       mxComponentContext(rxContext)
 {
 }
@@ -45,7 +44,7 @@ PresenterPaneBase::~PresenterPaneBase()
 {
 }
 
-void PresenterPaneBase::disposing()
+void PresenterPaneBase::disposing(std::unique_lock<std::mutex>&)
 {
     if (mxBorderWindow.is())
     {
@@ -107,7 +106,10 @@ void PresenterPaneBase::initialize(
     const rtl::Reference<PresenterPaneBorderPainter>& rxBorderPainter,
     bool bIsWindowVisibleOnCreation)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     if ( ! mxComponentContext.is())
     {
@@ -140,7 +142,10 @@ void PresenterPaneBase::initialize(
 
 Reference<XResourceId> SAL_CALL PresenterPaneBase::getResourceId()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     return mxPaneId;
 }
 
@@ -153,22 +158,26 @@ sal_Bool SAL_CALL PresenterPaneBase::isAnchorOnly()
 
 void SAL_CALL PresenterPaneBase::windowResized (const awt::WindowEvent&)
 {
-    ThrowIfDisposed();
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
 }
 
 void SAL_CALL PresenterPaneBase::windowMoved (const awt::WindowEvent&)
 {
-    ThrowIfDisposed();
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
 }
 
 void SAL_CALL PresenterPaneBase::windowShown (const lang::EventObject&)
 {
-    ThrowIfDisposed();
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
 }
 
 void SAL_CALL PresenterPaneBase::windowHidden (const lang::EventObject&)
 {
-    ThrowIfDisposed();
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
 }
 
 //----- lang::XEventListener --------------------------------------------------
@@ -243,16 +252,6 @@ void PresenterPaneBase::LayoutContextWindow()
         aInnerBox.Width,
         aInnerBox.Height,
         awt::PosSize::POSSIZE);
-}
-
-void PresenterPaneBase::ThrowIfDisposed()
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            u"PresenterPane object has already been disposed"_ustr,
-            static_cast<uno::XWeak*>(this));
-    }
 }
 
 } // end of namespace ::sdext::presenter

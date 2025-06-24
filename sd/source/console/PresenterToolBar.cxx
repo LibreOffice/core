@@ -32,7 +32,7 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/drawing/framework/XPane.hpp>
+#include <framework/AbstractPane.hxx>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
@@ -933,7 +933,7 @@ PresenterToolBarView::PresenterToolBarView (
     try
     {
         rtl::Reference<sd::framework::ConfigurationController> xCC(rxController->getConfigurationController());
-        mxPane.set(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
+        mxPane = dynamic_cast<sd::framework::AbstractPane*>(xCC->getResource(rxViewId->getAnchor()).get());
 
         mxWindow = mxPane->getWindow();
         mxCanvas = mxPane->getCanvas();

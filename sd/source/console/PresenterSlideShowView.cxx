@@ -112,9 +112,9 @@ void PresenterSlideShowView::LateInit()
 
     if (xCC.is())
     {
-        mxTopPane.set(xCC->getResource(mxViewId->getAnchor()->getAnchor()), UNO_QUERY);
+        mxTopPane = dynamic_cast<sd::framework::AbstractPane*>(xCC->getResource(mxViewId->getAnchor()->getAnchor()).get());
 
-        Reference<XPane> xPane (xCC->getResource(mxViewId->getAnchor()), UNO_QUERY_THROW);
+        rtl::Reference<sd::framework::AbstractPane> xPane = dynamic_cast<sd::framework::AbstractPane*>(xCC->getResource(mxViewId->getAnchor()).get());
 
         mxWindow = xPane->getWindow();
         mxCanvas = xPane->getCanvas();

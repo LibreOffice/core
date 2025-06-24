@@ -161,13 +161,13 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
     // The rest is (at the moment) just for the emergency case.
     if (pWindow == nullptr)
     {
-        Reference<XPane> xPane;
+        rtl::Reference<framework::AbstractPane> xPane;
         try
         {
             rtl::Reference<framework::ConfigurationController> xCC (
                 rxController->getConfigurationController());
             if (xCC.is())
-                xPane.set(xCC->getResource(rxViewTabBarId->getAnchor()), UNO_QUERY);
+                xPane = dynamic_cast<framework::AbstractPane*>(xCC->getResource(rxViewTabBarId->getAnchor()).get());
         }
         catch (const RuntimeException&)
         {

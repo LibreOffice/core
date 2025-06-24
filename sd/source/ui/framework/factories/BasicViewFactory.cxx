@@ -139,9 +139,9 @@ Reference<XResource> BasicViewFactory::createResource (
         rxViewId->isBoundToURL(FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT));
 
     // Get the pane for the anchor URL.
-    Reference<XPane> xPane;
+    rtl::Reference<AbstractPane> xPane;
     if (mxConfigurationController.is())
-        xPane.set(mxConfigurationController->getResource(rxViewId->getAnchor()), UNO_QUERY);
+        xPane = dynamic_cast<AbstractPane*>(mxConfigurationController->getResource(rxViewId->getAnchor()).get());
 
     // For main views use the frame view of the last main view.
     ::sd::FrameView* pFrameView = nullptr;
@@ -232,7 +232,7 @@ void BasicViewFactory::releaseResource (const Reference<XResource>& rxView)
 std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
     const Reference<XResourceId>& rxViewId,
     vcl::Window& rWindow,
-    const Reference<XPane>& rxPane,
+    const rtl::Reference<AbstractPane>& rxPane,
     FrameView* pFrameView,
     const bool bIsCenterPane)
 {
@@ -414,7 +414,7 @@ bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDes
 
 std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromCache (
     const Reference<XResourceId>& rxViewId,
-    const Reference<XPane>& rxPane)
+    const rtl::Reference<AbstractPane>& rxPane)
 {
     std::shared_ptr<ViewDescriptor> pDescriptor;
 

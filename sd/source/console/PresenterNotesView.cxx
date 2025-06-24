@@ -31,7 +31,7 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/drawing/framework/XPane.hpp>
+#include <framework/AbstractPane.hxx>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -65,7 +65,7 @@ PresenterNotesView::PresenterNotesView (
     try
     {
         rtl::Reference<sd::framework::ConfigurationController> xCC (rxController->getConfigurationController());
-        Reference<XPane> xPane (xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
+        rtl::Reference<sd::framework::AbstractPane> xPane = dynamic_cast<sd::framework::AbstractPane*>(xCC->getResource(rxViewId->getAnchor()).get());
 
         mxParentWindow = xPane->getWindow();
         mxCanvas = xPane->getCanvas();

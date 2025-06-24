@@ -28,7 +28,7 @@
 #include <com/sun/star/awt/XPointer.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/drawing/framework/XPane.hpp>
+#include <framework/AbstractPane.hxx>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -184,7 +184,7 @@ private:
     css::uno::Reference<css::awt::XPointer> mxPointer;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::awt::XWindow> mxViewWindow;
-    css::uno::Reference<css::drawing::framework::XPane> mxTopPane;
+    rtl::Reference<sd::framework::AbstractPane> mxTopPane;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxBackgroundPolygon1;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxBackgroundPolygon2;
     bool mbIsViewAdded;

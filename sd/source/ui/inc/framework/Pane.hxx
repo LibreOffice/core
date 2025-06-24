@@ -20,23 +20,17 @@
 #pragma once
 
 #include <sddllapi.h>
-#include <com/sun/star/drawing/framework/XPane.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <framework/AbstractPane.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 
 namespace sd::framework {
 
-typedef ::cppu::WeakComponentImplHelper <
-      css::drawing::framework::XPane
-    > PaneInterfaceBase;
-
 /** A pane is a wrapper for a window and possibly for a tab bar (for view
     switching).  Panes are unique resources.
 
     This class has two responsibilities:
-    1. It implements the XPane interface.  This is the most important
+    1. It implements the AbstractPane interface.  This is the most important
     interface of this class for API based views (of which there not that
     many yet) because it gives access to the XWindow.
     2. It gives access to the underlying VCL Window.
@@ -45,8 +39,7 @@ typedef ::cppu::WeakComponentImplHelper <
     on direct access on the Window class.
 */
 class SD_DLLPUBLIC Pane
-    : protected cppu::BaseMutex,
-      public PaneInterfaceBase
+    : public sd::framework::AbstractPane
 {
 public:
     /** Create a new Pane object that wraps the given window.
@@ -64,24 +57,22 @@ public:
         noexcept;
     virtual ~Pane() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     /** This method is typically used to obtain
-        a Window pointer from an XPane object.
+        a Window pointer from an AbstractPane object.
     */
     virtual vcl::Window* GetWindow();
 
-    //----- XPane -------------------------------------------------------------
+    //----- AbstractPane -------------------------------------------------------------
 
     /** For a UNO API based implementation of a view this may the most
         important method of this class because the view is only interested
         in the window of the pane.
     */
-    virtual css::uno::Reference<css::awt::XWindow>
-        SAL_CALL getWindow() override;
+    virtual css::uno::Reference<css::awt::XWindow> getWindow() override;
 
-    virtual css::uno::Reference<css::rendering::XCanvas>
-        SAL_CALL getCanvas() override;
+    virtual css::uno::Reference<css::rendering::XCanvas> getCanvas() override;
 
     /** Return whether all windows that are used to implement the pane are
         visible.
@@ -122,13 +113,6 @@ protected:
     virtual css::uno::Reference<css::rendering::XCanvas>
         CreateCanvas();
 
-    /** Throw DisposedException when the object has already been disposed or
-        is currently being disposed.  Otherwise this method returns
-        normally.
-
-        @throws css::lang::DisposedException
-    */
-    void ThrowIfDisposed() const;
 };
 
 } // end of namespace sd::framework

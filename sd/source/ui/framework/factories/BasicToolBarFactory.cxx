@@ -100,7 +100,7 @@ void SAL_CALL BasicToolBarFactory::disposing (
         mxConfigurationController = nullptr;
 }
 
-//===== XPaneFactory ==========================================================
+//===== AbstractPaneFactory ==========================================================
 
 Reference<XResource> BasicToolBarFactory::createResource (
     const Reference<XResourceId>& rxToolBarId)

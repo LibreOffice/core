@@ -41,17 +41,23 @@ PresenterPane::~PresenterPane()
 {
 }
 
-//----- XPane -----------------------------------------------------------------
+//----- AbstractPane -----------------------------------------------------------------
 
-Reference<awt::XWindow> SAL_CALL PresenterPane::getWindow()
+Reference<awt::XWindow> PresenterPane::getWindow()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     return mxContentWindow;
 }
 
-Reference<rendering::XCanvas> SAL_CALL PresenterPane::getCanvas()
+Reference<rendering::XCanvas> PresenterPane::getCanvas()
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
     return mxContentCanvas;
 }
 
@@ -110,7 +116,10 @@ void SAL_CALL PresenterPane::windowHidden (const lang::EventObject& rEvent)
 
 void SAL_CALL PresenterPane::windowPaint (const awt::PaintEvent& rEvent)
 {
-    ThrowIfDisposed();
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
 
     PaintBorder(rEvent.UpdateRect);
 }

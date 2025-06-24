@@ -17,7 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module com { module sun { module star { module drawing { module framework {
+#pragma once
+
+#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <comphelper/compbase.hxx>
+#include <sddllapi.h>
+
+namespace sd::framework
+{
+typedef comphelper::WeakComponentImplHelper<css::drawing::framework::XResource>
+    AbstractPaneInterfaceBase;
 
 /** A pane is an abstraction of a window and is one of the resources managed
     by the drawing framework.
@@ -25,14 +36,15 @@ module com { module sun { module star { module drawing { module framework {
     parts like title, menu, close button.</p>
     <p>The URL prefix of panes is <code>private:resource/floater</code></p>
 */
-interface XPane
+class SD_DLLPUBLIC AbstractPane : public AbstractPaneInterfaceBase
 {
-    interface XResource;
+public:
+    virtual ~AbstractPane() override;
 
     /** Return the com::sun::star::awt::XWindow of the
         pane that is used to display a view.
     */
-    ::com::sun::star::awt::XWindow getWindow ();
+    virtual css::uno::Reference<css::awt::XWindow> getWindow() = 0;
 
     /** Return the com::sun::star::awt::XCanvas of the pane.  The
         com::sun::star::rendering::XCanvas object is expected to
@@ -42,9 +54,9 @@ interface XPane
             When the com::sun::star::rendering::XCanvas
             interface is not supported then an empty reference is returned.
     */
-    ::com::sun::star::rendering::XCanvas getCanvas ();
+    virtual css::uno::Reference<css::rendering::XCanvas> getCanvas() = 0;
 };
 
-}; }; }; }; }; // ::com::sun::star::drawing::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

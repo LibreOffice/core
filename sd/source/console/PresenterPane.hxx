@@ -40,11 +40,11 @@ public:
                   const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPane() override;
 
-    // XPane
+    // AbstractPane
 
-    css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow() override;
+    css::uno::Reference<css::awt::XWindow> getWindow() override;
 
-    css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas() override;
+    css::uno::Reference<css::rendering::XCanvas> getCanvas() override;
 
     // XWindowListener
 

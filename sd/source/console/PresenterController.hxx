@@ -33,7 +33,7 @@
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <framework/ConfigurationChangeListener.hxx>
-#include <com/sun/star/drawing/framework/XPane.hpp>
+#include <framework/AbstractPane.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <rtl/ref.hxx>
@@ -197,7 +197,7 @@ private:
     void GetSlides (const sal_Int32 nOffset);
     void UpdateViews();
     void InitializeMainPane (const rtl::Reference<sd::framework::Pane>& rxPane);
-    void LoadTheme (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
+    void LoadTheme (const rtl::Reference<sd::framework::AbstractPane>& rxPane);
     void UpdatePendingSlideNumber (const sal_Int32 nPendingSlideNumber);
 
     /** This method is called when the user pressed one of the numerical

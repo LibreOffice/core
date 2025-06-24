@@ -57,7 +57,7 @@ namespace {
 
 namespace sd::framework {
 
-/** Store URL, XPane reference and (local) PaneId for every pane factory
+/** Store URL, AbstractPane reference and (local) PaneId for every pane factory
     that is registered at the PaneController.
 */
 class BasicPaneFactory::PaneDescriptor
@@ -171,7 +171,7 @@ void BasicPaneFactory::disposing(std::unique_lock<std::mutex>&)
     }
 }
 
-//===== XPaneFactory ==========================================================
+//===== AbstractPaneFactory ==========================================================
 
 Reference<XResource> BasicPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
@@ -244,7 +244,7 @@ void BasicPaneFactory::releaseResource (
 {
     ThrowIfDisposed();
 
-    // Based on the given XPane reference look up the corresponding factory
+    // Based on the given AbstractPane reference look up the corresponding factory
     // descriptor.
     PaneContainer::iterator iDescriptor (
         ::std::find_if(
@@ -254,7 +254,7 @@ void BasicPaneFactory::releaseResource (
 
     if (iDescriptor == maPaneContainer.end())
     {
-        // The given XPane reference is either empty or the pane was not
+        // The given AbstractPane reference is either empty or the pane was not
         // created by any of the factories managed by the called
         // BasicPaneFactory object.
         throw lang::IllegalArgumentException(u"BasicPaneFactory::releasePane() called for pane that was not created by same factory."_ustr,

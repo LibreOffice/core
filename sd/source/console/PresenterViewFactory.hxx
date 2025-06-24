@@ -109,7 +109,7 @@ private:
     unotools::WeakReference<::sd::DrawController> mxControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
     typedef ::std::pair<css::uno::Reference<css::drawing::framework::XView>,
-        css::uno::Reference<css::drawing::framework::XPane> > ViewResourceDescriptor;
+        rtl::Reference<sd::framework::AbstractPane> > ViewResourceDescriptor;
     typedef ::std::map<OUString, ViewResourceDescriptor> ResourceContainer;
     std::unique_ptr<ResourceContainer> mpResourceCache;
 
@@ -125,7 +125,7 @@ private:
 
     css::uno::Reference<css::drawing::framework::XView> CreateSlidePreviewView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::drawing::framework::XPane>& rxPane) const;
+        const rtl::Reference<sd::framework::AbstractPane>& rxPane) const;
 
     css::uno::Reference<css::drawing::framework::XView> CreateToolBarView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
@@ -141,10 +141,10 @@ private:
 
     css::uno::Reference<css::drawing::framework::XResource> GetViewFromCache (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane) const;
+        const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane) const;
     css::uno::Reference<css::drawing::framework::XResource> CreateView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane);
+        const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane);
 };
 
 }

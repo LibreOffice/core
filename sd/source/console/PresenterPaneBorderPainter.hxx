@@ -114,7 +114,7 @@ public:
 
     class Renderer;
 
-    // XPaneBorderPainter
+    // AbstractPaneBorderPainter
 
     css::awt::Rectangle addBorder (
         const OUString& rsPaneBorderStyleName,

@@ -107,7 +107,7 @@ void PresenterPaneFactory::disposing(std::unique_lock<std::mutex>&)
     }
 }
 
-//----- XPaneFactory ----------------------------------------------------------
+//----- AbstractPaneFactory ----------------------------------------------------------
 
 Reference<XResource> PresenterPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
@@ -204,7 +204,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     if ( ! xContext.is())
         return nullptr;
 
-    Reference<XPane> xParentPane (xCC->getResource(rxPaneId->getAnchor()), UNO_QUERY);
+    rtl::Reference<sd::framework::AbstractPane> xParentPane = dynamic_cast<sd::framework::AbstractPane*>(xCC->getResource(rxPaneId->getAnchor()).get());
     if ( ! xParentPane.is())
         return nullptr;
 
@@ -225,7 +225,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
 
 Reference<XResource> PresenterPaneFactory::CreatePane (
     const Reference<XResourceId>& rxPaneId,
-    const Reference<drawing::framework::XPane>& rxParentPane,
+    const rtl::Reference<sd::framework::AbstractPane>& rxParentPane,
     const bool bIsSpritePane)
 {
     Reference<XComponentContext> xContext (mxComponentContextWeak);

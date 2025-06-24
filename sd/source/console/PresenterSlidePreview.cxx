@@ -43,7 +43,7 @@ namespace sdext::presenter {
 PresenterSlidePreview::PresenterSlidePreview (
     const Reference<XComponentContext>& rxContext,
     const Reference<XResourceId>& rxViewId,
-    const Reference<XPane>& rxAnchorPane,
+    const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterSlidePreviewInterfaceBase(m_aMutex),
       mpPresenterController(rpPresenterController),

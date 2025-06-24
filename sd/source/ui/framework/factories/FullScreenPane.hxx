@@ -57,7 +57,7 @@ public:
         const DrawDocShell* pDrawDocShell);
     virtual ~FullScreenPane() noexcept override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     virtual bool isVisible() override;
 

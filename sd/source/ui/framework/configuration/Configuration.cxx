@@ -21,6 +21,7 @@
 #include <framework/ConfigurationChangeEvent.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <framework/AbstractPane.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -279,6 +280,8 @@ bool AreConfigurationsEquivalent (
 ConfigurationChangeListener::~ConfigurationChangeListener() {}
 
 ConfigurationChangeRequest::~ConfigurationChangeRequest() {}
+
+AbstractPane::~AbstractPane() {}
 
 } // end of namespace sd::framework
 

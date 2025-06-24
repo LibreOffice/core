@@ -24,8 +24,6 @@
 #include <vcl/vclptr.hxx>
 #include <memory>
 
-namespace com::sun::star::drawing::framework { class XPane; }
-
 namespace sd {
 class DrawController;
 class ViewShell;
@@ -37,6 +35,7 @@ namespace vcl { class Window; }
 
 namespace sd::framework {
 class ConfigurationController;
+class AbstractPane;
 
 /** Factory for the frequently used standard views of the drawing framework:
         private:resource/view/
@@ -80,12 +79,12 @@ private:
     ScopedVclPtr<vcl::Window> mpWindow;
     std::shared_ptr<ViewCache> mpViewCache;
 
-    css::uno::Reference<css::drawing::framework::XPane> mxLocalPane;
+    rtl::Reference<framework::AbstractPane> mxLocalPane;
 
     std::shared_ptr<ViewDescriptor> CreateView (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         vcl::Window& rWindow,
-        const css::uno::Reference<css::drawing::framework::XPane>& rxPane,
+        const rtl::Reference<framework::AbstractPane>& rxPane,
         FrameView* pFrameView,
         const bool bIsCenterView);
 
@@ -106,7 +105,7 @@ private:
 
     std::shared_ptr<ViewDescriptor> GetViewFromCache (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
+        const rtl::Reference<AbstractPane>& rxPane);
 };
 
 } // end of namespace sd::framework

@@ -28,7 +28,7 @@
 #include <model/SlsPageEnumerationProvider.hxx>
 #include <model/SlsPageDescriptor.hxx>
 
-#include <com/sun/star/drawing/framework/XPane.hpp>
+#include <framework/AbstractPane.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -176,7 +176,7 @@ bool ViewShellWrapper::relocateToAnchor (
 {
     bool bResult (false);
 
-    Reference<XPane> xPane (xResource, UNO_QUERY);
+    rtl::Reference<AbstractPane> xPane (dynamic_cast<AbstractPane*>(xResource.get()));
     if (xPane.is())
     {
         // Detach from the window of the old pane.

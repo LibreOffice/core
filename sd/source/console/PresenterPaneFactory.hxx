@@ -21,7 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEFACTORY_HXX
 
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/drawing/framework/XPane.hpp>
+#include <framework/AbstractPane.hxx>
 #include <framework/ResourceFactory.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
@@ -98,7 +98,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
     css::uno::Reference<css::drawing::framework::XResource> CreatePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const css::uno::Reference<css::drawing::framework::XPane>& rxParentPane,
+        const rtl::Reference<sd::framework::AbstractPane>& rxParentPane,
         const bool bIsSpritePane);
 };
 
