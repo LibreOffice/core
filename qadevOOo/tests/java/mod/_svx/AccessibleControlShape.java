@@ -77,8 +77,6 @@ public class AccessibleControlShape extends TestCase {
         XWindow xWindow = AccessibilityTools.getCurrentWindow (aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE);
-
         AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "Button");
