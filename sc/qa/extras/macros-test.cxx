@@ -12,6 +12,7 @@
 #include <sal/log.hxx>
 #include <svx/svdpage.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <conditio.hxx>
 #include <document.hxx>
@@ -938,6 +939,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf47479)
     css::table::CellRangeAddress origColRange = xColAddressable->getRangeAddress();
     css::table::CellRangeAddress origRowRange = xRowAddressable->getRangeAddress();
     css::table::CellRangeAddress addressToRemove(origSheetRange.Sheet, 1, 1, 1, 1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), origSheetRange.Sheet);
 
     xSheet->removeRange(addressToRemove, css::sheet::CellDeleteMode_UP);
 
@@ -974,6 +976,23 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf47479)
     CPPUNIT_ASSERT_EQUAL(origRowRange.StartRow, currentRange.StartRow);
     CPPUNIT_ASSERT_EQUAL(origRowRange.EndColumn, currentRange.EndColumn);
     CPPUNIT_ASSERT_EQUAL(origRowRange.EndRow, currentRange.EndRow);
+
+    // tdf#167178: make sure that adding a sheet before the current one keeps the addressables
+    // pointing to the correct sheet
+
+    ScDocument& rDoc = *getScDoc();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), rDoc.GetTableCount());
+
+    dispatchCommand(mxComponent, u".uno:Insert"_ustr,
+                    { comphelper::makePropertyValue(u"Name"_ustr, u"NewTab"_ustr),
+                      comphelper::makePropertyValue(u"Index"_ustr, sal_Int16(1)) });
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDoc.GetTableCount());
+
+    // Without the fix, these were 0.
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), xSheetAddressable->getRangeAddress().Sheet);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), xColAddressable->getRangeAddress().Sheet);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), xRowAddressable->getRangeAddress().Sheet);
 }
 
 ScMacrosTest::ScMacrosTest()
