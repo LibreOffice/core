@@ -483,6 +483,12 @@ RTFSprms::RTFSprms()
 
 RTFSprms::~RTFSprms() = default;
 
+RTFSprms::RTFSprms(RTFSprms const& source, CopyForWrite)
+    : RTFSprms(source)
+{
+    ensureCopyBeforeWrite();
+}
+
 void RTFSprms::clear()
 {
     if (m_pSprms->GetRefCount() == 1)

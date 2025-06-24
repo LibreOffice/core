@@ -45,6 +45,9 @@ public:
     RTFSprms();
     ~RTFSprms() override;
 
+    enum class CopyForWrite;
+    RTFSprms(RTFSprms const& source, CopyForWrite);
+
     RTFSprms(RTFSprms const&) = default;
     RTFSprms(RTFSprms&&) = default;
     RTFSprms& operator=(RTFSprms const&) = default;
