@@ -756,7 +756,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/drawing,\
 	AccessibleOLEShape \
 	AccessibleShape \
 	AccessibleSlideView \
-	AccessibleSlideViewObject \
 	AppletShape \
 	Background \
 	BitmapTable \
