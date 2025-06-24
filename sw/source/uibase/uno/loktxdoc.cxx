@@ -967,57 +967,47 @@ bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
 
 void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
-    static constexpr OStringLiteral aTextFormFields(".uno:TextFormFields");
-    static constexpr OStringLiteral aTextFormField(".uno:TextFormField");
-    static constexpr OStringLiteral aSetDocumentProperties(".uno:SetDocumentProperties");
-    static constexpr OStringLiteral aBookmarks(".uno:Bookmarks");
-    static constexpr OStringLiteral aFields(".uno:Fields");
-    static constexpr OStringLiteral aSections(".uno:Sections");
-    static constexpr OStringLiteral aBookmark(".uno:Bookmark");
-    static constexpr OStringLiteral aField(".uno:Field");
-    static constexpr OStringLiteral aExtractDocStructure(".uno:ExtractDocumentStructure");
-    static constexpr OStringLiteral aLayout(".uno:Layout");
-
+    using namespace std::string_view_literals;
     std::map<OUString, OUString> aMap
         = SfxLokHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
 
-    if (o3tl::starts_with(rCommand, aTextFormFields))
+    if (o3tl::starts_with(rCommand, ".uno:TextFormFields"sv))
     {
         GetTextFormFields(rJsonWriter, m_pDocShell, aMap);
     }
-    if (o3tl::starts_with(rCommand, aTextFormField))
+    if (o3tl::starts_with(rCommand, ".uno:TextFormField"sv))
     {
         GetTextFormField(rJsonWriter, m_pDocShell, aMap);
     }
-    else if (o3tl::starts_with(rCommand, aSetDocumentProperties))
+    else if (o3tl::starts_with(rCommand, ".uno:SetDocumentProperties"sv))
     {
         GetDocumentProperties(rJsonWriter, m_pDocShell, aMap);
     }
-    else if (o3tl::starts_with(rCommand, aBookmarks))
+    else if (o3tl::starts_with(rCommand, ".uno:Bookmarks"sv))
     {
         GetBookmarks(rJsonWriter, m_pDocShell, aMap);
     }
-    else if (o3tl::starts_with(rCommand, aFields))
+    else if (o3tl::starts_with(rCommand, ".uno:Fields"sv))
     {
         GetFields(rJsonWriter, m_pDocShell, aMap);
     }
-    else if (o3tl::starts_with(rCommand, aSections))
+    else if (o3tl::starts_with(rCommand, ".uno:Sections"sv))
     {
         GetSections(rJsonWriter, m_pDocShell, aMap);
     }
-    else if (o3tl::starts_with(rCommand, aBookmark))
+    else if (o3tl::starts_with(rCommand, ".uno:Bookmark"sv))
     {
         GetBookmark(rJsonWriter, m_pDocShell, aMap);
     }
-    else if (o3tl::starts_with(rCommand, aField))
+    else if (o3tl::starts_with(rCommand, ".uno:Field"sv))
     {
         GetField(rJsonWriter, m_pDocShell, aMap);
     }
-    else if (o3tl::starts_with(rCommand, aExtractDocStructure))
+    else if (o3tl::starts_with(rCommand, ".uno:ExtractDocumentStructure"sv))
     {
         GetDocStructure(rJsonWriter, m_pDocShell, aMap);
     }
-    else if (o3tl::starts_with(rCommand, aLayout))
+    else if (o3tl::starts_with(rCommand, ".uno:Layout"sv))
     {
         GetLayout(rJsonWriter, m_pDocShell);
     }
