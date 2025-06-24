@@ -132,11 +132,6 @@ OUString SwAccessiblePage::getImplementationName( )
     return sImplementationName;
 }
 
-Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
-{
-    return { sAccessibleServiceName };
-}
-
 OUString SwAccessiblePage::getAccessibleDescription( )
 {
     ThrowIfDisposed();

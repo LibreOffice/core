@@ -71,9 +71,6 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
     virtual void InvalidatePosOrSize( const SwRect& rFrame ) override;

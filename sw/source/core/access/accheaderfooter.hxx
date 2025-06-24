@@ -46,8 +46,6 @@ public:
     /** Returns an identifier for the implementation of this object. */
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
     // XAccessibleComponent
     sal_Int32 SAL_CALL getBackground() override;
 };

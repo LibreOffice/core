@@ -264,9 +264,6 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
     // XAccessibleText
     virtual sal_Int32 SAL_CALL getCaretPosition() override;
     virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;

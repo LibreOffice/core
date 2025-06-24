@@ -78,11 +78,6 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
         return sImplementationNameFooter;
 }
 
-Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames()
-{
-    return { sAccessibleServiceName };
-}
-
 sal_Int32 SAL_CALL SwAccessibleHeaderFooter::getBackground()
 {
     Reference< XAccessible > xParent =  getAccessibleParent();

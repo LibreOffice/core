@@ -231,11 +231,6 @@ OUString SAL_CALL SwAccessibleTextFrame::getImplementationName()
     return u"com.sun.star.comp.Writer.SwAccessibleTextFrameView"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
-{
-    return { sAccessibleServiceName };
-}
-
 // XAccessibleRelationSet
 
 SwFlyFrame* SwAccessibleTextFrame::getFlyFrame() const

@@ -47,9 +47,6 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
     static bool IsEndnote( const SwFootnoteFrame *pFrame );
 };
 

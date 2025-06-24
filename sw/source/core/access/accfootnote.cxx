@@ -89,11 +89,6 @@ OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
         return u"com.sun.star.comp.Writer.SwAccessibleFootnoteView"_ustr;
 }
 
-Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
-{
-    return { sAccessibleServiceName };
-}
-
 bool SwAccessibleFootnote::IsEndnote( const SwFootnoteFrame *pFootnoteFrame )
 {
     const SwTextFootnote *pTextFootnote = pFootnoteFrame ->GetAttr();

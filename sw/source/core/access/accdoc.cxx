@@ -363,11 +363,6 @@ OUString SAL_CALL SwAccessibleDocument::getImplementationName()
     return u"com.sun.star.comp.Writer.SwAccessibleDocumentView"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceNames()
-{
-    return { sAccessibleServiceName };
-}
-
 // XAccessibleSelection
 
 void SwAccessibleDocument::selectAccessibleChild(

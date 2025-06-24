@@ -974,6 +974,11 @@ sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
     return sal_Int32(COL_WHITE);
 }
 
+uno::Sequence<OUString> SAL_CALL SwAccessibleContext::getSupportedServiceNames()
+{
+    return { u"com.sun.star.accessibility.Accessible"_ustr };
+}
+
 sal_Bool SAL_CALL SwAccessibleContext::supportsService (const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);

@@ -37,9 +37,6 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 };

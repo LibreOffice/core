@@ -44,9 +44,6 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
     OUString SAL_CALL getAccessibleDescription() override;
     OUString SAL_CALL getAccessibleName() override;
     virtual void InvalidateFocus_() override;

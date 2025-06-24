@@ -791,11 +791,6 @@ OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
     return sImplementationName;
 }
 
-uno::Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()
-{
-    return { sAccessibleServiceName };
-}
-
 static uno::Sequence< OUString > const & getAttributeNames()
 {
     static uno::Sequence< OUString > const aNames

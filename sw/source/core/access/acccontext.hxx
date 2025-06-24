@@ -39,8 +39,6 @@ namespace accessibility {
     class AccessibleShape;
 }
 
-inline constexpr OUString sAccessibleServiceName = u"com.sun.star.accessibility.Accessible"_ustr;
-
 class SwAccessibleContext :
     public ::cppu::WeakImplHelper<
                 css::accessibility::XAccessible,
@@ -279,7 +277,9 @@ public:
 
     // XServiceInfo
 
-    // getImplementationName() and getSupportedServiceNames are abstract
+    // getImplementationName() is abstract
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     /** Return whether the specified service is supported by this class. */
     virtual sal_Bool SAL_CALL

@@ -1064,11 +1064,6 @@ OUString SAL_CALL SwAccessibleTable::getImplementationName()
     return u"com.sun.star.comp.Writer.SwAccessibleTableView"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()
-{
-    return { sAccessibleServiceName };
-}
-
 void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
 {
     SolarMutexGuard aGuard;

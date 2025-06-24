@@ -41,11 +41,6 @@ OUString SwAccessiblePreview::getImplementationName( )
     return sImplementationName;
 }
 
-Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
-{
-    return { sAccessibleServiceName };
-}
-
 OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription()
 {
     return GetResource( STR_ACCESS_PREVIEW_DOC_NAME );

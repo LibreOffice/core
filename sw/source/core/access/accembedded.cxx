@@ -71,11 +71,6 @@ OUString SAL_CALL SwAccessibleEmbeddedObject::getImplementationName()
     return u"com.sun.star.comp.Writer.SwAccessibleEmbeddedObject"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServiceNames()
-{
-    return { sAccessibleServiceName };
-}
-
 // XAccessibleExtendedAttributes
 OUString SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
 {
