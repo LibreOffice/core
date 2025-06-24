@@ -1144,7 +1144,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sdbcx,\
 	ViewDescriptor \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sheet,\
-	AccessibleCsvCell \
 	AddIn \
 	CellAnnotation \
 	CellAnnotationShape \
