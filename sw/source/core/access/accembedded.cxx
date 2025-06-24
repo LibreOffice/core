@@ -31,39 +31,13 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
 SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
-        std::shared_ptr<SwAccessibleMap> const& pInitMap,
-        const SwFlyFrame* pFlyFrame  ) :
-    SwAccessibleNoTextFrame( pInitMap, AccessibleRole::EMBEDDED_OBJECT, pFlyFrame )
+    std::shared_ptr<SwAccessibleMap> const& pInitMap, const SwFlyFrame* pFlyFrame)
+    : ImplInheritanceHelper(pInitMap, AccessibleRole::EMBEDDED_OBJECT, pFlyFrame)
 {
 }
 
 SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject()
 {
-}
-
-// XInterface
-css::uno::Any SAL_CALL
-    SwAccessibleEmbeddedObject::queryInterface (const css::uno::Type & rType)
-{
-    css::uno::Any aReturn = SwAccessibleNoTextFrame::queryInterface (rType);
-    if ( ! aReturn.hasValue())
-        aReturn = ::cppu::queryInterface (rType,
-         static_cast< css::accessibility::XAccessibleExtendedAttributes* >(this) );
-    return aReturn;
-}
-
-void SAL_CALL
-    SwAccessibleEmbeddedObject::acquire()
-    noexcept
-{
-    SwAccessibleNoTextFrame::acquire ();
-}
-
-void SAL_CALL
-    SwAccessibleEmbeddedObject::release()
-    noexcept
-{
-    SwAccessibleNoTextFrame::release ();
 }
 
 // XAccessibleExtendedAttributes

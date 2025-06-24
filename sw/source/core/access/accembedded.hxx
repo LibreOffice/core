@@ -22,9 +22,11 @@
 #include "accnotextframe.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
+#include <cppuhelper/implbase.hxx>
 
-class SwAccessibleEmbeddedObject : public   SwAccessibleNoTextFrame
-            , public css::accessibility::XAccessibleExtendedAttributes
+class SwAccessibleEmbeddedObject
+    : public cppu::ImplInheritanceHelper<SwAccessibleNoTextFrame,
+                                         css::accessibility::XAccessibleExtendedAttributes>
 
 {
 protected:
@@ -33,19 +35,6 @@ protected:
 public:
     SwAccessibleEmbeddedObject(std::shared_ptr<SwAccessibleMap> const& pInitMap,
                                 const SwFlyFrame* pFlyFrame );
-
-    // XInterface
-
-    virtual css::uno::Any SAL_CALL
-        queryInterface (const css::uno::Type & rType) override;
-
-    virtual void SAL_CALL
-        acquire()
-        noexcept override;
-
-    virtual void SAL_CALL
-        release()
-        noexcept override;
 
     // XAccessibleExtendedAttributes
     virtual OUString SAL_CALL getExtendedAttributes() override;
