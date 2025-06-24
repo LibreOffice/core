@@ -60,6 +60,8 @@ class ScRangeName;
 class ScXMLEditAttributeMap;
 class EditTextObject;
 class ScFormulaCell;
+class ScModelObj;
+class ScTableSheetObj;
 
 namespace sc {
 
@@ -70,7 +72,7 @@ class CompileFormulaContext;
 
 class ScXMLExport : public SvXMLExport
 {
-    css::uno::Reference <css::sheet::XSpreadsheet> xCurrentTable;
+    rtl::Reference<ScTableSheetObj> xCurrentTable;
 
     css::uno::Reference<css::io::XInputStream> xSourceStream;
     sal_Int64                   nSourceStreamPos;
@@ -127,7 +129,7 @@ class ScXMLExport : public SvXMLExport
     sal_Int32       GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const;
     void            CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount);
     void            CollectShapesAutoStyles(SCTAB nTableCount);
-    void            RegisterDefinedStyleNames( const css::uno::Reference< css::sheet::XSpreadsheetDocument > & xSpreadDoc );
+    void            RegisterDefinedStyleNames( const rtl::Reference<ScModelObj> & xSpreadDoc );
     virtual void ExportFontDecls_() override;
     virtual void ExportStyles_( bool bUsed ) override;
     virtual void ExportAutoStyles_() override;
@@ -170,7 +172,7 @@ class ScXMLExport : public SvXMLExport
     bool GetMerged (const css::table::CellRangeAddress* pCellRange,
         const css::uno::Reference <css::sheet::XSpreadsheet>& xTable);
 
-    void WriteTable(ScDocument& rDoc, sal_Int32 nTable, const css::uno::Reference< css::sheet::XSpreadsheet>& xTable);
+    void WriteTable(ScDocument& rDoc, sal_Int32 nTable, const rtl::Reference<ScTableSheetObj>& xTable);
     void WriteCell(ScDocument& rDoc, const ScMyCell& aCell, sal_Int32 nEqualCellCount);
     void WriteEditCell(const ScDocument& rDoc, const EditTextObject* pText);
     void WriteMultiLineFormulaResult(const ScFormulaCell* pCell);
@@ -185,10 +187,10 @@ class ScXMLExport : public SvXMLExport
     static bool IsEditCell(const ScMyCell& rCell);
     static bool IsCellEqual(const ScDocument& rDoc, const ScMyCell& aCell1, const ScMyCell& aCell2);
 
-    void WriteCalculationSettings(const ScDocument& rDoc, const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc);
+    void WriteCalculationSettings(const ScDocument& rDoc, const rtl::Reference<ScModelObj>& xSpreadDoc);
     void WriteTableSource();
     void WriteScenario(const ScDocument& rDoc);   // core implementation
-    void WriteTheLabelRanges(const ScDocument& rDoc, const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xSpreadDoc);
+    void WriteTheLabelRanges(const ScDocument& rDoc, const rtl::Reference<ScModelObj>& xSpreadDoc);
     void WriteLabelRanges(const ScDocument& rDoc, const css::uno::Reference< css::container::XIndexAccess >& xRangesIAccess, bool bColumn);
     void WriteNamedExpressions(const ScDocument& rDoc);
     void WriteExternalDataMapping(ScDocument& rDoc);

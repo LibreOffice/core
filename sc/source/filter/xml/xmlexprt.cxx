@@ -160,6 +160,7 @@
 #include <vector>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <cellsuno.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -486,11 +487,11 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
     if (!GetModel().is())
         return;
 
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc(GetModel(), uno::UNO_QUERY);
+    rtl::Reference<ScModelObj> xSpreadDoc = comphelper::getFromUnoTunnel<ScModelObj>(GetModel());
     if (!xSpreadDoc.is())
         return;
 
-    uno::Reference<container::XIndexAccess> xIndex(xSpreadDoc->getSheets(), uno::UNO_QUERY);
+    rtl::Reference<ScTableSheetsObj> xIndex(xSpreadDoc->getScSheets());
     if (!xIndex.is())
         return;
 
@@ -503,7 +504,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
     for (SCTAB nTable = 0; nTable < nTableCount; ++nTable)
     {
         nCurrentTable = sal::static_int_cast<sal_uInt16>(nTable);
-        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+        rtl::Reference<ScTableSheetObj> xDrawPageSupplier(xIndex->GetSheetByIndex(nTable));
         if (!xDrawPageSupplier.is())
             continue;
 
@@ -648,10 +649,9 @@ void ScXMLExport::ExportMeta_()
     };
 
     // update document statistics at the model
-    uno::Reference<document::XDocumentPropertiesSupplier> xPropSup(GetModel(),
-        uno::UNO_QUERY_THROW);
+    rtl::Reference<ScModelObj> xSpreadDoc = comphelper::getFromUnoTunnel<ScModelObj>(GetModel());
     uno::Reference<document::XDocumentProperties> xDocProps(
-        xPropSup->getDocumentProperties());
+        xSpreadDoc->getDocumentProperties());
     if (xDocProps.is()) {
         xDocProps->setDocumentStatistics(stats);
     }
@@ -1617,27 +1617,26 @@ void ScXMLExport::GetColumnRowHeader(const ScDocument& rDoc, bool& rHasColumnHea
                                      bool& rHasRowHeader, ScRange& rRowHeaderRange,
                                      OUString& rPrintRanges) const
 {
-    uno::Reference <sheet::XPrintAreas> xPrintAreas (xCurrentTable, uno::UNO_QUERY);
-    if (!xPrintAreas.is())
+    if (!xCurrentTable.is())
         return;
 
-    rHasRowHeader = xPrintAreas->getPrintTitleRows();
-    rHasColumnHeader = xPrintAreas->getPrintTitleColumns();
-    table::CellRangeAddress rTempRowHeaderRange = xPrintAreas->getTitleRows();
+    rHasRowHeader = xCurrentTable->getPrintTitleRows();
+    rHasColumnHeader = xCurrentTable->getPrintTitleColumns();
+    table::CellRangeAddress rTempRowHeaderRange = xCurrentTable->getTitleRows();
     rRowHeaderRange = ScRange(rTempRowHeaderRange.StartColumn,
                               rTempRowHeaderRange.StartRow,
                               rTempRowHeaderRange.Sheet,
                               rTempRowHeaderRange.EndColumn,
                               rTempRowHeaderRange.EndRow,
                               rTempRowHeaderRange.Sheet);
-    table::CellRangeAddress rTempColumnHeaderRange = xPrintAreas->getTitleColumns();
+    table::CellRangeAddress rTempColumnHeaderRange = xCurrentTable->getTitleColumns();
     rColumnHeaderRange = ScRange(rTempColumnHeaderRange.StartColumn,
                               rTempColumnHeaderRange.StartRow,
                               rTempColumnHeaderRange.Sheet,
                               rTempColumnHeaderRange.EndColumn,
                               rTempColumnHeaderRange.EndRow,
                               rTempColumnHeaderRange.Sheet);
-    uno::Sequence< table::CellRangeAddress > aRangeList( xPrintAreas->getPrintAreas() );
+    uno::Sequence< table::CellRangeAddress > aRangeList( xCurrentTable->getPrintAreas() );
     ScRangeStringConverter::GetStringFromRangeList( rPrintRanges, aRangeList, &rDoc, FormulaGrammar::CONV_OOO );
 }
 
@@ -1848,9 +1847,9 @@ const ScXMLEditAttributeMap& ScXMLExport::GetEditAttributeMap() const
     return *mpEditAttrMap;
 }
 
-void ScXMLExport::RegisterDefinedStyleNames( const uno::Reference< css::sheet::XSpreadsheetDocument > & xSpreadDoc )
+void ScXMLExport::RegisterDefinedStyleNames( const rtl::Reference<ScModelObj> & xSpreadDoc )
 {
-    ScFormatSaveData* pFormatData = comphelper::getFromUnoTunnel<ScModelObj>(xSpreadDoc)->GetFormatSaveData();
+    ScFormatSaveData* pFormatData = xSpreadDoc->GetFormatSaveData();
     auto xAutoStylePool = GetAutoStylePool();
     for (const auto& rFormatInfo : pFormatData->maIDToName)
     {
@@ -1874,24 +1873,22 @@ void ScXMLExport::ExportContent_()
     if (!GetModel().is())
         return;
 
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
-    if ( !xSpreadDoc.is() )
+    rtl::Reference<ScModelObj> xSpreadDoc = comphelper::getFromUnoTunnel<ScModelObj>(GetModel());
+    if ( !xSpreadDoc )
         return;
 
-    ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(xSpreadDoc);
-
-    ScDocument* pDoc = pModel->GetDocument();
+    ScDocument* pDoc = xSpreadDoc->GetDocument();
     if (!pDoc)
     {
         SAL_WARN("sc", "no ScDocument!");
         return;
     }
 
-    ScSheetSaveData* pSheetData = pModel->GetSheetSaveData();
+    ScSheetSaveData* pSheetData = xSpreadDoc->GetSheetSaveData();
     if (pSheetData)
         pSheetData->ResetSaveEntries();
 
-    uno::Reference<container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
+    rtl::Reference<ScTableSheetsObj> xIndex( xSpreadDoc->getScSheets() );
     if ( xIndex.is() )
     {
         //_GetNamespaceMap().ClearQNamesCache();
@@ -1938,7 +1935,7 @@ void ScXMLExport::ExportContent_()
             }
             else
             {
-                uno::Reference<sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                rtl::Reference<ScTableSheetObj> xTable(xIndex->GetSheetByIndex(nTable));
                 WriteTable(*pDoc, nTable, xTable);
             }
             IncrementProgressBar(false);
@@ -1960,7 +1957,7 @@ void ScXMLExport::ExportContent_()
 
 void ScXMLExport::ExportStyles_( bool bUsed )
 {
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
+    rtl::Reference<ScModelObj> xSpreadDoc = comphelper::getFromUnoTunnel<ScModelObj>(GetModel());
     if (xSpreadDoc.is())
         RegisterDefinedStyleNames( xSpreadDoc);
 
@@ -1973,10 +1970,9 @@ void ScXMLExport::ExportStyles_( bool bUsed )
     rtl::Reference<XMLCellStyleExport> aStylesExp(new XMLCellStyleExport(*this, GetAutoStylePool().get()));
     if (GetModel().is())
     {
-        uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
-        if (xMultiServiceFactory.is())
+        if (xSpreadDoc.is())
         {
-            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(u"com.sun.star.sheet.Defaults"_ustr), uno::UNO_QUERY);
+            uno::Reference <beans::XPropertySet> xProperties(xSpreadDoc->createInstance(u"com.sun.star.sheet.Defaults"_ustr), uno::UNO_QUERY);
             if (xProperties.is())
                 aStylesExp->exportDefaultStyle(xProperties, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper);
             GetShapeExport()->ExportGraphicDefaults();
@@ -2103,8 +2099,8 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
             bool bAdded = false;
             if (nKey)
             {
-                uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
-                ScFormatSaveData* pFormatData = comphelper::getFromUnoTunnel<ScModelObj>(xSpreadDoc)->GetFormatSaveData();
+                rtl::Reference<ScModelObj> xSpreadDoc = comphelper::getFromUnoTunnel<ScModelObj>(GetModel());
+                ScFormatSaveData* pFormatData = xSpreadDoc->GetFormatSaveData();
                 auto itr = pFormatData->maIDToName.find(nKey);
                 if (itr != pFormatData->maIDToName.end())
                 {
@@ -2255,11 +2251,11 @@ void ScXMLExport::collectAutoStyles()
     if (!GetModel().is())
         return;
 
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
+    rtl::Reference<ScModelObj> xSpreadDoc = comphelper::getFromUnoTunnel<ScModelObj>(GetModel());
     if (!xSpreadDoc.is())
         return;
 
-    uno::Reference<container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
+    rtl::Reference<ScTableSheetsObj> xIndex( xSpreadDoc->getScSheets() );
     if (!xIndex.is())
         return;
 
@@ -2268,12 +2264,11 @@ void ScXMLExport::collectAutoStyles()
         // Reserve the loaded cell style names.
         RegisterDefinedStyleNames( xSpreadDoc);
 
-        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(xSpreadDoc);
-        ScDocument* pDoc = pModel->GetDocument();
+        ScDocument* pDoc = xSpreadDoc->GetDocument();
         if (pDoc)
         {
             //  re-create automatic styles with old names from stored data
-            ScSheetSaveData* pSheetData = pModel->GetSheetSaveData();
+            ScSheetSaveData* pSheetData = xSpreadDoc->GetSheetSaveData();
             if (pSheetData)
             {
                 // formulas have to be calculated now, to detect changed results
@@ -2646,11 +2641,11 @@ void ScXMLExport::ExportAutoStyles_()
     if (!GetModel().is())
         return;
 
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
+    rtl::Reference<ScModelObj> xSpreadDoc = comphelper::getFromUnoTunnel<ScModelObj>(GetModel());
     if (!xSpreadDoc.is())
         return;
 
-    uno::Reference<container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
+    rtl::Reference<ScTableSheetsObj> xIndex( xSpreadDoc->getScSheets() );
     if (!xIndex.is())
         return;
 
@@ -2828,24 +2823,20 @@ bool ScXMLExport::IsMatrix (ScDocument& rDoc, const ScAddress& aCell,
     return false;
 }
 
-void ScXMLExport::WriteTable(ScDocument& rDoc, sal_Int32 nTable, const uno::Reference<sheet::XSpreadsheet>& xTable)
+void ScXMLExport::WriteTable(ScDocument& rDoc, sal_Int32 nTable, const rtl::Reference<ScTableSheetObj>& xTable)
 {
     if (!xTable.is())
         return;
 
-    xCurrentTable.set(xTable);
-    uno::Reference<container::XNamed> xName (xTable, uno::UNO_QUERY );
-    if (!xName.is())
-        return;
+    xCurrentTable = xTable;
 
     nCurrentTable = sal::static_int_cast<sal_uInt16>( nTable );
-    OUString sOUTableName(xName->getName());
+    OUString sOUTableName(xTable->getName());
     AddAttribute(sAttrName, sOUTableName);
     AddAttribute(sAttrStyleName, aTableStyles[nTable]);
 
-    uno::Reference<util::XProtectable> xProtectable (xTable, uno::UNO_QUERY);
     const ScTableProtection* pProtect = nullptr;
-    if (xProtectable.is() && xProtectable->isProtected())
+    if (xTable->isProtected())
     {
         AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE);
         pProtect = rDoc.GetTabProtection(nTable);
@@ -2943,8 +2934,7 @@ void ScXMLExport::WriteTable(ScDocument& rDoc, sal_Int32 nTable, const uno::Refe
         getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
     {
         // store sheet events
-        uno::Reference<document::XEventsSupplier> xSupplier(xTable, uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xEvents = xSupplier->getEvents();
+        uno::Reference<container::XNameAccess> xEvents = xTable->getEvents();
         GetEventExport().ExportExt( xEvents );
     }
 
@@ -3958,28 +3948,27 @@ bool ScXMLExport::IsCellEqual(const ScDocument& rDoc, const ScMyCell& aCell1, co
     return bIsEqual;
 }
 
-void ScXMLExport::WriteCalculationSettings(const ScDocument& rDoc, const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc)
+void ScXMLExport::WriteCalculationSettings(const ScDocument& rDoc, const rtl::Reference<ScModelObj>& xSpreadDoc)
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(xSpreadDoc, uno::UNO_QUERY);
-    if (!xPropertySet.is())
+    if (!xSpreadDoc.is())
         return;
 
-    bool bCalcAsShown (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_CALCASSHOWN) ));
-    bool bIgnoreCase (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_IGNORECASE) ));
-    bool bLookUpLabels (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_LOOKUPLABELS) ));
-    bool bMatchWholeCell (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_MATCHWHOLE) ));
-    bool bUseRegularExpressions (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_REGEXENABLED) ));
-    bool bUseWildcards (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_WILDCARDSENABLED) ));
+    bool bCalcAsShown (::cppu::any2bool( xSpreadDoc->getPropertyValue(SC_UNO_CALCASSHOWN) ));
+    bool bIgnoreCase (::cppu::any2bool( xSpreadDoc->getPropertyValue(SC_UNO_IGNORECASE) ));
+    bool bLookUpLabels (::cppu::any2bool( xSpreadDoc->getPropertyValue(SC_UNO_LOOKUPLABELS) ));
+    bool bMatchWholeCell (::cppu::any2bool( xSpreadDoc->getPropertyValue(SC_UNO_MATCHWHOLE) ));
+    bool bUseRegularExpressions (::cppu::any2bool( xSpreadDoc->getPropertyValue(SC_UNO_REGEXENABLED) ));
+    bool bUseWildcards (::cppu::any2bool( xSpreadDoc->getPropertyValue(SC_UNO_WILDCARDSENABLED) ));
     if (bUseWildcards && bUseRegularExpressions)
         bUseRegularExpressions = false;     // mutually exclusive, wildcards take precedence
-    bool bIsIterationEnabled (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_ITERENABLED) ));
+    bool bIsIterationEnabled (::cppu::any2bool( xSpreadDoc->getPropertyValue(SC_UNO_ITERENABLED) ));
     sal_uInt16 nYear2000 (rDoc.GetDocOptions().GetYear2000());
     sal_Int32 nIterationCount(100);
-    xPropertySet->getPropertyValue( SC_UNO_ITERCOUNT ) >>= nIterationCount;
+    xSpreadDoc->getPropertyValue( SC_UNO_ITERCOUNT ) >>= nIterationCount;
     double fIterationEpsilon = 0;
-    xPropertySet->getPropertyValue( SC_UNO_ITEREPSILON ) >>= fIterationEpsilon;
+    xSpreadDoc->getPropertyValue( SC_UNO_ITEREPSILON ) >>= fIterationEpsilon;
     util::Date aNullDate;
-    xPropertySet->getPropertyValue( SC_UNO_NULLDATE ) >>= aNullDate;
+    xSpreadDoc->getPropertyValue( SC_UNO_NULLDATE ) >>= aNullDate;
     if (!(bCalcAsShown || bIgnoreCase || !bLookUpLabels || !bMatchWholeCell || !bUseRegularExpressions ||
             bUseWildcards ||
             bIsIterationEnabled || nIterationCount != 100 || !::rtl::math::approxEqual(fIterationEpsilon, 0.001) ||
@@ -4033,20 +4022,19 @@ void ScXMLExport::WriteCalculationSettings(const ScDocument& rDoc, const uno::Re
 
 void ScXMLExport::WriteTableSource()
 {
-    uno::Reference <sheet::XSheetLinkable> xLinkable (xCurrentTable, uno::UNO_QUERY);
-    if (!(xLinkable.is() && GetModel().is()))
+    if (!(xCurrentTable.is() && GetModel().is()))
         return;
 
-    sheet::SheetLinkMode nMode (xLinkable->getLinkMode());
+    sheet::SheetLinkMode nMode (xCurrentTable->getLinkMode());
     if (nMode == sheet::SheetLinkMode_NONE)
         return;
 
-    OUString sLink (xLinkable->getLinkUrl());
-    uno::Reference <beans::XPropertySet> xProps (GetModel(), uno::UNO_QUERY);
-    if (!xProps.is())
+    OUString sLink (xCurrentTable->getLinkUrl());
+    rtl::Reference<ScModelObj> xSpreadDoc = comphelper::getFromUnoTunnel<ScModelObj>(GetModel());
+    if (!xSpreadDoc.is())
         return;
 
-    uno::Reference <container::XIndexAccess> xIndex(xProps->getPropertyValue(SC_UNO_SHEETLINKS), uno::UNO_QUERY);
+    uno::Reference <container::XIndexAccess> xIndex(xSpreadDoc->getPropertyValue(SC_UNO_SHEETLINKS), uno::UNO_QUERY);
     if (!xIndex.is())
         return;
 
@@ -4071,7 +4059,7 @@ void ScXMLExport::WriteTableSource()
 
     OUString sFilter;
     OUString sFilterOptions;
-    OUString sTableName (xLinkable->getLinkSheetName());
+    OUString sTableName (xCurrentTable->getLinkSheetName());
     sal_Int32 nRefresh(0);
     xLinkProps->getPropertyValue(SC_UNONAME_FILTER) >>= sFilter;
     xLinkProps->getPropertyValue(SC_UNONAME_FILTOPT) >>= sFilterOptions;
@@ -4134,17 +4122,17 @@ void ScXMLExport::WriteScenario(const ScDocument& rDoc)
     SvXMLElementExport aElem(*this, XML_NAMESPACE_TABLE, XML_SCENARIO, true, true);
 }
 
-void ScXMLExport::WriteTheLabelRanges(const ScDocument& rDoc, const uno::Reference< sheet::XSpreadsheetDocument >& xSpreadDoc)
+void ScXMLExport::WriteTheLabelRanges(const ScDocument& rDoc, const rtl::Reference<ScModelObj>& xSpreadDoc)
 {
-    uno::Reference< beans::XPropertySet > xDocProp( xSpreadDoc, uno::UNO_QUERY );
-    if( !xDocProp.is() ) return;
+    if( !xSpreadDoc )
+        return;
 
     sal_Int32 nCount(0);
-    uno::Reference< container::XIndexAccess > xColRangesIAccess(xDocProp->getPropertyValue( SC_UNO_COLLABELRNG ), uno::UNO_QUERY);
+    uno::Reference< container::XIndexAccess > xColRangesIAccess(xSpreadDoc->getPropertyValue( SC_UNO_COLLABELRNG ), uno::UNO_QUERY);
     if( xColRangesIAccess.is() )
         nCount += xColRangesIAccess->getCount();
 
-    uno::Reference< container::XIndexAccess > xRowRangesIAccess(xDocProp->getPropertyValue( SC_UNO_ROWLABELRNG ), uno::UNO_QUERY);
+    uno::Reference< container::XIndexAccess > xRowRangesIAccess(xSpreadDoc->getPropertyValue( SC_UNO_ROWLABELRNG ), uno::UNO_QUERY);
     if( xRowRangesIAccess.is() )
         nCount += xRowRangesIAccess->getCount();
 
@@ -5297,11 +5285,11 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     if (!GetModel().is())
         return;
 
-    uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
-    if (!xMultiServiceFactory.is())
+    rtl::Reference<ScModelObj> xSpreadDoc = comphelper::getFromUnoTunnel<ScModelObj>(GetModel());
+    if (!xSpreadDoc.is())
         return;
 
-    uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(u"com.sun.star.comp.SpreadsheetSettings"_ustr), uno::UNO_QUERY);
+    uno::Reference <beans::XPropertySet> xProperties(xSpreadDoc->createInstance(u"com.sun.star.comp.SpreadsheetSettings"_ustr), uno::UNO_QUERY);
     if (xProperties.is())
         SvXMLUnitConverter::convertPropertySet(rProps, xProperties);
 
