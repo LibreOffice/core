@@ -12012,8 +12012,6 @@ sw/source/core/access/acccontext.cxx
 sw/source/core/access/acccontext.hxx
 sw/source/core/access/accdoc.cxx
 sw/source/core/access/accdoc.hxx
-sw/source/core/access/accembedded.cxx
-sw/source/core/access/accembedded.hxx
 sw/source/core/access/accfootnote.cxx
 sw/source/core/access/accfootnote.hxx
 sw/source/core/access/accframe.cxx

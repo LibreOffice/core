@@ -36,9 +36,7 @@ SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
 {
 }
 
-SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject()
-{
-}
+SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject() {}
 
 // XAccessibleExtendedAttributes
 OUString SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
@@ -48,16 +46,16 @@ OUString SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
     OUString style;
     SwFlyFrame* pFFrame = getFlyFrame();
 
-    if( pFFrame )
+    if (pFFrame)
     {
         style = "style:";
         SwContentFrame* pCFrame;
         pCFrame = pFFrame->ContainsContent();
-        if( pCFrame )
+        if (pCFrame)
         {
             assert(pCFrame->IsNoTextFrame());
-            SwContentNode *const pCNode = static_cast<SwNoTextFrame*>(pCFrame)->GetNode();
-            if( pCNode )
+            SwContentNode* const pCNode = static_cast<SwNoTextFrame*>(pCFrame)->GetNode();
+            if (pCNode)
             {
                 style += static_cast<SwOLENode*>(pCNode)->GetOLEObj().GetStyleString();
             }

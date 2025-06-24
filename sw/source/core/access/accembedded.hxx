@@ -34,7 +34,7 @@ protected:
 
 public:
     SwAccessibleEmbeddedObject(std::shared_ptr<SwAccessibleMap> const& pInitMap,
-                                const SwFlyFrame* pFlyFrame );
+                               const SwFlyFrame* pFlyFrame);
 
     // XAccessibleExtendedAttributes
     virtual OUString SAL_CALL getExtendedAttributes() override;
