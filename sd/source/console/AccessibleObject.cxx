@@ -74,7 +74,7 @@ void AccessibleObject::SetAccessibleParent (
 
 void SAL_CALL AccessibleObject::disposing()
 {
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
 
     AccessibleFocusManager::Instance()->RemoveFocusableObject(this);
     SetWindow(nullptr, nullptr);

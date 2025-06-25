@@ -42,8 +42,8 @@ namespace vcl {
 /** The BrowseBox accessible objects inherit from this base class. It
     implements basic functionality for various Accessibility interfaces. */
 class VCL_DLLPUBLIC AccessibleBrowseBoxBase
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::awt::XFocusListener, css::lang::XServiceInfo>
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::awt::XFocusListener,
+                                         css::lang::XServiceInfo>
 {
 public:
     /** Constructor sets specified name and description. If the constant of a

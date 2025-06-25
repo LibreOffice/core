@@ -54,7 +54,7 @@ private:
     virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     void            FillAccessibleStateSet( sal_Int64& rStateSet );
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
     // XComponent

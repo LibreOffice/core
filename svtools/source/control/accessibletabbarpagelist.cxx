@@ -296,9 +296,7 @@ void AccessibleTabBarPageList::FillAccessibleStateSet( sal_Int64& rStateSet )
         rStateSet |= AccessibleStateType::SHOWING;
 }
 
-
-// OAccessibleComponentHelper
-
+// OAccessible
 
 awt::Rectangle AccessibleTabBarPageList::implGetBounds()
 {

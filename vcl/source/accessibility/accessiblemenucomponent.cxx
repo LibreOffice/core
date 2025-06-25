@@ -79,9 +79,7 @@ void OAccessibleMenuComponent::FillAccessibleStateSet( sal_Int64& rStateSet )
     rStateSet |= AccessibleStateType::OPAQUE;
 }
 
-
-// OAccessibleComponentHelper
-
+// OAccessible
 
 awt::Rectangle OAccessibleMenuComponent::implGetBounds()
 {

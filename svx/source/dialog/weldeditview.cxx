@@ -507,7 +507,7 @@ public:
 };
 }
 
-class WeldEditAccessible : public comphelper::OAccessibleComponentHelper
+class WeldEditAccessible : public comphelper::OAccessible
 {
     weld::CustomWidgetController* m_pController;
     EditEngine* m_pEditEngine;
@@ -557,7 +557,7 @@ public:
         m_xTextHelper->Dispose();
         m_xTextHelper.reset();
 
-        OAccessibleComponentHelper::dispose();
+        OAccessible::dispose();
     }
 
     // XAccessibleComponent

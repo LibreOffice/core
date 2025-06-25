@@ -174,7 +174,7 @@ void SAL_CALL AccessibleIconChoiceCtrlEntry::disposing()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    comphelper::OAccessibleComponentHelper::disposing();
+    comphelper::OAccessible::disposing();
 
     Reference< XComponent > xComp( m_xParent, UNO_QUERY );
     if ( xComp.is() )

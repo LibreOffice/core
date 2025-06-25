@@ -489,7 +489,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
         mxShapes.clear();
     }
 
-    comphelper::OAccessibleComponentHelper::disposing();
+    comphelper::OAccessible::disposing();
 }
 
 void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )

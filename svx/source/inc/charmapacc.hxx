@@ -75,7 +75,7 @@ namespace svx
         virtual void SAL_CALL grabFocus(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 
-        //OAccessibleComponentHelper
+        // OAccessible
         // XAccessibleContext - still waiting to be overwritten
         virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
@@ -134,7 +134,7 @@ namespace svx
         virtual void
             implSelect( sal_Int64 nAccessibleChildIndex, bool bSelect ) override;
 
-        // OAccessibleComponentHelper
+        // OAccessible
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten
         virtual css::awt::Rectangle implGetBounds(  ) override;
     };
@@ -145,7 +145,7 @@ namespace svx
     /** The child implementation of the table.
     */
     class SvxShowCharSetItemAcc final
-        : public cppu::ImplInheritanceHelper<::comphelper::OAccessibleComponentHelper,
+        : public cppu::ImplInheritanceHelper<::comphelper::OAccessible,
                                              css::accessibility::XAccessibleAction>
     {
     private:
@@ -153,7 +153,7 @@ namespace svx
 
         virtual ~SvxShowCharSetItemAcc() override;
 
-        // OAccessibleComponentHelper
+        // OAccessible
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten
         virtual css::awt::Rectangle implGetBounds(  ) override;
     public:
@@ -166,7 +166,7 @@ namespace svx
         virtual void SAL_CALL grabFocus(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 
-        //OAccessibleComponentHelper
+        // OAccessible
         // XAccessibleContext - still waiting to be overwritten
         virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;

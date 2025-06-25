@@ -69,7 +69,7 @@ uno::Reference<XAccessible> SAL_CALL
         static_cast<uno::XWeak*>(this));
 }
 
-// OAccessibleComponentHelper
+// OAccessible
 
 awt::Rectangle AccessiblePageShape::implGetBounds()
 {

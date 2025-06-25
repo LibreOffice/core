@@ -263,7 +263,7 @@ void SAL_CALL AccessibleEditableTextPara::dispose()
     mxParent = nullptr;
     mpEditSource = nullptr;
 
-    comphelper::OAccessibleComponentHelper::dispose();
+    comphelper::OAccessible::dispose();
 }
 
 void AccessibleEditableTextPara::SetEditSource( SvxEditSourceAdapter* pEditSource )

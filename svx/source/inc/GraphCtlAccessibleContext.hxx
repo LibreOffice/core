@@ -51,7 +51,7 @@ class SdrView;
 */
 
 class SvxGraphCtrlAccessibleContext final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
                                          css::accessibility::XAccessibleSelection,
                                          css::lang::XServiceInfo, css::lang::XServiceName>,
       public SfxListener,

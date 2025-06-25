@@ -35,8 +35,7 @@ class VclMenuEvent;
 class OAccessibleMenuItemComponent;
 
 class OAccessibleMenuBaseComponent
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::lang::XServiceInfo>
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo>
 {
     friend class OAccessibleMenuItemComponent;
     friend class VCLXAccessibleMenuItem;

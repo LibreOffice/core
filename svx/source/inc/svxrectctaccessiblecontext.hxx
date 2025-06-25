@@ -81,7 +81,7 @@ private:
     // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
     virtual void implSelect(sal_Int64 nAccessibleChildIndex, bool bSelect) override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     virtual void SAL_CALL disposing() override;
@@ -118,7 +118,7 @@ private:
 };
 
 class SvxRectCtlChildAccessibleContext final
-    : public cppu::ImplInheritanceHelper<::comphelper::OAccessibleComponentHelper,
+    : public cppu::ImplInheritanceHelper<::comphelper::OAccessible,
                                          css::accessibility::XAccessibleValue,
                                          css::accessibility::XAccessibleAction>
 {
@@ -178,7 +178,7 @@ private:
 
     virtual void SAL_CALL disposing() override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     /// implements the calculation of the bounding rectangle
     virtual css::awt::Rectangle implGetBounds(  ) override;
 

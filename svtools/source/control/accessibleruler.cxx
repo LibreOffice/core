@@ -179,7 +179,7 @@ void SAL_CALL SvtRulerAccessible::disposing()
 {
     mpRepr = nullptr;      // object dies with representation
 
-    comphelper::OAccessibleComponentHelper::disposing();
+    comphelper::OAccessible::disposing();
 
     mxParent.clear();
 }

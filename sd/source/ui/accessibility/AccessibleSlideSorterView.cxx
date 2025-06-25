@@ -137,7 +137,7 @@ void AccessibleSlideSorterView::FireAccessibleEvent (
 
 void SAL_CALL AccessibleSlideSorterView::disposing()
 {
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
 
     mpImpl.reset();
 }

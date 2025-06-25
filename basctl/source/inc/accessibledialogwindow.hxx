@@ -40,7 +40,7 @@ class DlgEdObj;
 class AccessibleDialogControlShape;
 
 class AccessibleDialogWindow final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
                                          css::accessibility::XAccessibleSelection,
                                          css::lang::XServiceInfo>,
       public SfxListener
@@ -82,7 +82,7 @@ private:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     void            FillAccessibleStateSet( sal_Int64& rStateSet );
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
     // XComponent

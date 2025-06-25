@@ -296,7 +296,7 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
 
 bool ValueSetAcc::HasAccessibleListeners() const
 {
-    return comphelper::OAccessibleComponentHelper::hasAccessibleListeners();
+    return comphelper::OAccessible::hasAccessibleListeners();
 }
 
 void ValueSetAcc::GetFocus()

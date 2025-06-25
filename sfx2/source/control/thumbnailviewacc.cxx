@@ -315,7 +315,7 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
 
 bool ThumbnailViewAcc::HasAccessibleListeners() const
 {
-    return OAccessibleComponentHelper::hasAccessibleListeners();
+    return OAccessible::hasAccessibleListeners();
 }
 
 void ThumbnailViewAcc::GetFocus()

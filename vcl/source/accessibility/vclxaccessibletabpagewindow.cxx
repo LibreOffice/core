@@ -57,9 +57,7 @@ VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow(vcl::Window* pWindow)
     }
 }
 
-
-// OAccessibleComponentHelper
-
+// OAccessible
 
 awt::Rectangle VCLXAccessibleTabPageWindow::implGetBounds()
 {

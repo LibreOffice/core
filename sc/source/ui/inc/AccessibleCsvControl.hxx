@@ -37,8 +37,7 @@
 class ScCsvControl;
 
 /** Accessible base class used for CSV controls. */
-class ScAccessibleCsvControl
-    : public comphelper::OAccessibleComponentHelper
+class ScAccessibleCsvControl : public comphelper::OAccessible
 {
 private:
     ScCsvControl*               mpControl;          /// Pointer to the VCL control.

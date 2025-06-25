@@ -36,10 +36,10 @@ class AccessibleListBox;
 class SvTreeListEntry;
 
 // class AccessibleListBoxEntry ------------------------------------------
-typedef cppu::ImplInheritanceHelper<
-    comphelper::OAccessibleComponentHelper, css::accessibility::XAccessibleAction,
-    css::accessibility::XAccessibleSelection, css::accessibility::XAccessibleText,
-    css::accessibility::XAccessibleValue, css::lang::XServiceInfo>
+typedef cppu::ImplInheritanceHelper<comphelper::OAccessible, css::accessibility::XAccessibleAction,
+                                    css::accessibility::XAccessibleSelection,
+                                    css::accessibility::XAccessibleText,
+                                    css::accessibility::XAccessibleValue, css::lang::XServiceInfo>
     AccessibleListBoxEntry_BASE;
 
 /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */

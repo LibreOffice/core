@@ -182,9 +182,7 @@ void VCLXAccessibleTabPage::FillAccessibleStateSet( sal_Int64& rStateSet )
         rStateSet |= AccessibleStateType::SELECTED;
 }
 
-
-// OAccessibleComponentHelper
-
+// OAccessible
 
 awt::Rectangle VCLXAccessibleTabPage::implGetBounds()
 {

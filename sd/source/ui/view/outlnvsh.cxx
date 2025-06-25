@@ -1820,7 +1820,7 @@ void OutlineViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
     <type>AccessibleDrawDocumentView</type>.  Otherwise return an empty
     reference.
 */
-rtl::Reference<comphelper::OAccessibleComponentHelper>
+rtl::Reference<comphelper::OAccessible>
 OutlineViewShell::CreateAccessibleDocumentView(::sd::Window* pWindow)
 {
     OSL_ASSERT (GetViewShell()!=nullptr);

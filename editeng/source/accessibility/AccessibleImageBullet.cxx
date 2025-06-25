@@ -221,7 +221,7 @@ void SAL_CALL AccessibleImageBullet::dispose()
     mxParent = nullptr;
     mpEditSource = nullptr;
 
-    OAccessibleComponentHelper::dispose();
+    OAccessible::dispose();
 }
 
 void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )

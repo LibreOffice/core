@@ -83,7 +83,7 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing()
         m_xFocusWindow->removeFocusListener( this );
     }
 
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
 
     mxParent = nullptr;
     mpBrowseBox = nullptr;

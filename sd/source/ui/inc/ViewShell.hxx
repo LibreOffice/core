@@ -293,7 +293,7 @@ public:
         @return
             This default implementation returns an empty reference.
     */
-    virtual rtl::Reference<comphelper::OAccessibleComponentHelper>
+    virtual rtl::Reference<comphelper::OAccessible>
     CreateAccessibleDocumentView(::sd::Window* pWindow);
 
     virtual void SwitchViewFireFocus( const css::uno::Reference< css::accessibility::XAccessible >& xAcc );

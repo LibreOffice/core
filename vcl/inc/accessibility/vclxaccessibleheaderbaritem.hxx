@@ -33,8 +33,7 @@ class HeaderBar;
 //    ----------------------------------------------------
 
 class VCLXAccessibleHeaderBarItem final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::lang::XServiceInfo>
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo>
 {
 private:
     VclPtr<HeaderBar>        m_pHeadBar;
@@ -42,7 +41,7 @@ private:
 
     void            FillAccessibleStateSet( sal_Int64& rStateSet );
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
 public:

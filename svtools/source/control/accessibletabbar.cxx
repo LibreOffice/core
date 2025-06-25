@@ -134,9 +134,7 @@ void AccessibleTabBar::FillAccessibleStateSet( sal_Int64& rStateSet )
         rStateSet |= AccessibleStateType::RESIZABLE;
 }
 
-
-// OAccessibleComponentHelper
-
+// OAccessible
 
 awt::Rectangle AccessibleTabBar::implGetBounds()
 {

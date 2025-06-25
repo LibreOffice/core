@@ -115,10 +115,9 @@ namespace comphelper
     /** a helper class for implementing an AccessibleExtendedComponent which at the same time
         supports an XAccessibleText interface
     */
-    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAccessibleTextHelper : public cppu::ImplInheritanceHelper<
-                                                           OAccessibleComponentHelper,
-                                                           css::accessibility::XAccessibleText>,
-                                  public OCommonAccessibleText
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAccessibleTextHelper
+        : public cppu::ImplInheritanceHelper<OAccessible, css::accessibility::XAccessibleText>,
+          public OCommonAccessibleText
     {
     private:
         OAccessibleTextHelper(OAccessibleTextHelper const &) = delete;

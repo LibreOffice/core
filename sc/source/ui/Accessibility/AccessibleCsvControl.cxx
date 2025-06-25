@@ -81,7 +81,7 @@ void SAL_CALL ScAccessibleCsvControl::disposing()
 {
     SolarMutexGuard aGuard;
     mpControl = nullptr;
-    comphelper::OAccessibleComponentHelper::disposing();
+    comphelper::OAccessible::disposing();
 }
 
 // XAccessibleComponent -------------------------------------------------------

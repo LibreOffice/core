@@ -206,7 +206,7 @@ public:
         The accessible that should be set as the source for
         accessibility events sent by this object.
     */
-    void SetEventSource(const rtl::Reference<comphelper::OAccessibleComponentHelper>& rEventSource);
+    void SetEventSource(const rtl::Reference<comphelper::OAccessible>& rEventSource);
 
     /** Set offset of EditEngine/Outliner from parent
 

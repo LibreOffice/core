@@ -587,7 +587,7 @@ void DrawViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
     <type>AccessibleDrawDocumentView</type>.  Otherwise return an empty
     reference.
 */
-rtl::Reference<comphelper::OAccessibleComponentHelper>
+rtl::Reference<comphelper::OAccessible>
 DrawViewShell::CreateAccessibleDocumentView(::sd::Window* pWindow)
 {
     if (GetViewShellBase().GetController() != nullptr)

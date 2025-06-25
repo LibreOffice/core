@@ -58,7 +58,7 @@ void SAL_CALL AccessibleGridControlBase::disposing()
 {
     SolarMutexGuard g;
 
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
 
     m_xParent = nullptr;
     //m_aTable = NULL;

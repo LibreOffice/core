@@ -176,7 +176,7 @@ public:
         @return
             Returns an <type>AccessibleSlideSorterView</type> object.
    */
-    virtual rtl::Reference<comphelper::OAccessibleComponentHelper>
+    virtual rtl::Reference<comphelper::OAccessible>
     CreateAccessibleDocumentView(::sd::Window* pWindow) override;
     // handle SlideSorterView specially because AccessibleSlideSorterView doesn't inherit from AccessibleDocumentViewBase
     virtual void SwitchViewFireFocus( const css::uno::Reference< css::accessibility::XAccessible >& xAcc ) override;

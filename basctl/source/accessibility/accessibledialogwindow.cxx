@@ -400,9 +400,7 @@ void AccessibleDialogWindow::FillAccessibleStateSet( sal_Int64& rStateSet )
     rStateSet |= AccessibleStateType::RESIZABLE;
 }
 
-
-// OAccessibleComponentHelper
-
+// OAccessible
 
 awt::Rectangle AccessibleDialogWindow::implGetBounds()
 {
@@ -483,7 +481,7 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void AccessibleDialogWindow::disposing()
 {
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
 
     if ( !m_pDialogWindow )
         return;

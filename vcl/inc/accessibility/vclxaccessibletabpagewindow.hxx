@@ -34,7 +34,7 @@ private:
     VclPtr<TabPage>         m_pTabPage;
     sal_uInt16              m_nPageId;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
     // XComponent

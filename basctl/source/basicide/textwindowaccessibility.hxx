@@ -114,7 +114,7 @@ private:
 typedef std::vector< ParagraphInfo > Paragraphs;
 
 typedef cppu::ImplInheritanceHelper<
-    comphelper::OAccessibleComponentHelper, css::accessibility::XAccessibleEditableText,
+    comphelper::OAccessible, css::accessibility::XAccessibleEditableText,
     css::accessibility::XAccessibleMultiLineText, css::accessibility::XAccessibleTextAttributes>
     ParagraphBase;
 
@@ -143,7 +143,7 @@ public:
                      css::uno::Any const & rNewValue);
 
 private:
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // OCommonAccessibleText

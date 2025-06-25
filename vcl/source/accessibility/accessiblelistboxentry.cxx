@@ -187,7 +187,7 @@ void SAL_CALL AccessibleListBoxEntry::disposing()
 
     Reference< XAccessible > xKeepAlive( this );
 
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
 
     // clean up
     m_wListBox.clear();

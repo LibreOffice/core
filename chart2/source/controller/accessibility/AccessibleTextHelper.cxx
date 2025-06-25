@@ -52,10 +52,9 @@ AccessibleTextHelper::~AccessibleTextHelper()
 {
 }
 
-void AccessibleTextHelper::initialize(
-    const OUString& aCID,
-    const rtl::Reference<comphelper::OAccessibleComponentHelper>& rEventSource,
-    vcl::Window* pWindow)
+void AccessibleTextHelper::initialize(const OUString& aCID,
+                                      const rtl::Reference<comphelper::OAccessible>& rEventSource,
+                                      vcl::Window* pWindow)
 {
     OSL_ENSURE( !aCID.isEmpty(), "Empty CID" );
     assert(rEventSource.is() && "Empty Event Source");

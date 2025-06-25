@@ -32,7 +32,7 @@
 namespace tools { class Rectangle; }
 class Ruler;
 
-class SvtRulerAccessible final : public comphelper::OAccessibleComponentHelper
+class SvtRulerAccessible final : public comphelper::OAccessible
 {
 public:
     SvtRulerAccessible(

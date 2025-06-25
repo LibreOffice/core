@@ -55,7 +55,7 @@ class AccessibleParaManager;
  */
 class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) AccessibleEditableTextPara final
     : public cppu::ImplInheritanceHelper<
-          comphelper::OAccessibleComponentHelper, css::accessibility::XAccessibleEditableText,
+          comphelper::OAccessible, css::accessibility::XAccessibleEditableText,
           css::accessibility::XAccessibleTextAttributes, css::accessibility::XAccessibleHypertext,
           css::accessibility::XAccessibleMultiLineText>,
       private ::comphelper::OCommonAccessibleText
@@ -89,7 +89,7 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
     virtual css::lang::Locale SAL_CALL getLocale() override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent

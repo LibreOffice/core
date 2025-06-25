@@ -72,7 +72,7 @@ struct AccessibleElementInfo
 
 /** Base class for all Chart Accessibility objects
  */
-class AccessibleBase : public comphelper::OAccessibleComponentHelper
+class AccessibleBase : public comphelper::OAccessible
 {
 public:
     enum class EventType
@@ -208,7 +208,7 @@ protected:
 //     virtual OUString SAL_CALL getAccessibleDescription()
 //         throw (css::uno::RuntimeException);
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // ________ XAccessibleComponent ________

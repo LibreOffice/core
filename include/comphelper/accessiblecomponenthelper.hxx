@@ -34,12 +34,9 @@
 namespace comphelper
 {
 
-//= OAccessibleComponentHelper
-
-/** a helper class for implementing an AccessibleContext which at the same time
-    supports an XAccessibleExtendedComponent interface.
+/** Central helper/base class for implementing basic accessibility interfaces.
 */
-class COMPHELPER_DLLPUBLIC OAccessibleComponentHelper
+class COMPHELPER_DLLPUBLIC OAccessible
     : public cppu::BaseMutex,
       public cppu::WeakComponentImplHelper<css::accessibility::XAccessible,
                                            css::accessibility::XAccessibleContext2,
@@ -51,15 +48,15 @@ private:
     AccessibleEventNotifier::TClientId m_nClientId;
 
 protected:
-    virtual ~OAccessibleComponentHelper( ) override;
+    virtual ~OAccessible() override;
 
-    OAccessibleComponentHelper( );
+    OAccessible();
 
 private:
-    OAccessibleComponentHelper(OAccessibleComponentHelper const &) = delete;
-    OAccessibleComponentHelper(OAccessibleComponentHelper &&) = delete;
-    void operator =(OAccessibleComponentHelper const &) = delete;
-    void operator =(OAccessibleComponentHelper &&) = delete;
+    OAccessible(OAccessible const&) = delete;
+    OAccessible(OAccessible&&) = delete;
+    void operator=(OAccessible const&) = delete;
+    void operator=(OAccessible&&) = delete;
 
 public:
     // XAccessible
@@ -87,7 +84,7 @@ public:
     /** default implementation for retrieving the index of this object within the parent
         <p>This basic implementation here returns the index <code>i</code> of the child for which
             <code>&lt;parent&gt;.getAccessibleChild(i).getAccessibleContext()</code> returns
-            a reference to this OAccessibleComponentHelper object.</p>
+            a reference to this OAccessible object.</p>
     */
     virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
     /** default implementation for retrieving the locale

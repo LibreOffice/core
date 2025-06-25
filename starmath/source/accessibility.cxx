@@ -80,7 +80,7 @@ void SAL_CALL SmGraphicAccessible::disposing()
 {
     pWin = nullptr;   // implicitly results in AccessibleStateType::DEFUNC set
 
-    comphelper::OAccessibleComponentHelper::disposing();
+    comphelper::OAccessible::disposing();
 }
 
 void SmGraphicAccessible::LaunchEvent(

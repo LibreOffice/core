@@ -32,7 +32,7 @@ class FrameSelector;
 
 namespace a11y {
 
-class AccFrameSelector final : public comphelper::OAccessibleComponentHelper
+class AccFrameSelector final : public comphelper::OAccessible
 {
 public:
     explicit            AccFrameSelector(FrameSelector& rFrameSel);
@@ -59,7 +59,7 @@ public:
     void    Invalidate();
 
 private:
-    // OAccessibleComponentHelper
+    // OAccessible
     /// implements the calculation of the bounding rectangle
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
@@ -69,7 +69,7 @@ private:
     FrameSelector*      mpFrameSel;
 };
 
-class AccFrameSelectorChild final : public comphelper::OAccessibleComponentHelper
+class AccFrameSelectorChild final : public comphelper::OAccessible
 {
 public:
     explicit            AccFrameSelectorChild( FrameSelector& rFrameSel, FrameBorderType eBorder );
@@ -95,13 +95,13 @@ public:
 
     void NotifyAccessibleEvent(const sal_Int16 _nEventId, const css::uno::Any& _rOldValue, const css::uno::Any& _rNewValue)
     {
-        ::comphelper::OAccessibleComponentHelper::NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
+        ::comphelper::OAccessible::NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
     }
 
     void    Invalidate();
 
 private:
-    // OAccessibleComponentHelper
+    // OAccessible
     /// implements the calculation of the bounding rectangle
     virtual css::awt::Rectangle implGetBounds(  ) override;
 

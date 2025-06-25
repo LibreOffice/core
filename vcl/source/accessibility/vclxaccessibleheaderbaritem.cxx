@@ -68,7 +68,7 @@ void VCLXAccessibleHeaderBarItem::FillAccessibleStateSet( sal_Int64& rStateSet )
     }
 }
 
-// OAccessibleComponentHelper
+// OAccessible
 awt::Rectangle VCLXAccessibleHeaderBarItem::implGetBounds()
 {
     awt::Rectangle aBounds;

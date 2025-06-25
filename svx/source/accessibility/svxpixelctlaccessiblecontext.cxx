@@ -405,7 +405,7 @@ sal_Int64 SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleStateSet()
 
 void SAL_CALL SvxPixelCtlAccessibleChild::disposing()
 {
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
     mxParent.clear();
 }
 

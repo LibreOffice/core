@@ -40,7 +40,7 @@ class AccessibleSlideSorterObject;
     accessible.
 */
 class AccessibleSlideSorterView final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
                                          css::accessibility::XAccessibleSelection,
                                          css::lang::XServiceInfo>
 {
@@ -104,7 +104,7 @@ public:
     virtual css::lang::Locale SAL_CALL
         getLocale() override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     //=====  XAccessibleComponent  ================================================

@@ -351,7 +351,7 @@ void SAL_CALL AccessibleBase::disposing()
         MutexGuard aGuard(m_aMutex);
         OSL_ENSURE(isAlive(), "dispose() called twice");
 
-        OAccessibleComponentHelper::disposing();
+        OAccessible::disposing();
 
         // reset pointers
         m_aAccInfo.m_pWindow.reset();

@@ -173,7 +173,7 @@ namespace toolkit
         m_xControlModel.clear();
         m_xModelPropsInfo.clear();
 
-        comphelper::OAccessibleComponentHelper::disposing();
+        comphelper::OAccessible::disposing();
     }
 
 

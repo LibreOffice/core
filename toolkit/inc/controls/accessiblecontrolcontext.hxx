@@ -43,7 +43,7 @@ namespace toolkit
         is being disposed.</p>
     */
     class OAccessibleControlContext final
-            : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper, css::lang::XEventListener>
+            : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XEventListener>
     {
     public:
         /** creates an accessible context for a uno control
@@ -73,7 +73,7 @@ namespace toolkit
         virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
         // XEventListener
-        using comphelper::OAccessibleComponentHelper::disposing;
+        using comphelper::OAccessible::disposing;
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // retrieves the value of a string property from the model, if the property is present
@@ -89,7 +89,7 @@ namespace toolkit
         OAccessibleControlContext(const css::uno::Reference<css::awt::XControl>& rxControl);
         virtual ~OAccessibleControlContext() override;
 
-        // OAccessibleComponentHelper overridables
+        // OAccessible overridables
         virtual css::awt::Rectangle implGetBounds(  ) override;
 
         css::uno::Reference< css::beans::XPropertySet >

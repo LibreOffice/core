@@ -72,7 +72,7 @@ void SAL_CALL ScAccessibleContextBase::disposing()
     // hold reference to make sure that the destructor is not called
     uno::Reference< XAccessibleContext > xKeepAlive(this);
 
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
 
     mxParent.clear();
 }
@@ -89,7 +89,7 @@ void ScAccessibleContextBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// OAccessibleComponentHelper
+// OAccessible
 
 awt::Rectangle ScAccessibleContextBase::implGetBounds(  )
 {

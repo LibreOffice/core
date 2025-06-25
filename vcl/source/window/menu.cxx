@@ -1299,7 +1299,7 @@ bool Menu::ImplIsSelectable( sal_uInt16 nPos ) const
     return bSelectable;
 }
 
-rtl::Reference<comphelper::OAccessibleComponentHelper> Menu::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> Menu::CreateAccessible()
 {
     rtl::Reference<OAccessibleMenuBaseComponent> xAccessible;
     if (IsMenuBar())
@@ -1338,7 +1338,7 @@ css::uno::Reference<css::accessibility::XAccessible> Menu::GetAccessible()
     return mpAccessible;
 }
 
-void Menu::SetAccessible(const rtl::Reference<comphelper::OAccessibleComponentHelper>& rAccessible)
+void Menu::SetAccessible(const rtl::Reference<comphelper::OAccessible>& rAccessible)
 {
     mpAccessible = rAccessible;
 }

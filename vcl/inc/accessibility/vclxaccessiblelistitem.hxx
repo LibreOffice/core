@@ -26,9 +26,8 @@
 #include <accessibility/vclxaccessiblelist.hxx>
 
 class VCLXAccessibleListItem final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::accessibility::XAccessibleText,
-                                         css::lang::XServiceInfo>,
+    : public cppu::ImplInheritanceHelper<
+          comphelper::OAccessible, css::accessibility::XAccessibleText, css::lang::XServiceInfo>,
       public comphelper::OCommonAccessibleText
 {
 private:
@@ -48,7 +47,7 @@ private:
     virtual css::lang::Locale               implGetLocale() override;
     virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     OUString getTextRangeImpl(sal_Int32 nStartIndex, sal_Int32 nEndIndex);

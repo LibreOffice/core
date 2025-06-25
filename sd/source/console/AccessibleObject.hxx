@@ -36,8 +36,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-class AccessibleObject : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                                            css::awt::XWindowListener>
+class AccessibleObject
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::awt::XWindowListener>
 {
 public:
     AccessibleObject(const sal_Int16 nRole, const OUString& rName = OUString());
@@ -123,7 +123,7 @@ protected:
     css::uno::Reference<css::accessibility::XAccessible> mxParentAccessible;
     ::std::vector<rtl::Reference<AccessibleObject> > maChildren;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     virtual awt::Point GetRelativeLocation();

@@ -43,8 +43,7 @@ namespace accessibility {
 /** The GridControl accessible objects inherit from this base class. It
     implements basic functionality. */
 class AccessibleGridControlBase
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::lang::XServiceInfo>
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo>
 {
 public:
     /** Constructor.

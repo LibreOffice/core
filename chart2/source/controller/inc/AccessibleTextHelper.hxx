@@ -58,7 +58,7 @@ public:
             text currently.
      */
     void initialize(const OUString& aCID,
-                    const rtl::Reference<comphelper::OAccessibleComponentHelper>& rEventSource,
+                    const rtl::Reference<comphelper::OAccessible>& rEventSource,
                     vcl::Window* pWindow);
 
     // ____ XAccessibleContext ____

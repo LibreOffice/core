@@ -103,8 +103,7 @@ void VCLXAccessibleListItem::NotifyAccessibleEvent( sal_Int16 _nEventId,
                                                     const css::uno::Any& _aOldValue,
                                                     const css::uno::Any& _aNewValue )
 {
-    comphelper::OAccessibleComponentHelper::NotifyAccessibleEvent(_nEventId, _aOldValue,
-                                                                  _aNewValue);
+    comphelper::OAccessible::NotifyAccessibleEvent(_nEventId, _aOldValue, _aNewValue);
 }
 
 // OCommonAccessibleText
@@ -147,7 +146,7 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
     m_sEntryText.clear();
     m_xParent = nullptr;
 
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
 }
 
 // XServiceInfo

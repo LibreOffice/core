@@ -98,7 +98,7 @@ public:
 
     void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
-    void SetEventSource(const rtl::Reference<comphelper::OAccessibleComponentHelper>& rEventSource)
+    void SetEventSource(const rtl::Reference<comphelper::OAccessible>& rEventSource)
     {
         mpFrontEnd = rEventSource;
     }
@@ -176,7 +176,7 @@ private:
     // our frontend class (the one implementing the actual
     // interface). That's not necessarily the one containing the impl
     // pointer!
-    rtl::Reference<comphelper::OAccessibleComponentHelper> mpFrontEnd;
+    rtl::Reference<comphelper::OAccessible> mpFrontEnd;
 
     // a wrapper for the text forwarders (guarded by solar mutex)
     mutable SvxEditSourceAdapter maEditSource;
@@ -1544,7 +1544,7 @@ void AccessibleTextHelper::SetEditSource( ::std::unique_ptr< SvxEditSource > && 
 }
 
 void AccessibleTextHelper::SetEventSource(
-    const rtl::Reference<comphelper::OAccessibleComponentHelper>& rEventSource)
+    const rtl::Reference<comphelper::OAccessible>& rEventSource)
 {
 #ifdef DBG_UTIL
     mpImpl->CheckInvariants();

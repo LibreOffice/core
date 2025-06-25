@@ -359,7 +359,7 @@ void VCLXAccessibleComponent::disposing()
 {
     DisconnectEvents();
 
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
 }
 
 vcl::Window* VCLXAccessibleComponent::GetWindow() const { return m_xWindow; }

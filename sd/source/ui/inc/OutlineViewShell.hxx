@@ -125,7 +125,7 @@ public:
         @return
             Returns an <type>AccessibleDrawDocumentView</type> object.
    */
-    virtual rtl::Reference<comphelper::OAccessibleComponentHelper>
+    virtual rtl::Reference<comphelper::OAccessible>
     CreateAccessibleDocumentView(::sd::Window* pWindow) override;
 
     /** Update the preview to show the specified page.

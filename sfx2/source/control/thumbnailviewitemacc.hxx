@@ -25,7 +25,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 class ThumbnailViewItem;
-class ThumbnailViewItemAcc : public comphelper::OAccessibleComponentHelper
+class ThumbnailViewItemAcc : public comphelper::OAccessible
 {
 private:
     ThumbnailViewItem*                                                  mpThumbnailViewItem;
@@ -48,7 +48,7 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent

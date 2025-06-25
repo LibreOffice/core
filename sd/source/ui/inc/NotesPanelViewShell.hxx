@@ -81,7 +81,7 @@ public:
 
     virtual void ReadFrameViewData(FrameView* pView) override;
     virtual void WriteFrameViewData() override;
-    virtual rtl::Reference<comphelper::OAccessibleComponentHelper>
+    virtual rtl::Reference<comphelper::OAccessible>
     CreateAccessibleDocumentView(::sd::Window* /*pWindow*/) override
     {
         // TODO

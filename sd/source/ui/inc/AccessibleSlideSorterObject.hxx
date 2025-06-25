@@ -32,7 +32,7 @@ namespace accessibility {
 
 /** This class makes page objects of the slide sorter accessible.
 */
-class AccessibleSlideSorterObject final : public comphelper::OAccessibleComponentHelper
+class AccessibleSlideSorterObject final : public comphelper::OAccessible
 {
 public:
     /** Create a new object that represents a page object in the slide
@@ -95,7 +95,7 @@ public:
     virtual css::lang::Locale SAL_CALL
         getLocale() override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     //=====  XAccessibleComponent  ================================================

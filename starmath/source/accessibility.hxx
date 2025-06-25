@@ -36,8 +36,7 @@ namespace accessibility { class AccessibleTextHelper; }
 // class used for accessibility in the graphic-window
 
 class SmGraphicAccessible final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::lang::XServiceInfo,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo,
                                          css::accessibility::XAccessibleText>
 {
     OUString                            aAccName;

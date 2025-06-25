@@ -34,8 +34,7 @@ class DlgEdObj;
 class DialogWindow;
 
 class AccessibleDialogControlShape final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::lang::XServiceInfo,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo,
                                          css::beans::XPropertyChangeListener>
 {
     friend class AccessibleDialogWindow;
@@ -64,7 +63,7 @@ private:
 
     void                    FillAccessibleStateSet( sal_Int64& rStateSet );
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XComponent

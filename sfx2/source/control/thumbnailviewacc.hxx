@@ -30,7 +30,7 @@ class ThumbnailView;
 class ThumbnailViewItem;
 
 class ThumbnailViewAcc
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
                                          css::accessibility::XAccessibleSelection>
 {
 public:
@@ -66,7 +66,7 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent

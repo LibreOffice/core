@@ -32,9 +32,9 @@
 
 class SvtIconChoiceCtrl;
 
-typedef ::cppu::ImplInheritanceHelper<
-    comphelper::OAccessibleComponentHelper, css::accessibility::XAccessibleText,
-    css::accessibility::XAccessibleAction, css::lang::XServiceInfo, css::lang::XEventListener>
+typedef ::cppu::ImplInheritanceHelper<comphelper::OAccessible, css::accessibility::XAccessibleText,
+                                      css::accessibility::XAccessibleAction,
+                                      css::lang::XServiceInfo, css::lang::XEventListener>
     AccessibleIconChoiceCtrlEntry_BASE;
 
 /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
@@ -63,7 +63,7 @@ class AccessibleIconChoiceCtrlEntry final : public AccessibleIconChoiceCtrlEntry
     */
     virtual void SAL_CALL                   disposing() override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // OCommonAccessibleText

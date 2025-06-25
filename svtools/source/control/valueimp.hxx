@@ -63,7 +63,7 @@ struct ValueSetItem
 };
 
 class ValueSetAcc final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
                                          css::accessibility::XAccessibleSelection>
 {
 public:
@@ -101,7 +101,7 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent
@@ -158,7 +158,7 @@ private:
     bool HasNoneField() const;
 };
 
-class ValueItemAcc : public comphelper::OAccessibleComponentHelper
+class ValueItemAcc : public comphelper::OAccessible
 {
 private:
     ValueSetItem*                                                       mpValueSetItem;
@@ -184,7 +184,7 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent

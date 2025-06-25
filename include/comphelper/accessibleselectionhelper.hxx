@@ -87,8 +87,7 @@ protected:
     supports an XAccessibleSelection interface.
 */
 class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OAccessibleSelectionHelper
-    : public cppu::ImplInheritanceHelper<OAccessibleComponentHelper,
-                                         css::accessibility::XAccessibleSelection>,
+    : public cppu::ImplInheritanceHelper<OAccessible, css::accessibility::XAccessibleSelection>,
       public OCommonAccessibleSelection
 {
 private:

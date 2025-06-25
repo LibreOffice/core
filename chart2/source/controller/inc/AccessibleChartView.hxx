@@ -76,8 +76,7 @@ public:
     virtual OUString SAL_CALL getAccessibleName() override;
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
-
-    // OAccessibleComponentHelper
+    // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
 protected:

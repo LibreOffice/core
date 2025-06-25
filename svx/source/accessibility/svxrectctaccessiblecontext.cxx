@@ -594,7 +594,7 @@ Reference< XAccessibleKeyBinding > SvxRectCtlChildAccessibleContext::getAccessib
 
 void SAL_CALL SvxRectCtlChildAccessibleContext::disposing()
 {
-    OAccessibleComponentHelper::disposing();
+    OAccessible::disposing();
     mxParent.clear();
 }
 

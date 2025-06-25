@@ -38,8 +38,7 @@ namespace accessibility
 /** This class implements the image bullets for the EditEngine/Outliner UAA
  */
 class AccessibleImageBullet final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::lang::XServiceInfo>
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo>
 {
 
 public:
