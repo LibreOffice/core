@@ -395,7 +395,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case SID_MANAGE_XML_SOURCE:
         {
-            xResult = std::make_shared<ScXMLSourceDlg>(pB, pCW, pParent, &rDoc);
+            xResult = std::make_shared<ScXMLSourceDlg>(pB, pCW, pParent, rDoc);
             break;
         }
         case SID_OPENDLG_PIVOTTABLE:

@@ -63,9 +63,9 @@ OUString getXPath(
 }
 
 ScXMLSourceDlg::ScXMLSourceDlg(
-    SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent, ScDocument* pDoc)
+    SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent, ScDocument& rDoc)
     : ScAnyRefDlgController(pB, pCW, pParent, u"modules/scalc/ui/xmlsourcedialog.ui"_ustr, u"XMLSourceDialog"_ustr)
-    , mpDoc(pDoc)
+    , mrDoc(rDoc)
     , mbDlgLostFocus(false)
     , mxBtnSelectSource(m_xBuilder->weld_button(u"selectsource"_ustr))
     , mxFtSourceFile(m_xBuilder->weld_label(u"sourcefile"_ustr))
@@ -192,7 +192,7 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
     if (!pOrcus)
         return;
 
-    mpXMLContext = pOrcus->createXMLContext(*mpDoc, rPath);
+    mpXMLContext = pOrcus->createXMLContext(mrDoc, rPath);
     if (!mpXMLContext)
         return;
 
@@ -250,7 +250,7 @@ void ScXMLSourceDlg::TreeItemSelected()
     const ScAddress& rPos = pUserData->maLinkedPos;
     if (rPos.IsValid())
     {
-        OUString aStr(rPos.Format(ScRefFlags::ADDR_ABS_3D, mpDoc, mpDoc->GetAddressConvention()));
+        OUString aStr(rPos.Format(ScRefFlags::ADDR_ABS_3D, &mrDoc, mrDoc.GetAddressConvention()));
         mxRefEdit->SetRefString(aStr);
     }
     else
@@ -532,7 +532,7 @@ void ScXMLSourceDlg::OkPressed()
     mpXMLContext->importXML(aParam);
 
     // Don't forget to broadcast the change.
-    ScDocShell* pShell = mpDoc->GetDocumentShell();
+    ScDocShell* pShell = mrDoc.GetDocumentShell();
     pShell->Broadcast(SfxHint(SfxHintId::ScDataChanged));
 
     // Repaint the grid to force repaint the cell values.
@@ -556,7 +556,7 @@ void ScXMLSourceDlg::RefEditModified()
     // Preset current sheet in case only address was entered.
     ScAddress aLinkedPos;
     aLinkedPos.SetTab( ScDocShell::GetCurTab());
-    ScRefFlags nRes = aLinkedPos.Parse(aRefStr, *mpDoc, mpDoc->GetAddressConvention());
+    ScRefFlags nRes = aLinkedPos.Parse(aRefStr, mrDoc, mrDoc.GetAddressConvention());
     bool bValid = ( (nRes & ScRefFlags::VALID) == ScRefFlags::VALID );
 
     // TODO: For some unknown reason, setting the ref invalid will hide the text altogether.
