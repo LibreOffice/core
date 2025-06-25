@@ -624,9 +624,9 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
     css::uno::Reference< XAccessible > xAccParent = m_xHeaderBar->GetAccessibleParent();
     if ( xAccParent.is() )
     {
-        Reference<XAccessible> xAccessible = new AccessibleBrowseBoxHeaderBar(
+        rtl::Reference<comphelper::OAccessible> pAccessible = new AccessibleBrowseBoxHeaderBar(
             xAccParent, *this, AccessibleBrowseBoxObjType::ColumnHeaderBar);
-        m_xHeaderBar->SetAccessible(xAccessible);
+        m_xHeaderBar->SetAccessible(pAccessible);
     }
 }
 

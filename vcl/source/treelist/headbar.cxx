@@ -1289,9 +1289,9 @@ css::uno::Reference< css::accessibility::XAccessible > HeaderBar::CreateAccessib
     return mxAccessible;
 }
 
-void HeaderBar::SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& _xAccessible )
+void HeaderBar::SetAccessible(rtl::Reference<comphelper::OAccessible>& rAccessible)
 {
-    mxAccessible = _xAccessible;
+    mxAccessible = rAccessible;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
