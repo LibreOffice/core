@@ -1840,7 +1840,7 @@ void RTFDocumentImpl::prepareProperties(
     }
 
     o_rpTableRowProperties
-        = new RTFReferenceProperties(rState.getTableRowAttributes(), localTableRowSprms);
+        = new RTFReferenceProperties(rState.getTableRowAttributes(), std::move(localTableRowSprms));
 }
 
 void RTFDocumentImpl::sendProperties(
