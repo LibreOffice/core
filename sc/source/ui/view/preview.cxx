@@ -1517,19 +1517,11 @@ void ScPreview::LoseFocus()
 
 css::uno::Reference<css::accessibility::XAccessible> ScPreview::CreateAccessible()
 {
-    css::uno::Reference<css::accessibility::XAccessible> xAcc= GetAccessible(false);
-    if (xAcc.is())
-    {
-        return xAcc;
-    }
-
     rtl::Reference<ScAccessibleDocumentPagePreview> pAccessible =
         new ScAccessibleDocumentPagePreview(GetAccessibleParent(), pViewShell );
-
-    xAcc = pAccessible;
-    SetAccessible(xAcc);
+    SetAccessible(pAccessible);
     pAccessible->Init();
-    return xAcc;
+    return pAccessible;
 }
 
 void ScPreview::DragMove( tools::Long nDragMovePos, PointerStyle nFlags )
