@@ -27,6 +27,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/unohelp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <viewsh.hxx>
@@ -880,10 +881,7 @@ awt::Rectangle SwAccessibleContext::getBoundsImpl(bool bRelative)
         }
     }
 
-    awt::Rectangle aBox( aPixBounds.Left(), aPixBounds.Top(),
-                         aPixBounds.GetWidth(), aPixBounds.GetHeight() );
-
-    return aBox;
+    return vcl::unohelper::ConvertToAWTRect(aPixBounds);
 }
 
 awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
