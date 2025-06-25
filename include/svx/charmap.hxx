@@ -112,7 +112,7 @@ private:
     virtual void LoseFocus() override;
     virtual bool Command(const CommandEvent& rCEvt) override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
     virtual FactoryFunction GetUITestFactory() const override;
 
 protected:

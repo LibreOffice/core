@@ -2217,7 +2217,7 @@ void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     EnableRTL(false); // EditEngine can't be used with VCL EnableRTL
 }
 
-css::uno::Reference< css::accessibility::XAccessible > ScTextWnd::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ScTextWnd::CreateAccessible()
 {
     pAcc = new ScAccessibleEditLineObject(this);
     return pAcc;

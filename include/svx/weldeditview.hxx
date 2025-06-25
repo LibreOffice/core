@@ -85,7 +85,7 @@ public:
     void SetAcceptsTab(bool bAcceptsTab) { m_bAcceptsTab = bAcceptsTab; }
 
 protected:
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     virtual void EditViewInvalidate(const tools::Rectangle& rRect) override { Invalidate(rRect); }
 

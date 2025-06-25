@@ -125,7 +125,7 @@ public:
     void                SetSdrMode(bool b);
 
     Point               GetPositionInDialog() const;
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 };
 
 class GraphCtrlView final : public SdrView

@@ -258,7 +258,7 @@ private:
     ValueSet & operator= (const ValueSet &) = delete;
 
 protected:
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
 public:
     ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);

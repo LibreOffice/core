@@ -1042,7 +1042,7 @@ SvxBorderLineStyle FrameSelector::getCurrentStyleLineStyle() const
 }
 
 // accessibility
-Reference< XAccessible > FrameSelector::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> FrameSelector::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if( !mxAccess.is() )

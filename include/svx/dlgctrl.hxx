@@ -126,7 +126,7 @@ public:
     tools::Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;
 
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 
     RectPoint          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
@@ -189,7 +189,7 @@ public:
     void    Reset();
 
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
-    SAL_DLLPRIVATE virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    SAL_DLLPRIVATE virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 
     static tools::Long GetSquares() { return nSquares ; }

@@ -1406,7 +1406,7 @@ tools::Rectangle ScCsvGrid::GetFocusRect()
 
 // accessibility ==============================================================
 
-css::uno::Reference<css::accessibility::XAccessible> ScCsvGrid::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ScCsvGrid::CreateAccessible()
 {
     rtl::Reference<ScAccessibleCsvGrid> xRef(new ScAccessibleCsvGrid(*this));
     mxAccessible = xRef;

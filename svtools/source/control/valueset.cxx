@@ -116,7 +116,7 @@ void ValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     maVirDev->EnableRTL(pDrawingArea->get_direction());
 }
 
-Reference<XAccessible> ValueSet::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ValueSet::CreateAccessible()
 {
     if (!mxAccessible)
         mxAccessible.set(new ValueSetAcc(this));

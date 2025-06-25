@@ -10,6 +10,7 @@
 #ifndef INCLUDED_VCL_CUSTOMWELD_HXX
 #define INCLUDED_VCL_CUSTOMWELD_HXX
 
+#include <comphelper/OAccessible.hxx>
 #include <vcl/weld.hxx>
 
 class InputContext;
@@ -24,10 +25,7 @@ private:
     DECL_LINK(DragBeginHdl, weld::DrawingArea&, bool);
 
 public:
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible()
-    {
-        return css::uno::Reference<css::accessibility::XAccessible>();
-    }
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() { return {}; }
     // rRect is in Logical units rather than Pixels
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) = 0;
     virtual void Resize() { Invalidate(); }

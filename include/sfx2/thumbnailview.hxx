@@ -248,7 +248,7 @@ protected:
 
     virtual OUString RequestHelp(tools::Rectangle& rRect) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     SAL_DLLPRIVATE const rtl::Reference<ThumbnailViewAcc> & getAccessible() const;
 

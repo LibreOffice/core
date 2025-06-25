@@ -363,7 +363,7 @@ void ThumbnailView::OnItemDblClicked (ThumbnailViewItem*)
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ThumbnailView::CreateAccessible()
 {
     mxAccessible.set(new ThumbnailViewAcc(this));
     return mxAccessible;

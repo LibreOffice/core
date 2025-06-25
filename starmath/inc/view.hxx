@@ -124,7 +124,7 @@ public:
     }
 
     // for Accessibility
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     SmGraphicAccessible* GetAccessible_Impl()
     {

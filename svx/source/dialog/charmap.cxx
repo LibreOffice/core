@@ -862,7 +862,7 @@ SvxShowCharSet::~SvxShowCharSet()
 #endif
 }
 
-css::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SvxShowCharSet::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     OSL_ENSURE(!m_xAccessible.is(),"Accessible already created!");

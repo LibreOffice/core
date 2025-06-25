@@ -800,7 +800,7 @@ public:
     }
 };
 
-css::uno::Reference<css::accessibility::XAccessible> WeldEditView::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> WeldEditView::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if (!m_xAccessible.is())

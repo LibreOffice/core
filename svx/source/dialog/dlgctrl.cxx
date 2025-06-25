@@ -557,7 +557,7 @@ tools::Rectangle SvxRectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) con
     return aRet;
 }
 
-Reference< XAccessible > SvxRectCtl::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SvxRectCtl::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     pAccContext = new SvxRectCtlAccessibleContext(this);
@@ -579,7 +579,7 @@ void SvxRectCtl::DoCompletelyDisable(bool bNew)
 
 // Control for editing bitmaps
 
-css::uno::Reference< css::accessibility::XAccessible > SvxPixelCtl::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SvxPixelCtl::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if (!m_xAccess.is())

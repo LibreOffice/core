@@ -835,7 +835,7 @@ Point GraphCtrl::GetPositionInDialog() const
     return Point();
 }
 
-css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> GraphCtrl::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if(mpAccContext == nullptr )

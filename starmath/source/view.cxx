@@ -906,7 +906,7 @@ void SmGraphicWindow::ZoomToFitInWindow()
     }
 }
 
-uno::Reference< XAccessible > SmGraphicWidget::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SmGraphicWidget::CreateAccessible()
 {
     if (!mxAccessible.is())
     {

@@ -249,7 +249,7 @@ bool ScEditWindow::MouseButtonDown(const MouseEvent& rMEvt)
     return bRet;
 }
 
-css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ScEditWindow::CreateAccessible()
 {
     rtl::Reference<ScAccessibleEditControlObject> tmp = new ScAccessibleEditControlObject(this, ScAccessibleEditObject::EditControl);
     mxAcc = tmp.get();
