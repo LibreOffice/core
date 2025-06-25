@@ -596,18 +596,21 @@ private:
 
         {
             SfxStyleSheet* pStyleSheet = pTextObject->getSdrPageFromSdrObject()->GetTextStyleSheetForObject(pTextObject);
-            auto aItemSet = pStyleSheet->GetItemSet();
-            if (const SvxFontItem* pItem = aItemSet.GetItemIfSet(EE_CHAR_FONTINFO, false))
+            if (pStyleSheet)
             {
-                addFontItem(pItem);
-            }
-            if (const SvxFontItem* pItem = aItemSet.GetItemIfSet(EE_CHAR_FONTINFO_CJK, false))
-            {
-                addFontItem(pItem);
-            }
-            if (const SvxFontItem* pItem = aItemSet.GetItemIfSet(EE_CHAR_FONTINFO_CTL, false))
-            {
-                addFontItem(pItem);
+                auto aItemSet = pStyleSheet->GetItemSet();
+                if (const SvxFontItem* pItem = aItemSet.GetItemIfSet(EE_CHAR_FONTINFO, false))
+                {
+                    addFontItem(pItem);
+                }
+                if (const SvxFontItem* pItem = aItemSet.GetItemIfSet(EE_CHAR_FONTINFO_CJK, false))
+                {
+                    addFontItem(pItem);
+                }
+                if (const SvxFontItem* pItem = aItemSet.GetItemIfSet(EE_CHAR_FONTINFO_CTL, false))
+                {
+                    addFontItem(pItem);
+                }
             }
         }
 
