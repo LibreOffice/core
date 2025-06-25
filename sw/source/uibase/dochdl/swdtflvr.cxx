@@ -41,7 +41,6 @@
 #include <sot/filelist.hxx>
 #include <svx/svxdlg.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <osl/endian.h>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/weld.hxx>
@@ -2207,11 +2206,7 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
                 pStream = new SvMemoryStream( const_cast<sal_Unicode *>(sData.getStr()),
                             sData.getLength() * sizeof( sal_Unicode ),
                             StreamMode::READ );
-#ifdef OSL_BIGENDIAN
-                pStream->SetEndian( SvStreamEndian::BIG );
-#else
-                pStream->SetEndian( SvStreamEndian::LITTLE );
-#endif
+                pStream->ResetEndianSwap();
 
                 SwAsciiOptions aAOpt;
                 aAOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );

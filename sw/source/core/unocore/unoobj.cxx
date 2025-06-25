@@ -23,7 +23,6 @@
 #include <svl/itemprop.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
-#include <osl/endian.h>
 #include <unotools/collatorwrapper.hxx>
 #include <editeng/memberids.h>
 
@@ -143,11 +142,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer,
         return;
     }
     SvMemoryStream aStream;
-#ifdef OSL_BIGENDIAN
-    aStream.SetEndian( SvStreamEndian::BIG );
-#else
-    aStream.SetEndian( SvStreamEndian::LITTLE );
-#endif
+    aStream.ResetEndianSwap();
     WriterRef xWrt;
     // TODO/MBA: looks like a BaseURL doesn't make sense here
     SwReaderWriter::GetWriter( FILTER_TEXT_DLG, OUString(), xWrt );

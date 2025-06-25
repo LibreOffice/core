@@ -21,7 +21,6 @@
 
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
-#include <osl/endian.h>
 #include <tools/urlobj.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -273,11 +272,7 @@ void SwEditShell::GetSelectedText( OUString &rBuf, ParaBreakType nHndlParaBrk )
     else if( IsSelection() )
     {
         SvMemoryStream aStream;
-#ifdef OSL_BIGENDIAN
-        aStream.SetEndian( SvStreamEndian::BIG );
-#else
-        aStream.SetEndian( SvStreamEndian::LITTLE );
-#endif
+        aStream.ResetEndianSwap();
         WriterRef xWrt;
         SwReaderWriter::GetWriter( FILTER_TEXT, OUString(), xWrt );
         if( xWrt.is() )

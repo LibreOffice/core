@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/endian.h>
+#include <sal/config.h>
+
 #include <tools/stream.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
@@ -172,11 +173,7 @@ ErrCode SwASCWriter::WriteStream()
 
                                 break;
                             case RTL_TEXTENCODING_UCS2:
-#ifdef OSL_LITENDIAN
-                                Strm().SetEndian(SvStreamEndian::LITTLE);
-#else
-                                Strm().SetEndian(SvStreamEndian::BIG);
-#endif
+                                Strm().ResetEndianSwap();
                                 if( bIncludeBOM )
                                 {
                                     Strm().StartWritingUnicodeText();

@@ -72,7 +72,6 @@
 
 #include <unicode/uchar.h>
 
-#include <osl/endian.h>
 #include <osl/file.hxx>
 
 // We don't want to end up with 2GB read in one line just because of malformed
@@ -323,7 +322,7 @@ bool ScImportExport::ImportString( const OUString& rText, SotClipboardFormatId n
             OString aTmp( rText.getStr(), rText.getLength(), eEnc );
             SvMemoryStream aStrm( const_cast<char *>(aTmp.getStr()), aTmp.getLength() * sizeof(char), StreamMode::READ );
             aStrm.SetStreamCharSet( eEnc );
-            SetNoEndianSwap( aStrm );       //! no swapping in memory
+            aStrm.ResetEndianSwap(); //! no swapping in memory
             return ImportStream( aStrm, OUString(), nFmt );
         }
     }
@@ -344,7 +343,7 @@ bool ScImportExport::ExportString( OUString& rText, SotClipboardFormatId nFmt )
 
     SvMemoryStream aStrm;
     aStrm.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
-    SetNoEndianSwap( aStrm );       //! no swapping in memory
+    aStrm.ResetEndianSwap(); //! no swapping in memory
     // mba: no BaseURL for data exc
     if( ExportStream( aStrm, OUString(), nFmt ) )
     {
@@ -369,7 +368,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, So
 
     SvMemoryStream aStrm;
     aStrm.SetStreamCharSet( eEnc );
-    SetNoEndianSwap( aStrm );       //! no swapping in memory
+    aStrm.ResetEndianSwap(); //! no swapping in memory
     // mba: no BaseURL for data exchange
     if( ExportStream( aStrm, OUString(), nFmt ) )
     {
@@ -520,15 +519,6 @@ sal_Int32 ScImportExport::CountVisualWidth(std::u16string_view rStr)
 {
     sal_Int32 nIdx = 0;
     return CountVisualWidth(rStr, nIdx, SAL_MAX_INT32);
-}
-
-void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
-{
-#ifdef OSL_BIGENDIAN
-    rStrm.SetEndian( SvStreamEndian::BIG );
-#else
-    rStrm.SetEndian( SvStreamEndian::LITTLE );
-#endif
 }
 
 static inline bool lcl_isFieldEnd( sal_Unicode c, const sal_Unicode* pSeps )
@@ -2694,11 +2684,7 @@ ScImportStringStream::ScImportStringStream( const OUString& rStr )
             rStr.getLength() * sizeof(sal_Unicode), StreamMode::READ)
 {
     SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
-#ifdef OSL_BIGENDIAN
-    SetEndian(SvStreamEndian::BIG);
-#else
-    SetEndian(SvStreamEndian::LITTLE);
-#endif
+    ResetEndianSwap();
 }
 
 OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,

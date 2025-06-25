@@ -205,6 +205,8 @@ public:
     SvStreamEndian  GetEndian() const;
     /// returns status of endian swap flag
     bool            IsEndianSwap() const { return m_isSwap; }
+    /// sets native endianness
+    void            ResetEndianSwap() { m_isSwap = false; }
 
     void            SetCompressMode( SvStreamCompressFlags nNewMode )
                         { m_nCompressMode = nNewMode; }

@@ -1077,7 +1077,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     SvMemoryStream aStream;
                     aStream.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
-                    ScImportExport::SetNoEndianSwap( aStream );
+                    aStream.ResetEndianSwap();
                     aExport.ExportStream( aStream, OUString(), SotClipboardFormatId::STRING );
 
                     aStream.Seek(0);

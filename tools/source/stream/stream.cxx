@@ -675,7 +675,7 @@ bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet
 
 void SvStream::StartWritingUnicodeText()
 {
-    m_isSwap = false; // Switch to no endian swapping
+    ResetEndianSwap(); // Switch to no endian swapping
     // BOM, Byte Order Mark, U+FEFF, see
     // http://www.unicode.org/faq/utf_bom.html#BOM
     // Upon read: 0xfeff(-257) => no swap; 0xfffe(-2) => swap

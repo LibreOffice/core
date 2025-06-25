@@ -125,9 +125,6 @@ public:
     **/
     static sal_Int32 CountVisualWidth(std::u16string_view rStr);
 
-    //! only if stream is only used in own (!) memory
-    static  void    SetNoEndianSwap( SvStream& rStrm );
-
     void SetSeparator( sal_Unicode c ) { cSep = c; }
     void SetDelimiter( sal_Unicode c ) { cStr = c; }
     void SetFormulas( bool b ) { bFormulas = b; }
