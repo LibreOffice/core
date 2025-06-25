@@ -388,9 +388,9 @@ public:
     void HighlightItem( sal_uInt16 nItemPos );
     void DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID
 
-    bool HandleMenuCommandEvent(Menu *pMenu, sal_uInt16 nEventId) const;
-    bool HandleMenuActivateEvent(Menu *pMenu) const;
-    bool HandleMenuDeActivateEvent(Menu *pMenu) const;
+    bool HandleMenuCommandEvent(Menu* pMenu, sal_uInt16 nEventId);
+    bool HandleMenuActivateEvent(Menu* pMenu);
+    bool HandleMenuDeActivateEvent(Menu* pMenu);
 
     /**
      * Sets an ID.
@@ -457,7 +457,7 @@ public:
     SAL_DLLPRIVATE void ShowButtons( bool bClose, bool bFloat, bool bHide );
 
     SAL_DLLPRIVATE virtual void SelectItem(sal_uInt16 nId) override;
-    SAL_DLLPRIVATE bool HandleMenuHighlightEvent(Menu *pMenu, sal_uInt16 nEventId) const;
+    SAL_DLLPRIVATE bool HandleMenuHighlightEvent(Menu* pMenu, sal_uInt16 nEventId);
     bool HandleMenuButtonEvent(sal_uInt16 nEventId);
 
     void SetCloseButtonClickHdl( const Link<void*,void>& rLink ) { maCloseHdl = rLink; }

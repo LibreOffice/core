@@ -2609,13 +2609,13 @@ void MenuBar::SelectItem(sal_uInt16 nId)
 }
 
 // handler for native menu selection and command events
-bool Menu::HandleMenuActivateEvent( Menu *pMenu ) const
+bool Menu::HandleMenuActivateEvent(Menu* pMenu)
 {
     if( pMenu )
     {
         ImplMenuDelData aDelData( this );
 
-        pMenu->pStartedFrom = const_cast<Menu*>(this);
+        pMenu->pStartedFrom = this;
         pMenu->bInCallback = true;
         pMenu->Activate();
 
@@ -2625,13 +2625,13 @@ bool Menu::HandleMenuActivateEvent( Menu *pMenu ) const
     return true;
 }
 
-bool Menu::HandleMenuDeActivateEvent( Menu *pMenu ) const
+bool Menu::HandleMenuDeActivateEvent(Menu* pMenu)
 {
     if( pMenu )
     {
         ImplMenuDelData aDelData( this );
 
-        pMenu->pStartedFrom = const_cast<Menu*>(this);
+        pMenu->pStartedFrom = this;
         pMenu->bInCallback = true;
         pMenu->Deactivate();
         if( !aDelData.isDeleted() )
@@ -2640,10 +2640,10 @@ bool Menu::HandleMenuDeActivateEvent( Menu *pMenu ) const
     return true;
 }
 
-bool MenuBar::HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nHighlightEventId ) const
+bool MenuBar::HandleMenuHighlightEvent(Menu* pMenu, sal_uInt16 nHighlightEventId)
 {
     if( !pMenu )
-        pMenu = const_cast<MenuBar*>(this)->ImplFindMenu(nHighlightEventId);
+        pMenu = ImplFindMenu(nHighlightEventId);
     if( pMenu )
     {
         ImplMenuDelData aDelData( pMenu );
@@ -2656,7 +2656,7 @@ bool MenuBar::HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nHighlightEventI
             pMenu->mnHighlightedItemPos = pMenu->GetItemPos( nHighlightEventId );
             pMenu->nSelectedId = nHighlightEventId;
             pMenu->sSelectedIdent = pMenu->GetItemIdent( nHighlightEventId );
-            pMenu->pStartedFrom = const_cast<MenuBar*>(this);
+            pMenu->pStartedFrom = this;
             pMenu->ImplCallHighlight( pMenu->mnHighlightedItemPos );
         }
         return true;
@@ -2665,15 +2665,15 @@ bool MenuBar::HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nHighlightEventI
         return false;
 }
 
-bool Menu::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventId ) const
+bool Menu::HandleMenuCommandEvent(Menu* pMenu, sal_uInt16 nCommandEventId)
 {
     if( !pMenu )
-        pMenu = const_cast<Menu*>(this)->ImplFindMenu(nCommandEventId);
+        pMenu = ImplFindMenu(nCommandEventId);
     if( pMenu )
     {
         pMenu->nSelectedId = nCommandEventId;
         pMenu->sSelectedIdent = pMenu->GetItemIdent(nCommandEventId);
-        pMenu->pStartedFrom = const_cast<Menu*>(this);
+        pMenu->pStartedFrom = this;
         pMenu->ImplSelect();
         return true;
     }
