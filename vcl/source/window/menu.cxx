@@ -2717,8 +2717,7 @@ bool MenuBar::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
 
 int MenuBar::GetMenuBarHeight() const
 {
-    MenuBar* pMenuBar = const_cast<MenuBar*>(this);
-    const SalMenu *pNativeMenu = pMenuBar->ImplGetSalMenu();
+    const SalMenu *pNativeMenu = ImplGetSalMenu();
     int nMenubarHeight;
     if (pNativeMenu)
         nMenubarHeight = pNativeMenu->GetMenuBarHeight();
