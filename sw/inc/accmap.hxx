@@ -146,7 +146,7 @@ public:
     SwAccessibleMap(SwViewShell& rViewShell);
     virtual ~SwAccessibleMap() override;
 
-    css::uno::Reference<css::accessibility::XAccessible> GetDocumentView();
+    rtl::Reference<comphelper::OAccessible> GetDocumentView();
 
     css::uno::Reference<css::accessibility::XAccessible> GetDocumentPreview(
                             const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,

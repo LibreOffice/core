@@ -1641,7 +1641,7 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetDocumentView_(
     return xAcc;
 }
 
-uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView( )
+rtl::Reference<comphelper::OAccessible> SwAccessibleMap::GetDocumentView()
 {
     return GetDocumentView_( false );
 }

@@ -31,6 +31,7 @@
 #include <vcl/window.hxx>
 
 namespace com::sun::star::accessibility { class XAccessible; }
+namespace comphelper { class OAccessible; }
 class SwDoc;
 class IDocumentSettingAccess;
 class IDocumentDeviceAccess;
@@ -555,7 +556,7 @@ public:
     sal_Int32 GetBrowseWidth() const;
     void SetBrowseBorder( const Size& rNew );
 
-    css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
+    rtl::Reference<comphelper::OAccessible> CreateAccessible();
 
     css::uno::Reference< css::accessibility::XAccessible >  CreateAccessiblePreview();
 

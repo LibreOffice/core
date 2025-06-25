@@ -2702,18 +2702,18 @@ bool SwViewShell::IsNewLayout() const
 }
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-uno::Reference< css::accessibility::XAccessible > SwViewShell::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SwViewShell::CreateAccessible()
 {
-    uno::Reference< css::accessibility::XAccessible > xAcc;
+    rtl::Reference<comphelper::OAccessible> pAcc;
 
     // We require a layout and an XModel to be accessible.
     OSL_ENSURE( mpLayout, "no layout, no access" );
     OSL_ENSURE( GetWin(), "no window, no access" );
 
     if( mxDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && GetWin() )
-        xAcc = Imp()->GetAccessibleMap().GetDocumentView();
+        pAcc = Imp()->GetAccessibleMap().GetDocumentView();
 
-    return xAcc;
+    return pAcc;
 }
 
 uno::Reference< css::accessibility::XAccessible > SwViewShell::CreateAccessiblePreview()
