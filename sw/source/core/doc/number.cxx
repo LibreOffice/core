@@ -773,13 +773,43 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
         // In this case we are ignoring GetIncludeUpperLevels: we put all
         // level numbers requested by level format
-        for (SwNumberTree::tNumberVector::size_type i=0; i <= nLevel; ++i)
+        for (sal_Int32 nPosition{0}; nPosition < sLevelFormat.getLength() - 2;)
         {
-            OUString sReplacement;
-            const SwNumFormat& rNFormat = Get(i);
+            if (sLevelFormat[nPosition] != '%')
+            {
+                ++nPosition;
+                continue;
+            }
+            SwNumberTree::tNumberVector::size_type nReplaceLevel;
+            decltype(nPosition) nEndPosition;
+            if (sLevelFormat[nPosition+1] == '1'
+                && sLevelFormat[nPosition+2] == '0'
+                && (nPosition+3) < sLevelFormat.getLength()
+                && sLevelFormat[nPosition+3] == '%')
+            {
+                nReplaceLevel = 9; // special case %10%
+                nEndPosition = nPosition + 4;
+            }
+            else if (sLevelFormat[nPosition+2] == '%'
+                && '1' <= sLevelFormat[nPosition+1]
+                && sLevelFormat[nPosition+1] <= '9')
+            {
+                nReplaceLevel = sLevelFormat[nPosition+1] - '1'; // need to subtract 1
+                nEndPosition = nPosition + 3;
+            }
+            else
+            {
+                ++nPosition;
+                continue; // ignore it
+            }
+            if (nLevel < nReplaceLevel)
+            {
+                nPosition = nEndPosition;
+                // there is no number to insert - in this case Word 2013
+                continue; // shows no label at all, we just skip it
+            }
 
-            OUString sFind("%" + OUString::number(i + 1) + "%");
-            sal_Int32 nPosition = sLevelFormat.indexOf(sFind);
+            SwNumFormat const& rNFormat{Get(nReplaceLevel)};
 
             if (rNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
             {
@@ -789,37 +819,38 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
                 // NOTE: if changed, fix MSWordExportBase::NumberingLevel to match new behaviour.
 
-                sal_Int32 nPositionNext = sLevelFormat.indexOf('%', nPosition + sFind.getLength());
-                if (nPosition >= 0 && nPositionNext > nPosition)
+                sal_Int32 const nPositionNext{sLevelFormat.indexOf('%', nEndPosition)};
+                if (nPositionNext > nPosition)
                 {
                     sLevelFormat = sLevelFormat.replaceAt(nPosition, nPositionNext - nPosition, u"");
                 }
                 continue;
             }
-            else if (rNumVector[i])
-                sReplacement = Get(i).GetNumStr(rNumVector[i], aLocale, rMyNFormat.GetIsLegal());
+
+            OUString sReplacement;
+            if (rNumVector[nReplaceLevel])
+                sReplacement = rNFormat.GetNumStr(rNumVector[nReplaceLevel], aLocale, rMyNFormat.GetIsLegal());
             else
                 sReplacement = "0";        // all 0 level are a 0
 
-            if (nPosition >= 0)
+            sLevelFormat = sLevelFormat.replaceAt(nPosition, nEndPosition - nPosition, sReplacement);
+            nPosition += sReplacement.getLength();
+
+            if (bHideNonNumerical)
             {
-                if (bHideNonNumerical)
+                sal_Int32 const nPositionNext{sLevelFormat.indexOf('%', nPosition)};
+
+                if (nPosition < nPositionNext)
                 {
-                    sal_Int32 nPositionNext = sLevelFormat.indexOf('%', nPosition + sFind.getLength());
+                    sal_Int32 nReplaceCount = nPositionNext - nPosition;
 
-                    if (nPositionNext >= nPosition) {
-                        sal_Int32 nReplaceStart = nPosition + sFind.getLength();
-                        sal_Int32 nReplaceCount = nPositionNext - nReplaceStart;
+                    OUString sSeparator = sLevelFormat.copy(nPosition, nReplaceCount);
+                    StripNonDelimiter(sSeparator);
 
-                        OUString sSeparator = sLevelFormat.copy(nReplaceStart, nReplaceCount);
-                        StripNonDelimiter(sSeparator);
-
-                        sLevelFormat = sLevelFormat.replaceAt(nReplaceStart, nReplaceCount, sSeparator);
-                    }
+                    sLevelFormat = sLevelFormat.replaceAt(nPosition, nReplaceCount, sSeparator);
                 }
-
-                sLevelFormat = sLevelFormat.replaceAt(nPosition, sFind.getLength(), sReplacement);
             }
+
         }
 
         aStr = sLevelFormat;
