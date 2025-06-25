@@ -617,16 +617,12 @@ void ShowWindow::AddWindowToPaintView()
 css::uno::Reference<css::accessibility::XAccessible>
     ShowWindow::CreateAccessible()
 {
-    css::uno::Reference< css::accessibility::XAccessible > xAcc = GetAccessible(false);
-    if (xAcc)
-    {
-        return xAcc;
-    }
     if (mpViewShell != nullptr)
     {
-        xAcc = mpViewShell->CreateAccessibleDocumentView (this);
-        SetAccessible(xAcc);
-        return xAcc;
+        rtl::Reference<comphelper::OAccessible> pAcc
+            = mpViewShell->CreateAccessibleDocumentView(this);
+        SetAccessible(pAcc);
+        return pAcc;
     }
     else
     {
