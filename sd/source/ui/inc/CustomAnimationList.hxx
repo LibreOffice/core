@@ -48,7 +48,7 @@ public:
 class CustomAnimationList;
 class CustomAnimationListEntryItem;
 
-class CustomAnimationListDropTarget : public DropTargetHelper
+class CustomAnimationListDropTarget final : public DropTargetHelper
 {
 private:
     CustomAnimationList& m_rTreeView;
@@ -60,7 +60,7 @@ public:
     CustomAnimationListDropTarget(CustomAnimationList& rTreeView);
 };
 
-class CustomAnimationList : public ISequenceListener
+class CustomAnimationList final : public ISequenceListener
 {
     friend class CustomAnimationListEntryItem;
     friend struct stl_append_effect_func;
@@ -69,7 +69,7 @@ public:
     explicit CustomAnimationList(std::unique_ptr<weld::TreeView> xTreeView,
                                  std::unique_ptr<weld::Label> xLabel,
                                  std::unique_ptr<weld::Widget> xScrolledWindow);
-    virtual ~CustomAnimationList();
+    ~CustomAnimationList();
 
     // methods
 

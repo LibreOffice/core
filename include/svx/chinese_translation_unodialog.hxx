@@ -55,7 +55,7 @@ The dialog gets this information from the registry on execute and writes it back
 
 class ChineseTranslationDialog;
 
-class TEXTCONVERSIONDLGS_DLLPUBLIC ChineseTranslation_UnoDialog : public ::cppu::WeakImplHelper <>
+class TEXTCONVERSIONDLGS_DLLPUBLIC ChineseTranslation_UnoDialog final : public ::cppu::WeakImplHelper <>
 {
 public:
     ChineseTranslation_UnoDialog(const css::uno::Reference< css::awt::XWindow >& xParentWindow);

@@ -31,7 +31,7 @@ class View;
 /**
  * dialog to adjust screen
  */
-class CopyDlg : public SfxDialogController
+class CopyDlg final : public SfxDialogController
 {
 public:
     CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView);

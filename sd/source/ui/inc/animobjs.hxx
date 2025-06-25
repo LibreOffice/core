@@ -49,7 +49,7 @@ enum BitmapAdjustment
     BA_RIGHT_DOWN
 };
 
-class SdDisplay : public weld::CustomWidgetController
+class SdDisplay final : public weld::CustomWidgetController
 {
 private:
     BitmapEx    aBitmapEx;
@@ -67,7 +67,7 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 };
 
-class AnimationWindow : public SfxDockingWindow
+class AnimationWindow final : public SfxDockingWindow
 {
  friend class AnimationChildWindow;
  friend class AnimationControllerItem;
@@ -145,7 +145,7 @@ private:
 /**
  * ControllerItem for Animator
  */
-class AnimationControllerItem : public SfxControllerItem
+class AnimationControllerItem final : public SfxControllerItem
 {
 
 public:

@@ -25,7 +25,7 @@ class SdDrawDocument;
 class SdPageObjsTLV;
 class SfxMedium;
 
-class SdInsertPagesObjsDlg : public weld::GenericDialogController
+class SdInsertPagesObjsDlg final : public weld::GenericDialogController
 {
 private:
     SfxMedium*              m_pMedium;

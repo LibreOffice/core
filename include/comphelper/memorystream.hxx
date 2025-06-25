@@ -30,7 +30,7 @@
 
 namespace comphelper
 {
-class COMPHELPER_DLLPUBLIC UNOMemoryStream
+class COMPHELPER_DLLPUBLIC UNOMemoryStream final
     : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::io::XStream,
                                   css::io::XSeekableInputStream, css::io::XOutputStream,
                                   css::io::XTruncate>,

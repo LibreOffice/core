@@ -32,7 +32,7 @@ namespace sd {
 /**
  * dialog to adjust snap- lines and points
  */
-class SdSnapLineDlg : public weld::GenericDialogController
+class SdSnapLineDlg final : public weld::GenericDialogController
 {
 private:
     int                 nXValue;

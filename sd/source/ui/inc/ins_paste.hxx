@@ -22,7 +22,7 @@
 #include <vcl/weld.hxx>
 
 // SdInsertPasteDlg
-class SdInsertPasteDlg : public weld::GenericDialogController
+class SdInsertPasteDlg final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::RadioButton> m_xRbBefore;

@@ -26,7 +26,7 @@ class SdDrawDocument;
 class SdCustomShow;
 class SdCustomShowList;
 
-class SdCustomShowDlg : public weld::GenericDialogController
+class SdCustomShowDlg final : public weld::GenericDialogController
 {
 private:
     SdDrawDocument& rDoc;
@@ -52,7 +52,7 @@ public:
     bool         IsCustomShow() const;
 };
 
-class SdDefineCustomShowDlg : public weld::GenericDialogController
+class SdDefineCustomShowDlg final : public weld::GenericDialogController
 {
 private:
     SdDrawDocument& rDoc;

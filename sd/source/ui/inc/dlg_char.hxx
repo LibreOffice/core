@@ -27,7 +27,7 @@ class SfxObjectShell;
 /**
  * Character-Tab-Dialog
  */
-class SdCharDlg : public SfxTabDialogController
+class SdCharDlg final : public SfxTabDialogController
 {
 private:
     const SfxObjectShell& rDocShell;

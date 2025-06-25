@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuConnectionDlg
+class FuConnectionDlg final
     : public FuPoor
 {
 public:

@@ -29,7 +29,7 @@ class SvxLanguageBox;
 /**
  * dialog to adjust field-commands
  */
-class SdModifyFieldDlg : public weld::GenericDialogController
+class SdModifyFieldDlg final : public weld::GenericDialogController
 {
 private:
     SfxItemSet          m_aInputSet;

@@ -28,7 +28,7 @@ class View;
 /**
  * Bullet-Tab-Dialog
  */
-class OutlineBulletDlg : public SfxTabDialogController
+class OutlineBulletDlg final : public SfxTabDialogController
 {
 public:
     OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView);

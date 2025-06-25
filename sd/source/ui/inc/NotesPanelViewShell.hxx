@@ -97,7 +97,7 @@ private:
     void Construct();
 };
 
-class FuNotesPane : public FuSimpleOutlinerText
+class FuNotesPane final : public FuSimpleOutlinerText
 {
 public:
     static rtl::Reference<FuPoor> Create(ViewShell& rViewSh, ::sd::Window* pWin,

@@ -27,7 +27,7 @@ class SfxObjectShell;
 /**
  * Page configuration-tab-dialog
  */
-class SdPageDlg : public SfxTabDialogController
+class SdPageDlg final : public SfxTabDialogController
 {
 private:
     bool mbIsImpressDoc;

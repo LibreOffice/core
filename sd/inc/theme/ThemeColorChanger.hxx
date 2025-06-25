@@ -17,7 +17,7 @@
 
 namespace sd
 {
-class SD_DLLPUBLIC ThemeColorChanger : public svx::IThemeColorChanger
+class SD_DLLPUBLIC ThemeColorChanger final : public svx::IThemeColorChanger
 {
 private:
     SdrPage* mpMasterPage;

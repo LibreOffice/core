@@ -26,7 +26,7 @@ namespace sd
 /**
  * The SdClientView is used for DrawDocShell::Draw()
  */
-class ClientView : public DrawView
+class ClientView final : public DrawView
 {
 public:
     ClientView(DrawDocShell* pDocSh, OutputDevice* pOutDev);

@@ -44,7 +44,7 @@ class DrawController;
 
 typedef std::vector< rtl::Reference< MotionPathTag > > MotionPathTagVector;
 
-class CustomAnimationPane : public PanelLayout
+class CustomAnimationPane final : public PanelLayout
                           , public sfx2::sidebar::ILayoutableWindow
                           , public ICustomAnimationListController
 {

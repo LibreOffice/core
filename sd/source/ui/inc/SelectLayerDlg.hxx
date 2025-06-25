@@ -20,7 +20,7 @@
 
 #include <vcl/weld.hxx>
 
-class SdSelectLayerDlg : public weld::GenericDialogController
+class SdSelectLayerDlg final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::Button> m_xOk;
     std::unique_ptr<weld::TreeView> m_xListLB;

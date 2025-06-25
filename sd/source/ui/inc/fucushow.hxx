@@ -23,7 +23,7 @@
 
 namespace sd {
 
-class FuCustomShowDlg
+class FuCustomShowDlg final
     : public FuPoor
 {
 public:

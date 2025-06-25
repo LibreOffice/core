@@ -27,7 +27,7 @@ class SfxBindings;
 
 namespace sd {
 
-class AnimationChildWindow
+class AnimationChildWindow final
     : public SfxChildWindow
 {
 public:

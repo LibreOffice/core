@@ -30,7 +30,7 @@ class ViewShell;
 
 class HeaderFooterTabPage;
 
-class HeaderFooterDialog : public weld::GenericDialogController
+class HeaderFooterDialog final : public weld::GenericDialogController
 {
 private:
     DECL_LINK( ActivatePageHdl, const OUString&, void );

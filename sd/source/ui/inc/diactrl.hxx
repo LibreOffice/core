@@ -52,7 +52,7 @@ public:
 
 // SdTbxCtlDiaPages:
 
-class SdTbxCtlDiaPages : public SfxToolBoxControl
+class SdTbxCtlDiaPages final : public SfxToolBoxControl
 {
 public:
     virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,

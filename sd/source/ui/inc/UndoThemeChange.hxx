@@ -18,7 +18,7 @@ class SdDrawDocument;
 
 namespace sd
 {
-class UndoThemeChange : public SdUndoAction
+class UndoThemeChange final : public SdUndoAction
 {
 private:
     SdrPage* mpMasterPage;

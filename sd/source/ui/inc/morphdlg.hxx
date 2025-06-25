@@ -25,7 +25,7 @@ class SdrObject;
 
 namespace sd {
 
-class MorphDlg : public weld::GenericDialogController
+class MorphDlg final : public weld::GenericDialogController
 {
 public:
     MorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2);

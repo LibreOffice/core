@@ -40,7 +40,7 @@ class View;
 }
 
 /// Main class for handling the bullets, numbering format and their position.
-class SvxBulletAndPositionDlg : public weld::GenericDialogController
+class SvxBulletAndPositionDlg final : public weld::GenericDialogController
 {
     OUString m_sNumCharFmtName;
 

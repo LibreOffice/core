@@ -28,7 +28,7 @@ class SdPage;
 namespace sd
 {
 
-class MasterLayoutDialog : public weld::GenericDialogController
+class MasterLayoutDialog final : public weld::GenericDialogController
 {
 private:
     SdDrawDocument& mrDoc;

@@ -26,7 +26,7 @@ namespace sd
 {
 class ViewShell;
 
-class Client : public SfxInPlaceClient
+class Client final : public SfxInPlaceClient
 {
     ViewShell& mrViewShell;
     SdrOle2Obj* pSdrOle2Obj;
