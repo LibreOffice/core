@@ -253,7 +253,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	,$(call fetch_Download_item,https://dev-www.libreoffice.org/extern,$(item)))
 	-@mkdir -p $(TARFILE_LOCATION)/cargo
 	$(if $(call fetch_Optional,YRS,1),\
-		CARGO_HOME=$(TARFILE_LOCATION)/cargo cargo fetch --locked --manifest-path $(SRCDIR)/external/y-crdt/Cargo.toml)
+		CARGO_HOME=$(TARFILE_LOCATION)/cargo cargo fetch $(if $(verbose),--verbose,) --locked --manifest-path $(SRCDIR)/external/y-crdt/Cargo.toml)
 	@mkdir -p $(dir $@) && touch $@
 	@mkdir -p $(dir $@)/Executable
 

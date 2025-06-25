@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,y-crdt,\
 $(call gb_ExternalProject_get_state_target,y-crdt,build):
 	$(call gb_Trace_StartRange,y-crdt,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		CARGO_HOME=$(TARFILE_LOCATION)/cargo cargo build --offline --locked -p yffi \
+		CARGO_HOME=$(TARFILE_LOCATION)/cargo cargo build $(if $(verbose),--verbose,) --offline --locked -p yffi \
 	)
 	$(call gb_Trace_EndRange,y-crdt,EXTERNAL)
 
