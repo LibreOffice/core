@@ -61,8 +61,6 @@
 #include <vector>
 #include <memory>
 
-using ::std::vector;
-
 namespace {
 
 ScProgress* GetProgressBar(
@@ -239,6 +237,8 @@ bool SetOptimalHeightsToRows(
 
 ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
                     bool bColInfo, bool bRowInfo ) :
+    nTab(nNewTab),
+    rDocument(rDoc),
     aCol( rDoc.GetSheetLimits(), INITIALCOLCOUNT ),
     aName( rNewName ),
     aCodeName( rNewName ),
@@ -250,17 +250,11 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     nRepeatStartY( SCROW_REPEAT_NONE ),
     nRepeatEndY( SCROW_REPEAT_NONE ),
     mnOptimalMinRowHeight(0),
-    mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(nullptr) ),
-    mpHiddenCols(new ScFlatBoolColSegments(rDoc.MaxCol())),
-    mpHiddenRows(new ScFlatBoolRowSegments(rDoc.MaxRow())),
-    mpFilteredCols(new ScFlatBoolColSegments(rDoc.MaxCol())),
-    mpFilteredRows(new ScFlatBoolRowSegments(rDoc.MaxRow())),
+    maFilterData(*this),
     nTableAreaX( 0 ),
     nTableAreaY( 0 ),
     nTableAreaVisibleX( 0 ),
     nTableAreaVisibleY( 0 ),
-    nTab( nNewTab ),
-    rDocument( rDoc ),
     pSortCollator( nullptr ),
     nLockCount( 0 ),
     aScenarioColor( COL_LIGHTGRAY ),
@@ -2176,7 +2170,7 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
         for (SCCOL nDataCol = nCol; 0 <= nDataCol && nDataCol >= aColData.mnCol1; --nDataCol)
         {
             SCCOL nPrintCol = nDataCol;
-            VisibleDataCellIterator aIter(rDocument, *mpHiddenRows, aCol[nDataCol]);
+            VisibleDataCellIterator aIter(rDocument, *maFilterData.mpHiddenRows, aCol[nDataCol]);
             ScRefCellValue aCell = aIter.reset(nStartRow);
             if (aCell.isEmpty())
                 // No visible cells found in this column.  Skip it.
@@ -2619,10 +2613,7 @@ bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2
     if ( !IsColValid( nCol ) || !ValidRow( nRow1 ) || !ValidRow( nRow2 ) )
         return false;
 
-    mpHiddenCols->makeReady();
-    mpHiddenRows->makeReady();
-    mpFilteredCols->makeReady();
-    mpFilteredRows->makeReady();
+    maFilterData.makeReady();
 
     return aCol[nCol].HandleRefArrayForParallelism(nRow1, nRow2, mxGroup, pDirtiedAddress);
 }

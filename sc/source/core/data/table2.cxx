@@ -168,8 +168,8 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         if (pOutlineTable)
             pOutlineTable->InsertRow( nStartRow, nSize );
 
-        mpFilteredRows->insertSegment(nStartRow, nSize);
-        mpHiddenRows->insertSegment(nStartRow, nSize);
+        maFilterData.mpFilteredRows->insertSegment(nStartRow, nSize);
+        maFilterData.mpHiddenRows->insertSegment(nStartRow, nSize);
 
         if (!maRowManualBreaks.empty())
         {
@@ -217,8 +217,8 @@ void ScTable::DeleteRow(
                 if (pUndoOutline)
                     *pUndoOutline = true;
 
-        mpFilteredRows->removeSegment(nStartRow, nStartRow+nSize);
-        mpHiddenRows->removeSegment(nStartRow, nStartRow+nSize);
+        maFilterData.mpFilteredRows->removeSegment(nStartRow, nStartRow+nSize);
+        maFilterData.mpHiddenRows->removeSegment(nStartRow, nStartRow+nSize);
 
         if (!maRowManualBreaks.empty())
         {
@@ -291,8 +291,8 @@ void ScTable::InsertCol(
         if (pOutlineTable)
             pOutlineTable->InsertCol( nStartCol, nSize );
 
-        mpHiddenCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize));
-        mpFilteredCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize));
+        maFilterData.mpHiddenCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize));
+        maFilterData.mpFilteredCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize));
 
         if (!maColManualBreaks.empty())
         {
@@ -371,8 +371,8 @@ void ScTable::DeleteCol(
                     *pUndoOutline = true;
 
         SCCOL nRmSize = nStartCol + static_cast<SCCOL>(nSize);
-        mpHiddenCols->removeSegment(nStartCol, nRmSize);
-        mpFilteredCols->removeSegment(nStartCol, nRmSize);
+        maFilterData.mpHiddenCols->removeSegment(nStartCol, nRmSize);
+        maFilterData.mpFilteredCols->removeSegment(nStartCol, nRmSize);
 
         if (!maColManualBreaks.empty())
         {
@@ -491,7 +491,7 @@ void ScTable::CopyToClip(
         pTable->mpColWidth->CopyFrom(*mpColWidth, 0, nCol2);
 
     pTable->CopyColHidden(*this, 0, nCol2);
-    pTable->CopyColFiltered(*this, 0, nCol2);
+    pTable->getFilterData().copyColFiltered(getFilterData(), 0, nCol2);
     if (pDBDataNoName)
         pTable->SetAnonymousDBData(std::unique_ptr<ScDBData>(new ScDBData(*pDBDataNoName)));
 
@@ -502,7 +502,7 @@ void ScTable::CopyToClip(
     }
 
     pTable->CopyRowHidden(*this, 0, nRow2);
-    pTable->CopyRowFiltered(*this, 0, nRow2);
+    pTable->getFilterData().copyRowFiltered(getFilterData(), 0, nRow2);
 
     // If necessary replace formulas with values
 
@@ -892,7 +892,7 @@ public:
             for (SCROW curRow = nTopRow; curRow <= static_cast<SCROW>(mnEndRow); ++curRow)
             {
                 // maybe this loop could be optimized
-                bool bFiltered = mrSrcTab.RowFiltered(curRow, nullptr, nullptr);
+                bool bFiltered = mrSrcTab.getFilterData().rowFiltered(curRow, nullptr, nullptr);
                 if (bFiltered)
                     rFilteredRows.push_back(curRow);
             }
@@ -901,7 +901,7 @@ public:
 
     void operator() (size_t nRow, double fVal)
     {
-        bool bFiltered = mrSrcTab.RowFiltered(nRow, nullptr, nullptr);
+        bool bFiltered = mrSrcTab.getFilterData().rowFiltered(nRow, nullptr, nullptr);
         if (!mbIncludeFiltered && bFiltered)
         {
             mnFilteredRows++;
@@ -920,7 +920,7 @@ public:
 
     void operator() (size_t nRow, const svl::SharedString& rStr)
     {
-        bool bFiltered = mrSrcTab.RowFiltered(nRow, nullptr, nullptr);
+        bool bFiltered = mrSrcTab.getFilterData().rowFiltered(nRow, nullptr, nullptr);
         if (!mbIncludeFiltered && bFiltered)
         {
             mnFilteredRows++;
@@ -939,7 +939,7 @@ public:
 
     void operator() (size_t nRow, const EditTextObject* p)
     {
-        bool bFiltered = mrSrcTab.RowFiltered(nRow, nullptr, nullptr);
+        bool bFiltered = mrSrcTab.getFilterData().rowFiltered(nRow, nullptr, nullptr);
         if (!mbIncludeFiltered && bFiltered)
         {
             mnFilteredRows++;
@@ -958,7 +958,7 @@ public:
 
     void operator() (size_t nRow, const ScFormulaCell* p)
     {
-        bool bFiltered = mrSrcTab.RowFiltered(nRow, nullptr, nullptr);
+        bool bFiltered = mrSrcTab.getFilterData().rowFiltered(nRow, nullptr, nullptr);
         if (!mbIncludeFiltered && bFiltered)
         {
             mnFilteredRows++;
@@ -990,7 +990,7 @@ public:
     {
         for (size_t curRow = nRow; curRow < nRow + nDataSize; ++curRow)
         {
-            bool bFiltered = mrSrcTab.RowFiltered(curRow, nullptr, nullptr);
+            bool bFiltered = mrSrcTab.getFilterData().rowFiltered(curRow, nullptr, nullptr);
             if (!mbIncludeFiltered && bFiltered)
             {
                 mnFilteredRows++;
@@ -1192,7 +1192,7 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                 size_t curRow = nBlockStart + nOffsetInBlock;
                 for (; itData != itDataEnd; ++itData, ++curRow)
                 {
-                    bool bFiltered = this->RowFiltered(curRow, nullptr, nullptr);
+                    bool bFiltered = getFilterData().rowFiltered(curRow, nullptr, nullptr);
                     if (!bIncludeFiltered && bFiltered)
                     {
                         nFilteredRows++;
@@ -1218,7 +1218,7 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                 size_t curRow = nBlockStart + nOffsetInBlock;
                 for (; itData != itDataEnd; ++itData, ++curRow)
                 {
-                    bool bFiltered = this->RowFiltered(curRow, nullptr, nullptr);
+                    bool bFiltered = getFilterData().rowFiltered(curRow, nullptr, nullptr);
                     if (!bIncludeFiltered && bFiltered)
                     {
                         nFilteredRows++;
@@ -1243,7 +1243,7 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
             for (size_t curRow = nBlockStart + nOffsetInBlock;
                  curRow <= nBlockEnd && curRow <= nRowPos; ++curRow)
             {
-                bool bFiltered = this->RowFiltered(curRow, nullptr, nullptr);
+                bool bFiltered = getFilterData().rowFiltered(curRow, nullptr, nullptr);
                 if (!bIncludeFiltered && bFiltered && curRow < nBlockEnd)
                 {
                     nFilteredRows++;
@@ -1473,11 +1473,11 @@ void ScTable::CopyToTable(
         for (SCROW i = nRow1; i <= nRow2; ++i)
         {
             SCROW nLastRow;
-            bool bFiltered = RowFiltered(i, nullptr, &nLastRow);
+            bool bFiltered = getFilterData().rowFiltered(i, nullptr, &nLastRow);
             if (nLastRow >= nRow2)
                 // the last row shouldn't exceed the upper bound the caller specified.
                 nLastRow = nRow2;
-            pDestTab->SetRowFiltered(i, nLastRow, bFiltered);
+            pDestTab->getFilterData().setRowFiltered(i, nLastRow, bFiltered);
             i = nLastRow;
         }
         pDestTab->SetRowManualBreaks(std::set(maRowManualBreaks));
@@ -3755,7 +3755,7 @@ void ScTable::ShowRow(SCROW nRow, bool bShow)
         {
             SetRowHidden(nRow, nRow, !bShow);
             if (bShow)
-                SetRowFiltered(nRow, nRow, false);
+                getFilterData().setRowFiltered(nRow, nRow, false);
             ScChartListenerCollection* pCharts = rDocument.GetChartListenerCollection();
             if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, rDocument.MaxCol(), nRow, nTab ));
@@ -3775,7 +3775,7 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
     {
         //  Always set filter flag; unchanged when Hidden
         bool bChanged = SetRowHidden(nRow, nRow, !bShow);
-        SetRowFiltered(nRow, nRow, !bShow);
+        getFilterData().setRowFiltered(nRow, nRow, !bShow);
 
         if (bChanged)
         {
@@ -3808,7 +3808,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
         bool bChanged = ( bWasVis != bShow );
 
         SetRowHidden(nStartRow, nEndRow, !bShow);
-        SetRowFiltered(nStartRow, nEndRow, !bShow);
+        getFilterData().setRowFiltered(nStartRow, nEndRow, !bShow);
 
         if ( bChanged )
         {
@@ -3846,7 +3846,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
 
         SetRowHidden(nStartRow, nEndRow, !bShow);
         if (bShow)
-            SetRowFiltered(nStartRow, nEndRow, false);
+            getFilterData().setRowFiltered(nStartRow, nEndRow, false);
 
         if ( bChanged )
         {
@@ -3865,7 +3865,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
         // #i116164# set the flags for the whole range at once
         SetRowHidden(nRow1, nRow2, !bShow);
         if (bShow)
-            SetRowFiltered(nRow1, nRow2, false);
+            getFilterData().setRowFiltered(nRow1, nRow2, false);
     }
 }
 
@@ -3942,16 +3942,16 @@ SCROW ScTable::GetLastFlaggedRow() const
     if (!maRowManualBreaks.empty())
         nLastFound = ::std::max(nLastFound, *maRowManualBreaks.rbegin());
 
-    if (mpHiddenRows)
+    if (maFilterData.mpHiddenRows)
     {
-        SCROW nRow = mpHiddenRows->findLastTrue();
+        SCROW nRow = maFilterData.mpHiddenRows->findLastTrue();
         if (ValidRow(nRow))
             nLastFound = ::std::max(nLastFound, nRow);
     }
 
-    if (mpFilteredRows)
+    if (maFilterData.mpFilteredRows)
     {
-        SCROW nRow = mpFilteredRows->findLastTrue();
+        SCROW nRow = maFilterData.mpFilteredRows->findLastTrue();
         if (ValidRow(nRow))
             nLastFound = ::std::max(nLastFound, nRow);
     }
@@ -4023,7 +4023,7 @@ void ScTable::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     if (rY1 > 0)
     {
         ScFlatBoolRowSegments::RangeData aData;
-        if (mpHiddenRows->getRangeData(rY1-1, aData) && aData.mbValue)
+        if (maFilterData.mpHiddenRows->getRangeData(rY1-1, aData) && aData.mbValue)
         {
             SCROW nStartRow = aData.mnRow1;
             if (ValidRow(nStartRow))
@@ -4048,7 +4048,7 @@ void ScTable::StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     if (rY1 < rY2)
     {
         ScFlatBoolRowSegments::RangeData aData;
-        if (mpHiddenRows->getRangeData(rY2, aData) && aData.mbValue)
+        if (maFilterData.mpHiddenRows->getRangeData(rY2, aData) && aData.mbValue)
         {
             SCROW nStartRow = aData.mnRow1;
             if (ValidRow(nStartRow) && nStartRow >= rY1)
@@ -4240,7 +4240,7 @@ bool ScTable::RefVisible(const ScFormulaCell* pCell)
         if (aRef.aStart.Col()==aRef.aEnd.Col() && aRef.aStart.Tab()==aRef.aEnd.Tab())
         {
             SCROW nEndRow;
-            if (!RowFiltered(aRef.aStart.Row(), nullptr, &nEndRow))
+            if (!getFilterData().rowFiltered(aRef.aStart.Row(), nullptr, &nEndRow))
                 // row not filtered.
                 nEndRow = ::std::numeric_limits<SCROW>::max();
 
@@ -4307,7 +4307,7 @@ ScRangeName* ScTable::GetRangeName() const
 tools::Long ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
 {
     tools::Long n = 0;
-    if ( mpHiddenRows && mpRowHeights )
+    if (maFilterData.mpHiddenRows && mpRowHeights)
     {
         if (nRow == 0)
             return 0;
@@ -4351,7 +4351,7 @@ SCROW ScTable::GetRowForHeight(tools::Long nHeight) const
         // fetch hidden data range if necessary
         if (aHiddenRange.mnRow2 < nRow)
         {
-            if (!mpHiddenRows->getRangeData(nRow, aHiddenRange))
+            if (!maFilterData.mpHiddenRows->getRangeData(nRow, aHiddenRange))
                 // Failed to fetch the range data for whatever reason.
                 break;
         }
@@ -4433,7 +4433,7 @@ SCROW ScTable::GetRowForHeightPixels(SCROW nStartRow, tools::Long& rStartRowHeig
         // fetch hidden data range if necessary
         if (aHiddenRange.mnRow2 < nRow)
         {
-            if (!mpHiddenRows->getRangeData(nRow, aHiddenRange))
+            if (!maFilterData.mpHiddenRows->getRangeData(nRow, aHiddenRange))
                 // Failed to fetch the range data for whatever reason.
                 break;
         }

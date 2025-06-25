@@ -276,7 +276,7 @@ void initDataRows(
         {
             ScSortInfoArray::Row& rRow = rRows[nRow-nRow1];
             rRow.mbHidden = rTab.RowHidden(nRow);
-            rRow.mbFiltered = rTab.RowFiltered(nRow);
+            rRow.mbFiltered = rTab.getFilterData().rowFiltered(nRow);
         }
     }
 }
@@ -1077,7 +1077,7 @@ void ScTable::SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol
 
         // Remove all flags in the range first.
         SetRowHidden(nRow1, nRow2, false);
-        SetRowFiltered(nRow1, nRow2, false);
+        getFilterData().setRowFiltered(nRow1, nRow2, false);
 
         std::vector<sc::RowSpan> aSpans =
             sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsHidden, nRow1);
@@ -1088,7 +1088,7 @@ void ScTable::SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol
         aSpans = sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsFiltered, nRow1);
 
         for (const auto& rSpan : aSpans)
-            SetRowFiltered(rSpan.mnRow1, rSpan.mnRow2, true);
+            getFilterData().setRowFiltered(rSpan.mnRow1, rSpan.mnRow2, true);
 
         //Restore visibility state of objects
         restoreObjectsVisibility(aSortedCols, aBackup);
@@ -1282,7 +1282,7 @@ void ScTable::SortReorderByRowRefUpdate(
 
         // Remove all flags in the range first.
         SetRowHidden(nRow1, nRow2, false);
-        SetRowFiltered(nRow1, nRow2, false);
+        getFilterData().setRowFiltered(nRow1, nRow2, false);
 
         std::vector<sc::RowSpan> aSpans =
             sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsHidden, nRow1);
@@ -1293,7 +1293,7 @@ void ScTable::SortReorderByRowRefUpdate(
         aSpans = sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsFiltered, nRow1);
 
         for (const auto& rSpan : aSpans)
-            SetRowFiltered(rSpan.mnRow1, rSpan.mnRow2, true);
+            getFilterData().setRowFiltered(rSpan.mnRow1, rSpan.mnRow2, true);
 
         //Restore visibility state of objects
         restoreObjectsVisibility(aSortedCols, aBackup);
@@ -2158,7 +2158,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         }
                     }
                 }
-                bBlockVis = !RowFiltered(nRow);
+                bBlockVis = !getFilterData().rowFiltered(nRow);
             }
         }
     }
@@ -3051,7 +3051,7 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& 
         if (mpColFlags && ColHidden(nCol))
             continue;
 
-        aCol[nCol].UpdateSelectionFunction(aRanges, rData, *mpHiddenRows);
+        aCol[nCol].UpdateSelectionFunction(aRanges, rData, *maFilterData.mpHiddenRows);
     }
 }
 

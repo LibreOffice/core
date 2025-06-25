@@ -567,15 +567,15 @@ OString ScTable::dumpHiddenFiltered(bool bColumns, bool bHidden)
     if (bHidden)
     {
         if (bColumns)
-            return mpHiddenCols ? mpHiddenCols->dumpAsString() : aDefaultForCols;
+            return maFilterData.dumpHiddenColsAsString(aDefaultForCols);
 
-        return mpHiddenRows ? mpHiddenRows->dumpAsString() : aDefaultForRows;
+        return maFilterData.dumpHiddenRowsAsString(aDefaultForRows);
     }
 
     if (bColumns)
-        return mpFilteredCols ? mpFilteredCols->dumpAsString() : aDefaultForCols;
+        return maFilterData.dumpColsAsString(aDefaultForCols);
 
-    return mpFilteredRows ? mpFilteredRows->dumpAsString() : aDefaultForRows;
+    return maFilterData.dumpRowsAsString(aDefaultForRows);
 }
 
 OString ScTable::dumpColumnRowGroups(bool bColumns) const

@@ -201,7 +201,7 @@ void ScTable::UpdatePageBreaks(const ScRange* pUserArea)
     bool bRepeatRow = (nRepeatStartY != SCROW_REPEAT_NONE);
     bool bRowFound = false;
     tools::Long nSizeY = 0;
-    ScFlatBoolRowSegments::ForwardIterator aIterHidden(*mpHiddenRows);
+    ScFlatBoolRowSegments::ForwardIterator aIterHidden(*maFilterData.mpHiddenRows);
     ScFlatUInt16RowSegments::ForwardIterator aIterHeights(*mpRowHeights);
     SCROW nNextManualBreak = GetNextManualBreak(nStartRow); // -1 => no more manual breaks
     for (SCROW nY = nStartRow; nY <= nEndRow; ++nY)
@@ -486,106 +486,58 @@ Sequence<TablePageBreakData> ScTable::GetRowBreakData() const
 
 bool ScTable::RowHidden(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
 {
-    if (!ValidRow(nRow))
-    {
-        if (pFirstRow)
-            *pFirstRow = nRow;
-        if (pLastRow)
-            *pLastRow = nRow;
-        return true;
-    }
-
-    ScFlatBoolRowSegments::RangeData aData;
-    if (!mpHiddenRows->getRangeData(nRow, aData))
-    {
-        // search failed.
-        if (pFirstRow)
-            *pFirstRow = nRow;
-        if (pLastRow)
-            *pLastRow = nRow;
-        return true;
-    }
-
-    if (pFirstRow)
-        *pFirstRow = aData.mnRow1;
-    if (pLastRow)
-        *pLastRow = aData.mnRow2;
-
-    return aData.mbValue;
+    return maFilterData.rowHidden(nRow, pFirstRow, pLastRow);
 }
 
 bool ScTable::RowHiddenLeaf(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
 {
-    if (!ValidRow(nRow))
-    {
-        if (pFirstRow)
-            *pFirstRow = nRow;
-        if (pLastRow)
-            *pLastRow = nRow;
-        return true;
-    }
-
-    ScFlatBoolRowSegments::RangeData aData;
-    if (!mpHiddenRows->getRangeDataLeaf(nRow, aData))
-    {
-        // search failed.
-        if (pFirstRow)
-            *pFirstRow = nRow;
-        if (pLastRow)
-            *pLastRow = nRow;
-        return true;
-    }
-
-    if (pFirstRow)
-        *pFirstRow = aData.mnRow1;
-    if (pLastRow)
-        *pLastRow = aData.mnRow2;
-
-    return aData.mbValue;
+    return maFilterData.rowHiddenLeaf(nRow, pFirstRow, pLastRow);
 }
 
 bool ScTable::HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const
 {
-    SCROW nRow = nStartRow;
-    while (nRow <= nEndRow)
-    {
-        SCROW nLastRow = -1;
-        bool bHidden = RowHidden(nRow, nullptr, &nLastRow);
-        if (bHidden)
-            return true;
-
-        nRow = nLastRow + 1;
-    }
-    return false;
+    return maFilterData.hasHiddenRows(nStartRow, nEndRow);
 }
 
 bool ScTable::ColHidden(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol) const
 {
-    if (!ValidCol(nCol))
-        return true;
-
-    ScFlatBoolColSegments::RangeData aData;
-    if (!mpHiddenCols->getRangeData(nCol, aData))
-        return true;
-
-    if (pFirstCol)
-        *pFirstCol = aData.mnCol1;
-    if (pLastCol)
-        *pLastCol = aData.mnCol2;
-
-    return aData.mbValue;
+    return maFilterData.colHidden(nCol, pFirstCol, pLastCol);
 }
 
-bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
+void ScTable::updateObjectsForColsChanged(SCCOL nStartCol, SCCOL nEndCol, bool bHidden,
+                                          bool bChanged)
 {
-    bool bChanged = false;
-    if (bHidden)
-        bChanged = mpHiddenRows->setTrue(nStartRow, nEndRow);
-    else
-        bChanged = mpHiddenRows->setFalse(nStartRow, nEndRow);
-
     // Cell anchored objects might change visibility
-    ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = GetDoc().GetDrawLayer();
+    if (pDrawLayer)
+    {
+        std::vector<SdrObject*> aColDrawObjects;
+        aColDrawObjects = pDrawLayer->GetObjectsAnchoredToCols(GetTab(), nStartCol, nEndCol);
+        for (auto aObj : aColDrawObjects)
+        {
+            ScDrawObjData* pData = ScDrawLayer::GetObjData(aObj);
+            if (pData)
+            {
+                if (bHidden)
+                    aObj->SetVisible(false);
+                else if (!GetDoc().RowHidden(pData->maStart.Row(), pData->maStart.Tab()))
+                {
+                    // Only change visibility if object is not hidden by a hidden row
+                    aObj->SetVisible(true);
+                }
+            }
+        }
+    }
+
+    if (bChanged)
+        SetStreamValid(false);
+}
+
+void ScTable::updateObjectsForRowsChanged(SCROW nStartRow, SCROW nEndRow, bool bHidden,
+                                          bool bChanged)
+{
+    // Cell anchored objects might change visibility
+    ScDrawLayer* pDrawLayer = GetDoc().GetDrawLayer();
     if (pDrawLayer)
     {
         std::vector<SdrObject*> aRowDrawObjects;
@@ -615,78 +567,33 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
             // SfxHintId::ScHiddenRowsChanged, leaving the bulk will track
             // those and broadcast SfxHintId::ScDataChanged to notify all
             // dependents.
-            ScBulkBroadcast aBulkBroadcast(rDocument.GetBASM(), SfxHintId::ScDataChanged);
+            ScBulkBroadcast aBulkBroadcast(GetDoc().GetBASM(), SfxHintId::ScDataChanged);
             for (SCCOL i = 0; i < aCol.size(); i++)
             {
                 aCol[i].BroadcastRows(nStartRow, nEndRow, SfxHintId::ScHiddenRowsChanged);
             }
         }
     }
+}
 
-    return bChanged;
+bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
+{
+    return maFilterData.setRowHidden(nStartRow, nEndRow, bHidden);
 }
 
 void ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
 {
-    bool bChanged = false;
-    if (bHidden)
-        bChanged = mpHiddenCols->setTrue(nStartCol, nEndCol);
-    else
-        bChanged = mpHiddenCols->setFalse(nStartCol, nEndCol);
-
-    // Cell anchored objects might change visibility
-    ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer();
-    if (pDrawLayer)
-    {
-        std::vector<SdrObject*> aColDrawObjects;
-        aColDrawObjects = pDrawLayer->GetObjectsAnchoredToCols(GetTab(), nStartCol, nEndCol);
-        for (auto aObj : aColDrawObjects)
-        {
-            ScDrawObjData* pData = ScDrawLayer::GetObjData(aObj);
-            if (pData)
-            {
-                if (bHidden)
-                    aObj->SetVisible(false);
-                else if (!GetDoc().RowHidden(pData->maStart.Row(), pData->maStart.Tab()))
-                {
-                    // Only change visibility if object is not hidden by a hidden row
-                    aObj->SetVisible(true);
-                }
-            }
-        }
-    }
-
-    if (bChanged)
-        SetStreamValid(false);
+    maFilterData.setColHidden(nStartCol, nEndCol, bHidden);
 }
 
 void ScTable::CopyColHidden(const ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
 {
-    SCCOL nCol = nStartCol;
-    while (nCol <= nEndCol)
-    {
-        SCCOL nLastCol = -1;
-        bool bHidden = rTable.ColHidden(nCol, nullptr, &nLastCol);
-        if (nLastCol > nEndCol)
-            nLastCol = nEndCol;
-
-        SetColHidden(nCol, nLastCol, bHidden);
-        nCol = nLastCol + 1;
-    }
+    return maFilterData.copyColHidden(rTable.getFilterData(), nStartCol, nEndCol);
 }
 
 void ScTable::CopyRowHidden(const ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
 {
-    SCROW nRow = nStartRow;
-    while (nRow <= nEndRow)
-    {
-        SCROW nLastRow = -1;
-        bool bHidden = rTable.RowHidden(nRow, nullptr, &nLastRow);
-        if (nLastRow > nEndRow)
-            nLastRow = nEndRow;
-        SetRowHidden(nRow, nLastRow, bHidden);
-        nRow = nLastRow + 1;
-    }
+    return maFilterData.copyRowHidden(rTable.getFilterData(), nStartRow, nEndRow);
 }
 
 void ScTable::CopyRowHeight(const ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow,
@@ -711,69 +618,17 @@ void ScTable::CopyRowHeight(const ScTable& rSrcTable, SCROW nStartRow, SCROW nEn
 
 SCROW ScTable::FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const
 {
-    SCROW nRow = nStartRow;
-    ScFlatBoolRowSegments::RangeData aData;
-    while (nRow <= nEndRow)
-    {
-        if (!ValidRow(nRow))
-            break;
-
-        if (!mpHiddenRows->getRangeData(nRow, aData))
-            // failed to get range data.
-            break;
-
-        if (!aData.mbValue)
-            // visible row found
-            return nRow;
-
-        nRow = aData.mnRow2 + 1;
-    }
-
-    return ::std::numeric_limits<SCROW>::max();
+    return maFilterData.firstVisibleRow(nStartRow, nEndRow);
 }
 
 SCROW ScTable::LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const
 {
-    SCROW nRow = nEndRow;
-    ScFlatBoolRowSegments::RangeData aData;
-    while (nRow >= nStartRow)
-    {
-        if (!ValidRow(nRow))
-            break;
-
-        if (!mpHiddenRows->getRangeData(nRow, aData))
-            // failed to get range data.
-            break;
-
-        if (!aData.mbValue)
-            // visible row found
-            return nRow;
-
-        nRow = aData.mnRow1 - 1;
-    }
-
-    return ::std::numeric_limits<SCROW>::max();
+    return maFilterData.lastVisibleRow(nStartRow, nEndRow);
 }
 
 SCROW ScTable::CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const
 {
-    SCROW nCount = 0;
-    SCROW nRow = nStartRow;
-    ScFlatBoolRowSegments::RangeData aData;
-    while (nRow <= nEndRow)
-    {
-        if (!mpHiddenRows->getRangeData(nRow, aData))
-            break;
-
-        if (aData.mnRow2 > nEndRow)
-            aData.mnRow2 = nEndRow;
-
-        if (!aData.mbValue)
-            nCount += aData.mnRow2 - nRow + 1;
-
-        nRow = aData.mnRow2 + 1;
-    }
-    return nCount;
+    return maFilterData.countVisibleRows(nStartRow, nEndRow);
 }
 
 tools::Long ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero) const
@@ -783,7 +638,7 @@ tools::Long ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHid
     ScFlatBoolRowSegments::RangeData aData;
     while (nRow <= nEndRow)
     {
-        if (!mpHiddenRows->getRangeData(nRow, aData))
+        if (!maFilterData.mpHiddenRows->getRangeData(nRow, aData))
             break;
 
         if (aData.mnRow2 > nEndRow)
@@ -801,211 +656,12 @@ tools::Long ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHid
 
 SCCOL ScTable::CountVisibleCols(SCCOL nStartCol, SCCOL nEndCol) const
 {
-    assert(nStartCol <= nEndCol);
-    SCCOL nCount = 0;
-    SCCOL nCol = nStartCol;
-    ScFlatBoolColSegments::RangeData aData;
-    while (nCol <= nEndCol)
-    {
-        if (!mpHiddenCols->getRangeData(nCol, aData))
-            break;
-
-        if (aData.mnCol2 > nEndCol)
-            aData.mnCol2 = nEndCol;
-
-        if (!aData.mbValue)
-            nCount += aData.mnCol2 - nCol + 1;
-
-        nCol = aData.mnCol2 + 1;
-    }
-    return nCount;
+    return maFilterData.countVisibleCols(nStartCol, nEndCol);
 }
 
 SCCOLROW ScTable::LastHiddenColRow(SCCOLROW nPos, bool bCol) const
 {
-    if (bCol)
-    {
-        SCCOL nCol = static_cast<SCCOL>(nPos);
-        if (ColHidden(nCol))
-        {
-            for (SCCOL i = nCol + 1; i <= rDocument.MaxCol(); ++i)
-            {
-                if (!ColHidden(i))
-                    return i - 1;
-            }
-        }
-    }
-    else
-    {
-        SCROW nRow = static_cast<SCROW>(nPos);
-        SCROW nLastRow;
-        if (RowHidden(nRow, nullptr, &nLastRow))
-            return static_cast<SCCOLROW>(nLastRow);
-    }
-    return ::std::numeric_limits<SCCOLROW>::max();
-}
-
-bool ScTable::RowFiltered(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
-{
-    if (!ValidRow(nRow))
-        return false;
-
-    ScFlatBoolRowSegments::RangeData aData;
-    if (!mpFilteredRows->getRangeData(nRow, aData))
-        // search failed.
-        return false;
-
-    if (pFirstRow)
-        *pFirstRow = aData.mnRow1;
-    if (pLastRow)
-        *pLastRow = aData.mnRow2;
-
-    return aData.mbValue;
-}
-
-bool ScTable::ColFiltered(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol) const
-{
-    if (!ValidCol(nCol))
-        return false;
-
-    ScFlatBoolColSegments::RangeData aData;
-    if (!mpFilteredCols->getRangeData(nCol, aData))
-        // search failed.
-        return false;
-
-    if (pFirstCol)
-        *pFirstCol = aData.mnCol1;
-    if (pLastCol)
-        *pLastCol = aData.mnCol2;
-
-    return aData.mbValue;
-}
-
-bool ScTable::HasFilteredRows(SCROW nStartRow, SCROW nEndRow) const
-{
-    SCROW nRow = nStartRow;
-    while (nRow <= nEndRow)
-    {
-        SCROW nLastRow = nRow;
-        bool bFiltered = RowFiltered(nRow, nullptr, &nLastRow);
-        if (bFiltered)
-            return true;
-
-        nRow = nLastRow + 1;
-    }
-    return false;
-}
-
-void ScTable::CopyColFiltered(const ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
-{
-    SCCOL nCol = nStartCol;
-    while (nCol <= nEndCol)
-    {
-        SCCOL nLastCol = -1;
-        bool bFiltered = rTable.ColFiltered(nCol, nullptr, &nLastCol);
-        if (nLastCol > nEndCol)
-            nLastCol = nEndCol;
-
-        SetColFiltered(nCol, nLastCol, bFiltered);
-        nCol = nLastCol + 1;
-    }
-}
-
-void ScTable::CopyRowFiltered(const ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
-{
-    SCROW nRow = nStartRow;
-    while (nRow <= nEndRow)
-    {
-        SCROW nLastRow = -1;
-        bool bFiltered = rTable.RowFiltered(nRow, nullptr, &nLastRow);
-        if (nLastRow > nEndRow)
-            nLastRow = nEndRow;
-        SetRowFiltered(nRow, nLastRow, bFiltered);
-        nRow = nLastRow + 1;
-    }
-}
-
-void ScTable::SetRowFiltered(SCROW nStartRow, SCROW nEndRow, bool bFiltered)
-{
-    if (bFiltered)
-        mpFilteredRows->setTrue(nStartRow, nEndRow);
-    else
-        mpFilteredRows->setFalse(nStartRow, nEndRow);
-}
-
-void ScTable::SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, bool bFiltered)
-{
-    if (bFiltered)
-        mpFilteredCols->setTrue(nStartCol, nEndCol);
-    else
-        mpFilteredCols->setFalse(nStartCol, nEndCol);
-}
-
-SCROW ScTable::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const
-{
-    SCROW nRow = nStartRow;
-    ScFlatBoolRowSegments::RangeData aData;
-    while (nRow <= nEndRow)
-    {
-        if (!ValidRow(nRow))
-            break;
-
-        if (!mpFilteredRows->getRangeData(nRow, aData))
-            // failed to get range data.
-            break;
-
-        if (!aData.mbValue)
-            // non-filtered row found
-            return nRow;
-
-        nRow = aData.mnRow2 + 1;
-    }
-
-    return ::std::numeric_limits<SCROW>::max();
-}
-
-SCROW ScTable::LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const
-{
-    SCROW nRow = nEndRow;
-    ScFlatBoolRowSegments::RangeData aData;
-    while (nRow >= nStartRow)
-    {
-        if (!ValidRow(nRow))
-            break;
-
-        if (!mpFilteredRows->getRangeData(nRow, aData))
-            // failed to get range data.
-            break;
-
-        if (!aData.mbValue)
-            // non-filtered row found
-            return nRow;
-
-        nRow = aData.mnRow1 - 1;
-    }
-
-    return ::std::numeric_limits<SCROW>::max();
-}
-
-SCROW ScTable::CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const
-{
-    SCROW nCount = 0;
-    SCROW nRow = nStartRow;
-    ScFlatBoolRowSegments::RangeData aData;
-    while (nRow <= nEndRow)
-    {
-        if (!mpFilteredRows->getRangeData(nRow, aData))
-            break;
-
-        if (aData.mnRow2 > nEndRow)
-            aData.mnRow2 = nEndRow;
-
-        if (!aData.mbValue)
-            nCount += aData.mnRow2 - nRow + 1;
-
-        nRow = aData.mnRow2 + 1;
-    }
-    return nCount;
+    return maFilterData.lastHiddenColRow(nPos, bCol);
 }
 
 Color ScTable::GetCellBackgroundColor(ScAddress aPos) const
@@ -1146,10 +802,10 @@ void ScTable::SyncColRowFlags()
         mpColFlags->OrValue(rBreakPos, CRFlags::ManualBreak);
 
     // Hidden flags.
-    lcl_syncFlags(&rDocument, *mpHiddenCols, *mpHiddenRows, mpColFlags.get(), pRowFlags.get(),
-                  CRFlags::Hidden);
-    lcl_syncFlags(&rDocument, *mpFilteredCols, *mpFilteredRows, mpColFlags.get(), pRowFlags.get(),
-                  CRFlags::Filtered);
+    lcl_syncFlags(&rDocument, *maFilterData.mpHiddenCols, *maFilterData.mpHiddenRows,
+                  mpColFlags.get(), pRowFlags.get(), CRFlags::Hidden);
+    lcl_syncFlags(&rDocument, *maFilterData.mpFilteredCols, *maFilterData.mpFilteredRows,
+                  mpColFlags.get(), pRowFlags.get(), CRFlags::Filtered);
 }
 
 void ScTable::SetPageSize(const Size& rSize)
