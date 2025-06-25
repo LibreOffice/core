@@ -1278,20 +1278,20 @@ Size HeaderBar::CalcWindowSizePixel() const
 
 css::uno::Reference< css::accessibility::XAccessible > HeaderBar::CreateAccessible()
 {
-    if ( !mxAccessible.is() )
+    if (!mpAccessible.is())
     {
         maCreateAccessibleHdl.Call( this );
 
-        if ( !mxAccessible.is() )
-            mxAccessible = new VCLXAccessibleHeaderBar(this);
+        if (!mpAccessible.is())
+            mpAccessible = new VCLXAccessibleHeaderBar(this);
     }
 
-    return mxAccessible;
+    return mpAccessible;
 }
 
 void HeaderBar::SetAccessible(rtl::Reference<comphelper::OAccessible>& rAccessible)
 {
-    mxAccessible = rAccessible;
+    mpAccessible = rAccessible;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

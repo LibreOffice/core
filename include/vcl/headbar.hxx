@@ -228,8 +228,7 @@ private:
     Link<HeaderBar*,void> maSelectHdl;
     Link<HeaderBar*,void> maCreateAccessibleHdl;
 
-    css::uno::Reference< css::accessibility::XAccessible >
-                          mxAccessible;
+    rtl::Reference<comphelper::OAccessible> mpAccessible;
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
