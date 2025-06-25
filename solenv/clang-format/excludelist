@@ -14150,7 +14150,6 @@ vcl/inc/brdwin.hxx
 vcl/inc/bubblewindow.hxx
 vcl/inc/calendar.hxx
 vcl/inc/canvasbitmap.hxx
-vcl/inc/configsettings.hxx
 vcl/inc/debugevent.hxx
 vcl/inc/displayconnectiondispatch.hxx
 vcl/inc/dndeventdispatcher.hxx
@@ -14675,7 +14674,6 @@ vcl/source/fontsubset/sft.cxx
 vcl/source/fontsubset/ttcr.cxx
 vcl/source/fontsubset/ttcr.hxx
 vcl/source/gdi/CommonSalLayout.cxx
-vcl/source/gdi/configsettings.cxx
 vcl/source/gdi/cvtgrf.cxx
 vcl/source/gdi/embeddedfontshelper.cxx
 vcl/source/gdi/formpdfexport.cxx

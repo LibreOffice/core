@@ -15724,7 +15724,6 @@ vcl::Region::GetAsRegionBand() const
 vcl::Region::Overlaps(tools::Rectangle const&) const
 vcl::Region::Scale(double, double)
 vcl::ScriptRun::next()
-vcl::SettingsConfigItem::getValues()
 vcl::Vectorizer::updateProgress(long)
 vcl::Window::ImplGetWindow() const
 vcl::Window::SetTextAlign(TextAlign)

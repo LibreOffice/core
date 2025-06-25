@@ -52,11 +52,6 @@
         </info>
       </prop>
     </group>
-    <group oor:name="ConfigurableSettings" oor:extensible="true">
-      <info>
-        <desc>Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing whether printing is deactivated is: "DisablePrinting" (valid values = "true", "false").</desc>
-      </info>
-    </group>
     <group oor:name="ExtraLanguage">
       <info>
         <desc>Specifies an extensible list of languages that should be added to the various language selection lists</desc>
@@ -84,11 +79,6 @@
     </set>
   </templates>
   <component>
-    <set oor:name="Settings" oor:node-type="ConfigurableSettings">
-      <info>
-        <desc>Contains the settings for VCL (see template description).</desc>
-      </info>
-    </set>
     <set oor:name="ExtraLanguages" oor:node-type="ExtraLanguage">
       <info>
         <desc>Specifies extra language tags to support</desc>

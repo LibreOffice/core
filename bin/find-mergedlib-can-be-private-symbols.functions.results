@@ -16319,7 +16319,6 @@ vcl::Region::XOr(vcl::Region const&)
 vcl::RoadmapWizardMachine::getStateDisplayName(short) const
 vcl::RoadmapWizardMachine::knowsState(short) const
 vcl::SetGetSpecialCharsFunction(rtl::OUString (*)(weld::Widget*, vcl::Font const&))
-vcl::SettingsConfigItem::getValues()
 vcl::Vectorizer::updateProgress(long)
 vcl::Window::AlwaysEnableInput(bool, bool)
 vcl::Window::ApplyControlBackground(OutputDevice&, Color const&)

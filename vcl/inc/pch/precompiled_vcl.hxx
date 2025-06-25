@@ -283,7 +283,6 @@
 #include <ImplOutDevData.hxx>
 #include <accel.hxx>
 #include <brdwin.hxx>
-#include <configsettings.hxx>
 #include <dndlistenercontainer.hxx>
 #include <drawmode.hxx>
 #include <fontattributes.hxx>

@@ -26,7 +26,6 @@
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
 
-#include <configsettings.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/dockwin.hxx>
@@ -89,8 +88,6 @@ void ImplDeInitSVData()
     ImplSVData* pSVData = ImplGetSVData();
 
     // delete global instance data
-    pSVData->mpSettingsConfigItem.reset();
-
     pSVData->mpDockingManager.reset();
 
     pSVData->maCtrlData.maFieldUnitStrings.clear();

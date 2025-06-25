@@ -45,7 +45,6 @@
 #include <vcl/ImageTree.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/unowrap.hxx>
-#include <configsettings.hxx>
 #include <tools/lazydelete.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 #include <vcl/toolkit/dialog.hxx>
@@ -475,7 +474,6 @@ void DeInitVCL()
 
     // free global data
     pSVData->maGDIData.mxGrfConverter.reset();
-    pSVData->mpSettingsConfigItem.reset();
 
     // prevent unnecessary painting during Scheduler shutdown
     // as this processes all pending events in debug builds.

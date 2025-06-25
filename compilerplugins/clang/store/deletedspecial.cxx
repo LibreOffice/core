@@ -117,7 +117,6 @@ bool DeletedSpecial::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
                 || allowlist(decl, "sd::RemoteServer", "sd/source/ui/inc/RemoteServer.hxx")
                 || allowlist(decl, "sd::slidesorter::cache::PageCacheManager", "sd/source/ui/slidesorter/inc/cache/SlsPageCacheManager.hxx")
                 || allowlist(decl, "framework::CommandInfoProvider", "include/framework/commandinfoprovider.hxx")
-                || allowlist(decl, "vcl::SettingsConfigItem", "vcl/inc/configsettings.hxx")
                 || allowlist(decl, "writerfilter::ooxml::OOXMLFactory", "writerfilter/source/ooxml/OOXMLFactory.hxx"))
             {
                 return true;

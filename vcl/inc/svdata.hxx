@@ -130,7 +130,6 @@ namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
 namespace vcl
 {
     class DisplayConnectionDispatch;
-    class SettingsConfigItem;
     class Window;
 }
 
@@ -402,7 +401,6 @@ struct ImplSVData
     rtl::Reference< vcl::DisplayConnectionDispatch > mxDisplayConnection;
 
     css::uno::Reference< css::lang::XComponent > mxAccessBridge;
-    std::unique_ptr<vcl::SettingsConfigItem> mpSettingsConfigItem;
     std::unordered_map< int, OUString > maPaperNames;
     o3tl::sorted_vector<CacheOwner*> maCacheOwners;
 
