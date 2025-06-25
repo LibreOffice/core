@@ -341,7 +341,7 @@ namespace pcr
         */
         bool impl_dialogChooseLabelControl_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
-        /** raises a dialog which lets the user chose the tab order of controls of a form
+        /** raises a dialog that lets the user choose the tab order of controls on a form
             @precond
                 we have a view control container in which our controls live
             @return
