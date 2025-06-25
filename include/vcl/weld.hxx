@@ -48,6 +48,10 @@ namespace com::sun::star::graphic
 {
 class XGraphic;
 }
+namespace comphelper
+{
+class OAccessible;
+}
 typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 enum class PointerStyle;
@@ -2855,7 +2859,8 @@ public:
     virtual std::unique_ptr<Image> weld_image(const OUString& id) = 0;
     virtual std::unique_ptr<Calendar> weld_calendar(const OUString& id) = 0;
     virtual std::unique_ptr<DrawingArea>
-    weld_drawing_area(const OUString& id, const a11yref& rA11yImpl = nullptr,
+    weld_drawing_area(const OUString& id,
+                      const rtl::Reference<comphelper::OAccessible>& rA11yImpl = nullptr,
                       FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr)
         = 0;
     virtual std::unique_ptr<EntryTreeView> weld_entry_tree_view(const OUString& containerid,

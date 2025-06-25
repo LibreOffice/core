@@ -604,9 +604,10 @@ std::unique_ptr<weld::Expander> QtInstanceBuilder::weld_expander(const OUString&
     return xRet;
 }
 
-std::unique_ptr<weld::DrawingArea> QtInstanceBuilder::weld_drawing_area(const OUString& rId,
-                                                                        const a11yref& rA11yImpl,
-                                                                        FactoryFunction, void*)
+std::unique_ptr<weld::DrawingArea>
+QtInstanceBuilder::weld_drawing_area(const OUString& rId,
+                                     const rtl::Reference<comphelper::OAccessible>& rA11yImpl,
+                                     FactoryFunction, void*)
 {
     SolarMutexGuard g;
 

@@ -844,10 +844,10 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
     return nullptr;
 }
 
-void QtAccessibleWidget::setCustomAccessible(QObject& rObject,
-                                             const uno::Reference<XAccessible>& rxAccessible)
+void QtAccessibleWidget::setCustomAccessible(
+    QObject& rObject, const rtl::Reference<comphelper::OAccessible>& rAccessible)
 {
-    assert(rxAccessible.is());
+    assert(rAccessible.is());
 
     // unset/delete the current/default accessible of the object
     QAccessibleInterface* pOldAccessible = QAccessible::queryAccessibleInterface(&rObject);
@@ -856,7 +856,7 @@ void QtAccessibleWidget::setCustomAccessible(QObject& rObject,
 
     // let QtAccessibleWidget::customFactory set the custom accessible
     rObject.setProperty(PROPERTY_ACCESSIBLE,
-                        QVariant::fromValue(new QtAccessibleWidget(rxAccessible, rObject)));
+                        QVariant::fromValue(new QtAccessibleWidget(rAccessible, rObject)));
     QAccessible::queryAccessibleInterface(&rObject);
 }
 

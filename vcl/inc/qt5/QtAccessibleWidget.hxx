@@ -11,6 +11,10 @@
 
 #include <vclpluginapi.h>
 
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <comphelper/OAccessible.hxx>
+#include <rtl/ref.hxx>
+
 #include <QtCore/QObject>
 #include <QtCore/QPair>
 #include <QtCore/QString>
@@ -25,8 +29,6 @@
 #include <QtGui/QAccessibleValueInterface>
 #include <QtGui/QColor>
 #include <QtGui/QWindow>
-
-#include <com/sun/star/accessibility/XAccessible.hpp>
 
 namespace com::sun::star::accessibility
 {
@@ -189,9 +191,8 @@ public:
 
     // Factory
     static QAccessibleInterface* customFactory(const QString& classname, QObject* object);
-    static void
-    setCustomAccessible(QObject& rObject,
-                        const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible);
+    static void setCustomAccessible(QObject& rObject,
+                                    const rtl::Reference<comphelper::OAccessible>& rAccessible);
 
 private:
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;

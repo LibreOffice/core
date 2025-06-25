@@ -18731,7 +18731,7 @@ class GtkInstanceDrawingArea : public GtkInstanceWidget, public virtual weld::Dr
 {
 private:
     GtkDrawingArea* m_pDrawingArea;
-    a11yref m_xAccessible;
+    rtl::Reference<comphelper::OAccessible> m_xAccessible;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     AtkObject *m_pAccessible;
 #endif
@@ -18912,7 +18912,8 @@ private:
 #endif
 
 public:
-    GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, a11yref xA11y, bool bTakeOwnership)
+    GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder,
+                           rtl::Reference<comphelper::OAccessible> xA11y, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), pBuilder, bTakeOwnership)
         , m_pDrawingArea(pDrawingArea)
         , m_xAccessible(std::move(xA11y))
@@ -19182,9 +19183,8 @@ public:
         if (m_pAccessible)
             g_object_unref(m_pAccessible);
 #endif
-        css::uno::Reference<css::lang::XComponent> xComp(m_xAccessible, css::uno::UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
+        if (m_xAccessible.is())
+            m_xAccessible->dispose();
 #if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pDrawingArea, m_nScrollEvent);
 #endif
@@ -24982,8 +24982,9 @@ public:
         return std::make_unique<GtkInstanceExpander>(pExpander, this, false);
     }
 
-    virtual std::unique_ptr<weld::DrawingArea> weld_drawing_area(const OUString &id, const a11yref& rA11y,
-            FactoryFunction /*pUITestFactoryFunction*/, void* /*pUserData*/) override
+    virtual std::unique_ptr<weld::DrawingArea>
+    weld_drawing_area(const OUString& id, const rtl::Reference<comphelper::OAccessible>& rA11y,
+                      FactoryFunction /*pUITestFactoryFunction*/, void* /*pUserData*/) override
     {
         GtkDrawingArea* pDrawingArea = GTK_DRAWING_AREA(gtk_builder_get_object(m_pBuilder, OUStringToOString(id, RTL_TEXTENCODING_UTF8).getStr()));
         if (!pDrawingArea)

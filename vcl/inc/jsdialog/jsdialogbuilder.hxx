@@ -184,10 +184,9 @@ public:
     virtual std::unique_ptr<weld::FormattedSpinButton>
     weld_formatted_spin_button(const OUString& id) override;
     virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OUString& id) override;
-    virtual std::unique_ptr<weld::DrawingArea>
-    weld_drawing_area(const OUString& id, const a11yref& rA11yImpl = nullptr,
-                      FactoryFunction pUITestFactoryFunction = nullptr,
-                      void* pUserData = nullptr) override;
+    virtual std::unique_ptr<weld::DrawingArea> weld_drawing_area(
+        const OUString& id, const rtl::Reference<comphelper::OAccessible>& rA11yImpl = nullptr,
+        FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr) override;
     virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OUString& id) override;
     virtual std::unique_ptr<weld::TextView> weld_text_view(const OUString& id) override;
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OUString& id) override;

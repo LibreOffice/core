@@ -7416,7 +7416,8 @@ std::unique_ptr<weld::Expander> SalInstanceBuilder::weld_expander(const OUString
 }
 
 std::unique_ptr<weld::DrawingArea>
-SalInstanceBuilder::weld_drawing_area(const OUString& id, const a11yref& rA11yImpl,
+SalInstanceBuilder::weld_drawing_area(const OUString& id,
+                                      const rtl::Reference<comphelper::OAccessible>& rA11yImpl,
                                       FactoryFunction pUITestFactoryFunction, void* pUserData)
 {
     VclDrawingArea* pDrawingArea = m_xBuilder->get<VclDrawingArea>(id);

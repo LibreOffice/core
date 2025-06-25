@@ -705,7 +705,8 @@ std::unique_ptr<weld::CheckButton> JSInstanceBuilder::weld_check_button(const OU
 }
 
 std::unique_ptr<weld::DrawingArea>
-JSInstanceBuilder::weld_drawing_area(const OUString& id, const a11yref& rA11yImpl,
+JSInstanceBuilder::weld_drawing_area(const OUString& id,
+                                     const rtl::Reference<comphelper::OAccessible>& rA11yImpl,
                                      FactoryFunction pUITestFactoryFunction, void* pUserData)
 {
     VclDrawingArea* pArea = m_xBuilder->get<VclDrawingArea>(id);
