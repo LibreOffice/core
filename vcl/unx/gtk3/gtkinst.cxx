@@ -5985,6 +5985,7 @@ public:
         gtk_widget_set_vexpand(pWindow, true);
         gtk_widget_realize(pWindow);
         gtk_widget_set_can_focus(pWindow, true);
+        // coverity[freed_arg : FALSE] - this does not free pWidget, it is reffed by pContainer
         g_object_unref(pWindow);
 
         // for x11 we have to keep the relative geometry of the embedded GtkSalFrame up to date when
