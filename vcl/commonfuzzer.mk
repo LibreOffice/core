@@ -96,6 +96,7 @@ fuzzer_core_libraries = \
     svt \
     svx \
     svxcore \
+    textconversiondlgs \
     emboleobj \
     svgfilter \
     svgio \
