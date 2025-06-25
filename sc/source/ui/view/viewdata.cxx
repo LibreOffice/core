@@ -125,15 +125,10 @@ bool ScPositionHelper::Comp::operator() (const value_type& rValue1, const value_
     }
 }
 
-ScPositionHelper::ScPositionHelper(const ScDocument *pDoc, bool bColumn)
-    : MAX_INDEX(bColumn ? (pDoc ? pDoc->MaxCol() : -1) : MAXTILEDROW)
+ScPositionHelper::ScPositionHelper(const ScDocument& rDoc, bool bColumn)
+    : MAX_INDEX(bColumn ? rDoc.MaxCol() : MAXTILEDROW)
 {
     mData.insert(std::make_pair(-1, 0));
-}
-
-void ScPositionHelper::setDocument(const ScDocument& rDoc, bool bColumn)
-{
-    MAX_INDEX = bColumn ? rDoc.MaxCol() : MAXTILEDROW;
 }
 
 void ScPositionHelper::insert(index_type nIndex, tools::Long nPos)
@@ -500,7 +495,7 @@ void ScBoundsProvider::GetIndexTowards(
     }
 }
 
-ScViewDataTable::ScViewDataTable(const ScDocument *pDoc) :
+ScViewDataTable::ScViewDataTable(const ScDocument& rDoc) :
                 eZoomType( SvxZoomType::PERCENT ),
                 aZoomX( 1,1 ),
                 aZoomY( 1,1 ),
@@ -517,8 +512,8 @@ ScViewDataTable::ScViewDataTable(const ScDocument *pDoc) :
                 nCurY( 0 ),
                 nOldCurX( 0 ),
                 nOldCurY( 0 ),
-                aWidthHelper(pDoc, true),
-                aHeightHelper(pDoc, false),
+                aWidthHelper(rDoc, true),
+                aHeightHelper(rDoc, false),
                 nMaxTiledCol( 20 ),
                 nMaxTiledRow( 50 ),
                 bShowGrid( true ),
@@ -532,12 +527,6 @@ ScViewDataTable::ScViewDataTable(const ScDocument *pDoc) :
     nMPosY[0]=nMPosY[1]=0;
     nPixPosX[0]=nPixPosX[1]=0;
     nPixPosY[0]=nPixPosY[1]=0;
-}
-
-void ScViewDataTable::InitData(const ScDocument& rDoc)
-{
-    aWidthHelper.setDocument(rDoc, true);
-    aHeightHelper.setDocument(rDoc, false);
 }
 
 void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData, SCTAB nTab) const
@@ -816,7 +805,7 @@ ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh) :
     aScrSize = Size( o3tl::convert(STD_COL_WIDTH * OLE_STD_CELLS_X, o3tl::Length::twip, o3tl::Length::px),
                     o3tl::convert(mrDoc.GetSheetOptimalMinRowHeight(nTabNo) * OLE_STD_CELLS_Y,
                                   o3tl::Length::twip, o3tl::Length::px));
-    maTabData.emplace_back( new ScViewDataTable(nullptr) );
+    maTabData.emplace_back( new ScViewDataTable(mrDoc) );
     pThisTab = maTabData[nTabNo].get();
 
     nEditEndCol = nEditStartCol = nEditCol = 0;
@@ -831,18 +820,12 @@ ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh) :
             ++nTabNo;
             maTabData.emplace_back(nullptr);
         }
-        maTabData[nTabNo].reset( new ScViewDataTable(nullptr) );
+        maTabData[nTabNo].reset( new ScViewDataTable(mrDoc) );
         pThisTab = maTabData[nTabNo].get();
     }
 
     SCTAB nTableCount = mrDoc.GetTableCount();
     EnsureTabDataSize(nTableCount);
-
-    for (auto& xTabData : maTabData)
-    {
-        if (xTabData)
-            xTabData->InitData(mrDoc);
-    }
 
     CalcPPT();
 }
@@ -864,7 +847,7 @@ void ScViewData::UpdateCurrentTab()
             pThisTab = maTabData[--nTabNo].get();
         else
         {
-            maTabData[0].reset(new ScViewDataTable(&mrDoc));
+            maTabData[0].reset(new ScViewDataTable(mrDoc));
             pThisTab = maTabData[0].get();
         }
     }
@@ -2330,7 +2313,7 @@ void ScViewData::CreateTabData( SCTAB nNewTab )
 
     if (!maTabData[nNewTab])
     {
-        maTabData[nNewTab].reset(new ScViewDataTable(&mrDoc));
+        maTabData[nNewTab].reset(new ScViewDataTable(mrDoc));
 
         maTabData[nNewTab]->eZoomType  = eDefZoomType;
         maTabData[nNewTab]->aZoomX     = aDefZoomX;
@@ -3426,7 +3409,7 @@ void ScViewData::ReadUserData(std::u16string_view rData)
         aTabOpt = o3tl::getToken(rData, 0, ';', nMainIdx);
         EnsureTabDataSize(nPos + 1);
         if (!maTabData[nPos])
-            maTabData[nPos].reset(new ScViewDataTable(&mrDoc));
+            maTabData[nPos].reset(new ScViewDataTable(mrDoc));
 
         sal_Unicode cTabSep = 0;
         if (comphelper::string::getTokenCount(aTabOpt, SC_OLD_TABSEP) >= 11)
@@ -3606,7 +3589,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
         if( const ScExtTabSettings* pTabSett = rDocOpt.GetTabSettings( nTab ) )
         {
             if( !maTabData[ nTab ] )
-                maTabData[nTab].reset(new ScViewDataTable(&mrDoc));
+                maTabData[nTab].reset(new ScViewDataTable(mrDoc));
 
             const ScExtTabSettings& rTabSett = *pTabSett;
             ScViewDataTable& rViewTab = *maTabData[ nTab ];
@@ -3877,7 +3860,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                         {
                             EnsureTabDataSize(nTab + 1);
                             if (!maTabData[nTab])
-                                maTabData[nTab].reset(new ScViewDataTable(&mrDoc));
+                                maTabData[nTab].reset(new ScViewDataTable(mrDoc));
 
                             bool bHasZoom = false;
                             maTabData[nTab]->ReadUserDataSequence(aTabSettings, *this, nTab, bHasZoom);
