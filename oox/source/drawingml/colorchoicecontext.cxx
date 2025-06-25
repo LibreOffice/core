@@ -33,8 +33,8 @@ namespace oox::drawingml {
 namespace
 {
 
-constexpr frozen::unordered_map<sal_Int32, model::SystemColorType, 30> constSystemColorMap
-{
+constexpr auto constSystemColorMap = frozen::make_unordered_map<sal_Int32, model::SystemColorType>
+({
     { XML_scrollBar, model::SystemColorType::ScrollBar },
     { XML_background, model::SystemColorType::Background },
     { XML_activeCaption, model::SystemColorType::ActiveCaption },
@@ -65,10 +65,10 @@ constexpr frozen::unordered_map<sal_Int32, model::SystemColorType, 30> constSyst
     { XML_gradientInactiveCaption, model::SystemColorType::GradientInactiveCaption },
     { XML_menuHighlight, model::SystemColorType::MenuHighlight },
     { XML_menuBar, model::SystemColorType::MenuBar }
-};
+});
 
-constexpr frozen::unordered_map<sal_Int32, model::TransformationType, 28> constTransformTypeMap
-{
+constexpr auto constTransformTypeMap = frozen::make_unordered_map<sal_Int32, model::TransformationType>
+({
     { XML_alpha, model::TransformationType::Alpha },
     { XML_alphaMod, model::TransformationType::AlphaMod },
     { XML_alphaOff, model::TransformationType::AlphaOff },
@@ -97,7 +97,7 @@ constexpr frozen::unordered_map<sal_Int32, model::TransformationType, 28> constT
     { XML_gray, model::TransformationType::Gray },
     { XML_inv, model::TransformationType::Inv },
     { XML_invGamma, model::TransformationType::InvGamma }
-};
+});
 
 }
 

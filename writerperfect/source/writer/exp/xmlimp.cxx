@@ -45,12 +45,12 @@ namespace
 /// Looks up mime type for a given image extension.
 OUString GetMimeType(std::u16string_view rExtension)
 {
-    static constexpr frozen::unordered_map<std::u16string_view, OUString, 4> vMimeTypes = {
+    static const auto vMimeTypes = frozen::make_unordered_map<std::u16string_view, OUString>({
         { u"gif", u"image/gif"_ustr },
         { u"jpg", u"image/jpeg"_ustr },
         { u"png", u"image/png"_ustr },
         { u"svg", u"image/svg+xml"_ustr },
-    };
+    });
 
     auto it = vMimeTypes.find(rExtension);
     return it == vMimeTypes.end() ? OUString() : it->second;

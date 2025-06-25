@@ -148,76 +148,75 @@ bool ThemeExport::writeFontScheme(model::FontScheme const& rFontScheme)
 
 namespace
 {
-constexpr frozen::unordered_map<model::TransformationType, sal_Int32, 4> constTransformTypeTokenMap{
-    { model::TransformationType::Tint, XML_tint },
-    { model::TransformationType::Shade, XML_shade },
-    { model::TransformationType::LumMod, XML_lumMod },
-    { model::TransformationType::LumOff, XML_lumOff },
-};
+constexpr auto constTransformTypeTokenMap
+    = frozen::make_unordered_map<model::TransformationType, sal_Int32>({
+        { model::TransformationType::Tint, XML_tint },
+        { model::TransformationType::Shade, XML_shade },
+        { model::TransformationType::LumMod, XML_lumMod },
+        { model::TransformationType::LumOff, XML_lumOff },
+    });
 
-constexpr frozen::unordered_map<model::ThemeColorType, const char*, 12> constThemeColorTypeTokenMap{
-    { model::ThemeColorType::Dark1, "dk1" },
-    { model::ThemeColorType::Light1, "lt1" },
-    { model::ThemeColorType::Dark2, "dk2" },
-    { model::ThemeColorType::Light2, "lt2" },
-    { model::ThemeColorType::Accent1, "accent1" },
-    { model::ThemeColorType::Accent2, "accent2" },
-    { model::ThemeColorType::Accent3, "accent3" },
-    { model::ThemeColorType::Accent4, "accent4" },
-    { model::ThemeColorType::Accent5, "accent5" },
-    { model::ThemeColorType::Accent6, "accent6" },
-    { model::ThemeColorType::Hyperlink, "hlink" },
-    { model::ThemeColorType::FollowedHyperlink, "folHlink" }
-};
+constexpr auto constThemeColorTypeTokenMap
+    = frozen::make_unordered_map<model::ThemeColorType, const char*>(
+        { { model::ThemeColorType::Dark1, "dk1" },
+          { model::ThemeColorType::Light1, "lt1" },
+          { model::ThemeColorType::Dark2, "dk2" },
+          { model::ThemeColorType::Light2, "lt2" },
+          { model::ThemeColorType::Accent1, "accent1" },
+          { model::ThemeColorType::Accent2, "accent2" },
+          { model::ThemeColorType::Accent3, "accent3" },
+          { model::ThemeColorType::Accent4, "accent4" },
+          { model::ThemeColorType::Accent5, "accent5" },
+          { model::ThemeColorType::Accent6, "accent6" },
+          { model::ThemeColorType::Hyperlink, "hlink" },
+          { model::ThemeColorType::FollowedHyperlink, "folHlink" } });
 
-constexpr frozen::unordered_map<model::SystemColorType, const char*, 30>
-    constSystemColorTypeTokenMap{
-        { model::SystemColorType::DarkShadow3D, "3dDkShadow" },
-        { model::SystemColorType::Light3D, "3dLight" },
-        { model::SystemColorType::ActiveBorder, "activeBorder" },
-        { model::SystemColorType::ActiveCaption, "activeCaption" },
-        { model::SystemColorType::AppWorkspace, "appWorkspace" },
-        { model::SystemColorType::Background, "background" },
-        { model::SystemColorType::ButtonFace, "btnFace" },
-        { model::SystemColorType::ButtonHighlight, "btnHighlight" },
-        { model::SystemColorType::ButtonShadow, "btnShadow" },
-        { model::SystemColorType::ButtonText, "btnText" },
-        { model::SystemColorType::CaptionText, "captionText" },
-        { model::SystemColorType::GradientActiveCaption, "gradientActiveCaption" },
-        { model::SystemColorType::GradientInactiveCaption, "gradientInactiveCaption" },
-        { model::SystemColorType::GrayText, "grayText" },
-        { model::SystemColorType::Highlight, "highlight" },
-        { model::SystemColorType::HighlightText, "highlightText" },
-        { model::SystemColorType::HotLight, "hotLight" },
-        { model::SystemColorType::InactiveBorder, "inactiveBorder" },
-        { model::SystemColorType::InactiveCaption, "inactiveCaption" },
-        { model::SystemColorType::InactiveCaptionText, "inactiveCaptionText" },
-        { model::SystemColorType::InfoBack, "infoBk" },
-        { model::SystemColorType::InfoText, "infoText" },
-        { model::SystemColorType::Menu, "menu" },
-        { model::SystemColorType::MenuBar, "menuBar" },
-        { model::SystemColorType::MenuHighlight, "menuHighlight" },
-        { model::SystemColorType::MenuText, "menuText" },
-        { model::SystemColorType::ScrollBar, "scrollBar" },
-        { model::SystemColorType::Window, "window" },
-        { model::SystemColorType::WindowFrame, "windowFrame" },
-        { model::SystemColorType::WindowText, "windowText" }
-    };
+constexpr auto constSystemColorTypeTokenMap
+    = frozen::make_unordered_map<model::SystemColorType, const char*>(
+        { { model::SystemColorType::DarkShadow3D, "3dDkShadow" },
+          { model::SystemColorType::Light3D, "3dLight" },
+          { model::SystemColorType::ActiveBorder, "activeBorder" },
+          { model::SystemColorType::ActiveCaption, "activeCaption" },
+          { model::SystemColorType::AppWorkspace, "appWorkspace" },
+          { model::SystemColorType::Background, "background" },
+          { model::SystemColorType::ButtonFace, "btnFace" },
+          { model::SystemColorType::ButtonHighlight, "btnHighlight" },
+          { model::SystemColorType::ButtonShadow, "btnShadow" },
+          { model::SystemColorType::ButtonText, "btnText" },
+          { model::SystemColorType::CaptionText, "captionText" },
+          { model::SystemColorType::GradientActiveCaption, "gradientActiveCaption" },
+          { model::SystemColorType::GradientInactiveCaption, "gradientInactiveCaption" },
+          { model::SystemColorType::GrayText, "grayText" },
+          { model::SystemColorType::Highlight, "highlight" },
+          { model::SystemColorType::HighlightText, "highlightText" },
+          { model::SystemColorType::HotLight, "hotLight" },
+          { model::SystemColorType::InactiveBorder, "inactiveBorder" },
+          { model::SystemColorType::InactiveCaption, "inactiveCaption" },
+          { model::SystemColorType::InactiveCaptionText, "inactiveCaptionText" },
+          { model::SystemColorType::InfoBack, "infoBk" },
+          { model::SystemColorType::InfoText, "infoText" },
+          { model::SystemColorType::Menu, "menu" },
+          { model::SystemColorType::MenuBar, "menuBar" },
+          { model::SystemColorType::MenuHighlight, "menuHighlight" },
+          { model::SystemColorType::MenuText, "menuText" },
+          { model::SystemColorType::ScrollBar, "scrollBar" },
+          { model::SystemColorType::Window, "window" },
+          { model::SystemColorType::WindowFrame, "windowFrame" },
+          { model::SystemColorType::WindowText, "windowText" } });
 
-constexpr frozen::unordered_map<sal_Int32, model::ThemeColorType, 12> constTokenMap{
-    { XML_dk1, model::ThemeColorType::Dark1 },
-    { XML_lt1, model::ThemeColorType::Light1 },
-    { XML_dk2, model::ThemeColorType::Dark2 },
-    { XML_lt2, model::ThemeColorType::Light2 },
-    { XML_accent1, model::ThemeColorType::Accent1 },
-    { XML_accent2, model::ThemeColorType::Accent2 },
-    { XML_accent3, model::ThemeColorType::Accent3 },
-    { XML_accent4, model::ThemeColorType::Accent4 },
-    { XML_accent5, model::ThemeColorType::Accent5 },
-    { XML_accent6, model::ThemeColorType::Accent6 },
-    { XML_hlink, model::ThemeColorType::Hyperlink },
-    { XML_folHlink, model::ThemeColorType::FollowedHyperlink }
-};
+constexpr auto constTokenMap = frozen::make_unordered_map<sal_Int32, model::ThemeColorType>(
+    { { XML_dk1, model::ThemeColorType::Dark1 },
+      { XML_lt1, model::ThemeColorType::Light1 },
+      { XML_dk2, model::ThemeColorType::Dark2 },
+      { XML_lt2, model::ThemeColorType::Light2 },
+      { XML_accent1, model::ThemeColorType::Accent1 },
+      { XML_accent2, model::ThemeColorType::Accent2 },
+      { XML_accent3, model::ThemeColorType::Accent3 },
+      { XML_accent4, model::ThemeColorType::Accent4 },
+      { XML_accent5, model::ThemeColorType::Accent5 },
+      { XML_accent6, model::ThemeColorType::Accent6 },
+      { XML_hlink, model::ThemeColorType::Hyperlink },
+      { XML_folHlink, model::ThemeColorType::FollowedHyperlink } });
 
 } // end anonymous ns
 

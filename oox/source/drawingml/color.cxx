@@ -37,8 +37,8 @@ namespace
 {
 
 // predefined colors in DrawingML (map XML token identifiers to RGB values)
-constexpr frozen::unordered_map<sal_Int32, ::Color, 140> constDmlColors
-{
+constexpr auto constDmlColors = frozen::make_unordered_map<sal_Int32, ::Color>
+({
     {XML_aliceBlue,         ::Color(0xF0F8FF)},    {XML_antiqueWhite,      ::Color(0xFAEBD7)},
     {XML_aqua,              ::Color(0x00FFFF)},    {XML_aquamarine,        ::Color(0x7FFFD4)},
     {XML_azure,             ::Color(0xF0FFFF)},    {XML_beige,             ::Color(0xF5F5DC)},
@@ -109,7 +109,7 @@ constexpr frozen::unordered_map<sal_Int32, ::Color, 140> constDmlColors
     {XML_violet,            ::Color(0xEE82EE)},    {XML_wheat,             ::Color(0xF5DEB3)},
     {XML_white,             ::Color(0xFFFFFF)},    {XML_whiteSmoke,        ::Color(0xF5F5F5)},
     {XML_yellow,            ::Color(0xFFFF00)},    {XML_yellowGreen,       ::Color(0x9ACD32)}
-};
+});
 
 constexpr ::Color lookupDmlColor(sal_Int32 nToken)
 {
@@ -119,8 +119,8 @@ constexpr ::Color lookupDmlColor(sal_Int32 nToken)
     return iterator->second;
 }
 
-constexpr frozen::unordered_map<sal_Int32, ::Color, 16> constVmlColors
-{
+constexpr auto constVmlColors = frozen::make_unordered_map<sal_Int32, ::Color>
+({
     {XML_aqua,              ::Color(0x00FFFF)},    {XML_black,             ::Color(0x000000)},
     {XML_blue,              ::Color(0x0000FF)},    {XML_fuchsia,           ::Color(0xFF00FF)},
     {XML_gray,              ::Color(0x808080)},    {XML_green,             ::Color(0x008000)},
@@ -129,7 +129,7 @@ constexpr frozen::unordered_map<sal_Int32, ::Color, 16> constVmlColors
     {XML_purple,            ::Color(0x800080)},    {XML_red,               ::Color(0xFF0000)},
     {XML_silver,            ::Color(0xC0C0C0)},    {XML_teal,              ::Color(0x008080)},
     {XML_white,             ::Color(0xFFFFFF)},    {XML_yellow,            ::Color(0xFFFF00)}
-};
+});
 
 constexpr ::Color lookupVmlColor(sal_Int32 nToken)
 {
@@ -139,8 +139,8 @@ constexpr ::Color lookupVmlColor(sal_Int32 nToken)
     return iterator->second;
 }
 
-constexpr frozen::unordered_map<sal_Int32, ::Color, 16> constHighlightColors
-{
+constexpr auto constHighlightColors = frozen::make_unordered_map<sal_Int32, ::Color>
+({
     // tdf#131841 Predefined color for OOXML highlight.
     {XML_black,             ::Color(0x000000)},    {XML_blue,              ::Color(0x0000FF)},
     {XML_cyan,              ::Color(0x00FFFF)},    {XML_darkBlue,          ::Color(0x00008B)},
@@ -150,7 +150,7 @@ constexpr frozen::unordered_map<sal_Int32, ::Color, 16> constHighlightColors
     {XML_green,             ::Color(0x00FF00)},    {XML_lightGray,         ::Color(0xD3D3D3)},
     {XML_magenta,           ::Color(0xFF00FF)},    {XML_red,               ::Color(0xFF0000)},
     {XML_white,             ::Color(0xFFFFFF)},    {XML_yellow,            ::Color(0xFFFF00)}
-};
+});
 
 constexpr ::Color lookupHighlightColor(sal_Int32 nToken)
 {
@@ -209,8 +209,8 @@ void lclOffValue( sal_Int32& ornValue, sal_Int32 nOff, sal_Int32 nMax = MAX_PERC
     ornValue = getLimitedValue< sal_Int32, sal_Int32 >( ornValue + nOff, 0, nMax );
 }
 
-constexpr frozen::unordered_map<std::u16string_view, model::ThemeColorType, 26> constSchemeColorNameToIndex
-{
+constexpr auto constSchemeColorNameToIndex = frozen::make_unordered_map<std::u16string_view, model::ThemeColorType>
+({
     { u"dk1", model::ThemeColorType::Dark1 },
     { u"lt1", model::ThemeColorType::Light1 },
     { u"dk2", model::ThemeColorType::Dark2 },
@@ -237,10 +237,10 @@ constexpr frozen::unordered_map<std::u16string_view, model::ThemeColorType, 26> 
     { u"background2", model::ThemeColorType::Light2 },
     { u"hyperlink", model::ThemeColorType::Hyperlink },
     { u"followedHyperlink", model::ThemeColorType::FollowedHyperlink }
-};
+});
 
-constexpr frozen::unordered_map<sal_Int32, model::ThemeColorType, 26> constThemeColorTokenMap
-{
+constexpr auto constThemeColorTokenMap = frozen::make_unordered_map<sal_Int32, model::ThemeColorType>
+({
     { XML_dk1, model::ThemeColorType::Dark1 },
     { XML_lt1, model::ThemeColorType::Light1 },
     { XML_dk2, model::ThemeColorType::Dark2 },
@@ -267,7 +267,7 @@ constexpr frozen::unordered_map<sal_Int32, model::ThemeColorType, 26> constTheme
     { XML_background2, model::ThemeColorType::Light2 },
     { XML_hyperlink, model::ThemeColorType::Hyperlink },
     { XML_followedHyperlink, model::ThemeColorType::FollowedHyperlink },
-};
+});
 
 } // end anonymous namespace
 
@@ -476,11 +476,13 @@ void Color::clearTransformations()
     clearTransparence();
 }
 
-constexpr frozen::unordered_map<std::u16string_view, sal_Int32, 12> constColorMapTokenMap
-    = { { u"bg1", XML_bg1 },         { u"tx1", XML_tx1 },         { u"bg2", XML_bg2 },
-        { u"tx2", XML_tx2 },         { u"accent1", XML_accent1 }, { u"accent2", XML_accent2 },
-        { u"accent3", XML_accent3 }, { u"accent4", XML_accent4 }, { u"accent5", XML_accent5 },
-        { u"accent6", XML_accent6 }, { u"hlink", XML_hlink },     { u"folHlink", XML_folHlink } };
+constexpr auto constColorMapTokenMap = frozen::make_unordered_map<std::u16string_view, sal_Int32>
+({
+    { u"bg1", XML_bg1 },         { u"tx1", XML_tx1 },         { u"bg2", XML_bg2 },
+    { u"tx2", XML_tx2 },         { u"accent1", XML_accent1 }, { u"accent2", XML_accent2 },
+    { u"accent3", XML_accent3 }, { u"accent4", XML_accent4 }, { u"accent5", XML_accent5 },
+    { u"accent6", XML_accent6 }, { u"hlink", XML_hlink },     { u"folHlink", XML_folHlink }
+});
 
 sal_Int32 Color::getColorMapToken(std::u16string_view sName)
 {

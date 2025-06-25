@@ -38,8 +38,8 @@ namespace oox::drawingml {
 namespace
 {
 
-constexpr frozen::unordered_map<PredefinedClrSchemeId, std::u16string_view, 12> constPredefinedClrNames
-{
+constexpr auto constPredefinedClrNames = frozen::make_unordered_map<PredefinedClrSchemeId, std::u16string_view>
+({
     { dk1, u"dk1" },
     { lt1, u"lt1" },
     { dk2, u"dk2" },
@@ -52,7 +52,7 @@ constexpr frozen::unordered_map<PredefinedClrSchemeId, std::u16string_view, 12> 
     { accent6, u"accent6" },
     { hlink, u"hlink" },
     { folHlink, u"folHlink" }
-};
+});
 
 } // end anonymous namespace
 

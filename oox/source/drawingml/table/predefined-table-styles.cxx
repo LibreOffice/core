@@ -195,10 +195,13 @@ const std::unordered_map<OUString, std::pair<OUString, OUString>> mStyleIdMap{
       std::make_pair(u"Dark-Style-2"_ustr, u"Accent5"_ustr) }
 };
 
-constexpr frozen::unordered_map<std::u16string_view, sal_Int32, 6> tokens{
-    { u"Accent1", XML_accent1 }, { u"Accent2", XML_accent2 }, { u"Accent3", XML_accent3 },
-    { u"Accent4", XML_accent4 }, { u"Accent5", XML_accent5 }, { u"Accent6", XML_accent6 }
-};
+constexpr auto tokens
+    = frozen::make_unordered_map<std::u16string_view, sal_Int32>({ { u"Accent1", XML_accent1 },
+                                                                   { u"Accent2", XML_accent2 },
+                                                                   { u"Accent3", XML_accent3 },
+                                                                   { u"Accent4", XML_accent4 },
+                                                                   { u"Accent5", XML_accent5 },
+                                                                   { u"Accent6", XML_accent6 } });
 
 sal_Int32 resolveToken(OUString const& rString)
 {

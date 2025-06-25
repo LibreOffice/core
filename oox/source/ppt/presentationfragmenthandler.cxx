@@ -85,8 +85,8 @@ namespace oox::ppt
 
 namespace
 {
-constexpr frozen::unordered_map<PredefinedClrSchemeId, sal_Int32, 12> constPredefinedClrTokens
-{
+constexpr auto constPredefinedClrTokens = frozen::make_unordered_map<PredefinedClrSchemeId, sal_Int32>
+({
     { dk1, XML_dk1 },
     { lt1, XML_lt1 },
     { dk2, XML_dk2 },
@@ -99,7 +99,7 @@ constexpr frozen::unordered_map<PredefinedClrSchemeId, sal_Int32, 12> constPrede
     { accent6, XML_accent6 },
     { hlink, XML_hlink },
     { folHlink, XML_folHlink }
-};
+});
 
 sal_Int32 getPredefinedClrTokens(PredefinedClrSchemeId eID)
 {

@@ -146,8 +146,8 @@ ContextHandlerRef GradientFillContext::onCreateContext(
 namespace
 {
 
-constexpr frozen::unordered_map<sal_Int32, model::PatternPreset, 54> constPatternPresetMap
-{
+constexpr auto constPatternPresetMap = frozen::make_unordered_map<sal_Int32, model::PatternPreset>
+({
     { XML_pct5, model::PatternPreset::Percent_5 },
     { XML_pct10, model::PatternPreset::Percent_10 },
     { XML_pct20, model::PatternPreset::Percent_20 },
@@ -202,7 +202,7 @@ constexpr frozen::unordered_map<sal_Int32, model::PatternPreset, 54> constPatter
     { XML_wave, model::PatternPreset::Wave },
     { XML_trellis, model::PatternPreset::Trellis },
     { XML_zigZag, model::PatternPreset::ZigZag }
-};
+});
 
 } // end anonymous namespace
 PatternFillContext::PatternFillContext(ContextHandler2Helper const & rParent,

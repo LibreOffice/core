@@ -649,8 +649,8 @@ static sal_uInt16 parseChar( sal_Unicode c )
 namespace
 {
 
-constexpr frozen::unordered_map<std::u16string_view, sal_uInt16, 34> s_KeyCodes
-{
+constexpr auto s_KeyCodes = frozen::make_unordered_map<std::u16string_view, sal_uInt16>
+({
     { u"BACKSPACE", KEY_BACKSPACE },
     { u"BS", KEY_BACKSPACE },
     { u"DELETE", KEY_DELETE },
@@ -685,7 +685,7 @@ constexpr frozen::unordered_map<std::u16string_view, sal_uInt16, 34> s_KeyCodes
     { u"F13", KEY_F13 },
     { u"F14", KEY_F14 },
     { u"F15", KEY_F15 }
-};
+});
 
 } // end anonymous namespace
 

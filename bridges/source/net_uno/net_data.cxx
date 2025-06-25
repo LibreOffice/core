@@ -23,7 +23,7 @@ namespace
 {
 size_t net_sizeof(typelib_TypeClass eTypeClass)
 {
-    static constexpr frozen::unordered_map<typelib_TypeClass, size_t, 19> s_sizes{
+    static constexpr auto s_sizes = frozen::make_unordered_map<typelib_TypeClass, size_t>({
         { typelib_TypeClass_BOOLEAN, sizeof(sal_Bool) },
         { typelib_TypeClass_BYTE, sizeof(sal_Int8) },
         { typelib_TypeClass_CHAR, sizeof(sal_Unicode) },
@@ -43,7 +43,7 @@ size_t net_sizeof(typelib_TypeClass eTypeClass)
         { typelib_TypeClass_INTERFACE, sizeof(IntPtr) },
         { typelib_TypeClass_EXCEPTION, sizeof(IntPtr) },
         { typelib_TypeClass_STRUCT, sizeof(IntPtr) },
-    };
+    });
     return s_sizes.at(eTypeClass);
 }
 

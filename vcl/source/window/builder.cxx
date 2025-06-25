@@ -2132,7 +2132,7 @@ namespace BuilderUtils
     {
         using namespace com::sun::star::accessibility;
 
-        static constexpr frozen::unordered_map<std::u16string_view, sal_Int16, 123> aAtkRoleToAccessibleRole = {
+        static constexpr auto aAtkRoleToAccessibleRole = frozen::make_unordered_map<std::u16string_view, sal_Int16>({
             /* This is in atkobject.h's AtkRole order */
             { u"invalid",               AccessibleRole::UNKNOWN },
             { u"accelerator label",     AccessibleRole::UNKNOWN },
@@ -2257,7 +2257,7 @@ namespace BuilderUtils
             { u"subscript",             AccessibleRole::UNKNOWN },
             { u"superscript",           AccessibleRole::UNKNOWN },
             { u"footnote",              AccessibleRole::FOOTNOTE },
-        };
+        });
 
         auto it = aAtkRoleToAccessibleRole.find(roleName);
         if (it == aAtkRoleToAccessibleRole.end())
