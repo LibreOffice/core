@@ -337,13 +337,18 @@ dnl ===================================================================
 WSL_ONLY_AS_HELPER=
 if test -n "$WSL_DISTRO_NAME" && $(echo $PATH |grep -q -e mingw64 -e clangarm64); then
     WSL_ONLY_AS_HELPER=TRUE
+    shortpath_cmd=$(wslpath -m $srcdir/solenv/bin/shortpath.cmd)
+    if test -n "$PKG_CONFIG"; then
+        # make sure it is specified in a unix form/a path that wsl can access
+        PathFormat "$PKG_CONFIG"
+        PKG_CONFIG="$formatted_path_unix"
+    fi
     AC_ARG_WITH([strawberry-perl-portable],
         [AS_HELP_STRING([--with-strawberry-perl-portable],
             [Specify the base path to strawberry perl portable])],
         [],
         [AC_MSG_ERROR(
             [for the moment strawberry-perl-portable is a requirement, feel free to replace it])])
-    shortpath_cmd=$(wslpath -m $srcdir/solenv/bin/shortpath.cmd)
     PathFormat "$with_strawberry_perl_portable"
     if test ! -f "$formatted_path_unix/perl/bin/perl.exe" -o ! -d "$formatted_path_unix/c/bin"; then
         AC_MSG_ERROR([$formatted_path doesn't contain perl or the utilities - sure you provided the base path?])
