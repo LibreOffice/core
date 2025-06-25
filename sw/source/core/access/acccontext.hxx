@@ -38,14 +38,10 @@ namespace accessibility {
     class AccessibleShape;
 }
 
-class SwAccessibleContext :
-    public ::cppu::WeakImplHelper<
-                css::accessibility::XAccessible,
-                css::accessibility::XAccessibleContext,
-                css::accessibility::XAccessibleContext3,
-                css::accessibility::XAccessibleComponent,
-                css::accessibility::XAccessibleEventBroadcaster>,
-    public SwAccessibleFrame
+class SwAccessibleContext
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
+                                         css::accessibility::XAccessibleContext3>,
+      public SwAccessibleFrame
 {
     // The implements for the XAccessibleSelection interface has been
     // 'externalized' and wants access to the protected members like
@@ -70,7 +66,6 @@ private:
     /// alive, after locking SolarMutex (alternatively, Dispose clears m_pMap)
     std::weak_ptr<SwAccessibleMap> m_wMap;
 
-    sal_uInt32 m_nClientId;  // client id in the AccessibleEventNotifier queue
     sal_Int16 m_nRole;        // immutable outside constructor
 
     // The current states (protected by mutex)
@@ -161,6 +156,9 @@ public:
                              const css::uno::Any& rNewValue, sal_Int32 nIndexHint = -1);
 
 protected:
+    // OAccessible
+    virtual css::awt::Rectangle implGetBounds() override;
+
     // broadcast visual data event
     void FireVisibleDataEvent();
 
@@ -195,12 +193,6 @@ protected:
 public:
     SwAccessibleContext( std::shared_ptr<SwAccessibleMap> const& pMap,
                          sal_Int16 nRole, const SwFrame *pFrame );
-
-    // XAccessible
-
-    // Return the XAccessibleContext.
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext() override;
 
     // XAccessibleContext
 
@@ -245,27 +237,11 @@ public:
     virtual css::lang::Locale SAL_CALL
         getLocale() override;
 
-    // XAccessibleEventBroadcaster
-
-    virtual void SAL_CALL addAccessibleEventListener(
-            const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-    virtual void SAL_CALL removeAccessibleEventListener(
-            const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-
     // XAccessibleComponent
-    virtual sal_Bool SAL_CALL containsPoint(
-            const css::awt::Point& aPoint ) override;
-
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint(
                 const css::awt::Point& aPoint ) override;
 
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-
-    virtual css::awt::Point SAL_CALL getLocation() override;
-
     virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-
-    virtual css::awt::Size SAL_CALL getSize() override;
 
     virtual void SAL_CALL grabFocus() override;
 

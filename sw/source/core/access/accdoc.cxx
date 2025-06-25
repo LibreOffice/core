@@ -211,12 +211,10 @@ OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleName()
     return sAccName;
 }
 
-awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
+awt::Rectangle SwAccessibleDocumentBase::implGetBounds()
 {
     try
     {
-        SolarMutexGuard aGuard;
-
         vcl::Window *pWin = GetWindow();
         if (!pWin)
         {

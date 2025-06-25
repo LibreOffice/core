@@ -65,12 +65,13 @@ public:
 
     virtual OUString SAL_CALL getAccessibleName() override;
 
+    // OAccessible
+    virtual css::awt::Rectangle implGetBounds() override;
+
     // XAccessibleComponent
     virtual css::uno::Reference<
         css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint(
                 const css::awt::Point& aPoint ) override;
-
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
 
     virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
 };

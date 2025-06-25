@@ -410,11 +410,7 @@ void SwAccessibleContext::FireAccessibleEvent(const sal_Int16 nEventId,
         return;
     }
 
-    uno::Reference<XAccessibleContext> xThis(this);
-    AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue, nIndexHint);
-
-    if (m_nClientId)
-        comphelper::AccessibleEventNotifier::addEvent(m_nClientId, aEvent);
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue, nIndexHint);
 }
 
 void SwAccessibleContext::FireVisibleDataEvent()
@@ -498,7 +494,6 @@ SwAccessibleContext::SwAccessibleContext(std::shared_ptr<SwAccessibleMap> const&
                          pMap->GetShell().IsPreview() )
     , m_pMap(pMap.get())
     , m_wMap(pMap)
-    , m_nClientId(0)
     , m_nRole(nRole)
     , m_isDisposing( false )
     , m_isRegisteredAtAccessibleMap( true )
@@ -524,13 +519,6 @@ SwAccessibleContext::~SwAccessibleContext()
     {
         pMap->RemoveContext( GetFrame() );
     }
-}
-
-uno::Reference< XAccessibleContext > SAL_CALL
-    SwAccessibleContext::getAccessibleContext()
-{
-    uno::Reference < XAccessibleContext > xRet( this );
-    return xRet;
 }
 
 sal_Int64 SAL_CALL SwAccessibleContext::getAccessibleChildCount()
@@ -725,58 +713,7 @@ lang::Locale SAL_CALL SwAccessibleContext::getLocale()
     return aLoc;
 }
 
-void SAL_CALL SwAccessibleContext::addAccessibleEventListener(
-            const uno::Reference< XAccessibleEventListener >& xListener )
-{
-    if (xListener.is())
-    {
-        SolarMutexGuard aGuard;
-        if (!m_nClientId)
-            m_nClientId = comphelper::AccessibleEventNotifier::registerClient( );
-        comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, xListener );
-    }
-}
-
-void SAL_CALL SwAccessibleContext::removeAccessibleEventListener(
-            const uno::Reference< XAccessibleEventListener >& xListener )
-{
-    if (!(xListener.is() && m_nClientId))
-        return;
-
-    SolarMutexGuard aGuard;
-    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
-    if ( !nListenerCount )
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-        comphelper::AccessibleEventNotifier::revokeClient( m_nClientId );
-        m_nClientId = 0;
-    }
-}
-
-static bool lcl_PointInRectangle(const awt::Point & aPoint,
-                                     const awt::Rectangle & aRect)
-{
-    tools::Long nDiffX = aPoint.X - aRect.X;
-    tools::Long nDiffY = aPoint.Y - aRect.Y;
-
-    return
-        nDiffX >= 0 && nDiffX < aRect.Width && nDiffY >= 0 &&
-        nDiffY < aRect.Height;
-
-}
-
-sal_Bool SAL_CALL SwAccessibleContext::containsPoint(
-            const awt::Point& aPoint )
-{
-    awt::Rectangle aPixBounds = getBounds();
-    aPixBounds.X = 0;
-    aPixBounds.Y = 0;
-
-    return lcl_PointInRectangle(aPoint, aPixBounds);
-}
+css::awt::Rectangle SwAccessibleContext::implGetBounds() { return getBoundsImpl(true); }
 
 uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint(
                 const awt::Point& aPoint )
@@ -839,8 +776,6 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
 */
 awt::Rectangle SwAccessibleContext::getBoundsImpl(bool bRelative)
 {
-    SolarMutexGuard aGuard;
-
     ThrowIfDisposed();
 
     const SwFrame *pParent = GetParent();
@@ -884,21 +819,10 @@ awt::Rectangle SwAccessibleContext::getBoundsImpl(bool bRelative)
     return vcl::unohelper::ConvertToAWTRect(aPixBounds);
 }
 
-awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
-{
-    return getBoundsImpl(true);
-}
-
-awt::Point SAL_CALL SwAccessibleContext::getLocation()
-{
-    awt::Rectangle aRect = getBounds();
-    awt::Point aPoint(aRect.X, aRect.Y);
-
-    return aPoint;
-}
-
 awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
 {
+    SolarMutexGuard aGuard;
+
     awt::Rectangle aRect = getBoundsImpl(false);
 
     Point aPixPos(aRect.X, aRect.Y);
@@ -913,14 +837,6 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
     awt::Point aPoint(aPixPosAbs.getX(), aPixPosAbs.getY());
 
     return aPoint;
-}
-
-awt::Size SAL_CALL SwAccessibleContext::getSize()
-{
-    awt::Rectangle aRect = getBounds();
-    awt::Size aSize( aRect.Width, aRect.Height );
-
-    return aSize;
 }
 
 void SAL_CALL SwAccessibleContext::grabFocus()
@@ -1037,12 +953,7 @@ void SwAccessibleContext::Dispose(bool bRecursive, bool bCanSkipInvisible)
         m_isDefuncState = true;
     }
 
-    // broadcast dispose event
-    if (m_nClientId)
-    {
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( m_nClientId, *this );
-        m_nClientId =  0;
-    }
+    OAccessible::dispose();
 
     RemoveFrameFromAccessibleMap();
     ClearFrame();
