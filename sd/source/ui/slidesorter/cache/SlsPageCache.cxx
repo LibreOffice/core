@@ -94,16 +94,6 @@ void PageCache::SetPreciousFlag (
     mpImplementation->SetPreciousFlag(aKey, bIsPrecious);
 }
 
-void PageCache::Pause()
-{
-    mpImplementation->Pause();
-}
-
-void PageCache::Resume()
-{
-    mpImplementation->Resume();
-}
-
 } // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

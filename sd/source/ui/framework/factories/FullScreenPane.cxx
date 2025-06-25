@@ -119,19 +119,6 @@ void FullScreenPane::disposing(std::unique_lock<std::mutex>& l)
     FrameWindowPane::disposing(l);
 }
 
-bool FullScreenPane::isVisible()
-{
-    {
-        std::unique_lock aGuard (m_aMutex);
-        throwIfDisposed(aGuard);
-    }
-
-    if (mpWindow != nullptr)
-        return mpWindow->IsReallyVisible();
-    else
-        return false;
-}
-
 void FullScreenPane::setVisible (const bool bIsVisible)
 {
     {

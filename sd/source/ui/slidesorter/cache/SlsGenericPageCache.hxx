@@ -123,9 +123,6 @@ public:
     */
     void SetPreciousFlag (const CacheKey aKey, const bool bIsPrecious);
 
-    void Pause();
-    void Resume();
-
 private:
     std::shared_ptr<BitmapCache> mpBitmapCache;
 

@@ -57,15 +57,6 @@ public:
         const rtl::Reference<sd::framework::ResourceFactory>& rxFactory);
 
     /** Unregister the specified factory.
-        @param rsURL
-            Unregister only the factory for this URL.  When the same factory
-            is registered for other URLs then these remain registered.
-        @throws css::uno::RuntimeException
-    */
-    void RemoveFactoryForURL(
-        const OUString& rsURL);
-
-    /** Unregister the specified factory.
         @param rxFactory
             Unregister the this factory for all URLs that it has been
             registered for.

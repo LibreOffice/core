@@ -410,7 +410,6 @@ namespace x11 {
         OUString convertFromCompound( const char* pText, int nLen );
 
         sal_Int8 getUserDragAction() const;
-        sal_Int32 getSelectionTimeout();
     public:
         static SelectionManager& get();
 

@@ -447,29 +447,12 @@ void ConfigurationController::addResourceFactory(
     mpImplementation->mpResourceFactoryContainer->AddFactory(sResourceURL, rxResourceFactory);
 }
 
-void ConfigurationController::removeResourceFactoryForURL(
-    const OUString& sResourceURL)
-{
-    ::osl::MutexGuard aGuard (m_aMutex);
-    ThrowIfDisposed();
-    mpImplementation->mpResourceFactoryContainer->RemoveFactoryForURL(sResourceURL);
-}
-
 void ConfigurationController::removeResourceFactoryForReference(
     const rtl::Reference<ResourceFactory>& rxResourceFactory)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
     ThrowIfDisposed();
     mpImplementation->mpResourceFactoryContainer->RemoveFactoryForReference(rxResourceFactory);
-}
-
-rtl::Reference<ResourceFactory> ConfigurationController::getResourceFactory (
-    const OUString& sResourceURL)
-{
-    ::osl::MutexGuard aGuard (m_aMutex);
-    ThrowIfDisposed();
-
-    return mpImplementation->mpResourceFactoryContainer->GetFactory(sResourceURL);
 }
 
 void ConfigurationController::ThrowIfDisposed () const

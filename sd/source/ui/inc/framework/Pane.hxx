@@ -74,12 +74,6 @@ public:
 
     virtual css::uno::Reference<css::rendering::XCanvas> getCanvas() override;
 
-    /** Return whether all windows that are used to implement the pane are
-        visible.
-        @return `TRUE` when all windows of the pane are visible.
-    */
-    virtual bool isVisible();
-
     /** Hide or show the pane.  If there is more than one window used to
         implement the pane then it is left to the implementation if one,
         some, or all windows are hidden or shown as long as the pane becomes

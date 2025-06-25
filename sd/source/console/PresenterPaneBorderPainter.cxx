@@ -114,8 +114,6 @@ public:
         const awt::Rectangle& rOuterBox,
         const OUString& rsPaneStyleName);
     std::shared_ptr<RendererPaneStyle> GetRendererPaneStyle (const OUString& rsResourceURL);
-    void SetCalloutAnchor (
-        const awt::Point& rCalloutAnchor);
 
 private:
     std::shared_ptr<PresenterTheme> mpTheme;
@@ -208,64 +206,6 @@ void PresenterPaneBorderPainter::paintBorder (
         rRepaintArea,
         rsPaneBorderStyleName);
 }
-
-void PresenterPaneBorderPainter::paintBorderWithCallout (
-    const OUString& rsPaneBorderStyleName,
-    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-    const css::awt::Rectangle& rOuterBorderRectangle,
-    const css::awt::Rectangle& rRepaintArea,
-    const OUString& rsTitle,
-    const css::awt::Point& rCalloutAnchor)
-{
-    ThrowIfDisposed();
-
-    // Early reject paints completely outside the repaint area.
-    if (rRepaintArea.X >= rOuterBorderRectangle.X+rOuterBorderRectangle.Width
-        || rRepaintArea.Y >= rOuterBorderRectangle.Y+rOuterBorderRectangle.Height
-        || rRepaintArea.X+rRepaintArea.Width <= rOuterBorderRectangle.X
-        || rRepaintArea.Y+rRepaintArea.Height <= rOuterBorderRectangle.Y)
-    {
-        return;
-    }
-    ProvideTheme(rxCanvas);
-
-    if (mpRenderer == nullptr)
-        return;
-
-    mpRenderer->SetCanvas(rxCanvas);
-    mpRenderer->SetupClipping(
-        rRepaintArea,
-        rOuterBorderRectangle,
-        rsPaneBorderStyleName);
-    mpRenderer->SetCalloutAnchor(rCalloutAnchor);
-    mpRenderer->PaintBorder(
-        rsTitle,
-        rOuterBorderRectangle,
-        rRepaintArea,
-        rsPaneBorderStyleName);
-}
-
-awt::Point PresenterPaneBorderPainter::getCalloutOffset (
-    const OUString& rsPaneBorderStyleName)
-{
-    ThrowIfDisposed();
-    ProvideTheme();
-    if (mpRenderer != nullptr)
-    {
-        const std::shared_ptr<RendererPaneStyle> pRendererPaneStyle(
-            mpRenderer->GetRendererPaneStyle(rsPaneBorderStyleName));
-        if (pRendererPaneStyle != nullptr && pRendererPaneStyle->mpBottomCallout)
-        {
-            return awt::Point (
-                0,
-                pRendererPaneStyle->mpBottomCallout->mnHeight
-                    - pRendererPaneStyle->mpBottomCallout->mnYHotSpot);
-        }
-    }
-
-    return awt::Point(0,0);
-}
-
 
 bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanvas>& rxCanvas)
 {
@@ -548,13 +488,6 @@ std::shared_ptr<RendererPaneStyle>
         return iStyle->second;
     else
         return std::shared_ptr<RendererPaneStyle>();
-}
-
-void PresenterPaneBorderPainter::Renderer::SetCalloutAnchor (
-    const awt::Point& rCalloutAnchor)
-{
-    mbHasCallout = true;
-    maCalloutAnchor = rCalloutAnchor;
 }
 
 void PresenterPaneBorderPainter::Renderer::PaintBitmap(

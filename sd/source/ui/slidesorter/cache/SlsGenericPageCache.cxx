@@ -260,20 +260,6 @@ void GenericPageCache::SetPreciousFlag (
     mpBitmapCache->SetPrecious(mpCacheContext->GetPage(aKey), bIsPrecious);
 }
 
-void GenericPageCache::Pause()
-{
-    ProvideCacheAndProcessor();
-    if (mpQueueProcessor != nullptr)
-        mpQueueProcessor->Pause();
-}
-
-void GenericPageCache::Resume()
-{
-    ProvideCacheAndProcessor();
-    if (mpQueueProcessor != nullptr)
-        mpQueueProcessor->Resume();
-}
-
 } // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

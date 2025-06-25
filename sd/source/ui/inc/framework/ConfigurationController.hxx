@@ -154,15 +154,8 @@ public:
         const OUString& sResourceURL,
         const rtl::Reference<sd::framework::ResourceFactory>& rxResourceFactory);
 
-    void removeResourceFactoryForURL(
-        const OUString& sResourceURL);
-
     void removeResourceFactoryForReference(
         const rtl::Reference<sd::framework::ResourceFactory>& rxResourceFactory);
-
-    rtl::Reference<sd::framework::ResourceFactory>
-        getResourceFactory (
-        const OUString& sResourceURL);
 
     /** Use this class instead of calling lock() and unlock() directly in
         order to be exception safe.

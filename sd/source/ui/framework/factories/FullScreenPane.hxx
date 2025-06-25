@@ -59,8 +59,6 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    virtual bool isVisible() override;
-
     virtual void setVisible (bool bIsVisible) override;
 
     DECL_LINK(WindowEventHandler, VclWindowEvent&, void);

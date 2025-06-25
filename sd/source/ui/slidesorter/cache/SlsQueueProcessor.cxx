@@ -72,18 +72,6 @@ void QueueProcessor::Stop()
         maTimer.Stop();
 }
 
-void QueueProcessor::Pause()
-{
-    mbIsPaused = true;
-}
-
-void QueueProcessor::Resume()
-{
-    mbIsPaused = false;
-    if ( ! mrQueue.IsEmpty())
-        Start(mrQueue.GetFrontPriorityClass());
-}
-
 void QueueProcessor::SetPreviewSize (
     const Size& rPreviewSize,
     const bool bDoSuperSampling)

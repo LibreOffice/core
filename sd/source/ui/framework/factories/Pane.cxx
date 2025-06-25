@@ -82,20 +82,6 @@ Reference<rendering::XCanvas> Pane::getCanvas()
     return mxCanvas;
 }
 
-bool Pane::isVisible()
-{
-    {
-        std::unique_lock aGuard (m_aMutex);
-        throwIfDisposed(aGuard);
-    }
-
-    const vcl::Window* pWindow = GetWindow();
-    if (pWindow != nullptr)
-        return pWindow->IsVisible();
-    else
-        return false;
-}
-
 void Pane::setVisible (bool bIsVisible)
 {
     {

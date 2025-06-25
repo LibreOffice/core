@@ -90,32 +90,6 @@ void ResourceFactoryManager::AddFactory (
     }
 }
 
-void ResourceFactoryManager::RemoveFactoryForURL (
-    const OUString& rsURL)
-{
-    if (rsURL.isEmpty())
-        throw lang::IllegalArgumentException();
-
-    std::scoped_lock aGuard (maMutex);
-
-    FactoryMap::iterator iFactory (maFactoryMap.find(rsURL));
-    if (iFactory != maFactoryMap.end())
-    {
-        maFactoryMap.erase(iFactory);
-    }
-    else
-    {
-        // The URL may be a pattern.  Look that up.
-        auto iPattern = std::find_if(maFactoryPatternList.begin(), maFactoryPatternList.end(),
-            [&rsURL](const FactoryPatternList::value_type& rPattern) { return rPattern.first == rsURL; });
-        if (iPattern != maFactoryPatternList.end())
-        {
-            // Found the pattern.  Remove it.
-            maFactoryPatternList.erase(iPattern);
-        }
-    }
-}
-
 void ResourceFactoryManager::RemoveFactoryForReference(
     const rtl::Reference<ResourceFactory>& rxFactory)
 {

@@ -128,23 +128,6 @@ public:
             const TabBarButton& rButton,
             const TabBarButton& rAnchor);
 
-    /** Add a tab bar button at the right most position.
-        @param aButton
-            The new tab bar button that is to be inserted.
-    */
-    void
-        appendTabBarButton (
-            const TabBarButton& rButton);
-
-    /** Remove a tab bar button.
-        @param aButton
-            The tab bar button to remove.  When there is no button with the
-            specified resource id then this call is silently ignored.
-    */
-    void
-        removeTabBarButton (
-            const TabBarButton& rButton);
-
     /** Test whether the specified button exists in the tab bar.
         @param aButton
             The tab bar button whose existence is tested.
@@ -154,14 +137,6 @@ public:
     bool
         hasTabBarButton (
             const TabBarButton& rButton);
-
-    /** Return a sequence of all the tab bar buttons.
-        <p>Their order reflects the visible order in the tab bar.</p>
-        <p>This method can be used when
-        addTabBarButtonAfter() does not provide enough
-        control as to where to insert a new button.</p>
-    */
-    const std::vector<TabBarButton>& getTabBarButtons() const;
 
     //----- AbstractResource ---------------------------------------------------------
 
@@ -186,10 +161,6 @@ public:
     void AddTabBarButton (
         const TabBarButton& rButton,
         const TabBarButton& rAnchor);
-    void AddTabBarButton (
-        const TabBarButton& rButton);
-    void RemoveTabBarButton (
-        const TabBarButton& rButton);
     bool HasTabBarButton (
         const TabBarButton& rButton);
 

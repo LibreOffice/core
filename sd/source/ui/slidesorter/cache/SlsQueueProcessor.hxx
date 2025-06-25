@@ -58,8 +58,6 @@ public:
     */
     void Start (int nPriorityClass);
     void Stop();
-    void Pause();
-    void Resume();
 
     void SetPreviewSize (
         const Size& rSize,

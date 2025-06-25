@@ -150,42 +150,6 @@ public:
         const css::awt::Rectangle& rRepaintArea,
         const OUString& rsTitle);
 
-    /** Paint the border around a pane where the border includes a call out
-        that is anchored at the given point.  Most arguments have the same
-        meaning as in the paintBorder().
-
-        @see paintBorder
-
-        @param sPaneBorderStyleName
-            See description in #paintBorder.
-        @param xCanvas
-            See description in #paintBorder.
-        @param aOuterBorderRectangle
-            See description in #paintBorder.
-        @param aRepaintArea
-            See description in #paintBorder.
-        @param sTitle
-            See description in #paintBorder.
-        @param aCalloutAnchor
-            The anchor point of the call out.  It is usually located outside
-            the border.
-    */
-    void paintBorderWithCallout (
-        const OUString& rsPaneBorderStyleName,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const css::awt::Rectangle& rOuterBorderRectangle,
-        const css::awt::Rectangle& rRepaintArea,
-        const OUString& rsTitle,
-        const css::awt::Point& rCalloutAnchor);
-
-    /** Return the offset of a call out anchor with respect to the outer
-        border.  This value is used when the call out is realized by a fixed
-        bitmap in order to determine the size and/or location of the outer
-        border for a given call out.
-    */
-    css::awt::Point getCalloutOffset (
-        const OUString& rsPaneBorderStyleName);
-
 private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     std::shared_ptr<PresenterTheme> mpTheme;

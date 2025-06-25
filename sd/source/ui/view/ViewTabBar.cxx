@@ -221,18 +221,6 @@ void ViewTabBar::addTabBarButtonAfter (
     AddTabBarButton(rButton, rAnchor);
 }
 
-void ViewTabBar::appendTabBarButton (const TabBarButton& rButton)
-{
-    const SolarMutexGuard aSolarGuard;
-    AddTabBarButton(rButton);
-}
-
-void ViewTabBar::removeTabBarButton (const TabBarButton& rButton)
-{
-    const SolarMutexGuard aSolarGuard;
-    RemoveTabBarButton(rButton);
-}
-
 bool ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
 {
     const SolarMutexGuard aSolarGuard;
@@ -357,12 +345,6 @@ void ViewTabBar::AddTabBarButton (
 }
 
 void ViewTabBar::AddTabBarButton (
-    const TabBarButton& rButton)
-{
-    AddTabBarButton(rButton, maTabBarButtons.size());
-}
-
-void ViewTabBar::AddTabBarButton (
     const TabBarButton& rButton,
     sal_Int32 nPosition)
 {
@@ -373,21 +355,6 @@ void ViewTabBar::AddTabBarButton (
         maTabBarButtons.insert(maTabBarButtons.begin() + nPosition, rButton);
         UpdateTabBarButtons();
         UpdateActiveButton();
-    }
-}
-
-void ViewTabBar::RemoveTabBarButton (
-    const TabBarButton& rButton)
-{
-    for (TabBarButtonList::size_type nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
-    {
-        if (IsEqual(maTabBarButtons[nIndex], rButton))
-        {
-            maTabBarButtons.erase(maTabBarButtons.begin()+nIndex);
-            UpdateTabBarButtons();
-            UpdateActiveButton();
-            break;
-        }
     }
 }
 
@@ -406,11 +373,6 @@ bool ViewTabBar::HasTabBarButton (
     }
 
     return bResult;
-}
-
-const std::vector<TabBarButton>& ViewTabBar::getTabBarButtons() const
-{
-    return maTabBarButtons;
 }
 
 void ViewTabBar::UpdateActiveButton()
