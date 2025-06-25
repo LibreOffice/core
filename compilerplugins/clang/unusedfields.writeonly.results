@@ -84,9 +84,9 @@ canvas/source/cairo/cairo_spritehelper.hxx:98
     cairocanvas::SpriteHelper mbTextureDirty _Bool
 chart2/inc/ChartModel.hxx:161
     chart::ChartModel m_aGraphicObjectVector std::vector<GraphicObject>
-chart2/inc/ChartModel.hxx:524
+chart2/inc/ChartModel.hxx:526
     chart::ChartModel mnStart sal_Int32
-chart2/inc/ChartModel.hxx:525
+chart2/inc/ChartModel.hxx:527
     chart::ChartModel mnEnd sal_Int32
 chart2/source/controller/dialogs/DialogModel.cxx:178
     (anonymous namespace)::lcl_RolesWithRangeAppend m_rDestCnt tContainerType *
@@ -284,10 +284,12 @@ dbaccess/source/ui/browser/dbloader.cxx:60
     (anonymous namespace)::DBContentLoader m_xListener Reference<XLoadEventListener>
 dbaccess/source/ui/inc/RelationController.hxx:36
     dbaui::ORelationController m_xWaitObject std::unique_ptr<weld::WaitObject>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:320
+desktop/qa/desktop_lib/test_desktop_lib.cxx:316
     DesktopLOKTest m_bModified _Bool
-desktop/qa/desktop_lib/test_desktop_lib.cxx:321
+desktop/qa/desktop_lib/test_desktop_lib.cxx:317
     DesktopLOKTest m_nTrackChanges int
+desktop/qa/desktop_lib/test_desktop_lib.cxx:2209
+    (anonymous namespace)::RedlineInfo index std::string
 desktop/source/app/app.cxx:1285
     desktop::(anonymous namespace)::ExecuteGlobals pCTLLanguageOptions std::unique_ptr<SvtCTLOptions>
 desktop/source/app/app.cxx:1286
@@ -1214,7 +1216,7 @@ sd/source/console/PresenterTimer.cxx:111
     sdext::presenter::(anonymous namespace)::TimerScheduler mpLateDestroy std::shared_ptr<TimerScheduler>
 sd/source/ui/dlg/RemoteDialogClientBox.hxx:66
     sd::ClientBox m_vEntries std::vector<TClientBoxEntry>
-sd/source/ui/framework/module/ToolBarModule.hxx:84
+sd/source/ui/framework/module/ToolBarModule.hxx:80
     sd::framework::ToolBarModule mpToolBarManagerLock std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock> >
 sd/source/ui/inc/animobjs.hxx:122
     sd::AnimationWindow pControllerItem std::unique_ptr<AnimationControllerItem>
@@ -1494,7 +1496,7 @@ sw/inc/unoframe.hxx:310
     SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
 sw/inc/view.hxx:197
     SwView m_xGlueDocShell std::unique_ptr<SwViewGlueDocShell>
-sw/qa/core/doc/doc.cxx:398
+sw/qa/core/doc/doc.cxx:399
     (anonymous namespace)::SelectionChangeListener m_aAnchors std::vector<uno::Reference<text::XTextRange> >
 sw/source/core/doc/docbm.cxx:549
     sw::mark::UniqueNameChecksGuard_impl usedNames std::unordered_set<OUString>
@@ -1546,9 +1548,9 @@ sw/source/uibase/inc/maildispatcher.hxx:149
     MailDispatcher m_xSelfReference ::rtl::Reference<MailDispatcher>
 sw/source/uibase/inc/navipi.hxx:62
     SwNavigationPI m_xContent3Dispatch std::unique_ptr<ToolbarUnoDispatcher>
-sw/source/uibase/inc/redlndlg.hxx:62
-    SwRedlineAcceptDlg m_RedlinData std::vector<std::unique_ptr<RedlinData> >
 sw/source/uibase/inc/redlndlg.hxx:63
+    SwRedlineAcceptDlg m_RedlinData std::vector<std::unique_ptr<RedlinData> >
+sw/source/uibase/inc/redlndlg.hxx:64
     SwRedlineAcceptDlg m_aUsedSeqNo SwRedlineDataParentSortArr
 sw/source/uibase/sidebar/TableEditPanel.hxx:51
     sw::sidebar::TableEditPanel m_xInsertDispatch std::unique_ptr<ToolbarUnoDispatcher>
@@ -1956,15 +1958,15 @@ vcl/source/fontsubset/sft.cxx:70
     vcl::(anonymous namespace)::TTGlyphMetrics lsb sal_Int16
 vcl/source/fontsubset/sft.cxx:71
     vcl::(anonymous namespace)::TTGlyphMetrics ah sal_uInt16
-vcl/unx/generic/app/wmadaptor.cxx:1268
+vcl/unx/generic/app/wmadaptor.cxx:1267
     _mwmhints deco unsigned long
-vcl/unx/generic/app/wmadaptor.cxx:1268
+vcl/unx/generic/app/wmadaptor.cxx:1267
     _mwmhints flags unsigned long
-vcl/unx/generic/app/wmadaptor.cxx:1268
+vcl/unx/generic/app/wmadaptor.cxx:1267
     _mwmhints func unsigned long
-vcl/unx/generic/app/wmadaptor.cxx:1269
+vcl/unx/generic/app/wmadaptor.cxx:1268
     _mwmhints input_mode tools::Long
-vcl/unx/generic/app/wmadaptor.cxx:1270
+vcl/unx/generic/app/wmadaptor.cxx:1269
     _mwmhints status unsigned long
 vcl/unx/generic/gdi/cairotextrender.cxx:51
     (anonymous namespace)::CairoFontsCache::CacheId maFace FT_Face
@@ -1978,7 +1980,7 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:80
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:21315
+vcl/unx/gtk3/gtkinst.cxx:21422
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection gpointer

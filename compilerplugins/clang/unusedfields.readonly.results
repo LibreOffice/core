@@ -752,10 +752,8 @@ sw/source/uibase/dbui/mmconfigitem.cxx:117
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:75
     SwInsertField_Data m_aDBDataSource css::uno::Any
-sw/source/uibase/inc/swrenamexnameddlg.hxx:30
-    SwRenameXNamedDlg m_xSecondAccess css::uno::Reference<css::container::XNameAccess>
-sw/source/uibase/inc/swrenamexnameddlg.hxx:31
-    SwRenameXNamedDlg m_xThirdAccess css::uno::Reference<css::container::XNameAccess>
+sw/source/writerfilter/dmapper/StyleSheetTable.hxx:157
+    writerfilter::dmapper::StyleSheetTable m_ClonedTOCStylesMap std::map<OUString, OUString>
 sw/source/writerfilter/ooxml/OOXMLFactory.hxx:60
     writerfilter::ooxml::AttributeInfo m_nToken Token_t
 sw/source/writerfilter/ooxml/OOXMLFactory.hxx:61

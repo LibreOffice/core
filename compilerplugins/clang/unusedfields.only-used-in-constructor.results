@@ -18,7 +18,7 @@ canvas/source/tools/surfaceproxy.hxx:104
     canvas::SurfaceProxy mpPageManager PageManagerSharedPtr
 canvas/source/vcl/impltools.hxx:95
     vclcanvas::tools::LocalGuard aSolarGuard SolarMutexGuard
-chart2/source/controller/accessibility/AccessibleChartShape.hxx:65
+chart2/source/controller/accessibility/AccessibleChartShape.hxx:62
     chart::AccessibleChartShape m_aShapeTreeInfo ::accessibility::AccessibleShapeTreeInfo
 chart2/source/controller/dialogs/tp_3D_SceneIllumination.hxx:70
     chart::ThreeD_SceneIllumination_TabPage m_aModelChangeListener ModifyListenerCallBack
@@ -150,8 +150,6 @@ cui/source/inc/AdditionsDialog.hxx:82
     AdditionsDialog m_sTag OUString
 cui/source/inc/cfgutil.hxx:244
     SvxScriptSelectorDialog m_aStylesInfo SfxStylesInfo_Impl
-cui/source/inc/connect.hxx:34
-    SvxConnectionPage rOutAttrs const SfxItemSet &
 cui/source/inc/cuitabarea.hxx:232
     SvxAreaTabPage maFixed_ChangeType ChangeType
 cui/source/inc/cuitabarea.hxx:236
@@ -556,7 +554,7 @@ sd/source/filter/eppt/epptbase.hxx:348
     PPTWriterBase maFraction Fraction
 sd/source/filter/ppt/pptin.hxx:81
     SdPPTImport maParam PowerPointImportParam
-sd/source/ui/inc/AccessibleDocumentViewBase.hxx:246
+sd/source/ui/inc/AccessibleDocumentViewBase.hxx:244
     accessibility::AccessibleDocumentViewBase maViewForwarder AccessibleViewForwarder
 sd/source/ui/inc/CustomAnimationList.hxx:127
     sd::CustomAnimationList maDropTargetHelper CustomAnimationListDropTarget
@@ -566,19 +564,21 @@ sd/source/ui/inc/SlideshowLayerRenderer.hxx:114
     sd::RenderState mpCurrentTarget SdrObject *
 sd/source/ui/inc/SlideshowLayerRenderer.hxx:115
     sd::RenderState mnCurrentTargetParagraph sal_Int32
+sd/source/ui/inc/ViewTabBar.hxx:74
+    sd::TabBarButton HelpText OUString
 sd/source/ui/remotecontrol/Receiver.hxx:34
     sd::Receiver pTransmitter Transmitter *
 sd/source/ui/remotecontrol/ZeroconfService.hxx:31
     sd::ZeroconfService port uint
 sd/source/ui/view/DocumentRenderer.cxx:1650
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1310
+sd/source/ui/view/viewshel.cxx:1309
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1311
+sd/source/ui/view/viewshel.cxx:1310
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1312
+sd/source/ui/view/viewshel.cxx:1311
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1313
+sd/source/ui/view/viewshel.cxx:1312
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::SelectionObserver::Context
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:249
     (anonymous namespace)::PDFGrammar::definition boolean rule<ScannerT>
@@ -732,15 +732,15 @@ svx/source/dialog/contimp.hxx:74
     SvxSuperContourDlg aContourItem SvxContourDlgItem
 svx/source/dialog/framelinkarray.cxx:570
     svx::frame::(anonymous namespace)::MergedCellIterator mnFirstRow sal_Int32
-svx/source/dialog/weldeditview.cxx:463
+svx/source/dialog/weldeditview.cxx:462
     (anonymous namespace)::WeldEditSource m_rEditAcc WeldEditAccessible &
 svx/source/inc/datanavi.hxx:190
     svxform::XFormsPage m_aDropHelper DataTreeDropTarget
 svx/source/svdraw/svdcrtv.cxx:49
     ImplConnectMarkerOverlay maObjects sdr::overlay::OverlayObjectList
-svx/source/svdraw/svdmrkv.cxx:143
+svx/source/svdraw/svdmrkv.cxx:146
     MarkingSelectionOverlay maObjects sdr::overlay::OverlayObjectList
-svx/source/svdraw/svdmrkv.cxx:168
+svx/source/svdraw/svdmrkv.cxx:171
     MarkingSubSelectionOverlay maObjects sdr::overlay::OverlayObjectList
 svx/source/tbxctrls/extrusioncontrols.hxx:66
     svx::ExtrusionDirectionWindow maImgDirection Image[9]
@@ -984,15 +984,15 @@ vcl/unx/gtk3/gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:7446
+vcl/unx/gtk3/gtkinst.cxx:7553
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtkinst.cxx:11152
+vcl/unx/gtk3/gtkinst.cxx:11259
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pContainer GtkBox *
-vcl/unx/gtk3/gtkinst.cxx:11154
+vcl/unx/gtk3/gtkinst.cxx:11261
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pMenuButton GtkMenuButton *
-vcl/unx/gtk3/gtkinst.cxx:21304
+vcl/unx/gtk3/gtkinst.cxx:21411
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtkinst.cxx:21310
+vcl/unx/gtk3/gtkinst.cxx:21417
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 xmloff/inc/XMLThemeContext.hxx:45
     XMLThemeColorsContext m_aColorScheme std::vector<css::util::Color>
