@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/compbase.hxx>
 

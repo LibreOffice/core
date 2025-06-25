@@ -23,7 +23,7 @@
 #include <memory>
 #include <string_view>
 
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <vcl/vclenum.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>

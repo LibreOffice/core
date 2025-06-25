@@ -25,7 +25,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <comphelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
 

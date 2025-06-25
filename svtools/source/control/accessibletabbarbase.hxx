@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 

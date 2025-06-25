@@ -1232,7 +1232,7 @@ comphelper/source/container/interfacecontainer2.cxx
 comphelper/source/container/namecontainer.cxx
 comphelper/source/eventattachermgr/eventattachermgr.cxx
 comphelper/source/misc/SelectionMultiplex.cxx
-comphelper/source/misc/accessiblecomponenthelper.cxx
+comphelper/source/misc/OAccessible.cxx
 comphelper/source/misc/accessibleeventnotifier.cxx
 comphelper/source/misc/accessiblekeybindinghelper.cxx
 comphelper/source/misc/accessibletexthelper.cxx
@@ -4715,7 +4715,7 @@ include/comphelper/MasterPropertySet.hxx
 include/comphelper/MasterPropertySetInfo.hxx
 include/comphelper/PropertyInfoHash.hxx
 include/comphelper/SelectionMultiplex.hxx
-include/comphelper/accessiblecomponenthelper.hxx
+include/comphelper/OAccessible.hxx
 include/comphelper/accessiblecontexthelper.hxx
 include/comphelper/accessibleeventnotifier.hxx
 include/comphelper/accessiblekeybindinghelper.hxx

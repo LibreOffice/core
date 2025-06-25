@@ -29,7 +29,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
 

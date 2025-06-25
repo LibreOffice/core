@@ -28,7 +28,7 @@
 #include <tools/gen.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>

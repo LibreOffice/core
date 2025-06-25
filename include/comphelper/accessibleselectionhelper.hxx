@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_ACCESSIBLESELECTIONHELPER_HXX
 
 #include <config_options.h>
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <comphelper/comphelperdllapi.h>

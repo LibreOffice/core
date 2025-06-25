@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>

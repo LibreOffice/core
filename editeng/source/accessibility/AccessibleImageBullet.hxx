@@ -21,7 +21,7 @@
 
 #include <rtl/ref.hxx>
 #include <tools/gen.hxx>
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>

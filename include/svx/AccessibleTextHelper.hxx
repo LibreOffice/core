@@ -24,7 +24,7 @@
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>

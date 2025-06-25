@@ -22,7 +22,7 @@
 #include <vcl/dllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 
 
 #include <tools/link.hxx>

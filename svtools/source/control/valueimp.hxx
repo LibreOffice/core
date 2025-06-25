@@ -22,7 +22,7 @@
 #include <tools/color.hxx>
 #include <vcl/image.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <comphelper/compbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>

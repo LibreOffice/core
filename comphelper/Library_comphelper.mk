@@ -80,7 +80,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     $(if $(filter OPENSSL,$(TLS)), comphelper/source/crypto/Crypto_OpenSSL) \
     $(if $(filter NSS OPENSSL,$(TLS)),,comphelper/source/crypto/Crypto_None) \
     comphelper/source/eventattachermgr/eventattachermgr \
-    comphelper/source/misc/accessiblecomponenthelper \
+    comphelper/source/misc/OAccessible \
     comphelper/source/misc/accessibleeventnotifier \
     comphelper/source/misc/accessiblekeybindinghelper \
     comphelper/source/misc/accessibleselectionhelper \

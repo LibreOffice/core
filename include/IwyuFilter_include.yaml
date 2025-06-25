@@ -115,7 +115,7 @@ excludelist:
     include/comphelper/accessiblekeybindinghelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleKeyBinding.hpp
-    include/comphelper/accessiblecomponenthelper.hxx:
+    include/comphelper/OAccessible.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleContext.hpp
     - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <comphelper/compbase.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <vcl/window.hxx>

@@ -514,7 +514,7 @@ include/basic/sbxcore.hxx:68
     _Bool SbxBase::IsReset(enum SbxFlagBits) const
     enum SbxFlagBits n
     256
-include/comphelper/accessiblecomponenthelper.hxx:107
+include/comphelper/OAccessible.hxx:107
     void comphelper::OCommonAccessibleComponent::NotifyAccessibleEvent(const short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &,int)
     int nIndexHint
     -1

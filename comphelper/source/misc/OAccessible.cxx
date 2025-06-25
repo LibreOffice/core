@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/accessiblecomponenthelper.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
