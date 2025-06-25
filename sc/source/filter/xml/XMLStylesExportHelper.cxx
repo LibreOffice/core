@@ -425,7 +425,7 @@ sal_Int32 ScMyDefaultStyles::GetStyleNameIndex(const ScFormatRangeStyles* pCellS
 }
 
 void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
-    const sal_Int32 nLastRow, const sal_Int32 nLastCol,
+    const sal_Int32 nLastRow, sal_Int32 nLastCol,
     const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc)
 {
     maColDefaults.clear();
@@ -434,7 +434,7 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
         return ;
 
     SCTAB nTab = static_cast<SCTAB>(nTable);
-    pDoc->CreateColumnIfNotExists(nTab, nLastCol);
+    nLastCol = pDoc->ClampToAllocatedColumns(nTab, nLastCol);
     sal_Int32 nPos;
     ScMyDefaultStyleList* pDefaults = &maColDefaults;
     bool bPrevAutoStyle(false);
