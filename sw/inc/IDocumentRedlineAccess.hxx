@@ -78,6 +78,9 @@ inline OUString SwRedlineTypeToOUString(RedlineType eType)
     return sRet;
 };
 
+/// This interface is implemented by DocumentRedlineManager: most clients only have to interact with
+/// this interface and not the underlying manager implementation. Also, the UI/filter code has no
+/// access to the manager, just to this interface.
 class IDocumentRedlineAccess
 {
      // Static helper functions
