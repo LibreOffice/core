@@ -374,18 +374,12 @@ void ScGridWindow::HideNoteOverlay()
 css::uno::Reference< css::accessibility::XAccessible >
     ScGridWindow::CreateAccessible()
 {
-    css::uno::Reference< css::accessibility::XAccessible > xAcc= GetAccessible(false);
-    if (xAcc.is())
-    {
-        return xAcc;
-    }
-
     rtl::Reference<ScAccessibleDocument> pAccessibleDocument =
         new ScAccessibleDocument(GetAccessibleParent(),
             mrViewData.GetViewShell(), eWhich);
     pAccessibleDocument->PreInit();
 
-    xAcc = pAccessibleDocument;
+    css::uno::Reference<css::accessibility::XAccessible> xAcc = pAccessibleDocument;
     SetAccessible(xAcc);
 
     pAccessibleDocument->Init();
