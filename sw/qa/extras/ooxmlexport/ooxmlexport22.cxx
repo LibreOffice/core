@@ -388,7 +388,7 @@ DECLARE_OOXMLEXPORT_TEST(testFieldMarkFormat, "fontsize-field-separator.docx")
     // Without the fix it fails with
     // - Expected: 12
     // - Actual  : 42
-    // i.e. the field content has the properties fo the field marks
+    // i.e. the field content has the properties of the field marks
     CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xRun, u"CharHeight"_ustr));
 }
 
