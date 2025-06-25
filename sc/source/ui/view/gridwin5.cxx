@@ -379,12 +379,11 @@ css::uno::Reference< css::accessibility::XAccessible >
             mrViewData.GetViewShell(), eWhich);
     pAccessibleDocument->PreInit();
 
-    css::uno::Reference<css::accessibility::XAccessible> xAcc = pAccessibleDocument;
-    SetAccessible(xAcc);
+    SetAccessible(pAccessibleDocument);
 
     pAccessibleDocument->Init();
 
-    return xAcc;
+    return pAccessibleDocument;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
