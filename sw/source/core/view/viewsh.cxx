@@ -2716,7 +2716,7 @@ rtl::Reference<comphelper::OAccessible> SwViewShell::CreateAccessible()
     return pAcc;
 }
 
-uno::Reference< css::accessibility::XAccessible > SwViewShell::CreateAccessiblePreview()
+rtl::Reference<comphelper::OAccessible> SwViewShell::CreateAccessiblePreview()
 {
     OSL_ENSURE( IsPreview(),
                 "Can't create accessible preview for non-preview SwViewShell" );

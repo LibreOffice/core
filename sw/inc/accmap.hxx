@@ -148,11 +148,10 @@ public:
 
     rtl::Reference<comphelper::OAccessible> GetDocumentView();
 
-    css::uno::Reference<css::accessibility::XAccessible> GetDocumentPreview(
-                            const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
-                            const Fraction&  _rScale,
-                            const SwPageFrame* _pSelectedPageFrame,
-                            const Size&      _rPreviewWinSize );
+    rtl::Reference<comphelper::OAccessible>
+    GetDocumentPreview(const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
+                       const Fraction& _rScale, const SwPageFrame* _pSelectedPageFrame,
+                       const Size& _rPreviewWinSize);
 
     ::rtl::Reference < SwAccessibleContext > GetContextImpl(
                                                  const SwFrame *pFrame,

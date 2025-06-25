@@ -1646,11 +1646,10 @@ rtl::Reference<comphelper::OAccessible> SwAccessibleMap::GetDocumentView()
     return GetDocumentView_( false );
 }
 
-uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
-                                    const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
-                                    const Fraction&  _rScale,
-                                    const SwPageFrame* _pSelectedPageFrame,
-                                    const Size&      _rPreviewWinSize )
+rtl::Reference<comphelper::OAccessible>
+SwAccessibleMap::GetDocumentPreview(const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
+                                    const Fraction& _rScale, const SwPageFrame* _pSelectedPageFrame,
+                                    const Size& _rPreviewWinSize)
 {
     // create & update preview data object
     if( mpPreview == nullptr )

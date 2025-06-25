@@ -30,7 +30,6 @@
 #include <tools/lazydelete.hxx>
 #include <vcl/window.hxx>
 
-namespace com::sun::star::accessibility { class XAccessible; }
 namespace comphelper { class OAccessible; }
 class SwDoc;
 class IDocumentSettingAccess;
@@ -558,7 +557,7 @@ public:
 
     rtl::Reference<comphelper::OAccessible> CreateAccessible();
 
-    css::uno::Reference< css::accessibility::XAccessible >  CreateAccessiblePreview();
+    rtl::Reference<comphelper::OAccessible> CreateAccessiblePreview();
 
     void ShowPreviewSelection( sal_uInt16 nSelPage );
     void InvalidateAccessibleFocus();
