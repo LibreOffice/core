@@ -120,6 +120,14 @@ public:
     virtual int getOptionCount(PDFiumDocument* pDoc) = 0;
 };
 
+class VCL_DLLPUBLIC PDFiumLink
+{
+public:
+    virtual ~PDFiumLink() = default;
+    virtual basegfx::B2DRectangle getRectangle() = 0;
+    virtual OUString getURIPath() = 0;
+};
+
 class PDFiumTextPage;
 
 class VCL_DLLPUBLIC PDFiumPathSegment
@@ -236,6 +244,7 @@ public:
     virtual bool hasTransparency() = 0;
 
     virtual bool hasLinks() = 0;
+    virtual std::unique_ptr<PDFiumLink> enumerateLink(int* nStartIndex, PDFiumDocument* pDoc) = 0;
 
     virtual void onAfterLoadPage(PDFiumDocument* pDoc) = 0;
 };

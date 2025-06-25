@@ -227,6 +227,7 @@ bool SdPdfFilter::Import()
 
             pPage->addAnnotation(xAnnotation, -1);
         }
+        pPage->setLinkAnnotations(rPDFGraphicResult.GetLinksInfo());
     }
     mrDocument.setLock(bWasLocked);
     mrDocument.EnableUndo(bSavedUndoEnabled);
