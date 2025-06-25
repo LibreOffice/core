@@ -25,7 +25,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <rtl/ref.hxx>
 
-#include <unomodel.hxx>
+#include "unomodel.hxx"
 
 class SdrLayer;
 class SdLayerManager;

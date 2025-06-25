@@ -45,7 +45,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <sddllapi.h>
+#include "sddllapi.h"
 
 namespace com::sun::star::i18n { class XForbiddenCharacters; }
 

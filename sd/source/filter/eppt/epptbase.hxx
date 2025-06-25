@@ -48,6 +48,7 @@ namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::drawing { class XShapes; }
 
 class VirtualDevice;
+class SdXImpressDocument;
 
 // PLACEMENT_ID
 enum class EppLayout
@@ -320,13 +321,11 @@ class PPTExStyleSheet
 class PPTWriterBase : public PropValue, public GroupTable
 {
 protected:
-    css::uno::Reference< css::frame::XModel >                 mXModel;
+    rtl::Reference< SdXImpressDocument >                      mXModel;
     css::uno::Reference< css::task::XStatusIndicator >        mXStatusIndicator;
 
     bool            mbStatusIndicator;
 
-    css::uno::Reference< css::drawing::XDrawPagesSupplier >   mXDrawPagesSupplier;
-    css::uno::Reference< css::drawing::XMasterPagesSupplier > mXMasterPagesSupplier;
     css::uno::Reference< css::drawing::XDrawPages >           mXDrawPages;
     css::uno::Reference< css::drawing::XDrawPage >            mXDrawPage;
     css::uno::Reference< css::beans::XPropertySet >           mXPagePropSet;
@@ -382,7 +381,7 @@ protected:
 
 public:
     PPTWriterBase();
-    PPTWriterBase( const css::uno::Reference< css::frame::XModel > & rModel,
+    PPTWriterBase( const rtl::Reference< SdXImpressDocument > & rModel,
                    const css::uno::Reference< css::task::XStatusIndicator > & rStatInd );
 
     virtual ~PPTWriterBase();

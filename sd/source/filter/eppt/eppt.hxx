@@ -221,7 +221,7 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
 
     public:
                                 PPTWriter( rtl::Reference<SotStorage> xSvStorage,
-                                            css::uno::Reference< css::frame::XModel > const & rModel,
+                                            rtl::Reference< SdXImpressDocument > const & rModel,
                                             css::uno::Reference< css::task::XStatusIndicator > const & rStatInd,
                                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );
 

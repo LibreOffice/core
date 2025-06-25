@@ -56,6 +56,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <oox/ole/olehelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <unomodel.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1196,15 +1197,11 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         nParaFlags >>= 16;
 
         sal_Int32 nDefaultTabSizeSrc = 2011; // I've no idea where this number came from, honestly
-        const uno::Reference< beans::XPropertySet > xPropSet( mXModel, uno::UNO_QUERY );
-        if ( xPropSet.is() )
+        if(ImplGetPropertyValue( mXModel, u"TabStop"_ustr ))
         {
-            if(ImplGetPropertyValue( xPropSet, u"TabStop"_ustr ))
-            {
-                sal_Int32 nTabStop( 0 );
-                if ( mAny >>= nTabStop )
-                    nDefaultTabSizeSrc = nTabStop;
-            }
+            sal_Int32 nTabStop( 0 );
+            if ( mAny >>= nTabStop )
+                nDefaultTabSizeSrc = nTabStop;
         }
         const sal_uInt32 nDefaultTabSize = MapSize( awt::Size( nDefaultTabSizeSrc, 1 ) ).Width;
         sal_uInt32  nDefaultTabs = std::abs( maRect.GetWidth() ) / nDefaultTabSize;

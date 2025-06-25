@@ -9242,6 +9242,7 @@ sd/inc/strings.hxx
 sd/inc/undo/undofactory.hxx
 sd/inc/undo/undomanager.hxx
 sd/inc/unolayer.hxx
+sd/inc/unomodel.hxx
 sd/qa/unit/SVGExportTests.cxx
 sd/qa/unit/activex-controls-tests.cxx
 sd/qa/unit/dialogs-test.cxx
@@ -9699,7 +9700,6 @@ sd/source/ui/inc/undopage.hxx
 sd/source/ui/inc/unmodpg.hxx
 sd/source/ui/inc/unmovss.hxx
 sd/source/ui/inc/unoaprms.hxx
-sd/source/ui/inc/unomodel.hxx
 sd/source/ui/inc/unopage.hxx
 sd/source/ui/inc/unoprnms.hxx
 sd/source/ui/inc/unosrch.hxx

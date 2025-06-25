@@ -398,14 +398,12 @@ PowerPointExport::~PowerPointExport()
 
 void PowerPointExport::writeDocumentProperties()
 {
-    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(mXModel, uno::UNO_QUERY);
-    uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
+    uno::Reference<document::XDocumentProperties> xDocProps = mXModel->getDocumentProperties();
 
     if (xDocProps.is())
     {
         bool bSecurityOptOpenReadOnly = false;
-        uno::Reference< lang::XMultiServiceFactory > xFactory(mXModel, uno::UNO_QUERY);
-        uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xSettings(mXModel->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
         try
         {
             xSettings->getPropertyValue(u"LoadReadonly"_ustr) >>= bSecurityOptOpenReadOnly;
@@ -439,7 +437,9 @@ bool PowerPointExport::exportDocument()
 
     maShapeMap.clear();
 
-    mXModel = getModel();
+    auto pDoc = dynamic_cast<SdXImpressDocument*>(getModel().get());
+    assert(pDoc);
+    mXModel = pDoc;
 
     //write document properties
     writeDocumentProperties();
@@ -669,10 +669,7 @@ std::unordered_set<OUString> PowerPointExport::getUsedFontList()
 {
     std::unordered_set<OUString> aReturnSet;
 
-    SdDrawDocument* pDocument = nullptr;
-    if (auto* pSdXImpressDocument = dynamic_cast<SdXImpressDocument*>(mXModel.get()))
-        pDocument = pSdXImpressDocument->GetDoc();
-
+    SdDrawDocument* pDocument = mXModel->GetDoc();
     if (!pDocument)
         return aReturnSet;
 
@@ -701,12 +698,8 @@ void PowerPointExport::WriteEmbeddedFontList()
 
     std::vector<EmbeddedFont> aEmbeddedFontInfo;
 
-    uno::Reference<beans::XPropertySet> xProperties(mXModel, UNO_QUERY);
-    if (!xProperties.is())
-        return;
-
     uno::Sequence<uno::Any> aAnySeq;
-    if (!(xProperties->getPropertyValue("Fonts") >>= aAnySeq))
+    if (!(mXModel->getPropertyValue("Fonts") >>= aAnySeq))
         return;
 
     if (aAnySeq.getLength() % 5 != 0)
@@ -883,15 +876,13 @@ void PowerPointExport::WriteEmbeddedFontList()
 
 void PowerPointExport::WriteCustomSlideShow()
 {
-    Reference<XCustomPresentationSupplier> aXCPSup(mXModel, css::uno::UNO_QUERY);
-    if (!aXCPSup.is() || !aXCPSup->getCustomPresentations()->hasElements())
+    if (!mXModel->getCustomPresentations()->hasElements())
         return;
 
     mPresentationFS->startElementNS(XML_p, XML_custShowLst);
 
-    Reference<XDrawPagesSupplier> xDPS(getModel(), uno::UNO_QUERY_THROW);
-    Reference<XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
-    Reference<XNameContainer> aXNameCont(aXCPSup->getCustomPresentations());
+    Reference<XDrawPages> xDrawPages(mXModel->getDrawPages(), uno::UNO_SET_THROW);
+    Reference<XNameContainer> aXNameCont(mXModel->getCustomPresentations());
     const Sequence<OUString> aNameSeq(aXNameCont->getElementNames());
 
     OUString sRelId;
@@ -1448,11 +1439,7 @@ sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor,
 
 void PowerPointExport::WritePresentationProps()
 {
-    Reference<XPresentationSupplier> xPresentationSupplier(mXModel, uno::UNO_QUERY);
-    if (!xPresentationSupplier.is())
-        return;
-
-    Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
+    Reference<beans::XPropertySet> xPresentationProps(mXModel->getPresentation(),
                                                       uno::UNO_QUERY);
     bool bEndlessVal = xPresentationProps->getPropertyValue(u"IsEndless"_ustr).get<bool>();
     bool bChangeManually = xPresentationProps->getPropertyValue(u"IsAutomatic"_ustr).get<bool>();
@@ -1472,8 +1459,7 @@ void PowerPointExport::WritePresentationProps()
                         XML_useTimings, sax_fastparser::UseIf("0", bChangeManually),
                         XML_showNarration, "1");
 
-    Reference<drawing::XDrawPagesSupplier> xDPS(mXModel, uno::UNO_QUERY_THROW);
-    Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
+    Reference<drawing::XDrawPages> xDrawPages(mXModel->getDrawPages(), uno::UNO_SET_THROW);
     if (!sFirstPage.isEmpty())
     {
         sal_Int32 nStartSlide = 1;
@@ -1496,10 +1482,8 @@ void PowerPointExport::WritePresentationProps()
 
     if (!sCustomShow.isEmpty())
     {
-        css::uno::Reference<css::presentation::XCustomPresentationSupplier>
-            XCustPresentationSupplier(mXModel, css::uno::UNO_QUERY_THROW);
         css::uno::Reference<css::container::XNameContainer> mxCustShows;
-        mxCustShows = XCustPresentationSupplier->getCustomPresentations();
+        mxCustShows = mXModel->getCustomPresentations();
         const css::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
 
         sal_Int32 nCustShowIndex = 0;
@@ -1608,11 +1592,7 @@ void PowerPointExport::WriteVBA()
     if (!mbPptm)
         return;
 
-    uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(getModel(), uno::UNO_QUERY);
-    if (!xStorageBasedDocument.is())
-        return;
-
-    uno::Reference<embed::XStorage> xDocumentStorage = xStorageBasedDocument->getDocumentStorage();
+    uno::Reference<embed::XStorage> xDocumentStorage = mXModel->getDocumentStorage();
     OUString aMacrosName(u"_MS_VBA_Macros"_ustr);
     if (!xDocumentStorage.is() || !xDocumentStorage->hasByName(aMacrosName))
         return;
@@ -1635,9 +1615,8 @@ void PowerPointExport::WriteModifyVerifier()
 
     try
     {
-        Reference<lang::XMultiServiceFactory> xFactory(mXModel, UNO_QUERY);
         Reference<XPropertySet> xDocSettings(
-            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), UNO_QUERY);
+            mXModel->createInstance(u"com.sun.star.document.Settings"_ustr), UNO_QUERY);
         xDocSettings->getPropertyValue(u"ModifyPasswordInfo"_ustr) >>= aInfo;
     }
     catch (const Exception&)
@@ -1900,7 +1879,7 @@ static bool lcl_ComparePageProperties(SdrPage* pMasterPage, SdrPage* pMasterNext
 void PowerPointExport::FindEquivalentMasterPages()
 {
     css::uno::Reference<css::drawing::XDrawPages> xDrawPages(
-        mXMasterPagesSupplier->getMasterPages());
+        mXModel->getMasterPages());
     maMastersLayouts.resize(mnMasterPages);
     maEquivalentMasters.resize(mnMasterPages, SAL_MAX_UINT32);
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
@@ -2033,76 +2012,72 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     pFS->endElementNS(XML_p, XML_cSld);
 
-    css::uno::Reference< css::beans::XPropertySet > xDocPropSet(getModel(), uno::UNO_QUERY);
-    if (xDocPropSet.is())
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    if (mXModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+        mXModel->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+
+    std::vector<OUString> aClrMap;
+    aClrMap.reserve(12);
+    uno::Sequence<beans::PropertyValue> aClrMapPropValue;
+    if(aGrabBag.hasElements())
     {
-        uno::Sequence<beans::PropertyValue> aGrabBag;
-        if (xDocPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
-            xDocPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
-
-        std::vector<OUString> aClrMap;
-        aClrMap.reserve(12);
-        uno::Sequence<beans::PropertyValue> aClrMapPropValue;
-        if(aGrabBag.hasElements())
+        for (const auto& rProp : aGrabBag)
         {
-            for (const auto& rProp : aGrabBag)
+            if (rProp.Name == "OOXColorMap")
             {
-                if (rProp.Name == "OOXColorMap")
-                {
-                    rProp.Value >>= aClrMapPropValue;
-                    break;
-                }
+                rProp.Value >>= aClrMapPropValue;
+                break;
             }
         }
-
-        if (aClrMapPropValue.getLength())
-        {
-            OUString sName;
-            sal_Int32 nToken = XML_TOKEN_INVALID;
-            for(const auto& item : aClrMapPropValue)
-            {
-                item.Value >>= nToken;
-                switch (nToken)
-                {
-                    case XML_dk1:      sName = u"dk1"_ustr;      break;
-                    case XML_lt1:      sName = u"lt1"_ustr;      break;
-                    case XML_dk2:      sName = u"dk2"_ustr;      break;
-                    case XML_lt2:      sName = u"lt2"_ustr;      break;
-                    case XML_accent1:  sName = u"accent1"_ustr;  break;
-                    case XML_accent2:  sName = u"accent2"_ustr;  break;
-                    case XML_accent3:  sName = u"accent3"_ustr;  break;
-                    case XML_accent4:  sName = u"accent4"_ustr;  break;
-                    case XML_accent5:  sName = u"accent5"_ustr;  break;
-                    case XML_accent6:  sName = u"accent6"_ustr;  break;
-                    case XML_hlink:    sName = u"hlink"_ustr;    break;
-                    case XML_folHlink: sName = u"folHlink"_ustr; break;
-                }
-                aClrMap.push_back(sName);
-            }
-            assert(aClrMap.size() == 12 && "missing entries for ClrMap");
-        }
-        else
-        {
-            // default clrMap to export ".odp" files to ".pptx"
-            aClrMap = { u"lt1"_ustr,     u"dk1"_ustr,     u"lt2"_ustr,     u"dk2"_ustr,
-                        u"accent1"_ustr, u"accent2"_ustr, u"accent3"_ustr, u"accent4"_ustr,
-                        u"accent5"_ustr, u"accent6"_ustr, u"hlink"_ustr,   u"folHlink"_ustr };
-        }
-
-        pFS->singleElementNS(XML_p, XML_clrMap,
-                             XML_bg1, aClrMap[0],
-                             XML_tx1, aClrMap[1],
-                             XML_bg2, aClrMap[2],
-                             XML_tx2, aClrMap[3],
-                             XML_accent1, aClrMap[4],
-                             XML_accent2, aClrMap[5],
-                             XML_accent3, aClrMap[6],
-                             XML_accent4, aClrMap[7],
-                             XML_accent5, aClrMap[8],
-                             XML_accent6, aClrMap[9],
-                             XML_hlink, aClrMap[10],
-                             XML_folHlink, aClrMap[11]);
     }
+
+    if (aClrMapPropValue.getLength())
+    {
+        OUString sName;
+        sal_Int32 nToken = XML_TOKEN_INVALID;
+        for(const auto& item : aClrMapPropValue)
+        {
+            item.Value >>= nToken;
+            switch (nToken)
+            {
+                case XML_dk1:      sName = u"dk1"_ustr;      break;
+                case XML_lt1:      sName = u"lt1"_ustr;      break;
+                case XML_dk2:      sName = u"dk2"_ustr;      break;
+                case XML_lt2:      sName = u"lt2"_ustr;      break;
+                case XML_accent1:  sName = u"accent1"_ustr;  break;
+                case XML_accent2:  sName = u"accent2"_ustr;  break;
+                case XML_accent3:  sName = u"accent3"_ustr;  break;
+                case XML_accent4:  sName = u"accent4"_ustr;  break;
+                case XML_accent5:  sName = u"accent5"_ustr;  break;
+                case XML_accent6:  sName = u"accent6"_ustr;  break;
+                case XML_hlink:    sName = u"hlink"_ustr;    break;
+                case XML_folHlink: sName = u"folHlink"_ustr; break;
+            }
+            aClrMap.push_back(sName);
+        }
+        assert(aClrMap.size() == 12 && "missing entries for ClrMap");
+    }
+    else
+    {
+        // default clrMap to export ".odp" files to ".pptx"
+        aClrMap = { u"lt1"_ustr,     u"dk1"_ustr,     u"lt2"_ustr,     u"dk2"_ustr,
+                    u"accent1"_ustr, u"accent2"_ustr, u"accent3"_ustr, u"accent4"_ustr,
+                    u"accent5"_ustr, u"accent6"_ustr, u"hlink"_ustr,   u"folHlink"_ustr };
+    }
+
+    pFS->singleElementNS(XML_p, XML_clrMap,
+                         XML_bg1, aClrMap[0],
+                         XML_tx1, aClrMap[1],
+                         XML_bg2, aClrMap[2],
+                         XML_tx2, aClrMap[3],
+                         XML_accent1, aClrMap[4],
+                         XML_accent2, aClrMap[5],
+                         XML_accent3, aClrMap[6],
+                         XML_accent4, aClrMap[7],
+                         XML_accent5, aClrMap[8],
+                         XML_accent6, aClrMap[9],
+                         XML_hlink, aClrMap[10],
+                         XML_folHlink, aClrMap[11]);
 
     // use master's id type as they have same range, mso does that as well
     pFS->startElementNS(XML_p, XML_sldLayoutIdLst);
@@ -2197,8 +2172,7 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
 {
     SAL_INFO("sd.eppt", "write layout: " << nOffset);
 
-    Reference< drawing::XDrawPagesSupplier > xDPS(getModel(), uno::UNO_QUERY);
-    Reference< drawing::XDrawPages > xDrawPages = xDPS->getDrawPages();
+    Reference< drawing::XDrawPages > xDrawPages = mXModel->getDrawPages();
     Reference< drawing::XDrawPage > xSlide = xDrawPages->insertNewByIndex(xDrawPages->getCount());
 
 #if OSL_DEBUG_LEVEL >= 2
@@ -2780,11 +2754,7 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
     {
         if (sUrl.startsWith("vnd.sun.star.Package:"))
         {
-            uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(getModel(), uno::UNO_QUERY);
-            if (!xStorageBasedDocument.is())
-                return;
-
-            uno::Reference<embed::XStorage> xDocumentStorage = xStorageBasedDocument->getDocumentStorage();
+            uno::Reference<embed::XStorage> xDocumentStorage = mXModel->getDocumentStorage();
             if (!xDocumentStorage.is())
                 return;
 

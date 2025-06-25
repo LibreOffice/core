@@ -46,7 +46,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-
+#include <unomodel.hxx>
 
 using namespace com::sun::star;
 
@@ -116,7 +116,7 @@ PPTWriterBase::PPTWriterBase()
     SAL_INFO("sd.eppt", "PPTWriterBase::PPTWriterBase()");
 }
 
-PPTWriterBase::PPTWriterBase( const Reference< XModel > & rXModel,
+PPTWriterBase::PPTWriterBase( const rtl::Reference< SdXImpressDocument > & rXModel,
                               const Reference< XStatusIndicator > & rXStatInd )
     : mXModel(rXModel)
     , mXStatusIndicator(rXStatInd)
@@ -220,18 +220,11 @@ bool PPTWriterBase::InitSOIface()
 {
     while( true )
     {
-        mXDrawPagesSupplier.set( mXModel, UNO_QUERY );
-        if ( !mXDrawPagesSupplier.is() )
-            break;
-
-        mXMasterPagesSupplier.set( mXModel, UNO_QUERY );
-        if ( !mXMasterPagesSupplier.is() )
-            break;
-        mXDrawPages = mXMasterPagesSupplier->getMasterPages();
+        mXDrawPages = mXModel->getMasterPages();
         if ( !mXDrawPages.is() )
             break;
         mnMasterPages = mXDrawPages->getCount();
-        mXDrawPages = mXDrawPagesSupplier->getDrawPages();
+        mXDrawPages = mXModel->getDrawPages();
         if( !mXDrawPages.is() )
             break;
         mnPages =  mXDrawPages->getCount();
@@ -254,7 +247,7 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                 case NORMAL :
                 case NOTICE :
                 {
-                    mXDrawPages = mXDrawPagesSupplier->getDrawPages();
+                    mXDrawPages = mXModel->getDrawPages();
                     if( !mXDrawPages.is() )
                         return false;
                 }
@@ -262,7 +255,7 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 
                 case MASTER :
                 {
-                    mXDrawPages = mXMasterPagesSupplier->getMasterPages();
+                    mXDrawPages = mXModel->getMasterPages();
                     if( !mXDrawPages.is() )
                         return false;
                 }
@@ -485,13 +478,7 @@ bool PPTWriterBase::GetStyleSheets()
         Reference< XNameAccess >
             aXNameAccess;
 
-        Reference< XStyleFamiliesSupplier >
-            aXStyleFamiliesSupplier( mXModel, UNO_QUERY );
-
-        Reference< XPropertySet >
-            aXPropSet( mXModel, UNO_QUERY );
-
-        sal_uInt16 nDefaultTab = ( aXPropSet.is() && ImplGetPropertyValue( aXPropSet, u"TabStop"_ustr ) )
+        sal_uInt16 nDefaultTab = ( mXModel.is() && ImplGetPropertyValue( mXModel, u"TabStop"_ustr ) )
             ? static_cast<sal_uInt16>( convertMm100ToMasterUnit(*o3tl::doAccess<sal_Int32>(mAny)) )
             : 1250;
 
@@ -500,10 +487,9 @@ bool PPTWriterBase::GetStyleSheets()
         if ( GetPageByIndex( nPageNum, MASTER ) )
             aXNamed.set( mXDrawPage, UNO_QUERY );
 
-        if ( aXStyleFamiliesSupplier.is() )
-            aXNameAccess = aXStyleFamiliesSupplier->getStyleFamilies();
+        aXNameAccess = mXModel->getStyleFamilies();
 
-        bRetValue = aXNamed.is() && aXNameAccess.is() && aXStyleFamiliesSupplier.is();
+        bRetValue = aXNamed.is() && aXNameAccess.is();
         if  ( bRetValue )
         {
             for ( nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_CenterTitle; nInstance++ )
