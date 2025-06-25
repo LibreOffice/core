@@ -253,10 +253,10 @@
       </node>
       <node oor:name=".uno:ReinstateTrackedChangeToNext" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Reinstate and Move to Next</value>
+          <value xml:lang="en-US">Reject but Track and Move to Next</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Reinstate Track Change and select the next one</value>
+          <value xml:lang="en-US">Reject tracked change but keep it and select the next one</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -278,13 +278,10 @@
       </node>
       <node oor:name=".uno:ReinstateAllTrackedChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Reinstate All</value>
+          <value xml:lang="en-US">Reject but Track All</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Reinstate All Tracked Changes</value>
-        </prop>
-        <prop oor:name="PopupLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Reinstate All Changes</value>
+          <value xml:lang="en-US">Reject all tracked changes but keep them</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -331,13 +328,10 @@
       </node>
       <node oor:name=".uno:ReinstateTrackedChange" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Reinstate</value>
+          <value xml:lang="en-US">Reject but Track</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Reinstate Track Change</value>
-        </prop>
-        <prop oor:name="PopupLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Reinstate Change</value>
+          <value xml:lang="en-US">Reject tracked change but keep it</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
