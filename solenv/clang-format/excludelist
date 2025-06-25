@@ -13407,7 +13407,6 @@ toolkit/inc/awt/vclxsystemdependentwindow.hxx
 toolkit/inc/awt/vclxtabpagecontainer.hxx
 toolkit/inc/awt/vclxtopwindow.hxx
 toolkit/inc/awt/vclxwindows.hxx
-toolkit/inc/controls/accessiblecontrolcontext.hxx
 toolkit/inc/controls/animatedimages.hxx
 toolkit/inc/controls/controlmodelcontainerbase.hxx
 toolkit/inc/controls/dialogcontrol.hxx
@@ -13467,7 +13466,6 @@ toolkit/source/awt/vclxtoolkit.cxx
 toolkit/source/awt/vclxtopwindow.cxx
 toolkit/source/awt/vclxwindow.cxx
 toolkit/source/awt/vclxwindows.cxx
-toolkit/source/controls/accessiblecontrolcontext.cxx
 toolkit/source/controls/animatedimages.cxx
 toolkit/source/controls/controlmodelcontainerbase.cxx
 toolkit/source/controls/dialogcontrol.cxx
