@@ -873,26 +873,45 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShel
         extractor.extract<OUString>(UNO_NAME_REDLINE_AUTHOR, "author");
         extractor.extract<OUString>(UNO_NAME_REDLINE_DESCRIPTION, "description");
         extractor.extract<OUString>(UNO_NAME_REDLINE_COMMENT, "comment");
-        if (auto xStart = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_START)
-                              .query<css::text::XTextRange>())
+
+        auto xStart = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_START)
+                          .query<css::text::XTextRange>();
+        auto xEnd = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_END)
+                        .query<css::text::XTextRange>();
+        if (xStart)
         {
             auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
             xCursor->goLeft(200, /*bExpand*/ true);
             rJsonWriter.put("textBefore", xCursor->getString());
         }
-        if (auto xEnd = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_END)
-                            .query<css::text::XTextRange>())
+        if (xEnd)
         {
             auto xCursor = xEnd->getText()->createTextCursorByRange(xEnd);
             xCursor->goRight(200, /*bExpand*/ true);
             rJsonWriter.put("textAfter", xCursor->getString());
         }
+        OUString changeText;
+        if (xStart && xEnd)
+        {
+            // Read the added / formatted text from the main XText
+            auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
+            xCursor->gotoRange(xEnd, /*bExpand*/ true);
+            changeText = xCursor->getString();
+        }
+        if (changeText.isEmpty())
+        {
+            // It is unlikely that we get here: the change text will be obtained above,
+            // even for deletion change
+            if (auto xRedlineText = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_TEXT)
+                                        .query<css::text::XText>())
+                changeText = xRedlineText->getString();
+        }
+        rJsonWriter.put("textChanged", changeText); // write unconditionally
         // UNO_NAME_REDLINE_IDENTIFIER: OUString (the value of a pointer, not persistent)
         // UNO_NAME_REDLINE_MOVED_ID: sal_uInt32; 0 == not moved, 1 == moved, but don't have its pair, 2+ == unique ID
         // UNO_NAME_REDLINE_SUCCESSOR_DATA: uno::Sequence<beans::PropertyValue>
         // UNO_NAME_IS_IN_HEADER_FOOTER: bool
         // UNO_NAME_MERGE_LAST_PARA: bool
-        // UNO_NAME_REDLINE_TEXT: uno::Reference<text::XText>
     }
 }
 

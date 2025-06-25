@@ -911,7 +911,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT(it != docStructure.end());
         const auto & [ name, change ] = *it;
         CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.0"s, name);
-        CPPUNIT_ASSERT_EQUAL(size_t(7), change.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(8), change.size());
         CPPUNIT_ASSERT_EQUAL("Delete"s, change.get<std::string>("type"));
         CPPUNIT_ASSERT_EQUAL("2025-06-16T14:08:27"s, change.get<std::string>("dateTime"));
         CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
@@ -923,6 +923,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         auto text_after = change.get<std::string>("textAfter");
         CPPUNIT_ASSERT_EQUAL(size_t(200), text_after.size());
         CPPUNIT_ASSERT(text_after.starts_with(" blandit "));
+        CPPUNIT_ASSERT_EQUAL("Donec"s, change.get<std::string>("textChanged"));
         ++it;
     }
 
@@ -931,7 +932,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT(it != docStructure.end());
         const auto & [ name, change ] = *it;
         CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.1"s, name);
-        CPPUNIT_ASSERT_EQUAL(size_t(7), change.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(8), change.size());
         CPPUNIT_ASSERT_EQUAL("Format"s, change.get<std::string>("type"));
         CPPUNIT_ASSERT_EQUAL("2025-06-17T12:41:00"s, change.get<std::string>("dateTime"));
         CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
@@ -943,6 +944,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         auto text_after = change.get<std::string>("textAfter");
         CPPUNIT_ASSERT_EQUAL(size_t(200), text_after.size());
         CPPUNIT_ASSERT(text_after.starts_with(" eros "));
+        CPPUNIT_ASSERT_EQUAL("pellentesque"s, change.get<std::string>("textChanged"));
         ++it;
     }
 
@@ -951,7 +953,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT(it != docStructure.end());
         const auto & [ name, change ] = *it;
         CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.2"s, name);
-        CPPUNIT_ASSERT_EQUAL(size_t(7), change.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(8), change.size());
         CPPUNIT_ASSERT_EQUAL("Insert"s, change.get<std::string>("type"));
         CPPUNIT_ASSERT_EQUAL("2025-06-17T12:41:19"s, change.get<std::string>("dateTime"));
         CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
@@ -962,6 +964,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT(text_before.ends_with(" est orci."));
         auto text_after = change.get<std::string>("textAfter");
         CPPUNIT_ASSERT(text_after.empty());
+        CPPUNIT_ASSERT_EQUAL(" Sapienti sat."s, change.get<std::string>("textChanged"));
         ++it;
     }
 
