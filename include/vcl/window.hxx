@@ -1121,10 +1121,6 @@ public:
 
     css::uno::Reference< css::accessibility::XAccessible >
                                         GetAccessible( bool bCreate = true );
-
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-                                        CreateAccessible();
-
     void                                SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& );
 
     vcl::Window*                        GetAccessibleParentWindow() const;
@@ -1159,6 +1155,7 @@ public:
     KeyEvent                            GetActivationKey() const;
 
 protected:
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible();
 
     // These eventually are supposed to go when everything is converted to .ui
     SAL_DLLPRIVATE vcl::Window*         getLegacyNonLayoutAccessibleRelationMemberOf() const;
