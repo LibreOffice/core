@@ -17,7 +17,6 @@ private:
     std::unique_ptr<weld::Button> m_xOKBtn;
     std::unique_ptr<weld::Button> m_xApplyBtn;
     std::unique_ptr<weld::Button> m_xCancelBtn;
-    std::unique_ptr<weld::Button> m_xHelpBtn;
     std::unique_ptr<weld::Button> m_xResetBtn;
 
     virtual void ActivatePage(const OUString& rPage) override;

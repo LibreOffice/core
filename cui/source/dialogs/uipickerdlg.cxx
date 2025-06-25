@@ -23,7 +23,6 @@ UIPickerDialog::UIPickerDialog(weld::Window* pParent)
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xApplyBtn(m_xBuilder->weld_button(u"apply"_ustr)) // Apply to %Module
     , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr)) // Close
-    , m_xHelpBtn(m_xBuilder->weld_button(u"help"_ustr))
     , m_xResetBtn(m_xBuilder->weld_button(u"reset"_ustr)) // Apply to All
 {
     AddTabPage("uimode", UITabPage::Create, nullptr);

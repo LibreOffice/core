@@ -69,10 +69,6 @@ struct TabBarButton
     */
     OUString ButtonLabel;
 
-    /** The localized help text that may be displayed in a tool tip.
-    */
-    OUString HelpText;
-
     /** XResourceId object of the resource that is requested to be
         displayed when the tab bar button is activated.
         <p>For some methods of the XTabBar interface only this
