@@ -824,10 +824,7 @@ BinaryDataContainer getMsGifChunk(SvStream& rStream)
         if (type == PNGCHUNK_msOG && length > MSGifHeaderSize)
         {
             // calculate chunktype CRC (swap it back to original byte order)
-            sal_uInt32 typeForCrc = type;
-#if defined(__LITTLEENDIAN) || defined(OSL_LITENDIAN)
-            typeForCrc = OSL_SWAPDWORD(typeForCrc);
-#endif
+            sal_uInt32 typeForCrc = OSL_NETDWORD(type);
             sal_uInt32 computedCrc = rtl_crc32(0, &typeForCrc, 4);
             const sal_uInt64 pos = rStream.Tell();
             if (pos + length >= rStream.TellEnd())

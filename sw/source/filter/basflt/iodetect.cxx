@@ -359,14 +359,8 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
             if (bLE != bNativeLE)
             {
                 bSwap = true;
-                char* pF = reinterpret_cast<char*>(pNewBuf);
-                char* pN = pF+1;
-                for(sal_uLong n = 0; n < nNewLen; ++n, pF+=2, pN+=2 )
-                {
-                    char c = *pF;
-                    *pF = *pN;
-                    *pN = c;
-                }
+                for (sal_uLong n = 0; n < nNewLen; ++n)
+                    pNewBuf[n] = OSL_SWAPWORD(pNewBuf[n]);
             }
         }
 

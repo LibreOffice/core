@@ -446,7 +446,7 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
         if ( !nTemp )
             break;
 #ifdef OSL_BIGENDIAN
-        cData[ i ] = ( nTemp >> 8 ) | ( nTemp << 8 );
+        cData[i] = OSL_SWAPWORD(nTemp);
 #endif
     }
     rAtom.aName = OUString(cData, i);
@@ -5196,11 +5196,9 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
         sal_Unicode* pPtr = aBuf.data();
 
 #ifdef OSL_BIGENDIAN
-        sal_Unicode nTemp;
         for ( i = 0; i < nMaxLen; i++ )
         {
-            nTemp = *pPtr;
-            *pPtr++ = ( nTemp << 8 ) | ( nTemp >> 8 );
+            *pPtr++ = OSL_SWAPWORD(*pPtr);
         }
         pPtr = aBuf.data();
 #endif

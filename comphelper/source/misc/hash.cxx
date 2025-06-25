@@ -243,10 +243,7 @@ std::vector<unsigned char> Hash::calculateHash(
             if (nAddIter)
             {
 #ifdef OSL_BIGENDIAN
-                sal_uInt32 be = i;
-                sal_uInt8* p = reinterpret_cast<sal_uInt8*>(&be);
-                std::swap( p[0], p[3] );
-                std::swap( p[1], p[2] );
+                sal_uInt32 be = OSL_SWAPDWORD(i);
                 memcpy( data.data() + nIterPos, &be, nAddIter);
 #else
                 memcpy( data.data() + nIterPos, &i, nAddIter);
@@ -274,17 +271,12 @@ std::vector<unsigned char> Hash::calculateHash(
     const size_t nPassBytesLen = rPassword.length() * 2;
 #ifdef OSL_BIGENDIAN
     // Swap UTF16-BE to UTF16-LE
-    std::vector<unsigned char> vPass;
+    std::vector<char16_t> vPass;
     if (nPassBytesLen)
     {
-        vPass.resize( nPassBytesLen);
-        std::copy( pPassBytes, pPassBytes + nPassBytesLen, vPass.begin());
-        unsigned char* p = vPass.data();
-        unsigned char const * const pEnd = p + nPassBytesLen;
-        for ( ; p < pEnd; p += 2 )
-        {
-            std::swap( p[0], p[1] );
-        }
+        vPass.insert(vPass.begin(), rPassword.begin(), rPassword.end());
+        for (char16_t& ch : vPass)
+            ch = OSL_SWAPWORD(ch);
         pPassBytes = vPass.data();
     }
 #endif
