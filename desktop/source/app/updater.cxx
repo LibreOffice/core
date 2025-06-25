@@ -543,7 +543,7 @@ size_t WriteCallbackFile(void *ptr, size_t size,
   WriteDataFile* response = static_cast<WriteDataFile *>(userp);
   size_t real_size = size * nmemb;
   response->mpStream->WriteBytes(ptr, real_size);
-  response->maHash.update(static_cast<const unsigned char*>(ptr), real_size);
+  response->maHash.update(ptr, real_size);
   return real_size;
 }
 

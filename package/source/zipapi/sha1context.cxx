@@ -102,7 +102,7 @@ void SAL_CALL CorrectSHA1DigestContext::updateDigest(const uno::Sequence<::sal_I
     if (m_bDisposed)
         throw lang::DisposedException();
 
-    m_Hash.update(reinterpret_cast<unsigned char const*>(rData.getConstArray()), rData.getLength());
+    m_Hash.update(rData.getConstArray(), rData.getLength());
 }
 
 uno::Sequence<::sal_Int8> SAL_CALL CorrectSHA1DigestContext::finalizeDigestAndDispose()

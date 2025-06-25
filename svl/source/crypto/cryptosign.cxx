@@ -911,7 +911,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         comphelper::Hash aHash(comphelper::HashType::SHA256);
 
         for (const auto& pair : m_dataBlocks)
-            aHash.update(static_cast<const unsigned char*>(pair.first), pair.second);
+            aHash.update(pair.first, pair.second);
 
         aHashResult = aHash.finalize();
     }

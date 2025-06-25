@@ -375,7 +375,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
         {
             OString aUTF8Password( OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 ) );
             std::vector<unsigned char> const hash(comphelper::Hash::calculateHash(
-                reinterpret_cast<unsigned char const*>(aUTF8Password.getStr()), aUTF8Password.getLength(),
+                aUTF8Password.getStr(), aUTF8Password.getLength(),
                 comphelper::HashType::SHA256));
             uno::Sequence<sal_Int8> aDigest(reinterpret_cast<const sal_Int8*>(hash.data()), hash.size());
 
@@ -423,7 +423,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
         pEncryptionData[nSha1Ind + 2].Name = PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
         OString aByteStrPass = OUStringToOString(aPassword, RTL_TEXTENCODING_UTF8);
         std::vector<unsigned char> const sha1(::comphelper::Hash::calculateHash(
-                reinterpret_cast<unsigned char const*>(aByteStrPass.getStr()), aByteStrPass.getLength(),
+                aByteStrPass.getStr(), aByteStrPass.getLength(),
                 ::comphelper::HashType::SHA1));
         pEncryptionData[nSha1Ind + 2].Value <<= uno::Sequence<sal_Int8>(
                 reinterpret_cast<sal_Int8 const*>(sha1.data()), sha1.size());

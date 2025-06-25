@@ -59,7 +59,7 @@ public:
     Hash(HashType eType);
     ~Hash();
 
-    void update(const unsigned char* pInput, size_t length);
+    void update(const void* pInput, size_t length);
 
     void update(std::vector<unsigned char> const& rInput)
     {
@@ -70,7 +70,7 @@ public:
 
     std::vector<unsigned char> finalize();
 
-    static std::vector<unsigned char> calculateHash(const unsigned char* pInput, size_t length, HashType eType);
+    static std::vector<unsigned char> calculateHash(const void* pInput, size_t length, HashType eType);
 
     /** Calculate hash value with salt (pSalt,nSaltLen) prepended to password
         (pInput,nLength) and repeated iterations run if nSpinCount>0.
@@ -102,8 +102,8 @@ public:
         @return the raw hash value
      */
     static std::vector<unsigned char> calculateHash(
-            const unsigned char* pInput, size_t nLength,
-            const unsigned char* pSalt, size_t nSaltLen,
+            const void* pInput, size_t nLength,
+            const void* pSalt, size_t nSaltLen,
             sal_uInt32 nSpinCount,
             IterCount eIterCount,
             HashType eType);

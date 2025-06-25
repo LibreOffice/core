@@ -631,9 +631,8 @@ void computeDocumentIdentifier(std::vector<sal_uInt8>& o_rIdentifier,
     o_rCString2 = aCreationMetaDateString.makeStringAndClear();
 
     ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
-    aDigest.update(reinterpret_cast<unsigned char const*>(&aGMT), sizeof(aGMT));
-    aDigest.update(reinterpret_cast<unsigned char const*>(aInfoValuesOut.getStr()),
-                   aInfoValuesOut.getLength());
+    aDigest.update(&aGMT, sizeof(aGMT));
+    aDigest.update(aInfoValuesOut.getStr(), aInfoValuesOut.getLength());
     //the binary form of the doc id is needed for encryption stuff
     o_rIdentifier = aDigest.finalize();
 }
@@ -1505,7 +1504,7 @@ bool PDFWriterImpl::writeBufferBytes( const void* pBuffer, sal_uInt64 nBytes )
         }
 
         const void* pWriteBuffer = bStreamEncryption ? m_vEncryptionBuffer.data() : pBuffer;
-        m_DocDigest.update(static_cast<unsigned char const*>(pWriteBuffer), sal_uInt32(nActualSize));
+        m_DocDigest.update(pWriteBuffer, sal_uInt32(nActualSize));
 
 
         if (m_aFile.write(pWriteBuffer, nActualSize, nWritten) != osl::File::E_None)

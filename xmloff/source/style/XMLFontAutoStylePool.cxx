@@ -592,7 +592,7 @@ static OString getFileHash(OUString const & rFileUrl)
         }
         if (nReadSize == 0)
             break;
-        aHashEngine.update(reinterpret_cast<unsigned char*>(aBuffer), nReadSize);
+        aHashEngine.update(aBuffer, nReadSize);
     }
     return convertToHashString(aHashEngine.finalize());
 }

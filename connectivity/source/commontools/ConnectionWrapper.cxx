@@ -201,11 +201,11 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
 {
     // first we create the digest we want to have
     ::comphelper::Hash sha1(::comphelper::HashType::SHA1);
-    sha1.update(reinterpret_cast<unsigned char const*>(_rURL.getStr()), _rURL.getLength() * sizeof(sal_Unicode));
+    sha1.update(_rURL.getStr(), _rURL.getLength() * sizeof(sal_Unicode));
     if ( !_rUserName.isEmpty() )
-        sha1.update(reinterpret_cast<unsigned char const*>(_rUserName.getStr()), _rUserName.getLength() * sizeof(sal_Unicode));
+        sha1.update(_rUserName.getStr(), _rUserName.getLength() * sizeof(sal_Unicode));
     if ( !_rPassword.isEmpty() )
-        sha1.update(reinterpret_cast<unsigned char const*>(_rPassword.getStr()), _rPassword.getLength() * sizeof(sal_Unicode));
+        sha1.update(_rPassword.getStr(), _rPassword.getLength() * sizeof(sal_Unicode));
     // now we need to sort the properties
     auto [begin, end] = asNonConstRange(_rInfo);
     std::sort(begin,end,TPropertyValueLessFunctor());
@@ -227,14 +227,14 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
                 if ( prop.Value >>= aSeq )
                 {
                     for (OUString const& s : aSeq)
-                        sha1.update(reinterpret_cast<unsigned char const*>(s.getStr()), s.getLength() * sizeof(sal_Unicode));
+                        sha1.update(s.getStr(), s.getLength() * sizeof(sal_Unicode));
                 }
             }
         }
         if ( !sValue.isEmpty() )
         {
             // we don't have to convert this into UTF8 because we don't store on a file system
-            sha1.update(reinterpret_cast<unsigned char const*>(sValue.getStr()), sValue.getLength() * sizeof(sal_Unicode));
+            sha1.update(sValue.getStr(), sValue.getLength() * sizeof(sal_Unicode));
         }
     }
 

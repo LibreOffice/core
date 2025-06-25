@@ -788,7 +788,7 @@ void PowerPointExport::WriteEmbeddedFontList()
                     break;
 
                 rFontData.insert(rFontData.end(), buffer.data(), buffer.data() + readSize);
-                aHashCalc.update(reinterpret_cast<const unsigned char*>(buffer.data()), readSize);
+                aHashCalc.update(buffer.data(), readSize);
             }
 
             std::string aHash = comphelper::hashToString(aHashCalc.finalize());

@@ -1118,7 +1118,7 @@ static sal_uInt32 password_to_key( const OString& rPwd, sal_uInt8* pOutKey, PDFF
     char aPadPwd[ENCRYPTION_BUF_LEN];
     pad_or_truncate_to_32( rPwd, aPadPwd );
     ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
-    aDigest.update(reinterpret_cast<unsigned char const*>(aPadPwd), sizeof(aPadPwd));
+    aDigest.update(aPadPwd, sizeof(aPadPwd));
     if( ! bComputeO )
     {
         aDigest.update(pData->m_aOEntry, 32);
@@ -1128,7 +1128,7 @@ static sal_uInt32 password_to_key( const OString& rPwd, sal_uInt8* pOutKey, PDFF
         aPEntry[2] = static_cast<sal_uInt8>((pData->m_nPEntry >> 16) & 0xff);
         aPEntry[3] = static_cast<sal_uInt8>((pData->m_nPEntry >> 24) & 0xff);
         aDigest.update(aPEntry, sizeof(aPEntry));
-        aDigest.update(reinterpret_cast<unsigned char const*>(pData->m_aDocID.getStr()), pData->m_aDocID.getLength());
+        aDigest.update(pData->m_aDocID.getStr(), pData->m_aDocID.getLength());
     }
     ::std::vector<unsigned char> nSum(aDigest.finalize());
     if( pData->m_nStandardRevision == 3 )
@@ -1175,7 +1175,7 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
         // see PDF reference 1.4 Algorithm 3.5
         ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
         aDigest.update(nPadString, sizeof(nPadString));
-        aDigest.update(reinterpret_cast<unsigned char const*>(pData->m_aDocID.getStr()), pData->m_aDocID.getLength());
+        aDigest.update(pData->m_aDocID.getStr(), pData->m_aDocID.getLength());
         ::std::vector<unsigned char> nEncryptedEntry(aDigest.finalize());
         if (rtl_cipher_initARCFOUR( pData->m_aCipher, rtl_Cipher_DirectionEncode,
                                     aKey, sizeof(aKey), nullptr, 0 )

@@ -34,7 +34,7 @@ void SvPasswordHelper::GetHashPasswordSHA256(uno::Sequence<sal_Int8>& rPassHash,
 {
     OString const tmp(OUStringToOString(rPassword, RTL_TEXTENCODING_UTF8));
     ::std::vector<unsigned char> const hash(::comphelper::Hash::calculateHash(
-        reinterpret_cast<unsigned char const*>(tmp.getStr()), tmp.getLength(),
+        tmp.getStr(), tmp.getLength(),
         ::comphelper::HashType::SHA256));
     rPassHash.realloc(hash.size());
     ::std::copy(hash.begin(), hash.end(), rPassHash.getArray());
@@ -45,7 +45,7 @@ void SvPasswordHelper::GetHashPasswordSHA1UTF8(uno::Sequence<sal_Int8>& rPassHas
 {
     OString const tmp(OUStringToOString(rPassword, RTL_TEXTENCODING_UTF8));
     ::std::vector<unsigned char> const hash(::comphelper::Hash::calculateHash(
-        reinterpret_cast<unsigned char const*>(tmp.getStr()), tmp.getLength(),
+        tmp.getStr(), tmp.getLength(),
         ::comphelper::HashType::SHA1));
     rPassHash.realloc(hash.size());
     ::std::copy(hash.begin(), hash.end(), rPassHash.getArray());
