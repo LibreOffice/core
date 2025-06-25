@@ -123,6 +123,9 @@ friend class sd::UndoAttrObject;
     sal_uInt16  mnPaperBin;               ///< PaperBin
     SdPageLink* mpPageLink;               ///< Page link (at left sides only)
 
+    // PDF link annotations for read-only pdfium
+    std::vector<std::pair<basegfx::B2DRectangle, OUString>> maLinkAnnotations;
+
     /** holds the smil animation sequences for this page */
     css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
 
@@ -372,6 +375,16 @@ public:
 
     SD_DLLPUBLIC void removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation) override;
     void removeAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation) override;
+
+    void setLinkAnnotations(std::vector<std::pair<basegfx::B2DRectangle, OUString>> aLinks)
+    {
+        maLinkAnnotations = aLinks;
+    }
+    const std::vector<std::pair<basegfx::B2DRectangle, OUString>>& getLinkAnnotations() const
+    {
+        return maLinkAnnotations;
+    }
+    bool hasLinkAnnotations() const { return !maLinkAnnotations.empty(); }
 
     bool Equals(const SdPage&) const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;

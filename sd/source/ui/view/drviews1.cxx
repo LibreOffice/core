@@ -799,6 +799,30 @@ bool DrawViewShell::IsSelected(sal_uInt16 nPage)
     return false;
 }
 
+namespace
+{
+void notifyLinkAnnotations(SfxViewShell* pViewShell, SdPage* pPage)
+{
+    if (!pViewShell || !pPage || !pPage->hasLinkAnnotations())
+        return;
+    ::tools::JsonWriter jsonWriter;
+    jsonWriter.put("commandName", "PageLinks");
+    {
+        auto jsonLinks = jsonWriter.startArray("links");
+        for (const auto& link : pPage->getLinkAnnotations())
+        {
+            auto jsonLink = jsonWriter.startStruct();
+            std::stringstream ss;
+            ss << link.first;
+            jsonWriter.put("rectangle", ss.str());
+            jsonWriter.put("uri", link.second);
+        }
+    }
+    OString aPayload = jsonWriter.finishAndGetAsOString();
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+}
+}
+
 /**
  * Switch to desired page.
  * nSelectPage refers to the current EditMode
@@ -904,6 +928,8 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus)
                         && maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)) == pNewPage->GetName())
                     {
                         // this slide is already visible
+                        if (comphelper::LibreOfficeKit::isActive())
+                            notifyLinkAnnotations(GetViewShell(), mpActualPage);
                         return true;
                     }
                 }
@@ -971,7 +997,10 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus)
             // notify LibreOfficeKit about changed page
             OString aPayload = OString::number(nSelectedPage);
             if (SfxViewShell* pViewShell = GetViewShell())
+            {
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
+                notifyLinkAnnotations(pViewShell, mpActualPage);
+            }
         }
 
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );

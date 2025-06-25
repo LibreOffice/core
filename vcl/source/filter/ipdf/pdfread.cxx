@@ -346,6 +346,31 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
     return aPDFGraphicAnnotations;
 }
 
+std::vector<std::pair<basegfx::B2DRectangle, OUString>>
+findLinks(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage,
+          const std::unique_ptr<vcl::pdf::PDFiumDocument>& pDocument, basegfx::B2DSize aPageSize)
+{
+    std::vector<std::pair<basegfx::B2DRectangle, OUString>> aResult;
+    int nIndex = 0;
+    std::unique_ptr<vcl::pdf::PDFiumLink> pLink;
+    while ((pLink = pPage->enumerateLink(&nIndex, pDocument.get())))
+    {
+        if (!pLink->getURIPath().isEmpty())
+        {
+            basegfx::B2DRectangle rRectangle = pLink->getRectangle();
+            basegfx::B2DRectangle rRectangleHMM(
+                o3tl::convert(rRectangle.getMinX(), o3tl::Length::pt, o3tl::Length::twip),
+                o3tl::convert(aPageSize.getHeight() - rRectangle.getMinY(), o3tl::Length::pt,
+                              o3tl::Length::twip),
+                o3tl::convert(rRectangle.getMaxX(), o3tl::Length::pt, o3tl::Length::twip),
+                o3tl::convert(aPageSize.getHeight() - rRectangle.getMaxY(), o3tl::Length::pt,
+                              o3tl::Length::twip));
+            aResult.emplace_back(rRectangleHMM, pLink->getURIPath());
+        }
+    }
+    return aResult;
+}
+
 } // end anonymous namespace
 
 size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics)
@@ -399,8 +424,11 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         std::vector<PDFGraphicAnnotation> aPDFGraphicAnnotations
             = findAnnotations(pPage, aPageSize);
 
+        std::vector<std::pair<basegfx::B2DRectangle, OUString>> aPDFLinksInfo
+            = findLinks(pPage, pPdfDocument, aPageSize);
+
         rGraphics.emplace_back(std::move(aGraphic), Size(nPageWidth, nPageHeight),
-                               aPDFGraphicAnnotations);
+                               aPDFGraphicAnnotations, aPDFLinksInfo);
     }
 
     return rGraphics.size();

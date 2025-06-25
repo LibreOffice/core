@@ -339,6 +339,20 @@ public:
     int getOptionCount(PDFiumDocument* pDoc) override;
 };
 
+class VCL_DLLPUBLIC PDFiumLinkImpl final : public PDFiumLink
+{
+    FPDF_LINK mpLink;
+    OUString maURI;
+
+    PDFiumLinkImpl(const PDFiumLinkImpl&) = delete;
+    PDFiumLinkImpl& operator=(const PDFiumLinkImpl&) = delete;
+
+public:
+    PDFiumLinkImpl(FPDF_DOCUMENT pDocument, FPDF_LINK pLink);
+    basegfx::B2DRectangle getRectangle() override;
+    OUString getURIPath() override;
+};
+
 class PDFiumStructureElementImpl final : public PDFiumStructureElement
 {
 private:
@@ -515,6 +529,7 @@ public:
     bool hasTransparency() override;
 
     bool hasLinks() override;
+    std::unique_ptr<PDFiumLink> enumerateLink(int* nStartIndex, PDFiumDocument* pDoc) override;
 
     void onAfterLoadPage(PDFiumDocument* pDoc) override;
 };
@@ -566,6 +581,7 @@ public:
     PDFiumDocumentImpl(FPDF_DOCUMENT pPdfDocument);
     ~PDFiumDocumentImpl() override;
     FPDF_FORMHANDLE getFormHandlePointer();
+    FPDF_DOCUMENT getPointer() { return mpPdfDocument; }
 
     // Page size in points
     basegfx::B2DSize getPageSize(int nIndex) override;
@@ -1024,6 +1040,18 @@ bool PDFiumPageImpl::hasLinks()
     int nStartPos = 0;
     FPDF_LINK pLinkAnnot = nullptr;
     return FPDFLink_Enumerate(mpPage, &nStartPos, &pLinkAnnot);
+}
+
+std::unique_ptr<PDFiumLink> PDFiumPageImpl::enumerateLink(int* nStartIndex, PDFiumDocument* pDoc)
+{
+    std::unique_ptr<PDFiumLink> pPDFiumLink;
+    FPDF_LINK pLinkAnnot = nullptr;
+    if (FPDFLink_Enumerate(mpPage, nStartIndex, &pLinkAnnot))
+    {
+        auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
+        pPDFiumLink = std::make_unique<PDFiumLinkImpl>(pDocImpl->getPointer(), pLinkAnnot);
+    }
+    return pPDFiumLink;
 }
 
 void PDFiumPageImpl::onAfterLoadPage(PDFiumDocument* pDoc)
@@ -1652,6 +1680,37 @@ std::unique_ptr<PDFiumPageObject> PDFiumAnnotationImpl::getObject(int nIndex)
     }
     return pPDFiumPageObject;
 }
+
+PDFiumLinkImpl::PDFiumLinkImpl(FPDF_DOCUMENT pDocument, FPDF_LINK pLink)
+    : mpLink(pLink)
+{
+    FPDF_ACTION pAction = FPDFLink_GetAction(pLink);
+    int nType = FPDFAction_GetType(pAction);
+    if (nType != PDFACTION_URI)
+        return;
+
+    size_t nLen = FPDFAction_GetURIPath(pDocument, pAction, nullptr, 0);
+    if (nLen == 0)
+        return;
+
+    char* pBuffer = new char[nLen];
+    FPDFAction_GetURIPath(pDocument, pAction, pBuffer, nLen);
+    maURI = OUString::fromUtf8(std::string_view(pBuffer, nLen - 1));
+    delete[] pBuffer;
+}
+
+basegfx::B2DRectangle PDFiumLinkImpl::getRectangle()
+{
+    basegfx::B2DRectangle aB2DRectangle;
+    FS_RECTF aRect;
+    if (FPDFLink_GetAnnotRect(mpLink, &aRect))
+    {
+        aB2DRectangle = basegfx::B2DRectangle(aRect.left, aRect.top, aRect.right, aRect.bottom);
+    }
+    return aB2DRectangle;
+}
+
+OUString PDFiumLinkImpl::getURIPath() { return maURI; }
 
 PDFiumStructureElementImpl::PDFiumStructureElementImpl(FPDF_STRUCTELEMENT pStructureElement)
     : mpStructureElement(pStructureElement)

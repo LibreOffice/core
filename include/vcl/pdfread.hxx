@@ -82,19 +82,26 @@ class PDFGraphicResult
     Size maSize;
 
     std::vector<PDFGraphicAnnotation> maAnnotations;
+    std::vector<std::pair<basegfx::B2DRectangle, OUString>> maLinksInfo;
 
 public:
     PDFGraphicResult(Graphic aGraphic, Size const& rSize,
-                     std::vector<PDFGraphicAnnotation> aAnnotations)
+                     std::vector<PDFGraphicAnnotation> aAnnotations,
+                     std::vector<std::pair<basegfx::B2DRectangle, OUString>> aLinks)
         : maGraphic(std::move(aGraphic))
         , maSize(rSize)
         , maAnnotations(std::move(aAnnotations))
+        , maLinksInfo(std::move(aLinks))
     {
     }
 
     const Graphic& GetGraphic() const { return maGraphic; }
     const Size& GetSize() const { return maSize; }
     const std::vector<PDFGraphicAnnotation>& GetAnnotations() const { return maAnnotations; }
+    const std::vector<std::pair<basegfx::B2DRectangle, OUString>>& GetLinksInfo() const
+    {
+        return maLinksInfo;
+    }
 };
 
 /// Import PDF as Graphic images (1 per page), but not loaded yet.
