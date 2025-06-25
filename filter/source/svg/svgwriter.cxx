@@ -48,6 +48,9 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
 #include <memory>
@@ -1107,7 +1110,9 @@ bool SVGTextWriter::nextParagraph()
             Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_SET_THROW );
             if( xEnumeration.is() && xEnumeration->hasMoreElements() )
             {
-                mrTextPortionEnumeration.set( xEnumeration );
+                mrTextPortionEnumeration.set(xEnumeration);
+                Reference<XPropertySet> xPortionPropSet(mrTextPortionEnumeration->nextElement(), UNO_QUERY);
+                extractTextAlignmentAndLineHeight(xPortionPropSet);
             }
 #if OSL_DEBUG_LEVEL > 0
             sInfo = "Paragraph";
@@ -1156,6 +1161,63 @@ bool SVGTextWriter::nextParagraph()
     return true;
 }
 
+void SVGTextWriter::extractTextAlignmentAndLineHeight(const Reference<XPropertySet>& xPortionPropSet)
+{
+    Reference<XPropertySetInfo> xPortionPropInfo(xPortionPropSet->getPropertySetInfo());
+    if (xPortionPropInfo->hasPropertyByName(u"ParaAdjust"_ustr))
+    {
+        sal_uInt16 nTextAdjust = sal_uInt16(ParagraphAdjust_LEFT);
+        if (xPortionPropSet->getPropertyValue(u"ParaAdjust"_ustr) >>= nTextAdjust)
+        {
+            switch (static_cast<ParagraphAdjust>(nTextAdjust))
+            {
+                case ParagraphAdjust_LEFT:
+                    msTextAlignment = "left";
+                    break;
+                case ParagraphAdjust_CENTER:
+                    msTextAlignment = "center";
+                    break;
+                case ParagraphAdjust_RIGHT:
+                    msTextAlignment = "right";
+                    break;
+                case ParagraphAdjust_BLOCK:
+                    msTextAlignment = "block";
+                    break;
+                default:
+                    msTextAlignment.clear();
+                    break;
+            }
+        }
+    }
+
+    if (xPortionPropInfo->hasPropertyByName(u"ParaLineSpacing"_ustr))
+    {
+        css::style::LineSpacing aLineSpacing;
+        if (xPortionPropSet->getPropertyValue(u"ParaLineSpacing"_ustr) >>= aLineSpacing)
+        {
+            switch (aLineSpacing.Mode)
+            {
+                case css::style::LineSpacingMode::PROP:
+                {
+                    double fLineHeight = aLineSpacing.Height / 100.0;
+                    msLineHeight = OUString::number(fLineHeight);
+                }
+                break;
+
+                case css::style::LineSpacingMode::FIX:
+                {
+                    double fPoints = aLineSpacing.Height / 35.0;
+                    msLineHeight = OUString::number(static_cast<int>(fPoints)) + u"pt";
+                }
+                break;
+
+                default:
+                    msLineHeight = OUString::number(aLineSpacing.Height);
+                    break;
+            }
+        }
+    }
+}
 
 bool SVGTextWriter::nextTextPortion()
 {
@@ -1388,6 +1450,12 @@ void SVGTextWriter::startTextParagraph()
     else
     {
         mrExport.AddAttribute(u"class"_ustr, u"TextParagraph"_ustr);
+        if (!msTextAlignment.isEmpty()) {
+            mrExport.AddAttribute(u"ooo:text-alignment"_ustr, msTextAlignment);
+        }
+        if (!msLineHeight.isEmpty()) {
+            mrExport.AddAttribute(u"ooo:line-height"_ustr, msLineHeight);
+        }
     }
     maParentFont = vcl::Font();
     mpTextParagraphElem.reset(new SvXMLElementExport(mrExport, aXMLElemTspan, mbIWS, mbIWS));
@@ -1419,6 +1487,13 @@ void SVGTextWriter::startTextPosition( bool bExportX, bool bExportY )
         mrExport.AddAttribute(aXMLAttrX, OUString::number(maTextPos.X()));
     if( bExportY )
         mrExport.AddAttribute(aXMLAttrY, OUString::number(maTextPos.Y()));
+
+    if (!msTextAlignment.isEmpty()) {
+        mrExport.AddAttribute(u"ooo:text-alignment"_ustr, msTextAlignment);
+    }
+    if (!msLineHeight.isEmpty()) {
+        mrExport.AddAttribute(u"ooo:line-height"_ustr, msLineHeight);
+    }
 
     mpTextPositionElem.reset(new SvXMLElementExport(mrExport, aXMLElemTspan, mbIWS, mbIWS));
 }

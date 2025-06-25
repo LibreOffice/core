@@ -226,6 +226,8 @@ class SVGTextWriter final
     OUString                                    msPageCount;
     OUString                                    msDateTimeType;
     OUString                                    msTextFieldType;
+    OUString                                    msTextAlignment;
+    OUString                                    msLineHeight;
     bool                                        mbIsPlaceholderShape;
     static const bool                           mbIWS = false;
     vcl::Font                                   maCurrentFont;
@@ -291,6 +293,7 @@ class SVGTextWriter final
 
     void implRegisterInterface( const Reference< XInterface >& rxIf );
     const OUString & implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+    void extractTextAlignmentAndLineHeight(const Reference<com::sun::star::beans::XPropertySet>& xPortionPropSet);
 };
 
 
