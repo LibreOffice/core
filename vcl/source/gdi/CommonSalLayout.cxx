@@ -369,8 +369,16 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
         m_GlyphItems = *pGlyphs;
 
         for(const GlyphItem& item : m_GlyphItems)
+        {
             if(!item.glyphId())
-                aFallbackRuns.AddPos(item.charPos(), item.IsRTLGlyph());
+            {
+                sal_Int32 nCurrCharPos = item.charPos();
+                auto aCurrChar = rArgs.mrStr.iterateCodePoints(&nCurrCharPos, 0);
+                // tdf#126111: fallback is meaningless for PUA codepoints
+                if (u_charType(aCurrChar) != U_PRIVATE_USE_CHAR)
+                    aFallbackRuns.AddPos(item.charPos(), item.IsRTLGlyph());
+            }
+        }
 
         for (const auto& rRun : aFallbackRuns)
         {
@@ -742,9 +750,15 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     if (nOrigCharPos >= rArgs.mnDrawMinCharPos
                         && nOrigCharPos < rArgs.mnDrawEndCharPos)
                     {
-                        aFallbackRuns.AddPos(nOrigCharPos, bRightToLeft);
-                        if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
-                            continue;
+                        sal_Int32 nCurrCharPos = nOrigCharPos;
+                        auto aCurrChar = rArgs.mrStr.iterateCodePoints(&nCurrCharPos, 0);
+                        // tdf#126111: fallback is meaningless for PUA codepoints
+                        if (u_charType(aCurrChar) != U_PRIVATE_USE_CHAR)
+                        {
+                            aFallbackRuns.AddPos(nOrigCharPos, bRightToLeft);
+                            if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
+                                continue;
+                        }
                     }
                 }
 
