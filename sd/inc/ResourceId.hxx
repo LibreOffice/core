@@ -156,14 +156,6 @@ private:
     */
     sal_Int16 CompareToLocalImplementation (const ResourceId& rId) const;
 
-    /** Compare the called ResourceId object to the given XResourceId object
-        reference.  The comparison is done via the UNO interface.  Namely,
-        it uses the getResourceURL() and the getAnchorURLs() methods to get
-        access to the URLs of the given object.
-    */
-    sal_Int16 CompareToExternalImplementation (const css::uno::Reference<
-        css::drawing::framework::XResourceId>& rxId) const;
-
     /** Return whether the called ResourceId object is bound to the anchor
         consisting of the URLs given by psFirstAnchorURL and paAnchorURLs.
         @param psFirstAnchorURL

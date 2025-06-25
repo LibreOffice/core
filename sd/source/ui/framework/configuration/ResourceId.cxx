@@ -34,14 +34,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
-/** When the USE_OPTIMIZATIONS symbol is defined then at some optimizations
-    are activated that work only together with XResourceId objects that are
-    implemented by the ResourceId class.  For other implementations of when
-    the USE_OPTIMIZATIONS symbol is not defined then alternative code is
-    used instead.
-*/
-#define USE_OPTIMIZATIONS
-
 namespace sd::framework {
 
 //===== ResourceId ============================================================
@@ -210,22 +202,10 @@ sal_Int16 SAL_CALL
     }
     else
     {
-        ResourceId* pId = nullptr;
-#ifdef USE_OPTIMIZATIONS
-        pId = dynamic_cast<ResourceId*>(rxResourceId.get());
-#endif
-        if (pId != nullptr)
-        {
-            // We have direct access to the implementation of the given
-            // resource id object.
-            nResult = CompareToLocalImplementation(*pId);
-        }
-        else
-        {
-            // We have to do the comparison via the UNO interface of the
-            // given resource id object.
-            nResult = CompareToExternalImplementation(rxResourceId);
-        }
+        ResourceId& rId = dynamic_cast<ResourceId&>(*rxResourceId);
+        // We have direct access to the implementation of the given
+        // resource id object.
+        nResult = CompareToLocalImplementation(rId);
     }
 
     return nResult;
@@ -273,51 +253,6 @@ sal_Int16 ResourceId::CompareToLocalImplementation (const ResourceId& rId) const
     return nResult;
 }
 
-sal_Int16 ResourceId::CompareToExternalImplementation (const Reference<XResourceId>& rxId) const
-{
-    sal_Int16 nResult (0);
-
-    const Sequence<OUString> aAnchorURLs (rxId->getAnchorURLs());
-    const sal_uInt32 nLocalURLCount (maResourceURLs.size());
-    const sal_uInt32 nURLCount(1+aAnchorURLs.getLength());
-
-    // Start comparison with the top most anchors.
-    sal_Int32 nLocalResult (0);
-    for (sal_Int32 nIndex=nURLCount-1,nLocalIndex=nLocalURLCount-1;
-         nIndex>=0&&nLocalIndex>=0;
-         --nIndex,--nLocalIndex)
-    {
-        if (nIndex == 0 )
-            nLocalResult = maResourceURLs[nIndex].compareTo(rxId->getResourceURL());
-        else
-            nLocalResult = maResourceURLs[nIndex].compareTo(aAnchorURLs[nIndex-1]);
-        if (nLocalResult != 0)
-        {
-            if (nLocalResult < 0)
-                nResult = -1;
-            else
-                nResult = +1;
-            break;
-        }
-    }
-
-    if (nResult == 0)
-    {
-        // No difference found yet.  When the lengths are the same then the
-        // two resource ids are equivalent.  Otherwise the shorter comes
-        // first.
-        if (nLocalURLCount != nURLCount)
-        {
-            if (nLocalURLCount < nURLCount)
-                nResult = -1;
-            else
-                nResult = +1;
-        }
-    }
-
-    return nResult;
-}
-
 sal_Bool SAL_CALL
     ResourceId::isBoundTo (
         const Reference<XResourceId>& rxResourceId,
@@ -329,20 +264,8 @@ sal_Bool SAL_CALL
         return IsBoundToAnchor(nullptr, nullptr, eMode);
     }
 
-    ResourceId* pId = nullptr;
-#ifdef USE_OPTIMIZATIONS
-    pId = dynamic_cast<ResourceId*>(rxResourceId.get());
-#endif
-    if (pId != nullptr)
-    {
-        return IsBoundToAnchor(pId->maResourceURLs, eMode);
-    }
-    else
-    {
-        const OUString sResourceURL (rxResourceId->getResourceURL());
-        const Sequence<OUString> aAnchorURLs (rxResourceId->getAnchorURLs());
-        return IsBoundToAnchor(&sResourceURL, &aAnchorURLs, eMode);
-    }
+    ResourceId& rId = dynamic_cast<ResourceId&>(*rxResourceId);
+    return IsBoundToAnchor(rId.maResourceURLs, eMode);
 }
 
 sal_Bool SAL_CALL
