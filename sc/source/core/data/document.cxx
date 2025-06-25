@@ -3279,7 +3279,7 @@ bool ScDocument::HasClipFilteredRows()
         {
             ScRange& rRange = rClipRanges[i];
             bool bAnswer
-                = maTabs[nCountTab]->HasFilteredRows(rRange.aStart.Row(), rRange.aEnd.Row());
+                = maTabs[nCountTab]->getFilterData().hasFilteredRows(rRange.aStart.Row(), rRange.aEnd.Row());
             if (bAnswer)
                 return true;
         }
@@ -4533,48 +4533,48 @@ SCROW ScDocument::CountVisibleRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) c
 bool ScDocument::RowFiltered(SCROW nRow, SCTAB nTab, SCROW* pFirstRow, SCROW* pLastRow) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
-        return pTable->RowFiltered(nRow, pFirstRow, pLastRow);
+        return pTable->getFilterData().rowFiltered(nRow, pFirstRow, pLastRow);
     return false;
 }
 
 bool ScDocument::HasFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
-        return pTable->HasFilteredRows(nStartRow, nEndRow);
+        return pTable->getFilterData().hasFilteredRows(nStartRow, nEndRow);
     return false;
 }
 
 bool ScDocument::ColFiltered(SCCOL nCol, SCTAB nTab) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
-        return pTable->ColFiltered(nCol);
+        return pTable->getFilterData().columnFiltered(nCol);
     return false;
 }
 
 void ScDocument::SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bFiltered)
 {
     if (ScTable* pTable = FetchTable(nTab))
-        pTable->SetRowFiltered(nStartRow, nEndRow, bFiltered);
+        pTable->getFilterData().setRowFiltered(nStartRow, nEndRow, bFiltered);
 }
 
 SCROW ScDocument::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
-        return pTable->FirstNonFilteredRow(nStartRow, nEndRow);
+        return pTable->getFilterData().firstNonFilteredRow(nStartRow, nEndRow);
     return std::numeric_limits<SCROW>::max();
 }
 
 SCROW ScDocument::LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
-        return pTable->LastNonFilteredRow(nStartRow, nEndRow);
+        return pTable->getFilterData().lastNonFilteredRow(nStartRow, nEndRow);
     return std::numeric_limits<SCROW>::max();
 }
 
 SCROW ScDocument::CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
-        return pTable->CountNonFilteredRows(nStartRow, nEndRow);
+        return pTable->getFilterData().countNonFilteredRows(nStartRow, nEndRow);
     return 0;
 }
 
@@ -4645,7 +4645,7 @@ SCROW ScDocument::GetNextDifferentChangedRowFlagsWidth( SCTAB nTab, SCROW nStart
     if (!pRowFlagsArray)
         return 0;
 
-    if (!pTable->mpRowHeights || !pTable->mpHiddenRows)
+    if (!pTable->mpRowHeights || !pTable->maFilterData.mpHiddenRows)
         return 0;
 
     size_t nIndex;          // ignored

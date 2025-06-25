@@ -281,7 +281,7 @@ void ScTable::SkipFilteredRows(SCROW& rRow, SCROW& rLastNonFilteredRow, bool bFo
             return;
 
         SCROW nLastRow = rRow;
-        if (RowFiltered(rRow, nullptr, &nLastRow))
+        if (getFilterData().rowFiltered(rRow, nullptr, &nLastRow))
             // move to the first non-filtered row.
             rRow = nLastRow + 1;
         else
@@ -297,7 +297,7 @@ void ScTable::SkipFilteredRows(SCROW& rRow, SCROW& rLastNonFilteredRow, bool bFo
             return;
 
         SCROW nFirstRow = rRow;
-        if (RowFiltered(rRow, &nFirstRow))
+        if (getFilterData().rowFiltered(rRow, &nFirstRow))
             // move to the first non-filtered row.
             rRow = nFirstRow - 1;
         else
@@ -1090,7 +1090,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
             for (SCROW nRow = rRange.aStart.Row(); nRow <= nEndRow; ++nRow)
             {
                 SCROW nLastRow;
-                const bool bFiltered = RowFiltered(nRow, nullptr, &nLastRow);
+                const bool bFiltered = getFilterData().rowFiltered(nRow, nullptr, &nLastRow);
                 if (nLastRow > nEndRow)
                     nLastRow = nEndRow;
                 if (!bFiltered)

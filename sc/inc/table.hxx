@@ -35,7 +35,7 @@
 #include "SparklineList.hxx"
 #include "SolverSettings.hxx"
 #include "markdata.hxx"
-
+#include "FilterData.hxx"
 #include <algorithm>
 #include <atomic>
 #include <memory>
@@ -160,6 +160,9 @@ class ScTable
 private:
     typedef ::std::vector< ScRange > ScRangeVec;
 
+    SCTAB           nTab;
+    ScDocument&     rDocument;
+
     ScColContainer aCol;
 
     OUString aName;
@@ -191,10 +194,8 @@ private:
 
     std::unique_ptr<ScBitMaskCompressedArray<SCCOL, CRFlags>> mpColFlags;
     std::unique_ptr<ScBitMaskCompressedArray< SCROW, CRFlags>> pRowFlags;
-    std::unique_ptr<ScFlatBoolColSegments>  mpHiddenCols;
-    std::unique_ptr<ScFlatBoolRowSegments>  mpHiddenRows;
-    std::unique_ptr<ScFlatBoolColSegments>  mpFilteredCols;
-    std::unique_ptr<ScFlatBoolRowSegments>  mpFilteredRows;
+
+    FilterData maFilterData;
 
     ::std::set<SCROW>                      maRowPageBreaks;
     ::std::set<SCROW>                      maRowManualBreaks;
@@ -210,8 +211,6 @@ private:
     mutable SCCOL nTableAreaVisibleX;
     mutable SCROW nTableAreaVisibleY;
 
-    SCTAB           nTab;
-    ScDocument&     rDocument;
     std::unique_ptr<utl::TextSearch> pSearchText;
 
     mutable OUString aUpperName;             // #i62977# filled only on demand, reset in SetName
@@ -989,6 +988,9 @@ public:
     css::uno::Sequence<
         css::sheet::TablePageBreakData> GetRowBreakData() const;
 
+    void updateObjectsForColsChanged(SCCOL nStartCol, SCCOL nEndCol, bool bHidden, bool bChanged);
+    void updateObjectsForRowsChanged(SCROW nStartRow, SCROW nEndRow, bool bHidden, bool bChanged);
+
     bool        RowHidden(SCROW nRow, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;
     bool        RowHiddenLeaf(SCROW nRow, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;
     bool        HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const;
@@ -1007,16 +1009,8 @@ public:
 
     SCCOLROW    LastHiddenColRow(SCCOLROW nPos, bool bCol) const;
 
-    bool        RowFiltered(SCROW nRow, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;
-    bool        ColFiltered(SCCOL nCol, SCCOL* pFirstCol = nullptr, SCCOL* pLastCol = nullptr) const;
-    bool        HasFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
-    void        CopyColFiltered(const ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
-    void        CopyRowFiltered(const ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
-    void        SetRowFiltered(SCROW nStartRow, SCROW nEndRow, bool bFiltered);
-    void        SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, bool bFiltered);
-    SCROW       FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const;
-    SCROW       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const;
-    SCROW       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
+    FilterData& getFilterData() { return maFilterData; }
+    FilterData const& getFilterData() const { return maFilterData; }
 
     Color GetCellBackgroundColor(ScAddress aPos) const;
     Color GetCellTextColor(ScAddress aPos) const;
