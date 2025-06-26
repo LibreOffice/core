@@ -17,6 +17,7 @@
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextField.hpp>
@@ -577,6 +578,81 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\"', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sStartDoubleQuote, xTextDocument->getText()->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
+{
+    // Given a document with several paragraphs, and a formula object
+    createSwDoc("text-with-formula.fodt");
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    auto& rObjectContainer = pTextDoc->GetObjectShell()->GetEmbeddedObjectContainer();
+    CPPUNIT_ASSERT(rObjectContainer.HasEmbeddedObjects());
+    auto xMathObject = rObjectContainer.GetEmbeddedObject(rObjectContainer.GetObjectNames()[0]);
+    CPPUNIT_ASSERT(xMathObject);
+
+    auto xSelSupplier = pTextDoc->getCurrentController().queryThrow<view::XSelectionSupplier>();
+    auto xCursor = pTextDoc->getText()->createTextCursor();
+    // 1. Select almost whole text, except the first and the last characters (to test the stability
+    // of the selection boundaries) - meaning that the selection spans across three paragraphs:
+    xCursor->gotoRange(pTextDoc->getText()->getStart(), false);
+    xCursor->goRight(1, false);
+    xCursor->gotoRange(pTextDoc->getText()->getEnd(), true);
+    xCursor->goLeft(1, true);
+    xSelSupplier->select(css::uno::Any(xCursor));
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '(', 0);
+    Scheduler::ProcessEventsToIdle();
+    // The formula must not be removed from the document
+    CPPUNIT_ASSERT(rObjectContainer.HasEmbeddedObject(xMathObject));
+
+    auto xSelections = xSelSupplier->getSelection().queryThrow<css::container::XIndexAccess>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSelections->getCount());
+    auto xSelection = xSelections->getByIndex(0).queryThrow<css::text::XTextRange>();
+    // Check that selection includes parentheses
+    CPPUNIT_ASSERT_EQUAL(u"(aragraph one" SAL_NEWLINE_STRING "Paragraph two: " SAL_NEWLINE_STRING
+                         "Paragraph thre)"_ustr,
+                         xSelection->getString());
+    // Check that the selection includes the formula
+    auto xContentEnumAccess = xSelection.queryThrow<css::container::XContentEnumerationAccess>();
+    auto xContentEnum
+        = xContentEnumAccess->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
+    CPPUNIT_ASSERT(xContentEnum->hasMoreElements());
+
+    // 2. Select part of the second paragraph, starting with the bold word, to the end (including
+    // the formula), to test that the added characters assume the formatting of selection:
+    auto xPara2 = getParagraph(2);
+    xCursor->gotoRange(xPara2->getStart(), false);
+    xCursor->goRight(10, false); // to start of "two", which is bold
+    xCursor->gotoRange(xPara2->getEnd(), true);
+    CPPUNIT_ASSERT_EQUAL(u"two: "_ustr, xCursor->getString());
+    xContentEnumAccess.set(xCursor, css::uno::UNO_QUERY_THROW);
+    xContentEnum
+        = xContentEnumAccess->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
+    CPPUNIT_ASSERT(xContentEnum->hasMoreElements()); // The selection contains the formula
+    xSelSupplier->select(css::uno::Any(xCursor));
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '[', 0);
+    Scheduler::ProcessEventsToIdle();
+    // The formula must not be removed from the document
+    CPPUNIT_ASSERT(rObjectContainer.HasEmbeddedObject(xMathObject));
+
+    // The paragraph now must consist of five runs: first, the non-bold "Paragraph ";
+    // then bold "[two"; then non-bold ": "; then the formula; and then non-bold "]":
+    auto xRun = getRun(xPara2, 1, u"Paragraph "_ustr);
+    CPPUNIT_ASSERT_EQUAL(100.0f, getProperty<float>(xRun, u"CharWeight"_ustr));
+    xRun = getRun(xPara2, 2, u"[two"_ustr);
+    CPPUNIT_ASSERT_EQUAL(150.0f, getProperty<float>(xRun, u"CharWeight"_ustr));
+    xRun = getRun(xPara2, 3, u": "_ustr);
+    CPPUNIT_ASSERT_EQUAL(100.0f, getProperty<float>(xRun, u"CharWeight"_ustr));
+    xRun = getRun(xPara2, 4, u""_ustr);
+    // Check that the run includes the formula
+    xContentEnumAccess.set(xRun, css::uno::UNO_QUERY_THROW);
+    xContentEnum
+        = xContentEnumAccess->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
+    CPPUNIT_ASSERT(xContentEnum->hasMoreElements()); // The selection contains the formula
+    xRun = getRun(xPara2, 5, u"]"_ustr);
+    CPPUNIT_ASSERT_EQUAL(100.0f, getProperty<float>(xRun, u"CharWeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167133)

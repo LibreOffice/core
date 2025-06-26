@@ -2632,13 +2632,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     switch (aCh)
                     {
                         case '(':
-                            rSh.InsertEnclosingChars(u"(", u")");
+                            rSh.InsertEnclosingChars(u"("_ustr, u")"_ustr);
                             break;
                         case '[':
-                            rSh.InsertEnclosingChars(u"[", u"]");
+                            rSh.InsertEnclosingChars(u"["_ustr, u"]"_ustr);
                             break;
                         case '{':
-                            rSh.InsertEnclosingChars(u"{", u"}");
+                            rSh.InsertEnclosingChars(u"{"_ustr, u"}"_ustr);
                             break;
                         case '\"':
                         {
