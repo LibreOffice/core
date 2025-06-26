@@ -332,7 +332,6 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition, bool bMergeMa
         nInsertPageCount = static_cast<sal_uInt16>(rBookmarkList.size());
         rModel.GetDocument()->PasteBookmarkAsPage(
             rBookmarkList,
-            nullptr,
             nInsertIndex,
             pClipTransferable->GetPageDocShell(),
             bMergeMasterPages,
@@ -353,7 +352,6 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition, bool bMergeMa
             nInsertPageCount = pDataDoc->GetSdPageCount( PageKind::Standard );
             rModel.GetDocument()->PasteBookmarkAsPage(
                 std::vector<OUString>(),
-                nullptr,
                 nInsertIndex,
                 pDataDocSh,
                 bMergeMasterPages,

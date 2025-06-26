@@ -230,7 +230,6 @@ sal_uInt16 ViewClipboard::InsertSlides (
             // This is a regular paste operation
             rDoc.PasteBookmarkAsPage(
                 pBookmarkList ? *pBookmarkList : std::vector<OUString>(),
-                nullptr,
                 nInsertPosition,
                 pDataDocSh,
                 bMergeMasterPages);

@@ -973,7 +973,7 @@ void SdMiscTest::testTdf39519()
 
     // Insert a bookmark as a new page using the same name
     std::vector<OUString> aBookmarkList = { u"Test"_ustr };
-    pDoc->CopyOrMovePagesWithinDocument(aBookmarkList, nullptr, 2, false);
+    pDoc->CopyOrMovePagesWithinDocument(aBookmarkList, 2, false);
 
     // Check if the copied page has a different name
     SdPage* pCopiedPage = static_cast<SdPage*>(pDoc->GetPage(2));
@@ -995,7 +995,7 @@ void SdMiscTest::testTdf164284()
     // Move a bookmark as a page using the same name
     pDoc->DoMakePageObjectsNamesUnique(false);
     std::vector<OUString> aBookmarkList = { u"Test"_ustr };
-    pDoc->CopyOrMovePagesWithinDocument(aBookmarkList, nullptr, 2, true);
+    pDoc->CopyOrMovePagesWithinDocument(aBookmarkList, 2, true);
 
     // Check if the moved page has the same name
     SdPage* pMovedPage = static_cast<SdPage*>(pDoc->GetPage(2));

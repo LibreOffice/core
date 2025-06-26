@@ -202,11 +202,11 @@ struct InsertBookmarkOptions
     }
 
     // Preset for file insert operation
-    static InsertBookmarkOptions ForFileInsert(bool bLinkPages, bool bMergeMasterPagesOnly = false) {
+    static InsertBookmarkOptions ForFileInsert(bool bLinkPages) {
         InsertBookmarkOptions options;
         options.bLink = bLinkPages;
         options.bIsFileDocument = true;
-        options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
+        options.bMergeMasterPagesOnly = false;
         return options;
     }
 
@@ -221,14 +221,14 @@ struct InsertBookmarkOptions
     }
 
     // Preset for page link resolution
-    static InsertBookmarkOptions ForPageLinks(bool bCopySource, bool bNoDialogs, bool bMergeMasterPagesOnly = false) {
+    static InsertBookmarkOptions ForPageLinks(bool bCopySource, bool bNoDialogs) {
         InsertBookmarkOptions options;
         options.bLink = true;
         options.bReplace = true;
         options.bPreservePageNames = true;
         options.bCopy = bCopySource;
         options.bNoDialogs = bNoDialogs;
-        options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
+        options.bMergeMasterPagesOnly = false;
         return options;
     }
 
@@ -622,7 +622,6 @@ public:
      * It handles the insertion of pages that were previously copied or cut to the clipboard.
      *
      * @param rBookmarkList List of page names to be pasted
-     * @param pExchangeList Optional list of names to use for the pasted pages
      * @param nInsertPos Position where pages should be inserted
      * @param pBookmarkDocSh Source document shell
      * @param bMergeMasterPages Whether to merge master pages from source
@@ -631,7 +630,6 @@ public:
      */
     bool PasteBookmarkAsPage(
         const PageNameList &rBookmarkList,
-        PageNameList *pExchangeList,
         sal_uInt16 nInsertPos,
         ::sd::DrawDocShell* pBookmarkDocSh,
         bool bMergeMasterPages,
@@ -649,7 +647,6 @@ public:
      * @param bLink Whether to link to the source pages instead of copying
      * @param nInsertPos Position where pages should be inserted
      * @param pBookmarkDocSh Source document shell
-     * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
      * @return true if operation was successful
      */
     bool InsertFileAsPage(
@@ -657,8 +654,7 @@ public:
         PageNameList *pExchangeList,
         bool bLink,
         sal_uInt16 nInsertPos,
-        ::sd::DrawDocShell* pBookmarkDocSh,
-        bool bMergeMasterPagesOnly = false);
+        ::sd::DrawDocShell* pBookmarkDocSh);
 
     /**
      * Handle drag and drop operations
@@ -671,15 +667,13 @@ public:
      * @param nInsertPos Position where pages should be inserted
      * @param pBookmarkDocSh Source document shell
      * @param bMergeMasterPages Whether to merge master pages from source
-     * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
      * @return true if operation was successful
      */
     bool DropBookmarkAsPage(
         const PageNameList &rBookmarkList,
         sal_uInt16 nInsertPos,
         ::sd::DrawDocShell* pBookmarkDocSh,
-        bool bMergeMasterPages,
-        bool bMergeMasterPagesOnly = false);
+        bool bMergeMasterPages);
 
     /**
      * Resolve page links
@@ -692,15 +686,13 @@ public:
      * @param nInsertPos Position where resolved pages should be inserted
      * @param bNoDialogs Whether to suppress dialogs during operation
      * @param bCopy Whether to copy the linked pages
-     * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
      * @return true if operation was successful
      */
     bool ResolvePageLinks(
         const PageNameList &rBookmarkList,
         sal_uInt16 nInsertPos,
         bool bNoDialogs,
-        bool bCopy,
-        bool bMergeMasterPagesOnly = false);
+        bool bCopy);
 
     /**
      * Copy or move pages within the same document
@@ -710,18 +702,14 @@ public:
      * of pages while maintaining proper references and styles.
      *
      * @param rBookmarkList List of page names to be copied or moved
-     * @param pExchangeList Optional list of names to use for the destination pages
      * @param nInsertPos Position where pages should be inserted
      * @param bPreservePageNames Whether to preserve original page names
-     * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
      * @return true if operation was successful
      */
     bool CopyOrMovePagesWithinDocument(
         const PageNameList &rBookmarkList,
-        PageNameList *pExchangeList,
         sal_uInt16 nInsertPos,
-        bool bPreservePageNames,
-        bool bMergeMasterPagesOnly = false);
+        bool bPreservePageNames);
 
     /**
      * Import a whole document

@@ -2154,7 +2154,6 @@ SdPage* SdDrawDocument::AddNewMasterPageFromExisting(
 // Paste pages from clipboard - handles regular paste operations
 bool SdDrawDocument::PasteBookmarkAsPage(
     const PageNameList &rBookmarkList,
-    PageNameList *pExchangeList,
     sal_uInt16 nInsertPos,
     ::sd::DrawDocShell* pBookmarkDocSh,
     bool bMergeMasterPages,
@@ -2164,7 +2163,7 @@ bool SdDrawDocument::PasteBookmarkAsPage(
     InsertBookmarkOptions options = InsertBookmarkOptions::ForPaste(bMergeMasterPages, bMergeMasterPagesOnly);
 
     // Create insertion parameters
-    PageInsertionParams aInsertParams(nInsertPos, pExchangeList);
+    PageInsertionParams aInsertParams(nInsertPos, /*pExchangeList*/nullptr);
 
     // Get the bookmark document first so we can use it for scale object determination
     if (!initBookmarkDoc(pBookmarkDocSh, aInsertParams.pBookmarkDoc, aInsertParams.aBookmarkName))
@@ -2267,12 +2266,11 @@ bool SdDrawDocument::ResolvePageLinks(
     const PageNameList &rBookmarkList,
     sal_uInt16 nInsertPos,
     bool bNoDialogs,
-    bool bCopy,
-    bool bMergeMasterPagesOnly)
+    bool bCopy)
 {
     // Use predefined options for page link resolution
     InsertBookmarkOptions options = InsertBookmarkOptions::ForPageLinks(bCopy, bNoDialogs);
-    options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
+    options.bMergeMasterPagesOnly = /*bMergeMasterPagesOnly*/false;
 
     // Create insertion parameters
     PageInsertionParams aInsertParams(nInsertPos);
@@ -2469,12 +2467,11 @@ bool SdDrawDocument::InsertFileAsPage(
     PageNameList *pExchangeList,
     bool bLink,
     sal_uInt16 nInsertPos,
-    ::sd::DrawDocShell* pBookmarkDocSh,
-    bool bMergeMasterPagesOnly)
+    ::sd::DrawDocShell* pBookmarkDocSh)
 {
     // Use predefined options for file insert operation
     InsertBookmarkOptions options = InsertBookmarkOptions::ForFileInsert(bLink);
-    options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
+    options.bMergeMasterPagesOnly = /*bMergeMasterPagesOnly*/false;
 
     // Create parameter object for page insertion
     PageInsertionParams aInsertParams(nInsertPos, pExchangeList);
@@ -2569,11 +2566,10 @@ bool SdDrawDocument::DropBookmarkAsPage(
     const PageNameList &rBookmarkList,
     sal_uInt16 nInsertPos,
     ::sd::DrawDocShell* pBookmarkDocSh,
-    bool bMergeMasterPages,
-    bool bMergeMasterPagesOnly)
+    bool bMergeMasterPages)
 {
     // Use predefined options for drag and drop operation
-    InsertBookmarkOptions options = InsertBookmarkOptions::ForDragDrop(bMergeMasterPages, bMergeMasterPagesOnly);
+    InsertBookmarkOptions options = InsertBookmarkOptions::ForDragDrop(bMergeMasterPages, /*bMergeMasterPagesOnly*/false);
 
     // Create parameter object for page insertion
     PageInsertionParams aInsertParams(nInsertPos);
@@ -2667,17 +2663,15 @@ bool SdDrawDocument::DropBookmarkAsPage(
 // Copy or move pages within the same document
 bool SdDrawDocument::CopyOrMovePagesWithinDocument(
     const PageNameList &rBookmarkList,
-    PageNameList *pExchangeList,
     sal_uInt16 nInsertPos,
-    bool bPreservePageNames,
-    bool bMergeMasterPagesOnly)
+    bool bPreservePageNames)
 {
     // Use predefined options for internal document operations
-    InsertBookmarkOptions options = InsertBookmarkOptions::ForInternalOps(bPreservePageNames, bMergeMasterPagesOnly);
+    InsertBookmarkOptions options = InsertBookmarkOptions::ForInternalOps(bPreservePageNames, /*bMergeMasterPagesOnly*/false);
 
     // Create parameter object for page insertion
     // When copying within document, source and target are the same
-    PageInsertionParams aInsertParams(nInsertPos, pExchangeList, this);
+    PageInsertionParams aInsertParams(nInsertPos, /*pExchangeList*/nullptr, this);
 
     DocumentPageCounts pageCounts(GetSdPageCount(PageKind::Standard),
                                   aInsertParams.pBookmarkDoc->GetSdPageCount(PageKind::Standard),
