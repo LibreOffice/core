@@ -5313,7 +5313,7 @@ ENABLE_OPTIMIZED=
 ENABLE_OPTIMIZED_DEBUG=
 AC_MSG_CHECKING([whether to compile with optimization flags])
 if test -z "$enable_optimized"; then
-    if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
+    if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL$ENABLE_GCOV"; then
         enable_optimized=no
     else
         enable_optimized=yes

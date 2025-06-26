@@ -124,7 +124,6 @@ gb_GCOV_LDFLAGS := -fprofile-arcs -lgcov
 gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage
 gb_CXXFLAGS_COMMON += -fprofile-arcs -ftest-coverage
 gb_LinkTarget_LDFLAGS += $(gb_GCOV_LDFLAGS)
-gb_COMPILEROPTFLAGS := -O0
 endif
 
 ifeq ($(DISABLE_DYNLOADING),TRUE)
