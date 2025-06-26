@@ -319,7 +319,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     void    InsertByWord( const OUString & );
     SW_DLLPUBLIC void InsertPageBreak(const OUString *pPageDesc = nullptr, const ::std::optional<sal_uInt16>& rPgNum = std::nullopt);
-    void InsertEnclosingChars(std::u16string_view sStartStr, std::u16string_view sEndStr);
+    void InsertEnclosingChars(const OUString& sStartStr, const OUString& sEndStr);
     SW_DLLPUBLIC void InsertLineBreak(std::optional<SwLineBreakClear> oClear = std::nullopt);
     void    InsertColumnBreak();
     SW_DLLPUBLIC void InsertContentControl(SwContentControlType eType);
