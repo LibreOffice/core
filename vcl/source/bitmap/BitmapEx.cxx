@@ -1375,6 +1375,58 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
     *this = BitmapEx( GetBitmap(), aAlpha );
 }
 
+void BitmapEx::BlendAlpha(sal_uInt8 nAlpha)
+{
+    AlphaMask   aAlpha;
+
+    if (!IsAlpha())
+    {
+        sal_uInt8 cTrans = 255 - nAlpha;
+        aAlpha = AlphaMask(GetSizePixel(), &cTrans);
+    }
+    else
+    {
+        aAlpha = GetAlphaMask();
+        BitmapScopedWriteAccess pA(aAlpha);
+        assert(pA);
+
+        if( !pA )
+            return;
+
+        const tools::Long  nWidth = pA->Width(), nHeight = pA->Height();
+
+        if( pA->GetScanlineFormat() == ScanlineFormat::N8BitPal )
+        {
+            for( tools::Long nY = 0; nY < nHeight; nY++ )
+            {
+                Scanline pAScan = pA->GetScanline( nY );
+
+                for( tools::Long nX = 0; nX < nWidth; nX++ )
+                {
+                    sal_uInt8 nNewAlpha = static_cast<sal_Int32>(nAlpha) * (*pAScan) / 255;
+                    *pAScan++ = nNewAlpha;
+                }
+            }
+        }
+        else
+        {
+            BitmapColor aAlphaValue( 0 );
+
+            for( tools::Long nY = 0; nY < nHeight; nY++ )
+            {
+                Scanline pScanline = pA->GetScanline( nY );
+                for( tools::Long nX = 0; nX < nWidth; nX++ )
+                {
+                    sal_uInt8 nNewAlpha = static_cast<sal_Int32>(nAlpha) * (pA->GetIndexFromData( pScanline, nX )) / 255;
+                    aAlphaValue.SetIndex( nNewAlpha );
+                    pA->SetPixelOnData( pScanline, nX, aAlphaValue );
+                }
+            }
+        }
+    }
+    *this = BitmapEx( GetBitmap(), aAlpha );
+}
+
 void BitmapEx::CombineMaskOr(Color maskColor, sal_uInt8 nTol)
 {
     AlphaMask aNewMask = maBitmap.CreateAlphaMask( maskColor, nTol );

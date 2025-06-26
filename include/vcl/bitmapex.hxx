@@ -434,7 +434,16 @@ public:
 
     SAL_DLLPRIVATE void ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
 
+    /**
+     * Adds a constant value to the alpha layer
+     */
     SAL_DLLPRIVATE void AdjustTransparency( sal_uInt8 cTrans );
+
+    /**
+     * Blends, i.e. multiplies the alpha layer with the new alpha value.
+     */
+    void BlendAlpha( sal_uInt8 nAlpha );
+
 
     void                CombineMaskOr(Color maskColor, sal_uInt8 nTol);
 
