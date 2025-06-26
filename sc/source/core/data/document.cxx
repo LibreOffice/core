@@ -5190,9 +5190,6 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
 bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, HasAttrFlags nMask ) const
 {
-    if (nMask == HasAttrFlags::NONE)
-        return false;
-
     for (SCTAB i = nTab1; i <= nTab2 && i < GetTableCount(); i++)
         if (maTabs[i])
         {
@@ -5215,7 +5212,7 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 bool ScDocument::HasAttrib( SCCOL nCol, SCROW nRow, SCTAB nTab, HasAttrFlags nMask, SCROW* nStartRow, SCROW* nEndRow ) const
 {
-    if (nMask == HasAttrFlags::NONE || nTab >= GetTableCount())
+    if (nTab >= GetTableCount())
     {
         if( nStartRow )
             *nStartRow = 0;
