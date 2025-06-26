@@ -578,7 +578,9 @@ Size VerticalTabControl::GetOptimalSize() const
             aOptimalPageSize.setHeight( aPagePrefSize.Height() );
     }
 
-    return aOptimalPageSize;
+    Size aChooserSize(m_xChooser->get_preferred_size());
+    return Size(aChooserSize.Width() + aOptimalPageSize.Width(),
+                std::max(aChooserSize.Height(), aOptimalPageSize.Height()));
 }
 
 void VerticalTabControl::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
