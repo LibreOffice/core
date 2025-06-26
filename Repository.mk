@@ -994,7 +994,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicshare \
 	wizards_basicsrvaccess2base \
 	wizards_basicsrvdepot \
-	wizards_basicsrveuro \
 	wizards_basicsrvgimmicks \
 	wizards_basicsrvimport \
 	wizards_basicsrvform \

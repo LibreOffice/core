@@ -68,7 +68,6 @@ $(eval $(call gb_CppunitTest_use_packages,desktop_lib, \
     wizards_basicshare \
     wizards_basicsrvaccess2base \
     wizards_basicsrvdepot \
-    wizards_basicsrveuro \
     wizards_basicsrvform \
     wizards_basicsrvgimmicks \
     wizards_basicsrvimport \

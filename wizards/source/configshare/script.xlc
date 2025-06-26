@@ -6,7 +6,6 @@
  <library:library library:name="Tools" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/Tools/script.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="Gimmicks" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/Gimmicks/script.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="ImportWizard" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/ImportWizard/script.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
- <library:library library:name="Euro" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/Euro/script.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="Depot" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/Depot/script.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="ScriptBindingLibrary" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/ScriptBindingLibrary/script.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="Access2Base" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/Access2Base/script.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>

@@ -24,7 +24,6 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	CustomTarget_wizards \
 	Package_access2base \
 	Package_depot \
-	Package_euro \
 	Package_form \
 	Package_gimmicks \
 	Package_import \

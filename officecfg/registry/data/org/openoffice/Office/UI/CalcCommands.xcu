@@ -239,14 +239,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:EuroConverter" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Euro Converter</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:InsertExternalDataSource" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">E~xternal Links...</value>

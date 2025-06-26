@@ -10,9 +10,6 @@
 $(eval $(call gb_Package_Package,extras_tplwizbitmap,$(SRCDIR)/extras/source/templates/wizard/bitmap))
 
 $(eval $(call gb_Package_add_files,extras_tplwizbitmap,$(LIBO_SHARE_FOLDER)/template/wizard/bitmap,\
-	euro_1.png \
-	euro_2.png \
-	euro_3.png \
 	ftpconnected.gif \
 	ftpconnecting.gif \
 	ftperror.gif \
