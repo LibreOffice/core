@@ -73,18 +73,18 @@ void ScCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 ScParagraphDlg::ScParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
     : SfxTabDialogController(pParent, u"modules/scalc/ui/paradialog.ui"_ustr, u"ParagraphDialog"_ustr, pAttr)
 {
-    AddTabPage(u"labelTP_PARA_STD"_ustr, RID_SVXPAGE_STD_PARAGRAPH);
-    AddTabPage(u"labelTP_PARA_ALIGN"_ustr, RID_SVXPAGE_ALIGN_PARAGRAPH);
+    AddTabPage(u"indents"_ustr, RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage(u"alignment"_ustr, RID_SVXPAGE_ALIGN_PARAGRAPH);
     if (SvtCJKOptions::IsAsianTypographyEnabled() )
-        AddTabPage(u"labelTP_PARA_ASIAN"_ustr, RID_SVXPAGE_PARA_ASIAN);
+        AddTabPage(u"asiantypo"_ustr, RID_SVXPAGE_PARA_ASIAN);
     else
-        RemoveTabPage(u"labelTP_PARA_ASIAN"_ustr);
-    AddTabPage(u"labelTP_TABULATOR"_ustr, RID_SVXPAGE_TABULATOR);
+        RemoveTabPage(u"asiantypo"_ustr);
+    AddTabPage(u"tabs"_ustr, RID_SVXPAGE_TABULATOR);
 }
 
 void ScParagraphDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
-    if (rId == "labelTP_TABULATOR")
+    if (rId == "tabs")
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         TabulatorDisableFlags const nFlags((TabulatorDisableFlags::TypeMask &~TabulatorDisableFlags::TypeLeft) |
