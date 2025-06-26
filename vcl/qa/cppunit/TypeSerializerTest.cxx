@@ -24,6 +24,7 @@
 #include <tools/vcompat.hxx>
 #include <comphelper/fileformat.h>
 #include <tools/fract.hxx>
+#include "CommonTools.hxx"
 
 #include <vcl/TypeSerializer.hxx>
 
@@ -34,27 +35,6 @@
 namespace
 {
 constexpr OUString DATA_DIRECTORY = u"/vcl/qa/cppunit/data/"_ustr;
-
-std::vector<unsigned char> calculateHash(SvStream& rStream)
-{
-    rStream.Seek(STREAM_SEEK_TO_BEGIN);
-    comphelper::Hash aHashEngine(comphelper::HashType::SHA1);
-    const sal_uInt32 nSize(rStream.remainingSize());
-    std::vector<sal_uInt8> aData(nSize);
-    aHashEngine.update(aData.data(), nSize);
-    return aHashEngine.finalize();
-}
-
-std::string toHexString(const std::vector<unsigned char>& a)
-{
-    std::stringstream aStrm;
-    for (auto& i : a)
-    {
-        aStrm << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i);
-    }
-
-    return aStrm.str();
-}
 
 class TypeSerializerTest : public CppUnit::TestFixture
 {
@@ -140,8 +120,8 @@ void TypeSerializerTest::testGraphic_Vector()
 
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(290), aMemoryStream.remainingSize());
         std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("ee55ab6faa73b61b68bc3d5628d95f0d3c528e2a"),
-                             toHexString(aHash));
+        CPPUNIT_ASSERT_EQUAL(std::string("e24553130d4b3c17da6b536bec89cb5579396540"),
+                             comphelper::hashToString(aHash));
 
         aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
         sal_uInt32 nType;
@@ -170,8 +150,8 @@ void TypeSerializerTest::testGraphic_Vector()
 
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(233), aMemoryStream.remainingSize());
         std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("c2bed2099ce617f1cc035701de5186f0d43e3064"),
-                             toHexString(aHash));
+        CPPUNIT_ASSERT_EQUAL(std::string("3dd76dd7533c761eff4805ed28b0d0cc6aa16e58"),
+                             comphelper::hashToString(aHash));
 
         aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
         sal_uInt32 nType;
@@ -208,8 +188,8 @@ void TypeSerializerTest::testGraphic_Bitmap_NoGfxLink()
 
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(383), aMemoryStream.remainingSize());
         std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("da831418499146d51bf245fadf60b9111faa76c2"),
-                             toHexString(aHash));
+        CPPUNIT_ASSERT_EQUAL(std::string("fc008eb6191d74184960cc8f4785d9e08546ee3d"),
+                             comphelper::hashToString(aHash));
 
         aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
         sal_uInt16 nType;
@@ -250,8 +230,8 @@ void TypeSerializerTest::testGraphic_Animation()
 
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(15123), aMemoryStream.remainingSize());
         std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("86e02d37ab5e9c96fbeda717f62bc6e35dec3a70"),
-                             toHexString(aHash));
+        CPPUNIT_ASSERT_EQUAL(std::string("1defb473c6f0eeb915935d5039ce0aaed00226ed"),
+                             comphelper::hashToString(aHash));
 
         aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
         sal_uInt16 nType;
@@ -282,8 +262,8 @@ void TypeSerializerTest::testGraphic_Animation()
 
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(1582), aMemoryStream.remainingSize());
         std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("da3b9600340fa80a895f2107357e4ab65a9292eb"),
-                             toHexString(aHash));
+        CPPUNIT_ASSERT_EQUAL(std::string("60423954a15cc15486162b17d9fb7096d64138d9"),
+                             comphelper::hashToString(aHash));
 
         aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
         sal_uInt32 nType;
@@ -328,8 +308,8 @@ void TypeSerializerTest::testGraphic_GDIMetaFile()
 
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(229), aMemoryStream.remainingSize());
         std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("144c518e5149d61ab4bc34643df820372405d61d"),
-                             toHexString(aHash));
+        CPPUNIT_ASSERT_EQUAL(std::string("607b19f614387aba3fb9dca843962ecb173dca4e"),
+                             comphelper::hashToString(aHash));
 
         aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
         char aIdCharArray[7] = { 0, 0, 0, 0, 0, 0, 0 };

@@ -18,6 +18,7 @@
 #include <vcl/dllapi.h>
 
 #include <memory>
+#include <vector>
 
 /** Container for the binary data, whose responsibility is to manage the
  *  make it as simple as possible to manage the binary data. The binary
@@ -37,11 +38,8 @@ public:
     BinaryDataContainer(SvStream& stream, size_t size);
 
     BinaryDataContainer(const BinaryDataContainer& rBinaryDataContainer) = default;
-
     BinaryDataContainer(BinaryDataContainer&& rBinaryDataContainer) noexcept = default;
-
     BinaryDataContainer& operator=(const BinaryDataContainer& rBinaryDataContainer) = default;
-
     BinaryDataContainer& operator=(BinaryDataContainer&& rBinaryDataContainer) noexcept = default;
 
     size_t getSize() const;
@@ -65,6 +63,7 @@ public:
     SAL_DLLPRIVATE void swapOut() const;
 
     SAL_DLLPRIVATE size_t calculateHash() const;
+    std::vector<unsigned char> calculateSHA1() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

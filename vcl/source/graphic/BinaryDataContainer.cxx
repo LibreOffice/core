@@ -13,6 +13,7 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/seqstream.hxx>
+#include <comphelper/hash.hxx>
 #include <sal/log.hxx>
 
 #include <vector>
@@ -85,6 +86,13 @@ size_t BinaryDataContainer::calculateHash() const
             o3tl::hash_combine(nSeed, rByte);
     }
     return nSeed;
+}
+
+std::vector<unsigned char> BinaryDataContainer::calculateSHA1() const
+{
+    comphelper::Hash aHashEngine(comphelper::HashType::SHA1);
+    aHashEngine.update(getData(), getSize());
+    return aHashEngine.finalize();
 }
 
 css::uno::Sequence<sal_Int8> BinaryDataContainer::getCopyAsByteSequence() const

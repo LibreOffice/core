@@ -26,6 +26,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/wmf.hxx>
+#include "CommonTools.hxx"
 
 #include <impgraph.hxx>
 #include <graphic/GraphicFormatDetector.hxx>
@@ -90,26 +91,6 @@ Graphic makeUnloadedGraphic(std::u16string_view sType, bool alpha = false)
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     createBitmapAndExportForType(aStream, sType, alpha);
     return rGraphicFilter.ImportUnloadedGraphic(aStream);
-}
-
-std::string toHexString(const std::vector<unsigned char>& a)
-{
-    std::stringstream aStrm;
-    for (auto& i : a)
-    {
-        aStrm << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i);
-    }
-
-    return aStrm.str();
-}
-
-std::vector<unsigned char> calculateHash(SvStream* pStream)
-{
-    comphelper::Hash aHashEngine(comphelper::HashType::SHA1);
-    const sal_uInt32 nSize(pStream->remainingSize());
-    std::vector<sal_uInt8> aData(nSize);
-    aHashEngine.update(aData.data(), nSize);
-    return aHashEngine.finalize();
 }
 
 bool checkBitmap(Graphic& rGraphic)
@@ -600,9 +581,9 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphic_PNG_WithoutGfxLink)
         // Check size of the stream
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(36079), pStream->remainingSize());
 
-        std::vector<unsigned char> aHash = calculateHash(pStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("9347511e3b80dfdfaadf91a3bdef55a8ae85552b"),
-                             toHexString(aHash));
+        std::vector<unsigned char> aHash = calculateHash(*pStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("5e9123e2ad3f8e90729677a531fc7e08657fe948"),
+                             comphelper::hashToString(aHash));
     }
 
     // SWAP IN
@@ -836,9 +817,9 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingVectorGraphic_SVG_WithoutGfxLink)
         // Check size of the stream
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(247), pStream->remainingSize());
 
-        std::vector<unsigned char> aHash = calculateHash(pStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("666820973fd95e6cd9e7bc5f1c53732acbc99326"),
-                             toHexString(aHash));
+        std::vector<unsigned char> aHash = calculateHash(*pStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("774c309b4b9f005f2f4d833d64f936656dfe3137"),
+                             comphelper::hashToString(aHash));
     }
 
     // Let's swap in
@@ -1179,9 +1160,9 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingAnimationGraphic_GIF_WithoutGfxLin
         // Check size of the stream
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(15139), pStream->remainingSize());
 
-        std::vector<unsigned char> aHash = calculateHash(pStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("ecae5354edd9cf98553eb3153e44181f56d35338"),
-                             toHexString(aHash));
+        std::vector<unsigned char> aHash = calculateHash(*pStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("f3678a6f0adc2a86450facd850c4740ba0ecb52a"),
+                             comphelper::hashToString(aHash));
     }
 
     // SWAP IN
