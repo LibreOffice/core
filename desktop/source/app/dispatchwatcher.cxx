@@ -334,7 +334,9 @@ DispatchWatcher::~DispatchWatcher()
 }
 
 
-bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest>& aDispatchRequestsList, bool bNoTerminate )
+bool DispatchWatcher::executeDispatchRequests(
+    const std::vector<DispatchRequest>& aDispatchRequestsList, bool bNoTerminate,
+    DispatchRequestFlags* pFlags)
 {
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
@@ -636,6 +638,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                             if (aFilter.isEmpty())
                             {
                                 std::cerr << "Error: no export filter" << std::endl;
+                                if (pFlags)
+                                    *pFlags |= DispatchRequestFlags::WithError;
                             }
                             else
                             {
@@ -720,6 +724,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                     if (!rException.Message.isEmpty())
                                         std::cerr << " (" << rException.Message << ")";
                                     std::cerr << std::endl;
+                                    if (pFlags)
+                                        *pFlags |= DispatchRequestFlags::WithError;
                                 }
 
                                 if (fileForCat && fileForCat->IsValid())
@@ -767,6 +773,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 else
                 {
                     std::cerr << "Error: source file could not be loaded" << std::endl;
+                    if (pFlags)
+                        *pFlags |= DispatchRequestFlags::WithError;
                 }
 
                 // remove the document
@@ -813,6 +821,9 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
             }
         }
     }
+
+    if (pFlags)
+        *pFlags |= DispatchRequestFlags::Finished;
 
     bool bEmpty = (m_nRequestCount == 0);
 

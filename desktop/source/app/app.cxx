@@ -1786,7 +1786,7 @@ int Desktop::doShutdown()
 
         return EXITHELPER_NORMAL_RESTART;
     }
-    return EXIT_SUCCESS;
+    return rCmdLineArgs.GetAllSucceeded() ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 IMPL_STATIC_LINK( Desktop, ImplInitFilterHdl, ::ConvertData&, rData, bool )
@@ -2213,8 +2213,13 @@ void Desktop::OpenClients()
         }
 #endif
         // Process request
+        DispatchRequestFlags eFlags = DispatchRequestFlags::NONE;
+        aRequest.mpFlags = &eFlags;
         if ( RequestHandler::ExecuteCmdLineRequests(aRequest, false) )
         {
+            if (eFlags & DispatchRequestFlags::WithError)
+                Desktop::GetCommandLineArgs().SetAllSucceeded(false);
+
             // Don't do anything if we have successfully called terminate at desktop:
             return;
         }
