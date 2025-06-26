@@ -5427,8 +5427,6 @@ SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuild
     m_xIconView->SetDeselectHdl(LINK(this, SalInstanceIconView, DeSelectHdl));
     m_xIconView->SetDoubleClickHdl(LINK(this, SalInstanceIconView, DoubleClickHdl));
     m_xIconView->SetPopupMenuHdl(LINK(this, SalInstanceIconView, CommandHdl));
-
-    m_xIconView->SetAccessible(m_xIconView->CreateAccessible());
 }
 
 int SalInstanceIconView::get_item_width() const { return m_xIconView->GetEntryWidth(); }
