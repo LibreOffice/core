@@ -134,6 +134,32 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testExportEmbeddedFontsPPTX)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testTdf167214)
+{
+    auto verify = [this]() {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+
+        // Check state of the font embedding settings
+        CPPUNIT_ASSERT_EQUAL(true, xProps->getPropertyValue(u"EmbedFonts"_ustr).get<bool>());
+        CPPUNIT_ASSERT_EQUAL(true,
+                             xProps->getPropertyValue(u"EmbedOnlyUsedFonts"_ustr).get<bool>());
+        CPPUNIT_ASSERT_EQUAL(true,
+                             xProps->getPropertyValue(u"EmbedLatinScriptFonts"_ustr).get<bool>());
+        CPPUNIT_ASSERT_EQUAL(true,
+                             xProps->getPropertyValue(u"EmbedAsianScriptFonts"_ustr).get<bool>());
+        CPPUNIT_ASSERT_EQUAL(true,
+                             xProps->getPropertyValue(u"EmbedComplexScriptFonts"_ustr).get<bool>());
+    };
+
+    createSdImpressDoc("pptx/tdf167214.pptx");
+    verify();
+    //Without the fix in place, it would crash at export time
+    saveAndReload(u"Impress Office Open XML"_ustr);
+    verify();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
