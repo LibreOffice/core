@@ -141,9 +141,9 @@
 		"cSpell.noSuggestDictionaries": ["ignoreWords"],
 		"cSpell.languageSettings": [
 			{
-				// check all file types, but only in comments and strings (what the regexes consider
-				// a comment/string)
-				"languageId": "*",
+				// limit spellchecking to comments and strings (what the regexes consider
+				// a comment/string) for these languages/file-types
+				"languageId": "c,objective-c,cpp,objective-cpp,makefile,m4,perl,python,automake",
 				// turn off compound words, because it is only checking strings.
 				"allowCompoundWords": false,
 				// Only check comments and strings
@@ -154,6 +154,13 @@
 				// Exclude includes, because they are also strings.
 				"ignoreRegExpList": [
 					"/#include.*/"
+				]
+			},
+			{
+				"languageId": "git-commit",
+				"allowCompoundWords": true,
+				"ignoreRegExpList": [
+					"/Change-Id:.*/"
 				]
 			}
 		],
