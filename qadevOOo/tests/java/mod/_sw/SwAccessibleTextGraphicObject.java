@@ -38,6 +38,7 @@ import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.XViewSettingsSupplier;
 
@@ -92,20 +93,17 @@ public class SwAccessibleTextGraphicObject extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(xGraphicAcc);
 
-        XController xController = xTextDoc.getCurrentController();
-        XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
-        xController);
-
-        final XPropertySet PropSet = xViewSetSup.getViewSettings();
+        final XPropertySet propSet = UnoRuntime.queryInterface(XPropertySet.class, oGraphObj);
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
                     try {
-                        //change zoom value to 20%
-                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("20"));
-                        //and back to 100%
-                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("100"));
+                        // temporarily set a different object name/title
+                        String title = AnyConverter.toString(propSet.getPropertyValue("Title"));
+                        propSet.setPropertyValue("Title", "New Title");
+                        // set back original value
+                        propSet.setPropertyValue("Title", title);
                     } catch ( com.sun.star.lang.WrappedTargetException e ) {
 
                     }  catch ( com.sun.star.lang.IllegalArgumentException e ) {
