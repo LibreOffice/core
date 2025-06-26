@@ -120,8 +120,7 @@ SfxStyleSheetBase::SfxStyleSheetBase( const OUString& rName, SfxStyleSheetBasePo
 }
 
 SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
-    : WeakImplHelper()
-    , m_pPool( r.m_pPool )
+    : m_pPool( r.m_pPool )
     , nFamily( r.nFamily )
     , aName( r.aName )
     , aParent( r.aParent )
@@ -566,7 +565,6 @@ SfxStyleSheetBasePool::SfxStyleSheetBasePool( SfxItemPool& r ) :
 
 SfxStyleSheetBasePool::SfxStyleSheetBasePool( const SfxStyleSheetBasePool& r ) :
     SfxBroadcaster( r ),
-    WeakImplHelper(),
     pImpl(new SfxStyleSheetBasePool_Impl),
     rPool(r.rPool)
 {

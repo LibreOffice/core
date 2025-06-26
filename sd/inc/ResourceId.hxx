@@ -33,6 +33,11 @@ namespace com::sun::star::uno { template <class interface_type> class WeakRefere
 
 namespace sd::framework {
 
+// avoid LNK2005 duplicate WeakImplHelper definitions with MSVC
+class SAL_DLLPUBLIC_TEMPLATE ResourceId_Base : public cppu::WeakImplHelper<>
+{
+};
+
 /** A resource id uses a set of URLs to unambiguously specify a resource of
     the drawing framework.
     <p>Resources of the drawing framework are panes, views, tool bars, and
@@ -48,7 +53,7 @@ namespace sd::framework {
     method on its creation.  Arguments are only available through the
     getFullResourceURL().  The getResourceURL() method strips them away.</p>
 */
-class SD_DLLPUBLIC ResourceId final : public ::cppu::WeakImplHelper<>
+class SD_DLLPUBLIC ResourceId final : public ResourceId_Base
 {
 public:
     /** Create a new, empty resource id.

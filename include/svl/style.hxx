@@ -110,7 +110,12 @@ SfxStyleSheetHint( SfxHintId::StyleSheetErased, *p ) from:
    SfxStyleSheetBasePool::Clear()
 */
 
-class SVL_DLLPUBLIC SfxStyleSheetBase : public cppu::WeakImplHelper<>
+// avoid LNK2005 duplicate WeakImplHelper definitions with MSVC
+class SAL_DLLPUBLIC_TEMPLATE SfxStyleSheetBase_Base : public cppu::WeakImplHelper<>
+{
+};
+
+class SVL_DLLPUBLIC SfxStyleSheetBase : public SfxStyleSheetBase_Base
 {
 private:
     friend class SfxStyleSheetBasePool;
@@ -225,7 +230,12 @@ friend class SfxStyleSheetBasePool;
 
 class SfxStyleSheetBasePool_Impl;
 
-class SVL_DLLPUBLIC SfxStyleSheetBasePool: public SfxBroadcaster, public cppu::WeakImplHelper<>
+// avoid LNK2005 duplicate WeakImplHelper definitions with MSVC
+class SAL_DLLPUBLIC_TEMPLATE SfxStyleSheetBasePool_Base : public cppu::WeakImplHelper<>
+{
+};
+
+class SVL_DLLPUBLIC SfxStyleSheetBasePool : public SfxBroadcaster, public SfxStyleSheetBasePool_Base
 {
 friend class SfxStyleSheetIterator;
 friend class SfxStyleSheetBase;
