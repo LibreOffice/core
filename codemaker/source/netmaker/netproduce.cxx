@@ -18,46 +18,44 @@
 #include "netproduce.hxx"
 #include "csharpfile.hxx"
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_set.h>
+#include <frozen/unordered_map.h>
+
 namespace
 {
-const std::unordered_set<OString> s_reservedKeywords{
-    "abstract"_ostr, "as"_ostr,       "base"_ostr,       "bool"_ostr,      "break"_ostr,
-    "byte"_ostr,     "case"_ostr,     "catch"_ostr,      "char"_ostr,      "checked"_ostr,
-    "class"_ostr,    "const"_ostr,    "continue"_ostr,   "decimal"_ostr,   "default"_ostr,
-    "delegate"_ostr, "do"_ostr,       "double"_ostr,     "else"_ostr,      "enum"_ostr,
-    "event"_ostr,    "explicit"_ostr, "extern"_ostr,     "false"_ostr,     "finally"_ostr,
-    "fixed"_ostr,    "float"_ostr,    "for"_ostr,        "foreach"_ostr,   "goto"_ostr,
-    "if"_ostr,       "implicit"_ostr, "in"_ostr,         "int"_ostr,       "interface"_ostr,
-    "internal"_ostr, "is"_ostr,       "lock"_ostr,       "long"_ostr,      "namespace"_ostr,
-    "new"_ostr,      "null"_ostr,     "object"_ostr,     "operator"_ostr,  "out"_ostr,
-    "override"_ostr, "params"_ostr,   "private"_ostr,    "protected"_ostr, "public"_ostr,
-    "readonly"_ostr, "ref"_ostr,      "return"_ostr,     "sbyte"_ostr,     "sealed"_ostr,
-    "short"_ostr,    "sizeof"_ostr,   "stackalloc"_ostr, "static"_ostr,    "string"_ostr,
-    "struct"_ostr,   "switch"_ostr,   "this"_ostr,       "throw"_ostr,     "true"_ostr,
-    "try"_ostr,      "typeof"_ostr,   "uint"_ostr,       "ulong"_ostr,     "unchecked"_ostr,
-    "unsafe"_ostr,   "ushort"_ostr,   "using"_ostr,      "virtual"_ostr,   "void"_ostr,
-    "volatile"_ostr, "while"_ostr,
-};
+constexpr auto s_reservedKeywords = frozen::make_unordered_set<std::string_view>(
+    { "abstract", "as",         "base",    "bool",     "break",     "byte",     "case",
+      "catch",    "char",       "checked", "class",    "const",     "continue", "decimal",
+      "default",  "delegate",   "do",      "double",   "else",      "enum",     "event",
+      "explicit", "extern",     "false",   "finally",  "fixed",     "float",    "for",
+      "foreach",  "goto",       "if",      "implicit", "in",        "int",      "interface",
+      "internal", "is",         "lock",    "long",     "namespace", "new",      "null",
+      "object",   "operator",   "out",     "override", "params",    "private",  "protected",
+      "public",   "readonly",   "ref",     "return",   "sbyte",     "sealed",   "short",
+      "sizeof",   "stackalloc", "static",  "string",   "struct",    "switch",   "this",
+      "throw",    "true",       "try",     "typeof",   "uint",      "ulong",    "unchecked",
+      "unsafe",   "ushort",     "using",   "virtual",  "void",      "volatile", "while" });
 
-const std::unordered_map<OString, OString> s_baseTypes{
-    { "boolean"_ostr, "bool"_ostr },
-    { "char"_ostr, "char"_ostr },
-    { "byte"_ostr, "sbyte"_ostr },
-    { "short"_ostr, "short"_ostr },
-    { "unsigned short"_ostr, "ushort"_ostr },
-    { "long"_ostr, "int"_ostr },
-    { "unsigned long"_ostr, "uint"_ostr },
-    { "hyper"_ostr, "long"_ostr },
-    { "unsigned hyper"_ostr, "ulong"_ostr },
-    { "float"_ostr, "float"_ostr },
-    { "double"_ostr, "double"_ostr },
-    { "string"_ostr, "string"_ostr },
-    { "void"_ostr, "void"_ostr },
-    { "type"_ostr, "System.Type"_ostr },
-    { "any"_ostr, "com.sun.star.uno.Any"_ostr },
-    { "com.sun.star.uno.Exception"_ostr, "com.sun.star.uno.UnoException"_ostr },
-    { "com.sun.star.uno.XInterface"_ostr, "com.sun.star.uno.IQueryInterface"_ostr },
-};
+const auto s_baseTypes = frozen::make_unordered_map<std::string_view, OString>(
+    { { "boolean", "bool"_ostr },
+      { "char", "char"_ostr },
+      { "byte", "sbyte"_ostr },
+      { "short", "short"_ostr },
+      { "unsigned short", "ushort"_ostr },
+      { "long", "int"_ostr },
+      { "unsigned long", "uint"_ostr },
+      { "hyper", "long"_ostr },
+      { "unsigned hyper", "ulong"_ostr },
+      { "float", "float"_ostr },
+      { "double", "double"_ostr },
+      { "string", "string"_ostr },
+      { "void", "void"_ostr },
+      { "type", "System.Type"_ostr },
+      { "any", "com.sun.star.uno.Any"_ostr },
+      { "com.sun.star.uno.Exception", "com.sun.star.uno.UnoException"_ostr },
+      { "com.sun.star.uno.XInterface", "com.sun.star.uno.IQueryInterface"_ostr } });
 
 std::tuple<bool, std::string_view, std::string_view> splitName(std::string_view name)
 {
@@ -1228,8 +1226,9 @@ OString NetProducer::getNetName(std::string_view name)
         // if this is changed later, move this part out of the else block
         fullName = OString(fullNameView);
         OString baseName = getBaseUnoName(fullName);
-        if (s_baseTypes.contains(baseName))
-            buffer.append(fullName.replaceFirst(baseName, s_baseTypes.at(baseName)));
+        const auto iter = s_baseTypes.find(baseName);
+        if (iter != s_baseTypes.end())
+            buffer.append(fullName.replaceFirst(baseName, iter->second));
         else
             buffer.append(fullName);
     }

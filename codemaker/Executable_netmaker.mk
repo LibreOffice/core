@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Executable_Executable,netmaker))
 
+$(eval $(call gb_Executable_use_external,netmaker,frozen))
+
 $(eval $(call gb_Executable_use_libraries,netmaker,\
     salhelper \
     sal \
