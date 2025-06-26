@@ -990,13 +990,65 @@ void SwWrtShell::InsertPageBreak(const UIName *pPageDesc, const ::std::optional<
 
 // Insert enclosing characters
 // Selections will be overwritten
-void SwWrtShell::InsertEnclosingChars(std::u16string_view sStartStr, std::u16string_view sEndStr)
+void SwWrtShell::InsertEnclosingChars(const OUString& sStartStr, const OUString& sEndStr)
 {
+    if (!lcl_IsAllowed(this) || !CanInsert())
+        return;
+    StartAllAction();
+    StartUndo();
+
+    OUStringBuffer currentText, newText;
+    bool dotsAdded = false;
+    const OUString dots = SwResId(STR_LDOTS);
     for (SwPaM& rPaM : SwWrtShell::GetCursor()->GetRingContainer())
     {
-        const OUString aStr = sStartStr + rPaM.GetText() + sEndStr;
-        SwViewShell::getIDocumentContentOperations().ReplaceRange(rPaM, aStr, false);
+        if (*rPaM.GetPoint() == *rPaM.GetMark())
+            continue;
+        if (newText.isEmpty())
+        {
+            OUString pamText = ShortenString(rPaM.GetText(), nUndoStringLength, dots)
+                                   .replaceAll("\n", " ");
+            currentText.append(pamText);
+            newText.append(sStartStr + pamText + sEndStr);
+        }
+        else if (!dotsAdded)
+        {
+            dotsAdded = true;
+            currentText.append(dots);
+            newText.append(dots);
+        }
+
+        {
+            SwPaM aLocalPam(rPaM, nullptr);
+            aLocalPam.Normalize(); // point is at start now
+            auto& contentOperations = SwViewShell::getIDocumentContentOperations();
+
+            // To copy the formatting of the start of the range, insert the start string in two
+            // phases: insert it after the first selected character; and then move it back
+            SwPosition posStart = *aLocalPam.GetPoint();
+            aLocalPam.GetPoint()->AdjustContent(+1);
+            contentOperations.InsertString(aLocalPam, sStartStr);
+            // Now aLocalPam's point is *after* the inserted string
+            SwPaM insertedPaM(*aLocalPam.GetPoint());
+            insertedPaM.SetMark();
+            insertedPaM.GetPoint()->AdjustContent(-sStartStr.getLength());
+            contentOperations.CopyRange(insertedPaM, posStart, SwCopyFlags::CopyAll);
+            contentOperations.DeleteRange(insertedPaM);
+
+            // No such problems with end string
+            aLocalPam.Exchange(); // point is at end now
+            contentOperations.InsertString(aLocalPam, sEndStr);
+        }
+        rPaM.Start()->AdjustContent(-sStartStr.getLength()); // now the selection includes insertion
     }
+
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, currentText.makeStringAndClear());
+    aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
+    aRewriter.AddRule(UndoArg3, newText.makeStringAndClear());
+    EndUndo(SwUndoId::UI_REPLACE, &aRewriter);
+
+    EndAllAction();
 }
 
 // Insert hard page break;
