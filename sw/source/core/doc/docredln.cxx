@@ -1119,6 +1119,15 @@ bool SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
     return false;
 }
 
+void SwRedlineExtraData::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwRedlineExtraData"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("typeName"),
+                                      BAD_CAST(typeid(*this).name()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( UIName aColl,
                                                 sal_uInt16 nPoolFormatId,
                                                 const SfxItemSet* pItemSet,
@@ -1199,6 +1208,23 @@ void SwRedlineExtraData_FormatColl::SetItemSet( const SfxItemSet& rSet )
         m_pSet.reset( new SfxItemSet( rSet ) );
     else
         m_pSet.reset();
+}
+
+void SwRedlineExtraData_FormatColl::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwRedlineExtraData_FormatColl"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("format-name"), BAD_CAST(m_sFormatNm.toString().toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pool-id"), BAD_CAST(OString::number(m_nPoolId).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("format-all"), BAD_CAST(OString::boolean(m_bFormatAll).getStr()));
+
+    SwRedlineExtraData::dumpAsXml(pWriter);
+
+    if (m_pSet)
+    {
+        m_pSet->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
@@ -1426,6 +1452,11 @@ void SwRedlineData::dumpAsXml(xmlTextWriterPtr pWriter) const
     }
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(sRedlineType.getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("moved"), BAD_CAST(OString::number(m_nMovedID).getStr()));
+
+    if (m_pExtraData)
+    {
+        m_pExtraData->dumpAsXml(pWriter);
+    }
 
     (void)xmlTextWriterEndElement(pWriter);
 }

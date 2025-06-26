@@ -47,6 +47,8 @@ public:
 
     virtual void Reject( SwPaM& rPam ) const;
     virtual bool operator == ( const SwRedlineExtraData& ) const;
+
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SW_DLLPUBLIC SwRedlineExtraData_FormatColl final : public SwRedlineExtraData
@@ -67,6 +69,8 @@ public:
     void SetItemSet( const SfxItemSet& rSet );
     SfxItemSet* GetItemSet( ) const { return m_pSet.get(); }
     void SetFormatAll( bool bAll )               { m_bFormatAll = bAll; }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwRedlineExtraData_Format final : public SwRedlineExtraData
