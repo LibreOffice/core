@@ -64,7 +64,7 @@ class GbuildLinkTarget:
 
     def __init__(self, json):
         (foundincludes, foundisystem) = GbuildLinkTarget.__split_includes(json['INCLUDE'])
-        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.objcxxobjects, self.cxxflags, self.cobjects, self.cflags, self.cxxclrobjects, self.cxxclrflags, self.linked_libs, self.linked_static_libs, self.link_target) = (
+        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.objcxxobjects, self.cxxflags, self.objcxxflags, self.cobjects, self.objcobjects, self.cflags, self.objcflags, self.cxxclrobjects, self.cxxclrflags, self.linked_libs, self.linked_static_libs, self.link_target) = (
             type(self).targetpattern.match(os.path.basename(json['MAKEFILE'])).group(1),
             os.path.dirname(json['MAKEFILE']),
             foundincludes,
@@ -73,8 +73,11 @@ class GbuildLinkTarget:
             GbuildLinkTarget.__split_objs(json['CXXOBJECTS']),
             GbuildLinkTarget.__split_objs(json['OBJCXXOBJECTS']),
             GbuildLinkTarget.__split_flags(json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
+            GbuildLinkTarget.__split_flags(json['OBJCXXFLAGS'], json['OBJCXXFLAGSAPPEND']),
             GbuildLinkTarget.__split_objs(json['COBJECTS']),
+            GbuildLinkTarget.__split_objs(json['OBJCOBJECTS']),
             GbuildLinkTarget.__split_flags(json['CFLAGS'], json['CFLAGSAPPEND']),
+            GbuildLinkTarget.__split_flags(json['OBJCFLAGS'], json['OBJCFLAGSAPPEND']),
             GbuildLinkTarget.__split_objs(json['CXXCLROBJECTS']),
             GbuildLinkTarget.__split_flags(json['CXXCLRFLAGS'], json['CXXCLRFLAGSAPPEND']),
             json['LINKED_LIBS'].strip().split(' '),
@@ -497,11 +500,32 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
                 entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
                 entries.append(entry)
             global_list.extend(entries)
+            entries = []
+            for file in lib.objcxxobjects:
+                filePath = os.path.join(self.gbuildparser.srcdir, file) + ".mm"
+                entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
+                entries.append(entry)
+            global_list.extend(entries)
+            entries = []
+            for file in lib.cobjects:
+                filePath = os.path.join(self.gbuildparser.srcdir, file) + ".c"
+                entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
+                entries.append(entry)
+            global_list.extend(entries)
+            entries = []
+            for file in lib.objcobjects:
+                filePath = os.path.join(self.gbuildparser.srcdir, file) + ".m"
+                entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
+                entries.append(entry)
+            global_list.extend(entries)
         with open(os.path.join(self.gbuildparser.builddir, 'compile_commands.json'), 'w') as export_file:
             json.dump(global_list, export_file)
 
     def generateCommand(self, lib, file):
-        command = 'clang++ -Wall'
+        command = os.environ.get('CXX')
+        if file.endswith('.c') or file.endswith('.m'):
+            command = os.environ.get('CC')
+        command += ' -Wall'
         for key, value in lib.defs.items():
             command += ' -D'
             command += key
@@ -515,7 +539,14 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
         for isystem in lib.include_sys:
             command += ' -isystem '
             command += isystem
-        for cxxflag in lib.cxxflags:
+        flags = lib.cxxflags
+        if file.endswith('.mm'):
+            flags = lib.objcxxflags
+        elif file.endswith('.c'):
+            flags = lib.cflags
+        elif file.endswith('.m'):
+            flags = lib.objcflags
+        for cxxflag in flags:
             command += ' '
             command += cxxflag
         command += ' -c '
