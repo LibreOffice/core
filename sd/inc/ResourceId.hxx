@@ -197,11 +197,6 @@ public:
             const OUString& rsAnchorURL,
             css::drawing::framework::AnchorBindingMode eMode) const;
 
-    /** Return a copy of the called resource id.  The caller becomes the
-        owner of the new object.
-    */
-    rtl::Reference<ResourceId> clone() const;
-
 private:
     /** The set of URLs that consist of the resource URL at index 0 and the
         anchor URLs and indices 1 and above.

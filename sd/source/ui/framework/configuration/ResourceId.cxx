@@ -263,11 +263,6 @@ bool ResourceId::isBoundToURL (
     return IsBoundToAnchor(&rsAnchorURL, nullptr, eMode);
 }
 
-rtl::Reference<ResourceId> ResourceId::clone() const
-{
-    return new ResourceId(std::vector(maResourceURLs));
-}
-
 /** When eMode is DIRECTLY then the anchor of the called object and the
     anchor represented by the given sequence of anchor URLs have to be
     identical.   When eMode is RECURSIVE then the anchor of the called
