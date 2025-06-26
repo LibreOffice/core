@@ -115,12 +115,12 @@ css::uno::Reference< css::accessibility::XAccessible > Window::CreateAccessible(
     return new VCLXAccessibleComponent(this);
 }
 
-void Window::SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& x )
+void Window::SetAccessible(const rtl::Reference<comphelper::OAccessible>& rpAccessible)
 {
     if (!mpWindowImpl)
         return;
 
-    mpWindowImpl->mxAccessible = x;
+    mpWindowImpl->mxAccessible = rpAccessible;
 }
 
 // skip all border windows that are not top level frames

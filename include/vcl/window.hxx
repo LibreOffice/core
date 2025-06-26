@@ -81,6 +81,11 @@ namespace com::sun::star {
     }
 }
 
+namespace comphelper
+{
+class OAccessible;
+}
+
 namespace vcl {
     struct ControlLayoutData;
 }
@@ -1121,7 +1126,7 @@ public:
 
     css::uno::Reference< css::accessibility::XAccessible >
                                         GetAccessible( bool bCreate = true );
-    void                                SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& );
+    void SetAccessible(const rtl::Reference<comphelper::OAccessible>& rpAccessible);
 
     vcl::Window*                        GetAccessibleParentWindow() const;
     sal_uInt16                          GetAccessibleChildWindowCount();
