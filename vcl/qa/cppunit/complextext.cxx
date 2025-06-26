@@ -792,4 +792,86 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf165510)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf154104)
+{
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+
+    vcl::Font aBaseFont{ u"David Libre"_ustr, u"Regular"_ustr, Size{ 0, 72 } };
+    pOutDev->SetFont(aBaseFont);
+
+    vcl::Font aFallbackFont{ u"Noto Sans Arabic"_ustr, u"Regular"_ustr, Size{ 0, 72 } };
+    pOutDev->ForceFallbackFont(aFallbackFont);
+
+    pOutDev->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::BiDiRtl
+                           | vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+
+    auto aText = u"\u05D0\u05D0\u05D0\u0644\u0627"_ustr;
+    KernArray aKernArray = { 100, 200, 300, 350, 400 };
+    auto pLayout = pOutDev->ImplLayout(aText, /*nIndex*/ 0, /*nLen*/ aText.getLength(),
+                                       /*rLogicPos*/ Point(0, 0), /*nLogicWidth*/ 0, aKernArray);
+
+    // Fallback must have happened for this test to be meaningful
+    auto pMultiLayout = dynamic_cast<MultiSalLayout*>(pLayout.get());
+    CPPUNIT_ASSERT(pMultiLayout);
+
+    std::vector<double> aCharX;
+
+    const GlyphItem* pGlyph = nullptr;
+    basegfx::B2DPoint stPos;
+    int nCurrPos = 0;
+    while (pLayout->GetNextGlyph(&pGlyph, stPos, nCurrPos))
+    {
+        aCharX.push_back(stPos.getX());
+    }
+
+    // tdf#154104 caused overlapping glyphs in fallback runs:
+    //                           { -295.0, -195.0, -95.0, -341.0 }
+    std::vector<double> aRefCharX{ -245.0, -145.0, -45.0, -341.0 };
+
+    CPPUNIT_ASSERT_EQUAL(aRefCharX.size(), aCharX.size());
+    for (size_t i = 0; i < aRefCharX.size(); ++i)
+    {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aRefCharX.at(i), aCharX.at(i), /*delta*/ 0.2);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf163761)
+{
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+
+    vcl::Font aBaseFont{ u"Noto Sans"_ustr, u"Regular"_ustr, Size{ 0, 72 } };
+    pOutDev->SetFont(aBaseFont);
+
+    vcl::Font aFallbackFont{ u"David Libre"_ustr, u"Regular"_ustr, Size{ 0, 72 } };
+    pOutDev->ForceFallbackFont(aFallbackFont);
+
+    auto aText = u"\u05DC\u0020\u05E0\u05EA\u05D9\u05D1\u05D9\u05BE\u200F\u05E4"_ustr;
+    auto pLayout = pOutDev->ImplLayout(aText, /*nIndex*/ 0, /*nLen*/ aText.getLength());
+
+    // Fallback must have happened for this test to be meaningful
+    auto pMultiLayout = dynamic_cast<MultiSalLayout*>(pLayout.get());
+    CPPUNIT_ASSERT(pMultiLayout);
+
+    std::vector<int> aCharIndices;
+
+    const GlyphItem* pGlyph = nullptr;
+    basegfx::B2DPoint stPos;
+    int nCurrPos = 0;
+    while (pLayout->GetNextGlyph(&pGlyph, stPos, nCurrPos))
+    {
+        aCharIndices.push_back(pGlyph->charPos());
+    }
+
+    // tdf#163761 caused failure to remove dropped glyphs from the base layout.
+    // Without the fix, the base layout will contain an errant copy of char 0.
+    //                              { 1, 0, 9, 7, 6, 5, 4, 3, 2, 0 }
+    std::vector<int> aRefCharIndices{ 1, 9, 7, 6, 5, 4, 3, 2, 0 };
+
+    CPPUNIT_ASSERT_EQUAL(aRefCharIndices.size(), aCharIndices.size());
+    for (size_t i = 0; i < aRefCharIndices.size(); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(aRefCharIndices.at(i), aCharIndices.at(i));
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
