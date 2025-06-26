@@ -417,6 +417,7 @@ void SingleValFields::walkPotentialAssign( const DeclaratorDecl* fieldOrVarDecl,
                 || isa<LambdaExpr>(parent)
                 || isa<PackExpansionExpr>(parent)
                 || isa<CXXPseudoDestructorExpr>(parent)
+                || isa<CXXDefaultInitExpr>(parent)
                 )
         {
             break;
