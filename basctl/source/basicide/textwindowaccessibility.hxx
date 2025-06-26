@@ -304,7 +304,7 @@ public:
     // still zero), pass a "Paragraph const &" instead of a
     // "::rtl::Reference< Paragraph > const &".
     css::awt::Rectangle
-    retrieveParagraphBounds(Paragraph const * pParagraph, bool bAbsolute);
+    retrieveParagraphBounds(Paragraph const * pParagraph);
 
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is

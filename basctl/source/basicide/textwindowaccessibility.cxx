@@ -210,7 +210,7 @@ Paragraph::getAccessibleAtPoint(css::awt::Point const &)
 
 css::awt::Rectangle Paragraph::implGetBounds()
 {
-    return m_xDocument->retrieveParagraphBounds(this, false);
+    return m_xDocument->retrieveParagraphBounds(this);
 }
 
 // virtual
@@ -280,7 +280,7 @@ Paragraph::getCharacterBounds(::sal_Int32 nIndex)
 {
     ensureAlive();
     css::awt::Rectangle aBounds(m_xDocument->retrieveCharacterBounds(this, nIndex));
-    css::awt::Rectangle aParaBounds(m_xDocument->retrieveParagraphBounds(this, false));
+    css::awt::Rectangle aParaBounds(m_xDocument->retrieveParagraphBounds(this));
     aBounds.X -= aParaBounds.X;
     aBounds.Y -= aParaBounds.Y;
     return aBounds;
@@ -299,7 +299,7 @@ Paragraph::getIndexAtPoint(css::awt::Point const & rPoint)
 {
     ensureAlive();
     css::awt::Point aPoint(rPoint);
-    css::awt::Rectangle aParaBounds(m_xDocument->retrieveParagraphBounds(this, false));
+    css::awt::Rectangle aParaBounds(m_xDocument->retrieveParagraphBounds(this));
     aPoint.X += aParaBounds.X;
     aPoint.Y += aParaBounds.Y;
     return m_xDocument->retrieveCharacterIndex(this, aPoint);
@@ -652,8 +652,7 @@ css::lang::Locale Document::retrieveLocale()
 };
 
 css::awt::Rectangle
-Document::retrieveParagraphBounds(Paragraph const * pParagraph,
-                                  bool bAbsolute)
+Document::retrieveParagraphBounds(Paragraph const * pParagraph)
 {
     SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
@@ -672,13 +671,9 @@ Document::retrieveParagraphBounds(Paragraph const * pParagraph,
     else
         nPos = std::accumulate(visibleBegin(), getIter(nPara), m_nViewOffset - m_nVisibleBeginOffset, lAddHeight);
 
-    Point aOrig(0, 0);
-    if (bAbsolute)
-        aOrig = Point(m_rView.GetWindow()->OutputToAbsoluteScreenPixel(aOrig));
-
     return css::awt::Rectangle(
-        static_cast< ::sal_Int32 >(aOrig.X()),
-        static_cast< ::sal_Int32 >(aOrig.Y()) + nPos - m_nViewOffset,
+        0,
+        nPos - m_nViewOffset,
         m_rView.GetWindow()->GetOutputSizePixel().Width(), getIter(nPara)->getHeight());
         // XXX  numeric overflow (3x)
 }
