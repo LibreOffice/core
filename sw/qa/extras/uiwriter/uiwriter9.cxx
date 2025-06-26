@@ -576,6 +576,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
     CPPUNIT_ASSERT_EQUAL(sStartDoubleQuote, xTextDocument->getText()->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167133)
+{
+    // Given a document with a single paragraph, having a formula object
+    createSwDoc("text-with-formula-one-paragraph.fodt");
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pDoc->getIDocumentContentOperations().ReplaceRange(*pWrtShell->GetCursor(), "", false);
+    Scheduler::ProcessEventsToIdle();
+    // This must not crash!
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159054_disableOutlineNumbering)
 {
     createSwDoc("tdf159054_disableOutlineNumbering.docx");

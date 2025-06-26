@@ -725,9 +725,14 @@ SwTextFrame* SwAnchoredObject::FindAnchorCharFrame()
             if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
                 || (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR))
             {
-                SwTextFrame* const pFrame(static_cast<SwTextFrame*>(AnchorFrame()));
-                TextFrameIndex const nOffset(pFrame->MapModelToViewPos(*rAnch.GetContentAnchor()));
-                pAnchorCharFrame = &pFrame->GetFrameAtOfst(nOffset);
+                // When the object was already removed from text, but the layout hasn't been
+                // updated yet, this can be nullptr:
+                if (const SwPosition* pContentAnchor = rAnch.GetContentAnchor())
+                {
+                    SwTextFrame* const pFrame(static_cast<SwTextFrame*>(AnchorFrame()));
+                    TextFrameIndex const nOffset(pFrame->MapModelToViewPos(*pContentAnchor));
+                    pAnchorCharFrame = &pFrame->GetFrameAtOfst(nOffset);
+                }
             }
             else if (SwFlyFrame* pFlyFrame = DynCastFlyFrame())
             {

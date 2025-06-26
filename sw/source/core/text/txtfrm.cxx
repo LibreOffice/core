@@ -1800,8 +1800,13 @@ void SwTextFrame::HideAndShowObjects()
                     sal_Int32 nHiddenStart;
                     sal_Int32 nHiddenEnd;
                     const SwFormatAnchor& rAnchorFormat = pContact->GetAnchorFormat();
+                    const SwNode* pNode = rAnchorFormat.GetAnchorNode();
+                    // When the object was already removed from text, but the layout hasn't been
+                    // updated yet, this can be nullptr:
+                    if (!pNode)
+                        continue;
                     SwScriptInfo::GetBoundsOfHiddenRange(
-                        *rAnchorFormat.GetAnchorNode()->GetTextNode(),
+                        *pNode->GetTextNode(),
                         rAnchorFormat.GetAnchorContentOffset(), nHiddenStart, nHiddenEnd);
                     // Under certain conditions
                     if ( nHiddenStart != COMPLETE_STRING && bShouldBeHidden &&
