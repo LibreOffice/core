@@ -1087,6 +1087,12 @@ CPPUNIT_TEST_FIXTURE(Test, tdf165923Tdf)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167254)
+{
+    createSwDoc("tdf167254.rtf");
+    // It must not crash on import
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
