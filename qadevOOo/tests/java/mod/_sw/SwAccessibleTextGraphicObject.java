@@ -32,7 +32,6 @@ import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
@@ -40,7 +39,6 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.view.XViewSettingsSupplier;
 
 /**
 * Test of accessible object for the graphic object of a text document.<p>
