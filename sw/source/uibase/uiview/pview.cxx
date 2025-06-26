@@ -1826,11 +1826,7 @@ uno::Reference< css::accessibility::XAccessible >
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     OSL_ENSURE( GetViewShell() != nullptr, "We need a view shell" );
     if (mpViewShell)
-    {
-        rtl::Reference<comphelper::OAccessible> pAccPreview = mpViewShell->CreateAccessiblePreview();
-        SetAccessible(pAccPreview);
-        return pAccPreview;
-    }
+        return mpViewShell->CreateAccessiblePreview();
 #endif
     return {};
 }

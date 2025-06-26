@@ -965,10 +965,7 @@ css::uno::Reference<css::accessibility::XAccessible>
 
     if (mpViewShell != nullptr)
     {
-        css::uno::Reference<css::accessibility::XAccessible> xAcc
-            = mpViewShell->CreateAccessibleDocumentView(this);
-        SetAccessible(xAcc);
-        return xAcc;
+        return mpViewShell->CreateAccessibleDocumentView(this);
     }
     else
     {
