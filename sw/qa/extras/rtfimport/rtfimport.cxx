@@ -2003,6 +2003,12 @@ CPPUNIT_TEST_FIXTURE(Test, test165805Tdf)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167254)
+{
+    createSwDoc("tdf167254.rtf");
+    // It must not crash on import
+}
+
 CPPUNIT_TEST_FIXTURE(Test, test165483Tdf)
 {
     createSwDoc("165483.rtf");

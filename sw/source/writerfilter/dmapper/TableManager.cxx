@@ -406,7 +406,7 @@ void TableManager::HandleSmallerRows()
             RowData::Pointer_t pRowData = pTableData->getRow(nRow);
             sal_Int32 nRowWidth = 0;
             pRowData->getProperties()->getValue(TablePropertyMap::TABLE_WIDTH, nRowWidth);
-            if (nRowWidth < nMaxRowWidth)
+            if (nRowWidth < nMaxRowWidth && pRowData->getCellCount() > 0)
             {
                 uno::Reference<text::XTextRange> xTextRange
                     = pRowData->getCellEnd(pRowData->getCellCount() - 1);
