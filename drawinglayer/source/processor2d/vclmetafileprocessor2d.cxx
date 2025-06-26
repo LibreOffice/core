@@ -1458,7 +1458,7 @@ void VclMetafileProcessor2D::processTextHierarchyBulletPrimitive2D(
 
     // process recursively and add MetaFile comment
     process(rBulletPrimitive);
-    // in Outliner::PaintBullet(), a MetafileComment for bullets is added, too. The
+    // in Outliner::PaintOrStripBullet(), a MetafileComment for bullets is added, too. The
     // "XTEXT_EOC" is used, use here, too.
     mpMetaFile->AddAction(new MetaCommentAction("XTEXT_EOC"_ostr));
 

@@ -2299,32 +2299,18 @@ drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::createO
     const EditView* pEditView(rScViewData.GetEditView(maScSplitPos));
     assert(pEditView && "NO access to EditView in ScTextEditOverlayObject!");
 
-    // use no transformations. The result will be in logic coordinates
-    // based on aEditRectangle and the EditEngine setup, see
-    // ScViewData::SetEditEngine
-    basegfx::B2DHomMatrix aNewTransformA;
-    basegfx::B2DHomMatrix aNewTransformB;
-
     // get text data in LogicMode
     OutputDevice& rOutDev(pEditView->GetOutputDevice());
     const MapMode aOrig(rOutDev.GetMapMode());
     rOutDev.SetMapMode(rScViewData.GetLogicMode());
 
-    pEditView->getEditEngine().StripPortions(
-        [&aRetval, &aNewTransformA, &aNewTransformB](const DrawPortionInfo& rInfo){
-            CreateTextPortionPrimitivesFromDrawPortionInfo(
-                aRetval,
-                aNewTransformA,
-                aNewTransformB,
-                rInfo);
-        },
-        [&aRetval, &aNewTransformA, &aNewTransformB](const DrawBulletInfo& rInfo){
-            CreateDrawBulletPrimitivesFromDrawBulletInfo(
-                aRetval,
-                aNewTransformA,
-                aNewTransformB,
-                rInfo);
-        });
+    // StripPortions from EditEngine.
+    // use no transformations. The result will be in logic coordinates
+    // based on aEditRectangle and the EditEngine setup, see
+    // ScViewData::SetEditEngine
+    TextHierarchyBreakup aBreakup;
+    pEditView->getEditEngine().StripPortions(aBreakup);
+    aRetval = aBreakup.getTextPortionPrimitives();
 
     rOutDev.SetMapMode(aOrig);
     return aRetval;

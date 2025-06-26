@@ -30,7 +30,7 @@
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 
-// anonymous helpers
+// anonymous Outline/EditEngine decompose helpers
 namespace
 {
 rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D>
@@ -82,77 +82,6 @@ CheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive,
 
     return xRet;
 }
-
-class DoCapitalsDrawPortionInfo : public SvxDoCapitals
-{
-private:
-    drawinglayer::primitive2d::Primitive2DContainer& mrTarget;
-    const basegfx::B2DHomMatrix& mrNewTransformA;
-    const basegfx::B2DHomMatrix& mrNewTransformB;
-    const DrawPortionInfo& m_rInfo;
-    SvxFont m_aFont;
-
-public:
-    DoCapitalsDrawPortionInfo(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-                              const basegfx::B2DHomMatrix& rNewTransformA,
-                              const basegfx::B2DHomMatrix& rNewTransformB,
-                              const DrawPortionInfo& rInfo)
-        : SvxDoCapitals(rInfo.maText, rInfo.mnTextStart, rInfo.mnTextLen)
-        , mrTarget(rTarget)
-        , mrNewTransformA(rNewTransformA)
-        , mrNewTransformB(rNewTransformB)
-        , m_rInfo(rInfo)
-        , m_aFont(rInfo.mrFont)
-    {
-        assert(!m_rInfo.mpDXArray.empty());
-
-        /* turn all these off as they are handled outside subportions for the whole portion */
-        m_aFont.SetTransparent(false);
-        m_aFont.SetUnderline(LINESTYLE_NONE);
-        m_aFont.SetOverline(LINESTYLE_NONE);
-        m_aFont.SetStrikeout(STRIKEOUT_NONE);
-
-        m_aFont.SetCaseMap(SvxCaseMap::NotMapped); /* otherwise this would call itself */
-    }
-    virtual void Do(const OUString& rSpanTxt, const sal_Int32 nSpanIdx, const sal_Int32 nSpanLen,
-                    const bool bUpper) override
-    {
-        sal_uInt8 nProp(0);
-        if (!bUpper)
-        {
-            nProp = m_aFont.GetPropr();
-            m_aFont.SetProprRel(SMALL_CAPS_PERCENTAGE);
-        }
-
-        sal_Int32 nStartOffset = nSpanIdx - nIdx;
-        double nStartX = nStartOffset ? m_rInfo.mpDXArray[nStartOffset - 1] : 0;
-
-        Point aStartPos(m_rInfo.mrStartPos.X() + nStartX, m_rInfo.mrStartPos.Y());
-
-        KernArray aDXArray;
-        aDXArray.resize(nSpanLen);
-        for (sal_Int32 i = 0; i < nSpanLen; ++i)
-            aDXArray[i] = m_rInfo.mpDXArray[nStartOffset + i] - nStartX;
-
-        auto aKashidaArray = !m_rInfo.mpKashidaArray.empty()
-                                 ? std::span<const sal_Bool>(
-                                       m_rInfo.mpKashidaArray.data() + nStartOffset, nSpanLen)
-                                 : std::span<const sal_Bool>();
-
-        DrawPortionInfo aInfo(aStartPos, rSpanTxt, nSpanIdx, nSpanLen, aDXArray, aKashidaArray,
-                              m_aFont, m_rInfo.mnPara, m_rInfo.mnBiDiLevel,
-                              nullptr, /* no spelling in subportion, handled outside */
-                              nullptr, /* no field in subportion, handled outside */
-                              false, false, false, m_rInfo.mpLocale, m_rInfo.maOverlineColor,
-                              m_rInfo.maTextLineColor);
-
-        CreateTextPortionPrimitivesFromDrawPortionInfo(mrTarget, mrNewTransformA, mrNewTransformB,
-                                                       aInfo);
-
-        if (!bUpper)
-            m_aFont.SetPropr(nProp);
-    }
-};
 
 rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D>
 buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
@@ -287,9 +216,42 @@ buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
 
     return pNewPrimitive;
 }
-} // end of anonymous namespace
 
-// Outliner helpers
+class DoCapitalsDrawPortionInfo : public SvxDoCapitals
+{
+private:
+    drawinglayer::primitive2d::Primitive2DContainer& mrTarget;
+    const basegfx::B2DHomMatrix& mrNewTransformA;
+    const basegfx::B2DHomMatrix& mrNewTransformB;
+    const DrawPortionInfo& m_rInfo;
+    SvxFont m_aFont;
+
+public:
+    DoCapitalsDrawPortionInfo(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+                              const basegfx::B2DHomMatrix& rNewTransformA,
+                              const basegfx::B2DHomMatrix& rNewTransformB,
+                              const DrawPortionInfo& rInfo)
+        : SvxDoCapitals(rInfo.maText, rInfo.mnTextStart, rInfo.mnTextLen)
+        , mrTarget(rTarget)
+        , mrNewTransformA(rNewTransformA)
+        , mrNewTransformB(rNewTransformB)
+        , m_rInfo(rInfo)
+        , m_aFont(rInfo.mrFont)
+    {
+        assert(!m_rInfo.mpDXArray.empty());
+
+        /* turn all these off as they are handled outside subportions for the whole portion */
+        m_aFont.SetTransparent(false);
+        m_aFont.SetUnderline(LINESTYLE_NONE);
+        m_aFont.SetOverline(LINESTYLE_NONE);
+        m_aFont.SetStrikeout(STRIKEOUT_NONE);
+
+        m_aFont.SetCaseMap(SvxCaseMap::NotMapped); /* otherwise this would call itself */
+    }
+    virtual void Do(const OUString& rSpanTxt, const sal_Int32 nSpanIdx, const sal_Int32 nSpanLen,
+                    const bool bUpper) override;
+};
+
 void CreateTextPortionPrimitivesFromDrawPortionInfo(
     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
     const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB,
@@ -530,6 +492,44 @@ void CreateTextPortionPrimitivesFromDrawPortionInfo(
     }
 }
 
+void DoCapitalsDrawPortionInfo::Do(const OUString& rSpanTxt, const sal_Int32 nSpanIdx,
+                                   const sal_Int32 nSpanLen, const bool bUpper)
+{
+    sal_uInt8 nProp(0);
+    if (!bUpper)
+    {
+        nProp = m_aFont.GetPropr();
+        m_aFont.SetProprRel(SMALL_CAPS_PERCENTAGE);
+    }
+
+    sal_Int32 nStartOffset = nSpanIdx - nIdx;
+    double nStartX = nStartOffset ? m_rInfo.mpDXArray[nStartOffset - 1] : 0;
+
+    Point aStartPos(m_rInfo.mrStartPos.X() + nStartX, m_rInfo.mrStartPos.Y());
+
+    KernArray aDXArray;
+    aDXArray.resize(nSpanLen);
+    for (sal_Int32 i = 0; i < nSpanLen; ++i)
+        aDXArray[i] = m_rInfo.mpDXArray[nStartOffset + i] - nStartX;
+
+    auto aKashidaArray
+        = !m_rInfo.mpKashidaArray.empty()
+              ? std::span<const sal_Bool>(m_rInfo.mpKashidaArray.data() + nStartOffset, nSpanLen)
+              : std::span<const sal_Bool>();
+
+    DrawPortionInfo aInfo(
+        aStartPos, rSpanTxt, nSpanIdx, nSpanLen, aDXArray, aKashidaArray, m_aFont, m_rInfo.mnPara,
+        m_rInfo.mnBiDiLevel, nullptr, /* no spelling in subportion, handled outside */
+        nullptr, /* no field in subportion, handled outside */
+        false, false, false, m_rInfo.mpLocale, m_rInfo.maOverlineColor, m_rInfo.maTextLineColor);
+
+    CreateTextPortionPrimitivesFromDrawPortionInfo(mrTarget, mrNewTransformA, mrNewTransformB,
+                                                   aInfo);
+
+    if (!bUpper)
+        m_aFont.SetPropr(nProp);
+}
+
 void CreateDrawBulletPrimitivesFromDrawBulletInfo(
     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
     const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB,
@@ -564,6 +564,125 @@ void CreateDrawBulletPrimitivesFromDrawBulletInfo(
 
     // add to output
     rTarget.push_back(pNewPrimitive);
+}
+} // end of anonymous namespace
+
+void TextHierarchyBreakup::flushTextPortionPrimitivesToLinePrimitives()
+{
+    // only create a line primitive when we had content; there is no need for
+    // empty line primitives (contrary to paragraphs, see below).
+    if (!maTextPortionPrimitives.empty())
+    {
+        maLinePrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyLinePrimitive2D(
+            std::move(maTextPortionPrimitives)));
+    }
+}
+
+sal_Int16 TextHierarchyBreakup::getOutlineLevelFromParagraph(sal_Int32 /*nPara*/) const
+{
+    return -1;
+}
+
+sal_Int32 TextHierarchyBreakup::getParagraphCount() const { return 0; }
+
+void TextHierarchyBreakup::flushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara)
+{
+    // ALWAYS create a paragraph primitive, even when no content was added. This is done to
+    // have the correct paragraph count even with empty paragraphs. Those paragraphs will
+    // have an empty sub-PrimitiveSequence.
+    maParagraphPrimitives.push_back(
+        new drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D(
+            std::move(maLinePrimitives), getOutlineLevelFromParagraph(nPara)));
+}
+
+void TextHierarchyBreakup::processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo)
+{
+    CreateTextPortionPrimitivesFromDrawPortionInfo(maTextPortionPrimitives, maNewTransformA,
+                                                   maNewTransformB, rDrawPortionInfo);
+
+    if (rDrawPortionInfo.mbEndOfLine || rDrawPortionInfo.mbEndOfParagraph)
+    {
+        flushTextPortionPrimitivesToLinePrimitives();
+    }
+
+    if (rDrawPortionInfo.mbEndOfParagraph)
+    {
+        flushLinePrimitivesToParagraphPrimitives(rDrawPortionInfo.mnPara);
+    }
+}
+
+void TextHierarchyBreakup::processDrawBulletInfo(const DrawBulletInfo& rDrawBulletInfo)
+{
+    CreateDrawBulletPrimitivesFromDrawBulletInfo(maTextPortionPrimitives, maNewTransformA,
+                                                 maNewTransformB, rDrawBulletInfo);
+    basegfx::B2DHomMatrix aNewTransform;
+
+    // add size to new transform
+    aNewTransform.scale(rDrawBulletInfo.maBulletSize.getWidth(),
+                        rDrawBulletInfo.maBulletSize.getHeight());
+
+    // apply transformA
+    aNewTransform *= maNewTransformA;
+
+    // apply local offset
+    aNewTransform.translate(rDrawBulletInfo.maBulletPosition.X(),
+                            rDrawBulletInfo.maBulletPosition.Y());
+
+    // also apply embedding object's transform
+    aNewTransform *= maNewTransformB;
+
+    // prepare empty GraphicAttr
+    const GraphicAttr aGraphicAttr;
+
+    // create GraphicPrimitive2D
+    const drawinglayer::primitive2d::Primitive2DReference aNewReference(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(
+            aNewTransform, rDrawBulletInfo.maBulletGraphicObject, aGraphicAttr));
+
+    // embed in TextHierarchyBulletPrimitive2D
+    drawinglayer::primitive2d::Primitive2DContainer aNewSequence{ aNewReference };
+    rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive
+        = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(std::move(aNewSequence));
+
+    // add to output
+    maTextPortionPrimitives.push_back(pNewPrimitive);
+}
+
+TextHierarchyBreakup::TextHierarchyBreakup()
+    : maTextPortionPrimitives()
+    , maLinePrimitives()
+    , maParagraphPrimitives()
+    , maNewTransformA()
+    , maNewTransformB()
+{
+}
+
+TextHierarchyBreakup::TextHierarchyBreakup(const basegfx::B2DHomMatrix& rNewTransformA,
+                                           const basegfx::B2DHomMatrix& rNewTransformB)
+    : maTextPortionPrimitives()
+    , maLinePrimitives()
+    , maParagraphPrimitives()
+    , maNewTransformA(rNewTransformA)
+    , maNewTransformB(rNewTransformB)
+{
+}
+
+const drawinglayer::primitive2d::Primitive2DContainer&
+TextHierarchyBreakup::getTextPortionPrimitives()
+{
+    if (!maTextPortionPrimitives.empty())
+    {
+        // collect non-closed lines
+        flushTextPortionPrimitivesToLinePrimitives();
+    }
+
+    if (!maLinePrimitives.empty())
+    {
+        // collect non-closed paragraphs
+        flushLinePrimitivesToParagraphPrimitives(getParagraphCount() - 1);
+    }
+
+    return maParagraphPrimitives;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,225 +61,6 @@
 
 using namespace com::sun::star;
 
-namespace
-{
-    class impTextBreakupHandler
-    {
-    private:
-        drawinglayer::primitive2d::Primitive2DContainer             maTextPortionPrimitives;
-        drawinglayer::primitive2d::Primitive2DContainer             maLinePrimitives;
-        drawinglayer::primitive2d::Primitive2DContainer             maParagraphPrimitives;
-
-        SdrOutliner&                                                mrOutliner;
-        basegfx::B2DHomMatrix                                       maNewTransformA;
-        basegfx::B2DHomMatrix                                       maNewTransformB;
-
-        // the visible area for contour text decomposition
-        basegfx::B2DVector                                          maScale;
-
-        // ClipRange for BlockText decomposition; only text portions completely
-        // inside are to be accepted, so this is different from geometric clipping
-        // (which would allow e.g. upper parts of portions to remain). Only used for
-        // BlockText (see there)
-        basegfx::B2DRange                                           maClipRange;
-
-        void impFlushTextPortionPrimitivesToLinePrimitives();
-        void impFlushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara);
-        void impHandleDrawPortionInfo(const DrawPortionInfo& rInfo);
-        void impHandleDrawBulletInfo(const DrawBulletInfo& rInfo);
-
-    public:
-        explicit impTextBreakupHandler(SdrOutliner& rOutliner)
-        :   mrOutliner(rOutliner)
-        {
-        }
-
-        void decomposeContourTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB, const basegfx::B2DVector& rScale)
-        {
-            maScale = rScale;
-            maNewTransformA = rNewTransformA;
-            maNewTransformB = rNewTransformB;
-
-            mrOutliner.StripPortions(
-                [this](const DrawPortionInfo& rInfo){
-                    // for contour text, ignore (clip away) all portions which are below
-                    // the visible area given by maScale
-                    if(static_cast<double>(rInfo.mrStartPos.Y()) < maScale.getY())
-                    {
-                        impHandleDrawPortionInfo(rInfo);
-                    }
-                },
-                [this](const DrawBulletInfo& rInfo){ impHandleDrawBulletInfo(rInfo); });
-        }
-
-        void decomposeBlockTextPrimitive(
-            const basegfx::B2DHomMatrix& rNewTransformA,
-            const basegfx::B2DHomMatrix& rNewTransformB,
-            const basegfx::B2DRange& rClipRange)
-        {
-            maNewTransformA = rNewTransformA;
-            maNewTransformB = rNewTransformB;
-            maClipRange = rClipRange;
-
-            mrOutliner.StripPortions(
-                [this](const DrawPortionInfo& rInfo){
-                    // Is clipping wanted? This is text clipping; only accept a portion
-                    // if it's completely in the range
-                    if(!maClipRange.isEmpty())
-                    {
-                        // Test start position first; this allows to not get the text range at
-                        // all if text is far outside
-                        const basegfx::B2DPoint aStartPosition(rInfo.mrStartPos.X(), rInfo.mrStartPos.Y());
-
-                        if(!maClipRange.isInside(aStartPosition))
-                        {
-                            return;
-                        }
-
-                        // Start position is inside. Get TextBoundRect and TopLeft next
-                        drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
-                        aTextLayouterDevice.setFont(rInfo.mrFont);
-
-                        const basegfx::B2DRange aTextBoundRect(
-                            aTextLayouterDevice.getTextBoundRect(
-                                rInfo.maText, rInfo.mnTextStart, rInfo.mnTextLen));
-                        const basegfx::B2DPoint aTopLeft(aTextBoundRect.getMinimum() + aStartPosition);
-
-                        if(!maClipRange.isInside(aTopLeft))
-                        {
-                            return;
-                        }
-
-                        // TopLeft is inside. Get BottomRight and check
-                        const basegfx::B2DPoint aBottomRight(aTextBoundRect.getMaximum() + aStartPosition);
-
-                        if(!maClipRange.isInside(aBottomRight))
-                        {
-                            return;
-                        }
-
-                        // all inside, clip was successful
-                    }
-                    impHandleDrawPortionInfo(rInfo);
-                },
-                [this](const DrawBulletInfo& rInfo){ impHandleDrawBulletInfo(rInfo); });
-        }
-
-        void decomposeStretchTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB)
-        {
-            maNewTransformA = rNewTransformA;
-            maNewTransformB = rNewTransformB;
-
-            mrOutliner.StripPortions(
-                [this](const DrawPortionInfo& rInfo){ impHandleDrawPortionInfo(rInfo); },
-                [this](const DrawBulletInfo& rInfo){ impHandleDrawBulletInfo(rInfo); });
-        }
-
-        drawinglayer::primitive2d::Primitive2DContainer extractPrimitive2DSequence();
-    };
-
-    void impTextBreakupHandler::impFlushTextPortionPrimitivesToLinePrimitives()
-    {
-        // only create a line primitive when we had content; there is no need for
-        // empty line primitives (contrary to paragraphs, see below).
-        if(!maTextPortionPrimitives.empty())
-        {
-            maLinePrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyLinePrimitive2D(std::move(maTextPortionPrimitives)));
-        }
-    }
-
-    void impTextBreakupHandler::impFlushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara)
-    {
-        sal_Int16 nDepth = mrOutliner.GetDepth(nPara);
-        EBulletInfo eInfo = mrOutliner.GetBulletInfo(nPara);
-        // Pass -1 to signal VclMetafileProcessor2D that there is no active
-        // bullets/numbering in this paragraph (i.e. this is normal text)
-        const sal_Int16 nOutlineLevel( eInfo.bVisible ?  nDepth : -1);
-
-        // ALWAYS create a paragraph primitive, even when no content was added. This is done to
-        // have the correct paragraph count even with empty paragraphs. Those paragraphs will
-        // have an empty sub-PrimitiveSequence.
-        maParagraphPrimitives.push_back(
-            new drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D(
-                std::move(maLinePrimitives),
-                nOutlineLevel));
-    }
-
-    void impTextBreakupHandler::impHandleDrawPortionInfo(const DrawPortionInfo& rInfo)
-    {
-        CreateTextPortionPrimitivesFromDrawPortionInfo(
-            maTextPortionPrimitives,
-            maNewTransformA,
-            maNewTransformB,
-            rInfo);
-
-        if(rInfo.mbEndOfLine || rInfo.mbEndOfParagraph)
-        {
-            impFlushTextPortionPrimitivesToLinePrimitives();
-        }
-
-        if(rInfo.mbEndOfParagraph)
-        {
-            impFlushLinePrimitivesToParagraphPrimitives(rInfo.mnPara);
-        }
-    }
-
-    void impTextBreakupHandler::impHandleDrawBulletInfo(const DrawBulletInfo& rInfo)
-    {
-        CreateDrawBulletPrimitivesFromDrawBulletInfo(
-            maTextPortionPrimitives,
-            maNewTransformA,
-            maNewTransformB,
-            rInfo);
-        basegfx::B2DHomMatrix aNewTransform;
-
-        // add size to new transform
-        aNewTransform.scale(rInfo.maBulletSize.getWidth(), rInfo.maBulletSize.getHeight());
-
-        // apply transformA
-        aNewTransform *= maNewTransformA;
-
-        // apply local offset
-        aNewTransform.translate(rInfo.maBulletPosition.X(), rInfo.maBulletPosition.Y());
-
-        // also apply embedding object's transform
-        aNewTransform *= maNewTransformB;
-
-        // prepare empty GraphicAttr
-        const GraphicAttr aGraphicAttr;
-
-        // create GraphicPrimitive2D
-        const drawinglayer::primitive2d::Primitive2DReference aNewReference(new drawinglayer::primitive2d::GraphicPrimitive2D(
-            aNewTransform,
-            rInfo.maBulletGraphicObject,
-            aGraphicAttr));
-
-        // embed in TextHierarchyBulletPrimitive2D
-        drawinglayer::primitive2d::Primitive2DContainer aNewSequence { aNewReference };
-        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(std::move(aNewSequence));
-
-        // add to output
-        maTextPortionPrimitives.push_back(pNewPrimitive);
-    }
-
-    drawinglayer::primitive2d::Primitive2DContainer impTextBreakupHandler::extractPrimitive2DSequence()
-    {
-        if(!maTextPortionPrimitives.empty())
-        {
-            // collect non-closed lines
-            impFlushTextPortionPrimitivesToLinePrimitives();
-        }
-
-        if(!maLinePrimitives.empty())
-        {
-            // collect non-closed paragraphs
-            impFlushLinePrimitivesToParagraphPrimitives(mrOutliner.GetParagraphCount() - 1);
-        }
-
-        return std::move(maParagraphPrimitives);
-    }
-} // end of anonymous namespace
-
 // primitive decompositions
 void SdrTextObj::impDecomposeContourTextPrimitive(
     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
@@ -370,15 +151,17 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     // now break up text primitives. If it has a fat stroke, createTextPrimitive() has created a
     // ScaledUnitPolyPolygon. Thus aPolyPolygon might be smaller than aScale from aObjectMatrix. We
     // use this smaller size for the text area, otherwise the text will reach into the stroke.
-    impTextBreakupHandler aConverter(rOutliner);
-    aConverter.decomposeContourTextPrimitive(aNewTransformA, aNewTransformB,
-                                             aPolyPolygon.getB2DRange().getRange());
+    TextHierarchyBreakupContourText aBreakup(
+        rOutliner,
+        aNewTransformA,
+        aNewTransformB,
+        aPolyPolygon.getB2DRange().getRange());
+    rOutliner.StripPortions(aBreakup);
+    rTarget = aBreakup.getTextPortionPrimitives();
 
     // cleanup outliner
     rOutliner.Clear();
     rOutliner.setVisualizedPage(nullptr);
-
-    rTarget = aConverter.extractPrimitive2DSequence();
 }
 
 void SdrTextObj::impDecomposeAutoFitTextPrimitive(
@@ -519,16 +302,19 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     basegfx::B2DRange aClipRange;
 
     // now break up text primitives.
-    impTextBreakupHandler aConverter(rOutliner);
-    aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB, aClipRange);
+    TextHierarchyBreakupBlockText aBreakup(
+        rOutliner,
+        aNewTransformA,
+        aNewTransformB,
+        aClipRange);
+    rOutliner.StripPortions(aBreakup);
+    rTarget = aBreakup.getTextPortionPrimitives();
 
     // cleanup outliner
     rOutliner.SetBackgroundColor(aOriginalBackColor);
     rOutliner.Clear();
     rOutliner.setVisualizedPage(nullptr);
     rOutliner.SetControlWord(nOriginalControlWord);
-
-    rTarget = aConverter.extractPrimitive2DSequence();
 }
 
 // Resolves: fdo#35779 set background color of this shape as the editeng background if there
@@ -833,15 +619,18 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         aClipRange = {0, 0, std::numeric_limits<double>::max(), aAnchorTextRange.getHeight()};
 
     // now break up text primitives.
-    impTextBreakupHandler aConverter(rOutliner);
-    aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB, aClipRange);
+    TextHierarchyBreakupBlockText aBreakup(
+        rOutliner,
+        aNewTransformA,
+        aNewTransformB,
+        aClipRange);
+    rOutliner.StripPortions(aBreakup);
+    rTarget = aBreakup.getTextPortionPrimitives();
 
     // cleanup outliner
     rOutliner.SetBackgroundColor(aOriginalBackColor);
     rOutliner.Clear();
     rOutliner.setVisualizedPage(nullptr);
-
-    rTarget = aConverter.extractPrimitive2DSequence();
 }
 
 void SdrTextObj::impDecomposeStretchTextPrimitive(
@@ -914,15 +703,17 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
         fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
     // now break up text primitives.
-    impTextBreakupHandler aConverter(rOutliner);
-    aConverter.decomposeStretchTextPrimitive(aNewTransformA, aNewTransformB);
+    TextHierarchyBreakupOutliner aBreakup(
+        rOutliner,
+        aNewTransformA,
+        aNewTransformB);
+    rOutliner.StripPortions(aBreakup);
+    rTarget = aBreakup.getTextPortionPrimitives();
 
     // cleanup outliner
     rOutliner.SetControlWord(nOriginalControlWord);
     rOutliner.Clear();
     rOutliner.setVisualizedPage(nullptr);
-
-    rTarget = aConverter.extractPrimitive2DSequence();
 }
 
 
@@ -1341,29 +1132,18 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     basegfx::B2DRange aClipRange;
 
     // now break up text primitives.
-    impTextBreakupHandler aConverter(rOutliner);
-    aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB, aClipRange);
+    TextHierarchyBreakupBlockText aBreakup(
+        rOutliner,
+        aNewTransformA,
+        aNewTransformB,
+        aClipRange);
+    rOutliner.StripPortions(aBreakup);
+    rTarget = aBreakup.getTextPortionPrimitives();
 
     // cleanup outliner
     rOutliner.Clear();
     rOutliner.setVisualizedPage(nullptr);
     rOutliner.SetControlWord(nOriginalControlWord);
-
-    rTarget = aConverter.extractPrimitive2DSequence();
-}
-
-// Direct decomposer for text visualization when you already have a prepared
-// Outliner containing all the needed information
-void SdrTextObj::impDecomposeBlockTextPrimitiveDirect(
-    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-    SdrOutliner& rOutliner,
-    const basegfx::B2DHomMatrix& rNewTransformA,
-    const basegfx::B2DHomMatrix& rNewTransformB,
-    const basegfx::B2DRange& rClipRange)
-{
-    impTextBreakupHandler aConverter(rOutliner);
-    aConverter.decomposeBlockTextPrimitive(rNewTransformA, rNewTransformB, rClipRange);
-    rTarget.append(aConverter.extractPrimitive2DSequence());
 }
 
 double SdrTextObj::GetCameraZRotation() const

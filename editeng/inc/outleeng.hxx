@@ -35,9 +35,7 @@ public:
                         OutlinerEditEng( Outliner* pOwner, SfxItemPool* pPool );
                         virtual ~OutlinerEditEng() override;
 
-    virtual void        PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev,
-        const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
-        const std::function<void(const DrawBulletInfo&)>& rDrawBullet) override;
+    virtual void        ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev, StripPortionsHelper* pStripPortionsHelper) override;
 
     virtual void        ParagraphInserted( sal_Int32 nNewParagraph ) override;
     virtual void        ParagraphDeleted( sal_Int32 nDeletedParagraph ) override;

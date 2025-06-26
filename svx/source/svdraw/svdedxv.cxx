@@ -783,8 +783,10 @@ void TextEditOverlayObject::checkDataChange(const basegfx::B2DRange& rMinTextEdi
         // of this mechanism, it *may* be possible to buffer layouted
         // primitives per ParaPortion with/in/dependent on the EditEngine
         // content if needed. For now, get and compare
-        SdrTextObj::impDecomposeBlockTextPrimitiveDirect(
-            aNewTextPrimitives, *pSdrOutliner, aNewTransformA, aNewTransformB, aClipRange);
+        TextHierarchyBreakupBlockText aBreakup(*pSdrOutliner, aNewTransformA, aNewTransformB,
+                                               aClipRange);
+        pSdrOutliner->StripPortions(aBreakup);
+        aNewTextPrimitives.append(aBreakup.getTextPortionPrimitives());
 
         if (aNewTextPrimitives != maTextPrimitives)
         {

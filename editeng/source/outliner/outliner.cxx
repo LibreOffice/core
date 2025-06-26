@@ -870,11 +870,10 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     return aBulletFont;
 }
 
-void Outliner::PaintBullet(
+void Outliner::PaintOrStripBullet(
     sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin,
     Degree10 nOrientation, OutputDevice& rOutDev,
-    const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
-    const std::function<void(const DrawBulletInfo&)>& rDrawBullet)
+    StripPortionsHelper* pStripPortionsHelper)
 {
 
     bool bDrawBullet = false;
@@ -958,7 +957,7 @@ void Outliner::PaintBullet(
                 nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft | vcl::text::ComplexTextLayoutFlags::BiDiStrong;
             rOutDev.SetLayoutMode( nLayoutMode );
 
-            if(rDrawPortion)
+            if (pStripPortionsHelper)
             {
                 const SvxFont aSvxFont(rOutDev.GetFont());
                 KernArray aBuf;
@@ -974,7 +973,7 @@ void Outliner::PaintBullet(
                 const DrawPortionInfo aInfo(
                     aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf, {},
                     aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
-                rDrawPortion(aInfo);
+                pStripPortionsHelper->processDrawPortionInfo(aInfo);
             }
             else
             {
@@ -1010,7 +1009,7 @@ void Outliner::PaintBullet(
                     }
                 }
 
-                if(rDrawBullet)
+                if (pStripPortionsHelper)
                 {
                     // call something analog to aDrawPortionHdl (if set) and feed it something
                     // analog to DrawPortionInfo...
@@ -1020,7 +1019,7 @@ void Outliner::PaintBullet(
                         *pFmt->GetBrush()->GetGraphicObject(),
                         aBulletPos,
                         pPara->aBulSize);
-                    rDrawBullet(aDrawBulletInfo);
+                    pStripPortionsHelper->processDrawBulletInfo(aDrawBulletInfo);
                 }
                 else
                 {
@@ -1031,7 +1030,7 @@ void Outliner::PaintBullet(
     }
 
     // In case of collapsed subparagraphs paint a line before the text.
-    if( !pParaList->HasChildren(pPara) || pParaList->HasVisibleChildren(pPara) || rDrawPortion || nOrientation )
+    if( !pParaList->HasChildren(pPara) || pParaList->HasVisibleChildren(pPara) || pStripPortionsHelper || nOrientation )
         return;
 
     tools::Long nWidth = rOutDev.PixelToLogic( Size( 10, 0 ) ).Width();
@@ -1514,7 +1513,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         ParagraphInfos aInfos = pEditEngine->GetParagraphInfos( nPara );
         if ( aInfos.bValid )
         {
-            aTopLeft.setY( /* aInfos.nFirstLineOffset + */ // nFirstLineOffset is already added to the StartPos (PaintBullet) from the EditEngine
+            aTopLeft.setY( /* aInfos.nFirstLineOffset + */ // nFirstLineOffset is already added to the StartPos (PaintOrStripBullet) from the EditEngine
                             aInfos.nFirstLineHeight - aInfos.nFirstLineTextHeight
                             + aInfos.nFirstLineTextHeight / 2
                             - aBulletSize.Height() / 2 );
@@ -1636,11 +1635,9 @@ void Outliner::Remove( Paragraph const * pPara, sal_Int32 nParaCount )
     }
 }
 
-void Outliner::StripPortions(
-    const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
-    const std::function<void(const DrawBulletInfo&)>& rDrawBullet)
+void Outliner::StripPortions(StripPortionsHelper& rStripPortionsHelper)
 {
-    pEditEngine->StripPortions(rDrawPortion, rDrawBullet);
+    pEditEngine->StripPortions(rStripPortionsHelper);
 }
 
 bool Outliner::RemovingPagesHdl( OutlinerView* pView )

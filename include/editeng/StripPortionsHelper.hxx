@@ -30,6 +30,8 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/flditem.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace com::sun::star::lang
 {
@@ -103,23 +105,37 @@ public:
     }
 };
 
-namespace drawinglayer::primitive2d
+class EDITENG_DLLPUBLIC StripPortionsHelper
 {
-class Primitive2DContainer;
-}
-namespace basegfx
-{
-class B2DHomMatrix;
-}
+public:
+    virtual void processDrawPortionInfo(const DrawPortionInfo&) = 0;
+    virtual void processDrawBulletInfo(const DrawBulletInfo&) = 0;
+};
 
-void EDITENG_DLLPUBLIC CreateTextPortionPrimitivesFromDrawPortionInfo(
-    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-    const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB,
-    const DrawPortionInfo& rInfo);
-void EDITENG_DLLPUBLIC CreateDrawBulletPrimitivesFromDrawBulletInfo(
-    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-    const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB,
-    const DrawBulletInfo& rInfo);
+class EDITENG_DLLPUBLIC TextHierarchyBreakup : public StripPortionsHelper
+{
+    drawinglayer::primitive2d::Primitive2DContainer maTextPortionPrimitives;
+    drawinglayer::primitive2d::Primitive2DContainer maLinePrimitives;
+    drawinglayer::primitive2d::Primitive2DContainer maParagraphPrimitives;
+    basegfx::B2DHomMatrix maNewTransformA;
+    basegfx::B2DHomMatrix maNewTransformB;
+
+protected:
+    void flushTextPortionPrimitivesToLinePrimitives();
+    virtual sal_Int16 getOutlineLevelFromParagraph(sal_Int32 nPara) const;
+    virtual sal_Int32 getParagraphCount() const;
+    void flushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara);
+
+public:
+    virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo);
+    virtual void processDrawBulletInfo(const DrawBulletInfo& rDrawBulletInfo);
+
+    TextHierarchyBreakup();
+    TextHierarchyBreakup(const basegfx::B2DHomMatrix& rNewTransformA,
+                         const basegfx::B2DHomMatrix& rNewTransformB);
+
+    const drawinglayer::primitive2d::Primitive2DContainer& getTextPortionPrimitives();
+};
 
 #endif // INCLUDED_EDITENG_STRIPPORTIONSHELPER_HXX
 

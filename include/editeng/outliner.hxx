@@ -82,6 +82,7 @@ enum class TextRotation;
 enum class SdrCompatibilityFlag;
 class DrawPortionInfo;
 class DrawBulletInfo;
+class StripPortionsHelper;
 
 namespace com::sun::star::linguistic2 {
     class XSpellChecker1;
@@ -577,12 +578,11 @@ protected:
     SAL_DLLPRIVATE void            StyleSheetChanged( SfxStyleSheet const * pStyle );
 
     SAL_DLLPRIVATE void            InvalidateBullet(sal_Int32 nPara);
-    SAL_DLLPRIVATE void            PaintBullet(
+    SAL_DLLPRIVATE void            PaintOrStripBullet(
         sal_Int32 nPara, const Point& rStartPos,
         const Point& rOrigin, Degree10 nOrientation,
         OutputDevice& rOutDev,
-        const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
-        const std::function<void(const DrawBulletInfo&)>& rDrawBullet);
+        StripPortionsHelper* pStripPortionsHelper);
 
     // used by OutlinerEditEng. Allows Outliner objects to provide
     // bullet access to the EditEngine.
@@ -747,9 +747,7 @@ public:
     OUString const & GetWordDelimiters() const;
     OUString        GetWord( const EPaM& rPos );
 
-    void            StripPortions(
-        const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
-        const std::function<void(const DrawBulletInfo&)>& rDrawBullet);
+    void StripPortions(StripPortionsHelper& rStripPortionsHelper);
 
     Size            CalcTextSize();
 

@@ -1004,10 +1004,7 @@ public:
     void                    UpdateViews( EditView* pCurView = nullptr );
     Point CalculateTextPaintStartPosition(ImpEditView& rView) const;
     void                    Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
-    void Paint(
-        OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, Degree10 nOrientation = 0_deg10,
-        const std::function<void(const DrawPortionInfo&)>& rDrawPortion = std::function<void(const DrawPortionInfo&)>(),
-        const std::function<void(const DrawBulletInfo&)>& rDrawBullet = std::function<void(const DrawBulletInfo&)>());
+    void PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, Degree10 nOrientation = 0_deg10, StripPortionsHelper* pStripPortionsHelper = nullptr);
 
     bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );
     bool                MouseButtonDown( const MouseEvent& rMouseEvent, EditView* pView );

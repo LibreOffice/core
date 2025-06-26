@@ -39,10 +39,7 @@ OutlinerEditEng::~OutlinerEditEng()
 {
 }
 
-void OutlinerEditEng::PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev,
-    const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
-    const std::function<void(const DrawBulletInfo&)>& rDrawBullet
-)
+void OutlinerEditEng::ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev, StripPortionsHelper* pStripPortionsHelper)//,
 {
     if( GetControlWord() & EEControlBits::OUTLINER )
     {
@@ -50,7 +47,7 @@ void OutlinerEditEng::PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos,
         pOwner->maPaintFirstLineHdl.Call( &aInfo );
     }
 
-    pOwner->PaintBullet(nPara, rStartPos, rOrigin, nOrientation, rOutDev, rDrawPortion, rDrawBullet);
+    pOwner->PaintOrStripBullet(nPara, rStartPos, rOrigin, nOrientation, rOutDev, pStripPortionsHelper);
 }
 
 const SvxNumberFormat* OutlinerEditEng::GetNumberFormat( sal_Int32 nPara ) const

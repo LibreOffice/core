@@ -629,15 +629,6 @@ public:
     void impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;
     void impGetScrollTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList, double fFrameLength, double fTextLength) const;
 
-    // Direct decomposer for text visualization when you already have a prepared
-    // Outliner containing all the needed information
-    static void impDecomposeBlockTextPrimitiveDirect(
-        drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-        SdrOutliner& rOutliner,
-        const basegfx::B2DHomMatrix& rNewTransformA,
-        const basegfx::B2DHomMatrix& rNewTransformB,
-        const basegfx::B2DRange& rClipRange);
-
     /** returns false if the given pointer is NULL
         or if the given SdrOutliner contains no text.
         Also checks for one empty paragraph.

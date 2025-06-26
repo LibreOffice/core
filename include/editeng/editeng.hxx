@@ -116,6 +116,7 @@ enum class TransliterationFlags;
 class LinkParamNone;
 class DrawPortionInfo;
 class DrawBulletInfo;
+class StripPortionsHelper;
 
 /** values for:
        SfxItemSet GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All );
@@ -369,9 +370,7 @@ public:
 
     bool            IsInSelectionMode() const;
 
-    void            StripPortions(
-        const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
-        const std::function<void(const DrawBulletInfo&)>& rDrawBullet);
+    void StripPortions(StripPortionsHelper& rStripPortionsHelper);
     void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList );
 
     SAL_DLLPRIVATE tools::Long            GetFirstLineStartX( sal_Int32 nParagraph );
@@ -492,9 +491,7 @@ public:
     SAL_DLLPRIVATE void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
     SAL_DLLPRIVATE void            SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
 
-    virtual void    PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev,
-        const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
-        const std::function<void(const DrawBulletInfo&)>& rDrawBullet);
+    virtual void    ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev, StripPortionsHelper* pStripPortionsHelper);
 
     virtual void    ParagraphInserted( sal_Int32 nNewParagraph );
     virtual void    ParagraphDeleted( sal_Int32 nDeletedParagraph );

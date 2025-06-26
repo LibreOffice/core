@@ -149,24 +149,24 @@ namespace
 
 namespace
 {
-    class impTextBreakupHandler
+    class TextHierarchyBreakupPathTextPortions : public StripPortionsHelper
     {
-        SdrOutliner&                                mrOutliner;
         ::std::vector< impPathTextPortion >         maPathTextPortions;
 
     public:
-        explicit impTextBreakupHandler(SdrOutliner& rOutliner)
-        :   mrOutliner(rOutliner)
+        virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo)
         {
+            // extract and add data for TextOnPath further processing
+            maPathTextPortions.emplace_back(rDrawPortionInfo);
         }
 
-        const ::std::vector< impPathTextPortion >& decompositionPathTextPrimitive()
+        virtual void processDrawBulletInfo(const DrawBulletInfo&)
         {
-            // strip portions to maPathTextPortions
-            mrOutliner.StripPortions(
-                [this](const DrawPortionInfo& rInfo){ maPathTextPortions.emplace_back(rInfo); },
-                std::function<void(const DrawBulletInfo&)>());
+            // nothing to do here, bullets are for now ignored for TextOnLine
+        }
 
+        const ::std::vector< impPathTextPortion >& sortAndGetPathTextPortions()
+        {
             if(!maPathTextPortions.empty())
             {
                 // sort portions by paragraph, x and y
@@ -635,8 +635,9 @@ void SdrTextObj::impDecomposePathTextPrimitive(
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
 
     // now break up to text portions
-    impTextBreakupHandler aConverter(rOutliner);
-    const ::std::vector< impPathTextPortion > rPathTextPortions = aConverter.decompositionPathTextPrimitive();
+    TextHierarchyBreakupPathTextPortions aBreakup;
+    rOutliner.StripPortions(aBreakup);
+    const ::std::vector< impPathTextPortion > rPathTextPortions(aBreakup.sortAndGetPathTextPortions());
 
     if(!rPathTextPortions.empty())
     {

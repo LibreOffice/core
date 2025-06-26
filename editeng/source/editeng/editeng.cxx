@@ -1071,13 +1071,8 @@ SvxFont EditEngine::GetStandardSvxFont( sal_Int32 nPara )
     return pNode->GetCharAttribs().GetDefFont();
 }
 
-void EditEngine::StripPortions(
-    const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
-    const std::function<void(const DrawBulletInfo&)>& rDrawBullet)
+void EditEngine::StripPortions(StripPortionsHelper& rStripPortionsHelper)
 {
-    if (!rDrawPortion && !rDrawBullet)
-        return;
-
     ScopedVclPtrInstance< VirtualDevice > aTmpDev;
     tools::Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
     if ( IsEffectivelyVertical() )
@@ -1094,7 +1089,7 @@ void EditEngine::StripPortions(
         }
     }
 
-    getImpl().Paint(*aTmpDev, aBigRect, Point(), 0_deg10, rDrawPortion, rDrawBullet);
+    getImpl().PaintOrStrip(*aTmpDev, aBigRect, Point(), 0_deg10, &rStripPortionsHelper);
 }
 
 void EditEngine::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList )
@@ -1584,9 +1579,7 @@ EditEngine::CreateTransferable(const ESelection& rSelection)
 
 // ======================    Virtual Methods    ========================
 
-void EditEngine::PaintingFirstLine(sal_Int32, const Point&, const Point&, Degree10, OutputDevice&,
-    const std::function<void(const DrawPortionInfo&)>&,
-    const std::function<void(const DrawBulletInfo&)>&)
+void EditEngine::ProcessFirstLineOfParagraph(sal_Int32, const Point&, const Point&, Degree10, OutputDevice&, StripPortionsHelper*)
 {
 }
 

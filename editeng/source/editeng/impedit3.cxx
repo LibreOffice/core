@@ -3365,7 +3365,7 @@ void ImpEditEngine::Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree1
         aStartPos.AdjustX(GetPaperSize().Width() );
         rStartPos.RotateAround(aStartPos, nOrientation);
     }
-    Paint(rOutDev, aBigRect, aStartPos, nOrientation);
+    PaintOrStrip(rOutDev, aBigRect, aStartPos, nOrientation);
     if (rOutDev.GetConnectMetaFile())
         rOutDev.Pop();
 }
@@ -3428,7 +3428,7 @@ void ImpEditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRec
         }
     }
 
-    Paint(rOutDev, aOutRect, aStartPos);
+    PaintOrStrip(rOutDev, aOutRect, aStartPos);
 
     if ( bMetafile )
         rOutDev.Pop();
@@ -3439,11 +3439,9 @@ void ImpEditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRec
 }
 
 // TODO: use IterateLineAreas in ImpEditEngine::Paint, to avoid algorithm duplication
-void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, Degree10 nOrientation,
-    const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
-    const std::function<void(const DrawBulletInfo&)>& rDrawBullet)
+void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, Degree10 nOrientation, StripPortionsHelper* pStripPortionsHelper)
 {
-    if ( !IsUpdateLayout() && !rDrawPortion )
+    if ( !IsUpdateLayout() && !pStripPortionsHelper )
         return;
 
     if ( !IsFormatted() )
@@ -3527,14 +3525,13 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                     // Why not just also call when stripping portions? This will give the correct values
                     // and needs no position corrections in OutlinerEditEng::DrawingText which tries to call
-                    // PaintBullet correctly; exactly what GetEditEnginePtr()->PaintingFirstLine
+                    // PaintOrStripBullet correctly; exactly what GetEditEnginePtr()->ProcessFirstLineOfParagraph
                     // does, too. No change for not-layouting (painting).
                     if(0 == nLine) // && !bStripOnly)
                     {
                         Point aLineStart(aStartPos);
                         adjustYDirectionAware(aLineStart, -nLineHeight);
-                        GetEditEnginePtr()->PaintingFirstLine(nParaPortion, aLineStart, aOrigin, nOrientation, rOutDev,
-                            rDrawPortion, rDrawBullet);
+                        GetEditEnginePtr()->ProcessFirstLineOfParagraph(nParaPortion, aLineStart, aOrigin, nOrientation, rOutDev, pStripPortionsHelper);//, rDrawPortion, rDrawBullet);
 
                         // Remember whether a bullet was painted.
                         const SfxBoolItem& rBulletState = mpEditEngine->GetParaAttrib(nParaPortion, EE_PARA_BULLETSTATE);
@@ -3576,9 +3573,8 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                             {
                                 SeekCursor(rParaPortion.GetNode(), nIndex, aTmpFont, &rOutDev);
 
-                                const auto* pRuby
-                                    = static_cast<const SvxRubyItem*>(pRubyAttr->GetItem());
-                                if (rDrawPortion)
+                                const auto* pRuby = static_cast<const SvxRubyItem*>(pRubyAttr->GetItem());
+                                if (pStripPortionsHelper)
                                 {
                                     const bool bEndOfLine(nPortion == pLine->GetEndPortion());
                                     const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
@@ -3598,8 +3594,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         {}, {}, aTmpFont, nParaPortion, 0, nullptr, nullptr,
                                         bEndOfLine, bEndOfParagraph, false, nullptr, aOverlineColor,
                                         aTextLineColor);
-                                    rDrawPortion(aInfo);
-
+                                    pStripPortionsHelper->processDrawPortionInfo(aInfo);
                                     aTmpFont.SetFontSize(nPrevSz);
                                 }
                             }
@@ -3759,7 +3754,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     //It is not perfect, it still use lineBreaksList, so it won’t seek
                                     //word ends to wrap text there, but it would be difficult to change
                                     //this due to needed adaptations in EditEngine
-                                    if (rDrawPortion && !bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty())
+                                    if (pStripPortionsHelper && !bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty())
                                     {
                                         bParsingFields = true;
                                         itSubLines = pExtraInfo->lineBreaksList.begin();
@@ -3863,7 +3858,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 if (rTextPortion.IsRightToLeft())
                                     aRedLineTmpPos.AdjustX(rTextPortion.GetSize().Width() );
 
-                                if ( rDrawPortion )
+                                if (pStripPortionsHelper)
                                 {
                                     EEngineData::WrongSpellVector aWrongSpellVector;
 
@@ -3956,7 +3951,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         &aLocale,
                                         aOverlineColor,
                                         aTextLineColor);
-                                    rDrawPortion(aInfo);
+                                    pStripPortionsHelper->processDrawPortionInfo(aInfo);
 
                                     // #108052# remember that EOP is written already for this ParaPortion
                                     if(bEndOfParagraph)
@@ -4181,7 +4176,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     comphelper::string::padToLength(aBuf, nChars, rTextPortion.GetExtraValue());
                                     OUString aText(aBuf.makeStringAndClear());
 
-                                    if ( rDrawPortion )
+                                    if (pStripPortionsHelper)
                                     {
                                         // create EOL and EOP bools
                                         const bool bEndOfLine(nPortion == pLine->GetEndPortion());
@@ -4200,7 +4195,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                             nullptr,
                                             aOverlineColor,
                                             aTextLineColor);
-                                        rDrawPortion(aInfo);
+                                        pStripPortionsHelper->processDrawPortionInfo(aInfo);
                                     }
                                     else
                                     {
@@ -4209,7 +4204,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         rOutDev.DrawStretchText( aTmpPos, rTextPortion.GetSize().Width(), aText );
                                     }
                                 }
-                                else if ( rDrawPortion )
+                                else if (pStripPortionsHelper)
                                 {
                                     // #i108052# When stripping, a callback for _empty_ paragraphs is also needed.
                                     // This was optimized away (by not rendering the space-only tab portion), so do
@@ -4229,7 +4224,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         nullptr,
                                         aOverlineColor,
                                         aTextLineColor);
-                                    rDrawPortion(aInfo);
+                                    pStripPortionsHelper->processDrawPortionInfo(aInfo);
                                 }
                             }
                             break;
@@ -4265,7 +4260,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
             // that the reason for #i108052# was fixed/removed again, so this is a try to fix
             // the number of paragraphs (and counting empty ones) now independent from the
             // changes in EditEngine behaviour.
-            if(!bEndOfParagraphWritten && !bPaintBullet && rDrawPortion)
+            if(!bEndOfParagraphWritten && !bPaintBullet && pStripPortionsHelper)
             {
                 const Color aOverlineColor(rOutDev.GetOverlineColor());
                 const Color aTextLineColor(rOutDev.GetTextLineColor());
@@ -4279,7 +4274,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                     nullptr,
                     aOverlineColor,
                     aTextLineColor);
-                rDrawPortion(aInfo);
+                pStripPortionsHelper->processDrawPortionInfo(aInfo);
             }
         }
         else
@@ -4348,7 +4343,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     vcl::Region aOldRegion = rTarget.GetClipRegion();
     rTarget.IntersectClipRegion( aClipRect );
 
-    Paint(rTarget, aClipRect, aStartPos);
+    PaintOrStrip(rTarget, aClipRect, aStartPos);
 
     if ( bClipRegion )
         rTarget.SetClipRegion( aOldRegion );
