@@ -54,7 +54,6 @@
 
 #if defined EMSCRIPTEN
 #include <emscripten.h>
-#include <comphelper/lok.hxx>
 #endif
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
