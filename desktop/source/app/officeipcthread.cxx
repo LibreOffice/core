@@ -26,7 +26,6 @@
 #include <app.hxx>
 #include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
-#include "dispatchwatcher.hxx"
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <salhelper/thread.hxx>
 #include <sal/log.hxx>
@@ -970,8 +969,8 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
             aCmdLineArgs->getCwdUrl()));
         m_handler->cProcessed.reset();
         pRequest->pcProcessed = &m_handler->cProcessed;
-        m_handler->mbSuccess = false;
-        pRequest->mpbSuccess = &m_handler->mbSuccess;
+        m_handler->mFlags = DispatchRequestFlags::NONE;
+        pRequest->mpFlags = &m_handler->mFlags;
 
         // Print requests are not dependent on the --invisible cmdline argument as they are
         // loaded with the "hidden" flag! So they are always checked.
@@ -1175,7 +1174,7 @@ void PipeIpcThread::execute()
             if (waitProcessed)
             {
                 m_handler->cProcessed.wait();
-                bSuccess = m_handler->mbSuccess;
+                bSuccess = static_cast<bool>(m_handler->mFlags & DispatchRequestFlags::Finished);
             }
             if (bSuccess)
             {
@@ -1344,9 +1343,8 @@ bool RequestHandler::ExecuteCmdLineRequests(
         aGuard.clear();
 
         // Execute dispatch requests
-        bShutdown = dispatchWatcher->executeDispatchRequests( aTempList, noTerminate);
-        if (aRequest.mpbSuccess)
-            *aRequest.mpbSuccess = true; // signal that we have actually succeeded
+        bShutdown
+            = dispatchWatcher->executeDispatchRequests(aTempList, noTerminate, aRequest.mpFlags);
     }
 
     return bShutdown;

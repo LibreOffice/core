@@ -34,6 +34,8 @@
 #include <osl/conditn.hxx>
 #include <optional>
 
+#include "dispatchwatcher.hxx"
+
 namespace desktop
 {
 
@@ -63,7 +65,7 @@ struct ProcessDocumentsRequest
     OUString aStartListParams;
     std::vector< OUString > aInFilter;
     ::osl::Condition *pcProcessed;  // pointer condition to be set when the request has been processed
-    bool* mpbSuccess = nullptr; // pointer to boolean receiving if the processing was successful
+    DispatchRequestFlags* mpFlags = nullptr; // pointer to DispatchRequestFlags receiving if the processing was successful
     bool bTextCat; // boolean flag indicating whether to dump text content to console
     bool bScriptCat; // boolean flag indicating whether to dump script content to console
 };
@@ -92,7 +94,7 @@ class RequestHandler: public salhelper::SimpleReferenceObject
     /* condition to be set when the request has been processed */
     ::osl::Condition cProcessed;
     /* receives if the processing was successful (may be false e.g. when shutting down) */
-    bool mbSuccess = false;
+    DispatchRequestFlags mFlags = DispatchRequestFlags::NONE;
 
     /* condition to be set when the main event loop is ready
        otherwise an error dialogs event loop could eat away

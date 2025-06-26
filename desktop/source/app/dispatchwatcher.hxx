@@ -28,6 +28,23 @@
 namespace desktop
 {
 
+enum class DispatchRequestFlags
+{
+    NONE = 0x0000,
+    Finished = 0x0001,
+    WithError = 0x0002, // one or more requests reported an error condition
+};
+
+}
+
+namespace o3tl
+{
+    template<> struct typed_flags<desktop::DispatchRequestFlags> : is_typed_flags<desktop::DispatchRequestFlags, 0x3> {};
+}
+
+namespace desktop
+{
+
 /*
     Class for controls dispatching of command URL through office command line. There
     are "dangerous" command URLs, that can result in a running office without UI. To prevent
@@ -74,7 +91,8 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
         virtual void SAL_CALL dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) override;
 
         // execute new dispatch request
-        bool executeDispatchRequests( const std::vector<DispatchRequest>& aDispatches, bool bNoTerminate );
+        bool executeDispatchRequests(const std::vector<DispatchRequest>& aDispatches,
+                                     bool bNoTerminate, DispatchRequestFlags* pFlags);
 
     private:
 

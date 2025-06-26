@@ -122,6 +122,9 @@ class CommandLineArgs
 
         void setHeadless() { m_headless = true; }
 
+        bool GetAllSucceeded() const { return m_bAllSucceeded; }
+        void SetAllSucceeded(bool bSet) { m_bAllSucceeded = bSet; }
+
     private:
         void                    ParseCommandLine_Impl( Supplier& supplier );
         void                    InitParamValues();
@@ -182,6 +185,10 @@ class CommandLineArgs
         std::vector< OUString > m_infilter;
         OUString m_language;
         OUString m_pidfile;
+
+        // If any argument fails, this may be set to false so that the app exits with EXIT_FAILURE.
+        // NOTE: only items of interest are setting this to false - can be extended to more cases...
+        bool m_bAllSucceeded = true;
 };
 
 }
