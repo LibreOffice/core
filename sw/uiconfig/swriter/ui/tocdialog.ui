@@ -136,7 +136,7 @@
                       <object class="GtkImage" id="imIndex">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="icon-name">cmd/lc_insertindexesentry.png</property>
+                        <property name="icon-name">cmd/32/insertindexesentry.png</property>
                         <accessibility>
                           <relation type="labelled-by" target="lbIndex"/>
                         </accessibility>
@@ -188,7 +188,7 @@
                       <object class="GtkImage" id="imEntries">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="icon-name">cmd/lc_updatecurindex.png</property>
+                        <property name="icon-name">cmd/32/updatecurindex.png</property>
                         <accessibility>
                           <relation type="labelled-by" target="lbEntries"/>
                         </accessibility>
@@ -241,7 +241,7 @@
                       <object class="GtkImage" id="imStyles">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="icon-name">cmd/lc_editstyle.png</property>
+                        <property name="icon-name">cmd/32/editstyle.png</property>
                         <accessibility>
                           <relation type="labelled-by" target="lbStyles"/>
                         </accessibility>
@@ -294,7 +294,7 @@
                       <object class="GtkImage" id="imColumns">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="icon-name">cmd/lc_formatcolumns.png</property>
+                        <property name="icon-name">cmd/32/formatcolumns.png</property>
                         <accessibility>
                           <relation type="labelled-by" target="lbColumns"/>
                         </accessibility>
@@ -347,7 +347,7 @@
                       <object class="GtkImage" id="imBackground">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="icon-name">cmd/lc_backgroundcolor.png</property>
+                        <property name="icon-name">cmd/32/backgroundcolor.png</property>
                         <accessibility>
                           <relation type="labelled-by" target="lbBackground"/>
                         </accessibility>
