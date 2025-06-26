@@ -44,9 +44,9 @@ class AccessibleFixedTextTest : public test::AccessibleTestBase
 {
 private:
     void testFixedText();
-    void
-    runInterfaceTests(const uno::Reference<accessibility::XAccessibleContext>& rxFixedTextContext,
-                      css::uno::Reference<css::awt::XWindow>& rxFixedTextWindow);
+    void runInterfaceTests(
+        const css::uno::Reference<accessibility::XAccessibleContext>& rxFixedTextContext,
+        const css::uno::Reference<css::awt::XWindow>& rxFixedTextWindow);
 
 public:
     CPPUNIT_TEST_SUITE(AccessibleFixedTextTest);
@@ -111,8 +111,8 @@ void AccessibleFixedTextTest::testFixedText()
 }
 
 void AccessibleFixedTextTest::runInterfaceTests(
-    const uno::Reference<accessibility::XAccessibleContext>& rxContext,
-    css::uno::Reference<css::awt::XWindow>& rxFixedTextWindow)
+    const css::uno::Reference<accessibility::XAccessibleContext>& rxContext,
+    const css::uno::Reference<css::awt::XWindow>& rxFixedTextWindow)
 {
     XAccessibleContextTester aContextTester(rxContext);
     aContextTester.testAll();
