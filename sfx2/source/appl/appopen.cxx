@@ -655,7 +655,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         ErrCode nErr = sfx2::FileOpenDialog_Impl(pTopWindow,
                 nDialogType,
                 eDialogFlags, aURLList,
-                aFilter, pSet, &aPath, nDialog, "", aDenyList, bShowFilterDialog);
+                aFilter, pSet, &aPath, nDialog, aDenyList, bShowFilterDialog);
 
         if ( nErr == ERRCODE_ABORT )
         {

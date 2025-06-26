@@ -2838,7 +2838,6 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              std::optional<SfxAllItemSet>& rpSet,
                              const OUString* pPath,
                              sal_Int16 nDialog,
-                             const OUString& rPreselectedDir,
                              const css::uno::Sequence< OUString >& rDenyList,
                              std::optional<bool>& rShowFilterDialog )
 {
@@ -2848,9 +2847,9 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
     // read-only to discourage editing (which would invalidate existing
     // signatures).
     if (nFlags & FileDialogFlags::SignPDF)
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), u"pdf", rPreselectedDir, rDenyList, pParent));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), u"pdf", u""_ustr, rDenyList, pParent));
     else
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, OUString(), nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rPreselectedDir, rDenyList, pParent));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, OUString(), nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, u""_ustr, rDenyList, pParent));
 
     OUString aPath;
     if ( pPath )

@@ -128,7 +128,7 @@ public:
     bool CheckInsert( SwNodeOffset nNodeIndex );
 
     static bool CheckInsertPage(SwPageFrame *& rpPage, SwLayoutFrame *& rpLay,
-        SwFrame *& rpFrame, bool & rIsBreakAfter, bool const isForceBreak);
+        SwFrame *& rpFrame, bool & rIsBreakAfter);
 
     /// Look for fresh text frames at this (new) page and set them to the right
     /// position, if they are in the fly cache.

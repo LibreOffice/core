@@ -39,8 +39,7 @@ class SwFieldDlg final : public SfxTabDialogController
     virtual SfxItemSet* CreateInputItemSet(const OUString& rId) override;
     virtual void        PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 
-    void                ReInitTabPage(std::u16string_view rPageId,
-                                      bool bOnlyActivate = false);
+    void                ReInitTabPage(std::u16string_view rPageId);
 
 public:
     SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent);

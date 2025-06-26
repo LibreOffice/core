@@ -250,7 +250,7 @@ bool ResourceId::isBoundTo (
     if ( ! rxResourceId.is())
     {
         // An empty reference is interpreted as empty resource id.
-        return IsBoundToAnchor(nullptr, nullptr, eMode);
+        return IsBoundToAnchor(nullptr, eMode);
     }
 
     return IsBoundToAnchor(rxResourceId->maResourceURLs, eMode);
@@ -260,7 +260,7 @@ bool ResourceId::isBoundToURL (
         const OUString& rsAnchorURL,
         AnchorBindingMode eMode) const
 {
-    return IsBoundToAnchor(&rsAnchorURL, nullptr, eMode);
+    return IsBoundToAnchor(&rsAnchorURL, eMode);
 }
 
 /** When eMode is DIRECTLY then the anchor of the called object and the
@@ -270,13 +270,11 @@ bool ResourceId::isBoundToURL (
 */
 bool ResourceId::IsBoundToAnchor (
     const OUString* psFirstAnchorURL,
-    const std::vector<OUString>* paAnchorURLs,
     AnchorBindingMode eMode) const
 {
     const sal_uInt32 nLocalAnchorURLCount (maResourceURLs.size() - 1);
     const bool bHasFirstAnchorURL (psFirstAnchorURL!=nullptr);
-    const sal_uInt32 nAnchorURLCount ((bHasFirstAnchorURL?1:0)
-        + (paAnchorURLs!=nullptr ? paAnchorURLs->size() : 0));
+    const sal_uInt32 nAnchorURLCount (bHasFirstAnchorURL?1:0);
 
     // Check the lengths.
     if (nLocalAnchorURLCount<nAnchorURLCount ||
@@ -287,23 +285,9 @@ bool ResourceId::IsBoundToAnchor (
 
     // Compare the nAnchorURLCount bottom-most anchor URLs of this resource
     // id and the given anchor.
-    sal_uInt32 nOffset = 0;
-    if (paAnchorURLs != nullptr)
-    {
-        sal_uInt32 nCount = paAnchorURLs->size();
-        while (nOffset < nCount)
-        {
-            if ( maResourceURLs[nLocalAnchorURLCount - nOffset] !=
-                (*paAnchorURLs)[nCount - 1 - nOffset] )
-            {
-                return false;
-            }
-            ++nOffset;
-        }
-    }
     if (bHasFirstAnchorURL)
     {
-        if ( *psFirstAnchorURL != maResourceURLs[nLocalAnchorURLCount - nOffset] )
+        if ( *psFirstAnchorURL != maResourceURLs[nLocalAnchorURLCount] )
             return false;
     }
 

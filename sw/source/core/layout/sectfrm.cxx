@@ -2850,7 +2850,7 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                     continue;
                 }
                 assert(pLowerFrame->IsContentFrame() || pLowerFrame->IsTabFrame());
-                if (SwLayHelper::CheckInsertPage(pPage, pLay, pLowerFrame, isBreakAfter, false))
+                if (SwLayHelper::CheckInsertPage(pPage, pLay, pLowerFrame, isBreakAfter))
                 {
                     if (pLowerFrame == Lower())
                     {   // move the whole section

@@ -219,13 +219,10 @@ private:
     sal_Int16 CompareToLocalImplementation (const ResourceId& rId) const;
 
     /** Return whether the called ResourceId object is bound to the anchor
-        consisting of the URLs given by psFirstAnchorURL and paAnchorURLs.
+        consisting of the URLs given by psFirstAnchorURL.
         @param psFirstAnchorURL
             Optional first URL of the anchor. This can be missing or present
             independently of paAnchorURLs.
-        @param paAnchorURLs
-            Optional set of additional anchor URLs.  This can be missing or
-            present independently of psFirstAnchorURL.
         @param eMode
             This specifies whether the called resource has to be directly
             bound to the given anchor in order to return <TRUE/> or whether
@@ -233,7 +230,6 @@ private:
     */
     bool IsBoundToAnchor (
         const OUString* psFirstAnchorURL,
-        const std::vector<OUString>* paAnchorURLs,
         css::drawing::framework::AnchorBindingMode eMode) const;
 
     /** Return whether the called ResourceId object is bound to the anchor

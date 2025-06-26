@@ -171,11 +171,11 @@ IMPL_LINK_NOARG(SwFieldDlg, CancelHdl, weld::Button&, void)
 }
 
 // newly initialise TabPage after Doc-Switch
-void SwFieldDlg::ReInitTabPage(std::u16string_view rPageId, bool bOnlyActivate)
+void SwFieldDlg::ReInitTabPage(std::u16string_view rPageId)
 {
     SwFieldPage* pPage = static_cast<SwFieldPage*>(GetTabPage(rPageId));
     if (pPage)
-        pPage->EditNewField( bOnlyActivate );   // newly initialise TabPage
+        pPage->EditNewField( /*bOnlyActivate*/true );   // newly initialise TabPage
 }
 
 // newly initialise after activation of a few TabPages
@@ -192,12 +192,12 @@ void SwFieldDlg::Activate()
                             &&  !SwCursorShell::PosInsideInputField(*rSh.GetCursor()->GetPoint()));
 
 
-    ReInitTabPage(u"variables", true);
+    ReInitTabPage(u"variables");
 
     if( !bHtmlMode )
     {
-        ReInitTabPage(u"ref", true);
-        ReInitTabPage(u"functions", true);
+        ReInitTabPage(u"ref");
+        ReInitTabPage(u"functions");
     }
 }
 

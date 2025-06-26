@@ -201,7 +201,7 @@ public:
     void OutputDML( css::uno::Reference< css::drawing::XShape > const & xShape );
 
     sal_Int32 WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp,
-                            bool bNeedsLastParaId, bool bWriteAnnotRef = false);
+                            bool bNeedsLastParaId);
 
     virtual ExportFormat GetExportFormat() const override { return ExportFormat::DOCX; }
 

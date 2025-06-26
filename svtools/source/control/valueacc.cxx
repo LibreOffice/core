@@ -675,11 +675,11 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
 }
 
 
-void ValueSetAcc::ThrowIfDisposed(bool bCheckValueSet)
+void ValueSetAcc::ThrowIfDisposed()
 {
     ensureAlive();
 
-    if (bCheckValueSet && !mpValueSet)
+    if (!mpValueSet)
     {
         assert(false && "ValueSetAcc not disposed but mpValueSet  == NULL");
         throw css::uno::RuntimeException(u"ValueSetAcc not disposed but mpValueSet == NULL"_ustr);

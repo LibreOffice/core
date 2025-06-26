@@ -294,7 +294,6 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              std::optional<SfxAllItemSet>& rpSet,
                              const OUString* pPath,
                              sal_Int16 nDialog,
-                             const OUString& rPreselectedDir,
                              const css::uno::Sequence< OUString >& rDenyList,
                              std::optional<bool>& rShowFilterDialog );
 

@@ -143,11 +143,9 @@ private:
         state of being disposed).  If that is the case then
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
-        @param bCheckValueSet
-            Whether to also check that the ValueSet is non-null.
         @throws css::lang::DisposedException
     */
-    void ThrowIfDisposed(bool bCheckValueSet = true);
+    void ThrowIfDisposed();
 
     /** Check whether the value set has a 'none' field, i.e. a field (button)
         that deselects any items (selects none of them).

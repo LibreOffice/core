@@ -2019,7 +2019,7 @@ bool DocxExport::ignoreAttributeForStyleDefaults( sal_uInt16 nWhich ) const
 }
 
 sal_Int32 DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp,
-                                    bool bNeedsLastParaId, bool bWriteAnnotRef)
+                                    bool bNeedsLastParaId)
 {
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
     MSWord_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
@@ -2044,7 +2044,7 @@ sal_Int32 DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt
         SfxItemSet aParagraphMarkerProperties(m_rDoc.GetAttrPool());
         AttrOutput().EndParagraphProperties(aParagraphMarkerProperties, nullptr, nullptr, nullptr);
 
-        if (bWriteAnnotRef && n == 0)
+        if (n == 0)
         {
             m_pAttrOutput->GetSerializer()->startElementNS(XML_w, XML_r);
             m_pAttrOutput->GetSerializer()->singleElementNS(XML_w, XML_annotationRef);

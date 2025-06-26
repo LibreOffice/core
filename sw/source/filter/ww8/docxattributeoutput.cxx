@@ -8597,7 +8597,7 @@ DocxAttributeOutput::hasProperties DocxAttributeOutput::WritePostitFields()
         {
             // richtext
             data.lastParaId
-                = GetExport().WriteOutliner(*f->GetTextObject(), TXT_ATN, bNeedParaId, true);
+                = GetExport().WriteOutliner(*f->GetTextObject(), TXT_ATN, bNeedParaId);
         }
         else
         {

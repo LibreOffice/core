@@ -616,8 +616,7 @@ bool SwLayHelper::CheckInsertPage(
     SwPageFrame *& rpPage,
     SwLayoutFrame *& rpLay,
     SwFrame *& rpFrame,
-    bool & rIsBreakAfter,
-    bool const isForceBreak)
+    bool & rIsBreakAfter)
 {
     bool bEnd = nullptr == rpPage->GetNext();
     const SvxFormatBreakItem& rBrk = rpFrame->GetBreakItem();
@@ -629,7 +628,7 @@ bool SwLayHelper::CheckInsertPage(
                           ? nullptr
                           : rDesc.GetPageDesc();
 
-    bool bBrk = isForceBreak || rIsBreakAfter;
+    bool bBrk = rIsBreakAfter;
     rIsBreakAfter = rBrk.GetBreak() == SvxBreak::PageAfter ||
                    rBrk.GetBreak() == SvxBreak::PageBoth;
     if ( !bBrk )
@@ -823,7 +822,7 @@ bool SwLayHelper::CheckInsert( SwNodeOffset nNodeIndex )
             }
 
             SwPageFrame* pLastPage = mrpPage;
-            if (CheckInsertPage(mrpPage, mrpLay, mrpFrame, mbBreakAfter, false))
+            if (CheckInsertPage(mrpPage, mrpLay, mrpFrame, mbBreakAfter))
             {
                 CheckFlyCache_( pLastPage );
                 if( mrpPrv && mrpPrv->IsTextFrame() && !mrpPrv->isFrameAreaSizeValid() )
