@@ -6313,7 +6313,8 @@ void SalInstanceDrawingArea::HandleMouseEventListener(VclWindowEvent& rEvent)
 bool SalInstanceDrawingArea::HandleKeyEventListener(VclWindowEvent& /*rEvent*/) { return false; }
 
 SalInstanceDrawingArea::SalInstanceDrawingArea(VclDrawingArea* pDrawingArea,
-                                               SalInstanceBuilder* pBuilder, const a11yref& rAlly,
+                                               SalInstanceBuilder* pBuilder,
+                                               const rtl::Reference<comphelper::OAccessible>& rAlly,
                                                FactoryFunction pUITestFactoryFunction,
                                                void* pUserData, bool bTakeOwnership)
     : SalInstanceWidget(pDrawingArea, pBuilder, bTakeOwnership)

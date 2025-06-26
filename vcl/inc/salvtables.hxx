@@ -1300,8 +1300,9 @@ private:
 
 public:
     SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, SalInstanceBuilder* pBuilder,
-                           const a11yref& rAlly, FactoryFunction pUITestFactoryFunction,
-                           void* pUserData, bool bTakeOwnership);
+                           const rtl::Reference<comphelper::OAccessible>& rAlly,
+                           FactoryFunction pUITestFactoryFunction, void* pUserData,
+                           bool bTakeOwnership);
 
     virtual void queue_draw() override;
 

@@ -1561,7 +1561,8 @@ void JSCheckButton::set_active(bool active)
 }
 
 JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,
-                             SalInstanceBuilder* pBuilder, const a11yref& rAlly,
+                             SalInstanceBuilder* pBuilder,
+                             const rtl::Reference<comphelper::OAccessible>& rAlly,
                              FactoryFunction pUITestFactoryFunction, void* pUserData)
     : JSWidget<SalInstanceDrawingArea, VclDrawingArea>(pSender, pDrawingArea, pBuilder, rAlly,
                                                        std::move(pUITestFactoryFunction), pUserData,

@@ -283,8 +283,8 @@ public:
     }
 
     JSWidget(JSDialogSender* pSender, VclClass* pObject, SalInstanceBuilder* pBuilder,
-             const a11yref& rAlly, FactoryFunction pUITestFactoryFunction, void* pUserData,
-             bool bTakeOwnership)
+             const rtl::Reference<comphelper::OAccessible>& rAlly,
+             FactoryFunction pUITestFactoryFunction, void* pUserData, bool bTakeOwnership)
         : BaseInstanceClass(pObject, pBuilder, rAlly, std::move(pUITestFactoryFunction), pUserData,
                             bTakeOwnership)
         , m_nFreezeCounter(0)
@@ -639,7 +639,8 @@ class JSDrawingArea final : public JSWidget<SalInstanceDrawingArea, VclDrawingAr
 {
 public:
     JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,
-                  SalInstanceBuilder* pBuilder, const a11yref& rAlly,
+                  SalInstanceBuilder* pBuilder,
+                  const rtl::Reference<comphelper::OAccessible>& rAlly,
                   FactoryFunction pUITestFactoryFunction, void* pUserData);
 
     virtual void queue_draw() override;
