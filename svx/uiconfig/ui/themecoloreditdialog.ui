@@ -226,7 +226,7 @@
                     <property name="can-focus">False</property>
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
-                    <property name="label" translatable="yes" context="themecoloreditdialog|labelLight1">Light1:</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelLight1">Light 1:</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="buttonLight1"/>
@@ -260,7 +260,7 @@
                     <property name="can-focus">False</property>
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
-                    <property name="label" translatable="yes" context="themecoloreditdialog|labelLight2">Light2:</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelLight2">Light 2:</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="buttonLight2"/>
@@ -531,12 +531,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="labelFollowHyperlink">
+                  <object class="GtkLabel" id="labelFollowedHyperlink">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
-                    <property name="label" translatable="yes" context="themecoloreditdialog|labelFollowHyperlink">Follow Hyperlink:</property>
+                    <property name="label" translatable="yes" context="themecoloreditdialog|labelFollowedHyperlink">Followed Hyperlink:</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="buttonFollowHyperlink"/>
@@ -579,7 +579,7 @@
                       <placeholder/>
                     </child>
                     <accessibility>
-                      <relation type="labelled-by" target="labelFollowHyperlink"/>
+                      <relation type="labelled-by" target="labelFollowedHyperlink"/>
                     </accessibility>
                   </object>
                   <packing>
