@@ -4060,7 +4060,7 @@ void ChartExport::exportOneAxis_chartex(
         case XML_valAx:
             {
                 bool bAutoMax = false;
-                double dMax;
+                double dMax = 0; // Make VS happy
                 bool bMaxSpecified = false;
                 if(GetProperty( xAxisProp, u"AutoMax"_ustr ) )
                     mAny >>= bAutoMax;
@@ -4072,7 +4072,7 @@ void ChartExport::exportOneAxis_chartex(
                 }
 
                 bool bAutoMin = false;
-                double dMin;
+                double dMin = 0; // Make VS happy
                 bool bMinSpecified = false;
                 if(GetProperty( xAxisProp, u"AutoMin"_ustr ) )
                     mAny >>= bAutoMin;
