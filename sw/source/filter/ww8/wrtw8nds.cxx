@@ -1903,6 +1903,7 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nCurrentPos,
     Because of the different style handling for delete operations,
     the track changes have to be analysed. A deletion, starting in paragraph A
     with style A, ending in paragraph B with style B, needs a hack.
+    If paragraph B is not deleted completely, we should preserve the style here.
 */
 static SwTextFormatColl& lcl_getFormatCollection( MSWordExportBase& rExport, const SwTextNode* pTextNode )
 {
@@ -1915,7 +1916,8 @@ static SwTextFormatColl& lcl_getFormatCollection( MSWordExportBase& rExport, con
         // Looking for deletions, which ends in current pTextNode
         if( RedlineType::Delete == pRedl->GetRedlineData().GetType() &&
             pEnd->GetNode() == *pTextNode && pStart->GetNode() != *pTextNode &&
-            pStart->GetNode().IsTextNode() )
+            pStart->GetNode().IsTextNode() &&
+            pEnd->GetContentIndex() == pEnd->GetNode().GetTextNode()->GetText().getLength())
         {
             pTextNode = pStart->GetNode().GetTextNode();
             nMax = nPos;

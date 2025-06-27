@@ -125,6 +125,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
+{
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Heading 1
+    // - Actual  : Standard
+
+    createSwDoc("tdf167082.docx");
+    saveAndReload(mpFilter);
+    OUString aStyleName = getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
