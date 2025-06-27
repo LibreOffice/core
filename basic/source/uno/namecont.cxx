@@ -2285,7 +2285,17 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 #endif
     }
 
-    for (auto& aElementName : pImplLib->getElementNames())
+    // tdf#167255 workaround: sort library elements to establish at least some predictable order.
+    // FIXME: the order of modules must not affect their inner names visibility. Modules must load
+    // their content first (and so the names of e.g. global constants / variables must be known),
+    // and only then their elements' values must be resolved.
+    auto elements = pImplLib->getElementNames();
+    {
+        auto range = asNonConstRange(elements);
+        std::sort(range.begin(), range.end());
+    }
+
+    for (auto& aElementName : elements)
     {
         OUString aFile;
         uno::Reference< io::XInputStream > xInStream;
