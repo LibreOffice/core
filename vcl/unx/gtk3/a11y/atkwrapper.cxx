@@ -65,51 +65,29 @@ static GObjectClass *parent_class = nullptr;
 
 static AtkRelationType mapRelationType(accessibility::AccessibleRelationType eRelation)
 {
-    AtkRelationType type = ATK_RELATION_NULL;
-
     switch (eRelation)
     {
         case accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM:
-            type = ATK_RELATION_FLOWS_FROM;
-            break;
-
+            return ATK_RELATION_FLOWS_FROM;
         case accessibility::AccessibleRelationType_CONTENT_FLOWS_TO:
-            type = ATK_RELATION_FLOWS_TO;
-            break;
-
+            return ATK_RELATION_FLOWS_TO;
         case accessibility::AccessibleRelationType_CONTROLLED_BY:
-            type = ATK_RELATION_CONTROLLED_BY;
-            break;
-
+            return ATK_RELATION_CONTROLLED_BY;
         case accessibility::AccessibleRelationType_CONTROLLER_FOR:
-            type = ATK_RELATION_CONTROLLER_FOR;
-            break;
-
+            return ATK_RELATION_CONTROLLER_FOR;
         case accessibility::AccessibleRelationType_LABEL_FOR:
-            type = ATK_RELATION_LABEL_FOR;
-            break;
-
+            return ATK_RELATION_LABEL_FOR;
         case accessibility::AccessibleRelationType_LABELED_BY:
-            type = ATK_RELATION_LABELLED_BY;
-            break;
-
+            return ATK_RELATION_LABELLED_BY;
         case accessibility::AccessibleRelationType_MEMBER_OF:
-            type = ATK_RELATION_MEMBER_OF;
-            break;
-
+            return ATK_RELATION_MEMBER_OF;
         case accessibility::AccessibleRelationType_SUB_WINDOW_OF:
-            type = ATK_RELATION_SUBWINDOW_OF;
-            break;
-
+            return ATK_RELATION_SUBWINDOW_OF;
         case accessibility::AccessibleRelationType_NODE_CHILD_OF:
-            type = ATK_RELATION_NODE_CHILD_OF;
-            break;
-
+            return ATK_RELATION_NODE_CHILD_OF;
         default:
-            break;
+            return ATK_RELATION_NULL;
     }
-
-    return type;
 }
 
 AtkStateType mapAtkState( sal_Int64 nState )
