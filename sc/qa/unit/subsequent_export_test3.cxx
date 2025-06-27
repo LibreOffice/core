@@ -892,6 +892,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testFunctionsExcel2010XLS)
     testFunctionsExcel2010(u"MS Excel 97"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testFunctionsExcel2010ODS) { testFunctionsExcel2010("calc8"); }
+
 void ScExportTest3::testCeilingFloor(const OUString& sFormatType)
 {
     createScDoc("xlsx/ceiling-floor.xlsx");
@@ -1015,11 +1017,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetProtectionODS)
     pDoc = getScDoc();
 
     testSheetProtection_Impl(*pDoc);
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testFunctionsExcel2010ODS)
-{
-    //testFunctionsExcel2010("calc8");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testSwappedOutImageExport)
