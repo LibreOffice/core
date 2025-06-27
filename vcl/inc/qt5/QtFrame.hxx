@@ -32,6 +32,7 @@
 #include <vcl/sysdata.hxx>
 
 #include <QtCore/QObject>
+#include <QtCore/QPointer>
 
 #if !defined EMSCRIPTEN
 #include <unx/sessioninhibitor.hxx>
@@ -93,7 +94,7 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     SystemEnvData m_aSystemData;
 
     QtDragSource* m_pDragSource;
-    QtDropTarget* m_pDropTarget;
+    QPointer<QtDropTarget> m_pDropTarget;
     bool m_bInDrag;
 
     bool m_bDefaultSize;
