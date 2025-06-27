@@ -309,7 +309,6 @@ private:
         const css::uno::Any& rNewValue,
         const css::uno::Any& rOldValue);
 
-    void ProvideFrameworkControllers();
     void DisposeFrameworkControllers();
 };
 

@@ -70,7 +70,17 @@ DrawController::DrawController (ViewShellBase& rBase) noexcept
       mbLayerMode(false),
       mbDisposing(false)
 {
-    ProvideFrameworkControllers();
+    SolarMutexGuard aGuard;
+    try
+    {
+        mxConfigurationController = new sd::framework::ConfigurationController(this);
+        mxModuleController = new sd::framework::ModuleController(this);
+    }
+    catch (const RuntimeException&)
+    {
+        mxConfigurationController = nullptr;
+        mxModuleController = nullptr;
+    }
 }
 
 DrawController::~DrawController() noexcept
@@ -792,21 +802,6 @@ void DrawController::getFastPropertyValue (
             if (mxSubController.is())
                 rRet = mxSubController->getFastPropertyValue(nHandle);
             break;
-    }
-}
-
-void DrawController::ProvideFrameworkControllers()
-{
-    SolarMutexGuard aGuard;
-    try
-    {
-        mxConfigurationController = new sd::framework::ConfigurationController(this);
-        mxModuleController = new sd::framework::ModuleController(this);
-    }
-    catch (const RuntimeException&)
-    {
-        mxConfigurationController = nullptr;
-        mxModuleController = nullptr;
     }
 }
 
