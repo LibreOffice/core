@@ -501,20 +501,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testAutofilterTextXLSXML)
     }
 }
 
-CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testCondFormatXLSB)
-{
-    createScDoc("xlsb/cond_format.xlsb");
-
-    ScDocument* pDoc = getScDoc();
-    ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
-    CPPUNIT_ASSERT(pList);
-
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
-    ScConditionalFormat* pFormat = pList->begin()->get();
-    CPPUNIT_ASSERT(pFormat);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
-}
-
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testPageScalingXLSX)
 {
     createScDoc("xlsx/page_scale.xlsx");
@@ -646,28 +632,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testCondFormatFormulaListenerXLSX)
     CPPUNIT_ASSERT(pFormat);
     pDoc->SetDocVisible(true);
     pDoc->SetValue(0, 0, 0, 2.0);
-
-    IdleTask::waitUntilIdleDispatched();
-
-    CPPUNIT_ASSERT(aListener.mbCalled);
-}
-
-CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf131471)
-{
-    // Repaint range of conditional format in merged cell.
-    createScDoc("ods/tdf131471.ods");
-    ScDocShell* pDocSh = getScDocShell();
-    PaintListener aListener;
-    aListener.StartListening(*pDocSh);
-    ScDocument* pDoc = getScDoc();
-    ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
-    CPPUNIT_ASSERT(pList);
-
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
-    ScConditionalFormat* pFormat = pList->begin()->get();
-    CPPUNIT_ASSERT(pFormat);
-    pDoc->SetDocVisible(true);
-    pDoc->SetValue(0, 0, 0, 1.0);
 
     IdleTask::waitUntilIdleDispatched();
 

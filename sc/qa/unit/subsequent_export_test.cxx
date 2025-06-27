@@ -12,11 +12,11 @@
 #include "helper/debughelper.hxx"
 
 #include "helper/qahelper.hxx"
-#include "helper/shared_test_impl.hxx"
 
 #include <userdat.hxx>
 #include <docpool.hxx>
 #include <cellvalue.hxx>
+#include <formulacell.hxx>
 #include <scitems.hxx>
 #include <attrib.hxx>
 #include <stlpool.hxx>
@@ -267,64 +267,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf134332)
     ASSERT_DOUBLES_EQUAL(238.0, pDoc->GetValue(ScAddress(0, 10144, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest, testConditionalFormatExportODS)
-{
-    createScDoc("ods/new_cond_format_test_export.ods");
-
-    saveAndReload(u"calc8"_ustr);
-    ScDocument* pDoc = getScDoc();
-    OUString aCSVPath = createFilePath(u"contentCSV/new_cond_format_test_export.csv");
-    testCondFile(aCSVPath, &*pDoc, 0);
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest, testCondFormatExportCellIs)
-{
-    createScDoc("xlsx/condFormat_cellis.xlsx");
-    saveAndReload(u"Calc Office Open XML"_ustr);
-
-    ScDocument* pDoc = getScDoc();
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetCondFormList(0)->size());
-
-    ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0);
-    CPPUNIT_ASSERT(pFormat);
-
-    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
-    CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
-
-    const ScCondFormatEntry* pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScConditionMode::Equal, pCondition->GetOperation());
-
-    OUString aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL(u"$Sheet2.$A$2"_ustr, aStr);
-
-    pEntry = pFormat->GetEntry(1);
-    CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
-
-    pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScConditionMode::Equal, pCondition->GetOperation());
-
-    aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL(u"$Sheet2.$A$1"_ustr, aStr);
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest, testConditionalFormatExportXLSX)
-{
-    createScDoc("xlsx/new_cond_format_test_export.xlsx");
-
-    saveAndReload(u"Calc Office Open XML"_ustr);
-    ScDocument* pDoc = getScDoc();
-    {
-        OUString aCSVPath = createFilePath(u"contentCSV/new_cond_format_test_export.csv");
-        testCondFile(aCSVPath, &*pDoc, 0);
-    }
-    {
-        OUString aCSVPath = createFilePath(u"contentCSV/new_cond_format_test_sheet2.csv");
-        testCondFile(aCSVPath, &*pDoc, 1);
-    }
-}
-
 CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf99856_dataValidationTest)
 {
     createScDoc("ods/tdf99856_dataValidationTest.ods");
@@ -485,41 +427,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_XL_SHA1)
         "@table:protection-key-digest-algorithm='http://docs.oasis-open.org/office/ns/table/"
         "legacy-hash-excel' and "
         "@loext:protection-key-digest-algorithm-2='http://www.w3.org/2000/09/xmldsig#sha1']");
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest, testColorScaleExportODS)
-{
-    createScDoc("ods/colorscale.ods");
-
-    saveAndReload(u"calc8"_ustr);
-
-    ScDocument* pDoc = getScDoc();
-
-    testColorScale2Entry_Impl(*pDoc);
-    testColorScale3Entry_Impl(*pDoc);
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest, testColorScaleExportXLSX)
-{
-    createScDoc("xlsx/colorscale.xlsx");
-
-    saveAndReload(u"Calc Office Open XML"_ustr);
-
-    ScDocument* pDoc = getScDoc();
-
-    testColorScale2Entry_Impl(*pDoc);
-    testColorScale3Entry_Impl(*pDoc);
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest, testDataBarExportODS)
-{
-    createScDoc("ods/databar.ods");
-
-    saveAndReload(u"calc8"_ustr);
-
-    ScDocument* pDoc = getScDoc();
-
-    testDataBar_Impl(*pDoc);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testFormatExportODS)
@@ -1080,17 +987,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testLandscapeOrientationXLSX)
     // the usePrinterDefaults cannot be saved to allow opening sheets in Landscape mode via MS Excel
     assertXPathNoAttribute(pSheet, "/x:worksheet/x:pageSetup", "usePrinterDefaults");
     assertXPath(pSheet, "/x:worksheet/x:pageSetup", "orientation", u"landscape");
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest, testDataBarExportXLSX)
-{
-    createScDoc("xlsx/databar.xlsx");
-
-    saveAndReload(u"Calc Office Open XML"_ustr);
-
-    ScDocument* pDoc = getScDoc();
-
-    testDataBar_Impl(*pDoc);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testMiscRowHeightExport)
@@ -2109,37 +2005,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testSheetProtectionXLSB)
     CPPUNIT_ASSERT(pTabProtect);
     CPPUNIT_ASSERT(pTabProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS));
     CPPUNIT_ASSERT(!pTabProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS));
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest, testConditionalFormatNumberInTextRule)
-{
-    createScDoc();
-
-    ScDocument* pDocument = getScDoc();
-    ScAddress aAddress(0, 0, 0);
-
-    auto pFormat = std::make_unique<ScConditionalFormat>(0, *pDocument);
-    ScRange aCondFormatRange(aAddress);
-    ScRangeList aRangeList(aCondFormatRange);
-    pFormat->SetRange(aRangeList);
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::BeginsWith, u"15"_ustr,
-                                                      u""_ustr, *pDocument, aAddress, u""_ustr);
-    pFormat->AddEntry(pEntry);
-    pDocument->AddCondFormat(std::move(pFormat), 0);
-
-    saveAndReload(u"Calc Office Open XML"_ustr);
-    pDocument = getScDoc();
-
-    ScConditionalFormat* pCondFormat = pDocument->GetCondFormat(0, 0, 0);
-    CPPUNIT_ASSERT(pCondFormat);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormat->size());
-    const ScFormatEntry* pCondFormatEntry = pCondFormat->GetEntry(0);
-    CPPUNIT_ASSERT(pCondFormatEntry);
-    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Condition, pCondFormatEntry->GetType());
-    const ScConditionEntry* pConditionEntry
-        = static_cast<const ScConditionEntry*>(pCondFormatEntry);
-    CPPUNIT_ASSERT_EQUAL(ScConditionMode::BeginsWith, pConditionEntry->GetOperation());
-    CPPUNIT_ASSERT_EQUAL(u"\"15\""_ustr, pConditionEntry->GetExpression(aAddress, 0));
 }
 
 namespace

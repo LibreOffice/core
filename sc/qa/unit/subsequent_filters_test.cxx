@@ -18,7 +18,6 @@
 #include <validat.hxx>
 #include <docfunc.hxx>
 #include <markdata.hxx>
-#include <colorscale.hxx>
 #include <scitems.hxx>
 #include <scopetools.hxx>
 #include <detfunc.hxx>
@@ -123,52 +122,6 @@ void testContentImpl(ScDocument& rDoc, bool bCheckMergedCells)
 }
 }
 
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf155321_CondFormatColor_XLSX)
-{
-    createScDoc("xlsx/tdf155321.xlsx");
-
-    ScDocument* pDoc = getScDoc();
-    ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(0, 0, 0);
-    ScRefCellValue aCellB1(*pDoc, ScAddress(1, 0, 0));
-    Color aColor = pCondFormat->GetData(aCellB1, ScAddress(1, 0, 0)).mxColorScale.value();
-    CPPUNIT_ASSERT_EQUAL(Color(99, 190, 123), aColor);
-}
-
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf156028_ColorScale_XLSX)
-{
-    createScDoc("xlsx/tdf156028.xlsx");
-
-    ScDocument* pDoc = getScDoc();
-    ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(0, 0, 0);
-    ScRefCellValue aCellA1(*pDoc, ScAddress(0, 0, 0));
-    Color aColor = pCondFormat->GetData(aCellA1, ScAddress(0, 0, 0)).mxColorScale.value();
-    CPPUNIT_ASSERT_EQUAL(Color(99, 190, 123), aColor);
-}
-
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf138601_CondFormatXLSX)
-{
-    createScDoc("xlsx/tdf138601.xlsx");
-
-    ScDocument* pDoc = getScDoc();
-    ScConditionalFormat* pFormat1 = pDoc->GetCondFormat(0, 0, 0);
-    const ScFormatEntry* pEntry1 = pFormat1->GetEntry(0);
-    const ScColorScaleFormat* pColorScale1 = static_cast<const ScColorScaleFormat*>(pEntry1);
-    const ScColorScaleEntry* pColorScaleEntry1 = pColorScale1->GetEntry(0);
-    CPPUNIT_ASSERT_EQUAL(Color(255, 255, 201), pColorScaleEntry1->GetColor());
-
-    ScConditionalFormat* pFormat2 = pDoc->GetCondFormat(1, 0, 0);
-    const ScFormatEntry* pEntry2 = pFormat2->GetEntry(0);
-    const ScColorScaleFormat* pColorScale2 = static_cast<const ScColorScaleFormat*>(pEntry2);
-    const ScColorScaleEntry* pColorScaleEntry2 = pColorScale2->GetEntry(0);
-    CPPUNIT_ASSERT_EQUAL(Color(255, 139, 139), pColorScaleEntry2->GetColor());
-
-    ScConditionalFormat* pFormat3 = pDoc->GetCondFormat(0, 1, 0);
-    const ScFormatEntry* pEntry3 = pFormat3->GetEntry(0);
-    const ScColorScaleFormat* pColorScale3 = static_cast<const ScColorScaleFormat*>(pEntry3);
-    const ScColorScaleEntry* pColorScaleEntry3 = pColorScale3->GetEntry(0);
-    CPPUNIT_ASSERT_EQUAL(Color(255, 255, 201), pColorScaleEntry3->GetColor());
-}
-
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentODS)
 {
     createScDoc("ods/universal-content.ods");
@@ -251,37 +204,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentGnumeric)
     testContentImpl(*getScDoc(), false);
 }
 
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatOperatorsSameRangeXLSX)
-{
-    createScDoc("xlsx/tdf139928.xlsx");
-
-    ScDocument* pDoc = getScDoc();
-
-    ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0);
-    CPPUNIT_ASSERT(pFormat);
-
-    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
-    CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
-
-    const ScCondFormatEntry* pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScConditionMode::ContainsText, pCondition->GetOperation());
-
-    pEntry = pFormat->GetEntry(1);
-    CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
-
-    pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScConditionMode::BeginsWith, pCondition->GetOperation());
-
-    pEntry = pFormat->GetEntry(2);
-    CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
-
-    pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScConditionMode::EndsWith, pCondition->GetOperation());
-}
-
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf119292)
 {
     createScDoc("xlsx/tdf119292.xlsx");
@@ -361,93 +283,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf48731)
     CPPUNIT_ASSERT_EQUAL(u"'3"_ustr, pDoc->GetString(1, 12, 0));
     CPPUNIT_ASSERT_EQUAL(u"'word"_ustr, pDoc->GetString(1, 13, 0));
     CPPUNIT_ASSERT_EQUAL(u"'mword"_ustr, pDoc->GetString(1, 14, 0));
-}
-
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatFormulaIsXLSX)
-{
-    createScDoc("xlsx/tdf113013.xlsx");
-
-    ScDocument* pDoc = getScDoc();
-
-    // "Formula is" condition
-    ScConditionalFormat* pFormatB1 = pDoc->GetCondFormat(1, 0, 0);
-    CPPUNIT_ASSERT(pFormatB1);
-    ScConditionalFormat* pFormatA2 = pDoc->GetCondFormat(0, 1, 0);
-    CPPUNIT_ASSERT(pFormatA2);
-
-    ScRefCellValue aCellB1(*pDoc, ScAddress(1, 0, 0));
-    OUString aCellStyleB1 = pFormatB1->GetCellStyle(aCellB1, ScAddress(1, 0, 0));
-    CPPUNIT_ASSERT(!aCellStyleB1.isEmpty());
-
-    ScRefCellValue aCellA2(*pDoc, ScAddress(0, 1, 0));
-    OUString aCellStyleA2 = pFormatA2->GetCellStyle(aCellA2, ScAddress(0, 1, 0));
-    CPPUNIT_ASSERT(!aCellStyleA2.isEmpty());
-}
-
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatBeginsAndEndsWithXLSX)
-{
-    createScDoc("xlsx/tdf120749.xlsx");
-
-    ScDocument* pDoc = getScDoc();
-
-    // begins with and ends with conditions
-    ScConditionalFormat* pFormatA1 = pDoc->GetCondFormat(0, 0, 0);
-    CPPUNIT_ASSERT(pFormatA1);
-    ScConditionalFormat* pFormatA2 = pDoc->GetCondFormat(0, 1, 0);
-    CPPUNIT_ASSERT(pFormatA2);
-    ScConditionalFormat* pFormatA3 = pDoc->GetCondFormat(0, 2, 0);
-    CPPUNIT_ASSERT(pFormatA3);
-    ScConditionalFormat* pFormatA4 = pDoc->GetCondFormat(0, 3, 0);
-    CPPUNIT_ASSERT(pFormatA4);
-
-    ScRefCellValue aCellA1(*pDoc, ScAddress(0, 0, 0));
-    OUString aCellStyleA1 = pFormatA1->GetCellStyle(aCellA1, ScAddress(0, 0, 0));
-    CPPUNIT_ASSERT(!aCellStyleA1.isEmpty());
-
-    ScRefCellValue aCellA2(*pDoc, ScAddress(0, 1, 0));
-    OUString aCellStyleA2 = pFormatA2->GetCellStyle(aCellA2, ScAddress(0, 1, 0));
-    CPPUNIT_ASSERT(!aCellStyleA2.isEmpty());
-
-    ScRefCellValue aCellA3(*pDoc, ScAddress(0, 2, 0));
-    OUString aCellStyleA3 = pFormatA3->GetCellStyle(aCellA3, ScAddress(0, 2, 0));
-    CPPUNIT_ASSERT(!aCellStyleA3.isEmpty());
-
-    ScRefCellValue aCellA4(*pDoc, ScAddress(0, 3, 0));
-    OUString aCellStyleA4 = pFormatA4->GetCellStyle(aCellA4, ScAddress(0, 3, 0));
-    CPPUNIT_ASSERT(!aCellStyleA4.isEmpty());
-}
-
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testExtCondFormatXLSX)
-{
-    createScDoc("xlsx/tdf122102.xlsx");
-
-    ScDocument* pDoc = getScDoc();
-
-    // contains text and not contains text conditions
-    ScConditionalFormat* pFormatA1 = pDoc->GetCondFormat(0, 0, 0);
-    CPPUNIT_ASSERT(pFormatA1);
-    ScConditionalFormat* pFormatA2 = pDoc->GetCondFormat(0, 1, 0);
-    CPPUNIT_ASSERT(pFormatA2);
-    ScConditionalFormat* pFormatA3 = pDoc->GetCondFormat(0, 2, 0);
-    CPPUNIT_ASSERT(pFormatA3);
-    ScConditionalFormat* pFormatA4 = pDoc->GetCondFormat(0, 3, 0);
-    CPPUNIT_ASSERT(pFormatA4);
-
-    ScRefCellValue aCellA1(*pDoc, ScAddress(0, 0, 0));
-    OUString aCellStyleA1 = pFormatA1->GetCellStyle(aCellA1, ScAddress(0, 0, 0));
-    CPPUNIT_ASSERT(!aCellStyleA1.isEmpty());
-
-    ScRefCellValue aCellA2(*pDoc, ScAddress(0, 1, 0));
-    OUString aCellStyleA2 = pFormatA2->GetCellStyle(aCellA2, ScAddress(0, 1, 0));
-    CPPUNIT_ASSERT(!aCellStyleA2.isEmpty());
-
-    ScRefCellValue aCellA3(*pDoc, ScAddress(0, 2, 0));
-    OUString aCellStyleA3 = pFormatA3->GetCellStyle(aCellA3, ScAddress(0, 2, 0));
-    CPPUNIT_ASSERT(!aCellStyleA3.isEmpty());
-
-    ScRefCellValue aCellA4(*pDoc, ScAddress(0, 3, 0));
-    OUString aCellStyleA4 = pFormatA4->GetCellStyle(aCellA4, ScAddress(0, 3, 0));
-    CPPUNIT_ASSERT(!aCellStyleA4.isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testUpdateCircleInMergedCellODS)
@@ -1769,27 +1604,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRowIndex1BasedXLSX)
     CPPUNIT_ASSERT_EQUAL(u"Second line."_ustr, aStr);
     aStr = pText->GetText(2);
     CPPUNIT_ASSERT_EQUAL(u"Third line."_ustr, aStr);
-}
-
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatCfvoScaleValueXLSX)
-{
-    createScDoc("xlsx/condformat_databar.xlsx");
-
-    ScDocument* pDoc = getScDoc();
-    ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0);
-    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
-    CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Databar, pEntry->GetType());
-    const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pEntry);
-    const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
-    const ScColorScaleEntry* pLower = pDataBarFormatData->mpLowerLimit.get();
-    const ScColorScaleEntry* pUpper = pDataBarFormatData->mpUpperLimit.get();
-
-    CPPUNIT_ASSERT_EQUAL(COLORSCALE_VALUE, pLower->GetType());
-    CPPUNIT_ASSERT_EQUAL(COLORSCALE_VALUE, pUpper->GetType());
-
-    CPPUNIT_ASSERT_EQUAL(0.0, pLower->GetValue());
-    CPPUNIT_ASSERT_EQUAL(1.0, pUpper->GetValue());
 }
 
 ScFiltersTest::ScFiltersTest()

@@ -79,6 +79,7 @@ endif
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_anchor_test \
+	CppunitTest_sc_cond_format \
 	CppunitTest_sc_cond_format_merge \
 	CppunitTest_sc_copypaste \
 	CppunitTest_sc_html_export_test \

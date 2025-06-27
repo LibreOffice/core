@@ -1666,100 +1666,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testMoveCellAnchoredShapesODS)
     CPPUNIT_ASSERT_EQUAL(pNData->maEnd, aNDataEnd);
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testConditionalFormatRangeListXLSX)
-{
-    createScDoc("ods/conditionalformat_rangelist.ods");
-    save(u"Calc Office Open XML"_ustr);
-    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
-    CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "//x:conditionalFormatting", "sqref", u"F4 F10");
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testConditionalFormatContainsTextXLSX)
-{
-    createScDoc("ods/conditionalformat_containstext.ods");
-    save(u"Calc Office Open XML"_ustr);
-    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
-    CPPUNIT_ASSERT(pDoc);
-    assertXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula",
-                       u"NOT(ISERROR(SEARCH(\"test\",A1)))");
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testConditionalFormatPriorityCheckXLSX)
-{
-    createScDoc("xlsx/conditional_fmt_checkpriority.xlsx");
-    save(u"Calc Office Open XML"_ustr);
-    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
-    CPPUNIT_ASSERT(pDoc);
-    constexpr bool bHighPriorityExtensionA1
-        = true; // Should A1's extension cfRule has higher priority than normal cfRule ?
-    constexpr bool bHighPriorityExtensionA3
-        = false; // Should A3's extension cfRule has higher priority than normal cfRule ?
-    size_t nA1NormalPriority = 0;
-    size_t nA1ExtPriority = 0;
-    size_t nA3NormalPriority = 0;
-    size_t nA3ExtPriority = 0;
-    for (size_t nIdx = 1; nIdx <= 2; ++nIdx)
-    {
-        OString aIdx = OString::number(nIdx);
-        OUString aCellAddr = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]", "sqref");
-        OUString aPriority
-            = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]/x:cfRule", "priority");
-        CPPUNIT_ASSERT_MESSAGE("conditionalFormatting sqref must be either A1 or A3",
-                               aCellAddr == "A1" || aCellAddr == "A3");
-        if (aCellAddr == "A1")
-            nA1NormalPriority = aPriority.toUInt32();
-        else
-            nA3NormalPriority = aPriority.toUInt32();
-        aCellAddr = getXPathContent(
-            pDoc, "//x:extLst/x:ext[1]/x14:conditionalFormattings/x14:conditionalFormatting[" + aIdx
-                      + "]/xm:sqref");
-        aPriority
-            = getXPath(pDoc,
-                       "//x:extLst/x:ext[1]/x14:conditionalFormattings/x14:conditionalFormatting["
-                           + aIdx + "]/x14:cfRule",
-                       "priority");
-        CPPUNIT_ASSERT_MESSAGE("x14:conditionalFormatting sqref must be either A1 or A3",
-                               aCellAddr == "A1" || aCellAddr == "A3");
-        if (aCellAddr == "A1")
-            nA1ExtPriority = aPriority.toUInt32();
-        else
-            nA3ExtPriority = aPriority.toUInt32();
-    }
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong priorities for A1", bHighPriorityExtensionA1,
-                                 nA1ExtPriority < nA1NormalPriority);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong priorities for A3", bHighPriorityExtensionA3,
-                                 nA3ExtPriority < nA3NormalPriority);
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testConditionalFormatOriginXLSX)
-{
-    createScDoc("xlsx/conditional_fmt_origin.xlsx");
-    save(u"Calc Office Open XML"_ustr);
-    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
-    CPPUNIT_ASSERT(pDoc);
-    // tdf#124953 : The range-list is B3:C6 F1:G2, origin address in the formula should be B1, not B3.
-    OUString aFormula = getXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong origin address in formula",
-                                 u"NOT(ISERROR(SEARCH(\"BAC\",B1)))"_ustr, aFormula);
-}
-
-// FILESAVE: XLSX export with long sheet names (length > 31 characters)
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf79998)
-{
-    // check: original document has tab name > 31 characters
-    createScDoc("ods/tdf79998.ods");
-    ScDocument* pDoc = getScDoc();
-    const std::vector<OUString> aTabNames1 = pDoc->GetAllTableNames();
-    CPPUNIT_ASSERT_EQUAL(u"Utilities (FX Kurse, Kreditkarten etc)"_ustr, aTabNames1[1]);
-
-    // check: saved XLSX document has truncated tab name
-    saveAndReload(u"Calc Office Open XML"_ustr);
-    pDoc = getScDoc();
-    const std::vector<OUString> aTabNames2 = pDoc->GetAllTableNames();
-    CPPUNIT_ASSERT_EQUAL(u"Utilities (FX Kurse, Kreditkart"_ustr, aTabNames2[1]);
-}
-
 static void impl_testLegacyCellAnchoredRotatedShape(ScDocument& rDoc, const tools::Rectangle& aRect,
                                                     const ScDrawObjData& aAnchor,
                                                     tools::Long TOLERANCE = 30 /* 30 hmm */)
@@ -1887,36 +1793,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testDateStandardfilterXLSX)
                 u"2011");
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]",
                 "dateTimeGrouping", u"day");
-}
-
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testNumberFormatODS)
-{
-    createScDoc("ods/testNumberFormats.ods");
-    saveAndReload(u"calc8"_ustr);
-    ScDocument* pDoc = getScDoc();
-    sal_uInt32 nNumberFormat;
-    const sal_Int32 nCountFormats = 18;
-    const OUString aExpectedFormatStr[nCountFormats]
-        = { u"\"format=\"000000"_ustr,        u"\"format=\"??????"_ustr,
-            u"\"format=\"??0000"_ustr,        u"\"format=\"000,000"_ustr,
-            u"\"format=\"???,???"_ustr,       u"\"format=\"??0,000"_ustr,
-            u"\"format=\"000\" \"?/?"_ustr,   u"\"format=\"???\" \"?/?"_ustr,
-            u"\"format=\"?00\" \"?/?"_ustr,   u"\"format=\"0,000\" \"?/?"_ustr,
-            u"\"format=\"?,???\" \"?/?"_ustr, u"\"format=\"?,?00\" \"?/?"_ustr,
-            u"\"format=\"0.000E+00"_ustr,     u"\"format=\"?.###E+00"_ustr,
-            u"\"format=\"?.0##E+00"_ustr,     u"\"format=\"000E+00"_ustr,
-            u"\"format=\"???E+00"_ustr,       u"\"format=\"?00E+00"_ustr };
-    for (sal_Int32 i = 0; i < nCountFormats; i++)
-    {
-        nNumberFormat = pDoc->GetNumberFormat(i + 1, 2, 0);
-        const SvNumberformat* pNumberFormat = pDoc->GetFormatTable()->GetEntry(nNumberFormat);
-        const OUString& rFormatStr = pNumberFormat->GetFormatstring();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format modified during export/import",
-                                     aExpectedFormatStr[i], rFormatStr);
-    }
-    OUString aCSVPath = createFilePath(u"contentCSV/testNumberFormats.csv");
-    testCondFile(aCSVPath, &*pDoc, 0,
-                 false); // comma is thousand separator and cannot be used as delimiter
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137576_Measureline)

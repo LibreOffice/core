@@ -45,24 +45,6 @@ ScUiCalcTest::ScUiCalcTest()
 {
 }
 
-static void lcl_AssertConditionalFormatList(ScDocument& rDoc,
-                                            std::unordered_map<OUString, OUString>& rExpectedValues)
-{
-    ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
-    CPPUNIT_ASSERT_EQUAL(rExpectedValues.size(), pList->size());
-
-    OUString sRangeStr;
-    for (const auto& rItem : *pList)
-    {
-        const ScRangeList& aRange = rItem->GetRange();
-        aRange.Format(sRangeStr, ScRefFlags::VALID, rDoc, rDoc.GetAddressConvention());
-        CPPUNIT_ASSERT_MESSAGE(OString(sRangeStr.toUtf8() + " not found").getStr(),
-                               rExpectedValues.count(sRangeStr));
-        CPPUNIT_ASSERT_EQUAL(rExpectedValues[sRangeStr],
-                             ScCondFormatHelper::GetExpression(*rItem, aRange.GetTopLeftCorner()));
-    }
-}
-
 static void lcl_AssertCurrentCursorPosition(ScDocShell& rDocSh, std::u16string_view rStr)
 {
     ScAddress aAddr;
@@ -1307,86 +1289,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf97215)
 
     // Restore previous status
     aInputOption.SetSortRefUpdate(bOldStatus);
-    pMod->SetInputOptions(aInputOption);
-}
-
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf104026)
-{
-    createScDoc("tdf104026.ods");
-    ScDocument* pDoc = getScDoc();
-
-    std::unordered_map<OUString, OUString> aExpectedValues
-        = { { "A2", "Cell value != $Sheet1.$B2" }, { "A3", "Cell value != $Sheet1.$B3" },
-            { "A4", "Cell value != $Sheet1.$B4" }, { "A5", "Cell value != $Sheet1.$B5" },
-            { "A6", "Cell value != $Sheet1.$B6" }, { "A7", "Cell value != $Sheet1.$B7" } };
-
-    lcl_AssertConditionalFormatList(*pDoc, aExpectedValues);
-
-    goToCell(u"A2"_ustr);
-    dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
-
-    std::unordered_map<OUString, OUString> aExpectedValues2
-        = { { "A2", "Cell value != $Sheet1.$B2" },
-            { "A3", "Cell value != $Sheet1.$B3" },
-            { "A4", "Cell value != $Sheet1.$B4" },
-            { "A5", "Cell value != $Sheet1.$B5" },
-            { "A6", "Cell value != $Sheet1.$B6" } };
-    // Without the fix in place, this test would have failed with
-    // - Expected: Cell value != $Sheet1.$B2
-    // - Actual  : Cell value != $Sheet1.$B#REF!
-    lcl_AssertConditionalFormatList(*pDoc, aExpectedValues2);
-
-    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
-
-    // tdf#140330: Without the fix in place, this test would have failed with
-    // - Expected: 6
-    // - Actual  : 5
-    lcl_AssertConditionalFormatList(*pDoc, aExpectedValues);
-}
-
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf167019)
-{
-    createScDoc("tdf167019.xlsx");
-    ScDocument* pDoc = getScDoc();
-
-    std::unordered_map<OUString, OUString> aExpectedValues
-        = { { "D4,G4,J4,M4,G6:G10,J6:J10,M6:M10,D6:D10", "Cell value is not between 100 and 152" },
-            { "E4,H4,K4,N4,E6:E10,H6:H10,K6:K10,N6:N10", "Cell value is not between 54 and 102" },
-            { "F4,I4,L4,O4,F6,I6,L6,O6", "Cell value is not between 32 and 100" } };
-
-    lcl_AssertConditionalFormatList(*pDoc, aExpectedValues);
-}
-
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
-{
-    createScDoc("tdf92963.ods");
-    ScDocument* pDoc = getScDoc();
-
-    // Disable replace cell warning
-    ScModule* pMod = ScModule::get();
-    ScInputOptions aInputOption = pMod->GetInputOptions();
-    bool bOldStatus = aInputOption.GetReplaceCellsWarn();
-    aInputOption.SetReplaceCellsWarn(false);
-    pMod->SetInputOptions(aInputOption);
-
-    std::unordered_map<OUString, OUString> aExpectedValues
-        = { { "C1", "Cell value > 14" }, { "C3", "Cell value > 14" }, { "C4", "Cell value > 14" } };
-
-    lcl_AssertConditionalFormatList(*pDoc, aExpectedValues);
-
-    goToCell(u"A3:C4"_ustr);
-
-    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
-
-    goToCell(u"A1:C1"_ustr);
-
-    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
-
-    aExpectedValues = { { "C3,C1", "Cell value > 14" }, { "C4,C2", "Cell value > 14" } };
-    lcl_AssertConditionalFormatList(*pDoc, aExpectedValues);
-
-    // Restore previous status
-    aInputOption.SetReplaceCellsWarn(bOldStatus);
     pMod->SetInputOptions(aInputOption);
 }
 
