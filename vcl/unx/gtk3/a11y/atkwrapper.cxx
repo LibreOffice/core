@@ -75,6 +75,8 @@ static AtkRelationType mapRelationType(accessibility::AccessibleRelationType eRe
             return ATK_RELATION_CONTROLLED_BY;
         case accessibility::AccessibleRelationType_CONTROLLER_FOR:
             return ATK_RELATION_CONTROLLER_FOR;
+        case accessibility::AccessibleRelationType_DESCRIBED_BY:
+            return ATK_RELATION_DESCRIBED_BY;
         case accessibility::AccessibleRelationType_LABEL_FOR:
             return ATK_RELATION_LABEL_FOR;
         case accessibility::AccessibleRelationType_LABELED_BY:
