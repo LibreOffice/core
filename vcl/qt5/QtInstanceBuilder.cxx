@@ -104,6 +104,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"filter/ui/xmlfiltersettings.ui"_ustr,
         u"filter/ui/xsltfilterdialog.ui"_ustr,
         u"modules/BasicIDE/ui/gotolinedialog.ui"_ustr,
+        u"modules/BasicIDE/ui/newlibdialog.ui"_ustr,
         u"modules/scalc/ui/groupbydate.ui"_ustr,
         u"modules/scalc/ui/inputstringdialog.ui"_ustr,
         u"modules/scalc/ui/insertcells.ui"_ustr,
