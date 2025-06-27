@@ -157,31 +157,16 @@ public:
 
             null_object = str_p( "null" )[boost::bind(&PDFGrammar::pushNull, pSelf, _1, _2)];
 
-            #ifdef USE_ASSIGN_ACTOR
-            objectref   = ( uint_p[push_back_a(pSelf->m_aUIntStack)]
-                            >> uint_p[push_back_a(pSelf->m_aUIntStack)]
-                            >> ch_p('R')
-                            >> eps_p
-                          )[boost::bind(&PDFGrammar::pushObjectRef, pSelf, _1, _2)];
-            #else
             objectref   = ( uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
                             >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
                             >> ch_p('R')
                             >> eps_p
                           )[boost::bind(&PDFGrammar::pushObjectRef, pSelf, _1, _2)];
-            #endif
 
-            #ifdef USE_ASSIGN_ACTOR
-            simple_type = objectref | name |
-                          ( real_p[assign_a(pSelf->m_fDouble)] >> eps_p )
-                          [boost::bind(&PDFGrammar::pushDouble, pSelf, _1, _2)]
-                          | stringtype | boolean | null_object;
-            #else
             simple_type = objectref | name |
                           ( real_p[boost::bind(&PDFGrammar::assign_action_double, pSelf, _1)] >> eps_p )
                           [boost::bind(&PDFGrammar::pushDouble, pSelf, _1, _2)]
                           | stringtype | boolean | null_object;
-            #endif
 
             dict_begin  = str_p( "<<" )[boost::bind(&PDFGrammar::beginDict, pSelf, _1, _2)];
             dict_end    = str_p( ">>" )[boost::bind(&PDFGrammar::endDict, pSelf, _1, _2)];
@@ -189,15 +174,9 @@ public:
             array_begin = str_p("[")[boost::bind(&PDFGrammar::beginArray,pSelf, _1, _2)];
             array_end   = str_p("]")[boost::bind(&PDFGrammar::endArray,pSelf, _1, _2)];
 
-            #ifdef USE_ASSIGN_ACTOR
-            object_begin= uint_p[push_back_a(pSelf->m_aUIntStack)]
-                          >> uint_p[push_back_a(pSelf->m_aUIntStack)]
-                          >> str_p("obj" )[boost::bind(&PDFGrammar::beginObject, pSelf, _1, _2)];
-            #else
             object_begin= uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
                           >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
                           >> str_p("obj" )[boost::bind(&PDFGrammar::beginObject, pSelf, _1, _2)];
-            #endif
             object_end  = str_p( "endobj" )[boost::bind(&PDFGrammar::endObject, pSelf, _1, _2)];
 
             xref        = str_p( "xref" ) >> uint_p >> uint_p
@@ -224,17 +203,6 @@ public:
                           >> uint_p
                           >> str_p("%%EOF")[boost::bind(&PDFGrammar::endTrailer,pSelf,_1,_2)];
 
-            #ifdef USE_ASSIGN_ACTOR
-            pdfrule     = ! (lexeme_d[
-                                str_p( "%PDF-" )
-                                >> uint_p[push_back_a(pSelf->m_aUIntStack)]
-                                >> ch_p('.')
-                                >> uint_p[push_back_a(pSelf->m_aUIntStack)]
-                                >> *((~ch_p('\r') & ~ch_p('\n')))
-                                >> eol_p
-                             ])[boost::bind(&PDFGrammar::haveFile,pSelf, _1, _2)]
-                          >> *( comment | object | ( xref >> trailer ) );
-            #else
             pdfrule     = ! (lexeme_d[
                                 str_p( "%PDF-" )
                                 >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
@@ -244,7 +212,6 @@ public:
                                 >> eol_p
                              ])[boost::bind(&PDFGrammar::haveFile,pSelf, _1, _2)]
                           >> *( comment | object | ( xref >> trailer ) );
-            #endif
         }
         rule< ScannerT > comment, stream, boolean, name, stringtype, null_object, simple_type,
                          objectref, array, value, dict_element, dict_begin, dict_end,
@@ -254,7 +221,6 @@ public:
         const rule< ScannerT >& start() const { return pdfrule; }
     };
 
-    #ifndef USE_ASSIGN_ACTOR
     void push_back_action_uint( unsigned int i )
     {
         m_aUIntStack.push_back( i );
@@ -263,7 +229,6 @@ public:
     {
         m_fDouble = d;
     }
-    #endif
 
     [[noreturn]] static void parseError( const char* pMessage, const iteratorT& pLocation )
     {
