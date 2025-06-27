@@ -2910,7 +2910,7 @@ void ImplListBoxFloatingWindow::Resize()
     FloatingWindow::Resize();
 }
 
-Size ImplListBoxFloatingWindow::CalcFloatSize() const
+Size ImplListBoxFloatingWindow::CalcFloatSize(const tools::Rectangle& rParentRect) const
 {
     Size aFloatSz( maPrefSz );
 
@@ -2927,6 +2927,8 @@ Size ImplListBoxFloatingWindow::CalcFloatSize() const
     if ( mnDDLineCount )
         aFloatSz.setHeight( nMaxHeight );
 
+    AbsoluteScreenPixelRectangle aDesktopRect(GetDesktopRectPixel());
+
     if( mbAutoWidth )
     {
         // AutoSize first only for width...
@@ -2941,13 +2943,32 @@ Size ImplListBoxFloatingWindow::CalcFloatSize() const
             aFloatSz.AdjustWidth(nSBWidth );
         }
 
-        tools::Long nDesktopWidth = GetDesktopRectPixel().getOpenWidth();
+        tools::Long nDesktopWidth = aDesktopRect.getOpenWidth();
         if (aFloatSz.Width() > nDesktopWidth)
             // Don't exceed the desktop width.
             aFloatSz.setWidth( nDesktopWidth );
     }
 
-    tools::Long nDesktopHeight = GetDesktopRectPixel().getOpenHeight();
+    tools::Long nDesktopHeight = aDesktopRect.getOpenHeight();
+
+    //tdf#136943. If the popup won't fit either above/below then force the menu
+    //to scroll if it won't fit
+    {
+        const vcl::Window* pRef = this;
+        if ( pRef->GetParent() )
+            pRef = pRef->GetParent();
+
+        tools::Rectangle normRect( rParentRect );  // rRect is already relative to top-level window
+        normRect.SetPos( pRef->ScreenToOutputPixel( normRect.TopLeft() ) );
+
+        AbsoluteScreenPixelRectangle devRect(pRef->OutputToAbsoluteScreenPixel(normRect.TopLeft()),
+                                             pRef->OutputToAbsoluteScreenPixel(normRect.BottomRight()));
+
+        tools::Long nHeightAbove = devRect.Top() - aDesktopRect.Top();
+        tools::Long nHeightBelow = aDesktopRect.Bottom() - devRect.Bottom();
+        nDesktopHeight = std::min(nDesktopHeight, std::max(nHeightAbove, nHeightBelow));
+    }
+
     if (aFloatSz.Height() > nDesktopHeight)
         aFloatSz.setHeight(nDesktopHeight);
 
@@ -2967,7 +2988,6 @@ Size ImplListBoxFloatingWindow::CalcFloatSize() const
     if ( nInnerHeight % nEntryHeight )
     {
         nInnerHeight /= nEntryHeight;
-        nInnerHeight++;
         nInnerHeight *= nEntryHeight;
         aFloatSz.setHeight( nInnerHeight + nTop + nBottom );
     }
@@ -2983,19 +3003,9 @@ Size ImplListBoxFloatingWindow::CalcFloatSize() const
     return aFloatSz;
 }
 
-void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
+tools::Rectangle ImplListBoxFloatingWindow::GetParentRect() const
 {
-    if( IsInPopupMode() )
-        return;
-
-    Size aFloatSz = CalcFloatSize();
-
-    SetSizePixel( aFloatSz );
-    mpImplLB->SetSizePixel( GetOutputSizePixel() );
-
-    sal_Int32 nPos = mpImplLB->GetEntryList().GetSelectedEntryPos( 0 );
-    mnPopupModeStartSaveSelection = nPos;
-
+    // Get Rectangle at which popup will appear
     Size aSz = GetParent()->GetSizePixel();
     Point aPos = GetParent()->GetPosPixel();
     aPos = GetParent()->GetParent()->OutputToScreenPixel( aPos );
@@ -3020,6 +3030,24 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
 
     if( pGrandparent->GetOutDev()->ImplIsAntiparallel() )
         pGrandparentOutDev->ReMirror( aRect );
+
+    return aRect;
+}
+
+void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
+{
+    if( IsInPopupMode() )
+        return;
+
+    tools::Rectangle aRect = GetParentRect();
+
+    Size aFloatSz = CalcFloatSize(aRect);
+
+    SetSizePixel( aFloatSz );
+    mpImplLB->SetSizePixel( GetOutputSizePixel() );
+
+    sal_Int32 nPos = mpImplLB->GetEntryList().GetSelectedEntryPos( 0 );
+    mnPopupModeStartSaveSelection = nPos;
 
     mpImplLB->GetMainWindow()->ResetLastPosPixel();
     // mouse-button right: close the List-Box-Float-win and don't stop the handling fdo#84795

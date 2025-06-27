@@ -636,7 +636,7 @@ void ListBox::Resize()
 
     // Retain FloatingWindow size even when it's invisible, as we still process KEY_PGUP/DOWN ...
     if ( mpFloatWin )
-        mpFloatWin->SetSizePixel( mpFloatWin->CalcFloatSize() );
+        mpFloatWin->SetSizePixel( mpFloatWin->CalcFloatSize(mpFloatWin->GetParentRect()) );
 
     Control::Resize();
 }
