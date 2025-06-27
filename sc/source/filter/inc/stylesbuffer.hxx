@@ -684,7 +684,7 @@ bool operator==( const Xf& rXf1,  const Xf& rXf2 );
 
 typedef std::shared_ptr< Xf > XfRef;
 
-class Dxf : public WorkbookHelper
+class Dxf final : public WorkbookHelper
 {
 friend struct CondFormatEquals;
 public:
