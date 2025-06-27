@@ -2601,7 +2601,7 @@ protected:
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_focus_in();
+        pThis->signal_focus_out();
     }
 #else
     static gboolean signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
