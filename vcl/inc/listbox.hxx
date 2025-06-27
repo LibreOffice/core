@@ -522,7 +522,8 @@ public:
 
     void            SetAutoWidth( bool b )              { mbAutoWidth = b; }
 
-    Size            CalcFloatSize() const;
+    tools::Rectangle GetParentRect() const;
+    Size            CalcFloatSize(const tools::Rectangle& rParentRect) const;
     void            StartFloat( bool bStartTracking );
 
     virtual void    setPosSizePixel( tools::Long nX, tools::Long nY,

@@ -587,7 +587,7 @@ void ComboBox::Resize()
     // adjust the size of the FloatingWindow even when invisible
     // as KEY_PGUP/DOWN is being processed...
     if (m_pFloatWin)
-        m_pFloatWin->SetSizePixel(m_pFloatWin->CalcFloatSize());
+        m_pFloatWin->SetSizePixel(m_pFloatWin->CalcFloatSize(m_pFloatWin->GetParentRect()));
 }
 
 bool ComboBox::IsDropDownBox() const { return m_pFloatWin != nullptr; }
