@@ -168,18 +168,10 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer,
 
     if( ! aWriter.Write( xWrt ).IsError() )
     {
-        const sal_uInt64 lUniLen = aStream.GetSize()/sizeof( sal_Unicode );
-        if (lUniLen < o3tl::make_unsigned(SAL_MAX_INT32-1))
-        {
-            aStream.WriteUInt16( '\0' );
-
-            aStream.Seek( 0 );
-            aStream.ResetError();
-
-            rtl_uString *pStr = rtl_uString_alloc(lUniLen);
-            aStream.ReadBytes(pStr->buffer, lUniLen * sizeof(sal_Unicode));
-            rBuffer = OUString(pStr, SAL_NO_ACQUIRE);
-        }
+        const sal_Unicode* p = static_cast<sal_Unicode const*>(aStream.GetData());
+        const size_t lUniLen = aStream.GetEndOfData()/sizeof( sal_Unicode );
+        if (p && lUniLen < o3tl::make_unsigned(SAL_MAX_INT32-1))
+            rBuffer = OUString(p, lUniLen);
     }
     xWrt->m_bShowProgress = bOldShowProgress;
 
