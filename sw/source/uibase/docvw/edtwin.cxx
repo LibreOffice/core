@@ -6488,15 +6488,10 @@ uno::Reference< css::accessibility::XAccessible > SwEditWin::CreateAccessible()
     SolarMutexGuard aGuard;   // this should have happened already!!!
     SwWrtShell *pSh = m_rView.GetWrtShellPtr();
     OSL_ENSURE( pSh, "no writer shell, no accessible object" );
-    uno::Reference<
-        css::accessibility::XAccessible > xAcc;
     if( pSh )
-        xAcc = pSh->CreateAccessible();
-
-    return xAcc;
-#else
-    return nullptr;
+        return pSh->CreateAccessible();
 #endif
+    return {};
 }
 
 void QuickHelpData::Move( QuickHelpData& rCpy )
