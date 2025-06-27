@@ -1,0 +1,11 @@
+
+services:
+  libreoffice-core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: libreoffice-core
+
+    # Uncomment and adjust the following lines as needed:
+    volumes:
+      - ./build:/build/
