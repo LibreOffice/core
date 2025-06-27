@@ -1353,13 +1353,6 @@ void QtFrame::registerDropTarget(QtDropTarget* pDropTarget)
     GetQtInstance().RunInMainThread([this]() { m_pQWidget->setAcceptDrops(true); });
 }
 
-void QtFrame::deregisterDropTarget(QtDropTarget const* pDropTarget)
-{
-    assert(m_pDropTarget == pDropTarget);
-    (void)pDropTarget;
-    m_pDropTarget = nullptr;
-}
-
 static css::uno::Reference<css::datatransfer::XTransferable>
 lcl_getXTransferable(const QMimeData* pMimeData)
 {

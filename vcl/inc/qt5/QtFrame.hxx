@@ -165,7 +165,6 @@ public:
     void registerDragSource(QtDragSource* pDragSource);
     void deregisterDragSource(QtDragSource const* pDragSource);
     void registerDropTarget(QtDropTarget* pDropTarget);
-    void deregisterDropTarget(QtDropTarget const* pDropTarget);
 
     void handleDragLeave();
     void handleDragMove(QDragMoveEvent* pEvent);
