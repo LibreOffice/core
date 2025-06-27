@@ -7,13 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
+#include <QtDragAndDrop.hxx>
+#include <QtDragAndDrop.moc>
+
+#include <QtFrame.hxx>
+#include <QtTransferable.hxx>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <cppuhelper/supportsservice.hxx>
-
-#include <QtDragAndDrop.hxx>
-#include <QtFrame.hxx>
-#include <QtTransferable.hxx>
 
 #include <QtGui/QDrag>
 
