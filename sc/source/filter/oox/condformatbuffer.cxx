@@ -1440,6 +1440,8 @@ private:
     }
     bool equals(const CondFormatRuleModel& lhs, const CondFormatRuleModel& rhs) const
     {
+        if (lhs.maFormulas != rhs.maFormulas)
+            return false;
         if (lhs.maText != rhs.maText)
             return false;
         // we skip mnPriority, because that is implicitly compared by the ordering of these objects
