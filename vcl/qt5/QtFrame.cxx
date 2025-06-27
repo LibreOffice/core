@@ -1338,13 +1338,6 @@ void QtFrame::registerDragSource(QtDragSource* pDragSource)
     m_pDragSource = pDragSource;
 }
 
-void QtFrame::deregisterDragSource(QtDragSource const* pDragSource)
-{
-    assert(m_pDragSource == pDragSource);
-    (void)pDragSource;
-    m_pDragSource = nullptr;
-}
-
 void QtFrame::registerDropTarget(QtDropTarget* pDropTarget)
 {
     assert(!m_pDropTarget);

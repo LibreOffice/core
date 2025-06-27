@@ -93,7 +93,7 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
 
     SystemEnvData m_aSystemData;
 
-    QtDragSource* m_pDragSource;
+    QPointer<QtDragSource> m_pDragSource;
     QPointer<QtDropTarget> m_pDropTarget;
     bool m_bInDrag;
 
@@ -163,7 +163,6 @@ public:
     virtual void SetMenu(SalMenu* pMenu) override;
 
     void registerDragSource(QtDragSource* pDragSource);
-    void deregisterDragSource(QtDragSource const* pDragSource);
     void registerDropTarget(QtDropTarget* pDropTarget);
 
     void handleDragLeave();

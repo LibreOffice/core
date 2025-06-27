@@ -19,9 +19,12 @@
 
 class QtFrame;
 
-class QtDragSource final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
+class QtDragSource final : public QObject,
+                           public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
                                                                 css::lang::XServiceInfo>
 {
+    Q_OBJECT
+
     osl::Mutex m_aMutex;
     QtFrame* m_pFrame;
     css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> m_xListener;
