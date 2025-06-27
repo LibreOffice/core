@@ -12,8 +12,8 @@
 static std::vector<unsigned char> calculateHash(SvStream& rStream)
 {
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
-    BinaryDataContainer aContianer(rStream, rStream.remainingSize());
-    return aContianer.calculateSHA1();
+    BinaryDataContainer aContainer(rStream, rStream.remainingSize());
+    return aContainer.calculateSHA1();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
