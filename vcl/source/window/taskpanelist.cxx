@@ -133,7 +133,7 @@ bool TaskPaneList::IsInList( vcl::Window *pWindow )
 
 bool TaskPaneList::IsCycleKey(const vcl::KeyCode& rKeyCode)
 {
-    return rKeyCode.GetCode() == KEY_F6 && !rKeyCode.IsMod2() && !rKeyCode.IsShift(); // F6
+    return rKeyCode.GetCode() == KEY_F6 && !rKeyCode.IsMod2() && !(rKeyCode.IsMod1() && rKeyCode.IsShift()); // F6
 }
 
 bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
