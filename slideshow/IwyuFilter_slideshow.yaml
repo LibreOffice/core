@@ -31,9 +31,6 @@ excludelist:
     slideshow/source/engine/smilfunctionparser.cxx:
     # Boost wrapper is needed
     - boost/spirit/include/classic_core.hpp
-    slideshow/source/engine/shapes/drawshape.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     slideshow/source/engine/shapes/viewappletshape.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp

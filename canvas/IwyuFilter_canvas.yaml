@@ -32,9 +32,6 @@ excludelist:
     canvas/source/opengl/ogl_texturecache.cxx:
     # Actually in use
     - com/sun/star/geometry/IntegerSize2D.hpp
-    canvas/source/tools/surface.cxx:
-    # Actually in use
-    - comphelper/scopeguard.hxx
     canvas/source/vcl/cachedbitmap.cxx:
     # Actually in use
     - com/sun/star/rendering/XCanvas.hpp

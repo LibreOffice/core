@@ -9,7 +9,6 @@ excludelist:
     - osl/thread.hxx
     desktop/qa/desktop_lib/test_desktop_lib.cxx:
     # Actually used
-    - comphelper/scopeguard.hxx
     - rtl/math.hxx
     desktop/source/app/app.cxx:
     # Needed on WIN32
@@ -42,8 +41,6 @@ excludelist:
     desktop/source/lib/init.cxx:
     # Needed for boost::trim_copy
     - boost/algorithm/string.hpp
-    # Actually used
-    - comphelper/scopeguard.hxx
     # Needed on IOS & ANDROID
     - officecfg/Office/Impress.hxx
     desktop/source/minidump/minidump.cxx:

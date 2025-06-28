@@ -401,8 +401,6 @@ excludelist:
     sw/qa/extras/odfexport/odfexport.cxx:
     # Needed for getProperty template
     - com/sun/star/graphic/XGraphic.hpp
-    #Actually used
-    - comphelper/scopeguard.hxx
     sw/qa/extras/odfimport/odfimport.cxx:
     # Needed for direct member access
     - com/sun/star/text/XTextSection.hpp
@@ -431,9 +429,6 @@ excludelist:
     - com/sun/star/graphic/XGraphic.hpp
     - com/sun/star/text/TableColumnSeparator.hpp
     - com/sun/star/text/XTextColumns.hpp
-    sw/qa/extras/ooxmlexport/ooxmlexport17.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/qa/extras/ooxmlimport/ooxmlimport2.cxx:
     # Needed for direct member access
     - com/sun/star/document/XEmbeddedObjectSupplier2.hpp
@@ -453,9 +448,6 @@ excludelist:
     sw/qa/extras/uiwriter/uiwriter6.cxx:
     # Needed in C++20 mode
     - o3tl/cppunittraitshelper.hxx
-    sw/qa/uibase/uiview/uiview.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/qa/extras/unowriter/unowriter.cxx:
     # Needed for direct member access
     - com/sun/star/awt/XDevice.hpp
@@ -468,7 +460,6 @@ excludelist:
     # Needed for for-loop range
     - com/sun/star/graphic/XGraphic.hpp
     sw/qa/extras/layout/layout.cxx:
-    - comphelper/scopeguard.hxx
     - com/sun/star/linguistic2/LinguServiceManager.hpp
     sw/source/core/access/AccessibilityCheck.cxx:
     # Needed for template
@@ -482,9 +473,6 @@ excludelist:
     sw/source/core/access/acctextframe.cxx:
     # Actually used
     - com/sun/star/accessibility/XAccessibleRelationSet.hpp
-    sw/source/core/doc/DocumentFieldsManager.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/source/core/doc/DocumentStatisticsManager.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
@@ -509,8 +497,6 @@ excludelist:
     sw/source/core/draw/drawdoc.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    sw/source/filter/html/htmlreqifreader.cxx:
-    - comphelper/scopeguard.hxx
     sw/source/uibase/sidebar/PageMarginUtils.hxx:
     # Needed for std::abs
     - cmath
@@ -520,31 +506,19 @@ excludelist:
     sw/source/core/undo/untbl.cxx:
     # Needed for linker visibility of sw_DebugRedline
     - docredln.hxx
-    sw/source/core/edit/edfcol.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/source/core/fields/textapi.cxx:
     # Needed for macros to work
     - editeng/unoprnms.hxx
     - com/sun/star/lang/Locale.hpp
-    sw/source/core/layout/layact.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/source/core/swg/SwXMLBlockExport.cxx:
     # Actually used
     - com/sun/star/xml/sax/XDocumentHandler.hpp
     sw/source/core/swg/SwXMLSectionList.cxx:
     # Actually used
     - vector
-    sw/source/core/text/porrst.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/source/core/text/txtftn.cxx:
     # Needed for template
     - com/sun/star/text/XTextRange.hpp
-    sw/source/core/undo/unsect.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/source/core/unocore/unomap1.cxx:
     # Needed for UnoType macro
     - com/sun/star/container/XIndexReplace.hpp
@@ -594,8 +568,6 @@ excludelist:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
     sw/source/filter/html/wrthtml.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     # Needed for template
     - com/sun/star/frame/XModel.hpp
     sw/source/filter/html/swhtml.cxx:
@@ -668,9 +640,6 @@ excludelist:
     sw/source/uibase/misc/glshell.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    sw/source/uibase/shells/basesh.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/source/uibase/shells/slotadd.cxx:
     # Needed for swslots.hxx
     - config_options.h
@@ -843,9 +812,6 @@ excludelist:
     sw/source/ui/vba/vbaglobals.cxx:
     # Needed for extern functions
     - service.hxx
-    sw/source/ui/vba/vbalistformat.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/source/ui/vba/vbalisttemplate.cxx:
     # Actually needed
     - com/sun/star/beans/XPropertySet.hpp
@@ -868,8 +834,6 @@ excludelist:
     - com/sun/star/frame/XModel.hpp
     sw/source/filter/ww8/rtfexport.cxx:
     - com/sun/star/frame/XModel.hpp
-    sw/qa/core/macros-test.cxx:
-    - comphelper/scopeguard.hxx
     sw/source/filter/docx/swdocxreader.cxx:
     - com/sun/star/frame/XModel.hpp
     sw/source/core/fields/docufld.cxx:
@@ -883,8 +847,6 @@ excludelist:
     sw/qa/extras/ooxmlimport/ooxmlimport.cxx:
     # Required in C++20 mode.
     - o3tl/cppunittraitshelper.hxx
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/qa/extras/ooxmlexport/ooxmlexport.cxx:
     # Required in C++20 mode.
     - o3tl/cppunittraitshelper.hxx
@@ -894,18 +856,12 @@ excludelist:
     sw/qa/extras/uiwriter/uiwriter.cxx:
     # Required in C++20 mode.
     - o3tl/cppunittraitshelper.hxx
-    sw/qa/extras/uiwriter/uiwriter2.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/qa/extras/rtfexport/rtfexport4.cxx:
     # Required in C++20 mode.
     - o3tl/cppunittraitshelper.hxx
     sw/qa/extras/txtexport/txtexport.cxx:
     # No .hxx -> .h replacement in URE headers
     - osl/thread.hxx
-    sw/qa/extras/layout/layout2.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sw/source/writerfilter/dmapper/BorderHandler.cxx:
     # Needed for method parameter type
     - tools/color.hxx
@@ -965,7 +921,3 @@ excludelist:
     sw/source/writerfilter/rtftok/rtftokenizer.cxx:
     # Actually used
     - com/sun/star/task/XStatusIndicator.hpp
-    sw/source/writerfilter/filter/RtfFilter.cxx:
-    - comphelper/scopeguard.hxx
-    sw/source/writerfilter/filter/WriterFilter.cxx:
-    - comphelper/scopeguard.hxx

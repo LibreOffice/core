@@ -2,8 +2,6 @@
 assumeFilename: sd/source/core/drawdoc.cxx
 excludelist:
     sd/qa/unit/SdrPdfImportTest.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     # Needed on WIN to compile
     - prewin.h
     - postwin.h
@@ -108,9 +106,6 @@ excludelist:
     # Needed on MACOSX
     - svl/intitem.hxx
     - app.hrc
-    sd/source/ui/dlg/sdtreelb.cxx:
-    # comphelper::ScopeGuard is actually used
-    - comphelper/scopeguard.hxx
     sd/source/ui/framework/configuration/ConfigurationTracer.hxx:
     # Needed for css shortcut
     - sal/types.h
@@ -406,12 +401,6 @@ excludelist:
     sd/source/filter/xml/sdtransform.cxx:
     # Needed for implicit dtor
     - editeng/outlobj.hxx
-    sd/source/ui/animations/CustomAnimationList.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
-    sd/source/ui/animations/CustomAnimationPane.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sd/source/ui/framework/configuration/ChangeRequestQueueProcessor.cxx:
     # Needed for DEBUG_SD_CONFIGURATION_TRACE
     - ConfigurationTracer.hxx
@@ -422,8 +411,6 @@ excludelist:
     sd/source/ui/framework/configuration/ConfigurationUpdater.cxx:
     # Needed for DEBUG_SD_CONFIGURATION_TRACE
     - ConfigurationTracer.hxx
-    # comphelper::ScopeGuard is actually used
-    - comphelper/scopeguard.hxx
     sd/source/ui/framework/configuration/ResourceFactoryManager.cxx:
     # Needed for VERBOSE mode
     - sal/log.hxx
@@ -480,18 +467,9 @@ excludelist:
     sd/source/ui/view/GraphicObjectBar.cxx:
     # Needed by a sdslots.hxx constant
     - svx/svxids.hrc
-    sd/source/ui/view/Outliner.cxx:
-    # comphelper::ScopeGuard is actually used
-    - comphelper/scopeguard.hxx
     sd/source/ui/view/PresentationViewShellBase.cxx:
     # Needed for template
     - com/sun/star/frame/XFrame.hpp
-    sd/source/ui/view/drviews1.cxx:
-    # comphelper::ScopeGuard is actually used
-    - comphelper/scopeguard.hxx
-    sd/source/ui/view/drviews2.cxx:
-    # comphelper::ScopeGuard is actually used
-    - comphelper/scopeguard.hxx
     sd/source/ui/view/drviewsf.cxx:
     # Needed for template
     - svx/sdmetitm.hxx

@@ -51,7 +51,6 @@ excludelist:
     # Needed for direct member access
     - com/sun/star/task/XStatusIndicator.hpp
     vcl/source/filter/ipdf/pdfdocument.cxx:
-    - comphelper/scopeguard.hxx
     # Actually these are used
     - com/sun/star/security/XCertificate.hpp
     - vector
@@ -74,12 +73,6 @@ excludelist:
     vcl/source/treelist/headbar.cxx:
     # Actually these are used
     - com/sun/star/accessibility/XAccessible.hpp
-    vcl/source/window/dialog.cxx:
-    # comphelper::ScopeGuard is actually used
-    - comphelper/scopeguard.hxx
-    vcl/source/window/event.cxx:
-    # comphelper::ScopeGuard is actually used
-    - comphelper/scopeguard.hxx
     vcl/unx/generic/app/saldisp.cxx:
     # needed for transitive cursor includes
     - unx/x11_cursors/salcursors.h

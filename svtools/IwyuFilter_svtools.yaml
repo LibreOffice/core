@@ -15,9 +15,6 @@ excludelist:
     svtools/source/dialogs/insdlg.cxx:
     # Needed on WIN
     - comphelper/classids.hxx
-    svtools/source/svrtf/parrtf.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     svtools/qa/unit/testHtmlReader.cxx:
     # Needed for the CPPUNIT_TEST_FIXTURE() macro.
     - unotest/bootstrapfixturebase.hxx

@@ -34,9 +34,6 @@ excludelist:
     svx/source/dialog/svxruler.cxx:
     # Needed for rtl::math::round
     - rtl/math.hxx
-    svx/source/dialog/srchdlg.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     svx/source/form/fmmodel.cxx:
     # Actually used
     - com/sun/star/form/XForms.hpp
@@ -110,7 +107,6 @@ excludelist:
     svx/source/sdr/contact/viewobjectcontactofunocontrol.cxx:
     # Actually used
     - com/sun/star/awt/XControlContainer.hpp
-    - comphelper/scopeguard.hxx
     svx/source/svdraw/charthelper.cxx:
     # Actually used
     - com/sun/star/embed/XEmbeddedObject.hpp
@@ -133,9 +129,6 @@ excludelist:
     svx/source/svdraw/svdorect.cxx:
     # Actually used
     - svx/svdopath.hxx
-    svx/source/svdraw/svdpagv.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     svx/source/table/accessiblecell.cxx:
     # Needed for SvxTextEditSource object instantiation
     - svx/svdotext.hxx
@@ -154,9 +147,6 @@ excludelist:
     svx/source/unodraw/unoshcol.cxx:
     # Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx
-    svx/source/unodraw/unoshape.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     svx/source/unodraw/unoprov.cxx:
     # Needed for UnoType instantiation
     - com/sun/star/lang/Locale.hpp

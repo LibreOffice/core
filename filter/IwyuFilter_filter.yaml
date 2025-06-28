@@ -28,9 +28,6 @@ excludelist:
     filter/source/svg/svgfilter.cxx:
     # Actually used
     - com/sun/star/io/IOException.hpp
-    filter/source/xmlfilteradaptor/XmlFilterAdaptor.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     filter/source/xmlfilterdetect/filterdetect.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp

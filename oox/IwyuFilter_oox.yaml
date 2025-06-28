@@ -4,9 +4,6 @@ excludelist:
     oox/source/docprop/docprophandler.hxx:
     # Needed for macro defines
     - oox/token/namespaces.hxx
-    oox/source/core/filterbase.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     oox/source/core/contexthandler2.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
@@ -147,9 +144,6 @@ excludelist:
     oox/source/ppt/comments.cxx:
     # Needed for rtl::math::round
      - rtl/math.hxx
-    oox/source/ppt/pptimport.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     oox/source/ppt/pptshape.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp

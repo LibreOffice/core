@@ -95,9 +95,6 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/xml/wrapper/XXMLElementWrapper.hpp
-    xmlsecurity/source/xmlsec/xmlstreamio.cxx:
-    # comphelper::ScopeGuard is in use but not noticed by IWYU
-    - comphelper/scopeguard.hxx
     xmlsecurity/source/xmlsec/nss/sanextension_nssimpl.hxx:
     # Base class needs complete type
     - com/sun/star/security/XSanExtension.hpp
@@ -124,5 +121,3 @@ excludelist:
     xmlsecurity/qa/unit/signing/signing.cxx:
     # Don't replace URE header with impl. detail
     - osl/thread.hxx
-    xmlsecurity/workben/pdfverify.cxx:
-    - comphelper/scopeguard.hxx

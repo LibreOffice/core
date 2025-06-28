@@ -355,9 +355,6 @@ excludelist:
     sc/inc/unitconv.hxx:
     # base class has to be a complete type
     - map
-    sc/qa/unit/uicalc/uicalc.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sc/qa/unit/ucalc.cxx:
     # Needed for namespace shortcuts
     - helper/debughelper.hxx
@@ -382,16 +379,8 @@ excludelist:
     # Needed for template
     - sfx2/sfxdlg.hxx
     sc/qa/unit/subsequent_export_test.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     # Needed for namespace shortcuts
     - helper/debughelper.hxx
-    sc/qa/unit/subsequent_export_test2.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
-    sc/qa/unit/subsequent_filters_test2.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     sc/source/core/inc/addinlis.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

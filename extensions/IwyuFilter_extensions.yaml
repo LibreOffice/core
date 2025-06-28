@@ -22,9 +22,6 @@ excludelist:
     extensions/source/config/ldap/ldapaccess.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
-    extensions/source/config/ldap/ldapuserprofilebe.cxx:
-    # Actually used
-    - comphelper/scopeguard.hxx
     extensions/source/dbpilots/listcombowizard.cxx:
     # Actually used
     - com/sun/star/container/XNameAccess.hpp
@@ -34,8 +31,6 @@ excludelist:
     extensions/source/update/check/updatecheck.cxx:
     # Needed on WIN32 for WNT_hasInternetConnection
     - onlinecheck.hxx
-    # Actually used 
-    - comphelper/scopeguard.hxx
     extensions/source/update/check/updatecheckconfig.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx

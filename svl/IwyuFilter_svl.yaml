@@ -35,8 +35,6 @@ excludelist:
     svl/source/crypto/cryptosign.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
-    # Actually used
-    - comphelper/scopeguard.hxx
     svl/source/filepicker/pickerhistory.cxx:
     # Needed to inherit linker visibility from function declaration
     - svl/pickerhistoryaccess.hxx

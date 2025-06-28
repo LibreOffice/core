@@ -367,9 +367,6 @@ excludelist:
     chart2/source/view/axes/VCartesianGrid.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
-    chart2/source/view/charttypes/BarChart.cxx:
-    # comphelper::ScopeGuard being used
-    - comphelper/scopeguard.hxx
     chart2/source/view/diagram/VDiagram.cxx:
     # Needed for implicit dtor
     - ChartType.hxx
@@ -386,9 +383,6 @@ excludelist:
     - com/sun/star/graphic/XGraphic.hpp
     # Actually used
     - com/sun/star/chart2/XFormattedString.hpp
-    chart2/source/view/main/ChartView.cxx:
-    # comphelper::ScopeGuard being used
-    - comphelper/scopeguard.hxx
     chart2/source/view/main/VLineProperties.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
