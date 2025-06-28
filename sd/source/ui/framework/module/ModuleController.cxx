@@ -48,13 +48,13 @@ ModuleController::ModuleController(const rtl::Reference<::sd::DrawController>& r
         mpResourceToFactoryMap member.
     */
     ProcessFactory(
-        u"com.sun.star.drawing.framework.BasicPaneFactory"_ustr,
+        ResourceFactoryId::BasicPaneFactory,
         { u"private:resource/pane/CenterPane"_ustr,
           u"private:resource/pane/LeftImpressPane"_ustr,
           u"private:resource/pane/BottomImpressPane"_ustr,
           u"private:resource/pane/LeftDrawPane"_ustr });
     ProcessFactory(
-        u"com.sun.star.drawing.framework.BasicViewFactory"_ustr,
+        ResourceFactoryId::BasicViewFactory,
         { u"private:resource/view/ImpressView"_ustr,
           u"private:resource/view/GraphicView"_ustr,
           u"private:resource/view/OutlineView"_ustr,
@@ -64,7 +64,7 @@ ModuleController::ModuleController(const rtl::Reference<::sd::DrawController>& r
           u"private:resource/view/SlideSorter"_ustr,
         u"private:resource/view/PresentationView"_ustr });
     ProcessFactory(
-        u"com.sun.star.drawing.framework.BasicToolBarFactory"_ustr,
+        ResourceFactoryId::BasicToolBarFactory,
         { u"private:resource/toolbar/ViewTabBar"_ustr });
 
     try
@@ -89,11 +89,11 @@ void ModuleController::disposing(std::unique_lock<std::mutex>&)
     mxController.clear();
 }
 
-void ModuleController::ProcessFactory (const OUString& sServiceName, ::std::vector<OUString> aURLs)
+void ModuleController::ProcessFactory (ResourceFactoryId sServiceName, ::std::vector<OUString> aURLs)
 {
     // Get all resource URLs that are created by the factory.
 
-    SAL_INFO("sd.fwk", __func__ << ": ModuleController::adding factory " << sServiceName);
+    SAL_INFO("sd.fwk", __func__ << ": ModuleController::adding factory " << static_cast<int>(sServiceName));
 
     // Add the resource URLs to the map.
     for (const auto& rResource : aURLs)
@@ -136,11 +136,11 @@ void ModuleController::requestResource (const OUString& rsResourceURL)
         return;
 
     // Create the factory service.
-    if (iFactory->second == "com.sun.star.drawing.framework.BasicPaneFactory")
+    if (iFactory->second == ResourceFactoryId::BasicPaneFactory)
         xFactory = new BasicPaneFactory(mxController);
-    else if (iFactory->second == "com.sun.star.drawing.framework.BasicViewFactory")
+    else if (iFactory->second == ResourceFactoryId::BasicViewFactory)
         xFactory = new BasicViewFactory(mxController);
-    else if (iFactory->second == "com.sun.star.drawing.framework.BasicToolBarFactory")
+    else if (iFactory->second == ResourceFactoryId::BasicToolBarFactory)
         xFactory = new BasicToolBarFactory(mxController);
     else
         throw RuntimeException(u"unknown factory"_ustr);

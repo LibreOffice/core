@@ -31,6 +31,13 @@ namespace sd { class DrawController; }
 namespace sd::framework {
 class ResourceFactory;
 
+enum class ResourceFactoryId
+{
+    BasicPaneFactory,
+    BasicViewFactory,
+    BasicToolBarFactory
+};
+
 typedef comphelper::WeakComponentImplHelper <> ModuleControllerInterfaceBase;
 
 /** The ModuleController has two tasks:
@@ -67,15 +74,15 @@ public:
 private:
     rtl::Reference<::sd::DrawController> mxController;
 
-    std::unordered_map<OUString, OUString> maResourceToFactoryMap;
-    std::unordered_map<OUString, unotools::WeakReference<sd::framework::ResourceFactory>> maLoadedFactories;
+    std::unordered_map<OUString, ResourceFactoryId> maResourceToFactoryMap;
+    std::unordered_map<ResourceFactoryId, unotools::WeakReference<sd::framework::ResourceFactory>> maLoadedFactories;
 
     ModuleController (const ModuleController&) = delete;
     virtual ~ModuleController() noexcept override;
 
     /** Called for every entry in the ResourceFactories configuration entry.
     */
-    void ProcessFactory (const OUString& ServiceName, ::std::vector<OUString> aURLs);
+    void ProcessFactory (ResourceFactoryId ServiceName, ::std::vector<OUString> aURLs);
 
     /** Instantiate startup services.  This method is called once when a new
         ModuleController object is created.
