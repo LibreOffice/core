@@ -22,6 +22,7 @@
 
 #include "canvas/elapsedtime.hxx"
 #include "drawinglayer/primitive2d/Primitive2DContainer.hxx"
+#include "sal/types.h"
 #include "svx/sdr/animation/objectanimator.hxx"
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/bitmap.hxx>
@@ -146,7 +147,8 @@ namespace slideshow::internal
                             const ShapeAttributeLayerSharedPtr& rAttr,
                             const VectorOfDocTreeNodes&         rSubsets,
                             double                              nPrio,
-                            double                              nElapsedTime ) :
+                            double                              nElapsedTime,
+                            sal_Int32                           nParaIndex) :
                     maOrigBounds( rOrigBounds ),
                     maUpdateBounds( rUpdateBounds ),
                     maBounds( rBounds ),
@@ -154,7 +156,8 @@ namespace slideshow::internal
                     mrAttr( rAttr ),
                     mrSubsets( rSubsets ),
                     mnShapePriority( nPrio ),
-                    mnElapsedTime( nElapsedTime )
+                    mnElapsedTime( nElapsedTime ),
+                    mnParagraphIndex( nParaIndex )
                 {
                 }
 
@@ -166,6 +169,7 @@ namespace slideshow::internal
                 const VectorOfDocTreeNodes&         mrSubsets;
                 const double                        mnShapePriority;
                 const double                        mnElapsedTime;
+                const sal_Int32                     mnParagraphIndex;
             };
 
             /** Update the ViewShape

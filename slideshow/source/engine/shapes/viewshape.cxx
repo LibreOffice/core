@@ -510,13 +510,10 @@ namespace slideshow::internal
 
             drawinglayer::geometry::ViewInformation2D aViewInformation;
             basegfx::B2DHomMatrix aMatrix(rViewLayer->getTransformation());
-            // Position of shape wrt origin
-            basegfx::B2DPoint aOrigPos(rOrigBounds.getMinimum());
             const ::basegfx::B2DPoint aAAGap(::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE,
                                              ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE);
-            aOrigPos *= rViewLayer->getSpriteTransformation();
-            // Bring the shape back to the origin
-            aMatrix.translate(-aOrigPos + aAAGap);
+            // Bring the renderable area of the shape to the origin
+            aMatrix.translate(-aSpriteBoundsPixel.getMinimum() + aAAGap);
             aViewInformation.setViewTransformation(aMatrix);
             drawinglayer::processor2d::CairoPixelProcessor2D aProcessor(
                 aViewInformation, pSurface->getCairoSurface().get());
@@ -890,6 +887,8 @@ namespace slideshow::internal
                                rArgs.mrAttr,
                                rArgs.mrSubsets,
                                bIsVisible ); */
+                if ( !rArgs.mrSubsets.empty() && rArgs.mnParagraphIndex == -1 )
+                    return true;
                 if (!bIsVisible)
                     return true;
                 uno::Reference<css::lang::XServiceInfo> xInfo(

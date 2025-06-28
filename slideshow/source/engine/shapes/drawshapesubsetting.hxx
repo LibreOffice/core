@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPESUBSETTING_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPESUBSETTING_HXX
 
+#include "sal/types.h"
 #include <doctreenode.hxx>
 #include <attributableshape.hxx>
 
@@ -163,6 +164,8 @@ namespace slideshow::internal
             };
 
             typedef ::std::vector< IndexClassificator > IndexClassificatorVector;
+
+            sal_Int32 mnParagraphIndex = -1;
 
         private:
             /** Entry for subset shape

@@ -43,6 +43,7 @@
 #include "com/sun/star/graphic/XPrimitiveFactory2D.hdl"
 #include "com/sun/star/uno/Reference.h"
 #include "com/sun/star/uno/Sequence.h"
+#include "drawinglayer/geometry/viewinformation2d.hxx"
 #include "drawshapesubsetting.hxx"
 #include "drawshape.hxx"
 #include <eventqueue.hxx>
@@ -52,9 +53,61 @@
 #include <tools.hxx>
 #include "gdimtftools.hxx"
 #include "drawinglayeranimation.hxx"
+#include "drawinglayer/primitive2d/baseprimitive2d.hxx"
+#include "drawinglayer/processor2d/baseprocessor2d.hxx"
+#include "osl/diagnose.h"
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 using namespace ::com::sun::star;
 
+namespace
+{
+class NthParagraphExtractor : public drawinglayer::processor2d::BaseProcessor2D
+{
+    drawinglayer::primitive2d::Primitive2DContainer maParagraphContainer;
+    sal_Int32 mnParagraphIndex = -1;
+    sal_Int32 mnParagraphFound = 0;
+
+protected:
+    void
+    processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate) override;
+
+public:
+    NthParagraphExtractor(drawinglayer::geometry::ViewInformation2D& rViewInformatin,
+                          sal_Int32 nParaIndex)
+        : drawinglayer::processor2d::BaseProcessor2D(rViewInformatin)
+        , mnParagraphIndex(nParaIndex)
+    {
+        OSL_ENSURE(nParaIndex >= 0, "nParaIndex should be >= 0");
+    }
+    drawinglayer::primitive2d::Primitive2DContainer getParagraphContainer()
+    {
+        return maParagraphContainer;
+    }
+};
+void NthParagraphExtractor::processBasePrimitive2D(
+    const drawinglayer::primitive2d::BasePrimitive2D& rCandidate)
+{
+    if (mnParagraphFound > mnParagraphIndex)
+        return;
+    switch (rCandidate.getPrimitive2DID())
+    {
+        case PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D:
+        {
+            drawinglayer::primitive2d::Primitive2DReference aRef
+                = &const_cast<drawinglayer::primitive2d::BasePrimitive2D&>(rCandidate);
+            mnParagraphFound++;
+            if (mnParagraphIndex == mnParagraphFound - 1)
+                maParagraphContainer.visit(aRef);
+            break;
+        }
+        default:
+        {
+            process(rCandidate);
+        }
+    }
+}
+}
 
 namespace slideshow::internal
 {
@@ -128,7 +181,8 @@ namespace slideshow::internal
                 mpAttributeLayer,
                 maSubsetting.getActiveSubsets(),
                 mnPriority,
-                maTimer.getElapsedTime() );
+                maTimer.getElapsedTime(),
+                maSubsetting.mnParagraphIndex );
         }
 
         bool DrawShape::implRender( UpdateFlags nUpdateFlags ) const
@@ -543,6 +597,14 @@ namespace slideshow::internal
             //           would mean modifying set of hyperlink regions when
             //           subsetting text portions. N.B.: there's already an
             //           issue for this #i72828#
+
+            if(rTreeNode.mnParagraphIndex >= 0)
+            {
+                drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                NthParagraphExtractor aExtractor(aViewInformation2D, rTreeNode.mnParagraphIndex);
+                aExtractor.process(mxPrimitive2DContainer);
+                mxPrimitive2DContainer = aExtractor.getParagraphContainer();
+            }
         }
 
 

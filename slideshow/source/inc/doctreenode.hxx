@@ -96,6 +96,8 @@ namespace slideshow::internal
                 mnEndIndex   = -1;
             }
 
+            sal_Int32   mnParagraphIndex = -1;
+
         private:
             sal_Int32   mnStartIndex;
             sal_Int32   mnEndIndex;

@@ -29,6 +29,7 @@
 
 #include "drawshapesubsetting.hxx"
 #include "gdimtftools.hxx"
+#include "sal/types.h"
 
 #include <algorithm>
 
@@ -258,6 +259,7 @@ namespace slideshow::internal
 
         DrawShapeSubsetting::DrawShapeSubsetting( const DocTreeNode&            rShapeSubset,
                                                   GDIMetaFileSharedPtr    rMtf ) :
+            mnParagraphIndex( rShapeSubset.mnParagraphIndex ),
             maActionClassVector(),
             mpMtf(std::move( rMtf )),
             maSubset( rShapeSubset ),
@@ -733,12 +735,15 @@ namespace slideshow::internal
 
             DocTreeNode makeTreeNode( const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rBegin,
                                       const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rStart,
-                                      const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd   )
+                                      const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd,
+                                      sal_Int32 nNodeIndex )
             {
-                return DocTreeNode( ::std::distance(rBegin,
+                DocTreeNode aRet( ::std::distance(rBegin,
                                                     rStart),
                                     ::std::distance(rBegin,
                                                     rEnd) );
+                aRet.mnParagraphIndex = nNodeIndex;
+                return aRet;
             }
         }
 
@@ -764,7 +769,7 @@ namespace slideshow::internal
             iterateActionClassifications( aFunctor, rBegin, rEnd );
 
             return makeTreeNode( maActionClassVector.begin(),
-                                 aLastBegin, aLastEnd );
+                                 aLastBegin, aLastEnd, nNodeIndex );
         }
 
         DocTreeNode DrawShapeSubsetting::getTreeNode( sal_Int32             nNodeIndex,
