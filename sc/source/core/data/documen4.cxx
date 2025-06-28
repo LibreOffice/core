@@ -804,6 +804,11 @@ const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab,
         aCell.assign(const_cast<ScDocument&>(*this), aPos);
         pCell = &aCell;
     }
+    // if the underlying cell needs evaluation, ScPatternAttr
+    // and ScCondFormatIndexes might end up being deleted under
+    // us, so we need to trigger evaluation before accessing them.
+    if (pCell->getType() == CELLTYPE_FORMULA)
+        pCell->getFormula()->IsValue();
     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
     const ScCondFormatIndexes& rIndex =
         pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
