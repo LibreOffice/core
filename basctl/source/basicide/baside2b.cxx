@@ -1489,8 +1489,7 @@ BreakPointWindow::BreakPointWindow (vcl::Window* pParent, ModulWindow* pModulWin
 
 void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    if (SyncYOffset())
-        return;
+    SyncYOffset(); // Don't return even if invalidated, to avoid flicker
 
     Size const aOutSz = rRenderContext.GetOutputSize();
     tools::Long const nLineHeight = rRenderContext.GetTextHeight();
@@ -1542,17 +1541,18 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
 void BreakPointWindow::DoScroll( tools::Long nVertScroll )
 {
     nCurYOffset -= nVertScroll;
-    Window::Scroll( 0, nVertScroll );
+    Window::Scroll(0, nVertScroll, ScrollFlags::Update);
 }
 
 void BreakPointWindow::SetMarkerPos( sal_uInt16 nLine, bool bError )
 {
-    if ( SyncYOffset() )
-        PaintImmediately();
+    bool bPaintImmediately = SyncYOffset();
 
     nMarkerPos = nLine;
     bErrorMarker = bError;
     Invalidate();
+    if (bPaintImmediately)
+        PaintImmediately();
 }
 
 void BreakPointWindow::SetNoMarker ()
