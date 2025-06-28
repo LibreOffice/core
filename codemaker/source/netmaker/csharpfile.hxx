@@ -14,6 +14,8 @@
 #include <string>
 #include <string_view>
 
+#include <codemaker/typemanager.hxx>
+
 class CSharpFile
 {
 public:

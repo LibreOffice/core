@@ -20,8 +20,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "javaoptions.hxx"
-#include <osl/process.h>
-#include <osl/thread.h>
 
 
 #ifdef SAL_UNX

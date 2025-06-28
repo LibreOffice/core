@@ -22,9 +22,9 @@
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 namespace codemaker { class GeneratedTypeSet; }
-namespace rtl { class OUString; }
 class JavaOptions;
 class TypeManager;
 

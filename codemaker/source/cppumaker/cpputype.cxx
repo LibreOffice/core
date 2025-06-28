@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <algorithm>
 #include <cassert>
@@ -29,13 +28,10 @@
 #include <memory>
 #include <utility>
 #include <vector>
-#include <iostream>
 
-#include <rtl/alloc.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
 #include <unoidl/unoidl.hxx>
 
 #include <codemaker/commoncpp.hxx>

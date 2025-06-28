@@ -33,7 +33,6 @@
 #include <codemaker/exceptiontree.hxx>
 #include <codemaker/generatedtypeset.hxx>
 #include <codemaker/global.hxx>
-#include <codemaker/options.hxx>
 #include <codemaker/typemanager.hxx>
 #include <codemaker/unotype.hxx>
 #include <codemaker/commonjava.hxx>

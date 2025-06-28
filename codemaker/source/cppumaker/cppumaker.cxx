@@ -22,7 +22,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
-#include <vector>
 
 #include <codemaker/generatedtypeset.hxx>
 #include <codemaker/typemanager.hxx>

@@ -25,8 +25,8 @@
 #include <string_view>
 
 #include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
-namespace rtl { class OUString; }
 class TypeManager;
 
 /// @HTML

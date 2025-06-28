@@ -22,7 +22,6 @@
 
 #include <codemaker/global.hxx>
 
-#include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <o3tl/string_view.hxx>
 
