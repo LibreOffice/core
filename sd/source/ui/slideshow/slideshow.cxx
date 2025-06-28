@@ -36,6 +36,7 @@
 #include <sfx2/sfxsids.hrc>
 
 #include <framework/FrameworkHelper.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <comphelper/extract.hxx>
 
 #include <FrameView.hxx>
@@ -1124,7 +1125,7 @@ void SlideShow::StartInPlacePresentation()
 
             pHelper->RequestView( FrameworkHelper::msImpressViewURL, FrameworkHelper::msCenterPaneURL );
             pHelper->RunOnConfigurationEvent(
-                FrameworkHelper::msConfigurationUpdateEndEvent,
+                framework::ConfigurationChangeEventType::ConfigurationUpdateEnd,
                 [this] (bool const) { return this->StartInPlacePresentationConfigurationCallback(); } );
             return;
         }

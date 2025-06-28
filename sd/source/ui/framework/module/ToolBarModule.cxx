@@ -68,19 +68,19 @@ ToolBarModule::ToolBarModule (
 
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        FrameworkHelper::msConfigurationUpdateStartEvent,
+        ConfigurationChangeEventType::ConfigurationUpdateStart,
         Any(gnConfigurationUpdateStartEvent));
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        FrameworkHelper::msConfigurationUpdateEndEvent,
+        ConfigurationChangeEventType::ConfigurationUpdateEnd,
         Any(gnConfigurationUpdateEndEvent));
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        FrameworkHelper::msResourceActivationRequestEvent,
+        ConfigurationChangeEventType::ResourceActivationRequest,
         Any(gnResourceActivationRequestEvent));
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        FrameworkHelper::msResourceDeactivationRequestEvent,
+        ConfigurationChangeEventType::ResourceDeactivationRequest,
         Any(gnResourceDeactivationRequestEvent));
 }
 

@@ -169,7 +169,7 @@ void ConfigurationController::RequestSynchronousUpdate()
 
 void ConfigurationController::addConfigurationChangeListener (
     const rtl::Reference<ConfigurationChangeListener>& rxListener,
-    const OUString& rsEventType,
+    ConfigurationChangeEventType rsEventType,
     const Any& rUserData)
 {
     ::osl::MutexGuard aGuard (m_aMutex);

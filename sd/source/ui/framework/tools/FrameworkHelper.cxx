@@ -81,7 +81,7 @@ public:
     */
     CallbackCaller (
         const ::sd::ViewShellBase& rBase,
-        OUString sEventType,
+        sd::framework::ConfigurationChangeEventType sEventType,
         ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter aFilter,
         ::sd::framework::FrameworkHelper::Callback aCallback);
 
@@ -92,7 +92,7 @@ public:
     virtual void notifyConfigurationChange (const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
 private:
-    OUString msEventType;
+    sd::framework::ConfigurationChangeEventType mnEventType;
     rtl::Reference<::sd::framework::ConfigurationController> mxConfigurationController;
     ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter maFilter;
     ::sd::framework::FrameworkHelper::Callback maCallback;
@@ -588,7 +588,7 @@ void FrameworkHelper::HandleModeChangeSlot (
 }
 
 void FrameworkHelper::RunOnConfigurationEvent(
-    const OUString& rsEventType,
+    ConfigurationChangeEventType rsEventType,
     const Callback& rCallback)
 {
     RunOnEvent(
@@ -609,7 +609,7 @@ void FrameworkHelper::RunOnResourceActivation(
     else
     {
         RunOnEvent(
-            msResourceActivationEvent,
+            ConfigurationChangeEventType::ResourceActivation,
             FrameworkHelperResourceIdFilter(rxResourceId),
             rCallback);
     }
@@ -637,7 +637,7 @@ void FrameworkHelper::RequestSynchronousUpdate()
         mxConfigurationController->RequestSynchronousUpdate();
 }
 
-void FrameworkHelper::WaitForEvent (const OUString& rsEventType) const
+void FrameworkHelper::WaitForEvent (ConfigurationChangeEventType rsEventType) const
 {
     bool bConfigurationUpdateSeen (false);
 
@@ -661,11 +661,11 @@ void FrameworkHelper::WaitForEvent (const OUString& rsEventType) const
 
 void FrameworkHelper::WaitForUpdate() const
 {
-    WaitForEvent(msConfigurationUpdateEndEvent);
+    WaitForEvent(ConfigurationChangeEventType::ConfigurationUpdateEnd);
 }
 
 void FrameworkHelper::RunOnEvent(
-    const OUString& rsEventType,
+    ConfigurationChangeEventType rsEventType,
     const ConfigurationChangeEventFilter& rFilter,
     const Callback& rCallback) const
 {
@@ -781,10 +781,10 @@ namespace {
 
 CallbackCaller::CallbackCaller (
     const ::sd::ViewShellBase& rBase,
-    OUString  rsEventType,
+    sd::framework::ConfigurationChangeEventType rsEventType,
     ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter aFilter,
     ::sd::framework::FrameworkHelper::Callback aCallback)
-    : msEventType(std::move(rsEventType)),
+    : mnEventType(rsEventType),
       maFilter(std::move(aFilter)),
       maCallback(std::move(aCallback))
 {
@@ -797,7 +797,7 @@ CallbackCaller::CallbackCaller (
         if (mxConfigurationController.is())
         {
             if (mxConfigurationController->hasPendingRequests())
-                mxConfigurationController->addConfigurationChangeListener(this,msEventType,Any());
+                mxConfigurationController->addConfigurationChangeListener(this,mnEventType,Any());
             else
             {
                 // There are no requests waiting to be processed.  Therefore
@@ -846,7 +846,7 @@ void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
 void CallbackCaller::notifyConfigurationChange (
     const sd::framework::ConfigurationChangeEvent& rEvent)
 {
-    if (!(rEvent.Type == msEventType && maFilter(rEvent)))
+    if (!(rEvent.Type == mnEventType && maFilter(rEvent)))
         return;
 
     maCallback(true);

@@ -20,13 +20,13 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <rtl/ref.hxx>
 #include <unordered_map>
 #include <vector>
 
 namespace sd::framework {
 class ConfigurationChangeListener;
-struct ConfigurationChangeEvent;
 class ConfigurationController;
 class AbstractResource;
 class ResourceId;
@@ -68,7 +68,7 @@ public:
     void AddListener(
         const rtl::Reference<
             sd::framework::ConfigurationChangeListener>& rxListener,
-        const OUString& rsEventType,
+        ConfigurationChangeEventType rsEventType,
         const css::uno::Any& rUserData);
 
     /** Remove all references to the given listener.  When one listener has
@@ -96,7 +96,7 @@ public:
         the given arguments.
     */
     void NotifyListeners (
-        const OUString& rsEventType,
+        ConfigurationChangeEventType rsEventType,
         const rtl::Reference<sd::framework::ResourceId>& rxResourceId,
         const rtl::Reference<sd::framework::AbstractResource>& rxResourceObject);
 
@@ -117,7 +117,7 @@ private:
     };
     typedef std::vector<ListenerDescriptor> ListenerList;
     typedef std::unordered_map
-        <OUString,
+        <ConfigurationChangeEventType,
          ListenerList> ListenerMap;
     ListenerMap maListenerMap;
 

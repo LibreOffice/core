@@ -63,11 +63,11 @@ CenterViewFocusModule::CenterViewFocusModule (rtl::Reference<sd::DrawController>
     {
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            FrameworkHelper::msConfigurationUpdateEndEvent,
+            ConfigurationChangeEventType::ConfigurationUpdateEnd,
             Any());
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            FrameworkHelper::msResourceActivationEvent,
+            ConfigurationChangeEventType::ResourceActivation,
             Any());
     }
 }
@@ -91,11 +91,11 @@ void CenterViewFocusModule::notifyConfigurationChange (
 {
     if (mbValid)
     {
-        if (rEvent.Type == FrameworkHelper::msConfigurationUpdateEndEvent)
+        if (rEvent.Type == ConfigurationChangeEventType::ConfigurationUpdateEnd)
         {
             HandleNewView(rEvent.Configuration);
         }
-        else if (rEvent.Type == FrameworkHelper::msResourceActivationEvent)
+        else if (rEvent.Type == ConfigurationChangeEventType::ResourceActivation)
         {
             if (rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix))
                 mbNewViewCreated = true;

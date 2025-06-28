@@ -85,7 +85,7 @@ ViewTabBar::ViewTabBar (
         {
             mxConfigurationController->addConfigurationChangeListener(
                 mxListener,
-                    FrameworkHelper::msResourceActivationEvent,
+                    framework::ConfigurationChangeEventType::ResourceActivation,
                 Any());
         }
     }
@@ -193,7 +193,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
 void ViewTabBar::Listener::notifyConfigurationChange (
     const sd::framework::ConfigurationChangeEvent& rEvent)
 {
-    if (rEvent.Type == FrameworkHelper::msResourceActivationEvent
+    if (rEvent.Type == framework::ConfigurationChangeEventType::ResourceActivation
         && rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix)
         && rEvent.ResourceId->isBoundTo(mrParent.mxViewTabBarId->getAnchor(), AnchorBindingMode_DIRECT))
     {

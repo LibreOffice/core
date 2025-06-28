@@ -56,7 +56,7 @@ ShellStackGuard::ShellStackGuard (rtl::Reference<sd::DrawController> const & rxC
         // prevented in case of a printing printer.
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            FrameworkHelper::msConfigurationUpdateStartEvent,
+            ConfigurationChangeEventType::ConfigurationUpdateStart,
             Any());
 
         // Prepare the printer polling.
@@ -81,7 +81,7 @@ void ShellStackGuard::disposing(std::unique_lock<std::mutex>&)
 void ShellStackGuard::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    if (rEvent.Type == FrameworkHelper::msConfigurationUpdateStartEvent)
+    if (rEvent.Type == ConfigurationChangeEventType::ConfigurationUpdateStart)
     {
         if (mpUpdateLock == nullptr && IsPrinting())
         {

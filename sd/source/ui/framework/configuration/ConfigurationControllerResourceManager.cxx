@@ -148,7 +148,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
 
             // 5. Notify the new resource to listeners of the ConfigurationController.
             mpBroadcaster->NotifyListeners(
-                FrameworkHelper::msResourceActivationEvent,
+                ConfigurationChangeEventType::ResourceActivation,
                 rxResourceId,
                 xResource);
         }
@@ -190,7 +190,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
         {
             // 2.  Notify listeners that the resource is being deactivated.
             mpBroadcaster->NotifyListeners(
-                FrameworkHelper::msResourceDeactivationEvent,
+                ConfigurationChangeEventType::ResourceDeactivation,
                 rxResourceId,
                 aDescriptor.mxResource);
 
@@ -223,12 +223,6 @@ void ConfigurationControllerResourceManager::DeactivateResource (
     {
         DBG_UNHANDLED_EXCEPTION("sd");
     }
-
-    // 5.  Notify listeners that the resource is being deactivated.
-    mpBroadcaster->NotifyListeners(
-        FrameworkHelper::msResourceDeactivationEndEvent,
-        rxResourceId,
-        nullptr);
 
 #if OSL_DEBUG_LEVEL >= 1
     if (bSuccess)

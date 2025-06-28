@@ -19,6 +19,7 @@
 
 #include "PresenterFrameworkObserver.hxx"
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <utility>
 
@@ -42,7 +43,7 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
     {
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            u"ConfigurationUpdateEnd"_ustr,
+            sd::framework::ConfigurationChangeEventType::ConfigurationUpdateEnd,
             Any());
     }
     else

@@ -35,6 +35,7 @@ namespace sd { class DrawController; }
 
 namespace sd::framework {
 class ResourceFactory;
+enum class ConfigurationChangeEventType;
 
 /** The ResourceActivationMode specifies, for example for the
     com::sun::star::drawing::framework::XConfigurationController::requestResourceActivation(),
@@ -116,7 +117,7 @@ public:
     void addConfigurationChangeListener (
         const rtl::Reference<
             sd::framework::ConfigurationChangeListener>& rxListener,
-        const OUString& rsEventType,
+        ConfigurationChangeEventType rsEventType,
         const css::uno::Any& rUserData);
 
     void removeConfigurationChangeListener (

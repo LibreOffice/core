@@ -38,6 +38,7 @@ struct ConfigurationChangeEvent;
 class ConfigurationController;
 class AbstractView;
 class ResourceId;
+enum class ConfigurationChangeEventType;
 
 /** The FrameworkHelper is a convenience class that simplifies the
     access to the drawing framework.
@@ -77,17 +78,6 @@ public:
     // URLs of frequently used tool bars.
     static constexpr OUString msToolBarURLPrefix = u"private:resource/toolbar/"_ustr;
     static const OUString msViewTabBarURL;
-
-    // Names of frequently used events.
-    static constexpr OUString msResourceActivationRequestEvent
-        = u"ResourceActivationRequested"_ustr;
-    static constexpr OUString msResourceDeactivationRequestEvent
-        = u"ResourceDeactivationRequest"_ustr;
-    static constexpr OUString msResourceActivationEvent = u"ResourceActivation"_ustr;
-    static constexpr OUString msResourceDeactivationEvent = u"ResourceDeactivation"_ustr;
-    static constexpr OUString msResourceDeactivationEndEvent = u"ResourceDeactivationEnd"_ustr;
-    static constexpr OUString msConfigurationUpdateStartEvent = u"ConfigurationUpdateStart"_ustr;
-    static constexpr OUString msConfigurationUpdateEndEvent = u"ConfigurationUpdateEnd"_ustr;
 
     /** Return the FrameworkHelper object that is associated with the given
         ViewShellBase.  If such an object does not yet exist, a new one is
@@ -203,7 +193,7 @@ public:
         the event it waits for has been sent.
     */
     void RunOnConfigurationEvent(
-        const OUString& rsEventType,
+        ConfigurationChangeEventType rsEventType,
         const Callback& rCallback);
 
     /** Run the given callback when the specified resource has been
@@ -235,7 +225,7 @@ public:
         controller.  When the configuration controller is not processing any
         requests the method returns immediately.
     */
-    void WaitForEvent (const OUString& rsEventName) const;
+    void WaitForEvent (ConfigurationChangeEventType rsEventName) const;
 
     /** This is a short cut for WaitForEvent(msConfigurationUpdateEndEvent).
         Call this method to execute the pending requests.
@@ -320,7 +310,7 @@ private:
             The callback functor to be called.
     */
     void RunOnEvent(
-        const OUString& rsEventType,
+        ConfigurationChangeEventType rsEventType,
         const ConfigurationChangeEventFilter& rFilter,
         const Callback& rCallback) const;
 

@@ -66,11 +66,11 @@ SlideSorterModule::SlideSorterModule (
             mxConfigurationController->addEventListener(this);
             mxConfigurationController->addConfigurationChangeListener(
                 this,
-                FrameworkHelper::msResourceActivationRequestEvent,
+                ConfigurationChangeEventType::ResourceActivationRequest,
                 Any(ResourceActivationRequestEvent));
             mxConfigurationController->addConfigurationChangeListener(
                 this,
-                FrameworkHelper::msResourceDeactivationRequestEvent,
+                ConfigurationChangeEventType::ResourceDeactivationRequest,
                 Any(ResourceDeactivationRequestEvent));
         }
     }
@@ -96,7 +96,7 @@ SlideSorterModule::SlideSorterModule (
 
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        FrameworkHelper::msResourceActivationEvent,
+        ConfigurationChangeEventType::ResourceActivation,
         Any());
 }
 
@@ -119,7 +119,7 @@ void SlideSorterModule::SaveResourceState()
 void SlideSorterModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    if (rEvent.Type == FrameworkHelper::msResourceActivationEvent)
+    if (rEvent.Type == ConfigurationChangeEventType::ResourceActivation)
     {
         if (rEvent.ResourceId->compareTo(mxViewTabBarId) == 0)
         {

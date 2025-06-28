@@ -28,6 +28,16 @@ namespace sd::framework
 class Configuration;
 class AbstractResource;
 
+enum class ConfigurationChangeEventType
+{
+    ConfigurationUpdateStart,
+    ConfigurationUpdateEnd,
+    ResourceActivation,
+    ResourceActivationRequest,
+    ResourceDeactivation,
+    ResourceDeactivationRequest
+};
+
 /** Objects of this class are used for notifying changes of the
     configuration.
 
@@ -43,11 +53,10 @@ class AbstractResource;
 */
 struct ConfigurationChangeEvent final : public ::css::lang::EventObject
 {
-    /** The type of configuration change is a free-form string.  This is the
-        only member that is always set.  The values of the other members
+    /** This is the only member that is always set.  The values of the other members
         depend on the configuration change type and may or may not be set.
     */
-    ::rtl::OUString Type;
+    ConfigurationChangeEventType Type;
     /** The current configuration, depending on the event type, either
         before or after the change.  May be an empty reference.
     */

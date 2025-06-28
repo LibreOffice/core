@@ -47,6 +47,7 @@
 #include <ToolBarManager.hxx>
 #include <Window.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 #include <DocumentRenderer.hxx>
 #include <optsitem.hxx>
 #include <sdmod.hxx>
@@ -1229,7 +1230,7 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot()
     pHelper->RequestView(
         FrameworkHelper::GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
         FrameworkHelper::msCenterPaneURL);
-    pHelper->RunOnConfigurationEvent(u"ConfigurationUpdateEnd"_ustr, CurrentPageSetter(mrBase));
+    pHelper->RunOnConfigurationEvent(framework::ConfigurationChangeEventType::ConfigurationUpdateEnd, CurrentPageSetter(mrBase));
 }
 
 void ViewShellBase::Implementation::SetUserWantsTabBar(bool inValue)

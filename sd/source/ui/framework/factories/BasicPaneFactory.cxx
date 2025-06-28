@@ -21,6 +21,7 @@
 #include <sal/config.h>
 
 #include <framework/factories/BasicPaneFactory.hxx>
+#include <framework/ConfigurationChangeEvent.hxx>
 
 #include "ChildWindowPane.hxx"
 #include "FrameWindowPane.hxx"
@@ -128,11 +129,11 @@ BasicPaneFactory::BasicPaneFactory(
         {
             xCC->addConfigurationChangeListener(
                 mxListener,
-                FrameworkHelper::msConfigurationUpdateStartEvent,
+                ConfigurationChangeEventType::ConfigurationUpdateStart,
                 Any(gnConfigurationUpdateStartEvent));
             xCC->addConfigurationChangeListener(
                 mxListener,
-                FrameworkHelper::msConfigurationUpdateEndEvent,
+                ConfigurationChangeEventType::ConfigurationUpdateEnd,
                 Any(gnConfigurationUpdateEndEvent));
         }
     }

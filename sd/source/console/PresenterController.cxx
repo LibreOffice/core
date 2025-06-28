@@ -119,15 +119,15 @@ PresenterController::PresenterController (
     {
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            u"ResourceActivation"_ustr,
+            sd::framework::ConfigurationChangeEventType::ResourceActivation,
             Any(ResourceActivationEventType));
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            u"ResourceDeactivation"_ustr,
+            sd::framework::ConfigurationChangeEventType::ResourceDeactivation,
             Any(ResourceDeactivationEventType));
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            u"ConfigurationUpdateEnd"_ustr,
+            sd::framework::ConfigurationChangeEventType::ConfigurationUpdateEnd,
             Any(ConfigurationUpdateEndEventType));
     }
 

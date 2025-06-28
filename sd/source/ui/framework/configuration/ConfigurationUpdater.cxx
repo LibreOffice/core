@@ -149,7 +149,7 @@ void ConfigurationUpdater::UpdateConfiguration()
 #endif
             // Notify the beginning of the update.
             ConfigurationChangeEvent aEvent;
-            aEvent.Type = FrameworkHelper::msConfigurationUpdateStartEvent;
+            aEvent.Type = ConfigurationChangeEventType::ConfigurationUpdateStart;
             aEvent.Configuration = mxRequestedConfiguration;
             mpBroadcaster->NotifyListeners(aEvent);
 
@@ -165,7 +165,7 @@ void ConfigurationUpdater::UpdateConfiguration()
             }
 
             // Notify the end of the update.
-            aEvent.Type = FrameworkHelper::msConfigurationUpdateEndEvent;
+            aEvent.Type = ConfigurationChangeEventType::ConfigurationUpdateEnd;
             mpBroadcaster->NotifyListeners(aEvent);
 
             CheckUpdateSuccess();

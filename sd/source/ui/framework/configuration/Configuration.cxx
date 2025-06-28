@@ -227,14 +227,14 @@ void Configuration::PostEvent (
     aEvent.ResourceId = rxResourceId;
     if (bActivation)
         if (mbBroadcastRequestEvents)
-            aEvent.Type = FrameworkHelper::msResourceActivationRequestEvent;
+            aEvent.Type = ConfigurationChangeEventType::ResourceActivationRequest;
         else
-            aEvent.Type = FrameworkHelper::msResourceActivationEvent;
+            aEvent.Type = ConfigurationChangeEventType::ResourceActivation;
     else
         if (mbBroadcastRequestEvents)
-            aEvent.Type = FrameworkHelper::msResourceDeactivationRequestEvent;
+            aEvent.Type = ConfigurationChangeEventType::ResourceDeactivationRequest;
         else
-            aEvent.Type = FrameworkHelper::msResourceDeactivationEvent;
+            aEvent.Type = ConfigurationChangeEventType::ResourceDeactivation;
     aEvent.Configuration = this;
 
     mxBroadcaster->notifyEvent(aEvent);

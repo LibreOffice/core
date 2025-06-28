@@ -40,7 +40,7 @@ ConfigurationControllerBroadcaster::ConfigurationControllerBroadcaster (
 
 void ConfigurationControllerBroadcaster::AddListener(
     const rtl::Reference<ConfigurationChangeListener>& rxListener,
-    const OUString& rsEventType,
+    ConfigurationChangeEventType rsEventType,
     const Any& rUserData)
 {
     if ( ! rxListener.is())
@@ -114,20 +114,10 @@ void ConfigurationControllerBroadcaster::NotifyListeners (const ConfigurationCha
         ListenerList aList (iMap->second.begin(), iMap->second.end());
         NotifyListeners(aList,rEvent);
     }
-
-    // Notify the universal listeners.
-    iMap = maListenerMap.find(OUString());
-    if (iMap != maListenerMap.end())
-    {
-        // Create a local list of the listeners to avoid problems with
-        // concurrent changes and to be able to remove disposed listeners.
-        ListenerList aList (iMap->second.begin(), iMap->second.end());
-        NotifyListeners(aList,rEvent);
-    }
 }
 
 void ConfigurationControllerBroadcaster::NotifyListeners (
-    const OUString& rsEventType,
+    ConfigurationChangeEventType rsEventType,
     const rtl::Reference<ResourceId>& rxResourceId,
     const rtl::Reference<AbstractResource>& rxResourceObject)
 {

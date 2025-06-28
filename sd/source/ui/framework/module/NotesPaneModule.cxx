@@ -51,10 +51,10 @@ NotesPaneModule::NotesPaneModule(const rtl::Reference<::sd::DrawController>& rxC
         return;
 
     mxConfigurationController->addConfigurationChangeListener(
-        this, FrameworkHelper::msResourceActivationRequestEvent,
+        this, ConfigurationChangeEventType::ResourceActivationRequest,
         Any(ResourceActivationRequestEvent));
     mxConfigurationController->addConfigurationChangeListener(
-        this, FrameworkHelper::msResourceDeactivationRequestEvent,
+        this, ConfigurationChangeEventType::ResourceDeactivationRequest,
         Any(ResourceDeactivationRequestEvent));
 
     if (officecfg::Office::Impress::MultiPaneGUI::NotesPane::Visible::ImpressView::get().value_or(

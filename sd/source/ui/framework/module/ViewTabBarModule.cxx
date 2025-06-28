@@ -61,17 +61,17 @@ ViewTabBarModule::ViewTabBarModule (
 
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        FrameworkHelper::msResourceActivationRequestEvent,
+        ConfigurationChangeEventType::ResourceActivationRequest,
         Any(ResourceActivationRequestEvent));
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        FrameworkHelper::msResourceDeactivationRequestEvent,
+        ConfigurationChangeEventType::ResourceDeactivationRequest,
         Any(ResourceDeactivationRequestEvent));
 
     UpdateViewTabBar(nullptr);
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        FrameworkHelper::msResourceActivationEvent,
+        ConfigurationChangeEventType::ResourceActivation,
         Any(ResourceActivationEvent));
 }
 
