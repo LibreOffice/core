@@ -220,7 +220,7 @@ enum class ScrollFlags
     Children                 = 0x0002,
     NoChildren               = 0x0004,
     UseClipRegion            = 0x0008,
-    Update                   = 0x0010,
+    Update                   = 0x0010, // paint immediately
 };
 namespace o3tl
 {

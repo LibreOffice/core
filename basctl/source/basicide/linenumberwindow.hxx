@@ -36,7 +36,7 @@ public:
 
     void DoScroll(tools::Long nVertScroll);
 
-    bool SyncYOffset();
+    void SyncYOffset();
     tools::Long& GetCurYOffset() { return m_nCurYOffset; }
 
     int GetWidth() const { return m_nWidth; }

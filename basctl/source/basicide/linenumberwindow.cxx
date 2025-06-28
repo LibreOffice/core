@@ -43,8 +43,7 @@ void LineNumberWindow::dispose()
 
 void LineNumberWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    if (SyncYOffset())
-        return;
+    SyncYOffset(); // Don't return even if invalidated, to avoid flicker
 
     ExtTextEngine* txtEngine = m_pModulWindow->GetEditEngine();
     if (!txtEngine)
@@ -139,22 +138,18 @@ void LineNumberWindow::DataChanged(DataChangedEvent const& rDCEvt)
 void LineNumberWindow::DoScroll(tools::Long nVertScroll)
 {
     m_nCurYOffset -= nVertScroll;
-    Window::Scroll(0, nVertScroll);
+    Window::Scroll(0, nVertScroll, ScrollFlags::Update);
 }
 
-bool LineNumberWindow::SyncYOffset()
+void LineNumberWindow::SyncYOffset()
 {
-    TextView* pView = m_pModulWindow->GetEditView();
-    if (!pView)
-        return false;
-
-    tools::Long nViewYOffset = pView->GetStartDocPos().Y();
-    if (m_nCurYOffset == nViewYOffset)
-        return false;
-
-    m_nCurYOffset = nViewYOffset;
-    Invalidate();
-    return true;
+    if (TextView* pView = m_pModulWindow->GetEditView())
+    {
+        tools::Long nViewYOffset = pView->GetStartDocPos().Y();
+        if (m_nCurYOffset != nViewYOffset)
+            Invalidate();
+        m_nCurYOffset = nViewYOffset;
+    }
 }
 
 } // namespace basctl
