@@ -6,9 +6,6 @@ excludelist:
     - config_folders.h
     # Don't replace with URE impl. detail
     - rtl/byteseq.hxx
-    jvmfwk/inc/vendorbase.hxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     jvmfwk/source/framework.cxx:
     # Don't replace with URE impl. detail
     - osl/thread.hxx

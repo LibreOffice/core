@@ -1,9 +1,6 @@
 ---
 assumeFilename: filter/source/msfilter/msdffimp.cxx
 excludelist:
-    filter/source/graphicfilter/icgm/cgm.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     filter/source/msfilter/mscodec.cxx:
     # Actually used
     - com/sun/star/beans/NamedValue.hpp
@@ -13,9 +10,6 @@ excludelist:
     filter/source/msfilter/mstoolbar.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    filter/source/msfilter/svdfppt.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     filter/source/pdf/impdialog.cxx:
     # Actually used
     - com/sun/star/beans/XMaterialHolder.hpp

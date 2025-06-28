@@ -71,9 +71,6 @@ excludelist:
     connectivity/source/drivers/mysql_jdbc/YDriver.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
-    connectivity/source/drivers/odbc/OTools.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     connectivity/source/drivers/postgresql/pq_connection.cxx:
     # Needed for using deleter_from_fn
     - pq_tools.hxx

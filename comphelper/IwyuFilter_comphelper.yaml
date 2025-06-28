@@ -52,9 +52,6 @@ excludelist:
     comphelper/source/misc/graphicmimetype.cxx:
     # Needed for direct member access
     - com/sun/star/io/XInputStream.hpp
-    comphelper/source/misc/hash.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     comphelper/source/misc/instancelocker.cxx:
     # Needed for template
     - com/sun/star/embed/XActionsApproval.hpp
