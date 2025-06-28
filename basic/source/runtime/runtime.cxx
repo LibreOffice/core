@@ -3953,7 +3953,23 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             // parameters may be missing, if an array is
             // passed as an argument
             if( pPar )
-                pElem = pDimArray->Get( pPar );
+            {
+                bool parIsArrayIndex = true;
+                if (dynamic_cast<const SbxMethod*>(pElem))
+                {
+                    // If this was a method, then there are two possibilities:
+                    // 1. pPar is this method's parameters.
+                    // 2. pPar is the indexes into the array returned from the method.
+                    // To disambiguate, check the 0th element of pPar.
+                    if (dynamic_cast<const SbxMethod*>(pPar->Get(0)))
+                    {
+                        // pPar was the parameters to the method, not indexes into the array
+                        parIsArrayIndex = false;
+                    }
+                }
+                if (parIsArrayIndex)
+                    pElem = pDimArray->Get(pPar);
+            }
         }
         else
         {
