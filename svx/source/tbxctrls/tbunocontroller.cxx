@@ -137,13 +137,6 @@ public:
         InterimItemWindow::dispose();
     }
 
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
-
     virtual ~SvxFontSizeBox_Impl() override
     {
         disposeOnce();
@@ -317,6 +310,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(vcl::Window* pParent,
     : InterimItemWindow(pParent, u"svx/ui/fontsizebox.ui"_ustr, u"FontSizeBox"_ustr, true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , SvxFontSizeBox_Base(m_xBuilder->weld_combo_box(u"fontsizecombobox"_ustr), rFrame, rCtrl)
 {
+    InitControlBase(m_xWidget->getWidget());
 }
 
 void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
