@@ -37,7 +37,7 @@ void ImpressModule::Initialize (rtl::Reference<sd::DrawController> const & rxCon
     new CenterViewFocusModule(rxController);
     new ViewTabBarModule(
         rxController,
-        FrameworkHelper::CreateResourceId(
+        new ::sd::framework::ResourceId(
             FrameworkHelper::msViewTabBarURL,
             FrameworkHelper::msCenterPaneURL));
     new SlideSorterModule(

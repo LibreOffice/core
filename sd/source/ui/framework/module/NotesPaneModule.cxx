@@ -31,9 +31,9 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sd::framework
 {
 NotesPaneModule::NotesPaneModule(const rtl::Reference<::sd::DrawController>& rxController)
-    : mxBottomImpressPaneId(FrameworkHelper::CreateResourceId(
+    : mxBottomImpressPaneId(new ::sd::framework::ResourceId(
           FrameworkHelper::msNotesPanelViewURL, FrameworkHelper::msBottomImpressPaneURL))
-    , mxMainViewAnchorId(FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL))
+    , mxMainViewAnchorId(new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL))
 {
     if (!rxController.is())
         return;
@@ -233,7 +233,7 @@ void NotesPaneModule::onResourceRequest(
     bool bActivation, const rtl::Reference<sd::framework::Configuration>& rxConfiguration)
 {
     std::vector<rtl::Reference<ResourceId>> aCenterViews = rxConfiguration->getResources(
-        FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
+        new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL),
         FrameworkHelper::msViewURLPrefix, AnchorBindingMode_DIRECT);
 
     if (aCenterViews.size() != 1)

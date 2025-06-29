@@ -350,7 +350,7 @@ bool FrameworkHelper::IsValid() const
     if ( !mxConfigurationController.is() )
         return ::std::shared_ptr<ViewShell>();
 
-    rtl::Reference<ResourceId> xPaneId( CreateResourceId( rsPaneURL ) );
+    rtl::Reference<ResourceId> xPaneId( new ::sd::framework::ResourceId( rsPaneURL ) );
     return lcl_getViewShell( lcl_getFirstViewInPane( mxConfigurationController, xPaneId ) );
 }
 
@@ -399,9 +399,9 @@ rtl::Reference<ResourceId> FrameworkHelper::RequestView (
         if (mxConfigurationController.is())
         {
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(rsAnchorURL),
+                new ::sd::framework::ResourceId(rsAnchorURL),
                 ResourceActivationMode::ADD);
-            xViewId = CreateResourceId(rsResourceURL, rsAnchorURL);
+            xViewId = new ::sd::framework::ResourceId(rsResourceURL, rsAnchorURL);
             mxConfigurationController->requestResourceActivation(
                 xViewId,
                 ResourceActivationMode::REPLACE);
@@ -487,7 +487,7 @@ void updateEditMode(const rtl::Reference<AbstractView> &xView, const EditMode eE
 void asyncUpdateEditMode(FrameworkHelper* const pHelper, const EditMode eEMode)
 {
     rtl::Reference<ResourceId> xPaneId (
-        FrameworkHelper::CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
+        new ::sd::framework::ResourceId(framework::FrameworkHelper::msCenterPaneURL));
     rtl::Reference<AbstractView> xView (pHelper->GetView(xPaneId));
     updateEditMode(xView, eEMode, true);
 }
@@ -526,7 +526,7 @@ void FrameworkHelper::HandleModeChangeSlot (
             throw RuntimeException();
 
         rtl::Reference<ResourceId> xPaneId (
-            CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
+            new ::sd::framework::ResourceId(framework::FrameworkHelper::msCenterPaneURL));
         rtl::Reference<AbstractView> xView (GetView(xPaneId));
 
         // Compute requested view
@@ -570,7 +570,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         if (!(xView.is() && xView->getResourceId()->getResourceURL() == sRequestedView))
 
         {
-            const auto xId = CreateResourceId(sRequestedView, msCenterPaneURL);
+            rtl::Reference<::sd::framework::ResourceId> xId = new ::sd::framework::ResourceId(sRequestedView, msCenterPaneURL);
             mxConfigurationController->requestResourceActivation(
                 xId,
                 ResourceActivationMode::REPLACE);
@@ -714,31 +714,6 @@ OUString FrameworkHelper::ResourceIdToString (const rtl::Reference<ResourceId>& 
         }
     }
     return sString.makeStringAndClear();
-}
-
-rtl::Reference<ResourceId> FrameworkHelper::CreateResourceId (const OUString& rsResourceURL)
-{
-    return new ::sd::framework::ResourceId(rsResourceURL);
-}
-
-rtl::Reference<ResourceId> FrameworkHelper::CreateResourceId (
-    const OUString& rsResourceURL,
-    const OUString& rsAnchorURL)
-{
-    return new ::sd::framework::ResourceId(rsResourceURL, rsAnchorURL);
-}
-
-rtl::Reference<ResourceId> FrameworkHelper::CreateResourceId (
-    const OUString& rsResourceURL,
-    const rtl::Reference<ResourceId>& rxAnchorId)
-{
-    if (rxAnchorId.is())
-        return new ::sd::framework::ResourceId(
-            rsResourceURL,
-            rxAnchorId->getResourceURL(),
-            rxAnchorId->getAnchorURLs());
-    else
-        return new ::sd::framework::ResourceId(rsResourceURL);
 }
 
 //----- FrameworkHelper::DisposeListener --------------------------------------

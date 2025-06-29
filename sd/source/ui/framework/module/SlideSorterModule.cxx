@@ -45,9 +45,9 @@ namespace sd::framework {
 SlideSorterModule::SlideSorterModule (
     const rtl::Reference<::sd::DrawController>& rxController,
     const OUString& rsLeftPaneURL)
-    : mxResourceId(FrameworkHelper::CreateResourceId(FrameworkHelper::msSlideSorterURL, rsLeftPaneURL)),
-      mxMainViewAnchorId(FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL)),
-      mxViewTabBarId(FrameworkHelper::CreateResourceId(
+    : mxResourceId(new ::sd::framework::ResourceId(FrameworkHelper::msSlideSorterURL, rsLeftPaneURL)),
+      mxMainViewAnchorId(new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL)),
+      mxViewTabBarId(new ::sd::framework::ResourceId(
           FrameworkHelper::msViewTabBarURL,
           FrameworkHelper::msCenterPaneURL)),
       mxControllerManager(rxController)
@@ -122,7 +122,7 @@ void SlideSorterModule::notifyConfigurationChange (
         else if (rEvent.ResourceId->getResourceTypePrefix() ==
                      FrameworkHelper::msViewURLPrefix
                  && rEvent.ResourceId->isBoundTo(
-                        FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
+                        new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL),
                         AnchorBindingMode_DIRECT))
         {
             // Update the view tab bar because the view in the center pane
@@ -199,13 +199,13 @@ void SlideSorterModule::UpdateViewTabBar (const rtl::Reference<ViewTabBar>& rxTa
         return;
 
     TabBarButton aButtonA;
-    aButtonA.ResourceId = FrameworkHelper::CreateResourceId(
+    aButtonA.ResourceId = new ::sd::framework::ResourceId(
         FrameworkHelper::msSlideSorterURL,
         FrameworkHelper::msCenterPaneURL);
     aButtonA.ButtonLabel = SdResId(STR_SLIDE_SORTER_MODE);
 
     TabBarButton aButtonB;
-    aButtonB.ResourceId = FrameworkHelper::CreateResourceId(
+    aButtonB.ResourceId = new ::sd::framework::ResourceId(
         FrameworkHelper::msHandoutViewURL,
         FrameworkHelper::msCenterPaneURL);
 
@@ -271,7 +271,7 @@ void SlideSorterModule::HandleResourceRequest(
     const rtl::Reference<Configuration>& rxConfiguration)
 {
     std::vector<rtl::Reference<ResourceId> > aCenterViews = rxConfiguration->getResources(
-        FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
+        new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL),
         FrameworkHelper::msViewURLPrefix,
         AnchorBindingMode_DIRECT);
     if (aCenterViews.size() == 1)

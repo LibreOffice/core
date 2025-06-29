@@ -112,7 +112,7 @@ void CenterViewFocusModule::HandleNewView (
     // controller to obtain a ViewShell pointer.
 
     std::vector<rtl::Reference<ResourceId> > xViewIds (rxConfiguration->getResources(
-        FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
+        new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL),
         FrameworkHelper::msViewURLPrefix,
         AnchorBindingMode_DIRECT));
     rtl::Reference<AbstractView> xView;

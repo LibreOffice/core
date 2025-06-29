@@ -329,9 +329,9 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
 
             // Create the resource ids for the center pane and view.
             const rtl::Reference<framework::ResourceId> xCenterPaneId (
-                FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL));
+                new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL));
             const rtl::Reference<framework::ResourceId> xCenterViewId (
-                FrameworkHelper::CreateResourceId(sView, xCenterPaneId));
+                new ::sd::framework::ResourceId(sView, xCenterPaneId));
 
             // Request center pane and view.
             xConfigurationController->requestResourceActivation(xCenterPaneId, framework::ResourceActivationMode::ADD);

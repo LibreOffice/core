@@ -245,27 +245,6 @@ public:
     static OUString ResourceIdToString (
         const rtl::Reference<ResourceId>& rxResourceId);
 
-    /** Create a new ResourceId object for the given resource URL.
-    */
-    static rtl::Reference<ResourceId>
-            CreateResourceId (
-                const OUString& rsResourceURL);
-
-    /** Create a new ResourceId object for the given resource URL and a
-        single anchor URL.
-    */
-    static rtl::Reference<ResourceId>
-            CreateResourceId (
-                const OUString& rsResourceURL,
-                const OUString& rsAnchorURL);
-
-    /** Create a new ResourceId object for the given resource URL.
-    */
-    static rtl::Reference<ResourceId>
-            CreateResourceId (
-                const OUString& rsResourceURL,
-                const rtl::Reference<ResourceId>& rxAnchor);
-
     const rtl::Reference<ConfigurationController>&
         GetConfigurationController() const { return mxConfigurationController;}
 

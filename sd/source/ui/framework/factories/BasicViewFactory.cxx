@@ -399,9 +399,9 @@ bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDes
             FrameworkHelper::Instance(*mpBase);
 
             // The slide sorter and the task panel are cacheable and relocatable.
-            tmp.push_back(FrameworkHelper::CreateResourceId(
+            tmp.push_back(new ::sd::framework::ResourceId(
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftDrawPaneURL));
-            tmp.push_back(FrameworkHelper::CreateResourceId(
+            tmp.push_back(new ::sd::framework::ResourceId(
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftImpressPaneURL));
             return tmp;
         }();

@@ -311,9 +311,9 @@ bool SdModule::OutlineToImpress(SfxRequest const & rRequest)
                             FrameworkHelper::msCenterPaneURL);
 
                         pHelper->RunOnResourceActivation(
-                            FrameworkHelper::CreateResourceId(
-                            FrameworkHelper::msOutlineViewURL,
-                            FrameworkHelper::msCenterPaneURL),
+                            new ::sd::framework::ResourceId(
+                                FrameworkHelper::msOutlineViewURL,
+                                FrameworkHelper::msCenterPaneURL),
                             OutlineToImpressFinalizer(*pBase, *pDoc, pBytes));
                     }
                 }

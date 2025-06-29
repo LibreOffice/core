@@ -112,7 +112,7 @@ IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation, void*, void)
     ::std::shared_ptr<FrameworkHelper> pHelper(
         FrameworkHelper::Instance(*mpViewShellBase));
     if (pHelper->GetConfigurationController()->getResource(
-        FrameworkHelper::CreateResourceId(FrameworkHelper::msFullScreenPaneURL)).is())
+        new ::sd::framework::ResourceId(FrameworkHelper::msFullScreenPaneURL)).is())
     {
         ::sd::framework::ConfigurationController::Lock aLock (
             pHelper->GetConfigurationController());

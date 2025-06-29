@@ -141,7 +141,7 @@ void ViewTabBarModule::UpdateViewTabBar (const rtl::Reference<sd::ViewTabBar>& r
     rtl::Reference<ResourceId> xAnchor (mxViewTabBarId->getAnchor());
 
     TabBarButton aImpressViewButton;
-    aImpressViewButton.ResourceId = FrameworkHelper::CreateResourceId(
+    aImpressViewButton.ResourceId = new ::sd::framework::ResourceId(
         FrameworkHelper::msImpressViewURL,
         xAnchor);
     aImpressViewButton.ButtonLabel = SdResId(STR_NORMAL_MODE);
@@ -149,7 +149,7 @@ void ViewTabBarModule::UpdateViewTabBar (const rtl::Reference<sd::ViewTabBar>& r
         xBar->addTabBarButtonAfter(aImpressViewButton, aEmptyButton);
 
     TabBarButton aOutlineViewButton;
-    aOutlineViewButton.ResourceId = FrameworkHelper::CreateResourceId(
+    aOutlineViewButton.ResourceId = new ::sd::framework::ResourceId(
         FrameworkHelper::msOutlineViewURL,
         xAnchor);
     aOutlineViewButton.ButtonLabel = SdResId(STR_OUTLINE_MODE);
@@ -157,7 +157,7 @@ void ViewTabBarModule::UpdateViewTabBar (const rtl::Reference<sd::ViewTabBar>& r
         xBar->addTabBarButtonAfter(aOutlineViewButton, aImpressViewButton);
 
     TabBarButton aNotesViewButton;
-    aNotesViewButton.ResourceId = FrameworkHelper::CreateResourceId(
+    aNotesViewButton.ResourceId = new ::sd::framework::ResourceId(
         FrameworkHelper::msNotesViewURL,
         xAnchor);
     aNotesViewButton.ButtonLabel = SdResId(STR_NOTES_MODE);
