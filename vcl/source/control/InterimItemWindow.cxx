@@ -10,6 +10,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/layout.hxx>
 #include <salobj.hxx>
+#include <svdata.hxx>
 #include <window.h>
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
@@ -131,7 +132,12 @@ void InterimItemWindow::InitControlBase(weld::Widget* pWidget) { m_pWidget = pWi
 
 void InterimItemWindow::GetFocus()
 {
-    if (m_pWidget)
+    // tdf#157738 Don't grab focus to the other widget hierarchy if the parent has
+    // captured the mouse in order to avoid breaking the capture.
+    ImplSVWinData* pWinData = ImplGetSVData()->mpWinData;
+    const bool bParentHasCapturedMouse
+        = pWinData->mpCaptureWin && pWinData->mpCaptureWin->ImplIsChild(this);
+    if (m_pWidget && !bParentHasCapturedMouse)
         m_pWidget->grab_focus();
 
     /* let toolbox know this item window has focus so it updates its mnHighItemId to point
