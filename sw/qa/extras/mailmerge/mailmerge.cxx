@@ -604,6 +604,23 @@ DECLARE_SHELL_MAILMERGE_TEST(testEmptyValuesNewFODT, "tdf35798-new.fodt", "5-wit
                          getParagraphs(mxSwTextDocument->getText()));
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(testEmptyValuesDOCX, "tdf35798.docx", "5-with-blanks.ods",
+                             "names")
+{
+    // DOCX - and any other Word format - must use the "hide empty DB fields" compatibility option.
+    // The feature was introduced to match Word's existing functionality in the first place.
+    executeMailMerge();
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    for (size_t i = 0; i < std::size(EmptyValuesNewData); ++i)
+    {
+        auto xPara = getParagraphOfText(i + 1, mxSwTextDocument->getText());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("paragraph " + OString::number(i + 1)).getStr(),
+                                     EmptyValuesNewData[i], xPara->getString());
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(std::size(EmptyValuesNewData)),
+                         getParagraphs(mxSwTextDocument->getText()));
+}
+
 DECLARE_SHELL_MAILMERGE_TEST(testTdf118845, "tdf118845.fodt", "4_v01.ods", "Tabelle1")
 {
     executeMailMerge();

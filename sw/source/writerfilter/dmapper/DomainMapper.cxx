@@ -150,7 +150,6 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         m_pImpl->SetDocumentSettingsProperty(u"NoNumberingShowFollowBy"_ustr, uno::Any(true));
         //paint background frames after header/footer when anchored in body
         m_pImpl->SetDocumentSettingsProperty(u"PaintHellOverHeaderFooter"_ustr,uno::Any(true));
-        m_pImpl->SetDocumentSettingsProperty(u"EmptyDbFieldHidesPara"_ustr,uno::Any(false));
         m_pImpl->SetDocumentSettingsProperty(u"IgnoreTabsAndBlanksForLineCalculation"_ustr,uno::Any(true));
         // calculate table row height with 'atLeast' including horizontal border width
         m_pImpl->SetDocumentSettingsProperty(u"MinRowHeightInclBorder"_ustr,uno::Any(true));
