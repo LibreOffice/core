@@ -1774,7 +1774,7 @@ bool SwDoc::FieldHidesPara(const SwField& rField) const
         case SwFieldIds::HiddenPara:
             return static_cast<const SwHiddenParaField&>(rField).IsHidden();
         case SwFieldIds::Database:
-            return FieldCanHideParaWeight(SwFieldIds::Database)
+            return IsInMailMerge() && FieldCanHideParaWeight(SwFieldIds::Database)
                    && rField.ExpandField(true, nullptr).isEmpty();
         default:
             return false;

@@ -385,135 +385,223 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118113, "tdf118113.odt", "tdf118113.ods", "t
 }
 
 
-constexpr char const* const EmptyValuesLegacyData[][8]
-    = { { "Heading", "Title: ", "First Name: firstname1", "Last Name: lastname1",
-          "Title:  First Name: firstname1", "First Name: firstname1 Last Name: lastname1",
-          "Title:  First Name: firstname1 Last Name: lastname1", "Trailing text" },
-        { "Heading", "Title: title2", "First Name: ", "Last Name: lastname2",
-          "Title: title2 First Name: ", "First Name:  Last Name: lastname2",
-          "Title: title2 First Name:  Last Name: lastname2", "Trailing text" },
-        { "Heading", "Title: title3", "First Name: firstname3", "Last Name: ",
-          "Title: title3 First Name: firstname3", "First Name: firstname3 Last Name: ",
-          "Title: title3 First Name: firstname3 Last Name: ", "Trailing text" },
-        { "Heading", "Title: ", "First Name: ", "Last Name: lastname4",
-          "Title:  First Name: ", "First Name:  Last Name: lastname4",
-          "Title:  First Name:  Last Name: lastname4", "Trailing text" },
-        { "Heading", "Title: title5", "First Name: ", "Last Name: ", "Title: title5 First Name: ",
-          "First Name:  Last Name: ", "Title: title5 First Name:  Last Name: ", "Trailing text" } };
-constexpr char const* const EmptyValuesNewData[][8]
-    = { { "Heading", "First Name: firstname1", "Last Name: lastname1",
-          "Title:  First Name: firstname1", "First Name: firstname1 Last Name: lastname1",
-          "Title:  First Name: firstname1 Last Name: lastname1", "Trailing text" },
-        { "Heading", "Title: title2", "Last Name: lastname2",
-          "Title: title2 First Name: ", "First Name:  Last Name: lastname2",
-          "Title: title2 First Name:  Last Name: lastname2", "Trailing text" },
-        { "Heading", "Title: title3", "First Name: firstname3",
-          "Title: title3 First Name: firstname3", "First Name: firstname3 Last Name: ",
-          "Title: title3 First Name: firstname3 Last Name: ", "Trailing text" },
-        { "Heading", "Last Name: lastname4", "First Name:  Last Name: lastname4",
-          "Title:  First Name:  Last Name: lastname4", "Trailing text" },
-        { "Heading", "Title: title5", "Title: title5 First Name: ",
-          "Title: title5 First Name:  Last Name: ", "Trailing text" } };
+constexpr OUString EmptyValuesLegacyData[] = {
+    // Doc 1 [ Title: ""; First Name: "firstname1"; Last Name: "lastname1" ]
+    u"Heading"_ustr,
+    // Title: [Title]
+    u"Title: "_ustr,
+    // First Name: [First Name]
+    u"First Name: firstname1"_ustr,
+    // Last Name: [Last Name]
+    u"Last Name: lastname1"_ustr,
+    // Title: [Title] First Name: [First Name]
+    u"Title:  First Name: firstname1"_ustr,
+    // First Name: [First Name] Last Name: [Last Name]
+    u"First Name: firstname1 Last Name: lastname1"_ustr,
+    // Title: [Title] First Name: [First Name] Last Name: [Last Name]
+    u"Title:  First Name: firstname1 Last Name: lastname1"_ustr,
+    u"Trailing text"_ustr,
+
+    // Doc 2 [ Title: "title2"; First Name: ""; Last Name: "lastname2" ]
+    u"Heading"_ustr,
+    // Title: [Title]
+    u"Title: title2"_ustr,
+    // First Name: [First Name]
+    u"First Name: "_ustr,
+    // Last Name: [Last Name]
+    u"Last Name: lastname2"_ustr,
+    // Title: [Title] First Name: [First Name]
+    u"Title: title2 First Name: "_ustr,
+    // First Name: [First Name] Last Name: [Last Name]
+    u"First Name:  Last Name: lastname2"_ustr,
+    // Title: [Title] First Name: [First Name] Last Name: [Last Name]
+    u"Title: title2 First Name:  Last Name: lastname2"_ustr,
+    u"Trailing text"_ustr,
+
+    // Doc 3 [ Title: "title3"; First Name: "firstname3"; Last Name: "" ]
+    u"Heading"_ustr,
+    // Title: [Title]
+    u"Title: title3"_ustr,
+    // First Name: [First Name]
+    u"First Name: firstname3"_ustr,
+    // Last Name: [Last Name]
+    u"Last Name: "_ustr,
+    // Title: [Title] First Name: [First Name]
+    u"Title: title3 First Name: firstname3"_ustr,
+    // First Name: [First Name] Last Name: [Last Name]
+    u"First Name: firstname3 Last Name: "_ustr,
+    // Title: [Title] First Name: [First Name] Last Name: [Last Name]
+    u"Title: title3 First Name: firstname3 Last Name: "_ustr,
+    u"Trailing text"_ustr,
+
+    // Doc 4 [ Title: ""; First Name: ""; Last Name: "lastname4" ]
+    u"Heading"_ustr,
+    // Title: [Title]
+    u"Title: "_ustr,
+    // First Name: [First Name]
+    u"First Name: "_ustr,
+    // Last Name: [Last Name]
+    u"Last Name: lastname4"_ustr,
+    // Title: [Title] First Name: [First Name]
+    u"Title:  First Name: "_ustr,
+    // First Name: [First Name] Last Name: [Last Name]
+    u"First Name:  Last Name: lastname4"_ustr,
+    // Title: [Title] First Name: [First Name] Last Name: [Last Name]
+    u"Title:  First Name:  Last Name: lastname4"_ustr,
+    u"Trailing text"_ustr,
+
+    // Doc 5 [ Title: "title5"; First Name: ""; Last Name: "" ]
+    u"Heading"_ustr,
+    // Title: [Title]
+    u"Title: title5"_ustr,
+    // First Name: [First Name]
+    u"First Name: "_ustr,
+    // Last Name: [Last Name]
+    u"Last Name: "_ustr,
+    // Title: [Title] First Name: [First Name]
+    u"Title: title5 First Name: "_ustr,
+    // First Name: [First Name] Last Name: [Last Name]
+    u"First Name:  Last Name: "_ustr,
+    // Title: [Title] First Name: [First Name] Last Name: [Last Name]
+    u"Title: title5 First Name:  Last Name: "_ustr,
+    u"Trailing text"_ustr,
+};
+constexpr OUString EmptyValuesNewData[] = {
+    // Doc 1 [ Title: ""; First Name: "firstname1"; Last Name: "lastname1" ]
+    u"Heading"_ustr,
+    // Title: [Title]
+    // First Name: [First Name]
+    u"First Name: firstname1"_ustr,
+    // Last Name: [Last Name]
+    u"Last Name: lastname1"_ustr,
+    // Title: [Title] First Name: [First Name]
+    u"Title:  First Name: firstname1"_ustr,
+    // First Name: [First Name] Last Name: [Last Name]
+    u"First Name: firstname1 Last Name: lastname1"_ustr,
+    // Title: [Title] First Name: [First Name] Last Name: [Last Name]
+    u"Title:  First Name: firstname1 Last Name: lastname1"_ustr,
+    u"Trailing text"_ustr,
+
+    // Doc 2 [ Title: "title2"; First Name: ""; Last Name: "lastname2" ]
+    u"Heading"_ustr,
+    // Title: [Title]
+    u"Title: title2"_ustr,
+    // First Name: [First Name]
+    // Last Name: [Last Name]
+    u"Last Name: lastname2"_ustr,
+    // Title: [Title] First Name: [First Name]
+    u"Title: title2 First Name: "_ustr,
+    // First Name: [First Name] Last Name: [Last Name]
+    u"First Name:  Last Name: lastname2"_ustr,
+    // Title: [Title] First Name: [First Name] Last Name: [Last Name]
+    u"Title: title2 First Name:  Last Name: lastname2"_ustr,
+    u"Trailing text"_ustr,
+
+    // Doc 3 [ Title: "title3"; First Name: "firstname3"; Last Name: "" ]
+    u"Heading"_ustr,
+    // Title: [Title]
+    u"Title: title3"_ustr,
+    // First Name: [First Name]
+    u"First Name: firstname3"_ustr,
+    // Last Name: [Last Name]
+    // Title: [Title] First Name: [First Name]
+    u"Title: title3 First Name: firstname3"_ustr,
+    // First Name: [First Name] Last Name: [Last Name]
+    u"First Name: firstname3 Last Name: "_ustr,
+    // Title: [Title] First Name: [First Name] Last Name: [Last Name]
+    u"Title: title3 First Name: firstname3 Last Name: "_ustr,
+    u"Trailing text"_ustr,
+
+    // Doc 4 [ Title: ""; First Name: ""; Last Name: "lastname4" ]
+    u"Heading"_ustr,
+    // Title: [Title]
+    // First Name: [First Name]
+    // Last Name: [Last Name]
+    u"Last Name: lastname4"_ustr,
+    // Title: [Title] First Name: [First Name]
+    // First Name: [First Name] Last Name: [Last Name]
+    u"First Name:  Last Name: lastname4"_ustr,
+    // Title: [Title] First Name: [First Name] Last Name: [Last Name]
+    u"Title:  First Name:  Last Name: lastname4"_ustr,
+    u"Trailing text"_ustr,
+
+    // Doc 5 [ Title: "title5"; First Name: ""; Last Name: "" ]
+    u"Heading"_ustr,
+    // Title: [Title]
+    u"Title: title5"_ustr,
+    // First Name: [First Name]
+    // Last Name: [Last Name]
+    // Title: [Title] First Name: [First Name]
+    u"Title: title5 First Name: "_ustr,
+    // First Name: [First Name] Last Name: [Last Name]
+    // Title: [Title] First Name: [First Name] Last Name: [Last Name]
+    u"Title: title5 First Name:  Last Name: "_ustr,
+    u"Trailing text"_ustr,
+};
 
 
-// The following four tests (testEmptyValuesLegacyODT, testEmptyValuesNewODT, (testEmptyValuesLegacyFODT, testEmptyValuesNewFODT)
+// The following four tests (testEmptyValuesLegacyODT, testEmptyValuesNewODT, testEmptyValuesLegacyFODT, testEmptyValuesNewFODT)
 // check that for native documents without "EmptyDbFieldHidesPara" compatibility option, all paragraphs are exported visible,
-// while for documents with the option enabled, the paragraphs with all Database fields having empty values are hidden.
+// while for documents with the option enabled, the paragraphs with all Database fields having empty values are removed.
 
-DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesLegacyODT, "tdf35798-legacy.odt", "5-with-blanks.ods",
-                            "names")
+DECLARE_SHELL_MAILMERGE_TEST(testEmptyValuesLegacyODT, "tdf35798-legacy.odt", "5-with-blanks.ods",
+                             "names")
 {
     executeMailMerge();
-    for (int doc = 0; doc < 5; ++doc)
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    for (size_t i = 0; i < std::size(EmptyValuesLegacyData); ++i)
     {
-        loadMailMergeDocument(doc);
-        SwDoc* pDoc = getSwDoc();
-        pDoc->RemoveInvisibleContent();
-        CPPUNIT_ASSERT_EQUAL(1, getPages());
-        for (int i = 0; i < 8; ++i)
-        {
-            auto xPara = getParagraph(i+1);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                OString("in doc " + OString::number(doc) + " paragraph " + OString::number(i + 1))
-                    .getStr(),
-                OUString::createFromAscii(EmptyValuesLegacyData[doc][i]), xPara->getString());
-        }
-        CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
+        auto xPara = getParagraphOfText(i + 1, mxSwTextDocument->getText());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("paragraph " + OString::number(i + 1)).getStr(),
+                                     EmptyValuesLegacyData[i], xPara->getString());
     }
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(std::size(EmptyValuesLegacyData)),
+                         getParagraphs(mxSwTextDocument->getText()));
 }
 
-DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesNewODT, "tdf35798-new.odt", "5-with-blanks.ods",
-                            "names")
+DECLARE_SHELL_MAILMERGE_TEST(testEmptyValuesNewODT, "tdf35798-new.odt", "5-with-blanks.ods",
+                             "names")
 {
     executeMailMerge();
-    for (int doc = 0; doc < 5; ++doc)
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    for (size_t i = 0; i < std::size(EmptyValuesNewData); ++i)
     {
-        loadMailMergeDocument(doc);
-        SwDoc* pDoc = getSwDoc();
-        pDoc->RemoveInvisibleContent();
-        CPPUNIT_ASSERT_EQUAL(1, getPages());
-        int i;
-        for (i = 0; i < 8; ++i)
-        {
-            const char* pExpected = EmptyValuesNewData[doc][i];
-            if (!pExpected)
-                break;
-            auto xPara = getParagraph(i + 1);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                OString("in doc " + OString::number(doc) + " paragraph " + OString::number(i + 1))
-                    .getStr(),
-                OUString::createFromAscii(pExpected), xPara->getString());
-        }
-        CPPUNIT_ASSERT_EQUAL(i, getParagraphs());
+        auto xPara = getParagraphOfText(i + 1, mxSwTextDocument->getText());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("paragraph " + OString::number(i + 1)).getStr(),
+                                     EmptyValuesNewData[i], xPara->getString());
     }
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(std::size(EmptyValuesNewData)),
+                         getParagraphs(mxSwTextDocument->getText()));
 }
 
-DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesLegacyFODT, "tdf35798-legacy.fodt", "5-with-blanks.ods",
-                            "names")
+DECLARE_SHELL_MAILMERGE_TEST(testEmptyValuesLegacyFODT, "tdf35798-legacy.fodt", "5-with-blanks.ods",
+                             "names")
 {
     executeMailMerge();
-    for (int doc = 0; doc < 5; ++doc)
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    for (size_t i = 0; i < std::size(EmptyValuesLegacyData); ++i)
     {
-        loadMailMergeDocument(doc);
-        SwDoc* pDoc = getSwDoc();
-        pDoc->RemoveInvisibleContent();
-        CPPUNIT_ASSERT_EQUAL(1, getPages());
-        for (int i = 0; i < 8; ++i)
-        {
-            auto xPara = getParagraph(i + 1);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                OString("in doc " + OString::number(doc) + " paragraph " + OString::number(i + 1))
-                    .getStr(),
-                OUString::createFromAscii(EmptyValuesLegacyData[doc][i]), xPara->getString());
-        }
-        CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
+        auto xPara = getParagraphOfText(i + 1, mxSwTextDocument->getText());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("paragraph " + OString::number(i + 1)).getStr(),
+                                     EmptyValuesLegacyData[i], xPara->getString());
     }
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(std::size(EmptyValuesLegacyData)),
+                         getParagraphs(mxSwTextDocument->getText()));
 }
 
-DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesNewFODT, "tdf35798-new.fodt", "5-with-blanks.ods",
-                            "names")
+DECLARE_SHELL_MAILMERGE_TEST(testEmptyValuesNewFODT, "tdf35798-new.fodt", "5-with-blanks.ods",
+                             "names")
 {
     executeMailMerge();
-    for (int doc = 0; doc < 5; ++doc)
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    for (size_t i = 0; i < std::size(EmptyValuesNewData); ++i)
     {
-        loadMailMergeDocument(doc);
-        SwDoc* pDoc = getSwDoc();
-        pDoc->RemoveInvisibleContent();
-        CPPUNIT_ASSERT_EQUAL(1, getPages());
-        int i;
-        for (i = 0; i < 8; ++i)
-        {
-            const char* pExpected = EmptyValuesNewData[doc][i];
-            if (!pExpected)
-                break;
-            auto xPara = getParagraph(i + 1);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                OString("in doc " + OString::number(doc) + " paragraph " + OString::number(i + 1))
-                    .getStr(),
-                OUString::createFromAscii(pExpected), xPara->getString());
-        }
-        CPPUNIT_ASSERT_EQUAL(i, getParagraphs());
+        auto xPara = getParagraphOfText(i + 1, mxSwTextDocument->getText());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("paragraph " + OString::number(i + 1)).getStr(),
+                                     EmptyValuesNewData[i], xPara->getString());
     }
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(std::size(EmptyValuesNewData)),
+                         getParagraphs(mxSwTextDocument->getText()));
 }
 
 DECLARE_SHELL_MAILMERGE_TEST(testTdf118845, "tdf118845.fodt", "4_v01.ods", "Tabelle1")

@@ -917,6 +917,7 @@ rtl::Reference<SfxObjectShell> SwDoc::CreateCopy(bool bCallInitNew, bool bEmpty)
 {
     SAL_INFO( "sw.pageframe", "(SwDoc::CreateCopy in" );
     rtl::Reference<SwDoc> xRet( new SwDoc );
+    xRet->SetInMailMerge(IsInMailMerge());
 
     // we have to use pointer here, since the callee has to decide whether
     // SfxObjectShellLock or SfxObjectShellRef should be used sometimes the
