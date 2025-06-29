@@ -52,9 +52,6 @@ namespace {
         BottomImpressPaneId,
         LeftDrawPaneId
     };
-
-    const sal_Int32 gnConfigurationUpdateStartEvent(0);
-    const sal_Int32 gnConfigurationUpdateEndEvent(1);
 }
 
 namespace sd::framework {
@@ -129,12 +126,10 @@ BasicPaneFactory::BasicPaneFactory(
         {
             xCC->addConfigurationChangeListener(
                 mxListener,
-                ConfigurationChangeEventType::ConfigurationUpdateStart,
-                Any(gnConfigurationUpdateStartEvent));
+                ConfigurationChangeEventType::ConfigurationUpdateStart);
             xCC->addConfigurationChangeListener(
                 mxListener,
-                ConfigurationChangeEventType::ConfigurationUpdateEnd,
-                Any(gnConfigurationUpdateEndEvent));
+                ConfigurationChangeEventType::ConfigurationUpdateEnd);
         }
     }
     catch (RuntimeException&)

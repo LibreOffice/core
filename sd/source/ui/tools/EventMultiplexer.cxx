@@ -46,12 +46,6 @@ using ::sd::framework::FrameworkHelper;
 
 class SdDrawDocument;
 
-namespace {
-const sal_Int32 ResourceActivationEvent = 0;
-const sal_Int32 ResourceDeactivationEvent = 1;
-const sal_Int32 ConfigurationUpdateEvent = 2;
-}
-
 namespace sd::tools {
 
 typedef cppu::ImplInheritanceHelper<
@@ -226,16 +220,13 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
 
     xConfigurationController->addConfigurationChangeListener(
         this,
-        framework::ConfigurationChangeEventType::ResourceActivation,
-        Any(ResourceActivationEvent));
+        framework::ConfigurationChangeEventType::ResourceActivation);
     xConfigurationController->addConfigurationChangeListener(
         this,
-        framework::ConfigurationChangeEventType::ResourceDeactivation,
-        Any(ResourceDeactivationEvent));
+        framework::ConfigurationChangeEventType::ResourceDeactivation);
     xConfigurationController->addConfigurationChangeListener(
         this,
-        framework::ConfigurationChangeEventType::ConfigurationUpdateEnd,
-        Any(ConfigurationUpdateEvent));
+        framework::ConfigurationChangeEventType::ConfigurationUpdateEnd);
 }
 
 EventMultiplexer::Implementation::~Implementation()
@@ -497,11 +488,9 @@ void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
 void EventMultiplexer::Implementation::notifyConfigurationChange (
     const sd::framework::ConfigurationChangeEvent& rEvent)
 {
-    sal_Int32 nEventType = 0;
-    rEvent.UserData >>= nEventType;
-    switch (nEventType)
+    switch (rEvent.Type)
     {
-        case ResourceActivationEvent:
+        case framework::ConfigurationChangeEventType::ResourceActivation:
             if (rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix))
             {
                 CallListeners (EventMultiplexerEventId::ViewAdded);
@@ -528,7 +517,7 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
             }
             break;
 
-        case ResourceDeactivationEvent:
+        case framework::ConfigurationChangeEventType::ResourceDeactivation:
             if (rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix))
             {
                 if (rEvent.ResourceId->isBoundToURL(
@@ -554,9 +543,11 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
             }
             break;
 
-        case ConfigurationUpdateEvent:
+        case framework::ConfigurationChangeEventType::ConfigurationUpdateEnd:
             CallListeners (EventMultiplexerEventId::ConfigurationUpdated);
             break;
+
+        default: break;
     }
 
 }

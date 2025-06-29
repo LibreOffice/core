@@ -38,11 +38,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
-namespace {
-    const sal_Int32 ResourceActivationRequestEvent = 0;
-    const sal_Int32 ResourceDeactivationRequestEvent = 1;
-}
-
 namespace sd::framework {
 
 //===== SlideSorterModule ==================================================
@@ -66,12 +61,10 @@ SlideSorterModule::SlideSorterModule (
             mxConfigurationController->addEventListener(this);
             mxConfigurationController->addConfigurationChangeListener(
                 this,
-                ConfigurationChangeEventType::ResourceActivationRequest,
-                Any(ResourceActivationRequestEvent));
+                ConfigurationChangeEventType::ResourceActivationRequest);
             mxConfigurationController->addConfigurationChangeListener(
                 this,
-                ConfigurationChangeEventType::ResourceDeactivationRequest,
-                Any(ResourceDeactivationRequestEvent));
+                ConfigurationChangeEventType::ResourceDeactivationRequest);
         }
     }
     if (!mxConfigurationController.is())
@@ -96,8 +89,7 @@ SlideSorterModule::SlideSorterModule (
 
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        ConfigurationChangeEventType::ResourceActivation,
-        Any());
+        ConfigurationChangeEventType::ResourceActivation);
 }
 
 SlideSorterModule::~SlideSorterModule()
@@ -141,11 +133,9 @@ void SlideSorterModule::notifyConfigurationChange (
     }
 
     OSL_ASSERT(rEvent.ResourceId.is());
-    sal_Int32 nEventType = 0;
-    rEvent.UserData >>= nEventType;
-    switch (nEventType)
+    switch (rEvent.Type)
     {
-        case ResourceActivationRequestEvent:
+        case ConfigurationChangeEventType::ResourceActivationRequest:
             if (rEvent.ResourceId->isBoundToURL(
                 FrameworkHelper::msCenterPaneURL,
                 AnchorBindingMode_DIRECT))
@@ -171,7 +161,7 @@ void SlideSorterModule::notifyConfigurationChange (
             }
             break;
 
-        case ResourceDeactivationRequestEvent:
+        case ConfigurationChangeEventType::ResourceDeactivationRequest:
             if (rEvent.ResourceId->compareTo(mxMainViewAnchorId) == 0)
             {
                 HandleMainViewSwitch(
@@ -186,6 +176,8 @@ void SlideSorterModule::notifyConfigurationChange (
                 HandleResourceRequest(false, rEvent.Configuration);
             }
             break;
+
+        default: break;
     }
 }
 

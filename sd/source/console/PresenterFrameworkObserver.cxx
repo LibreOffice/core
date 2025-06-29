@@ -43,8 +43,7 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
     {
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            sd::framework::ConfigurationChangeEventType::ConfigurationUpdateEnd,
-            Any());
+            sd::framework::ConfigurationChangeEventType::ConfigurationUpdateEnd);
     }
     else
     {

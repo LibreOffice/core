@@ -85,8 +85,7 @@ ViewTabBar::ViewTabBar (
         {
             mxConfigurationController->addConfigurationChangeListener(
                 mxListener,
-                    framework::ConfigurationChangeEventType::ResourceActivation,
-                Any());
+                    framework::ConfigurationChangeEventType::ResourceActivation);
         }
     }
 

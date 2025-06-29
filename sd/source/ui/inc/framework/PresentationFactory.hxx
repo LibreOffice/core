@@ -51,21 +51,8 @@ public:
         const rtl::Reference<sd::framework::AbstractResource>& xView) override;
 
 private:
-    class Listener : public sd::framework::ConfigurationChangeListener
-    {
-        using WeakComponentImplHelperBase::disposing;
-
-        // ConfigurationChangeListener
-        virtual void notifyConfigurationChange (
-            const sd::framework::ConfigurationChangeEvent& rEvent) override;
-
-        // lang::XEventListener
-        virtual void SAL_CALL disposing (
-            const css::lang::EventObject& rEventObject) override;
-    };
 
     rtl::Reference<::sd::DrawController> mxController;
-    rtl::Reference<Listener> mxListener;
 };
 
 } // end of namespace sd::framework

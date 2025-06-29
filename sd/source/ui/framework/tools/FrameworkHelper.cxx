@@ -797,7 +797,7 @@ CallbackCaller::CallbackCaller (
         if (mxConfigurationController.is())
         {
             if (mxConfigurationController->hasPendingRequests())
-                mxConfigurationController->addConfigurationChangeListener(this,mnEventType,Any());
+                mxConfigurationController->addConfigurationChangeListener(this,mnEventType);
             else
             {
                 // There are no requests waiting to be processed.  Therefore

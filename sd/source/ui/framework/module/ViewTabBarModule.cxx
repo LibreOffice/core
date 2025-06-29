@@ -35,14 +35,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
-namespace {
-
-const sal_Int32 ResourceActivationRequestEvent = 0;
-const sal_Int32 ResourceDeactivationRequestEvent = 1;
-const sal_Int32 ResourceActivationEvent = 2;
-
-}
-
 namespace sd::framework {
 
 //===== ViewTabBarModule ==================================================
@@ -61,18 +53,15 @@ ViewTabBarModule::ViewTabBarModule (
 
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        ConfigurationChangeEventType::ResourceActivationRequest,
-        Any(ResourceActivationRequestEvent));
+        ConfigurationChangeEventType::ResourceActivationRequest);
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        ConfigurationChangeEventType::ResourceDeactivationRequest,
-        Any(ResourceDeactivationRequestEvent));
+        ConfigurationChangeEventType::ResourceDeactivationRequest);
 
     UpdateViewTabBar(nullptr);
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        ConfigurationChangeEventType::ResourceActivation,
-        Any(ResourceActivationEvent));
+        ConfigurationChangeEventType::ResourceActivation);
 }
 
 ViewTabBarModule::~ViewTabBarModule()
@@ -94,11 +83,9 @@ void ViewTabBarModule::notifyConfigurationChange (
     if (!mxConfigurationController.is())
         return;
 
-    sal_Int32 nEventType = 0;
-    rEvent.UserData >>= nEventType;
-    switch (nEventType)
+    switch (rEvent.Type)
     {
-        case ResourceActivationRequestEvent:
+        case ConfigurationChangeEventType::ResourceActivationRequest:
             if (mxViewTabBarId->isBoundTo(rEvent.ResourceId, AnchorBindingMode_DIRECT))
             {
                 mxConfigurationController->requestResourceActivation(
@@ -107,18 +94,21 @@ void ViewTabBarModule::notifyConfigurationChange (
             }
             break;
 
-        case ResourceDeactivationRequestEvent:
+        case ConfigurationChangeEventType::ResourceDeactivationRequest:
             if (mxViewTabBarId->isBoundTo(rEvent.ResourceId, AnchorBindingMode_DIRECT))
             {
                 mxConfigurationController->requestResourceDeactivation(mxViewTabBarId);
             }
             break;
 
-        case ResourceActivationEvent:
+        case ConfigurationChangeEventType::ResourceActivation:
             if (rEvent.ResourceId->compareTo(mxViewTabBarId) == 0)
             {
                 UpdateViewTabBar(dynamic_cast<sd::ViewTabBar*>(rEvent.ResourceObject.get()));
             }
+            break;
+
+        default: break;
     }
 }
 

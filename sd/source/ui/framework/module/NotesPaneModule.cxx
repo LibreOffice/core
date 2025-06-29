@@ -28,12 +28,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace
-{
-const sal_Int32 ResourceActivationRequestEvent = 0;
-const sal_Int32 ResourceDeactivationRequestEvent = 1;
-}
-
 namespace sd::framework
 {
 NotesPaneModule::NotesPaneModule(const rtl::Reference<::sd::DrawController>& rxController)
@@ -51,11 +45,9 @@ NotesPaneModule::NotesPaneModule(const rtl::Reference<::sd::DrawController>& rxC
         return;
 
     mxConfigurationController->addConfigurationChangeListener(
-        this, ConfigurationChangeEventType::ResourceActivationRequest,
-        Any(ResourceActivationRequestEvent));
+        this, ConfigurationChangeEventType::ResourceActivationRequest);
     mxConfigurationController->addConfigurationChangeListener(
-        this, ConfigurationChangeEventType::ResourceDeactivationRequest,
-        Any(ResourceDeactivationRequestEvent));
+        this, ConfigurationChangeEventType::ResourceDeactivationRequest);
 
     if (officecfg::Office::Impress::MultiPaneGUI::NotesPane::Visible::ImpressView::get().value_or(
             false))
@@ -151,11 +143,9 @@ void NotesPaneModule::notifyConfigurationChange(const ConfigurationChangeEvent& 
         mbListeningEventMultiplexer = true;
     }
 
-    sal_Int32 nEventType = 0;
-    rEvent.UserData >>= nEventType;
-    switch (nEventType)
+    switch (rEvent.Type)
     {
-        case ResourceActivationRequestEvent:
+        case ConfigurationChangeEventType::ResourceActivationRequest:
             if (rEvent.ResourceId->isBoundToURL(FrameworkHelper::msCenterPaneURL,
                                                 AnchorBindingMode_DIRECT))
             {
@@ -170,7 +160,7 @@ void NotesPaneModule::notifyConfigurationChange(const ConfigurationChangeEvent& 
             }
             break;
 
-        case ResourceDeactivationRequestEvent:
+        case ConfigurationChangeEventType::ResourceDeactivationRequest:
             if (rEvent.ResourceId->compareTo(mxMainViewAnchorId) == 0)
             {
                 onMainViewSwitch(OUString(), false);

@@ -58,18 +58,13 @@ public:
             The type of event that the listener will be called for.  The
             empty string is a special value in that the listener will be
             called for all event types.
-        @param rUserData
-            This object is passed to the listener whenever it is called for
-            the specified event type.  For different event types different
-            user data objects can be provided.
         @throws IllegalArgumentException
             when an empty listener reference is given.
     */
     void AddListener(
         const rtl::Reference<
             sd::framework::ConfigurationChangeListener>& rxListener,
-        ConfigurationChangeEventType rsEventType,
-        const css::uno::Any& rUserData);
+        ConfigurationChangeEventType rsEventType);
 
     /** Remove all references to the given listener.  When one listener has
         been registered for more than one type of event then it is removed
@@ -109,13 +104,7 @@ public:
 
 private:
     rtl::Reference<ConfigurationController> mxConfigurationController;
-    class ListenerDescriptor
-    {
-    public:
-        rtl::Reference<sd::framework::ConfigurationChangeListener> mxListener;
-        css::uno::Any maUserData;
-    };
-    typedef std::vector<ListenerDescriptor> ListenerList;
+    typedef std::vector<rtl::Reference<sd::framework::ConfigurationChangeListener>> ListenerList;
     typedef std::unordered_map
         <ConfigurationChangeEventType,
          ListenerList> ListenerMap;

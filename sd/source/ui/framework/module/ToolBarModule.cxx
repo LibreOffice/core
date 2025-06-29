@@ -39,13 +39,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
-namespace {
-    const sal_Int32 gnConfigurationUpdateStartEvent(0);
-    const sal_Int32 gnConfigurationUpdateEndEvent(1);
-    const sal_Int32 gnResourceActivationRequestEvent(2);
-    const sal_Int32 gnResourceDeactivationRequestEvent(3);
-}
-
 namespace sd::framework {
 
 //===== ToolBarModule =========================================================
@@ -68,20 +61,16 @@ ToolBarModule::ToolBarModule (
 
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        ConfigurationChangeEventType::ConfigurationUpdateStart,
-        Any(gnConfigurationUpdateStartEvent));
+        ConfigurationChangeEventType::ConfigurationUpdateStart);
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        ConfigurationChangeEventType::ConfigurationUpdateEnd,
-        Any(gnConfigurationUpdateEndEvent));
+        ConfigurationChangeEventType::ConfigurationUpdateEnd);
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        ConfigurationChangeEventType::ResourceActivationRequest,
-        Any(gnResourceActivationRequestEvent));
+        ConfigurationChangeEventType::ResourceActivationRequest);
     mxConfigurationController->addConfigurationChangeListener(
         this,
-        ConfigurationChangeEventType::ResourceDeactivationRequest,
-        Any(gnResourceDeactivationRequestEvent));
+        ConfigurationChangeEventType::ResourceDeactivationRequest);
 }
 
 ToolBarModule::~ToolBarModule()
@@ -116,20 +105,18 @@ void ToolBarModule::notifyConfigurationChange (
     }
 
 
-    sal_Int32 nEventType = 0;
-    rEvent.UserData >>= nEventType;
-    switch (nEventType)
+    switch (rEvent.Type)
     {
-        case gnConfigurationUpdateStartEvent:
+        case ConfigurationChangeEventType::ConfigurationUpdateStart:
             HandleUpdateStart();
             break;
 
-        case gnConfigurationUpdateEndEvent:
+        case ConfigurationChangeEventType::ConfigurationUpdateEnd:
             HandleUpdateEnd();
             break;
 
-        case gnResourceActivationRequestEvent:
-        case gnResourceDeactivationRequestEvent:
+        case ConfigurationChangeEventType::ResourceActivationRequest:
+        case ConfigurationChangeEventType::ResourceDeactivationRequest:
             // Remember the request for the activation or deactivation
             // of the center pane view.  When that happens then on end
             // of the next configuration update the set of visible tool
@@ -143,6 +130,7 @@ void ToolBarModule::notifyConfigurationChange (
                     mbMainViewSwitchUpdatePending = true;
                 }
             break;
+        default: break;
     }
 }
 

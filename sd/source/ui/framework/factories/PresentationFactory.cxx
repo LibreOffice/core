@@ -69,8 +69,7 @@ constexpr OUString gsPresentationViewURL = u"private:resource/view/Presentation"
 
 PresentationFactory::PresentationFactory (
     const rtl::Reference<::sd::DrawController>& rxController)
-    : mxController(rxController),
-      mxListener(new Listener)
+    : mxController(rxController)
 {
 }
 
@@ -110,18 +109,6 @@ void PresentationFactory::releaseResource (
             SlideShow::Stop( *pBase );
     }
 }
-
-//===== ConfigurationChangeListener ==========================================
-
-void PresentationFactory::Listener::notifyConfigurationChange (
-    const ConfigurationChangeEvent&)
-{}
-
-//===== lang::XEventListener ==================================================
-
-void SAL_CALL PresentationFactory::Listener::disposing (
-    const lang::EventObject&)
-{}
 
 void PresentationFactory::install(const rtl::Reference<::sd::DrawController>& rxController)
 {

@@ -40,8 +40,7 @@ ConfigurationControllerBroadcaster::ConfigurationControllerBroadcaster (
 
 void ConfigurationControllerBroadcaster::AddListener(
     const rtl::Reference<ConfigurationChangeListener>& rxListener,
-    ConfigurationChangeEventType rsEventType,
-    const Any& rUserData)
+    ConfigurationChangeEventType rsEventType)
 {
     if ( ! rxListener.is())
         throw lang::IllegalArgumentException(u"invalid listener"_ustr,
@@ -50,10 +49,7 @@ void ConfigurationControllerBroadcaster::AddListener(
 
     maListenerMap.try_emplace(rsEventType);
 
-    ListenerDescriptor aDescriptor;
-    aDescriptor.mxListener = rxListener;
-    aDescriptor.maUserData = rUserData;
-    maListenerMap[rsEventType].push_back(aDescriptor);
+    maListenerMap[rsEventType].push_back(rxListener);
 }
 
 void ConfigurationControllerBroadcaster::RemoveListener(
@@ -67,8 +63,7 @@ void ConfigurationControllerBroadcaster::RemoveListener(
     ListenerList::iterator iList;
     for (auto& rMap : maListenerMap)
     {
-        iList = std::find_if(rMap.second.begin(), rMap.second.end(),
-            [&rxListener](const ListenerDescriptor& rList) { return rList.mxListener == rxListener; });
+        iList = std::find(rMap.second.begin(), rMap.second.end(), rxListener);
         if (iList != rMap.second.end())
             rMap.second.erase(iList);
     }
@@ -86,15 +81,14 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
     {
         try
         {
-            aEvent.UserData = rListener.maUserData;
-            rListener.mxListener->notifyConfigurationChange(aEvent);
+            rListener->notifyConfigurationChange(aEvent);
         }
         catch (const lang::DisposedException& rException)
         {
             // When the exception comes from the listener itself then
             // unregister it.
-            if (rException.Context == cppu::getXWeak(rListener.mxListener.get()))
-                RemoveListener(rListener.mxListener);
+            if (rException.Context == cppu::getXWeak(rListener.get()))
+                RemoveListener(rListener);
         }
         catch (const RuntimeException&)
         {
@@ -152,8 +146,7 @@ void ConfigurationControllerBroadcaster::DisposeAndClear()
         }
         else
         {
-            rtl::Reference<ConfigurationChangeListener> xListener (
-                iMap->second.front().mxListener );
+            rtl::Reference<ConfigurationChangeListener> xListener ( iMap->second.front() );
             if (xListener.is())
             {
                 // Tell the listener that the configuration controller is

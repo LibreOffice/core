@@ -63,12 +63,10 @@ CenterViewFocusModule::CenterViewFocusModule (rtl::Reference<sd::DrawController>
     {
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            ConfigurationChangeEventType::ConfigurationUpdateEnd,
-            Any());
+            ConfigurationChangeEventType::ConfigurationUpdateEnd);
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            ConfigurationChangeEventType::ResourceActivation,
-            Any());
+            ConfigurationChangeEventType::ResourceActivation);
     }
 }
 

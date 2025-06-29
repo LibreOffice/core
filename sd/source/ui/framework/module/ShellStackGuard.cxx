@@ -56,8 +56,7 @@ ShellStackGuard::ShellStackGuard (rtl::Reference<sd::DrawController> const & rxC
         // prevented in case of a printing printer.
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            ConfigurationChangeEventType::ConfigurationUpdateStart,
-            Any());
+            ConfigurationChangeEventType::ConfigurationUpdateStart);
 
         // Prepare the printer polling.
         maPrinterPollingIdle.SetInvokeHandler(LINK(this,ShellStackGuard,TimeoutHandler));

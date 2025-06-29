@@ -169,14 +169,13 @@ void ConfigurationController::RequestSynchronousUpdate()
 
 void ConfigurationController::addConfigurationChangeListener (
     const rtl::Reference<ConfigurationChangeListener>& rxListener,
-    ConfigurationChangeEventType rsEventType,
-    const Any& rUserData)
+    ConfigurationChangeEventType rsEventType)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
 
     ThrowIfDisposed();
     OSL_ASSERT(mpImplementation != nullptr);
-    mpImplementation->mpBroadcaster->AddListener(rxListener, rsEventType, rUserData);
+    mpImplementation->mpBroadcaster->AddListener(rxListener, rsEventType);
 }
 
 void ConfigurationController::removeConfigurationChangeListener (

@@ -61,12 +61,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace {
-    const sal_Int32 ResourceActivationEventType = 0;
-    const sal_Int32 ResourceDeactivationEventType = 1;
-    const sal_Int32 ConfigurationUpdateEndEventType = 2;
-}
-
 namespace sdext::presenter {
 
 IPresentationTime::~IPresentationTime()
@@ -119,16 +113,13 @@ PresenterController::PresenterController (
     {
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            sd::framework::ConfigurationChangeEventType::ResourceActivation,
-            Any(ResourceActivationEventType));
+            sd::framework::ConfigurationChangeEventType::ResourceActivation);
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            sd::framework::ConfigurationChangeEventType::ResourceDeactivation,
-            Any(ResourceDeactivationEventType));
+            sd::framework::ConfigurationChangeEventType::ResourceDeactivation);
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            sd::framework::ConfigurationChangeEventType::ConfigurationUpdateEnd,
-            Any(ConfigurationUpdateEndEventType));
+            sd::framework::ConfigurationChangeEventType::ConfigurationUpdateEnd);
     }
 
     // Listen for the frame being activated.
@@ -665,13 +656,9 @@ void PresenterController::notifyConfigurationChange (
         throwIfDisposed(l);
     }
 
-    sal_Int32 nType (0);
-    if ( ! (rEvent.UserData >>= nType))
-        return;
-
-    switch (nType)
+    switch (rEvent.Type)
     {
-        case ResourceActivationEventType:
+        case sd::framework::ConfigurationChangeEventType::ResourceActivation:
             if (rEvent.ResourceId->compareTo(mxMainPaneId) == 0)
             {
                 InitializeMainPane(dynamic_cast<sd::framework::Pane*>(rEvent.ResourceObject.get()));
@@ -700,7 +687,7 @@ void PresenterController::notifyConfigurationChange (
             }
             break;
 
-        case ResourceDeactivationEventType:
+        case sd::framework::ConfigurationChangeEventType::ResourceDeactivation:
             if (rEvent.ResourceId->isBoundTo(mxMainPaneId,AnchorBindingMode_INDIRECT))
             {
                 // If this is a view then remove it from the pane container.
@@ -721,11 +708,13 @@ void PresenterController::notifyConfigurationChange (
             }
             break;
 
-        case ConfigurationUpdateEndEventType:
+        case sd::framework::ConfigurationChangeEventType::ConfigurationUpdateEnd:
             if (mpAccessibleObject.is())
                 mpAccessibleObject->UpdateAccessibilityHierarchy();
             UpdateCurrentSlide(0);
             break;
+
+        default: break;
     }
 }
 

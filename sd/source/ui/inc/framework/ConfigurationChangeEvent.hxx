@@ -68,10 +68,6 @@ struct ConfigurationChangeEvent final : public ::css::lang::EventObject
         be an empty reference.
     */
     rtl::Reference<sd::framework::AbstractResource> ResourceObject;
-    /** Each listener is called with exactly the #UserData
-        that was given when the listener was registered.
-    */
-    ::css::uno::Any UserData;
 };
 
 } // end of namespace sd::framework

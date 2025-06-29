@@ -117,8 +117,7 @@ public:
     void addConfigurationChangeListener (
         const rtl::Reference<
             sd::framework::ConfigurationChangeListener>& rxListener,
-        ConfigurationChangeEventType rsEventType,
-        const css::uno::Any& rUserData);
+        ConfigurationChangeEventType rsEventType);
 
     void removeConfigurationChangeListener (
         const rtl::Reference<
