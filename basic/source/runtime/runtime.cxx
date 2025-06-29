@@ -3942,13 +3942,11 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
 SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 {
     assert(pElem);
-    SbxArray* pPar;
     if( ( pElem->GetType() & SbxARRAY ) && refRedim.get() != pElem )
     {
         SbxBase* pElemObj = pElem->GetObject();
-        SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>( pElemObj );
-        pPar = pElem->GetParameters();
-        if( pDimArray )
+        SbxArray* pPar = pElem->GetParameters();
+        if (SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>(pElemObj))
         {
             // parameters may be missing, if an array is
             // passed as an argument
@@ -3971,20 +3969,16 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                     pElem = pDimArray->Get(pPar);
             }
         }
-        else
+        else if (SbxArray* pArray = dynamic_cast<SbxArray*>(pElemObj))
         {
-            SbxArray* pArray = dynamic_cast<SbxArray*>( pElemObj );
-            if( pArray )
+            if( !pPar )
             {
-                if( !pPar )
-                {
-                    Error( ERRCODE_BASIC_OUT_OF_RANGE );
-                    pElem = new SbxVariable;
-                }
-                else
-                {
-                    pElem = pArray->Get(pPar->Get(1)->GetInteger());
-                }
+                Error( ERRCODE_BASIC_OUT_OF_RANGE );
+                pElem = new SbxVariable;
+            }
+            else
+            {
+                pElem = pArray->Get(pPar->Get(1)->GetInteger());
             }
         }
 
@@ -3999,8 +3993,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             dynamic_cast<const SbxMethod*>( pElem) == nullptr &&
             ( !bVBAEnabled || dynamic_cast<const SbxProperty*>( pElem) == nullptr ) )
     {
-        pPar = pElem->GetParameters();
-        if ( pPar )
+        if (SbxArray* pPar = pElem->GetParameters())
         {
             // is it a uno-object?
             SbxBaseRef pObj = pElem->GetObject();
