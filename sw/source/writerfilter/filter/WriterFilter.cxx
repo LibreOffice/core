@@ -317,8 +317,6 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     xSettings->setPropertyValue(u"IgnoreTabsAndBlanksForLineCalculation"_ustr, uno::Any(true));
     xSettings->setPropertyValue(u"InvertBorderSpacing"_ustr, uno::Any(true));
     xSettings->setPropertyValue(u"CollapseEmptyCellPara"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"EmptyDbFieldHidesPara"_ustr, uno::Any(false));
-
     // tdf#142404 TabOverSpacing (new for compatibilityMode15/Word2013+) is a subset of TabOverMargin
     // (which applied to DOCX <= compatibilityMode14).
     // TabOverMargin looks at tabs beyond the normal text area,
