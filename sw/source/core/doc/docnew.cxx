@@ -919,10 +919,7 @@ rtl::Reference<SfxObjectShell> SwDoc::CreateCopy(bool bCallInitNew, bool bEmpty)
     rtl::Reference<SwDoc> xRet( new SwDoc );
     xRet->SetInMailMerge(IsInMailMerge());
 
-    // we have to use pointer here, since the callee has to decide whether
-    // SfxObjectShellLock or SfxObjectShellRef should be used sometimes the
-    // object will be returned with refcount set to 0 ( if no DoInitNew is done )
-    rtl::Reference<SfxObjectShell> pRetShell = new SwDocShell(*xRet, SfxObjectCreateMode::STANDARD);
+    rtl::Reference<SwDocShell> pRetShell = new SwDocShell(*xRet, SfxObjectCreateMode::STANDARD);
     if( bCallInitNew )
     {
         // it could happen that DoInitNew creates model,
@@ -936,12 +933,9 @@ rtl::Reference<SfxObjectShell> SwDoc::CreateCopy(bool bCallInitNew, bool bEmpty)
 
     xRet->ReplaceStyles(*this);
 
-    rtl::Reference<SwXTextDocument> const xThisSet(GetDocShell()->GetBaseModel());
-    uno::Reference<beans::XPropertySet> const xRetSet(
-        pRetShell->GetBaseModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
-    xThisSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
-    xRetSet->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aInteropGrabBag));
+    GetDocShell()->GetBaseModel()->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
+    pRetShell->GetBaseModel()->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aInteropGrabBag));
 
     if( !bEmpty )
     {
