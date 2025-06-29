@@ -498,6 +498,8 @@ public:
     void disable_entry_completion() { m_xComboBox->set_entry_completion(false, false); }
     void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) { m_xComboBox->connect_get_property_tree(rLink); }
 
+    weld::Widget* getWidget() { return m_xComboBox.get(); }
+
 private:
     FontSizeBox(const FontSizeBox&) = delete;
     FontSizeBox& operator=(const FontSizeBox&) = delete;
