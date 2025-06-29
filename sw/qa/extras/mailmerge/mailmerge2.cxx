@@ -416,6 +416,22 @@ DECLARE_MAILMERGE_TEST(testGrabBag, "grabbagtest.docx", "onecell.xlsx", "Sheet1"
     CPPUNIT_ASSERT_EQUAL(u"Arial"_ustr, getProperty<OUString>(xParaA1, u"CharFontName"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(MMTest2, testTdf156061)
+{
+    // Given a document with a paragraph with a database field having empty content
+    createSwDoc("empty-db-field.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // The first paragraph is a text followed by the DB field; the second is empty.
+    // Check that both are visible (have proper height).
+    assertXPath(pXmlDoc, "//txt", 2);
+
+    // Without the fix, it was "0"
+    CPPUNIT_ASSERT_GREATER(sal_Int32(260),
+                           getXPath(pXmlDoc, "//txt[1]/infos/bounds", "height").toInt32());
+    CPPUNIT_ASSERT_GREATER(sal_Int32(260),
+                           getXPath(pXmlDoc, "//txt[2]/infos/bounds", "height").toInt32());
+}
+
 } // end of anonymous namespace
 namespace com::sun::star::table {
 

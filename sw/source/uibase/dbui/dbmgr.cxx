@@ -86,6 +86,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
@@ -1189,6 +1190,10 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
     std::shared_ptr<weld::GenericDialogController> xProgressDlg;
 
+    comphelper::ScopeGuard restoreInMailMerge(
+        [pSourceShell, val = pSourceShell->GetDoc()->IsInMailMerge()]
+        { pSourceShell->GetDoc()->SetInMailMerge(val); });
+    pSourceShell->GetDoc()->SetInMailMerge(true);
     try
     {
         vcl::Window *pSourceWindow = nullptr;
