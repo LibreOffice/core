@@ -38,10 +38,8 @@
 #include <salgdiimpl.hxx>
 
 #include <config_features.h>
-#if HAVE_FEATURE_SKIA
 #include <skia/win/gdiimpl.hxx>
 #include <skia/salbmp.hxx>
-#endif
 
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
@@ -106,10 +104,8 @@ public:
 void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 {
     BitmapPalette aBitmapPalette;
-#if HAVE_FEATURE_SKIA
     if(SkiaSalBitmap* pSkiaSalBitmap = dynamic_cast<SkiaSalBitmap*>(&rSalBitmap))
         aBitmapPalette = pSkiaSalBitmap->Palette();
-#endif
 
     BitmapBuffer* pRead = rSalBitmap.AcquireBuffer(BitmapAccessMode::Read);
 
@@ -164,9 +160,7 @@ void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSal
 {
     assert(&rSalBitmap && "msvc -analyze gets confused here");
     if (dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr
-#if HAVE_FEATURE_SKIA
         && dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr
-#endif
         )
     {
         WinSalBitmap aWinSalBitmap;
@@ -186,9 +180,7 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
 {
     assert(&rSSalBitmap && "msvc -analyze gets confused here");
     if (dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr
-#if HAVE_FEATURE_SKIA
         && dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr
-#endif
         )
     {
         WinSalBitmap aWinSalBitmap;

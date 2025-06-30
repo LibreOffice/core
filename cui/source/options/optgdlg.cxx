@@ -629,8 +629,8 @@ void OfaViewTabPage::UpdateSkiaStatus()
     m_xSkiaStatusEnabled->set_visible(bEnabled);
     m_xSkiaStatusDisabled->set_visible(!bEnabled);
 
-#ifdef MACOSX
-    m_xUseSkia->set_sensitive(false); // macOS can __only__ render via skia
+#if defined(MACOSX) || defined(_WIN32)
+    m_xUseSkia->set_sensitive(false); // macOS/win can __only__ render via skia
 #else
     m_xUseSkia->set_sensitive(!officecfg::Office::Common::VCL::UseSkia::isReadOnly());
 #endif
@@ -824,8 +824,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         m_xUseAntiAliase->save_state();
     }
 
-#ifdef MACOSX
-    m_xUseSkia->set_active(true); // macOS can __only__ render via skia
+#if defined(MACOSX) || defined(_WIN32)
+    m_xUseSkia->set_active(true); // macOS/win can __only__ render via skia
 #else
     m_xUseSkia->set_active(officecfg::Office::Common::VCL::UseSkia::get());
 #endif

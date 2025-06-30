@@ -3458,7 +3458,7 @@ if test "$enable_dynamic_loading" = yes; then
     BUILD_TYPE="$BUILD_TYPE DYNLOADING"
 else
     DISABLE_DYNLOADING='TRUE'
-    if test $_os != iOS -a $_os != Darwin -a $_os != Android; then
+    if test $_os != iOS -a $_os != Darwin -a $_os != Android -a $_os != WINNT; then
         enable_database_connectivity=no
         enable_nss=no
         enable_odk=no

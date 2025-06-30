@@ -54,11 +54,9 @@
 
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
-#if HAVE_FEATURE_SKIA
 #include <config_skia.h>
 #include <skia/salbmp.hxx>
 #include <skia/win/gdiimpl.hxx>
-#endif
 
 #include <salsys.hxx>
 
@@ -407,12 +405,10 @@ WinSalInstance::WinSalInstance()
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("win");
     m_bSupportsOpenGL = true;
-#if HAVE_FEATURE_SKIA
     WinSkiaSalGraphicsImpl::prepareSkia();
 #if SKIA_USE_BITMAP32
     if (SkiaHelper::isVCLSkiaEnabled())
         m_bSupportsBitmap32 = true;
-#endif
 #endif
 }
 
@@ -420,9 +416,7 @@ WinSalInstance::~WinSalInstance()
 {
     ImplFreeSalGDI();
     DestroyWindow( mhComWnd );
-#if HAVE_FEATURE_SKIA
     SkiaHelper::cleanup();
-#endif
 }
 
 void WinSalInstance::AfterAppInit()
@@ -881,12 +875,8 @@ SalTimer* WinSalInstance::CreateSalTimer()
 
 std::shared_ptr<SalBitmap> WinSalInstance::CreateSalBitmap()
 {
-#if HAVE_FEATURE_SKIA
-    if (SkiaHelper::isVCLSkiaEnabled())
-        return std::make_shared<SkiaSalBitmap>();
-    else
-#endif
-        return std::make_shared<WinSalBitmap>();
+    assert(SkiaHelper::isVCLSkiaEnabled() && "Windows requires skia");
+    return std::make_shared<SkiaSalBitmap>();
 }
 
 int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POINTERS pExceptionInfo)

@@ -38,9 +38,7 @@
 
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
-#if HAVE_FEATURE_SKIA
 #include <skia/win/gdiimpl.hxx>
-#endif
 
 
 // we must create pens with 1-pixel width; otherwise the S3-graphics card
@@ -257,15 +255,14 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mpStdClipRgnData(nullptr),
     mnPenWidth(GSL_PEN_WIDTH)
 {
-#if HAVE_FEATURE_SKIA
-    if (SkiaHelper::isVCLSkiaEnabled() && !mbPrinter)
+    assert(SkiaHelper::isVCLSkiaEnabled() && "Windows requires skia");
+    if (!mbPrinter)
     {
         auto const impl = new WinSkiaSalGraphicsImpl(*this, pProvider);
         mpImpl.reset(impl);
         mWinSalGraphicsImplBase = impl;
     }
     else
-#endif
     {
         auto const impl = new WinSalGraphicsImpl(*this);
         mpImpl.reset(impl);

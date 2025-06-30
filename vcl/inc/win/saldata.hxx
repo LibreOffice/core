@@ -46,9 +46,7 @@ namespace vcl { class Font; }
 struct HDCCache;
 struct TempFontItem;
 class TextOutRenderer;
-#if HAVE_FEATURE_SKIA
 class SkiaControlsCache;
-#endif
 
 #define MAX_STOCKPEN            4
 #define MAX_STOCKBRUSH          4
@@ -132,9 +130,7 @@ public:
     std::unique_ptr<TextOutRenderer> m_pD2DWriteTextOutRenderer;
     // tdf#107205 need 2 instances because D2DWrite can't rotate text
     std::unique_ptr<TextOutRenderer> m_pExTextOutRenderer;
-#if HAVE_FEATURE_SKIA
     std::unique_ptr<SkiaControlsCache> m_pSkiaControlsCache;
-#endif
 };
 
 struct SalShlData

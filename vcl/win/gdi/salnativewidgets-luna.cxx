@@ -54,9 +54,7 @@
 #include <win/salinst.h>
 #include <win/scoped_gdi.hxx>
 #include <win/wingdiimpl.hxx>
-#if HAVE_FEATURE_SKIA
 #include <skia/win/gdiimpl.hxx>
-#endif
 
 #include <uxtheme.h>
 #include <vssym32.h>
@@ -1657,9 +1655,9 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         // restore alignment
         SetTextAlign(getHDC(), ta);
     }
-#if HAVE_FEATURE_SKIA
-    else if (SkiaHelper::isVCLSkiaEnabled())
+    else
     {
+        assert(SkiaHelper::isVCLSkiaEnabled() && "Windows requires skia");
         // We can do Skia
         SkiaCompatibleDC aBlackDC( *this, cacheRect.Left(), cacheRect.Top(), cacheRect.GetWidth()+1, cacheRect.GetHeight()+1 );
         SetTextAlign(aBlackDC.getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
@@ -1674,13 +1672,6 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         {
             bOk = pImpl->RenderAndCacheNativeControl(aWhiteDC, aBlackDC, cacheRect.Left(), cacheRect.Top(), aControlCacheKey);
         }
-    }
-#endif
-    else
-    {
-        // Use normal GDI
-        SetTextAlign(getHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
-        ImplDrawNativeControl(getHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr, bUseDarkMode);
     }
 
     if (bUseDarkMode)

@@ -69,10 +69,8 @@
 #include <font/FontMetricData.hxx>
 #include <impglyphitem.hxx>
 
-#if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/win/font.hxx>
-#endif
 
 using namespace vcl;
 
@@ -527,11 +525,8 @@ sal_IntPtr WinFontFace::GetFontId() const
 
 rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
-#if HAVE_FEATURE_SKIA
-    if (SkiaHelper::isVCLSkiaEnabled())
-        return new SkiaWinFontInstance(*this, rFSD);
-#endif
-    return new WinFontInstance(*this, rFSD);
+    assert(SkiaHelper::isVCLSkiaEnabled() && "Windows requires skia");
+    return new SkiaWinFontInstance(*this, rFSD);
 }
 
 const std::vector<hb_variation_t>&
