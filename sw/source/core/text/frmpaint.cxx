@@ -43,6 +43,8 @@
 #include <tabfrm.hxx>
 #include <numrule.hxx>
 #include <wrong.hxx>
+#include <vcl/lineinfo.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 #include <EnhancedPDFExportHelper.hxx>
 
@@ -96,7 +98,7 @@ public:
     }
 
     void PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax, bool bRed, const OUString* pRedlineText = nullptr );
-    void PaintRedline( SwTwips nY, tools::Long nMax );
+    void PaintRedline( SwTwips nY, tools::Long nMax, sal_Int16 nWordSpacing = 0 );
 };
 
 }
@@ -279,7 +281,8 @@ void SwExtraPainter::PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax,
     }
 }
 
-void SwExtraPainter::PaintRedline( SwTwips nY, tools::Long nMax )
+// paint redline or word spacing indicator
+void SwExtraPainter::PaintRedline( SwTwips nY, tools::Long nMax, sal_Int16 nWordSpacing )
 {
     Point aStart( m_nRedX, nY );
     Point aEnd( m_nRedX, nY + nMax );
@@ -295,15 +298,18 @@ void SwExtraPainter::PaintRedline( SwTwips nY, tools::Long nMax )
         }
     }
     const Color aOldCol( m_pSh->GetOut()->GetLineColor() );
-    m_pSh->GetOut()->SetLineColor(SwModule::get()->GetRedlineMarkColor());
+    m_pSh->GetOut()->SetLineColor(nWordSpacing ? COL_LIGHTRED : SwModule::get()->GetRedlineMarkColor());
 
-    if ( m_pTextFrame->IsVertical() )
+    if ( nWordSpacing )
     {
-        m_pTextFrame->SwitchHorizontalToVertical( aStart );
-        m_pTextFrame->SwitchHorizontalToVertical( aEnd );
-    }
+        LineInfo aLineInfo;
+        aLineInfo.SetStyle(LineStyle::Solid);
+        aLineInfo.SetWidth( nWordSpacing * 2540/1440 );
 
-    m_pSh->GetOut()->DrawLine( aStart, aEnd );
+        m_pSh->GetOut()->DrawLine( aStart, aEnd, aLineInfo );
+    }
+    else
+        m_pSh->GetOut()->DrawLine( aStart, aEnd );
     m_pSh->GetOut()->SetLineColor( aOldCol );
 }
 
@@ -321,19 +327,22 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
     sal_Int16 eHor = static_cast<sal_Int16>(SwModule::get()->GetRedlineMarkPos());
+    SwViewShell *pSh = getRootFrame()->GetCurrShell();
+    bool bWordSpacingIndicator = officecfg::Office::Writer::Content::Display::ShowWordSpacingIndicator::get()
+        && pSh->GetViewOptions()->IsViewMetaChars();
     if (eHor != text::HoriOrientation::NONE
+        && !bWordSpacingIndicator
         && (!IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
             || getRootFrame()->IsHideRedlines()))
     {
         eHor = text::HoriOrientation::NONE;
     }
     bool bRedLine = eHor != text::HoriOrientation::NONE;
-    if ( !bLineNum && !bRedLine )
+    if ( !bLineNum && !bRedLine && !bWordSpacingIndicator )
         return;
 
     if( IsLocked() || IsHiddenNow() || !getFramePrintArea().Height() )
         return;
-    SwViewShell *pSh = getRootFrame()->GetCurrShell();
 
     SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
     SwRect rOldRect( rRect );
@@ -383,6 +392,10 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
         {
             if( bNoDummy || !aLine.GetCurr()->IsDummy() )
             {
+                SwTwips nExtraSpaceSize = aLine.GetCurr()->GetFirstPortion()->ExtraSpaceSize();
+                if ( nExtraSpaceSize && bWordSpacingIndicator )
+                    aExtra.PaintRedline( aLine.Y(), aLine.GetLineHeight(), nExtraSpaceSize );
+
                 bool bRed = bRedLine && aLine.GetCurr()->HasRedline();
                 if( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
                 {

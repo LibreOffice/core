@@ -304,6 +304,7 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
         SetLen( TextFrameIndex(0) );
         Width( 0 );
         ExtraShrunkWidth( 0 );
+        ExtraSpaceSize( 0 );
     }
 }
 
@@ -313,6 +314,7 @@ void SwTextPortion::BreakUnderflow( SwTextFormatInfo &rInf )
     Height( 0 );
     Width( 0 );
     ExtraShrunkWidth( 0 );
+    ExtraSpaceSize( 0 );
     SetLen( TextFrameIndex(0) );
     SetAscent( 0 );
     rInf.SetUnderflow( this );
@@ -358,6 +360,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     }
 
     ExtraShrunkWidth( 0 );
+    ExtraSpaceSize( 0 );
     std::optional<SwTextGuess> pGuess(std::in_place);
     bool bFull = !pGuess->Guess( *this, rInf, Height() );
 
@@ -367,7 +370,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     const SvxAdjust aAdjust = aAdjustItem.GetAdjust();
     bool bFullJustified = bFull && aAdjust == SvxAdjust::Block &&
          pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING);
-    bool bInteropSmartJustify =
+    bool bInteropSmartJustify = bFullJustified &&
             rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
                     DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING);
     bool bNoWordSpacing = aAdjustItem.GetPropWordSpacing() == 100 &&
@@ -418,6 +421,9 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             sal_Int32 nRealSpaces = rInf.GetLineSpaceCount( pGuess->BreakPos() );
             float fSpaceNormal = (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nRealSpaces * nSpaceWidth/10.0))/nRealSpaces;
 
+            float fExpansionOverMax = fSpaceNormal - nSpaceWidth/10.0 * aAdjustItem.GetPropWordSpacingMaximum()/100.0;
+            ExtraSpaceSize( rInf.GetBreakWidth() > rInf.GetLineWidth()/2 && fExpansionOverMax > 0 ? fExpansionOverMax : 0);
+
             bool bOrigHyphenated = pGuess->HyphWord().is() &&
                         pGuess->BreakPos() > rInf.GetLineStart();
             // calculate line breaking with desired word spacing, also
@@ -431,7 +437,11 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                 sal_Int32 nSpacesInLine2 = rInf.GetLineSpaceCount( pGuess->BreakPos() );
 
                 if ( rInf.GetBreakWidth() <= rInf.GetLineWidth() )
+                {
                     fSpaceNormal = (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nSpacesInLine2 * nSpaceWidth/10.0))/nSpacesInLine2;
+                    fExpansionOverMax = fSpaceNormal - nSpaceWidth/10.0 * aAdjustItem.GetPropWordSpacingMaximum()/100.0;
+                    ExtraSpaceSize( rInf.GetBreakWidth() > rInf.GetLineWidth()/2 && fExpansionOverMax > 0 ? fExpansionOverMax : 0);
+                }
             }
 
             sal_Int32 nSpacesInLineShrink = 0;
@@ -499,12 +509,14 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                         if ( z1 >= z0 || bIsPortion )
                         {
                             pGuess = std::move(pGuess2);
+                            ExtraSpaceSize(0);
                             bFull = bFull2;
                         }
                     }
                     else if ( bOldInterop )
                     {
                         pGuess = std::move(pGuess2);
+                        ExtraSpaceSize(0);
                         bFull = bFull2;
                     }
                 }
@@ -514,7 +526,10 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             }
 
             if ( pGuess->BreakWidth() != nOldWidth )
+            {
                 ExtraShrunkWidth( pGuess->BreakWidth() );
+                ExtraSpaceSize( 0 );
+            }
         }
     }
 
@@ -692,6 +707,7 @@ bool SwTextPortion::Format( SwTextFormatInfo &rInf )
         Height( 0 );
         Width( 0 );
         ExtraShrunkWidth( 0 );
+        ExtraSpaceSize( 0 );
         SetLen( TextFrameIndex(0) );
         SetAscent( 0 );
         SetNextPortion( nullptr );  // ????

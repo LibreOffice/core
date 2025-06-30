@@ -51,6 +51,7 @@ private:
     bool m_bIsFieldmarkText;
     SwTwips m_nExtraBlankWidth = 0;    // width of spaces after the break
     SwTwips m_nExtraShrunkWidth = 0;   // width of not shrunk line
+    SwTwips m_nExtraSpaceSize = 0;     // extra space over normal space width
 
     std::optional<SwLinePortionLayoutContext> m_nLayoutContext;
 
@@ -77,6 +78,8 @@ public:
     void ExtraBlankWidth(const SwTwips nNew) { m_nExtraBlankWidth = nNew; }
     SwTwips ExtraShrunkWidth() const { return m_nExtraShrunkWidth; }
     void ExtraShrunkWidth(const SwTwips nNew) { m_nExtraShrunkWidth = nNew; }
+    SwTwips ExtraSpaceSize() const { return m_nExtraSpaceSize; }
+    void ExtraSpaceSize(const SwTwips nNew) { m_nExtraSpaceSize = nNew; }
     SwTwips GetHangingBaseline() const { return mnHangingBaseline; }
     void SetHangingBaseline( const SwTwips nNewBaseline ) { mnHangingBaseline = nNewBaseline; }
     const std::optional<SwLinePortionLayoutContext> & GetLayoutContext() const { return m_nLayoutContext; }
@@ -193,6 +196,7 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
     m_bJoinBorderWithNext = rPortion.m_bJoinBorderWithNext;
     m_nExtraBlankWidth = rPortion.m_nExtraBlankWidth;
     m_nExtraShrunkWidth = rPortion.m_nExtraShrunkWidth;
+    m_nExtraSpaceSize = rPortion.m_nExtraSpaceSize;
     m_nLayoutContext = rPortion.m_nLayoutContext;
     return *this;
 }
@@ -209,6 +213,7 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     m_bIsFieldmarkText( rPortion.m_bIsFieldmarkText ),
     m_nExtraBlankWidth(rPortion.m_nExtraBlankWidth),
     m_nExtraShrunkWidth(rPortion.m_nExtraShrunkWidth),
+    m_nExtraSpaceSize(rPortion.m_nExtraSpaceSize),
     m_nLayoutContext(rPortion.m_nLayoutContext)
 {
 }
