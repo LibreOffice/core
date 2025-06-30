@@ -66,7 +66,7 @@ public:
         const std::shared_ptr<Theme>& rpTheme);
     ~Layouter();
 
-    std::shared_ptr<PageObjectLayouter> const & GetPageObjectLayouter() const;
+    PageObjectLayouter* GetPageObjectLayouter() const;
     /** Set the interval of valid column counts.  When nMinimalColumnCount
         <= nMaximalColumnCount is not fulfilled then the call is ignored.
         @param nMinimalColumnCount

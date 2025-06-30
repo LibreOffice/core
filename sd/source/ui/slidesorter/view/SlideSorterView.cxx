@@ -383,8 +383,7 @@ void SlideSorterView::Layout ()
         pWindow->SetViewOrigin (aViewBox.TopLeft());
         pWindow->SetViewSize (aViewBox.GetSize());
 
-        std::shared_ptr<PageObjectLayouter> pPageObjectLayouter(
-            mpLayouter->GetPageObjectLayouter());
+        PageObjectLayouter* pPageObjectLayouter(mpLayouter->GetPageObjectLayouter());
         if (pPageObjectLayouter)
         {
             const Size aNewPreviewSize (mpLayouter->GetPageObjectLayouter()->GetPreviewSize());

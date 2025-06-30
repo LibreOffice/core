@@ -67,7 +67,7 @@ void PageObjectPainter::PaintPageObject (
     if (!UpdatePageObjectLayouter())
         return;
 
-    PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter().get();
+    PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
     // Turn off antialiasing to avoid the bitmaps from being
     // shifted by fractions of a pixel and thus show blurry edges.
     const AntialiasingFlags nSavedAntialiasingMode (rDevice.GetAntialiasing());
@@ -86,7 +86,7 @@ bool PageObjectPainter::UpdatePageObjectLayouter()
 {
     // The page object layouter is quite volatile. It may have been replaced
     // since the last call.  Update it now.
-    PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter().get();
+    PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
     if ( ! pPageObjectLayouter)
     {
         OSL_FAIL("no page object layouter");
@@ -185,7 +185,7 @@ BitmapEx PageObjectPainter::GetPreviewBitmap (
 
     if (bIsExcluded)
     {
-        PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter().get();
+        PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
 
         BitmapEx aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage));
         const ::tools::Rectangle aPreviewBox (pPageObjectLayouter->GetBoundingBox(

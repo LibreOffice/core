@@ -59,7 +59,7 @@ public:
     /// rows.
     sal_Int32 mnMaxRowCount;
     Size maPageObjectSize;
-    std::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
+    std::unique_ptr<PageObjectLayouter> mpPageObjectLayouter;
     std::shared_ptr<view::Theme> mpTheme;
 
     /** Specify how the gap between two page objects is associated with the
@@ -303,9 +303,9 @@ Layouter::~Layouter()
 {
 }
 
-std::shared_ptr<PageObjectLayouter> const & Layouter::GetPageObjectLayouter() const
+PageObjectLayouter* Layouter::GetPageObjectLayouter() const
 {
-    return mpImplementation->mpPageObjectLayouter;
+    return mpImplementation->mpPageObjectLayouter.get();
 }
 
 void Layouter::SetColumnCount (
@@ -517,7 +517,7 @@ bool Layouter::Implementation::Rearrange (
     }
 
     mpPageObjectLayouter =
-        std::make_shared<PageObjectLayouter>(
+        std::make_unique<PageObjectLayouter>(
             CalculateTargetSize(rWindowSize),
             rPreviewModelSize,
             mpWindow,

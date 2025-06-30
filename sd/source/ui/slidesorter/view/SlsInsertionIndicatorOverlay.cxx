@@ -105,7 +105,7 @@ void InsertionIndicatorOverlay::Create (
     const sal_Int32 nSelectionCount)
 {
     view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
-    const std::shared_ptr<view::PageObjectLayouter>& pPageObjectLayouter (
+    view::PageObjectLayouter* pPageObjectLayouter (
         rLayouter.GetPageObjectLayouter());
     std::shared_ptr<view::Theme> pTheme (mrSlideSorter.GetTheme());
     const Size aOriginalPreviewSize (pPageObjectLayouter->GetPreviewSize());
