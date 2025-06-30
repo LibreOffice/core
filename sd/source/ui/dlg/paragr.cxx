@@ -139,28 +139,28 @@ SdParagraphDlg::SdParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
     : SfxTabDialogController(pParent, u"modules/sdraw/ui/drawparadialog.ui"_ustr,
                              u"DrawParagraphPropertiesDialog"_ustr, pAttr)
 {
-    AddTabPage( u"labelTP_PARA_STD"_ustr, RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage( u"indents"_ustr, RID_SVXPAGE_STD_PARAGRAPH);
 
     if( SvtCJKOptions::IsAsianTypographyEnabled() )
-        AddTabPage( u"labelTP_PARA_ASIAN"_ustr, RID_SVXPAGE_PARA_ASIAN);
+        AddTabPage( u"asiantypo"_ustr, RID_SVXPAGE_PARA_ASIAN);
     else
-        RemoveTabPage( u"labelTP_PARA_ASIAN"_ustr );
+        RemoveTabPage( u"asiantypo"_ustr );
 
-    AddTabPage( u"labelTP_PARA_ALIGN"_ustr, RID_SVXPAGE_ALIGN_PARAGRAPH);
+    AddTabPage( u"alignment"_ustr, RID_SVXPAGE_ALIGN_PARAGRAPH);
 
     static const bool bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != nullptr );
     if( bShowParaNumbering )
-        AddTabPage( u"labelNUMBERING"_ustr, SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
+        AddTabPage( u"numbering"_ustr, SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
     else
-        RemoveTabPage( u"labelNUMBERING"_ustr );
+        RemoveTabPage( u"numbering"_ustr );
 
-    AddTabPage(u"labelTP_TABULATOR"_ustr, RID_SVXPAGE_TABULATOR);
+    AddTabPage(u"tabs"_ustr, RID_SVXPAGE_TABULATOR);
 }
 
 void SdParagraphDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (rId == "labelTP_PARA_STD")
+    if (rId == "indents")
     {
         aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/2));
         rPage.PageCreated(aSet);
