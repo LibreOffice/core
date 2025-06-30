@@ -322,7 +322,7 @@ private:
     VclPtr<vcl::Window>    mpParentWindow;
     VclPtr<sd::ShowWindow>     mpShowWindow;
 
-    std::shared_ptr< AnimationSlideController > mpSlideController;
+    std::unique_ptr< AnimationSlideController > mpSlideController;
 
     ::tools::Long            mnRestoreSlide;
     Point           maPopupMousePos;

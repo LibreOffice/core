@@ -962,7 +962,7 @@ bool SlideshowImpl::startPreview(
 
         rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
         Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
-        mpSlideController = std::make_shared<AnimationSlideController>( xSlides, AnimationSlideController::PREVIEW );
+        mpSlideController = std::make_unique<AnimationSlideController>( xSlides, AnimationSlideController::PREVIEW );
 
         sal_Int32 nSlideNumber = 0;
         Reference< XPropertySet > xSet( mxPreviewDrawPage, UNO_QUERY_THROW );
@@ -2515,7 +2515,7 @@ void SlideshowImpl::createSlideList( bool bAll, std::u16string_view rPresSlide )
 
     rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
     Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
-    mpSlideController = std::make_shared<AnimationSlideController>( xSlides, eMode );
+    mpSlideController = std::make_unique<AnimationSlideController>( xSlides, eMode );
 
     if( eMode != AnimationSlideController::CUSTOM )
     {
