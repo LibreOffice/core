@@ -38,29 +38,29 @@ SdCharDlg::SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr,
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    AddTabPage(u"RID_SVXPAGE_CHAR_NAME"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
-    AddTabPage(u"RID_SVXPAGE_CHAR_EFFECTS"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
-    AddTabPage(u"RID_SVXPAGE_CHAR_POSITION"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION), nullptr);
-    AddTabPage(u"RID_SVXPAGE_BKG"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
+    AddTabPage(u"font"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
+    AddTabPage(u"fonteffects"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
+    AddTabPage(u"position"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION), nullptr);
+    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
 }
 
 void SdCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (rId == "RID_SVXPAGE_CHAR_NAME")
+    if (rId == "font")
     {
         SvxFontListItem aItem(* static_cast<const SvxFontListItem*>( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) );
 
         aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         rPage.PageCreated(aSet);
     }
-    else if (rId == "RID_SVXPAGE_CHAR_EFFECTS")
+    else if (rId == "fonteffects")
     {
         // Opt in for character transparency.
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE, SVX_ENABLE_CHAR_TRANSPARENCY));
         rPage.PageCreated(aSet);
     }
-    else if (rId == "RID_SVXPAGE_BKG")
+    else if (rId == "background")
     {
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
         rPage.PageCreated(aSet);
