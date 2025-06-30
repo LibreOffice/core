@@ -941,8 +941,8 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  )
         OUString const& name(GetName());
         sal_Int32 const sep(name.indexOf(SD_LT_SEPARATOR));
         OUString const master((sep == -1) ? OUString() : name.copy(0, sep));
-        std::shared_ptr<SfxStyleSheetIterator> aSSSI = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), nFamily);
-        for (SfxStyleSheetBase *pStyle = aSSSI->First(); pStyle; pStyle = aSSSI->Next())
+        SfxStyleSheetIterator aSSSI(mxPool.get(), nFamily);
+        for (SfxStyleSheetBase *pStyle = aSSSI.First(); pStyle; pStyle = aSSSI.Next())
         {
             // we hope that we have only sd style sheets
             SdStyleSheet* pSdStyleSheet = static_cast<SdStyleSheet*>(pStyle);

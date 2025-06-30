@@ -79,9 +79,9 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
             maStyleSheets.clear();
 
             // The iterator will return only style sheets of family master page
-            std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), SfxStyleFamily::Page);
-            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                     pStyle = aSSSIterator->Next() )
+            SfxStyleSheetIterator aSSSIterator(mxPool.get(), SfxStyleFamily::Page);
+            for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
+                                     pStyle = aSSSIterator.Next() )
             {
                 // we assume that we have only SdStyleSheets
                 SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
@@ -147,9 +147,9 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName )
         }
         else
         {
-            std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
-            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                     pStyle = aSSSIterator->Next() )
+            SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+            for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
+                                     pStyle = aSSSIterator.Next() )
             {
                 // we assume that we have only SdStyleSheets
                 SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
@@ -243,9 +243,9 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
     else
     {
         std::vector< OUString > aNames;
-        std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
-        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                 pStyle = aSSSIterator->Next() )
+        SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+        for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
+                                 pStyle = aSSSIterator.Next() )
         {
             // we assume that we have only SdStyleSheets
             SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
@@ -270,9 +270,9 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )
         }
         else
         {
-            std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
-            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                     pStyle = aSSSIterator->Next() )
+            SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+            for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
+                                     pStyle = aSSSIterator.Next() )
             {
                 // we assume that we have only SdStyleSheets
                 SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
@@ -305,8 +305,8 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements()
     }
     else
     {
-        std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
-        if (aSSSIterator->First())
+        SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+        if (aSSSIterator.First())
         {
             return true;
         }
@@ -329,9 +329,9 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount()
     }
     else
     {
-        std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
-        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                 pStyle = aSSSIterator->Next() )
+        SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+        for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
+                                 pStyle = aSSSIterator.Next() )
         {
             nCount++;
         }
@@ -359,9 +359,9 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index )
         }
         else
         {
-            std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
-            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                     pStyle = aSSSIterator->Next() )
+            SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+            for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
+                                     pStyle = aSSSIterator.Next() )
             {
                 // we assume that we have only SdStyleSheets
                 SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );

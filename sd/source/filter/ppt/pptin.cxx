@@ -135,10 +135,9 @@ SdPPTImport::SdPPTImport( SdDrawDocument& rDocument, SvStream& rDocStream, SotSt
 
     // iterate over all styles
     SdStyleSheetPool* pStyleSheetPool = rDocument.GetSdStyleSheetPool();
-    std::shared_ptr<SfxStyleSheetIterator> aIter =
-            std::make_shared<SfxStyleSheetIterator>(pStyleSheetPool, SfxStyleFamily::All);
+    SfxStyleSheetIterator aIter(pStyleSheetPool, SfxStyleFamily::All);
 
-    for (SfxStyleSheetBase *pSheet = aIter->First(); pSheet; pSheet = aIter->Next())
+    for (SfxStyleSheetBase *pSheet = aIter.First(); pSheet; pSheet = aIter.Next())
     {
         SfxItemSet& rSet = pSheet->GetItemSet();
         // if autokerning is set in style, override it, ppt has no autokerning

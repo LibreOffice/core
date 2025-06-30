@@ -498,12 +498,11 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
             }
         }
 
-        std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(GetStyleSheetPool(),
-                SfxStyleFamily::All);
+        SfxStyleSheetIterator aSSSIterator(GetStyleSheetPool(), SfxStyleFamily::All);
         // fill aStyleSheetToIdMap
         sal_uInt32 nId = 1;
-        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                 pStyle = aSSSIterator->Next() )
+        for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
+                                 pStyle = aSSSIterator.Next() )
         {
             if (bClipboard && !aUsedParagraphStyles.contains(pStyle))
             {
@@ -514,14 +513,14 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
             nId++;
         }
 
-        if ( aSSSIterator->Count() )
+        if ( aSSSIterator.Count() )
         {
 
             sal_uInt32 nStyle = 0;
             rOutput.WriteChar( '{' ).WriteOString( OOO_STRING_SVTOOLS_RTF_STYLESHEET );
 
-            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                     pStyle = aSSSIterator->Next() )
+            for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
+                                     pStyle = aSSSIterator.Next() )
             {
                 if (bClipboard && !aUsedParagraphStyles.contains(pStyle))
                 {
