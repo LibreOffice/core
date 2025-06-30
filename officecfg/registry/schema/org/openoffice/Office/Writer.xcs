@@ -867,6 +867,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="ShowWordSpacingIndicator" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Enables the word spacing indicator, which shows before each justified text line how much the expanded space in the current line exceeds the maximum word spacing set for the paragraph.</desc>
+            <label>Show word spacing indicator at justified lines.</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="ShowWarningHiddenSection" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Not accessible via user interface -->
           <info>
