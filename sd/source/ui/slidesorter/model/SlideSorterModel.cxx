@@ -428,7 +428,7 @@ void SlideSorterModel::SetDocumentSlides (
         }
     }
 
-    mrSlideSorter.GetController().GetSlotManager()->NotifyEditModeChange();
+    mrSlideSorter.GetController().GetSlotManager().NotifyEditModeChange();
 }
 
 Reference<container::XIndexAccess> SlideSorterModel::GetDocumentSlides() const

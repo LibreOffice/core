@@ -355,14 +355,14 @@ void SlideSorterViewShell::GetMenuState ( SfxItemSet& rSet)
 {
     ViewShell::GetMenuState(rSet);
     assert(mpSlideSorter);
-    mpSlideSorter->GetController().GetSlotManager()->GetMenuState(rSet);
+    mpSlideSorter->GetController().GetSlotManager().GetMenuState(rSet);
 }
 
 void SlideSorterViewShell::GetClipboardState ( SfxItemSet& rSet)
 {
     ViewShell::GetMenuState(rSet);
     assert(mpSlideSorter);
-    mpSlideSorter->GetController().GetSlotManager()->GetClipboardState(rSet);
+    mpSlideSorter->GetController().GetSlotManager().GetClipboardState(rSet);
 }
 
 void SlideSorterViewShell::ExecCtrl (SfxRequest& rRequest)

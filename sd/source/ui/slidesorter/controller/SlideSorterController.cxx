@@ -118,7 +118,7 @@ void SlideSorterController::Init()
     mpCurrentSlideManager = std::make_unique<CurrentSlideManager>(mrSlideSorter);
     mpPageSelector.reset(new PageSelector(mrSlideSorter));
     mpFocusManager.reset(new FocusManager(mrSlideSorter));
-    mpSlotManager = std::make_shared<SlotManager>(mrSlideSorter);
+    mpSlotManager = std::make_unique<SlotManager>(mrSlideSorter);
     mpScrollBarManager.reset(new ScrollBarManager(mrSlideSorter));
     mpSelectionManager = std::make_shared<SelectionManager>(mrSlideSorter);
     mpClipboard.reset(new Clipboard(mrSlideSorter));
@@ -217,10 +217,9 @@ CurrentSlideManager& SlideSorterController::GetCurrentSlideManager() const
     return *mpCurrentSlideManager;
 }
 
-std::shared_ptr<SlotManager> const & SlideSorterController::GetSlotManager() const
+SlotManager& SlideSorterController::GetSlotManager() const
 {
-    OSL_ASSERT(mpSlotManager != nullptr);
-    return mpSlotManager;
+    return *mpSlotManager;
 }
 
 std::shared_ptr<SelectionManager> const & SlideSorterController::GetSelectionManager() const
