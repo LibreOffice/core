@@ -197,7 +197,7 @@ public:
     const ::tools::Rectangle& getClientRectangle() const;
 
     std::shared_ptr<ToolBarManager> const & GetToolBarManager() const;
-    std::shared_ptr<FormShellManager> const & GetFormShellManager() const;
+    FormShellManager* GetFormShellManager() const;
 
     DrawController* GetDrawController() const;
 

@@ -142,7 +142,7 @@ public:
     std::shared_ptr<ToolBarManager> mpToolBarManager;
     std::shared_ptr<ViewShellManager> mpViewShellManager;
     std::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;
-    std::shared_ptr<FormShellManager> mpFormShellManager;
+    std::unique_ptr<FormShellManager> mpFormShellManager;
 
     explicit Implementation (ViewShellBase& rBase);
     ~Implementation();
@@ -306,7 +306,7 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
 
     mpImpl->mpEventMultiplexer = std::make_shared<tools::EventMultiplexer>(*this);
 
-    mpImpl->mpFormShellManager = std::make_shared<FormShellManager>(*this);
+    mpImpl->mpFormShellManager = std::make_unique<FormShellManager>(*this);
 
     mpImpl->mpToolBarManager = ToolBarManager::Create(
         *this,
@@ -969,12 +969,12 @@ std::shared_ptr<ToolBarManager> const & ViewShellBase::GetToolBarManager() const
     return mpImpl->mpToolBarManager;
 }
 
-std::shared_ptr<FormShellManager> const & ViewShellBase::GetFormShellManager() const
+FormShellManager* ViewShellBase::GetFormShellManager() const
 {
     OSL_ASSERT(mpImpl != nullptr);
     OSL_ASSERT(mpImpl->mpFormShellManager != nullptr);
 
-    return mpImpl->mpFormShellManager;
+    return mpImpl->mpFormShellManager.get();
 }
 
 DrawController* ViewShellBase::GetDrawController() const
