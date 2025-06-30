@@ -1334,7 +1334,10 @@ void ScPrintFunc::DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long 
         }
         else
         {
-            pDev->SetFillColor(pBackground->GetColor());
+            if (pBackground->GetColor() == COL_TRANSPARENT)
+                pDev->SetFillColor();
+            else
+                pDev->SetFillColor(pBackground->GetColor());
             pDev->SetLineColor();
             pDev->DrawRect(aFrameRect);
         }

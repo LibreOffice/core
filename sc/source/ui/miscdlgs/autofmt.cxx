@@ -370,7 +370,10 @@ void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
 
             rRenderContext.Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
             rRenderContext.SetLineColor();
-            rRenderContext.SetFillColor( pItem->GetColor() );
+            if (pItem->GetColor() == COL_TRANSPARENT)
+                rRenderContext.SetFillColor();
+            else
+                rRenderContext.SetFillColor( pItem->GetColor() );
 
             const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
             rRenderContext.DrawRect(
