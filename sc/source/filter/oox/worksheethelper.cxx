@@ -1073,6 +1073,8 @@ void WorksheetGlobals::finalizeValidationRanges() const
     for (auto const& validation : maValidations)
     {
         rtl::Reference<ScCellRangesObj> xRanges = getCellRangeList(validation.maRanges);
+        if (!xRanges)
+            continue;
         rtl::Reference<ScTableValidationObj> xValidation = xRanges->getValidation();
 
         if( xValidation.is() )
