@@ -270,7 +270,7 @@ public:
 
     virtual void deregisterFrame( SalFrame* pFrame ) override;
     GdkCursor *getCursor( PointerStyle ePointerStyle );
-    int CaptureMouse( SalFrame* pFrame );
+    int CaptureMouse(GtkSalFrame* pFrame);
 
     SalX11Screen GetDefaultXScreen() { return m_pSys->GetDisplayDefaultXScreen(); }
     AbsoluteScreenPixelSize GetScreenSize( int nDisplayScreen );

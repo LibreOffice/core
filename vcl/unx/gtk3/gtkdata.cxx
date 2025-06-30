@@ -302,10 +302,8 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
     return m_aCursors[ ePointerStyle ];
 }
 
-int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
+int GtkSalDisplay::CaptureMouse(GtkSalFrame* pFrame)
 {
-    GtkSalFrame* pFrame = static_cast<GtkSalFrame*>(pSFrame);
-
     if( !pFrame )
     {
         if( m_pCapture )
