@@ -20,15 +20,15 @@
 #include "AccessibleFocusManager.hxx"
 #include "AccessibleObject.hxx"
 
-std::shared_ptr<AccessibleFocusManager> AccessibleFocusManager::mpInstance;
+std::unique_ptr<AccessibleFocusManager> AccessibleFocusManager::mpInstance;
 
-std::shared_ptr<AccessibleFocusManager> const & AccessibleFocusManager::Instance()
+AccessibleFocusManager & AccessibleFocusManager::Instance()
 {
     if ( ! mpInstance)
     {
         mpInstance.reset(new AccessibleFocusManager());
     }
-    return mpInstance;
+    return *mpInstance;
 }
 
 AccessibleFocusManager::AccessibleFocusManager()

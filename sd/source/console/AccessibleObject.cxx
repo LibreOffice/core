@@ -38,7 +38,7 @@ AccessibleObject::AccessibleObject(
 
 void AccessibleObject::LateInitialization()
 {
-    AccessibleFocusManager::Instance()->AddFocusableObject(this);
+    AccessibleFocusManager::Instance().AddFocusableObject(this);
 }
 
 void AccessibleObject::SetWindow (
@@ -76,7 +76,7 @@ void SAL_CALL AccessibleObject::disposing()
 {
     OAccessible::disposing();
 
-    AccessibleFocusManager::Instance()->RemoveFocusableObject(this);
+    AccessibleFocusManager::Instance().RemoveFocusableObject(this);
     SetWindow(nullptr, nullptr);
 }
 

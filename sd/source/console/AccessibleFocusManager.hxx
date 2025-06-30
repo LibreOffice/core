@@ -32,7 +32,7 @@ class AccessibleObject;
 class AccessibleFocusManager
 {
 public:
-    static std::shared_ptr<AccessibleFocusManager> const & Instance();
+    static AccessibleFocusManager & Instance();
 
     void AddFocusableObject (const ::rtl::Reference<AccessibleObject>& rpObject);
     void RemoveFocusableObject (const ::rtl::Reference<AccessibleObject>& rpObject);
@@ -42,7 +42,7 @@ public:
     ~AccessibleFocusManager();
 
 private:
-    static std::shared_ptr<AccessibleFocusManager> mpInstance;
+    static std::unique_ptr<AccessibleFocusManager> mpInstance;
     ::std::vector<rtl::Reference<AccessibleObject> > maFocusableObjects;
     bool m_isInDtor = false;
 

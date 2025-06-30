@@ -126,7 +126,7 @@ void AccessibleNotes::NotifyCaretChange (
     const sal_Int32 nNewParagraphIndex,
     const sal_Int32 nNewCharacterIndex)
 {
-    AccessibleFocusManager::Instance()->FocusObject(
+    AccessibleFocusManager::Instance().FocusObject(
         nNewParagraphIndex >= 0
             ? maChildren[nNewParagraphIndex]
             : this);

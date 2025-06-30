@@ -228,7 +228,7 @@ void PresenterAccessible::NotifyCurrentSlideChange ()
 
     // Play some focus ping-pong to trigger AT tools.
     //AccessibleFocusManager::Instance()->FocusObject(this);
-    AccessibleFocusManager::Instance()->FocusObject(mpAccessiblePreview);
+    AccessibleFocusManager::Instance().FocusObject(mpAccessiblePreview);
 }
 
 void SAL_CALL PresenterAccessible::disposing()
@@ -287,13 +287,13 @@ void SAL_CALL PresenterAccessible::focusGained (const css::awt::FocusEvent&)
 {
     SAL_INFO("sdext.presenter", __func__ << ": PresenterAccessible::focusGained at " << this
         << " and window " << mxMainWindow.get());
-    AccessibleFocusManager::Instance()->FocusObject(this);
+    AccessibleFocusManager::Instance().FocusObject(this);
 }
 
 void SAL_CALL PresenterAccessible::focusLost (const css::awt::FocusEvent&)
 {
     SAL_INFO("sdext.presenter", __func__ << ": PresenterAccessible::focusLost at " << this);
-    AccessibleFocusManager::Instance()->FocusObject(nullptr);
+    AccessibleFocusManager::Instance().FocusObject(nullptr);
 }
 
 //----- XEventListener ----------------------------------------------------
