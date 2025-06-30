@@ -1534,10 +1534,10 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
             if( !xSetInfo.is() || !xSetInfo->hasPropertyByName( gsOnClick ) )
                 continue;
 
-            WrappedShapeEventImplPtr pEvent = std::make_shared<WrappedShapeEventImpl>();
-            xSet->getPropertyValue( gsOnClick ) >>= pEvent->meClickAction;
+            WrappedShapeEventImpl aEvent;
+            xSet->getPropertyValue( gsOnClick ) >>= aEvent.meClickAction;
 
-            switch( pEvent->meClickAction )
+            switch( aEvent.meClickAction )
             {
             case ClickAction_PREVPAGE:
             case ClickAction_NEXTPAGE:
@@ -1547,8 +1547,8 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
                 break;
             case ClickAction_BOOKMARK:
                 if( xSetInfo->hasPropertyByName( gsBookmark ) )
-                    xSet->getPropertyValue( gsBookmark ) >>= pEvent->maStrBookmark;
-                if( getSlideNumberForBookmark( pEvent->maStrBookmark ) == -1 )
+                    xSet->getPropertyValue( gsBookmark ) >>= aEvent.maStrBookmark;
+                if( getSlideNumberForBookmark( aEvent.maStrBookmark ) == -1 )
                     continue;
                 break;
             case ClickAction_DOCUMENT:
@@ -1556,17 +1556,17 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
             case ClickAction_PROGRAM:
             case ClickAction_MACRO:
                 if( xSetInfo->hasPropertyByName( gsBookmark ) )
-                    xSet->getPropertyValue( gsBookmark ) >>= pEvent->maStrBookmark;
+                    xSet->getPropertyValue( gsBookmark ) >>= aEvent.maStrBookmark;
                 break;
             case ClickAction_VERB:
                 if( xSetInfo->hasPropertyByName( gsVerb ) )
-                    xSet->getPropertyValue( gsVerb ) >>= pEvent->mnVerb;
+                    xSet->getPropertyValue( gsVerb ) >>= aEvent.mnVerb;
                 break;
             default:
                 continue; // skip all others
             }
 
-            maShapeEventMap[ xShape ] = std::move(pEvent);
+            maShapeEventMap[ xShape ] = std::move(aEvent);
 
             if( mxListenerProxy.is() )
                 mxListenerProxy->addShapeEventListener( xShape );
@@ -1705,9 +1705,10 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
 {
     SolarMutexGuard aSolarGuard;
 
-    WrappedShapeEventImplPtr pEvent = maShapeEventMap[xShape];
-    if( !pEvent )
+    auto it = maShapeEventMap.find(xShape);
+    if (it == maShapeEventMap.end())
         return;
+    WrappedShapeEventImpl* pEvent = &it->second;
 
     switch( pEvent->meClickAction )
     {

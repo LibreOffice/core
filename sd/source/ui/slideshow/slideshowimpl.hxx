@@ -77,8 +77,6 @@ struct WrappedShapeEventImpl
     WrappedShapeEventImpl() : meClickAction( css::presentation::ClickAction_NONE ), mnVerb( 0 ) {};
 };
 
-typedef std::shared_ptr< WrappedShapeEventImpl > WrappedShapeEventImplPtr;
-
 class SlideShowListenerProxy :
         public ::cppu::WeakImplHelper< css::presentation::XSlideShowNavigationListener, css::presentation::XShapeEventListener >
 {
@@ -347,7 +345,7 @@ private:
     bool            mbUsePen;
     double          mdUserPaintStrokeWidth;
 
-    std::map< css::uno::Reference< css::drawing::XShape >, WrappedShapeEventImplPtr >
+    std::map< css::uno::Reference< css::drawing::XShape >, WrappedShapeEventImpl >
                     maShapeEventMap;
 
     css::uno::Reference< css::drawing::XDrawPage > mxPreviewDrawPage;
