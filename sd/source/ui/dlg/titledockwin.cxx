@@ -51,8 +51,7 @@ namespace sd
 
         m_aContentWindow->Show();
 
-        m_sTitle = rsTitle;
-        Invalidate();
+        SetTitle(rsTitle);
         SetSizePixel(LogicToPixel(Size(80,200), MapMode(MapUnit::MapAppFont)));
     }
 
@@ -71,6 +70,7 @@ namespace sd
     void TitledDockingWindow::SetTitle(const OUString& i_rText)
     {
         m_sTitle = i_rText;
+        SetAccessibleName(m_sTitle);
         Invalidate();
     }
 
