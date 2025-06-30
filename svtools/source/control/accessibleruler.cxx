@@ -131,21 +131,6 @@ sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
     return nStateSet;
 }
 
-lang::Locale SAL_CALL SvtRulerAccessible::getLocale()
-{
-    SolarMutexGuard aSolarGuard;
-
-    if( mxParent.is() )
-    {
-        uno::Reference< XAccessibleContext >    xParentContext( mxParent->getAccessibleContext() );
-        if( xParentContext.is() )
-            return xParentContext->getLocale();
-    }
-
-    //  No parent.  Therefore throw exception to indicate this cluelessness.
-    throw IllegalAccessibleComponentStateException();
-}
-
 void SAL_CALL SvtRulerAccessible::grabFocus()
 {
     SolarMutexGuard aSolarGuard;

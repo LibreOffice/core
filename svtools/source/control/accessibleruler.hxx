@@ -77,9 +77,6 @@ public:
     virtual sal_Int64 SAL_CALL
         getAccessibleStateSet() override;
 
-    virtual css::lang::Locale SAL_CALL
-        getLocale() override;
-
 protected:
     virtual css::awt::Rectangle implGetBounds() override;
 
