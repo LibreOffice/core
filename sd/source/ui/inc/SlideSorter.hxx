@@ -20,6 +20,7 @@
 #pragma once
 
 #include <cppuhelper/weakref.hxx>
+#include <o3tl/deleter.hxx>
 #include <svtools/scrolladaptor.hxx>
 #include <sddllapi.h>
 #include <memory>
@@ -81,7 +82,7 @@ public:
         @param rpVerticalScrollBar
             Typically the vertical scroll bar of the ViewShell.
     */
-    static std::shared_ptr<SlideSorter> CreateSlideSorter (
+    static std::unique_ptr<SlideSorter, o3tl::default_delete<SlideSorter>> CreateSlideSorter (
         ViewShell& rViewShell,
         sd::Window* pContentWindow,
         ScrollAdaptor* pHorizontalScrollBar,

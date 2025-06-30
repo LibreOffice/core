@@ -21,6 +21,7 @@
 
 #include "ViewShell.hxx"
 #include <glob.hxx>
+#include <o3tl/deleter.hxx>
 #include <sfx2/shell.hxx>
 #include <sddllapi.h>
 #include <memory>
@@ -196,7 +197,7 @@ private:
     */
     virtual SfxUndoManager* ImpGetUndoManager() const override;
 
-    std::shared_ptr<SlideSorter> mpSlideSorter;
+    std::unique_ptr<SlideSorter, o3tl::default_delete<SlideSorter>> mpSlideSorter;
     bool mbIsArrangeGUIElementsPending;
 
     SlideSorterViewShell (
