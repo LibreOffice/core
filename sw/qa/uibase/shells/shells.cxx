@@ -892,14 +892,18 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
 {
     createSwDoc("three-changes.fodt");
 
-    // extract
-    tools::JsonWriter aJsonWriter;
-    std::string_view aCommand(".uno:ExtractDocumentStructure?filter=trackchanges");
-    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
-
     boost::property_tree::ptree tree;
-    std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
-    boost::property_tree::read_json(aStream, tree);
+
+    // 1. No filter arguments
+    {
+        // extract
+        tools::JsonWriter aJsonWriter;
+        std::string_view aCommand(".uno:ExtractDocumentStructure?filter=trackchanges");
+        getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+
+        std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
+        boost::property_tree::read_json(aStream, tree);
+    }
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), tree.size());
     boost::property_tree::ptree docStructure = tree.get_child("DocStructure");
@@ -965,6 +969,55 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         auto text_after = change.get<std::string>("textAfter");
         CPPUNIT_ASSERT(text_after.empty());
         CPPUNIT_ASSERT_EQUAL(" Sapienti sat."s, change.get<std::string>("textChanged"));
+        ++it;
+    }
+
+    CPPUNIT_ASSERT(bool(it == docStructure.end()));
+
+    // 2. Test contextLen filter argument
+    {
+        // extract
+        tools::JsonWriter aJsonWriter;
+        std::string_view aCommand(
+            ".uno:ExtractDocumentStructure?filter=trackchanges,foo:bar, contextLen: 15,,");
+        getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+
+        std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
+        boost::property_tree::read_json(aStream, tree);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), tree.size());
+    docStructure = tree.get_child("DocStructure");
+    CPPUNIT_ASSERT_EQUAL(size_t(3), docStructure.size());
+    it = docStructure.begin();
+
+    {
+        // First change
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.0"s, name);
+        CPPUNIT_ASSERT_EQUAL("ursus egestas. "s, change.get<std::string>("textBefore"));
+        CPPUNIT_ASSERT_EQUAL(" blandit auctor"s, change.get<std::string>("textAfter"));
+        ++it;
+    }
+
+    {
+        // Second change
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.1"s, name);
+        CPPUNIT_ASSERT_EQUAL("ctor arcu, nec "s, change.get<std::string>("textBefore"));
+        CPPUNIT_ASSERT_EQUAL(" eros molestie "s, change.get<std::string>("textAfter"));
+        ++it;
+    }
+
+    {
+        // Third change
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.2"s, name);
+        CPPUNIT_ASSERT_EQUAL("esque est orci."s, change.get<std::string>("textBefore"));
+        CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("textAfter"));
         ++it;
     }
 

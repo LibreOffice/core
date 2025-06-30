@@ -855,8 +855,29 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
 }
 
 /// Implements getCommandValues(".uno:ExtractDocumentStructures") for redlines
-void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell)
+void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell,
+                                 std::u16string_view filterArguments)
 {
+    // filter arguments are separated from the filter name by comma, and are name:value pairs
+    // separated by commas
+    if (!filterArguments.empty() && !filterArguments.starts_with(u","))
+        return; // not a correct filter
+    sal_Int16 nContextLen = 200;
+    for (size_t paramPos = 1; paramPos < filterArguments.size();)
+    {
+        std::u16string_view param = o3tl::getToken(filterArguments, u',', paramPos);
+        sal_Int32 nIndex = 0;
+        std::u16string_view token = o3tl::trim(o3tl::getToken(param, 0, u':', nIndex));
+        std::u16string_view value
+            = nIndex > 0 ? o3tl::trim(param.substr(nIndex)) : std::u16string_view{};
+        if (token == u"contextLen")
+        {
+            if (!value.empty())
+                nContextLen = o3tl::toInt32(value);
+        }
+        // else unknown filter argument (maybe from a newer API?) - ignore
+    }
+
     auto xRedlinesEnum = pDocShell->GetBaseModel()->getRedlines()->createEnumeration();
     for (sal_Int32 i = 0; xRedlinesEnum->hasMoreElements(); ++i)
     {
@@ -881,13 +902,13 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShel
         if (xStart)
         {
             auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
-            xCursor->goLeft(200, /*bExpand*/ true);
+            xCursor->goLeft(nContextLen, /*bExpand*/ true);
             rJsonWriter.put("textBefore", xCursor->getString());
         }
         if (xEnd)
         {
             auto xCursor = xEnd->getText()->createTextCursorByRange(xEnd);
-            xCursor->goRight(200, /*bExpand*/ true);
+            xCursor->goRight(nContextLen, /*bExpand*/ true);
             rJsonWriter.put("textAfter", xCursor->getString());
         }
         OUString changeText;
@@ -938,8 +959,8 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell
     if (filter.isEmpty() || filter == "docprops")
         GetDocStructureDocProps(rJsonWriter, pDocShell);
 
-    if (filter.isEmpty() || filter == "trackchanges")
-        GetDocStructureTrackChanges(rJsonWriter, pDocShell);
+    if (std::u16string_view rest; filter.isEmpty() || filter.startsWith("trackchanges", &rest))
+        GetDocStructureTrackChanges(rJsonWriter, pDocShell, o3tl::trim(rest));
 }
 
 /// Implements getCommandValues(".uno:Sections").
