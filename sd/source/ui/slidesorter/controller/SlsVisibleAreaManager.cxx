@@ -92,7 +92,7 @@ void VisibleAreaManager::RequestCurrentSlideVisible()
 {
     if (mbIsCurrentSlideTrackingActive && mnDisableCount==0)
         RequestVisible(
-            mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
+            mrSlideSorter.GetController().GetCurrentSlideManager().GetCurrentSlide());
 }
 
 void VisibleAreaManager::MakeVisible()

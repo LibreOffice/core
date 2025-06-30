@@ -378,7 +378,7 @@ void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
             // The first page of the new selection is made the current page.
             if (i == 0)
             {
-                mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
+                mrController.GetCurrentSlideManager().SwitchCurrentSlide(pDescriptor);
             }
         }
     }

@@ -143,7 +143,7 @@ public:
     */
     ScrollBarManager& GetScrollBarManager();
 
-    std::shared_ptr<CurrentSlideManager> const& GetCurrentSlideManager() const;
+    CurrentSlideManager& GetCurrentSlideManager() const;
     std::shared_ptr<SlotManager> const& GetSlotManager() const;
     std::shared_ptr<SelectionManager> const& GetSelectionManager() const;
     std::shared_ptr<InsertionIndicatorHandler> const& GetInsertionIndicatorHandler() const;
@@ -255,7 +255,7 @@ private:
     std::unique_ptr<FocusManager> mpFocusManager;
     std::shared_ptr<SlotManager> mpSlotManager;
     std::unique_ptr<ScrollBarManager> mpScrollBarManager;
-    mutable std::shared_ptr<CurrentSlideManager> mpCurrentSlideManager;
+    mutable std::unique_ptr<CurrentSlideManager> mpCurrentSlideManager;
     std::shared_ptr<SelectionManager> mpSelectionManager;
     std::unique_ptr<controller::Clipboard> mpClipboard;
     std::shared_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;

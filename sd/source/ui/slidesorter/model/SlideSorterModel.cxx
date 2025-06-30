@@ -389,7 +389,7 @@ void SlideSorterModel::SetDocumentSlides (
     ClearDescriptorList ();
 
     // Reset the current page to cause everybody to release references to it.
-    mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(-1);
+    mrSlideSorter.GetController().GetCurrentSlideManager().NotifyCurrentSlideChange(-1);
 
     // Set the new set of pages.
     mxSlides = rxSlides;
@@ -402,14 +402,14 @@ void SlideSorterModel::SetDocumentSlides (
     if (aSelectedPages.HasMoreElements())
     {
         SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-        mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+        mrSlideSorter.GetController().GetCurrentSlideManager().NotifyCurrentSlideChange(
             pDescriptor->GetPage());
     }
 
     ViewShell& rViewShell = mrSlideSorter.GetViewShell();
     SdPage* pPage = rViewShell.getCurrentPage();
     if (pPage != nullptr)
-        mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+        mrSlideSorter.GetController().GetCurrentSlideManager().NotifyCurrentSlideChange(
             pPage);
     else
     {
@@ -417,13 +417,13 @@ void SlideSorterModel::SetDocumentSlides (
         // the main view shell.  Get current slide form frame view.
         const FrameView* pFrameView = rViewShell.GetFrameView();
         if (pFrameView != nullptr)
-            mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+            mrSlideSorter.GetController().GetCurrentSlideManager().NotifyCurrentSlideChange(
                 pFrameView->GetSelectedPage());
         else
         {
             // No frame view.  As a last resort use the first slide as
             // current slide.
-            mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+            mrSlideSorter.GetController().GetCurrentSlideManager().NotifyCurrentSlideChange(
                 sal_Int32(0));
         }
     }

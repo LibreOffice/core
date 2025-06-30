@@ -115,7 +115,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
 
 void SlideSorterController::Init()
 {
-    mpCurrentSlideManager = std::make_shared<CurrentSlideManager>(mrSlideSorter);
+    mpCurrentSlideManager = std::make_unique<CurrentSlideManager>(mrSlideSorter);
     mpPageSelector.reset(new PageSelector(mrSlideSorter));
     mpFocusManager.reset(new FocusManager(mrSlideSorter));
     mpSlotManager = std::make_shared<SlotManager>(mrSlideSorter);
@@ -212,10 +212,9 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager()
     return *mpScrollBarManager;
 }
 
-std::shared_ptr<CurrentSlideManager> const & SlideSorterController::GetCurrentSlideManager() const
+CurrentSlideManager& SlideSorterController::GetCurrentSlideManager() const
 {
-    OSL_ASSERT(mpCurrentSlideManager != nullptr);
-    return mpCurrentSlideManager;
+    return *mpCurrentSlideManager;
 }
 
 std::shared_ptr<SlotManager> const & SlideSorterController::GetSlotManager() const
@@ -444,7 +443,7 @@ void SlideSorterController::PreModelChange()
     mrSlideSorter.GetViewShell().Broadcast(
         ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
 
-    GetCurrentSlideManager()->PrepareModelChange();
+    GetCurrentSlideManager().PrepareModelChange();
 
     if (mrSlideSorter.GetContentWindow())
         mrView.PreModelChange();
@@ -460,7 +459,7 @@ void SlideSorterController::PostModelChange()
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
     {
-        GetCurrentSlideManager()->HandleModelChange();
+        GetCurrentSlideManager().HandleModelChange();
 
         mrView.PostModelChange ();
 
@@ -532,7 +531,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, vo
                     {
                         // Select the current slide so that it is properly
                         // visualized when the focus is moved to the edit view.
-                        GetPageSelector().SelectPage(GetCurrentSlideManager()->GetCurrentSlide());
+                        GetPageSelector().SelectPage(GetCurrentSlideManager().GetCurrentSlide());
                     }
                 }
                 break;
@@ -770,7 +769,7 @@ void SlideSorterController::FinishEditModeChange()
             SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
             if (pDescriptor->GetPage() == mpEditModeChangeMasterPage)
             {
-                GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
+                GetCurrentSlideManager().SwitchCurrentSlide(pDescriptor);
                 mpPageSelector->SelectPage(pDescriptor);
                 break;
             }
@@ -781,7 +780,7 @@ void SlideSorterController::FinishEditModeChange()
         PageSelector::BroadcastLock aBroadcastLock (*mpPageSelector);
 
         SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnCurrentPageBeforeSwitch));
-        GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
+        GetCurrentSlideManager().SwitchCurrentSlide(pDescriptor);
 
         // Restore the selection.
         mpPageSelector->DeselectAllPages();

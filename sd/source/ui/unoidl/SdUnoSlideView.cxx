@@ -120,7 +120,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
         sal_uInt16 nPageNumber(0);
         if (xProperties->getPropertyValue(u"Number"_ustr) >>= nPageNumber)
         {
-            mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(
+            mrSlideSorter.GetController().GetCurrentSlideManager().SwitchCurrentSlide(
                 nPageNumber-1);
         }
     }
@@ -129,7 +129,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
 css::uno::Reference<css::drawing::XDrawPage > SAL_CALL
     SdUnoSlideView::getCurrentPage()
 {
-    return mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide()->GetXDrawPage();
+    return mrSlideSorter.GetController().GetCurrentSlideManager().GetCurrentSlide()->GetXDrawPage();
 }
 
 //----- XFastPropertySet ------------------------------------------------------

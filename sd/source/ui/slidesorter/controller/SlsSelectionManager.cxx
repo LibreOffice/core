@@ -234,8 +234,7 @@ void SelectionManager::SelectionHasChanged ()
     rViewShell.Invalidate (SID_STATUS_LAYOUT);
     rViewShell.Invalidate (SID_SCALE);
 
-    OSL_ASSERT(mrController.GetCurrentSlideManager());
-    SharedPageDescriptor pDescriptor(mrController.GetCurrentSlideManager()->GetCurrentSlide());
+    SharedPageDescriptor pDescriptor(mrController.GetCurrentSlideManager().GetCurrentSlide());
     if (pDescriptor)
         rViewShell.UpdatePreview(pDescriptor->GetPage());
 

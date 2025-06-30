@@ -343,7 +343,7 @@ SdPage* SlideSorterViewShell::GetActualPage()
     if (pCurrentPage == nullptr)
     {
         model::SharedPageDescriptor pDescriptor (
-            mpSlideSorter->GetController().GetCurrentSlideManager()->GetCurrentSlide());
+            mpSlideSorter->GetController().GetCurrentSlideManager().GetCurrentSlide());
         if (pDescriptor)
             pCurrentPage = pDescriptor->GetPage();
     }
@@ -544,7 +544,7 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
             rView.GetLayouter().SetColumnCount(nSlidesPerRow,nSlidesPerRow);
         }
         if (IsMainViewShell())
-            mpSlideSorter->GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+            mpSlideSorter->GetController().GetCurrentSlideManager().NotifyCurrentSlideChange(
                 mpFrameView->GetSelectedPage());
         mpSlideSorter->GetController().Rearrange(true);
 
@@ -560,7 +560,7 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
     {
         std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
         if (pMainViewShell != nullptr)
-            mpSlideSorter->GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+            mpSlideSorter->GetController().GetCurrentSlideManager().NotifyCurrentSlideChange(
                 pMainViewShell->getCurrentPage());
     }
 }

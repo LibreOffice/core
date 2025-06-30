@@ -322,7 +322,7 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
     // selection.
     std::shared_ptr<PageSelection> pSelection (GetPageSelection());
 
-    mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pCurrentPageDescriptor);
+    mrController.GetCurrentSlideManager().SwitchCurrentSlide(pCurrentPageDescriptor);
 
     // Restore the selection and prevent a recursive call to
     // UpdateCurrentPage().

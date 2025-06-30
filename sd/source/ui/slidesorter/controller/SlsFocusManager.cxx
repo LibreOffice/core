@@ -161,7 +161,7 @@ void FocusManager::SetFocusedPage (sal_Int32 nPageIndex)
 
 bool FocusManager::SetFocusedPageFromCurrentPage()
 {
-    return SetFocusedPage(mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
+    return SetFocusedPage(mrSlideSorter.GetController().GetCurrentSlideManager().GetCurrentSlide());
 }
 
 bool FocusManager::IsFocusShowing() const

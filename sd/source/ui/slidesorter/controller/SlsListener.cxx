@@ -433,7 +433,7 @@ void SAL_CALL Listener::propertyChange (
                 // nevertheless in order to make the new current page the
                 // last recently selected page of the PageSelector.  This is
                 // used when making the selection visible.
-                mrController.GetCurrentSlideManager()->NotifyCurrentSlideChange(nCurrentPage-1);
+                mrController.GetCurrentSlideManager().NotifyCurrentSlideChange(nCurrentPage-1);
                 mrController.GetPageSelector().SelectPage(nCurrentPage-1);
             }
             catch (beans::UnknownPropertyException&)
