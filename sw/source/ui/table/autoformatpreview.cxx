@@ -329,7 +329,10 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
 
             rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
-            rRenderContext.SetFillColor(aBrushItem.GetColor());
+            if (aBrushItem.GetColor() == COL_TRANSPARENT)
+                rRenderContext.SetFillColor();
+            else
+                rRenderContext.SetFillColor(aBrushItem.GetColor());
             const basegfx::B2DRange aCellRange(maArray.GetCellRange(nCol, nRow));
             rRenderContext.DrawRect(
                 tools::Rectangle(basegfx::fround<tools::Long>(aCellRange.getMinX()),
