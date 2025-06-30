@@ -301,9 +301,9 @@ void InsertionIndicatorOverlay::Paint (
     rDevice.DrawImage(maLocation, Image(maIcon));
 }
 
-void InsertionIndicatorOverlay::SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator)
+void InsertionIndicatorOverlay::SetLayerInvalidator (std::unique_ptr<ILayerInvalidator> pInvalidator)
 {
-    mpLayerInvalidator = rpInvalidator;
+    mpLayerInvalidator = std::move(pInvalidator);
 
     if (mbIsVisible && mpLayerInvalidator)
         mpLayerInvalidator->Invalidate(GetBoundingBox());

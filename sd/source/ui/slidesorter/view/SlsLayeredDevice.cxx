@@ -228,7 +228,7 @@ void LayeredDevice::RegisterPainter (
         (*mpLayers)[nLayer]->Initialize(mpTargetWindow);
 
     rpPainter->SetLayerInvalidator(
-        std::make_shared<LayerInvalidator>(shared_from_this(),mpTargetWindow,nLayer));
+        std::make_unique<LayerInvalidator>(shared_from_this(),mpTargetWindow,nLayer));
 }
 
 void LayeredDevice::RemovePainter (
@@ -246,7 +246,7 @@ void LayeredDevice::RemovePainter (
         return;
     }
 
-    rpPainter->SetLayerInvalidator(SharedILayerInvalidator());
+    rpPainter->SetLayerInvalidator({});
 
     (*mpLayers)[nLayer]->RemovePainter(rpPainter);
 

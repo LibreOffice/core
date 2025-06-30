@@ -74,7 +74,7 @@ namespace {
             mrView.Paint(rDevice,rRepaintArea);
         }
 
-        virtual void SetLayerInvalidator (const SharedILayerInvalidator&) override {}
+        virtual void SetLayerInvalidator (std::unique_ptr<ILayerInvalidator>) override {}
 
     private:
         SlideSorterView& mrView;
@@ -98,7 +98,7 @@ public:
         rDevice.DrawRect(rRepaintArea);
     }
 
-    virtual void SetLayerInvalidator (const SharedILayerInvalidator&) override {}
+    virtual void SetLayerInvalidator (std::unique_ptr<ILayerInvalidator>) override {}
 
     void SetColor (const Color& rColor) { maBackgroundColor = rColor; }
 

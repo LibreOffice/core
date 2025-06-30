@@ -47,7 +47,7 @@ public:
     InsertionIndicatorOverlay (SlideSorter& rSlideSorter);
     virtual ~InsertionIndicatorOverlay() override;
 
-    virtual void SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator) override;
+    virtual void SetLayerInvalidator (std::unique_ptr<ILayerInvalidator> pInvalidator) override;
 
     void Create (const SdTransferable* pTransferable);
 
@@ -72,7 +72,7 @@ public:
 private:
     SlideSorter& mrSlideSorter;
     bool mbIsVisible;
-    SharedILayerInvalidator mpLayerInvalidator;
+    std::unique_ptr<ILayerInvalidator> mpLayerInvalidator;
     // Center of the insertion indicator.
     Point maLocation;
     BitmapEx maIcon;

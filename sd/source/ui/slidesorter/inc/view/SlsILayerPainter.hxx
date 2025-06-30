@@ -33,7 +33,6 @@ public:
 
     virtual void Invalidate (const ::tools::Rectangle& rInvalidationBox) = 0;
 };
-typedef std::shared_ptr<ILayerInvalidator> SharedILayerInvalidator;
 
 class ILayerPainter
 {
@@ -41,7 +40,7 @@ public:
     virtual ~ILayerPainter() {}
 
     virtual void SetLayerInvalidator (
-        const SharedILayerInvalidator& rpInvalidator) = 0;
+        std::unique_ptr<ILayerInvalidator> pInvalidator) = 0;
     virtual void Paint (
         OutputDevice& rDevice,
         const ::tools::Rectangle& rRepaintArea) = 0;
