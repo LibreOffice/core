@@ -2040,7 +2040,12 @@ void DrawGraphic(
             default:
             {
                 if( rOutDev.GetFillColor() != aColor )
-                    rOutDev.SetFillColor( aColor );
+                {
+                    if (aColor.IsTransparent() && !rOutDev.HasAlpha())
+                        rOutDev.SetFillColor();
+                    else
+                        rOutDev.SetFillColor( aColor );
+                }
                 break;
             }
         }

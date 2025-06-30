@@ -490,8 +490,14 @@ void SwViewShell::ImplUnlockPaint(std::vector<LockPaintReason>& rReasons, bool b
                 GetWin()->Validate();
 
                 Imp()->UnlockPaint();
-                pVout->SetLineColor( mpOut->GetLineColor() );
-                pVout->SetFillColor( mpOut->GetFillColor() );
+                if (mpOut->IsLineColor())
+                    pVout->SetLineColor( mpOut->GetLineColor() );
+                else
+                    pVout->SetLineColor();
+                if (mpOut->IsFillColor())
+                    pVout->SetFillColor( mpOut->GetFillColor() );
+                else
+                    pVout->SetFillColor();
 
                 // #i72754# start Pre/PostPaint encapsulation before mpOut is changed to the buffering VDev
                 const vcl::Region aRepaintRegion(VisArea().SVRect());

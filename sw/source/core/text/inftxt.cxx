@@ -565,7 +565,7 @@ namespace
  */
 class SwTransparentTextGuard
 {
-    ScopedVclPtrInstance<VirtualDevice> m_aContentVDev;
+    ScopedVclPtrInstance<VirtualDevice> m_aContentVDev { DeviceFormat::WITH_ALPHA };
     GDIMetaFile m_aContentMetafile;
     MapMode m_aNewMapMode;
     SwRect m_aPorRect;
@@ -1273,7 +1273,10 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
 
     pTmpOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
 
-    pTmpOut->SetFillColor(aFillColor);
+    if (aFillColor == COL_TRANSPARENT)
+        pTmpOut->SetFillColor();
+    else
+        pTmpOut->SetFillColor(aFillColor);
     pTmpOut->SetLineColor();
 
     DrawRect( aIntersect, false );

@@ -114,7 +114,10 @@ void FormFieldButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
                m_aFieldFramePixel.GetSize().Height() - nPadding);
     const tools::Rectangle aFrameRect(tools::Rectangle(aPos, aSize));
     rRenderContext.SetLineColor(aLineColor);
-    rRenderContext.SetFillColor(COL_TRANSPARENT);
+    if (rRenderContext.HasAlpha())
+        rRenderContext.SetFillColor(COL_TRANSPARENT);
+    else
+        rRenderContext.SetFillColor(COL_WHITE);
     rRenderContext.DrawRect(aFrameRect);
 
     // Draw the button next to the frame

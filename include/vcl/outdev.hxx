@@ -1359,6 +1359,8 @@ public:
 
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const;
 
+    bool HasAlpha() const { return bool(mpAlphaVDev); }
+
     /** Query extended bitmap (with alpha channel, if available).
      */
     BitmapEx                    GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const;
