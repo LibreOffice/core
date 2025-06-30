@@ -43,18 +43,22 @@ void GetInfoBarColors(InfobarType ibType, BColor& rBackgroundColor, BColor& rFor
                       BColor& rMessageColor)
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-
+    const bool bIsDark = rSettings.GetWindowColor().IsDark();
     switch (ibType)
     {
         case InfobarType::INFO: // blue; #004785/0,71,133; #BDE5F8/189,229,248
-            rBackgroundColor = basegfx::BColor(0.741, 0.898, 0.973);
-            rForegroundColor = basegfx::BColor(0.0, 0.278, 0.522);
-            rMessageColor = basegfx::BColor(0.0, 0.278, 0.522);
+            rBackgroundColor = bIsDark ? basegfx::BColor(0.000, 0.278, 0.522)
+                                       : basegfx::BColor(0.741, 0.898, 0.973);
+            rForegroundColor = bIsDark ? basegfx::BColor(0.741, 0.898, 0.973)
+                                       : basegfx::BColor(0.000, 0.278, 0.522);
+            rMessageColor = rForegroundColor;
             break;
         case InfobarType::SUCCESS: // green; #32550C/50,85,12; #DFF2BF/223,242,191
-            rBackgroundColor = basegfx::BColor(0.874, 0.949, 0.749);
-            rForegroundColor = basegfx::BColor(0.196, 0.333, 0.047);
-            rMessageColor = basegfx::BColor(0.196, 0.333, 0.047);
+            rBackgroundColor = bIsDark ? basegfx::BColor(0.196, 0.333, 0.047)
+                                       : basegfx::BColor(0.874, 0.949, 0.749);
+            rForegroundColor = bIsDark ? basegfx::BColor(0.874, 0.949, 0.749)
+                                       : basegfx::BColor(0.196, 0.333, 0.047);
+            rMessageColor = rForegroundColor;
             break;
         case InfobarType::WARNING: // orange; #704300/112,67,0; #FEEFB3/254,239,179
             rBackgroundColor = rSettings.GetWarningColor().getBColor();
