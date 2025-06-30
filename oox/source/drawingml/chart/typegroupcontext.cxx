@@ -414,9 +414,21 @@ ContextHandlerRef ChartexTypeGroupContext::onCreateContext( [[maybe_unused]] sal
             return nullptr;
         case CX_TOKEN(series) :
             if (rAttribs.hasAttribute(XML_layoutId)) {
-                // The type ID is currently set to <cx:plotAreaRegion>. Set it
+                // If this is the first series, then the type ID is currently
+                // set to <cx:plotAreaRegion>. If this is not the first series
+                // in a multi-series chart, it should be set to the previous
+                // chart type in the series (which *should* only be another
+                // chartex type, not a <c> type). In either case, set it
                 // to the specific chart type based on the layoutId attribute
-                assert(mrModel.mnTypeId == CX_TOKEN(plotAreaRegion));
+                assert(mrModel.mnTypeId == CX_TOKEN(plotAreaRegion) ||
+                        mrModel.mnTypeId == CX_TOKEN(boxWhisker) ||
+                        mrModel.mnTypeId == CX_TOKEN(clusteredColumn) ||
+                        mrModel.mnTypeId == CX_TOKEN(funnel) ||
+                        mrModel.mnTypeId == CX_TOKEN(paretoLine) ||
+                        mrModel.mnTypeId == CX_TOKEN(regionMap) ||
+                        mrModel.mnTypeId == CX_TOKEN(sunburst) ||
+                        mrModel.mnTypeId == CX_TOKEN(treemap) ||
+                        mrModel.mnTypeId == CX_TOKEN(waterfall));
                 OUString sChartId = rAttribs.getStringDefaulted(XML_layoutId);
                 assert(!sChartId.isEmpty());
 
