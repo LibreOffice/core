@@ -85,7 +85,7 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     mxValueSetDoc->SetStyle(WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NO_DIRECTSELECT);
     mxValueSet->init(mePageType);
     mxValueSetDoc->init(NumberingPageType::DOCBULLET);
-    mxValueSetWinDoc->hide();
+    mxValueSetDoc->Hide();
     mxDocBulletsLabel->hide();
 
     if ( mePageType != NumberingPageType::BULLET )
@@ -184,13 +184,13 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
             }
             if (!aList.empty())
             {
-                mxValueSetWinDoc->show();
+                mxValueSetDoc->Show();
                 mxDocBulletsLabel->show();
                 mxValueSetDoc->SetCustomBullets(aList);
             }
             else
             {
-                mxValueSetWinDoc->hide();
+                mxValueSetDoc->Hide();
                 mxDocBulletsLabel->hide();
             }
         }
