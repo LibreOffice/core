@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - master
-      - user/grigorii/add-pipeline
   pull_request:
     branches:
       - master
-      - user/grigorii/add-pipeline
   workflow_dispatch:
 
 jobs:
