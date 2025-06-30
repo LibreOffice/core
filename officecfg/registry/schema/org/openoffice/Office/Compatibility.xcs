@@ -130,7 +130,7 @@
       </prop>
       <prop oor:name="EmptyDbFieldHidesPara" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Hide paragraphs of database fields (e.g., mail merge) with an empty value</desc>
+          <desc>Hide paragraphs of mail merge fields with empty value when generating merged documents</desc>
         </info>
         <value>true</value>
       </prop>

@@ -1525,7 +1525,7 @@
 #define STR_COMPAT_OPT_PROTECTFORM              NC_("STR_COMPAT_OPT_PROTECTFORM", "Protect form (no longer protects whole document. Insert write protected section instead)")
 #define STR_COMPAT_OPT_MSWORDCOMPTRAILINGBLANKS NC_("STR_COMPAT_OPT_MSWORDCOMPTRAILINGBLANKS", "Word-compatible trailing blanks")
 #define STR_COMPAT_OPT_SUBTRACTFLYSANCHOREDATFLYS NC_("STR_COMPAT_OPT_SUBTRACTFLYSANCHOREDATFLYS", "Tolerate white lines that may appear in PDF page backgrounds")
-#define STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA    NC_("STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA", "Hide paragraphs of database fields (e.g., mail merge) with an empty value")
+#define STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA    NC_("STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA", "Hide paragraphs of mail merge fields with empty value when generating merged documents")
 #define STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP     NC_("STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP", "Render non-breaking spaces (NBSP) as standard-space-width (off for fixed size)")
 #define STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER     NC_("STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER", "Do not add an extra space after number in footnotes / endnotes with hanging first line")
 #define STR_COMPAT_OPT_TABSRELATIVETOINDENT     NC_("STR_COMPAT_OPT_TABSRELATIVETOINDENT", "Set tabstops relative to indent of paragraph")
