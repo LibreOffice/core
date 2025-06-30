@@ -77,7 +77,7 @@ private:
 
     using ViewCache = std::vector<std::shared_ptr<ViewDescriptor>>;
     ScopedVclPtr<vcl::Window> mpWindow;
-    std::shared_ptr<ViewCache> mpViewCache;
+    ViewCache maViewCache;
 
     rtl::Reference<framework::AbstractPane> mxLocalPane;
 

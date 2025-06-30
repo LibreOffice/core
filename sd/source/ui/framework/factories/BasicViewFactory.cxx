@@ -72,7 +72,6 @@ BasicViewFactory::BasicViewFactory (const rtl::Reference<::sd::DrawController>& 
     : mpBase(nullptr),
       mpFrameView(nullptr),
       mpWindow(VclPtr<WorkWindow>::Create(nullptr,WB_STDWORK)),
-      mpViewCache(std::make_shared<ViewCache>()),
       mxLocalPane(new Pane(rtl::Reference<ResourceId>(), mpWindow.get()))
 {
     try
@@ -116,7 +115,7 @@ void BasicViewFactory::disposing(std::unique_lock<std::mutex>&)
     }
 
     // Release the view cache.
-    for (const auto& rxView : *mpViewCache)
+    for (const auto& rxView : maViewCache)
     {
         ReleaseView(rxView, true);
     }
@@ -363,7 +362,7 @@ void BasicViewFactory::ReleaseView (
         {
             if (mxLocalPane.is())
                 if (rpDescriptor->mxView->relocateToAnchor(mxLocalPane))
-                    mpViewCache->push_back(rpDescriptor);
+                    maViewCache.push_back(rpDescriptor);
                 else
                     bIsCacheable = false;
             else
@@ -420,12 +419,12 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromC
     std::shared_ptr<ViewDescriptor> pDescriptor;
 
     // Search for the requested view in the cache.
-    ViewCache::iterator iEntry = std::find_if(mpViewCache->begin(), mpViewCache->end(),
+    ViewCache::iterator iEntry = std::find_if(maViewCache.begin(), maViewCache.end(),
         [&rxViewId](const ViewCache::value_type& rxEntry) { return rxEntry->mxViewId->compareTo(rxViewId) == 0; });
-    if (iEntry != mpViewCache->end())
+    if (iEntry != maViewCache.end())
     {
         pDescriptor = *iEntry;
-        mpViewCache->erase(iEntry);
+        maViewCache.erase(iEntry);
     }
 
     // When the view has been found then relocate it to the given pane and
