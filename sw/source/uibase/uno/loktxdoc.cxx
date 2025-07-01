@@ -33,12 +33,15 @@
 #include <sfx2/lokhelper.hxx>
 
 #include <IDocumentMarkAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <fmtrfmrk.hxx>
 #include <wrtsh.hxx>
 #include <txtrfmrk.hxx>
 #include <ndtxt.hxx>
+#include <redline.hxx>
+#include <unoredline.hxx>
 #include <unoredlines.hxx>
 
 #include <unoport.hxx>
@@ -69,7 +72,8 @@ namespace
 class PropertyExtractor
 {
 public:
-    PropertyExtractor(uno::Reference<beans::XPropertySet>& xProperties, tools::JsonWriter& rWriter)
+    PropertyExtractor(const uno::Reference<beans::XPropertySet>& xProperties,
+                      tools::JsonWriter& rWriter)
         : m_xProperties(xProperties)
         , m_rWriter(rWriter)
     {
@@ -91,7 +95,7 @@ public:
     }
 
 private:
-    uno::Reference<beans::XPropertySet>& m_xProperties;
+    uno::Reference<beans::XPropertySet> m_xProperties;
     tools::JsonWriter& m_rWriter;
 };
 
@@ -854,8 +858,97 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
     }
 }
 
+// This class temporarily hides / shows redlines in the document, based on timestamp: when a redline
+// is newer than the date, it is "hidden" (the text looks as if that redline were rejected); and
+// otherwise the redline is "shown" (the text looks as if the redline is accepted). This allows to
+// obtain textBefore / textAfter context attributes for a given redline as it was when the redline
+// was created. The state of redlines is restored to original in dtor.
+class HideNewerShowOlder
+{
+public:
+    HideNewerShowOlder(DateTime limit, const SwRedlineTable& rTable)
+        : m_rTable(rTable)
+        , m_aRedlineShowStateRestore(collectRestoreData(m_rTable))
+    {
+        for (auto pRedline : m_rTable)
+        {
+            const auto& data = pRedline->GetRedlineData();
+            if (data.GetType() != RedlineType::Insert && data.GetType() != RedlineType::Delete)
+                continue;
+            bool hide;
+            if (limit < data.GetTimeStamp())
+                hide = data.GetType() == RedlineType::Insert;
+            else // not later
+                hide = data.GetType() == RedlineType::Delete;
+
+            if (hide)
+                Hide(pRedline, m_rTable);
+            else
+                Show(pRedline, m_rTable);
+        }
+    }
+    ~HideNewerShowOlder()
+    {
+        // I assume, that only the redlines explicitly handled in ctor would change their visible
+        // state; so here, only Insert / Delete redlines will be handled.
+        for (auto[pRedline, visible] : m_aRedlineShowStateRestore)
+        {
+            if (visible)
+                Show(pRedline, m_rTable);
+            else
+                Hide(pRedline, m_rTable);
+        }
+    }
+
+private:
+    static std::unordered_map<SwRangeRedline*, bool>
+    collectRestoreData(const SwRedlineTable& rTable)
+    {
+        std::unordered_map<SwRangeRedline*, bool> aRedlineShowStateRestore;
+        for (auto pRedline : rTable)
+            aRedlineShowStateRestore[pRedline] = pRedline->IsVisible();
+        return aRedlineShowStateRestore;
+    }
+    static void Show(SwRangeRedline* pRedline, const SwRedlineTable& rTable)
+    {
+        if (pRedline->IsVisible())
+            return;
+        switch (pRedline->GetType())
+        {
+            case RedlineType::Insert:
+            case RedlineType::Delete:
+                pRedline->Show(0, rTable.GetPos(pRedline), true);
+                pRedline->Show(1, rTable.GetPos(pRedline), true);
+                break;
+            default:
+                assert(!"Trying to show a redline that is not expected to change visibility here");
+        }
+    }
+    static void Hide(SwRangeRedline* pRedline, const SwRedlineTable& rTable)
+    {
+        if (!pRedline->IsVisible())
+            return;
+        switch (pRedline->GetType())
+        {
+            case RedlineType::Insert:
+                pRedline->ShowOriginal(0, rTable.GetPos(pRedline));
+                pRedline->ShowOriginal(1, rTable.GetPos(pRedline));
+                break;
+            case RedlineType::Delete:
+                pRedline->Hide(0, rTable.GetPos(pRedline));
+                pRedline->Hide(1, rTable.GetPos(pRedline));
+                break;
+            default:
+                assert(!"Trying to hide a redline that is not expected to change visibility here");
+        }
+    }
+
+    const SwRedlineTable& m_rTable;
+    std::unordered_map<SwRangeRedline*, bool> m_aRedlineShowStateRestore;
+};
+
 /// Implements getCommandValues(".uno:ExtractDocumentStructures") for redlines
-void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell,
+void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
                                  std::u16string_view filterArguments)
 {
     // filter arguments are separated from the filter name by comma, and are name:value pairs
@@ -878,16 +971,17 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShel
         // else unknown filter argument (maybe from a newer API?) - ignore
     }
 
-    auto xRedlinesEnum = pDocShell->GetBaseModel()->getRedlines()->createEnumeration();
-    for (sal_Int32 i = 0; xRedlinesEnum->hasMoreElements(); ++i)
+    SwDoc& rDoc = *pDocShell->GetDoc();
+    const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+
+    for (size_t i = 0; i < rTable.size(); ++i)
     {
-        auto xRedlineProperties = xRedlinesEnum->nextElement().query<beans::XPropertySet>();
-        assert(xRedlineProperties);
+        rtl::Reference<SwXRedline> pSwXRedline(new SwXRedline(*rTable[i], rDoc));
 
         auto TrackChangesNode
             = rJsonWriter.startNode(Concat2View("TrackChanges.ByIndex." + OString::number(i)));
 
-        PropertyExtractor extractor{ xRedlineProperties, rJsonWriter };
+        PropertyExtractor extractor{ pSwXRedline, rJsonWriter };
 
         extractor.extract<OUString>(UNO_NAME_REDLINE_TYPE, "type");
         extractor.extract<css::util::DateTime>(UNO_NAME_REDLINE_DATE_TIME, "dateTime");
@@ -895,39 +989,44 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShel
         extractor.extract<OUString>(UNO_NAME_REDLINE_DESCRIPTION, "description");
         extractor.extract<OUString>(UNO_NAME_REDLINE_COMMENT, "comment");
 
-        auto xStart = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_START)
-                          .query<css::text::XTextRange>();
-        auto xEnd = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_END)
-                        .query<css::text::XTextRange>();
-        if (xStart)
         {
-            auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
-            xCursor->goLeft(nContextLen, /*bExpand*/ true);
-            rJsonWriter.put("textBefore", xCursor->getString());
+            // Set the text into a state according to current redline's timestamp: all older changes
+            // are shows as if accepted, all newer are shown as if rejected.
+            HideNewerShowOlder prepare(pSwXRedline->GetRedline()->GetTimeStamp(), rTable);
+            auto xStart = pSwXRedline->getPropertyValue(UNO_NAME_REDLINE_START)
+                              .query<css::text::XTextRange>();
+            auto xEnd = pSwXRedline->getPropertyValue(UNO_NAME_REDLINE_END)
+                            .query<css::text::XTextRange>();
+            if (xStart)
+            {
+                auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
+                xCursor->goLeft(nContextLen, /*bExpand*/ true);
+                rJsonWriter.put("textBefore", xCursor->getString());
+            }
+            if (xEnd)
+            {
+                auto xCursor = xEnd->getText()->createTextCursorByRange(xEnd);
+                xCursor->goRight(nContextLen, /*bExpand*/ true);
+                rJsonWriter.put("textAfter", xCursor->getString());
+            }
+            OUString changeText;
+            if (xStart && xEnd)
+            {
+                // Read the added / formatted text from the main XText
+                auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
+                xCursor->gotoRange(xEnd, /*bExpand*/ true);
+                changeText = xCursor->getString();
+            }
+            if (changeText.isEmpty())
+            {
+                // It is unlikely that we get here: the change text will be obtained above,
+                // even for deletion change
+                if (auto xRedlineText = pSwXRedline->getPropertyValue(UNO_NAME_REDLINE_TEXT)
+                                            .query<css::text::XText>())
+                    changeText = xRedlineText->getString();
+            }
+            rJsonWriter.put("textChanged", changeText); // write unconditionally
         }
-        if (xEnd)
-        {
-            auto xCursor = xEnd->getText()->createTextCursorByRange(xEnd);
-            xCursor->goRight(nContextLen, /*bExpand*/ true);
-            rJsonWriter.put("textAfter", xCursor->getString());
-        }
-        OUString changeText;
-        if (xStart && xEnd)
-        {
-            // Read the added / formatted text from the main XText
-            auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
-            xCursor->gotoRange(xEnd, /*bExpand*/ true);
-            changeText = xCursor->getString();
-        }
-        if (changeText.isEmpty())
-        {
-            // It is unlikely that we get here: the change text will be obtained above,
-            // even for deletion change
-            if (auto xRedlineText = xRedlineProperties->getPropertyValue(UNO_NAME_REDLINE_TEXT)
-                                        .query<css::text::XText>())
-                changeText = xRedlineText->getString();
-        }
-        rJsonWriter.put("textChanged", changeText); // write unconditionally
         // UNO_NAME_REDLINE_IDENTIFIER: OUString (the value of a pointer, not persistent)
         // UNO_NAME_REDLINE_MOVED_ID: sal_uInt32; 0 == not moved, 1 == moved, but don't have its pair, 2+ == unique ID
         // UNO_NAME_REDLINE_SUCCESSOR_DATA: uno::Sequence<beans::PropertyValue>
@@ -941,7 +1040,7 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, const SwDocShel
 /// Parameters:
 ///
 /// - filter: To filter what document structure types to extract
-void GetDocStructure(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell,
+void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
                      const std::map<OUString, OUString>& rArguments)
 {
     auto commentsNode = rJsonWriter.startNode("DocStructure");
