@@ -124,3 +124,6 @@ race:typelib_typedescriptionreference_getByName
 # harmless race where two fields are sharing an address slot/word
 race:ScFormulaCell::GetMatrixFlag
 race:ScFormulaCell::InterpretTail
+
+# some gstreamer stuff
+race:gst_buffer_fill
