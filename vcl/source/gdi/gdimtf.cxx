@@ -850,7 +850,7 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
         return;
 
     GDIMetaFile     aMtf;
-    ScopedVclPtrInstance< VirtualDevice > aMapVDev;
+    ScopedVclPtrInstance< VirtualDevice > aMapVDev(DeviceFormat::WITH_ALPHA);
     const double    fAngle = toRadians(nAngle10);
     const double    fSin = sin( fAngle );
     const double    fCos = cos( fAngle );
@@ -1321,7 +1321,7 @@ static void ImplActionBounds( tools::Rectangle& o_rOutBounds,
 
 tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference ) const
 {
-    ScopedVclPtrInstance< VirtualDevice > aMapVDev(  i_rReference  );
+    ScopedVclPtrInstance< VirtualDevice > aMapVDev( i_rReference, DeviceFormat::WITH_ALPHA );
 
     aMapVDev->EnableOutput( false );
     aMapVDev->SetMapMode( GetPrefMapMode() );
