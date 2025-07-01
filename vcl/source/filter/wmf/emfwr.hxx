@@ -87,7 +87,7 @@ private:
 public:
 
     explicit EMFWriter(SvStream &rStream)
-        : maVDev( VclPtr<VirtualDevice>::Create() )
+        : maVDev( VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA) )
         , m_rStm(rStream)
         , mnHandleCount(0)
         , mnRecordCount(0)
