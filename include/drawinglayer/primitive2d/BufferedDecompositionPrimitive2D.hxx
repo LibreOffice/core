@@ -73,7 +73,9 @@ private:
 
     /// offer callback mechanism to flush buffered content timer-based
     mutable std::mutex maCallbackLock;
-    mutable std::chrono::time_point<std::chrono::steady_clock> maLastAccess;
+    /// atomic because this is touched from the main thread and the background thread running
+    /// the BufferedDecompositionFlusher.
+    mutable std::atomic<std::chrono::time_point<std::chrono::steady_clock>> maLastAccess;
     bool mbFlushOnTimer;
 
 protected:

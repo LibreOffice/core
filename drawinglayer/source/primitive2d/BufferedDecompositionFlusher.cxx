@@ -130,7 +130,7 @@ void SAL_CALL BufferedDecompositionFlusher::run()
                 break;
             for (auto it = maRegistered1.begin(); it != maRegistered1.end();)
             {
-                if (aNow - (*it)->maLastAccess > std::chrono::seconds(10))
+                if (aNow - (*it)->maLastAccess.load() > std::chrono::seconds(10))
                 {
                     aRemoved1.push_back(*it);
                     it = maRegistered1.erase(it);
@@ -140,7 +140,7 @@ void SAL_CALL BufferedDecompositionFlusher::run()
             }
             for (auto it = maRegistered2.begin(); it != maRegistered2.end();)
             {
-                if (aNow - (*it)->maLastAccess > std::chrono::seconds(10))
+                if (aNow - (*it)->maLastAccess.load() > std::chrono::seconds(10))
                 {
                     aRemoved2.push_back(*it);
                     it = maRegistered2.erase(it);
