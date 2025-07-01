@@ -109,7 +109,8 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
                 tools::JsonWriter aJson;
                 aJson.put("action", "change-picture");
                 OString pJson(aJson.finishAndGetAsOString());
-                GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL,
+                if (SfxViewShell* pNotifySh = GetSfxViewShell())
+                    pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL,
                                                               pJson);
             }
             else

@@ -88,7 +88,11 @@ UIName SwFEShell::GetUniqueFrameName() const
 
 bool SwFEShell::FinishOLEObj()                      // Server is terminated
 {
-    SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
+    SfxViewShell* pNotifySh = GetSfxViewShell();
+    if (!pNotifySh)
+        return false;
+
+    SfxInPlaceClient* pIPClient = pNotifySh->GetIPClient();
     if ( !pIPClient )
         return false;
 
