@@ -1409,16 +1409,16 @@ void QtFrame::handleDragMove(QDragMoveEvent* pEvent)
     const sal_Int8 nUserDropAction = lcl_getUserDropAction(pEvent, nSourceActions, pMimeData);
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    const Point aPos = toPoint(pEvent->position().toPoint() * devicePixelRatioF());
+    const QPoint aPos = pEvent->position().toPoint() * devicePixelRatioF();
 #else
-    const Point aPos = toPoint(pEvent->pos() * devicePixelRatioF());
+    const QPoint aPos = pEvent->pos() * devicePixelRatioF();
 #endif
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDragContext*>(m_pDropTarget);
-    aEvent.LocationX = aPos.X();
-    aEvent.LocationY = aPos.Y();
+    aEvent.LocationX = aPos.x();
+    aEvent.LocationY = aPos.y();
     aEvent.DropAction = nUserDropAction;
     aEvent.SourceActions = nSourceActions;
 
@@ -1452,16 +1452,16 @@ void QtFrame::handleDrop(QDropEvent* pEvent)
         = lcl_getUserDropAction(pEvent, nSourceActions, pEvent->mimeData());
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    const Point aPos = toPoint(pEvent->position().toPoint() * devicePixelRatioF());
+    const QPoint aPos = pEvent->position().toPoint() * devicePixelRatioF();
 #else
-    const Point aPos = toPoint(pEvent->pos() * devicePixelRatioF());
+    const QPoint aPos = pEvent->pos() * devicePixelRatioF();
 #endif
 
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDropContext*>(m_pDropTarget);
-    aEvent.LocationX = aPos.X();
-    aEvent.LocationY = aPos.Y();
+    aEvent.LocationX = aPos.x();
+    aEvent.LocationY = aPos.y();
     aEvent.SourceActions = nSourceActions;
     aEvent.DropAction = nUserDropAction;
     aEvent.Transferable = lcl_getXTransferable(pEvent->mimeData());
