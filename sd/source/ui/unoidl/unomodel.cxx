@@ -4987,8 +4987,8 @@ void SAL_CALL SdXImpressDocument::dispose()
     mxTransGradientTable = nullptr;
     mxMarkerTable = nullptr;
     mxDrawingPool = nullptr;
+    mpDocShell = nullptr;
 }
-
 
 SdDrawPagesAccess::SdDrawPagesAccess( SdXImpressDocument& rMyModel )  noexcept
 :   mpModel( &rMyModel)
