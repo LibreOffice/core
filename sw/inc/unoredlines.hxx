@@ -61,7 +61,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    static css::beans::XPropertySet*           GetObject( SwRangeRedline& rRedline, SwDoc& rDoc );
+    static css::uno::Reference<css::beans::XPropertySet> GetObject(SwRangeRedline& rRedline);
 };
 
 class SwXRedlineEnumeration final

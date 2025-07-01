@@ -61,7 +61,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     if ((nIndex < 0) || (rRedTable.size() <= o3tl::make_unsigned(nIndex)))
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference<beans::XPropertySet> xRet = SwXRedlines::GetObject(*rRedTable[nIndex], rDoc);
+    uno::Reference<beans::XPropertySet> xRet = SwXRedlines::GetObject(*rRedTable[nIndex]);
     return uno::Any(xRet);
 }
 
@@ -99,12 +99,12 @@ uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames()
     return uno::Sequence< OUString >();
 }
 
-beans::XPropertySet* SwXRedlines::GetObject( SwRangeRedline& rRedline, SwDoc& rDoc )
+css::uno::Reference<css::beans::XPropertySet> SwXRedlines::GetObject(SwRangeRedline& rRedline)
 {
     SwXRedline* pXRedline(nullptr);
     sw::FindRedlineHint aHint(rRedline, &pXRedline);
-    rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier().Broadcast(aHint);
-    return pXRedline ? pXRedline : new SwXRedline(rRedline, rDoc);
+    rRedline.GetDoc().getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier().Broadcast(aHint);
+    return pXRedline ? pXRedline : new SwXRedline(rRedline);
 }
 
 SwXRedlineEnumeration::SwXRedlineEnumeration(SwDoc& rDoc) :
@@ -132,9 +132,8 @@ uno::Any SwXRedlineEnumeration::nextElement()
     const SwRedlineTable& rRedTable = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     if( rRedTable.size() <= m_nCurrentIndex )
         throw container::NoSuchElementException();
-    uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTable[m_nCurrentIndex++], *m_pDoc );
     uno::Any aRet;
-    aRet <<= xRet;
+    aRet <<= SwXRedlines::GetObject(*rRedTable[m_nCurrentIndex++]);
     return aRet;
 }
 
