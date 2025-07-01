@@ -73,7 +73,7 @@ enum
 }
 
 ValueSet::ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
-    : maVirDev( VclPtr<VirtualDevice>::Create())
+    : maVirDev( VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA))
     , mxScrolledWindow(std::move(pScrolledWindow))
     , mnHighItemId(0)
     , maColor(COL_WHITE)
