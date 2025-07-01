@@ -640,6 +640,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
     do
     {   pFloat->mpUpper = pParent;
         pFloat->InvalidateAll_();
+        pFloat->InvalidateInfFlags();
         pFloat->CheckDirChange();
 
         // I'm a friend of the TextFrame and thus am allowed to do many things.

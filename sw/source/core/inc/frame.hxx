@@ -627,7 +627,7 @@ public:
     bool IsRetouche() const { return mbRetouche; }
 
     SW_DLLPUBLIC void SetInfFlags();
-    void InvalidateInfFlags() { mbInfInvalid = true; }
+    inline void InvalidateInfFlags();
     inline bool IsInDocBody() const;    // use InfoFlags, determine flags
     inline bool IsInFootnote() const;        // if necessary
     inline bool IsInTab() const;
@@ -978,6 +978,17 @@ public:
     /// Determines if the upper margin of this frame should be ignored.
     bool IsCollapseUpper() const;
 };
+
+inline void SwFrame::InvalidateInfFlags()
+{
+    mbInfInvalid = true;
+    if (IsLayoutFrame())
+    {
+        // If we are not sure about our flags, neither are lowers
+        for (SwFrame* p = GetLower(); p; p = p->GetNext())
+            p->InvalidateInfFlags();
+    }
+}
 
 inline bool SwFrame::IsInDocBody() const
 {
