@@ -3935,7 +3935,6 @@ public:
         return m_pFocusController;
     }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
     GtkEventController* get_click_controller()
     {
         if (!m_pClickController)
@@ -3978,9 +3977,6 @@ public:
         }
         return m_pKeyController;
     }
-
-#endif
-
 
 #endif
 
