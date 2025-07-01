@@ -1346,86 +1346,21 @@ void QtFrame::registerDropTarget(QtDropTarget* pDropTarget)
     GetQtInstance().RunInMainThread([this]() { m_pQWidget->setAcceptDrops(true); });
 }
 
-static css::uno::Reference<css::datatransfer::XTransferable>
-lcl_getXTransferable(const QMimeData* pMimeData)
-{
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    const QtMimeData* pQtMimeData = qobject_cast<const QtMimeData*>(pMimeData);
-    if (!pQtMimeData)
-        xTransferable = new QtDnDTransferable(pMimeData);
-    else
-        xTransferable = pQtMimeData->xTransferable();
-    return xTransferable;
-}
-
-static sal_Int8 lcl_getUserDropAction(const QDropEvent* pEvent, const sal_Int8 nSourceActions,
-                                      const QMimeData* pMimeData)
-{
-// we completely ignore all proposals by the Qt event, as they don't
-// match at all with the preferred LO DnD actions.
-// check the key modifiers to detect a user-overridden DnD action
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    const Qt::KeyboardModifiers eKeyMod = pEvent->modifiers();
-#else
-    const Qt::KeyboardModifiers eKeyMod = pEvent->keyboardModifiers();
-#endif
-    sal_Int8 nUserDropAction = 0;
-    if ((eKeyMod & Qt::ShiftModifier) && !(eKeyMod & Qt::ControlModifier))
-        nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
-    else if ((eKeyMod & Qt::ControlModifier) && !(eKeyMod & Qt::ShiftModifier))
-        nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
-    else if ((eKeyMod & Qt::ShiftModifier) && (eKeyMod & Qt::ControlModifier))
-        nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_LINK;
-    nUserDropAction &= nSourceActions;
-
-    // select the default DnD action, if there isn't a user preference
-    if (0 == nUserDropAction)
-    {
-        // default LO internal action is move, but default external action is copy
-        nUserDropAction = qobject_cast<const QtMimeData*>(pMimeData)
-                              ? css::datatransfer::dnd::DNDConstants::ACTION_MOVE
-                              : css::datatransfer::dnd::DNDConstants::ACTION_COPY;
-        nUserDropAction &= nSourceActions;
-
-        // if the default doesn't match any allowed source action, fall back to the
-        // preferred of all allowed source actions
-        if (0 == nUserDropAction)
-            nUserDropAction = toVclDropAction(getPreferredDropAction(nSourceActions));
-
-        // this is "our" preference, but actually we would even prefer any default,
-        // if there is any
-        nUserDropAction |= css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
-    }
-    return nUserDropAction;
-}
-
 void QtFrame::handleDragMove(QDragMoveEvent* pEvent)
 {
+    assert(pEvent);
     assert(m_pDropTarget);
 
-    // prepare our suggested drop action for the drop target
-    const sal_Int8 nSourceActions = toVclDropActions(pEvent->possibleActions());
-    const QMimeData* pMimeData = pEvent->mimeData();
-    const sal_Int8 nUserDropAction = lcl_getUserDropAction(pEvent, nSourceActions, pMimeData);
+    css::datatransfer::dnd::DropTargetDragEnterEvent aEvent
+        = toVclDropTargetDragEnterEvent(*pEvent, m_pDropTarget, !m_bInDrag);
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    const QPoint aPos = pEvent->position().toPoint() * devicePixelRatioF();
-#else
-    const QPoint aPos = pEvent->pos() * devicePixelRatioF();
-#endif
-
-    css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
-    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
-    aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDragContext*>(m_pDropTarget);
-    aEvent.LocationX = aPos.x();
-    aEvent.LocationY = aPos.y();
-    aEvent.DropAction = nUserDropAction;
-    aEvent.SourceActions = nSourceActions;
+    const qreal fDevicePixelRatio = devicePixelRatioF();
+    aEvent.LocationX *= fDevicePixelRatio;
+    aEvent.LocationY *= fDevicePixelRatio;
 
     // ask the drop target to accept our drop action
     if (!m_bInDrag)
     {
-        aEvent.SupportedDataFlavors = lcl_getXTransferable(pMimeData)->getTransferDataFlavors();
         m_pDropTarget->fire_dragEnter(aEvent);
         m_bInDrag = true;
     }
@@ -1444,27 +1379,15 @@ void QtFrame::handleDragMove(QDragMoveEvent* pEvent)
 
 void QtFrame::handleDrop(QDropEvent* pEvent)
 {
+    assert(pEvent);
     assert(m_pDropTarget);
 
-    // prepare our suggested drop action for the drop target
-    const sal_Int8 nSourceActions = toVclDropActions(pEvent->possibleActions());
-    const sal_Int8 nUserDropAction
-        = lcl_getUserDropAction(pEvent, nSourceActions, pEvent->mimeData());
+    css::datatransfer::dnd::DropTargetDropEvent aEvent
+        = toVclDropTargetDropEvent(*pEvent, m_pDropTarget);
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    const QPoint aPos = pEvent->position().toPoint() * devicePixelRatioF();
-#else
-    const QPoint aPos = pEvent->pos() * devicePixelRatioF();
-#endif
-
-    css::datatransfer::dnd::DropTargetDropEvent aEvent;
-    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
-    aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDropContext*>(m_pDropTarget);
-    aEvent.LocationX = aPos.x();
-    aEvent.LocationY = aPos.y();
-    aEvent.SourceActions = nSourceActions;
-    aEvent.DropAction = nUserDropAction;
-    aEvent.Transferable = lcl_getXTransferable(pEvent->mimeData());
+    const qreal fDevicePixelRatio = devicePixelRatioF();
+    aEvent.LocationX *= fDevicePixelRatio;
+    aEvent.LocationY *= fDevicePixelRatio;
 
     // ask the drop target to accept our drop action
     m_pDropTarget->fire_drop(aEvent);
