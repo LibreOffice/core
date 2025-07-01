@@ -1282,14 +1282,14 @@ void SwViewShell::SizeChgNotify()
         {
             PageNumNotify(*this);
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (SfxViewShell* pNotifySh = comphelper::LibreOfficeKit::isActive() ? GetSfxViewShell() : nullptr)
             {
                 Size aDocSize = GetDocSize();
                 OString sPayload = OString::number(aDocSize.Width() + 2 * DOCUMENTBORDER) +
                     ", " + OString::number(aDocSize.Height() + 2 * DOCUMENTBORDER);
 
-                SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetSfxViewShell()->GetCurrentDocument());
-                SfxLokHelper::notifyDocumentSizeChanged(GetSfxViewShell(), sPayload, pModel);
+                SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(pNotifySh->GetCurrentDocument());
+                SfxLokHelper::notifyDocumentSizeChanged(pNotifySh, sPayload, pModel);
             }
         }
     }
