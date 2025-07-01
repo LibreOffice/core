@@ -193,7 +193,9 @@ namespace svx
 
     VclPtr<VirtualDevice> VclToolboxButtonColorUpdater::CreateVirtualDevice() const
     {
-        return VclPtr<VirtualDevice>::Create(*mpTbx->GetOutDev());
+        auto xVD = VclPtr<VirtualDevice>::Create(*mpTbx->GetOutDev());
+        xVD->SetBackground(Wallpaper(COL_WHITE));
+        return xVD;
     }
 
     vcl::ImageType VclToolboxButtonColorUpdater::GetImageSize() const
@@ -249,7 +251,7 @@ namespace svx
             return;
 
         ScopedVclPtr<VirtualDevice> pVirDev(CreateVirtualDevice());
-        pVirDev->SetOutputSizePixel(aItemSize, /*bErase*/true, /*bAlphaMaskTransparent*/true);
+        pVirDev->SetOutputSizePixel(aItemSize, /*bErase*/true, /*bAlphaMaskTransparent*/false);
         maBmpSize = aItemSize;
 
         std::unique_ptr<GDIMetaFile> xMetaFile;
