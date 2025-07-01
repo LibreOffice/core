@@ -82,7 +82,7 @@
 #define STR_TIP_DATAPOINT_VALUES                    NC_("STR_TIP_DATAPOINT_VALUES", "Values: %POINTVALUES")
 #define STR_TIP_DATAPOINT                           NC_("STR_TIP_DATAPOINT", "Data Point %POINTNUMBER, data series %SERIESNUMBER, values: %POINTVALUES")
 #define STR_STATUS_DATAPOINT_MARKED                 NC_("STR_STATUS_DATAPOINT_MARKED", "Data point %POINTNUMBER in data series %SERIESNUMBER selected, values: %POINTVALUES")
-#define STR_STATUS_OBJECT_MARKED                    NC_("STR_STATUS_OBJECT_MARKED", "%OBJECTNAME selected")
+#define STR_STATUS_OBJECT_MARKED                    NC_("STR_STATUS_OBJECT_MARKED", "Selection: %OBJECTNAME")
 #define STR_STATUS_PIE_SEGMENT_EXPLODED             NC_("STR_STATUS_PIE_SEGMENT_EXPLODED", "Pie exploded by %PERCENTVALUE percent")
 #define STR_OBJECT_FOR_SERIES                       NC_("STR_OBJECT_FOR_SERIES", "%OBJECTNAME for Data Series '%SERIESNAME'")
 #define STR_OBJECT_FOR_ALL_SERIES                   NC_("STR_OBJECT_FOR_ALL_SERIES", "%OBJECTNAME for all Data Series")
