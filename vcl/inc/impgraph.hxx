@@ -70,7 +70,8 @@ private:
     std::optional<GraphicID>     mxGraphicID;
     GraphicExternalLink          maGraphicExternalLink;
 
-    mutable std::chrono::high_resolution_clock::time_point maLastUsed = std::chrono::high_resolution_clock::now();
+    // atomic because it is touched in parallel from the drawinglayer parallel rendering stuff in ScenePrimitive2D::create2DDecomposition
+    mutable std::atomic<std::chrono::high_resolution_clock::time_point> maLastUsed = std::chrono::high_resolution_clock::now();
     bool mbPrepared = false;
 
 public:
