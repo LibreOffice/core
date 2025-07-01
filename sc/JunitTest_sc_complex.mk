@@ -9,9 +9,6 @@
 
 $(eval $(call gb_JunitTest_JunitTest,sc_complex))
 
-# sc/qa/complex/calcPreview/ tests do not work automatically (they request "Press
-# any key after resizing" etc.)
-
 $(eval $(call gb_JunitTest_add_classes,sc_complex, \
     complex.sc.CalcRTL \
 ))
