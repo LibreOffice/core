@@ -501,7 +501,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDefaultFillColor)
 CPPUNIT_TEST_FIXTURE(VclOutdevTest, testTransparentFillColor)
 {
     // Create a virtual device, and connect a metafile to it.
-    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    ScopedVclPtrInstance<VirtualDevice> pVDev(DeviceFormat::WITH_ALPHA);
 
     GDIMetaFile aMtf;
     aMtf.Record(pVDev.get());
