@@ -27,7 +27,6 @@
 
 #include <com/sun/star/sheet/NamedRangeFlag.hdl>
 #include "helper/qahelper.hxx"
-#include "helper/shared_test_impl.hxx"
 
 using namespace ::com::sun::star;
 
@@ -670,24 +669,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFunctionsODS)
     pDoc = getScDoc();
     aCSVPath = createFilePath(u"contentCSV/user-defined-function.csv");
     testFile(aCSVPath, *pDoc, 0);
-}
-
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFunctionsExcel2010)
-{
-    createScDoc("xlsx/functions-excel-2010.xlsx");
-    ScDocument* pDoc = getScDoc();
-    pDoc->CalcAll(); // perform hard re-calculation.
-
-    testFunctionsExcel2010_Impl(*pDoc);
-}
-
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCeilingFloorXLSX)
-{
-    createScDoc("xlsx/ceiling-floor.xlsx");
-    ScDocument* pDoc = getScDoc();
-    pDoc->CalcAll(); // perform hard re-calculation.
-
-    testCeilingFloor_Impl(*pDoc);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCachedFormulaResultsODS)

@@ -7815,7 +7815,6 @@ sc/qa/unit/functions_text.cxx
 sc/qa/unit/helper/csv_handler.hxx
 sc/qa/unit/helper/qahelper.cxx
 sc/qa/unit/helper/qahelper.hxx
-sc/qa/unit/helper/shared_test_impl.hxx
 sc/qa/unit/helper/sorthelper.hxx
 sc/qa/unit/helper/xpath.cxx
 sc/qa/unit/helper/xpath.hxx
