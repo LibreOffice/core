@@ -1749,13 +1749,13 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos, bool /*bForce
 {
     SwDoc& rDoc = GetDoc();
     RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
-    SwRedlineData* pCur;
 
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     // Determine the Type, it's the first on Stack
-    for( pCur = m_pRedlineData; pCur->m_pNext; )
+    SwRedlineData* pCur = m_pRedlineData;
+    while (pCur->m_pNext)
         pCur = pCur->m_pNext;
 
     switch( pCur->m_eType )
