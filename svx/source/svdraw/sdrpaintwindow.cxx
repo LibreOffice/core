@@ -115,7 +115,7 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window const & rWindow, tools::
 
 SdrPreRenderDevice::SdrPreRenderDevice(OutputDevice& rOriginal)
 :   mpOutputDevice(&rOriginal),
-    mpPreRenderDevice(VclPtr<VirtualDevice>::Create())
+    mpPreRenderDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA))
 {
 }
 
