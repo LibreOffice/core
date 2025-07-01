@@ -1024,6 +1024,99 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
     CPPUNIT_ASSERT(bool(it == docStructure.end()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines_textBeforeAfter)
+{
+    // The document here has a series of insert/delete/format changes having different times.
+    // This test checks, that for each extracted data, we produce textBefore / textAfter in proper
+    // form: all newer changes are pretended to never had happened / as if rejected; other changes
+    // are shown as if accepted. This produces the correct context for each current change.
+    createSwDoc("nearby-changes.fodt");
+
+    boost::property_tree::ptree tree;
+
+    // extract using the context length enough to cover the whole document text
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:ExtractDocumentStructure?filter=trackchanges,contextLen:100");
+    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
+
+    std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
+    boost::property_tree::read_json(aStream, tree);
+
+    boost::property_tree::ptree docStructure = tree.get_child("DocStructure");
+    CPPUNIT_ASSERT_EQUAL(size_t(5), docStructure.size());
+    auto it = docStructure.begin();
+
+    // The text before covers older changes. It includes text that was inserted earlier; it
+    // excludes text that was deleted earlier.
+    // The text after covers newer changes. It includes text that was deleted later; it
+    // excludes text that was added later.
+    // The formatting changes don't affect text.
+    // The whole text looks like "a del1 b ins2 c fmt3 d del4 e ins5 f"
+    // where <delN>, <insN>, <fmtN> are successive deletions/insertions/formattings.
+
+    {
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.0"s, name);
+        CPPUNIT_ASSERT_EQUAL("Delete"s, change.get<std::string>("type"));
+        CPPUNIT_ASSERT_EQUAL("2025-07-01T12:00:00"s, change.get<std::string>("dateTime"));
+        CPPUNIT_ASSERT_EQUAL("del1"s, change.get<std::string>("textChanged"));
+        CPPUNIT_ASSERT_EQUAL("a "s, change.get<std::string>("textBefore"));
+        CPPUNIT_ASSERT_EQUAL(" b  c fmt3 d del4 e  f"s, change.get<std::string>("textAfter"));
+        ++it;
+    }
+
+    {
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.1"s, name);
+        CPPUNIT_ASSERT_EQUAL("Insert"s, change.get<std::string>("type"));
+        CPPUNIT_ASSERT_EQUAL("2025-07-01T12:30:00"s, change.get<std::string>("dateTime"));
+        CPPUNIT_ASSERT_EQUAL("ins2"s, change.get<std::string>("textChanged"));
+        CPPUNIT_ASSERT_EQUAL("a  b "s, change.get<std::string>("textBefore"));
+        CPPUNIT_ASSERT_EQUAL(" c fmt3 d del4 e  f"s, change.get<std::string>("textAfter"));
+        ++it;
+    }
+
+    {
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.2"s, name);
+        CPPUNIT_ASSERT_EQUAL("Format"s, change.get<std::string>("type"));
+        CPPUNIT_ASSERT_EQUAL("2025-07-01T13:00:00"s, change.get<std::string>("dateTime"));
+        CPPUNIT_ASSERT_EQUAL("fmt3"s, change.get<std::string>("textChanged"));
+        CPPUNIT_ASSERT_EQUAL("a  b ins2 c "s, change.get<std::string>("textBefore"));
+        CPPUNIT_ASSERT_EQUAL(" d del4 e  f"s, change.get<std::string>("textAfter"));
+        ++it;
+    }
+
+    {
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.3"s, name);
+        CPPUNIT_ASSERT_EQUAL("Delete"s, change.get<std::string>("type"));
+        CPPUNIT_ASSERT_EQUAL("2025-07-01T13:30:00"s, change.get<std::string>("dateTime"));
+        CPPUNIT_ASSERT_EQUAL("del4"s, change.get<std::string>("textChanged"));
+        CPPUNIT_ASSERT_EQUAL("a  b ins2 c fmt3 d "s, change.get<std::string>("textBefore"));
+        CPPUNIT_ASSERT_EQUAL(" e  f"s, change.get<std::string>("textAfter"));
+        ++it;
+    }
+
+    {
+        CPPUNIT_ASSERT(it != docStructure.end());
+        const auto & [ name, change ] = *it;
+        CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.4"s, name);
+        CPPUNIT_ASSERT_EQUAL("Insert"s, change.get<std::string>("type"));
+        CPPUNIT_ASSERT_EQUAL("2025-07-01T14:00:00"s, change.get<std::string>("dateTime"));
+        CPPUNIT_ASSERT_EQUAL("ins5"s, change.get<std::string>("textChanged"));
+        CPPUNIT_ASSERT_EQUAL("a  b ins2 c fmt3 d  e "s, change.get<std::string>("textBefore"));
+        CPPUNIT_ASSERT_EQUAL(" f"s, change.get<std::string>("textAfter"));
+        ++it;
+    }
+
+    CPPUNIT_ASSERT(bool(it == docStructure.end()));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
 {
     // Given a document with two refmarks, one is not interesting the other is a citation:
