@@ -38,6 +38,9 @@ race:rtl::str::release<_rtl_uString>
 race:rtl_uString_acquire
 race:rtl_uString_release
 race:rtl_uString_assign
+# similar static flag
+race:SimpleReferenceObject::acquire
+race:SimpleReferenceObject::release
 
 # I've convinced myself this is a false+, caused by ping-ponging the buffer between two
 # threads, but I might be wrong.
