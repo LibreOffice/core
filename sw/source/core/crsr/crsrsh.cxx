@@ -2545,8 +2545,12 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
 
 void SwCursorShell::sendLOKCursorUpdates()
 {
-    SwView* pView = static_cast<SwView*>(GetSfxViewShell());
-    if (!pView || !pView->GetWrtShellPtr())
+    SfxViewShell* pNotifySh = GetSfxViewShell();
+    if (!pNotifySh)
+        return;
+
+    SwView* pView = static_cast<SwView*>(pNotifySh);
+    if (!pView->GetWrtShellPtr())
         return;
 
     SwWrtShell* pShell = &pView->GetWrtShell();
@@ -2612,7 +2616,7 @@ void SwCursorShell::sendLOKCursorUpdates()
     }
 
     OString pChar = aJsonWriter.finishAndGetAsOString();
-    GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, pChar);
+    pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, pChar);
 }
 
 void SwCursorShell::RefreshBlockCursor()
@@ -2900,11 +2904,11 @@ void SwCursorShell::ShowCursor()
     m_pCurrentCursor->SetShowTextInputFieldOverlay( true );
     m_pCurrentCursor->SetShowContentControlOverlay(true);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (SfxViewShell* pNotifySh = comphelper::LibreOfficeKit::isActive() ? GetSfxViewShell() : nullptr)
     {
         const OString aPayload = OString::boolean(m_bSVCursorVis);
-        GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
-        SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
+        pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
+        SfxLokHelper::notifyOtherViews(pNotifySh, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 
     UpdateCursor();
@@ -2922,11 +2926,11 @@ void SwCursorShell::HideCursor()
     m_pCurrentCursor->SetShowContentControlOverlay(false);
     m_pVisibleCursor->Hide();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (SfxViewShell* pNotifySh = comphelper::LibreOfficeKit::isActive() ? GetSfxViewShell() : nullptr)
     {
         OString aPayload = OString::boolean(m_bSVCursorVis);
-        GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
-        SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
+        pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
+        SfxLokHelper::notifyOtherViews(pNotifySh, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 }
 

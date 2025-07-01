@@ -5729,7 +5729,8 @@ void SwEditWin::LoseFocus()
 bool SwEditWin::IsViewReadonly() const
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
-    return (m_rView.GetDocShell()->IsReadOnly() && rSh.IsCursorReadonly()) || (rSh.GetSfxViewShell() && rSh.GetSfxViewShell()->IsLokReadOnlyView());
+    SfxViewShell* pNotifySh = rSh.GetSfxViewShell();
+    return (m_rView.GetDocShell()->IsReadOnly() && rSh.IsCursorReadonly()) || (pNotifySh && pNotifySh->IsLokReadOnlyView());
 }
 
 void SwEditWin::Command( const CommandEvent& rCEvt )

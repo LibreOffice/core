@@ -497,7 +497,7 @@ public:
     SW_DLLPUBLIC static void SetCareDialog(const std::shared_ptr<weld::Window>& rNew);
     static weld::Window*  GetCareDialog(SwViewShell const & rVSh);
 
-    SfxViewShell   *GetSfxViewShell() const { return mpSfxViewShell; }
+    SAL_RET_MAYBENULL SfxViewShell   *GetSfxViewShell() const { return mpSfxViewShell; }
     void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }
 
     // Selection of  Draw Engine has been changed.

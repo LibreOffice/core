@@ -335,11 +335,9 @@ std::optional<OString> SwVisibleCursor::getLOKPayload(int nType, int nViewId) co
         else if (bIsSelection)
         {
             SwWrtShell* pShell = m_pCursorShell->GetDoc()->GetDocShell()->GetWrtShell();
-
-            if (pShell)
+            if (SfxViewShell* pNotifySh = pShell ? m_pCursorShell->GetSfxViewShell() : nullptr)
             {
-                SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>
-                     aSet(m_pCursorShell->GetSfxViewShell()->GetPool());
+                SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(pNotifySh->GetPool());
                 pShell->GetCurAttr(aSet);
                 const SwFormatINetFormat* pItem = nullptr;
                 if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT, true, &pItem ))
@@ -829,12 +827,12 @@ void SwSelPaintRects::HighlightContentControl()
     }
     else
     {
-        if (comphelper::LibreOfficeKit::isActive() && m_pContentControlOverlay)
+        if (SfxViewShell* pNotifySh = comphelper::LibreOfficeKit::isActive() && m_pContentControlOverlay ? GetShell()->GetSfxViewShell() : nullptr)
         {
             tools::JsonWriter aJson;
             aJson.put("action", "hide");
             OString pJson(aJson.finishAndGetAsOString());
-            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson);
+            pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson);
         }
         m_pContentControlOverlay.reset();
 

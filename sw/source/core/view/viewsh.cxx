@@ -2213,11 +2213,14 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
         // Changing the zoom value doesn't always trigger the updating of
         // the client ole object area, so we call it directly.
-        SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
-        if (pIPClient)
+        if (SfxViewShell* pNotifySh = GetSfxViewShell())
         {
-            pIPClient->VisAreaChanged();
+            if (SfxInPlaceClient* pIPClient = pNotifySh->GetIPClient())
+            {
+                pIPClient->VisAreaChanged();
+            }
         }
+
         // Make sure the map mode (disabled in SwXTextDocument::initializeForTiledRendering()) is still disabled.
         GetWin()->EnableMapMode(false);
     }
@@ -2559,8 +2562,11 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         InvalidateLayout( true );
     }
 
-    SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetSfxViewShell()->GetCurrentDocument());
-    SfxLokHelper::notifyViewRenderState(GetSfxViewShell(), pModel);
+    if (SfxViewShell* pNotifySh = GetSfxViewShell())
+    {
+        SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(pNotifySh->GetCurrentDocument());
+        SfxLokHelper::notifyViewRenderState(pNotifySh, pModel);
+    }
 
     pMyWin->Invalidate();
     if ( bReformat )
