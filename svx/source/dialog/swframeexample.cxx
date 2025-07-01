@@ -36,10 +36,16 @@ constexpr OUString DEMOTEXT = u"Ij"_ustr;
 namespace {
 
 void DrawRect_Impl(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect,
-                   const Color &rFillColor, const Color &rLineColor)
+                   std::optional<Color> oFillColor, std::optional<Color> oLineColor)
 {
-    rRenderContext.SetFillColor(rFillColor);
-    rRenderContext.SetLineColor(rLineColor);
+    if (oFillColor)
+        rRenderContext.SetFillColor(*oFillColor);
+    else
+        rRenderContext.SetFillColor();
+    if (oLineColor)
+        rRenderContext.SetLineColor(*oLineColor);
+    else
+        rRenderContext.SetLineColor();
     rRenderContext.DrawRect(rRect);
 }
 
@@ -74,7 +80,6 @@ void SwFrameExample::InitColors_Impl()
 
     m_aFrameColor = COL_LIGHTGREEN;
     m_aAlignColor = COL_LIGHTRED;
-    m_aTransColor = COL_TRANSPARENT;
 
     m_aTxtCol = bHC?
         svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor :
@@ -440,9 +445,9 @@ void SwFrameExample::CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext
 }
 
 tools::Rectangle SwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect,
-                                                 const Color &rFillColor, const Color &rBorderColor)
+                                                 std::optional<Color> oFillColor, const Color &rBorderColor)
 {
-    DrawRect_Impl(rRenderContext, rRect, rFillColor, rBorderColor);
+    DrawRect_Impl(rRenderContext, rRect, oFillColor, rBorderColor);
 
     // determine the area relative to which the positioning happens
     tools::Rectangle aRect(rRect); // aPagePrtArea = Default
@@ -459,7 +464,7 @@ tools::Rectangle SwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRender
         {
             if (i == nLines - 1)
                 aTxt.SetSize(Size(aTxt.GetWidth() / 2, aTxt.GetHeight()));
-            DrawRect_Impl(rRenderContext, aTxt, m_aTxtCol, m_aTransColor);
+            DrawRect_Impl(rRenderContext, aTxt, m_aTxtCol, std::nullopt);
             aTxt.Move(0, nStep);
         }
     }
@@ -477,7 +482,7 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     DrawRect_Impl(rRenderContext, aPage, m_aBgCol, m_aBorderCol);
 
     // Draw PrintArea
-    tools::Rectangle aRect = DrawInnerFrame_Impl(rRenderContext, aPagePrtArea, m_aTransColor, m_aPrintAreaCol);
+    tools::Rectangle aRect = DrawInnerFrame_Impl(rRenderContext, aPagePrtArea, std::nullopt, m_aPrintAreaCol);
 
     if (nAnchor == RndStdIds::FLY_AT_FLY)
         aRect = DrawInnerFrame_Impl(rRenderContext, aFrameAtFrame, m_aBgCol, m_aBorderCol);
@@ -661,7 +666,7 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
                 }
             }
             if (pOuterFrame->Contains(aTxt))
-                DrawRect_Impl(rRenderContext, aTxt, m_aTxtCol, m_aTransColor );
+                DrawRect_Impl(rRenderContext, aTxt, m_aTxtCol, std::nullopt );
 
             aTxt.Move(0, nStep);
             aTxt.SetRight( nOldR );
@@ -691,11 +696,11 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
 
     // Draw rectangle on which the frame is aligned:
-    DrawRect_Impl(rRenderContext, aRect, m_aTransColor, m_aAlignColor);
+    DrawRect_Impl(rRenderContext, aRect, std::nullopt, m_aAlignColor);
 
     // Frame View
     bool bDontFill = (nAnchor == RndStdIds::FLY_AT_CHAR && aFrmRect.Overlaps(aAutoCharFrame)) || bTrans;
-    DrawRect_Impl(rRenderContext, aFrmRect, bDontFill? m_aTransColor : m_aBgCol, m_aFrameColor);
+    DrawRect_Impl(rRenderContext, aFrmRect, bDontFill ? std::nullopt : std::optional { m_aBgCol }, m_aFrameColor);
 }
 
 void SwFrameExample::SetRelPos(const Point& rP)

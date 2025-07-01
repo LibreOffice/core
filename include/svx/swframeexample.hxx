@@ -28,7 +28,6 @@
 
 class SVX_DLLPUBLIC SwFrameExample final : public weld::CustomWidgetController
 {
-    Color       m_aTransColor;      ///< transparency
     Color       m_aBgCol;           ///< background
     Color       m_aFrameColor;      ///< graphic frame
     Color       m_aAlignColor;      ///< align anchor
@@ -63,7 +62,8 @@ class SVX_DLLPUBLIC SwFrameExample final : public weld::CustomWidgetController
     void InitColors_Impl();
     void InitAllRects_Impl(vcl::RenderContext& rRenderContext);
     void CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext, tools::Rectangle &rRect);
-    tools::Rectangle DrawInnerFrame_Impl(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, const Color &rFillColor, const Color &rBorderColor);
+    tools::Rectangle DrawInnerFrame_Impl(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect,
+                              std::optional<Color> oFillColor, const Color &rBorderColor);
 
     virtual void StyleUpdated() override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
