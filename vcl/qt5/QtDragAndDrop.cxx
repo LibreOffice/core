@@ -113,16 +113,12 @@ css::uno::Sequence<OUString> SAL_CALL QtDragSource::getSupportedServiceNames()
     return { u"com.sun.star.datatransfer.dnd.QtDragSource"_ustr };
 }
 
-QtDropTarget::QtDropTarget(QtFrame* pFrame)
+QtDropTarget::QtDropTarget()
     : WeakComponentImplHelper(m_aMutex)
     , m_nDropAction(datatransfer::dnd::DNDConstants::ACTION_NONE)
     , m_bActive(false)
     , m_nDefaultActions(0)
 {
-    assert(pFrame && "missing SalFrame");
-
-    pFrame->registerDropTarget(this);
-    m_bActive = true;
 }
 
 OUString SAL_CALL QtDropTarget::getImplementationName()

@@ -665,9 +665,12 @@ QtInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 css::uno::Reference<css::datatransfer::dnd::XDropTarget>
 QtInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    css::uno::Reference<css::datatransfer::dnd::XDropTarget> xRet
-        = new QtDropTarget(static_cast<QtFrame*>(pSysEnv->pSalFrame));
-    return xRet;
+    rtl::Reference<QtDropTarget> pDropTarget = new QtDropTarget;
+    QtFrame* pFrame = static_cast<QtFrame*>(pSysEnv->pSalFrame);
+    pFrame->registerDropTarget(pDropTarget.get());
+    pDropTarget->setActive(true);
+
+    return pDropTarget;
 }
 
 const cairo_font_options_t* QtInstance::GetCairoFontOptions()

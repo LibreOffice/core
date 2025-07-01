@@ -68,7 +68,7 @@ class QtDropTarget final
     bool m_bDropSuccessful;
 
 public:
-    QtDropTarget(QtFrame* pFrame);
+    QtDropTarget();
     virtual ~QtDropTarget() override;
 
     // XDropTarget
