@@ -603,8 +603,6 @@ static void lcl_InvalidateInfFlags( SwFrame* pFrame, bool bInva )
             pFrame->InvalidateSize_();
             pFrame->InvalidatePrt_();
         }
-        if( pFrame->IsLayoutFrame() )
-            lcl_InvalidateInfFlags( static_cast<SwLayoutFrame*>(pFrame)->GetLower(), false );
         pFrame = pFrame->GetNext();
     }
 }

@@ -1703,6 +1703,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             }
 
             pFrame = pTableNode->MakeFrame( pLay );
+            pFrame->InvalidateInfFlags();
 
             // skip tables deleted with track changes
             if ( !static_cast<SwTabFrame*>(pFrame)->Lower() )
