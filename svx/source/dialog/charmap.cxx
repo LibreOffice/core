@@ -583,7 +583,7 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
         {
             const Color aLineCol = rRenderContext.GetLineColor();
             rRenderContext.SetLineColor(aHighlightColor);
-            rRenderContext.SetFillColor(COL_TRANSPARENT);
+            rRenderContext.SetFillColor();
             // Outer border
             rRenderContext.DrawRect(tools::Rectangle(Point(x - 1, y - 1), Size(nX + 3, nY + 3)), 1, 1);
             // Inner border
@@ -600,7 +600,6 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
         else
         {
             Color aLineCol = rRenderContext.GetLineColor();
-            Color aFillCol = rRenderContext.GetFillColor();
             rRenderContext.SetLineColor();
             Point aPointUL(x + 1, y + 1);
             if (HasFocus())
@@ -627,7 +626,6 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
                 rRenderContext.DrawText(aPointTxTy, aCharStr);
             }
             rRenderContext.SetLineColor(aLineCol);
-            rRenderContext.SetFillColor(aFillCol);
         }
         rRenderContext.SetTextColor(aTextCol);
     }
