@@ -6,6 +6,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/* Place "optional" and "property" decorations closer to the definitions */
+td.mlabels-left {
+    width: auto;
+    max-width: 100%;
+}
+
+/* Hack to insert an "unpublished" decoration when appropriate */
 /* Doxygen 1.8 */
 #top:not(:has(#nav-path .el:first-child[href^="dir_"])) ~ .header .title:not(:has(> .mlabels))::after {
     content: "unpublished";
