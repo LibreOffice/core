@@ -176,7 +176,7 @@ class SAL_DLLPUBLIC_RTTI SwViewShell : public sw::Ring<SwViewShell>
     SwRootFramePtr            mpLayout;
 
     // Initialization; called by the diverse constructors.
-    void Init( const SwViewOption *pNewOpt );
+    void Init( const SwViewOption *pNewOpt, tools::Long nFlags);
 
     inline void ResetInvalidRect();
 
