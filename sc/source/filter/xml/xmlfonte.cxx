@@ -79,7 +79,7 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXML
                                        ATTR_CTL_FONT };
     sal_uInt16 const aEditWhichIds[] { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
                                        EE_CHAR_FONTINFO_CTL };
-    sal_uInt16 const aPageWhichIds[] { ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERLEFT,
+    TypedWhichId<ScPageHFItem> const aPageWhichIds[] { ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERLEFT,
                                        ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT,
                                        ATTR_PAGE_HEADERFIRST, ATTR_PAGE_FOOTERFIRST };
 
@@ -105,31 +105,27 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXML
 
     while (pStyle)
     {
-        const SfxItemPool& rPagePool(pStyle->GetPool()->GetPool());
-
-        for (sal_uInt16 nPageWhichId : aPageWhichIds)
+        for (const TypedWhichId<ScPageHFItem>& nPageWhichId : aPageWhichIds)
         {
-            for (const SfxPoolItem* pItem : rPagePool.GetItemSurrogates(nPageWhichId))
+            const SfxItemSet& rItemSet = pStyle->GetItemSet();
+            const ScPageHFItem* pPageItem = &rItemSet.Get( nPageWhichId );
+            const EditTextObject* pLeftArea(pPageItem->GetLeftArea());
+            if (pLeftArea)
             {
-                const ScPageHFItem* pPageItem = static_cast<const ScPageHFItem*>(pItem);
-                const EditTextObject* pLeftArea(pPageItem->GetLeftArea());
-                if (pLeftArea)
-                {
-                    aEditEngine.SetText(*pLeftArea);
-                    AddFontItems(aEditWhichIds, 3, mpEditEnginePool.get(), false);
-                }
-                const EditTextObject* pCenterArea(pPageItem->GetCenterArea());
-                if (pCenterArea)
-                {
-                    aEditEngine.SetText(*pCenterArea);
-                    AddFontItems(aEditWhichIds, 3, mpEditEnginePool.get(), false);
-                }
-                const EditTextObject* pRightArea(pPageItem->GetRightArea());
-                if (pRightArea)
-                {
-                    aEditEngine.SetText(*pRightArea);
-                    AddFontItems(aEditWhichIds, 3, mpEditEnginePool.get(), false);
-                }
+                aEditEngine.SetText(*pLeftArea);
+                AddFontItems(aEditWhichIds, 3, mpEditEnginePool.get(), false);
+            }
+            const EditTextObject* pCenterArea(pPageItem->GetCenterArea());
+            if (pCenterArea)
+            {
+                aEditEngine.SetText(*pCenterArea);
+                AddFontItems(aEditWhichIds, 3, mpEditEnginePool.get(), false);
+            }
+            const EditTextObject* pRightArea(pPageItem->GetRightArea());
+            if (pRightArea)
+            {
+                aEditEngine.SetText(*pRightArea);
+                AddFontItems(aEditWhichIds, 3, mpEditEnginePool.get(), false);
             }
         }
 
