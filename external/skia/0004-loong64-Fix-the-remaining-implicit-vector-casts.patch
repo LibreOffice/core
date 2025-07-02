@@ -35,7 +35,7 @@ diff --git a/src/core/SkBlurEngine.cpp b/src/core/SkBlurEngine.cpp
 index 2c18eb0fb2e7..1c8e9bdb7945 100644
 --- a/src/core/SkBlurEngine.cpp
 +++ b/src/core/SkBlurEngine.cpp
-@@ -330,61 +330,61 @@ private:
+@@ -556,33 +556,33 @@
          skvx::Vec<4, uint32_t>* buffer0Cursor = fBuffer0Cursor;
          skvx::Vec<4, uint32_t>* buffer1Cursor = fBuffer1Cursor;
          skvx::Vec<4, uint32_t>* buffer2Cursor = fBuffer2Cursor;

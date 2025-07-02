@@ -1,16 +1,18 @@
 diff -ur skia.org/include/ports/SkFontMgr_fontconfig.h skia/include/ports/SkFontMgr_fontconfig.h
 --- skia.org/include/ports/SkFontMgr_fontconfig.h	2024-10-09 10:25:16.421928663 +0200
 +++ skia/include/ports/SkFontMgr_fontconfig.h	2024-10-09 10:27:17.914640682 +0200
-@@ -21,4 +21,9 @@
+@@ -21,6 +21,11 @@
  class SkFontScanner;
  SK_API sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc, std::unique_ptr<SkFontScanner> scanner);
- SK_API sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc);
+ 
 +struct _FcPattern;
 +typedef struct _FcPattern FcPattern;
 +class SkTypeface;
 +SK_API sk_sp<SkTypeface> SkFontMgr_createTypefaceFromFcPattern(const sk_sp<SkFontMgr>& mgr, FcPattern* pattern);
 +
- #endif // #ifndef SkFontMgr_fontconfig_DEFINED
+ #if !defined(SK_DISABLE_LEGACY_FONTCONFIG_FACTORY)
+ SK_API sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc);
+ #endif
 diff -ur skia.org/src/ports/SkFontMgr_fontconfig.cpp skia/src/ports/SkFontMgr_fontconfig.cpp
 --- skia.org/src/ports/SkFontMgr_fontconfig.cpp	2024-10-09 10:25:16.460928891 +0200
 +++ skia/src/ports/SkFontMgr_fontconfig.cpp	2024-10-09 10:27:30.405714112 +0200
@@ -22,13 +24,9 @@ diff -ur skia.org/src/ports/SkFontMgr_fontconfig.cpp skia/src/ports/SkFontMgr_fo
      sk_sp<SkTypeface> createTypefaceFromFcPattern(SkAutoFcPattern pattern) const {
          if (!pattern) {
              return nullptr;
-@@ -1043,6 +1044,16 @@
+@@ -994,3 +994,13 @@
+ sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc, std::unique_ptr<SkFontScanner> scanner) {
      return sk_make_sp<SkFontMgr_fontconfig>(fc, std::move(scanner));
- }
-
--sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc) {
-+SK_API sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc) {
-     return sk_make_sp<SkFontMgr_fontconfig>(fc, SkFontScanner_Make_FreeType());
  }
 +
 +SK_API sk_sp<SkTypeface> SkFontMgr_createTypefaceFromFcPattern(const sk_sp<SkFontMgr>& mgr, FcPattern* pattern)
@@ -40,4 +38,3 @@ diff -ur skia.org/src/ports/SkFontMgr_fontconfig.cpp skia/src/ports/SkFontMgr_fo
 +    }());
 +    return static_cast<SkFontMgr_fontconfig*>(mgr.get())->createTypefaceFromFcPattern(std::move(p));
 +}
-Only in skia/src/ports: SkFontMgr_fontconfig.cpp.orig

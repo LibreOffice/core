@@ -69,16 +69,15 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWindowContext.h
 --- skia.org/tools/window/VulkanWindowContext.h	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/VulkanWindowContext.h	2024-10-05 18:19:54.713202674 +0200
-@@ -70,7 +70,7 @@
+@@ -68,7 +68,7 @@
      bool createSwapchain(int width, int height);
      bool createBuffers(VkFormat format, VkImageUsageFlags, SkColorType colorType, VkSharingMode);
      void destroyBuffers();
 -    void onSwapBuffers() override;
 +    void onSwapBuffers(const SkIRect* rect = nullptr) override;
-
+ 
+ 
      // Create functions
-     CreateVkSurfaceFn fCreateVkSurfaceFn;
-     CanPresentFn      fCanPresentFn;
 diff -ur skia.org/tools/window/win/RasterWindowContext_win.cpp skia/tools/window/win/RasterWindowContext_win.cpp
 --- skia.org/tools/window/win/RasterWindowContext_win.cpp	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/win/RasterWindowContext_win.cpp	2024-10-05 18:20:58.138561375 +0200

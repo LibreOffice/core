@@ -253,9 +253,9 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 
  namespace skwindow::internal {
 
-@@ -55,36 +59,47 @@
+@@ -59,34 +55,44 @@
  }
-
+ 
  void VulkanWindowContext::initializeContext() {
 +    fShared = fGlobalShared;
 +    if( !fShared )
@@ -267,37 +267,33 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 +
      SkASSERT(!fContext);
      // any config code here (particularly for msaa)?
-
+ 
      PFN_vkGetInstanceProcAddr getInstanceProc = fGetInstanceProcAddr;
 -    skgpu::VulkanBackendContext backendContext;
 +    skgpu::VulkanBackendContext& backendContext = fGlobalShared->backendContext;
      skgpu::VulkanExtensions extensions;
-     VkPhysicalDeviceFeatures2 features;
+     sk_gpu_test::TestVkFeatures features;
      if (!sk_gpu_test::CreateVkBackendContext(getInstanceProc,
                                               &backendContext,
                                               &extensions,
 -                                             &features,
--                                             &fDebugCallback,
+-                                             &fDebugMessenger,
 -                                             &fPresentQueueIndex,
 +                                             &d->features,
-+                                             &d->fDebugCallback,
++                                             &d->fDebugMessenger,
 +                                             &d->fPresentQueueIndex,
                                               fCanPresentFn,
                                               fDisplayParams->createProtectedNativeBackend())) {
-+        sk_gpu_test::FreeVulkanFeaturesStructs(&d->features);
 +        fGlobalShared.reset();
-         sk_gpu_test::FreeVulkanFeaturesStructs(&features);
          return;
      }
-
+ 
      if (!extensions.hasExtension(VK_KHR_SURFACE_EXTENSION_NAME, 25) ||
          !extensions.hasExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME, 68)) {
--        sk_gpu_test::FreeVulkanFeaturesStructs(&features);
-+        sk_gpu_test::FreeVulkanFeaturesStructs(&d->features);
 +        fGlobalShared.reset();
          return;
      }
-
+ 
 -    fInstance = backendContext.fInstance;
 -    fPhysicalDevice = backendContext.fPhysicalDevice;
 -    fDevice = backendContext.fDevice;
@@ -308,15 +304,13 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 +    d->fDevice = backendContext.fDevice;
 +    d->fGraphicsQueueIndex = backendContext.fGraphicsQueueIndex;
 +    d->fGraphicsQueue = backendContext.fQueue;
-
+ 
      PFN_vkGetPhysicalDeviceProperties localGetPhysicalDeviceProperties =
              reinterpret_cast<PFN_vkGetPhysicalDeviceProperties>(
-@@ -88,24 +103,43 @@
+@@ -104,23 +104,42 @@
                                              backendContext.fInstance,
                                              VK_NULL_HANDLE));
      if (!localGetPhysicalDeviceProperties) {
--        sk_gpu_test::FreeVulkanFeaturesStructs(&features);
-+        sk_gpu_test::FreeVulkanFeaturesStructs(&d->features);
 +        fGlobalShared.reset();
          return;
      }
@@ -336,15 +330,15 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                                  backendContext.fMaxAPIVersion,
                                                  physDevVersion,
                                                  &extensions));
-
+ 
 -    GET_PROC(DestroyInstance);
--    if (fDebugCallback != VK_NULL_HANDLE) {
--        GET_PROC(DestroyDebugReportCallbackEXT);
+-    if (fDebugMessenger != VK_NULL_HANDLE) {
+-        GET_PROC(DestroyDebugUtilsMessengerEXT);
 +    d->fContext = GrDirectContexts::MakeVulkan(backendContext, fDisplayParams->grContextOptions());
 +
 +    GET_PROC_GLOBAL(DestroyInstance);
 +    GET_DEV_PROC_GLOBAL(DestroyDevice);
-+    if (fGlobalShared->fDebugCallback != VK_NULL_HANDLE) {
++    if (fGlobalShared->fDebugMessenger != VK_NULL_HANDLE) {
 +        GET_PROC_GLOBAL(DestroyDebugReportCallbackEXT);
      }
 +
@@ -374,10 +368,10 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      GET_DEV_PROC(CreateSwapchainKHR);
      GET_DEV_PROC(DestroySwapchainKHR);
      GET_DEV_PROC(GetSwapchainImagesKHR);
-@@ -121,55 +154,43 @@
+@@ -135,26 +154,21 @@
      GET_DEV_PROC(QueuePresentKHR);
      GET_DEV_PROC(GetDeviceQueue);
-
+ 
 -    backendContext.fMemoryAllocator =
 -            skgpu::VulkanAMDMemoryAllocator::Make(fInstance,
 -                                                  backendContext.fPhysicalDevice,
@@ -392,15 +386,14 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 +    // No actual window, used just to create the shared GrContext.
 +    if(fCreateVkSurfaceFn == nullptr)
 +        return;
-
+ 
 -    fSurface = fCreateVkSurfaceFn(fInstance);
 +    fSurface = fCreateVkSurfaceFn(fShared->fInstance);
      if (VK_NULL_HANDLE == fSurface) {
          this->destroyContext();
--        sk_gpu_test::FreeVulkanFeaturesStructs(&features);
          return;
      }
-
+ 
 +    // create presentQueue
 +    fGetDeviceQueue(fShared->fDevice, fShared->fPresentQueueIndex, 0, &fPresentQueue);
 +
@@ -410,21 +403,15 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                                         fSurface, &supported);
      if (VK_SUCCESS != res) {
          this->destroyContext();
--        sk_gpu_test::FreeVulkanFeaturesStructs(&features);
-         return;
-     }
-
-     if (!this->createSwapchain(-1, -1)) {
+@@ -165,21 +179,18 @@
          this->destroyContext();
--        sk_gpu_test::FreeVulkanFeaturesStructs(&features);
          return;
      }
 -
 -    // create presentQueue
 -    fGetDeviceQueue(fDevice, fPresentQueueIndex, 0, &fPresentQueue);
--    sk_gpu_test::FreeVulkanFeaturesStructs(&features);
  }
-
+ 
  bool VulkanWindowContext::createSwapchain(int width, int height) {
      // check for capabilities
      VkSurfaceCapabilitiesKHR caps;
@@ -433,7 +420,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      if (VK_SUCCESS != res) {
          return false;
      }
-
+ 
      uint32_t surfaceFormatCount;
 -    res = fGetPhysicalDeviceSurfaceFormatsKHR(fPhysicalDevice, fSurface, &surfaceFormatCount,
 +    res = fGetPhysicalDeviceSurfaceFormatsKHR(fShared->fPhysicalDevice, fSurface, &surfaceFormatCount,
@@ -554,36 +541,36 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                          fBackbuffers[i].fRenderSemaphore,
                                          nullptr));
          }
-@@ -458,42 +478,59 @@
+@@ -466,42 +477,58 @@
  void VulkanWindowContext::destroyContext() {
      if (this->isValid()) {
          fQueueWaitIdle(fPresentQueue);
 -        fDeviceWaitIdle(fDevice);
 +        fDeviceWaitIdle(fShared->fDevice);
-
+ 
          this->destroyBuffers();
-
+ 
          if (VK_NULL_HANDLE != fSwapchain) {
 -            fDestroySwapchainKHR(fDevice, fSwapchain, nullptr);
 +            fDestroySwapchainKHR(fShared->fDevice, fSwapchain, nullptr);
              fSwapchain = VK_NULL_HANDLE;
          }
-
+ 
          if (VK_NULL_HANDLE != fSurface) {
 -            fDestroySurfaceKHR(fInstance, fSurface, nullptr);
 +            fDestroySurfaceKHR(fShared->fInstance, fSurface, nullptr);
              fSurface = VK_NULL_HANDLE;
          }
      }
-
+ 
 -    SkASSERT(fContext->unique());
      fContext.reset();
 -    fInterface.reset();
 +    fShared.reset();
-+
++    
 +    checkDestroyShared();
 +}
-
+ 
 -    if (VK_NULL_HANDLE != fDevice) {
 -        fDestroyDevice(fDevice, nullptr);
 -        fDevice = VK_NULL_HANDLE;
@@ -603,18 +590,18 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 +        fGlobalShared->fDestroyDevice(fGlobalShared->fDevice, nullptr);
 +        fGlobalShared->fDevice = VK_NULL_HANDLE;
      }
-
+ 
  #ifdef SK_ENABLE_VK_LAYERS
--    if (fDebugCallback != VK_NULL_HANDLE) {
--        fDestroyDebugReportCallbackEXT(fInstance, fDebugCallback, nullptr);
-+    if (fGlobalShared->fDebugCallback != VK_NULL_HANDLE) {
-+        fGlobalShared->fDestroyDebugReportCallbackEXT(fGlobalShared->fInstance, fGlobalShared->fDebugCallback, nullptr);
+-    if (fDebugMessenger != VK_NULL_HANDLE) {
+-        fDestroyDebugUtilsMessengerEXT(fInstance, fDebugMessenger, nullptr);
++    if (fGlobalShared->fDebugMessenger != VK_NULL_HANDLE) {
++        fGlobalShared->fDestroyDebugUtilsMessengerEXT(fGlobalShared->fInstance, fGlobalShared->fDebugMessenger, nullptr);
      }
  #endif
-
+ 
 -    fPhysicalDevice = VK_NULL_HANDLE;
 +    fGlobalShared->fPhysicalDevice = VK_NULL_HANDLE;
-
+ 
 -    if (VK_NULL_HANDLE != fInstance) {
 -        fDestroyInstance(fInstance, nullptr);
 -        fInstance = VK_NULL_HANDLE;
@@ -622,11 +609,10 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 +        fGlobalShared->fDestroyInstance(fGlobalShared->fInstance, nullptr);
 +        fGlobalShared->fInstance = VK_NULL_HANDLE;
      }
-+
-+    sk_gpu_test::FreeVulkanFeaturesStructs(&fGlobalShared->features);
++    
 +    fGlobalShared.reset();
  }
-
+ 
  VulkanWindowContext::BackbufferInfo* VulkanWindowContext::getAvailableBackbuffer() {
 @@ -519,35 +556,35 @@
      semaphoreInfo.pNext = nullptr;
@@ -731,29 +717,28 @@ diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWin
 
      struct BackbufferInfo {
          uint32_t        fImageIndex;          // image this is associated with
-@@ -60,11 +70,6 @@
+@@ -70,10 +70,6 @@
      void destroyBuffers();
      void onSwapBuffers() override;
-
+ 
 -    VkInstance fInstance = VK_NULL_HANDLE;
 -    VkPhysicalDevice fPhysicalDevice = VK_NULL_HANDLE;
 -    VkDevice fDevice = VK_NULL_HANDLE;
--    VkDebugReportCallbackEXT fDebugCallback = VK_NULL_HANDLE;
--
+-    VkDebugUtilsMessengerEXT fDebugMessenger = VK_NULL_HANDLE;
+ 
      // Create functions
      CreateVkSurfaceFn fCreateVkSurfaceFn;
-     CanPresentFn      fCanPresentFn;
-@@ -84,20 +89,46 @@
+@@ -94,20 +90,46 @@
      PFN_vkAcquireNextImageKHR fAcquireNextImageKHR = nullptr;
      PFN_vkQueuePresentKHR fQueuePresentKHR = nullptr;
-
+ 
 -    PFN_vkDestroyInstance fDestroyInstance = nullptr;
      PFN_vkDeviceWaitIdle fDeviceWaitIdle = nullptr;
--    PFN_vkDestroyDebugReportCallbackEXT fDestroyDebugReportCallbackEXT = nullptr;
+-    PFN_vkDestroyDebugUtilsMessengerEXT fDestroyDebugUtilsMessengerEXT = nullptr;
      PFN_vkQueueWaitIdle fQueueWaitIdle = nullptr;
 -    PFN_vkDestroyDevice fDestroyDevice = nullptr;
      PFN_vkGetDeviceQueue fGetDeviceQueue = nullptr;
-
++    
 +    // We need to use just one GrDirectContext, so share all the relevant data.
 +    struct Shared : public SkRefCnt
 +    {
@@ -764,21 +749,21 @@ diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWin
 +    VkInstance fInstance = VK_NULL_HANDLE;
 +    VkPhysicalDevice fPhysicalDevice = VK_NULL_HANDLE;
 +    VkDevice fDevice = VK_NULL_HANDLE;
-+    VkDebugReportCallbackEXT fDebugCallback = VK_NULL_HANDLE;
-+
++    VkDebugUtilsMessengerEXT fDebugMessenger = VK_NULL_HANDLE;
+ 
      sk_sp<const skgpu::VulkanInterface> fInterface;
-
--    VkSurfaceKHR      fSurface;
--    VkSwapchainKHR    fSwapchain;
++    
 +    // Original code had this as a function-local variable, but that seems wrong.
 +    // It should exist as long as the context exists.
-+    VkPhysicalDeviceFeatures2 features;
++    sk_gpu_test::TestVkFeatures features;
 +
 +    // Store this to make it accessible.
 +    VkPhysicalDeviceProperties physDeviceProperties;
 +
 +    skgpu::VulkanBackendContext backendContext;
-+
+ 
+-    VkSurfaceKHR      fSurface;
+-    VkSwapchainKHR    fSwapchain;
      uint32_t          fGraphicsQueueIndex;
      VkQueue           fGraphicsQueue;
      uint32_t          fPresentQueueIndex;
@@ -793,7 +778,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWin
 +    VkSurfaceKHR      fSurface;
 +    VkSwapchainKHR    fSwapchain;
      VkQueue           fPresentQueue;
-
+ 
      uint32_t               fImageCount;
 diff -ur skia.org/tools/window/win/VulkanWindowContext_win.cpp skia/tools/window/win/VulkanWindowContext_win.cpp
 --- skia.org/tools/window/win/VulkanWindowContext_win.cpp	2024-10-10 14:11:32.362258108 +0200

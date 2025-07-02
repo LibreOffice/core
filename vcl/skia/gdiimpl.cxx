@@ -1185,7 +1185,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
         // Transform size by the matrix.
         for (double stroke : *pStroke)
             intervals.push_back((rObjectToDevice * basegfx::B2DVector(stroke, 0)).getLength());
-        aPaint.setPathEffect(SkDashPathEffect::Make(intervals.data(), intervals.size(), 0));
+        aPaint.setPathEffect(SkDashPathEffect::Make(intervals, 0));
     }
 
     // Skia does not support basegfx::B2DLineJoin::NONE, so in that case batch only if lines
@@ -1535,7 +1535,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             aPaint.setStrokeWidth(2);
             static constexpr float intervals[] = { 4.0f, 4.0f };
             aPaint.setStyle(SkPaint::kStroke_Style);
-            aPaint.setPathEffect(SkDashPathEffect::Make(intervals, std::size(intervals), 0));
+            aPaint.setPathEffect(SkDashPathEffect::Make(intervals, 0));
         }
         else
         {
@@ -1923,12 +1923,12 @@ void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkSh
             return rtl::math::round(p1.x(), 2) == p2.x() && rtl::math::round(p1.y(), 2) == p2.y();
         };
 #endif
-        assert(compareRounded(matrix.mapXY(rPosAry.mnSrcX, rPosAry.mnSrcY),
+        assert(compareRounded(matrix.mapPoint(SkPoint::Make(rPosAry.mnSrcX, rPosAry.mnSrcY)),
                               SkPoint::Make(rPosAry.mnDestX, rPosAry.mnDestY)));
-        assert(compareRounded(
-            matrix.mapXY(rPosAry.mnSrcX + rPosAry.mnSrcWidth, rPosAry.mnSrcY + rPosAry.mnSrcHeight),
-            SkPoint::Make(rPosAry.mnDestX + rPosAry.mnDestWidth,
-                          rPosAry.mnDestY + rPosAry.mnDestHeight)));
+        assert(compareRounded(matrix.mapPoint(SkPoint::Make(rPosAry.mnSrcX + rPosAry.mnSrcWidth,
+                                                            rPosAry.mnSrcY + rPosAry.mnSrcHeight)),
+                              SkPoint::Make(rPosAry.mnDestX + rPosAry.mnDestWidth,
+                                            rPosAry.mnDestY + rPosAry.mnDestHeight)));
         canvas->concat(matrix);
         SkRect sourceRect = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth,
                                              rPosAry.mnSrcHeight);
@@ -2266,7 +2266,7 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
         size_t index = pos - verticals.cbegin();
         size_t count = rangeEnd - pos;
         sk_sp<SkTextBlob> textBlob = SkTextBlob::MakeFromRSXform(
-            glyphIds.data() + index, count * sizeof(SkGlyphID), glyphForms.data() + index,
+            glyphIds.data() + index, count * sizeof(SkGlyphID), glyphForms,
             verticalRun ? verticalFont : font, SkTextEncoding::kGlyphID);
         addUpdateRegion(textBlob->bounds());
         SkPaint paint = makeTextPaint(textColor);
