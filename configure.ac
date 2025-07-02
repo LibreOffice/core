@@ -3222,7 +3222,7 @@ AC_ARG_WITH(macosx-version-min-required,
     AS_HELP_STRING([--with-macosx-version-min-required=<version>],
         [set the minimum OS version needed to run the built LibreOffice])
     [
-                          e. g.: --with-macosx-version-min-required=10.15
+                          e. g.: --with-macosx-version-min-required=11.0
     ],
 ,)
 
@@ -3790,16 +3790,12 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([what minimum version of macOS to require])
     if test "$with_macosx_version_min_required" = "" ; then
-        if test "$host_cpu" = x86_64; then
-            with_macosx_version_min_required="10.15";
-        else
-            with_macosx_version_min_required="11.0";
-        fi
+        with_macosx_version_min_required="11.0";
     fi
     # see same notes about MACOSX_SDK_VERSION above
     MAC_OS_X_VERSION_MIN_REQUIRED=$(echo $with_macosx_version_min_required | $AWK -F. '{ print $1*10000+$2*100+$3 }')
-    if test $MAC_OS_X_VERSION_MIN_REQUIRED -lt 101500; then
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, minimum supported version is 10.15])
+    if test $MAC_OS_X_VERSION_MIN_REQUIRED -lt 110000; then
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, minimum supported version is 11])
     fi
     AC_MSG_RESULT([$with_macosx_version_min_required])
 
@@ -12638,8 +12634,8 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
 	<true/>"
     AC_MSG_CHECKING([whether to enable Bluetooth support in Impress remote control])
 
-    if test $OS = MACOSX && test "$MACOSX_SDK_VERSION" -ge 101500; then
-        # The Bluetooth code doesn't compile with macOS SDK 10.15
+    if test $OS = MACOSX; then
+        # The Bluetooth code doesn't compile since macOS SDK 10.15
         if test "$enable_sdremote_bluetooth" = yes; then
             AC_MSG_ERROR([macOS SDK $macosx_sdk does not currently support --enable-sdremote-bluetooth])
         fi
