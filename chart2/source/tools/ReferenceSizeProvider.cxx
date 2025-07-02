@@ -92,6 +92,8 @@ void ReferenceSizeProvider::setValuesAtTitle(
 
 void ReferenceSizeProvider::setValuesAtAllDataSeries()
 {
+    if (!m_xChartDoc)
+        return;
     rtl::Reference< Diagram > xDiagram( m_xChartDoc->getFirstChartDiagram());
     if (!xDiagram)
         return;
