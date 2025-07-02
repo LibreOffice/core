@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -218,6 +218,11 @@
                     <property name="always-show-image">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="horileftl-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|horileftl|accessible_name">Horizontal Left</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -234,6 +239,11 @@
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">horileftl</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="horicenterl-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|horicenterl|accessible_name">Horizontal Center</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -250,6 +260,11 @@
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">horileftl</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="horirightl-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|horirightl|accessible_name">Horizontal Right</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -266,6 +281,11 @@
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">horileftl</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="vertleftl-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|vertleftl|accessible_name">Vertical Left</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -282,6 +302,11 @@
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">horileftl</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="vertcenterl-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|vertcenterl|accessible_name">Vertical Center</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">4</property>
@@ -298,6 +323,11 @@
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">horileftl</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="vertrightl-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|vertrightl|accessible_name">Vertical Right</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">5</property>
@@ -327,6 +357,11 @@
                     <property name="always-show-image">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="horileftu-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|horileftu|accessible_name">Horizontal Left</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -343,6 +378,11 @@
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">horileftu</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="horicenteru-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|horicenteru|accessible_name">Horizontal Center</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -359,6 +399,11 @@
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">horileftu</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="horirightu-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|horirightu|accessible_name">Horizontal Right</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -375,6 +420,11 @@
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">horileftu</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="vertleftu-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|vertleftu|accessible_name">Vertical Left</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -391,6 +441,11 @@
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">horileftu</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="vertcenteru-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|vertcenteru|accessible_name">Vertical Center</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">4</property>
@@ -407,6 +462,11 @@
                     <property name="always-show-image">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">horileftu</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="vertrightu-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="envprinterpage|vertrightu|accessible_name">Vertical Right</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">5</property>
