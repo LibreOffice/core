@@ -995,12 +995,10 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
     bool bSuccess = false;
     ::dbtools::SQLExceptionInfo aErrorInfo;
     uno::Reference< awt::XWindow > xInspectorWindow;
-    uno::Reference< lang::XMultiComponentFactory > xFactory;
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory;
     try
     {
-        xFactory = _xContext->getServiceManager();
-        xServiceFactory.set(xFactory,uno::UNO_QUERY);
+        uno::Reference<lang::XMultiComponentFactory> xFactory = _xContext->getServiceManager();
+        uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xFactory, uno::UNO_QUERY);
 
         uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext(u"org.libreoffice.report.pentaho.SOFunctionManager"_ustr,_xContext),uno::UNO_QUERY);
         if ( xMgr.is() )
