@@ -1809,29 +1809,38 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                     if( bRet )
                     {
-                        const sal_Int32* pEnd = pTextAttr->GetEnd();
-                        if( pEnd )
-                            rContentAtPos.sStr =
-                                pTextNd->GetExpandText(GetLayout(), pTextAttr->GetStart(), *pEnd - pTextAttr->GetStart());
-                        else if( RES_TXTATR_TOXMARK == pTextAttr->Which())
+                        OUStringBuffer aStringBuffer;
+                        if (RES_TXTATR_TOXMARK == pTextAttr->Which())
                         {
                             // tdf#143157 - include first and secondary keys in index fields
                             const auto& aSwTOXMark = pTextAttr->GetTOXMark();
                             const auto aSecondaryKey = aSwTOXMark.GetSecondaryKey();
 
-                            OUStringBuffer aStringBuffer(aSwTOXMark.GetPrimaryKey());
+                            aStringBuffer.append(aSwTOXMark.GetPrimaryKey());
                             if (!aSecondaryKey.isEmpty())
                             {
                                 if (!aStringBuffer.isEmpty())
                                     aStringBuffer.append(" > ");
                                 aStringBuffer.append(aSecondaryKey);
                             }
-                            if (!aStringBuffer.isEmpty())
-                                aStringBuffer.append(" > ");
-                            aStringBuffer.append(aSwTOXMark.GetAlternativeText());
 
-                            rContentAtPos.sStr = aStringBuffer.makeStringAndClear();
+                            const auto aAlternativeText = aSwTOXMark.GetAlternativeText();
+                            if (!aStringBuffer.isEmpty() && !aAlternativeText.isEmpty())
+                                aStringBuffer.append(" > ");
+                            aStringBuffer.append(aAlternativeText);
                         }
+
+                        // tdf#143157 - include expanded text in index fields
+                        const sal_Int32* pEnd = pTextAttr->GetEnd();
+                        if (pEnd)
+                        {
+                            const auto aExpandText = pTextNd->GetExpandText(
+                                GetLayout(), pTextAttr->GetStart(), *pEnd - pTextAttr->GetStart());
+                            if (!aStringBuffer.isEmpty() && !aExpandText.isEmpty())
+                                aStringBuffer.append(" > ");
+                            aStringBuffer.append(aExpandText);
+                        }
+                        rContentAtPos.sStr = aStringBuffer.makeStringAndClear();
 
                         rContentAtPos.eContentAtPos =
                             RES_TXTATR_TOXMARK == pTextAttr->Which()
