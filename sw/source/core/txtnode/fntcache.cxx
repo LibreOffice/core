@@ -652,8 +652,8 @@ static void lcl_DrawLineForWrongListData(
     SwForbidden::iterator pIter = rForbidden.begin();
     if (rInf.GetOut().GetConnectMetaFile())
         rInf.GetOut().Push();
-
-    const Color aCol( rInf.GetOut().GetLineColor() );
+    else
+        rInf.GetOut().Push(vcl::PushFlags::LINECOLOR);
 
     // iterate over all ranges stored in the respective SwWrongList
     do
@@ -743,10 +743,7 @@ static void lcl_DrawLineForWrongListData(
     }
     while (nWrLen && pWList->Check( nStart, nWrLen ));
 
-    rInf.GetOut().SetLineColor( aCol );
-
-    if (rInf.GetOut().GetConnectMetaFile())
-        rInf.GetOut().Pop();
+    rInf.GetOut().Pop();
 }
 
 static void GetTextArray(const SwDrawTextInfo& rExtraInf, const OutputDevice& rDevice,

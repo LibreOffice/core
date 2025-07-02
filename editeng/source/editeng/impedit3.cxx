@@ -4117,13 +4117,13 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                                 adjustYDirectionAware(aRedLineTmpPos, -nShift);
                                             }
                                         }
-                                        Color aOldColor( rOutDev.GetLineColor() );
+                                        rOutDev.Push(vcl::PushFlags::LINECOLOR);
                                         rOutDev.SetLineColor( GetColorConfig().GetColorValue( svtools::SPELL ).nColor );
                                         lcl_DrawRedLines(rOutDev, aTmpFont.GetFontSize().Height(), aRedLineTmpPos,
                                                          static_cast<size_t>(nIndex), static_cast<size_t>(nIndex) + rTextPortion.GetLen(),
                                                          pDXArray, rParaPortion.GetNode()->GetWrongList(), nOrientation,
                                                          aOrigin, IsEffectivelyVertical(), rTextPortion.IsRightToLeft());
-                                        rOutDev.SetLineColor( aOldColor );
+                                        rOutDev.Pop();
                                     }
                                 }
 

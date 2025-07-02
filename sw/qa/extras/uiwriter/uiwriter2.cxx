@@ -2906,7 +2906,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This would be 5 without the new vertical redline mark
-    assertXPath(pXmlDoc, "/metafile/push/push/push/line", 6);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/push/line", 6);
 
     // This was the content of the next <text> (missing deletion on margin)
     // or only the first character of the deleted character sequence
@@ -2948,12 +2948,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142130)
     // This was 6 (bad crossing out of the first, not deleted image)
     // (4 lines = 2 lines for crossing out of the second image + 2 lines =
     // vertical "changed line" indicator before the two paragraph lines)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/line", 4);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/line", 2);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/push/line", 2);
 
     // check line color
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/linecolor", 5);
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/linecolor", 1);
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[1]/linecolor", 1);
     // tdf#142128 This was 3 (NON_PRINTING_CHARACTER_COLOR = #268bd2)
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/linecolor[@color='#268bd2']", 0);
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[1]/linecolor[@color='#268bd2']",
+                0);
 
     // reject deletion of the second image
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());

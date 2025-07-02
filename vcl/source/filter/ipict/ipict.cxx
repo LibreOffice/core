@@ -647,7 +647,7 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
             pVirDev->SetRasterOp(eActROP);
             break;
         case PictDrawingMethod::PAINT:
-            SetLineColor( COL_TRANSPARENT );
+            pVirDev->SetLineColor();
             if (eActPenPattern.isDefault())
               SetFillColor( aActForeColor );
             else
@@ -655,7 +655,7 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
             pVirDev->SetRasterOp(eActROP);
             break;
         case PictDrawingMethod::ERASE:
-            SetLineColor( COL_TRANSPARENT );
+            pVirDev->SetLineColor();
             if (eActBackPattern.isDefault())
               SetFillColor( aActBackColor );// Osnola: previously aActForeColor
             else // checkMe
@@ -663,12 +663,12 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
             pVirDev->SetRasterOp(RasterOp::OverPaint);
             break;
         case PictDrawingMethod::INVERT: // checkme
-            SetLineColor( COL_TRANSPARENT);
+            pVirDev->SetLineColor();
             SetFillColor( COL_BLACK );
             pVirDev->SetRasterOp(RasterOp::Invert);
             break;
         case PictDrawingMethod::FILL:
-            SetLineColor( COL_TRANSPARENT );
+            pVirDev->SetLineColor();
             if (eActFillPattern.isDefault())
               SetFillColor( aActForeColor );
             else

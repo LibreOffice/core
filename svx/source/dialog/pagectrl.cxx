@@ -133,7 +133,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     // background
     if (!bSecond || bResetBackground)
     {
-        rRenderContext.SetLineColor(COL_TRANSPARENT);
+        rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(rDlgColor);
         Size winSize(rRenderContext.GetOutputSize());
         rRenderContext.DrawRect(tools::Rectangle(Point(0,0), winSize));
