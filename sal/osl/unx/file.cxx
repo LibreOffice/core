@@ -907,7 +907,7 @@ void setAllowedPaths(
     abortOnForbidden = !!getenv("SAL_ABORT_ON_FORBIDDEN");
 }
 
-bool isForbidden(const OString &filePath, int nFlags)
+bool isForbidden(const OString &filePath, sal_uInt32 nFlags)
 {
     // avoid realpath cost unless configured
     if (allowedPathsRead.size() == 0)

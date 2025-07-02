@@ -57,7 +57,7 @@ struct DirectoryItem_Impl
 
    @see setAllowedPaths in sal/inc/setallowedpaths.hxx
 */
-bool isForbidden(const OString &filePath, int nFlags);
+bool isForbidden(const OString &filePath, sal_uInt32 nFlags);
 
 oslFileError openFile(
     rtl_uString * pustrFileURL, oslFileHandle * pHandle, sal_uInt32 uFlags,
