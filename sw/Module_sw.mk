@@ -103,7 +103,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ooxmlexport23 \
     CppunitTest_sw_ooxmlexport24 \
     CppunitTest_sw_ooxmlexport25 \
-    CppunitTest_sw_ooxmlexport26 \
+    CppunitTest_sw_ooxmlexport_de_locale \
     CppunitTest_sw_ooxmlexport_template \
     CppunitTest_sw_ooxmlfieldexport \
     CppunitTest_sw_ooxmllinks \
