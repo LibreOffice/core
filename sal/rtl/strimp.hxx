@@ -60,6 +60,8 @@ typedef void  (*rtl_freeStringFn)(void *);
 extern rtl_allocateStringFn rtl_allocateString;
 extern rtl_freeStringFn rtl_freeString;
 
+void alloc_preInit(bool start) noexcept;
+
 // string lifetime instrumentation / diagnostics
 #if USE_SDT_PROBES
 #  define PROBE_SNAME(n,b) n ## _ ## b

@@ -26,6 +26,8 @@
 #include <rtl/string.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <setallowedpaths.hxx>
+
 #include "system.hxx"
 #include "createfilehandlefromfd.hxx"
 #include "file_error_transl.hxx"
@@ -844,20 +846,16 @@ static OString getParentFolder(std::string_view rFilePath)
     return folderPath;
 }
 
-SAL_DLLPUBLIC void osl_setAllowedPaths(
-        rtl_uString *pustrFilePaths
+void setAllowedPaths(
+        std::u16string_view aPaths
     )
 {
     allowedPathsRead.clear();
     allowedPathsReadWrite.clear();
     allowedPathsExecute.clear();
 
-    if (!pustrFilePaths)
-        return;
-
     char eType = 'r';
     sal_Int32 nIndex = 0;
-    OUString aPaths(pustrFilePaths);
     do
     {
         OString aPath = rtl::OUStringToOString(
@@ -963,15 +961,6 @@ bool isForbidden(const OString &filePath, int nFlags)
         abort(); // a bit abrupt - but don't try to escape.
 
     return !allowed;
-}
-
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isForbiddenPath(
-    rtl_uString *pustrFileURL, int nFlags
-    )
-{
-    return isForbidden(
-        rtl::OUStringToOString(OUString(pustrFileURL),
-                               RTL_TEXTENCODING_UTF8), nFlags);
 }
 
 #ifdef HAVE_O_EXLOCK
