@@ -178,8 +178,6 @@ namespace vcl
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 
-        bool                                    mbCollateAlwaysOff;
-
         std::vector<std::unique_ptr<weld::Widget>>
                                                 maExtraControls;
 

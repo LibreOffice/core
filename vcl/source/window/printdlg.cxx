@@ -581,7 +581,6 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     , maNoPreviewStr( VclResId( SV_PRINT_NOPREVIEW ) )
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
-    , mbCollateAlwaysOff(false)
     , mbShowLayoutFrame( true )
     , maUpdatePreviewIdle("Print Dialog Update Preview Idle")
     , maUpdatePreviewNoCacheIdle("Print Dialog Update Preview (no cache) Idle")
@@ -788,17 +787,8 @@ void PrintDialog::readFromSettings()
         m_xDialog->set_window_state(aValue);
 
     // collate
-    if( officecfg::VCL::VCLSettings::PrintDialog::Collate::isReadOnly() )
-    {
-        mbCollateAlwaysOff = true;
-        mxCollateBox->set_active( false );
-        mxCollateBox->set_sensitive( false );
-    }
-    else
-    {
-        mbCollateAlwaysOff = false;
-        mxCollateBox->set_active( officecfg::VCL::VCLSettings::PrintDialog::Collate::get() );
-    }
+    mxCollateBox->set_sensitive( officecfg::VCL::VCLSettings::PrintDialog::Collate::isReadOnly() );
+    mxCollateBox->set_active( officecfg::VCL::VCLSettings::PrintDialog::Collate::get() );
 
     // collate single jobs
     mxSingleJobsBox->set_active( officecfg::VCL::VCLSettings::PrintDialog::CollateSingleJobs::get() );
@@ -1074,7 +1064,7 @@ void PrintDialog::checkControlDependencies()
 {
     if (mxCopyCountField->get_value() > 1)
     {
-        mxCollateBox->set_sensitive( !mbCollateAlwaysOff );
+        mxCollateBox->set_sensitive( officecfg::VCL::VCLSettings::PrintDialog::Collate::isReadOnly() );
         mxSingleJobsBox->set_sensitive( mxCollateBox->get_active() );
     }
     else
