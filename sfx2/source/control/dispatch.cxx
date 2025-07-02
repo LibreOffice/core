@@ -1665,8 +1665,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
 
     // search through all the shells of the chained dispatchers
     // from top to bottom
-    sal_uInt16 nFirstShell = 0;
-    for ( sal_uInt16 i = nFirstShell; i < nTotCount; ++i )
+    for (sal_uInt16 i = 0; i < nTotCount; ++i)
     {
         SfxShell *pObjShell = GetShell(i);
         if (!pObjShell)
