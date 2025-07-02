@@ -972,6 +972,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testDigitGuideName_funnel)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
 
     // Test idea: Convert the shape to a Bézier curve. Test the end coordinate of the first half
