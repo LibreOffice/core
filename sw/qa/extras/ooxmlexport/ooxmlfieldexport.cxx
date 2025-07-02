@@ -437,16 +437,15 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo78910)
     assertXPath ( pXmlDoc, "//w:hyperlink[2]/w:r[5]/w:fldChar", "fldCharType", u"end" );
 }
 
-// FIXME: During this test a pure VML shape get converted to DML and crash at verifying.
-// CPPUNIT_TEST_FIXTURE(Test, testFDO78590)
-// {
-//     loadAndReload("FDO78590.docx");
-//     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-//
-//     // This is to ensure that the fld starts and ends inside a hyperlink...
-//     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "w", "9851" );
-//     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "h", "1669" );
-// }
+CPPUNIT_TEST_FIXTURE(Test, testFDO78590)
+{
+    loadAndReload("FDO78590.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // This is to ensure that the fld starts and ends inside a hyperlink...
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "w", u"9851" );
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "h", u"1669" );
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtCitationRun)
 {
