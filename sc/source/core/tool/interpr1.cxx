@@ -6968,6 +6968,11 @@ void ScInterpreter::ScLookup()
                     PushIllegalParameter();
                     return;
                 }
+                if (eResArrayType == svMatrix) // inline-array
+                {
+                    nResCol2 = nC - 1;
+                    nResRow2 = nR - 1;
+                }
             }
             break;
             case svDouble:
@@ -7022,6 +7027,11 @@ void ScInterpreter::ScLookup()
             pDataMat->GetDimensions(nC, nR);
             bVertical = (nR >= nC);
             nLenMajor = bVertical ? nR : nC;
+            if (eDataArrayType == svMatrix) // inline array
+            {
+                nCol2 = nC - 1;
+                nRow2 = nR - 1;
+            }
         }
         break;
         case svDouble:
@@ -7324,7 +7334,7 @@ void ScInterpreter::ScLookup()
 
         if (pResMat)
         {
-            VectorMatrixAccessor aResMatAcc(*pResMat, bVertical);
+            VectorMatrixAccessor aResMatAcc(*pResMat, (nResRow2 - nResRow1) > 0);
             // Result array is matrix.
             // Note this does not replicate the other dimension.
             if (o3tl::make_unsigned(nDelta) >= aResMatAcc.GetElementCount())
@@ -7458,7 +7468,7 @@ void ScInterpreter::ScLookup()
 
     if (pResMat)
     {
-        VectorMatrixAccessor aResMatAcc(*pResMat, bVertical);
+        VectorMatrixAccessor aResMatAcc(*pResMat, (nResRow2 - nResRow1) > 0);
         // Use the matrix result array.
         // Note this does not replicate the other dimension.
         if (o3tl::make_unsigned(nDelta) >= aResMatAcc.GetElementCount())
