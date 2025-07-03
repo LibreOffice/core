@@ -983,11 +983,11 @@ bool FrameSelector::IsBorderSelected( FrameBorderType eBorder ) const
     return mxImpl->GetBorder( eBorder ).IsSelected();
 }
 
-void FrameSelector::SelectBorder( FrameBorderType eBorder )
+void FrameSelector::SelectBorder(FrameBorderType eBorder, bool bFocus)
 {
     mxImpl->SelectBorder( mxImpl->GetBorderAccess( eBorder ), true/*bSelect*/ );
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    // if (bFocus)
+    if (bFocus)
     {
         rtl::Reference< a11y::AccFrameSelectorChild > xRet = GetChildAccessible(eBorder);
         if (xRet.is())
@@ -1146,8 +1146,7 @@ bool FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
                 if (!pBorder->IsSelected())
                 {
                     bNewSelected = true;
-                    //mxImpl->SelectBorder( **aIt, true );
-                    SelectBorder(pBorder->GetType());
+                    SelectBorder(pBorder->GetType(), true);
                 }
             }
             else
@@ -1228,7 +1227,7 @@ bool FrameSelector::KeyInput( const KeyEvent& rKEvt )
                     if( eBorder != FrameBorderType::NONE )
                     {
                         DeselectAllBorders();
-                        SelectBorder( eBorder );
+                        SelectBorder(eBorder, true);
                     }
                     bHandled = true;
                 }
@@ -1267,7 +1266,7 @@ void FrameSelector::GetFocus()
             borderType = FrameBorderType::TLBR;
         else if (mxImpl->maBLTR.IsSelected())
             borderType = FrameBorderType::BLTR;
-        SelectBorder(borderType);
+        SelectBorder(borderType, true);
     }
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
             mxImpl->SetBorderState( **aIt, FrameBorderState::Show );

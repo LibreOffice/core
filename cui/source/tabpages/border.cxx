@@ -1195,7 +1195,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
         svx::FrameBorderType eBorder = svx::GetFrameBorderTypeFromIndex( nBorder );
         switch( ppeStates[ nLine ][ nBorder ] )
         {
-            case SHOW:  m_aFrameSel.SelectBorder( eBorder );      break;
+            case SHOW:  m_aFrameSel.SelectBorder(eBorder, false); break;
             case HIDE:  /* nothing to do */                     break;
             case DONT:  m_aFrameSel.SetBorderDontCare( eBorder ); break;
         }

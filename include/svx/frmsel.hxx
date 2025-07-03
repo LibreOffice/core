@@ -137,7 +137,7 @@ public:
     /** Returns true, if the specified frame border is selected. */
     bool                IsBorderSelected( FrameBorderType eBorder ) const;
     /** Selects or deselects the specified frame border. */
-    void                SelectBorder( FrameBorderType eBorder );
+    void SelectBorder(FrameBorderType eBorder, bool bFocus);
     /** Returns true, if any of the enabled frame borders is selected. */
     bool                IsAnyBorderSelected() const;
     /** Selects or deselects all frame borders. */
