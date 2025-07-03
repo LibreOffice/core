@@ -1663,7 +1663,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163974)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf167329)
 {
-    // This used to fail an assertion during loafing, because some inserted frames didn't
+    // This used to fail an assertion during loading, because some inserted frames didn't
     // update their inf flags, and still reported to be not in body.
     createSwDoc("chained-boxes-in-min-height-cells.fodt");
     // This must succeed
