@@ -1072,11 +1072,17 @@ Reference< XAccessible > FrameSelector::GetChildAccessible( sal_Int32 nIndex )
 
 Reference< XAccessible > FrameSelector::GetChildAccessible( const Point& rPos )
 {
-    Reference< XAccessible > xRet;
-    for( FrameBorderCIter aIt( mxImpl->maEnabBorders ); !xRet.is() && aIt.Is(); ++aIt )
-        if( (*aIt)->ContainsClickPoint( rPos ) )
-            xRet = GetChildAccessible( (*aIt)->GetType() ).get();
-    return xRet;
+    for (const FrameBorder* pBorder : mxImpl->maEnabBorders)
+    {
+        if (pBorder->ContainsClickPoint(rPos))
+        {
+            rtl::Reference<a11y::AccFrameSelectorChild> pChild = GetChildAccessible(pBorder->GetType());
+            if (pChild.is())
+                return pChild;
+        }
+    }
+
+    return {};
 }
 
 tools::Rectangle FrameSelector::GetClickBoundRect( FrameBorderType eBorder ) const
