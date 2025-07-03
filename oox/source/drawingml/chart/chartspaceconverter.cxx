@@ -240,6 +240,13 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
 
         PropertySet aDiaProp( xDiagram );
         aDiaProp.setProperty( PROP_MissingValueTreatment, nMissingValues );
+
+        if (mrModel.mbExplicitStyle) {
+            // The <c:style> value, now in mrModel.mnStyle, is handled in the
+            // ObjectFormatter code. Set it here as a property just so it can be
+            // stored for output.
+            aDiaProp.setProperty( PROP_StyleIndex, mrModel.mnStyle);
+        }
     }
 
     /*  Following all conversions needing the old Chart1 API that involves full

@@ -25,6 +25,7 @@ namespace oox::drawingml::chart {
 ChartSpaceModel::ChartSpaceModel(bool bMSO2007Doc) :
     mnDispBlanksAs( bMSO2007Doc ? XML_gap : XML_zero ),  // difference between OOXML spec and MSO 2007
     mnStyle( 2 ),
+    mbExplicitStyle(false),
     mbAutoTitleDel( !bMSO2007Doc ), // difference between OOXML spec and MSO 2007
     mbPlotVisOnly( !bMSO2007Doc ),
     mbShowLabelsOverMax( !bMSO2007Doc ),
