@@ -34,6 +34,14 @@
 #include <formatflysplit.hxx>
 #include <frmatr.hxx>
 
+#include <svx/fontworkbar.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdview.hxx>
+#include <drawdoc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <swdtflvr.hxx>
+
 namespace
 {
 /// Covers sw/source/uibase/wrtsh/ fixes.
@@ -576,6 +584,75 @@ CPPUNIT_TEST_FIXTURE(Test, testRemoveIndent)
     // - Actual  : 1418
     // i.e. there was no decrease of the left text margin on pressing backspace.
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(1135), nLeftMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCutFontworkObject)
+{
+    // Given a document with a fontwork object named "fontwork1":
+    createSwDoc("tdf58511.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwDoc* pDoc = getSwDoc();
+
+    // First, verify that the fontwork object exists
+    SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    SdrPage* pPage = pDrawModel->GetPage(0);
+    SdrObject* pFontworkObj = nullptr;
+
+    // Search for the fontwork object by name
+    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    {
+        SdrObject* pObj = pPage->GetObj(i);
+        if (pObj && pObj->GetName() == u"fontwork1")
+        {
+            // Check if it's actually a fontwork object using the helper function
+            if (svx::checkForFontWork(pObj))
+            {
+                pFontworkObj = pObj;
+                break;
+            }
+        }
+    }
+
+    // Make sure the fontwork object was found initially
+    CPPUNIT_ASSERT(pFontworkObj != nullptr);
+
+    // Select the fontwork object
+    SdrView* pSdrView = pWrtShell->GetDrawView();
+    CPPUNIT_ASSERT(pSdrView != nullptr);
+
+    // Clear any existing selection
+    pSdrView->UnmarkAll();
+
+    // Mark the fontwork object
+    pSdrView->MarkObj(pFontworkObj, pSdrView->GetSdrPageView());
+
+    // Verify the object is selected
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT_EQUAL(pFontworkObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
+
+    // When cutting the fontwork object - use SwTransferable::Copy with bIsCut = true:
+    rtl::Reference<SwTransferable> xTransfer(new SwTransferable(*pWrtShell));
+    xTransfer->Cut();
+
+    // Then make sure the fontwork object is deleted from the document:
+    pFontworkObj = nullptr;
+    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    {
+        SdrObject* pObj = pPage->GetObj(i);
+        if (pObj && pObj->GetName() == u"fontwork1")
+        {
+            if (svx::checkForFontWork(pObj))
+            {
+                pFontworkObj = pObj;
+                break;
+            }
+        }
+    }
+
+    // Without the accompanying fix in place, this test would have failed because
+    // the fontwork object was not properly deleted when cut.
+    CPPUNIT_ASSERT(pFontworkObj == nullptr);
 }
 }
 

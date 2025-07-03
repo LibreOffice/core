@@ -295,6 +295,8 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
         nSelection = SelectionType::Table;
     if(nSelection & SelectionType::Text)
         nSelection = SelectionType::Text;
+    if(nSelection & SelectionType::FontWork)
+        nSelection = SelectionType::DrawObject;
 
     switch( nSelection & ~SelectionType::Ornament & ~SelectionType::Media )
     {
