@@ -257,10 +257,6 @@ private:
 typedef FrameBorderIterBase< const FrameBorderPtrVec, FrameBorderPtrVec::const_iterator, FrameBorderDummy_Pred >
     FrameBorderCIter;
 
-/** Iterator for mutable svx::FrameBorder containers, iterates over all borders. */
-typedef FrameBorderIterBase< FrameBorderPtrVec, FrameBorderPtrVec::iterator, FrameBorderDummy_Pred >
-    FrameBorderIter;
-
 /** Iterator for constant svx::FrameBorder containers, iterates over visible borders. */
 typedef FrameBorderIterBase< const FrameBorderPtrVec, FrameBorderPtrVec::const_iterator, FrameBorderVisible_Pred >
     VisFrameBorderCIter;

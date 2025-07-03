@@ -288,11 +288,11 @@ void FrameSelectorImpl::Initialize( FrameSelFlags nFlags )
     mnFlags = nFlags;
 
     maEnabBorders.clear();
-    for( FrameBorderIter aIt( maAllBorders ); aIt.Is(); ++aIt )
+    for (FrameBorder* pBorder : maAllBorders)
     {
-        (*aIt)->Enable( mnFlags );
-        if( (*aIt)->IsEnabled() )
-            maEnabBorders.push_back( *aIt );
+        pBorder->Enable(mnFlags);
+        if (pBorder->IsEnabled())
+            maEnabBorders.push_back(pBorder);
     }
     mbHor = maHor.IsEnabled();
     mbVer = maVer.IsEnabled();
@@ -457,8 +457,8 @@ void FrameSelectorImpl::InitBorderGeometry()
     }
 
     // Click areas
-    for( FrameBorderIter aIt( maAllBorders ); aIt.Is(); ++aIt )
-        (*aIt)->ClearClickArea();
+    for (FrameBorder* pBorder : maAllBorders)
+        pBorder->ClearClickArea();
 
     /*  Additional space for click area: is added to the space available to draw
         the frame borders. For instance left frame border:
@@ -640,12 +640,12 @@ Color FrameSelectorImpl::GetDrawLineColor( const Color& rColor ) const
 void FrameSelectorImpl::DrawAllFrameBorders()
 {
     // Translate core colors to current UI colors (regards current background and HC mode).
-    for( FrameBorderIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
+    for (FrameBorder* pBorder : maEnabBorders)
     {
-        Color aCoreColorPrim = ((*aIt)->GetState() == FrameBorderState::DontCare) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorOut();
-        Color aCoreColorSecn = ((*aIt)->GetState() == FrameBorderState::DontCare) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorIn();
-        (*aIt)->SetUIColorPrim( GetDrawLineColor( aCoreColorPrim ) );
-        (*aIt)->SetUIColorSecn( GetDrawLineColor( aCoreColorSecn ) );
+        Color aCoreColorPrim = (pBorder->GetState() == FrameBorderState::DontCare) ? maMarkCol : pBorder->GetCoreStyle().GetColorOut();
+        Color aCoreColorSecn = (pBorder->GetState() == FrameBorderState::DontCare) ? maMarkCol : pBorder->GetCoreStyle().GetColorIn();
+        pBorder->SetUIColorPrim(GetDrawLineColor(aCoreColorPrim));
+        pBorder->SetUIColorSecn(GetDrawLineColor(aCoreColorSecn));
     }
 
     // Copy all frame border styles to the helper array
@@ -924,8 +924,8 @@ bool FrameSelector::IsAnyBorderVisible() const
 
 void FrameSelector::HideAllBorders()
 {
-    for( FrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
-        mxImpl->SetBorderState( **aIt, FrameBorderState::Hide );
+    for (FrameBorder* pBorder : mxImpl->maEnabBorders)
+        mxImpl->SetBorderState(*pBorder, FrameBorderState::Hide);
 }
 
 bool FrameSelector::GetVisibleWidth( tools::Long& rnWidth, SvxBorderLineStyle& rnStyle ) const
@@ -1009,8 +1009,8 @@ bool FrameSelector::IsAnyBorderSelected() const
 
 void FrameSelector::SelectAllBorders( bool bSelect )
 {
-    for( FrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
-        mxImpl->SelectBorder( **aIt, bSelect );
+    for (FrameBorder* pBorder : mxImpl->maEnabBorders)
+        mxImpl->SelectBorder(*pBorder, bSelect);
 }
 
 void FrameSelector::SelectAllVisibleBorders()
@@ -1132,36 +1132,36 @@ bool FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
             DR 2004-01-30: Why are the borders set to "don't care" then?!? */
         bool bHideDontCare = !SupportsDontCareState();
 
-        for( FrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
+        for (FrameBorder* pBorder : mxImpl->maEnabBorders)
         {
-            if( (*aIt)->ContainsClickPoint( aPos ) )
+            if (pBorder->ContainsClickPoint(aPos))
             {
                 // frame border is clicked
                 bAnyClicked = true;
-                if( !(*aIt)->IsSelected() )
+                if (!pBorder->IsSelected())
                 {
                     bNewSelected = true;
                     //mxImpl->SelectBorder( **aIt, true );
-                    SelectBorder((**aIt).GetType());
+                    SelectBorder(pBorder->GetType());
                 }
             }
             else
             {
                 // hide a "don't care" frame border only if it is not clicked
-                if( bHideDontCare && ((*aIt)->GetState() == FrameBorderState::DontCare) )
-                    mxImpl->SetBorderState( **aIt, FrameBorderState::Hide );
+                if (bHideDontCare && (pBorder->GetState() == FrameBorderState::DontCare))
+                    mxImpl->SetBorderState(*pBorder, FrameBorderState::Hide);
 
                 // deselect frame borders not clicked (if SHIFT or CTRL are not pressed)
                 if( !rMEvt.IsShift() && !rMEvt.IsMod1() )
-                    aDeselectBorders.push_back( *aIt );
+                    aDeselectBorders.push_back(pBorder);
             }
         }
 
         if( bAnyClicked )
         {
             // any valid frame border clicked? -> deselect other frame borders
-            for( FrameBorderIter aIt( aDeselectBorders ); aIt.Is(); ++aIt )
-                mxImpl->SelectBorder( **aIt, false );
+            for (FrameBorder* pBorder : aDeselectBorders)
+                mxImpl->SelectBorder(*pBorder, false);
 
             if( bNewSelected || !mxImpl->SelectedBordersEqual() )
             {
