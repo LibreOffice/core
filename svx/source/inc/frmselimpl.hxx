@@ -213,13 +213,6 @@ struct FrameSelectorImpl
     bool                SelectedBordersEqual() const;
 };
 
-
-/** Dummy predicate for frame border iterators to use all borders in a container. */
-struct FrameBorderDummy_Pred
-{
-    bool operator()( const FrameBorder* ) const { return true; }
-};
-
 /** Predicate for frame border iterators to use only visible borders in a container. */
 struct FrameBorderVisible_Pred
 {
@@ -252,10 +245,6 @@ private:
     iterator_type       maEnd;
     Pred                maPred;
 };
-
-/** Iterator for constant svx::FrameBorder containers, iterates over all borders. */
-typedef FrameBorderIterBase< const FrameBorderPtrVec, FrameBorderPtrVec::const_iterator, FrameBorderDummy_Pred >
-    FrameBorderCIter;
 
 /** Iterator for constant svx::FrameBorder containers, iterates over visible borders. */
 typedef FrameBorderIterBase< const FrameBorderPtrVec, FrameBorderPtrVec::const_iterator, FrameBorderVisible_Pred >

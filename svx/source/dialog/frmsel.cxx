@@ -565,8 +565,8 @@ void FrameSelectorImpl::DrawBackground()
 
     // draw the white space for enabled frame borders
     tools::PolyPolygon aPPoly;
-    for( FrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
-        (*aIt)->MergeFocusToPolyPolygon( aPPoly );
+    for (const FrameBorder* pBorder : maEnabBorders)
+        pBorder->MergeFocusToPolyPolygon(aPPoly);
     aPPoly.Optimize( PolyOptimizeFlags::CLOSE );
     mpVirDev->SetLineColor( maBackCol );
     mpVirDev->SetFillColor( maBackCol );
@@ -709,8 +709,8 @@ void FrameSelectorImpl::DrawAllFrameBorders()
 void FrameSelectorImpl::DrawVirtualDevice()
 {
     DrawBackground();
-    for(FrameBorderCIter aIt(maEnabBorders); aIt.Is(); ++aIt)
-        DrawArrows(**aIt);
+    for (const FrameBorder* pBorder : maEnabBorders)
+        DrawArrows(*pBorder);
     DrawAllFrameBorders();
     mbFullRepaint = false;
 }
