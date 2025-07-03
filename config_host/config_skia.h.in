@@ -46,6 +46,11 @@ are the same.
 #define SK_CODEC_DECODES_PNG 1
 #define SK_ENCODE_PNG 1
 
+// tdf#166339: Gamma-correct text rendering is needed for subpixel antialiasing
+// to work properly. This option may make some text appear fainter than in other
+// backends, but that is because the other backends don't handle gamma correctly.
+#define SK_GAMMA_APPLY_TO_A8 1
+
 // These are just to avoid warnings (some headers use them even with GL disabled).
 #define SK_ASSUME_GL 1
 #define SK_ASSUME_GL_ES 0
