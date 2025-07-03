@@ -363,7 +363,7 @@ bool LayeredDevice::HandleMapModeChange()
     }
     else
     {
-        // Can this happen?  Lets trigger a warning when it does.
+        // Can this happen? Let's trigger a warning when it does.
         OSL_ASSERT(false);
     }
 
