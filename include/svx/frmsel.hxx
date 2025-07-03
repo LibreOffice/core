@@ -165,11 +165,9 @@ public:
     rtl::Reference< a11y::AccFrameSelectorChild >
                         GetChildAccessible( FrameBorderType eBorder );
     /** Returns the accessibility child object with specified index (counts enabled frame borders only). */
-    css::uno::Reference< css::accessibility::XAccessible >
-                        GetChildAccessible( sal_Int32 nIndex );
+    rtl::Reference<comphelper::OAccessible> GetChildAccessible(sal_Int32 nIndex);
     /** Returns the accessibility child object at the specified position (relative to control). */
-    css::uno::Reference< css::accessibility::XAccessible >
-                        GetChildAccessible( const Point& rPos );
+    rtl::Reference<comphelper::OAccessible> GetChildAccessible(const Point& rPos);
 
     /** Returns the bounding rectangle of the specified frame border (if enabled). */
     tools::Rectangle           GetClickBoundRect( FrameBorderType eBorder ) const;

@@ -1065,12 +1065,12 @@ rtl::Reference< a11y::AccFrameSelectorChild > FrameSelector::GetChildAccessible(
     return xRet;
 }
 
-Reference< XAccessible > FrameSelector::GetChildAccessible( sal_Int32 nIndex )
+rtl::Reference<comphelper::OAccessible> FrameSelector::GetChildAccessible(sal_Int32 nIndex)
 {
     return GetChildAccessible( GetEnabledBorderType( nIndex ) );
 }
 
-Reference< XAccessible > FrameSelector::GetChildAccessible( const Point& rPos )
+rtl::Reference<comphelper::OAccessible> FrameSelector::GetChildAccessible(const Point& rPos)
 {
     for (const FrameBorder* pBorder : mxImpl->maEnabBorders)
     {
