@@ -68,6 +68,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
                 case C_TOKEN( style ):
                     mrModel.mnStyle = rAttribs.getInteger( XML_val, 2 );
+                    mrModel.mbExplicitStyle = true;
                     return nullptr;
                 case C_TOKEN( txPr ):
                     return new TextBodyContext( *this, mrModel.mxTextProp.create() );

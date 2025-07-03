@@ -54,6 +54,7 @@ struct ChartSpaceModel
     OUString            maSheetPath;        /// Path to embedded charts.
     sal_Int32           mnDispBlanksAs;     /// Mode how to display blank values.
     sal_Int32           mnStyle;            /// Index to default formatting.
+    bool                mbExplicitStyle;    /// Is there a <c:style> tag?
     bool                mbAutoTitleDel;     /// True = automatic title deleted manually.
     bool                mbPlotVisOnly;      /// True = plot visible cells in a sheet only.
     bool                mbShowLabelsOverMax;/// True = show labels over chart maximum.

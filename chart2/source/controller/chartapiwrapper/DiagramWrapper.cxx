@@ -140,7 +140,8 @@ enum
     PROP_DIAGRAM_HAS_SECOND_Y_AXIS_TITLE,
 
     PROP_DIAGRAM_AUTOMATIC_SIZE,
-    PROP_DIAGRAM_EXTERNALDATA
+    PROP_DIAGRAM_EXTERNALDATA,
+    PROP_DIAGRAM_STYLE_INDEX
 };
 
 void lcl_AddPropertiesToVector(
@@ -392,9 +393,16 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    // chartSpace properties
     rOutProperties.emplace_back( "ExternalData",
                   PROP_DIAGRAM_EXTERNALDATA,
                   cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "StyleIndex",
+                  PROP_DIAGRAM_STYLE_INDEX,
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 }
