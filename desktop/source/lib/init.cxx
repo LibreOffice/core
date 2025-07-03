@@ -5370,7 +5370,7 @@ static bool isCommandAllowed(std::u16string_view command)
 
     if (command == u".uno:Save")
     {
-        return pViewShell->IsAllowChangeComments();
+        return pViewShell->IsAllowChangeComments() || pViewShell->IsAllowManageRedlines();
     }
 
     if (command == u".uno:TransformDialog")
