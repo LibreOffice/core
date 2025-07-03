@@ -981,168 +981,171 @@ struct IndexCompare
 
 OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
 {
-    OUString strTypeName;
+    sal_Int32 nFieldIndex = GetPortionData().GetFieldIndex(nIndex);
+    if (nFieldIndex < 0)
+        return OUString();
+
     SwFieldMgr aMgr;
     SwTextField* pTextField = nullptr;
-    sal_Int32 nFieldIndex = GetPortionData().GetFieldIndex(nIndex);
-    if (nFieldIndex >= 0)
+    OUString strTypeName;
+
+    const SwTextFrame* const pFrame = GetTextFrame();
+    sw::MergedAttrIter iter(*pFrame);
+    while (SwTextAttr const*const pHt = iter.NextAttr())
     {
-        const SwTextFrame* const pFrame = GetTextFrame();
-        sw::MergedAttrIter iter(*pFrame);
-        while (SwTextAttr const*const pHt = iter.NextAttr())
+        if ((pHt->Which() == RES_TXTATR_FIELD
+               || pHt->Which() == RES_TXTATR_ANNOTATION
+               || pHt->Which() == RES_TXTATR_INPUTFIELD)
+             && (nFieldIndex-- == 0))
         {
-            if ((pHt->Which() == RES_TXTATR_FIELD
-                   || pHt->Which() == RES_TXTATR_ANNOTATION
-                   || pHt->Which() == RES_TXTATR_INPUTFIELD)
+            pTextField = const_cast<SwTextField*>(
+                        static_txtattr_cast<SwTextField const*>(pHt));
+            break;
+        }
+        else if (pHt->Which() == RES_TXTATR_REFMARK
                  && (nFieldIndex-- == 0))
-            {
-                pTextField = const_cast<SwTextField*>(
-                            static_txtattr_cast<SwTextField const*>(pHt));
-                break;
-            }
-            else if (pHt->Which() == RES_TXTATR_REFMARK
-                     && (nFieldIndex-- == 0))
-            {
-                strTypeName = "set reference";
-            }
+        {
+            strTypeName = "set reference";
         }
     }
-    if (pTextField)
+
+    if (!pTextField)
+        return strTypeName;
+
+    const SwField* pField = pTextField->GetFormatField().GetField();
+    if (!pField)
+        return strTypeName;
+
+    strTypeName = SwFieldType::GetTypeStr(pField->GetTypeId());
+    const SwFieldIds nWhich = pField->GetTyp()->Which();
+    OUString sEntry;
+    sal_uInt32 subType = 0;
+    switch (nWhich)
     {
-        const SwField* pField = pTextField->GetFormatField().GetField();
-        if (pField)
+    case SwFieldIds::DocStat:
+        subType = static_cast<const SwDocStatField*>(pField)->GetSubType();
+        break;
+    case SwFieldIds::GetRef:
         {
-            strTypeName = SwFieldType::GetTypeStr(pField->GetTypeId());
-            const SwFieldIds nWhich = pField->GetTyp()->Which();
-            OUString sEntry;
-            sal_uInt32 subType = 0;
-            switch (nWhich)
+            switch( pField->GetSubType() )
             {
-            case SwFieldIds::DocStat:
-                subType = static_cast<const SwDocStatField*>(pField)->GetSubType();
-                break;
-            case SwFieldIds::GetRef:
+            case REF_BOOKMARK:
                 {
-                    switch( pField->GetSubType() )
-                    {
-                    case REF_BOOKMARK:
-                        {
-                            const SwGetRefField* pRefField = dynamic_cast<const SwGetRefField*>(pField);
-                            if ( pRefField && pRefField->IsRefToHeadingCrossRefBookmark() )
-                                sEntry = "Headings";
-                            else if ( pRefField && pRefField->IsRefToNumItemCrossRefBookmark() )
-                                sEntry = "Numbered Paragraphs";
-                            else
-                                sEntry = "Bookmarks";
-                        }
-                        break;
-                    case REF_FOOTNOTE:
-                        sEntry = "Footnotes";
-                        break;
-                    case REF_ENDNOTE:
-                        sEntry = "Endnotes";
-                        break;
-                    case REF_SETREFATTR:
-                        sEntry = "Insert Reference";
-                        break;
-                    case REF_SEQUENCEFLD:
-                        sEntry = static_cast<const SwGetRefField*>(pField)->GetSetRefName().toString();
-                        break;
-                    case REF_STYLE:
-                        sEntry = "StyleRef";
-                        break;
-                    }
-                    //Get format string
-                    strTypeName = sEntry;
-                    // <pField->GetFormat() >= 0> is always true as <pField->GetFormat()> is unsigned
-//                    if (pField->GetFormat() >= 0)
-                    {
-                        sEntry = aMgr.GetFormatStr( pField->GetTypeId(), pField->GetFormat() );
-                        if (sEntry.getLength() > 0)
-                        {
-                            strTypeName += "-" + sEntry;
-                        }
-                    }
-                }
-                break;
-            case SwFieldIds::DateTime:
-                subType = static_cast<const SwDateTimeField*>(pField)->GetSubType();
-                break;
-            case SwFieldIds::JumpEdit:
-                {
-                    const sal_uInt32 nFormat= pField->GetFormat();
-                    const sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
-                    if (nFormat < nSize)
-                    {
-                        sEntry = aMgr.GetFormatStr(pField->GetTypeId(), nFormat);
-                        if (sEntry.getLength() > 0)
-                        {
-                            strTypeName += "-" + sEntry;
-                        }
-                    }
-                }
-                break;
-            case SwFieldIds::ExtUser:
-                subType = static_cast<const SwExtUserField*>(pField)->GetSubType();
-                break;
-            case SwFieldIds::HiddenText:
-            case SwFieldIds::SetExp:
-                {
-                    sEntry = pField->GetTyp()->GetName().toString();
-                    if (sEntry.getLength() > 0)
-                    {
-                        strTypeName += "-" + sEntry;
-                    }
-                }
-                break;
-            case SwFieldIds::DocInfo:
-                subType = pField->GetSubType();
-                subType &= 0x00ff;
-                break;
-            case SwFieldIds::RefPageSet:
-                {
-                    const SwRefPageSetField* pRPld = static_cast<const SwRefPageSetField*>(pField);
-                    bool bOn = pRPld->IsOn();
-                    strTypeName += "-";
-                    if (bOn)
-                        strTypeName += "on";
+                    const SwGetRefField* pRefField = dynamic_cast<const SwGetRefField*>(pField);
+                    if ( pRefField && pRefField->IsRefToHeadingCrossRefBookmark() )
+                        sEntry = "Headings";
+                    else if ( pRefField && pRefField->IsRefToNumItemCrossRefBookmark() )
+                        sEntry = "Numbered Paragraphs";
                     else
-                        strTypeName += "off";
+                        sEntry = "Bookmarks";
                 }
                 break;
-            case SwFieldIds::Author:
-                {
-                    strTypeName += "-" + aMgr.GetFormatStr(pField->GetTypeId(), pField->GetFormat() & 0xff);
-                }
+            case REF_FOOTNOTE:
+                sEntry = "Footnotes";
                 break;
-            default: break;
+            case REF_ENDNOTE:
+                sEntry = "Endnotes";
+                break;
+            case REF_SETREFATTR:
+                sEntry = "Insert Reference";
+                break;
+            case REF_SEQUENCEFLD:
+                sEntry = static_cast<const SwGetRefField*>(pField)->GetSetRefName().toString();
+                break;
+            case REF_STYLE:
+                sEntry = "StyleRef";
+                break;
             }
-            if (subType > 0 || nWhich == SwFieldIds::DocInfo || nWhich == SwFieldIds::ExtUser || nWhich == SwFieldIds::DocStat)
+            //Get format string
+            strTypeName = sEntry;
+            // <pField->GetFormat() >= 0> is always true as <pField->GetFormat()> is unsigned
+//                    if (pField->GetFormat() >= 0)
             {
-                std::vector<OUString> aLst;
-                aMgr.GetSubTypes(pField->GetTypeId(), aLst);
-                if (subType < aLst.size())
-                    sEntry = aLst[subType];
+                sEntry = aMgr.GetFormatStr( pField->GetTypeId(), pField->GetFormat() );
                 if (sEntry.getLength() > 0)
                 {
-                    if (nWhich == SwFieldIds::DocInfo)
-                    {
-                        strTypeName = sEntry;
-                        sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
-                        const sal_uInt16 nExSub = pField->GetSubType() & 0xff00;
-                        if (nSize > 0 && nExSub > 0)
-                        {
-                            //Get extra subtype string
-                            strTypeName += "-";
-                            sEntry = aMgr.GetFormatStr(pField->GetTypeId(), nExSub/0x0100-1);
-                            strTypeName += sEntry;
-                        }
-                    }
-                    else
-                    {
-                        strTypeName += "-" + sEntry;
-                    }
+                    strTypeName += "-" + sEntry;
                 }
+            }
+        }
+        break;
+    case SwFieldIds::DateTime:
+        subType = static_cast<const SwDateTimeField*>(pField)->GetSubType();
+        break;
+    case SwFieldIds::JumpEdit:
+        {
+            const sal_uInt32 nFormat= pField->GetFormat();
+            const sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
+            if (nFormat < nSize)
+            {
+                sEntry = aMgr.GetFormatStr(pField->GetTypeId(), nFormat);
+                if (sEntry.getLength() > 0)
+                {
+                    strTypeName += "-" + sEntry;
+                }
+            }
+        }
+        break;
+    case SwFieldIds::ExtUser:
+        subType = static_cast<const SwExtUserField*>(pField)->GetSubType();
+        break;
+    case SwFieldIds::HiddenText:
+    case SwFieldIds::SetExp:
+        {
+            sEntry = pField->GetTyp()->GetName().toString();
+            if (sEntry.getLength() > 0)
+            {
+                strTypeName += "-" + sEntry;
+            }
+        }
+        break;
+    case SwFieldIds::DocInfo:
+        subType = pField->GetSubType();
+        subType &= 0x00ff;
+        break;
+    case SwFieldIds::RefPageSet:
+        {
+            const SwRefPageSetField* pRPld = static_cast<const SwRefPageSetField*>(pField);
+            bool bOn = pRPld->IsOn();
+            strTypeName += "-";
+            if (bOn)
+                strTypeName += "on";
+            else
+                strTypeName += "off";
+        }
+        break;
+    case SwFieldIds::Author:
+        {
+            strTypeName += "-" + aMgr.GetFormatStr(pField->GetTypeId(), pField->GetFormat() & 0xff);
+        }
+        break;
+    default: break;
+    }
+
+    if (subType > 0 || nWhich == SwFieldIds::DocInfo || nWhich == SwFieldIds::ExtUser || nWhich == SwFieldIds::DocStat)
+    {
+        std::vector<OUString> aLst;
+        aMgr.GetSubTypes(pField->GetTypeId(), aLst);
+        if (subType < aLst.size())
+            sEntry = aLst[subType];
+        if (sEntry.getLength() > 0)
+        {
+            if (nWhich == SwFieldIds::DocInfo)
+            {
+                strTypeName = sEntry;
+                sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
+                const sal_uInt16 nExSub = pField->GetSubType() & 0xff00;
+                if (nSize > 0 && nExSub > 0)
+                {
+                    //Get extra subtype string
+                    strTypeName += "-";
+                    sEntry = aMgr.GetFormatStr(pField->GetTypeId(), nExSub/0x0100-1);
+                    strTypeName += sEntry;
+                }
+            }
+            else
+            {
+                strTypeName += "-" + sEntry;
             }
         }
     }
