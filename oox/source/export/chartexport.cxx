@@ -1273,6 +1273,19 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
         pFS->singleElement(FSNS(XML_c, XML_roundedCorners), XML_val, "0");
     }
 
+    // style
+    if (!bIsChartex) {
+        mxDiagram.set( xChartDoc->getDiagram() );
+        Reference< XPropertySet > xPropSet(mxDiagram, uno::UNO_QUERY);
+        if (GetProperty(xPropSet, u"StyleIndex"_ustr)) {
+            sal_Int32 nStyleIdx = -1;
+            mAny >>= nStyleIdx;
+            assert(nStyleIdx >= 0);
+            pFS->singleElement(FSNS(XML_c, XML_style), XML_val,
+                    OUString::number(nStyleIdx));
+        }
+    }
+
     if( !bIncludeTable )
     {
         // TODO:external data
@@ -1281,7 +1294,6 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     exportChart(xChartDoc, bIsChartex);
 
     // TODO: printSettings
-    // TODO: style
     // TODO: text properties
     Reference< XPropertySet > xPropSet = xChartDoc->getArea();
     if( xPropSet.is() )

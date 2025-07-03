@@ -929,6 +929,17 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf123206_customLabelText)
                        u"kiscica");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, test_style)
+{
+    loadFromFile(u"xlsx/column-style.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // workaround: use leave-gap instead of zero to show the original line chart
+    assertXPath(pXmlDoc, "/c:chartSpace/c:style", "val", u"23");
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomLabelText)
 {
     loadFromFile(u"docx/testCustomlabeltext.docx");
