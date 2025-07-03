@@ -10,10 +10,6 @@
 $(eval $(call gb_Package_Package,extras_tplwizbitmap,$(SRCDIR)/extras/source/templates/wizard/bitmap))
 
 $(eval $(call gb_Package_add_files,extras_tplwizbitmap,$(LIBO_SHARE_FOLDER)/template/wizard/bitmap,\
-	ftpconnected.gif \
-	ftpconnecting.gif \
-	ftperror.gif \
-	ftpunknown.gif \
 	Import_1.png \
 	Import_3.png \
 	Import_4.png \
