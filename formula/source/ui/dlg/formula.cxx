@@ -628,19 +628,19 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, cons
 
                 if (eOp == ocBad)
                 {
-                    _pTree->InsertEntry(aResult, pParent, STRUCT_ERROR, 0, _pToken, *xEntry);
+                    _pTree->InsertEntry(aResult, pParent, StructType::Error, 0, _pToken, *xEntry);
                 }
                 else if (!((SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP) ||
                             (SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)))
                 {
                     // Not a binary or unary operator.
                     bCalcSubformula = true;
-                    _pTree->InsertEntry(aResult, pParent, STRUCT_FOLDER, 0, _pToken, *xEntry);
+                    _pTree->InsertEntry(aResult, pParent, StructType::Folder, 0, _pToken, *xEntry);
                 }
                 else
                 {
                     /* TODO: question remains, why not sub calculate operators? */
-                    _pTree->InsertEntry(aResult, pParent, STRUCT_FOLDER, 0, _pToken, *xEntry);
+                    _pTree->InsertEntry(aResult, pParent, StructType::Folder, 0, _pToken, *xEntry);
                 }
 
                 pEntry = xEntry.get();
@@ -680,7 +680,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, cons
             std::unique_ptr<weld::TreeIter> xEntry(m_xStructPage->GetTlbStruct().make_iterator());
             if (eOp == ocBad)
             {
-                _pTree->InsertEntry( aResult, pParent, STRUCT_ERROR, 0, _pToken, *xEntry);
+                _pTree->InsertEntry(aResult, pParent, StructType::Error, 0, _pToken, *xEntry);
             }
             else if (eOp == ocPush)
             {
@@ -728,14 +728,14 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, cons
                     // Cell is a formula, print subformula.
                     // With scalar values prints "A1:A3 = 2 {1;2;3}"
                     _pTree->InsertEntry( aResult + " = " + aUnforcedResult + aCellResult,
-                            pParent, STRUCT_END, 0, _pToken, *xEntry);
+                            pParent, StructType::End, 0, _pToken, *xEntry);
                 }
                 else
-                    _pTree->InsertEntry(aResult, pParent, STRUCT_END, 0, _pToken, *xEntry);
+                    _pTree->InsertEntry(aResult, pParent, StructType::End, 0, _pToken, *xEntry);
             }
             else
             {
-                _pTree->InsertEntry(aResult, pParent, STRUCT_END, 0, _pToken, *xEntry);
+                _pTree->InsertEntry(aResult, pParent, StructType::End, 0, _pToken, *xEntry);
             }
             --Count;
             MakeTree( _pTree, pParent, _pToken, m_oTokenArrayIterator->PrevRPN(), Count);

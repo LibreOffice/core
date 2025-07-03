@@ -37,10 +37,12 @@ class SfxChildWindow;
 
 namespace formula
 {
-
-#define STRUCT_END    1
-#define STRUCT_FOLDER 2
-#define STRUCT_ERROR  3
+enum class StructType
+{
+    End,
+    Folder,
+    Error,
+};
 
 enum class FormulaDlgMode { Formula, Edit };
 

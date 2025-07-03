@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <formula/formula.hxx>
 #include <vcl/weld.hxx>
 
 namespace formula
@@ -56,7 +57,7 @@ public:
 
     void            ClearStruct();
     bool InsertEntry(const OUString& rText, const weld::TreeIter* pParent,
-                     sal_uInt16 nFlag, int nPos,
+                     StructType eStructType, int nPos,
                      const FormulaToken* pIFormulaToken,
                      weld::TreeIter& rRet);
 

@@ -58,8 +58,7 @@ void StructPage::ClearStruct()
 }
 
 bool StructPage::InsertEntry(const OUString& rText, const weld::TreeIter* pParent,
-                             sal_uInt16 nFlag, int nPos,
-                             const FormulaToken* pIFormulaToken,
+                             StructType eStructType, int nPos, const FormulaToken* pIFormulaToken,
                              weld::TreeIter& rRet)
 {
     SetActiveFlag(false);
@@ -67,21 +66,21 @@ bool StructPage::InsertEntry(const OUString& rText, const weld::TreeIter* pParen
     OUString sId(weld::toId(pIFormulaToken));
 
     bool bEntry = false;
-    switch (nFlag)
+    switch (eStructType)
     {
-        case STRUCT_FOLDER:
+        case StructType::Folder:
             m_xTlbStruct->insert(pParent, nPos, &rText, &sId, nullptr, nullptr,
                                  false, &rRet);
             m_xTlbStruct->set_image(rRet, BMP_STR_OPEN);
             bEntry = true;
             break;
-        case STRUCT_END:
+        case StructType::End:
             m_xTlbStruct->insert(pParent, nPos, &rText, &sId, nullptr, nullptr,
                                  false, &rRet);
             m_xTlbStruct->set_image(rRet, maImgEnd);
             bEntry = true;
             break;
-        case STRUCT_ERROR:
+        case StructType::Error:
             m_xTlbStruct->insert(pParent, nPos, &rText, &sId, nullptr, nullptr,
                                  false, &rRet);
             m_xTlbStruct->set_image(rRet, maImgError);
