@@ -36,7 +36,8 @@ public:
     virtual void set_current_page(int nPage) override;
     virtual void set_current_page(const OUString& rIdent) override;
     virtual void remove_page(const OUString& rIdent) override;
-    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos) override;
+    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
+                             const OUString* pIconName = nullptr) override;
     virtual void set_tab_label_text(const OUString& rIdent, const OUString& rLabel) override;
     virtual OUString get_tab_label_text(const OUString& rIdent) const override;
     virtual void set_show_tabs(bool bShow) override;

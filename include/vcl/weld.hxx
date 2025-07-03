@@ -525,10 +525,13 @@ public:
     virtual void set_current_page(int nPage) = 0;
     virtual void set_current_page(const OUString& rIdent) = 0;
     virtual void remove_page(const OUString& rIdent) = 0;
-    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos) = 0;
-    void append_page(const OUString& rIdent, const OUString& rLabel)
+    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
+                             const OUString* pIconName = nullptr)
+        = 0;
+    void append_page(const OUString& rIdent, const OUString& rLabel,
+                     const OUString* pIconName = nullptr)
     {
-        insert_page(rIdent, rLabel, -1);
+        insert_page(rIdent, rLabel, -1, pIconName);
     }
     virtual void set_tab_label_text(const OUString& rIdent, const OUString& rLabel) = 0;
     virtual OUString get_tab_label_text(const OUString& rIdent) const = 0;

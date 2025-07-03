@@ -129,11 +129,23 @@ public:
 
     void                AddTabPage(const OUString& rName,          // Name of the label for the new page to create
                                    const OUString& rLabel,         // UI Label for the new page to create
-                                   CreateTabPage pCreateFunc);     // != 0
+                                   CreateTabPage pCreateFunc,      // != 0
+                                   const OUString* pIconName = nullptr);
+
+    void                AddTabPage(const OUString& rName,
+                                   const OUString& rLabel,
+                                   CreateTabPage pCreateFunc,
+                                   const OUString& rIconName);
 
     void                AddTabPage(const OUString& rName,          // Name of the label for the new page to create
                                    const OUString& rLabel,         // UI Label for the new page to create
-                                   sal_uInt16 nPageCreateId);      // Identifier of the Factory Method to create the page
+                                   sal_uInt16 nPageCreateId,       // Identifier of the Factory Method to create the page
+                                   const OUString* pIconName = nullptr);
+
+    void                AddTabPage(const OUString& rName,
+                                   const OUString& rLabel,
+                                   sal_uInt16 nPageCreateId,
+                                   const OUString& rIconName);
 
     void                RemoveTabPage( const OUString& rName ); // Name of the label for the page in the notebook .ui
 

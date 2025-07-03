@@ -1359,9 +1359,10 @@ void JSNotebook::remove_page(const OUString& rIdent)
     sendFullUpdate();
 }
 
-void JSNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos)
+void JSNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
+                             const OUString* pIconName)
 {
-    SalInstanceNotebook::insert_page(rIdent, rLabel, nPos);
+    SalInstanceNotebook::insert_page(rIdent, rLabel, nPos, pIconName);
     sendFullUpdate();
 }
 
@@ -1378,9 +1379,10 @@ void JSVerticalNotebook::remove_page(const OUString& rIdent)
     sendFullUpdate();
 }
 
-void JSVerticalNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos)
+void JSVerticalNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
+                                     const OUString* pIconName)
 {
-    SalInstanceVerticalNotebook::insert_page(rIdent, rLabel, nPos);
+    SalInstanceVerticalNotebook::insert_page(rIdent, rLabel, nPos, pIconName);
     sendFullUpdate();
 }
 

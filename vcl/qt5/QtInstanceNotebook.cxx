@@ -100,7 +100,8 @@ void QtInstanceNotebook::remove_page(const OUString& rIdent)
     GetQtInstance().RunInMainThread([&] { m_pTabWidget->removeTab(get_page_index(rIdent)); });
 }
 
-void QtInstanceNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos)
+void QtInstanceNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
+                                     const OUString* /* pIconName */)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {

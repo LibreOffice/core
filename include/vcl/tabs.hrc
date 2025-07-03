@@ -1,0 +1,38 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*/
+
+#pragma once
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+#include <rtl/ustring.hxx>
+#include <unotools/resmgr.hxx>
+
+struct TabData
+{
+    TranslateId aLabel;
+    OUString sIconName;
+};
+
+/*
+ * Tabs are used on dialogs with a few items, usually <4, where it should be
+ * accompanied with larger 32px icons and dialogs with more content using 24px icons;
+ * the effective icon is loaded per RID_M + RID_TAB*.sIconName
+*/
+
+static constexpr OUString RID_M = u"cmd/lc_"_ustr;
+static constexpr OUString RID_L = u"cmd/32/"_ustr;
+
+
+static OUString TabResId(TranslateId aId)
+{
+    return Translate::get(aId, Translate::Create("vcl"));
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

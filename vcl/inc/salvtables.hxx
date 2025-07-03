@@ -1178,7 +1178,8 @@ public:
 
     virtual void remove_page(const OUString& rIdent) override;
 
-    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos) override;
+    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
+                             const OUString* pIconName = nullptr) override;
 
     virtual int get_n_pages() const override;
 
@@ -2333,7 +2334,8 @@ public:
 
     virtual void remove_page(const OUString& rIdent) override;
 
-    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos) override;
+    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
+                             const OUString* pIconName = nullptr) override;
 
     virtual int get_n_pages() const override;
 

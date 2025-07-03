@@ -9048,12 +9048,47 @@ private:
         enable_notify_events();
     }
 
-    void insert_page(GtkNotebook *pNotebook, const OUString& rIdent, const OUString& rLabel, GtkWidget *pChild, int nPos)
+    void insert_page(GtkNotebook* pNotebook, const OUString& rIdent, const OUString& rLabel,
+                     GtkWidget* pChild, int nPos, const OUString* pIconName = nullptr)
     {
         disable_notify_events();
 
-        GtkWidget *pTabWidget = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rLabel).getStr());
+        GtkWidget* pLabel = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rLabel).getStr());
+        GtkWidget* pTabWidget = nullptr;
+
+        GtkWidget* pImage = nullptr;
+        if (pIconName)
+            pImage = image_new_from_icon_name(*pIconName);
+
+        if (pImage)
+        {
+            // image/label should be stacked vertically for only a few tabs with large icons
+            bool bLarge = false;
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            GdkPixbuf* pixbuf = gtk_image_get_pixbuf(GTK_IMAGE(pImage));
+            bLarge = gdk_pixbuf_get_height(pixbuf) > 24;
+#endif
+            GtkBox* pBox = GTK_BOX(gtk_box_new(bLarge ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL, 6));
+            gtk_label_set_xalign(GTK_LABEL(pLabel), bLarge ? 0.5 : 0.0);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            gtk_box_pack_start(pBox, pImage, false, true, 0);
+            gtk_box_pack_start(pBox, pLabel, true, true, 0);
+#else
+            gtk_box_insert_child_after(GTK_BOX(pBox), pImage, nullptr);
+            gtk_box_insert_child_after(GTK_BOX(pBox), pLabel, pImage);
+#endif
+            pTabWidget = GTK_WIDGET(pBox);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            gtk_widget_show_all(pTabWidget);
+#endif
+        }
+        else
+        {
+            pTabWidget = pLabel;
+        }
+
         ::set_buildable_id(GTK_BUILDABLE(pTabWidget), rIdent);
+
         gtk_notebook_insert_page(pNotebook, pChild, pTabWidget, nPos);
         gtk_widget_set_visible(pChild, true);
         gtk_widget_set_visible(pTabWidget, true);
@@ -9598,7 +9633,7 @@ public:
             m_aPages.erase(m_aPages.begin() + nPageIndex);
     }
 
-    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos) override
+    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos, const OUString* pIconName = nullptr) override
     {
         if (m_bOverFlowBoxActive)
         {
@@ -9610,7 +9645,7 @@ public:
         gtk_widget_set_visible(GTK_WIDGET(m_pOverFlowNotebook), false);
         m_bOverFlowBoxActive = false;
 
-        insert_page(m_pNotebook, rIdent, rLabel, gtk_grid_new(), nPos);
+        insert_page(m_pNotebook, rIdent, rLabel, gtk_grid_new(), nPos, pIconName);
     }
 
     virtual ~GtkInstanceNotebook() override

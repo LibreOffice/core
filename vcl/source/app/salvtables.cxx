@@ -2723,7 +2723,8 @@ void SalInstanceNotebook::remove_page(const OUString& rIdent)
     }
 }
 
-void SalInstanceNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos)
+void SalInstanceNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
+                                      const OUString* /* pIconName */)
 {
     sal_uInt16 nPageCount = m_xNotebook->GetPageCount();
     sal_uInt16 nLastPageId = nPageCount ? m_xNotebook->GetPageId(nPageCount - 1) : 0;
@@ -2847,12 +2848,13 @@ void SalInstanceVerticalNotebook::remove_page(const OUString& rIdent)
 }
 
 void SalInstanceVerticalNotebook::insert_page(const OUString& rIdent, const OUString& rLabel,
-                                              int nPos)
+                                              int nPos, const OUString* pIconName)
 {
     VclPtrInstance<VclGrid> xGrid(m_xNotebook->GetPageParent());
     xGrid->set_hexpand(true);
     xGrid->set_vexpand(true);
-    m_xNotebook->InsertPage(rIdent, rLabel, Image(), u""_ustr, xGrid, nPos);
+    Image aImage = pIconName ? Image(StockImage::Yes, *pIconName) : Image();
+    m_xNotebook->InsertPage(rIdent, rLabel, aImage, u""_ustr, xGrid, nPos);
 }
 
 int SalInstanceVerticalNotebook::get_n_pages() const { return m_xNotebook->GetPageCount(); }

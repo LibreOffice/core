@@ -880,19 +880,36 @@ void SfxTabDialogController::AddTabPage(const OUString &rName /* Page ID */,
 
 void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
                                         const OUString& rRiderText,
-                                        CreateTabPage pCreateFunc  /* Pointer to the Factory Method */)
+                                        CreateTabPage pCreateFunc, /* Pointer to the Factory Method */
+                                        const OUString* pIconName)
 {
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
-    m_xTabCtrl->append_page(rName, rRiderText);
+    m_xTabCtrl->append_page(rName, rRiderText, pIconName);
     AddTabPage(rName, pCreateFunc, nullptr);
 }
 
+void SfxTabDialogController::AddTabPage(const OUString &rName,
+                                        const OUString& rRiderText,
+                                        CreateTabPage pCreateFunc,
+                                        const OUString& rIconName)
+{
+    AddTabPage(rName, rRiderText, pCreateFunc, &rIconName);
+}
+
 void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& rRiderText,
-                                        sal_uInt16 nPageCreateId /* Identifier of the Factory Method to create the page */)
+                                        sal_uInt16 nPageCreateId, /* Identifier of the Factory Method to create the page */
+                                        const OUString* pIconName)
 {
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
-    m_xTabCtrl->append_page(rName, rRiderText);
+    m_xTabCtrl->append_page(rName, rRiderText, pIconName);
     AddTabPage(rName, nPageCreateId);
+}
+
+void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& rRiderText,
+                                        sal_uInt16 nPageCreateId,
+                                        const OUString& rIconName)
+{
+    AddTabPage(rName, rRiderText, nPageCreateId, &rIconName);
 }
 
 /*  [Description]

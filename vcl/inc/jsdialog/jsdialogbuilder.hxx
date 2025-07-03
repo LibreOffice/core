@@ -557,7 +557,8 @@ public:
                bool bTakeOwnership);
 
     virtual void remove_page(const OUString& rIdent) override;
-    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos) override;
+    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
+                             const OUString* pIconName = nullptr) override;
 };
 
 class JSVerticalNotebook final : public JSWidget<SalInstanceVerticalNotebook, ::VerticalTabControl>
@@ -567,7 +568,8 @@ public:
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
     virtual void remove_page(const OUString& rIdent) override;
-    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos) override;
+    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
+                             const OUString* pIconName = nullptr) override;
 };
 
 class JSSpinButton final : public JSWidget<SalInstanceSpinButton, ::FormattedField>
