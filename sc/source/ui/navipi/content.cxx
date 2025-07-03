@@ -563,6 +563,9 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     {
         case CommandEventId::ContextMenu:
             {
+                if (comphelper::LibreOfficeKit::isActive())
+                    break;
+
                 //  drag-and-drop mode
                 std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), u"modules/scalc/ui/dropmenu.ui"_ustr));
                 std::unique_ptr<weld::Menu> xPop(xBuilder->weld_menu(u"contextmenu"_ustr));
