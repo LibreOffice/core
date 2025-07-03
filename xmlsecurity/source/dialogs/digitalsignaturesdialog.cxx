@@ -225,7 +225,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     // Give the first column 6 percent, try to distribute the rest equally.
     std::vector<int> aWidths;
     aWidths.push_back(6*nControlWidth/100);
-    auto nColWidth = (nControlWidth - aWidths[0]) / 4;
+    auto nColWidth = (nControlWidth - aWidths[0]) / 5;
+    aWidths.push_back(nColWidth);
     aWidths.push_back(nColWidth);
     aWidths.push_back(nColWidth);
     aWidths.push_back(nColWidth);
