@@ -20,7 +20,6 @@ xmlsecurity/uiconfig/ui/digitalsignaturesdialog.ui://GtkLabel[@id='date'] orphan
 xmlsecurity/uiconfig/ui/digitalsignaturesdialog.ui://GtkLabel[@id='description'] orphan-label
 xmlsecurity/uiconfig/ui/digitalsignaturesdialog.ui://GtkLabel[@id='type'] orphan-label
 xmlsecurity/uiconfig/ui/digitalsignaturesdialog.ui://GtkLabel[@id='macrohint'] orphan-label
-xmlsecurity/uiconfig/ui/digitalsignaturesdialog.ui://GtkLabel[@id='packagehint'] orphan-label
 xmlsecurity/uiconfig/ui/digitalsignaturesdialog.ui://GtkLabel[@id='validft'] orphan-label
 xmlsecurity/uiconfig/ui/digitalsignaturesdialog.ui://GtkImage[@id='validimg'] no-labelled-by
 xmlsecurity/uiconfig/ui/digitalsignaturesdialog.ui://GtkLabel[@id='invalidft'] orphan-label
