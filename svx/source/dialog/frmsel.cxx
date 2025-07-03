@@ -916,10 +916,9 @@ void FrameSelector::SetBorderDontCare( FrameBorderType eBorder )
 
 bool FrameSelector::IsAnyBorderVisible() const
 {
-    bool bIsSet = false;
-    for( FrameBorderCIter aIt( mxImpl->maEnabBorders ); !bIsSet && aIt.Is(); ++aIt )
-        bIsSet = ((*aIt)->GetState() == FrameBorderState::Show);
-    return bIsSet;
+    return std::any_of(mxImpl->maEnabBorders.begin(), mxImpl->maEnabBorders.end(),
+                       [](const FrameBorder* pBorder)
+                       { return pBorder->GetState() == FrameBorderState::Show; });
 }
 
 void FrameSelector::HideAllBorders()
