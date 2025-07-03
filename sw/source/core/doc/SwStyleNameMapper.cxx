@@ -316,8 +316,10 @@ void SwStyleNameMapper::FillUIName(
     {
         rFillName = UIName(aName.toString());
         // TabStyle: unfortunately ODF documents with UIName table styles exist
-        if (eFlags == SwGetPoolIdFromName::TableStyle || // see testTdf129568ui
-            GetPoolIdFromUIName(UIName(aName.toString()), eFlags) == USHRT_MAX)
+        // PageDesc: same problem as TableStyle, page styles using UINames exist
+        if (eFlags == SwGetPoolIdFromName::TableStyle // see testTdf129568ui
+            || eFlags == SwGetPoolIdFromName::PageDesc
+            || GetPoolIdFromUIName(UIName(aName.toString()), eFlags) == USHRT_MAX)
         {
             // aName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
             lcl_CheckSuffixAndDelete(rFillName);
