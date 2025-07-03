@@ -48,8 +48,9 @@ void WidgetTestDialog::FillTreeView()
         m_xTreeView2->append();
         m_xTreeView2->set_image(nCount, (nCount % 2 == 0) ? aImage1 : aImage2);
         m_xTreeView2->set_text(nCount, u"First Column"_ustr, 0);
-        m_xTreeView2->set_text(
-            nCount, OUString::Concat("Row ") + OUString::Concat(OUString::number(nCount)), 1);
+        // FIXME: crash out-of-bound
+        //m_xTreeView2->set_text(
+        //    nCount, OUString::Concat("Row ") + OUString::Concat(OUString::number(nCount)), 1);
         m_xTreeView2->set_id(nCount, OUString::number(nCount));
     }
 }
