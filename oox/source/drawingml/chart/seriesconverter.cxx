@@ -799,12 +799,12 @@ SeriesConverter::~SeriesConverter()
 
 Reference< XLabeledDataSequence > SeriesConverter::createCategorySequence( const OUString& rRole )
 {
-    return createLabeledDataSequence(SeriesModel::CATEGORIES, rRole, false);
+    return createLabeledDataSequence(DataSourceType::CATEGORIES, rRole, false);
 }
 
 Reference< XLabeledDataSequence > SeriesConverter::createValueSequence( const OUString& rRole )
 {
-    return createLabeledDataSequence( SeriesModel::VALUES, rRole, true );
+    return createLabeledDataSequence( DataSourceType::VALUES, rRole, true );
 }
 
 Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConverter& rTypeGroup, bool bVaryColorsByPoint )
@@ -844,7 +844,8 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
             // add size values of bubble charts
             if( rTypeInfo.meTypeId == TYPEID_BUBBLE )
             {
-                Reference< XLabeledDataSequence > xSizeValueSeq = createLabeledDataSequence( SeriesModel::POINTS, u"values-size"_ustr, true );
+                Reference< XLabeledDataSequence > xSizeValueSeq =
+                    createLabeledDataSequence( DataSourceType::POINTS, u"values-size"_ustr, true );
                 if( xSizeValueSeq.is() )
                     aLabeledSeqVec.push_back( xSizeValueSeq );
             }
@@ -936,7 +937,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         if( xLabels->maNumberFormat.maFormatCode.isEmpty() )
         {
             // Use number format code from Value series
-            DataSourceModel* pValues = mrModel.maSources.get( SeriesModel::VALUES ).get();
+            DataSourceModel* pValues = mrModel.maSources.get( DataSourceType::VALUES ).get();
             if( pValues )
                 xLabels->maNumberFormat.maFormatCode = pValues->mxDataSeq->maFormatCode;
         }
@@ -950,7 +951,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
 // private --------------------------------------------------------------------
 
 Reference< XLabeledDataSequence > SeriesConverter::createLabeledDataSequence(
-        SeriesModel::SourceType eSourceType, const OUString& rRole, bool bUseTextLabel )
+        enum DataSourceType eSourceType, const OUString& rRole, bool bUseTextLabel )
 {
     DataSourceModel* pValues = mrModel.maSources.get( eSourceType ).get();
     TextModel* pTitle = bUseTextLabel ? mrModel.mxText.get() : nullptr;

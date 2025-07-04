@@ -174,17 +174,17 @@ struct DataPointModel
                         ~DataPointModel();
 };
 
+enum class DataSourceType: sal_Int32
+{
+    CATEGORIES,         /// Data point categories.
+    VALUES,             /// Data point values.
+    POINTS,             /// Data point size (e.g. bubble size in bubble charts).
+    DATALABELS,         /// Data point labels.
+};
+
 struct SeriesModel
 {
-    enum SourceType
-    {
-        CATEGORIES,         /// Data point categories.
-        VALUES,             /// Data point values.
-        POINTS,             /// Data point size (e.g. bubble size in bubble charts).
-        DATALABELS,         /// Data point labels.
-    };
-
-    typedef ModelMap< SourceType, DataSourceModel > DataSourceMap;
+    typedef ModelMap< DataSourceType, DataSourceModel > DataSourceMap;
     typedef ModelVector< ErrorBarModel >            ErrorBarVector;
     typedef ModelVector< TrendlineModel >           TrendlineVector;
     typedef ModelVector< DataPointModel >           DataPointVector;
@@ -208,6 +208,7 @@ struct SeriesModel
     sal_Int32           mnMarkerSize;       /// Size of the series line marker (2...72).
     sal_Int32           mnMarkerSymbol;     /// Series line marker symbol.
     sal_Int32           mnOrder;            /// Series order.
+    sal_Int32           mnDataId;           /// Reference to correct data chunk (chartex)
     bool                mbBubble3d;         /// True = show bubbles with 3D shade.
     bool                mbInvertNeg;        /// True = invert negative data points.
     bool                mbSmooth;           /// True = smooth series line.
