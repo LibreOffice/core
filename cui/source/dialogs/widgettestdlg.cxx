@@ -38,6 +38,17 @@ void WidgetTestDialog::FillTreeView()
     OUString aImage1(RID_SVXBMP_CELL_LR);
     OUString aImage2(RID_SVXBMP_SHADOW_BOT_LEFT);
 
+    // some backends might crash without proper widths set
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xTreeView2->get_checkbox_column_width());
+    for (int i = 0; i < 3 - 1; ++i)
+    {
+        int nWidth = m_xTreeView2->get_column_width(i);
+        assert(nWidth > 0 && "suspicious to get a value like this");
+        aWidths.push_back(nWidth);
+    }
+    m_xTreeView2->set_column_fixed_widths(aWidths);
+
     for (size_t nCount = 0; nCount < 4; nCount++)
     {
         OUString sText = OUString::Concat("Test ") + OUString::Concat(OUString::number(nCount));
@@ -45,13 +56,13 @@ void WidgetTestDialog::FillTreeView()
         m_xTreeView->insert(nullptr, -1, &sText, &sText, nullptr, nullptr, false, xEntry.get());
         m_xTreeView->set_image(*xEntry, (nCount % 2 == 0) ? aImage1 : aImage2);
 
+        int nRow = m_xTreeView2->n_children();
         m_xTreeView2->append();
-        m_xTreeView2->set_image(nCount, (nCount % 2 == 0) ? aImage1 : aImage2);
-        m_xTreeView2->set_text(nCount, u"First Column"_ustr, 0);
-        // FIXME: crash out-of-bound
-        //m_xTreeView2->set_text(
-        //    nCount, OUString::Concat("Row ") + OUString::Concat(OUString::number(nCount)), 1);
-        m_xTreeView2->set_id(nCount, OUString::number(nCount));
+        m_xTreeView2->set_image(nRow, (nCount % 2 == 0) ? aImage1 : aImage2);
+        m_xTreeView2->set_text(nRow, u"First Column"_ustr, 0);
+        m_xTreeView2->set_text(
+            nRow, OUString::Concat("Row ") + OUString::Concat(OUString::number(nCount)), 1);
+        m_xTreeView2->set_id(nRow, OUString::number(nCount));
     }
 }
 
