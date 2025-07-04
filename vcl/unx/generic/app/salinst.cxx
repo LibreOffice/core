@@ -193,12 +193,6 @@ bool X11SalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     return mpXLib->Yield( bWait, bHandleAllCurrentEvents );
 }
 
-OUString X11SalInstance::GetConnectionIdentifier()
-{
-    static const char* pDisplay = getenv( "DISPLAY" );
-    return pDisplay ? OUString::createFromAscii(pDisplay) : OUString();
-}
-
 SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle )
 {
     SalFrame *pFrame = new X11SalFrame( pParent, nSalFrameStyle );

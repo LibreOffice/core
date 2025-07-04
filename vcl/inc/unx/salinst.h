@@ -76,7 +76,6 @@ public:
     virtual bool                AnyInput( VclInputFlags nType ) override;
     virtual bool                IsMainThread() const override { return true; }
 
-    virtual OUString            GetConnectionIdentifier() override;
     void                        SetLib( SalXLib *pXLib ) { mpXLib = pXLib; }
 
     virtual void                AfterAppInit() override;

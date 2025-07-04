@@ -343,11 +343,8 @@ void SelectionManager::initialize()
     if( m_pDisplay )
         return;
 
-    const OUString aUDisplay = ImplGetSVData()->mpDefInst->GetConnectionIdentifier();
-
-    OString aDisplayName( OUStringToOString( aUDisplay, RTL_TEXTENCODING_ISO_8859_1 ) );
-
-    m_pDisplay = XOpenDisplay( aDisplayName.isEmpty() ? nullptr : aDisplayName.getStr());
+    static const char* pDisplay = getenv("DISPLAY");
+    m_pDisplay = XOpenDisplay(pDisplay);
 
     if( !m_pDisplay )
         return;

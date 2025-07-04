@@ -166,8 +166,6 @@ bool SalInstance::CallEventCallback(const void* pEvent)
     return m_pEventInst.is() && m_pEventInst->dispatchEvent(pEvent);
 }
 
-OUString SalInstance::GetConnectionIdentifier() { return OUString(); }
-
 bool SalInstance::DoExecute(int&)
 {
     // can't run on system event loop without implementing DoExecute and DoQuit
