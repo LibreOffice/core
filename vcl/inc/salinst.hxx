@@ -186,7 +186,7 @@ public:
 
     bool                    CallEventCallback( void const * pEvent, int nBytes );
 
-    virtual OUString        GetConnectionIdentifier() = 0;
+    virtual OUString GetConnectionIdentifier();
 
     // dtrans implementation
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>

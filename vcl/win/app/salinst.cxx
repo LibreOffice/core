@@ -797,11 +797,6 @@ void WinSalInstance::DestroyObject( SalObject* pObject )
     SendMessageW( mhComWnd, SAL_MSG_DESTROYOBJECT, 0, reinterpret_cast<LPARAM>(pObject) );
 }
 
-OUString WinSalInstance::GetConnectionIdentifier()
-{
-    return OUString();
-}
-
 /** Add a file to the system shells recent document list if there is any.
       This function may have no effect under Unix because there is no
       standard API among the different desktop managers.

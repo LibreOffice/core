@@ -549,11 +549,6 @@ bool SvpSalInstance::AnyInput( VclInputFlags nType )
     return false;
 }
 
-OUString SvpSalInstance::GetConnectionIdentifier()
-{
-    return OUString();
-}
-
 void SvpSalInstance::StopTimer()
 {
     m_aTimeout.tv_sec   = 0;

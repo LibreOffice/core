@@ -929,11 +929,6 @@ void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
     delete pPrinter;
 }
 
-OUString AquaSalInstance::GetConnectionIdentifier()
-{
-    return OUString();
-}
-
 // We need to re-encode file urls because osl_getFileURLFromSystemPath converts
 // to UTF-8 before encoding non ascii characters, which is not what other apps expect.
 static OUString translateToExternalUrl(const OUString& internalUrl)

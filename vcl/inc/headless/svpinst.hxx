@@ -175,8 +175,6 @@ public:
     SAL_DLLPRIVATE virtual bool IsMainThread() const override;
     virtual void            updateMainThread() override;
 
-    virtual OUString        GetConnectionIdentifier() override;
-
     SAL_DLLPRIVATE virtual void AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
     SAL_DLLPRIVATE virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;

@@ -558,8 +558,6 @@ bool QtInstance::AnyInput(VclInputFlags nType)
     return bResult;
 }
 
-OUString QtInstance::GetConnectionIdentifier() { return OUString(); }
-
 void QtInstance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&) {}
 
 #ifndef EMSCRIPTEN

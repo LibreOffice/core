@@ -74,7 +74,6 @@ public:
     virtual std::unique_ptr<SalMenu>     CreateMenu( bool bMenuBar, Menu* ) override;
     virtual std::unique_ptr<SalMenuItem> CreateMenuItem( const SalItemParams & rItemData ) override;
     virtual OpenGLContext*      CreateOpenGLContext() override;
-    virtual OUString            GetConnectionIdentifier() override;
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
     static DWORD getWindowsBuildNumber();
