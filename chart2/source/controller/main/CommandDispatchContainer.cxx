@@ -77,7 +77,8 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     static const o3tl::sorted_vector< std::u16string_view >  s_aContainerDocumentCommands {
         u"AddDirect",    u"NewDoc",             u"Open",
         u"Save",         u"SaveAs",             u"SendMail",
-        u"EditDoc",      u"ExportDirectToPDF",  u"PrintDefault"};
+        u"EditDoc",      u"ExportDirectToPDF",  u"PrintDefault",
+        u"ChangeTheme", };
 
     if (auto aIt = m_aCachedDispatches.find(rURL.Complete); aIt != m_aCachedDispatches.end())
         return aIt->second;

@@ -16,7 +16,6 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XController; }
-namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::uno { template<class E> class Sequence; }
 
@@ -30,11 +29,8 @@ class SFX2_DLLPUBLIC LokChartHelper
 private:
     SfxViewShell* mpViewShell;
     mutable css::uno::Reference<css::frame::XController> mxController;
-    mutable css::uno::Reference<css::frame::XDispatch> mxDispatcher;
     VclPtr<vcl::Window> mpWindow;
     bool mbNegativeX;
-
-    css::uno::Reference<css::frame::XDispatch>& GetXDispatcher() const;
 
 public:
     LokChartHelper(SfxViewShell* pViewShell, bool bNegativeX = false)

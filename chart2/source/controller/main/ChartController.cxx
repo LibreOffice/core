@@ -1388,8 +1388,6 @@ void SAL_CALL ChartController::dispatch(
         }
 
     }
-    else if( aCommand == "ChangeTheme" )
-        comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, getFrame(), rArgs);
 }
 
 void SAL_CALL ChartController::addStatusListener(
@@ -1662,13 +1660,11 @@ void ChartController::impl_initializeAccessible( AccessibleChartView& /* rAccCha
 const o3tl::sorted_vector< std::u16string_view >& ChartController::impl_getAvailableCommands()
 {
     static const o3tl::sorted_vector< std::u16string_view > s_AvailableCommands {
-        // commands for container forward
-        u"AddDirect",           u"NewDoc",                u"Open",
-        u"Save",                u"SaveAs",                u"SendMail",
-        u"EditDoc",             u"ExportDirectToPDF",     u"PrintDefault",
-
         // toolbar commands
         u"ChartElementSelector",
+
+        // LOK commands
+        u"LOKSetTextSelection", u"LOKTransform",
     };
     return s_AvailableCommands;
 }
