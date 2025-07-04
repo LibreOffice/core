@@ -129,14 +129,18 @@ private:
     /// reference to either a SwTextFootnote::m_nSeqNo or a SwSetExpField::mnSeqNo
     sal_uInt16 m_nSeqNo;
     sal_uInt16 m_nFlags;
+    sal_uInt32 m_nFormat;
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 public:
     SW_DLLPUBLIC SwGetRefField( SwGetRefFieldType*, SwMarkName aSetRef, OUString aReferenceLanguage,
-                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags, sal_uLong nFormat );
+                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags, sal_uInt32 nFormat );
 
     SW_DLLPUBLIC virtual ~SwGetRefField() override;
+
+    sal_uInt32 GetFormat() const { return m_nFormat; }
+    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
 
     virtual OUString GetFieldName() const override;
 

@@ -1450,14 +1450,16 @@ void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
                     break;
 
                 case SwFieldIds::Filename:
-                    if( static_cast<SwFileNameField*>(pFormatField->GetField())->IsFixed() )
                     {
-                        bChgd = true;
                         SwFileNameField* pFileNameField =
-                            static_cast<SwFileNameField*>(pFormatField->GetField());
-                        pFileNameField->SetExpansion( static_cast<SwFileNameFieldType*>(
-                                    pFileNameField->GetTyp())->Expand(
-                                            pFileNameField->GetFormat() ) );
+                                static_cast<SwFileNameField*>(pFormatField->GetField());
+                        if( pFileNameField->IsFixed() )
+                        {
+                            bChgd = true;
+                            pFileNameField->SetExpansion( static_cast<SwFileNameFieldType*>(
+                                        pFileNameField->GetTyp())->Expand(
+                                                pFileNameField->GetFormat() ) );
+                        }
                     }
                     break;
                 default: break;

@@ -138,6 +138,7 @@
 #include <formatcontentcontrol.hxx>
 #include <rtl/uri.hxx>
 #include <unotxdoc.hxx>
+#include <expfld.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
@@ -1547,7 +1548,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 if( !bDelSel && aFieldMgr.GetCurField() && SwFieldTypesEnum::Formel == aFieldMgr.GetCurTypeId() )
-                    aFieldMgr.UpdateCurField( aFieldMgr.GetCurField()->GetFormat(), OUString(), sFormula );
+                    aFieldMgr.UpdateCurField( static_cast<SwGetExpField*>(aFieldMgr.GetCurField())->GetFormat(), OUString(), sFormula );
                 else if( !sFormula.isEmpty() )
                 {
                     if( rWrtSh.IsCursorInTable() )

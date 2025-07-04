@@ -298,7 +298,6 @@ class SW_DLLPUBLIC SwField
 private:
     mutable OUString    m_Cache;                ///< Cached expansion (for clipboard).
     SwFieldType*        m_pType;
-    sal_uInt32          m_nFormat;              /// this can be either SvxNumType or SwChapterFormat depending on the subtype
     LanguageType        m_nLang;                ///< Always change via SetLanguage!
     bool                m_bUseFieldValueCache;  /// control the usage of the cached field value
     bool                m_bIsAutomaticLanguage;
@@ -309,12 +308,7 @@ private:
     virtual std::unique_ptr<SwField> Copy() const = 0;
 
 protected:
-    void                SetFormat(sal_uInt32 const nSet) {
-        m_nFormat = nSet;
-    }
-
     SwField( SwFieldType* pTyp,
-             sal_uInt32 nFormat = 0,
              LanguageType nLang = LANGUAGE_SYSTEM,
              bool m_bUseFieldValueCache = true );
 
@@ -365,13 +359,11 @@ public:
     virtual void        SetLanguage(LanguageType nLng);
 
     /// Query parameters for dialog and for BASIC.
-    inline sal_uInt32   GetFormat() const;
     virtual OUString GetPar1() const;
     virtual OUString GetPar2() const;
 
     virtual OUString    GetFormula() const;
 
-    void        ChangeFormat(sal_uInt32 n);
     virtual void        SetPar1(const OUString& rStr);
     virtual void        SetPar2(const OUString& rStr);
 
@@ -395,16 +387,15 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     const OUString & GetTitle() const { return m_aTitle; }
     void SetTitle(const OUString& rTitle) { m_aTitle = rTitle; }
+
+    /// Helpers for those places still passing untyped format ids around for SwField
+    sal_uInt32 GetUntypedFormat() const;
+    void SetUntypedFormat(sal_uInt32);
 };
 
 inline SwFieldType* SwField::GetTyp() const
 {
     return m_pType;
-}
-
-inline sal_uInt32 SwField::GetFormat() const
-{
-    return m_nFormat;
 }
 
 inline LanguageType SwField::GetLanguage() const
@@ -449,6 +440,7 @@ class SW_DLLPUBLIC SwValueField : public SwField
 {
 private:
     double m_fValue;
+    sal_uInt32 m_nFormat;
 
 protected:
     SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat, LanguageType nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
@@ -457,6 +449,8 @@ protected:
 public:
     virtual                 ~SwValueField() override;
 
+    sal_uInt32 GetFormat() const { return m_nFormat; }
+    void SetFormat(sal_uInt32 nFormat) { m_nFormat = nFormat; }
     virtual SwFieldType*    ChgTyp( SwFieldType* ) override;
     virtual void            SetLanguage(LanguageType nLng) override;
 

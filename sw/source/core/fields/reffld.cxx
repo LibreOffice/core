@@ -352,13 +352,14 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
                               SwMarkName aSetRef, OUString aSetReferenceLanguage, sal_uInt16 nSubTyp,
-                              sal_uInt16 nSequenceNo, sal_uInt16 nFlags, sal_uLong nFormat )
-    : SwField(pFieldType, nFormat),
+                              sal_uInt16 nSequenceNo, sal_uInt16 nFlags, sal_uInt32 nFormat )
+    : SwField(pFieldType),
       m_sSetRefName(std::move(aSetRef)),
       m_sSetReferenceLanguage(std::move(aSetReferenceLanguage)),
       m_nSubType(nSubTyp),
       m_nSeqNo(nSequenceNo),
-      m_nFlags(nFlags)
+      m_nFlags(nFlags),
+      m_nFormat(nFormat)
 {
 }
 
@@ -1015,7 +1016,7 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             case ReferenceFieldPart::NUMBER_FULL_CONTEXT: nPart = REF_NUMBER_FULL_CONTEXT; break;
             default: return false;
             }
-            SetFormat(nPart);
+            m_nFormat = nPart;
         }
         break;
     case FIELD_PROP_USHORT2:

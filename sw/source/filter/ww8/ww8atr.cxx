@@ -2734,7 +2734,7 @@ bool MSWordExportBase::GetNumberFormat(const SwField& rField, OUString& rStr)
     // Returns a date or time format string by using the US NfKeywordTable
     bool bHasFormat = false;
     SvNumberFormatter* pNFormatr = m_rDoc.GetNumberFormatter();
-    sal_uInt32 nFormatIdx = rField.GetFormat();
+    sal_uInt32 nFormatIdx = rField.GetUntypedFormat();
     const SvNumberformat* pNumFormat = pNFormatr->GetEntry( nFormatIdx );
     if( pNumFormat )
     {
@@ -2762,7 +2762,7 @@ bool MSWordExportBase::GetNumberFormat(const SwField& rField, OUString& rStr)
 
 void AttributeOutputBase::GetNumberPara( OUString& rStr, const SwField& rField )
 {
-    switch(rField.GetFormat())
+    switch(rField.GetUntypedFormat())
     {
         case SVX_NUM_CHARS_UPPER_LETTER:
         case SVX_NUM_CHARS_UPPER_LETTER_N:
@@ -2788,7 +2788,7 @@ void AttributeOutputBase::GetNumberPara( OUString& rStr, const SwField& rField )
             rStr += "\\* Cardtext ";
             break;
         default:
-            OSL_ENSURE(rField.GetFormat() == SVX_NUM_ARABIC,
+            OSL_ENSURE(rField.GetUntypedFormat() == SVX_NUM_ARABIC,
                 "Unknown numbering type exported as default of Arabic");
             [[fallthrough]];
         case SVX_NUM_ARABIC:
@@ -3018,7 +3018,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::Filename:
         {
             OUString sStr = FieldString(ww::eFILENAME);
-            if (pField->GetFormat() == FF_PATHNAME)
+            if (static_cast<const SwFileNameField*>(pField)->GetFormat() == FF_PATHNAME)
                 sStr += "\\p ";
             GetExport().OutputField(pField, ww::eFILENAME, sStr);
         }
@@ -3043,7 +3043,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::Author:
         {
             ww::eField eField =
-                ((AF_SHORTCUT & pField->GetFormat()) ? ww::eUSERINITIALS : ww::eUSERNAME);
+                ((AF_SHORTCUT & static_cast<const SwAuthorField*>(pField)->GetFormat()) ? ww::eUSERINITIALS : ww::eUSERNAME);
             GetExport().OutputField(pField, eField, FieldString(eField));
         }
         break;
@@ -3238,7 +3238,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             {
                 case REF_SETREFATTR:
                 case REF_BOOKMARK:
-                    switch (pField->GetFormat())
+                    switch (rRField.GetFormat())
                     {
                         case REF_PAGE_PGDESC:
                         case REF_PAGE:
@@ -3253,7 +3253,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                         sStr = FieldString(eField)
                                + GetExport().GetBookmarkName(nSubType, &aRefName.toString(), 0);
                     }
-                    switch (pField->GetFormat())
+                    switch (rRField.GetFormat())
                     {
                         case REF_NUMBER:
                             sStr += " \\r";
@@ -3272,7 +3272,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     if(GetExport().GetExportFormat() == MSWordExportBase::ExportFormat::RTF)
                         break;
 
-                    switch (pField->GetFormat())
+                    switch (rRField.GetFormat())
                     {
                         case REF_PAGE:
                         case REF_PAGE_PGDESC:
@@ -3285,7 +3285,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     // Generate a unique bookmark name
                     {
                         OUString sName{rRField.GetSetRefName().toString() + OUString::number(rRField.GetSeqNo())};
-                        switch (pField->GetFormat())
+                        switch (rRField.GetFormat())
                         {
                             case REF_PAGE:
                             case REF_PAGE_PGDESC:
@@ -3308,7 +3308,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                         }
                         sStr = FieldString(eField) + GetExport().GetBookmarkName(nSubType, &sName, 0);
                     }
-                    switch (pField->GetFormat())
+                    switch (rRField.GetFormat())
                     {
                         case REF_NUMBER:
                             sStr += " \\r";
@@ -3324,7 +3324,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 }
                 case REF_FOOTNOTE:
                 case REF_ENDNOTE:
-                    switch (pField->GetFormat())
+                    switch (rRField.GetFormat())
                     {
                         case REF_PAGE_PGDESC:
                         case REF_PAGE:
@@ -3370,7 +3370,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
 
                     [[fallthrough]];
                 default:
-                    switch (pField->GetFormat())
+                    switch (rRField.GetFormat())
                     {
                         case REF_NUMBER:
                             sStr += " \\r " + sExtraFlags;

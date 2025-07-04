@@ -120,7 +120,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
             aFormula.msDefault,
             aFormula.msTitle,
             INP_TXT,
-            0 );
+            false );
         aField.SetHelp(aFormula.msHelp);
         aField.SetToolTip(aFormula.msToolTip);
 

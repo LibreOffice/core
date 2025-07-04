@@ -206,7 +206,7 @@ bool SwFormatField::operator==( const SfxPoolItem& rAttr ) const
     return ( mpField
              && static_cast<const SwFormatField&>(rAttr).mpField
              && mpField->GetTyp() == static_cast<const SwFormatField&>(rAttr).mpField->GetTyp()
-             && mpField->GetFormat() == static_cast<const SwFormatField&>(rAttr).mpField->GetFormat() )
+             && mpField->GetUntypedFormat() == static_cast<const SwFormatField&>(rAttr).mpField->GetUntypedFormat() )
            ||
            ( !mpField && !static_cast<const SwFormatField&>(rAttr).mpField );
 }

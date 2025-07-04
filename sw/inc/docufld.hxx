@@ -155,12 +155,16 @@ class SW_DLLPUBLIC SwPageNumberField final : public SwField
     // fdo#58074 store page number in SwField, not SwFieldType
     sal_uInt16 m_nPageNumber;
     sal_uInt16 m_nMaxPage;
+    SvxNumType m_nFormat;
 
 public:
     SwPageNumberField(SwPageNumberFieldType*, sal_uInt16 nSub,
-                      sal_uInt32 nFormat, short nOff = 0,
+                      SvxNumType nFormat, short nOff = 0,
                       sal_uInt16 const nPageNumber = 0,
                       sal_uInt16 const nMaxPage = 0);
+
+    SvxNumType GetFormat() const { return m_nFormat; }
+    void SetFormat(SvxNumType n) { m_nFormat = n; }
 
     void ChangeExpansion(sal_uInt16 const nPageNumber,
             sal_uInt16 const nMaxPage);
@@ -191,9 +195,13 @@ public:
 class SwAuthorField final : public SwField
 {
     OUString m_aContent;
+    sal_uInt32 m_nFormat;
 
 public:
     SwAuthorField(SwAuthorFieldType*, sal_uInt32 nFormat);
+
+    sal_uInt32 GetFormat() const { return m_nFormat; }
+    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -217,9 +225,13 @@ public:
 class SW_DLLPUBLIC SwFileNameField final : public SwField
 {
     OUString m_aContent;
+    sal_uInt32 m_nFormat;
 
 public:
     SwFileNameField(SwFileNameFieldType*, sal_uInt32 nFormat);
+
+    sal_uInt32 GetFormat() const { return m_nFormat; }
+    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -242,9 +254,12 @@ public:
 
 class SW_DLLPUBLIC SwTemplNameField final : public SwField
 {
+    sal_uInt32 m_nFormat;
 public:
     SwTemplNameField(SwTemplNameFieldType*, sal_uInt32 nFormat);
 
+    sal_uInt32 GetFormat() const { return m_nFormat; }
+    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
@@ -271,10 +286,13 @@ class SW_DLLPUBLIC SwDocStatField final : public SwField
 {
     sal_uInt16 m_nSubType;
     sal_uInt16 m_nVirtPageCount;
-
+    SvxNumType m_nFormat;
 public:
     SwDocStatField( SwDocStatFieldType*,
-                    sal_uInt16 nSubType, sal_uInt32 nFormat, sal_uInt16 nVirtPageCount = 0);
+                    sal_uInt16 nSubType, SvxNumType nFormat, sal_uInt16 nVirtPageCount = 0);
+
+    SvxNumType GetFormat() const { return m_nFormat; }
+    void SetFormat(SvxNumType n) { m_nFormat = n; }
 
     void ChangeExpansion( const SwFrame* pFrame, sal_uInt16 nVirtPageCount);
 
@@ -586,9 +604,13 @@ class SwExtUserField final : public SwField
 {
     OUString m_aContent;
     sal_uInt16  m_nType;
+    sal_uInt32 m_nFormat;
 
 public:
     SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat);
+
+    sal_uInt32 GetFormat() const { return m_nFormat; }
+    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -662,9 +684,13 @@ class SwRefPageGetField final : public SwField
 {
     OUString m_sText;
     OUString m_sTextRLHidden; ///< hidden redlines
+    SvxNumType m_nFormat;
 
 public:
-    SwRefPageGetField( SwRefPageGetFieldType*, sal_uInt32 nFormat );
+    SwRefPageGetField( SwRefPageGetFieldType*, SvxNumType nFormat );
+
+    SvxNumType GetFormat() const { return m_nFormat; }
+    void SetFormat(SvxNumType n) { m_nFormat = n; }
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -694,9 +720,13 @@ class SwJumpEditField final : public SwField
 {
     OUString m_sText;
     OUString m_sHelp;
+    sal_uInt32 m_nFormat;
 public:
     SwJumpEditField( SwJumpEditFieldType*, sal_uInt32 nFormat,
                      OUString sText, OUString sHelp );
+
+    sal_uInt32 GetFormat() const { return m_nFormat; }
+    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;

@@ -61,12 +61,16 @@ class SW_DLLPUBLIC SwChapterField final : public SwField
     };
     State m_State;
     State m_StateRLHidden;
+    sal_uInt32 m_nFormat;
 
     virtual OUString ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     SwChapterField(SwChapterFieldType*, sal_uInt32 nFormat = 0);
+
+    sal_uInt32 GetFormat() const { return m_nFormat; }
+    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
 
     // #i53420#
     void ChangeExpansion( const SwFrame&,

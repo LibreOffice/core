@@ -178,7 +178,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
         m_xConditionED->save_value();
         m_xValueED->save_value();
         m_sOldDBName = m_xDatabaseTLB->GetDBName(m_sOldTableName, m_sOldColumnName);
-        m_nOldFormat = GetCurField()->GetFormat();
+        m_nOldFormat = GetCurField()->GetUntypedFormat();
         m_nOldSubType = GetCurField()->GetSubType();
     }
 }
@@ -337,8 +337,10 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
 
             if (IsFieldEdit())
             {
-                if (GetCurField()->GetFormat() != 0 && GetCurField()->GetFormat() != SAL_MAX_UINT32)
-                    m_xNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
+                auto pValueField = static_cast<SwValueField*>(GetCurField());
+                auto nFormat = pValueField->GetFormat();
+                if (nFormat != 0 && nFormat != SAL_MAX_UINT32)
+                    m_xNumFormatLB->SetDefFormat(nFormat);
 
                 if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_OWN_FMT)
                     m_xNewFormatRB->set_active(true);
@@ -373,9 +375,11 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
 
             if( IsFieldEdit() )
             {
+                auto pValueField = static_cast<SwValueField*>(GetCurField());
+                auto nFormat = pValueField->GetFormat();
                 for (sal_Int32 nI = m_xFormatLB->get_count(); nI;)
                 {
-                    if (GetCurField()->GetFormat() == m_xFormatLB->get_id(--nI).toUInt32())
+                    if (nFormat == m_xFormatLB->get_id(--nI).toUInt32())
                     {
                         m_xFormatLB->set_active( nI );
                         break;

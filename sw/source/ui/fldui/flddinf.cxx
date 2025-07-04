@@ -146,7 +146,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
         SwWrtShell *pSh = GetWrtShell();
         if(pSh)
         {
-            const SvNumberformat* pFormat = pSh->GetNumberFormatter()->GetEntry(pCurField->GetFormat());
+            const SvNumberformat* pFormat = pSh->GetNumberFormatter()->GetEntry(pCurField->GetUntypedFormat());
             if(pFormat)
                 m_xFormatLB->SetLanguage(pFormat->GetLanguage());
         }
@@ -242,7 +242,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     if (IsFieldEdit())
     {
         m_nOldSel = m_xSelectionLB->get_selected_index();
-        m_nOldFormat = GetCurField()->GetFormat();
+        m_nOldFormat = GetCurField()->GetUntypedFormat();
         m_xFixedCB->save_state();
     }
 }

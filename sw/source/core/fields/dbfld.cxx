@@ -441,9 +441,10 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // base class for all further database fields
 
 SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, SwDBData aDBData, sal_uInt32 nFormat) :
-    SwField(pTyp, nFormat),
+    SwField(pTyp),
     m_aDBData(std::move(aDBData)),
-    m_nSubType(0)
+    m_nSubType(0),
+    m_nFormat(nFormat)
 {
 }
 
@@ -752,8 +753,8 @@ std::unique_ptr<SwFieldType> SwDBNameFieldType::Copy() const
 
 // name of the connected database
 
-SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData)
-    : SwDBNameInfField(pTyp, rDBData, 0)
+SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, sal_uInt32 nFormat)
+    : SwDBNameInfField(pTyp, rDBData, nFormat)
 {}
 
 OUString SwDBNameField::ExpandImpl(SwRootFrame const*const) const
@@ -765,8 +766,7 @@ OUString SwDBNameField::ExpandImpl(SwRootFrame const*const) const
 
 std::unique_ptr<SwField> SwDBNameField::Copy() const
 {
-    std::unique_ptr<SwDBNameField> pTmp(new SwDBNameField(static_cast<SwDBNameFieldType*>(GetTyp()), GetDBData()));
-    pTmp->ChangeFormat(GetFormat());
+    std::unique_ptr<SwDBNameField> pTmp(new SwDBNameField(static_cast<SwDBNameFieldType*>(GetTyp()), GetDBData(), GetFormat()));
     pTmp->SetLanguage(GetLanguage());
     pTmp->SetSubType(GetSubType());
     return std::unique_ptr<SwField>(pTmp.release());

@@ -978,7 +978,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         if (!IsFieldEdit())
             m_xFormatLB->select_text(sOldSel);
         else
-            m_xFormatLB->select_text(SwResId(FMT_REF_ARY[GetCurField()->GetFormat() % std::size(FMT_REF_ARY)]));
+            m_xFormatLB->select_text(SwResId(FMT_REF_ARY[GetCurField()->GetUntypedFormat() % std::size(FMT_REF_ARY)]));
 
         if (m_xFormatLB->get_selected_index() == -1)
         {

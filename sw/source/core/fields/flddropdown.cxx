@@ -45,12 +45,12 @@ std::unique_ptr<SwFieldType> SwDropDownFieldType::Copy() const
 }
 
 SwDropDownField::SwDropDownField(SwFieldType * pTyp)
-    : SwField(pTyp, 0, LANGUAGE_SYSTEM)
+    : SwField(pTyp, LANGUAGE_SYSTEM)
 {
 }
 
 SwDropDownField::SwDropDownField(const SwDropDownField & rSrc)
-    : SwField(rSrc.GetTyp(), rSrc.GetFormat(), rSrc.GetLanguage()),
+    : SwField(rSrc.GetTyp(), rSrc.GetLanguage()),
       m_aValues(rSrc.m_aValues), m_aSelectedItem(rSrc.m_aSelectedItem),
       m_aName(rSrc.m_aName), m_aHelp(rSrc.m_aHelp), m_aToolTip(rSrc.m_aToolTip)
 {

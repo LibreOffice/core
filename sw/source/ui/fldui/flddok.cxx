@@ -137,7 +137,7 @@ void SwFieldDokPage::Reset(const SfxItemSet* )
             pSh = ::GetActiveWrtShell();
         if(pSh)
         {
-            const SvNumberformat* pFormat = pSh->GetNumberFormatter()->GetEntry(pCurField->GetFormat());
+            const SvNumberformat* pFormat = pSh->GetNumberFormatter()->GetEntry(pCurField->GetUntypedFormat());
             if(pFormat)
                 m_xNumFormatLB->SetLanguage(pFormat->GetLanguage());
         }
@@ -178,7 +178,7 @@ void SwFieldDokPage::Reset(const SfxItemSet* )
     if (IsFieldEdit())
     {
         m_nOldSel = m_xSelectionLB->get_selected_index();
-        m_nOldFormat = GetCurField()->GetFormat();
+        m_nOldFormat = GetCurField()->GetUntypedFormat();
         m_xFixedCB->save_state();
         m_xValueED->save_value();
         m_xLevelED->save_value();
@@ -260,7 +260,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
                     {
                         const OUString sFormat(GetFieldMgr().GetFormatStr(nTypeId, i));
                         m_xSelectionLB->append(sId, sFormat);
-                        m_xSelectionLB->select_text(GetFieldMgr().GetFormatStr(nTypeId, GetCurField()->GetFormat()));
+                        m_xSelectionLB->select_text(GetFieldMgr().GetFormatStr(*GetCurField()));
                         break;
                     }
 
@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
     {
         if (IsFieldEdit())
         {
-            m_xNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
+            m_xNumFormatLB->SetDefFormat(GetCurField()->GetUntypedFormat());
 
             if (m_xNumFormatLB->GetFormatType() == (SvNumFormatType::DATE|SvNumFormatType::TIME))
             {
@@ -393,7 +393,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
                 m_xNumFormatLB->SetFormatType(SvNumFormatType::ALL);
                 m_xNumFormatLB->SetFormatType(nFormatType);
                 // set correct format once again
-                m_xNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
+                m_xNumFormatLB->SetDefFormat(GetCurField()->GetUntypedFormat());
             }
         }
         else
@@ -416,7 +416,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
     m_xFixedCB->set_sensitive(bFixed);
 
     if (IsFieldEdit())
-        m_xFixedCB->set_active((GetCurField()->GetFormat() & AF_FIXED) != 0 && bFixed);
+        m_xFixedCB->set_active((GetCurField()->GetUntypedFormat() & AF_FIXED) != 0 && bFixed);
 
     if (m_xNumFormatLB->get_selected_index() == -1)
         m_xNumFormatLB->select(0);
@@ -480,7 +480,7 @@ sal_Int32 SwFieldDokPage::FillFormatLB(SwFieldTypesEnum nTypeId)
 
     if (IsFieldEdit())
     {
-        m_xFormatLB->select_id(OUString::number(GetCurField()->GetFormat() & ~AF_FIXED));
+        m_xFormatLB->select_id(OUString::number(GetCurField()->GetUntypedFormat() & ~AF_FIXED));
     }
     else
     {

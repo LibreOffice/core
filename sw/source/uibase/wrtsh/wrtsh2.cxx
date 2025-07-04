@@ -377,7 +377,7 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
     case SwFieldIds::JumpEdit:
         {
             sal_uInt16 nSlotId = 0;
-            switch( rField.GetFormat() )
+            switch( static_cast<const SwJumpEditField&>(rField).GetFormat() )
             {
             case JE_FMT_TABLE:
                 nSlotId = FN_INSERT_TABLE;

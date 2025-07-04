@@ -122,6 +122,7 @@ class SW_DLLPUBLIC SwDBNameInfField : public SwField
 {
     SwDBData        m_aDBData;
     sal_uInt16      m_nSubType;
+    sal_uInt32      m_nFormat;
 
 protected:
     const SwDBData& GetDBData() const {return m_aDBData;}
@@ -130,6 +131,9 @@ protected:
     SwDBNameInfField(SwFieldType* pTyp, SwDBData aDBData, sal_uInt32 nFormat = 0);
 
 public:
+    sal_uInt32 GetFormat() const { return m_nFormat; }
+    void SetFormat(sal_uInt32 nFormat) { m_nFormat = nFormat; }
+
     /// DBName
     const SwDBData&  GetRealDBData() const { return m_aDBData; }
     SwDBData&        GetRealDBData() { return m_aDBData; }
@@ -245,7 +249,7 @@ public:
 class SwDBNameField final : public SwDBNameInfField
 {
 public:
-    SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData);
+    SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData, sal_uInt32 nFormat = 0);
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;

@@ -742,7 +742,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                 SwScriptField* pField = static_cast<SwScriptField*>(aMgr.GetCurField());
                 bNew = !pField || (pField->GetTyp()->Which() != SwFieldIds::Script);
-                bUpdate = pField && ( bIsUrl != static_cast<bool>(pField->GetFormat()) || pField->GetPar2() != aType || pField->GetPar1() != aText );
+                bUpdate = pField && ( bIsUrl != pField->IsCodeURL() || pField->GetPar2() != aType || pField->GetPar1() != aText );
             }
             else
             {

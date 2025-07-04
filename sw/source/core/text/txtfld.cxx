@@ -134,11 +134,12 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
 
                 sal_uInt16 nVirtNum = m_pFrame->GetVirtPageNum();
                 sal_uInt16 nNumPages = pTmpRootFrame->GetPageNum();
+                auto pPageNumberField = static_cast<SwPageNumberField*>(pField);
                 SvxNumType nNumFormat = SvxNumType(-1);
-                if (SVX_NUM_PAGEDESC == pField->GetFormat())
+                if (SVX_NUM_PAGEDESC == pPageNumberField->GetFormat())
                     nNumFormat
                         = m_pFrame->FindPageFrame()->GetPageDesc()->GetNumType().GetNumberingType();
-                static_cast<SwPageNumberField*>(pField)->ChangeExpansion(nVirtNum, nNumPages);
+                pPageNumberField->ChangeExpansion(nVirtNum, nNumPages);
                 pPageNr->ChangeExpansion(pSh->GetDoc(), bVirt,
                                          nNumFormat != SvxNumType(-1) ? &nNumFormat : nullptr);
             }
@@ -177,16 +178,17 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             break;
         case SwFieldIds::JumpEdit:
         {
+            auto pJumpEditField = static_cast<SwJumpEditField*>(pField);
             std::unique_ptr<SwFont> pFont;
             if (!bName)
             {
                 pFont = std::make_unique<SwFont>(*m_pFont);
                 pFont->SetDiffFnt(
-                    &static_cast<SwJumpEditField*>(pField)->GetCharFormat()->GetAttrSet(),
+                    &pJumpEditField->GetCharFormat()->GetAttrSet(),
                     &m_pFrame->GetDoc().getIDocumentSettingAccess());
             }
             return new SwJumpFieldPortion(ExpandField(*pField, *this, rInf), pField->GetPar2(),
-                                          std::move(pFont), pField->GetFormat());
+                                          std::move(pFont), pJumpEditField->GetFormat());
         }
         case SwFieldIds::GetRef:
             if (!bName)

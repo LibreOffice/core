@@ -50,9 +50,9 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub
     {
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
         if (m_nSubType & DATEFLD)
-            ChangeFormat(pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, GetLanguage()));
+            SetFormat(pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, GetLanguage()));
         else
-            ChangeFormat(pFormatter->GetFormatIndex(NF_TIME_HHMMSS, GetLanguage()));
+            SetFormat(pFormatter->GetFormatIndex(NF_TIME_HHMMSS, GetLanguage()));
     }
     if (IsFixed())
     {
@@ -212,7 +212,7 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_FORMAT:
         rVal >>= nTmp;
-        ChangeFormat(nTmp);
+        SetFormat(nTmp);
         break;
     case FIELD_PROP_SUBTYPE:
         rVal >>= nTmp;

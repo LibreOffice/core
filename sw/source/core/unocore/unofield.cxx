@@ -1637,7 +1637,7 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::RefPageGet);
                 SwRefPageGetField *const pRGField = new SwRefPageGetField(
                         static_cast<SwRefPageGetFieldType*>(pFieldType),
-                        m_pImpl->m_pProps->nUSHORT1 );
+                        static_cast<SvxNumType>(m_pImpl->m_pProps->nUSHORT1) );
                 xField.reset(pRGField);
                 pRGField->SetText(m_pImpl->m_pProps->sPar1, nullptr);
             }
@@ -1647,7 +1647,7 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::PageNumber);
                 SwPageNumberField *const pPNField = new SwPageNumberField(
                     static_cast<SwPageNumberFieldType*>(pFieldType), PG_RANDOM,
-                    m_pImpl->m_pProps->nFormat,
+                    static_cast<SvxNumType>(m_pImpl->m_pProps->nFormat),
                     m_pImpl->m_pProps->nUSHORT1);
                 xField.reset(pPNField);
                 pPNField->SetUserString(m_pImpl->m_pProps->sPar1);
@@ -1888,7 +1888,7 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocStat);
                 xField.reset(new SwDocStatField(
                         static_cast<SwDocStatFieldType*>(pFieldType),
-                        nSubType, m_pImpl->m_pProps->nUSHORT2, m_pImpl->m_pProps->nUSHORT1));
+                        nSubType, static_cast<SvxNumType>(m_pImpl->m_pProps->nUSHORT2), m_pImpl->m_pProps->nUSHORT1));
             }
             break;
             case SwServiceType::FieldTypeBibliography:

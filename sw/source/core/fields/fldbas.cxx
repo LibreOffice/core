@@ -44,6 +44,8 @@
 #include <viewsh.hxx>
 #include <hints.hxx>
 #include <unofield.hxx>
+#include <dbfld.hxx>
+#include <chpfld.hxx>
 
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
@@ -243,11 +245,9 @@ void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 // A field (multiple can exist) references a field type (can exists only once)
 SwField::SwField(
         SwFieldType* pType,
-        sal_uInt32 nFormat,
         LanguageType nLang,
         bool bUseFieldValueCache)
     : m_pType( pType )
-    , m_nFormat( nFormat )
     , m_nLang( nLang )
     , m_bUseFieldValueCache( bUseFieldValueCache )
     , m_bIsAutomaticLanguage( true )
@@ -322,6 +322,91 @@ OUString SwField::GetFieldName() const
     }
     return sRet;
 }
+
+/// Helpers for those places still passing untyped format ids around for SwField
+sal_uInt32 SwField::GetUntypedFormat() const
+{
+    switch (m_pType->Which())
+    {
+    case SwFieldIds::PageNumber:
+        return static_cast<const SwPageNumberField*>(this)->GetFormat();
+    case SwFieldIds::JumpEdit:
+        return static_cast<const SwJumpEditField*>(this)->GetFormat();
+    case SwFieldIds::DocStat:
+        return static_cast<const SwDocStatField*>(this)->GetFormat();
+    case SwFieldIds::TemplateName:
+        return static_cast<const SwTemplNameField*>(this)->GetFormat();
+    case SwFieldIds::Chapter:
+        return static_cast<const SwChapterField*>(this)->GetFormat();
+    case SwFieldIds::Filename:
+        return static_cast<const SwFileNameField*>(this)->GetFormat();
+    case SwFieldIds::Author:
+        return static_cast<const SwAuthorField*>(this)->GetFormat();
+    case SwFieldIds::ExtUser:
+        return static_cast<const SwExtUserField*>(this)->GetFormat();
+    case SwFieldIds::DbNextSet:
+    case SwFieldIds::DbNumSet:
+    case SwFieldIds::DatabaseName:
+    case SwFieldIds::DbSetNumber:
+        return static_cast<const SwDBNameInfField*>(this)->GetFormat();
+    case SwFieldIds::RefPageGet:
+        return static_cast<const SwRefPageGetField*>(this)->GetFormat();
+    case SwFieldIds::GetRef:
+        return static_cast<const SwGetRefField*>(this)->GetFormat();
+    default: break;
+    }
+    if (auto p = dynamic_cast<const SwValueField*>(this))
+        return p->GetFormat();
+    return 0;
+}
+
+/// Helpers for those places still passing untyped format ids around for SwField
+void SwField::SetUntypedFormat(sal_uInt32 n)
+{
+    switch (m_pType->Which())
+    {
+    case SwFieldIds::PageNumber:
+        static_cast<SwPageNumberField*>(this)->SetFormat(static_cast<SvxNumType>(n));
+        return;
+    case SwFieldIds::JumpEdit:
+        static_cast<SwJumpEditField*>(this)->SetFormat(n);
+        return;
+    case SwFieldIds::DocStat:
+        static_cast<SwDocStatField*>(this)->SetFormat(static_cast<SvxNumType>(n));
+        return;
+    case SwFieldIds::TemplateName:
+        static_cast<SwTemplNameField*>(this)->SetFormat(n);
+        return;
+    case SwFieldIds::Chapter:
+        static_cast<SwChapterField*>(this)->SetFormat(n);
+        return;
+    case SwFieldIds::Filename:
+        static_cast<SwFileNameField*>(this)->SetFormat(n);
+        return;
+    case SwFieldIds::Author:
+        static_cast<SwAuthorField*>(this)->SetFormat(n);
+        return;
+    case SwFieldIds::ExtUser:
+        static_cast<SwExtUserField*>(this)->SetFormat(n);
+        return;
+    case SwFieldIds::DbNextSet:
+    case SwFieldIds::DbNumSet:
+    case SwFieldIds::DatabaseName:
+    case SwFieldIds::DbSetNumber:
+        static_cast<SwDBNameInfField*>(this)->SetFormat(n);
+        return;
+    case SwFieldIds::RefPageGet:
+        static_cast<SwRefPageGetField*>(this)->SetFormat(static_cast<SvxNumType>(n));
+        return;
+    case SwFieldIds::GetRef:
+        static_cast<SwGetRefField*>(this)->SetFormat(n);
+        return;
+    default: break;
+    }
+    if (auto p2 = dynamic_cast<SwValueField*>(this))
+        p2->SetFormat(n);
+}
+
 
 OUString SwField::GetPar1() const
 {
@@ -443,11 +528,6 @@ void SwField::SetLanguage(LanguageType const nLang)
     m_nLang = nLang;
 }
 
-void SwField::ChangeFormat(sal_uInt32 const nFormat)
-{
-    m_nFormat = nFormat;
-}
-
 bool SwField::IsFixed() const
 {
     bool bRet = false;
@@ -463,12 +543,14 @@ bool SwField::IsFixed() const
         break;
 
     case SwFieldIds::ExtUser:
+        bRet = 0 != (static_cast<const SwExtUserField*>(this)->GetFormat() & AF_FIXED);
+        break;
     case SwFieldIds::Author:
-        bRet = 0 != (GetFormat() & AF_FIXED);
+        bRet = 0 != (static_cast<const SwAuthorField*>(this)->GetFormat() & AF_FIXED);
         break;
 
     case SwFieldIds::Filename:
-        bRet = 0 != (GetFormat() & FF_FIXED);
+        bRet = 0 != (static_cast<const SwFileNameField*>(this)->GetFormat() & FF_FIXED);
         break;
 
     case SwFieldIds::DocInfo:
@@ -663,8 +745,9 @@ OUString SwValueFieldType::GetInputOrDateTime( const OUString& rInput, const dou
 
 SwValueField::SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat,
                             LanguageType nLng, const double fVal )
-    : SwField(pFieldType, nFormat, nLng)
+    : SwField(pFieldType, nLng)
     , m_fValue(fVal)
+    , m_nFormat(nFormat)
 {
 }
 
@@ -920,7 +1003,6 @@ void SwField::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwField"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nFormat"), BAD_CAST(OString::number(m_nFormat).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nLang"), BAD_CAST(OString::number(m_nLang.get()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_aTitle"), BAD_CAST(m_aTitle.toUtf8().getStr()));
 

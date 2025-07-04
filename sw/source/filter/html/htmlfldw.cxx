@@ -72,7 +72,6 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
 {
     const SwFieldType* pFieldTyp = pField->GetTyp();
     SwFieldIds nField = pFieldTyp->Which();
-    sal_uLong nFormat = pField->GetFormat();
 
     const char *pTypeStr=nullptr, // TYPE
                       *pSubStr=nullptr,   // SUBTYPE
@@ -83,6 +82,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
     double dNumValue = 0.0;     // SDVAL (Number-Formatter-Value)
     bool bFixed=false;          // SDFIXED
     OUString aName;               // NAME (CUSTOM)
+    sal_uInt32 nNumFormat = 0;
 
     switch( nField )
     {
@@ -114,7 +114,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
 
         case SwFieldIds::Author:
             pTypeStr = OOO_STRING_SW_HTML_FT_author;
-            switch( static_cast<SwAuthorFormat>(nFormat) & 0xff)
+            switch( static_cast<SwAuthorFormat>(static_cast<const SwAuthorField*>(pField)->GetFormat()) & 0xff)
             {
                 case AF_NAME:     pFormatStr = OOO_STRING_SW_HTML_FF_name;     break;
                 case AF_SHORTCUT:  pFormatStr = OOO_STRING_SW_HTML_FF_shortcut;    break;
@@ -126,6 +126,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
         case SwFieldIds::DateTime:
             pTypeStr = OOO_STRING_SW_HTML_FT_datetime;
             bNumFormat = true;
+            nNumFormat = static_cast<const SwDateTimeField*>(pField)->GetFormat();
             if( static_cast<const SwDateTimeField*>(pField)->IsFixed() )
             {
                 bNumValue = true;
@@ -135,6 +136,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
 
         case SwFieldIds::PageNumber:
             {
+                auto pPageNumberField = static_cast<const SwPageNumberField *>(pField);
                 pTypeStr = OOO_STRING_SW_HTML_FT_page;
                 SwPageNumSubType eSubType = static_cast<SwPageNumSubType>(pField->GetSubType());
                 switch( eSubType )
@@ -144,11 +146,12 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                     case PG_PREV:       pSubStr = OOO_STRING_SW_HTML_FS_prev;       break;
                 }
                 OSL_ENSURE( pSubStr, "unknown sub type for SwPageNumberField" );
+                SvxNumType nFormat = pPageNumberField->GetFormat();
                 pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFormat) );
 
-                if( static_cast<SvxNumType>(nFormat)==SVX_NUM_CHAR_SPECIAL )
+                if( nFormat == SVX_NUM_CHAR_SPECIAL )
                 {
-                    aValue = static_cast<const SwPageNumberField *>(pField)->GetUserString();
+                    aValue = pPageNumberField->GetUserString();
                 }
                 else
                 {
@@ -165,6 +168,8 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
             break;
         case SwFieldIds::DocInfo:
             {
+                auto pDocInfoField = static_cast<const SwDocInfoField*>(pField);
+                nNumFormat = pDocInfoField->GetFormat();
                 sal_uInt16 nSubType = pField->GetSubType();
                 pTypeStr = OOO_STRING_SW_HTML_FT_docinfo;
                 sal_uInt16 nExtSubType = nSubType & 0x0f00;
@@ -183,7 +188,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                 }
 
                 if( DI_CUSTOM == nSubType ) {
-                    aName = static_cast<const SwDocInfoField*>(pField)->GetName();
+                    aName = pDocInfoField->GetName();
                 }
 
                 if( DI_CREATE == nSubType || DI_CHANGE == nSubType )
@@ -203,7 +208,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                             break;
                     }
                 }
-                bFixed = static_cast<const SwDocInfoField*>(pField)->IsFixed();
+                bFixed = pDocInfoField->IsFixed();
                 if( bNumFormat )
                 {
                     if( bFixed )
@@ -214,7 +219,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                         dNumValue = static_cast<const SwDocInfoField*>(pField)->GetValue();
                         bNumValue = true;
                     }
-                    else if( !nFormat  )
+                    else if( !pDocInfoField->GetFormat()  )
                     {
                         // Non-fixed fields may not have a number format, when
                         // they come from a 4.0-document.
@@ -239,13 +244,13 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                     case DS_OLE:        pSubStr = OOO_STRING_SW_HTML_FS_ole;    break;
                     default:            pTypeStr = nullptr;               break;
                 }
-                pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFormat) );
+                pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(static_cast<const SwDocStatField*>(pField)->GetFormat()) );
             }
             break;
 
         case SwFieldIds::Filename:
             pTypeStr = OOO_STRING_SW_HTML_FT_filename;
-            switch( static_cast<SwFileNameFormat>(nFormat & ~FF_FIXED) )
+            switch( static_cast<SwFileNameFormat>(static_cast<const SwFileNameField*>(pField)->GetFormat() & ~FF_FIXED) )
             {
                 case FF_NAME:       pFormatStr = OOO_STRING_SW_HTML_FF_name;       break;
                 case FF_PATHNAME:   pFormatStr = OOO_STRING_SW_HTML_FF_pathname;   break;
@@ -304,9 +309,9 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
         }
         if( bNumFormat )
         {
-            OSL_ENSURE( nFormat, "number format is 0" );
+            OSL_ENSURE( nNumFormat, "number format is 0" );
             sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(
-                bNumValue, dNumValue, nFormat,
+                bNumValue, dNumValue, nNumFormat,
                 *rWrt.m_pDoc->GetNumberFormatter()));
         }
         if( bFixed )

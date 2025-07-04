@@ -185,6 +185,7 @@ public:
 
     // format to a type
     sal_uInt16          GetFormatCount(SwFieldTypesEnum nTypeId, bool bHtmlMode) const;
+    OUString            GetFormatStr(const SwField&) const;
     OUString            GetFormatStr(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId) const;
     sal_uInt16          GetFormatId(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId) const;
     sal_uInt32          GetDefaultFormat(SwFieldTypesEnum nTypeId, bool bIsText, SvNumberFormatter* pFormatter);

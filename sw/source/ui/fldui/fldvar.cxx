@@ -142,7 +142,7 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
             pSh = ::GetActiveWrtShell();
         if(pSh)
         {
-            const SvNumberformat* pFormat = pSh->GetNumberFormatter()->GetEntry(pCurField->GetFormat());
+            const SvNumberformat* pFormat = pSh->GetNumberFormatter()->GetEntry(pCurField->GetUntypedFormat());
             if(pFormat)
                 m_xNumFormatLB->SetLanguage(pFormat->GetLanguage());
         }
@@ -721,11 +721,11 @@ void SwFieldVarPage::FillFormatLB(SwFieldTypesEnum nTypeId)
     {
         if (GetCurField() != nullptr && IsFieldEdit())
         {
-            bSpecialFormat = GetCurField()->GetFormat() == NUMBERFORMAT_ENTRY_NOT_FOUND;
+            bSpecialFormat = GetCurField()->GetUntypedFormat() == NUMBERFORMAT_ENTRY_NOT_FOUND;
 
             if (!bSpecialFormat)
             {
-                m_xNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
+                m_xNumFormatLB->SetDefFormat(GetCurField()->GetUntypedFormat());
                 sOldNumSel.clear();
             }
             else if (nTypeId == SwFieldTypesEnum::Get || nTypeId == SwFieldTypesEnum::Formel)
@@ -809,7 +809,7 @@ void SwFieldVarPage::FillFormatLB(SwFieldTypesEnum nTypeId)
         const sal_uInt16 nFieldId = GetFieldMgr().GetFormatId( nTypeId, i );
         OUString sId(OUString::number(nFieldId));
         m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr(nTypeId, i));
-        if (IsFieldEdit() && GetCurField() && nFieldId == GetCurField()->GetFormat())
+        if (IsFieldEdit() && GetCurField() && nFieldId == GetCurField()->GetUntypedFormat())
             sSelectId = sId;
     }
 

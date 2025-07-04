@@ -549,22 +549,22 @@ void SwSetExpFieldType::SwClientNotify(const SwModify&, const SfxHint&)
     // do not expand further
 }
 
-void SwSetExpFieldType::SetSeqFormat(sal_uLong nFormat)
+void SwSetExpFieldType::SetSeqFormat(sal_uInt32 nFormat)
 {
     std::vector<SwFormatField*> vFields;
     GatherFields(vFields, false);
     for(auto pFormatField: vFields)
-        pFormatField->GetField()->ChangeFormat(nFormat);
+        pFormatField->GetField()->SetUntypedFormat(nFormat);
 }
 
-sal_uLong SwSetExpFieldType::GetSeqFormat() const
+sal_uInt32 SwSetExpFieldType::GetSeqFormat() const
 {
     if( !HasWriterListeners() )
         return SVX_NUM_ARABIC;
 
     std::vector<SwFormatField*> vFields;
     GatherFields(vFields, false);
-    return vFields.front()->GetField()->GetFormat();
+    return vFields.front()->GetField()->GetUntypedFormat();
 }
 
 void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
@@ -1223,9 +1223,8 @@ SwInputField::SwInputField( SwInputFieldType* pFieldType,
                             OUString aContent,
                             OUString aPrompt,
                             sal_uInt16 nSub,
-                            sal_uLong nFormat,
                             bool bIsFormField )
-    : SwField( pFieldType, nFormat, LANGUAGE_SYSTEM, false )
+    : SwField( pFieldType, LANGUAGE_SYSTEM, false )
     , maContent(std::move(aContent))
     , maPText(std::move(aPrompt))
     , mnSubType(nSub)
@@ -1304,7 +1303,6 @@ std::unique_ptr<SwField> SwInputField::Copy() const
             getContent(),
             maPText,
             GetSubType(),
-            GetFormat(),
             mbIsFormField ));
 
     pField->SetHelp( maHelp );

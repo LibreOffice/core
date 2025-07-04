@@ -1061,7 +1061,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             // <pField->GetFormat() >= 0> is always true as <pField->GetFormat()> is unsigned
 //                    if (pField->GetFormat() >= 0)
             {
-                sEntry = aMgr.GetFormatStr( pField->GetTypeId(), pField->GetFormat() );
+                sEntry = aMgr.GetFormatStr( *pField );
                 if (sEntry.getLength() > 0)
                 {
                     strTypeName += "-" + sEntry;
@@ -1074,7 +1074,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         break;
     case SwFieldIds::JumpEdit:
         {
-            const sal_uInt32 nFormat= pField->GetFormat();
+            const sal_uInt32 nFormat = static_cast<const SwJumpEditField*>(pField)->GetFormat();
             const sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
             if (nFormat < nSize)
             {
@@ -1116,7 +1116,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         break;
     case SwFieldIds::Author:
         {
-            strTypeName += "-" + aMgr.GetFormatStr(pField->GetTypeId(), pField->GetFormat() & 0xff);
+            strTypeName += "-" + aMgr.GetFormatStr(pField->GetTypeId(), static_cast<const SwAuthorField*>(pField)->GetFormat() & 0xff);
         }
         break;
     default: break;

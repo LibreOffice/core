@@ -708,6 +708,12 @@ sal_uInt16 SwFieldMgr::GetFormatCount(SwFieldTypesEnum nTypeId, bool bHtmlMode) 
 }
 
 // determine FormatString to a type
+OUString SwFieldMgr::GetFormatStr(const SwField& rField) const
+{
+    return GetFormatStr(rField.GetTypeId(), rField.GetUntypedFormat());
+}
+
+// determine FormatString to a type
 OUString SwFieldMgr::GetFormatStr(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId) const
 {
     assert(nTypeId < SwFieldTypesEnum::LAST && "forbidden TypeId");
@@ -1026,7 +1032,7 @@ bool SwFieldMgr::InsertField(
 
             SwPageNumberFieldType* pTyp =
                 static_cast<SwPageNumberFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::PageNumber) );
-            pField.reset(new SwPageNumberField(pTyp, nSubType, nFormatId, nOff));
+            pField.reset(new SwPageNumberField(pTyp, nSubType, static_cast<SvxNumType>(nFormatId), nOff));
 
             if( SVX_NUM_CHAR_SPECIAL == nFormatId &&
                 ( PG_PREV == nSubType || PG_NEXT == nSubType ) )
@@ -1038,7 +1044,7 @@ bool SwFieldMgr::InsertField(
         {
             SwDocStatFieldType* pTyp =
                 static_cast<SwDocStatFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::DocStat) );
-            pField.reset(new SwDocStatField(pTyp, nSubType, nFormatId));
+            pField.reset(new SwDocStatField(pTyp, nSubType, static_cast<SvxNumType>(nFormatId)));
             break;
         }
 
@@ -1258,7 +1264,7 @@ bool SwFieldMgr::InsertField(
                     aDBData.sDataSource, aDBData.sCommand, sPar1,
                     pCurShell->GetNumberFormatter(), GetCurrLanguage() );
             }
-            pField->ChangeFormat( nFormatId );
+            static_cast<SwDBField*>(pField.get())->SetFormat( nFormatId );
 
             bExp = true;
 #endif
@@ -1503,7 +1509,7 @@ bool SwFieldMgr::InsertField(
 
         case SwFieldTypesEnum::GetRefPage:
             pField.reset( new SwRefPageGetField( static_cast<SwRefPageGetFieldType*>(
-                            pCurShell->GetFieldType( 0, SwFieldIds::RefPageGet ) ), nFormatId ) );
+                            pCurShell->GetFieldType( 0, SwFieldIds::RefPageGet ) ), static_cast<SvxNumType>(nFormatId) ) );
             bPageVar = true;
             break;
         case SwFieldTypesEnum::Dropdown :
@@ -1780,7 +1786,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
 
     // set format
     // setup format before SetPar2 because of NumberFormatter!
-    pTmpField->ChangeFormat(nFormat);
+    pTmpField->SetUntypedFormat(nFormat);
 
     if( bSetPar1 )
         pTmpField->SetPar1( rPar1 );

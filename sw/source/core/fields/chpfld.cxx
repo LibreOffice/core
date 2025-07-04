@@ -72,7 +72,8 @@ std::unique_ptr<SwFieldType> SwChapterFieldType::Copy() const
 // chapter field
 
 SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFormat)
-    : SwField(pTyp, nFormat)
+    : SwField(pTyp),
+      m_nFormat(nFormat)
 {
 }
 
@@ -286,16 +287,20 @@ bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= nVal;
             switch( nVal )
             {
-                case text::ChapterFormat::NAME: SetFormat(CF_TITLE); break;
-                case text::ChapterFormat::NUMBER:  SetFormat(CF_NUMBER); break;
+                case text::ChapterFormat::NAME:
+                    m_nFormat = CF_TITLE;
+                    break;
+                case text::ChapterFormat::NUMBER:
+                    m_nFormat = CF_NUMBER;
+                    break;
                 case text::ChapterFormat::NO_PREFIX_SUFFIX:
-                            SetFormat(CF_NUM_NOPREPST_TITLE);
-                break;
+                    m_nFormat = CF_NUM_NOPREPST_TITLE;
+                    break;
                 case text::ChapterFormat::DIGIT:
-                        SetFormat(CF_NUMBER_NOPREPST);
-                break;
-
-                default:        SetFormat(CF_NUM_TITLE);
+                    m_nFormat = CF_NUMBER_NOPREPST;
+                    break;
+                default:
+                    m_nFormat = CF_NUM_TITLE;
             }
         }
         break;

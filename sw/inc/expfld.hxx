@@ -163,8 +163,8 @@ public:
     inline void             SetType(sal_uInt16 nTyp);
     inline sal_uInt16       GetType() const;
 
-    void                    SetSeqFormat(sal_uLong nFormat);
-    sal_uLong               GetSeqFormat() const;
+    void                    SetSeqFormat(sal_uInt32 nFormat);
+    sal_uInt32              GetSeqFormat() const;
 
     bool                IsDeleted() const       { return m_bDeleted; }
     void                    SetDeleted( bool b )    { m_bDeleted = b; }
@@ -307,7 +307,6 @@ public:
         OUString aContent,
         OUString aPrompt,
         sal_uInt16 nSubType,
-        sal_uLong nFormat = 0,
         bool bIsFormField = true );
     virtual ~SwInputField() override;
 

@@ -194,7 +194,7 @@ void SwJavaEditDialog::SetField()
 
 bool SwJavaEditDialog::IsUpdate() const
 {
-    return m_pField && ( sal_uInt32(m_bIsUrl ? 1 : 0) != m_pField->GetFormat() || m_pField->GetPar2() != m_aType || m_pField->GetPar1() != m_aText );
+    return m_pField && ( m_bIsUrl != m_pField->IsCodeURL() || m_pField->GetPar2() != m_aType || m_pField->GetPar1() != m_aText );
 }
 
 IMPL_LINK(SwJavaEditDialog, RadioButtonHdl, weld::Toggleable&, rButton, void)
