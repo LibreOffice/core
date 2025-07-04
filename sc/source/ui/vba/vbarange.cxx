@@ -705,7 +705,7 @@ bool
 CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< table::XCell >& xCell )
 {
 
-    bool isExtracted = false;
+    bool isExtracted = true;
     switch ( aValue.getValueTypeClass() )
     {
         case  uno::TypeClass_BOOLEAN:
@@ -756,7 +756,14 @@ CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< tab
         default:
         {
             double nDouble = 0.0;
-            if ( aValue >>= nDouble )
+            if (!(aValue >>= nDouble))
+            {
+                if (css::bridge::oleautomation::Date date; aValue >>= date)
+                    nDouble = date.Value;
+                else
+                    isExtracted = false;
+            }
+            if (isExtracted)
             {
                 uno::Reference< table::XCellRange > xRange( xCell, uno::UNO_QUERY_THROW );
                 NumFormatHelper cellFormat( xRange );
@@ -767,8 +774,6 @@ CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< tab
                     cellFormat.setNumberFormat(u"General"_ustr);
                 xCell->setValue( nDouble );
             }
-            else
-                isExtracted = false;
             break;
         }
     }
