@@ -1028,7 +1028,7 @@ uno::Reference<frame::XDispatch> SAL_CALL
 
     if ( !m_aLifeTimeManager.impl_isDisposed() && getModel().is() )
     {
-        if( !rTargetFrameName.isEmpty() && rTargetFrameName == "_self" )
+        if (rTargetFrameName == "_self")
             return m_aDispatchContainer.getDispatchForURL( rURL );
     }
     return uno::Reference< frame::XDispatch > ();
