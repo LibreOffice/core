@@ -11,13 +11,10 @@
 <plist version="1.0">
 <dict>
 <!-- require the parent process to be LibreOffice -->
-    <key>parent-constraints</key>
-    <dict>
-        <key>signing-identifier</key>
-        <string>@MACOSX_BUNDLE_IDENTIFIER@</string>
-        <key>team-identifier</key>
-        <string>@MACOSX_CODESIGNING_TEAM_IDENTIFIER@</string>
-    </dict>
+    <key>signing-identifier</key>
+    <string>@MACOSX_BUNDLE_IDENTIFIER@</string>
+    <key>team-identifier</key>
+    <string>@MACOSX_CODESIGNING_TEAM_IDENTIFIER@</string>
 </dict>
 </plist>
 <!-- vim:set shiftwidth=4 softtabstop=4 expandtab: -->
