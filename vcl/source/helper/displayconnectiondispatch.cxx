@@ -77,9 +77,9 @@ void DisplayConnectionDispatch::removeEventHandler(
     std::erase(m_aHandlers, handler);
 }
 
-Any DisplayConnectionDispatch::getIdentifier()
+OUString DisplayConnectionDispatch::getIdentifier()
 {
-    return Any(m_ConnectionIdentifier);
+    return m_ConnectionIdentifier;
 }
 
 bool DisplayConnectionDispatch::dispatchEvent( void const * pData, int nBytes )

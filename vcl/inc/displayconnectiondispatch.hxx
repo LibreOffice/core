@@ -46,7 +46,7 @@ public:
 
     void addEventHandler(const css::uno::Reference<css::awt::XEventHandler>& handler);
     void removeEventHandler(const css::uno::Reference<css::awt::XEventHandler>& handler);
-    css::uno::Any getIdentifier();
+    OUString getIdentifier();
 };
 
 }

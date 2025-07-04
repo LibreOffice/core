@@ -344,10 +344,7 @@ void SelectionManager::initialize()
 
     OUString aUDisplay;
     if( m_xDisplayConnection.is() )
-    {
-        Any aIdentifier = m_xDisplayConnection->getIdentifier();
-        aIdentifier >>= aUDisplay;
-    }
+        aUDisplay = m_xDisplayConnection->getIdentifier();
 
     OString aDisplayName( OUStringToOString( aUDisplay, RTL_TEXTENCODING_ISO_8859_1 ) );
 
