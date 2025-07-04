@@ -3865,19 +3865,18 @@ void SelectionManager::shutdown() noexcept
     m_xDropTransferable.clear();
 }
 
-bool SelectionManager::handleEvent(const css::uno::Sequence<sal_Int8>& rEvent)
+bool SelectionManager::handleEvent(const void* pEvent)
 {
-    Sequence<sal_Int8> aSeq = rEvent;
-    XEvent* pEvent = reinterpret_cast<XEvent*>(aSeq.getArray());
+    const XEvent* pXEvent = static_cast<const XEvent*>(pEvent);
     Time nTimestamp = CurrentTime;
-    if (pEvent->type == ButtonPress || pEvent->type == ButtonRelease)
-        nTimestamp = pEvent->xbutton.time;
-    else if (pEvent->type == KeyPress || pEvent->type == KeyRelease)
-        nTimestamp = pEvent->xkey.time;
-    else if (pEvent->type == MotionNotify)
-        nTimestamp = pEvent->xmotion.time;
-    else if (pEvent->type == PropertyNotify)
-        nTimestamp = pEvent->xproperty.time;
+    if (pXEvent->type == ButtonPress || pXEvent->type == ButtonRelease)
+        nTimestamp = pXEvent->xbutton.time;
+    else if (pXEvent->type == KeyPress || pXEvent->type == KeyRelease)
+        nTimestamp = pXEvent->xkey.time;
+    else if (pXEvent->type == MotionNotify)
+        nTimestamp = pXEvent->xmotion.time;
+    else if (pXEvent->type == PropertyNotify)
+        nTimestamp = pXEvent->xproperty.time;
 
     if (nTimestamp != CurrentTime)
     {
@@ -3886,7 +3885,7 @@ bool SelectionManager::handleEvent(const css::uno::Sequence<sal_Int8>& rEvent)
         m_nSelectionTimestamp = nTimestamp;
     }
 
-    return handleXEvent(*pEvent);
+    return handleXEvent(*pXEvent);
 }
 
 void SAL_CALL SelectionManager::disposing( const css::lang::EventObject& rEvt )

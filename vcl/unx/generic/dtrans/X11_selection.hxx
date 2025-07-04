@@ -440,7 +440,7 @@ namespace x11 {
 
         void initialize();
 
-        virtual bool handleEvent(const css::uno::Sequence<sal_Int8>& rEvent) override;
+        virtual bool handleEvent(const void* pEvent) override;
         void shutdown() noexcept override;
 
         // XDragSource

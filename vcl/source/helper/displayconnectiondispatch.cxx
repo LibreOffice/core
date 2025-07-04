@@ -81,18 +81,17 @@ OUString DisplayConnectionDispatch::getIdentifier()
     return m_ConnectionIdentifier;
 }
 
-bool DisplayConnectionDispatch::dispatchEvent( void const * pData, int nBytes )
+bool DisplayConnectionDispatch::dispatchEvent(const void* pEvent)
 {
     SolarMutexReleaser aRel;
 
-    Sequence< sal_Int8 > aSeq( static_cast<const sal_Int8*>(pData), nBytes );
     std::vector<rtl::Reference<DisplayEventHandler>> handlers;
     {
         std::scoped_lock aGuard( m_aMutex );
         handlers = m_aHandlers;
     }
     for (auto const& handle : handlers)
-        if (handle->handleEvent(aSeq))
+        if (handle->handleEvent(pEvent))
             return true;
     return false;
 }

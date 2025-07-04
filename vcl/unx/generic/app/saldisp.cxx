@@ -1906,7 +1906,7 @@ void SalX11Display::Dispatch( XEvent *pEvent )
     }
 
     SalInstance* pInstance = GetSalInstance();
-    pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
+    pInstance->CallEventCallback(pEvent);
 
     switch( pEvent->type )
     {

@@ -32,7 +32,7 @@ namespace vcl {
 class DisplayEventHandler : public cppu::WeakImplHelper<>
 {
 public:
-    virtual bool handleEvent(const css::uno::Sequence<sal_Int8>& rEvent) = 0;
+    virtual bool handleEvent(const void* pEvent) = 0;
     virtual void shutdown() noexcept = 0;
 };
 
@@ -48,7 +48,7 @@ public:
     void start();
     void terminate();
 
-    bool dispatchEvent( void const * pData, int nBytes );
+    bool dispatchEvent(const void* pEvent);
 
     void addEventHandler(const rtl::Reference<DisplayEventHandler>& handler);
     void removeEventHandler(const rtl::Reference<DisplayEventHandler>& handler);

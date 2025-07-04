@@ -161,9 +161,9 @@ std::unique_ptr<SalMenu> SalInstance::CreateMenu(bool, Menu*)
 
 std::unique_ptr<SalMenuItem> SalInstance::CreateMenuItem(const SalItemParams&) { return nullptr; }
 
-bool SalInstance::CallEventCallback(void const* pEvent, int nBytes)
+bool SalInstance::CallEventCallback(const void* pEvent)
 {
-    return m_pEventInst.is() && m_pEventInst->dispatchEvent(pEvent, nBytes);
+    return m_pEventInst.is() && m_pEventInst->dispatchEvent(pEvent);
 }
 
 OUString SalInstance::GetConnectionIdentifier() { return OUString(); }
