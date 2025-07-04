@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
-
+#include "file_impl.hxx"
 #include <cassert>
 #include <fcntl.h>
 #include <limits.h>
@@ -597,6 +597,9 @@ oslProcessError osl_psz_executeProcess(char *pszImageName,
     {
         return osl_Process_E_NotFound;
     }
+
+    if (isForbidden(pszImageName, 0x80 /* execute */))
+        return osl_Process_E_NoPermission;
 
     Data.m_pszArgs[0] = strdup(pszImageName);
     Data.m_pszArgs[1] = nullptr;

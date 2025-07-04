@@ -40,6 +40,25 @@ struct DirectoryItem_Impl
     oslFileType getFileType() const;
 };
 
+/**
+   Determine if the passed in path is not contained inside
+   the allowed paths, or if no allowed paths are set it
+   will not forbid any access.
+
+   @param[in] filePath
+   A URL (or path) that we want to check if it is forbidden
+   to access.
+
+   @param[in] nFlags
+   Flags to determine what type of access is requested,
+   osl_File_OpenFlag_Read | Write, or 0x80 for 'execute'.
+
+   This method is Unix specific.
+
+   @see setAllowedPaths in sal/inc/setallowedpaths.hxx
+*/
+bool isForbidden(const OString &filePath, sal_uInt32 nFlags);
+
 oslFileError openFile(
     rtl_uString * pustrFileURL, oslFileHandle * pHandle, sal_uInt32 uFlags,
     mode_t mode);

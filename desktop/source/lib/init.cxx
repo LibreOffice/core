@@ -8255,6 +8255,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         }
     }
 
+#ifdef LINUX
+    // Enforce SAL_ALLOWED_PATHS:
+    rtl_alloc_preInit(2);
+#endif
+
     char* pAllowlist = ::getenv("LOK_HOST_ALLOWLIST");
     if (pAllowlist)
     {
@@ -8292,7 +8297,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     if (eStage == PRE_INIT)
     {
-        rtl_alloc_preInit(true);
+        rtl_alloc_preInit(1);
 
         // Set the default timezone to the TZ envar, if set.
         const char* tz = ::getenv("TZ");
@@ -8599,7 +8604,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     // staticize all strings.
     if (eStage == PRE_INIT)
-        rtl_alloc_preInit(false);
+        rtl_alloc_preInit(0);
 
     return bInitialized;
 }

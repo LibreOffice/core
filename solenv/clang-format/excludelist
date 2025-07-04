@@ -7432,6 +7432,7 @@ sal/qa/OStringBuffer/rtl_OStringBuffer.cxx
 sal/qa/OStringBuffer/rtl_String_Const.h
 sal/qa/inc/valueequal.hxx
 sal/qa/osl/condition/osl_Condition.cxx
+sal/qa/osl/file/forbidden.cxx
 sal/qa/osl/file/osl_File.cxx
 sal/qa/osl/file/osl_File_Const.h
 sal/qa/osl/file/osl_old_test_file.cxx
