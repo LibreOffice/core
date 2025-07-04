@@ -339,7 +339,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 +    GET_PROC_GLOBAL(DestroyInstance);
 +    GET_DEV_PROC_GLOBAL(DestroyDevice);
 +    if (fGlobalShared->fDebugMessenger != VK_NULL_HANDLE) {
-+        GET_PROC_GLOBAL(DestroyDebugReportCallbackEXT);
++        GET_PROC_GLOBAL(DestroyDebugUtilsMessengerEXT);
      }
 +
 +    backendContext.fMemoryAllocator =
@@ -744,7 +744,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWin
 +    {
 +    PFN_vkDestroyInstance fDestroyInstance = nullptr;
 +    PFN_vkDestroyDevice fDestroyDevice = nullptr;
-+    PFN_vkDestroyDebugReportCallbackEXT fDestroyDebugReportCallbackEXT = nullptr;
++    PFN_vkDestroyDebugUtilsMessengerEXT fDestroyDebugUtilsMessengerEXT = nullptr;
 +
 +    VkInstance fInstance = VK_NULL_HANDLE;
 +    VkPhysicalDevice fPhysicalDevice = VK_NULL_HANDLE;
