@@ -20,6 +20,7 @@
 #pragma once
 
 #include <displayconnectiondispatch.hxx>
+#include <DropTarget.hxx>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -62,37 +63,17 @@ namespace x11 {
         ~SelectionAdaptor() {}
     };
 
-    class DropTarget : public ::cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
-                                                              css::lang::XServiceInfo>
+    class X11DropTarget : public ::cppu::ImplInheritanceHelper<DropTarget, css::lang::XServiceInfo>
     {
-        ::osl::Mutex                m_aMutex;
-        bool                        m_bActive;
-        sal_Int8                    m_nDefaultActions;
         ::Window                    m_aTargetWindow;
         rtl::Reference<SelectionManager>
                                     m_xSelectionManager;
-        ::std::vector< css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > >
-                                    m_aListeners;
 
     public:
-        DropTarget();
-        virtual ~DropTarget() override;
-
-        // convenience functions that loop over listeners
-        void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde ) noexcept;
-        void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) noexcept;
-        void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) noexcept;
-        void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) noexcept;
+        X11DropTarget();
+        virtual ~X11DropTarget() override;
 
         void initialize(::Window aWindow);
-
-        // XDropTarget
-        virtual void        SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& ) override;
-        virtual void        SAL_CALL removeDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& ) override;
-        virtual sal_Bool    SAL_CALL isActive() override;
-        virtual void        SAL_CALL setActive( sal_Bool active ) override;
-        virtual sal_Int8    SAL_CALL getDefaultActions() override;
-        virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
@@ -208,20 +189,20 @@ namespace x11 {
         // a struct to hold data associated with a XDropTarget
         struct DropTargetEntry
         {
-            DropTarget*     m_pTarget;
+            X11DropTarget*  m_pTarget;
             ::Window        m_aRootWindow;
 
             DropTargetEntry() : m_pTarget( nullptr ), m_aRootWindow( None ) {}
-            explicit DropTargetEntry( DropTarget* pTarget ) :
-                    m_pTarget( pTarget ),
-                    m_aRootWindow( None )
-                {}
+            explicit DropTargetEntry(X11DropTarget* pTarget)
+                : m_pTarget(pTarget)
+                , m_aRootWindow(None)
+            {}
             DropTargetEntry( const DropTargetEntry& rEntry ) :
                     m_pTarget( rEntry.m_pTarget ),
                     m_aRootWindow( rEntry.m_aRootWindow )
                 {}
 
-            DropTarget* operator->() const { return m_pTarget; }
+            X11DropTarget* operator->() const { return m_pTarget; }
             DropTargetEntry& operator=(const DropTargetEntry& rEntry)
                 { m_pTarget = rEntry.m_pTarget; m_aRootWindow = rEntry.m_aRootWindow; return *this; }
         };
@@ -425,7 +406,7 @@ namespace x11 {
         bool getPasteData( Atom selection, const OUString& rType, css::uno::Sequence< sal_Int8 >& rData );
 
         // for XDropTarget to register/deregister itself
-        void registerDropTarget( ::Window aXLIB_Window, DropTarget* pTarget );
+        void registerDropTarget(::Window aXLIB_Window, X11DropTarget* pTarget);
         void deregisterDropTarget( ::Window aXLIB_Window );
 
         // for XDropTarget{Drag|Drop}Context

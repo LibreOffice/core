@@ -90,7 +90,7 @@ X11SalInstance::ImplCreateDragSource(const SystemEnvData*)
 css::uno::Reference<css::datatransfer::dnd::XDropTarget>
 X11SalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
-    rtl::Reference<DropTarget> xDropTarget = new DropTarget();
+    rtl::Reference<X11DropTarget> xDropTarget = new X11DropTarget();
 
     X11SalFrame* pFrame = static_cast<X11SalFrame*>(pSysEnv->pSalFrame);
     ::Window aShellWindow = pFrame ? pFrame->GetShellWindow() : 0;

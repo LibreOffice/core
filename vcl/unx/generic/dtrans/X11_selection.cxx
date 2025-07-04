@@ -3939,7 +3939,7 @@ extern "C"
     typedef int(*xerror_hdl_t)(Display*,XErrorEvent*);
 }
 
-void SelectionManager::registerDropTarget( ::Window aWindow, DropTarget* pTarget )
+void SelectionManager::registerDropTarget(::Window aWindow, X11DropTarget* pTarget)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
