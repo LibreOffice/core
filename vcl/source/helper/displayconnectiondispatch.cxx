@@ -57,12 +57,12 @@ void DisplayConnectionDispatch::terminate()
 
     std::scoped_lock aGuard( m_aMutex );
     Any aEvent;
-    std::vector< css::uno::Reference< XEventHandler > > aLocalList( m_aHandlers );
+    std::vector<rtl::Reference<DisplayEventHandler>> aLocalList(m_aHandlers);
     for (auto const& elem : aLocalList)
         elem->handleEvent( aEvent );
 }
 
-void DisplayConnectionDispatch::addEventHandler(const css::uno::Reference<XEventHandler>& handler)
+void DisplayConnectionDispatch::addEventHandler(const rtl::Reference<DisplayEventHandler>& handler)
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -70,7 +70,7 @@ void DisplayConnectionDispatch::addEventHandler(const css::uno::Reference<XEvent
 }
 
 void DisplayConnectionDispatch::removeEventHandler(
-    const css::uno::Reference<XEventHandler>& handler)
+    const rtl::Reference<DisplayEventHandler>& handler)
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -89,7 +89,7 @@ bool DisplayConnectionDispatch::dispatchEvent( void const * pData, int nBytes )
     Sequence< sal_Int8 > aSeq( static_cast<const sal_Int8*>(pData), nBytes );
     Any aEvent;
     aEvent <<= aSeq;
-    ::std::vector< css::uno::Reference< XEventHandler > > handlers;
+    std::vector<rtl::Reference<DisplayEventHandler>> handlers;
     {
         std::scoped_lock aGuard( m_aMutex );
         handlers = m_aHandlers;

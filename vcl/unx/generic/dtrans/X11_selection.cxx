@@ -3865,7 +3865,7 @@ void SelectionManager::shutdown() noexcept
     m_xDropTransferable.clear();
 }
 
-sal_Bool SelectionManager::handleEvent(const Any& event)
+bool SelectionManager::handleEvent(const Any& event)
 {
     Sequence< sal_Int8 > aSeq;
     if( event >>= aSeq )

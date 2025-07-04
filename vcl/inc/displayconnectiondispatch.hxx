@@ -20,20 +20,25 @@
 #pragma once
 
 #include <sal/config.h>
-#include <cppuhelper/weak.hxx>
-#include <com/sun/star/awt/XEventHandler.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/dllapi.h>
 #include <mutex>
 #include <vector>
 
 namespace vcl {
 
+class DisplayEventHandler : public cppu::WeakImplHelper<>
+{
+public:
+    virtual bool handleEvent(const ::css::uno::Any& rEvent) = 0;
+};
+
 class VCL_DLLPUBLIC DisplayConnectionDispatch final : public cppu::OWeakObject
 {
     std::mutex                      m_aMutex;
-    ::std::vector< css::uno::Reference< css::awt::XEventHandler > >
-                                    m_aHandlers;
+    std::vector<rtl::Reference<DisplayEventHandler>> m_aHandlers;
     OUString                        m_ConnectionIdentifier;
 public:
     DisplayConnectionDispatch();
@@ -44,8 +49,8 @@ public:
 
     bool dispatchEvent( void const * pData, int nBytes );
 
-    void addEventHandler(const css::uno::Reference<css::awt::XEventHandler>& handler);
-    void removeEventHandler(const css::uno::Reference<css::awt::XEventHandler>& handler);
+    void addEventHandler(const rtl::Reference<DisplayEventHandler>& handler);
+    void removeEventHandler(const rtl::Reference<DisplayEventHandler>& handler);
     OUString getIdentifier();
 };
 

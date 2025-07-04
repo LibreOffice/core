@@ -134,13 +134,10 @@ namespace x11 {
 
     };
 
-    class SelectionManager :
-        public ::cppu::WeakImplHelper<
-            css::datatransfer::dnd::XDragSource,
-            css::awt::XEventHandler,
-            css::frame::XTerminateListener
-        >,
-        public SelectionAdaptor
+    class SelectionManager : public cppu::ImplInheritanceHelper<vcl::DisplayEventHandler,
+                                                                css::datatransfer::dnd::XDragSource,
+                                                                css::frame::XTerminateListener>,
+                             public SelectionAdaptor
     {
         static std::unordered_map< OUString, SelectionManager* >& getInstances();
 
@@ -445,8 +442,7 @@ namespace x11 {
 
         void initialize();
 
-        // XEventHandler
-        virtual sal_Bool    SAL_CALL handleEvent(const css::uno::Any& event) override;
+        virtual bool handleEvent(const css::uno::Any& event) override;
 
         // XDragSource
         virtual sal_Bool    SAL_CALL isDragImageSupported() override;
