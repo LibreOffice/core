@@ -835,7 +835,7 @@ void PDFOutDev::updateStrokeColor(GfxState *state)
             normalize(colToDbl(aRGB.r)),
             normalize(colToDbl(aRGB.g)),
             normalize(colToDbl(aRGB.b)),
-            normalize(state->getFillOpacity()) );
+            normalize(state->getStrokeOpacity()) );
 }
 
 void PDFOutDev::updateFillOpacity(GfxState *state)
