@@ -32,6 +32,8 @@ constexpr auto IgnoredList
         { u"svt/ui/tabbuttons.ui" },
         { u"svx/ui/toolbarpopover.ui" },
         { u"modules/scalc/ui/dropmenu.ui"}, // Calc -> Navigator -> right click
+        { u"modules/sdraw/ui/navigatorcontextmenu.ui" }, // Impress -> Navigator -> right click
+        { u"modules/swriter/ui/navigatorcontextmenu.ui" }, // Writer -> Navigator -> right click
     });
 
 // ========== MOBILE DIALOGS ================================================= //
