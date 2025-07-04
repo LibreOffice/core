@@ -20,6 +20,7 @@
 #include <tools/fract.hxx>
 #include <tools/debug.hxx>
 #include <o3tl/hash_combine.hxx>
+#include <o3tl/numeric.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -34,7 +35,7 @@
 static boost::rational<sal_Int32> rational_FromDouble(double dVal);
 static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, unsigned nSignificantBits);
 // Find the number of bits required to represent this number
-static int impl_NumberOfBits(sal_uInt32 nNum) { return 32 - std::countl_zero(nNum); }
+static int impl_NumberOfBits(sal_uInt32 nNum) { return o3tl::number_of_bits(nNum); }
 
 static boost::rational<sal_Int32> toRational(sal_Int32 n, sal_Int32 d)
 {
