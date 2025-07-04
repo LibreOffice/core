@@ -354,7 +354,7 @@ namespace x11 {
         PixmapHolder* getPixmapHolder( Atom selection );
 
         // handle various events
-        bool handleSelectionRequest( XSelectionRequestEvent& rRequest );
+        bool handleSelectionRequest(const XSelectionRequestEvent& rRequest);
         bool handleSendPropertyNotify( XPropertyEvent const & rNotify );
         bool handleReceivePropertyNotify( XPropertyEvent const & rNotify );
         bool handleSelectionNotify( XSelectionEvent const & rNotify );
@@ -391,7 +391,7 @@ namespace x11 {
         static void runDragExecute( void* );
         private:
         void dragDoDispatch();
-        bool handleXEvent( XEvent& rEvent );
+        bool handleXEvent(const XEvent& rEvent);
 
         // compound text conversion
         OString convertToCompound( const OUString& rText );

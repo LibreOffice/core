@@ -1566,7 +1566,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
     return bConverted;
 }
 
-bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest )
+bool SelectionManager::handleSelectionRequest(const XSelectionRequestEvent& rRequest)
 {
     osl::ResettableMutexGuard aGuard( m_aMutex );
 
@@ -3620,7 +3620,7 @@ void SelectionManager::transferablesFlavorsChanged()
  *  dispatch loop
  */
 
-bool SelectionManager::handleXEvent( XEvent& rEvent )
+bool SelectionManager::handleXEvent(const XEvent& rEvent)
 {
     /*
      *  since we are XConnectionListener to a second X display
