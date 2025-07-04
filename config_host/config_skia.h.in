@@ -51,6 +51,19 @@ are the same.
 // backends, but that is because the other backends don't handle gamma correctly.
 #define SK_GAMMA_APPLY_TO_A8 1
 
+// Platform-specific font gamma tuning to recover some contrast while still
+// reducing artifacts. Most values are from BUILD.gn.
+#if defined(_WIN32)
+#define SK_GAMMA_SRGB 1
+#define SK_GAMMA_CONTRAST 0.75
+#elif defined(__APPLE__)
+#define SK_GAMMA_SRGB 1
+#define SK_GAMMA_CONTRAST 0.0
+#else
+#define SK_GAMMA_EXPONENT 1.2
+#define SK_GAMMA_CONTRAST 0.2
+#endif
+
 // These are just to avoid warnings (some headers use them even with GL disabled).
 #define SK_ASSUME_GL 1
 #define SK_ASSUME_GL_ES 0
