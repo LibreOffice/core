@@ -30,8 +30,6 @@
 
 #include <com/sun/star/media/XPlayerWindow.hpp>
 
-struct IVideoWindow;
-
 namespace avmedia::win {
 
 class Player;
@@ -46,7 +44,6 @@ public:
             ~Window() override;
 
     bool    create( const css::uno::Sequence< css::uno::Any >& aArguments );
-    void    processGraphEvent();
     void    updatePointer();
 
     // XPlayerWindow
@@ -93,6 +90,7 @@ public:
     void fireKeyReleasedEvent( const css::awt::KeyEvent& rEvt );
     void fireSetFocusEvent( const css::awt::FocusEvent& rEvt );
     HWND getParentWnd() const { return mnParentWnd; }
+    Player& getPlayer() const { return mrPlayer; }
 
 private:
 
@@ -110,6 +108,7 @@ private:
     HWND                                        mnParentWnd;
     int                                         mnPointerType;
 
+    const css::awt::Rectangle                   getParentPosSize() const;
     void                                        ImplLayoutVideoWindow();
 };
 

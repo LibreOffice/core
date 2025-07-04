@@ -34,10 +34,8 @@ class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
                      public sal::systools::CoInitializeGuard
 {
 public:
-    explicit FrameGrabber();
+    explicit FrameGrabber( const OUString& rURL, UINT32 nFrameWidth, UINT32 nFrameHeight );
     ~FrameGrabber() override;
-
-    bool    create( const OUString& rURL );
 
     // XFrameGrabber
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) override;
@@ -48,7 +46,9 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
-    OUString                                                  maURL;
+    OUString                maURL;
+    UINT32                  mnFrameWidth;
+    UINT32                  mnFrameHeight;
 };
 
 } // namespace avmedia::win

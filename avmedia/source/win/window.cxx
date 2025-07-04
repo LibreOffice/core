@@ -18,12 +18,12 @@
  */
 
 #include <objbase.h>
-#include <strmif.h>
-#include <control.h>
 #include <dshow.h>
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <avmedia/mediaitem.hxx>
+#include <avmedia/mediawindow.hxx>
 
 #include "window.hxx"
 #include "player.hxx"
@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 namespace avmedia::win {
 
-static LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
+static LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
     Window* pWindow = reinterpret_cast<Window*>(GetWindowLongPtrW( hWnd, 0 ));
     bool    bProcessed = true;
@@ -44,12 +44,12 @@ static LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, L
     {
         switch( nMsg )
         {
+            HANDLE_MSG(hWnd, WM_CLOSE, pWindow->getPlayer().OnClose);
+            HANDLE_MSG(hWnd, WM_PAINT, pWindow->getPlayer().OnPaint);
+            HANDLE_MSG(hWnd, WM_SIZE, pWindow->getPlayer().OnSize);
+
             case WM_SETCURSOR:
                 pWindow->updatePointer();
-            break;
-
-            case WM_GRAPHNOTIFY:
-                pWindow->processGraphEvent();
             break;
 
             case WM_MOUSEMOVE:
@@ -59,7 +59,7 @@ static LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, L
             case WM_LBUTTONUP:
             case WM_MBUTTONUP:
             case WM_RBUTTONUP:
-                PostMessage(pWindow->getParentWnd(), nMsg, nPar1, nPar2);
+                PostMessage(pWindow->getParentWnd(), nMsg, wParam, lParam);
             break;
 
             case WM_SETFOCUS:
@@ -77,7 +77,7 @@ static LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, L
     else
         bProcessed = false;
 
-    return( bProcessed ? 0 : DefWindowProcW( hWnd, nMsg, nPar1, nPar2 ) );
+    return( bProcessed ? 0 : DefWindowProcW( hWnd, nMsg, wParam, lParam ) );
 }
 
 static WNDCLASSW* lcl_getWndClass()
@@ -112,12 +112,32 @@ Window::~Window()
         ::DestroyWindow( mnFrameWnd );
 }
 
+const css::awt::Rectangle Window::getParentPosSize() const
+{
+    awt::Rectangle aRet;
+
+    if (mnParentWnd)
+    {
+        ::RECT  aWndRect;
+
+        if (::GetClientRect(mnParentWnd, &aWndRect))
+        {
+            aRet.X = aWndRect.left;
+            aRet.Y = aWndRect.top;
+            aRet.Width = aWndRect.right - aWndRect.left + 1;
+            aRet.Height = aWndRect.bottom - aWndRect.top + 1;
+        }
+    }
+
+    return aRet;
+}
+
 void Window::ImplLayoutVideoWindow()
 {
     if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel )
     {
         awt::Size           aPrefSize( mrPlayer.getPreferredPlayerWindowSize() );
-        awt::Rectangle      aRect = getPosSize();
+        awt::Rectangle      aRect = getParentPosSize();
         int                 nW = aRect.Width, nH = aRect.Height;
         int                 nVideoW = nW, nVideoH = nH;
         int                 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
@@ -190,19 +210,16 @@ void Window::ImplLayoutVideoWindow()
                 nX = nY = nWidth = nHeight = 0;
         }
 
-        IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
-
-        if( pVideoWindow )
-            pVideoWindow->SetWindowPosition( nX, nY, nWidth, nHeight );
+        if (mnFrameWnd && mrPlayer.GetVideoWidth() && mrPlayer.GetVideoHeight() )
+            SetWindowPos( mnFrameWnd, HWND_TOP, nX, nY, nWidth, nHeight, 0 );
     }
 }
 
 bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 {
-    IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
     static WNDCLASSW* mpWndClass = lcl_getWndClass();
 
-    if( !mnFrameWnd && pVideoWindow && mpWndClass )
+    if( !mnFrameWnd && mpWndClass )
     {
         awt::Rectangle  aRect;
         sal_IntPtr       nWnd;
@@ -213,32 +230,38 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
         mnParentWnd = reinterpret_cast<HWND>(nWnd);
 
         mnFrameWnd = CreateWindowW( mpWndClass->lpszClassName, nullptr,
-                                    WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
-                                    aRect.X, aRect.Y, aRect.Width, aRect.Height,
-                                    mnParentWnd, nullptr, mpWndClass->hInstance, nullptr );
+            WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+            aRect.X, aRect.Y, aRect.Width, aRect.Height,
+            mnParentWnd, nullptr, mpWndClass->hInstance, nullptr );
 
         if( mnFrameWnd )
         {
             SetWindowLongPtrW( mnFrameWnd, 0, reinterpret_cast<LONG_PTR>(this) );
-
-            pVideoWindow->put_Owner( reinterpret_cast<OAHWND>(mnFrameWnd) );
-            pVideoWindow->put_MessageDrain( reinterpret_cast<OAHWND>(mnFrameWnd) );
-            pVideoWindow->put_WindowStyle( WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN );
-
-            mrPlayer.setNotifyWnd( mnFrameWnd );
-
-            meZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
-            ImplLayoutVideoWindow();
+            mrPlayer.setNotifyWnd(mnFrameWnd);
+            if (SUCCEEDED(mrPlayer.InitializeWindow(false)))
+            {
+                sal_IntPtr pIntPtr = 0;
+                if ((rArguments.getLength() >= 4) && (rArguments[3] >>= pIntPtr) && pIntPtr)
+                {
+                    auto pItem = reinterpret_cast<const avmedia::MediaItem*>(pIntPtr);
+                    if (pItem->getState() == avmedia::MediaState::Play)
+                    {
+                        mrPlayer.setAutoPlayBack(true);
+                    }
+                }
+                meZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
+                ImplLayoutVideoWindow();
+            }
+            else
+            {
+                ::avmedia::MediaWindow::executeFormatErrorBox(nullptr);
+            }
         }
     }
 
     return( mnFrameWnd != nullptr );
 }
 
-void Window::processGraphEvent()
-{
-    mrPlayer.processEvent();
-}
 
 void Window::updatePointer()
 {
@@ -323,15 +346,8 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 
 void SAL_CALL Window::setVisible( sal_Bool bVisible )
 {
-    if( mnFrameWnd )
-    {
-        IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
-
-        if( pVideoWindow )
-            pVideoWindow->put_Visible( bVisible ? OATRUE : OAFALSE );
-
+    if( mnFrameWnd && mrPlayer.GetVideoWidth() && mrPlayer.GetVideoHeight() )
         ::ShowWindow( mnFrameWnd, bVisible ? SW_SHOW : SW_HIDE );
-    }
 }
 
 void SAL_CALL Window::setEnable( sal_Bool bEnable )

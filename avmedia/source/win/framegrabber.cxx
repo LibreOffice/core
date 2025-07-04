@@ -21,13 +21,15 @@
 
 #include <memory>
 
-#include <prewin.h>
-#include <postwin.h>
 #include <objbase.h>
 #include <strmif.h>
-#include <Amvideo.h>
 #include "interface.hxx"
 #include <uuids.h>
+
+// Media Foundation headers
+#include <mfapi.h>
+#include <mfidl.h>
+#include <mfreadwrite.h>
 
 #include "framegrabber.hxx"
 #include "player.hxx"
@@ -37,147 +39,166 @@
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <systools/win32/oleauto.hxx>
 
 constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.FrameGrabber_DirectX";
 constexpr OUString AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_DirectX"_ustr;
+constexpr LONGLONG SEEK_TOLERANCE = 10000000;
+constexpr LONGLONG MAX_FRAMES_TO_SKIP = 10;
 
 using namespace ::com::sun::star;
 
 namespace avmedia::win {
 
 
-FrameGrabber::FrameGrabber()
+FrameGrabber::FrameGrabber( const OUString& rURL, UINT32 nFrameWidth, UINT32 nFrameHeight )
     : sal::systools::CoInitializeGuard(COINIT_APARTMENTTHREADED, false,
                                        sal::systools::CoInitializeGuard::WhenFailed::NoThrow)
 {
+    maURL = rURL;
+    mnFrameWidth = nFrameWidth;
+    mnFrameHeight = nFrameHeight;
 }
-
 
 FrameGrabber::~FrameGrabber() = default;
-
-namespace {
-
-sal::systools::COMReference<IMediaDet> implCreateMediaDet( const OUString& rURL )
-{
-    sal::systools::COMReference<IMediaDet> pDet;
-
-    if( SUCCEEDED(pDet.CoCreateInstance(CLSID_MediaDet, nullptr, CLSCTX_INPROC_SERVER)) )
-    {
-        OUString aLocalStr;
-
-        if( osl::FileBase::getSystemPathFromFileURL( rURL, aLocalStr )
-            == osl::FileBase::E_None )
-        {
-            if( !SUCCEEDED( pDet->put_Filename(sal::systools::BStr(aLocalStr)) ) )
-                pDet.clear();
-        }
-    }
-
-    return pDet;
-}
-
-}
-
-bool FrameGrabber::create( const OUString& rURL )
-{
-    // just check if a MediaDet interface can be created with the given URL
-    if (implCreateMediaDet(rURL))
-        maURL = rURL;
-    else
-        maURL.clear();
-
-    return !maURL.isEmpty();
-}
-
 
 uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
 {
     uno::Reference< graphic::XGraphic > xRet;
-    if (sal::systools::COMReference<IMediaDet> pDet = implCreateMediaDet(maURL))
+
+    if (mnFrameWidth && mnFrameHeight &&
+        SUCCEEDED(MFStartup(MF_VERSION)))
     {
-        double  fLength;
-        long    nStreamCount;
-        bool    bFound = false;
+        HRESULT hr = S_OK;
+        IMFAttributes* pAttributes = nullptr;
 
-        if( SUCCEEDED( pDet->get_OutputStreams( &nStreamCount ) ) )
+        // Configure the source reader to perform video processing.
+        //
+        // This includes:
+        //   - YUV to RGB-32
+        //   - Software deinterlace
+        if (SUCCEEDED(MFCreateAttributes(&pAttributes, 1)))
         {
-            for( long n = 0; ( n < nStreamCount ) && !bFound; ++n )
-            {
-                GUID aMajorType;
-
-                if( SUCCEEDED( pDet->put_CurrentStream( n ) )  &&
-                    SUCCEEDED( pDet->get_StreamType( &aMajorType ) ) &&
-                    ( aMajorType == MEDIATYPE_Video ) )
-                {
-                    bFound = true;
-                }
-            }
+            hr = pAttributes->SetUINT32(MF_SOURCE_READER_ENABLE_VIDEO_PROCESSING, TRUE);
         }
 
-        if( bFound &&
-            ( S_OK == pDet->get_StreamLength( &fLength ) ) &&
-            ( fLength > 0.0 ) && ( fMediaTime >= 0.0 ) && ( fMediaTime <= fLength ) )
+        // Create the source reader from the URL.
+        IMFSourceReader* pReader = nullptr; // Create the source reader.
+        if (SUCCEEDED(hr) && SUCCEEDED(MFCreateSourceReaderFromURL(o3tl::toW(maURL.getStr()), pAttributes, &pReader)))
         {
-            AM_MEDIA_TYPE   aMediaType;
-            LONG            nWidth = 0, nHeight = 0;
-            long            nSize = 0;
+            IMFMediaType* pType = nullptr;
 
-            if( SUCCEEDED( pDet->get_StreamMediaType( &aMediaType ) ) )
+            // Configure the source reader to give us progressive RGB32 frames.
+            // The source reader will load the decoder if needed.
+            if (SUCCEEDED(MFCreateMediaType(&pType)))
+                hr = pType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Video);
+
+            if (SUCCEEDED(hr))
+                hr = pType->SetGUID(MF_MT_SUBTYPE, MFVideoFormat_RGB32);
+
+            if (SUCCEEDED(hr))
             {
-                if( ( aMediaType.formattype == FORMAT_VideoInfo ) &&
-                    ( aMediaType.cbFormat >= sizeof( VIDEOINFOHEADER ) ) )
-                {
-                    VIDEOINFOHEADER* pVih = reinterpret_cast< VIDEOINFOHEADER* >( aMediaType.pbFormat );
-
-                    nWidth = pVih->bmiHeader.biWidth;
-                    nHeight = pVih->bmiHeader.biHeight;
-
-                    if( nHeight < 0 )
-                        nHeight *= -1;
-                }
-
-                if( aMediaType.cbFormat != 0 )
-                {
-                    ::CoTaskMemFree( aMediaType.pbFormat );
-                    aMediaType.cbFormat = 0;
-                    aMediaType.pbFormat = nullptr;
-                }
-
-                if( aMediaType.pUnk != nullptr )
-                {
-                    aMediaType.pUnk->Release();
-                    aMediaType.pUnk = nullptr;
-                }
+                hr = pReader->SetCurrentMediaType(
+                    (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+                    nullptr,
+                    pType
+                );
             }
 
-            if( ( nWidth > 0 ) && ( nHeight > 0 ) &&
-                SUCCEEDED( pDet->GetBitmapBits( 0, &nSize, nullptr, nWidth, nHeight ) ) &&
-                ( nSize > 0  ) )
+            // Ensure the stream is selected.
+            if (SUCCEEDED(hr))
             {
-                auto pBuffer = std::make_unique<char[]>(nSize);
+                hr = pReader->SetStreamSelection(
+                    (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+                    TRUE
+                );
+            }
 
-                try
+            SafeRelease(&pType);
+
+            if (SUCCEEDED(hr) && fMediaTime > 0.0)
+            {
+                PROPVARIANT var;
+                PropVariantInit(&var);
+
+                var.vt = VT_I8;
+                var.hVal.QuadPart = fMediaTime;
+
+                hr = pReader->SetCurrentPosition(GUID_NULL, var);
+            }
+
+            IMFSample* pSampleTmp = nullptr;
+
+            if (SUCCEEDED(hr))
+            {
+                DWORD dwFlags = 0;
+                DWORD cSkipped = 0; // Number of skipped frames
+                while (true)
                 {
-                    if( SUCCEEDED( pDet->GetBitmapBits( fMediaTime, nullptr, pBuffer.get(), nWidth, nHeight ) ) )
-                    {
-                        SvMemoryStream  aMemStm( pBuffer.get(), nSize, StreamMode::READ | StreamMode::WRITE );
-                        Bitmap          aBmp;
+                    hr = pReader->ReadSample(
+                        (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+                        0,
+                        nullptr,
+                        &dwFlags,
+                        nullptr,
+                        &pSampleTmp
+                    );
 
-                        if( ReadDIB(aBmp, aMemStm, false ) && !aBmp.IsEmpty() )
+                    if (FAILED(hr) || (dwFlags & MF_SOURCE_READERF_ENDOFSTREAM))
+                        break;
+
+                    if (pSampleTmp == nullptr)
+                        continue;
+
+                    LONGLONG hnsTimeStamp = 0;
+                    if (SUCCEEDED(pSampleTmp->GetSampleTime(&hnsTimeStamp)))
+                    {
+                        // Keep going until we get a frame that is within tolerance of the
+                        // desired seek position, or until we skip MAX_FRAMES_TO_SKIP frames.
+
+                        // During this process, we might reach the end of the file, so we
+                        // always cache the last sample that we got (pSample).
+
+                        if ((cSkipped < MAX_FRAMES_TO_SKIP) &&
+                            (hnsTimeStamp + SEEK_TOLERANCE < fMediaTime))
                         {
-                            BitmapEx aBitmapEx(aBmp);
-                            Graphic aGraphic(aBitmapEx);
-                            xRet = aGraphic.GetXGraphic();
+                            SafeRelease(&pSampleTmp);
+
+                            ++cSkipped;
+                            continue;
                         }
                     }
-                }
-                catch( ... )
-                {
+
+                    fMediaTime = hnsTimeStamp;
+                    break;
                 }
             }
+
+            // We got a sample. Hold onto it.
+            IMFMediaBuffer* pBuffer = nullptr;
+            BYTE* pBitmapData = nullptr;  // Bitmap data
+            DWORD cbBitmapData = 0;       // Size of data, in bytes
+            if (pSampleTmp && SUCCEEDED(pSampleTmp->ConvertToContiguousBuffer(&pBuffer)))
+            {
+                if (SUCCEEDED(pBuffer->Lock(&pBitmapData, nullptr, &cbBitmapData)) && cbBitmapData)
+                {
+                    BitmapEx aBitmapEx = vcl::bitmap::CreateFromData(pBitmapData, mnFrameWidth, mnFrameHeight, mnFrameWidth * 4, /*nBitsPerPixel*/32, true);
+                    Graphic aGraphic(aBitmapEx);
+                    xRet = aGraphic.GetXGraphic();
+                }
+                pBuffer->Unlock();
+            }
+
+            SafeRelease(&pBuffer);
+            SafeRelease(&pSampleTmp);
         }
+
+        SafeRelease(&pAttributes);
+        SafeRelease(&pReader);
+        // Shut down Media Foundation.
+        MFShutdown();
     }
 
     return xRet;

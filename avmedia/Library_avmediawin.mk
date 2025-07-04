@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,avmediawin,\
 	tl \
 	utl \
 	vcl \
+	avmedia \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,avmediawin,\
@@ -35,6 +36,13 @@ $(eval $(call gb_Library_use_system_win32_libs,avmediawin,\
 	ole32 \
 	oleaut32 \
 	strmiids \
+	propsys \
+	shlwapi \
+	mf \
+	mfuuid \
+	mfplat \
+	mfplay \
+	mfreadwrite \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmediawin,\

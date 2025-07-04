@@ -36,6 +36,4 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/media/XManager.hpp>
 
-#define WM_GRAPHNOTIFY (WM_USER + 567)
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -464,11 +464,15 @@ namespace slideshow::internal
 
                             SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
                             auto pMediaObj = dynamic_cast<SdrMediaObj*>(pObj);
-                            const avmedia::MediaItem* pMediaItem = nullptr;
+                            avmedia::MediaItem* pMediaItem = nullptr;
                             if (pMediaObj)
                             {
-                                pMediaItem = &pMediaObj->getMediaProperties();
+                                pMediaItem = pMediaObj->getMediaProperties().Clone();
                             }
+
+                            // TODO In slideshow we cannot play/pause/stop the video
+                            if (pMediaItem)
+                                pMediaItem->setState(avmedia::MediaState::Play);
 
                             uno::Sequence< uno::Any >   aArgs{
                                 uno::Any(nParentWindowHandle),

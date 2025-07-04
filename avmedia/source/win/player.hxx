@@ -23,6 +23,10 @@
 
 #include <WinDef.h>
 
+// Media Foundation headers
+#include <mfplay.h>
+#include <mferror.h>
+
 #include "wincommon.hxx"
 
 #include <com/sun/star/media/XPlayer.hpp>
@@ -31,26 +35,31 @@
 #include <cppuhelper/basemutex.hxx>
 #include <systools/win32/comtools.hxx>
 
-struct IGraphBuilder;
-struct IBaseFilter;
-struct IMediaControl;
-struct IMediaEventEx;
-struct IMediaSeeking;
-struct IMediaPosition;
-struct IBasicAudio;
-struct IBasicVideo;
-struct IVideoWindow;
-struct IDDrawExclModeVideo;
-struct IDirectDraw;
-struct IDirectDrawSurface;
 
 namespace avmedia::win {
+
+enum PlayerState
+{
+    Closed = 0,     // No session.
+    Started,        // Session is playing a file.
+    Paused,         // Session is paused.
+    Stopped         // Session is stopped (ready to play).
+};
+
+template <class T> void SafeRelease(T **ppT)
+{
+    if (*ppT)
+    {
+        (*ppT)->Release();
+        *ppT = nullptr;
+    }
+}
 
 typedef ::cppu::WeakComponentImplHelper< css::media::XPlayer,
                                          css::lang::XServiceInfo > Player_BASE;
 
-
-class Player : public cppu::BaseMutex,
+class Player : public IMFPMediaPlayerCallback,
+               public cppu::BaseMutex,
                public Player_BASE,
                public sal::systools::CoInitializeGuard
 {
@@ -59,12 +68,32 @@ public:
     explicit Player();
     ~Player() override;
 
-    bool                create( const OUString& rURL );
+    bool    create( const OUString& rURL );
+    HRESULT InitializeWindow( bool bAddSoundWindow );
+    void    setNotifyWnd( HWND nNotifyWnd );
+    HWND*   getNotifyWnd() { return &mnFrameWnd; }
+    void    setAutoPlayBack(bool bVal) { mbAutoPlayBack = bVal; }
+    const UINT32  GetVideoWidth() const { return mnFrameWidth; }
+    const UINT32  GetVideoHeight() const { return mnFrameHeight; }
 
-    void                setNotifyWnd( HWND nNotifyWnd );
-    void                processEvent();
+    // IUnknown methods
+    STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
+    STDMETHODIMP_(ULONG) AddRef();
+    STDMETHODIMP_(ULONG) Release();
 
-    const IVideoWindow* getVideoWindow() const;
+    // IMFPMediaPlayerCallback methods
+    void STDMETHODCALLTYPE OnMediaPlayerEvent(MFP_EVENT_HEADER* pEventHeader);
+
+    // Window message handlers
+    void    OnClose(HWND hwnd);
+    void    OnPaint(HWND hwnd);
+    void    OnSize(HWND hwnd, UINT state, int cx, int cy);
+
+    // MFPlay event handler functions.
+    void    OnMediaItemCreated(MFP_MEDIAITEM_CREATED_EVENT* pEvent);
+    void    OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT* pEvent);
+    void    OnMediaPosSet(MFP_POSITION_SET_EVENT* pEvent);
+    void    OnMediaItemEnded(MFP_PLAYBACK_ENDED_EVENT* pEvent);
 
     // XPlayer
     virtual void SAL_CALL start(  ) override;
@@ -93,19 +122,19 @@ public:
 
 private:
 
+    long                    m_cRef;          // Reference count.
     OUString                maURL;
-    sal::systools::COMReference<IGraphBuilder>          mpGB;
-    sal::systools::COMReference<IMediaControl>          mpMC;
-    sal::systools::COMReference<IMediaEventEx>          mpME;
-    sal::systools::COMReference<IMediaPosition>         mpMP;
-    sal::systools::COMReference<IBasicAudio>            mpBA;
-    sal::systools::COMReference<IBasicVideo>            mpBV;
-    sal::systools::COMReference<IVideoWindow>           mpVW;
-    long                    mnUnmutedVolume;
+    float                   mnUnmutedVolume;
     HWND                    mnFrameWnd;
-    bool                    mbMuted;
+    BOOL                    mbMuted;
     bool                    mbLooping;
-    bool                    mbAddWindow;
+    bool                    mbAutoPlayBack;
+    UINT32                  mnFrameWidth;
+    UINT32                  mnFrameHeight;
+    IMFPMediaPlayer*        g_pPlayer;      // The MFPlay player object.
+    BOOL                    g_bHasVideo;
+    BOOL                    g_bHasAudio;
+    PlayerState             m_state;
 };
 
 } // namespace avmedia::win
