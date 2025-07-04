@@ -34,18 +34,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace x11;
 
-namespace
-{
-void InitializeDnD(const css::uno::Reference<css::lang::XInitialization>& xDnD,
-                   const X11SalFrame* pFrame)
-{
-    ::Window aShellWindow = pFrame ? pFrame->GetShellWindow() : 0;
-    if (aShellWindow && xDnD)
-        xDnD->initialize({ css::uno::Any(Application::GetDisplayConnection()),
-                           css::uno::Any(static_cast<sal_uInt64>(aShellWindow)) });
-}
-}
-
 Sequence< OUString > x11::X11Clipboard_getSupportedServiceNames()
 {
     return { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
@@ -95,7 +83,14 @@ css::uno::Reference<css::datatransfer::dnd::XDragSource>
 X11SalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
 {
     rtl::Reference<SelectionManagerHolder> xSelectionManagerHolder = new SelectionManagerHolder();
-    InitializeDnD(xSelectionManagerHolder, static_cast<X11SalFrame*>(pSysEnv->pSalFrame));
+
+    X11SalFrame* pFrame = static_cast<X11SalFrame*>(pSysEnv->pSalFrame);
+    ::Window aShellWindow = pFrame ? pFrame->GetShellWindow() : 0;
+    if (aShellWindow)
+        xSelectionManagerHolder->initialize(
+            { css::uno::Any(Application::GetDisplayConnection()),
+              css::uno::Any(static_cast<sal_uInt64>(aShellWindow)) });
+
     return xSelectionManagerHolder;
 }
 
@@ -103,7 +98,13 @@ css::uno::Reference<css::datatransfer::dnd::XDropTarget>
 X11SalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
 {
     rtl::Reference<DropTarget> xDropTarget = new DropTarget();
-    InitializeDnD(xDropTarget, static_cast<X11SalFrame*>(pSysEnv->pSalFrame));
+
+    X11SalFrame* pFrame = static_cast<X11SalFrame*>(pSysEnv->pSalFrame);
+    ::Window aShellWindow = pFrame ? pFrame->GetShellWindow() : 0;
+    if (aShellWindow)
+        xDropTarget->initialize({ css::uno::Any(Application::GetDisplayConnection()),
+                                  css::uno::Any(static_cast<sal_uInt64>(aShellWindow)) });
+
     return xDropTarget;
 }
 
