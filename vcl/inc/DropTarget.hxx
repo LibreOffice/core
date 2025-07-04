@@ -39,7 +39,7 @@ protected:
 public:
     // convenience functions that loop over listeners
     void dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde) noexcept;
-    void dragExit(const css::datatransfer::dnd::DropTargetEvent& dte) noexcept;
+    void dragExit() noexcept;
     void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde) noexcept;
     virtual void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde) noexcept;
 

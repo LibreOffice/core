@@ -5448,9 +5448,7 @@ void GtkSalFrame::signalDragLeave(GtkWidget* pWidget, GdkDragContext* /*context*
 static gboolean lcl_deferred_dragExit(gpointer user_data)
 {
     GtkInstDropTarget* pThis = static_cast<GtkInstDropTarget*>(user_data);
-    css::datatransfer::dnd::DropTargetEvent aEvent;
-    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis);
-    pThis->dragExit(aEvent);
+    pThis->dragExit();
     return false;
 }
 

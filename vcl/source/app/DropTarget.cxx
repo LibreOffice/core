@@ -88,15 +88,17 @@ void DropTarget::dragEnter(const DropTargetDragEnterEvent& dtde) noexcept
     }
 }
 
-void DropTarget::dragExit(const DropTargetEvent& dte) noexcept
+void DropTarget::dragExit() noexcept
 {
     osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
     std::vector<uno::Reference<XDropTargetListener>> aListeners(m_aListeners);
     aGuard.clear();
 
+    DropTargetEvent aEvent;
+    aEvent.Source = getXWeak();
     for (auto const& listener : aListeners)
     {
-        listener->dragExit(dte);
+        listener->dragExit(aEvent);
     }
 }
 

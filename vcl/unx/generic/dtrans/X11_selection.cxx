@@ -2257,14 +2257,13 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
                     << std::showbase << std::hex
                     << aTarget);
 #endif
-            DropTargetEvent aEvent;
-            aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
+
             m_aDropEnterEvent.data.l[0] = None;
             if( m_aCurrentDropWindow == aTarget )
                 m_aCurrentDropWindow = None;
             m_nCurrentProtocolVersion = nXdndProtocolRevision;
             aGuard.clear();
-            it->second.m_pTarget->dragExit(aEvent);
+            it->second.m_pTarget->dragExit();
         }
         else if(
                 rMessage.message_type == m_nXdndDrop &&
@@ -2306,10 +2305,8 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
                 SAL_INFO("vcl.unx.dtrans", "XdndDrop canceled due to "
                         << "m_bLastDropAccepted = false." );
 #endif
-                DropTargetEvent aEvent;
-                aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
                 aGuard.clear();
-                it->second.m_pTarget->dragExit(aEvent);
+                it->second.m_pTarget->dragExit();
                 // reset the drop status, notify source
                 dropComplete( false, m_aCurrentDropWindow );
             }
@@ -2726,10 +2723,8 @@ bool SelectionManager::handleDragEvent( XEvent const & rMessage )
             // abort drag
             if( it != m_aDropTargets.end() )
             {
-                DropTargetEvent dte;
-                dte.Source = it->second.m_pTarget->getXWeak();
                 aGuard.clear();
-                it->second.m_pTarget->dragExit( dte );
+                it->second.m_pTarget->dragExit();
                 aGuard.reset();
             }
             else if( m_aDropProxy != None && m_nCurrentProtocolVersion >= 0 )
@@ -3113,10 +3108,8 @@ void SelectionManager::updateDragWindow( int nX, int nY, ::Window aRoot )
             if( it != m_aDropTargets.end() )
                 // shortcut for own drop targets
             {
-                DropTargetEvent dte;
-                dte.Source  = it->second.m_pTarget->getXWeak();
                 aGuard.clear();
-                it->second.m_pTarget->dragExit( dte );
+                it->second.m_pTarget->dragExit();
                 aGuard.reset();
             }
             else
@@ -3994,10 +3987,8 @@ void SelectionManager::deregisterDropTarget( ::Window aWindow )
         m_aDropTargets.find( m_aDropWindow );
     if( it != m_aDropTargets.end() )
     {
-        DropTargetEvent dte;
-        dte.Source = it->second.m_pTarget->getXWeak();
         aGuard.clear();
-        it->second.m_pTarget->dragExit( dte );
+        it->second.m_pTarget->dragExit();
         aGuard.reset();
     }
     else if( m_aDropProxy != None && m_nCurrentProtocolVersion >= 0 )

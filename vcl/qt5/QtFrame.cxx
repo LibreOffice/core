@@ -1417,9 +1417,7 @@ void QtFrame::handleDrop(QDropEvent* pEvent)
 
 void QtFrame::handleDragLeave()
 {
-    css::datatransfer::dnd::DropTargetEvent aEvent;
-    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
-    m_pDropTarget->dragExit(aEvent);
+    m_pDropTarget->dragExit();
     m_bInDrag = false;
 }
 
