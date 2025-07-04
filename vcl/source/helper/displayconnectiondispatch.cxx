@@ -56,10 +56,9 @@ void DisplayConnectionDispatch::terminate()
     SolarMutexReleaser aRel;
 
     std::scoped_lock aGuard( m_aMutex );
-    Any aEvent;
     std::vector<rtl::Reference<DisplayEventHandler>> aLocalList(m_aHandlers);
     for (auto const& elem : aLocalList)
-        elem->handleEvent( aEvent );
+        elem->shutdown();
 }
 
 void DisplayConnectionDispatch::addEventHandler(const rtl::Reference<DisplayEventHandler>& handler)
@@ -87,15 +86,13 @@ bool DisplayConnectionDispatch::dispatchEvent( void const * pData, int nBytes )
     SolarMutexReleaser aRel;
 
     Sequence< sal_Int8 > aSeq( static_cast<const sal_Int8*>(pData), nBytes );
-    Any aEvent;
-    aEvent <<= aSeq;
     std::vector<rtl::Reference<DisplayEventHandler>> handlers;
     {
         std::scoped_lock aGuard( m_aMutex );
         handlers = m_aHandlers;
     }
     for (auto const& handle : handlers)
-        if( handle->handleEvent( aEvent ) )
+        if (handle->handleEvent(aSeq))
             return true;
     return false;
 }

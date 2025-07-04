@@ -3865,39 +3865,28 @@ void SelectionManager::shutdown() noexcept
     m_xDropTransferable.clear();
 }
 
-bool SelectionManager::handleEvent(const Any& event)
+bool SelectionManager::handleEvent(const css::uno::Sequence<sal_Int8>& rEvent)
 {
-    Sequence< sal_Int8 > aSeq;
-    if( event >>= aSeq )
+    Sequence<sal_Int8> aSeq = rEvent;
+    XEvent* pEvent = reinterpret_cast<XEvent*>(aSeq.getArray());
+    Time nTimestamp = CurrentTime;
+    if (pEvent->type == ButtonPress || pEvent->type == ButtonRelease)
+        nTimestamp = pEvent->xbutton.time;
+    else if (pEvent->type == KeyPress || pEvent->type == KeyRelease)
+        nTimestamp = pEvent->xkey.time;
+    else if (pEvent->type == MotionNotify)
+        nTimestamp = pEvent->xmotion.time;
+    else if (pEvent->type == PropertyNotify)
+        nTimestamp = pEvent->xproperty.time;
+
+    if (nTimestamp != CurrentTime)
     {
-        XEvent* pEvent = reinterpret_cast<XEvent*>(aSeq.getArray());
-        Time nTimestamp = CurrentTime;
-        if( pEvent->type == ButtonPress || pEvent->type == ButtonRelease )
-            nTimestamp = pEvent->xbutton.time;
-        else if( pEvent->type == KeyPress || pEvent->type == KeyRelease )
-            nTimestamp = pEvent->xkey.time;
-        else if( pEvent->type == MotionNotify )
-            nTimestamp = pEvent->xmotion.time;
-        else if( pEvent->type == PropertyNotify )
-            nTimestamp = pEvent->xproperty.time;
+        osl::MutexGuard aGuard(m_aMutex);
 
-        if( nTimestamp != CurrentTime )
-        {
-            osl::MutexGuard aGuard(m_aMutex);
-
-            m_nSelectionTimestamp = nTimestamp;
-        }
-
-        return handleXEvent( *pEvent );
+        m_nSelectionTimestamp = nTimestamp;
     }
-    else
-    {
-#if OSL_DEBUG_LEVEL > 1
-        SAL_INFO("vcl.unx.dtrans", "SelectionManager got downing event.");
-#endif
-        shutdown();
-    }
-    return true;
+
+    return handleXEvent(*pEvent);
 }
 
 void SAL_CALL SelectionManager::disposing( const css::lang::EventObject& rEvt )

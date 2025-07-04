@@ -32,7 +32,8 @@ namespace vcl {
 class DisplayEventHandler : public cppu::WeakImplHelper<>
 {
 public:
-    virtual bool handleEvent(const ::css::uno::Any& rEvent) = 0;
+    virtual bool handleEvent(const css::uno::Sequence<sal_Int8>& rEvent) = 0;
+    virtual void shutdown() noexcept = 0;
 };
 
 class VCL_DLLPUBLIC DisplayConnectionDispatch final : public cppu::OWeakObject

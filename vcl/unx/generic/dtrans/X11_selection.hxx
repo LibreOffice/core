@@ -438,11 +438,10 @@ namespace x11 {
         void setCursor( sal_Int32 cursor, ::Window aDropXLIB_Window );
         void transferablesFlavorsChanged();
 
-        void shutdown() noexcept;
-
         void initialize();
 
-        virtual bool handleEvent(const css::uno::Any& event) override;
+        virtual bool handleEvent(const css::uno::Sequence<sal_Int8>& rEvent) override;
+        void shutdown() noexcept override;
 
         // XDragSource
         virtual sal_Bool    SAL_CALL isDragImageSupported() override;
