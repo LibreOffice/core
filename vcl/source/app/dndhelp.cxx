@@ -24,7 +24,6 @@
 
 #include <cppuhelper/queryinterface.hxx>
 
-#include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 using namespace ::com::sun::star;
