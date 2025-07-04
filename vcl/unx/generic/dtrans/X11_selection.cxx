@@ -336,7 +336,7 @@ void SelectionManager::initialize()
          */
         m_xDisplayConnection = Application::GetDisplayConnection();
         assert(m_xDisplayConnection.is());
-        m_xDisplayConnection->addEventHandler(Any(), this, ~0);
+        m_xDisplayConnection->addEventHandler(this);
     }
 
     if( m_pDisplay )
@@ -3826,7 +3826,7 @@ void SelectionManager::shutdown() noexcept
         m_xDesktop->removeTerminateListener(this);
 
     if( m_xDisplayConnection.is() )
-        m_xDisplayConnection->removeEventHandler(Any(), this);
+        m_xDisplayConnection->removeEventHandler(this);
 
     // stop dispatching
     if( m_aThread )

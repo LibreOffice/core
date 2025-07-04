@@ -44,8 +44,8 @@ public:
 
     bool dispatchEvent( void const * pData, int nBytes );
 
-    void addEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler, sal_Int32 eventMask );
-    void removeEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler );
+    void addEventHandler(const css::uno::Reference<css::awt::XEventHandler>& handler);
+    void removeEventHandler(const css::uno::Reference<css::awt::XEventHandler>& handler);
     css::uno::Any getIdentifier();
 };
 

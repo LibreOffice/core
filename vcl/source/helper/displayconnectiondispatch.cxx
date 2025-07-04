@@ -62,14 +62,15 @@ void DisplayConnectionDispatch::terminate()
         elem->handleEvent( aEvent );
 }
 
-void DisplayConnectionDispatch::addEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler, sal_Int32 /*eventMask*/ )
+void DisplayConnectionDispatch::addEventHandler(const css::uno::Reference<XEventHandler>& handler)
 {
     std::scoped_lock aGuard( m_aMutex );
 
     m_aHandlers.push_back( handler );
 }
 
-void DisplayConnectionDispatch::removeEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler )
+void DisplayConnectionDispatch::removeEventHandler(
+    const css::uno::Reference<XEventHandler>& handler)
 {
     std::scoped_lock aGuard( m_aMutex );
 
