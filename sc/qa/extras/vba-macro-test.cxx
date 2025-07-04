@@ -838,6 +838,35 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNonAsciiMacroIRI)
     CPPUNIT_ASSERT_EQUAL(u"zab"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf167378)
+{
+    loadFromURL(u"private:factory/scalc"_ustr);
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, uno::UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
+
+    // Execute a macro that assigns a Date variable to a cell value
+    OUString sMacro = uR"vba(
+            Option VBASupport 1
+            Sub TestSetDate
+              Dim d As Date
+              d = #2025-07-04# ' numeric value 45842
+              Cells(1, 1).Value = d
+            End Sub
+        )vba"_ustr;
+    xLibrary->insertByName(u"TestModule"_ustr, uno::Any(sMacro));
+
+    executeMacro(u"vnd.sun.Star.script:TestLibrary.TestModule.TestSetDate?language=Basic&location="
+                 "document"_ustr);
+
+    SfxObjectShell* pObjectShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    CPPUNIT_ASSERT(pObjectShell);
+    ScDocument& rDoc = static_cast<ScDocShell*>(pObjectShell)->GetDocument();
+    // Without a fix, this was 0, because oleautomation::Date wasn't handled
+    CPPUNIT_ASSERT_EQUAL(45842.0, rDoc.GetValue(0, 0, 0));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
