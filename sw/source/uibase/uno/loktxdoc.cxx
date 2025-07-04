@@ -887,7 +887,7 @@ public:
                 Show(pRedline, m_rTable);
         }
     }
-    ~HideNewerShowOlder()
+    void ImplDestroy()
     {
         // I assume, that only the redlines explicitly handled in ctor would change their visible
         // state; so here, only Insert / Delete redlines will be handled.
@@ -899,6 +899,7 @@ public:
                 Hide(pRedline, m_rTable);
         }
     }
+    ~HideNewerShowOlder() { suppress_fun_call_w_exception(ImplDestroy()); }
 
 private:
     static std::unordered_map<SwRangeRedline*, bool>
