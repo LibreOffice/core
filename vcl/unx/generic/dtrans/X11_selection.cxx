@@ -2156,8 +2156,8 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
     }
 #endif
 
-    if( it != m_aDropTargets.end() && it->second.m_pTarget->m_bActive &&
-        m_bDropWaitingForCompletion && m_aDropEnterEvent.data.l[0] )
+    if (it != m_aDropTargets.end() && it->second.m_pTarget->isActive()
+        && m_bDropWaitingForCompletion && m_aDropEnterEvent.data.l[0])
     {
         bHandled = true;
         OSL_FAIL( "someone forgot to call dropComplete ?" );
@@ -2168,10 +2168,9 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
         aGuard.reset();
     }
 
-    if( it != m_aDropTargets.end() &&
-        it->second.m_pTarget->m_bActive &&
-       ( m_aDropEnterEvent.data.l[0] == None || ::Window(m_aDropEnterEvent.data.l[0]) == aSource )
-        )
+    if (it != m_aDropTargets.end() && it->second.m_pTarget->isActive()
+        && (m_aDropEnterEvent.data.l[0] == None
+            || ::Window(m_aDropEnterEvent.data.l[0]) == aSource))
     {
         if( rMessage.message_type == m_nXdndEnter )
         {
@@ -2526,7 +2525,7 @@ void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
           m_aDropTargets.find( m_aDropWindow );
     if( it != m_aDropTargets.end() )
     {
-        if( it->second.m_pTarget->m_bActive )
+        if (it->second.m_pTarget->isActive())
         {
             int x, y;
             ::Window aChild;
@@ -2794,7 +2793,8 @@ bool SelectionManager::handleDragEvent( XEvent const & rMessage )
         {
             if( it != m_aDropTargets.end() )
             {
-                if( it->second.m_pTarget->m_bActive && m_nUserDragAction != DNDConstants::ACTION_NONE && m_bLastDropAccepted )
+                if (it->second.m_pTarget->isActive()
+                    && m_nUserDragAction != DNDConstants::ACTION_NONE && m_bLastDropAccepted)
                 {
                     bHandled = true;
                     int x, y;
@@ -3145,7 +3145,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, ::Window aRoot )
         m_aDropProxy                = aNewProxy != None ? aNewProxy : m_aDropWindow;
 
         it = m_aDropTargets.find( m_aDropWindow );
-        if( it != m_aDropTargets.end() && ! it->second.m_pTarget->m_bActive )
+        if (it != m_aDropTargets.end() && !it->second.m_pTarget->isActive())
             m_aDropProxy = None;
 
         if( m_aDropProxy != None && xListener.is() )

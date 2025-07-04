@@ -65,7 +65,6 @@ namespace x11 {
     class DropTarget : public ::cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
                                                               css::lang::XServiceInfo>
     {
-    public:
         ::osl::Mutex                m_aMutex;
         bool                        m_bActive;
         sal_Int8                    m_nDefaultActions;
@@ -75,6 +74,7 @@ namespace x11 {
         ::std::vector< css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > >
                                     m_aListeners;
 
+    public:
         DropTarget();
         virtual ~DropTarget() override;
 
