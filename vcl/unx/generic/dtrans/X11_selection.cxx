@@ -2238,12 +2238,12 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
                 m_bDropEnterSent = true;
                 aEvent.SupportedDataFlavors = m_xDropTransferable->getTransferDataFlavors();
                 aGuard.clear();
-                it->second->dragEnter( aEvent );
+                it->second.m_pTarget->dragEnter(aEvent);
             }
             else
             {
                 aGuard.clear();
-                it->second->dragOver( aEvent );
+                it->second.m_pTarget->dragOver(aEvent);
             }
         }
         else if(
@@ -2264,7 +2264,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
                 m_aCurrentDropWindow = None;
             m_nCurrentProtocolVersion = nXdndProtocolRevision;
             aGuard.clear();
-            it->second->dragExit( aEvent );
+            it->second.m_pTarget->dragExit(aEvent);
         }
         else if(
                 rMessage.message_type == m_nXdndDrop &&
@@ -2298,7 +2298,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
 
                 m_bDropWaitingForCompletion = true;
                 aGuard.clear();
-                it->second->drop( aEvent );
+                it->second.m_pTarget->drop(aEvent);
             }
             else
             {
@@ -2309,7 +2309,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
                 DropTargetEvent aEvent;
                 aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
                 aGuard.clear();
-                it->second->dragExit( aEvent );
+                it->second.m_pTarget->dragExit(aEvent);
                 // reset the drop status, notify source
                 dropComplete( false, m_aCurrentDropWindow );
             }
@@ -2538,7 +2538,7 @@ void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
             dtde.DropAction     = getUserDragAction();
             dtde.SourceActions  = m_nSourceActions;
             aGuard.clear();
-            it->second->dragOver( dtde );
+            it->second.m_pTarget->dragOver(dtde);
         }
     }
     else if( bForce ||
@@ -2812,7 +2812,7 @@ bool SelectionManager::handleDragEvent( XEvent const & rMessage )
                     m_nDropTimeout              = time( nullptr );
                     m_bDropWaitingForCompletion = true;
                     aGuard.clear();
-                    it->second->drop( dtde );
+                    it->second.m_pTarget->drop(dtde);
                     bCancel = false;
                 }
                 else bCancel = true;

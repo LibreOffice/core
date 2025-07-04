@@ -202,7 +202,6 @@ namespace x11 {
                     m_aRootWindow( rEntry.m_aRootWindow )
                 {}
 
-            X11DropTarget* operator->() const { return m_pTarget; }
             DropTargetEntry& operator=(const DropTargetEntry& rEntry)
                 { m_pTarget = rEntry.m_pTarget; m_aRootWindow = rEntry.m_aRootWindow; return *this; }
         };
