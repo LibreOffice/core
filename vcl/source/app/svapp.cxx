@@ -1558,7 +1558,7 @@ void UnoWrapperBase::SetUnoWrapper( UnoWrapperBase* pWrapper )
     pSVData->mpUnoWrapper = pWrapper;
 }
 
-css::uno::Reference< css::awt::XDisplayConnection > Application::GetDisplayConnection()
+rtl::Reference<vcl::DisplayConnectionDispatch> Application::GetDisplayConnection()
 {
     ImplSVData* pSVData = ImplGetSVData();
 

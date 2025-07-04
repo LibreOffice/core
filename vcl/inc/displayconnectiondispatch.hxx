@@ -23,12 +23,13 @@
 #include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <vcl/dllapi.h>
 #include <mutex>
 #include <vector>
 
 namespace vcl {
 
-class DisplayConnectionDispatch final :
+class VCL_DLLPUBLIC DisplayConnectionDispatch final :
     public cppu::WeakImplHelper< css::awt::XDisplayConnection >
 {
     std::mutex                      m_aMutex;

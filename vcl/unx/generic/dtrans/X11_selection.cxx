@@ -324,7 +324,7 @@ void SelectionManager::initialize()
     if( ! m_xDisplayConnection.is() )
     {
         /*
-         *  We will get the XEvents of the vcl event loop from the css::awt::XDisplayConnection by
+         *  We will get the XEvents of the vcl event loop from the display connection by
          *  registering us as XEventHandler on it.
          *
          *  implementor's note:
@@ -3905,7 +3905,7 @@ sal_Bool SelectionManager::handleEvent(const Any& event)
 
 void SAL_CALL SelectionManager::disposing( const css::lang::EventObject& rEvt )
 {
-    if (rEvt.Source == m_xDesktop || rEvt.Source == m_xDisplayConnection)
+    if (rEvt.Source == m_xDesktop || rEvt.Source == m_xDisplayConnection->getXWeak())
         shutdown();
 }
 

@@ -19,12 +19,13 @@
 
 #pragma once
 
+#include <displayconnectiondispatch.hxx>
+
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
-#include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
@@ -236,8 +237,7 @@ namespace x11 {
         ::osl::Condition            m_aDragRunning;
         ::Window                    m_aWindow;
         css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
-        css::uno::Reference< css::awt::XDisplayConnection >
-                                    m_xDisplayConnection;
+        rtl::Reference<vcl::DisplayConnectionDispatch> m_xDisplayConnection;
         Time                        m_nSelectionTimestamp;
 
         // members used for Xdnd

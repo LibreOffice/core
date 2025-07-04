@@ -59,6 +59,7 @@ class Accelerator;
 class Help;
 class OutputDevice;
 namespace vcl {
+    class DisplayConnectionDispatch;
     class KeyCode;
     class Window;
 }
@@ -80,7 +81,6 @@ namespace com::sun::star::ui::dialogs {
 }
 namespace com::sun::star::awt {
     class XToolkit;
-    class XDisplayConnection;
     class XWindow;
 }
 
@@ -792,15 +792,13 @@ public:
     */
     static void                 RemoveUserEvent( ImplSVEvent * nUserEvent );
 
-    /*** Get the DisplayConnection.
+    /** Get the DisplayConnection.
 
-     It is a reference to XDisplayConnection, which allows toolkits to send display
-     events to the application.
+    It allows toolkits to send display events to the application.
 
-     @returns UNO reference to an object that implements the css:awt:XDisplayConnection
-        interface.
+    This is only used by the gen/x11 VCL plugin.
     */
-    static css::uno::Reference< css::awt::XDisplayConnection > GetDisplayConnection();
+    static rtl::Reference<vcl::DisplayConnectionDispatch> GetDisplayConnection();
 
     /** @deprecated AppEvent is used only in the Desktop class now. However, it is
      intended to notify the application that an event has occurred. It was in oldsv.cxx,
