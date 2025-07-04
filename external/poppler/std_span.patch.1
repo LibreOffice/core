@@ -48,3 +48,64 @@ replace C++20 std::span with o3tl::span
  
  //------------------------------------------------------------------------
  
+--- poppler/fofi/FoFiBase.h.orig	2025-08-08 10:53:11.909805257 +0200
++++ poppler/fofi/FoFiBase.h	2025-08-08 10:53:32.743052104 +0200
+@@ -30,7 +30,8 @@
+ #include <cstddef>
+ #include <optional>
+ #include <vector>
+-#include <span>
++#include <o3tl/span.hxx>
++namespace std { using o3tl::span; }
+ 
+ //------------------------------------------------------------------------
+ 
+--- poppler/fofi/FoFiType1C.cc.orig	2025-08-08 11:07:35.921045067 +0200
++++ poppler/fofi/FoFiType1C.cc	2025-08-08 11:07:41.092126443 +0200
+@@ -1820,7 +1820,7 @@
+     // some tools embed Type 1C fonts with an extra whitespace char at
+     // the beginning
+     if (!file.empty() && file[0] != '\x01') {
+-        file = file.subspan(1);
++        file = std::span(file.data() + 1, file.size() - 1);
+     }
+ 
+     // find the indexes
+--- poppler/poppler/PSOutputDev.cc.orig2	2025-08-08 11:14:15.458117801 +0200
++++ poppler/poppler/PSOutputDev.cc	2025-08-08 11:14:35.087228506 +0200
+@@ -2360,7 +2360,7 @@
+     // convert it to a Type 1 font
+     std::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
+     if (fontBuf) {
+-        if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(std::span(fontBuf.value()), faceIndex)) {
++        if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(std::span<unsigned char>(fontBuf.value()), faceIndex)) {
+             if (ffTT->isOpenTypeCFF()) {
+                 ffTT->convertToType1(psName->c_str(), nullptr, true, outputFunc, outputStream);
+             }
+@@ -2382,7 +2382,7 @@
+     // convert it to a Type 42 font
+     std::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
+     if (fontBuf) {
+-        if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(std::span(fontBuf.value()), faceIndex)) {
++        if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(std::span<unsigned char>(fontBuf.value()), faceIndex)) {
+             std::vector<int> codeToGID = ((Gfx8BitFont *)font)->getCodeToGIDMap(ffTT.get());
+             ffTT->convertToType42(psName->c_str(), ((Gfx8BitFont *)font)->getHasEncoding() ? ((Gfx8BitFont *)font)->getEncoding() : nullptr, codeToGID, outputFunc, outputStream);
+             if (!codeToGID.empty()) {
+@@ -2516,7 +2516,7 @@
+     // convert it to a Type 0 font
+     std::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
+     if (fontBuf) {
+-        if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(std::span(fontBuf.value()), faceIndex)) {
++        if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(std::span<unsigned char>(fontBuf.value()), faceIndex)) {
+             if (level >= psLevel3) {
+                 // Level 3: use a CID font
+                 ffTT->convertToCIDType2(psName->c_str(), ((GfxCIDFont *)font)->getCIDToGID(), needVerticalMetrics, outputFunc, outputStream);
+@@ -2554,7 +2554,7 @@
+     // convert it to a Type 0 font
+     std::optional<std::vector<unsigned char>> fontBuf = font->readEmbFontFile(xref);
+     if (fontBuf) {
+-        if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(std::span(fontBuf.value()), faceIndex)) {
++        if (std::unique_ptr<FoFiTrueType> ffTT = FoFiTrueType::make(std::span<unsigned char>(fontBuf.value()), faceIndex)) {
+             if (ffTT->isOpenTypeCFF()) {
+                 if (level >= psLevel3) {
+                     // Level 3: use a CID font
