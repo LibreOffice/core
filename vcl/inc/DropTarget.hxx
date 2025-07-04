@@ -41,7 +41,7 @@ public:
     void dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde) noexcept;
     void dragExit(const css::datatransfer::dnd::DropTargetEvent& dte) noexcept;
     void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde) noexcept;
-    void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde) noexcept;
+    virtual void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde) noexcept;
 
     // XDropTarget
     virtual void SAL_CALL addDropTargetListener(

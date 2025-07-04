@@ -114,10 +114,7 @@ css::uno::Sequence<OUString> SAL_CALL QtDragSource::getSupportedServiceNames()
 }
 
 QtDropTarget::QtDropTarget()
-    : WeakComponentImplHelper(m_aMutex)
-    , m_nDropAction(datatransfer::dnd::DNDConstants::ACTION_NONE)
-    , m_bActive(false)
-    , m_nDefaultActions(0)
+    : m_nDropAction(datatransfer::dnd::DNDConstants::ACTION_NONE)
 {
 }
 
@@ -138,79 +135,11 @@ css::uno::Sequence<OUString> SAL_CALL QtDropTarget::getSupportedServiceNames()
 
 QtDropTarget::~QtDropTarget() {}
 
-void QtDropTarget::addDropTargetListener(
-    const uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
-{
-    ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
-
-    m_aListeners.push_back(xListener);
-}
-
-void QtDropTarget::removeDropTargetListener(
-    const uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
-{
-    ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
-
-    std::erase(m_aListeners, xListener);
-}
-
-sal_Bool QtDropTarget::isActive() { return m_bActive; }
-
-void QtDropTarget::setActive(sal_Bool bActive) { m_bActive = bActive; }
-
-sal_Int8 QtDropTarget::getDefaultActions() { return m_nDefaultActions; }
-
-void QtDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
-{
-    m_nDefaultActions = nDefaultActions;
-}
-
-void QtDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
-{
-    osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
-        m_aListeners);
-    aGuard.clear();
-
-    for (auto const& listener : aListeners)
-    {
-        listener->dragEnter(dtde);
-    }
-}
-
-void QtDropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
-{
-    osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
-        m_aListeners);
-    aGuard.clear();
-
-    for (auto const& listener : aListeners)
-        listener->dragOver(dtde);
-}
-
-void QtDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
+void QtDropTarget::drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde) noexcept
 {
     m_bDropSuccessful = true;
 
-    osl::ClearableGuard<osl::Mutex> aGuard(m_aMutex);
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
-        m_aListeners);
-    aGuard.clear();
-
-    for (auto const& listener : aListeners)
-        listener->drop(dtde);
-}
-
-void QtDropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
-{
-    osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
-        m_aListeners);
-    aGuard.clear();
-
-    for (auto const& listener : aListeners)
-        listener->dragExit(dte);
+    DropTarget::drop(dtde);
 }
 
 void QtDropTarget::acceptDrag(sal_Int8 dragOperation) { m_nDropAction = dragOperation; }

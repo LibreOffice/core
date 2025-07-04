@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <DropTarget.hxx>
+
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -54,32 +56,18 @@ public:
 
 class QtDropTarget final
     : public QObject,
-      public cppu::WeakComponentImplHelper<
-          css::datatransfer::dnd::XDropTarget, css::datatransfer::dnd::XDropTargetDragContext,
-          css::datatransfer::dnd::XDropTargetDropContext, css::lang::XServiceInfo>
+      public cppu::ImplInheritanceHelper<DropTarget, css::datatransfer::dnd::XDropTargetDragContext,
+                                         css::datatransfer::dnd::XDropTargetDropContext,
+                                         css::lang::XServiceInfo>
 {
     Q_OBJECT
 
-    osl::Mutex m_aMutex;
     sal_Int8 m_nDropAction;
-    bool m_bActive;
-    sal_Int8 m_nDefaultActions;
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
     bool m_bDropSuccessful;
 
 public:
     QtDropTarget();
     virtual ~QtDropTarget() override;
-
-    // XDropTarget
-    virtual void SAL_CALL addDropTargetListener(
-        const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
-    virtual void SAL_CALL removeDropTargetListener(
-        const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
-    virtual sal_Bool SAL_CALL isActive() override;
-    virtual void SAL_CALL setActive(sal_Bool active) override;
-    virtual sal_Int8 SAL_CALL getDefaultActions() override;
-    virtual void SAL_CALL setDefaultActions(sal_Int8 actions) override;
 
     // XDropTargetDragContext
     virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) override;
@@ -95,10 +83,7 @@ public:
     sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
-    void fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte);
-    void fire_dragOver(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
-    void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
+    virtual void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde) noexcept override;
 
     sal_Int8 proposedDropAction() const { return m_nDropAction; }
     bool dropSuccessful() const { return m_bDropSuccessful; }

@@ -1361,11 +1361,11 @@ void QtFrame::handleDragMove(QDragMoveEvent* pEvent)
     // ask the drop target to accept our drop action
     if (!m_bInDrag)
     {
-        m_pDropTarget->fire_dragEnter(aEvent);
+        m_pDropTarget->dragEnter(aEvent);
         m_bInDrag = true;
     }
     else
-        m_pDropTarget->fire_dragOver(aEvent);
+        m_pDropTarget->dragOver(aEvent);
 
     // the drop target accepted our drop action => inform Qt
     if (m_pDropTarget->proposedDropAction() != 0)
@@ -1390,7 +1390,7 @@ void QtFrame::handleDrop(QDropEvent* pEvent)
     aEvent.LocationY *= fDevicePixelRatio;
 
     // ask the drop target to accept our drop action
-    m_pDropTarget->fire_drop(aEvent);
+    m_pDropTarget->drop(aEvent);
     m_bInDrag = false;
 
     const bool bDropSuccessful = m_pDropTarget->dropSuccessful();
@@ -1419,7 +1419,7 @@ void QtFrame::handleDragLeave()
 {
     css::datatransfer::dnd::DropTargetEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
-    m_pDropTarget->fire_dragExit(aEvent);
+    m_pDropTarget->dragExit(aEvent);
     m_bInDrag = false;
 }
 
