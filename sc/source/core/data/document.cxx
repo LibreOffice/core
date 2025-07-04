@@ -3571,9 +3571,7 @@ OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, ScInterprete
 
 OUString ScDocument::GetString( const ScAddress& rPos, ScInterpreterContext* pContext ) const
 {
-    if (const ScTable* pTable = FetchTable(rPos.Tab()))
-        return pTable->GetString(rPos.Col(), rPos.Row(), pContext);
-    return OUString();
+    return GetString(rPos.Col(), rPos.Row(), rPos.Tab(), pContext);
 }
 
 double* ScDocument::GetValueCell( const ScAddress& rPos )
@@ -3685,16 +3683,14 @@ void ScDocument::RemoveEditTextCharAttribs( const ScAddress& rPos, const ScPatte
 
 double ScDocument::GetValue( const ScAddress& rPos ) const
 {
-    SCTAB nTab = rPos.Tab();
-    if (const ScTable* pTable = FetchTable(nTab))
-        return pTable->GetValue(rPos.Col(), rPos.Row());
-    return 0.0;
+    return GetValue(rPos.Col(), rPos.Row(), rPos.Tab());
 }
 
 double ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    ScAddress aAdr(nCol, nRow, nTab);
-    return GetValue(aAdr);
+    if (const ScTable* pTable = FetchTable(nTab))
+        return pTable->GetValue(nCol, nRow);
+    return 0.0;
 }
 
 sal_uInt32 ScDocument::GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
@@ -3787,10 +3783,7 @@ ScFormulaCell* ScDocument::GetFormulaCell( const ScAddress& rPos )
 
 CellType ScDocument::GetCellType( const ScAddress& rPos ) const
 {
-    SCTAB nTab = rPos.Tab();
-    if (const ScTable* pTable = FetchTable(nTab))
-        return pTable->GetCellType(rPos);
-    return CELLTYPE_NONE;
+    return GetCellType(rPos.Col(), rPos.Row(), rPos.Tab());
 }
 
 CellType ScDocument::GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
@@ -4786,10 +4779,7 @@ const ScPatternAttr* ScDocument::GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab 
 
 const ScPatternAttr* ScDocument::GetPattern( const ScAddress& rPos ) const
 {
-    if (const ScTable* pTable = FetchTable(rPos.Tab()))
-        return pTable->GetPattern(rPos.Col(), rPos.Row());
-
-    return nullptr;
+    return GetPattern(rPos.Col(), rPos.Row(), rPos.Tab());
 }
 
 const ScPatternAttr* ScDocument::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const

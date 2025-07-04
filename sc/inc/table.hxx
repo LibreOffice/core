@@ -484,14 +484,6 @@ public:
     const ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow ) const;
     ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow );
 
-    CellType    GetCellType( const ScAddress& rPos ) const
-                    {
-                        if (!GetDoc().ValidColRow(rPos.Col(),rPos.Row()))
-                            return CELLTYPE_NONE;
-                        if (rPos.Col() >= aCol.size())
-                            return CELLTYPE_NONE;
-                        return aCol[rPos.Col()].GetCellType( rPos.Row() );
-                    }
     CellType    GetCellType( SCCOL nCol, SCROW nRow ) const;
     ScRefCellValue GetCellValue( SCCOL nCol, sc::ColumnBlockPosition& rBlockPos, SCROW nRow );
     ScRefCellValue GetCellValue( SCCOL nCol, SCROW nRow ) const;
