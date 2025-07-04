@@ -5165,7 +5165,7 @@ gboolean GtkSalFrame::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context
 #if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkInstDropTarget::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time)
 #else
-gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop* drop, double x, double y)
+gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop* pDrop, double x, double y)
 #endif
 {
     // remove the deferred dragExit, as we'll do a drop
@@ -5186,14 +5186,14 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop*
 #if !GTK_CHECK_VERSION(4, 0, 0)
     aEvent.Context = new GtkDropTargetDropContext(context, time);
 #else
-    aEvent.Context = new GtkDropTargetDropContext(drop);
+    aEvent.Context = new GtkDropTargetDropContext(pDrop);
 #endif
     aEvent.LocationX = x;
     aEvent.LocationY = y;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     aEvent.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
 #else
-    aEvent.DropAction = GdkToVcl(getPreferredDragAction(GdkToVcl(gdk_drop_get_actions(drop))));
+    aEvent.DropAction = GdkToVcl(getPreferredDragAction(GdkToVcl(gdk_drop_get_actions(pDrop))));
 #endif
     // ACTION_DEFAULT is documented as...
     // 'This means the user did not press any key during the Drag and Drop operation
@@ -5208,7 +5208,7 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop*
     GdkModifierType mask;
     gdk_window_get_pointer(widget_get_surface(pWidget), nullptr, nullptr, &mask);
 #else
-    aEvent.SourceActions = GdkToVcl(gdk_drop_get_actions(drop));
+    aEvent.SourceActions = GdkToVcl(gdk_drop_get_actions(pDrop));
     GdkModifierType mask = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(context));
 #endif
     if (!(mask & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)))
@@ -5221,7 +5221,7 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop*
     else
     {
 #if GTK_CHECK_VERSION(4,0,0)
-        aEvent.Transferable = new GtkDnDTransferable(drop);
+        aEvent.Transferable = new GtkDnDTransferable(pDrop);
 #else
         aEvent.Transferable = new GtkDnDTransferable(context, time, pWidget, this);
 #endif
