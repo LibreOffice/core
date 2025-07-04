@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkListStore" id="liststore1">
@@ -67,6 +67,7 @@
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox">
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox">
@@ -123,11 +124,11 @@
                   <object class="GtkEntry" id="entry_box_1">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="truncate-multiline">True</property>
                     <property name="text" translatable="no">Editable Entry</property>
+                    <property name="truncate-multiline">True</property>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">2</property>
                   </packing>
                 </child>
@@ -136,11 +137,11 @@
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can-focus">True</property>
-                    <property name="truncate-multiline">True</property>
                     <property name="text" translatable="no">Disabled Entry</property>
+                    <property name="truncate-multiline">True</property>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">3</property>
                   </packing>
                 </child>
@@ -157,13 +158,13 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="sensitive">False</property>
-                        <property name="truncate-multiline">True</property>
                         <property name="can-focus">False</property>
+                        <property name="truncate-multiline">True</property>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
@@ -175,7 +176,7 @@
                     <property name="receives-default">True</property>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
+                    <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -188,21 +189,8 @@
                     <property name="receives-default">True</property>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
+                    <property name="left-attach">0</property>
                     <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleButton" id="toggle_btn_3">
-                    <property name="label" translatable="no">Toggle Button</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="active">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -261,8 +249,8 @@
                     <child>
                       <object class="GtkSpinButton" id="spin_btn_1">
                         <property name="visible">True</property>
-                        <property name="truncate-multiline">True</property>
                         <property name="can-focus">True</property>
+                        <property name="truncate-multiline">True</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -288,8 +276,8 @@
                       <object class="GtkSpinButton" id="spin_btn_2">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="truncate-multiline">True</property>
                         <property name="can-focus">True</property>
+                        <property name="truncate-multiline">True</property>
                       </object>
                       <packing>
                         <property name="left-attach">3</property>
@@ -298,7 +286,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">4</property>
                   </packing>
                 </child>
@@ -337,8 +325,8 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can-focus">False</property>
-                        <property name="truncate-multiline">True</property>
                         <property name="text" translatable="no">Test 3</property>
+                        <property name="truncate-multiline">True</property>
                       </object>
                     </child>
                   </object>
@@ -348,15 +336,53 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkToggleButton" id="toggle_btn_3">
+                    <property name="label" translatable="no">Toggle Button</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="active">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_3">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="no">Entry Label 1</property>
+                    <property name="use-underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic-widget">entry_box_1</property>
+                    <property name="ellipsize">start</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_4">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="no">Entry Label 2</property>
+                    <property name="use-underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic-widget">entry_box_2</property>
+                    <property name="ellipsize">start</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
               </packing>
@@ -389,7 +415,6 @@
                             <property name="receives-default">False</property>
                             <property name="active">True</property>
                             <property name="draw-indicator">True</property>
-                            <property name="mnemonic-widget">entry_box_1</property>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -403,7 +428,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="draw-indicator">True</property>
-                            <property name="mnemonic-widget">entry_box_2</property>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -514,8 +538,6 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="left-attach">0</property>
                 <property name="top-attach">1</property>
               </packing>
@@ -548,6 +570,9 @@
                         <property name="reorderable">True</property>
                         <property name="search-column">1</property>
                         <property name="enable-tree-lines">True</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn0">
                             <property name="spacing">6</property>
@@ -609,17 +634,19 @@
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="model">liststore3</property>
-                        <property name="headers-visible">True</property>
                         <property name="reorderable">True</property>
                         <property name="search-column">1</property>
                         <property name="enable-tree-lines">True</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="sort-indicator">True</property>
-                            <property name="clickable">True</property>
                             <property name="title" translatable="no">Column 1</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer1"/>
                               <attributes>
@@ -632,9 +659,9 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="sort-indicator">True</property>
-                            <property name="clickable">True</property>
                             <property name="title" translatable="no">Column 2</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer2"/>
                               <attributes>
@@ -659,11 +686,13 @@
               </packing>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
-      <packing>
-        <property name="position">0</property>
-      </packing>
     </child>
   </object>
   <object class="GtkTextBuffer" id="textbuffer1">
