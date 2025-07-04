@@ -23,6 +23,7 @@
 
 #include <stack>
 
+#include <DropTarget.hxx>
 #include <unx/salinst.h>
 #include <unx/gensys.h>
 #include <headless/svpinst.hxx>
@@ -125,16 +126,12 @@ public:
 class GtkDnDTransferable;
 
 class GtkInstDropTarget final
-    : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
-                                           css::lang::XServiceInfo>
+    : public cppu::ImplInheritanceHelper<DropTarget, css::lang::XServiceInfo>
 {
-    osl::Mutex m_aMutex;
     GtkSalFrame* m_pFrame;
     GtkDnDTransferable* m_pFormatConversionRequest;
-    bool m_bActive;
     bool m_bInDrag;
-    sal_Int8 m_nDefaultActions;
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
+
 public:
     GtkInstDropTarget();
     GtkInstDropTarget(GtkSalFrame* pFrame);
@@ -142,24 +139,11 @@ public:
 
     void deinitialize();
 
-    // XDropTarget
-    virtual void        SAL_CALL addDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
-    virtual void        SAL_CALL removeDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
-    virtual sal_Bool    SAL_CALL isActive() override;
-    virtual void        SAL_CALL setActive(sal_Bool active) override;
-    virtual sal_Int8    SAL_CALL getDefaultActions() override;
-    virtual void        SAL_CALL setDefaultActions(sal_Int8 actions) override;
-
     OUString SAL_CALL getImplementationName() override;
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-    void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee);
-    void fire_dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde);
-    void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
-    void fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte);
 
     void SetFormatConversionRequest(GtkDnDTransferable *pRequest)
     {

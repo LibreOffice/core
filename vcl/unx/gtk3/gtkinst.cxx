@@ -1612,14 +1612,11 @@ GtkInstance::CreateClipboard(const Sequence<Any>& arguments)
 }
 
 GtkInstDropTarget::GtkInstDropTarget()
-    : WeakComponentImplHelper(m_aMutex)
-    , m_pFrame(nullptr)
+    : m_pFrame(nullptr)
     , m_pFormatConversionRequest(nullptr)
-    , m_bActive(false)
 #if !GTK_CHECK_VERSION(4, 0, 0)
     , m_bInDrag(false)
 #endif
-    , m_nDefaultActions(0)
 {
 }
 
@@ -1630,7 +1627,7 @@ GtkInstDropTarget::GtkInstDropTarget(GtkSalFrame* pFrame)
 
     m_pFrame = pFrame;
     m_pFrame->registerDropTarget(this);
-    m_bActive = true;
+    setActive(true);
 }
 
 OUString SAL_CALL GtkInstDropTarget::getImplementationName()
@@ -1658,89 +1655,7 @@ GtkInstDropTarget::~GtkInstDropTarget()
 void GtkInstDropTarget::deinitialize()
 {
     m_pFrame = nullptr;
-    m_bActive = false;
-}
-
-void GtkInstDropTarget::addDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
-
-    m_aListeners.push_back( xListener );
-}
-
-void GtkInstDropTarget::removeDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
-
-    std::erase(m_aListeners, xListener);
-}
-
-void GtkInstDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
-{
-    osl::ClearableGuard<osl::Mutex> aGuard( m_aMutex );
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
-    aGuard.clear();
-
-    for (auto const& listener : aListeners)
-    {
-        listener->drop( dtde );
-    }
-}
-
-void GtkInstDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
-{
-    osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
-    aGuard.clear();
-
-    for (auto const& listener : aListeners)
-    {
-        listener->dragEnter( dtde );
-    }
-}
-
-void GtkInstDropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde)
-{
-    osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
-    aGuard.clear();
-
-    for (auto const& listener : aListeners)
-    {
-        listener->dragOver( dtde );
-    }
-}
-
-void GtkInstDropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
-{
-    osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
-    aGuard.clear();
-
-    for (auto const& listener : aListeners)
-    {
-        listener->dragExit( dte );
-    }
-}
-
-sal_Bool GtkInstDropTarget::isActive()
-{
-    return m_bActive;
-}
-
-void GtkInstDropTarget::setActive(sal_Bool bActive)
-{
-    m_bActive = bActive;
-}
-
-sal_Int8 GtkInstDropTarget::getDefaultActions()
-{
-    return m_nDefaultActions;
-}
-
-void GtkInstDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
-{
-    m_nDefaultActions = nDefaultActions;
+    setActive(false);
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDropTarget>

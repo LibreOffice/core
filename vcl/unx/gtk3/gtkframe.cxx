@@ -5227,7 +5227,7 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop*
 #endif
     }
 
-    fire_drop(aEvent);
+    drop(aEvent);
 
     return true;
 }
@@ -5412,12 +5412,12 @@ GdkDragAction GtkInstDropTarget::signalDragMotion(GtkDropTargetAsync *context, G
 #endif
         }
         aEvent.SupportedDataFlavors = xTransferable->getTransferDataFlavors();
-        fire_dragEnter(aEvent);
+        dragEnter(aEvent);
         m_bInDrag = true;
     }
     else
     {
-        fire_dragOver(aEvent);
+        dragOver(aEvent);
     }
 
 #if !GTK_CHECK_VERSION(4,0,0)
@@ -5450,7 +5450,7 @@ static gboolean lcl_deferred_dragExit(gpointer user_data)
     GtkInstDropTarget* pThis = static_cast<GtkInstDropTarget*>(user_data);
     css::datatransfer::dnd::DropTargetEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis);
-    pThis->fire_dragExit(aEvent);
+    pThis->dragExit(aEvent);
     return false;
 }
 
