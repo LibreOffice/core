@@ -3,8 +3,8 @@ remove C++20 starts_with
 --- poppler/goo/GooString.h.orig	2025-01-09 11:15:13.174300578 +0100
 +++ poppler/goo/GooString.h	2025-01-09 11:17:39.568825610 +0100
 @@ -237,11 +237,16 @@
+     int cmp(const std::string &str) const { return compare(str); }
      int cmp(const char *sA) const { return compare(sA); }
-     int cmpN(const char *sA, int n) const { return compare(0, n, sA); }
  
 -    // Return true if strings starts with prefix
 -    using std::string::starts_with;
