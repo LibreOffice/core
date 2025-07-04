@@ -644,6 +644,12 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
             bDisable = true;
     }
 
+    if (!ScTransferObj::GetOwnClipboard(
+        ScTabViewShell::GetClipData(GetViewData().GetActiveWin())))
+    {
+        rSet.DisableItem( SID_PASTE_TRANSPOSED );
+    }
+
     if (bDisable)
     {
         rSet.DisableItem( SID_PASTE );
