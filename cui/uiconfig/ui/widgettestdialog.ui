@@ -45,6 +45,8 @@
   </object>
   <object class="GtkTreeStore" id="liststore3">
     <columns>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name text1 -->
@@ -614,6 +616,21 @@
                         <property name="search-column">1</property>
                         <property name="enable-tree-lines">True</property>
                         <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn0">
+                            <property name="resizable">True</property>
+                            <property name="spacing">6</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="clickable">True</property>
+                            <property name="title" translatable="no">.</property>
+                            <child>
+                              <object class="GtkCellRendererPixbuf" id="cellrenderer0"/>
+                              <attributes>
+                                <attribute name="pixbuf">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
@@ -623,7 +640,7 @@
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer1"/>
                               <attributes>
-                                <attribute name="text">0</attribute>
+                                <attribute name="text">1</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -638,7 +655,7 @@
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer2"/>
                               <attributes>
-                                <attribute name="text">1</attribute>
+                                <attribute name="text">2</attribute>
                               </attributes>
                             </child>
                           </object>
