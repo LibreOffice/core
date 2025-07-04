@@ -704,81 +704,65 @@ CellValueSetter::visitNode( sal_Int32 /*i*/, sal_Int32 /*j*/, const uno::Referen
 bool
 CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< table::XCell >& xCell )
 {
-
-    bool isExtracted = true;
-    switch ( aValue.getValueTypeClass() )
+    if (bool bState; aValue >>= bState)
     {
-        case  uno::TypeClass_BOOLEAN:
-        {
-            bool bState = false;
-            if ( aValue >>= bState   )
-            {
-                uno::Reference< table::XCellRange > xRange( xCell, uno::UNO_QUERY_THROW );
-                if ( bState )
-                    xCell->setValue( double(1) );
-                else
-                    xCell->setValue( double(0) );
-                NumFormatHelper cellNumFormat( xRange );
-                cellNumFormat.setNumberFormat( util::NumberFormat::LOGICAL );
-            }
-            break;
-        }
-        case uno::TypeClass_STRING:
-        {
-            OUString aString;
-            if ( aValue >>= aString )
-            {
-                // The required behavior for a string value is:
-                // 1. If the first character is a single quote, use the rest as a string cell, regardless of the cell's number format.
-                // 2. Otherwise, if the cell's number format is "text", use the string value as a string cell.
-                // 3. Otherwise, parse the string value in English locale, and apply a corresponding number format with the cell's locale
-                //    if the cell's number format was "General".
-                // Case 1 is handled here, the rest in ScCellObj::InputEnglishString
+        uno::Reference<table::XCellRange> xRange(xCell, uno::UNO_QUERY_THROW);
+        xCell->setValue(bState ? 1 : 0);
+        NumFormatHelper cellNumFormat(xRange);
+        cellNumFormat.setNumberFormat(util::NumberFormat::LOGICAL);
+    }
+    else if (OUString aString; aValue >>= aString)
+    {
+        // The required behavior for a string value is:
+        // 1. If the first character is a single quote, use the rest as a string cell, regardless of the cell's number format.
+        // 2. Otherwise, if the cell's number format is "text", use the string value as a string cell.
+        // 3. Otherwise, parse the string value in English locale, and apply a corresponding number format with the cell's locale
+        //    if the cell's number format was "General".
+        // Case 1 is handled here, the rest in ScCellObj::InputEnglishString
 
-                if ( aString.toChar() == '\'' )     // case 1 - handle with XTextRange
-                {
-                    OUString aRemainder( aString.copy(1) );    // strip the quote
-                    uno::Reference< text::XTextRange > xTextRange( xCell, uno::UNO_QUERY_THROW );
-                    xTextRange->setString( aRemainder );
-                }
-                else
-                {
-                    // call implementation method InputEnglishString
-                    ScCellObj* pCellObj = dynamic_cast< ScCellObj* >( xCell.get() );
-                    if ( pCellObj )
-                        pCellObj->InputEnglishString( aString );
-                }
-            }
-            else
-                isExtracted = false;
-            break;
-        }
-        default:
+        if (aString.toChar() == '\'') // case 1 - handle with XTextRange
         {
-            double nDouble = 0.0;
-            if (!(aValue >>= nDouble))
-            {
-                if (css::bridge::oleautomation::Date date; aValue >>= date)
-                    nDouble = date.Value;
-                else
-                    isExtracted = false;
-            }
-            if (isExtracted)
-            {
-                uno::Reference< table::XCellRange > xRange( xCell, uno::UNO_QUERY_THROW );
-                NumFormatHelper cellFormat( xRange );
-                // If we are setting a number and the cell types was logical
-                // then we need to reset the logical format. ( see case uno::TypeClass_BOOLEAN:
-                // handling above )
-                if ( cellFormat.isBooleanType() )
-                    cellFormat.setNumberFormat(u"General"_ustr);
-                xCell->setValue( nDouble );
-            }
-            break;
+            OUString aRemainder(aString.copy(1)); // strip the quote
+            uno::Reference<text::XTextRange> xTextRange(xCell, uno::UNO_QUERY_THROW);
+            xTextRange->setString(aRemainder);
+        }
+        else
+        {
+            // call implementation method InputEnglishString
+            ScCellObj* pCellObj = dynamic_cast<ScCellObj*>(xCell.get());
+            if (pCellObj)
+                pCellObj->InputEnglishString(aString);
         }
     }
-    return isExtracted;
+    else if (double nDouble; aValue >>= nDouble)
+    {
+        uno::Reference<table::XCellRange> xRange(xCell, uno::UNO_QUERY_THROW);
+        NumFormatHelper cellFormat(xRange);
+        // If we are setting a number and the cell types was logical
+        // then we need to reset the logical format. ( see bool handling above )
+        if (cellFormat.isBooleanType())
+            cellFormat.setNumberFormat(u"General"_ustr);
+        xCell->setValue(nDouble);
+    }
+    else if (css::bridge::oleautomation::Date aDate; aValue >>= aDate)
+    {
+        uno::Reference<table::XCellRange> xRange(xCell, uno::UNO_QUERY_THROW);
+        NumFormatHelper cellFormat(xRange);
+        sal_Int16 format;
+        double wholePart = floor(aDate.Value);
+        if (wholePart == 0)
+            format = util::NumberFormat::TIME;
+        else if (wholePart == aDate.Value) // no fractional part
+            format = util::NumberFormat::DATE;
+        else
+            format = util::NumberFormat::DATETIME;
+        cellFormat.setNumberFormat(format);
+        xCell->setValue(aDate.Value);
+    }
+    else
+        return false;
 
+    return true;
 }
 
 namespace {
