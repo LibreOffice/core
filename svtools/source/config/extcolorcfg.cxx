@@ -406,7 +406,8 @@ void ExtendedColorConfig_Impl::ImplCommit()
             for (auto const& elem : configValue.second.first)
             {
                 pPropValues->Name = sNode + s_sSep + elem.first;
-                ConfigItem::AddNode(sNode, elem.first);
+                if (!ConfigItem::AddNode(sNode, elem.first))
+                    SAL_WARN("svtools", "Could not add config node: " << pPropValues->Name);
                 pPropValues->Name += sColor;
                 pPropValues->Value <<= elem.second.getColor();
                 // the default color will never be changed
