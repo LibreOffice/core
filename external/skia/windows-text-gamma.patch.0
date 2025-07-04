@@ -1,0 +1,72 @@
+--- ./src/ports/SkFontHost_win.cpp	2024-10-04 15:24:40.448100018 +0200
++++ ./src/ports/SkFontHost_win.cpp	2024-10-04 15:26:22.284624363 +0200
+@@ -1149,18 +1149,24 @@
+         // since the caller may require A8 for maskfilters, we can't check for BW
+         // ... until we have the caller tell us that explicitly
+         const SkGdiRGB* src = (const SkGdiRGB*)bits;
++#if defined(SK_GAMMA_APPLY_TO_A8)
+         if (fPreBlend.isApplicable()) {
+             RGBToA8<true>(src, srcRB, glyph, imageBuffer, fPreBlend.fG);
+-        } else {
++        } else
++#endif
++        {
+             RGBToA8<false>(src, srcRB, glyph, imageBuffer, fPreBlend.fG);
+         }
+     } else {    // LCD16
+         const SkGdiRGB* src = (const SkGdiRGB*)bits;
+         SkASSERT(SkMask::kLCD16_Format == glyph.maskFormat());
++#if defined(SK_GAMMA_APPLY_TO_A8)
+         if (fPreBlend.isApplicable()) {
+             RGBToLcd16<true>(src, srcRB, glyph, imageBuffer,
+                              fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);
+-        } else {
++        } else
++#endif
++        {
+             RGBToLcd16<false>(src, srcRB, glyph, imageBuffer,
+                               fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);
+         }
+--- ./src/ports/SkScalerContext_win_dw.cpp	2024-10-04 15:24:40.448100018 +0200
++++ ./src/ports/SkScalerContext_win_dw.cpp	2024-10-04 15:29:29.810572073 +0200
+@@ -2127,20 +2127,27 @@
+         BilevelToBW(src, glyph, imageBuffer);
+     } else if (!isLCD(fRec)) {
+         if (textureType == DWRITE_TEXTURE_ALIASED_1x1) {
++#if defined(SK_GAMMA_APPLY_TO_A8)
+             if (fPreBlend.isApplicable()) {
+                 GrayscaleToA8<true>(src, glyph, imageBuffer, fPreBlend.fG);
+-            } else {
++            } else
++#endif
++            {
+                 GrayscaleToA8<false>(src, glyph, imageBuffer, fPreBlend.fG);
+             }
+         } else {
++#if defined(SK_GAMMA_APPLY_TO_A8)
+             if (fPreBlend.isApplicable()) {
+                 RGBToA8<true>(src, glyph, imageBuffer, fPreBlend.fG);
+-            } else {
++            } else
++#endif
++            {
+                 RGBToA8<false>(src, glyph, imageBuffer, fPreBlend.fG);
+             }
+         }
+     } else {
+         SkASSERT(SkMask::kLCD16_Format == glyph.maskFormat());
++#if defined(SK_GAMMA_APPLY_TO_A8)
+         if (fPreBlend.isApplicable()) {
+             if (fRec.fFlags & SkScalerContext::kLCD_BGROrder_Flag) {
+                 RGBToLcd16<true, false>(src, glyph, imageBuffer,
+@@ -2149,7 +2156,9 @@
+                 RGBToLcd16<true, true>(src, glyph, imageBuffer,
+                                        fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);
+             }
+-        } else {
++        } else
++#endif
++        {
+             if (fRec.fFlags & SkScalerContext::kLCD_BGROrder_Flag) {
+                 RGBToLcd16<false, false>(src, glyph, imageBuffer,
+                                          fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);
