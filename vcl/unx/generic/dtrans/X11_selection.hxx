@@ -25,7 +25,6 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/XDisplayConnection.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
@@ -62,12 +61,8 @@ namespace x11 {
         ~SelectionAdaptor() {}
     };
 
-    class DropTarget :
-        public ::cppu::WeakComponentImplHelper<
-            css::datatransfer::dnd::XDropTarget,
-            css::lang::XInitialization,
-            css::lang::XServiceInfo
-        >
+    class DropTarget : public ::cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
+                                                              css::lang::XServiceInfo>
     {
     public:
         ::osl::Mutex                m_aMutex;
@@ -88,8 +83,7 @@ namespace x11 {
         void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) noexcept;
         void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) noexcept;
 
-        // XInitialization
-        virtual void        SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& args ) override;
+        void initialize(::Window aWindow);
 
         // XDropTarget
         virtual void        SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& ) override;

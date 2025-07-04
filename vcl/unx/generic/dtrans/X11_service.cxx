@@ -95,8 +95,7 @@ X11SalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
     X11SalFrame* pFrame = static_cast<X11SalFrame*>(pSysEnv->pSalFrame);
     ::Window aShellWindow = pFrame ? pFrame->GetShellWindow() : 0;
     if (aShellWindow)
-        xDropTarget->initialize({ css::uno::Any(Application::GetDisplayConnection()),
-                                  css::uno::Any(static_cast<sal_uInt64>(aShellWindow)) });
+        xDropTarget->initialize(aShellWindow);
 
     return xDropTarget;
 }

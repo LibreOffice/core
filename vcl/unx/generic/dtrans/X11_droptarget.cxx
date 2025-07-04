@@ -27,15 +27,11 @@ using namespace com::sun::star::awt;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 
-DropTarget::DropTarget() :
-        ::cppu::WeakComponentImplHelper<
-            XDropTarget,
-            XInitialization,
-            XServiceInfo
-        >( m_aMutex ),
-    m_bActive( false ),
-    m_nDefaultActions( 0 ),
-    m_aTargetWindow( None )
+DropTarget::DropTarget()
+    : ::cppu::WeakComponentImplHelper<XDropTarget, XServiceInfo>(m_aMutex)
+    , m_bActive(false)
+    , m_nDefaultActions(0)
+    , m_aTargetWindow(None)
 {
 }
 
@@ -45,18 +41,13 @@ DropTarget::~DropTarget()
         m_xSelectionManager->deregisterDropTarget( m_aTargetWindow );
 }
 
-void DropTarget::initialize( const Sequence< Any >& arguments )
+void DropTarget::initialize(::Window aWindow)
 {
-    if( arguments.getLength() <= 1 )
-        return;
-
     m_xSelectionManager = &SelectionManager::get();
     m_xSelectionManager->initialize();
 
     if( m_xSelectionManager->getDisplay() ) // #136582# sanity check
     {
-        sal_IntPtr aWindow = None;
-        arguments.getConstArray()[1] >>= aWindow;
         m_xSelectionManager->registerDropTarget( aWindow, this );
         m_aTargetWindow = aWindow;
         m_bActive = true;
