@@ -7753,9 +7753,20 @@ dnl ===================================================================
 dnl GCC features
 dnl ===================================================================
 HAVE_GCC_STACK_CLASH_PROTECTION=
+HARDENING_LDFLAGS=
 HARDENING_CFLAGS=
 HARDENING_OPT_CFLAGS=
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
+
+    AC_MSG_CHECKING([for full RELRO linker support])
+    save_LDFLAGS=$LDFLAGS
+    LDFLAGS="$LDFLAGS -Wl,-z,relro,-z,now"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HARDENING_LDFLAGS="$HARDENING_LDFLAGS -Wl,-z,relro,-z,now"],
+        [AC_MSG_RESULT([no])])
+    LDFLAGS=$save_LDFLAGS
+
     AC_MSG_CHECKING([whether $CC_BASE supports -grecord-gcc-switches])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -grecord-gcc-switches"
@@ -7954,6 +7965,7 @@ fi
 AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 AC_SUBST(HAVE_GCC_STACK_CLASH_PROTECTION)
+AC_SUBST(HARDENING_LDFLAGS)
 AC_SUBST(HARDENING_CFLAGS)
 AC_SUBST(HARDENING_OPT_CFLAGS)
 
