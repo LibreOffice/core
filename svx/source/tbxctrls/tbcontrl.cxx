@@ -3726,6 +3726,7 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
     bool bValue;
     if ( !m_bSplitButton )
     {
+        SolarMutexGuard aSolarMutexGuard;
         m_aColorStatus.statusChanged( rEvent );
         m_xBtnUpdater->Update( m_aColorStatus.GetColor() );
     }

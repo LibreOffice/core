@@ -629,6 +629,10 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ u".uno:FormatTrendlineEquation"_ustr ] = bFormatObjectAvailable && bControllerStateIsValid && m_apControllerState->bMayFormatTrendlineEquation;
     m_aCommandAvailability[ u".uno:FormatStockLoss"_ustr ] = bFormatObjectAvailable;
     m_aCommandAvailability[ u".uno:FormatStockGain"_ustr ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ u".uno:FillColor"_ustr ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ u".uno:XLineColor"_ustr ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ u".uno:LineWidth"_ustr ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ u".uno:FillGradient"_ustr ] = bFormatObjectAvailable;
 
     m_aCommandAvailability[ u".uno:DiagramType"_ustr ] = bIsWritable;
     m_aCommandAvailability[ u".uno:Legend"_ustr ] = bIsWritable && m_apModelState->bHasLegend;

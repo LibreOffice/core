@@ -9,8 +9,8 @@
 
 #include <sfx2/lokcomponenthelpers.hxx>
 
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/ipclient.hxx>
@@ -24,7 +24,6 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
 
 using namespace com::sun::star;
 
@@ -52,24 +51,6 @@ css::uno::Reference<css::frame::XController>& LokChartHelper::GetXController() c
     }
 
     return mxController;
-}
-
-css::uno::Reference<css::frame::XDispatch>& LokChartHelper::GetXDispatcher() const
-{
-    if( !mxDispatcher.is() )
-    {
-        ::css::uno::Reference< ::css::frame::XController >& xChartController = GetXController();
-        if( xChartController.is() )
-        {
-            ::css::uno::Reference< ::css::frame::XDispatch > xDispatcher( xChartController, uno::UNO_QUERY );
-            if( xDispatcher.is() )
-            {
-                mxDispatcher = std::move(xDispatcher);
-            }
-        }
-    }
-
-    return mxDispatcher;
 }
 
 vcl::Window* LokChartHelper::GetWindow()
@@ -153,17 +134,12 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
 void LokChartHelper::Dispatch(const OUString& cmd,
                               const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const
 {
-    util::URL aCmdURL;
-    aCmdURL.Complete = cmd;
-    util::URLTransformer::create(comphelper::getProcessComponentContext())->parseStrict(aCmdURL);
-
-    GetXDispatcher()->dispatch(aCmdURL, rArguments);
+    comphelper::dispatchCommand(cmd, GetXController(), rArguments);
 }
 
 void LokChartHelper::Invalidate()
 {
     mpWindow = nullptr;
-    mxDispatcher.clear();
     mxController.clear();
 }
 
