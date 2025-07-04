@@ -56,8 +56,7 @@ X11SalInstance::CreateClipboard(const Sequence<Any>& arguments)
         return SalInstance::CreateClipboard( arguments );
 
     SelectionManager& rManager = SelectionManager::get();
-    css::uno::Sequence<css::uno::Any> mgrArgs{ css::uno::Any(Application::GetDisplayConnection()) };
-    rManager.initialize(mgrArgs);
+    rManager.initialize();
 
     OUString sel;
     if (!arguments.hasElements()) {
@@ -80,16 +79,10 @@ X11SalInstance::CreateClipboard(const Sequence<Any>& arguments)
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDragSource>
-X11SalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
+X11SalInstance::ImplCreateDragSource(const SystemEnvData*)
 {
     rtl::Reference<SelectionManagerHolder> xSelectionManagerHolder = new SelectionManagerHolder();
-
-    X11SalFrame* pFrame = static_cast<X11SalFrame*>(pSysEnv->pSalFrame);
-    ::Window aShellWindow = pFrame ? pFrame->GetShellWindow() : 0;
-    if (aShellWindow)
-        xSelectionManagerHolder->initialize(
-            { css::uno::Any(Application::GetDisplayConnection()),
-              css::uno::Any(static_cast<sal_uInt64>(aShellWindow)) });
+    xSelectionManagerHolder->initialize();
 
     return xSelectionManagerHolder;
 }

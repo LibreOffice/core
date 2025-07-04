@@ -109,7 +109,6 @@ namespace x11 {
     class SelectionManagerHolder :
         public ::cppu::WeakComponentImplHelper<
             css::datatransfer::dnd::XDragSource,
-            css::lang::XInitialization,
             css::lang::XServiceInfo
         >
     {
@@ -126,8 +125,7 @@ namespace x11 {
         virtual css::uno::Sequence< OUString >
                             SAL_CALL getSupportedServiceNames() override;
 
-        // XInitialization
-        virtual void        SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& arguments ) override;
+        void initialize();
 
         // XDragSource
         virtual sal_Bool    SAL_CALL isDragImageSupported() override;
@@ -144,7 +142,6 @@ namespace x11 {
     class SelectionManager :
         public ::cppu::WeakImplHelper<
             css::datatransfer::dnd::XDragSource,
-            css::lang::XInitialization,
             css::awt::XEventHandler,
             css::frame::XTerminateListener
         >,
@@ -452,8 +449,7 @@ namespace x11 {
 
         void shutdown() noexcept;
 
-        // XInitialization
-        virtual void        SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& arguments ) override;
+        void initialize();
 
         // XEventHandler
         virtual sal_Bool    SAL_CALL handleEvent(const css::uno::Any& event) override;

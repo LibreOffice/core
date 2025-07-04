@@ -51,7 +51,7 @@ void DropTarget::initialize( const Sequence< Any >& arguments )
         return;
 
     m_xSelectionManager = &SelectionManager::get();
-    m_xSelectionManager->initialize( arguments );
+    m_xSelectionManager->initialize();
 
     if( m_xSelectionManager->getDisplay() ) // #136582# sanity check
     {

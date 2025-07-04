@@ -317,15 +317,14 @@ Cursor SelectionManager::createCursor( const unsigned char* pPointerData, const 
     return aCursor;
 }
 
-void SelectionManager::initialize( const Sequence< Any >& arguments )
+void SelectionManager::initialize()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
     if( ! m_xDisplayConnection.is() )
     {
         /*
-         *  first argument must be a css::awt::XDisplayConnection
-         *  from this we will get the XEvents of the vcl event loop by
+         *  We will get the XEvents of the vcl event loop from the css::awt::XDisplayConnection by
          *  registering us as XEventHandler on it.
          *
          *  implementor's note:
@@ -335,13 +334,9 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
          *  needs to be added. The display used would be that of the normal event loop
          *  and synchronization should be done via the SolarMutex.
          */
-        if( arguments.hasElements() )
-            arguments.getConstArray()[0] >>= m_xDisplayConnection;
-        if( ! m_xDisplayConnection.is() )
-        {
-        }
-        else
-            m_xDisplayConnection->addEventHandler( Any(), this, ~0 );
+        m_xDisplayConnection = Application::GetDisplayConnection();
+        assert(m_xDisplayConnection.is());
+        m_xDisplayConnection->addEventHandler(Any(), this, ~0);
     }
 
     if( m_pDisplay )
@@ -4078,11 +4073,8 @@ css::uno::Reference< XInterface > SelectionManager::getReference() noexcept
  *  SelectionManagerHolder
  */
 
-SelectionManagerHolder::SelectionManagerHolder() :
-        ::cppu::WeakComponentImplHelper<
-    XDragSource,
-    XInitialization,
-    XServiceInfo > (m_aMutex)
+SelectionManagerHolder::SelectionManagerHolder()
+    : ::cppu::WeakComponentImplHelper<XDragSource, XServiceInfo>(m_aMutex)
 {
 }
 
@@ -4090,10 +4082,10 @@ SelectionManagerHolder::~SelectionManagerHolder()
 {
 }
 
-void SelectionManagerHolder::initialize( const Sequence< Any >& arguments )
+void SelectionManagerHolder::initialize()
 {
     SelectionManager& rManager = SelectionManager::get();
-    rManager.initialize( arguments );
+    rManager.initialize();
     m_xRealDragSource = &rManager;
 }
 
