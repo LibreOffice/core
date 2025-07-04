@@ -21,6 +21,7 @@ skia_patches := \
     clang-attributes-warning.patch.1 \
     fontconfig-get-typeface.patch.1 \
     windows-do-not-modify-logfont.patch.0 \
+    windows-text-gamma.patch.0 \
     windows-force-unicode-api.patch.0 \
     fix-without-gl.patch.1 \
     windows-typeface-directwrite.patch.1 \
