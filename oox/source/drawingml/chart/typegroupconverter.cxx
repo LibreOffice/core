@@ -39,6 +39,7 @@
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <drawingml/lineproperties.hxx>
+#include <drawingml/chart/seriesmodel.hxx>
 #include <drawingml/chart/seriesconverter.hxx>
 #include <drawingml/chart/typegroupmodel.hxx>
 #include <oox/core/xmlfilterbase.hxx>
@@ -288,16 +289,16 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
         first series, even if it was empty. */
     for (auto const& elem : mrModel.maSeries)
     {
-        if( elem->maSources.has( SeriesModel::CATEGORIES ) )
+        if( elem->maSources.has( DataSourceType::CATEGORIES ) )
         {
             SeriesConverter aSeriesConv(*this, *elem);
             xLabeledSeq = aSeriesConv.createCategorySequence( u"categories"_ustr );
             if (xLabeledSeq.is())
                 break;
         }
-        else if( nMaxValues <= 0 && elem->maSources.has( SeriesModel::VALUES ) )
+        else if( nMaxValues <= 0 && elem->maSources.has( DataSourceType::VALUES ) )
         {
-            DataSourceModel *pValues = elem->maSources.get( SeriesModel::VALUES ).get();
+            DataSourceModel *pValues = elem->maSources.get( DataSourceType::VALUES ).get();
             if( pValues->mxDataSeq.is() )
                 nMaxValues = pValues->mxDataSeq->maData.size();
         }
@@ -308,9 +309,9 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
             nMaxValues = 2;
         typedef RefVector<SeriesModel> SeriesModelVector;
         SeriesModelVector::value_type aModel = mrModel.maSeries.get(0);
-        if (!aModel->maSources.has(SeriesModel::CATEGORIES))
+        if (!aModel->maSources.has(DataSourceType::CATEGORIES))
         {
-            DataSourceModel &aSrc = aModel->maSources.create( SeriesModel::CATEGORIES );
+            DataSourceModel &aSrc = aModel->maSources.create( DataSourceType::CATEGORIES );
             DataSequenceModel &aSeq = aSrc.mxDataSeq.create();
             aSeq.mnPointCount = nMaxValues;
             for( sal_Int32 i = 0; i < nMaxValues; i++ )
@@ -324,7 +325,8 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
 
 void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
         const Reference< XCoordinateSystem >& rxCoordSystem,
-        sal_Int32 nAxesSetIdx, bool bSupportsVaryColorsByPoint )
+        sal_Int32 nAxesSetIdx,
+        bool bSupportsVaryColorsByPoint )
 {
     try
     {
@@ -612,6 +614,22 @@ PieChartSubType TypeGroupConverter::convertOfPieType(sal_Int32 nOoxOfPieType ) c
     }
 }
 
+void TypeGroupConverter::moveDataToSeries(DataSourceCxModel::DataMap& raDataMap)
+{
+    // For chartex, move data from rDataMap to the appropriate series. In
+    // chartex the data is given outside the series, in a child element of
+    // <cx:chartSpace>. Pre-2016 charts have the data inside the series, and
+    // SeriesModel and subsequent handling reflects this. So here we get the
+    // data to the right place for processing.
+    if (!raDataMap.empty()) {
+        // should only happen for chartex
+        for (auto const& elem : mrModel.maSeries) {
+            // This ID must be present in the map
+            assert(raDataMap.find(elem->mnDataId) != raDataMap.end());
+            elem->maSources = *(raDataMap[elem->mnDataId]);
+        }
+    }
+}
 
 // private --------------------------------------------------------------------
 

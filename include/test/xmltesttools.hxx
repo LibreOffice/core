@@ -57,6 +57,16 @@ protected:
         return getXPath(pXmlDoc, sXPath.getStr(), pAttribute);
     }
     /**
+     * Same as above, but where the expected number of nodes with
+     * the given path is nNumPaths and the desired node index is nPathIdx.
+     */
+    OUString      getXPath(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, int nNumPaths, int nPathIdx, const char* pAttribute);
+    OUString getXPath(const xmlDocUniquePtr& pXmlDoc, const OString& sXPath, int nNumPaths, int nPathIdx, const char* pAttribute)
+    {
+        assert(nPathIdx < nNumPaths);
+        return getXPath(pXmlDoc, sXPath.getStr(), nNumPaths, nPathIdx, pAttribute);
+    }
+    /**
      * Same as the assertXPathContent(), but don't assert: return the string instead.
      */
     OUString      getXPathContent(const xmlDocUniquePtr& pXmlDoc, const char* pXPath);
@@ -94,6 +104,19 @@ protected:
                      const std::vector<std::pair<const char*, std::u16string_view>>& aPairVector)
     {
         assertXPathAttrs(pXmlDoc, sXPath.getStr(), aPairVector);
+    }
+    /**
+     * Assert that pXPath exists, returns nNumNodes nodes, and the attribute
+     * value of node number nPathIdx equals the rExpected value.
+     */
+    void          assertXPath(const xmlDocUniquePtr& pXmlDoc, const char* pXPath,
+                              int nNumNodes, int nNodeIdx,
+                              const char* pAttribute, std::u16string_view rExpectedValue);
+    void assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& sXPath,
+                     int nNumNodes, int nNodeIdx,
+                     const char* pAttribute, std::u16string_view rExpectedValue)
+    {
+        assertXPath(pXmlDoc, sXPath.getStr(), nNumNodes, nNodeIdx, pAttribute, rExpectedValue);
     }
 
     /**

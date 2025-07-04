@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_SERIESCONVERTER_HXX
 
 #include <drawingml/chart/converterbase.hxx>
+#include <oox/drawingml/chart/datasourcemodel.hxx>
 #include <drawingml/chart/seriesmodel.hxx>
 
 namespace com::sun::star {
@@ -134,7 +135,7 @@ public:
 private:
     css::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createLabeledDataSequence(
-                            SeriesModel::SourceType eSourceType,
+                            enum DataSourceType eSourceType,
                             const OUString& rRole,
                             bool bUseTextLabel );
 };

@@ -231,12 +231,65 @@ void outputDataPointStyleEntry(FSHelperPtr pFS)
     pFS->endElement(FSNS(XML_cs, XML_dataPoint));
 }
 
+std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(const Reference< chart2::XChartType >& xChartType)
+{
+    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitSeries;
+    std::map<sal_Int32, size_t> aMapAxisToIndex;
+
+    Reference< chart2::XDataSeriesContainer > xDSCnt(xChartType, uno::UNO_QUERY);
+    if (xDSCnt.is())
+    {
+        sal_Int32 nAxisIndexOfFirstSeries = -1;
+        const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq(xDSCnt->getDataSeries());
+        for (const uno::Reference<chart2::XDataSeries>& xSeries : aSeriesSeq)
+        {
+            Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY);
+            if (!xPropSet.is())
+                continue;
+
+            sal_Int32 nAxisIndex = -1;
+            uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
+            aAny >>= nAxisIndex;
+            size_t nVectorPos = 0;
+            if (nAxisIndexOfFirstSeries == -1)
+            {
+                nAxisIndexOfFirstSeries = nAxisIndex;
+            }
+
+            auto it = aMapAxisToIndex.find(nAxisIndex);
+            if (it == aMapAxisToIndex.end())
+            {
+                aSplitSeries.emplace_back();
+                nVectorPos = aSplitSeries.size() - 1;
+                aMapAxisToIndex.insert(std::pair<sal_Int32, size_t>(nAxisIndex, nVectorPos));
+            }
+            else
+            {
+                nVectorPos = it->second;
+            }
+
+            uno::Sequence<Reference<chart2::XDataSeries> >& rAxisSeriesSeq = aSplitSeries[nVectorPos];
+            sal_Int32 nLength = rAxisSeriesSeq.getLength();
+            rAxisSeriesSeq.realloc(nLength + 1);
+            rAxisSeriesSeq.getArray()[nLength] = xSeries;
+        }
+        // if the first series attached to secondary axis, then export those series first, which are attached to primary axis
+        // also the MS Office export every time in this order
+        if (aSplitSeries.size() > 1 && nAxisIndexOfFirstSeries == 1)
+        {
+            std::swap(aSplitSeries[0], aSplitSeries[1]);
+        }
+    }
+
+    return aSplitSeries;
+}
 
 }   // unnamed namespace
 
-static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram, bool& bHasDateCategories )
+static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories(
+        const Reference< chart2::XDiagram > & xDiagram, bool *pbHasDateCategories )
 {
-    bHasDateCategories = false;
+    *pbHasDateCategories = false;
     Reference< chart2::data::XLabeledDataSequence >  xResult;
     try
     {
@@ -259,7 +312,7 @@ static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const 
                         chart2::ScaleData aScaleData = xAxis->getScaleData();
                         if( aScaleData.Categories.is())
                         {
-                            bHasDateCategories = aScaleData.AxisType == chart2::AxisType::DATE;
+                            *pbHasDateCategories = aScaleData.AxisType == chart2::AxisType::DATE;
                             xResult.set( aScaleData.Categories );
                             break;
                         }
@@ -299,7 +352,8 @@ static bool lcl_hasCategoryLabels( const Reference< chart2::XChartDocument >& xC
     //categories are always the first sequence
     Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
     bool bDateCategories;
-    Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xDiagram, bDateCategories ) );
+    Reference< chart2::data::XLabeledDataSequence > xCategories(
+            lcl_getCategories( xDiagram, &bDateCategories ) );
     return xCategories.is();
 }
 
@@ -1264,7 +1318,7 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
         pFS->startElement(FSNS(XML_cx, XML_chartData));
 
         exportExternalData(xChartDoc, true);
-        exportData(xChartDoc, true);
+        exportData_chartex(xChartDoc);
 
         pFS->endElement(FSNS(XML_cx, XML_chartData));
     } else {
@@ -1313,24 +1367,239 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     pFS->endElement( FSNS( nChartNS, XML_chartSpace ) );
 }
 
-void ChartExport::exportData( [[maybe_unused]] const Reference< css::chart::XChartDocument >& xChartDoc,
-        bool bIsChartex)
+void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::chart::XChartDocument >& xChartDoc)
 {
-    if (bIsChartex) {
-        FSHelperPtr pFS = GetFS();
+    Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( mxNewDiagram, uno::UNO_QUERY );
+    if( ! xBCooSysCnt.is()) return;
+    const Sequence< Reference< chart2::XCoordinateSystem > >
+        aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
 
-        // Not sure if the data id is always 0. However, it seems it may need to
-        // agree with the id in exportSeries(). See DATA_ID_COMMENT
-        pFS->startElement(FSNS(XML_cx, XML_data), XML_id, "0");
-        // Just hard-coding this for now
-        pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, "val");
-        pFS->startElement(FSNS(XML_cx, XML_f));
-        pFS->writeEscaped("_xlchart.v2.0");    // I have no idea what this
-                                                // means or what it should be in
-                                                // general
-        pFS->endElement(FSNS(XML_cx, XML_f));
-        pFS->endElement(FSNS(XML_cx, XML_numDim));
-        pFS->endElement(FSNS(XML_cx, XML_data));
+    if (!aCooSysSeq.hasElements()) return;
+
+    for( const auto& rCS : aCooSysSeq ) {
+        Reference< chart2::XChartTypeContainer > xCTCnt( rCS, uno::UNO_QUERY );
+        if( ! xCTCnt.is())
+            continue;
+        const Sequence< Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
+
+        for( const auto& rCT : aCTSeq ) {
+            Reference< chart2::XDataSeriesContainer > xDSCnt( rCT, uno::UNO_QUERY );
+            if( ! xDSCnt.is())
+                return;
+            Reference< chart2::XChartType > xChartType( rCT, uno::UNO_QUERY );
+            if( ! xChartType.is())
+                continue;
+
+            OUString aLabelRole = xChartType->getRoleOfSequenceForSeriesLabel();
+
+            const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+
+            for (const auto& splitDataSeries : aSplitDataSeries) {
+                sal_Int32 nSeriesIndex = 0;
+                for( const auto& rSeries : splitDataSeries )
+                {
+                    // export series
+                    Reference< chart2::data::XDataSource > xSource( rSeries, uno::UNO_QUERY );
+                    if( !xSource.is()) continue;
+
+                    Reference< chart2::XDataSeries > xDataSeries( xSource, uno::UNO_QUERY );
+                    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
+                        xSource->getDataSequences());
+
+                    // search for main sequence and create a series element
+                    sal_Int32 nMainSequenceIndex = -1;
+                    sal_Int32 nSeriesLength = 0;
+                    Reference< chart2::data::XDataSequence > xValueSeq;
+                    Reference< chart2::data::XDataSequence > xLabelSeq;
+                    sal_Int32 nSeqIdx=0;
+                    for( ; nSeqIdx<aSeqCnt.getLength(); ++nSeqIdx )
+                    {
+                        Reference< chart2::data::XDataSequence > xTempValueSeq( aSeqCnt[nSeqIdx]->getValues() );
+                        if( nMainSequenceIndex==-1 )
+                        {
+                            Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
+                            OUString aRole;
+                            if( xSeqProp.is())
+                                xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole;
+                            // "main" sequence
+                            if( aRole == aLabelRole )
+                            {
+                                xValueSeq.set( xTempValueSeq );
+                                xLabelSeq.set( aSeqCnt[nSeqIdx]->getLabel());
+                                nMainSequenceIndex = nSeqIdx;
+                            }
+                        }
+                        sal_Int32 nSequenceLength = (xTempValueSeq.is()? xTempValueSeq->getData().getLength() : sal_Int32(0));
+                        if( nSeriesLength < nSequenceLength )
+                            nSeriesLength = nSequenceLength;
+                    }
+                    FSHelperPtr pFS = GetFS();
+
+                    // The data id needs to agree with the id in exportSeries(). See DATA_ID_COMMENT
+                    pFS->startElement(FSNS(XML_cx, XML_data), XML_id, OUString::number(nSeriesIndex++));
+
+                    // .xlsx chartex files seem to have this magical "_xlchart.v2.0" string,
+                    // and no explicit data, while .docx and .pptx contain the literal data,
+                    // as well as a ../embeddings file (which LO doesn't seem to produce).
+                    // But there's probably a smarter way to determine which pathway to take
+                    // than based on document type.
+                    if (GetDocumentType() == DOCUMENT_XLSX) {
+                        // Just hard-coding this for now
+                        pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, "val");
+                        pFS->startElement(FSNS(XML_cx, XML_f));
+                        pFS->writeEscaped("_xlchart.v2.0");    // I have no idea what this
+                                                                // means or what it should be in
+                                                                // general
+                        pFS->endElement(FSNS(XML_cx, XML_f));
+                        pFS->endElement(FSNS(XML_cx, XML_numDim));
+                    } else {    // PPTX, DOCX
+                        OUString aCellRange = mxCategoriesValues.is() ? mxCategoriesValues->getSourceRangeRepresentation() : OUString();
+#undef OUTPUT_SPLIT_CATEGORIES  // do we need this or not? TODO
+#ifdef OUTPUT_SPLIT_CATEGORIES
+                        const Sequence< Sequence< OUString >> aFinalSplitSource = getSplitCategoriesList(aCellRange);
+#endif
+                        aCellRange = parseFormula( aCellRange );
+
+#ifdef OUTPUT_SPLIT_CATEGORIES
+                        if (aFinalSplitSource.getLength() > 1) {
+
+                            // export multi level category axis labels
+                            pFS->startElement(FSNS(XML_cx, XML_strDim), XML_type, "cat");
+
+                            pFS->startElement(FSNS(XML_cx, XML_f));
+                            pFS->writeEscaped(aCellRange);
+                            pFS->endElement(FSNS(XML_cx, XML_f));
+
+                            for (const auto& rSeq : aFinalSplitSource) {
+                                pFS->startElement(FSNS(XML_cx, XML_lvl),
+                                        XML_ptCount, OString::number(aFinalSplitSource[0].getLength()));
+
+                                for (sal_Int32 j = 0; j < rSeq.getLength(); j++) {
+                                    if(!rSeq[j].isEmpty()) {
+                                        pFS->startElement(FSNS(XML_cx, XML_pt), XML_idx, OString::number(j));
+                                        pFS->writeEscaped(rSeq[j]);
+                                        pFS->endElement(FSNS(XML_cx, XML_pt));
+                                    }
+                                }
+                                pFS->endElement(FSNS(XML_cx, XML_lvl));
+                            }
+
+                            pFS->endElement(FSNS(XML_cx, XML_strDim));
+                        }
+                        else
+#endif
+                        {
+                            // export single category axis labels
+                            // TODO: seems like this should consider mbHasCategoryLabels
+                            bool bWriteDateCategories = mbHasDateCategories;
+                            OUString aNumberFormatString;
+                            if (bWriteDateCategories)
+                            {
+                                Reference< css::chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
+                                if( xAxisXSupp.is())
+                                {
+                                    Reference< XPropertySet > xAxisProp = xAxisXSupp->getXAxis();
+                                    if (GetProperty(xAxisProp, u"NumberFormat"_ustr))
+                                    {
+                                        sal_Int32 nKey = 0;
+                                        mAny >>= nKey;
+                                        aNumberFormatString = getNumberFormatCode(nKey);
+                                    }
+                                }
+                                if (aNumberFormatString.isEmpty()) bWriteDateCategories = false;
+                            }
+
+                            // === Output the categories
+                            if (bWriteDateCategories)
+                            {
+                                std::vector<double> aDateCategories = lcl_getAllValuesFromSequence(xValueSeq);
+                                const sal_Int32 ptCount = aDateCategories.size();
+
+                                pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, "x"); // is "x" right?
+                                // TODO: check this
+
+                                pFS->startElement(FSNS(XML_cx, XML_f));
+                                pFS->writeEscaped(aCellRange);
+                                pFS->endElement(FSNS(XML_cx, XML_f));
+
+                                pFS->startElement(FSNS(XML_cx, XML_lvl),
+                                        XML_ptCount, OString::number(ptCount),
+                                        XML_formatCode, aNumberFormatString);
+
+                                for (sal_Int32 i = 0; i < ptCount; i++) {
+                                    if (!std::isnan(aDateCategories[i])) {
+                                        pFS->startElement(FSNS(XML_cx, XML_pt), XML_idx, OString::number(i));
+                                        pFS->write(OString::number(aDateCategories[i]));
+                                        pFS->endElement(FSNS(XML_cx, XML_pt));
+                                    }
+                                }
+
+                                pFS->endElement(FSNS(XML_cx, XML_lvl));
+                                pFS->endElement(FSNS(XML_cx, XML_numDim));
+                            }
+                            else
+                            {
+                                std::vector<OUString> aCategories;
+                                lcl_fillCategoriesIntoStringVector(xValueSeq, aCategories);
+                                const sal_Int32 ptCount = aCategories.size();
+
+                                // TODO: shouldn't have "cat" hard-coded here:
+                                // other options are colorStr, entityId
+                                pFS->startElement(FSNS(XML_cx, XML_strDim), XML_type, "cat");
+
+                                pFS->startElement(FSNS(XML_cx, XML_f));
+                                pFS->writeEscaped(aCellRange);
+                                pFS->endElement(FSNS(XML_cx, XML_f));
+
+                                pFS->startElement(FSNS(XML_cx, XML_lvl), XML_ptCount, OString::number(ptCount));
+
+                                for (sal_Int32 i = 0; i < ptCount; i++) {
+                                    pFS->startElement(FSNS(XML_cx, XML_pt), XML_idx, OString::number(i));
+                                    pFS->writeEscaped(aCategories[i]);
+                                    pFS->endElement(FSNS(XML_cx, XML_pt));
+                                }
+
+                                pFS->endElement(FSNS(XML_cx, XML_lvl));
+                                pFS->endElement(FSNS(XML_cx, XML_strDim));
+                            }
+
+                            // === Output the values
+                            pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, "val");
+
+                            aCellRange = xValueSeq.is() ? xValueSeq->getSourceRangeRepresentation() : OUString();
+                            aCellRange = parseFormula( aCellRange );
+                            // TODO: need to handle XML_multiLvlStrRef according to aCellRange
+
+                            pFS->startElement(FSNS(XML_cx, XML_f));
+                            pFS->writeEscaped( aCellRange );
+                            pFS->endElement( FSNS( XML_cx, XML_f ) );
+
+                            ::std::vector< double > aValues = lcl_getAllValuesFromSequence( xValueSeq );
+                            sal_Int32 ptCount = aValues.size();
+                            OUString sNumberFormatString(u"General"_ustr);
+                            const sal_Int32 nKey = xValueSeq.is() ? xValueSeq->getNumberFormatKeyByIndex(-1) : 0;
+                            if (nKey > 0) {
+                                sNumberFormatString = getNumberFormatCode(nKey);
+                            }
+                            pFS->startElement(FSNS(XML_cx, XML_lvl),
+                                    XML_ptCount, OString::number(ptCount),
+                                    XML_formatCode,  sNumberFormatString);
+
+                            for( sal_Int32 i = 0; i < ptCount; i++ ) {
+
+                                pFS->startElement(FSNS(XML_cx, XML_pt), XML_idx, OString::number(i));
+                                pFS->write(std::isnan(aValues[i]) ?  0 : aValues[i]);
+                                pFS->endElement(FSNS(XML_cx, XML_pt));
+                            }
+
+                            pFS->endElement(FSNS(XML_cx, XML_lvl));
+                            pFS->endElement(FSNS(XML_cx, XML_numDim));
+                        }
+                    }
+                    pFS->endElement(FSNS(XML_cx, XML_data));
+                }
+            }
+        }
     }
 }
 
@@ -2023,63 +2292,6 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
     }
 }
 
-namespace {
-
-    std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(const Reference< chart2::XChartType >& xChartType)
-    {
-        std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitSeries;
-        std::map<sal_Int32, size_t> aMapAxisToIndex;
-
-        Reference< chart2::XDataSeriesContainer > xDSCnt(xChartType, uno::UNO_QUERY);
-        if (xDSCnt.is())
-        {
-            sal_Int32 nAxisIndexOfFirstSeries = -1;
-            const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq(xDSCnt->getDataSeries());
-            for (const uno::Reference<chart2::XDataSeries>& xSeries : aSeriesSeq)
-            {
-                Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY);
-                if (!xPropSet.is())
-                    continue;
-
-                sal_Int32 nAxisIndex = -1;
-                uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
-                aAny >>= nAxisIndex;
-                size_t nVectorPos = 0;
-                if (nAxisIndexOfFirstSeries == -1)
-                {
-                    nAxisIndexOfFirstSeries = nAxisIndex;
-                }
-
-                auto it = aMapAxisToIndex.find(nAxisIndex);
-                if (it == aMapAxisToIndex.end())
-                {
-                    aSplitSeries.emplace_back();
-                    nVectorPos = aSplitSeries.size() - 1;
-                    aMapAxisToIndex.insert(std::pair<sal_Int32, size_t>(nAxisIndex, nVectorPos));
-                }
-                else
-                {
-                    nVectorPos = it->second;
-                }
-
-                uno::Sequence<Reference<chart2::XDataSeries> >& rAxisSeriesSeq = aSplitSeries[nVectorPos];
-                sal_Int32 nLength = rAxisSeriesSeq.getLength();
-                rAxisSeriesSeq.realloc(nLength + 1);
-                rAxisSeriesSeq.getArray()[nLength] = xSeries;
-            }
-            // if the first series attached to secondary axis, then export those series first, which are attached to primary axis
-            // also the MS Office export every time in this order
-            if (aSplitSeries.size() > 1 && nAxisIndexOfFirstSeries == 1)
-            {
-                std::swap(aSplitSeries[0], aSplitSeries[1]);
-            }
-        }
-
-        return aSplitSeries;
-    }
-
-}
-
 void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& xChartDoc,
         bool bIsChartex)
 {
@@ -2635,8 +2847,9 @@ void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChart
 
         exportGrouping();
         bool bPrimaryAxes = true;
-        exportSeries(xChartType, splitDataSeries, bPrimaryAxes, false);
+        exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
         createAxes(bPrimaryAxes, false);
+        //exportAxesId(bPrimaryAxes);
 
         pFS->endElement(FSNS(XML_c, nTypeId));
     }
@@ -2670,7 +2883,7 @@ void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartTy
         exportVaryColors(xChartType);
 
         bool bPrimaryAxes = true;
-        exportSeries(xChartType, splitDataSeries, bPrimaryAxes, false);
+        exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
         Reference< XPropertySet > xTypeProp(xChartType, uno::UNO_QUERY);
 
@@ -2756,7 +2969,7 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
         exportVaryColors(xChartType);
 
         bool bPrimaryAxes = true;
-        exportSeries(xChartType, splitDataSeries, bPrimaryAxes, false);
+        exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
         createAxes(bPrimaryAxes, false);
 
@@ -2773,14 +2986,9 @@ void ChartExport::exportFunnelChart( const Reference< chart2::XChartType >& xCha
         if (!splitDataSeries.hasElements())
             continue;
 
-        pFS->startElement(FSNS(XML_cx, XML_series), XML_layoutId, "funnel");
-
         //exportVaryColors(xChartType);
 
-        bool bPrimaryAxes = false;
-        exportSeries(xChartType, splitDataSeries, bPrimaryAxes, true);
-
-        pFS->endElement(FSNS(XML_cx, XML_series));
+        exportSeries_chartex(xChartType, splitDataSeries, "funnel");
     }
 }
 
@@ -2878,7 +3086,7 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
         exportVaryColors(xChartType);
         // TODO: show marker symbol in series?
         bool bPrimaryAxes = true;
-        exportSeries(xChartType, splitDataSeries, bPrimaryAxes, false);
+        exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
         // show marker?
         sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
@@ -2968,8 +3176,9 @@ void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType 
     // FIXME: should export xVal and yVal
     bool bPrimaryAxes = true;
     if (pSeries)
-        exportSeries(xChartType, *pSeries, bPrimaryAxes, false);
+        exportSeries_chart(xChartType, *pSeries, bPrimaryAxes);
     createAxes(bPrimaryAxes, false);
+    //exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
 }
@@ -3100,7 +3309,7 @@ void ChartExport::exportAllSeries(const Reference<chart2::XChartType>& xChartTyp
 
     // export dataseries for current chart-type
     Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
-    exportSeries(xChartType, aSeriesSeq, rPrimaryAxes, false);
+    exportSeries_chart(xChartType, aSeriesSeq, rPrimaryAxes);
 }
 
 void ChartExport::exportVaryColors(const Reference<chart2::XChartType>& xChartType)
@@ -3121,10 +3330,9 @@ void ChartExport::exportVaryColors(const Reference<chart2::XChartType>& xChartTy
     }
 }
 
-void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
+void ChartExport::exportSeries_chart( const Reference<chart2::XChartType>& xChartType,
         const Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq,
-        bool& rPrimaryAxes,
-        bool bIsChartex)
+        bool& rPrimaryAxes)
 {
     OUString aLabelRole = xChartType->getRoleOfSequenceForSeriesLabel();
     OUString aChartType( xChartType->getChartType());
@@ -3172,19 +3380,17 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                 // xLabelSeq contain those.  Otherwise both are empty
                 FSHelperPtr pFS = GetFS();
 
-                if (!bIsChartex) {
-                    pFS->startElement(FSNS(XML_c, XML_ser));
+                pFS->startElement(FSNS(XML_c, XML_ser));
 
-                    // TODO: idx and order
-                    pFS->singleElement( FSNS( XML_c, XML_idx ),
-                        XML_val, OString::number(mnSeriesCount) );
-                    pFS->singleElement( FSNS( XML_c, XML_order ),
-                        XML_val, OString::number(mnSeriesCount++) );
-                }
+                // TODO: idx and order
+                pFS->singleElement( FSNS( XML_c, XML_idx ),
+                    XML_val, OString::number(mnSeriesCount) );
+                pFS->singleElement( FSNS( XML_c, XML_order ),
+                    XML_val, OString::number(mnSeriesCount++) );
 
                 // export label
                 if( xLabelSeq.is() )
-                    exportSeriesText( xLabelSeq, bIsChartex );
+                    exportSeriesText( xLabelSeq, false );
 
                 Reference<XPropertySet> xPropSet(xDataSeries, UNO_QUERY_THROW);
                 if( GetProperty( xPropSet, u"AttachedAxisIndex"_ustr) )
@@ -3199,140 +3405,210 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                     rSeries, getModel() );
                 if( xOldPropSet.is() )
                 {
-                    exportShapeProps( xOldPropSet, bIsChartex );
+                    exportShapeProps( xOldPropSet, false );
                 }
 
-                if (!bIsChartex) {
-                    switch( eChartType )
+                switch( eChartType )
+                {
+                    case chart::TYPEID_BUBBLE:
+                    case chart::TYPEID_HORBAR:
+                    case chart::TYPEID_BAR:
                     {
-                        case chart::TYPEID_BUBBLE:
-                        case chart::TYPEID_HORBAR:
-                        case chart::TYPEID_BAR:
+                        pFS->singleElement(FSNS(XML_c, XML_invertIfNegative), XML_val, "0");
+                    }
+                    break;
+                    case chart::TYPEID_LINE:
+                    {
+                        exportMarker(xOldPropSet);
+                        break;
+                    }
+                    case chart::TYPEID_PIE:
+                    case chart::TYPEID_DOUGHNUT:
+                    {
+                        if( xOldPropSet.is() && GetProperty( xOldPropSet, u"SegmentOffset"_ustr) )
                         {
-                            pFS->singleElement(FSNS(XML_c, XML_invertIfNegative), XML_val, "0");
+                            sal_Int32 nOffset = 0;
+                            mAny >>= nOffset;
+                            pFS->singleElement( FSNS( XML_c, XML_explosion ),
+                                XML_val, OString::number( nOffset ) );
                         }
                         break;
-                        case chart::TYPEID_LINE:
-                        {
-                            exportMarker(xOldPropSet);
-                            break;
-                        }
-                        case chart::TYPEID_PIE:
-                        case chart::TYPEID_DOUGHNUT:
-                        {
-                            if( xOldPropSet.is() && GetProperty( xOldPropSet, u"SegmentOffset"_ustr) )
-                            {
-                                sal_Int32 nOffset = 0;
-                                mAny >>= nOffset;
-                                pFS->singleElement( FSNS( XML_c, XML_explosion ),
-                                    XML_val, OString::number( nOffset ) );
-                            }
-                            break;
-                        }
-                        case chart::TYPEID_SCATTER:
-                        {
-                            exportMarker(xOldPropSet);
-                            break;
-                        }
-                        case chart::TYPEID_RADARLINE:
-                        {
-                            exportMarker(xOldPropSet);
-                            break;
-                        }
                     }
-
-                    // export data points
-                    exportDataPoints( uno::Reference< beans::XPropertySet >( rSeries, uno::UNO_QUERY ), nSeriesLength, eChartType );
+                    case chart::TYPEID_SCATTER:
+                    {
+                        exportMarker(xOldPropSet);
+                        break;
+                    }
+                    case chart::TYPEID_RADARLINE:
+                    {
+                        exportMarker(xOldPropSet);
+                        break;
+                    }
                 }
+
+                // export data points
+                exportDataPoints( uno::Reference< beans::XPropertySet >( rSeries, uno::UNO_QUERY ), nSeriesLength, eChartType );
 
                 DataLabelsRange aDLblsRange;
                 // export data labels
-                exportDataLabels(rSeries, nSeriesLength, eChartType, aDLblsRange, bIsChartex);
+                exportDataLabels(rSeries, nSeriesLength, eChartType, aDLblsRange, false);
 
-                if (!bIsChartex) {
-                    exportTrendlines( rSeries );
+                exportTrendlines( rSeries );
 
-                    if( eChartType != chart::TYPEID_PIE &&
-                            eChartType != chart::TYPEID_RADARLINE )
+                if( eChartType != chart::TYPEID_PIE &&
+                        eChartType != chart::TYPEID_RADARLINE )
+                {
+                    //export error bars here
+                    Reference< XPropertySet > xSeriesPropSet( xSource, uno::UNO_QUERY );
+                    Reference< XPropertySet > xErrorBarYProps;
+                    xSeriesPropSet->getPropertyValue(u"ErrorBarY"_ustr) >>= xErrorBarYProps;
+                    if(xErrorBarYProps.is())
+                        exportErrorBar(xErrorBarYProps, true);
+                    if (eChartType != chart::TYPEID_BAR &&
+                            eChartType != chart::TYPEID_HORBAR)
                     {
-                        //export error bars here
-                        Reference< XPropertySet > xSeriesPropSet( xSource, uno::UNO_QUERY );
-                        Reference< XPropertySet > xErrorBarYProps;
-                        xSeriesPropSet->getPropertyValue(u"ErrorBarY"_ustr) >>= xErrorBarYProps;
-                        if(xErrorBarYProps.is())
-                            exportErrorBar(xErrorBarYProps, true);
-                        if (eChartType != chart::TYPEID_BAR &&
-                                eChartType != chart::TYPEID_HORBAR)
-                        {
-                            Reference< XPropertySet > xErrorBarXProps;
-                            xSeriesPropSet->getPropertyValue(u"ErrorBarX"_ustr) >>= xErrorBarXProps;
-                            if(xErrorBarXProps.is())
-                                exportErrorBar(xErrorBarXProps, false);
-                        }
+                        Reference< XPropertySet > xErrorBarXProps;
+                        xSeriesPropSet->getPropertyValue(u"ErrorBarX"_ustr) >>= xErrorBarXProps;
+                        if(xErrorBarXProps.is())
+                            exportErrorBar(xErrorBarXProps, false);
                     }
-
-                    // export categories
-                    if( eChartType != chart::TYPEID_SCATTER && eChartType != chart::TYPEID_BUBBLE && mxCategoriesValues.is() )
-                        exportSeriesCategory( mxCategoriesValues );
-
-                    if( (eChartType == chart::TYPEID_SCATTER)
-                        || (eChartType == chart::TYPEID_BUBBLE) )
-                    {
-                        // export xVal
-                        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, u"values-x"_ustr ) );
-                        if( xSequence.is() )
-                        {
-                            Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
-                            if( xValues.is() )
-                                exportSeriesValues( xValues, XML_xVal );
-                        }
-                        else if( mxCategoriesValues.is() )
-                            exportSeriesCategory( mxCategoriesValues, XML_xVal );
-                    }
-
-                    if( eChartType == chart::TYPEID_BUBBLE )
-                    {
-                        // export yVal
-                        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, u"values-y"_ustr ) );
-                        if( xSequence.is() )
-                        {
-                            Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
-                            if( xValues.is() )
-                                exportSeriesValues( xValues, XML_yVal );
-                        }
-                    }
-
-                    // export values
-                    if( xValuesSeq.is() )
-                    {
-                        sal_Int32 nYValueType = XML_val;
-                        if( eChartType == chart::TYPEID_SCATTER )
-                            nYValueType = XML_yVal;
-                        else if( eChartType == chart::TYPEID_BUBBLE )
-                            nYValueType = XML_bubbleSize;
-                        exportSeriesValues( xValuesSeq, nYValueType );
-                    }
-
-                    if( eChartType == chart::TYPEID_SCATTER
-                            || eChartType == chart::TYPEID_LINE )
-                        exportSmooth();
-
-                    // tdf103988: "corrupted" files with Bubble chart opening in MSO
-                    if( eChartType == chart::TYPEID_BUBBLE )
-                        pFS->singleElement(FSNS(XML_c, XML_bubble3D), XML_val, "0");
-
-                    if (!aDLblsRange.empty())
-                        writeDataLabelsRange(pFS, GetFB(), aDLblsRange);
-
-                    pFS->endElement( FSNS( XML_c, XML_ser ) );
-                } else {
-                    // chartex
-
-                    // Align the data id here with that in exportData().
-                    // See DATA_ID_COMMENT
-                    pFS->singleElement(FSNS(XML_cx, XML_dataId), XML_val, "0");
                 }
+
+                // export categories
+                if( eChartType != chart::TYPEID_SCATTER && eChartType != chart::TYPEID_BUBBLE && mxCategoriesValues.is() )
+                    exportSeriesCategory( mxCategoriesValues );
+
+                if( (eChartType == chart::TYPEID_SCATTER)
+                    || (eChartType == chart::TYPEID_BUBBLE) )
+                {
+                    // export xVal
+                    Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, u"values-x"_ustr ) );
+                    if( xSequence.is() )
+                    {
+                        Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
+                        if( xValues.is() )
+                            exportSeriesValues( xValues, XML_xVal );
+                    }
+                    else if( mxCategoriesValues.is() )
+                        exportSeriesCategory( mxCategoriesValues, XML_xVal );
+                }
+
+                if( eChartType == chart::TYPEID_BUBBLE )
+                {
+                    // export yVal
+                    Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, u"values-y"_ustr ) );
+                    if( xSequence.is() )
+                    {
+                        Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
+                        if( xValues.is() )
+                            exportSeriesValues( xValues, XML_yVal );
+                    }
+                }
+
+                // export values
+                if( xValuesSeq.is() )
+                {
+                    sal_Int32 nYValueType = XML_val;
+                    if( eChartType == chart::TYPEID_SCATTER )
+                        nYValueType = XML_yVal;
+                    else if( eChartType == chart::TYPEID_BUBBLE )
+                        nYValueType = XML_bubbleSize;
+                    exportSeriesValues( xValuesSeq, nYValueType );
+                }
+
+                if( eChartType == chart::TYPEID_SCATTER
+                        || eChartType == chart::TYPEID_LINE )
+                    exportSmooth();
+
+                // tdf103988: "corrupted" files with Bubble chart opening in MSO
+                if( eChartType == chart::TYPEID_BUBBLE )
+                    pFS->singleElement(FSNS(XML_c, XML_bubble3D), XML_val, "0");
+
+                if (!aDLblsRange.empty())
+                    writeDataLabelsRange(pFS, GetFB(), aDLblsRange);
+
+                pFS->endElement( FSNS( XML_c, XML_ser ) );
             }
+        }
+    }
+}
+
+void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xChartType,
+        const Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq,
+        const char* sTypeName)
+{
+    OUString aLabelRole = xChartType->getRoleOfSequenceForSeriesLabel();
+    OUString aChartType( xChartType->getChartType());
+    sal_Int32 eChartType = lcl_getChartType( aChartType );
+
+    sal_Int32 nSeriesCnt = 0;
+    for( const auto& rSeries : rSeriesSeq )
+    {
+        // export series
+        Reference< chart2::data::XDataSource > xSource( rSeries, uno::UNO_QUERY );
+        if( xSource.is())
+        {
+            FSHelperPtr pFS = GetFS();
+            pFS->startElement(FSNS(XML_cx, XML_series), XML_layoutId, sTypeName);
+
+            Reference< chart2::XDataSeries > xDataSeries( xSource, uno::UNO_QUERY );
+            Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
+                xSource->getDataSequences());
+
+            // search for main sequence and create a series element
+            sal_Int32 nMainSequenceIndex = -1;
+            sal_Int32 nSeriesLength = 0;
+            Reference< chart2::data::XDataSequence > xLabelSeq;
+            sal_Int32 nSeqIdx=0;
+            for( ; nSeqIdx<aSeqCnt.getLength(); ++nSeqIdx )
+            {
+                Reference< chart2::data::XDataSequence > xTempValueSeq( aSeqCnt[nSeqIdx]->getValues() );
+                if( nMainSequenceIndex==-1 )
+                {
+                    Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
+                    OUString aRole;
+                    if( xSeqProp.is())
+                        xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole;
+                    // "main" sequence
+                    if( aRole == aLabelRole )
+                    {
+                        xLabelSeq.set( aSeqCnt[nSeqIdx]->getLabel());
+                        nMainSequenceIndex = nSeqIdx;
+                    }
+                }
+                sal_Int32 nSequenceLength = (xTempValueSeq.is()? xTempValueSeq->getData().getLength() : sal_Int32(0));
+                if( nSeriesLength < nSequenceLength )
+                    nSeriesLength = nSequenceLength;
+            }
+
+            // export label
+            if( xLabelSeq.is() )
+                exportSeriesText( xLabelSeq, true );
+
+            // export shape properties
+            Reference< XPropertySet > xOldPropSet = SchXMLSeriesHelper::createOldAPISeriesPropertySet(
+                rSeries, getModel() );
+            if( xOldPropSet.is() )
+            {
+                exportShapeProps( xOldPropSet, true );
+            }
+
+            DataLabelsRange aDLblsRange;
+            // export data labels
+            exportDataLabels(rSeries, nSeriesLength, eChartType, aDLblsRange, true);
+
+            // dataId links to the correct data set in the <cx:chartData>. See
+            // DATA_ID_COMMENT
+            pFS->singleElement(FSNS(XML_cx, XML_dataId), XML_val,
+                    OString::number(nSeriesCnt++));
+
+            // layoutPr
+
+            // axisId
+
+            // extLst
+
+            pFS->endElement(FSNS(XML_cx, XML_series));
         }
     }
 }
@@ -3687,7 +3963,8 @@ void ChartExport::InitPlotArea( )
 
     if( mbHasCategoryLabels && mxNewDiagram.is())
     {
-        Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( mxNewDiagram, mbHasDateCategories ) );
+        Reference< chart2::data::XLabeledDataSequence > xCategories(
+                lcl_getCategories( mxNewDiagram, &mbHasDateCategories ) );
         if( xCategories.is() )
         {
             mxCategoriesValues.set( xCategories->getValues() );

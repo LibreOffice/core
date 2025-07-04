@@ -32,6 +32,7 @@
 #include <drawingml/chart/axisconverter.hxx>
 #include <drawingml/chart/plotareamodel.hxx>
 #include <drawingml/chart/typegroupconverter.hxx>
+#include <drawingml/chart/seriesmodel.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
@@ -71,6 +72,7 @@ public:
                             const Reference< XDiagram >& rxDiagram,
                             View3DModel& rView3DModel,
                             sal_Int32 nAxesSetIdx,
+                            DataSourceCxModel::DataMap& raSourceMap,
                             bool bSupportsVaryColorsByPoint,
                             bool bUseFixedInnerSize );
 
@@ -112,6 +114,7 @@ ModelRef< AxisModel > lclGetOrCreateAxis( const AxesSetModel::AxisMap& rFromAxes
 
 void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
                                         View3DModel& rView3DModel, sal_Int32 nAxesSetIdx,
+                                        DataSourceCxModel::DataMap& raSourceMap,
                                         bool bSupportsVaryColorsByPoint, bool bUseFixedInnerSize)
 {
     // create type group converter objects for all type groups
@@ -169,6 +172,13 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             to the data provider attached to the chart document. */
         if( xCoordSystem.is() )
         {
+            // Transfer any (chartex) data, specified at the chartSpace level,
+            // into the appropriate series. This needs to happen before the
+            // calls to AxisConverter::convertFromModel() below.
+            for (auto const& typeGroup : aTypeGroups) {
+                typeGroup->moveDataToSeries(raSourceMap);
+            }
+
             bool bMSO2007Doc = getFilter().isMSO2007Document();
             // convert all axes (create missing axis models)
             ModelRef< AxisModel > xXAxis = lclGetOrCreateAxis( mrModel.maAxes, API_X_AXIS, rFirstTypeGroup.getTypeInfo().mbCategoryAxis ? C_TOKEN( catAx ) : C_TOKEN( valAx ), bMSO2007Doc );
@@ -191,7 +201,8 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
 
             // convert all chart type groups, this converts all series data and formatting
             for (auto const& typeGroup : aTypeGroups)
-                typeGroup->convertFromModel( rxDiagram, xCoordSystem, nAxesSetIdx, bSupportsVaryColorsByPoint );
+                typeGroup->convertFromModel( rxDiagram, xCoordSystem,
+                        nAxesSetIdx,bSupportsVaryColorsByPoint );
         }
     }
     catch( Exception& )
@@ -313,7 +324,8 @@ PlotAreaConverter::~PlotAreaConverter()
 {
 }
 
-void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
+void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel,
+        DataSourceCxModel& rDataCxModel )
 {
     /*  Create the diagram object and attach it to the chart document. One
         diagram is used to carry all coordinate systems and data series. */
@@ -426,7 +438,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
     {
         AxesSetConverter aAxesSetConv(*this, *axesSet);
         aAxesSetConv.convertFromModel(xDiagram, rView3DModel, nAxesSetIdx,
-                                      bSupportsVaryColorsByPoint, bUseFixedInnerSize);
+                rDataCxModel.maSourceMap, bSupportsVaryColorsByPoint, bUseFixedInnerSize);
         if(nAxesSetIdx == nStartAxesSetIdx)
         {
             maAutoTitle = aAxesSetConv.getAutomaticTitle();

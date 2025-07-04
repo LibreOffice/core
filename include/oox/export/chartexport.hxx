@@ -174,9 +174,8 @@ private:
     void exportChart( const css::uno::Reference<
                           css::chart::XChartDocument >& rChartDoc,
                           bool bIsChartex);
-    void exportData( const css::uno::Reference<
-                              css::chart::XChartDocument >& rChartDoc,
-                              bool bIsChartex);
+    void exportData_chartex( const css::uno::Reference<
+                              css::chart::XChartDocument >& rChartDoc);
     void exportExternalData( const css::uno::Reference<
                               css::chart::XChartDocument >& rChartDoc,
                               bool bIsChartex);
@@ -217,10 +216,12 @@ private:
     void exportUpDownBars(const css::uno::Reference< css::chart2::XChartType >& xChartType );
 
     void exportAllSeries(const css::uno::Reference<css::chart2::XChartType>& xChartType, bool& rPrimaryAxes);
-    void exportSeries(const css::uno::Reference< css::chart2::XChartType >& xChartType,
+    void exportSeries_chart(const css::uno::Reference< css::chart2::XChartType >& xChartType,
             const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq,
-            bool& rPrimaryAxes,
-            bool bIsChartex);
+            bool& rPrimaryAxes);
+    void exportSeries_chartex(const css::uno::Reference< css::chart2::XChartType >& xChartType,
+            const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq,
+            const char* sTypeName);
 
     void exportVaryColors(const css::uno::Reference<css::chart2::XChartType>& xChartType);
     void exportCandleStickSeries(

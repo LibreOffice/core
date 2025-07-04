@@ -89,6 +89,11 @@ void XmlTestTools::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 
 OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttribute)
 {
+    return getXPath(pXmlDoc, pXPath, 1, 0, pAttribute);
+}
+
+OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const char*pXPath, int nNumNodes, int nPathIdx, const char* pAttribute)
+{
     CPPUNIT_ASSERT(pXmlDoc);
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, pXPath);
     OString docAndXPath = OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath;
@@ -96,10 +101,10 @@ OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const char* pXPa
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_MESSAGE(OString(docAndXPath + "' not found").getStr(), pXmlNodes);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(docAndXPath + "' number of nodes is incorrect").getStr(),
-                                 1, xmlXPathNodeSetGetLength(pXmlNodes));
+                                 nNumNodes, xmlXPathNodeSetGetLength(pXmlNodes));
     CPPUNIT_ASSERT(pAttribute);
     CPPUNIT_ASSERT(pAttribute[0]);
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[nPathIdx];
     xmlChar * prop = xmlGetProp(pXmlNode, BAD_CAST(pAttribute));
     OString sAttAbsent = docAndXPath + "' no attribute '" + pAttribute + "' exist";
     CPPUNIT_ASSERT_MESSAGE(sAttAbsent.getStr(), prop);
@@ -165,6 +170,16 @@ OUString XmlTestTools::getXPathContent(const xmlDocUniquePtr& pXmlDoc, const cha
 void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttribute, std::u16string_view rExpectedValue)
 {
     OUString aValue = getXPath(pXmlDoc, pXPath, pAttribute);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, attribute '" + pAttribute + "' of '" + pXPath + "' incorrect value.").getStr(),
+                                 rExpectedValue, std::u16string_view(aValue));
+}
+
+// Verify the given path and attribute, where the expected number of nodes with
+// the given path is nNumNodes and the desired node index is nPathIdx.
+void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const char*
+        pXPath, int nNumNodes, int nPathIdx, const char* pAttribute, std::u16string_view rExpectedValue)
+{
+    OUString aValue = getXPath(pXmlDoc, pXPath, nNumNodes, nPathIdx, pAttribute);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, attribute '" + pAttribute + "' of '" + pXPath + "' incorrect value.").getStr(),
                                  rExpectedValue, std::u16string_view(aValue));
 }

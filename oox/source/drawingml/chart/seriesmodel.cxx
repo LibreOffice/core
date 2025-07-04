@@ -112,6 +112,7 @@ SeriesModel::SeriesModel(bool bMSO2007Doc) :
     mnMarkerSize( 5 ),
     mnMarkerSymbol( XML_auto ),
     mnOrder( -1 ),
+    mnDataId(-1),
     mbBubble3d( !bMSO2007Doc ),
     mbInvertNeg( !bMSO2007Doc ),
     mbSmooth( !bMSO2007Doc )

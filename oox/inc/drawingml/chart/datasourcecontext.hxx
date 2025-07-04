@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_DATASOURCECONTEXT_HXX
 
 #include <memory>
+#include <oox/drawingml/chart/datasourcemodel.hxx>
 #include <drawingml/chart/chartcontextbase.hxx>
 
 class SvNumberFormatter;
@@ -84,6 +85,22 @@ public:
     virtual             ~DataSourceContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+};
+
+struct DataSourceCxModel;
+
+/** Handler for a chartex data source context (cx:chartData, cx:data elements).
+ */
+class DataSourceCxContext final : public ContextBase< DataSourceCxModel >
+{
+public:
+    explicit            DataSourceCxContext( ::oox::core::ContextHandler2Helper& rParent,
+            DataSourceCxModel& rModel);
+    virtual             ~DataSourceCxContext() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+
+    DataSourceCxModel::DataSourceMap *paCurSource;
 };
 
 

@@ -58,6 +58,24 @@ struct DataSourceModel
                         ~DataSourceModel();
 };
 
+enum class DataSourceType: sal_Int32;
+
+// Data source for chartex
+struct DataSourceCxModel
+{
+    // Same as definition in SeriesModel
+    typedef ModelMap< DataSourceType, DataSourceModel > DataSourceMap;
+    typedef ModelMap<sal_Int32, DataSourceMap> DataMap;
+
+    // Chartex data can have three levels of lists/maps:
+    // 1. Multiple data series, each with a <cx:data> tag and indexed by id.
+    // 2. Within a series, multiple sources ("val", "cat", etc.)
+    // 3. Within a source, multiple points, with corresponding index.
+    DataMap             maSourceMap; /// Data for chartex.
+
+    explicit            DataSourceCxModel() = default;
+};
+
 
 } // namespace oox::drawingml::chart
 

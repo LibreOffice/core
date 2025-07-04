@@ -21,6 +21,8 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_TYPEGROUPCONVERTER_HXX
 
 #include <drawingml/chart/converterbase.hxx>
+#include <oox/drawingml/chart/datasourcemodel.hxx>
+#include <drawingml/chart/seriesmodel.hxx>
 #include <com/sun/star/chart2/PieChartSubType.hpp>
 
 namespace com::sun::star {
@@ -166,6 +168,12 @@ public:
     void                convertPieExplosion( PropertySet& rPropSet, sal_Int32 nOoxExplosion ) const;
     /** Converts of-pie types */
     css::chart2::PieChartSubType convertOfPieType(sal_Int32 nOoxOfPieType ) const;
+    /** Move any internal data to the appropriate series.  In chartex the data
+       (if any is internal) is given outside the series, in a child element of
+       <cx:chartSpace>. Pre-2016 charts have the data inside the series, and
+       SeriesModel and subsequent handling reflects this. So this function gets
+       the data to the right place for processing. */
+    void                moveDataToSeries(DataSourceCxModel::DataMap& raDataMap);
 
 private:
     /** Inserts the passed series into the chart type. Adds additional properties to the series. */
