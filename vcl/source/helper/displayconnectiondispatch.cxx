@@ -30,7 +30,6 @@ using namespace com::sun::star::awt;
 
 DisplayConnectionDispatch::DisplayConnectionDispatch()
 {
-    m_ConnectionIdentifier = ImplGetSVData()->mpDefInst->GetConnectionIdentifier();
 }
 
 DisplayConnectionDispatch::~DisplayConnectionDispatch()
@@ -74,11 +73,6 @@ void DisplayConnectionDispatch::removeEventHandler(
     std::scoped_lock aGuard( m_aMutex );
 
     std::erase(m_aHandlers, handler);
-}
-
-OUString DisplayConnectionDispatch::getIdentifier()
-{
-    return m_ConnectionIdentifier;
 }
 
 bool DisplayConnectionDispatch::dispatchEvent(const void* pEvent)

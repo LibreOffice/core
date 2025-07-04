@@ -52,7 +52,6 @@ public:
 
     void addEventHandler(const rtl::Reference<DisplayEventHandler>& handler);
     void removeEventHandler(const rtl::Reference<DisplayEventHandler>& handler);
-    OUString getIdentifier();
 };
 
 }

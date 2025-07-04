@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <thread>
 
+#include <salinst.hxx>
 #include <unx/saldisp.hxx>
 
 #include <unistd.h>
@@ -342,9 +343,7 @@ void SelectionManager::initialize()
     if( m_pDisplay )
         return;
 
-    OUString aUDisplay;
-    if( m_xDisplayConnection.is() )
-        aUDisplay = m_xDisplayConnection->getIdentifier();
+    const OUString aUDisplay = ImplGetSVData()->mpDefInst->GetConnectionIdentifier();
 
     OString aDisplayName( OUStringToOString( aUDisplay, RTL_TEXTENCODING_ISO_8859_1 ) );
 
