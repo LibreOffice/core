@@ -179,7 +179,7 @@ public:
                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage);
     virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 
-    // methods for XDisplayConnection
+    // methods for DisplayConnectionDispatch
 
     void                    SetEventCallback( rtl::Reference< vcl::DisplayConnectionDispatch > const & pInstance )
         { m_pEventInst = pInstance; }
