@@ -19110,6 +19110,207 @@
      <table:table-cell table:style-name="ce31" table:number-columns-repeated="5"/>
      <table:table-cell table:number-columns-repeated="14"/>
     </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=LOOKUP([.K721]; {&quot;B&quot;;&quot;C&quot;;&quot;D&quot;}; {&quot;X&quot;|&quot;Y&quot;|&quot;Z&quot;})" office:value-type="string" office:string-value="Z" calcext:value-type="string">
+      <text:p>Z</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce67" office:value-type="string" calcext:value-type="string">
+      <text:p>Z</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A721]=[.B721]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A721])" office:value-type="string" office:string-value="=LOOKUP(K721; {&quot;B&quot;.&quot;C&quot;.&quot;D&quot;}; {&quot;X&quot;;&quot;Y&quot;;&quot;Z&quot;})" calcext:value-type="string">
+      <text:p>=LOOKUP(K721; {&quot;B&quot;.&quot;C&quot;.&quot;D&quot;}; {&quot;X&quot;;&quot;Y&quot;;&quot;Z&quot;})</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Search and result array need not have the same direction.</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce82" office:value-type="string" calcext:value-type="string">
+      <text:p>D</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="14"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=LOOKUP([.K721]; {&quot;B&quot;|&quot;C&quot;|&quot;D&quot;}; {&quot;X&quot;;&quot;Y&quot;;&quot;Z&quot;})" office:value-type="string" office:string-value="Z" calcext:value-type="string">
+      <text:p>Z</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce67" office:value-type="string" calcext:value-type="string">
+      <text:p>Z</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A722]=[.B722]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A722])" office:value-type="string" office:string-value="=LOOKUP(K721; {&quot;B&quot;;&quot;C&quot;;&quot;D&quot;}; {&quot;X&quot;.&quot;Y&quot;.&quot;Z&quot;})" calcext:value-type="string">
+      <text:p>=LOOKUP(K721; {&quot;B&quot;;&quot;C&quot;;&quot;D&quot;}; {&quot;X&quot;.&quot;Y&quot;.&quot;Z&quot;})</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="28"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+     <table:table-cell table:formula="of:=LOOKUP([.K723]; {&quot;B&quot;;&quot;C&quot;}; {&quot;X&quot;;&quot;Y&quot;;&quot;Z&quot;})" office:value-type="string" office:string-value="Y" calcext:value-type="string">
+      <text:p>Y</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Y</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A723]=[.B723]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A723])" office:value-type="string" office:string-value="=LOOKUP(K723; {&quot;B&quot;.&quot;C&quot;}; {&quot;X&quot;.&quot;Y&quot;.&quot;Z&quot;})" calcext:value-type="string">
+      <text:p>=LOOKUP(K723; {&quot;B&quot;.&quot;C&quot;}; {&quot;X&quot;.&quot;Y&quot;.&quot;Z&quot;})</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce48" office:value-type="string" calcext:value-type="string"><text:p>Search and result vector need not have the same size. If the index of the value found in the search vector is larger than the size of the result vector, the result vector is not extended. Instead the #N/A error is returned. That is different from the rule for cell ranges as parameter.</text:p><text:p>Different directions for search and result vector are allowed. Those cases are handled in file tdf167134_LOOKUP_inlineArray.ods</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>C</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=LOOKUP([.K724]; {&quot;B&quot;;&quot;C&quot;;&quot;D&quot;}; {&quot;X&quot;;&quot;Y&quot;})" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=ISERROR([.A724])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A724])" office:value-type="string" office:string-value="=LOOKUP(K724; {&quot;B&quot;.&quot;C&quot;.&quot;D&quot;}; {&quot;X&quot;.&quot;Y&quot;})" calcext:value-type="string">
+      <text:p>=LOOKUP(K724; {&quot;B&quot;.&quot;C&quot;.&quot;D&quot;}; {&quot;X&quot;.&quot;Y&quot;})</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>D</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro9">
+     <table:table-cell table:formula="of:=LOOKUP([.K725]; {1;3;&quot;B&quot;;&quot;C&quot;;&quot;D&quot;};{10;20;&quot;X&quot;;&quot;Y&quot;;&quot;Z&quot;})" office:value-type="string" office:string-value="Z" calcext:value-type="string">
+      <text:p>Z</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Z</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A725]=[.B725]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A725])" office:value-type="string" office:string-value="=LOOKUP(K725; {1.3.&quot;B&quot;.&quot;C&quot;.&quot;D&quot;};{10.20.&quot;X&quot;.&quot;Y&quot;.&quot;Z&quot;})" calcext:value-type="string">
+      <text:p>=LOOKUP(K725; {1.3.&quot;B&quot;.&quot;C&quot;.&quot;D&quot;};{10.20.&quot;X&quot;.&quot;Y&quot;.&quot;Z&quot;})</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce48" office:value-type="string" calcext:value-type="string">
+      <text:p>Generally, LOOKUP uses the index of the largest value from the search vector that is less or equal to the query value. Numbers must be sorted before strings in the search vector.</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>E</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=LOOKUP([.K726]; {1;3;&quot;B&quot;;&quot;C&quot;;&quot;D&quot;};{10;20;&quot;X&quot;;&quot;Y&quot;;&quot;Z&quot;})" office:value-type="float" office:value="10" calcext:value-type="float">
+      <text:p>10</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="10" calcext:value-type="float">
+      <text:p>10</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A726]=[.B726]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A726])" office:value-type="string" office:string-value="=LOOKUP(K726; {1.3.&quot;B&quot;.&quot;C&quot;.&quot;D&quot;};{10.20.&quot;X&quot;.&quot;Y&quot;.&quot;Z&quot;})" calcext:value-type="string">
+      <text:p>=LOOKUP(K726; {1.3.&quot;B&quot;.&quot;C&quot;.&quot;D&quot;};{10.20.&quot;X&quot;.&quot;Y&quot;.&quot;Z&quot;})</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro10">
+     <table:table-cell table:formula="of:=LOOKUP([.K727]; {1;2;&quot;B&quot;;&quot;C&quot;;&quot;D&quot;};{10;20;&quot;X&quot;;&quot;Y&quot;;&quot;Z&quot;})" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=ISERROR([.A727])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A727])" office:value-type="string" office:string-value="=LOOKUP(K727; {1.2.&quot;B&quot;.&quot;C&quot;.&quot;D&quot;};{10.20.&quot;X&quot;.&quot;Y&quot;.&quot;Z&quot;})" calcext:value-type="string">
+      <text:p>=LOOKUP(K727; {1.2.&quot;B&quot;.&quot;C&quot;.&quot;D&quot;};{10.20.&quot;X&quot;.&quot;Y&quot;.&quot;Z&quot;})</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce48" office:value-type="string" calcext:value-type="string">
+      <text:p>Only if the query value is a string and the found value in the search vector would be a number following the above rule, then a #N/A error is returned.</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>A</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro11">
+     <table:table-cell table:formula="of:=LOOKUP([.K728];{1;2;3;4|10;20;30;40|100;200;300;400})" office:value-type="float" office:value="200" calcext:value-type="float">
+      <text:p>200</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="200" calcext:value-type="float">
+      <text:p>200</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A728]=[.B728]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A728])" office:value-type="string" office:string-value="=LOOKUP(K728;{1.2.3.4;10.20.30.40;100.200.300.400})" calcext:value-type="string">
+      <text:p>=LOOKUP(K728;{1.2.3.4;10.20.30.40;100.200.300.400})</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce48" office:value-type="string" calcext:value-type="string"><text:p>When the LOOKUP function is used with two parameters, then a horizontal search direction is used if the count of rows is less than the count of columns. Otherwise the search direction is vertical. The first column/row is used as search vector, the last column/row is used as result vector.</text:p><text:p>In the third example, the value 4 in the first column is the largest value in the search vector that is smaller or equal to the query value 5. Thus the index 2 is used for the result vector. The value 6 in the last column is the value at index 2 in the result vector. </text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=LOOKUP([.K729];{1;10;100|2;20;200|3;30;300|4;40;400})" office:value-type="float" office:value="200" calcext:value-type="float">
+      <text:p>200</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="200" calcext:value-type="float">
+      <text:p>200</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A729]=[.B729]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A729])" office:value-type="string" office:string-value="=LOOKUP(K729;{1.10.100;2.20.200;3.30.300;4.40.400})" calcext:value-type="string">
+      <text:p>=LOOKUP(K729;{1.10.100;2.20.200;3.30.300;4.40.400})</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=LOOKUP([.K730];{1;2;3|4;5;6|7;8;9})" office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A730]=[.B730]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A730])" office:value-type="string" office:string-value="=LOOKUP(K730;{1.2.3;4.5.6;7.8.9})" calcext:value-type="string">
+      <text:p>=LOOKUP(K730;{1.2.3;4.5.6;7.8.9})</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
+    </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce31" table:number-columns-repeated="5"/>

@@ -65,7 +65,6 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_cache_test \
 	CppunitTest_sc_parallelism \
     CppunitTest_sc_shapetest \
-    CppunitTest_sc_inlinearray \
 ))
 endif
 
