@@ -325,7 +325,7 @@ void SelectionManager::initialize()
     {
         /*
          *  We will get the XEvents of the vcl event loop from the display connection by
-         *  registering us as XEventHandler on it.
+         *  registering ourselves as an event handler for it.
          *
          *  implementor's note:
          *  FIXME:
