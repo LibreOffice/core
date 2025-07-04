@@ -257,6 +257,9 @@ IMPL_STATIC_LINK_NOARG(SdNavigatorWin, MouseReleaseHdl, const MouseEvent&, bool)
 
 IMPL_LINK(SdNavigatorWin, CommandHdl, const CommandEvent&, rCEvt, bool)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return false;
+
     if (NavDocInfo* pInfo = GetDocInfo(); !pInfo || !pInfo->IsActive())
         return false;
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)

@@ -1617,6 +1617,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
+    if (comphelper::LibreOfficeKit::isActive())
+        return false;
+
     grab_focus();
 
     // select clicked entry or limit selection to root entry if needed
