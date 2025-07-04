@@ -569,6 +569,9 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/html/svxcss1 \
     sw/source/filter/html/swhtml \
     sw/source/filter/html/wrthtml \
+    sw/source/filter/md/mdcallbcks \
+    sw/source/filter/md/mdnum \
+    sw/source/filter/md/mdtab \
     sw/source/filter/md/swmd \
     sw/source/filter/md/wrtmd \
     sw/source/filter/writer/writer \
