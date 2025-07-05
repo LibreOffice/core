@@ -369,20 +369,20 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
 
 void DrawCommandDispatch::describeSupportedFeatures()
 {
-    implDescribeSupportedFeature( ".uno:SelectObject",      ChartCommandID::DrawObjectSelect,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Line",              ChartCommandID::DrawLine,               CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:LineArrowEnd",      ChartCommandID::DrawLineArrowEnd,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Rect",              ChartCommandID::DrawRect,               CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Ellipse",           ChartCommandID::DrawEllipse,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Freeline_Unfilled", ChartCommandID::DrawFreelineNoFill,    CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawText",          ChartCommandID::DrawText,               CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawCaption",       ChartCommandID::DrawCaption,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes",       ChartCommandID::DrawToolboxCsBasic,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes",      ChartCommandID::DrawToolboxCsSymbol,       CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes",       ChartCommandID::DrawToolboxCsArrow,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes",   ChartCommandID::DrawToolboxCsFlowchart,    CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes",     ChartCommandID::DrawToolboxCsCallout,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes",        ChartCommandID::DrawToolboxCsStar,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SelectObject"_ustr,      ChartCommandID::DrawObjectSelect,       CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:Line"_ustr,              ChartCommandID::DrawLine,               CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:LineArrowEnd"_ustr,      ChartCommandID::DrawLineArrowEnd,       CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:Rect"_ustr,              ChartCommandID::DrawRect,               CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:Ellipse"_ustr,           ChartCommandID::DrawEllipse,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:Freeline_Unfilled"_ustr, ChartCommandID::DrawFreelineNoFill,     CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:DrawText"_ustr,          ChartCommandID::DrawText,               CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:DrawCaption"_ustr,       ChartCommandID::DrawCaption,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:BasicShapes"_ustr,       ChartCommandID::DrawToolboxCsBasic,     CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:SymbolShapes"_ustr,      ChartCommandID::DrawToolboxCsSymbol,    CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:ArrowShapes"_ustr,       ChartCommandID::DrawToolboxCsArrow,     CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:FlowChartShapes"_ustr,   ChartCommandID::DrawToolboxCsFlowchart, CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:CalloutShapes"_ustr,     ChartCommandID::DrawToolboxCsCallout,   CommandGroup::INSERT );
+    implDescribeSupportedFeature( u".uno:StarShapes"_ustr,        ChartCommandID::DrawToolboxCsStar,      CommandGroup::INSERT );
 }
 
 void DrawCommandDispatch::setInsertObj(SdrObjKind eObj)
