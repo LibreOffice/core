@@ -160,7 +160,7 @@ ToxTextGeneratorTest::ChapterNumberWithoutTextIsGeneratedForNoprepstTitle()
     ttg.GetChapterField().m_State.sTitle = "TITLE";
 
     SwFormToken token(TOKEN_CHAPTER_INFO);
-    token.nChapterFormat = CF_NUM_NOPREPST_TITLE;
+    token.nChapterFormat = SwChapterFormat::NumberNoPrePostAndTitle;
 
     OUString expected(u"1"_ustr);
     OUString actual = ttg.GenerateTextForChapterToken(token, nullptr, nullptr, nullptr);
@@ -168,7 +168,7 @@ ToxTextGeneratorTest::ChapterNumberWithoutTextIsGeneratedForNoprepstTitle()
 
     // we cannot mock the pre- and suffix generation in the chapterfield. We just test that sNumber and
     // sTitle are used and hope that the pre- and suffix addition works.
-    token.nChapterFormat = CF_NUMBER;
+    token.nChapterFormat = SwChapterFormat::Number;
     expected = ttg.GenerateTextForChapterToken(token, nullptr, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
@@ -186,7 +186,7 @@ ToxTextGeneratorTest::ChapterNumberWithTitleIsGeneratedForNumberNoPrepst()
     ttg.GetChapterField().m_State.sTitle = "myTitle";
 
     SwFormToken token(TOKEN_CHAPTER_INFO);
-    token.nChapterFormat = CF_NUMBER_NOPREPST;
+    token.nChapterFormat = SwChapterFormat::NumberNoPrePost;
 
     OUString expected(u"5 myTitle"_ustr);
     OUString actual = ttg.GenerateTextForChapterToken(token, nullptr, nullptr, nullptr);
@@ -194,7 +194,7 @@ ToxTextGeneratorTest::ChapterNumberWithTitleIsGeneratedForNumberNoPrepst()
 
     // we cannot mock the pre- and suffix generation in the chapterfield. We just test that sNumber and
     // sTitle are used and hope that the pre- and suffix addition works.
-    token.nChapterFormat = CF_NUM_TITLE;
+    token.nChapterFormat = SwChapterFormat::NumberAndTitle;
     expected = ttg.GenerateTextForChapterToken(token, nullptr, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }

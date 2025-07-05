@@ -2726,24 +2726,23 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
                 switch(nFormat)
                 {
                     case text::ChapterFormat::NUMBER:
-                        nFormat = CF_NUMBER;
+                        aToken.nChapterFormat = SwChapterFormat::Number;
                     break;
                     case text::ChapterFormat::NAME:
-                        nFormat = CF_TITLE;
+                        aToken.nChapterFormat = SwChapterFormat::Title;
                     break;
                     case text::ChapterFormat::NAME_NUMBER:
-                        nFormat = CF_NUM_TITLE;
+                        aToken.nChapterFormat = SwChapterFormat::NumberAndTitle;
                     break;
                     case text::ChapterFormat::NO_PREFIX_SUFFIX:
-                        nFormat = CF_NUMBER_NOPREPST;
+                        aToken.nChapterFormat = SwChapterFormat::NumberNoPrePost;
                     break;
                     case text::ChapterFormat::DIGIT:
-                        nFormat = CF_NUM_NOPREPST_TITLE;
+                        aToken.nChapterFormat = SwChapterFormat::NumberNoPrePostAndTitle;
                     break;
                     default:
                         throw lang::IllegalArgumentException();
                 }
-                aToken.nChapterFormat = nFormat;
             }
 // #i53420#
             else if ( pProperties[j].Name == "ChapterLevel" )
@@ -2792,8 +2791,8 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
         {
             switch(aToken.nChapterFormat)
             {
-            case CF_NUMBER:
-            case CF_NUM_NOPREPST_TITLE:
+            case SwChapterFormat::Number:
+            case SwChapterFormat::NumberNoPrePostAndTitle:
                 break;
             default:
                 throw lang::IllegalArgumentException();
@@ -2865,7 +2864,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 sal_Int32 nCurrentElement = 0;
 
                 // check for default value
-                if (aToken.nChapterFormat != CF_NUMBER)
+                if (aToken.nChapterFormat != SwChapterFormat::Number)
                 {
                     nElements++;//we need the element
                 }
@@ -2884,7 +2883,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 
                 pArr[nCurrentElement].Name = "CharacterStyleName";
                 pArr[nCurrentElement++].Value <<= aProgCharStyle.toString();
-                if( aToken.nChapterFormat != CF_NUMBER )
+                if( aToken.nChapterFormat != SwChapterFormat::Number )
                 {
                     pArr[nCurrentElement].Name = "ChapterFormat";
                     sal_Int16 nVal;
@@ -2894,10 +2893,10 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                     switch(aToken.nChapterFormat)
                     {
                     default:
-                    case CF_NUMBER:
+                    case SwChapterFormat::Number:
                         nVal = text::ChapterFormat::NUMBER;
                     break;
-                    case CF_NUM_NOPREPST_TITLE:
+                    case SwChapterFormat::NumberNoPrePostAndTitle:
                         nVal = text::ChapterFormat::DIGIT;
                     break;
                     }
@@ -2997,19 +2996,19 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 sal_Int16 nVal = text::ChapterFormat::NUMBER;
                 switch(aToken.nChapterFormat)
                 {
-                    case CF_NUMBER:
+                    case SwChapterFormat::Number:
                         nVal = text::ChapterFormat::NUMBER;
                     break;
-                    case CF_TITLE:
+                    case SwChapterFormat::Title:
                         nVal = text::ChapterFormat::NAME;
                     break;
-                    case CF_NUM_TITLE:
+                    case SwChapterFormat::NumberAndTitle:
                         nVal = text::ChapterFormat::NAME_NUMBER;
                     break;
-                    case CF_NUMBER_NOPREPST:
+                    case SwChapterFormat::NumberNoPrePost:
                         nVal = text::ChapterFormat::NO_PREFIX_SUFFIX;
                     break;
-                    case CF_NUM_NOPREPST_TITLE:
+                    case SwChapterFormat::NumberNoPrePostAndTitle:
                         nVal = text::ChapterFormat::DIGIT;
                     break;
                 }

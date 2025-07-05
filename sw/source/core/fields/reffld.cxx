@@ -712,7 +712,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
         if (pFrame)
         {
             SwChapterFieldType aFieldTyp;
-            SwChapterField aField(&aFieldTyp, 0);
+            SwChapterField aField(&aFieldTyp, SwChapterFormat::Number);
             aField.SetLevel(MAXLEVEL - 1);
             aField.ChangeExpansion(*pFrame, pTextNd, true);
 

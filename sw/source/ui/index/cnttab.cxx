@@ -1787,10 +1787,10 @@ public:
         {
         default:
         case 0:
-            m_aFormToken.nChapterFormat = CF_NUMBER;
+            m_aFormToken.nChapterFormat = SwChapterFormat::Number;
             break;
         case 1:
-            m_aFormToken.nChapterFormat = CF_NUM_NOPREPST_TITLE;
+            m_aFormToken.nChapterFormat = SwChapterFormat::NumberNoPrePostAndTitle;
             break;
         }
     }
@@ -1800,13 +1800,13 @@ public:
         {
         default:
         case 0:
-            m_aFormToken.nChapterFormat = CF_NUM_NOPREPST_TITLE;
+            m_aFormToken.nChapterFormat = SwChapterFormat::NumberNoPrePostAndTitle;
             break;
         case 1:
-            m_aFormToken.nChapterFormat = CF_TITLE;
+            m_aFormToken.nChapterFormat = SwChapterFormat::Title;
             break;
         case 2:
-            m_aFormToken.nChapterFormat = CF_NUMBER_NOPREPST;
+            m_aFormToken.nChapterFormat = SwChapterFormat::NumberNoPrePost;
             break;
         }
     }
@@ -2383,7 +2383,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, weld::Button&, rBtn, void)
 {
     FormTokenType eTokenType = TOKEN_ENTRY_NO;
     OUString sCharStyle;
-    sal_uInt16  nChapterFormat = CF_NUMBER; // i89791
+    SwChapterFormat nChapterFormat = SwChapterFormat::Number; // i89791
     if (&rBtn == m_xEntryNoPB.get())
     {
         eTokenType = TOKEN_ENTRY_NO;
@@ -2402,7 +2402,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, weld::Button&, rBtn, void)
     else if (&rBtn == m_xChapterInfoPB.get())
     {
         eTokenType = TOKEN_CHAPTER_INFO;
-        nChapterFormat = CF_NUM_NOPREPST_TITLE; // i89791
+        nChapterFormat = SwChapterFormat::NumberNoPrePostAndTitle; // i89791
     }
     else if (&rBtn == m_xPageNoPB.get())
     {
@@ -2522,13 +2522,13 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
         default:
             m_xChapterEntryLB->set_active(-1);//to alert the user
             break;
-        case CF_NUM_NOPREPST_TITLE:
+        case SwChapterFormat::NumberNoPrePostAndTitle:
             m_xChapterEntryLB->set_active(0);
             break;
-        case CF_TITLE:
+        case SwChapterFormat::Title:
             m_xChapterEntryLB->set_active(1);
            break;
-        case CF_NUMBER_NOPREPST:
+        case SwChapterFormat::NumberNoPrePost:
             m_xChapterEntryLB->set_active(2);
             break;
         }
@@ -2542,7 +2542,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
     {
         m_xEntryOutlineLevelNF->set_value(rToken.nOutlineLevel);
         const sal_uInt16 nFormat =
-            rToken.nChapterFormat == CF_NUM_NOPREPST_TITLE ? 1 : 0;
+            rToken.nChapterFormat == SwChapterFormat::NumberNoPrePostAndTitle ? 1 : 0;
         m_xNumberFormatLB->set_active(nFormat);
     }
 

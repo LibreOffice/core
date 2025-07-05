@@ -25,14 +25,13 @@ class SwContentNode;
 class SwTextNode;
 class SwRootFrame;
 
-enum SwChapterFormat
+enum class SwChapterFormat : sal_uInt16
 {
-    CF_BEGIN,
-    CF_NUMBER = CF_BEGIN,       ///< only the chapter number
-    CF_TITLE,                   ///< only the title
-    CF_NUM_TITLE,               ///< number and title
-    CF_NUMBER_NOPREPST,         ///< only chapter number without post-/prefix
-    CF_NUM_NOPREPST_TITLE,      ///< chapter number without post-/prefix and title
+    Number,                  ///< only the chapter number
+    Title,                   ///< only the title
+    NumberAndTitle,          ///< number and title
+    NumberNoPrePost,         ///< only chapter number without post-/prefix
+    NumberNoPrePostAndTitle  ///< chapter number without post-/prefix and title
 };
 
 class SAL_DLLPUBLIC_RTTI SwChapterFieldType final : public SwFieldType
@@ -61,16 +60,16 @@ class SW_DLLPUBLIC SwChapterField final : public SwField
     };
     State m_State;
     State m_StateRLHidden;
-    sal_uInt32 m_nFormat;
+    SwChapterFormat m_nFormat;
 
     virtual OUString ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
-    SwChapterField(SwChapterFieldType*, sal_uInt32 nFormat = 0);
+    SwChapterField(SwChapterFieldType*, SwChapterFormat nFormat = SwChapterFormat::Number);
 
-    sal_uInt32 GetFormat() const { return m_nFormat; }
-    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
+    SwChapterFormat GetFormat() const { return m_nFormat; }
+    void SetFormat(SwChapterFormat n) { m_nFormat = n; }
 
     // #i53420#
     void ChangeExpansion( const SwFrame&,

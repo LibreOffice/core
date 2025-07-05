@@ -997,7 +997,7 @@ bool SwFieldMgr::InsertField(
             sal_uInt16 nByte = o3tl::narrowing<sal_uInt16>(rData.m_sPar2.toInt32());
             SwChapterFieldType* pTyp =
                 static_cast<SwChapterFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::Chapter) );
-            pField.reset(new SwChapterField(pTyp, nFormatId));
+            pField.reset(new SwChapterField(pTyp, static_cast<SwChapterFormat>(nFormatId)));
             nByte = std::max(sal_uInt16(1), nByte);
             nByte = std::min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;

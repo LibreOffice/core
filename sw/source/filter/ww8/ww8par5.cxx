@@ -1577,7 +1577,7 @@ eF_ResT SwWW8ImplReader::Read_F_Styleref(WW8FieldDesc*, OUString& rString)
         return eF_ResT::TAGIGN;
 
     SwFieldType* pFieldType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Chapter);
-    SwChapterField aField(static_cast<SwChapterFieldType*>(pFieldType), CF_TITLE);
+    SwChapterField aField(static_cast<SwChapterFieldType*>(pFieldType), SwChapterFormat::Title);
     aField.SetLevel(nResult - 1);
     m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
 

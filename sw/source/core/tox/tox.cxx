@@ -732,7 +732,7 @@ OUString SwFormToken::GetString() const
         case TOKEN_CHAPTER_INFO:
         case TOKEN_ENTRY_NO:
             // add also maximum permitted level
-            sData += OUString::number( nChapterFormat ) + ","
+            sData += OUString::number( static_cast<sal_uInt16>(nChapterFormat) ) + ","
                   +  OUString::number( nOutlineLevel );
             break;
         case TOKEN_TEXT:
@@ -882,7 +882,7 @@ lcl_BuildToken(std::u16string_view sPattern, size_t & nCurPatternPos)
     case TOKEN_ENTRY_NO:
         sTmp = o3tl::getToken(sToken, 0, ',', nIdx ); // token 2
         if( !sTmp.empty() )
-            eRet.nChapterFormat = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sTmp));
+            eRet.nChapterFormat = static_cast<SwChapterFormat>(o3tl::toInt32(sTmp));
         sTmp = o3tl::getToken(sToken, 0, ',', nIdx ); // token 3
         if( !sTmp.empty() )
             eRet.nOutlineLevel = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sTmp)); //the maximum outline level to examine

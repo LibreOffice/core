@@ -154,12 +154,12 @@ ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, c
     //---> #i89791#
     // continue to support CF_NUMBER and CF_NUM_TITLE in order to handle ODF 1.0/1.1 written by OOo 3.x
     // in the same way as OOo 2.x would handle them.
-    if (CF_NUM_NOPREPST_TITLE == chapterToken.nChapterFormat || CF_NUMBER == chapterToken.nChapterFormat) {
+    if (SwChapterFormat::NumberNoPrePostAndTitle == chapterToken.nChapterFormat || SwChapterFormat::Number == chapterToken.nChapterFormat) {
         retval += aField.GetNumber(pLayout); // get the string number without pre/postfix
     }
-    else if (CF_NUMBER_NOPREPST == chapterToken.nChapterFormat || CF_NUM_TITLE == chapterToken.nChapterFormat) {
+    else if (SwChapterFormat::NumberNoPrePost == chapterToken.nChapterFormat || SwChapterFormat::NumberAndTitle == chapterToken.nChapterFormat) {
         retval += aField.GetNumber(pLayout) + " " + aField.GetTitle(pLayout);
-    } else if (CF_TITLE == chapterToken.nChapterFormat) {
+    } else if (SwChapterFormat::Title == chapterToken.nChapterFormat) {
         retval += aField.GetTitle(pLayout);
     }
     return retval;
@@ -205,7 +205,7 @@ ToxTextGenerator::GenerateText(SwDoc& rDoc,
                 // is the entry text: it can also be e.g. a tab, or the entry number can be used
                 // in page number area like "2-15" for chapter 2, page 15.
                 rText += GetNumStringOfFirstNode(rBase,
-                    aToken.nChapterFormat == CF_NUMBER,
+                    aToken.nChapterFormat == SwChapterFormat::Number,
                     static_cast<sal_uInt8>(aToken.nOutlineLevel - 1), pLayout,
                     i < aPattern.size() - 1 && aPattern[i + 1].eTokenType == TOKEN_ENTRY_TEXT);
                 break;

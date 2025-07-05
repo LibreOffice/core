@@ -1465,7 +1465,7 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Chapter);
                 SwChapterField *const pChapterField = new SwChapterField(
                         static_cast<SwChapterFieldType*>(pFieldType),
-                        m_pImpl->m_pProps->nUSHORT1);
+                        static_cast<SwChapterFormat>(m_pImpl->m_pProps->nUSHORT1));
                 xField.reset(pChapterField);
                 pChapterField->SetLevel(m_pImpl->m_pProps->nByte1);
                 uno::Any aVal;

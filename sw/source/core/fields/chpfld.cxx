@@ -71,7 +71,7 @@ std::unique_ptr<SwFieldType> SwChapterFieldType::Copy() const
 
 // chapter field
 
-SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFormat)
+SwChapterField::SwChapterField(SwChapterFieldType* pTyp, SwChapterFormat nFormat)
     : SwField(pTyp),
       m_nFormat(nFormat)
 {
@@ -107,14 +107,15 @@ OUString SwChapterField::ExpandImpl(SwRootFrame const*const pLayout) const
     State const& rState(pLayout && pLayout->IsHideRedlines() ? m_StateRLHidden : m_State);
     switch( GetFormat() )
     {
-        case CF_TITLE:
+        case SwChapterFormat::Title:
             return rState.sTitle;
-        case CF_NUMBER:
+        case SwChapterFormat::Number:
             return rState.sPre + rState.sNumber + rState.sPost;
-        case CF_NUM_TITLE:
+        case SwChapterFormat::NumberAndTitle:
             return rState.sPre + rState.sNumber + rState.sPost + rState.sLabelFollowedBy + rState.sTitle;
-        case CF_NUM_NOPREPST_TITLE:
+        case SwChapterFormat::NumberNoPrePostAndTitle:
             return rState.sNumber + rState.sLabelFollowedBy + rState.sTitle;
+        default: break;
     }
     // CF_NUMBER_NOPREPST
     return rState.sNumber;
@@ -241,16 +242,21 @@ bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             sal_Int16 nRet;
             switch( GetFormat() )
             {
-                case CF_NUMBER: nRet = text::ChapterFormat::NUMBER; break;
-                case CF_TITLE:  nRet = text::ChapterFormat::NAME; break;
-                case CF_NUMBER_NOPREPST:
+                case SwChapterFormat::Number:
+                    nRet = text::ChapterFormat::NUMBER;
+                    break;
+                case SwChapterFormat::Title:
+                    nRet = text::ChapterFormat::NAME;
+                    break;
+                case SwChapterFormat::NumberNoPrePost:
                     nRet = text::ChapterFormat::DIGIT;
-                break;
-                case CF_NUM_NOPREPST_TITLE:
+                    break;
+                case SwChapterFormat::NumberNoPrePostAndTitle:
                     nRet = text::ChapterFormat::NO_PREFIX_SUFFIX;
-                break;
-                case CF_NUM_TITLE:
-                default:        nRet = text::ChapterFormat::NAME_NUMBER;
+                    break;
+                case SwChapterFormat::NumberAndTitle:
+                default:
+                    nRet = text::ChapterFormat::NAME_NUMBER;
             }
             rAny <<= nRet;
         }
@@ -288,19 +294,19 @@ bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             switch( nVal )
             {
                 case text::ChapterFormat::NAME:
-                    m_nFormat = CF_TITLE;
+                    m_nFormat = SwChapterFormat::Title;
                     break;
                 case text::ChapterFormat::NUMBER:
-                    m_nFormat = CF_NUMBER;
+                    m_nFormat = SwChapterFormat::Number;
                     break;
                 case text::ChapterFormat::NO_PREFIX_SUFFIX:
-                    m_nFormat = CF_NUM_NOPREPST_TITLE;
+                    m_nFormat = SwChapterFormat::NumberNoPrePostAndTitle;
                     break;
                 case text::ChapterFormat::DIGIT:
-                    m_nFormat = CF_NUMBER_NOPREPST;
+                    m_nFormat = SwChapterFormat::NumberNoPrePost;
                     break;
                 default:
-                    m_nFormat = CF_NUM_TITLE;
+                    m_nFormat = SwChapterFormat::NumberAndTitle;
             }
         }
         break;

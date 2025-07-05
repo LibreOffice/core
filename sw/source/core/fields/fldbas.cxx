@@ -337,7 +337,7 @@ sal_uInt32 SwField::GetUntypedFormat() const
     case SwFieldIds::TemplateName:
         return static_cast<const SwTemplNameField*>(this)->GetFormat();
     case SwFieldIds::Chapter:
-        return static_cast<const SwChapterField*>(this)->GetFormat();
+        return static_cast<sal_uInt32>(static_cast<const SwChapterField*>(this)->GetFormat());
     case SwFieldIds::Filename:
         return static_cast<const SwFileNameField*>(this)->GetFormat();
     case SwFieldIds::Author:
@@ -378,7 +378,7 @@ void SwField::SetUntypedFormat(sal_uInt32 n)
         static_cast<SwTemplNameField*>(this)->SetFormat(n);
         return;
     case SwFieldIds::Chapter:
-        static_cast<SwChapterField*>(this)->SetFormat(n);
+        static_cast<SwChapterField*>(this)->SetFormat(static_cast<SwChapterFormat>(n));
         return;
     case SwFieldIds::Filename:
         static_cast<SwFileNameField*>(this)->SetFormat(n);

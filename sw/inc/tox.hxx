@@ -36,6 +36,7 @@
 #include "hints.hxx"
 #include "swtypes.hxx"
 #include "toxe.hxx"
+#include "chpfld.hxx"
 
 class SwTOXType;
 class SwTOXMark;
@@ -249,7 +250,7 @@ struct SW_DLLPUBLIC SwFormToken
     FormTokenType   eTokenType;
     sal_uInt16          nPoolId;
     SvxTabAdjust    eTabAlign;
-    sal_uInt16          nChapterFormat;     //SwChapterFormat;
+    SwChapterFormat     nChapterFormat;     //SwChapterFormat;
     sal_uInt16          nOutlineLevel;//the maximum permitted outline level in numbering
     sal_uInt16          nAuthorityField;    //enum ToxAuthorityField
     sal_Unicode     cTabFillChar;
@@ -262,7 +263,7 @@ struct SW_DLLPUBLIC SwFormToken
         eTokenType(eType),
         nPoolId(USHRT_MAX),
         eTabAlign( SvxTabAdjust::Left ),
-        nChapterFormat(0 /*CF_NUMBER*/),
+        nChapterFormat(SwChapterFormat::Number),
         nOutlineLevel(MAXLEVEL),   //default to maximum outline level
         nAuthorityField(0 /*AUTH_FIELD_IDENTIFIER*/),
         cTabFillChar(' '),
