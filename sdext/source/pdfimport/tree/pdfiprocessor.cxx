@@ -458,7 +458,7 @@ void PDFIProcessor::strokePath( const uno::Reference< rendering::XPolyPolygon2D 
     if( aCurClip.count() ) {
         aPoly = basegfx::utils::clipPolyPolygonOnPolyPolygon( aPoly, aCurClip,
                     true, /* bInside, keep parts inside the clip */
-                    true /* bStroke, stroked */ );
+                    !aPoly.isClosed() /* bStroke */ );
     }
 
     PolyPolyElement* pPoly = ElementFactory::createPolyPolyElement(
