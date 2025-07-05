@@ -613,7 +613,7 @@ void SwTextField::ExpandTextField(const bool bForceNotify) const
           // Page count fields to not use aExpand during formatting,
           // therefore an invalidation of the text frame has to be triggered even if aNewExpand == aExpand:
           && (SwFieldIds::DocStat != nWhich
-              || DS_PAGE != static_cast<const SwDocStatField*>(pField)->GetSubType())
+              || SwDocStatSubType::Page != static_cast<const SwDocStatField*>(pField)->GetSubType())
           && (SwFieldIds::GetExp != nWhich
               || static_cast<const SwGetExpField*>(pField)->IsInBodyText());
 

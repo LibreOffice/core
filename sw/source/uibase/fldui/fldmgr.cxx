@@ -1044,7 +1044,7 @@ bool SwFieldMgr::InsertField(
         {
             SwDocStatFieldType* pTyp =
                 static_cast<SwDocStatFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::DocStat) );
-            pField.reset(new SwDocStatField(pTyp, nSubType, static_cast<SvxNumType>(nFormatId)));
+            pField.reset(new SwDocStatField(pTyp, static_cast<SwDocStatSubType>(nSubType), static_cast<SvxNumType>(nFormatId)));
             break;
         }
 

@@ -1981,10 +1981,10 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, OUString &rStr)
 
 eF_ResT SwWW8ImplReader::Read_F_Num( WW8FieldDesc* pF, OUString& rStr )
 {
-    sal_uInt16 nSub = DS_PAGE;                  // page number
+    SwDocStatSubType nSub = SwDocStatSubType::Page;                  // page number
     switch ( pF->nId ){
-        case 27: nSub = DS_WORD; break;         // number of words
-        case 28: nSub = DS_CHAR; break;         // number of characters
+        case 27: nSub = SwDocStatSubType::Word; break;         // number of words
+        case 28: nSub = SwDocStatSubType::Character; break;         // number of characters
     }
     SwDocStatField aField( static_cast<SwDocStatFieldType*>(
                          m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DocStat )), nSub,

@@ -237,16 +237,16 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
             {
                 auto pDocStatField = static_cast<const SwDocStatField*>(pField);
                 pTypeStr = OOO_STRING_SW_HTML_FT_docstat;
-                sal_uInt16 nSubType = pDocStatField->GetSubType();
+                SwDocStatSubType nSubType = pDocStatField->GetSubType();
                 switch( nSubType )
                 {
-                    case DS_PAGE:       pSubStr = OOO_STRING_SW_HTML_FS_page;   break;
-                    case DS_PARA:       pSubStr = OOO_STRING_SW_HTML_FS_para;   break;
-                    case DS_WORD:       pSubStr = OOO_STRING_SW_HTML_FS_word;   break;
-                    case DS_CHAR:       pSubStr = OOO_STRING_SW_HTML_FS_char;   break;
-                    case DS_TBL:        pSubStr = OOO_STRING_SW_HTML_FS_tbl;    break;
-                    case DS_GRF:        pSubStr = OOO_STRING_SW_HTML_FS_grf;    break;
-                    case DS_OLE:        pSubStr = OOO_STRING_SW_HTML_FS_ole;    break;
+                    case SwDocStatSubType::Page:       pSubStr = OOO_STRING_SW_HTML_FS_page;   break;
+                    case SwDocStatSubType::Paragraph:       pSubStr = OOO_STRING_SW_HTML_FS_para;   break;
+                    case SwDocStatSubType::Word:       pSubStr = OOO_STRING_SW_HTML_FS_word;   break;
+                    case SwDocStatSubType::Character:       pSubStr = OOO_STRING_SW_HTML_FS_char;   break;
+                    case SwDocStatSubType::Table:        pSubStr = OOO_STRING_SW_HTML_FS_tbl;    break;
+                    case SwDocStatSubType::Graphic:        pSubStr = OOO_STRING_SW_HTML_FS_grf;    break;
+                    case SwDocStatSubType::OLE:        pSubStr = OOO_STRING_SW_HTML_FS_ole;    break;
                     default:            pTypeStr = nullptr;               break;
                 }
                 pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(pDocStatField->GetFormat()) );

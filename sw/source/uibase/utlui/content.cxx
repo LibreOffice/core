@@ -781,7 +781,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         SwFieldMgr(m_pWrtShell).GetSubTypes(SwFieldTypesEnum::DocumentStatistics,
                                                             aDocumentStatisticsSubTypesList);
                     OUString sSubType;
-                    sal_uInt16 nSubStype = static_cast<const SwDocStatField*>(pField)->GetSubType();
+                    sal_uInt16 nSubStype = static_cast<sal_uInt16>(static_cast<const SwDocStatField*>(pField)->GetSubType());
                     if (nSubStype < aDocumentStatisticsSubTypesList.size())
                         sSubType = u" - " + aDocumentStatisticsSubTypesList[nSubStype];
                     sText = pField->GetDescription() + u" - " + pField->GetFieldName() + sSubType +

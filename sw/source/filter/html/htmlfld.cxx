@@ -178,13 +178,13 @@ HTMLOptionEnum<sal_uInt16> const aHTMLDocInfoFieldFormatTable[] =
 
 HTMLOptionEnum<SwDocStatSubType> const aHTMLDocStatFieldSubTable[] =
 {
-    { OOO_STRING_SW_HTML_FS_page,    DS_PAGE },
-    { OOO_STRING_SW_HTML_FS_para,    DS_PARA },
-    { OOO_STRING_SW_HTML_FS_word,    DS_WORD },
-    { OOO_STRING_SW_HTML_FS_char,    DS_CHAR },
-    { OOO_STRING_SW_HTML_FS_tbl,     DS_TBL },
-    { OOO_STRING_SW_HTML_FS_grf,     DS_GRF },
-    { OOO_STRING_SW_HTML_FS_ole,     DS_OLE },
+    { OOO_STRING_SW_HTML_FS_page,    SwDocStatSubType::Page },
+    { OOO_STRING_SW_HTML_FS_para,    SwDocStatSubType::Paragraph },
+    { OOO_STRING_SW_HTML_FS_word,    SwDocStatSubType::Word },
+    { OOO_STRING_SW_HTML_FS_char,    SwDocStatSubType::Character },
+    { OOO_STRING_SW_HTML_FS_tbl,     SwDocStatSubType::Table },
+    { OOO_STRING_SW_HTML_FS_grf,     SwDocStatSubType::Graphic },
+    { OOO_STRING_SW_HTML_FS_ole,     SwDocStatSubType::OLE },
     { nullptr,                       SwDocStatSubType(0) }
 };
 
@@ -498,7 +498,7 @@ void SwHTMLParser::NewField()
                 if( pFormatOption )
                     pFormatOption->GetEnum( nFormat, aHTMLPageNumFieldFormatTable );
                 xNewField.reset(new SwDocStatField(static_cast<SwDocStatFieldType*>(pType), nSub, nFormat));
-                m_bUpdateDocStat |= (DS_PAGE != nSub);
+                m_bUpdateDocStat |= (SwDocStatSubType::Page != nSub);
             }
         }
         break;

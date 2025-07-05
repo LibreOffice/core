@@ -1023,7 +1023,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
     switch (nWhich)
     {
     case SwFieldIds::DocStat:
-        subType = static_cast<const SwDocStatField*>(pField)->GetSubType();
+        subType = static_cast<sal_uInt16>(static_cast<const SwDocStatField*>(pField)->GetSubType());
         break;
     case SwFieldIds::GetRef:
         {

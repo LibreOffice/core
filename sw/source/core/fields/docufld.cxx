@@ -746,27 +746,27 @@ SwDocStatFieldType::SwDocStatFieldType(SwDoc& rDocument)
 {
 }
 
-OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType,
+OUString SwDocStatFieldType::Expand(SwDocStatSubType nSubType,
     SvxNumType nFormat, sal_uInt16 nVirtPageCount) const
 {
     sal_uInt32 nVal = 0;
     const SwDocStat& rDStat = m_rDoc.getIDocumentStatistics().GetDocStat();
     switch( nSubType )
     {
-        case DS_TBL:  nVal = rDStat.nTable;   break;
-        case DS_GRF:  nVal = rDStat.nGrf;   break;
-        case DS_OLE:  nVal = rDStat.nOLE;   break;
-        case DS_PARA: nVal = rDStat.nPara;  break;
-        case DS_WORD: nVal = rDStat.nWord;  break;
-        case DS_CHAR: nVal = rDStat.nChar;  break;
-        case DS_PAGE:
+        case SwDocStatSubType::Table:  nVal = rDStat.nTable;   break;
+        case SwDocStatSubType::Graphic:  nVal = rDStat.nGrf;   break;
+        case SwDocStatSubType::OLE:  nVal = rDStat.nOLE;   break;
+        case SwDocStatSubType::Paragraph: nVal = rDStat.nPara;  break;
+        case SwDocStatSubType::Word: nVal = rDStat.nWord;  break;
+        case SwDocStatSubType::Character: nVal = rDStat.nChar;  break;
+        case SwDocStatSubType::Page:
             if( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )
                 const_cast<SwDocStat &>(rDStat).nPage = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum();
             nVal = rDStat.nPage;
             if( SVX_NUM_PAGEDESC == nFormat )
                 nFormat = m_nNumberingType;
             break;
-        case DS_PAGE_RANGE:
+        case SwDocStatSubType::PageRange:
             nVal = nVirtPageCount;
             if( SVX_NUM_PAGEDESC == nFormat )
                 nFormat = m_nNumberingType;
@@ -792,7 +792,7 @@ void SwDocStatFieldType::UpdateRangeFields(SwRootFrame const*const pLayout)
     for(auto pFormatField: vFields)
     {
         SwDocStatField* pDocStatField = static_cast<SwDocStatField*>(pFormatField->GetField());
-        if (pDocStatField->GetSubType() == DS_PAGE_RANGE)
+        if (pDocStatField->GetSubType() == SwDocStatSubType::PageRange)
         {
             SwTextField* pTField = pFormatField->GetTextField();
             const SwTextNode& rTextNd = pTField->GetTextNode();
@@ -817,7 +817,7 @@ void SwDocStatFieldType::UpdateRangeFields(SwRootFrame const*const pLayout)
  * @param nSub SubType
  * @param nFormat
  */
-SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub,
+SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, SwDocStatSubType nSub,
     SvxNumType nFormat, sal_uInt16 nVirtPageCount)
     : SwField(pTyp),
     m_nSubType(nSub),
@@ -838,22 +838,22 @@ std::unique_ptr<SwField> SwDocStatField::Copy() const
         static_cast<SwDocStatFieldType*>(GetTyp()), m_nSubType, m_nFormat, m_nVirtPageCount );
 }
 
-sal_uInt16 SwDocStatField::GetSubType() const
+SwDocStatSubType SwDocStatField::GetSubType() const
 {
     return m_nSubType;
 }
 
-void SwDocStatField::SetSubType(sal_uInt16 nSub)
+void SwDocStatField::SetSubType(SwDocStatSubType nSub)
 {
     m_nSubType = nSub;
 }
 
 void SwDocStatField::ChangeExpansion(const SwFrame* pFrame, sal_uInt16 nVirtPageCount)
 {
-    if( DS_PAGE == m_nSubType && SVX_NUM_PAGEDESC == m_nFormat )
+    if( SwDocStatSubType::Page == m_nSubType && SVX_NUM_PAGEDESC == m_nFormat )
         static_cast<SwDocStatFieldType*>(GetTyp())->SetNumFormat(
                 pFrame->FindPageFrame()->GetPageDesc()->GetNumType().GetNumberingType() );
-    else if (nVirtPageCount && DS_PAGE_RANGE == m_nSubType)
+    else if (nVirtPageCount && SwDocStatSubType::PageRange == m_nSubType)
         m_nVirtPageCount = nVirtPageCount;
 }
 

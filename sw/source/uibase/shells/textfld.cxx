@@ -1423,7 +1423,7 @@ FIELD_INSERT:
                 {
                     rDoc.getIDocumentContentOperations().InsertString(*rSh.GetCursor(), u" / "_ustr);
                     SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics,
-                        pDlg->GetIncludePageTotal() ? DS_PAGE : DS_PAGE_RANGE,
+                        static_cast<sal_uInt16>(pDlg->GetIncludePageTotal() ? SwDocStatSubType::Page : SwDocStatSubType::PageRange),
                         OUString(), OUString(), SVX_NUM_PAGEDESC);
                     aMgr.InsertField(aPageTotalData);
                 }
@@ -1477,7 +1477,7 @@ FIELD_INSERT:
                     {
                         rDoc.getIDocumentContentOperations().InsertString(*rSh.GetCursor(), u" / "_ustr);
                         SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics,
-                                                          DS_PAGE, OUString(), OUString(),
+                                                          static_cast<sal_uInt16>(SwDocStatSubType::Page), OUString(), OUString(),
                                                           SVX_NUM_PAGEDESC);
                         aMgr.InsertField(aPageTotalData);
                     }

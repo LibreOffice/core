@@ -472,7 +472,7 @@ sal_uInt16 SwField::GetUntypedSubType() const
     case SwFieldIds::HiddenText:
         return static_cast<sal_uInt16>(static_cast<const SwHiddenTextField*>(this)->GetSubType());
     case SwFieldIds::DocStat:
-        return static_cast<const SwDocStatField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwDocStatField*>(this)->GetSubType());
     case SwFieldIds::PageNumber:
         return static_cast<const SwPageNumberField*>(this)->GetSubType();
     case SwFieldIds::DbNextSet:
@@ -522,7 +522,7 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
         static_cast<SwHiddenTextField*>(this)->SetSubType(static_cast<SwFieldTypesEnum>(n));
         break;
     case SwFieldIds::DocStat:
-        static_cast<SwDocStatField*>(this)->SetSubType(n);
+        static_cast<SwDocStatField*>(this)->SetSubType(static_cast<SwDocStatSubType>(n));
         break;
     case SwFieldIds::PageNumber:
         static_cast<SwPageNumberField*>(this)->SetSubType(n);

@@ -119,7 +119,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             {
                 SwDocStatField* pDocStatField = static_cast<SwDocStatField*>(pField);
                 sal_uInt16 nVirtPageCount = 0;
-                if (pDocStatField->GetSubType() == SwDocStatSubType::DS_PAGE_RANGE)
+                if (pDocStatField->GetSubType() == SwDocStatSubType::PageRange)
                     nVirtPageCount = m_pFrame->GetVirtPageCount();
                 pDocStatField->ChangeExpansion(m_pFrame, nVirtPageCount);
             }

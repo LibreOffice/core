@@ -52,18 +52,17 @@ enum class SwAuthorFormat : sal_uInt32
 namespace o3tl { template<> struct typed_flags<SwAuthorFormat> : is_typed_flags<SwAuthorFormat, 0x8003> {}; }
 
 // Subtype of document statistics.
-enum SwDocStatSubType
+enum class SwDocStatSubType : sal_uInt16
 {
-    DS_BEGIN,
-    DS_PAGE = DS_BEGIN,
+    Page,
     // page count in current section
-    DS_PAGE_RANGE,
-    DS_PARA,
-    DS_WORD,
-    DS_CHAR,
-    DS_TBL,
-    DS_GRF,
-    DS_OLE
+    PageRange,
+    Paragraph,
+    Word,
+    Character,
+    Table,
+    Graphic,
+    OLE
 };
 
 typedef sal_uInt16  SwDocInfoSubType;
@@ -278,7 +277,7 @@ class SAL_DLLPUBLIC_RTTI SwDocStatFieldType final : public SwFieldType
 
 public:
     SwDocStatFieldType(SwDoc&);
-    OUString                Expand(sal_uInt16 nSubType, SvxNumType nFormat,
+    OUString                Expand(SwDocStatSubType nSubType, SvxNumType nFormat,
         sal_uInt16 nVirtPageCount) const;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
@@ -288,12 +287,12 @@ public:
 
 class SW_DLLPUBLIC SwDocStatField final : public SwField
 {
-    sal_uInt16 m_nSubType;
+    SwDocStatSubType m_nSubType;
     sal_uInt16 m_nVirtPageCount;
     SvxNumType m_nFormat;
 public:
     SwDocStatField( SwDocStatFieldType*,
-                    sal_uInt16 nSubType, SvxNumType nFormat, sal_uInt16 nVirtPageCount = 0);
+                    SwDocStatSubType nSubType, SvxNumType nFormat, sal_uInt16 nVirtPageCount = 0);
 
     SvxNumType GetFormat() const { return m_nFormat; }
     void SetFormat(SvxNumType n) { m_nFormat = n; }
@@ -303,8 +302,8 @@ public:
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
-    sal_uInt16          GetSubType() const;
-    void                SetSubType(sal_uInt16 nSub);
+    SwDocStatSubType    GetSubType() const;
+    void                SetSubType(SwDocStatSubType nSub);
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };

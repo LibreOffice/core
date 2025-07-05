@@ -255,14 +255,14 @@ static SwServiceType lcl_GetServiceForField( const SwField& rField )
             auto rDocStatField = static_cast<const SwDocStatField&>(rField);
             switch( rDocStatField.GetSubType() )
             {
-            case DS_PAGE_RANGE:nSrvId = SwServiceType::FieldTypePageCountRange; break;
-            case DS_PAGE: nSrvId = SwServiceType::FieldTypePageCount; break;
-            case DS_PARA: nSrvId = SwServiceType::FieldTypeParagraphCount; break;
-            case DS_WORD: nSrvId = SwServiceType::FieldTypeWordCount     ; break;
-            case DS_CHAR: nSrvId = SwServiceType::FieldTypeCharacterCount; break;
-            case DS_TBL:  nSrvId = SwServiceType::FieldTypeTableCount    ; break;
-            case DS_GRF:  nSrvId = SwServiceType::FieldTypeGraphicObjectCount; break;
-            case DS_OLE:  nSrvId = SwServiceType::FieldTypeEmbeddedObjectCount; break;
+            case SwDocStatSubType::PageRange:nSrvId = SwServiceType::FieldTypePageCountRange; break;
+            case SwDocStatSubType::Page: nSrvId = SwServiceType::FieldTypePageCount; break;
+            case SwDocStatSubType::Paragraph: nSrvId = SwServiceType::FieldTypeParagraphCount; break;
+            case SwDocStatSubType::Word: nSrvId = SwServiceType::FieldTypeWordCount     ; break;
+            case SwDocStatSubType::Character: nSrvId = SwServiceType::FieldTypeCharacterCount; break;
+            case SwDocStatSubType::Table:  nSrvId = SwServiceType::FieldTypeTableCount    ; break;
+            case SwDocStatSubType::Graphic:  nSrvId = SwServiceType::FieldTypeGraphicObjectCount; break;
+            case SwDocStatSubType::OLE:  nSrvId = SwServiceType::FieldTypeEmbeddedObjectCount; break;
             }
         }
         break;
@@ -1880,16 +1880,16 @@ void SAL_CALL SwXTextField::attach(
             case SwServiceType::FieldTypeGraphicObjectCount:
             case SwServiceType::FieldTypeEmbeddedObjectCount:
             {
-                sal_uInt16 nSubType = DS_PAGE;
+                SwDocStatSubType nSubType = SwDocStatSubType::Page;
                 switch (m_pImpl->m_nServiceId)
                 {
-                    case SwServiceType::FieldTypeParagraphCount       : nSubType = DS_PARA; break;
-                    case SwServiceType::FieldTypeWordCount            : nSubType = DS_WORD; break;
-                    case SwServiceType::FieldTypeCharacterCount       : nSubType = DS_CHAR; break;
-                    case SwServiceType::FieldTypeTableCount           : nSubType = DS_TBL;  break;
-                    case SwServiceType::FieldTypeGraphicObjectCount  : nSubType = DS_GRF;  break;
-                    case SwServiceType::FieldTypeEmbeddedObjectCount : nSubType = DS_OLE;  break;
-                    case SwServiceType::FieldTypePageCountRange  :     nSubType = DS_PAGE_RANGE; break;
+                    case SwServiceType::FieldTypeParagraphCount       : nSubType = SwDocStatSubType::Paragraph; break;
+                    case SwServiceType::FieldTypeWordCount            : nSubType = SwDocStatSubType::Word; break;
+                    case SwServiceType::FieldTypeCharacterCount       : nSubType = SwDocStatSubType::Character; break;
+                    case SwServiceType::FieldTypeTableCount           : nSubType = SwDocStatSubType::Table;  break;
+                    case SwServiceType::FieldTypeGraphicObjectCount  : nSubType = SwDocStatSubType::Graphic;  break;
+                    case SwServiceType::FieldTypeEmbeddedObjectCount : nSubType = SwDocStatSubType::OLE;  break;
+                    case SwServiceType::FieldTypePageCountRange  :     nSubType = SwDocStatSubType::PageRange; break;
                     default: break;
                 }
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocStat);

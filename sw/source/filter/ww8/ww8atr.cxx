@@ -3144,20 +3144,21 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::DocStat:
         {
             auto pDocStatField = static_cast<const SwDocStatField*>(pField);
-            const sal_uInt16 nSubType = pDocStatField->GetSubType();
+            const SwDocStatSubType nSubType = pDocStatField->GetSubType();
             ww::eField eField = ww::eNONE;
 
             switch (nSubType)
             {
-                case DS_PAGE:
+                case SwDocStatSubType::Page:
                     eField = ww::eNUMPAGES;
                     break;
-                case DS_WORD:
+                case SwDocStatSubType::Word:
                     eField = ww::eNUMWORDS;
                     break;
-                case DS_CHAR:
+                case SwDocStatSubType::Character:
                     eField = ww::eNUMCHARS;
                     break;
+                default: break;
             }
 
             if (eField != ww::eNONE)
