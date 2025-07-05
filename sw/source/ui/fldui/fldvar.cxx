@@ -632,11 +632,18 @@ void SwFieldVarPage::UpdateSubType()
                         break;
 
                     case SwFieldTypesEnum::Set:
+                        if (GetCurField() && aList[i] == GetCurField()->GetTyp()->GetName())
+                        {
+                            bInsert = true;
+                            if (static_cast<SwSetExpField*>(GetCurField())->GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE)
+                                m_xInvisibleCB->set_active(true);
+                        }
+                        break;
                     case SwFieldTypesEnum::User:
                         if (GetCurField() && aList[i] == GetCurField()->GetTyp()->GetName())
                         {
                             bInsert = true;
-                            if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE)
+                            if (static_cast<SwUserField*>(GetCurField())->GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE)
                                 m_xInvisibleCB->set_active(true);
                         }
                         break;
@@ -787,7 +794,7 @@ void SwFieldVarPage::FillFormatLB(SwFieldTypesEnum nTypeId)
 
     if (IsFieldEdit() && bSpecialFormat)
     {
-        if (nTypeId == SwFieldTypesEnum::User && (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_CMD))
+        if (nTypeId == SwFieldTypesEnum::User && (static_cast<SwUserField*>(GetCurField())->GetSubType() & nsSwExtendedSubType::SUB_CMD))
             rWidget.select(1);
         else
             rWidget.select(0);

@@ -133,12 +133,13 @@ namespace
 
         if( SwFieldIds::SetExp == nFieldWhich )
         {
+            auto pSetExpField = static_cast<const SwSetExpField*>(pField);
             SwSbxValue aValue;
-            if( nsSwGetSetExpType::GSE_EXPR & pField->GetSubType() )
-                aValue.PutDouble( static_cast<const SwSetExpField*>(pField)->GetValue(pLayout) );
+            if( nsSwGetSetExpType::GSE_EXPR & pSetExpField->GetSubType() )
+                aValue.PutDouble( pSetExpField->GetValue(pLayout) );
             else
                 // Extension to calculate with Strings
-                aValue.PutString( static_cast<const SwSetExpField*>(pField)->GetExpStr(pLayout) );
+                aValue.PutString( pSetExpField->GetExpStr(pLayout) );
 
             // set the new value in Calculator
             rCalc.VarChange( pField->GetTyp()->GetName().toString(), aValue );
@@ -1066,108 +1067,101 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         }
         break;
         case SwFieldIds::GetExp:
-        case SwFieldIds::SetExp:
         {
-            if( nsSwGetSetExpType::GSE_STRING & pField->GetSubType() )        // replace String
+            SwGetExpField* pGField = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(pField));
+            if( nsSwGetSetExpType::GSE_STRING & pGField->GetSubType() )        // replace String
             {
-                if( SwFieldIds::GetExp == nWhich )
+                if( (!pUpdateField || pUpdateField == pTextField )
+                    && pGField->IsInBodyText() )
                 {
-                    SwGetExpField* pGField = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(pField));
-
-                    if( (!pUpdateField || pUpdateField == pTextField )
-                        && pGField->IsInBodyText() )
-                    {
-                        OUString aNew = LookString( aHashStrTable, pGField->GetFormula() );
-                        pGField->ChgExpStr( aNew, pLayout );
-                    }
-                }
-                else
-                {
-                    SwSetExpField* pSField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
-                    // is the "formula" a field?
-                    OUString aNew = LookString( aHashStrTable, pSField->GetFormula() );
-
-                    if( aNew.isEmpty() )               // nothing found then the formula is the new value
-                        aNew = pSField->GetFormula();
-
-                    // only update one field
-                    if( !pUpdateField || pUpdateField == pTextField )
-                        pSField->ChgExpStr( aNew, pLayout );
-
-                    // lookup the field's name
-                    aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName().toString();
-                    // Entry present?
-                    auto pFnd = aHashStrTable.find( aNew );
-                    if( pFnd != aHashStrTable.end() )
-                        // Modify entry in the hash table
-                        pFnd->second = pSField->GetExpStr(pLayout);
-                    else
-                        // insert new entry
-                        pFnd = aHashStrTable.insert( { aNew, pSField->GetExpStr(pLayout) } ).first;
-
-                    // Extension for calculation with Strings
-                    SwSbxValue aValue;
-                    aValue.PutString( pFnd->second );
-                    aCalc.VarChange( aNew, aValue );
+                    OUString aNew = LookString( aHashStrTable, pGField->GetFormula() );
+                    pGField->ChgExpStr( aNew, pLayout );
                 }
             }
             else            // recalculate formula
             {
-                if( SwFieldIds::GetExp == nWhich )
+                if( (!pUpdateField || pUpdateField == pTextField )
+                    && pGField->IsInBodyText() )
                 {
-                    SwGetExpField* pGField = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(pField));
+                    SwSbxValue aValue = aCalc.Calculate(
+                                    pGField->GetFormula());
+                    if(!aValue.IsVoidValue())
+                        pGField->SetValue(aValue.GetDouble(), pLayout);
+                }
+            }
+        }
+        break;
+        case SwFieldIds::SetExp:
+        {
+            SwSetExpField* pSField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
+            if( nsSwGetSetExpType::GSE_STRING & pSField->GetSubType() )        // replace String
+            {
+                // is the "formula" a field?
+                OUString aNew = LookString( aHashStrTable, pSField->GetFormula() );
 
-                    if( (!pUpdateField || pUpdateField == pTextField )
-                        && pGField->IsInBodyText() )
+                if( aNew.isEmpty() )               // nothing found then the formula is the new value
+                    aNew = pSField->GetFormula();
+
+                // only update one field
+                if( !pUpdateField || pUpdateField == pTextField )
+                    pSField->ChgExpStr( aNew, pLayout );
+
+                // lookup the field's name
+                aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName().toString();
+                // Entry present?
+                auto pFnd = aHashStrTable.find( aNew );
+                if( pFnd != aHashStrTable.end() )
+                    // Modify entry in the hash table
+                    pFnd->second = pSField->GetExpStr(pLayout);
+                else
+                    // insert new entry
+                    pFnd = aHashStrTable.insert( { aNew, pSField->GetExpStr(pLayout) } ).first;
+
+                // Extension for calculation with Strings
+                SwSbxValue aValue;
+                aValue.PutString( pFnd->second );
+                aCalc.VarChange( aNew, aValue );
+            }
+            else            // recalculate formula
+            {
+                SwSetExpFieldType* pSFieldTyp = static_cast<SwSetExpFieldType*>(pField->GetTyp());
+                OUString aNew = pSFieldTyp->GetName().toString();
+
+                SwNode* pSeqNd = nullptr;
+
+                if( pSField->IsSequenceField() )
+                {
+                    const sal_uInt8 nLvl = pSFieldTyp->GetOutlineLvl();
+                    if( MAXLEVEL > nLvl )
                     {
-                        SwSbxValue aValue = aCalc.Calculate(
-                                        pGField->GetFormula());
-                        if(!aValue.IsVoidValue())
-                            pGField->SetValue(aValue.GetDouble(), pLayout);
+                        // test if the Number needs to be updated
+                        pSeqNd = m_rDoc.GetNodes()[ it->GetNode() ];
+
+                        const SwTextNode* pOutlNd = pSeqNd->
+                                FindOutlineNodeOfLevel(nLvl, pLayout);
+                        auto const iter(SetExpOutlineNodeMap.find(pSFieldTyp));
+                        if (iter == SetExpOutlineNodeMap.end()
+                            || iter->second != pOutlNd)
+                        {
+                            SetExpOutlineNodeMap[pSFieldTyp] = pOutlNd;
+                            aCalc.VarChange( aNew, 0 );
+                        }
                     }
                 }
-                else
+
+                aNew += "=" + pSField->GetFormula();
+
+                SwSbxValue aValue = aCalc.Calculate( aNew );
+                if (!aCalc.IsCalcError())
                 {
-                    SwSetExpField* pSField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
-                    SwSetExpFieldType* pSFieldTyp = static_cast<SwSetExpFieldType*>(pField->GetTyp());
-                    OUString aNew = pSFieldTyp->GetName().toString();
-
-                    SwNode* pSeqNd = nullptr;
-
-                    if( pSField->IsSequenceField() )
+                    double nErg = aValue.GetDouble();
+                    // only update one field
+                    if( !aValue.IsVoidValue() && (!pUpdateField || pUpdateField == pTextField) )
                     {
-                        const sal_uInt8 nLvl = pSFieldTyp->GetOutlineLvl();
-                        if( MAXLEVEL > nLvl )
-                        {
-                            // test if the Number needs to be updated
-                            pSeqNd = m_rDoc.GetNodes()[ it->GetNode() ];
+                        pSField->SetValue(nErg, pLayout);
 
-                            const SwTextNode* pOutlNd = pSeqNd->
-                                    FindOutlineNodeOfLevel(nLvl, pLayout);
-                            auto const iter(SetExpOutlineNodeMap.find(pSFieldTyp));
-                            if (iter == SetExpOutlineNodeMap.end()
-                                || iter->second != pOutlNd)
-                            {
-                                SetExpOutlineNodeMap[pSFieldTyp] = pOutlNd;
-                                aCalc.VarChange( aNew, 0 );
-                            }
-                        }
-                    }
-
-                    aNew += "=" + pSField->GetFormula();
-
-                    SwSbxValue aValue = aCalc.Calculate( aNew );
-                    if (!aCalc.IsCalcError())
-                    {
-                        double nErg = aValue.GetDouble();
-                        // only update one field
-                        if( !aValue.IsVoidValue() && (!pUpdateField || pUpdateField == pTextField) )
-                        {
-                            pSField->SetValue(nErg, pLayout);
-
-                            if( pSeqNd )
-                                pSFieldTyp->SetChapter(*pSField, *pSeqNd, pLayout);
-                        }
+                        if( pSeqNd )
+                            pSFieldTyp->SetChapter(*pSField, *pSeqNd, pLayout);
                     }
                 }
             }
@@ -1585,30 +1579,32 @@ void DocumentFieldsManager::FieldsToExpand( std::unordered_map<OUString, OUStrin
         switch( pField->GetTyp()->Which() )
         {
         case SwFieldIds::SetExp:
-            if( nsSwGetSetExpType::GSE_STRING & pField->GetSubType() )
             {
-                // set the new value in the hash table
-                // is the formula a field?
                 SwSetExpField* pSField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
-                OUString aNew = LookString( rHashTable, pSField->GetFormula() );
+                if( nsSwGetSetExpType::GSE_STRING & pSField->GetSubType() )
+                {
+                    // set the new value in the hash table
+                    // is the formula a field?
+                    OUString aNew = LookString( rHashTable, pSField->GetFormula() );
 
-                if( aNew.isEmpty() )               // nothing found, then the formula is
-                    aNew = pSField->GetFormula(); // the new value
+                    if( aNew.isEmpty() )               // nothing found, then the formula is
+                        aNew = pSField->GetFormula(); // the new value
 
-                // #i3141# - update expression of field as in method
-                // <SwDoc::UpdateExpFields(..)> for string/text fields
-                pSField->ChgExpStr(aNew, &rLayout);
+                    // #i3141# - update expression of field as in method
+                    // <SwDoc::UpdateExpFields(..)> for string/text fields
+                    pSField->ChgExpStr(aNew, &rLayout);
 
-                // look up the field's name
-                aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName().toString();
-                // Entry present?
-                auto pFnd = rHashTable.find( aNew );
-                if( pFnd != rHashTable.end() )
-                    // modify entry in the hash table
-                    pFnd->second = pSField->GetExpStr(&rLayout);
-                else
-                    // insert the new entry
-                    rHashTable.insert( { aNew, pSField->GetExpStr(&rLayout) } );
+                    // look up the field's name
+                    aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName().toString();
+                    // Entry present?
+                    auto pFnd = rHashTable.find( aNew );
+                    if( pFnd != rHashTable.end() )
+                        // modify entry in the hash table
+                        pFnd->second = pSField->GetExpStr(&rLayout);
+                    else
+                        // insert the new entry
+                        rHashTable.insert( { aNew, pSField->GetExpStr(&rLayout) } );
+                }
             }
             break;
         case SwFieldIds::Database:

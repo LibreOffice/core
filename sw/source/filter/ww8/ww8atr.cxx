@@ -129,6 +129,7 @@
 #include <authfld.hxx>
 #include <dbfld.hxx>
 #include <docsh.hxx>
+#include <flddat.hxx>
 
 #include "sprmids.hxx"
 
@@ -1957,8 +1958,8 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
         {
             // retrieve reference destination - the name of the bookmark
             OUString aLinkStr;
-            const sal_uInt16 nSubType = pField->GetSubType();
             const SwGetRefField& rRField = *static_cast<const SwGetRefField*>(pField);
+            const sal_uInt16 nSubType = rRField.GetSubType();
             if ( nSubType == REF_SETREFATTR ||
                  nSubType == REF_BOOKMARK )
             {
@@ -2028,17 +2029,18 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
         if (pField->GetTyp()->Which() == SwFieldIds::Input &&
             eFieldType == ww::eFORMTEXT)
         {
-            sal_uInt16 nSubType = pField->GetSubType();
+            sal_uInt16 nSubType = static_cast<const SwInputField*>(pField)->GetSubType();
 
             if (nSubType == REF_SEQUENCEFLD)
                 aField15[0] |= (0x4 << 5);
         }
         // This ought to apply to any field, but just to be safe, start off with DATE/TIME only.
-        if (pField->GetTyp()->Which() == SwFieldIds::DateTime
-            && (pField->GetSubType() & FIXEDFLD))
+        if (pField->GetTyp()->Which() == SwFieldIds::DateTime)
         {
-            //bit 5 - Locked: do not recalculate field
-            aField15[1] |= 0x10;
+            sal_uInt16 nSubType = static_cast<const SwDateTimeField*>(pField)->GetSubType();
+            if (nSubType & FIXEDFLD)
+                //bit 5 - Locked: do not recalculate field
+                aField15[1] |= 0x10;
         }
     }
 
@@ -2178,7 +2180,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
             const SwFormatField& rField = static_cast<const SwFormatField&>(pHt->GetAttr());
             const SwField* pField = rField.GetField();
             // Need to have bookmarks only for sequence fields
-            if (pField && pField->GetTyp()->Which() == SwFieldIds::SetExp && pField->GetSubType() == nsSwGetSetExpType::GSE_SEQ)
+            if (pField && pField->GetTyp()->Which() == SwFieldIds::SetExp && static_cast<const SwSetExpField*>(pField)->GetSubType() == nsSwGetSetExpType::GSE_SEQ)
             {
                 const sal_uInt16 nSeqFieldNumber = static_cast<const SwSetExpField*>(pField)->GetSeqNumber();
                 const UIName sObjectName = static_cast<const SwSetExpFieldType*>(pField->GetTyp())->GetName();
@@ -2952,61 +2954,65 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
 {
     const SwField* pField = rField.GetField();
     bool bWriteExpand = false;
-    const sal_uInt16 nSubType = pField->GetSubType();
 
     switch (pField->GetTyp()->Which())
     {
     case SwFieldIds::GetExp:
-        if (nSubType == nsSwGetSetExpType::GSE_STRING)
         {
             const SwGetExpField *pGet = static_cast<const SwGetExpField*>(pField);
-            RefField( *pGet, pGet->GetFormula() );
+            if (pGet->GetSubType() == nsSwGetSetExpType::GSE_STRING)
+            {
+                RefField( *pGet, pGet->GetFormula() );
+            }
+            else
+                bWriteExpand = true;
         }
-        else
-            bWriteExpand = true;
         break;
     case SwFieldIds::SetExp:
-        if (nsSwGetSetExpType::GSE_SEQ == nSubType)
         {
-            OUString sStr;
-            if (GetExport().FieldsQuoted())
-                sStr = FieldString(ww::eSEQ) + pField->GetTyp()->GetName().toString() + " ";
-            else
-                sStr = FieldString(ww::eSEQ) + "\"" + pField->GetTyp()->GetName().toString() +"\" ";
-            GetNumberPara( sStr, *pField );
-            GetExport().OutputField(pField, ww::eSEQ, sStr);
-        }
-        else if (nSubType & nsSwGetSetExpType::GSE_STRING)
-        {
-            bool bShowAsWell = false;
-            ww::eField eFieldNo;
             const SwSetExpField *pSet = static_cast<const SwSetExpField*>(pField);
-            const OUString sVar = pSet->GetPar2();
-            OUString sStr;
-            if (pSet->GetInputFlag())
+            sal_uInt16 nSubType = pSet->GetSubType();
+            if (nsSwGetSetExpType::GSE_SEQ == nSubType)
             {
-                sStr = FieldString(ww::eASK) + "\""
-                    + pSet->GetPar1() + "\" "
-                    + pSet->GetPromptText() + " \\d "
-                    + sVar;
-                eFieldNo = ww::eASK;
+                OUString sStr;
+                if (GetExport().FieldsQuoted())
+                    sStr = FieldString(ww::eSEQ) + pField->GetTyp()->GetName().toString() + " ";
+                else
+                    sStr = FieldString(ww::eSEQ) + "\"" + pField->GetTyp()->GetName().toString() +"\" ";
+                GetNumberPara( sStr, *pField );
+                GetExport().OutputField(pField, ww::eSEQ, sStr);
+            }
+            else if (nSubType & nsSwGetSetExpType::GSE_STRING)
+            {
+                bool bShowAsWell = false;
+                ww::eField eFieldNo;
+                const OUString sVar = pSet->GetPar2();
+                OUString sStr;
+                if (pSet->GetInputFlag())
+                {
+                    sStr = FieldString(ww::eASK) + "\""
+                        + pSet->GetPar1() + "\" "
+                        + pSet->GetPromptText() + " \\d "
+                        + sVar;
+                    eFieldNo = ww::eASK;
+                }
+                else
+                {
+                    sStr = FieldString(ww::eSET)
+                        + pSet->GetPar1() + " \""
+                        + sVar + "\" ";
+                    eFieldNo = ww::eSET;
+                    bShowAsWell = (nSubType & nsSwExtendedSubType::SUB_INVISIBLE) == 0;
+                }
+
+                SetField( *pField, eFieldNo, sStr );
+
+                if (bShowAsWell)
+                    RefField( *pSet, pSet->GetPar1() );
             }
             else
-            {
-                sStr = FieldString(ww::eSET)
-                    + pSet->GetPar1() + " \""
-                    + sVar + "\" ";
-                eFieldNo = ww::eSET;
-                bShowAsWell = (nSubType & nsSwExtendedSubType::SUB_INVISIBLE) == 0;
-            }
-
-            SetField( *pField, eFieldNo, sStr );
-
-            if (bShowAsWell)
-                RefField( *pSet, pSet->GetPar1() );
+                bWriteExpand = true;
         }
-        else
-            bWriteExpand = true;
         break;
     case SwFieldIds::PageNumber:
         {
@@ -3051,10 +3057,12 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         GetExport().OutputField(pField, ww::eTEMPLATE, FieldString(ww::eTEMPLATE));
         break;
     case SwFieldIds::DocInfo:    // Last printed, last edited,...
-        if( DI_SUB_FIXED & nSubType )
-            bWriteExpand = true;
-
         {
+            auto pDocInfoField = static_cast<const SwDocInfoField*>(pField);
+            const sal_uInt16 nSubType = pDocInfoField->GetSubType();
+            if( DI_SUB_FIXED & nSubType )
+                bWriteExpand = true;
+
             OUString sStr;
             ww::eField eField(ww::eNONE);
             switch (0xff & nSubType)
@@ -3104,15 +3112,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     break;
                 case DI_CUSTOM:
                     eField = ww::eDOCPROPERTY;
-                    {
-                        const SwDocInfoField * pDocInfoField =
-                        dynamic_cast<const SwDocInfoField *> (pField);
-
-                        if (pDocInfoField != nullptr)
-                            sStr = "\"" + pDocInfoField->GetName() + "\"";
-
-                        bWriteExpand = false;
-                    }
+                    sStr = "\"" + pDocInfoField->GetName() + "\"";
+                    bWriteExpand = false;
                     break;
                 default:
                     break;
@@ -3128,6 +3129,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         break;
     case SwFieldIds::DateTime:
         {
+            auto pDateTimeField = static_cast<const SwDateTimeField*>(pField);
+            const sal_uInt16 nSubType = pDateTimeField->GetSubType();
             OUString sStr;
             if (!GetExport().GetNumberFormat(*pField, sStr))
                 bWriteExpand = true;
@@ -3140,6 +3143,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         break;
     case SwFieldIds::DocStat:
         {
+            auto pDocStatField = static_cast<const SwDocStatField*>(pField);
+            const sal_uInt16 nSubType = pDocStatField->GetSubType();
             ww::eField eField = ww::eNONE;
 
             switch (nSubType)
@@ -3167,6 +3172,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         break;
     case SwFieldIds::ExtUser:
         {
+            auto pExtUserField = static_cast<const SwExtUserField*>(pField);
+            const sal_uInt16 nSubType = pExtUserField->GetSubType();
             ww::eField eField = ww::eNONE;
             switch (0xFF & nSubType)
             {
@@ -3234,6 +3241,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             ww::eField eField = ww::eNONE;
             OUString sStr;
             const SwGetRefField& rRField = *static_cast<const SwGetRefField*>(pField);
+            const sal_uInt16 nSubType = rRField.GetSubType();
             switch (nSubType)
             {
                 case REF_SETREFATTR:
@@ -3482,7 +3490,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             OUString sExpand(pField->GetPar2());
             if (!sExpand.isEmpty())
             {
-                auto eSubType = static_cast<SwFieldTypesEnum>(pField->GetSubType());
+                auto eSubType = static_cast<const SwHiddenTextField*>(pField)->GetSubType();
                 if (eSubType == SwFieldTypesEnum::ConditionalText)
                 {
                     OUString aCond = pField->GetPar1();

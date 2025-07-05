@@ -1586,14 +1586,18 @@ bool SwWW8FltRefStack::IsFootnoteEdnBkmField(
     sal_uInt16& rBkmNo)
 {
     const SwField* pField = rFormatField.GetField();
-    sal_uInt16 nSubType;
-    if(pField && (SwFieldIds::GetRef == pField->Which())
-        && ((REF_FOOTNOTE == (nSubType = pField->GetSubType())) || (REF_ENDNOTE  == nSubType))
-        && !static_cast<const SwGetRefField*>(pField)->GetSetRefName().isEmpty())
+    if (!pField)
+        return false;
+    if(SwFieldIds::GetRef != pField->Which())
+        return false;
+    auto pGetRefField = static_cast<const SwGetRefField*>(pField);
+    sal_uInt16 nSubType = pGetRefField->GetSubType();
+    if( ((REF_FOOTNOTE == nSubType) || (REF_ENDNOTE  == nSubType))
+        && !pGetRefField->GetSetRefName().isEmpty())
     {
         const IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
         auto ppBkmk =
-            pMarkAccess->findMark( static_cast<const SwGetRefField*>(pField)->GetSetRefName() );
+            pMarkAccess->findMark( pGetRefField->GetSetRefName() );
         if(ppBkmk != pMarkAccess->getAllMarksEnd())
         {
             // find Sequence No of corresponding Foot-/Endnote

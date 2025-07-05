@@ -36,6 +36,7 @@
 #include <docufld.hxx>
 #include <flddat.hxx>
 #include <viewopt.hxx>
+#include <expfld.hxx>
 #include "htmlfld.hxx"
 #include "wrthtml.hxx"
 #include <rtl/strbuf.hxx>
@@ -87,8 +88,10 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
     switch( nField )
     {
         case SwFieldIds::ExtUser:
+        {
+            auto pExtUserField = static_cast<const SwExtUserField*>(pField);
             pTypeStr = OOO_STRING_SW_HTML_FT_sender;
-            switch( static_cast<SwExtUserSubType>(pField->GetSubType()) )
+            switch( static_cast<SwExtUserSubType>(pExtUserField->GetSubType()) )
             {
                 case EU_COMPANY:    pSubStr = OOO_STRING_SW_HTML_FS_company;        break;
                 case EU_FIRSTNAME:  pSubStr = OOO_STRING_SW_HTML_FS_firstname;  break;
@@ -109,9 +112,9 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                     ;
             }
             OSL_ENSURE( pSubStr, "unknown sub type for SwExtUserField" );
-            bFixed = static_cast<const SwExtUserField*>(pField)->IsFixed();
+            bFixed = pExtUserField->IsFixed();
             break;
-
+        }
         case SwFieldIds::Author:
             pTypeStr = OOO_STRING_SW_HTML_FT_author;
             switch( static_cast<const SwAuthorField*>(pField)->GetFormat() & SwAuthorFormat::Mask )
@@ -139,7 +142,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
             {
                 auto pPageNumberField = static_cast<const SwPageNumberField *>(pField);
                 pTypeStr = OOO_STRING_SW_HTML_FT_page;
-                SwPageNumSubType eSubType = static_cast<SwPageNumSubType>(pField->GetSubType());
+                SwPageNumSubType eSubType = static_cast<SwPageNumSubType>(pPageNumberField->GetSubType());
                 switch( eSubType )
                 {
                     case PG_RANDOM:     pSubStr = OOO_STRING_SW_HTML_FS_random;     break;
@@ -171,7 +174,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
             {
                 auto pDocInfoField = static_cast<const SwDocInfoField*>(pField);
                 nNumFormat = pDocInfoField->GetFormat();
-                sal_uInt16 nSubType = pField->GetSubType();
+                sal_uInt16 nSubType = pDocInfoField->GetSubType();
                 pTypeStr = OOO_STRING_SW_HTML_FT_docinfo;
                 sal_uInt16 nExtSubType = nSubType & 0x0f00;
                 nSubType &= 0x00ff;
@@ -232,8 +235,9 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
 
         case SwFieldIds::DocStat:
             {
+                auto pDocStatField = static_cast<const SwDocStatField*>(pField);
                 pTypeStr = OOO_STRING_SW_HTML_FT_docstat;
-                sal_uInt16 nSubType = pField->GetSubType();
+                sal_uInt16 nSubType = pDocStatField->GetSubType();
                 switch( nSubType )
                 {
                     case DS_PAGE:       pSubStr = OOO_STRING_SW_HTML_FS_page;   break;
@@ -245,7 +249,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                     case DS_OLE:        pSubStr = OOO_STRING_SW_HTML_FS_ole;    break;
                     default:            pTypeStr = nullptr;               break;
                 }
-                pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(static_cast<const SwDocStatField*>(pField)->GetFormat()) );
+                pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(pDocStatField->GetFormat()) );
             }
             break;
 
@@ -473,7 +477,7 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
     const SwFieldType* pFieldTyp = pField->GetTyp();
 
     if( SwFieldIds::SetExp == pFieldTyp->Which() &&
-        (nsSwGetSetExpType::GSE_STRING & pField->GetSubType()) )
+        (nsSwGetSetExpType::GSE_STRING & static_cast<const SwSetExpField*>(pField)->GetSubType()) )
     {
         const bool bOn = pFieldTyp->GetName() == "HTML_ON";
         if (!bOn && pFieldTyp->GetName() != "HTML_OFF")

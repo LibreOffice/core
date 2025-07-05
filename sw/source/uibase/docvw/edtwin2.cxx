@@ -55,6 +55,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/lok.hxx>
 #include <authfld.hxx>
+#include <expfld.hxx>
 
 #include <com/sun/star/text/XTextRange.hpp>
 #include <unotextrange.hxx>
@@ -553,15 +554,32 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         switch( pField->Which() )
                         {
                         case SwFieldIds::SetExp:
+                        {
+                            auto pSetExpField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
+                            sal_uInt16 nOldSubType = pSetExpField->GetSubType();
+                            pSetExpField->SetSubType(nsSwExtendedSubType::SUB_CMD);
+                            sText = pSetExpField->ExpandField(true, rSh.GetLayout());
+                            pSetExpField->SetSubType(nOldSubType);
+                            break;
+                        }
                         case SwFieldIds::Table:
+                        {
+                            auto pTableField = const_cast<SwTableField*>(static_cast<const SwTableField*>(pField));
+                            sal_uInt16 nOldSubType = pTableField->GetSubType();
+                            pTableField->SetSubType(nsSwExtendedSubType::SUB_CMD);
+                            sText = pTableField->ExpandField(true, rSh.GetLayout());
+                            pTableField->SetSubType(nOldSubType);
+                            break;
+                        }
                         case SwFieldIds::GetExp:
                         {
-                            sal_uInt16 nOldSubType = pField->GetSubType();
-                            const_cast<SwField*>(pField)->SetSubType(nsSwExtendedSubType::SUB_CMD);
-                            sText = pField->ExpandField(true, rSh.GetLayout());
-                            const_cast<SwField*>(pField)->SetSubType(nOldSubType);
+                            auto pGetExpField = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(pField));
+                            sal_uInt16 nOldSubType = pGetExpField->GetSubType();
+                            pGetExpField->SetSubType(nsSwExtendedSubType::SUB_CMD);
+                            sText = pGetExpField->ExpandField(true, rSh.GetLayout());
+                            pGetExpField->SetSubType(nOldSubType);
+                            break;
                         }
-                        break;
 
                         case SwFieldIds::Postit:
                             {

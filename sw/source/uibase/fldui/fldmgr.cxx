@@ -1243,8 +1243,7 @@ bool SwFieldMgr::InsertField(
 
             SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(pCurShell->InsertFieldType(
                 SwDBFieldType(pCurShell->GetDoc(), sPar1, aDBData) ) );
-            pField.reset(new SwDBField(pTyp));
-            pField->SetSubType(nSubType);
+            pField.reset(new SwDBField(pTyp, nSubType));
 
             if( !(nSubType & nsSwExtendedSubType::SUB_OWN_FMT) ) // determine database format
             {
@@ -1362,9 +1361,7 @@ bool SwFieldMgr::InsertField(
             }
             if (pTyp->GetContent(nFormatId) != rData.m_sPar2)
                 pTyp->SetContent(rData.m_sPar2, nFormatId);
-            pField.reset(new SwUserField(pTyp, 0, nFormatId));
-            if (pField->GetSubType() != nSubType)
-                pField->SetSubType(nSubType);
+            pField.reset(new SwUserField(pTyp, nSubType, nFormatId));
             bTable = true;
             break;
         }
@@ -1448,8 +1445,7 @@ bool SwFieldMgr::InsertField(
             {
                 SwGetExpFieldType* pTyp = static_cast<SwGetExpFieldType*>( pCurShell->GetFieldType(
                     0, SwFieldIds::GetExp) );
-                pField.reset( new SwGetExpField(pTyp, rData.m_sPar1, pSetTyp->GetType(), nFormatId) );
-                pField->SetSubType(nSubType | pSetTyp->GetType());
+                pField.reset( new SwGetExpField(pTyp, rData.m_sPar1, nSubType | pSetTyp->GetType(), nFormatId) );
                 bExp = true;
             }
             else
@@ -1494,8 +1490,7 @@ bool SwFieldMgr::InsertField(
             {
                 SwGetExpFieldType* pTyp = static_cast<SwGetExpFieldType*>(
                     pCurShell->GetFieldType(0, SwFieldIds::GetExp) );
-                pField.reset( new SwGetExpField(pTyp, rData.m_sPar2, nsSwGetSetExpType::GSE_FORMULA, nFormatId) );
-                pField->SetSubType(nSubType);
+                pField.reset( new SwGetExpField(pTyp, rData.m_sPar2, nSubType, nFormatId) );
                 bExp = true;
             }
             break;

@@ -1027,14 +1027,14 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         break;
     case SwFieldIds::GetRef:
         {
-            switch( pField->GetSubType() )
+            const SwGetRefField* pRefField = static_cast<const SwGetRefField*>(pField);
+            switch( pRefField->GetSubType() )
             {
             case REF_BOOKMARK:
                 {
-                    const SwGetRefField* pRefField = dynamic_cast<const SwGetRefField*>(pField);
-                    if ( pRefField && pRefField->IsRefToHeadingCrossRefBookmark() )
+                    if (  pRefField->IsRefToHeadingCrossRefBookmark() )
                         sEntry = "Headings";
-                    else if ( pRefField && pRefField->IsRefToNumItemCrossRefBookmark() )
+                    else if (  pRefField->IsRefToNumItemCrossRefBookmark() )
                         sEntry = "Numbered Paragraphs";
                     else
                         sEntry = "Bookmarks";
@@ -1050,7 +1050,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 sEntry = "Insert Reference";
                 break;
             case REF_SEQUENCEFLD:
-                sEntry = static_cast<const SwGetRefField*>(pField)->GetSetRefName().toString();
+                sEntry = pRefField->GetSetRefName().toString();
                 break;
             case REF_STYLE:
                 sEntry = "StyleRef";
@@ -1100,8 +1100,11 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         }
         break;
     case SwFieldIds::DocInfo:
-        subType = pField->GetSubType();
-        subType &= 0x00ff;
+        {
+            const SwDocInfoField* pDocInfoField = static_cast<const SwDocInfoField*>(pField);
+            subType = pDocInfoField->GetSubType();
+            subType &= 0x00ff;
+        }
         break;
     case SwFieldIds::RefPageSet:
         {
@@ -1135,7 +1138,8 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             {
                 strTypeName = sEntry;
                 sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
-                const sal_uInt16 nExSub = pField->GetSubType() & 0xff00;
+                auto pDocInfoField = static_cast<const SwDocInfoField*>(pField);
+                const sal_uInt16 nExSub = pDocInfoField->GetSubType() & 0xff00;
                 if (nSize > 0 && nExSub > 0)
                 {
                     //Get extra subtype string

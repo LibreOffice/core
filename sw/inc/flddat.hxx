@@ -54,8 +54,8 @@ public:
         SwDateTimeField(SwDateTimeFieldType* pType, sal_uInt16 nSubType = DATEFLD,
                     sal_uLong nFormat = 0, LanguageType nLng = LANGUAGE_SYSTEM);
 
-        virtual sal_uInt16      GetSubType() const override;
-        virtual void            SetSubType(sal_uInt16 nSub) override;
+        sal_uInt16              GetSubType() const;
+        void                    SetSubType(sal_uInt16 nSub);
 
         virtual double          GetValue() const override;
 

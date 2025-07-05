@@ -203,13 +203,16 @@ static SwServiceType lcl_GetServiceForField( const SwField& rField )
     switch( nWhich )
     {
     case SwFieldIds::Input:
-        if( INP_USR == (rField.GetSubType() & 0x00ff) )
-            nSrvId = SwServiceType::FieldTypeInputUser;
-        break;
-
+        {
+            const auto & rInputField = static_cast<const SwInputField&>(rField);
+            if( INP_USR == (rInputField.GetSubType() & 0x00ff) )
+                nSrvId = SwServiceType::FieldTypeInputUser;
+            break;
+        }
     case SwFieldIds::DocInfo:
         {
-            const sal_uInt16 nSubType = rField.GetSubType();
+            auto rDocInfoField = static_cast<const SwDocInfoField&>(rField);
+            const sal_uInt16 nSubType = rDocInfoField.GetSubType();
             switch( nSubType & 0xff )
             {
             case DI_CHANGE:
@@ -239,14 +242,18 @@ static SwServiceType lcl_GetServiceForField( const SwField& rField )
         break;
 
     case SwFieldIds::HiddenText:
-        nSrvId = SwFieldTypesEnum::ConditionalText == static_cast<SwFieldTypesEnum>(rField.GetSubType())
-                        ? SwServiceType::FieldTypeConditionedText
-                        : SwServiceType::FieldTypeHiddenText;
+        {
+            auto rHiddenTextField = static_cast<const SwHiddenTextField&>(rField);
+            nSrvId = SwFieldTypesEnum::ConditionalText == rHiddenTextField.GetSubType()
+                            ? SwServiceType::FieldTypeConditionedText
+                            : SwServiceType::FieldTypeHiddenText;
+        }
         break;
 
     case SwFieldIds::DocStat:
         {
-            switch( rField.GetSubType() )
+            auto rDocStatField = static_cast<const SwDocStatField&>(rField);
+            switch( rDocStatField.GetSubType() )
             {
             case DS_PAGE_RANGE:nSrvId = SwServiceType::FieldTypePageCountRange; break;
             case DS_PAGE: nSrvId = SwServiceType::FieldTypePageCount; break;
@@ -1673,12 +1680,12 @@ void SAL_CALL SwXTextField::attach(
                 aData.sCommand = m_pImpl->m_pProps->sPar2;
                 aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
                 xField.reset(new SwDBNameField(static_cast<SwDBNameFieldType*>(pFieldType), aData));
-                sal_uInt16  nSubType = xField->GetSubType();
+                sal_uInt16  nSubType = static_cast<SwDBNameField*>(xField.get())->GetSubType();
                 if (m_pImpl->m_pProps->bBool2)
                     nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
                 else
                     nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
-                xField->SetSubType(nSubType);
+                static_cast<SwDBNameField*>(xField.get())->SetSubType(nSubType);
             }
             break;
             case SwServiceType::FieldTypeDatabaseNextSet:
@@ -1717,12 +1724,12 @@ void SAL_CALL SwXTextField::attach(
                         m_pImpl->m_pProps->nUSHORT1);
                 xField.reset(pDBSNField);
                 pDBSNField->SetSetNumber(m_pImpl->m_pProps->nFormat);
-                sal_uInt16 nSubType = xField->GetSubType();
+                sal_uInt16 nSubType = pDBSNField->GetSubType();
                 if (m_pImpl->m_pProps->bBool2)
                     nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
                 else
                     nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
-                xField->SetSubType(nSubType);
+                pDBSNField->SetSubType(nSubType);
             }
             break;
             case SwServiceType::FieldTypeDatabase:
@@ -1734,12 +1741,12 @@ void SAL_CALL SwXTextField::attach(
                 xField.reset(new SwDBField(static_cast<SwDBFieldType*>(pFieldType),
                         m_pImpl->m_pProps->nFormat));
                 static_cast<SwDBField*>(xField.get())->InitContent(m_pImpl->m_pProps->sPar1);
-                sal_uInt16  nSubType = xField->GetSubType();
+                sal_uInt16  nSubType = static_cast<SwDBField*>(xField.get())->GetSubType();
                 if (m_pImpl->m_pProps->bBool2)
                     nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
                 else
                     nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
-                xField->SetSubType(nSubType);
+                static_cast<SwDBField*>(xField.get())->SetSubType(nSubType);
             }
             break;
             case SwServiceType::FieldTypeSetExp:
@@ -1761,7 +1768,7 @@ void SAL_CALL SwXTextField::attach(
                     m_pImpl->m_pProps->nUSHORT2 : m_pImpl->m_pProps->nFormat);
                 xField.reset(pSEField);
 
-                sal_uInt16  nSubType = xField->GetSubType();
+                sal_uInt16  nSubType = pSEField->GetSubType();
                 if (m_pImpl->m_pProps->bBool2)
                     nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
                 else
@@ -1770,7 +1777,7 @@ void SAL_CALL SwXTextField::attach(
                     nSubType |= nsSwExtendedSubType::SUB_CMD;
                 else
                     nSubType &= ~nsSwExtendedSubType::SUB_CMD;
-                xField->SetSubType(nSubType);
+                pSEField->SetSubType(nSubType);
                 pSEField->SetSeqNumber(m_pImpl->m_pProps->nUSHORT1);
                 pSEField->SetInputFlag(m_pImpl->m_pProps->bBool1);
                 pSEField->SetPromptText(m_pImpl->m_pProps->sPar3);

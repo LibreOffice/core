@@ -166,6 +166,7 @@
 #include <sfx2/printer.hxx>
 #include <unotxdoc.hxx>
 #include <poolfmt.hxx>
+#include <flddat.hxx>
 
 using ::editeng::SvxBorderLine;
 
@@ -2970,7 +2971,8 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         else
         {
             // Write the field start
-            if ( rInfos.pField && (rInfos.pField->Which() == SwFieldIds::DateTime) && rInfos.pField->GetSubType() & FIXEDFLD )
+            if ( rInfos.pField && (rInfos.pField->Which() == SwFieldIds::DateTime)
+                && (static_cast<const SwDateTimeField*>(rInfos.pField.get())->GetSubType() & FIXEDFLD) )
             {
                 m_pSerializer->startElementNS( XML_w, XML_fldChar,
                     FSNS( XML_w, XML_fldCharType ), "begin",
@@ -3271,9 +3273,8 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
         return;
     }
 
-    sal_uInt16 nSubType = rInfos.pField->GetSubType( );
     bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == SwFieldIds::SetExp;
-    bool bShowRef = bIsSetField && ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) == 0;
+    bool bShowRef = bIsSetField && ( static_cast<const SwSetExpField*>(rInfos.pField.get())->GetSubType( ) & nsSwExtendedSubType::SUB_INVISIBLE ) == 0;
 
     if (!bShowRef)
     {
@@ -8731,13 +8732,13 @@ void DocxAttributeOutput::WriteField_Impl(const SwField *const pField,
         return;
 
     SwFieldIds nType = pField->GetTyp( )->Which( );
-    sal_uInt16 nSubType = pField->GetSubType();
 
     // TODO Any other field types here ?
-    if ( ( nType == SwFieldIds::SetExp ) && ( nSubType & nsSwGetSetExpType::GSE_STRING ) )
+    if ( nType == SwFieldIds::SetExp )
     {
         const SwSetExpField *pSet = static_cast<const SwSetExpField*>( pField );
-        m_sFieldBkm = pSet->GetPar1( );
+        if ( pSet->GetSubType() & nsSwGetSetExpType::GSE_STRING )
+            m_sFieldBkm = pSet->GetPar1( );
     }
     else if ( nType == SwFieldIds::Dropdown )
     {

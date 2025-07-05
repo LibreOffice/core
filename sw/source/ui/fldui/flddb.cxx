@@ -179,7 +179,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
         m_xValueED->save_value();
         m_sOldDBName = m_xDatabaseTLB->GetDBName(m_sOldTableName, m_sOldColumnName);
         m_nOldFormat = GetCurField()->GetUntypedFormat();
-        m_nOldSubType = GetCurField()->GetSubType();
+        m_nOldSubType = GetCurField()->GetUntypedSubType();
     }
 }
 
@@ -337,12 +337,12 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
 
             if (IsFieldEdit())
             {
-                auto pValueField = static_cast<SwValueField*>(GetCurField());
-                auto nFormat = pValueField->GetFormat();
+                auto pDBField = static_cast<SwDBField*>(GetCurField());
+                auto nFormat = pDBField->GetFormat();
                 if (nFormat != 0 && nFormat != SAL_MAX_UINT32)
                     m_xNumFormatLB->SetDefFormat(nFormat);
 
-                if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_OWN_FMT)
+                if (pDBField->GetSubType() & nsSwExtendedSubType::SUB_OWN_FMT)
                     m_xNewFormatRB->set_active(true);
                 else
                     m_xDBFormatRB->set_active(true);

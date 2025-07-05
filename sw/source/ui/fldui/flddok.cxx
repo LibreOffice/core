@@ -250,9 +250,13 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
                             m_xSelectionLB->select_id(sId);
                         break;
                     case SwFieldTypesEnum::ExtendedUser:
+                        m_xSelectionLB->append(sId, aLst[i]);
+                        if (static_cast<const SwExtUserField*>(GetCurField())->GetSubType() == i)
+                            m_xSelectionLB->select_id(sId);
+                        break;
                     case SwFieldTypesEnum::DocumentStatistics:
                         m_xSelectionLB->append(sId, aLst[i]);
-                        if (GetCurField()->GetSubType() == i)
+                        if (static_cast<const SwDocStatField*>(GetCurField())->GetSubType() == i)
                             m_xSelectionLB->select_id(sId);
                         break;
 

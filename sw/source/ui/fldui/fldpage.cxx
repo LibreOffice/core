@@ -232,11 +232,11 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
 
         case SwFieldTypesEnum::Input:
             {
+                SwSetExpField* pField = static_cast<SwSetExpField*>(pTmpField.get());
                 // User- or SetField ?
                 if (m_aMgr.GetFieldType(SwFieldIds::User, sPar1) == nullptr &&
-                !(pTmpField->GetSubType() & INP_TXT)) // SETEXPFLD
+                    !(pField->GetSubType() & INP_TXT)) // SETEXPFLD
                 {
-                    SwSetExpField* pField = static_cast<SwSetExpField*>(pTmpField.get());
                     pField->SetPromptText(sPar2);
                     sPar2 = pField->GetPar2();
                 }
@@ -256,7 +256,7 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
 
         pSh->StartAllAction();
 
-        pTmpField->SetSubType(nSubType);
+        pTmpField->SetUntypedSubType(nSubType);
         pTmpField->SetAutomaticLanguage(bIsAutomaticLanguage);
 
         m_aMgr.UpdateCurField( nFormatId, sPar1, sPar2, std::move(pTmpField) );

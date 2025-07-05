@@ -99,6 +99,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <sfx2/printer.hxx>
 #include <fmtftntx.hxx>
+#include <flddat.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::util;
@@ -1885,7 +1886,8 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* const pField, ww::eField
         if (bHasInstructions)
         {
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
-            if (pField && (pField->GetSubType() & FIXEDFLD))
+            if (pField && pField->GetTyp()->Which() == SwFieldIds::DateTime
+                && (static_cast<const SwDateTimeField*>(pField)->GetSubType() & FIXEDFLD))
                 m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLDLOCK);
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST
                                " ");

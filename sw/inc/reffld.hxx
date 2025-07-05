@@ -160,8 +160,8 @@ public:
     void                SetExpand( const OUString& rStr );
 
     /// Get/set sub type.
-    virtual sal_uInt16      GetSubType() const override;
-    SW_DLLPUBLIC virtual void SetSubType( sal_uInt16 n ) override;
+    SW_DLLPUBLIC sal_uInt16 GetSubType() const;
+    SW_DLLPUBLIC void SetSubType( sal_uInt16 n );
 
     // --> #i81002#
     SW_DLLPUBLIC bool IsRefToHeadingCrossRefBookmark() const;

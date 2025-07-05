@@ -116,7 +116,7 @@ SwFieldEditDlg::SwFieldEditDlg(SwView const & rVw)
 
     EnsureSelection(pCurField, aMgr);
 
-    sal_uInt16 nGroup = SwFieldMgr::GetGroup(pCurField->GetTypeId(), pCurField->GetSubType());
+    sal_uInt16 nGroup = SwFieldMgr::GetGroup(pCurField->GetTypeId(), pCurField->GetUntypedSubType());
 
     CreatePage(nGroup);
 
@@ -162,7 +162,7 @@ void SwFieldEditDlg::Init()
 
             const SwFieldTypesEnum aId(pCurField->GetTypeId());
             if ( (aId == SwFieldTypesEnum::Author) ||
-                 ((aId == SwFieldTypesEnum::DocumentInfo) && (pCurField->GetSubType() != (DI_CREATE|DI_SUB_AUTHOR)))) // except DocumentInfo > Author
+                 ((aId == SwFieldTypesEnum::DocumentInfo) && (static_cast<const SwDocInfoField*>(pCurField)->GetSubType() != (DI_CREATE|DI_SUB_AUTHOR)))) // except DocumentInfo > Author
                 m_xAddressBT->set_visible(true);
             else
                 m_xAddressBT->set_visible(false);
@@ -286,7 +286,7 @@ IMPL_LINK(SwFieldEditDlg, NextPrevHdl, weld::Button&, rButton, void)
     rMgr.GoNextPrev( bNext, pOldTyp );
     pCurField = rMgr.GetCurField();
 
-    sal_uInt16 nGroup = SwFieldMgr::GetGroup(pCurField->GetTypeId(), pCurField->GetSubType());
+    sal_uInt16 nGroup = SwFieldMgr::GetGroup(pCurField->GetTypeId(), pCurField->GetUntypedSubType());
 
     if (nGroup != pTabPage->GetGroup())
         pTabPage = static_cast<SwFieldPage*>(CreatePage(nGroup));
@@ -311,7 +311,8 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, weld::Button&, void)
 
         EditPosition nEditPos = EditPosition::UNKNOWN;
 
-        switch(pCurField->GetSubType())
+        auto pExtUserField = static_cast<const SwExtUserField*>(pCurField);
+        switch(pExtUserField->GetSubType())
         {
             case EU_FIRSTNAME:  nEditPos = EditPosition::FIRSTNAME;  break;
             case EU_NAME:       nEditPos = EditPosition::LASTNAME;   break;

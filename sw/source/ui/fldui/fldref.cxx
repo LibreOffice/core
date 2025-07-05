@@ -328,20 +328,18 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
             OUString sName;
             sal_uInt16 nFlag = 0;
 
-            switch( GetCurField()->GetSubType() )
+            SwGetRefField* pRefField = dynamic_cast<SwGetRefField*>(GetCurField());
+            switch( pRefField->GetSubType() )
             {
                 case REF_BOOKMARK:
                 {
                     // #i83479#
-                    SwGetRefField* pRefField = dynamic_cast<SwGetRefField*>(GetCurField());
-                    if ( pRefField &&
-                         pRefField->IsRefToHeadingCrossRefBookmark() )
+                    if ( pRefField->IsRefToHeadingCrossRefBookmark() )
                     {
                         sName = m_sHeadingText;
                         nFlag = REFFLDFLAG_HEADING;
                     }
-                    else if ( pRefField &&
-                              pRefField->IsRefToNumItemCrossRefBookmark() )
+                    else if ( pRefField->IsRefToNumItemCrossRefBookmark() )
                     {
                         sName = m_sNumItemText;
                         nFlag = REFFLDFLAG_NUMITEM;
@@ -371,22 +369,14 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
 
                 case REF_SEQUENCEFLD:
                 {
-                    SwGetRefField const*const pRefField(dynamic_cast<SwGetRefField*>(GetCurField()));
-                    if (pRefField)
-                    {
-                        sName = pRefField->GetSetRefName().toString();
-                    }
+                    sName = pRefField->GetSetRefName().toString();
                     nFlag = REFFLDFLAG;
                     break;
                 }
 
                 case REF_STYLE:
                 {
-                    SwGetRefField const*const pRefField(dynamic_cast<SwGetRefField*>(GetCurField()));
-                    if (pRefField)
-                    {
-                        sName = pRefField->GetPar1();
-                    }
+                    sName = pRefField->GetPar1();
                     nFlag = REFFLDFLAG_STYLE;
                     break;
                 }

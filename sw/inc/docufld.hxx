@@ -178,7 +178,8 @@ public:
     virtual OUString GetPar2() const override;
     virtual void        SetPar2(const OUString& rStr) override;
 
-    virtual sal_uInt16  GetSubType() const override;
+    sal_uInt16          GetSubType() const;
+    void                SetSubType(sal_uInt16 n) { m_nSubType = n; }
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
@@ -302,8 +303,8 @@ public:
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
-    virtual sal_uInt16      GetSubType() const override;
-    virtual void        SetSubType(sal_uInt16 nSub) override;
+    sal_uInt16          GetSubType() const;
+    void                SetSubType(sal_uInt16 nSub);
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
@@ -367,7 +368,8 @@ public:
     virtual void        SetPar2(const OUString& rStr) override;
     virtual OUString    GetPar2() const override;
 
-    virtual sal_uInt16  GetSubType() const override;
+    SwFieldTypesEnum    GetSubType() const;
+    void SetSubType(SwFieldTypesEnum n) { m_nSubType = n; }
 
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
@@ -582,8 +584,8 @@ public:
     SwDocInfoField(SwDocInfoFieldType*, sal_uInt16 nSub, const OUString& rName, sal_uInt32 nFormat=0);
     SwDocInfoField(SwDocInfoFieldType*, sal_uInt16 nSub, const OUString& rName, const OUString& rValue, sal_uInt32 nFormat=0);
 
-    virtual void            SetSubType(sal_uInt16) override;
-    virtual sal_uInt16      GetSubType() const override;
+    void                    SetSubType(sal_uInt16);
+    sal_uInt16              GetSubType() const;
     virtual void            SetLanguage(LanguageType nLng) override;
     virtual OUString        GetFieldName() const override;
     const OUString&         GetName() const { return m_aName; }
@@ -618,8 +620,8 @@ public:
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
-    virtual sal_uInt16      GetSubType() const override;
-    virtual void        SetSubType(sal_uInt16 nSub) override;
+    SW_DLLPUBLIC sal_uInt16 GetSubType() const;
+    void SetSubType(sal_uInt16 nSub);
 
     void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
 

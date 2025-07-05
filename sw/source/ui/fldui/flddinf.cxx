@@ -134,13 +134,11 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     if (IsFieldEdit())
     {
         const SwField* pCurField = GetCurField();
-        nSubType = pCurField->GetSubType() & 0xff;
-        if( nSubType == DI_CUSTOM )
+        if (auto const pField = dynamic_cast<SwDocInfoField const*>(pCurField))
         {
-            if (auto const pField = dynamic_cast<SwDocInfoField const*>(pCurField))
-            {
+            nSubType = pField->GetSubType() & 0xff;
+            if( nSubType == DI_CUSTOM )
                 m_sOldCustomFieldName = pField->GetName();
-            }
         }
         m_xFormatLB->SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
         SwWrtShell *pSh = GetWrtShell();

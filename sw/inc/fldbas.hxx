@@ -318,8 +318,10 @@ public:
 
     // TYP_ID
     SwFieldTypesEnum    GetTypeId() const;
-    virtual sal_uInt16      GetSubType() const;
-    virtual void        SetSubType(sal_uInt16);
+
+    // for code that is still passing around untyped values
+    sal_uInt16 GetUntypedSubType() const;
+    void SetUntypedSubType(sal_uInt16);
 
     /// Language at field position.
     inline LanguageType GetLanguage() const;

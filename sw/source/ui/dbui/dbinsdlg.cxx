@@ -903,9 +903,7 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
                                             m_aDBData );
                     pNew = new DB_Column( rFndCol, *new SwDBField(
                             static_cast<SwDBFieldType*>(rSh.InsertFieldType( aFieldType )),
-                                                            nFormat ) );
-                    if( nSubType )
-                        pNew->pField->SetSubType( nSubType );
+                                                            nFormat, nSubType ) );
                 }
                 else
                     pNew = new DB_Column( rFndCol, nFormat );

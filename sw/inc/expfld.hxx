@@ -124,8 +124,8 @@ public:
     virtual OUString GetPar2() const override;
     virtual void        SetPar2(const OUString& rStr) override;
 
-    virtual sal_uInt16  GetSubType() const override;
-    virtual void        SetSubType(sal_uInt16 nType) override;
+    sal_uInt16          GetSubType() const;
+    void                SetSubType(sal_uInt16 nType);
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
@@ -237,8 +237,8 @@ public:
 
     virtual OUString            GetFieldName() const override;
 
-    virtual sal_uInt16              GetSubType() const override;
-    virtual void                SetSubType(sal_uInt16 nType) override;
+    sal_uInt16                  GetSubType() const;
+    void                        SetSubType(sal_uInt16 nType);
 
     inline bool                 IsSequenceField() const;
 
@@ -336,8 +336,8 @@ public:
     const OUString&         GetToolTip() const;
     void                    SetToolTip(const OUString & rStr);
 
-    virtual sal_uInt16      GetSubType() const override;
-    virtual void            SetSubType(sal_uInt16 nSub) override;
+    sal_uInt16          GetSubType() const;
+    void                SetSubType(sal_uInt16 nSub);
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
@@ -394,8 +394,8 @@ public:
                 sal_uInt16 nSubType, sal_uLong nFormat);
 
     virtual void        SetValue( const double& rVal ) override;
-    virtual sal_uInt16  GetSubType() const override;
-    virtual void        SetSubType(sal_uInt16 nType) override;
+    sal_uInt16          GetSubType() const;
+    void                SetSubType(sal_uInt16 nType);
 
     void                ChgExpStr(const OUString& rStr) { m_sExpand = rStr; }
 

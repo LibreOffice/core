@@ -781,8 +781,9 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         SwFieldMgr(m_pWrtShell).GetSubTypes(SwFieldTypesEnum::DocumentStatistics,
                                                             aDocumentStatisticsSubTypesList);
                     OUString sSubType;
-                    if (pField->GetSubType() < aDocumentStatisticsSubTypesList.size())
-                        sSubType = u" - " + aDocumentStatisticsSubTypesList[pField->GetSubType()];
+                    sal_uInt16 nSubStype = static_cast<const SwDocStatField*>(pField)->GetSubType();
+                    if (nSubStype < aDocumentStatisticsSubTypesList.size())
+                        sSubType = u" - " + aDocumentStatisticsSubTypesList[nSubStype];
                     sText = pField->GetDescription() + u" - " + pField->GetFieldName() + sSubType +
                             sExpandField;
                 }
@@ -807,7 +808,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     else
                     {
                         OUString sFieldSubTypeOrName;
-                        auto nSubType = pField->GetSubType();
+                        auto nSubType = pRefField->GetSubType();
                         if (nSubType == REF_FOOTNOTE)
                             sFieldSubTypeOrName = SwResId(STR_FLDREF_FOOTNOTE);
                         else if (nSubType == REF_ENDNOTE)

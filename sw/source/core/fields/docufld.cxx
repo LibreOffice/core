@@ -1516,9 +1516,9 @@ OUString SwHiddenTextField::GetPar2() const
     return m_aTRUEText + "|" + m_aFALSEText;
 }
 
-sal_uInt16 SwHiddenTextField::GetSubType() const
+SwFieldTypesEnum SwHiddenTextField::GetSubType() const
 {
-    return static_cast<sal_uInt16>(m_nSubType);
+    return m_nSubType;
 }
 
 bool SwHiddenTextField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const

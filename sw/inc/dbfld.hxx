@@ -66,7 +66,7 @@ class SW_DLLPUBLIC SwDBField final : public SwValueField
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
-    SwDBField(SwDBFieldType*, sal_uInt32 nFormat = 0);
+    SwDBField(SwDBFieldType*, sal_uInt32 nFormat = 0, sal_uInt16 nSubType = 0);
     virtual ~SwDBField() override;
 
     virtual SwFieldType*    ChgTyp( SwFieldType* ) override;
@@ -74,8 +74,8 @@ public:
     /// Current text.
     inline  void        SetExpansion(const OUString& rStr);
 
-    virtual sal_uInt16      GetSubType() const override;
-    virtual void        SetSubType(sal_uInt16 nType) override;
+    sal_uInt16 GetSubType() const;
+    void SetSubType(sal_uInt16 nType);
 
     virtual OUString    GetFieldName() const override;
 
@@ -145,8 +145,8 @@ public:
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
-    virtual sal_uInt16      GetSubType() const override;
-    virtual void            SetSubType(sal_uInt16 nType) override;
+    sal_uInt16              GetSubType() const;
+    void                    SetSubType(sal_uInt16 nType);
 };
 
 // Database field next record.

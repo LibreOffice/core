@@ -297,7 +297,7 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     else if (rHint.GetId() == SfxHintId::SwGatherRefFields)
     {
         const auto pGatherRefFieldsHint = static_cast<const sw::GatherRefFieldsHint*>( &rHint );
-        if(!GetTextField() || pGatherRefFieldsHint->m_nType != GetField()->GetSubType())
+        if(!GetTextField() || pGatherRefFieldsHint->m_nType != GetField()->GetUntypedSubType())
             return;
         SwTextNode* pNd = GetTextField()->GetpTextNode();
         if(pNd && pNd->GetNodes().IsDocNodes())

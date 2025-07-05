@@ -2845,36 +2845,42 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
         CPPUNIT_ASSERT(pA == pB || &pHintA->GetTextNode() != &pHintB->GetTextNode());
         return pHintA->GetTextNode().GetIndex() < pHintB->GetTextNode().GetIndex();
     });
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[0]->GetField()->GetSubType());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK),
+                         static_cast<SwGetRefField*>(fields[0]->GetField())->GetSubType());
     CPPUNIT_ASSERT_EQUAL(
         u"bookmarkchapter1_text"_ustr,
         static_cast<SwGetRefField const*>(fields[0]->GetField())->GetSetRefName().toString());
     CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,
                          static_cast<SwGetRefField const*>(fields[0]->GetField())
                              ->GetExpandedTextOfReferencedTextNode(*pWrtShell->GetLayout()));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[1]->GetField()->GetSubType());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK),
+                         static_cast<SwGetRefField*>(fields[1]->GetField())->GetSubType());
     CPPUNIT_ASSERT(
         static_cast<SwGetRefField const*>(fields[1]->GetField())->IsRefToHeadingCrossRefBookmark());
     CPPUNIT_ASSERT_EQUAL(u"Chapter 2"_ustr,
                          static_cast<SwGetRefField const*>(fields[1]->GetField())->GetPar2());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[2]->GetField()->GetSubType());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK),
+                         static_cast<SwGetRefField*>(fields[2]->GetField())->GetSubType());
     CPPUNIT_ASSERT_EQUAL(
         u"Bookmarkchapter1"_ustr,
         static_cast<SwGetRefField const*>(fields[2]->GetField())->GetSetRefName().toString());
     CPPUNIT_ASSERT_EQUAL(u"Chapter 1"_ustr,
                          static_cast<SwGetRefField const*>(fields[2]->GetField())->GetPar2());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[3]->GetField()->GetSubType());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK),
+                         static_cast<SwGetRefField*>(fields[3]->GetField())->GetSubType());
     CPPUNIT_ASSERT_EQUAL(
         u"bookmarkchapter1_text"_ustr,
         static_cast<SwGetRefField const*>(fields[3]->GetField())->GetSetRefName().toString());
     CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,
                          static_cast<SwGetRefField const*>(fields[3]->GetField())->GetPar2());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[4]->GetField()->GetSubType());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK),
+                         static_cast<SwGetRefField*>(fields[4]->GetField())->GetSubType());
     CPPUNIT_ASSERT(
         static_cast<SwGetRefField const*>(fields[4]->GetField())->IsRefToHeadingCrossRefBookmark());
     CPPUNIT_ASSERT_EQUAL(u"Chapter 1.1"_ustr,
                          static_cast<SwGetRefField const*>(fields[4]->GetField())->GetPar2());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[5]->GetField()->GetSubType());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK),
+                         static_cast<SwGetRefField*>(fields[5]->GetField())->GetSubType());
     CPPUNIT_ASSERT(
         static_cast<SwGetRefField const*>(fields[5]->GetField())->IsRefToHeadingCrossRefBookmark());
     CPPUNIT_ASSERT_EQUAL(u"Chapter 2"_ustr,

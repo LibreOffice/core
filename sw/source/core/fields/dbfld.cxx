@@ -157,9 +157,9 @@ void SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // database field
 
-SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uInt32 nFormat)
+SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uInt32 nFormat, sal_uInt16 nSubType)
     :   SwValueField(pTyp, nFormat),
-        m_nSubType(0),
+        m_nSubType(nSubType),
         m_bIsInBodyText(true),
         m_bValidValue(false),
         m_bInitialized(false)
