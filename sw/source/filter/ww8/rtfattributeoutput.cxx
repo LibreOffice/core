@@ -1887,7 +1887,8 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* const pField, ww::eField
         {
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
             if (pField && pField->GetTyp()->Which() == SwFieldIds::DateTime
-                && (static_cast<const SwDateTimeField*>(pField)->GetSubType() & FIXEDFLD))
+                && (static_cast<const SwDateTimeField*>(pField)->GetSubType()
+                    & SwDateTimeSubType::Fixed))
                 m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLDLOCK);
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST
                                " ");

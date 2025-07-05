@@ -179,9 +179,12 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
         switch( nTypeId )
         {
         case SwFieldTypesEnum::Date:
+            nSubType = static_cast< sal_uInt16 >(SwDateTimeSubType::Date |
+                       ((nSubType == DATE_VAR) ? SwDateTimeSubType::None : SwDateTimeSubType::Fixed));
+            break;
         case SwFieldTypesEnum::Time:
-            nSubType = static_cast< sal_uInt16 >(((nTypeId == SwFieldTypesEnum::Date) ? DATEFLD : TIMEFLD) |
-                       ((nSubType == DATE_VAR) ? 0 : FIXEDFLD));
+            nSubType = static_cast< sal_uInt16 >(SwDateTimeSubType::Time |
+                       ((nSubType == DATE_VAR) ? SwDateTimeSubType::None : SwDateTimeSubType::Fixed));
             break;
 
         case SwFieldTypesEnum::DatabaseName:

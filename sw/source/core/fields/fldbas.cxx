@@ -269,11 +269,11 @@ SwFieldTypesEnum SwField::GetTypeId() const
     case SwFieldIds::DateTime:
         {
             auto pDateTimeField = static_cast<const SwDateTimeField*>(this);
-            sal_uInt16 nSubType = pDateTimeField->GetSubType();
-            if (nSubType & FIXEDFLD)
-                nRet = nSubType & DATEFLD ? SwFieldTypesEnum::FixedDate : SwFieldTypesEnum::FixedTime;
+            SwDateTimeSubType nSubType = pDateTimeField->GetSubType();
+            if (nSubType & SwDateTimeSubType::Fixed)
+                nRet = nSubType & SwDateTimeSubType::Date ? SwFieldTypesEnum::FixedDate : SwFieldTypesEnum::FixedTime;
             else
-                nRet = nSubType & DATEFLD ? SwFieldTypesEnum::Date : SwFieldTypesEnum::Time;
+                nRet = nSubType & SwDateTimeSubType::Date ? SwFieldTypesEnum::Date : SwFieldTypesEnum::Time;
         }
         break;
     case SwFieldIds::GetExp:
@@ -329,7 +329,7 @@ OUString SwField::GetFieldName() const
     {
         auto pDateTimeField = static_cast<const SwDateTimeField*>(this);
         nTypeId =
-            ((pDateTimeField->GetSubType() & DATEFLD) != 0) ? SwFieldTypesEnum::Date : SwFieldTypesEnum::Time;
+            (pDateTimeField->GetSubType() & SwDateTimeSubType::Date) ? SwFieldTypesEnum::Date : SwFieldTypesEnum::Time;
     }
     OUString sRet = SwFieldType::GetTypeStr( nTypeId );
     if (IsFixed())
@@ -455,7 +455,7 @@ sal_uInt16 SwField::GetUntypedSubType() const
     case SwFieldIds::GetRef:
         return static_cast<const SwGetRefField*>(this)->GetSubType();
     case SwFieldIds::DateTime:
-        return static_cast<const SwDateTimeField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwDateTimeField*>(this)->GetSubType());
     case SwFieldIds::Table:
         return static_cast<const SwTableField*>(this)->GetSubType();
     case SwFieldIds::Input:
@@ -497,7 +497,7 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
         static_cast<SwGetRefField*>(this)->SetSubType(n);
         break;
     case SwFieldIds::DateTime:
-        static_cast<SwDateTimeField*>(this)->SetSubType(n);
+        static_cast<SwDateTimeField*>(this)->SetSubType(static_cast<SwDateTimeSubType>(n));
         break;
     case SwFieldIds::Table:
         static_cast<SwTableField*>(this)->SetSubType(n);
@@ -642,7 +642,7 @@ bool SwField::IsFixed() const
         break;
 
     case SwFieldIds::DateTime:
-        bRet = 0 != (static_cast<const SwDateTimeField*>(this)->GetSubType() & FIXEDFLD);
+        bRet = bool(static_cast<const SwDateTimeField*>(this)->GetSubType() & SwDateTimeSubType::Fixed);
         break;
 
     case SwFieldIds::ExtUser:

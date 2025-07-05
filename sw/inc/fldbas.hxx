@@ -188,11 +188,13 @@ enum SwUserType {
     UF_EXPR     = 0x02
 };
 
-enum SwDateTimeSubType {
-    FIXEDFLD = 1,
-    DATEFLD  = 2,
-    TIMEFLD  = 4
+enum class SwDateTimeSubType : sal_uInt16 {
+    None  = 0,
+    Fixed = 1,
+    Date  = 2,
+    Time  = 4
 };
+namespace o3tl { template<> struct typed_flags<SwDateTimeSubType> : is_typed_flags<SwDateTimeSubType, 0x0007> {}; }
 
 /// General tools.
 OUString  FormatNumber(sal_uInt32 nNum, SvxNumType nFormat, LanguageType nLang = LANGUAGE_NONE);

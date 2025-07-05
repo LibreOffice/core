@@ -966,8 +966,9 @@ bool SwFieldMgr::InsertField(
     case SwFieldTypesEnum::Time:
         {
             sal_uInt16 nSubType = rData.m_nSubType;
-            sal_uInt16 nSub = static_cast< sal_uInt16 >(rData.m_nTypeId == SwFieldTypesEnum::Date ? DATEFLD : TIMEFLD);
-            nSub |= nSubType == DATE_VAR ? 0 : FIXEDFLD;
+            SwDateTimeSubType nSub = (rData.m_nTypeId == SwFieldTypesEnum::Date ? SwDateTimeSubType::Date : SwDateTimeSubType::Time);
+            if (nSubType != DATE_VAR)
+                nSub |= SwDateTimeSubType::Fixed;
 
             SwDateTimeFieldType* pTyp =
                 static_cast<SwDateTimeFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::DateTime) );

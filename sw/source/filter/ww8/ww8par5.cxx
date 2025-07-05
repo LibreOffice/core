@@ -1930,14 +1930,14 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, OUString& rStr )
     {
         SwDateTimeField aField(static_cast<SwDateTimeFieldType*>(
             m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime)),
-            nDT & SvNumFormatType::DATE ? DATEFLD : TIMEFLD, nFormat);
+            nDT & SvNumFormatType::DATE ? SwDateTimeSubType::Date : SwDateTimeSubType::Time, nFormat);
         if (pF->nOpt & 0x10) // Fixed field
         {
             double fSerial;
             if (!m_rDoc.GetNumberFormatter()->IsNumberFormat(GetFieldResult(pF), nFormat, fSerial,
                                                              SvNumInputOptions::LAX_TIME))
                 return eF_ResT::TEXT; // just drop the field and insert the plain text.
-            aField.SetSubType(aField.GetSubType() | FIXEDFLD);
+            aField.SetSubType(aField.GetSubType() | SwDateTimeSubType::Fixed);
             DateTime aSetDateTime(m_rDoc.GetNumberFormatter()->GetNullDate());
             aSetDateTime.AddTime(fSerial);
             aField.SetDateTime(aSetDateTime);

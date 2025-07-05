@@ -321,26 +321,26 @@ void SwHTMLParser::NewField()
             DateTime aDateTime( DateTime::SYSTEM );
             sal_Int64 nTime = aDateTime.GetTime();
             sal_Int32 nDate = aDateTime.GetDate();
-            sal_uInt16 nSub = 0;
+            SwDateTimeSubType nSub = SwDateTimeSubType::None;
             bool bValidFormat = false;
             HTMLNumFormatTableEntry const * pFormatTable;
 
             if( SwFieldIds::Date==nType )
             {
-                nSub = DATEFLD;
+                nSub = SwDateTimeSubType::Date;
                 pFormatTable = aHTMLDateFieldFormatTable;
                 if( !aValue.isEmpty() )
                     nDate = aValue.toInt32();
             }
             else
             {
-                nSub = TIMEFLD;
+                nSub = SwDateTimeSubType::Time;
                 pFormatTable = aHTMLTimeFieldFormatTable;
                 if( !aValue.isEmpty() )
                     nTime = static_cast<sal_uLong>(aValue.toInt32()); // Is this OK? 32-bit encoded time?
             }
             if( !aValue.isEmpty() )
-                nSub |= FIXEDFLD;
+                nSub |= SwDateTimeSubType::Fixed;
 
             SvNumberFormatter *pFormatter = m_xDoc->GetNumberFormatter();
             if( pFormatOption )
@@ -363,7 +363,7 @@ void SwHTMLParser::NewField()
 
             xNewField.reset(new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFormat));
 
-            if (nSub & FIXEDFLD)
+            if (nSub & SwDateTimeSubType::Fixed)
                 static_cast<SwDateTimeField *>(xNewField.get())->SetDateTime(DateTime(Date(nDate), tools::Time::fromEncodedTime(nTime)));
         }
         break;
@@ -371,7 +371,7 @@ void SwHTMLParser::NewField()
     case SwFieldIds::DateTime:
         if( bHasNumFormat )
         {
-            sal_uInt16 nSub = 0;
+            SwDateTimeSubType nSub = SwDateTimeSubType::None;
 
             SvNumberFormatter *pFormatter = m_xDoc->GetNumberFormatter();
             sal_uInt32 nNumFormat;
@@ -382,15 +382,15 @@ void SwHTMLParser::NewField()
             SvNumFormatType nFormatType = pFormatter->GetType( nNumFormat );
             switch( nFormatType )
             {
-            case SvNumFormatType::DATE: nSub = DATEFLD; break;
-            case SvNumFormatType::TIME: nSub = TIMEFLD; break;
+            case SvNumFormatType::DATE: nSub = SwDateTimeSubType::Date; break;
+            case SvNumFormatType::TIME: nSub = SwDateTimeSubType::Time; break;
             default: break;
             }
 
-            if( nSub )
+            if( nSub != SwDateTimeSubType::None )
             {
                 if( bHasNumValue )
-                    nSub |= FIXEDFLD;
+                    nSub |= SwDateTimeSubType::Fixed;
 
                 xNewField.reset(new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFormat));
                 if (bHasNumValue)

@@ -2971,7 +2971,7 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         {
             // Write the field start
             if ( rInfos.pField && (rInfos.pField->Which() == SwFieldIds::DateTime)
-                && (static_cast<const SwDateTimeField*>(rInfos.pField.get())->GetSubType() & FIXEDFLD) )
+                && (static_cast<const SwDateTimeField*>(rInfos.pField.get())->GetSubType() & SwDateTimeSubType::Fixed) )
             {
                 m_pSerializer->startElementNS( XML_w, XML_fldChar,
                     FSNS( XML_w, XML_fldCharType ), "begin",

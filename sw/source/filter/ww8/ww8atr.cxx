@@ -2036,8 +2036,8 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
         // This ought to apply to any field, but just to be safe, start off with DATE/TIME only.
         if (pField->GetTyp()->Which() == SwFieldIds::DateTime)
         {
-            sal_uInt16 nSubType = static_cast<const SwDateTimeField*>(pField)->GetSubType();
-            if (nSubType & FIXEDFLD)
+            SwDateTimeSubType nSubType = static_cast<const SwDateTimeField*>(pField)->GetSubType();
+            if (nSubType & SwDateTimeSubType::Fixed)
                 //bit 5 - Locked: do not recalculate field
                 aField15[1] |= 0x10;
         }
@@ -3129,13 +3129,13 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::DateTime:
         {
             auto pDateTimeField = static_cast<const SwDateTimeField*>(pField);
-            const sal_uInt16 nSubType = pDateTimeField->GetSubType();
+            const SwDateTimeSubType nSubType = pDateTimeField->GetSubType();
             OUString sStr;
             if (!GetExport().GetNumberFormat(*pField, sStr))
                 bWriteExpand = true;
             else
             {
-                ww::eField eField = (DATEFLD & nSubType) ? ww::eDATE : ww::eTIME;
+                ww::eField eField = (SwDateTimeSubType::Date & nSubType) ? ww::eDATE : ww::eTIME;
                 GetExport().OutputField(pField, eField, FieldString(eField) + sStr);
             }
         }

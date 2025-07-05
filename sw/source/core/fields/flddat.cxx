@@ -41,7 +41,7 @@ std::unique_ptr<SwFieldType> SwDateTimeFieldType::Copy() const
     return std::make_unique<SwDateTimeFieldType>(GetDoc());
 }
 
-SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub, sal_uLong nFormat, LanguageType nLng)
+SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, SwDateTimeSubType nSub, sal_uLong nFormat, LanguageType nLng)
     : SwValueField(pInitType, nFormat, nLng, 0.0),
     m_nSubType(nSub),
     m_nOffset(0)
@@ -49,7 +49,7 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub
     if (!nFormat)
     {
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-        if (m_nSubType & DATEFLD)
+        if (m_nSubType & SwDateTimeSubType::Date)
             SetFormat(pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, GetLanguage()));
         else
             SetFormat(pFormatter->GetFormatIndex(NF_TIME_HHMMSS, GetLanguage()));
@@ -65,7 +65,7 @@ OUString SwDateTimeField::ExpandImpl(SwRootFrame const*const) const
 {
     if (getenv("STABLE_FIELDS_HACK"))
     {
-        const_cast<SwDateTimeField*>(this)->m_nSubType |= FIXEDFLD; //HACK
+        const_cast<SwDateTimeField*>(this)->m_nSubType |= SwDateTimeSubType::Fixed; //HACK
     }
 
     double fVal;
@@ -97,12 +97,12 @@ std::unique_ptr<SwField> SwDateTimeField::Copy() const
     return std::unique_ptr<SwField>(pTmp.release());
 }
 
-sal_uInt16 SwDateTimeField::GetSubType() const
+SwDateTimeSubType SwDateTimeField::GetSubType() const
 {
     return m_nSubType;
 }
 
-void SwDateTimeField::SetSubType(sal_uInt16 nType)
+void SwDateTimeField::SetSubType(SwDateTimeSubType nType)
 {
     m_nSubType = nType;
 }
@@ -138,7 +138,7 @@ double SwDateTimeField::GetValue() const
 {
     if (getenv("STABLE_FIELDS_HACK"))
     {
-        const_cast<SwDateTimeField*>(this)->m_nSubType |= FIXEDFLD; //HACK
+        const_cast<SwDateTimeField*>(this)->m_nSubType |= SwDateTimeSubType::Fixed; //HACK
     }
 
     if (IsFixed())
@@ -175,7 +175,7 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         rVal <<= IsFixed();
         break;
     case FIELD_PROP_BOOL2:
-        rVal <<= (m_nSubType & DATEFLD) != 0;
+        rVal <<= bool(m_nSubType & SwDateTimeSubType::Date);
         break;
     case FIELD_PROP_FORMAT:
         rVal <<= static_cast<sal_Int32>(GetFormat());
@@ -202,13 +202,13 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     {
     case FIELD_PROP_BOOL1:
         if(*o3tl::doAccess<bool>(rVal))
-            m_nSubType |= FIXEDFLD;
+            m_nSubType |= SwDateTimeSubType::Fixed;
         else
-            m_nSubType &= ~FIXEDFLD;
+            m_nSubType &= ~SwDateTimeSubType::Fixed;
         break;
     case FIELD_PROP_BOOL2:
-        m_nSubType &=  ~(DATEFLD|TIMEFLD);
-        m_nSubType |= *o3tl::doAccess<bool>(rVal) ? DATEFLD : TIMEFLD;
+        m_nSubType &= ~SwDateTimeSubType(SwDateTimeSubType::Date | SwDateTimeSubType::Time);
+        m_nSubType |= *o3tl::doAccess<bool>(rVal) ? SwDateTimeSubType::Date : SwDateTimeSubType::Time;
         break;
     case FIELD_PROP_FORMAT:
         rVal >>= nTmp;

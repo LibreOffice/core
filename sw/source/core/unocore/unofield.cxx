@@ -1417,13 +1417,13 @@ void SAL_CALL SwXTextField::attach(
             break;
             case SwServiceType::FieldTypeDateTime:
             {
-                sal_uInt16 nSub = 0;
+                SwDateTimeSubType nSub = SwDateTimeSubType::None;
                 if (m_pImpl->m_pProps->bBool1)
-                    nSub |= FIXEDFLD;
+                    nSub |= SwDateTimeSubType::Fixed;
                 if (m_pImpl->m_pProps->bBool2)
-                    nSub |= DATEFLD;
+                    nSub |= SwDateTimeSubType::Date;
                 else
-                    nSub |= TIMEFLD;
+                    nSub |= SwDateTimeSubType::Time;
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime);
                 SwDateTimeField *const pDTField = new SwDateTimeField(
                         static_cast<SwDateTimeFieldType*>(pFieldType),
