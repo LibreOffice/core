@@ -3173,23 +3173,24 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::ExtUser:
         {
             auto pExtUserField = static_cast<const SwExtUserField*>(pField);
-            const sal_uInt16 nSubType = pExtUserField->GetSubType();
+            const SwExtUserSubType nSubType = pExtUserField->GetSubType();
             ww::eField eField = ww::eNONE;
-            switch (0xFF & nSubType)
+            switch (static_cast<SwExtUserSubType>(0xFF & static_cast<sal_uInt16>(nSubType)))
             {
-                case EU_FIRSTNAME:
-                case EU_NAME:
+                case SwExtUserSubType::Firstname:
+                case SwExtUserSubType::Name:
                     eField = ww::eUSERNAME;
                     break;
-                case EU_SHORTCUT:
+                case SwExtUserSubType::Shortcut:
                     eField = ww::eUSERINITIALS;
                     break;
-                case EU_STREET:
-                case EU_COUNTRY:
-                case EU_ZIP:
-                case EU_CITY:
+                case SwExtUserSubType::Street:
+                case SwExtUserSubType::Country:
+                case SwExtUserSubType::Zip:
+                case SwExtUserSubType::City:
                     eField = ww::eUSERADDRESS;
                     break;
+                default: break;
             }
 
             if (eField != ww::eNONE)

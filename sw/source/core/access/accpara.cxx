@@ -1087,7 +1087,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         }
         break;
     case SwFieldIds::ExtUser:
-        subType = static_cast<const SwExtUserField*>(pField)->GetSubType();
+        subType = static_cast<sal_uInt16>(static_cast<const SwExtUserField*>(pField)->GetSubType());
         break;
     case SwFieldIds::HiddenText:
     case SwFieldIds::SetExp:

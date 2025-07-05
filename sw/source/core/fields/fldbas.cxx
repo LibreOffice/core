@@ -512,7 +512,7 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
         static_cast<SwSetExpField*>(this)->SetSubType(n);
         break;
     case SwFieldIds::ExtUser:
-        static_cast<SwExtUserField*>(this)->SetSubType(n);
+        static_cast<SwExtUserField*>(this)->SetSubType(static_cast<SwExtUserSubType>(n));
         break;
     case SwFieldIds::DocInfo:
         static_cast<SwDocInfoField*>(this)->SetSubType(static_cast<SwDocInfoSubType>(n));

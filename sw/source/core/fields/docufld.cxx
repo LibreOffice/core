@@ -2109,29 +2109,29 @@ std::unique_ptr<SwFieldType> SwExtUserFieldType::Copy() const
     return std::make_unique<SwExtUserFieldType>();
 }
 
-OUString SwExtUserFieldType::Expand(sal_uInt16 nSub )
+OUString SwExtUserFieldType::Expand(SwExtUserSubType nSub )
 {
     UserOptToken nRet = static_cast<UserOptToken>(USHRT_MAX);
     switch(nSub)
     {
-    case EU_FIRSTNAME:      nRet = UserOptToken::FirstName; break;
-    case EU_NAME:           nRet = UserOptToken::LastName;  break;
-    case EU_SHORTCUT:       nRet = UserOptToken::ID; break;
+    case SwExtUserSubType::Firstname:      nRet = UserOptToken::FirstName; break;
+    case SwExtUserSubType::Name:           nRet = UserOptToken::LastName;  break;
+    case SwExtUserSubType::Shortcut:       nRet = UserOptToken::ID; break;
 
-    case EU_COMPANY:        nRet = UserOptToken::Company;        break;
-    case EU_STREET:         nRet = UserOptToken::Street;         break;
-    case EU_TITLE:          nRet = UserOptToken::Title;          break;
-    case EU_POSITION:       nRet = UserOptToken::Position;       break;
-    case EU_PHONE_PRIVATE:  nRet = UserOptToken::TelephoneHome;    break;
-    case EU_PHONE_COMPANY:  nRet = UserOptToken::TelephoneWork;    break;
-    case EU_FAX:            nRet = UserOptToken::Fax;            break;
-    case EU_EMAIL:          nRet = UserOptToken::Email;          break;
-    case EU_COUNTRY:        nRet = UserOptToken::Country;        break;
-    case EU_ZIP:            nRet = UserOptToken::Zip;            break;
-    case EU_CITY:           nRet = UserOptToken::City;           break;
-    case EU_STATE:          nRet = UserOptToken::State;          break;
-    case EU_FATHERSNAME:    nRet = UserOptToken::FathersName;    break;
-    case EU_APARTMENT:      nRet = UserOptToken::Apartment;      break;
+    case SwExtUserSubType::Company:        nRet = UserOptToken::Company;        break;
+    case SwExtUserSubType::Street:         nRet = UserOptToken::Street;         break;
+    case SwExtUserSubType::Title:          nRet = UserOptToken::Title;          break;
+    case SwExtUserSubType::Position:       nRet = UserOptToken::Position;       break;
+    case SwExtUserSubType::PhonePrivate:  nRet = UserOptToken::TelephoneHome;    break;
+    case SwExtUserSubType::PhoneCompany:  nRet = UserOptToken::TelephoneWork;    break;
+    case SwExtUserSubType::Fax:            nRet = UserOptToken::Fax;            break;
+    case SwExtUserSubType::Email:          nRet = UserOptToken::Email;          break;
+    case SwExtUserSubType::Country:        nRet = UserOptToken::Country;        break;
+    case SwExtUserSubType::Zip:            nRet = UserOptToken::Zip;            break;
+    case SwExtUserSubType::City:           nRet = UserOptToken::City;           break;
+    case SwExtUserSubType::State:          nRet = UserOptToken::State;          break;
+    case SwExtUserSubType::FathersName:    nRet = UserOptToken::FathersName;    break;
+    case SwExtUserSubType::Apartment:      nRet = UserOptToken::Apartment;      break;
     default:             OSL_ENSURE( false, "Field unknown");
     }
     if( static_cast<UserOptToken>(USHRT_MAX) != nRet )
@@ -2144,7 +2144,7 @@ OUString SwExtUserFieldType::Expand(sal_uInt16 nSub )
 
 // extended user information field
 
-SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, SwAuthorFormat nFormat) :
+SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, SwExtUserSubType nSubTyp, SwAuthorFormat nFormat) :
     SwField(pTyp), m_nType(nSubTyp), m_nFormat(nFormat)
 {
     m_aContent = SwExtUserFieldType::Expand(m_nType);
@@ -2166,12 +2166,12 @@ std::unique_ptr<SwField> SwExtUserField::Copy() const
     return std::unique_ptr<SwField>(pField.release());
 }
 
-sal_uInt16 SwExtUserField::GetSubType() const
+SwExtUserSubType SwExtUserField::GetSubType() const
 {
     return m_nType;
 }
 
-void SwExtUserField::SetSubType(sal_uInt16 nSub)
+void SwExtUserField::SetSubType(SwExtUserSubType nSub)
 {
     m_nType = nSub;
 }
@@ -2186,7 +2186,7 @@ bool SwExtUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 
     case FIELD_PROP_USHORT1:
         {
-            sal_Int16 nTmp = m_nType;
+            sal_Int16 nTmp = static_cast<sal_uInt16>(m_nType);
             rAny <<= nTmp;
         }
         break;
@@ -2211,7 +2211,7 @@ bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         {
             sal_Int16 nTmp = 0;
             rAny >>= nTmp;
-            m_nType = nTmp;
+            m_nType = static_cast<SwExtUserSubType>(nTmp);
         }
         break;
     case FIELD_PROP_BOOL1:

@@ -114,25 +114,25 @@ enum class SwPageNumSubType
 // to exactly match the published constants in css::text::UserDataPart
 // (see offapi/com/sun/star/text/UserDataPart.idl).
 
-enum SwExtUserSubType
+enum class SwExtUserSubType : sal_uInt16
 {
-    EU_COMPANY,
-    EU_FIRSTNAME,
-    EU_NAME,
-    EU_SHORTCUT,
-    EU_STREET,
-    EU_COUNTRY,
-    EU_ZIP,
-    EU_CITY,
-    EU_TITLE,
-    EU_POSITION,
-    EU_PHONE_PRIVATE,
-    EU_PHONE_COMPANY,
-    EU_FAX,
-    EU_EMAIL,
-    EU_STATE,
-    EU_FATHERSNAME,
-    EU_APARTMENT
+    Company,
+    Firstname,
+    Name,
+    Shortcut,
+    Street,
+    Country,
+    Zip,
+    City,
+    Title,
+    Position,
+    PhonePrivate,
+    PhoneCompany,
+    Fax,
+    Email,
+    State,
+    FathersName,
+    Apartment
 };
 
 enum class SwJumpEditFormat
@@ -611,18 +611,18 @@ class SwExtUserFieldType final : public SwFieldType
 public:
     SwExtUserFieldType();
 
-    static OUString         Expand(sal_uInt16 nSubType);
+    static OUString         Expand(SwExtUserSubType nSubType);
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SAL_DLLPUBLIC_RTTI SwExtUserField final : public SwField
 {
     OUString m_aContent;
-    sal_uInt16  m_nType;
+    SwExtUserSubType  m_nType;
     SwAuthorFormat m_nFormat;
 
 public:
-    SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, SwAuthorFormat nFormat);
+    SwExtUserField(SwExtUserFieldType*, SwExtUserSubType nSub, SwAuthorFormat nFormat);
 
     SwAuthorFormat GetFormat() const { return m_nFormat; }
     void SetFormat(SwAuthorFormat n) { m_nFormat = n; }
@@ -630,8 +630,8 @@ public:
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
-    SW_DLLPUBLIC sal_uInt16 GetSubType() const;
-    void SetSubType(sal_uInt16 nSub);
+    SW_DLLPUBLIC SwExtUserSubType GetSubType() const;
+    void SetSubType(SwExtUserSubType nSub);
 
     void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
 

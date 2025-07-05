@@ -1216,7 +1216,7 @@ bool SwFieldMgr::InsertField(
 
     case SwFieldTypesEnum::ExtendedUser:
         {
-            sal_uInt16 nSubType = rData.m_nSubType;
+            SwExtUserSubType nSubType = static_cast<SwExtUserSubType>(rData.m_nSubType);
             SwExtUserFieldType* pTyp = static_cast<SwExtUserFieldType*>( pCurShell->GetFieldType(
                 0, SwFieldIds::ExtUser) );
             pField.reset(new SwExtUserField(pTyp, nSubType, static_cast<SwAuthorFormat>(nFormatId)));

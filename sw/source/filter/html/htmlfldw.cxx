@@ -89,23 +89,23 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
         {
             auto pExtUserField = static_cast<const SwExtUserField*>(pField);
             pTypeStr = OOO_STRING_SW_HTML_FT_sender;
-            switch( static_cast<SwExtUserSubType>(pExtUserField->GetSubType()) )
+            switch( pExtUserField->GetSubType() )
             {
-                case EU_COMPANY:    pSubStr = OOO_STRING_SW_HTML_FS_company;        break;
-                case EU_FIRSTNAME:  pSubStr = OOO_STRING_SW_HTML_FS_firstname;  break;
-                case EU_NAME:       pSubStr = OOO_STRING_SW_HTML_FS_name;       break;
-                case EU_SHORTCUT:   pSubStr = OOO_STRING_SW_HTML_FS_shortcut;   break;
-                case EU_STREET:     pSubStr = OOO_STRING_SW_HTML_FS_street;     break;
-                case EU_COUNTRY:    pSubStr = OOO_STRING_SW_HTML_FS_country;     break;
-                case EU_ZIP:        pSubStr = OOO_STRING_SW_HTML_FS_zip;         break;
-                case EU_CITY:       pSubStr = OOO_STRING_SW_HTML_FS_city;        break;
-                case EU_TITLE:      pSubStr = OOO_STRING_SW_HTML_FS_title;       break;
-                case EU_POSITION:   pSubStr = OOO_STRING_SW_HTML_FS_position;    break;
-                case EU_PHONE_PRIVATE:  pSubStr = OOO_STRING_SW_HTML_FS_pphone;      break;
-                case EU_PHONE_COMPANY:  pSubStr = OOO_STRING_SW_HTML_FS_cphone;      break;
-                case EU_FAX:        pSubStr = OOO_STRING_SW_HTML_FS_fax;         break;
-                case EU_EMAIL:      pSubStr = OOO_STRING_SW_HTML_FS_email;       break;
-                case EU_STATE:      pSubStr = OOO_STRING_SW_HTML_FS_state;       break;
+                case SwExtUserSubType::Company:    pSubStr = OOO_STRING_SW_HTML_FS_company;        break;
+                case SwExtUserSubType::Firstname:  pSubStr = OOO_STRING_SW_HTML_FS_firstname;  break;
+                case SwExtUserSubType::Name:       pSubStr = OOO_STRING_SW_HTML_FS_name;       break;
+                case SwExtUserSubType::Shortcut:   pSubStr = OOO_STRING_SW_HTML_FS_shortcut;   break;
+                case SwExtUserSubType::Street:     pSubStr = OOO_STRING_SW_HTML_FS_street;     break;
+                case SwExtUserSubType::Country:    pSubStr = OOO_STRING_SW_HTML_FS_country;     break;
+                case SwExtUserSubType::Zip:        pSubStr = OOO_STRING_SW_HTML_FS_zip;         break;
+                case SwExtUserSubType::City:       pSubStr = OOO_STRING_SW_HTML_FS_city;        break;
+                case SwExtUserSubType::Title:      pSubStr = OOO_STRING_SW_HTML_FS_title;       break;
+                case SwExtUserSubType::Position:   pSubStr = OOO_STRING_SW_HTML_FS_position;    break;
+                case SwExtUserSubType::PhonePrivate:  pSubStr = OOO_STRING_SW_HTML_FS_pphone;      break;
+                case SwExtUserSubType::PhoneCompany:  pSubStr = OOO_STRING_SW_HTML_FS_cphone;      break;
+                case SwExtUserSubType::Fax:        pSubStr = OOO_STRING_SW_HTML_FS_fax;         break;
+                case SwExtUserSubType::Email:      pSubStr = OOO_STRING_SW_HTML_FS_email;       break;
+                case SwExtUserSubType::State:      pSubStr = OOO_STRING_SW_HTML_FS_state;       break;
                 default:
                     ;
             }

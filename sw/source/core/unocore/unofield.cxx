@@ -1606,7 +1606,7 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::ExtUser);
                 SwExtUserField *const pEUField = new SwExtUserField(
                     static_cast<SwExtUserFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->nUSHORT1, nFormat);
+                    static_cast<SwExtUserSubType>(m_pImpl->m_pProps->nUSHORT1), nFormat);
                 xField.reset(pEUField);
                 pEUField->SetExpansion(m_pImpl->m_pProps->sPar1);
             }

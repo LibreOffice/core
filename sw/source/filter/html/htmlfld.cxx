@@ -110,21 +110,21 @@ HTMLOptionEnum<SvxNumType> const aHTMLPageNumFieldFormatTable[] =
 
 HTMLOptionEnum<SwExtUserSubType> const aHTMLExtUsrFieldSubTable[] =
 {
-    { OOO_STRING_SW_HTML_FS_company,     EU_COMPANY },
-    { OOO_STRING_SW_HTML_FS_firstname,   EU_FIRSTNAME },
-    { OOO_STRING_SW_HTML_FS_name,        EU_NAME },
-    { OOO_STRING_SW_HTML_FS_shortcut,    EU_SHORTCUT },
-    { OOO_STRING_SW_HTML_FS_street,      EU_STREET },
-    { OOO_STRING_SW_HTML_FS_country,     EU_COUNTRY },
-    { OOO_STRING_SW_HTML_FS_zip,         EU_ZIP },
-    { OOO_STRING_SW_HTML_FS_city,        EU_CITY },
-    { OOO_STRING_SW_HTML_FS_title,       EU_TITLE },
-    { OOO_STRING_SW_HTML_FS_position,    EU_POSITION },
-    { OOO_STRING_SW_HTML_FS_pphone,      EU_PHONE_PRIVATE },
-    { OOO_STRING_SW_HTML_FS_cphone,      EU_PHONE_COMPANY },
-    { OOO_STRING_SW_HTML_FS_fax,         EU_FAX },
-    { OOO_STRING_SW_HTML_FS_email,       EU_EMAIL },
-    { OOO_STRING_SW_HTML_FS_state,       EU_STATE },
+    { OOO_STRING_SW_HTML_FS_company,     SwExtUserSubType::Company },
+    { OOO_STRING_SW_HTML_FS_firstname,   SwExtUserSubType::Firstname },
+    { OOO_STRING_SW_HTML_FS_name,        SwExtUserSubType::Name },
+    { OOO_STRING_SW_HTML_FS_shortcut,    SwExtUserSubType::Shortcut },
+    { OOO_STRING_SW_HTML_FS_street,      SwExtUserSubType::Street },
+    { OOO_STRING_SW_HTML_FS_country,     SwExtUserSubType::Country },
+    { OOO_STRING_SW_HTML_FS_zip,         SwExtUserSubType::Zip },
+    { OOO_STRING_SW_HTML_FS_city,        SwExtUserSubType::City },
+    { OOO_STRING_SW_HTML_FS_title,       SwExtUserSubType::Title },
+    { OOO_STRING_SW_HTML_FS_position,    SwExtUserSubType::Position },
+    { OOO_STRING_SW_HTML_FS_pphone,      SwExtUserSubType::PhonePrivate },
+    { OOO_STRING_SW_HTML_FS_cphone,      SwExtUserSubType::PhoneCompany },
+    { OOO_STRING_SW_HTML_FS_fax,         SwExtUserSubType::Fax },
+    { OOO_STRING_SW_HTML_FS_email,       SwExtUserSubType::Email },
+    { OOO_STRING_SW_HTML_FS_state,       SwExtUserSubType::State },
     { nullptr,                           SwExtUserSubType(0) }
 };
 
