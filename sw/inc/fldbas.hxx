@@ -146,15 +146,6 @@ enum class SwFieldTypesEnum : sal_uInt16 {
     LAST,
     Unknown = USHRT_MAX // used by SwFieldMgr::GetCurTypeId
 };
-enum SwAttrFieldType {
-    ATTR_NONE,
-    ATTR_DATEFLD,
-    ATTR_TIMEFLD,
-    ATTR_PAGENUMBERFLD,
-    ATTR_PAGECOUNTFLD,
-    ATTR_BOOKMARKFLD,
-    ATTR_SETREFATTRFLD
-};
 enum class SwFileNameFormat {
     // most of the constants are a regular enum
     Name,
