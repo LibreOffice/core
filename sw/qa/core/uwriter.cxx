@@ -224,20 +224,20 @@ void SwDocTest::testFileNameFields()
     SwFileNameFieldType aNameField(*m_pDoc);
 
     {
-        OUString sResult(aNameField.Expand(FF_NAME));
+        OUString sResult(aNameField.Expand(SwFileNameFormat::Name));
         OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
             true,INetURLObject::DecodeMechanism::WithCharset));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
     {
-        OUString sResult(aNameField.Expand(FF_PATHNAME));
+        OUString sResult(aNameField.Expand(SwFileNameFormat::PathName));
         OUString sExpected(rUrlObj.GetFull());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
     {
-        OUString sResult(aNameField.Expand(FF_PATH));
+        OUString sResult(aNameField.Expand(SwFileNameFormat::Path));
         INetURLObject aTemp(rUrlObj);
         aTemp.removeSegment();
         OUString sExpected(aTemp.PathToFileName());
@@ -245,7 +245,7 @@ void SwDocTest::testFileNameFields()
     }
 
     {
-        OUString sResult(aNameField.Expand(FF_NAME_NOEXT));
+        OUString sResult(aNameField.Expand(SwFileNameFormat::NameNoExt));
         OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
             true,INetURLObject::DecodeMechanism::WithCharset));
         //Chop off .tmp

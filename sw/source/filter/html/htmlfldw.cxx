@@ -250,12 +250,12 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
 
         case SwFieldIds::Filename:
             pTypeStr = OOO_STRING_SW_HTML_FT_filename;
-            switch( static_cast<SwFileNameFormat>(static_cast<const SwFileNameField*>(pField)->GetFormat() & ~FF_FIXED) )
+            switch( static_cast<const SwFileNameField*>(pField)->GetFormat() & ~SwFileNameFormat::Fixed )
             {
-                case FF_NAME:       pFormatStr = OOO_STRING_SW_HTML_FF_name;       break;
-                case FF_PATHNAME:   pFormatStr = OOO_STRING_SW_HTML_FF_pathname;   break;
-                case FF_PATH:       pFormatStr = OOO_STRING_SW_HTML_FF_path;       break;
-                case FF_NAME_NOEXT: pFormatStr = OOO_STRING_SW_HTML_FF_name_noext; break;
+                case SwFileNameFormat::Name:       pFormatStr = OOO_STRING_SW_HTML_FF_name;       break;
+                case SwFileNameFormat::PathName:   pFormatStr = OOO_STRING_SW_HTML_FF_pathname;   break;
+                case SwFileNameFormat::Path:       pFormatStr = OOO_STRING_SW_HTML_FF_path;       break;
+                case SwFileNameFormat::NameNoExt: pFormatStr = OOO_STRING_SW_HTML_FF_name_noext; break;
                 default:
                     ;
             }

@@ -155,17 +155,19 @@ enum SwAttrFieldType {
     ATTR_BOOKMARKFLD,
     ATTR_SETREFATTRFLD
 };
-enum SwFileNameFormat {
-    FF_BEGIN,
-    FF_NAME = FF_BEGIN,
-    FF_PATHNAME,
-    FF_PATH,
-    FF_NAME_NOEXT,
-    FF_UI_NAME,
-    FF_UI_RANGE,
-    FF_END,
-    FF_FIXED = 0x8000
+enum class SwFileNameFormat {
+    // most of the constants are a regular enum
+    Name,
+    PathName,
+    Path,
+    NameNoExt,
+    UIName,
+    UIRange,
+    End, // marker value, used for asserts
+    // except for this, which is a flag
+    Fixed = 0x8000
 };
+namespace o3tl { template<> struct typed_flags<SwFileNameFormat> : is_typed_flags<SwFileNameFormat, 0x800f> {}; }
 
 enum SwVarFormat {
     VVF_CMD         = 0x0010,   ///< Show command.

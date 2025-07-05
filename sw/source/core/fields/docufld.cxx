@@ -430,16 +430,16 @@ SwFileNameFieldType::SwFileNameFieldType(SwDoc& rDocument)
 {
 }
 
-OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
+OUString SwFileNameFieldType::Expand(SwFileNameFormat nFormat) const
 {
     OUString aRet;
     const SwDocShell* pDShell = m_rDoc.GetDocShell();
     if( pDShell && pDShell->HasName() )
     {
         const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
-        switch( nFormat & ~FF_FIXED )
+        switch( nFormat & ~SwFileNameFormat::Fixed )
         {
-            case FF_PATH:
+            case SwFileNameFormat::Path:
                 {
                     if( INetProtocol::File == rURLObj.GetProtocol() )
                     {
@@ -462,11 +462,11 @@ OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
                 }
                 break;
 
-            case FF_NAME:
+            case SwFileNameFormat::Name:
                 aRet = rURLObj.GetLastName( INetURLObject::DecodeMechanism::WithCharset );
                 break;
 
-            case FF_NAME_NOEXT:
+            case SwFileNameFormat::NameNoExt:
                 aRet = rURLObj.GetBase();
                 break;
 
@@ -487,7 +487,7 @@ std::unique_ptr<SwFieldType> SwFileNameFieldType::Copy() const
     return std::make_unique<SwFileNameFieldType>(m_rDoc);
 }
 
-SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, sal_uInt32 nFormat)
+SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, SwFileNameFormat nFormat)
     : SwField(pTyp),
       m_nFormat(nFormat)
 {
@@ -518,15 +518,15 @@ bool SwFileNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_FORMAT:
         {
             sal_Int16 nRet;
-            switch( GetFormat() &(~FF_FIXED) )
+            switch( GetFormat() & (~SwFileNameFormat::Fixed) )
             {
-                case FF_PATH:
+                case SwFileNameFormat::Path:
                     nRet = text::FilenameDisplayFormat::PATH;
                 break;
-                case FF_NAME_NOEXT:
+                case SwFileNameFormat::NameNoExt:
                     nRet = text::FilenameDisplayFormat::NAME;
                 break;
-                case FF_NAME:
+                case SwFileNameFormat::Name:
                     nRet = text::FilenameDisplayFormat::NAME_AND_EXT;
                 break;
                 default:    nRet = text::FilenameDisplayFormat::FULL;
@@ -564,27 +564,27 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             switch( nType )
             {
                 case text::FilenameDisplayFormat::PATH:
-                    nType = FF_PATH;
+                    m_nFormat = SwFileNameFormat::Path;
                 break;
                 case text::FilenameDisplayFormat::NAME:
-                    nType = FF_NAME_NOEXT;
+                    m_nFormat = SwFileNameFormat::NameNoExt;
                 break;
                 case text::FilenameDisplayFormat::NAME_AND_EXT:
-                    nType = FF_NAME;
+                    m_nFormat = SwFileNameFormat::Name;
                 break;
-                default:    nType = FF_PATHNAME;
+                default:
+                    m_nFormat = SwFileNameFormat::PathName;
             }
             if(bFixed)
-                nType |= FF_FIXED;
-            m_nFormat = nType;
+                m_nFormat |= SwFileNameFormat::Fixed;
         }
         break;
 
     case FIELD_PROP_BOOL2:
         if( *o3tl::doAccess<bool>(rAny) )
-            m_nFormat |= FF_FIXED;
+            m_nFormat |= SwFileNameFormat::Fixed;
         else
-            m_nFormat &= ~FF_FIXED;
+            m_nFormat &= ~SwFileNameFormat::Fixed;
         break;
 
     case FIELD_PROP_PAR3:
@@ -603,9 +603,9 @@ SwTemplNameFieldType::SwTemplNameFieldType(SwDoc& rDocument)
 {
 }
 
-OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
+OUString SwTemplNameFieldType::Expand(SwFileNameFormat nFormat) const
 {
-    OSL_ENSURE( nFormat < FF_END, "Expand: no valid Format!" );
+    OSL_ENSURE( nFormat < SwFileNameFormat::End, "Expand: no valid Format!" );
 
     OUString aRet;
     SwDocShell *pDocShell(m_rDoc.GetDocShell());
@@ -617,11 +617,11 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
             xDPS->getDocumentProperties());
         OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
 
-        if( FF_UI_NAME == nFormat )
+        if( SwFileNameFormat::UIName == nFormat )
             aRet = xDocProps->getTemplateName();
         else if( !xDocProps->getTemplateURL().isEmpty() )
         {
-            if( FF_UI_RANGE == nFormat )
+            if( SwFileNameFormat::UIRange == nFormat )
             {
                 // for getting region names!
                 SfxDocumentTemplates aFac;
@@ -633,13 +633,13 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
             else
             {
                 INetURLObject aPathName( xDocProps->getTemplateURL() );
-                if( FF_NAME == nFormat )
+                if( SwFileNameFormat::Name == nFormat )
                     aRet = aPathName.GetLastName(URL_DECODE);
-                else if( FF_NAME_NOEXT == nFormat )
+                else if( SwFileNameFormat::NameNoExt == nFormat )
                     aRet = aPathName.GetBase();
                 else
                 {
-                    if( FF_PATH == nFormat )
+                    if( SwFileNameFormat::Path == nFormat )
                     {
                         aPathName.removeSegment();
                         aRet = aPathName.GetFull();
@@ -658,7 +658,7 @@ std::unique_ptr<SwFieldType> SwTemplNameFieldType::Copy() const
     return std::make_unique<SwTemplNameFieldType>(m_rDoc);
 }
 
-SwTemplNameField::SwTemplNameField(SwTemplNameFieldType* pTyp, sal_uInt32 nFormat)
+SwTemplNameField::SwTemplNameField(SwTemplNameFieldType* pTyp, SwFileNameFormat nFormat)
     : SwField(pTyp), m_nFormat(nFormat)
 {}
 
@@ -681,11 +681,11 @@ bool SwTemplNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             sal_Int16 nRet;
             switch( GetFormat() )
             {
-                case FF_PATH:       nRet = text::FilenameDisplayFormat::PATH; break;
-                case FF_NAME_NOEXT: nRet = text::FilenameDisplayFormat::NAME; break;
-                case FF_NAME:       nRet = text::FilenameDisplayFormat::NAME_AND_EXT; break;
-                case FF_UI_RANGE:   nRet = text::TemplateDisplayFormat::AREA; break;
-                case FF_UI_NAME:    nRet = text::TemplateDisplayFormat::TITLE;  break;
+                case SwFileNameFormat::Path:       nRet = text::FilenameDisplayFormat::PATH; break;
+                case SwFileNameFormat::NameNoExt: nRet = text::FilenameDisplayFormat::NAME; break;
+                case SwFileNameFormat::Name:       nRet = text::FilenameDisplayFormat::NAME_AND_EXT; break;
+                case SwFileNameFormat::UIRange:   nRet = text::TemplateDisplayFormat::AREA; break;
+                case SwFileNameFormat::UIName:    nRet = text::TemplateDisplayFormat::TITLE;  break;
                 default:    nRet = text::FilenameDisplayFormat::FULL;
 
             }
@@ -713,21 +713,22 @@ bool SwTemplNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             switch( nType )
             {
             case text::FilenameDisplayFormat::PATH:
-                m_nFormat = FF_PATH;
+                m_nFormat = SwFileNameFormat::Path;
             break;
             case text::FilenameDisplayFormat::NAME:
-                m_nFormat = FF_NAME_NOEXT;
+                m_nFormat = SwFileNameFormat::NameNoExt;
             break;
             case text::FilenameDisplayFormat::NAME_AND_EXT:
-                m_nFormat = FF_NAME;
+                m_nFormat = SwFileNameFormat::Name;
             break;
             case text::TemplateDisplayFormat::AREA  :
-                m_nFormat = FF_UI_RANGE;
+                m_nFormat = SwFileNameFormat::UIRange;
             break;
             case text::TemplateDisplayFormat::TITLE  :
-                m_nFormat = FF_UI_NAME;
+                m_nFormat = SwFileNameFormat::UIName;
             break;
-            default:    m_nFormat = FF_PATHNAME;
+            default:
+                m_nFormat = SwFileNameFormat::PathName;
             }
         }
         break;

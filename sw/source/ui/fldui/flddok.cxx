@@ -571,7 +571,7 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
             break;
 
         case SwFieldTypesEnum::Filename:
-            nFormat |= m_xFixedCB->get_active() ? FF_FIXED : 0;
+            nFormat |= m_xFixedCB->get_active() ? static_cast<sal_uInt32>(SwFileNameFormat::Fixed) : 0;
             break;
 
         case SwFieldTypesEnum::Date:

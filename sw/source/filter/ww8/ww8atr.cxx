@@ -3018,7 +3018,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::Filename:
         {
             OUString sStr = FieldString(ww::eFILENAME);
-            if (static_cast<const SwFileNameField*>(pField)->GetFormat() == FF_PATHNAME)
+            if (static_cast<const SwFileNameField*>(pField)->GetFormat() == SwFileNameFormat::PathName)
                 sStr += "\\p ";
             GetExport().OutputField(pField, ww::eFILENAME, sStr);
         }

@@ -1437,9 +1437,9 @@ void SAL_CALL SwXTextField::attach(
             case SwServiceType::FieldTypeFileName:
             {
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Filename);
-                sal_Int32 nFormat = m_pImpl->m_pProps->nFormat;
+                SwFileNameFormat nFormat = static_cast<SwFileNameFormat>(m_pImpl->m_pProps->nFormat);
                 if (m_pImpl->m_pProps->bBool2)
-                    nFormat |= FF_FIXED;
+                    nFormat |= SwFileNameFormat::Fixed;
                 SwFileNameField *const pFNField = new SwFileNameField(
                         static_cast<SwFileNameFieldType*>(pFieldType), nFormat);
                 xField.reset(pFNField);
@@ -1454,7 +1454,7 @@ void SAL_CALL SwXTextField::attach(
             {
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::TemplateName);
                 xField.reset(new SwTemplNameField(static_cast<SwTemplNameFieldType*>(pFieldType),
-                                            m_pImpl->m_pProps->nFormat));
+                                            static_cast<SwFileNameFormat>(m_pImpl->m_pProps->nFormat)));
                 uno::Any aFormat;
                 aFormat <<= m_pImpl->m_pProps->nFormat;
                 xField->PutValue(aFormat, FIELD_PROP_FORMAT);

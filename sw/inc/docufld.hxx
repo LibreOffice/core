@@ -218,20 +218,20 @@ class SAL_DLLPUBLIC_RTTI SwFileNameFieldType final : public SwFieldType
 public:
     SwFileNameFieldType(SwDoc&);
 
-    OUString                Expand(sal_uLong) const;
+    OUString                Expand(SwFileNameFormat) const;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SW_DLLPUBLIC SwFileNameField final : public SwField
 {
     OUString m_aContent;
-    sal_uInt32 m_nFormat;
+    SwFileNameFormat m_nFormat;
 
 public:
-    SwFileNameField(SwFileNameFieldType*, sal_uInt32 nFormat);
+    SwFileNameField(SwFileNameFieldType*, SwFileNameFormat nFormat);
 
-    sal_uInt32 GetFormat() const { return m_nFormat; }
-    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
+    SwFileNameFormat GetFormat() const { return m_nFormat; }
+    void SetFormat(SwFileNameFormat n) { m_nFormat = n; }
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -248,18 +248,18 @@ class SAL_DLLPUBLIC_RTTI SwTemplNameFieldType final : public SwFieldType
 public:
     SwTemplNameFieldType(SwDoc&);
 
-    OUString                Expand(sal_uLong) const;
+    OUString                Expand(SwFileNameFormat) const;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SW_DLLPUBLIC SwTemplNameField final : public SwField
 {
-    sal_uInt32 m_nFormat;
+    SwFileNameFormat m_nFormat;
 public:
-    SwTemplNameField(SwTemplNameFieldType*, sal_uInt32 nFormat);
+    SwTemplNameField(SwTemplNameFieldType*, SwFileNameFormat nFormat);
 
-    sal_uInt32 GetFormat() const { return m_nFormat; }
-    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
+    SwFileNameFormat GetFormat() const { return m_nFormat; }
+    void SetFormat(SwFileNameFormat n) { m_nFormat = n; }
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;

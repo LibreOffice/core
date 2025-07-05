@@ -190,10 +190,10 @@ HTMLOptionEnum<SwDocStatSubType> const aHTMLDocStatFieldSubTable[] =
 
 HTMLOptionEnum<SwFileNameFormat> const aHTMLFileNameFieldFormatTable[] =
 {
-    { OOO_STRING_SW_HTML_FF_name,       FF_NAME },
-    { OOO_STRING_SW_HTML_FF_pathname,   FF_PATHNAME },
-    { OOO_STRING_SW_HTML_FF_path,       FF_PATH },
-    { OOO_STRING_SW_HTML_FF_name_noext, FF_NAME_NOEXT },
+    { OOO_STRING_SW_HTML_FF_name,       SwFileNameFormat::Name },
+    { OOO_STRING_SW_HTML_FF_pathname,   SwFileNameFormat::PathName },
+    { OOO_STRING_SW_HTML_FF_path,       SwFileNameFormat::Path },
+    { OOO_STRING_SW_HTML_FF_name_noext, SwFileNameFormat::NameNoExt },
     { nullptr,                          SwFileNameFormat(0) }
 };
 
@@ -505,12 +505,12 @@ void SwHTMLParser::NewField()
 
     case SwFieldIds::Filename:
         {
-            SwFileNameFormat nFormat = FF_NAME;
+            SwFileNameFormat nFormat = SwFileNameFormat::Name;
             if( pFormatOption )
                 pFormatOption->GetEnum( nFormat, aHTMLFileNameFieldFormatTable );
             if( bFixed )
             {
-                nFormat = static_cast<SwFileNameFormat>(static_cast<int>(nFormat) | FF_FIXED);
+                nFormat |= SwFileNameFormat::Fixed;
                 bInsOnEndTag = true;
             }
 

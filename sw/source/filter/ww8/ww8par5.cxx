@@ -1875,7 +1875,7 @@ eF_ResT SwWW8ImplReader::Read_F_Author(WW8FieldDesc* pF, OUString&)
 eF_ResT SwWW8ImplReader::Read_F_TemplName( WW8FieldDesc*, OUString& )
 {
     SwTemplNameField aField( static_cast<SwTemplNameFieldType*>(
-                     m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::TemplateName )), FF_NAME );
+                     m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::TemplateName )), SwFileNameFormat::Name );
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     return eF_ResT::OK;
 }
@@ -1951,7 +1951,7 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, OUString& rStr )
 
 eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, OUString &rStr)
 {
-    SwFileNameFormat eType = FF_NAME;
+    SwFileNameFormat eType = SwFileNameFormat::Name;
     WW8ReadFieldParams aReadParam(rStr);
     for (;;)
     {
@@ -1961,7 +1961,7 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, OUString &rStr)
         switch (nRet)
         {
             case 'p':
-                eType = FF_PATHNAME;
+                eType = SwFileNameFormat::PathName;
                 break;
             case '*':
                 //Skip over MERGEFORMAT

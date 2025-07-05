@@ -727,7 +727,7 @@ OUString SwFieldMgr::GetFormatStr(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId
         return OUString();
 
     if (SwFieldTypesEnum::Author == nTypeId || SwFieldTypesEnum::Filename == nTypeId)
-        nFormatId &= ~static_cast<sal_uInt32>(FF_FIXED); // mask out Fixed-Flag
+        nFormatId &= ~static_cast<sal_uInt32>(SwFileNameFormat::Fixed); // mask out Fixed-Flag
 
     if (nFormatId < aSwFields[nPos].nFormatLength)
         return SwResId(pStart[nFormatId]);
@@ -980,7 +980,7 @@ bool SwFieldMgr::InsertField(
         {
             SwFileNameFieldType* pTyp =
                 static_cast<SwFileNameFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::Filename) );
-            pField.reset(new SwFileNameField(pTyp, nFormatId));
+            pField.reset(new SwFileNameField(pTyp, static_cast<SwFileNameFormat>(nFormatId)));
             break;
         }
 
@@ -988,7 +988,7 @@ bool SwFieldMgr::InsertField(
         {
             SwTemplNameFieldType* pTyp =
                 static_cast<SwTemplNameFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::TemplateName) );
-            pField.reset(new SwTemplNameField(pTyp, nFormatId));
+            pField.reset(new SwTemplNameField(pTyp, static_cast<SwFileNameFormat>(nFormatId)));
             break;
         }
 
