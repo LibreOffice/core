@@ -1074,11 +1074,11 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         break;
     case SwFieldIds::JumpEdit:
         {
-            const sal_uInt32 nFormat = static_cast<const SwJumpEditField*>(pField)->GetFormat();
+            const SwJumpEditFormat nFormat = static_cast<const SwJumpEditField*>(pField)->GetFormat();
             const sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
-            if (nFormat < nSize)
+            if (static_cast<sal_uInt32>(nFormat) < nSize)
             {
-                sEntry = aMgr.GetFormatStr(pField->GetTypeId(), nFormat);
+                sEntry = aMgr.GetFormatStr(pField->GetTypeId(), static_cast<sal_uInt32>(nFormat));
                 if (sEntry.getLength() > 0)
                 {
                     strTypeName += "-" + sEntry;

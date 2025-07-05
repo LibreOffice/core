@@ -223,7 +223,10 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, weld::TreeView&, void)
     if (nSize)
     {
         if (IsFieldEdit() && nTypeId == SwFieldTypesEnum::JumpEdit)
-            m_xFormatLB->select_text(SwResId(FMT_MARK_ARY[static_cast<const SwJumpEditField*>(GetCurField())->GetFormat()]));
+        {
+            auto pJumpField = static_cast<const SwJumpEditField*>(GetCurField());
+            m_xFormatLB->select_text(SwResId(FMT_MARK_ARY[static_cast<sal_uInt32>(pJumpField->GetFormat())]));
+        }
 
         if (m_xFormatLB->get_selected_index() == -1)
             m_xFormatLB->select(0);

@@ -2628,7 +2628,7 @@ SwCharFormat* SwJumpEditFieldType::GetCharFormat()
     return pFormat;
 }
 
-SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nFormat,
+SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, SwJumpEditFormat nFormat,
                                 OUString aText, OUString aHelp )
     : SwField( pTyp), m_sText( std::move(aText) ), m_sHelp( std::move(aHelp) ), m_nFormat(nFormat)
 {
@@ -2678,10 +2678,10 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             sal_Int16 nRet;
             switch( GetFormat() )
             {
-            case JE_FMT_TABLE:  nRet = text::PlaceholderType::TABLE; break;
-            case JE_FMT_FRAME:  nRet = text::PlaceholderType::TEXTFRAME; break;
-            case JE_FMT_GRAPHIC:nRet = text::PlaceholderType::GRAPHIC; break;
-            case JE_FMT_OLE:    nRet = text::PlaceholderType::OBJECT; break;
+            case SwJumpEditFormat::Table:  nRet = text::PlaceholderType::TABLE; break;
+            case SwJumpEditFormat::Frame:  nRet = text::PlaceholderType::TEXTFRAME; break;
+            case SwJumpEditFormat::Graphic:nRet = text::PlaceholderType::GRAPHIC; break;
+            case SwJumpEditFormat::OLE:    nRet = text::PlaceholderType::OBJECT; break;
             default:
                 nRet = text::PlaceholderType::TEXT; break;
             }
@@ -2713,11 +2713,11 @@ bool SwJumpEditField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= nSet;
             switch( nSet )
             {
-                case text::PlaceholderType::TEXT     : m_nFormat = JE_FMT_TEXT; break;
-                case text::PlaceholderType::TABLE    : m_nFormat = JE_FMT_TABLE; break;
-                case text::PlaceholderType::TEXTFRAME: m_nFormat = JE_FMT_FRAME; break;
-                case text::PlaceholderType::GRAPHIC  : m_nFormat = JE_FMT_GRAPHIC; break;
-                case text::PlaceholderType::OBJECT   : m_nFormat = JE_FMT_OLE; break;
+                case text::PlaceholderType::TEXT     : m_nFormat = SwJumpEditFormat::Text; break;
+                case text::PlaceholderType::TABLE    : m_nFormat = SwJumpEditFormat::Table; break;
+                case text::PlaceholderType::TEXTFRAME: m_nFormat = SwJumpEditFormat::Frame; break;
+                case text::PlaceholderType::GRAPHIC  : m_nFormat = SwJumpEditFormat::Graphic; break;
+                case text::PlaceholderType::OBJECT   : m_nFormat = SwJumpEditFormat::OLE; break;
             }
         }
         break;

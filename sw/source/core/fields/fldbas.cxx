@@ -331,7 +331,7 @@ sal_uInt32 SwField::GetUntypedFormat() const
     case SwFieldIds::PageNumber:
         return static_cast<const SwPageNumberField*>(this)->GetFormat();
     case SwFieldIds::JumpEdit:
-        return static_cast<const SwJumpEditField*>(this)->GetFormat();
+        return static_cast<sal_uInt32>(static_cast<const SwJumpEditField*>(this)->GetFormat());
     case SwFieldIds::DocStat:
         return static_cast<const SwDocStatField*>(this)->GetFormat();
     case SwFieldIds::TemplateName:
@@ -369,7 +369,7 @@ void SwField::SetUntypedFormat(sal_uInt32 n)
         static_cast<SwPageNumberField*>(this)->SetFormat(static_cast<SvxNumType>(n));
         return;
     case SwFieldIds::JumpEdit:
-        static_cast<SwJumpEditField*>(this)->SetFormat(n);
+        static_cast<SwJumpEditField*>(this)->SetFormat(static_cast<SwJumpEditFormat>(n));
         return;
     case SwFieldIds::DocStat:
         static_cast<SwDocStatField*>(this)->SetFormat(static_cast<SvxNumType>(n));

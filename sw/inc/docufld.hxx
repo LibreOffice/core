@@ -125,13 +125,13 @@ enum SwExtUserSubType
     EU_APARTMENT
 };
 
-enum SwJumpEditFormat
+enum class SwJumpEditFormat
 {
-    JE_FMT_TEXT,
-    JE_FMT_TABLE,
-    JE_FMT_FRAME,
-    JE_FMT_GRAPHIC,
-    JE_FMT_OLE
+    Text,
+    Table,
+    Frame,
+    Graphic,
+    OLE
 };
 
 class SAL_DLLPUBLIC_RTTI SwPageNumberFieldType final : public SwFieldType
@@ -723,13 +723,13 @@ class SwJumpEditField final : public SwField
 {
     OUString m_sText;
     OUString m_sHelp;
-    sal_uInt32 m_nFormat;
+    SwJumpEditFormat m_nFormat;
 public:
-    SwJumpEditField( SwJumpEditFieldType*, sal_uInt32 nFormat,
+    SwJumpEditField( SwJumpEditFieldType*, SwJumpEditFormat nFormat,
                      OUString sText, OUString sHelp );
 
-    sal_uInt32 GetFormat() const { return m_nFormat; }
-    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
+    SwJumpEditFormat GetFormat() const { return m_nFormat; }
+    void SetFormat(SwJumpEditFormat n) { m_nFormat = n; }
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;

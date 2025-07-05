@@ -30,6 +30,7 @@
 
 class SvxBrushItem;
 class SwFormatVertOrient;
+enum class SwJumpEditFormat;
 
 class SwFieldPortion : public SwExpandPortion
 {
@@ -267,7 +268,7 @@ class SwJumpFieldPortion final : public SwFieldPortion
 {
 public:
     explicit SwJumpFieldPortion(OUString aExpand, OUString aHelp, std::unique_ptr<SwFont> pFont,
-                                sal_uInt32 nFormat)
+                                SwJumpEditFormat nFormat)
         : SwFieldPortion(std::move(aExpand), std::move(pFont))
         , m_nFormat(nFormat)
         , m_sHelp(std::move(aHelp))
@@ -278,7 +279,7 @@ public:
     virtual void Paint(const SwTextPaintInfo& rInf) const override;
 
 private:
-    sal_uInt32 m_nFormat; // SwJumpEditFormat from SwField::GetFormat()
+    SwJumpEditFormat m_nFormat; // SwJumpEditFormat from SwField::GetFormat()
     OUString m_sHelp;
 
     bool DescribePDFControl(const SwTextPaintInfo& rInf) const;

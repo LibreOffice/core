@@ -1543,7 +1543,7 @@ void SAL_CALL SwXTextField::attach(
             {
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::JumpEdit);
                 xField.reset(new SwJumpEditField(static_cast<SwJumpEditFieldType*>(pFieldType),
-                        m_pImpl->m_pProps->nUSHORT1, m_pImpl->m_pProps->sPar2,
+                        static_cast<SwJumpEditFormat>(m_pImpl->m_pProps->nUSHORT1), m_pImpl->m_pProps->sPar2,
                         m_pImpl->m_pProps->sPar1));
             }
             break;

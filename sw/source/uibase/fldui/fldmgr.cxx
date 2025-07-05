@@ -1198,7 +1198,7 @@ bool SwFieldMgr::InsertField(
             SwJumpEditFieldType* pTyp =
                 static_cast<SwJumpEditFieldType*>(pCurShell->GetFieldType(0, SwFieldIds::JumpEdit));
 
-            pField.reset(new SwJumpEditField(pTyp, nFormatId, rData.m_sPar1, rData.m_sPar2));
+            pField.reset(new SwJumpEditField(pTyp, static_cast<SwJumpEditFormat>(nFormatId), rData.m_sPar1, rData.m_sPar2));
             break;
         }
 

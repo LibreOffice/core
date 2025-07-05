@@ -379,17 +379,19 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
             sal_uInt16 nSlotId = 0;
             switch( static_cast<const SwJumpEditField&>(rField).GetFormat() )
             {
-            case JE_FMT_TABLE:
+            case SwJumpEditFormat::Table:
                 nSlotId = FN_INSERT_TABLE;
                 break;
-
-            case JE_FMT_FRAME:
+            case SwJumpEditFormat::Frame:
                 nSlotId = FN_INSERT_FRAME;
                 break;
-
-            case JE_FMT_GRAPHIC:    nSlotId = SID_INSERT_GRAPHIC;       break;
-            case JE_FMT_OLE:        nSlotId = SID_INSERT_OBJECT;        break;
-
+            case SwJumpEditFormat::Graphic:
+                nSlotId = SID_INSERT_GRAPHIC;
+                break;
+            case SwJumpEditFormat::OLE:
+                nSlotId = SID_INSERT_OBJECT;
+                break;
+            default: break;
             }
 
             if( nSlotId )

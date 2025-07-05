@@ -1430,7 +1430,7 @@ bool SwJumpFieldPortion::DescribePDFControl(const SwTextPaintInfo& rInf) const
     if (!pPDFExtOutDevData->GetIsExportFormFields())
         return false;
 
-    if (m_nFormat != SwJumpEditFormat::JE_FMT_TEXT)
+    if (m_nFormat != SwJumpEditFormat::Text)
         return false;
 
     vcl::PDFWriter::EditWidget aDescriptor;
