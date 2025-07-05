@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwUserFieldType final : public SwValueFieldType
     OUString  m_aContent;
     /// Language used by m_aContents
     OUString m_aContentLang;
-    sal_uInt16  m_nType;
+    SwUserType  m_nType;
 
 public:
     SwUserFieldType( SwDoc* pDocPtr, const UIName& );
@@ -49,7 +49,7 @@ public:
     virtual UIName          GetName() const override;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
-    OUString                Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, LanguageType nLng);
+    OUString                Expand(sal_uInt32 nFormat, SwUserType nSubType, LanguageType nLng);
 
     OUString                GetContent( sal_uInt32 nFormat = 0 ) const;
            void             SetContent( const OUString& rStr, sal_uInt32 nFormat = 0 );
@@ -62,8 +62,8 @@ public:
     inline double           GetValue() const;
     inline void             SetValue(const double nVal);
 
-    inline sal_uInt16           GetType() const;
-    inline void             SetType(sal_uInt16);
+    inline SwUserType       GetType() const;
+    inline void             SetType(SwUserType);
 
     bool                    IsDeleted() const       { return m_bDeleted; }
     void                    SetDeleted( bool b )    { m_bDeleted = b; }
@@ -87,13 +87,13 @@ inline double SwUserFieldType::GetValue() const
 inline void SwUserFieldType::SetValue(const double nVal)
     { m_nValue = nVal; }
 
-inline sal_uInt16 SwUserFieldType::GetType() const
+inline SwUserType SwUserFieldType::GetType() const
     { return m_nType; }
 
-inline void SwUserFieldType::SetType(sal_uInt16 nSub)
+inline void SwUserFieldType::SetType(SwUserType nSub)
 {
     m_nType = nSub;
-    EnableFormat(!(nSub & nsSwGetSetExpType::GSE_STRING));
+    EnableFormat(!(nSub & SwUserType::String));
 }
 
 /**
@@ -104,16 +104,16 @@ inline void SwUserFieldType::SetType(sal_uInt16 nSub)
  */
 class SW_DLLPUBLIC SwUserField final : public SwValueField
 {
-    sal_uInt16  m_nSubType;
+    SwUserType  m_nSubType;
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
-    SwUserField(SwUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat);
+    SwUserField(SwUserFieldType*, SwUserType nSub, sal_uInt32 nFormat);
 
-    sal_uInt16              GetSubType() const;
-    void                    SetSubType(sal_uInt16 nSub);
+    SwUserType              GetSubType() const;
+    void                    SetSubType(SwUserType nSub);
 
     virtual double          GetValue() const override;
     virtual void            SetValue( const double& rVal ) override;

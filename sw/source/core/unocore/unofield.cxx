@@ -650,7 +650,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
                 static_cast<SwUserFieldType*>(pType2)->SetContent(m_pImpl->m_sParam1);
                 static_cast<SwUserFieldType*>(pType2)->SetValue(m_pImpl->m_fParam1);
                 static_cast<SwUserFieldType*>(pType2)->SetType(m_pImpl->m_bParam1
-                    ? nsSwGetSetExpType::GSE_EXPR : nsSwGetSetExpType::GSE_STRING);
+                    ? SwUserType::Expr : SwUserType::String);
             }
             break;
             case SwFieldIds::Dde :
@@ -1617,12 +1617,12 @@ void SAL_CALL SwXTextField::attach(
                     pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::User, m_pImpl->m_sTypeName.toString(), true);
                 if (!pFieldType)
                     throw uno::RuntimeException();
-                sal_uInt16 nUserSubType = (m_pImpl->m_pProps->bBool1)
-                    ? nsSwExtendedSubType::SUB_INVISIBLE : 0;
+                SwUserType nUserSubType = (m_pImpl->m_pProps->bBool1)
+                    ? SwUserType::Invisible : SwUserType::None;
                 if (m_pImpl->m_pProps->bBool2)
-                    nUserSubType |= nsSwExtendedSubType::SUB_CMD;
+                    nUserSubType |= SwUserType::ShowCommand;
                 if (m_pImpl->m_pProps->bFormatIsDefault &&
-                    nsSwGetSetExpType::GSE_STRING == static_cast<SwUserFieldType*>(pFieldType)->GetType())
+                    SwUserType::String == static_cast<SwUserFieldType*>(pFieldType)->GetType())
                 {
                     m_pImpl->m_pProps->nFormat = -1;
                 }

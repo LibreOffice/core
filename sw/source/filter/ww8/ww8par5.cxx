@@ -1841,7 +1841,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             m_rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::User, aData, false)));
         if (pType)
         {
-            SwUserField aField(pType, 0, nFormat);
+            SwUserField aField(pType, SwUserType::None, nFormat);
             if (bDateTime)
                 ForceFieldLanguage(aField, nLang);
             m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));

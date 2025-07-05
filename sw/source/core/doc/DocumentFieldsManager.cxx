@@ -872,7 +872,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                 {
                     // Entry present?
                     const OUString aNm = pFieldType->GetName().toString();
-                    OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(nsSwGetSetExpType::GSE_STRING, 0, LANGUAGE_SYSTEM));
+                    OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(nsSwGetSetExpType::GSE_STRING, SwUserType::None, LANGUAGE_SYSTEM));
                     auto pFnd = aHashStrTable.find( aNm );
                     if( pFnd != aHashStrTable.end() )
                         // modify entry in the hash table

@@ -451,7 +451,7 @@ sal_uInt16 SwField::GetUntypedSubType() const
     switch (m_pType->Which())
     {
     case SwFieldIds::User:
-        return static_cast<const SwUserField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwUserField*>(this)->GetSubType());
     case SwFieldIds::GetRef:
         return static_cast<const SwGetRefField*>(this)->GetSubType();
     case SwFieldIds::DateTime:
@@ -491,7 +491,7 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
     switch (m_pType->Which())
     {
     case SwFieldIds::User:
-        static_cast<SwUserField*>(this)->SetSubType(n);
+        static_cast<SwUserField*>(this)->SetSubType(static_cast<SwUserType>(n));
         break;
     case SwFieldIds::GetRef:
         static_cast<SwGetRefField*>(this)->SetSubType(n);
@@ -940,7 +940,7 @@ void SwValueField::SetLanguage( LanguageType nLng )
 
         if( (GetFormat() >= SV_COUNTRY_LANGUAGE_OFFSET ||
              LANGUAGE_SYSTEM != nFormatLng ) &&
-            !(Which() == SwFieldIds::User && (static_cast<const SwUserField*>(this)->GetSubType()&nsSwExtendedSubType::SUB_CMD) ) )
+            !(Which() == SwFieldIds::User && (static_cast<const SwUserField*>(this)->GetSubType() & SwUserType::ShowCommand) ) )
         {
             const SvNumberformat* pEntry = pFormatter->GetEntry(GetFormat());
 

@@ -1357,7 +1357,7 @@ bool SwFieldMgr::InsertField(
 
     case SwFieldTypesEnum::User:
         {
-            sal_uInt16 nSubType = rData.m_nSubType;
+            SwUserType nSubType = static_cast<SwUserType>(rData.m_nSubType);
             SwUserFieldType* pTyp =
                 static_cast<SwUserFieldType*>( pCurShell->GetFieldType(SwFieldIds::User, rData.m_sPar1) );
 

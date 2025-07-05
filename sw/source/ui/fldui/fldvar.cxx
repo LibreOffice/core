@@ -295,7 +295,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
                     {
                         m_xNameED->set_text(pType->GetName().toString());
 
-                        if (pType->GetType() == UF_STRING)
+                        if (pType->GetType() == SwUserType::String)
                         {
                             m_xValueED->set_text(pType->GetContent());
                             m_xNumFormatLB->select(0);
@@ -643,7 +643,7 @@ void SwFieldVarPage::UpdateSubType()
                         if (GetCurField() && aList[i] == GetCurField()->GetTyp()->GetName())
                         {
                             bInsert = true;
-                            if (static_cast<SwUserField*>(GetCurField())->GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE)
+                            if (static_cast<SwUserField*>(GetCurField())->GetSubType() & SwUserType::Invisible)
                                 m_xInvisibleCB->set_active(true);
                         }
                         break;
@@ -794,7 +794,7 @@ void SwFieldVarPage::FillFormatLB(SwFieldTypesEnum nTypeId)
 
     if (IsFieldEdit() && bSpecialFormat)
     {
-        if (nTypeId == SwFieldTypesEnum::User && (static_cast<SwUserField*>(GetCurField())->GetSubType() & nsSwExtendedSubType::SUB_CMD))
+        if (nTypeId == SwFieldTypesEnum::User && (static_cast<SwUserField*>(GetCurField())->GetSubType() & SwUserType::ShowCommand))
             rWidget.select(1);
         else
             rWidget.select(0);
@@ -1045,7 +1045,7 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
                         }
                         static_cast<SwUserFieldType*>(pType)->SetContent(m_xValueED->get_text(), nNumberFormat);
                         static_cast<SwUserFieldType*>(pType)->SetType(
-                                bText ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR );
+                                bText ? SwUserType::String : SwUserType::Expr );
                     }
                 }
                 else
@@ -1085,7 +1085,7 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
                         // selected that may claim the top position :-/
                         bool bText = false;
                         sal_uInt32 nNumberFormat = lcl_getUsedNumFormat( *m_xNumFormatLB, bText);
-                        aType.SetType(bText ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR);
+                        aType.SetType(bText ? SwUserType::String : SwUserType::Expr);
                         aType.SetContent( sValue, nNumberFormat );
                         m_xSelectionLB->append_text(sName);
                         m_xSelectionLB->select_text(sName);

@@ -183,10 +183,16 @@ enum SwInputFieldSubType {
     INP_VAR     = 0x03
 };
 
-enum SwUserType {
-    UF_STRING   = 0x01,
-    UF_EXPR     = 0x02
+enum class SwUserType : sal_uInt16 {
+    None          = 0x0000,
+    String        = 0x0001, ///< String
+    Expr          = 0x0002, ///< Expression
+    LowerMask     = 0x0003,
+    UpperMask     = 0x0300,
+    ShowCommand   = 0x0100, ///< Show command.
+    Invisible     = 0x0200, ///< Invisible.
 };
+namespace o3tl { template<> struct typed_flags<SwUserType> : is_typed_flags<SwUserType, 0x0303> {}; }
 
 enum class SwDateTimeSubType : sal_uInt16 {
     None  = 0,

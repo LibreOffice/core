@@ -51,7 +51,7 @@ LanguageType GetFieldTypeLanguage()
 
 // Userfields
 
-SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFormat)
+SwUserField::SwUserField(SwUserFieldType* pTyp, SwUserType nSub, sal_uInt32 nFormat)
     : SwValueField(pTyp, nFormat),
     m_nSubType(nSub)
 {
@@ -59,7 +59,7 @@ SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFor
 
 OUString SwUserField::ExpandImpl(SwRootFrame const*const) const
 {
-    if(!(m_nSubType & nsSwExtendedSubType::SUB_INVISIBLE))
+    if(!(m_nSubType & SwUserType::Invisible))
         return static_cast<SwUserFieldType*>(GetTyp())->Expand(GetFormat(), m_nSubType, GetLanguage());
 
     return OUString();
@@ -107,15 +107,15 @@ void SwUserField::SetPar2(const OUString& rStr)
     static_cast<SwUserFieldType*>(GetTyp())->SetContent(rStr, GetFormat());
 }
 
-sal_uInt16 SwUserField::GetSubType() const
+SwUserType SwUserField::GetSubType() const
 {
     return static_cast<SwUserFieldType*>(GetTyp())->GetType() | m_nSubType;
 }
 
-void SwUserField::SetSubType(sal_uInt16 nSub)
+void SwUserField::SetSubType(SwUserType nSub)
 {
-    static_cast<SwUserFieldType*>(GetTyp())->SetType(nSub & 0x00ff);
-    m_nSubType = nSub & 0xff00;
+    static_cast<SwUserFieldType*>(GetTyp())->SetType(nSub & SwUserType::LowerMask);
+    m_nSubType = nSub & SwUserType::UpperMask;
 }
 
 bool SwUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -123,10 +123,10 @@ bool SwUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
-        rAny <<= 0 != (m_nSubType & nsSwExtendedSubType::SUB_CMD);
+        rAny <<= bool(m_nSubType & SwUserType::ShowCommand);
         break;
     case FIELD_PROP_BOOL1:
-        rAny <<= 0 == (m_nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
+        rAny <<= !(m_nSubType & SwUserType::Invisible);
         break;
     case FIELD_PROP_FORMAT:
         rAny <<= static_cast<sal_Int32>(GetFormat());
@@ -143,15 +143,15 @@ bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     {
     case FIELD_PROP_BOOL1:
         if(*o3tl::doAccess<bool>(rAny))
-            m_nSubType &= (~nsSwExtendedSubType::SUB_INVISIBLE);
+            m_nSubType &= ~SwUserType::Invisible;
         else
-            m_nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+            m_nSubType |= SwUserType::Invisible;
         break;
     case FIELD_PROP_BOOL2:
         if(*o3tl::doAccess<bool>(rAny))
-            m_nSubType |= nsSwExtendedSubType::SUB_CMD;
+            m_nSubType |= SwUserType::ShowCommand;
         else
-            m_nSubType &= (~nsSwExtendedSubType::SUB_CMD);
+            m_nSubType &= ~SwUserType::ShowCommand;
         break;
     case FIELD_PROP_FORMAT:
         {
@@ -169,7 +169,7 @@ bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 void SwUserField::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUserField"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nSubType"), BAD_CAST(OString::number(m_nSubType).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nSubType"), BAD_CAST(OString::number(static_cast<sal_uInt16>(m_nSubType)).getStr()));
     SwValueField::dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
@@ -177,17 +177,17 @@ void SwUserField::dumpAsXml(xmlTextWriterPtr pWriter) const
 SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const UIName& aNam )
     : SwValueFieldType( pDocPtr, SwFieldIds::User ),
     m_nValue( 0 ),
-    m_nType(nsSwGetSetExpType::GSE_STRING)
+    m_nType(SwUserType::String)
 {
     m_bValidValue = m_bDeleted = false;
     m_aName = aNam;
 
-    EnableFormat(false); // Do not use a Numberformatter for nsSwGetSetExpType::GSE_STRING
+    EnableFormat(false); // Do not use a Numberformatter for SwUserType::String
 }
 
-OUString SwUserFieldType::Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, LanguageType nLng)
+OUString SwUserFieldType::Expand(sal_uInt32 nFormat, SwUserType nSubType, LanguageType nLng)
 {
-    if((m_nType & nsSwGetSetExpType::GSE_EXPR) && !(nSubType & nsSwExtendedSubType::SUB_CMD))
+    if((m_nType & SwUserType::Expr) && !(nSubType & SwUserType::ShowCommand))
     {
         EnableFormat();
         return ExpandValue(m_nValue, nFormat, nLng);
@@ -360,7 +360,7 @@ void SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= m_aContent;
         break;
     case FIELD_PROP_BOOL1:
-        rAny <<= 0 != (nsSwGetSetExpType::GSE_EXPR&m_nType);
+        rAny <<= bool(SwUserType::Expr & m_nType);
         break;
     default:
         assert(false);
@@ -387,13 +387,13 @@ void SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_BOOL1:
         if(*o3tl::doAccess<bool>(rAny))
         {
-            m_nType |= nsSwGetSetExpType::GSE_EXPR;
-            m_nType &= ~nsSwGetSetExpType::GSE_STRING;
+            m_nType |= SwUserType::Expr;
+            m_nType &= ~SwUserType::String;
         }
         else
         {
-            m_nType &= ~nsSwGetSetExpType::GSE_EXPR;
-            m_nType |= nsSwGetSetExpType::GSE_STRING;
+            m_nType &= ~SwUserType::Expr;
+            m_nType |= SwUserType::String;
         }
         break;
     default:

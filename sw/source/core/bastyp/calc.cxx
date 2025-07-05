@@ -393,7 +393,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
         if( pFnd->pFieldType && pFnd->pFieldType->Which() == SwFieldIds::User )
         {
             SwUserFieldType* pUField = const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFnd->pFieldType));
-            if( nsSwGetSetExpType::GSE_STRING & pUField->GetType() )
+            if( SwUserType::String & pUField->GetType() )
             {
                 pFnd->nValue.PutString( pUField->GetContent() );
             }
