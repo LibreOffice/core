@@ -196,18 +196,18 @@ void ShapeController::execute( const OUString& rCommand, const Sequence< beans::
 
 void ShapeController::describeSupportedFeatures()
 {
-    implDescribeSupportedFeature( ".uno:FormatLine",                ChartCommandID::ShapeFormatLine,                 CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:FormatArea",                ChartCommandID::ShapeFormatArea,                 CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:TextAttributes",            ChartCommandID::ShapeTextAttributes,             CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:TransformDialog",           ChartCommandID::ShapeTransformDialog,            CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ObjectTitleDescription",    ChartCommandID::ShapeObjectTitleDescription,    CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:RenameObject",              ChartCommandID::ShapeRenameObject,               CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:BringToFront",              ChartCommandID::ShapeBringToFront,              CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:Forward",                   ChartCommandID::ShapeForward,                     CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:Backward",                  ChartCommandID::ShapeBackward,                    CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SendToBack",                ChartCommandID::ShapeSendToBack,                CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:FontDialog",                ChartCommandID::ShapeFontDialog,                 CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:ParagraphDialog",           ChartCommandID::ShapeParagraphDialog,            CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:FormatLine"_ustr,             ChartCommandID::ShapeFormatLine,             CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:FormatArea"_ustr,             ChartCommandID::ShapeFormatArea,             CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:TextAttributes"_ustr,         ChartCommandID::ShapeTextAttributes,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:TransformDialog"_ustr,        ChartCommandID::ShapeTransformDialog,        CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:ObjectTitleDescription"_ustr, ChartCommandID::ShapeObjectTitleDescription, CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:RenameObject"_ustr,           ChartCommandID::ShapeRenameObject,           CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:BringToFront"_ustr,           ChartCommandID::ShapeBringToFront,           CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:Forward"_ustr,                ChartCommandID::ShapeForward,                CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:Backward"_ustr,               ChartCommandID::ShapeBackward,               CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:SendToBack"_ustr,             ChartCommandID::ShapeSendToBack,             CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:FontDialog"_ustr,             ChartCommandID::ShapeFontDialog,             CommandGroup::EDIT );
+    implDescribeSupportedFeature( u".uno:ParagraphDialog"_ustr,        ChartCommandID::ShapeParagraphDialog,        CommandGroup::EDIT );
 }
 
 IMPL_LINK( ShapeController, CheckNameHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
