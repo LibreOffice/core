@@ -169,41 +169,6 @@ enum class SwFileNameFormat {
 };
 namespace o3tl { template<> struct typed_flags<SwFileNameFormat> : is_typed_flags<SwFileNameFormat, 0x800f> {}; }
 
-enum SwVarFormat {
-    VVF_CMD         = 0x0010,   ///< Show command.
-    VVF_INVISIBLE   = 0x0040,   ///< Invisible.
-    VVF_XXP         = 0x0400,   ///< 1234%
-    VVF_XX_XXP      = 0x0800,   ///< 1.234,56%
-    VVF_CLEAR       = 0x000f,
-
-// From here new formats:
-    VVF_SYS         = 0x2000,   ///< Format for numbers from system.
-    VVF_X           = 0x2100,   ///< 1234
-    VVF_X_X         = 0x2200,   ///< 1234.5
-    VVF_X_XX        = 0x2300,   ///< 1245.56
-    VVF_XX_X        = 0x2400,   ///< 1.234.5
-    VVF_XX_XX       = 0x2500,   ///< 1.234.56
-    VVF_XX_XXX      = 0x2600,   ///< 1.234.567
-    VVF_SYS_CUR     = 0x2700,   ///< Format for currency from system.
-    VVF_CUR_X       = 0x2800,   ///< EUR 1234
-    VVF_CUR_XX_XX   = 0x2900,   ///< EUR 1234.56 EUR 1234.00
-    VVF_CUR_XX_X0   = 0x2a00,   ///< EUR 1234.56 EUR 1234.--
-    VVF_X_CUR       = 0x2b00,   ///< 1234 EUR
-    VVF_XX_XX_CUR   = 0x2c00,   ///< 1234.56 EUR 1234.00 EUR
-    VVF_XX_X0_CUR   = 0x2d00,   ///< 1234.56 EUR 1234.-- EUR
-/// Compatibility:
-    VF_CMD          = VVF_CMD,
-    VF_INVISIBLE    = VVF_INVISIBLE,
-    VF_XXP          = VVF_XXP,
-    VF_XX_XXP       = VVF_XX_XXP,
-    VF_VISIBLE      = VVF_SYS,
-    VF_XX           = VVF_X,
-    VF_XX_XX        = VVF_XX_XX,
-    VF_XX_XX_CUR    = VVF_SYS_CUR,
-    VF_CLEAR        = VVF_CLEAR
-
-};
-
 typedef sal_uInt16 SwGetSetExpType;
 namespace nsSwGetSetExpType
 {
