@@ -47,13 +47,6 @@ void OutputDevice::SetFillColor( const Color& rColor )
 {
     Color aColor(vcl::drawmode::GetFillColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings()));
 
-    // If this assert fires, and this is a VirtualDevice, you likely need to either
-    // (a) create this VirtualDevice with the WITH_ALPHA flag
-    // or
-    // (b) call SetFillColor() to set no fill
-    assert((mpAlphaVDev || !aColor.IsTransparent())
-        && "transparent color on a device that has no alpha layer will turn out wrong");
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaFillColorAction( aColor, true ) );
 
