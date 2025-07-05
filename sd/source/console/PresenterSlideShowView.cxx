@@ -176,19 +176,17 @@ PresenterSlideShowView::~PresenterSlideShowView()
 {
 }
 
-void PresenterSlideShowView::disposing(std::unique_lock<std::mutex>&)
+void PresenterSlideShowView::disposing(std::unique_lock<std::mutex>& rLock)
 {
     // Tell all listeners that we are disposed.
     lang::EventObject aEvent;
     aEvent.Source = static_cast<XWeak*>(this);
 
-    {
-        std::unique_lock l(m_aMutex);
-        maMouseListeners.disposeAndClear(l, aEvent);
-        maMouseMotionListeners.disposeAndClear(l, aEvent);
-        maPaintListeners.disposeAndClear(l, aEvent);
-        maModifyListeners.disposeAndClear(l, aEvent);
-    }
+    assert(rLock.mutex() == &m_aMutex);
+    maMouseListeners.disposeAndClear(rLock, aEvent);
+    maMouseMotionListeners.disposeAndClear(rLock, aEvent);
+    maPaintListeners.disposeAndClear(rLock, aEvent);
+    maModifyListeners.disposeAndClear(rLock, aEvent);
 
     // Do this for
     // XPaintListener, XModifyListener,XMouseListener,XMouseMotionListener,XWindowListener?
