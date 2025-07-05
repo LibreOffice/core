@@ -1653,7 +1653,7 @@ void SAL_CALL SwXTextField::attach(
             {
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::PageNumber);
                 SwPageNumberField *const pPNField = new SwPageNumberField(
-                    static_cast<SwPageNumberFieldType*>(pFieldType), PG_RANDOM,
+                    static_cast<SwPageNumberFieldType*>(pFieldType), SwPageNumSubType::Random,
                     static_cast<SvxNumType>(m_pImpl->m_pProps->nFormat),
                     m_pImpl->m_pProps->nUSHORT1);
                 xField.reset(pPNField);

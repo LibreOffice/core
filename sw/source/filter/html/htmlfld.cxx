@@ -137,9 +137,9 @@ HTMLOptionEnum<SwAuthorFormat> const aHTMLAuthorFieldFormatTable[] =
 
 HTMLOptionEnum<SwPageNumSubType> const aHTMLPageNumFieldSubTable[] =
 {
-    { OOO_STRING_SW_HTML_FS_random,      PG_RANDOM },
-    { OOO_STRING_SW_HTML_FS_next,        PG_NEXT },
-    { OOO_STRING_SW_HTML_FS_prev,        PG_PREV },
+    { OOO_STRING_SW_HTML_FS_random,      SwPageNumSubType::Random },
+    { OOO_STRING_SW_HTML_FS_next,        SwPageNumSubType::Next },
+    { OOO_STRING_SW_HTML_FS_prev,        SwPageNumSubType::Previous },
     { nullptr,                           SwPageNumSubType(0)  }
 };
 
@@ -413,13 +413,13 @@ void SwHTMLParser::NewField()
 
                 if( nFormat!=SVX_NUM_CHAR_SPECIAL && !aValue.isEmpty() )
                     nOff = static_cast<short>(aValue.toInt32());
-                else if( nSub == PG_NEXT  )
+                else if( nSub == SwPageNumSubType::Next  )
                     nOff = 1;
-                else if( nSub == PG_PREV  )
+                else if( nSub == SwPageNumSubType::Previous  )
                     nOff = -1;
 
                 if( nFormat==SVX_NUM_CHAR_SPECIAL &&
-                    nSub==PG_RANDOM )
+                    nSub == SwPageNumSubType::Random )
                     nFormat = SVX_NUM_PAGEDESC;
 
                 xNewField.reset(new SwPageNumberField(static_cast<SwPageNumberFieldType*>(pType), nSub, nFormat, nOff));

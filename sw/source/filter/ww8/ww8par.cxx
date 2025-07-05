@@ -3644,7 +3644,7 @@ bool SwWW8ImplReader::ReadChar(tools::Long nPosCp, tools::Long nCpOfs)
                 // Page number
                 SwPageNumberField aField(
                     static_cast<SwPageNumberFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(
-                    SwFieldIds::PageNumber )), PG_RANDOM, SVX_NUM_ARABIC);
+                    SwFieldIds::PageNumber )), SwPageNumSubType::Random, SVX_NUM_ARABIC);
                 m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
             }
             else

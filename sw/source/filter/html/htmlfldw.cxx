@@ -140,12 +140,12 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
             {
                 auto pPageNumberField = static_cast<const SwPageNumberField *>(pField);
                 pTypeStr = OOO_STRING_SW_HTML_FT_page;
-                SwPageNumSubType eSubType = static_cast<SwPageNumSubType>(pPageNumberField->GetSubType());
+                SwPageNumSubType eSubType = pPageNumberField->GetSubType();
                 switch( eSubType )
                 {
-                    case PG_RANDOM:     pSubStr = OOO_STRING_SW_HTML_FS_random;     break;
-                    case PG_NEXT:       pSubStr = OOO_STRING_SW_HTML_FS_next;       break;
-                    case PG_PREV:       pSubStr = OOO_STRING_SW_HTML_FS_prev;       break;
+                    case SwPageNumSubType::Random:     pSubStr = OOO_STRING_SW_HTML_FS_random;     break;
+                    case SwPageNumSubType::Next:       pSubStr = OOO_STRING_SW_HTML_FS_next;       break;
+                    case SwPageNumSubType::Previous:       pSubStr = OOO_STRING_SW_HTML_FS_prev;       break;
                 }
                 OSL_ENSURE( pSubStr, "unknown sub type for SwPageNumberField" );
                 SvxNumType nFormat = pPageNumberField->GetFormat();
@@ -159,9 +159,9 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                 {
                     const OUString aPar2Value = pField->GetPar2();
                     short nValue = static_cast<short>(aPar2Value.toInt32());
-                    if( (eSubType == PG_NEXT && nValue!=1) ||
-                        (eSubType == PG_PREV && nValue!=-1) ||
-                        (eSubType == PG_RANDOM && nValue!=0) )
+                    if( (eSubType == SwPageNumSubType::Next && nValue!=1) ||
+                        (eSubType == SwPageNumSubType::Previous && nValue!=-1) ||
+                        (eSubType == SwPageNumSubType::Random && nValue!=0) )
                     {
                         aValue = aPar2Value;
                     }

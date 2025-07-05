@@ -103,11 +103,11 @@ enum class SwDocInfoSubType : sal_uInt16
 };
 namespace o3tl { template<> struct typed_flags<SwDocInfoSubType> : is_typed_flags<SwDocInfoSubType, 0xffff> {}; }
 
-enum SwPageNumSubType
+enum class SwPageNumSubType
 {
-    PG_RANDOM,
-    PG_NEXT,
-    PG_PREV
+    Random,
+    Next,
+    Previous
 };
 
 // NOTE: Possibly the first 15 values in the below enum are required
@@ -163,7 +163,7 @@ public:
 class SW_DLLPUBLIC SwPageNumberField final : public SwField
 {
     OUString m_sUserStr;
-    sal_uInt16  m_nSubType;
+    SwPageNumSubType  m_nSubType;
     short   m_nOffset;
     // fdo#58074 store page number in SwField, not SwFieldType
     sal_uInt16 m_nPageNumber;
@@ -171,7 +171,7 @@ class SW_DLLPUBLIC SwPageNumberField final : public SwField
     SvxNumType m_nFormat;
 
 public:
-    SwPageNumberField(SwPageNumberFieldType*, sal_uInt16 nSub,
+    SwPageNumberField(SwPageNumberFieldType*, SwPageNumSubType nSub,
                       SvxNumType nFormat, short nOff = 0,
                       sal_uInt16 const nPageNumber = 0,
                       sal_uInt16 const nMaxPage = 0);
@@ -188,8 +188,8 @@ public:
     virtual OUString GetPar2() const override;
     virtual void        SetPar2(const OUString& rStr) override;
 
-    sal_uInt16          GetSubType() const;
-    void                SetSubType(sal_uInt16 n) { m_nSubType = n; }
+    SwPageNumSubType    GetSubType() const;
+    void                SetSubType(SwPageNumSubType n) { m_nSubType = n; }
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 

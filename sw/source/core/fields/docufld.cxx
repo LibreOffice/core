@@ -174,7 +174,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
 }
 
 SwPageNumberField::SwPageNumberField(SwPageNumberFieldType* pTyp,
-          sal_uInt16 nSub, SvxNumType nFormat, short nOff,
+          SwPageNumSubType nSub, SvxNumType nFormat, short nOff,
           sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage)
     : SwField(pTyp), m_nSubType(nSub), m_nOffset(nOff)
     , m_nPageNumber(nPageNumber)
@@ -195,7 +195,7 @@ OUString SwPageNumberField::ExpandImpl(SwRootFrame const*const) const
     OUString sRet;
     SwPageNumberFieldType* pFieldType = static_cast<SwPageNumberFieldType*>(GetTyp());
 
-    if( PG_NEXT == m_nSubType && 1 != m_nOffset )
+    if( SwPageNumSubType::Next == m_nSubType && 1 != m_nOffset )
     {
         sRet = pFieldType->Expand(GetFormat(), 1, m_nPageNumber, m_nMaxPage, m_sUserStr, GetLanguage());
         if (!sRet.isEmpty())
@@ -203,7 +203,7 @@ OUString SwPageNumberField::ExpandImpl(SwRootFrame const*const) const
             sRet = pFieldType->Expand(GetFormat(), m_nOffset, m_nPageNumber, m_nMaxPage, m_sUserStr, GetLanguage());
         }
     }
-    else if( PG_PREV == m_nSubType && -1 != m_nOffset )
+    else if( SwPageNumSubType::Previous == m_nSubType && -1 != m_nOffset )
     {
         sRet = pFieldType->Expand(GetFormat(), -1, m_nPageNumber, m_nMaxPage, m_sUserStr, GetLanguage());
         if (!sRet.isEmpty())
@@ -236,7 +236,7 @@ void SwPageNumberField::SetPar2(const OUString& rStr)
     m_nOffset = static_cast<short>(rStr.toInt32());
 }
 
-sal_uInt16 SwPageNumberField::GetSubType() const
+SwPageNumSubType SwPageNumberField::GetSubType() const
 {
     return m_nSubType;
 }
@@ -255,9 +255,9 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         {
             text::PageNumberType eType;
             eType = text::PageNumberType_CURRENT;
-            if(m_nSubType == PG_PREV)
+            if(m_nSubType == SwPageNumSubType::Previous)
                 eType = text::PageNumberType_PREV;
-            else if(m_nSubType == PG_NEXT)
+            else if(m_nSubType == SwPageNumSubType::Next)
                 eType = text::PageNumberType_NEXT;
             rAny <<= eType;
         }
@@ -295,13 +295,13 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         switch( static_cast<text::PageNumberType>(SWUnoHelper::GetEnumAsInt32( rAny )) )
         {
             case text::PageNumberType_CURRENT:
-                m_nSubType = PG_RANDOM;
+                m_nSubType = SwPageNumSubType::Random;
             break;
             case text::PageNumberType_PREV:
-                m_nSubType = PG_PREV;
+                m_nSubType = SwPageNumSubType::Previous;
             break;
             case text::PageNumberType_NEXT:
-                m_nSubType = PG_NEXT;
+                m_nSubType = SwPageNumSubType::Next;
             break;
             default:
                 bRet = false;

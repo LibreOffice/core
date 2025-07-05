@@ -1997,7 +1997,7 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, OUString& rStr )
 {
     // page number
     SwPageNumberField aField( static_cast<SwPageNumberFieldType*>(
-        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::PageNumber )), PG_RANDOM,
+        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::PageNumber )), SwPageNumSubType::Random,
         GetNumberPara(rStr, true));
 
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );

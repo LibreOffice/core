@@ -305,10 +305,10 @@ SwFieldTypesEnum SwField::GetTypeId() const
     case SwFieldIds::PageNumber:
         {
             auto pPageNumberField = static_cast<const SwPageNumberField*>(this);
-            auto nSubType = pPageNumberField->GetSubType();
-            if( PG_NEXT == nSubType )
+            SwPageNumSubType nSubType = pPageNumberField->GetSubType();
+            if( SwPageNumSubType::Next == nSubType )
                 nRet = SwFieldTypesEnum::NextPage;
-            else if( PG_PREV == nSubType )
+            else if( SwPageNumSubType::Previous == nSubType )
                 nRet = SwFieldTypesEnum::PreviousPage;
             else
                 nRet = SwFieldTypesEnum::PageNumber;
@@ -473,7 +473,7 @@ sal_uInt16 SwField::GetUntypedSubType() const
     case SwFieldIds::DocStat:
         return static_cast<sal_uInt16>(static_cast<const SwDocStatField*>(this)->GetSubType());
     case SwFieldIds::PageNumber:
-        return static_cast<const SwPageNumberField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwPageNumberField*>(this)->GetSubType());
     case SwFieldIds::DbNextSet:
     case SwFieldIds::DbNumSet:
     case SwFieldIds::DatabaseName:
@@ -524,7 +524,7 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
         static_cast<SwDocStatField*>(this)->SetSubType(static_cast<SwDocStatSubType>(n));
         break;
     case SwFieldIds::PageNumber:
-        static_cast<SwPageNumberField*>(this)->SetSubType(n);
+        static_cast<SwPageNumberField*>(this)->SetSubType(static_cast<SwPageNumSubType>(n));
         break;
     case SwFieldIds::DbNextSet:
     case SwFieldIds::DbNumSet:
