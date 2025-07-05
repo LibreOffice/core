@@ -1116,7 +1116,8 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         break;
     case SwFieldIds::Author:
         {
-            strTypeName += "-" + aMgr.GetFormatStr(pField->GetTypeId(), static_cast<const SwAuthorField*>(pField)->GetFormat() & 0xff);
+            const SwAuthorField* pAuthorField = static_cast<const SwAuthorField*>(pField);
+            strTypeName += "-" + aMgr.GetFormatStr(pField->GetTypeId(), static_cast<sal_uInt32>(pAuthorField->GetFormat() & SwAuthorFormat::Mask));
         }
         break;
     default: break;

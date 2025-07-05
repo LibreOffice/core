@@ -40,13 +40,16 @@ class SwFrame;
 class SwTextAPIObject;
 class SwCharFormat;
 
-enum SwAuthorFormat
+enum class SwAuthorFormat : sal_uInt32
 {
-    AF_BEGIN,
-    AF_NAME = AF_BEGIN,
-    AF_SHORTCUT,
-    AF_FIXED = 0x8000
+    // most of the constants are a regular enum
+    Name,
+    Shortcut,
+    Mask = Name | Shortcut, // mask off the enum part
+    // except for this, which is a flag
+    Fixed = 0x8000
 };
+namespace o3tl { template<> struct typed_flags<SwAuthorFormat> : is_typed_flags<SwAuthorFormat, 0x8003> {}; }
 
 // Subtype of document statistics.
 enum SwDocStatSubType
@@ -188,20 +191,20 @@ class SwAuthorFieldType final : public SwFieldType
 public:
     SwAuthorFieldType();
 
-    static OUString         Expand(sal_uLong);
+    static OUString         Expand(SwAuthorFormat);
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SwAuthorField final : public SwField
 {
     OUString m_aContent;
-    sal_uInt32 m_nFormat;
+    SwAuthorFormat m_nFormat;
 
 public:
-    SwAuthorField(SwAuthorFieldType*, sal_uInt32 nFormat);
+    SwAuthorField(SwAuthorFieldType*, SwAuthorFormat nFormat);
 
-    sal_uInt32 GetFormat() const { return m_nFormat; }
-    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
+    SwAuthorFormat GetFormat() const { return m_nFormat; }
+    void SetFormat(SwAuthorFormat n) { m_nFormat = n; }
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -604,13 +607,13 @@ class SwExtUserField final : public SwField
 {
     OUString m_aContent;
     sal_uInt16  m_nType;
-    sal_uInt32 m_nFormat;
+    SwAuthorFormat m_nFormat;
 
 public:
-    SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat);
+    SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, SwAuthorFormat nFormat);
 
-    sal_uInt32 GetFormat() const { return m_nFormat; }
-    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
+    SwAuthorFormat GetFormat() const { return m_nFormat; }
+    void SetFormat(SwAuthorFormat n) { m_nFormat = n; }
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;

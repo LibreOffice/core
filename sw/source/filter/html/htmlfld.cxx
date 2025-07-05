@@ -131,8 +131,8 @@ HTMLOptionEnum<SwExtUserSubType> const aHTMLExtUsrFieldSubTable[] =
 
 HTMLOptionEnum<SwAuthorFormat> const aHTMLAuthorFieldFormatTable[] =
 {
-    { OOO_STRING_SW_HTML_FF_name,        AF_NAME },
-    { OOO_STRING_SW_HTML_FF_shortcut,    AF_SHORTCUT },
+    { OOO_STRING_SW_HTML_FF_name,        SwAuthorFormat::Name },
+    { OOO_STRING_SW_HTML_FF_shortcut,    SwAuthorFormat::Shortcut },
     { nullptr,                           SwAuthorFormat(0) }
 };
 
@@ -297,10 +297,10 @@ void SwHTMLParser::NewField()
         if( pSubOption )
         {
             SwExtUserSubType nSub;
-            sal_uLong nFormat = 0;
+            SwAuthorFormat nFormat = SwAuthorFormat::Name;
             if( bFixed )
             {
-                nFormat |= AF_FIXED;
+                nFormat |= SwAuthorFormat::Fixed;
                 bInsOnEndTag = true;
             }
             if( pSubOption->GetEnum( nSub, aHTMLExtUsrFieldSubTable ) )
@@ -310,12 +310,12 @@ void SwHTMLParser::NewField()
 
     case SwFieldIds::Author:
         {
-            SwAuthorFormat nFormat = AF_NAME;
+            SwAuthorFormat nFormat = SwAuthorFormat::Name;
             if( pFormatOption )
                 pFormatOption->GetEnum( nFormat, aHTMLAuthorFieldFormatTable );
             if( bFixed )
             {
-                nFormat = static_cast<SwAuthorFormat>(static_cast<int>(nFormat) | AF_FIXED);
+                nFormat |= SwAuthorFormat::Fixed;
                 bInsOnEndTag = true;
             }
 

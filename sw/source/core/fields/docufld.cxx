@@ -323,11 +323,11 @@ SwAuthorFieldType::SwAuthorFieldType()
 {
 }
 
-OUString SwAuthorFieldType::Expand(sal_uLong nFormat)
+OUString SwAuthorFieldType::Expand(SwAuthorFormat nFormat)
 {
     SwModule* mod = SwModule::get();
     SvtUserOptions&  rOpt = mod->GetUserOptions();
-    if((nFormat & 0xff) == AF_NAME)
+    if((nFormat & SwAuthorFormat::Mask) == SwAuthorFormat::Name)
     {
         // Prefer the view's redline author name.
         // (set in SwXTextDocument::initializeForTiledRendering)
@@ -347,7 +347,7 @@ std::unique_ptr<SwFieldType> SwAuthorFieldType::Copy() const
     return std::make_unique<SwAuthorFieldType>();
 }
 
-SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFormat)
+SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, SwAuthorFormat nFormat)
     : SwField(pTyp),
       m_nFormat(nFormat)
 {
@@ -376,7 +376,7 @@ bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        rAny <<= (GetFormat() & 0xff) == AF_NAME;
+        rAny <<= (GetFormat() & SwAuthorFormat::Mask) == SwAuthorFormat::Name;
         break;
 
     case FIELD_PROP_BOOL2:
@@ -401,14 +401,14 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        m_nFormat = *o3tl::doAccess<bool>(rAny) ? AF_NAME : AF_SHORTCUT;
+        m_nFormat = *o3tl::doAccess<bool>(rAny) ? SwAuthorFormat::Name : SwAuthorFormat::Shortcut;
         break;
 
     case FIELD_PROP_BOOL2:
         if( *o3tl::doAccess<bool>(rAny) )
-            m_nFormat |= AF_FIXED;
+            m_nFormat |= SwAuthorFormat::Fixed;
         else
-            m_nFormat &= ~AF_FIXED;
+            m_nFormat &= ~SwAuthorFormat::Fixed;
         break;
 
     case FIELD_PROP_PAR1:
@@ -2144,7 +2144,7 @@ OUString SwExtUserFieldType::Expand(sal_uInt16 nSub )
 
 // extended user information field
 
-SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFormat) :
+SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, SwAuthorFormat nFormat) :
     SwField(pTyp), m_nType(nSubTyp), m_nFormat(nFormat)
 {
     m_aContent = SwExtUserFieldType::Expand(m_nType);
@@ -2216,9 +2216,9 @@ bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_BOOL1:
         if( *o3tl::doAccess<bool>(rAny) )
-            m_nFormat |= AF_FIXED;
+            m_nFormat |= SwAuthorFormat::Fixed;
         else
-            m_nFormat &= ~AF_FIXED;
+            m_nFormat &= ~SwAuthorFormat::Fixed;
         break;
     default:
         assert(false);

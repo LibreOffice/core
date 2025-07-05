@@ -1052,7 +1052,7 @@ bool SwFieldMgr::InsertField(
         {
             SwAuthorFieldType* pTyp =
                 static_cast<SwAuthorFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::Author) );
-            pField.reset(new SwAuthorField(pTyp, nFormatId));
+            pField.reset(new SwAuthorField(pTyp, static_cast<SwAuthorFormat>(nFormatId)));
             break;
         }
 
@@ -1214,7 +1214,7 @@ bool SwFieldMgr::InsertField(
         {
             SwExtUserFieldType* pTyp = static_cast<SwExtUserFieldType*>( pCurShell->GetFieldType(
                 0, SwFieldIds::ExtUser) );
-            pField.reset(new SwExtUserField(pTyp, nSubType, nFormatId));
+            pField.reset(new SwExtUserField(pTyp, nSubType, static_cast<SwAuthorFormat>(nFormatId)));
             break;
         }
 

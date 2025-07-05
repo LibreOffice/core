@@ -416,7 +416,14 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
     m_xFixedCB->set_sensitive(bFixed);
 
     if (IsFieldEdit())
-        m_xFixedCB->set_active((GetCurField()->GetUntypedFormat() & AF_FIXED) != 0 && bFixed);
+    {
+        if (nTypeId == SwFieldTypesEnum::Author)
+            m_xFixedCB->set_active((static_cast<const SwAuthorField*>(GetCurField())->GetFormat() & SwAuthorFormat::Fixed) && bFixed);
+        else if (nTypeId == SwFieldTypesEnum::ExtendedUser)
+            m_xFixedCB->set_active((static_cast<const SwExtUserField*>(GetCurField())->GetFormat() & SwAuthorFormat::Fixed) && bFixed);
+        else
+            m_xFixedCB->set_active(false);
+    }
 
     if (m_xNumFormatLB->get_selected_index() == -1)
         m_xNumFormatLB->select(0);
@@ -480,7 +487,18 @@ sal_Int32 SwFieldDokPage::FillFormatLB(SwFieldTypesEnum nTypeId)
 
     if (IsFieldEdit())
     {
-        m_xFormatLB->select_id(OUString::number(GetCurField()->GetUntypedFormat() & ~AF_FIXED));
+        if (nTypeId == SwFieldTypesEnum::Author)
+        {
+            SwAuthorFormat nFormat = static_cast<const SwAuthorField*>(GetCurField())->GetFormat() & ~SwAuthorFormat::Fixed;
+            m_xFormatLB->select_id(OUString::number(static_cast<sal_uInt32>(nFormat)));
+        }
+        else if (nTypeId == SwFieldTypesEnum::ExtendedUser)
+        {
+            SwAuthorFormat nFormat = static_cast<const SwExtUserField*>(GetCurField())->GetFormat() & ~SwAuthorFormat::Fixed;
+            m_xFormatLB->select_id(OUString::number(static_cast<sal_uInt32>(nFormat)));
+        }
+        else
+            m_xFormatLB->select_id(OUString::number(GetCurField()->GetUntypedFormat()));
     }
     else
     {
@@ -567,7 +585,7 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
             nSubType = 0;
             [[fallthrough]];
         case SwFieldTypesEnum::ExtendedUser:
-            nFormat |= m_xFixedCB->get_active() ? AF_FIXED : 0;
+            nFormat |= m_xFixedCB->get_active() ? static_cast<sal_uInt32>(SwAuthorFormat::Fixed) : 0;
             break;
 
         case SwFieldTypesEnum::Filename:

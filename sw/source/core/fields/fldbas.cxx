@@ -341,9 +341,9 @@ sal_uInt32 SwField::GetUntypedFormat() const
     case SwFieldIds::Filename:
         return static_cast<sal_uInt32>(static_cast<const SwFileNameField*>(this)->GetFormat());
     case SwFieldIds::Author:
-        return static_cast<const SwAuthorField*>(this)->GetFormat();
+        return static_cast<sal_uInt32>(static_cast<const SwAuthorField*>(this)->GetFormat());
     case SwFieldIds::ExtUser:
-        return static_cast<const SwExtUserField*>(this)->GetFormat();
+        return static_cast<sal_uInt32>(static_cast<const SwExtUserField*>(this)->GetFormat());
     case SwFieldIds::DbNextSet:
     case SwFieldIds::DbNumSet:
     case SwFieldIds::DatabaseName:
@@ -384,10 +384,10 @@ void SwField::SetUntypedFormat(sal_uInt32 n)
         static_cast<SwFileNameField*>(this)->SetFormat(static_cast<SwFileNameFormat>(n));
         return;
     case SwFieldIds::Author:
-        static_cast<SwAuthorField*>(this)->SetFormat(n);
+        static_cast<SwAuthorField*>(this)->SetFormat(static_cast<SwAuthorFormat>(n));
         return;
     case SwFieldIds::ExtUser:
-        static_cast<SwExtUserField*>(this)->SetFormat(n);
+        static_cast<SwExtUserField*>(this)->SetFormat(static_cast<SwAuthorFormat>(n));
         return;
     case SwFieldIds::DbNextSet:
     case SwFieldIds::DbNumSet:
@@ -543,10 +543,10 @@ bool SwField::IsFixed() const
         break;
 
     case SwFieldIds::ExtUser:
-        bRet = 0 != (static_cast<const SwExtUserField*>(this)->GetFormat() & AF_FIXED);
+        bRet = bool(static_cast<const SwExtUserField*>(this)->GetFormat() & SwAuthorFormat::Fixed);
         break;
     case SwFieldIds::Author:
-        bRet = 0 != (static_cast<const SwAuthorField*>(this)->GetFormat() & AF_FIXED);
+        bRet = bool(static_cast<const SwAuthorField*>(this)->GetFormat() & SwAuthorFormat::Fixed);
         break;
 
     case SwFieldIds::Filename:

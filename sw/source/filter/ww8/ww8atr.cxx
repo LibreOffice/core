@@ -3043,7 +3043,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::Author:
         {
             ww::eField eField =
-                ((AF_SHORTCUT & static_cast<const SwAuthorField*>(pField)->GetFormat()) ? ww::eUSERINITIALS : ww::eUSERNAME);
+                ((SwAuthorFormat::Shortcut & static_cast<const SwAuthorField*>(pField)->GetFormat()) ? ww::eUSERINITIALS : ww::eUSERNAME);
             GetExport().OutputField(pField, eField, FieldString(eField));
         }
         break;

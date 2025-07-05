@@ -1475,9 +1475,9 @@ void SAL_CALL SwXTextField::attach(
             break;
             case SwServiceType::FieldTypeAuthor:
             {
-                tools::Long nFormat = m_pImpl->m_pProps->bBool1 ? AF_NAME : AF_SHORTCUT;
+                SwAuthorFormat nFormat = m_pImpl->m_pProps->bBool1 ? SwAuthorFormat::Name : SwAuthorFormat::Shortcut;
                 if (m_pImpl->m_pProps->bBool2)
-                    nFormat |= AF_FIXED;
+                    nFormat |= SwAuthorFormat::Fixed;
 
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Author);
                 SwAuthorField *const pAuthorField = new SwAuthorField(
@@ -1592,9 +1592,9 @@ void SAL_CALL SwXTextField::attach(
             break;
             case SwServiceType::FieldTypeUserExt:
             {
-                sal_Int32 nFormat = 0;
+                SwAuthorFormat nFormat = SwAuthorFormat::Name;
                 if (m_pImpl->m_pProps->bBool1)
-                    nFormat = AF_FIXED;
+                    nFormat = SwAuthorFormat::Fixed;
 
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::ExtUser);
                 SwExtUserField *const pEUField = new SwExtUserField(

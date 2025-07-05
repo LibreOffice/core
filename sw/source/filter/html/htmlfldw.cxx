@@ -114,10 +114,11 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
 
         case SwFieldIds::Author:
             pTypeStr = OOO_STRING_SW_HTML_FT_author;
-            switch( static_cast<SwAuthorFormat>(static_cast<const SwAuthorField*>(pField)->GetFormat()) & 0xff)
+            switch( static_cast<const SwAuthorField*>(pField)->GetFormat() & SwAuthorFormat::Mask )
             {
-                case AF_NAME:     pFormatStr = OOO_STRING_SW_HTML_FF_name;     break;
-                case AF_SHORTCUT:  pFormatStr = OOO_STRING_SW_HTML_FF_shortcut;    break;
+                case SwAuthorFormat::Name:     pFormatStr = OOO_STRING_SW_HTML_FF_name;     break;
+                case SwAuthorFormat::Shortcut:  pFormatStr = OOO_STRING_SW_HTML_FF_shortcut;    break;
+                default: break;
             }
             OSL_ENSURE( pFormatStr, "unknown format for SwAuthorField" );
             bFixed = static_cast<const SwAuthorField*>(pField)->IsFixed();
