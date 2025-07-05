@@ -43,8 +43,6 @@
 #include "css1atr.hxx"
 #include "css1kywd.hxx"
 
-using namespace nsSwDocInfoSubType;
-
 const char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFormat )
 {
     const char *pFormatStr = nullptr;
@@ -174,42 +172,43 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
             {
                 auto pDocInfoField = static_cast<const SwDocInfoField*>(pField);
                 nNumFormat = pDocInfoField->GetFormat();
-                sal_uInt16 nSubType = pDocInfoField->GetSubType();
+                SwDocInfoSubType nSubType = pDocInfoField->GetSubType();
                 pTypeStr = OOO_STRING_SW_HTML_FT_docinfo;
-                sal_uInt16 nExtSubType = nSubType & 0x0f00;
-                nSubType &= 0x00ff;
+                SwDocInfoSubType nExtSubType = nSubType & SwDocInfoSubType::SubMask;
+                nSubType &= SwDocInfoSubType::LowerMask;
 
                 switch( nSubType )
                 {
-                    case DI_TITLE:      pSubStr = OOO_STRING_SW_HTML_FS_title;  break;
-                    case DI_SUBJECT:    pSubStr = OOO_STRING_SW_HTML_FS_theme;  break;
-                    case DI_KEYS:       pSubStr = OOO_STRING_SW_HTML_FS_keys;   break;
-                    case DI_COMMENT:    pSubStr = OOO_STRING_SW_HTML_FS_comment; break;
-                    case DI_CREATE:     pSubStr = OOO_STRING_SW_HTML_FS_create;     break;
-                    case DI_CHANGE:     pSubStr = OOO_STRING_SW_HTML_FS_change;     break;
-                    case DI_CUSTOM:     pSubStr = OOO_STRING_SW_HTML_FS_custom;     break;
+                    case SwDocInfoSubType::Title:      pSubStr = OOO_STRING_SW_HTML_FS_title;  break;
+                    case SwDocInfoSubType::Subject:    pSubStr = OOO_STRING_SW_HTML_FS_theme;  break;
+                    case SwDocInfoSubType::Keys:       pSubStr = OOO_STRING_SW_HTML_FS_keys;   break;
+                    case SwDocInfoSubType::Comment:    pSubStr = OOO_STRING_SW_HTML_FS_comment; break;
+                    case SwDocInfoSubType::Create:     pSubStr = OOO_STRING_SW_HTML_FS_create;     break;
+                    case SwDocInfoSubType::Change:     pSubStr = OOO_STRING_SW_HTML_FS_change;     break;
+                    case SwDocInfoSubType::Custom:     pSubStr = OOO_STRING_SW_HTML_FS_custom;     break;
                     default:            pTypeStr = nullptr;               break;
                 }
 
-                if( DI_CUSTOM == nSubType ) {
+                if( SwDocInfoSubType::Custom == nSubType ) {
                     aName = pDocInfoField->GetName();
                 }
 
-                if( DI_CREATE == nSubType || DI_CHANGE == nSubType )
+                if( SwDocInfoSubType::Create == nSubType || SwDocInfoSubType::Change == nSubType )
                 {
                     switch( nExtSubType )
                     {
-                        case DI_SUB_AUTHOR:
+                        case SwDocInfoSubType::SubAuthor:
                             pFormatStr = OOO_STRING_SW_HTML_FF_author;
                             break;
-                        case DI_SUB_TIME:
+                        case SwDocInfoSubType::SubTime:
                             pFormatStr = OOO_STRING_SW_HTML_FF_time;
                             bNumFormat = true;
                             break;
-                        case DI_SUB_DATE:
+                        case SwDocInfoSubType::SubDate:
                             pFormatStr = OOO_STRING_SW_HTML_FF_date;
                             bNumFormat = true;
                             break;
+                        default: break;
                     }
                 }
                 bFixed = pDocInfoField->IsFixed();

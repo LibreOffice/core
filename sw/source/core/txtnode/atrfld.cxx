@@ -363,16 +363,17 @@ namespace
         if (rField.GetTyp()->Which() == SwFieldIds::DocInfo)
         {
             auto pDocInfoField = static_cast<const SwDocInfoField*>(&rField);
-            sal_uInt16 nSubType = pDocInfoField->GetSubType();
+            SwDocInfoSubType nSubType = pDocInfoField->GetSubType();
             // Do not consider extended SubTypes.
-            nSubType &= 0xff;
+            nSubType &= SwDocInfoSubType::LowerMask;
             switch (nSubType)
             {
-                case nsSwDocInfoSubType::DI_TITLE:
-                case nsSwDocInfoSubType::DI_SUBJECT:
-                case nsSwDocInfoSubType::DI_CHANGE:
-                case nsSwDocInfoSubType::DI_CUSTOM:
+                case SwDocInfoSubType::Title:
+                case SwDocInfoSubType::Subject:
+                case SwDocInfoSubType::Change:
+                case SwDocInfoSubType::Custom:
                     return false;
+                default: break;
             }
         }
         return true;

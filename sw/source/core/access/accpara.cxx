@@ -1102,8 +1102,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
     case SwFieldIds::DocInfo:
         {
             const SwDocInfoField* pDocInfoField = static_cast<const SwDocInfoField*>(pField);
-            subType = pDocInfoField->GetSubType();
-            subType &= 0x00ff;
+            subType = static_cast<sal_uInt16>(pDocInfoField->GetSubType() & SwDocInfoSubType::LowerMask);
         }
         break;
     case SwFieldIds::RefPageSet:
@@ -1139,7 +1138,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 strTypeName = sEntry;
                 sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
                 auto pDocInfoField = static_cast<const SwDocInfoField*>(pField);
-                const sal_uInt16 nExSub = pDocInfoField->GetSubType() & 0xff00;
+                const sal_uInt16 nExSub = static_cast<sal_uInt16>(pDocInfoField->GetSubType() & SwDocInfoSubType::UpperMask);
                 if (nSize > 0 && nExSub > 0)
                 {
                     //Get extra subtype string

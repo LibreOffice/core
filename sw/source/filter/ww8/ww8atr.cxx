@@ -147,7 +147,6 @@
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
-using namespace nsSwDocInfoSubType;
 using namespace sw::util;
 using namespace sw::types;
 
@@ -3059,34 +3058,34 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::DocInfo:    // Last printed, last edited,...
         {
             auto pDocInfoField = static_cast<const SwDocInfoField*>(pField);
-            const sal_uInt16 nSubType = pDocInfoField->GetSubType();
-            if( DI_SUB_FIXED & nSubType )
+            const SwDocInfoSubType nSubType = pDocInfoField->GetSubType();
+            if( SwDocInfoSubType::SubFixed & nSubType )
                 bWriteExpand = true;
 
             OUString sStr;
             ww::eField eField(ww::eNONE);
-            switch (0xff & nSubType)
+            switch (SwDocInfoSubType::LowerMask & nSubType)
             {
-                case DI_TITLE:
+                case SwDocInfoSubType::Title:
                     eField = ww::eTITLE;
                     break;
-                case DI_SUBJECT:
+                case SwDocInfoSubType::Subject:
                     eField = ww::eSUBJECT;
                     break;
-                case DI_KEYS:
+                case SwDocInfoSubType::Keys:
                     eField = ww::eKEYWORDS;
                     break;
-                case DI_COMMENT:
+                case SwDocInfoSubType::Comment:
                     eField = ww::eCOMMENTS;
                     break;
-                case DI_DOCNO:
+                case SwDocInfoSubType::DocNo:
                     eField = ww::eREVNUM;
                     break;
-                case DI_EDIT:
+                case SwDocInfoSubType::Edit:
                     eField = ww::eEDITTIME;
                     break;
-                case DI_CREATE:
-                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_MASK))
+                case SwDocInfoSubType::Create:
+                    if (SwDocInfoSubType::SubAuthor == (nSubType & SwDocInfoSubType::SubMask))
                         eField = ww::eAUTHOR;
                     else if (GetExport().GetNumberFormat(*pField, sStr) || sStr.isEmpty())
                         eField = ww::eCREATEDATE;
@@ -3095,8 +3094,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     bWriteExpand = false;
                     break;
 
-                case DI_CHANGE:
-                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_MASK))
+                case SwDocInfoSubType::Change:
+                    if (SwDocInfoSubType::SubAuthor == (nSubType & SwDocInfoSubType::SubMask))
                     {
                         eField = ww::eLASTSAVEDBY;
                         bWriteExpand=false;
@@ -3105,12 +3104,12 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                         eField = ww::eSAVEDATE;
                     break;
 
-                case DI_PRINT:
-                    if (DI_SUB_AUTHOR != (nSubType & DI_SUB_MASK) &&
+                case SwDocInfoSubType::Print:
+                    if (SwDocInfoSubType::SubAuthor != (nSubType & SwDocInfoSubType::SubMask) &&
                         (GetExport().GetNumberFormat(*pField, sStr) || sStr.isEmpty()))
                         eField = ww::ePRINTDATE;
                     break;
-                case DI_CUSTOM:
+                case SwDocInfoSubType::Custom:
                     eField = ww::eDOCPROPERTY;
                     sStr = "\"" + pDocInfoField->GetName() + "\"";
                     bWriteExpand = false;

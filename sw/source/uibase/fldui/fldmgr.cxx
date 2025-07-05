@@ -89,7 +89,6 @@ using namespace com::sun::star::text;
 using namespace com::sun::star::style;
 using namespace com::sun::star::sdbc;
 using namespace ::com::sun::star;
-using namespace nsSwDocInfoSubType;
 
 // groups of fields
 enum
@@ -639,7 +638,7 @@ void SwFieldMgr::GetSubTypes(SwFieldTypesEnum nTypeId, std::vector<OUString>& rT
             {
                 sal_uInt16 nCount;
                 if (nTypeId == SwFieldTypesEnum::DocumentInfo)
-                    nCount = DI_SUBTYPE_END - DI_SUBTYPE_BEGIN;
+                    nCount = static_cast<sal_uInt16>(SwDocInfoSubType::SubtypeEnd) - static_cast<sal_uInt16>(SwDocInfoSubType::SubtypeBegin);
                 else
                     nCount = aSwFields[nPos].nSubTypeLength;
 
@@ -648,7 +647,7 @@ void SwFieldMgr::GetSubTypes(SwFieldTypesEnum nTypeId, std::vector<OUString>& rT
                     OUString sNew;
                     if (nTypeId == SwFieldTypesEnum::DocumentInfo)
                     {
-                        if ( i == DI_CUSTOM )
+                        if ( i == static_cast<sal_uInt16>(SwDocInfoSubType::Custom) )
                             sNew = SwResId(STR_CUSTOM_FIELD);
                         else
                             sNew = SwViewShell::GetShellRes()->aDocInfoLst[i];
@@ -777,11 +776,11 @@ sal_uInt16 SwFieldMgr::GetFormatId(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatI
         {
             TranslateId sId = aSwFields[GetPos(nTypeId)].pFormatResIds[nFormatId];
             if (sId == FMT_REG_AUTHOR)
-                nId = DI_SUB_AUTHOR;
+                nId = static_cast<sal_uInt16>(SwDocInfoSubType::SubAuthor);
             else if (sId == FMT_REG_TIME)
-                nId = DI_SUB_TIME;
+                nId = static_cast<sal_uInt16>(SwDocInfoSubType::SubTime);
             else if (sId == FMT_REG_DATE)
-                nId = DI_SUB_DATE;
+                nId = static_cast<sal_uInt16>(SwDocInfoSubType::SubDate);
             break;
         }
         case SwFieldTypesEnum::PageNumber:
@@ -1206,7 +1205,7 @@ bool SwFieldMgr::InsertField(
         {
             SwDocInfoFieldType* pTyp = static_cast<SwDocInfoFieldType*>( pCurShell->GetFieldType(
                 0, SwFieldIds::DocInfo ) );
-            pField.reset(new SwDocInfoField(pTyp, nSubType, rData.m_sPar1, nFormatId));
+            pField.reset(new SwDocInfoField(pTyp, static_cast<SwDocInfoSubType>(nSubType), rData.m_sPar1, nFormatId));
             break;
         }
 

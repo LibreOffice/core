@@ -24,6 +24,7 @@
 #include "fldpage.hxx"
 
 namespace com::sun::star::beans { class XPropertySet; }
+enum class SwDocInfoSubType : sal_uInt16;
 
 class SwFieldDokInfPage : public SwFieldPage
 {
@@ -46,7 +47,7 @@ class SwFieldDokInfPage : public SwFieldPage
     DECL_LINK(TypeHdl, weld::TreeView&, void);
     DECL_LINK(SubTypeHdl, weld::TreeView&, void);
 
-    sal_Int32               FillSelectionLB(sal_uInt16 nSubTypeId);
+    sal_Int32               FillSelectionLB(SwDocInfoSubType nSubTypeId);
 
 protected:
     virtual sal_uInt16      GetGroup() override;

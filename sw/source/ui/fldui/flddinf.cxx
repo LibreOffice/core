@@ -41,7 +41,6 @@
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-using namespace nsSwDocInfoSubType;
 using namespace com::sun::star;
 
 void FillFieldSelect(weld::TreeView& rListBox)
@@ -130,14 +129,14 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     m_xSelEntry.reset();
 
     // display SubTypes in TypeLB
-    sal_uInt16 nSubType = USHRT_MAX;
+    SwDocInfoSubType nSubType = SwDocInfoSubType::Max;
     if (IsFieldEdit())
     {
         const SwField* pCurField = GetCurField();
         if (auto const pField = dynamic_cast<SwDocInfoField const*>(pCurField))
         {
-            nSubType = pField->GetSubType() & 0xff;
-            if( nSubType == DI_CUSTOM )
+            nSubType = pField->GetSubType() & SwDocInfoSubType::LowerMask;
+            if( nSubType == SwDocInfoSubType::Custom )
                 m_sOldCustomFieldName = pField->GetName();
         }
         m_xFormatLB->SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
@@ -164,10 +163,10 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     std::unique_ptr<weld::TreeIter> xExpandEntry;
     for(size_t i = 0; i < aLst.size(); ++i)
     {
-        if (!IsFieldEdit() || nSubType == i)
+        if (!IsFieldEdit() || static_cast<sal_uInt16>(nSubType) == i)
         {
             const OUString sId(OUString::number(i));
-            if (DI_CUSTOM == i)
+            if (static_cast<sal_uInt16>(SwDocInfoSubType::Custom) == i)
             {
                 if(m_xCustomPropertySet.is() )
                 {
@@ -196,7 +195,10 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
             }
             else
             {
-                if (!(IsFieldDlgHtmlMode() && (i == DI_EDIT || i == DI_SUBJECT || i == DI_PRINT)))
+                if (!(IsFieldDlgHtmlMode()
+                      && (i == static_cast<sal_uInt16>(SwDocInfoSubType::Edit)
+                          || i == static_cast<sal_uInt16>(SwDocInfoSubType::Subject)
+                          || i == static_cast<sal_uInt16>(SwDocInfoSubType::Print))))
                 {
                     m_pTypeView->insert(nullptr, -1, &aLst[i], &sId,
                                         nullptr, nullptr, false, xEntry.get());
@@ -216,13 +218,13 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     if (m_xSelEntry)
     {
         m_pTypeView->select(*m_xSelEntry);
-        nSubType = m_pTypeView->get_id(*m_xSelEntry).toUInt32();
+        nSubType = static_cast<SwDocInfoSubType>(m_pTypeView->get_id(*m_xSelEntry).toUInt32());
     }
     else
     {
         m_xSelEntry = m_pTypeView->make_iterator();
         if (m_pTypeView->get_iter_first(*m_xSelEntry))
-            nSubType = m_pTypeView->get_id(*m_xSelEntry).toUInt32();
+            nSubType = static_cast<SwDocInfoSubType>(m_pTypeView->get_id(*m_xSelEntry).toUInt32());
         else
             m_xSelEntry.reset();
     }
@@ -253,18 +255,18 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, TypeHdl, weld::TreeView&, void)
     {
         m_pTypeView->select(*m_xSelEntry);
     }
-    FillSelectionLB(m_pTypeView->get_id(*m_xSelEntry).toUInt32());
+    FillSelectionLB(static_cast<SwDocInfoSubType>(m_pTypeView->get_id(*m_xSelEntry).toUInt32()));
     SubTypeHdl(*m_xSelectionLB);
 }
 
 IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
 {
-    sal_uInt16 nSubType = m_pTypeView->get_id(*m_xSelEntry).toUInt32();
+    SwDocInfoSubType nSubType = static_cast<SwDocInfoSubType>(m_pTypeView->get_id(*m_xSelEntry).toUInt32());
     sal_Int32 nPos = m_xSelectionLB->get_selected_index();
-    sal_uInt16 nExtSubType;
+    SwDocInfoSubType nExtSubType;
     SvNumFormatType nNewType = SvNumFormatType::ALL;
 
-    if (nSubType != DI_EDIT)
+    if (nSubType != SwDocInfoSubType::Edit)
     {
         if (nPos == -1)
         {
@@ -272,7 +274,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
             {
                 m_xFormatLB->clear();
                 m_xFormat->set_sensitive(false);
-                if( nSubType == DI_CUSTOM )
+                if( nSubType == SwDocInfoSubType::Custom )
                 {
                     //find out which type the custom field has - for a start set to DATE format
                     const OUString sName = m_pTypeView->get_text(*m_xSelEntry);
@@ -303,10 +305,10 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
             nPos = 0;
         }
 
-        nExtSubType = m_xSelectionLB->get_id(nPos).toUInt32();
+        nExtSubType = static_cast<SwDocInfoSubType>(m_xSelectionLB->get_id(nPos).toUInt32());
     }
     else
-        nExtSubType = DI_SUB_TIME;
+        nExtSubType = SwDocInfoSubType::SubTime;
 
     SvNumFormatType nOldType = SvNumFormatType::ALL;
     bool bEnable = false;
@@ -317,18 +319,20 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
 
     switch (nExtSubType)
     {
-        case DI_SUB_AUTHOR:
+        case SwDocInfoSubType::SubAuthor:
             break;
 
-        case DI_SUB_DATE:
+        case SwDocInfoSubType::SubDate:
             nNewType = SvNumFormatType::DATE;
             bOneArea = true;
             break;
 
-        case DI_SUB_TIME:
+        case SwDocInfoSubType::SubTime:
             nNewType = SvNumFormatType::TIME;
             bOneArea = true;
             break;
+
+        default: break;
     }
     if (nNewType == SvNumFormatType::ALL)
     {
@@ -346,21 +350,21 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
 
     sal_uInt32 nFormat = 0;
 
-    sal_uInt16 nOldSubType = 0;
+    SwDocInfoSubType nOldSubType = SwDocInfoSubType::Title;
 
     if (IsFieldEdit())
     {
         if (auto const pField = dynamic_cast<SwDocInfoField const*>(GetCurField()))
         {
-            nFormat = pField->GetFormat();
-            nOldSubType = pField->GetSubType() & 0xff00;
+            nFormat = static_cast<sal_uInt16>(pField->GetFormat());
+            nOldSubType = pField->GetSubType() & SwDocInfoSubType::UpperMask;
         }
         nPos = m_xSelectionLB->get_selected_index();
         if (nPos != -1)
         {
-            nSubType = m_xSelectionLB->get_id(nPos).toUInt32();
+            nSubType = static_cast<SwDocInfoSubType>(m_xSelectionLB->get_id(nPos).toUInt32());
 
-            nOldSubType &= ~DI_SUB_FIXED;
+            nOldSubType &= ~SwDocInfoSubType::SubFixed;
             if (nOldSubType == nSubType)
             {
                 if (!nFormat && (nNewType == SvNumFormatType::DATE || nNewType == SvNumFormatType::TIME))
@@ -379,7 +383,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
                 m_xFormatLB->SetDefFormat(nFormat);
             }
         }
-        else if( (nSubType == DI_CUSTOM)  && (nNewType != SvNumFormatType::ALL) )
+        else if( (nSubType == SwDocInfoSubType::Custom)  && (nNewType != SvNumFormatType::ALL) )
         {
             m_xFormatLB->SetDefFormat(nFormat);
         }
@@ -394,33 +398,37 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
         m_xFormatLB->select(0);
 }
 
-sal_Int32 SwFieldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
+sal_Int32 SwFieldDokInfPage::FillSelectionLB(SwDocInfoSubType nSubType)
 {
     // fill Format-Listbox
     SwFieldTypesEnum nTypeId = SwFieldTypesEnum::DocumentInfo;
 
-    EnableInsert(nSubType != USHRT_MAX, IsCurrentPage());
+    EnableInsert(nSubType != SwDocInfoSubType::Max, IsCurrentPage());
 
-    if (nSubType == USHRT_MAX)  // Info-Text
-        nSubType = DI_SUBTYPE_BEGIN;
+    if (nSubType == SwDocInfoSubType::Max)  // Info-Text
+        nSubType = SwDocInfoSubType::SubtypeBegin;
 
     m_xSelectionLB->clear();
 
     sal_uInt16 nSize = 0;
     sal_Int32 nSelPos = -1;
-    sal_uInt16 nExtSubType = 0;
+    sal_uInt16 nExtSubIdx = 0;
 
     if (IsFieldEdit())
     {
+        SwDocInfoSubType nExtSubType = SwDocInfoSubType::Title;
         if (auto const pField = dynamic_cast<SwDocInfoField const*>(GetCurField()))
         {
-            nExtSubType = pField->GetSubType() & 0xff00;
+            nExtSubType = pField->GetSubType() & SwDocInfoSubType::UpperMask;
         }
-        m_xFixedCB->set_active((nExtSubType & DI_SUB_FIXED) != 0);
-        nExtSubType = ((nExtSubType & ~DI_SUB_FIXED) >> 8) - 1;
+        m_xFixedCB->set_active(bool(nExtSubType & SwDocInfoSubType::SubFixed));
+        nExtSubIdx = (static_cast<sal_uInt16>(nExtSubType & ~SwDocInfoSubType::SubFixed) >> 8) - 1;
     }
 
-    if (nSubType < DI_CREATE || nSubType == DI_DOCNO || nSubType == DI_EDIT|| nSubType == DI_CUSTOM )
+    if (nSubType < SwDocInfoSubType::Create
+        || nSubType == SwDocInfoSubType::DocNo
+        || nSubType == SwDocInfoSubType::Edit
+        || nSubType == SwDocInfoSubType::Custom )
     {
         // Format Box is empty for Title and Time
     }
@@ -431,7 +439,7 @@ sal_Int32 SwFieldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
         {
             OUString sId(OUString::number(GetFieldMgr().GetFormatId(nTypeId, i)));
             m_xSelectionLB->append(sId, GetFieldMgr().GetFormatStr(nTypeId, i));
-            if (IsFieldEdit() && i == nExtSubType)
+            if (IsFieldEdit() && i == nExtSubIdx)
                 nSelPos = i;
         }
     }
@@ -455,8 +463,8 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
     if (!m_xSelEntry)
         return false;
 
-    sal_uInt16 nSubType = m_pTypeView->get_id(*m_xSelEntry).toUInt32();
-    if (nSubType == USHRT_MAX)
+    SwDocInfoSubType nSubType = static_cast<SwDocInfoSubType>(m_pTypeView->get_id(*m_xSelEntry).toUInt32());
+    if (nSubType == SwDocInfoSubType::Max)
         return false;
 
     sal_uInt32 nFormat = 0;
@@ -464,14 +472,14 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
     sal_Int32 nPos = m_xSelectionLB->get_selected_index();
 
     OUString aName;
-    if (DI_CUSTOM == nSubType)
+    if (SwDocInfoSubType::Custom == nSubType)
         aName = m_pTypeView->get_text(*m_xSelEntry);
 
     if (nPos != -1)
-        nSubType |= m_xSelectionLB->get_id(nPos).toUInt32();
+        nSubType |= static_cast<SwDocInfoSubType>(m_xSelectionLB->get_id(nPos).toUInt32());
 
     if (m_xFixedCB->get_active())
-        nSubType |= DI_SUB_FIXED;
+        nSubType |= SwDocInfoSubType::SubFixed;
 
     nPos = m_xFormatLB->get_selected_index();
     if(nPos != -1)
@@ -479,9 +487,9 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
 
     if (!IsFieldEdit() || m_nOldSel != m_xSelectionLB->get_selected_index() ||
         m_nOldFormat != nFormat || m_xFixedCB->get_state_changed_from_saved()
-        || (DI_CUSTOM == nSubType && aName != m_sOldCustomFieldName ))
+        || (SwDocInfoSubType::Custom == nSubType && aName != m_sOldCustomFieldName ))
     {
-        InsertField(SwFieldTypesEnum::DocumentInfo, nSubType, aName, OUString(), nFormat,
+        InsertField(SwFieldTypesEnum::DocumentInfo, static_cast<sal_uInt16>(nSubType), aName, OUString(), nFormat,
                 ' ', m_xFormatLB->IsAutomaticLanguage());
     }
 

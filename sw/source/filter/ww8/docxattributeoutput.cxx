@@ -173,7 +173,6 @@ using ::editeng::SvxBorderLine;
 using namespace oox;
 using namespace docx;
 using namespace sax_fastparser;
-using namespace nsSwDocInfoSubType;
 using namespace sw::util;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

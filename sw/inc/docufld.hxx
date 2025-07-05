@@ -65,32 +65,43 @@ enum class SwDocStatSubType : sal_uInt16
     OLE
 };
 
-typedef sal_uInt16  SwDocInfoSubType;
-namespace nsSwDocInfoSubType
+enum class SwDocInfoSubType : sal_uInt16
 {
     /** NB: these must denote consecutive integers!
      NB2: these are extended by 4 DI_INFO values for backward compatibility
           in filter/html/htmlfld.cxx, so make sure that DI_SUBTYPE_END
           really is the end, and is at least 4 less than DI_SUB_*! */
-    const SwDocInfoSubType DI_SUBTYPE_BEGIN =  0;
-    const SwDocInfoSubType DI_TITLE         =  DI_SUBTYPE_BEGIN;
-    const SwDocInfoSubType DI_SUBJECT       =  1;
-    const SwDocInfoSubType DI_KEYS          =  2;
-    const SwDocInfoSubType DI_COMMENT       =  3;
-    const SwDocInfoSubType DI_CREATE        =  4;
-    const SwDocInfoSubType DI_CHANGE        =  5;
-    const SwDocInfoSubType DI_PRINT         =  6;
-    const SwDocInfoSubType DI_DOCNO         =  7;
-    const SwDocInfoSubType DI_EDIT          =  8;
-    const SwDocInfoSubType DI_CUSTOM        =  9;
-    const SwDocInfoSubType DI_SUBTYPE_END   = 10;
+    SubtypeBegin =  0,
+    Title         = SubtypeBegin,
+    Subject       =  1,
+    Keys          =  2,
+    Comment       =  3,
+    Create        =  4,
+    Change        =  5,
+    Print         =  6,
+    DocNo         =  7,
+    Edit          =  8,
+    Custom        =  9,
+    SubtypeEnd    = 10,
+    LowerMask     = 0x00ff,
+    UpperMask     = 0xff00,
 
-    const SwDocInfoSubType DI_SUB_AUTHOR    = 0x0100;
-    const SwDocInfoSubType DI_SUB_TIME      = 0x0200;
-    const SwDocInfoSubType DI_SUB_DATE      = 0x0300;
-    const SwDocInfoSubType DI_SUB_FIXED     = 0x1000;
-    const SwDocInfoSubType DI_SUB_MASK      = 0x0f00;
-}
+    // UGLY: these are necessary for importing document info fields written by
+    //       older versions of OOo (< 3.0) which did not have Custom fields
+    Info1         =  SubtypeEnd + 1,
+    Info2         =  SubtypeEnd + 2,
+    Info3         =  SubtypeEnd + 3,
+    Info4         =  SubtypeEnd + 4,
+
+    SubAuthor     = 0x0100,
+    SubTime       = 0x0200,
+    SubDate       = 0x0300,
+    SubFixed      = 0x1000,
+    SubMask       = 0x0f00,
+
+    Max           = 0xffff // used as a flag by SwFieldDokInfPage
+};
+namespace o3tl { template<> struct typed_flags<SwDocInfoSubType> : is_typed_flags<SwDocInfoSubType, 0xffff> {}; }
 
 enum SwPageNumSubType
 {
@@ -566,13 +577,13 @@ class SAL_DLLPUBLIC_RTTI SwDocInfoFieldType final : public SwValueFieldType
 public:
     SwDocInfoFieldType(SwDoc* pDc);
 
-    OUString                Expand(sal_uInt16 nSubType, sal_uInt32 nFormat, LanguageType nLang, const OUString& rName) const;
+    OUString                Expand(SwDocInfoSubType nSubType, sal_uInt32 nFormat, LanguageType nLang, const OUString& rName) const;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SW_DLLPUBLIC SwDocInfoField final : public SwValueField
 {
-    sal_uInt16  m_nSubType;
+    SwDocInfoSubType  m_nSubType;
     OUString  m_aContent;
     OUString  m_aName;
 
@@ -580,11 +591,11 @@ class SW_DLLPUBLIC SwDocInfoField final : public SwValueField
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
-    SwDocInfoField(SwDocInfoFieldType*, sal_uInt16 nSub, const OUString& rName, sal_uInt32 nFormat=0);
-    SwDocInfoField(SwDocInfoFieldType*, sal_uInt16 nSub, const OUString& rName, const OUString& rValue, sal_uInt32 nFormat=0);
+    SwDocInfoField(SwDocInfoFieldType*, SwDocInfoSubType nSub, const OUString& rName, sal_uInt32 nFormat=0);
+    SwDocInfoField(SwDocInfoFieldType*, SwDocInfoSubType nSub, const OUString& rName, const OUString& rValue, sal_uInt32 nFormat=0);
 
-    void                    SetSubType(sal_uInt16);
-    sal_uInt16              GetSubType() const;
+    void                    SetSubType(SwDocInfoSubType);
+    SwDocInfoSubType        GetSubType() const;
     virtual void            SetLanguage(LanguageType nLng) override;
     virtual OUString        GetFieldName() const override;
     const OUString&         GetName() const { return m_aName; }

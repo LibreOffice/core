@@ -244,7 +244,7 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
             break;
         case SwFieldTypesEnum::DocumentInfo:
             {
-                if( nSubType == nsSwDocInfoSubType::DI_CUSTOM )
+                if( nSubType == static_cast<sal_uInt16>(SwDocInfoSubType::Custom) )
                 {
                     SwDocInfoField* pDocInfo = static_cast<SwDocInfoField*>( pTmpField.get() );
                     pDocInfo->SetName( rPar1 );

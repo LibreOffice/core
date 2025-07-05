@@ -96,7 +96,6 @@ using namespace ::com::sun::star;
 using namespace msfilter::util;
 using namespace sw::util;
 using namespace sw::mark;
-using namespace nsSwDocInfoSubType;
 
 // Bookmarks
 namespace
@@ -1586,11 +1585,11 @@ eF_ResT SwWW8ImplReader::Read_F_Styleref(WW8FieldDesc*, OUString& rString)
 
 eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
 {
-    sal_uInt16 nSub=0;
+    SwDocInfoSubType nSub = SwDocInfoSubType::SubtypeBegin;
     // RegInfoFormat, DefaultFormat for DocInfoFields
-    sal_uInt16 nReg = DI_SUB_AUTHOR;
+    SwDocInfoSubType nReg = SwDocInfoSubType::SubAuthor;
     bool bDateTime = false;
-    const sal_uInt16 nFldLock = (pF->nOpt & 0x10) ? DI_SUB_FIXED : 0;
+    const SwDocInfoSubType nFldLock = (pF->nOpt & 0x10) ? SwDocInfoSubType::SubFixed : SwDocInfoSubType::SubtypeBegin;
 
     if( 85 == pF->nId )
     {
@@ -1710,7 +1709,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             const auto pType(static_cast<SwDocInfoFieldType*>(
                 m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo)));
             const OUString sDisplayed = GetFieldResult(pF);
-            SwDocInfoField aField(pType, DI_CUSTOM | nReg, aDocProperty);
+            SwDocInfoField aField(pType, SwDocInfoSubType::Custom | nReg, aDocProperty);
 
             // If text already matches the DocProperty var, then safe to treat as refreshable field.
             OUString sVariable = aField.ExpandField(/*bCache=*/false, nullptr);
@@ -1725,7 +1724,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             else
             {
                 // They don't match, so use a fixed field to prevent LO from altering the contents.
-                SwDocInfoField aFixedField(pType, DI_CUSTOM | DI_SUB_FIXED | nReg, aDocProperty,
+                SwDocInfoField aFixedField(pType, SwDocInfoSubType::Custom | SwDocInfoSubType::SubFixed | nReg, aDocProperty,
                                            sDisplayed);
                 rIDCO.InsertPoolItem(*m_pPaM, SwFormatField(aFixedField));
             }
@@ -1738,51 +1737,51 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
     {
         case 14:
             /* supports all INFO variables! */
-            nSub = DI_KEYS;
+            nSub = SwDocInfoSubType::Keys;
             break;
         case 15:
-            nSub = DI_TITLE;
+            nSub = SwDocInfoSubType::Title;
             break;
         case 16:
-            nSub = DI_SUBJECT;
+            nSub = SwDocInfoSubType::Subject;
             break;
         case 18:
-            nSub = DI_KEYS;
+            nSub = SwDocInfoSubType::Keys;
             break;
         case 19:
-            nSub = DI_COMMENT;
+            nSub = SwDocInfoSubType::Comment;
             break;
         case 20:
             // MS Word never updates this automatically, so mark as fixed for best compatibility
-            nSub = DI_CHANGE | DI_SUB_FIXED;
-            nReg = DI_SUB_AUTHOR;
+            nSub = SwDocInfoSubType::Change | SwDocInfoSubType::SubFixed;
+            nReg = SwDocInfoSubType::SubAuthor;
             break;
         case 21:
             // The real create date can never change, so mark as fixed for best compatibility
-            nSub = DI_CREATE | DI_SUB_FIXED;
-            nReg = DI_SUB_DATE;
+            nSub = SwDocInfoSubType::Create | SwDocInfoSubType::SubFixed;
+            nReg = SwDocInfoSubType::SubDate;
             bDateTime = true;
             break;
         case 23:
-            nSub = DI_PRINT | nFldLock;
-            nReg = DI_SUB_DATE;
+            nSub = SwDocInfoSubType::Print | nFldLock;
+            nReg = SwDocInfoSubType::SubDate;
             bDateTime = true;
             break;
         case 24:
-            nSub = DI_DOCNO;
+            nSub = SwDocInfoSubType::DocNo;
             break;
         case 22:
-            nSub = DI_CHANGE | nFldLock;
-            nReg = DI_SUB_DATE;
+            nSub = SwDocInfoSubType::Change | nFldLock;
+            nReg = SwDocInfoSubType::SubDate;
             bDateTime = true;
             break;
         case 25:
-            nSub = DI_CHANGE | nFldLock;
-            nReg = DI_SUB_TIME;
+            nSub = SwDocInfoSubType::Change | nFldLock;
+            nReg = SwDocInfoSubType::SubTime;
             bDateTime = true;
             break;
         case 64: // DOCVARIABLE
-            nSub = DI_CUSTOM;
+            nSub = SwDocInfoSubType::Custom;
             break;
     }
 
@@ -1795,16 +1794,16 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
         switch (nDT)
         {
             case SvNumFormatType::DATE:
-                nReg = DI_SUB_DATE;
+                nReg = SwDocInfoSubType::SubDate;
                 break;
             case SvNumFormatType::TIME:
-                nReg = DI_SUB_TIME;
+                nReg = SwDocInfoSubType::SubTime;
                 break;
             case SvNumFormatType::DATETIME:
-                nReg = DI_SUB_DATE;
+                nReg = SwDocInfoSubType::SubDate;
                 break;
             default:
-                nReg = DI_SUB_DATE;
+                nReg = SwDocInfoSubType::SubDate;
                 break;
         }
     }
@@ -1836,7 +1835,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
     }
 
     bool bDone = false;
-    if (DI_CUSTOM == nSub)
+    if (SwDocInfoSubType::Custom == nSub)
     {
         const auto pType(static_cast<SwUserFieldType*>(
             m_rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::User, aData, false)));
@@ -1867,7 +1866,8 @@ eF_ResT SwWW8ImplReader::Read_F_Author(WW8FieldDesc* pF, OUString&)
         // SH: The SwAuthorField refers not to the original author but to the current user, better use DocInfo
     SwDocInfoField aField( static_cast<SwDocInfoFieldType*>(
                      m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DocInfo )),
-                     DI_CREATE|DI_SUB_AUTHOR|DI_SUB_FIXED, OUString(), GetFieldResult(pF));
+                     SwDocInfoSubType::Create | SwDocInfoSubType::SubAuthor | SwDocInfoSubType::SubFixed,
+                     OUString(), GetFieldResult(pF));
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     return eF_ResT::OK;
 }

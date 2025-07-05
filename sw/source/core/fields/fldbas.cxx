@@ -50,7 +50,6 @@
 #include <usrfld.hxx>
 
 using namespace ::com::sun::star;
-using namespace nsSwDocInfoSubType;
 
 static LanguageType lcl_GetLanguageOfFormat(LanguageType nLng, sal_uLong nFormat)
 {
@@ -468,7 +467,7 @@ sal_uInt16 SwField::GetUntypedSubType() const
     case SwFieldIds::ExtUser:
         return static_cast<sal_uInt32>(static_cast<const SwExtUserField*>(this)->GetSubType());
     case SwFieldIds::DocInfo:
-        return static_cast<const SwDocInfoField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwDocInfoField*>(this)->GetSubType());
     case SwFieldIds::HiddenText:
         return static_cast<sal_uInt16>(static_cast<const SwHiddenTextField*>(this)->GetSubType());
     case SwFieldIds::DocStat:
@@ -516,7 +515,7 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
         static_cast<SwExtUserField*>(this)->SetSubType(n);
         break;
     case SwFieldIds::DocInfo:
-        static_cast<SwDocInfoField*>(this)->SetSubType(n);
+        static_cast<SwDocInfoField*>(this)->SetSubType(static_cast<SwDocInfoSubType>(n));
         break;
     case SwFieldIds::HiddenText:
         static_cast<SwHiddenTextField*>(this)->SetSubType(static_cast<SwFieldTypesEnum>(n));
@@ -658,7 +657,7 @@ bool SwField::IsFixed() const
         break;
 
     case SwFieldIds::DocInfo:
-        bRet = 0 != (static_cast<const SwDocInfoField*>(this)->GetSubType() & DI_SUB_FIXED);
+        bRet = bool(static_cast<const SwDocInfoField*>(this)->GetSubType() & SwDocInfoSubType::SubFixed);
         break;
     default: break;
     }

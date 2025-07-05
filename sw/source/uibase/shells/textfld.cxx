@@ -83,8 +83,6 @@
 #include <sfx2/dispatch.hxx>
 
 
-using namespace nsSwDocInfoSubType;
-
 static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 {
     const OUString sTitle(SwResId(STR_REDLINE_COMMENT));
@@ -814,15 +812,15 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             goto FIELD_INSERT;
         case FN_INSERT_FLD_TOPIC   :
             nInsertType = SwFieldTypesEnum::DocumentInfo;
-            nInsertSubType = DI_SUBJECT;
+            nInsertSubType = static_cast<sal_uInt16>(SwDocInfoSubType::Subject);
             goto FIELD_INSERT;
         case FN_INSERT_FLD_TITLE   :
             nInsertType = SwFieldTypesEnum::DocumentInfo;
-            nInsertSubType = DI_TITLE;
+            nInsertSubType = static_cast<sal_uInt16>(SwDocInfoSubType::Title);
             goto FIELD_INSERT;
         case FN_INSERT_FLD_AUTHOR  :
             nInsertType = SwFieldTypesEnum::DocumentInfo;
-            nInsertSubType = DI_CREATE|DI_SUB_AUTHOR;
+            nInsertSubType = static_cast<sal_uInt16>(SwDocInfoSubType::Create | SwDocInfoSubType::SubAuthor);
 
 FIELD_INSERT:
         {

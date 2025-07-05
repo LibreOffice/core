@@ -93,7 +93,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace nsSwDocInfoSubType;
 
 SwPageNumberFieldType::SwPageNumberFieldType()
     : SwFieldType( SwFieldIds::PageNumber ),
@@ -933,7 +932,7 @@ static void lcl_GetLocalDataWrapper( LanguageType nLang,
         *ppLocalData = new LocaleDataWrapper(LanguageTag( nLang ));
 }
 
-OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
+OUString SwDocInfoFieldType::Expand( SwDocInfoSubType nSub, sal_uInt32 nFormat,
                                     LanguageType nLang, const OUString& rName ) const
 {
     const LocaleDataWrapper *pAppLocalData = nullptr, *pLocalData = nullptr;
@@ -947,22 +946,22 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
         xDPS->getDocumentProperties());
     OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
 
-    sal_uInt16 nExtSub = nSub & 0xff00;
-    nSub &= 0xff;   // do not consider extended SubTypes
+    SwDocInfoSubType nExtSub = nSub & SwDocInfoSubType::UpperMask;
+    nSub &= SwDocInfoSubType::LowerMask;   // do not consider extended SubTypes
 
     OUString aStr;
     switch(nSub)
     {
-    case DI_TITLE:  aStr = xDocProps->getTitle();       break;
-    case DI_SUBJECT:aStr = xDocProps->getSubject();     break;
-    case DI_KEYS:   aStr = ::comphelper::string::convertCommaSeparated(
+    case SwDocInfoSubType::Title:  aStr = xDocProps->getTitle();       break;
+    case SwDocInfoSubType::Subject:aStr = xDocProps->getSubject();     break;
+    case SwDocInfoSubType::Keys:   aStr = ::comphelper::string::convertCommaSeparated(
                                 xDocProps->getKeywords());
                     break;
-    case DI_COMMENT:aStr = xDocProps->getDescription(); break;
-    case DI_DOCNO:  aStr = OUString::number(
+    case SwDocInfoSubType::Comment:aStr = xDocProps->getDescription(); break;
+    case SwDocInfoSubType::DocNo:  aStr = OUString::number(
                                         xDocProps->getEditingCycles() );
                     break;
-    case DI_EDIT:
+    case SwDocInfoSubType::Edit:
         if ( !nFormat )
         {
             lcl_GetLocalDataWrapper( nLang, &pAppLocalData, &pLocalData );
@@ -978,7 +977,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             aStr = ExpandValue(fVal, nFormat, nLang);
         }
         break;
-    case DI_CUSTOM:
+    case SwDocInfoSubType::Custom:
         {
             OUString sVal;
             try
@@ -1002,15 +1001,15 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             OUString aName( xDocProps->getAuthor() );
             util::DateTime uDT( xDocProps->getCreationDate() );
             DateTime aDate(uDT);
-            if( nSub == DI_CREATE )
+            if( nSub == SwDocInfoSubType::Create )
                 ;       // that's it !!
-            else if( nSub == DI_CHANGE )
+            else if( nSub == SwDocInfoSubType::Change )
             {
                 aName = xDocProps->getModifiedBy();
                 uDT = xDocProps->getModificationDate();
                 aDate = DateTime(uDT);
             }
-            else if( nSub == DI_PRINT )
+            else if( nSub == SwDocInfoSubType::Print )
             {
                 aName = xDocProps->getPrintedBy();
                 if ( !std::getenv("STABLE_FIELDS_HACK") )
@@ -1024,13 +1023,13 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 
             if (aDate.IsValidAndGregorian())
             {
-                switch (nExtSub & ~DI_SUB_FIXED)
+                switch (nExtSub & ~SwDocInfoSubType::SubFixed)
                 {
-                case DI_SUB_AUTHOR:
+                case SwDocInfoSubType::SubAuthor:
                     aStr = aName;
                     break;
 
-                case DI_SUB_TIME:
+                case SwDocInfoSubType::SubTime:
                     if (!nFormat)
                     {
                         lcl_GetLocalDataWrapper( nLang, &pAppLocalData,
@@ -1047,7 +1046,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                     }
                     break;
 
-                case DI_SUB_DATE:
+                case SwDocInfoSubType::SubDate:
                     if (!nFormat)
                     {
                         lcl_GetLocalDataWrapper( nLang, &pAppLocalData,
@@ -1062,6 +1061,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                         aStr = ExpandValue(fVal, nFormat, nLang);
                     }
                     break;
+                default: break;
                 }
             }
         }
@@ -1076,14 +1076,14 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 
 // document info field
 
-SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const OUString& rName, sal_uInt32 nFormat) :
+SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, SwDocInfoSubType nSub, const OUString& rName, sal_uInt32 nFormat) :
     SwValueField(pTyp, nFormat), m_nSubType(nSub)
 {
     m_aName = rName;
     m_aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(m_nSubType, nFormat, GetLanguage(), m_aName);
 }
 
-SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const OUString& rName, const OUString& rValue, sal_uInt32 nFormat) :
+SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, SwDocInfoSubType nSub, const OUString& rName, const OUString& rValue, sal_uInt32 nFormat) :
     SwValueField(pTyp, nFormat), m_nSubType(nSub)
 {
     m_aName = rName;
@@ -1113,7 +1113,7 @@ OUString SwDocInfoField::ExpandImpl(SwRootFrame const*const) const
     // if the field is "fixed" we don't update it from the property
     if (!IsFixed())
     {
-        if ( ( m_nSubType & 0xFF ) == DI_CUSTOM )
+        if ( ( m_nSubType & SwDocInfoSubType::LowerMask ) == SwDocInfoSubType::Custom )
         {
             // custom properties currently need special treatment
             // We don't have a secure way to detect "real" custom properties in Word import of text
@@ -1181,17 +1181,17 @@ OUString SwDocInfoField::GetFieldName() const
 {
     OUString aStr(SwFieldType::GetTypeStr(GetTypeId()) + ":");
 
-    sal_uInt16 const nSub = m_nSubType & 0xff;
+    SwDocInfoSubType const nSub = m_nSubType & SwDocInfoSubType::LowerMask;
 
     switch (nSub)
     {
-        case DI_CUSTOM:
+        case SwDocInfoSubType::Custom:
             aStr += m_aName;
             break;
 
         default:
             aStr += SwViewShell::GetShellRes()
-                     ->aDocInfoLst[ nSub - DI_SUBTYPE_BEGIN ];
+                     ->aDocInfoLst[ static_cast<sal_uInt16>(nSub) - static_cast<sal_uInt16>(SwDocInfoSubType::SubtypeBegin) ];
             break;
     }
     if (IsFixed())
@@ -1210,12 +1210,12 @@ std::unique_ptr<SwField> SwDocInfoField::Copy() const
     return std::unique_ptr<SwField>(pField.release());
 }
 
-sal_uInt16 SwDocInfoField::GetSubType() const
+SwDocInfoSubType SwDocInfoField::GetSubType() const
 {
     return m_nSubType;
 }
 
-void SwDocInfoField::SetSubType(sal_uInt16 nSub)
+void SwDocInfoField::SetSubType(SwDocInfoSubType nSub)
 {
     m_nSubType = nSub;
 }
@@ -1245,7 +1245,7 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_BOOL1:
-        rAny <<= 0 != (m_nSubType & DI_SUB_FIXED);
+        rAny <<= bool(m_nSubType & SwDocInfoSubType::SubFixed);
         break;
 
     case FIELD_PROP_FORMAT:
@@ -1263,8 +1263,8 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_BOOL2:
         {
-            sal_uInt16 nExtSub = (m_nSubType & 0xff00) & ~DI_SUB_FIXED;
-            rAny <<= nExtSub == DI_SUB_DATE;
+            SwDocInfoSubType nExtSub = (m_nSubType & SwDocInfoSubType::UpperMask) & ~SwDocInfoSubType::SubFixed;
+            rAny <<= nExtSub == SwDocInfoSubType::SubDate;
         }
         break;
     default:
@@ -1279,12 +1279,12 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        if( m_nSubType & DI_SUB_FIXED )
+        if( m_nSubType & SwDocInfoSubType::SubFixed )
             rAny >>= m_aContent;
         break;
 
     case FIELD_PROP_USHORT1:
-        if( m_nSubType & DI_SUB_FIXED )
+        if( m_nSubType & SwDocInfoSubType::SubFixed )
         {
             rAny >>= nValue;
             m_aContent = OUString::number(nValue);
@@ -1293,9 +1293,9 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
     case FIELD_PROP_BOOL1:
         if(*o3tl::doAccess<bool>(rAny))
-            m_nSubType |= DI_SUB_FIXED;
+            m_nSubType |= SwDocInfoSubType::SubFixed;
         else
-            m_nSubType &= ~DI_SUB_FIXED;
+            m_nSubType &= ~SwDocInfoSubType::SubFixed;
         break;
     case FIELD_PROP_FORMAT:
         {
@@ -1309,11 +1309,11 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= m_aContent;
         break;
     case FIELD_PROP_BOOL2:
-        m_nSubType &= 0xf0ff;
+        m_nSubType &= ~SwDocInfoSubType::SubMask;
         if(*o3tl::doAccess<bool>(rAny))
-            m_nSubType |= DI_SUB_DATE;
+            m_nSubType |= SwDocInfoSubType::SubDate;
         else
-            m_nSubType |= DI_SUB_TIME;
+            m_nSubType |= SwDocInfoSubType::SubTime;
         break;
     default:
         return SwField::PutValue(rAny, nWhichId);

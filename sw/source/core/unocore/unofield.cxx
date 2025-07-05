@@ -90,31 +90,30 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace nsSwDocInfoSubType;
 
 // case-corrected version of the first part for the service names (see #i67811)
 constexpr OUString COM_TEXT_FLDMASTER_CC = u"com.sun.star.text.fieldmaster."_ustr;
 
 // note: this thing is indexed as an array, so do not insert/remove entries!
-const sal_uInt16 aDocInfoSubTypeFromService[] =
+const SwDocInfoSubType aDocInfoSubTypeFromService[] =
 {
-    DI_CHANGE | DI_SUB_AUTHOR,  //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_AUTHOR
-    DI_CHANGE | DI_SUB_DATE,    //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME
-    DI_EDIT | DI_SUB_TIME,      //PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME
-    DI_COMMENT,                 //PROPERTY_MAP_FLDTYP_DOCINFO_DESCRIPTION
-    DI_CREATE | DI_SUB_AUTHOR,  //PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_AUTHOR
-    DI_CREATE | DI_SUB_DATE,    //PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME
-    0,                          //DUMMY
-    0,                          //DUMMY
-    0,                          //DUMMY
-    0,                          //DUMMY
-    DI_CUSTOM,                  //PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM
-    DI_PRINT | DI_SUB_AUTHOR,   //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_AUTHOR
-    DI_PRINT | DI_SUB_DATE,     //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_DATE_TIME
-    DI_KEYS,                    //PROPERTY_MAP_FLDTYP_DOCINFO_KEY_WORDS
-    DI_SUBJECT,                 //PROPERTY_MAP_FLDTYP_DOCINFO_SUBJECT
-    DI_TITLE,                   //PROPERTY_MAP_FLDTYP_DOCINFO_TITLE
-    DI_DOCNO                    //PROPERTY_MAP_FLDTYP_DOCINFO_REVISION
+    SwDocInfoSubType::Change | SwDocInfoSubType::SubAuthor,  //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_AUTHOR
+    SwDocInfoSubType::Change | SwDocInfoSubType::SubDate,    //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME
+    SwDocInfoSubType::Edit | SwDocInfoSubType::SubTime,      //PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME
+    SwDocInfoSubType::Comment,                 //PROPERTY_MAP_FLDTYP_DOCINFO_DESCRIPTION
+    SwDocInfoSubType::Create | SwDocInfoSubType::SubAuthor,  //PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_AUTHOR
+    SwDocInfoSubType::Create | SwDocInfoSubType::SubDate,    //PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME
+    SwDocInfoSubType::SubtypeBegin,                          //DUMMY
+    SwDocInfoSubType::SubtypeBegin,                          //DUMMY
+    SwDocInfoSubType::SubtypeBegin,                          //DUMMY
+    SwDocInfoSubType::SubtypeBegin,                          //DUMMY
+    SwDocInfoSubType::Custom,                  //PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM
+    SwDocInfoSubType::Print | SwDocInfoSubType::SubAuthor,   //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_AUTHOR
+    SwDocInfoSubType::Print | SwDocInfoSubType::SubDate,     //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_DATE_TIME
+    SwDocInfoSubType::Keys,                    //PROPERTY_MAP_FLDTYP_DOCINFO_KEY_WORDS
+    SwDocInfoSubType::Subject,                 //PROPERTY_MAP_FLDTYP_DOCINFO_SUBJECT
+    SwDocInfoSubType::Title,                   //PROPERTY_MAP_FLDTYP_DOCINFO_TITLE
+    SwDocInfoSubType::DocNo                    //PROPERTY_MAP_FLDTYP_DOCINFO_REVISION
 };
 
 namespace {
@@ -212,31 +211,32 @@ static SwServiceType lcl_GetServiceForField( const SwField& rField )
     case SwFieldIds::DocInfo:
         {
             auto rDocInfoField = static_cast<const SwDocInfoField&>(rField);
-            const sal_uInt16 nSubType = rDocInfoField.GetSubType();
-            switch( nSubType & 0xff )
+            const SwDocInfoSubType nSubType = rDocInfoField.GetSubType();
+            switch( nSubType & SwDocInfoSubType::LowerMask )
             {
-            case DI_CHANGE:
-                nSrvId = ((nSubType&0x300) == DI_SUB_AUTHOR)
+            case SwDocInfoSubType::Change:
+                nSrvId = ((nSubType & SwDocInfoSubType::SubMask) == SwDocInfoSubType::SubAuthor)
                         ? SwServiceType::FieldTypeDocInfoChangeAuthor
                         : SwServiceType::FieldTypeDocInfoChangeDateTime;
                 break;
-            case DI_CREATE:
-                nSrvId = ((nSubType&0x300) == DI_SUB_AUTHOR)
+            case SwDocInfoSubType::Create:
+                nSrvId = ((nSubType & SwDocInfoSubType::SubMask) == SwDocInfoSubType::SubAuthor)
                         ? SwServiceType::FieldTypeDocInfoCreateAuthor
                         : SwServiceType::FieldTypeDocInfoCreateDateTime;
                 break;
-            case DI_PRINT:
-                nSrvId = ((nSubType&0x300) == DI_SUB_AUTHOR)
+            case SwDocInfoSubType::Print:
+                nSrvId = ((nSubType & SwDocInfoSubType::SubMask) == SwDocInfoSubType::SubAuthor)
                         ? SwServiceType::FieldTypeDocInfoPrintAuthor
                         : SwServiceType::FieldTypeDocInfoPrintDateTime;
                 break;
-            case DI_EDIT:   nSrvId = SwServiceType::FieldTypeDocInfoEditTime;break;
-            case DI_COMMENT:nSrvId = SwServiceType::FieldTypeDocInfoDescription;break;
-            case DI_KEYS:   nSrvId = SwServiceType::FieldTypeDocInfoKeywords;break;
-            case DI_SUBJECT:nSrvId = SwServiceType::FieldTypeDocInfoSubject;  break;
-            case DI_TITLE:  nSrvId = SwServiceType::FieldTypeDocInfoTitle;    break;
-            case DI_DOCNO:  nSrvId = SwServiceType::FieldTypeDocInfoRevision; break;
-            case DI_CUSTOM: nSrvId = SwServiceType::FieldTypeDocInfoCustom;   break;
+            case SwDocInfoSubType::Edit:   nSrvId = SwServiceType::FieldTypeDocInfoEditTime;break;
+            case SwDocInfoSubType::Comment:nSrvId = SwServiceType::FieldTypeDocInfoDescription;break;
+            case SwDocInfoSubType::Keys:   nSrvId = SwServiceType::FieldTypeDocInfoKeywords;break;
+            case SwDocInfoSubType::Subject:nSrvId = SwServiceType::FieldTypeDocInfoSubject;  break;
+            case SwDocInfoSubType::Title:  nSrvId = SwServiceType::FieldTypeDocInfoTitle;    break;
+            case SwDocInfoSubType::DocNo:  nSrvId = SwServiceType::FieldTypeDocInfoRevision; break;
+            case SwDocInfoSubType::Custom: nSrvId = SwServiceType::FieldTypeDocInfoCustom;   break;
+            default: break;
             }
         }
         break;
@@ -1570,7 +1570,7 @@ void SAL_CALL SwXTextField::attach(
             case SwServiceType::FieldTypeDocInfo:
             {
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo);
-                sal_uInt16 nSubType = aDocInfoSubTypeFromService[
+                SwDocInfoSubType nSubType = aDocInfoSubTypeFromService[
                         static_cast<sal_uInt16>(m_pImpl->m_nServiceId) - sal_uInt16(SwServiceType::FieldTypeDocInfoChangeAuthor)];
                 if (SwServiceType::FieldTypeDocInfoChangeDateTime == m_pImpl->m_nServiceId ||
                     SwServiceType::FieldTypeDocInfoCreateDateTime == m_pImpl->m_nServiceId ||
@@ -1579,17 +1579,17 @@ void SAL_CALL SwXTextField::attach(
                 {
                     if (m_pImpl->m_pProps->bBool2) //IsDate
                     {
-                        nSubType &= 0xf0ff;
-                        nSubType |= DI_SUB_DATE;
+                        nSubType &= ~SwDocInfoSubType::SubMask;
+                        nSubType |= SwDocInfoSubType::SubDate;
                     }
                     else
                     {
-                        nSubType &= 0xf0ff;
-                        nSubType |= DI_SUB_TIME;
+                        nSubType &= ~SwDocInfoSubType::SubMask;
+                        nSubType |= SwDocInfoSubType::SubTime;
                     }
                 }
                 if (m_pImpl->m_pProps->bBool1)
-                    nSubType |= DI_SUB_FIXED;
+                    nSubType |= SwDocInfoSubType::SubFixed;
                 xField.reset(new SwDocInfoField(
                         static_cast<SwDocInfoFieldType*>(pFieldType), nSubType,
                         m_pImpl->m_pProps->sPar4, m_pImpl->m_pProps->nFormat));

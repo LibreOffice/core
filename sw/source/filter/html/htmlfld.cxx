@@ -37,7 +37,6 @@
 #include "htmlfld.hxx"
 #include "swhtml.hxx"
 
-using namespace nsSwDocInfoSubType;
 using namespace ::com::sun::star;
 
 namespace {
@@ -144,36 +143,28 @@ HTMLOptionEnum<SwPageNumSubType> const aHTMLPageNumFieldSubTable[] =
     { nullptr,                           SwPageNumSubType(0)  }
 };
 
-// UGLY: these are extensions of nsSwDocInfoSubType (in inc/docufld.hxx)
-//       these are necessary for importing document info fields written by
-//       older versions of OOo (< 3.0) which did not have DI_CUSTOM fields
-    const SwDocInfoSubType DI_INFO1         =  DI_SUBTYPE_END + 1;
-    const SwDocInfoSubType DI_INFO2         =  DI_SUBTYPE_END + 2;
-    const SwDocInfoSubType DI_INFO3         =  DI_SUBTYPE_END + 3;
-    const SwDocInfoSubType DI_INFO4         =  DI_SUBTYPE_END + 4;
-
-HTMLOptionEnum<sal_uInt16> const aHTMLDocInfoFieldSubTable[] =
+HTMLOptionEnum<SwDocInfoSubType> const aHTMLDocInfoFieldSubTable[] =
 {
-    { OOO_STRING_SW_HTML_FS_title,   DI_TITLE },
-    { OOO_STRING_SW_HTML_FS_theme,   DI_SUBJECT },
-    { OOO_STRING_SW_HTML_FS_keys,    DI_KEYS },
-    { OOO_STRING_SW_HTML_FS_comment, DI_COMMENT },
-    { "INFO1",                       DI_INFO1 },
-    { "INFO2",                       DI_INFO2 },
-    { "INFO3",                       DI_INFO3 },
-    { "INFO4",                       DI_INFO4 },
-    { OOO_STRING_SW_HTML_FS_custom,  DI_CUSTOM },
-    { OOO_STRING_SW_HTML_FS_create,  DI_CREATE },
-    { OOO_STRING_SW_HTML_FS_change,  DI_CHANGE },
-    { nullptr,                       0 }
+    { OOO_STRING_SW_HTML_FS_title,   SwDocInfoSubType::Title },
+    { OOO_STRING_SW_HTML_FS_theme,   SwDocInfoSubType::Subject },
+    { OOO_STRING_SW_HTML_FS_keys,    SwDocInfoSubType::Keys },
+    { OOO_STRING_SW_HTML_FS_comment, SwDocInfoSubType::Comment },
+    { "INFO1",                       SwDocInfoSubType::Info1 },
+    { "INFO2",                       SwDocInfoSubType::Info2 },
+    { "INFO3",                       SwDocInfoSubType::Info3 },
+    { "INFO4",                       SwDocInfoSubType::Info4 },
+    { OOO_STRING_SW_HTML_FS_custom,  SwDocInfoSubType::Custom },
+    { OOO_STRING_SW_HTML_FS_create,  SwDocInfoSubType::Create },
+    { OOO_STRING_SW_HTML_FS_change,  SwDocInfoSubType::Change },
+    { nullptr,                       SwDocInfoSubType(0) }
 };
 
-HTMLOptionEnum<sal_uInt16> const aHTMLDocInfoFieldFormatTable[] =
+HTMLOptionEnum<SwDocInfoSubType> const aHTMLDocInfoFieldFormatTable[] =
 {
-    { OOO_STRING_SW_HTML_FF_author,  DI_SUB_AUTHOR },
-    { OOO_STRING_SW_HTML_FF_time,    DI_SUB_TIME },
-    { OOO_STRING_SW_HTML_FF_date,    DI_SUB_DATE },
-    { nullptr,                       0 }
+    { OOO_STRING_SW_HTML_FF_author,  SwDocInfoSubType::SubAuthor },
+    { OOO_STRING_SW_HTML_FF_time,    SwDocInfoSubType::SubTime },
+    { OOO_STRING_SW_HTML_FF_date,    SwDocInfoSubType::SubDate },
+    { nullptr,                       SwDocInfoSubType(0) }
 };
 
 HTMLOptionEnum<SwDocStatSubType> const aHTMLDocStatFieldSubTable[] =
@@ -441,14 +432,14 @@ void SwHTMLParser::NewField()
     case SwFieldIds::DocInfo:
         if( pSubOption )
         {
-            sal_uInt16 nSub;
+            SwDocInfoSubType nSub;
             if( pSubOption->GetEnum( nSub, aHTMLDocInfoFieldSubTable ) )
             {
-                sal_uInt16 nExtSub = 0;
-                if( DI_CREATE==static_cast<SwDocInfoSubType>(nSub) ||
-                    DI_CHANGE==static_cast<SwDocInfoSubType>(nSub) )
+                SwDocInfoSubType nExtSub = SwDocInfoSubType::Title;
+                if( SwDocInfoSubType::Create == nSub ||
+                    SwDocInfoSubType::Change == nSub )
                 {
-                    nExtSub = DI_SUB_AUTHOR;
+                    nExtSub = SwDocInfoSubType::SubAuthor;
                     if( pFormatOption )
                         pFormatOption->GetEnum( nExtSub, aHTMLDocInfoFieldFormatTable );
                     nSub |= nExtSub;
@@ -456,7 +447,7 @@ void SwHTMLParser::NewField()
 
                 sal_uInt32 nNumFormat = 0;
                 double dValue = 0;
-                if( bHasNumFormat && (DI_SUB_DATE==nExtSub || DI_SUB_TIME==nExtSub) )
+                if( bHasNumFormat && (SwDocInfoSubType::SubDate==nExtSub || SwDocInfoSubType::SubTime==nExtSub) )
                 {
                     LanguageType eLang;
                     dValue = GetTableDataOptionsValNum(
@@ -467,17 +458,17 @@ void SwHTMLParser::NewField()
                 else
                     bHasNumValue = false;
 
-                if( nSub >= DI_INFO1 && nSub <= DI_INFO4 && aName.isEmpty() )
+                if( nSub >= SwDocInfoSubType::Info1 && nSub <= SwDocInfoSubType::Info4 && aName.isEmpty() )
                 {
                     // backward compatibility for OOo 2:
                     // map to names stored in AddMetaUserDefined
-                    aName = m_InfoNames[nSub - DI_INFO1];
-                    nSub = DI_CUSTOM;
+                    aName = m_InfoNames[static_cast<sal_uInt16>(nSub) - static_cast<sal_uInt16>(SwDocInfoSubType::Info1)];
+                    nSub = SwDocInfoSubType::Custom;
                 }
 
                 if( bFixed )
                 {
-                    nSub |= DI_SUB_FIXED;
+                    nSub |= SwDocInfoSubType::SubFixed;
                     bInsOnEndTag = true;
                 }
 

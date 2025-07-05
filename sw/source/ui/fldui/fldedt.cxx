@@ -158,11 +158,9 @@ void SwFieldEditDlg::Init()
             rMgr.GoNext();
         m_xPrevBT->set_sensitive( bMove );
         {
-            using namespace nsSwDocInfoSubType;
-
             const SwFieldTypesEnum aId(pCurField->GetTypeId());
             if ( (aId == SwFieldTypesEnum::Author) ||
-                 ((aId == SwFieldTypesEnum::DocumentInfo) && (static_cast<const SwDocInfoField*>(pCurField)->GetSubType() != (DI_CREATE|DI_SUB_AUTHOR)))) // except DocumentInfo > Author
+                 ((aId == SwFieldTypesEnum::DocumentInfo) && (static_cast<const SwDocInfoField*>(pCurField)->GetSubType() != (SwDocInfoSubType::Create | SwDocInfoSubType::SubAuthor)))) // except DocumentInfo > Author
                 m_xAddressBT->set_visible(true);
             else
                 m_xAddressBT->set_visible(false);
