@@ -985,8 +985,7 @@ void ControllerCommandDispatch::fireStatusEvent(
     const OUString & rURL,
     const Reference< frame::XStatusListener > & xSingleListener /* = 0 */ )
 {
-    bool bIsChartSelectorURL = rURL == ".uno:ChartElementSelector";
-    if( rURL.isEmpty() || bIsChartSelectorURL )
+    if (rURL.isEmpty() || rURL == ".uno:ChartElementSelector")
     {
         uno::Any aArg;
         aArg <<= Reference< frame::XController >(m_xChartController);
@@ -998,7 +997,7 @@ void ControllerCommandDispatch::fireStatusEvent(
         for (auto const& elem : m_aCommandAvailability)
             fireStatusEventForURLImpl( elem.first, xSingleListener );
     }
-    else if( !bIsChartSelectorURL )
+    else if (m_aCommandAvailability.contains(rURL))
         fireStatusEventForURLImpl( rURL, xSingleListener );
 
     // statusbar. Should be handled by base implementation
