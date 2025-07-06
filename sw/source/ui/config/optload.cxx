@@ -535,11 +535,8 @@ SwLoadOptPage::SwLoadOptPage(weld::Container* pPage, weld::DialogController* pCo
     , m_xStandardizedPageSizeNF(m_xBuilder->weld_spin_button(u"standardpagesize"_ustr))
     , m_xStandardizedPageSizeImg(m_xBuilder->weld_widget(u"lockstandardpagesize"_ustr))
 {
-    for (sal_uInt32 i = 0; i < SwFieldUnitTable::Count(); ++i)
+    for (const auto& [pId, eFUnit] : STR_ARR_METRIC)
     {
-        const OUString sMetric = SwFieldUnitTable::GetString(i);
-        FieldUnit eFUnit = SwFieldUnitTable::GetValue(i);
-
         switch ( eFUnit )
         {
             case FieldUnit::MM:
@@ -549,7 +546,7 @@ SwLoadOptPage::SwLoadOptPage(weld::Container* pPage, weld::DialogController* pCo
             case FieldUnit::INCH:
             {
                 // use only these metrics
-                m_xMetricLB->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), sMetric);
+                m_xMetricLB->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), SwResId(pId));
                 break;
             }
             default:; //prevent warning
