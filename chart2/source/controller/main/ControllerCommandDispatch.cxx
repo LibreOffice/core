@@ -923,6 +923,11 @@ bool ControllerCommandDispatch::commandAvailable(const OUString& rCommand) const
     return false;
 }
 
+bool ControllerCommandDispatch::commandHandled(const OUString& rCommand) const
+{
+    return m_aCommandAvailability.contains(rCommand);
+}
+
 void ControllerCommandDispatch::updateAndFireStatus()
 {
     updateCommandAvailability();

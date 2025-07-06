@@ -561,8 +561,8 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     pDispatch->initialize();
 
     // the dispatch container will return "this" for all commands returned by
-    // impl_getAvailableCommands().  That means, for those commands dispatch()
-    // is called here at the ChartController.
+    // impl_getAvailableCommands(), and also for which ControllerCommandDispatch::commandHandled()
+    // gives true. That means, for those commands dispatch() is called here at the ChartController.
     m_aDispatchContainer.setChartDispatch( pDispatch, impl_getAvailableCommands() );
 
     rtl::Reference<DrawCommandDispatch> pDrawDispatch = new DrawCommandDispatch( m_xCC, this );
@@ -1819,69 +1819,8 @@ const o3tl::sorted_vector< std::u16string_view >& ChartController::impl_getAvail
         u"Save",                u"SaveAs",                u"SendMail",
         u"EditDoc",             u"ExportDirectToPDF",     u"PrintDefault",
 
-        // own commands
-        u"Cut",                u"Copy",                 u"Paste",
-        u"DataRanges",         u"DiagramData",
-        // insert objects
-        u"InsertMenuTitles",   u"InsertTitles",
-        u"InsertMenuLegend",   u"InsertLegend",         u"DeleteLegend",
-        u"InsertMenuDataLabels",
-        u"InsertMenuAxes",     u"InsertRemoveAxes",         u"InsertMenuGrids",
-        u"InsertSymbol",
-        u"InsertTrendlineEquation",  u"InsertTrendlineEquationAndR2",
-        u"InsertR2Value",      u"DeleteR2Value",
-        u"InsertMenuTrendlines",  u"InsertTrendline",
-        u"InsertMenuMeanValues", u"InsertMeanValue",
-        u"InsertMenuXErrorBars",  u"InsertXErrorBars",
-        u"InsertMenuYErrorBars",   u"InsertYErrorBars",
-        u"InsertDataLabels",   u"InsertDataLabel",
-        u"DeleteTrendline",    u"DeleteMeanValue",      u"DeleteTrendlineEquation",
-        u"DeleteXErrorBars",   u"DeleteYErrorBars",
-        u"DeleteDataLabels",   u"DeleteDataLabel",
-        u"InsertMenuDataTable",
-        u"InsertDataTable", u"DeleteDataTable",
-        //format objects
-        u"FormatSelection",    u"FontDialog",           u"TransformDialog",
-        u"DiagramType",        u"View3D",
-        u"Forward",            u"Backward",
-        u"MainTitle",          u"SubTitle",
-        u"XTitle",             u"YTitle",               u"ZTitle",
-        u"SecondaryXTitle",    u"SecondaryYTitle",
-        u"AllTitles",          u"Legend",
-        u"DiagramAxisX",       u"DiagramAxisY",         u"DiagramAxisZ",
-        u"DiagramAxisA",       u"DiagramAxisB",         u"DiagramAxisAll",
-        u"DiagramGridXMain",   u"DiagramGridYMain",     u"DiagramGridZMain",
-        u"DiagramGridXHelp",   u"DiagramGridYHelp",     u"DiagramGridZHelp",
-        u"DiagramGridAll",
-        u"DiagramWall",        u"DiagramFloor",         u"DiagramArea",
-
-        //context menu - format objects entries
-        u"FormatWall",        u"FormatFloor",         u"FormatChartArea",
-        u"FormatLegend",
-
-        u"FormatAxis",           u"FormatTitle",
-        u"FormatDataSeries",     u"FormatDataPoint",
-        u"ResetAllDataPoints",   u"ResetDataPoint",
-        u"FormatDataLabels",     u"FormatDataLabel",
-        u"FormatMeanValue",      u"FormatTrendline",      u"FormatTrendlineEquation",
-        u"FormatXErrorBars",     u"FormatYErrorBars",
-        u"FormatStockLoss",      u"FormatStockGain",
-
-        u"FormatMajorGrid",      u"InsertMajorGrid",      u"DeleteMajorGrid",
-        u"FormatMinorGrid",      u"InsertMinorGrid",      u"DeleteMinorGrid",
-        u"InsertAxis",           u"DeleteAxis",           u"InsertAxisTitle",
-
         // toolbar commands
-        u"ToggleGridHorizontal", u"ToggleGridVertical", u"ToggleLegend",         u"ScaleText",
-        u"NewArrangement",     u"Update",
-        u"DefaultColors",      u"BarWidth",             u"NumberOfLines",
-        u"ArrangeRow",
         u"ChartElementSelector",
-
-        // sidebar commands
-        u"CharFontName" , u"FontHeight" , u"Italic", u"Underline",
-        u"Bold", u"Strikeout",u"Shadowed", u"Color", u"FontColor", u"ResetAttributes",
-        u"Grow", u"Shrink", u"Spacing", u"SuperScript", u"SubScript"
     };
     return s_AvailableCommands;
 }
