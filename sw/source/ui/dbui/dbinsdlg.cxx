@@ -881,7 +881,7 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
                 sText = sText.copy( rFndCol.sColumn.getLength() + 2 );
                 nSttPos = 0;
 
-                sal_uInt16 nSubType = 0;
+                SwDBFieldSubType nSubType = SwDBFieldSubType::None;
                 sal_uInt32 nFormat;
                 if( rFndCol.bHasFormat )
                 {
@@ -890,7 +890,7 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
                     else
                     {
                         nFormat = rFndCol.nUsrNumFormat;
-                        nSubType = nsSwExtendedSubType::SUB_OWN_FMT;
+                        nSubType = SwDBFieldSubType::OwnFormat;
                     }
                 }
                 else

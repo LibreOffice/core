@@ -1680,11 +1680,11 @@ void SAL_CALL SwXTextField::attach(
                 aData.sCommand = m_pImpl->m_pProps->sPar2;
                 aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
                 xField.reset(new SwDBNameField(static_cast<SwDBNameFieldType*>(pFieldType), aData));
-                sal_uInt16  nSubType = static_cast<SwDBNameField*>(xField.get())->GetSubType();
+                SwDBFieldSubType  nSubType = static_cast<SwDBNameField*>(xField.get())->GetSubType();
                 if (m_pImpl->m_pProps->bBool2)
-                    nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+                    nSubType &= ~SwDBFieldSubType::Invisible;
                 else
-                    nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+                    nSubType |= SwDBFieldSubType::Invisible;
                 static_cast<SwDBNameField*>(xField.get())->SetSubType(nSubType);
             }
             break;
@@ -1724,11 +1724,11 @@ void SAL_CALL SwXTextField::attach(
                         m_pImpl->m_pProps->nUSHORT1);
                 xField.reset(pDBSNField);
                 pDBSNField->SetSetNumber(m_pImpl->m_pProps->nFormat);
-                sal_uInt16 nSubType = pDBSNField->GetSubType();
+                SwDBFieldSubType nSubType = pDBSNField->GetSubType();
                 if (m_pImpl->m_pProps->bBool2)
-                    nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+                    nSubType &= ~SwDBFieldSubType::Invisible;
                 else
-                    nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+                    nSubType |= SwDBFieldSubType::Invisible;
                 pDBSNField->SetSubType(nSubType);
             }
             break;
@@ -1741,11 +1741,11 @@ void SAL_CALL SwXTextField::attach(
                 xField.reset(new SwDBField(static_cast<SwDBFieldType*>(pFieldType),
                         m_pImpl->m_pProps->nFormat));
                 static_cast<SwDBField*>(xField.get())->InitContent(m_pImpl->m_pProps->sPar1);
-                sal_uInt16  nSubType = static_cast<SwDBField*>(xField.get())->GetSubType();
+                SwDBFieldSubType  nSubType = static_cast<SwDBField*>(xField.get())->GetSubType();
                 if (m_pImpl->m_pProps->bBool2)
-                    nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+                    nSubType &= ~SwDBFieldSubType::Invisible;
                 else
-                    nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+                    nSubType |= SwDBFieldSubType::Invisible;
                 static_cast<SwDBField*>(xField.get())->SetSubType(nSubType);
             }
             break;

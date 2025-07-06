@@ -478,9 +478,9 @@ sal_uInt16 SwField::GetUntypedSubType() const
     case SwFieldIds::DbNumSet:
     case SwFieldIds::DatabaseName:
     case SwFieldIds::DbSetNumber:
-        return static_cast<const SwDBNameInfField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwDBNameInfField*>(this)->GetSubType());
     case SwFieldIds::Database:
-        return static_cast<const SwDBField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwDBField*>(this)->GetSubType());
     default: break;
     }
     return 0;
@@ -530,10 +530,10 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
     case SwFieldIds::DbNumSet:
     case SwFieldIds::DatabaseName:
     case SwFieldIds::DbSetNumber:
-        static_cast<SwDBNameInfField*>(this)->SetSubType(n);
+        static_cast<SwDBNameInfField*>(this)->SetSubType(static_cast<SwDBFieldSubType>(n));
         break;
     case SwFieldIds::Database:
-        static_cast<SwDBField*>(this)->SetSubType(n);
+        static_cast<SwDBField*>(this)->SetSubType(static_cast<SwDBFieldSubType>(n));
         break;
     default:
         assert(n == 0 && "trying to set a subtype on something I don't know about");

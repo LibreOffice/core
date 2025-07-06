@@ -157,7 +157,7 @@ void SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // database field
 
-SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uInt32 nFormat, sal_uInt16 nSubType)
+SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uInt32 nFormat, SwDBFieldSubType nSubType)
     :   SwValueField(pTyp, nFormat),
         m_nSubType(nSubType),
         m_bIsInBodyText(true),
@@ -200,7 +200,7 @@ void SwDBField::InitContent(const OUString& rExpansion)
 
 OUString SwDBField::ExpandImpl(SwRootFrame const*const) const
 {
-    if(0 ==(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE))
+    if(!(GetSubType() & SwDBFieldSubType::Invisible))
         return lcl_DBSeparatorConvert(m_aContent);
     return OUString();
 }
@@ -320,7 +320,7 @@ void SwDBField::Evaluate()
 
     SvNumberFormatter* pDocFormatter = GetDoc()->GetNumberFormatter();
     pMgr->GetMergeColumnCnt(aColNm, GetLanguage(), m_aContent, &nValue);
-    if( !( m_nSubType & nsSwExtendedSubType::SUB_OWN_FMT ) )
+    if( !( m_nSubType & SwDBFieldSubType::OwnFormat ) )
     {
         nFormat = pMgr->GetColumnFormat( aTmpData.sDataSource, aTmpData.sCommand,
                                         aColNm, pDocFormatter, GetLanguage() );
@@ -345,12 +345,12 @@ OUString SwDBField::GetPar1() const
     return static_cast<const SwDBFieldType*>(GetTyp())->GetName().toString();
 }
 
-sal_uInt16 SwDBField::GetSubType() const
+SwDBFieldSubType SwDBField::GetSubType() const
 {
     return m_nSubType;
 }
 
-void SwDBField::SetSubType(sal_uInt16 nType)
+void SwDBField::SetSubType(SwDBFieldSubType nType)
 {
     m_nSubType = nType;
 }
@@ -360,10 +360,10 @@ bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        rAny <<= 0 == (GetSubType()&nsSwExtendedSubType::SUB_OWN_FMT);
+        rAny <<= !(GetSubType() & SwDBFieldSubType::OwnFormat);
         break;
     case FIELD_PROP_BOOL2:
-        rAny <<= 0 == (GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE);
+        rAny <<= !(GetSubType() & SwDBFieldSubType::Invisible);
         break;
     case FIELD_PROP_FORMAT:
         rAny <<= static_cast<sal_Int32>(GetFormat());
@@ -386,20 +386,20 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     {
     case FIELD_PROP_BOOL1:
         if( *o3tl::doAccess<bool>(rAny) )
-            SetSubType(GetSubType()&~nsSwExtendedSubType::SUB_OWN_FMT);
+            SetSubType(GetSubType() & ~SwDBFieldSubType::OwnFormat);
         else
-            SetSubType(GetSubType()|nsSwExtendedSubType::SUB_OWN_FMT);
+            SetSubType(GetSubType() | SwDBFieldSubType::OwnFormat);
         break;
     case FIELD_PROP_BOOL2:
     {
-        sal_uInt16 nSubTyp = GetSubType();
+        SwDBFieldSubType nSubTyp = GetSubType();
         bool bVisible = false;
         if(!(rAny >>= bVisible))
             return false;
         if(bVisible)
-            nSubTyp &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+            nSubTyp &= ~SwDBFieldSubType::Invisible;
         else
-            nSubTyp |= nsSwExtendedSubType::SUB_INVISIBLE;
+            nSubTyp |= SwDBFieldSubType::Invisible;
         SetSubType(nSubTyp);
         //invalidate text node
         auto pType = GetTyp();
@@ -443,7 +443,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, SwDBData aDBData, sal_uInt32 nFormat) :
     SwField(pTyp),
     m_aDBData(std::move(aDBData)),
-    m_nSubType(0),
+    m_nSubType(SwDBFieldSubType::None),
     m_nFormat(nFormat)
 {
 }
@@ -490,7 +490,7 @@ bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= m_aDBData.nCommandType;
         break;
     case FIELD_PROP_BOOL2:
-        rAny <<= 0 == (GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE);
+        rAny <<= !(GetSubType() & SwDBFieldSubType::Invisible);
         break;
     default:
         assert(false);
@@ -513,14 +513,14 @@ bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_BOOL2:
     {
-        sal_uInt16 nSubTyp = GetSubType();
+        SwDBFieldSubType nSubTyp = GetSubType();
         bool bVisible = false;
         if(!(rAny >>= bVisible))
             return false;
         if(bVisible)
-            nSubTyp &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+            nSubTyp &= ~SwDBFieldSubType::Invisible;
         else
-            nSubTyp |= nsSwExtendedSubType::SUB_INVISIBLE;
+            nSubTyp |= SwDBFieldSubType::Invisible;
         SetSubType(nSubTyp);
     }
     break;
@@ -530,12 +530,12 @@ bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-sal_uInt16 SwDBNameInfField::GetSubType() const
+SwDBFieldSubType SwDBNameInfField::GetSubType() const
 {
     return m_nSubType;
 }
 
-void SwDBNameInfField::SetSubType(sal_uInt16 nType)
+void SwDBNameInfField::SetSubType(SwDBFieldSubType nType)
 {
     m_nSubType = nType;
 }
@@ -759,7 +759,7 @@ SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, s
 
 OUString SwDBNameField::ExpandImpl(SwRootFrame const*const) const
 {
-    if(0 ==(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE))
+    if(!(GetSubType() & SwDBFieldSubType::Invisible))
         return static_cast<SwDBNameFieldType*>(GetTyp())->Expand();
     return OUString();
 }
@@ -802,7 +802,7 @@ SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
 
 OUString SwDBSetNumberField::ExpandImpl(SwRootFrame const*const) const
 {
-    if(0 !=(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE) || m_nNumber == 0)
+    if((GetSubType() & SwDBFieldSubType::Invisible) || m_nNumber == 0)
         return OUString();
     return FormatNumber(m_nNumber, static_cast<SvxNumType>(GetFormat()));
 }

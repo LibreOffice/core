@@ -1229,7 +1229,7 @@ bool SwFieldMgr::InsertField(
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             SwDBData aDBData;
             OUString sPar1;
-            sal_uInt16 nSubType = rData.m_nSubType;
+            SwDBFieldSubType nSubType = static_cast<SwDBFieldSubType>(rData.m_nSubType);
 
             if (rData.m_sPar1.indexOf(DB_DELIM)<0)
             {
@@ -1250,9 +1250,9 @@ bool SwFieldMgr::InsertField(
 
             SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(pCurShell->InsertFieldType(
                 SwDBFieldType(pCurShell->GetDoc(), sPar1, aDBData) ) );
-            pField.reset(new SwDBField(pTyp, nSubType));
+            pField.reset(new SwDBField(pTyp, 0, nSubType));
 
-            if( !(nSubType & nsSwExtendedSubType::SUB_OWN_FMT) ) // determine database format
+            if( !(nSubType & SwDBFieldSubType::OwnFormat) ) // determine database format
             {
                 Reference< XDataSource> xSource;
                 rData.m_aDBDataSource >>= xSource;

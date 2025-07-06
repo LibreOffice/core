@@ -230,7 +230,7 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
         case SwFieldTypesEnum::Database:
             nFormat = m_xNumFormatLB->GetFormat();
             if (m_xNewFormatRB->get_sensitive() && m_xNewFormatRB->get_active())
-                nSubType = nsSwExtendedSubType::SUB_OWN_FMT;
+                nSubType = static_cast<sal_uInt16>(SwDBFieldSubType::OwnFormat);
             aName = sDBName;
             break;
 
@@ -342,7 +342,7 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
                 if (nFormat != 0 && nFormat != SAL_MAX_UINT32)
                     m_xNumFormatLB->SetDefFormat(nFormat);
 
-                if (pDBField->GetSubType() & nsSwExtendedSubType::SUB_OWN_FMT)
+                if (pDBField->GetSubType() & SwDBFieldSubType::OwnFormat)
                     m_xNewFormatRB->set_active(true);
                 else
                     m_xDBFormatRB->set_active(true);

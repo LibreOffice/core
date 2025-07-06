@@ -182,13 +182,13 @@ enum class SwGetSetExpType : sal_uInt16
 };
 namespace o3tl { template<> struct typed_flags<SwGetSetExpType> : is_typed_flags<SwGetSetExpType, 0x031f> {}; }
 
-typedef sal_uInt16 SwExtendedSubType;
-namespace nsSwExtendedSubType
+enum class SwDBFieldSubType : sal_uInt16
 {
-const SwExtendedSubType SUB_CMD         = 0x0100;   ///< Show command.
-const SwExtendedSubType SUB_INVISIBLE   = 0x0200;   ///< Invisible.
-const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   ///< SwDBField: Don't accept formatting from database.
-}
+    None      = 0x0000,
+    Invisible = 0x0200,   ///< Invisible.
+    OwnFormat = 0x0400    ///< SwDBField: Don't accept formatting from database.
+};
+namespace o3tl { template<> struct typed_flags<SwDBFieldSubType> : is_typed_flags<SwDBFieldSubType, 0x0600> {}; }
 
 enum class SwInputFieldSubType : sal_uInt16
 {
