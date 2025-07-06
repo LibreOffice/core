@@ -40,7 +40,6 @@ class VCL_DLLPUBLIC DisplayConnectionDispatch final : public cppu::OWeakObject
 {
     std::mutex                      m_aMutex;
     std::vector<rtl::Reference<DisplayEventHandler>> m_aHandlers;
-    OUString                        m_ConnectionIdentifier;
 public:
     DisplayConnectionDispatch();
     ~DisplayConnectionDispatch() override;
