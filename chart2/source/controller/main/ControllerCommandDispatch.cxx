@@ -60,24 +60,22 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-bool lcl_arePropertiesSame(std::vector<Reference<beans::XPropertySet>>& xProperties,
+uno::Any getPropertyIfSame(std::vector<Reference<beans::XPropertySet>>& xProperties,
                            const OUString& aPropName)
 {
-    if (xProperties.size() == 1)
-        return true;
     if (xProperties.size() < 1)
-        return false;
+        return {};
 
     if (!xProperties[0])
-        return false;
+        return {};
 
     uno::Any aValue = xProperties[0]->getPropertyValue(aPropName);
     for (std::size_t i = 1; i < xProperties.size(); i++)
     {
         if (xProperties[i] && aValue != xProperties[i]->getPropertyValue(aPropName))
-            return false;
+            return {};
     }
-    return true;
+    return aValue;
 }
 
 } // anonymous namespace
@@ -744,64 +742,49 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
                 if (!aFont.Name.isEmpty())
                 {
-                    OUString aPropName = u"CharFontName"_ustr;
-                    if (lcl_arePropertiesSame(xProperties, aPropName))
+                    if (getPropertyIfSame(xProperties, u"CharFontName"_ustr).hasValue())
                     {
                         m_aCommandArguments[u".uno:CharFontName"_ustr] <<= aFont;
                     }
                 }
             }
-            OUString aPropName = u"CharHeight"_ustr;
-            if (lcl_arePropertiesSame(xProperties, aPropName))
+            if (frame::status::FontHeight aFontHeight;
+                getPropertyIfSame(xProperties, u"CharHeight"_ustr) >>= aFontHeight.Height)
             {
-                uno::Any aAny = xProperties[0]->getPropertyValue(aPropName);
-                frame::status::FontHeight aFontHeight;
-                aAny >>= aFontHeight.Height;
                 // another type is needed here, so
                 m_aCommandArguments[u".uno:FontHeight"_ustr] <<= aFontHeight;
             }
 
-            aPropName = u"CharWeight"_ustr;
-            if (lcl_arePropertiesSame(xProperties, aPropName))
+            if (float nFontWeight;
+                getPropertyIfSame(xProperties, u"CharWeight"_ustr) >>= nFontWeight)
             {
-                float nFontWeight(0.0);
-                xProperties[0]->getPropertyValue(aPropName) >>= nFontWeight;
                 bool bFontWeight = (nFontWeight > 100.0);
                 m_aCommandArguments[u".uno:Bold"_ustr] <<= bFontWeight;
             }
 
-            aPropName = u"CharPosture"_ustr;
-            if (lcl_arePropertiesSame(xProperties, aPropName))
+            if (awt::FontSlant nFontItalic;
+                getPropertyIfSame(xProperties, u"CharPosture"_ustr) >>= nFontItalic)
             {
-                awt::FontSlant nFontItalic;
-                xProperties[0]->getPropertyValue(aPropName) >>= nFontItalic;
                 bool bItalic = (nFontItalic == awt::FontSlant_ITALIC);
                 m_aCommandArguments[u".uno:Italic"_ustr] <<= bItalic;
             }
 
-            aPropName = u"CharStrikeout"_ustr;
-            if (lcl_arePropertiesSame(xProperties, aPropName))
+            if (sal_Int16 nFontStrikeout;
+                getPropertyIfSame(xProperties, u"CharStrikeout"_ustr) >>= nFontStrikeout)
             {
-                sal_Int16 nFontStrikeout(0);
-                xProperties[0]->getPropertyValue(aPropName) >>= nFontStrikeout;
                 bool bFontStrikeout = (nFontStrikeout > 0);
                 m_aCommandArguments[u".uno:Strikeout"_ustr] <<= bFontStrikeout;
             }
 
-            aPropName = u"CharUnderline"_ustr;
-            if (lcl_arePropertiesSame(xProperties, aPropName))
+            if (sal_Int16 nFontUnderline;
+                getPropertyIfSame(xProperties, u"CharUnderline"_ustr) >>= nFontUnderline)
             {
-                sal_Int16 nFontUnderline(0);
-                xProperties[0]->getPropertyValue(aPropName) >>= nFontUnderline;
                 bool bFontUnderline = (nFontUnderline > 0);
                 m_aCommandArguments[u".uno:Underline"_ustr] <<= bFontUnderline;
             }
 
-            aPropName = u"CharShadowed"_ustr;
-            if (lcl_arePropertiesSame(xProperties, aPropName))
+            if (bool bShadowed; getPropertyIfSame(xProperties, u"CharShadowed"_ustr) >>= bShadowed)
             {
-                bool bShadowed = false;
-                xProperties[0]->getPropertyValue(aPropName) >>= bShadowed;
                 m_aCommandArguments[u".uno:Shadowed"_ustr] <<= bShadowed;
             }
 
@@ -809,11 +792,9 @@ void ControllerCommandDispatch::updateCommandAvailability()
             m_aCommandArguments[u".uno:Color"_ustr] <<= false;
             m_aCommandArguments[u".uno:FontColor"_ustr] <<= false;
 
-            aPropName = u"CharEscapement"_ustr;
-            if (lcl_arePropertiesSame(xProperties, aPropName))
+            if (sal_Int32 nCharEscapement;
+                getPropertyIfSame(xProperties, u"CharEscapement"_ustr) >>= nCharEscapement)
             {
-                sal_Int32 nCharEscapement = 0;
-                xProperties[0]->getPropertyValue(aPropName) >>= nCharEscapement;
                 m_aCommandArguments[u".uno:SuperScript"_ustr] <<= (nCharEscapement > 0);
                 m_aCommandArguments[u".uno:SubScript"_ustr] <<= (nCharEscapement < 0);
             }
