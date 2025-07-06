@@ -1400,31 +1400,6 @@ void SAL_CALL ChartController::dispatch(
         }
 
     }
-    else if( aCommand == "StatusBarVisible" )
-    {
-        // workaround: this should not be necessary.
-        uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY );
-        if( xPropSet.is() )
-        {
-            uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-            xPropSet->getPropertyValue( u"LayoutManager"_ustr ) >>= xLayoutManager;
-            if ( xLayoutManager.is() )
-            {
-                bool bIsVisible( xLayoutManager->isElementVisible( u"private:resource/statusbar/statusbar"_ustr ));
-                if( bIsVisible )
-                {
-                    xLayoutManager->hideElement( u"private:resource/statusbar/statusbar"_ustr );
-                    xLayoutManager->destroyElement( u"private:resource/statusbar/statusbar"_ustr );
-                }
-                else
-                {
-                    xLayoutManager->createElement( u"private:resource/statusbar/statusbar"_ustr );
-                    xLayoutManager->showElement( u"private:resource/statusbar/statusbar"_ustr );
-                }
-                // @todo: update menu state (checkmark next to "Statusbar").
-            }
-        }
-    }
     else if( aCommand == "ChangeTheme" )
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, getFrame(), rArgs);
 }
@@ -1761,7 +1736,6 @@ const o3tl::sorted_vector< std::u16string_view >& ChartController::impl_getAvail
         u"NewArrangement",     u"Update",
         u"DefaultColors",      u"BarWidth",             u"NumberOfLines",
         u"ArrangeRow",
-        u"StatusBarVisible",
         u"ChartElementSelector",
 
         // sidebar commands

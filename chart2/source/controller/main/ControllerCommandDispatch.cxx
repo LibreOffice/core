@@ -60,25 +60,6 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-bool lcl_isStatusBarVisible( const Reference< frame::XController > & xController )
-{
-    bool bIsStatusBarVisible = false;
-    // Status-Bar visible, workaround: this should not be necessary. @todo:
-    // remove when Issue #i68864# is fixed
-    if( xController.is())
-    {
-        Reference< beans::XPropertySet > xPropSet( xController->getFrame(), uno::UNO_QUERY );
-        if( xPropSet.is() )
-        {
-            uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-            xPropSet->getPropertyValue( u"LayoutManager"_ustr ) >>= xLayoutManager;
-            if ( xLayoutManager.is() )
-                bIsStatusBarVisible = xLayoutManager->isElementVisible( u"private:resource/statusbar/statusbar"_ustr );
-        }
-    }
-    return bIsStatusBarVisible;
-}
-
 bool lcl_arePropertiesSame(std::vector<Reference<beans::XPropertySet>>& xProperties,
                            const OUString& aPropName)
 {
@@ -953,14 +934,6 @@ void ControllerCommandDispatch::fireStatusEvent(
     }
     else if (m_aCommandAvailability.contains(rURL))
         fireStatusEventForURLImpl( rURL, xSingleListener );
-
-    // statusbar. Should be handled by base implementation
-    // @todo: remove if Issue 68864 is fixed
-    if( rURL.isEmpty() || rURL == ".uno:StatusBarVisible" )
-    {
-        bool bIsStatusBarVisible( lcl_isStatusBarVisible( m_xChartController ));
-        fireStatusEventForURL( u".uno:StatusBarVisible"_ustr, uno::Any( bIsStatusBarVisible ), true, xSingleListener );
-    }
 }
 
 // ____ XDispatch ____
