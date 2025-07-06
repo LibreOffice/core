@@ -44,7 +44,6 @@
   <menu:menu menu:id=".uno:ViewMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
-      <menu:menuitem menu:id=".uno:StatusBarVisible"/>
       <menu:menuitem menu:id=".uno:Sidebar" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DiagramData"/>
