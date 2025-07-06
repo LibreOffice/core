@@ -141,7 +141,7 @@ Sequence< Reference< frame::XDispatch > > CommandDispatchContainer::getDispatche
 
     for( sal_Int32 nPos = 0; nPos < nCount; ++nPos )
     {
-        if ( aDescriptors[ nPos ].FrameName == "_self" )
+        if (aDescriptors[nPos].FrameName.isEmpty() || aDescriptors[nPos].FrameName == "_self")
             aRetRange[ nPos ] = getDispatchForURL( aDescriptors[ nPos ].FeatureURL );
     }
     return aRet;
