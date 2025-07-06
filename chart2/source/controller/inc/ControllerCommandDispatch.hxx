@@ -65,6 +65,7 @@ public:
     virtual void initialize() override;
 
     bool commandAvailable(const OUString& rCommand) const;
+    bool commandHandled(const OUString& rCommand) const;
 
 protected:
     // ____ XDispatch ____

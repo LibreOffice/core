@@ -67,7 +67,7 @@ void CommandDispatchContainer::setChartDispatch(
 {
     OSL_ENSURE(rChartDispatch.is(),"Invalid fall back dispatcher!");
     m_xChartDispatcher = rChartDispatch;
-    m_aChartCommands = rChartCommands;
+    m_aAdditionalChartCommands = rChartCommands;
     m_aToBeDisposedDispatches.push_back( m_xChartDispatcher );
 }
 
@@ -119,7 +119,9 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
         }
     }
 
-    if (m_xChartDispatcher.is() && m_aChartCommands.count(rURL.Path) > 0)
+    if (m_xChartDispatcher.is()
+        && (m_xChartDispatcher->commandHandled(rURL.Complete)
+            || m_aAdditionalChartCommands.count(rURL.Path) > 0))
         return cacheIt(m_xChartDispatcher);
 
     // #i12587# support for shapes in chart
@@ -156,7 +158,7 @@ void CommandDispatchContainer::DisposeAndClear()
     DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );
     m_aToBeDisposedDispatches.clear();
     m_xChartDispatcher.clear();
-    m_aChartCommands.clear();
+    m_aAdditionalChartCommands.clear();
     m_pDrawCommandDispatch = nullptr;
     m_pShapeController = nullptr;
 }

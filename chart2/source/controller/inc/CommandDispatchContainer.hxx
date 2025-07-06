@@ -127,7 +127,7 @@ private:
     unotools::WeakReference< ::chart::ChartModel >         m_xModel;
 
     rtl::Reference<ControllerCommandDispatch> m_xChartDispatcher;
-    o3tl::sorted_vector< std::u16string_view >            m_aChartCommands;
+    o3tl::sorted_vector<std::u16string_view> m_aAdditionalChartCommands;
 
     DrawCommandDispatch* m_pDrawCommandDispatch;
     ShapeController* m_pShapeController;
