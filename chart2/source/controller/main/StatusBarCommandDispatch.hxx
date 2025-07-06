@@ -18,7 +18,9 @@
  */
 #pragma once
 
-#include "CommandDispatch.hxx"
+#include <sal/config.h>
+
+#include <CommandDispatch.hxx>
 #include <ObjectIdentifier.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>

@@ -55,7 +55,7 @@
 #include <servicenames_charttypes.hxx>
 #include "DrawCommandDispatch.hxx"
 #include <PopupRequest.hxx>
-#include "ControllerCommandDispatch.hxx"
+#include <ControllerCommandDispatch.hxx>
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -599,9 +599,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
              ( rMEvt.IsRight() && pDrawViewWrapper->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt ) == SdrHitKind::MarkedObject ) )
         {
             pDrawViewWrapper->MouseButtonDown(rMEvt, pChartWindow->GetOutDev());
-            ControllerCommandDispatch* pCommandDispatch
-                = dynamic_cast<ControllerCommandDispatch*>(
-                    m_aDispatchContainer.getChartDispatcher().get());
+            ControllerCommandDispatch* pCommandDispatch = m_aDispatchContainer.getChartDispatcher();
             if (pCommandDispatch)
             {
                 pCommandDispatch->updateAndFireStatus();
@@ -780,8 +778,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             if( pDrawViewWrapper->MouseButtonUp(rMEvt,pChartWindow->GetOutDev()) )
             {
                 ControllerCommandDispatch* pCommandDispatch
-                    = dynamic_cast<ControllerCommandDispatch*>(
-                        m_aDispatchContainer.getChartDispatcher().get());
+                    = m_aDispatchContainer.getChartDispatcher();
                 if (pCommandDispatch)
                 {
                     pCommandDispatch->updateAndFireStatus();
@@ -1289,7 +1286,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         {
             if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {
-                ControllerCommandDispatch* pCommandDispatch = dynamic_cast<ControllerCommandDispatch*>(m_aDispatchContainer.getChartDispatcher().get());
+                const ControllerCommandDispatch* pCommandDispatch = m_aDispatchContainer.getChartDispatcher();
                 if (pCommandDispatch)
                 {
                     for (int nPos = 0, nCount = xPopupMenu->getItemCount(); nPos < nCount; ++nPos)
@@ -1371,8 +1368,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                     EndTextEdit();
                 }
                 ControllerCommandDispatch* pCommandDispatch
-                    = dynamic_cast<ControllerCommandDispatch*>(
-                        m_aDispatchContainer.getChartDispatcher().get());
+                    = m_aDispatchContainer.getChartDispatcher();
                 if (pCommandDispatch)
                 {
                     pCommandDispatch->updateAndFireStatus();

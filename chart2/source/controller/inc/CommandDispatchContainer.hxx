@@ -21,6 +21,8 @@
 #include <unotools/weakref.hxx>
 #include <o3tl/sorted_vector.hxx>
 
+#include "ControllerCommandDispatch.hxx"
+
 #include <map>
 #include <vector>
 
@@ -71,6 +73,7 @@ public:
     // itself)
     explicit CommandDispatchContainer(
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    ~CommandDispatchContainer();
 
     void setModel(
         const rtl::Reference<::chart::ChartModel> & xModel );
@@ -79,7 +82,7 @@ public:
         rChartCommands
      */
     void setChartDispatch(
-        const css::uno::Reference< css::frame::XDispatch >& rChartDispatch,
+        const rtl::Reference< ControllerCommandDispatch >& rChartDispatch,
         const o3tl::sorted_vector< std::u16string_view > & rChartCommands );
 
     /** Returns the dispatch that is able to do the command given in rURL, if
@@ -102,7 +105,7 @@ public:
             const css::uno::Reference< css::frame::XController > & xChartController,
             const css::util::URL & rURL );
 
-    const css::uno::Reference< css::frame::XDispatch > & getChartDispatcher() const { return m_xChartDispatcher; }
+    ControllerCommandDispatch* getChartDispatcher() { return m_xChartDispatcher.get(); }
 
     void setDrawCommandDispatch( DrawCommandDispatch* pDispatch );
     DrawCommandDispatch* getDrawCommandDispatch() { return m_pDrawCommandDispatch; }
@@ -124,7 +127,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
     unotools::WeakReference< ::chart::ChartModel >         m_xModel;
 
-    css::uno::Reference< css::frame::XDispatch >          m_xChartDispatcher;
+    rtl::Reference<ControllerCommandDispatch> m_xChartDispatcher;
     o3tl::sorted_vector< std::u16string_view >            m_aChartCommands;
 
     DrawCommandDispatch* m_pDrawCommandDispatch;

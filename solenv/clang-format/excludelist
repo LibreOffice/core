@@ -853,7 +853,9 @@ chart2/source/controller/inc/ChartController.hxx
 chart2/source/controller/inc/ChartDocumentWrapper.hxx
 chart2/source/controller/inc/ChartToolbarController.hxx
 chart2/source/controller/inc/ChartWindow.hxx
+chart2/source/controller/inc/CommandDispatch.hxx
 chart2/source/controller/inc/CommandDispatchContainer.hxx
+chart2/source/controller/inc/ControllerCommandDispatch.hxx
 chart2/source/controller/inc/DataPointItemConverter.hxx
 chart2/source/controller/inc/DrawViewWrapper.hxx
 chart2/source/controller/inc/ErrorBarItemConverter.hxx
@@ -919,11 +921,9 @@ chart2/source/controller/main/ChartTransferable.cxx
 chart2/source/controller/main/ChartTransferable.hxx
 chart2/source/controller/main/ChartWindow.cxx
 chart2/source/controller/main/CommandDispatch.cxx
-chart2/source/controller/main/CommandDispatch.hxx
 chart2/source/controller/main/CommandDispatchContainer.cxx
 chart2/source/controller/main/ConfigurationAccess.cxx
 chart2/source/controller/main/ControllerCommandDispatch.cxx
-chart2/source/controller/main/ControllerCommandDispatch.hxx
 chart2/source/controller/main/DragMethod_Base.cxx
 chart2/source/controller/main/DragMethod_Base.hxx
 chart2/source/controller/main/DragMethod_PieSegment.cxx

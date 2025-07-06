@@ -29,7 +29,7 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
-#include "ControllerCommandDispatch.hxx"
+#include <ControllerCommandDispatch.hxx>
 #include <DataSeries.hxx>
 #include <Diagram.hxx>
 #include <strings.hrc>
@@ -1438,8 +1438,7 @@ void SAL_CALL ChartController::dispatch(
 
                             // update the sidebar
                             ControllerCommandDispatch* pCommandDispatch
-                                = dynamic_cast<ControllerCommandDispatch*>(
-                                    m_aDispatchContainer.getChartDispatcher().get());
+                                = m_aDispatchContainer.getChartDispatcher();
                             if (pCommandDispatch)
                             {
                                 pCommandDispatch->updateAndFireStatus();

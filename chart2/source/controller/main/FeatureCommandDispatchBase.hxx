@@ -18,7 +18,9 @@
  */
 #pragma once
 
-#include "CommandDispatch.hxx"
+#include <sal/config.h>
+
+#include <CommandDispatch.hxx>
 
 #include <com/sun/star/frame/DispatchInformation.hpp>
 
