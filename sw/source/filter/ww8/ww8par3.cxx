@@ -119,7 +119,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
             static_cast<SwInputFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Input )),
             aFormula.msDefault,
             aFormula.msTitle,
-            INP_TXT,
+            SwInputFieldSubType::Text,
             false );
         aField.SetHelp(aFormula.msHelp);
         aField.SetToolTip(aFormula.msToolTip);

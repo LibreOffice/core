@@ -288,7 +288,7 @@ class SW_DLLPUBLIC SwInputField final : public SwField
     OUString maPText;
     OUString maHelp;
     OUString maToolTip;
-    sal_uInt16 mnSubType;
+    SwInputFieldSubType mnSubType;
     bool mbIsFormField;
     css::uno::Sequence<css::beans::PropertyValue> maGrabBag;
 
@@ -306,7 +306,7 @@ public:
         SwInputFieldType* pFieldType,
         OUString aContent,
         OUString aPrompt,
-        sal_uInt16 nSubType,
+        SwInputFieldSubType nSubType,
         bool bIsFormField = true );
     virtual ~SwInputField() override;
 
@@ -336,8 +336,9 @@ public:
     const OUString&         GetToolTip() const;
     void                    SetToolTip(const OUString & rStr);
 
-    sal_uInt16          GetSubType() const;
-    void                SetSubType(sal_uInt16 nSub);
+    SwInputFieldSubType     GetSubType() const;
+    void                    SetSubType(SwInputFieldSubType nSub);
+
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };

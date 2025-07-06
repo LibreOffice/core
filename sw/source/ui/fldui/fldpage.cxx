@@ -235,13 +235,12 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
 
         case SwFieldTypesEnum::Input:
             {
-                SwSetExpField* pField = static_cast<SwSetExpField*>(pTmpField.get());
+                SwInputField* pField = static_cast<SwInputField*>(pTmpField.get());
                 // User- or SetField ?
                 if (m_aMgr.GetFieldType(SwFieldIds::User, sPar1) == nullptr &&
-                    !(pField->GetSubType() & INP_TXT)) // SETEXPFLD
+                    !(pField->GetSubType() & SwInputFieldSubType::Text)) // SETEXPFLD
                 {
-                    pField->SetPromptText(sPar2);
-                    sPar2 = pField->GetPar2();
+                    pField->SetPar2(sPar2); // Par2 is prompt for SwInputField
                 }
             }
             break;

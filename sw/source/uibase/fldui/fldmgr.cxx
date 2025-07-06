@@ -491,7 +491,7 @@ sal_uInt16 SwFieldMgr::GetGroup(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType)
     if (nTypeId == SwFieldTypesEnum::SetInput)
         nTypeId = SwFieldTypesEnum::Set;
 
-    if (nTypeId == SwFieldTypesEnum::Input && (nSubType & INP_USR))
+    if (nTypeId == SwFieldTypesEnum::Input && (static_cast<SwInputFieldSubType>(nSubType) & SwInputFieldSubType::User))
         nTypeId = SwFieldTypesEnum::User;
 
     if (nTypeId == SwFieldTypesEnum::FixedDate)
@@ -897,7 +897,7 @@ bool SwFieldMgr::InsertField(
     bool bTable = false;
     bool bPageVar = false;
     sal_uInt32 nFormatId = rData.m_nFormatId;
-    sal_uInt16 nInputSubType = rData.m_nSubType; // only used for SwInputField
+    SwInputFieldSubType nInputSubType = SwInputFieldSubType::None; // only used for SwInputField
     sal_Unicode cSeparator = rData.m_cSeparator;
     SwWrtShell* pCurShell = rData.m_pSh;
     if(!pCurShell)
@@ -1376,7 +1376,8 @@ bool SwFieldMgr::InsertField(
 
     case SwFieldTypesEnum::Input:
         {
-            if ((nInputSubType & 0x00ff) == INP_VAR)
+            nInputSubType = static_cast<SwInputFieldSubType>(rData.m_nSubType);
+            if ((nInputSubType & SwInputFieldSubType::LowerMask) == SwInputFieldSubType::Var)
             {
                 SwSetExpFieldType* pTyp = static_cast<SwSetExpFieldType*>(
                     pCurShell->GetFieldType(SwFieldIds::SetExp, rData.m_sPar1) );
@@ -1388,9 +1389,11 @@ bool SwFieldMgr::InsertField(
                         new SwSetExpField(pTyp, OUString(), nFormatId));
 
                     // Don't change type of SwSetExpFieldType:
-                    sal_uInt16 nOldSubType = pExpField->GetSubType();
-                    pExpField->SetSubType(nOldSubType | (nInputSubType & 0xff00));
-
+                    if (nInputSubType & SwInputFieldSubType::Invisible)
+                    {
+                        sal_uInt16 nOldSubType = pExpField->GetSubType();
+                        pExpField->SetSubType(nOldSubType | nsSwExtendedSubType::SUB_INVISIBLE);
+                    }
                     pExpField->SetPromptText(rData.m_sPar2);
                     pExpField->SetInputFlag(true) ;
                     bExp = true;
@@ -1405,7 +1408,7 @@ bool SwFieldMgr::InsertField(
                     static_cast<SwInputFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::Input) );
 
                 pField.reset(
-                    new SwInputField( pTyp, rData.m_sPar1, rData.m_sPar2, nInputSubType|nsSwExtendedSubType::SUB_INVISIBLE, nFormatId));
+                    new SwInputField( pTyp, rData.m_sPar1, rData.m_sPar2, nInputSubType|SwInputFieldSubType::Invisible, nFormatId));
             }
             break;
         }
@@ -1564,7 +1567,7 @@ bool SwFieldMgr::InsertField(
 
             // start dialog, not before the field is inserted tdf#99529
             pCurShell->Left(SwCursorSkipMode::Chars, false,
-                (INP_VAR == (nInputSubType & 0xff) || pCurShell->GetViewOptions()->IsFieldName()) ? 1 : 2,
+                (SwInputFieldSubType::Var == (nInputSubType & SwInputFieldSubType::LowerMask) || pCurShell->GetViewOptions()->IsFieldName()) ? 1 : 2,
                 false);
             pCurShell->StartInputFieldDlg(pField.get(), false, true, rData.m_pParent);
 

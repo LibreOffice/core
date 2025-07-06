@@ -2028,9 +2028,9 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
         if (pField->GetTyp()->Which() == SwFieldIds::Input &&
             eFieldType == ww::eFORMTEXT)
         {
-            sal_uInt16 nSubType = static_cast<const SwInputField*>(pField)->GetSubType();
+            SwInputFieldSubType nSubType = static_cast<const SwInputField*>(pField)->GetSubType();
 
-            if (nSubType == REF_SEQUENCEFLD)
+            if (nSubType == SwInputFieldSubType::Text)
                 aField15[0] |= (0x4 << 5);
         }
         // This ought to apply to any field, but just to be safe, start off with DATE/TIME only.

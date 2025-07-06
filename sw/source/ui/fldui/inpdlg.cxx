@@ -60,21 +60,23 @@ SwFieldInputDlg::SwFieldInputDlg(weld::Widget *pParent, SwWrtShell &rS,
 
         m_pInpField = static_cast<SwInputField*>(pField);
         m_xLabelED->set_text(m_pInpField->GetPar2());
-        sal_uInt16 nSubType = m_pInpField->GetSubType();
+        SwInputFieldSubType nSubType = m_pInpField->GetSubType();
 
-        switch(nSubType & 0xff)
+        switch(nSubType & SwInputFieldSubType::LowerMask)
         {
-            case INP_TXT:
+            case SwInputFieldSubType::Text:
                 aStr = m_pInpField->GetPar1();
                 break;
 
-            case INP_USR:
+            case SwInputFieldSubType::User:
                 // user field
                 m_pUsrType = static_cast<SwUserFieldType*>(m_rSh.GetFieldType(
                             SwFieldIds::User, m_pInpField->GetPar1() ));
                 if( nullptr != m_pUsrType )
                     aStr = m_pUsrType->GetContent();
                 break;
+
+            default: break;
         }
     }
     else

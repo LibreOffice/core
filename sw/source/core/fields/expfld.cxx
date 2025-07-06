@@ -1222,7 +1222,7 @@ std::unique_ptr<SwFieldType> SwInputFieldType::Copy() const
 SwInputField::SwInputField( SwInputFieldType* pFieldType,
                             OUString aContent,
                             OUString aPrompt,
-                            sal_uInt16 nSub,
+                            SwInputFieldSubType nSub,
                             bool bIsFormField )
     : SwField( pFieldType, LANGUAGE_SYSTEM, false )
     , maContent(std::move(aContent))
@@ -1245,11 +1245,11 @@ void SwInputField::SetFormatField( SwFormatField& rFormatField )
 
 void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
 {
-    if ( (mnSubType & 0x00ff) == INP_TXT )
+    if ( (mnSubType & SwInputFieldSubType::LowerMask) == SwInputFieldSubType::Text )
     {
         maContent = rNewFieldContent;
     }
-    else if( (mnSubType & 0x00ff) == INP_USR )
+    else if( (mnSubType & SwInputFieldSubType::LowerMask) == SwInputFieldSubType::User )
     {
         SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
             static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::User, getContent(), false ) );
@@ -1288,7 +1288,7 @@ void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
 OUString SwInputField::GetFieldName() const
 {
     OUString aStr(SwField::GetFieldName());
-    if ((mnSubType & 0x00ff) == INP_USR)
+    if ((mnSubType & SwInputFieldSubType::LowerMask) == SwInputFieldSubType::User)
     {
         aStr += GetTyp()->GetName().toString() + " " + getContent();
     }
@@ -1315,12 +1315,12 @@ std::unique_ptr<SwField> SwInputField::Copy() const
 
 OUString SwInputField::ExpandImpl(SwRootFrame const*const) const
 {
-    if((mnSubType & 0x00ff) == INP_TXT)
+    if((mnSubType & SwInputFieldSubType::LowerMask) == SwInputFieldSubType::Text)
     {
         return getContent();
     }
 
-    if( (mnSubType & 0x00ff) == INP_USR )
+    if( (mnSubType & SwInputFieldSubType::LowerMask) == SwInputFieldSubType::User )
     {
         SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
             static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::User, getContent(), false ) );
@@ -1433,12 +1433,12 @@ const OUString& SwInputField::GetToolTip() const
     return maToolTip;
 }
 
-sal_uInt16 SwInputField::GetSubType() const
+SwInputFieldSubType SwInputField::GetSubType() const
 {
     return mnSubType;
 }
 
-void SwInputField::SetSubType(sal_uInt16 nSub)
+void SwInputField::SetSubType(SwInputFieldSubType nSub)
 {
     mnSubType = nSub;
 }

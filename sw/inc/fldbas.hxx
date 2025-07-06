@@ -177,11 +177,17 @@ const SwExtendedSubType SUB_INVISIBLE   = 0x0200;   ///< Invisible.
 const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   ///< SwDBField: Don't accept formatting from database.
 }
 
-enum SwInputFieldSubType {
-    INP_TXT     = 0x01,
-    INP_USR     = 0x02,
-    INP_VAR     = 0x03
+enum class SwInputFieldSubType : sal_uInt16
+{
+    None        = 0x0000,
+    Text        = 0x0001,
+    User        = 0x0002,
+    Var         = 0x0003,
+    LowerMask   = 0x0003,
+    UpperMask   = 0x0200,
+    Invisible   = 0x0200   ///< Invisible.
 };
+namespace o3tl { template<> struct typed_flags<SwInputFieldSubType> : is_typed_flags<SwInputFieldSubType, 0x0203> {}; }
 
 enum class SwUserType : sal_uInt16 {
     None          = 0x0000,

@@ -1203,7 +1203,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
         case SwFieldTypesEnum::Input:
         {
             SwFieldType* pType = GetFieldMgr().GetFieldType(SwFieldIds::User, aName);
-            nSubType = static_cast< sal_uInt16 >((nSubType & 0xff00) | (pType ? INP_USR : INP_VAR));
+            nSubType = static_cast< sal_uInt16 >((nSubType & 0xff00) | static_cast<sal_uInt16>(pType ? SwInputFieldSubType::User : SwInputFieldSubType::Var));
             break;
         }
 

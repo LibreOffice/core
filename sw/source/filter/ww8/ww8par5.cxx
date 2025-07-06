@@ -1240,7 +1240,7 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, OUString& rStr )
     if ( pF->nId != 0x01 ) // 0x01 fields have no result
     {
         SwInputField aField( static_cast<SwInputFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Input )),
-                            aDef, aQ, INP_TXT, false );
+                            aDef, aQ, SwInputFieldSubType::Text, false );
         m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     }
 
@@ -2709,7 +2709,7 @@ eF_ResT SwWW8ImplReader::Read_F_Equation( WW8FieldDesc*, OUString& rStr )
         if (aResult.sType == "Input")
         {
             SwInputField aField( static_cast<SwInputFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Input )),
-                aResult.sResult, aResult.sResult, INP_TXT, false );
+                aResult.sResult, aResult.sResult, SwInputFieldSubType::Text, false );
             m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) ); // insert input field
         }
         else if (aResult.sType == "CombinedCharacters")

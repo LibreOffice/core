@@ -204,7 +204,7 @@ static SwServiceType lcl_GetServiceForField( const SwField& rField )
     case SwFieldIds::Input:
         {
             const auto & rInputField = static_cast<const SwInputField&>(rField);
-            if( INP_USR == (rInputField.GetSubType() & 0x00ff) )
+            if( SwInputFieldSubType::User == (rInputField.GetSubType() & SwInputFieldSubType::LowerMask) )
                 nSrvId = SwServiceType::FieldTypeInputUser;
             break;
         }
@@ -1837,10 +1837,9 @@ void SAL_CALL SwXTextField::attach(
                     pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Input, m_pImpl->m_sTypeName.toString(), true);
                 if (!pFieldType)
                     throw uno::RuntimeException();
-                sal_uInt16 nInpSubType =
-                    sal::static_int_cast<sal_uInt16>(
+                SwInputFieldSubType nInpSubType =
                         SwServiceType::FieldTypeInputUser == m_pImpl->m_nServiceId
-                            ? INP_USR : INP_TXT);
+                            ? SwInputFieldSubType::User : SwInputFieldSubType::Text;
                 SwInputField * pTextField =
                     new SwInputField(static_cast<SwInputFieldType*>(pFieldType),
                                      m_pImpl->m_pProps->sPar1,

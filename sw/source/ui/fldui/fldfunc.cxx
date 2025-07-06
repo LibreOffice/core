@@ -530,7 +530,7 @@ bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
     switch(nTypeId)
     {
         case SwFieldTypesEnum::Input:
-            nSubType = INP_TXT;
+            nSubType = static_cast<sal_uInt16>(SwInputFieldSubType::Text);
             // to prevent removal of CR/LF restore old content
             if (!m_xNameED->get_value_changed_from_saved() && IsFieldEdit())
                 aName = GetCurField()->GetPar1();

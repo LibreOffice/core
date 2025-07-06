@@ -1091,7 +1091,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo74981)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::Input)), u"foo"_ustr, u"bar"_ustr, 0, false);
+    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::Input)), u"foo"_ustr, u"bar"_ustr, SwInputFieldSubType::None, false);
     pWrtShell->InsertField2(aField);
 
     {
@@ -1123,10 +1123,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf98512)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwInputFieldType *const pType(static_cast<SwInputFieldType*>(
                 pWrtShell->GetFieldType(0, SwFieldIds::Input)));
-    SwInputField aField1(pType, u"foo"_ustr, u"bar"_ustr, INP_TXT, false);
+    SwInputField aField1(pType, u"foo"_ustr, u"bar"_ustr, SwInputFieldSubType::Text, false);
     pWrtShell->InsertField2(aField1);
     pWrtShell->SttEndDoc(/*bStt=*/true);
-    SwInputField aField2(pType, u"baz"_ustr, u"quux"_ustr, INP_TXT, false);
+    SwInputField aField2(pType, u"baz"_ustr, u"quux"_ustr, SwInputFieldSubType::Text, false);
     pWrtShell->InsertField2(aField2);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->SetMark();

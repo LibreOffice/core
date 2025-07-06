@@ -459,7 +459,7 @@ sal_uInt16 SwField::GetUntypedSubType() const
     case SwFieldIds::Table:
         return static_cast<const SwTableField*>(this)->GetSubType();
     case SwFieldIds::Input:
-        return static_cast<const SwInputField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwInputField*>(this)->GetSubType());
     case SwFieldIds::GetExp:
         return static_cast<const SwGetExpField*>(this)->GetSubType();
     case SwFieldIds::SetExp:
@@ -503,7 +503,7 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
         static_cast<SwTableField*>(this)->SetSubType(n);
         break;
     case SwFieldIds::Input:
-        static_cast<SwInputField*>(this)->SetSubType(n);
+        static_cast<SwInputField*>(this)->SetSubType(static_cast<SwInputFieldSubType>(n));
         break;
     case SwFieldIds::GetExp:
         static_cast<SwGetExpField*>(this)->SetSubType(n);
