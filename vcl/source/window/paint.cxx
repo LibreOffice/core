@@ -86,7 +86,10 @@ PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWind
     pFrameData->mpBuffer->SetClipRegion(rDev.GetClipRegion());
     pFrameData->mpBuffer->SetFillColor(rDev.GetFillColor());
     pFrameData->mpBuffer->SetFont(pWindow->GetFont());
-    pFrameData->mpBuffer->SetLineColor(rDev.GetLineColor());
+    if (rDev.GetLineColor() == COL_TRANSPARENT)
+        pFrameData->mpBuffer->SetLineColor();
+    else
+        pFrameData->mpBuffer->SetLineColor(rDev.GetLineColor());
     pFrameData->mpBuffer->SetMapMode(pWindow->GetMapMode());
     pFrameData->mpBuffer->SetRefPoint(rDev.GetRefPoint());
     pFrameData->mpBuffer->SetSettings(pWindow->GetSettings());
