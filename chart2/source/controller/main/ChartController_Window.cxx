@@ -53,7 +53,7 @@
 #include <servicenames_charttypes.hxx>
 #include "DrawCommandDispatch.hxx"
 #include <PopupRequest.hxx>
-#include "ControllerCommandDispatch.hxx"
+#include <ControllerCommandDispatch.hxx>
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -1223,7 +1223,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         {
             if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {
-                ControllerCommandDispatch* pCommandDispatch = dynamic_cast<ControllerCommandDispatch*>(m_aDispatchContainer.getChartDispatcher().get());
+                const ControllerCommandDispatch* pCommandDispatch = m_aDispatchContainer.getChartDispatcher();
                 if (pCommandDispatch)
                 {
                     for (int nPos = 0, nCount = xPopupMenu->getItemCount(); nPos < nCount; ++nPos)

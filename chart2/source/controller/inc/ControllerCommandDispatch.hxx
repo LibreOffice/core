@@ -64,7 +64,7 @@ public:
     // late initialisation, especially for adding as listener
     virtual void initialize() override;
 
-    bool commandAvailable( const OUString & rCommand );
+    bool commandAvailable(const OUString& rCommand) const;
 
 protected:
     // ____ XDispatch ____

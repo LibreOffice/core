@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ControllerCommandDispatch.hxx"
+#include <sal/config.h>
+
+#include <ControllerCommandDispatch.hxx>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
 #include <Axis.hxx>
@@ -908,7 +910,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ u".uno:DeleteDataTable"_ustr ] = bIsWritable && bModelStateIsValid && m_apModelState->bDataTable;
 }
 
-bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
+bool ControllerCommandDispatch::commandAvailable(const OUString& rCommand) const
 {
     std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.find( rCommand ));
     if( aIt != m_aCommandAvailability.end())

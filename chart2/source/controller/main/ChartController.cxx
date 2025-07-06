@@ -28,7 +28,7 @@
 #include <dlg_DataSource.hxx>
 #include <ChartModel.hxx>
 #include <ChartType.hxx>
-#include "ControllerCommandDispatch.hxx"
+#include <ControllerCommandDispatch.hxx>
 #include <DataSeries.hxx>
 #include <Diagram.hxx>
 #include <strings.hrc>

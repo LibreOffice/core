@@ -18,6 +18,7 @@
  */
 
 #include <CommandDispatchContainer.hxx>
+#include <ControllerCommandDispatch.hxx>
 #include "UndoCommandDispatch.hxx"
 #include "StatusBarCommandDispatch.hxx"
 #include <DisposeHelper.hxx>
@@ -48,6 +49,8 @@ CommandDispatchContainer::CommandDispatchContainer(
 {
 }
 
+CommandDispatchContainer::~CommandDispatchContainer() = default;
+
 void CommandDispatchContainer::setModel(
     const rtl::Reference<::chart::ChartModel> & xModel )
 {
@@ -59,11 +62,11 @@ void CommandDispatchContainer::setModel(
 }
 
 void CommandDispatchContainer::setChartDispatch(
-    const Reference< frame::XDispatch >& rChartDispatch,
+    const rtl::Reference< ControllerCommandDispatch >& rChartDispatch,
     const o3tl::sorted_vector< std::u16string_view > & rChartCommands )
 {
     OSL_ENSURE(rChartDispatch.is(),"Invalid fall back dispatcher!");
-    m_xChartDispatcher.set( rChartDispatch );
+    m_xChartDispatcher = rChartDispatch;
     m_aChartCommands = rChartCommands;
     m_aToBeDisposedDispatches.push_back( m_xChartDispatcher );
 }
