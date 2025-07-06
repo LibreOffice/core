@@ -3273,7 +3273,7 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
     }
 
     bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == SwFieldIds::SetExp;
-    bool bShowRef = bIsSetField && ( static_cast<const SwSetExpField*>(rInfos.pField.get())->GetSubType( ) & nsSwExtendedSubType::SUB_INVISIBLE ) == 0;
+    bool bShowRef = bIsSetField && !( static_cast<const SwSetExpField*>(rInfos.pField.get())->GetSubType( ) & SwGetSetExpType::Invisible );
 
     if (!bShowRef)
     {
@@ -8736,7 +8736,7 @@ void DocxAttributeOutput::WriteField_Impl(const SwField *const pField,
     if ( nType == SwFieldIds::SetExp )
     {
         const SwSetExpField *pSet = static_cast<const SwSetExpField*>( pField );
-        if ( pSet->GetSubType() & nsSwGetSetExpType::GSE_STRING )
+        if ( pSet->GetSubType() & SwGetSetExpType::String )
             m_sFieldBkm = pSet->GetPar1( );
     }
     else if ( nType == SwFieldIds::Dropdown )

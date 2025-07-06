@@ -1399,7 +1399,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const SwMarkName& rRefMar
         {
             SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::SetExp, rRefMark, false );
             if( pFieldType && pFieldType->HasWriterListeners() &&
-                nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pFieldType)->GetType() )
+                SwGetSetExpType::Sequence & static_cast<SwSetExpFieldType*>(pFieldType)->GetType() )
             {
                 std::vector<SwFormatField*> vFields;
                 pFieldType->GatherFields(vFields, false);

@@ -236,7 +236,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
     {
         SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFieldType(n, SwFieldIds::SetExp));
 
-        if ((nsSwGetSetExpType::GSE_SEQ & pType->GetType()) && pType->HasWriterListeners() && pSh->IsUsed(*pType))
+        if ((SwGetSetExpType::Sequence & pType->GetType()) && pType->HasWriterListeners() && pSh->IsUsed(*pType))
         {
             m_xTypeLB->append(OUString::number(REFFLDFLAG | n), pType->GetName().toString());
         }

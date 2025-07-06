@@ -2953,9 +2953,9 @@ SwNodeOffset SwTableBox::IsValidNumTextNd( bool bCheckAttr ) const
                                 const SwField* pField = pAttr->GetFormatField().GetField();
                                 if (pField &&
                                     (pField->GetTypeId() == SwFieldTypesEnum::Set) &&
-                                    (0 != (static_cast<SwSetExpField const*>
+                                    (static_cast<SwSetExpField const*>
                                            (pField)->GetSubType() &
-                                        nsSwExtendedSubType::SUB_INVISIBLE)))
+                                        SwGetSetExpType::Invisible))
                                 {
                                     nNextSetField = pAttr->GetStart() + 1;
                                     continue;

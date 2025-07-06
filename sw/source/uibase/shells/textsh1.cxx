@@ -1562,7 +1562,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     {
                         SvNumberFormatter* pFormatter = rWrtSh.GetNumberFormatter();
                         const sal_uInt32 nSysNumFormat = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
-                        SwInsertField_Data aData(SwFieldTypesEnum::Formel, nsSwGetSetExpType::GSE_FORMULA, OUString(), sFormula, nSysNumFormat);
+                        SwInsertField_Data aData(SwFieldTypesEnum::Formel, static_cast<sal_uInt16>(SwGetSetExpType::Formula), OUString(), sFormula, nSysNumFormat);
                         aFieldMgr.InsertField(aData);
                     }
                 }

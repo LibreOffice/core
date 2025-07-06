@@ -573,8 +573,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         case SwFieldIds::SetExp:
                         {
                             auto pSetExpField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
-                            sal_uInt16 nOldSubType = pSetExpField->GetSubType();
-                            pSetExpField->SetSubType(nsSwExtendedSubType::SUB_CMD);
+                            SwGetSetExpType nOldSubType = pSetExpField->GetSubType();
+                            pSetExpField->SetSubType(SwGetSetExpType::Command);
                             sText = pSetExpField->ExpandField(true, rSh.GetLayout());
                             pSetExpField->SetSubType(nOldSubType);
                             break;
@@ -582,8 +582,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         case SwFieldIds::Table:
                         {
                             auto pTableField = const_cast<SwTableField*>(static_cast<const SwTableField*>(pField));
-                            sal_uInt16 nOldSubType = pTableField->GetSubType();
-                            pTableField->SetSubType(nsSwExtendedSubType::SUB_CMD);
+                            SwTableFieldSubType nOldSubType = pTableField->GetSubType();
+                            pTableField->SetSubType(SwTableFieldSubType::Command);
                             sText = pTableField->ExpandField(true, rSh.GetLayout());
                             pTableField->SetSubType(nOldSubType);
                             break;
@@ -591,8 +591,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         case SwFieldIds::GetExp:
                         {
                             auto pGetExpField = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(pField));
-                            sal_uInt16 nOldSubType = pGetExpField->GetSubType();
-                            pGetExpField->SetSubType(nsSwExtendedSubType::SUB_CMD);
+                            SwGetSetExpType nOldSubType = pGetExpField->GetSubType();
+                            pGetExpField->SetSubType(SwGetSetExpType::Command);
                             sText = pGetExpField->ExpandField(true, rSh.GetLayout());
                             pGetExpField->SetSubType(nOldSubType);
                             break;

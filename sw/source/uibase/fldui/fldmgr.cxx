@@ -607,18 +607,18 @@ void SwFieldMgr::GetSubTypes(SwFieldTypesEnum nTypeId, std::vector<OUString>& rT
                    (nTypeId == SwFieldTypesEnum::User && nWhich == SwFieldIds::User) ||
 
                    (nTypeId == SwFieldTypesEnum::Get && nWhich == SwFieldIds::SetExp &&
-                    !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
+                    !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & SwGetSetExpType::Sequence)) ||
 
                    (nTypeId == SwFieldTypesEnum::Set && nWhich == SwFieldIds::SetExp &&
-                    !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
+                    !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & SwGetSetExpType::Sequence)) ||
 
                    (nTypeId == SwFieldTypesEnum::Sequence && nWhich == SwFieldIds::SetExp  &&
-                   (static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
+                   (static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & SwGetSetExpType::Sequence)) ||
 
                    ((nTypeId == SwFieldTypesEnum::Input || nTypeId == SwFieldTypesEnum::Formel) &&
                      (nWhich == SwFieldIds::User ||
                       (nWhich == SwFieldIds::SetExp &&
-                      !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ))) ) )
+                      !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & SwGetSetExpType::Sequence))) ) )
                 {
                     rToFill.push_back(pFieldType->GetName().toString());
                 }
@@ -1391,8 +1391,8 @@ bool SwFieldMgr::InsertField(
                     // Don't change type of SwSetExpFieldType:
                     if (nInputSubType & SwInputFieldSubType::Invisible)
                     {
-                        sal_uInt16 nOldSubType = pExpField->GetSubType();
-                        pExpField->SetSubType(nOldSubType | nsSwExtendedSubType::SUB_INVISIBLE);
+                        SwGetSetExpType nOldSubType = pExpField->GetSubType();
+                        pExpField->SetSubType(nOldSubType | SwGetSetExpType::Invisible);
                     }
                     pExpField->SetPromptText(rData.m_sPar2);
                     pExpField->SetInputFlag(true) ;
@@ -1415,7 +1415,7 @@ bool SwFieldMgr::InsertField(
 
     case SwFieldTypesEnum::Set:
         {
-            sal_uInt16 nSubType = rData.m_nSubType;
+            SwGetSetExpType nSubType = static_cast<SwGetSetExpType>(rData.m_nSubType);
             if (rData.m_sPar2.isEmpty())   // empty variables are not allowed
                 return false;
 
@@ -1434,7 +1434,7 @@ bool SwFieldMgr::InsertField(
         {
             sal_uInt16 nSubType = rData.m_nSubType;
             SwSetExpFieldType* pTyp = static_cast<SwSetExpFieldType*>( pCurShell->InsertFieldType(
-                SwSetExpFieldType(pCurShell->GetDoc(), UIName(rData.m_sPar1), nsSwGetSetExpType::GSE_SEQ)));
+                SwSetExpFieldType(pCurShell->GetDoc(), UIName(rData.m_sPar1), SwGetSetExpType::Sequence)));
 
             sal_uInt8 nLevel = static_cast< sal_uInt8 >(nSubType & 0xff);
 
@@ -1450,7 +1450,7 @@ bool SwFieldMgr::InsertField(
 
     case SwFieldTypesEnum::Get:
         {
-            sal_uInt16 nSubType = rData.m_nSubType;
+            SwGetSetExpType nSubType = static_cast<SwGetSetExpType>(rData.m_nSubType);
             // is there a corresponding SetField
             SwSetExpFieldType* pSetTyp = static_cast<SwSetExpFieldType*>(
                 pCurShell->GetFieldType(SwFieldIds::SetExp, rData.m_sPar1));
@@ -1469,7 +1469,6 @@ bool SwFieldMgr::InsertField(
 
     case SwFieldTypesEnum::Formel:
         {
-            sal_uInt16 nSubType = rData.m_nSubType;
             if(pCurShell->GetFrameType(nullptr,false) & FrameTypeFlags::TABLE)
             {
                 pCurShell->StartAllAction();
@@ -1505,7 +1504,7 @@ bool SwFieldMgr::InsertField(
             {
                 SwGetExpFieldType* pTyp = static_cast<SwGetExpFieldType*>(
                     pCurShell->GetFieldType(0, SwFieldIds::GetExp) );
-                pField.reset( new SwGetExpField(pTyp, rData.m_sPar2, nSubType, nFormatId) );
+                pField.reset( new SwGetExpField(pTyp, rData.m_sPar2, static_cast<SwGetSetExpType>(rData.m_nSubType), nFormatId) );
                 bExp = true;
             }
             break;

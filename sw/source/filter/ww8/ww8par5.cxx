@@ -1179,10 +1179,10 @@ void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const OUString& rTag
     {                                                   // tag normally
 
         SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType(
-                                SwSetExpFieldType( &m_rDoc, UIName(aName), nsSwGetSetExpType::GSE_STRING ) );
+                                SwSetExpFieldType( &m_rDoc, UIName(aName), SwGetSetExpType::String ) );
         SwSetExpField aField( static_cast<SwSetExpFieldType*>(pFT), rTagText );                            // SUB_INVISIBLE
-        sal_uInt16 nSubType = ( SwFltGetFlag( m_nFieldFlags, SwFltControlStack::TAGS_VISIBLE ) ) ? 0 : nsSwExtendedSubType::SUB_INVISIBLE;
-        aField.SetSubType(nSubType | nsSwGetSetExpType::GSE_STRING);
+        SwGetSetExpType nSubType = ( SwFltGetFlag( m_nFieldFlags, SwFltControlStack::TAGS_VISIBLE ) ) ? SwGetSetExpType::None : SwGetSetExpType::Invisible;
+        aField.SetSubType(nSubType | SwGetSetExpType::String);
 
         m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     }
@@ -1392,7 +1392,7 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pField,
         if (aResult != m_aFieldVarNames.end())
         {
             SwGetExpField aField( static_cast<SwGetExpFieldType*>(
-                m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetExp)), sName, nsSwGetSetExpType::GSE_STRING, 0);
+                m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetExp)), sName, SwGetSetExpType::String, 0);
             SwFormatField aTmp(aField);
             rEntry.m_pAttr.reset( aTmp.Clone() );
             pRet = &rEntry;
@@ -1460,9 +1460,9 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
     const tools::Long nNo = MapBookmarkVariables(pF, sOrigName, aResult);
 
     SwSetExpFieldType* pFT = static_cast<SwSetExpFieldType*>(m_rDoc.getIDocumentFieldsAccess().InsertFieldType(
-        SwSetExpFieldType(&m_rDoc, UIName(sOrigName), nsSwGetSetExpType::GSE_STRING)));
+        SwSetExpFieldType(&m_rDoc, UIName(sOrigName), SwGetSetExpType::String)));
     SwSetExpField aField(pFT, aResult);
-    aField.SetSubType(nsSwExtendedSubType::SUB_INVISIBLE | nsSwGetSetExpType::GSE_STRING);
+    aField.SetSubType(SwGetSetExpType::Invisible | SwGetSetExpType::String);
     aField.SetInputFlag(true);
     aField.SetPromptText( aQ );
 
@@ -1476,7 +1476,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
 eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, OUString& rStr )
 {
     if( !m_pNumFieldType ){     // 1st time
-        SwSetExpFieldType aT( &m_rDoc, UIName(u"AutoNr"_ustr), nsSwGetSetExpType::GSE_SEQ );
+        SwSetExpFieldType aT( &m_rDoc, UIName(u"AutoNr"_ustr), SwGetSetExpType::Sequence );
         m_pNumFieldType = static_cast<SwSetExpFieldType*>(m_rDoc.getIDocumentFieldsAccess().InsertFieldType( aT ));
     }
     SwSetExpField aField( m_pNumFieldType, OUString(), GetNumberPara( rStr ) );
@@ -1546,12 +1546,12 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, OUString& rStr )
         return eF_ResT::TAGIGN;
 
     SwSetExpFieldType* pFT = static_cast<SwSetExpFieldType*>(m_rDoc.getIDocumentFieldsAccess().InsertFieldType(
-                        SwSetExpFieldType( &m_rDoc, UIName(aSequenceName), nsSwGetSetExpType::GSE_SEQ ) ) );
+                        SwSetExpFieldType( &m_rDoc, UIName(aSequenceName), SwGetSetExpType::Sequence ) ) );
     SwSetExpField aField( pFT, OUString(), eNumFormat );
 
     //#i120654# Add bHidden for /h flag (/h: Hide the field result.)
     if (bHidden)
-        aField.SetSubType(aField.GetSubType() | nsSwExtendedSubType::SUB_INVISIBLE);
+        aField.SetSubType(aField.GetSubType() | SwGetSetExpType::Invisible);
 
     if (!sStart.isEmpty())
         aField.SetFormula( aSequenceName + "=" + sStart );
@@ -2128,9 +2128,9 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, OUString& rStr )
     const tools::Long nNo = MapBookmarkVariables(pF, sOrigName, sVal);
 
     SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType( SwSetExpFieldType( &m_rDoc, UIName(sOrigName),
-        nsSwGetSetExpType::GSE_STRING ) );
+        SwGetSetExpType::String ) );
     SwSetExpField aField( static_cast<SwSetExpFieldType*>(pFT), sVal, ULONG_MAX );
-    aField.SetSubType(nsSwExtendedSubType::SUB_INVISIBLE | nsSwGetSetExpType::GSE_STRING);
+    aField.SetSubType(SwGetSetExpType::Invisible | SwGetSetExpType::String);
 
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
 

@@ -1237,7 +1237,7 @@ void SwCaptionOptPage::UpdateEntry(int nSelEntry)
             {
                 SwFieldType *pType = m_pMgr->GetFieldType( SwFieldIds::Unknown, i );
                 if( pType->Which() == SwFieldIds::SetExp &&
-                    static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
+                    static_cast<SwSetExpFieldType *>( pType)->GetType() & SwGetSetExpType::Sequence )
                 {
                     m_xCategoryBox->append_text(pType->GetName().toString());
                 }

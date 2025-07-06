@@ -135,7 +135,7 @@ private:
 public:
     SwServiceType GetServiceId() const;
 
-    static void TransmuteLeadToInputField(SwSetExpField & rField, sal_uInt16 const*const pSubType);
+    static void TransmuteLeadToInputField(SwSetExpField & rField, std::optional<SwGetSetExpType> oSubType);
 
     /// @return an SwXTextField, either an already existing one or a new one
     static rtl::Reference<SwXTextField>

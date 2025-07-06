@@ -2179,7 +2179,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
             const SwFormatField& rField = static_cast<const SwFormatField&>(pHt->GetAttr());
             const SwField* pField = rField.GetField();
             // Need to have bookmarks only for sequence fields
-            if (pField && pField->GetTyp()->Which() == SwFieldIds::SetExp && static_cast<const SwSetExpField*>(pField)->GetSubType() == nsSwGetSetExpType::GSE_SEQ)
+            if (pField && pField->GetTyp()->Which() == SwFieldIds::SetExp && static_cast<const SwSetExpField*>(pField)->GetSubType() == SwGetSetExpType::Sequence)
             {
                 const sal_uInt16 nSeqFieldNumber = static_cast<const SwSetExpField*>(pField)->GetSeqNumber();
                 const UIName sObjectName = static_cast<const SwSetExpFieldType*>(pField->GetTyp())->GetName();
@@ -2959,7 +2959,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::GetExp:
         {
             const SwGetExpField *pGet = static_cast<const SwGetExpField*>(pField);
-            if (pGet->GetSubType() == nsSwGetSetExpType::GSE_STRING)
+            if (pGet->GetSubType() == SwGetSetExpType::String)
             {
                 RefField( *pGet, pGet->GetFormula() );
             }
@@ -2970,8 +2970,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::SetExp:
         {
             const SwSetExpField *pSet = static_cast<const SwSetExpField*>(pField);
-            sal_uInt16 nSubType = pSet->GetSubType();
-            if (nsSwGetSetExpType::GSE_SEQ == nSubType)
+            SwGetSetExpType nSubType = pSet->GetSubType();
+            if (SwGetSetExpType::Sequence == nSubType)
             {
                 OUString sStr;
                 if (GetExport().FieldsQuoted())
@@ -2981,7 +2981,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 GetNumberPara( sStr, *pField );
                 GetExport().OutputField(pField, ww::eSEQ, sStr);
             }
-            else if (nSubType & nsSwGetSetExpType::GSE_STRING)
+            else if (nSubType & SwGetSetExpType::String)
             {
                 bool bShowAsWell = false;
                 ww::eField eFieldNo;
@@ -3001,7 +3001,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                         + pSet->GetPar1() + " \""
                         + sVar + "\" ";
                     eFieldNo = ww::eSET;
-                    bShowAsWell = (nSubType & nsSwExtendedSubType::SUB_INVISIBLE) == 0;
+                    bShowAsWell = !(nSubType & SwGetSetExpType::Invisible);
                 }
 
                 SetField( *pField, eFieldNo, sStr );

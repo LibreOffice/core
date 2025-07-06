@@ -245,7 +245,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if (!pFieldType && !rName.isEmpty() )
     {
         // Create new field types
-        SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), UIName(rName), nsSwGetSetExpType::GSE_SEQ);
+        SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), UIName(rName), SwGetSetExpType::Sequence);
         aMgr.InsertFieldType(aSwSetExpFieldType);
         pFieldType = static_cast<SwSetExpFieldType*>(aMgr.GetFieldType(SwFieldIds::SetExp, rName));
     }

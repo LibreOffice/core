@@ -1261,7 +1261,7 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet* )
     {
         SwFieldType *pType = rSh.GetFieldType( i, SwFieldIds::SetExp );
         if( pType->Which() == SwFieldIds::SetExp &&
-            static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
+            static_cast<SwSetExpFieldType *>( pType)->GetType() & SwGetSetExpType::Sequence )
             m_xCaptionSequenceLB->append_text(pType->GetName().toString());
     }
 

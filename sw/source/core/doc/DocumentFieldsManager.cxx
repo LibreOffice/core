@@ -135,7 +135,7 @@ namespace
         {
             auto pSetExpField = static_cast<const SwSetExpField*>(pField);
             SwSbxValue aValue;
-            if( nsSwGetSetExpType::GSE_EXPR & pSetExpField->GetSubType() )
+            if( SwGetSetExpType::Expr & pSetExpField->GetSubType() )
                 aValue.PutDouble( pSetExpField->GetValue(pLayout) );
             else
                 // Extension to calculate with Strings
@@ -220,7 +220,7 @@ SwFieldType* DocumentFieldsManager::InsertFieldType(const SwFieldType &rFieldTyp
             //             Or we get doubble number circles!!
             //MIB 14.03.95: From now on also the SW3-Reader relies on this, when
             //constructing string pools and when reading SetExp fields
-            if( nsSwGetSetExpType::GSE_SEQ & static_cast<const SwSetExpFieldType&>(rFieldTyp).GetType() )
+            if( SwGetSetExpType::Sequence & static_cast<const SwSetExpFieldType&>(rFieldTyp).GetType() )
                 i -= INIT_SEQ_FLDTYPES;
             [[fallthrough]];
     case SwFieldIds::Database:
@@ -610,7 +610,7 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
             // re-set the value flag
             // JP 17.06.96: internal representation of all formulas
             //              (reference to other table!!!)
-            if(pTable && nsSwExtendedSubType::SUB_CMD & pField->GetSubType())
+            if(pTable && SwTableFieldSubType::Command & pField->GetSubType())
                 pField->PtrToBoxNm(pTable);
             else
                 // reset the value flag for all
@@ -646,7 +646,7 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
             // that gives faster calculation on import
             // mba: do we really need this "optimization"? Is it still valid?
             SwTableField *const pField(static_cast<SwTableField*>(pFormatField->GetField()));
-            if (nsSwExtendedSubType::SUB_CMD & pField->GetSubType())
+            if (SwTableFieldSubType::Command & pField->GetSubType())
                 continue;
 
             // needs to be recalculated
@@ -872,7 +872,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                 {
                     // Entry present?
                     const OUString aNm = pFieldType->GetName().toString();
-                    OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(nsSwGetSetExpType::GSE_STRING, SwUserType::None, LANGUAGE_SYSTEM));
+                    OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(1, SwUserType::None, LANGUAGE_SYSTEM));
                     auto pFnd = aHashStrTable.find( aNm );
                     if( pFnd != aHashStrTable.end() )
                         // modify entry in the hash table
@@ -1069,7 +1069,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         case SwFieldIds::GetExp:
         {
             SwGetExpField* pGField = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(pField));
-            if( nsSwGetSetExpType::GSE_STRING & pGField->GetSubType() )        // replace String
+            if( SwGetSetExpType::String & pGField->GetSubType() )        // replace String
             {
                 if( (!pUpdateField || pUpdateField == pTextField )
                     && pGField->IsInBodyText() )
@@ -1094,7 +1094,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         case SwFieldIds::SetExp:
         {
             SwSetExpField* pSField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
-            if( nsSwGetSetExpType::GSE_STRING & pSField->GetSubType() )        // replace String
+            if( SwGetSetExpType::String & pSField->GetSubType() )        // replace String
             {
                 // is the "formula" a field?
                 OUString aNew = LookString( aHashStrTable, pSField->GetFormula() );
@@ -1581,7 +1581,7 @@ void DocumentFieldsManager::FieldsToExpand( std::unordered_map<OUString, OUStrin
         case SwFieldIds::SetExp:
             {
                 SwSetExpField* pSField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
-                if( nsSwGetSetExpType::GSE_STRING & pSField->GetSubType() )
+                if( SwGetSetExpType::String & pSField->GetSubType() )
                 {
                     // set the new value in the hash table
                     // is the formula a field?
@@ -1720,15 +1720,15 @@ void DocumentFieldsManager::InitFieldTypes()       // is being called by the CTO
     // MIB 14.04.95: In Sw3StringPool::Setup (sw3imp.cxx) and
     //               lcl_sw3io_InSetExpField (sw3field.cxx) now also
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
-                UIName(SwResId(STR_POOLCOLL_LABEL_ABB)), nsSwGetSetExpType::GSE_SEQ) );
+                UIName(SwResId(STR_POOLCOLL_LABEL_ABB)), SwGetSetExpType::Sequence) );
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
-                UIName(SwResId(STR_POOLCOLL_LABEL_TABLE)), nsSwGetSetExpType::GSE_SEQ) );
+                UIName(SwResId(STR_POOLCOLL_LABEL_TABLE)), SwGetSetExpType::Sequence) );
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
-                UIName(SwResId(STR_POOLCOLL_LABEL_FRAME)), nsSwGetSetExpType::GSE_SEQ) );
+                UIName(SwResId(STR_POOLCOLL_LABEL_FRAME)), SwGetSetExpType::Sequence) );
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
-                UIName(SwResId(STR_POOLCOLL_LABEL_DRAWING)), nsSwGetSetExpType::GSE_SEQ) );
+                UIName(SwResId(STR_POOLCOLL_LABEL_DRAWING)), SwGetSetExpType::Sequence) );
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
-                UIName(SwResId(STR_POOLCOLL_LABEL_FIGURE)), nsSwGetSetExpType::GSE_SEQ) );
+                UIName(SwResId(STR_POOLCOLL_LABEL_FIGURE)), SwGetSetExpType::Sequence) );
 
     assert( mpFieldTypes->size() == INIT_FLDTYPES );
 }

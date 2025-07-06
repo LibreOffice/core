@@ -279,7 +279,7 @@ SwFieldTypesEnum SwField::GetTypeId() const
     case SwFieldIds::GetExp:
         {
             auto pGetExpField = static_cast<const SwGetExpField*>(this);
-            nRet = nsSwGetSetExpType::GSE_FORMULA & pGetExpField->GetSubType() ? SwFieldTypesEnum::Formel : SwFieldTypesEnum::Get;
+            nRet = SwGetSetExpType::Formula & pGetExpField->GetSubType() ? SwFieldTypesEnum::Formel : SwFieldTypesEnum::Get;
         }
         break;
 
@@ -293,7 +293,7 @@ SwFieldTypesEnum SwField::GetTypeId() const
     case SwFieldIds::SetExp:
         {
             auto pSetExpField = static_cast<const SwSetExpField*>(this);
-            if( nsSwGetSetExpType::GSE_SEQ & pSetExpField->GetSubType() )
+            if( SwGetSetExpType::Sequence & pSetExpField->GetSubType() )
                 nRet = SwFieldTypesEnum::Sequence;
             else if( pSetExpField->GetInputFlag() )
                 nRet = SwFieldTypesEnum::SetInput;
@@ -457,13 +457,13 @@ sal_uInt16 SwField::GetUntypedSubType() const
     case SwFieldIds::DateTime:
         return static_cast<sal_uInt16>(static_cast<const SwDateTimeField*>(this)->GetSubType());
     case SwFieldIds::Table:
-        return static_cast<const SwTableField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwTableField*>(this)->GetSubType());
     case SwFieldIds::Input:
         return static_cast<sal_uInt16>(static_cast<const SwInputField*>(this)->GetSubType());
     case SwFieldIds::GetExp:
-        return static_cast<const SwGetExpField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwGetExpField*>(this)->GetSubType());
     case SwFieldIds::SetExp:
-        return static_cast<const SwSetExpField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwSetExpField*>(this)->GetSubType());
     case SwFieldIds::ExtUser:
         return static_cast<sal_uInt32>(static_cast<const SwExtUserField*>(this)->GetSubType());
     case SwFieldIds::DocInfo:
@@ -500,16 +500,16 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
         static_cast<SwDateTimeField*>(this)->SetSubType(static_cast<SwDateTimeSubType>(n));
         break;
     case SwFieldIds::Table:
-        static_cast<SwTableField*>(this)->SetSubType(n);
+        static_cast<SwTableField*>(this)->SetSubType(static_cast<SwTableFieldSubType>(n));
         break;
     case SwFieldIds::Input:
         static_cast<SwInputField*>(this)->SetSubType(static_cast<SwInputFieldSubType>(n));
         break;
     case SwFieldIds::GetExp:
-        static_cast<SwGetExpField*>(this)->SetSubType(n);
+        static_cast<SwGetExpField*>(this)->SetSubType(static_cast<SwGetSetExpType>(n));
         break;
     case SwFieldIds::SetExp:
-        static_cast<SwSetExpField*>(this)->SetSubType(n);
+        static_cast<SwSetExpField*>(this)->SetSubType(static_cast<SwGetSetExpType>(n));
         break;
     case SwFieldIds::ExtUser:
         static_cast<SwExtUserField*>(this)->SetSubType(static_cast<SwExtUserSubType>(n));

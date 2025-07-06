@@ -75,7 +75,7 @@ SwFormatField::SwFormatField( const SwField &rField )
             // only for string fields for now - inline editing of number fields
             // tends to produce error messages...
             && (static_cast<SwSetExpFieldType*>(pSetField->GetTyp())->GetType()
-                & nsSwGetSetExpType::GSE_STRING))
+                & SwGetSetExpType::String))
         {
             SetWhich( RES_TXTATR_INPUTFIELD );
         }
@@ -117,7 +117,7 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
         SwSetExpField *const pSetField(static_cast<SwSetExpField *>(mpField.get()));
         if (pSetField->GetInputFlag()
             && (static_cast<SwSetExpFieldType*>(pSetField->GetTyp())->GetType()
-                & nsSwGetSetExpType::GSE_STRING))
+                & SwGetSetExpType::String))
         {
             SetWhich( RES_TXTATR_INPUTFIELD );
         }

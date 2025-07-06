@@ -3172,7 +3172,7 @@ bool SwpHints::TryInsertHint(
                 {
                 case SwFieldIds::SetExp:
                     bInsFieldType = static_cast<SwSetExpFieldType*>(pField->GetTyp())->IsDeleted();
-                    if( nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pField->GetTyp())->GetType() )
+                    if( SwGetSetExpType::Sequence & static_cast<SwSetExpFieldType*>(pField->GetTyp())->GetType() )
                     {
                         // register the field at its FieldType before setting
                         // the sequence reference number!

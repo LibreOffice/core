@@ -89,9 +89,9 @@ void SwFieldPage::Init()
     {
         SwDoc* pDoc = pSh->GetDoc();
         pSh->InsertFieldType( SwSetExpFieldType( pDoc,
-                            UIName(u"HTML_ON"_ustr), 1));
+                            UIName(u"HTML_ON"_ustr), SwGetSetExpType::String));
         pSh->InsertFieldType( SwSetExpFieldType(pDoc,
-                            UIName(u"HTML_OFF"_ustr), 1));
+                            UIName(u"HTML_OFF"_ustr), SwGetSetExpType::String));
     }
 }
 
@@ -229,7 +229,7 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
                 pTyp->SetOutlineLvl( static_cast< sal_uInt8 >(nSubType & 0xff));
                 pTyp->SetDelimiter(OUString(cSeparator));
 
-                nSubType = nsSwGetSetExpType::GSE_SEQ;
+                nSubType = static_cast<sal_uInt16>(SwGetSetExpType::Sequence);
             }
             break;
 

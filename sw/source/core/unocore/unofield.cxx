@@ -1248,11 +1248,11 @@ SwServiceType SwXTextField::GetServiceId() const
     new instance!
  */
 void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField,
-        sal_uInt16 const*const pSubType)
+        std::optional<SwGetSetExpType> oSubType)
 {
 #ifndef NDEBUG
     auto const oldWhich(
-        (pSubType ? (rField.GetSubType() & nsSwGetSetExpType::GSE_STRING) != 0 : rField.GetInputFlag())
+        (oSubType ? bool(rField.GetSubType() & SwGetSetExpType::String) : rField.GetInputFlag())
             ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD);
     auto const newWhich(oldWhich == RES_TXTATR_FIELD ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD);
 #endif
@@ -1263,9 +1263,9 @@ void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField,
         pXField->m_pImpl->SetFormatField(nullptr, nullptr);
     SwTextField *const pOldAttr(rField.GetFormatField()->GetTextField());
     SwSetExpField tempField(rField);
-    if (pSubType)
+    if (oSubType)
     {
-        tempField.SetSubType(*pSubType);
+        tempField.SetSubType(*oSubType);
     }
     else
     {
@@ -1291,7 +1291,7 @@ void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField,
     SwFormatField const& rNewFormat(pNewAttr->GetFormatField());
     assert(rNewFormat.Which() == newWhich);
     assert((dynamic_cast<SwTextInputField const*>(pNewAttr) != nullptr)
-        == ((static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetSubType() & nsSwGetSetExpType::GSE_STRING)
+        == ((static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetSubType() & SwGetSetExpType::String)
             && static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetInputFlag()));
     if (pXField)
     {
@@ -1757,7 +1757,7 @@ void SAL_CALL SwXTextField::attach(
                     throw uno::RuntimeException();
                 // detect the field type's sub type and set an appropriate number format
                 if (m_pImpl->m_pProps->bFormatIsDefault &&
-                    nsSwGetSetExpType::GSE_STRING == static_cast<SwSetExpFieldType*>(pFieldType)->GetType())
+                    SwGetSetExpType::String == static_cast<SwSetExpFieldType*>(pFieldType)->GetType())
                 {
                     m_pImpl->m_pProps->nFormat = -1;
                 }
@@ -1768,15 +1768,15 @@ void SAL_CALL SwXTextField::attach(
                     m_pImpl->m_pProps->nUSHORT2 : m_pImpl->m_pProps->nFormat);
                 xField.reset(pSEField);
 
-                sal_uInt16  nSubType = pSEField->GetSubType();
+                SwGetSetExpType  nSubType = pSEField->GetSubType();
                 if (m_pImpl->m_pProps->bBool2)
-                    nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+                    nSubType &= ~SwGetSetExpType::Invisible;
                 else
-                    nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+                    nSubType |= SwGetSetExpType::Invisible;
                 if (m_pImpl->m_pProps->bBool3)
-                    nSubType |= nsSwExtendedSubType::SUB_CMD;
+                    nSubType |= SwGetSetExpType::Command;
                 else
-                    nSubType &= ~nsSwExtendedSubType::SUB_CMD;
+                    nSubType &= ~SwGetSetExpType::Command;
                 pSEField->SetSubType(nSubType);
                 pSEField->SetSeqNumber(m_pImpl->m_pProps->nUSHORT1);
                 pSEField->SetInputFlag(m_pImpl->m_pProps->bBool1);
@@ -1788,16 +1788,16 @@ void SAL_CALL SwXTextField::attach(
             break;
             case SwServiceType::FieldTypeGetExp:
             {
-                sal_uInt16 nSubType;
+                SwGetSetExpType nSubType;
                 switch (m_pImpl->m_pProps->nSubType)
                 {
-                    case text::SetVariableType::STRING: nSubType = nsSwGetSetExpType::GSE_STRING;   break;
-                    case text::SetVariableType::VAR:        nSubType = nsSwGetSetExpType::GSE_EXPR;  break;
-                    //case text::SetVariableType::SEQUENCE:   nSubType = nsSwGetSetExpType::GSE_SEQ;  break;
-                    case text::SetVariableType::FORMULA:    nSubType = nsSwGetSetExpType::GSE_FORMULA; break;
+                    case text::SetVariableType::STRING: nSubType = SwGetSetExpType::String;   break;
+                    case text::SetVariableType::VAR:        nSubType = SwGetSetExpType::Expr;  break;
+                    //case text::SetVariableType::SEQUENCE:   nSubType = nsSwGetSetExpType::Sequence;  break;
+                    case text::SetVariableType::FORMULA:    nSubType = SwGetSetExpType::Formula; break;
                     default:
                         OSL_FAIL("wrong value");
-                        nSubType = nsSwGetSetExpType::GSE_EXPR;
+                        nSubType = SwGetSetExpType::Expr;
                 }
                 //make sure the SubType matches the field type
                 SwFieldType* pSetExpField = pDoc->getIDocumentFieldsAccess().GetFieldType(
@@ -1805,17 +1805,17 @@ void SAL_CALL SwXTextField::attach(
                 bool bSetGetExpFieldUninitialized = false;
                 if (pSetExpField)
                 {
-                    if (nSubType != nsSwGetSetExpType::GSE_STRING &&
-                        static_cast< SwSetExpFieldType* >(pSetExpField)->GetType() == nsSwGetSetExpType::GSE_STRING)
-                        nSubType = nsSwGetSetExpType::GSE_STRING;
+                    if (nSubType != SwGetSetExpType::String &&
+                        static_cast< SwSetExpFieldType* >(pSetExpField)->GetType() == SwGetSetExpType::String)
+                        nSubType = SwGetSetExpType::String;
                 }
                 else
                     bSetGetExpFieldUninitialized = true; // #i82544#
 
                 if (m_pImpl->m_pProps->bBool2)
-                    nSubType |= nsSwExtendedSubType::SUB_CMD;
+                    nSubType |= SwGetSetExpType::Command;
                 else
-                    nSubType &= ~nsSwExtendedSubType::SUB_CMD;
+                    nSubType &= ~SwGetSetExpType::Command;
                 SwGetExpField *const pGEField = new SwGetExpField(
                         static_cast<SwGetExpFieldType*>(
                             pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetExp)),
@@ -1935,10 +1935,10 @@ void SAL_CALL SwXTextField::attach(
             case SwServiceType::FieldTypeTableFormula:
             {
                 // create field
-                sal_uInt16 nType = nsSwGetSetExpType::GSE_FORMULA;
+                SwTableFieldSubType nType = SwTableFieldSubType::Formula;
                 if (m_pImpl->m_pProps->bBool1)
                 {
-                    nType |= nsSwExtendedSubType::SUB_CMD;
+                    nType |= SwTableFieldSubType::Command;
                     if (m_pImpl->m_pProps->bFormatIsDefault)
                         m_pImpl->m_pProps->nFormat = -1;
                 }

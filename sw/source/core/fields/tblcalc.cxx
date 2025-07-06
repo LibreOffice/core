@@ -53,7 +53,7 @@ void SwTableField::CalcField( SwTableCalcPara& rCalcPara )
 }
 
 SwTableField::SwTableField( SwTableFieldType* pInitType, const OUString& rFormel,
-                        sal_uInt16 nType, sal_uLong nFormat )
+                        SwTableFieldSubType nType, sal_uLong nFormat )
     : SwValueField( pInitType, nFormat ), SwTableFormula( rFormel ),
     m_nSubType(nType)
 {
@@ -101,12 +101,12 @@ OUString SwTableField::GetCommand()
 
 OUString SwTableField::ExpandImpl(SwRootFrame const*const) const
 {
-    if (m_nSubType & nsSwExtendedSubType::SUB_CMD)
+    if (m_nSubType & SwTableFieldSubType::Command)
     {
         return const_cast<SwTableField *>(this)->GetCommand();
     }
 
-    if(m_nSubType & nsSwGetSetExpType::GSE_STRING)
+    if(m_nSubType & SwTableFieldSubType::String)
     {
         // it is a string
         return m_sExpand.copy(1, m_sExpand.getLength()-2);
@@ -115,12 +115,12 @@ OUString SwTableField::ExpandImpl(SwRootFrame const*const) const
     return m_sExpand;
 }
 
-sal_uInt16 SwTableField::GetSubType() const
+SwTableFieldSubType SwTableField::GetSubType() const
 {
     return m_nSubType;
 }
 
-void SwTableField::SetSubType(sal_uInt16 nType)
+void SwTableField::SetSubType(SwTableFieldSubType nType)
 {
     m_nSubType = nType;
 }
@@ -148,15 +148,15 @@ bool SwTableField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     {
     case FIELD_PROP_PAR2:
         {
-            sal_uInt16 nOldSubType = m_nSubType;
+            SwTableFieldSubType nOldSubType = m_nSubType;
             SwTableField* pThis = const_cast<SwTableField*>(this);
-            pThis->m_nSubType |= nsSwExtendedSubType::SUB_CMD;
+            pThis->m_nSubType |= SwTableFieldSubType::Command;
             rAny <<= ExpandImpl(nullptr);
             pThis->m_nSubType = nOldSubType;
         }
         break;
     case FIELD_PROP_BOOL1:
-        rAny <<= 0 != (nsSwExtendedSubType::SUB_CMD & m_nSubType);
+        rAny <<= bool(SwTableFieldSubType::Command & m_nSubType);
         break;
     case FIELD_PROP_PAR1:
         rAny <<= m_sExpand;
@@ -184,9 +184,9 @@ bool SwTableField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_BOOL1:
         if(*o3tl::doAccess<bool>(rAny))
-            m_nSubType = nsSwGetSetExpType::GSE_FORMULA|nsSwExtendedSubType::SUB_CMD;
+            m_nSubType = SwTableFieldSubType::Formula | SwTableFieldSubType::Command;
         else
-            m_nSubType = nsSwGetSetExpType::GSE_FORMULA;
+            m_nSubType = SwTableFieldSubType::Formula;
         break;
     case FIELD_PROP_PAR1:
         {

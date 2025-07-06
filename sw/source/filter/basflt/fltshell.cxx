@@ -557,11 +557,11 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rName, false);
                 if (!pFT)
                 {
-                    SwSetExpFieldType aS(&m_rDoc, UIName(rName), nsSwGetSetExpType::GSE_STRING);
+                    SwSetExpFieldType aS(&m_rDoc, UIName(rName), SwGetSetExpType::String);
                     pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType(aS);
                 }
                 SwSetExpField aField(static_cast<SwSetExpFieldType*>(pFT), pB->GetValSys());
-                aField.SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
+                aField.SetSubType( SwGetSetExpType::Invisible );
                 MakePoint(rEntry, aRegion);
                 m_rDoc.getIDocumentContentOperations().InsertPoolItem(aRegion, SwFormatField(aField));
                 MoveAttrs( *(aRegion.GetPoint()) );

@@ -160,14 +160,27 @@ enum class SwFileNameFormat {
 };
 namespace o3tl { template<> struct typed_flags<SwFileNameFormat> : is_typed_flags<SwFileNameFormat, 0x800f> {}; }
 
-typedef sal_uInt16 SwGetSetExpType;
-namespace nsSwGetSetExpType
+enum class SwTableFieldSubType : sal_uInt16
 {
-const SwGetSetExpType GSE_STRING  = 0x0001; ///< String
-const SwGetSetExpType GSE_EXPR    = 0x0002; ///< Expression
-const SwGetSetExpType GSE_SEQ     = 0x0008; ///< Sequence
-const SwGetSetExpType GSE_FORMULA = 0x0010; ///< Formula
-}
+    String    = 0x0001, ///< String
+    Formula   = 0x0010, ///< Formula
+    Command   = 0x0100, ///< Show command.
+};
+namespace o3tl { template<> struct typed_flags<SwTableFieldSubType> : is_typed_flags<SwTableFieldSubType, 0x0111> {}; }
+
+enum class SwGetSetExpType : sal_uInt16
+{
+    None          = 0x0000,
+    String        = 0x0001, ///< String
+    Expr          = 0x0002, ///< Expression
+    Sequence      = 0x0008, ///< Sequence
+    Formula       = 0x0010, ///< Formula
+    LowerMask     = 0x001f,
+    UpperMask     = 0x0300,
+    Command       = 0x0100, ///< Show command.
+    Invisible     = 0x0200  ///< Invisible.
+};
+namespace o3tl { template<> struct typed_flags<SwGetSetExpType> : is_typed_flags<SwGetSetExpType, 0x031f> {}; }
 
 typedef sal_uInt16 SwExtendedSubType;
 namespace nsSwExtendedSubType

@@ -141,7 +141,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     {
         SwFieldType *pType = m_pMgr->GetFieldType( SwFieldIds::Unknown, i );
         if( pType->Which() == SwFieldIds::SetExp &&
-            static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
+            static_cast<SwSetExpFieldType *>( pType)->GetType() & SwGetSetExpType::Sequence )
             m_xCategoryBox->append_text(pType->GetName().toString());
     }
 
@@ -340,7 +340,7 @@ void SwCaptionDialog::ModifyHdl()
                     : nullptr;
     m_xOKButton->set_sensitive( bCorrectFieldName &&
                         (!pType ||
-                            static_cast<SwSetExpFieldType*>(pType)->GetType() == nsSwGetSetExpType::GSE_SEQ) );
+                            static_cast<SwSetExpFieldType*>(pType)->GetType() == SwGetSetExpType::Sequence) );
     m_xOptionButton->set_sensitive(m_xOKButton->get_sensitive() && !bNone);
     m_xNumberingSeparatorFT->set_sensitive(m_bOrderNumberingFirst && !bNone);
     m_xNumberingSeparatorED->set_sensitive(m_bOrderNumberingFirst && !bNone);
@@ -497,7 +497,7 @@ void SwSequenceOptionDialog::Apply()
     else if( !m_aFieldTypeName.isEmpty() && nLvl < MAXLEVEL )
     {
         // then we have to insert that
-        SwSetExpFieldType aFieldType( rSh.GetDoc(), UIName(m_aFieldTypeName), nsSwGetSetExpType::GSE_SEQ );
+        SwSetExpFieldType aFieldType( rSh.GetDoc(), UIName(m_aFieldTypeName), SwGetSetExpType::Sequence );
         aFieldType.SetDelimiter( OUString(cDelim) );
         aFieldType.SetOutlineLvl( nLvl );
         rSh.InsertFieldType( aFieldType );

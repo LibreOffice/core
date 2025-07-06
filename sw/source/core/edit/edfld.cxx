@@ -169,7 +169,7 @@ static SwTextField* lcl_FindInputField( const SwDoc* pDoc, const SwField& rField
         || (SwFieldIds::SetExp == rField.Which()
             && static_cast<const SwSetExpField&>(rField).GetInputFlag()
             && (static_cast<SwSetExpFieldType*>(rField.GetTyp())->GetType()
-                & nsSwGetSetExpType::GSE_STRING)))
+                & SwGetSetExpType::String)))
     {
         pDoc->ForEachFormatField(RES_TXTATR_INPUTFIELD,
             [&rField, &pTField] (const SwFormatField& rFormatField) -> bool

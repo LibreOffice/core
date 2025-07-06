@@ -360,7 +360,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
                             SwSetExpFieldType* pSetTyp = static_cast<SwSetExpFieldType*>(
                                     pSh->GetFieldType(SwFieldIds::SetExp, sName));
 
-                            if (pSetTyp && pSetTyp->GetType() == nsSwGetSetExpType::GSE_STRING)
+                            if (pSetTyp && pSetTyp->GetType() == SwGetSetExpType::String)
                                 m_xNumFormatLB->select(0); // textual
                         }
                     }
@@ -407,7 +407,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
 
                         if(pSetTyp)
                         {
-                            if (pSetTyp->GetType() & nsSwGetSetExpType::GSE_STRING)    // textual?
+                            if (pSetTyp->GetType() & SwGetSetExpType::String)    // textual?
                                 bFormat = true;
                             else                    // numeric
                                 bNumFormat = true;
@@ -440,7 +440,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
 
                     if(pSetTyp)
                     {
-                        if (pSetTyp->GetType() == nsSwGetSetExpType::GSE_STRING)    // textual?
+                        if (pSetTyp->GetType() == SwGetSetExpType::String)    // textual?
                         {
                             m_xNumFormatLB->clear();
                             m_xNumFormatLB->append(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND), SwResId(FMT_USERVAR_TEXT));
@@ -635,7 +635,7 @@ void SwFieldVarPage::UpdateSubType()
                         if (GetCurField() && aList[i] == GetCurField()->GetTyp()->GetName())
                         {
                             bInsert = true;
-                            if (static_cast<SwSetExpField*>(GetCurField())->GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE)
+                            if (static_cast<SwSetExpField*>(GetCurField())->GetSubType() & SwGetSetExpType::Invisible)
                                 m_xInvisibleCB->set_active(true);
                         }
                         break;
@@ -937,10 +937,10 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, weld::Entry&, void)
                     if (i >= INIT_FLDTYPES && !pSh->IsUsed(*pFieldType))
                         bDelete = true;
 
-                    if (nTypeId == SwFieldTypesEnum::Sequence && !(pFieldType->GetType() & nsSwGetSetExpType::GSE_SEQ))
+                    if (nTypeId == SwFieldTypesEnum::Sequence && !(pFieldType->GetType() & SwGetSetExpType::Sequence))
                         bInsert = false;
 
-                    if (nTypeId == SwFieldTypesEnum::Set && (pFieldType->GetType() & nsSwGetSetExpType::GSE_SEQ))
+                    if (nTypeId == SwFieldTypesEnum::Set && (pFieldType->GetType() & SwGetSetExpType::Sequence))
                         bInsert = false;
                 }
             }
@@ -1177,27 +1177,29 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
     {
         case SwFieldTypesEnum::User:
         {
-            nSubType = (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND) ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR;
+            SwGetSetExpType nUserSubType = (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND) ? SwGetSetExpType::String : SwGetSetExpType::Expr;
 
             if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND && m_xNumFormatLB->get_selected_text() == SwResId(FMT_USERVAR_CMD))
-                nSubType |= nsSwExtendedSubType::SUB_CMD;
+                nUserSubType |= SwGetSetExpType::Command;
 
             if (m_xInvisibleCB->get_active())
-                nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+                nUserSubType |= SwGetSetExpType::Invisible;
+            nSubType = static_cast<sal_uInt16>(nUserSubType);
             break;
         }
         case SwFieldTypesEnum::Formel:
         {
-            nSubType = nsSwGetSetExpType::GSE_FORMULA;
+            SwGetSetExpType nFormSubType = SwGetSetExpType::Formula;
             if (m_xNumFormatLB->get_visible() && nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
-                nSubType |= nsSwExtendedSubType::SUB_CMD;
+                nFormSubType |= SwGetSetExpType::Command;
+            nSubType = static_cast<sal_uInt16>(nFormSubType);
             break;
         }
         case SwFieldTypesEnum::Get:
         {
             nSubType &= 0xff00;
             if (m_xNumFormatLB->get_visible() && nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
-                nSubType |= nsSwExtendedSubType::SUB_CMD;
+                nSubType |= static_cast<sal_uInt16>(SwGetSetExpType::Command);
             break;
         }
         case SwFieldTypesEnum::Input:
@@ -1209,16 +1211,15 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
 
         case SwFieldTypesEnum::Set:
         {
+            SwGetSetExpType nSetSubType = SwGetSetExpType::None;
             if (IsFieldDlgHtmlMode())
-            {
-                nSubType = 0x0100;
-                nSubType = (nSubType & 0xff00) | nsSwGetSetExpType::GSE_STRING;
-            }
+                nSetSubType = SwGetSetExpType::Command | SwGetSetExpType::String;
             else
-                nSubType = (nSubType & 0xff00) | ((nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND) ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR);
+                nSetSubType = ((nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND) ? SwGetSetExpType::String : SwGetSetExpType::Expr);
 
             if (m_xInvisibleCB->get_active())
-                nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+                nSetSubType |= SwGetSetExpType::Invisible;
+            nSubType = static_cast<sal_uInt16>(nSetSubType);
             break;
         }
         case SwFieldTypesEnum::Sequence:
