@@ -26,6 +26,11 @@
 #include <map>
 #include <memory>
 
+namespace com::sun::star::frame
+{
+class XFrame;
+}
+
 namespace sm::sidebar
 {
 class SmPropertiesPanel : public PanelLayout

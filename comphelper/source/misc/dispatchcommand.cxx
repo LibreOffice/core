@@ -31,9 +31,12 @@ using namespace css;
 
 namespace comphelper {
 
-bool dispatchCommand(const OUString& rCommand, const uno::Reference<css::frame::XFrame>& rFrame, const css::uno::Sequence<css::beans::PropertyValue>& rArguments, const uno::Reference<css::frame::XDispatchResultListener>& rListener)
+bool dispatchCommand(const OUString& rCommand,
+                     const uno::Reference<uno::XInterface>& xDispatchSource,
+                     const uno::Sequence<beans::PropertyValue>& rArguments,
+                     const uno::Reference<frame::XDispatchResultListener>& rListener)
 {
-    uno::Reference<frame::XDispatchProvider> xDispatchProvider(rFrame, uno::UNO_QUERY);
+    uno::Reference<frame::XDispatchProvider> xDispatchProvider(xDispatchSource, uno::UNO_QUERY);
     if (!xDispatchProvider.is())
         return false;
 

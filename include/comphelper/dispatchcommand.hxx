@@ -15,7 +15,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::frame { class XDispatchResultListener; class XFrame; }
+namespace com::sun::star::frame { class XDispatchResultListener; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 
 namespace comphelper
@@ -32,7 +32,7 @@ COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand,
         const css::uno::Reference<css::frame::XDispatchResultListener>& rListener = css::uno::Reference<css::frame::XDispatchResultListener>());
 
 COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand,
-        const css::uno::Reference<css::frame::XFrame>& rFrame,
+        const css::uno::Reference<css::uno::XInterface>& xDispatchSource,
         const css::uno::Sequence<css::beans::PropertyValue>& rArguments,
         const css::uno::Reference<css::frame::XDispatchResultListener>& rListener = css::uno::Reference<css::frame::XDispatchResultListener>());
 
