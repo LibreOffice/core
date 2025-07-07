@@ -9931,17 +9931,10 @@ case "$with_system_md4c" in
     AC_CHECK_HEADER([md4c.h], [],
       [AC_MSG_ERROR([md4c.h not found. Install system md4c.])])
 
-    AC_CHECK_HEADER([md4c-html.h], [],
-      [AC_MSG_ERROR([md4c-html.h not found. Install system md4c.])])
-
     AC_CHECK_LIB([md4c], [md_parse],
       [ MD4C_LIBS="-lmd4c"
         MD4C_CFLAGS="" ],
       [ AC_MSG_ERROR([system md4c library not found or broken.]) ])
-
-    AC_CHECK_LIB([md4c-html], [md_html],
-      [ MD4C_LIBS="$MD4C_LIBS -lmd4c-html" ],
-      [ AC_MSG_ERROR([system md4c-html library not found or broken.]) ])
     ;;
 
   ""|no)
