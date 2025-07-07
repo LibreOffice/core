@@ -35,6 +35,8 @@ public class JavaThreadPool implements IThreadPool {
      */
     private static final boolean DEBUG = false;
 
+    private Throwable _disposeThrowable = null;
+
     JavaThreadPoolFactory _javaThreadPoolFactory;
 
     JavaThreadPool(JavaThreadPoolFactory javaThreadPoolFactory) {
@@ -112,9 +114,19 @@ public class JavaThreadPool implements IThreadPool {
     }
 
     public void dispose(Throwable throwable) {
+        assert(throwable != null);
+
+        synchronized (this) {
+            _disposeThrowable = throwable;
+        }
+
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispose:" + throwable);
 
-        _javaThreadPoolFactory.dispose(this, throwable);
+        _javaThreadPoolFactory.notifyAboutSomeDisposedPool();
+    }
+
+    public synchronized Throwable checkDisposed() {
+        return _disposeThrowable;
     }
 
     public void destroy() {

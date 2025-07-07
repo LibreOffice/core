@@ -52,14 +52,14 @@ final class JavaThreadPoolFactory {
         return q == null ? null : q._async_jobQueue;
     }
 
-    public void dispose(Object disposeId, Throwable throwable) {
+    public void notifyAboutSomeDisposedPool() {
         JobQueue[] qs;
         synchronized (jobQueues) {
             Collection<JobQueue> c = jobQueues.values();
             qs = c.toArray(new JobQueue[c.size()]);
         }
         for (int i = 0; i < qs.length; ++i) {
-            qs[i].dispose(disposeId, throwable);
+            qs[i].notifyAboutSomeDisposedPool();
         }
     }
 
