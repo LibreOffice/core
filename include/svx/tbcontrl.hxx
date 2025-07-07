@@ -150,7 +150,7 @@ class SvxStyleToolBoxControl final : public cppu::ImplInheritanceHelper<svt::Too
                                                                                           css::lang::XServiceInfo>
 {
     struct Impl;
-    std::unique_ptr<Impl> pImpl;
+    std::unique_ptr<Impl> m_pImpl;
 
 public:
     SvxStyleToolBoxControl();
@@ -179,10 +179,10 @@ public:
 private:
 #define MAX_FAMILIES 5
 
-    SfxStyleSheetBasePool* pStyleSheetPool;
+    SfxStyleSheetBasePool* m_pStyleSheetPool;
     rtl::Reference<SfxStyleControllerItem_Impl> m_xBoundItems[MAX_FAMILIES];
-    std::unique_ptr<SfxTemplateItem> pFamilyState[MAX_FAMILIES];
-    sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
+    std::unique_ptr<SfxTemplateItem> m_pFamilyState[MAX_FAMILIES];
+    sal_uInt16 m_nActFamily; // Id in the ToolBox = Position - 1
 
     void Update();
     void FillStyleBox();

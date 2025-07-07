@@ -3083,14 +3083,14 @@ constexpr OUString StyleSlotToStyleCommand[MAX_FAMILIES] =
 };
 
 SvxStyleToolBoxControl::SvxStyleToolBoxControl()
-    : pImpl(new Impl)
-    , pStyleSheetPool(nullptr)
-    , nActFamily(0xffff)
+    : m_pImpl(new Impl)
+    , m_pStyleSheetPool(nullptr)
+    , m_nActFamily(0xffff)
 {
     for (sal_uInt16 i = 0; i < MAX_FAMILIES; ++i)
     {
         m_xBoundItems[i].clear();
-        pFamilyState[i]  = nullptr;
+        m_pFamilyState[i]  = nullptr;
     }
 }
 
@@ -3107,7 +3107,7 @@ void SAL_CALL SvxStyleToolBoxControl::initialize(const Sequence<Any>& rArguments
     if ( !m_xFrame.is() )
         return;
 
-    pImpl->InitializeStyles(m_xFrame->getController()->getModel());
+    m_pImpl->InitializeStyles(m_xFrame->getController()->getModel());
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame->getController(), UNO_QUERY );
     for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
     {
@@ -3115,7 +3115,7 @@ void SAL_CALL SvxStyleToolBoxControl::initialize(const Sequence<Any>& rArguments
                                                             SID_STYLE_FAMILY_START + i,
                                                             StyleSlotToStyleCommand[i],
                                                             *this );
-        pFamilyState[i]  = nullptr;
+        m_pFamilyState[i]  = nullptr;
     }
 }
 
@@ -3125,9 +3125,9 @@ void SAL_CALL SvxStyleToolBoxControl::dispose()
     svt::ToolboxController::dispose();
 
     SolarMutexGuard aSolarMutexGuard;
-    pImpl->m_xVclBox.disposeAndClear();
-    pImpl->m_xWeldBox.reset();
-    pImpl->m_pBox = nullptr;
+    m_pImpl->m_xVclBox.disposeAndClear();
+    m_pImpl->m_xWeldBox.reset();
+    m_pImpl->m_pBox = nullptr;
 
     for (rtl::Reference<SfxStyleControllerItem_Impl>& pBoundItem : m_xBoundItems)
     {
@@ -3151,10 +3151,10 @@ void SAL_CALL SvxStyleToolBoxControl::dispose()
 
             m_xBoundItems[i].clear();
         }
-        pFamilyState[i].reset();
+        m_pFamilyState[i].reset();
     }
-    pStyleSheetPool = nullptr;
-    pImpl.reset();
+    m_pStyleSheetPool = nullptr;
+    m_pImpl.reset();
 }
 
 OUString SvxStyleToolBoxControl::getImplementationName()
@@ -3189,7 +3189,7 @@ void SAL_CALL SvxStyleToolBoxControl::update()
 
 SfxStyleFamily SvxStyleToolBoxControl::GetActFamily() const
 {
-    switch ( nActFamily-1 + SID_STYLE_FAMILY_START )
+    switch ( m_nActFamily-1 + SID_STYLE_FAMILY_START )
     {
         case SID_STYLE_FAMILY1: return SfxStyleFamily::Char;
         case SID_STYLE_FAMILY2: return SfxStyleFamily::Para;
@@ -3205,19 +3205,19 @@ SfxStyleFamily SvxStyleToolBoxControl::GetActFamily() const
 
 void SvxStyleToolBoxControl::FillStyleBox()
 {
-    SvxStyleBox_Base* pBox = pImpl->m_pBox;
+    SvxStyleBox_Base* pBox = m_pImpl->m_pBox;
 
-    DBG_ASSERT( pStyleSheetPool, "StyleSheetPool not found!" );
+    DBG_ASSERT( m_pStyleSheetPool, "StyleSheetPool not found!" );
     DBG_ASSERT( pBox,            "Control not found!" );
 
-    if ( !(pStyleSheetPool && pBox && nActFamily!=0xffff) )
+    if ( !(m_pStyleSheetPool && pBox && m_nActFamily!=0xffff) )
         return;
 
     const SfxStyleFamily    eFamily     = GetActFamily();
     SfxStyleSheetBase*      pStyle      = nullptr;
     bool                    bDoFill     = false;
 
-    auto xIter = pStyleSheetPool->CreateIterator(eFamily, SfxStyleSearchBits::Used);
+    auto xIter = m_pStyleSheetPool->CreateIterator(eFamily, SfxStyleSearchBits::Used);
     sal_uInt16 nCount = xIter->Count();
 
     // Check whether fill is necessary
@@ -3256,13 +3256,13 @@ void SvxStyleToolBoxControl::FillStyleBox()
         pStyle = xIter->Next();
     }
 
-    if (pImpl->bSpecModeWriter || pImpl->bSpecModeCalc)
+    if (m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc)
     {
-        pBox->append_text(pImpl->aClearForm);
+        pBox->append_text(m_pImpl->aClearForm);
         pBox->insert_separator(1, u"separator"_ustr);
 
         // add default styles if less than 12 items
-        for( const auto &rStyle : pImpl->aDefaultStyles )
+        for( const auto &rStyle : m_pImpl->aDefaultStyles )
         {
             if ( aStyles.size() + pBox->get_count() > 12)
                 break;
@@ -3275,8 +3275,8 @@ void SvxStyleToolBoxControl::FillStyleBox()
         if (pBox->find_text(rStyle) == -1)
             pBox->append_text(rStyle);
 
-    if ((pImpl->bSpecModeWriter || pImpl->bSpecModeCalc) && !comphelper::LibreOfficeKit::isActive())
-        pBox->append_text(pImpl->aMore);
+    if ((m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc) && !comphelper::LibreOfficeKit::isActive())
+        pBox->append_text(m_pImpl->aMore);
 
     pBox->thaw();
     pBox->set_active_or_entry_text(aStrSel);
@@ -3285,7 +3285,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
 void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
 {
-    SvxStyleBox_Base* pBox = pImpl->m_pBox;
+    SvxStyleBox_Base* pBox = m_pImpl->m_pBox;
     DBG_ASSERT( pBox, "Control not found!" );
 
     if ( !pBox )
@@ -3297,11 +3297,11 @@ void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
     {
         OUString aNewStyle = rStyleName;
 
-        auto aFound = std::find_if(pImpl->aDefaultStyles.begin(), pImpl->aDefaultStyles.end(),
+        auto aFound = std::find_if(m_pImpl->aDefaultStyles.begin(), m_pImpl->aDefaultStyles.end(),
             [rStyleName] (auto it) { return it.first == rStyleName || it.second == rStyleName; }
         );
 
-        if (aFound != pImpl->aDefaultStyles.end())
+        if (aFound != m_pImpl->aDefaultStyles.end())
             aNewStyle = aFound->second;
 
         if ( aNewStyle != aStrSel )
@@ -3322,33 +3322,33 @@ void SvxStyleToolBoxControl::Update()
 
     sal_uInt16 i;
     for ( i=0; i<MAX_FAMILIES; i++ )
-        if( pFamilyState[i] )
+        if( m_pFamilyState[i] )
             break;
 
     if ( i==MAX_FAMILIES || !pPool )
     {
-        pStyleSheetPool = pPool;
+        m_pStyleSheetPool = pPool;
         return;
     }
 
 
     const SfxTemplateItem* pItem = nullptr;
 
-    if ( nActFamily == 0xffff || nullptr == (pItem = pFamilyState[nActFamily-1].get()) )
+    if ( m_nActFamily == 0xffff || nullptr == (pItem = m_pFamilyState[m_nActFamily-1].get()) )
     // Current range not within allowed ranges or default
     {
-        pStyleSheetPool = pPool;
-        nActFamily      = 2;
+        m_pStyleSheetPool = pPool;
+        m_nActFamily      = 2;
 
-        pItem = pFamilyState[nActFamily-1].get();
+        pItem = m_pFamilyState[m_nActFamily-1].get();
         if ( !pItem )
         {
-            nActFamily++;
-            pItem = pFamilyState[nActFamily-1].get();
+            m_nActFamily++;
+            pItem = m_pFamilyState[m_nActFamily-1].get();
         }
     }
-    else if ( pPool != pStyleSheetPool )
-        pStyleSheetPool = pPool;
+    else if ( pPool != m_pStyleSheetPool )
+        m_pStyleSheetPool = pPool;
 
     FillStyleBox(); // Decides by itself whether Fill is needed
 
@@ -3359,7 +3359,7 @@ void SvxStyleToolBoxControl::Update()
 void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
                                              const SfxTemplateItem* pItem )
 {
-    pFamilyState[nIdx].reset( pItem == nullptr ? nullptr : new SfxTemplateItem( *pItem ) );
+    m_pFamilyState[nIdx].reset( pItem == nullptr ? nullptr : new SfxTemplateItem( *pItem ) );
     Update();
 }
 
@@ -3394,14 +3394,14 @@ css::uno::Reference<css::awt::XWindow> SvxStyleToolBoxControl::createItemWindow(
 
         xItemWindow = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
 
-        pImpl->m_xWeldBox.reset(new SvxStyleBox_Base(std::move(xWidget),
+        m_pImpl->m_xWeldBox.reset(new SvxStyleBox_Base(std::move(xWidget),
                                                      u".uno:StyleApply"_ustr,
                                                      SfxStyleFamily::Para,
                                                      m_xFrame,
-                                                     pImpl->aClearForm,
-                                                     pImpl->aMore,
-                                                     pImpl->bSpecModeWriter || pImpl->bSpecModeCalc, *this));
-        pImpl->m_pBox = pImpl->m_xWeldBox.get();
+                                                     m_pImpl->aClearForm,
+                                                     m_pImpl->aMore,
+                                                     m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc, *this));
+        m_pImpl->m_pBox = m_pImpl->m_xWeldBox.get();
     }
     else
     {
@@ -3410,20 +3410,20 @@ css::uno::Reference<css::awt::XWindow> SvxStyleToolBoxControl::createItemWindow(
         {
             SolarMutexGuard aSolarMutexGuard;
 
-            pImpl->m_xVclBox = VclPtr<SvxStyleBox_Impl>::Create(pParent,
+            m_pImpl->m_xVclBox = VclPtr<SvxStyleBox_Impl>::Create(pParent,
                                                                 ".uno:StyleApply",
                                                                 SfxStyleFamily::Para,
                                                                 m_xFrame,
-                                                                pImpl->aClearForm,
-                                                                pImpl->aMore,
-                                                                pImpl->bSpecModeWriter || pImpl->bSpecModeCalc, *this);
-            pImpl->m_pBox = pImpl->m_xVclBox.get();
-            xItemWindow = VCLUnoHelper::GetInterface(pImpl->m_xVclBox);
+                                                                m_pImpl->aClearForm,
+                                                                m_pImpl->aMore,
+                                                                m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc, *this);
+            m_pImpl->m_pBox = m_pImpl->m_xVclBox.get();
+            xItemWindow = VCLUnoHelper::GetInterface(m_pImpl->m_xVclBox);
         }
     }
 
-    if (pImpl->m_pBox && !pImpl->aDefaultStyles.empty())
-        pImpl->m_pBox->SetDefaultStyle(pImpl->aDefaultStyles[0].second);
+    if (m_pImpl->m_pBox && !m_pImpl->aDefaultStyles.empty())
+        m_pImpl->m_pBox->SetDefaultStyle(m_pImpl->aDefaultStyles[0].second);
 
     return xItemWindow;
 }
