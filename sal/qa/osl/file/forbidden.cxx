@@ -239,7 +239,7 @@ namespace osl_Forbidden
     public:
         Forbidden():
             aTempDirectoryURL(getTempDirectoryURL_()),
-            aTmpName3( aTempDirectoryURL + "/tmpdir" )
+            aTmpName3( aTempDirectoryURL + "/tmpdir-forbidden" )
         {}
     };
 
