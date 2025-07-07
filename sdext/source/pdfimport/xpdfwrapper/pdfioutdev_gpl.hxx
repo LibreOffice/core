@@ -284,6 +284,16 @@ namespace pdfi
 
         static void setPageNum( int nNumPages );
         void setSkipImages ( bool bSkipImages );
+
+        // This is a fudge to allow us to do a fixup in axialShadedFill for
+        // opacity, which may need extending to other types, see axialShadedFill
+        // definition for details
+        poppler_bool useShadedFills(int type) override
+        {
+            return type == 2; // Axial
+        };
+        poppler_bool axialShadedFill(GfxState *state, GfxAxialShading *, double, double) override;
+
 #if POPPLER_CHECK_VERSION(21, 3, 0)
         poppler_bool useTilingPatternFill() override { return true; };
         poppler_bool tilingPatternFill(GfxState *state, Gfx *gfx, Catalog *cat,

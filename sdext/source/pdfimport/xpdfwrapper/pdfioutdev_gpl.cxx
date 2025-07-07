@@ -1247,6 +1247,20 @@ void PDFOutDev::setSkipImages( bool bSkipImages )
     m_bSkipImages = bSkipImages;
 }
 
+// This is a fudge to fixup the opacity during shaded fills,
+// there are situations where the stroke opacity is used rather than the
+// fill opacity is ued, so flip it here.
+// Note that Poppler does a state save around the fill, so it restores this hack
+// See https://gitlab.freedesktop.org/poppler/poppler/-/issues/178#note_472334
+poppler_bool PDFOutDev::axialShadedFill(GfxState *state, GfxAxialShading *, double, double)
+{
+    if (state->getStrokePattern()!=nullptr)
+    {
+        state->setFillOpacity(state->getStrokeOpacity());
+    }
+    return false;
+}
+
 #if POPPLER_CHECK_VERSION(21, 3, 0)
 poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
                                           GfxTilingPattern *tPat, const double *mat,
