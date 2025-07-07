@@ -40,4 +40,26 @@ $(eval $(call gb_CppunitTest_use_externals,sal_osl_file_details, \
 
 $(eval $(call gb_CppunitTest_use_library_objects,sal_osl_file_details,sal))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_CppunitTest_use_system_darwin_frameworks,sal_osl_file_details, \
+    Carbon \
+    CoreFoundation \
+    Foundation \
+    $(if $(ENABLE_MACOSX_SANDBOX),Security) \
+))
+endif
+
+$(eval $(call gb_CppunitTest_use_system_win32_libs,sal_osl_file_details, \
+    advapi32 \
+    comdlg32 \
+    dbghelp \
+    mpr \
+    ole32 \
+    shell32 \
+    user32 \
+    userenv \
+    wer \
+    ws2_32 \
+))
+
 # vim: set noet sw=4 ts=4:
