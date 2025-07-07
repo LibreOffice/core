@@ -35,7 +35,7 @@ class MDTable;
 
 constexpr tools::Long MD_PARSPACE = o3tl::toTwips(5, o3tl::Length::mm);
 constexpr tools::Long MD_MAX_IMAGE_WIDTH_IN_TWIPS = 2500;
-constexpr tools::Long MD_MAX_IMAGE_HEIGH_IN_TWIPS = 2500;
+constexpr tools::Long MD_MAX_IMAGE_HEIGHT_IN_TWIPS = 2500;
 
 constexpr frozen::unordered_map<MD_ALIGN, SvxAdjust, 4> adjustMap
     = { { MD_ALIGN_DEFAULT, SvxAdjust::Left },

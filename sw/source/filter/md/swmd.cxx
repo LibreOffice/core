@@ -621,10 +621,10 @@ void SwMarkdownParser::InsertImage(const OUString& aURL, const OUString& rTitle)
 
     if (nWidth > 0 && nHeight > 0)
     {
-        if (nWidth > MD_MAX_IMAGE_WIDTH_IN_TWIPS || nHeight > MD_MAX_IMAGE_HEIGH_IN_TWIPS)
+        if (nWidth > MD_MAX_IMAGE_WIDTH_IN_TWIPS || nHeight > MD_MAX_IMAGE_HEIGHT_IN_TWIPS)
         {
             double fScaleX = static_cast<double>(MD_MAX_IMAGE_WIDTH_IN_TWIPS) / nWidth;
-            double fScaleY = static_cast<double>(MD_MAX_IMAGE_HEIGH_IN_TWIPS) / nHeight;
+            double fScaleY = static_cast<double>(MD_MAX_IMAGE_HEIGHT_IN_TWIPS) / nHeight;
             double fScale = std::min(fScaleX, fScaleY);
 
             nWidth = static_cast<tools::Long>(nWidth * fScale);
