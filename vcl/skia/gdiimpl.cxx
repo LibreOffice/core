@@ -251,7 +251,7 @@ public:
         SetPriority(TaskPriority::SKIA_FLUSH);
 #else
         // We don't want to be swapping before we've painted.
-        SetPriority(TaskPriority::HIGHEST);
+        SetPriority(TaskPriority::POST_PAINT);
 #endif
     }
 #ifndef NDEBUG
@@ -328,7 +328,7 @@ void SkiaSalGraphicsImpl::createSurface()
     // tasks on macOS
     mFlush->SetPriority(TaskPriority::SKIA_FLUSH);
 #else
-    mFlush->SetPriority(TaskPriority::HIGHEST);
+    mFlush->SetPriority(TaskPriority::POST_PAINT);
 #endif
 }
 
