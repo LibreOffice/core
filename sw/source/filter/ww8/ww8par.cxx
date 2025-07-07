@@ -1591,8 +1591,8 @@ bool SwWW8FltRefStack::IsFootnoteEdnBkmField(
     if(SwFieldIds::GetRef != pField->Which())
         return false;
     auto pGetRefField = static_cast<const SwGetRefField*>(pField);
-    sal_uInt16 nSubType = pGetRefField->GetSubType();
-    if( ((REF_FOOTNOTE == nSubType) || (REF_ENDNOTE  == nSubType))
+    ReferencesSubtype nSubType = pGetRefField->GetSubType();
+    if( ((ReferencesSubtype::Footnote == nSubType) || (ReferencesSubtype::Endnote  == nSubType))
         && !pGetRefField->GetSetRefName().isEmpty())
     {
         const IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
@@ -1648,7 +1648,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             static_cast<SwGetRefField*>(pField)->SetSeqNo( nRefNo );
 
                             if( pFootnote->GetFootnote().IsEndNote() )
-                                static_cast<SwGetRefField*>(pField)->SetSubType(REF_ENDNOTE);
+                                static_cast<SwGetRefField*>(pField)->SetSubType(ReferencesSubtype::Endnote);
                         }
                     }
                 }

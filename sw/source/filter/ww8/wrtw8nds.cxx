@@ -1321,7 +1321,7 @@ OUString BookmarkToWriter(std::u16string_view rBookmark)
 void SwWW8AttrIter::OutSwFormatRefMark(const SwFormatRefMark& rAttr)
 {
     if(m_rExport.HasRefToAttr(rAttr.GetRefName().toString()))
-        m_rExport.AppendBookmark( m_rExport.GetBookmarkName( REF_SETREFATTR,
+        m_rExport.AppendBookmark( m_rExport.GetBookmarkName( ReferencesSubtype::SetRefAttr,
                                             &rAttr.GetRefName().toString(), 0 ));
 }
 

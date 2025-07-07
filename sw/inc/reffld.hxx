@@ -23,6 +23,7 @@
 
 #include "fldbas.hxx"
 #include "names.hxx"
+#include "reffldsubtype.hxx"
 
 class SwDoc;
 class SwTextNode;
@@ -46,17 +47,6 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
        with REFFLDFLAG they are false */
 #define REFFLDFLAG_STYLE_FROM_BOTTOM           0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL    0xc200
-
-enum REFERENCESUBTYPE
-{
-    REF_SETREFATTR = 0,
-    REF_SEQUENCEFLD,
-    REF_BOOKMARK,
-    REF_OUTLINE,
-    REF_FOOTNOTE,
-    REF_ENDNOTE,
-    REF_STYLE
-};
 
 enum REFERENCEMARK
 {
@@ -94,7 +84,7 @@ public:
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 
     static SwTextNode* FindAnchor( SwDoc* pDoc, const SwMarkName& rRefMark,
-                                        sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
+                                        ReferencesSubtype nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
                                         sal_Int32* pStart, sal_Int32* pEnd = nullptr,
                                         SwRootFrame const* pLayout = nullptr,
                                         const SwTextNode* pSelf = nullptr, SwFrame* pFrame = nullptr);
@@ -125,7 +115,7 @@ private:
     OUString m_sSetReferenceLanguage;
     OUString m_sText;         ///< result
     OUString m_sTextRLHidden; ///< result for layout with redlines hidden
-    sal_uInt16 m_nSubType;
+    ReferencesSubtype m_nSubType;
     /// reference to either a SwTextFootnote::m_nSeqNo or a SwSetExpField::mnSeqNo
     sal_uInt16 m_nSeqNo;
     sal_uInt16 m_nFlags;
@@ -135,7 +125,7 @@ private:
     virtual std::unique_ptr<SwField> Copy() const override;
 public:
     SW_DLLPUBLIC SwGetRefField( SwGetRefFieldType*, SwMarkName aSetRef, OUString aReferenceLanguage,
-                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags, sal_uInt32 nFormat );
+                    ReferencesSubtype nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags, sal_uInt32 nFormat );
 
     SW_DLLPUBLIC virtual ~SwGetRefField() override;
 
@@ -150,7 +140,7 @@ public:
     /** The <SwTextField> instance, which represents the text attribute for the
        <SwGetRefField> instance, has to be passed to the method.
        This <SwTextField> instance is needed for the reference format type REF_UPDOWN, REF_NUMBER
-       and REF_STYLE.
+       and ReferencesSubtype::Style.
        Note: This instance may be NULL (field in Undo/Redo). This will cause
        no update for these reference format types. */
     void                UpdateField( const SwTextField* pFieldTextAttr, SwFrame* pFrame );
@@ -160,8 +150,8 @@ public:
     void                SetExpand( const OUString& rStr );
 
     /// Get/set sub type.
-    SW_DLLPUBLIC sal_uInt16 GetSubType() const;
-    SW_DLLPUBLIC void SetSubType( sal_uInt16 n );
+    SW_DLLPUBLIC ReferencesSubtype GetSubType() const;
+    SW_DLLPUBLIC void SetSubType( ReferencesSubtype n );
 
     // --> #i81002#
     SW_DLLPUBLIC bool IsRefToHeadingCrossRefBookmark() const;
@@ -170,11 +160,11 @@ public:
     // #i85090#
     SW_DLLPUBLIC OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout) const;
 
-    /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
+    /// Get/set SequenceNo (of interest only for ReferencesSubtype::SequenceField).
     sal_uInt16              GetSeqNo() const        { return m_nSeqNo; }
     void                SetSeqNo( sal_uInt16 n )    { m_nSeqNo = n; }
 
-    /// Get/set flags (currently only used for REF_STYLE)
+    /// Get/set flags (currently only used for ReferencesSubtype::Style)
     sal_uInt16              GetFlags() const        { return m_nFlags; }
     void                SetFlags( sal_uInt16 n )    { m_nFlags = n; }
 

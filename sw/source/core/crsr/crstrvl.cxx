@@ -1451,7 +1451,7 @@ void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
 }
 
 /// jump to reference marker
-bool SwCursorShell::GotoRefMark( const SwMarkName& rRefMark, sal_uInt16 nSubType,
+bool SwCursorShell::GotoRefMark( const SwMarkName& rRefMark, ReferencesSubtype nSubType,
                                     sal_uInt16 nSeqNo, sal_uInt16 nFlags )
 {
     CurrShell aCurr( this );

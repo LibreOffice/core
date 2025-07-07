@@ -808,10 +808,10 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     else
                     {
                         OUString sFieldSubTypeOrName;
-                        auto nSubType = pRefField->GetSubType();
-                        if (nSubType == REF_FOOTNOTE)
+                        ReferencesSubtype nSubType = pRefField->GetSubType();
+                        if (nSubType == ReferencesSubtype::Footnote)
                             sFieldSubTypeOrName = SwResId(STR_FLDREF_FOOTNOTE);
-                        else if (nSubType == REF_ENDNOTE)
+                        else if (nSubType == ReferencesSubtype::Endnote)
                             sFieldSubTypeOrName = SwResId(STR_FLDREF_ENDNOTE);
                         else
                             sFieldSubTypeOrName = pField->GetFieldName();
@@ -3525,17 +3525,17 @@ bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
                     return false;
 
                 const UIName sFieldTypeName = pField->GetTyp()->GetName();
-                sCrossRef = OUString::number(static_cast<int>(REFERENCESUBTYPE::REF_SEQUENCEFLD))
+                sCrossRef = OUString::number(static_cast<int>(ReferencesSubtype::SequenceField))
                         + u"|" + sFieldTypeName.toString() + u"|" + sVal;
             }
             else if (eActType == ContentTypeId::REFERENCE)
             {
-                sCrossRef = OUString::number(static_cast<int>(REFERENCESUBTYPE::REF_SETREFATTR))
+                sCrossRef = OUString::number(static_cast<int>(ReferencesSubtype::SetRefAttr))
                         + u"|" + sEntry;
             }
             else if (eActType == ContentTypeId::BOOKMARK)
             {
-                sCrossRef = OUString::number(static_cast<int>(REFERENCESUBTYPE::REF_BOOKMARK))
+                sCrossRef = OUString::number(static_cast<int>(ReferencesSubtype::Bookmark))
                         + u"|" + sEntry;
             }
             else if (eActType == ContentTypeId::FOOTNOTE || eActType == ContentTypeId::ENDNOTE)
@@ -3551,9 +3551,9 @@ bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
                 else
                     return false;
 
-                REFERENCESUBTYPE eReferenceSubType =
-                        eActType == ContentTypeId::FOOTNOTE ? REFERENCESUBTYPE::REF_FOOTNOTE :
-                                                              REFERENCESUBTYPE::REF_ENDNOTE;
+                ReferencesSubtype eReferenceSubType =
+                        eActType == ContentTypeId::FOOTNOTE ? ReferencesSubtype::Footnote :
+                                                              ReferencesSubtype::Endnote;
 
                 sCrossRef = OUString::number(static_cast<int>(eReferenceSubType)) + u"|"
                         + sEntry + u"|" + sVal;
@@ -3568,11 +3568,11 @@ bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
                 sw::mark::MarkBase const * const pMark =
                         pWrtShell->getIDocumentMarkAccess()->getMarkForTextNode(
                             *pTextNode, IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
-                // REFERENCESUBTYPE_OUTLINE is changed to REFERENCESUBTYPE::BOOKMARK in
+                // ReferencesSubtype::Outine is changed to ReferencesSubtype::Bookmark in
                 // SwWrtShell::NavigatorPaste. It is used to differentiate between a
                 // headings reference and a regular bookmark reference to show different
                 // options in the reference mark type popup menu.
-                sCrossRef = OUString::number(static_cast<int>(REFERENCESUBTYPE::REF_OUTLINE))
+                sCrossRef = OUString::number(static_cast<int>(ReferencesSubtype::Outline))
                         + u"|" + pMark->GetName().toString();
             }
         }

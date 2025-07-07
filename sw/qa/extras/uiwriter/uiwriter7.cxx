@@ -821,16 +821,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     //moving cursor to the starting of document
     pWrtShell->StartOfSection();
     //inserting reference field 1
-    SwGetRefField aField1(pRefType, SwMarkName(u""_ustr), u""_ustr, REF_FOOTNOTE, sal_uInt16(0),
-                          sal_uInt16(0), REF_CONTENT);
+    SwGetRefField aField1(pRefType, SwMarkName(u""_ustr), u""_ustr, ReferencesSubtype::Footnote,
+                          sal_uInt16(0), sal_uInt16(0), REF_CONTENT);
     pWrtShell->InsertField2(aField1);
     //inserting second footnote
     pWrtShell->InsertFootnote(u""_ustr);
     pWrtShell->StartOfSection();
     pCursor->Move(fnMoveForward);
     //inserting reference field 2
-    SwGetRefField aField2(pRefType, SwMarkName(u""_ustr), u""_ustr, REF_FOOTNOTE, sal_uInt16(1),
-                          sal_uInt16(0), REF_CONTENT);
+    SwGetRefField aField2(pRefType, SwMarkName(u""_ustr), u""_ustr, ReferencesSubtype::Footnote,
+                          sal_uInt16(1), sal_uInt16(0), REF_CONTENT);
     pWrtShell->InsertField2(aField2);
     //inserting third footnote
     pWrtShell->InsertFootnote(u""_ustr);
@@ -838,8 +838,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //inserting reference field 3
-    SwGetRefField aField3(pRefType, SwMarkName(u""_ustr), u""_ustr, REF_FOOTNOTE, sal_uInt16(2),
-                          sal_uInt16(0), REF_CONTENT);
+    SwGetRefField aField3(pRefType, SwMarkName(u""_ustr), u""_ustr, ReferencesSubtype::Footnote,
+                          sal_uInt16(2), sal_uInt16(0), REF_CONTENT);
     pWrtShell->InsertField2(aField3);
     //updating the fields
     IDocumentFieldsAccess& rField(pDoc->getIDocumentFieldsAccess());
@@ -1080,8 +1080,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     //moving cursor to the starting of document
     pWrtShell->StartOfSection();
     //inserting reference field 1
-    SwGetRefField aGetField1(pRefType, SwMarkName(u"Illustration"_ustr), u""_ustr, REF_SEQUENCEFLD,
-                             sal_uInt16(0), sal_uInt16(0), REF_CONTENT);
+    SwGetRefField aGetField1(pRefType, SwMarkName(u"Illustration"_ustr), u""_ustr,
+                             ReferencesSubtype::SequenceField, sal_uInt16(0), sal_uInt16(0),
+                             REF_CONTENT);
     pWrtShell->InsertField2(aGetField1);
     //now we have ref1-seq1
     //moving the cursor
@@ -1093,8 +1094,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     pWrtShell->StartOfSection();
     pCursor->Move(fnMoveForward);
     //inserting reference field 2
-    SwGetRefField aGetField2(pRefType, SwMarkName(u"Illustration"_ustr), u""_ustr, REF_SEQUENCEFLD,
-                             sal_uInt16(1), sal_uInt16(0), REF_CONTENT);
+    SwGetRefField aGetField2(pRefType, SwMarkName(u"Illustration"_ustr), u""_ustr,
+                             ReferencesSubtype::SequenceField, sal_uInt16(1), sal_uInt16(0),
+                             REF_CONTENT);
     pWrtShell->InsertField2(aGetField2);
     //now we have ref1-ref2-seq1-seq2
     //moving the cursor
@@ -1107,8 +1109,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //inserting reference field 3
-    SwGetRefField aGetField3(pRefType, SwMarkName(u"Illustration"_ustr), u""_ustr, REF_SEQUENCEFLD,
-                             sal_uInt16(2), sal_uInt16(0), REF_CONTENT);
+    SwGetRefField aGetField3(pRefType, SwMarkName(u"Illustration"_ustr), u""_ustr,
+                             ReferencesSubtype::SequenceField, sal_uInt16(2), sal_uInt16(0),
+                             REF_CONTENT);
     pWrtShell->InsertField2(aGetField3);
     //now after insertion we have ref1-ref2-ref3-seq1-seq2-seq3
     //updating the fields

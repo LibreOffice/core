@@ -1034,7 +1034,7 @@ bool MSWordExportBase::HasRefToAttr(const OUString& rName)
 {
     SwFieldType* pType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
     std::vector<SwGetRefField*> vpRFields;
-    pType->GatherRefFields(vpRFields, REF_SETREFATTR);
+    pType->GatherRefFields(vpRFields, ReferencesSubtype::SetRefAttr);
     return std::any_of(vpRFields.begin(), vpRFields.end(),
             [rName](SwGetRefField* pF) { return rName == pF->GetSetRefName(); });
 }
@@ -1043,40 +1043,41 @@ bool MSWordExportBase::HasRefToFootOrEndnote(const bool isEndNote, const sal_uIn
 {
     SwFieldType* pType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
     std::vector<SwGetRefField*> vpRFields;
-    pType->GatherRefFields(vpRFields, isEndNote ? REF_ENDNOTE : REF_FOOTNOTE);
+    pType->GatherRefFields(vpRFields, isEndNote ? ReferencesSubtype::Endnote : ReferencesSubtype::Footnote);
     return std::any_of(vpRFields.begin(), vpRFields.end(),
             [nSeqNo](SwGetRefField* pF) { return nSeqNo == pF->GetSeqNo(); });
 }
 
-OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
+OUString MSWordExportBase::GetBookmarkName( ReferencesSubtype nTyp, const OUString* pName, sal_uInt16 nSeqNo )
 {
     OUString sRet;
     switch ( nTyp )
     {
-        case REF_SETREFATTR:
+        case ReferencesSubtype::SetRefAttr:
             if ( pName )
             {
                 sRet = "Ref_" + *pName;
             }
             break;
-        case REF_SEQUENCEFLD:
+        case ReferencesSubtype::SequenceField:
         {
             assert(pName);
             sRet = "Ref_" + *pName;
             break;
         }
-        case REF_BOOKMARK:
+        case ReferencesSubtype::Bookmark:
             if ( pName )
                 sRet = *pName;
             break;
-        case REF_OUTLINE:
+        case ReferencesSubtype::Outline:
             break;      // ???
-        case REF_FOOTNOTE:
+        case ReferencesSubtype::Footnote:
             sRet = "_RefF" + OUString::number( nSeqNo );
             break;
-        case REF_ENDNOTE:
+        case ReferencesSubtype::Endnote:
             sRet = "_RefE" + OUString::number( nSeqNo );
             break;
+        default: break; // ReferencesSubtype::Style not handled?
     }
     return BookmarkToWord( sRet ); // #i43956# - encode bookmark accordingly
 }
@@ -1958,19 +1959,19 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             // retrieve reference destination - the name of the bookmark
             OUString aLinkStr;
             const SwGetRefField& rRField = *static_cast<const SwGetRefField*>(pField);
-            const sal_uInt16 nSubType = rRField.GetSubType();
-            if ( nSubType == REF_SETREFATTR ||
-                 nSubType == REF_BOOKMARK )
+            const ReferencesSubtype nSubType = rRField.GetSubType();
+            if ( nSubType == ReferencesSubtype::SetRefAttr ||
+                 nSubType == ReferencesSubtype::Bookmark )
             {
                 const SwMarkName& aRefName(rRField.GetSetRefName());
                 aLinkStr = GetBookmarkName( nSubType, &aRefName.toString(), 0 );
             }
-            else if ( nSubType == REF_FOOTNOTE ||
-                      nSubType == REF_ENDNOTE )
+            else if ( nSubType == ReferencesSubtype::Footnote ||
+                      nSubType == ReferencesSubtype::Endnote )
             {
                 aLinkStr = GetBookmarkName( nSubType, nullptr, rRField.GetSeqNo() );
             }
-            else if ( nSubType == REF_SEQUENCEFLD )
+            else if ( nSubType == ReferencesSubtype::SequenceField )
             {
                 aLinkStr = pField->GetPar2();
             }
@@ -3242,11 +3243,11 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             ww::eField eField = ww::eNONE;
             OUString sStr;
             const SwGetRefField& rRField = *static_cast<const SwGetRefField*>(pField);
-            const sal_uInt16 nSubType = rRField.GetSubType();
+            const ReferencesSubtype nSubType = rRField.GetSubType();
             switch (nSubType)
             {
-                case REF_SETREFATTR:
-                case REF_BOOKMARK:
+                case ReferencesSubtype::SetRefAttr:
+                case ReferencesSubtype::Bookmark:
                     switch (rRField.GetFormat())
                     {
                         case REF_PAGE_PGDESC:
@@ -3275,7 +3276,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                             break;
                     }
                     break;
-                case REF_SEQUENCEFLD:
+                case ReferencesSubtype::SequenceField:
                 {
                     // Not implemented for RTF
                     if(GetExport().GetExportFormat() == MSWordExportBase::ExportFormat::RTF)
@@ -3331,8 +3332,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     }
                     break;
                 }
-                case REF_FOOTNOTE:
-                case REF_ENDNOTE:
+                case ReferencesSubtype::Footnote:
+                case ReferencesSubtype::Endnote:
                     switch (rRField.GetFormat())
                     {
                         case REF_PAGE_PGDESC:
@@ -3344,17 +3345,18 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                             break;
                         default:
                             eField =
-                                REF_ENDNOTE == nSubType ? ww::eNOTEREF : ww::eFOOTREF;
+                                ReferencesSubtype::Endnote == nSubType ? ww::eNOTEREF : ww::eFOOTREF;
                             break;
                     }
                     sStr = FieldString(eField)
                            + GetExport().GetBookmarkName(nSubType, nullptr, rRField.GetSeqNo());
                     break;
-                case REF_STYLE:
+                case ReferencesSubtype::Style:
                     sStr = FieldString(ww::eSTYLEREF)
                            + GetExport().GetStyleRefName(pField->GetPar1());
                     eField = ww::eSTYLEREF;
                     break;
+                default: break; // ReferencesSubtype::Outline not handled ?
             }
 
             OUString sExtraFlags = u"\\h "_ustr; // by default, include a hyperlink
@@ -3753,16 +3755,16 @@ static bool lcl_IsAtTextEnd(const SwFormatFootnote& rFootnote)
 
 void AttributeOutputBase::TextFootnote( const SwFormatFootnote& rFootnote )
 {
-    sal_uInt16 nTyp;
+    ReferencesSubtype nTyp;
     if ( rFootnote.IsEndNote() )
     {
-        nTyp = REF_ENDNOTE;
+        nTyp = ReferencesSubtype::Endnote;
         if ( GetExport().m_bEndAtTextEnd )
             GetExport().m_bEndAtTextEnd = lcl_IsAtTextEnd( rFootnote );
     }
     else
     {
-        nTyp = REF_FOOTNOTE;
+        nTyp = ReferencesSubtype::Footnote;
         if ( GetExport().m_bFootnoteAtTextEnd )
             GetExport().m_bFootnoteAtTextEnd = lcl_IsAtTextEnd( rFootnote );
     }

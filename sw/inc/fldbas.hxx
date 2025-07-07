@@ -43,6 +43,7 @@ class SvNumberFormatter;
 class IDocumentRedlineAccess;
 class SwGetRefField;
 class SwXFieldMaster;
+enum class ReferencesSubtype : sal_uInt16;
 namespace com::sun::star::uno { class Any; }
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
@@ -268,7 +269,7 @@ public:
     void CollectPostIts(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, bool HideRedlines);
     bool HasHiddenInformationNotes() const;
     void GatherNodeIndex(std::vector<SwNodeOffset>& rvNodeIndex);
-    void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp);
+    void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const ReferencesSubtype nTyp);
     void GatherFields(std::vector<SwFormatField*>& rvFormatFields, bool bCollectOnlyInDocNodes=true) const;
     void GatherDdeTables(std::vector<SwDDETable*>& rvTables) const;
     void UpdateDocPos(const SwTwips nDocPos);

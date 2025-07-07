@@ -75,7 +75,7 @@ using namespace ::com::sun::star::text;
 static std::pair<OUString, bool> MakeRefNumStr(SwRootFrame const* pLayout,
       const SwTextNode& rTextNodeOfField,
       const SwTextNode& rTextNodeOfReferencedItem,
-      sal_uInt16 nSubType,
+      ReferencesSubtype nSubType,
       sal_uInt32 nRefNumFormat,
       sal_uInt16 nFlags);
 
@@ -351,7 +351,7 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
 
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
-                              SwMarkName aSetRef, OUString aSetReferenceLanguage, sal_uInt16 nSubTyp,
+                              SwMarkName aSetRef, OUString aSetReferenceLanguage, ReferencesSubtype nSubTyp,
                               sal_uInt16 nSequenceNo, sal_uInt16 nFlags, sal_uInt32 nFormat )
     : SwField(pFieldType),
       m_sSetRefName(std::move(aSetRef)),
@@ -372,12 +372,12 @@ OUString SwGetRefField::GetDescription() const
     return SwResId(STR_REFERENCE);
 }
 
-sal_uInt16 SwGetRefField::GetSubType() const
+ReferencesSubtype SwGetRefField::GetSubType() const
 {
     return m_nSubType;
 }
 
-void SwGetRefField::SetSubType( sal_uInt16 n )
+void SwGetRefField::SetSubType( ReferencesSubtype n )
 {
     m_nSubType = n;
 }
@@ -385,13 +385,13 @@ void SwGetRefField::SetSubType( sal_uInt16 n )
 // #i81002#
 bool SwGetRefField::IsRefToHeadingCrossRefBookmark() const
 {
-    return GetSubType() == REF_BOOKMARK &&
+    return GetSubType() == ReferencesSubtype::Bookmark &&
         ::sw::mark::CrossRefHeadingBookmark::IsLegalName(m_sSetRefName);
 }
 
 bool SwGetRefField::IsRefToNumItemCrossRefBookmark() const
 {
-    return GetSubType() == REF_BOOKMARK &&
+    return GetSubType() == ReferencesSubtype::Bookmark &&
         ::sw::mark::CrossRefNumItemBookmark::IsLegalName(m_sSetRefName);
 }
 
@@ -551,7 +551,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
 
             switch( m_nSubType )
             {
-            case REF_SEQUENCEFLD:
+            case ReferencesSubtype::SequenceField:
 
                 switch( GetFormat() )
                 {
@@ -601,20 +601,20 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                 }
                 break;
 
-            case REF_BOOKMARK:
+            case ReferencesSubtype::Bookmark:
                 nStart = nNumStart;
                 // text is spread across multiple nodes - get whole text or only until end of node?
                 nEnd = nNumEnd<0 ? nLen : nNumEnd;
                 break;
 
-            case REF_OUTLINE:
-            case REF_SETREFATTR:
+            case ReferencesSubtype::Outline:
+            case ReferencesSubtype::SetRefAttr:
                 nStart = nNumStart;
                 nEnd = nNumEnd;
                 break;
 
-            case REF_FOOTNOTE:
-            case REF_ENDNOTE:
+            case ReferencesSubtype::Footnote:
+            case ReferencesSubtype::Endnote:
                 // get number or numString
                 for( size_t i = 0; i < rDoc.GetFootnoteIdxs().size(); ++i )
                 {
@@ -631,7 +631,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                 }
                 return;
 
-            case REF_STYLE:
+            case ReferencesSubtype::Style:
                 nStart = 0;
                 nEnd = nLen;
                 break;
@@ -644,8 +644,8 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
             {
                 if (pLayout->IsHideRedlines())
                 {
-                    if (m_nSubType == REF_OUTLINE
-                        || (m_nSubType == REF_SEQUENCEFLD && REF_CONTENT == GetFormat()))
+                    if (m_nSubType == ReferencesSubtype::Outline
+                        || (m_nSubType == ReferencesSubtype::SequenceField && REF_CONTENT == GetFormat()))
                     {
                         rText = sw::GetExpandTextMerged(pLayout, *pTextNd, false, false,
                                                         ExpandMode(0));
@@ -783,11 +783,11 @@ static std::pair<OUString, bool> MakeRefNumStr(
         SwRootFrame const*const pLayout,
         const SwTextNode& i_rTextNodeOfField,
         const SwTextNode& i_rTextNodeOfReferencedItem,
-        const sal_uInt16 nSubType,
+        const ReferencesSubtype nSubType,
         const sal_uInt32 nRefNumFormat,
         const sal_uInt16 nFlags)
 {
-    bool bHideNonNumerical = (nSubType == REF_STYLE) && ((nFlags & REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL) == REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL);
+    bool bHideNonNumerical = (nSubType == ReferencesSubtype::Style) && ((nFlags & REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL) == REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL);
     SwTextNode const& rTextNodeOfField(pLayout
             ?   *sw::GetParaPropsNode(*pLayout, i_rTextNodeOfField)
             :   i_rTextNodeOfField);
@@ -928,13 +928,13 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             sal_Int16 nSource = 0;
             switch(m_nSubType)
             {
-            case  REF_SETREFATTR : nSource = ReferenceFieldSource::REFERENCE_MARK; break;
-            case  REF_SEQUENCEFLD: nSource = ReferenceFieldSource::SEQUENCE_FIELD; break;
-            case  REF_BOOKMARK   : nSource = ReferenceFieldSource::BOOKMARK; break;
-            case  REF_OUTLINE    : OSL_FAIL("not implemented"); break;
-            case  REF_FOOTNOTE   : nSource = ReferenceFieldSource::FOOTNOTE; break;
-            case  REF_ENDNOTE    : nSource = ReferenceFieldSource::ENDNOTE; break;
-            case  REF_STYLE      : nSource = ReferenceFieldSource::STYLE; break;
+            case  ReferencesSubtype::SetRefAttr : nSource = ReferenceFieldSource::REFERENCE_MARK; break;
+            case  ReferencesSubtype::SequenceField: nSource = ReferenceFieldSource::SEQUENCE_FIELD; break;
+            case  ReferencesSubtype::Bookmark   : nSource = ReferenceFieldSource::BOOKMARK; break;
+            case  ReferencesSubtype::Outline    : OSL_FAIL("not implemented"); break;
+            case  ReferencesSubtype::Footnote   : nSource = ReferenceFieldSource::FOOTNOTE; break;
+            case  ReferencesSubtype::Endnote    : nSource = ReferenceFieldSource::ENDNOTE; break;
+            case  ReferencesSubtype::Style      : nSource = ReferenceFieldSource::STYLE; break;
             }
             rAny <<= nSource;
         }
@@ -945,7 +945,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_PAR1:
     {
         OUString sTmp(GetPar1());
-        if(REF_SEQUENCEFLD == m_nSubType)
+        if(ReferencesSubtype::SequenceField == m_nSubType)
         {
             sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( UIName(sTmp), SwGetPoolIdFromName::TxtColl );
             switch( nPoolId )
@@ -963,7 +963,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
                 break;
             }
         }
-        else if (REF_STYLE == m_nSubType)
+        else if (ReferencesSubtype::Style == m_nSubType)
         {
             ProgName name;
             SwStyleNameMapper::FillProgName(UIName{sTmp}, name, SwGetPoolIdFromName::TxtColl);
@@ -1025,22 +1025,22 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= nSource;
             switch(nSource)
             {
-            case ReferenceFieldSource::REFERENCE_MARK : m_nSubType = REF_SETREFATTR ; break;
+            case ReferenceFieldSource::REFERENCE_MARK : m_nSubType = ReferencesSubtype::SetRefAttr ; break;
             case ReferenceFieldSource::SEQUENCE_FIELD :
             {
-                if(REF_SEQUENCEFLD == m_nSubType)
+                if(ReferencesSubtype::SequenceField == m_nSubType)
                     break;
-                m_nSubType = REF_SEQUENCEFLD;
+                m_nSubType = ReferencesSubtype::SequenceField;
                 ConvertProgrammaticToUIName();
             }
             break;
-            case ReferenceFieldSource::BOOKMARK       : m_nSubType = REF_BOOKMARK   ; break;
-            case ReferenceFieldSource::FOOTNOTE       : m_nSubType = REF_FOOTNOTE   ; break;
-            case ReferenceFieldSource::ENDNOTE        : m_nSubType = REF_ENDNOTE    ; break;
+            case ReferenceFieldSource::BOOKMARK       : m_nSubType = ReferencesSubtype::Bookmark   ; break;
+            case ReferenceFieldSource::FOOTNOTE       : m_nSubType = ReferencesSubtype::Footnote   ; break;
+            case ReferenceFieldSource::ENDNOTE        : m_nSubType = ReferencesSubtype::Endnote    ; break;
             case ReferenceFieldSource::STYLE          :
-                if (REF_STYLE != m_nSubType)
+                if (ReferencesSubtype::Style != m_nSubType)
                 {
-                    m_nSubType = REF_STYLE;
+                    m_nSubType = ReferencesSubtype::Style;
                     ConvertProgrammaticToUIName();
                 }
                 break;
@@ -1088,7 +1088,7 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 void SwGetRefField::ConvertProgrammaticToUIName()
 {
-    if (GetTyp() && REF_STYLE == m_nSubType)
+    if (GetTyp() && ReferencesSubtype::Style == m_nSubType)
     {
         // this is super ugly, but there isn't a sensible way to check in xmloff
         SwDoc & rDoc{static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc()};
@@ -1111,7 +1111,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         return;
     }
 
-    if(!(GetTyp() && REF_SEQUENCEFLD == m_nSubType))
+    if(!(GetTyp() && ReferencesSubtype::SequenceField == m_nSubType))
         return;
 
     SwDoc& rDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
@@ -1186,7 +1186,7 @@ void SwGetRefFieldType::UpdateStyleReferences()
         // update only the GetRef fields which are also STYLEREF fields
         SwGetRefField* pGRef = static_cast<SwGetRefField*>(pFormatField->GetField());
 
-        if (pGRef->GetSubType() != REF_STYLE) continue;
+        if (pGRef->GetSubType() != ReferencesSubtype::Style) continue;
 
         const SwTextField* pTField;
         if(!pGRef->GetLanguage() &&
@@ -1370,7 +1370,7 @@ namespace
 }
 
 SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const SwMarkName& rRefMark,
-                                          sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
+                                          ReferencesSubtype nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
                                           sal_Int32* pStart, sal_Int32* pEnd, SwRootFrame const* const pLayout,
                                           const SwTextNode* pSelf, SwFrame* pContentFrame)
 {
@@ -1380,7 +1380,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const SwMarkName& rRefMar
     SwTextNode* pTextNd = nullptr;
     switch( nSubType )
     {
-    case REF_SETREFATTR:
+    case ReferencesSubtype::SetRefAttr:
         {
             const SwFormatRefMark *pRef = pDoc->GetRefMark( rRefMark );
             SwTextRefMark const*const pRefMark(pRef ? pRef->GetTextRefMark() : nullptr);
@@ -1395,7 +1395,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const SwMarkName& rRefMar
         }
         break;
 
-    case REF_SEQUENCEFLD:
+    case ReferencesSubtype::SequenceField:
         {
             SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::SetExp, rRefMark, false );
             if( pFieldType && pFieldType->HasWriterListeners() &&
@@ -1422,7 +1422,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const SwMarkName& rRefMar
         }
         break;
 
-    case REF_BOOKMARK:
+    case ReferencesSubtype::Bookmark:
         {
             auto ppMark = pDoc->getIDocumentMarkAccess()->findMark(rRefMark);
             if (ppMark != pDoc->getIDocumentMarkAccess()->getAllMarksEnd()
@@ -1456,11 +1456,11 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const SwMarkName& rRefMar
         }
         break;
 
-    case REF_OUTLINE:
+    case ReferencesSubtype::Outline:
         break;
 
-    case REF_FOOTNOTE:
-    case REF_ENDNOTE:
+    case ReferencesSubtype::Footnote:
+    case ReferencesSubtype::Endnote:
         {
             for( auto pFootnoteIdx : pDoc->GetFootnoteIdxs() )
                 if( nSeqNo == pFootnoteIdx->GetSeqRefNo() )
@@ -1487,7 +1487,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const SwMarkName& rRefMar
                 }
         }
         break;
-        case REF_STYLE:
+        case ReferencesSubtype::Style:
             pTextNd = FindAnchorRefStyle(pDoc, rRefMark, nFlags,
                                           pStart, pEnd, pLayout, pSelf, pContentFrame);
             break;
@@ -1895,7 +1895,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         SwGetRefField& rRefField = *static_cast<SwGetRefField*>(pField->GetField());
         switch( rRefField.GetSubType() )
         {
-        case REF_SEQUENCEFLD:
+        case ReferencesSubtype::SequenceField:
             {
                 RefIdsMap* pMap = nullptr;
                 for( auto n = aFieldMap.size(); n; )
@@ -1916,10 +1916,11 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
             }
             break;
 
-        case REF_FOOTNOTE:
-        case REF_ENDNOTE:
+        case ReferencesSubtype::Footnote:
+        case ReferencesSubtype::Endnote:
             aFntMap.Check(m_rDoc, rDestDoc, rRefField, false);
             break;
+        default: break;
         }
     }
 }

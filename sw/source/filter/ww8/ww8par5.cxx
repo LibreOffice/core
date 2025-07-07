@@ -2202,7 +2202,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
 
     SwGetRefField aField(
         static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
-        std::move(sBkmName), u""_ustr, REF_BOOKMARK, 0, 0, eFormat);
+        std::move(sBkmName), u""_ustr, ReferencesSubtype::Bookmark, 0, 0, eFormat);
 
     if (eFormat == REF_CONTENT)
     {
@@ -2257,14 +2257,14 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, OUString& rStr )
     // set Sequence No of corresponding Foot-/Endnote to Zero
     // (will be corrected in
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(
-        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), SwMarkName(aBkmName), u""_ustr, REF_FOOTNOTE, 0, 0,
+        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), SwMarkName(aBkmName), u""_ustr, ReferencesSubtype::Footnote, 0, 0,
         REF_ONLYNUMBER );
     m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField));
     m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
     if (bAboveBelow)
     {
         SwGetRefField aField2( static_cast<SwGetRefFieldType*>(
-            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), SwMarkName(aBkmName), u""_ustr, REF_FOOTNOTE, 0, 0,
+            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), SwMarkName(aBkmName), u""_ustr, ReferencesSubtype::Footnote, 0, 0,
             REF_UPDOWN );
         m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField2));
         m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
@@ -2337,7 +2337,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
         sPageRefBookmarkName = SwMarkName(sName);
     }
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
-                        std::move(sPageRefBookmarkName), u""_ustr, REF_BOOKMARK, 0, 0, REF_PAGE );
+                        std::move(sPageRefBookmarkName), u""_ustr, ReferencesSubtype::Bookmark, 0, 0, REF_PAGE );
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
 
     return eF_ResT::OK;

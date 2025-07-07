@@ -194,7 +194,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             if (!bName)
             {
                 auto pGetRef = static_cast<SwGetRefField*>(pField);
-                if (pGetRef->GetSubType() == REF_STYLE)
+                if (pGetRef->GetSubType() == ReferencesSubtype::Style)
                     pGetRef->UpdateField(static_txtattr_cast<SwTextField const*>(pHint), m_pFrame);
             }
             break;

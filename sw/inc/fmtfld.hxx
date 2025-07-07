@@ -74,8 +74,8 @@ namespace sw {
     };
     struct GatherRefFieldsHint final : SfxHint {
         std::vector<SwGetRefField*>& m_rvRFields;
-        const sal_uInt16 m_nType;
-        GatherRefFieldsHint(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nType)
+        const ReferencesSubtype m_nType;
+        GatherRefFieldsHint(std::vector<SwGetRefField*>& rvRFields, const ReferencesSubtype nType)
             : SfxHint(SfxHintId::SwGatherRefFields),
               m_rvRFields(rvRFields), m_nType(nType) {};
     };

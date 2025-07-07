@@ -681,19 +681,19 @@ void SwWrtShell::NavigatorPaste(const NaviContentBookmark& rBkmk)
         }
     }
 
-    std::optional<REFERENCESUBTYPE> oeRefSubType;
+    std::optional<ReferencesSubtype> oeRefSubType;
     std::optional<OUString> osName;
     std::optional<OUString> osVal;
 
     if (!rsCrossRef.isEmpty())
     {
         sal_Int32 nPos = 0;
-        oeRefSubType = static_cast<REFERENCESUBTYPE>(
+        oeRefSubType = static_cast<ReferencesSubtype>(
                     o3tl::toInt32(o3tl::getToken(rsCrossRef, 0, '|', nPos)));
         osName = rsCrossRef.getToken(0, '|', nPos);
-        if (oeRefSubType == REFERENCESUBTYPE::REF_SEQUENCEFLD
-                || oeRefSubType == REFERENCESUBTYPE::REF_FOOTNOTE
-                || oeRefSubType == REFERENCESUBTYPE::REF_ENDNOTE)
+        if (oeRefSubType == ReferencesSubtype::SequenceField
+                || oeRefSubType == ReferencesSubtype::Footnote
+                || oeRefSubType == ReferencesSubtype::Endnote)
         {
             // sequence number
             osVal = rsCrossRef.getToken(0, '|', nPos);
@@ -707,13 +707,13 @@ void SwWrtShell::NavigatorPaste(const NaviContentBookmark& rBkmk)
         bSensitiveRefUpDownEntry = true;
         bSensitiveRefPagePgDscEntry = true;
 
-        if (oeRefSubType == REFERENCESUBTYPE::REF_OUTLINE)
+        if (oeRefSubType == ReferencesSubtype::Outline)
         {
             bSensitiveRefNumberEntry = true;
             bSensitiveRefNumberNoContextEntry = true;
             bSensitiveRefNumberFullContextEntry = true;
         }
-        if (oeRefSubType == REFERENCESUBTYPE::REF_SEQUENCEFLD)
+        if (oeRefSubType == ReferencesSubtype::SequenceField)
         {
             bSensitiveRefOnlyNumberEntry = true;
             bSensitiveRefOnlyCaptionEntry = true;
@@ -877,13 +877,13 @@ void SwWrtShell::NavigatorPaste(const NaviContentBookmark& rBkmk)
             return;
         }
 
-        // Change REFERENCESUBTYPE_OUTLINE to REFERENCESUBTYPE::BOOKMARK. It is used to show
+        // Change ReferencesSubtype::Outline to ReferencesSubtype::Bookmark. It is used to show
         // different options for headings reference and a regular bookmark in the reference mark
         // type popup menu. See related comment in SwContentTree::FillTransferData.
-        if (oeRefSubType == REFERENCESUBTYPE::REF_OUTLINE)
-            oeRefSubType = REFERENCESUBTYPE::REF_BOOKMARK;
+        if (oeRefSubType == ReferencesSubtype::Outline)
+            oeRefSubType = ReferencesSubtype::Bookmark;
 
-        SwInsertField_Data aData(SwFieldTypesEnum::GetRef, oeRefSubType.value(), osName.value(),
+        SwInsertField_Data aData(SwFieldTypesEnum::GetRef, static_cast<sal_uInt16>(oeRefSubType.value()), osName.value(),
                                  osVal.value(), eRefMarkType);
         SwFieldMgr aFieldMgr(this);
         aFieldMgr.InsertField(aData);

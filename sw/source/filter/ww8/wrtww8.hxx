@@ -118,6 +118,7 @@ class SwMSConvertControls;
 class WW8_WrPc;
 struct WW8_PdAttrDesc;
 class SvxBrushItem;
+enum class ReferencesSubtype : sal_uInt16;
 namespace sw::mark { class Fieldmark; }
 namespace com::sun::star::embed { class XEmbeddedObject; }
 
@@ -634,7 +635,7 @@ public:
     bool HasRefToFootOrEndnote(const bool isEndNote, const sal_uInt16 nSeqNo);
 
     /// Find the bookmark name.
-    OUString GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
+    OUString GetBookmarkName( ReferencesSubtype nTyp, const OUString* pName, sal_uInt16 nSeqNo );
 
     /// Find out which style we should use in OOXML
     OUString GetStyleRefName(const OUString& rName);

@@ -62,6 +62,7 @@ class SwTextField;
 class SwTextFootnote;
 class SwTextContentControl;
 class SwMarkName;
+enum class ReferencesSubtype : sal_uInt16;
 
 namespace i18nutil {
     struct SearchOptions2;
@@ -740,7 +741,7 @@ public:
     // on graphics
     bool SelectNxtPrvHyperlink( bool bNext );
 
-    bool GotoRefMark( const SwMarkName& rRefMark, sal_uInt16 nSubType,
+    bool GotoRefMark( const SwMarkName& rRefMark, ReferencesSubtype nSubType,
                             sal_uInt16 nSeqNo, sal_uInt16 nFlags );
 
     // get the nth character from the start or end of the  current selection

@@ -34,6 +34,7 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
+#include <reffldsubtype.hxx>
 
 namespace vcl { class Window; }
 class SbxArray;
@@ -504,7 +505,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void GotoOutline( SwOutlineNodes::size_type nIdx );
     bool GotoOutline( const OUString& rName );
     bool GotoRegion( std::u16string_view rName );
-    bool GotoRefMark( const SwMarkName& rRefMark, sal_uInt16 nSubType = 0,
+    bool GotoRefMark( const SwMarkName& rRefMark, ReferencesSubtype nSubType = ReferencesSubtype::SetRefAttr,
         sal_uInt16 nSeqNo = 0, sal_uInt16 nFlags = 0 );
     SW_DLLPUBLIC bool GotoNextTOXBase( const UIName* pName = nullptr);
     SW_DLLPUBLIC bool GotoTable( const UIName& rName );

@@ -1134,14 +1134,14 @@ bool SwFieldMgr::InsertField(
 
     case SwFieldTypesEnum::GetRef:
         {
-            sal_uInt16 nSubType = rData.m_nSubType;
+            ReferencesSubtype nSubType = static_cast<ReferencesSubtype>(rData.m_nSubType);
             SwGetRefFieldType* pTyp =
                 static_cast<SwGetRefFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::GetRef) );
 
             sal_uInt16 nSeqNo = 0;
             sal_uInt16 nFlags = 0;
 
-            if (nSubType == REF_STYLE) nFlags = o3tl::narrowing<sal_uInt16>(rData.m_sPar2.toInt32());
+            if (nSubType == ReferencesSubtype::Style) nFlags = o3tl::narrowing<sal_uInt16>(rData.m_sPar2.toInt32());
             else nSeqNo = o3tl::narrowing<sal_uInt16>(rData.m_sPar2.toInt32());
 
             OUString sReferenceLanguage;
@@ -1712,12 +1712,12 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
         case SwFieldTypesEnum::GetRef:
             {
                 bSetPar2 = false;
-                sal_Int16 nSubType = o3tl::narrowing<sal_uInt16>(rPar2.toInt32());
+                ReferencesSubtype nSubType = static_cast<ReferencesSubtype>(rPar2.toInt32());
                 static_cast<SwGetRefField*>(pTmpField.get())->SetSubType( nSubType );
                 const sal_Int32 nPos = rPar2.indexOf( '|' );
                 if( nPos>=0 )
                     switch (nSubType) {
-                        case REF_STYLE:
+                        case ReferencesSubtype::Style:
                             static_cast<SwGetRefField*>(pTmpField.get())->SetFlags( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rPar2.subView( nPos + 1 ))));
                             break;
                         default:

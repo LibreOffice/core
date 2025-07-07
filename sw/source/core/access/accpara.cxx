@@ -1030,7 +1030,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             const SwGetRefField* pRefField = static_cast<const SwGetRefField*>(pField);
             switch( pRefField->GetSubType() )
             {
-            case REF_BOOKMARK:
+            case ReferencesSubtype::Bookmark:
                 {
                     if (  pRefField->IsRefToHeadingCrossRefBookmark() )
                         sEntry = "Headings";
@@ -1040,21 +1040,22 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                         sEntry = "Bookmarks";
                 }
                 break;
-            case REF_FOOTNOTE:
+            case ReferencesSubtype::Footnote:
                 sEntry = "Footnotes";
                 break;
-            case REF_ENDNOTE:
+            case ReferencesSubtype::Endnote:
                 sEntry = "Endnotes";
                 break;
-            case REF_SETREFATTR:
+            case ReferencesSubtype::SetRefAttr:
                 sEntry = "Insert Reference";
                 break;
-            case REF_SEQUENCEFLD:
+            case ReferencesSubtype::SequenceField:
                 sEntry = pRefField->GetSetRefName().toString();
                 break;
-            case REF_STYLE:
+            case ReferencesSubtype::Style:
                 sEntry = "StyleRef";
                 break;
+            default: break; // ReferencesSubtype::Outline not handled?
             }
             //Get format string
             strTypeName = sEntry;

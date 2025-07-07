@@ -202,7 +202,7 @@ void SwFieldType::GatherNodeIndex(std::vector<SwNodeOffset>& rvNodeIndex)
     CallSwClientNotify(sw::GatherNodeIndexHint(rvNodeIndex));
 }
 
-void SwFieldType::GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp)
+void SwFieldType::GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const ReferencesSubtype nTyp)
 {
     CallSwClientNotify(sw::GatherRefFieldsHint(rvRFields, nTyp));
 }
@@ -453,7 +453,7 @@ sal_uInt16 SwField::GetUntypedSubType() const
     case SwFieldIds::User:
         return static_cast<sal_uInt16>(static_cast<const SwUserField*>(this)->GetSubType());
     case SwFieldIds::GetRef:
-        return static_cast<const SwGetRefField*>(this)->GetSubType();
+        return static_cast<sal_uInt16>(static_cast<const SwGetRefField*>(this)->GetSubType());
     case SwFieldIds::DateTime:
         return static_cast<sal_uInt16>(static_cast<const SwDateTimeField*>(this)->GetSubType());
     case SwFieldIds::Table:
@@ -494,7 +494,7 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
         static_cast<SwUserField*>(this)->SetSubType(static_cast<SwUserType>(n));
         break;
     case SwFieldIds::GetRef:
-        static_cast<SwGetRefField*>(this)->SetSubType(n);
+        static_cast<SwGetRefField*>(this)->SetSubType(static_cast<ReferencesSubtype>(n));
         break;
     case SwFieldIds::DateTime:
         static_cast<SwDateTimeField*>(this)->SetSubType(static_cast<SwDateTimeSubType>(n));

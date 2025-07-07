@@ -1529,7 +1529,7 @@ void SAL_CALL SwXTextField::attach(
                 xField.reset(new SwGetRefField(static_cast<SwGetRefFieldType*>(pFieldType),
                             SwMarkName(m_pImpl->m_pProps->sPar1),
                             m_pImpl->m_pProps->sPar4,
-                            0,
+                            ReferencesSubtype::SetRefAttr,
                             0,
                             0,
                             0));

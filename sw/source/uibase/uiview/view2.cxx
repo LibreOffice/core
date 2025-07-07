@@ -2668,7 +2668,7 @@ bool SwView::JumpToSwMark( const SwMarkName& rMark )
                 {
                     sal_uInt16 nSeqNo = o3tl::toInt32(sName.subView( nNoPos + 1 ));
                     sName = sName.copy( 0, nNoPos );
-                    bRet = m_pWrtShell->GotoRefMark(SwMarkName(sName), REF_SEQUENCEFLD, nSeqNo);
+                    bRet = m_pWrtShell->GotoRefMark(SwMarkName(sName), ReferencesSubtype::SequenceField, nSeqNo);
                 }
             }
             else if (sCmp == "toxmark")
