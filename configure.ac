@@ -9033,7 +9033,7 @@ if test $_os = "WINNT"; then
             with_redist=${VCTOOLSET:1}
             find_msms "$with_redist"
             if test -n "$msmdir"; then
-                MSM_PATH=`win_short_path_for_make "$msmdir"`/
+                MSM_PATH=`win_short_path_for_make "${msmdir%/}/"`
                 SCPDEFS="$SCPDEFS -DWITH_VC_REDIST=$with_redist"
             fi
             break
