@@ -3357,15 +3357,22 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
         }
         else if (pTmp->GetRedlineData(0).CanCombineForAcceptReject(aOrigData))
         {
+            bool bHierarchicalFormat = pTmp->GetType() == RedlineType::Format && pTmp->GetStackCount() > 1;
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
+                sal_Int8 nDepth = 0;
+                if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
+                {
+                    // Only work with the underlying insert, so the undo action matches the UI
+                    // action below.
+                    nDepth = 1;
+                }
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                    std::make_unique<SwUndoAcceptRedline>(*pTmp));
+                    std::make_unique<SwUndoAcceptRedline>(*pTmp, nDepth));
             }
             nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
 
-            bool bHierarchicalFormat = pTmp->GetType() == RedlineType::Format && pTmp->GetStackCount() > 1;
             if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
             {
                 // This combination of 2 redline types prefers accepting the inner one first.
