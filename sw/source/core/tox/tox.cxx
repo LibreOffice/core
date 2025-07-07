@@ -550,7 +550,7 @@ SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
     , m_eLanguage(::GetAppLanguage())
     , m_nCreateType(nCreaType)
     , m_nOLEOptions(SwTOOElements::NONE)
-    , m_eCaptionDisplay(CAPTION_COMPLETE)
+    , m_eCaptionDisplay(SwCaptionDisplay::Complete)
     , m_bProtected( true )
     , m_bFromChapter(false)
     , m_bFromObjectNames(false)

@@ -234,9 +234,9 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             sal_Int16 nSet = text::ChapterFormat::NAME_NUMBER;
             switch (rDesc.GetCaptionDisplay())
             {
-                case CAPTION_COMPLETE:  nSet = text::ChapterFormat::NAME_NUMBER;break;
-                case CAPTION_NUMBER  :  nSet = text::ChapterFormat::NUMBER; break;
-                case CAPTION_TEXT    :  nSet = text::ChapterFormat::NAME;      break;
+                case SwCaptionDisplay::Complete:  nSet = text::ChapterFormat::NAME_NUMBER;break;
+                case SwCaptionDisplay::Number  :  nSet = text::ChapterFormat::NUMBER; break;
+                case SwCaptionDisplay::Text    :  nSet = text::ChapterFormat::NAME;      break;
             }
             lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_DISPLAY_TYPE, nSet);
 

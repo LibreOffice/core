@@ -1498,12 +1498,12 @@ void SwTOXBaseSection::UpdateSequence(const SwTextNode* pOwnChapterNode,
                 + OUString::number( rSeqField.GetSeqNumber() );
             std::unique_ptr<SwTOXPara> pNew(new SwTOXPara( rTextNode, SwTOXElement::Sequence, 1, sName ));
             // set indexes if the number or the reference text are to be displayed
-            if( GetCaptionDisplay() == CAPTION_TEXT )
+            if( GetCaptionDisplay() == SwCaptionDisplay::Text )
             {
                 pNew->SetStartIndex(
                     SwGetExpField::GetReferenceTextPos( *pFormatField, rDoc ));
             }
-            else if(GetCaptionDisplay() == CAPTION_NUMBER)
+            else if(GetCaptionDisplay() == SwCaptionDisplay::Number)
             {
                 pNew->SetEndIndex(pTextField->GetStart() + 1);
             }

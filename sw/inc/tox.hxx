@@ -400,11 +400,11 @@ namespace o3tl {
 }
 
 //which part of the caption is to be displayed
-enum SwCaptionDisplay
+enum class SwCaptionDisplay
 {
-    CAPTION_COMPLETE,
-    CAPTION_NUMBER,
-    CAPTION_TEXT
+    Complete,
+    Number,
+    Text
 };
 
 enum class SwTOOElements : sal_uInt16

@@ -696,22 +696,22 @@ SwXDocumentIndex::setPropertyValue(
         case WID_LABEL_DISPLAY_TYPE:
         {
             const sal_Int16 nVal = lcl_AnyToType<sal_Int16>(rValue);
-            sal_uInt16 nSet = CAPTION_COMPLETE;
+            SwCaptionDisplay nSet = SwCaptionDisplay::Complete;
             switch (nVal)
             {
                 case text::ReferenceFieldPart::TEXT:
-                    nSet = CAPTION_COMPLETE;
+                    nSet = SwCaptionDisplay::Complete;
                 break;
                 case text::ReferenceFieldPart::CATEGORY_AND_NUMBER:
-                    nSet = CAPTION_NUMBER;
+                    nSet = SwCaptionDisplay::Number;
                 break;
                 case text::ReferenceFieldPart::ONLY_CAPTION:
-                    nSet = CAPTION_TEXT;
+                    nSet = SwCaptionDisplay::Text;
                 break;
                 default:
                     throw lang::IllegalArgumentException();
             }
-            rTOXBase.SetCaptionDisplay(static_cast<SwCaptionDisplay>(nSet));
+            rTOXBase.SetCaptionDisplay(nSet);
         }
         break;
         case WID_USE_LEVEL_FROM_SOURCE:
@@ -1028,13 +1028,13 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 sal_Int16 nSet = text::ReferenceFieldPart::TEXT;
                 switch (pTOXBase->GetCaptionDisplay())
                 {
-                    case CAPTION_COMPLETE:
+                    case SwCaptionDisplay::Complete:
                         nSet = text::ReferenceFieldPart::TEXT;
                     break;
-                    case CAPTION_NUMBER:
+                    case SwCaptionDisplay::Number:
                         nSet = text::ReferenceFieldPart::CATEGORY_AND_NUMBER;
                     break;
-                    case CAPTION_TEXT:
+                    case SwCaptionDisplay::Text:
                         nSet = text::ReferenceFieldPart::ONLY_CAPTION;
                     break;
                 }

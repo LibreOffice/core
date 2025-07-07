@@ -3190,8 +3190,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                 case 'c':
                     lcl_toxMatchACSwitch(m_rDoc, *pBase, aReadParam,
                                            ('c' == nRet)
-                                         ? CAPTION_COMPLETE
-                                         : CAPTION_TEXT );
+                                         ? SwCaptionDisplay::Complete
+                                         : SwCaptionDisplay::Text );
                     break;
                 case 'o':
                     {

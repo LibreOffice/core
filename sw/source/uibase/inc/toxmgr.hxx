@@ -76,7 +76,7 @@ public:
         m_nIndexOptions(SwTOIOptions::SameEntry|SwTOIOptions::FF|SwTOIOptions::CaseSensitive),
         m_nOLEOptions(SwTOOElements::NONE),
         m_eLanguage(::GetAppLanguage()),
-        m_eCaptionDisplay(CAPTION_COMPLETE),
+        m_eCaptionDisplay(SwCaptionDisplay::Complete),
         m_nLevel(MAXLEVEL),
         m_bFromObjectNames(false),
         m_bFromChapter(false),
