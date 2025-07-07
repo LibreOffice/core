@@ -1110,29 +1110,17 @@ void SAL_CALL ChartController::dispatch(
     else if(aCommand == "FillColor")
     {
         if (rArgs.getLength() > 0)
-        {
-            sal_uInt32 nColor;
-            if (rArgs[0].Value >>= nColor)
-                this->executeDispatch_FillColor(nColor);
-        }
+            executeDispatch_FillColor(rArgs[0].Value);
     }
     else if(aCommand == "XLineColor")
     {
         if (rArgs.getLength() > 0)
-        {
-            sal_Int32 nColor = -1;
-            rArgs[0].Value >>= nColor;
-            this->executeDispatch_LineColor(nColor);
-        }
+            executeDispatch_LineColor(rArgs[0].Value);
     }
     else if(aCommand == "LineWidth")
     {
         if (rArgs.getLength() > 0)
-        {
-            sal_Int32 nWidth = -1;
-            rArgs[0].Value >>= nWidth;
-            this->executeDispatch_LineWidth(nWidth);
-        }
+            executeDispatch_LineWidth(rArgs[0].Value);
     }
     else if(aCommand.startsWith("FillGradient"))
     {

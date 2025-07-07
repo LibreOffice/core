@@ -542,10 +542,10 @@ private:
 
     void executeDispatch_LOKSetTextSelection(int nType, int nX, int nY);
     void executeDispatch_LOKPieSegmentDragging(int nOffset);
-    void executeDispatch_FillColor(sal_uInt32 nColor);
+    void executeDispatch_FillColor(const css::uno::Any& rColor);
     void executeDispatch_FillGradient(std::u16string_view sJSONGradient);
-    void executeDispatch_LineColor(sal_uInt32 nColor);
-    void executeDispatch_LineWidth(sal_uInt32 nWidth);
+    void executeDispatch_LineColor(const css::uno::Any& rColor);
+    void executeDispatch_LineWidth(const css::uno::Any& rWidth);
 
     void sendPopupRequest(std::u16string_view rCID, tools::Rectangle aRectangle);
 
