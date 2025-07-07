@@ -908,6 +908,43 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenFormat)
     // Without the accompanying fix in place, this test would have failed, the text was AAABBBCCC,
     // just the format of BBB was dropped.
     CPPUNIT_ASSERT(pTextNode->GetText().isEmpty());
+
+    // And given a state where you're just after the undo for the accept of insert-then-format's
+    // format:
+    pWrtShell->Undo();
+    // Undo() creates a new cursor.
+    pCursor = pWrtShell->GetCursor();
+    pCursor->DeleteMark();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Move inside "BBB".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    nRedline = 0;
+    rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    // A redline is found.
+    CPPUNIT_ASSERT_LESS(rRedlines.size(), nRedline);
+    pWrtShell->AcceptRedline(nRedline);
+    pWrtShell->Undo();
+
+    // When redoing that accept:
+    pWrtShell->Redo();
+
+    // Then make sure we have a single format redline as a result:
+    pCursor = pWrtShell->GetCursor();
+    pCursor->DeleteMark();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Move inside "BBB".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    nRedline = 0;
+    pRedline = rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. everything was accepted, even the format redline was gone from the document, instead of
+    // just accepting the underlying insert.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    CPPUNIT_ASSERT(pRedline);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, pRedline->GetType());
+    CPPUNIT_ASSERT(!pRedline->GetRedlineData().Next());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
