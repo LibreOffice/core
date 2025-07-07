@@ -64,7 +64,6 @@
 #include <osl/detail/android-bootstrap.h>
 #include <android/log.h>
 #include <android/asset_manager.h>
-#include <o3tl/string_view.hxx>
 #endif
 
 #include <vector>
