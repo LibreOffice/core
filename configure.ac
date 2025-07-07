@@ -6198,7 +6198,8 @@ if test "$cross_compiling" = "yes"; then
     fi
     # windows uses full-internal python and that in turn relies on openssl, so also enable openssl
     # when cross-compiling for aarch64, overriding the defaults below
-    test "${PLATFORMID}" = "windows_aarch64" && sub_conf_opts="$sub_conf_opts --enable-openssl --with-tls=openssl"
+    # similarly: at least skia headers need to be available in the cross-toolset
+    test "${PLATFORMID}" = "windows_aarch64" && sub_conf_opts="$sub_conf_opts --enable-openssl --with-tls=openssl --enable-skia"
     # cross-compilations don't necessarily enable python support in the product/the sub-configure needs to know
     # that the minimum supported python version is 3.7 or later...
     test "$with_system_harfbuzz" != "yes" && sub_conf_opts="$sub_conf_opts NEED_MESON=TRUE"
@@ -6296,6 +6297,7 @@ if test "$cross_compiling" = "yes"; then
         PYTHON
         REPORTBUILDER
         SCRIPTING
+        SKIA
         ZLIB
         ZSTD
         ZXCVBN
