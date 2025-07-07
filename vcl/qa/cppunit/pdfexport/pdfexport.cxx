@@ -1717,6 +1717,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_2)
             {
                 auto pName
                     = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
+                CPPUNIT_ASSERT_MESSAGE("No BaseFont element found in font!", pName);
                 auto aName = pName->GetValue().copy(7); // skip the subset id
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", "ReemKufi-Regular"_ostr,
                                              aName);
