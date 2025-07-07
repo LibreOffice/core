@@ -11794,61 +11794,54 @@ bool ScInterpreter::SearchMatrixForValue( VectorSearchArguments& vsa, ScQueryPar
         case searchbdesc:
             {
                 // binary search for non-equality mode (the source data is sorted)
-                bool bAscOrder = ( vsa.eSearchMode == searchbasc );
-                SCSIZE nFirst = 0;
-                SCSIZE nLast  = nMatCount - 1;
-                for ( SCSIZE nLen = nLast - nFirst; nLen > 0; nLen = nLast - nFirst )
+                bool bAscOrder = (rEntry.eOp == SC_LESS_EQUAL);
+                SCSIZE nFirst = 0, nLast = nMatCount-1, nHitIndex = 0;
+                for (SCSIZE nLen = nLast-nFirst; nLen > 0; nLen = nLast-nFirst)
                 {
-                    SCSIZE nMid = nFirst + nLen / 2;
-                    sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, aMatAcc, rParam, rEntry, bMatchWholeCell );
-                    if ( nCmp == 0 )
+                    SCSIZE nMid = nFirst + nLen/2;
+                    sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, aMatAcc, rParam, rEntry, bMatchWholeCell);
+                    if (nCmp == 0)
                     {
                         // exact match.  find the last item with the same value.
                         lcl_GetLastMatch( nMid, aMatAcc, nMatCount);
-                        vsa.nHitIndex = nMid + 1;
+                        vsa.nHitIndex = nMid+1;
+                        return true;
+                    }
+                    if (nLen == 1) // first and last items are next to each other.
+                    {
+                        if (nCmp < 0)
+                            nHitIndex = bAscOrder ? nLast : nFirst;
+                        else
+                            nHitIndex = bAscOrder ? nFirst : nLast;
                         break;
                     }
-
-                    if ( nLen == 1 ) // first and last items are next to each other.
+                    if (nCmp < 0)
                     {
-                        if ( bAscOrder && vsa.eMatchMode == exactorS )
-                            vsa.nHitIndex = ( nCmp > 0 ? nFirst : nLast );
-                        else if ( !bAscOrder && vsa.eMatchMode == exactorG )
-                            vsa.nHitIndex = ( nCmp < 0 ? nFirst : nLast );
-                        break;
+                        if (bAscOrder)
+                            nFirst = nMid;
+                        else
+                            nLast = nMid;
                     }
                     else
                     {
-                        if ( nCmp < 0 )
-                        {
-                            if ( bAscOrder )
-                                nFirst = nMid;
-                            else
-                                nLast = nMid;
-                        }
+                        if (bAscOrder)
+                            nLast = nMid;
                         else
-                        {
-                            if ( bAscOrder )
-                                nLast = nMid;
-                            else
-                                nFirst = nMid;
-                        }
-
-                        if ( vsa.nHitIndex == nMatCount - 1 ) // last item
-                        {
-                            nCmp = lcl_CompareMatrix2Query( vsa.nHitIndex, aMatAcc, rParam, rEntry, bMatchWholeCell );
-                            if ( ( vsa.eMatchMode == exactorS && nCmp <= 0 ) ||
-                                 ( vsa.eMatchMode == exactorG && nCmp >= 0 ) )
-                            {
-                                // either the last item is an exact match or the real
-                                // hit is beyond the last item.
-                                vsa.nHitIndex++;
-                            }
-                            else
-                                vsa.nHitIndex = 0;
-                        }
+                            nFirst = nMid;
                     }
                 }
+                if (nHitIndex == nMatCount-1) // last item
+                {
+                    sal_Int32 nCmp = lcl_CompareMatrix2Query( nHitIndex, aMatAcc, rParam, rEntry, bMatchWholeCell);
+                    if ((bAscOrder && nCmp <= 0) || (!bAscOrder && nCmp >= 0))
+                    {
+                        // either the last item is an exact match or the real
+                        // hit is beyond the last item.
+                        vsa.nHitIndex = nHitIndex+1;
+                        return true;
+                    }
+                }
+                vsa.nHitIndex = nHitIndex;
             }
             break;
 
