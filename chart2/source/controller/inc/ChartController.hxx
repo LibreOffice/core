@@ -341,7 +341,7 @@ public:
     rtl::Reference<::chart::ChartModel> getChartModel();
     rtl::Reference<::chart::Diagram> getFirstDiagram();
 
-    Selection getSelectionMember() { return m_aSelection; }
+    const Selection& getSelectionMember() const { return m_aSelection; }
 
 private:
     class TheModel : public salhelper::SimpleReferenceObject
