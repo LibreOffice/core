@@ -251,7 +251,7 @@ public:
         SetPriority(TaskPriority::SKIA_FLUSH);
 #else
         // We don't want to be swapping before we've painted.
-        SetPriority(TaskPriority::POST_PAINT);
+        SetPriority(TaskPriority::HIGHEST);
 #endif
     }
 #ifndef NDEBUG
