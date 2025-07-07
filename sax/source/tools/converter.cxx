@@ -48,18 +48,6 @@ using namespace com::sun::star::util;
 
 namespace sax {
 
-const std::string_view gpsMM = "mm";
-const std::string_view gpsCM = "cm";
-const std::string_view gpsPT = "pt";
-const std::string_view gpsINCH = "in";
-const std::string_view gpsPC = "pc";
-const std::string_view gpsPX = "px";
-const std::string_view gpsPERCENT = "%";
-const std::string_view gpsFONT_EM = "em";
-const std::string_view gpsFONT_IC = "ic";
-
-const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 14;
-
 static sal_Int64 toInt64_WithLength(const sal_Unicode * str, sal_Int16 radix, sal_Int32 nStrLength )
 {
     return rtl_ustr_toInt64_WithLength(str, radix, nStrLength);
@@ -71,6 +59,18 @@ static sal_Int64 toInt64_WithLength(const char * str, sal_Int16 radix, sal_Int32
 
 namespace
 {
+constexpr std::string_view gpsMM = "mm";
+constexpr std::string_view gpsCM = "cm";
+constexpr std::string_view gpsPT = "pt";
+constexpr std::string_view gpsINCH = "in";
+constexpr std::string_view gpsPC = "pc";
+constexpr std::string_view gpsPX = "px";
+constexpr std::string_view gpsPERCENT = "%";
+constexpr std::string_view gpsFONT_EM = "em";
+constexpr std::string_view gpsFONT_IC = "ic";
+
+const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 14;
+
 const std::map<sal_Int16, std::string_view> stConvertMeasureUnitStrMap{
     { MeasureUnit::MM, gpsMM },          { MeasureUnit::CM, gpsCM },
     { MeasureUnit::INCH, gpsINCH },      { MeasureUnit::POINT, gpsPT },
