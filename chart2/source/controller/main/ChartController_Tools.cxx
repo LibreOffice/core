@@ -1210,7 +1210,7 @@ void ChartController::executeDispatch_ToggleGridVertical()
     aUndoGuard.commit();
 }
 
-void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
+void ChartController::executeDispatch_FillColor(const css::uno::Any& rColor)
 {
     try
     {
@@ -1220,7 +1220,7 @@ void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
             const auto [xPointProperties, eType]
                 = getSelectedGraphObject(getSelection(), xChartModel);
             if( xPointProperties.is() )
-                xPointProperties->setPropertyValue( u"FillColor"_ustr, uno::Any( nColor ) );
+                xPointProperties->setPropertyValue(u"FillColor"_ustr, rColor);
 
             if (eType == OBJECTTYPE_DATA_SERIES || eType == OBJECTTYPE_DATA_POINT)
             {
@@ -1270,12 +1270,12 @@ void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGrad
     }
 }
 
-void ChartController::executeDispatch_LineColor(sal_uInt32 nColor)
+void ChartController::executeDispatch_LineColor(const css::uno::Any& rColor)
 {
     try
     {
         if (css::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
-            xPropSet->setPropertyValue( u"LineColor"_ustr, css::uno::Any( Color(ColorTransparency, nColor) ) );
+            xPropSet->setPropertyValue(u"LineColor"_ustr, rColor);
     }
     catch( const uno::Exception& )
     {
@@ -1283,12 +1283,12 @@ void ChartController::executeDispatch_LineColor(sal_uInt32 nColor)
     }
 }
 
-void ChartController::executeDispatch_LineWidth(sal_uInt32 nWidth)
+void ChartController::executeDispatch_LineWidth(const css::uno::Any& rWidth)
 {
     try
     {
         if (css::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
-            xPropSet->setPropertyValue( u"LineWidth"_ustr, css::uno::Any( nWidth ) );
+            xPropSet->setPropertyValue(u"LineWidth"_ustr, rWidth);
     }
     catch( const uno::Exception& )
     {
