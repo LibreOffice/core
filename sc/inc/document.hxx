@@ -353,7 +353,6 @@ friend class sc::EditTextIterator;
 friend struct ScMutationGuard;
 friend struct ScMutationDisable;
 
-    typedef std::vector<ScTableUniquePtr> TableContainer;
 
 public:
     enum class HardRecalcState
@@ -403,7 +402,7 @@ private:
     std::unique_ptr<ScValidationDataList> pValidationList;              // validity
     sal_uInt32 mnLastValidationListMax = 0;
     SvNumberFormatterIndexTable* pFormatExchangeList;    // for application of number formats
-    TableContainer maTabs;
+    std::vector<ScTableUniquePtr> maTabs;
     rtl::Reference<ScSheetLimits> mxSheetLimits;
     std::vector<OUString> maTabNames;               // for undo document, we need the information tab name <-> index
     mutable std::unique_ptr<ScRangeName>    pRangeName;
@@ -649,7 +648,7 @@ public:
     SC_DLLPUBLIC sal_uInt64  GetFormulaGroupCount() const;       // all cells
     sal_uInt64               GetCodeCount() const;       // RPN-Code in formulas
     DECL_LINK( GetUserDefinedColor, sal_uInt16, Color* );
-                                                                // number formatter
+
 public:
     SC_DLLPUBLIC                ScDocument( ScDocumentMode eMode = SCDOCMODE_DOCUMENT,
                                             ScDocShell* pDocShell = nullptr );

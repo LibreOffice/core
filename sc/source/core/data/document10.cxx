@@ -59,7 +59,7 @@ void ScDocument::DeleteBeforeCopyFromClip(
     sc::CopyFromClipContext& rCxt, const ScMarkData& rMark, sc::ColumnSpanSet& rBroadcastSpans )
 {
     SCTAB nClipTab = 0;
-    const TableContainer& rClipTabs = rCxt.getClipDoc()->maTabs;
+    std::vector<ScTableUniquePtr> const& rClipTabs = rCxt.getClipDoc()->maTabs;
     SCTAB nClipTabCount = rClipTabs.size();
 
     for (SCTAB nTab = rCxt.getTabStart(); nTab <= rCxt.getTabEnd(); ++nTab)

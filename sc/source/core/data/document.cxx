@@ -2682,7 +2682,7 @@ void ScDocument::CopyBlockFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     const ScMarkData& rMark, SCCOL nDx, SCROW nDy )
 {
-    TableContainer& rClipTabs = rCxt.getClipDoc()->maTabs;
+    std::vector<ScTableUniquePtr>& rClipTabs = rCxt.getClipDoc()->maTabs;
     SCTAB nTabEnd = rCxt.getTabEnd();
     SCTAB nClipTab = 0;
     for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < GetTableCount(); i++)
@@ -2788,7 +2788,7 @@ SCROW ScDocument::CopyNonFilteredFromClip(sc::CopyFromClipContext& rCxt, SCCOL n
 
     //  filtered state is taken from first used table in clipboard (as in GetClipArea)
     SCTAB nFlagTab = 0;
-    TableContainer& rClipTabs = rCxt.getClipDoc()->maTabs;
+    std::vector<ScTableUniquePtr>& rClipTabs = rCxt.getClipDoc()->maTabs;
     while ( nFlagTab < static_cast<SCTAB>(rClipTabs.size()) && !rClipTabs[nFlagTab] )
         ++nFlagTab;
 
