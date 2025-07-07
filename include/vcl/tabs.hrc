@@ -26,9 +26,38 @@ struct TabData
  * the effective icon is loaded per RID_M + RID_TAB*.sIconName
 */
 
-static constexpr OUString RID_M = u"cmd/lc_"_ustr;
-static constexpr OUString RID_L = u"cmd/32/"_ustr;
+inline constexpr OUString RID_M = u"cmd/lc_"_ustr;
+inline constexpr OUString RID_L = u"cmd/32/"_ustr;
 
+const TabData RID_TAB_BORDER{ NC_("RID_TAB_BORDER", "Border"), "borderdialog.png" };
+const TabData RID_TAB_LINE{ NC_("RID_TAB_LINE", "Line"), "formatline.png" };
+const TabData RID_TAB_AREA{ NC_("RID_TAB_AREA", "Area"), "backgroundcolor.png" };
+const TabData RID_TAB_TRANSPARENCE{ NC_("RID_TAB_TRANSPARENCE", "Transparency"), "graftransparence.png" };
+const TabData RID_TAB_FONT{ NC_("RID_TAB_FONT", "Font"), "fontdialog.png" };
+const TabData RID_TAB_FONTEFFECTS{ NC_("RID_TAB_FONTEFFECTS", "Font Effects"), "color.png" };
+const TabData RID_TAB_ALIGNMENT{ NC_("RID_TAB_ALIGNMENT", "Alignment"), "alignblock.png" };
+const TabData RID_TAB_ASIANTYPO{ NC_("RID_TAB_ASIANTYPO", "Asian Typography"), "defaultcharstyle.png" };
+const TabData RID_TAB_POSITION{ NC_("RID_TAB_POSITION", "Position"), "fontwork.png" }; // font
+const TabData RID_TAB_HIGHLIGHTING{ NC_("RID_TAB_HIGHLIGHTING", "Highlighting"), "backcolor.png" };
+const TabData RID_TAB_COLORPALETTE{ NC_("RID_TAB_COLORPALETTE", "Color Palette"), "colorsettings.png" };
+const TabData RID_TAB_NUMBERS{ NC_("RID_TAB_NUMBERS", "Numbers"), "numberformatdecimal.png" };
+const TabData RID_TAB_INDENTS{ NC_("RID_TAB_INDENTS", "Indents &amp; Spacing"), "paraspaceincrease.png" };
+const TabData RID_TAB_TABS{ NC_("RID_TAB_TABS", "Tabs"), "hangingindent.png" };
+
+const TabData RID_TAB_CHART_OPTIONS{ NC_("RID_TAB_CHART_OPTIONS", "Options"), "diagramtype.png" };
+const TabData RID_TAB_CHART_ERROR_X{ NC_("RID_TAB_CHART_ERROR_X", "X Error Bars"), "arrowshapes.png" };
+const TabData RID_TAB_CHART_ERROR_Y{ NC_("RID_TAB_CHART_ERROR_Y", "Y Error Bars"), "arrowshapes.up-down-arrow.png" };
+const TabData RID_TAB_CHART_TREND{ NC_("RID_TAB_CHART_TREND", "Type"), "bezierconvert.png" };
+const TabData RID_TAB_CHART_TABLE{ NC_("RID_TAB_CHART_TABLE", "Data Table"), "inserttable.png" };
+const TabData RID_TAB_CHART_LEGENDPOS{ NC_("RID_TAB_CHART_LEGENDPOS", "Position"), "arrowshapes.quad-arrow.png" };
+const TabData RID_TAB_CHART_DATALABEL{ NC_("RID_TAB_CHART_DATALABEL", "Data Labels"), "numberformatstandard.png" };
+const TabData RID_TAB_CHART_SCALE{ NC_("RID_TAB_CHART_SCALE", "Scale"), "diagramaxisxyz.png" };
+const TabData RID_TAB_CHART_POSITIONING{ NC_("RID_TAB_CHART_POSITIONING", "Positioning"), "grow.png" };
+const TabData RID_TAB_CHART_AXISLABEL{ NC_("RID_TAB_CHART_AXISLABEL", "Label"), "insertfixedtext.png" };
+const TabData RID_TAB_CHART_LAYOUT{ NC_("RID_TAB_CHART_LAYOUT", "Layout"), "cyramid.png" };
+const TabData RID_TAB_CHART_PERSPECTIVE{ NC_("RID_TAB_CHART_PERSPECTIVE", "Perspective"), "window3d.png" };
+const TabData RID_TAB_CHART_APPEARANCE{ NC_("RID_TAB_CHART_APPEARANCE", "Appearance"), "shell3d.png" };
+const TabData RID_TAB_CHART_ILLUMINATION{ NC_("RID_TAB_CHART_ILLUMINATION", "Illumination"), "grafluminance.png" };
 
 static OUString TabResId(TranslateId aId)
 {
