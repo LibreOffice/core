@@ -1882,7 +1882,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
             tools::Long nDif = aPaperSize.Height() - static_cast<tools::Long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
                 aDraw.AdjustY(nDif / 2 );
-            pEditEngine->Draw(*pDev, aDraw);
+            pEditEngine->DrawText_ToPosition(*pDev, aDraw);
         }
 
         //  center
@@ -1896,7 +1896,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
             tools::Long nDif = aPaperSize.Height() - static_cast<tools::Long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
                 aDraw.AdjustY(nDif / 2 );
-            pEditEngine->Draw(*pDev, aDraw);
+            pEditEngine->DrawText_ToPosition(*pDev, aDraw);
         }
 
         //  right
@@ -1910,7 +1910,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
             tools::Long nDif = aPaperSize.Height() - static_cast<tools::Long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
                 aDraw.AdjustY(nDif / 2 );
-            pEditEngine->Draw(*pDev, aDraw);
+            pEditEngine->DrawText_ToPosition(*pDev, aDraw);
         }
 
         pDev->SetClipRegion();
@@ -1970,13 +1970,13 @@ tools::Long ScPrintFunc::DoNotes( tools::Long nNoteStart, bool bDoPrint, ScPrevi
                 {
                     if (bDoPrint)
                     {
-                        pEditEngine->Draw(*pDev, Point(nPosX, nPosY));
+                        pEditEngine->DrawText_ToPosition(*pDev, Point(nPosX, nPosY));
 
                         OUString aMarkStr(rPos.Format(ScRefFlags::VALID, &rDoc, rDoc.GetAddressConvention()) + ":");
 
                         //  cell position also via EditEngine, for correct positioning
                         pEditEngine->SetTextCurrentDefaults(aMarkStr);
-                        pEditEngine->Draw(*pDev, Point(aPageRect.Left(), nPosY));
+                        pEditEngine->DrawText_ToPosition(*pDev, Point(aPageRect.Left(), nPosY));
                     }
 
                     if ( pLocationData )

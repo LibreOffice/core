@@ -1446,7 +1446,7 @@ namespace {
             pOutliner->Clear();
             pOutliner->SetText(*mpParaObject);
 
-            pOutliner->Draw(rPrinter, aOutRect);
+            pOutliner->DrawText_ToRectangle(rPrinter, aOutRect);
 
             PrintMessage(
                 rPrinter,

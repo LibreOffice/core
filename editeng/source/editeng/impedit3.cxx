@@ -3352,7 +3352,7 @@ Point ImpEditEngine::MoveToNextLine(
     return rMovePos - aOld;
 }
 
-void ImpEditEngine::Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation )
+void ImpEditEngine::DrawText_ToPosition( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation )
 {
     // Create with 2 points, as with positive points it will end up with
     // LONGMAX as Size, Bottom and Right in the range > LONGMAX.
@@ -3370,7 +3370,7 @@ void ImpEditEngine::Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree1
         rOutDev.Pop();
 }
 
-void ImpEditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip )
+void ImpEditEngine::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bHardClip )
 {
 #if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
     if ( bDebugPaint )
@@ -3404,7 +3404,7 @@ void ImpEditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRec
         rOutDev.Push();
 
     // Always use the Intersect method, it is a must for Metafile!
-    if ( bClip )
+    if ( bHardClip )
     {
         // Clip only if necessary...
         if (!IsFormatted())
@@ -4311,7 +4311,7 @@ Point ImpEditEngine::CalculateTextPaintStartPosition(ImpEditView& rView) const
     return aStartPos;
 }
 
-void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
+void ImpEditEngine::DrawText_ToEditView( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     if ( !IsUpdateLayout() || IsInUndo() )
         return;

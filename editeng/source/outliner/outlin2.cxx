@@ -163,14 +163,14 @@ OUString Outliner::GetWord(const EPaM& rPos)
     return pEditEngine->GetWord(rPos);
 }
 
-void Outliner::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect )
+void Outliner::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Rectangle& rOutRect )
 {
-    pEditEngine->Draw( rOutDev, rOutRect );
+    pEditEngine->DrawText_ToRectangle( rOutDev, rOutRect, Point( 0, 0 ), true );
 }
 
-void Outliner::Draw( OutputDevice& rOutDev, const Point& rStartPos )
+void Outliner::DrawText_ToPosition( OutputDevice& rOutDev, const Point& rStartPos )
 {
-    pEditEngine->Draw( rOutDev, rStartPos );
+    pEditEngine->DrawText_ToPosition( rOutDev, rStartPos );
 }
 
 void Outliner::SetPaperSize( const Size& rSize )

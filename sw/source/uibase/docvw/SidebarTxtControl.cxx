@@ -233,7 +233,7 @@ void SidebarTextControl::DrawForPage(OutputDevice* pDev, const Point& rPt)
 
     if (OutlinerView* pOutlinerView = mrSidebarWin.GetOutlinerView())
     {
-        pOutlinerView->GetOutliner().Draw(*pDev, tools::Rectangle(rPt, aSize));
+        pOutlinerView->GetOutliner().DrawText_ToRectangle(*pDev, tools::Rectangle(rPt, aSize));
     }
 
     if ( mrSidebarWin.GetLayoutStatus()!=SwPostItHelper::DELETED )

@@ -137,7 +137,7 @@ void NotesPanelView::setNotesToDoc()
 
 void NotesPanelView::Paint(const ::tools::Rectangle& rRect, ::sd::Window const* /*pWin*/)
 {
-    maOutlinerView.Paint(rRect);
+    maOutlinerView.DrawText_ToEditView(rRect);
 }
 
 OutlinerView* NotesPanelView::GetOutlinerView() { return &maOutlinerView; }

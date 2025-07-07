@@ -3311,11 +3311,11 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             // no hard clip, only draw the affected rows
             Point aDocStart = aClip.getRect().TopLeft();
             aDocStart -= aLogicStart;
-            rParam.mpEngine->Draw(*mpDev, aClip.getRect(), aDocStart, false);
+            rParam.mpEngine->DrawText_ToRectangle(*mpDev, aClip.getRect(), aDocStart, false);
         }
         else
         {
-            rParam.mpEngine->Draw(*mpDev, aLogicStart);
+            rParam.mpEngine->DrawText_ToPosition(*mpDev, aLogicStart);
         }
     }
 
@@ -3662,7 +3662,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             }
         }
 
-        rParam.mpEngine->Draw(*mpDev, aLogicStart, 900_deg10);
+        rParam.mpEngine->DrawText_ToPosition(*mpDev, aLogicStart, 900_deg10);
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
@@ -3899,7 +3899,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         // bMoveClipped handling has been replaced by complete alignment
         // handling (also extending to the left).
 
-        rParam.mpEngine->Draw(*mpDev, aLogicStart, 2700_deg10);
+        rParam.mpEngine->DrawText_ToPosition(*mpDev, aLogicStart, 2700_deg10);
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
@@ -4178,11 +4178,11 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             // no hard clip, only draw the affected rows
             Point aDocStart = aClip.getRect().TopLeft();
             aDocStart -= aLogicStart;
-            rParam.mpEngine->Draw(*mpDev, aClip.getRect(), aDocStart, false);
+            rParam.mpEngine->DrawText_ToRectangle(*mpDev, aClip.getRect(), aDocStart, false);
         }
         else
         {
-            rParam.mpEngine->Draw(*mpDev, aLogicStart);
+            rParam.mpEngine->DrawText_ToPosition(*mpDev, aLogicStart);
         }
     }
 
@@ -4448,7 +4448,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         // the whole output area, not the text itself
         aLogicStart.AdjustX( -(rParam.mpEngine->GetPaperSize().Width()) );
 
-        rParam.mpEngine->Draw(*mpDev, aLogicStart);
+        rParam.mpEngine->DrawText_ToPosition(*mpDev, aLogicStart);
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
@@ -5311,7 +5311,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                                 //  bSimClip is not used here (because nOriVal is set)
 
-                                mxOutputEditEngine->Draw(*mpDev, aLogicStart, nOriVal);
+                                mxOutputEditEngine->DrawText_ToPosition(*mpDev, aLogicStart, nOriVal);
 
                                 if (bMetaFile)
                                     mpDev->Pop();

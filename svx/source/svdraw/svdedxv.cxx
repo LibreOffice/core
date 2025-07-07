@@ -990,7 +990,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
         aBlankRect.Intersection(rRect);
 
     rOutlView.GetOutliner().SetUpdateLayout(true); // Bugfix #22596#
-    rOutlView.Paint(aBlankRect, &rTargetDevice);
+    rOutlView.DrawText_ToEditView(aBlankRect, &rTargetDevice);
 
     if (!bModified)
     {

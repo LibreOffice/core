@@ -379,10 +379,8 @@ public:
     SAL_DLLPRIVATE bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder );
 
     // StartDocPos corresponds to VisArea.TopLeft().
-    SAL_DLLPRIVATE void            Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect );
-    SAL_DLLPRIVATE void            Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos );
-    void            Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );
-    void            Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation = 0_deg10 );
+    void            DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bHardClip );
+    void            DrawText_ToPosition( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation = 0_deg10 );
 
     ErrCode         Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
     void            Write( SvStream& rOutput, EETextFormat );

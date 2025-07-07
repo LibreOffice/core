@@ -401,9 +401,9 @@ Point EditView::CalculateTextPaintStartPosition() const
     return getImpEditEngine().CalculateTextPaintStartPosition(getImpl());
 }
 
-void EditView::Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
+void EditView::DrawText_ToEditView( const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
-    getImpEditEngine().Paint(&getImpl(), rRect, pTargetDevice);
+    getImpEditEngine().DrawText_ToEditView(&getImpl(), rRect, pTargetDevice);
 }
 
 void EditView::setEditEngine(EditEngine& rEditEngine)

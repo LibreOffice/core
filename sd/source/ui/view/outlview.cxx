@@ -190,7 +190,7 @@ void OutlineView::Paint(const ::tools::Rectangle& rRect, ::sd::Window const * pW
     if (pOlView)
     {
         pOlView->HideCursor();
-        pOlView->Paint(rRect);
+        pOlView->DrawText_ToEditView(rRect);
 
         pOlView->ShowCursor(mbFirstPaint);
 

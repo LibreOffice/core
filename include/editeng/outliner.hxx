@@ -215,7 +215,7 @@ public:
 
     void        Scroll( tools::Long nHorzScroll, tools::Long nVertScroll );
 
-    void        Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
+    void        DrawText_ToEditView( const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
     bool        PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFrameWin = nullptr );
     bool        MouseButtonDown( const MouseEvent& );
     bool        MouseButtonUp( const MouseEvent& );
@@ -713,8 +713,8 @@ public:
     void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink );
     Link<EditStatus&, void> const & GetStatusEventHdl() const;
 
-    void            Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect );
-    void            Draw( OutputDevice& rOutDev, const Point& rStartPos );
+    void            DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Rectangle& rOutRect );
+    void            DrawText_ToPosition( OutputDevice& rOutDev, const Point& rStartPos );
 
     const Size&     GetPaperSize() const;
     void            SetPaperSize( const Size& rSize );

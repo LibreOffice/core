@@ -999,11 +999,11 @@ public:
     void FormatFullDoc();
     void EnsureDocumentFormatted();
 
-    void                    Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation );
-    void                    Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );
+    void                    DrawText_ToPosition( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation );
+    void                    DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bHardClip );
     void                    UpdateViews( EditView* pCurView = nullptr );
     Point CalculateTextPaintStartPosition(ImpEditView& rView) const;
-    void                    Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
+    void                    DrawText_ToEditView( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
     void PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, Degree10 nOrientation = 0_deg10, StripPortionsHelper* pStripPortionsHelper = nullptr);
 
     bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );

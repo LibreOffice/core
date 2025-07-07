@@ -231,9 +231,9 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
     rRenderContext.Push(vcl::PushFlags::ALL);
     rRenderContext.SetClipRegion();
 
-    pEditView->Paint(comphelper::LibreOfficeKit::isActive() ? rRenderContext.PixelToLogic(rRect)
-                                                            : rRect,
-                     &rRenderContext);
+    pEditView->DrawText_ToEditView(
+        comphelper::LibreOfficeKit::isActive() ? rRenderContext.PixelToLogic(rRect) : rRect,
+        &rRenderContext);
 
     if (HasFocus())
     {

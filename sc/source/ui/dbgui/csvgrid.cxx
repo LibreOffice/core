@@ -1131,7 +1131,7 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
     aPlainText = aPlainText.replaceAll( "\n", " " );
     mpEditEngine->SetPaperSize( maEdEngSize );
     mpEditEngine->SetTextCurrentDefaults(aPlainText);
-    mpEditEngine->Draw(*mpBackgrDev, rPos);
+    mpEditEngine->DrawText_ToPosition(*mpBackgrDev, rPos);
 
     sal_Int32 nCharIx = 0;
     while( (nCharIx = rText.indexOf( '\t', nCharIx )) != -1 )

@@ -37,7 +37,7 @@ namespace frm
 
     void RichTextViewPort::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect )
     {
-        m_pView->Paint(_rRect, &rRenderContext);
+        m_pView->DrawText_ToEditView(_rRect, &rRenderContext);
     }
 
     void RichTextViewPort::GetFocus()

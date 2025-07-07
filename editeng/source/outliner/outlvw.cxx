@@ -59,14 +59,14 @@ OutlinerView::~OutlinerView()
 {
 }
 
-void OutlinerView::Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
+void OutlinerView::DrawText_ToEditView( const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     // For the first Paint/KeyInput/Drop an empty Outliner is turned into
     // an Outliner with exactly one paragraph.
     if( rOwner.bFirstParaIsEmpty )
         rOwner.Insert( OUString() );
 
-    pEditView->Paint( rRect, pTargetDevice );
+    pEditView->DrawText_ToEditView( rRect, pTargetDevice );
 }
 
 bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFrameWin )

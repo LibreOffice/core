@@ -194,24 +194,14 @@ const SfxItemSet& EditEngine::GetEmptyItemSet() const
     return getImpl().GetEmptyItemSet();
 }
 
-void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect )
+void EditEngine::DrawText_ToPosition( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation )
 {
-    Draw( rOutDev, rOutRect, Point( 0, 0 ) );
+    getImpl().DrawText_ToPosition(rOutDev, rStartPos, nOrientation);
 }
 
-void EditEngine::Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation )
+void EditEngine::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bHardClip )
 {
-    getImpl().Draw(rOutDev, rStartPos, nOrientation);
-}
-
-void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos )
-{
-    Draw( rOutDev, rOutRect, rStartDocPos, true );
-}
-
-void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip )
-{
-    getImpl().Draw(rOutDev, rOutRect, rStartDocPos, bClip);
+    getImpl().DrawText_ToRectangle(rOutDev, rOutRect, rStartDocPos, bHardClip);
 }
 
 void EditEngine::InsertView(EditView* pEditView, size_t nIndex)

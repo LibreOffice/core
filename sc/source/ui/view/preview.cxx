@@ -522,7 +522,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             (aWinEnd.X() - pEditEng->CalcTextWidth())/2,
             (aWinEnd.Y() - pEditEng->GetTextHeight())/2);
 
-        pEditEng->Draw(*GetOutDev(), aCenter);
+        pEditEng->DrawText_ToPosition(*GetOutDev(), aCenter);
 
         return;
     }
