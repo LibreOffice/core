@@ -53,9 +53,7 @@ public class JobQueue {
     private boolean   _createThread_now;   // create a worker thread, if needed
     private Thread    _worker_thread;  // the thread that does the jobs
 
-    private Object    _disposeId; // the active dispose id
-    private Object    _doDispose = null;
-    private Throwable _throwable;
+    private JavaThreadPool _pool; // the active pool
 
     JobQueue  _async_jobQueue; // chaining job queues for asyncs
     protected JobQueue  _sync_jobQueue;  // chaining job queues for syncs
@@ -68,14 +66,14 @@ public class JobQueue {
      * A thread for dispatching jobs.
      */
     class JobDispatcher extends Thread {
-        Object _disposeId;
+        JavaThreadPool _pool;
 
-        JobDispatcher(Object disposeId) {
+        JobDispatcher(JavaThreadPool pool) {
             super("JobDispatcher");
 
             if(DEBUG) System.err.println("JobQueue$JobDispatcher.<init>:" + _threadId);
 
-            _disposeId = disposeId;
+            _pool = pool;
         }
 
         ThreadId getThreadId() {
@@ -87,7 +85,7 @@ public class JobQueue {
             if(DEBUG) System.err.println("ThreadPool$JobDispatcher.run: " + Thread.currentThread());
 
             try {
-                  enter(2000, _disposeId);
+                  enter(2000, _pool);
             } catch(Throwable throwable) {
                 synchronized (JobQueue.this) {
                     if(!jobList.isEmpty() || _active) { // there was a job in progress, so give a stack
@@ -196,10 +194,10 @@ public class JobQueue {
             // wait max. waitTime time for a job to enter the queue
             boolean waited = false;
             while(jobList.isEmpty() && (waitTime == 0 || !waited)) {
-                if(_doDispose == _disposeId) {
-                    _doDispose = null;
+                Throwable throwable = _pool.checkDisposed();
+                if(throwable != null) {
                     throw (DisposedException)
-                        new DisposedException().initCause(_throwable);
+                        new DisposedException().initCause(throwable);
                 }
 
                 // notify sync queues
@@ -230,10 +228,10 @@ public class JobQueue {
                 while(_async_jobQueue._active || !_async_jobQueue.jobList.isEmpty()) {
                     if(DEBUG) System.err.println("waiting for async:" + _async_jobQueue.jobList + " " +  _async_jobQueue._worker_thread);
 
-                    if(_doDispose == _disposeId) {
-                        _doDispose = null;
+                    Throwable throwable = _pool.checkDisposed();
+                    if(throwable != null) {
                         throw (DisposedException)
-                            new DisposedException().initCause(_throwable);
+                            new DisposedException().initCause(throwable);
                     }
 
                     try {
@@ -252,9 +250,9 @@ public class JobQueue {
      * Puts a job into the queue.
      *
      * @param  job        the job.
-     * @param  disposeId  a dispose id.
+     * @param  pool       a pool.
      */
-    synchronized void putJob(Job job, Object disposeId) {
+    synchronized void putJob(Job job, JavaThreadPool pool) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".putJob todoes: " + " job:" + job);
 
         jobList.add(job);
@@ -264,7 +262,7 @@ public class JobQueue {
             acquire();
 
             _createThread_now = false;
-            new JobDispatcher(disposeId).start();
+            new JobDispatcher(pool).start();
         }
 
         // always notify possible waiters
@@ -274,29 +272,29 @@ public class JobQueue {
     /**
      * Enters the job queue.
      *
-     * @param  disposeId  a dispose id.
+     * @param  pool  a pool.
      * @return the result of the final job (reply).
      */
-    Object enter(Object disposeId) throws Throwable {
-        return enter(0, disposeId); // wait infinitely
+    Object enter(JavaThreadPool pool) throws Throwable {
+        return enter(0, pool); // wait infinitely
     }
 
     /**
      * Enters the job queue.
      *
      * @param  waitTime   the maximum amount of time to wait for a job (0 means wait infinitely).
-     * @param  disposeId  a dispose id.
+     * @param  pool       a pool.
      * @return the result of the final job (reply).
      */
-    Object enter(int waitTime, Object disposeId) throws Throwable {
+    Object enter(int waitTime, JavaThreadPool pool) throws Throwable {
         if(DEBUG) System.err.println("#####" + getClass().getName() + ".enter: " + _threadId);
 
         boolean quit = false;
 
-        Object hold_disposeId;
+        JavaThreadPool hold_pool;
         synchronized (this) {
-            hold_disposeId = _disposeId;
-            _disposeId = disposeId;
+            hold_pool = _pool;
+            _pool = pool;
         }
 
         Object result = null;
@@ -340,7 +338,7 @@ public class JobQueue {
 
                         _createThread_now = true;
 
-                        _disposeId = hold_disposeId;
+                        _pool = hold_pool;
 
                         if(_sync_jobQueue != null)
                             notifyAll(); // notify waiters (e.g. this is an asyncQueue and there is a sync waiting)
@@ -356,16 +354,11 @@ public class JobQueue {
     }
 
     /**
-     * If the given disposeId is registered, interrupts the worker thread.
-     *
-     * @param disposeId    the dispose id.
+     * Interrupts the worker thread so it can check whether its JavaThreadPool got disposed.
      */
-    synchronized void dispose(Object disposeId, Throwable throwable) {
+    synchronized void notifyAboutSomeDisposedPool() {
         if(_sync_jobQueue == null) { // dispose only sync queues
-            _doDispose = disposeId;
-            _throwable = throwable;
-
-            // get thread out of wait and let it throw the throwable
+            // get thread out of wait
             if(DEBUG) System.err.println(getClass().getName() + ".dispose - notifying thread");
 
             notifyAll();

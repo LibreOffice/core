@@ -42,7 +42,8 @@ public final class JobQueue_Test {
         TestThread t = new TestThread(waitTime);
         t.waitToStart();
         String msg = "xcxxxxxxxx";
-        t._jobQueue.dispose(t._disposeId, new RuntimeException (msg));
+        t._pool.dispose(new RuntimeException (msg));
+        t._jobQueue.notifyAboutSomeDisposedPool();
         t.waitToTerminate();
 /*TODO: below test fails with "expected:<xcxxxxxxxx> but was:<null>":
         assertEquals(msg, t._message);
@@ -94,9 +95,9 @@ public final class JobQueue_Test {
     {
         TestThread t = new TestThread(waitTime);
         t.waitToStart();
-        testExecuteJobs(t._jobQueue);
-        t._jobQueue.dispose(t._disposeId,
-                            new RuntimeException("xxxxxxxxxxxxx"));
+        testExecuteJobs(t._jobQueue, t._pool);
+        t._pool.dispose(new RuntimeException("xxxxxxxxxxxxx"));
+        t._jobQueue.notifyAboutSomeDisposedPool();
         t.waitToTerminate();
     }
 
@@ -104,7 +105,8 @@ public final class JobQueue_Test {
     {
         testExecuteJobs(
             new JobQueue(
-                __javaThreadPoolFactory, ThreadId.createFresh(), true));
+                __javaThreadPoolFactory, ThreadId.createFresh(), true),
+            new JavaThreadPool(__javaThreadPoolFactory));
     }
 
     @Test public void testStaticThreadExecutesAsyncs()
@@ -118,9 +120,9 @@ public final class JobQueue_Test {
         assertEquals(1, t._jobQueue._ref_count);
         t.waitToStart();
         TestWorkAt workAt = new TestWorkAt();
-        testAsyncJobQueue(workAt, async_jobQueue, t._threadId);
-        t._jobQueue.dispose(t._disposeId,
-                            new RuntimeException("xxxxxxxxxxxxx"));
+        testAsyncJobQueue(workAt, async_jobQueue, t._threadId, t._pool);
+        t._pool.dispose(new RuntimeException("xxxxxxxxxxxxx"));
+        t._jobQueue.notifyAboutSomeDisposedPool();
         t.waitToTerminate();
         assertEquals(TestWorkAt.MESSAGES, workAt._async_counter);
         assertEquals(TestWorkAt.MESSAGES, workAt._sync_counter);
@@ -133,15 +135,15 @@ public final class JobQueue_Test {
         JobQueue async_jobQueue = new JobQueue(__javaThreadPoolFactory,
                                                threadId);
         TestWorkAt workAt = new TestWorkAt();
-        testAsyncJobQueue(workAt, async_jobQueue, threadId);
+        testAsyncJobQueue(workAt, async_jobQueue, threadId, new JavaThreadPool(__javaThreadPoolFactory));
         assertEquals(TestWorkAt.MESSAGES, workAt._async_counter);
         assertEquals(TestWorkAt.MESSAGES, workAt._sync_counter);
     }
 
-    private void testExecuteJobs(JobQueue jobQueue) throws InterruptedException
+    private void testExecuteJobs(JobQueue jobQueue, JavaThreadPool pool) throws InterruptedException
     {
         TestWorkAt workAt = new TestWorkAt();
-        testSendRequests(workAt, "increment", jobQueue);
+        testSendRequests(workAt, "increment", jobQueue, pool);
         synchronized (workAt) {
             jobQueue.putJob(new Job(workAt, __iReceiver,
                                     new Message(
@@ -158,13 +160,13 @@ public final class JobQueue_Test {
     }
 
     private void testAsyncJobQueue(TestWorkAt workAt, JobQueue async_jobQueue,
-                                   ThreadId threadId)
+                                   ThreadId threadId, JavaThreadPool pool)
         throws InterruptedException
     {
         // put slow async calls first, followed by fast sync calls:
-        testSendRequests(workAt, "asyncCall", async_jobQueue);
+        testSendRequests(workAt, "asyncCall", async_jobQueue, pool);
         testSendRequests(workAt, "syncCall",
-                         __javaThreadPoolFactory.getJobQueue(threadId));
+                         __javaThreadPoolFactory.getJobQueue(threadId), pool);
         synchronized (workAt) {
             async_jobQueue._sync_jobQueue.putJob(
                 new Job(workAt, __iReceiver,
@@ -181,7 +183,7 @@ public final class JobQueue_Test {
     }
 
     private void testSendRequests(TestWorkAt workAt, String operation,
-                                  JobQueue jobQueue) {
+                                  JobQueue jobQueue, JavaThreadPool pool) {
         Message iMessage = new Message(
             null, true, "oid", __workAt_td,
             __workAt_td.getMethodDescription(operation),
@@ -189,13 +191,13 @@ public final class JobQueue_Test {
         for (int i = 0; i < TestWorkAt.MESSAGES; ++ i) {
             Thread.yield(); // force scheduling
             jobQueue.putJob(new Job(workAt, __iReceiver, iMessage),
-                            new Object());
+                            pool);
         }
     }
 
     private static final class TestThread extends Thread {
         public final ThreadId _threadId = JavaThreadPoolFactory.getThreadId();
-        public final Object _disposeId = new Object();
+        public final JavaThreadPool _pool = new JavaThreadPool(__javaThreadPoolFactory);
         public JobQueue _jobQueue = null;
 
         public TestThread(int waitTime) {
@@ -217,7 +219,7 @@ public final class JobQueue_Test {
                 if (waitTime != 0) {
                     Thread.sleep(waitTime);
                 }
-                _jobQueue.enter(_disposeId);
+                _jobQueue.enter(_pool);
             } catch (Throwable e) {
             }
             synchronized (lock) {
