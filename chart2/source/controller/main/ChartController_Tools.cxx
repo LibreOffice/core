@@ -177,6 +177,37 @@ bool lcl_arePropertiesSame(const std::vector<Reference<beans::XPropertySet>>& xP
     return true;
 }
 
+// Cf. ChartColorWrapper::operator()
+std::pair<css::uno::Reference<css::beans::XPropertySet>, ObjectType>
+getSelectedGraphObject(const css::uno::Any& rSelection, const rtl::Reference<ChartModel>& pModel)
+{
+    if (OUString sCID; rSelection >>= sCID)
+    {
+        auto xPropSet(ObjectIdentifier::getObjectPropertySet(sCID, pModel));
+        ObjectType eType = ObjectIdentifier::getObjectType(sCID);
+        if (eType == ObjectType::OBJECTTYPE_DIAGRAM)
+        {
+            if (auto xDiagram = xPropSet.query<css::chart2::XDiagram>())
+            {
+                xPropSet = xDiagram->getWall();
+                eType = ObjectType::OBJECTTYPE_DIAGRAM_WALL;
+            }
+        }
+
+        return { xPropSet, eType };
+    }
+
+    if (css::uno::Reference<css::beans::XPropertySet> xSelection; rSelection >>= xSelection)
+        return { xSelection, ObjectType::OBJECTTYPE_SHAPE };
+
+    return {};
+}
+
+css::uno::Reference<css::beans::XPropertySet> getSelectedGraphObject(ChartController& rController)
+{
+    return getSelectedGraphObject(rController.getSelection(), rController.getChartModel()).first;
+}
+
 } // anonymous namespace
 
 ReferenceSizeProvider ChartController::impl_createReferenceSizeProvider()
@@ -1183,16 +1214,14 @@ void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
 {
     try
     {
-        OUString aCID( m_aSelection.getSelectedCID() );
         rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
         if( xChartModel.is() )
         {
-            Reference< beans::XPropertySet > xPointProperties(
-                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
+            const auto [xPointProperties, eType]
+                = getSelectedGraphObject(getSelection(), xChartModel);
             if( xPointProperties.is() )
                 xPointProperties->setPropertyValue( u"FillColor"_ustr, uno::Any( nColor ) );
 
-            ObjectType eType = ObjectIdentifier::getObjectType(aCID);
             if (eType == OBJECTTYPE_DATA_SERIES || eType == OBJECTTYPE_DATA_POINT)
             {
                 xChartModel->clearColorPalette();
@@ -1245,25 +1274,8 @@ void ChartController::executeDispatch_LineColor(sal_uInt32 nColor)
 {
     try
     {
-        OUString aCID( m_aSelection.getSelectedCID() );
-        rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
-        if( xChartModel.is() )
-        {
-            Reference< beans::XPropertySet > xPropSet(
-                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
-
-            ObjectType eType = ObjectIdentifier::getObjectType(aCID);
-            if (eType == OBJECTTYPE_DIAGRAM)
-            {
-                css::uno::Reference<css::chart2::XDiagram> xDiagram(
-                        xPropSet, css::uno::UNO_QUERY);
-                if (xDiagram.is())
-                    xPropSet.set(xDiagram->getWall());
-            }
-
-            if( xPropSet.is() )
-                xPropSet->setPropertyValue( u"LineColor"_ustr, css::uno::Any( Color(ColorTransparency, nColor) ) );
-        }
+        if (css::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
+            xPropSet->setPropertyValue( u"LineColor"_ustr, css::uno::Any( Color(ColorTransparency, nColor) ) );
     }
     catch( const uno::Exception& )
     {
@@ -1275,25 +1287,8 @@ void ChartController::executeDispatch_LineWidth(sal_uInt32 nWidth)
 {
     try
     {
-        OUString aCID( m_aSelection.getSelectedCID() );
-        rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
-        if( xChartModel.is() )
-        {
-            Reference< beans::XPropertySet > xPropSet(
-                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
-
-            ObjectType eType = ObjectIdentifier::getObjectType(aCID);
-            if (eType == OBJECTTYPE_DIAGRAM)
-            {
-                css::uno::Reference<css::chart2::XDiagram> xDiagram(
-                        xPropSet, css::uno::UNO_QUERY);
-                if (xDiagram.is())
-                    xPropSet.set(xDiagram->getWall());
-            }
-
-            if( xPropSet.is() )
-                xPropSet->setPropertyValue( u"LineWidth"_ustr, css::uno::Any( nWidth ) );
-        }
+        if (css::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
+            xPropSet->setPropertyValue( u"LineWidth"_ustr, css::uno::Any( nWidth ) );
     }
     catch( const uno::Exception& )
     {
