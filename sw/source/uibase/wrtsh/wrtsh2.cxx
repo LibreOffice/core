@@ -847,30 +847,30 @@ void SwWrtShell::NavigatorPaste(const NaviContentBookmark& rBkmk)
     }
     else // insert is for a reference mark type
     {
-        REFERENCEMARK eRefMarkType;
+        RefFieldFormat eRefMarkType;
 
         if (sInsert == "refpage")
-            eRefMarkType = REFERENCEMARK::REF_PAGE;
+            eRefMarkType = RefFieldFormat::Page;
         else if (sInsert == "refchapter")
-            eRefMarkType = REFERENCEMARK::REF_CHAPTER;
+            eRefMarkType = RefFieldFormat::Chapter;
         else if (sInsert == "refcontent")
-            eRefMarkType = REFERENCEMARK::REF_CONTENT;
+            eRefMarkType = RefFieldFormat::Content;
         else if (sInsert == "refupdown")
-            eRefMarkType = REFERENCEMARK::REF_UPDOWN;
+            eRefMarkType = RefFieldFormat::UpDown;
         else if (sInsert == "refpagepgdsc")
-            eRefMarkType = REFERENCEMARK::REF_PAGE_PGDESC;
+            eRefMarkType = RefFieldFormat::AsPageStyle;
         else if (sInsert == "refnumberentry")
-            eRefMarkType = REFERENCEMARK::REF_NUMBER;
+            eRefMarkType = RefFieldFormat::Number;
         else if (sInsert == "refnumbernocontext")
-            eRefMarkType = REFERENCEMARK::REF_NUMBER_NO_CONTEXT;
+            eRefMarkType = RefFieldFormat::NumberNoContext;
         else if (sInsert == "refnumberfullcontext")
-            eRefMarkType = REFERENCEMARK::REF_NUMBER_FULL_CONTEXT;
+            eRefMarkType = RefFieldFormat::NumberFullContext;
         else if (sInsert == "refonlynumber")
-            eRefMarkType = REFERENCEMARK::REF_ONLYNUMBER;
+            eRefMarkType = RefFieldFormat::CategoryAndNumber;
         else if (sInsert == "refonlycaption")
-            eRefMarkType = REFERENCEMARK::REF_ONLYCAPTION;
+            eRefMarkType = RefFieldFormat::CaptionText;
         else if (sInsert == "refonlyseqnoentry")
-            eRefMarkType = REFERENCEMARK::REF_ONLYSEQNO;
+            eRefMarkType = RefFieldFormat::Numbering;
         else
         {
             assert(false && "unknown reference mark type");
@@ -884,7 +884,7 @@ void SwWrtShell::NavigatorPaste(const NaviContentBookmark& rBkmk)
             oeRefSubType = ReferencesSubtype::Bookmark;
 
         SwInsertField_Data aData(SwFieldTypesEnum::GetRef, static_cast<sal_uInt16>(oeRefSubType.value()), osName.value(),
-                                 osVal.value(), eRefMarkType);
+                                 osVal.value(), static_cast<sal_uInt16>(eRefMarkType));
         SwFieldMgr aFieldMgr(this);
         aFieldMgr.InsertField(aData);
     }

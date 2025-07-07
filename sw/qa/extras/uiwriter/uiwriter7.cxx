@@ -822,7 +822,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pWrtShell->StartOfSection();
     //inserting reference field 1
     SwGetRefField aField1(pRefType, SwMarkName(u""_ustr), u""_ustr, ReferencesSubtype::Footnote,
-                          sal_uInt16(0), sal_uInt16(0), REF_CONTENT);
+                          sal_uInt16(0), sal_uInt16(0), RefFieldFormat::Content);
     pWrtShell->InsertField2(aField1);
     //inserting second footnote
     pWrtShell->InsertFootnote(u""_ustr);
@@ -830,7 +830,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     //inserting reference field 2
     SwGetRefField aField2(pRefType, SwMarkName(u""_ustr), u""_ustr, ReferencesSubtype::Footnote,
-                          sal_uInt16(1), sal_uInt16(0), REF_CONTENT);
+                          sal_uInt16(1), sal_uInt16(0), RefFieldFormat::Content);
     pWrtShell->InsertField2(aField2);
     //inserting third footnote
     pWrtShell->InsertFootnote(u""_ustr);
@@ -839,7 +839,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     //inserting reference field 3
     SwGetRefField aField3(pRefType, SwMarkName(u""_ustr), u""_ustr, ReferencesSubtype::Footnote,
-                          sal_uInt16(2), sal_uInt16(0), REF_CONTENT);
+                          sal_uInt16(2), sal_uInt16(0), RefFieldFormat::Content);
     pWrtShell->InsertField2(aField3);
     //updating the fields
     IDocumentFieldsAccess& rField(pDoc->getIDocumentFieldsAccess());
@@ -868,21 +868,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pWrtShell->StartOfSection();
     SwField* pRef1 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pRef1->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pRef1->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(0)), aAny);
     //reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pRef2 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pRef2->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pRef2->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(1)), aAny);
     //reference field 3
     pCursor->Move(fnMoveForward);
     SwField* pRef3 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pRef3->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pRef3->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(2)), aAny);
     //moving cursor to the end of the document
@@ -894,21 +894,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     //old reference field 1
     SwField* pOldRef11 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef11->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(0)), aAny);
     //old reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pOldRef12 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef12->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(1)), aAny);
     //old reference field 3
     pCursor->Move(fnMoveForward);
     SwField* pOldRef13 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef13->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef13->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(2)), aAny);
     //old footnote 1
@@ -942,14 +942,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwField* pNewRef11 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pNewRef11->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pNewRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(1)), aAny);
     //new reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pNewRef12 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pNewRef12->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pNewRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(3)), aAny);
     //new footnote 1
@@ -970,14 +970,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     //new reference field 1
     SwField* pNewRef21 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pNewRef21->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pNewRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(1)), aAny);
     //new reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pNewRef22 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pNewRef22->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pNewRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(4)), aAny);
     //new footnote 1
@@ -993,21 +993,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwField* pOldRef21 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef21->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(0)), aAny);
     //old reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pOldRef22 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef22->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(1)), aAny);
     //old reference field 3
     pCursor->Move(fnMoveForward);
     SwField* pOldRef23 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef23->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef23->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(2)), aAny);
     //old footnote 1
@@ -1041,14 +1041,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwField* pOldRef24 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef24->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef24->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(1)), aAny);
     //old reference field 5
     pCursor->Move(fnMoveForward);
     SwField* pOldRef25 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef25->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef25->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(3)), aAny);
     //old footnote 4
@@ -1082,7 +1082,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     //inserting reference field 1
     SwGetRefField aGetField1(pRefType, SwMarkName(u"Illustration"_ustr), u""_ustr,
                              ReferencesSubtype::SequenceField, sal_uInt16(0), sal_uInt16(0),
-                             REF_CONTENT);
+                             RefFieldFormat::Content);
     pWrtShell->InsertField2(aGetField1);
     //now we have ref1-seq1
     //moving the cursor
@@ -1096,7 +1096,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     //inserting reference field 2
     SwGetRefField aGetField2(pRefType, SwMarkName(u"Illustration"_ustr), u""_ustr,
                              ReferencesSubtype::SequenceField, sal_uInt16(1), sal_uInt16(0),
-                             REF_CONTENT);
+                             RefFieldFormat::Content);
     pWrtShell->InsertField2(aGetField2);
     //now we have ref1-ref2-seq1-seq2
     //moving the cursor
@@ -1111,7 +1111,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     //inserting reference field 3
     SwGetRefField aGetField3(pRefType, SwMarkName(u"Illustration"_ustr), u""_ustr,
                              ReferencesSubtype::SequenceField, sal_uInt16(2), sal_uInt16(0),
-                             REF_CONTENT);
+                             RefFieldFormat::Content);
     pWrtShell->InsertField2(aGetField3);
     //now after insertion we have ref1-ref2-ref3-seq1-seq2-seq3
     //updating the fields
@@ -1143,21 +1143,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     pWrtShell->StartOfSection();
     SwField* pRef1 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pRef1->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pRef1->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(0)), aAny);
     //reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pRef2 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pRef2->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pRef2->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(1)), aAny);
     //reference field 3
     pCursor->Move(fnMoveForward);
     SwField* pRef3 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pRef3->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pRef3->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(2)), aAny);
     //sequence field 1
@@ -1188,21 +1188,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     //old reference field 1
     SwField* pOldRef11 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef11->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(0)), aAny);
     //old reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pOldRef12 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef12->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(1)), aAny);
     //old reference field 3
     pCursor->Move(fnMoveForward);
     SwField* pOldRef13 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef13->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef13->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(2)), aAny);
     //old sequence field 1
@@ -1227,14 +1227,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     pCursor->Move(fnMoveForward);
     SwField* pNewRef11 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pNewRef11->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pNewRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(4)), aAny);
     //new reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pNewRef12 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pNewRef12->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pNewRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(2)), aAny);
     //new sequence field 1
@@ -1259,14 +1259,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     //new reference field 1
     SwField* pNewRef21 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pNewRef21->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pNewRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(6)), aAny);
     //new reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pNewRef22 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pNewRef22->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pNewRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(2)), aAny);
     //new sequence field 1
@@ -1285,21 +1285,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     pCursor->Move(fnMoveForward);
     SwField* pOldRef21 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef21->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(0)), aAny);
     //old reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pOldRef22 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef22->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(1)), aAny);
     //old reference field 3
     pCursor->Move(fnMoveForward);
     SwField* pOldRef23 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef23->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef23->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(2)), aAny);
     //old sequence field 1
@@ -1324,14 +1324,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     pCursor->Move(fnMoveForward);
     SwField* pOldRef24 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef24->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef24->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(4)), aAny);
     //old reference field 5
     pCursor->Move(fnMoveForward);
     SwField* pOldRef25 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef25->GetUntypedFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RefFieldFormat::Content), aFormat);
     pOldRef25->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_uInt16(2)), aAny);
     //old sequence field 4

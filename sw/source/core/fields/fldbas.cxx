@@ -368,7 +368,7 @@ sal_uInt32 SwField::GetUntypedFormat() const
     case SwFieldIds::RefPageGet:
         return static_cast<const SwRefPageGetField*>(this)->GetFormat();
     case SwFieldIds::GetRef:
-        return static_cast<const SwGetRefField*>(this)->GetFormat();
+        return static_cast<sal_uInt16>(static_cast<const SwGetRefField*>(this)->GetFormat());
     default: break;
     }
     if (auto p = dynamic_cast<const SwValueField*>(this))
@@ -415,7 +415,7 @@ void SwField::SetUntypedFormat(sal_uInt32 n)
         static_cast<SwRefPageGetField*>(this)->SetFormat(static_cast<SvxNumType>(n));
         return;
     case SwFieldIds::GetRef:
-        static_cast<SwGetRefField*>(this)->SetFormat(n);
+        static_cast<SwGetRefField*>(this)->SetFormat(static_cast<RefFieldFormat>(n));
         return;
     default: break;
     }

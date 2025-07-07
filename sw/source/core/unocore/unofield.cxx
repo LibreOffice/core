@@ -1532,7 +1532,7 @@ void SAL_CALL SwXTextField::attach(
                             ReferencesSubtype::SetRefAttr,
                             0,
                             0,
-                            0));
+                            RefFieldFormat::Page));
                 if (!m_pImpl->m_pProps->sPar3.isEmpty())
                     static_cast<SwGetRefField*>(xField.get())->SetExpand(m_pImpl->m_pProps->sPar3);
                 uno::Any aVal;

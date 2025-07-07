@@ -2252,10 +2252,10 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                 OUString sName("Ref_" + pRefField->GetSetRefName().toString() + OUString::number(pRefField->GetSeqNo()));
                                 switch (pRefField->GetFormat())
                                 {
-                                    case REF_PAGE:
-                                    case REF_PAGE_PGDESC:
-                                    case REF_CONTENT:
-                                    case REF_UPDOWN:
+                                    case RefFieldFormat::Page:
+                                    case RefFieldFormat::AsPageStyle:
+                                    case RefFieldFormat::Content:
+                                    case RefFieldFormat::UpDown:
                                         if(!bHaveFullBkm)
                                         {
                                             sal_Int32 nLastAttrStart = 0;
@@ -2270,7 +2270,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                             bHaveFullBkm = true;
                                         }
                                         break;
-                                    case REF_ONLYNUMBER:
+                                    case RefFieldFormat::CategoryAndNumber:
                                     {
                                         if(!bHaveLabelAndNumberBkm)
                                         {
@@ -2295,7 +2295,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                         }
                                         break;
                                     }
-                                    case REF_ONLYCAPTION:
+                                    case RefFieldFormat::CaptionText:
                                     {
                                         if(!bHaveCaptionOnlyBkm)
                                         {
@@ -2313,7 +2313,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                         }
                                         break;
                                     }
-                                    case REF_ONLYSEQNO:
+                                    case RefFieldFormat::Numbering:
                                     {
                                         if(!bHaveNumberOnlyBkm)
                                         {
@@ -2322,6 +2322,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                         }
                                         break;
                                     }
+                                    default: break;
                                 }
                             }
                         }
@@ -3250,8 +3251,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 case ReferencesSubtype::Bookmark:
                     switch (rRField.GetFormat())
                     {
-                        case REF_PAGE_PGDESC:
-                        case REF_PAGE:
+                        case RefFieldFormat::AsPageStyle:
+                        case RefFieldFormat::Page:
                             eField = ww::ePAGEREF;
                             break;
                         default:
@@ -3265,15 +3266,16 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     }
                     switch (rRField.GetFormat())
                     {
-                        case REF_NUMBER:
+                        case RefFieldFormat::Number:
                             sStr += " \\r";
                             break;
-                        case REF_NUMBER_NO_CONTEXT:
+                        case RefFieldFormat::NumberNoContext:
                             sStr += " \\n";
                             break;
-                        case REF_NUMBER_FULL_CONTEXT:
+                        case RefFieldFormat::NumberFullContext:
                             sStr += " \\w";
                             break;
+                        default: break;
                     }
                     break;
                 case ReferencesSubtype::SequenceField:
@@ -3284,8 +3286,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
 
                     switch (rRField.GetFormat())
                     {
-                        case REF_PAGE:
-                        case REF_PAGE_PGDESC:
+                        case RefFieldFormat::Page:
+                        case RefFieldFormat::AsPageStyle:
                             eField = ww::ePAGEREF;
                             break;
                         default:
@@ -3297,19 +3299,19 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                         OUString sName{rRField.GetSetRefName().toString() + OUString::number(rRField.GetSeqNo())};
                         switch (rRField.GetFormat())
                         {
-                            case REF_PAGE:
-                            case REF_PAGE_PGDESC:
-                            case REF_CONTENT:
-                            case REF_UPDOWN:
+                            case RefFieldFormat::Page:
+                            case RefFieldFormat::AsPageStyle:
+                            case RefFieldFormat::Content:
+                            case RefFieldFormat::UpDown:
                                     sName += "_full";
                                     break;
-                            case REF_ONLYNUMBER:
+                            case RefFieldFormat::CategoryAndNumber:
                                     sName += "_label_and_number";
                                     break;
-                            case REF_ONLYCAPTION:
+                            case RefFieldFormat::CaptionText:
                                     sName += "_caption_only";
                                     break;
-                            case REF_ONLYSEQNO:
+                            case RefFieldFormat::Numbering:
                                     sName += "_number_only";
                                     break;
                             default: // Ignore other types of reference fields
@@ -3320,15 +3322,16 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     }
                     switch (rRField.GetFormat())
                     {
-                        case REF_NUMBER:
+                        case RefFieldFormat::Number:
                             sStr += " \\r";
                             break;
-                        case REF_NUMBER_NO_CONTEXT:
+                        case RefFieldFormat::NumberNoContext:
                             sStr += " \\n";
                             break;
-                        case REF_NUMBER_FULL_CONTEXT:
+                        case RefFieldFormat::NumberFullContext:
                             sStr += " \\w";
                             break;
+                        default: break;
                     }
                     break;
                 }
@@ -3336,11 +3339,11 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 case ReferencesSubtype::Endnote:
                     switch (rRField.GetFormat())
                     {
-                        case REF_PAGE_PGDESC:
-                        case REF_PAGE:
+                        case RefFieldFormat::AsPageStyle:
+                        case RefFieldFormat::Page:
                             eField = ww::ePAGEREF;
                             break;
-                        case REF_UPDOWN:
+                        case RefFieldFormat::UpDown:
                             eField = ww::eREF;
                             break;
                         default:
@@ -3383,17 +3386,17 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 default:
                     switch (rRField.GetFormat())
                     {
-                        case REF_NUMBER:
+                        case RefFieldFormat::Number:
                             sStr += " \\r " + sExtraFlags;
                             break;
-                        case REF_NUMBER_FULL_CONTEXT:
+                        case RefFieldFormat::NumberFullContext:
                             sStr += " \\w " + sExtraFlags;
                             break;
-                        case REF_UPDOWN:
+                        case RefFieldFormat::UpDown:
                             sStr += " \\p " + sExtraFlags;
                             break;
-                        case REF_NUMBER_NO_CONTEXT:
-                        case REF_CHAPTER:
+                        case RefFieldFormat::NumberNoContext:
+                        case RefFieldFormat::Chapter:
                             sStr += " \\n " + sExtraFlags;
                             break;
                         default:

@@ -48,22 +48,22 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
 #define REFFLDFLAG_STYLE_FROM_BOTTOM           0xc100
 #define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL    0xc200
 
-enum REFERENCEMARK
+enum class RefFieldFormat : sal_uInt16
 {
-    REF_BEGIN,
-    REF_PAGE = REF_BEGIN, ///< "Page"
-    REF_CHAPTER,          ///< "Chapter"
-    REF_CONTENT,          ///< "Reference"
-    REF_UPDOWN,           ///< "Above/Below"
-    REF_PAGE_PGDESC,      ///< "As Page Style"
-    REF_ONLYNUMBER,       ///< "Category and Number"
-    REF_ONLYCAPTION,      ///< "Caption Text"
-    REF_ONLYSEQNO,        ///< "Numbering"
+    Begin,
+    Page = Begin,      ///< "Page"
+    Chapter,           ///< "Chapter"
+    Content,           ///< "Reference"
+    UpDown,            ///< "Above/Below"
+    AsPageStyle,       ///< "As Page Style"
+    CategoryAndNumber, ///< "Category and Number"
+    CaptionText,       ///< "Caption Text"
+    Numbering,         ///< "Numbering"
     // --> #i81002#
     /// new reference format types for referencing bookmarks and set references
-    REF_NUMBER,              ///< "Number"
-    REF_NUMBER_NO_CONTEXT,   ///< "Number (no context)"
-    REF_NUMBER_FULL_CONTEXT, ///< "Number (full context)"
+    Number,            ///< "Number"
+    NumberNoContext,   ///< "Number (no context)"
+    NumberFullContext, ///< "Number (full context)"
 };
 
 /// Get reference.
@@ -119,18 +119,18 @@ private:
     /// reference to either a SwTextFootnote::m_nSeqNo or a SwSetExpField::mnSeqNo
     sal_uInt16 m_nSeqNo;
     sal_uInt16 m_nFlags;
-    sal_uInt32 m_nFormat;
+    RefFieldFormat m_nFormat;
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 public:
     SW_DLLPUBLIC SwGetRefField( SwGetRefFieldType*, SwMarkName aSetRef, OUString aReferenceLanguage,
-                    ReferencesSubtype nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags, sal_uInt32 nFormat );
+                    ReferencesSubtype nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags, RefFieldFormat nFormat );
 
     SW_DLLPUBLIC virtual ~SwGetRefField() override;
 
-    sal_uInt32 GetFormat() const { return m_nFormat; }
-    void SetFormat(sal_uInt32 n) { m_nFormat = n; }
+    RefFieldFormat GetFormat() const { return m_nFormat; }
+    void SetFormat(RefFieldFormat n) { m_nFormat = n; }
 
     virtual OUString GetFieldName() const override;
 

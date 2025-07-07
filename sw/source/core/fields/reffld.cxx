@@ -76,7 +76,7 @@ static std::pair<OUString, bool> MakeRefNumStr(SwRootFrame const* pLayout,
       const SwTextNode& rTextNodeOfField,
       const SwTextNode& rTextNodeOfReferencedItem,
       ReferencesSubtype nSubType,
-      sal_uInt32 nRefNumFormat,
+      RefFieldFormat nRefNumFormat,
       sal_uInt16 nFlags);
 
 static void lcl_GetLayTree( const SwFrame* pFrame, std::vector<const SwFrame*>& rArr )
@@ -352,7 +352,7 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
                               SwMarkName aSetRef, OUString aSetReferenceLanguage, ReferencesSubtype nSubTyp,
-                              sal_uInt16 nSequenceNo, sal_uInt16 nFlags, sal_uInt32 nFormat )
+                              sal_uInt16 nSequenceNo, sal_uInt16 nFlags, RefFieldFormat nFormat )
     : SwField(pFieldType),
       m_sSetRefName(std::move(aSetRef)),
       m_sSetReferenceLanguage(std::move(aSetReferenceLanguage)),
@@ -540,10 +540,10 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
     // which format?
     switch( GetFormat() )
     {
-    case REF_CONTENT:
-    case REF_ONLYNUMBER:
-    case REF_ONLYCAPTION:
-    case REF_ONLYSEQNO:
+    case RefFieldFormat::Content:
+    case RefFieldFormat::CategoryAndNumber:
+    case RefFieldFormat::CaptionText:
+    case RefFieldFormat::Numbering:
         {
             // needed part of Text
             sal_Int32 nStart;
@@ -556,7 +556,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                 switch( GetFormat() )
                 {
                 // "Category and Number"
-                case REF_ONLYNUMBER:
+                case RefFieldFormat::CategoryAndNumber:
                     if (bHasCat) {
                         nStart = std::min(nNumStart, nCatStart);
                         nEnd = std::max(nNumEnd, nCatEnd);
@@ -567,7 +567,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                     break;
 
                 // "Caption Text"
-                case REF_ONLYCAPTION: {
+                case RefFieldFormat::CaptionText: {
                     // next alphanumeric character after category+number
                     if (const SwTextAttr* const pTextAttr =
                         pTextNd->GetTextAttrForCharAt(nNumStart, RES_TXTATR_FIELD)
@@ -585,13 +585,13 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                 }
 
                 // "Numbering"
-                case REF_ONLYSEQNO:
+                case RefFieldFormat::Numbering:
                     nStart = nNumStart;
                     nEnd = std::min(nStart + 1, nLen);
                     break;
 
                 // "Reference" (whole Text)
-                case REF_CONTENT:
+                case RefFieldFormat::Content:
                     nStart = 0;
                     nEnd = nLen;
                     break;
@@ -645,7 +645,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                 if (pLayout->IsHideRedlines())
                 {
                     if (m_nSubType == ReferencesSubtype::Outline
-                        || (m_nSubType == ReferencesSubtype::SequenceField && REF_CONTENT == GetFormat()))
+                        || (m_nSubType == ReferencesSubtype::SequenceField && RefFieldFormat::Content == GetFormat()))
                     {
                         rText = sw::GetExpandTextMerged(pLayout, *pTextNd, false, false,
                                                         ExpandMode(0));
@@ -672,8 +672,8 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
         }
         break;
 
-    case REF_PAGE:
-    case REF_PAGE_PGDESC:
+    case RefFieldFormat::Page:
+    case RefFieldFormat::AsPageStyle:
         {
             SwTextFrame const* pFrame = static_cast<SwTextFrame*>(pTextNd->getLayoutFrame(pLayout, nullptr, nullptr));
             SwTextFrame const*const pSave = pFrame;
@@ -688,7 +688,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
             {
                 sal_uInt16 nPageNo = pFrame->GetVirtPageNum();
                 const SwPageFrame *pPage;
-                if( REF_PAGE_PGDESC == GetFormat() &&
+                if( RefFieldFormat::AsPageStyle == GetFormat() &&
                     nullptr != ( pPage = pFrame->FindPageFrame() ) &&
                     pPage->GetPageDesc() )
                 {
@@ -705,7 +705,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
         }
         break;
 
-    case REF_CHAPTER:
+    case RefFieldFormat::Chapter:
     {
         // a bit tricky: search any frame
         SwFrame const* const pFrame = pTextNd->getLayoutFrame(pLayout);
@@ -724,7 +724,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
         }
         break;
 
-    case REF_UPDOWN:
+    case RefFieldFormat::UpDown:
         {
             // #i81002#
             // simplified: use parameter <pFieldTextAttr>
@@ -752,9 +752,9 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
         }
         break;
     // #i81002#
-    case REF_NUMBER:
-    case REF_NUMBER_NO_CONTEXT:
-    case REF_NUMBER_FULL_CONTEXT:
+    case RefFieldFormat::Number:
+    case RefFieldFormat::NumberNoContext:
+    case RefFieldFormat::NumberFullContext:
         {
             if ( pFieldTextAttr && pFieldTextAttr->GetpTextNode() )
             {
@@ -784,7 +784,7 @@ static std::pair<OUString, bool> MakeRefNumStr(
         const SwTextNode& i_rTextNodeOfField,
         const SwTextNode& i_rTextNodeOfReferencedItem,
         const ReferencesSubtype nSubType,
-        const sal_uInt32 nRefNumFormat,
+        const RefFieldFormat nRefNumFormat,
         const sal_uInt16 nFlags)
 {
     bool bHideNonNumerical = (nSubType == ReferencesSubtype::Style) && ((nFlags & REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL) == REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL);
@@ -807,7 +807,7 @@ static std::pair<OUString, bool> MakeRefNumStr(
         // list labels have to be restricted, if the text node of the reference
         // field and the text node of the referenced item are in the same
         // document context.
-        if ( nRefNumFormat == REF_NUMBER &&
+        if ( nRefNumFormat == RefFieldFormat::Number &&
              rTextNodeOfField.FindFlyStartNode()
                             == rTextNodeOfReferencedItem.FindFlyStartNode() &&
              rTextNodeOfField.FindFootnoteStartNode()
@@ -853,7 +853,7 @@ static std::pair<OUString, bool> MakeRefNumStr(
         // Determine, if superior list labels have to be included
         const bool bInclSuperiorNumLabels(
             ( nRestrictInclToThisLevel < rTextNodeOfReferencedItem.GetActualListLevel() &&
-              ( nRefNumFormat == REF_NUMBER || nRefNumFormat == REF_NUMBER_FULL_CONTEXT ) ) );
+              ( nRefNumFormat == RefFieldFormat::Number || nRefNumFormat == RefFieldFormat::NumberFullContext ) ) );
 
         OSL_ENSURE( rTextNodeOfReferencedItem.GetNumRule(),
                 "<SwGetRefField::MakeRefNumStr(..)> - referenced numbered paragraph has no numbering rule set!" );
@@ -907,18 +907,18 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             sal_Int16 nPart = 0;
             switch(GetFormat())
             {
-            case REF_PAGE       : nPart = ReferenceFieldPart::PAGE                ; break;
-            case REF_CHAPTER    : nPart = ReferenceFieldPart::CHAPTER             ; break;
-            case REF_CONTENT    : nPart = ReferenceFieldPart::TEXT                ; break;
-            case REF_UPDOWN     : nPart = ReferenceFieldPart::UP_DOWN             ; break;
-            case REF_PAGE_PGDESC: nPart = ReferenceFieldPart::PAGE_DESC           ; break;
-            case REF_ONLYNUMBER : nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
-            case REF_ONLYCAPTION: nPart = ReferenceFieldPart::ONLY_CAPTION        ; break;
-            case REF_ONLYSEQNO  : nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
+            case RefFieldFormat::Page       : nPart = ReferenceFieldPart::PAGE                ; break;
+            case RefFieldFormat::Chapter    : nPart = ReferenceFieldPart::CHAPTER             ; break;
+            case RefFieldFormat::Content    : nPart = ReferenceFieldPart::TEXT                ; break;
+            case RefFieldFormat::UpDown     : nPart = ReferenceFieldPart::UP_DOWN             ; break;
+            case RefFieldFormat::AsPageStyle: nPart = ReferenceFieldPart::PAGE_DESC           ; break;
+            case RefFieldFormat::CategoryAndNumber : nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
+            case RefFieldFormat::CaptionText: nPart = ReferenceFieldPart::ONLY_CAPTION        ; break;
+            case RefFieldFormat::Numbering  : nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
             // #i81002#
-            case REF_NUMBER:              nPart = ReferenceFieldPart::NUMBER;              break;
-            case REF_NUMBER_NO_CONTEXT:   nPart = ReferenceFieldPart::NUMBER_NO_CONTEXT;   break;
-            case REF_NUMBER_FULL_CONTEXT: nPart = ReferenceFieldPart::NUMBER_FULL_CONTEXT; break;
+            case RefFieldFormat::Number:              nPart = ReferenceFieldPart::NUMBER;              break;
+            case RefFieldFormat::NumberNoContext:   nPart = ReferenceFieldPart::NUMBER_NO_CONTEXT;   break;
+            case RefFieldFormat::NumberFullContext: nPart = ReferenceFieldPart::NUMBER_FULL_CONTEXT; break;
             }
             rAny <<= nPart;
         }
@@ -1002,21 +1002,20 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= nPart;
             switch(nPart)
             {
-            case ReferenceFieldPart::PAGE:                  nPart = REF_PAGE; break;
-            case ReferenceFieldPart::CHAPTER:               nPart = REF_CHAPTER; break;
-            case ReferenceFieldPart::TEXT:                  nPart = REF_CONTENT; break;
-            case ReferenceFieldPart::UP_DOWN:               nPart = REF_UPDOWN; break;
-            case ReferenceFieldPart::PAGE_DESC:             nPart = REF_PAGE_PGDESC; break;
-            case ReferenceFieldPart::CATEGORY_AND_NUMBER:   nPart = REF_ONLYNUMBER; break;
-            case ReferenceFieldPart::ONLY_CAPTION:          nPart = REF_ONLYCAPTION; break;
-            case ReferenceFieldPart::ONLY_SEQUENCE_NUMBER : nPart = REF_ONLYSEQNO; break;
+            case ReferenceFieldPart::PAGE:                  m_nFormat = RefFieldFormat::Page; break;
+            case ReferenceFieldPart::CHAPTER:               m_nFormat = RefFieldFormat::Chapter; break;
+            case ReferenceFieldPart::TEXT:                  m_nFormat = RefFieldFormat::Content; break;
+            case ReferenceFieldPart::UP_DOWN:               m_nFormat = RefFieldFormat::UpDown; break;
+            case ReferenceFieldPart::PAGE_DESC:             m_nFormat = RefFieldFormat::AsPageStyle; break;
+            case ReferenceFieldPart::CATEGORY_AND_NUMBER:   m_nFormat = RefFieldFormat::CategoryAndNumber; break;
+            case ReferenceFieldPart::ONLY_CAPTION:          m_nFormat = RefFieldFormat::CaptionText; break;
+            case ReferenceFieldPart::ONLY_SEQUENCE_NUMBER : m_nFormat = RefFieldFormat::Numbering; break;
             // #i81002#
-            case ReferenceFieldPart::NUMBER:              nPart = REF_NUMBER;              break;
-            case ReferenceFieldPart::NUMBER_NO_CONTEXT:   nPart = REF_NUMBER_NO_CONTEXT;   break;
-            case ReferenceFieldPart::NUMBER_FULL_CONTEXT: nPart = REF_NUMBER_FULL_CONTEXT; break;
+            case ReferenceFieldPart::NUMBER:              m_nFormat = RefFieldFormat::Number;              break;
+            case ReferenceFieldPart::NUMBER_NO_CONTEXT:   m_nFormat = RefFieldFormat::NumberNoContext;   break;
+            case ReferenceFieldPart::NUMBER_FULL_CONTEXT: m_nFormat = RefFieldFormat::NumberFullContext; break;
             default: return false;
             }
-            m_nFormat = nPart;
         }
         break;
     case FIELD_PROP_USHORT2:

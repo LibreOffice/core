@@ -2143,7 +2143,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, OUString& rStr )
 eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
 {                                                       // Reference - Field
     OUString sOrigBkmName;
-    REFERENCEMARK eFormat = REF_CONTENT;
+    RefFieldFormat eFormat = RefFieldFormat::Content;
 
     WW8ReadFieldParams aReadParam( rStr );
     for (;;)
@@ -2169,17 +2169,17 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
         for us to use the REF_CHAPTER bookmark format on import.
         */
         case 'n':
-            eFormat = REF_NUMBER_NO_CONTEXT;
+            eFormat = RefFieldFormat::NumberNoContext;
             break;
         case 'r':
-            eFormat = REF_NUMBER;
+            eFormat = RefFieldFormat::Number;
             break;
         case 'w':
-            eFormat = REF_NUMBER_FULL_CONTEXT;
+            eFormat = RefFieldFormat::NumberFullContext;
             break;
 
         case 'p':
-            eFormat = REF_UPDOWN;
+            eFormat = RefFieldFormat::UpDown;
             break;
         case 'h':
             break;
@@ -2204,7 +2204,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
         static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
         std::move(sBkmName), u""_ustr, ReferencesSubtype::Bookmark, 0, 0, eFormat);
 
-    if (eFormat == REF_CONTENT)
+    if (eFormat == RefFieldFormat::Content)
     {
         /*
         If we are just inserting the contents of the bookmark, then it
@@ -2258,14 +2258,14 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, OUString& rStr )
     // (will be corrected in
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(
         m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), SwMarkName(aBkmName), u""_ustr, ReferencesSubtype::Footnote, 0, 0,
-        REF_ONLYNUMBER );
+        RefFieldFormat::CategoryAndNumber );
     m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField));
     m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
     if (bAboveBelow)
     {
         SwGetRefField aField2( static_cast<SwGetRefFieldType*>(
             m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), SwMarkName(aBkmName), u""_ustr, ReferencesSubtype::Footnote, 0, 0,
-            REF_UPDOWN );
+            RefFieldFormat::UpDown );
         m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField2));
         m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
     }
@@ -2337,7 +2337,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
         sPageRefBookmarkName = SwMarkName(sName);
     }
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
-                        std::move(sPageRefBookmarkName), u""_ustr, ReferencesSubtype::Bookmark, 0, 0, REF_PAGE );
+                        std::move(sPageRefBookmarkName), u""_ustr, ReferencesSubtype::Bookmark, 0, 0, RefFieldFormat::Page );
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
 
     return eF_ResT::OK;

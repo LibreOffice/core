@@ -1159,7 +1159,7 @@ bool SwFieldMgr::InsertField(
                 nFormatId %= SAL_N_ELEMENTS(FMT_REF_ARY);
             }
 
-            pField.reset(new SwGetRefField(pTyp, SwMarkName(rData.m_sPar1), sReferenceLanguage, nSubType, nSeqNo, nFlags, nFormatId));
+            pField.reset(new SwGetRefField(pTyp, SwMarkName(rData.m_sPar1), sReferenceLanguage, nSubType, nSeqNo, nFlags, static_cast<RefFieldFormat>(nFormatId)));
             bExp = true;
             break;
         }
