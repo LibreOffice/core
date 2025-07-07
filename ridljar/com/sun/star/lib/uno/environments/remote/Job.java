@@ -42,7 +42,6 @@ import com.sun.star.uno.XCurrentContext;
 public class Job {
     protected IReceiver _iReceiver;
     protected Message  _iMessage;
-              Object    _disposeId;
 
     protected Object    _object;
 
