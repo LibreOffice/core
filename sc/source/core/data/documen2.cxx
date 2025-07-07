@@ -870,21 +870,27 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
 
-                for (TableContainer::iterator it = maTabs.begin(); it != maTabs.end(); ++it)
+                for (auto it = maTabs.begin(); it != maTabs.end(); ++it)
+                {
                     if (*it && it != (maTabs.begin() + nOldPos))
                         (*it)->UpdateInsertTab(aCxt);
+                }
                 if (nNewPos <= nOldPos)
                     nOldPos++;
                 maTabs.emplace(maTabs.begin() + nNewPos, new ScTable(*this, nNewPos, aName));
                 bValid = true;
-                for (TableContainer::iterator it = maTabs.begin(); it != maTabs.end(); ++it)
+                for (auto it = maTabs.begin(); it != maTabs.end(); ++it)
+                {
                     if (*it && it != maTabs.begin()+nOldPos && it != maTabs.begin() + nNewPos)
                         (*it)->UpdateCompile();
+                }
                 SetNoListening( false );
                 sc::StartListeningContext aSLCxt(*this);
-                for (TableContainer::iterator it = maTabs.begin(); it != maTabs.end(); ++it)
+                for (auto it = maTabs.begin(); it != maTabs.end(); ++it)
+                {
                     if (*it && it != maTabs.begin()+nOldPos && it != maTabs.begin()+nNewPos)
                         (*it)->StartListeners(aSLCxt, true);
+                }
 
                 if (pValidationList)
                     pValidationList->UpdateInsertTab(aCxt);
