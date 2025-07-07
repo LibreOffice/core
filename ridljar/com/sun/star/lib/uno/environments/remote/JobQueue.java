@@ -293,8 +293,11 @@ public class JobQueue {
 
         boolean quit = false;
 
-        Object hold_disposeId = _disposeId;
-        _disposeId = disposeId;
+        Object hold_disposeId;
+        synchronized (this) {
+            hold_disposeId = _disposeId;
+            _disposeId = disposeId;
+        }
 
         Object result = null;
 
