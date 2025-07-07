@@ -29,10 +29,12 @@ class SFX2_DLLPUBLIC LokChartHelper
 {
 private:
     SfxViewShell* mpViewShell;
-    css::uno::Reference<css::frame::XController> mxController;
-    css::uno::Reference<css::frame::XDispatch> mxDispatcher;
+    mutable css::uno::Reference<css::frame::XController> mxController;
+    mutable css::uno::Reference<css::frame::XDispatch> mxDispatcher;
     VclPtr<vcl::Window> mpWindow;
     bool mbNegativeX;
+
+    css::uno::Reference<css::frame::XDispatch>& GetXDispatcher() const;
 
 public:
     LokChartHelper(SfxViewShell* pViewShell, bool bNegativeX = false)
@@ -41,11 +43,12 @@ public:
         , mbNegativeX(bNegativeX)
     {}
 
-    css::uno::Reference<css::frame::XController>& GetXController();
-    css::uno::Reference<css::frame::XDispatch>& GetXDispatcher();
+    css::uno::Reference<css::frame::XController>& GetXController() const;
     vcl::Window* GetWindow();
     tools::Rectangle GetChartBoundingBox();
     void Invalidate();
+
+    void Dispatch(const OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
 
     bool Hit(const Point& aPos);
     static bool HitAny(const Point& aPos, bool bNegativeX = false);

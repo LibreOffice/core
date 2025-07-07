@@ -5540,10 +5540,8 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
                     }
                 }
             }
-            util::URL aCommandURL;
-            aCommandURL.Path = u"LOKTransform"_ustr;
-            css::uno::Reference<css::frame::XDispatch>& aChartDispatcher = aChartHelper.GetXDispatcher();
-            aChartDispatcher->dispatch(aCommandURL, comphelper::containerToSequence(aPropertyValuesVector));
+            aChartHelper.Dispatch(u".uno:LOKTransform"_ustr,
+                                  comphelper::containerToSequence(aPropertyValuesVector));
             return;
         }
     }
@@ -5569,23 +5567,20 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         return;
     }
 
+    if (aCommand != ".uno:Save")
+    {
+        if (LokChartHelper aChartHelper(SfxViewShell::Current()); aChartHelper.GetWindow())
+        {
+            aChartHelper.Dispatch(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
+            return;
+        }
+        if (LokStarMathHelper aMathHelper(SfxViewShell::Current()); aMathHelper.GetGraphicWindow())
+        {
+            aMathHelper.Dispatch(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
+            return;
+        }
+    }
     bool bResult = false;
-    LokChartHelper aChartHelper(SfxViewShell::Current());
-
-    if (aChartHelper.GetWindow() && aCommand != ".uno:Save" )
-    {
-        util::URL aCommandURL;
-        aCommandURL.Path = aCommand.copy(5);
-        css::uno::Reference<css::frame::XDispatch>& aChartDispatcher = aChartHelper.GetXDispatcher();
-        aChartDispatcher->dispatch(aCommandURL, comphelper::containerToSequence(aPropertyValuesVector));
-        return;
-    }
-    if (LokStarMathHelper aMathHelper(SfxViewShell::Current());
-        aMathHelper.GetGraphicWindow() && aCommand != ".uno:Save")
-    {
-        aMathHelper.Dispatch(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
-        return;
-    }
     if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers.count(nView))
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),

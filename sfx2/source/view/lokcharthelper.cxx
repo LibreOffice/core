@@ -10,6 +10,7 @@
 #include <sfx2/lokcomponenthelpers.hxx>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/ipclient.hxx>
@@ -23,10 +24,11 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 using namespace com::sun::star;
 
-css::uno::Reference<css::frame::XController>& LokChartHelper::GetXController()
+css::uno::Reference<css::frame::XController>& LokChartHelper::GetXController() const
 {
     if(!mxController.is() && mpViewShell)
     {
@@ -52,7 +54,7 @@ css::uno::Reference<css::frame::XController>& LokChartHelper::GetXController()
     return mxController;
 }
 
-css::uno::Reference<css::frame::XDispatch>& LokChartHelper::GetXDispatcher()
+css::uno::Reference<css::frame::XDispatch>& LokChartHelper::GetXDispatcher() const
 {
     if( !mxDispatcher.is() )
     {
@@ -146,6 +148,16 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
         }
     }
     return aBBox;
+}
+
+void LokChartHelper::Dispatch(const OUString& cmd,
+                              const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const
+{
+    util::URL aCmdURL;
+    aCmdURL.Complete = cmd;
+    util::URLTransformer::create(comphelper::getProcessComponentContext())->parseStrict(aCmdURL);
+
+    GetXDispatcher()->dispatch(aCmdURL, rArguments);
 }
 
 void LokChartHelper::Invalidate()
@@ -305,23 +317,17 @@ bool LokChartHelper::setTextSelection(int nType, int nX, int nY)
     tools::Rectangle rChartBBox = GetChartBoundingBox();
     if (rChartBBox.Contains(Point(nX, nY)))
     {
-        css::uno::Reference<css::frame::XDispatch> xDispatcher = GetXDispatcher();
-        if (xDispatcher.is())
-        {
-            int nChartWinX = nX - rChartBBox.Left();
-            int nChartWinY = nY - rChartBBox.Top();
+        int nChartWinX = nX - rChartBBox.Left();
+        int nChartWinY = nY - rChartBBox.Top();
 
-            // no scale here the chart controller expects twips
-            // that are converted to hmm
-            util::URL aURL;
-            aURL.Path = "LOKSetTextSelection";
-            uno::Sequence< beans::PropertyValue > aArgs{
-                comphelper::makePropertyValue({}, static_cast<sal_Int32>(nType)), // Why no name?
-                comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinX)),
-                comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinY))
-            };
-            xDispatcher->dispatch(aURL, aArgs);
-        }
+        // no scale here the chart controller expects twips
+        // that are converted to hmm
+        uno::Sequence< beans::PropertyValue > aArgs{
+            comphelper::makePropertyValue({}, static_cast<sal_Int32>(nType)), // Why no name?
+            comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinX)),
+            comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinY))
+        };
+        Dispatch(u".uno:LOKSetTextSelection"_ustr, aArgs);
         return true;
     }
     return false;
