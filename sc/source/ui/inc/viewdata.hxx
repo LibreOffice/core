@@ -297,7 +297,7 @@ private:
 
     ScRefType           eRefType;
 
-    SCTAB               nTabNo;                     // displayed sheet
+    SCTAB mnTabNumber; // displayed sheet
     SCTAB               nRefTabNo;                  // sheet which contains RefInput
     SCCOL               nRefStartX;
     SCROW               nRefStartY;
@@ -397,7 +397,7 @@ public:
     SCTAB           GetRefTabNo() const                     { return nRefTabNo; }
     void            SetRefTabNo( SCTAB nNewTab )            { nRefTabNo = nNewTab; }
 
-    SCTAB           GetTabNo() const                        { return nTabNo; }
+    SCTAB GetTabNo() const { return mnTabNumber; }
     SCCOL           MaxCol() const                          { return mrDoc.MaxCol(); }
     SCROW           MaxRow() const                          { return mrDoc.MaxRow(); }
     ScSplitPos      GetActivePart() const                   { return pThisTab->eWhichActive; }
