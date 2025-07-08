@@ -90,6 +90,13 @@ extern "C" ImplTextEncodingData const* sal_getFullTextEncodingData(rtl_TextEncod
     std::abort();
 }
 
+void sal_detail_log(sal_detail_LogLevel, char const*, char const*, char const*, sal_uInt32)
+{
+    std::abort();
+}
+
+unsigned char sal_detail_log_report(sal_detail_LogLevel, char const*) { std::abort(); }
+
 #pragma clang diagnostic ignored "-Weverything"
 extern "C" {
 #include <src/dtoa.c> // workdir/UnpackedTarball/dtoa/src/dtoa.c
