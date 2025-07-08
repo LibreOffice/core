@@ -45,6 +45,17 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_writerfilter_dmapper, \
     utl \
     tl \
     vcl \
+    svl \
+    sw \
+    swqahelper \
+))
+
+$(eval $(call gb_CppunitTest_set_include,sw_writerfilter_dmapper,\
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/uibase/inc \
+    -I$(SRCDIR)/sw/qa/inc \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sw_writerfilter_dmapper))

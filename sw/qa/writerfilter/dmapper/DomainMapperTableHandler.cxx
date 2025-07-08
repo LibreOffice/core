@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -21,16 +21,19 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
 
+#include <frmatr.hxx>
+#include <swtable.hxx>
+
 using namespace ::com::sun::star;
 
 namespace
 {
 /// Tests for sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx.
-class Test : public UnoApiXmlTest
+class Test : public SwModelTestBase
 {
 public:
     Test()
-        : UnoApiXmlTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
+        : SwModelTestBase(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };
@@ -276,6 +279,28 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableNestedLayout)
     // i.e. the floating table was outside the outer table.
     CPPUNIT_ASSERT_GREATER(nTableTop, nFlyTop);
     CPPUNIT_ASSERT_LESS(nTableBottom, nFlyBottom);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableRedline)
+{
+    // Given a document with 3 floating tables, the last table has a last cell with a custom cell
+    // background:
+    // When importing that document from DOCX:
+    createSwDoc("floattable-redline.docx");
+
+    // Then make sure that the cell background is not lost:
+    SwDoc* pDoc = getSwDoc();
+    sw::TableFrameFormats& rTableFormats = *pDoc->GetTableFrameFormats();
+    SwTableFormat* pTableFormat = rTableFormats[2];
+    SwTable* pTable = SwTable::FindTable(pTableFormat);
+    const SwTableBox* pCell = pTable->GetTableBox(u"B2"_ustr);
+    const SwAttrSet& rCellSet = pCell->GetFrameFormat()->GetAttrSet();
+    const SvxBrushItem& rCellBackground = rCellSet.GetBackground();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: rgba[d0d8e8ff]
+    // - Actual  : rgba[ffffff00]
+    // i.e. the cell background was white, should be gray.
+    CPPUNIT_ASSERT_EQUAL(Color(0xD0D8E8), rCellBackground.GetColor());
 }
 }
 
