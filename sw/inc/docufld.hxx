@@ -206,7 +206,7 @@ public:
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
-class SwAuthorField final : public SwField
+class SAL_DLLPUBLIC_RTTI SwAuthorField final : public SwField
 {
     OUString m_aContent;
     SwAuthorFormat m_nFormat;
@@ -615,7 +615,7 @@ public:
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
-class SwExtUserField final : public SwField
+class SAL_DLLPUBLIC_RTTI SwExtUserField final : public SwField
 {
     OUString m_aContent;
     sal_uInt16  m_nType;
@@ -731,7 +731,7 @@ public:
     SwCharFormat* GetCharFormat();
 };
 
-class SwJumpEditField final : public SwField
+class SAL_DLLPUBLIC_RTTI SwJumpEditField final : public SwField
 {
     OUString m_sText;
     OUString m_sHelp;
