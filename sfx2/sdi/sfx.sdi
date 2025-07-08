@@ -3210,7 +3210,7 @@ SfxVoidItem PasteOnlyText SID_PASTE_ONLY_TEXT
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -3227,7 +3227,7 @@ SfxVoidItem PasteOnlyFormula SID_PASTE_ONLY_FORMULA
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -3244,7 +3244,7 @@ SfxVoidItem PasteOnlyValue SID_PASTE_ONLY_VALUE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -3295,7 +3295,7 @@ SfxVoidItem PasteTextImportDialog SID_PASTE_TEXTIMPORT_DIALOG
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
