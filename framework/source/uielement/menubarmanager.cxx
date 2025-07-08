@@ -41,6 +41,7 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -269,9 +270,10 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                  * in 2009 with commit 426ab2c0e8f6e3fe2b766f74f6b8da873d860260
                  * as some "metropatch" and the other places it touched seem to
                  * be gone. */
-                if ( (menuItemHandler->aMenuItemURL == ".uno:Paste" &&
+                if (!comphelper::LibreOfficeKit::isActive() &&
+                    ((menuItemHandler->aMenuItemURL == ".uno:Paste" &&
                             m_aModuleIdentifier != "com.sun.star.sheet.SpreadsheetDocument")
-                        || menuItemHandler->aMenuItemURL == ".uno:PasteClipboard" )    // special for draw/impress
+                        || menuItemHandler->aMenuItemURL == ".uno:PasteClipboard"))    // special for draw/impress
                     bEnabledItem = true;
                 #endif
 
