@@ -31,15 +31,19 @@ namespace oox {
 
 namespace {
 // include auto-generated Perfect_Hash
-#if defined __clang__
+#if defined __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#if defined __clang__
 #if __has_warning("-Wdeprecated-register")
 #pragma GCC diagnostic ignored "-Wdeprecated-register"
 #endif
 #endif
+#endif
+
 #include <tokenhash.inc>
-#if defined __clang__
+
+#if defined __GNUC__
 #pragma GCC diagnostic pop
 #endif
 } // namespace

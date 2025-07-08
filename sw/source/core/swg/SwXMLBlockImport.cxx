@@ -23,17 +23,20 @@
 #include <unotools/charclass.hxx>
 #include <swtypes.hxx>
 
+#if defined __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #if defined __clang__
 #if __has_warning("-Wdeprecated-register")
-#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-register"
 #endif
 #endif
-#include <tokens.cxx>
-#if defined __clang__
-#if __has_warning("-Wdeprecated-register")
-#pragma GCC diagnostic pop
 #endif
+
+#include <tokens.cxx>
+
+#if defined __GNUC__
+#pragma GCC diagnostic pop
 #endif
 
 using namespace ::com::sun::star::uno;

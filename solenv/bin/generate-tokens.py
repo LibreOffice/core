@@ -33,7 +33,7 @@ gperffile.write("""%language=C++
 %null-strings
 %struct-type
 struct xmltoken {
-    const char *name;
+    int name;
     sal_Int32 nToken;
 };
 %%

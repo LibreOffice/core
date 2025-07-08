@@ -1,4 +1,4 @@
-struct hash_entry { const char* name; enum parseKey eKey; };
+struct hash_entry { int name; enum parseKey eKey; };
 
 #if defined __GNUC__
 #pragma GCC system_header

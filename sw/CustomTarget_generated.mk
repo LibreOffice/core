@@ -24,10 +24,12 @@ $(sw_INC)/BlockListTokens.gperf : $(sw_INC)/%.gperf : $(sw_SRC)/%.txt $(sw_PY) \
 # https://github.com/microsoft/WSL/issues/4400 so create them as separate intermediates
 $(sw_INC)/TextBlockTokens.processed : $(sw_INC)/TextBlockTokens.gperf
 	$(GPERF) --compare-strncmp --readonly-tables --class-name=TextBlockTokens \
+	--pic --string-pool-name=textBlockPool \
 	--word-array-name=textBlockList --enum $(sw_INC)/TextBlockTokens.gperf > $@
 
 $(sw_INC)/BlockListTokens.processed : $(sw_INC)/BlockListTokens.gperf
 	$(GPERF) --compare-strncmp --readonly-tables -T $(sw_INC)/BlockListTokens.gperf \
+	--pic --string-pool-name=blockListPool \
 	--class-name=BlockListTokens --word-array-name=blockListList > $@
 
 $(sw_INC)/tokens.cxx : sw_INC:=$(call gb_Helper_wsl_path,$(sw_INC))
