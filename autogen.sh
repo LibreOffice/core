@@ -17,19 +17,24 @@
         if 0;
 
 use strict;
-use Cwd ('cwd', 'realpath');
+# use Cwd's chdir to also set PWD environment variable
+use Cwd ('chdir', 'getcwd', 'realpath');
 use File::Basename;
 
 my $src_path=dirname(realpath($0));
-my $build_path=realpath(cwd());
+my $build_path=realpath(getcwd());
+
+# workaround for case-preserving filesystems to get the canonical name
+# otherwise the src_path may be different from the build_path by case only
+# and mess up the builddir != srcdir handling
+chdir($src_path);
+$src_path=getcwd();
+
 # since this looks crazy, if you have a symlink on a path up to and including
 # the current directory, we need our configure to run in the realpath of that
 # such that compiled (realpath'd) dependency filenames match the filenames
 # used in our makefiles - ie. this gets dependencies right via SRC_ROOT
 chdir ($build_path);
-# more amazingly, if you don't clobber 'PWD' shells will re-assert their
-# old path from the environment, not cwd.
-$ENV{PWD} = $build_path;
 
 my $aclocal;
 my $autoconf;
