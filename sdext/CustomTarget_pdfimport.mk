@@ -17,7 +17,7 @@ $(gb_CustomTarget_workdir)/sdext/pdfimport/hash.cxx : \
 		| $(gb_CustomTarget_workdir)/sdext/pdfimport/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GPF,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),GPF)
-	$(call gb_Helper_wsl_path,$(GPERF) -C -t -l -L C++ -m 20 --switch=2 --readonly-tables -Z PdfKeywordHash -k'4-5$(COMMA)$$' $<) > $@
+	$(call gb_Helper_wsl_path,$(GPERF) -C -t -l -L C++ -m 20 --switch=2 --readonly-tables --pic -Z PdfKeywordHash -k'4-5$(COMMA)$$' $<) > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),GPF)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

@@ -40,7 +40,7 @@ $(filter_GEN_svg_Tokens_hxx) : $(filter_GEN_svg_Tokens_gperf)
 $(filter_GEN_svg_Tokens_cxx) : $(filter_GEN_svg_Tokens_gperf)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,GPF,1)
 	$(call gb_Helper_wsl_path,\
-		$(GPERF) --compare-strncmp -C -m 20 --switch=2 --readonly-tables $(filter_GEN_svg_Tokens_gperf)) \
+		$(GPERF) --compare-strncmp -C -m 20 --switch=2 --readonly-tables --pic $(filter_GEN_svg_Tokens_gperf)) \
 			 | sed -e '/^#line/d' -e 's/(char\*)0/(char\*)0, 0/g' > $@
 
 $(filter_GEN_svg_Script_hxx) : \
