@@ -288,6 +288,16 @@ static void checkFunctionNames(const OString& aLanguage)
     }
 }
 
+static void printError(const OString& rPoPath, const OString& rLanguage, const PoEntry& rPoEntry, const OString& rError)
+{
+    std::cout << "ERROR: " << rError << std::endl
+    << "File: " << rPoPath << std::endl
+    << "Language: " << rLanguage << std::endl
+    << "English:   " << rPoEntry.getMsgId() << std::endl
+    << "Localized: " << rPoEntry.getMsgStr() << std::endl
+    << std::endl;
+}
+
 // In instsetoo_native/inc_openoffice/windows/msi_languages.po
 // where an en-US string ends with '|', translation must end
 // with '|', too.
@@ -319,14 +329,9 @@ static void checkVerticalBar(const OString& aLanguage)
         if( !aPoEntry.isFuzzy() && aPoEntry.getMsgId().endsWith("|") &&
             !aPoEntry.getMsgStr().isEmpty() && !aPoEntry.getMsgStr().endsWith("|") )
         {
-            std::cout
-                << ("ERROR: Missing '|' character at the end of translated"
-                    " string.\nIt causes runtime error in installer.\nFile: ")
-                << aPoPath << std::endl
-                << "Language: " << aLanguage << std::endl
-                << "English:   " << aPoEntry.getMsgId() << std::endl
-                << "Localized: " << aPoEntry.getMsgStr() << std::endl
-                << std::endl;
+            OString aError("Missing '|' character at the end of translated"
+                    " string.\nIt causes runtime error in installer."_ostr);
+            printError(aPoPath, aLanguage, aPoEntry, aError);
             bError = true;
         }
         else
@@ -342,6 +347,108 @@ static void checkVerticalBar(const OString& aLanguage)
         osl::File::remove(aPoPathURL + ".new");
 }
 
+static void checkMalformedString(const OString& aLanguage)
+{
+    OString aPoPath = OString::Concat(getenv("SRC_ROOT")) +
+                      "/translations/source/" +
+                      aLanguage +
+                      "/instsetoo_native/inc_openoffice/windows/msi_languages.po";
+    PoIfstream aPoInput;
+    aPoInput.open(aPoPath);
+    if( !aPoInput.isOpen() )
+    {
+        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+        return;
+    }
+    PoOfstream aPoOutput;
+    aPoOutput.open(aPoPath+".new");
+    PoHeader aTmp("instsetoo_native/inc_openoffice/windows/msi_languages");
+    aPoOutput.writeHeader(aTmp);
+    bool bError = false;
+
+    for(;;)
+    {
+        PoEntry aPoEntry;
+        aPoInput.readEntry(aPoEntry);
+        if( aPoInput.eof() )
+            break;
+        if(!aPoEntry.isFuzzy() && !aPoEntry.getMsgStr().isEmpty())
+        {
+            if (aPoEntry.getMsgId().indexOf("[ProductName]") != -1 &&
+                      aPoEntry.getMsgStr().indexOf("[ProductName]") == -1)
+            {
+                // just a warning. bError = false
+                printError(aPoPath, aLanguage, aPoEntry, "Incorrect [ProductName]."_ostr);
+            }
+
+            OString aStr = aPoEntry.getMsgStr();
+            sal_Int32 nPos(0);
+            sal_Int32 nOpeningBracketsCount(0);
+            sal_Int32 nClosingBracketsCount(0);
+            sal_Int32 nOpeningSquareBracketsCount(0);
+            sal_Int32 nClosingSquareBracketsCount(0);
+            sal_Int32 nOpeningParenthesesCount(0);
+            sal_Int32 nClosingParenthesesCount(0);
+
+            // Check the number of opening and closing characters for
+            // brackets, square brackets and parentheses match
+            while (nPos < aStr.getLength())
+            {
+                const sal_Unicode cCurrentChar = aStr[nPos];
+                if (cCurrentChar == '{')
+                    ++nOpeningBracketsCount;
+                else if (cCurrentChar == '}')
+                    ++nClosingBracketsCount;
+                else if (cCurrentChar == '[')
+                    ++nOpeningSquareBracketsCount;
+                else if (cCurrentChar == ']')
+                    ++nClosingSquareBracketsCount;
+                else if (cCurrentChar == '(')
+                    ++nOpeningParenthesesCount;
+                else if (cCurrentChar == ')')
+                    ++nClosingParenthesesCount;
+                ++nPos;
+            }
+
+            // See instsetoo_native/inc_openoffice/windows/msi_templates/TextStyl.idt
+            if ((aPoEntry.getMsgId().startsWith("{&DialogDefaultBold}") &&
+                  !aPoEntry.getMsgStr().startsWith("{&DialogDefaultBold}")) ||
+                 (aPoEntry.getMsgId().startsWith("{&DialogHeading}") &&
+                  !aPoEntry.getMsgStr().startsWith("{&DialogHeading}")))
+            {
+                printError(aPoPath, aLanguage, aPoEntry, "Incorrect TextStyle."_ostr);
+                bError = true;
+            }
+            else if (nOpeningBracketsCount != nClosingBracketsCount)
+            {
+                printError(aPoPath, aLanguage, aPoEntry, "Number of Opening and Closing brackets doesn't match."_ostr);
+                bError = true;
+            }
+            else if (nOpeningSquareBracketsCount != nClosingSquareBracketsCount)
+            {
+                printError(aPoPath, aLanguage, aPoEntry, "Number of Opening and Closing square brackets doesn't match."_ostr);
+                bError = true;
+            }
+            else if (nOpeningParenthesesCount != nClosingParenthesesCount)
+            {
+                printError(aPoPath, aLanguage, aPoEntry, "Number of Opening and Closing parentheses doesn't match."_ostr);
+                bError = true;
+            }
+            else
+                aPoOutput.writeEntry(aPoEntry);
+        }
+        else
+            aPoOutput.writeEntry(aPoEntry);
+    }
+    aPoInput.close();
+    aPoOutput.close();
+    OUString aPoPathURL;
+    osl::FileBase::getFileURLFromSystemPath(OStringToOUString(aPoPath, RTL_TEXTENCODING_UTF8), aPoPathURL);
+    if( bError )
+        osl::File::move(aPoPathURL + ".new", aPoPathURL);
+    else
+        osl::File::remove(aPoPathURL + ".new");
+}
 // In starmath/source.po Math symbol names (from symbol.src)
 // must not contain spaces
 static void checkMathSymbolNames(const OString& aLanguage)
@@ -372,13 +479,7 @@ static void checkMathSymbolNames(const OString& aLanguage)
         if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_UI_SYMBOL_NAMES" &&
             !aPoEntry.getMsgStr().isEmpty() && (aPoEntry.getMsgStr().indexOf(" ") != -1) )
         {
-            std::cout
-                << "ERROR: Math symbol names must not contain spaces.\nFile: "
-                << aPoPath << std::endl
-                << "Language: " << aLanguage << std::endl
-                << "English:   " << aPoEntry.getMsgId() << std::endl
-                << "Localized: " << aPoEntry.getMsgStr() << std::endl
-                << std::endl;
+            printError(aPoPath, aLanguage, aPoEntry, "Math symbol names must not contain spaces."_ostr);
             bError = true;
         }
         else
@@ -417,6 +518,7 @@ int main()
              checkFunctionNames(aLanguage);
              checkVerticalBar(aLanguage);
              checkMathSymbolNames(aLanguage);
+             checkMalformedString(aLanguage);
         }
         return 0;
     }
