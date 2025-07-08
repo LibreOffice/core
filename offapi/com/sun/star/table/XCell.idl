@@ -46,6 +46,8 @@ published interface XCell: com::sun::star::uno::XInterface
         <p>When assigned, the string will be interpreted and a value, text
         or formula cell is created, depending on the text and the number
         format.</p>
+        <p>Formula must use API English with A1 reference style grammar.</p>
+        @see com::sun::star::sheet::FormulaLanguage::API
      */
     void setFormula( [in] string aFormula );
 
