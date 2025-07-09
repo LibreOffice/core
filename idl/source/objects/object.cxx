@@ -311,7 +311,14 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << endl;
 
     // write slotmap
-    rOutStm.WriteOString("static SfxSlot a").WriteOString(GetName())
+    rOutStm.WriteOString("static ");
+#if defined(_MSC_VER) && _MSC_VER < 1931
+    //https://developercommunity.visualstudio.com/t/Taking-the-address-of-a-constexpr-variab/1550408
+    rOutStm.WriteOString("const");
+#else
+    rOutStm.WriteOString("constexpr");
+#endif
+    rOutStm.WriteOString(" SfxSlot a").WriteOString(GetName())
         .WriteOString("Slots_Impl[").WriteOString(OString::number(nSlotCount == 0 ? 1 : nSlotCount)).WriteOString("] =") << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
