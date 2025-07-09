@@ -181,6 +181,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_filter_html \
     CppunitTest_sw_filter_xml \
     CppunitTest_sw_filter_ascii \
+    CppunitTest_sw_filter_md \
     CppunitTest_sw_a11y \
     CppunitTest_sw_core_theme \
     CppunitTest_sw_pdf_test \
