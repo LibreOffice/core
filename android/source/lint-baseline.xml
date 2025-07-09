@@ -113,17 +113,6 @@
 
     <issue
         id="GradleDependency"
-        message="A newer version of androidx.constraintlayout:constraintlayout than 2.2.0 is available: 2.2.1"
-        errorLine1="    implementation &apos;androidx.constraintlayout:constraintlayout:2.2.0&apos;"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="36"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
         message="A newer version of `compileSdkVersion` than 34 is available: 36"
         errorLine1="    compileSdk 34"
         errorLine2="    ~~~~~~~~~~~~~">
@@ -1381,7 +1370,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/java/org/libreoffice/ui/LibreOfficeUIActivity.java"
-            line="408"
+            line="415"
             column="13"/>
     </issue>
 
@@ -2135,7 +2124,7 @@
 
     <issue
         id="RtlHardcoded"
-        message="Redundant attribute `layout_toRightOf`; already defining `layout_toEndOf` with `targetSdkVersion` 34"
+        message="Consider replacing `android:layout_toRightOf` with `android:layout_toEndOf=&quot;@+id/calc_header_top_left&quot;` to better support right-to-left layouts"
         errorLine1="                    android:layout_toRightOf=&quot;@+id/calc_header_top_left&quot;"
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
@@ -2146,12 +2135,12 @@
 
     <issue
         id="RtlHardcoded"
-        message="Redundant attribute `layout_toRightOf`; already defining `layout_toEndOf` with `targetSdkVersion` 34"
+        message="Consider replacing `android:layout_toRightOf` with `android:layout_toEndOf=&quot;@+id/calc_header_row&quot;` to better support right-to-left layouts"
         errorLine1="                    android:layout_toRightOf=&quot;@+id/calc_header_row&quot;"
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_main.xml"
-            line="94"
+            line="93"
             column="21"/>
     </issue>
 
