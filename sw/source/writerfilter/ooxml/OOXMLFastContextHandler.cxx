@@ -1618,6 +1618,25 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
         // subset of '<resource name="CT_P" resource="Stream">' in model.xml:
         startParagraphGroup();
         sendTableDepth();
+
+        OOXMLPropertySet::Pointer_t pSprms(new OOXMLPropertySet);
+        {
+            // Configure the dummy paragraph to have a zero height, so it has no impact on the
+            // layout.
+            OOXMLPropertySet::Pointer_t pAttributes(new OOXMLPropertySet);
+            OOXMLValue pSBVal = OOXMLValue::createInteger(0);
+            pAttributes->add(NS_ooxml::LN_CT_Spacing_before, pSBVal, OOXMLProperty::ATTRIBUTE);
+            OOXMLValue pSAVal = OOXMLValue::createInteger(0);
+            pAttributes->add(NS_ooxml::LN_CT_Spacing_after, pSAVal, OOXMLProperty::ATTRIBUTE);
+            OOXMLValue pSLRVal = OOXMLValue::createInteger(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact);
+            pAttributes->add(NS_ooxml::LN_CT_Spacing_lineRule, pSLRVal, OOXMLProperty::ATTRIBUTE);
+            OOXMLValue pSLVal = OOXMLValue::createInteger(0);
+            pAttributes->add(NS_ooxml::LN_CT_Spacing_line, pSLVal, OOXMLProperty::ATTRIBUTE);
+            OOXMLValue pSprm = OOXMLValue::createPropertySet(pAttributes);
+            pSprms->add(NS_ooxml::LN_CT_PPrBase_spacing, pSprm, OOXMLProperty::SPRM);
+        }
+        mpStream->props(pSprms.get());
+
         endOfParagraph();
     }
 
