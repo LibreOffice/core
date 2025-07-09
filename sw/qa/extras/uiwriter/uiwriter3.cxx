@@ -844,7 +844,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    // Go to the end of the document, outside the dummy paragraph that just serves as an anchor for
+    // the floating table.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursor> xViewCursor = xTextViewCursorSupplier->getViewCursor();
+    xViewCursor->gotoEnd(/*bExpand=*/false);
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     // Without the fix in place, it would have crashed here
