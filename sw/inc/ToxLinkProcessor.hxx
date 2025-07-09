@@ -41,7 +41,7 @@ public:
      * STR_POOLCHR_TOXJUMP.
      */
     void
-    CloseLink(sal_Int32 endPosition, const OUString& url, bool bRelative);
+    CloseLink(sal_Int32 endPosition, const OUString& url, const OUString& sText, bool bRelative);
 
     /** Insert the found links as attributes to a text node */
     void

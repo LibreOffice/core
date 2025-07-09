@@ -178,6 +178,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
     // FIXME this operates directly on the node text
     OUString & rText = const_cast<OUString&>(pTOXNd->GetText());
     rText.clear();
+    OUString rAltText;
     for(sal_uInt16 nIndex = indexOfEntryToProcess; nIndex < indexOfEntryToProcess + numberOfEntriesToProcess; nIndex++)
     {
         if(nIndex > indexOfEntryToProcess)
@@ -213,6 +214,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
             case TOKEN_ENTRY_TEXT: {
                 HandledTextToken htt = HandleTextToken(rBase, pDoc->GetAttrPool(), pLayout);
                 ApplyHandledTextToken(htt, *pTOXNd);
+                rAltText += htt.text;
             }
                 break;
 
@@ -222,6 +224,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                     rText += GetNumStringOfFirstNode(rBase, true, MAXLEVEL, pLayout);
                     HandledTextToken htt = HandleTextToken(rBase, pDoc->GetAttrPool(), pLayout);
                     ApplyHandledTextToken(htt, *pTOXNd);
+                    rAltText += htt.text;
                 }
                 break;
 
@@ -247,6 +250,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
 
             case TOKEN_LINK_START:
                 mLinkProcessor->StartNewLink(rText.getLength(), aToken.sCharStyleName);
+                rAltText = "";
                 break;
 
             case TOKEN_LINK_END:
@@ -259,7 +263,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                         ++iter->second;
                         url = "#" + OUString::number(iter->second) + url;
                     }
-                    mLinkProcessor->CloseLink(rText.getLength(), url, /*bRelative=*/true);
+                    mLinkProcessor->CloseLink(rText.getLength(), url, rAltText, /*bRelative=*/true);
                 }
                 break;
 
@@ -280,7 +284,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                         OUString aURL = SwTOXAuthority::GetSourceURL(
                             rAuthority.GetText(AUTH_FIELD_URL, pLayout));
 
-                        mLinkProcessor->CloseLink(rText.getLength(), aURL, /*bRelative=*/false);
+                        mLinkProcessor->CloseLink(rText.getLength(), aURL, rAltText, /*bRelative=*/false);
                     }
                 }
                 break;
