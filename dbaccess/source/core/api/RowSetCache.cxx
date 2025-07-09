@@ -108,6 +108,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         if ( bBookmarkable )
         {
             xUp->moveToInsertRow();
+            xUp->moveToCurrentRow();
             xUp->cancelRowUpdates();
             _xRs->beforeFirst();
             m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
