@@ -39,23 +39,40 @@ static void runTest(const char* deviceName, const char* devicePlatform)
     int status = clewInit(OPENCL_DLL_NAME);
     check(status, CLEW_SUCCESS);
 
-    // Find the given OpenCL device (in order to use the same one as LO core).
-    cl_uint numPlatforms;
+    // Find the given OpenCL device (to match LO core config)
+    cl_uint numPlatforms = 0;
     openclcheck(clGetPlatformIDs(0, nullptr, &numPlatforms));
+    if (numPlatforms == 0)
+    {
+        SAL_WARN("opencl", "No OpenCL platforms found");
+        return;
+    }
+
     std::vector<cl_platform_id> platforms(numPlatforms);
     openclcheck(clGetPlatformIDs(numPlatforms, platforms.data(), nullptr));
+
     cl_platform_id platformId = nullptr;
     for (cl_uint i = 0; i < numPlatforms; ++i)
     {
-        char platformName[64];
-        if (clGetPlatformInfo(platforms[i], CL_PLATFORM_NAME, 64, platformName, nullptr)
-                == CL_SUCCESS
-            && strcmp(devicePlatform, platformName) == 0)
+        size_t len = 0;
+        if (clGetPlatformInfo(platforms[i], CL_PLATFORM_NAME, 0, nullptr, &len) != CL_SUCCESS)
+            continue;
+
+        std::string platformName(len, '\0');
+        if (clGetPlatformInfo(platforms[i], CL_PLATFORM_NAME, len, &platformName[0], nullptr)
+            != CL_SUCCESS)
+            continue;
+
+        // We want the string terminated with null
+        platformName.back() = '\0';
+
+        if (strcmp(devicePlatform, platformName.c_str()) == 0)
         {
             platformId = platforms[i];
             break;
         }
     }
+
     if (platformId == nullptr)
     {
         SAL_WARN("opencl", "Device platform not found: " << devicePlatform);
@@ -63,25 +80,41 @@ static void runTest(const char* deviceName, const char* devicePlatform)
         return;
     }
 
-    cl_uint numDevices;
+    cl_uint numDevices = 0;
     openclcheck(clGetDeviceIDs(platformId, CL_DEVICE_TYPE_ALL, 0, nullptr, &numDevices));
+    if (numDevices == 0)
+    {
+        SAL_WARN("opencl", "No OpenCL devices found on platform " << devicePlatform);
+        return;
+    }
+
     std::vector<cl_device_id> devices(numDevices);
     openclcheck(
         clGetDeviceIDs(platformId, CL_DEVICE_TYPE_ALL, numDevices, devices.data(), nullptr));
+
     cl_device_id deviceId = nullptr;
     for (cl_uint i = 0; i < numDevices; ++i)
     {
-        char name[1024];
-        if (clGetDeviceInfo(devices[i], CL_DEVICE_NAME, 64, name, nullptr) == CL_SUCCESS
-            && strcmp(deviceName, name) == 0)
+        size_t len = 0;
+        if (clGetDeviceInfo(devices[i], CL_DEVICE_NAME, 0, nullptr, &len) != CL_SUCCESS)
+            continue;
+
+        std::string name(len, '\0');
+        if (clGetDeviceInfo(devices[i], CL_DEVICE_NAME, len, &name[0], nullptr) != CL_SUCCESS)
+            continue;
+
+        name.back() = '\0';
+
+        if (strcmp(deviceName, name.c_str()) == 0)
         {
             deviceId = devices[i];
             break;
         }
     }
+
     if (deviceId == nullptr)
     {
-        SAL_WARN("opencl", "Device not found: " << deviceName);
+        SAL_WARN("opencl", "Device not found: " << deviceName << " on platform " << devicePlatform);
         assert(false);
         return;
     }
@@ -126,40 +159,47 @@ static void runTest(const char* deviceName, const char* devicePlatform)
     cl_kernel kernel = clCreateKernel(program, "testFunction", &state);
     openclcheck(state);
 
-    // Some random data for the program.
-    constexpr int dataSize = 1000;
+    // data and buffers
+    constexpr size_t localSize = 64;
+    constexpr size_t dataSize = 1000;
+
+    // globalSize rounding to the multiple of localSize
+    const size_t globalWorkSize[] = { ((dataSize + localSize - 1) / localSize) * localSize };
+
     cl_float inputData1[dataSize];
     cl_float inputData2[dataSize];
-    cl_float outputData[dataSize];
-    for (int i = 0; i < dataSize; ++i)
+    for (size_t i = 0; i < dataSize; ++i)
     {
-        inputData1[i] = i * 2;
+        inputData1[i] = i * 2.0f;
         inputData2[i] = i % 100;
     }
-    cl_mem input1 = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
-                                   sizeof(cl_float) * dataSize, inputData1, &state);
+
+    cl_mem input1 = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                   sizeof(inputData1), inputData1, &state);
     openclcheck(state);
-    cl_mem input2 = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
-                                   sizeof(cl_float) * dataSize, inputData2, &state);
+    cl_mem input2 = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                   sizeof(inputData2), inputData2, &state);
     openclcheck(state);
-    cl_mem output = clCreateBuffer(context, CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR,
-                                   sizeof(cl_float) * dataSize, outputData, &state);
-    openclcheck(state);
-    state = clSetKernelArg(kernel, 0, sizeof(cl_mem), &input1);
-    openclcheck(state);
-    state = clSetKernelArg(kernel, 1, sizeof(cl_mem), &input2);
-    openclcheck(state);
-    state = clSetKernelArg(kernel, 2, sizeof(cl_mem), &output);
+    cl_mem output = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(cl_float) * globalWorkSize[0],
+                                   nullptr, &state);
     openclcheck(state);
 
-    const size_t globalWorkSize[] = { dataSize };
-    const size_t localSize[1] = { 64 };
-    state = clEnqueueNDRangeKernel(queue, kernel, 1, nullptr, globalWorkSize, localSize, 0, nullptr,
-                                   nullptr);
-    openclcheck(state);
+    // kernel launch
+    openclcheck(clSetKernelArg(kernel, 0, sizeof(cl_mem), &input1));
+    openclcheck(clSetKernelArg(kernel, 1, sizeof(cl_mem), &input2));
+    openclcheck(clSetKernelArg(kernel, 2, sizeof(cl_mem), &output));
+
+    openclcheck(clEnqueueNDRangeKernel(queue, kernel, 1, nullptr, // 1 dimension, no offset
+                                       globalWorkSize, // 64-multiple
+                                       &localSize, 0, nullptr, nullptr));
+
     openclcheck(clFinish(queue));
-    openclcheck(clEnqueueReadBuffer(queue, output, CL_TRUE, 0, sizeof(cl_float) * dataSize,
-                                    outputData, 0, nullptr, nullptr));
+
+    // reading and cleaning
+    cl_float outputData[dataSize]; // we only read what we need
+    openclcheck(clEnqueueReadBuffer(queue, output, CL_TRUE, 0, sizeof(outputData), outputData, 0,
+                                    nullptr, nullptr));
+
     clReleaseMemObject(input1);
     clReleaseMemObject(input2);
     clReleaseMemObject(output);
