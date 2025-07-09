@@ -1450,7 +1450,6 @@ namespace
 
 namespace comphelper
 {
-    sal_uInt16 BackupFileHelper::mnMaxAllowedBackups = 10;
     bool BackupFileHelper::mbExitWasCalled = false;
     bool BackupFileHelper::mbSafeModeDirExists = false;
     OUString BackupFileHelper::maInitialBaseURL;
