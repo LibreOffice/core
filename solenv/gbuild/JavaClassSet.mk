@@ -170,8 +170,8 @@ endef
 # $1: token identifying this JavaClassSet
 # $2: token identifying the Jar being used
 define gb_JavaClassSet_use_jar_classset
-$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(2)))
-$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(2)))
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_Jar_get_target,$(2))
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(call gb_Jar_get_target,$(2))
 $(call gb_JavaClassSet_add_classpath,$(1),$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(2))))
 
 endef
