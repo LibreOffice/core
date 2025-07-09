@@ -20,9 +20,6 @@ excludelist:
     xmloff/source/xforms/XFormsModelExport.hxx:
     # Needed for css shortcut
     - sal/types.h
-    xmloff/source/core/fasttokenhandler.cxx:
-    # Needed for special array initialization
-    - tokennames.inc
     xmloff/source/chart/SchXMLCalculationSettingsContext.cxx:
     # Complete type is needed
     - com/sun/star/frame/XModel.hpp

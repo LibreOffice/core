@@ -46,22 +46,20 @@ static const std::pair<css::uno::Sequence<sal_Int8>, OUString>& getNames(sal_Int
 {
     static const auto saTokenNames = []()
     {
-        static constexpr std::string_view sppcTokenNames[] = {
-#include <tokennames.inc>
-        };
-        static_assert(std::size(sppcTokenNames) == XML_TOKEN_COUNT);
+        static_assert(std::size(wordlist) == XML_TOKEN_COUNT);
 
-        std::vector<std::pair<css::uno::Sequence<sal_Int8>, OUString>> names;
-        names.reserve(std::size(sppcTokenNames));
-        std::transform(std::begin(sppcTokenNames), std::end(sppcTokenNames),
-                       std::back_inserter(names),
-                       [](auto token)
-                       {
-                           return std::make_pair(
-                               css::uno::Sequence<sal_Int8>(
-                                   reinterpret_cast<const sal_Int8*>(token.data()), token.size()),
-                               OStringToOUString(token, RTL_TEXTENCODING_UTF8));
-                       });
+        std::vector<std::pair<css::uno::Sequence<sal_Int8>, OUString>> names(std::size(wordlist));
+
+        for (const auto& resword : wordlist)
+        {
+            const char *s = reinterpret_cast<const char*>(&stringpool_contents) + resword.name;
+            std::string_view token(s, strlen(s));
+
+            names[resword.nToken].first =
+               css::uno::Sequence<sal_Int8>(
+                   reinterpret_cast<const sal_Int8*>(token.data()), token.size());
+            names[resword.nToken].second = OStringToOUString(token, RTL_TEXTENCODING_UTF8);
+        };
         return names;
     }();
 
