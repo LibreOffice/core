@@ -130,7 +130,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 
     for ( size_t nFunc = 0; nFunc < rInterface.Count(); ++nFunc )
     {
-        SfxSlot &rDef = rInterface.pSlots[nFunc];
+        const SfxSlot &rDef = rInterface.pSlots[nFunc];
         if ( rDef.GetGroupId() != SfxGroupId::NONE &&
              std::find(_vGroups.begin(), _vGroups.end(), rDef.GetGroupId()) == _vGroups.end() )
         {
@@ -285,7 +285,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
     SfxInterface* pInterface = _vInterfaces[nInterface];
     while ( ++_nCurMsg < pInterface->Count() )
     {
-        SfxSlot& rMsg = pInterface->pSlots[_nCurMsg];
+        const SfxSlot& rMsg = pInterface->pSlots[_nCurMsg];
         if (rMsg.GetGroupId() == _vGroups.at(_nCurGroup))
             return &rMsg;
     }

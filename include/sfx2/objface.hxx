@@ -57,7 +57,7 @@ friend class SfxSlotPool;
 
     const char*             pName;          // Sfx-internal name of interface
     const SfxInterface*     pGenoType;      // base interface
-    SfxSlot*                pSlots;         // SlotMap
+    const SfxSlot*          pSlots;         // SlotMap
     sal_uInt16              nCount;         // number of slots in SlotMap
     SfxInterfaceId          nClassId;       // Id of interface
     bool                    bSuperClass;    // Whether children inherit its toolbars etc
@@ -68,10 +68,10 @@ public:
                                           bool bSuperClass,
                                           SfxInterfaceId nClassId,
                                           const SfxInterface* pGeno,
-                                          SfxSlot &rMessages, sal_uInt16 nMsgCount );
+                                          const SfxSlot &rMessages, sal_uInt16 nMsgCount );
                             ~SfxInterface();
 
-    void                    SetSlotMap( SfxSlot& rMessages, sal_uInt16 nMsgCount );
+    void                    SetSlotMap( const SfxSlot& rMessages, sal_uInt16 nMsgCount );
     inline sal_uInt16           Count() const;
 
     const SfxSlot*          GetRealSlot( const SfxSlot * ) const;

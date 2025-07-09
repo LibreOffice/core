@@ -84,7 +84,7 @@ SfxInterface::SfxInterface( const char *pClassName,
                             bool bUsableSuperClass,
                             SfxInterfaceId nId,
                             const SfxInterface* pParent,
-                            SfxSlot &rSlotMap, sal_uInt16 nSlotCount ):
+                            const SfxSlot &rSlotMap, sal_uInt16 nSlotCount ):
     pName(pClassName),
     pGenoType(pParent),
     nClassId(nId),
@@ -102,11 +102,11 @@ void SfxInterface::Register( const SfxModule* pMod )
         SfxGetpApp()->GetAppSlotPool_Impl().RegisterInterface(*this);
 }
 
-void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
+void SfxInterface::SetSlotMap( const SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
 {
     pSlots = &rSlotMap;
     nCount = nSlotCount;
-    SfxSlot* pIter = pSlots;
+    const SfxSlot* pIter = pSlots;
 
     if ( !pIter->pNextSlot )
     {
@@ -120,7 +120,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
     else
     {
         sal_uInt16 nIter = 1;
-        for ( SfxSlot *pNext = pIter+1; nIter < nCount; ++pNext, ++nIter )
+        for (const SfxSlot *pNext = pIter+1; nIter < nCount; ++pNext, ++nIter)
         {
 
             if ( pNext->GetSlotId() <= pIter->GetSlotId() )
