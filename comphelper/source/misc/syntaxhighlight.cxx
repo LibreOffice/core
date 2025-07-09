@@ -52,7 +52,7 @@ namespace o3tl {
 // ##########################################################################
 // ATTENTION: all these words need to be in lower case
 // ##########################################################################
-static const char* strListBasicKeyWords[] = {
+const char* const strListBasicKeyWords[] = {
     "access",
     "alias",
     "and",
@@ -185,8 +185,7 @@ static const char* strListBasicKeyWords[] = {
     "xor"
 };
 
-
-static const char* strListSqlKeyWords[] = {
+const char* const strListSqlKeyWords[] = {
     "all",
     "and",
     "any",
@@ -251,7 +250,6 @@ static const char* strListSqlKeyWords[] = {
     "where"
 };
 
-
 extern "C" {
 
 static int compare_strings( const void *arg1, const void *arg2 )
@@ -283,7 +281,7 @@ class SyntaxHighlighter::Tokenizer
     bool getNextToken(std::u16string_view::const_iterator& pos, std::u16string_view::const_iterator end, /*out*/TokenType& reType,
         /*out*/std::u16string_view::const_iterator& rpStartPos, /*out*/std::u16string_view::const_iterator& rpEndPos) const;
 
-    const char** ppListKeyWords;
+    const char* const* ppListKeyWords;
     sal_uInt16 nKeyWordCount;
 
 public:
@@ -293,7 +291,7 @@ public:
 
     void getHighlightPortions(std::u16string_view rLine,
                                /*out*/std::vector<HighlightPortion>& portions) const;
-    void setKeyWords( const char** ppKeyWords, sal_uInt16 nCount );
+    void setKeyWords( const char* const* ppKeyWords, sal_uInt16 nCount );
 };
 
 // Helper function: test character flag
@@ -312,7 +310,7 @@ bool SyntaxHighlighter::Tokenizer::testCharFlags(sal_Unicode c, CharFlags nTestF
     return bRet;
 }
 
-void SyntaxHighlighter::Tokenizer::setKeyWords( const char** ppKeyWords, sal_uInt16 nCount )
+void SyntaxHighlighter::Tokenizer::setKeyWords( const char* const* ppKeyWords, sal_uInt16 nCount )
 {
     ppListKeyWords = ppKeyWords;
     nKeyWordCount = nCount;
