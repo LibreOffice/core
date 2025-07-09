@@ -43,9 +43,11 @@ for subdir in $(ls -d */ | grep -v \
                                 -e remotebridges/ \
                                 -e reportbuilder/ \
                                 -e ridljar/ \
+                                -e salhelper/ \
                                 -e schema/ \
                                 -e scp2/ \
                                 -e smoketest/ \
+                                -e static/ \
                                 -e swext/ \
                                 -e sysui/ \
                                 -e udkapi/ \
@@ -81,7 +83,7 @@ echo "Checking global headers";
 # Search for files in include is different since they can be used in any module
 for i in  $(find include/ -name "*\.h" -o -name "*\.hxx" -o -name "\.hrc" | cut -d "/" -f 2- ); do
     # Some headers are only included between double quotes
-    if [ $(git grep -l -e \<$i\> -e \"$i\" {*\.[hc]xx,*\.[hc],*\.hrc,*\.mm,*\.m} | grep -v pch | wc -l) -eq 0 ] ; then
+    if [ $(git grep -l -e \<$i\> -e \"$i\" -e \"$(basename $i)\" {*\.[hc]xx,*\.[hc],*\.hrc,*\.mm,*\.m} | grep -v pch | wc -l) -eq 0 ] ; then
         echo "Out of use header: include/$i";
     fi
 done
