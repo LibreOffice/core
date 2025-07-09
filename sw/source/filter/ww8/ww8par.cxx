@@ -3368,8 +3368,6 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
             const SfxInt16Item *pIdctHint = GetFormatAttr(RES_CHRATR_IDCTHINT);
             nLclIdctHint = pIdctHint->GetValue();
         }
-        else if (nScript == MSASCII) // Force weak chars in ascii range to use LATIN font
-            nLclIdctHint = 0;
 
         TypedWhichId<SvxFontItem> nForceFromFontId(0);
         if (nLclIdctHint != 0xFF)
