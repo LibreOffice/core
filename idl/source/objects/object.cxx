@@ -269,7 +269,14 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         return;
     }
     // write parameter array
-    rOutStm.WriteOString("static const SfxFormalArgument a").WriteOString(GetName()).WriteOString("Args_Impl[] =") << endl;
+    rOutStm.WriteOString("static ");
+#if defined(_MSC_VER) && _MSC_VER < 1931
+    //https://developercommunity.visualstudio.com/t/Taking-the-address-of-a-constexpr-variab/1550408
+    rOutStm.WriteOString("const");
+#else
+    rOutStm.WriteOString("constexpr");
+#endif
+    rOutStm.WriteOString(" SfxFormalArgument a").WriteOString(GetName()).WriteOString("Args_Impl[] =") << endl;
     rOutStm.WriteChar('{') << endl;
 
     std::vector<sal_uInt32> aSuperList;
