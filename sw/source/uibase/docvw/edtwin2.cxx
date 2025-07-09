@@ -325,6 +325,48 @@ static OString getTooltipPayload(const OUString& tooltip, const SwRect& rect)
     return writer.finishAndGetAsOString();
 }
 
+namespace
+{
+
+/** Fetches the text encolsed by the bookmark, resolved from the internal (input) link
+ *
+ * If a bookmark doesn't exist, return an empty string.
+ **/
+OUString fetchBookmarkedValueFromInternalLink(std::u16string_view sURL, SwWrtShell& rShell)
+{
+    // Check if the URL is an internal link (starts with '#')
+    if (sURL[0] != '#')
+        return OUString();
+
+    IDocumentMarkAccess* pMarkAccess = rShell.getIDocumentMarkAccess();
+    auto ppBookmark = pMarkAccess->findBookmark(SwMarkName(OUString(sURL.substr(1))));
+    if (ppBookmark != pMarkAccess->getBookmarksEnd()
+        && IDocumentMarkAccess::GetType(**ppBookmark)
+            == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK)
+    {
+        SwTextNode* pTextNode = (*ppBookmark)->GetMarkStart().GetNode().GetTextNode();
+        if (pTextNode)
+        {
+            OUString sText = sw::GetExpandTextMerged(rShell.GetLayout(), *pTextNode, true, false, ExpandMode(0));
+
+            if (!sText.isEmpty())
+            {
+                OUStringBuffer sBuffer(sText.replaceAll(u"\u00ad", ""));
+                for (sal_Int32 i = 0; i < sBuffer.getLength(); ++i)
+                {
+                    if (sBuffer[i] < 0x20)
+                        sBuffer[i] = 0x20;
+                    else if (sBuffer[i] == 0x2011)
+                        sBuffer[i] = '-';
+                }
+                return sBuffer.makeStringAndClear();
+            }
+        }
+    }
+    return OUString();
+}
+}
+
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
@@ -416,32 +458,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 // #i104300#
                 // special handling if target is a cross-reference bookmark
                 {
-                    OUString sTmpSearchStr = sText.copy( 1 );
-                    IDocumentMarkAccess* pMarkAccess = rSh.getIDocumentMarkAccess();
-                    auto ppBkmk = pMarkAccess->findBookmark( SwMarkName(sTmpSearchStr) );
-                    if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
-                         IDocumentMarkAccess::GetType(**ppBkmk)
-                            == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK )
-                    {
-                        SwTextNode* pTextNode = (*ppBkmk)->GetMarkStart().GetNode().GetTextNode();
-                        if ( pTextNode )
-                        {
-                            sText = sw::GetExpandTextMerged(rSh.GetLayout(), *pTextNode, true, false, ExpandMode(0));
-
-                            if( !sText.isEmpty() )
-                            {
-                                OUStringBuffer sTmp(sText.replaceAll(u"\u00ad", ""));
-                                for (sal_Int32 i = 0; i < sTmp.getLength(); ++i)
-                                {
-                                    if (sTmp[i] < 0x20)
-                                        sTmp[i] = 0x20;
-                                    else if (sTmp[i] == 0x2011)
-                                        sTmp[i] = '-';
-                                }
-                                sText = sTmp.makeStringAndClear();
-                            }
-                        }
-                    }
+                    sText = fetchBookmarkedValueFromInternalLink(sText, rSh);
                 }
                 // #i80029#
                 bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
