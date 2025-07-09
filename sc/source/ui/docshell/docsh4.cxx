@@ -44,6 +44,8 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fmshell.hxx>
+#include <svx/pageitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/dispatch.hxx>
@@ -588,11 +590,72 @@ void ScDocShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        case SID_AUTO_STYLE:
-            OSL_FAIL("use ScAutoStyleHint instead of SID_AUTO_STYLE");
-            break;
+            case SID_ATTR_PAGE_ORIENTATION: // .uno:Orientation
+            {
+                const SfxBoolItem* pBool = rReq.GetArg<SfxBoolItem>(SID_ATTR_PAGE_ORIENTATION);
 
-        case SID_GET_COLORLIST:
+                if (!pBool) // nothing supplied  -> do nothing
+                {
+                    rReq.Done();
+                    break;
+                }
+                ScViewData* pViewData = GetViewData();
+                if (!pViewData)
+                    break;
+
+                ScDocument& rDoc = GetDocument();
+                const SCTAB nTab = pViewData->GetTabNo();
+
+                // obtain the page-style’s ItemSet
+                OUString aStyleName = rDoc.GetPageStyle(nTab);
+                ScStyleSheetPool* pPagePool = rDoc.GetStyleSheetPool();
+                if (!pPagePool)
+                    break;
+                SfxStyleSheetBase* pStyle = pPagePool->Find(aStyleName, SfxStyleFamily::Page);
+                if (!pStyle)
+                    break;
+
+                SfxItemSet& rSet = pStyle->GetItemSet();
+
+                const SvxPageItem& rOldPageItem = rSet.Get(ATTR_PAGE);
+                const SvxSizeItem& rOldSizeItem = rSet.Get(ATTR_PAGE_SIZE);
+
+                bool bDesiredLandscape = pBool->GetValue();
+                bool bCurrentLandscape = rOldPageItem.IsLandscape();
+
+                if (bDesiredLandscape == bCurrentLandscape) // already correct
+                {
+                    rReq.Done();
+                    break;
+                }
+                //  apply the change: flip orientation and swap paper size
+                SvxPageItem aNewPageItem(ATTR_PAGE);
+                aNewPageItem.SetLandscape(bDesiredLandscape);
+
+                Size aOld = rOldSizeItem.GetSize();
+                Size aNew(aOld.Height(), aOld.Width()); // swap W/H
+                SvxSizeItem aNewSizeItem(ATTR_PAGE_SIZE, aNew);
+
+                rSet.Put(aNewPageItem);
+                rSet.Put(aNewSizeItem);
+
+                SetDocumentModified();
+                PostPaintGridAll(); // repaint sheet
+
+                if (pBindings) {
+
+                    pBindings->Invalidate(SID_ATTR_PAGE_ORIENTATION);
+                    pBindings->Invalidate(SID_ATTR_PAGE_SIZE);
+                }
+
+                rReq.Done();
+            }
+            break;
+            case SID_AUTO_STYLE:
+                OSL_FAIL("use ScAutoStyleHint instead of SID_AUTO_STYLE");
+                break;
+
+            case SID_GET_COLORLIST:
             {
                 const SvxColorListItem* pColItem = GetItem(SID_COLOR_TABLE);
                 const XColorListRef& pList = pColItem->GetColorList();
@@ -2272,11 +2335,34 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 }
                 break;
 
-            case SID_ATTR_CHAR_FONTLIST:
-                rSet.Put( SvxFontListItem( m_pImpl->pFontList.get(), nWhich ) );
-                break;
+                case SID_ATTR_PAGE_ORIENTATION:
+                {
+                    ScViewData* pViewData = GetViewData();
+                    if (pViewData)
+                    {
+                        ScDocument& rDoc = GetDocument();
+                        const SCTAB nTab = pViewData->GetTabNo();
 
-            case SID_NOTEBOOKBAR:
+                        OUString aStyleName = rDoc.GetPageStyle(nTab);
+                        ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
+                        if (pStylePool)
+                        {
+                            SfxStyleSheetBase* pStyleSheet
+                                = pStylePool->Find(aStyleName, SfxStyleFamily::Page);
+                            if (pStyleSheet)
+                            {
+                                const SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
+                                rSet.Put(rStyleSet.Get(ATTR_PAGE));
+                            }
+                        }
+                    }
+                }
+                break;
+                case SID_ATTR_CHAR_FONTLIST:
+                    rSet.Put(SvxFontListItem(m_pImpl->pFontList.get(), nWhich));
+                    break;
+
+                case SID_NOTEBOOKBAR:
                 {
                     if (SfxBindings* pBindings = GetViewBindings())
                     {
