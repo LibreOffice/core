@@ -58,21 +58,19 @@ css::uno::Sequence<sal_Int8> const& TokenMap::getUtf8TokenName(sal_Int32 nToken)
 {
     static const auto saTokenNames = []()
     {
-        static constexpr std::string_view sppcTokenNames[] = {
-// include auto-generated C array with token names as C strings
-#include <tokennames.inc>
-        };
-        static_assert(std::size(sppcTokenNames) == XML_TOKEN_COUNT);
+        static_assert(std::size(wordlist) == XML_TOKEN_COUNT);
 
-        std::vector<css::uno::Sequence<sal_Int8>> aTokenNames;
-        aTokenNames.reserve(std::size(sppcTokenNames));
-        std::transform(
-            std::begin(sppcTokenNames), std::end(sppcTokenNames), std::back_inserter(aTokenNames),
-            [](auto aUtf8Token)
-            {
-                return css::uno::Sequence<sal_Int8>(
-                    reinterpret_cast<const sal_Int8*>(aUtf8Token.data()), aUtf8Token.size());
-            });
+        std::vector<css::uno::Sequence<sal_Int8>> aTokenNames(std::size(wordlist));
+        for (const auto& resword : wordlist)
+        {
+            const char *s = reinterpret_cast<const char*>(&stringpool_contents) + resword.name;
+            std::string_view aUtf8Token(s, strlen(s));
+
+            aTokenNames[resword.nToken] =
+               css::uno::Sequence<sal_Int8>(
+                   reinterpret_cast<const sal_Int8*>(aUtf8Token.data()), aUtf8Token.size());
+        }
+
         return aTokenNames;
     }();
 

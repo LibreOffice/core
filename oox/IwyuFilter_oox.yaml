@@ -176,9 +176,6 @@ excludelist:
     # Auto-generated C array of transitional and strict namespace names
     - namespacenames.inc
     - namespaces-strictnames.inc
-    oox/source/token/tokenmap.cxx:
-    # Auto-generated C array of token names
-    - tokennames.inc
     oox/source/vml/vmlinputstream.cxx:
     # Needed for direct member access
     - com/sun/star/io/XTextInputStream2.hpp

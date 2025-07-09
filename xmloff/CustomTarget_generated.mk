@@ -20,7 +20,6 @@ $(eval $(call gb_CustomTarget_generate_tokens,xmloff/generated,xmloff,xmloff/sou
 
 $(call gb_CustomTarget_get_target,xmloff/generated) : \
 	$(xmloff_INC)/tokenhash.inc \
-	$(xmloff_INC)/tokennames.inc \
 	$(xmloff_GENHEADERPATH)/tokens.hxx \
 
 # vim: set noet sw=4 ts=4:
