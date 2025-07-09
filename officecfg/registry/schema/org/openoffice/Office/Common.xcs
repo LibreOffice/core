@@ -5499,7 +5499,7 @@
         <info>
           <desc>Like OpenCLDenyList, but for combinations known to be good.</desc>
         </info>
-        <value oor:separator=";">Linux//Advanced Micro Devices, Inc\.//1445\.5 \(sse2,avx\);//Advanced Micro Devices, Inc\.//;//Intel\(R\) Corporation//;//NVIDIA Corporation//</value>
+        <value oor:separator=";">Linux//Advanced Micro Devices, Inc\.//1445\.5 \(sse2,avx\);//Advanced Micro Devices, Inc\.//;//Intel\(R\) Corporation//;//NVIDIA Corporation//;Linux//Mesa%2FX.org//</value>
       </prop>
       <prop oor:name="SelectedOpenCLDeviceIdentifier" oor:type="xs:string" oor:nillable="false">
         <info>
