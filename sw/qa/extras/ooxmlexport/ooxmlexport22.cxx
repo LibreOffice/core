@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166201_simplePosCM)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf166975)
 {
-    loadAndSave("WordOK.docx");
+    createSwDoc("WordOK.docx");
 
     CPPUNIT_ASSERT_EQUAL(u"a)"_ustr,
                          getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
@@ -83,6 +83,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166975)
     CPPUNIT_ASSERT_EQUAL(u"aa)"_ustr,
                          getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
     // this was a%7%%7%)
+    CPPUNIT_ASSERT_EQUAL(u"aaa)"_ustr,
+                         getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"bbb)"_ustr,
+                         getProperty<OUString>(getParagraph(5), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"ccc)"_ustr,
+                         getProperty<OUString>(getParagraph(6), u"ListLabelString"_ustr));
+
+    saveAndReload(mpFilter);
+
+    CPPUNIT_ASSERT_EQUAL(u"a)"_ustr,
+                         getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
+    // this was aa%)
+    CPPUNIT_ASSERT_EQUAL(u"aa)"_ustr,
+                         getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
+    // this was aa%a%)
     CPPUNIT_ASSERT_EQUAL(u"aaa)"_ustr,
                          getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"bbb)"_ustr,
