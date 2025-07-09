@@ -17,6 +17,14 @@
 
 #include <fmtcntnt.hxx>
 #include <ndtxt.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <txtfrm.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
+#include <flyfrm.hxx>
 
 using namespace ::com::sun::star;
 
@@ -108,6 +116,35 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedRuns)
     CPPUNIT_ASSERT(pTextNode);
     // Without the accompanying fix in place, this test would have failed, the shape was empty.
     CPPUNIT_ASSERT_EQUAL(u"Test text box"_ustr, pTextNode->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPos)
+{
+    // Given a document with a floating table (text: C) and a visually first body paragraph (text:
+    // D):
+    // When loading that document:
+    createSwDoc("floattable-anchorpos.docx");
+
+    // Then make sure that D is not shifted down vertically, compared to C:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwPageFrame* pPage = pLayout->GetLower()->DynCastPageFrame();
+    SwTextFrame* pBodyPara1 = pPage->FindFirstBodyContent()->DynCastTextFrame();
+    CPPUNIT_ASSERT(pBodyPara1->HasSplitFlyDrawObjs());
+    SwSortedObjs& rFlys1 = *pBodyPara1->GetDrawObjs();
+    SwFlyFrame* pFly1 = rFlys1[0]->DynCastFlyFrame();
+    SwTextFrame* pFly1Text = pFly1->ContainsContent()->DynCastTextFrame();
+    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, pFly1Text->GetText());
+    SwTwips nFlyTop = pFly1Text->getFrameArea().Top();
+    SwTextFrame* pBodyPara2 = pBodyPara1->GetNext()->DynCastTextFrame();
+    CPPUNIT_ASSERT_EQUAL(u"D"_ustr, pBodyPara2->GetText());
+    SwTwips nBodyTop = pBodyPara2->getFrameArea().Top();
+    SwTwips nDiff = std::abs(nBodyTop - nFlyTop);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less or equal than: 1
+    // - Actual  : 243
+    // i.e. the vertical position of D was too big.
+    CPPUNIT_ASSERT_LESSEQUAL(static_cast<SwTwips>(1), nDiff);
 }
 }
 
