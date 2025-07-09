@@ -9057,7 +9057,9 @@ private:
         GtkWidget* pTabWidget = nullptr;
 
         GtkWidget* pImage = nullptr;
-        if (pIconName)
+        // do not show images of horizontal tabs
+        const bool bTabIsLeft = gtk_notebook_get_tab_pos(pNotebook) != GTK_POS_TOP;
+        if (pIconName && bTabIsLeft)
             pImage = image_new_from_icon_name(*pIconName);
 
         if (pImage)
@@ -9374,6 +9376,9 @@ public:
 #endif
         }
         gtk_notebook_set_show_border(m_pOverFlowNotebook, false);
+
+        if (!officecfg::Office::Common::Misc::UseVerticalNotebookbar::get())
+            gtk_notebook_set_tab_pos(pNotebook, GTK_POS_TOP);
 
         // tdf#122623 it's nigh impossible to have a GtkNotebook without an active (checked) tab, so try and theme
         // the unwanted tab into invisibility via the 'overflow' class themed by global CreateStyleProvider

@@ -918,13 +918,18 @@ namespace
     bool extractVerticalTabPos(VclBuilder::stringmap &rMap)
     {
         bool bVertical = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"tab-pos"_ustr);
-        if (aFind != rMap.end())
+
+        if (officecfg::Office::Common::Misc::UseVerticalNotebookbar::get())
         {
-            bVertical = aFind->second.equalsIgnoreAsciiCase("left") ||
-                        aFind->second.equalsIgnoreAsciiCase("right");
-            rMap.erase(aFind);
+            VclBuilder::stringmap::iterator aFind = rMap.find(u"tab-pos"_ustr);
+            if (aFind != rMap.end())
+            {
+                bVertical = aFind->second.equalsIgnoreAsciiCase("left") ||
+                            aFind->second.equalsIgnoreAsciiCase("right");
+                rMap.erase(aFind);
+            }
         }
+
         return bVertical;
     }
 

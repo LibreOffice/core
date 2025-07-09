@@ -12,7 +12,7 @@
     <property name="can-focus">False</property>
     <property name="icon-name">cmd/sc_additionsdialog.png</property>
   </object>
-  <!-- n-columns=1 n-rows=3 -->
+  <!-- n-columns=1 n-rows=4 -->
   <object class="GtkGrid" id="AppearanceTabPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -103,11 +103,14 @@
                 <property name="row-spacing">3</property>
                 <property name="column-spacing">3</property>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="lbToolbar">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes" context="appearance|toolbariconsizelbl">Toolbar</property>
+                    <accessibility>
+                      <relation type="label-for" target="toolbariconsdropdown"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -115,11 +118,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="lbSidebar">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes" context="appearance|sidebariconsizelbl">Sidebar</property>
+                    <accessibility>
+                      <relation type="label-for" target="sidebariconsdropdown"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -127,11 +133,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="lbNotebookbar">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes" context="appearance|notebookbariconsizelbl">Notebookbar</property>
+                    <accessibility>
+                      <relation type="label-for" target="notebookbariconsdropdown"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -148,6 +157,9 @@
                       <item translatable="yes" context="appearance|toolbariconsdropdown">Large</item>
                       <item translatable="yes" context="appearance|toolbariconsdropdown">Extra Large</item>
                     </items>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbToolbar"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="toolbariconsdropdown-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|toolbariconsdropdown">Select the icon theme for the toolbar.</property>
@@ -168,6 +180,9 @@
                       <item translatable="yes" context="appearance|sidebariconsdropdown">Small</item>
                       <item translatable="yes" context="appearance|sidebariconsdropdown">Large</item>
                     </items>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbSidebar"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="sidebariconsdropdown-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|sidebariconsdropdown">Select the icon theme for the sidebar.</property>
@@ -188,6 +203,9 @@
                       <item translatable="yes" context="appearance|notebookbariconsdropdown">Small</item>
                       <item translatable="yes" context="appearance|notebookbariconsdropdown">Large</item>
                     </items>
+                    <accessibility>
+                      <relation type="labelled-by" target="lbNotebookbar"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="notebookbariconsdropdown-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|notebookbariconsdropdown">Select the icon theme for the notebookbar.</property>
@@ -460,7 +478,6 @@
                 <property name="receives-default">True</property>
                 <property name="halign">start</property>
                 <property name="draw-indicator">True</property>
-                <property name="label" translatable="no"></property>
                 <child>
                   <placeholder/>
                 </child>
@@ -526,6 +543,87 @@
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="dialogs">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <!-- n-columns=3 n-rows=1 -->
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <child>
+              <object class="GtkRadioButton" id="rbVertical">
+                <property name="label" translatable="yes" context="appearance|rbVertical">Vertical at the side</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="margin-start">6</property>
+                <property name="active">True</property>
+                <property name="draw-indicator">True</property>
+                <property name="group">rbHorizontal</property>
+                <accessibility>
+                  <relation type="labelled-by" target="lbTabPosition"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbTabPosition">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="appearance|lbTabPosition">Tab position:</property>
+                <property name="xalign">0</property>
+                <accessibility>
+                  <relation type="label-for" target="rbVertical"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="rbHorizontal">
+                <property name="label" translatable="yes" context="appearance|rbHorizontal">Horizontal on top</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="margin-start">6</property>
+                <property name="active">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="lbDialogs">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="appearance|lbDialogs">Dialogs</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
   </object>

@@ -51,6 +51,8 @@ private:
     std::unique_ptr<weld::Widget> m_xSizeGrid;
     std::unique_ptr<weld::Widget> m_xCustomizationFrame;
     OUString m_sAutoStr;
+    std::unique_ptr<weld::RadioButton> m_xVerticalToolbars;
+    std::unique_ptr<weld::RadioButton> m_xHorizontalToolbars;
 
     sal_Int32 nInitialToolbarIconSizeSel;
     sal_Int32 nInitialSidebarIconSizeSel;
@@ -76,10 +78,13 @@ private:
     DECL_LINK(OnToolbarIconSizeChange, weld::ComboBox&, void);
     DECL_LINK(OnSidebarIconSizeChange, weld::ComboBox&, void);
     DECL_LINK(OnNotebookbarIconSizeChange, weld::ComboBox&, void);
+    DECL_LINK(OnTabPosChange, weld::Toggleable&, void);
 
     void InitThemes();
     void InitCustomization();
     void InitIcons();
+    void InitDialogs();
+
     void LoadSchemeList();
 
     void UpdateBmpControlsState();

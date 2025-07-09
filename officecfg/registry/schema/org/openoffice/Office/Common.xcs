@@ -5681,6 +5681,13 @@
         </info>
         <value>10</value>
       </prop>
+      <prop oor:name="UseVerticalNotebookbar" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Defines whether to show tabs vertically or horizontallyin a notebookbar.</desc>
+          <label>Vertical tabs in dialogs</label>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Forms">
       <info>

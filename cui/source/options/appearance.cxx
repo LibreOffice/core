@@ -124,10 +124,13 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , m_xSizeGrid(m_xBuilder->weld_widget(u"grdIconSize"_ustr))
     , m_xCustomizationFrame(m_xBuilder->weld_widget(u"items"_ustr))
     , m_sAutoStr(m_xIconsDropDown->get_text(0))
+    , m_xVerticalToolbars(m_xBuilder->weld_radio_button(u"rbVertical"_ustr))
+    , m_xHorizontalToolbars(m_xBuilder->weld_radio_button(u"rbHorizontal"_ustr))
 {
     InitThemes();
     InitCustomization();
     InitIcons();
+    InitDialogs();
 }
 
 void SvxAppearanceTabPage::LoadSchemeList()
@@ -573,6 +576,25 @@ void SvxAppearanceTabPage::InitIcons()
 
     for (auto const& installIconTheme : mInstalledIconThemes)
         m_xIconsDropDown->append(installIconTheme.GetThemeId(), installIconTheme.GetDisplayName());
+}
+
+void SvxAppearanceTabPage::InitDialogs()
+{
+    if (officecfg::Office::Common::Misc::UseVerticalNotebookbar::get())
+        m_xVerticalToolbars->set_active(true);
+    else
+        m_xHorizontalToolbars->set_active(true);
+
+    m_xVerticalToolbars->connect_toggled(LINK(this, SvxAppearanceTabPage, OnTabPosChange));
+}
+
+IMPL_LINK_NOARG(SvxAppearanceTabPage, OnTabPosChange, weld::Toggleable&, void)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
+    bool bSet = m_xVerticalToolbars->get_active();
+    officecfg::Office::Common::Misc::UseVerticalNotebookbar::set(bSet, xChanges);
+    xChanges->commit();
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, OnIconThemeChange, weld::ComboBox&, void)
