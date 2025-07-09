@@ -997,6 +997,8 @@ void FrameSelector::SelectBorder(FrameBorderType eBorder, bool bFocus)
             xRet->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
     }
+#else
+    (void) bFocus;
 #endif
 }
 
