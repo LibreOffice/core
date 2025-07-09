@@ -22,6 +22,8 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
@@ -142,6 +144,20 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
         createUI();
         fabOpenAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_open);
         fabCloseAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_close);
+
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isFabMenuOpen) {
+                    collapseFabMenu();
+                    return;
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        });
     }
 
     @Override
@@ -232,15 +248,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
         drawFAB.setClickable(false);
         calcFAB.setClickable(false);
         isFabMenuOpen = false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isFabMenuOpen) {
-            collapseFabMenu();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
