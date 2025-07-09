@@ -480,29 +480,72 @@ void MSWordExportBase::NumberingLevel(
         if (rFormat.HasListFormat())
         {
             sal_uInt8* pLvlPos = aNumLvlPos;
-            sNumStr = rFormat.GetListFormat();
+            OUString const sLevelFormat{rFormat.GetListFormat()};
+            OUStringBuffer buf;
+            ::std::optional<sal_Int32> oEraseFrom;
 
-            // now search the nums in the string
-            for (sal_uInt8 i = 0; i <= nLvl; ++i)
+            for (sal_Int32 nPosition{0}; nPosition < sLevelFormat.getLength(); )
             {
-                OUString sSrch("%" + OUString::number(i+1) + "%");
-                sal_Int32 nFnd = sNumStr.indexOf(sSrch);
-                if (-1 != nFnd)
+                if (sLevelFormat[nPosition] == '%'
+                    && (nPosition+3) < sLevelFormat.getLength()
+                    && sLevelFormat[nPosition] == '%'
+                    && sLevelFormat[nPosition+1] == '1'
+                    && sLevelFormat[nPosition+2] == '0'
+                    && sLevelFormat[nPosition+3] == '%')
                 {
-                    sal_Int32 nLen = sSrch.getLength();
+                    // WW8 does not support this level and breaks => erase it
+                    nPosition = nPosition + 4;
+                    oEraseFrom.emplace(nPosition);
+                }
+                else if (sLevelFormat[nPosition] == '%'
+                    && (nPosition+2) < sLevelFormat.getLength()
+                    && '1' <= sLevelFormat[nPosition+1]
+                    && sLevelFormat[nPosition+1] <= '9'
+                    && sLevelFormat[nPosition+2] == '%')
+                {
+                    sal_uInt8 const i(sLevelFormat[nPosition+1] - '1'); // need to subtract 1
+                    // because the result here is for RTF/DOC which is 0 based
+                    // not DOCX which is 1 based so it's converted there again
+                    nPosition = nPosition + 3;
+                    if (pLvlPos != ::std::end(aNumLvlPos) && i <= nLvl)
+                    {
+                        // this just contains the positions in order, level
+                        // doesn't matter here.
+                        // and yes, this index is 1-based in RTF/DOC!
+                        *pLvlPos = static_cast<sal_uInt8>(buf.getLength() + 1);
+                        ++pLvlPos;
+                    }
                     if (i < nLvl && rRule.Get(i).GetNumberingType() == SVX_NUM_NUMBER_NONE)
                     {
                         // LO doesn't show this level, so don't export its separator
-                        const OUString sSrch2("%" + OUString::number(i + 2) + "%");
-                        const sal_Int32 nFnd2 = sNumStr.indexOf(sSrch2, nFnd);
-                        if (-1 != nFnd2)
-                            nLen = nFnd2 - nFnd;
+                        oEraseFrom.emplace(nPosition);
+                        buf.append(static_cast<sal_Unicode>(i));
                     }
-                    *pLvlPos = static_cast<sal_uInt8>(nFnd + 1);
-                    ++pLvlPos;
-                    sNumStr = sNumStr.replaceAt(nFnd, nLen, OUStringChar(static_cast<char>(i)));
+                    else if (nLvl < i)
+                    { // Word 2013 won't show label at all => erase completely
+                        oEraseFrom.emplace(nPosition);
+                    }
+                    else
+                    {
+                        oEraseFrom.reset();
+                        buf.append(static_cast<sal_Unicode>(i));
+                    }
+                }
+                else
+                {
+                    if (!oEraseFrom)
+                    {
+                        buf.append(sLevelFormat[nPosition]);
+                    }
+                    ++nPosition;
                 }
             }
+            if (oEraseFrom)
+            {
+                // a suffix is *not* erased, only in the middle!
+                buf.append(sLevelFormat.subView(*oEraseFrom));
+            }
+            sNumStr = buf.makeStringAndClear();
         }
         else if (rFormat.GetNumberingType() != SVX_NUM_NUMBER_NONE)
             assert(false && "deprecated format still exists and is unhandled. Inform Vasily or Justin");
