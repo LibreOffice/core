@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.provider.DocumentsContract;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -259,6 +261,53 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
         bottomToolbarSheetBehavior.setHideable(true);
         toolbarColorPickerBottomSheetBehavior.setHideable(true);
         toolbarBackColorPickerBottomSheetBehavior.setHideable(true);
+
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            private void forwardBackPress()
+            {
+                setEnabled(false);
+                LibreOfficeMainActivity.this.getOnBackPressedDispatcher().onBackPressed();
+                setEnabled(true);
+            }
+
+            @Override
+            public void handleOnBackPressed() {
+                if (!isDocumentChanged) {
+                    forwardBackPress();
+                    return;
+                }
+
+
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                mTileProvider.saveDocument();
+                                isDocumentChanged=false;
+                                forwardBackPress();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //CANCEL
+                                break;
+                            case DialogInterface.BUTTON_NEUTRAL:
+                                //NO
+                                isDocumentChanged=false;
+                                forwardBackPress();
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(LibreOfficeMainActivity.this);
+                builder.setMessage(R.string.save_alert_dialog_title)
+                    .setPositiveButton(R.string.save_document, dialogClickListener)
+                    .setNegativeButton(R.string.action_cancel, dialogClickListener)
+                    .setNeutralButton(R.string.no_save_document, dialogClickListener)
+                    .show();
+
+            }
+        });
     }
 
     private void updatePreferences() {
@@ -506,43 +555,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
                 mTempSlideShowFile.delete();
             }
         }
-    }
-    @Override
-    public void onBackPressed() {
-        if (!isDocumentChanged) {
-            super.onBackPressed();
-            return;
-        }
-
-
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        mTileProvider.saveDocument();
-                        isDocumentChanged=false;
-                        onBackPressed();
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        //CANCEL
-                        break;
-                    case DialogInterface.BUTTON_NEUTRAL:
-                        //NO
-                        isDocumentChanged=false;
-                        onBackPressed();
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.save_alert_dialog_title)
-                .setPositiveButton(R.string.save_document, dialogClickListener)
-                .setNegativeButton(R.string.action_cancel, dialogClickListener)
-                .setNeutralButton(R.string.no_save_document, dialogClickListener)
-                .show();
-
     }
 
     public List<DocumentPartView> getDocumentPartView() {
