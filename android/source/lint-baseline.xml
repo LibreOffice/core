@@ -1524,7 +1524,7 @@
         errorLine2="         ~~~~~~~~~~~">
         <location
             file="res/layout/presentation_mode.xml"
-            line="25"
+            line="24"
             column="10"/>
     </issue>
 
@@ -2085,7 +2085,7 @@
         errorLine2="         ~~~~~~">
         <location
             file="res/layout/presentation_mode.xml"
-            line="34"
+            line="32"
             column="10"/>
     </issue>
 
@@ -2142,39 +2142,6 @@
             file="res/layout/activity_main.xml"
             line="93"
             column="21"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Redundant attribute `layout_alignParentRight`; already defining `layout_alignParentEnd` with `targetSdkVersion` 34"
-        errorLine1="            android:layout_alignParentRight=&quot;true&quot;"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/layout/presentation_mode.xml"
-            line="21"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Redundant attribute `layout_alignParentRight`; already defining `layout_alignParentEnd` with `targetSdkVersion` 34"
-        errorLine1="            android:layout_alignParentRight=&quot;true&quot;"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/layout/presentation_mode.xml"
-            line="31"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Redundant attribute `layout_alignParentLeft`; already defining `layout_alignParentStart` with `targetSdkVersion` 34"
-        errorLine1="            android:layout_alignParentLeft=&quot;true&quot;"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/layout/presentation_mode.xml"
-            line="38"
-            column="13"/>
     </issue>
 
     <issue
