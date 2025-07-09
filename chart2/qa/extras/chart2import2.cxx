@@ -18,6 +18,7 @@
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 class Chart2ImportTest2 : public ChartTest
 {
@@ -956,6 +957,54 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf166428)
     Reference<chart2::data::XDataSequence> xDataSeq
         = getDataSequenceFromDocByRole(xChartDoc, u"values-min");
     CPPUNIT_ASSERT(xDataSeq.is());
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf60316)
+{
+    loadFromFile(u"pptx/tdf60316.pptx");
+
+    // 1st chart
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
+    CPPUNIT_ASSERT(xPropSet.is());
+    drawing::FillStyle eStyle
+        = xPropSet->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "'Automatic' chart background fill in pptx should be loaded as no fill (transparent).",
+        drawing::FillStyle_NONE, eStyle);
+
+    Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    Reference<beans::XPropertySet> xWallPropSet = xDiagram->getWall();
+
+    eStyle = xWallPropSet->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Wall background for styles below 32 shoujld be transparent in pptx",
+        drawing::FillStyle_NONE, eStyle);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136754)
+{
+    loadFromFile(u"pptx/tdf136754.pptx");
+
+    // 1st chart
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
+    CPPUNIT_ASSERT(xPropSet.is());
+    drawing::FillStyle eStyle
+        = xPropSet->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "'Automatic' chart background fill in pptx should be loaded as no fill (transparent).",
+        drawing::FillStyle_NONE, eStyle);
+
+    Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    Reference<beans::XPropertySet> xWallPropSet = xDiagram->getWall();
+    eStyle = xWallPropSet->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wall background for styles above 32 should be solid in pptx",
+                                 drawing::FillStyle_SOLID, eStyle);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

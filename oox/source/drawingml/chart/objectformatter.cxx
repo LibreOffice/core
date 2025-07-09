@@ -636,6 +636,8 @@ public:
                             const PictureOptionsModel* pPicOptions,
                             sal_Int32 nSeriesIdx );
 
+    void                setAutoFill(sal_Int32 nAutoFill);
+
 private:
     FillPropertiesPtr   mxAutoFill;         /// Automatic fill properties.
 };
@@ -871,11 +873,6 @@ FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
     if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
         if( const FillProperties* pFillProps = pTheme->getFillStyle( pAutoFormatEntry->mnThemedIdx ) )
             *mxAutoFill = *pFillProps;
-
-    if (eObjType == OBJECTTYPE_CHARTSPACE)
-    {
-        mxAutoFill->moFillType = rData.mrFilter.getGraphicHelper().getDefaultChartAreaFillStyle();
-    }
 }
 
 void FillFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRef< Shape >& rxShapeProp, const PictureOptionsModel* pPicOptions, sal_Int32 nSeriesIdx )
@@ -888,6 +885,11 @@ void FillFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRe
     if( pPicOptions )
         lclConvertPictureOptions( aFillProps, *pPicOptions );
     aFillProps.pushToPropMap( rPropMap, mrData.mrFilter.getGraphicHelper(), 0, getPhColor( nSeriesIdx ) );
+}
+
+void FillFormatter::setAutoFill(sal_Int32 nFillStyle)
+{
+    mxAutoFill->moFillType = nFillStyle;
 }
 
 namespace {
@@ -948,6 +950,12 @@ ObjectTypeFormatter::ObjectTypeFormatter( ObjectFormatterData& rData, const Obje
     mrModelObjHelper( rData.maModelObjHelper ),
     mrEntry( rEntry )
 {
+    // this seems to be an undocumented quirk in the OOXML spec. Only for pptx files the first 32 theme entries
+    // force a transparent background
+    if (rChartSpace.mnStyle <= 32 && (eObjType == OBJECTTYPE_CHARTSPACE || eObjType == OBJECTTYPE_PLOTAREA2D))
+    {
+        maFillFormatter.setAutoFill(rData.mrFilter.getGraphicHelper().getDefaultChartAreaFillStyle());
+    }
 }
 
 void ObjectTypeFormatter::convertFrameFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, const PictureOptionsModel* pPicOptions, sal_Int32 nSeriesIdx )
