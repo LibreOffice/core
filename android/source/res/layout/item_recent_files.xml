@@ -23,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="@dimen/file_icon_margin_end"
-        android:layout_marginRight="@dimen/file_icon_margin_end"
         android:adjustViewBounds="true"
         android:id="@+id/imageView"
         android:contentDescription="@string/file_icon_desc"/>
