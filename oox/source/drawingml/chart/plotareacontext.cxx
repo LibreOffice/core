@@ -162,7 +162,7 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_
                 case C_TOKEN( layout ):
                     return new LayoutContext( *this, mrModel.mxLayout.create() );
                 case C_TOKEN( spPr ):
-                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.getOrCreate() );
+                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
                 case C_TOKEN(dTable):
                     return new DataTableContext( *this, mrModel.mxDataTable.create() );
             }
