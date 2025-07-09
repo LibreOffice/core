@@ -1920,7 +1920,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="30"
+            line="28"
             column="9"/>
     </issue>
 
@@ -1931,7 +1931,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="64"
+            line="62"
             column="9"/>
     </issue>
 
@@ -1942,7 +1942,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="95"
+            line="92"
             column="9"/>
     </issue>
 
@@ -1953,7 +1953,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="126"
+            line="122"
             column="9"/>
     </issue>
 
@@ -1997,7 +1997,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="16"
+            line="15"
             column="9"/>
     </issue>
 
@@ -2008,7 +2008,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="32"
+            line="30"
             column="9"/>
     </issue>
 
@@ -2019,7 +2019,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="45"
+            line="43"
             column="9"/>
     </issue>
 
@@ -2030,7 +2030,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="60"
+            line="58"
             column="9"/>
     </issue>
 
@@ -2041,7 +2041,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="77"
+            line="74"
             column="9"/>
     </issue>
 
@@ -2052,7 +2052,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="90"
+            line="87"
             column="9"/>
     </issue>
 
@@ -2063,7 +2063,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="108"
+            line="105"
             column="9"/>
     </issue>
 
@@ -2074,7 +2074,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/number_picker.xml"
-            line="122"
+            line="118"
             column="9"/>
     </issue>
 
@@ -2142,61 +2142,6 @@
             file="res/layout/activity_main.xml"
             line="93"
             column="21"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Redundant attribute `layout_marginRight`; already defining `layout_marginEnd` with `targetSdkVersion` 34"
-        errorLine1="        android:layout_marginRight=&quot;@dimen/file_icon_margin_end&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/layout/item_recent_files.xml"
-            line="26"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Redundant attribute `layout_marginLeft`; already defining `layout_marginStart` with `targetSdkVersion` 34"
-        errorLine1="        android:layout_marginLeft=&quot;8dp&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/layout/number_picker.xml"
-            line="14"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Redundant attribute `layout_marginRight`; already defining `layout_marginEnd` with `targetSdkVersion` 34"
-        errorLine1="        android:layout_marginRight=&quot;8dp&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/layout/number_picker.xml"
-            line="27"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Redundant attribute `layout_marginLeft`; already defining `layout_marginStart` with `targetSdkVersion` 34"
-        errorLine1="        android:layout_marginLeft=&quot;8dp&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/layout/number_picker.xml"
-            line="75"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Redundant attribute `layout_marginRight`; already defining `layout_marginEnd` with `targetSdkVersion` 34"
-        errorLine1="        android:layout_marginRight=&quot;8dp&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/layout/number_picker.xml"
-            line="120"
-            column="9"/>
     </issue>
 
     <issue
