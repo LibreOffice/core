@@ -76,7 +76,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/calc_header_height"
                     android:layout_toRightOf="@+id/calc_header_top_left"
-                    android:layout_toEndOf="@+id/calc_header_top_left"
                     android:visibility="gone"/>
 
                 <org.libreoffice.overlay.CalcHeadersView
@@ -92,7 +91,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_toRightOf="@+id/calc_header_row"
-                    android:layout_toEndOf="@+id/calc_header_row"
                     android:layout_below="@+id/calc_header_column">
 
                     <org.mozilla.gecko.gfx.LayerView
