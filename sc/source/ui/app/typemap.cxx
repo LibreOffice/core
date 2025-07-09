@@ -88,6 +88,7 @@
 #include <attrib.hxx>
 #include <svx/sdprcitm.hxx>
 #include <svx/sdmetitm.hxx>
+#include <svx/pageitem.hxx>
 
 #define avmedia_MediaItem ::avmedia::MediaItem
 
