@@ -92,7 +92,7 @@ android {
     lint {
         warningsAsErrors true
         // ignore missing or extra translations, since these are tracked/managed via Weblate
-        ignore 'ExtraTranslation', 'MissingTranslation'
+        disable 'ExtraTranslation', 'MissingTranslation'
         // don't error-out on external updates (new gradle plugin, library versions
         // or target API become available)
         // don't error-out on TypographyEllipsis, since this can be introduced with
