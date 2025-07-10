@@ -250,6 +250,26 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf163295)
     // Without the fix, this was "writer_PocketWord_File"
     CPPUNIT_ASSERT_EQUAL(u"generic_Text"_ustr, detection);
 }
+
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testMarkdownDetect)
+{
+    uno::Reference<document::XExtendedFilterDetection> xDetect(
+        getMultiServiceFactory()->createInstance(
+            u"com.sun.star.comp.filters.PlainTextFilterDetect"_ustr),
+        uno::UNO_QUERY);
+    OUString aURL = createFileURL(u"sample-markdown.md");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(aStream));
+    uno::Sequence<beans::PropertyValue> aDescriptor
+        = { comphelper::makePropertyValue(u"DocumentService"_ustr,
+                                          u"com.sun.star.text.TextDocument"_ustr),
+            comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+            comphelper::makePropertyValue(u"TypeName"_ustr, u"generic_Markdown"_ustr) };
+    xDetect->detect(aDescriptor);
+    utl::MediaDescriptor aMediaDesc(aDescriptor);
+    OUString aFilterName = aMediaDesc.getUnpackedValueOrDefault(u"FilterName"_ustr, OUString());
+    CPPUNIT_ASSERT_EQUAL(u"Markdown"_ustr, aFilterName);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

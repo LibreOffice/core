@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_filter_md))
 
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_filter_md))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_filter_md, \
     sw/qa/filter/md/md \
 ))
