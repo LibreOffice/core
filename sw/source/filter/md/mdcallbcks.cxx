@@ -38,30 +38,20 @@ int SwMarkdownParser::enter_block_callback(MD_BLOCKTYPE type, void* detail, void
         case MD_BLOCK_DOC:
             break;
         case MD_BLOCK_QUOTE:
-        {
             parser->AddBlockQuote();
             break;
-        }
         case MD_BLOCK_UL:
-        {
             parser->StartNumberedBulletList(type);
             break;
-        }
         case MD_BLOCK_OL:
-        {
             parser->StartNumberedBulletList(type);
             break;
-        }
         case MD_BLOCK_LI:
-        {
             parser->StartNumberedBulletListItem();
             break;
-        }
         case MD_BLOCK_HR:
-        {
             parser->AddHR();
             break;
-        }
         case MD_BLOCK_H:
         {
             const MD_BLOCK_H_DETAIL* pDetail = static_cast<const MD_BLOCK_H_DETAIL*>(detail);
@@ -75,10 +65,8 @@ int SwMarkdownParser::enter_block_callback(MD_BLOCKTYPE type, void* detail, void
             parser->BeginHtmlBlock();
             break;
         case MD_BLOCK_P:
-        {
             parser->StartPara();
             break;
-        }
         case MD_BLOCK_TABLE:
         {
             const MD_BLOCK_TABLE_DETAIL* pDetail
@@ -125,28 +113,20 @@ int SwMarkdownParser::leave_block_callback(MD_BLOCKTYPE type, void* /*detail*/, 
             parser->EndNumberedBulletListItem();
             break;
         case MD_BLOCK_HR:
-        {
             parser->EndHR();
             break;
-        }
         case MD_BLOCK_H:
-        {
             parser->EndHeading();
             break;
-        }
         case MD_BLOCK_CODE:
             parser->EndCodeBlock();
             break;
         case MD_BLOCK_HTML:
-        {
             parser->EndHtmlBlock();
             break;
-        }
         case MD_BLOCK_P:
-        {
             parser->EndPara();
             break;
-        }
         case MD_BLOCK_TABLE:
             parser->EndTable();
             break;
@@ -203,7 +183,6 @@ int SwMarkdownParser::enter_span_callback(MD_SPANTYPE type, void* detail, void* 
             pItem.reset(new SvxCrossedOutItem(STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT));
             break;
         case MD_SPAN_LATEXMATH:
-            break;
         case MD_SPAN_LATEXMATH_DISPLAY:
             break;
         case MD_SPAN_WIKILINK:
@@ -232,27 +211,17 @@ int SwMarkdownParser::leave_span_callback(MD_SPANTYPE type, void* /*detail*/, vo
     parser->m_aAttrStack.pop_back();
     switch (type)
     {
-        case MD_SPAN_EM:
-            break;
-        case MD_SPAN_STRONG:
-            break;
-        case MD_SPAN_A:
-        {
-            break;
-        }
         case MD_SPAN_IMG:
             parser->m_bInsideImage = false;
             break;
+        case MD_SPAN_EM:
+        case MD_SPAN_STRONG:
+        case MD_SPAN_A:
         case MD_SPAN_CODE:
-            break;
         case MD_SPAN_DEL:
-            break;
         case MD_SPAN_LATEXMATH:
-            break;
         case MD_SPAN_LATEXMATH_DISPLAY:
-            break;
         case MD_SPAN_WIKILINK:
-            break;
         case MD_SPAN_U:
             break;
     }
@@ -264,33 +233,33 @@ int SwMarkdownParser::text_callback(MD_TEXTTYPE type, const MD_CHAR* text, MD_SI
 {
     SwMarkdownParser* parser = static_cast<SwMarkdownParser*>(userdata);
 
-    OUString aText = rtl::OStringToOUString(std::string_view(text, size), RTL_TEXTENCODING_UTF8);
-
     switch (type)
     {
-        case MD_TEXT_CODE:
-            if (!parser->m_bInsideImage)
-                parser->InsertText(aText);
-            break;
         case MD_TEXT_HTML:
-            parser->m_htmlData += aText;
+        {
+            parser->m_htmlData += OStringToOUString({ text, size }, RTL_TEXTENCODING_UTF8);
             break;
+        }
+        case MD_TEXT_CODE:
         case MD_TEXT_NORMAL:
+        {
             if (!parser->m_bInsideImage)
+            {
+                OUString aText = OStringToOUString({ text, size }, RTL_TEXTENCODING_UTF8);
                 parser->InsertText(aText);
+            }
             break;
-        case MD_TEXT_NULLCHAR:
-            break;
+        }
         case MD_TEXT_BR:
             parser->m_xDoc->getIDocumentContentOperations().InsertString(*parser->m_pPam,
-                                                                         OUString(u'\n'));
+                                                                         u"\n"_ustr);
             break;
         case MD_TEXT_SOFTBR:
             parser->m_xDoc->getIDocumentContentOperations().InsertString(*parser->m_pPam,
                                                                          OUString(CHAR_HARDBLANK));
             break;
         case MD_TEXT_ENTITY:
-            break;
+        case MD_TEXT_NULLCHAR:
         case MD_TEXT_LATEXMATH:
             break;
     }
