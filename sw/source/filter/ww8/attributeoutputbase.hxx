@@ -58,6 +58,7 @@ class SvxCharScaleWidthItem;
 class SvxCharReliefItem;
 class SvxCharHiddenItem;
 class SvxBoxItem;
+class SvxScriptHintItem;
 class SwFormatINetFormat;
 class SwFormatCharFormat;
 class SwFormatField;
@@ -439,9 +440,6 @@ protected:
     /// Sfx item RES_CHRATR_BidiRTL
     virtual void CharBidiRTL( const SfxPoolItem& ) = 0;
 
-    /// Sfx item RES_CHRATR_IdctHint
-    virtual void CharIdctHint( const SfxPoolItem& ) = 0;
-
     /// Sfx item RES_CHRATR_ROTATE
     virtual void CharRotate( const SvxCharRotateItem& ) = 0;
 
@@ -466,6 +464,9 @@ protected:
 
     /// Sfx item RES_CHRATR_HIGHLIGHT
     virtual void CharHighlight( const SvxBrushItem& ) = 0;
+
+    /// Sfx item RES_CHRATR_SCRIPT_HINT
+    virtual void CharScriptHint(const SvxScriptHintItem&) = 0;
 
     /// Sfx item RES_TXTATR_INETFMT
     virtual void TextINetFormat( const SwFormatINetFormat& ) = 0;

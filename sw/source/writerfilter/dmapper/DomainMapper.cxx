@@ -69,6 +69,7 @@
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
+#include <com/sun/star/text/ScriptHintType.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
@@ -821,12 +822,25 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
             m_pImpl->HandleLineBreakClear(val.getInt());
             break;
         case NS_ooxml::LN_CT_Fonts_hint :
-            /*  assigns script type to ambiguous characters, values can be:
-                NS_ooxml::LN_Value_ST_Hint_default
-                NS_ooxml::LN_Value_ST_Hint_eastAsia
-                NS_ooxml::LN_Value_ST_Hint_cs
-             */
-            //TODO: unsupported?
+        {
+            auto eHint = css::text::ScriptHintType::AUTOMATIC;
+            switch (nIntValue)
+            {
+                case NS_ooxml::LN_Value_ST_Hint_eastAsia:
+                    eHint = css::text::ScriptHintType::ASIAN;
+                    break;
+
+                case NS_ooxml::LN_Value_ST_Hint_cs:
+                    eHint = css::text::ScriptHintType::COMPLEX;
+                    break;
+
+                default:
+                case NS_ooxml::LN_Value_ST_Hint_default:
+                    break;
+            }
+
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_SCRIPT_HINT, uno::Any(eHint));
+        }
         break;
         case NS_ooxml::LN_CT_TblBorders_right:
         case NS_ooxml::LN_CT_TblBorders_top:

@@ -369,6 +369,7 @@ const OUString & getPropertyName( PropertyIds eId )
         { PROP_CHAR_NUMSPACING_TEXT_EFFECT, u"CharNumSpacingTextEffect"_ustr},
         { PROP_CHAR_STYLISTICSETS_TEXT_EFFECT, u"CharStylisticSetsTextEffect"_ustr},
         { PROP_CHAR_CNTXTALTS_TEXT_EFFECT, u"CharCntxtAltsTextEffect"_ustr},
+        { PROP_CHAR_SCRIPT_HINT, u"CharScriptHint"_ustr},
         { PROP_SDTPR, u"SdtPr"_ustr},
         { PROP_CELL_INTEROP_GRAB_BAG, u"CellInteropGrabBag"_ustr},
         { PROP_TABLE_INTEROP_GRAB_BAG, u"TableInteropGrabBag"_ustr},

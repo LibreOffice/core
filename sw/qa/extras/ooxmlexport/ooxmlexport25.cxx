@@ -169,6 +169,24 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPosExport)
     CPPUNIT_ASSERT_EQUAL(u"D"_ustr, getXPathContent(pXmlDoc, "//w:body/w:p/w:r/w:t"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167297)
+{
+    createSwDoc("tdf167297.fodt");
+
+    auto fnVerify = [this] {
+        auto pXmlDoc = parseLayoutDump();
+
+        // The test document uses style:script-type to replace 12pt characters
+        // with 96pt characters. Round-trip is confirmed by checking height.
+        sal_Int32 nHeight = getXPath(pXmlDoc, "//txt/infos/bounds", "height").toInt32();
+        CPPUNIT_ASSERT_GREATER(sal_Int32(2000), nHeight);
+    };
+
+    fnVerify();
+    saveAndReload(mpFilter);
+    fnVerify();
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

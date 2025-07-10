@@ -1453,7 +1453,6 @@ private:
     {
         DeleteStack(std::move(m_xAnchorStck));
     }
-    void emulateMSWordAddTextToParagraph(const OUString& rAddString);
     void simpleAddTextToParagraph(std::u16string_view aAddString);
     bool HandlePageBreakChar();
     bool ReadChar(tools::Long nPosCp, tools::Long nCpOfs);

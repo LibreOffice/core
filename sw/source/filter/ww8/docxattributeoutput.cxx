@@ -90,6 +90,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/borderline.hxx>
+#include <editeng/scripthintitem.hxx>
 #include <sax/tools/converter.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
@@ -8363,10 +8364,6 @@ void DocxAttributeOutput::CharBidiRTL( const SfxPoolItem& )
 {
 }
 
-void DocxAttributeOutput::CharIdctHint( const SfxPoolItem& )
-{
-}
-
 void DocxAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
 {
     // Not rotated?
@@ -8493,6 +8490,23 @@ void DocxAttributeOutput::CharHighlight( const SvxBrushItem& rHighlight )
     if ( !sColor.isEmpty() )
     {
         m_pSerializer->singleElementNS(XML_w, XML_highlight, FSNS(XML_w, XML_val), sColor);
+    }
+}
+
+void DocxAttributeOutput::CharScriptHint(const SvxScriptHintItem& rHint)
+{
+    switch (rHint.GetValue())
+    {
+        case i18nutil::ScriptHintType::Asian:
+            AddToAttrList(m_pFontsAttrList, FSNS(XML_w, XML_hint), "eastAsia");
+            break;
+
+        case i18nutil::ScriptHintType::Complex:
+            AddToAttrList(m_pFontsAttrList, FSNS(XML_w, XML_hint), "cs");
+            break;
+
+        default:
+            break;
     }
 }
 

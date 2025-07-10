@@ -65,6 +65,7 @@
 #include <editeng/pgrditem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <editeng/scripthintitem.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -4745,7 +4746,7 @@ void SwWW8ImplReader::Read_LineBreakClear(sal_uInt16 /*nId*/, const sal_uInt8* p
     m_oLineBreakClear = eClear;
 }
 
-void SwWW8ImplReader::Read_IdctHint( sal_uInt16, const sal_uInt8* pData, short nLen )
+void SwWW8ImplReader::Read_IdctHint(sal_uInt16, const sal_uInt8* pData, short nLen)
 {
     // sprmcidcthint (opcode 0x286f) specifies a script bias for the text in the run.
     // for unicode characters that are shared between far east and non-far east scripts,
@@ -4753,13 +4754,28 @@ void SwWW8ImplReader::Read_IdctHint( sal_uInt16, const sal_uInt8* pData, short n
     // when this value is 0, text properties bias towards non-far east properties.
     // when this value is 1, text properties bias towards far east properties.
     // when this value is 2, text properties bias towards complex properties.
-    if (nLen < 1)  //Property end
+    if (nLen < 1) //Property end
     {
-        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(),RES_CHRATR_IDCTHINT);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_CHRATR_SCRIPT_HINT);
     }
-    else    //Property start
+    else //Property start
     {
-        NewAttr(SfxInt16Item(RES_CHRATR_IDCTHINT, *pData));
+        auto eHint = i18nutil::ScriptHintType::Automatic;
+        switch (*pData)
+        {
+            default:
+                break;
+
+            case 1:
+                eHint = i18nutil::ScriptHintType::Asian;
+                break;
+
+            case 2:
+                eHint = i18nutil::ScriptHintType::Complex;
+                break;
+        }
+
+        NewAttr(SvxScriptHintItem(eHint, RES_CHRATR_SCRIPT_HINT));
     }
 }
 

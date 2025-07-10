@@ -329,7 +329,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
 
             // CharacterAttr - MSWord weak char direction/script override emulation
             { RES_CHRATR_BIDIRTL, new SfxInt16Item( RES_CHRATR_BIDIRTL, sal_Int16(-1) ), 0, SFX_ITEMINFOFLAG_NONE },
-            { RES_CHRATR_IDCTHINT, new SfxInt16Item( RES_CHRATR_IDCTHINT, sal_Int16(-1) ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_UNUSED3, new SfxVoidItem( RES_CHRATR_UNUSED3 ), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_CHRATR_SCRIPT_HINT, new SvxScriptHintItem( RES_CHRATR_SCRIPT_HINT ), SID_ATTR_CHAR_SCRIPT_HINT, SFX_ITEMINFOFLAG_NONE },
 
             { RES_TXTATR_REFMARK, new SwFormatRefMark( SwMarkName() ),  0, SFX_ITEMINFOFLAG_NONE },
