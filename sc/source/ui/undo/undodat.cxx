@@ -1751,12 +1751,7 @@ void ScUndoDataPilot::Undo()
             if (xOldDPObject)
             {
                 //  restore old settings
-                xOldDPObject->WriteSourceDataTo( *pDocObj );
-                ScDPSaveData* pData = xOldDPObject->GetSaveData();
-                if (pData)
-                    pDocObj->SetSaveData(*pData);
-                pDocObj->SetOutRange(xOldDPObject->GetOutRange());
-                xOldDPObject->WriteTempDataTo( *pDocObj );
+                *pDocObj = *xOldDPObject;
             }
             else
             {

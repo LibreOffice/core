@@ -790,10 +790,11 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         return;
 
     ScDPObject* pDPObj = pDPData->mpDPObj;
-    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    ScDPObject aNewObj(*pDPObj);
+    ScDPSaveData* pSaveData = aNewObj.GetSaveData();
 
     bool bIsDataLayout;
-    OUString aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
+    OUString aDimName = aNewObj.GetDimName(pDPData->mnDim, bIsDataLayout);
     ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aDimName);
     if (!pDim)
         return;
@@ -831,7 +832,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     pDim->UpdateMemberVisibility(aResult);
 
     ScDBDocFunc aFunc(*mrViewData.GetDocShell());
-    aFunc.UpdatePivotTable(*pDPObj, true, false);
+    aFunc.DataPilotUpdate(pDPObj, &aNewObj, true, false);
 }
 
 namespace {
