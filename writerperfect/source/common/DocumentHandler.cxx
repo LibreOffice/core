@@ -139,7 +139,7 @@ void DocumentHandler::startElement(const char* psName,
             for (int j = 0; j < 9; ++j)
             {
                 // list of the encoded attributes followed by their lengths
-                static char const* listEncoded[9]
+                static char const* const listEncoded[9]
                     = { "draw:name",        "svg:font-family",  "style:condition",
                         "style:num-prefix", "style:num-suffix", "table:formula",
                         "text:bullet-char", "text:label",       "xlink:href" };

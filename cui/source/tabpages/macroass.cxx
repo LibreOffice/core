@@ -57,7 +57,7 @@ SfxMacroTabPage_Impl::SfxMacroTabPage_Impl()
 {
 }
 
-static sal_uInt16 aPageRg[] = {
+const sal_uInt16 aPageRg[] = {
     SID_ATTR_MACROITEM, SID_ATTR_MACROITEM,
     0
 };

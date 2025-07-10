@@ -363,7 +363,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 
 static bool isODFFormat( std::u16string_view sFilter )
 {
-    static const char* aODFFormats[] =
+    static const char* const aODFFormats[] =
     {
         "writer8",
         "writer8_template",

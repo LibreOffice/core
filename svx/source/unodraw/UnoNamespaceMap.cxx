@@ -47,11 +47,11 @@ namespace svx
     class NamespaceMap : public WeakImplHelper< XNameAccess, XServiceInfo >
     {
     private:
-        sal_uInt16* mpWhichIds;
+        const sal_uInt16* mpWhichIds;
         SfxItemPool* mpPool;
 
     public:
-        NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool );
+        NamespaceMap( const sal_uInt16* pWhichIds, SfxItemPool* pPool );
 
         // XNameAccess
         virtual Any SAL_CALL getByName( const OUString& aName ) override;
@@ -70,7 +70,7 @@ namespace svx
 
     }
 
-    Reference< XInterface > NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool )
+    Reference< XInterface > NamespaceMap_createInstance( const sal_uInt16* pWhichIds, SfxItemPool* pPool )
     {
         return getXWeak(new NamespaceMap( pWhichIds, pPool ));
     }
@@ -95,7 +95,7 @@ namespace svx
     private:
         SfxItemPool* mpPool;
 
-        sal_uInt16* mpWhichId;
+        const sal_uInt16* mpWhichId;
 
         std::vector<const SvXMLAttrContainerItem*> mvItems;
         sal_Int32 mnItem;
@@ -105,7 +105,7 @@ namespace svx
 
     public:
 
-        NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool );
+        NamespaceIteratorImpl( const sal_uInt16* pWhichIds, SfxItemPool* pPool );
 
         bool next( OUString& rPrefix, OUString& rURL );
     };
@@ -116,7 +116,7 @@ namespace svx
 using namespace ::svx;
 
 
-NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool )
+NamespaceIteratorImpl::NamespaceIteratorImpl( const sal_uInt16* pWhichIds, SfxItemPool* pPool )
 {
     mpPool = pPool;
     mpCurrentAttr = nullptr;
@@ -184,7 +184,7 @@ bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
 }
 
 
-NamespaceMap::NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool )
+NamespaceMap::NamespaceMap( const sal_uInt16* pWhichIds, SfxItemPool* pPool )
 : mpWhichIds( pWhichIds ), mpPool( pPool )
 {
 }

@@ -289,7 +289,7 @@ constexpr auto HORI_CHAR_REL = LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPa
                                       LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft|
                                       LB::RelFrameRight|LB::RelChar;
 
-static FrmMap aHCharMap[] =
+const FrmMap aHCharMap[] =
 {
     {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,      HORI_CHAR_REL},
     {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_CHAR_REL},
@@ -299,13 +299,13 @@ static FrmMap aHCharMap[] =
 
 #define HTML_HORI_CHAR_REL  (LB::Frame|LB::PrintArea|LB::RelChar)
 
-static FrmMap aHCharHtmlMap[] =
+const FrmMap aHCharHtmlMap[] =
 {
     {SvxSwFramePosString::LEFT,          SvxSwFramePosString::LEFT,           HoriOrientation::LEFT,      HTML_HORI_CHAR_REL},
     {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::RIGHT,          HoriOrientation::RIGHT,     HTML_HORI_CHAR_REL}
 };
 
-static FrmMap aHCharHtmlAbsMap[] =
+const FrmMap aHCharHtmlAbsMap[] =
 {
     {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,          LB::PrintArea|LB::RelChar},
     {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     LB::PrintArea},
@@ -317,7 +317,7 @@ static FrmMap aHCharHtmlAbsMap[] =
 constexpr auto VERT_CHAR_REL = LB::VertFrame|LB::VertPrintArea|
                                       LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPagePrintAreaBottom;
 
-static FrmMap aVCharMap[] =
+const FrmMap aVCharMap[] =
 {
     // #i22341#
     // introduce mappings for new vertical alignment at top of line <LB::VertLine>

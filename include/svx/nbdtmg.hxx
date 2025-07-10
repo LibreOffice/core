@@ -152,8 +152,8 @@ class SVX_DLLPUBLIC BulletsTypeMgr final : public NBOTypeMgrBase
     private:
         BulletsTypeMgr(const BulletsTypeMgr&) = delete;
     public:
-        static sal_Unicode aDynamicBulletTypes[DEFAULT_BULLET_TYPES];
-        static sal_Unicode aDynamicRTLBulletTypes[DEFAULT_BULLET_TYPES];
+        static const sal_Unicode aDynamicBulletTypes[DEFAULT_BULLET_TYPES];
+        static const sal_Unicode aDynamicRTLBulletTypes[DEFAULT_BULLET_TYPES];
         static BulletsSettings* pActualBullets[DEFAULT_BULLET_TYPES];
     public:
         BulletsTypeMgr();

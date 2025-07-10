@@ -116,7 +116,7 @@ enum ExportedAttribute
 
 }
 
-static const char * ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
+const char * const ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
 {
     "CharBackColor",        // TEXT_ATTRIBUTE_BACKGROUND_COLOR
     "CharCaseMap",          // TEXT_ATTRIBUTE_CASEMAP
@@ -580,7 +580,7 @@ UnitString2CMM( uno::Any& rAny, const gchar * value )
 
 /*****************************************************************************/
 
-static const gchar * bool_values[] = { "true", "false" };
+const gchar* const bool_values[] = { "true", "false" };
 
 static gchar *
 Bool2String( const uno::Any& rAny )
@@ -739,7 +739,7 @@ String2Locale( uno::Any& rAny, const gchar * value )
 /*****************************************************************************/
 
 // @see http://www.w3.org/TR/2002/WD-css3-fonts-20020802/#font-effect-prop
-static const gchar * relief[] = { "none", "emboss", "engrave" };
+const gchar* const relief[] = { "none", "emboss", "engrave" };
 const gchar * const outline  = "outline";
 
 static gchar *
@@ -774,7 +774,7 @@ enum
     DECORATION_LINE_THROUGH
 };
 
-static const gchar * decorations[] = { "none", "blink", "underline", "line-through" };
+const gchar* const decorations[] = { "none", "blink", "underline", "line-through" };
 
 static gchar *
 get_text_decoration(const uno::Sequence< beans::PropertyValue >& rAttributeList,
@@ -816,7 +816,7 @@ get_text_decoration(const uno::Sequence< beans::PropertyValue >& rAttributeList,
 
 // @see http://www.w3.org/TR/REC-CSS2/text.html#propdef-text-shadow
 
-static const gchar * shadow_values[] = { "none", "black" };
+const gchar* const shadow_values[] = { "none", "black" };
 
 static gchar *
 Bool2Shadow( const uno::Any& rAny )
