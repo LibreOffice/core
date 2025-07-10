@@ -199,7 +199,6 @@ ifeq ($(OS),ANDROID)
 	rm -fr $(BUILDDIR)/android/jniLibs
 	rm -fr $(SRCDIR)/android/source/build
 	rm -fr $(SRCDIR)/android/source/assets
-	rm -fr $(SRCDIR)/android/source/assets_fullUI
 	rm -fr $(SRCDIR)/android/source/assets_strippedUI
 	rm -fr $(SRCDIR)/android/source/res_generated
 endif
