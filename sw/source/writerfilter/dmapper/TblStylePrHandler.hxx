@@ -30,22 +30,22 @@ namespace writerfilter::dmapper {
 
 class DomainMapper;
 
-enum TblStyleType
+enum class TblStyleType
 {
-    TBL_STYLE_UNKNOWN,
-    TBL_STYLE_WHOLETABLE,
-    TBL_STYLE_FIRSTROW,
-    TBL_STYLE_LASTROW,
-    TBL_STYLE_FIRSTCOL,
-    TBL_STYLE_LASTCOL,
-    TBL_STYLE_BAND1VERT,
-    TBL_STYLE_BAND2VERT,
-    TBL_STYLE_BAND1HORZ,
-    TBL_STYLE_BAND2HORZ,
-    TBL_STYLE_NECELL,
-    TBL_STYLE_NWCELL,
-    TBL_STYLE_SECELL,
-    TBL_STYLE_SWCELL
+    Unknown,
+    WholeTable,
+    FirstRow,
+    LastRow,
+    FirstCol,
+    LastCol,
+    Band1Vert,
+    Band2Vert,
+    Band1Horz,
+    Band2Horz,
+    NECell,
+    NWCell,
+    SECell,
+    SWCell
 };
 
 class TblStylePrHandler : public LoggedProperties

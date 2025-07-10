@@ -34,7 +34,7 @@ TblStylePrHandler::TblStylePrHandler( DomainMapper & rDMapper ) :
 LoggedProperties("TblStylePrHandler"),
 m_rDMapper( rDMapper ),
 m_pTablePropsHandler(new TablePropertiesHandler()),
-m_nType( TBL_STYLE_UNKNOWN ),
+m_nType( TblStyleType::Unknown ),
 m_pProperties( new PropertyMap )
 {
 }
@@ -47,19 +47,19 @@ OUString TblStylePrHandler::getTypeString() const
 {
     switch (m_nType)
     {
-        case TBL_STYLE_WHOLETABLE: return u"wholeTable"_ustr;
-        case TBL_STYLE_FIRSTROW: return u"firstRow"_ustr;
-        case TBL_STYLE_LASTROW: return u"lastRow"_ustr;
-        case TBL_STYLE_FIRSTCOL: return u"firstCol"_ustr;
-        case TBL_STYLE_LASTCOL: return u"lastCol"_ustr;
-        case TBL_STYLE_BAND1VERT: return u"band1Vert"_ustr;
-        case TBL_STYLE_BAND2VERT: return u"band2Vert"_ustr;
-        case TBL_STYLE_BAND1HORZ: return u"band1Horz"_ustr;
-        case TBL_STYLE_BAND2HORZ: return u"band2Horz"_ustr;
-        case TBL_STYLE_NECELL: return u"neCell"_ustr;
-        case TBL_STYLE_NWCELL: return u"nwCell"_ustr;
-        case TBL_STYLE_SECELL: return u"seCell"_ustr;
-        case TBL_STYLE_SWCELL: return u"swCell"_ustr;
+        case TblStyleType::WholeTable: return u"wholeTable"_ustr;
+        case TblStyleType::FirstRow: return u"firstRow"_ustr;
+        case TblStyleType::LastRow: return u"lastRow"_ustr;
+        case TblStyleType::FirstCol: return u"firstCol"_ustr;
+        case TblStyleType::LastCol: return u"lastCol"_ustr;
+        case TblStyleType::Band1Vert: return u"band1Vert"_ustr;
+        case TblStyleType::Band2Vert: return u"band2Vert"_ustr;
+        case TblStyleType::Band1Horz: return u"band1Horz"_ustr;
+        case TblStyleType::Band2Horz: return u"band2Horz"_ustr;
+        case TblStyleType::NECell: return u"neCell"_ustr;
+        case TblStyleType::NWCell: return u"nwCell"_ustr;
+        case TblStyleType::SECell: return u"seCell"_ustr;
+        case TblStyleType::SWCell: return u"swCell"_ustr;
         default: break;
     }
     return OUString();
@@ -75,43 +75,43 @@ void TblStylePrHandler::lcl_attribute(Id rName, const Value & rVal)
                 switch (rVal.getInt())
                 {
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_wholeTable:
-                    m_nType = TBL_STYLE_WHOLETABLE;
+                    m_nType = TblStyleType::WholeTable;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_firstRow:
-                    m_nType = TBL_STYLE_FIRSTROW;
+                    m_nType = TblStyleType::FirstRow;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_lastRow:
-                    m_nType = TBL_STYLE_LASTROW;
+                    m_nType = TblStyleType::LastRow;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_firstCol:
-                    m_nType = TBL_STYLE_FIRSTCOL;
+                    m_nType = TblStyleType::FirstCol;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_lastCol:
-                    m_nType = TBL_STYLE_LASTCOL;
+                    m_nType = TblStyleType::LastCol;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_band1Vert:
-                    m_nType = TBL_STYLE_BAND1VERT;
+                    m_nType = TblStyleType::Band1Vert;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_band2Vert:
-                    m_nType = TBL_STYLE_BAND2VERT;
+                    m_nType = TblStyleType::Band2Vert;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_band1Horz:
-                    m_nType = TBL_STYLE_BAND1HORZ;
+                    m_nType = TblStyleType::Band1Horz;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_band2Horz:
-                    m_nType = TBL_STYLE_BAND2HORZ;
+                    m_nType = TblStyleType::Band2Horz;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_neCell:
-                    m_nType = TBL_STYLE_NECELL;
+                    m_nType = TblStyleType::NECell;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_nwCell:
-                    m_nType = TBL_STYLE_NWCELL;
+                    m_nType = TblStyleType::NWCell;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_seCell:
-                    m_nType = TBL_STYLE_SECELL;
+                    m_nType = TblStyleType::SECell;
                     break;
                 case NS_ooxml::LN_Value_ST_TblStyleOverrideType_swCell:
-                    m_nType = TBL_STYLE_SWCELL;
+                    m_nType = TblStyleType::SWCell;
                     break;
                 }
             }

@@ -101,10 +101,10 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, const PropertyMapP
     static const int nTypesProps = 4;
     static const TblStyleType pTypesToFix[nTypesProps] =
     {
-        TBL_STYLE_FIRSTROW,
-        TBL_STYLE_LASTROW,
-        TBL_STYLE_FIRSTCOL,
-        TBL_STYLE_LASTCOL
+        TblStyleType::FirstRow,
+        TblStyleType::LastRow,
+        TblStyleType::FirstCol,
+        TblStyleType::LastCol
     };
 
     static const PropertyIds pPropsToCheck[nTypesProps] =
@@ -199,10 +199,10 @@ static void lcl_mergeProps( const PropertyMapPtr& pToFill, const PropertyMapPtr&
 
     bool pRemoveInside[] =
     {
-        ( nStyleId == TBL_STYLE_FIRSTROW ),
-        ( nStyleId == TBL_STYLE_LASTROW ),
-        ( nStyleId == TBL_STYLE_LASTCOL ),
-        ( nStyleId == TBL_STYLE_FIRSTCOL )
+        ( nStyleId == TblStyleType::FirstRow ),
+        ( nStyleId == TblStyleType::LastRow ),
+        ( nStyleId == TblStyleType::LastCol ),
+        ( nStyleId == TblStyleType::FirstCol )
     };
 
     for ( unsigned i = 0 ; i != SAL_N_ELEMENTS(pPropsToCheck); i++ )
@@ -234,18 +234,18 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
 
     static const TblStyleTypeAndMask aOrderedStyleTable[] =
     {
-        { 0x010, TBL_STYLE_BAND2HORZ },
-        { 0x020, TBL_STYLE_BAND1HORZ },
-        { 0x040, TBL_STYLE_BAND2VERT },
-        { 0x080, TBL_STYLE_BAND1VERT },
-        { 0x100, TBL_STYLE_LASTCOL  },
-        { 0x200, TBL_STYLE_FIRSTCOL },
-        { 0x400, TBL_STYLE_LASTROW  },
-        { 0x800, TBL_STYLE_FIRSTROW },
-        { 0x001, TBL_STYLE_SWCELL },
-        { 0x002, TBL_STYLE_SECELL },
-        { 0x004, TBL_STYLE_NWCELL },
-        { 0x008, TBL_STYLE_NECELL }
+        { 0x010, TblStyleType::Band2Horz },
+        { 0x020, TblStyleType::Band1Horz },
+        { 0x040, TblStyleType::Band2Vert },
+        { 0x080, TblStyleType::Band1Vert },
+        { 0x100, TblStyleType::LastCol  },
+        { 0x200, TblStyleType::FirstCol },
+        { 0x400, TblStyleType::LastRow  },
+        { 0x800, TblStyleType::FirstRow },
+        { 0x001, TblStyleType::SWCell },
+        { 0x002, TblStyleType::SECell },
+        { 0x004, TblStyleType::NWCell },
+        { 0x008, TblStyleType::NECell }
     };
 
     // Get the properties applying according to the mask
@@ -620,7 +620,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 StyleSheetEntry *  pEntry = m_pCurrentEntry.get();
 
                 TableStyleSheetEntry * pTableEntry = dynamic_cast<TableStyleSheetEntry*>( pEntry );
-                if (nType == TBL_STYLE_UNKNOWN)
+                if (nType == TblStyleType::Unknown)
                 {
                     pEntry->m_pProperties->InsertProps(pProps);
                 }
