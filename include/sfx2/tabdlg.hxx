@@ -132,6 +132,12 @@ public:
                                    CreateTabPage pCreateFunc,      // != 0
                                    const OUString* pIconName = nullptr);
 
+    void                AddTabPage(const OUString& rName,          // Name of the label for the new page to create
+                                   const OUString& rLabel,         // UI Label for the new page to create
+                                   CreateTabPage pCreateFunc,      // != 0
+                                   GetTabPageRanges pRangesFunc,
+                                   const OUString& rIconName);
+
     void                AddTabPage(const OUString& rName,
                                    const OUString& rLabel,
                                    CreateTabPage pCreateFunc,

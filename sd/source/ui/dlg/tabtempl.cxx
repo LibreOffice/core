@@ -33,6 +33,8 @@
 #include <tabtempl.hxx>
 #include <svx/flagsdef.hxx>
 
+#include <vcl/tabs.hrc>
+
 /**
  * Constructor of the Tab dialog: appends pages to the dialog
  */
@@ -55,24 +57,37 @@ SdTabTemplateDlg::SdTabTemplateDlg(weld::Window* pParent,
 {
     // fill Listbox and set Select-Handler
 
-    AddTabPage(u"line"_ustr, RID_SVXPAGE_LINE);
-    AddTabPage(u"area"_ustr, RID_SVXPAGE_AREA);
-    AddTabPage(u"shadowing"_ustr, RID_SVXPAGE_SHADOW);
-    AddTabPage(u"transparency"_ustr, RID_SVXPAGE_TRANSPARENCE);
-    AddTabPage(u"font"_ustr, RID_SVXPAGE_CHAR_NAME);
-    AddTabPage(u"fonteffect"_ustr, RID_SVXPAGE_CHAR_EFFECTS);
-    AddTabPage(u"background"_ustr, RID_SVXPAGE_BKG);
-    AddTabPage(u"indents"_ustr, RID_SVXPAGE_STD_PARAGRAPH);
-    AddTabPage(u"text"_ustr, RID_SVXPAGE_TEXTATTR);
-    AddTabPage(u"animation"_ustr, RID_SVXPAGE_TEXTANIMATION);
-    AddTabPage(u"dimensioning"_ustr, RID_SVXPAGE_MEASURE);
-    AddTabPage(u"connector"_ustr, RID_SVXPAGE_CONNECTION);
-    AddTabPage(u"alignment"_ustr, RID_SVXPAGE_ALIGN_PARAGRAPH);
-    AddTabPage(u"tabs"_ustr, RID_SVXPAGE_TABULATOR);
-    if( SvtCJKOptions::IsAsianTypographyEnabled() )
-        AddTabPage(u"asiantypo"_ustr, RID_SVXPAGE_PARA_ASIAN);
-    else
-        RemoveTabPage(u"asiantypo"_ustr);
+    AddTabPage(u"line"_ustr, TabResId(RID_TAB_LINE.aLabel), RID_SVXPAGE_LINE,
+               RID_M + RID_TAB_LINE.sIconName);
+    AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), RID_SVXPAGE_AREA,
+               RID_M + RID_TAB_AREA.sIconName);
+    AddTabPage(u"shadowing"_ustr, TabResId(RID_TAB_SHADOW.aLabel), RID_SVXPAGE_SHADOW,
+               RID_M + RID_TAB_SHADOW.sIconName);
+    AddTabPage(u"transparency"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
+               RID_SVXPAGE_TRANSPARENCE, RID_M + RID_TAB_TRANSPARENCE.sIconName);
+    AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
+               RID_M + RID_TAB_FONT.sIconName);
+    AddTabPage(u"fonteffect"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
+               RID_M + RID_TAB_FONTEFFECTS.sIconName);
+    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTS.aLabel), RID_SVXPAGE_STD_PARAGRAPH,
+               RID_M + RID_TAB_INDENTS.sIconName);
+    AddTabPage(u"text"_ustr, TabResId(RID_TAB_TEXT.aLabel), RID_SVXPAGE_TEXTATTR,
+               RID_M + RID_TAB_TEXT.sIconName);
+    AddTabPage(u"animation"_ustr, TabResId(RID_TAB_TEXTANIMATION.aLabel), RID_SVXPAGE_TEXTANIMATION,
+               RID_M + RID_TAB_TEXTANIMATION.sIconName);
+    AddTabPage(u"dimensioning"_ustr, TabResId(RID_TAB_DIMENSIONING.aLabel), RID_SVXPAGE_MEASURE,
+               RID_M + RID_TAB_DIMENSIONING.sIconName);
+    AddTabPage(u"connector"_ustr, TabResId(RID_TAB_CONNECTOR.aLabel), RID_SVXPAGE_CONNECTION,
+               RID_M + RID_TAB_CONNECTOR.sIconName);
+    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel), RID_SVXPAGE_ALIGN_PARAGRAPH,
+               RID_M + RID_TAB_ALIGNMENT.sIconName);
+    if (SvtCJKOptions::IsAsianTypographyEnabled())
+        AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), RID_SVXPAGE_PARA_ASIAN,
+                   RID_M + RID_TAB_ASIANTYPO.sIconName);
+    AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_TABS.aLabel), RID_SVXPAGE_TABULATOR,
+               RID_M + RID_TAB_TABS.sIconName);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_HIGHLIGHTING.aLabel), RID_SVXPAGE_BKG,
+               RID_M + RID_TAB_HIGHLIGHTING.sIconName);
 }
 
 void SdTabTemplateDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
