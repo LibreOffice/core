@@ -185,6 +185,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/sortoptionspage.ui" },
         { u"modules/scalc/ui/sparklinedialog.ui" },
         { u"modules/scalc/ui/standardfilterdialog.ui" },
+        { u"modules/scalc/ui/statisticsinfopage.ui" },
         { u"modules/scalc/ui/textimportcsv.ui" },
         { u"modules/scalc/ui/ttestdialog.ui" },
         { u"modules/scalc/ui/ungroupdialog.ui" },
