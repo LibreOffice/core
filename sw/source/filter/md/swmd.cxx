@@ -675,7 +675,6 @@ SwMarkdownParser::SwMarkdownParser(SwDoc& rD, SwPaM& rCursor, SvStream& rIn, OUS
     // , m_pMedium(&rMedium)
     , m_pNumRuleInfo(new SwMdNumRuleInfo)
     , m_sBaseURL(std::move(aBaseURL))
-    , m_nBlockQuoteDepth(-1)
     , m_bNewDoc(bReadNewDoc)
 {
     rCursor.DeleteMark();
