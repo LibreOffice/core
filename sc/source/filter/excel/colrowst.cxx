@@ -220,7 +220,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 
     SCROW nPrevRow = -1;
     ExcColRowFlags nPrevFlags = ExcColRowFlags::NONE;
-    for (const auto& [nRow, nFlags] : maRowFlags)
+    for (const auto [nRow, nFlags] : maRowFlags)
     {
         if (nPrevRow >= 0)
         {
@@ -306,7 +306,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 
     SCROW nPrevRow = -1;
     bool bPrevHidden = false;
-    for (const auto& [nRow, bHidden] : maHiddenRows)
+    for (const auto [nRow, bHidden] : maHiddenRows)
     {
         if (nPrevRow >= 0)
         {

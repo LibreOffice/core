@@ -88,7 +88,7 @@ void XclImpOutlineBuffer::MakeScOutline()
 
     ::std::vector<SCSIZE> aOutlineStack;
     aOutlineStack.reserve(mnMaxLevel);
-    for (const auto& [nPos, nLevel] : maLevels)
+    for (const auto [nPos, nLevel] : maLevels)
     {
         if (nPos >= mnEndPos)
         {
