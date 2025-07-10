@@ -246,7 +246,7 @@ void SwPagePreviewWin::CalcWish( sal_Int16 nNewRow, sal_Int16 nNewCol )
 
     // Order must be maintained!
     // additional invalidate page status.
-    static sal_uInt16 aInval[] =
+    static const sal_uInt16 aInval[] =
     {
         SID_ATTR_ZOOM, SID_ZOOM_OUT, SID_ZOOM_IN,
         FN_PREVIEW_ZOOM,
@@ -354,7 +354,7 @@ bool SwPagePreviewWin::MovePage( int eMoveMode )
     mnSttPage = nNewSttPage;
 
     // additional invalidate page status.
-    static sal_uInt16 aInval[] =
+    static const sal_uInt16 aInval[] =
     {
         FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
         FN_STAT_PAGE, 0
@@ -503,7 +503,7 @@ void SwPagePreviewWin::MouseButtonDown( const MouseEvent& rMEvt )
             mrView.SetVScrollbarThumbPos( nNewSelectedPage );
         }
         // invalidate page status.
-        static sal_uInt16 aInval[] =
+        static const sal_uInt16 aInval[] =
         {
             FN_STAT_PAGE, 0
         };
@@ -641,7 +641,7 @@ void SwPagePreview::ExecPgUpAndPgDown( const bool  _bPgUp,
             }
             ScrollViewSzChg();
             // additional invalidate page status.
-            static sal_uInt16 aInval[] =
+            static const sal_uInt16 aInval[] =
             {
                 FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
                 FN_STAT_PAGE, 0
@@ -703,7 +703,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 // book preview mode changed. Thus, adjust scrollbars and
                 // invalidate corresponding states.
                 ScrollViewSzChg();
-                static sal_uInt16 aInval[] =
+                static const sal_uInt16 aInval[] =
                 {
                     FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
                     FN_STAT_PAGE, FN_SHOW_BOOKVIEW, 0
@@ -822,7 +822,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 }
                 GetViewShell()->ShowPreviewSelection( nNewSelectedPage );
                 // invalidate page status.
-                static sal_uInt16 aInval[] =
+                static const sal_uInt16 aInval[] =
                 {
                     FN_STAT_PAGE, 0
                 };
@@ -1286,7 +1286,7 @@ bool SwPagePreview::ChgPage( int eMvMode, bool bUpdateScrollbar )
         {
             ScrollViewSzChg();
 
-            static sal_uInt16 aInval[] =
+            static const sal_uInt16 aInval[] =
             {
                 FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT,
                 FN_PAGEUP, FN_PAGEDOWN, 0
@@ -1510,7 +1510,7 @@ void SwPagePreview::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
         m_pViewWin->Scroll(nThmbPos - m_pViewWin->GetPaintedPreviewDocRect().Left(), 0);
     }
     // additional invalidate page status.
-    static sal_uInt16 aInval[] =
+    static const sal_uInt16 aInval[] =
     {
         FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
         FN_STAT_PAGE, 0
@@ -1685,7 +1685,7 @@ sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, SfxPrinterChangeFlags n
         rESh.SetModified();
         rESh.EndAllAction();
 
-        static sal_uInt16 aInval[] =
+        static const sal_uInt16 aInval[] =
         {
             SID_ATTR_LONG_ULSPACE, SID_ATTR_LONG_LRSPACE,
             SID_RULER_BORDERS, SID_RULER_PAGE_POS, 0

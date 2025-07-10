@@ -1145,7 +1145,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                         : TableChgMode::VarWidthChangeAbs );
 
             SfxBindings& rBind = GetView().GetViewFrame().GetBindings();
-            static sal_uInt16 aInva[] =
+            static const sal_uInt16 aInva[] =
                             {   FN_TABLE_MODE_FIX,
                                 FN_TABLE_MODE_FIX_PROP,
                                 FN_TABLE_MODE_VARIABLE,
@@ -1299,7 +1299,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 aSet.Put( aAttr );
                 rSh.SetTableAttr( aSet );
                 rSh.EndUndo(SwUndoId::TABLE_ATTR);
-                static sal_uInt16 aInva[] =
+                static const sal_uInt16 aInva[] =
                                 {   SID_ATTR_TABLE_LEFT_SPACE,
                                     SID_ATTR_TABLE_RIGHT_SPACE,
                                     0

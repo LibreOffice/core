@@ -3483,7 +3483,7 @@ bool SwTransferable::TestAllowedFormat( const TransferableDataHelper& rData,
  * the list of formats which will be offered to the user in the 'Paste
  * Special...' dialog and the paste button menu
  */
-static SotClipboardFormatId aPasteSpecialIds[] =
+const SotClipboardFormatId aPasteSpecialIds[] =
 {
     SotClipboardFormatId::HTML,
     SotClipboardFormatId::HTML_SIMPLE,
@@ -3559,7 +3559,7 @@ void SwTransferable::PrePasteSpecial( const SwWrtShell& rSh, const TransferableD
     if( SwTransferable::TestAllowedFormat( rData, SotClipboardFormatId::LINK, nDest ))
         pDlg->Insert( SotClipboardFormatId::LINK, SwResId(STR_DDEFORMAT) );
 
-    for( SotClipboardFormatId* pIds = aPasteSpecialIds; *pIds != SotClipboardFormatId::NONE; ++pIds )
+    for( const SotClipboardFormatId* pIds = aPasteSpecialIds; *pIds != SotClipboardFormatId::NONE; ++pIds )
         if( SwTransferable::TestAllowedFormat( rData, *pIds, nDest ))
             pDlg->Insert( *pIds, OUString() );
 }
@@ -3612,7 +3612,7 @@ void SwTransferable::FillClipFormatItem( const SwWrtShell& rSh,
     if( SwTransferable::TestAllowedFormat( rData, SotClipboardFormatId::LINK, nDest ))
         rToFill.AddClipbrdFormat( SotClipboardFormatId::LINK, SwResId(STR_DDEFORMAT) );
 
-    for( SotClipboardFormatId* pIds = aPasteSpecialIds; *pIds != SotClipboardFormatId::NONE; ++pIds )
+    for( const SotClipboardFormatId* pIds = aPasteSpecialIds; *pIds != SotClipboardFormatId::NONE; ++pIds )
         if( SwTransferable::TestAllowedFormat( rData, *pIds, nDest ))
             rToFill.AddClipbrdFormat(*pIds, OUString());
 }

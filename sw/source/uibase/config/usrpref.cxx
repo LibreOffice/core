@@ -304,7 +304,7 @@ void SwContentViewConfig::Load()
 
 Sequence<OUString> SwLayoutViewConfig::GetPropertyNames() const
 {
-    static const char* aPropNames[] =
+    static const char* const aPropNames[] =
     {
         "Line/Guide",                           // 0
         "Window/HorizontalScroll",              // 1
@@ -458,7 +458,7 @@ void SwLayoutViewConfig::Notify(const css::uno::Sequence<OUString>&)
 
 Sequence<OUString> SwGridConfig::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    static const char* const aPropNames[] =
     {
         "Option/SnapToGrid",            // 0
         "Option/VisibleGrid",           // 1
@@ -553,7 +553,7 @@ void SwGridConfig::Notify( const css::uno::Sequence< OUString >& )
 
 Sequence<OUString> SwCursorConfig::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    static const char* const aPropNames[] =
     {
         "DirectCursor/UseDirectCursor", // 0
         "DirectCursor/Insert",          // 1
@@ -635,7 +635,7 @@ void SwCursorConfig::Notify(const css::uno::Sequence<OUString>& )
 
 Sequence<OUString> SwFmtAidsAutoComplConfig::GetPropertyNames()
 {
-    static const char* aPropNames[] = {
+    static const char* const aPropNames[] = {
         "EncloseWithCharacters", // 0
     };
     const int nCount = SAL_N_ELEMENTS(aPropNames);

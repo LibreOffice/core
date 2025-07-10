@@ -106,7 +106,7 @@ static void lcl_GetPos(SwView const * pView,
 
 void SwView::InvalidateRulerPos()
 {
-    static sal_uInt16 aInval[] =
+    static const sal_uInt16 aInval[] =
     {
         SID_ATTR_PARA_LRSPACE, SID_RULER_BORDERS, SID_RULER_PAGE_POS,
         SID_RULER_LR_MIN_MAX, SID_ATTR_LONG_ULSPACE, SID_ATTR_LONG_LRSPACE,

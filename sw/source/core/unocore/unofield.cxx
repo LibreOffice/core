@@ -570,7 +570,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
             const std::vector<OUString>& rExtraArr(
                     SwStyleNameMapper::GetExtraUINameArray());
             const OUString sTypeName = pType->GetName();
-            static sal_uInt16 nIds[] =
+            static const sal_uInt16 nIds[] =
             {
                 RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
                 RES_POOLCOLL_LABEL_ABB - RES_POOLCOLL_EXTRA_BEGIN,

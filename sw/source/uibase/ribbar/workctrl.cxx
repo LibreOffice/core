@@ -162,7 +162,7 @@ IMPL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, pMenu, bool)
 
 // Navigation-Popup
 // determine the order of the toolbox items
-static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
+const sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
 {
     NID_TBL,
     NID_FRM,

@@ -1398,7 +1398,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
                         // set attributes at FlyFrame
                         GetShell().SetFlyFrameAttr(const_cast< SfxItemSet& >(*pDlg->GetOutputItemSet()));
 
-                        static sal_uInt16 aInval[] =
+                        static const sal_uInt16 aInval[] =
                         {
                             SID_ATTR_FILL_STYLE,
                             SID_ATTR_FILL_COLOR,

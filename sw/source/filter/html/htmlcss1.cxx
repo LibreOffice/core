@@ -394,8 +394,8 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
     if( !(bSetBrush || bSetBox || bSetFrameDir) )
         return;
 
-    static sal_uInt16 aPoolIds[] = { RES_POOLPAGE_HTML, RES_POOLPAGE_FIRST,
-                                 RES_POOLPAGE_LEFT, RES_POOLPAGE_RIGHT };
+    static const sal_uInt16 aPoolIds[] = { RES_POOLPAGE_HTML, RES_POOLPAGE_FIRST,
+                                           RES_POOLPAGE_LEFT, RES_POOLPAGE_RIGHT };
     for(sal_uInt16 i : aPoolIds)
     {
         const SwPageDesc *pPageDesc = GetPageDesc( i, false );
