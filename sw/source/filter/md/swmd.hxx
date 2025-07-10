@@ -71,11 +71,11 @@ class SwMarkdownParser
     OUString m_htmlData;
     OUString m_sBaseURL;
 
-    int m_nBlockQuoteDepth;
+    sal_Int32 m_nBlockQuoteDepth = -1;
 
     bool m_bNewDoc;
-    bool m_bNoParSpace : 1;
-    bool m_bInsideImage;
+    bool m_bNoParSpace = true;
+    bool m_bInsideImage = false;
 
     std::vector<MDTable*> m_aTables;
     std::shared_ptr<MDTable> m_xTable;
