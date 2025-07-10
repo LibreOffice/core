@@ -1307,10 +1307,18 @@ void SwView::Execute(SfxRequest &rReq)
             sal_uInt16 nPhyPage, nVirPage;
             GetWrtShell().GetPageNum(nPhyPage, nVirPage);
 
-            svx::GotoPageDlg aDlg(GetViewFrame().GetFrameWeld(), SwResId(STR_GOTO_PAGE_DLG_TITLE),
-                                 SwResId(ST_PGE) + ":", nPhyPage, GetWrtShell().GetPageCnt());
-            if (aDlg.run() == RET_OK)
-                GetWrtShell().GotoPage(aDlg.GetPageSelection(), true);
+            std::shared_ptr<SfxRequest> xRequest = std::make_shared<SfxRequest>(rReq);
+            rReq.Ignore();
+
+            auto xDialog = std::make_shared<svx::GotoPageDlg>(
+                GetViewFrame().GetFrameWeld(), SwResId(STR_GOTO_PAGE_DLG_TITLE),
+                SwResId(ST_PGE) + ":", nPhyPage, GetWrtShell().GetPageCnt());
+            weld::DialogController::runAsync(xDialog, [this, xDialog, xRequest](sal_uInt32 nResult) {
+                if (nResult == RET_OK)
+                    GetWrtShell().GotoPage(xDialog->GetPageSelection(), true);
+
+                xRequest->Done();
+            });
         }
         break;
         case  FN_EDIT_CURRENT_TOX:

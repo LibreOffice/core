@@ -316,6 +316,7 @@ constexpr auto OtherDialogList
         { u"svx/ui/compressgraphicdialog.ui" },
         { u"svx/ui/findreplacedialog.ui" },
         { u"svx/ui/fontworkgallerydialog.ui" },
+        { u"svx/ui/gotopagedialog.ui" },
         { u"svx/ui/headfootformatpage.ui" },
         { u"svx/ui/redlinecontrol.ui" },
         { u"svx/ui/redlinefilterpage.ui" },
