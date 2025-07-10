@@ -649,7 +649,7 @@ void ScDPSaveDimension::RemoveObsoleteMembers(const MemberSetType& rMembers)
 
 void ScDPSaveDimension::Dump(int nIndent) const
 {
-    static const char* pOrientNames[] = { "hidden", "column", "row", "page", "data" };
+    static const char* const pOrientNames[] = { "hidden", "column", "row", "page", "data" };
     std::string aIndent(nIndent*4, ' ');
 
     cout << aIndent << "* dimension name: '" << aName << "'" << endl;

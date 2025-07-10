@@ -1416,7 +1416,7 @@ void dumpSourceData(const ScDPCache& rCache, tools::Long nDim, const ScDPCache::
 
 const char* getGroupTypeName(sal_Int32 nType)
 {
-    static const char* pNames[] = {
+    static const char* const pNames[] = {
         "", "years", "quarters", "months", "days", "hours", "minutes", "seconds"
     };
 

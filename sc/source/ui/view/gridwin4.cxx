@@ -649,7 +649,7 @@ tools::Rectangle lcl_negateRectX(const tools::Rectangle& rRect)
 
 tools::Long GetSide(const tools::Rectangle& rRect, int i)
 {
-    static decltype(&tools::Rectangle::Left) GetSides[4] = {
+    static const decltype(&tools::Rectangle::Left) GetSides[4] = {
         &tools::Rectangle::Left, &tools::Rectangle::Top,
         &tools::Rectangle::Right, &tools::Rectangle::Bottom
     };
@@ -658,7 +658,7 @@ tools::Long GetSide(const tools::Rectangle& rRect, int i)
 
 Fraction GetZoom(const ScViewData& rViewData, int i)
 {
-    static decltype(&ScViewData::GetZoomX) GetZooms[4] = {
+    static const decltype(&ScViewData::GetZoomX) GetZooms[4] = {
         &ScViewData::GetZoomX, &ScViewData::GetZoomY,
         &ScViewData::GetZoomX, &ScViewData::GetZoomY
     };
