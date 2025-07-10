@@ -500,7 +500,7 @@ void SfxDocTplService::getDefaultLocale()
     }
 }
 
-const char* TEMPLATE_SHORT_NAMES_ARY[] =
+const char* const TEMPLATE_SHORT_NAMES_ARY[] =
 {
     "standard",
     "styles",

@@ -27,7 +27,7 @@
 
 #include <sfx2/printopt.hxx>
 
-static sal_uInt16   aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
+const sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 static bool     bOutputForPrinter = true;
 
 #define DPI_COUNT SAL_N_ELEMENTS(aDPIArray)

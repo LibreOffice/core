@@ -919,7 +919,7 @@ const XMLTokenEnum aLevelNameBibliographyMap[] =
           XML_PROCEEDINGS, XML_TECHREPORT, XML_UNPUBLISHED, XML_WWW,
           XML_TOKEN_INVALID };
 
-static const XMLTokenEnum* aTypeLevelNameMap[] =
+const XMLTokenEnum* const aTypeLevelNameMap[] =
 {
     aLevelNameTOCMap,           // TOC
     aLevelNameTableMap,         // table index

@@ -565,7 +565,7 @@ std::vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
                     || nEarliestODFVersionForExport == SvtSaveOptions::ODFSVER_FUTURE_EXTENDED);
                 static_assert(SvtSaveOptions::ODFSVER_LATEST_EXTENDED < SvtSaveOptions::ODFSVER_FUTURE_EXTENDED);
                 /// standard ODF namespaces for elements and attributes
-                static sal_uInt16 s_OdfNs[] = {
+                static const sal_uInt16 s_OdfNs[] = {
                     XML_NAMESPACE_OFFICE,
                     XML_NAMESPACE_STYLE,
                     XML_NAMESPACE_TEXT,
