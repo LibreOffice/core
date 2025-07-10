@@ -62,7 +62,7 @@ OOXMLStreamImpl::OOXMLStreamImpl
 : mxContext(rOOXMLStream.mxContext),
   mxStorageStream(rOOXMLStream.mxStorageStream),
   mxStorage(rOOXMLStream.mxStorage),
-  mnStreamType(UNKNOWN),
+  mnStreamType(StreamType_t::UNKNOWN),
   msId(std::move(sId)),
   msPath(rOOXMLStream.msPath)
 {
@@ -174,83 +174,83 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
 
     switch (nStreamType)
     {
-        case VBAPROJECT:
+        case StreamType_t::VBAPROJECT:
             sStreamType = sVBAProjectType;
             sStreamTypeStrict = sVBAProjectType;
             break;
-        case VBADATA:
+        case StreamType_t::VBADATA:
             sStreamType = sVBADataType;
             sStreamTypeStrict = sVBADataType;
             break;
-        case DOCUMENT:
+        case StreamType_t::DOCUMENT:
             sStreamType = sDocumentType;
             sStreamTypeStrict = sDocumentTypeStrict;
             break;
-        case STYLES:
+        case StreamType_t::STYLES:
             sStreamType = sStylesType;
             sStreamTypeStrict = sStylesTypeStrict;
             break;
-        case NUMBERING:
+        case StreamType_t::NUMBERING:
             sStreamType = sNumberingType;
             sStreamTypeStrict = sNumberingTypeStrict;
             break;
-        case FONTTABLE:
+        case StreamType_t::FONTTABLE:
             sStreamType = sFonttableType;
             sStreamTypeStrict = sFonttableTypeStrict;
             break;
-        case FOOTNOTES:
+        case StreamType_t::FOOTNOTES:
             sStreamType = sFootnotesType;
             sStreamTypeStrict = sFootnotesTypeStrict;
             break;
-        case ENDNOTES:
+        case StreamType_t::ENDNOTES:
             sStreamType = sEndnotesType;
             sStreamTypeStrict = sEndnotesTypeStrict;
             break;
-        case COMMENTS:
+        case StreamType_t::COMMENTS:
             sStreamType = sCommentsType;
             sStreamTypeStrict = sCommentsTypeStrict;
             break;
-        case THEME:
+        case StreamType_t::THEME:
             sStreamType = sThemeType;
             sStreamTypeStrict = sThemeTypeStrict;
             break;
-        case CUSTOMXML:
+        case StreamType_t::CUSTOMXML:
             sStreamType = sCustomType;
             sStreamTypeStrict = sCustomTypeStrict;
             break;
-        case CUSTOMXMLPROPS:
+        case StreamType_t::CUSTOMXMLPROPS:
             sStreamType = sCustomPropsType;
             sStreamTypeStrict = sCustomPropsTypeStrict;
             break;
-        case SETTINGS:
+        case StreamType_t::SETTINGS:
             sStreamType = sSettingsType;
             sStreamTypeStrict = sSettingsTypeStrict;
             break;
-        case GLOSSARY:
+        case StreamType_t::GLOSSARY:
             sStreamType = sGlossaryType;
             sStreamTypeStrict = sGlossaryTypeStrict;
             break;
-        case WEBSETTINGS:
+        case StreamType_t::WEBSETTINGS:
             sStreamType = sWebSettings;
             sStreamTypeStrict = sWebSettingsStrict;
           break;
-        case CHARTS:
+        case StreamType_t::CHARTS:
             sStreamType = sChartType;
             sStreamTypeStrict = sChartTypeStrict;
           break;
-        case EMBEDDINGS:
+        case StreamType_t::EMBEDDINGS:
             sStreamType = sEmbeddingsType;
             sStreamTypeStrict = sEmbeddingsTypeStrict;
           break;
-        case FOOTER:
+        case StreamType_t::FOOTER:
             sStreamType = sFooterType;
             sStreamTypeStrict = sFootersTypeStrict;
           break;
-        case HEADER:
+        case StreamType_t::HEADER:
             sStreamType = sHeaderType;
             sStreamTypeStrict = sHeaderTypeStrict;
           break;
-        case COMMENTS_EXTENDED:
+        case StreamType_t::COMMENTS_EXTENDED:
             sStreamType = sCommentsExtendedType;
             sStreamTypeStrict = sCommentsExtendedType;
             break;
@@ -276,7 +276,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
                 else if(rPair.First == sType &&
                         ((rPair.Second == sOleObjectType ||
                           rPair.Second == sOleObjectTypeStrict) &&
-                          nStreamType == EMBEDDINGS))
+                          nStreamType == StreamType_t::EMBEDDINGS))
                 {
                     bFound = true;
                 }
@@ -343,7 +343,7 @@ OUString OOXMLStreamImpl::getTargetForId(const OUString & rId)
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess
         (mxDocumentStream, uno::UNO_QUERY_THROW);
 
-    if (lcl_getTarget(xRelationshipAccess, UNKNOWN, rId, sTarget))
+    if (lcl_getTarget(xRelationshipAccess, StreamType_t::UNKNOWN, rId, sTarget))
         return sTarget;
 
     return OUString();
@@ -406,7 +406,7 @@ OOXMLDocumentFactory::createStream
  bool bRepairStorage)
 {
     OOXMLStreamImpl * pStream = new OOXMLStreamImpl(xContext, rStream,
-                                                    OOXMLStream::DOCUMENT, bRepairStorage);
+                                                    OOXMLStream::StreamType_t::DOCUMENT, bRepairStorage);
     return OOXMLStream::Pointer_t(pStream);
 }
 
@@ -416,7 +416,7 @@ OOXMLDocumentFactory::createStream
 {
     OOXMLStream::Pointer_t pRet;
 
-    if (nStreamType != OOXMLStream::VBADATA)
+    if (nStreamType != OOXMLStream::StreamType_t::VBADATA)
     {
         if (OOXMLStreamImpl* pImpl = dynamic_cast<OOXMLStreamImpl *>(pStream.get()))
             pRet = new OOXMLStreamImpl(*pImpl, nStreamType);
@@ -426,8 +426,8 @@ OOXMLDocumentFactory::createStream
         // VBADATA is not a relation of the document, but of the VBAPROJECT stream.
         if (OOXMLStreamImpl* pImpl = dynamic_cast<OOXMLStreamImpl *>(pStream.get()))
         {
-            OOXMLStreamImpl aProject(*pImpl, OOXMLStream::VBAPROJECT);
-            pRet = new OOXMLStreamImpl(aProject, OOXMLStream::VBADATA);
+            OOXMLStreamImpl aProject(*pImpl, OOXMLStream::StreamType_t::VBAPROJECT);
+            pRet = new OOXMLStreamImpl(aProject, OOXMLStream::StreamType_t::VBADATA);
         }
     }
 
