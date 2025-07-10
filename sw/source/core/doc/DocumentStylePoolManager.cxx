@@ -124,7 +124,7 @@ namespace
 
     void lcl_SetDfltFont( DefaultFontType nFntType, SfxItemSet& rSet )
     {
-        static struct {
+        static const struct {
             sal_uInt16 nResLngId;
             sal_uInt16 nResFntId;
         } aArr[ 3 ] = {

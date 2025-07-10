@@ -5520,7 +5520,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
             rSh.Edit();
     }
 
-    static sal_uInt16 aInva[] =
+    static const sal_uInt16 aInva[] =
     {
         SID_STYLE_WATERCAN,
         SID_ATTR_CHAR_COLOR_EXT,
@@ -6476,7 +6476,7 @@ void SwEditWin::SetChainMode( bool bOn )
 
     m_bChainMode = bOn;
 
-    static sal_uInt16 aInva[] =
+    static const sal_uInt16 aInva[] =
     {
         FN_FRAME_CHAIN, FN_FRAME_UNCHAIN, 0
     };

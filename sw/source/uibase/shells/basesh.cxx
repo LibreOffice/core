@@ -2411,7 +2411,7 @@ void SwBaseShell::SetFrameMode(FlyMode eMode, SwWrtShell *pSh )
     }
     else if( eMode == FLY_DRAG_END )
     {
-        static sal_uInt16 aInval[] =
+        static const sal_uInt16 aInval[] =
         {
             SID_ATTR_POSITION, SID_ATTR_SIZE, 0
         };

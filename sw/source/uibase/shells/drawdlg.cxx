@@ -131,7 +131,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                         pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), false);
                     pSh->EndAction();
 
-                    static sal_uInt16 aInval[] =
+                    static const sal_uInt16 aInval[] =
                     {
                         SID_ATTR_FILL_STYLE,
                         SID_ATTR_FILL_COLOR,
@@ -186,7 +186,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                         pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), false);
                     pSh->EndAction();
 
-                    static sal_uInt16 aInval[] =
+                    static const sal_uInt16 aInval[] =
                     {
                         SID_ATTR_LINE_STYLE,                // ( SID_SVX_START + 169 )
                         SID_ATTR_LINE_DASH,                 // ( SID_SVX_START + 170 )

@@ -1504,7 +1504,7 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
         if(m_pWrtShell && SelectionType::Table & m_pWrtShell->GetSelectionType())
         {
             m_pWrtShell->SetTableChgMode(eMode);
-            static sal_uInt16 aInva[] =
+            static const sal_uInt16 aInva[] =
                                 {   FN_TABLE_MODE_FIX,
                                     FN_TABLE_MODE_FIX_PROP,
                                     FN_TABLE_MODE_VARIABLE,

@@ -184,7 +184,7 @@ SwLabItem* SwLabItem::Clone(SfxItemPool*) const
 
 Sequence<OUString> SwLabCfgItem::GetPropertyNames() const
 {
-    static const char* aLabelPropNames[] =
+    static const char* const aLabelPropNames[] =
     {
         "Medium/Continuous",         // 0
         "Medium/Brand",             // 1
@@ -207,7 +207,7 @@ Sequence<OUString> SwLabCfgItem::GetPropertyNames() const
         "Inscription/Address",      //18
         "Inscription/Database"      //19
     };
-    static const char* aBusinessPropNames[] =
+    static const char* const aBusinessPropNames[] =
     {
         "PrivateAddress/FirstName",             //  0
         "PrivateAddress/Name",                  //  1

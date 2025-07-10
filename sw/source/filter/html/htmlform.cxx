@@ -124,7 +124,7 @@ HTMLOptionEnum<HTMLWordWrapMode> const aHTMLTextAreaWrapTable[] =
     { nullptr,                             HTMLWordWrapMode(0) }
 };
 
-static SvMacroItemId aEventTypeTable[] =
+const SvMacroItemId aEventTypeTable[] =
 {
     SvMacroItemId::HtmlOnSubmitForm,
     SvMacroItemId::HtmlOnResetForm,

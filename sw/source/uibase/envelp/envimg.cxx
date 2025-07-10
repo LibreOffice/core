@@ -248,7 +248,7 @@ void SwEnvCfgItem::Notify( const css::uno::Sequence< OUString >& ) {}
 
 Sequence<OUString> SwEnvCfgItem::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    static const char* const aPropNames[] =
     {
         "Inscription/Addressee",    //  0
         "Inscription/Sender",       //  1
