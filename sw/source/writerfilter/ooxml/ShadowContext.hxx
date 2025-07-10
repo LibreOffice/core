@@ -28,7 +28,7 @@
 
 namespace writerfilter::ooxml
 {
-enum CallDataType
+enum class CallDataType
 {
     Init,
     ElementAttr,

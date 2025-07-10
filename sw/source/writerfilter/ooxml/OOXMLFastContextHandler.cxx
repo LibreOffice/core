@@ -2058,7 +2058,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
             {
                 switch (callDataIt->getType())
                 {
-                    case Init:
+                    case CallDataType::Init:
                     {
                         sal_Int32 nElement = callDataIt->getElement();
                         css::uno::Reference<css::xml::sax::XFastAttributeList> rAttribs
@@ -2074,7 +2074,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                         aLocalHandlers.push_back(newWrapper);
                     }
                     break;
-                    case ElementAttr:
+                    case CallDataType::ElementAttr:
                     {
                         sal_Int32 nElement = callDataIt->getElement();
                         css::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
@@ -2084,7 +2084,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                             xHandler->startFastElement(nElement, rAttrs);
                     }
                     break;
-                    case Char:
+                    case CallDataType::Char:
                     {
                         const ::rtl::OUString& chars = callDataIt->getChars();
                         auto xHandler = aLocalHandlers.back();
@@ -2092,7 +2092,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                             xHandler->characters(chars);
                     }
                     break;
-                    case EndElementAttr:
+                    case CallDataType::EndElementAttr:
                     {
                         sal_Int32 nElement = callDataIt->getElement();
                         auto xHandler = aLocalHandlers.back();
@@ -2101,7 +2101,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                         aLocalHandlers.pop_back();
                     }
                     break;
-                    case Unknown:
+                    case CallDataType::Unknown:
                     {
                         const ::rtl::OUString& rNameSpace = callDataIt->getUnknownNameSpace();
                         const ::rtl::OUString& rElement = callDataIt->getUnknownElement();
@@ -2112,7 +2112,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                             xHandler->startUnknownElement(rNameSpace, rElement, rAttrs);
                     }
                     break;
-                    case EndUnknown:
+                    case CallDataType::EndUnknown:
                     {
                         const ::rtl::OUString& rNameSpace = callDataIt->getUnknownNameSpace();
                         const ::rtl::OUString& rElement = callDataIt->getUnknownElement();
@@ -2122,7 +2122,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                         aLocalHandlers.pop_back();
                     }
                     break;
-                    case ElementContext:
+                    case CallDataType::ElementContext:
                     {
                         sal_Int32 nElement = callDataIt->getElement();
                         css::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
@@ -2133,7 +2133,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                         aLocalHandlers.push_back(newContext);
                     }
                     break;
-                    case UnknownContext:
+                    case CallDataType::UnknownContext:
                     {
                         const ::rtl::OUString& rNameSpace = callDataIt->getUnknownNameSpace();
                         const ::rtl::OUString& rElement = callDataIt->getUnknownElement();
