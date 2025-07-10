@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="LibreOfficeTheme" parent="LibreOfficeTheme.Base"/>
-
-    <style name="LibreOfficeTheme.Base" parent="Theme.AppCompat.DayNight.NoActionBar">
-    </style>
+    <style name="LibreOfficeTheme" parent="Theme.AppCompat.DayNight.NoActionBar"/>
 
     <style name="ListItemText">
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="LibreOfficeTheme.Toolbar" parent="Theme.AppCompat.DayNight.NoActionBar">
     </style>
 
     <style name="NewDocumentTextView">

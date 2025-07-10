@@ -28,8 +28,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:elevation="3dp"
-                    app:theme="@style/LibreOfficeTheme.Toolbar"
-                    tools:theme="@style/LibreOfficeTheme.Toolbar"
+                    app:theme="@style/LibreOfficeTheme"
+                    tools:theme="@style/LibreOfficeTheme"
                     app:popupTheme="@style/LibreOfficeTheme" />
 
             </com.google.android.material.appbar.AppBarLayout>
