@@ -2422,13 +2422,22 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
         LOK_CALLBACK_INVALIDATE_VIEW_CURSOR,
         LOK_CALLBACK_TEXT_VIEW_SELECTION };
 
-    for( int type : orderedUpdatedTypes )
+    if (viewShell)
     {
-        if(o3tl::make_unsigned( type ) < updatedTypes.size() && updatedTypes[ type ])
+        for( int type : orderedUpdatedTypes )
         {
-            enqueueUpdatedType( type, viewShell, m_viewId );
+            if(o3tl::make_unsigned( type ) < updatedTypes.size() && updatedTypes[ type ])
+            {
+                enqueueUpdatedType( type, viewShell, m_viewId );
+            }
         }
     }
+    else
+    {
+        // View removed, probably cleaning up.
+        SAL_INFO("lok", "View #" << m_viewId << " no longer found for updated events");
+    }
+
     for( const auto& it : updatedTypesPerViewId )
     {
         int viewId = it.first;
