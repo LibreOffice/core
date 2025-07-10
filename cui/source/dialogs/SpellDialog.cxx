@@ -36,6 +36,7 @@
 #include <linguistic/misc.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
@@ -89,6 +90,52 @@ namespace
 
 
 namespace svx{
+
+class DictionaryEventListener : public cppu::WeakImplHelper<XDictionaryEventListener>
+{
+public:
+    DictionaryEventListener(uno::Reference<linguistic2::XDictionary> xDict, SpellDialog& rDialog);
+    void stopListening();
+
+    //  XEventListener
+    void SAL_CALL disposing(const css::lang::EventObject& rSource) override;
+
+    // XDictionaryEventListener
+    void SAL_CALL processDictionaryEvent(const DictionaryEvent& rDicEvt) override;
+
+private:
+    uno::Reference<linguistic2::XDictionary> m_xDict;
+    SpellDialog& m_rDialog;
+};
+
+DictionaryEventListener::DictionaryEventListener(uno::Reference<linguistic2::XDictionary> xDict,
+                                                 SpellDialog& rDialog)
+    : m_xDict(std::move(xDict))
+    , m_rDialog(rDialog)
+{
+    if (m_xDict)
+        m_xDict->addDictionaryEventListener(this);
+}
+
+void DictionaryEventListener::stopListening()
+{
+    if (m_xDict)
+        m_xDict->removeDictionaryEventListener(this);
+}
+
+void DictionaryEventListener::disposing(const css::lang::EventObject& rSource)
+{
+    if (rSource.Source == m_xDict)
+        m_xDict->removeDictionaryEventListener(this);
+}
+
+void DictionaryEventListener::processDictionaryEvent(const DictionaryEvent& rDicEvt)
+{
+    m_rDialog.processDictionaryEvent(rDicEvt);
+}
+
+// class SpellUndoAction_Impl
+
 class SpellUndoAction_Impl : public SfxUndoAction
 {
     SpellUndoAction m_nId;
@@ -243,6 +290,8 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     // disable controls if service is missing
     m_xDialog->set_sensitive(xSpell.is());
 
+    m_xChangeAllDictListener.set(new DictionaryEventListener(LinguMgr::GetChangeAllList(), *this));
+
     // further initialization happens in Initialize() to prevent virtual
     // calls from the constructor
 }
@@ -264,6 +313,9 @@ SpellDialog::~SpellDialog()
 
         pImpl.reset();
     }
+
+    m_xChangeAllDictListener->stopListening();
+    m_xChangeAllDictListener.clear();
 }
 
 void SpellDialog::UpdateBoxes_Impl(bool bCallFromSelectHdl)
@@ -440,7 +492,7 @@ IMPL_LINK( SpellDialog, ExtClickHdl, weld::Button&, rBtn, void )
 IMPL_LINK_NOARG(SpellDialog, CheckGrammarHdl, weld::Toggleable&, void)
 {
     rParent.SetGrammarChecking(m_xCheckGrammarCB->get_active());
-    Impl_Restore(true);
+    Impl_Restore(/*UseSavedSentence=*/true, /*ClearChangeAll=*/true);
 }
 
 void SpellDialog::StartSpellOptDlg_Impl()
@@ -493,6 +545,18 @@ OUString SpellDialog::getReplacementString() const
         sReplacement = m_xSuggestionLB->get_selected_text();
 
     return getDotReplacementString(sOrigString, sReplacement);
+}
+
+void SpellDialog::processDictionaryEvent(const DictionaryEvent& rDicEvt)
+{
+    if (rDicEvt.nEvent & DictionaryEventFlags::ADD_ENTRY)
+    {
+        // The ChangeAll dictionary is shared by all documents.
+        // If something changed it while this dialog did not have the focus,
+        // when spell checking resumes, it must be cleared and start adding words all over again.
+        if (!m_xDialog->has_toplevel_focus() && rDicEvt.Source == LinguMgr::GetChangeAllList())
+            m_bResumeClearsChangeAllDict = true;
+    }
 }
 
 IMPL_LINK_NOARG(SpellDialog, DoubleClickChangeHdl, weld::TreeView&, bool)
@@ -669,10 +733,11 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
     }
 }
 
-void SpellDialog::Impl_Restore(bool bUseSavedSentence)
+void SpellDialog::Impl_Restore(bool bUseSavedSentence, bool bClearChangeAll)
 {
     //clear the "ChangeAllList"
-    LinguMgr::GetChangeAllList()->clear();
+    if (bClearChangeAll)
+        LinguMgr::GetChangeAllList()->clear();
     //get a new sentence
     m_xSentenceED->SetText(OUString());
     m_xSentenceED->ResetModified();
@@ -685,7 +750,8 @@ IMPL_LINK_NOARG(SpellDialog, IgnoreHdl, weld::Button&, void)
 {
     if (m_sResumeST == m_xIgnorePB->get_label())
     {
-        Impl_Restore(false);
+        Impl_Restore(/*UseSavedSentence=*/false, m_bResumeClearsChangeAllDict);
+        m_bResumeClearsChangeAllDict = false;
     }
     else
     {

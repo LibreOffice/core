@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sfx2/basedlgs.hxx>
+#include <com/sun/star/linguistic2/DictionaryEvent.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 
@@ -127,10 +128,12 @@ public:
 };
 
 class SpellDialogChildWindow;
+class DictionaryEventListener;
 
 class SpellDialog : public SfxModelessDialogController
 {
     friend class SentenceEditWindow_Impl;
+    friend class DictionaryEventListener;
 private:
     OUString        m_sResumeST;
     OUString        m_sIgnoreOnceST;
@@ -148,6 +151,9 @@ private:
     std::unique_ptr<SpellDialog_Impl> pImpl;
     css::uno::Reference<
         css::linguistic2::XSpellChecker1 >     xSpell;
+
+    rtl::Reference<DictionaryEventListener> m_xChangeAllDictListener;
+    bool m_bResumeClearsChangeAllDict = false; // clear if another instance changed this word list
 
     std::unordered_map<OUString, OUString> m_aDictIdToName;
 
@@ -200,7 +206,7 @@ private:
     void            SpellContinue_Impl(std::unique_ptr<UndoChangeGroupGuard>* pGuard = nullptr, bool UseSavedSentence = false, bool bIgnoreCurrentError = false );
     void            LockFocusChanges( bool bLock ) {bFocusLocked = bLock;}
     void            ToplevelFocusChanged();
-    void            Impl_Restore(bool bUseSavedSentence);
+    void            Impl_Restore(bool bUseSavedSentence, bool bClearChangeAll);
 
     LanguageType    GetSelectedLang_Impl() const;
 
@@ -215,6 +221,7 @@ private:
 protected:
 
     OUString getReplacementString() const;
+    void processDictionaryEvent(const css::linguistic2::DictionaryEvent& rDicEvt);
 
 public:
     SpellDialog(
