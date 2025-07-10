@@ -138,6 +138,30 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPosExport)
+{
+    // Given a document with two floating tables after each other:
+    // When saving that document to DOCX:
+    loadAndSave("floattable-anchorpos.docx");
+
+    // Then make sure that the dummy anchor of the first floating table is not written to the export
+    // result:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Check the order of the floating tables: C is from the previous node, A is normal floating
+    // table.
+    CPPUNIT_ASSERT_EQUAL(u"C"_ustr,
+                         getXPathContent(pXmlDoc, "//w:body/w:tbl[1]/w:tr/w:tc/w:p/w:r/w:t"));
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr,
+                         getXPathContent(pXmlDoc, "//w:body/w:tbl[2]/w:tr/w:tc/w:p/w:r/w:t"));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the dummy anchor node was written to DOCX, leading to a Writer vs Word layout
+    // difference.
+    CPPUNIT_ASSERT_EQUAL(1, countXPathNodes(pXmlDoc, "//w:body/w:p"));
+    CPPUNIT_ASSERT_EQUAL(u"D"_ustr, getXPathContent(pXmlDoc, "//w:body/w:p/w:r/w:t"));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
