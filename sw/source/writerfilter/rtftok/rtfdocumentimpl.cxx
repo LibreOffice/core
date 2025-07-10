@@ -1431,7 +1431,7 @@ void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
     }
     else
     {
-        pCurrentBuffer->emplace_back(BUFFER_STARTRUN, nullptr, nullptr);
+        pCurrentBuffer->emplace_back(RTFBufferTypes::StartRun, nullptr, nullptr);
     }
 
     // Should we send run properties?
@@ -1446,8 +1446,8 @@ void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
     else
     {
         auto pValue = new RTFValue(*sValue);
-        pCurrentBuffer->emplace_back(BUFFER_TEXT, pValue, nullptr);
-        pCurrentBuffer->emplace_back(BUFFER_ENDRUN, nullptr, nullptr);
+        pCurrentBuffer->emplace_back(RTFBufferTypes::Text, pValue, nullptr);
+        pCurrentBuffer->emplace_back(RTFBufferTypes::EndRun, nullptr, nullptr);
     }
 }
 
@@ -1666,7 +1666,8 @@ void RTFDocumentImpl::text(OUString& rString)
     if (m_aStates.top().getTableCellSprms().find(NS_ooxml::LN_CT_TcPrBase_vAlign)
         && m_nTopLevelCells == 0)
     {
-        m_aTableBufferStack.back().emplace_back(BUFFER_UTEXT, new RTFValue(rString), nullptr);
+        m_aTableBufferStack.back().emplace_back(RTFBufferTypes::UText, new RTFValue(rString),
+                                                nullptr);
         return;
     }
 
@@ -1687,7 +1688,7 @@ void RTFDocumentImpl::text(OUString& rString)
     else if (pCurrentBuffer)
     {
         RTFValue::Pointer_t pValue;
-        pCurrentBuffer->emplace_back(BUFFER_STARTRUN, pValue, nullptr);
+        pCurrentBuffer->emplace_back(RTFBufferTypes::StartRun, pValue, nullptr);
     }
 
     if (m_aStates.top().getDestination() == Destination::NORMAL
@@ -1700,7 +1701,7 @@ void RTFDocumentImpl::text(OUString& rString)
     else
     {
         auto pValue = new RTFValue(rString);
-        pCurrentBuffer->emplace_back(BUFFER_UTEXT, pValue, nullptr);
+        pCurrentBuffer->emplace_back(RTFBufferTypes::UText, pValue, nullptr);
     }
 
     m_bNeedCr = true;
@@ -1710,7 +1711,7 @@ void RTFDocumentImpl::text(OUString& rString)
     else if (pCurrentBuffer)
     {
         RTFValue::Pointer_t pValue;
-        pCurrentBuffer->emplace_back(BUFFER_ENDRUN, pValue, nullptr);
+        pCurrentBuffer->emplace_back(RTFBufferTypes::EndRun, pValue, nullptr);
     }
 }
 
@@ -1871,7 +1872,8 @@ void RTFDocumentImpl::replayRowBuffer(RTFBuffer_t& rBuffer, ::std::deque<RTFSprm
     }
     for (Buf_t& i : rBuffer)
     {
-        SAL_WARN_IF(BUFFER_CELLEND == std::get<0>(i), "writerfilter.rtf", "dropping table cell!");
+        SAL_WARN_IF(RTFBufferTypes::CellEnd == std::get<0>(i), "writerfilter.rtf",
+                    "dropping table cell!");
     }
     assert(rCellsSprms.empty());
     assert(rCellsAttributes.empty());
@@ -1884,17 +1886,19 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
     {
         Buf_t aTuple(rBuffer.front());
         rBuffer.pop_front();
-        if (std::get<0>(aTuple) == BUFFER_PROPS || std::get<0>(aTuple) == BUFFER_PROPS_CHAR)
+        if (std::get<0>(aTuple) == RTFBufferTypes::Props
+            || std::get<0>(aTuple) == RTFBufferTypes::PropsChar)
         {
             // Construct properties via getProperties() and not directly, to take care of deduplication.
-            writerfilter::Reference<Properties>::Pointer_t const pProp(getProperties(
-                std::get<1>(aTuple)->getAttributes(), std::get<1>(aTuple)->getSprms(),
-                std::get<0>(aTuple) == BUFFER_PROPS_CHAR ? NS_ooxml::LN_Value_ST_StyleType_character
-                                                         : 0,
-                std::get<0>(aTuple) == BUFFER_PROPS_CHAR));
+            writerfilter::Reference<Properties>::Pointer_t const pProp(
+                getProperties(std::get<1>(aTuple)->getAttributes(), std::get<1>(aTuple)->getSprms(),
+                              std::get<0>(aTuple) == RTFBufferTypes::PropsChar
+                                  ? NS_ooxml::LN_Value_ST_StyleType_character
+                                  : 0,
+                              std::get<0>(aTuple) == RTFBufferTypes::PropsChar));
             Mapper().props(pProp);
         }
-        else if (std::get<0>(aTuple) == BUFFER_NESTROW)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::NestRow)
         {
             TableRowBuffer& rRowBuffer(*std::get<2>(aTuple));
 
@@ -1904,7 +1908,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
             sendProperties(rRowBuffer.GetParaProperties(), rRowBuffer.GetFrameProperties(),
                            rRowBuffer.GetRowProperties());
         }
-        else if (std::get<0>(aTuple) == BUFFER_CELLEND)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::CellEnd)
         {
             assert(pSprms && pAttributes);
             auto pValue = new RTFValue(1);
@@ -1915,25 +1919,25 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
             tableBreak();
             break;
         }
-        else if (std::get<0>(aTuple) == BUFFER_STARTRUN)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::StartRun)
             Mapper().startCharacterGroup();
-        else if (std::get<0>(aTuple) == BUFFER_TEXT)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::Text)
         {
             sal_uInt8 const nValue = std::get<1>(aTuple)->getInt();
             Mapper().text(&nValue, 1);
         }
-        else if (std::get<0>(aTuple) == BUFFER_UTEXT)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::UText)
         {
             OUString const aString(std::get<1>(aTuple)->getString());
             Mapper().utext(aString.getStr(), aString.getLength());
         }
-        else if (std::get<0>(aTuple) == BUFFER_ENDRUN)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::EndRun)
             Mapper().endCharacterGroup();
-        else if (std::get<0>(aTuple) == BUFFER_PAR)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::PAR)
             parBreak();
-        else if (std::get<0>(aTuple) == BUFFER_STARTSHAPE)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::StartShape)
             m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), false, RTFSdrImport::SHAPE);
-        else if (std::get<0>(aTuple) == BUFFER_RESOLVESHAPE)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::ResolveShape)
         {
             // Make sure there is no current buffer while replaying the shape,
             // otherwise it gets re-buffered.
@@ -1949,9 +1953,9 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
             m_aStates.top().getShape() = std::move(aShape);
             m_aStates.top().setCurrentBuffer(pCurrentBuffer);
         }
-        else if (std::get<0>(aTuple) == BUFFER_ENDSHAPE)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::EndShape)
             m_pSdrImport->close();
-        else if (std::get<0>(aTuple) == BUFFER_RESOLVESUBSTREAM)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::ResolveSubstream)
         {
             RTFSprms& rAttributes = std::get<1>(aTuple)->getAttributes();
             std::size_t nPos = rAttributes.find(0)->getInt();
@@ -1959,9 +1963,9 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
             OUString aCustomMark = rAttributes.find(2)->getString();
             resolveSubstream(nPos, nId, aCustomMark);
         }
-        else if (std::get<0>(aTuple) == BUFFER_PICTURE)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::Picture)
             m_aStates.top().getPicture() = std::get<1>(aTuple)->getPicture();
-        else if (std::get<0>(aTuple) == BUFFER_SETSTYLE)
+        else if (std::get<0>(aTuple) == RTFBufferTypes::SetStyle)
         {
             if (!m_aStates.empty())
                 m_aStates.top().setCurrentStyleIndex(std::get<1>(aTuple)->getInt());
@@ -2664,8 +2668,8 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                     // Also buffer the RTFPicture of the state stack as it contains
                     // the shape size.
                     auto pPictureValue = new RTFValue(m_aStates.top().getPicture());
-                    m_aStates.top().getCurrentBuffer()->emplace_back(BUFFER_PICTURE, pPictureValue,
-                                                                     nullptr);
+                    m_aStates.top().getCurrentBuffer()->emplace_back(RTFBufferTypes::Picture,
+                                                                     pPictureValue, nullptr);
                     auto pValue = new RTFValue(m_aStates.top().getShape());
 
                     // Buffer wrap type.
@@ -2679,8 +2683,8 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                         }
                     }
 
-                    m_aStates.top().getCurrentBuffer()->emplace_back(BUFFER_RESOLVESHAPE, pValue,
-                                                                     nullptr);
+                    m_aStates.top().getCurrentBuffer()->emplace_back(RTFBufferTypes::ResolveShape,
+                                                                     pValue, nullptr);
                 }
             }
             else if (rState.getInShapeGroup() && !rState.getInShape())
@@ -3749,8 +3753,8 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
                     if (!m_aStates.top().getCurrentBuffer())
                         m_pSdrImport->close();
                     else
-                        m_aStates.top().getCurrentBuffer()->emplace_back(BUFFER_ENDSHAPE, nullptr,
-                                                                         nullptr);
+                        m_aStates.top().getCurrentBuffer()->emplace_back(RTFBufferTypes::EndShape,
+                                                                         nullptr, nullptr);
                 }
 
                 // It's allowed to declare these inside the shape text, and they
@@ -4018,11 +4022,12 @@ void RTFDocumentImpl::bufferProperties(RTFBuffer_t& rBuffer, const RTFValue::Poi
                                        const tools::SvRef<TableRowBuffer>& pTableProperties,
                                        Id const nStyleType)
 {
-    rBuffer.emplace_back(BUFFER_SETSTYLE, new RTFValue(m_aStates.top().getCurrentStyleIndex()),
-                         nullptr);
+    rBuffer.emplace_back(RTFBufferTypes::SetStyle,
+                         new RTFValue(m_aStates.top().getCurrentStyleIndex()), nullptr);
     assert(nStyleType == 0 || nStyleType == NS_ooxml::LN_Value_ST_StyleType_character);
-    rBuffer.emplace_back(nStyleType == NS_ooxml::LN_Value_ST_StyleType_character ? BUFFER_PROPS_CHAR
-                                                                                 : BUFFER_PROPS,
+    rBuffer.emplace_back(nStyleType == NS_ooxml::LN_Value_ST_StyleType_character
+                             ? RTFBufferTypes::PropsChar
+                             : RTFBufferTypes::Props,
                          pValue, pTableProperties);
 }
 

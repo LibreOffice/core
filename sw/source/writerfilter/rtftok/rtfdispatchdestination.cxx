@@ -282,7 +282,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     OUString aCustomMark;
                     for (auto const& elem : m_aSuperBuffer)
                     {
-                        if (std::get<0>(elem) == BUFFER_UTEXT)
+                        if (std::get<0>(elem) == RTFBufferTypes::UText)
                         {
                             aCustomMark = std::get<1>(elem)->getString();
                             bCustomMark = true;
@@ -300,8 +300,8 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         aAttributes.set(Id(0), new RTFValue(m_nGroupStartPos - 1));
                         aAttributes.set(Id(1), new RTFValue(nId));
                         aAttributes.set(Id(2), new RTFValue(aCustomMark));
-                        m_aStates.top().getCurrentBuffer()->push_back(
-                            Buf_t(BUFFER_RESOLVESUBSTREAM, new RTFValue(aAttributes), nullptr));
+                        m_aStates.top().getCurrentBuffer()->push_back(Buf_t(
+                            RTFBufferTypes::ResolveSubstream, new RTFValue(aAttributes), nullptr));
                     }
                     if (bCustomMark)
                     {
@@ -345,8 +345,8 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         aAttributes.set(Id(0), new RTFValue(m_nGroupStartPos - 1));
                         aAttributes.set(Id(1), new RTFValue(NS_ooxml::LN_annotation));
                         aAttributes.set(Id(2), new RTFValue(OUString()));
-                        m_aStates.top().getCurrentBuffer()->push_back(
-                            Buf_t(BUFFER_RESOLVESUBSTREAM, new RTFValue(aAttributes), nullptr));
+                        m_aStates.top().getCurrentBuffer()->push_back(Buf_t(
+                            RTFBufferTypes::ResolveSubstream, new RTFValue(aAttributes), nullptr));
                     }
                     m_aStates.top().setDestination(Destination::SKIP);
                 }
@@ -405,7 +405,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         {
                             auto pValue = new RTFValue(m_aStates.top().getShape());
                             m_aStates.top().getCurrentBuffer()->push_back(
-                                Buf_t(BUFFER_STARTSHAPE, pValue, nullptr));
+                                Buf_t(RTFBufferTypes::StartShape, pValue, nullptr));
                         }
                     }
                 }

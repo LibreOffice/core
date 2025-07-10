@@ -121,7 +121,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             else if (m_aStates.top().getDestination() != Destination::SHAPETEXT)
             {
                 RTFValue::Pointer_t pValue;
-                m_aStates.top().getCurrentBuffer()->push_back(Buf_t(BUFFER_PAR, pValue, nullptr));
+                m_aStates.top().getCurrentBuffer()->push_back(
+                    Buf_t(RTFBufferTypes::PAR, pValue, nullptr));
             }
             // but don't emit properties yet, since they may change till the first text token arrives
             m_bNeedPap = true;
@@ -209,7 +210,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
 
             RTFValue::Pointer_t pValue;
-            m_aTableBufferStack.back().emplace_back(Buf_t(BUFFER_CELLEND, pValue, nullptr));
+            m_aTableBufferStack.back().emplace_back(
+                Buf_t(RTFBufferTypes::CellEnd, pValue, nullptr));
             m_bNeedPap = true;
         }
         break;
@@ -239,7 +241,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             m_aTableBufferStack.pop_back();
             m_aTableBufferStack.back().emplace_back(
-                Buf_t(BUFFER_NESTROW, RTFValue::Pointer_t(), pBuffer));
+                Buf_t(RTFBufferTypes::NestRow, RTFValue::Pointer_t(), pBuffer));
 
             m_aNestedTableCellsSprms.clear();
             m_aNestedTableCellsAttributes.clear();
@@ -263,7 +265,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 int nCellCount = 0;
                 for (Buf_t& i : m_aTableBufferStack.back())
                 {
-                    if (BUFFER_CELLEND == std::get<0>(i))
+                    if (RTFBufferTypes::CellEnd == std::get<0>(i))
                         ++nCellCount;
                 }
                 if (m_nTopLevelCells < nCellCount)
@@ -304,11 +306,11 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 int nCell = 1;
                 for (Buf_t& rTableBufferElement : m_aTableBufferStack.back())
                 {
-                    if (BUFFER_CELLEND == std::get<0>(rTableBufferElement))
+                    if (RTFBufferTypes::CellEnd == std::get<0>(rTableBufferElement))
                         ++nCell;
                     else if (nCell == nCellCount - 1)
                     {
-                        if (BUFFER_PROPS_CHAR == std::get<0>(rTableBufferElement))
+                        if (RTFBufferTypes::PropsChar == std::get<0>(rTableBufferElement))
                         {
                             tools::SvRef<writerfilter::rtftok::RTFValue> xPropValue
                                 = std::get<1>(rTableBufferElement);
@@ -322,10 +324,11 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 nCell = 1;
                 for (Buf_t& rTableBufferElement : m_aTableBufferStack.back())
                 {
-                    if (BUFFER_CELLEND == std::get<0>(rTableBufferElement))
+                    if (RTFBufferTypes::CellEnd == std::get<0>(rTableBufferElement))
                         ++nCell;
                     //Remove paragraph spacing on fill cells
-                    if (nCell == nCellCount && BUFFER_PROPS == std::get<0>(rTableBufferElement))
+                    if (nCell == nCellCount
+                        && RTFBufferTypes::Props == std::get<0>(rTableBufferElement))
                     {
                         tools::SvRef<writerfilter::rtftok::RTFValue> xPropValue
                             = std::get<1>(rTableBufferElement);

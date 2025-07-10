@@ -68,26 +68,26 @@ enum class RTFBorderState
 };
 
 /// Different kind of buffers for table cell contents.
-enum RTFBufferTypes
+enum class RTFBufferTypes
 {
-    BUFFER_SETSTYLE,
+    SetStyle,
     /// Stores properties, should be created only in bufferProperties().
-    BUFFER_PROPS,
-    BUFFER_PROPS_CHAR,
-    BUFFER_NESTROW,
-    BUFFER_CELLEND,
-    BUFFER_STARTRUN,
-    BUFFER_TEXT,
-    BUFFER_UTEXT,
-    BUFFER_ENDRUN,
-    BUFFER_PAR,
-    BUFFER_STARTSHAPE,
+    Props,
+    PropsChar,
+    NestRow,
+    CellEnd,
+    StartRun,
+    Text,
+    UText,
+    EndRun,
+    PAR,
+    StartShape,
     /// Imports a shape.
-    BUFFER_RESOLVESHAPE,
-    BUFFER_ENDSHAPE,
-    BUFFER_RESOLVESUBSTREAM,
+    ResolveShape,
+    EndShape,
+    ResolveSubstream,
     /// Restores RTFParserState::aPicture.
-    BUFFER_PICTURE
+    Picture
 };
 
 /// Form field types
