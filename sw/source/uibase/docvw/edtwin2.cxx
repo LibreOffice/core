@@ -328,7 +328,7 @@ static OString getTooltipPayload(const OUString& tooltip, const SwRect& rect)
 namespace
 {
 
-/** Fetches the text encolsed by the bookmark, resolved from the internal (input) link
+/** Fetches the text enclosed by the bookmark, resolved from the internal (input) link
  *
  * If a bookmark doesn't exist, return an empty string.
  **/
