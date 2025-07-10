@@ -76,6 +76,7 @@
 #include <editeng/blinkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/paperinf.hxx>
+#include <editeng/scripthintitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <o3tl/string_view.hxx>
@@ -1397,6 +1398,27 @@ void WW8AttributeOutput::CharHighlight( const SvxBrushItem& rBrush )
     m_rWW8Export.m_pO->push_back( nColor );
 }
 
+void WW8AttributeOutput::CharScriptHint(const SvxScriptHintItem& rHint)
+{
+    sal_uInt8 nHint = 0;
+    switch (rHint.GetValue())
+    {
+        case i18nutil::ScriptHintType::Asian:
+            nHint = 1;
+            break;
+
+        case i18nutil::ScriptHintType::Complex:
+            nHint = 2;
+            break;
+
+        default:
+            break;
+    }
+
+    m_rWW8Export.InsUInt16(NS_sprm::CIdctHint::val);
+    m_rWW8Export.m_pO->push_back(nHint);
+}
+
 void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
 {
     m_rWW8Export.InsUInt16( NS_sprm::CKul::val );
@@ -1640,13 +1662,6 @@ void WW8AttributeOutput::CharBidiRTL( const SfxPoolItem& rHt )
         m_rWW8Export.InsUInt16(0x85a);
         m_rWW8Export.m_pO->push_back(sal_uInt8(1));
     }
-}
-
-void WW8AttributeOutput::CharIdctHint( const SfxPoolItem& rHt )
-{
-    const SfxInt16Item& rAttr = static_cast<const SfxInt16Item&>(rHt);
-    m_rWW8Export.InsUInt16(0x286F);
-    m_rWW8Export.m_pO->push_back(static_cast<sal_uInt8>(rAttr.GetValue()));
 }
 
 void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
@@ -5818,8 +5833,8 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
         case RES_CHRATR_BIDIRTL:
             CharBidiRTL( rHt );
             break;
-        case RES_CHRATR_IDCTHINT:
-            CharIdctHint( rHt );
+        case RES_CHRATR_SCRIPT_HINT:
+            CharScriptHint(rHt.StaticWhichCast(RES_CHRATR_SCRIPT_HINT));
             break;
         case RES_TXTATR_INETFMT:
             TextINetFormat( static_cast< const SwFormatINetFormat& >( rHt ) );

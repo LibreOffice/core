@@ -304,10 +304,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf139418, "tdf139418.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPorLen1);
 
     sal_Int32 nPorLen2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "length").toInt32();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(42), nPorLen2);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nPorLen2);
 
     sal_Int32 nPorLen3 = getXPath(pXmlDoc, "(//SwLinePortion)[3]", "length").toInt32();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPorLen3);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(41), nPorLen3);
+
+    sal_Int32 nPorLen4 = getXPath(pXmlDoc, "(//SwLinePortion)[4]", "length").toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPorLen4);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAnnotationRef)

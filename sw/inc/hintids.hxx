@@ -241,7 +241,7 @@ inline constexpr TypedWhichId<SvxShadowItem> RES_CHRATR_SHADOW(RES_CHRATR_BEGIN 
 inline constexpr TypedWhichId<SvxBrushItem> RES_CHRATR_HIGHLIGHT(RES_CHRATR_BEGIN + 41);
 inline constexpr TypedWhichId<SfxGrabBagItem> RES_CHRATR_GRABBAG(RES_CHRATR_BEGIN + 42);
 inline constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_BIDIRTL(RES_CHRATR_BEGIN + 43);
-inline constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_IDCTHINT(RES_CHRATR_BEGIN + 44);
+inline constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_UNUSED3(RES_CHRATR_BEGIN + 44);
 inline constexpr TypedWhichId<SvxScriptHintItem> RES_CHRATR_SCRIPT_HINT(RES_CHRATR_BEGIN + 45);
 inline constexpr sal_uInt16 RES_CHRATR_END(RES_CHRATR_BEGIN + 46);
 

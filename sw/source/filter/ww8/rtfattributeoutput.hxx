@@ -334,9 +334,6 @@ protected:
     /// Sfx item RES_CHRATR_BidiRTL
     void CharBidiRTL(const SfxPoolItem& rItem) override;
 
-    /// Sfx item RES_CHRATR_IdctHint
-    void CharIdctHint(const SfxPoolItem& rItem) override;
-
     /// Sfx item RES_CHRATR_ROTATE
     void CharRotate(const SvxCharRotateItem& rRotate) override;
 
@@ -361,6 +358,9 @@ protected:
 
     /// Sfx item RES_CHRATR_HIGHLIGHT
     void CharHighlight(const SvxBrushItem& rBrush) override;
+
+    /// Sfx item RES_CHRATR_SCRIPT_HINT
+    void CharScriptHint(const SvxScriptHintItem& rHint) override;
 
     /// Sfx item RES_TXTATR_INETFMT
     void TextINetFormat(const SwFormatINetFormat& rURL) override;

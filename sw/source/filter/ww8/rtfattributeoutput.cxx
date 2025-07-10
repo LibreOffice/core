@@ -2952,8 +2952,6 @@ void RtfAttributeOutput::CharWeightCTL(const SvxWeightItem& rWeight)
 
 void RtfAttributeOutput::CharBidiRTL(const SfxPoolItem& /*rItem*/) {}
 
-void RtfAttributeOutput::CharIdctHint(const SfxPoolItem& /*rItem*/) {}
-
 void RtfAttributeOutput::CharRotate(const SvxCharRotateItem& rRotate)
 {
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HORZVERT);
@@ -3044,6 +3042,11 @@ void RtfAttributeOutput::CharHighlight(const SvxBrushItem& rBrush)
 {
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HIGHLIGHT);
     m_aStyles.append(static_cast<sal_Int32>(msfilter::util::TransColToIco(rBrush.GetColor())));
+}
+
+void RtfAttributeOutput::CharScriptHint(const SvxScriptHintItem&)
+{
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::TextINetFormat(const SwFormatINetFormat& rURL)

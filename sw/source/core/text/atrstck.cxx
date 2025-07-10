@@ -114,7 +114,7 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
     38, // RES_CHRATR_HIGHLIGHT,                 // 42
      0, // RES_CHRATR_GRABBAG,                   // 43
      0, // RES_CHRATR_BIDIRTL,                   // 44
-     0, // RES_CHRATR_IDCTHINT,                  // 45
+     0, // RES_CHRATR_UNUSED3,                   // 45
     39, // RES_CHRATR_SCRIPT_HINT,               // 46
     40, // RES_TXTATR_REFMARK,                   // 47
     41, // RES_TXTATR_TOXMARK,                   // 48

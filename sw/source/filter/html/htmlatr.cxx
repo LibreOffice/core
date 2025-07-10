@@ -3322,7 +3322,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_HIGHLIGHT */          nullptr,
 /* RES_CHRATR_GRABBAG */            nullptr,
 /* RES_CHRATR_BIDIRTL */            nullptr,
-/* RES_CHRATR_IDCTHINT */           nullptr,
+/* RES_CHRATR_UNUSED3 */            nullptr,
 /* RES_CHRATR_SCRIPT_HINT */        nullptr,
 
 /* RES_TXTATR_REFMARK */            nullptr,
