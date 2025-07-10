@@ -327,7 +327,7 @@ void ScUnoAddInCollection::Initialize()
 
 static sal_uInt16 lcl_GetCategory( std::u16string_view rName )
 {
-    static const char* aFuncNames[SC_FUNCGROUP_COUNT] =
+    static const char* const aFuncNames[SC_FUNCGROUP_COUNT] =
     {
         //  array index = ID - 1 (ID starts at 1)
         //  all upper case

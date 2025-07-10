@@ -191,7 +191,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
 {
     Sequence<OUString> aPropNames = GetPropertyNames();
-    static sal_uInt16 aVals[] = {
+    static const sal_uInt16 aVals[] = {
         SCFORMULAOPT_GRAMMAR,
         SCFORMULAOPT_ENGLISH_FUNCNAME,
         SCFORMULAOPT_SEP_ARG,
