@@ -3568,7 +3568,7 @@ bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
                 sw::mark::MarkBase const * const pMark =
                         pWrtShell->getIDocumentMarkAccess()->getMarkForTextNode(
                             *pTextNode, IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
-                // ReferencesSubtype::Outine is changed to ReferencesSubtype::Bookmark in
+                // ReferencesSubtype::Outline is changed to ReferencesSubtype::Bookmark in
                 // SwWrtShell::NavigatorPaste. It is used to differentiate between a
                 // headings reference and a regular bookmark reference to show different
                 // options in the reference mark type popup menu.
