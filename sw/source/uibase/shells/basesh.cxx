@@ -1526,27 +1526,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             }
             break;
 
-        case FN_XFORMS_DESIGN_MODE:
-            if (pArgs && pArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET)
-            {
-                if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pItem))
-                {
-                    bool bDesignMode = pBoolItem->GetValue();
-
-                    // set from design mode
-                    OSL_ENSURE( GetView().GetFormShell() != nullptr, "form shell?" );
-                    SfxRequest aReq(GetView().GetViewFrame(), SID_FM_DESIGN_MODE);
-                    aReq.AppendItem( SfxBoolItem( SID_FM_DESIGN_MODE, bDesignMode ) );
-                    GetView().GetFormShell()->Execute( aReq );
-                    aReq.Done();
-
-                    // also set suitable view options
-                    SwViewOption aViewOption = *rSh.GetViewOptions();
-                    aViewOption.SetFormView( ! bDesignMode );
-                    rSh.ApplyViewOptions( aViewOption );
-                }
-            }
-            break;
         case SID_PROTECTSIZE:
         case SID_PROTECTPOS:
             {
@@ -2160,17 +2139,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_UPDATE_ALL_LINKS:
                 if ( rSh.GetLinkManager().GetLinks().empty() )
                     rSet.DisableItem(nWhich);
-                break;
-            case FN_XFORMS_DESIGN_MODE:
-                // enable if in XForms document
-                if( rSh.GetDoc()->isXForms() )
-                {
-                    // determine current state from view options
-                    bool bValue = ! rSh.GetViewOptions()->IsFormView();
-                    rSet.Put( SfxBoolItem( nWhich, bValue ) );
-                }
-                else
-                    rSet.Put( SfxVisibilityItem( nWhich, false ) );
                 break;
             case SID_GRAPHIC_SIZE_CHECK:
             {

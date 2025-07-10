@@ -1034,6 +1034,8 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     SetNewWindowAllowed(!bBrowse);
     // End of disabled multiple window
 
+    UpdateXformsViewOption(GetDrawView()->IsDesignMode());
+
     m_bVScrollbarEnabled = aUsrPref.IsViewVScrollBar();
     m_bHScrollbarEnabled = aUsrPref.IsViewHScrollBar();
     if (m_pHScrollbar)
@@ -1751,6 +1753,17 @@ SwGlossaryHdl* SwView::GetGlosHdl()
     return m_pGlosHdl.get();
 }
 
+void SwView::UpdateXformsViewOption(bool bDesignMode)
+{
+    // Set suitable view options when in/out of design mode in XForm documents
+    if( GetDocShell()->GetDoc()->isXForms() )
+    {
+        SwViewOption aViewOption = *GetWrtShellPtr()->GetViewOptions();
+        aViewOption.SetFormView(!bDesignMode);
+        GetWrtShellPtr()->ApplyViewOptions(aViewOption);
+    }
+}
+
 void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     bool bCallBase = true;
@@ -1761,6 +1774,9 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             auto pChangedHint = static_cast<const FmDesignModeChangedHint*>(&rHint);
             bool bDesignMode = pChangedHint->GetDesignMode();
+
+            UpdateXformsViewOption(bDesignMode);
+
             if (!bDesignMode && GetDrawFuncPtr())
             {
                 GetDrawFuncPtr()->Deactivate();

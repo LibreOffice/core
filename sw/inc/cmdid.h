@@ -642,8 +642,6 @@ class SwUINumRuleItem;
 #define FN_UNO_COMPONENT                    (FN_EXTRA2 + 97)
 #define FN_WORDCOUNT_DIALOG                 (FN_EXTRA2 + 98)
 
-#define FN_XFORMS_DESIGN_MODE               (FN_EXTRA2 + 99)
-
 #define FN_UNO_PARA_STYLE_CONDITIONS        (FN_EXTRA2 + 100)
 #define FN_UNO_GRAPHIC                      (FN_EXTRA2 + 101)
 

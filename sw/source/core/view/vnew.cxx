@@ -143,15 +143,6 @@ void SwViewShell::Init( const SwViewOption *pNewOpt, tools::Long const nFlags)
     }
     SizeChgNotify();
 
-    // XForms mode: initialize XForms mode, based on design mode (draw view)
-    //   MakeDrawView() requires layout
-    if( GetDoc()->isXForms() )
-    {
-        if( ! HasDrawView() )
-            MakeDrawView();
-        mpOpt->SetFormView( ! GetDrawView()->IsDesignMode() );
-    }
-
     awt::Rectangle aClientVisibleArea = comphelper::LibreOfficeKit::getInitialClientVisibleArea();
     if (aClientVisibleArea.Width && aClientVisibleArea.Height)
     {

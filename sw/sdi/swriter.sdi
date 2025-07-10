@@ -7680,25 +7680,6 @@ SfxVoidItem TableSort FN_TABLE_SORT_DIALOG
     GroupId = SfxGroupId::Table;
 ]
 
-// #i31958#: toggle design mode for XForms; copied from SID_FM_DESIGN_MODE
-SfxBoolItem SwitchXFormsDesignMode FN_XFORMS_DESIGN_MODE
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Controls;
-]
-
 SfxVoidItem RemoveDirectCharFormats FN_REMOVE_DIRECT_CHAR_FORMATS
 [
     AutoUpdate = TRUE,

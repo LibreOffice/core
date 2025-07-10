@@ -358,6 +358,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SAL_DLLPRIVATE void          ShowAtResize();
 
+    // XForms mode: change XForms mode, based on design mode
+    SAL_DLLPRIVATE void          UpdateXformsViewOption(bool bDesignMode);
+
     SAL_DLLPRIVATE virtual void  Move() override;
 
 public: // #i123922# Needs to be called from a 2nd place now as a helper method

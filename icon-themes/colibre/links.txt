@@ -2109,7 +2109,6 @@ res/sx03254.png res/ots_16_8.png
 res/sx03255.png res/ott_16_8.png
 res/sx03256.png cmd/sc_insertplugin.png
 res/sx10144.png cmd/sc_checkbox.png
-res/sx10593.png cmd/sc_switchxformsdesignmode.png
 res/sx10594.png cmd/sc_pushbutton.png
 res/sx10595.png cmd/sc_radiobutton.png
 res/sx10596.png cmd/sc_checkbox.png

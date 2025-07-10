@@ -5836,14 +5836,6 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:SwitchXFormsDesignMode" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Design Mode On/Off</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>9</value>
-        </prop>
-      </node>
       <node oor:name=".uno:RecUndo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Undo: Data entry</value>

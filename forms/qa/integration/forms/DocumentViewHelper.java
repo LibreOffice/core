@@ -186,11 +186,8 @@ public class DocumentViewHelper
     */
     protected void toggleFormDesignMode( ) throws java.lang.Exception
     {
-        if ( m_document instanceof XMLDocument )
-            dispatch( ".uno:SwitchXFormsDesignMode" );
-        else
-            dispatch( ".uno:SwitchControlDesignMode" );
-        // at least SwitchControlDesignMode is async, so wait for it to be done
+        dispatch( ".uno:SwitchControlDesignMode" );
+        // SwitchControlDesignMode is async, so wait for it to be done
         XToolkitExperimental xToolkit = UnoRuntime.queryInterface(
                 XToolkitExperimental.class,
                 m_orb.createInstance("com.sun.star.awt.Toolkit"));
