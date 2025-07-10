@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.3">
+  <LC_INFO>
+    <Language>
+      <LangID>ro</LangID>
+      <DefaultName>Romanian</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>MD</CountryID>
+      <DefaultName>Moldova</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="ro_RO"/>
+  <LC_FORMAT ref="ro_RO" replaceTo="[$L-818]"/>
+  <LC_COLLATION ref="ro_RO"/>
+  <LC_SEARCH ref="ro_RO"/>
+  <LC_INDEX ref="ro_RO"/>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Dum</DefaultAbbrvName>
+          <DefaultFullName>duminică</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Lun</DefaultAbbrvName>
+          <DefaultFullName>luni</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Mar</DefaultAbbrvName>
+          <DefaultFullName>marți</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Mie</DefaultAbbrvName>
+          <DefaultFullName>miercuri</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Joi</DefaultAbbrvName>
+          <DefaultFullName>joi</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Vin</DefaultAbbrvName>
+          <DefaultFullName>vineri</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Sâm</DefaultAbbrvName>
+          <DefaultFullName>sâmbătă</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear ref="ro_RO" />
+      <Eras ref="ro_RO" />
+      <StartDayOfWeek>
+        <DayID>mon</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>MDL</CurrencyID>
+      <CurrencySymbol>L</CurrencySymbol>
+      <BankSymbol>MDL</BankSymbol>
+      <CurrencyName>Leu</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION ref="ro_RO"/>
+  <LC_MISC ref="ro_RO"/>
+  <LC_NumberingLevel ref="ro_RO"/>
+  <LC_OutLineNumberingLevel ref="ro_RO"/>
+</Locale>

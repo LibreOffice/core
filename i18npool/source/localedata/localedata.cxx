@@ -180,6 +180,7 @@ constexpr struct {
     { "lt_LT",  DataLocaleLibrary::EURO },
     { "lv_LV",  DataLocaleLibrary::EURO },
     { "uk_UA",  DataLocaleLibrary::EURO },
+    { "ro_MD",  DataLocaleLibrary::EURO },
     { "ro_RO",  DataLocaleLibrary::EURO },
     { "cy_GB",  DataLocaleLibrary::EURO },
     { "bg_BG",  DataLocaleLibrary::EURO },
