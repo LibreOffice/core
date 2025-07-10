@@ -1050,9 +1050,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
     return bRet;
 }
 
-void XMLChartImportPropertyMapper::finished(std::vector<XMLPropertyState>& /*rProperties*/,
-                                            sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/,
-                                            const sal_uInt32 /*nPropMap*/) const
+void XMLChartImportPropertyMapper::finished( ::std::vector< XMLPropertyState >& /*rProperties*/, sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
 {
 }
 
