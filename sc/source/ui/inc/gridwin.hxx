@@ -237,6 +237,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
 
     bool            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
     bool            DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
+    void            SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow);
     void DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup, bool bMultiField );
     void DoPushPivotToggle( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
 

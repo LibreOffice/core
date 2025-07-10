@@ -146,6 +146,7 @@
 #include <sfx2/lokhelper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <tools/json_writer.hxx>
 
 #include <vector>
 #include <boost/property_tree/json_parser.hpp>
@@ -937,6 +938,22 @@ void collectUIInformation(const OUString& aRow, const OUString& aCol , const OUS
 
 }
 
+void ScGridWindow::SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow) {
+    ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+    if (pViewShell)
+    {
+        tools::JsonWriter writer;
+        writer.put("commandName", "AutoFilterInfo");
+        {
+            const auto aState = writer.startNode("state");
+            writer.put("column", nCol);
+            writer.put("row", nRow);
+        }
+        OString info = writer.finishAndGetAsOString();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+    }
+}
+
 void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 {
     SCTAB nTab = mrViewData.GetTabNo();
@@ -1008,6 +1025,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         aPos.setY(aPos.getY() / fZoomY);
         nSizeX = nSizeX / fZoomX;
         nSizeY = nSizeY / fZoomY;
+        SendAutofilterPopupPosition(nCol, nRow); // Send the position of the autofilter popup.
     }
     tools::Rectangle aCellRect(bLOKActive ? aPos : OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
 
