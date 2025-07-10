@@ -55,8 +55,6 @@ android {
         main.res.srcDirs = ['res', 'res_generated']
         main.java.srcDirs = ['../Bootstrap/src', 'src/java']
         main.jniLibs.srcDirs = ["${liboJniLibsdir}"]
-        // the configuration data that might be stripped or not
-        fullUI.assets.srcDirs 'assets_fullUI'
         strippedUI.assets.srcDirs 'assets_strippedUI'
         strippedUIEditing.assets.srcDirs 'assets_strippedUI'
     }
@@ -87,7 +85,6 @@ android {
             dimension "default"
             buildConfigField 'boolean', 'ALLOW_EDITING', 'true'
         }
-        fullUI.dimension "default"
     }
     lint {
         warningsAsErrors true
@@ -220,13 +217,6 @@ task copyAppResources(type: Copy) {
     }
 }
 
-task createFullConfig(type: Copy) {
-    // grab dir to clear whole hierarchy on clean target
-    outputs.dir "assets_fullUI"
-    into 'assets_fullUI/share/config/soffice.cfg'
-    from "${liboInstdir}/share/config/soffice.cfg"
-}
-
 task createStrippedConfig {
     def preserveDir = file("assets_strippedUI/share/config/soffice.cfg/empty")
     outputs.dir "assets_strippedUI"
@@ -318,9 +308,7 @@ task createRCfiles {
 preBuild.dependsOn 'createRCfiles',
         'createStrippedConfigMain',
         'createStrippedConfigRegistry',
-        'createFullConfig',
         'copyAppResources'
 
 clean.dependsOn 'cleanCopyAssets',
-        'cleanCreateStrippedConfig',
-        'cleanCreateFullConfig'
+        'cleanCreateStrippedConfig'
