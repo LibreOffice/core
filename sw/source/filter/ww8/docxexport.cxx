@@ -101,6 +101,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotxdoc.hxx>
+#include <formatflysplit.hxx>
+#include <fmtanchr.hxx>
 
 using namespace sax_fastparser;
 using namespace ::comphelper;
@@ -524,6 +526,67 @@ void DocxExport::OutputDML(uno::Reference<drawing::XShape> const & xShape)
     aExport.WriteShape(xShape);
 }
 
+void DocxExport::CollectFloatingTables()
+{
+    if (!m_rDoc.GetSpzFrameFormats())
+    {
+        return;
+    }
+
+    sw::FrameFormats<sw::SpzFrameFormat*>& rSpzFormats = *m_rDoc.GetSpzFrameFormats();
+    for (sw::SpzFrameFormat* pFormat : rSpzFormats)
+    {
+        const SwFormatFlySplit& rFlySplit = pFormat->GetFlySplit();
+        if (!rFlySplit.GetValue())
+        {
+            continue;
+        }
+
+        const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
+        const SwPosition* pContentAnchor = rAnchor.GetContentAnchor();
+        if (!pContentAnchor)
+        {
+            continue;
+        }
+
+        SwNode& rNode = pContentAnchor->GetNode();
+        SwTextNode* pTextNode = rNode.GetTextNode();
+        if (!pTextNode)
+        {
+            continue;
+        }
+
+        SwNodeIndex aNodeIndex(*pTextNode);
+        ++aNodeIndex;
+        if (!aNodeIndex.GetNode().GetTextNode())
+        {
+            // Only text nodes know to look for floating tables from previous text nodes.
+            continue;
+        }
+
+        if (!pTextNode->HasSwAttrSet())
+        {
+            continue;
+        }
+
+        const SwAttrSet& rAttrSet = pTextNode->GetSwAttrSet();
+        const SvxLineSpacingItem& rLineSpacing = rAttrSet.GetLineSpacing();
+        if (rLineSpacing.GetLineSpaceRule() != SvxLineSpaceRule::Fix)
+        {
+            continue;
+        }
+
+        if (rLineSpacing.GetLineHeight() != 0)
+        {
+            continue;
+        }
+
+        // This is text node which is effectively invisible in Writer and has a floating table
+        // anchored to it; omit such nodes from the DOCX output.
+        m_aDummyFloatingTableAnchors.insert(&pContentAnchor->GetNode());
+    }
+}
+
 ErrCode DocxExport::ExportDocument_Impl()
 {
     // Set the 'Reviewing' flags in the settings structure
@@ -539,6 +602,8 @@ ErrCode DocxExport::ExportDocument_Impl()
 
     // Make sure images are counted from one, even when exporting multiple documents.
     rGraphicExportCache.push();
+
+    CollectFloatingTables();
 
     WriteMainText();
 
@@ -1906,6 +1971,11 @@ bool DocxExport::isMirroredMargin()
         bMirroredMargins = true;
     }
     return bMirroredMargins;
+}
+
+bool DocxExport::IsDummyFloattableAnchor(SwNode& rNode) const
+{
+    return GetDummyFloatingTableAnchors().contains(&rNode);
 }
 
 void DocxExport::WriteDocumentBackgroundFill()

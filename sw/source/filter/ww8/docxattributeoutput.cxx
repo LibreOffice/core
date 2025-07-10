@@ -460,6 +460,7 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
 {
     const auto& rExport = rDocxAttributeOutput.GetExport();
     // iterate though all SpzFrameFormats and check whether they are anchored to the current text node
+    std::vector<ww8::Frame> aFrames;
     for( sal_uInt16 nCnt = rExport.m_rDoc.GetSpzFrameFormats()->size(); nCnt; )
     {
         const SwFrameFormat* pFrameFormat = (*rExport.m_rDoc.GetSpzFrameFormats())[ --nCnt ];
@@ -469,7 +470,22 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
         if (!pAnchorNode || ! rExport.m_pCurPam->GetPointNode().GetTextNode())
             continue;
 
-        if (*pAnchorNode != *rExport.m_pCurPam->GetPointNode().GetTextNode())
+        bool bAnchorMatchesNode = *pAnchorNode == *rExport.m_pCurPam->GetPointNode().GetTextNode();
+        bool bAnchorIsPreviousNode = false;
+        if (!bAnchorMatchesNode)
+        {
+            // The anchor doesn't match, but see if the previous node is a dummy anchor, we should
+            // emit floating tables to that anchor here, too.
+            SwNodeIndex aNodeIndex(rExport.m_pCurPam->GetPointNode());
+            --aNodeIndex;
+            if (*pAnchorNode == aNodeIndex.GetNode() && rExport.IsDummyFloattableAnchor(aNodeIndex.GetNode()))
+            {
+                bAnchorMatchesNode = true;
+                bAnchorIsPreviousNode = true;
+            }
+        }
+
+        if (!bAnchorMatchesNode)
             continue;
 
         const SwNodeIndex* pStartNode = pFrameFormat->GetContent().GetContentIdx();
@@ -500,19 +516,26 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
         const SfxGrabBagItem* pTableGrabBag = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG);
         const std::map<OUString, css::uno::Any> & rTableGrabBag = pTableGrabBag->GetGrabBag();
         // no grabbag?
-        if (rTableGrabBag.find(u"TablePosition"_ustr) == rTableGrabBag.end())
+        if (rTableGrabBag.find(u"TablePosition"_ustr) == rTableGrabBag.end() && !pFrameFormat->GetFlySplit().GetValue())
         {
-            if (pFrameFormat->GetFlySplit().GetValue())
-            {
-                ww8::Frame aFrame(*pFrameFormat, *rAnchor.GetContentAnchor());
-                rDocxAttributeOutput.WriteFloatingTable(&aFrame);
-            }
             continue;
         }
 
-        // write table to docx
+        // write table to docx: first tables from previous node, then from this node.
         ww8::Frame aFrame(*pFrameFormat, *rAnchor.GetContentAnchor());
-        rDocxAttributeOutput.WriteFloatingTable(&aFrame);
+        if (bAnchorIsPreviousNode)
+        {
+            aFrames.insert(aFrames.begin(), aFrame);
+        }
+        else
+        {
+            aFrames.push_back(aFrame);
+        }
+    }
+
+    for (const auto& rFrame : aFrames)
+    {
+        rDocxAttributeOutput.WriteFloatingTable(&rFrame);
     }
 }
 

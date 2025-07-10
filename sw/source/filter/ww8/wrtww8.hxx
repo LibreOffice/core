@@ -919,6 +919,8 @@ protected:
 
     std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the graphics of bullets
 
+    virtual bool IsDummyFloattableAnchor(SwNode& /*rNode*/) const { return false; }
+
 public:
     MSWordExportBase(SwDoc& rDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam);
     virtual ~MSWordExportBase();
