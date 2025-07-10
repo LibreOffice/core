@@ -34,6 +34,8 @@
 #include <svx/flagsdef.hxx>
 #include <svx/dialogs.hrc>
 
+#include <vcl/tabs.hrc>
+
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
@@ -49,13 +51,18 @@ SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rView, const SfxItemSet& rCo
     {
         m_xDialog->set_title(m_xDialog->get_title() + SwResId(STR_TEXTCOLL_HEADER) + *pStr + ")");
     }
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage(u"font"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
-    AddTabPage(u"fonteffects"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
-    AddTabPage(u"position"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
-    AddTabPage(u"asianlayout"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), nullptr );
-    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
-    AddTabPage(u"borders"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), nullptr );
+    AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
+               RID_M + RID_TAB_FONT.sIconName);
+    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
+               RID_M + RID_TAB_FONTEFFECTS.sIconName);
+    AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel), RID_SVXPAGE_CHAR_POSITION,
+               RID_M + RID_TAB_POSITION.sIconName);
+    AddTabPage(u"asianlayout"_ustr, TabResId(RID_TAB_ASIANLAYOUT.aLabel), RID_SVXPAGE_CHAR_TWOLINES,
+               RID_M + RID_TAB_ASIANLAYOUT.sIconName);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel), RID_SVXPAGE_BKG,
+               RID_M + RID_TAB_BACKGROUND.sIconName);
+    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_BORDER,
+               RID_M + RID_TAB_BORDER.sIconName);
 
     if (m_nDialogMode == SwCharDlgMode::Draw || m_nDialogMode == SwCharDlgMode::Ann)
     {

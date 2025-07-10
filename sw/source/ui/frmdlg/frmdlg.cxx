@@ -40,6 +40,8 @@
 #include <svx/drawitem.hxx>
 #include <comphelper/lok.hxx>
 
+#include <vcl/tabs.hrc>
+
 // the dialog's carrier
 SwFrameDlg::SwFrameDlg(const SfxViewFrame& rViewFrame,
                        weld::Window*       pParent,
@@ -68,27 +70,41 @@ SwFrameDlg::SwFrameDlg(const SfxViewFrame& rViewFrame,
         m_xDialog->set_title(m_xDialog->get_title() + SwResId(STR_FRMUI_COLL_HEADER) + *pStr + ")");
     }
 
-    AddTabPage(u"type"_ustr,  SwFramePage::Create, nullptr);
-    AddTabPage(u"options"_ustr,  SwFrameAddPage::Create, nullptr);
-    AddTabPage(u"wrap"_ustr, SwWrapTabPage::Create, nullptr);
-    AddTabPage(u"hyperlink"_ustr,  SwFrameURLPage::Create, nullptr);
+    AddTabPage(u"type"_ustr, TabResId(RID_TAB_POSSIZE.aLabel), SwFramePage::Create,
+               RID_M + RID_TAB_POSSIZE.sIconName);
+    AddTabPage(u"options"_ustr, TabResId(RID_TAB_FRAME_OPTIONS.aLabel), SwFrameAddPage::Create,
+               RID_M + RID_TAB_FRAME_OPTIONS.sIconName);
+    AddTabPage(u"wrap"_ustr, TabResId(RID_TAB_FRAME_WRAP.aLabel), SwWrapTabPage::Create,
+               RID_M + RID_TAB_FRAME_WRAP.sIconName);
+    AddTabPage(u"hyperlink"_ustr, TabResId(RID_TAB_HYPERLINK.aLabel), SwFrameURLPage::Create,
+               RID_M + RID_TAB_HYPERLINK.sIconName);
     if (m_sDlgType == "PictureDialog")
     {
-        AddTabPage(u"picture"_ustr, SwGrfExtPage::Create, nullptr);
-        AddTabPage(u"crop"_ustr, RID_SVXPAGE_GRFCROP);
+        AddTabPage(u"picture"_ustr, TabResId(RID_TAB_ROTATION.aLabel), SwGrfExtPage::Create,
+                   RID_M + RID_TAB_ROTATION.sIconName);
+        AddTabPage(u"crop"_ustr, TabResId(RID_TAB_CROP.aLabel), RID_SVXPAGE_GRFCROP,
+                   RID_M + RID_TAB_CROP.sIconName);
     }
     if (m_sDlgType == "FrameDialog")
     {
-        AddTabPage(u"columns"_ustr, SwColumnPage::Create, nullptr);
+        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), SwColumnPage::Create,
+                   RID_M + RID_TAB_COLUMNS.sIconName);
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
     // add Area and Transparence TabPages
-    AddTabPage(u"area"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
-    AddTabPage(u"transparence"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
+    AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA),
+               pFact->GetTabPageRangesFunc(RID_SVXPAGE_AREA), RID_M + RID_TAB_AREA.sIconName);
+    AddTabPage(u"transparence"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE),
+               pFact->GetTabPageRangesFunc(RID_SVXPAGE_TRANSPARENCE),
+               RID_M + RID_TAB_TRANSPARENCE.sIconName);
 
-    AddTabPage(u"macro"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), nullptr);
-    AddTabPage(u"borders"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), nullptr);
+    AddTabPage(u"macro"_ustr, TabResId(RID_TAB_MACRO.aLabel), RID_SVXPAGE_MACROASSIGN,
+               RID_M + RID_TAB_MACRO.sIconName);
+    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_BORDER,
+               RID_M + RID_TAB_BORDER.sIconName);
 
     if(bHTMLMode)
     {

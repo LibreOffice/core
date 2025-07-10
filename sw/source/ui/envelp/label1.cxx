@@ -35,6 +35,8 @@
 #include <strings.hrc>
 #include <envimg.hxx>
 
+#include <vcl/tabs.hrc>
+
 void SwLabRec::SetFromItem( const SwLabItem& rItem )
 {
     m_nHDist  = rItem.m_lHDist;
@@ -132,22 +134,21 @@ SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
     if (m_xExampleSet)
         m_xExampleSet->Put(aItem);
 
-    AddTabPage(u"format"_ustr, SwLabFormatPage::Create, nullptr);
-    AddTabPage(u"options"_ustr, SwLabPrtPage::Create, nullptr);
-    AddTabPage(u"labels"_ustr, SwLabPage::Create, nullptr);
-    m_sBusinessCardDlg = SwResId(STR_BUSINESS_CARDS);
-
-    if (m_bLabel)
+    AddTabPage(u"labels"_ustr, TabResId(RID_TAB_LABEL.aLabel), SwLabPage::Create,
+               RID_L + RID_TAB_LABEL.sIconName);
+    if (!m_bLabel)
     {
-        RemoveTabPage(u"business"_ustr);
-        RemoveTabPage(u"private"_ustr);
-    }
-    else
-    {
-        AddTabPage(u"business"_ustr, SwBusinessDataPage::Create, nullptr );
-        AddTabPage(u"private"_ustr, SwPrivateDataPage::Create, nullptr);
+        AddTabPage(u"private"_ustr, TabResId(RID_TAB_PRIVATE.aLabel), SwPrivateDataPage::Create,
+                   RID_L + RID_TAB_PRIVATE.sIconName);
+        AddTabPage(u"business"_ustr, TabResId(RID_TAB_BUSINESS.aLabel), SwBusinessDataPage::Create,
+                   RID_L + RID_TAB_BUSINESS.sIconName);
         m_xDialog->set_title(m_sBusinessCardDlg);
     }
+    AddTabPage(u"format"_ustr, TabResId(RID_TAB_FORMAT.aLabel), SwLabFormatPage::Create,
+               RID_L + RID_TAB_FORMAT.sIconName);
+    AddTabPage(u"options"_ustr, TabResId(RID_TAB_LABEL_OPTIONS.aLabel), SwLabPrtPage::Create,
+               RID_L + RID_TAB_LABEL_OPTIONS.sIconName);
+    m_sBusinessCardDlg = SwResId(STR_BUSINESS_CARDS);
 }
 
 SwLabDlg::~SwLabDlg()

@@ -47,6 +47,8 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
+#include <vcl/tabs.hrc>
+
 // carrier of the dialog
 SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* /*pCW*/, weld::Window *pParent)
     : SfxTabDialogController(pParent, u"modules/swriter/ui/fielddialog.ui"_ustr, u"FieldDialog"_ustr)
@@ -54,25 +56,32 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* /*pCW*/, weld::Window
     , m_bDataBaseMode(false)
     , m_bClosing(false)
 {
-    bool bHtmlMode = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
+    bool bHtmlMode
+        = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
 
     GetCancelButton().connect_clicked(LINK(this, SwFieldDlg, CancelHdl));
     GetOKButton().connect_clicked(LINK(this, SwFieldDlg, OKHdl));
 
-    AddTabPage(u"document"_ustr, SwFieldDokPage::Create, nullptr);
-    AddTabPage(u"variables"_ustr, SwFieldVarPage::Create, nullptr);
-    AddTabPage(u"docinfo"_ustr, SwFieldDokInfPage::Create, nullptr);
-
+    AddTabPage(u"document"_ustr, TabResId(RID_TAB_DOCUMENT.aLabel), SwFieldDokPage::Create,
+               RID_M + RID_TAB_DOCUMENT.sIconName);
     if (!bHtmlMode)
     {
-        AddTabPage(u"ref"_ustr, SwFieldRefPage::Create, nullptr);
-        AddTabPage(u"functions"_ustr, SwFieldFuncPage::Create, nullptr);
+        AddTabPage(u"ref"_ustr, TabResId(RID_TAB_CROSSREF.aLabel), SwFieldRefPage::Create,
+                   RID_M + RID_TAB_CROSSREF.sIconName);
+        AddTabPage(u"functions"_ustr, TabResId(RID_TAB_FUNCTIONS.aLabel), SwFieldFuncPage::Create,
+                   RID_M + RID_TAB_FUNCTIONS.sIconName);
+    }
+    AddTabPage(u"docinfo"_ustr, TabResId(RID_TAB_DOCINFO.aLabel), SwFieldDokInfPage::Create,
+               RID_M + RID_TAB_DOCINFO.sIconName);
+    AddTabPage(u"variables"_ustr, TabResId(RID_TAB_VARIABLES.aLabel), SwFieldVarPage::Create,
+               RID_M + RID_TAB_VARIABLES.sIconName);
 
+    if (!bHtmlMode && !comphelper::LibreOfficeKit::isActive())
+    {
         utl::OConfigurationTreeRoot aCfgRoot
             = utl::OConfigurationTreeRoot::createWithComponentContext(
                 ::comphelper::getProcessComponentContext(),
-                u"/org.openoffice.Office.DataAccess/Policies/Features/Writer"_ustr,
-                -1,
+                u"/org.openoffice.Office.DataAccess/Policies/Features/Writer"_ustr, -1,
                 utl::OConfigurationTreeRoot::CM_READONLY);
 
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
@@ -80,20 +89,10 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* /*pCW*/, weld::Window
         aCfgRoot.getNodeValue(u"DatabaseFields"_ustr) >>= bDatabaseFields;
 
         if (bDatabaseFields)
-            AddTabPage(u"database"_ustr, SwFieldDBPage::Create, nullptr);
-        else
+            AddTabPage(u"database"_ustr, TabResId(RID_TAB_DATABASE.aLabel), SwFieldDBPage::Create,
+                       RID_M + RID_TAB_DATABASE.sIconName);
 #endif
-            RemoveTabPage(u"database"_ustr);
     }
-    else
-    {
-        RemoveTabPage(u"ref"_ustr);
-        RemoveTabPage(u"functions"_ustr);
-        RemoveTabPage(u"database"_ustr);
-    }
-
-    if (comphelper::LibreOfficeKit::isActive())
-        RemoveTabPage(u"database"_ustr);
 }
 
 SwFieldDlg::~SwFieldDlg()

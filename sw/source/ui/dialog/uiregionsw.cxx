@@ -63,6 +63,8 @@
 #include <memory>
 #include <string_view>
 
+#include <vcl/tabs.hrc>
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -1384,23 +1386,25 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
                              u"InsertSectionDialog"_ustr,&rSet)
     , m_rWrtSh(rSh)
 {
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage(u"section"_ustr, SwInsertSectionTabPage::Create, nullptr);
-    AddTabPage(u"columns"_ustr,   SwColumnPage::Create, nullptr);
-    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
-    AddTabPage(u"notes"_ustr, SwSectionFootnoteEndTabPage::Create, nullptr);
-    AddTabPage(u"indents"_ustr, SwSectionIndentTabPage::Create, nullptr);
-
     tools::Long nHtmlMode = SvxHtmlOptions::GetExportMode();
+    bool bWeb = dynamic_cast<SwWebDocShell*>(rSh.GetView().GetDocShell()) != nullptr;
+    const bool bColumn = bWeb ? false : HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode;
 
-    bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell()  ) != nullptr ;
-    if(bWeb)
-    {
-        RemoveTabPage(u"notes"_ustr);
-        RemoveTabPage(u"indents"_ustr);
-        if( HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
-            RemoveTabPage(u"columns"_ustr);
-    }
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    AddTabPage(u"section"_ustr, TabResId(RID_TAB_SECTION.aLabel), SwInsertSectionTabPage::Create,
+               RID_L + RID_TAB_SECTION.sIconName);
+    if (!bWeb && !bColumn)
+        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), SwColumnPage::Create,
+                   RID_L + RID_TAB_COLUMNS.sIconName);
+    if (!bWeb)
+        AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTSONLY.aLabel),
+                   SwSectionIndentTabPage::Create, RID_L + RID_TAB_INDENTSONLY.sIconName);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND.sIconName);
+    if (!bWeb)
+        AddTabPage(u"notes"_ustr, TabResId(RID_TAB_FOOTENDNOTES.aLabel),
+                   SwSectionFootnoteEndTabPage::Create, RID_L + RID_TAB_FOOTENDNOTES.sIconName);
+
     SetCurPageId(u"section"_ustr);
 }
 
@@ -2034,21 +2038,22 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
                              u"FormatSectionDialog"_ustr, &rSet)
     , m_rWrtSh(rSh)
 {
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage(u"columns"_ustr,   SwColumnPage::Create, nullptr);
-    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
-    AddTabPage(u"notes"_ustr, SwSectionFootnoteEndTabPage::Create, nullptr);
-    AddTabPage(u"indents"_ustr, SwSectionIndentTabPage::Create, nullptr);
-
     tools::Long nHtmlMode = SvxHtmlOptions::GetExportMode();
-    bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell()  ) != nullptr ;
-    if(bWeb)
-    {
-        RemoveTabPage(u"notes"_ustr);
-        RemoveTabPage(u"indents"_ustr);
-        if( HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
-            RemoveTabPage(u"columns"_ustr);
-    }
+    bool bWeb = dynamic_cast<SwWebDocShell*>(rSh.GetView().GetDocShell()) != nullptr;
+    const bool bColumn = bWeb ? false : HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode;
+
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    if (!bWeb && !bColumn)
+        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), SwColumnPage::Create,
+                   RID_L + RID_TAB_COLUMNS.sIconName);
+    if (!bWeb)
+        AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTSONLY.aLabel),
+                   SwSectionIndentTabPage::Create, RID_L + RID_TAB_INDENTSONLY.sIconName);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND.sIconName);
+    if (!bWeb)
+        AddTabPage(u"notes"_ustr, TabResId(RID_TAB_FOOTENDNOTES.aLabel),
+                   SwSectionFootnoteEndTabPage::Create, RID_L + RID_TAB_FOOTENDNOTES.sIconName);
 }
 
 SwSectionPropertyTabDialog::~SwSectionPropertyTabDialog()

@@ -41,9 +41,9 @@ inline constexpr TabData RID_TAB_POSITION{ NC_("RID_TAB_POSITION", "Position"), 
 inline constexpr TabData RID_TAB_HIGHLIGHTING{ NC_("RID_TAB_HIGHLIGHTING", "Highlighting"), u"backcolor.png"_ustr };
 inline constexpr TabData RID_TAB_COLORPALETTE{ NC_("RID_TAB_COLORPALETTE", "Color Palette"), u"colorsettings.png"_ustr };
 inline constexpr TabData RID_TAB_NUMBERS{ NC_("RID_TAB_NUMBERS", "Numbers"), u"numberformatdecimal.png"_ustr };
-inline constexpr TabData RID_TAB_INDENTS{ NC_("RID_TAB_INDENTS", "Indents &amp; Spacing"), u"paraspaceincrease.png"_ustr };
+inline constexpr TabData RID_TAB_INDENTS{ NC_("RID_TAB_INDENTS", "Indents & Spacing"), u"paraspaceincrease.png"_ustr };
 inline constexpr TabData RID_TAB_TABS{ NC_("RID_TAB_TABS", "Tabs"), u"hangingindent.png"_ustr };
-inline constexpr TabData RID_TAB_ORGANIZER{ NC_("RID_TAB_ORGANIZER", "Organizer"), u"browseview.png"_ustr };
+inline constexpr TabData RID_TAB_ORGANIZER{ NC_("RID_TAB_ORGANIZER", "General"), u"browseview.png"_ustr };
 inline constexpr TabData RID_TAB_BACKGROUND{ NC_("RID_TAB_BACKGROUND", "Background"), u"backgroundcolor.png"_ustr };
 inline constexpr TabData RID_TAB_TEXTFLOW{ NC_("RID_TAB_TEXTFLOW", "Text Flow"), u"hyphenate.png"_ustr };
 inline constexpr TabData RID_TAB_ASIANLAYOUT{ NC_("RID_TAB_ASIANLAYOUT", "Asian Layout"), u"textdirectiontoptobottom.png"_ustr };
@@ -65,9 +65,33 @@ inline constexpr TabData RID_TAB_CUSTOMIZE{ NC_("RID_TAB_CUSTOMIZE", "Customize"
 inline constexpr TabData RID_TAB_LIST_POSITION{ NC_("RID_TAB_LIST_POSITION", "Position"), u"hangingindent.png"_ustr };
 // frame
 inline constexpr TabData RID_TAB_FRAME_TYPE{ NC_("RID_TAB_FRAME_TYPE", "Type"), u"toggleanchortype.png"_ustr };
-inline constexpr TabData RID_TAB_FRAME_OPTIONS{ NC_("RID_TAB_FRAME_OPTIONS", "Options"), u"inserthyperlink.png"_ustr };
+inline constexpr TabData RID_TAB_FRAME_OPTIONS{ NC_("RID_TAB_FRAME_OPTIONS", "Options"), u"calloutshapes.png"_ustr };
 inline constexpr TabData RID_TAB_FRAME_WRAP{ NC_("RID_TAB_FRAME_WRAP", "Wrap"), u"wrapcontour.png"_ustr };
 inline constexpr TabData RID_TAB_MACRO{ NC_("RID_TAB_MACRO", "Macro"), u"choosemacro.png"_ustr };
+// section
+inline constexpr TabData RID_TAB_SECTION{ NC_("RID_TAB_SECTION", "Section"), u"protectfields.png"_ustr };
+inline constexpr TabData RID_TAB_FOOTENDNOTES{ NC_("RID_TAB_FOOTENDNOTES", "Footnotes/Endnotes"), u"footnotedialog.png"_ustr };
+inline constexpr TabData RID_TAB_INDENTSONLY{ NC_("RID_TAB_INDENTS", "Indents"), u"paraspaceincrease.png"_ustr };
+// ToC
+inline constexpr TabData RID_TAB_TOCTYPE{ NC_("RID_TAB_TOCTYPE", "Type"), u"insertindexesentry.png"_ustr };
+inline constexpr TabData RID_TAB_TOCENTRIES{ NC_("RID_TAB_TOCENTRIES", "Entries"), u"updatecurindex.png"_ustr };
+inline constexpr TabData RID_TAB_STYLES{ NC_("RID_TAB_STYLES", "Styles"), u"editstyle.png"_ustr };
+// table
+inline constexpr TabData RID_TAB_TABLE{ NC_("RID_TAB_TABLE", "Table"), u"tabledialog.png"_ustr };
+// field
+inline constexpr TabData RID_TAB_DOCUMENT{ NC_("RID_TAB_DOCUMENT", "Document"), u"insertreferencefield.png"_ustr };
+inline constexpr TabData RID_TAB_CROSSREF{ NC_("RID_TAB_CROSSREF", "Cross-references"), u"insertbookmark.png"_ustr };
+inline constexpr TabData RID_TAB_FUNCTIONS{ NC_("RID_TAB_FUNCTIONS", "Functions"), u"insertplugin.png"_ustr };
+inline constexpr TabData RID_TAB_DOCINFO{ NC_("RID_TAB_DOCINFO", "DocInformation"), u"insertdoc.png"_ustr };
+inline constexpr TabData RID_TAB_VARIABLES{ NC_("RID_TAB_VARIABLES", "Variables"), u"insertpagenumberfield.png"_ustr };
+inline constexpr TabData RID_TAB_DATABASE{ NC_("RID_TAB_DATABASE", "Database"), u"insertexternaldatasource.png"_ustr };
+// label / business card
+inline constexpr TabData RID_TAB_LABEL{ NC_("RID_TAB_LABEL", "Labels"), u"label.png"_ustr };
+inline constexpr TabData RID_TAB_PRIVATE{ NC_("RID_TAB_PRIVATE", "Private"), u"symbolshapes.moon.png"_ustr };
+inline constexpr TabData RID_TAB_BUSINESS{ NC_("RID_TAB_BUSINESS", "Business"), u"symbolshapes.sun.png"_ustr };
+inline constexpr TabData RID_TAB_FORMAT{ NC_("RID_TAB_FORMAT", "Format"), u"pagemargin.png"_ustr };
+inline constexpr TabData RID_TAB_LABEL_OPTIONS{ NC_("RID_TAB_LABEL_OPTIONS", "Options"), u"printlayout.png"_ustr };
+
 // draw
 inline constexpr TabData RID_TAB_SHADOW{ NC_("RID_TAB_SHADOW", "Shadowing"), u"fillshadow.png"_ustr };
 inline constexpr TabData RID_TAB_TEXT{ NC_("RID_TAB_TEXT", "Text"), u"text_marquee.png"_ustr };
@@ -77,6 +101,11 @@ inline constexpr TabData RID_TAB_CONNECTOR{ NC_("RID_TAB_CONNECTOR", "Connector"
 // calc
 inline constexpr TabData RID_TAB_SHEET{ NC_("RID_TAB_SHEET", "Sheet"), u"printersetup.png"_ustr };
 inline constexpr TabData RID_TAB_PROTECTION{ NC_("RID_TAB_PROTECTION", "Cell Protection"), u"protect.png"_ustr };
+// picture/frame formatting
+inline constexpr TabData RID_TAB_POSSIZE{ NC_("RID_TAB_POSSIZE", "Position and Size"), u"transformdialog.png"_ustr };
+inline constexpr TabData RID_TAB_HYPERLINK{ NC_("RID_TAB_HYPERLINK", "Hyperlink"), u"inserthyperlink.png"_ustr };
+inline constexpr TabData RID_TAB_CROP{ NC_("RID_TAB_CROP", "Crop"), u"crop.png"_ustr };
+inline constexpr TabData RID_TAB_ROTATION{ NC_("RID_TAB_ROTATION", "Rotation"), u"toggleobjectrotatemode.png"_ustr };
 
 inline constexpr TabData RID_TAB_CHART_OPTIONS{ NC_("RID_TAB_CHART_OPTIONS", "Options"), u"diagramtype.png"_ustr };
 inline constexpr TabData RID_TAB_CHART_ERROR_X{ NC_("RID_TAB_CHART_ERROR_X", "X Error Bars"), u"arrowshapes.png"_ustr };

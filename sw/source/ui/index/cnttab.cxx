@@ -72,6 +72,7 @@
 #include <vector>
 #include <numeric>
 
+#include <vcl/tabs.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -272,11 +273,16 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet
         }
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage(u"index"_ustr, SwTOXSelectTabPage::Create, nullptr);
-    AddTabPage(u"styles"_ustr, SwTOXStylesTabPage::Create, nullptr);
-    AddTabPage(u"columns"_ustr, SwColumnPage::Create, nullptr);
-    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
-    AddTabPage(u"entries"_ustr, SwTOXEntryTabPage::Create, nullptr);
+    AddTabPage(u"index"_ustr, TabResId(RID_TAB_TOCTYPE.aLabel), SwTOXSelectTabPage::Create,
+               RID_L + RID_TAB_TOCTYPE.sIconName);
+    AddTabPage(u"entries"_ustr, TabResId(RID_TAB_TOCENTRIES.aLabel), SwTOXEntryTabPage::Create,
+               RID_L + RID_TAB_TOCENTRIES.sIconName);
+    AddTabPage(u"styles"_ustr, TabResId(RID_TAB_STYLES.aLabel), SwTOXStylesTabPage::Create,
+               RID_L + RID_TAB_STYLES.sIconName);
+    AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), SwColumnPage::Create,
+               RID_L + RID_TAB_COLUMNS.sIconName);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND.sIconName);
     if (!pCurTOX)
         SetCurPageId(u"index"_ustr);
 

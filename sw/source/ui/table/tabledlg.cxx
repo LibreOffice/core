@@ -62,6 +62,8 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
+#include <vcl/tabs.hrc>
+
 using namespace ::com::sun::star;
 
 SwFormatTablePage::SwFormatTablePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
@@ -1223,11 +1225,16 @@ SwTableTabDlg::SwTableTabDlg(weld::Window* pParent, const SfxItemSet* pItemSet, 
     , m_pShell(pSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage(u"table"_ustr, &SwFormatTablePage::Create, nullptr);
-    AddTabPage(u"textflow"_ustr, &SwTextFlowPage::Create, nullptr);
-    AddTabPage(u"columns"_ustr, &SwTableColumnPage::Create, nullptr);
-    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
-    AddTabPage(u"borders"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), nullptr);
+    AddTabPage(u"table"_ustr, TabResId(RID_TAB_TABLE.aLabel), &SwFormatTablePage::Create,
+               RID_L + RID_TAB_TABLE.sIconName);
+    AddTabPage(u"textflow"_ustr, TabResId(RID_TAB_TEXTFLOW.aLabel), &SwTextFlowPage::Create,
+               RID_L + RID_TAB_TEXTFLOW.sIconName);
+    AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), &SwTableColumnPage::Create,
+               RID_L + RID_TAB_COLUMNS.sIconName);
+    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), RID_L + RID_TAB_BORDER.sIconName);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND.sIconName);
 }
 
 void  SwTableTabDlg::PageCreated(const OUString& rId, SfxTabPage& rPage)
