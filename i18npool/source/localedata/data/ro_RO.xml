@@ -236,37 +236,37 @@
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>D</DefaultAbbrvName>
+          <DefaultAbbrvName>dum.</DefaultAbbrvName>
           <DefaultFullName>duminică</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>L</DefaultAbbrvName>
+          <DefaultAbbrvName>lun.</DefaultAbbrvName>
           <DefaultFullName>luni</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>Ma</DefaultAbbrvName>
-          <DefaultFullName>marţi</DefaultFullName>
+          <DefaultAbbrvName>mar.</DefaultAbbrvName>
+          <DefaultFullName>marți</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>Mi</DefaultAbbrvName>
+          <DefaultAbbrvName>mie.</DefaultAbbrvName>
           <DefaultFullName>miercuri</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>J</DefaultAbbrvName>
+          <DefaultAbbrvName>joi.</DefaultAbbrvName>
           <DefaultFullName>joi</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
-          <DefaultAbbrvName>V</DefaultAbbrvName>
+          <DefaultAbbrvName>vin.</DefaultAbbrvName>
           <DefaultFullName>vineri</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>S</DefaultAbbrvName>
+          <DefaultAbbrvName>sâm.</DefaultAbbrvName>
           <DefaultFullName>sâmbătă</DefaultFullName>
         </Day>
       </DaysOfWeek>
