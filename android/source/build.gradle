@@ -43,7 +43,7 @@ base {
 
 android {
     namespace 'org.libreoffice'
-    compileSdk 34
+    compileSdk 35
     buildFeatures {
         buildConfig = true
     }
@@ -62,7 +62,7 @@ android {
     }
     defaultConfig {
         // minSdkVersion is set in liboSettings.gradle
-        targetSdkVersion 34
+        targetSdkVersion 35
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
