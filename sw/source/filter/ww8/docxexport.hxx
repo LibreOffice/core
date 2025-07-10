@@ -124,6 +124,8 @@ class DocxExport : public MSWordExportBase
     /// Storage for sdt data which need to be written to other XMLs
     std::vector<SdtData> m_SdtData;
 
+    std::set<SwNode*> m_aDummyFloatingTableAnchors;
+
 public:
 
     DocxExportFilter& GetFilter() { return m_rFilter; };
@@ -249,6 +251,8 @@ private:
     /// Write comments.xml
     void WritePostitFields();
 
+    void CollectFloatingTables();
+
     /// Write the numbering table.
     virtual void WriteNumbering() override;
 
@@ -319,6 +323,10 @@ public:
 
     /// return true if Page Layout is set as Mirrored
     bool isMirroredMargin();
+
+    const std::set<SwNode*>& GetDummyFloatingTableAnchors() const { return m_aDummyFloatingTableAnchors; }
+
+    bool IsDummyFloattableAnchor(SwNode& rNode) const override;
 
 private:
     DocxExport( const DocxExport& ) = delete;

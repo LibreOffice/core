@@ -3757,7 +3757,11 @@ void MSWordExportBase::OutputContentNode( SwContentNode& rNode )
     switch ( rNode.GetNodeType() )
     {
         case SwNodeType::Text:
-            OutputTextNode( *rNode.GetTextNode() );
+            // Skip dummy anchors: the next node will emit their floating tables.
+            if (!IsDummyFloattableAnchor(*rNode.GetTextNode()))
+            {
+                OutputTextNode(*rNode.GetTextNode());
+            }
             break;
         case SwNodeType::Grf:
             OutputGrfNode( *rNode.GetGrfNode() );
