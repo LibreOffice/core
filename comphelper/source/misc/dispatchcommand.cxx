@@ -32,11 +32,10 @@ using namespace css;
 namespace comphelper {
 
 bool dispatchCommand(const OUString& rCommand,
-                     const uno::Reference<uno::XInterface>& xDispatchSource,
+                     const uno::Reference<frame::XDispatchProvider>& xDispatchProvider,
                      const uno::Sequence<beans::PropertyValue>& rArguments,
                      const uno::Reference<frame::XDispatchResultListener>& rListener)
 {
-    uno::Reference<frame::XDispatchProvider> xDispatchProvider(xDispatchSource, uno::UNO_QUERY);
     if (!xDispatchProvider.is())
         return false;
 
@@ -64,6 +63,22 @@ bool dispatchCommand(const OUString& rCommand,
     xDisp->dispatch(aCommandURL, rArguments);
 
     return true;
+}
+
+bool dispatchCommand(const OUString& rCommand,
+                     const uno::Reference<frame::XFrame>& xFrame,
+                     const uno::Sequence<beans::PropertyValue>& rArguments,
+                     const uno::Reference<frame::XDispatchResultListener>& rListener)
+{
+    return dispatchCommand(rCommand, xFrame.query<frame::XDispatchProvider>(), rArguments, rListener);
+}
+
+bool dispatchCommand(const OUString& rCommand,
+                     const uno::Reference<frame::XController>& xController,
+                     const uno::Sequence<beans::PropertyValue>& rArguments,
+                     const uno::Reference<frame::XDispatchResultListener>& rListener)
+{
+    return dispatchCommand(rCommand, xController.query<frame::XDispatchProvider>(), rArguments, rListener);
 }
 
 bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments, const uno::Reference<css::frame::XDispatchResultListener>& rListener)
