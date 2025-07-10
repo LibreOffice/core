@@ -69,6 +69,7 @@ class InputContext;
 class OutputDevice;
 enum class TransliterationFlags;
 enum class PointerStyle;
+class TextHierarchyBreakup;
 
 namespace com {
 namespace sun {
@@ -204,6 +205,7 @@ public:
 
     Point CalculateTextPaintStartPosition() const;
     void            DrawText_ToEditView( const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
+    void            DrawText_ToEditView( TextHierarchyBreakup& rHelper, const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
     tools::Rectangle       GetInvalidateRect() const;
     SAL_DLLPRIVATE void            InvalidateWindow(const tools::Rectangle& rClipRect);
     void            InvalidateOtherViewWindows( const tools::Rectangle& rInvRect );

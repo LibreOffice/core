@@ -44,6 +44,13 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <vcl/metric.hxx>
+
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <Window.hxx>
@@ -1576,8 +1583,23 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
     Point aImagePos( pInfo->mrStartPos );
     aImagePos.AdjustX(aOutSize.Width() - aImageSize.Width() - aOffset.Width() ) ;
     aImagePos.AdjustY((aOutSize.Height() - aImageSize.Height()) / 2 );
+    static bool bUsePrimitives(nullptr == std::getenv("DISBALE_EDITENGINE_ON_PRIMITIVES"));
 
-    pInfo->mpOutDev->DrawImage( aImagePos, aImageSize, maSlideImage );
+    if (bUsePrimitives && pInfo->mpStripPortionsHelper)
+    {
+        // create BitmapPrimitive2D and add directly
+        const drawinglayer::primitive2d::Primitive2DReference xBitmap(
+            new drawinglayer::primitive2d::BitmapPrimitive2D(
+                maSlideImage.GetBitmapEx(),
+                basegfx::utils::createScaleTranslateB2DHomMatrix(
+                    aImageSize.Width(), aImageSize.Height(),
+                    aImagePos.X(), aImagePos.Y())));
+        pInfo->mpStripPortionsHelper->directlyAddB2DPrimitive(xBitmap);
+    }
+    else
+    {
+        pInfo->mpOutDev->DrawImage( aImagePos, aImageSize, maSlideImage );
+    }
 
     const bool bVertical = mrOutliner.IsVertical();
     const bool bRightToLeftPara = rEditEngine.IsRightToLeft( pInfo->mnPara );
@@ -1612,7 +1634,38 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
         aTextPos.AdjustY( -(aTextSz.Width()) );
         aTextPos.AdjustX(nBulletHeight / 2 );
     }
-    pInfo->mpOutDev->DrawText( aTextPos, aPageText );
+
+    if (bUsePrimitives && pInfo->mpStripPortionsHelper)
+    {
+        // create TextSimplePortionPrimitive2D and add directly
+        basegfx::B2DVector aFontSize;
+        const vcl::Font& rFont(pInfo->mpOutDev->GetFont());
+        drawinglayer::attribute::FontAttribute aFontAttr(
+            drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, rFont, false, false));
+        const FontMetric aFontMetric(pInfo->mpOutDev->GetFontMetric(rFont));
+        const double fTextOffsetY(aFontMetric.GetAscent());
+        const basegfx::B2DHomMatrix aTextTransform(
+            basegfx::utils::createScaleTranslateB2DHomMatrix(
+                aFontSize.getX(), aFontSize.getY(),
+                aTextPos.X(), aTextPos.Y() + fTextOffsetY));
+
+        const drawinglayer::primitive2d::Primitive2DReference xText(
+            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                aTextTransform,
+                aPageText,
+                0,
+                aPageText.getLength(),
+                std::vector<double>(),
+                {},
+                std::move(aFontAttr),
+                css::lang::Locale(),
+                pInfo->mpOutDev->GetTextColor().getBColor()));
+        pInfo->mpStripPortionsHelper->directlyAddB2DPrimitive(xText);
+    }
+    else
+    {
+        pInfo->mpOutDev->DrawText( aTextPos, aPageText );
+    }
 }
 
 void OutlineView::UpdateParagraph( sal_Int32 nPara )

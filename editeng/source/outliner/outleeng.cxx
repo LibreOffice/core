@@ -39,11 +39,11 @@ OutlinerEditEng::~OutlinerEditEng()
 {
 }
 
-void OutlinerEditEng::ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev, StripPortionsHelper* pStripPortionsHelper)//,
+void OutlinerEditEng::ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev, StripPortionsHelper* pStripPortionsHelper)
 {
     if( GetControlWord() & EEControlBits::OUTLINER )
     {
-        PaintFirstLineInfo aInfo(nPara, rStartPos, &rOutDev);
+        PaintFirstLineInfo aInfo(nPara, rStartPos, &rOutDev, pStripPortionsHelper);
         pOwner->maPaintFirstLineHdl.Call( &aInfo );
     }
 

@@ -1384,6 +1384,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
     // thus do the MetafileAction embedding stuff but just handle recursively.
     static constexpr OString aCommentStringCommon("FIELD_SEQ_BEGIN"_ostr);
     OUString aURL;
+    const bool bIsExportTaggedPDF(mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF());
 
     switch (rFieldPrimitive.getType())
     {
@@ -1406,6 +1407,10 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
                 mpMetaFile->AddAction(new MetaCommentAction(
                     aCommentStringCommon, 0, reinterpret_cast<const sal_uInt8*>(aURL.getStr()),
                     2 * aURL.getLength()));
+
+                if (bIsExportTaggedPDF)
+                    mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Link,
+                                                                  u"Link"_ustr);
             }
 
             break;
@@ -1436,6 +1441,13 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
     aBookmark.aBookmark = aURL;
     std::vector<vcl::PDFExtOutDevBookmarkEntry>& rBookmarks = mpPDFExtOutDevData->GetBookmarks();
     rBookmarks.push_back(aBookmark);
+
+    if (bIsExportTaggedPDF)
+    {
+        mpPDFExtOutDevData->SetStructureAttributeNumerical(vcl::PDFWriter::LinkAnnotation,
+                                                           aBookmark.nLinkId);
+        mpPDFExtOutDevData->EndStructureElement();
+    }
 }
 
 void VclMetafileProcessor2D::processTextHierarchyLinePrimitive2D(

@@ -1003,7 +1003,7 @@ public:
     void                    DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bHardClip );
     void                    UpdateViews( EditView* pCurView = nullptr );
     Point CalculateTextPaintStartPosition(ImpEditView& rView) const;
-    void                    DrawText_ToEditView( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
+    void                    DrawText_ToEditView( TextHierarchyBreakup& rHelper, ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
     void PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, Degree10 nOrientation = 0_deg10, StripPortionsHelper* pStripPortionsHelper = nullptr);
 
     bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );

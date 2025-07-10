@@ -24,6 +24,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editdata.hxx>
+#include <editeng/StripPortionsHelper.hxx>
 
 #include <svl/style.hxx>
 #include <svl/languageoptions.hxx>
@@ -66,7 +67,14 @@ void OutlinerView::DrawText_ToEditView( const tools::Rectangle& rRect, OutputDev
     if( rOwner.bFirstParaIsEmpty )
         rOwner.Insert( OUString() );
 
-    pEditView->DrawText_ToEditView( rRect, pTargetDevice );
+    // use TextHierarchyBreakupOutliner to get all text embedded to the
+    // TextHierarchy.*Primitive2D groupings for better processing, plus
+    // the correct paragtaph countings
+    TextHierarchyBreakupOutliner aHelper(rOwner);
+
+    // hand that Helper over to DrawText_ToEditView at the EditEngine
+    // for usage
+    pEditView->DrawText_ToEditView( aHelper, rRect, pTargetDevice );
 }
 
 bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFrameWin )

@@ -38,6 +38,8 @@ namespace com::sun::star::lang
 struct Locale;
 }
 
+class Outliner;
+
 class EDITENG_DLLPUBLIC DrawPortionInfo
 {
 public:
@@ -110,6 +112,8 @@ class EDITENG_DLLPUBLIC StripPortionsHelper
 public:
     virtual void processDrawPortionInfo(const DrawPortionInfo&) = 0;
     virtual void processDrawBulletInfo(const DrawBulletInfo&) = 0;
+    virtual void directlyAddB2DPrimitive(const drawinglayer::primitive2d::Primitive2DReference&)
+        = 0;
 };
 
 class EDITENG_DLLPUBLIC TextHierarchyBreakup : public StripPortionsHelper
@@ -127,14 +131,30 @@ protected:
     void flushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara);
 
 public:
-    virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo);
-    virtual void processDrawBulletInfo(const DrawBulletInfo& rDrawBulletInfo);
+    virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo) override;
+    virtual void processDrawBulletInfo(const DrawBulletInfo& rDrawBulletInfo) override;
+    virtual void
+    directlyAddB2DPrimitive(const drawinglayer::primitive2d::Primitive2DReference&) override;
 
     TextHierarchyBreakup();
     TextHierarchyBreakup(const basegfx::B2DHomMatrix& rNewTransformA,
                          const basegfx::B2DHomMatrix& rNewTransformB);
 
     const drawinglayer::primitive2d::Primitive2DContainer& getTextPortionPrimitives();
+};
+
+class EDITENG_DLLPUBLIC TextHierarchyBreakupOutliner : public TextHierarchyBreakup
+{
+    Outliner& mrOutliner;
+
+protected:
+    virtual sal_Int16 getOutlineLevelFromParagraph(sal_Int32 nPara) const override;
+    virtual sal_Int32 getParagraphCount() const override;
+
+public:
+    TextHierarchyBreakupOutliner(Outliner& rOutliner);
+    TextHierarchyBreakupOutliner(Outliner& rOutliner, const basegfx::B2DHomMatrix& rNewTransformA,
+                                 const basegfx::B2DHomMatrix& rNewTransformB);
 };
 
 #endif // INCLUDED_EDITENG_STRIPPORTIONSHELPER_HXX

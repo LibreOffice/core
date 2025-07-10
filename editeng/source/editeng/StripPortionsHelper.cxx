@@ -23,6 +23,7 @@
 #include <editeng/escapementitem.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <editeng/smallcaps.hxx>
+#include <editeng/outliner.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
@@ -648,6 +649,12 @@ void TextHierarchyBreakup::processDrawBulletInfo(const DrawBulletInfo& rDrawBull
     maTextPortionPrimitives.push_back(pNewPrimitive);
 }
 
+void TextHierarchyBreakup::directlyAddB2DPrimitive(
+    const drawinglayer::primitive2d::Primitive2DReference& rSource)
+{
+    maTextPortionPrimitives.push_back(rSource);
+}
+
 TextHierarchyBreakup::TextHierarchyBreakup()
     : maTextPortionPrimitives()
     , maLinePrimitives()
@@ -683,6 +690,34 @@ TextHierarchyBreakup::getTextPortionPrimitives()
     }
 
     return maParagraphPrimitives;
+}
+
+sal_Int16 TextHierarchyBreakupOutliner::getOutlineLevelFromParagraph(sal_Int32 nPara) const
+{
+    sal_Int16 nDepth(mrOutliner.GetDepth(nPara));
+    EBulletInfo eInfo(mrOutliner.GetBulletInfo(nPara));
+    // Pass -1 to signal VclMetafileProcessor2D that there is no active
+    // bullets/numbering in this paragraph (i.e. this is normal text)
+    return eInfo.bVisible ? nDepth : -1;
+}
+
+sal_Int32 TextHierarchyBreakupOutliner::getParagraphCount() const
+{
+    return mrOutliner.GetParagraphCount();
+}
+
+TextHierarchyBreakupOutliner::TextHierarchyBreakupOutliner(Outliner& rOutliner)
+    : TextHierarchyBreakup()
+    , mrOutliner(rOutliner)
+{
+}
+
+TextHierarchyBreakupOutliner::TextHierarchyBreakupOutliner(
+    Outliner& rOutliner, const basegfx::B2DHomMatrix& rNewTransformA,
+    const basegfx::B2DHomMatrix& rNewTransformB)
+    : TextHierarchyBreakup(rNewTransformA, rNewTransformB)
+    , mrOutliner(rOutliner)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

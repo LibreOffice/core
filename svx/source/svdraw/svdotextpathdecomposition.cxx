@@ -154,15 +154,20 @@ namespace
         ::std::vector< impPathTextPortion >         maPathTextPortions;
 
     public:
-        virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo)
+        virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo) override
         {
             // extract and add data for TextOnPath further processing
             maPathTextPortions.emplace_back(rDrawPortionInfo);
         }
 
-        virtual void processDrawBulletInfo(const DrawBulletInfo&)
+        virtual void processDrawBulletInfo(const DrawBulletInfo&) override
         {
             // nothing to do here, bullets are for now ignored for TextOnLine
+        }
+
+        virtual void directlyAddB2DPrimitive(const drawinglayer::primitive2d::Primitive2DReference&) override
+        {
+            // nothing to do here, no support for directly adding Primitives
         }
 
         const ::std::vector< impPathTextPortion >& sortAndGetPathTextPortions()

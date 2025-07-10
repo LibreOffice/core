@@ -122,31 +122,6 @@ std::optional<bool> SdrOutliner::GetCompatFlag(SdrCompatibilityFlag eFlag) const
     return {};
 }
 
-sal_Int16 TextHierarchyBreakupOutliner::getOutlineLevelFromParagraph(sal_Int32 nPara) const
-{
-    sal_Int16 nDepth(mrOutliner.GetDepth(nPara));
-    EBulletInfo eInfo(mrOutliner.GetBulletInfo(nPara));
-    // Pass -1 to signal VclMetafileProcessor2D that there is no active
-    // bullets/numbering in this paragraph (i.e. this is normal text)
-    return eInfo.bVisible ?  nDepth : -1;
-}
-
-sal_Int32 TextHierarchyBreakupOutliner::getParagraphCount() const
-{
-    return mrOutliner.GetParagraphCount();
-}
-
-TextHierarchyBreakupOutliner::TextHierarchyBreakupOutliner(
-    SdrOutliner& rOutliner,
-    const basegfx::B2DHomMatrix& rNewTransformA,
-    const basegfx::B2DHomMatrix& rNewTransformB)
-: TextHierarchyBreakup(
-    rNewTransformA,
-    rNewTransformB)
-, mrOutliner(rOutliner)
-{
-}
-
 void TextHierarchyBreakupBlockText::processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo)
 {
     // Is clipping wanted? This is text clipping; only accept a portion

@@ -88,6 +88,15 @@
 
 #include <vcl/outdev/ScopedStates.hxx>
 
+#include <vcl/canvastools.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <unicode/uchar.h>
 
 using namespace ::com::sun::star;
@@ -3354,18 +3363,61 @@ Point ImpEditEngine::MoveToNextLine(
 
 void ImpEditEngine::DrawText_ToPosition( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation )
 {
+    if( rOutDev.GetConnectMetaFile() )
+        rOutDev.Push();
+
     // Create with 2 points, as with positive points it will end up with
     // LONGMAX as Size, Bottom and Right in the range > LONGMAX.
     tools::Rectangle aBigRect( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
-    if( rOutDev.GetConnectMetaFile() )
-        rOutDev.Push();
     Point aStartPos( rStartPos );
+
     if ( IsEffectivelyVertical() )
     {
         aStartPos.AdjustX(GetPaperSize().Width() );
         rStartPos.RotateAround(aStartPos, nOrientation);
     }
-    PaintOrStrip(rOutDev, aBigRect, aStartPos, nOrientation);
+
+    static bool bUsePrimitives(nullptr == std::getenv("DISBALE_EDITENGINE_ON_PRIMITIVES"));
+
+    if (bUsePrimitives)
+    {
+        // extract Primitives.
+        // Do not use Orientation, that will be added below as transformation
+        TextHierarchyBreakup aHelper;
+        PaintOrStrip(rOutDev, aBigRect, aStartPos, 0_deg10, &aHelper);
+
+        if (aHelper.getTextPortionPrimitives().empty())
+            // no Primitives, done
+            return;
+
+        // create ViewInformation2D based on target OutputDevice
+        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+        aViewInformation2D.setViewTransformation(rOutDev.GetViewTransformation());
+
+        // get content
+        drawinglayer::primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());
+
+        if (0_deg10 != nOrientation)
+        {
+            // if we have an Orientation, add rotation. Note that input value is
+            // 10th degree and wrong oriented for a right-hand coordinate system (sigh)
+            const double fAngle(-toRadians(nOrientation));
+            aContent = drawinglayer::primitive2d::Primitive2DContainer{
+                new drawinglayer::primitive2d::TransformPrimitive2D(
+                    basegfx::utils::createRotateAroundPoint(aStartPos.X(), aStartPos.Y(), fAngle),
+                    std::move(aContent))};
+        }
+
+        // create PrimitiveProcessor and render to target
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
+            drawinglayer::processor2d::createProcessor2DFromOutputDevice(rOutDev, aViewInformation2D));
+        xProcessor->process(aContent);
+    }
+    else
+    {
+        PaintOrStrip(rOutDev, aBigRect, aStartPos, nOrientation);
+    }
+
     if (rOutDev.GetConnectMetaFile())
         rOutDev.Pop();
 }
@@ -3394,48 +3446,92 @@ void ImpEditEngine::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Re
         aStartPos.setY( aOutRect.Top() - rStartDocPos.X() );
     }
 
-    bool bClipRegion = rOutDev.IsClipRegion();
-    bool bMetafile = rOutDev.GetConnectMetaFile();
-    vcl::Region aOldRegion = rOutDev.GetClipRegion();
+    static bool bUsePrimitives(nullptr == std::getenv("DISBALE_EDITENGINE_ON_PRIMITIVES"));
 
-    // If one existed => intersection!
-    // Use Push/pop for creating the Meta file
-    if ( bMetafile )
-        rOutDev.Push();
-
-    // Always use the Intersect method, it is a must for Metafile!
-    if ( bHardClip )
+    if (bUsePrimitives)
     {
-        // Clip only if necessary...
-        if (!IsFormatted())
-            FormatDoc();
-        tools::Long nTextWidth = !IsEffectivelyVertical() ? CalcTextWidth(true) : GetTextHeight();
-        if ( rStartDocPos.X() || rStartDocPos.Y() ||
-             ( rOutRect.GetHeight() < static_cast<tools::Long>(GetTextHeight()) ) ||
-             ( rOutRect.GetWidth() < nTextWidth ) )
+        // extract Primitives
+        TextHierarchyBreakup aHelper;
+        PaintOrStrip(rOutDev, aOutRect, aStartPos, 0_deg10, &aHelper);
+
+        if (aHelper.getTextPortionPrimitives().empty())
+            // no Primitives, done
+            return;
+
+        // create ViewInformation2D based on target OutputDevice
+        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+        aViewInformation2D.setViewTransformation(rOutDev.GetViewTransformation());
+        const basegfx::B2DRange aClipRange(vcl::unotools::b2DRectangleFromRectangle(aOutRect));
+        aViewInformation2D.setViewport(aClipRange);
+
+        // get content and it's range
+        drawinglayer::primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());
+        const basegfx::B2DRange aContentRange(aContent.getB2DRange(aViewInformation2D));
+
+        if (!aContentRange.overlaps(aClipRange))
+            // no overlap, nothing visible
+            return;
+
+        if (bHardClip && !aClipRange.isInside(aContentRange))
         {
-            // Some printer drivers cause problems if characters graze the
-            // ClipRegion, therefore rather add a pixel more ...
-            tools::Rectangle aClipRect( aOutRect );
-            if ( rOutDev.GetOutDevType() == OUTDEV_PRINTER )
-            {
-                Size aPixSz( 1, 0 );
-                aPixSz = rOutDev.PixelToLogic( aPixSz );
-                aClipRect.AdjustRight(aPixSz.Width() );
-                aClipRect.AdjustBottom(aPixSz.Width() );
-            }
-            rOutDev.IntersectClipRegion( aClipRect );
+            // not completely inside aClipRange and clipping requested
+            // Embed to MaskPrimitive2D
+            aContent = drawinglayer::primitive2d::Primitive2DContainer{
+                new drawinglayer::primitive2d::MaskPrimitive2D(
+                    basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClipRange)),
+                    std::move(aContent))};
         }
+
+        // create PrimitiveProcessor and render to target
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
+            drawinglayer::processor2d::createProcessor2DFromOutputDevice(rOutDev, aViewInformation2D));
+        xProcessor->process(aContent);
     }
-
-    PaintOrStrip(rOutDev, aOutRect, aStartPos);
-
-    if ( bMetafile )
-        rOutDev.Pop();
-    else if ( bClipRegion )
-        rOutDev.SetClipRegion( aOldRegion );
     else
-        rOutDev.SetClipRegion();
+    {
+        bool bClipRegion = rOutDev.IsClipRegion();
+        bool bMetafile = rOutDev.GetConnectMetaFile();
+        vcl::Region aOldRegion = rOutDev.GetClipRegion();
+
+        // If one existed => intersection!
+        // Use Push/pop for creating the Meta file
+        if ( bMetafile )
+            rOutDev.Push();
+
+        // Always use the Intersect method, it is a must for Metafile!
+        if ( bHardClip )
+        {
+            // Clip only if necessary...
+            if (!IsFormatted())
+                FormatDoc();
+            tools::Long nTextWidth = !IsEffectivelyVertical() ? CalcTextWidth(true) : GetTextHeight();
+            if ( rStartDocPos.X() || rStartDocPos.Y() ||
+                ( rOutRect.GetHeight() < static_cast<tools::Long>(GetTextHeight()) ) ||
+                ( rOutRect.GetWidth() < nTextWidth ) )
+            {
+                // Some printer drivers cause problems if characters graze the
+                // ClipRegion, therefore rather add a pixel more ...
+                tools::Rectangle aClipRect( aOutRect );
+                if ( rOutDev.GetOutDevType() == OUTDEV_PRINTER )
+                {
+                    Size aPixSz( 1, 0 );
+                    aPixSz = rOutDev.PixelToLogic( aPixSz );
+                    aClipRect.AdjustRight(aPixSz.Width() );
+                    aClipRect.AdjustBottom(aPixSz.Width() );
+                }
+                rOutDev.IntersectClipRegion( aClipRect );
+            }
+        }
+
+        PaintOrStrip(rOutDev, aOutRect, aStartPos);
+
+        if ( bMetafile )
+            rOutDev.Pop();
+        else if ( bClipRegion )
+            rOutDev.SetClipRegion( aOldRegion );
+        else
+            rOutDev.SetClipRegion();
+    }
 }
 
 // TODO: use IterateLineAreas in ImpEditEngine::Paint, to avoid algorithm duplication
@@ -3822,7 +3918,7 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                     pDXArray = KernArraySpan(aTmpDXArray);
 
                                     // add a meta file comment if we record to a metafile
-                                    if( bMetafileValid )
+                                    if( !pStripPortionsHelper && bMetafileValid )
                                     {
                                         const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
                                         if( pFieldItem )
@@ -4132,7 +4228,7 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                 if ( rTextPortion.GetKind() == PortionKind::FIELD )
                                 {
                                     // add a meta file comment if we record to a metafile
-                                    if( bMetafileValid )
+                                    if( !pStripPortionsHelper && bMetafileValid )
                                     {
                                         const EditCharAttrib* pAttr = rParaPortion.GetNode()->GetCharAttribs().FindFeature(nIndex);
                                         assert( pAttr && "Field not found" );
@@ -4311,7 +4407,7 @@ Point ImpEditEngine::CalculateTextPaintStartPosition(ImpEditView& rView) const
     return aStartPos;
 }
 
-void ImpEditEngine::DrawText_ToEditView( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
+void ImpEditEngine::DrawText_ToEditView( TextHierarchyBreakup& rHelper, ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     if ( !IsUpdateLayout() || IsInUndo() )
         return;
@@ -4339,16 +4435,59 @@ void ImpEditEngine::DrawText_ToEditView( ImpEditView* pView, const tools::Rectan
             aClipRect.SetRight( nMaxX );
     }
 
-    bool bClipRegion = rTarget.IsClipRegion();
-    vcl::Region aOldRegion = rTarget.GetClipRegion();
-    rTarget.IntersectClipRegion( aClipRect );
+    static bool bUsePrimitives(nullptr == std::getenv("DISBALE_EDITENGINE_ON_PRIMITIVES"));
 
-    PaintOrStrip(rTarget, aClipRect, aStartPos);
+    if (bUsePrimitives)
+    {
+        // extract Primitives
+        PaintOrStrip(rTarget, aClipRect, aStartPos, 0_deg10, &rHelper);
 
-    if ( bClipRegion )
-        rTarget.SetClipRegion( aOldRegion );
+        if (rHelper.getTextPortionPrimitives().empty())
+            // no Primitives, done
+            return;
+
+        // create ViewInformation2D based on target OutputDevice
+        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+        aViewInformation2D.setViewTransformation(rTarget.GetViewTransformation());
+        const basegfx::B2DRange aClipRange(vcl::unotools::b2DRectangleFromRectangle(aClipRect));
+        aViewInformation2D.setViewport(aClipRange);
+
+        // get content and it's range
+        drawinglayer::primitive2d::Primitive2DContainer aContent(rHelper.getTextPortionPrimitives());
+        const basegfx::B2DRange aContentRange(aContent.getB2DRange(aViewInformation2D));
+
+        if (!aContentRange.overlaps(aClipRange))
+            // no overlap, nothing visible
+            return;
+
+        if (!aClipRange.isInside(aContentRange))
+        {
+            // not completely inside aClipRange, clipping needed.
+            // Embed to MaskPrimitive2D
+            aContent = drawinglayer::primitive2d::Primitive2DContainer{
+                new drawinglayer::primitive2d::MaskPrimitive2D(
+                    basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClipRange)),
+                    std::move(aContent))};
+        }
+
+        // create PrimitiveProcessor and render to target
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
+            drawinglayer::processor2d::createProcessor2DFromOutputDevice(rTarget, aViewInformation2D));
+        xProcessor->process(aContent);
+    }
     else
-        rTarget.SetClipRegion();
+    {
+        bool bClipRegion = rTarget.IsClipRegion();
+        vcl::Region aOldRegion = rTarget.GetClipRegion();
+        rTarget.IntersectClipRegion( aClipRect );
+
+        PaintOrStrip(rTarget, aClipRect, aStartPos);
+
+        if ( bClipRegion )
+            rTarget.SetClipRegion( aOldRegion );
+        else
+            rTarget.SetClipRegion();
+    }
 
     pView->DrawSelectionXOR(pView->GetEditSelection(), nullptr, &rTarget);
 }

@@ -49,6 +49,7 @@
 #include <vcl/window.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/StripPortionsHelper.hxx>
 #include <unotools/lingucfg.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
@@ -401,9 +402,20 @@ Point EditView::CalculateTextPaintStartPosition() const
     return getImpEditEngine().CalculateTextPaintStartPosition(getImpl());
 }
 
+void EditView::DrawText_ToEditView( TextHierarchyBreakup& rHelper, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
+{
+    getImpEditEngine().DrawText_ToEditView(rHelper, &getImpl(), rRect, pTargetDevice);
+}
+
 void EditView::DrawText_ToEditView( const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
-    getImpEditEngine().DrawText_ToEditView(&getImpl(), rRect, pTargetDevice);
+    // use TextHierarchyBreakup to get all text embedded to the
+    // TextHierarchy.*Primitive2D groupings for better processing
+    TextHierarchyBreakup aHelper;
+
+    // hand that Helper over to DrawText_ToEditView at the EditEngine
+    // for usage
+    getImpEditEngine().DrawText_ToEditView(aHelper, &getImpl(), rRect, pTargetDevice);
 }
 
 void EditView::setEditEngine(EditEngine& rEditEngine)

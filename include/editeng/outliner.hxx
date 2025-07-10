@@ -407,9 +407,10 @@ struct EDITENG_DLLPUBLIC PaintFirstLineInfo
     sal_Int32 mnPara;
     const Point& mrStartPos;
     VclPtr<OutputDevice> mpOutDev;
+    StripPortionsHelper* mpStripPortionsHelper;
 
-    PaintFirstLineInfo( sal_Int32 nPara, const Point& rStartPos, OutputDevice* pOutDev )
-        : mnPara( nPara ), mrStartPos( rStartPos ), mpOutDev( pOutDev )
+    PaintFirstLineInfo( sal_Int32 nPara, const Point& rStartPos, OutputDevice* pOutDev, StripPortionsHelper* pStripPortionsHelper )
+        : mnPara( nPara ), mrStartPos( rStartPos ), mpOutDev( pOutDev ), mpStripPortionsHelper( pStripPortionsHelper )
     {}
 };
 

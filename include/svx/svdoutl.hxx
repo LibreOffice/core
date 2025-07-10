@@ -52,21 +52,6 @@ public:
     virtual std::optional<bool> GetCompatFlag(SdrCompatibilityFlag eFlag) const override;
 };
 
-class TextHierarchyBreakupOutliner : public TextHierarchyBreakup
-{
-    SdrOutliner&                mrOutliner;
-
-protected:
-    virtual sal_Int16 getOutlineLevelFromParagraph(sal_Int32 nPara) const;
-    virtual sal_Int32 getParagraphCount() const;
-
-public:
-    TextHierarchyBreakupOutliner(
-        SdrOutliner& rOutliner,
-        const basegfx::B2DHomMatrix& rNewTransformA,
-        const basegfx::B2DHomMatrix& rNewTransformB);
-};
-
 class TextHierarchyBreakupBlockText : public TextHierarchyBreakupOutliner
 {
     // ClipRange for BlockText decomposition; only text portions completely
@@ -75,7 +60,7 @@ class TextHierarchyBreakupBlockText : public TextHierarchyBreakupOutliner
     const basegfx::B2DRange&    mrClipRange;
 
 public:
-    virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo);
+    virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo) override;
 
     TextHierarchyBreakupBlockText(
         SdrOutliner& rOutliner,
@@ -90,7 +75,7 @@ class TextHierarchyBreakupContourText : public TextHierarchyBreakupOutliner
     basegfx::B2DVector              maScale;
 
 public:
-    virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo);
+    virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo) override;
 
     TextHierarchyBreakupContourText(
         SdrOutliner& rOutliner,
