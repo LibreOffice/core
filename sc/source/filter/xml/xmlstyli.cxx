@@ -76,16 +76,14 @@ ScXMLCellImportPropertyMapper::~ScXMLCellImportPropertyMapper()
 {
 }
 
-void ScXMLCellImportPropertyMapper::finished(std::vector<XMLPropertyState>& rProperties,
-                                             sal_Int32 nStartIndex, sal_Int32 nEndIndex,
-                                             const sal_uInt32 nPropType) const
+void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     static const sal_Int16 aPaddingCTF[4] = { CTF_SC_LEFTPADDING, CTF_SC_RIGHTPADDING,
                                             CTF_SC_TOPPADDING, CTF_SC_BOTTOMPADDING };
     static const sal_Int16 aBorderCTF[4] = { CTF_SC_LEFTBORDER, CTF_SC_RIGHTBORDER,
                                             CTF_SC_TOPBORDER, CTF_SC_BOTTOMBORDER };
 
-    SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex, nPropType);
+    SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
     XMLPropertyState* pAllPaddingProperty(nullptr);
     XMLPropertyState* pPadding[4] = { nullptr, nullptr, nullptr, nullptr };
     XMLPropertyState* pNewPadding[4] = { nullptr, nullptr, nullptr, nullptr };
@@ -219,11 +217,9 @@ ScXMLRowImportPropertyMapper::~ScXMLRowImportPropertyMapper()
 {
 }
 
-void ScXMLRowImportPropertyMapper::finished(std::vector<XMLPropertyState>& rProperties,
-                                            sal_Int32 nStartIndex, sal_Int32 nEndIndex,
-                                            const sal_uInt32 nPropType) const
+void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
-    SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex, nPropType);
+    SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
     XMLPropertyState* pHeight(nullptr);
     XMLPropertyState* pOptimalHeight(nullptr);
     XMLPropertyState* pPageBreak(nullptr);
