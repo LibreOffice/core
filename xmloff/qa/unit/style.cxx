@@ -300,8 +300,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTdf156707)
 {
-    // The file contains a shape with linear gradient fill from red #ff0000 to yellow #ffff00,
-    // named 'red2yellow'
     loadFromFile(u"tdf156707_text_form_control_borders.odt");
     saveAndReload(u"writer8"_ustr);
 
@@ -315,11 +313,34 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTdf156707)
     xShape = getShape(1);
     xShapeProperties.set(xShape, uno::UNO_QUERY_THROW);
     xShapeProperties->getPropertyValue(u"ControlBorder"_ustr) >>= nBorderStyle;
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), nBorderStyle);
+    // since tdf#152974, this shape SHOULD ACTUALLY have a 3d border (1), NOT a flat one(2).
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("DID YOU FIX ME?", sal_uInt16(2), nBorderStyle);
 
     xShape = getShape(2);
     xShapeProperties.set(xShape, uno::UNO_QUERY_THROW);
     xShapeProperties->getPropertyValue(u"ControlBorder"_ustr) >>= nBorderStyle;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), nBorderStyle);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTdf167358)
+{
+    // The file contains label form fields. Labels default to having no border.
+    loadFromFile(u"tdf167358_label_form_control_borders.odt");
+    saveAndReload(u"writer8"_ustr);
+
+    uno::Reference<drawing::XShape> xShape = getShape(0);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
+
+    sal_uInt16 nBorderStyle = SAL_MAX_UINT16; // 0 = none, 1 = 3d [default], 2 = flat
+    xShapeProperties->getPropertyValue(u"ControlBorder"_ustr) >>= nBorderStyle;
+    // In this case, no fo:border style element exists, so the default must be none.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), nBorderStyle);
+
+    xShape = getShape(1);
+    xShapeProperties.set(xShape, uno::UNO_QUERY_THROW);
+    xShapeProperties->getPropertyValue(u"ControlBorder"_ustr) >>= nBorderStyle;
+    // In this case, the fo:border style element doesn't specify 3d/flat/none,
+    // so the default must be still be none.
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), nBorderStyle);
 }
 

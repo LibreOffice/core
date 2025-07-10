@@ -154,7 +154,7 @@ void SvXMLImportPropertyMapper::importXML(
             rAttribute.Name, rAttribute.NamespaceURL, rAttribute.Value);
     }
 
-    finished(rProperties, nStartIdx, nEndIdx, nPropType);
+    finished( rProperties, nStartIdx, nEndIdx );
 }
 
 void SvXMLImportPropertyMapper::importXMLAttribute(
@@ -746,13 +746,13 @@ bool SvXMLImportPropertyMapper::FillTolerantMultiPropertySet_(
     return bSuccessful;
 }
 
-void SvXMLImportPropertyMapper::finished(std::vector<XMLPropertyState>& rProperties,
-                                         sal_Int32 nStartIndex, sal_Int32 nEndIndex,
-                                         const sal_uInt32 nPropType) const
+void SvXMLImportPropertyMapper::finished(
+        std::vector< XMLPropertyState >& rProperties,
+        sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     // nothing to do here
     if( mxNextMapper.is() )
-        mxNextMapper->finished(rProperties, nStartIndex, nEndIndex, nPropType);
+        mxNextMapper->finished(rProperties, nStartIndex, nEndIndex);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
