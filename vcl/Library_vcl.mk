@@ -40,6 +40,7 @@ $(eval $(call gb_Library_set_precompiled_header,vcl,vcl/inc/pch/precompiled_vcl)
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
+    -I$(SRCDIR)/vcl/canvas_inc \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\
@@ -92,6 +93,38 @@ $(eval $(call gb_Library_use_externals,vcl,\
     libpng \
     libtiff \
     libwebp \
+))
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+	vcl/source/canvas/tools/cachedprimitivebase \
+	vcl/source/canvas/tools/canvascustomspritehelper \
+	vcl/source/canvas/tools/canvastools \
+	vcl/source/canvas/tools/elapsedtime \
+	vcl/source/canvas/tools/page \
+	vcl/source/canvas/tools/pagemanager \
+	vcl/source/canvas/tools/parametricpolypolygon \
+	vcl/source/canvas/tools/propertysethelper \
+	vcl/source/canvas/tools/spriteredrawmanager \
+	vcl/source/canvas/tools/surface \
+	vcl/source/canvas/tools/surfaceproxy \
+	vcl/source/canvas/tools/surfaceproxymanager \
+	vcl/source/canvas/tools/verifyinput \
+))
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+	vcl/source/canvas/cairo/cairo_cachedbitmap \
+	vcl/source/canvas/cairo/cairo_canvas \
+	vcl/source/canvas/cairo/cairo_canvasbitmap \
+	vcl/source/canvas/cairo/cairo_canvascustomsprite \
+	vcl/source/canvas/cairo/cairo_canvasfont \
+	vcl/source/canvas/cairo/cairo_canvashelper \
+	vcl/source/canvas/cairo/cairo_canvashelper_text \
+	vcl/source/canvas/cairo/cairo_devicehelper \
+	vcl/source/canvas/cairo/cairo_spritecanvas \
+	vcl/source/canvas/cairo/cairo_spritecanvashelper \
+	vcl/source/canvas/cairo/cairo_spritedevicehelper \
+	vcl/source/canvas/cairo/cairo_spritehelper \
+	vcl/source/canvas/cairo/cairo_textlayout \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
