@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 com.sun.star.comp.datatransfer.dnd.OleDragSource_V1
-com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1
 com.sun.star.datatransfer.clipboard.AquaClipboard
 com.sun.star.frame.VCLSessionManagerClient
 org.libreoffice.uitest.UITest

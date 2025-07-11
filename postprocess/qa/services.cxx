@@ -357,11 +357,6 @@ void Test::createInstance(
     {
         expImpl = "com.sun.star.datatransfer.dnd.VclGenericDragSource";
         expServs = {u"com.sun.star.datatransfer.dnd.GenericDragSource"_ustr};
-    } else if (name == "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
-               || name == "com.sun.star.datatransfer.dnd.XdndDropTarget")
-    {
-        expImpl = "com.sun.star.datatransfer.dnd.VclGenericDropTarget";
-        expServs = {u"com.sun.star.datatransfer.dnd.GenericDropTarget"_ustr};
 #endif
     } else if (name == "com.sun.star.ui.dialogs.FolderPicker") {
         // FolderPicker is a wrapper returning either a platform-specific or the

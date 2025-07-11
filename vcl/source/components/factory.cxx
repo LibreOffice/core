@@ -45,12 +45,6 @@ extern "C" {
                 xMgr, vcl::DragSource_getImplementationName(), vcl::DragSource_createInstance,
                 vcl::DragSource_getSupportedServiceNames() );
         }
-        else if( vcl::DropTarget_getImplementationName().equalsAscii( pImplementationName ) )
-        {
-            xFactory = ::cppu::createSingleFactory(
-                xMgr, vcl::DropTarget_getImplementationName(), vcl::DropTarget_createInstance,
-                vcl::DropTarget_getSupportedServiceNames() );
-        }
 
         if( xFactory.is() )
         {

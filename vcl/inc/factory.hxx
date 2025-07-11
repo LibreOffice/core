@@ -41,13 +41,6 @@ OUString DragSource_getImplementationName();
 css::uno::Reference<css::uno::XInterface> DragSource_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory > const &);
 
-css::uno::Sequence<OUString> DropTarget_getSupportedServiceNames();
-
-OUString DropTarget_getImplementationName();
-
-css::uno::Reference<css::uno::XInterface> DropTarget_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory > const &);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

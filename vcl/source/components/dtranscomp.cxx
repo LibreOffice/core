@@ -376,37 +376,6 @@ void GenericDropTarget::setDefaultActions( sal_Int8)
 {
 }
 
-Sequence< OUString > DropTarget_getSupportedServiceNames()
-{
-#if defined MACOSX
-    return {  "com.sun.star.datatransfer.dnd.OleDropTarget" };
-#elif defined UNX
-    return { u"com.sun.star.datatransfer.dnd.X11DropTarget"_ustr };
-#else
-    return GenericDropTarget::getSupportedServiceNames_static();
-#endif
-}
-
-OUString DropTarget_getImplementationName()
-{
-    return
-    #if defined MACOSX
-    "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
-    #elif defined UNX
-    u"com.sun.star.datatransfer.dnd.XdndDropTarget"_ustr
-    #else
-    "com.sun.star.datatransfer.dnd.VclGenericDropTarget"
-    #endif
-                   ;
-}
-
-Reference< XInterface > DropTarget_createInstance( const Reference< XMultiServiceFactory >&  )
-{
-    SolarMutexGuard aGuard;
-    Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDropTarget();
-    return xResult;
-}
-
 } // namespace vcl
 
 /*

@@ -23,10 +23,6 @@
     <service name="com.sun.star.datatransfer.dnd.OleDragSource"/>
     <optional/>
   </implementation>
-  <implementation name="com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1">
-    <service name="com.sun.star.datatransfer.dnd.OleDropTarget"/>
-    <optional/>
-  </implementation>
   <implementation name="com.sun.star.comp.graphic.GraphicMapper"
       constructor="com_sun_star_comp_graphic_GraphicMapper_get_implementation">
     <service name="com.sun.star.graphic.GraphicMapper"/>
@@ -43,10 +39,6 @@
   <implementation name="com.sun.star.datatransfer.clipboard.iOSClipboard"
       constructor="vcl_SystemClipboard_get_implementation">
     <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
-    <optional/>
-  </implementation>
-  <implementation name="com.sun.star.datatransfer.dnd.XdndDropTarget">
-    <service name="com.sun.star.datatransfer.dnd.X11DropTarget"/>
     <optional/>
   </implementation>
   <implementation name="com.sun.star.datatransfer.dnd.XdndSupport">
