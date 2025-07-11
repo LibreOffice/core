@@ -571,7 +571,7 @@ struct
     OUString msAPIName;
     OUString msFormName;
 }
-const SvxShapeControlPropertyMapping[] =
+constexpr SvxShapeControlPropertyMapping[] =
 {
     // Warning: The first entry must be FontSlant because the any needs to be converted
     { UNO_NAME_EDIT_CHAR_POSTURE, u"FontSlant"_ustr  }, //  const sal_Int16 => css::awt::FontSlant

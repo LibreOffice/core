@@ -200,7 +200,7 @@ TypeList const comboBoxList = {&typeXComboBox, 1};
 TypeList const listBoxList = {&typeXListBox, 1};
 
 //this array stores the OO event to VBA event translation info
-static TranslatePropMap aTranslatePropMap_Impl[] =
+constexpr TranslatePropMap aTranslatePropMap_Impl[] =
 {
     { u"actionPerformed"_ustr, { u"_Change"_ustr, nullptr, DenyType, static_cast<void const *>(&radioButtonList) } },
     // actionPerformed ooo event
@@ -253,7 +253,7 @@ static EventInfoHash& getEventTransInfo()
     {
         EventInfoHash tmp;
         OUString sEventInfo;
-        TranslatePropMap* pTransProp = aTranslatePropMap_Impl;
+        const TranslatePropMap* pTransProp = aTranslatePropMap_Impl;
         int nCount = SAL_N_ELEMENTS(aTranslatePropMap_Impl);
 
         int i = 0;

@@ -53,7 +53,7 @@ using namespace ::com::sun::star::uno;
 
 // Declare the default interface. (The slotmap must not be empty, so
 // we enter something which never occurs here (hopefully).)
-static SfxSlot aExtrusionBarSlots_Impl[] =
+constexpr SfxSlot aExtrusionBarSlots_Impl[] =
 {
     { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, u""_ustr }
 };
