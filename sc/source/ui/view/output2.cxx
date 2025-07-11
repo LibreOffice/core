@@ -1563,6 +1563,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
             tools::Long nPosX = nInitPosX;
             if ( nLoopStartX < nX1 )
                 nPosX -= pRowInfo[0].basicCellInfo(nLoopStartX).nWidth * nLayoutSign;
+            std::optional<SCCOL> oLastEmptyCellX;
             for (SCCOL nX=nLoopStartX; nX<=nX2; nX++)
             {
                 bool bMergeEmpty = false;
@@ -1598,15 +1599,19 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
 
                 if ( bEmpty && !bMergeEmpty && nX < nX1 && !bOverlapped )
                 {
-                    SCCOL nTempX=nX1;
-                    while (nTempX > 0 && IsEmptyCellText( pThisRowInfo, nTempX, nY ))
-                        --nTempX;
-
-                    if ( nTempX < nX1 &&
-                         !IsEmptyCellText( pThisRowInfo, nTempX, nY ) &&
-                         !mpDoc->HasAttrib( nTempX,nY,nTab, nX1,nY,nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
+                    if (!oLastEmptyCellX)
                     {
-                        nCellX = nTempX;
+                        SCCOL nTempX=nX1;
+                        while (nTempX > 0 && IsEmptyCellText( pThisRowInfo, nTempX, nY ))
+                            --nTempX;
+                        oLastEmptyCellX = nTempX;
+                    }
+
+                    if ( *oLastEmptyCellX < nX1 &&
+                         !IsEmptyCellText( pThisRowInfo, *oLastEmptyCellX, nY ) &&
+                         !mpDoc->HasAttrib( *oLastEmptyCellX,nY,nTab, nX1,nY,nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
+                    {
+                        nCellX = *oLastEmptyCellX;
                         bDoCell = true;
                     }
                 }
