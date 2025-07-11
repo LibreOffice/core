@@ -1513,9 +1513,10 @@ namespace
 {
 cairo_pattern_t* create_stipple()
 {
-    static unsigned char data[16] = { 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
-                                      0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF };
-    cairo_surface_t* surface = cairo_image_surface_create_for_data(data, CAIRO_FORMAT_A8, 4, 4, 4);
+    static const unsigned char data[16] = { 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00,
+                                            0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF };
+    cairo_surface_t* surface = cairo_image_surface_create_for_data(const_cast<unsigned char*>(data),
+                                                                   CAIRO_FORMAT_A8, 4, 4, 4);
     cairo_pattern_t* pattern = cairo_pattern_create_for_surface(surface);
     cairo_surface_destroy(surface);
     cairo_pattern_set_extend(pattern, CAIRO_EXTEND_REPEAT);
