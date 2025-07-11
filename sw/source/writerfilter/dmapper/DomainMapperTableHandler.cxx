@@ -1293,7 +1293,7 @@ static void lcl_convertFormulaRanges(const rtl::Reference<SwXTextTable> & xTable
                             sal_Int16 m_nCol;
                             sal_Int16 m_nRow;
                         };
-                        static const RangeDirection pDirections[] =
+                        static constexpr RangeDirection pDirections[] =
                         {
                             { u" LEFT "_ustr, -1, 0},
                             { u" RIGHT "_ustr, 1, 0},

@@ -3436,7 +3436,7 @@ struct NameToId
     sal_Int32 maId;
 };
 
-const NameToId constNameToIdMapping[] =
+constexpr NameToId constNameToIdMapping[] =
 {
     { u"glow"_ustr,         FSNS( XML_w14, XML_glow ) },
     { u"shadow"_ustr,       FSNS( XML_w14, XML_shadow ) },

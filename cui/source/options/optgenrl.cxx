@@ -91,7 +91,7 @@ struct
     // which language is this row for?
     unsigned nLangFlags;
 }
-const vRowInfo[] =
+constexpr vRowInfo[] =
 {
     { u"lockcompanyft"_ustr,  u"companyft"_ustr,   Lang::All },
     { u"locknameft"_ustr,     u"nameft"_ustr,      Lang::All & ~Lang::Russian & ~Lang::Eastern },
@@ -122,7 +122,7 @@ struct
     // id for settings the focus (defined in svx/optgenrl.hxx)
     EditPosition nGrabFocusId;
 }
-const vFieldInfo[] =
+constexpr vFieldInfo[] =
 {
     // Company
     { Row_Company, u"company"_ustr, UserOptToken::Company, EditPosition::COMPANY },

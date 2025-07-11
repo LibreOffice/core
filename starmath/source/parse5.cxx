@@ -39,7 +39,7 @@
 using namespace ::com::sun::star::i18n;
 
 //Definition of math keywords
-const SmTokenTableEntry aTokenTable[]
+constexpr SmTokenTableEntry aTokenTable[]
     = { { u"abs"_ustr, TABS, '\0', TG::UnOper, 13 },
         { u"acute"_ustr, TACUTE, MS_ACUTE, TG::Attribute, 5 },
         { u"aleph"_ustr, TALEPH, MS_ALEPH, TG::Standalone, 5 },
