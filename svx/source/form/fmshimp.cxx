@@ -180,7 +180,7 @@ const sal_uInt16 SelObjectSlotMap[] =  // slots depending on the SelObject
 
 // the following arrays must be consistent, i.e., corresponding entries should
 // be at the same relative position within their respective arrays
-static std::u16string_view aConvertSlots[] =
+constexpr std::u16string_view aConvertSlots[] =
 {
     u"ConvertToEdit",
     u"ConvertToButton",

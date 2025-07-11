@@ -152,7 +152,7 @@ OUString GetColorString( const Color& rCol )
         nColor += 1;
     }
 
-    static TranslateId RID_SVXITEMS_COLORS[] =
+    static const TranslateId RID_SVXITEMS_COLORS[] =
     {
         RID_SVXITEMS_COLOR_BLACK,
         RID_SVXITEMS_COLOR_BLUE,

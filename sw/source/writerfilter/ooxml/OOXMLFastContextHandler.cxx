@@ -131,7 +131,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
         case XML_Choice:
         {
             OUString aRequires = rAttribs->getOptionalValue(XML_Requires);
-            static const char* aFeatures[] = {
+            static const char* const aFeatures[] = {
                 "wps",
                 "wpg",
                 "w14",
@@ -1577,7 +1577,7 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue& va
             OOXMLPropertySet::Pointer_t pCellProps( new OOXMLPropertySet );
             {
                 OOXMLPropertySet::Pointer_t pBorderProps( new OOXMLPropertySet );
-                static Id borders[] = { NS_ooxml::LN_CT_TcBorders_top, NS_ooxml::LN_CT_TcBorders_bottom,
+                static const Id borders[] = { NS_ooxml::LN_CT_TcBorders_top, NS_ooxml::LN_CT_TcBorders_bottom,
                     NS_ooxml::LN_CT_TcBorders_start, NS_ooxml::LN_CT_TcBorders_end };
                 for(sal_uInt32 border : borders)
                     pBorderProps->add(border, fakeNoBorder(), OOXMLProperty::SPRM);

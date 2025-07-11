@@ -1575,7 +1575,7 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
     rAttributeOutput.GetExport().SetCurItemSet(pOldI);
 }
 
-const char *RubyAlignValues[] =
+const char * const RubyAlignValues[] =
 {
     "center",
     "distributeLetter",

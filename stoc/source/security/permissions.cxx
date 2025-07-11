@@ -100,7 +100,7 @@ namespace {
 
 class SocketPermission : public Permission
 {
-    static char const * s_actions [];
+    static char const * const s_actions [];
     sal_Int32 m_actions;
 
     OUString m_host;
@@ -123,7 +123,7 @@ public:
 
 }
 
-char const * SocketPermission::s_actions [] = { "accept", "connect", "listen", "resolve", nullptr };
+char const * const SocketPermission::s_actions [] = { "accept", "connect", "listen", "resolve", nullptr };
 
 SocketPermission::SocketPermission(
     connection::SocketPermission const & perm,
@@ -268,7 +268,7 @@ namespace {
 
 class FilePermission : public Permission
 {
-    static char const * s_actions [];
+    static char const * const s_actions [];
     sal_Int32 m_actions;
 
     OUString m_url;
@@ -284,7 +284,7 @@ public:
 
 }
 
-char const * FilePermission::s_actions [] = { "read", "write", "execute", "delete", nullptr };
+char const * const FilePermission::s_actions [] = { "read", "write", "execute", "delete", nullptr };
 
 static OUString const & getWorkingDir()
 {

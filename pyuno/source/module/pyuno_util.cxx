@@ -105,7 +105,7 @@ void log( RuntimeCargo * cargo, sal_Int32 level, const char *str )
     if( !isLog( cargo, level ) )
         return;
 
-    static const char *strLevel[] = { "NONE", "CALL", "ARGS" };
+    static const char* const strLevel[] = { "NONE", "CALL", "ARGS" };
 
     TimeValue systemTime;
     TimeValue localTime;

@@ -461,7 +461,7 @@ const Number natnum11 = { NumberChar_Hangul_ko, MultiplierChar_6_CJK[Multiplier_
 
 //! ATTENTION: Do not change order of elements!
 //! Append new languages to the end of the list!
-const char *natnum1Locales[] = {
+const char* const natnum1Locales[] = {
     "zh_CN",
     "zh_TW",
     "ja",
@@ -890,7 +890,7 @@ NativeNumberXmlAttributes SAL_CALL NativeNumberSupplierService::convertToXmlAttr
     static const sal_Int16 attShort         = 0;
     static const sal_Int16 attMedium        = 1;
     static const sal_Int16 attLong          = 2;
-    static const char *attType[] = { "short", "medium", "long" };
+    static const char * const attType[] = { "short", "medium", "long" };
 
     sal_Int16 number = NumberChar_HalfWidth, type = attShort;
 

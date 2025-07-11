@@ -130,7 +130,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
     try
     {
-        static const char* IndexServiceNames[] =
+        static const char* const IndexServiceNames[] =
         {
             "com.sun.star.text.DocumentIndex",
             "com.sun.star.text.UserIndex",

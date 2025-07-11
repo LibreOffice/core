@@ -1622,7 +1622,7 @@ void lclGetBorderLine(
 
     enum CalcLineIndex{Idx_None, Idx_Solid, Idx_Dotted, Idx_Dashed, Idx_FineDashed, Idx_DashDot, Idx_DashDotDot, Idx_DoubleThin, Idx_Last};
     enum ExcelWidthIndex{Width_Hair, Width_Thin, Width_Medium, Width_Thick, Width_Last};
-    static sal_uInt8 Map_LineLO_toMS[Idx_Last][Width_Last] =
+    static const sal_uInt8 Map_LineLO_toMS[Idx_Last][Width_Last] =
     {
     //    0,05  -  0,74                  0,75  -  1,49                   1,50  -  2,49                 2,50  -  9,00          Width Range [pt]
     //   EXC_BORDER_HAIR                EXC_BORDER_THIN                EXC_BORDER_MEDIUM              EXC_BORDER_THICK        MS Width

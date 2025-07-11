@@ -110,14 +110,14 @@ namespace
         STR_LABEL_POWER
     };
 
-    OUString constTemplateLINEST[] =
+    constexpr OUString constTemplateLINEST[] =
     {
         u"=LINEST(%VARIABLE2_RANGE% ; %VARIABLE1_RANGE% ; %CALC_INTERCEPT% ; TRUE)"_ustr,
         u"=LINEST(%VARIABLE2_RANGE% ; LN(%VARIABLE1_RANGE%) ; %CALC_INTERCEPT% ; TRUE)"_ustr,
         u"=LINEST(LN(%VARIABLE2_RANGE%) ; LN(%VARIABLE1_RANGE%) ; %CALC_INTERCEPT% ; TRUE)"_ustr
     };
 
-    OUString constRegressionFormula[] =
+    constexpr OUString constRegressionFormula[] =
     {
         u"=MMULT(%XDATAMATRIX_RANGE% ; %SLOPES_RANGE%) + %INTERCEPT_ADDR%"_ustr,
         u"=MMULT(LN(%XDATAMATRIX_RANGE%) ; %SLOPES_RANGE%) + %INTERCEPT_ADDR%"_ustr,

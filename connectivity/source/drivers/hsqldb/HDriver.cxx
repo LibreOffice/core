@@ -676,7 +676,7 @@ namespace connectivity
 
         const char* lcl_getCollationForLocale( const OUString& _rLocaleString, bool _bAcceptCountryMismatch = false )
         {
-            static const char* pTranslations[] =
+            static const char* const pTranslations[] =
             {
                 "af-ZA", "Afrikaans",
                 "am-ET", "Amharic",
@@ -789,7 +789,7 @@ namespace connectivity
                 nCompareTermination = '-';
             }
 
-            const char** pLookup = pTranslations;
+            const char* const* pLookup = pTranslations;
             for ( ; *pLookup; pLookup +=2 )
             {
                 sal_Int32 nCompareUntil = 0;

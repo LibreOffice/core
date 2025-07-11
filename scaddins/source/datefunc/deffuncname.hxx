@@ -19,49 +19,49 @@
 
 #pragma once
 
-static const char* DATE_DEFFUNCNAME_DiffWeeks[2] =
+const char* const DATE_DEFFUNCNAME_DiffWeeks[2] =
 {
     "WOCHEN",
     "WEEKS"
 };
 
-static const char* DATE_DEFFUNCNAME_DiffMonths[2] =
+const char* const DATE_DEFFUNCNAME_DiffMonths[2] =
 {
     "MONATE",
     "MONTHS"
 };
 
-static const char* DATE_DEFFUNCNAME_DiffYears[2] =
+const char* const DATE_DEFFUNCNAME_DiffYears[2] =
 {
     "JAHRE",
     "YEARS"
 };
 
-static const char* DATE_DEFFUNCNAME_IsLeapYear[2] =
+const char* const DATE_DEFFUNCNAME_IsLeapYear[2] =
 {
     "ISTSCHALTJAHR",
     "ISLEAPYEAR"
 };
 
-static const char* DATE_DEFFUNCNAME_DaysInMonth[2] =
+const char* const DATE_DEFFUNCNAME_DaysInMonth[2] =
 {
     "TAGEIMMONAT",
     "DAYSINMONTH"
 };
 
-static const char* DATE_DEFFUNCNAME_DaysInYear[2] =
+const char* const DATE_DEFFUNCNAME_DaysInYear[2] =
 {
     "TAGEIMJAHR",
     "DAYSINYEAR"
 };
 
-static const char* DATE_DEFFUNCNAME_WeeksInYear[2] =
+const char* const DATE_DEFFUNCNAME_WeeksInYear[2] =
 {
     "WOCHENIMJAHR",
     "WEEKSINYEAR"
 };
 
-static const char* DATE_DEFFUNCNAME_Rot13[2] =
+const char* const DATE_DEFFUNCNAME_Rot13[2] =
 {
     "ROT13",
     "ROT13"

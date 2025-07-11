@@ -154,7 +154,7 @@ using ::sax_fastparser::FastSerializerHelper;
 
 namespace
 {
-const char* g_aPredefinedClrNames[] = {
+const char* const g_aPredefinedClrNames[] = {
     "dk1",
     "lt1",
     "dk2",

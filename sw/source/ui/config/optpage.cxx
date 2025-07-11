@@ -2056,15 +2056,15 @@ CharAttr const aRedlineAttr[] =
 };
 // Items from aRedlineAttr relevant for InsertAttr: strikethrough is
 // not used
-static sal_uInt16 aInsertAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
+const sal_uInt16 aInsertAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 
 // Items from aRedlineAttr relevant for DeleteAttr: underline and
 // double underline is not used
-static sal_uInt16 aDeletedAttrMap[] = { 0, 1, 2, 5, 6, 7, 8, 9, 10 };
+const sal_uInt16 aDeletedAttrMap[] = { 0, 1, 2, 5, 6, 7, 8, 9, 10 };
 
 // Items from aRedlineAttr relevant for ChangeAttr: strikethrough is
 // not used
-static sal_uInt16 aChangedAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
+const sal_uInt16 aChangedAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 
 // Preview of selection
 SwMarkPreview::SwMarkPreview()

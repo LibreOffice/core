@@ -179,7 +179,7 @@ void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
 }
 
 // https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.spreadsheet.indexedcolors?view=openxml-2.8.1
-static ::Color IndexedColors[] = {
+const ::Color IndexedColors[] = {
     0x00000000,
     0x00FFFFFF,
     0x00FF0000,

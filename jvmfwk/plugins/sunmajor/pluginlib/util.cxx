@@ -62,7 +62,7 @@ using ::rtl::Reference;
 
 #if defined( UNX ) && !defined( MACOSX )
 namespace {
-char const *g_arJavaNames[] = {
+char const * const g_arJavaNames[] = {
     "",
     "j2re",
     "j2se",
@@ -74,7 +74,7 @@ char const *g_arJavaNames[] = {
 
 /* These are directory names which could contain multiple java installations.
  */
-char const *g_arCollectDirs[] = {
+char const * const g_arCollectDirs[] = {
     "",
 #ifndef JVM_ONE_PATH_CHECK
     "j2re/",
@@ -90,7 +90,7 @@ char const *g_arCollectDirs[] = {
 /* These are directories in which a java installation is
    looked for.
 */
-char const *g_arSearchPaths[] = {
+char const * const g_arSearchPaths[] = {
 #ifndef JVM_ONE_PATH_CHECK
     "",
     "usr/",

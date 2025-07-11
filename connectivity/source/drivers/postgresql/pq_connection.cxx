@@ -379,7 +379,7 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
     // Else, at least support all keywords from
     // http://www.postgresql.org/docs/9.0/interactive/libpq-connect.html
 
-    static const char* keyword_list[] = {
+    static const char* const keyword_list[] = {
         "password",
         "user",
         "port",

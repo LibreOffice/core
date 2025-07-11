@@ -1078,7 +1078,7 @@ sal_uInt16 SdrCaptionTypeItem::GetValueCount() const { return 4; }
 
 OUString SdrCaptionTypeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALCAPTIONTYPES[] =
+    static const TranslateId ITEMVALCAPTIONTYPES[] =
     {
         STR_ItemValCAPTIONTYPE1,
         STR_ItemValCAPTIONTYPE2,
@@ -1106,7 +1106,7 @@ sal_uInt16 SdrCaptionEscDirItem::GetValueCount() const { return 3; }
 
 OUString SdrCaptionEscDirItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALCAPTIONTYPES[] =
+    static const TranslateId ITEMVALCAPTIONTYPES[] =
     {
         STR_ItemValCAPTIONESCHORI,
         STR_ItemValCAPTIONESCVERT,
@@ -1151,7 +1151,7 @@ sal_uInt16 SdrTextFitToSizeTypeItem::GetValueCount() const { return 4; }
 
 OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALFITTISIZETYPES[] =
+    static const TranslateId ITEMVALFITTISIZETYPES[] =
     {
         STR_ItemValFITTOSIZENONE,
         STR_ItemValFITTOSIZEPROP,
@@ -1213,7 +1213,7 @@ sal_uInt16 SdrTextVertAdjustItem::GetValueCount() const { return 5; }
 
 OUString SdrTextVertAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALTEXTVADJTYPES[] =
+    static const TranslateId ITEMVALTEXTVADJTYPES[] =
     {
         STR_ItemValTEXTVADJTOP,
         STR_ItemValTEXTVADJCENTER,
@@ -1272,7 +1272,7 @@ sal_uInt16 SdrTextHorzAdjustItem::GetValueCount() const { return 5; }
 
 OUString SdrTextHorzAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALTEXTHADJTYPES[] =
+    static const TranslateId ITEMVALTEXTHADJTYPES[] =
     {
         STR_ItemValTEXTHADJLEFT,
         STR_ItemValTEXTHADJCENTER,
@@ -1324,7 +1324,7 @@ sal_uInt16 SdrTextAniKindItem::GetValueCount() const { return 5; }
 
 OUString SdrTextAniKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALTEXTANITYPES[] =
+    static const TranslateId ITEMVALTEXTANITYPES[] =
     {
         STR_ItemValTEXTANI_NONE,
         STR_ItemValTEXTANI_BLINK,
@@ -1375,7 +1375,7 @@ sal_uInt16 SdrTextAniDirectionItem::GetValueCount() const { return 4; }
 
 OUString SdrTextAniDirectionItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALTEXTANITYPES[] =
+    static const TranslateId ITEMVALTEXTANITYPES[] =
     {
         STR_ItemValTEXTANI_LEFT,
         STR_ItemValTEXTANI_UP,
@@ -1528,7 +1528,7 @@ sal_uInt16 SdrEdgeKindItem::GetValueCount() const { return 4; }
 
 OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALEDGES[] =
+    static const TranslateId ITEMVALEDGES[] =
     {
         STR_ItemValEDGE_ORTHOLINES,
         STR_ItemValEDGE_THREELINES,
@@ -1696,7 +1696,7 @@ sal_uInt16 SdrMeasureKindItem::GetValueCount() const { return 2; }
 
 OUString SdrMeasureKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALMEASURETYPES[] =
+    static const TranslateId ITEMVALMEASURETYPES[] =
     {
         STR_ItemValMEASURE_STD,
         STR_ItemValMEASURE_RADIUS
@@ -1793,7 +1793,7 @@ sal_uInt16 SdrMeasureTextVPosItem::GetValueCount() const { return 5; }
 
 OUString SdrMeasureTextVPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALMEASURETEXTTYPES[] =
+    static const TranslateId ITEMVALMEASURETEXTTYPES[] =
     {
         STR_ItemValMEASURE_TEXTVAUTO,
         STR_ItemValMEASURE_ABOVE,
@@ -1882,7 +1882,7 @@ sal_uInt16 SdrCircKindItem::GetValueCount() const { return 4; }
 
 OUString SdrCircKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALCIRCTYPES[] =
+    static const TranslateId ITEMVALCIRCTYPES[] =
     {
         STR_ItemValCIRC_FULL,
         STR_ItemValCIRC_SECT,

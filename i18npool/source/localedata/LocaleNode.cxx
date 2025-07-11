@@ -2214,7 +2214,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
 
     // generate code. (top-level array)
     of.writeAsciiString("\n");
-    of.writeAsciiString("static const OUString* LCContinuousNumberingLevelsArray[] = {\n" );
+    of.writeAsciiString("static const OUString* const LCContinuousNumberingLevelsArray[] = {\n" );
     for( i=0; i<nStyles; i++ )
     {
         of.writeAsciiString( "\t" );

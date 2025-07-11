@@ -188,7 +188,7 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
         AnimationNode::ENDED|AnimationNode::ACTIVE|AnimationNode::RESOLVED  // active successors for ENDED: restart
     };
 
-    static const StateTransitionTable* tableGuide[] = {
+    static const StateTransitionTable* const tableGuide[] = {
         &stateTransitionTable_Never_Remove,
         &stateTransitionTable_NotActive_Remove,
         &stateTransitionTable_Always_Remove,

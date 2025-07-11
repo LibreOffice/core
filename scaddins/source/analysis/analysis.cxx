@@ -278,8 +278,8 @@ OUString SAL_CALL AnalysisAddIn::getDisplayCategoryName( const OUString& aProgra
     return aRet;
 }
 
-static const char*          pLang[] = { "de", "en" };
-static const char*          pCoun[] = { "DE", "US" };
+const char* const pLang[] = { "de", "en" };
+const char* const pCoun[] = { "DE", "US" };
 constexpr sal_uInt32     nNumOfLoc = std::size(pLang);
 
 void AnalysisAddIn::InitDefLocales()

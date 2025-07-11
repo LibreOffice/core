@@ -190,7 +190,7 @@ struct FuncDataBase
     const TranslateId*      pDescrID;           // resource ID to description, parameter names and ~ description
     bool                    bDouble;            // name already exist in Calc
     bool                    bWithOpt;           // first parameter is internal
-    const char**            pCompListID;        // list of valid names
+    const char* const*      pCompListID;        // list of valid names
     sal_uInt16              nNumOfParams;       // number of named / described parameters
     FDCategory              eCat;               // function category
     const char*             pSuffix;            // if bDouble, append a suffix other than "_ADD" for UI

@@ -1623,57 +1623,57 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
         possible name sets (english, german, french, spanish)
         */
 
-        static const char* aName10 = "\x0F"; // SW field code
-        static const char* aName11 // German
+        static const char* const aName10 = "\x0F"; // SW field code
+        static const char* const aName11 // German
             = "TITEL";
-        static const char* aName12 // French
+        static const char* const aName12 // French
             = "TITRE";
-        static const char* aName13 // English
+        static const char* const aName13 // English
             = "TITLE";
-        static const char* aName14 // Spanish
+        static const char* const aName14 // Spanish
             = "TITRO";
-        static const char* aName20 = "\x15"; // SW field code
-        static const char* aName21 // German
+        static const char* const aName20 = "\x15"; // SW field code
+        static const char* const aName21 // German
             = "ERSTELLDATUM";
-        static const char* aName22 // French
+        static const char* const aName22 // French
             = "CR\xC9\xC9";
-        static const char* aName23 // English
+        static const char* const aName23 // English
             = "CREATED";
-        static const char* aName24 // Spanish
+        static const char* const aName24 // Spanish
             = "CREADO";
-        static const char* aName30 = "\x16"; // SW field code
-        static const char* aName31 // German
+        static const char* const aName30 = "\x16"; // SW field code
+        static const char* const aName31 // German
             = "ZULETZTGESPEICHERTZEIT";
-        static const char* aName32 // French
+        static const char* const aName32 // French
             = "DERNIERENREGISTREMENT";
-        static const char* aName33 // English
+        static const char* const aName33 // English
             = "SAVED";
-        static const char* aName34 // Spanish
+        static const char* const aName34 // Spanish
             = "MODIFICADO";
-        static const char* aName40 = "\x17"; // SW field code
-        static const char* aName41 // German
+        static const char* const aName40 = "\x17"; // SW field code
+        static const char* const aName41 // German
             = "ZULETZTGEDRUCKT";
-        static const char* aName42 // French
+        static const char* const aName42 // French
             = "DERNI\xC8" "REIMPRESSION";
-        static const char* aName43 // English
+        static const char* const aName43 // English
             = "LASTPRINTED";
-        static const char* aName44 // Spanish
+        static const char* const aName44 // Spanish
             = "HUPS PUPS";
-        static const char* aName50 = "\x18"; // SW field code
-        static const char* aName51 // German
+        static const char* const aName50 = "\x18"; // SW field code
+        static const char* const aName51 // German
             = "\xDC" "BERARBEITUNGSNUMMER";
-        static const char* aName52 // French
+        static const char* const aName52 // French
             = "NUM\xC9" "RODEREVISION";
-        static const char* aName53 // English
+        static const char* const aName53 // English
             = "REVISIONNUMBER";
-        static const char* aName54 // Spanish
+        static const char* const aName54 // Spanish
             = "SNUBBEL BUBBEL";
         static const sal_uInt16 nFieldCnt  = 5;
 
         // additional fields are to be coded soon!
 
         static const sal_uInt16 nLangCnt = 4;
-        static const char *aNameSet_26[nFieldCnt][nLangCnt+1] =
+        static const char * const aNameSet_26[nFieldCnt][nLangCnt+1] =
         {
             {aName10, aName11, aName12, aName13, aName14},
             {aName20, aName21, aName22, aName23, aName24},
@@ -3737,8 +3737,8 @@ void SwWW8ImplReader::Read_FieldVanish( sal_uInt16, const sal_uInt8*, short nLen
     const int nChunk = 64;  //number of characters to read at one time
 
     // Careful: MEMICMP doesn't work with fieldnames including umlauts!
-    const static char *aFieldNames[] = {  "\x06""INHALT", "\x02""XE", // dt.
-                                            "\x02""TC"  };              // us
+    const static char * const aFieldNames[] = {  "\x06""INHALT", "\x02""XE", // dt.
+                                                 "\x02""TC"  };              // us
     const static sal_uInt8  aFieldId[] = { 9, 4, 9 };
 
     if( nLen < 0 )

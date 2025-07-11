@@ -63,7 +63,7 @@ constexpr OUString aCommands[]
     u".uno:ConvertToNavigationBar"_ustr
 };
 
-static TranslateId aLabels[] =
+const TranslateId aLabels[] =
 {
     RID_STR_PROPTITLE_EDIT,
     RID_STR_PROPTITLE_PUSHBUTTON,

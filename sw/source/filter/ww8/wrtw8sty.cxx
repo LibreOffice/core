@@ -743,7 +743,7 @@ void WW8AttributeOutput::StartStyles()
     rFib.m_fcStshfOrig = rFib.m_fcStshf = nCurPos;
     m_nStyleCountPos = nCurPos + 2;     // count is added later
 
-    static sal_uInt8 aStShi[] = {
+    static const sal_uInt8 aStShi[] = {
         0x12, 0x00,
         0x0F, 0x00, 0x0A, 0x00, 0x01, 0x00, 0x5B, 0x00,
         0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

@@ -810,7 +810,7 @@ OString extractSingleTableFromSelect( const std::vector< OString > &vec )
                     }
                     else
                     {
-                        static const char * forbiddenKeywords[] =
+                        static const char* const forbiddenKeywords[] =
                             { "join", "natural", "outer", "inner", "left", "right", "full" , nullptr };
                         for( int i = 0 ; forbiddenKeywords[i] ; i ++ )
                         {

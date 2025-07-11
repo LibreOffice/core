@@ -1299,7 +1299,7 @@ void VclBuilderPreload()
 #else
 // find -name '*ui*' | xargs grep 'class=".*lo-' |
 //     sed 's/.*class="//' | sed 's/-.*$//' | sort | uniq
-    static const char *aWidgetLibs[] = {
+    static const char* const aWidgetLibs[] = {
         "sfxlo",  "svtlo"
     };
     for (const auto & lib : aWidgetLibs)

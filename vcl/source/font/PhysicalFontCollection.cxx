@@ -108,7 +108,7 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
     // normalized family names of fonts suited for glyph fallback
     // if a font is available related fonts can be ignored
     // TODO: implement dynamic lists
-    static const char* aGlyphFallbackList[] = {
+    static const char* const aGlyphFallbackList[] = {
         // empty strings separate the names of unrelated fonts
         "eudc", "",
         "arialunicodems", "cyberbit", "code2000", "",
@@ -137,7 +137,7 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
     int nBestQuality = 0;
     std::unique_ptr<std::array<PhysicalFontFamily*,MAX_GLYPHFALLBACK>> pFallbackList;
 
-    for( const char** ppNames = &aGlyphFallbackList[0];; ++ppNames )
+    for( const char* const* ppNames = &aGlyphFallbackList[0];; ++ppNames )
     {
         // advance to next sub-list when end-of-sublist marker
         if( !**ppNames ) // #i46456# check for empty string, i.e., deref string itself not only ptr to it

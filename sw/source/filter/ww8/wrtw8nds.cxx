@@ -1194,7 +1194,7 @@ bool WW8AttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget,
         sRelativeURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), rUrl );
     bool bAbsolute = sRelativeURL == rUrl;
 
-    static sal_uInt8 aURLData1[] = {
+    static const sal_uInt8 aURLData1[] = {
         0,0,0,0,        // len of struct
         0x44,0,         // the start of "next" data
         0,0,0,0,0,0,0,0,0,0,                // PIC-Structure!
@@ -1203,7 +1203,7 @@ bool WW8AttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget,
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
         0,0,0,0,                            // /
     };
-    static sal_uInt8 MAGIC_A[] = {
+    static const sal_uInt8 MAGIC_A[] = {
         // start of "next" data
         0xD0,0xC9,0xEA,0x79,0xF9,0xBA,0xCE,0x11,
         0x8C,0x82,0x00,0xAA,0x00,0x4B,0xA9,0x0B
@@ -1231,13 +1231,13 @@ bool WW8AttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget,
     {
         // version 1 (for a document)
 
-        static sal_uInt8 MAGIC_C[] = {
+        static const sal_uInt8 MAGIC_C[] = {
             0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46,
             0x00, 0x00
         };
 
-        static sal_uInt8 MAGIC_D[] = {
+        static const sal_uInt8 MAGIC_D[] = {
             0xFF, 0xFF, 0xAD, 0xDE, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -1284,7 +1284,7 @@ bool WW8AttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget,
         // and write some data to the data stream, but don't ask
         // what the data mean, except for the URL.
         // The First piece is the WW8_PIC structure.
-        static sal_uInt8 MAGIC_B[] = {
+        static const sal_uInt8 MAGIC_B[] = {
             0xE0,0xC9,0xEA,0x79,0xF9,0xBA,0xCE,0x11,
             0x8C,0x82,0x00,0xAA,0x00,0x4B,0xA9,0x0B
         };

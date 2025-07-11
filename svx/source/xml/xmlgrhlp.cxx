@@ -766,7 +766,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             // storage compression
             // .svm pics gets compressed via ZBITMAP old-style stream
             // option below
-            static const char* aCompressiblePics[] =
+            static const char* const aCompressiblePics[] =
             {
                 "image/svg+xml",
                 "image/x-emf",
