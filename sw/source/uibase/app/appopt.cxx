@@ -525,14 +525,6 @@ std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, weld::Conta
             xRet = (*fnCreatePage)( pPage, pController, &rSet );
             break;
         }
-        case  RID_SW_TP_BACKGROUND:
-        {
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG );
-            xRet = (*fnCreatePage)( pPage, pController, &rSet );
-            xRet->PageCreated( rSet );
-            break;
-        }
         case RID_SW_TP_OPTCAPTION_PAGE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

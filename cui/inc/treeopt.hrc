@@ -93,7 +93,6 @@ const std::pair<TranslateId, sal_uInt16> SID_SW_ONLINEOPTIONS_RES[] =
     { NC_("SID_SW_ONLINEOPTIONS_RES", "Grid"),        RID_SW_TP_HTML_OPTGRID_PAGE  },
     { NC_("SID_SW_ONLINEOPTIONS_RES", "Print"),         RID_SW_TP_HTML_OPTPRINT_PAGE   },
     { NC_("SID_SW_ONLINEOPTIONS_RES", "Table"),         RID_SW_TP_HTML_OPTTABLE_PAGE   },
-    { NC_("SID_SW_ONLINEOPTIONS_RES", "Background"),    RID_SW_TP_BACKGROUND   }
 };
 
 const std::pair<TranslateId, sal_uInt16> SID_SM_EDITOPTIONS_RES[] =

@@ -349,7 +349,6 @@ constexpr OptionsMapping_Impl OptionsMap_Impl[]
     { u"WriterWeb"_ustr,          u"Grid"_ustr,                 RID_SW_TP_HTML_OPTGRID_PAGE },
     { u"WriterWeb"_ustr,          u"Print"_ustr,                RID_SW_TP_HTML_OPTPRINT_PAGE },
     { u"WriterWeb"_ustr,          u"Table"_ustr,                RID_SW_TP_HTML_OPTTABLE_PAGE },
-    { u"WriterWeb"_ustr,          u"Background"_ustr,           RID_SW_TP_BACKGROUND },
     { u"Math"_ustr,               u""_ustr,                SID_SM_EDITOPTIONS },
     { u"Math"_ustr,               u"Settings"_ustr,             SID_SM_TP_PRINTOPTIONS },
     { u"Calc"_ustr,               u""_ustr,                SID_SC_EDITOPTIONS },
