@@ -965,7 +965,7 @@ int Sane::GetRange( int n, std::unique_ptr<double[]>& rpDouble )
     }
 }
 
-static const char *ppUnits[] = {
+const char* const ppUnits[] = {
     "",
     "[Pixel]",
     "[Bit]",

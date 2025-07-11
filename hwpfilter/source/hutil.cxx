@@ -25,7 +25,7 @@
 
 static char *get_one_roman(int num, char one, char five, char ten, char *str)
 {
-    static const char *one_strs[] =
+    static const char * const one_strs[] =
     {
         "", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"
     };

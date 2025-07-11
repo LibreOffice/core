@@ -204,7 +204,7 @@ private:
 
 // important: The order and position of the elements must match the constant
 // definition of "css::ui::UIElementType"
-std::u16string_view UIELEMENTTYPENAMES[] =
+constexpr std::u16string_view UIELEMENTTYPENAMES[] =
 {
     u"",  // Dummy value for unknown!
     u"" UIELEMENTTYPE_MENUBAR_NAME,

@@ -535,7 +535,7 @@ constexpr OString pStringIds[] = {
 };
 
 // TOP DICT keywords (also covers PRIV DICT keywords)
-static const char* pDictOps[] = {
+const char* const pDictOps[] = {
     "sVersion",         "sNotice",              "sFullName",        "sFamilyName",
     "sWeight",          "aFontBBox",            "dBlueValues",      "dOtherBlues",
     "dFamilyBlues",     "dFamilyOtherBlues",    "nStdHW",           "nStdVW",
@@ -547,7 +547,7 @@ static const char* pDictOps[] = {
 };
 
 // TOP DICT escapes (also covers PRIV DICT escapes)
-static const char* pDictEscs[] = {
+const char* const pDictEscs[] = {
     "sCopyright",           "bIsFixedPitch",    "nItalicAngle",     "nUnderlinePosition",
     "nUnderlineThickness",  "nPaintType",       "tCharstringType",  "aFontMatrix",
     "nStrokeWidth",         "nBlueScale",       "nBlueShift",       "nBlueFuzz",
@@ -560,7 +560,7 @@ static const char* pDictEscs[] = {
     "nFDArray",             "nFDSelect",        "sFontName"
 };
 
-static const char* pStandardEncoding[] = {
+const char* const pStandardEncoding[] = {
     ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
     ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",
     ".notdef", ".notdef", ".notdef", ".notdef", ".notdef",

@@ -639,7 +639,7 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
                                        const IntlWrapper* pIntl,
                                        bool bMetricStr) const
 {
-    static TranslateId aStyleIds[] =
+    static const TranslateId aStyleIds[] =
     {
         RID_SOLID,
         RID_DOTTED,

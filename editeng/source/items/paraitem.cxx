@@ -464,7 +464,7 @@ bool SvxAdjustItem::GetPresentation
 
 OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static TranslateId RID_SVXITEMS_ADJUST[] =
+    static const TranslateId RID_SVXITEMS_ADJUST[] =
     {
         RID_SVXITEMS_ADJUST_LEFT,
         RID_SVXITEMS_ADJUST_RIGHT,

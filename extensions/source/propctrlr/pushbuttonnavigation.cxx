@@ -40,7 +40,7 @@ namespace pcr
     {
         const sal_Int32 s_nFirstVirtualButtonType = 1 + sal_Int32(FormButtonType_URL);
 
-        const char* pNavigationURLs[] =
+        const char* const pNavigationURLs[] =
         {
             ".uno:FormController/moveToFirst",
             ".uno:FormController/moveToPrev",
@@ -56,7 +56,7 @@ namespace pcr
 
         sal_Int32 lcl_getNavigationURLIndex( std::u16string_view _rNavURL )
         {
-            const char** pLookup = pNavigationURLs;
+            const char* const* pLookup = pNavigationURLs;
             while ( *pLookup )
             {
                 if ( o3tl::equalsAscii( _rNavURL, *pLookup ) )
@@ -68,7 +68,7 @@ namespace pcr
 
         const char* lcl_getNavigationURL( sal_Int32 _nButtonTypeIndex )
         {
-            const char** pLookup = pNavigationURLs;
+            const char* const* pLookup = pNavigationURLs;
             while ( _nButtonTypeIndex-- && *pLookup++ )
                 ;
             OSL_ENSURE( *pLookup, "lcl_getNavigationURL: invalid index!" );

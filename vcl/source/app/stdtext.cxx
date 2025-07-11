@@ -92,7 +92,7 @@ OUString GetStandardQueryBoxText()
 
 OUString GetStandardText(StandardButtonType eButton)
 {
-    static TranslateId aResIdAry[static_cast<int>(StandardButtonType::Count)] =
+    static const TranslateId aResIdAry[static_cast<int>(StandardButtonType::Count)] =
     {
         // http://lists.freedesktop.org/archives/libreoffice/2013-January/044513.html
         // Under windows we don't want accelerators on ok/cancel but do on other

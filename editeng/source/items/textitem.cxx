@@ -570,7 +570,7 @@ bool SvxWeightItem::GetPresentation
 
 OUString SvxWeightItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static TranslateId RID_SVXITEMS_WEIGHTS[] =
+    static const TranslateId RID_SVXITEMS_WEIGHTS[] =
     {
         RID_SVXITEMS_WEIGHT_DONTKNOW,
         RID_SVXITEMS_WEIGHT_THIN,
@@ -1251,7 +1251,7 @@ SvxUnderlineItem* SvxUnderlineItem::Clone( SfxItemPool * ) const
 
 OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    static TranslateId RID_SVXITEMS_UL[] =
+    static const TranslateId RID_SVXITEMS_UL[] =
     {
         RID_SVXITEMS_UL_NONE,
         RID_SVXITEMS_UL_SINGLE,
@@ -1298,7 +1298,7 @@ SvxOverlineItem* SvxOverlineItem::Clone( SfxItemPool * ) const
 
 OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    static TranslateId RID_SVXITEMS_OL[] =
+    static const TranslateId RID_SVXITEMS_OL[] =
     {
         RID_SVXITEMS_OL_NONE,
         RID_SVXITEMS_OL_SINGLE,
@@ -1377,7 +1377,7 @@ bool SvxCrossedOutItem::GetPresentation
 
 OUString SvxCrossedOutItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static TranslateId RID_SVXITEMS_STRIKEOUT[] =
+    static const TranslateId RID_SVXITEMS_STRIKEOUT[] =
     {
         RID_SVXITEMS_STRIKEOUT_NONE,
         RID_SVXITEMS_STRIKEOUT_SINGLE,
@@ -1915,7 +1915,7 @@ bool SvxCaseMapItem::GetPresentation
 
 OUString SvxCaseMapItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static TranslateId RID_SVXITEMS_CASEMAP[] =
+    static const TranslateId RID_SVXITEMS_CASEMAP[] =
     {
         RID_SVXITEMS_CASEMAP_NONE,
         RID_SVXITEMS_CASEMAP_UPPERCASE,
@@ -2277,7 +2277,7 @@ bool SvxEmphasisMarkItem::GetPresentation
     const IntlWrapper& /*rIntl*/
 )   const
 {
-    static TranslateId RID_SVXITEMS_EMPHASIS[] =
+    static const TranslateId RID_SVXITEMS_EMPHASIS[] =
     {
         RID_SVXITEMS_EMPHASIS_NONE_STYLE,
         RID_SVXITEMS_EMPHASIS_DOT_STYLE,
@@ -2709,7 +2709,7 @@ SvxCharReliefItem* SvxCharReliefItem::Clone( SfxItemPool * ) const
     return new SvxCharReliefItem( *this );
 }
 
-static TranslateId RID_SVXITEMS_RELIEF[] =
+const TranslateId RID_SVXITEMS_RELIEF[] =
 {
     RID_SVXITEMS_RELIEF_NONE,
     RID_SVXITEMS_RELIEF_EMBOSSED,

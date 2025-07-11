@@ -1739,7 +1739,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
 
 const char* GetAddInName( const sal_uInt8 n )
 {
-    static const char*  pNames[ 256 ] =
+    static const char* const pNames[ 256 ] =
     {
         nullptr,                       //    0 8-Byte-IEEE-Float
         nullptr,                       //    1 Variable

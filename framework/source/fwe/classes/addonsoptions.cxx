@@ -1596,7 +1596,7 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
     SubstituteVariables( aImageURL );
 
     // Loop to create the two possible image names and try to read the bitmap files
-    static const char* aExtArray[] = { "_16", "_26" };
+    static const char* const aExtArray[] = { "_16", "_26" };
     for ( size_t i = 0; i < std::size(aExtArray); i++ )
     {
         OUStringBuffer aFileURL( aImageURL );

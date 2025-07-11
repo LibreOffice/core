@@ -266,7 +266,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
     if(bTakeCareOfDrawingLayerFillStyle)
     {
         // check if new FillStyles are used and if so mark old ones with -1
-        static OUString s_FillStyle(u"FillStyle"_ustr);
+        static constexpr OUString s_FillStyle(u"FillStyle"_ustr);
 
         if(doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle))
         {

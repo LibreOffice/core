@@ -181,7 +181,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 {
 #ifdef DBG_UTIL
     static int nLvl = 1;
-    static const char* pCls[] = { "DontCare","Array","Value","Variable","Method","Property","Object" };
+    static const char* const pCls[] = { "DontCare","Array","Value","Variable","Method","Property","Object" };
     SAL_INFO(
         "basic.sbx",
         "search" << std::setw(nLvl) << " "
@@ -433,7 +433,7 @@ void SbxObject::Insert( SbxVariable* pVar )
     }
     SetModified( true );
 #ifdef DBG_UTIL
-    static const char* pCls[] =
+    static const char* const pCls[] =
         { "DontCare","Array","Value","Variable","Method","Property","Object" };
     OUString aVarName( pVar->GetName() );
     if (const SbxObject *pSbxObj = aVarName.isEmpty() ? dynamic_cast<const SbxObject*>(pVar) : nullptr)
@@ -477,7 +477,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     }
     SetModified( true );
 #ifdef DBG_UTIL
-    static const char* pCls[] =
+    static const char* const pCls[] =
         { "DontCare","Array","Value","Variable","Method","Property","Object" };
     OUString aVarName( pVar->GetName() );
     if (const SbxObject *pSbxObj = aVarName.isEmpty() ? dynamic_cast<const SbxObject*>(pVar) : nullptr)

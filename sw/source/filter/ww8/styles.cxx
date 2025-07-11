@@ -24,11 +24,11 @@
 namespace
 {
     // Keep in sync with StyleSheetTable::ConvertStyleName
-    const char **GetStiNames() noexcept
+    const char* const* GetStiNames() noexcept
     {
         // Matches enum ww::sti in sw/source/filter/inc/wwstyles.hxx
         // tdf#161509: The case of the names must match Word-generated document's w:latentStyles
-        static const char *stiName[] =
+        static const char * const stiName[] =
         {
             "Normal",                   // stiNormal
             "heading 1",                // stiLev1

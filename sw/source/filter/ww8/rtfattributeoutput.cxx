@@ -840,11 +840,11 @@ void RtfAttributeOutput::TableDefinition(
     static const SvxBoxItemLine aBorders[] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
                                                SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
 
-    static const char* aRowPadNames[]
+    static const char* const aRowPadNames[]
         = { OOO_STRING_SVTOOLS_RTF_TRPADDT, OOO_STRING_SVTOOLS_RTF_TRPADDL,
             OOO_STRING_SVTOOLS_RTF_TRPADDB, OOO_STRING_SVTOOLS_RTF_TRPADDR };
 
-    static const char* aRowPadUnits[]
+    static const char* const aRowPadUnits[]
         = { OOO_STRING_SVTOOLS_RTF_TRPADDFT, OOO_STRING_SVTOOLS_RTF_TRPADDFL,
             OOO_STRING_SVTOOLS_RTF_TRPADDFB, OOO_STRING_SVTOOLS_RTF_TRPADDFR };
 
@@ -910,15 +910,15 @@ void RtfAttributeOutput::TableDefaultBorders(
     auto& rBox = *pItem;
     static const SvxBoxItemLine aBorders[] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
                                                SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
-    static const char* aBorderNames[]
+    static const char* const aBorderNames[]
         = { OOO_STRING_SVTOOLS_RTF_CLBRDRT, OOO_STRING_SVTOOLS_RTF_CLBRDRL,
             OOO_STRING_SVTOOLS_RTF_CLBRDRB, OOO_STRING_SVTOOLS_RTF_CLBRDRR };
     //Yes left and top are swapped with each other for cell padding! Because
     //that's what the thundering annoying rtf export/import word xp does.
-    static const char* aCellPadNames[]
+    static const char* const aCellPadNames[]
         = { OOO_STRING_SVTOOLS_RTF_CLPADL, OOO_STRING_SVTOOLS_RTF_CLPADT,
             OOO_STRING_SVTOOLS_RTF_CLPADB, OOO_STRING_SVTOOLS_RTF_CLPADR };
-    static const char* aCellPadUnits[]
+    static const char* const aCellPadUnits[]
         = { OOO_STRING_SVTOOLS_RTF_CLPADFL, OOO_STRING_SVTOOLS_RTF_CLPADFT,
             OOO_STRING_SVTOOLS_RTF_CLPADFB, OOO_STRING_SVTOOLS_RTF_CLPADFR };
     for (int i = 0; i < 4; ++i)
@@ -3844,7 +3844,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
 {
     static const SvxBoxItemLine aBorders[] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
                                                SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
-    static const char* aBorderNames[]
+    static const char* const aBorderNames[]
         = { OOO_STRING_SVTOOLS_RTF_BRDRT, OOO_STRING_SVTOOLS_RTF_BRDRL,
             OOO_STRING_SVTOOLS_RTF_BRDRB, OOO_STRING_SVTOOLS_RTF_BRDRR };
 
@@ -3931,7 +3931,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
             eShadowLocation = pItem->GetLocation();
 
         const SvxBoxItemLine* pBrd = aBorders;
-        const char** pBrdNms = aBorderNames;
+        const char* const* pBrdNms = aBorderNames;
         for (int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms)
         {
             editeng::SvxBorderLine const* const pLn = rBox.GetLine(*pBrd);

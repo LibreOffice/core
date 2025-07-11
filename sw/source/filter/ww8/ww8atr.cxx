@@ -2835,7 +2835,7 @@ void WW8AttributeOutput::HiddenField( const SwField& rField )
 
     m_rWW8Export.m_pChpPlc->AppendFkpEntry(m_rWW8Export.Strm().Tell());
     SwWW8Writer::WriteString16(m_rWW8Export.Strm(), sExpand, false);
-    static sal_uInt8 aArr[] =
+    static const sal_uInt8 aArr[] =
     {
         0x3C, 0x08, 0x1
     };

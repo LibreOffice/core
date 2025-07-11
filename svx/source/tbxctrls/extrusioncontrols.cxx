@@ -98,7 +98,7 @@ constexpr OUString aDirectionBmps[] =
     RID_SVXBMP_DIRECTION_DIRECTION_SE
 };
 
-static TranslateId aDirectionStrs[] =
+constexpr TranslateId aDirectionStrs[] =
 {
     RID_SVXSTR_DIRECTION_NW,
     RID_SVXSTR_DIRECTION_N,

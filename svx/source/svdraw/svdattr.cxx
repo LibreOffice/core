@@ -1076,7 +1076,7 @@ SdrCaptionTypeItem* SdrCaptionTypeItem::Clone(SfxItemPool* /*pPool*/) const     
 
 OUString SdrCaptionTypeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALCAPTIONTYPES[] =
+    static const TranslateId ITEMVALCAPTIONTYPES[] =
     {
         STR_ItemValCAPTIONTYPE1,
         STR_ItemValCAPTIONTYPE2,
@@ -1102,7 +1102,7 @@ SdrCaptionEscDirItem* SdrCaptionEscDirItem::Clone(SfxItemPool* /*pPool*/) const 
 
 OUString SdrCaptionEscDirItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALCAPTIONTYPES[] =
+    static const TranslateId ITEMVALCAPTIONTYPES[] =
     {
         STR_ItemValCAPTIONESCHORI,
         STR_ItemValCAPTIONESCVERT,
@@ -1145,7 +1145,7 @@ bool SdrTextFitToSizeTypeItem::operator==(const SfxPoolItem& rItem) const
 
 OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALFITTISIZETYPES[] =
+    static const TranslateId ITEMVALFITTISIZETYPES[] =
     {
         STR_ItemValFITTOSIZENONE,
         STR_ItemValFITTOSIZEPROP,
@@ -1205,7 +1205,7 @@ SdrTextVertAdjustItem* SdrTextVertAdjustItem::Clone(SfxItemPool* /*pPool*/) cons
 
 OUString SdrTextVertAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALTEXTVADJTYPES[] =
+    static const TranslateId ITEMVALTEXTVADJTYPES[] =
     {
         STR_ItemValTEXTVADJTOP,
         STR_ItemValTEXTVADJCENTER,
@@ -1262,7 +1262,7 @@ SdrTextHorzAdjustItem* SdrTextHorzAdjustItem::Clone(SfxItemPool* /*pPool*/) cons
 
 OUString SdrTextHorzAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALTEXTHADJTYPES[] =
+    static const TranslateId ITEMVALTEXTHADJTYPES[] =
     {
         STR_ItemValTEXTHADJLEFT,
         STR_ItemValTEXTHADJCENTER,
@@ -1312,7 +1312,7 @@ SdrTextAniKindItem* SdrTextAniKindItem::Clone(SfxItemPool* /*pPool*/) const     
 
 OUString SdrTextAniKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALTEXTANITYPES[] =
+    static const TranslateId ITEMVALTEXTANITYPES[] =
     {
         STR_ItemValTEXTANI_NONE,
         STR_ItemValTEXTANI_BLINK,
@@ -1361,7 +1361,7 @@ SdrTextAniDirectionItem* SdrTextAniDirectionItem::Clone(SfxItemPool* /*pPool*/) 
 
 OUString SdrTextAniDirectionItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALTEXTANITYPES[] =
+    static const TranslateId ITEMVALTEXTANITYPES[] =
     {
         STR_ItemValTEXTANI_LEFT,
         STR_ItemValTEXTANI_UP,
@@ -1514,7 +1514,7 @@ sal_uInt16 SdrEdgeKindItem::GetValueCount() { return 4; }
 
 OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALEDGES[] =
+    static const TranslateId ITEMVALEDGES[] =
     {
         STR_ItemValEDGE_ORTHOLINES,
         STR_ItemValEDGE_THREELINES,
@@ -1680,7 +1680,7 @@ SdrMeasureKindItem* SdrMeasureKindItem::Clone(SfxItemPool* /*pPool*/) const     
 
 OUString SdrMeasureKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALMEASURETYPES[] =
+    static const TranslateId ITEMVALMEASURETYPES[] =
     {
         STR_ItemValMEASURE_STD,
         STR_ItemValMEASURE_RADIUS
@@ -1773,7 +1773,7 @@ SdrMeasureTextVPosItem* SdrMeasureTextVPosItem::Clone(SfxItemPool* /*pPool*/) co
 
 OUString SdrMeasureTextVPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALMEASURETEXTTYPES[] =
+    static const TranslateId ITEMVALMEASURETEXTTYPES[] =
     {
         STR_ItemValMEASURE_TEXTVAUTO,
         STR_ItemValMEASURE_ABOVE,
@@ -1858,7 +1858,7 @@ SdrCircKindItem* SdrCircKindItem::Clone(SfxItemPool* /*pPool*/) const          {
 
 OUString SdrCircKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static TranslateId ITEMVALCIRCTYPES[] =
+    static const TranslateId ITEMVALCIRCTYPES[] =
     {
         STR_ItemValCIRC_FULL,
         STR_ItemValCIRC_SECT,

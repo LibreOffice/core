@@ -47,7 +47,7 @@ struct ScaFuncDataBase
     const char*                 pIntName;           // internal name (get***)
     TranslateId                 pUINameID;          // resource ID to UI name
     const TranslateId*          pDescrID;           // resource ID to description, parameter names and ~ description
-    const char**                pCompListID;        // list of valid names
+    const char* const*          pCompListID;        // list of valid names
     sal_uInt16                  nParamCount;        // number of named / described parameters
     ScaCategory                 eCat;               // function category
     bool                        bDouble;            // name already exist in Calc

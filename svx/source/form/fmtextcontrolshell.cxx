@@ -80,7 +80,7 @@ namespace svx
     typedef sal_uInt16 WhichId;
 
 
-    static SfxSlotId pTextControlSlots[] =
+    constexpr SfxSlotId pTextControlSlots[] =
     {
         SID_CLIPBOARD_FORMAT_ITEMS,
         SID_CUT,
@@ -130,7 +130,7 @@ namespace svx
     // slots which we are not responsible for on the SfxShell level, but
     // need to handle during the "paragraph attributes" and/or "character
     // attributes" dialogs
-    static SfxSlotId pDialogSlots[] =
+    constexpr SfxSlotId pDialogSlots[] =
     {
         SID_ATTR_TABSTOP,
         SID_ATTR_PARA_HANGPUNCTUATION,
@@ -1207,7 +1207,8 @@ namespace svx
     }
 
 
-    void FmTextControlShell::fillFeatureDispatchers(const Reference< css::awt::XControl >& _rxControl, SfxSlotId* _pZeroTerminatedSlots,
+    void FmTextControlShell::fillFeatureDispatchers(const Reference< css::awt::XControl >& _rxControl,
+            const SfxSlotId* _pZeroTerminatedSlots,
             ControlFeatures& _rDispatchers)
     {
         Reference< XDispatchProvider > xProvider( _rxControl, UNO_QUERY );
@@ -1215,7 +1216,7 @@ namespace svx
         DBG_ASSERT( pApplication, "FmTextControlShell::fillFeatureDispatchers: no SfxApplication!" );
         if ( xProvider.is() && pApplication )
         {
-            SfxSlotId* pSlots = _pZeroTerminatedSlots;
+            const SfxSlotId* pSlots = _pZeroTerminatedSlots;
             while ( *pSlots )
             {
                 rtl::Reference<FmTextControlFeature> pDispatcher = implGetFeatureDispatcher( xProvider, pApplication, *pSlots );

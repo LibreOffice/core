@@ -137,7 +137,7 @@ int getFlatTypeRank(std::u16string_view rType)
 {
     // List formats from more complex to less complex.
     // TODO: Add more.
-    static const char* ranks[] = {
+    static const char* const ranks[] = {
 
         // Compressed XML (ODF XML zip formats)
         "writer8_template",

@@ -68,7 +68,7 @@ namespace svt
         #define PROPERTY_FLAGS_CHECKBOX     ( PropFlags::Checked | PropFlags::Text )
 
         // Note: this array MUST be sorted by name!
-        const ControlDescription aDescriptions[] =  {
+        constexpr ControlDescription aDescriptions[] =  {
             { "AutoExtensionBox",       CHECKBOX_AUTOEXTENSION,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "CancelButton",           PUSHBUTTON_CANCEL,              PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "CurrentFolderText",      FIXEDTEXT_CURRENTFOLDER,        PROPERTY_FLAGS_COMMON | PropFlags::Text          },
@@ -102,8 +102,8 @@ namespace svt
 
         const sal_Int32 s_nControlCount = SAL_N_ELEMENTS( aDescriptions );
 
-        ControlDescIterator s_pControls = aDescriptions;
-        ControlDescIterator s_pControlsEnd = aDescriptions + s_nControlCount;
+        const ControlDescription* const s_pControls = aDescriptions;
+        const ControlDescription* const s_pControlsEnd = aDescriptions + s_nControlCount;
 
         struct ControlDescriptionLookup
         {
@@ -121,7 +121,7 @@ namespace svt
 
         typedef const ControlProperty* ControlPropertyIterator;
 
-        const ControlProperty aProperties[] =  {
+        constexpr ControlProperty aProperties[] =  {
             { "Text",               PropFlags::Text              },
             { "Enabled",            PropFlags::Enabled          },
             { "Visible",            PropFlags::Visible           },
@@ -134,9 +134,8 @@ namespace svt
 
         const int s_nPropertyCount = SAL_N_ELEMENTS( aProperties );
 
-        ControlPropertyIterator s_pProperties = aProperties;
-        ControlPropertyIterator s_pPropertiesEnd = aProperties + s_nPropertyCount;
-
+        const ControlProperty* const s_pProperties = aProperties;
+        const ControlProperty* const s_pPropertiesEnd = aProperties + s_nPropertyCount;
 
         struct ControlPropertyLookup
         {

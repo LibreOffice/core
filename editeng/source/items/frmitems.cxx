@@ -2734,7 +2734,7 @@ sal_uInt16 SvxShadowItem::CalcShadowSpace( SvxShadowItemSide nShadow ) const
     return nSpace;
 }
 
-static TranslateId RID_SVXITEMS_SHADOW[] =
+const TranslateId RID_SVXITEMS_SHADOW[] =
 {
     RID_SVXITEMS_SHADOW_NONE,
     RID_SVXITEMS_SHADOW_TOPLEFT,
@@ -4283,7 +4283,7 @@ bool SvxFormatBreakItem::GetPresentation
 
 OUString SvxFormatBreakItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static TranslateId RID_SVXITEMS_BREAK[] =
+    static const TranslateId RID_SVXITEMS_BREAK[] =
     {
         RID_SVXITEMS_BREAK_NONE,
         RID_SVXITEMS_BREAK_COLUMN_BEFORE,
