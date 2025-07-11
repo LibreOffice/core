@@ -7711,6 +7711,7 @@ static char* lo_getError (LibreOfficeKit *pThis)
 
 static void lo_freeError(char* pFree)
 {
+    // Do not try to do anything clever here. This should just call free() on the pointer.
     free(pFree);
 }
 
