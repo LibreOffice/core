@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <stlpool.hxx>
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <framework/windowstatehelper.hxx>
@@ -1124,6 +1125,50 @@ void ScViewData::SetShowGrid( bool bShow )
 {
     CreateSelectedTabData();
     maTabData[GetTabNumber()]->bShowGrid = bShow;
+}
+
+bool ScViewData::GetPrintGrid() const
+{
+    bool bPrintGrid;
+    ScStyleSheetPool* pStylePool = mrDoc.GetStyleSheetPool();
+    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( mrDoc.GetPageStyle( GetTabNumber() ), SfxStyleFamily::Page );
+    if (pStyleSheet)
+    {
+        SfxItemSet& rSet = pStyleSheet->GetItemSet();
+        bPrintGrid  = rSet.Get(ATTR_PAGE_GRID).GetValue();
+    }
+    else
+    {
+        const ScViewOptions& rOpt = mrDoc.GetViewOptions();
+        bPrintGrid  = rOpt.GetOption(sc::ViewOption::GRID);
+    }
+    return bPrintGrid;
+}
+
+void ScViewData::SetPrintGrid( bool bPrintGrid )
+{
+    ScStyleSheetPool* pStylePool = mrDoc.GetStyleSheetPool();
+    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( mrDoc.GetPageStyle( GetTabNumber() ), SfxStyleFamily::Page );
+    if (pStyleSheet)
+    {
+        SfxItemSet& rSet = pStyleSheet->GetItemSet();
+        SfxItemState eState = rSet.GetItemState(ATTR_PAGE_GRID, true);
+        bool bOld = rSet.Get(ATTR_PAGE_GRID).GetValue();
+
+        if (bOld == bPrintGrid && eState == SfxItemState::DEFAULT)
+            rSet.ClearItem(ATTR_PAGE_GRID);
+        else
+            rSet.Put(SfxBoolItem(ATTR_PAGE_GRID, bPrintGrid));
+
+        mrDoc.PageStyleModified(GetTabNumber(), pStyleSheet->GetName());
+    }
+    else
+    {
+        // If no style sheet exists, modify the view options directly
+        ScViewOptions aNewOptions = mrDoc.GetViewOptions();
+        aNewOptions.SetOption(sc::ViewOption::GRID, bPrintGrid);
+        mrDoc.SetViewOptions(aNewOptions);
+    }
 }
 
 void ScViewData::RefreshZoom()

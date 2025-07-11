@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <stlpool.hxx>
 #include <config_features.h>
 
 #include <memory>
@@ -427,6 +428,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             }
             break;
 
+        case FID_TOGGLE_PRINT_GRID:
+            {
+                bool bPrintGrid = rViewData.GetPrintGrid();
+                rViewData.SetPrintGrid(!bPrintGrid);
+                SfxBindings& rBindings = GetViewFrame().GetBindings();
+                rBindings.Invalidate( FID_TOGGLE_PRINT_GRID );
+            }
+            break;
+
         case FID_TAB_SET_TAB_BG_COLOR:
         case FID_TAB_MENU_SET_TAB_BG_COLOR:
             ExecuteSetTableBackgroundCol(rReq);
@@ -592,6 +602,12 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 
             case FID_TAB_TOGGLE_GRID:
                 rSet.Put( SfxBoolItem(nWhich, rViewData.GetShowGrid()) );
+                break;
+
+            case FID_TOGGLE_PRINT_GRID:
+                {
+                    rSet.Put( SfxBoolItem(nWhich, rViewData.GetPrintGrid()));
+                }
                 break;
         }
         nWhich = aIter.NextWhich();
