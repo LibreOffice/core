@@ -527,6 +527,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	SYLK \
 	StarOffice_XML__Calc_ \
 	Text___txt___csv__StarCalc_ \
+	calc_csv_Orcus \
 	calc_HTML_WebQuery \
 	calc_StarOffice_XML_Calc_Template \
 	calc_pdf_Export \
