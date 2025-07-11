@@ -787,17 +787,17 @@ vcl::TextArrayMetrics
 OutputDevice::GetTextArray(const OUString& rStr, KernArray* pKernArray, sal_Int32 nIndex,
                            sal_Int32 nLen, bool bCaret,
                            vcl::text::TextLayoutCache const* const pLayoutCache,
-                           SalLayoutGlyphs const* const pSalLayoutCache) const
+                           SalLayoutGlyphs const* const pSalLayoutCache, bool bBounds) const
 {
     return GetPartialTextArray(rStr, pKernArray, nIndex, nLen, nIndex, nLen, bCaret, pLayoutCache,
-                               pSalLayoutCache);
+                               pSalLayoutCache, bBounds);
 }
 
 vcl::TextArrayMetrics
 OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, sal_Int32 nIndex,
                                   sal_Int32 nLen, sal_Int32 nPartIndex, sal_Int32 nPartLen,
                                   bool bCaret, const vcl::text::TextLayoutCache* pLayoutCache,
-                                  const SalLayoutGlyphs* pSalLayoutCache) const
+                                  const SalLayoutGlyphs* pSalLayoutCache, bool bBounds) const
 {
     if (nIndex >= rStr.getLength())
     {
@@ -901,11 +901,14 @@ OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, s
 
     vcl::TextArrayMetrics stReturnValue;
 
-    basegfx::B2DRectangle stRect;
-    if (pSalLayout->GetBoundRect(stRect))
+    if (bBounds)
     {
-        auto stRect2 = SalLayout::BoundRect2Rectangle(stRect);
-        stReturnValue.aBounds = ImplDevicePixelToLogic(stRect2);
+        basegfx::B2DRectangle stRect;
+        if (pSalLayout->GetBoundRect(stRect))
+        {
+            auto stRect2 = SalLayout::BoundRect2Rectangle(stRect);
+            stReturnValue.aBounds = ImplDevicePixelToLogic(stRect2);
+        }
     }
 
     stReturnValue.nWidth = ImplDevicePixelToLogicWidthDouble(nWidth);
