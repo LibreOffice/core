@@ -723,8 +723,8 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
     try
     {
         SalInstance* pInst = ImplGetSVData()->mpDefInst;
-        mpWindowImpl->mpFrameData->mxDragSource = pInst->CreateDragSource(pEnvData);
-        mpWindowImpl->mpFrameData->mxDropTarget = pInst->CreateDropTarget(pEnvData);
+        mpWindowImpl->mpFrameData->mxDragSource = pInst->CreateDragSource(*pEnvData);
+        mpWindowImpl->mpFrameData->mxDropTarget = pInst->CreateDropTarget(*pEnvData);
     }
     catch (const Exception&)
     {

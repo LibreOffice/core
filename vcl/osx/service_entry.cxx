@@ -51,19 +51,19 @@ AquaSalInstance::CreateClipboard(const Sequence<Any>& i_rArguments)
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDragSource>
-AquaSalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
+AquaSalInstance::ImplCreateDragSource(const SystemEnvData& rSysEnv)
 {
     rtl::Reference<DragSource> xDragSource = new DragSource();
-    vcl::OleDnDHelper(xDragSource, reinterpret_cast<sal_IntPtr>(pSysEnv->mpNSView),
+    vcl::OleDnDHelper(xDragSource, reinterpret_cast<sal_IntPtr>(rSysEnv.mpNSView),
                       vcl::DragOrDrop::Drag);
     return xDragSource;
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDropTarget>
-AquaSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
+AquaSalInstance::ImplCreateDropTarget(const SystemEnvData& rSysEnv)
 {
     rtl::Reference<DropTarget> xDropTarget = new DropTarget();
-    vcl::OleDnDHelper(xDropTarget, reinterpret_cast<sal_IntPtr>(pSysEnv->mpNSView),
+    vcl::OleDnDHelper(xDropTarget, reinterpret_cast<sal_IntPtr>(rSysEnv.mpNSView),
                       vcl::DragOrDrop::Drop);
     return xDropTarget;
 }

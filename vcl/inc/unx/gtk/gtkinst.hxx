@@ -273,9 +273,9 @@ public:
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
     CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
-    ImplCreateDragSource(const SystemEnvData*) override;
+    ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
-    ImplCreateDropTarget(const SystemEnvData*) override;
+    ImplCreateDropTarget(const SystemEnvData& rSysEnv) override;
     virtual OpenGLContext* CreateOpenGLContext() override;
     virtual std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile) override;
     virtual std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,

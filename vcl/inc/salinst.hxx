@@ -190,13 +190,13 @@ public:
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
     CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments);
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
-    ImplCreateDragSource(const SystemEnvData*);
+    ImplCreateDragSource(const SystemEnvData& rSysEnv);
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
-    ImplCreateDropTarget(const SystemEnvData*);
+    ImplCreateDropTarget(const SystemEnvData& rSysEnv);
     css::uno::Reference<css::datatransfer::dnd::XDragSource>
-    CreateDragSource(const SystemEnvData* = nullptr);
+    CreateDragSource(const SystemEnvData& rSysEnv);
     css::uno::Reference<css::datatransfer::dnd::XDropTarget>
-    CreateDropTarget(const SystemEnvData* = nullptr);
+    CreateDropTarget(const SystemEnvData& rSysEnv);
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) = 0;
 
     virtual bool            hasNativeFileSelection() const { return false; }

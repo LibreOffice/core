@@ -1659,9 +1659,9 @@ void GtkInstDropTarget::deinitialize()
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDropTarget>
-GtkInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
+GtkInstance::ImplCreateDropTarget(const SystemEnvData& rSysEnv)
 {
-    return new GtkInstDropTarget(static_cast<GtkSalFrame*>(pSysEnv->pSalFrame));
+    return new GtkInstDropTarget(static_cast<GtkSalFrame*>(rSysEnv.pSalFrame));
 }
 
 GtkInstDragSource::GtkInstDragSource(GtkSalFrame* pFrame)
@@ -1717,9 +1717,9 @@ css::uno::Sequence<OUString> SAL_CALL GtkInstDragSource::getSupportedServiceName
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDragSource>
-GtkInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
+GtkInstance::ImplCreateDragSource(const SystemEnvData& rSysEnv)
 {
-    return new GtkInstDragSource(static_cast<GtkSalFrame*>(pSysEnv->pSalFrame));
+    return new GtkInstDragSource(static_cast<GtkSalFrame*>(rSysEnv.pSalFrame));
 }
 
 namespace {

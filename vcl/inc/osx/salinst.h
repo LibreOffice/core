@@ -139,9 +139,9 @@ public:
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
     CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
-    ImplCreateDragSource(const SystemEnvData*) override;
+    ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
-    ImplCreateDropTarget(const SystemEnvData*) override;
+    ImplCreateDropTarget(const SystemEnvData& rSysEnv) override;
 
     static void handleAppDefinedEvent( NSEvent* pEvent );
 

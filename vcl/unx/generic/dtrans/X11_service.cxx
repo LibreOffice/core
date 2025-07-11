@@ -79,7 +79,7 @@ X11SalInstance::CreateClipboard(const Sequence<Any>& arguments)
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDragSource>
-X11SalInstance::ImplCreateDragSource(const SystemEnvData*)
+X11SalInstance::ImplCreateDragSource(const SystemEnvData&)
 {
     rtl::Reference<SelectionManagerHolder> xSelectionManagerHolder = new SelectionManagerHolder();
     xSelectionManagerHolder->initialize();
@@ -88,11 +88,11 @@ X11SalInstance::ImplCreateDragSource(const SystemEnvData*)
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDropTarget>
-X11SalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
+X11SalInstance::ImplCreateDropTarget(const SystemEnvData& rSysEnv)
 {
     rtl::Reference<X11DropTarget> xDropTarget = new X11DropTarget();
 
-    X11SalFrame* pFrame = static_cast<X11SalFrame*>(pSysEnv->pSalFrame);
+    X11SalFrame* pFrame = static_cast<X11SalFrame*>(rSysEnv.pSalFrame);
     ::Window aShellWindow = pFrame ? pFrame->GetShellWindow() : 0;
     if (aShellWindow)
         xDropTarget->initialize(aShellWindow);

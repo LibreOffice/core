@@ -1051,18 +1051,18 @@ void WinSalInstance::BeforeAbort(const OUString&, bool)
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDragSource>
-WinSalInstance::ImplCreateDragSource(const SystemEnvData* pSysEnv)
+WinSalInstance::ImplCreateDragSource(const SystemEnvData& rSysEnv)
 {
     rtl::Reference<DragSource> xDragSource = new DragSource(comphelper::getProcessComponentContext());
-    vcl::OleDnDHelper(xDragSource, reinterpret_cast<sal_IntPtr>(pSysEnv->hWnd), vcl::DragOrDrop::Drag);
+    vcl::OleDnDHelper(xDragSource, reinterpret_cast<sal_IntPtr>(rSysEnv.hWnd), vcl::DragOrDrop::Drag);
     return xDragSource;
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDropTarget>
-WinSalInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
+WinSalInstance::ImplCreateDropTarget(const SystemEnvData& rSysEnv)
 {
     rtl::Reference<DropTarget> xDropTarget = new DropTarget(comphelper::getProcessComponentContext());
-    vcl::OleDnDHelper(xDropTarget, reinterpret_cast<sal_IntPtr>(pSysEnv->hWnd), vcl::DragOrDrop::Drop);
+    vcl::OleDnDHelper(xDropTarget, reinterpret_cast<sal_IntPtr>(rSysEnv.hWnd), vcl::DragOrDrop::Drop);
     return xDropTarget;
 }
 

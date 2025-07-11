@@ -83,9 +83,9 @@ public:
     static int WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo);
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
-    ImplCreateDragSource(const SystemEnvData*) override;
+    ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
-    ImplCreateDropTarget(const SystemEnvData*) override;
+    ImplCreateDropTarget(const SystemEnvData& rSysEnv) override;
 };
 
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, SalFrameStyleFlags nSalFrameStyle );
