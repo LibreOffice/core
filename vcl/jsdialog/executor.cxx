@@ -487,6 +487,11 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                     LOKTrigger::trigger_changed(*pEdit);
                     return true;
                 }
+                if (sAction == "activate")
+                {
+                    LOKTrigger::trigger_activated(*pEdit);
+                    return true;
+                }
             }
 
             auto pTextView = dynamic_cast<JSTextView*>(pWidget);

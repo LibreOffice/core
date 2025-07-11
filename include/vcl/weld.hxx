@@ -1767,6 +1767,7 @@ protected:
     friend class ::LOKTrigger;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
+    void signal_activated() { m_aActivateHdl.Call(*this); }
     void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
 
 public:

@@ -21,6 +21,8 @@ public:
 
     static void trigger_changed(weld::Entry& rEdit) { rEdit.signal_changed(); }
 
+    static void trigger_activated(weld::Entry& rEdit) { rEdit.signal_activated(); }
+
     static void trigger_changed(weld::ComboBox& rComboBox) { rComboBox.signal_changed(); }
 
     static void trigger_changed(weld::TreeView& rTreeView) { rTreeView.signal_changed(); }
