@@ -139,11 +139,11 @@ static void convertNumber(OUStringBuffer & b, sal_Int32 n) {
     b.append(n);
 }
 
-convert_t const xforms_int32    = &xforms_convert<sal_Int32,&convertNumber>;
-convert_t const xforms_double   = &xforms_convert<double,&::sax::Converter::convertDouble>;
-convert_t const xforms_dateTime = &xforms_convertRef<util::DateTime,&xforms_formatDateTime>;
-convert_t const xforms_date     = &xforms_convertRef<util::Date,&xforms_formatDate>;
-convert_t const xforms_time     = &xforms_convertRef<css::util::Time,&xforms_formatTime>;
+constexpr convert_t xforms_int32    = &xforms_convert<sal_Int32,&convertNumber>;
+constexpr convert_t xforms_double   = &xforms_convert<double,&::sax::Converter::convertDouble>;
+constexpr convert_t xforms_dateTime = &xforms_convertRef<util::DateTime,&xforms_formatDateTime>;
+constexpr convert_t xforms_date     = &xforms_convertRef<util::Date,&xforms_formatDate>;
+constexpr convert_t xforms_time     = &xforms_convertRef<css::util::Time,&xforms_formatTime>;
 
 // other functions
 static OUString lcl_getXSDType( SvXMLExport const & rExport,
@@ -397,8 +397,7 @@ void exportXFormsSubmission( SvXMLExport& rExport,
 
 // export data types as XSD schema
 
-
-const ExportTable aDataTypeFacetTable[] =
+constexpr ExportTable aDataTypeFacetTable[] =
 {
     { u"Length"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_LENGTH, xforms_int32 },
     { u"MinLength"_ustr, XML_NAMESPACE_XSD, xmloff::token::XML_MINLENGTH, xforms_int32 },
