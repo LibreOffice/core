@@ -75,7 +75,7 @@ namespace slideshow
             ViewAppletShape( ViewLayerSharedPtr                                xViewLayer,
                              const css::uno::Reference< css::drawing::XShape >&        rxShape,
                              const OUString&                                   rServiceName,
-                             const char**                                      pPropCopyTable,
+                             const char* const*                                pPropCopyTable,
                              std::size_t                                       nNumPropEntries,
                              css::uno::Reference< css::uno::XComponentContext > xContext );
 

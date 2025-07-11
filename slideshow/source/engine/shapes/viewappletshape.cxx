@@ -55,7 +55,7 @@ namespace slideshow::internal
         ViewAppletShape::ViewAppletShape( ViewLayerSharedPtr                              xViewLayer,
                                           const uno::Reference< drawing::XShape >&        rxShape,
                                           const OUString&                          rServiceName,
-                                          const char**                                    pPropCopyTable,
+                                          const char* const*                              pPropCopyTable,
                                           std::size_t                                     nNumPropEntries,
                                           uno::Reference< uno::XComponentContext >        xContext ) :
             mpViewLayer(std::move( xViewLayer )),
