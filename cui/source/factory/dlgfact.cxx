@@ -1190,7 +1190,6 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
 {
     switch ( nId )
     {
-        case RID_SW_TP_BACKGROUND :
         case RID_SVXPAGE_BKG :
             return SvxBkgTabPage::Create;
         case RID_SVXPAGE_TEXTANIMATION :
@@ -1299,7 +1298,6 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nI
             return SvxTextAttrPage::GetRanges;
         case RID_SVXPAGE_ALIGNMENT :
             return svx::AlignmentTabPage::GetRanges;
-        case RID_SW_TP_BACKGROUND :
         case RID_SVXPAGE_BKG:
             return SvxBkgTabPage::GetRanges;
         case RID_SVXPAGE_BORDER :

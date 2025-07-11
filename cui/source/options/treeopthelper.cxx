@@ -102,7 +102,6 @@ static PageIdToFileNameMap_Impl FileMap_Impl[] = {
     { RID_SW_TP_HTML_OPTGRID_PAGE, u""_ustr }, // Grid
     { RID_SW_TP_HTML_OPTPRINT_PAGE, u""_ustr }, // Print
     { RID_SW_TP_HTML_OPTTABLE_PAGE, u""_ustr }, // Table
-    { RID_SW_TP_BACKGROUND, u""_ustr }, // Background
     { RID_SW_TP_OPTTEST_PAGE, u""_ustr }, // Internal Test (only in dev build)
 
     // Math, SID_SM_EDITOPTIONS
