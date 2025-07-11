@@ -427,7 +427,7 @@ void WW8Export::DoComboBox(const OUString &rName,
 
     WriteChar( 0x01 );
 
-    static sal_uInt8 aArr1[] =
+    sal_uInt8 aArr1[] =
     {
         0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
         0x06, 0x08, 0x01,       // sprmCFData
@@ -435,7 +435,7 @@ void WW8Export::DoComboBox(const OUString &rName,
         0x02, 0x08, 0x01        // sprmCFFieldVanish
     };
     sal_uInt8* pDataAdr = aArr1 + 2;
-    Set_UInt32( pDataAdr, nDataStt );
+    Set_UInt32(pDataAdr, nDataStt);
 
     m_pChpPlc->AppendFkpEntry(Strm().Tell(), sizeof(aArr1), aArr1);
 
@@ -470,7 +470,7 @@ void WW8Export::DoFormText(const SwInputField * pField)
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 
     WriteChar( 0x01 );
-    static sal_uInt8 aArr1[] = {
+    sal_uInt8 aArr1[] = {
         0x02, 0x08, 0x81,        // sprmCFFieldVanish
         0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
 
@@ -496,7 +496,7 @@ void WW8Export::DoFormText(const SwInputField * pField)
     const OUString fieldStr( pField->ExpandField(true, nullptr) );
     SwWW8Writer::WriteString16(Strm(), fieldStr, false);
 
-    static sal_uInt8 aArr2[] = {
+    sal_uInt8 aArr2[] = {
         0x55, 0x08, 0x01,  // sprmCFSpec
         0x75, 0x08, 0x01       // ???
     };

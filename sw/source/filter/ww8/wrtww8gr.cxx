@@ -195,7 +195,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     sal_uInt8 *pSpecOLE;
     sal_uInt8 *pDataAdr;
     short nSize;
-    static sal_uInt8 aSpecOLE_WW8[] = {
+    sal_uInt8 aSpecOLE_WW8[] = {
             0x03, 0x6a, 0, 0, 0, 0, // sprmCPicLocation
             0x0a, 0x08, 1,          // sprmCFOLE2
             0x56, 0x08, 1           // sprmCFObj
