@@ -4206,7 +4206,7 @@ void WW8Export::WriteFormData( const ::sw::mark::Fieldmark& rFieldmark )
     m_pChpPlc->AppendFkpEntry(Strm().Tell());
 
     WriteChar(0x01);
-    static sal_uInt8 aArr1[] =
+    sal_uInt8 aArr1[] =
     {
         0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
 

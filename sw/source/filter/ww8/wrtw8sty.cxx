@@ -2105,7 +2105,7 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
         rWrt.m_pTableStrm->WriteUInt32(nP);
     }
 
-    static WW8_SED aSed = {{4, 0},{0, 0, 0, 0},{0, 0},{0xff, 0xff, 0xff, 0xff}};
+    WW8_SED aSed = {{4, 0},{0, 0, 0, 0},{0, 0},{0xff, 0xff, 0xff, 0xff}};
 
     for (const auto & rSectionAttribute : m_SectionAttributes)
     {

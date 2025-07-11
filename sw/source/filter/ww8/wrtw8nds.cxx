@@ -1170,7 +1170,7 @@ bool WW8AttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget,
     // WinWord 2000 doesn't write this - so it's a temp solution by W97 ?
     m_rWW8Export.WriteChar( 0x01 );
 
-    static sal_uInt8 aArr1[] = {
+    sal_uInt8 aArr1[] = {
         0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
 
         0x06, 0x08, 0x01,       // sprmCFData
