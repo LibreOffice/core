@@ -69,7 +69,7 @@ namespace slideshow::internal
             AppletShape( const css::uno::Reference< css::drawing::XShape >& xShape,
                          double                                     nPrio,
                          OUString                                   aServiceName,
-                         const char**                               pPropCopyTable,
+                         const char* const*                         pPropCopyTable,
                          std::size_t                                nNumPropEntries,
                          const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
 
@@ -97,7 +97,7 @@ namespace slideshow::internal
             virtual void implSetIntrinsicAnimationTime(double) override;
 
             const OUString                           maServiceName;
-            const char**                                    mpPropCopyTable;
+            const char* const*                       mpPropCopyTable;
             const std::size_t                        mnNumPropEntries;
 
             /// the list of active view shapes (one for each registered view layer)
@@ -111,8 +111,8 @@ namespace slideshow::internal
         AppletShape::AppletShape( const uno::Reference< drawing::XShape >& xShape,
                                   double                                   nPrio,
                                   OUString                                 aServiceName,
-                                  const char**                             pPropCopyTable,
-                                  std::size_t                                 nNumPropEntries,
+                                  const char* const*                       pPropCopyTable,
+                                  std::size_t                              nNumPropEntries,
                                   const SlideShowContext&                  rContext ) :
             ExternalShapeBase( xShape, nPrio, rContext ),
             maServiceName(std::move( aServiceName )),
@@ -283,7 +283,7 @@ namespace slideshow::internal
             const uno::Reference< drawing::XShape >& xShape,
             double                                   nPrio,
             const OUString&                   rServiceName,
-            const char**                             pPropCopyTable,
+            const char* const*                       pPropCopyTable,
             std::size_t                              nNumPropEntries,
             const SlideShowContext&                  rContext )
         {

@@ -220,7 +220,7 @@ ShapeSharedPtr ShapeImporter::createShape(
     else if( shapeType == u"com.sun.star.drawing.AppletShape" )
     {
         // PropertyValues to copy from XShape to applet
-        static const char* aPropertyValues[] =
+        static const char* const aPropertyValues[] =
             {
                 "AppletCodeBase",
                 "AppletName",

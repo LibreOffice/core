@@ -34,7 +34,7 @@ namespace slideshow::internal
             const css::uno::Reference< css::drawing::XShape >& xShape,
             double                                  nPrio,
             const OUString&                         rServiceName,
-            const char**                            pPropCopyTable,
+            const char* const*                      pPropCopyTable,
             std::size_t                             nNumPropEntries,
             const SlideShowContext&                 rContext );
 }
