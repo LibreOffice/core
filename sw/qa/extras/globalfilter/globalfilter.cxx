@@ -32,6 +32,7 @@
 #include <ndtxt.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
+#include <wrtsh.hxx>
 #include <xmloff/odffields.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
@@ -1647,6 +1648,55 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
         }
     }
     CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nL)>(1), nL);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableOfContentLinksHaveContentSet)
+{
+    // Test for tdf#167409
+
+    // TOC is expected to have alt. text set (written to /Contents key), PDF/UA conformance tests
+    // will fail. TOC links can't be set by the user.
+
+    createSwDoc("SimpleTOC.odt");
+
+    // Let's update TOC first
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
+    const SwTOXBase* pTOX = pWrtShell->GetTOX(0);
+    CPPUNIT_ASSERT(pTOX);
+    pWrtShell->UpdateTableOf(*pTOX);
+
+    // Export as PDF
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    // Non-NULL pPdfDocument means pdfium is available.
+    if (!pPdfDocument)
+        return;
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // The page has one annotation.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPdfPage->getAnnotation(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Link, pAnnotation->getSubType());
+    CPPUNIT_ASSERT(pAnnotation->hasKey("Contents"_ostr));
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFObjectType::String,
+                         pAnnotation->getValueType("Contents"_ostr));
+    OUString aContent = pAnnotation->getString("Contents"_ostr);
+    CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr, aContent);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
