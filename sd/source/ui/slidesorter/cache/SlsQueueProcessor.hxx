@@ -83,7 +83,6 @@ private:
     RequestQueue& mrQueue;
     std::shared_ptr<BitmapCache> mpCache;
     BitmapFactory maBitmapFactory;
-    bool mbIsPaused;
 
     void ProcessRequests();
     void ProcessOneRequest (

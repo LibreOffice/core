@@ -41,8 +41,7 @@ QueueProcessor::QueueProcessor (
       mbDoSuperSampling(bDoSuperSampling),
       mpCacheContext(std::move(pCacheContext)),
       mrQueue(rQueue),
-      mpCache(std::move(pCache)),
-      mbIsPaused(false)
+      mpCache(std::move(pCache))
 {
     maTimer.SetInvokeHandler (LINK(this,QueueProcessor,ProcessRequestHdl));
     maTimer.SetTimeout (10);
@@ -54,8 +53,6 @@ QueueProcessor::~QueueProcessor()
 
 void QueueProcessor::Start (int nPriorityClass)
 {
-    if (mbIsPaused)
-        return;
     if ( ! maTimer.IsActive())
     {
         if (nPriorityClass == 0)
@@ -92,7 +89,6 @@ void QueueProcessor::ProcessRequests()
     // Never process more than one request at a time in order to prevent the
     // lock up of the edit view.
     if ( ! mrQueue.IsEmpty()
-        && ! mbIsPaused
         &&  mpCacheContext->IsIdle())
     {
         CacheKey aKey = nullptr;
