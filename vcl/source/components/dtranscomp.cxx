@@ -26,7 +26,6 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
-#include <factory.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
 
@@ -272,35 +271,6 @@ void GenericDragSource::startDrag( const datatransfer::dnd::DragGestureEvent&,
 
 void GenericDragSource::initialize( const Sequence< Any >& )
 {
-}
-
-Sequence< OUString > DragSource_getSupportedServiceNames()
-{
-#if defined MACOSX
-    return { "com.sun.star.datatransfer.dnd.OleDragSource" };
-#elif defined UNX
-    return { u"com.sun.star.datatransfer.dnd.X11DragSource"_ustr };
-#else
-    return { "com.sun.star.datatransfer.dnd.VclGenericDragSource" };
-#endif
-}
-
-OUString DragSource_getImplementationName()
-{
-#if defined MACOSX
-    return "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1";
-#elif defined UNX
-    return u"com.sun.star.datatransfer.dnd.XdndSupport"_ustr;
-#else
-    return "com.sun.star.datatransfer.dnd.VclGenericDragSource";
-#endif
-}
-
-Reference< XInterface > DragSource_createInstance( const Reference< XMultiServiceFactory >&  )
-{
-    SolarMutexGuard aGuard;
-    Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDragSource();
-    return xResult;
 }
 
 /*

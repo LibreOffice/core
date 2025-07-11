@@ -351,13 +351,6 @@ void Test::createInstance(
         // SystemClipboard is a wrapper returning either a platform-specific or
         // the generic VCLGenericClipboard:
         expImpl = "com.sun.star.datatransfer.VCLGenericClipboard";
-#if !defined(_WIN32)
-    } else if (name == "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"
-               || name == "com.sun.star.datatransfer.dnd.XdndSupport")
-    {
-        expImpl = "com.sun.star.datatransfer.dnd.VclGenericDragSource";
-        expServs = {u"com.sun.star.datatransfer.dnd.GenericDragSource"_ustr};
-#endif
     } else if (name == "com.sun.star.ui.dialogs.FolderPicker") {
         // FolderPicker is a wrapper returning either a platform-specific or the
         // generic OfficeFolderPicker. In headless mode it is always the

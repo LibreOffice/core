@@ -17,41 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/factory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <vcl/dllapi.h>
-
-#include <factory.hxx>
 
 extern "C" {
 
     VCL_DLLPUBLIC void* vcl_component_getFactory(
-        const char* pImplementationName,
-        void* pXUnoSMgr,
+        const char* /*pImplementationName*/,
+        void* /*pXUnoSMgr*/,
         void* /*pXUnoKey*/)
     {
-        if (!pXUnoSMgr)
-            return nullptr;
-
-        css::uno::Reference<css::lang::XMultiServiceFactory> xMgr(
-            static_cast<css::lang::XMultiServiceFactory*>(pXUnoSMgr));
-
-        css::uno::Reference<css::lang::XSingleServiceFactory> xFactory;
-
-        if( vcl::DragSource_getImplementationName().equalsAscii( pImplementationName ) )
-        {
-            xFactory = ::cppu::createSingleFactory(
-                xMgr, vcl::DragSource_getImplementationName(), vcl::DragSource_createInstance,
-                vcl::DragSource_getSupportedServiceNames() );
-        }
-
-        if( xFactory.is() )
-        {
-            xFactory->acquire();
-            return xFactory.get();
-        }
-
         return nullptr;
     }
 
