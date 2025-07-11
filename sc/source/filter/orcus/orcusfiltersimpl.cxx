@@ -18,6 +18,7 @@
 #include <svl/itemset.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <orcus/format_detection.hpp>
 #include <orcus/orcus_import_ods.hpp>
@@ -40,21 +41,30 @@ uno::Reference<task::XStatusIndicator> getStatusIndicator(const SfxMedium& rMedi
 
 bool loadFileContent(SfxMedium& rMedium, orcus::iface::import_filter& filter)
 {
-    SvStream* pStream = rMedium.GetInStream();
-    pStream->Seek(0);
-    static const size_t nReadBuffer = 1024 * 32;
-    OStringBuffer aBuffer((int(nReadBuffer)));
-    size_t nRead = 0;
+    // write the content to a temp file
+    utl::TempFileNamed aTemp;
+    aTemp.EnableKillingFile();
+    SvStream* pDest = aTemp.GetStream(StreamMode::WRITE);
+
+    SvStream* pSrc = rMedium.GetInStream();
+    pSrc->Seek(0);
+    const std::size_t nReadBuffer = 1024 * 32;
+    std::size_t nRead = 0;
+
     do
     {
         char pData[nReadBuffer];
-        nRead = pStream->ReadBytes(pData, nReadBuffer);
-        aBuffer.append(pData, nRead);
+        nRead = pSrc->ReadBytes(pData, nReadBuffer);
+        pDest->WriteBytes(pData, nRead);
     } while (nRead == nReadBuffer);
+
+    aTemp.CloseStream();
 
     try
     {
-        filter.read_stream(aBuffer);
+        // memory-map the temp file and start the import
+        orcus::file_content input(aTemp.GetFileName().toUtf8());
+        filter.read_stream(input.str());
     }
     catch (const std::exception& e)
     {
