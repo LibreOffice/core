@@ -142,6 +142,13 @@ static void MyCGPathApplierFunc(void* pData, const CGPathElement* pElement)
     }
 }
 
+static void MyDestroyCFDataRef(void* pUserData)
+{
+    CFDataRef pData = static_cast<CFDataRef>(pUserData);
+    if (pData)
+        CFRelease(pData);
+}
+
 bool CoreTextFont::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rResult, bool) const
 {
     rResult.clear();
@@ -216,15 +223,20 @@ hb_blob_t* CoreTextFontFace::GetHbTable(hb_tag_t nTag) const
         const CFIndex nLength = pData ? CFDataGetLength(pData) : 0;
         if (nLength > 0)
         {
-            auto pBuffer = new UInt8[nLength];
-            const CFRange aRange = CFRangeMake(0, nLength);
-            CFDataGetBytes(pData, aRange, pBuffer);
-
-            pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength,
-                                   HB_MEMORY_MODE_READONLY, pBuffer,
-                                   [](void* data) { delete[] static_cast<UInt8*>(data); });
+            // tdf#159529 Use macOS font table memory directly instead of copying
+            // Per Apple's documentation, the CFDataRef returned by the
+            // CTFontCopyTable() function is "A retained reference to the
+            // font table data as a CFDataRef object. The table data is not
+            // actually copied; however, the data reference must be released."
+            // So, instead of making a copy of the CFDataRef's data, just use
+            // the CFDataRef's data pointer for the HarfBuzz blob and release
+            // the CFDataRef in the blob's destroy function.
+            pBlob = hb_blob_create(reinterpret_cast<const char*>(CFDataGetBytePtr(pData)), nLength,
+                                   HB_MEMORY_MODE_READONLY,
+                                   const_cast<void*>(static_cast<CFTypeRef>(pData)),
+                                   MyDestroyCFDataRef);
         }
-        if (pData)
+        else if (pData)
             CFRelease(pData);
     }
 
