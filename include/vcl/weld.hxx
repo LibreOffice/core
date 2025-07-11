@@ -2073,6 +2073,13 @@ protected:
         m_aChangeHdl.Call(*this);
     }
 
+    void signal_activated()
+    {
+        if (notify_events_disabled())
+            return;
+        m_aActivateHdl.Call(*this);
+    }
+
     void signal_cursor_position()
     {
         if (notify_events_disabled())
