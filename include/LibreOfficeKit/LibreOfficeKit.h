@@ -65,6 +65,20 @@ struct _LibreOfficeKitClass
                                                         const char* pURL,
                                                         const char* pOptions);
     /// @since LibreOffice 5.2
+
+    /// The name "freeError" is a historical accident, actually this
+    /// is a generic deallocation function for dynamically allocated
+    /// memory returned by other LibreOfficeKit functions.
+
+    /// Especially on Windows it is important to not call free() in
+    /// your own code on a pointer returned from some random other
+    /// dynamic library (like the one this code goes into) where it
+    /// might have been allocated by calling malloc() (etc) in a C
+    /// runtime library that is different from the one used by your
+    /// code. That will lead to a crash. Alays call the free() in the
+    /// same C runtime where the malloc() that allocated the pointer
+    /// is.
+
     void (*freeError) (char* pFree);
 
     /// @since LibreOffice 6.0
