@@ -1056,7 +1056,8 @@ public:
                                        sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                        bool bCaret = false,
                                        vcl::text::TextLayoutCache const* = nullptr,
-                                       SalLayoutGlyphs const* const pLayoutCache = nullptr) const;
+                                       SalLayoutGlyphs const* const pLayoutCache = nullptr,
+                                       bool bBounds = false) const;
 
     void DrawPartialTextArray(const Point& rStartPt, const OUString& rStr, KernArraySpan aKernArray,
                               std::span<const sal_Bool> pKashidaAry, sal_Int32 nIndex,
@@ -1068,7 +1069,8 @@ public:
                                               sal_Int32 nPartIndex, sal_Int32 nPartLen,
                                               bool bCaret = false,
                                               const vcl::text::TextLayoutCache* = nullptr,
-                                              const SalLayoutGlyphs* pLayoutCache = nullptr) const;
+                                              const SalLayoutGlyphs* pLayoutCache = nullptr,
+                                              bool bBounds = false) const;
 
     SAL_DLLPRIVATE void         GetCaretPositions( const OUString&, KernArray& rCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen,

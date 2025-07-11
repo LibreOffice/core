@@ -768,14 +768,14 @@ static void GetTextArray(const SwDrawTextInfo& rExtraInf, const OutputDevice& rD
         const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
             &rDevice, rStr, nContextBegin, nContextLen, nIndex, nIndex + nLen, 0, layoutCache);
         stMetrics = rDevice.GetPartialTextArray(rStr, &rDXAry, nContextBegin, nContextLen, nIndex,
-                                                nLen, bCaret, layoutCache, pLayoutCache);
+                                                nLen, bCaret, layoutCache, pLayoutCache, true);
     }
     else
     {
         const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
             &rDevice, rStr, nIndex, nLen, 0, layoutCache);
         stMetrics
-            = rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, bCaret, layoutCache, pLayoutCache);
+            = rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, bCaret, layoutCache, pLayoutCache, true);
     }
 
     if (stMetrics.aBounds.has_value())
