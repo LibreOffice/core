@@ -26,7 +26,7 @@
             <value xml:lang="en-US">Text documents (Writer)</value>
           </prop>
           <prop oor:name="Filters">
-            <value oor:separator=";">AportisDoc Palm DB;HTML (StarWriter);LotusWordPro;MS Word 2003 XML;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 97;MS Word 97 Vorlage;MS_Works;Office Open XML Text;Office Open XML Text Template;OpenDocument Text Flat XML;PocketWord File;Rich Text Format;StarOffice XML (Writer);Text;WordPerfect;WordPerfect;writer_MIZI_Hwp_97;writer_StarOffice_XML_Writer_Template;writer8;writer8_template;writerglobal8;writerweb8_writer_template</value>
+            <value oor:separator=";">AportisDoc Palm DB;HTML (StarWriter);LotusWordPro;MS Word 2003 XML;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 97;MS Word 97 Vorlage;MS_Works;Office Open XML Text;Office Open XML Text Template;OpenDocument Text Flat XML;PocketWord File;Rich Text Format;StarOffice XML (Writer);Markdown;Text;WordPerfect;WordPerfect;writer_MIZI_Hwp_97;writer_StarOffice_XML_Writer_Template;writer8;writer8_template;writerglobal8;writerweb8_writer_template</value>
           </prop>
         </node>
         <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">

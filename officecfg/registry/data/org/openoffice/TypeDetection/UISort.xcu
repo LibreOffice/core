@@ -46,7 +46,7 @@
     </node>
     <node oor:name="com.sun.star.text.TextDocument" oor:op="replace" install:module="writer">
       <prop oor:name="SortedFilterList">
-        <value oor:separator=";">writer8;writer8_template;StarOffice XML (Writer);writer_StarOffice_XML_Writer_Template;OpenDocument Text Flat XML;UOF text;Office Open XML Text;Office Open XML Text Template;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 2003 XML;Rich Text Format;MS Word 97;MS Word 97 Vorlage;MS Word 95;MS Word 95 Vorlage;MS WinWord 6.0;MS WinWord 5;MS_Works;AportisDoc Palm DB;DocBook File;writer_MIZI_Hwp_97;HTML (StarWriter);LotusWordPro;PocketWord File;T602Document;Text;Text (encoded);WordPerfect</value>
+        <value oor:separator=";">writer8;writer8_template;StarOffice XML (Writer);writer_StarOffice_XML_Writer_Template;OpenDocument Text Flat XML;UOF text;Office Open XML Text;Office Open XML Text Template;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 2003 XML;Rich Text Format;MS Word 97;MS Word 97 Vorlage;MS Word 95;MS Word 95 Vorlage;MS WinWord 6.0;MS WinWord 5;MS_Works;AportisDoc Palm DB;DocBook File;writer_MIZI_Hwp_97;HTML (StarWriter);LotusWordPro;PocketWord File;T602Document;Markdown;Text;Text (encoded);WordPerfect</value>
       </prop>
     </node>
     <node oor:name="com.sun.star.text.WebDocument" oor:op="replace" install:module="writer">
