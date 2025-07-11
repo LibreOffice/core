@@ -527,7 +527,7 @@ void XMLTableExport::exportAutoStyles()
 
 const TableStyleElement* getTableStyleMap()
 {
-    static const struct TableStyleElement gTableStyleElements[] =
+    static constexpr struct TableStyleElement gTableStyleElements[] =
     {
         { XML_FIRST_ROW, u"first-row"_ustr },
         { XML_LAST_ROW, u"last-row"_ustr },
@@ -539,7 +539,7 @@ const TableStyleElement* getTableStyleMap()
         { XML_EVEN_COLUMNS, u"even-columns"_ustr },
         { XML_ODD_COLUMNS, u"odd-columns"_ustr },
         { XML_BACKGROUND, u"background"_ustr },
-        { XML_TOKEN_END, OUString() }
+        { XML_TOKEN_END, EMPTY_OUSTRING }
     };
 
     return &gTableStyleElements[0];
@@ -547,7 +547,7 @@ const TableStyleElement* getTableStyleMap()
 
 const TableStyleElement* getWriterSpecificTableStyleMap()
 {
-    static const struct TableStyleElement gWriterSpecificTableStyleElements[] =
+    static constexpr struct TableStyleElement gWriterSpecificTableStyleElements[] =
     {
         { XML_FIRST_ROW_EVEN_COLUMN, u"first-row-even-column"_ustr },
         { XML_LAST_ROW_EVEN_COLUMN, u"last-row-even-column"_ustr },
@@ -555,7 +555,7 @@ const TableStyleElement* getWriterSpecificTableStyleMap()
         { XML_FIRST_ROW_START_COLUMN, u"first-row-start-column"_ustr },
         { XML_LAST_ROW_END_COLUMN, u"last-row-end-column"_ustr },
         { XML_LAST_ROW_START_COLUMN, u"last-row-start-column"_ustr },
-        { XML_TOKEN_END, OUString() }
+        { XML_TOKEN_END, EMPTY_OUSTRING }
     };
 
     return &gWriterSpecificTableStyleElements[0];
@@ -563,13 +563,13 @@ const TableStyleElement* getWriterSpecificTableStyleMap()
 
 static const TableStyleElement* getWriterSpecificTableStyleAttributes()
 {
-    static const struct TableStyleElement gWriterSpecifitTableStyleAttributes[] =
+    static constexpr struct TableStyleElement gWriterSpecifitTableStyleAttributes[] =
     {
         { XML_FIRST_ROW_END_COLUMN, u"FirstRowEndColumn"_ustr },
         { XML_FIRST_ROW_START_COLUMN, u"FirstRowStartColumn"_ustr },
         { XML_LAST_ROW_END_COLUMN, u"LastRowEndColumn"_ustr },
         { XML_LAST_ROW_START_COLUMN, u"LastRowStartColumn"_ustr },
-        { XML_TOKEN_END, OUString() }
+        { XML_TOKEN_END, EMPTY_OUSTRING }
     };
 
     return &gWriterSpecifitTableStyleAttributes[0];
