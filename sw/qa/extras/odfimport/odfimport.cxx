@@ -620,6 +620,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128737)
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, tdf167455)
+{
+    // crashes at import time on macOS
+    createSwDoc("tdf167455.odt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCalcFootnoteContent)
 {
     createSwDoc("ooo32780-1.odt");
