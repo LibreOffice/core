@@ -60,15 +60,6 @@ public:
     */
     ResourceId();
 
-    /** Create a new resource id that is described by the given URLs.
-        @param rsResourceURLs
-            The first URL specifies the type of resource.  The other URLs
-            describe its anchor.
-            The set of URLs may be empty.  The result is then the same as
-            returned by ResourceId() default constructor.
-    */
-    ResourceId (std::vector<OUString>&& rsResourceURLs);
-
     /** Create a new resource id that has an empty anchor.
         @param rsResourceURL
             When this resource URL is empty then the resulting ResourceId
@@ -95,20 +86,6 @@ public:
     ResourceId (
         const OUString& rsResourceURL,
         const OUString& rsAnchorURL);
-
-    /** Create a new resource id with an anchor that consists of a sequence
-        of URLs that is extended by a further URL.
-        @param rsResourceURL
-            The URL of the actual resource.
-        @param rsFirstAnchorURL
-            This URL extends the anchor given by rAnchorURLs.
-        @param rAnchorURLs
-            An anchor as it is returned by ResourceId::getAnchorURLs().
-    */
-    ResourceId (
-        const OUString& rsResourceURL,
-        const OUString& rsFirstAnchorURL,
-        const std::vector<OUString>& rAnchorURLs);
 
     virtual ~ResourceId() override;
 

@@ -490,7 +490,6 @@ public:
     bool get_value_changed_from_saved() const { return get_value() != get_saved_value(); }
     int get_count() const { return m_xComboBox->get_count(); }
     OUString get_text(int i) const { return m_xComboBox->get_text(i); }
-    void grab_focus() { m_xComboBox->grab_focus(); }
     bool has_focus() const { return m_xComboBox->has_focus(); }
     void connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xComboBox->connect_entry_activate(rLink); }
     void disable_entry_completion() { m_xComboBox->set_entry_completion(false, false); }

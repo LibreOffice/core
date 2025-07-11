@@ -231,8 +231,6 @@ public:
         { return PutImpl(*xItem.release(), /*bPassingOwnership*/true); }
     const SfxPoolItem* PutAsTargetWhich(const SfxPoolItem& rItem, sal_uInt16 nTargetWhich )
         { return PutImplAsTargetWhich(rItem, nTargetWhich, false); }
-    const SfxPoolItem* PutAsTargetWhich(std::unique_ptr<SfxPoolItem> xItem, sal_uInt16 nTargetWhich )
-        { return PutImplAsTargetWhich(*xItem.release(), nTargetWhich, true); }
     bool                        Put( const SfxItemSet&,
                                      bool bInvalidAsDefault = true );
     void                        PutExtended( const SfxItemSet&,

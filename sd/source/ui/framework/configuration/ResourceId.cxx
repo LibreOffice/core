@@ -46,13 +46,6 @@ ResourceId::ResourceId()
 }
 
 ResourceId::ResourceId (
-    std::vector<OUString>&& rResourceURLs)
-    : maResourceURLs(std::move(rResourceURLs))
-{
-    ParseResourceURL();
-}
-
-ResourceId::ResourceId (
     const OUString& rsResourceURL)
     : maResourceURLs(1, rsResourceURL)
 {
@@ -82,18 +75,6 @@ ResourceId::ResourceId (
 {
     maResourceURLs[0] = rsResourceURL;
     maResourceURLs[1] = rsAnchorURL;
-    ParseResourceURL();
-}
-
-ResourceId::ResourceId (
-    const OUString& rsResourceURL,
-    const OUString& rsFirstAnchorURL,
-    const std::vector<OUString>& rAnchorURLs)
-    : maResourceURLs(2+rAnchorURLs.size())
-{
-    maResourceURLs[0] = rsResourceURL;
-    maResourceURLs[1] = rsFirstAnchorURL;
-    std::copy(rAnchorURLs.begin(), rAnchorURLs.end(), std::next(maResourceURLs.begin(), 2));
     ParseResourceURL();
 }
 
