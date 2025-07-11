@@ -6374,6 +6374,22 @@ SfxBoolItem ToggleSheetGrid FID_TAB_TOGGLE_GRID
 ]
 
 
+SfxBoolItem TogglePrintGrid FID_TOGGLE_PRINT_GRID
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
 
 
 SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR

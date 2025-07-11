@@ -1424,6 +1424,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"ToggleMergeCells", { PayloadType::BooleanOrDisabledPayload, true } },
         { u"SheetRightToLeft", { PayloadType::BooleanOrDisabledPayload, true } },
         { u"ToggleSheetGrid", { PayloadType::BooleanOrDisabledPayload, true } },
+        { u"TogglePrintGrid", { PayloadType::BooleanOrDisabledPayload, true } },
         { u"EditDoc", { PayloadType::BooleanOrDisabledPayload, true } },
 
         { u"Position", { PayloadType::PointPayload, false } },

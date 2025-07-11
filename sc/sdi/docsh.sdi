@@ -41,6 +41,7 @@ interface TableSelection
     FID_TAB_RTL         [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_SET_TAB_BG_COLOR    [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_TOGGLE_GRID [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TOGGLE_PRINT_GRID [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TOGGLEHIDDENCOLROW [ ExecMethod = ExecuteTable; StateMethod = GetState; ]
     SID_TABLE_ACTIVATE  [ ExecMethod = Execute; ]
 }

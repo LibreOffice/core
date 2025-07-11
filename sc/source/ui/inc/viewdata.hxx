@@ -467,6 +467,9 @@ public:
     void            SetShowGrid( bool bShow );
     bool            GetShowGrid() const { return pThisTab->bShowGrid; }
 
+    void            SetPrintGrid( bool bPrintGrid );
+    bool            GetPrintGrid() const;
+
     const MapMode&  GetLogicMode( ScSplitPos eWhich );
     const MapMode&  GetLogicMode();                     // Offset 0
 
