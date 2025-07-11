@@ -197,6 +197,31 @@ There are multiple model classes involved for fields:
 
 Note that there is no UNO service to represent a list.
 
+### Styles
+
+Styles are either user-defined, or built-in.
+
+User-defined styles simply have a user-defined name.
+
+Built-in styles are identified by `RES_POOL*` constants in `inc/poolfmt.hxx`.
+
+Each built-in style has 2 names:
+
+* programmatic name (ProgName): this is defined in functions
+  `SwStyleNameMapper::GetTextProgNameArray()` etc, and *never* *ever* changes.
+
+* translatable name (UIName): this is defined as `STR_POOL*` constants
+  for en-US in `sw/inc/strings.hrc` and is translated like any other
+  translatable string.
+  These strings have been changed and may change in future versions.
+
+At the UNO API, and in ODF documents, only ProgNames are relevant.
+
+In the UI, the UINames are used.
+
+Unfortunately the core code also uses UIName, it would be better if it used
+ProgName and the conversion would happen in UI code.
+
 ### Layout
 
 The layout is a tree of `SwFrame` subclasses, the following relationships are
