@@ -93,7 +93,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
     }
 
     m_pOwnFormatter.reset( new SvNumberFormatter( m_xORB, eNewFormatterLanguage) );
-    m_pOwnFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
+    m_pOwnFormatter->SetEvalDateFormat( NfEvalDateFormat::FormatThenInternational );
     SetNumberFormatter(m_pOwnFormatter.get());
 }
 

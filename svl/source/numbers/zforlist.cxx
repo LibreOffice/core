@@ -290,7 +290,7 @@ SvNFLanguageData::SvNFLanguageData(const Reference<XComponentContext>& rxContext
     , IniLnge(eLang)
     , ActLnge(eLang)
     , aLanguageTag(eLang)
-    , eEvalDateFormat(NF_EVALDATEFORMAT_INTL)
+    , eEvalDateFormat(NfEvalDateFormat::International)
 {
     xCharClass.changeLocale(xContext, aLanguageTag);
     xLocaleData.init(aLanguageTag);

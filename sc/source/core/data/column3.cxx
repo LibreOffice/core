@@ -2198,7 +2198,7 @@ bool ScColumn::ParseString(
                 bool bForceFormatDate = (eNumFormatType == SvNumFormatType::DATE
                         || eNumFormatType == SvNumFormatType::DATETIME);
                 const SvNumberformat* pOldFormat = nullptr;
-                NfEvalDateFormat eEvalDateFormat = NF_EVALDATEFORMAT_INTL_FORMAT;
+                NfEvalDateFormat eEvalDateFormat = NfEvalDateFormat::InternationalThenFormat;
                 if (bForceFormatDate)
                 {
                     ScRefCellValue aCell = GetCellValue(nRow);
@@ -2216,7 +2216,7 @@ bool ScColumn::ParseString(
                             nIndex = aParam.mpNumFormatter->GetEditFormat(
                                     aCell.getValue(), nOldIndex, eNumFormatType, pOldFormat);
                             eEvalDateFormat = aParam.mpNumFormatter->GetEvalDateFormat();
-                            aParam.mpNumFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL);
+                            aParam.mpNumFormatter->SetEvalDateFormat( NfEvalDateFormat::FormatThenInternational);
                         }
                     }
                     else

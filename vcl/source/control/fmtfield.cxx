@@ -656,7 +656,7 @@ void Formatter::FormatChanged(FORMAT_CHANGE_TYPE _nWhat)
     m_pLastOutputColor = nullptr;
 
     if ( (_nWhat == FORMAT_CHANGE_TYPE::FORMATTER) && m_pFormatter )
-        m_pFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
+        m_pFormatter->SetEvalDateFormat( NfEvalDateFormat::FormatThenInternational );
 
     ReFormat();
 }

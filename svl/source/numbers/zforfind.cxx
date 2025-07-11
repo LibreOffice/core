@@ -1211,9 +1211,9 @@ bool ImpSvNumberInputScan::IsAcceptableIso8601()
     {
         switch (mrCurrentLanguageData.GetEvalDateFormat())
         {
-            case NF_EVALDATEFORMAT_INTL:
+            case NfEvalDateFormat::International:
                 return CanForceToIso8601( GetDateOrder());
-            case NF_EVALDATEFORMAT_FORMAT:
+            case NfEvalDateFormat::Format:
                 return CanForceToIso8601( mpFormat->GetDateOrder());
             default:
                 return CanForceToIso8601( GetDateOrder()) || CanForceToIso8601( mpFormat->GetDateOrder());
@@ -1319,7 +1319,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     {
         // The current locale is the format's locale, if a format is present.
         const NfEvalDateFormat eEDF = mrCurrentLanguageData.GetEvalDateFormat();
-        if (!mpFormat || eEDF == NF_EVALDATEFORMAT_FORMAT || mpFormat->GetLanguage() == mrCurrentLanguageData.GetIniLanguage())
+        if (!mpFormat || eEDF == NfEvalDateFormat::Format || mpFormat->GetLanguage() == mrCurrentLanguageData.GetIniLanguage())
         {
             sDateAcceptancePatterns = mrCurrentLanguageData.GetLocaleData()->getDateAcceptancePatterns();
         }
@@ -1339,18 +1339,18 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
             // take less time than looping over two additional patterns below...
             switch (eEDF)
             {
-                case NF_EVALDATEFORMAT_FORMAT:
+                case NfEvalDateFormat::Format:
                     assert(!"shouldn't reach here");
                 break;
-                case NF_EVALDATEFORMAT_INTL:
+                case NfEvalDateFormat::International:
                     sDateAcceptancePatterns = aLocalePatterns;
                 break;
-                case NF_EVALDATEFORMAT_INTL_FORMAT:
+                case NfEvalDateFormat::InternationalThenFormat:
                     sDateAcceptancePatterns = comphelper::concatSequences(
                             aLocalePatterns,
                             xLocaleData->getDateAcceptancePatterns());
                 break;
-                case NF_EVALDATEFORMAT_FORMAT_INTL:
+                case NfEvalDateFormat::FormatThenInternational:
                     sDateAcceptancePatterns = comphelper::concatSequences(
                             xLocaleData->getDateAcceptancePatterns(),
                             aLocalePatterns);
@@ -1787,22 +1787,22 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
         eEDF = mrCurrentLanguageData.GetEvalDateFormat();
         switch ( eEDF )
         {
-        case NF_EVALDATEFORMAT_INTL :
-        case NF_EVALDATEFORMAT_FORMAT :
+        case NfEvalDateFormat::International :
+        case NfEvalDateFormat::Format :
             nFormatOrder = 1; // only one loop
             break;
         default:
             nFormatOrder = 2;
             if ( nMatchedAllStrings )
             {
-                eEDF = NF_EVALDATEFORMAT_FORMAT_INTL;
+                eEDF = NfEvalDateFormat::FormatThenInternational;
                 // we have a complete match, use it
             }
         }
     }
     else
     {
-        eEDF = NF_EVALDATEFORMAT_INTL;
+        eEDF = NfEvalDateFormat::International;
         nFormatOrder = 1;
     }
     bool res = true;
@@ -1818,15 +1818,15 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
         bool bFormatTurn;
         switch ( eEDF )
         {
-        case NF_EVALDATEFORMAT_INTL :
+        case NfEvalDateFormat::International :
             bFormatTurn = false;
             DateFmt = GetDateOrder();
             break;
-        case NF_EVALDATEFORMAT_FORMAT :
+        case NfEvalDateFormat::Format :
             bFormatTurn = true;
             DateFmt = mpFormat->GetDateOrder();
             break;
-        case NF_EVALDATEFORMAT_INTL_FORMAT :
+        case NfEvalDateFormat::InternationalThenFormat :
             if ( nTryOrder == 1 )
             {
                 bFormatTurn = false;
@@ -1838,7 +1838,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
                 DateFmt = mpFormat->GetDateOrder();
             }
             break;
-        case NF_EVALDATEFORMAT_FORMAT_INTL :
+        case NfEvalDateFormat::FormatThenInternational :
             if ( nTryOrder == 2 )
             {
                 bFormatTurn = false;
@@ -1875,7 +1875,7 @@ input for the following reasons:
    define the same YMD order and use the same date separator, there is no way
    to distinguish between them if the input results in valid calendar input for
    both calendars. How to solve? Would NfEvalDateFormat be sufficient? Should
-   it always be set to NF_EVALDATEFORMAT_FORMAT_INTL and thus the format's
+   it always be set to NfEvalDateFormat::FormatThenInternational and thus the format's
    calendar be preferred? This could be confusing if a Calc cell was formatted
    different to the locale's default and has no content yet, then the user has
    no clue about the format or calendar being set.
@@ -2009,7 +2009,7 @@ input for the following reasons:
                 if (!bIsExact && bFormatTurn && IsAcceptedDatePattern( nNums[0]))
                 {
                     // If input does not match format but pattern, use pattern
-                    // instead, even if eEDF==NF_EVALDATEFORMAT_FORMAT_INTL.
+                    // instead, even if eEDF==NfEvalDateFormat::FormatThenInternational.
                     // For example, format has "Y-M-D" and pattern is "D.M.",
                     // input with 2 numbers can't match format and 31.12. would
                     // lead to 1931-12-01 (fdo#54344)

@@ -176,7 +176,7 @@ SvNumberFormatter* ScGlobal::GetEnglishFormatter()
     {
         xEnglishFormatter.reset( new SvNumberFormatter(
             ::comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US ) );
-        xEnglishFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
+        xEnglishFormatter->SetEvalDateFormat( NfEvalDateFormat::InternationalThenFormat );
     }
     return xEnglishFormatter.get();
 }

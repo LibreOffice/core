@@ -430,11 +430,11 @@ std::shared_ptr<SvNumberFormatter> SbiInstance::PrepareNumberFormatter( sal_uInt
     // Several parser methods pass SvNumberFormatter::IsNumberFormat() a number
     // format index to parse against. Tell the formatter the proper date
     // evaluation order, which also determines the date acceptance patterns to
-    // use if a format was passed. NF_EVALDATEFORMAT_FORMAT restricts to the
+    // use if a format was passed. NfEvalDateFormat::Format restricts to the
     // format's locale's date patterns/order (no init/system locale match
-    // tried) and falls back to NF_EVALDATEFORMAT_INTL if no specific (i.e. 0)
+    // tried) and falls back to NfEvalDateFormat::International if no specific (i.e. 0)
     // (or an unknown) format index was passed.
-    pNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT);
+    pNumberFormatter->SetEvalDateFormat( NfEvalDateFormat::Format);
 
     sal_Int32 nCheckPos = 0;
     SvNumFormatType nType;

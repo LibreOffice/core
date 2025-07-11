@@ -92,7 +92,7 @@ std::unique_ptr<SvNumberFormatter> ScPoolHelper::CreateNumberFormatter() const
     }
     assert(mxStylePool->GetDocument());
     p->SetColorLink( LINK(mxStylePool->GetDocument(), ScDocument, GetUserDefinedColor));
-    p->SetEvalDateFormat(NF_EVALDATEFORMAT_INTL_FORMAT);
+    p->SetEvalDateFormat(NfEvalDateFormat::InternationalThenFormat);
 
     sal_uInt16 d,m;
     sal_Int16 y;

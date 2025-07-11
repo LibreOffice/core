@@ -261,22 +261,22 @@ enum NfIndexTableOffset
      DateFormat order (YMD,DMY,MDY) into account, if called from IsNumberFormat
     with a date format to match against.
  */
-enum NfEvalDateFormat
+enum class NfEvalDateFormat
 {
     /** DateFormat only from International, default. */
-    NF_EVALDATEFORMAT_INTL,
+    International,
 
     /** DateFormat only from date format passed to function (if any).
         If no date format is passed then the DateFormat is taken from International. */
-    NF_EVALDATEFORMAT_FORMAT,
+    Format,
 
     /** First try the DateFormat from International. If it doesn't match a
          valid date try the DateFormat from the date format passed. */
-    NF_EVALDATEFORMAT_INTL_FORMAT,
+    InternationalThenFormat,
 
     /** First try the DateFormat from the date format passed. If it doesn't
         match a valid date try the DateFormat from International. */
-    NF_EVALDATEFORMAT_FORMAT_INTL
+    FormatThenInternational
 };
 
 

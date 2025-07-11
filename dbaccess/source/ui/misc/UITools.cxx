@@ -1047,7 +1047,7 @@ void setEvalDateFormatForFormatter(Reference< css::util::XNumberFormatter > cons
     if ( pSupplierImpl )
     {
         SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
-        pFormatter->SetEvalDateFormat(NF_EVALDATEFORMAT_FORMAT);
+        pFormatter->SetEvalDateFormat(NfEvalDateFormat::Format);
     }
 }
 
