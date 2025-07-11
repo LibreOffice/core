@@ -480,7 +480,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/weldutils \
     vcl/source/app/winscheduler \
     vcl/source/components/dtranscomp \
-    vcl/source/components/factory \
     vcl/source/components/fontident \
     vcl/source/filter/bmp/BmpReader \
     vcl/source/filter/bmp/BmpWriter \

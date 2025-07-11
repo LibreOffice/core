@@ -20,7 +20,6 @@ import xml.etree.ElementTree as ET
 
 core_factory_list = [
     ("libi18npoollo.a", "i18npool_component_getFactory"),
-    ("libvcllo.a", "vcl_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
     ]
 
