@@ -26,14 +26,18 @@
 #include <editeng/wghtitem.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
+#include <sax/tools/converter.hxx>
 #include <svl/itemiter.hxx>
 
 #include <officecfg/Office/Writer.hxx>
 
+#include <docary.hxx>
 #include <fmtpdsc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <mdiexp.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
+#include <redline.hxx>
 #include <strings.hrc>
 #include <txatbase.hxx>
 #include "wrtmd.hxx"
@@ -51,20 +55,39 @@ struct FormattingStatus
     int nUnderlineChange = 0;
     int nWeightChange = 0;
     std::unordered_map<OUString, int> aHyperlinkChanges;
+    std::unordered_map<const SwRangeRedline*, int> aRedlineChanges;
 };
 
-struct HintsAtPos
+template <typename T> struct PosData
 {
-    using value_type = std::pair<sal_Int32, const SfxPoolItem*>;
+    using value_type = std::pair<sal_Int32, const T*>;
+    static bool value_less(const value_type& l, const value_type& r) { return l.first < r.first; }
     std::vector<value_type> table;
     size_t cur = 0;
     const value_type* get(size_t n) const { return n < table.size() ? &table[n] : nullptr; }
     const value_type* current() const { return get(cur); }
     const value_type* next() { return get(++cur); }
-    void sort()
+    void add(sal_Int32 pos, const T* val) { table.emplace_back(pos, val); }
+    void sort() { std::stable_sort(table.begin(), table.end(), value_less); }
+};
+
+struct NodePositions
+{
+    PosData<SfxPoolItem> hintStarts;
+    PosData<SfxPoolItem> hintEnds;
+    PosData<SwRangeRedline> redlineStarts;
+    PosData<SwRangeRedline> redlineEnds;
+
+    sal_Int32 getEndOfCurrent(sal_Int32 end)
     {
-        std::stable_sort(table.begin(), table.end(),
-                         [](auto& lh, auto& rh) { return lh.first < rh.first; });
+        auto pos_of = [](const auto* v) { return v ? v->first : SAL_MAX_INT32; };
+        return std::min({
+            end,
+            pos_of(hintEnds.current()),
+            pos_of(hintStarts.current()),
+            pos_of(redlineEnds.current()),
+            pos_of(redlineStarts.current()),
+        });
     }
 };
 
@@ -120,60 +143,136 @@ void ApplyItem(FormattingStatus& rChange, const SfxPoolItem& rItem, int incremen
     }
 }
 
-FormattingStatus CalculateFormattingChange(HintsAtPos& starts, HintsAtPos& ends, sal_Int32 pos,
+void ApplyItem(FormattingStatus& rChange, const SwRangeRedline* pItem, int increment)
+{
+    rChange.aRedlineChanges[pItem] += increment;
+}
+
+FormattingStatus CalculateFormattingChange(NodePositions& positions, sal_Int32 pos,
                                            const FormattingStatus& currentFormatting)
 {
     FormattingStatus result(currentFormatting);
     // 1. Output closing attributes
-    for (auto* p = ends.current(); p && p->first == pos; p = ends.next())
+    for (auto* p = positions.hintEnds.current(); p && p->first == pos;
+         p = positions.hintEnds.next())
         ApplyItem(result, *p->second, -1);
 
     // 2. Output opening attributes
-    for (auto* p = starts.current(); p && p->first == pos; p = starts.next())
+    for (auto* p = positions.hintStarts.current(); p && p->first == pos;
+         p = positions.hintStarts.next())
         ApplyItem(result, *p->second, +1);
+
+    // 3. Output closing redlines
+    for (auto* p = positions.redlineEnds.current(); p && p->first == pos;
+         p = positions.redlineEnds.next())
+        ApplyItem(result, p->second, -1);
+
+    // 4. Output opening redlines
+    for (auto* p = positions.redlineStarts.current(); p && p->first == pos;
+         p = positions.redlineStarts.next())
+        ApplyItem(result, p->second, +1);
 
     return result;
 }
 
-void OutFormattingChange(SwMDWriter& rWrt, HintsAtPos& starts, HintsAtPos& ends, sal_Int32 pos,
+// Closing redlines may happen in a following paragraph; there it will change from 0 to -1.
+// Account for that possibility in ShouldCloseIt.
+bool ShouldCloseIt(int prev, int curr) { return prev != curr && prev >= 0 && curr <= 0; }
+bool ShouldOpenIt(int prev, int curr) { return prev != curr && prev <= 0 && curr > 0; }
+
+void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 pos,
                          FormattingStatus& current)
 {
-    FormattingStatus result = CalculateFormattingChange(starts, ends, pos, current);
+    FormattingStatus result = CalculateFormattingChange(positions, pos, current);
+
+    // Closing stuff
+
+    // TODO/FIXME: the closing characters must be right-flanking
 
     // Not in CommonMark
-    if (current.nCrossedOutChange <= 0 && result.nCrossedOutChange > 0)
-        rWrt.Strm().WriteUnicodeOrByteText(u"~~");
-    else if (current.nCrossedOutChange > 0 && result.nCrossedOutChange <= 0)
+    if (ShouldCloseIt(current.nCrossedOutChange, result.nCrossedOutChange))
         rWrt.Strm().WriteUnicodeOrByteText(u"~~");
 
-    if ((current.nPostureChange <= 0 && result.nPostureChange > 0)
-        || (current.nPostureChange > 0 && result.nPostureChange <= 0))
-        rWrt.Strm().WriteUnicodeOrByteText(u"*"); // both to open, and to close
+    if (ShouldCloseIt(current.nPostureChange, result.nPostureChange))
+        rWrt.Strm().WriteUnicodeOrByteText(u"*");
 
-    if (current.nUnderlineChange <= 0 && result.nUnderlineChange > 0)
-    {
-        //rWrt.Strm().WriteUnicodeOrByteText(u"[u]");
-    }
-    else if (current.nUnderlineChange > 0 && result.nUnderlineChange <= 0)
+    if (ShouldCloseIt(current.nUnderlineChange, result.nUnderlineChange))
     {
         //rWrt.Strm().WriteUnicodeOrByteText(u"[/u]");
     }
 
-    if ((current.nWeightChange <= 0 && result.nWeightChange > 0)
-        || (current.nWeightChange > 0 && result.nWeightChange <= 0)) // both to open, and to close
+    if (ShouldCloseIt(current.nWeightChange, result.nWeightChange))
         rWrt.Strm().WriteUnicodeOrByteText(u"**");
 
-    for (const auto & [ url, delta ] : result.aHyperlinkChanges)
+    for (const auto & [ url, curr ] : result.aHyperlinkChanges)
     {
-        if (current.aHyperlinkChanges[url] <= 0 && delta > 0)
-        {
-            rWrt.Strm().WriteUnicodeOrByteText(u"[");
-        }
-        else if (current.aHyperlinkChanges[url] > 0 && delta <= 0)
+        if (ShouldCloseIt(current.aHyperlinkChanges[url], curr))
         {
             rWrt.Strm().WriteUnicodeOrByteText(u"](");
             rWrt.Strm().WriteUnicodeOrByteText(url);
             rWrt.Strm().WriteUnicodeOrByteText(u")");
+        }
+    }
+
+    for (const auto & [ pRedline, curr ] : result.aRedlineChanges)
+    {
+        if (ShouldCloseIt(current.aRedlineChanges[pRedline], curr))
+        {
+            // </ins>
+            rWrt.Strm().WriteUnicodeOrByteText(u"</");
+            if (pRedline->GetType() == RedlineType::Insert)
+                rWrt.Strm().WriteUnicodeOrByteText(u"ins");
+            else if (pRedline->GetType() == RedlineType::Delete)
+                rWrt.Strm().WriteUnicodeOrByteText(u"del");
+            rWrt.Strm().WriteUnicodeOrByteText(u">");
+        }
+    }
+
+    // Opening stuff
+
+    // TODO/FIXME: the opening characters must be left-flanking
+
+    for (const auto & [ pRedline, curr ] : result.aRedlineChanges)
+    {
+        if (ShouldOpenIt(current.aRedlineChanges[pRedline], curr))
+        {
+            // <ins title="Author: John Doe" datetime="2025-07-10T20:00:00">
+            rWrt.Strm().WriteUnicodeOrByteText(u"<");
+            if (pRedline->GetType() == RedlineType::Insert)
+                rWrt.Strm().WriteUnicodeOrByteText(u"ins");
+            else if (pRedline->GetType() == RedlineType::Delete)
+                rWrt.Strm().WriteUnicodeOrByteText(u"del");
+            rWrt.Strm().WriteUnicodeOrByteText(u" title=\"Author: ");
+            rWrt.Strm().WriteUnicodeOrByteText(pRedline->GetAuthorString());
+            rWrt.Strm().WriteUnicodeOrByteText(u"\" datetime=\"");
+            OUStringBuffer buf;
+            sax::Converter::convertDateTime(buf, pRedline->GetTimeStamp().GetUNODateTime(),
+                                            nullptr);
+            rWrt.Strm().WriteUnicodeOrByteText(buf);
+            rWrt.Strm().WriteUnicodeOrByteText(u"\">");
+        }
+    }
+
+    // Not in CommonMark
+    if (ShouldOpenIt(current.nCrossedOutChange, result.nCrossedOutChange))
+        rWrt.Strm().WriteUnicodeOrByteText(u"~~");
+
+    if (ShouldOpenIt(current.nPostureChange, result.nPostureChange))
+        rWrt.Strm().WriteUnicodeOrByteText(u"*");
+
+    if (ShouldOpenIt(current.nUnderlineChange, result.nUnderlineChange))
+    {
+        //rWrt.Strm().WriteUnicodeOrByteText(u"[u]");
+    }
+
+    if (ShouldOpenIt(current.nWeightChange, result.nWeightChange))
+        rWrt.Strm().WriteUnicodeOrByteText(u"**");
+
+    for (const auto & [ url, curr ] : result.aHyperlinkChanges)
+    {
+        if (ShouldOpenIt(current.aHyperlinkChanges[url], curr))
+        {
+            rWrt.Strm().WriteUnicodeOrByteText(u"[");
         }
     }
 
@@ -188,6 +287,20 @@ void OutEscapedChars(SwMDWriter& rWrt, std::u16string_view chars)
         sal_uInt32 ch = o3tl::iterateCodePoints(chars, &pos);
         switch (ch)
         {
+            // dummy characters: anchors, comments, etc. TODO: handle their attributes / content.
+            case CH_TXTATR_BREAKWORD:
+            case CH_TXTATR_INWORD:
+            case CH_TXT_ATR_INPUTFIELDSTART:
+            case CH_TXT_ATR_INPUTFIELDEND:
+            case CH_TXT_ATR_FORMELEMENT:
+            case CH_TXT_ATR_FIELDSTART:
+            case CH_TXT_ATR_FIELDSEP:
+            case CH_TXT_ATR_FIELDEND:
+            case CH_TXT_TRACKED_DUMMY_CHAR:
+                break;
+
+                // TODO: line breaks
+
             case '\\':
             case '`':
             case '*':
@@ -209,11 +322,15 @@ void OutEscapedChars(SwMDWriter& rWrt, std::u16string_view chars)
 }
 
 /* Output of the nodes*/
-void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode)
+void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFirst)
 {
     const OUString& rNodeText = rNode.GetText();
     if (!rNodeText.isEmpty())
     {
+        // Paragraphs separate by empty lines
+        if (!bFirst)
+            rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
+
         int nHeadingLevel = 0;
         for (const SwFormat* pFormat = &rNode.GetAnyFormatColl(); pFormat;
              pFormat = pFormat->DerivedFrom())
@@ -262,16 +379,18 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode)
             rWrt.Strm().WriteUniOrByteChar(' ');
         }
 
+        // TODO: handle lists
+
         sal_Int32 nStrPos = rWrt.m_pCurrentPam->GetPoint()->GetContentIndex();
         sal_Int32 nEnd = rNodeText.getLength();
         if (rWrt.m_pCurrentPam->GetPoint()->GetNode() == rWrt.m_pCurrentPam->GetMark()->GetNode())
             nEnd = rWrt.m_pCurrentPam->GetMark()->GetContentIndex();
 
-        HintsAtPos aHintStarts, aHintEnds;
+        NodePositions positions;
 
         // Start paragraph properties
         for (SfxItemIter iter(rNode.GetSwAttrSet()); !iter.IsAtEnd(); iter.NextItem())
-            aHintStarts.table.emplace_back(nStrPos, iter.GetCurItem());
+            positions.hintStarts.add(nStrPos, iter.GetCurItem());
 
         // Store character formatting
         const size_t nCntAttr = rNode.HasHints() ? rNode.GetSwpHints().Count() : 0;
@@ -284,40 +403,70 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode)
             const sal_Int32 nHintEnd = pHint->GetAnyEnd();
             if (nHintEnd == nHintStart || nHintEnd <= nStrPos)
                 continue; // no output of zero-length hints and hints ended before output started yet
-            aHintStarts.table.emplace_back(std::max(nHintStart, nStrPos), &pHint->GetAttr());
-            aHintEnds.table.emplace_back(std::min(nHintEnd, nEnd), &pHint->GetAttr());
+            positions.hintStarts.add(std::max(nHintStart, nStrPos), &pHint->GetAttr());
+            positions.hintEnds.add(std::min(nHintEnd, nEnd), &pHint->GetAttr());
         }
 
-        aHintEnds.sort();
+        positions.hintEnds.sort();
+
         // End paragraph properties
         for (SfxItemIter iter(rNode.GetSwAttrSet()); !iter.IsAtEnd(); iter.NextItem())
-            aHintEnds.table.emplace_back(nEnd, iter.GetCurItem());
+            positions.hintEnds.add(nEnd, iter.GetCurItem());
+
+        if (const SwRedlineTable& rRedlines
+            = rNode.GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
+            !rRedlines.empty() && rRedlines.GetMaxEndPos() >= SwPosition(rNode))
+        {
+            for (const SwRangeRedline* pRedline : rRedlines)
+            {
+                const auto[redlineStart, redlineEnd] = pRedline->StartEnd();
+                if (redlineStart->GetContentNode()->GetIndex() > rNode.GetIndex()
+                    || (redlineStart->GetContentNode()->GetIndex() == rNode.GetIndex()
+                        && redlineStart->GetContentIndex() > nEnd))
+                    break;
+                if (redlineEnd->GetContentNode()->GetIndex() < rNode.GetIndex()
+                    || (redlineEnd->GetContentNode()->GetIndex() == rNode.GetIndex()
+                        && redlineEnd->GetContentIndex() < nStrPos))
+                    continue;
+
+                if (pRedline->GetType() != RedlineType::Insert
+                    && pRedline->GetType() != RedlineType::Delete)
+                    continue;
+
+                if (*redlineStart->GetContentNode() == rNode
+                    && redlineStart->GetContentIndex() >= nStrPos)
+                    positions.redlineStarts.add(redlineStart->GetContentIndex(), pRedline);
+
+                if (*redlineEnd->GetContentNode() == rNode && redlineEnd->GetContentIndex() <= nEnd)
+                    positions.redlineEnds.add(redlineEnd->GetContentIndex(), pRedline);
+            }
+        }
+
+        positions.redlineEnds.sort();
 
         FormattingStatus currentStatus;
         while (nStrPos < nEnd)
         {
             // 1. Output attributes
-            OutFormattingChange(rWrt, aHintStarts, aHintEnds, nStrPos, currentStatus);
+            OutFormattingChange(rWrt, positions, nStrPos, currentStatus);
 
             // 2. Escape and output the character. This relies on hints not appearing in the middle of
             // a surrogate pair.
-            sal_Int32 nEndOfChunk = nEnd;
-            if (auto* p = aHintEnds.current(); p && p->first < nEndOfChunk)
-                nEndOfChunk = p->first;
-            if (auto* p = aHintStarts.current(); p && p->first < nEndOfChunk)
-                nEndOfChunk = p->first;
+            sal_Int32 nEndOfChunk = positions.getEndOfCurrent(nEnd);
             OutEscapedChars(rWrt, rNodeText.subView(nStrPos, nEndOfChunk - nStrPos));
             nStrPos = nEndOfChunk;
         }
-        assert(aHintStarts.current() == nullptr);
+        assert(positions.hintStarts.current() == nullptr);
         // Output final closing attributes
-        OutFormattingChange(rWrt, aHintStarts, aHintEnds, nEnd, currentStatus);
+        OutFormattingChange(rWrt, positions, nEnd, currentStatus);
     }
     rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
 }
 
 void OutMarkdown_SwTableNode(SwMDWriter& /*rWrt*/, const SwTableNode& /*rNode*/)
 {
+    // TODO
+
     //const SwTable& rTable = rNode.GetTable();
 
     //WriterRef pHtmlWrt;
@@ -335,6 +484,7 @@ SwMDWriter::SwMDWriter(const OUString& rBaseURL) { SetBaseURL(rBaseURL); }
 
 ErrCode SwMDWriter::WriteStream()
 {
+    Strm().SetStreamCharSet(RTL_TEXTENCODING_UTF8);
     if (m_bShowProgress)
         ::StartProgress(STR_STATSTR_W4WWRITE, 0, sal_Int32(m_pDoc->GetNodes().Count()),
                         m_pDoc->GetDocShell());
@@ -400,7 +550,7 @@ void SwMDWriter::Out_SwDoc(SwPaM* pPam)
                     if (!bFirstLine)
                         m_pCurrentPam->GetPoint()->SetContent(0);
 
-                    OutMarkdown_SwTextNode(*this, *pTextNd);
+                    OutMarkdown_SwTextNode(*this, *pTextNd, bFirstLine);
                 }
             }
             else if (rNd.IsTableNode())

@@ -45,21 +45,58 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingBasicElements)
     std::string_view expected(
         // clang-format off
         "# Heading 1" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
         "## Heading 2" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
         "### Heading 3" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
         "#### Heading 4" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
         "##### Heading 5" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
         "###### Heading 6" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
         "**Bold** text" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
         "Text in *italics*" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
         "This is a [hyperlink](http://www.libreoffice.org/)" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
         "\\# Leading hash" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
         "Some \\{braces\\}, \\[square brackets\\], \\*asterisks\\*, \\`backticks\\`, \\\\backslashes\\\\, \\_underscores\\_, \\<angle brackets\\>" SAL_NEWLINE_STRING
         SAL_NEWLINE_STRING
         // clang-format on
     );
 
     CPPUNIT_ASSERT_EQUAL(expected, md_content);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testExportingRedlines)
+{
+    // Given a document with some redlines
+    createSwDoc("redlines-and-comments.odt");
+
+    // Save as a markdown document
+    save(mpFilter);
+    SvFileStream fileStream(maTempFile.GetURL(), StreamMode::READ);
+    OUString aParagraph;
+    // 1st paragraph
+    CPPUNIT_ASSERT(fileStream.ReadUniOrByteStringLine(aParagraph, RTL_TEXTENCODING_UTF8));
+    // Check that the insert/delete redlines were exported as <del>/<ins> elements
+    std::u16string_view expected
+        = uR"(<del title="Author: Author 1" datetime="2019-04-23T09:25:00"> </del>)";
+    CPPUNIT_ASSERT(aParagraph.indexOf(expected) >= 0);
+    expected = uR"(<ins title="Author: Author 1" datetime="2019-04-23T09:25:00">)";
+    CPPUNIT_ASSERT(aParagraph.indexOf(expected) >= 0);
+    // The insert starts on the first paragraph, and ends on the second
+    CPPUNIT_ASSERT(aParagraph.indexOf("</ins>") < 0);
+    // An empty line between paragraphs
+    CPPUNIT_ASSERT(fileStream.ReadUniOrByteStringLine(aParagraph, RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT(aParagraph.isEmpty());
+    // 2nd paragraph
+    CPPUNIT_ASSERT(fileStream.ReadUniOrByteStringLine(aParagraph, RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT(aParagraph.indexOf("</ins>") >= 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
