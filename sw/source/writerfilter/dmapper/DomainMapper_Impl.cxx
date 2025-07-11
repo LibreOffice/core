@@ -2241,7 +2241,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     bool isNumberingViaRule = nListId > -1;
     if (!bRemove && pEntry && pEntry->m_pProperties && pParaContext)
     {
-        if (pEntry->m_nStyleTypeCode != StyleType::STYLE_TYPE_PARA) {
+        if (pEntry->m_nStyleTypeCode != StyleType::Paragraph) {
             // We could not resolve paragraph style or it is not a paragraph style
             // Remove this style reference, otherwise it will cause exceptions during further
             // processing and not all paragraph styles will be initialized.

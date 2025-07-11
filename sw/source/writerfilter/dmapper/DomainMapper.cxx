@@ -1709,7 +1709,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             PropertyIds eBorderDistId = PropertyIds::INVALID;
 
             const StyleSheetEntryPtr& pEntry = GetStyleSheetTable()->GetCurrentEntry();
-            bool bInTableStyle = pEntry && pEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE;
+            bool bInTableStyle = pEntry && pEntry->m_nStyleTypeCode == StyleType::Table;
 
             switch( nSprmId )
             {
@@ -2006,7 +2006,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             if ( IsStyleSheetImport() )
             {
                 const StyleSheetEntryPtr pCurrStyle = GetStyleSheetTable()->GetCurrentEntry();
-                if ( pCurrStyle && pCurrStyle->m_nStyleTypeCode == STYLE_TYPE_CHAR )
+                if ( pCurrStyle && pCurrStyle->m_nStyleTypeCode == StyleType::Character )
                     break;
             }
 
@@ -2233,7 +2233,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 // For some undocumented reason, MS Word seems to ignore this in docDefaults
 
                 const StyleSheetEntryPtr pCurrStyle = GetStyleSheetTable()->GetCurrentEntry();
-                if (pCurrStyle && pCurrStyle->m_nStyleTypeCode == STYLE_TYPE_PARA && nIntValue < 0)
+                if (pCurrStyle && pCurrStyle->m_nStyleTypeCode == StyleType::Paragraph && nIntValue < 0)
                 {
                     m_pImpl->deferCharacterProperty(nSprmId, uno::Any(nIntValue));
                     break;
@@ -2838,7 +2838,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 
             // First check if the style exists in the document.
             StyleSheetEntryPtr pEntry = m_pImpl->GetStyleSheetTable( )->FindStyleSheetByConvertedStyleName( sConvertedName );
-            bool bExists = pEntry && ( pEntry->m_nStyleTypeCode == STYLE_TYPE_CHAR );
+            bool bExists = pEntry && ( pEntry->m_nStyleTypeCode == StyleType::Character );
             // Add the property if the style exists, but do not add it elements in TOC:
             // they will receive later another style references from TOC
             if ( bExists && m_pImpl->GetTopContext() && !m_pImpl->IsInTOC())

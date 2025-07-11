@@ -69,7 +69,7 @@ StyleSheetEntry::StyleSheetEntry() :
         ,m_bAssignedAsChapterNumbering(false)
         ,m_bInvalidHeight(false)
         ,m_bHasUPE(false)
-        ,m_nStyleTypeCode(STYLE_TYPE_UNKNOWN)
+        ,m_nStyleTypeCode(StyleType::Unknown)
         ,m_pProperties(new StyleSheetPropertyMap)
         ,m_bAutoRedefine(false)
 {
@@ -84,7 +84,7 @@ TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry )
     m_bIsDefaultStyle = rEntry.m_bIsDefaultStyle;
     m_bInvalidHeight = rEntry.m_bInvalidHeight;
     m_bHasUPE = rEntry.m_bHasUPE;
-    m_nStyleTypeCode = STYLE_TYPE_TABLE;
+    m_nStyleTypeCode = StyleType::Table;
     m_sBaseStyleIdentifier = rEntry.m_sBaseStyleIdentifier;
     m_sNextStyleIdentifier = rEntry.m_sNextStyleIdentifier;
     m_sLinkStyleIdentifier = rEntry.m_sLinkStyleIdentifier;
@@ -377,40 +377,40 @@ void StyleSheetTable::lcl_attribute(Id Name, const Value & val)
     // The default type is paragraph, and it needs to be processed first,
     // because the NS_ooxml::LN_CT_Style_type handling may set m_pCurrentEntry
     // to point to a different object.
-    if( m_pCurrentEntry->m_nStyleTypeCode == STYLE_TYPE_UNKNOWN )
+    if( m_pCurrentEntry->m_nStyleTypeCode == StyleType::Unknown )
     {
         if( Name != NS_ooxml::LN_CT_Style_type )
-            m_pCurrentEntry->m_nStyleTypeCode = STYLE_TYPE_PARA;
+            m_pCurrentEntry->m_nStyleTypeCode = StyleType::Paragraph;
     }
     switch(Name)
     {
         case NS_ooxml::LN_CT_Style_type:
         {
-            SAL_WARN_IF( m_pCurrentEntry->m_nStyleTypeCode != STYLE_TYPE_UNKNOWN,
+            SAL_WARN_IF( m_pCurrentEntry->m_nStyleTypeCode != StyleType::Unknown,
                 "writerfilter", "Style type needs to be processed first" );
-            StyleType nType(STYLE_TYPE_UNKNOWN);
+            StyleType nType(StyleType::Unknown);
             switch (nIntValue)
             {
                 case NS_ooxml::LN_Value_ST_StyleType_paragraph:
-                    nType = STYLE_TYPE_PARA;
+                    nType = StyleType::Paragraph;
                     break;
                 case NS_ooxml::LN_Value_ST_StyleType_character:
-                    nType = STYLE_TYPE_CHAR;
+                    nType = StyleType::Character;
                     break;
                 case NS_ooxml::LN_Value_ST_StyleType_table:
-                    nType = STYLE_TYPE_TABLE;
+                    nType = StyleType::Table;
                     break;
                 case NS_ooxml::LN_Value_ST_StyleType_numbering:
-                    nType = STYLE_TYPE_LIST;
+                    nType = StyleType::List;
                     break;
                 default:
-                    SAL_WARN("writerfilter", "unknown LN_CT_Style_type " << nType);
+                    SAL_WARN("writerfilter", "unknown LN_CT_Style_type " << static_cast<int>(nType));
                     [[fallthrough]];
                 case 0: // explicit unknown set by tokenizer
                     break;
 
             }
-            if ( nType == STYLE_TYPE_TABLE )
+            if ( nType == StyleType::Table )
             {
                 StyleSheetEntryPtr pEntry = m_pCurrentEntry;
                 tools::SvRef<TableStyleSheetEntry> pTableEntry( new TableStyleSheetEntry( *pEntry ) );
@@ -423,11 +423,11 @@ void StyleSheetTable::lcl_attribute(Id Name, const Value & val)
         case NS_ooxml::LN_CT_Style_default:
             m_pCurrentEntry->m_bIsDefaultStyle = (nIntValue != 0);
 
-            if (m_pCurrentEntry->m_nStyleTypeCode != STYLE_TYPE_UNKNOWN)
+            if (m_pCurrentEntry->m_nStyleTypeCode != StyleType::Unknown)
             {
                 // "If this attribute is specified by multiple styles, then the last instance shall be used."
                 if (m_pCurrentEntry->m_bIsDefaultStyle
-                    && m_pCurrentEntry->m_nStyleTypeCode == STYLE_TYPE_PARA
+                    && m_pCurrentEntry->m_nStyleTypeCode == StyleType::Paragraph
                     && !m_pCurrentEntry->m_sStyleIdentifierD.isEmpty())
                 {
                     m_sDefaultParaStyleName = m_pCurrentEntry->m_sStyleIdentifierD;
@@ -440,7 +440,7 @@ void StyleSheetTable::lcl_attribute(Id Name, const Value & val)
             }
         break;
         case NS_ooxml::LN_CT_Style_customStyle:
-            if (m_pCurrentEntry->m_nStyleTypeCode != STYLE_TYPE_UNKNOWN)
+            if (m_pCurrentEntry->m_nStyleTypeCode != StyleType::Unknown)
             {
                 beans::PropertyValue aValue;
                 aValue.Name = "customStyle";
@@ -450,7 +450,7 @@ void StyleSheetTable::lcl_attribute(Id Name, const Value & val)
         break;
         case NS_ooxml::LN_CT_Style_styleId:
             m_pCurrentEntry->m_sStyleIdentifierD = sValue;
-            if(m_pCurrentEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE)
+            if(m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
             {
                 TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pCurrentEntry.get());
                 beans::PropertyValue aValue;
@@ -504,7 +504,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_name:
             //this is only a UI name!
             m_pCurrentEntry->m_sStyleName = sStringValue;
-            if(m_pCurrentEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE)
+            if(m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
             {
                 TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pCurrentEntry.get());
                 beans::PropertyValue aValue;
@@ -515,7 +515,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             break;
         case NS_ooxml::LN_CT_Style_basedOn:
             m_pCurrentEntry->m_sBaseStyleIdentifier = sStringValue;
-            if(m_pCurrentEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE)
+            if(m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
             {
                 TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pCurrentEntry.get());
                 beans::PropertyValue aValue;
@@ -542,7 +542,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_tcPr:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties && m_pCurrentEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE)
+            if( pProperties && m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
             {
                 auto pTblStylePrHandler = std::make_shared<TblStylePrHandler>(m_rDMapper);
                 pProperties->resolve(*pTblStylePrHandler);
@@ -563,7 +563,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_unhideWhenUsed:
         case NS_ooxml::LN_CT_Style_uiPriority:
         case NS_ooxml::LN_CT_Style_locked:
-            if (m_pCurrentEntry->m_nStyleTypeCode != STYLE_TYPE_UNKNOWN)
+            if (m_pCurrentEntry->m_nStyleTypeCode != StyleType::Unknown)
             {
                 StyleSheetEntryPtr pEntry = m_pCurrentEntry;
                 beans::PropertyValue aValue;
@@ -728,7 +728,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     m_rDMapper.PushStyleSheetProperties( m_pCurrentEntry->m_pProperties.get() );
 
                     PropertyMapPtr pProps(new PropertyMap());
-                    if (m_pCurrentEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE)
+                    if (m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
                     {
                         if (nSprmId == NS_ooxml::LN_CT_Style_pPr)
                             m_rDMapper.enableInteropGrabBag(u"pPr"_ustr);
@@ -736,7 +736,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                             m_rDMapper.enableInteropGrabBag(u"rPr"_ustr);
                     }
                     m_rDMapper.sprmWithProps( rSprm, pProps );
-                    if (m_pCurrentEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE)
+                    if (m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
                     {
                         if (nSprmId == NS_ooxml::LN_CT_Style_pPr || nSprmId == NS_ooxml::LN_CT_Style_rPr)
                         {
@@ -867,7 +867,7 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
         for ( const auto& pEntry : m_aStyleSheetEntries )
         {
             StyleSheetPropertyMap* pStyleSheetProperties = nullptr;
-            if ( pEntry->m_nStyleTypeCode == STYLE_TYPE_PARA && (pStyleSheetProperties = pEntry->m_pProperties.get()) )
+            if ( pEntry->m_nStyleTypeCode == StyleType::Paragraph && (pStyleSheetProperties = pEntry->m_pProperties.get()) )
             {
                 // ListId 0 means turn off numbering - to cancel inheritance - so make sure that can be set.
                 if (pStyleSheetProperties->props().GetListId() > -1)
@@ -917,7 +917,7 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
 
         for (const auto& pEntry : m_aStyleSheetEntries)
         {
-            if (pEntry->m_nStyleTypeCode != STYLE_TYPE_PARA || pEntry->m_sBaseStyleIdentifier.isEmpty())
+            if (pEntry->m_nStyleTypeCode != StyleType::Paragraph || pEntry->m_sBaseStyleIdentifier.isEmpty())
                 continue;
 
             StyleSheetEntryPtr pParent = FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier);
@@ -1079,14 +1079,14 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
             std::vector<beans::PropertyValue> aTableStylesVec;
             for (auto& pEntry : rEntries)
             {
-                if( pEntry->m_nStyleTypeCode == STYLE_TYPE_UNKNOWN && !pEntry->m_sStyleName.isEmpty() )
-                    pEntry->m_nStyleTypeCode = STYLE_TYPE_PARA; // unspecified style types are considered paragraph styles
+                if( pEntry->m_nStyleTypeCode == StyleType::Unknown && !pEntry->m_sStyleName.isEmpty() )
+                    pEntry->m_nStyleTypeCode = StyleType::Paragraph; // unspecified style types are considered paragraph styles
 
-                if( pEntry->m_nStyleTypeCode == STYLE_TYPE_CHAR || pEntry->m_nStyleTypeCode == STYLE_TYPE_PARA || pEntry->m_nStyleTypeCode == STYLE_TYPE_LIST )
+                if( pEntry->m_nStyleTypeCode == StyleType::Character || pEntry->m_nStyleTypeCode == StyleType::Paragraph || pEntry->m_nStyleTypeCode == StyleType::List )
                 {
-                    bool bParaStyle = pEntry->m_nStyleTypeCode == STYLE_TYPE_PARA;
-                    bool bCharStyle = pEntry->m_nStyleTypeCode == STYLE_TYPE_CHAR;
-                    bool bListStyle = pEntry->m_nStyleTypeCode == STYLE_TYPE_LIST;
+                    bool bParaStyle = pEntry->m_nStyleTypeCode == StyleType::Paragraph;
+                    bool bCharStyle = pEntry->m_nStyleTypeCode == StyleType::Character;
+                    bool bListStyle = pEntry->m_nStyleTypeCode == StyleType::List;
                     bool bInsert = false;
                     rtl::Reference< SwXStyleFamily > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
                     rtl::Reference< SwXBaseStyle > xStyle;
@@ -1381,7 +1381,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                     if (pEntry->m_bAutoRedefine && bParaStyle)
                         xStyle->setPropertyValue(u"IsAutoUpdate"_ustr, uno::Any(true));
                 }
-                else if(pEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE)
+                else if(pEntry->m_nStyleTypeCode == StyleType::Table)
                 {
                     // If this is a table style, save its contents as-is for roundtrip purposes.
                     TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(pEntry.get());

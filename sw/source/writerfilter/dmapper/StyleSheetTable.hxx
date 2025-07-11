@@ -38,13 +38,13 @@ namespace writerfilter::dmapper
 {
 
 
-enum StyleType
+enum class StyleType
 {
-    STYLE_TYPE_UNKNOWN,
-    STYLE_TYPE_PARA,
-    STYLE_TYPE_CHAR,
-    STYLE_TYPE_TABLE,
-    STYLE_TYPE_LIST
+    Unknown,
+    Paragraph,
+    Character,
+    Table,
+    List
 };
 class StyleSheetTable;
 typedef tools::SvRef<StyleSheetTable> StyleSheetTablePtr;
