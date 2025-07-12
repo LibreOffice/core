@@ -33,7 +33,7 @@
 using namespace ::cairo;
 using namespace ::com::sun::star;
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     Canvas::Canvas( const uno::Sequence< uno::Any >&                aArguments,
                     const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
@@ -175,7 +175,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_Canvas_Cairo_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-    rtl::Reference<cairocanvas::Canvas> p = new cairocanvas::Canvas(args, context);
+    rtl::Reference<vcl_cairocanvas::Canvas> p = new vcl_cairocanvas::Canvas(args, context);
     try {
         p->initialize();
     } catch (css::uno::Exception&) {

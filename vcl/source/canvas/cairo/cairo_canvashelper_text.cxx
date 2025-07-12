@@ -38,7 +38,7 @@
 using namespace ::cairo;
 using namespace ::com::sun::star;
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    ,
                                                                        const rendering::FontRequest&                fontRequest,

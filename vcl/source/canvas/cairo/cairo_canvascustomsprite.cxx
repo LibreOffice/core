@@ -34,7 +34,7 @@
 using namespace ::cairo;
 using namespace ::com::sun::star;
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     CanvasCustomSprite::CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
                                             const SpriteCanvasRef&                          rRefDevice ) :

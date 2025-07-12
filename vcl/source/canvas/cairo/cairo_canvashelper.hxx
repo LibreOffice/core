@@ -36,7 +36,7 @@ namespace basegfx {
     class B2DPolyPolygon;
 }
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
 
     enum Operation {

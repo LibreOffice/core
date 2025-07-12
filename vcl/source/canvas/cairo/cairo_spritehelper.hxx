@@ -26,7 +26,7 @@
 #include "cairo_spritecanvas.hxx"
 
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     /* Definition of SpriteHelper class */
 

@@ -23,7 +23,7 @@
 
 #include <vcl/cairo.hxx>
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     /** Specialization of ::canvas::Sprite interface, to also provide
         redraw methods.

@@ -36,7 +36,7 @@
 using namespace ::cairo;
 using namespace ::com::sun::star;
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
                                 const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
@@ -226,7 +226,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_SpriteCanvas_Cairo_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-    rtl::Reference<cairocanvas::SpriteCanvas> p = new cairocanvas::SpriteCanvas(args, context);
+    rtl::Reference<vcl_cairocanvas::SpriteCanvas> p = new vcl_cairocanvas::SpriteCanvas(args, context);
     p->initialize();
     return cppu::acquire(p.get());
 }

@@ -41,7 +41,7 @@
 #include "cairo_spritecanvas.hxx"
 
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCustomSprite,
                                              css::rendering::XBitmapCanvas,

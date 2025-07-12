@@ -35,7 +35,7 @@
 
 /* Definition of CanvasFont class */
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     typedef ::comphelper::WeakComponentImplHelper< css::rendering::XCanvasFont,
                                              css::lang::XServiceInfo > CanvasFont_Base;

@@ -33,7 +33,7 @@
 
 /* Definition of TextLayout class */
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     typedef ::comphelper::WeakComponentImplHelper< css::rendering::XTextLayout,
                                              css::lang::XServiceInfo > TextLayout_Base;

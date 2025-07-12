@@ -28,7 +28,7 @@
 class OutputDevice;
 class Bitmap;
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     /* Definition of RepaintTarget interface */
 

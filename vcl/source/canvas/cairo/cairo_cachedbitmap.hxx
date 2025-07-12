@@ -26,7 +26,7 @@
 
 /* Definition of CachedBitmap class */
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     class CachedBitmap : public ::canvas::CachedPrimitiveBase
     {

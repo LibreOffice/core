@@ -33,7 +33,7 @@
 using namespace ::cairo;
 using namespace ::com::sun::star;
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     CanvasBitmap::CanvasBitmap( const ::basegfx::B2ISize&  rSize,
                                 SurfaceProviderRef         rSurfaceProvider,

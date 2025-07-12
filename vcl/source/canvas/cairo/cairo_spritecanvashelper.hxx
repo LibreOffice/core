@@ -33,7 +33,7 @@ namespace basegfx
     class B2IRange;
 }
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     class SpriteCanvas;
 

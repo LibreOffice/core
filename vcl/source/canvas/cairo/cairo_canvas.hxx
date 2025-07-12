@@ -41,7 +41,7 @@
 #include "cairo_repainttarget.hxx"
 #include "cairo_surfaceprovider.hxx"
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
                                              css::rendering::XIntegerBitmap,

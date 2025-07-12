@@ -27,7 +27,7 @@
 
 /* Definition of DeviceHelper class */
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     class DeviceHelper
     {

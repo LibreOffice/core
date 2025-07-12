@@ -34,7 +34,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
 
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,

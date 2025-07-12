@@ -24,7 +24,7 @@
 
 #include <vcl/cairo.hxx>
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     /* Definition of RepaintTarget interface */
 

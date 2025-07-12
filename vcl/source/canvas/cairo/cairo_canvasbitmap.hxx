@@ -37,7 +37,7 @@
 
 /* Definition of CanvasBitmap class */
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
                                              css::rendering::XIntegerBitmap,

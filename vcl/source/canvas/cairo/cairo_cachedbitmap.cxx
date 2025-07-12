@@ -31,7 +31,7 @@
 using namespace ::cairo;
 using namespace ::com::sun::star;
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     CachedBitmap::CachedBitmap( SurfaceSharedPtr                            pSurface,
                                 const rendering::ViewState&                 rUsedViewState,

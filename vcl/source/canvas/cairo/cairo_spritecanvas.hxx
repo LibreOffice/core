@@ -43,7 +43,7 @@
 #include "cairo_surfaceprovider.hxx"
 #include "cairo_spritecanvashelper.hxx"
 
-namespace cairocanvas
+namespace vcl_cairocanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
                                              css::rendering::XIntegerBitmap,
