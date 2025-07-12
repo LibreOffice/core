@@ -10,6 +10,8 @@
 xmlsec_patches :=
 # Remove this when Ubuntu 20.04 is EOL in 2025.
 xmlsec_patches += old-nss.patch.1
+# Upstreamed as: https://github.com/lsh123/xmlsec/pull/937
+xmlsec_patches += 0001-const-up-xmlSecErrorsTable.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 

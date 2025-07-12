@@ -1,0 +1,26 @@
+From 49382b442e2c1c651019c58966f7a6378759954b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sat, 12 Jul 2025 21:33:34 +0100
+Subject: [PATCH] const up xmlSecErrorsTable
+
+to move it out of the .data table
+---
+ src/errors.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/errors.c b/src/errors.c
+index 075265d6..fe7e6601 100644
+--- a/src/errors.c
++++ b/src/errors.c
+@@ -41,7 +41,7 @@ struct _xmlSecErrorDescription {
+     const char*         errorMsg;
+ };
+ 
+-static xmlSecErrorDescription xmlSecErrorsTable[XMLSEC_ERRORS_MAX_NUMBER + 1] = {
++static const xmlSecErrorDescription xmlSecErrorsTable[XMLSEC_ERRORS_MAX_NUMBER + 1] = {
+   { XMLSEC_ERRORS_R_XMLSEC_FAILED,              "xmlsec library function failed" },
+   { XMLSEC_ERRORS_R_MALLOC_FAILED,              "malloc function failed" },
+   { XMLSEC_ERRORS_R_STRDUP_FAILED,              "strdup function failed" },
+-- 
+2.49.0
+
