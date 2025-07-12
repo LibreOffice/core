@@ -270,8 +270,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     }
     // write parameter array
     rOutStm.WriteOString("static ");
-#if defined(_MSC_VER) && _MSC_VER < 1931
-    //https://developercommunity.visualstudio.com/t/Taking-the-address-of-a-constexpr-variab/1550408
+#if defined(_MSC_VER)
     rOutStm.WriteOString("const");
 #else
     rOutStm.WriteOString("constexpr");
@@ -312,8 +311,8 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 
     // write slotmap
     rOutStm.WriteOString("static ");
-#if defined(_MSC_VER) && _MSC_VER < 1931
-    //https://developercommunity.visualstudio.com/t/Taking-the-address-of-a-constexpr-variab/1550408
+#if defined(_MSC_VER)
+    // otherwise linker error of: unresolved external symbol "struct SfxType0 const aSfxVoidItem_Impl"
     rOutStm.WriteOString("const");
 #else
     rOutStm.WriteOString("constexpr");
