@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/container/XMap.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
@@ -37,6 +38,7 @@
 #include <sal/log.hxx>
 #include <salhelper/thread.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/string.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <queue>
@@ -271,6 +273,7 @@ public:
     void produce( bool bForceFlush = false );
     bool m_bIgnoreMissingNSDecl;
     bool m_bDisableThreadedParser;
+    css::uno::Reference<css::container::XMap> mxMap; /// _ prefix string mapper for translation
 
 private:
     bool consume(EventList&);
@@ -1360,6 +1363,10 @@ void FastSaxParserImpl::sendPendingCharacters()
 {
     Entity& rEntity = getEntity();
     OUString sChars( pendingCharacters.data(), pendingCharacters.size(), RTL_TEXTENCODING_UTF8 );
+
+    if (sChars[0] == '_' && mxMap)
+        mxMap->get(uno::Any(sChars)) >>= sChars;
+
     if (rEntity.mbEnableThreads)
     {
         Event& rEvent = rEntity.getEvent( CallbackType::CHARACTERS );
@@ -1463,15 +1470,21 @@ FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
     if ( !(rArguments[0] >>= str) )
         throw IllegalArgumentException();
 
-    if ( str == "IgnoreMissingNSDecl" )
-        mpImpl->m_bIgnoreMissingNSDecl = true;
-    else if ( str == "DoSmeplease" )
-        ; //just ignore as this is already immune to billion laughs
-    else if ( str == "DisableThreadedParser" )
-        mpImpl->m_bDisableThreadedParser = true;
-    else
-        throw IllegalArgumentException();
+    auto opts = comphelper::string::split(str, ',');
+    for (auto &s : opts)
+    {
+        if ( s == "IgnoreMissingNSDecl" )
+            mpImpl->m_bIgnoreMissingNSDecl = true;
+        else if ( s == "DoSmeplease" )
+            ; //just ignore as this is already immune to billion laughs
+        else if ( s == "DisableThreadedParser" )
+            mpImpl->m_bDisableThreadedParser = true;
+        else
+            throw IllegalArgumentException();
+    }
 
+    if (rArguments.size() > 1)
+        rArguments[1] >>= mpImpl->mxMap;
 }
 
 void FastSaxParser::parseStream( const xml::sax::InputSource& aInputSource )
