@@ -12,6 +12,8 @@ xmlsec_patches :=
 xmlsec_patches += old-nss.patch.1
 # Remove this when Windows 7 is no longer supported
 xmlsec_patches += BCryptKeyDerivation.patch.1
+# Upstreamed as: https://github.com/lsh123/xmlsec/pull/937
+xmlsec_patches += 0001-const-up-xmlSecErrorsTable.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
