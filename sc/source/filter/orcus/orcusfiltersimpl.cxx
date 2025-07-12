@@ -12,6 +12,7 @@
 #include <tokenarray.hxx>
 
 #include <osl/thread.hxx>
+#include <osl/file.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -29,6 +30,37 @@ using namespace com::sun::star;
 
 namespace
 {
+/**
+ * Stream copied to a temporary file with a filepath.
+ */
+class CopiedTempStream
+{
+    utl::TempFileNamed maTemp;
+
+public:
+    CopiedTempStream(SvStream& rSrc)
+    {
+        maTemp.EnableKillingFile();
+        SvStream* pDest = maTemp.GetStream(StreamMode::WRITE);
+
+        rSrc.Seek(0);
+
+        const std::size_t nReadBuffer = 1024 * 32;
+        std::size_t nRead = 0;
+
+        do
+        {
+            char pData[nReadBuffer];
+            nRead = rSrc.ReadBytes(pData, nReadBuffer);
+            pDest->WriteBytes(pData, nRead);
+        } while (nRead == nReadBuffer);
+
+        maTemp.CloseStream();
+    }
+
+    OString getFileName() const { return maTemp.GetFileName().toUtf8(); }
+};
+
 uno::Reference<task::XStatusIndicator> getStatusIndicator(const SfxMedium& rMedium)
 {
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
@@ -41,29 +73,15 @@ uno::Reference<task::XStatusIndicator> getStatusIndicator(const SfxMedium& rMedi
 
 bool loadFileContent(SfxMedium& rMedium, orcus::iface::import_filter& filter)
 {
-    // write the content to a temp file
-    utl::TempFileNamed aTemp;
-    aTemp.EnableKillingFile();
-    SvStream* pDest = aTemp.GetStream(StreamMode::WRITE);
-
     SvStream* pSrc = rMedium.GetInStream();
-    pSrc->Seek(0);
-    const std::size_t nReadBuffer = 1024 * 32;
-    std::size_t nRead = 0;
-
-    do
-    {
-        char pData[nReadBuffer];
-        nRead = pSrc->ReadBytes(pData, nReadBuffer);
-        pDest->WriteBytes(pData, nRead);
-    } while (nRead == nReadBuffer);
-
-    aTemp.CloseStream();
+    if (!pSrc)
+        return false;
 
     try
     {
         // memory-map the temp file and start the import
-        orcus::file_content input(aTemp.GetFileName().toUtf8());
+        CopiedTempStream aTemp(*pSrc);
+        orcus::file_content input(aTemp.getFileName());
         filter.read_stream(input.str());
     }
     catch (const std::exception& e)
@@ -112,12 +130,14 @@ bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) con
 {
     try
     {
-#if defined _WIN32
-        OString aPath8 = OUStringToOString(aPath, RTL_TEXTENCODING_UTF8);
-#else
-        OString aPath8 = OUStringToOString(aPath, osl_getThreadTextEncoding());
-#endif
-        orcus::file_content content(aPath8);
+        OUString aURL;
+        if (osl::FileBase::getFileURLFromSystemPath(aPath, aURL) != osl::FileBase::E_None)
+            return false;
+
+        SvFileStream aSrc(aURL, StreamMode::READ);
+        CopiedTempStream aTemp(aSrc);
+        orcus::file_content content(aTemp.getFileName());
+
         ScOrcusFactory aFactory(rDoc);
         ScOrcusStyles aStyles(aFactory);
         orcus::import_ods::read_styles(content.str(), &aStyles);

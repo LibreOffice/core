@@ -21,7 +21,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/windows-constants-hack.patch \
-	external/liborcus/win_path_utf16.patch \
 ))
 endif
 
