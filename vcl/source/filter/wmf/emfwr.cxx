@@ -879,7 +879,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, K
     }
     else
     {
-        nNormWidth = basegfx::fround<sal_uInt32>(maVDev->GetTextArray(rText, &aOwnArray).nWidth);
+        nNormWidth = basegfx::fround<sal_uInt32>(maVDev->GetTextArray(rText, &aOwnArray));
         pDX = aOwnArray;
     }
 

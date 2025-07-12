@@ -1197,7 +1197,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 const sal_Int32 nLen = aTemp.getLength();
                 KernArray aDXAry;
                 const sal_Int32 nNormSize = basegfx::fround(
-                    pVirDev->GetTextArray(aTemp, nLen ? &aDXAry : nullptr).nWidth);
+                    pVirDev->GetTextArray(aTemp, nLen ? &aDXAry : nullptr));
                 if (nLen && nNormSize == 0)
                 {
                     OSL_FAIL("Impossible div by 0 action: MetaStretchTextAction!");

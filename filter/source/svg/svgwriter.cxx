@@ -2743,7 +2743,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     else
     {
         aNormSize
-            = Size(basegfx::fround<tools::Long>(mpVDev->GetTextArray(rText, &aTmpArray).nWidth), 0);
+            = Size(basegfx::fround<tools::Long>(mpVDev->GetTextArray(rText, &aTmpArray)), 0);
     }
 
     // if text is rotated, set transform matrix at new g element

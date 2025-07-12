@@ -239,8 +239,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleTextFontSpecificKerning)
     tools::Long nRefTextWidth = 2671;
     KernArray aRefCharWidths{ 1270, 2671 };
     KernArray aCharWidths;
-    tools::Long nTextWidth
-        = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aAV, &aCharWidths).nWidth);
+    tools::Long nTextWidth = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aAV, &aCharWidths));
 
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths[0], aCharWidths[0]);
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths[1], aCharWidths[1]);
@@ -289,8 +288,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleTextNoKerning)
     tools::Long nRefTextWidth = 2802;
     KernArray aRefCharWidths{ 1401, 2802 };
     KernArray aCharWidths;
-    tools::Long nTextWidth
-        = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aAV, &aCharWidths).nWidth);
+    tools::Long nTextWidth = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aAV, &aCharWidths));
 
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths[0], aCharWidths[0]);
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths[1], aCharWidths[1]);
@@ -1028,7 +1026,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testPartialTextArraySizeMatch)
 
     // Absolute character widths for the complete array.
     KernArray aCompleteWidths;
-    auto nCompleteWidth = pOutDev->GetTextArray(aWater, &aCompleteWidths).nWidth;
+    auto nCompleteWidth = pOutDev->GetTextArray(aWater, &aCompleteWidths);
 
     CPPUNIT_ASSERT_EQUAL(size_t{ 5 }, aCompleteWidths.size());
 
@@ -1040,10 +1038,8 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testPartialTextArraySizeMatch)
     {
         KernArray aFragmentWidths;
         auto nFragmentWidth
-            = pOutDev
-                  ->GetPartialTextArray(aWater, &aFragmentWidths, /*nIndex*/ 0, /*nLen*/ 5,
-                                        /*nPartIndex*/ i, /*nPartLen*/ 1)
-                  .nWidth;
+            = pOutDev->GetPartialTextArray(aWater, &aFragmentWidths, /*nIndex*/ 0, /*nLen*/ 5,
+                                           /*nPartIndex*/ i, /*nPartLen*/ 1);
         nPartialWidth += nFragmentWidth;
 
         CPPUNIT_ASSERT_EQUAL(size_t{ 1 }, aFragmentWidths.size());

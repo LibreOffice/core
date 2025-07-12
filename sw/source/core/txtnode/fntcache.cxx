@@ -753,7 +753,7 @@ static void GetTextArray(const SwDrawTextInfo& rExtraInf, const OutputDevice& rD
                          bool bCaret = false,
                          const vcl::text::TextLayoutCache* layoutCache = nullptr)
 {
-    vcl::TextArrayMetrics stMetrics;
+    std::optional<tools::Rectangle> oBounds;
 
     if (nLayoutContext.has_value())
     {
@@ -764,27 +764,26 @@ static void GetTextArray(const SwDrawTextInfo& rExtraInf, const OutputDevice& rD
 
         const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
             &rDevice, rStr, nContextBegin, nContextLen, nIndex, nIndex + nLen, 0, layoutCache);
-        stMetrics = rDevice.GetPartialTextArray(rStr, &rDXAry, nContextBegin, nContextLen, nIndex,
-                                                nLen, bCaret, layoutCache, pLayoutCache, true);
+        (void)rDevice.GetPartialTextArray(rStr, &rDXAry, nContextBegin, nContextLen, nIndex,
+                                                nLen, bCaret, layoutCache, pLayoutCache, &oBounds);
     }
     else
     {
         const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
             &rDevice, rStr, nIndex, nLen, 0, layoutCache);
-        stMetrics
-            = rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, bCaret, layoutCache, pLayoutCache, true);
+        (void)rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, bCaret, layoutCache, pLayoutCache, &oBounds);
     }
 
-    if (stMetrics.aBounds.has_value())
+    if (oBounds.has_value())
     {
         if (nMaxAscent)
         {
-            *nMaxAscent = static_cast<SwTwips>(std::ceil(-stMetrics.aBounds->Top()));
+            *nMaxAscent = static_cast<SwTwips>(std::ceil(-oBounds->Top()));
         }
 
         if (nMaxDescent)
         {
-            *nMaxDescent = static_cast<SwTwips>(std::ceil(stMetrics.aBounds->Bottom()));
+            *nMaxDescent = static_cast<SwTwips>(std::ceil(oBounds->Bottom()));
         }
     }
 
