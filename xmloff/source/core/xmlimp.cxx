@@ -22,6 +22,7 @@
 #include <memory>
 #include <optional>
 
+
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -77,6 +78,12 @@
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
 #include <RDFaImportHelper.hxx>
+
+// L10nMapper bits to split out ...
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/container/XMap.hpp>
+#include <cppuhelper/compbase.hxx>
 
 using ::com::sun::star::beans::XPropertySetInfo;
 
@@ -436,6 +443,64 @@ void SvXMLImport::InitCtor_()
     }
 }
 
+namespace {
+
+    class L10nMapper : public cppu::WeakImplHelper<css::container::XMap>
+    {
+        std::unordered_map<OUString, OUString> maMap;
+
+        void load()
+        {
+            maMap["_Foo"] = "Baz";
+        }
+    public:
+        L10nMapper()
+        {
+            load();
+        }
+        virtual ~L10nMapper() override {}
+
+        // XMap
+        virtual Type SAL_CALL getKeyType() override   { return cppu::UnoType<OUString>::get(); };
+        virtual Type SAL_CALL getValueType() override { return cppu::UnoType<OUString>::get(); };
+        virtual void SAL_CALL clear() override { maMap.clear(); }
+        virtual sal_Bool SAL_CALL containsKey( const Any& ) override
+        {
+            throw css::uno::RuntimeException(u"not implemented"_ustr);
+        }
+        virtual sal_Bool SAL_CALL containsValue( const Any& ) override
+        {
+            throw css::uno::RuntimeException(u"not implemented"_ustr);
+        }
+        virtual Any SAL_CALL get( const Any& key ) override
+        {
+            auto it = maMap.find(key.get<OUString>());
+            if (it == maMap.end())
+                return css::uno::Any(key); // or throw ?
+            else
+                return css::uno::Any(it->second);
+        }
+        virtual Any SAL_CALL put( const Any&, const Any& ) override
+        {
+            throw css::uno::RuntimeException(u"not implemented"_ustr);
+        }
+        virtual Any SAL_CALL remove( const Any& ) override
+        {
+            throw css::uno::RuntimeException(u"not implemented"_ustr);
+        }
+
+        // XElementAccess (base)
+        virtual Type SAL_CALL getElementType() override
+        {
+            throw css::uno::RuntimeException(u"not implemented"_ustr);
+        }
+        virtual sal_Bool SAL_CALL hasElements() override
+        {
+            return !maMap.empty();
+        }
+};
+}
+
 SvXMLImport::SvXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,
@@ -457,6 +522,13 @@ SvXMLImport::SvXMLImport(
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();
     mxParser = xml::sax::FastParser::create( xContext );
+
+    // FIXME: make conditional [!] ...
+    css::uno::Reference< css::lang::XInitialization > xInit( mxParser, css::uno::UNO_QUERY_THROW );
+    css::uno::Reference< XMap > xMap( new L10nMapper() );
+    css::uno::Sequence< css::uno::Any > args{ css::uno::Any(OUString("")), css::uno::Any(xMap) };
+    xInit->initialize(args);
+
     setNamespaceHandler( maNamespaceHandler );
     setTokenHandler( xTokenHandler  );
     if ( !bIsNSMapsInitialized )
