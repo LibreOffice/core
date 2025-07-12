@@ -130,14 +130,12 @@ bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) con
 {
     try
     {
-        OUString aURL;
-        if (osl::FileBase::getFileURLFromSystemPath(aPath, aURL) != osl::FileBase::E_None)
-            return false;
-
-        SvFileStream aSrc(aURL, StreamMode::READ);
-        CopiedTempStream aTemp(aSrc);
-        orcus::file_content content(aTemp.getFileName());
-
+#if defined _WIN32
+        OString aPath8 = OUStringToOString(aPath, RTL_TEXTENCODING_UTF8);
+#else
+        OString aPath8 = OUStringToOString(aPath, osl_getThreadTextEncoding());
+#endif
+        orcus::file_content content(aPath8);
         ScOrcusFactory aFactory(rDoc);
         ScOrcusStyles aStyles(aFactory);
         orcus::import_ods::read_styles(content.str(), &aStyles);
