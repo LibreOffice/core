@@ -202,7 +202,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::lang::XServiceInfo
 > SwXFieldEnumeration_Base;
 
-class SwXFieldEnumeration final
+class SW_DLLPUBLIC SwXFieldEnumeration final
     : public SwXFieldEnumeration_Base
 {
 

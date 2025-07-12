@@ -2914,6 +2914,12 @@ uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration(
     return new SwXFieldEnumeration(GetDoc());
 }
 
+rtl::Reference< SwXFieldEnumeration >  SwXTextFieldTypes::createFieldEnumeration()
+{
+    SolarMutexGuard aGuard;
+    return new SwXFieldEnumeration(GetDoc());
+}
+
 uno::Type  SwXTextFieldTypes::getElementType()
 {
     return cppu::UnoType<text::XDependentTextField>::get();

@@ -28,6 +28,7 @@
 #include "unocoll.hxx"
 
 class SwFieldType;
+class SwXFieldEnumeration;
 
 typedef ::cppu::WeakImplHelper
 <   css::container::XNameAccess
@@ -117,6 +118,8 @@ public:
     // container::XUniqueIDAccess
     virtual css::uno::Any SAL_CALL getByUniqueID( const OUString& ID ) override;
     virtual void SAL_CALL removeByUniqueID( const OUString& ID ) override;
+
+    rtl::Reference<SwXFieldEnumeration> createFieldEnumeration();
 };
 
 #endif

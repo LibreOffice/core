@@ -28,6 +28,9 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <unotxdoc.hxx>
+#include <unofieldcoll.hxx>
+#include <unofield.hxx>
 
 namespace writerfilter::dmapper {
 
@@ -53,12 +56,13 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent )
         try
         {
             //remove listener
-            uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY_THROW )->removeEventListener(
-                uno::Reference<document::XEventListener>(this));
+            SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(rEvent.Source.get());
+            assert(pDoc);
+            pDoc->removeEventListener(uno::Reference<document::XEventListener>(this));
 
             // If we have PAGEREF fields, update fields as well.
-            uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(rEvent.Source, uno::UNO_QUERY);
-            uno::Reference<container::XEnumeration> xEnumeration = xTextFieldsSupplier->getTextFields()->createEnumeration();
+            rtl::Reference<SwXTextFieldTypes> pTextFields = pDoc->getSwTextFields();
+            rtl::Reference<SwXFieldEnumeration> xEnumeration = pTextFields->createFieldEnumeration();
             sal_Int32 nIndex = 0;
             while(xEnumeration->hasMoreElements())
             {
@@ -78,10 +82,7 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent )
                 }
             }
             if (nIndex)
-            {
-                uno::Reference<util::XRefreshable> xRefreshable(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY);
-                xRefreshable->refresh();
-            }
+                pTextFields->refresh();
         }
         catch( const uno::Exception& )
         {
