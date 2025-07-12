@@ -211,7 +211,11 @@ std::unique_ptr<vcl::pdf::PDFiumDocument> UnoApiTest::parsePDFExport(const OStri
     }
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), rPassword);
-    CPPUNIT_ASSERT(pPdfDocument);
+    if (!pPdfDocument)
+    {
+        OString aError = OUStringToOString(pPDFium->getLastError(), RTL_TEXTENCODING_UTF8);
+        CPPUNIT_ASSERT_MESSAGE(aError.getStr(), pPdfDocument);
+    }
     return pPdfDocument;
 }
 
