@@ -405,163 +405,152 @@
 
 // HTML attribute tokens (=options)
 
-// attributes without value
-#define OOO_STRING_SVTOOLS_HTML_O_checked "checked"
-#define OOO_STRING_SVTOOLS_HTML_O_compact "compact"
-#define OOO_STRING_SVTOOLS_HTML_O_declare "declare"
-#define OOO_STRING_SVTOOLS_HTML_O_disabled "disabled"
-#define OOO_STRING_SVTOOLS_HTML_O_ismap "ismap"
-#define OOO_STRING_SVTOOLS_HTML_O_mayscript "mayscript"
-#define OOO_STRING_SVTOOLS_HTML_O_multiple "multiple"
-#define OOO_STRING_SVTOOLS_HTML_O_nohref "nohref"
-#define OOO_STRING_SVTOOLS_HTML_O_noresize "noresize"
-#define OOO_STRING_SVTOOLS_HTML_O_noshade "noshade"
-#define OOO_STRING_SVTOOLS_HTML_O_nowrap "nowrap"
-#define OOO_STRING_SVTOOLS_HTML_O_sdfixed "sdfixed"
-#define OOO_STRING_SVTOOLS_HTML_O_selected "selected"
-
-// attributes with a string as value
-#define OOO_STRING_SVTOOLS_HTML_O_accesskey "accesskey"
-#define OOO_STRING_SVTOOLS_HTML_O_accept "accept"
-#define OOO_STRING_SVTOOLS_HTML_O_alt "alt"
-#define OOO_STRING_SVTOOLS_HTML_O_axis "axis"
-#define OOO_STRING_SVTOOLS_HTML_O_char "char"
-#define OOO_STRING_SVTOOLS_HTML_O_charset "charset"
-#define OOO_STRING_SVTOOLS_HTML_O_class "class"
-#define OOO_STRING_SVTOOLS_HTML_O_code "code"
-#define OOO_STRING_SVTOOLS_HTML_O_codetype "codetype"
-#define OOO_STRING_SVTOOLS_HTML_O_content "content"
-#define OOO_STRING_SVTOOLS_HTML_O_coords "coords"
-#define OOO_STRING_SVTOOLS_HTML_O_enctype "enctype"
-#define OOO_STRING_SVTOOLS_HTML_O_face "face"
-#define OOO_STRING_SVTOOLS_HTML_O_frameborder "frameborder"
-#define OOO_STRING_SVTOOLS_HTML_O_httpequiv "http-equiv"
-#define OOO_STRING_SVTOOLS_HTML_O_language "language"
-#define OOO_STRING_SVTOOLS_HTML_O_name "name"
-#define OOO_STRING_SVTOOLS_HTML_O_prompt "prompt"
-#define OOO_STRING_SVTOOLS_HTML_O_shape "shape"
-#define OOO_STRING_SVTOOLS_HTML_O_standby "standby"
-#define OOO_STRING_SVTOOLS_HTML_O_style "style"
-#define OOO_STRING_SVTOOLS_HTML_O_title "title"
-#define OOO_STRING_SVTOOLS_HTML_O_value "value"
-#define OOO_STRING_SVTOOLS_HTML_O_SDval "sdval"
-#define OOO_STRING_SVTOOLS_HTML_O_DSval "data-sheets-value"
-#define OOO_STRING_SVTOOLS_HTML_O_SDnum "sdnum"
-#define OOO_STRING_SVTOOLS_HTML_O_DSnum "data-sheets-numberformat"
-#define OOO_STRING_SVTOOLS_HTML_O_DSformula "data-sheets-formula"
-#define OOO_STRING_SVTOOLS_HTML_O_sdlibrary "sdlibrary"
-#define OOO_STRING_SVTOOLS_HTML_O_sdmodule "sdmodule"
-#define OOO_STRING_SVTOOLS_HTML_O_sdevent "sdevent-"
-#define OOO_STRING_SVTOOLS_HTML_O_sdaddparam "sdaddparam-"
-
-// attributes with an SGML identifier as value
-#define OOO_STRING_SVTOOLS_HTML_O_id "id"
-#define OOO_STRING_SVTOOLS_HTML_O_target "target"
-#define OOO_STRING_SVTOOLS_HTML_O_to "to"
-
-// attributes with a URI as value
-#define OOO_STRING_SVTOOLS_HTML_O_action "action"
-#define OOO_STRING_SVTOOLS_HTML_O_archive "archive"
-#define OOO_STRING_SVTOOLS_HTML_O_background "background"
-#define OOO_STRING_SVTOOLS_HTML_O_classid "classid"
-#define OOO_STRING_SVTOOLS_HTML_O_codebase "codebase"
-#define OOO_STRING_SVTOOLS_HTML_O_data "data"
-#define OOO_STRING_SVTOOLS_HTML_O_href "href"
-#define OOO_STRING_SVTOOLS_HTML_O_script "script"
-#define OOO_STRING_SVTOOLS_HTML_O_src "src"
-#define OOO_STRING_SVTOOLS_HTML_O_usemap "usemap"
-
-// attributes with a colour as value (all Netscape)
-#define OOO_STRING_SVTOOLS_HTML_O_alink "alink"
-#define OOO_STRING_SVTOOLS_HTML_O_bgcolor "bgcolor"
-#define OOO_STRING_SVTOOLS_HTML_O_bordercolor "bordercolor"
-#define OOO_STRING_SVTOOLS_HTML_O_bordercolorlight "bordercolorlight"
-#define OOO_STRING_SVTOOLS_HTML_O_bordercolordark "bordercolordark"
-#define OOO_STRING_SVTOOLS_HTML_O_color "color"
-#define OOO_STRING_SVTOOLS_HTML_O_link "link"
-#define OOO_STRING_SVTOOLS_HTML_O_text "text"
-#define OOO_STRING_SVTOOLS_HTML_O_vlink "vlink"
-
-// attributes with a numerical value
-#define OOO_STRING_SVTOOLS_HTML_O_border "border"
-#define OOO_STRING_SVTOOLS_HTML_O_cellspacing "cellspacing"
-#define OOO_STRING_SVTOOLS_HTML_O_cellpadding "cellpadding"
-#define OOO_STRING_SVTOOLS_HTML_O_charoff "charoff"
-#define OOO_STRING_SVTOOLS_HTML_O_colspan "colspan"
-#define OOO_STRING_SVTOOLS_HTML_O_framespacing "framespacing"
-#define OOO_STRING_SVTOOLS_HTML_O_gutter "gutter"
-#define OOO_STRING_SVTOOLS_HTML_O_height "height"
-#define OOO_STRING_SVTOOLS_HTML_O_hspace "hspace"
-#define OOO_STRING_SVTOOLS_HTML_O_left "left"
-#define OOO_STRING_SVTOOLS_HTML_O_loop "loop"
-#define OOO_STRING_SVTOOLS_HTML_O_marginheight "marginheight"
-#define OOO_STRING_SVTOOLS_HTML_O_marginwidth "marginwidth"
-#define OOO_STRING_SVTOOLS_HTML_O_maxlength "maxlength"
-#define OOO_STRING_SVTOOLS_HTML_O_rowspan "rowspan"
-#define OOO_STRING_SVTOOLS_HTML_O_scrollamount "scrollamount"
-#define OOO_STRING_SVTOOLS_HTML_O_scrolldelay "scrolldelay"
-#define OOO_STRING_SVTOOLS_HTML_O_span "span"
-#define OOO_STRING_SVTOOLS_HTML_O_tabindex "tabindex"
-#define OOO_STRING_SVTOOLS_HTML_O_vspace "vspace"
-#define OOO_STRING_SVTOOLS_HTML_O_width "width"
-#define OOO_STRING_SVTOOLS_HTML_O_zindex "z-index"
-
-// attributes with enum values
-#define OOO_STRING_SVTOOLS_HTML_O_behavior "behavior"
-#define OOO_STRING_SVTOOLS_HTML_O_clear "clear"
-#define OOO_STRING_SVTOOLS_HTML_O_dir "dir"
-#define OOO_STRING_SVTOOLS_HTML_O_direction "direction"
-#define OOO_STRING_SVTOOLS_HTML_O_format "format"
-#define OOO_STRING_SVTOOLS_HTML_O_frame "frame"
-#define OOO_STRING_SVTOOLS_HTML_O_lang "lang"
-#define OOO_STRING_SVTOOLS_XHTML_O_lang "xml:lang"
-#define OOO_STRING_SVTOOLS_HTML_O_method "method"
-#define OOO_STRING_SVTOOLS_HTML_O_rel "rel"
-#define OOO_STRING_SVTOOLS_HTML_O_rev "rev"
-#define OOO_STRING_SVTOOLS_HTML_O_rules "rules"
-#define OOO_STRING_SVTOOLS_HTML_O_scrolling "scrolling"
-#define OOO_STRING_SVTOOLS_HTML_O_sdreadonly "readonly"
-#define OOO_STRING_SVTOOLS_HTML_O_subtype "subtype"
-#define OOO_STRING_SVTOOLS_HTML_O_type "type"
-#define OOO_STRING_SVTOOLS_HTML_O_valign "valign"
-#define OOO_STRING_SVTOOLS_HTML_O_valuetype "valuetype"
-#define OOO_STRING_SVTOOLS_HTML_O_wrap "wrap"
-#define OOO_STRING_SVTOOLS_XHTML_O_xml_space "xml:space"
-
-// attributes with script code as value
-#define OOO_STRING_SVTOOLS_HTML_O_onblur "onblur"
-#define OOO_STRING_SVTOOLS_HTML_O_onchange "onchange"
-#define OOO_STRING_SVTOOLS_HTML_O_onclick "onclick"
-#define OOO_STRING_SVTOOLS_HTML_O_onfocus "onfocus"
-#define OOO_STRING_SVTOOLS_HTML_O_onload "onload"
-#define OOO_STRING_SVTOOLS_HTML_O_onmouseover "onmouseover"
-#define OOO_STRING_SVTOOLS_HTML_O_onreset "onreset"
-#define OOO_STRING_SVTOOLS_HTML_O_onselect "onselect"
-#define OOO_STRING_SVTOOLS_HTML_O_onsubmit "onsubmit"
-#define OOO_STRING_SVTOOLS_HTML_O_onunload "onunload"
-#define OOO_STRING_SVTOOLS_HTML_O_onabort "onabort"
-#define OOO_STRING_SVTOOLS_HTML_O_onerror "onerror"
-#define OOO_STRING_SVTOOLS_HTML_O_onmouseout "onmouseout"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonblur "sdonblur"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonchange "sdonchange"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonclick "sdonclick"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonfocus "sdonfocus"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonload "sdonload"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonmouseover "sdonmouseover"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonreset "sdonreset"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonselect "sdonselect"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonsubmit "sdonsubmit"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonunload "sdonunload"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonabort "sdonabort"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonerror "sdonerror"
-#define OOO_STRING_SVTOOLS_HTML_O_SDonmouseout "sdonmouseout"
-
-// attributes with context-dependent values
-#define OOO_STRING_SVTOOLS_HTML_O_align "align"
-#define OOO_STRING_SVTOOLS_HTML_O_cols "cols"
-#define OOO_STRING_SVTOOLS_HTML_O_rows "rows"
-#define OOO_STRING_SVTOOLS_HTML_O_start "start"
-#define OOO_STRING_SVTOOLS_HTML_O_size "size"
+#define OOO_STRING_SVTOOLS_HTML_O_accept "accept" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_accesskey "accesskey" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_action "action" // attribute with a URI as value
+#define OOO_STRING_SVTOOLS_HTML_O_align "align" // attribute with context-dependent values
+#define OOO_STRING_SVTOOLS_HTML_O_alink "alink" // attribute with a colour as value (Netscape)
+#define OOO_STRING_SVTOOLS_HTML_O_alt "alt" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_archive "archive" // attribute with a URI as value
+#define OOO_STRING_SVTOOLS_HTML_O_axis "axis" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_background "background" // attribute with a URI as value
+#define OOO_STRING_SVTOOLS_HTML_O_behavior "behavior" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_bgcolor "bgcolor" // attribute with a colour as value (Netscape)
+#define OOO_STRING_SVTOOLS_HTML_O_border "border" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_bordercolor                                                      \
+    "bordercolor" // attribute with a colour as value (Netscape)
+#define OOO_STRING_SVTOOLS_HTML_O_bordercolordark                                                  \
+    "bordercolordark" // attribute with a colour as value (Netscape)
+#define OOO_STRING_SVTOOLS_HTML_O_bordercolorlight                                                 \
+    "bordercolorlight" // attribute with a colour as value (Netscape)
+#define OOO_STRING_SVTOOLS_HTML_O_cellpadding "cellpadding" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_cellspacing "cellspacing" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_char "char" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_charoff "charoff" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_charset "charset" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_checked "checked" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_class "class" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_classid "classid" // attribute with a URI as value
+#define OOO_STRING_SVTOOLS_HTML_O_clear "clear" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_code "code" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_codebase "codebase" // attribute with a URI as value
+#define OOO_STRING_SVTOOLS_HTML_O_codetype "codetype" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_color "color" // attribute with a colour as value (Netscape)
+#define OOO_STRING_SVTOOLS_HTML_O_cols "cols" // attribute with context-dependent values
+#define OOO_STRING_SVTOOLS_HTML_O_colspan "colspan" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_compact "compact" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_content "content" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_coords "coords" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_data "data" // attribute with a URI as value
+#define OOO_STRING_SVTOOLS_HTML_O_DSformula                                                        \
+    "data-sheets-formula" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_DSnum                                                            \
+    "data-sheets-numberformat" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_DSval "data-sheets-value" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_declare "declare" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_dir "dir" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_direction "direction" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_disabled "disabled" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_enctype "enctype" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_face "face" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_format "format" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_frame "frame" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_frameborder "frameborder" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_framespacing "framespacing" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_gutter "gutter" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_height "height" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_href "href" // attribute with a URI as value
+#define OOO_STRING_SVTOOLS_HTML_O_hspace "hspace" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_httpequiv "http-equiv" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_id "id" // attribute with an SGML identifier as value
+#define OOO_STRING_SVTOOLS_HTML_O_ismap "ismap" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_lang "lang" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_language "language" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_left "left" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_link "link" // attribute with a colour as value (Netscape)
+#define OOO_STRING_SVTOOLS_HTML_O_loop "loop" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_marginheight "marginheight" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_marginwidth "marginwidth" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_maxlength "maxlength" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_mayscript "mayscript" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_method "method" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_multiple "multiple" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_name "name" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_nohref "nohref" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_noresize "noresize" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_noshade "noshade" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_nowrap "nowrap" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_onabort "onabort" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onblur "onblur" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onchange "onchange" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onclick "onclick" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onerror "onerror" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onfocus "onfocus" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onload "onload" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onmouseout "onmouseout" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onmouseover "onmouseover" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onreset "onreset" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onselect "onselect" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onsubmit "onsubmit" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_onunload "onunload" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_prompt "prompt" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_sdreadonly "readonly" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_rel "rel" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_rev "rev" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_rows "rows" // attribute with context-dependent values
+#define OOO_STRING_SVTOOLS_HTML_O_rowspan "rowspan" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_rules "rules" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_script "script" // attribute with a URI as value
+#define OOO_STRING_SVTOOLS_HTML_O_scrollamount "scrollamount" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_scrolldelay "scrolldelay" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_scrolling "scrolling" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_sdaddparam "sdaddparam-" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_sdevent "sdevent-" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_sdfixed "sdfixed" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_sdlibrary "sdlibrary" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_sdmodule "sdmodule" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDnum "sdnum" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonabort "sdonabort" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonblur "sdonblur" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonchange "sdonchange" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonclick "sdonclick" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonerror "sdonerror" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonfocus "sdonfocus" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonload "sdonload" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonmouseout "sdonmouseout" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonmouseover                                                    \
+    "sdonmouseover" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonreset "sdonreset" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonselect "sdonselect" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonsubmit "sdonsubmit" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDonunload "sdonunload" // attribute with script code as value
+#define OOO_STRING_SVTOOLS_HTML_O_SDval "sdval" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_selected "selected" // attribute without value
+#define OOO_STRING_SVTOOLS_HTML_O_shape "shape" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_size "size" // attribute with context-dependent values
+#define OOO_STRING_SVTOOLS_HTML_O_span "span" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_src "src" // attribute with a URI as value
+#define OOO_STRING_SVTOOLS_HTML_O_standby "standby" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_start "start" // attribute with context-dependent values
+#define OOO_STRING_SVTOOLS_HTML_O_style "style" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_subtype "subtype" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_tabindex "tabindex" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_target "target" // attribute with an SGML identifier as value
+#define OOO_STRING_SVTOOLS_HTML_O_text "text" // attribute with a colour as value (Netscape)
+#define OOO_STRING_SVTOOLS_HTML_O_title "title" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_to "to" // attribute with an SGML identifier as value
+#define OOO_STRING_SVTOOLS_HTML_O_type "type" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_usemap "usemap" // attribute with a URI as value
+#define OOO_STRING_SVTOOLS_HTML_O_valign "valign" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_value "value" // attribute with a string as value
+#define OOO_STRING_SVTOOLS_HTML_O_valuetype "valuetype" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_vlink "vlink" // attribute with a colour as value (Netscape)
+#define OOO_STRING_SVTOOLS_HTML_O_vspace "vspace" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_width "width" // attribute with a numerical value
+#define OOO_STRING_SVTOOLS_HTML_O_wrap "wrap" // attribute with enum values
+#define OOO_STRING_SVTOOLS_XHTML_O_lang "xml:lang" // attribute with enum values
+#define OOO_STRING_SVTOOLS_XHTML_O_xml_space "xml:space" // attribute with enum values
+#define OOO_STRING_SVTOOLS_HTML_O_zindex "z-index" // attribute with a numerical value
 
 // values of <INPUT TYPE=...>
 #define OOO_STRING_SVTOOLS_HTML_IT_text "text"
