@@ -29,7 +29,7 @@
 
 #include "pagemanager.hxx"
 
-namespace canvas
+namespace vcl_canvas
 {
     /** surfaces denote occupied areas within pages.
 

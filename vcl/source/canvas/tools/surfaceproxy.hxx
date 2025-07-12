@@ -25,7 +25,7 @@
 #include "pagemanager.hxx"
 #include "surface.hxx"
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Definition of the surface proxy class.
 
@@ -38,7 +38,7 @@ namespace canvas
     {
     public:
 
-        SurfaceProxy( std::shared_ptr<canvas::IColorBuffer> xBuffer,
+        SurfaceProxy( std::shared_ptr<IColorBuffer> xBuffer,
                       PageManagerSharedPtr xPageManager );
 
         // ISurfaceProxy interface
@@ -111,7 +111,7 @@ namespace canvas
         // pointer to the source of image data
         // which always is stored in system memory,
         // 32bit rgba and can have any size.
-        std::shared_ptr<canvas::IColorBuffer> mpBuffer;
+        std::shared_ptr<IColorBuffer> mpBuffer;
     };
 }
 

@@ -35,7 +35,7 @@ namespace vcl_cairocanvas
         This class implements all sprite-related functionality, like
         that available on the XSprite interface.
      */
-    class SpriteHelper : public ::canvas::CanvasCustomSpriteHelper
+    class SpriteHelper : public ::vcl_canvas::CanvasCustomSpriteHelper
     {
     public:
         /** Create sprite helper

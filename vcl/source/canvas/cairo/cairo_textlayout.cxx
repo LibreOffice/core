@@ -23,7 +23,7 @@
 #include <math.h>
 
 #include <com/sun/star/rendering/TextDirection.hpp>
-#include <canvas/canvastools.hxx>
+#include <vcl_canvas/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -182,8 +182,8 @@ namespace vcl_cairocanvas
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               pVDev->GetTextWidth(
                                                   maText.Text,
-                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) ),
+                                                  ::vcl_canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                                  ::vcl_canvas::tools::numeric_cast<sal_uInt16>(maText.Length) ),
                                               nBelowBaseline );
         }
     }
@@ -282,14 +282,14 @@ namespace vcl_cairocanvas
             std::span<const sal_Bool> aKashidaArray(maKashidaPositions.getConstArray(), maKashidaPositions.getLength());
 
             rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets, aKashidaArray,
-                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
+                                   ::vcl_canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                   ::vcl_canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
         }
         else
         {
             rOutDev.DrawText( rOutpos, maText.Text,
-                              ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-                              ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
+                              ::vcl_canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                              ::vcl_canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
         }
     }
 
@@ -332,7 +332,7 @@ namespace vcl_cairocanvas
     {
         ::basegfx::B2DHomMatrix aMatrix;
 
-        ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
+        ::vcl_canvas::tools::mergeViewAndRenderTransform(aMatrix,
                                                      viewState,
                                                      renderState);
 

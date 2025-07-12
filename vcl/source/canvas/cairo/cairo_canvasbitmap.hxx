@@ -44,13 +44,13 @@ namespace vcl_cairocanvas
                                              css::lang::XServiceInfo,
                                              css::beans::XFastPropertySet >   CanvasBitmapBase_Base;
     class CanvasBitmapSpriteSurface_Base :
-        public ::canvas::BaseMutexHelper<CanvasBitmapBase_Base>,
+        public ::vcl_canvas::BaseMutexHelper<CanvasBitmapBase_Base>,
         public SurfaceProvider
     {
     };
 
-    typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase2<
+    typedef ::vcl_canvas::IntegerBitmapBase<
+        vcl_canvas::BitmapCanvasBase2<
             CanvasBitmapSpriteSurface_Base,
             CanvasHelper,
             ::osl::MutexGuard,

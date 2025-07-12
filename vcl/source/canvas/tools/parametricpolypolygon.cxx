@@ -31,7 +31,7 @@
 
 using namespace ::com::sun::star;
 
-namespace canvas
+namespace vcl_canvas
 {
     uno::Sequence<OUString> ParametricPolyPolygon::getAvailableServiceNames()
     {

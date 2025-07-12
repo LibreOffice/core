@@ -29,7 +29,7 @@ namespace basegfx
     class B2DRange;
 }
 
-namespace canvas
+namespace vcl_canvas
 {
     /* Definition of Sprite interface (as we mix with UNO here, has to
        be XInterface - reference holders to a Sprite must be able to

@@ -33,12 +33,12 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <base/canvascustomspritehelper.hxx>
-#include <canvas/canvastools.hxx>
+#include <vcl_canvas/canvastools.hxx>
 
 using namespace ::com::sun::star;
 
 
-namespace canvas
+namespace vcl_canvas
 {
     bool CanvasCustomSpriteHelper::updateClipState( const Sprite::Reference& rSprite )
     {
@@ -70,7 +70,7 @@ namespace canvas
 
             // rectangular area which is actually covered by the sprite.
             // coordinates are relative to the sprite origin.
-            ::basegfx::B2DRectangle aSpriteRectPixel = ::canvas::tools::calcTransformedRectBounds(
+            ::basegfx::B2DRectangle aSpriteRectPixel = ::vcl_canvas::tools::calcTransformedRectBounds(
                                                         aBounds,
                                                         maTransform );
 
@@ -201,7 +201,7 @@ namespace canvas
                 ::basegfx::B2DRectangle( 0.0,0.0,
                                          aInputSize.Width,
                                          aInputSize.Height ),
-                ::canvas::tools::mergeViewAndRenderTransform(aTransform,
+                ::vcl_canvas::tools::mergeViewAndRenderTransform(aTransform,
                                                              viewState,
                                                              renderState) ) )
         {
@@ -239,7 +239,7 @@ namespace canvas
             return; // we're disposed
 
         ::basegfx::B2DHomMatrix aTransform;
-        ::canvas::tools::mergeViewAndRenderTransform(aTransform,
+        ::vcl_canvas::tools::mergeViewAndRenderTransform(aTransform,
                                                      viewState,
                                                      renderState);
 
@@ -412,7 +412,7 @@ namespace canvas
 
         // transform bounds at origin, as the sprite transformation is
         // formulated that way
-        return ::canvas::tools::calcTransformedRectBounds(
+        return ::vcl_canvas::tools::calcTransformedRectBounds(
                                                            rBounds,
                                                            aTransform );
     }

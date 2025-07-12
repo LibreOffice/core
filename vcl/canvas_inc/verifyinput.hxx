@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <canvas/canvastoolsdllapi.h>
+#include <vcl_canvas/canvastoolsdllapi.h>
 
 namespace com::sun::star::geometry
 {
@@ -49,7 +49,7 @@ namespace com::sun::star::rendering
 
 namespace com::sun::star::uno { template <class E> class Sequence; }
 
-namespace canvas
+namespace vcl_canvas
 {
     namespace tools
     {

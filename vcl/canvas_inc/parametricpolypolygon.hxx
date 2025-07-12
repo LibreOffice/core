@@ -24,7 +24,7 @@
 #include <comphelper/compbase.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <canvas/canvastoolsdllapi.h>
+#include <vcl_canvas/canvastoolsdllapi.h>
 #include <rtl/ref.hxx>
 #include <utility>
 
@@ -33,7 +33,7 @@ namespace com::sun::star::rendering { class XGraphicDevice; }
 
 /* Definition of ParametricPolyPolygon class */
 
-namespace canvas
+namespace vcl_canvas
 {
     typedef comphelper::WeakComponentImplHelper< css::rendering::XParametricPolyPolygon2D,
                                            css::lang::XServiceInfo > ParametricPolyPolygon_Base;

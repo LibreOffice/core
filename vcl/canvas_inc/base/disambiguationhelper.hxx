@@ -25,7 +25,7 @@
 
 /* Definition of the DisambiguationHelper class */
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Base class, initializing its own baseclass with m_aMutex.
 

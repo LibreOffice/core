@@ -21,7 +21,7 @@
 
 #include <com/sun/star/awt/XWindow2.hpp>
 
-#include <canvas/canvastools.hxx>
+#include <vcl_canvas/canvastools.hxx>
 #include <base/graphicdevicebase.hxx>
 
 namespace com::sun::star::awt { class XTopWindow; }
@@ -29,7 +29,7 @@ namespace com::sun::star::awt { class XTopWindow; }
 
 /* Definition of BufferedGraphicDeviceBase class */
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Helper template base class for XGraphicDevice implementations
         on windows.

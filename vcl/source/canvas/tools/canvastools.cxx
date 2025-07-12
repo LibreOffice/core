@@ -58,12 +58,12 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/window.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <vcl_canvas/canvastools.hxx>
 
 
 using namespace ::com::sun::star;
 
-namespace canvas::tools
+namespace vcl_canvas::tools
 {
         geometry::RealSize2D createInfiniteSize2D()
         {
@@ -1100,7 +1100,7 @@ namespace canvas::tools
             rTotalTransform.identity();
             ::basegfx::unotools::homMatrixFromAffineMatrix( rTotalTransform,
                                                             texture.AffineTransform );
-            ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
+            ::vcl_canvas::tools::mergeViewAndRenderTransform(aMatrix,
                                                          viewState,
                                                          renderState);
             rTotalTransform *= aMatrix; // prepend total view/render transformation
@@ -1172,7 +1172,7 @@ namespace canvas::tools
 
                 ::basegfx::B2DHomMatrix aMatrix;
                 aClipPoly.transform(
-                    ::canvas::tools::mergeViewAndRenderTransform( aMatrix,
+                    ::vcl_canvas::tools::mergeViewAndRenderTransform( aMatrix,
                                                                   viewState,
                                                                   renderState ) );
 

@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Interface for a raw memory pixel container
 

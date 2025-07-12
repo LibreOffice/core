@@ -23,7 +23,7 @@
 #include <verifyinput.hxx>
 
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Helper template to handle XIntegerBitmap method forwarding to
         BitmapCanvasHelper

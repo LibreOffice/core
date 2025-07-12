@@ -30,7 +30,7 @@
 #include <boost/range/adaptor/reversed.hpp>
 #include <utility>
 
-namespace canvas
+namespace vcl_canvas
 {
     namespace
     {

@@ -64,13 +64,13 @@ namespace vcl_cairocanvas
         remain a base class that provides implementation, not to
         enforce any specific interface on its derivees.
      */
-    class CanvasCustomSpriteSpriteBase_Base : public ::canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,
+    class CanvasCustomSpriteSpriteBase_Base : public ::vcl_canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,
                                                  public Sprite,
                                               public SurfaceProvider
     {
     };
 
-    typedef ::canvas::CanvasCustomSpriteBase< CanvasCustomSpriteSpriteBase_Base,
+    typedef ::vcl_canvas::CanvasCustomSpriteBase< CanvasCustomSpriteSpriteBase_Base,
                                               SpriteHelper,
                                               CanvasHelper,
                                               ::osl::MutexGuard,

@@ -30,11 +30,11 @@
 #include <algorithm>
 
 #include "base/sprite.hxx"
-#include <canvas/canvastoolsdllapi.h>
+#include <vcl_canvas/canvastoolsdllapi.h>
 
 /* Definition of SpriteRedrawManager class */
 
-namespace canvas
+namespace vcl_canvas
 {
     /** This class manages smooth SpriteCanvas updates
 

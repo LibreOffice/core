@@ -30,7 +30,7 @@
 #include <vector>
 #include "surfacerect.hxx"
 
-namespace canvas
+namespace vcl_canvas
 {
     class PageFragment;
 

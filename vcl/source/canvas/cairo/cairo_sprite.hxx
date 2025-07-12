@@ -28,7 +28,7 @@ namespace vcl_cairocanvas
     /** Specialization of ::canvas::Sprite interface, to also provide
         redraw methods.
      */
-    class Sprite : public ::canvas::Sprite
+    class Sprite : public ::vcl_canvas::Sprite
     {
     public:
 

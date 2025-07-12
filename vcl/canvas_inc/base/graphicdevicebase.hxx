@@ -38,7 +38,7 @@ namespace com::sun::star::rendering { class XColorSpace; }
 
 /* Definition of GraphicDeviceBase class */
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Helper template base class for XGraphicDevice implementations.
 

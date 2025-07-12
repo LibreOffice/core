@@ -27,7 +27,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <vcl_canvas/canvastools.hxx>
 
 #include "cairo_canvasbitmap.hxx"
 #include "cairo_devicehelper.hxx"
@@ -111,7 +111,7 @@ namespace vcl_cairocanvas
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
     {
         if( !mpRefDevice )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::vcl_canvas::tools::createInfiniteSize2D(); // we're disposed
 
         // Map the pixel dimensions of the output window to millimeter
         const MapMode aOldMapMode( mpRefDevice->GetMapMode() );

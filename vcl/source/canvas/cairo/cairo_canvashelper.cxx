@@ -48,7 +48,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <vcl_canvas/canvastools.hxx>
 #include <parametricpolypolygon.hxx>
 #include <cairo.h>
 
@@ -418,15 +418,15 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         return {};
     }
 
-    static cairo_pattern_t* patternFromParametricPolyPolygon( ::canvas::ParametricPolyPolygon const & rPolygon )
+    static cairo_pattern_t* patternFromParametricPolyPolygon( ::vcl_canvas::ParametricPolyPolygon const & rPolygon )
     {
         cairo_pattern_t* pPattern = nullptr;
-        const ::canvas::ParametricPolyPolygon::Values& aValues = rPolygon.getValues();
+        const ::vcl_canvas::ParametricPolyPolygon::Values& aValues = rPolygon.getValues();
         double x0, x1, y0, y1, cx, cy, r0, r1;
 
         switch( aValues.meType )
         {
-            case ::canvas::ParametricPolyPolygon::GradientType::Linear:
+            case ::vcl_canvas::ParametricPolyPolygon::GradientType::Linear:
                 x0 = 0;
                 y0 = 0;
                 x1 = 1;
@@ -435,7 +435,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                 addColorStops( pPattern, aValues.maColors, aValues.maStops, false );
                 break;
 
-            case ::canvas::ParametricPolyPolygon::GradientType::Elliptical:
+            case ::vcl_canvas::ParametricPolyPolygon::GradientType::Elliptical:
                 cx = 0;
                 cy = 0;
                 r0 = 0;
@@ -544,14 +544,14 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                             // TODO(F1): FillRule
                             SAL_INFO( "canvas.cairo", "known implementation" );
 
-                            ::canvas::ParametricPolyPolygon* pPolyImpl = static_cast< ::canvas::ParametricPolyPolygon* >( aTexture.Gradient.get() );
+                            ::vcl_canvas::ParametricPolyPolygon* pPolyImpl = static_cast< ::vcl_canvas::ParametricPolyPolygon* >( aTexture.Gradient.get() );
                             css::geometry::AffineMatrix2D aTransform( aTexture.AffineTransform );
                             cairo_matrix_t aTextureMatrix;
 
                             cairo_matrix_init( &aTextureMatrix,
                                                aTransform.m00, aTransform.m10, aTransform.m01,
                                                aTransform.m11, aTransform.m02, aTransform.m12);
-                            if( pPolyImpl->getValues().meType == canvas::ParametricPolyPolygon::GradientType::Rectangular )
+                            if( pPolyImpl->getValues().meType == vcl_canvas::ParametricPolyPolygon::GradientType::Rectangular )
                             {
                                 // no general path gradient yet in cairo; emulate then
                                 cairo_save( pCairo );
@@ -1288,8 +1288,8 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 
         if( mpCairo )
         {
-            return uno::Reference< rendering::XBitmap >( new CanvasBitmap( ::basegfx::B2ISize( ::canvas::tools::roundUp( newSize.Width ),
-                                                                                               ::canvas::tools::roundUp( newSize.Height ) ),
+            return uno::Reference< rendering::XBitmap >( new CanvasBitmap( ::basegfx::B2ISize( ::vcl_canvas::tools::roundUp( newSize.Width ),
+                                                                                               ::vcl_canvas::tools::roundUp( newSize.Height ) ),
                                                                            mpSurfaceProvider, mpDevice, false ) );
         }
         else

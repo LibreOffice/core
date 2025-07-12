@@ -21,7 +21,7 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include "page.hxx"
 
-namespace canvas
+namespace vcl_canvas
 {
     Page::Page( const std::shared_ptr<IRenderModule> &rRenderModule ) :
         mpRenderModule(rRenderModule),

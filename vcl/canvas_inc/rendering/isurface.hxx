@@ -25,7 +25,7 @@ namespace basegfx
     class B2IPoint;
 }
 
-namespace canvas
+namespace vcl_canvas
 {
     struct IColorBuffer;
 

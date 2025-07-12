@@ -27,7 +27,7 @@
 
 using namespace ::com::sun::star;
 
-namespace canvas
+namespace vcl_canvas
 {
     namespace
     {

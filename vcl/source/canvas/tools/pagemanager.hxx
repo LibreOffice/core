@@ -25,13 +25,13 @@
 
 #include "page.hxx"
 
-namespace canvas
+namespace vcl_canvas
 {
     // PageManager
     class PageManager
     {
     public:
-        explicit PageManager(std::shared_ptr<canvas::IRenderModule> xRenderModule)
+        explicit PageManager(std::shared_ptr<IRenderModule> xRenderModule)
             : mpRenderModule(std::move(xRenderModule))
         {
         }
@@ -40,7 +40,7 @@ namespace canvas
         // accelerated page, e.g. OpenGL texture.
         ::basegfx::B2ISize getPageSize() const;
 
-        const std::shared_ptr<canvas::IRenderModule>& getRenderModule() const { return mpRenderModule; }
+        const std::shared_ptr<IRenderModule>& getRenderModule() const { return mpRenderModule; }
 
         FragmentSharedPtr allocateSpace( const ::basegfx::B2ISize& rSize );
         void              free( const FragmentSharedPtr& pFragment );
@@ -52,7 +52,7 @@ namespace canvas
     private:
         // the pagemanager needs access to the rendermodule
         // since we query for system resources from it.
-        std::shared_ptr<canvas::IRenderModule> mpRenderModule;
+        std::shared_ptr<IRenderModule> mpRenderModule;
 
         // here we collect all fragments that will be created
         // since we need them for relocation purposes.

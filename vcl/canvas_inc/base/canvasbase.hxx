@@ -37,7 +37,7 @@ namespace com::sun::star::rendering { struct FontInfo; }
 namespace com::sun::star::rendering { struct StringContext; }
 
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Helper template to handle XCanvas method forwarding to CanvasHelper
 

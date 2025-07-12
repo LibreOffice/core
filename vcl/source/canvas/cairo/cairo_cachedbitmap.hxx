@@ -28,7 +28,7 @@
 
 namespace vcl_cairocanvas
 {
-    class CachedBitmap : public ::canvas::CachedPrimitiveBase
+    class CachedBitmap : public ::vcl_canvas::CachedPrimitiveBase
     {
     public:
 

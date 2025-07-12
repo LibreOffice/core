@@ -24,7 +24,7 @@
 
 #include "surfaceproxy.hxx"
 
-namespace canvas
+namespace vcl_canvas
 {
     namespace {
 

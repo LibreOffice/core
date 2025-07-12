@@ -22,7 +22,7 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
-namespace canvas
+namespace vcl_canvas
 {
     /**
      * This implements some equivalent to basegfx::B2IBox, but instead of two

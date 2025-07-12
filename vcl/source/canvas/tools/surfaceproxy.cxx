@@ -27,9 +27,9 @@
 
 #include "surfaceproxy.hxx"
 
-namespace canvas
+namespace vcl_canvas
 {
-    SurfaceProxy::SurfaceProxy( std::shared_ptr<canvas::IColorBuffer> xBuffer,
+    SurfaceProxy::SurfaceProxy( std::shared_ptr<IColorBuffer> xBuffer,
                                 PageManagerSharedPtr           xPageManager ) :
         mpPageManager(std::move( xPageManager )),
         mpBuffer(std::move( xBuffer ))

@@ -25,7 +25,7 @@
 #include <basegfx/range/b2irange.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <vcl_canvas/canvastools.hxx>
 
 #include <cairo.h>
 
@@ -45,7 +45,7 @@ namespace vcl_cairocanvas
             sprites)
          */
         void spriteRedraw( const CairoSharedPtr& pCairo,
-                           const ::canvas::Sprite::Reference& rSprite )
+                           const ::vcl_canvas::Sprite::Reference& rSprite )
         {
             // downcast to derived cairocanvas::Sprite interface, which
             // provides the actual redraw methods.
@@ -66,7 +66,7 @@ namespace vcl_cairocanvas
             cairo_restore( pCairo.get() );
         }
 
-        void opaqueUpdateSpriteArea( const ::canvas::Sprite::Reference& rSprite,
+        void opaqueUpdateSpriteArea( const ::vcl_canvas::Sprite::Reference& rSprite,
                                      const CairoSharedPtr&              pCairo,
                                      const ::basegfx::B2IRange&         rArea )
         {
@@ -95,7 +95,7 @@ namespace vcl_cairocanvas
     {
     }
 
-    void SpriteCanvasHelper::init( ::canvas::SpriteRedrawManager& rManager,
+    void SpriteCanvasHelper::init( ::vcl_canvas::SpriteRedrawManager& rManager,
                                    SpriteCanvas&                  rDevice,
                                    const ::basegfx::B2ISize&      rSize )
     {
@@ -235,7 +235,7 @@ namespace vcl_cairocanvas
 
     void SpriteCanvasHelper::scrollUpdate( const ::basegfx::B2DRange&                       rMoveStart,
                                            const ::basegfx::B2DRange&                       rMoveEnd,
-                                           const ::canvas::SpriteRedrawManager::UpdateArea& rUpdateArea )
+                                           const ::vcl_canvas::SpriteRedrawManager::UpdateArea& rUpdateArea )
     {
         ENSURE_OR_THROW( mpOwningSpriteCanvas &&
                           mpOwningSpriteCanvas->getBufferSurface(),
@@ -259,9 +259,9 @@ namespace vcl_cairocanvas
         // would copy pixel that are not supposed to be part of
         // the sprite.
         ::basegfx::B2IRange aSourceRect(
-            ::canvas::tools::spritePixelAreaFromB2DRange( rMoveStart ) );
+            ::vcl_canvas::tools::spritePixelAreaFromB2DRange( rMoveStart ) );
         const ::basegfx::B2IRange aDestRect(
-            ::canvas::tools::spritePixelAreaFromB2DRange( rMoveEnd ) );
+            ::vcl_canvas::tools::spritePixelAreaFromB2DRange( rMoveEnd ) );
         ::basegfx::B2IPoint aDestPos( aDestRect.getMinimum() );
 
         std::vector< ::basegfx::B2IRange > aUnscrollableAreas;
@@ -272,7 +272,7 @@ namespace vcl_cairocanvas
 
         // clip to output bounds (cannot properly scroll stuff
         // _outside_ our screen area)
-        if( !::canvas::tools::clipScrollArea( aSourceRect,
+        if( !::vcl_canvas::tools::clipScrollArea( aSourceRect,
                                               aDestPos,
                                               aUnscrollableAreas,
                                               aOutputBounds ) )
@@ -285,7 +285,7 @@ namespace vcl_cairocanvas
             // repaint all affected sprites directly to output device
             for( const auto& rComponent : rUpdateArea.maComponentList )
             {
-                const ::canvas::Sprite::Reference& rSprite( rComponent.second.getSprite() );
+                const ::vcl_canvas::Sprite::Reference& rSprite( rComponent.second.getSprite() );
                 if( rSprite.is() )
                     ::boost::polymorphic_downcast< Sprite* >( rSprite.get() )->redraw(
                         pCompositingCairo, true );
@@ -331,9 +331,9 @@ namespace vcl_cairocanvas
             cairo_paint( pCompositingCairo.get() );
             cairo_restore( pCompositingCairo.get() );
 
-            const ::canvas::SpriteRedrawManager::SpriteConnectedRanges::ComponentListType::const_iterator
+            const ::vcl_canvas::SpriteRedrawManager::SpriteConnectedRanges::ComponentListType::const_iterator
                 aFirst( rUpdateArea.maComponentList.begin() );
-            ::canvas::SpriteRedrawManager::SpriteConnectedRanges::ComponentListType::const_iterator
+            ::vcl_canvas::SpriteRedrawManager::SpriteConnectedRanges::ComponentListType::const_iterator
                   aSecond( aFirst );
             ++aSecond;
 
@@ -369,7 +369,7 @@ namespace vcl_cairocanvas
     }
 
     void SpriteCanvasHelper::opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                                           const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
+                                           const std::vector< ::vcl_canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
         ENSURE_OR_THROW( mpOwningSpriteCanvas &&
                           mpOwningSpriteCanvas->getBufferSurface(),
@@ -414,7 +414,7 @@ namespace vcl_cairocanvas
     }
 
     void SpriteCanvasHelper::genericUpdate( const ::basegfx::B2DRange&                          rRequestedArea,
-                                            const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
+                                            const std::vector< ::vcl_canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
         // TODO
         SAL_INFO("canvas.cairo", "SpriteCanvasHelper::genericUpdate called");
@@ -445,9 +445,9 @@ namespace vcl_cairocanvas
         // device's area.
         const Size  aOutputSize(
             std::min( rSize.getWidth(),
-                        ::canvas::tools::roundUp( rRequestedArea.getMaxX() - aOutputPosition.X()) ),
+                        ::vcl_canvas::tools::roundUp( rRequestedArea.getMaxX() - aOutputPosition.X()) ),
             std::min( rSize.getHeight(),
-                        ::canvas::tools::roundUp( rRequestedArea.getMaxY() - aOutputPosition.Y()) ) );
+                        ::vcl_canvas::tools::roundUp( rRequestedArea.getMaxY() - aOutputPosition.Y()) ) );
 
         cairo_rectangle( pCompositingCairo.get(), aOutputPosition.X(), aOutputPosition.Y(), aOutputSize.Width(), aOutputSize.Height() );
         cairo_clip( pCompositingCairo.get() );

@@ -25,13 +25,13 @@
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <comphelper/compbase.hxx>
 
-#include <canvas/canvastoolsdllapi.h>
+#include <vcl_canvas/canvastoolsdllapi.h>
 
 namespace com::sun::star::rendering { class XCanvas; }
 
 /* Definition of CachedPrimitiveBase class */
 
-namespace canvas
+namespace vcl_canvas
 {
     typedef comphelper::WeakComponentImplHelper< css::rendering::XCachedPrimitive,
                                            css::lang::XServiceInfo > CachedPrimitiveBase_Base;

@@ -51,7 +51,7 @@ namespace vcl_cairocanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
                                              css::lang::XServiceInfo >  GraphicDeviceBase_Base;
-    typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
+    typedef ::vcl_canvas::GraphicDeviceBase< ::vcl_canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
                                                  DeviceHelper,
                                                  ::osl::MutexGuard,
                                                  ::cppu::OWeakObject > CanvasBase_Base;
@@ -76,8 +76,8 @@ namespace vcl_cairocanvas
     {
     };
 
-    typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase2<
+    typedef ::vcl_canvas::IntegerBitmapBase<
+        vcl_canvas::BitmapCanvasBase2<
             CanvasBaseSurfaceProvider_Base,
             CanvasHelper,
             ::osl::MutexGuard,

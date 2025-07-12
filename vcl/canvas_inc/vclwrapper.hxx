@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <memory>
 
-namespace canvas
+namespace vcl_canvas
 {
     namespace vcltools
     {

@@ -24,7 +24,7 @@
 
 namespace com::sun::star::rendering { class XBitmapCanvas; }
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Helper template to handle XBitmapCanvas method forwarding to
         BitmapCanvasHelper

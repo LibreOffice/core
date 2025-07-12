@@ -21,7 +21,7 @@
 
 #include <base/sprite.hxx>
 
-namespace canvas
+namespace vcl_canvas
 {
     /* Definition of the SpriteSurface interface */
 

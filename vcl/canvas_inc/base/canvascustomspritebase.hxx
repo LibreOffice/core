@@ -29,7 +29,7 @@
 
 namespace com::sun::star::rendering { class XPolyPolygon2D; }
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Helper template to handle XCustomSprite method forwarding to
         CanvasCustomSpriteHelper

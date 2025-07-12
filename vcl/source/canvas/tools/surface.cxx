@@ -26,7 +26,7 @@
 
 #include "surface.hxx"
 
-namespace canvas
+namespace vcl_canvas
 {
     Surface::Surface( PageManagerSharedPtr         rPageManager,
                       std::shared_ptr<IColorBuffer> xColorBuffer,
@@ -149,7 +149,7 @@ namespace canvas
         const ::basegfx::B2DPoint p2(aTransform * ::basegfx::B2DPoint(0.0,0.0));
         const ::basegfx::B2DPoint p3(aTransform * ::basegfx::B2DPoint(maSize.getWidth(),0.0));
 
-        canvas::Vertex vertex;
+        vcl_canvas::Vertex vertex;
         vertex.r = 1.0f;
         vertex.g = 1.0f;
         vertex.b = 1.0f;
@@ -157,7 +157,7 @@ namespace canvas
         vertex.z = 0.0f;
 
         {
-            pRenderModule->beginPrimitive( canvas::IRenderModule::PrimitiveType::Quad );
+            pRenderModule->beginPrimitive( vcl_canvas::IRenderModule::PrimitiveType::Quad );
 
             // issue an endPrimitive() when leaving the scope
             const ::comphelper::ScopeGuard aScopeGuard(
@@ -269,7 +269,7 @@ namespace canvas
         const ::basegfx::B2DPoint p2(aTransform * ::basegfx::B2DPoint(0.0,         0.0));
         const ::basegfx::B2DPoint p3(aTransform * ::basegfx::B2DPoint(aSize.getX(),0.0));
 
-        canvas::Vertex vertex;
+        vcl_canvas::Vertex vertex;
         vertex.r = 1.0f;
         vertex.g = 1.0f;
         vertex.b = 1.0f;
@@ -277,7 +277,7 @@ namespace canvas
         vertex.z = 0.0f;
 
         {
-            pRenderModule->beginPrimitive( canvas::IRenderModule::PrimitiveType::Quad );
+            pRenderModule->beginPrimitive( vcl_canvas::IRenderModule::PrimitiveType::Quad );
 
             // issue an endPrimitive() when leaving the scope
             const ::comphelper::ScopeGuard aScopeGuard(
@@ -368,14 +368,14 @@ namespace canvas
         // Push vertices to backend renderer
         if(const sal_uInt32 nVertexCount = rTriangleList.count())
         {
-            canvas::Vertex vertex;
+            vcl_canvas::Vertex vertex;
             vertex.r = 1.0f;
             vertex.g = 1.0f;
             vertex.b = 1.0f;
             vertex.a = static_cast<float>(fAlpha);
             vertex.z = 0.0f;
 
-            pRenderModule->beginPrimitive( canvas::IRenderModule::PrimitiveType::Triangle );
+            pRenderModule->beginPrimitive( vcl_canvas::IRenderModule::PrimitiveType::Triangle );
 
             // issue an endPrimitive() when leaving the scope
             const ::comphelper::ScopeGuard aScopeGuard(

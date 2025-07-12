@@ -42,7 +42,7 @@ namespace vcl_cairocanvas
     public:
         SpriteCanvasHelper();
 
-        void init( ::canvas::SpriteRedrawManager& rManager,
+        void init( ::vcl_canvas::SpriteRedrawManager& rManager,
                    SpriteCanvas&                  rOwningSpriteCanvas,
                    const ::basegfx::B2ISize&      rSize );
 
@@ -108,13 +108,13 @@ namespace vcl_cairocanvas
          */
         void scrollUpdate( const ::basegfx::B2DRange&                           rMoveStart,
                            const ::basegfx::B2DRange&                           rMoveEnd,
-                           const ::canvas::SpriteRedrawManager::UpdateArea&     rUpdateArea );
+                           const ::vcl_canvas::SpriteRedrawManager::UpdateArea&     rUpdateArea );
 
         void opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                           const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
+                           const std::vector< ::vcl_canvas::Sprite::Reference >& rSortedUpdateSprites );
 
         void genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                            const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
+                            const std::vector< ::vcl_canvas::Sprite::Reference >& rSortedUpdateSprites );
 
     private:
         ::cairo::SurfaceSharedPtr const & getCompositingSurface( const ::basegfx::B2ISize& rNeededSize );
@@ -122,7 +122,7 @@ namespace vcl_cairocanvas
         ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rNeededSize ) const;
 
         /// Set from the SpriteCanvas: instance coordinating sprite redraw
-        ::canvas::SpriteRedrawManager*  mpRedrawManager;
+        ::vcl_canvas::SpriteRedrawManager*  mpRedrawManager;
 
         /// Set from the init method. used to generate sprites
         SpriteCanvas*                   mpOwningSpriteCanvas;

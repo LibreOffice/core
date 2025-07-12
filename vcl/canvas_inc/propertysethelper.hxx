@@ -19,19 +19,19 @@
 
 #pragma once
 
-#include <canvas/canvastools.hxx>
+#include <vcl_canvas/canvastools.hxx>
 
 #include <functional>
 #include <vector>
 #include <memory>
 
-#include <canvas/canvastoolsdllapi.h>
+#include <vcl_canvas/canvastoolsdllapi.h>
 
 namespace com::sun::star::beans { class XPropertyChangeListener; }
 namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace com::sun::star::beans { class XVetoableChangeListener; }
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Really simplistic XPropertySet helper for properties.
 

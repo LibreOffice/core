@@ -21,7 +21,7 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include "pagemanager.hxx"
 
-namespace canvas
+namespace vcl_canvas
 {
     FragmentSharedPtr PageManager::allocateSpace( const ::basegfx::B2ISize& rSize )
     {

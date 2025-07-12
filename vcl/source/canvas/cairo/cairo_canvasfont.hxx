@@ -73,7 +73,7 @@ namespace vcl_cairocanvas
         sal_uInt32 getEmphasisMark() const { return mnEmphasisMark; }
 
     private:
-        ::canvas::vcltools::VCLObject<vcl::Font> maFont;
+        ::vcl_canvas::vcltools::VCLObject<vcl::Font> maFont;
         css::rendering::FontRequest              maFontRequest;
         SurfaceProviderRef                       mpRefDevice;
         sal_uInt32                               mnEmphasisMark;

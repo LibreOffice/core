@@ -25,7 +25,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <base/spritesurface.hxx>
-#include <canvas/canvastoolsdllapi.h>
+#include <vcl_canvas/canvastoolsdllapi.h>
 
 namespace com::sun::star::geometry { struct AffineMatrix2D; }
 namespace com::sun::star::geometry { struct RealPoint2D; }
@@ -36,7 +36,7 @@ namespace com::sun::star::rendering { struct RenderState; }
 namespace com::sun::star::rendering { struct ViewState; }
 
 
-namespace canvas
+namespace vcl_canvas
 {
     /* Definition of CanvasCustomSpriteHelper class */
 

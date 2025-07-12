@@ -31,7 +31,7 @@ namespace com::sun::star::rendering { class XCustomSprite; }
 namespace com::sun::star::rendering { class XSprite; }
 
 
-namespace canvas
+namespace vcl_canvas
 {
     /** Helper template to handle XIntegerBitmap method forwarding to
         BitmapCanvasHelper

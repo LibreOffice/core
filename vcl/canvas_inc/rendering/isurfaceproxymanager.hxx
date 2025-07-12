@@ -19,10 +19,10 @@
 
 #pragma once
 
-#include <canvas/canvastoolsdllapi.h>
+#include <vcl_canvas/canvastoolsdllapi.h>
 #include <memory>
 
-namespace canvas
+namespace vcl_canvas
 {
     struct ISurfaceProxy;
     struct IColorBuffer;

@@ -55,7 +55,7 @@ namespace vcl_cairocanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
                                              css::lang::XServiceInfo >  WindowGraphicDeviceBase_Base;
-    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
+    typedef ::vcl_canvas::BufferedGraphicDeviceBase< ::vcl_canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
                                                  SpriteDeviceHelper,
                                                  ::osl::MutexGuard,
                                                  ::cppu::OWeakObject > SpriteCanvasBase_Base;
@@ -77,12 +77,12 @@ namespace vcl_cairocanvas
         enforce any specific interface on its derivees.
      */
     class SpriteCanvasBaseSpriteSurface_Base : public SpriteCanvasBase_Base,
-                                               public ::canvas::SpriteSurface,
+                                               public ::vcl_canvas::SpriteSurface,
                                                public SurfaceProvider
     {
     };
 
-    typedef ::canvas::SpriteCanvasBase< SpriteCanvasBaseSpriteSurface_Base,
+    typedef ::vcl_canvas::SpriteCanvasBase< SpriteCanvasBaseSpriteSurface_Base,
                                         SpriteCanvasHelper,
                                         ::osl::MutexGuard,
                                         ::cppu::OWeakObject >           SpriteCanvasBaseT;

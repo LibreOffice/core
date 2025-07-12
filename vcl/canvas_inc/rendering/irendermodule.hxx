@@ -27,7 +27,7 @@ namespace basegfx
     class B2IVector;
 }
 
-namespace canvas
+namespace vcl_canvas
 {
     struct ISurface;
 

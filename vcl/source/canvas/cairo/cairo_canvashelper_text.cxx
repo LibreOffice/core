@@ -28,7 +28,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <vcl_canvas/canvastools.hxx>
 #include <verifyinput.hxx>
 
 #include "cairo_canvasfont.hxx"
@@ -65,7 +65,7 @@ namespace vcl_cairocanvas
     {
         ::basegfx::B2DHomMatrix aMatrix;
 
-        ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
+        ::vcl_canvas::tools::mergeViewAndRenderTransform(aMatrix,
                                                      rViewState,
                                                      rRenderState);
 
@@ -114,7 +114,7 @@ namespace vcl_cairocanvas
                       const rendering::ViewState&   viewState,
                       const rendering::RenderState& renderState )
     {
-        ::canvas::tools::verifyInput( renderState,
+        ::vcl_canvas::tools::verifyInput( renderState,
                                       __func__,
                                       const_cast<rendering::XCanvas*>(pOwner), // only for refcount
                                       2,
@@ -122,7 +122,7 @@ namespace vcl_cairocanvas
 
         // TODO(P2): Don't change clipping all the time, maintain current clip
         // state and change only when update is necessary
-        ::canvas::tools::clipOutDev(viewState, renderState, rOutDev);
+        ::vcl_canvas::tools::clipOutDev(viewState, renderState, rOutDev);
 
         Color aColor( COL_WHITE );
 

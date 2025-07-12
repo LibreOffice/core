@@ -46,7 +46,7 @@
 
 using namespace ::com::sun::star;
 
-namespace canvas::tools
+namespace vcl_canvas::tools
 {
         void verifyInput( const geometry::RealPoint2D&              rPoint,
                           const char*                               pStr,

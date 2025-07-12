@@ -27,7 +27,7 @@
 #include <utility>
 #include <vcl/metric.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <vcl_canvas/canvastools.hxx>
 
 #include "cairo_canvasfont.hxx"
 #include "cairo_textlayout.hxx"
@@ -48,7 +48,7 @@ namespace vcl_cairocanvas
         mpRefDevice(std::move( rDevice )),
         mnEmphasisMark(0)
     {
-        ::canvas::tools::extractExtraFontProperties(rExtraFontProperties, mnEmphasisMark);
+        ::vcl_canvas::tools::extractExtraFontProperties(rExtraFontProperties, mnEmphasisMark);
 
         maFont->SetAlignment( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==css::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );

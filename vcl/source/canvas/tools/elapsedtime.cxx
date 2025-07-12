@@ -19,12 +19,12 @@
 
 #include <sal/config.h>
 
-#include <canvas/elapsedtime.hxx>
+#include <vcl_canvas/elapsedtime.hxx>
 
 #include <tools/time.hxx>
 #include <utility>
 
-namespace canvas::tools {
+namespace vcl_canvas::tools {
 
 double ElapsedTime::getSystemTime()
 {

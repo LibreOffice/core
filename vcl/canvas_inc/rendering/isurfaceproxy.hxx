@@ -27,7 +27,7 @@ namespace basegfx
     class B2DHomMatrix;
 }
 
-namespace canvas
+namespace vcl_canvas
 {
     struct ISurfaceProxy
     {
