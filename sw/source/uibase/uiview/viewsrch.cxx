@@ -304,43 +304,34 @@ void SwView::ExecSearch(SfxRequest& rReq)
             case SvxSearchCmd::REPLACE:
                 {
 
-                    // 1) Replace selection (Not if only attributes should be replaced)
-//JP 27.04.95: Why?
-//      what if you only want to assign attributes to the found??
+                    // 1) Replace selection
 
-                    SvxSearchCmd nCmd = SvxSearchCmd::FIND;
-                    if( !s_pSrchItem->GetReplaceString().isEmpty() ||
-                        !s_xReplaceList )
+                    // Prevent, that the replaced string will be found again
+                    // if the replacement string is containing the search string.
+                    bool bBack = s_pSrchItem->GetBackward();
+                    if (bBack)
+                        m_pWrtShell->Push();
+                    OUString aReplace( s_pSrchItem->GetReplaceString() );
+                    i18nutil::SearchOptions2 aTmp( s_pSrchItem->GetSearchOptions() );
+                    std::optional<OUString> xBackRef = sw::ReplaceBackReferences(aTmp,
+                        m_pWrtShell->GetCursor(), m_pWrtShell->GetLayout());
+                    if( xBackRef )
+                        s_pSrchItem->SetReplaceString( *xBackRef );
+                    Replace();
+                    if( xBackRef )
                     {
-                        // Prevent, that the replaced string will be found again
-                        // if the replacement string is containing the search string.
-                        bool bBack = s_pSrchItem->GetBackward();
-                        if (bBack)
-                            m_pWrtShell->Push();
-                        OUString aReplace( s_pSrchItem->GetReplaceString() );
-                        i18nutil::SearchOptions2 aTmp( s_pSrchItem->GetSearchOptions() );
-                        std::optional<OUString> xBackRef = sw::ReplaceBackReferences(aTmp,
-                            m_pWrtShell->GetCursor(), m_pWrtShell->GetLayout());
-                        if( xBackRef )
-                            s_pSrchItem->SetReplaceString( *xBackRef );
-                        Replace();
-                        if( xBackRef )
-                        {
-                            s_pSrchItem->SetReplaceString( aReplace );
-                        }
-                        if (bBack)
-                        {
-                            m_pWrtShell->Pop();
-                            m_pWrtShell->SwapPam();
-                        }
+                        s_pSrchItem->SetReplaceString( aReplace );
                     }
-                    else if( s_xReplaceList )
-                        nCmd = SvxSearchCmd::REPLACE;
+                    if (bBack)
+                    {
+                        m_pWrtShell->Pop();
+                        m_pWrtShell->SwapPam();
+                    }
 
                     // 2) Search further (without replacing!)
 
                     SvxSearchCmd nOldCmd = s_pSrchItem->GetCommand();
-                    s_pSrchItem->SetCommand( nCmd );
+                    s_pSrchItem->SetCommand( SvxSearchCmd::FIND );
                     bool bRet = SearchAndWrap(bQuiet);
                     if( bRet )
                         Scroll( m_pWrtShell->GetCharRect().SVRect());
@@ -724,9 +715,14 @@ void SwView::Replace()
 
         if( bReqReplace )
         {
-
-            bool bReplaced = m_pWrtShell->SwEditShell::Replace( s_pSrchItem->GetReplaceString(),
-                                                                  s_pSrchItem->GetRegExp());
+            bool bReplaced = true;
+            // Replace selection (Not if only attributes should be replaced)
+            if (!s_pSrchItem->GetReplaceString().isEmpty() || !s_xReplaceList)
+            {
+                bReplaced = m_pWrtShell->SwEditShell::Replace( s_pSrchItem->GetReplaceString(),
+                                                               s_pSrchItem->GetRegExp() );
+            }
+            // Replace attributes
             if( bReplaced && s_xReplaceList && s_xReplaceList->Count() && m_pWrtShell->HasSelection() )
             {
                 SfxItemSet aReplSet( m_pWrtShell->GetAttrPool(),
