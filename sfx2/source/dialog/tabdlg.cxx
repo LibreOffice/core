@@ -1032,7 +1032,7 @@ void SfxTabDialogController::Start_Impl()
     if (m_sAppPageId.isEmpty())
     {
         SvtViewOptions aDlgOpt(EViewType::TabDialog, m_xDialog->get_help_id());
-        if (aDlgOpt.Exists() && !aDlgOpt.GetPageID().isEmpty())
+        if (aDlgOpt.Exists())
             m_xTabCtrl->set_current_page(aDlgOpt.GetPageID());
         else
             m_xTabCtrl->set_current_page(0);
