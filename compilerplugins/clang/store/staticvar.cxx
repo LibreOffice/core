@@ -73,8 +73,6 @@ public:
             || fn == SRCDIR "/sw/source/uibase/docvw/srcedtw.cxx"
             // mutable
             || fn == SRCDIR "/forms/source/misc/limitedformats.cxx"
-            // aHTMLOptionTab is ordered by useful grouping, so let it sort at runtime
-            || fn == SRCDIR "/svtools/source/svhtml/htmlkywd.cxx"
             // TODO sorting some of these tables will be a lot of work...
             || fn == SRCDIR "/sw/source/filter/ww8/ww8par6.cxx"
             // this only triggers on older versions of clang, not sure why
@@ -83,8 +81,6 @@ public:
             // I tried doing this, but got very weird unit test failures, apparently sorting this table
             // disturbs some code elsewhere
             || fn == SRCDIR "/svx/source/unodraw/unoprov.cxx"
-            // aRTFTokenTab is ordered by useful grouping, so let it sort at runtime
-            || fn == SRCDIR "/svtools/source/svrtf/rtfkeywd.cxx")
             return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }

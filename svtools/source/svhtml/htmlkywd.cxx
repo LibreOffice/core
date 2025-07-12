@@ -459,178 +459,154 @@ sal_Unicode GetHTMLCharName( std::u16string_view rName )
     return search<sal_Unicode>( aHTMLCharNameTab, rName, 0);
 }
 
-// Flag: Options table has already been sorted
-static bool bSortOptionKeyWords = false;
-
 using HTML_OptionEntry = TokenEntry<HtmlOptionId>;
 
-static HTML_OptionEntry aHTMLOptionTab[] = {
+constexpr HTML_OptionEntry aHTMLOptionTab[] = {
 
-// Attributes without value
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_checked),   HtmlOptionId::CHECKED},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_compact),   HtmlOptionId::COMPACT},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_declare),   HtmlOptionId::DECLARE},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_disabled),  HtmlOptionId::DISABLED},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_ismap),     HtmlOptionId::ISMAP},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_mayscript), HtmlOptionId::MAYSCRIPT},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_multiple),  HtmlOptionId::MULTIPLE},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_nohref),        HtmlOptionId::NOHREF}, // Netscape 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_noresize),  HtmlOptionId::NORESIZE}, // Netscape 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_noshade),   HtmlOptionId::NOSHADE}, // Netscape 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_nowrap),        HtmlOptionId::NOWRAP},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdfixed),   HtmlOptionId::SDFIXED},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_selected),      HtmlOptionId::SELECTED},
-
-// Attributes with a string value
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_accept),        HtmlOptionId::ACCEPT},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_accept),    HtmlOptionId::ACCEPT},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_accesskey), HtmlOptionId::ACCESSKEY},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_action),    HtmlOptionId::ACTION},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_align),     HtmlOptionId::ALIGN},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_alink),     HtmlOptionId::ALINK},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_alt),       HtmlOptionId::ALT},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_archive),   HtmlOptionId::ARCHIVE},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_axis),      HtmlOptionId::AXIS},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_background),HtmlOptionId::BACKGROUND},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_behavior),  HtmlOptionId::BEHAVIOR}, // IExplorer 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_bgcolor),   HtmlOptionId::BGCOLOR},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_border),    HtmlOptionId::BORDER},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_bordercolor), HtmlOptionId::BORDERCOLOR}, // IExplorer 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_bordercolordark), HtmlOptionId::BORDERCOLORDARK}, // IExplorer 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_bordercolorlight), HtmlOptionId::BORDERCOLORLIGHT}, // IExplorer 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_cellpadding),HtmlOptionId::CELLPADDING}, // HTML 3 Table Model Draft
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_cellspacing),HtmlOptionId::CELLSPACING}, // HTML 3 Table Model Draft
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_char),      HtmlOptionId::CHAR}, // HTML 3 Table Model Draft
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_charoff),   HtmlOptionId::CHAROFF}, // HTML 3 Table Model Draft
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_charset),   HtmlOptionId::CHARSET},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_checked),   HtmlOptionId::CHECKED},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_class),     HtmlOptionId::CLASS},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_classid),   HtmlOptionId::CLASSID},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_clear),     HtmlOptionId::CLEAR},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_code),      HtmlOptionId::CODE}, // HotJava
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_codebase),  HtmlOptionId::CODEBASE}, // HotJava
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_codetype),  HtmlOptionId::CODETYPE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_color),     HtmlOptionId::COLOR},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_cols),      HtmlOptionId::COLS}, // Netscape 2.0 vs HTML 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_colspan),   HtmlOptionId::COLSPAN},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_compact),   HtmlOptionId::COMPACT},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_content),   HtmlOptionId::CONTENT},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_coords),        HtmlOptionId::COORDS}, // Netscape 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_coords),    HtmlOptionId::COORDS}, // Netscape 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_data),      HtmlOptionId::DATA},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_DSformula), HtmlOptionId::DSFORMULA},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_DSnum),     HtmlOptionId::DSNUM},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_DSval),     HtmlOptionId::DSVAL},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_declare),   HtmlOptionId::DECLARE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_dir),       HtmlOptionId::DIR}, // HTML 3 Table Model Draft
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_direction), HtmlOptionId::DIRECTION}, // IExplorer 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_disabled),  HtmlOptionId::DISABLED},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_enctype),   HtmlOptionId::ENCTYPE},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_face),      HtmlOptionId::FACE}, // IExplorer 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_format),    HtmlOptionId::FORMAT},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_frame),     HtmlOptionId::FRAME}, // HTML 3 Table Model Draft
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_frameborder), HtmlOptionId::FRAMEBORDER}, // IExplorer 3.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_httpequiv), HtmlOptionId::HTTPEQUIV},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_language),  HtmlOptionId::LANGUAGE}, // JavaScript
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_name),      HtmlOptionId::NAME},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_prompt),        HtmlOptionId::PROMPT},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_shape),     HtmlOptionId::SHAPE},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_standby),   HtmlOptionId::STANDBY},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_style),     HtmlOptionId::STYLE},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_title),     HtmlOptionId::TITLE},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_value),     HtmlOptionId::VALUE},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDval),     HtmlOptionId::SDVAL}, // StarDiv NumberValue
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_DSval),     HtmlOptionId::DSVAL},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDnum),     HtmlOptionId::SDNUM}, // StarDiv NumberFormat
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_DSnum),     HtmlOptionId::DSNUM},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_DSformula), HtmlOptionId::DSFORMULA},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdlibrary), HtmlOptionId::SDLIBRARY},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdmodule),  HtmlOptionId::SDMODULE},
-
-// Attributes with a SGML identifier value
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_id),            HtmlOptionId::ID},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_target),        HtmlOptionId::TARGET}, // Netscape 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_to),            HtmlOptionId::TO},
-
-// Attributes with a URI value
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_action),        HtmlOptionId::ACTION},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_archive),       HtmlOptionId::ARCHIVE},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_background),    HtmlOptionId::BACKGROUND},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_classid),   HtmlOptionId::CLASSID},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_codebase),  HtmlOptionId::CODEBASE}, // HotJava
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_data),      HtmlOptionId::DATA},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_href),      HtmlOptionId::HREF},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_script),        HtmlOptionId::SCRIPT},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_src),       HtmlOptionId::SRC},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_usemap),        HtmlOptionId::USEMAP}, // Netscape 2.0
-
-// Attributes with a color value (all Netscape versions)
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_alink),     HtmlOptionId::ALINK},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_bgcolor),   HtmlOptionId::BGCOLOR},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_bordercolor), HtmlOptionId::BORDERCOLOR}, // IExplorer 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_bordercolorlight), HtmlOptionId::BORDERCOLORLIGHT}, // IExplorer 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_bordercolordark), HtmlOptionId::BORDERCOLORDARK}, // IExplorer 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_color),     HtmlOptionId::COLOR},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_link),      HtmlOptionId::LINK},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_text),      HtmlOptionId::TEXT},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_vlink),     HtmlOptionId::VLINK},
-
-// Attributes with a numerical value
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_border),        HtmlOptionId::BORDER},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_cellspacing),HtmlOptionId::CELLSPACING}, // HTML 3 Table Model Draft
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_cellpadding),HtmlOptionId::CELLPADDING}, // HTML 3 Table Model Draft
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_charoff),   HtmlOptionId::CHAROFF}, // HTML 3 Table Model Draft
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_colspan),   HtmlOptionId::COLSPAN},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_framespacing), HtmlOptionId::FRAMESPACING}, // IExplorer 3.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_gutter),        HtmlOptionId::GUTTER}, // Netscape 3.0b5
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_height),        HtmlOptionId::HEIGHT},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_hspace),        HtmlOptionId::HSPACE}, // Netscape
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_gutter),    HtmlOptionId::GUTTER}, // Netscape 3.0b5
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_height),    HtmlOptionId::HEIGHT},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_href),      HtmlOptionId::HREF},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_hspace),    HtmlOptionId::HSPACE}, // Netscape
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_httpequiv), HtmlOptionId::HTTPEQUIV},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_id),        HtmlOptionId::ID},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_ismap),     HtmlOptionId::ISMAP},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_lang),      HtmlOptionId::LANG},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_language),  HtmlOptionId::LANGUAGE}, // JavaScript
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_left),      HtmlOptionId::LEFT},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_link),      HtmlOptionId::LINK},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_loop),      HtmlOptionId::LOOP}, // IExplorer 2.0
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_marginheight),HtmlOptionId::MARGINHEIGHT}, // Netscape 2.0
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_marginwidth),HtmlOptionId::MARGINWIDTH}, // Netscape 2.0
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_maxlength), HtmlOptionId::MAXLENGTH},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_rowspan),   HtmlOptionId::ROWSPAN},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_scrollamount), HtmlOptionId::SCROLLAMOUNT}, // IExplorer 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_scrolldelay), HtmlOptionId::SCROLLDELAY}, // IExplorer 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_span),      HtmlOptionId::SPAN}, // HTML 3 Table Model Draft
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_tabindex),  HtmlOptionId::TABINDEX},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_vspace),        HtmlOptionId::VSPACE}, // Netscape
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_width),     HtmlOptionId::WIDTH},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_zindex),        HtmlOptionId::ZINDEX},
-
-// Attributes with enum values
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_behavior),  HtmlOptionId::BEHAVIOR}, // IExplorer 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_clear),     HtmlOptionId::CLEAR},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_dir),       HtmlOptionId::DIR}, // HTML 3 Table Model Draft
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_direction),     HtmlOptionId::DIRECTION}, // IExplorer 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_format),        HtmlOptionId::FORMAT},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_frame),     HtmlOptionId::FRAME}, // HTML 3 Table Model Draft
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_lang),      HtmlOptionId::LANG},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_method),        HtmlOptionId::METHOD},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_rel),       HtmlOptionId::REL},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_rev),       HtmlOptionId::REV},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_rules),     HtmlOptionId::RULES}, // HTML 3 Table Model Draft
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_scrolling), HtmlOptionId::SCROLLING}, // Netscape 2.0
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdreadonly),    HtmlOptionId::SDREADONLY},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_subtype),   HtmlOptionId::SUBTYPE},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_type),      HtmlOptionId::TYPE},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_valign),        HtmlOptionId::VALIGN},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_valuetype), HtmlOptionId::VALUETYPE},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_wrap),      HtmlOptionId::WRAP},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_XHTML_O_xml_space), HtmlOptionId::XML_SPACE},
-
-// Attributes with script code value
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onblur),        HtmlOptionId::ONBLUR}, // JavaScript
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_mayscript), HtmlOptionId::MAYSCRIPT},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_method),    HtmlOptionId::METHOD},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_multiple),  HtmlOptionId::MULTIPLE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_name),      HtmlOptionId::NAME},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_nohref),    HtmlOptionId::NOHREF}, // Netscape 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_noresize),  HtmlOptionId::NORESIZE}, // Netscape 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_noshade),   HtmlOptionId::NOSHADE}, // Netscape 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_nowrap),    HtmlOptionId::NOWRAP},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onabort),   HtmlOptionId::ONABORT}, // JavaScript
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onblur),    HtmlOptionId::ONBLUR}, // JavaScript
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onchange),  HtmlOptionId::ONCHANGE}, // JavaScript
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onclick),   HtmlOptionId::ONCLICK}, // JavaScript
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onerror),   HtmlOptionId::ONERROR}, // JavaScript
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onfocus),   HtmlOptionId::ONFOCUS}, // JavaScript
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onload),    HtmlOptionId::ONLOAD}, // JavaScript
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onmouseout),HtmlOptionId::ONMOUSEOUT}, // JavaScript
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onmouseover), HtmlOptionId::ONMOUSEOVER}, // JavaScript
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onreset),   HtmlOptionId::ONRESET}, // JavaScript
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onselect),  HtmlOptionId::ONSELECT}, // JavaScript
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onsubmit),  HtmlOptionId::ONSUBMIT}, // JavaScript
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onunload),  HtmlOptionId::ONUNLOAD}, // JavaScript
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onabort),   HtmlOptionId::ONABORT}, // JavaScript
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onerror),   HtmlOptionId::ONERROR}, // JavaScript
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onmouseout),    HtmlOptionId::ONMOUSEOUT}, // JavaScript
-
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonblur),      HtmlOptionId::SDONBLUR}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonchange),    HtmlOptionId::SDONCHANGE}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonclick),         HtmlOptionId::SDONCLICK}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonfocus),         HtmlOptionId::SDONFOCUS}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonload),      HtmlOptionId::SDONLOAD}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonmouseover),     HtmlOptionId::SDONMOUSEOVER}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonreset),     HtmlOptionId::SDONRESET}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonselect),        HtmlOptionId::SDONSELECT}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonsubmit),        HtmlOptionId::SDONSUBMIT}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonunload),        HtmlOptionId::SDONUNLOAD}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonabort),     HtmlOptionId::SDONABORT}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonerror),         HtmlOptionId::SDONERROR}, // StarBasic
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonmouseout),  HtmlOptionId::SDONMOUSEOUT}, // StarBasic
-
-// Attributes with context sensitive values
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_align),     HtmlOptionId::ALIGN},
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_cols),      HtmlOptionId::COLS}, // Netscape 2.0 vs HTML 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_prompt),    HtmlOptionId::PROMPT},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdreadonly),HtmlOptionId::SDREADONLY},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_rel),       HtmlOptionId::REL},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_rev),       HtmlOptionId::REV},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_rows),      HtmlOptionId::ROWS}, // Netscape 2.0 vs HTML 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_rowspan),   HtmlOptionId::ROWSPAN},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_rules),     HtmlOptionId::RULES}, // HTML 3 Table Model Draft
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_script),    HtmlOptionId::SCRIPT},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_scrollamount), HtmlOptionId::SCROLLAMOUNT}, // IExplorer 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_scrolldelay), HtmlOptionId::SCROLLDELAY}, // IExplorer 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_scrolling), HtmlOptionId::SCROLLING}, // Netscape 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdfixed),   HtmlOptionId::SDFIXED},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdlibrary), HtmlOptionId::SDLIBRARY},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdmodule),  HtmlOptionId::SDMODULE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDnum),     HtmlOptionId::SDNUM}, // StarDiv NumberFormat
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonabort), HtmlOptionId::SDONABORT}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonblur),  HtmlOptionId::SDONBLUR}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonchange),HtmlOptionId::SDONCHANGE}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonclick), HtmlOptionId::SDONCLICK}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonerror), HtmlOptionId::SDONERROR}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonfocus), HtmlOptionId::SDONFOCUS}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonload),  HtmlOptionId::SDONLOAD}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonmouseout), HtmlOptionId::SDONMOUSEOUT}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonmouseover), HtmlOptionId::SDONMOUSEOVER}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonreset), HtmlOptionId::SDONRESET}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonselect),HtmlOptionId::SDONSELECT}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonsubmit),HtmlOptionId::SDONSUBMIT}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDonunload),HtmlOptionId::SDONUNLOAD}, // StarBasic
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDval),     HtmlOptionId::SDVAL}, // StarDiv NumberValue
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_selected),  HtmlOptionId::SELECTED},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_shape),     HtmlOptionId::SHAPE},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_size),      HtmlOptionId::SIZE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_span),      HtmlOptionId::SPAN}, // HTML 3 Table Model Draft
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_src),       HtmlOptionId::SRC},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_standby),   HtmlOptionId::STANDBY},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_start),     HtmlOptionId::START}, // Netscape 2.0 vs IExplorer 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_style),     HtmlOptionId::STYLE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_subtype),   HtmlOptionId::SUBTYPE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_tabindex),  HtmlOptionId::TABINDEX},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_target),    HtmlOptionId::TARGET}, // Netscape 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_text),      HtmlOptionId::TEXT},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_title),     HtmlOptionId::TITLE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_to),        HtmlOptionId::TO},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_type),      HtmlOptionId::TYPE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_usemap),    HtmlOptionId::USEMAP}, // Netscape 2.0
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_valign),    HtmlOptionId::VALIGN},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_value),     HtmlOptionId::VALUE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_valuetype), HtmlOptionId::VALUETYPE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_vlink),     HtmlOptionId::VLINK},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_vspace),    HtmlOptionId::VSPACE}, // Netscape
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_width),     HtmlOptionId::WIDTH},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_wrap),      HtmlOptionId::WRAP},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_XHTML_O_xml_space), HtmlOptionId::XML_SPACE},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_zindex),    HtmlOptionId::ZINDEX}
 };
+
+static_assert(std::is_sorted(std::begin(aHTMLOptionTab), std::end(aHTMLOptionTab),
+                             sortCompare<HtmlOptionId>));
 
 HtmlOptionId GetHTMLOption( std::u16string_view rName )
 {
-    if( !bSortOptionKeyWords )
-    {
-        std::sort( std::begin(aHTMLOptionTab), std::end(aHTMLOptionTab), sortCompare<HtmlOptionId> );
-        bSortOptionKeyWords = true;
-    }
-
     return search( aHTMLOptionTab, rName, HtmlOptionId::UNKNOWN);
 }
 
