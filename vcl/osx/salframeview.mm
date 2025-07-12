@@ -1312,7 +1312,7 @@ static NSString* getCurrentSelection()
     if ( mpMouseEventListener != nil &&
         [mpMouseEventListener respondsToSelector: @selector(mouseDown:)])
     {
-        [mpMouseEventListener mouseDown: [pEvent copyWithZone: nullptr]];
+        [mpMouseEventListener mouseDown: pEvent];
     }
 
     s_nLastButton = MOUSE_LEFT;
@@ -3150,7 +3150,7 @@ static NSString* getCurrentSelection()
         if ( mpMouseEventListener != nil &&
              [mpMouseEventListener respondsToSelector: @selector(mouseDragged:)])
         {
-            [mpMouseEventListener mouseDragged: [mpPendingMouseDraggedEvent copyWithZone: nullptr]];
+            [mpMouseEventListener mouseDragged: mpPendingMouseDraggedEvent];
         }
 
         s_nLastButton = MOUSE_LEFT;
