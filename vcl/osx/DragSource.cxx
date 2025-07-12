@@ -156,6 +156,9 @@ DragSource::~DragSource()
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
         [static_cast<id <MouseEventListener>>(mView) unregisterMouseEventListener: mDragSourceHelper];
     [mDragSourceHelper release];
+
+    if( mLastMouseEventBeforeStartDrag )
+        [mLastMouseEventBeforeStartDrag release];
 }
 
 void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
@@ -293,6 +296,11 @@ void DragSource::saveMouseEvent(NSEvent* theEvent)
   }
 
   mLastMouseEventBeforeStartDrag = theEvent;
+
+  if (mLastMouseEventBeforeStartDrag != nil)
+  {
+      [mLastMouseEventBeforeStartDrag retain];
+  }
 }
 
 /* isLocal indicates whether or not the DnD operation is OOo
