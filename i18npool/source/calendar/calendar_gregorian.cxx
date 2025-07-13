@@ -1030,8 +1030,8 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
                 nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR)
             && (nNativeNumberMode == NativeNumberMode::NATNUM1 ||
                 nNativeNumberMode == NativeNumberMode::NATNUM2)) {
-            static sal_Unicode gan = 0x5143;
-            return OUString(&gan, 1);
+            constexpr sal_Unicode gan = 0x5143;
+            return OUString(gan);
         }
         sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode, value);
         if (nNatNum > 0)
