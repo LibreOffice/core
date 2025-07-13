@@ -322,13 +322,12 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
 
     if(GetTypeSel() == -1)
     {
-        if (IsFieldEdit())
+        if (SwGetRefField* pRefField = IsFieldEdit() ? dynamic_cast<SwGetRefField*>(GetCurField()) : nullptr)
         {
             // select positions
             OUString sName;
             sal_uInt16 nFlag = 0;
 
-            SwGetRefField* pRefField = dynamic_cast<SwGetRefField*>(GetCurField());
             switch( pRefField->GetSubType() )
             {
                 case ReferencesSubtype::Bookmark:
