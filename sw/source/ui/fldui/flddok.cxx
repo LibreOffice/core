@@ -491,12 +491,7 @@ sal_Int32 SwFieldDokPage::FillFormatLB(SwFieldTypesEnum nTypeId)
 
     if (IsFieldEdit())
     {
-        if (nTypeId == SwFieldTypesEnum::Author)
-        {
-            SwAuthorFormat nFormat = static_cast<const SwAuthorField*>(GetCurField())->GetFormat() & ~SwAuthorFormat::Fixed;
-            m_xFormatLB->select_id(OUString::number(static_cast<sal_uInt32>(nFormat)));
-        }
-        else if (nTypeId == SwFieldTypesEnum::ExtendedUser)
+        if (nTypeId == SwFieldTypesEnum::ExtendedUser)
         {
             SwAuthorFormat nFormat = static_cast<const SwExtUserField*>(GetCurField())->GetFormat() & ~SwAuthorFormat::Fixed;
             m_xFormatLB->select_id(OUString::number(static_cast<sal_uInt32>(nFormat)));
