@@ -857,6 +857,7 @@ SwValueField::SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat,
 SwValueField::SwValueField( const SwValueField& rField )
     : SwField(rField)
     , m_fValue(rField.GetValue())
+    , m_nFormat(rField.GetFormat())
 {
 }
 
