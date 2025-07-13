@@ -666,6 +666,7 @@ struct ImageCacheItem
     OString key;
     sk_sp<SkImage> image;
     tools::Long size; // cost of the item
+    long long keepInCacheUntilMilliseconds; // don't remove from cache before this timestamp
 };
 } //namespace
 
@@ -675,6 +676,11 @@ struct ImageCacheItem
 static std::list<ImageCacheItem> imageCache;
 static tools::Long imageCacheSize = 0; // sum of all ImageCacheItem.size
 
+// Related: tdf#166994 set the minimum amount of time that an image must
+// remain in the image cache to 5 seconds. 2 seconds appears to be enough
+// on macOS but set it to 5 seconds just to be safe.
+const long long imageMinKeepInCacheMilliseconds = 5000;
+
 void addCachedImage(const OString& key, sk_sp<SkImage> image)
 {
     static bool disabled = getenv("SAL_DISABLE_SKIA_CACHE") != nullptr;
@@ -682,13 +688,28 @@ void addCachedImage(const OString& key, sk_sp<SkImage> image)
         return;
     tools::Long size = static_cast<tools::Long>(image->width()) * image->height()
                        * SkColorTypeBytesPerPixel(image->imageInfo().colorType());
-    imageCache.push_front({ key, image, size });
+    auto time = std::chrono::steady_clock::now().time_since_epoch();
+    auto now = std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
+    imageCache.push_front({ key, image, size, now + imageMinKeepInCacheMilliseconds });
     imageCacheSize += size;
     SAL_INFO("vcl.skia.trace", "addcachedimage " << image << " :" << size << "/" << imageCacheSize);
     const tools::Long maxSize = maxImageCacheSize();
     while (imageCacheSize > maxSize)
     {
         assert(!imageCache.empty());
+
+        // tdf#166994 Don't remove image from cache too quickly
+        // While an animation is running, the same images are drawn in a
+        // repeating cycle but each frame is removed from the cache before
+        // it is drawn again.
+        // Blending a bitmap with an alpha channel can be very slow so
+        // it is much faster to keep all of the frames in the image cache.
+        // So, allow the image cache to temporarily increase in size by
+        // deferring removal of an image if it was cached within the last
+        // few seconds.
+        if (now < imageCache.back().keepInCacheUntilMilliseconds)
+            break;
+
         imageCacheSize -= imageCache.back().size;
         SAL_INFO("vcl.skia.trace",
                  "least used removal " << imageCache.back().image << ":" << imageCache.back().size);
@@ -702,6 +723,9 @@ sk_sp<SkImage> findCachedImage(const OString& key)
     {
         if (it->key == key)
         {
+            auto time = std::chrono::steady_clock::now().time_since_epoch();
+            auto now = std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
+            it->keepInCacheUntilMilliseconds = now + imageMinKeepInCacheMilliseconds;
             sk_sp<SkImage> ret = it->image;
             SAL_INFO("vcl.skia.trace", "findcachedimage " << key << " : " << it->image << " found");
             imageCache.splice(imageCache.begin(), imageCache, it);
