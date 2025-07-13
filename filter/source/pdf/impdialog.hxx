@@ -389,6 +389,7 @@ class ImpPDFTabLinksPage : public SfxTabPage
     bool                        mbOpnLnksDefaultUserState;
     bool                        mbOpnLnksLaunchUserState;
     bool                        mbOpnLnksBrowserUserState;
+    bool                        mbOpnLnksRemoveUserState;
 
     std::unique_ptr<weld::CheckButton> m_xCbExprtBmkrToNmDst;
     std::unique_ptr<weld::CheckButton> m_xCbOOoToPDFTargets;
@@ -396,6 +397,7 @@ class ImpPDFTabLinksPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xRbOpnLnksDefault;
     std::unique_ptr<weld::RadioButton> m_xRbOpnLnksLaunch;
     std::unique_ptr<weld::RadioButton> m_xRbOpnLnksBrowser;
+    std::unique_ptr<weld::RadioButton> m_xRbOpnLnksRemove;
 
     DECL_LINK(ClickRbOpnLnksDefaultHdl, weld::Toggleable&, void);
     DECL_LINK(ClickRbOpnLnksBrowserHdl, weld::Toggleable&, void);

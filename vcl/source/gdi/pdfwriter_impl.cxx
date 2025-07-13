@@ -3593,6 +3593,8 @@ bool PDFWriterImpl::emitLinkAnnotations()
         const PDFLink& rLink            = m_aLinks[i];
         if( ! updateObject( rLink.m_nObject ) )
             continue;
+        if( m_aContext.DefaultLinkAction == PDFWriter::RemoveExternalLinks && rLink.m_nDest < 0 )
+            continue;
 
         OStringBuffer aLine( 1024 );
         COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);

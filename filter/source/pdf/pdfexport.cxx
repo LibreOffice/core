@@ -989,6 +989,10 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     // view PDF through an Internet browser
                     aContext.DefaultLinkAction = vcl::PDFWriter::URIActionDestination;
                     break;
+                case 3:
+                    // do not emit Link annotations for external links
+                    aContext.DefaultLinkAction = vcl::PDFWriter::RemoveExternalLinks;
+                    break;
                 }
                 aContext.ConvertOOoTargetToPDFTarget = bConvertOOoTargetToPDFTarget;
 

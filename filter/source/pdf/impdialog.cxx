@@ -1598,12 +1598,14 @@ ImpPDFTabLinksPage::ImpPDFTabLinksPage(weld::Container* pPage, weld::DialogContr
     , mbOpnLnksDefaultUserState(false)
     , mbOpnLnksLaunchUserState(false)
     , mbOpnLnksBrowserUserState(false)
+    , mbOpnLnksRemoveUserState(false)
     , m_xCbExprtBmkrToNmDst(m_xBuilder->weld_check_button(u"export"_ustr))
     , m_xCbOOoToPDFTargets(m_xBuilder->weld_check_button(u"convert"_ustr))
     , m_xCbExportRelativeFsysLinks(m_xBuilder->weld_check_button(u"exporturl"_ustr))
     , m_xRbOpnLnksDefault(m_xBuilder->weld_radio_button(u"default"_ustr))
     , m_xRbOpnLnksLaunch(m_xBuilder->weld_radio_button(u"openpdf"_ustr))
     , m_xRbOpnLnksBrowser(m_xBuilder->weld_radio_button(u"openinternet"_ustr))
+    , m_xRbOpnLnksRemove(m_xBuilder->weld_radio_button(u"removeexternallinks"_ustr))
 {
 }
 
@@ -1632,6 +1634,8 @@ void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
         mbOpnLnksLaunchUserState =  m_xRbOpnLnksLaunch->get_active();
         mbOpnLnksBrowserUserState = m_xRbOpnLnksBrowser->get_active();
     }
+    // Option to remove links is possible regardless of PDF version
+    mbOpnLnksRemoveUserState = m_xRbOpnLnksRemove->get_active();
     // the control states, or the saved is used
     // to form the stored selection
     pParent->mnViewPDFMode = 0;
@@ -1639,6 +1643,8 @@ void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
         pParent->mnViewPDFMode = 2;
     else if( mbOpnLnksLaunchUserState )
         pParent->mnViewPDFMode = 1;
+    else if( mbOpnLnksRemoveUserState )
+        pParent->mnViewPDFMode = 3;
 
     pParent->mbConvertOOoTargets = m_xCbOOoToPDFTargets->get_active();
     pParent->mbExportBmkToPDFDestination = m_xCbExprtBmkrToNmDst->get_active();
@@ -1668,6 +1674,10 @@ void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
         m_xRbOpnLnksBrowser->set_active(true);
         mbOpnLnksBrowserUserState = true;
         break;
+    case 3:
+        m_xRbOpnLnksRemove->set_active(true);
+        mbOpnLnksRemoveUserState = true;
+        break;
     }
 
     // now check the status of PDF/A selection
@@ -1693,6 +1703,7 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( bool bEnableLaunch )
         m_xRbOpnLnksDefault->set_active(mbOpnLnksDefaultUserState);
         m_xRbOpnLnksLaunch->set_active(mbOpnLnksLaunchUserState);
         m_xRbOpnLnksBrowser->set_active(mbOpnLnksBrowserUserState);
+        m_xRbOpnLnksRemove->set_active(mbOpnLnksRemoveUserState);
     }
     else
     {
@@ -1700,6 +1711,7 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( bool bEnableLaunch )
         mbOpnLnksDefaultUserState = m_xRbOpnLnksDefault->get_active();
         mbOpnLnksLaunchUserState = m_xRbOpnLnksLaunch->get_active();
         mbOpnLnksBrowserUserState = m_xRbOpnLnksBrowser->get_active();
+        mbOpnLnksRemoveUserState = m_xRbOpnLnksRemove->get_active();
         m_xRbOpnLnksLaunch->set_sensitive(false);
         if (mbOpnLnksLaunchUserState)
             m_xRbOpnLnksBrowser->set_active(true);
@@ -1712,6 +1724,7 @@ IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, weld::Toggleable&,
     mbOpnLnksDefaultUserState = m_xRbOpnLnksDefault->get_active();
     mbOpnLnksLaunchUserState = m_xRbOpnLnksLaunch->get_active();
     mbOpnLnksBrowserUserState = m_xRbOpnLnksBrowser->get_active();
+    mbOpnLnksRemoveUserState = m_xRbOpnLnksRemove->get_active();
 }
 
 /// Reset the memory of a launch action present when PDF/A-1 was requested
@@ -1720,6 +1733,7 @@ IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, weld::Toggleable&,
     mbOpnLnksDefaultUserState = m_xRbOpnLnksDefault->get_active();
     mbOpnLnksLaunchUserState = m_xRbOpnLnksLaunch->get_active();
     mbOpnLnksBrowserUserState = m_xRbOpnLnksBrowser->get_active();
+    mbOpnLnksRemoveUserState = m_xRbOpnLnksRemove->get_active();
 }
 
 ImplErrorDialog::ImplErrorDialog(weld::Window* pParent, const std::set<vcl::PDFWriter::ErrorCode>& rErrors)

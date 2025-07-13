@@ -609,7 +609,8 @@ public:
     {
         URIAction,
         URIActionDestination,
-        LaunchAction
+        LaunchAction,
+        RemoveExternalLinks
     };
 
     struct PDFDocInfo

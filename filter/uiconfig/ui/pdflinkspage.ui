@@ -175,6 +175,26 @@
                 <property name="top-attach">2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkRadioButton" id="removeexternallinks">
+                <property name="label" translatable="yes" context="pdflinkspage|removeexternallinks">Remove cross-document links</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <property name="group">default</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="removeexternallinks-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdflinkspage|extended_tip|removeexternallinks">Cross-document links will be removed from your PDF document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
           </object>
         </child>
         <child type="label">
