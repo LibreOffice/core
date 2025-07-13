@@ -446,6 +446,18 @@ void ImpGraphic::setPrepared(bool bAnimated, const Size* pSizeHint)
 
     if (maVectorGraphicData)
         maSwapInfo.mnPageIndex = maVectorGraphicData->getPageIndex();
+
+    // tdf#167007 Add animated graphic to cache when prepared
+    // For some reason, after an animation has been swapped out by
+    // MemoryManager::loopAndReduceMemory(), the animation repeatedly
+    // creates a new ImpGraphic instance, swaps it in, but it never
+    // gets registered in the cache. Since it is not in the cache, new
+    // ImpGraphic instances get deleted almost immediately after they
+    // are created.
+    // So prevent immediate deletion by ensuring that animated
+    // ImpGraphic instances are registered when they are prepared.
+    if (maSwapInfo.mbIsAnimated)
+        registerIntoManager();
 }
 
 void ImpGraphic::clear()
