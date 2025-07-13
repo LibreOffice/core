@@ -32,26 +32,10 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 {
     unsigned __int64 CurTime;
 
-    typedef VOID (WINAPI *GetSystemTimePreciseAsFileTime_PROC)(LPFILETIME);
-
     assert(pTimeVal != nullptr);
 
-    static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = []()
-    {
-        HMODULE hModule = GetModuleHandleW( L"Kernel32.dll" );
-        return reinterpret_cast<GetSystemTimePreciseAsFileTime_PROC>(
-                GetProcAddress(hModule, "GetSystemTimePreciseAsFileTime"));
-    }();
-
-    // use ~1 microsecond resolution if available
-    if (pGetSystemTimePreciseAsFileTime)
-        pGetSystemTimePreciseAsFileTime(reinterpret_cast<LPFILETIME>(&CurTime));
-    else
-    {
-        SYSTEMTIME SystemTime;
-        GetSystemTime(&SystemTime);
-        SystemTimeToFileTime(&SystemTime, reinterpret_cast<LPFILETIME>(&CurTime));
-    }
+    // use ~1 microsecond resolution
+    GetSystemTimePreciseAsFileTime(reinterpret_cast<LPFILETIME>(&CurTime));
 
     static const unsigned __int64 OffTime = [] {
         SYSTEMTIME SystemTime;
