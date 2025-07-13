@@ -150,7 +150,7 @@ void SdOptionsGeneric::Commit( SdOptionsItem& rCfgItem ) const
 Sequence< OUString > SdOptionsGeneric::GetPropertyNames() const
 {
     sal_uLong           nCount;
-    const char**    ppPropNames;
+    const char* const*  ppPropNames;
 
     GetPropNameArray( ppPropNames, nCount );
 
@@ -254,9 +254,9 @@ bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
         );
 }
 
-void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
+void SdOptionsMisc::GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const
 {
-    static const char* aPropNames[] =
+    static const char* const aPropNames[] =
     {
         "ObjectMoveable",
         "NoDistort",
@@ -530,11 +530,11 @@ void SdOptionsGrid::SetDefaults()
     SetEqualGrid( true );
 }
 
-void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
+void SdOptionsGrid::GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const
 {
     if( isMetricSystem() )
     {
-        static const char* aPropNamesMetric[] =
+        static const char* const aPropNamesMetric[] =
         {
             "Resolution/XAxis/Metric",
             "Resolution/YAxis/Metric",
@@ -550,7 +550,7 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
     }
     else
     {
-        static const char* aPropNamesNonMetric[] =
+        static const char* const aPropNamesNonMetric[] =
         {
             "Resolution/XAxis/NonMetric",
             "Resolution/YAxis/NonMetric",
@@ -698,11 +698,11 @@ bool SdOptionsPrint::operator==( const SdOptionsPrint& rOpt ) const
             GetHandoutPages() == rOpt.GetHandoutPages() );
 }
 
-void SdOptionsPrint::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
+void SdOptionsPrint::GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const
 {
     if (IsImpress())
     {
-        static const char* aImpressPropNames[] =
+        static const char* const aImpressPropNames[] =
         {
             "Other/Date",
             "Other/Time",
@@ -731,7 +731,7 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, sal_uLong& rCount 
     }
     else
     {
-        static const char* aDrawPropNames[] =
+        static const char* const aDrawPropNames[] =
         {
             "Other/Date",
             "Other/Time",
