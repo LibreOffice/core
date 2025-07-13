@@ -34,7 +34,10 @@ class MDTable
 
 public:
     MDTable(SwMarkdownParser* pParser)
-        : m_pParser(pParser)
+        : m_pTable(nullptr)
+        , m_pParser(pParser)
+        , m_nRow(-1)
+        , m_nCol(-1)
         , m_nCurRow(-1)
         , m_nCurCol(-1)
     {
