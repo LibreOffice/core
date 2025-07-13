@@ -3122,7 +3122,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // to nDeadLine may not be enough.
                     // tdf#161508 hack: treat oscillation likewise
                     if ((bSplitError && bTryToSplit) // no restart if we did not try to split: i72847, i79426
-                        || posSizeOscillationControl.OscillationDetected(*this))
+                        || (!bSplitError && posSizeOscillationControl.OscillationDetected(*this)))
                     {
                         lcl_RecalcRow(*static_cast<SwRowFrame*>(Lower()), LONG_MAX);
                         setFrameAreaPositionValid(false);

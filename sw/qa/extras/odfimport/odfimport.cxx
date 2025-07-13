@@ -1676,6 +1676,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167329)
     // This must succeed
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165156)
+{
+    // This used to hang after loading
+    createSwDoc("tdf165156.odt");
+    // This must succeed
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
