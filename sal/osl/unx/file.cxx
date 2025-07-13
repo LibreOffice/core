@@ -884,7 +884,10 @@ void setAllowedPaths(
             if (notExists || !isResolved || strlen(resolvedPath) + aPath.getLength() - n + 1 >= PATH_MAX)
                 return; // too bad
             else
+            {
+                // coverity[fixed_size_dest : FALSE] - safe, see check above
                 strcat(resolvedPath, aPath.getStr() + n);
+            }
         }
 
         if (isResolved)
@@ -928,7 +931,10 @@ bool isForbidden(const OString &filePath, sal_uInt32 nFlags)
         else if (!isResolved || strlen(resolvedPath) + filePath.getLength() - n + 1 >= PATH_MAX)
             return true; // too bad
         else
+        {
+            // coverity[fixed_size_dest : FALSE] - safe, see check above
             strcat(resolvedPath, filePath.getStr() + n);
+        }
     }
 
     const std::vector<OString> *pCheckPaths = &allowedPathsRead;
