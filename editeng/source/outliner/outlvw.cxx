@@ -69,7 +69,7 @@ void OutlinerView::DrawText_ToEditView( const tools::Rectangle& rRect, OutputDev
 
     // use TextHierarchyBreakupOutliner to get all text embedded to the
     // TextHierarchy.*Primitive2D groupings for better processing, plus
-    // the correct paragtaph countings
+    // the correct paragraph countings
     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
     TextHierarchyBreakupOutliner aHelper(aViewInformation2D, rOwner);
 
