@@ -177,7 +177,7 @@ void OutFormattingChange(SwMDWriter& rWrt, HintsAtPos& starts, HintsAtPos& ends,
         }
     }
 
-    current = result;
+    current = std::move(result);
 }
 
 void OutEscapedChars(SwMDWriter& rWrt, std::u16string_view chars)
