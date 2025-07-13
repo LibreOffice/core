@@ -36,66 +36,67 @@
 
 #include <memory>
 
-BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime)
+namespace
 {
-    SYSTEMTIME  BaseSysTime;
-    FILETIME    BaseFileTime;
-    FILETIME    FTime;
-    bool        fSuccess = false;
-
-    BaseSysTime.wYear         = 1970;
-    BaseSysTime.wMonth        = 1;
-    BaseSysTime.wDayOfWeek    = 0;
-    BaseSysTime.wDay          = 1;
-    BaseSysTime.wHour         = 0;
-    BaseSysTime.wMinute       = 0;
-    BaseSysTime.wSecond       = 0;
-    BaseSysTime.wMilliseconds = 0;
-
-    if (cpTimeVal==nullptr)
-        return fSuccess;
-
-    if ( SystemTimeToFileTime(&BaseSysTime, &BaseFileTime) )
-    {
-        __int64 timeValue;
-
-        __int64 localTime = cpTimeVal->Seconds*__int64(10000000)+cpTimeVal->Nanosec/100;
-        osl::detail::setFiletime(FTime, localTime);
-        fSuccess = 0 <= (timeValue= osl::detail::getFiletime(BaseFileTime) + osl::detail::getFiletime(FTime));
-        if (fSuccess)
-            osl::detail::setFiletime(*pFTime, timeValue);
-    }
-    return fSuccess;
+__int64 getFiletime(FILETIME const& ft)
+{
+    return (DWORD64(ft.dwHighDateTime) << 32) | ft.dwLowDateTime;
 }
 
-BOOL FileTimeToTimeValue(const FILETIME *cpFTime, TimeValue *pTimeVal)
+void setFiletime(FILETIME& ft, __int64 value)
 {
-    SYSTEMTIME  BaseSysTime;
-    FILETIME    BaseFileTime;
-    bool        fSuccess = false;   /* Assume failure */
+    ft.dwHighDateTime = value >> 32;
+    ft.dwLowDateTime = value & 0xFFFFFFFF;
+}
 
-    BaseSysTime.wYear         = 1970;
-    BaseSysTime.wMonth        = 1;
-    BaseSysTime.wDayOfWeek    = 0;
-    BaseSysTime.wDay          = 1;
-    BaseSysTime.wHour         = 0;
-    BaseSysTime.wMinute       = 0;
-    BaseSysTime.wSecond       = 0;
-    BaseSysTime.wMilliseconds = 0;
-
-    if ( SystemTimeToFileTime(&BaseSysTime, &BaseFileTime) )
+__int64 getBaseFileTime()
+{
+    static const __int64 baseFileTime = []
     {
-        __int64     Value;
+        const SYSTEMTIME BaseSysTime{ .wYear = 1970,
+                                      .wMonth = 1,
+                                      .wDayOfWeek = 0,
+                                      .wDay = 1,
+                                      .wHour = 0,
+                                      .wMinute = 0,
+                                      .wSecond = 0,
+                                      .wMilliseconds = 0 };
+        FILETIME BaseFileTime;
+        [[maybe_unused]] bool bResult = SystemTimeToFileTime(&BaseSysTime, &BaseFileTime);
+        assert(bResult);
+        return getFiletime(BaseFileTime);
+    }();
+    return baseFileTime;
+}
+}
 
-        fSuccess = 0 <= (Value = osl::detail::getFiletime(*cpFTime) - osl::detail::getFiletime(BaseFileTime));
+BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime)
+{
+    if (cpTimeVal==nullptr)
+        return false;
 
-        if ( fSuccess )
-        {
-            pTimeVal->Seconds  = static_cast<unsigned long>(Value / 10000000L);
-            pTimeVal->Nanosec  = static_cast<unsigned long>((Value % 10000000L) * 100);
-        }
-    }
-    return fSuccess;
+    __int64 localTime = cpTimeVal->Seconds * __int64(10000000) + cpTimeVal->Nanosec / 100;
+    __int64 timeValue = getBaseFileTime() + localTime;
+
+    if (timeValue < 0)
+        return false;
+
+    setFiletime(*pFTime, timeValue);
+    return true;
+}
+
+BOOL FileTimeToTimeValue(const FILETIME* cpFTime, TimeValue* pTimeVal, bool bDuration)
+{
+    __int64 localTime = getFiletime(*cpFTime);
+    if (!bDuration)
+        localTime -= getBaseFileTime();
+
+    if (localTime < 0)
+        return false;
+
+    pTimeVal->Seconds = static_cast<unsigned long>(localTime / 10000000L);
+    pTimeVal->Nanosec = static_cast<unsigned long>((localTime % 10000000L) * 100);
+    return true;
 }
 
 namespace

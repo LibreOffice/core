@@ -27,6 +27,7 @@
 #include <osl/mutex.hxx>
 #include <osl/nlsupport.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/temporary.hxx>
 #include <systools/win32/extended_max_path.hxx>
 
 #include "filetime.hxx"
@@ -228,20 +229,13 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 
     if (Fields & osl_Process_CPUTIMES)
     {
-        FILETIME CreationTime, ExitTime, KernelTime, UserTime;
+        FILETIME KernelTime, UserTime;
 
-        if (GetProcessTimes(hProcess, &CreationTime, &ExitTime,
+        if (GetProcessTimes(hProcess, &o3tl::temporary(FILETIME()), &o3tl::temporary(FILETIME()),
                                       &KernelTime, &UserTime))
         {
-            __int64 Value;
-
-            Value = osl::detail::getFiletime(UserTime);
-            pInfo->UserTime.Seconds   = static_cast<unsigned long>(Value / 10000000L);
-            pInfo->UserTime.Nanosec   = static_cast<unsigned long>((Value % 10000000L) * 100);
-
-            Value = osl::detail::getFiletime(KernelTime);
-            pInfo->SystemTime.Seconds = static_cast<unsigned long>(Value / 10000000L);
-            pInfo->SystemTime.Nanosec = static_cast<unsigned long>((Value % 10000000L) * 100);
+            FileTimeToTimeValue(&UserTime, &pInfo->UserTime, true);
+            FileTimeToTimeValue(&KernelTime, &pInfo->SystemTime, true);
 
             pInfo->Fields |= osl_Process_CPUTIMES;
         }

@@ -18,22 +18,8 @@
 #include <osl/time.h>
 
 BOOL TimeValueToFileTime(TimeValue const* cpTimeVal, FILETIME* pFTime);
-
-BOOL FileTimeToTimeValue(FILETIME const* cpFTime, TimeValue* pTimeVal);
-
-namespace osl::detail
-{
-inline __int64 getFiletime(FILETIME const& ft)
-{
-    return (DWORD64(ft.dwHighDateTime) << 32) | ft.dwLowDateTime;
-}
-
-inline void setFiletime(FILETIME& ft, __int64 value)
-{
-    ft.dwHighDateTime = value >> 32;
-    ft.dwLowDateTime = value & 0xFFFFFFFF;
-}
-}
+// bDuration means cpFTime contains a time interval, not a point in time
+BOOL FileTimeToTimeValue(FILETIME const* cpFTime, TimeValue* pTimeVal, bool bDuration = false);
 
 #endif
 
