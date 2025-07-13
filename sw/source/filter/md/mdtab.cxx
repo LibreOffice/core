@@ -69,8 +69,7 @@ void SwMarkdownParser::StartTable(sal_Int32 nRow, sal_Int32 nCol)
     else
         AddParSpace();
 
-    std::shared_ptr<MDTable> xTable = std::make_shared<MDTable>(this);
-    m_xTable = xTable;
+    m_xTable = std::make_shared<MDTable>(this);
 
     const SwTable* pTable
         = m_xDoc->InsertTable(SwInsertTableOptions(SwInsertTableFlags::All, 1), *m_pPam->GetPoint(),
