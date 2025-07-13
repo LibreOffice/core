@@ -2539,7 +2539,7 @@ void WW8AttributeOutput::TableDefinition(const ww8::WW8TableNodeInfoInner::Point
             lcl_TCFlags(m_rWW8Export.m_rDoc, pTabBox1, *aItRowSpans);
         m_rWW8Export.InsUInt16( nFlags );
 
-        static sal_uInt8 aNullBytes[] = { 0x0, 0x0 };
+        static const sal_uInt8 aNullBytes[] = { 0x0, 0x0 };
 
         m_rWW8Export.m_pO->insert( m_rWW8Export.m_pO->end(), aNullBytes, aNullBytes+2 );   // dummy
         if (pBoxFormat != nullptr)

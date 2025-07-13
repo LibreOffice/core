@@ -2952,7 +2952,7 @@ namespace pcr
                 whose UI is to be disabled while the SQL command property is
                 being edited.
             */
-            virtual OUString*    getPropertiesToDisable() = 0;
+            virtual const OUString* getPropertiesToDisable() = 0;
         };
 
 
@@ -2987,7 +2987,7 @@ namespace pcr
             virtual void            setEscapeProcessing( const bool _bEscapeProcessing ) const override;
 
             // ISQLCommandPropertyUI
-            virtual OUString*    getPropertiesToDisable() override;
+            virtual const OUString* getPropertiesToDisable() override;
         };
 
 
@@ -3030,14 +3030,14 @@ namespace pcr
         }
 
 
-        OUString* FormSQLCommandUI::getPropertiesToDisable()
+        const OUString* FormSQLCommandUI::getPropertiesToDisable()
         {
-            static OUString s_aCommandProps[] = {
+            static constexpr OUString s_aCommandProps[] = {
                 PROPERTY_DATASOURCE,
                 PROPERTY_COMMAND,
                 PROPERTY_COMMANDTYPE,
                 PROPERTY_ESCAPE_PROCESSING,
-                OUString()
+                u""_ustr
             };
             return s_aCommandProps;
         }
@@ -3056,7 +3056,7 @@ namespace pcr
             virtual void            setEscapeProcessing( const bool _bEscapeProcessing ) const override;
 
             // ISQLCommandPropertyUI
-            virtual OUString*    getPropertiesToDisable() override;
+            virtual const OUString* getPropertiesToDisable() override;
         private:
             mutable bool    m_bPropertyValueIsList;
         };
@@ -3125,12 +3125,12 @@ namespace pcr
         }
 
 
-        OUString* ValueListCommandUI::getPropertiesToDisable()
+        const OUString* ValueListCommandUI::getPropertiesToDisable()
         {
-            static OUString s_aListSourceProps[] = {
+            static constexpr OUString s_aListSourceProps[] = {
                 PROPERTY_LISTSOURCETYPE,
                 PROPERTY_LISTSOURCE,
-                OUString()
+                u""_ustr
             };
             return s_aListSourceProps;
         }

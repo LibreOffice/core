@@ -893,7 +893,7 @@ for entry in sorted(custom_widgets):
     print ('void make' + entry + '();')
 print ('typedef void (*custom_widget_func)();')
 print ('#if !ENABLE_FUZZERS')
-print ('static struct { const char *name; custom_widget_func func; } custom_widgets[] = {')
+print ('static struct { const char *name; custom_widget_func func; } const custom_widgets[] = {')
 for entry in sorted(custom_widgets):
     print ('    { "make' + entry + '", make' + entry + ' },')
 print ('};')

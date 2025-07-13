@@ -580,14 +580,14 @@ void SdXMLImport::SetConfigurationSettings(const css::uno::Sequence<css::beans::
 void SdXMLImport::SetStatistics(
         const uno::Sequence<beans::NamedValue> & i_rStats)
 {
-    static const char* s_stats[] =
+    static const char* const s_stats[] =
         { "ObjectCount", nullptr };
 
     SvXMLImport::SetStatistics(i_rStats);
 
     sal_uInt32 nCount(10);
     for (const auto& rStat : i_rStats) {
-        for (const char** pStat = s_stats; *pStat != nullptr; ++pStat) {
+        for (const char*const* pStat = s_stats; *pStat != nullptr; ++pStat) {
             if (rStat.Name.equalsAscii(*pStat)) {
                 sal_Int32 val = 0;
                 if (rStat.Value >>= val) {

@@ -1414,7 +1414,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMa
             break;
             case PROPERTY_MAP_TEXT_VIEW :
             {
-                static SfxItemPropertyMapEntry pTextViewMap[] =
+                static SfxItemPropertyMapEntry const pTextViewMap[] =
                 {
                     {UNO_NAME_PAGE_COUNT,             WID_PAGE_COUNT,             cppu::UnoType<sal_Int32>::get(),   PropertyAttribute::READONLY, 0},
                     {UNO_NAME_LINE_COUNT,             WID_LINE_COUNT,             cppu::UnoType<sal_Int32>::get(),   PropertyAttribute::READONLY, 0},

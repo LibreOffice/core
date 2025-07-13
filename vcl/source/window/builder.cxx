@@ -1339,7 +1339,7 @@ extern "C" VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* na
 extern "C" void makeNotebookbarTabControl(VclPtr<vcl::Window> &rRet, const VclPtr<vcl::Window> &pParent, VclBuilder::stringmap &rVec);
 extern "C" void makeNotebookbarToolBox(VclPtr<vcl::Window> &rRet, const VclPtr<vcl::Window> &pParent, VclBuilder::stringmap &rVec);
 
-static struct { const char *name; VclBuilder::customMakeWidget func; } custom_widgets[] = {
+static struct { const char *name; VclBuilder::customMakeWidget func; } const custom_widgets[] = {
     { "makeNotebookbarTabControl", makeNotebookbarTabControl },
     { "makeNotebookbarToolBox", makeNotebookbarToolBox },
 };

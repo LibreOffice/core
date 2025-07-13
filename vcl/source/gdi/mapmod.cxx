@@ -83,7 +83,7 @@ namespace
     }
     MapMode::ImplType GetUnitDefault(MapUnit mapUnit)
     {
-        static MapMode::ImplType defaults[]
+        static const MapMode::ImplType defaults[]
         {
             MapMode::ImplType( MapMode::ImplMapMode(MapUnit::Map100thMM) ),
             MapMode::ImplType( MapMode::ImplMapMode(MapUnit::Map10thMM) ),
