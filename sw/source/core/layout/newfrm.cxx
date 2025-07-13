@@ -59,7 +59,7 @@ static tools::Long SwIncrement( tools::Long nA, tools::Long nAdd )
 static tools::Long SwDecrement( tools::Long nA, tools::Long nSub )
     { return nA - nSub; }
 
-static SwRectFnCollection aHorizontal = {
+const SwRectFnCollection aHorizontal = {
     /*.fnGetTop =*/&SwRect::Top_,
     /*.fnGetBottom =*/&SwRect::Bottom_,
     /*.fnGetLeft =*/&SwRect::Left_,
@@ -114,7 +114,7 @@ static SwRectFnCollection aHorizontal = {
     /*.fnSetTopAndHeight =*/&SwRect::SetTopAndHeight
 };
 
-static SwRectFnCollection aVertical = {
+const SwRectFnCollection aVertical = {
     /*.fnGetTop =*/&SwRect::Right_,
     /*.fnGetBottom =*/&SwRect::Left_,
     /*.fnGetLeft =*/&SwRect::Top_,
@@ -169,7 +169,7 @@ static SwRectFnCollection aVertical = {
     /*.fnSetTopAndHeight =*/&SwRect::SetRightAndWidth
 };
 
-static SwRectFnCollection aVerticalLeftToRight = {
+const SwRectFnCollection aVerticalLeftToRight = {
     /*.fnGetTop =*/&SwRect::Left_,
     /*.fnGetBottom =*/&SwRect::Right_,
     /*.fnGetLeft =*/&SwRect::Top_,
@@ -229,7 +229,7 @@ static SwRectFnCollection aVerticalLeftToRight = {
  * This means logical top is physical left, bottom is right, left is bottom,
  * finally right is top. Values map from logical to physical.
  */
-static SwRectFnCollection aVerticalLeftToRightBottomToTop = {
+const SwRectFnCollection aVerticalLeftToRightBottomToTop = {
     /*.fnGetTop =*/&SwRect::Left_,
     /*.fnGetBottom =*/&SwRect::Right_,
     /*.fnGetLeft =*/&SwRect::Bottom_,

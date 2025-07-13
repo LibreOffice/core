@@ -1399,7 +1399,7 @@ struct SwRectFnCollection
     SwRectSetTwice  fnSetTopAndHeight;
 };
 
-typedef SwRectFnCollection* SwRectFn;
+typedef const SwRectFnCollection* SwRectFn;
 
 // This class allows to use proper methods regardless of orientation (LTR/RTL, horizontal or vertical)
 extern SwRectFn fnRectHori, fnRectVert, fnRectVertL2R, fnRectVertL2RB2T;
