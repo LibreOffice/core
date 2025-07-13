@@ -73,6 +73,7 @@ void test::oustring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL( u"fooxyz"_ustr, OUString( u"foo"_ustr + d2 ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const sal_Unicode* > )), typeid( u"foo"_ustr + d2 ));
     const sal_Unicode d3[] = u"xyz";
+    sal_Unicode d4[5] = u"xyz"; // non-const array: text is copied only up to terminating null
     CPPUNIT_ASSERT_EQUAL( u"foobar"_ustr, OUString( OUString::Concat( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< rtl::OUStringConcatMarker, const char[ 4 ] >, const char[ 4 ] > )), typeid( OUString::Concat( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( u"xyzbar"_ustr, OUString( OUString::Concat( d1 ) + "bar" ));
@@ -83,6 +84,8 @@ void test::oustring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< rtl::OUStringConcatMarker, const sal_Unicode* >, const char[ 4 ] > )), typeid( OUString::Concat( d2 ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( u"xyzbar"_ustr, OUString( OUString::Concat( d3 ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< rtl::OUStringConcatMarker, const sal_Unicode[ 4 ] >, const char[ 4 ] > )), typeid( OUString::Concat( d3 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( u"xyzbar"_ustr, OUString( OUString::Concat( d4 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< rtl::OUStringConcatMarker, sal_Unicode[ 5 ] >, const char[ 4 ] > )), typeid( OUString::Concat( d4 ) + "bar" ));
 
     CPPUNIT_ASSERT_EQUAL( u"num10"_ustr, OUString( u"num"_ustr + OUString::number( 10 )));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFINT32 > > )), typeid( u"num"_ustr + OUString::number( 10 )));

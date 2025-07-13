@@ -151,7 +151,7 @@ struct ToStringHelper<sal_Unicode[ N ]>
         return std::char_traits<char16_t>::length( str );
     }
     sal_Unicode * operator()(sal_Unicode * buffer, sal_Unicode const str[N]) const
-    { return addDataHelper(buffer, str, N - 1); }
+    { return addDataString(buffer, str); }
 };
 
 template<std::size_t N>
