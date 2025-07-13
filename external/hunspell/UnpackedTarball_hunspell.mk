@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
 	external/hunspell/0001-fix-LibreOffice-build-problem-with-basic_string-appe.patch \
 	external/hunspell/0001-Resolves-rhbz-2158548-allow-longer-words-for-hunspel.patch \
 	external/hunspell/0001-Keep-only-REP-ph-or-2-word-dictionary-phrase-suggest.patch \
+	external/hunspell/0001-move-iscii_devanagari_tbl-etc-out-of-.data-section.patch \
 	external/hunspell/bit_cast.patch.0 \
 	external/hunspell/clock-monotonic.patch.1 \
 ))
