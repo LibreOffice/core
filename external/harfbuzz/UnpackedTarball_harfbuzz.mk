@@ -13,10 +13,14 @@ $(eval $(call gb_UnpackedTarball_set_tarball,harfbuzz,$(HARFBUZZ_TARBALL),,harfb
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,harfbuzz))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
+$(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,1))
+
+# 0001-const-up-modifier_combining_marks.patch upstreamed as:
+# 	https://github.com/harfbuzz/harfbuzz/pull/5389
 
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/harfbuzz_visibility.patch.1 \
+    external/harfbuzz/0001-const-up-modifier_combining_marks.patch \
 ))
 
 # meson will replace python3 from shebang in build commands with the

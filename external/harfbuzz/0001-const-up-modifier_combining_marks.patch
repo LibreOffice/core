@@ -1,0 +1,70 @@
+From 59a84b4ec5b45381dc2b60bb88ce5604ffceef6f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 13 Jul 2025 20:40:53 +0100
+Subject: [PATCH] const up modifier_combining_marks
+
+and supported_face_loaders, etc.
+
+move these symbols out of the .data section
+---
+ src/hb-face.cc             | 2 +-
+ src/hb-font.cc             | 2 +-
+ src/hb-ot-shaper-arabic.cc | 2 +-
+ src/hb-ot-shaper-thai.cc   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/hb-face.cc b/src/hb-face.cc
+index 431cbaccb..3a5045109 100644
+--- a/src/hb-face.cc
++++ b/src/hb-face.cc
+@@ -329,7 +329,7 @@ hb_face_create_from_file_or_fail (const char   *file_name,
+   return face;
+ }
+ 
+-static struct supported_face_loaders_t {
++static const struct supported_face_loaders_t {
+ 	char name[16];
+ 	hb_face_t * (*from_file) (const char *font_file, unsigned face_index);
+ 	hb_face_t * (*from_blob) (hb_blob_t *blob, unsigned face_index);
+diff --git a/src/hb-font.cc b/src/hb-font.cc
+index 417420404..06e6f1c42 100644
+--- a/src/hb-font.cc
++++ b/src/hb-font.cc
+@@ -2401,7 +2401,7 @@ hb_font_set_funcs_data (hb_font_t         *font,
+   font->changed ();
+ }
+ 
+-static struct supported_font_funcs_t {
++static const struct supported_font_funcs_t {
+ 	char name[16];
+ 	void (*func) (hb_font_t *);
+ } supported_font_funcs[] =
+diff --git a/src/hb-ot-shaper-arabic.cc b/src/hb-ot-shaper-arabic.cc
+index d25a3f6f4..c5104c948 100644
+--- a/src/hb-ot-shaper-arabic.cc
++++ b/src/hb-ot-shaper-arabic.cc
+@@ -654,7 +654,7 @@ postprocess_glyphs_arabic (const hb_ot_shape_plan_t *plan,
+ 
+ /* https://www.unicode.org/reports/tr53/ */
+ 
+-static hb_codepoint_t
++static const hb_codepoint_t
+ modifier_combining_marks[] =
+ {
+   0x0654u, /* ARABIC HAMZA ABOVE */
+diff --git a/src/hb-ot-shaper-thai.cc b/src/hb-ot-shaper-thai.cc
+index 6124a2114..6d293b5c4 100644
+--- a/src/hb-ot-shaper-thai.cc
++++ b/src/hb-ot-shaper-thai.cc
+@@ -163,7 +163,7 @@ thai_pua_shape (hb_codepoint_t u, thai_action_t action, hb_font_t *font)
+ }
+ 
+ 
+-static enum thai_above_state_t
++static const enum thai_above_state_t
+ {     /* Cluster above looks like: */
+   T0, /*  ⣤                      */
+   T1, /*     ⣼                   */
+-- 
+2.49.0
+
