@@ -980,7 +980,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf60316)
 
     eStyle = xWallPropSet->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Wall background for styles below 32 shoujld be transparent in pptx",
+        "Wall background for styles below 32 should be transparent in pptx",
         drawing::FillStyle_NONE, eStyle);
 }
 
