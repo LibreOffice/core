@@ -50,6 +50,7 @@
 #include <charthelper.hxx>
 #include <conditio.hxx>
 #include <documentlinkmgr.hxx>
+#include <userdat.hxx>
 
 using namespace ::com::sun::star;
 
@@ -87,6 +88,14 @@ void ScDocument::TransferDrawPage(const ScDocument& rSrcDoc, SCTAB nSrcPos, SCTA
                 rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*mpDrawLayer));
                 pNewObject->NbcMove(Size(0,0));
                 pNewPage->InsertObject( pNewObject.get() );
+
+                // tdf#167450 adapt anchor tab
+                ScDrawObjData* pNewData = ScDrawLayer::GetObjData(pNewObject.get());
+                if (pNewData)
+                {
+                    pNewData->maStart.SetTab(nDestPos);
+                    pNewData->maEnd.SetTab(nDestPos);
+                }
 
                 if (mpDrawLayer->IsRecording())
                     mpDrawLayer->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pNewObject ) );
