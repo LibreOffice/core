@@ -356,10 +356,14 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo const * _pInfo )
     m_xJavaList->append();
     m_xJavaList->set_toggle(nPos, TRISTATE_FALSE);
     m_xJavaList->set_text(nPos, _pInfo->sVendor, 1);
-    m_xJavaList->set_text(nPos, _pInfo->sVersion, 2);
+    // tdf#80662 Add LRM and PDF Unicode characters around version info
+    // to display it correctly, even when UI is RTL (SAL_RTL_ENABLED=1)
+    m_xJavaList->set_text(nPos, u"\u200E" + _pInfo->sVersion + u"\u202C", 2);
 
     INetURLObject aLocObj(_pInfo->sLocation);
-    OUString sLocation = aLocObj.getFSysPath(FSysStyle::Detect);
+    // tdf#80662 Add LRM and PDF Unicode characters around JRE location
+    // to display it correctly, even when UI is RTL (SAL_RTL_ENABLED=1)
+    OUString sLocation = u"\u200E" + aLocObj.getFSysPath(FSysStyle::Detect) + u"\u202C";
     m_xJavaList->set_id(nPos, sLocation);
 #else
     (void) this;
