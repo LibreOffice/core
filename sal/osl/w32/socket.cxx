@@ -64,7 +64,7 @@
 #define OSL_INVALID_SOCKET      INVALID_SOCKET          /* WIN32 */
 #define OSL_SOCKET_ERROR        SOCKET_ERROR            /* WIN32 */
 
-static DWORD FamilyMap[]= {
+static const DWORD FamilyMap[]= {
     AF_INET,                    /* osl_Socket_FamilyInet */
     AF_IPX,                     /* osl_Socket_FamilyIpx */
     0                           /* osl_Socket_FamilyInvalid */
@@ -85,7 +85,7 @@ static oslAddrFamily osl_AddrFamilyFromNative(DWORD nativeType)
 #define FAMILY_FROM_NATIVE(y) osl_AddrFamilyFromNative(y)
 #define FAMILY_TO_NATIVE(x) static_cast<short>(FamilyMap[x])
 
-static DWORD ProtocolMap[]= {
+static const DWORD ProtocolMap[]= {
     0,                          /* osl_Socket_FamilyInet */
     NSPROTO_IPX,                /* osl_Socket_FamilyIpx */
     NSPROTO_SPX,                /* osl_Socket_ProtocolSpx */
@@ -95,7 +95,7 @@ static DWORD ProtocolMap[]= {
 
 #define PROTOCOL_TO_NATIVE(x)   ProtocolMap[x]
 
-static DWORD TypeMap[]= {
+static const DWORD TypeMap[]= {
     SOCK_STREAM,                /* osl_Socket_TypeStream */
     SOCK_DGRAM,                 /* osl_Socket_TypeDgram  */
     SOCK_RAW,                   /* osl_Socket_TypeRaw */
@@ -119,7 +119,7 @@ static oslSocketType osl_SocketTypeFromNative(DWORD nativeType)
 #define TYPE_TO_NATIVE(x)       TypeMap[x]
 #define TYPE_FROM_NATIVE(y)     osl_SocketTypeFromNative(y)
 
-static DWORD OptionMap[]= {
+static const DWORD OptionMap[]= {
     SO_DEBUG,                   /* osl_Socket_OptionDebug */
     SO_ACCEPTCONN,              /* osl_Socket_OptionAcceptConn */
     SO_REUSEADDR,               /* osl_Socket_OptionReuseAddr */
@@ -143,7 +143,7 @@ static DWORD OptionMap[]= {
 
 #define OPTION_TO_NATIVE(x)     OptionMap[x]
 
-static DWORD OptionLevelMap[]= {
+static const DWORD OptionLevelMap[]= {
     SOL_SOCKET,                 /* osl_Socket_LevelSocket */
     IPPROTO_TCP,                /* osl_Socket_LevelTcp */
     0                           /* osl_invalid_SocketLevel */
@@ -151,7 +151,7 @@ static DWORD OptionLevelMap[]= {
 
 #define OPTION_LEVEL_TO_NATIVE(x)       OptionLevelMap[x]
 
-static DWORD SocketMsgFlagMap[]= {
+static const DWORD SocketMsgFlagMap[]= {
     0,                          /* osl_Socket_MsgNormal */
     MSG_OOB,                    /* osl_Socket_MsgOOB */
     MSG_PEEK,                   /* osl_Socket_MsgPeek */
@@ -161,7 +161,7 @@ static DWORD SocketMsgFlagMap[]= {
 
 #define MSG_FLAG_TO_NATIVE(x)       SocketMsgFlagMap[x]
 
-static DWORD SocketDirection[]= {
+static const DWORD SocketDirection[]= {
     SD_RECEIVE,                 /* osl_Socket_DirRead */
     SD_SEND,                    /* osl_Socket_DirWrite */
     SD_BOTH                     /* osl_Socket_DirReadwrite */
@@ -169,7 +169,7 @@ static DWORD SocketDirection[]= {
 
 #define DIRECTION_TO_NATIVE(x)      SocketDirection[x]
 
-static int SocketError[]= {
+static const int SocketError[]= {
     0,                      /* no error */
     WSAENOTSOCK,            /* Socket operation on non-socket */
     WSAEDESTADDRREQ,        /* Destination address required */

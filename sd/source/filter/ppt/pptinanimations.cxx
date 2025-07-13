@@ -2894,7 +2894,7 @@ void AnimationImporter::dump( Any& rAny )
     {
         if( aEvent.Trigger != EventTrigger::NONE )
         {
-            static const char* triggers[] =
+            static const char* const triggers[] =
             {
                 "none","onbegin","onend","begin",
                 "end","onclick","ondoubleclick","onmouseenter",

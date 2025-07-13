@@ -44,7 +44,7 @@ class FilterConfigCache
         void            CreateFilterName( const OUString& rUserDataEntry );
         OUString        GetShortName( );
 
-        static const char* InternalPixelFilterNameList[];
+        static const char* const InternalPixelFilterNameList[];
     };
 
 

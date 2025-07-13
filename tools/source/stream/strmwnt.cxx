@@ -38,7 +38,7 @@ using namespace osl;
 
 static ErrCode GetSvError( DWORD nWntError )
 {
-    static struct { DWORD wnt; ErrCode sv; } errArr[] =
+    static const struct { DWORD wnt; ErrCode sv; } errArr[] =
     {
         { ERROR_SUCCESS,                ERRCODE_NONE },
         { ERROR_ACCESS_DENIED,          SVSTREAM_ACCESS_DENIED },
