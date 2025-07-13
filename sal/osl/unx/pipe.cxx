@@ -208,7 +208,10 @@ static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Option
     SAL_INFO("sal.osl.pipe", "new pipe on fd " << pPipe->m_Socket << " '" << name << "'");
 
     if (isForbidden(name, osl_File_OpenFlag_Create))
+    {
+        destroyPipeImpl(pPipe);
         return nullptr;
+    }
 
     addr.sun_family = AF_UNIX;
     // coverity[fixed_size_dest : FALSE] - safe, see check above
