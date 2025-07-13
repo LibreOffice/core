@@ -23,9 +23,13 @@ $(eval $(call gb_UnpackedTarball_add_file,mariadb-connector-c,include/ma_config.
 endif
 endif # $(OS),WNT
 
+# 0001-const-up-my_uca1400_collation_definitions.patch upstreamed as:
+# https://github.com/mariadb-corporation/mariadb-connector-c/pull/290
+
 $(eval $(call gb_UnpackedTarball_add_patches,mariadb-connector-c,\
     external/mariadb-connector-c/clang-cl.patch.0 \
     external/mariadb-connector-c/c23.patch.0 \
+    external/mariadb-connector-c/0001-const-up-my_uca1400_collation_definitions.patch \
 ))
 
 # TODO are any "plugins" needed?
