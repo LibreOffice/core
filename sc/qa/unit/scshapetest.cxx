@@ -50,16 +50,24 @@ static SdrPage* lcl_getSdrPageWithAssert(ScDocument& rDoc)
     return pPage;
 }
 
-static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNumber)
+static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNumber,
+                                             sal_uInt16 nPageIndex)
 {
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+    const SdrPage* pPage = pDrawLayer->GetPage(nPageIndex);
+    OString sMsg1 = "No draw page " + OString::number(nPageIndex);
+    CPPUNIT_ASSERT_MESSAGE(sMsg1.getStr(), pPage);
     SdrObject* pObj = pPage->GetObj(nObjNumber);
-    OString sMsg = "no Object " + OString::number(nObjNumber);
-    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), pObj);
+    OString sMsg2
+        = "No Object " + OString::number(nObjNumber) + " on page " + OString::number(nPageIndex);
+    CPPUNIT_ASSERT_MESSAGE(sMsg2.getStr(), pObj);
     return pObj;
+}
+
+static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNumber)
+{
+    return lcl_getSdrObjectWithAssert(rDoc, nObjNumber, 0);
 }
 
 static SdrObject* lcl_getSdrObjectbyName(ScDocument& rDoc, std::u16string_view rName)
@@ -1330,6 +1338,39 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160329_sortWithHiddenRows)
     aPos = pObj->GetSnapRect().TopLeft();
     // The position was (2600|2499) without fix.
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(2600, 4399), aPos, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf167450_copySheet)
+{
+    // Copy a sheet that contains an image from one document to another. Make sure the image has the
+    // correct position after save and reload of the target document.
+
+    // Open source and target document
+    mxComponent = loadFromDesktop(createFileURL(u"ods/tdf167450_target.ods"));
+    ScDocument* pDocTarget = getScDoc();
+    mxComponent2 = loadFromDesktop(createFileURL(u"ods/tdf167450_source.ods"));
+    ScDocument* pDocSource = getScDoc2();
+
+    // Copy sheet to target document. 32767 means 'to end position'
+    uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"DocName"_ustr, u"tdf167450_target"_ustr),
+            comphelper::makePropertyValue(u"Index"_ustr, sal_Int32(32767)),
+            comphelper::makePropertyValue(u"Copy"_ustr, true) };
+    dispatchCommand(mxComponent2, u".uno:Move"_ustr, aArgs);
+
+    // Get object in source document. It is on first sheet.
+    SdrObject* pObjSource = lcl_getSdrObjectWithAssert(*pDocSource, 0, 0);
+    tools::Rectangle aRectSource = pObjSource->GetLogicRect();
+
+    // verify sheet inclusive image is copied
+    SdrObject* pObjTarget = lcl_getSdrObjectWithAssert(*pDocTarget, 0, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRectSource, pObjTarget->GetLogicRect(), 1);
+
+    // Compare positions after save and reload. Without fix the position was wrong after reload.
+    saveAndReload(u"calc8"_ustr);
+    pDocTarget = getScDoc();
+    pObjTarget = lcl_getSdrObjectWithAssert(*pDocTarget, 0, 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRectSource, pObjTarget->GetLogicRect(), 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
