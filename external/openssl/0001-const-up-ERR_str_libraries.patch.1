@@ -1,0 +1,26 @@
+From c2148028116c729d58dad12d0cddb5ff7b8736aa Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 13 Jul 2025 20:21:19 +0100
+Subject: [PATCH] const up ERR_str_libraries
+
+move this symbol out of the .data section
+---
+ crypto/err/err.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/crypto/err/err.c b/crypto/err/err.c
+index 167b66ed6b..e9228d66a3 100644
+--- a/crypto/err/err.c
++++ b/crypto/err/err.c
+@@ -35,7 +35,7 @@
+ 
+ static void ERR_STATE_free(ERR_STATE *s);
+ #ifndef OPENSSL_NO_ERR
+-static ERR_STRING_DATA ERR_str_libraries[] = {
++static const ERR_STRING_DATA ERR_str_libraries[] = {
+     {ERR_PACK(ERR_LIB_NONE, 0, 0), "unknown library"},
+     {ERR_PACK(ERR_LIB_SYS, 0, 0), "system library"},
+     {ERR_PACK(ERR_LIB_BN, 0, 0), "bignum routines"},
+-- 
+2.49.0
+
