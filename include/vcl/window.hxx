@@ -85,6 +85,10 @@ namespace vcl {
     struct ControlLayoutData;
 }
 
+namespace vcl_cairocanvas {
+    class SpriteCanvas;
+}
+
 namespace svt { class PopupWindowControllerImpl; }
 
 namespace weld { class Window; }
@@ -551,6 +555,7 @@ public:
                    void                 DecModalCount();
 
     SAL_DLLPRIVATE static void          ImplCalcSymbolRect( tools::Rectangle& rRect );
+    std::shared_ptr<vcl_cairocanvas::SpriteCanvas> GetSpriteCanvas();
 
 protected:
 

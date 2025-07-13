@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <sal/config.h>
 
 #include <rtl/strbuf.hxx>
@@ -60,6 +61,7 @@
 #include <helpwin.hxx>
 #include <dndlistenercontainer.hxx>
 #include <dndeventdispatcher.hxx>
+#include <cairo_spritecanvas.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -572,6 +574,20 @@ Window::~Window()
 ::OutputDevice* Window::GetOutDev()
 {
     return mpWindowImpl ? mpWindowImpl->mxOutDev.get() : nullptr;
+}
+
+std::shared_ptr<vcl_cairocanvas::SpriteCanvas> Window::GetSpriteCanvas()
+{
+    Sequence< Any > aArg{
+        Any(reinterpret_cast<sal_Int64>(GetOutDev())),
+        Any(css::awt::Rectangle( 0, 0, 0, 0 )),
+        Any(false),
+        Any(Reference< css::awt::XWindow >()),
+        GetOutDev()->GetSystemGfxDataAny()
+    };
+    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
+    auto pSpriteCanvas = std::make_shared<vcl_cairocanvas::SpriteCanvas>(aArg, xContext);
+    return pSpriteCanvas;
 }
 
 Color WindowOutputDevice::GetBackgroundColor() const

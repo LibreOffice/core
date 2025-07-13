@@ -28,11 +28,13 @@
 #include <cppcanvas/spritecanvas.hxx>
 #include <cppuhelper/weakref.hxx>
 
+#include <memory>
 #include <slideshow.hxx>
 
 namespace com::sun::star::awt { class XPointer; }
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::awt { class XWindowPeer; }
+namespace vcl_cairocanvas { class SpriteCanvas; }
 class SdDrawDocument;
 
 namespace sd
@@ -157,6 +159,7 @@ private:
     void disposingImpl( std::unique_lock<std::mutex>& );
 
     ::cppcanvas::SpriteCanvasSharedPtr                    mpCanvas;
+    std::shared_ptr<vcl_cairocanvas::SpriteCanvas>        mpSpriteCanvas;
     css::uno::Reference< css::awt::XWindow >              mxWindow;
     css::uno::Reference< css::awt::XWindowPeer >          mxWindowPeer;
     css::uno::Reference< css::awt::XPointer >             mxPointer;
