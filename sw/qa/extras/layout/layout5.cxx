@@ -1934,6 +1934,28 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167540)
     verify_me();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166181)
+{
+    // Given a document with a table with a merged cell, which gets split across pages:
+    createSwDoc("tdf166181.fodt");
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // Make sure that the follow cell has the correct height
+    auto pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page", 2);
+    assertXPath(pXmlDoc, "//page[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row[1]/infos/bounds", "height", u"0");
+    // Check that the first cell of the row is a follow (it has a precede)
+    (void)getXPath(pXmlDoc, "//page[2]/body/tab/row[1]/cell[1]", "precede");
+    // Check that it is merged
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row[1]/cell[1]", "rowspan", u"2");
+    // Get cell height
+    OUString height = getXPath(pXmlDoc, "//page[2]/body/tab/row[1]/cell[1]/infos/bounds", "height");
+    // Without a fix, this was greater than 16000; it is expected around 400
+    CPPUNIT_ASSERT_LESS(sal_Int32(500), height.toInt32());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
