@@ -1,0 +1,54 @@
+From 1cb423d68e647e0c99e397cd6cf04272240ee86d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 13 Jul 2025 19:43:51 +0100
+Subject: [PATCH] const up tripletEncodings
+
+moves tripletEncodings out of the .data section
+---
+ src/ctf/parseCTF.c      | 2 +-
+ src/triplet_encodings.c | 2 +-
+ src/triplet_encodings.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/ctf/parseCTF.c b/src/ctf/parseCTF.c
+index 3ec938d..231a85e 100644
+--- a/src/ctf/parseCTF.c
++++ b/src/ctf/parseCTF.c
+@@ -424,7 +424,7 @@
+   unsigned currX = 0, currY = 0;
+   for (unsigned i = 0; i < totalPoints; ++i)
+   {
+-    struct TripletEncoding enc = tripletEncodings[flags[i] & 0x7F];
++    const struct TripletEncoding enc = tripletEncodings[flags[i] & 0x7F];
+     unsigned moreBytes = enc.byteCount - 1;
+     if (in->pos + moreBytes > in->size)
+     {
+diff --git a/src/triplet_encodings.c b/src/triplet_encodings.c
+index 899eadb..81e9ae0 100644
+--- a/src/triplet_encodings.c
++++ b/src/triplet_encodings.c
+@@ -4,7 +4,7 @@
+  */
+ 
+ #include "triplet_encodings.h"
+-struct TripletEncoding tripletEncodings[] = {{2, 0, 8, 0, 0, 0, -1},
++const struct TripletEncoding tripletEncodings[] = {{2, 0, 8, 0, 0, 0, -1},
+ {2, 0, 8, 0, 0, 0, 1},
+ {2, 0, 8, 0, 256, 0, -1},
+ {2, 0, 8, 0, 256, 0, 1},
+diff --git a/src/triplet_encodings.h b/src/triplet_encodings.h
+index 972145f..40a7537 100644
+--- a/src/triplet_encodings.h
++++ b/src/triplet_encodings.h
+@@ -17,7 +17,7 @@
+   int ySign;
+ };
+ 
+-extern struct TripletEncoding tripletEncodings[];
++extern const struct TripletEncoding tripletEncodings[];
+ 
+ #endif /* #define __LIBEOT_TRIPLET_ENCODINGS_H__ */
+ 
+-- 
+2.49.0
+
