@@ -86,25 +86,34 @@ void MemoryManager::registerObject(MemoryManaged* pMemoryManaged)
     // Insert and update the used size (bytes)
     assert(aGuard.owns_lock() && aGuard.mutex() == &maMutex);
     // coverity[missing_lock: FALSE] - as above assert
-    mnTotalSize += pMemoryManaged->getCurrentSizeInBytes();
-    maObjectList.insert(pMemoryManaged);
+    // Related: tdf#167007 Only add object bytes if the object is
+    // actually inserted into the cache
+    if (maObjectList.insert(pMemoryManaged).second)
+        mnTotalSize += pMemoryManaged->getCurrentSizeInBytes();
     checkStartReduceTimer();
 }
 
 void MemoryManager::unregisterObject(MemoryManaged* pMemoryManaged)
 {
     std::unique_lock aGuard(maMutex);
-    mnTotalSize -= pMemoryManaged->getCurrentSizeInBytes();
-    maObjectList.erase(pMemoryManaged);
+    // Related: tdf#167007 Only remove object size if the object is
+    // actually removed from the cache
+    if (maObjectList.erase(pMemoryManaged))
+        mnTotalSize -= pMemoryManaged->getCurrentSizeInBytes();
     checkStartReduceTimer();
 }
 
 void MemoryManager::changeExisting(MemoryManaged* pMemoryManaged, sal_Int64 nNewSize)
 {
     std::scoped_lock aGuard(maMutex);
-    sal_Int64 nOldSize = pMemoryManaged->getCurrentSizeInBytes();
-    mnTotalSize -= nOldSize;
-    mnTotalSize += nNewSize;
+    // Related: tdf#167007 Only change total cache bytes if the object
+    // actually exists in the cache
+    if (maObjectList.find(pMemoryManaged) != maObjectList.end())
+    {
+        sal_Int64 nOldSize = pMemoryManaged->getCurrentSizeInBytes();
+        mnTotalSize -= nOldSize;
+        mnTotalSize += nNewSize;
+    }
     pMemoryManaged->setCurrentSizeInBytes(nNewSize);
     checkStartReduceTimer();
 }
