@@ -11,6 +11,8 @@ libeot_patches :=
 libeot_patches += 0001-remove-unused-err.h.patch
 libeot_patches += debug-no-werror.patch.0
 libeot_patches += ubsan.patch.0
+# upstreamed as: https://github.com/umanwizard/libeot/pull/14
+libeot_patches += 0001-const-up-tripletEncodings.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,libeot))
 
