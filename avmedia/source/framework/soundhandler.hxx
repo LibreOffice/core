@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
@@ -30,8 +29,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/weak.hxx>
 
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>

@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <comphelper/mediamimetype.hxx>
-
 #include <unotools/resmgr.hxx>
 
 #ifdef _WIN32

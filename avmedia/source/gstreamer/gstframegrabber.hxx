@@ -21,9 +21,11 @@
 
 #include <sal/config.h>
 
+#include <gst/gst.h>
+
 #include <string_view>
 
-#include "gstplayer.hxx"
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>

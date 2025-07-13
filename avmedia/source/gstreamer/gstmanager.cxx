@@ -22,6 +22,8 @@
 #include "gstmanager.hxx"
 #include "gstplayer.hxx"
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <tools/urlobj.hxx>
 #include <rtl/ref.hxx>
 

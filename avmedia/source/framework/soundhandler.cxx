@@ -25,8 +25,6 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include <avmedia/mediawindow.hxx>
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

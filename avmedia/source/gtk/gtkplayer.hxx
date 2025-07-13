@@ -11,8 +11,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/media/XPlayerNotifier.hpp>

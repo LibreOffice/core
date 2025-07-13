@@ -13,7 +13,6 @@
 #include <sal/log.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/image.hxx>
 #include <vcl/qt/QtUtils.hxx>
 #include <vcl/scheduler.hxx>
 

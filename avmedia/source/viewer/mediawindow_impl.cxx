@@ -25,7 +25,6 @@
 #include <helpids.h>
 
 #include <algorithm>
-#include <string_view>
 
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>

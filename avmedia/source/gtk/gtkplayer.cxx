@@ -9,18 +9,12 @@
 
 #include <sal/config.h>
 
-#include <mutex>
-
 #include <cppuhelper/supportsservice.hxx>
-#include <sal/log.hxx>
 #include <rtl/string.hxx>
-#include <tools/link.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
-#include <vcl/timer.hxx>
 
 #include <gstwindow.hxx>
 #include "gtkplayer.hxx"

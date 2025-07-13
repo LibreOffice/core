@@ -28,8 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/media/XPlayerNotifier.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>

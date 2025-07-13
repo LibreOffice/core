@@ -18,7 +18,6 @@
  */
 
 #include "mediaevent_impl.hxx"
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>

@@ -19,7 +19,6 @@
 #include <avmedia/MediaControlBase.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediaitem.hxx>
-#include <tools/time.hxx>
 #include <tools/duration.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <strings.hrc>

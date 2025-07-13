@@ -18,18 +18,13 @@
  */
 
 #include "gstframegrabber.hxx"
-#include "gstplayer.hxx"
 
 #include <cppuhelper/supportsservice.hxx>
 
 #include <gst/gstbuffer.h>
-#include <gst/video/video.h>
-#include <gst/video/gstvideosink.h>
 #include <o3tl/safeint.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
-
-#include <string>
 
 constexpr OUString AVMEDIA_GST_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_GStreamer"_ustr;
 

@@ -39,7 +39,6 @@
 #include <comphelper/mediamimetype.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <mediamisc.hxx>
 #include <osl/file.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/graph.hxx>

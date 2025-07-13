@@ -21,11 +21,14 @@
 
 #include <sal/config.h>
 
+#include <gst/gst.h>
+
 #include <string_view>
 
 #include <osl/conditn.hxx>
-#include "gstcommon.hxx"
+#include <tools/long.hxx>
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>

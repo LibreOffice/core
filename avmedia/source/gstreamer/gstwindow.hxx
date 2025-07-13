@@ -20,7 +20,6 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XPlayerWindow.hpp>
