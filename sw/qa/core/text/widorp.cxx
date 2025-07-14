@@ -60,6 +60,28 @@ CPPUNIT_TEST_FIXTURE(Test, testHideWhitespaceWidorp)
     // went to page 1, so it was not split anymore.
     CPPUNIT_ASSERT(pPara2->HasFollow());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableHeadingSplit)
+{
+    // Given a document which ends with a floating table and a heading paragraph:
+    // When loading that document & laying it out:
+    createSwDoc("floattable-heading-split.docx");
+
+    // Then make sure that the floating table is on page 1 and the last heading is on page 2:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    // Without the accompanying fix in place, this test would have failed, the floating table went
+    // to page 2, not to page 1.
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    // Make sure that page 2 has no floating table and has the heading on the correct page.
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(!pPage2->GetSortedObjs());
+    SwLayoutFrame* pBody2 = pPage2->FindBodyCont();
+    SwTextFrame* pPage2Para1 = pBody2->ContainsContent()->DynCastTextFrame();
+    CPPUNIT_ASSERT_EQUAL(u"page 2"_ustr, pPage2Para1->GetText());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
