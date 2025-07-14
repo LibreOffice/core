@@ -1402,7 +1402,6 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                     Reference< chart2::data::XDataSource > xSource( rSeries, uno::UNO_QUERY );
                     if( !xSource.is()) continue;
 
-                    Reference< chart2::XDataSeries > xDataSeries( xSource, uno::UNO_QUERY );
                     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                         xSource->getDataSequences());
 
@@ -3551,7 +3550,6 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
             FSHelperPtr pFS = GetFS();
             pFS->startElement(FSNS(XML_cx, XML_series), XML_layoutId, sTypeName);
 
-            Reference< chart2::XDataSeries > xDataSeries( xSource, uno::UNO_QUERY );
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                 xSource->getDataSequences());
 
