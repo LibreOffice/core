@@ -1864,7 +1864,7 @@ uno::Reference< report::XFunctions > SAL_CALL OReportDefinition::getFunctions()
 
 uno::Reference< ui::XUIConfigurationManager > SAL_CALL OReportDefinition::getUIConfigurationManager(  )
 {
-    return uno::Reference< ui::XUIConfigurationManager >( getUIConfigurationManager2(), uno::UNO_QUERY_THROW );
+    return getUIConfigurationManager2();
 }
 
 uno::Reference< ui::XUIConfigurationManager2 > OReportDefinition::getUIConfigurationManager2(  )
