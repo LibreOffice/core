@@ -10,9 +10,6 @@
 #include <oslmemory.h>
 
 #include <stdlib.h>
-#ifdef __ANDROID__
-#include <malloc.h>
-#endif
 
 void* osl_aligned_alloc(sal_Size align, sal_Size size)
 {
@@ -20,14 +17,9 @@ void* osl_aligned_alloc(sal_Size align, sal_Size size)
     {
         return nullptr;
     }
-
-#if defined __ANDROID__
-    return memalign(align, size);
-#else
     void* ptr;
     int err = posix_memalign(&ptr, align, size);
     return err ? nullptr : ptr;
-#endif
 }
 
 void osl_aligned_free(void* p) { free(p); }
