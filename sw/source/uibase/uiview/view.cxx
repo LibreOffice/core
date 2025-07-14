@@ -543,14 +543,6 @@ void SwView::SelectShell()
 // But since we can no longer supply status and we want instead lock
 // the dispatcher.
 
-extern "C"
-{
-    static int lcl_CmpIds( const void *pFirst, const void *pSecond)
-    {
-        return *static_cast<sal_uInt16 const *>(pFirst) - *static_cast<sal_uInt16 const *>(pSecond);
-    }
-}
-
 IMPL_LINK_NOARG(SwView, AttrChangedNotify, LinkParamNone*, void)
 {
     if ( GetEditWin().IsChainMode() )
@@ -641,57 +633,46 @@ void SwView::CheckReadonlyState()
 
     if ( !m_pWrtShell->IsCursorReadonly() )
     {
-        static sal_uInt16 aROIds[] =
+        static constexpr sal_uInt16 aROIds[] =
         {
-            SID_DELETE,                 FN_BACKSPACE,               FN_SHIFT_BACKSPACE,
-            SID_UNDO,
-            SID_REDO,                   SID_REPEAT,                 SID_PASTE,
-            SID_PASTE_UNFORMATTED,      FN_PASTE_NESTED_TABLE,      FN_TABLE_PASTE_ROW_BEFORE,
-            FN_TABLE_PASTE_COL_BEFORE,  SID_PASTE_SPECIAL,          SID_SBA_BRW_INSERT,
-            SID_BACKGROUND_COLOR,       FN_INSERT_BOOKMARK,         SID_CHARMAP_CONTROL,
-            SID_CHARMAP,                                            FN_INSERT_SOFT_HYPHEN,
-            FN_INSERT_HARDHYPHEN,       FN_INSERT_HARD_SPACE,       FN_INSERT_NNBSP,
-            FN_INSERT_BREAK,            FN_INSERT_LINEBREAK,        FN_INSERT_COLUMN_BREAK,
-            FN_INSERT_BREAK_DLG,        FN_INSERT_CONTENT_CONTROL,  FN_INSERT_CHECKBOX_CONTENT_CONTROL,
-            FN_INSERT_DROPDOWN_CONTENT_CONTROL, FN_INSERT_PICTURE_CONTENT_CONTROL,
-            FN_INSERT_DATE_CONTENT_CONTROL, FN_INSERT_PLAIN_TEXT_CONTENT_CONTROL,
-            FN_INSERT_COMBO_BOX_CONTENT_CONTROL,
-            FN_DELETE_SENT,             FN_DELETE_BACK_SENT,        FN_DELETE_WORD,
-            FN_DELETE_BACK_WORD,        FN_DELETE_LINE,             FN_DELETE_BACK_LINE,
-            FN_DELETE_PARA,             FN_DELETE_BACK_PARA,        FN_DELETE_WHOLE_LINE,
-            FN_CALCULATE,               FN_FORMAT_RESET,
-            FN_POSTIT,                  FN_JAVAEDIT,                SID_ATTR_PARA_ADJUST_LEFT,
-            SID_ATTR_PARA_ADJUST_RIGHT, SID_ATTR_PARA_ADJUST_CENTER,SID_ATTR_PARA_ADJUST_BLOCK,
-            SID_ATTR_PARA_LINESPACE_10, SID_ATTR_PARA_LINESPACE_15, SID_ATTR_PARA_LINESPACE_20,
-            SID_ATTR_CHAR_FONT,         SID_ATTR_CHAR_FONTHEIGHT,   SID_ATTR_CHAR_COLOR_BACKGROUND,
-            SID_ATTR_CHAR_BACK_COLOR,
-            SID_ATTR_CHAR_COLOR_BACKGROUND_EXT,                     SID_ATTR_CHAR_COLOR_EXT,
-            SID_ATTR_CHAR_COLOR,        SID_ATTR_CHAR_WEIGHT,       SID_ATTR_CHAR_POSTURE,
-            SID_ATTR_CHAR_OVERLINE,
-            SID_ATTR_CHAR_UNDERLINE,    SID_ATTR_FLASH,             SID_ATTR_CHAR_STRIKEOUT,
-            SID_ULINE_VAL_SINGLE,       SID_ULINE_VAL_DOUBLE,       SID_ULINE_VAL_DOTTED,
-            SID_ATTR_CHAR_CONTOUR,      SID_ATTR_CHAR_SHADOWED,
-            SID_ATTR_CHAR_AUTOKERN,     SID_ATTR_CHAR_ESCAPEMENT,   FN_SET_SUPER_SCRIPT,
-            FN_SET_SUB_SCRIPT,          SID_ATTR_CHAR_CASEMAP,      SID_ATTR_CHAR_LANGUAGE,
-            SID_ATTR_CHAR_KERNING,      SID_CHAR_DLG,               SID_ATTR_CHAR_WORDLINEMODE,
-            FN_GROW_FONT_SIZE,          FN_SHRINK_FONT_SIZE,        FN_TXTATR_INET,
-            FN_FORMAT_DROPCAPS,         SID_ATTR_PARA_ADJUST,       SID_ATTR_PARA_LINESPACE,
-            SID_ATTR_PARA_SPLIT,        SID_ATTR_PARA_KEEP,         SID_ATTR_PARA_WIDOWS,
-            SID_ATTR_PARA_ORPHANS,
-            SID_ATTR_PARA_MODEL,        SID_PARA_DLG,
-            FN_SELECT_PARA,             SID_DEC_INDENT,
-            SID_INC_INDENT,
-            FN_INSERT_TABLE,            FN_FORMAT_TABLE_DLG,        FN_EXPAND_GLOSSARY,
-            FN_NUM_BULLET_ON,           FN_NUM_NUMBERING_ON,        FN_SVX_SET_NUMBER,
-            FN_SVX_SET_BULLET,          FN_SVX_SET_OUTLINE,         SID_AUTOSPELL_CHECK,
-            FN_SPELL_GRAMMAR_DIALOG
-        };
-        static bool bFirst = true;
-        if ( bFirst )
-        {
-            qsort( static_cast<void*>(aROIds), SAL_N_ELEMENTS(aROIds), sizeof(sal_uInt16), lcl_CmpIds );
-            bFirst = false;
-        }
+            SID_PASTE_SPECIAL, SID_PASTE_UNFORMATTED, SID_CHARMAP_CONTROL,
+            SID_REDO, SID_UNDO, SID_REPEAT,
+            SID_PASTE, SID_DELETE, SID_ATTR_CHAR_FONT,
+            SID_ATTR_CHAR_POSTURE, SID_ATTR_CHAR_WEIGHT, SID_ATTR_CHAR_SHADOWED,
+            SID_ATTR_CHAR_WORDLINEMODE, SID_ATTR_CHAR_CONTOUR, SID_ATTR_CHAR_STRIKEOUT,
+            SID_ATTR_CHAR_UNDERLINE, SID_ATTR_CHAR_FONTHEIGHT, SID_ATTR_CHAR_COLOR,
+            SID_ATTR_CHAR_KERNING, SID_ATTR_CHAR_CASEMAP, SID_ATTR_CHAR_LANGUAGE,
+            SID_ATTR_CHAR_ESCAPEMENT, SID_ATTR_PARA_ADJUST, SID_ATTR_PARA_ADJUST_LEFT,
+            SID_ATTR_PARA_ADJUST_RIGHT, SID_ATTR_PARA_ADJUST_CENTER, SID_ATTR_PARA_ADJUST_BLOCK,
+            SID_ATTR_PARA_LINESPACE, SID_ATTR_PARA_LINESPACE_10, SID_ATTR_PARA_LINESPACE_15,
+            SID_ATTR_PARA_LINESPACE_20, SID_ATTR_PARA_SPLIT, SID_ATTR_PARA_ORPHANS,
+            SID_ATTR_PARA_WIDOWS, SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP,
+            SID_ATTR_CHAR_AUTOKERN, SID_BACKGROUND_COLOR, SID_CHAR_DLG,
+            SID_PARA_DLG, SID_ATTR_FLASH, SID_DEC_INDENT,
+            SID_INC_INDENT, SID_ATTR_CHAR_COLOR_EXT, SID_ATTR_CHAR_COLOR_BACKGROUND,
+            SID_ATTR_CHAR_COLOR_BACKGROUND_EXT, SID_CHARMAP, FN_SVX_SET_NUMBER,
+            FN_SVX_SET_BULLET, FN_SVX_SET_OUTLINE, SID_ATTR_CHAR_BACK_COLOR,
+            SID_ULINE_VAL_SINGLE, SID_ULINE_VAL_DOUBLE, SID_ULINE_VAL_DOTTED,
+            SID_ATTR_CHAR_OVERLINE, SID_AUTOSPELL_CHECK, SID_SBA_BRW_INSERT,
+            FN_NUM_BULLET_ON, FN_NUM_NUMBERING_ON, FN_SELECT_PARA,
+            FN_INSERT_BOOKMARK, FN_INSERT_BREAK, FN_INSERT_BREAK_DLG,
+            FN_INSERT_COLUMN_BREAK, FN_INSERT_LINEBREAK, FN_INSERT_CONTENT_CONTROL,
+            FN_INSERT_CHECKBOX_CONTENT_CONTROL, FN_INSERT_DROPDOWN_CONTENT_CONTROL, FN_INSERT_PICTURE_CONTENT_CONTROL,
+            FN_INSERT_DATE_CONTENT_CONTROL, FN_INSERT_PLAIN_TEXT_CONTENT_CONTROL, FN_POSTIT,
+            FN_INSERT_TABLE, FN_INSERT_COMBO_BOX_CONTENT_CONTROL, FN_INSERT_SOFT_HYPHEN,
+            FN_INSERT_HARD_SPACE, FN_INSERT_NNBSP, FN_INSERT_HARDHYPHEN,
+            FN_GROW_FONT_SIZE, FN_SHRINK_FONT_SIZE, FN_SET_SUPER_SCRIPT,
+            FN_SET_SUB_SCRIPT, FN_FORMAT_DROPCAPS, FN_FORMAT_TABLE_DLG,
+            FN_FORMAT_RESET, FN_CALCULATE, FN_EXPAND_GLOSSARY,
+            FN_BACKSPACE, FN_DELETE_SENT, FN_DELETE_BACK_SENT,
+            FN_DELETE_WORD, FN_DELETE_BACK_WORD, FN_DELETE_LINE,
+            FN_DELETE_BACK_LINE, FN_DELETE_PARA, FN_DELETE_BACK_PARA,
+            FN_DELETE_WHOLE_LINE, FN_SHIFT_BACKSPACE, FN_TXTATR_INET,
+            FN_JAVAEDIT, FN_PASTE_NESTED_TABLE, FN_TABLE_PASTE_ROW_BEFORE,
+            FN_TABLE_PASTE_COL_BEFORE, FN_SPELL_GRAMMAR_DIALOG };
+
+        static_assert(std::is_sorted(std::begin(aROIds), std::end(aROIds)));
+
         if ( SfxItemState::DISABLED == eStateRO )
         {
             if (m_pWrtShell->GetViewOptions()->IsReadonly())
@@ -705,13 +686,10 @@ void SwView::CheckReadonlyState()
     {
         if ( SfxItemState::DISABLED == eStateProtAll )
         {
-            static sal_uInt16 aAllProtIds[] = { SID_SAVEDOC, FN_EDIT_REGION };
-            static bool bAllProtFirst = true;
-            if ( bAllProtFirst )
-            {
-                qsort( static_cast<void*>(aAllProtIds), SAL_N_ELEMENTS(aAllProtIds), sizeof(sal_uInt16), lcl_CmpIds );
-                bAllProtFirst = false;
-            }
+            static constexpr sal_uInt16 aAllProtIds[] = { SID_SAVEDOC, FN_EDIT_REGION };
+
+            static_assert(std::is_sorted(std::begin(aAllProtIds), std::end(aAllProtIds)));
+
             rDis.SetSlotFilter( SfxSlotFilterState::ENABLED_READONLY, aAllProtIds );
             bChgd = true;
         }
