@@ -344,7 +344,7 @@ private:
                 }
                 if (isa<TagDecl>(*d) || isa<ClassTemplateDecl>(*d))
                 {
-                    if (auto const d1 = dyn_cast<RecordDecl>(*d))
+                    if (auto const d1 = dyn_cast<CXXRecordDecl>(*d))
                     {
                         if (d1->isInjectedClassName())
                         {
