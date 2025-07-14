@@ -217,15 +217,13 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     imp_lib[partial_length++] = SEPARATOR;
     strncpy(imp_lib + partial_length, TARGET_LIB, imp_lib_size - partial_length);
 
-    dlhandle = lok_loadlib(imp_lib);
-    if (!dlhandle)
+    struct stat st;
+    // If TARGET_LUB exists but is ridiculously small, it is the
+    // one-line text stub as in the --enable-mergedlib case.
+    if (stat(imp_lib, &st) == 0 && st.st_size > 1000)
     {
-        // If TARGET_LIB exists, and likely is a real library (not a
-        // small one-line text stub as in the --enable-mergedlib
-        // case), but dlopen failed for some reason, don't try
-        // TARGET_MERGED_LIB.
-        struct stat st;
-        if (stat(imp_lib, &st) == 0 && st.st_size > 100)
+        dlhandle = lok_loadlib(imp_lib);
+        if (!dlhandle)
         {
             char *pErrMessage = lok_dlerror();
             fprintf(stderr, "failed to open library '%s': %s\n",
@@ -234,7 +232,9 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
             free(imp_lib);
             return NULL;
         }
-
+    }
+    else
+    {
         strncpy(imp_lib + partial_length, TARGET_MERGED_LIB, imp_lib_size - partial_length);
 
         dlhandle = lok_loadlib(imp_lib);
