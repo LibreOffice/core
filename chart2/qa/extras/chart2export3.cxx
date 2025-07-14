@@ -885,6 +885,17 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testODSFormattedChartTitles)
     checkCharacterProps(xTitleProp);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf148117)
+{
+    // The document contains a line chart with "Between tick marks" X axis position.
+    loadFromFile(u"pptx/tdf148117.pptx");
+    // Check formatted strings after export.
+    save(u"Impress MS PowerPoint 2007 XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:date1904", "val", u"0");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
