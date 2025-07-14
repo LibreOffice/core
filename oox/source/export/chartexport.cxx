@@ -1312,6 +1312,15 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
                 FSNS( XML_xmlns, XML_r ), pFB->getNamespaceURL(OOX_NS(officeRel)));
     }
 
+    if( !bIncludeTable )
+    {
+        // TODO:external data
+    }
+    else
+    {
+        pFS->singleElement(FSNS(XML_c, XML_date1904), XML_val, "0");
+    }
+
     // TODO: get the correct editing language
     if (bIsChartex) {
         // chartData
@@ -1340,10 +1349,6 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
         }
     }
 
-    if( !bIncludeTable )
-    {
-        // TODO:external data
-    }
     //XML_chart
     exportChart(xChartDoc, bIsChartex);
 
