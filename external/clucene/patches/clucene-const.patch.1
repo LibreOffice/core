@@ -8470,9 +8470,51 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_swedish
  
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
+diff -ru clucene.orig/src/core/CLucene/analysis/Analyzers.cpp clucene/src/core/CLucene/analysis/Analyzers.cpp
+--- clucene.orig/src/core/CLucene/analysis/Analyzers.cpp	2025-07-14 21:22:25.560506427 +0100
++++ clucene/src/core/CLucene/analysis/Analyzers.cpp	2025-07-14 21:22:35.955552591 +0100
+@@ -195,7 +195,7 @@
+ bool StopFilter::getEnablePositionIncrements() const { return enablePositionIncrements; }
+ void StopFilter::setEnablePositionIncrements(const bool enable) { this->enablePositionIncrements = enable; }
+ 
+-void StopFilter::fillStopTable(CLTCSetList* stopTable, const TCHAR** stopWords, const bool _ignoreCase)
++void StopFilter::fillStopTable(CLTCSetList* stopTable, const TCHAR* const* stopWords, const bool _ignoreCase)
+ {
+   TCHAR* tmp;
+ 	if ( _ignoreCase ){
+@@ -290,7 +290,7 @@
+     return streams->result;
+ }
+ 
+-const TCHAR* StopAnalyzer::ENGLISH_STOP_WORDS[]  = 
++const TCHAR* const StopAnalyzer::ENGLISH_STOP_WORDS[]  = 
+ {
+ 	_T("a"), _T("an"), _T("and"), _T("are"), _T("as"), _T("at"), _T("be"), _T("but"), _T("by"),
+ 	_T("for"), _T("if"), _T("in"), _T("into"), _T("is"), _T("it"),
+diff -ru clucene.orig/src/core/CLucene/analysis/Analyzers.h clucene/src/core/CLucene/analysis/Analyzers.h
+--- clucene.orig/src/core/CLucene/analysis/Analyzers.h	2025-07-14 21:22:25.560506427 +0100
++++ clucene/src/core/CLucene/analysis/Analyzers.h	2025-07-14 21:22:35.957413701 +0100
+@@ -160,7 +160,7 @@
+ 	* Note: the stopWords list must be a static list because the strings are not copied
+ 	*/
+ 	static void fillStopTable(CLTCSetList* stopTable,
+-                                      const TCHAR** stopWords, const bool _ignoreCase = false);
++                                      const TCHAR* const* stopWords, const bool _ignoreCase = false);
+ 
+ 	/**
+ 	* Returns the next input Token whose termText() is not a stop word.
+@@ -262,7 +262,7 @@
+ 
+ 	/** An array containing some common English words that are not usually useful
+     for searching. */
+-    static const TCHAR* ENGLISH_STOP_WORDS[];
++    static const TCHAR* const ENGLISH_STOP_WORDS[];
+ };
+ 
+ 
 diff -ru clucene.orig/src/core/CLucene/index/IndexFileNames.cpp clucene/src/core/CLucene/index/IndexFileNames.cpp
---- clucene.orig/src/core/CLucene/index/IndexFileNames.cpp	2025-07-14 10:02:13.796423188 +0100
-+++ clucene/src/core/CLucene/index/IndexFileNames.cpp	2025-07-14 10:06:17.086614810 +0100
+--- clucene.orig/src/core/CLucene/index/IndexFileNames.cpp	2025-07-14 21:22:25.582506524 +0100
++++ clucene/src/core/CLucene/index/IndexFileNames.cpp	2025-07-14 21:22:30.824736167 +0100
 @@ -13,26 +13,26 @@
  
  CL_NS_DEF(index)
@@ -8594,9 +8636,54 @@ diff -ru clucene.orig/src/core/CLucene/index/IndexWriter.h clucene/src/core/CLuc
  
    /**
     * @deprecated
+diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParserConstants.h clucene/src/core/CLucene/queryParser/QueryParserConstants.h
+--- clucene.orig/src/core/CLucene/queryParser/QueryParserConstants.h	2025-07-14 21:22:25.584506533 +0100
++++ clucene/src/core/CLucene/queryParser/QueryParserConstants.h	2025-07-14 21:22:35.958548353 +0100
+@@ -53,7 +53,7 @@
+ 		DEFAULT = 3
+ 	};
+ 
+-	static const TCHAR* tokenImage[];
++	static const TCHAR* const tokenImage[];
+ 
+ protected:
+ 	/**
+diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParser.cpp clucene/src/core/CLucene/queryParser/QueryParser.cpp
+--- clucene.orig/src/core/CLucene/queryParser/QueryParser.cpp	2025-07-14 21:22:25.587506546 +0100
++++ clucene/src/core/CLucene/queryParser/QueryParser.cpp	2025-07-14 21:22:35.959114783 +0100
+@@ -43,7 +43,7 @@
+ 
+ CL_NS_DEF(queryParser)
+ 
+-const TCHAR* QueryParserConstants::tokenImage[] = {
++const TCHAR* const QueryParserConstants::tokenImage[] = {
+     _T("<EOF>"),
+     _T("<_NUM_CHAR>"),
+     _T("<_ESCAPED_CHAR>"),
+@@ -1440,7 +1440,7 @@
+ 
+ TCHAR* QueryParser::getParseExceptionMessage(QueryToken* currentToken,
+                        CL_NS(util)::CLVector< CL_NS(util)::ValueArray<int32_t>*, CL_NS(util)::Deletor::Object< CL_NS(util)::ValueArray<int32_t> > >* expectedTokenSequences,
+-                       const TCHAR* tokenImage[])
++                       const TCHAR* const tokenImage[])
+ {
+   // TODO: Check to see what's a realistic initial value for the buffers here
+   // TODO: Make eol configurable (will be useful for PrintStream implementation as well later)?
+diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParser.h clucene/src/core/CLucene/queryParser/QueryParser.h
+--- clucene.orig/src/core/CLucene/queryParser/QueryParser.h	2025-07-14 21:22:25.584506533 +0100
++++ clucene/src/core/CLucene/queryParser/QueryParser.h	2025-07-14 21:22:35.960694453 +0100
+@@ -524,7 +524,7 @@
+   TCHAR* getParseExceptionMessage(QueryToken* currentToken,
+     CL_NS(util)::CLVector<  CL_NS(util)::ValueArray<int32_t>*,
+     CL_NS(util)::Deletor::Object< CL_NS(util)::ValueArray<int32_t> > >* expectedTokenSequences,
+-    const TCHAR* tokenImage[]);
++    const TCHAR* const tokenImage[]);
+ };
+ CL_NS_END
+ #endif
 diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.cpp clucene/src/core/CLucene/queryParser/QueryParserTokenManager.cpp
---- clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.cpp	2025-07-14 10:02:13.799247895 +0100
-+++ clucene/src/core/CLucene/queryParser/QueryParserTokenManager.cpp	2025-07-14 10:04:22.134762172 +0100
+--- clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.cpp	2025-07-14 21:22:25.587506546 +0100
++++ clucene/src/core/CLucene/queryParser/QueryParserTokenManager.cpp	2025-07-14 21:22:30.826276026 +0100
 @@ -23,12 +23,12 @@
  		15, 17, 18, 29, 32, 23, 33, 30, 20, 21, 32, 23, 33, 31, 34, 27,
  		2, 4, 5, 0, 1
