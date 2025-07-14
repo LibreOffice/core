@@ -6433,6 +6433,25 @@ SvxSizeItem CalcPageMargin SID_SC_ATTR_PAGE_MARGIN
 ]
 
 
+SvxSizeItem CalcPageSize SID_SC_ATTR_PAGE_SIZE
+(
+    SfxUInt16Item PaperFormat SID_SC_ATTR_PAGE_SIZE
+)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
 SfxVoidItem MarkPrecedents SID_DETECTIVE_MARK_PRED
 ()
 [

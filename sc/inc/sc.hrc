@@ -655,6 +655,7 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 #define FID_TOGGLE_PRINT_GRID   (SC_RESOURCE_START+19) // toggle print grid
 #define WID_SIMPLE_REF          (SC_RESOURCE_START+20)
 #define SID_SC_ATTR_PAGE_MARGIN   (SC_RESOURCE_START+22)
+#define SID_SC_ATTR_PAGE_SIZE   (SC_RESOURCE_START+21)
 
 #endif
 
