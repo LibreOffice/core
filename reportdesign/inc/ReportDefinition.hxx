@@ -398,9 +398,6 @@ namespace reportdesign
         virtual css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() const override;
         virtual bool isEnableSetModified() const override;
         virtual OUString getDocumentBaseURL() const override;
-
-        /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2(  );
       };
 
 } // namespace reportdesign

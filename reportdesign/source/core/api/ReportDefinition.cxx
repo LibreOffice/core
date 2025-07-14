@@ -1864,11 +1864,6 @@ uno::Reference< report::XFunctions > SAL_CALL OReportDefinition::getFunctions()
 
 uno::Reference< ui::XUIConfigurationManager > SAL_CALL OReportDefinition::getUIConfigurationManager(  )
 {
-    return getUIConfigurationManager2();
-}
-
-uno::Reference< ui::XUIConfigurationManager2 > OReportDefinition::getUIConfigurationManager2(  )
-{
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
