@@ -23,30 +23,28 @@ class ConfigureDialog(UITestCase):
                 xfunc = xDialog.getChild("functions")
                 xSearch = xDialog.getChild("searchEntry")
 
-                initialEntryCount = get_state_as_dict(xfunc)["Children"]
+                initialEntryCount = int(get_state_as_dict(xfunc)["Children"])
                 self.assertTrue(initialEntryCount != 0)
 
                 xSearch.executeAction("TYPE", mkPropertyValues({"TEXT":"format"}))
 
                 # Wait for the search/filter op to be completed
-                timeout = time.time() + 1
-                while time.time() < timeout:
-                    filteredEntryCount = get_state_as_dict(xfunc)["Children"]
+                while True:
+                    filteredEntryCount = int(get_state_as_dict(xfunc)["Children"])
                     if filteredEntryCount != initialEntryCount:
                         break
-                    time.sleep(0.1)
+                    time.sleep(self.ui_test.get_default_sleep())
 
                 self.assertTrue(filteredEntryCount < initialEntryCount)
 
                 xSearch.executeAction("CLEAR", tuple())
 
                 # Wait for the search/filter op to be completed
-                timeout = time.time() + 1
-                while time.time() < timeout:
-                    finalEntryCount = get_state_as_dict(xfunc)["Children"]
+                while True:
+                    finalEntryCount = int(get_state_as_dict(xfunc)["Children"])
                     if finalEntryCount != filteredEntryCount:
                         break
-                    time.sleep(0.1)
+                    time.sleep(self.ui_test.get_default_sleep())
 
                 self.assertEqual(initialEntryCount, finalEntryCount)
 
@@ -57,15 +55,15 @@ class ConfigureDialog(UITestCase):
                 xFunc = xDialog.getChild("functions")
                 xCategory = xDialog.getChild("commandcategorylist")
 
-                initialEntryCount = get_state_as_dict(xFunc)["Children"]
+                initialEntryCount = int(get_state_as_dict(xFunc)["Children"])
                 self.assertTrue(initialEntryCount != 0)
 
                 select_pos(xCategory, "1")
-                filteredEntryCount = get_state_as_dict(xFunc)["Children"]
+                filteredEntryCount = int(get_state_as_dict(xFunc)["Children"])
                 self.assertTrue(filteredEntryCount < initialEntryCount)
 
                 select_pos(xCategory, "0")
-                finalEntryCount = get_state_as_dict(xFunc)["Children"]
+                finalEntryCount = int(get_state_as_dict(xFunc)["Children"])
                 self.assertEqual(initialEntryCount, finalEntryCount)
 
     def test_tdf133862(self):
