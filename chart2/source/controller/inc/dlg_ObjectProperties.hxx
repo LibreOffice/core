@@ -112,7 +112,7 @@ class ViewElementListProvider;
 class SchAttribTabDlg final : public SfxTabDialogController
 {
 private:
-    const ObjectPropertiesDialogParameter * const        m_pParameter;
+    const ObjectPropertiesDialogParameter& m_rParameter;
     const ViewElementListProvider* const                 m_pViewElementListProvider;
     SvNumberFormatter* m_pNumberFormatter;
 
@@ -128,7 +128,7 @@ private:
 
 public:
     SchAttribTabDlg(weld::Window* pParent, const SfxItemSet* pAttr,
-                    const ObjectPropertiesDialogParameter* pDialogParameter,
+                    const ObjectPropertiesDialogParameter& rDialogParameter,
                     const ViewElementListProvider* pViewElementListProvider,
                     const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~SchAttribTabDlg() override;

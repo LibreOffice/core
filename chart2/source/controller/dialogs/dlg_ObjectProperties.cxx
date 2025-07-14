@@ -328,11 +328,11 @@ void SchAttribTabDlg::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorSte
 
 SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                                  const SfxItemSet* pAttr,
-                                 const ObjectPropertiesDialogParameter* pDialogParameter,
+                                 const ObjectPropertiesDialogParameter& rDialogParameter,
                                  const ViewElementListProvider* pViewElementListProvider,
                                  const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier)
     : SfxTabDialogController(pParent, u"modules/schart/ui/attributedialog.ui"_ustr, u"AttributeDialog"_ustr, pAttr)
-    , m_pParameter( pDialogParameter )
+    , m_rParameter(rDialogParameter)
     , m_pViewElementListProvider( pViewElementListProvider )
     , m_pNumberFormatter(nullptr)
     , m_fAxisMinorStepWidthForErrorBarDecimals(0.1)
@@ -341,9 +341,9 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
     NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
     m_pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
 
-    m_xDialog->set_title(pDialogParameter->getLocalizedName());
+    m_xDialog->set_title(rDialogParameter.getLocalizedName());
 
-    ObjectType eType = pDialogParameter->getObjectType();
+    ObjectType eType = rDialogParameter.getObjectType();
     switch (eType)
     {
         case OBJECTTYPE_TITLE:
@@ -386,21 +386,21 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
 
         case OBJECTTYPE_DATA_SERIES:
         case OBJECTTYPE_DATA_POINT:
-            if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() || m_pParameter->ProvidesMissingValueTreatments() )
+            if (m_rParameter.ProvidesSecondaryYAxis() || m_rParameter.ProvidesOverlapAndGapWidth() || m_rParameter.ProvidesMissingValueTreatments())
                 AddTabPage(u"options"_ustr, TabResId(RID_TAB_CHART_OPTIONS.aLabel), SchOptionTabPage::Create,
                            RID_M + RID_TAB_CHART_OPTIONS.sIconName);
-            if( m_pParameter->ProvidesStartingAngle())
+            if (m_rParameter.ProvidesStartingAngle())
                 AddTabPage(u"polaroptions"_ustr, TabResId(RID_TAB_CHART_OPTIONS.aLabel), PolarOptionsTabPage::Create,
                            RID_M + RID_TAB_CHART_OPTIONS.sIconName);
-            if (m_pParameter->IsPieChartDataPoint())
+            if (m_rParameter.IsPieChartDataPoint())
                 AddTabPage(u"datapointoption"_ustr, TabResId(RID_TAB_CHART_OPTIONS.aLabel), DataPointOptionTabPage::Create,
                            RID_M + RID_TAB_CHART_OPTIONS.sIconName);
 
-            if( m_pParameter->HasGeometryProperties() )
+            if (m_rParameter.HasGeometryProperties())
                 AddTabPage(u"layout"_ustr, TabResId(RID_TAB_CHART_LAYOUT.aLabel), SchLayoutTabPage::Create,
                            RID_M + RID_TAB_CHART_LAYOUT.sIconName);
 
-            if(m_pParameter->HasAreaProperties())
+            if (m_rParameter.HasAreaProperties())
             {
                 AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), RID_SVXPAGE_AREA,
                            RID_M + RID_TAB_AREA.sIconName);
@@ -435,7 +435,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
 
         case OBJECTTYPE_AXIS:
         {
-            if( m_pParameter->HasScaleProperties() )
+            if (m_rParameter.HasScaleProperties())
             {
                 AddTabPage(u"scale"_ustr, TabResId(RID_TAB_CHART_SCALE.aLabel), ScaleTabPage::Create,
                            RID_M + RID_TAB_CHART_SCALE.sIconName);
@@ -447,7 +447,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                        RID_M + RID_TAB_BORDER.sIconName);
             AddTabPage(u"axislabel"_ustr, TabResId(RID_TAB_CHART_AXISLABEL.aLabel), SchAxisLabelTabPage::Create,
                        RID_M + RID_TAB_CHART_AXISLABEL.sIconName);
-            if( m_pParameter->HasNumberProperties() )
+            if (m_rParameter.HasNumberProperties())
                 AddTabPage(u"numberformat"_ustr, TabResId(RID_TAB_NUMBERS.aLabel), RID_SVXPAGE_NUMBERFORMAT,
                            RID_M + RID_TAB_NUMBERS.sIconName);
             AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
@@ -574,7 +574,7 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
         aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nNoArrowNoShadowDlg));
 
-        if( m_pParameter->HasSymbolProperties() )
+        if (m_rParameter.HasSymbolProperties())
         {
             aSet.Put(OfaPtrItem(SID_OBJECT_LIST,m_pViewElementListProvider->GetSymbolList()));
             if( m_oSymbolShapeProperties )
@@ -613,10 +613,10 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
     }
     else if (rId == "axislabel")
     {
-        bool bShowStaggeringControls = m_pParameter->CanAxisLabelsBeStaggered();
+        bool bShowStaggeringControls = m_rParameter.CanAxisLabelsBeStaggered();
         auto & rLabelPage = static_cast<SchAxisLabelTabPage&>(rPage);
         rLabelPage.ShowStaggeringControls( bShowStaggeringControls );
-        rLabelPage.SetComplexCategories( m_pParameter->IsComplexCategoriesAxis() );
+        rLabelPage.SetComplexCategories(m_rParameter.IsComplexCategoriesAxis());
     }
     else if (rId == "axispos")
     {
@@ -624,13 +624,13 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
         if(pPage)
         {
             pPage->SetNumFormatter( m_pNumberFormatter );
-            if( m_pParameter->IsCrossingAxisIsCategoryAxis() )
+            if (m_rParameter.IsCrossingAxisIsCategoryAxis())
             {
-                pPage->SetCrossingAxisIsCategoryAxis( m_pParameter->IsCrossingAxisIsCategoryAxis() );
-                pPage->SetCategories( m_pParameter->GetCategories() );
+                pPage->SetCrossingAxisIsCategoryAxis(m_rParameter.IsCrossingAxisIsCategoryAxis());
+                pPage->SetCategories(m_rParameter.GetCategories());
             }
-            pPage->SupportAxisPositioning( m_pParameter->IsSupportingAxisPositioning() );
-            pPage->SupportCategoryPositioning( m_pParameter->IsSupportingCategoryPositioning() );
+            pPage->SupportAxisPositioning(m_rParameter.IsSupportingAxisPositioning());
+            pPage->SupportCategoryPositioning(m_rParameter.IsSupportingCategoryPositioning());
         }
     }
     else if (rId == "scale")
@@ -639,7 +639,7 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
         if(pScaleTabPage)
         {
             pScaleTabPage->SetNumFormatter( m_pNumberFormatter );
-            pScaleTabPage->ShowAxisOrigin( m_pParameter->ShowAxisOrigin() );
+            pScaleTabPage->ShowAxisOrigin(m_rParameter.ShowAxisOrigin());
         }
     }
     else if (rId == "datalabels")
@@ -661,7 +661,7 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
         {
             pTabPage->SetAxisMinorStepWidthForErrorBarDecimals( m_fAxisMinorStepWidthForErrorBarDecimals );
             pTabPage->SetErrorBarType( ErrorBarResources::ERROR_BAR_X );
-            pTabPage->SetChartDocumentForRangeChoosing( m_pParameter->getDocument());
+            pTabPage->SetChartDocumentForRangeChoosing(m_rParameter.getDocument());
         }
     }
     else if (rId == "yerrorbar")
@@ -672,15 +672,16 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
         {
             pTabPage->SetAxisMinorStepWidthForErrorBarDecimals( m_fAxisMinorStepWidthForErrorBarDecimals );
             pTabPage->SetErrorBarType( ErrorBarResources::ERROR_BAR_Y );
-            pTabPage->SetChartDocumentForRangeChoosing( m_pParameter->getDocument());
+            pTabPage->SetChartDocumentForRangeChoosing(m_rParameter.getDocument());
         }
     }
     else if (rId == "options")
     {
         SchOptionTabPage* pTabPage = dynamic_cast< SchOptionTabPage* >( &rPage );
-        if( pTabPage && m_pParameter )
-            pTabPage->Init( m_pParameter->ProvidesSecondaryYAxis(), m_pParameter->ProvidesOverlapAndGapWidth(),
-                m_pParameter->ProvidesBarConnectors() );
+        if (pTabPage)
+            pTabPage->Init(m_rParameter.ProvidesSecondaryYAxis(),
+                           m_rParameter.ProvidesOverlapAndGapWidth(),
+                           m_rParameter.ProvidesBarConnectors());
     }
     else if (rId == "trendline")
     {
@@ -688,7 +689,7 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
         if(pTrendlineTabPage)
         {
             pTrendlineTabPage->SetNumFormatter( m_pNumberFormatter );
-            pTrendlineTabPage->SetNbPoints( m_pParameter->getNbPoints() );
+            pTrendlineTabPage->SetNbPoints(m_rParameter.getNbPoints());
         }
     }
     else if (rId == "colorpalette")
@@ -696,7 +697,7 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
         auto* pColorPaletteTabPage = dynamic_cast<ChartColorPaletteTabPage*>( &rPage );
         if (pColorPaletteTabPage)
         {
-            pColorPaletteTabPage->init(m_pParameter->getDocument());
+            pColorPaletteTabPage->init(m_rParameter.getDocument());
         }
     }
 }

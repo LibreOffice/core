@@ -497,7 +497,7 @@ void ChartController::executeDispatch_InsertTrendline()
     aDialogParameter.init( getChartModel() );
     ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
     SolarMutexGuard aGuard;
-    auto aDialog = std::make_shared<SchAttribTabDlg>(GetChartFrame(), &aItemSet, &aDialogParameter,
+    auto aDialog = std::make_shared<SchAttribTabDlg>(GetChartFrame(), &aItemSet, aDialogParameter,
                                                      &aViewElementListProvider, getChartModel());
 
     // note: when a user pressed "OK" but didn't change any settings in the
@@ -555,7 +555,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;
         auto aDlg = std::make_shared<SchAttribTabDlg>(
-                GetChartFrame(), &aItemSet, &aDialogParameter,
+                GetChartFrame(), &aItemSet, aDialogParameter,
                 &aViewElementListProvider,
                 getChartModel() );
         aDlg->SetAxisMinorStepWidthForErrorBarDecimals(

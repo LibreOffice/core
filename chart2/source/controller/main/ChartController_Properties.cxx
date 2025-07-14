@@ -747,7 +747,7 @@ void ChartController::executeDlg_ObjectProperties_withUndoGuard(
 
         SolarMutexGuard aGuard;
         std::shared_ptr<SchAttribTabDlg> aDlgPtr = std::make_shared<SchAttribTabDlg>(
-            GetChartFrame(), &aItemSet, &aDialogParameter,
+            GetChartFrame(), &aItemSet, aDialogParameter,
             &aViewElementListProvider,
             xChartDoc);
 
