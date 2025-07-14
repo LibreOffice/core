@@ -3681,6 +3681,10 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
                 rState.Put( SfxBoolItem( nSID, HasChildWindow( nSID ) ) );
             }
         }
+        else if ( nSID == SID_QUICKFIND )
+        {
+            rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );
+        }
         else if ( KnowsChildWindow(nSID) )
             rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );
         else

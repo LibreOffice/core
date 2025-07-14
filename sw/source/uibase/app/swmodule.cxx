@@ -73,6 +73,7 @@
 #include <wtabsh.hxx>
 #include <navipi.hxx>
 #include <init.hxx>
+#include <QuickFindPanel.hxx>
 #include <inputwin.hxx>
 #include <usrpref.hxx>
 #include <uinums.hxx>
@@ -334,6 +335,7 @@ void SwDLL::RegisterControls()
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
 
     SwNavigatorWrapper::RegisterChildWindow(false, pMod, SfxChildWindowFlags::NEVERHIDE);
+    ::sw::sidebar::QuickFindPanelWrapper::RegisterChildWindow(false, pMod, SfxChildWindowFlags::FORCEDOCK);
 
     SwJumpToSpecificPageControl::RegisterControl(SID_JUMP_TO_SPECIFIC_PAGE, pMod);
 }

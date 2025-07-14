@@ -103,6 +103,11 @@ void SendSidebarForView(const sal_uInt64 nShellId)
     jsdialog::SendFullUpdate(OUString::number(nShellId) + "sidebar", "Panel");
 }
 
+void SendQuickFindForView(const sal_uInt64 nShellId)
+{
+    jsdialog::SendFullUpdate(OUString::number(nShellId) + "quickfind", "QuickFindPanel");
+}
+
 void SendFullUpdate(const OUString& nWindowId, const OUString& rWidget)
 {
     auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);

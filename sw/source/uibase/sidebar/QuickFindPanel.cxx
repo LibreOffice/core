@@ -8,7 +8,7 @@
  *
  */
 
-#include "QuickFindPanel.hxx"
+#include <QuickFindPanel.hxx>
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/scopeguard.hxx>
@@ -23,11 +23,18 @@
 #include <cntfrm.hxx>
 #include <strings.hrc>
 #include <vcl/event.hxx>
+#include <vcl/jsdialog/executor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <swwait.hxx>
 
+#include <sfx2/strings.hrc>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/bindings.hxx>
+
 #include <svx/srchdlg.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 
 const int CharactersBeforeAndAfter = 40;
@@ -98,6 +105,25 @@ IMPL_LINK_NOARG(QuickFindPanel::SearchOptionsDialog, SimilaritySettingsDialogBut
     }
 }
 
+QuickFindPanelWindow::QuickFindPanelWindow(SfxBindings* _pBindings, SfxChildWindow* pChildWin,
+                                           vcl::Window* pParent, SfxChildWinInfo* pInfo)
+    : SfxQuickFind(_pBindings, pChildWin, pParent, pInfo)
+    , m_xQuickFindPanel(std::make_unique<QuickFindPanel>(m_xContainer.get(),
+                                                         _pBindings->GetActiveFrame(), _pBindings))
+{
+    _pBindings->Invalidate(SID_QUICKFIND);
+}
+
+QuickFindPanelWrapper::QuickFindPanelWrapper(vcl::Window* pParent, sal_uInt16 nId,
+                                             SfxBindings* pBindings, SfxChildWinInfo* pInfo)
+    : SfxQuickFindWrapper(pParent, nId)
+{
+    SetWindow(VclPtr<QuickFindPanelWindow>::Create(pBindings, this, pParent, pInfo));
+    Initialize();
+}
+
+SFX_IMPL_DOCKINGWINDOW(QuickFindPanelWrapper, SID_QUICKFIND);
+
 std::unique_ptr<PanelLayout>
 QuickFindPanel::Create(weld::Widget* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -126,6 +152,14 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
 {
     m_xAcceleratorExecute->init(comphelper::getProcessComponentContext(), rxFrame);
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
+        jsdialog::SendQuickFindForView(nShellId);
+
+        // disable search options for online as still tunnled dialog
+        m_xSearchOptionsToolbar->set_visible(false);
+    }
     m_nMinimumPanelWidth
         = m_xBuilder->weld_widget(u"box"_ustr)->get_preferred_size().getWidth() + (6 * 2) + 6;
     m_xContainer->set_size_request(m_nMinimumPanelWidth, 1);

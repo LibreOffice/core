@@ -186,7 +186,8 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
 
     m_aParentDialog = pRoot->GetParentWithLOKNotifier();
 
-    bool bIsNavigatorPanel = jsdialog::isBuilderEnabledForNavigator(rUIFile);
+    bool bIsDockingWindow = jsdialog::isBuilderEnabledForNavigator(rUIFile)
+                            || jsdialog::isBuilderEnabledForQuickFind(rUIFile);
 
     // builder for Panel, PanelLayout, and DockingWindow
     // get SidebarDockingWindow, or SwNavigatorWin as m_aContentWindow
@@ -195,7 +196,7 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
     //      Panel        : 7 levels up from pRoot
     //      DockingWindow: 3 levels up from pRoot
     unsigned nLevelsUp = 100; // limit
-    if (bIsNavigatorPanel)
+    if (bIsDockingWindow)
         nLevelsUp = 3;
 
     if (nLevelsUp > 0)
@@ -207,7 +208,7 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
         m_aContentWindow = pRoot;
         for (unsigned i = 0; i < nLevelsUp && m_aContentWindow; i++)
         {
-            if (!bIsNavigatorPanel && m_aContentWindow->get_id() == "Deck")
+            if (!bIsDockingWindow && m_aContentWindow->get_id() == "Deck")
                 nLevelsUp = i + 3;
 
             // Useful to check if any panel doesn't appear
