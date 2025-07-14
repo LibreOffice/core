@@ -2634,6 +2634,22 @@ SfxBoolItem Navigator SID_NAVIGATOR
     GroupId = SfxGroupId::Navigator;
 ]
 
+SfxBoolItem QuickFind SID_QUICKFIND
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = ;
+]
+
 SfxBoolItem InfoBar SID_INFOBAR
 [
     AutoUpdate = FALSE,

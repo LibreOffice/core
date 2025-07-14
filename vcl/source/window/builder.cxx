@@ -195,6 +195,8 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
             return JSInstanceBuilder::CreateMenuBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else if (jsdialog::isBuilderEnabledForNavigator(rUIFile))
             return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "navigator", nLOKWindowId);
+        else if (jsdialog::isBuilderEnabledForQuickFind(rUIFile))
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "quickfind", nLOKWindowId);
         else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else

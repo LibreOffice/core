@@ -594,6 +594,7 @@ class SvxZoomItem;
 #define SID_HYPERLINK_SETLINK               TypedWhichId<SvxHyperlinkItem>(SID_SVX_START + 362)
 #define SID_INFOBAR                         (SID_SVX_START + 365)
 #define SID_NAVIGATOR                       (SID_SVX_START + 366)
+#define SID_QUICKFIND                       (SID_SVX_START + 367)
 #define SID_ZOOM_NEXT                       (SID_SVX_START + 402)
 #define SID_ZOOM_PREV                       (SID_SVX_START + 403)
 #define SID_INET_DLG                        (SID_SVX_START + 416)

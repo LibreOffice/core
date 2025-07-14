@@ -88,6 +88,7 @@ SFX_IMPL_INTERFACE(SwView, SfxViewShell)
 void SwView::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
+    GetStaticInterface()->RegisterChildWindow(SID_QUICKFIND, false);
 
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 

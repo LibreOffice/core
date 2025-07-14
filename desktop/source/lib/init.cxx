@@ -5152,6 +5152,8 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
             sWindowId = sCurrentShellId + "formulabar";
         if (nWindowId == static_cast<unsigned long long int>(-4))
             sWindowId = sCurrentShellId + "addressinputfield";
+        if (nWindowId == static_cast<unsigned long long int>(-5))
+            sWindowId = sCurrentShellId + "quickfind";
 
         // dialogs send own id but notebookbar and sidebar controls are remembered by SfxViewShell id
         if (jsdialog::ExecuteAction(sWindowId, sControlId, aMap))
@@ -5160,6 +5162,8 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         if (jsdialog::ExecuteAction(sCurrentShellId + "sidebar", sControlId, aMap))
             return;
         if (jsdialog::ExecuteAction(sCurrentShellId + "navigator", sControlId, aMap))
+            return;
+        if (jsdialog::ExecuteAction(sCurrentShellId + "quickfind", sControlId, aMap))
             return;
         if (jsdialog::ExecuteAction(sCurrentShellId + "notebookbar", sControlId, aMap))
             return;

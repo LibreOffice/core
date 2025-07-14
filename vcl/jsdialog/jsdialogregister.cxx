@@ -16,7 +16,7 @@ OUString JSInstanceBuilder::getMapIdFromWindowId() const
 {
     if (m_sTypeOfJSON == "sidebar" || m_sTypeOfJSON == "notebookbar"
         || m_sTypeOfJSON == "formulabar" || m_sTypeOfJSON == "addressinputfield"
-        || m_sTypeOfJSON == "navigator")
+        || m_sTypeOfJSON == "navigator" || m_sTypeOfJSON == "quickfind")
     {
         return OUString::number(m_nWindowId) + m_sTypeOfJSON;
     }

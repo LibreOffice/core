@@ -27,7 +27,7 @@
 #include "PageFormatPanel.hxx"
 #include "PageHeaderPanel.hxx"
 #include "PageFooterPanel.hxx"
-#include "QuickFindPanel.hxx"
+#include <QuickFindPanel.hxx>
 #include "WrapPropertyPanel.hxx"
 #include "WriterInspectorTextPanel.hxx"
 #include "TableEditPanel.hxx"

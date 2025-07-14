@@ -224,6 +224,7 @@
 #define STR_DELETE_STYLE_USED                   NC_("STR_DELETE_STYLE_USED", "One or more of the selected styles is in use in this document.\nIf you will delete it, text or objects using these styles will revert to the parent style.\nDo you still wish to delete these styles?\n")
 #define STR_DELETE_STYLE                        NC_("STR_DELETE_STYLE", "Styles in use: ")
 #define STR_SID_NAVIGATOR                       NC_("STR_SID_NAVIGATOR", "Navigator")
+#define STR_SID_QUICKFIND                       NC_("STR_SID_QUICKFIND", "Quick Find")
 #define STR_ERROR_WRONG_CONFIRM                 NC_("STR_ERROR_WRONG_CONFIRM", "Faulty password confirmation")
 #define STR_PDF_EXPORT_SEND                     NC_("STR_PDF_EXPORT_SEND", "Send")
 #define STR_FONT_TABPAGE                        NC_("STR_FONT_TABPAGE", "Font")

@@ -10,8 +10,9 @@
 
 #pragma once
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <sfx2/quickfind.hxx>
 #include <svx/svxdlg.hxx>
-#include <wrtsh.hxx>
+#include "wrtsh.hxx"
 #include <sfx2/weldutils.hxx>
 
 namespace sw::sidebar
@@ -51,6 +52,7 @@ public:
     virtual ~QuickFindPanel() override;
 
 private:
+    friend class QuickFindPanelWindow;
     std::vector<std::unique_ptr<SwPaM>> m_vPaMs;
 
     std::unique_ptr<weld::Entry> m_xSearchFindEntry;
@@ -83,6 +85,24 @@ private:
     DECL_LINK(FindAndReplaceToolbarClickedHandler, const OUString&, void);
 
     void FillSearchFindsList();
+};
+
+class QuickFindPanelWrapper : public SfxQuickFindWrapper
+{
+public:
+    QuickFindPanelWrapper(vcl::Window* pParent, sal_uInt16 nId, SfxBindings* pBindings,
+                          SfxChildWinInfo* pInfo);
+    SFX_DECL_CHILDWINDOW(QuickFindPanelWrapper);
+};
+
+class QuickFindPanelWindow : public SfxQuickFind
+{
+private:
+    std::unique_ptr<QuickFindPanel> m_xQuickFindPanel;
+
+public:
+    QuickFindPanelWindow(SfxBindings* _pBindings, SfxChildWindow* pChildWin, vcl::Window* pParent,
+                         SfxChildWinInfo* pInfo);
 };
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

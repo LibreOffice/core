@@ -33,6 +33,11 @@ interface Window
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
     ]
+    SID_QUICKFIND
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
     SID_INFOBAR // status(final|play)
     [
         ExecMethod = ChildWindowExecute ;
