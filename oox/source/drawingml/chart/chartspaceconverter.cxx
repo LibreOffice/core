@@ -28,6 +28,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/token/properties.hxx>
@@ -320,6 +321,15 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         Reference< css::chart::XChartDocument > xChartDoc( getChartDocument(), UNO_QUERY );
         PropertySet aProps( xChartDoc->getDiagram() );
         aProps.setProperty( PROP_ExternalData , uno::Any(mrModel.maSheetPath) );
+    }
+
+    if (mrModel.mbDate1904) {
+        util::DateTime aNullDate(0,0,0,0,1,1,1904, false);
+        Any aAny;
+        aAny <<= aNullDate;
+        Reference< css::chart::XChartDocument > xChartDoc( getChartDocument(), UNO_QUERY );
+        Reference< beans::XPropertySet > xDocPropSet(xChartDoc, UNO_QUERY );
+        xDocPropSet->setPropertyValue(u"NullDate"_ustr, aAny);
     }
 }
 

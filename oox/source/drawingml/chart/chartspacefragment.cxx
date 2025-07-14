@@ -60,6 +60,9 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
         case C_TOKEN( chartSpace ):
             switch( nElement )
             {
+                case C_TOKEN ( date1904 ):
+                    mrModel.mbDate1904 = rAttribs.getBool( XML_val, false );
+                    return nullptr;
                 case C_TOKEN( chart ):
                     return this;
                 case C_TOKEN( spPr ):

@@ -29,7 +29,8 @@ ChartSpaceModel::ChartSpaceModel(bool bMSO2007Doc) :
     mbAutoTitleDel( !bMSO2007Doc ), // difference between OOXML spec and MSO 2007
     mbPlotVisOnly( !bMSO2007Doc ),
     mbShowLabelsOverMax( !bMSO2007Doc ),
-    mbPivotChart( false )
+    mbPivotChart( false ),
+    mbDate1904(false)
 {
 }
 

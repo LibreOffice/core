@@ -626,6 +626,72 @@ Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPro
     return aRet;
 }
 
+namespace {
+
+//PROP_DOCUMENT_NULL_DATE
+class WrappedNullDateProperty : public WrappedProperty
+{
+public:
+    explicit WrappedNullDateProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
+
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+
+    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+
+private: //member
+    std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
+};
+
+}
+
+WrappedNullDateProperty::WrappedNullDateProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
+            : WrappedProperty(u"NullDate"_ustr, OUString())
+            , m_spChart2ModelContact(std::move( spChart2ModelContact ))
+{
+}
+
+void WrappedNullDateProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
+{
+    util::DateTime aDateTime;
+    if( ! (rOuterValue >>= aDateTime) )
+        throw lang::IllegalArgumentException(u"Property NullDate requires value of type util::DateTime"_ustr, nullptr, 0 );
+
+    try
+    {
+        m_spChart2ModelContact->getDocumentModel()->changeNullDate(aDateTime);
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
+Any WrappedNullDateProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
+{
+    Any aRet;
+    try
+    {
+        std::optional<css::util::DateTime> moDateTime = m_spChart2ModelContact->getDocumentModel()->getNullDate();
+        if (moDateTime)
+        {
+            aRet <<= *moDateTime;
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+    return aRet;
+}
+
+Any WrappedNullDateProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
+{
+    Any aRet;
+    return aRet;
+}
+
 ChartDocumentWrapper::ChartDocumentWrapper(
     const Reference< uno::XComponentContext > & xContext ) :
         m_spChart2ModelContact( std::make_shared<Chart2ModelContact>( xContext ) ),
@@ -1401,7 +1467,7 @@ std::vector< std::unique_ptr<WrappedProperty> > ChartDocumentWrapper::createWrap
     aWrappedProperties.emplace_back( new WrappedBaseDiagramProperty( *this ) );
     aWrappedProperties.emplace_back( new WrappedAdditionalShapesProperty( *this ) );
     aWrappedProperties.emplace_back( new WrappedRefreshAddInAllowedProperty( *this ) );
-    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"NullDate"_ustr,Any() ) ); // i99104
+    aWrappedProperties.emplace_back( new WrappedNullDateProperty( m_spChart2ModelContact ) );
     aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"EnableComplexChartTypes"_ustr, uno::Any(true) ) );
     aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"EnableDataTableDialog"_ustr, uno::Any(true) ) );
 

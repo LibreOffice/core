@@ -61,6 +61,7 @@ struct ChartSpaceModel
     bool                mbShowLabelsOverMax;/// True = show labels over chart maximum.
     bool                mbPivotChart;       /// True = pivot chart.
     DataSourceRef       maCxData;           /// Data for Chartex.
+    bool                mbDate1904;         /// True = default is 1904 date system
 
     explicit            ChartSpaceModel(bool bMSO2007Doc);
                         ~ChartSpaceModel();

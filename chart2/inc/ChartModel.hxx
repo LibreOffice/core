@@ -24,6 +24,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -185,6 +186,8 @@ private:
 
     ChartColorPaletteType m_eColorPaletteType;
     sal_uInt32 m_nColorPaletteIndex;
+
+    std::optional<css::util::DateTime> m_aNullDate;
 
 private:
     //private methods
@@ -519,6 +522,9 @@ public:
     std::optional<ChartColorPalette> getCurrentColorPalette() const;
     void applyColorPaletteToDataSeries(const ChartColorPalette& rColorPalette);
     void onDocumentThemeChanged();
+
+    std::optional<css::util::DateTime> getNullDate() const;
+    void changeNullDate(const css::util::DateTime& aNullDate);
 
 private:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
