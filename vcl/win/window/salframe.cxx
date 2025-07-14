@@ -947,8 +947,6 @@ bool WinSalFrame::ReleaseFrameGraphicsDC( WinSalGraphics* pGraphics )
     pGraphics->setHDC(nullptr);
     SendMessageW( pSalData->mpInstance->mhComWnd, SAL_MSG_RELEASEDC,
         reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC) );
-    if ( pGraphics == mpThreadGraphics )
-        pSalData->mnCacheDCInUse--;
     return true;
 }
 
@@ -1009,7 +1007,6 @@ WinSalFrame::~WinSalFrame()
 
 bool WinSalFrame::InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND hWnd )
 {
-    SalData* pSalData = GetSalData();
     assert( pGraphics );
     pGraphics->setHWND( hWnd );
 
@@ -1021,9 +1018,6 @@ bool WinSalFrame::InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND 
 
     if ( !hDC )
         return false;
-
-    if ( pGraphics == mpThreadGraphics )
-        pSalData->mnCacheDCInUse++;
     return true;
 }
 
@@ -1041,11 +1035,6 @@ SalGraphics* WinSalFrame::AcquireGraphics()
     // WM_ERASEBACKGROUND message
     if ( !pSalData->mpInstance->IsMainThread() )
     {
-        // We use only three CacheDC's for all threads, because W9x is limited
-        // to max. 5 Cache DC's per thread
-        if ( pSalData->mnCacheDCInUse >= 3 )
-            return nullptr;
-
         if ( !mpThreadGraphics )
             mpThreadGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
         pGraphics = mpThreadGraphics;
@@ -1502,8 +1491,6 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
     HPEN    hPen    = nullptr;
     HBRUSH  hBrush  = nullptr;
 
-    int oldCount = pSalData->mnCacheDCInUse;
-
     // release the thread DC
     if ( mpThreadGraphics )
     {
@@ -1550,8 +1537,6 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
                 SelectObject( hDC, hPen );
             if( hBrush )
                 SelectObject( hDC, hBrush );
-
-            SAL_WARN_IF( oldCount != pSalData->mnCacheDCInUse, "vcl", "WinSalFrame::SetParent() hDC count corrupted");
         }
     }
 

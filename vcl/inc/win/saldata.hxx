@@ -113,7 +113,6 @@ public:
     sal_uInt16              mnStockPenCount;        // count of static pens
     sal_uInt16              mnStockBrushCount;      // count of static brushes
     WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent that should be processed by SalObj-Hook
-    BYTE                    mnCacheDCInUse;         // count of CacheDC in use
     bool                    mbObjClassInit;         // is SALOBJECTCLASS initialised
     DWORD                   mnAppThreadId;          // Id from Application-Thread
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none

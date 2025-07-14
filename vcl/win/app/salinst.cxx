@@ -269,7 +269,6 @@ SalData::SalData()
     mnStockPenCount = 0;        // count of static pens
     mnStockBrushCount = 0;      // count of static brushes
     mnSalObjWantKeyEvt = 0;     // KeyEvent for the SalObj hook
-    mnCacheDCInUse = 0;         // count of CacheDC in use
     mbObjClassInit = false;     // is SALOBJECTCLASS initialised
     mnAppThreadId = 0;          // Id from Application-Thread
     mpFirstIcon = nullptr;      // icon cache, points to first icon, NULL if none
