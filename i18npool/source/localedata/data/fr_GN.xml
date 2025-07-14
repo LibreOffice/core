@@ -20,7 +20,7 @@
     </Country>
   </LC_INFO>
   <LC_CTYPE ref="fr_BF" />
-  <LC_FORMAT ref="fr_BF" replaceFrom="[CURRENCY]" replaceTo="[$FG-0x940C]" />
+  <LC_FORMAT ref="fr_BF" replaceFrom="[CURRENCY]" replaceTo="[$FG-940C]" />
   <LC_COLLATION ref="fr_BF" />
   <LC_SEARCH ref="fr_BF" />
   <LC_INDEX ref="fr_BF" />
