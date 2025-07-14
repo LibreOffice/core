@@ -1329,12 +1329,11 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     auto pDelegatorArguments = aDelegatorArguments.getArray();
     pDelegatorArguments[nArgsLen++] <<= xInfoSet;
 
-    uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
-    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper = SvXMLGraphicHelper::Create(_xStorageToSaveTo,SvXMLGraphicHelperMode::Write);
-    xGraphicStorageHandler = xGraphicHelper.get();
-    xGraphicHelper.clear();
-    xObjectResolver = SvXMLEmbeddedObjectHelper::Create( _xStorageToSaveTo,*this, SvXMLEmbeddedObjectHelperMode::Write ).get();
+    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler
+        = SvXMLGraphicHelper::Create(_xStorageToSaveTo, SvXMLGraphicHelperMode::Write);
+    uno::Reference<document::XEmbeddedObjectResolver> xObjectResolver
+        = SvXMLEmbeddedObjectHelper::Create(_xStorageToSaveTo, *this,
+                                            SvXMLEmbeddedObjectHelperMode::Write);
 
     pDelegatorArguments[nArgsLen++] <<= xGraphicStorageHandler;
     pDelegatorArguments[nArgsLen++] <<= xObjectResolver;
