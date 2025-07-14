@@ -92,8 +92,6 @@ public:
 
 private:
     void ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild );
-    bool InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND hWnd );
-    bool ReleaseFrameGraphicsDC( WinSalGraphics* pGraphics );
 
 public:
     WinSalFrame();
