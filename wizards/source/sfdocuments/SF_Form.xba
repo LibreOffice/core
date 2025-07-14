@@ -1263,7 +1263,12 @@ Try:
 					_FormType = ISBASEFORM
 					&apos;	Make a new SF_FormDocument instance
 					Set [_Parent] = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.FormDocument&quot;, oParent)
-					Set _FormDocument = [_Parent]._FormDocument
+					With [_Parent]
+						Set _FormDocument = ._FormDocument
+						_FormDocumentName = ._HierarchicalName
+						Set _BaseComponent = ._BaseComponent
+						Set _Component = ._Component
+					End With
 				ElseIf oParent.Identifier = &quot;com.sun.star.text.TextDocument&quot; Then
 					_FormType = ISDOCFORM
 					Set [_Parent] = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.Document&quot;, oParent)
