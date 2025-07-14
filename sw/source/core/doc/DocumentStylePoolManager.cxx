@@ -148,18 +148,15 @@ namespace
     void lcl_SetDfltFont( DefaultFontType nLatinFntType, DefaultFontType nCJKFntType,
                             DefaultFontType nCTLFntType, SfxItemSet& rSet )
     {
-        static struct {
+        const struct {
             sal_uInt16 nResLngId;
             sal_uInt16 nResFntId;
             DefaultFontType nFntType;
         } aArr[ 3 ] = {
-            { RES_CHRATR_LANGUAGE, RES_CHRATR_FONT, static_cast<DefaultFontType>(0) },
-            { RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_FONT, static_cast<DefaultFontType>(0) },
-            { RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_FONT, static_cast<DefaultFontType>(0) }
+            { RES_CHRATR_LANGUAGE, RES_CHRATR_FONT, nLatinFntType },
+            { RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_FONT, nCJKFntType },
+            { RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_FONT, nCTLFntType }
         };
-        aArr[0].nFntType = nLatinFntType;
-        aArr[1].nFntType = nCJKFntType;
-        aArr[2].nFntType = nCTLFntType;
 
         for(const auto & n : aArr)
         {
