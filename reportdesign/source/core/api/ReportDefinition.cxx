@@ -2119,38 +2119,29 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
 
 uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames()
 {
-    static const std::u16string_view aSvxComponentServiceNameList[] =
-    {
-        u"com.sun.star.form.component.FixedText",
-        u"com.sun.star.form.component.DatabaseImageControl",
-        u"com.sun.star.style.PageStyle",
-        u"com.sun.star.style.GraphicStyle",
-        u"com.sun.star.style.FrameStyle",
-        u"com.sun.star.drawing.Defaults",
-        u"com.sun.star.document.ImportEmbeddedObjectResolver",
-        u"com.sun.star.document.ExportEmbeddedObjectResolver",
-        u"com.sun.star.document.ImportGraphicStorageHandler",
-        u"com.sun.star.document.ExportGraphicStorageHandler",
-        u"com.sun.star.chart2.data.DataProvider",
-        u"com.sun.star.xml.NamespaceMap",
-        u"com.sun.star.document.Settings",
-        u"com.sun.star.drawing.GradientTable",
-        u"com.sun.star.drawing.HatchTable",
-        u"com.sun.star.drawing.BitmapTable",
-        u"com.sun.star.drawing.TransparencyGradientTable",
-        u"com.sun.star.drawing.DashTable",
-        u"com.sun.star.drawing.MarkerTable"
-    };
-
-    static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
-
-    uno::Sequence< OUString > aSeq( nSvxComponentServiceNameListCount );
-    OUString* pStrings = aSeq.getArray();
-    for( sal_uInt16 nIdx = 0; nIdx < nSvxComponentServiceNameListCount; nIdx++ )
-        pStrings[nIdx] = aSvxComponentServiceNameList[nIdx];
+    static const uno::Sequence<OUString> aSvxComponentServiceNameSeq
+        = { u"com.sun.star.form.component.FixedText"_ustr,
+            u"com.sun.star.form.component.DatabaseImageControl"_ustr,
+            u"com.sun.star.style.PageStyle"_ustr,
+            u"com.sun.star.style.GraphicStyle"_ustr,
+            u"com.sun.star.style.FrameStyle"_ustr,
+            u"com.sun.star.drawing.Defaults"_ustr,
+            u"com.sun.star.document.ImportEmbeddedObjectResolver"_ustr,
+            u"com.sun.star.document.ExportEmbeddedObjectResolver"_ustr,
+            u"com.sun.star.document.ImportGraphicStorageHandler"_ustr,
+            u"com.sun.star.document.ExportGraphicStorageHandler"_ustr,
+            u"com.sun.star.chart2.data.DataProvider"_ustr,
+            u"com.sun.star.xml.NamespaceMap"_ustr,
+            u"com.sun.star.document.Settings"_ustr,
+            u"com.sun.star.drawing.GradientTable"_ustr,
+            u"com.sun.star.drawing.HatchTable"_ustr,
+            u"com.sun.star.drawing.BitmapTable"_ustr,
+            u"com.sun.star.drawing.TransparencyGradientTable"_ustr,
+            u"com.sun.star.drawing.DashTable"_ustr,
+            u"com.sun.star.drawing.MarkerTable"_ustr };
 
     uno::Sequence< OUString > aParentSeq( SvxUnoDrawMSFactory::getAvailableServiceNames() );
-    return comphelper::concatSequences( aParentSeq, aSeq );
+    return comphelper::concatSequences(aParentSeq, aSvxComponentServiceNameSeq);
 }
 
 // XShape
