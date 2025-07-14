@@ -648,6 +648,9 @@ void PathSettings::impl_storePath(std::unique_lock<std::mutex>& g, const PathSet
     PathInfo aResubstPath(aPath);
     impl_subst(g, aResubstPath, true);
 
+    // unlock because writeRelativeKey and friends might trigger a listener which calls back into us
+    g.unlock();
+
     // update new configuration
     if (! aResubstPath.bIsSinglePath)
     {
@@ -676,6 +679,8 @@ void PathSettings::impl_storePath(std::unique_lock<std::mutex>& g, const PathSet
         xProps->setPropertyValue(aResubstPath.sPathName, css::uno::Any());
         ::comphelper::ConfigurationHelper::flush(xCfgOld);
     }
+
+    g.lock();
 }
 
 // static
