@@ -255,7 +255,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformExtractSlide
           "\"Click to add Text\"]}}}, \"Objects 3\": { \"TextCount\": 1, \"Texts\": { \"Text 0\": "
           "{ \"ParaCount\": 1, \"Paragraphs\": [ \"Click to add Text\"]}}}, \"Objects 4\": { "
           "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
-          "\"Click to add Text\"]}}}}}, \"Slide 4\": { \"SlideName\": \"Slide 6\", "
+          "\"Click to add Text\"]}}}}}, \"Slide 4\": { \"SlideName\": \"Slide 5\", "
           "\"MasterSlideName\": \"Topic_Separator_Purple\", \"LayoutId\": 3, \"LayoutName\": "
           "\"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, \"Objects\": { \"Objects 0\": { "
           "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"With "
