@@ -47,6 +47,7 @@
 #include <svx/fmshell.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/sizeitem.hxx>
+#include <editeng/paperinf.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/dispatch.hxx>
@@ -649,6 +650,68 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 rReq.Done();
             }
             break;
+            case SID_SC_ATTR_PAGE_SIZE:
+            {
+                const SfxUInt16Item* pPaperFormatInt
+                    = rReq.GetArg<SfxUInt16Item>(SID_SC_ATTR_PAGE_SIZE);
+                if (!pPaperFormatInt)
+                    break;
+
+                Paper ePaper = static_cast<Paper>(pPaperFormatInt->GetValue());
+                if (ePaper >= NUM_PAPER_ENTRIES
+                    && ePaper != PAPER_USER) // PAPER_USER is a valid special case
+                {
+                    break;
+                }
+
+                Size aNewSize = SvxPaperInfo::GetPaperSize(ePaper);
+
+                ScViewData* pViewData = GetViewData();
+                if (!pViewData)
+                    break;
+                ScDocument& rDoc = GetDocument();
+                const SCTAB nTab = pViewData->GetTabNo();
+                OUString aStyleName = rDoc.GetPageStyle(nTab);
+                ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
+                SfxStyleSheetBase* pStyleSheet = pStylePool->Find(aStyleName, SfxStyleFamily::Page);
+                if (!pStyleSheet)
+                    break;
+
+                SfxItemSet& rSet = pStyleSheet->GetItemSet();
+                const SvxSizeItem& rOldSizeItem = rSet.Get(ATTR_PAGE_SIZE);
+
+                // Only apply if the size is actually different
+                if (aNewSize == rOldSizeItem.GetSize())
+                {
+                    rReq.Done();
+                    break;
+                }
+
+                SvxSizeItem aNewSizeItem(ATTR_PAGE_SIZE, aNewSize);
+                rSet.Put(aNewSizeItem);
+
+                // Also update the orientation flag to be consistent with the new dimensions
+                const SvxPageItem& rOldPageItem = rSet.Get(ATTR_PAGE);
+                bool bNewIsLandscape = aNewSize.Width() > aNewSize.Height();
+                if (bNewIsLandscape != rOldPageItem.IsLandscape())
+                {
+                    SvxPageItem aNewPageItem(ATTR_PAGE);
+                    aNewPageItem.SetLandscape(bNewIsLandscape);
+                    rSet.Put(aNewPageItem);
+                }
+
+                SetDocumentModified();
+                PostPaintGridAll();
+
+                if (pBindings)
+                {
+                    pBindings->Invalidate(SID_ATTR_PAGE_SIZE);
+                    pBindings->Invalidate(SID_ATTR_PAGE_ORIENTATION);
+                }
+
+                rReq.Done();
+            }
+            break;
         case SID_SC_ATTR_PAGE_MARGIN:
         {
             const SvxLRSpaceItem* pLR = rReq.GetArg<SvxLRSpaceItem>(SID_ATTR_LRSPACE);
@@ -711,7 +774,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
         case SID_AUTO_STYLE:
             OSL_FAIL("use ScAutoStyleHint instead of SID_AUTO_STYLE");
             break;
-
         case SID_GET_COLORLIST:
             {
                 const SvxColorListItem* pColItem = GetItem(SID_COLOR_TABLE);
@@ -2413,26 +2475,27 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 break;
             case SID_ATTR_PAGE_ORIENTATION:
             case SID_SC_ATTR_PAGE_MARGIN:
-            {
-                ScViewData* pViewData = GetViewData();
-                if (pViewData)
+            case SID_SC_ATTR_PAGE_SIZE:
                 {
-                    ScDocument& rDoc = GetDocument();
-                    const SCTAB nTab = pViewData->GetTabNo();
-                    OUString aStyleName = rDoc.GetPageStyle(nTab);
-                    ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
-                    if (pStylePool)
+                    ScViewData* pViewData = GetViewData();
+                    if (pViewData)
                     {
-                        SfxStyleSheetBase* pStyleSheet
-                            = pStylePool->Find(aStyleName, SfxStyleFamily::Page);
-                        if (pStyleSheet)
+                        ScDocument& rDoc = GetDocument();
+                        const SCTAB nTab = pViewData->GetTabNo();
+                        OUString aStyleName = rDoc.GetPageStyle(nTab);
+                        ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
+                        if (pStylePool)
                         {
-                            const SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
-                            rSet.Put(rStyleSet.Get(ATTR_PAGE));
+                            SfxStyleSheetBase* pStyleSheet
+                                = pStylePool->Find(aStyleName, SfxStyleFamily::Page);
+                            if (pStyleSheet)
+                            {
+                                const SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
+                                rSet.Put(rStyleSet.Get(ATTR_PAGE));
+                            }
                         }
                     }
                 }
-            }
             break;
             case SID_OPEN_HYPERLINK:
                 {
