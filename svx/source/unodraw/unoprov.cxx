@@ -886,7 +886,7 @@ SvxUnoPropertyMapProvider& getSvxMapProvider()
 SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 {
     for(sal_uInt16 i=0;i<SVXMAP_END; i++)
-        aSetArr[i] = nullptr;
+        m_aSetArr[i] = nullptr;
 }
 
 SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
@@ -897,46 +897,46 @@ SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
 std::span<const SfxItemPropertyMapEntry> SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
 {
     assert(nPropertyId < SVXMAP_END);
-    if(aMapArr[nPropertyId].empty()) {
+    if(m_aMapArr[nPropertyId].empty()) {
         switch(nPropertyId) {
-            case SVXMAP_SHAPE: aMapArr[SVXMAP_SHAPE]=ImplGetSvxShapePropertyMap(); break;
-            case SVXMAP_CONNECTOR: aMapArr[SVXMAP_CONNECTOR]=ImplGetSvxConnectorPropertyMap(); break;
-            case SVXMAP_DIMENSIONING: aMapArr[SVXMAP_DIMENSIONING]=ImplGetSvxDimensioningPropertyMap(); break;
-            case SVXMAP_CIRCLE: aMapArr[SVXMAP_CIRCLE]=ImplGetSvxCirclePropertyMap(); break;
-            case SVXMAP_POLYPOLYGON: aMapArr[SVXMAP_POLYPOLYGON]=ImplGetSvxPolyPolygonPropertyMap(); break;
-            case SVXMAP_GRAPHICOBJECT: aMapArr[SVXMAP_GRAPHICOBJECT]=ImplGetSvxGraphicObjectPropertyMap(); break;
-            case SVXMAP_3DSCENEOBJECT: aMapArr[SVXMAP_3DSCENEOBJECT]=ImplGetSvx3DSceneObjectPropertyMap(); break;
-            case SVXMAP_3DCUBEOBJECT: aMapArr[SVXMAP_3DCUBEOBJECT]=ImplGetSvx3DCubeObjectPropertyMap(); break;
-            case SVXMAP_3DSPHEREOBJECT: aMapArr[SVXMAP_3DSPHEREOBJECT]=ImplGetSvx3DSphereObjectPropertyMap(); break;
-            case SVXMAP_3DLATHEOBJECT: aMapArr[SVXMAP_3DLATHEOBJECT]=ImplGetSvx3DLatheObjectPropertyMap(); break;
-            case SVXMAP_3DEXTRUDEOBJECT: aMapArr[SVXMAP_3DEXTRUDEOBJECT]=ImplGetSvx3DExtrudeObjectPropertyMap(); break;
-            case SVXMAP_3DPOLYGONOBJECT: aMapArr[SVXMAP_3DPOLYGONOBJECT]=ImplGetSvx3DPolygonObjectPropertyMap(); break;
-            case SVXMAP_ALL: aMapArr[SVXMAP_ALL]=ImplGetSvxAllPropertyMap(); break;
-            case SVXMAP_GROUP: aMapArr[SVXMAP_GROUP]=ImplGetSvxGroupPropertyMap(); break;
-            case SVXMAP_CAPTION: aMapArr[SVXMAP_CAPTION]=ImplGetSvxCaptionPropertyMap(); break;
-            case SVXMAP_OLE2: aMapArr[SVXMAP_OLE2]=ImplGetSvxOle2PropertyMap(); break;
-            case SVXMAP_PLUGIN: aMapArr[SVXMAP_PLUGIN]=ImplGetSvxPluginPropertyMap(); break;
-            case SVXMAP_FRAME: aMapArr[SVXMAP_FRAME]=ImplGetSvxFramePropertyMap(); break;
-            case SVXMAP_APPLET: aMapArr[SVXMAP_APPLET]=ImplGetSvxAppletPropertyMap(); break;
-            case SVXMAP_CONTROL: aMapArr[SVXMAP_CONTROL]=ImplGetSvxControlShapePropertyMap(); break;
-            case SVXMAP_TEXT: aMapArr[SVXMAP_TEXT]=ImplGetSvxTextShapePropertyMap(); break;
-            case SVXMAP_CUSTOMSHAPE: aMapArr[SVXMAP_CUSTOMSHAPE]=ImplGetSvxCustomShapePropertyMap(); break;
-            case SVXMAP_MEDIA: aMapArr[SVXMAP_MEDIA]=ImplGetSvxMediaShapePropertyMap(); break;
-            case SVXMAP_TABLE: aMapArr[SVXMAP_TABLE]=ImplGetSvxTableShapePropertyMap(); break;
-            case SVXMAP_PAGE: aMapArr[SVXMAP_PAGE] = ImplGetSvxPageShapePropertyMap(); break;
+            case SVXMAP_SHAPE: m_aMapArr[SVXMAP_SHAPE]=ImplGetSvxShapePropertyMap(); break;
+            case SVXMAP_CONNECTOR: m_aMapArr[SVXMAP_CONNECTOR]=ImplGetSvxConnectorPropertyMap(); break;
+            case SVXMAP_DIMENSIONING: m_aMapArr[SVXMAP_DIMENSIONING]=ImplGetSvxDimensioningPropertyMap(); break;
+            case SVXMAP_CIRCLE: m_aMapArr[SVXMAP_CIRCLE]=ImplGetSvxCirclePropertyMap(); break;
+            case SVXMAP_POLYPOLYGON: m_aMapArr[SVXMAP_POLYPOLYGON]=ImplGetSvxPolyPolygonPropertyMap(); break;
+            case SVXMAP_GRAPHICOBJECT: m_aMapArr[SVXMAP_GRAPHICOBJECT]=ImplGetSvxGraphicObjectPropertyMap(); break;
+            case SVXMAP_3DSCENEOBJECT: m_aMapArr[SVXMAP_3DSCENEOBJECT]=ImplGetSvx3DSceneObjectPropertyMap(); break;
+            case SVXMAP_3DCUBEOBJECT: m_aMapArr[SVXMAP_3DCUBEOBJECT]=ImplGetSvx3DCubeObjectPropertyMap(); break;
+            case SVXMAP_3DSPHEREOBJECT: m_aMapArr[SVXMAP_3DSPHEREOBJECT]=ImplGetSvx3DSphereObjectPropertyMap(); break;
+            case SVXMAP_3DLATHEOBJECT: m_aMapArr[SVXMAP_3DLATHEOBJECT]=ImplGetSvx3DLatheObjectPropertyMap(); break;
+            case SVXMAP_3DEXTRUDEOBJECT: m_aMapArr[SVXMAP_3DEXTRUDEOBJECT]=ImplGetSvx3DExtrudeObjectPropertyMap(); break;
+            case SVXMAP_3DPOLYGONOBJECT: m_aMapArr[SVXMAP_3DPOLYGONOBJECT]=ImplGetSvx3DPolygonObjectPropertyMap(); break;
+            case SVXMAP_ALL: m_aMapArr[SVXMAP_ALL]=ImplGetSvxAllPropertyMap(); break;
+            case SVXMAP_GROUP: m_aMapArr[SVXMAP_GROUP]=ImplGetSvxGroupPropertyMap(); break;
+            case SVXMAP_CAPTION: m_aMapArr[SVXMAP_CAPTION]=ImplGetSvxCaptionPropertyMap(); break;
+            case SVXMAP_OLE2: m_aMapArr[SVXMAP_OLE2]=ImplGetSvxOle2PropertyMap(); break;
+            case SVXMAP_PLUGIN: m_aMapArr[SVXMAP_PLUGIN]=ImplGetSvxPluginPropertyMap(); break;
+            case SVXMAP_FRAME: m_aMapArr[SVXMAP_FRAME]=ImplGetSvxFramePropertyMap(); break;
+            case SVXMAP_APPLET: m_aMapArr[SVXMAP_APPLET]=ImplGetSvxAppletPropertyMap(); break;
+            case SVXMAP_CONTROL: m_aMapArr[SVXMAP_CONTROL]=ImplGetSvxControlShapePropertyMap(); break;
+            case SVXMAP_TEXT: m_aMapArr[SVXMAP_TEXT]=ImplGetSvxTextShapePropertyMap(); break;
+            case SVXMAP_CUSTOMSHAPE: m_aMapArr[SVXMAP_CUSTOMSHAPE]=ImplGetSvxCustomShapePropertyMap(); break;
+            case SVXMAP_MEDIA: m_aMapArr[SVXMAP_MEDIA]=ImplGetSvxMediaShapePropertyMap(); break;
+            case SVXMAP_TABLE: m_aMapArr[SVXMAP_TABLE]=ImplGetSvxTableShapePropertyMap(); break;
+            case SVXMAP_PAGE: m_aMapArr[SVXMAP_PAGE] = ImplGetSvxPageShapePropertyMap(); break;
 
             default:
                 OSL_FAIL( "Unknown property map for SvxUnoPropertyMapProvider!" );
         }
 //      Sort(nPropertyId);
     }
-    return aMapArr[nPropertyId];
+    return m_aMapArr[nPropertyId];
 }
 const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(sal_uInt16 nPropertyId, SfxItemPool& rPool)
 {
-    if( !aSetArr[nPropertyId] )
-        aSetArr[nPropertyId].reset(new SvxItemPropertySet( GetMap( nPropertyId ), rPool ));
-    return aSetArr[nPropertyId].get();
+    if( !m_aSetArr[nPropertyId] )
+        m_aSetArr[nPropertyId].reset(new SvxItemPropertySet( GetMap( nPropertyId ), rPool ));
+    return m_aSetArr[nPropertyId].get();
 }
 
 /** maps the vcl MapUnit enum to an API constant MeasureUnit.
