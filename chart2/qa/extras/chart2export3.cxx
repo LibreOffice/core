@@ -13,6 +13,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 using uno::Reference;
 using beans::XPropertySet;
@@ -887,13 +888,62 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testODSFormattedChartTitles)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf148117)
 {
-    // The document contains a line chart with "Between tick marks" X axis position.
     loadFromFile(u"pptx/tdf148117.pptx");
-    // Check formatted strings after export.
     save(u"Impress MS PowerPoint 2007 XML"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     assertXPath(pXmlDoc, "/c:chartSpace/c:date1904", "val", u"0");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, test1904NullDate)
+{
+    loadFromFile(u"pptx/1904NullDate.pptx");
+    saveAndReload(u"Impress MS PowerPoint 2007 XML"_ustr);
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    Reference<beans::XPropertySet> xPropSet(xChartDoc, uno::UNO_QUERY);
+
+    util::DateTime aDateTime;
+    xPropSet->getPropertyValue("NullDate") >>= aDateTime;
+
+    CPPUNIT_ASSERT_EQUAL(1904, static_cast<int>(aDateTime.Year));
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aDateTime.Month));
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aDateTime.Day));
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapes.is());
+    OUString sAxisShapeName = u"CID/D=0:CS=0:Axis=0,0"_ustr;
+    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, sAxisShapeName,
+        // Axis occurs twice in chart xshape representation so need to get the one related to labels
+        [](const uno::Reference<drawing::XShape>& rXShape) -> bool
+        {
+            uno::Reference<drawing::XShapes> xAxisShapes(rXShape, uno::UNO_QUERY);
+            CPPUNIT_ASSERT(xAxisShapes.is());
+            uno::Reference<drawing::XShape> xChildShape(xAxisShapes->getByIndex(0), uno::UNO_QUERY);
+            uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xChildShape, uno::UNO_QUERY_THROW);
+            return (xShapeDescriptor->getShapeType() == "com.sun.star.drawing.TextShape");
+        });
+    CPPUNIT_ASSERT(xXAxis.is());
+
+    uno::Reference<container::XIndexAccess> xIndexAccess(xXAxis, UNO_QUERY_THROW);
+    sal_Int32 nAxisLabelsCount = xIndexAccess->getCount();
+
+    // Check axis labels's text
+    std::vector<OUString> aExpectedLabels = {
+        u"1/1/2006"_ustr,
+        u"1/1/2007"_ustr,
+        u"1/1/2008"_ustr,
+        u"1/1/2009"_ustr,
+    };
+    for (sal_Int32 nLabelIndex = 0; nLabelIndex < nAxisLabelsCount; ++nLabelIndex)
+    {
+        // Check text
+        uno::Reference<text::XTextRange> xLabel(xIndexAccess->getByIndex(nLabelIndex), uno::UNO_QUERY);
+        OUString aLabelName = xLabel->getString();
+        CPPUNIT_ASSERT_EQUAL(aExpectedLabels[nLabelIndex], aLabelName);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

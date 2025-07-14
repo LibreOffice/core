@@ -1264,6 +1264,10 @@ Reference< util::XNumberFormatsSupplier > const & ChartModel::getNumberFormatsSu
         if( !m_xOwnNumberFormatsSupplier.is() )
         {
             m_apSvNumberFormatter.reset( new SvNumberFormatter( m_xContext, LANGUAGE_SYSTEM ) );
+            if (m_aNullDate)
+            {
+                m_apSvNumberFormatter->ChangeNullDate(m_aNullDate->Day, m_aNullDate->Month, m_aNullDate->Year);
+            }
             m_xOwnNumberFormatsSupplier = new SvNumberFormatsSupplierObj( m_apSvNumberFormatter.get() );
             //pOwnNumberFormatter->ChangeStandardPrec( 15 ); todo?
         }
@@ -1603,6 +1607,23 @@ void ChartModel::onDocumentThemeChanged()
         applyColorPaletteToDataSeries(*oColorPalette);
         setModified(true);
     }
+}
+
+void ChartModel::changeNullDate(const css::util::DateTime& aNullDate)
+{
+    if (m_aNullDate == aNullDate)
+        return;
+
+    m_aNullDate = aNullDate;
+    if (m_apSvNumberFormatter)
+    {
+        m_apSvNumberFormatter->ChangeNullDate(aNullDate.Day, aNullDate.Month, aNullDate.Year);
+    }
+}
+
+std::optional<css::util::DateTime> ChartModel::getNullDate() const
+{
+    return m_aNullDate;
 }
 
 }  // namespace chart

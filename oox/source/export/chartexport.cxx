@@ -1264,7 +1264,17 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     }
     else
     {
-        pFS->singleElement(FSNS(XML_c, XML_date1904), XML_val, "0");
+        Reference< XPropertySet > xPropSet(xChartDoc, UNO_QUERY);
+        Any aNullDate = xPropSet->getPropertyValue("NullDate");
+        util::DateTime aDate;
+        if ((aNullDate >>= aDate) && (aDate.Year == 1904 && aDate.Month == 1 && aDate.Day == 1))
+        {
+            pFS->singleElement(FSNS(XML_c, XML_date1904), XML_val, "1");
+        }
+        else
+        {
+            pFS->singleElement(FSNS(XML_c, XML_date1904), XML_val, "0");
+        }
     }
 
     // TODO: get the correct editing language
