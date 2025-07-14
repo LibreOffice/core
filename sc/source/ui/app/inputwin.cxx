@@ -1824,8 +1824,6 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
             return true;
 
         ScModule* mod = ScModule::get();
-        // if we focus input after "Accept Formula" command, we need to notify to get it working
-        mod->InputChanged(m_xEditView.get());
 
         // information about paragraph is in additional data
         // information about position in a paragraph in a Mouse Pos

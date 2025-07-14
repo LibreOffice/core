@@ -155,6 +155,7 @@ public:
     void testGetFilterTypes();
     void testGetPartPageRectangles();
     void testSearchCalc();
+    void testPropertySettingOnFormulaBar();
     void testSearchAllNotificationsCalc();
     void testPaintTile();
     void testSaveAs();
@@ -232,6 +233,7 @@ public:
     CPPUNIT_TEST(testGetFilterTypes);
     CPPUNIT_TEST(testGetPartPageRectangles);
     CPPUNIT_TEST(testSearchCalc);
+    CPPUNIT_TEST(testPropertySettingOnFormulaBar);
     CPPUNIT_TEST(testSearchAllNotificationsCalc);
     CPPUNIT_TEST(testPaintTile);
     CPPUNIT_TEST(testSaveAs);
@@ -2264,6 +2266,7 @@ public:
     bool m_bEmptyTableSelection;
     bool m_bTilesInvalidated;
     bool m_bZeroCursor;
+    bool m_stateBold;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
@@ -2274,7 +2277,8 @@ public:
           m_nTableSelectionCount(0),
           m_bEmptyTableSelection(false),
           m_bTilesInvalidated(false),
-          m_bZeroCursor(false)
+          m_bZeroCursor(false),
+          m_stateBold(false)
     {
         mnView = SfxLokHelper::getView();
         mpDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, this);
@@ -2362,6 +2366,13 @@ public:
             m_aLastRedlineInfo = redlines[0];
         }
         break;
+        case LOK_CALLBACK_STATE_CHANGED:
+        {
+            if (aPayload.startsWith(".uno:Bold="))
+            {
+                m_stateBold = aPayload.copy(".uno:Bold="_ostr.getLength()).toBoolean();
+            }
+        }
         }
     }
 };
@@ -3125,6 +3136,52 @@ void DesktopLOKTest::testCalcValidityDropdownInReadonlyMode()
 
     // Dropdown should not open in readonly mode.
     CPPUNIT_ASSERT_EQUAL(true, aView.m_JSONDialog.empty());
+}
+
+void DesktopLOKTest::testPropertySettingOnFormulaBar()
+{
+    LibLibreOffice_Impl aOffice;
+    LibLODocument_Impl* pDocument = loadDoc("formulabar.ods");
+    Scheduler::ProcessEventsToIdle();
+
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    Scheduler::ProcessEventsToIdle();
+
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    // Go to A1. There are 2 words in the cell.
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Set the focus to formulabar.
+    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"grab_focus\", \"data\": \"null\", \"type\": \"drawingarea\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Select the first word.
+    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;3;0;0\", \"type\": \"drawingarea\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Set bold property for the selected word.
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(true, aView.m_stateBold);
+
+    // Select the second word. Without the fix, this selection removes the "bold" attribute.
+    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"4;9;0;0\", \"type\": \"drawingarea\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Select the first word again.
+    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;3;0;0\", \"type\": \"drawingarea\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Unset bold property for the selected word.
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(false, aView.m_stateBold); // This line doesn't pass without the fix in this commit.
 }
 
 void DesktopLOKTest::testRunMacro()
