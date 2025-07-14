@@ -1313,7 +1313,7 @@ void SwView::Execute(SfxRequest &rReq)
             auto xDialog = std::make_shared<svx::GotoPageDlg>(
                 GetViewFrame().GetFrameWeld(), SwResId(STR_GOTO_PAGE_DLG_TITLE),
                 SwResId(ST_PGE) + ":", nPhyPage, GetWrtShell().GetPageCnt());
-            weld::DialogController::runAsync(xDialog, [this, xDialog, xRequest](sal_uInt32 nResult) {
+            weld::DialogController::runAsync(xDialog,[this, xDialog, xRequest=std::move(xRequest)](sal_uInt32 nResult) {
                 if (nResult == RET_OK)
                     GetWrtShell().GotoPage(xDialog->GetPageSelection(), true);
 
