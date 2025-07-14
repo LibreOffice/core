@@ -27,15 +27,12 @@
 
 namespace ww
 {
-    /** simple template that manages a static array
-
-        The template sorts the array at construction in place.
-    */
+    /** simple template that manages a static sorted array */
     template<class C> class SortedArray
     {
     private:
         //The array e.g. of sprms.
-        C *mpWwSprmTab;
+        const C *mpWwSprmTab;
         size_t mnNoElems;
 
         SortedArray(const SortedArray&) = delete;
@@ -44,7 +41,7 @@ namespace ww
         //Find an entry, return its address if found and 0 if not
         const C *search(C aSrch) const
         {
-            std::pair<C *, C *> aPair =
+            std::pair<const C*, const C*> aPair =
                 std::equal_range(mpWwSprmTab, mpWwSprmTab + mnNoElems, aSrch);
             if (aPair.first != aPair.second)
                 return aPair.first;
@@ -52,11 +49,10 @@ namespace ww
                 return nullptr;
         }
 
-        SortedArray(C *pWwSprmTab, size_t nNoElems)
+        SortedArray(const C *pWwSprmTab, size_t nNoElems)
             : mpWwSprmTab(pWwSprmTab), mnNoElems(nNoElems)
         {
-            OSL_ENSURE(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
-            std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
+            assert(mnNoElems && pWwSprmTab && "WW8: empty Array: Don't do that");
         }
     };
 }
