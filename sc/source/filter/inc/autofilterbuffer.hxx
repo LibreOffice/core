@@ -243,6 +243,8 @@ public:
     void                finalizeImport( const css::uno::Reference< css::sheet::XDatabaseRange >& rxDatabaseRange,
                                         sal_Int16 nSheet );
 
+    css::uno::Reference< css::sheet::XDatabaseRange > createDatabaseObject(sal_Int16 nSheet);
+
 private:
     typedef RefVector< FilterColumn > FilterColumnVector;
 

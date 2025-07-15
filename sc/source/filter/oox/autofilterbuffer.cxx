@@ -866,6 +866,14 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
         OSL_FAIL("AutoFilter::finalizeImport(): cannot find matching DBData");
 }
 
+Reference< XDatabaseRange > AutoFilter::createDatabaseObject(sal_Int16 nSheet)
+{
+    ScRange aRangeCopy(maRange);
+    aRangeCopy.aStart.SetTab(nSheet);
+    aRangeCopy.aEnd.SetTab(nSheet);
+    return createUnnamedDatabaseRangeObject( maRange );
+}
+
 AutoFilterBuffer::AutoFilterBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -880,17 +888,13 @@ AutoFilter& AutoFilterBuffer::createAutoFilter()
 
 void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
 {
-    // rely on existence of the defined name '_FilterDatabase' containing the range address of the filtered area
-    const DefinedName* pFilterDBName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_FILTERDATABASE, nSheet ).get();
-    if(!pFilterDBName)
+    if (maAutoFilters.empty()) {
         return;
+    }
 
-    ScRange aFilterRange;
-    if( !(pFilterDBName->getAbsoluteRange( aFilterRange ) && (aFilterRange.aStart.Tab() == nSheet)) )
-        return;
-
+    std::shared_ptr<AutoFilter> xAutoFilter = maAutoFilters.front();
     // use the same name for the database range as used for the defined name '_FilterDatabase'
-    Reference< XDatabaseRange > xDatabaseRange = createUnnamedDatabaseRangeObject( aFilterRange );
+    Reference< XDatabaseRange > xDatabaseRange = xAutoFilter->createDatabaseObject(nSheet);
     // first, try to create an auto filter
     bool bHasAutoFilter = finalizeImport( xDatabaseRange, nSheet );
     // no success: try to create an advanced filter

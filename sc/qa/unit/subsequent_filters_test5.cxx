@@ -19,6 +19,8 @@
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
+#include <dbdata.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -133,6 +135,27 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf162177_EastersundayODF14)
     save(u"calc8"_ustr); // this saves to .ods not to .fods
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, sPath, "formula", u"of:=EASTERSUNDAY(2024)");
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf157689)
+{
+    // testing the correct import of autofilter on multiple sheets
+    createScDoc("xlsx/tdf157689.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+
+    ScDBData* pAnonDBData = pDoc->GetAnonymousDBData(0);
+    CPPUNIT_ASSERT(pAnonDBData);
+    ScRange aFilterRange;
+    pAnonDBData->GetArea(aFilterRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 1, 3, 0), aFilterRange); // A1:B4
+    CPPUNIT_ASSERT(pAnonDBData->HasAutoFilter());
+
+    pAnonDBData = pDoc->GetAnonymousDBData(1);
+    CPPUNIT_ASSERT(pAnonDBData);
+    pAnonDBData->GetArea(aFilterRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 1, 1, 4, 1), aFilterRange); // A1:B5
+    CPPUNIT_ASSERT(pAnonDBData->HasAutoFilter());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
