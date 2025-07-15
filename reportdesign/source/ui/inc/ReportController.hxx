@@ -287,7 +287,8 @@ namespace rptui
             @param  _rState     the state to fill
         */
         void impl_fillState_nothrow(const OUString& _sProperty,dbaui::FeatureState& _rState) const;
-        void impl_fillCustomShapeState_nothrow(const char* _pCustomShapeType,dbaui::FeatureState& _rState) const;
+        void impl_fillCustomShapeState_nothrow(std::u16string_view sCustomShapeType,
+                                               dbaui::FeatureState& _rState) const;
 
         /** set the property at all selected controls.
             @return <TRUE/> when the selection is not empty

@@ -645,7 +645,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_BASIC20:
         case SID_DRAWTBX_CS_BASIC21:
         case SID_DRAWTBX_CS_BASIC22:
-            impl_fillCustomShapeState_nothrow("diamond",aReturn);
+            impl_fillCustomShapeState_nothrow(u"diamond", aReturn);
             break;
         case SID_DRAWTBX_CS_SYMBOL:
         case SID_DRAWTBX_CS_SYMBOL1:
@@ -666,7 +666,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_SYMBOL16:
         case SID_DRAWTBX_CS_SYMBOL17:
         case SID_DRAWTBX_CS_SYMBOL18:
-            impl_fillCustomShapeState_nothrow("smiley",aReturn);
+            impl_fillCustomShapeState_nothrow(u"smiley", aReturn);
             break;
         case SID_DRAWTBX_CS_ARROW:
         case SID_DRAWTBX_CS_ARROW1:
@@ -695,7 +695,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_ARROW24:
         case SID_DRAWTBX_CS_ARROW25:
         case SID_DRAWTBX_CS_ARROW26:
-            impl_fillCustomShapeState_nothrow("left-right-arrow",aReturn);
+            impl_fillCustomShapeState_nothrow(u"left-right-arrow", aReturn);
             break;
         case SID_DRAWTBX_CS_STAR:
         case SID_DRAWTBX_CS_STAR1:
@@ -710,7 +710,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_STAR10:
         case SID_DRAWTBX_CS_STAR11:
         case SID_DRAWTBX_CS_STAR12:
-            impl_fillCustomShapeState_nothrow("star5",aReturn);
+            impl_fillCustomShapeState_nothrow(u"star5", aReturn);
             break;
         case SID_DRAWTBX_CS_FLOWCHART:
         case SID_DRAWTBX_CS_FLOWCHART1:
@@ -741,7 +741,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_FLOWCHART26:
         case SID_DRAWTBX_CS_FLOWCHART27:
         case SID_DRAWTBX_CS_FLOWCHART28:
-            impl_fillCustomShapeState_nothrow("flowchart-internal-storage",aReturn);
+            impl_fillCustomShapeState_nothrow(u"flowchart-internal-storage", aReturn);
             break;
         case SID_DRAWTBX_CS_CALLOUT:
         case SID_DRAWTBX_CS_CALLOUT1:
@@ -751,7 +751,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_CALLOUT5:
         case SID_DRAWTBX_CS_CALLOUT6:
         case SID_DRAWTBX_CS_CALLOUT7:
-            impl_fillCustomShapeState_nothrow("round-rectangular-callout",aReturn);
+            impl_fillCustomShapeState_nothrow(u"round-rectangular-callout", aReturn);
             break;
         case SID_RPT_SHOWREPORTEXPLORER:
             aReturn.bEnabled = m_xReportDefinition.is();
@@ -4157,10 +4157,12 @@ bool OReportController::impl_setPropertyAtControls_throw(TranslateId pUndoResId,
     return !aSelection.empty();
 }
 
-void OReportController::impl_fillCustomShapeState_nothrow(const char* _pCustomShapeType,dbaui::FeatureState& _rState) const
+void OReportController::impl_fillCustomShapeState_nothrow(std::u16string_view sCustomShapeType,
+                                                          dbaui::FeatureState& _rState) const
 {
     _rState.bEnabled = isEditable();
-    _rState.bChecked = getDesignView()->GetInsertObj() == SdrObjKind::CustomShape && getDesignView()->GetInsertObjString().equalsAscii(_pCustomShapeType);
+    _rState.bChecked = getDesignView()->GetInsertObj() == SdrObjKind::CustomShape
+                       && getDesignView()->GetInsertObjString() == sCustomShapeType;
 }
 
 
