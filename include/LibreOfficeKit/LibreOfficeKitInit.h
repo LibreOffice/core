@@ -32,15 +32,15 @@
     #include <dlfcn.h>
 
     #ifdef __APPLE__
-        #define TARGET_LIB        "lib" "sofficeapp" ".dylib"
-        #define TARGET_MERGED_LIB "lib" "mergedlo" ".dylib"
+        #define SOFFICEAPP_LIB "libsofficeapp.dylib"
+        #define MERGED_LIB "libmergedlo.dylib"
 
         #if (!defined TARGET_OS_IPHONE || TARGET_OS_IPHONE == 0) && (!defined TARGET_OS_OSX || TARGET_OS_OSX == 0)
             #error LibreOfficeKit is not supported on tvOS, visionOS or watchOS
         #endif
     #else
-        #define TARGET_LIB        "lib" "sofficeapp" ".so"
-        #define TARGET_MERGED_LIB "lib" "mergedlo" ".so"
+        #define SOFFICEAPP_LIB "libsofficeapp.so"
+        #define MERGED_LIB "libmergedlo.so"
     #endif
     #define SEPARATOR         '/'
 
@@ -49,11 +49,11 @@
     #if !defined WIN32_LEAN_AND_MEAN
         #define WIN32_LEAN_AND_MEAN
     #endif
-    #include  <windows.h>
-    #define TARGET_LIB        "sofficeapp" ".dll"
-    #define TARGET_MERGED_LIB "mergedlo" ".dll"
-    #define SEPARATOR         '\\'
-    #define UNOPATH           "\\..\\URE\\bin"
+    #include <windows.h>
+    #define SOFFICEAPP_LIB "sofficeapp.dll"
+    #define MERGED_LIB "mergedlo.dll"
+    #define SEPARATOR '\\'
+    #define UNOPATH "\\..\\URE\\bin"
 
     #undef DELETE
 
@@ -202,7 +202,7 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 
     // allocate large enough buffer
     partial_length = strlen(install_path);
-    imp_lib_size = partial_length + sizeof(TARGET_LIB) + sizeof(TARGET_MERGED_LIB) + 2;
+    imp_lib_size = partial_length + sizeof(SOFFICEAPP_LIB) + sizeof(MERGED_LIB) + 2;
     imp_lib = (char *) malloc(imp_lib_size);
     if (!imp_lib)
     {
@@ -215,10 +215,10 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     extendUnoPath(install_path);
 
     imp_lib[partial_length++] = SEPARATOR;
-    strncpy(imp_lib + partial_length, TARGET_LIB, imp_lib_size - partial_length);
+    strncpy(imp_lib + partial_length, SOFFICEAPP_LIB, imp_lib_size - partial_length);
 
     struct stat st;
-    // If TARGET_LIB exists but is ridiculously small, it is the
+    // If SOFFICEAPP_LIB exists but is ridiculously small, it is the
     // one-line text stub as in the --enable-mergedlib case.
     if (stat(imp_lib, &st) == 0 && st.st_size > 1000)
     {
@@ -235,7 +235,7 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     }
     else
     {
-        strncpy(imp_lib + partial_length, TARGET_MERGED_LIB, imp_lib_size - partial_length);
+        strncpy(imp_lib + partial_length, MERGED_LIB, imp_lib_size - partial_length);
 
         dlhandle = lok_loadlib(imp_lib);
         if (!dlhandle)
