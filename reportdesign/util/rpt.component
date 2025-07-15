@@ -46,4 +46,60 @@
   <implementation name="com.sun.star.comp.report.Shape">
     <service name="com.sun.star.report.Shape"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Report.XMLOasisContentImporter"
+    constructor="reportdesign_XMLOasisContentImporter_get_implementation">
+    <service name="com.sun.star.comp.document.ImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Report.XMLOasisMetaImporter"
+    constructor="reportdesign_ORptMetaImportHelper_get_implementation">
+    <service name="com.sun.star.comp.document.ImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Report.XMLOasisSettingsImporter"
+    constructor="reportdesign_ORptImportHelper_get_implementation">
+    <service name="com.sun.star.comp.document.ImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Report.XMLOasisStylesImporter"
+    constructor="reportdesign_ORptStylesImportHelper_get_implementation">
+    <service name="com.sun.star.comp.document.ImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.report.ExportDocumentHandler"
+    constructor="reportdesign_ExportDocumentHandler_get_implementation">
+    <service name="com.sun.star.report.ExportDocumentHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.report.ExportFilter"
+    constructor="reportdesign_ORptExport_get_implementation">
+    <service name="com.sun.star.document.ExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.report.ImportDocumentHandler"
+    constructor="reportdesign_ImportDocumentHandler_get_implementation">
+    <service name="com.sun.star.report.ImportDocumentHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.report.OReportFilter"
+    constructor="reportdesign_OReportFilter_get_implementation">
+    <service name="com.sun.star.comp.document.ImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.report.ORptTypeDetection"
+    constructor="reportdesign_ORptTypeDetection_get_implementation">
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.report.XMLContentExporter"
+    constructor="reportdesign_ORptContentExportHelper_get_implementation">
+    <service name="com.sun.star.document.ExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.report.XMLFullExporter"
+    constructor="reportdesign_ODBFullExportHelper_get_implementation">
+    <service name="com.sun.star.document.ExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.report.XMLMetaExporter"
+    constructor="reportdesign_ORptMetaExportHelper_get_implementation">
+    <service name="com.sun.star.document.ExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.report.XMLSettingsExporter"
+    constructor="reportdesign_ORptExportHelper_get_implementation">
+    <service name="com.sun.star.document.ExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.report.XMLStylesExporter"
+    constructor="reportdesign_ORptStylesExportHelper_get_implementation">
+    <service name="com.sun.star.document.ExportFilter"/>
+  </implementation>
 </component>

@@ -171,7 +171,6 @@ gb_MERGE_LIBRARY_LIST += \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
 	rpt \
 	rptui \
-	rptxml \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
 	sdbc2 \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \

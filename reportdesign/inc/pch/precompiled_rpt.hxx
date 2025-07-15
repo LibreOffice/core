@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2023-07-19 09:28:24 using:
+ Generated on 2025-07-15 11:31:34 using:
  ./bin/update_pch reportdesign rpt --cutoff=9 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,8 +24,12 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <cassert>
+#include <climits>
 #include <cmath>
+#include <compare>
+#include <concepts>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -34,6 +38,7 @@
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
+#include <iterator>
 #include <limits.h>
 #include <limits>
 #include <map>
@@ -51,8 +56,8 @@
 #include <string.h>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <type_traits>
-#include <typeinfo>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -74,6 +79,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
+#include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
@@ -84,6 +90,7 @@
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -133,8 +140,10 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/task.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/vectorgraphicdata.hxx>
@@ -144,7 +153,6 @@
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/hommatrixtemplate.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/point/b2ipoint.hxx>
@@ -152,6 +160,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/Size2D.hxx>
 #include <basegfx/tuple/Tuple2D.hxx>
@@ -160,29 +169,22 @@
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/utils/common.hxx>
+#include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -213,6 +215,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
+#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/compbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/diagnose_ex.hxx>
@@ -233,8 +236,6 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/propertysetmixin.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
@@ -245,10 +246,13 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <editeng/EPaM.hxx>
+#include <editeng/ESelection.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/outlobj.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <i18nlangtag/lang.h>
+#include <o3tl/concepts.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
@@ -258,6 +262,7 @@
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sfx2/dllapi.h>
+#include <sot/formats.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>
@@ -270,6 +275,8 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/whichranges.hxx>
+#include <svtools/colorcfg.hxx>
+#include <svtools/svtdllapi.h>
 #include <svx/itextprovider.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/sdr/properties/properties.hxx>
@@ -277,6 +284,8 @@
 #include <svx/sdtaitm.hxx>
 #include <svx/sdtakitm.hxx>
 #include <svx/svddef.hxx>
+#include <svx/svdgeodata.hxx>
+#include <svx/svdglue.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdobjkind.hxx>
@@ -286,6 +295,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/xdef.hxx>
+#include <tools/UniqueID.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
@@ -312,11 +322,17 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/fontdefs.hxx>
+#include <unotools/options.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
-#include <unotools/tempfile.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <unotools/weakref.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
+#include <xmloff/dllapi.h>
+#include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlictxt.hxx>
+#include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmluconv.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <RptModel.hxx>

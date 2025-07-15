@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,rpt,\
     i18nlangtag \
     sal \
     salhelper \
+    sax \
     sfx \
     svl \
     svt \
@@ -50,6 +51,7 @@ $(eval $(call gb_Library_use_libraries,rpt,\
     tl \
     utl \
     vcl \
+    xo \
 ))
 
 $(eval $(call gb_Library_set_componentfile,rpt,reportdesign/util/rpt,services))
@@ -87,6 +89,33 @@ $(eval $(call gb_Library_add_exception_objects,rpt,\
     reportdesign/source/core/sdr/RptPage \
     reportdesign/source/core/sdr/UndoActions \
     reportdesign/source/core/sdr/UndoEnv \
+    reportdesign/source/filter/xml/dbloader2 \
+    reportdesign/source/filter/xml/xmlAutoStyle \
+    reportdesign/source/filter/xml/xmlCell \
+    reportdesign/source/filter/xml/xmlColumn \
+    reportdesign/source/filter/xml/xmlComponent \
+    reportdesign/source/filter/xml/xmlCondPrtExpr \
+    reportdesign/source/filter/xml/xmlControlProperty \
+    reportdesign/source/filter/xml/xmlExport \
+    reportdesign/source/filter/xml/xmlExportDocumentHandler \
+    reportdesign/source/filter/xml/xmlfilter \
+    reportdesign/source/filter/xml/xmlFixedContent \
+    reportdesign/source/filter/xml/xmlFormatCondition \
+    reportdesign/source/filter/xml/xmlFormattedField \
+    reportdesign/source/filter/xml/xmlFunction \
+    reportdesign/source/filter/xml/xmlGroup \
+    reportdesign/source/filter/xml/xmlHelper \
+    reportdesign/source/filter/xml/xmlImage \
+    reportdesign/source/filter/xml/xmlImportDocumentHandler \
+    reportdesign/source/filter/xml/xmlMasterFields \
+    reportdesign/source/filter/xml/xmlPropertyHandler \
+    reportdesign/source/filter/xml/xmlReport \
+    reportdesign/source/filter/xml/xmlReportElement \
+    reportdesign/source/filter/xml/xmlReportElementBase \
+    reportdesign/source/filter/xml/xmlSection \
+    reportdesign/source/filter/xml/xmlStyleImport \
+    reportdesign/source/filter/xml/xmlSubDocument \
+    reportdesign/source/filter/xml/xmlTable \
 ))
 
 # vim: set noet sw=4 ts=4:

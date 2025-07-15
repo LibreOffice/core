@@ -84,7 +84,6 @@ DEFAULTS = \
     'package.xstor'                     : ( 2, EXCLUDE, INCLUDE, EXCLUDE), #   3.8
     'reportdesign.rpt'                  : ( 9, EXCLUDE, INCLUDE, INCLUDE), #   9.4
     'reportdesign.rptui'                : ( 4, EXCLUDE, INCLUDE, INCLUDE), #  13.1
-    'reportdesign.rptxml'               : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   7.6
     'sal.sal'                           : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   4.2
     'sc.sc'                             : (12, EXCLUDE, INCLUDE, INCLUDE), #  92.6
     'sc.scfilt'                         : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #  39.9

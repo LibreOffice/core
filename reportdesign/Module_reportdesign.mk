@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,reportdesign))
 $(eval $(call gb_Module_add_targets,reportdesign,\
     Library_rpt \
     Library_rptui \
-    Library_rptxml \
     UIConfig_dbreport \
 ))
 
