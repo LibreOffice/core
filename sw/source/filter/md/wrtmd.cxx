@@ -48,6 +48,11 @@
 
 namespace
 {
+// This struct contains a state of the properties that we output. The integers represent "level"
+// of a given feature. Positive values mean applied status; zero means cleared status. Sometimes
+// values may be negative: e.g., when a node started, and some redline continues from a previous
+// node, aRedlineChanges would be empty initially; and when the end of the continued redline is
+// reached, its "applied" status is decremented, making it negative.
 struct FormattingStatus
 {
     int nCrossedOutChange = 0;
@@ -58,6 +63,8 @@ struct FormattingStatus
     std::unordered_map<const SwRangeRedline*, int> aRedlineChanges;
 };
 
+// This is a vector of positions in the node text, where objects of class T start or end.
+// The current position into the vector is maintained, and incremented using calls to next().
 template <typename T> struct PosData
 {
     using value_type = std::pair<sal_Int32, const T*>;
@@ -71,6 +78,9 @@ template <typename T> struct PosData
     void sort() { std::stable_sort(table.begin(), table.end(), value_less); }
 };
 
+// This is a collection of all positions into node's text: starts of hints, ends of hints, starts
+// of redlines, and ends of redlines. Its getEndOfCurrent methos allows to obtain the position of
+// the next (closest) position (which may happen in any list).
 struct NodePositions
 {
     PosData<SfxPoolItem> hintStarts;
@@ -148,6 +158,10 @@ void ApplyItem(FormattingStatus& rChange, const SwRangeRedline* pItem, int incre
     rChange.aRedlineChanges[pItem] += increment;
 }
 
+// currentFormatting is the state of properties before this position. For any hint and/or redline
+// that starts and/or ends at this position, every property that starts here increments respective
+// applied status, and properties that end here decrement their applied count (see comment for
+// FormattingStatus).
 FormattingStatus CalculateFormattingChange(NodePositions& positions, sal_Int32 pos,
                                            const FormattingStatus& currentFormatting)
 {
@@ -180,6 +194,10 @@ FormattingStatus CalculateFormattingChange(NodePositions& positions, sal_Int32 p
 bool ShouldCloseIt(int prev, int curr) { return prev != curr && prev >= 0 && curr <= 0; }
 bool ShouldOpenIt(int prev, int curr) { return prev != curr && prev <= 0 && curr > 0; }
 
+// Calculate the updated status of properties. Then compare the status before and after; and for
+// each event when a value changes from 0 to a positive number, output respective opening markup;
+// when a value is decreased to 0, a closing markup is written. For redlines, closing markup is
+// also written when its value changes from 0 to a negative (see comment for FormattingStatus).
 void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 pos,
                          FormattingStatus& current)
 {
