@@ -556,8 +556,25 @@ rtl::Reference< HyphenatedWord > RebuildHyphensAndControlChars(
 
 bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageType nLanguage )
 {
+    assert(nPos >= 0 && nLen > 0);
     CharClass aCC(( LanguageTag( nLanguage ) ));
-    return aCC.isUpper( rText, nPos, nLen );
+
+    bool bCaseIsAlwaysUppercase = false;
+    const sal_Int32 nEnd = std::min(nPos + nLen, rText.getLength());
+    while (nPos < nEnd)
+    {
+        // only consider characters that have case-status
+        if (aCC.isAlpha(rText, nPos))
+        {
+            if (aCC.isUpper(rText, nPos))
+                bCaseIsAlwaysUppercase = true;
+            else
+                return false;
+        }
+        rText.iterateCodePoints(&nPos);
+    }
+
+    return bCaseIsAlwaysUppercase;
 }
 
 CapType capitalType(const OUString& aTerm, CharClass const * pCC)
