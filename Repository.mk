@@ -41,7 +41,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	) \
 	gencoll_rule \
 	genconv_dict \
-	gendict \
 	genindex_data \
 	helpex \
 	idxdict \

@@ -4066,17 +4066,6 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 )
 endef
 
-ifeq ($(SYSTEM_ICU),)
-
-define gb_Executable__register_gendict
-$(call gb_Executable_add_runtime_dependencies,gendict,\
-	$(call gb_Package_get_target_for_build,icu) \
-	$(call gb_Package_get_target_for_build,icu_ure) \
-)
-endef
-
-endif
-
 define gb_Executable__register_localize
 $(call gb_Executable_add_runtime_dependencies,localize,\
 	$(foreach exec,cfgex helpex propex treex ulfex xrmex,\

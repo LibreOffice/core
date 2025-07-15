@@ -4498,8 +4498,6 @@ i18npool/qa/cppunit/test_textsearch.cxx
 i18npool/source/breakiterator/breakiteratorImpl.cxx
 i18npool/source/breakiterator/breakiterator_cjk.cxx
 i18npool/source/breakiterator/breakiterator_unicode.cxx
-i18npool/source/breakiterator/gendict.cxx
-i18npool/source/breakiterator/xdictionary.cxx
 i18npool/source/calendar/calendarImpl.cxx
 i18npool/source/calendar/calendar_gregorian.cxx
 i18npool/source/calendar/calendar_hijri.cxx

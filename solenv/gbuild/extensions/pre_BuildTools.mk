@@ -19,7 +19,6 @@ gb_BUILD_TOOLS_executables = \
 		$(if $(filter EMSCRIPTEN,$(BUILD_TYPE_FOR_HOST)),embindmaker wasmbridgegen) \
 		gencoll_rule \
 		genconv_dict \
-		gendict \
 		$(if $(WITH_GALLERY_BUILD),gengal) \
 		genindex_data \
 		helpex \
