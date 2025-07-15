@@ -147,6 +147,16 @@ public:
     const Reference<XReportDefinition>& getReportDefinition() const { return m_xReportDefinition; }
 
     const rtl::Reference < XMLPropertySetMapper >& GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}
+
+    // Helper methods to create exporters
+    static rtl::Reference<ORptExport>
+    createSettingsExporter(const Reference<XComponentContext>& rxContext);
+    static rtl::Reference<ORptExport>
+    createStylesExporter(const Reference<XComponentContext>& rxContext);
+    static rtl::Reference<ORptExport>
+    createMetaExporter(const Reference<XComponentContext>& rxContext);
+    static rtl::Reference<ORptExport>
+    createExportFilter(const Reference<XComponentContext>& rxContext);
 };
 
 

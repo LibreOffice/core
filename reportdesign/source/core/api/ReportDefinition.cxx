@@ -1342,20 +1342,28 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     // Try to write to settings.xml, meta.xml, and styles.xml; only really care about success of
     // write to content.xml (keeping logic of commit 94ccba3eebc83b58e74e18f0e028c6a995ce6aa6)
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"settings.xml"_ustr));
-    WriteThroughComponent(xCom, u"settings.xml"_ustr, u"com.sun.star.comp.report.XMLSettingsExporter"_ustr,
-                          aDelegatorArguments, _xStorageToSaveTo);
+    rtl::Reference<rptxml::ORptExport> pSettingsExporter
+        = rptxml::ORptExport::createSettingsExporter(m_aProps->m_xContext);
+    WriteThroughComponent(xCom, u"settings.xml"_ustr, pSettingsExporter, aDelegatorArguments,
+                          _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"meta.xml"_ustr));
-    WriteThroughComponent(xCom, u"meta.xml"_ustr, u"com.sun.star.comp.report.XMLMetaExporter"_ustr,
-                          aDelegatorArguments, _xStorageToSaveTo);
+    rtl::Reference<rptxml::ORptExport> pMetaExporter
+        = rptxml::ORptExport::createMetaExporter(m_aProps->m_xContext);
+    WriteThroughComponent(xCom, u"meta.xml"_ustr, pMetaExporter, aDelegatorArguments,
+                          _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"styles.xml"_ustr));
-    WriteThroughComponent(xCom, u"styles.xml"_ustr, u"com.sun.star.comp.report.XMLStylesExporter"_ustr,
-                          aDelegatorArguments, _xStorageToSaveTo);
+    rtl::Reference<rptxml::ORptExport> pStylesExporter
+        = rptxml::ORptExport::createStylesExporter(m_aProps->m_xContext);
+    WriteThroughComponent(xCom, u"styles.xml"_ustr, pStylesExporter, aDelegatorArguments,
+                          _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
-    bool bOk = WriteThroughComponent(xCom, u"content.xml"_ustr, u"com.sun.star.comp.report.ExportFilter"_ustr,
-                                     aDelegatorArguments, _xStorageToSaveTo);
+    rtl::Reference<rptxml::ORptExport> pExportFilter
+        = rptxml::ORptExport::createExportFilter(m_aProps->m_xContext);
+    bool bOk = WriteThroughComponent(xCom, u"content.xml"_ustr, pExportFilter, aDelegatorArguments,
+                                     _xStorageToSaveTo);
 
     uno::Any aImage;
     uno::Reference< embed::XVisualObject > xCurrentController(getCurrentController(),uno::UNO_QUERY);
@@ -1445,11 +1453,12 @@ void SAL_CALL OReportDefinition::removeStorageChangeListener( const uno::Referen
 bool OReportDefinition::WriteThroughComponent(
     const uno::Reference<lang::XComponent> & xComponent,
     const OUString& rStreamName,
-    const OUString& rServiceName,
+    const rtl::Reference<rptxml::ORptExport>& pExporter,
     const uno::Sequence<uno::Any> & rArguments,
     const uno::Reference<embed::XStorage>& _xStorageToSaveTo)
 {
     OSL_ENSURE( xComponent.is(), "Need component!" );
+    assert(pExporter.is());
 
     // open stream
     uno::Reference<io::XStream> xStream = _xStorageToSaveTo->openStreamElement(rStreamName,
@@ -1489,22 +1498,14 @@ bool OReportDefinition::WriteThroughComponent(
     *pArgs <<= xSaxWriter;
     std::copy(rArguments.begin(), rArguments.end(), std::next(pArgs));
 
-    // get filter component
-    uno::Reference< document::XExporter > xExporter(
-        m_aProps->m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            rServiceName, aArgs, m_aProps->m_xContext), uno::UNO_QUERY);
-    OSL_ENSURE( xExporter.is(),
-               "can't instantiate export filter component" );
-    if( !xExporter.is() )
-        return false;
+    pExporter->initialize(aArgs);
 
     // connect model and filter
-    xExporter->setSourceDocument( xComponent );
+    pExporter->setSourceDocument(xComponent);
 
     // filter!
     uno::Sequence<beans::PropertyValue> aMediaDesc;
-    uno::Reference<document::XFilter> xFilter( xExporter, uno::UNO_QUERY );
-    return xFilter->filter(aMediaDesc);
+    return pExporter->filter(aMediaDesc);
 }
 
 // XLoadable

@@ -24,6 +24,7 @@
 #include "dllapi.h"
 
 #include "ReportHelperDefines.hxx"
+#include "xmlExport.hxx"
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
@@ -132,7 +133,7 @@ namespace reportdesign
             /// the component we export
             const css::uno::Reference< css::lang::XComponent> & xComponent,
             const OUString& rStreamName, /// the stream name
-            const OUString& rServiceName, /// service name of the component
+            const rtl::Reference<rptxml::ORptExport>& pExporter, /// the exporter
             /// the argument (XInitialization)
             const css::uno::Sequence< css::uno::Any> & rArguments,
             const css::uno::Reference< css::embed::XStorage >& _xStorageToSaveTo);

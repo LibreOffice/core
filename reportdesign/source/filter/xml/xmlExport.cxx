@@ -57,47 +57,6 @@ namespace rptxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::util;
 
-
-    /** Exports only settings
-     * \ingroup reportdesign_source_filter_xml
-     *
-     */
-    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-    reportdesign_ORptExportHelper_get_implementation(
-        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-    {
-        return cppu::acquire(new ORptExport(context,
-            u"com.sun.star.comp.report.XMLSettingsExporter"_ustr,
-            SvXMLExportFlags::SETTINGS ));
-    }
-
-    /** Exports only styles
-     * \ingroup reportdesign_source_filter_xml
-     *
-     */
-    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-    reportdesign_ORptStylesExportHelper_get_implementation(
-        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-    {
-        return cppu::acquire(new ORptExport(context,
-            u"com.sun.star.comp.report.XMLStylesExporter"_ustr,
-            SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES |
-                SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS ));
-    }
-
-    /** Exports only meta data
-     * \ingroup reportdesign_source_filter_xml
-     *
-     */
-    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-    reportdesign_ORptMetaExportHelper_get_implementation(
-        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-    {
-        return cppu::acquire(new ORptExport(context,
-            u"com.sun.star.comp.report.XMLMetaExporter"_ustr,
-            SvXMLExportFlags::META ));
-    }
-
     namespace {
 
     class OSpecialHandleXMLExportPropertyMapper : public SvXMLExportPropertyMapper
@@ -244,16 +203,6 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_TABLE, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME,
         m_xTableStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX);
 }
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-reportdesign_ORptExport_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-{
-    return cppu::acquire(new ORptExport(context,
-        u"com.sun.star.comp.report.ExportFilter"_ustr,
-        SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::FONTDECLS));
-}
-
 
 void ORptExport::exportFunctions(const Reference<XIndexAccess>& _xFunctions)
 {
@@ -1502,6 +1451,36 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
     }
 }
 
+rtl::Reference<ORptExport>
+ORptExport::createSettingsExporter(const Reference<XComponentContext>& rxContext)
+{
+    return new ORptExport(rxContext, u"com.sun.star.comp.report.XMLSettingsExporter"_ustr,
+                          SvXMLExportFlags::SETTINGS);
+}
+
+rtl::Reference<ORptExport>
+ORptExport::createStylesExporter(const Reference<XComponentContext>& rxContext)
+{
+    return new ORptExport(rxContext, u"com.sun.star.comp.report.XMLStylesExporter"_ustr,
+                          SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES
+                              | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::FONTDECLS
+                              | SvXMLExportFlags::OASIS);
+}
+
+rtl::Reference<ORptExport>
+ORptExport::createMetaExporter(const Reference<XComponentContext>& rxContext)
+{
+    return new ORptExport(rxContext, u"com.sun.star.comp.report.XMLMetaExporter"_ustr,
+                          SvXMLExportFlags::META);
+}
+
+rtl::Reference<ORptExport>
+ORptExport::createExportFilter(const Reference<XComponentContext>& rxContext)
+{
+    return new ORptExport(rxContext, u"com.sun.star.comp.report.ExportFilter"_ustr,
+                          SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES
+                              | SvXMLExportFlags::FONTDECLS);
+}
 
 }// rptxml
 
