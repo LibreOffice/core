@@ -71,19 +71,6 @@ namespace rptxml
             SvXMLExportFlags::SETTINGS ));
     }
 
-    /** Exports only content
-     * \ingroup reportdesign_source_filter_xml
-     *
-     */
-    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-    reportdesign_ORptContentExportHelper_get_implementation(
-        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-    {
-        return cppu::acquire(new ORptExport(context,
-            u"com.sun.star.comp.report.XMLContentExporter"_ustr,
-            SvXMLExportFlags::CONTENT ));
-    }
-
     /** Exports only styles
      * \ingroup reportdesign_source_filter_xml
      *
