@@ -458,7 +458,8 @@ void ImplSVData::dropCaches()
     }
 
 #if defined __cpp_lib_memory_resource
-    assert(!bAllCachesDropped || CacheMemory::GetMemoryResource().GetAllocatedPages() == 0);
+    SAL_WARN_IF(!(!bAllCachesDropped || CacheMemory::GetMemoryResource().GetAllocatedPages() == 0),
+                "vcl", "Cache pages still allocated after cache memory fully dropped");
 #endif
     (void)bAllCachesDropped;
 }
