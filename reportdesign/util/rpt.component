@@ -86,10 +86,6 @@
     constructor="reportdesign_ORptContentExportHelper_get_implementation">
     <service name="com.sun.star.document.ExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.XMLFullExporter"
-    constructor="reportdesign_ODBFullExportHelper_get_implementation">
-    <service name="com.sun.star.document.ExportFilter"/>
-  </implementation>
   <implementation name="com.sun.star.comp.report.XMLMetaExporter"
     constructor="reportdesign_ORptMetaExportHelper_get_implementation">
     <service name="com.sun.star.document.ExportFilter"/>

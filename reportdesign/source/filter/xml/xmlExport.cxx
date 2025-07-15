@@ -111,19 +111,6 @@ namespace rptxml
             SvXMLExportFlags::META ));
     }
 
-    /** Exports all
-     * \ingroup reportdesign_source_filter_xml
-     *
-     */
-    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-    reportdesign_ODBFullExportHelper_get_implementation(
-        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-    {
-        return cppu::acquire(new ORptExport(context,
-            u"com.sun.star.comp.report.XMLFullExporter"_ustr,
-            SvXMLExportFlags::ALL));
-    }
-
     namespace {
 
     class OSpecialHandleXMLExportPropertyMapper : public SvXMLExportPropertyMapper
