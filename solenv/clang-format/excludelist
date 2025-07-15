@@ -7171,6 +7171,7 @@ reportdesign/inc/conditionalexpression.hxx
 reportdesign/inc/helpids.h
 reportdesign/inc/reportformula.hxx
 reportdesign/inc/strings.hxx
+reportdesign/inc/xmlExport.hxx
 reportdesign/source/core/api/FixedLine.cxx
 reportdesign/source/core/api/FixedText.cxx
 reportdesign/source/core/api/FormatCondition.cxx
@@ -7236,7 +7237,6 @@ reportdesign/source/filter/xml/xmlControlProperty.cxx
 reportdesign/source/filter/xml/xmlControlProperty.hxx
 reportdesign/source/filter/xml/xmlEnums.hxx
 reportdesign/source/filter/xml/xmlExport.cxx
-reportdesign/source/filter/xml/xmlExport.hxx
 reportdesign/source/filter/xml/xmlExportDocumentHandler.cxx
 reportdesign/source/filter/xml/xmlExportDocumentHandler.hxx
 reportdesign/source/filter/xml/xmlFixedContent.cxx

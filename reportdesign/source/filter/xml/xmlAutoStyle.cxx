@@ -18,7 +18,7 @@
  */
 #include "xmlAutoStyle.hxx"
 #include "xmlHelper.hxx"
-#include "xmlExport.hxx"
+#include <xmlExport.hxx>
 #include <xmloff/families.hxx>
 
 namespace rptxml

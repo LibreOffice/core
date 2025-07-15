@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "xmlExport.hxx"
+#include <xmlExport.hxx>
 #include "xmlAutoStyle.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
