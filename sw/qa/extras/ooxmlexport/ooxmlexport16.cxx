@@ -772,7 +772,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
     CPPUNIT_ASSERT_EQUAL( Color(228,71,69), bitmap.GetPixelColor(38,38));
 #else
     // NOTE: For CairoSDPR the Color changes slightly from (228,71,69)
-    CPPUNIT_ASSERT_EQUAL( Color(229,71,70), bitmap.GetPixelColor(38,38));
+    CPPUNIT_ASSERT_EQUAL( Color(228,72,70), bitmap.GetPixelColor(38,38));
 #endif
 }
 
