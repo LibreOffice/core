@@ -803,19 +803,22 @@ namespace
 {
 void notifyLinkAnnotations(SfxViewShell* pViewShell, SdPage* pPage)
 {
-    if (!pViewShell || !pPage || !pPage->hasLinkAnnotations())
+    if (!pViewShell || !pPage)
         return;
     ::tools::JsonWriter jsonWriter;
     jsonWriter.put("commandName", "PageLinks");
     {
-        auto jsonLinks = jsonWriter.startArray("links");
-        for (const auto& link : pPage->getLinkAnnotations())
+        auto jsonState = jsonWriter.startNode("state");
         {
-            auto jsonLink = jsonWriter.startStruct();
-            std::stringstream ss;
-            ss << link.first;
-            jsonWriter.put("rectangle", ss.str());
-            jsonWriter.put("uri", link.second);
+            auto jsonLinks = jsonWriter.startArray("links");
+            for (const auto& link : pPage->getLinkAnnotations())
+            {
+                auto jsonLink = jsonWriter.startStruct();
+                std::stringstream ss;
+                ss << link.first;
+                jsonWriter.put("rectangle", ss.str());
+                jsonWriter.put("uri", link.second);
+            }
         }
     }
     OString aPayload = jsonWriter.finishAndGetAsOString();
