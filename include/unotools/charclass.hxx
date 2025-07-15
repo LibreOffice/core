@@ -176,8 +176,6 @@ public:
     bool isNumeric( const OUString& rStr ) const;
     bool isLetterNumeric( const OUString& rStr ) const;
 
-    bool isUpper( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
-
 private:
 
     const css::lang::Locale &  getMyLocale() const;
