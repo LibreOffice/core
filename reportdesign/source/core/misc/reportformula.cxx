@@ -27,8 +27,8 @@ namespace rptui
     namespace
     {
 
-        const char sExpressionPrefix[] = "rpt:";
-        const char sFieldPrefix[] =  "field:";
+        constexpr std::u16string_view sExpressionPrefix = u"rpt:";
+        constexpr std::u16string_view sFieldPrefix =  u"field:";
     }
 
 
@@ -50,7 +50,7 @@ namespace rptui
         /// does it refer to a field?
         if ( m_sCompleteFormula.startsWith( sFieldPrefix ) )
         {
-            sal_Int32 nPrefixLen = strlen(sFieldPrefix);
+            sal_Int32 nPrefixLen = sFieldPrefix.length();
             if  (   ( m_sCompleteFormula.getLength() >= nPrefixLen + 2 )
                 &&  ( m_sCompleteFormula[ nPrefixLen ] == '[' )
                 &&  ( m_sCompleteFormula[ m_sCompleteFormula.getLength() - 1 ] == ']' )
