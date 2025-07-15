@@ -1390,6 +1390,10 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"ParaRightToLeft", { PayloadType::ParaDirectionPayload, true } },
 
         { u"AssignLayout", { PayloadType::Int32Payload, true } },
+        { u"GrafContrast", { PayloadType::Int32Payload, true } },
+        { u"GrafLuminance", { PayloadType::Int32Payload, true } },
+        { u"GrafMode", { PayloadType::Int32Payload, true } },
+        { u"GrafTransparence", { PayloadType::Int32Payload, true } },
         { u"StatusSelectionMode", { PayloadType::Int32Payload, true } },
         { u"Signature", { PayloadType::Int32Payload, false } },
         { u"SelectionMode", { PayloadType::Int32Payload, true } },
