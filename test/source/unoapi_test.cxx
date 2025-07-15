@@ -60,12 +60,12 @@ void UnoApiTest::tearDown()
 
 OUString UnoApiTest::createFileURL(std::u16string_view aFileBase)
 {
-    return m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileBase;
+    return m_directories.getURLFromSrc(m_aBaseString, aFileBase);
 }
 
 OUString UnoApiTest::createFilePath(std::u16string_view aFileBase)
 {
-    return m_directories.getSrcRootPath() + "/" + m_aBaseString + "/" + aFileBase;
+    return m_directories.getPathFromSrc(m_aBaseString, aFileBase);
 }
 
 void UnoApiTest::setTestInteractionHandler(const char* pPassword,

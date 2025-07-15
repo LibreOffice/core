@@ -43,24 +43,4 @@ test::Directories::Directories()
     m_aWorkdirRootURL = getFileURLFromSystemPath(m_aWorkdirRootPath);
 }
 
-OUString test::Directories::getURLFromSrc(std::u16string_view rPath) const
-{
-    return m_aSrcRootURL + rPath;
-}
-
-OUString test::Directories::getPathFromSrc(std::u16string_view rPath) const
-{
-    return m_aSrcRootPath + rPath;
-}
-
-OUString test::Directories::getURLFromWorkdir(std::u16string_view rPath) const
-{
-    return m_aWorkdirRootURL + rPath;
-}
-
-OUString test::Directories::getPathFromWorkdir(std::u16string_view rPath) const
-{
-    return m_aWorkdirRootPath + rPath;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

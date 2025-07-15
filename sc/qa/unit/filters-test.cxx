@@ -51,20 +51,13 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void createFileURL(std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath);
+    OUString createFileURL(std::u16string_view aFileName);
 };
 
-void ScFiltersTest::createFileURL(
-    std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath)
+OUString ScFiltersTest::createFileURL(std::u16string_view aFileName)
 {
-    // aFileBase may contain multiple segments, so use
-    // GetNewAbsURL instead of insertName for them:
-    INetURLObject url(m_directories.getSrcRootURL());
-    url.setFinalSlash();
-    url.GetNewAbsURL(u"sc/qa/unit/data"_ustr, &url);
-    url.insertName(aFileExtension, true);
-    url.GetNewAbsURL(OUString::Concat(aFileBase) + aFileExtension, &url);
-    rFilePath = url.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    std::u16string_view aFileExtension = aFileName.substr(aFileName.find_last_of('.') + 1);
+    return m_directories.getURLFromSrc(u"sc/qa/unit/data", aFileExtension, aFileName);
 }
 
 
@@ -116,8 +109,7 @@ void ScFiltersTest::testCVEs()
 
 void ScFiltersTest::testContentofz9704()
 {
-    OUString aFileName;
-    createFileURL(u"ofz9704.", u"123", aFileName);
+    OUString aFileName = createFileURL(u"ofz9704.123");
     SvFileStream aFileStream(aFileName, StreamMode::READ);
     TestImportWKS(aFileStream);
 }
@@ -129,8 +121,7 @@ void ScFiltersTest::testTdf90299()
     const OUString aSavedFileURL = utl::CreateTempURL(&aTmpDirectory1URL);
 
     OUString aReferencedFileURL;
-    OUString aReferencingFileURL;
-    createFileURL(u"tdf90299.", u"xls", aReferencingFileURL);
+    OUString aReferencingFileURL = createFileURL(u"tdf90299.xls");
 
     auto eError = osl::File::copy(aReferencingFileURL, aTmpDirectory1URL + "/tdf90299.xls");
     CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);

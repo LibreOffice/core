@@ -15,6 +15,7 @@
 #include <string_view>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 
 namespace test
@@ -27,23 +28,50 @@ private:
     OUString m_aWorkdirRootURL;
     OUString m_aWorkdirRootPath;
 
+    static void concatEnsureSeparator(OUStringBuffer& buf, std::u16string_view s)
+    {
+        while (s.starts_with('/'))
+            s = s.substr(1);
+        assert(!s.empty());
+        if (!OUString::unacquired(buf).endsWith("/"))
+            buf.append("/");
+        buf.append(s);
+    }
+
 public:
     Directories();
 
-    const OUString& getSrcRootURL() const { return m_aSrcRootURL; }
-    const OUString& getSrcRootPath() const { return m_aSrcRootPath; }
-
     // return a URL to a given path from the source directory
-    OUString getURLFromSrc(std::u16string_view rPath) const;
+    template <typename... Segments> OUString getURLFromSrc(Segments... segments) const
+    {
+        OUStringBuffer buf(m_aSrcRootURL);
+        (..., concatEnsureSeparator(buf, segments));
+        return buf.makeStringAndClear();
+    }
 
     // return a Path to a given path from the source directory
-    OUString getPathFromSrc(std::u16string_view rPath) const;
+    template <typename... Segments> OUString getPathFromSrc(Segments... segments) const
+    {
+        OUStringBuffer buf(m_aSrcRootPath);
+        (..., concatEnsureSeparator(buf, segments));
+        return buf.makeStringAndClear();
+    }
 
     // return a URL to a given path from the workdir directory
-    OUString getURLFromWorkdir(std::u16string_view rPath) const;
+    OUString getURLFromWorkdir(std::u16string_view rPath) const
+    {
+        OUStringBuffer buf(m_aWorkdirRootURL);
+        concatEnsureSeparator(buf, rPath);
+        return buf.makeStringAndClear();
+    }
 
     // return a Path to a given path from the workdir directory
-    OUString getPathFromWorkdir(std::u16string_view rPath) const;
+    OUString getPathFromWorkdir(std::u16string_view rPath) const
+    {
+        OUStringBuffer buf(m_aWorkdirRootPath);
+        concatEnsureSeparator(buf, rPath);
+        return buf.makeStringAndClear();
+    }
 };
 }
 
