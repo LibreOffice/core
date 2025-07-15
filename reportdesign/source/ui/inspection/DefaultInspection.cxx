@@ -158,12 +158,12 @@ namespace rptui
 
         const struct
         {
-            const char* programmaticName;
+            OUString programmaticName;
             TranslateId uiNameResId;
             OUString    helpId;
         } aCategories[] = {
-            { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },
-            { "Data",       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },
+            { u"General"_ustr,    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },
+            { u"Data"_ustr,       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },
         };
 
         const size_t nCategories = SAL_N_ELEMENTS( aCategories );
@@ -171,7 +171,7 @@ namespace rptui
         PropertyCategoryDescriptor* pReturn = aReturn.getArray();
         for ( size_t i=0; i<nCategories; ++i, ++pReturn )
         {
-            pReturn->ProgrammaticName = OUString::createFromAscii( aCategories[i].programmaticName );
+            pReturn->ProgrammaticName = aCategories[i].programmaticName;
             pReturn->UIName = RptResId( aCategories[i].uiNameResId );
             pReturn->HelpURL = HelpIdUrl::getHelpURL( aCategories[i].helpId );
         }
