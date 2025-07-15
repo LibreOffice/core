@@ -433,6 +433,44 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionBreakAfterSection)
     auto aPageDescName = getProperty<OUString>(xParagraph, "PageDescName");
     CPPUNIT_ASSERT(!aPageDescName.isEmpty());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf167512)
+{
+    // Given a document with a text box with a paragraph in a list, followed by a paragraph not
+    // in a list:
+    createSwDoc("tdf167512.rtf");
+    {
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
+        auto xTextBox = getShape(1).queryThrow<text::XText>();
+        // First paragraph is not in list
+        auto xParagraph = getParagraphOfText(1, xTextBox, u"AAA"_ustr);
+        CPPUNIT_ASSERT(getProperty<OUString>(xParagraph, u"ListId"_ustr).isEmpty());
+        // Second paragraph is in list (its ListId is not empty)
+        xParagraph = getParagraphOfText(2, xTextBox, u"BBB"_ustr);
+        CPPUNIT_ASSERT(!getProperty<OUString>(xParagraph, u"ListId"_ustr).isEmpty());
+        // Third paragraph is not in list
+        xParagraph = getParagraphOfText(3, xTextBox, u"CCC"_ustr);
+        CPPUNIT_ASSERT(getProperty<OUString>(xParagraph, u"ListId"_ustr).isEmpty());
+    }
+    // Check export
+    saveAndReload(mpFilter);
+    {
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
+        auto xTextBox = getShape(1).queryThrow<text::XText>();
+        // First paragraph is not in list
+        auto xParagraph = getParagraphOfText(1, xTextBox, u"AAA"_ustr);
+        CPPUNIT_ASSERT(getProperty<OUString>(xParagraph, u"ListId"_ustr).isEmpty());
+        // Second paragraph is in list (its ListId is not empty)
+        xParagraph = getParagraphOfText(2, xTextBox, u"BBB"_ustr);
+        CPPUNIT_ASSERT(!getProperty<OUString>(xParagraph, u"ListId"_ustr).isEmpty());
+        // Third paragraph is not in list
+        xParagraph = getParagraphOfText(3, xTextBox, u"CCC"_ustr);
+        // Without the fix, this failed, because on export, the paragraph's properties weren't
+        // reset to defaults using \pard when starting next paragraph; so the list continued:
+        CPPUNIT_ASSERT(getProperty<OUString>(xParagraph, u"ListId"_ustr).isEmpty());
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

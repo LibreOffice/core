@@ -379,11 +379,8 @@ void RtfAttributeOutput::SectionBreaks(const SwNode& rNode)
 
 void RtfAttributeOutput::StartParagraphProperties()
 {
-    OStringBuffer aPar;
-    if (!m_rExport.GetRTFFlySyntax())
-    {
-        aPar.append(OOO_STRING_SVTOOLS_RTF_PARD OOO_STRING_SVTOOLS_RTF_PLAIN " ");
-    }
+    static constexpr std::string_view aPar(OOO_STRING_SVTOOLS_RTF_PARD OOO_STRING_SVTOOLS_RTF_PLAIN
+                                           " ");
     if (!m_bBufferSectionHeaders)
         m_rExport.Strm().WriteOString(aPar);
     else
