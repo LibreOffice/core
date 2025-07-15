@@ -1332,7 +1332,7 @@ const RecodeTable aAppleSymbolRecodeTable[] = {
     {"symbol",         {aAdobeSymbolToAppleSymbolTab, u"AppleSymbol"_ustr, nullptr}}
 };
 
-static ConvertChar aImplStarSymbolCvt = { nullptr, u"StarBats"_ustr, ImplStarSymbolToStarBats };
+const ConvertChar aImplStarSymbolCvt = { nullptr, u"StarBats"_ustr, ImplStarSymbolToStarBats };
 
 const ConvertChar* ConvertChar::GetRecodeData( std::u16string_view rOrgFontName, std::u16string_view rMapFontName )
 {

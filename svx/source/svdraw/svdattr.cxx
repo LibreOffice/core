@@ -1726,7 +1726,7 @@ SdrMeasureTextHPosItem* SdrMeasureTextHPosItem::Clone(SfxItemPool* /*pPool*/) co
 
 const OUString & SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static std::array<OUString, 4> aMeasureTextHPosItem
+    static constexpr std::array<OUString, 4> aMeasureTextHPosItem
     {
         u"automatic"_ustr,
         u"left outside"_ustr,

@@ -394,7 +394,7 @@ constexpr OUString s_stdStatAttrs[] = {
 };
 
 // NB: keep these two arrays in sync!
-const char* s_stdStats[] = {
+const char* const s_stdStats[] = {
     "PageCount",
     "TableCount",
     "DrawCount",
@@ -413,7 +413,7 @@ const char* s_stdStats[] = {
     nullptr
 };
 
-const char* s_stdMeta[] = {
+const char* const s_stdMeta[] = {
     "meta:generator",           // string
     "dc:title",                 // string
     "dc:description",           // string
@@ -1212,7 +1212,7 @@ void SfxDocumentMetaData::init(
 
 
     // select nodes for elements of which we only handle one occurrence
-    for (const char **pName = s_stdMeta; *pName != nullptr; ++pName) {
+    for (const char* const* pName = s_stdMeta; *pName != nullptr; ++pName) {
         OUString name = OUString::createFromAscii(*pName);
         // NB: If a document contains more than one occurrence of a
         // meta-data element, we arbitrarily pick one of them here.
