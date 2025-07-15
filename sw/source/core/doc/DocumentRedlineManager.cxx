@@ -1918,7 +1918,14 @@ void DocumentRedlineManager::PreAppendInsertRedline(AppendRedlineContext& rCtx)
 
 void DocumentRedlineManager::PreAppendDeleteRedline(AppendRedlineContext& rCtx)
 {
-    switch( rCtx.pRedl->GetType() )
+    RedlineType eRedlType = rCtx.pRedl->GetType();
+    bool bHierarchicalFormat = rCtx.pRedl->GetType() == RedlineType::Format && rCtx.pRedl->GetStackCount() > 1;
+    if (bHierarchicalFormat && rCtx.pRedl->GetType(1) == RedlineType::Insert)
+    {
+        eRedlType = rCtx.pRedl->GetType(1);
+    }
+
+    switch (eRedlType)
     {
     case RedlineType::Delete:
         switch( rCtx.eCmpPos )
