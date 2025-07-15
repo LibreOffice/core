@@ -35,31 +35,31 @@ ScPoolHelper::ScPoolHelper( ScDocument& rSourceDoc )
 
 ScPoolHelper::~ScPoolHelper()
 {
-    pEnginePool.clear();
-    pEditPool.clear();
+    mpEditTextObjectPool.clear();
+    mpEditEnginePool.clear();
     pFormTable.reset();
     mxStylePool.clear();
     pDocPool.clear();
 }
 
-SfxItemPool* ScPoolHelper::GetEditPool() const
+SfxItemPool* ScPoolHelper::GetEditTextObjectPool() const
 {
-    if ( !pEditPool )
+    if ( !mpEditTextObjectPool )
     {
-        pEditPool = EditEngine::CreatePool();
-        pEditPool->SetDefaultMetric( MapUnit::Map100thMM );
+        mpEditTextObjectPool = EditEngine::CreatePool();
+        mpEditTextObjectPool->SetDefaultMetric( MapUnit::Map100thMM );
     }
-    return pEditPool.get();
+    return mpEditTextObjectPool.get();
 }
 
-SfxItemPool* ScPoolHelper::GetEnginePool() const
+SfxItemPool* ScPoolHelper::GetEditEnginePool() const
 {
-    if ( !pEnginePool )
+    if ( !mpEditEnginePool )
     {
-        pEnginePool = EditEngine::CreatePool();
-        pEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
+        mpEditEnginePool = EditEngine::CreatePool();
+        mpEditEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
     } // ifg ( pEnginePool )
-    return pEnginePool.get();
+    return mpEditEnginePool.get();
 }
 SvNumberFormatter*  ScPoolHelper::GetFormTable() const
 {

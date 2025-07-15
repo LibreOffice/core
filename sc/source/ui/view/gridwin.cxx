@@ -5806,7 +5806,7 @@ std::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell* pDocSh, const S
 {
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    auto pEngine = std::make_shared<ScFieldEditEngine>(&rDoc, rDoc.GetEditPool());
+    auto pEngine = std::make_shared<ScFieldEditEngine>(&rDoc, rDoc.GetEditTextObjectPool());
     ScSizeDeviceProvider aProv(pDocSh);
     pEngine->SetRefDevice(aProv.GetDevice());
     pEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));

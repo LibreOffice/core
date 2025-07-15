@@ -739,9 +739,9 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
 }
 
 ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )
-        : ScFieldEditEngine( pDoc, pDoc->GetEnginePool() )
+        : ScFieldEditEngine( pDoc, pDoc->GetEditEnginePool() )
 {
-    SetEditTextObjectPool( pDoc->GetEditPool() );
+    SetEditTextObjectPool( pDoc->GetEditTextObjectPool() );
     const ScPatternAttr& rScPatternAttr(pDoc->getCellAttributeHelper().getDefaultCellAttribute());
     Init(rScPatternAttr);
 }

@@ -1536,7 +1536,7 @@ void ScTextWnd::InitEditEngine()
     {
         pDocSh = mpViewShell->GetViewData().GetDocShell();
         ScDocument& rDoc = mpViewShell->GetViewData().GetDocument();
-        pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
+        pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEditEnginePool(), rDoc.GetEditTextObjectPool());
     }
     else
         pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool().get(), nullptr, true);
@@ -2104,7 +2104,7 @@ void ScTextWnd::MakeDialogEditView()
     if ( pViewSh )
     {
         ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
-        pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
+        pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEditEnginePool(), rDoc.GetEditTextObjectPool());
     }
     else
         pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool().get(), nullptr, true);

@@ -89,7 +89,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         const bool bRecord (rDoc.IsUndoEnabled());
 
         const ScPatternAttr* pPattern = rDoc.GetPattern( nStartCol, nStartRow, nTab );
-        std::optional<ScTabEditEngine> pEngine(std::in_place, *pPattern, rDoc.GetEnginePool(), &rDoc );
+        std::optional<ScTabEditEngine> pEngine(std::in_place, *pPattern, rDoc.GetEditEnginePool(), &rDoc );
         pEngine->EnableUndo( false );
 
         vcl::Window* pActWin = GetActiveWin();
@@ -357,8 +357,8 @@ void ScViewFunc::DoThesaurus()
 
     uno::Reference<linguistic2::XSpellChecker1> xSpeller = LinguMgr::GetSpellChecker();
 
-    pThesaurusEngine.reset(new ScEditEngineDefaulter(rDoc.GetEnginePool()));
-    pThesaurusEngine->SetEditTextObjectPool( rDoc.GetEditPool() );
+    pThesaurusEngine.reset(new ScEditEngineDefaulter(rDoc.GetEditEnginePool()));
+    pThesaurusEngine->SetEditTextObjectPool( rDoc.GetEditTextObjectPool() );
     pThesaurusEngine->SetRefDevice(GetViewData().GetActiveWin()->GetOutDev());
     pThesaurusEngine->SetSpeller(xSpeller);
     MakeEditView(pThesaurusEngine.get(), nCol, nRow );
@@ -509,12 +509,12 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     {
         case SC_CONVERSION_SPELLCHECK:
             pEngine.reset(new ScSpellingEngine(
-                rDoc.GetEnginePool(), rViewData, pUndoDoc.get(), pRedoDoc.get(), LinguMgr::GetSpellChecker() ));
+                rDoc.GetEditEnginePool(), rViewData, pUndoDoc.get(), pRedoDoc.get(), LinguMgr::GetSpellChecker() ));
         break;
         case SC_CONVERSION_HANGULHANJA:
         case SC_CONVERSION_CHINESE_TRANSL:
             pEngine.reset(new ScTextConversionEngine(
-                rDoc.GetEnginePool(), rViewData, rConvParam, pUndoDoc.get(), pRedoDoc.get() ));
+                rDoc.GetEditEnginePool(), rViewData, rConvParam, pUndoDoc.get(), pRedoDoc.get() ));
         break;
     }
 
@@ -716,7 +716,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
     ScDocument& rDoc = GetViewData().GetDocument();
     SCTAB nTab = GetViewData().GetTabNo();
     ScAddress aCellPos( nPosX, nPosY, nTab );
-    EditEngine aEngine( rDoc.GetEnginePool() );
+    EditEngine aEngine( rDoc.GetEditEnginePool() );
 
     const EditTextObject* pOld = rDoc.GetEditText(aCellPos);
     if (pOld)

@@ -837,7 +837,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         OUString aString;
 
         const ScPatternAttr* pOldPattern = rDoc.GetPattern( nCol, nRow, nTab );
-        ScTabEditEngine aEngine( *pOldPattern, rDoc.GetEnginePool(), &rDoc );
+        ScTabEditEngine aEngine( *pOldPattern, rDoc.GetEditEnginePool(), &rDoc );
         aEngine.SetTextCurrentDefaults(rData);
 
         if (bTestSimple)                    // test, if simple string without attribute
@@ -902,7 +902,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             for (const auto& rTab : rMark)
             {
                 ScAddress aPos(nCol, nRow, rTab);
-                rDoc.SetEditText(aPos, rData, rDoc.GetEditPool());
+                rDoc.SetEditText(aPos, rData, rDoc.GetEditTextObjectPool());
             }
 
             if ( bRecord )

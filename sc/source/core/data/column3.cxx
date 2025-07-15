@@ -2394,7 +2394,7 @@ void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, std:
 
 void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const EditTextObject& rEditText )
 {
-    if (GetDoc().GetEditPool() == rEditText.GetPool())
+    if (GetDoc().GetEditTextObjectPool() == rEditText.GetPool())
     {
         SetEditText(rBlockPos, nRow, rEditText.Clone());
         return;
@@ -2410,7 +2410,7 @@ void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, cons
 
 void ScColumn::SetEditText( SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool )
 {
-    if (pEditPool && GetDoc().GetEditPool() == pEditPool)
+    if (pEditPool && GetDoc().GetEditTextObjectPool() == pEditPool)
     {
         SetEditText(nRow, rEditText.Clone());
         return;

@@ -65,7 +65,7 @@ ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
 {
     const ScPatternAttr* pPattern = mpDoc->GetPattern(
         maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
-    mpEngine.reset( new ScTabEditEngine(*pPattern, mpDoc->GetEditPool(), mpDoc, mpDoc->GetEditPool()) );
+    mpEngine.reset( new ScTabEditEngine(*pPattern, mpDoc->GetEditTextObjectPool(), mpDoc, mpDoc->GetEditTextObjectPool()) );
     mpEngine->SetUpdateLayout( false );
     mpEngine->EnableUndo( false );
 }
