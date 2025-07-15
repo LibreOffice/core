@@ -39,7 +39,7 @@ namespace rptui
         const OUString       m_sPattern;
 
     public:
-        ConditionalExpression( const char* _pAsciiPattern );
+        ConditionalExpression(const OUString& sPattern);
 
         /** assembles an expression string from a field data source, and one or two operands
         */

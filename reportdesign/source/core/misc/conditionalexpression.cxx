@@ -29,8 +29,8 @@ namespace rptui
     // = ConditionalExpression
 
 
-    ConditionalExpression::ConditionalExpression( const char* _pAsciiPattern )
-        :m_sPattern( OUString::createFromAscii( _pAsciiPattern ) )
+    ConditionalExpression::ConditionalExpression(const OUString& sPattern)
+        : m_sPattern(sPattern)
     {
     }
 
@@ -163,14 +163,14 @@ namespace rptui
     {
         ConditionalExpressions().swap(_out_rCondExp);
 
-        _out_rCondExp[ eBetween ]        = std::make_shared<ConditionalExpression>( "AND( ( $$ ) >= ( $1 ); ( $$ ) <= ( $2 ) )" );
-        _out_rCondExp[ eNotBetween ]     = std::make_shared<ConditionalExpression>( "NOT( AND( ( $$ ) >= ( $1 ); ( $$ ) <= ( $2 ) ) )" );
-        _out_rCondExp[ eEqualTo ]        = std::make_shared<ConditionalExpression>( "( $$ ) = ( $1 )" );
-        _out_rCondExp[ eNotEqualTo ]     = std::make_shared<ConditionalExpression>( "( $$ ) <> ( $1 )" );
-        _out_rCondExp[ eGreaterThan ]    = std::make_shared<ConditionalExpression>( "( $$ ) > ( $1 )" );
-        _out_rCondExp[ eLessThan ]       = std::make_shared<ConditionalExpression>( "( $$ ) < ( $1 )" );
-        _out_rCondExp[ eGreaterOrEqual ] = std::make_shared<ConditionalExpression>( "( $$ ) >= ( $1 )" );
-        _out_rCondExp[ eLessOrEqual ]    = std::make_shared<ConditionalExpression>( "( $$ ) <= ( $1 )" );
+        _out_rCondExp[ eBetween ]        = std::make_shared<ConditionalExpression>(u"AND( ( $$ ) >= ( $1 ); ( $$ ) <= ( $2 ) )"_ustr);
+        _out_rCondExp[ eNotBetween ]     = std::make_shared<ConditionalExpression>(u"NOT( AND( ( $$ ) >= ( $1 ); ( $$ ) <= ( $2 ) ) )"_ustr);
+        _out_rCondExp[ eEqualTo ]        = std::make_shared<ConditionalExpression>(u"( $$ ) = ( $1 )"_ustr);
+        _out_rCondExp[ eNotEqualTo ]     = std::make_shared<ConditionalExpression>(u"( $$ ) <> ( $1 )"_ustr);
+        _out_rCondExp[ eGreaterThan ]    = std::make_shared<ConditionalExpression>(u"( $$ ) > ( $1 )"_ustr);
+        _out_rCondExp[ eLessThan ]       = std::make_shared<ConditionalExpression>(u"( $$ ) < ( $1 )"_ustr);
+        _out_rCondExp[ eGreaterOrEqual ] = std::make_shared<ConditionalExpression>(u"( $$ ) >= ( $1 )"_ustr);
+        _out_rCondExp[ eLessOrEqual ]    = std::make_shared<ConditionalExpression>(u"( $$ ) <= ( $1 )"_ustr);
 
         return _out_rCondExp.size();
     }
