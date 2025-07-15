@@ -10,12 +10,15 @@
 #include <swmodeltestbase.hxx>
 
 #include <editeng/wghtitem.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 #include <docsh.hxx>
 #include <redline.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <swmodule.hxx>
+#include <strings.hrc>
 
 namespace
 {
@@ -95,6 +98,35 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineIns)
         CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData.GetType());
         CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[2]->GetType());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInsThenFormatSelf)
+{
+    // Given a document with <ins>A<format>B</format>C</ins> redlines, created by Alice:
+    createSwDoc("ins-then-format-self.docx");
+    SwModule* pModule = SwModule::get();
+    pModule->SetRedlineAuthor("Alice");
+    comphelper::ScopeGuard g(
+        [pModule] { pModule->SetRedlineAuthor(SwResId(STR_REDLINE_UNKNOWN_AUTHOR)); });
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+    pWrtShell->DelLeft();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rRedlines.size());
+
+    // When deleting B:
+    pWrtShell->DelLeft();
+
+    // Then make sure that B is removed from the document (since this is a self-insert):
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. a delete was created instead of removing the insert.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
 }
 }
 
