@@ -1449,6 +1449,8 @@ bool OReportDefinition::WriteThroughComponent(
     const uno::Sequence<uno::Any> & rArguments,
     const uno::Reference<embed::XStorage>& _xStorageToSaveTo)
 {
+    OSL_ENSURE( xComponent.is(), "Need component!" );
+
     // open stream
     uno::Reference<io::XStream> xStream = _xStorageToSaveTo->openStreamElement(rStreamName,
                                                                                embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE);
@@ -1474,25 +1476,6 @@ bool OReportDefinition::WriteThroughComponent(
     xStreamProp->setPropertyValue( u"UseCommonStoragePasswordEncryption"_ustr,
                                        uno::Any( true ) );
 
-    // set buffer and create outputstream
-
-    // write the stuff
-    bool bRet = WriteThroughComponent(
-        xOutputStream, xComponent,
-        rServiceName, rArguments);
-    // finally, commit stream.
-    return bRet;
-}
-
-bool OReportDefinition::WriteThroughComponent(
-    const uno::Reference<io::XOutputStream> & xOutputStream,
-    const uno::Reference<lang::XComponent> & xComponent,
-    const OUString& rServiceName,
-    const uno::Sequence<uno::Any> & rArguments)
-{
-    OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );
-    OSL_ENSURE( xComponent.is(), "Need component!" );
-
     // get component
     uno::Reference< xml::sax::XWriter > xSaxWriter(
         xml::sax::Writer::create(m_aProps->m_xContext) );
@@ -1511,7 +1494,7 @@ bool OReportDefinition::WriteThroughComponent(
         m_aProps->m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             rServiceName, aArgs, m_aProps->m_xContext), uno::UNO_QUERY);
     OSL_ENSURE( xExporter.is(),
-            "can't instantiate export filter component" );
+               "can't instantiate export filter component" );
     if( !xExporter.is() )
         return false;
 

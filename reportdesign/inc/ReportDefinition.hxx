@@ -137,14 +137,6 @@ namespace reportdesign
             const css::uno::Sequence< css::uno::Any> & rArguments,
             const css::uno::Reference< css::embed::XStorage >& _xStorageToSaveTo);
 
-        /// write a single output stream
-        /// (to be called either directly or by WriteThroughComponent(...))
-        bool WriteThroughComponent(
-            const css::uno::Reference< css::io::XOutputStream> & xOutputStream,
-            const css::uno::Reference< css::lang::XComponent> & xComponent,
-            const OUString& rServiceName,
-            const css::uno::Sequence< css::uno::Any> & rArguments);
-
         void notifyEvent(const OUString& _sEventName);
         void init();
         void fillArgs(utl::MediaDescriptor& _aDescriptor);
