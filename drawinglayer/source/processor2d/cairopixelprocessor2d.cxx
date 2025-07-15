@@ -1635,6 +1635,13 @@ void CairoPixelProcessor2D::processTransparencePrimitive2D(
 
     cairo_save(mpRT);
 
+    // tdf#166734 need to expand to full pixels due to pre-rendering
+    // will use discrete pixels/top-left position
+    aVisibleRange.expand(
+        basegfx::B2DPoint(floor(aVisibleRange.getMinX()), floor(aVisibleRange.getMinY())));
+    aVisibleRange.expand(
+        basegfx::B2DPoint(ceil(aVisibleRange.getMaxX()), ceil(aVisibleRange.getMaxY())));
+
     // create embedding transformation for sub-surface
     const basegfx::B2DHomMatrix aEmbedTransform(basegfx::utils::createTranslateB2DHomMatrix(
         -aVisibleRange.getMinX(), -aVisibleRange.getMinY()));
@@ -1644,8 +1651,8 @@ void CairoPixelProcessor2D::processTransparencePrimitive2D(
 
     // draw mask to temporary surface
     cairo_surface_t* pTarget(cairo_get_target(mpRT));
-    const double fContainedWidth(ceil(aVisibleRange.getWidth()));
-    const double fContainedHeight(ceil(aVisibleRange.getHeight()));
+    const double fContainedWidth(aVisibleRange.getWidth());
+    const double fContainedHeight(aVisibleRange.getHeight());
     cairo_surface_t* pMask(cairo_surface_create_similar_image(pTarget, CAIRO_FORMAT_ARGB32,
                                                               fContainedWidth, fContainedHeight));
     CairoPixelProcessor2D aMaskRenderer(aViewInformation2D, pMask);
@@ -1699,6 +1706,13 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
 
     cairo_save(mpRT);
 
+    // tdf#166734 need to expand to full pixels due to pre-rendering
+    // will use discrete pixels/top-left position
+    aVisibleRange.expand(
+        basegfx::B2DPoint(floor(aVisibleRange.getMinX()), floor(aVisibleRange.getMinY())));
+    aVisibleRange.expand(
+        basegfx::B2DPoint(ceil(aVisibleRange.getMaxX()), ceil(aVisibleRange.getMaxY())));
+
     // create embedding transformation for sub-surface
     const basegfx::B2DHomMatrix aEmbedTransform(basegfx::utils::createTranslateB2DHomMatrix(
         -aVisibleRange.getMinX(), -aVisibleRange.getMinY()));
@@ -1708,8 +1722,8 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
 
     // draw sub-content to temporary surface
     cairo_surface_t* pTarget(cairo_get_target(mpRT));
-    const double fContainedWidth(ceil(aVisibleRange.getWidth()));
-    const double fContainedHeight(ceil(aVisibleRange.getHeight()));
+    const double fContainedWidth(aVisibleRange.getWidth());
+    const double fContainedHeight(aVisibleRange.getHeight());
     cairo_surface_t* pContent(cairo_surface_create_similar_image(
         pTarget, CAIRO_FORMAT_ARGB32, fContainedWidth, fContainedHeight));
     CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
@@ -1752,8 +1766,8 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
         unsigned char* pFrontDataRoot(cairo_image_surface_get_data(pContent));
 
         // in parallel, iterate over original data (call it Back)
-        const sal_uInt32 nBackOffX(floor(aVisibleRange.getMinX()));
-        const sal_uInt32 nBackOffY(floor(aVisibleRange.getMinY()));
+        const sal_uInt32 nBackOffX(aVisibleRange.getMinX());
+        const sal_uInt32 nBackOffY(aVisibleRange.getMinY());
         const sal_uInt32 nBackStride(cairo_image_surface_get_stride(pRenderTarget));
         unsigned char* pBackDataRoot(cairo_image_surface_get_data(pRenderTarget));
         const bool bBackPreMultiply(CAIRO_FORMAT_ARGB32
@@ -1995,8 +2009,6 @@ void CairoPixelProcessor2D::processUnifiedTransparencePrimitive2D(
         return;
     }
 
-    cairo_save(mpRT);
-
     // calculate visible range, create only for that range
     basegfx::B2DRange aDiscreteRange(
         rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
@@ -2010,6 +2022,15 @@ void CairoPixelProcessor2D::processUnifiedTransparencePrimitive2D(
         return;
     }
 
+    cairo_save(mpRT);
+
+    // tdf#166734 need to expand to full pixels due to pre-rendering
+    // will use discrete pixels/top-left position
+    aVisibleRange.expand(
+        basegfx::B2DPoint(floor(aVisibleRange.getMinX()), floor(aVisibleRange.getMinY())));
+    aVisibleRange.expand(
+        basegfx::B2DPoint(ceil(aVisibleRange.getMaxX()), ceil(aVisibleRange.getMaxY())));
+
     // create embedding transformation for sub-surface
     const basegfx::B2DHomMatrix aEmbedTransform(basegfx::utils::createTranslateB2DHomMatrix(
         -aVisibleRange.getMinX(), -aVisibleRange.getMinY()));
@@ -2019,8 +2040,8 @@ void CairoPixelProcessor2D::processUnifiedTransparencePrimitive2D(
 
     // draw content to temporary surface
     cairo_surface_t* pTarget(cairo_get_target(mpRT));
-    const double fContainedWidth(ceil(aVisibleRange.getWidth()));
-    const double fContainedHeight(ceil(aVisibleRange.getHeight()));
+    const double fContainedWidth(aVisibleRange.getWidth());
+    const double fContainedHeight(aVisibleRange.getHeight());
     cairo_surface_t* pContent(cairo_surface_create_similar(
         pTarget, cairo_surface_get_content(pTarget), fContainedWidth, fContainedHeight));
     CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
