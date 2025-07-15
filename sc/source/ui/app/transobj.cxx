@@ -317,7 +317,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             const ScPatternAttr* pPattern = m_pDoc->GetPattern( nCol, nRow, nTab );
             if (pPattern)
             {
-                ScTabEditEngine aEngine(*pPattern, m_pDoc->GetEditPool(), *m_pDoc);
+                ScTabEditEngine aEngine(*pPattern, m_pDoc->GetEditTextObjectPool(), *m_pDoc);
                 ScRefCellValue aCell(*m_pDoc, aPos);
                 if (aCell.getType() == CELLTYPE_EDIT)
                 {

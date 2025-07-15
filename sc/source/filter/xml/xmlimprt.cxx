@@ -1640,9 +1640,9 @@ ScEditEngineDefaulter* ScXMLImport::GetEditEngine()
 {
     if (!mpEditEngine && mpDoc)
     {
-        mpEditEngine.reset(new ScEditEngineDefaulter(mpDoc->GetEnginePool()));
+        mpEditEngine.reset(new ScEditEngineDefaulter(mpDoc->GetEditEnginePool()));
         mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
-        mpEditEngine->SetEditTextObjectPool(mpDoc->GetEditPool());
+        mpEditEngine->SetEditTextObjectPool(mpDoc->GetEditTextObjectPool());
         mpEditEngine->SetUpdateLayout(false);
         mpEditEngine->EnableUndo(false);
         mpEditEngine->SetControlWord(mpEditEngine->GetControlWord() & ~EEControlBits::ALLOWBIGOBJS);

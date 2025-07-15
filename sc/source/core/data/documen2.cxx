@@ -486,21 +486,21 @@ SvNumberFormatter* ScDocument::GetFormatTable() const
     return mxPoolHelper->GetFormTable();
 }
 
-SfxItemPool* ScDocument::GetEditPool() const
+SfxItemPool* ScDocument::GetEditTextObjectPool() const
 {
-    return mxPoolHelper->GetEditPool();
+    return mxPoolHelper->GetEditTextObjectPool();
 }
 
-SfxItemPool* ScDocument::GetEnginePool() const
+SfxItemPool* ScDocument::GetEditEnginePool() const
 {
-    return mxPoolHelper->GetEnginePool();
+    return mxPoolHelper->GetEditEnginePool();
 }
 
 ScFieldEditEngine& ScDocument::GetEditEngine()
 {
     if ( !mpEditEngine )
     {
-        mpEditEngine.reset( new ScFieldEditEngine(this, GetEnginePool(), GetEditPool()) );
+        mpEditEngine.reset( new ScFieldEditEngine(this, GetEditEnginePool(), GetEditTextObjectPool()) );
         mpEditEngine->SetUpdateLayout( false );
         mpEditEngine->EnableUndo( false );
         mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
@@ -514,7 +514,7 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     if ( !mpNoteEngine )
     {
         ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
-        mpNoteEngine.reset( new ScNoteEditEngine( GetEnginePool(), GetEditPool() ) );
+        mpNoteEngine.reset( new ScNoteEditEngine( GetEditEnginePool(), GetEditTextObjectPool() ) );
         mpNoteEngine->SetUpdateLayout( false );
         mpNoteEngine->EnableUndo( false );
         mpNoteEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
@@ -1211,7 +1211,7 @@ std::unique_ptr<ScFieldEditEngine> ScDocument::CreateFieldEditEngine()
     if (!pCacheFieldEditEngine)
     {
         pNewEditEngine.reset( new ScFieldEditEngine(
-            this, GetEnginePool(), GetEditPool(), false) );
+            this, GetEditEnginePool(), GetEditTextObjectPool(), false) );
     }
     else
     {

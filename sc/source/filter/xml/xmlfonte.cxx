@@ -85,7 +85,7 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXML
 
     const SfxItemPool* pItemPool(pDoc->GetPool());
     AddFontItems(aWhichIds, 3, pItemPool, true);
-    const SfxItemPool* pEditPool(pDoc->GetEditPool());
+    const SfxItemPool* pEditPool(pDoc->GetEditTextObjectPool());
     AddFontItems(aEditWhichIds, 3, pEditPool, false);
 
     std::unique_ptr<SfxStyleSheetIterator> pItr = pDoc->GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Page);

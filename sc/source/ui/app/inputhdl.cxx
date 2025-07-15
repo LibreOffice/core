@@ -926,7 +926,7 @@ void ScInputHandler::ImplCreateEditEngine()
     // we cannot create a properly initialised EditEngine until we have a document
     assert( pActiveViewSh );
     ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell().GetDocument();
-    mpEditEngine = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
+    mpEditEngine = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEditEnginePool(), rDoc.GetEditTextObjectPool());
     mpEditEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( mpEditEngine->GetWordDelimiters() ) );
     UpdateRefDevice();      // also sets MapMode
     mpEditEngine->SetPaperSize( Size( 1000000, 1000000 ) );

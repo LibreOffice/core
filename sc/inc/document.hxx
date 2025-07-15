@@ -2594,8 +2594,8 @@ public:
     void                           SetInLinkUpdate(bool bSet);             // TableLink or AreaLink
     bool                           IsInLinkUpdate() const;                 // including DdeLink
 
-    SC_DLLPUBLIC SfxItemPool*       GetEditPool() const;
-    SC_DLLPUBLIC SfxItemPool*       GetEnginePool() const;
+    SC_DLLPUBLIC SfxItemPool*       GetEditTextObjectPool() const;
+    SC_DLLPUBLIC SfxItemPool*       GetEditEnginePool() const;
     SC_DLLPUBLIC ScFieldEditEngine& GetEditEngine();
     SC_DLLPUBLIC ScNoteEditEngine&  GetNoteEngine();
 

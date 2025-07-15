@@ -913,7 +913,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     if ( pData )
     {
         const ScPatternAttr* pOldPattern = rDoc.GetPattern( nCol, nRow, nTab );
-        ScTabEditEngine aEngine( *pOldPattern, rDoc.GetEnginePool(), rDoc );
+        ScTabEditEngine aEngine( *pOldPattern, rDoc.GetEditEnginePool(), rDoc );
         aEngine.SetTextCurrentDefaults(*pData);
 
         ScEditAttrTester aTester( &aEngine );
@@ -940,7 +940,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     else if ( pData )
     {
         // A copy of pData will be stored.
-        pInsDoc->SetEditText(aPos, *pData, rDoc.GetEditPool());
+        pInsDoc->SetEditText(aPos, *pData, rDoc.GetEditTextObjectPool());
     }
     else
         pInsDoc->SetString( nCol, nRow, nTab, aNewStr );

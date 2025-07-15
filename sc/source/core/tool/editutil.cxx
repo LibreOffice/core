@@ -730,9 +730,9 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
 }
 
 ScTabEditEngine::ScTabEditEngine( ScDocument& rDoc )
-        : ScFieldEditEngine( &rDoc, rDoc.GetEnginePool() )
+        : ScFieldEditEngine( &rDoc, rDoc.GetEditEnginePool() )
 {
-    SetEditTextObjectPool( rDoc.GetEditPool() );
+    SetEditTextObjectPool( rDoc.GetEditTextObjectPool() );
     const ScPatternAttr& rScPatternAttr(rDoc.getCellAttributeHelper().getDefaultCellAttribute());
     Init(rScPatternAttr);
 }

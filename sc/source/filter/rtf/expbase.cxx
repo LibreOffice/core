@@ -68,7 +68,7 @@ bool ScExportBase::IsEmptyTable( SCTAB nTab ) const
 ScFieldEditEngine& ScExportBase::GetEditEngine() const
 {
     if ( !pEditEngine )
-        const_cast<ScExportBase*>(this)->pEditEngine.reset( new ScFieldEditEngine(pDoc, pDoc->GetEditPool()) );
+        const_cast<ScExportBase*>(this)->pEditEngine.reset( new ScFieldEditEngine(pDoc, pDoc->GetEditTextObjectPool()) );
     return *pEditEngine;
 }
 

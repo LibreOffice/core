@@ -604,9 +604,9 @@ void WorkbookGlobals::initialize()
 
     // initialise edit engine
     ScDocument& rDoc = getScDocument();
-    mxEditEngine.reset( new ScEditEngineDefaulter( rDoc.GetEnginePool() ) );
+    mxEditEngine.reset( new ScEditEngineDefaulter( rDoc.GetEditEnginePool() ) );
     mxEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
-    mxEditEngine->SetEditTextObjectPool( rDoc.GetEditPool() );
+    mxEditEngine->SetEditTextObjectPool( rDoc.GetEditTextObjectPool() );
     mxEditEngine->SetUpdateLayout( false );
     mxEditEngine->EnableUndo( false );
     mxEditEngine->SetControlWord( mxEditEngine->GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );

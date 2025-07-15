@@ -2280,7 +2280,7 @@ void ScOutputData::InitOutputEditEngine()
 {
     if (!mxOutputEditEngine)
     {
-        mxOutputEditEngine = std::make_unique<ScFieldEditEngine>(mpDoc, mpDoc->GetEnginePool());
+        mxOutputEditEngine = std::make_unique<ScFieldEditEngine>(mpDoc, mpDoc->GetEditEnginePool());
         mxOutputEditEngine->SetUpdateLayout( false );
         mxOutputEditEngine->EnableUndo( false ); // don't need undo for painting purposes
         // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
