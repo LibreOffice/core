@@ -1,0 +1,25 @@
+From a918593e59e4fc67055420281940f67a068e0598 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@gmail.com>
+Date: Tue, 15 Jul 2025 11:21:18 +0100
+Subject: [PATCH] ICU-23054 const up struct that gencmn outputs
+
+---
+ icu4c/source/tools/toolutil/pkg_gencmn.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/icu4c/source/tools/toolutil/pkg_gencmn.cpp b/icu4c/source/tools/toolutil/pkg_gencmn.cpp
+index 3ec965d8e6..c1a46e9aed 100644
+--- a/icu4c/source/tools/toolutil/pkg_gencmn.cpp
++++ b/icu4c/source/tools/toolutil/pkg_gencmn.cpp
+@@ -360,7 +360,7 @@ createCommonDataFile(const char *destDir, const char *name, const char *entrypoi
+ 
+         snprintf(
+             buffer, sizeof(buffer),
+-            "U_EXPORT struct {\n"
++            "U_EXPORT const struct {\n"
+             "    uint16_t headerSize;\n"
+             "    uint8_t magic1, magic2;\n"
+             "    UDataInfo info;\n"
+-- 
+2.49.0
+

@@ -41,6 +41,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.patch.1) \
 	external/icu/no-python.patch \
 	external/icu/Wunnecessary-virtual-specifier.patch \
+	external/icu/0001-ICU-23054-const-up-struct-that-gencmn-outputs.patch.2 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
