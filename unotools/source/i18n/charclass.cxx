@@ -288,33 +288,6 @@ bool CharClass::isUpper( const OUString& rStr, sal_Int32 nPos ) const
     return false;
 }
 
-bool CharClass::isUpper( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
-{
-    if (rStr.isEmpty())
-        return false;
-
-    assert(nPos >= 0 && nPos < rStr.getLength() && nCount > 0);
-    if (nPos < 0 || nPos >= rStr.getLength() || nCount == 0)
-        return false;
-
-    try
-    {
-        const sal_Int32 nLen = std::min( nPos + nCount, rStr.getLength());
-        while (nPos < nLen)
-        {
-            if (!isUpper( rStr, nPos))
-                return false;
-            rStr.iterateCodePoints( &nPos);
-        }
-        return true;
-    }
-    catch ( const Exception& )
-    {
-        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
-    }
-    return false;
-}
-
 OUString CharClass::titlecase(const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount) const
 {
     try
