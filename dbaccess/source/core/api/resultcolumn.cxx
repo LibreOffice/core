@@ -78,6 +78,8 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
                         break;
                     }
                 }
+                Reference< XCloseable > xResultCloseable( xVersionColumns, UNO_QUERY_THROW );
+                xResultCloseable->close();
             }
         }
         catch(const SQLException&)
