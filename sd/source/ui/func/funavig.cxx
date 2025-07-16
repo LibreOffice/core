@@ -160,15 +160,32 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
                         sTitle = SdResId(STR_GOTO_SLIDE_DLG_TITLE);
                         sLabel = SdResId(STR_SLIDE_NAME) + ":";
                     }
-                    svx::GotoPageDlg aDlg(pDrawViewShell->GetFrameWeld(), sTitle, sLabel,
-                         pDrawViewShell->GetCurPagePos() + 1,
-                         mpDoc->GetSdPageCount(PageKind::Standard));
-                    if (aDlg.run() == RET_OK)
-                        pDrawViewShell->SwitchPage(aDlg.GetPageSelection() - 1);
+                    std::shared_ptr<SfxRequest> xRequest = std::make_shared<SfxRequest>(rReq);
+                    rReq.Ignore(); // the 'old' request is not relevant any more
+
+                    auto xDialog = std::make_shared<svx::GotoPageDlg>(pDrawViewShell->GetFrameWeld(), sTitle, sLabel,
+                        pDrawViewShell->GetCurPagePos() + 1,
+                        mpDoc->GetSdPageCount(PageKind::Standard));
+
+                    rtl::Reference<FuNavigation> xThis( this ); // avoid destruction within async processing
+                    weld::DialogController::runAsync(xDialog, [this, xDialog, xRequest, xThis](sal_uInt32 nResult) {
+                        if (nResult == RET_OK)
+                            static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(xDialog->GetPageSelection() - 1);
+                        xThis->Finish();
+                        xRequest->Done();
+                    });
+
+                    return;
                 }
         }
         break;
     }
+
+    Finish();
+}
+
+void FuNavigation::Finish()
+{
     // Refresh toolbar icons
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate(SID_GO_TO_FIRST_PAGE);
