@@ -224,19 +224,19 @@ IMPL_LINK(DataLabelResources, NumberFormatDialogHdl, weld::Button&, rButton, voi
 IMPL_LINK(DataLabelResources, CheckHdl, weld::Toggleable&, rToggle, void)
 {
     if (&rToggle == m_xCBNumber.get())
-        m_aNumberState.ButtonToggled(rToggle);
+        m_aNumberState.CheckButtonToggled(*m_xCBNumber);
     else if (&rToggle == m_xCBPercent.get())
-        m_aPercentState.ButtonToggled(rToggle);
+        m_aPercentState.CheckButtonToggled(*m_xCBPercent);
     else if (&rToggle == m_xCBCategory.get())
-        m_aCategoryState.ButtonToggled(rToggle);
+        m_aCategoryState.CheckButtonToggled(*m_xCBCategory);
     else if (&rToggle == m_xCBSymbol.get())
-        m_aSymbolState.ButtonToggled(rToggle);
+        m_aSymbolState.CheckButtonToggled(*m_xCBSymbol);
     else if (&rToggle == m_xCBDataSeries.get())
-        m_aDataSeriesState.ButtonToggled(rToggle);
+        m_aDataSeriesState.CheckButtonToggled(*m_xCBDataSeries);
     else if (&rToggle == m_xCBWrapText.get())
-        m_aWrapTextState.ButtonToggled(rToggle);
+        m_aWrapTextState.CheckButtonToggled(*m_xCBWrapText);
     else if (&rToggle == m_xCBCustomLeaderLines.get())
-        m_aCustomLeaderLinesState.ButtonToggled(rToggle);
+        m_aCustomLeaderLinesState.CheckButtonToggled(*m_xCBCustomLeaderLines);
     EnableControls();
 }
 

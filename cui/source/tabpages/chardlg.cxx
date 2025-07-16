@@ -1641,9 +1641,9 @@ void SvxCharEffectsPage::SelectHdl_Impl(const weld::ComboBox* pBox)
     UpdatePreview_Impl();
 }
 
-IMPL_LINK(SvxCharEffectsPage, CbClickHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, CbClickHdl_Impl, weld::Toggleable&, void)
 {
-    m_aIndividualWordsState.ButtonToggled(rToggle);
+    m_aIndividualWordsState.CheckButtonToggled(*m_xIndividualWordsBtn);
     UpdatePreview_Impl();
     UpdatePreview_Impl();
 }
@@ -2031,20 +2031,20 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     ChangesApplied();
 }
 
-IMPL_LINK(SvxCharEffectsPage, HiddenBtnClickHdl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, HiddenBtnClickHdl, weld::Toggleable&, void)
 {
-    m_aHiddenState.ButtonToggled(rToggle);
+    m_aHiddenState.CheckButtonToggled(*m_xHiddenBtn);
 }
 
-IMPL_LINK(SvxCharEffectsPage, OutlineBtnClickHdl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, OutlineBtnClickHdl, weld::Toggleable&, void)
 {
-    m_aOutlineState.ButtonToggled(rToggle);
+    m_aOutlineState.CheckButtonToggled(*m_xOutlineBtn);
     UpdatePreview_Impl();
 }
 
-IMPL_LINK(SvxCharEffectsPage, ShadowBtnClickHdl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, ShadowBtnClickHdl, weld::Toggleable&, void)
 {
-    m_aShadowState.ButtonToggled(rToggle);
+    m_aShadowState.CheckButtonToggled(*m_xShadowBtn);
     UpdatePreview_Impl();
 }
 

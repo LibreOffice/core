@@ -203,7 +203,7 @@ void FontFeaturesDialog::updateFontPreview()
 
 IMPL_LINK(FontFeatureItem, CheckBoxToggledHdl, weld::Toggleable&, rToggle, void)
 {
-    m_aTriStateEnabled.ButtonToggled(rToggle);
+    m_aTriStateEnabled.CheckButtonToggled(*m_xCheck);
     m_aTriStateEnabled.bTriStateEnabled = false;
     m_aToggleHdl.Call(rToggle);
 }

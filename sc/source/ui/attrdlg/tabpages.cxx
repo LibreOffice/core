@@ -137,28 +137,28 @@ DeactivateRC ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK(ScTabPageProtection, ProtectClickHdl, weld::Toggleable&, rBox, void)
+IMPL_LINK_NOARG(ScTabPageProtection, ProtectClickHdl, weld::Toggleable&, void)
 {
-    aProtectState.ButtonToggled(rBox);
-    ButtonClick(rBox);
+    aProtectState.CheckButtonToggled(*m_xBtnProtect);
+    ButtonClick(*m_xBtnProtect);
 }
 
-IMPL_LINK(ScTabPageProtection, HideCellClickHdl, weld::Toggleable&, rBox, void)
+IMPL_LINK_NOARG(ScTabPageProtection, HideCellClickHdl, weld::Toggleable&, void)
 {
-    aHideCellState.ButtonToggled(rBox);
-    ButtonClick(rBox);
+    aHideCellState.CheckButtonToggled(*m_xBtnHideCell);
+    ButtonClick(*m_xBtnHideCell);
 }
 
-IMPL_LINK(ScTabPageProtection, HideFormulaClickHdl, weld::Toggleable&, rBox, void)
+IMPL_LINK_NOARG(ScTabPageProtection, HideFormulaClickHdl, weld::Toggleable&, void)
 {
-    aHideFormulaState.ButtonToggled(rBox);
-    ButtonClick(rBox);
+    aHideFormulaState.CheckButtonToggled(*m_xBtnHideFormula);
+    ButtonClick(*m_xBtnHideFormula);
 }
 
-IMPL_LINK(ScTabPageProtection, HidePrintClickHdl, weld::Toggleable&, rBox, void)
+IMPL_LINK_NOARG(ScTabPageProtection, HidePrintClickHdl, weld::Toggleable&, void)
 {
-    aHidePrintState.ButtonToggled(rBox);
-    ButtonClick(rBox);
+    aHidePrintState.CheckButtonToggled(*m_xBtnHidePrint);
+    ButtonClick(*m_xBtnHidePrint);
 }
 
 void ScTabPageProtection::ButtonClick(const weld::Toggleable& rBox)

@@ -752,31 +752,31 @@ bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, TypedWhichId
     return eMethodOld != eMethodNew;
 }
 
-IMPL_LINK(AlignmentTabPage, StackedClickHdl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(AlignmentTabPage, StackedClickHdl, weld::Toggleable&, void)
 {
-    m_aStackedState.ButtonToggled(rToggle);
+    m_aStackedState.CheckButtonToggled(*m_xCbStacked);
     UpdateEnableControls();
 }
 
-IMPL_LINK(AlignmentTabPage, AsianModeClickHdl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(AlignmentTabPage, AsianModeClickHdl, weld::Toggleable&, void)
 {
-    m_aAsianModeState.ButtonToggled(rToggle);
+    m_aAsianModeState.CheckButtonToggled(*m_xCbAsianMode);
 }
 
-IMPL_LINK(AlignmentTabPage, WrapClickHdl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(AlignmentTabPage, WrapClickHdl, weld::Toggleable&, void)
 {
-    m_aWrapState.ButtonToggled(rToggle);
+    m_aWrapState.CheckButtonToggled(*m_xBtnWrap);
     UpdateEnableControls();
 }
 
-IMPL_LINK(AlignmentTabPage, HyphenClickHdl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(AlignmentTabPage, HyphenClickHdl, weld::Toggleable&, void)
 {
-    m_aHyphenState.ButtonToggled(rToggle);
+    m_aHyphenState.CheckButtonToggled(*m_xBtnHyphen);
 }
 
-IMPL_LINK(AlignmentTabPage, ShrinkClickHdl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(AlignmentTabPage, ShrinkClickHdl, weld::Toggleable&, void)
 {
-    m_aShrinkState.ButtonToggled(rToggle);
+    m_aShrinkState.CheckButtonToggled(*m_xBtnShrink);
 }
 
 IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableHdl, weld::ComboBox&, void)

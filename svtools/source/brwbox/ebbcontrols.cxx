@@ -261,7 +261,7 @@ namespace svt
 
     IMPL_LINK_NOARG(CheckBoxControl, OnToggle, weld::Toggleable&, void)
     {
-        m_aModeState.ButtonToggled(*m_xBox);
+        m_aModeState.CheckButtonToggled(*m_xBox);
         m_aToggleLink.Call(*m_xBox);
         CallModifyHdls();
     }

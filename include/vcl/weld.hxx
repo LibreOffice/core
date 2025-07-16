@@ -1649,18 +1649,6 @@ class VCL_DLLPUBLIC ToggleButton : virtual public Button, virtual public Togglea
     friend class ::LOKTrigger;
 };
 
-struct VCL_DLLPUBLIC TriStateEnabled
-{
-    TriState eState;
-    bool bTriStateEnabled;
-    TriStateEnabled()
-        : eState(TRISTATE_INDET)
-        , bTriStateEnabled(true)
-    {
-    }
-    void ButtonToggled(Toggleable& rToggle);
-};
-
 class VCL_DLLPUBLIC MenuButton : virtual public ToggleButton
 {
     friend class ::LOKTrigger;
@@ -1722,6 +1710,18 @@ public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
     virtual void set_label_wrap(bool wrap) = 0;
+};
+
+struct VCL_DLLPUBLIC TriStateEnabled
+{
+    TriState eState;
+    bool bTriStateEnabled;
+    TriStateEnabled()
+        : eState(TRISTATE_INDET)
+        , bTriStateEnabled(true)
+    {
+    }
+    void CheckButtonToggled(CheckButton& rToggle);
 };
 
 class VCL_DLLPUBLIC RadioButton : virtual public CheckButton

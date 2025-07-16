@@ -2606,9 +2606,9 @@ void SvxExtParagraphTabPage::PageBreakHdl()
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, PageBreakHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageBreakHdl_Impl, weld::Toggleable&, void)
 {
-    aPageBreakState.ButtonToggled(rToggle);
+    aPageBreakState.CheckButtonToggled(*m_xPageBreakBox);
     PageBreakHdl();
 }
 
@@ -2619,9 +2619,9 @@ void SvxExtParagraphTabPage::AllowSplitHdl()
     m_xOrphanBox->set_sensitive(bEnable);
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, AllowSplitHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, AllowSplitHdl_Impl, weld::Toggleable&, void)
 {
-    aAllowSplitState.ButtonToggled(rToggle);
+    aAllowSplitState.CheckButtonToggled(*m_xAllowSplitBox);
     AllowSplitHdl();
 }
 
@@ -2645,15 +2645,15 @@ void SvxExtParagraphTabPage::WidowHdl()
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, WidowHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, WidowHdl_Impl, weld::Toggleable&, void)
 {
-    aWidowState.ButtonToggled(rToggle);
+    aWidowState.CheckButtonToggled(*m_xWidowBox);
     WidowHdl();
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, OrphanHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, OrphanHdl_Impl, weld::Toggleable&, void)
 {
-    aOrphanState.ButtonToggled(rToggle);
+    aOrphanState.CheckButtonToggled(*m_xOrphanBox);
     OrphanHdl();
 }
 
@@ -2717,9 +2717,9 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_xHyphenBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, HyphenClickHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, HyphenClickHdl_Impl, weld::Toggleable&, void)
 {
-    aHyphenState.ButtonToggled(rToggle);
+    aHyphenState.CheckButtonToggled(*m_xHyphenBox);
     HyphenClickHdl();
 }
 
@@ -2743,9 +2743,9 @@ void SvxExtParagraphTabPage::ApplyCollClickHdl()
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, weld::Toggleable&, void)
 {
-    aApplyCollState.ButtonToggled(rToggle);
+    aApplyCollState.CheckButtonToggled(*m_xApplyCollBtn);
     ApplyCollClickHdl();
 }
 
@@ -2795,15 +2795,15 @@ void SvxExtParagraphTabPage::PageNumBoxClickHdl()
     m_xPagenumEdit->set_sensitive(m_xPageNumBox->get_state() == TRISTATE_TRUE);
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, PageNumBoxClickHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageNumBoxClickHdl_Impl, weld::Toggleable&, void)
 {
-    aPageNumState.ButtonToggled(rToggle);
+    aPageNumState.CheckButtonToggled(*m_xPageNumBox);
     PageNumBoxClickHdl();
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, KeepParaBoxClickHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, KeepParaBoxClickHdl_Impl, weld::Toggleable&, void)
 {
-    aKeepParaState.ButtonToggled(rToggle);
+    aKeepParaState.CheckButtonToggled(*m_xKeepParaBox);
 }
 
 void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
@@ -2815,9 +2815,9 @@ void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
                     DisablePageBreak();
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, AcrossParagraphHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, AcrossParagraphHdl_Impl, weld::Toggleable&, void)
 {
-    aAcrossParagraphState.ButtonToggled(rToggle);
+    aAcrossParagraphState.CheckButtonToggled(*m_xAcrossParagraphBox);
     if (m_xAcrossParagraphBox->get_state() != TRISTATE_TRUE )
     {
         m_xAcrossColumnBox->set_state( TRISTATE_FALSE );
@@ -2840,9 +2840,9 @@ IMPL_LINK(SvxExtParagraphTabPage, AcrossParagraphHdl_Impl, weld::Toggleable&, rT
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, AcrossColumnHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, AcrossColumnHdl_Impl, weld::Toggleable&, void)
 {
-    aAcrossColumnState.ButtonToggled(rToggle);
+    aAcrossColumnState.CheckButtonToggled(*m_xAcrossColumnBox);
     if (m_xAcrossColumnBox->get_state() != TRISTATE_TRUE )
     {
         m_xAcrossPageBox->set_state( TRISTATE_FALSE );
@@ -2865,9 +2865,9 @@ IMPL_LINK(SvxExtParagraphTabPage, AcrossColumnHdl_Impl, weld::Toggleable&, rTogg
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, AcrossPageHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, AcrossPageHdl_Impl, weld::Toggleable&, void)
 {
-    aAcrossPageState.ButtonToggled(rToggle);
+    aAcrossPageState.CheckButtonToggled(*m_xAcrossPageBox);
     if (m_xAcrossPageBox->get_state() == TRISTATE_TRUE )
     {
         m_xAcrossParagraphBox->set_state( TRISTATE_TRUE );
@@ -2892,9 +2892,9 @@ IMPL_LINK(SvxExtParagraphTabPage, AcrossPageHdl_Impl, weld::Toggleable&, rToggle
     }
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, AcrossSpreadHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, AcrossSpreadHdl_Impl, weld::Toggleable&, void)
 {
-    aAcrossSpreadState.ButtonToggled(rToggle);
+    aAcrossSpreadState.CheckButtonToggled(*m_xAcrossSpreadBox);
     if (m_xAcrossSpreadBox->get_state() == TRISTATE_TRUE )
     {
         m_xAcrossParagraphBox->set_state( TRISTATE_TRUE );
