@@ -61,7 +61,7 @@ private:
     DECL_LINK(HideCellClickHdl, weld::Toggleable&, void);
     DECL_LINK(HideFormulaClickHdl, weld::Toggleable&, void);
     DECL_LINK(HidePrintClickHdl, weld::Toggleable&, void);
-    void ButtonClick(const weld::Toggleable& rBox);
+    void ButtonClick(const weld::CheckButton& rBox);
     void UpdateButtons();
 };
 
