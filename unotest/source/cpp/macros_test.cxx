@@ -213,12 +213,12 @@ extern "C" {
 SAL_DLLPUBLIC_EXPORT
 void test_init_gpg(OUString const& rTargetDir)
 {
-    const char* pSrcRoot = getenv("SRC_ROOT");
-    if (!pSrcRoot)
+    OUString srcRootPath;
+    osl_getEnvironment(u"SRC_ROOT"_ustr.pData, &srcRootPath.pData);
+    if (srcRootPath.isEmpty())
     {
         abort();
     }
-    OUString const srcRootPath(OUString(pSrcRoot, strlen(pSrcRoot), osl_getThreadTextEncoding()));
     OUString const sourcePath(srcRootPath + "/test/signing-keys/");
     OUString aSourceDir;
     osl::FileBase::RC e = osl::FileBase::getFileURLFromSystemPath(sourcePath, aSourceDir);
