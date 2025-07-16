@@ -24,31 +24,31 @@
 
 namespace rptui
 {
-    class OSectionWindow;
+class OSectionWindow;
 
-    enum NearSectionAccess
-    {
-        CURRENT = 0,
-        PREVIOUS = -1,
-        POST = 1
-    };
+enum NearSectionAccess
+{
+    CURRENT = 0,
+    PREVIOUS = -1,
+    POST = 1
+};
 
-    class IMarkedSection
-    {
-    public:
-        /** returns the section which is currently marked.
+class IMarkedSection
+{
+public:
+    /** returns the section which is currently marked.
         */
-        virtual OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const =0;
+    virtual OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const = 0;
 
-        /** mark the section on the given position .
+    /** mark the section on the given position .
         *
         * \param _nPos the position is zero based.
         */
-        virtual void markSection(const sal_uInt16 _nPos) = 0;
+    virtual void markSection(const sal_uInt16 _nPos) = 0;
 
-    protected:
-        ~IMarkedSection() {}
-    };
+protected:
+    ~IMarkedSection() {}
+};
 
 } // rptui
 

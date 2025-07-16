@@ -7304,7 +7304,6 @@ reportdesign/source/ui/inc/FunctionHelper.hxx
 reportdesign/source/ui/inc/GeometryHandler.hxx
 reportdesign/source/ui/inc/GroupsSorting.hxx
 reportdesign/source/ui/inc/IReportControllerObserver.hxx
-reportdesign/source/ui/inc/MarkedSection.hxx
 reportdesign/source/ui/inc/Navigator.hxx
 reportdesign/source/ui/inc/PageNumber.hxx
 reportdesign/source/ui/inc/ReportComponentHandler.hxx
