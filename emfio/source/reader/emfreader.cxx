@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <vcl/dibtools.hxx>
+#include <o3tl/environment.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sprintf.hxx>
 #include <tools/stream.hxx>
@@ -1612,7 +1613,7 @@ namespace emfio
                                     if(bDoSaveForVisualControl)
                                     {
                                         // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
-                                        static const OUString sDumpPath(OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
+                                        static const OUString sDumpPath(o3tl::getEnvironment(u"VCL_DUMP_BMP_PATH"_ustr));
                                         if(!sDumpPath.isEmpty())
                                         {
                                             SvFileStream aNew(sDumpPath + "metafile_content.png",

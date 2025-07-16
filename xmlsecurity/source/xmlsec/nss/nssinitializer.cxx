@@ -28,6 +28,7 @@
 #include <sal/types.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/string.hxx>
+#include <o3tl/environment.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -177,8 +178,7 @@ const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Refer
         m_bIsNSSinitialized = true;
 
     // first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
-    if (OUString pEnv; osl_getEnvironment(u"MOZILLA_CERTIFICATE_FOLDER"_ustr.pData, &pEnv.pData) == osl_Process_E_None
-                       && !pEnv.isEmpty())
+    if (OUString pEnv = o3tl::getEnvironment(u"MOZILLA_CERTIFICATE_FOLDER"_ustr); !pEnv.isEmpty())
     {
         SAL_INFO(
             "xmlsecurity.xmlsec",
@@ -285,8 +285,7 @@ css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
     }
     aProfileList.push_back({u"MANUAL"_ustr, sUserSelect, mozilla::MozillaProductType_Default});
 
-    OUString pEnv;
-    osl_getEnvironment(u"MOZILLA_CERTIFICATE_FOLDER"_ustr.pData, &pEnv.pData);
+    OUString pEnv = o3tl::getEnvironment(u"MOZILLA_CERTIFICATE_FOLDER"_ustr);
     aProfileList.push_back({u"MOZILLA_CERTIFICATE_FOLDER"_ustr,
                             pEnv,
                             mozilla::MozillaProductType_Default});

@@ -36,6 +36,7 @@
 #include <mutex>
 
 #ifdef DBG_UTIL
+#include <o3tl/environment.hxx>
 #include <tools/stream.hxx>
 #endif
 
@@ -458,7 +459,7 @@ void impBufferDevice::paint(double fTrans)
 #ifdef DBG_UTIL
     // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
     static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
-    static const OUString sDumpPath(OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
+    static const OUString sDumpPath(o3tl::getEnvironment(u"VCL_DUMP_BMP_PATH"_ustr));
 
     if (!sDumpPath.isEmpty() && bDoSaveForVisualControl)
     {

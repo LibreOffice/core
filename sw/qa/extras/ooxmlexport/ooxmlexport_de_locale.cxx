@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <config_folders.h>
+#include <o3tl/environment.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
 
@@ -59,8 +60,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166850_ODT)
     // test ODT import from version 24.2 where this worked
     // but only in the same locale that was used to import from DOCX, not in
     // a different one
-    OUString instdir;
-    osl_getEnvironment(u"INSTDIR"_ustr.pData, &instdir.pData);
+    OUString instdir = o3tl::getEnvironment(u"INSTDIR"_ustr);
     OUString url;
     CPPUNIT_ASSERT_EQUAL(::osl::FileBase::E_None,
                          ::osl::FileBase::getFileURLFromSystemPath(instdir, url));

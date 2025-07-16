@@ -25,6 +25,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotest/directories.hxx>
+#include <o3tl/environment.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -213,8 +214,7 @@ extern "C" {
 SAL_DLLPUBLIC_EXPORT
 void test_init_gpg(OUString const& rTargetDir)
 {
-    OUString srcRootPath;
-    osl_getEnvironment(u"SRC_ROOT"_ustr.pData, &srcRootPath.pData);
+    OUString const srcRootPath = o3tl::getEnvironment(u"SRC_ROOT"_ustr);
     if (srcRootPath.isEmpty())
     {
         abort();

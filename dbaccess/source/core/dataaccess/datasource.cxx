@@ -57,6 +57,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <o3tl/environment.hxx>
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <sal/log.hxx>
@@ -544,10 +545,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     if(!bIgnoreMigration && m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
     {
         Reference<XStorage> const xRootStorage = m_pImpl->getOrCreateRootStorage();
-        OUString sMigrEnvVal;
-        osl_getEnvironment(u"DBACCESS_HSQL_MIGRATION"_ustr.pData,
-            &sMigrEnvVal.pData);
-        if(!sMigrEnvVal.isEmpty())
+        if (!o3tl::getEnvironment(u"DBACCESS_HSQL_MIGRATION"_ustr).isEmpty())
             bNeedMigration = true;
         else
         {

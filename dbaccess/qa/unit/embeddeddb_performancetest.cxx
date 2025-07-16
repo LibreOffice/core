@@ -10,6 +10,7 @@
 #include "dbtest_base.cxx"
 
 #include <memory>
+#include <o3tl/environment.hxx>
 #include <osl/process.h>
 #include <osl/time.h>
 #include <rtl/ustrbuf.hxx>
@@ -81,9 +82,6 @@ class EmbeddedDBPerformanceTest
     : public DBTestBase
 {
 private:
-    static constexpr OUString our_sEnableTestEnvVar = u"DBA_PERFTEST"_ustr;
-
-
     // We store the results and print them at the end due to the amount of warning
     // noise present which otherwise obscures the results.
     OUStringBuffer m_aOutputBuffer;
@@ -143,10 +141,7 @@ void EmbeddedDBPerformanceTest::printTimes(
 
 void EmbeddedDBPerformanceTest::testPerformance()
 {
-    OUString sEnabled;
-    osl_getEnvironment(our_sEnableTestEnvVar.pData, &sEnabled.pData);
-
-    if (sEnabled.isEmpty())
+    if (o3tl::getEnvironment(u"DBA_PERFTEST"_ustr).isEmpty())
         return;
 
     m_aOutputBuffer.append("---------------------\n");

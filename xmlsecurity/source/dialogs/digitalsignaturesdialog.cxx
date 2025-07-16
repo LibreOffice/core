@@ -39,6 +39,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>
 
@@ -106,10 +107,7 @@ bool GetPathAllOS(OUString& aPath)
         return false;
     aPath = o3tl::toU(sPath);
 #else
-    const char* cPath = getenv("PATH");
-    if (!cPath)
-        return false;
-    aPath = OUString(cPath, strlen(cPath), osl_getThreadTextEncoding());
+    osl_getEnvironment(u"PATH"_ustr.pData, &aPath.pData);
 #endif
     return (!aPath.isEmpty());
 }

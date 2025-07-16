@@ -10,8 +10,8 @@
 #include <sal/config.h>
 
 #include <cppunit/TestAssert.h>
+#include <o3tl/environment.hxx>
 #include <osl/file.hxx>
-#include <osl/process.h>
 #include <unotest/directories.hxx>
 
 namespace
@@ -30,10 +30,10 @@ OUString getFileURLFromSystemPath(OUString const& path)
 }
 
 test::Directories::Directories()
+    : m_aSrcRootPath(o3tl::getEnvironment(u"SRC_ROOT"_ustr))
+    , m_aWorkdirRootPath(o3tl::getEnvironment(u"WORKDIR_FOR_BUILD"_ustr))
 {
-    osl_getEnvironment(u"SRC_ROOT"_ustr.pData, &m_aSrcRootPath.pData);
     CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", !m_aSrcRootPath.isEmpty());
-    osl_getEnvironment(u"WORKDIR_FOR_BUILD"_ustr.pData, &m_aWorkdirRootPath.pData);
     CPPUNIT_ASSERT_MESSAGE("WORKDIR_FOR_BUILD env variable not set", !m_aWorkdirRootPath.isEmpty());
     m_aSrcRootURL = getFileURLFromSystemPath(m_aSrcRootPath);
     m_aWorkdirRootURL = getFileURLFromSystemPath(m_aWorkdirRootPath);

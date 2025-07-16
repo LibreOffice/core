@@ -25,6 +25,7 @@
 
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
+#include <o3tl/environment.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/security.hxx>
@@ -300,10 +301,9 @@ OUString SubstitutePathVariables::GetHomeVariableValue()
 OUString SubstitutePathVariables::GetPathVariableValue()
 {
     OUString aRetStr;
-    OUString aPathList;
+    OUString aPathList = o3tl::getEnvironment(u"PATH"_ustr);
 
-    if (osl_getEnvironment(u"PATH"_ustr.pData, &aPathList.pData) == osl_Process_E_None
-        && !aPathList.isEmpty())
+    if (!aPathList.isEmpty())
     {
         const int PATH_EXTEND_FACTOR = 200;
         OUString       aTmp;

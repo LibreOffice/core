@@ -32,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/environment.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -347,8 +348,7 @@ namespace /* private */
 
     OUString get_batch_processor()
     {
-        OUString comspec;
-        osl_getEnvironment(u"COMSPEC"_ustr.pData, &comspec.pData);
+        OUString comspec = o3tl::getEnvironment(u"COMSPEC"_ustr);
 
         OSL_ASSERT(comspec.getLength());
 

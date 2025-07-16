@@ -52,6 +52,7 @@
 #include <unotools/pathoptions.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ustring.hxx>
+#include <o3tl/environment.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/process.h>
@@ -344,10 +345,7 @@ SfxHelp::SfxHelp()
 {
     // read the environment variable "HELP_DEBUG"
     // if it's set, you will see debug output on active help
-    OUString sHelpDebug;
-    OUString sEnvVarName( u"HELP_DEBUG"_ustr  );
-    osl_getEnvironment( sEnvVarName.pData, &sHelpDebug.pData );
-    bIsDebug = !sHelpDebug.isEmpty();
+    bIsDebug = !o3tl::getEnvironment(u"HELP_DEBUG"_ustr).isEmpty();
 }
 
 SfxHelp::~SfxHelp()

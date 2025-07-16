@@ -22,6 +22,7 @@
 #include <osl/process.h>
 #include <osl/diagnose.hxx>
 #include <sal/log.hxx>
+#include <o3tl/environment.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <algorithm>
@@ -34,12 +35,9 @@ const std::vector<OString>& StaticDebugBaseAddressFilter()
     static const std::vector<OString> theFilter = []()
     {
         std::vector<OString> vec;
-        rtl_uString * pStr = nullptr;
-        if (osl_getEnvironment( u"OSL_DEBUGBASE_STORE_ADDRESSES"_ustr.pData, &pStr )
-            == osl_Process_E_None)
+        OUString const str(o3tl::getEnvironment(u"OSL_DEBUGBASE_STORE_ADDRESSES"_ustr));
+        if (!str.isEmpty())
         {
-            OUString const str(pStr);
-            rtl_uString_release(pStr);
             sal_Int32 nIndex = 0;
             do {
                 vec.push_back( OUStringToOString(

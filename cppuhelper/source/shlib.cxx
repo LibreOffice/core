@@ -34,6 +34,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/shlib.hxx>
+#include <o3tl/environment.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/module.hxx>
 #include <osl/process.h>
@@ -52,9 +53,8 @@ css::uno::Environment cppuhelper::detail::getEnvironment(
 {
     OUString n(name);
     if (!implementation.empty()) {
-        OUString imps;
-        if (osl_getEnvironment(u"UNO_ENV_LOG"_ustr.pData, &imps.pData) == osl_Process_E_None
-            && !imps.isEmpty()) {
+        OUString imps = o3tl::getEnvironment(u"UNO_ENV_LOG"_ustr);
+        if (!imps.isEmpty()) {
             for (sal_Int32 i = 0; i != -1;) {
                 std::u16string_view imp(o3tl::getToken(imps, 0, ';', i));
                 if (implementation == imp)

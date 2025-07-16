@@ -20,6 +20,7 @@
 #include <sal/log.hxx>
 #include <rtl/crc.h>
 #include <rtl/math.hxx>
+#include <o3tl/environment.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -1492,18 +1493,14 @@ void  BitmapEx::GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
 
 void BitmapEx::DumpAsPng(const char* pFileName) const
 {
-    OUString sPath;
+    OUString sPath(u"file:///tmp/bitmap.png"_ustr);
     if (pFileName)
     {
         sPath = OUString::fromUtf8(pFileName);
     }
-    else if (const char* pEnv = std::getenv("VCL_DUMP_BMP_PATH"))
+    else if (OUString env = o3tl::getEnvironment(u"VCL_DUMP_BMP_PATH"_ustr); !env.isEmpty())
     {
-        sPath = OUString::fromUtf8(pEnv);
-    }
-    else
-    {
-        sPath = "file:///tmp/bitmap.png";
+        sPath = env;
     }
     SvFileStream aStream(sPath, StreamMode::STD_READWRITE | StreamMode::TRUNC);
     assert(aStream.good());

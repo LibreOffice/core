@@ -24,6 +24,7 @@
 
 #include <o3tl/any.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/environment.hxx>
 
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -179,12 +180,12 @@ static void prependPythonPath( std::u16string_view pythonPathBootstrap )
             break;
         nIndex = nNew + 1;
     }
-    const char * oldEnv = getenv( "PYTHONPATH");
-    if( oldEnv )
+    OUString oldEnv = o3tl::getEnvironment(u"PYTHONPATH"_ustr);
+    if (!oldEnv.isEmpty())
     {
         if (bAppendSep)
             bufPYTHONPATH.append( static_cast<sal_Unicode>(SAL_PATHSEPARATOR) );
-        bufPYTHONPATH.append( OUString(oldEnv, strlen(oldEnv), osl_getThreadTextEncoding()) );
+        bufPYTHONPATH.append(oldEnv);
     }
 
     OUString envVar(u"PYTHONPATH"_ustr);
@@ -229,14 +230,12 @@ void pythonInit() {
 #ifdef _WIN32
     //extend PATH under windows to include the branddir/program so ssl libs will be found
     //for use by terminal mailmerge dependency _ssl.pyd
-    OUString sEnvName("PATH");
-    OUString sPath;
-    osl_getEnvironment(sEnvName.pData, &sPath.pData);
+    OUString sPath = o3tl::getEnvironment(u"PATH"_ustr);
     OUString sBrandLocation("$BRAND_BASE_DIR/program");
     rtl::Bootstrap::expandMacros(sBrandLocation);
     osl::FileBase::getSystemPathFromFileURL(sBrandLocation, sBrandLocation);
-    sPath = sPath + OUStringChar(SAL_PATHSEPARATOR) + sBrandLocation;
-    osl_setEnvironment(sEnvName.pData, sPath.pData);
+    sPath += OUStringChar(SAL_PATHSEPARATOR) + sBrandLocation;
+    o3tl::setEnvironment(u"PATH"_ustr, sPath);
 #endif
 
     PyImport_AppendInittab( "pyuno", PyInit_pyuno );

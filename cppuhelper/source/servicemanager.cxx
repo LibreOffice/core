@@ -39,6 +39,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/factory.hxx>
+#include <o3tl/environment.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
@@ -1827,9 +1828,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     OUStringBuffer aMissingMsg;
 
     /// Allow external callers & testers to disable certain components
-    if (OUString aDisable;
-        osl_getEnvironment(u"UNODISABLELIBRARY"_ustr.pData, &aDisable.pData) == osl_Process_E_None
-        && !aDisable.isEmpty())
+    if (OUString aDisable = o3tl::getEnvironment(u"UNODISABLELIBRARY"_ustr); !aDisable.isEmpty())
     {
         for (sal_Int32 i = 0; i >= 0; )
         {

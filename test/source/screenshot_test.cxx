@@ -15,6 +15,7 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/environment.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/svapp.hxx>
@@ -51,12 +52,10 @@ using namespace css::uno;
 constexpr OUString g_aScreenshotDirectory(u"screenshots"_ustr);
 
 ScreenshotTest::ScreenshotTest()
-    : maParent(nullptr, u"vcl/ui/screenshotparent.ui"_ustr, u"ScreenShot"_ustr)
+    : maCurrentLanguage(o3tl::getEnvironment(u"LO_TEST_LOCALE"_ustr))
+    , maParent(nullptr, u"vcl/ui/screenshotparent.ui"_ustr, u"ScreenShot"_ustr)
     , mxParentWidget(maParent.getDialog()->weld_content_area())
 {
-    if (auto const env = getenv("LO_TEST_LOCALE")) {
-        maCurrentLanguage = OUString::fromUtf8(env);
-    }
 }
 
 ScreenshotTest::~ScreenshotTest()

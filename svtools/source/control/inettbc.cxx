@@ -43,6 +43,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
+#include <osl/process.h>
 #include <unotools/historyoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <ucbhelper/commandenvironment.hxx>
@@ -653,16 +654,8 @@ void SvtMatchContext_Impl::doExecute()
 /** Parse leading ~ for Unix systems,
     does nothing for Windows
  */
-bool SvtURLBox_Impl::TildeParsing(
-    OUString&
-#ifdef UNX
-    aText
-#endif
-    , OUString&
-#ifdef UNX
-    aBaseURL
-#endif
-)
+bool SvtURLBox_Impl::TildeParsing([[maybe_unused]] OUString& aText,
+                                  [[maybe_unused]] OUString& aBaseURL)
 {
 #ifdef UNX
     if( aText.startsWith( "~" ) )
@@ -673,11 +666,7 @@ bool SvtURLBox_Impl::TildeParsing(
         if( aText.getLength() == 1 || aText[ 1 ] == '/' )
         {
             // covers "~" or "~/..." cases
-            const char* aHomeLocation = getenv( "HOME" );
-            if( !aHomeLocation )
-                aHomeLocation = "";
-
-            aParseTilde = OUString::createFromAscii(aHomeLocation);
+            osl_getEnvironment(u"HOME"_ustr.pData, &aParseTilde.pData);
 
             // in case the whole path is just "~" then there should
             // be no trailing slash at the end

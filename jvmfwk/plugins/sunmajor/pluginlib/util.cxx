@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <salhelper/thread.hxx>
+#include <o3tl/environment.hxx>
 #include <o3tl/string_view.hxx>
 #include <memory>
 #include <utility>
@@ -1038,9 +1039,8 @@ void addJavaInfosFromPath(
 {
 #if !defined JVM_ONE_PATH_CHECK
 // Get Java from PATH environment variable
-    OUString usAllPath;
-    if (osl_getEnvironment(u"PATH"_ustr.pData, &usAllPath.pData) != osl_Process_E_None
-        || usAllPath.isEmpty())
+    OUString usAllPath = o3tl::getEnvironment(u"PATH"_ustr);
+    if (usAllPath.isEmpty())
         return;
 
     sal_Int32 nIndex = 0;
@@ -1092,9 +1092,8 @@ void addJavaInfoFromJavaHome(
     // variable. We set it in our build environment for build-time programs, though,
     // so it is set when running unit tests that involve Java functionality. (Which affects
     // at least CppunitTest_dbaccess_dialog_save, too, and not only the JunitTest ones.)
-    OUString sHome;
-    if (osl_getEnvironment(u"JAVA_HOME"_ustr.pData, &sHome.pData) == osl_Process_E_None
-        && !sHome.isEmpty())
+    OUString sHome = o3tl::getEnvironment(u"JAVA_HOME"_ustr);
+    if (!sHome.isEmpty())
     {
         OUString sHomeUrl;
         if(File::getFileURLFromSystemPath(sHome, sHomeUrl) == File::E_None)

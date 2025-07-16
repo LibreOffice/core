@@ -32,6 +32,7 @@
 #include <osl/process.h>
 #endif
 #include <osl/thread.hxx>
+#include <o3tl/environment.hxx>
 #include <o3tl/string_view.hxx>
 #include <jvmfwk/framework.hxx>
 #include <vendorbase.hxx>
@@ -273,15 +274,12 @@ javaFrameworkError jfw_startVM(
         // java.library.path. Somehow setting java.library.path accordingly doesn't work,
         // but the PATH gets picked up, so add it there.
         // Without this hack, some features don't work in alternative JREs.
-        OUString sPATH;
-        osl_getEnvironment(OUString("PATH").pData, &sPATH.pData);
-        OUString sJRELocation;
-        osl::FileBase::getSystemPathFromFileURL(pInfo->sLocation + "/bin", sJRELocation);
-        if (sPATH.isEmpty())
-            sPATH = sJRELocation;
-        else
-            sPATH = sJRELocation + OUStringChar(SAL_PATHSEPARATOR) + sPATH;
-        osl_setEnvironment(OUString("PATH").pData, sPATH.pData);
+        OUString sOldPATH = o3tl::getEnvironment(u"PATH"_ustr);
+        OUString sNewPATH;
+        osl::FileBase::getSystemPathFromFileURL(pInfo->sLocation + "/bin", sNewPATH);
+        if (!sOldPATH.isEmpty())
+            sNewPATH += OUStringChar(SAL_PATHSEPARATOR) + sOldPATH;
+        o3tl::setEnvironment(u"PATH"_ustr, sNewPATH);
 #endif // _WIN32
 
         // create JavaVMOptions array that is passed to the plugin

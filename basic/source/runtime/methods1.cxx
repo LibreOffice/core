@@ -35,6 +35,7 @@
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
+#include <o3tl/environment.hxx>
 #include <o3tl/temporary.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -1132,9 +1133,7 @@ void SbRtl_Environ(StarBASIC *, SbxArray & rPar, bool)
     if (rPar.Count() != 2)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
-    OUString aResult;
-    osl_getEnvironment(rPar.Get(1)->GetOUString().pData, &aResult.pData);
-    rPar.Get(0)->PutString(aResult);
+    rPar.Get(0)->PutString(o3tl::getEnvironment(rPar.Get(1)->GetOUString()));
 }
 
 static double GetDialogZoomFactor( bool bX, tools::Long nValue )

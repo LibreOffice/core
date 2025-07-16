@@ -27,6 +27,7 @@
 #include "GlowSoftEgdeShadowTools.hxx"
 
 #ifdef DBG_UTIL
+#include <o3tl/environment.hxx>
 #include <tools/stream.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #endif
@@ -218,8 +219,7 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         if (bDoSaveForVisualControl)
         {
             // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
-            static const OUString sDumpPath(
-                OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
+            static const OUString sDumpPath(o3tl::getEnvironment(u"VCL_DUMP_BMP_PATH"_ustr));
             if (!sDumpPath.isEmpty())
             {
                 SvFileStream aNew(sDumpPath + "test_softedge.png",

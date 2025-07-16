@@ -16,6 +16,7 @@
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <o3tl/environment.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
@@ -72,10 +73,8 @@ IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
 
 void test::setUpVcl(bool const forceHeadless) {
     // Force locale (and resource files loaded):
-    OUString locale;
-    if (getenv("LO_TEST_LOCALE") != nullptr)
-        locale = OUString::fromUtf8(getenv("LO_TEST_LOCALE"));
-    else
+    OUString locale = o3tl::getEnvironment(u"LO_TEST_LOCALE"_ustr);
+    if (locale.isEmpty())
         locale = "en-US";
 
     SvtSysLocaleOptions localOptions;
