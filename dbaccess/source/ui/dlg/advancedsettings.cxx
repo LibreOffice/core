@@ -117,16 +117,17 @@ namespace dbaui
     IMPL_LINK(SpecialSettingsPage, OnTriStateToggleHdl, weld::Toggleable&, rToggle, void)
     {
         auto eOldState = m_aTriStates[&rToggle];
+        weld::CheckButton& rCheckButton = dynamic_cast<weld::CheckButton&>(rToggle);
         switch (eOldState)
         {
             case TRISTATE_INDET:
-                rToggle.set_state(TRISTATE_FALSE);
+                rCheckButton.set_state(TRISTATE_FALSE);
                 break;
             case TRISTATE_TRUE:
-                rToggle.set_state(TRISTATE_INDET);
+                rCheckButton.set_state(TRISTATE_INDET);
                 break;
             case TRISTATE_FALSE:
-                rToggle.set_state(TRISTATE_TRUE);
+                rCheckButton.set_state(TRISTATE_TRUE);
                 break;
         }
         m_aTriStates[&rToggle] = rToggle.get_state();
