@@ -39,6 +39,8 @@ private:
         ::sd::View* pView,
         SdDrawDocument& rDoc,
         SfxRequest& rReq);
+
+    void Finish();
 };
 
 } // end of namespace sd
