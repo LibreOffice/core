@@ -43,7 +43,7 @@ static void lcl_setScrollBar(sal_Int32 _nNewValue,const Point& _aPos,const Size&
 
 
 OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
-    : OScrollWindowHelper_BASE( _pDesignView,WB_DIALOGCONTROL)
+    : vcl::Window( _pDesignView,WB_DIALOGCONTROL)
     ,OPropertyChangeListener()
     ,m_aHScroll( VclPtr<ScrollAdaptor>::Create(this, true) )
     ,m_aVScroll( VclPtr<ScrollAdaptor>::Create(this, false) )
@@ -78,7 +78,7 @@ void OScrollWindowHelper::dispose()
     m_aVScroll.disposeAndClear();
     m_aReportWindow.disposeAndClear();
     m_pParent.reset();
-    OScrollWindowHelper_BASE::dispose();
+    vcl::Window::dispose();
 }
 
 void OScrollWindowHelper::impl_initScrollBar( ScrollAdaptor& _rScrollBar ) const
@@ -166,7 +166,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
 
 void OScrollWindowHelper::Resize()
 {
-    OScrollWindowHelper_BASE::Resize();
+    vcl::Window::Resize();
     const Size aTotalOutputSize = ResizeScrollBars();
 
     m_aReportWindow->SetPosSizePixel(Point( 0, 0 ),aTotalOutputSize);
@@ -323,7 +323,7 @@ bool OScrollWindowHelper::EventNotify( NotifyEvent& rNEvt )
         if ( HandleScrollCommand( *pCommandEvent, pHScrBar, pVScrBar ) )
             return true;
     }
-    return OScrollWindowHelper_BASE::EventNotify(rNEvt);
+    return vcl::Window::EventNotify(rNEvt);
 }
 
 void OScrollWindowHelper::alignMarkedObjects(ControlModification _nControlModification, bool _bAlignAtSection)
