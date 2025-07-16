@@ -24,7 +24,6 @@
 #include "dllapi.h"
 
 #include "ReportHelperDefines.hxx"
-#include "xmlExport.hxx"
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
@@ -54,6 +53,10 @@
 namespace rptui
 {
     class OReportModel;
+}
+namespace rptxml
+{
+    class ORptExport;
 }
 namespace utl
 {

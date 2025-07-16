@@ -37,6 +37,7 @@
 #include <strings.hrc>
 #include <core_resource.hxx>
 #include <strings.hxx>
+#include <xmlExport.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>

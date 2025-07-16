@@ -1144,7 +1144,7 @@ void ORptExport::exportAutoStyle(const Reference<XSection>& _xProp)
         m_aAutoStyleNames.emplace( _xProp.get(),GetAutoStylePool()->Add( XmlStyleFamily::TABLE_TABLE, std::move(aPropertyStates) ));
 }
 
-void ORptExport::SetBodyAttributes() { exportReportAttributes(m_xReportDefinition); }
+void ORptExport::SetBodyAttributes() { exportReportAttributes(m_pReportDefinition); }
 
 void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xReport)
 {
@@ -1178,7 +1178,7 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
         AddAttribute(XML_NAMESPACE_DRAW, XML_NAME,sName);
 }
 
-void ORptExport::ExportContent_() { exportReport(m_xReportDefinition); }
+void ORptExport::ExportContent_() { exportReport(m_pReportDefinition); }
 
 void ORptExport::ExportMasterStyles_()
 {
@@ -1191,24 +1191,24 @@ void ORptExport::collectComponentStyles()
         return;
 
     m_bAllreadyFilled = true;
-    if (!m_xReportDefinition.is())
+    if (!m_pReportDefinition.is())
         return;
 
-    uno::Reference<report::XSection> xParent(m_xReportDefinition->getParent(), uno::UNO_QUERY);
+    uno::Reference<report::XSection> xParent(m_pReportDefinition->getParent(), uno::UNO_QUERY);
     if ( xParent.is() )
-        exportAutoStyle(m_xReportDefinition.get());
+        exportAutoStyle(css::uno::Reference<XReportDefinition>(m_pReportDefinition).get());
 
-    if (m_xReportDefinition->getReportHeaderOn())
-        exportSectionAutoStyle(m_xReportDefinition->getReportHeader());
-    if (m_xReportDefinition->getPageHeaderOn())
-        exportSectionAutoStyle(m_xReportDefinition->getPageHeader());
+    if (m_pReportDefinition->getReportHeaderOn())
+        exportSectionAutoStyle(m_pReportDefinition->getReportHeader());
+    if (m_pReportDefinition->getPageHeaderOn())
+        exportSectionAutoStyle(m_pReportDefinition->getPageHeader());
 
-    exportGroup(m_xReportDefinition, 0, true);
+    exportGroup(m_pReportDefinition, 0, true);
 
-    if (m_xReportDefinition->getPageFooterOn())
-        exportSectionAutoStyle(m_xReportDefinition->getPageFooter());
-    if (m_xReportDefinition->getReportFooterOn())
-        exportSectionAutoStyle(m_xReportDefinition->getReportFooter());
+    if (m_pReportDefinition->getPageFooterOn())
+        exportSectionAutoStyle(m_pReportDefinition->getPageFooter());
+    if (m_pReportDefinition->getReportFooterOn())
+        exportSectionAutoStyle(m_pReportDefinition->getReportFooter());
 }
 
 void ORptExport::ExportAutoStyles_()
@@ -1246,7 +1246,8 @@ SvXMLAutoStylePoolP* ORptExport::CreateAutoStylePool()
 
 void SAL_CALL ORptExport::setSourceDocument( const Reference< XComponent >& xDoc )
 {
-    m_xReportDefinition.set(xDoc,UNO_QUERY_THROW);
+    m_pReportDefinition = dynamic_cast<reportdesign::OReportDefinition*>(xDoc.get());
+    assert(m_pReportDefinition.is() && "document is not an OReportDefinition");
     SvXMLExport::setSourceDocument(xDoc);
 }
 

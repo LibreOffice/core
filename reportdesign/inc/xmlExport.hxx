@@ -20,6 +20,8 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLEXPORT_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLEXPORT_HXX
 
+#include "ReportDefinition.hxx"
+
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -95,7 +97,7 @@ private:
     rtl::Reference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
 
     mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
-    Reference<XReportDefinition>                    m_xReportDefinition;
+    rtl::Reference<reportdesign::OReportDefinition> m_pReportDefinition;
     bool                                        m_bAllreadyFilled;
 
     void                    exportReport(const Reference<XReportDefinition>& _xReportDefinition); /// <element name="office:report">
