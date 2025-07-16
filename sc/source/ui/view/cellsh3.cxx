@@ -1069,7 +1069,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_ACCEPT_FORMULA:
             {
                 if (GetViewData().HasEditView(GetViewData().GetActivePart()))
+                {
                     pScMod->InputEnterHandler();
+                    pTabViewShell->UpdateInputHandler();
+                }
             }
             break;
 
