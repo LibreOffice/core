@@ -96,7 +96,7 @@ private:
     rtl::Reference < SvXMLExportPropertyMapper >      m_xParaPropMapper;
     rtl::Reference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
 
-    mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
+    rtl::Reference<XMLPropertySetMapper> m_xCellStylesPropertySetMapper;
     rtl::Reference<reportdesign::OReportDefinition> m_pReportDefinition;
     bool                                        m_bAllreadyFilled;
 
