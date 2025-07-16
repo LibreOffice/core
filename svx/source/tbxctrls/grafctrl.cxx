@@ -561,12 +561,15 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
         case SID_ATTR_GRAF_CONTRAST:
         {
-            if( pItem )
-            {
+            const SfxInt16Item* pContrast = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+            if (pContrast)
+                aSet.Put( SdrGrafContrastItem( pContrast->GetValue() ) );
+            else if( pItem )
                 aSet.Put( SdrGrafContrastItem( static_cast<const SfxInt16Item*>(pItem)->GetValue() ));
-                if( bUndo )
-                    aUndoStr += SvxResId( RID_SVXSTR_UNDO_GRAFCONTRAST );
-            }
+
+            if (bUndo && (pContrast || pItem))
+                aUndoStr += SvxResId( RID_SVXSTR_UNDO_GRAFCONTRAST );
+
         }
         break;
 
