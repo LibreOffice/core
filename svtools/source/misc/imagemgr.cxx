@@ -57,7 +57,7 @@ struct SvtExtensionResIdMapping_Impl
 
 }
 
-SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
+constexpr SvtExtensionResIdMapping_Impl ExtensionMap_Impl[] =
 {
     { "awk",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
     { "bas",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
@@ -125,18 +125,18 @@ SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { "rtf",   false, STR_DESCRIPTION_WORD_DOC,              SvImageId::Writer },
     { "sbl",   false, {},                                    SvImageId::NONE },
     { "sch",   false, {},                                    SvImageId::NONE },
-    { "sda",   false, { nullptr, STR_DESCRIPTION_SDRAW_DOC}, SvImageId::Draw },
+    { "sda",   false, STR_DESCRIPTION_SDRAW_DOC,             SvImageId::Draw },
     { "sdb",   false, STR_DESCRIPTION_SDATABASE_DOC,         SvImageId::Database },
-    { "sdc",   false, { nullptr, STR_DESCRIPTION_SCALC_DOC}, SvImageId::Calc },
-    { "sdd",   false, { nullptr, STR_DESCRIPTION_SIMPRESS_DOC},          SvImageId::Impress },
-    { "sdp",   false, { nullptr, STR_DESCRIPTION_SIMPRESS_DOC},          SvImageId::NONE },
-    { "sds",   false, { nullptr, STR_DESCRIPTION_SCHART_DOC},            SvImageId::NONE },
-    { "sdw",   false, { nullptr, STR_DESCRIPTION_SWRITER_DOC},           SvImageId::Writer },
+    { "sdc",   false, STR_DESCRIPTION_SCALC_DOC,             SvImageId::Calc },
+    { "sdd",   false, STR_DESCRIPTION_SIMPRESS_DOC,          SvImageId::Impress },
+    { "sdp",   false, STR_DESCRIPTION_SIMPRESS_DOC,          SvImageId::NONE },
+    { "sds",   false, STR_DESCRIPTION_SCHART_DOC,            SvImageId::NONE },
+    { "sdw",   false, STR_DESCRIPTION_SWRITER_DOC,           SvImageId::Writer },
     { "sga",   false, {},                                    SvImageId::NONE },
     { "sgl",   false, STR_DESCRIPTION_GLOBALDOC,             SvImageId::GlobalDoc },
     { "shtml", false, STR_DESCRIPTION_HTMLFILE,              SvImageId::HTML },
     { "sim",   false, STR_DESCRIPTION_SIMAGE_DOC,            SvImageId::SIM },
-    { "smf",   false, { nullptr, STR_DESCRIPTION_SMATH_DOC},             SvImageId::Math },
+    { "smf",   false, STR_DESCRIPTION_SMATH_DOC,             SvImageId::Math },
     { "src",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
     { "svh",   false, STR_DESCRIPTION_HELP_DOC,              SvImageId::NONE },
     { "svm",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::SVM },
