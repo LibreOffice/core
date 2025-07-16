@@ -3808,7 +3808,7 @@ SfxInt16Item GrafBlue SID_ATTR_GRAF_BLUE
 
 
 SfxInt16Item GrafContrast SID_ATTR_GRAF_CONTRAST
-
+(SfxInt16Item Contrast FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
