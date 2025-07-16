@@ -18,12 +18,11 @@
  */
 #pragma once
 
-#include <svtools/valueset.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/hexcolorcontrol.hxx>
-#include <svx/SvxColorValueSet.hxx>
+#include <svx/SvxColorIconView.hxx>
 #include <svx/SvxPresetListBox.hxx>
 #include <svx/PaletteManager.hxx>
 #include <svx/svdview.hxx>
@@ -650,12 +649,13 @@ private:
 
     Color m_aPreviousColor;
     NamedColor m_aCurrentColor;
+    Color m_aActiveColor;
 
     PaletteManager maPaletteManager;
     SvxXRectPreview m_aCtlPreviewOld;
     SvxXRectPreview m_aCtlPreviewNew;
-    std::unique_ptr<SvxColorValueSet> m_xValSetColorList;
-    std::unique_ptr<SvxColorValueSet> m_xValSetRecentList;
+    std::unique_ptr<weld::IconView> m_xIconViewColorList;
+    std::unique_ptr<weld::IconView> m_xIconViewRecentList;
     std::unique_ptr<weld::ComboBox> m_xSelectPalette;
     std::unique_ptr<weld::RadioButton> m_xRbRGB;
     std::unique_ptr<weld::RadioButton> m_xRbCMYK;
@@ -685,8 +685,9 @@ private:
     std::unique_ptr<weld::Button> m_xMoreColors;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreviewOld;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreviewNew;
-    std::unique_ptr<weld::CustomWeld> m_xValSetColorListWin;
-    std::unique_ptr<weld::CustomWeld> m_xValSetRecentListWin;
+
+    std::vector<NamedColor> vColors;
+    std::vector<NamedColor> vRecentColors;
 
     static void    ConvertColorValues (Color& rColor, ColorModel eModell);
     static void    RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK );
@@ -694,7 +695,6 @@ private:
     sal_uInt16  ColorToPercent_Impl( sal_uInt16 nColor );
     sal_uInt16  PercentToColor_Impl( sal_uInt16 nPercent );
 
-    void ImpColorCountChanged();
     void FillPaletteLB();
 
     DECL_LINK(ClickAddHdl_Impl, weld::Button&, void);
@@ -703,7 +703,9 @@ private:
     DECL_STATIC_LINK(SvxColorTabPage, OnMoreColorsClick, weld::Button&, void);
 
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
-    DECL_LINK( SelectValSetHdl_Impl, ValueSet*, void );
+    DECL_LINK( SelectionChangedHdl, weld::IconView&, void );
+    DECL_LINK( QueryColorIVTooltipHdl, const weld::TreeIter&, OUString );
+    DECL_LINK( QueryRecentIVTooltipHdl, const weld::TreeIter&, OUString );
     DECL_LINK( SelectColorModeHdl_Impl, weld::Toggleable&, void );
     void ChangeColor(const NamedColor &rNewColor, bool bUpdatePreset = true);
     void SetColorModel(ColorModel eModel);

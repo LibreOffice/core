@@ -33,6 +33,7 @@
 #include <tbxcolorupdate.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <comphelper/sequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -265,6 +266,75 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     }
 }
 
+void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
+{
+    moThemePaletteCollection.reset();
+    if( mnCurrentPalette == 0)
+    {
+        pIconView.clear();
+        css::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
+        css::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
+        for (int i = 0; i < CustomColorList.getLength(); ++i)
+        {
+            Color aColor(ColorTransparency, CustomColorList[i]);
+            VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
+            OUString sId = OUString::number(i);
+            OUString sColorName = CustomColorNameList[i];
+            pIconView.insert(i, &sColorName, &sId, pColorVDev, nullptr);
+        }
+    }
+    else if (IsThemePaletteSelected())
+    {
+        SfxObjectShell* pObjectShell = SfxObjectShell::Current();
+        if (pObjectShell)
+        {
+            auto pColorSet = pObjectShell->GetThemeColors();
+            mnColorCount = 12;
+            pIconView.clear();
+            sal_uInt16 nItemId = 0;
+
+            if (!pColorSet)
+                return;
+
+            svx::ThemeColorPaletteManager aThemeColorManager(pColorSet);
+            moThemePaletteCollection = aThemeColorManager.generate();
+
+            // Each row is one effect type (no effect + each type).
+            for (size_t nEffect : {0, 1, 2, 3, 4, 5})
+            {
+                // Each column is one color type.
+                for (auto const& rColorData : moThemePaletteCollection->maColors)
+                {
+                    auto const& rEffect = rColorData.maEffects[nEffect];
+                    Color aColor = rEffect.maColor;
+                    VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
+                    OUString sColorName = rEffect.maColorName;
+                    OUString sId = OUString::number(nItemId);
+                    pIconView.insert(nItemId, &sColorName, &sId, pColorVDev, nullptr);
+                    nItemId++;
+                }
+            }
+        }
+    }
+    else if( mnCurrentPalette == mnNumOfPalettes - 1 )
+    {
+        // Add doc colors to palette
+        SfxObjectShell* pDocSh = SfxObjectShell::Current();
+        if (pDocSh)
+        {
+            std::set<Color> aColors = pDocSh->GetDocColors();
+            mnColorCount = aColors.size();
+            pIconView.clear();
+            SvxColorIconView::addEntriesForColorSet(pIconView, aColors, Concat2View(SvxResId( RID_SVXSTR_DOC_COLOR_PREFIX ) + " ") );
+        }
+    }
+    else
+    {
+        m_Palettes[mnCurrentPalette - 1]->LoadColorSet( pIconView );
+        mnColorCount = pIconView.n_children();
+    }
+}
+
 void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
 {
     maRecentColors.clear();
@@ -279,6 +349,26 @@ void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
         OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
         maRecentColors.emplace_back(aColor, sColorName);
         rColorSet.InsertItem(nIx, aColor, sColorName);
+        ++nIx;
+    }
+}
+
+void PaletteManager::ReloadRecentColorSet(weld::IconView& pIconView)
+{
+    maRecentColors.clear();
+    pIconView.clear();
+    css::uno::Sequence< sal_Int32 > Colorlist(officecfg::Office::Common::UserColors::RecentColor::get());
+    css::uno::Sequence< OUString > ColorNamelist(officecfg::Office::Common::UserColors::RecentColorName::get());
+    int nIx = 0;
+    const bool bHasColorNames = Colorlist.getLength() == ColorNamelist.getLength();
+    for (int i = 0; i < Colorlist.getLength(); ++i)
+    {
+        Color aColor(ColorTransparency, Colorlist[i]);
+        VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
+        OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
+        maRecentColors.emplace_back(aColor, sColorName);
+        OUString sId = OUString::number(nIx);
+        pIconView.insert(nIx, &sColorName, &sId, pColorVDev, nullptr);
         ++nIx;
     }
 }
@@ -355,6 +445,53 @@ const OUString & PaletteManager::GetSelectedPalettePath()
         return m_Palettes[mnCurrentPalette - 1]->GetPath();
     else
         return EMPTY_OUSTRING;
+}
+
+std::vector<NamedColor> PaletteManager::GetColors() const
+{
+    std::vector<NamedColor> colors;
+
+    if (mnCurrentPalette == 0) {
+        css::uno::Sequence<sal_Int32> CustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
+        css::uno::Sequence<OUString> CustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
+
+        for (int i = 0; i < CustomColorList.getLength(); ++i) {
+            Color aColor(ColorTransparency, CustomColorList[i]);
+            OUString colorName = (i < CustomColorNameList.getLength()) ? CustomColorNameList[i] : OUString();
+            colors.emplace_back(aColor, colorName);
+        }
+    }
+    else if (IsThemePaletteSelected()) {
+        if (moThemePaletteCollection) {
+            for (size_t nEffect : {0, 1, 2, 3, 4, 5}) {
+                for (auto const& rColorData : moThemePaletteCollection->maColors) {
+                    auto const& rEffect = rColorData.maEffects[nEffect];
+                    colors.emplace_back(rEffect.maColor, rEffect.maColorName);
+                }
+            }
+        }
+    }
+    else if (mnCurrentPalette == mnNumOfPalettes - 1) {
+        SfxObjectShell* pDocSh = SfxObjectShell::Current();
+        if (pDocSh) {
+            std::set<Color> aColors = pDocSh->GetDocColors();
+            OUString namePrefix = SvxResId(RID_SVXSTR_DOC_COLOR_PREFIX) + " ";
+            int index = 1;
+            for (const Color& color : aColors) {
+                colors.emplace_back(color, namePrefix + OUString::number(index++));
+            }
+        }
+    }
+    else {
+        return m_Palettes[mnCurrentPalette - 1]->GetColorList();
+    }
+
+    return colors;
+}
+
+std::vector< NamedColor > PaletteManager::GetRecentColors() const
+{
+    return std::vector< NamedColor >(maRecentColors.begin(), maRecentColors.end());
 }
 
 tools::Long PaletteManager::GetColorCount() const

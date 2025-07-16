@@ -47,6 +47,22 @@
     <property name="can-focus">False</property>
     <property name="icon-name">res/sc10350.png</property>
   </object>
+  <object class="GtkTreeStore" id="colors_liststore">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="recent_colors_liststore">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="ColorPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -139,7 +155,7 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label20">Recent Colors</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">recentcolorset</property>
+                    <property name="mnemonic-widget">iconview_recent_colors_win</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -149,12 +165,27 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkDrawingArea" id="recentcolorset">
+                  <object class="GtkScrolledWindow" id="iconview_recent_colors_win">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">never</property>
+                    <property name="shadow-type">in</property>
+                    <property name="height-request">10</property>
+                    <child>
+                      <object class="GtkIconView" id="iconview_recent_colors">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="model">recent_colors_liststore</property>
+                        <property name="pixbuf-column">0</property>
+                        <property name="selection-mode">single</property>
+                        <property name="item-orientation">horizontal</property>
+                        <property name="columns">12</property>
+                        <property name="row-spacing">1</property>
+                        <property name="column-spacing">1</property>
+                        <property name="item-padding">3</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -241,7 +272,7 @@
                     <property name="margin-bottom">3</property>
                     <property name="label" translatable="yes" context="colorpage|label22">Custom Palette</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">colorset</property>
+                    <property name="mnemonic-widget">iconview_colors_win</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -263,25 +294,25 @@
                 <property name="valign">start</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="colorsetwin">
+                  <object class="GtkScrolledWindow" id="iconview_colors_win">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="hscrollbar-policy">never</property>
-                    <property name="vscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">always</property>
                     <property name="shadow-type">in</property>
+                    <property name="height-request">180</property>
                     <child>
-                      <object class="GtkViewport">
+                      <object class="GtkIconView" id="iconview_colors">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <child>
-                          <object class="GtkDrawingArea" id="colorset">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                          </object>
-                        </child>
+                        <property name="can-focus">True</property>
+                        <property name="model">colors_liststore</property>
+                        <property name="pixbuf-column">0</property>
+                        <property name="selection-mode">single</property>
+                        <property name="item-orientation">horizontal</property>
+                        <property name="columns">12</property>
+                        <property name="row-spacing">1</property>
+                        <property name="column-spacing">1</property>
+                        <property name="item-padding">3</property>
                       </object>
                     </child>
                   </object>

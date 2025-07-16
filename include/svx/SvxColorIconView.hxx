@@ -19,34 +19,22 @@
 
 #pragma once
 
-#include <sal/config.h>
-#include <sfx2/namedcolor.hxx>
 #include <vcl/weld.hxx>
+#include <svx/svxdllapi.h>
+#include <set>
 
-#include <functional>
+class XColorList;
 
-class SvxColorValueSet;
-class SvxColorIconView;
-
-typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
-
-class Palette
+class SVXCORE_DLLPUBLIC SvxColorIconView
 {
-protected:
-    Palette(const Palette&) = default;
 public:
-    Palette() = default;
-    virtual ~Palette();
+    static sal_uInt32 getEntryEdgeLength();
+    static void addEntriesForXColorList(weld::IconView& pIconView, const XColorList& rXColorList,
+                                        sal_uInt32 nStartIndex = 0);
+    static void addEntriesForColorSet(weld::IconView& pIconView, const std::set<Color>& rColorSet,
+                                      std::u16string_view rNamePrefix);
 
-    virtual const OUString&     GetName() = 0;
-    virtual const OUString&     GetPath() = 0;
-    virtual void                LoadColorSet(SvxColorValueSet& rColorSet) = 0;
-    virtual void                LoadColorSet(weld::IconView& pIconView) = 0;
-    virtual std::vector< NamedColor >   GetColorList() = 0;
-
-    virtual bool                IsValid() = 0;
-
-    virtual Palette*            Clone() const = 0;
+    static VclPtr<VirtualDevice> createColorVirtualDevice(const Color& rColor);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

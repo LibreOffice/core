@@ -67,7 +67,9 @@ public:
     PaletteManager& operator=(const PaletteManager&) = delete;
     void        LoadPalettes();
     void        ReloadColorSet(SvxColorValueSet& rColorSet);
+    void        ReloadColorSet(weld::IconView& pIconView);
     void        ReloadRecentColorSet(SvxColorValueSet& rColorSet);
+    void        ReloadRecentColorSet(weld::IconView& pIconView);
     std::vector<OUString> GetPaletteList();
     void        SetPalette( sal_Int32 nPos );
     sal_Int32   GetPalette() const;
@@ -77,6 +79,9 @@ public:
 
     tools::Long        GetColorCount() const;
     tools::Long        GetRecentColorCount() const;
+
+    std::vector< NamedColor >        GetColors() const;
+    std::vector< NamedColor >        GetRecentColors() const;
     void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName, bool bFront = true);
     void        SetSplitButtonColor(const NamedColor& rColor);
 

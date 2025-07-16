@@ -8,6 +8,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
+from uitest.uihelper.common import get_state_as_dict
 
 
 # Test for cui/source/tabpages/tpcolor.cxx.
@@ -55,8 +56,10 @@ class Test(UITestCase):
                 btnColor.executeAction("CLICK", tuple())
                 paletteSelector = xDialog.getChild("paletteselector")
                 select_by_text(paletteSelector, "Theme colors")
-                colorSelector = xDialog.getChild("colorset")
-                colorSelector.executeAction("CHOOSE", mkPropertyValues({"POS": "4"}))
+                colorSelector = xDialog.getChild("iconview_colors")
+                color_element = colorSelector.getChild("4")
+                color_element.executeAction("SELECT", mkPropertyValues({}))
+                self.assertEqual(get_state_as_dict(colorSelector)["SelectEntryText"], "Accent 1")
 
             # Then make sure the doc model is updated accordingly:
             shape = drawPage[0]
