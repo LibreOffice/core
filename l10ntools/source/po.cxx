@@ -566,7 +566,7 @@ PoIfstream::~PoIfstream()
     }
 }
 
-void PoIfstream::open( const OString& rFileName, OString& rPoHeader )
+void PoIfstream::open(const OString& rFileName, OString* pPoHeader)
 {
     assert( !isOpen() );
     m_aInPut.open( rFileName.getStr(), std::ios_base::in );
@@ -577,28 +577,14 @@ void PoIfstream::open( const OString& rFileName, OString& rPoHeader )
     while( !sTemp.empty() && !m_aInPut.eof() )
     {
         std::getline(m_aInPut,sTemp);
-        OString sLine(sTemp.data(),sTemp.length());
-        if (sLine.startsWith("\"PO-Revision-Date"))
-            rPoHeader += "PO-Revision-Date: " + lcl_GetTime() + "\n";
-        else if (sLine.startsWith("\"X-Generator"))
-            rPoHeader += "X-Generator: LibreOffice\n";
-        else if (sLine.startsWith("\""))
-            rPoHeader += lcl_GenNormString(sLine);
-    }
-    m_bEof = false;
-}
-
-void PoIfstream::open( const OString& rFileName )
-{
-    assert( !isOpen() );
-    m_aInPut.open( rFileName.getStr(), std::ios_base::in );
-
-    // Skip header
-    std::string sTemp;
-    std::getline(m_aInPut,sTemp);
-    while( !sTemp.empty() && !m_aInPut.eof() )
-    {
-        std::getline(m_aInPut,sTemp);
+        if (!pPoHeader)
+            continue;
+        if (sTemp.starts_with("\"PO-Revision-Date"))
+            *pPoHeader += "PO-Revision-Date: " + lcl_GetTime() + "\n";
+        else if (sTemp.starts_with("\"X-Generator"))
+            *pPoHeader += "X-Generator: LibreOffice\n";
+        else if (sTemp.starts_with("\""))
+            *pPoHeader += lcl_GenNormString(sTemp);
     }
     m_bEof = false;
 }

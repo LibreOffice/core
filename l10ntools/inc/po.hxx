@@ -127,6 +127,8 @@ private:
     std::ifstream   m_aInPut;
     bool            m_bEof;
 
+    void open(const OString& rFileName, OString* pPoHeader);
+
 public:
 
     class Exception final : public std::exception { };
@@ -139,8 +141,8 @@ public:
     bool    isOpen() const  { return m_aInPut.is_open(); }
     bool    eof() const     { return m_bEof; }
 
-    void    open(const OString& rFileName);
-    void    open(const OString& rFileName, OString& sPoHeader);
+    void    open(const OString& rFileName) { open(rFileName, nullptr); }
+    void    open(const OString& rFileName, OString& sPoHeader) { open(rFileName, &sPoHeader); }
     void    close();
     void    readEntry(PoEntry& rPo);
 };
