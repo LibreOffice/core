@@ -94,13 +94,8 @@ namespace dbaui
                 const ::comphelper::NamedValueCollection& _rAdditionalArgs
             );
 
-        void
-            impl_newWithPilot(
-                const char* _pWizardService,
-                const sal_Int32 _nCommandType,
-                const OUString& _rObjectName
-            );
-
+        void impl_newWithPilot(const OUString& rWizardService, const sal_Int32 _nCommandType,
+                               const OUString& _rObjectName);
     };
 
 }   // namespace dbaui

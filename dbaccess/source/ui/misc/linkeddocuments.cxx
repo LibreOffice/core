@@ -147,8 +147,9 @@ namespace dbaui
 
         return xRet;
     }
-    void OLinkedDocumentsAccess::impl_newWithPilot( const char* _pWizardService,
-        const sal_Int32 _nCommandType, const OUString& _rObjectName )
+    void OLinkedDocumentsAccess::impl_newWithPilot(const OUString& rWizardService,
+                                                   const sal_Int32 _nCommandType,
+                                                   const OUString& _rObjectName)
     {
         try
         {
@@ -169,11 +170,9 @@ namespace dbaui
             Reference< XJobExecutor > xWizard;
             {
                 weld::WaitObject aWaitCursor(m_pDialogParent);
-                xWizard.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    OUString::createFromAscii( _pWizardService ),
-                    aArgs.getWrappedPropertyValues(),
-                    m_xContext
-                    ), UNO_QUERY_THROW );
+                xWizard.set(m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                rWizardService, aArgs.getWrappedPropertyValues(), m_xContext),
+                            UNO_QUERY_THROW);
             }
 
             xWizard->trigger( u"start"_ustr );
@@ -186,20 +185,22 @@ namespace dbaui
     }
     void OLinkedDocumentsAccess::newFormWithPilot( const sal_Int32 _nCommandType,const OUString& _rObjectName )
     {
-        impl_newWithPilot( "com.sun.star.wizards.form.CallFormWizard", _nCommandType, _rObjectName );
+        impl_newWithPilot(u"com.sun.star.wizards.form.CallFormWizard"_ustr, _nCommandType,
+                          _rObjectName);
     }
 
     void OLinkedDocumentsAccess::newReportWithPilot( const sal_Int32 _nCommandType, const OUString& _rObjectName )
     {
-        impl_newWithPilot( "com.sun.star.wizards.report.CallReportWizard", _nCommandType, _rObjectName );
+        impl_newWithPilot(u"com.sun.star.wizards.report.CallReportWizard"_ustr, _nCommandType,
+                          _rObjectName);
     }
     void OLinkedDocumentsAccess::newTableWithPilot()
     {
-        impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", -1, OUString() );
+        impl_newWithPilot(u"com.sun.star.wizards.table.CallTableWizard"_ustr, -1, OUString());
     }
     void OLinkedDocumentsAccess::newQueryWithPilot()
     {
-        impl_newWithPilot( "com.sun.star.wizards.query.CallQueryWizard", -1, OUString() );
+        impl_newWithPilot(u"com.sun.star.wizards.query.CallQueryWizard"_ustr, -1, OUString());
     }
     Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 i_nActionID,
         const ::comphelper::NamedValueCollection& i_rCreationArgs, Reference< XComponent >& o_rDefinition )
