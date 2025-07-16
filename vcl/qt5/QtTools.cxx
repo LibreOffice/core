@@ -38,6 +38,38 @@
 
 void CairoDeleter::operator()(cairo_surface_t* pSurface) const { cairo_surface_destroy(pSurface); }
 
+Qt::CheckState toQtCheckState(TriState eTristate)
+{
+    switch (eTristate)
+    {
+        case TRISTATE_FALSE:
+            return Qt::CheckState::Unchecked;
+        case TRISTATE_TRUE:
+            return Qt::CheckState::Checked;
+        case TRISTATE_INDET:
+            return Qt::CheckState::PartiallyChecked;
+        default:
+            assert(false && "unhandled Tristate value");
+            return Qt::CheckState::PartiallyChecked;
+    }
+};
+
+TriState toVclTriState(Qt::CheckState eTristate)
+{
+    switch (eTristate)
+    {
+        case Qt::CheckState::Unchecked:
+            return TRISTATE_FALSE;
+        case Qt::CheckState::Checked:
+            return TRISTATE_TRUE;
+        case Qt::CheckState::PartiallyChecked:
+            return TRISTATE_INDET;
+        default:
+            assert(false && "unhandled Qt::CheckState value");
+            return TRISTATE_INDET;
+    }
+};
+
 sal_uInt16 toVclKeyboardModifiers(Qt::KeyboardModifiers eKeyModifiers)
 {
     sal_uInt16 nCode = 0;

@@ -213,9 +213,6 @@ private:
     QModelIndex firstTextColumnModelIndex(const weld::TreeIter& rIter) const;
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 
-    static Qt::CheckState toQtCheckState(TriState eTristate);
-    static TriState toVclTriState(Qt::CheckState eCheckState);
-
 private Q_SLOTS:
     void handleActivated();
     void handleDataChanged(const QModelIndex& rTopLeft, const QModelIndex& rBottomRight,

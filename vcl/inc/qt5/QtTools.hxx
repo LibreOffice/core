@@ -97,6 +97,9 @@ inline QDate toQDate(const Date& rDate)
 
 inline Date toDate(const QDate& rDate) { return Date(rDate.day(), rDate.month(), rDate.year()); }
 
+Qt::CheckState toQtCheckState(TriState eTristate);
+TriState toVclTriState(Qt::CheckState eTristate);
+
 Qt::DropActions toQtDropActions(sal_Int8 dragOperation);
 sal_Int8 toVclDropActions(Qt::DropActions dragOperation);
 sal_Int8 toVclDropAction(Qt::DropAction dragOperation);
