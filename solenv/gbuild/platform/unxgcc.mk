@@ -172,7 +172,7 @@ $(call gb_Helper_abbreviate_dirs,\
                 ) \
 		-o $(1) \
 	$(if $(SOVERSIONSCRIPT),&& ln -sf ../../program/$(notdir $(1)) $(ILIBTARGET)) \
-	$(if $(filter EMSCRIPTEN,$(OS)),$(if $(filter TRUE,$(HAVE_EXTERNAL_DWARF)),&& emdwp -e $(patsubst %$(gb_Executable_EXT),%.wasm.debug.wasm,$(1)) -o $(patsubst %$(gb_Executable_EXT),%.wasm.debug.wasm.dwp,$(1)))) \
+	$(if $(filter EMSCRIPTEN,$(OS)),$(if $(call gb_target_symbols_enabled,$(1)),$(if $(filter TRUE,$(HAVE_EXTERNAL_DWARF)),&& emdwp -e $(patsubst %$(gb_Executable_EXT),%.wasm.debug.wasm,$(1)) -o $(patsubst %$(gb_Executable_EXT),%.wasm.debug.wasm.dwp,$(1))))) \
 	$(if $(call gb_LinkTarget__WantLock,$(2)),; RC=$$? ; rm -f $(gb_LinkTarget__Lock); if test $$RC -ne 0; then exit $$RC; fi))
 
 $(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
