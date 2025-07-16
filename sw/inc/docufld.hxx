@@ -535,6 +535,8 @@ public:
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
+/// A field that expands to the value of some document information, e.g. Insert -> Field -> First
+/// Author on the UI.
 class SW_DLLPUBLIC SwDocInfoField final : public SwValueField
 {
     sal_uInt16  m_nSubType;
