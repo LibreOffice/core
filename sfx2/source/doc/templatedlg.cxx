@@ -287,8 +287,8 @@ void SfxTemplateManagerDlg::setTemplateViewMode(TemplateViewMode eViewMode)
 {
     if(eViewMode == TemplateViewMode::eThumbnailView && mViewMode != TemplateViewMode::eThumbnailView)
     {
-        mxThumbnailViewButton->set_state(TRISTATE_TRUE);
-        mxListViewButton->set_state(TRISTATE_FALSE);
+        mxThumbnailViewButton->set_active(true);
+        mxListViewButton->set_active(false);
         mxLocalView->ThumbnailView::GrabFocus();
         mViewMode = eViewMode;
         mxLocalView->setTemplateViewMode(eViewMode);
@@ -296,8 +296,8 @@ void SfxTemplateManagerDlg::setTemplateViewMode(TemplateViewMode eViewMode)
     }
     if(eViewMode == TemplateViewMode::eListView && mViewMode != TemplateViewMode::eListView)
     {
-        mxListViewButton->set_state(TRISTATE_TRUE);
-        mxThumbnailViewButton->set_state(TRISTATE_FALSE);
+        mxListViewButton->set_active(true);
+        mxThumbnailViewButton->set_active(false);
         mxLocalView->ListView::grab_focus();
         mViewMode = eViewMode;
         mxLocalView->setTemplateViewMode(eViewMode);
