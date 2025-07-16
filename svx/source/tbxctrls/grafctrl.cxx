@@ -549,12 +549,13 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
         case SID_ATTR_GRAF_LUMINANCE:
         {
-            if( pItem )
-            {
+            const SfxInt16Item* pBrightness = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+            if (pBrightness)
+                aSet.Put( SdrGrafLuminanceItem( pBrightness->GetValue() ) );
+            else if( pItem )
                 aSet.Put( SdrGrafLuminanceItem( static_cast<const SfxInt16Item*>(pItem)->GetValue() ));
-                if( bUndo )
-                    aUndoStr += SvxResId( RID_SVXSTR_UNDO_GRAFLUMINANCE );
-            }
+            if( bUndo && (pBrightness || pItem) )
+                aUndoStr += SvxResId( RID_SVXSTR_UNDO_GRAFLUMINANCE );
         }
         break;
 
