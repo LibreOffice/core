@@ -21,6 +21,7 @@
 
 #include <svx/Palette.hxx>
 #include <svx/SvxColorValueSet.hxx>
+#include <svx/SvxColorIconView.hxx>
 #include <svx/xtable.hxx>
 
 class SvFileStream;
@@ -45,6 +46,8 @@ public:
     virtual const OUString&     GetName() override;
     virtual const OUString&     GetPath() override;
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) override;
+    virtual void                LoadColorSet(weld::IconView& pIconView) override;
+    virtual std::vector< NamedColor >   GetColorList() override;
 
     virtual bool                IsValid() override;
 };
@@ -71,6 +74,8 @@ public:
     virtual const OUString&     GetName() override;
     virtual const OUString&     GetPath() override;
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) override;
+    virtual void                LoadColorSet(weld::IconView& pIconView) override;
+    virtual std::vector< NamedColor >   GetColorList() override;;
 
     virtual bool                IsValid() override;
 };
@@ -91,6 +96,8 @@ public:
     virtual const OUString&     GetName() override;
     virtual const OUString&     GetPath() override;
     virtual void                LoadColorSet(SvxColorValueSet& rColorSet) override;
+    virtual void                LoadColorSet(weld::IconView& pIconView) override;
+    virtual std::vector< NamedColor >   GetColorList() override;;
 
     virtual bool                IsValid() override;
 };

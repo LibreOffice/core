@@ -24,6 +24,8 @@
 #include <palettes.hxx>
 #include <utility>
 
+#include <vcl/virdev.hxx>
+
 Palette::~Palette()
 {
 }
@@ -49,6 +51,26 @@ void PaletteASE::LoadColorSet(SvxColorValueSet& rColorSet)
         rColorSet.InsertItem(nIx, rColor.m_aColor, rColor.m_aName);
         ++nIx;
     }
+}
+
+void PaletteASE::LoadColorSet(weld::IconView& pIconView)
+{
+    pIconView.clear();
+    int nIx = 0;
+    for (const auto& rColor : maColors)
+    {
+        VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(rColor.m_aColor);
+        Bitmap aBmp = pColorVDev->GetBitmap(Point(), pColorVDev->GetOutputSizePixel());
+        OUString sColorName = rColor.m_aName;
+        OUString sId = OUString::number(nIx);
+        pIconView.insert(nIx, &sColorName, &sId, &aBmp, nullptr);
+        ++nIx;
+    }
+}
+
+std::vector< NamedColor > PaletteASE::GetColorList()
+{
+    return maColors;
 }
 
 const OUString& PaletteASE::GetName()
@@ -307,6 +329,28 @@ void PaletteGPL::LoadColorSet(SvxColorValueSet& rColorSet)
     }
 }
 
+void PaletteGPL::LoadColorSet(weld::IconView& pIconView)
+{
+    LoadPalette();
+
+    pIconView.clear();
+    int nIx = 0;
+    for (const auto& rColor : maColors)
+    {
+        VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(rColor.m_aColor);
+        Bitmap aBmp = pColorVDev->GetBitmap(Point(), pColorVDev->GetOutputSizePixel());
+        OUString sColorName = rColor.m_aName;
+        OUString sId = OUString::number(nIx);
+        pIconView.insert(nIx, &sColorName, &sId, &aBmp, nullptr);
+        ++nIx;
+    }
+}
+
+std::vector< NamedColor > PaletteGPL::GetColorList()
+{
+    return maColors;
+}
+
 bool PaletteGPL::IsValid()
 {
     return mbValidPalette;
@@ -454,6 +498,41 @@ void PaletteSOC::LoadColorSet(SvxColorValueSet& rColorSet)
     rColorSet.Clear();
     if( mpColorList.is() )
         rColorSet.addEntriesForXColorList( *mpColorList );
+}
+
+void PaletteSOC::LoadColorSet(weld::IconView& pIconView)
+{
+    if( !mbLoadedPalette )
+    {
+        mbLoadedPalette = true;
+        mpColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(XPropertyListType::Color, maFPath));
+        (void)mpColorList->Load();
+    }
+    pIconView.clear();
+    if( mpColorList.is() )
+        SvxColorIconView::addEntriesForXColorList( pIconView, *mpColorList );
+}
+
+std::vector< NamedColor > PaletteSOC::GetColorList()
+{
+    std::vector<NamedColor> aColors;
+    if(!mpColorList.is())
+        return aColors;
+
+    const XColorList& rXColorList = *mpColorList;
+    const sal_uInt32 nColorCount(rXColorList.Count());
+
+    for(sal_uInt32 nIndex(0); nIndex < nColorCount; nIndex++)
+    {
+        const XColorEntry* pEntry = rXColorList.GetColor(nIndex);
+
+        if(pEntry)
+        {
+            NamedColor aNamedColor(pEntry->GetColor(), pEntry->GetName());
+            aColors.push_back(aNamedColor);
+        }
+    }
+    return aColors;
 }
 
 bool PaletteSOC::IsValid()
