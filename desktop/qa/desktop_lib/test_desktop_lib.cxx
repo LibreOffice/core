@@ -156,6 +156,7 @@ public:
     void testGetPartPageRectangles();
     void testSearchCalc();
     void testPropertySettingOnFormulaBar();
+    void testFormulaBarAcceptButton();
     void testSearchAllNotificationsCalc();
     void testPaintTile();
     void testSaveAs();
@@ -234,6 +235,7 @@ public:
     CPPUNIT_TEST(testGetPartPageRectangles);
     CPPUNIT_TEST(testSearchCalc);
     CPPUNIT_TEST(testPropertySettingOnFormulaBar);
+    CPPUNIT_TEST(testFormulaBarAcceptButton);
     CPPUNIT_TEST(testSearchAllNotificationsCalc);
     CPPUNIT_TEST(testPaintTile);
     CPPUNIT_TEST(testSaveAs);
@@ -3182,6 +3184,47 @@ void DesktopLOKTest::testPropertySettingOnFormulaBar()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(false, aView.m_stateBold); // This line doesn't pass without the fix in this commit.
+}
+
+void DesktopLOKTest::testFormulaBarAcceptButton()
+{
+    LibLibreOffice_Impl aOffice;
+    LibLODocument_Impl* pDocument = loadDoc("empty.ods");
+    Scheduler::ProcessEventsToIdle();
+
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    Scheduler::ProcessEventsToIdle();
+
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    // Go to A1.
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Set the focus to formulabar.
+    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"grab_focus\", \"data\": \"null\", \"type\": \"drawingarea\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Set selection (nothing selected).
+    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;0;0;0\", \"type\": \"drawingarea\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Set text.
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, "H");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, "H");
+    Scheduler::ProcessEventsToIdle();
+
+    aView.m_JSONDialog.clear();
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:AcceptFormula", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    // Client should have receive a JSDialog event for formulabar by now.
+
+    // These lines don't pass without the fix in this commit.
+    CPPUNIT_ASSERT_EQUAL(std::string("formulabar"), aView.m_JSONDialog.get_child("jsontype").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(std::string("setText"), aView.m_JSONDialog.get_child("data").get_child("action_type").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(std::string("sc_input_window"), aView.m_JSONDialog.get_child("data").get_child("control_id").get_value<std::string>());
 }
 
 void DesktopLOKTest::testRunMacro()
