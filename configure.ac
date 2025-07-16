@@ -13863,6 +13863,10 @@ then
     fi
 
     if test "$USING_X11" = TRUE; then
+        if ! test -r "$qt5_incdir/QtX11Extras/QX11Info"; then
+            AC_MSG_ERROR(['Qt 5 QtX11Extras headers not found.'])
+        fi
+
         PKG_CHECK_MODULES(QT5_XCB,[xcb],,[AC_MSG_ERROR([XCB not found, which is needed for correct app grouping in X11.])])
         QT5_CFLAGS="$QT5_CFLAGS $QT5_XCB_CFLAGS $QT5_XCB_ICCCM_CFLAGS"
         QT5_LIBS="$QT5_LIBS $QT5_XCB_LIBS $QT5_XCB_ICCCM_LIBS -lQt5X11Extras"
