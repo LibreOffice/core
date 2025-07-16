@@ -2328,6 +2328,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 {
     SAL_INFO( "sw.ww8", "<OutWW8_SwTextNode>" );
 
+    if (IsDummyFloattableAnchor(rNode))
+    {
+        // Emit their floating tables
+        AttrOutput().CheckAndWriteFloatingTables(rNode);
+        return;
+    }
+
     SwWW8AttrIter aWatermarkAttrIter( *this, rNode );
 
     // export inline heading
@@ -3757,11 +3764,7 @@ void MSWordExportBase::OutputContentNode( SwContentNode& rNode )
     switch ( rNode.GetNodeType() )
     {
         case SwNodeType::Text:
-            // Skip dummy anchors: the next node will emit their floating tables.
-            if (!IsDummyFloattableAnchor(*rNode.GetTextNode()))
-            {
-                OutputTextNode(*rNode.GetTextNode());
-            }
+            OutputTextNode(*rNode.GetTextNode());
             break;
         case SwNodeType::Grf:
             OutputGrfNode( *rNode.GetGrfNode() );
