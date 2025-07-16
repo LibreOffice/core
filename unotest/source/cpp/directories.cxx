@@ -11,6 +11,7 @@
 
 #include <cppunit/TestAssert.h>
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <unotest/directories.hxx>
 
 namespace
@@ -30,16 +31,11 @@ OUString getFileURLFromSystemPath(OUString const& path)
 
 test::Directories::Directories()
 {
-    const char* pSrcRoot = getenv("SRC_ROOT");
-    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != nullptr);
-    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot[0] != 0);
-    const char* pWorkdirRoot = getenv("WORKDIR_FOR_BUILD");
-    CPPUNIT_ASSERT_MESSAGE("$WORKDIR_FOR_BUILD env variable not set", pWorkdirRoot != nullptr);
-    CPPUNIT_ASSERT_MESSAGE("$WORKDIR_FOR_BUILD env variable not set", pWorkdirRoot[0] != 0);
-    m_aSrcRootPath = OUString::createFromAscii(pSrcRoot);
+    osl_getEnvironment(u"SRC_ROOT"_ustr.pData, &m_aSrcRootPath.pData);
+    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", !m_aSrcRootPath.isEmpty());
+    osl_getEnvironment(u"WORKDIR_FOR_BUILD"_ustr.pData, &m_aWorkdirRootPath.pData);
+    CPPUNIT_ASSERT_MESSAGE("WORKDIR_FOR_BUILD env variable not set", !m_aWorkdirRootPath.isEmpty());
     m_aSrcRootURL = getFileURLFromSystemPath(m_aSrcRootPath);
-
-    m_aWorkdirRootPath = OUString::createFromAscii(pWorkdirRoot);
     m_aWorkdirRootURL = getFileURLFromSystemPath(m_aWorkdirRootPath);
 }
 
