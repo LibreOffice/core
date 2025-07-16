@@ -1831,6 +1831,44 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166181)
     CPPUNIT_ASSERT_LESS(sal_Int32(500), height.toInt32());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167526)
+{
+    // Given a document with a floating table, immediately followed by a normal table:
+    createSwDoc("tdf167526.docx");
+
+    // check layout
+    {
+        // Make sure that the second node is a dummy node, and its line has height of 0
+        auto pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//page['pass 1']", 1);
+        assertXPath(pXmlDoc, "//body['pass 1']/txt[2]/anchored", 1);
+        assertXPath(pXmlDoc, "//body['pass 1']/txt[2]/SwParaPortion/SwLineLayout", "height", u"0");
+    }
+
+    // DOCX roundtrip:
+    saveAndReload(u"Office Open XML Text"_ustr);
+
+    // check layout
+    {
+        // Make sure that the second node is a dummy node, and its line has height of 0
+        auto pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//page['pass 2']", 1);
+        assertXPath(pXmlDoc, "//body['pass 2']/txt[2]/anchored", 1);
+        // Without a fix, this would fail, because the paragraph was visible after reload;
+        // there were two SwLineLayout elements, each with non-0 height.
+        assertXPath(pXmlDoc, "//body['pass 2']/txt[2]/SwParaPortion/SwLineLayout", "height", u"0");
+    }
+
+    // check DOCX export
+    {
+        auto pXmlDoc = parseExport(u"word/document.xml"_ustr);
+        assertXPathNodeName(pXmlDoc, "/w:document/w:body/*[1]", "p");
+        assertXPathNodeName(pXmlDoc, "/w:document/w:body/*[2]", "tbl");
+        // Without a fix, this would fail, because the third element was the wrongly emitted <w:p>
+        assertXPathNodeName(pXmlDoc, "/w:document/w:body/*[3]", "tbl");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -557,14 +557,6 @@ void DocxExport::CollectFloatingTables()
             continue;
         }
 
-        SwNodeIndex aNodeIndex(*pTextNode);
-        ++aNodeIndex;
-        if (!aNodeIndex.GetNode().GetTextNode())
-        {
-            // Only text nodes know to look for floating tables from previous text nodes.
-            continue;
-        }
-
         if (!pTextNode->HasSwAttrSet())
         {
             continue;

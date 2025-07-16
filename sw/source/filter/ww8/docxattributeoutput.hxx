@@ -434,6 +434,9 @@ public:
         const SvxBrushItem* pBrush,
         bool isLegal ) override;
 
+    /// Output the floating tables attached to the text node
+    virtual void CheckAndWriteFloatingTables(const SwNode& rNode) override;
+
     void WriteField_Impl(const SwField* pField, ww::eField eType,
             const OUString& rFieldCmd, FieldFlags nMode,
             OUString const* pBookmarkName = nullptr);

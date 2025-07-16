@@ -457,36 +457,23 @@ void DocxAttributeOutput::WriteFloatingTable(ww8::Frame const* pParentFrame)
     m_rExport.SetFloatingTableFrame(nullptr);
 }
 
-static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutput)
+void DocxAttributeOutput::CheckAndWriteFloatingTables(const SwNode& rNode)
 {
-    const auto& rExport = rDocxAttributeOutput.GetExport();
+    // floating tables in shapes are not supported: exclude this case
+    if (m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
+        return;
+
     // iterate though all SpzFrameFormats and check whether they are anchored to the current text node
-    std::vector<ww8::Frame> aFrames;
-    for( sal_uInt16 nCnt = rExport.m_rDoc.GetSpzFrameFormats()->size(); nCnt; )
+    for( sal_uInt16 nCnt = m_rExport.m_rDoc.GetSpzFrameFormats()->size(); nCnt; )
     {
-        const SwFrameFormat* pFrameFormat = (*rExport.m_rDoc.GetSpzFrameFormats())[ --nCnt ];
+        const SwFrameFormat* pFrameFormat = (*m_rExport.m_rDoc.GetSpzFrameFormats())[ --nCnt ];
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         const SwNode* pAnchorNode = rAnchor.GetAnchorNode();
 
-        if (!pAnchorNode || ! rExport.m_pCurPam->GetPointNode().GetTextNode())
+        if (!pAnchorNode || !rNode.GetTextNode())
             continue;
 
-        bool bAnchorMatchesNode = *pAnchorNode == *rExport.m_pCurPam->GetPointNode().GetTextNode();
-        bool bAnchorIsPreviousNode = false;
-        if (!bAnchorMatchesNode)
-        {
-            // The anchor doesn't match, but see if the previous node is a dummy anchor, we should
-            // emit floating tables to that anchor here, too.
-            SwNodeIndex aNodeIndex(rExport.m_pCurPam->GetPointNode());
-            --aNodeIndex;
-            if (*pAnchorNode == aNodeIndex.GetNode() && rExport.IsDummyFloattableAnchor(aNodeIndex.GetNode()))
-            {
-                bAnchorMatchesNode = true;
-                bAnchorIsPreviousNode = true;
-            }
-        }
-
-        if (!bAnchorMatchesNode)
+        if (*pAnchorNode != *rNode.GetTextNode())
             continue;
 
         const SwNodeIndex* pStartNode = pFrameFormat->GetContent().GetContentIdx();
@@ -522,21 +509,9 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
             continue;
         }
 
-        // write table to docx: first tables from previous node, then from this node.
+        // write table to docx
         ww8::Frame aFrame(*pFrameFormat, *rAnchor.GetContentAnchor());
-        if (bAnchorIsPreviousNode)
-        {
-            aFrames.insert(aFrames.begin(), aFrame);
-        }
-        else
-        {
-            aFrames.push_back(aFrame);
-        }
-    }
-
-    for (const auto& rFrame : aFrames)
-    {
-        rDocxAttributeOutput.WriteFloatingTable(&rFrame);
+        WriteFloatingTable(&aFrame);
     }
 }
 
@@ -597,13 +572,9 @@ sal_Int32 DocxAttributeOutput::StartParagraph(const ww8::WW8TableNodeInfo::Point
     }
 
     // look ahead for floating tables that were put into a frame during import
-    // floating tables in shapes are not supported: exclude this case
-    if (!m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
-    {
-        // Do this after opening table/row/cell, so floating tables anchored at cell start go inside
-        // the cell, not outside.
-        checkAndWriteFloatingTables(*this);
-    }
+    // Do this after opening table/row/cell, so floating tables anchored at cell start go inside
+    // the cell, not outside.
+    CheckAndWriteFloatingTables(m_rExport.m_pCurPam->GetPointNode());
 
     // Look up the "sdt end before this paragraph" property early, when it
     // would normally arrive, it would be too late (would be after the

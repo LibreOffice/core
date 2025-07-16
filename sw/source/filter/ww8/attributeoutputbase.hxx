@@ -351,6 +351,9 @@ public:
         const SvxBrushItem* pBrush, // #i120928 export graphic of bullet
         bool isLegal) = 0;
 
+    // Output the floating tables attached to the text node
+    virtual void CheckAndWriteFloatingTables(const SwNode& /*rNode*/) {}
+
 protected:
 
     static void GetNumberPara( OUString& rStr, const SwField& rField );
