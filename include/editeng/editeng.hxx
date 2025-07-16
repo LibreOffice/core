@@ -420,8 +420,8 @@ public:
 
     SAL_DLLPRIVATE void setRoundFontSizeToPt(bool bRound);
 
-    void            SetEditTextObjectPool( SfxItemPool* pPool );
-    SfxItemPool*    GetEditTextObjectPool() const;
+    void            SetItemPool( SfxItemPool* pPool );
+    SfxItemPool*    GetItemPool() const;
 
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
     SfxStyleSheetPool*  GetStyleSheetPool();

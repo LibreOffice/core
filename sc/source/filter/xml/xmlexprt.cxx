@@ -5421,8 +5421,8 @@ ErrCode ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
             }
 
             CollectUserDefinedNamespaces(pDoc->GetPool(), ATTR_USERDEF);
-            CollectUserDefinedNamespaces(pDoc->GetEditTextObjectPool(), EE_PARA_XMLATTRIBS);
-            CollectUserDefinedNamespaces(pDoc->GetEditTextObjectPool(), EE_CHAR_XMLATTRIBS);
+            CollectUserDefinedNamespaces(pDoc->GetEditEnginePool(), EE_PARA_XMLATTRIBS);
+            CollectUserDefinedNamespaces(pDoc->GetEditEnginePool(), EE_CHAR_XMLATTRIBS);
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
             if (pDrawLayer)
             {

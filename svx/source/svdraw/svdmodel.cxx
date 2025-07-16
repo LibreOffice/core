@@ -713,7 +713,7 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
     {
         pOutliner->EraseVirtualDevice();
         pOutliner->SetUpdateLayout(false);
-        pOutliner->SetEditTextObjectPool(m_pItemPool.get());
+        pOutliner->SetEditEnginePool(m_pItemPool.get());
         pOutliner->SetDefTab(m_nDefaultTabulator);
     }
 

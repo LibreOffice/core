@@ -1536,10 +1536,10 @@ void ScTextWnd::InitEditEngine()
     {
         pDocSh = &mpViewShell->GetViewData().GetDocShell();
         ScDocument& rDoc = mpViewShell->GetViewData().GetDocument();
-        pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEditEnginePool(), rDoc.GetEditTextObjectPool());
+        pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEditEnginePool());
     }
     else
-        pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool().get(), nullptr, true);
+        pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool().get(), true);
     pNew->SetExecuteURL( false );
     m_xEditEngine = std::move(pNew);
 
@@ -2106,10 +2106,10 @@ void ScTextWnd::MakeDialogEditView()
     if ( pViewSh )
     {
         ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
-        pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEditEnginePool(), rDoc.GetEditTextObjectPool());
+        pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEditEnginePool());
     }
     else
-        pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool().get(), nullptr, true);
+        pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool().get(), true);
     pNew->SetExecuteURL( false );
     m_xEditEngine = std::move(pNew);
 

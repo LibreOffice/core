@@ -940,7 +940,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     else if ( pData )
     {
         // A copy of pData will be stored.
-        pInsDoc->SetEditText(aPos, *pData, rDoc.GetEditTextObjectPool());
+        pInsDoc->SetEditText(aPos, *pData, rDoc.GetEditEnginePool());
     }
     else
         pInsDoc->SetString( nCol, nRow, nTab, aNewStr );

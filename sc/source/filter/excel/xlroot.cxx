@@ -368,7 +368,6 @@ ScEditEngineDefaulter& XclRoot::GetEditEngine() const
         mrData.mxEditEngine = std::make_shared<ScEditEngineDefaulter>( GetDoc().GetEditEnginePool() );
         ScEditEngineDefaulter& rEE = *mrData.mxEditEngine;
         rEE.SetRefMapMode(MapMode(MapUnit::Map100thMM));
-        rEE.SetEditTextObjectPool( GetDoc().GetEditTextObjectPool() );
         rEE.SetUpdateLayout( false );
         rEE.EnableUndo( false );
         rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );

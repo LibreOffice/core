@@ -358,7 +358,6 @@ void ScViewFunc::DoThesaurus()
     uno::Reference<linguistic2::XSpellChecker1> xSpeller = LinguMgr::GetSpellChecker();
 
     pThesaurusEngine.reset(new ScEditEngineDefaulter(rDoc.GetEditEnginePool()));
-    pThesaurusEngine->SetEditTextObjectPool( rDoc.GetEditTextObjectPool() );
     pThesaurusEngine->SetRefDevice(GetViewData().GetActiveWin()->GetOutDev());
     pThesaurusEngine->SetSpeller(xSpeller);
     MakeEditView(*pThesaurusEngine, nCol, nRow);

@@ -84,7 +84,7 @@ DrawViewWrapper::DrawViewWrapper(
 
     // #i12587# support for shapes in chart
     SdrOutliner* pOutliner = getOutliner();
-    SfxItemPool* pOutlinerPool = ( pOutliner ? pOutliner->GetEditTextObjectPool() : nullptr );
+    SfxItemPool* pOutlinerPool = ( pOutliner ? pOutliner->GetEditEnginePool() : nullptr );
     if ( pOutlinerPool )
     {
         SvtLinguConfig aLinguConfig;

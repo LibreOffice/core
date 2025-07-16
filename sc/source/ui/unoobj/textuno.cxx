@@ -683,11 +683,11 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd()
 
 UNO3_GETIMPLEMENTATION2_IMPL(ScDrawTextCursor, SvxUnoTextCursor);
 
-ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
+ScSimpleEditSourceHelper::ScSimpleEditSourceHelper(SfxItemPool* pEditEnginePool)
 {
-    rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-    pEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
-    pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );     // TRUE: become owner of pool
+//    rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
+//    pEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
+    pEditEngine.reset( new ScFieldEditEngine(nullptr, pEditEnginePool, false) );     // TRUE: become owner of pool
     pForwarder.reset( new SvxEditEngineForwarder( *pEditEngine ) );
     pOriginalSource.reset( new ScSimpleEditSource( pForwarder.get() ) );
 }
@@ -701,7 +701,8 @@ ScSimpleEditSourceHelper::~ScSimpleEditSourceHelper()
     pEditEngine.reset();
 }
 
-ScEditEngineTextObj::ScEditEngineTextObj() :
+ScEditEngineTextObj::ScEditEngineTextObj(SfxItemPool* pEditEnginePool) :
+    ScSimpleEditSourceHelper(pEditEnginePool),
     SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertySet(), uno::Reference<text::XText>() )
 {
 }
@@ -772,7 +773,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         else
         {
             rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-            pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );
+            pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), true) );
         }
         //  currently, GetPortions doesn't work if UpdateMode is sal_False,
         //  this will be fixed (in EditEngine) by src600

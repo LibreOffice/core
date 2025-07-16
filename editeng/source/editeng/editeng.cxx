@@ -1194,14 +1194,14 @@ bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
     return false;
 }
 
-void EditEngine::SetEditTextObjectPool( SfxItemPool* pPool )
+void EditEngine::SetItemPool( SfxItemPool* pPool )
 {
-    getImpl().SetEditTextObjectPool(pPool);
+    getImpl().GetEditDoc().SetItemPool(pPool);
 }
 
-SfxItemPool* EditEngine::GetEditTextObjectPool() const
+SfxItemPool* EditEngine::GetItemPool() const
 {
-    return getImpl().GetEditTextObjectPool();
+    return &getImpl().GetEditDoc().GetItemPool();
 }
 
 void EditEngine::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )

@@ -825,8 +825,8 @@ public:
     bool            HasConvertibleTextPortion( LanguageType nLang );
     virtual bool    ConvertNextDocument();
 
-    void            SetEditTextObjectPool( SfxItemPool* pPool );
-    SfxItemPool*    GetEditTextObjectPool() const;
+    void            SetEditEnginePool( SfxItemPool* pPool );
+    SfxItemPool*    GetEditEnginePool() const;
 
     void            SetRefDevice( OutputDevice* pRefDev );
     OutputDevice*   GetRefDevice() const;

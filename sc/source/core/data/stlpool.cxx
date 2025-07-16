@@ -263,7 +263,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     const OUString  aHelpFile;//which text???
     SfxItemSet*     pSet            = nullptr;
     SfxItemSet*     pHFSet          = nullptr;
-    ScEditEngineDefaulter aEdEngine( EditEngine::CreatePool().get(), true );
+    ScEditEngineDefaulter aEdEngine( pDoc->GetEditEnginePool(), true );
     aEdEngine.SetUpdateLayout( false );
     std::unique_ptr<EditTextObject> pEmptyTxtObj = aEdEngine.CreateTextObject();
     std::unique_ptr<EditTextObject> pTxtObj;

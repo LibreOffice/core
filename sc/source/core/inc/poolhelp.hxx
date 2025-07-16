@@ -39,7 +39,6 @@ private:
     rtl::Reference<ScDocumentPool> pDocPool;
     rtl::Reference< ScStyleSheetPool > mxStylePool;
     mutable std::unique_ptr<SvNumberFormatter> pFormTable;
-    mutable rtl::Reference<SfxItemPool>  mpEditTextObjectPool;     // EditTextObjectPool
     mutable rtl::Reference<SfxItemPool>  mpEditEnginePool;   // EditEnginePool
 
 public:
@@ -53,7 +52,6 @@ public:
     ScDocumentPool*     GetDocPool() const      { return pDocPool.get(); }
     ScStyleSheetPool*   GetStylePool() const    { return mxStylePool.get(); }
     SvNumberFormatter*  GetFormTable() const;
-    SfxItemPool*        GetEditTextObjectPool() const;
     SfxItemPool*        GetEditEnginePool() const;
 
     void                SetFormTableOpt(const ScDocOptions& rOpt);

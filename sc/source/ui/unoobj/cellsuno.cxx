@@ -2145,7 +2145,6 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
 
                         OUString aStr = aCell.getString(rDoc);
                         EditEngine aEngine( rDoc.GetEditEnginePool() );
-                        aEngine.SetEditTextObjectPool(rDoc.GetEditTextObjectPool());
 
                         /* EE_CHAR_ESCAPEMENT seems to be set on the cell _only_ when
                          * there are no other attribs for the cell.

@@ -732,17 +732,14 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
 ScTabEditEngine::ScTabEditEngine( ScDocument& rDoc )
         : ScFieldEditEngine( &rDoc, rDoc.GetEditEnginePool() )
 {
-    SetEditTextObjectPool( rDoc.GetEditTextObjectPool() );
     const ScPatternAttr& rScPatternAttr(rDoc.getCellAttributeHelper().getDefaultCellAttribute());
     Init(rScPatternAttr);
 }
 
 ScTabEditEngine::ScTabEditEngine( const ScPatternAttr& rPattern,
-            SfxItemPool* pEngineItemPool, ScDocument& rDoc, SfxItemPool* pTextObjectPool )
-        : ScFieldEditEngine( &rDoc, pEngineItemPool, pTextObjectPool )
+            SfxItemPool* pEngineItemPool, ScDocument& rDoc )
+        : ScFieldEditEngine( &rDoc, pEngineItemPool )
 {
-    if ( pTextObjectPool )
-        SetEditTextObjectPool( pTextObjectPool );
     Init( rPattern );
 }
 
@@ -887,12 +884,10 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 
 ScFieldEditEngine::ScFieldEditEngine(
     ScDocument* pDoc, SfxItemPool* pEnginePoolP,
-    SfxItemPool* pTextObjectPool, bool bDeleteEnginePoolP) :
+    bool bDeleteEnginePoolP) :
         ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP ),
         mpDoc(pDoc), bExecuteURL(true)
 {
-    if ( pTextObjectPool )
-        SetEditTextObjectPool( pTextObjectPool );
     SetControlWord( EEControlBits(GetControlWord() | EEControlBits::MARKFIELDS) & ~EEControlBits::RTFSTYLESHEETS );
 }
 
@@ -922,12 +917,9 @@ bool ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField )
     return false;
 }
 
-ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP,
-            SfxItemPool* pTextObjectPool ) :
+ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP ) :
     ScEditEngineDefaulter( pEnginePoolP, false/*bDeleteEnginePoolP*/ )
 {
-    if ( pTextObjectPool )
-        SetEditTextObjectPool( pTextObjectPool );
     SetControlWord( EEControlBits(GetControlWord() | EEControlBits::MARKFIELDS) & ~EEControlBits::RTFSTYLESHEETS );
 }
 

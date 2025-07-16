@@ -1210,7 +1210,7 @@ public:
         //  test for attributes
         if (!mpEngine)
         {
-            mpEngine.reset(new ScFieldEditEngine(&mrDoc, mrDoc.GetEditTextObjectPool()));
+            mpEngine.reset(new ScFieldEditEngine(&mrDoc, mrDoc.GetEditEnginePool()));
             //  EEControlBits::ONLINESPELLING if there are errors already
             mpEngine->SetControlWord(mpEngine->GetControlWord() | EEControlBits::ONLINESPELLING);
             mrDoc.ApplyAsianEditSettings(*mpEngine);

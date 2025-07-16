@@ -317,14 +317,14 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
     rHitOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
 
     // set FontHeight pool defaults without changing static SdrEngineDefaults
-    SfxItemPool* pOutlinerPool = rOutliner.GetEditTextObjectPool();
+    SfxItemPool* pOutlinerPool = rOutliner.GetEditEnginePool();
     if ( pOutlinerPool )
     {
          m_pItemPool->SetUserDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
          m_pItemPool->SetUserDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CJK ));           // 12Pt
          m_pItemPool->SetUserDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CTL ));           // 12Pt
     }
-    SfxItemPool* pHitOutlinerPool = rHitOutliner.GetEditTextObjectPool();
+    SfxItemPool* pHitOutlinerPool = rHitOutliner.GetEditEnginePool();
     if ( pHitOutlinerPool )
     {
          pHitOutlinerPool->SetUserDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));    // 12Pt

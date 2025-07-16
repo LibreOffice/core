@@ -1185,7 +1185,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject()
 
 std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject(const EditSelection& rSel)
 {
-    return CreateTextObject(rSel, GetEditTextObjectPool(), maStatus.AllowBigObjects(), mnBigTextObjectStart);
+    return CreateTextObject(rSel, &maEditDoc.GetItemPool(), maStatus.AllowBigObjects(), mnBigTextObjectStart);
 }
 
 std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool* pPool, bool bAllowBigObjects, sal_Int32 nBigObjectStart )

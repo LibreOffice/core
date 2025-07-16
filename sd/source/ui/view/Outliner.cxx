@@ -185,7 +185,6 @@ SdOutliner::SdOutliner( SdDrawDocument& rDoc, OutlinerMode nMode )
       mbPrepareSpellingPending(true)
 {
     SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mrDrawDocument.GetStyleSheetPool() ));
-    SetEditTextObjectPool( &rDoc.GetItemPool() );
     SetCalcFieldValueHdl(LINK(SdModule::get(), SdModule, CalcFieldValueHdl));
     SetForbiddenCharsTable( rDoc.GetForbiddenCharsTable() );
 

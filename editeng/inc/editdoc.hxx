@@ -215,6 +215,10 @@ public:
     {
         return *mpItemPool;
     }
+    void SetItemPool(SfxItemPool* pPool)
+    {
+        mpItemPool = pPool;
+    }
 
     void            InsertAttrib( const SfxPoolItem& rItem, ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd );
     void            InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem );

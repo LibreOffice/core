@@ -817,7 +817,7 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
             if (!mpEditEngine)
             {
                 rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-                mpEditEngine = new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true);
+                mpEditEngine = new ScFieldEditEngine(nullptr, pEnginePool.get(), true);
                 mbEditEngineCreated = true;
                 mpEditEngine->EnableUndo( false );
                 mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
@@ -1020,7 +1020,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         else
         {
             rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-            pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );
+            pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), true) );
         }
         pEditEngine->EnableUndo( false );
         if (pDocShell)
@@ -1247,7 +1247,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         else
         {
             rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-            mpEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );
+            mpEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), true) );
         }
         mpEditEngine->EnableUndo( false );
         if (mpDocSh)

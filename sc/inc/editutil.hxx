@@ -178,8 +178,7 @@ private:
 
 public:
     ScFieldEditEngine(
-        ScDocument* pDoc, SfxItemPool* pEnginePool, SfxItemPool* pTextObjectPool = nullptr,
-        bool bDeleteEnginePool = false);
+        ScDocument* pDoc, SfxItemPool* pEnginePool, bool bDeleteEnginePool = false);
 
     void SetExecuteURL(bool bSet)    { bExecuteURL = bSet; }
 
@@ -195,8 +194,7 @@ private:
 public:
     ScTabEditEngine( ScDocument& rDoc );            // Default
     ScTabEditEngine(const ScPatternAttr& rPattern,
-                    SfxItemPool *pEngineItemPool, ScDocument& rDoc,
-                    SfxItemPool* pTextObjectPool = nullptr );
+                    SfxItemPool *pEngineItemPool, ScDocument& rDoc );
 };
 
 struct ScHeaderFieldData
@@ -232,7 +230,7 @@ class ScNoteEditEngine final : public ScEditEngineDefaulter
 {
 
 public:
-    ScNoteEditEngine( SfxItemPool* pEnginePool, SfxItemPool* pTextObjectPool );
+    ScNoteEditEngine( SfxItemPool* pEnginePool );
 
 };
 

@@ -351,7 +351,6 @@ std::unique_ptr<SdrOutliner> SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrMode
 {
     SfxItemPool* pPool = &rModel.GetItemPool();
     std::unique_ptr<SdrOutliner> pOutl(new SdrOutliner( pPool, nOutlinerMode ));
-    pOutl->SetEditTextObjectPool( pPool );
     pOutl->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(rModel.GetStyleSheetPool()));
     pOutl->SetDefTab(rModel.GetDefaultTabulator());
     Outliner::SetForbiddenCharsTable(rModel.GetForbiddenCharsTable());

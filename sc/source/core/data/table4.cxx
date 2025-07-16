@@ -161,7 +161,6 @@ void setSuffixCell(
     }
 
     EditEngine aEngine(rDoc.GetEditEnginePool());
-    aEngine.SetEditTextObjectPool(rDoc.GetEditTextObjectPool());
 
     SfxItemSet aAttr = aEngine.GetEmptyItemSet();
     aAttr.Put( SvxEscapementItem( SvxEscapement::Superscript, EE_CHAR_ESCAPEMENT));

@@ -103,7 +103,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     mpEditEngine(pEE),
     mpActiveView(nullptr),
     mpStylePool(nullptr),
-    mpTextObjectPool(nullptr),
     mpUndoManager(nullptr),
     maWordDelimiters(u" .,;:-`'?!_=\"{}()[]"_ustr),
     maBackgroundColor(COL_AUTO),

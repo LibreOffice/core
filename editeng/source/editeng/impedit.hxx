@@ -557,7 +557,6 @@ private:
     std::unique_ptr<TextRanger> mpTextRanger;
 
     SfxStyleSheetPool* mpStylePool;
-    SfxItemPool* mpTextObjectPool;
 
     VclPtr<VirtualDevice> mpVirtDev;
     VclPtr<OutputDevice> mpRefDev;
@@ -1266,9 +1265,6 @@ public:
     bool                    ImpSearch( const SvxSearchItem& rSearchItem, const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel );
     sal_Int32               StartSearchAndReplace( EditView* pEditView, const SvxSearchItem& rSearchItem );
     bool                    HasText( const SvxSearchItem& rSearchItem );
-
-    void                    SetEditTextObjectPool( SfxItemPool* pP )    { mpTextObjectPool = pP; }
-    SfxItemPool*            GetEditTextObjectPool() const               { return mpTextObjectPool; }
 
     const SvxNumberFormat * GetNumberFormat( const ContentNode* pNode ) const;
     sal_Int32               GetSpaceBeforeAndMinLabelWidth( const ContentNode *pNode, sal_Int32 *pnSpaceBefore = nullptr, sal_Int32 *pnMinLabelWidth = nullptr ) const;

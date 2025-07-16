@@ -126,7 +126,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
                 if (!bSimpleString || eCellType == CELLTYPE_EDIT)
                 {
                     std::unique_ptr<EditTextObject> pEditObj(CreateTextObject());
-                    mrDoc.SetEditText(aPos, *pEditObj, GetEditTextObjectPool());
+                    mrDoc.SetEditText(aPos, *pEditObj, GetItemPool());
                 }
                 else
                 {

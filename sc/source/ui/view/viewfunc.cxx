@@ -899,7 +899,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             for (const auto& rTab : rMark)
             {
                 ScAddress aPos(nCol, nRow, rTab);
-                rDoc.SetEditText(aPos, rData, rDoc.GetEditTextObjectPool());
+                rDoc.SetEditText(aPos, rData, rDoc.GetEditEnginePool());
             }
 
             if ( bRecord )

@@ -35,21 +35,10 @@ ScPoolHelper::ScPoolHelper( ScDocument& rSourceDoc )
 
 ScPoolHelper::~ScPoolHelper()
 {
-    mpEditTextObjectPool.clear();
     mpEditEnginePool.clear();
     pFormTable.reset();
     mxStylePool.clear();
     pDocPool.clear();
-}
-
-SfxItemPool* ScPoolHelper::GetEditTextObjectPool() const
-{
-    if ( !mpEditTextObjectPool )
-    {
-        mpEditTextObjectPool = EditEngine::CreatePool();
-        mpEditTextObjectPool->SetDefaultMetric( MapUnit::Map100thMM );
-    }
-    return mpEditTextObjectPool.get();
 }
 
 SfxItemPool* ScPoolHelper::GetEditEnginePool() const

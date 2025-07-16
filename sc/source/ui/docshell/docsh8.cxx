@@ -785,7 +785,7 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
                         bHasMemo, eCharSet );
     // also needed for exception catch
     SCROW nDocRow = 0;
-    ScFieldEditEngine aEditEngine(m_pDocument.get(), m_pDocument->GetEditTextObjectPool());
+    ScFieldEditEngine aEditEngine(m_pDocument.get(), m_pDocument->GetEditEnginePool());
     OUString aString;
 
     try

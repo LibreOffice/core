@@ -298,7 +298,7 @@ class ScSimpleEditSourceHelper
     std::unique_ptr<ScSimpleEditSource>     pOriginalSource;
 
 public:
-            ScSimpleEditSourceHelper();
+            ScSimpleEditSourceHelper(SfxItemPool* pEditEnginePool);
             ~ScSimpleEditSourceHelper();
 
     ScSimpleEditSource* GetOriginalSource() const   { return pOriginalSource.get(); }
@@ -308,7 +308,7 @@ public:
 class ScEditEngineTextObj final : public ScSimpleEditSourceHelper, public SvxUnoText
 {
 public:
-                        ScEditEngineTextObj();
+                        ScEditEngineTextObj(SfxItemPool* pEditEngineItemPool);
         virtual         ~ScEditEngineTextObj() noexcept override;
 
     void                SetText( const EditTextObject& rTextObject );

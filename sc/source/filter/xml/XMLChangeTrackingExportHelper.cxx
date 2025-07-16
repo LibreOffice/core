@@ -295,7 +295,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
     if (rCell.getEditText() && !sString.isEmpty())
     {
         if (!pEditTextObj)
-            pEditTextObj = new ScEditEngineTextObj();
+            pEditTextObj = new ScEditEngineTextObj(m_rDoc.GetEditEnginePool());
         pEditTextObj->SetText(*rCell.getEditText());
         rExport.GetTextParagraphExport()->exportText(pEditTextObj, false, false);
     }
@@ -598,7 +598,7 @@ void ScChangeTrackingExportHelper::CollectCellAutoStyles(const ScCellValue& rCel
         return;
 
     if (!pEditTextObj)
-        pEditTextObj = new ScEditEngineTextObj();
+        pEditTextObj = new ScEditEngineTextObj(m_rDoc.GetEditEnginePool());
 
     pEditTextObj->SetText(*rCell.getEditText());
     rExport.GetTextParagraphExport()->collectTextAutoStyles(pEditTextObj, false, false);

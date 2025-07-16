@@ -1241,7 +1241,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                      ( nType == TransliterationFlags::SENTENCE_CASE || nType == TransliterationFlags::TITLE_CASE)))
                 {
                     if (!pEngine)
-                        pEngine.reset(new ScFieldEditEngine(this, GetEditEnginePool(), GetEditTextObjectPool()));
+                        pEngine.reset(new ScFieldEditEngine(this, GetEditEnginePool()));
 
                     // defaults from cell attributes must be set so right language is used
                     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );

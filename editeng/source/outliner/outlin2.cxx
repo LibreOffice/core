@@ -358,14 +358,14 @@ bool Outliner::HasText( const SvxSearchItem& rSearchItem )
     return pEditEngine->HasText( rSearchItem );
 }
 
-void Outliner::SetEditTextObjectPool( SfxItemPool* pPool )
+void Outliner::SetEditEnginePool( SfxItemPool* pPool )
 {
-    pEditEngine->SetEditTextObjectPool( pPool );
+    pEditEngine->SetItemPool( pPool );
 }
 
-SfxItemPool* Outliner::GetEditTextObjectPool() const
+SfxItemPool* Outliner::GetEditEnginePool() const
 {
-    return pEditEngine->GetEditTextObjectPool();
+    return pEditEngine->GetItemPool();
 }
 
 bool Outliner::SpellNextDocument()
