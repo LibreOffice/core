@@ -70,7 +70,7 @@ gb_LINKERSTRIPDEBUGFLAGS :=
 gb_DEBUGINFO_FLAGS = -g
 
 ifeq ($(HAVE_EXTERNAL_DWARF),TRUE)
-gb_DEBUGINFO_FLAGS += -gsplit-dwarf -gpubnames
+gb_DEBUGINFO_FLAGS += -gseparate-dwarf -gsplit-dwarf -gpubnames
 endif
 
 gb_COMPILEROPTFLAGS := -O3
@@ -86,7 +86,8 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.linkdeps,$(3)) \
         $(patsubst %.lib,%.wasm,$(3)) \
         $(if $(EMSCRIPTEN_WORKERJS),$(patsubst %.lib,%.worker.js,$(3))) \
-        $(patsubst %.lib,%.wasm.dwp,$(3)) \
+        $(patsubst %.lib,%.wasm.debug.wasm,$(3)) \
+        $(patsubst %.lib,%.wasm.debug.wasm.dwp,$(3)) \
 )
 
 endef
@@ -96,7 +97,8 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.linkdeps,$(3)) \
         $(patsubst %.lib,%.wasm,$(3)) \
         $(if $(EMSCRIPTEN_WORKERJS),$(patsubst %.lib,%.worker.js,$(3))) \
-        $(patsubst %.lib,%.wasm.dwp,$(3)) \
+        $(patsubst %.lib,%.wasm.debug.wasm,$(3)) \
+        $(patsubst %.lib,%.wasm.debug.wasm.dwp,$(3)) \
 )
 
 endef

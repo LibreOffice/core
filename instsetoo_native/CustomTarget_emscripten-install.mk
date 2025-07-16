@@ -19,7 +19,9 @@ emscripten_install_files := \
     soffice.js \
     soffice.wasm \
     $(if $(EMSCRIPTEN_WORKERJS),soffice.worker.js) \
-    $(if $(ENABLE_SYMBOLS_FOR),soffice.wasm.dwp) \
+    $(if $(ENABLE_SYMBOLS_FOR), \
+        soffice.wasm.debug.wasm \
+        soffice.wasm.debug.wasm.dwp) \
     $(if $(DISABLE_GUI),, \
         qt_soffice.html \
         qtloader.js \
