@@ -3326,7 +3326,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             if ( bLabelAboveTextField || nDNDAction == DND_ACTION_LINK )
             {
                 // Add the Label one Section up
-                pSectionWindow[1] = getDesignView()->getMarkedSection(bLabelAboveTextField ? PREVIOUS : POST);
+                pSectionWindow[1] = getDesignView()->getMarkedSection(
+                    bLabelAboveTextField ? NearSectionAccess::PREVIOUS : NearSectionAccess::POST);
                 if (!pSectionWindow[1])
                 {
                     // maybe out of bounds
@@ -3923,7 +3924,8 @@ void OReportController::markSection(const bool _bNext)
     OSectionWindow *pSection = getDesignView()->getMarkedSection();
     if ( pSection )
     {
-        OSectionWindow *pPrevSection = getDesignView()->getMarkedSection(_bNext ? POST : PREVIOUS);
+        OSectionWindow* pPrevSection = getDesignView()->getMarkedSection(
+            _bNext ? NearSectionAccess::POST : NearSectionAccess::PREVIOUS);
         if ( pPrevSection != pSection && pPrevSection )
             select(uno::Any(pPrevSection->getReportSection().getSection()));
         else

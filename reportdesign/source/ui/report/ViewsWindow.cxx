@@ -419,12 +419,12 @@ OSectionWindow* OViewsWindow::getMarkedSection(NearSectionAccess nsa) const
     {
         if ( (*aIter)->getStartMarker().isMarked() )
         {
-            if (nsa == CURRENT)
+            if (nsa == NearSectionAccess::CURRENT)
             {
                 pRet = aIter->get();
                 break;
             }
-            else if ( nsa == PREVIOUS )
+            else if (nsa == NearSectionAccess::PREVIOUS)
             {
                 if (nCurrentPosition > 0)
                 {
@@ -441,7 +441,7 @@ OSectionWindow* OViewsWindow::getMarkedSection(NearSectionAccess nsa) const
                 }
                 break;
             }
-            else if ( nsa == POST )
+            else if (nsa == NearSectionAccess::POST)
             {
                 sal_uInt32 nSize = m_aSections.size();
                 if ((nCurrentPosition + 1) < nSize)

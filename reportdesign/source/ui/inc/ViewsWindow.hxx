@@ -201,7 +201,8 @@ namespace rptui
         void            setMarked(const css::uno::Sequence< css::uno::Reference< css::report::XReportComponent> >& _xShape, bool _bMark);
 
         // IMarkedSection
-        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const override;
+        OSectionWindow* getMarkedSection(NearSectionAccess nsa
+                                         = NearSectionAccess::CURRENT) const override;
         virtual void markSection(const sal_uInt16 _nPos) override;
 
         /** align all marked objects in all sections

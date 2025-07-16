@@ -193,7 +193,8 @@ namespace rptui
         css::uno::Reference< css::report::XReportComponent > getCurrentControlModel() const;
 
         // IMarkedSection
-        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const override;
+        OSectionWindow* getMarkedSection(NearSectionAccess nsa
+                                         = NearSectionAccess::CURRENT) const override;
         OSectionWindow* getSectionWindow(const css::uno::Reference< css::report::XSection>& _xSection) const;
         virtual void markSection(const sal_uInt16 _nPos) override;
 
