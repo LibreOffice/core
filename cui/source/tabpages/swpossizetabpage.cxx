@@ -770,7 +770,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
     }
     if (m_xPositionCB->get_state_changed_from_saved())
     {
-        if (m_xPositionCB->get_inconsistent())
+        if (m_xPositionCB->get_state() == TRISTATE_INDET)
             rSet->InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_POS );
         else
             rSet->Put(
@@ -781,7 +781,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
 
     if (m_xSizeCB->get_state_changed_from_saved())
     {
-        if (m_xSizeCB->get_inconsistent())
+        if (m_xSizeCB->get_state() == TRISTATE_INDET)
             rSet->InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_SIZE );
         else
             rSet->Put(
@@ -948,7 +948,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     }
     else
     {
-        m_xPositionCB->set_inconsistent(true);
+        m_xPositionCB->set_state(TRISTATE_INDET);
     }
 
     m_xPositionCB->save_state();
@@ -960,7 +960,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
         m_xSizeCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
     }
     else
-        m_xSizeCB->set_inconsistent(true);
+        m_xSizeCB->set_state(TRISTATE_INDET);
     m_xSizeCB->save_state();
 
     pItem = GetItem( *rSet, SID_HTML_MODE );

@@ -929,7 +929,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
         if (m_xTsbPosProtect->get_state_changed_from_saved())
         {
-            if( m_xTsbPosProtect->get_inconsistent() )
+            if (m_xTsbPosProtect->get_state() == TRISTATE_INDET)
             {
                 rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_POS );
             }
@@ -969,7 +969,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
     if (m_xTsbSizeProtect->get_state_changed_from_saved())
     {
-        if ( m_xTsbSizeProtect->get_inconsistent() )
+        if (m_xTsbSizeProtect->get_state() == TRISTATE_INDET)
             rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_SIZE );
         else
             rOutAttrs->Put(
@@ -982,7 +982,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     {
         if (!mbIgnoreAutoGrowWidth)
         {
-            if( m_xTsbAutoGrowWidth->get_inconsistent() )
+            if (m_xTsbAutoGrowWidth->get_state() == TRISTATE_INDET)
                 rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_AUTOWIDTH );
             else
                 rOutAttrs->Put(
@@ -996,7 +996,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     {
         if (!mbIgnoreAutoGrowHeight)
         {
-            if (m_xTsbAutoGrowHeight->get_inconsistent())
+            if (m_xTsbAutoGrowHeight->get_state() == TRISTATE_INDET)
             {
                 rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_AUTOHEIGHT );
             }
@@ -1042,7 +1042,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         }
         else
         {
-            m_xTsbPosProtect->set_inconsistent(true);
+            m_xTsbPosProtect->set_state(TRISTATE_INDET);
         }
 
         m_xTsbPosProtect->save_state();
@@ -1076,7 +1076,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         m_xTsbSizeProtect->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
     }
     else
-        m_xTsbSizeProtect->set_inconsistent(true);
+        m_xTsbSizeProtect->set_state(TRISTATE_INDET);
 
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_AUTOWIDTH );
     if ( pItem )
@@ -1084,7 +1084,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         m_xTsbAutoGrowWidth->set_active(static_cast<const SfxBoolItem*>( pItem )->GetValue());
     }
     else
-        m_xTsbAutoGrowWidth->set_inconsistent(true);
+        m_xTsbAutoGrowWidth->set_state(TRISTATE_INDET);
 
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_AUTOHEIGHT );
     if ( pItem )
@@ -1092,7 +1092,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         m_xTsbAutoGrowHeight->set_active(static_cast<const SfxBoolItem*>( pItem )->GetValue());
     }
     else
-        m_xTsbAutoGrowHeight->set_inconsistent(true);
+        m_xTsbAutoGrowHeight->set_state(TRISTATE_INDET);
 
     // Is matching set?
     OUString aStr = GetUserData();

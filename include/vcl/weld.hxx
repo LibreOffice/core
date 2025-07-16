@@ -1606,9 +1606,6 @@ public:
     virtual void set_active(bool active) = 0;
     virtual bool get_active() const = 0;
 
-    virtual void set_inconsistent(bool inconsistent) = 0;
-    virtual bool get_inconsistent() const = 0;
-
     TriState get_state() const
     {
         if (get_inconsistent())
@@ -1641,6 +1638,10 @@ public:
     bool get_state_changed_from_saved() const { return m_eSavedValue != get_state(); }
 
     virtual void connect_toggled(const Link<Toggleable&, void>& rLink) { m_aToggleHdl = rLink; }
+
+protected:
+    virtual void set_inconsistent(bool inconsistent) = 0;
+    virtual bool get_inconsistent() const = 0;
 };
 
 class VCL_DLLPUBLIC ToggleButton : virtual public Button, virtual public Toggleable
