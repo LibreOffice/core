@@ -112,6 +112,40 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     CPPUNIT_ASSERT(!pViewShell->GetViewShell()->GetSignPDFCertificate().Is());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPdfiumLinks)
+{
+    // Given a pdf file with links:
+    SdXImpressDocument* pDoc = createDoc("link_2p.pdf");
+    SdTestViewCallback aView;
+
+    auto get_links_array = [&aView]() -> boost::property_tree::ptree {
+        auto it = aView.m_aStateChanges.find("PageLinks");
+        CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+        boost::property_tree::ptree pTree = it->second;
+        auto it2 = pTree.find("state");
+        CPPUNIT_ASSERT(it2 != pTree.not_found());
+        auto it3 = it2->second.find("links");
+        CPPUNIT_ASSERT(it3 != pTree.not_found());
+        return it3->second;
+    };
+
+    // First page has a link
+    pDoc->setPart(0);
+    auto links = get_links_array();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), links.size());
+    // auto pLinkInfo = links.get_child("");
+    auto pLinkInfo = links.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("767.28x292.999@(1133.86,2013)"),
+                         pLinkInfo.get_child("rectangle").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(std::string("http://cidac.pt/"),
+                         pLinkInfo.get_child("uri").get_value<std::string>());
+
+    // Second doesn't
+    pDoc->setPart(1);
+    links = get_links_array();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), links.size());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
