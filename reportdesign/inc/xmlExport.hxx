@@ -144,8 +144,6 @@ public:
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
-    const Reference<XReportDefinition>& getReportDefinition() const { return m_xReportDefinition; }
-
     const rtl::Reference < XMLPropertySetMapper >& GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}
 
     // Helper methods to create exporters

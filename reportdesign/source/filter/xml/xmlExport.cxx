@@ -1144,11 +1144,7 @@ void ORptExport::exportAutoStyle(const Reference<XSection>& _xProp)
         m_aAutoStyleNames.emplace( _xProp.get(),GetAutoStylePool()->Add( XmlStyleFamily::TABLE_TABLE, std::move(aPropertyStates) ));
 }
 
-void ORptExport::SetBodyAttributes()
-{
-    Reference<XReportDefinition> xProp(getReportDefinition());
-    exportReportAttributes(xProp);
-}
+void ORptExport::SetBodyAttributes() { exportReportAttributes(m_xReportDefinition); }
 
 void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xReport)
 {
@@ -1182,10 +1178,7 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
         AddAttribute(XML_NAMESPACE_DRAW, XML_NAME,sName);
 }
 
-void ORptExport::ExportContent_()
-{
-    exportReport(getReportDefinition());
-}
+void ORptExport::ExportContent_() { exportReport(m_xReportDefinition); }
 
 void ORptExport::ExportMasterStyles_()
 {
@@ -1198,25 +1191,24 @@ void ORptExport::collectComponentStyles()
         return;
 
     m_bAllreadyFilled = true;
-    Reference<XReportDefinition> xProp(getReportDefinition());
-    if ( !xProp.is() )
+    if (!m_xReportDefinition.is())
         return;
 
-    uno::Reference< report::XSection> xParent(xProp->getParent(),uno::UNO_QUERY);
+    uno::Reference<report::XSection> xParent(m_xReportDefinition->getParent(), uno::UNO_QUERY);
     if ( xParent.is() )
-        exportAutoStyle(xProp.get());
+        exportAutoStyle(m_xReportDefinition.get());
 
-    if ( xProp->getReportHeaderOn() )
-        exportSectionAutoStyle(xProp->getReportHeader());
-    if ( xProp->getPageHeaderOn() )
-        exportSectionAutoStyle(xProp->getPageHeader());
+    if (m_xReportDefinition->getReportHeaderOn())
+        exportSectionAutoStyle(m_xReportDefinition->getReportHeader());
+    if (m_xReportDefinition->getPageHeaderOn())
+        exportSectionAutoStyle(m_xReportDefinition->getPageHeader());
 
-    exportGroup(xProp,0,true);
+    exportGroup(m_xReportDefinition, 0, true);
 
-    if ( xProp->getPageFooterOn() )
-        exportSectionAutoStyle(xProp->getPageFooter());
-    if ( xProp->getReportFooterOn() )
-        exportSectionAutoStyle(xProp->getReportFooter());
+    if (m_xReportDefinition->getPageFooterOn())
+        exportSectionAutoStyle(m_xReportDefinition->getPageFooter());
+    if (m_xReportDefinition->getReportFooterOn())
+        exportSectionAutoStyle(m_xReportDefinition->getReportFooter());
 }
 
 void ORptExport::ExportAutoStyles_()
