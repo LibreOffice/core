@@ -36,18 +36,6 @@ bool QtInstanceToggleButton::get_active() const
     return bActive;
 };
 
-void QtInstanceToggleButton::set_inconsistent(bool bInconsistent)
-{
-    assert(!bInconsistent && "Inconsistent state not supported (yet?)");
-    (void)bInconsistent;
-};
-
-bool QtInstanceToggleButton::get_inconsistent() const
-{
-    assert(false && "Not implemented yet");
-    return false;
-};
-
 void QtInstanceToggleButton::signalToggled()
 {
     SolarMutexGuard g;

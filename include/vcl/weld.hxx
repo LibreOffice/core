@@ -1606,31 +1606,11 @@ public:
     virtual void set_active(bool active) = 0;
     virtual bool get_active() const = 0;
 
-    TriState get_state() const
+    virtual TriState get_state() const
     {
-        if (get_inconsistent())
-            return TRISTATE_INDET;
-        else if (get_active())
+        if (get_active())
             return TRISTATE_TRUE;
         return TRISTATE_FALSE;
-    }
-
-    void set_state(TriState eState)
-    {
-        switch (eState)
-        {
-            case TRISTATE_INDET:
-                set_inconsistent(true);
-                break;
-            case TRISTATE_TRUE:
-                set_inconsistent(false);
-                set_active(true);
-                break;
-            case TRISTATE_FALSE:
-                set_inconsistent(false);
-                set_active(false);
-                break;
-        }
     }
 
     void save_state() { m_eSavedValue = get_state(); }
@@ -1638,10 +1618,6 @@ public:
     bool get_state_changed_from_saved() const { return m_eSavedValue != get_state(); }
 
     virtual void connect_toggled(const Link<Toggleable&, void>& rLink) { m_aToggleHdl = rLink; }
-
-protected:
-    virtual void set_inconsistent(bool inconsistent) = 0;
-    virtual bool get_inconsistent() const = 0;
 };
 
 class VCL_DLLPUBLIC ToggleButton : virtual public Button, virtual public Toggleable
@@ -1707,9 +1683,38 @@ class VCL_DLLPUBLIC MenuToggleButton : virtual public MenuButton
 class VCL_DLLPUBLIC CheckButton : virtual public Toggleable
 {
 public:
+    virtual TriState get_state() const override
+    {
+        if (get_inconsistent())
+            return TRISTATE_INDET;
+        return weld::Toggleable::get_state();
+    }
+
+    void set_state(TriState eState)
+    {
+        switch (eState)
+        {
+            case TRISTATE_INDET:
+                set_inconsistent(true);
+                break;
+            case TRISTATE_TRUE:
+                set_inconsistent(false);
+                set_active(true);
+                break;
+            case TRISTATE_FALSE:
+                set_inconsistent(false);
+                set_active(false);
+                break;
+        }
+    }
+
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
     virtual void set_label_wrap(bool wrap) = 0;
+
+protected:
+    virtual void set_inconsistent(bool inconsistent) = 0;
+    virtual bool get_inconsistent() const = 0;
 };
 
 struct VCL_DLLPUBLIC TriStateEnabled

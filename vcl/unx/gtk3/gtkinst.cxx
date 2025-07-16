@@ -10276,7 +10276,6 @@ public:
     virtual void set_active(bool active) override
     {
         disable_notify_events();
-        set_inconsistent(false);
         gtk_toggle_button_set_active(m_pToggleButton, active);
         enable_notify_events();
     }
@@ -10284,27 +10283,6 @@ public:
     virtual bool get_active() const override
     {
         return gtk_toggle_button_get_active(m_pToggleButton);
-    }
-
-    virtual void set_inconsistent(bool inconsistent) override
-    {
-#if GTK_CHECK_VERSION(4, 0, 0)
-        if (inconsistent)
-            gtk_widget_set_state_flags(GTK_WIDGET(m_pToggleButton), GTK_STATE_FLAG_INCONSISTENT, false);
-        else
-            gtk_widget_unset_state_flags(GTK_WIDGET(m_pToggleButton), GTK_STATE_FLAG_INCONSISTENT);
-#else
-        gtk_toggle_button_set_inconsistent(m_pToggleButton, inconsistent);
-#endif
-    }
-
-    virtual bool get_inconsistent() const override
-    {
-#if GTK_CHECK_VERSION(4, 0, 0)
-        return gtk_widget_get_state_flags(GTK_WIDGET(m_pToggleButton)) & GTK_STATE_FLAG_INCONSISTENT;
-#else
-        return gtk_toggle_button_get_inconsistent(m_pToggleButton);
-#endif
     }
 
     virtual void disable_notify_events() override
@@ -10958,23 +10936,9 @@ public:
         m_aCustomBackground.use_custom_content(pDevice);
     }
 
-    virtual void set_inconsistent(bool inconsistent) override
-    {
-        if (inconsistent)
-            gtk_widget_set_state_flags(GTK_WIDGET(m_pMenuButton), GTK_STATE_FLAG_INCONSISTENT, false);
-        else
-            gtk_widget_unset_state_flags(GTK_WIDGET(m_pMenuButton), GTK_STATE_FLAG_INCONSISTENT);
-    }
-
-    virtual bool get_inconsistent() const override
-    {
-        return gtk_widget_get_state_flags(GTK_WIDGET(m_pMenuButton)) & GTK_STATE_FLAG_INCONSISTENT;
-    }
-
     virtual void set_active(bool active) override
     {
         disable_notify_events();
-        set_inconsistent(false);
         if (active)
             gtk_menu_button_popup(m_pMenuButton);
         else

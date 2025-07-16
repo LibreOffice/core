@@ -3018,13 +3018,6 @@ void SalInstanceMenuButton::set_active(bool active)
 
 bool SalInstanceMenuButton::get_active() const { return m_xMenuButton->InPopupMode(); }
 
-void SalInstanceMenuButton::set_inconsistent(bool /*inconsistent*/)
-{
-    //not available
-}
-
-bool SalInstanceMenuButton::get_inconsistent() const { return false; }
-
 void SalInstanceMenuButton::insert_item(int pos, const OUString& rId, const OUString& rStr,
                                         const OUString* pIconName, VirtualDevice* pImageSurface,
                                         TriState eCheckRadioFalse)

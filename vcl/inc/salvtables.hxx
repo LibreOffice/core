@@ -1128,18 +1128,6 @@ public:
 
     virtual bool get_active() const override { return m_xToggleButton->IsChecked(); }
 
-    virtual void set_inconsistent(bool inconsistent) override
-    {
-        disable_notify_events();
-        m_xToggleButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
-        enable_notify_events();
-    }
-
-    virtual bool get_inconsistent() const override
-    {
-        return m_xToggleButton->GetState() == TRISTATE_INDET;
-    }
-
     virtual ~SalInstanceToggleButton() override
     {
         if (m_aToggleHdl.IsSet())
@@ -2070,10 +2058,6 @@ public:
     virtual void set_active(bool active) override;
 
     virtual bool get_active() const override;
-
-    virtual void set_inconsistent(bool /*inconsistent*/) override;
-
-    virtual bool get_inconsistent() const override;
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
                              const OUString* pIconName, VirtualDevice* pImageSurface,
