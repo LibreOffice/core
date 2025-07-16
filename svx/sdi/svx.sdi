@@ -3884,7 +3884,7 @@ SfxBoolItem GrafInvert SID_ATTR_GRAF_INVERT
 
 
 SfxInt16Item GrafLuminance SID_ATTR_GRAF_LUMINANCE
-
+(SfxInt16Item Brightness FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
