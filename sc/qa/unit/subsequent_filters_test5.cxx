@@ -1,4 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
 /*
  * This file is part of the LibreOffice project.
  *
@@ -156,6 +157,27 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf157689)
     pAnonDBData->GetArea(aFilterRange);
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 1, 1, 4, 1), aFilterRange); // A1:B5
     CPPUNIT_ASSERT(pAnonDBData->HasAutoFilter());
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf151505)
+{
+    // testing the correct import of autofilter from XLSB
+    createScDoc("xlsb/tdf151505.xlsb");
+
+    ScDocument* pDoc = getScDoc();
+
+    ScDBData* pAnonDBData = pDoc->GetAnonymousDBData(0);
+    CPPUNIT_ASSERT(pAnonDBData);
+    ScRange aFilterRange;
+    pAnonDBData->GetArea(aFilterRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 1, 4, 0), aFilterRange); // A1:B5
+    CPPUNIT_ASSERT(pAnonDBData->HasAutoFilter());
+
+    // also check for the correct handling of the autofilter buttons
+    auto nFlag = pDoc->GetAttr(0, 0, 0, ATTR_MERGE_FLAG)->GetValue();
+    CPPUNIT_ASSERT(nFlag & ScMF::Auto);
+    nFlag = pDoc->GetAttr(1, 0, 0, ATTR_MERGE_FLAG)->GetValue();
+    CPPUNIT_ASSERT(nFlag & ScMF::Auto);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
