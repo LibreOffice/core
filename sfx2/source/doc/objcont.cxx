@@ -93,12 +93,12 @@ bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
 }
 
 std::shared_ptr<GDIMetaFile>
-SfxObjectShell::GetPreviewMetaFile( bool bFullContent ) const
+SfxObjectShell::GetPreviewMetaFile( bool bFullContent, bool bOutputForScreen ) const
 {
     auto xFile = std::make_shared<GDIMetaFile>();
     ScopedVclPtrInstance< VirtualDevice > pDevice;
     pDevice->EnableOutput( false );
-    if(!CreatePreview_Impl(bFullContent, pDevice, xFile.get()))
+    if(!CreatePreview_Impl(bFullContent, bOutputForScreen, pDevice, xFile.get()))
         return std::shared_ptr<GDIMetaFile>();
     return xFile;
 }
@@ -108,7 +108,7 @@ BitmapEx SfxObjectShell::GetPreviewBitmap() const
     SfxCloseVetoLock lock(this);
     ScopedVclPtrInstance< VirtualDevice > pDevice;
     pDevice->SetAntialiasing(AntialiasingFlags::Enable | pDevice->GetAntialiasing());
-    if(!CreatePreview_Impl(/*bFullContent*/false, pDevice, nullptr))
+    if(!CreatePreview_Impl(/*bFullContent*/false, false, pDevice, nullptr))
         return BitmapEx();
     Size size = pDevice->GetOutputSizePixel();
     BitmapEx aBitmap = pDevice->GetBitmapEx( Point(), size);
@@ -120,7 +120,7 @@ BitmapEx SfxObjectShell::GetPreviewBitmap() const
     return aBitmap;
 }
 
-bool SfxObjectShell::CreatePreview_Impl( bool bFullContent, VirtualDevice* pDevice, GDIMetaFile* pFile) const
+bool SfxObjectShell::CreatePreview_Impl( bool bFullContent, bool bOutputForScreen, VirtualDevice* pDevice, GDIMetaFile* pFile) const
 {
     // DoDraw can only be called when no printing is done, otherwise
     // the printer may be turned off
@@ -196,7 +196,7 @@ bool SfxObjectShell::CreatePreview_Impl( bool bFullContent, VirtualDevice* pDevi
 
     pDevice->SetDigitLanguage( eLang );
 
-    const_cast<SfxObjectShell*>(this)->DoDraw( pDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
+    const_cast<SfxObjectShell*>(this)->DoDraw( pDevice, Point(0,0), aTmpSize, JobSetup(), nAspect, bOutputForScreen );
 
     if(pFile)
         pFile->Stop();

@@ -19,6 +19,7 @@
 #include <pam.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <vcl/gdimtf.hxx>
 
 #include <set>
 
@@ -349,6 +350,31 @@ DECLARE_OOXMLEXPORT_TEST(testFieldMarkFormat, "fontsize-field-separator.docx")
     // - Actual  : 42
     // i.e. the field content has the properties fo the field marks
     CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xRun, u"CharHeight"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, tdf167527_title_letters_cut_from_below)
+{
+    createSwDoc("tdf167527_title_letters_cut_from_below.docx");
+
+    SwDocShell* pDocShell = getSwDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    // bOutputForScreen of true to ensure field backgrounds are rendered
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile(false, true);
+
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+
+    auto nFieldShadingsBottom = getXPath(pXmlDoc, "(//rect)[2]", "bottom").toInt32();
+    auto nFieldShadingsTop = getXPath(pXmlDoc, "(//rect)[2]", "top").toInt32();
+    sal_Int32 nFieldShadingsHeight = nFieldShadingsBottom - nFieldShadingsTop;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // less equal assertion failed
+    // Expected less or equal than: 700
+    // Actual  : 810
+    // i.e. the field background overlaps the previous row of text
+    CPPUNIT_ASSERT_LESSEQUAL(static_cast<sal_Int32>(700), nFieldShadingsHeight);
 }
 
 } // end of anonymous namespace
