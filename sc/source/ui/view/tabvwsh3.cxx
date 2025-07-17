@@ -171,6 +171,77 @@ namespace
     }
 }
 
+void ScTabViewShell::ExecGoToTab( SfxRequest& rReq, SfxBindings& rBindings )
+{
+    SCTAB nTab;
+    ScViewData& rViewData = GetViewData();
+    ScDocument& rDoc = rViewData.GetDocument();
+    SCTAB nTabCount = rDoc.GetTableCount();
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
+    sal_uInt16 nSlot = rReq.GetSlot();
+
+    if ( pReqArgs ) // command from Navigator with nTab
+    {
+        // sheet for basic is one-based
+        nTab = static_cast<const SfxUInt16Item&>(pReqArgs->Get(nSlot)).GetValue() - 1;
+        if ( nTab < nTabCount )
+        {
+            SetTabNo( nTab );
+            rBindings.Update( nSlot );
+
+            if( ! rReq.IsAPI() )
+                rReq.Done();
+        }
+    }
+    else            // command from Menu: ask for nTab
+    {
+        auto xRequest = std::make_shared<SfxRequest>(rReq);
+        rReq.Ignore();
+
+        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+
+        VclPtr<AbstractScGoToTabDlg> pDlg(pFact->CreateScGoToTabDlg(GetFrameWeld()));
+        pDlg->SetDescription(
+            ScResId( STR_DLG_SELECTTABLE_TITLE ),
+            ScResId( STR_DLG_SELECTTABLE_MASK ),
+            ScResId( STR_DLG_SELECTTABLE_LBNAME ),
+            GetStaticInterface()->GetSlot(SID_CURRENTTAB)->GetCommand(), HID_GOTOTABLEMASK, HID_GOTOTABLE );
+
+        // fill all table names and select current tab
+        OUString aTabName;
+        for( nTab = 0; nTab < nTabCount; ++nTab )
+        {
+            if( rDoc.IsVisible( nTab ) )
+            {
+                rDoc.GetName( nTab, aTabName );
+                pDlg->Insert( aTabName, rViewData.GetTabNo() == nTab );
+            }
+        }
+
+        pDlg->StartExecuteAsync([this, nTab, nTabCount, pDlg,
+                                 xRequest=std::move(xRequest)](sal_Int32 response) {
+            if( response == RET_OK )
+            {
+                auto nTab2 = nTab;
+                if( !GetViewData().GetDocument().GetTable( pDlg->GetSelectedEntry(), nTab2 ) )
+                    nTab2 = nTabCount;
+                if ( nTab2 < nTabCount )
+                {
+                    SetTabNo( nTab2 );
+
+                    if ( !xRequest->IsAPI() )
+                        xRequest->Done();
+                }
+            }
+            else
+            {
+                xRequest->Ignore();
+            }
+            pDlg->disposeOnce();
+        });
+    }
+}
+
 void ScTabViewShell::FinishProtectTable()
 {
     TabChanged();
@@ -638,56 +709,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_CURRENTTAB:
             {
-                SCTAB nTab;
-                ScViewData& rViewData = GetViewData();
-                ScDocument& rDoc = rViewData.GetDocument();
-                SCTAB nTabCount = rDoc.GetTableCount();
-                if ( pReqArgs ) // command from Navigator with nTab
-                {
-                    // sheet for basic is one-based
-                    nTab = static_cast<const SfxUInt16Item&>(pReqArgs->Get(nSlot)).GetValue() - 1;
-                }
-                else            // command from Menu: ask for nTab
-                {
-                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-
-                    ScopedVclPtr<AbstractScGoToTabDlg> pDlg(pFact->CreateScGoToTabDlg(GetFrameWeld()));
-                    pDlg->SetDescription(
-                        ScResId( STR_DLG_SELECTTABLE_TITLE ),
-                        ScResId( STR_DLG_SELECTTABLE_MASK ),
-                        ScResId( STR_DLG_SELECTTABLE_LBNAME ),
-                        GetStaticInterface()->GetSlot(SID_CURRENTTAB)->GetCommand(), HID_GOTOTABLEMASK, HID_GOTOTABLE );
-
-                    // fill all table names and select current tab
-                    OUString aTabName;
-                    for( nTab = 0; nTab < nTabCount; ++nTab )
-                    {
-                        if( rDoc.IsVisible( nTab ) )
-                        {
-                            rDoc.GetName( nTab, aTabName );
-                            pDlg->Insert( aTabName, rViewData.GetTabNo() == nTab );
-                        }
-                    }
-
-                    if( pDlg->Execute() == RET_OK )
-                    {
-                        if( !rDoc.GetTable( pDlg->GetSelectedEntry(), nTab ) )
-                            nTab = nTabCount;
-                        pDlg.disposeAndClear();
-                    }
-                    else
-                    {
-                        rReq.Ignore();
-                    }
-                }
-                if ( nTab < nTabCount )
-                {
-                    SetTabNo( nTab );
-                    rBindings.Update( nSlot );
-
-                    if( ! rReq.IsAPI() )
-                        rReq.Done();
-                }
+                ExecGoToTab( rReq, rBindings );
                 //! otherwise an error ?
             }
             break;
