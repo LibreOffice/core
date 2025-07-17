@@ -1755,7 +1755,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         stScriptHints.AddHint(pScriptHintValue->GetValue(), pScriptHint->GetStart(),
                               pScriptHint->GetEnd());
 
-        pScriptHint = pScriptHint->GetEnd() ? pNode->GetCharAttribs().FindNextAttrib(
+        pScriptHint = pScriptHint->GetEnd() ? pNode->GetCharAttribs().FindAttribRightOpen(
                                                   EE_CHAR_SCRIPT_HINT, pScriptHint->GetEnd())
                                             : nullptr;
     }

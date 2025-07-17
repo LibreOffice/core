@@ -1831,6 +1831,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166181)
     CPPUNIT_ASSERT_LESS(sal_Int32(500), height.toInt32());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167541)
+{
+    // Without the fix, the following call would hang on an infinite loop
+    createSwDoc("tdf167541.fodt");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
