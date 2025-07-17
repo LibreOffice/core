@@ -1634,6 +1634,9 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
             pAttributes->add(NS_ooxml::LN_CT_Spacing_line, pSLVal, OOXMLProperty::ATTRIBUTE);
             OOXMLValue pSprm = OOXMLValue::createPropertySet(pAttributes);
             pSprms->add(NS_ooxml::LN_CT_PPrBase_spacing, pSprm, OOXMLProperty::SPRM);
+            // Do not count it in line numbering
+            pSprms->add(NS_ooxml::LN_CT_PPrBase_suppressLineNumbers,
+                        OOXMLValue::createBoolean(true), OOXMLProperty::SPRM);
         }
         mpStream->props(pSprms.get());
 
