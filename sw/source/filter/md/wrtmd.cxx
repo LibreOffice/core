@@ -79,7 +79,7 @@ template <typename T> struct PosData
 };
 
 // This is a collection of all positions into node's text: starts of hints, ends of hints, starts
-// of redlines, and ends of redlines. Its getEndOfCurrent methos allows to obtain the position of
+// of redlines, and ends of redlines. Its getEndOfCurrent method allows to obtain the position of
 // the next (closest) position (which may happen in any list).
 struct NodePositions
 {
